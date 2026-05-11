@@ -361,12 +361,6 @@ function Capabilities() {
               className="rounded-xl p-6 transition-all hover:-translate-y-1"
               style={{ background: "var(--lp-card)", border: "1px solid rgba(245,166,35,0.2)" }}
             >
-              <div
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg mb-4"
-                style={{ background: "rgba(245,166,35,0.12)", border: "1px solid rgba(245,166,35,0.3)" }}
-              >
-                <it.icon className="h-5 w-5" style={{ color: AMBER }} />
-              </div>
               <h3 className="text-[var(--lp-fg)] font-bold text-[16px] mb-2">{it.title}</h3>
               <p className="text-[13px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{it.body}</p>
             </div>
@@ -410,12 +404,6 @@ function RiskDrivers() {
                   className="flex items-center gap-4 p-3 rounded-lg"
                   style={{ background: "var(--lp-soft-bg)", border: "1px solid var(--lp-soft-border)" }}
                 >
-                  <div
-                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md"
-                    style={{ background: "rgba(245,166,35,0.1)", border: "1px solid rgba(245,166,35,0.25)" }}
-                  >
-                    <d.icon className="h-4 w-4" style={{ color: AMBER }} />
-                  </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[var(--lp-fg)] font-semibold text-[13px]">{d.label}</p>
                     <p className="text-[11px]" style={{ color: "var(--lp-muted)" }}>{d.body}</p>
