@@ -2,10 +2,7 @@ import { RegionData, RiskLevel, MunicipalityData } from "./types";
 import muniListRaw from "./calabarzon-municipalities.json";
 
 function getRiskLevel(score: number): RiskLevel {
-  if (score < 0.35) return "low";
-  if (score < 0.50) return "moderate";
-  if (score < 0.65) return "high";
-  return "severe";
+  return score >= 0.5 ? "high" : "low";
 }
 
 function generateTrend(baseScore: number): { year: number; score: number }[] {

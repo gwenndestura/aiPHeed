@@ -4,7 +4,7 @@ import { AlertTriangle, TrendingUp } from "lucide-react";
 
 export function EmphasisAlerts() {
   const severeRegions = regionsData
-    .filter((r) => r.riskLevel === "severe")
+    .filter((r) => r.riskLevel === "high")
     .sort((a, b) => b.riskScore - a.riskScore);
   
   const topMoM = regionsData
@@ -60,8 +60,7 @@ export function EmphasisAlerts() {
       <div className="bg-card/70 backdrop-blur-md border border-border/30 rounded-xl px-3.5 py-2 shadow-lg">
         <div className="flex items-center gap-4">
           {([
-            { level: "severe" as const, label: "High (>0.65)" },
-            { level: "moderate" as const, label: "Moderate" },
+            { level: "high" as const, label: "High (≥0.50)" },
             { level: "low" as const, label: "Low (<0.50)" },
           ]).map(({ level, label }) => (
             <div key={level} className="flex items-center gap-1.5 text-[9px] text-foreground/60">

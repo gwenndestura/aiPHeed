@@ -117,9 +117,7 @@ export default function DataPage() {
             <select value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)} className="h-8 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none">
               <option value="all">All risk levels</option>
               <option value="low">Low</option>
-              <option value="moderate">Moderate</option>
               <option value="high">High</option>
-              <option value="severe">Severe</option>
             </select>
             <select value={filterQ} onChange={(e) => setFilterQ(e.target.value)} className="h-8 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none">
               <option value="all">All quarters</option>
@@ -149,7 +147,7 @@ export default function DataPage() {
                       const prov = PROVINCE_QUARTER_DATA.find((p) => p.name === r.province);
                       if (prov) {
                         sessionStorage.setItem("aipheed_focus", JSON.stringify({ provinceId: prov.id }));
-                        navigate("/");
+                        navigate("/dashboard");
                       }
                     }}
                     className="border-t border-border/40 hover:bg-secondary/30 cursor-pointer"

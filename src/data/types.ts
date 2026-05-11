@@ -43,9 +43,9 @@ export interface FilterState {
 }
 
 export const RISK_COLORS: Record<RiskLevel, string> = {
-  low: "#22c55e",
+  low: "#EAB308",
   moderate: "#eab308",
-  high: "#f97316",
+  high: "#EF4444",
   severe: "#ef4444",
 };
 

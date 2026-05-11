@@ -196,7 +196,7 @@ function Hero() {
           <div
             className="h-2 w-full rounded-full"
             style={{
-              background: "linear-gradient(to right, #22C55E, #EAB308, #F97316, #EF4444)",
+              background: "linear-gradient(to right, #EAB308, #EF4444)",
             }}
           />
           <div
@@ -204,9 +204,7 @@ function Hero() {
             style={{ color: "var(--lp-muted)" }}
           >
             <span>LOW</span>
-            <span>MODERATE</span>
             <span>HIGH</span>
-            <span>SEVERE</span>
           </div>
         </div>
       </div>
@@ -336,12 +334,12 @@ function SummaryCard() {
 /* ---------------- CAPABILITIES ---------------- */
 function Capabilities() {
   const items = [
-    { title: "Geospatial Risk Mapping", body: "Province and municipality choropleth on an interactive Leaflet map, color-coded Low → Moderate → High → Severe." },
-    { title: "Zero-Shot Filipino-English NLP", body: "XLM-RoBERTa scores bilingual news articles against 10 food insecurity hypotheses with no labeled training data required." },
-    { title: "Bias-Corrected FSSI", body: "The Food Stress Sentiment Index upweights under-covered rural provinces to correct for capital-city media concentration." },
-    { title: "LightGBM + Optuna Tuning", body: "Ensemble ML optimized via Bayesian hyperparameter search across 100 trials, benchmarked against six comparison models." },
-    { title: "SHAP Feature Attribution", body: "Every forecast is broken into named driver contributions (e.g., 'Engel Coefficient +0.19') for transparent, interpretable decision support." },
-    { title: "Municipal Disaggregation", body: "Province forecasts distributed to all 142 LGUs using PSA poverty incidence (60%) and population density (40%) as vulnerability weights." },
+    { icon: MapPin, title: "Geospatial Risk Mapping", body: "Province and municipality choropleth on an interactive Leaflet map, color-coded Low → Moderate → High → Severe." },
+    { icon: Languages, title: "Zero-Shot Filipino-English NLP", body: "XLM-RoBERTa scores bilingual news articles against 10 food insecurity hypotheses with no labeled training data required." },
+    { icon: Scale, title: "Bias-Corrected FSSI", body: "The Food Stress Sentiment Index upweights under-covered rural provinces to correct for capital-city media concentration." },
+    { icon: Sparkles, title: "LightGBM + Optuna Tuning", body: "Ensemble ML optimized via Bayesian hyperparameter search across 100 trials, benchmarked against six comparison models." },
+    { icon: Network, title: "SHAP Feature Attribution", body: "Every forecast is broken into named driver contributions (e.g., 'Engel Coefficient +0.19') for transparent, interpretable decision support." },
+    { icon: Layers, title: "Municipal Disaggregation", body: "Province forecasts distributed to all 142 LGUs using PSA poverty incidence (60%) and population density (40%) as vulnerability weights." },
   ];
 
   return (

@@ -81,10 +81,7 @@ export const PROVINCE_QUARTER_DATA: ProvinceQuarterRow[] = [
 ];
 
 export function getRiskLevelFromScore(score: number): RiskLevel {
-  if (score < 0.35) return "low";
-  if (score < 0.50) return "moderate";
-  if (score < 0.65) return "high";
-  return "severe";
+  return score >= 0.5 ? "high" : "low";
 }
 
 export function getProvinceScore(provinceId: string, qid: string): number {

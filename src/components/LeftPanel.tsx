@@ -105,9 +105,7 @@ export function RfiiScoreCardBody({ quarterId = "2026-Q2", quarterLabel }: { qua
   const highPct = total ? (high / total) * 100 : 0;
 
   const band =
-    animScore >= 0.65 ? { label: "SEVERE", color: "hsl(var(--risk-high))" }
-    : animScore >= 0.5 ? { label: "HIGH", color: "hsl(var(--risk-high))" }
-    : animScore >= 0.35 ? { label: "MODERATE", color: "hsl(var(--risk-moderate))" }
+    animScore >= 0.5 ? { label: "HIGH", color: "hsl(var(--risk-high))" }
     : { label: "LOW", color: "hsl(var(--risk-low))" };
 
   const ticks = Array.from({ length: 11 }, (_, i) => i / 10);
@@ -202,12 +200,12 @@ export function RfiiScoreCardBody({ quarterId = "2026-Q2", quarterLabel }: { qua
               <div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: 'linear-gradient(90deg, hsl(var(--risk-low)) 0%, hsl(var(--risk-moderate)) 50%, hsl(var(--risk-high)) 100%)',
+                  background: 'linear-gradient(90deg, hsl(var(--risk-low)) 0%, hsl(var(--risk-high)) 100%)',
                   opacity: 0.85,
                 }}
               />
-              {/* Segment dividers at 0.35, 0.5, 0.65 */}
-              {[35, 50, 65].map((p) => (
+              {/* Segment divider at 0.5 */}
+              {[50].map((p) => (
                 <div key={p} className="absolute top-0 bottom-0 w-px bg-background/60" style={{ left: `${p}%` }} />
               ))}
               {/* Pointer */}
@@ -232,7 +230,7 @@ export function RfiiScoreCardBody({ quarterId = "2026-Q2", quarterLabel }: { qua
 
       <div className="grid grid-cols-3 gap-2">
         <SummaryChip label="HIGH" value={high} color="hsl(var(--risk-high))" />
-        <SummaryChip label="MODERATE" value={low} color="hsl(var(--risk-moderate))" />
+        <SummaryChip label="LOW" value={low} color="hsl(var(--risk-low))" />
         <SummaryChip label="LIMITED" value={limited} color="hsl(var(--muted-foreground))" tip="Provinces with < 5 geocoded articles" />
       </div>
     </div>
@@ -374,9 +372,6 @@ function RegionDetail({
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-3">
-          <div className="rounded-lg p-1.5 mt-0.5" style={{ backgroundColor: `${riskColor}20` }}>
-            <MapPin className="h-4 w-4" style={{ color: riskColor }} />
-          </div>
           <div>
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">Province of</p>
             <h2 className="text-base font-bold leading-tight">{region.name}</h2>
@@ -551,9 +546,6 @@ function MunicipalityDetail({
 
       {/* Header */}
       <div className="flex items-start gap-3">
-        <div className="rounded-lg p-1.5 mt-0.5" style={{ backgroundColor: `${riskColor}20` }}>
-          <MapPin className="h-4 w-4" style={{ color: riskColor }} />
-        </div>
         <div>
           <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">
             {municipality.classification} of

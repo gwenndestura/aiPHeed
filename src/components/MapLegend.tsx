@@ -2,9 +2,7 @@ import { RISK_COLORS } from "@/data/types";
 
 const LEVELS: Array<{ key: keyof typeof RISK_COLORS; label: string }> = [
   { key: "low", label: "Low" },
-  { key: "moderate", label: "Moderate" },
   { key: "high", label: "High" },
-  { key: "severe", label: "Severe" },
 ];
 
 export function MapLegend() {

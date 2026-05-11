@@ -631,7 +631,7 @@ function ReviewDetailModal({
                         className="h-full"
                         style={{
                           width: `${Math.min(100, m.score * 100)}%`,
-                          background: m.score >= 0.65 ? "hsl(var(--risk-high))" : m.score >= 0.5 ? "hsl(var(--risk-moderate))" : "hsl(var(--risk-low))",
+                          background: m.score >= 0.5 ? "hsl(var(--risk-high))" : "hsl(var(--risk-low))",
                         }}
                       />
                     </div>
