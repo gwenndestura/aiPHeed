@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# aiPHeed — CALABARZON Food Insecurity Risk Intelligence
 
-TODO: Document your project here
+AI-powered food insecurity risk intelligence dashboard for CALABARZON. Mapped, explained, and forecasted with explainable ML.
