@@ -145,12 +145,6 @@ function Hero() {
         }}
       />
       <div className="relative mx-auto max-w-6xl" data-reveal style={{ transition: "all .8s ease" }}>
-        <p
-          className="text-[11px] font-semibold uppercase mb-6"
-          style={{ color: AMBER, letterSpacing: "0.32em" }}
-        >
-          Region IV-A · CALABARZON · Food Risk Intelligence
-        </p>
 
         <h1
           className="font-extrabold leading-[1.02] text-[var(--lp-fg)]"
