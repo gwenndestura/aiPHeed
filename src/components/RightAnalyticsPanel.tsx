@@ -2,9 +2,12 @@ import { useMemo, useState } from "react";
 import { RegionData, MunicipalityData } from "@/data/types";
 import { ChevronDown, ChevronRight, Newspaper, Sparkles, Info, ShieldAlert, AlertCircle } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   PROVINCE_QUARTER_DATA,
   getShapForProvince,
+  SAMPLE_ARTICLES,
+  type Article,
   ALERT_THRESHOLD,
   RISK_DISPLAY_CUTOFF,
   isLimitedSignal,
@@ -309,6 +312,7 @@ const NEWS_TOPICS = [
 
 export function NewsArticlesCardBody({ selectedRegion }: { selectedRegion: RegionData | null }) {
   const [open, setOpen] = useState(false);
+  const [activeArticle, setActiveArticle] = useState<Article | null>(null);
 
   const articleCount = selectedRegion
     ? PROVINCE_QUARTER_DATA.find((p) => p.id === selectedRegion.id)?.articles ?? 0
@@ -328,20 +332,57 @@ export function NewsArticlesCardBody({ selectedRegion }: { selectedRegion: Regio
         {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
       </button>
       {open && (
-        <div className="mt-3 space-y-2 px-1">
-          {NEWS_TOPICS.map((t) => (
-            <div key={t.label}>
-              <div className="flex items-center justify-between text-[10px] mb-0.5">
-                <span className="text-foreground/80 font-medium">{t.label}</span>
-                <span className="font-mono-num font-bold text-foreground/70">{t.pct}%</span>
+        <div className="mt-3 space-y-3 px-1">
+          {/* Topic breakdown */}
+          <div className="space-y-2">
+            {NEWS_TOPICS.map((t) => (
+              <div key={t.label}>
+                <div className="flex items-center justify-between text-[10px] mb-0.5">
+                  <span className="text-foreground/80 font-medium">{t.label}</span>
+                  <span className="font-mono-num font-bold text-foreground/70">{t.pct}%</span>
+                </div>
+                <div className="h-[4px] rounded-full bg-border/30 overflow-hidden">
+                  <div className="h-full rounded-full opacity-80" style={{ width: `${t.pct}%`, backgroundColor: t.color }} />
+                </div>
               </div>
-              <div className="h-[4px] rounded-full bg-border/30 overflow-hidden">
-                <div className="h-full rounded-full opacity-80" style={{ width: `${t.pct}%`, backgroundColor: t.color }} />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Clickable articles */}
+          <div className="space-y-1 border-t border-border/30 pt-2">
+            {SAMPLE_ARTICLES.map((a) => (
+              <button
+                key={a.title}
+                onClick={() => setActiveArticle(a)}
+                className="w-full text-left text-[10px] py-1.5 px-2 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <p className="truncate font-semibold text-foreground/90">{a.title}</p>
+                <p className="text-[9px]">{a.source} · {a.date}</p>
+              </button>
+            ))}
+          </div>
         </div>
       )}
+
+      <Dialog open={!!activeArticle} onOpenChange={(o) => !o && setActiveArticle(null)}>
+        <DialogContent className="z-[1300] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-sm">{activeArticle?.title}</DialogTitle>
+            <DialogDescription className="text-[11px]">{activeArticle?.source} · {activeArticle?.date}</DialogDescription>
+          </DialogHeader>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">{activeArticle?.excerpt}</p>
+          {activeArticle?.url && (
+            <a
+              href={activeArticle.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[11px] font-semibold text-primary hover:underline break-all"
+            >
+              Read full article ↗
+            </a>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
