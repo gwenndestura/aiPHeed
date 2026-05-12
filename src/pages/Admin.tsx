@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { Navigate, Link, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   MessageSquareText,
   ClipboardCheck,
@@ -98,7 +98,7 @@ const initialReviewItems: ReviewItem[] = REVIEW_YEARS.flatMap((year) =>
           ? "Staged"
           : year < 2026
           ? "Approved"
-          : seed < 2 ? "Staged" : seed === 4 ? "Rejected" : "Approved";
+          : seed < 2 ? "Staged" : seed === 4 ? "Staged" : "Approved";
       // Vary score slightly by quarter for realism
       const drift = ((q.charCodeAt(1) - 49) * 0.01) + ((2026 - year) * -0.02);
       return {
@@ -112,6 +112,34 @@ const initialReviewItems: ReviewItem[] = REVIEW_YEARS.flatMap((year) =>
     })
   )
 );
+
+// Seed localStorage with the deterministic initial rejections so the map
+// reflects them immediately. Uses the same seed formula as initialReviewItems
+// so the source of truth for "Rejected" is localStorage, not local state.
+const REJECTIONS_SEED_KEY = "aipheed_rejections_seeded_v1";
+if (!localStorage.getItem(REJECTIONS_SEED_KEY)) {
+  REVIEW_YEARS.forEach((year) => {
+    (["Q1", "Q2", "Q3", "Q4"] as const).forEach((q) => {
+      regionsData.forEach((r, idx) => {
+        const seed = (year + q.charCodeAt(1) + idx) % 5;
+        const shouldSeed =
+          year >= 2026 &&
+          !(year === 2026 && q === "Q4" && r.name === "Quezon") &&
+          seed === 4;
+        if (shouldSeed) {
+          addRejection({
+            province: r.name,
+            provinceId: r.name.toLowerCase(),
+            quarter: `${year}-${q}`,
+            reason: "Pre-existing rejection",
+            timestamp: new Date().toISOString(),
+          });
+        }
+      });
+    });
+  });
+  localStorage.setItem(REJECTIONS_SEED_KEY, "1");
+}
 
 export default function Admin({ initialSection }: { initialSection?: Section } = {}) {
   const [section, setSection] = useState<Section>(initialSection ?? "map");
@@ -191,13 +219,17 @@ function AdminNavbar({
 
   return (
     <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
-      {/* Brand → landing */}
-      <Link to="/" className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0" aria-label="aiPHeed home">
+      {/* Brand → admin map (stays within admin, no sign-out) */}
+      <button
+        onClick={() => onSection("map")}
+        className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0"
+        aria-label="aiPHeed admin home"
+      >
         <img src={logoIcon} alt="aiPHeed" className="sm:hidden h-9 w-9 object-contain" />
         <img src={logoDark} alt="aiPHeed" className="hidden sm:block dark-only h-10 w-auto object-contain" />
         <img src={logoLight} alt="aiPHeed" className="hidden sm:block light-only h-10 w-auto object-contain" />
         <span className="hidden md:inline ml-2 text-[9px] uppercase tracking-widest text-primary font-bold">Admin</span>
-      </Link>
+      </button>
 
       {/* Nav links — centered */}
       <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
@@ -493,7 +525,19 @@ function ReviewSection() {
           </div>
         </div>
       ) : (
-        <RejectionLog rejections={rejections} onClear={(r) => { removeRejection(r.provinceId, r.quarter); }} />
+        <RejectionLog
+          rejections={rejections}
+          onClear={(r) => {
+            removeRejection(r.provinceId, r.quarter);
+            setItems((prev) =>
+              prev.map((x) =>
+                x.province === r.province && x.quarter === r.quarter
+                  ? { ...x, status: "Staged" }
+                  : x
+              )
+            );
+          }}
+        />
       )}
 
       {open && (

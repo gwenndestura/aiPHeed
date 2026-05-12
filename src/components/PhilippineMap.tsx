@@ -148,14 +148,16 @@ export function PhilippineMap({
     );
     if (!features.length) return;
 
+    const isProvRejected = rejectedRef.current.has(provinceId);
+
     const muniLayer = L.geoJSON(
       { type: "FeatureCollection", features } as GeoJSON.FeatureCollection,
       {
         style: (feature) => {
           const name = (feature?.properties?.name || "").toLowerCase();
           const muni = muniMap.get(`${provinceId}::${name}`);
-          const color = muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
-          const isSel = muni && selectedMuniRef.current?.id === muni.id;
+          const color = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
+          const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
           return {
             fillColor: color,
             fillOpacity: isSel ? 0.98 : 0.9,
@@ -172,7 +174,9 @@ export function PhilippineMap({
           layer.bindTooltip(
             `<div style="font-size:11px">
               <strong>${name}</strong>
-              ${muni ? `<br/><span style="color:${tipColor}">RFII ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>` : ""}
+              ${isProvRejected
+                ? `<br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span>`
+                : muni ? `<br/><span style="color:${tipColor}">RFII ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>` : ""}
             </div>`,
             { sticky: true }
           );
@@ -184,7 +188,7 @@ export function PhilippineMap({
             },
             mouseout: (e) => {
               const l = e.target as L.Path;
-              const isSel = muni && selectedMuniRef.current?.id === muni.id;
+              const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
               l.setStyle({
                 fillOpacity: isSel ? 0.98 : 0.9,
                 weight: isSel ? 2.5 : 0.8,
@@ -192,7 +196,7 @@ export function PhilippineMap({
               });
             },
             click: () => {
-              if (muni) onMuniClickRef.current(muni);
+              if (muni && !isProvRejected) onMuniClickRef.current(muni);
             },
           });
         },
@@ -204,7 +208,7 @@ export function PhilippineMap({
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = (feature?.properties?.name || "").toLowerCase();
       const muni = muniMap.get(`${provinceId}::${name}`);
-      const fill = muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
+      const fill = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
       (layer as L.Path).setStyle({ fillColor: fill });
     });
 
@@ -251,8 +255,10 @@ export function PhilippineMap({
 
     clearMunicipalities();
 
-    // Show all province pulses
-    provincePulsesRef.current.forEach(({ marker }) => marker.addTo(map));
+    // Re-show pulses only for non-rejected provinces
+    provincePulsesRef.current.forEach(({ marker, provinceId }) => {
+      if (!rejectedRef.current.has(provinceId)) marker.addTo(map);
+    });
 
     // Reset all province styles + re-enable interactivity
     provLayer.eachLayer((layer) => {
@@ -543,21 +549,22 @@ export function PhilippineMap({
   useEffect(() => {
     if (!municipalitiesLayerRef.current || !selectedRegion) return;
     const provinceId = selectedRegion.id;
+    const isProvRejected = rejectedRef.current.has(provinceId);
     municipalitiesLayerRef.current.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = (feature?.properties?.name || "").toLowerCase();
       const muni = muniMap.get(`${provinceId}::${name}`);
       if (!muni) return;
-      const isSel = selectedMunicipality?.id === muni.id;
+      const isSel = !isProvRejected && selectedMunicipality?.id === muni.id;
       (layer as L.Path).setStyle({
-        fillColor: RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR,
+        fillColor: isProvRejected ? NO_DATA_COLOR : (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR),
         fillOpacity: isSel ? 0.98 : 0.9,
         color: isSel ? AMBER : "rgba(255,255,255,0.35)",
         weight: isSel ? 2.5 : 0.8,
       });
       if (isSel) (layer as L.Path).bringToFront();
     });
-  }, [selectedMunicipality, selectedRegion, muniMap]);
+  }, [selectedMunicipality, selectedRegion, muniMap, rejectedProvinceIds]);
 
   // Apply rejection updates: re-style provinces, re-bind tooltips, hide pulses for rejected.
   useEffect(() => {

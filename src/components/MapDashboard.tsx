@@ -139,6 +139,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
                   onCloseMunicipality={() => setSelectedMunicipality(null)}
                   onRegionClick={handleRegionClick}
                   onMunicipalityClick={handleMunicipalityClick}
+                  rejectedProvinceIds={rejectedIds}
                 />
               </FloatingCard>
             </div>
@@ -175,16 +176,29 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         onClick={() => rightCollapsed && setRightCollapsed(false)}
         aria-label={rightCollapsed ? "Show right sidebar" : undefined}
       >
-          <FloatingCard>
-            <ShapNarrativeCardBody
-              quarter={currentQuarter}
-              selectedRegion={effectiveRegion}
-              selectedMunicipality={selectedMunicipality}
-            />
-          </FloatingCard>
-          <FloatingCard>
-            <NewsArticlesCardBody selectedRegion={effectiveRegion} />
-          </FloatingCard>
+          {effectiveRegion && rejectedIds.has(effectiveRegion.id) ? (
+            <FloatingCard>
+              <div className="py-8 text-center space-y-2">
+                <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
+                <p className="text-[10px] text-muted-foreground/60 leading-snug px-2">
+                  This quarter's forecast for <span className="font-semibold">{effectiveRegion.name}</span> has been rejected by the admin.
+                </p>
+              </div>
+            </FloatingCard>
+          ) : (
+            <>
+              <FloatingCard>
+                <ShapNarrativeCardBody
+                  quarter={currentQuarter}
+                  selectedRegion={effectiveRegion}
+                  selectedMunicipality={selectedMunicipality}
+                />
+              </FloatingCard>
+              <FloatingCard>
+                <NewsArticlesCardBody selectedRegion={effectiveRegion} />
+              </FloatingCard>
+            </>
+          )}
       </div>
 
       {/* Map search — top, beside left sidebar */}

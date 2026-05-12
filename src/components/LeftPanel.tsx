@@ -25,6 +25,7 @@ interface Props {
   onCloseMunicipality: () => void;
   onRegionClick: (r: RegionData) => void;
   onMunicipalityClick: (m: MunicipalityData) => void;
+  rejectedProvinceIds?: Set<string>;
 }
 
 export function LeftPanel({
@@ -35,25 +36,43 @@ export function LeftPanel({
   onCloseMunicipality,
   onRegionClick,
   onMunicipalityClick,
+  rejectedProvinceIds,
 }: Props) {
   const activeRegion = selectedRegion || previewRegion;
+  const isRegionRejected = !!activeRegion && !!rejectedProvinceIds?.has(activeRegion.id);
+  const isMuniRejected = !!selectedMunicipality && !!rejectedProvinceIds?.has(selectedMunicipality.provinceId);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {selectedMunicipality ? (
-          <MunicipalityDetail
-            municipality={selectedMunicipality}
-            onBack={onCloseMunicipality}
-          />
+          isMuniRejected ? (
+            <RejectedForecastPlaceholder
+              name={selectedMunicipality.provinceName}
+              onBack={onCloseMunicipality}
+            />
+          ) : (
+            <MunicipalityDetail
+              municipality={selectedMunicipality}
+              onBack={onCloseMunicipality}
+            />
+          )
         ) : activeRegion ? (
-          <RegionDetail
-            region={activeRegion}
-            isLocked={!!selectedRegion}
-            onClose={onClose}
-            onMunicipalityClick={onMunicipalityClick}
-          />
+          isRegionRejected ? (
+            <RejectedForecastPlaceholder
+              name={activeRegion.name}
+              isLocked={!!selectedRegion}
+              onClose={onClose}
+            />
+          ) : (
+            <RegionDetail
+              region={activeRegion}
+              isLocked={!!selectedRegion}
+              onClose={onClose}
+              onMunicipalityClick={onMunicipalityClick}
+            />
+          )
         ) : (
           <RegionalOverview onRegionClick={onRegionClick} />
         )}
@@ -344,6 +363,51 @@ export function ProvinceRankingCardBody({ onRegionClick }: { onRegionClick: (r: 
   );
 }
 
+
+/* ─── Rejected forecast placeholder ─── */
+function RejectedForecastPlaceholder({
+  name,
+  isLocked,
+  onClose,
+  onBack,
+}: {
+  name: string;
+  isLocked?: boolean;
+  onClose?: () => void;
+  onBack?: () => void;
+}) {
+  return (
+    <div className="px-5 py-4 space-y-4">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors group mb-2"
+            >
+              <ArrowLeft className="h-3 w-3 group-hover:-translate-x-0.5 transition-transform" />
+              Back
+            </button>
+          )}
+          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">Province of</p>
+          <h2 className="text-base font-bold leading-tight">{name}</h2>
+        </div>
+        {isLocked && onClose && (
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        )}
+      </div>
+      <div className="rounded-xl border border-border/40 bg-secondary/20 px-4 py-8 flex flex-col items-center text-center space-y-2">
+        <span className="text-3xl text-muted-foreground/30 select-none">—</span>
+        <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
+        <p className="text-[10px] text-muted-foreground/60 leading-snug max-w-[200px]">
+          This quarter's forecast has been rejected by the admin and is not available for display.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Province (Region) Detail ─── */
 function RegionDetail({
