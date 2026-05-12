@@ -11,7 +11,7 @@ export function DashboardOverview({ regions }: Props) {
   const totalHouseholds = regions.reduce((s, r) => s + r.householdsAtRisk, 0);
 
   const stats = [
-    { label: "National RFII", value: avgScore.toFixed(2), icon: Cloud },
+    { label: "National Risk Level", value: avgScore.toFixed(2), icon: Cloud },
     { label: "High-Risk", value: `${highRiskCount}/${regions.length}`, icon: AlertTriangle },
     { label: "HH at Risk", value: (totalHouseholds / 1e6).toFixed(1) + "M", icon: Users },
     { label: "F1 / AUC", value: "0.82 / 0.87", icon: Sparkles },
