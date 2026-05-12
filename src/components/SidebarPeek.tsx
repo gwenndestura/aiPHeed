@@ -21,7 +21,7 @@ export function SidebarPeek({ side, onExpand }: Props) {
       >
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground" />
         <div className="font-mono-num text-[11px] font-bold text-primary writing-vertical" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-          RFII {avg.toFixed(2)}
+          Risk Level {avg.toFixed(2)}
         </div>
         <div className="flex flex-col gap-1.5 mt-2">
           {sorted.map((r) => (

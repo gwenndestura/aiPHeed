@@ -81,7 +81,7 @@ export function ShapNarrativeCardBody({
     return baseline + shap.reduce((a, s) => a + s.value, 0);
   }, [region, quarter.id, shap]);
 
-  // Calibrate SHAP values so baseline + Σφᵢ exactly equals the displayed RFII shown elsewhere.
+  // Calibrate SHAP values so baseline + Σφᵢ exactly equals the displayed Risk Level shown elsewhere.
   const calibratedShap = useMemo(() => {
     const target = finalScore - baseline;
     const current = shap.reduce((a, s) => a + s.value, 0);
@@ -216,7 +216,7 @@ function FeatureWaterfall({
             })}
           </ul>
           <div className="flex items-center justify-between text-[10px] font-mono-num mt-1.5 pt-1 border-t border-border/30">
-            <span className="uppercase tracking-wider text-muted-foreground">Final RFII</span>
+            <span className="uppercase tracking-wider text-muted-foreground">Final Risk Level</span>
             <span className="font-bold text-foreground">{finalScore.toFixed(3)}</span>
           </div>
         </div>

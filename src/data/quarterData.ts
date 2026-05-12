@@ -21,7 +21,7 @@ export const QUARTER_IDS = [
 ] as const;
 export type QuarterId = typeof QUARTER_IDS[number];
 
-// RFII per province per quarter (2027-Q1 is forecast — slight uptick)
+// Risk Level per province per quarter (2027-Q1 is forecast — slight uptick)
 export const PROVINCE_QUARTER_DATA: ProvinceQuarterRow[] = [
   {
     id: "quezon",

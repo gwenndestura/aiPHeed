@@ -13,7 +13,7 @@ export function RegionalRankingsTable({ onSelectRegion }: Props) {
     <div className="bg-card border rounded-lg p-4">
       <div className="mb-4">
         <h3 className="text-sm font-bold">Regional Risk Rankings</h3>
-        <p className="text-xs text-muted-foreground">Sorted by RFII score — click a region for details</p>
+        <p className="text-xs text-muted-foreground">Sorted by Risk Level score — click a region for details</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -21,7 +21,7 @@ export function RegionalRankingsTable({ onSelectRegion }: Props) {
             <tr className="border-b border-border">
               <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2 w-10">#</th>
               <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2">REGION</th>
-              <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2">RFII</th>
+              <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2">RISK LEVEL</th>
               <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2">TREND</th>
               <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-left py-2 px-2">RISK</th>
               <th className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold text-right py-2 px-2">HH AT RISK</th>

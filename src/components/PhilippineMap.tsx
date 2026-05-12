@@ -176,7 +176,7 @@ export function PhilippineMap({
               <strong>${name}</strong>
               ${isProvRejected
                 ? `<br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span>`
-                : muni ? `<br/><span style="color:${tipColor}">RFII ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>` : ""}
+                : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>` : ""}
             </div>`,
             { sticky: true }
           );
@@ -428,7 +428,7 @@ export function PhilippineMap({
                 layer.bindTooltip(
                   isRej
                     ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span></div>`
-                    : `<div style="font-size:12px"><strong>${region.name}</strong><br/>RFII: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
+                    : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
                   { sticky: true }
                 );
               }
@@ -584,7 +584,7 @@ export function PhilippineMap({
       (layer as any).bindTooltip(
         isRej
           ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span></div>`
-          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>RFII: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
+          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
         { sticky: true }
       );
     });

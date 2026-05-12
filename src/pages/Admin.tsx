@@ -96,6 +96,8 @@ const initialReviewItems: ReviewItem[] = REVIEW_YEARS.flatMap((year) =>
       const status: ReviewItem["status"] =
         year === 2026 && q === "Q4" && r.name === "Quezon"
           ? "Staged"
+          : year === 2026 && q === "Q2" && r.name === "Quezon"
+          ? "Approved"
           : year < 2026
           ? "Approved"
           : seed < 2 ? "Staged" : seed === 4 ? "Staged" : "Approved";
@@ -116,8 +118,10 @@ const initialReviewItems: ReviewItem[] = REVIEW_YEARS.flatMap((year) =>
 // Seed localStorage with the deterministic initial rejections so the map
 // reflects them immediately. Uses the same seed formula as initialReviewItems
 // so the source of truth for "Rejected" is localStorage, not local state.
-const REJECTIONS_SEED_KEY = "aipheed_rejections_seeded_v1";
+const REJECTIONS_SEED_KEY = "aipheed_rejections_seeded_v2";
 if (!localStorage.getItem(REJECTIONS_SEED_KEY)) {
+  // Clear any rejections from a previous seed version before re-seeding.
+  localStorage.removeItem("aipheed_rejections");
   REVIEW_YEARS.forEach((year) => {
     (["Q1", "Q2", "Q3", "Q4"] as const).forEach((q) => {
       regionsData.forEach((r, idx) => {
@@ -125,6 +129,7 @@ if (!localStorage.getItem(REJECTIONS_SEED_KEY)) {
         const shouldSeed =
           year >= 2026 &&
           !(year === 2026 && q === "Q4" && r.name === "Quezon") &&
+          !(year === 2026 && q === "Q2" && r.name === "Quezon") &&
           seed === 4;
         if (shouldSeed) {
           addRejection({
@@ -478,7 +483,7 @@ function ReviewSection() {
                   <th className="text-left font-semibold px-4 py-2.5">Province</th>
                   <th className="text-left font-semibold px-4 py-2.5">Quarter</th>
                   <th className="text-left font-semibold px-4 py-2.5">Risk Level</th>
-                  <th className="text-left font-semibold px-4 py-2.5">RFII Score</th>
+                  <th className="text-left font-semibold px-4 py-2.5">Risk Level Score</th>
                   <th className="text-left font-semibold px-4 py-2.5">Status</th>
                   <th className="text-left font-semibold px-4 py-2.5">Action</th>
                 </tr>
@@ -645,7 +650,7 @@ function ReviewDetailModal({
           <div>
             <h2 className="text-base font-bold">{item.province} — Risk Review</h2>
             <p className="text-[10px] text-muted-foreground">
-              <span className="font-semibold text-primary">{item.quarter}</span> · {item.date} · RFII {item.riskScore.toFixed(2)} · {RISK_LABELS[item.riskLevel]} · Status: {item.status}
+              <span className="font-semibold text-primary">{item.quarter}</span> · {item.date} · Risk Level {item.riskScore.toFixed(2)} · {RISK_LABELS[item.riskLevel]} · Status: {item.status}
             </p>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
@@ -663,7 +668,7 @@ function ReviewDetailModal({
           <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-[11px] font-bold">Municipality / City scores</h4>
-              <span className="text-[10px] text-muted-foreground">{muniData.length} LGUs · sorted by RFII</span>
+              <span className="text-[10px] text-muted-foreground">{muniData.length} LGUs · sorted by Risk Level</span>
             </div>
             <div className="max-h-64 overflow-y-auto thin-scrollbar pr-1">
               <div className="grid grid-cols-2 gap-x-4 gap-y-1">
@@ -706,7 +711,7 @@ function ReviewDetailModal({
           <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
             <h4 className="text-[11px] font-bold mb-1">SHAP explanations</h4>
             <p className="text-[10px] text-muted-foreground mb-3">
-              Feature-level reasons behind this quarter's RFII forecast.
+              Feature-level reasons behind this quarter's Risk Level forecast.
             </p>
 
             <ShapNarrativeBlock shap={shapData} />

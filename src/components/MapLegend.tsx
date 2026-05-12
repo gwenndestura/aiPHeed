@@ -16,7 +16,7 @@ export function MapLegend() {
       }}
     >
       <span className="text-[9px] uppercase tracking-widest text-muted-foreground/80 font-semibold">
-        RFII
+        Risk Level
       </span>
       <div className="flex items-center gap-1.5">
         {LEVELS.map((l) => (

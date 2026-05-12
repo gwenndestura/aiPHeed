@@ -47,7 +47,7 @@ export function RegionSidebar({ region, previewRegion, onClose }: Props) {
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-muted/50 rounded-lg px-3 py-3 border border-border">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">RFII SCORE</div>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">RISK LEVEL SCORE</div>
           <div className="text-2xl font-bold mt-1">{data.riskScore.toFixed(2)}</div>
           <div className="h-1 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full" style={{ width: `${data.riskScore * 100}%`, backgroundColor: riskColor }} />
@@ -72,7 +72,7 @@ export function RegionSidebar({ region, previewRegion, onClose }: Props) {
         <div className="bg-muted/50 rounded-lg px-3 py-3 border border-border">
           <div className="flex items-center gap-1.5">
             <TrendingUp className="h-3 w-3 text-muted-foreground" />
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">MOM CHANGE</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">QOQ CHANGE</span>
           </div>
           <div className={`text-2xl font-bold mt-1 ${momPositive ? "text-destructive" : "text-risk-low"}`}>
             {momPositive ? "+" : ""}{data.momChange}%
@@ -99,7 +99,7 @@ export function RegionSidebar({ region, previewRegion, onClose }: Props) {
           <span className="text-primary text-sm">💡</span>
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          {data.name} is classified as {data.riskLevel === "high" || data.riskLevel === "severe" ? "Elevated" : "Moderate"} (RFII: {data.riskScore.toFixed(2)}), primarily driven by Engel Coefficient, FPSI (Price Stress), Dependency Ratio. Protective factors include Income Decile and Income Sources, which partially offset risk.
+          {data.name} is classified as {data.riskLevel === "high" || data.riskLevel === "severe" ? "Elevated" : "Moderate"} (Risk Level: {data.riskScore.toFixed(2)}), primarily driven by Engel Coefficient, FPSI (Price Stress), Dependency Ratio. Protective factors include Income Decile and Income Sources, which partially offset risk.
         </p>
       </div>
 
@@ -112,7 +112,7 @@ export function RegionSidebar({ region, previewRegion, onClose }: Props) {
           </h3>
         </div>
         <p className="text-[10px] text-muted-foreground mb-3">
-          Cumulative feature contributions from base score (0.30) → predicted RFII ({data.riskScore.toFixed(2)})
+          Cumulative feature contributions from base score (0.30) → predicted Risk Level ({data.riskScore.toFixed(2)})
         </p>
         <div className="space-y-2">
           {data.shapValues.map((sv) => (

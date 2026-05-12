@@ -6,13 +6,13 @@ export function NationalTrendChart() {
     <div className="bg-card border rounded-lg p-4">
       <div className="flex items-center justify-between mb-1">
         <div>
-          <h3 className="text-sm font-bold">National RFII & FPSI Trend</h3>
+          <h3 className="text-sm font-bold">National Risk Level & FPSI Trend</h3>
           <p className="text-xs text-muted-foreground">12-month rolling national average</p>
         </div>
         <div className="flex items-center gap-4 text-xs">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "hsl(35, 90%, 55%)" }} />
-            RFII
+            Risk Level
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "hsl(200, 80%, 50%)" }} />
@@ -49,7 +49,7 @@ export function NationalTrendChart() {
               border: "1px solid hsl(222, 20%, 18%)",
               color: "hsl(210, 20%, 92%)",
             }}
-            formatter={(v: number, name: string) => [v.toFixed(3), name === "rfii" ? "RFII" : "FPSI"]}
+            formatter={(v: number, name: string) => [v.toFixed(3), name === "rfii" ? "Risk Level" : "FPSI"]}
           />
           <Area
             type="monotone"

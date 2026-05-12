@@ -34,7 +34,7 @@ export function WhatIfSandbox({ region }: Props) {
         </button>
       </div>
       <p className="text-[10px] text-muted-foreground/70 mb-4">
-        Adjust features to simulate RFII changes for {region.name}
+        Adjust features to simulate Risk Level changes for {region.name}
       </p>
 
       {/* Score cards */}

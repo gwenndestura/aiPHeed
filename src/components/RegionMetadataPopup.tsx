@@ -36,9 +36,9 @@ export function RegionMetadataPopup({ region, open, onOpenChange }: Props) {
         <div className="space-y-4 mt-2">
           {/* Metadata */}
           <Section icon={Info} title="Metadata">
-            <Row k="RFII" v={region.riskScore.toFixed(2)} accent={color} />
+            <Row k="Risk Level" v={region.riskScore.toFixed(2)} accent={color} />
             <Row k="FPSI" v={`${region.fpsi}%`} />
-            <Row k="MoM Change" v={`${region.momChange > 0 ? "+" : ""}${region.momChange}%`} />
+            <Row k="QoQ Change" v={`${region.momChange > 0 ? "+" : ""}${region.momChange}%`} />
             <Row k="Households at risk" v={region.householdsAtRisk.toLocaleString()} />
           </Section>
 

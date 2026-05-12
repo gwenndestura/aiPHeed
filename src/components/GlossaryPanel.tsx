@@ -1,14 +1,16 @@
 import { X } from "lucide-react";
 
 const TERMS: Array<{ term: string; def: string }> = [
-  { term: "RFII", def: "Regional Food Insecurity Index. A composite score from 0 to 1 forecasting the likelihood of food insecurity in a province or municipality. Higher values indicate greater risk." },
+  { term: "Risk Level", def: "A composite score from 0 to 1 forecasting the likelihood of food insecurity in a province or municipality. Higher values indicate greater risk. Formerly referred to as RFII (Regional Food Insecurity Index)." },
   { term: "SHAP", def: "SHapley Additive exPlanations. A method that explains how each feature contributed to the model's prediction. Positive values increase risk; negative values are protective." },
   { term: "Engel Coefficient", def: "The proportion of household income spent on food. Higher values indicate lower income and greater food vulnerability." },
   { term: "FPSI Price Stress", def: "Food Price Stress Index. Measures pressure from rising food retail prices on household food access." },
+  { term: "Fish Kill", def: "Mass mortality of fish in inland or coastal waters due to pollution, algal blooms, or oxygen depletion. Disrupts local protein supply and livelihoods, directly elevating food insecurity risk in affected communities." },
   { term: "Dependency Rate", def: "The ratio of non-working household members to working members. Higher rates increase economic vulnerability." },
   { term: "Income Decile", def: "Household income ranking from lowest (1) to highest (10). Lower deciles face greater food insecurity risk." },
-  { term: "Baseline (φ₀)", def: "The average RFII across all areas before feature contributions are applied." },
+  { term: "Baseline (φ₀)", def: "The average Risk Level across all areas before feature contributions are applied." },
   { term: "Impact", def: "The total change from baseline caused by all feature contributions combined." },
+  { term: "QoQ Change", def: "Quarter-over-Quarter Change. The percentage shift in the Risk Level score compared to the previous quarter. Positive values indicate worsening conditions." },
   { term: "Forecast Quarter", def: "A future quarter for which the model has generated a risk prediction based on current signals." },
   { term: "IPC/CH Phase", def: "Integrated Food Security Phase Classification. International standard for measuring acute food insecurity severity." },
 ];

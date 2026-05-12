@@ -55,7 +55,7 @@ export default function VisualizationPage() {
           {/* Sub-tabs */}
           <div className="flex items-center gap-2 mb-4">
             <SubTab active={tab === "trend"} onClick={() => setTab("trend")} icon={<LineIcon className="h-3.5 w-3.5" />}>
-              Province RFII Trend
+              Province Risk Level Trend
             </SubTab>
             <SubTab active={tab === "shap"} onClick={() => setTab("shap")} icon={<BarChart3 className="h-3.5 w-3.5" />}>
               Feature Contribution Breakdown
@@ -95,7 +95,7 @@ function SubTab({
   );
 }
 
-/* ─── Sub-tab A — Province RFII Trend ─── */
+/* ─── Sub-tab A — Province Risk Level Trend ─── */
 function TrendView() {
   const [province, setProvince] = useState<string>("All");
   const [municipality, setMunicipality] = useState<string>("All");
@@ -154,9 +154,9 @@ function TrendView() {
   return (
     <div>
       <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
-        <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality RFII Trend</h1>
+        <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality Risk Level Trend</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest">
-          RFII time series across selected province, municipality, and quarters
+          Risk Level time series across selected province, municipality, and quarters
         </p>
       </div>
 
@@ -216,7 +216,7 @@ function TrendView() {
               <YAxis
                 domain={[0, 1]}
                 tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
-                label={{ value: "RFII Score", angle: -90, position: "insideLeft", fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                label={{ value: "Risk Level Score", angle: -90, position: "insideLeft", fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip
                 contentStyle={{

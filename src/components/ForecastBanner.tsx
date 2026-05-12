@@ -72,7 +72,7 @@ export function ForecastBanner({ quarter }: Props) {
           </span>
         )}
         {alerts > 0 && (
-          <span className="px-1.5 py-0.5 rounded-md bg-destructive text-destructive-foreground font-bold tabular-nums font-mono-num flex items-center gap-1 severe-pulse" title={`Active alerts (RFII ≥ ${ALERT_THRESHOLD})`}>
+          <span className="px-1.5 py-0.5 rounded-md bg-destructive text-destructive-foreground font-bold tabular-nums font-mono-num flex items-center gap-1 severe-pulse" title={`Active alerts (Risk Level ≥ ${ALERT_THRESHOLD})`}>
             <ShieldAlert className="h-2.5 w-2.5" />
             {alerts} ALERT
           </span>

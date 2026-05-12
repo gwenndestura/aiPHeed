@@ -12,7 +12,7 @@ export interface RegionData {
   accessToFood: number;
   householdsAtRisk: number;
   fpsi: number; // Food Price Stress Index
-  momChange: number; // Month-over-month change %
+  momChange: number; // Quarter-over-quarter change %
   historicalTrend: { year: number; score: number }[];
   featureImportance: { feature: string; importance: number }[];
   shapValues: { feature: string; value: number }[]; // positive = increases risk, negative = decreases

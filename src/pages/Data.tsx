@@ -66,7 +66,7 @@ export default function DataPage() {
   };
 
   const exportCsv = () => {
-    const header = ["Province", "Quarter", "RFII", "Risk Level", "Articles", "Trigger", "Status"];
+    const header = ["Province", "Quarter", "Risk Level Score", "Risk Level", "Articles", "Trigger", "Status"];
     const csv = [
       header.join(","),
       ...filtered.map((r) => [r.province, r.quarter, r.rfii.toFixed(2), r.riskLevel, r.articles, r.trigger, r.status].join(",")),
@@ -132,7 +132,7 @@ export default function DataPage() {
                   {(["province", "quarter", "rfii", "riskLevel", "articles", "trigger", "status"] as SortKey[]).map((k) => (
                     <th key={k} className="text-left font-semibold px-4 py-2.5 cursor-pointer hover:text-foreground" onClick={() => setSort(k)}>
                       <span className="inline-flex items-center gap-1 capitalize">
-                        {k === "rfii" ? "RFII" : k === "riskLevel" ? "Risk Level" : k}
+                        {k === "rfii" ? "Risk Level" : k === "riskLevel" ? "Risk Level" : k}
                         {sortKey === k && (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
                       </span>
                     </th>

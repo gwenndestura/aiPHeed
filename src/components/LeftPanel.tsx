@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS } from "@/data/types";
 import { regionsData, municipalitiesByProvince } from "@/data/mockData";
-import { X, MapPin, TrendingUp, TrendingDown, BarChart3, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, AlertCircle, Info } from "lucide-react";
+import { X, MapPin, TrendingUp, TrendingDown, BarChart3, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, AlertCircle, Info, Fish } from "lucide-react";
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -136,7 +136,7 @@ export function RfiiScoreCardBody({ quarterId = "2026-Q2", quarterLabel }: { qua
     <div className="space-y-3">
       <div className="flex items-baseline justify-between gap-2">
         <p className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground/80 font-semibold">
-          CALABARZON — Regional Average RFII
+          CALABARZON — Regional Average Risk Level
         </p>
         {quarterLabel && (
           <p className="text-[9px] text-muted-foreground/70 font-mono-num tabular-nums shrink-0">{quarterLabel}</p>
@@ -260,6 +260,7 @@ export function RiskDriversCardBody() {
   const drivers: { key: string; label: string; icon: typeof Briefcase; pct: number; protective?: boolean }[] = [
     { key: "market", label: "Market / Prices", icon: Store, pct: 0.78 },
     { key: "climate", label: "Climate Stress", icon: CloudRain, pct: 0.66 },
+    { key: "fishkill", label: "Fish Kill", icon: Fish, pct: 0.57 },
     { key: "employment", label: "Employment", icon: Briefcase, pct: 0.42 },
     { key: "ofw", label: "OFW Remittance", icon: Plane, pct: 0.38, protective: true },
   ].sort((a, b) => b.pct - a.pct);
@@ -268,7 +269,7 @@ export function RiskDriversCardBody() {
     <div>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-1 h-4 rounded-full bg-primary" />
-        <h3 className="text-[11px] font-bold uppercase tracking-wider">Risk Drivers</h3>
+        <h3 className="text-[11px] font-bold uppercase tracking-wider">Why is this Province at Risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">Ranked</span>
       </div>
       <div className="space-y-2">
@@ -448,7 +449,7 @@ function RegionDetail({
                 {specLabel} · risk
               </span>
               {isActiveAlert && (
-                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse" title={`Active alert: RFII ≥ ${ALERT_THRESHOLD}`}>
+                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse" title={`Active alert: Risk Level ≥ ${ALERT_THRESHOLD}`}>
                   Active alert
                 </span>
               )}
@@ -481,7 +482,7 @@ function RegionDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">RFII Score</div>
+          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Risk Level Score</div>
           <div className="text-3xl font-extrabold mt-1 tracking-tight">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
@@ -503,7 +504,7 @@ function RegionDetail({
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
           <div className="flex items-center gap-1.5">
             {momPositive ? <TrendingUp className="h-3 w-3 text-destructive" /> : <TrendingDown className="h-3 w-3 text-risk-low" />}
-            <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">MoM Change</span>
+            <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">QoQ Change</span>
           </div>
           <div className={`text-3xl font-extrabold mt-1 tracking-tight ${momPositive ? "text-destructive" : "text-risk-low"}`}>
             {momPositive ? "+" : ""}{region.momChange}%
@@ -630,7 +631,7 @@ function MunicipalityDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">RFII Score</div>
+          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Risk Level Score</div>
           <div className="text-3xl font-extrabold mt-1 tracking-tight">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div
@@ -657,7 +658,7 @@ function MunicipalityDetail({
             ) : (
               <TrendingDown className="h-3 w-3 text-risk-low" />
             )}
-            <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">MoM Change</span>
+            <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">QoQ Change</span>
           </div>
           <div className={`text-3xl font-extrabold mt-1 tracking-tight ${momPositive ? "text-destructive" : "text-risk-low"}`}>
             {momPositive ? "+" : ""}{municipality.momChange}%
