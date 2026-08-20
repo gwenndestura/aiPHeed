@@ -126,83 +126,12 @@ export function ShapNarrativeCardBody({
       <ShapDriverGroup title="WHY IS THE RISK HIGH?" tone="up" items={sortedShap.filter((s) => s.value > 0).slice(0, 3)} totalAbsShap={totalAbsShap} />
       <ShapDriverGroup title="WHAT IS HELPING REDUCE THE RISK?" tone="down" items={sortedShap.filter((s) => s.value < 0).slice(0, 2)} totalAbsShap={totalAbsShap} />
 
-      <FeatureWaterfall baseline={baseline} finalScore={finalScore} shap={sortedShap} />
-
       <p className="mt-2 px-1 text-[9px] italic text-muted-foreground leading-snug">
         AI-generated estimate only. Not an official government report.
       </p>
 
       <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
     </div>
-  );
-}
-
-function FeatureWaterfall({
-  baseline,
-  finalScore,
-  shap,
-}: {
-  baseline: number;
-  finalScore: number;
-  shap: { feature: string; value: number }[];
-}) {
-  const [open, setOpen] = useState(false);
-  const maxAbs = Math.max(...shap.map((s) => Math.abs(s.value)), 0.01);
-  let running = baseline;
-  return (
-    <section className="mt-3 rounded-lg overflow-hidden border border-primary/30 bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="group w-full flex items-center justify-between gap-2 px-3 py-2.5 hover:bg-primary/10 transition-colors cursor-pointer"
-        aria-expanded={open}
-      >
-        <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-          {open ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />}
-          How did we arrive at {finalScore.toFixed(2)}?
-          <span className="ml-1 text-[8px] text-primary/60 normal-case tracking-normal font-normal">
-            {open ? "advanced" : "click to expand"}
-          </span>
-        </span>
-        <span className="text-[9px] text-primary/80 font-mono-num bg-primary/15 border border-primary/30 px-1.5 py-0.5 rounded">{shap.length} features</span>
-      </button>
-      {open && (
-        <div className="px-3 pb-3 pt-2 bg-primary/5 border-t border-primary/20">
-          <div className="flex items-center justify-between text-[9px] font-mono-num text-muted-foreground/80 mb-1">
-            <span>φ₀ baseline</span>
-            <span>{baseline.toFixed(3)}</span>
-          </div>
-          <ul className="divide-y divide-border/25">
-            {shap.map((s) => {
-              const positive = s.value >= 0;
-              const widthPct = (Math.abs(s.value) / maxAbs) * 50;
-              running += s.value;
-              return (
-                <li key={s.feature} className="grid grid-cols-[1fr_70px_46px] items-center gap-2 py-1">
-                  <span className="truncate text-[10px] text-foreground/80">{FEATURE_DISPLAY_NAME[s.feature] ?? s.feature}</span>
-                  <div className="relative h-[3px]">
-                    <div className="absolute inset-y-0 left-1/2 w-px bg-border/60" />
-                    <div
-                      className={`absolute top-0 h-full rounded-sm ${positive ? "bg-risk-high" : "bg-risk-low"}`}
-                      style={{
-                        left: positive ? "50%" : `${50 - widthPct}%`,
-                        width: `${widthPct}%`,
-                      }}
-                    />
-                  </div>
-                  <span className={`text-right font-mono-num text-[10px] tabular-nums ${positive ? "text-risk-high" : "text-risk-low"}`}>
-                    {positive ? "+" : ""}{s.value.toFixed(3)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-          <div className="flex items-center justify-between text-[10px] font-mono-num mt-1.5 pt-1 border-t border-border/30">
-            <span className="uppercase tracking-wider text-muted-foreground">Final Risk Level</span>
-            <span className="font-bold text-foreground">{finalScore.toFixed(3)}</span>
-          </div>
-        </div>
-      )}
-    </section>
   );
 }
 
@@ -243,15 +172,6 @@ const FEATURE_PHRASING: Record<string, { upLabel: string; upDesc: string; downLa
     downLabel: "News is not alarming",
     downDesc: "Local news has fewer reports about food shortages this quarter.",
   },
-};
-
-const FEATURE_DISPLAY_NAME: Record<string, string> = {
-  "Engel Coefficient": "Food price share",
-  "FPSI Price Stress": "Typhoon / climate shock",
-  "Dependency Rate": "OFW remittance drop",
-  "Income Decile": "Employment rate",
-  "Household Size": "Household size",
-  "Income Sources": "News signal",
 };
 
 function ShapDriverGroup({
