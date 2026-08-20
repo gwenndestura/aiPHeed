@@ -489,19 +489,6 @@ function RegionDetail({
           </div>
         </div>
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">FPSI</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight text-destructive">{region.fpsi}%</div>
-          <div className="text-[9px] text-muted-foreground mt-1.5">Food Price Stress Index</div>
-        </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">HH at Risk</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight">
-            {region.householdsAtRisk >= 1000000
-              ? (region.householdsAtRisk / 1e6).toFixed(1) + "M"
-              : (region.householdsAtRisk / 1e3).toFixed(0) + "K"}
-          </div>
-        </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
           <div className="flex items-center gap-1.5">
             {momPositive ? <TrendingUp className="h-3 w-3 text-destructive" /> : <TrendingDown className="h-3 w-3 text-risk-low" />}
             <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">QoQ Change</span>
@@ -638,17 +625,6 @@ function MunicipalityDetail({
               className="h-full rounded-full transition-all"
               style={{ width: `${municipality.riskScore * 100}%`, backgroundColor: riskColor }}
             />
-          </div>
-        </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">FPSI</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight text-destructive">{municipality.fpsi}%</div>
-          <div className="text-[9px] text-muted-foreground mt-1.5">Food Price Stress</div>
-        </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">HH at Risk</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight">
-            {(municipality.householdsAtRisk / 1e3).toFixed(1)}K
           </div>
         </div>
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
