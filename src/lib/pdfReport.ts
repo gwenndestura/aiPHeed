@@ -201,13 +201,13 @@ function drawCover(doc: jsPDF, scope: ReportScope) {
   doc.setFont(FONT_MONO, "normal").setFontSize(7);
   doc.text(`FORECAST SYSTEM  ·  REGION IV-A`, MARGIN_X + 12, 24.5);
 
-  // Right side: DSWD attribution
+  // Right side: DOST attribution
   setText(doc, COL.ink);
   doc.setFont(FONT_SANS, "bold").setFontSize(8.5);
-  doc.text("Department of Social Welfare and Development", PAGE_W - MARGIN_X, 18, { align: "right" });
+  doc.text("Department of Science and Technology", PAGE_W - MARGIN_X, 18, { align: "right" });
   setText(doc, COL.muted);
   doc.setFont(FONT_MONO, "normal").setFontSize(7);
-  doc.text("FIELD OFFICE IV-A  ·  CALABARZON", PAGE_W - MARGIN_X, 22, { align: "right" });
+  doc.text("REGION IV-A  ·  CALABARZON", PAGE_W - MARGIN_X, 22, { align: "right" });
   doc.text("REPUBLIC OF THE PHILIPPINES", PAGE_W - MARGIN_X, 25.5, { align: "right" });
 
   // Heavy rule
@@ -543,7 +543,7 @@ function drawActionsSection(doc: jsPDF, scope: ReportScope, pageNum: number) {
   doc.setFont(FONT_SANS, "normal").setFontSize(9.5);
   const lead = wrap(
     doc,
-    `These recommendations are draft suggestions requiring human confirmation by DSWD Field Office IV-A before any downstream notification. Each action lists the evidence chain the model used to surface it.`,
+    `These recommendations are draft suggestions requiring human confirmation by DOST Region IV-A before any downstream notification. Each action lists the evidence chain the model used to surface it.`,
     CONTENT_W
   );
   let y = titleEndY + 6;
@@ -613,7 +613,7 @@ function drawActionsSection(doc: jsPDF, scope: ReportScope, pageNum: number) {
   doc.setFont(FONT_SANS, "normal").setFontSize(8.5);
   const hl = wrap(
     doc,
-    `No recommendation in this report is auto-delivered. DSWD Field Office IV-A reviews, revises, and signs each action before external notification. aiPHeed logs each sign-off for audit. This report is advisory; statutory classification of food-insecurity status remains with DOST-FNRI.`,
+    `No recommendation in this report is auto-delivered. DOST Region IV-A reviews, revises, and signs each action before external notification. aiPHeed logs each sign-off for audit. This report is advisory; statutory classification of food-insecurity status remains with DOST-FNRI.`,
     CONTENT_W - 8
   );
   hl.forEach((ln, i) => doc.text(ln, MARGIN_X + 4, y + 11 + i * 3.6));
@@ -624,14 +624,14 @@ function drawActionsSection(doc: jsPDF, scope: ReportScope, pageNum: number) {
   const colW = CONTENT_W / 2;
   setText(doc, COL.amber);
   doc.setFont(FONT_MONO, "normal").setFontSize(7);
-  doc.text("REVIEWED BY  ·  DSWD FIELD OFFICE IV-A", MARGIN_X, y + 5);
+  doc.text("REVIEWED BY  ·  DOST REGION IV-A", MARGIN_X, y + 5);
   doc.text("PREPARED BY  ·  AIPHEED TEAM", MARGIN_X + colW, y + 5);
   setText(doc, COL.ink);
   doc.setFont(FONT_SANS, "bold").setFontSize(10);
   doc.text(`Provincial Director, ${scope.kind === "region" ? "CALABARZON" : scope.title}`, MARGIN_X, y + 11);
   doc.text("Destura · Esico · Melindo", MARGIN_X + colW, y + 11);
 
-  drawRunningFooter(doc, scope, pageNum, "End of report", "Confidential until released  ·  for internal DSWD review");
+  drawRunningFooter(doc, scope, pageNum, "End of report", "Confidential until released  ·  for internal DOST review");
 }
 
 // ─────────── helpers ───────────

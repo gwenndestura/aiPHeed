@@ -225,10 +225,10 @@ export const SAMPLE_ARTICLES: Article[] = [
     url: "https://www.bworldonline.com/top-stories/2024/12/17/641938/remittance-growth-slows-in-october/",
   },
   {
-    title: "DSWD-Calabarzon adds satellite warehouses to boost disaster response",
+    title: "DOST Region IV-A adds satellite warehouses to boost disaster response",
     source: "Philippine News Agency",
     date: "2024-12-13",
-    excerpt: "DSWD Field Office IV-A expands its prepositioning network to deliver food packs faster to disaster- and food-stress-prone LGUs.",
+    excerpt: "DOST Region IV-A expands its prepositioning network to deliver food packs faster to disaster- and food-stress-prone LGUs.",
     url: "https://www.pna.gov.ph/articles/1239902",
   },
   {

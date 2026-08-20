@@ -57,7 +57,7 @@ import {
 
 type Section = "map" | "review" | "feedback";
 const THEME_KEY = "aipheed_theme";
-const ADMIN_DOMAINS = ["dswd.gov.ph", "region4a.dswd.gov.ph"];
+const ADMIN_DOMAINS = ["ro4a.dost.gov.ph"];
 
 function getCurrentUser(): { email: string; role: string } | null {
   try {
@@ -158,8 +158,7 @@ export default function Admin({ initialSection }: { initialSection?: Section } =
         <div className="max-w-sm bg-card border border-border/60 rounded-2xl p-6 text-center">
           <h1 className="text-base font-bold mb-2">Access denied</h1>
           <p className="text-[11px] text-muted-foreground mb-4">
-            Admin access is restricted to <span className="font-bold">@dswd.gov.ph</span> and{" "}
-            <span className="font-bold">@region4a.dswd.gov.ph</span> emails.
+            Admin access is restricted to <span className="font-bold">@ro4a.dost.gov.ph</span> emails.
           </p>
           <button
             onClick={() => navigate("/")}
@@ -661,7 +660,7 @@ function ReviewDetailModal({
             <div className="bg-primary/15 rounded-lg p-2"><FileText className="h-4 w-4 text-primary" /></div>
             <div>
               <p className="text-[12px] font-semibold">{item.province} — {item.quarter} Risk Report</p>
-              <p className="text-[10px] text-muted-foreground">Quarter forecast · reviewed by DSWD analyst</p>
+              <p className="text-[10px] text-muted-foreground">Quarter forecast · reviewed by DOST analyst</p>
             </div>
           </div>
 

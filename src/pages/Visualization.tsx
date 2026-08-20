@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { TopNavbar } from "@/components/TopNavbar";
+import { toast } from "@/hooks/use-toast";
 import {
   PROVINCE_QUARTER_DATA,
   getShapForProvince,
@@ -42,6 +45,83 @@ const PROVINCE_COLORS: Record<string, string> = {
 };
 
 type Tab = "trend" | "shap";
+
+async function captureChartCanvas(node: HTMLElement) {
+  return html2canvas(node, {
+    backgroundColor: null,
+    scale: 2,
+    useCORS: true,
+  });
+}
+
+function downloadCanvasAsPng(canvas: HTMLCanvasElement, filename: string) {
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+function downloadCanvasAsPdf(canvas: HTMLCanvasElement, filename: string, title: string, subtitle: string) {
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF({
+    orientation: canvas.width >= canvas.height ? "landscape" : "portrait",
+    unit: "pt",
+    format: "a4",
+  });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const margin = 32;
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(14);
+  pdf.setTextColor(20);
+  pdf.text(title, margin, margin);
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(9);
+  pdf.setTextColor(120);
+  pdf.text(subtitle, margin, margin + 14);
+  pdf.setTextColor(0);
+
+  const availW = pageW - margin * 2;
+  const availH = pageH - margin * 2 - 40;
+  const ratio = Math.min(availW / canvas.width, availH / canvas.height);
+  const w = canvas.width * ratio;
+  const h = canvas.height * ratio;
+  const x = margin + (availW - w) / 2;
+  const y = margin + 40;
+  pdf.addImage(imgData, "PNG", x, y, w, h);
+  pdf.save(filename);
+}
+
+function useChartExport(chartRef: React.RefObject<HTMLElement>, canExport: boolean) {
+  const guard = () => {
+    if (!canExport || !chartRef.current) {
+      toast({
+        title: "No chart to export",
+        description: "Generate a chart first.",
+        variant: "destructive",
+      });
+      return null;
+    }
+    return chartRef.current;
+  };
+
+  const downloadPng = async (filename: string) => {
+    const node = guard();
+    if (!node) return;
+    const canvas = await captureChartCanvas(node);
+    downloadCanvasAsPng(canvas, filename);
+  };
+
+  const downloadPdf = async (filename: string, title: string, subtitle: string) => {
+    const node = guard();
+    if (!node) return;
+    const canvas = await captureChartCanvas(node);
+    downloadCanvasAsPdf(canvas, filename, title, subtitle);
+  };
+
+  return { downloadPng, downloadPdf };
+}
 
 export default function VisualizationPage() {
   const [tab, setTab] = useState<Tab>("trend");
@@ -151,6 +231,29 @@ function TrendView() {
     setGenerated(null);
   };
 
+  const chartRef = useRef<HTMLDivElement>(null);
+  const hasChart = !!generated && data.length > 0;
+  const { downloadPng, downloadPdf } = useChartExport(chartRef, hasChart);
+
+  const exportLabel = generated
+    ? `${generated.province === "All" ? "all-provinces" : generated.province}${
+        generated.municipality !== "All" ? `-${generated.municipality}` : ""
+      }_${generated.from}_to_${generated.to}`
+    : "trend";
+  const exportSubtitle = generated
+    ? `${generated.province === "All" ? "All provinces" : generated.province}${
+        generated.municipality !== "All" ? ` — ${generated.municipality}` : ""
+      } · ${generated.from} to ${generated.to}`
+    : "";
+
+  const handleDownloadPng = () => downloadPng(`aipheed_trend_${exportLabel}.png`);
+  const handleDownloadPdf = () =>
+    downloadPdf(
+      `aipheed_trend_${exportLabel}.pdf`,
+      "Province / Municipality Risk Level Trend",
+      exportSubtitle
+    );
+
   return (
     <div>
       <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
@@ -194,16 +297,24 @@ function TrendView() {
         </div>
 
         <div className="flex items-center justify-between pt-2">
-          <button className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity">
+          <button
+            onClick={handleDownloadPng}
+            disabled={!hasChart}
+            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+          >
             <ImageIcon className="h-4 w-4" /> Download PNG
           </button>
-          <button className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity">
+          <button
+            onClick={handleDownloadPdf}
+            disabled={!hasChart}
+            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+          >
             <FileText className="h-4 w-4" /> Download PDF
           </button>
         </div>
       </div>
 
-      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div ref={chartRef} className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
         {!generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter range to view the trend.
@@ -280,6 +391,17 @@ function ShapView() {
     setGenerated(null);
   };
 
+  const chartRef = useRef<HTMLDivElement>(null);
+  const hasChart = !!generated && data.length > 0;
+  const { downloadPng, downloadPdf } = useChartExport(chartRef, hasChart);
+
+  const exportLabel = generated ? `${generated.province}_${generated.quarter}` : "shap";
+  const exportSubtitle = generated ? `${generated.province} · ${generated.quarter}` : "";
+
+  const handleDownloadPng = () => downloadPng(`aipheed_shap_${exportLabel}.png`);
+  const handleDownloadPdf = () =>
+    downloadPdf(`aipheed_shap_${exportLabel}.pdf`, "Feature Contribution Breakdown (SHAP)", exportSubtitle);
+
   return (
     <div>
       <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
@@ -308,9 +430,26 @@ function ShapView() {
             <X className="h-3.5 w-3.5" /> Clear Filters
           </button>
         </div>
+
+        <div className="flex items-center justify-between pt-2">
+          <button
+            onClick={handleDownloadPng}
+            disabled={!hasChart}
+            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+          >
+            <ImageIcon className="h-4 w-4" /> Download PNG
+          </button>
+          <button
+            onClick={handleDownloadPdf}
+            disabled={!hasChart}
+            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+          >
+            <FileText className="h-4 w-4" /> Download PDF
+          </button>
+        </div>
       </div>
 
-      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div ref={chartRef} className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
         {!generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter to view feature contributions.

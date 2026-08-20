@@ -14,7 +14,6 @@ import {
   Briefcase,
   Send,
   Fish,
-  Heart,
 } from "lucide-react";
 import { TopNavbar } from "@/components/TopNavbar";
 import desturaImg from "@/assets/researchers/destura.png";
@@ -167,8 +166,8 @@ function Hero() {
           className="mt-8 mx-auto text-[17px] leading-relaxed"
           style={{ color: "var(--lp-muted)", maxWidth: 620 }}
         >
-          aiPHeed is an interactive geospatial food insecurity forecasting system for DSWD
-          CALABARZON, combining NLP and ensemble machine learning to detect food stress before it
+          aiPHeed is an interactive geospatial food insecurity forecasting system for DOST
+          Region IV-A, combining NLP and ensemble machine learning to detect food stress before it
           peaks.
         </p>
 
@@ -317,7 +316,7 @@ function SummaryCard() {
         </span>
       </div>
 
-      <div className="relative h-2 w-full rounded-full" style={{ background: "linear-gradient(to right, #22C55E, #EAB308, #F97316, #EF4444)" }}>
+      <div className="relative h-2 w-full rounded-full" style={{ background: "linear-gradient(to right, #EAB308, #F97316, #EF4444)" }}>
         <div
           className="absolute -top-1 h-4 w-1 rounded-sm bg-white shadow-lg"
           style={{ left: "46%" }}
@@ -563,7 +562,7 @@ function FAQ() {
     },
     {
       q: "Who is the intended user of aiPHeed?",
-      a: "DSWD CALABARZON field offices, LGU planning units, academic researchers, and journalists tracking food security signals. It is a decision-support layer, not a replacement for official assessment.",
+      a: "DOST REGION IV-A field offices, LGU planning units, academic researchers, and journalists tracking food security signals. It is a decision-support layer, not a replacement for official assessment.",
     },
     {
       q: "Can the system be adapted for other Philippine regions?",
@@ -705,8 +704,7 @@ function Footer() {
         >
           <p>© 2026 aiPHeed. All rights reserved.</p>
           <p className="flex items-center gap-1.5">
-            Made with <Heart className="h-3.5 w-3.5 fill-[#F5A623] text-[#F5A623]" /> •
-            <span className="text-[var(--lp-fg)] font-semibold ml-0.5">aiPHeed</span>
+            <span className="text-[var(--lp-fg)] font-semibold">aiPHeed</span>
           </p>
         </div>
       </div>
