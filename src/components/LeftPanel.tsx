@@ -262,7 +262,7 @@ export function RiskDriversCardBody() {
     { key: "climate", label: "Climate Stress", icon: CloudRain, pct: 0.66 },
     { key: "fishkill", label: "Fish Kill", icon: Fish, pct: 0.57 },
     { key: "employment", label: "Employment", icon: Briefcase, pct: 0.42 },
-    { key: "ofw", label: "OFW Remittance", icon: Plane, pct: 0.38, protective: true },
+    { key: "ofw", label: "OFW Remittance", icon: Plane, pct: 0.38 },
   ].sort((a, b) => b.pct - a.pct);
 
   return (
