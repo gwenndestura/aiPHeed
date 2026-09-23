@@ -45,6 +45,7 @@ from app.ml.inference.feature_display import (
     DRIVER_GROUP_FEATURES,
     DRIVER_GROUP_LABELS,
     FEATURE_DISPLAY_MAP,
+    UNGROUPED_FEATURES,
 )
 
 logger = logging.getLogger(__name__)
@@ -265,6 +266,9 @@ class Explainer:
             group_shap[group] = sum(sv_dict.get(f, 0.0) for f in feats)
 
         # ── Trigger proportions from NLP corpus ───────────────────────────
+        # One real trigger_* proportion per group, self-matched (not the
+        # earlier bug where trigger_fish_kill's value was attached to a
+        # differently-named group).
         trigger_map: dict[str, float] = {}
         article_count = 0
         if self._triggers is not None:
@@ -276,15 +280,26 @@ class Explainer:
                 r = t_row.iloc[0]
                 article_count = int(r.get("article_count", 0))
                 trigger_map = {
-                    "market":        float(r.get("trigger_market", 0.0)),
-                    "climate":       float(r.get("trigger_climate", 0.0)),
-                    "employment":    float(r.get("trigger_employment", 0.0)),
-                    "macro_ofw":     float(r.get("trigger_ofw_remittance", 0.0)),
-                    "nlp_sentiment": float(r.get("trigger_fish_kill", 0.0)),
+                    "market":         float(r.get("trigger_market", 0.0)),
+                    "climate":        float(r.get("trigger_climate", 0.0)),
+                    "fish_kill":      float(r.get("trigger_fish_kill", 0.0)),
+                    "employment":     float(r.get("trigger_employment", 0.0)),
+                    "ofw_remittance": float(r.get("trigger_ofw_remittance", 0.0)),
                 }
 
         # ── Build driver records ───────────────────────────────────────────
+        # total_abs sums only the five presentation groups' own features, so
+        # their displayed percentages are relative shares AMONG THEMSELVES --
+        # disclosed as such via other_pct below, not silently presented as
+        # 100% of the model's real reasoning.
         total_abs = sum(abs(v) for v in group_shap.values()) or 1.0
+
+        # Real magnitude of the model's other drivers (series/seasonal
+        # dynamics, general news volume) that aren't one of the five bars.
+        # Reported, not discarded -- see UNGROUPED_FEATURES.
+        other_abs = sum(abs(sv_dict.get(f, 0.0)) for f in UNGROUPED_FEATURES)
+        grand_total = total_abs + other_abs or 1.0
+        other_pct = round(other_abs / grand_total * 100, 1)
 
         drivers = []
         for group in DRIVER_GROUP_FEATURES:
@@ -302,6 +317,7 @@ class Explainer:
         drivers.sort(key=lambda d: abs(d["group_shap"]), reverse=True)
 
         return {
+            "other_pct": other_pct,
             "province_code": province_code,
             "quarter":       quarter,
             "drivers":       drivers,

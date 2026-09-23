@@ -16,6 +16,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.concurrency import run_in_threadpool
 
 from app.dependencies import get_db
 from app.schemas.public import (
@@ -126,11 +127,15 @@ async def get_provinces(
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    # Scores all 5 provinces' commodity ensembles -- CPU-bound, off the event
+    # loop so it doesn't queue behind (or get queued behind by) a concurrent
+    # SHAP call the way it did before this endpoint moved off the loop too.
+    data = await run_in_threadpool(svc.province_summary, q, withheld, h)
     return ProvincesResponse(
         quarter=q,
         horizon=h,
         indicator=svc.INDICATOR,
-        data=svc.province_summary(q, withheld, h),
+        data=data,
     )
 
 
@@ -152,11 +157,12 @@ async def get_municipalities(
     if slug not in ref.PROVINCES:
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
     q = svc.resolve_quarter(quarter)
+    data = await run_in_threadpool(svc.municipality_summary, q, slug)
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,
         indicator=svc.INDICATOR,
-        data=svc.municipality_summary(q, province_id=slug),
+        data=data,
     )
 
 

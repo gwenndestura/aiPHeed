@@ -1,39 +1,39 @@
 {
   "series + seasonal": {
     "best_params": {
-      "n_estimators": 210,
-      "learning_rate": 0.01819472478737714,
-      "num_leaves": 35,
-      "max_depth": 2,
-      "min_child_samples": 48,
-      "subsample": 0.7264420617031158,
-      "colsample_bytree": 0.7088041173943704,
-      "reg_alpha": 0.8504466105563974,
-      "reg_lambda": 0.016882063913347605
+      "n_estimators": 479,
+      "learning_rate": 0.0074661194696088945,
+      "num_leaves": 55,
+      "max_depth": 8,
+      "min_child_samples": 6,
+      "subsample": 0.6001953872535262,
+      "colsample_bytree": 0.5110782918303366,
+      "reg_alpha": 0.11538331699944682,
+      "reg_lambda": 0.06273815590020902
     },
     "tuned_on_search_folds": {
-      "accuracy": 0.7003696846581328,
-      "f1": 0.7086742740167596,
-      "roc_auc": 0.7543187167133781,
-      "persistence": 0.6208795729408869,
-      "seasonal_persistence": 0.7122506398140422,
-      "n_folds": 6
+      "accuracy": 0.7290003905360999,
+      "f1": 0.7328813471476446,
+      "roc_auc": 0.7874851209131224,
+      "persistence": 0.6357267242686787,
+      "seasonal_persistence": 0.7342383151598522,
+      "n_folds": 10
     },
     "held_out": {
-      "accuracy": 0.7362903225806452,
-      "f1": 0.747049175235613,
-      "roc_auc": 0.8506698463554667,
-      "persistence": 0.6629775042444821,
-      "seasonal_persistence": 0.7949596774193548,
+      "accuracy": 0.8043739967897271,
+      "f1": 0.8112599885339036,
+      "roc_auc": 0.8432469867321228,
+      "persistence": 0.6986757624398074,
+      "seasonal_persistence": 0.7965877648874766,
       "n_folds": 2
     },
     "all_folds": {
-      "accuracy": 0.7093498441387609,
-      "f1": 0.7182679993214729,
-      "roc_auc": 0.7784064991239004,
-      "persistence": 0.6314040557667857,
-      "seasonal_persistence": 0.7329278992153705,
-      "n_folds": 8
+      "accuracy": 0.7415626582450378,
+      "f1": 0.7459444540453544,
+      "roc_auc": 0.7967787652162891,
+      "persistence": 0.6462182306305335,
+      "seasonal_persistence": 0.7446298901144562,
+      "n_folds": 12
     }
   },
   "ALL (series+seasonal+gov+NLP+matched)": {
@@ -49,28 +49,29 @@
       "reg_lambda": 0.995477896578695
     },
     "tuned_on_search_folds": {
-      "accuracy": 0.7182318284337788,
-      "f1": 0.7215738221985789,
-      "roc_auc": 0.7428648371156812,
-      "persistence": 0.6208795729408869,
-      "seasonal_persistence": 0.7122506398140422,
-      "n_folds": 6
+      "accuracy": 0.7417290558570324,
+      "f1": 0.7427968095330675,
+      "roc_auc": 0.7809851838096938,
+      "persistence": 0.6357267242686787,
+      "seasonal_persistence": 0.7342383151598522,
+      "n_folds": 10
     },
     "held_out": {
-      "accuracy": 0.7868951612903226,
-      "f1": 0.7924860019239564,
-      "roc_auc": 0.8455217082757314,
-      "persistence": 0.6629775042444821,
-      "seasonal_persistence": 0.7949596774193548,
+      "accuracy": 0.8258025682182986,
+      "f1": 0.8263150660783032,
+      "roc_auc": 0.8431474401595745,
+      "persistence": 0.6986757624398074,
+      "seasonal_persistence": 0.7965877648874766,
       "n_folds": 2
     },
     "all_folds": {
-      "accuracy": 0.7353976616479148,
-      "f1": 0.7393018671299233,
-      "roc_auc": 0.7685290549056938,
-      "persistence": 0.6314040557667857,
-      "seasonal_persistence": 0.7329278992153705,
-      "n_folds": 8
-    }
+      "accuracy": 0.7557413079172434,
+      "f1": 0.7567165189572734,
+      "roc_auc": 0.7913455598680074,
+      "persistence": 0.6462182306305335,
+      "seasonal_persistence": 0.7446298901144562,
+      "n_folds": 12
+    },
+    "_note": "Reverted 2026-09-21: re-tuned on the expanded (38-feature) set via the simple pooled-LightGBM evaluation in tune_food_availability.py, which suggested a gain (held-out acc 0.7869->0.8258). Retraining the actual production ensemble (train_final.py) with these params did not reproduce that gain -- operating-figure accuracy went 0.8153->0.8144, essentially flat/within noise. The single-pooled-model tuning objective does not transfer to the per-group 4-model ensemble that is actually served. Reverted to the pre-tune params (last genuinely validated)."
   }
 }

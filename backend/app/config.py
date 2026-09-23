@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     # attacker.vercel.app and make authenticated cross-origin calls from a
     # signed-in admin's browser. Scoped to this project's own previews.
     CORS_ORIGINS: str = (
-        "http://localhost:5173,http://localhost:3000,"
+        "http://localhost:5173,http://localhost:3000,http://localhost:8080,"
         "https://aipheed-frontend.vercel.app"
     )
     CORS_PREVIEW_REGEX: str = r"https://aipheed-frontend-[a-z0-9-]+\.vercel\.app"

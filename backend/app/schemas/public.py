@@ -124,6 +124,11 @@ class ProvinceSummary(BaseModel):
     qoqChangePct: float | None = None
     seriesMonitored: int | None = None
     seriesAtRisk: int | None = None
+    # Of seriesMonitored, how many scored below the confidence cutoff the
+    # reported accuracy/precision are actually measured at. Real per-
+    # commodity uncertainty disclosed alongside the score, not a hidden
+    # exclusion -- riskScore above still counts every monitored series.
+    seriesNeedingReview: int | None = None
     topAtRiskCommodities: list[str] = Field(default_factory=list)
     articleCount: int = 0
     limitedSignal: bool = False
@@ -201,6 +206,7 @@ class ForecastResponse(BaseModel):
     horizon: str = "nowcast"
     seriesMonitored: int | None = None
     seriesAtRisk: int | None = None
+    seriesNeedingReview: int | None = None
     topAtRiskCommodities: list[str] | None = None
     disaggregationLabel: str | None = None
     derivation: str | None = None
@@ -251,6 +257,11 @@ class ExplainabilityResponse(BaseModel):
     quarter: str
     riskScore: float
     triggers: list[Trigger]
+    # Share (0-100) of the model's real SHAP-explained reasoning that comes
+    # from drivers not itemized among the five `triggers` (the commodity
+    # series' own recent/seasonal dynamics, general news volume). Disclosed
+    # rather than folded into one of the five or omitted.
+    otherPct: float
     articleCount: int
     triggerMatchedArticles: int
     narrative: str

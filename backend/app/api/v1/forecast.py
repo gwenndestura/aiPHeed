@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.concurrency import run_in_threadpool
 
 from app.dependencies import get_db
 from app.schemas.public import ForecastResponse, TimeseriesResponse
@@ -97,6 +98,7 @@ def _score_for(
             "limitedSignal": p["limitedSignal"],
             "seriesMonitored": p["seriesMonitored"],
             "seriesAtRisk": p["seriesAtRisk"],
+            "seriesNeedingReview": p.get("seriesNeedingReview"),
             "topAtRiskCommodities": p["topAtRiskCommodities"],
             "horizon": horizon,
         }
@@ -134,7 +136,10 @@ async def get_forecast(
     """
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
-    body = _score_for(scope, id, q, await _withheld_for(db, q), h)
+    # _score_for runs the model's LightGBM/RF/ET/LogReg ensemble synchronously
+    # -- CPU-bound, so off the event loop it goes, same reasoning as
+    # insights.py's explainability route.
+    body = await run_in_threadpool(_score_for, scope, id, q, await _withheld_for(db, q), h)
     return ForecastResponse(
         scope=scope,
         id=id.lower(),
@@ -179,25 +184,33 @@ async def get_timeseries(
     # zero, which would read as a real fall to no risk.
     rejected = await rv.rejected_pairs(db)
 
-    series = []
-    for q in window:
-        withheld = frozenset(pid for pid, rq in rejected if rq == q)
-        try:
-            body = _score_for(scope, id, q, withheld, h)
-        except svc.SubjectNotFound:
-            raise  # bad id: every quarter would fail, so say so once
-        except svc.ForecastWithheld:
-            continue
-        except Exception:  # a quarter the subject has no rows for
-            continue
-        if body["riskScore"] is None:
-            continue
-        series.append({
-            "quarter": q,
-            "riskScore": body["riskScore"],
-            "riskLevel": body["riskLevel"],
-            "isForecast": False,
-        })
+    def _build_series() -> list[dict]:
+        # One _score_for (model ensemble pass) per quarter in the window --
+        # CPU-bound and, for an unscored range, the biggest cost on this
+        # endpoint, so the whole loop runs off the event loop as one unit
+        # rather than blocking it query by query.
+        out = []
+        for q in window:
+            withheld = frozenset(pid for pid, rq in rejected if rq == q)
+            try:
+                body = _score_for(scope, id, q, withheld, h)
+            except svc.SubjectNotFound:
+                raise  # bad id: every quarter would fail, so say so once
+            except svc.ForecastWithheld:
+                continue
+            except Exception:  # a quarter the subject has no rows for
+                continue
+            if body["riskScore"] is None:
+                continue
+            out.append({
+                "quarter": q,
+                "riskScore": body["riskScore"],
+                "riskLevel": body["riskLevel"],
+                "isForecast": False,
+            })
+        return out
+
+    series = await run_in_threadpool(_build_series)
 
     return TimeseriesResponse(
         scope=scope,

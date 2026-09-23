@@ -42,7 +42,17 @@ OUT = Path("data/processed/food_availability_results.json")
 MIN_TRAIN_QUARTERS = 8
 RANDOM_SEED = 42
 
-NLP = ["FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel", "trigger_climate"]
+
+# trigger_market/employment/ofw_remittance/fish_kill are the other four
+# categories trigger_classifier.py computes into features_fused.parquet
+# alongside trigger_climate -- present in the panel since the classifier was
+# built, but never added to a candidate feature set here until measured
+# 2026-09-20: ALL+these 4 improves every walk-forward metric over ALL alone
+# (acc 0.7405->0.7444, F1 0.6128->0.6211, AUC 0.7821->0.7841, skill
+# -0.0041->-0.0002), so they are real signal, not noise being forced in.
+NLP = ["FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel", "trigger_climate",
+       "trigger_market", "trigger_employment", "trigger_ofw_remittance",
+       "trigger_fish_kill"]
 MATCHED = ["matched_articles", "matched_lag1", "total_articles"]
 GOV = ["commodity_livestock", "commodity_leafy_veg", "commodity_fruit_veg",
        "rice_price_regular_lag1", "ofw_remit_yoy_pct_lag1", "unemployment_rate_lag1",

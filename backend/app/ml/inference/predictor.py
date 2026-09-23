@@ -158,6 +158,21 @@ class Predictor:
             thr[mask] = spec["threshold"]
         return prob, thr
 
+    def _low_confidence(self, prob: np.ndarray, thr: np.ndarray) -> np.ndarray:
+        """
+        Flag rows below the confidence cutoff stored in the model bundle.
+
+        That cutoff is the minimum |prob - threshold| among the walk-forward
+        operating set the reported accuracy/precision are actually measured
+        on (COVERAGE in train_final.py) -- so "low confidence" here means the
+        same thing live as it does in that report, instead of the report
+        describing a 90%-coverage behavior nothing serves.
+        """
+        cutoff = self._model.get("confidence_cutoff")
+        if cutoff is None:
+            return np.zeros(len(prob), dtype=bool)
+        return np.abs(prob - thr) < cutoff
+
     def forecast_commodities(self, quarter: str) -> list[dict]:
         """
         Score every province-commodity series for one quarter.
@@ -174,6 +189,7 @@ class Predictor:
             return []
 
         prob, thr = self._score(rows)
+        low_conf = self._low_confidence(prob, thr)
         out = [
             {
                 "province_code": r["province_code"],
@@ -183,8 +199,9 @@ class Predictor:
                 "commodity": r["commodity"],
                 "shock_probability": round(float(p), 4),
                 "at_risk": bool(p >= t),
+                "low_confidence": bool(lc),
             }
-            for (_, r), p, t in zip(rows.iterrows(), prob, thr)
+            for (_, r), p, t, lc in zip(rows.iterrows(), prob, thr, low_conf)
         ]
         out.sort(key=lambda d: d["shock_probability"], reverse=True)
         return out
@@ -222,6 +239,7 @@ class Predictor:
         scored = rows[["province_code", "group", "commodity"]].copy()
         scored["prob"] = prob
         scored["at_risk"] = prob >= thr
+        scored["low_confidence"] = self._low_confidence(prob, thr)
 
         results = []
         for province_code, d in scored.groupby("province_code"):
@@ -241,6 +259,11 @@ class Predictor:
                 "risk_label":           "HIGH" if share >= 0.5 else "LOW",
                 "series_monitored":     int(len(d)),
                 "series_at_risk":       int(d["at_risk"].sum()),
+                # Of series_monitored, how many scored below the confidence
+                # cutoff the reported accuracy/precision are measured at --
+                # real per-commodity uncertainty, not a hidden exclusion: the
+                # headline riskScore above still counts every series.
+                "series_needing_review": int(d["low_confidence"].sum()),
                 "mean_shock_probability": round(float(d["prob"].mean()), 4),
                 "top_at_risk_commodities": at_risk,
                 "data_sufficiency_flag": data_flag,

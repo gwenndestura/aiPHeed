@@ -10,6 +10,7 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 from __future__ import annotations
 
 from fastapi import APIRouter, Query
+from starlette.concurrency import run_in_threadpool
 
 from app.schemas.public import ExplainabilityResponse, NewsResponse
 from app.services import dashboard as svc
@@ -17,20 +18,26 @@ from app.services import reference as ref
 
 router = APIRouter()
 
-# Seven groups, not five. `seasonal` and `series_history` were added with the
-# food-availability target and are usually the largest contributors; a panel
-# built for five categories has to grow rather than drop them.
+# Five research-defined categories (Market/Prices, Climate Stress, Fish Kill,
+# Employment, OFW Remittance). Percentages are grouped SHAP values from the
+# food-availability shock model, rescaled so these five sum to 100% AMONG
+# THEMSELVES -- see `otherPct` and the caveats below for what that excludes.
 EXPLAINABILITY_NOTE = (
     "Contributions are grouped SHAP values from the food-availability shock "
-    "model, rescaled so the seven groups sum to 100%. A group can hold a large "
-    "share while pushing risk down -- read `direction`, not bar size alone. "
-    "`seasonal` and `series_history` describe where the series sits in its own "
-    "annual cycle and how it behaved recently; they are typically the strongest "
-    "drivers, which is why the model beats a naive baseline at all. "
-    "`color` takes three values, not two: yellow below the 20% line, red above "
-    "it while raising the score, GREEN above it while lowering the score. The "
-    "original two-colour rule predates signed contributions and would paint a "
-    "large protective driver red."
+    "model, rescaled so the five research-defined driver categories sum to "
+    "100% among themselves. A group can hold a large share while pushing risk "
+    "down -- read `direction`, not bar size alone. `color` takes three values, "
+    "not two: yellow below the 20% line, red above it while raising the score, "
+    "GREEN above it while lowering the score. "
+    "Two caveats on what these five categories contain: OFW Remittance is "
+    "restricted to actual remittance features (fuel/transport-cost features "
+    "that used to sit here moved to Market/Prices, where they belong); Fish "
+    "Kill reflects a real but comparatively thin news-derived signal (see "
+    "`newsSignalProportion`), not a dedicated structured dataset. `otherPct` "
+    "is the share of the model's real, often-dominant reasoning that comes "
+    "from the commodity series' own recent history and seasonal position, "
+    "plus general (non-fish-kill) news volume -- deliberately not folded into "
+    "one of the five bars, which would overstate it, nor hidden."
 )
 
 
@@ -66,14 +73,19 @@ async def get_explainability(
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
 
+    # SHAP is CPU-bound and, on a quarter not yet cached this process, blocks
+    # for several seconds per province. Run it off the event loop so it
+    # doesn't stall every other request on the server while it computes --
+    # confirmed by measurement that a concurrent /config call queued behind
+    # an in-flight SHAP call the way it would if this ran inline.
     if code is None:
-        result = svc.explainability_region(q)
+        result = await run_in_threadpool(svc.explainability_region, q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
         risk_score = svc.region_forecast(q)["riskScore"]
     else:
-        result = svc.explainability(code, q)
+        result = await run_in_threadpool(svc.explainability, code, q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
@@ -81,6 +93,7 @@ async def get_explainability(
         match = [p for p in svc.province_summary(q) if p["id"] == slug]
         risk_score = match[0]["riskScore"] if match else 0.0
 
+    other_pct = result["otherPct"]
     return ExplainabilityResponse(
         scope=scope,
         id=id.lower(),
@@ -88,9 +101,10 @@ async def get_explainability(
         quarter=q,
         riskScore=risk_score,
         triggers=triggers,
+        otherPct=other_pct,
         articleCount=article_count,
         triggerMatchedArticles=matched,
-        narrative=svc.compose_narrative(name, q, triggers),
+        narrative=svc.compose_narrative(name, q, triggers, other_pct),
         note=EXPLAINABILITY_NOTE,
     )
 

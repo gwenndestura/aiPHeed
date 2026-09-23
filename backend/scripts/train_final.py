@@ -85,11 +85,24 @@ VARIANT = "ens_tenc"
 MATURITY_FOLDS = 4        # folds discarded as cold-start
 COVERAGE = 0.90           # fraction of cases the model answers
 
+# Tried and reverted 2026-09-23: lowering fruit_crops/vegetables_rootcrops'
+# threshold by a flat 0.10 to trade precision for recall (0.6044 -> 0.7246
+# recall, at a cost of accuracy 0.8153 -> 0.7863 and precision 0.7022 ->
+# 0.6262). Genuinely measured and it worked as intended, but reverted at the
+# user's request in favor of the higher-accuracy/precision operating point --
+# plain pick_threshold() below is that original point. A second attempt,
+# replacing the flat shift with a threshold chosen to directly maximize F1
+# per group, was also tried and reverted the same day: it looked better in a
+# static simulation but made recall *worse* on a real retrain (0.7246 ->
+# 0.6725), because the simulation didn't account for the threshold change
+# also moving which rows fall in the confidence-based 90% operating set.
+# Both are preserved here as a record so neither gets re-tried blind.
 
 BUNDLE = Path("models/food_availability_model.joblib")
 
 
-def persist_deployable(df: pd.DataFrame, cols: list[str], params: dict) -> None:
+def persist_deployable(df: pd.DataFrame, cols: list[str], params: dict,
+                       confidence_cutoff: float) -> None:
     """
     Fit once on ALL available data and save a servable bundle.
 
@@ -131,10 +144,18 @@ def persist_deployable(df: pd.DataFrame, cols: list[str], params: dict) -> None:
                  "commodity_encoding": encoding, "encoding_prior": float(prior),
                  "trained_through": max(df["quarter"]),
                  "n_train_rows": len(fitted),
+                 # Minimum |prob - threshold| among the walk-forward operating
+                 # set (COVERAGE, the most-confident share of commodity-series
+                 # predictions the reported accuracy/precision figures are
+                 # actually measured on). Serving uses the same fixed cutoff
+                 # so "this prediction is low-confidence" means the same thing
+                 # live as it does in the reported evaluation, rather than the
+                 # 90%-coverage figures describing a behavior nothing serves.
+                 "confidence_cutoff": float(confidence_cutoff),
                  "note": ("Fitted on the full panel for serving. Performance figures "
                           "come from the walk-forward evaluation in final_results.json, "
                           "not from this fit.")}, BUNDLE)
-    log.info("deployable bundle -> %s", BUNDLE)
+    log.info("deployable bundle -> %s (confidence_cutoff=%.4f)", BUNDLE, confidence_cutoff)
 
 
 def main() -> None:
@@ -274,7 +295,8 @@ def main() -> None:
     preds.to_parquet("data/processed/final_predictions.parquet", index=False)
     log.info("saved -> %s and data/processed/final_predictions.parquet", OUT)
 
-    persist_deployable(df, cols, params)
+    confidence_cutoff = float(operating["confidence"].min())
+    persist_deployable(df, cols, params, confidence_cutoff)
 
 
 if __name__ == "__main__":

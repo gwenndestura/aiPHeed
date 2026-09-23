@@ -22,6 +22,7 @@ both are memoised per quarter for the life of the process.
 from __future__ import annotations
 
 import functools
+import hashlib
 import json
 import logging
 from pathlib import Path
@@ -35,7 +36,7 @@ from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
 
-CORPUS_PATH = Path("data/processed/corpus_geocoded.parquet")
+CORPUS_PATH = Path("data/processed/calabarzon_food_insecurity_dataset.parquet")
 LGU_POVERTY_PATH = Path("data/processed/lgu_poverty.parquet")
 RESULTS_PATH = Path("data/processed/final_results.json")
 
@@ -88,6 +89,18 @@ TOPIC_MAP: dict[str, tuple[str, str]] = {
     "This article is about poverty, unemployment, or economic hardship of families":
         ("poverty", "Poverty & unemployment"),
     "poverty_hardship": ("poverty", "Poverty & unemployment"),
+    # event_type values from calabarzon_food_insecurity_dataset.parquet --
+    # the corpus that actually produced the trigger/SHAP scores (see _corpus()
+    # below). Mapped onto the same keys/labels above wherever the category is
+    # the same thing under a different name; fishery_loss is the one with no
+    # prior equivalent short-code, so it takes the "fishkill" bucket the
+    # sentence-form hypothesis already defines.
+    "fishery_loss":         ("fishkill", "Fish kill & fisheries"),
+    "food_assistance":      ("food_assistance", "Food assistance & relief"),
+    "crop_production_loss": ("crop_damage", "Crop damage & harvest loss"),
+    "malnutrition_nutrition": ("hunger_nutrition", "Hunger & nutrition"),
+    "unrest_disruption":    ("unrest", "Strikes & unrest"),
+    "supply_disruption":    ("logistics", "Transport & storage"),
 }
 
 UNCLASSIFIED = ("unclassified", "Unclassified")
@@ -314,6 +327,7 @@ def province_summary(
             "qoqChangePct": pct,
             "seriesMonitored": record.get("series_monitored"),
             "seriesAtRisk": record.get("series_at_risk"),
+            "seriesNeedingReview": record.get("series_needing_review"),
             "topAtRiskCommodities": record.get("top_at_risk_commodities", []),
             "articleCount": article_count(code, quarter),
             "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
@@ -329,6 +343,7 @@ def province_summary(
                 "qoqChange": None,
                 "qoqChangePct": None,
                 "seriesAtRisk": None,
+                "seriesNeedingReview": None,
                 "topAtRiskCommodities": [],
                 "withheld": True,
             })
@@ -507,11 +522,15 @@ def trigger_color(pct: int, direction: str) -> str:
 
 def explainability(province_code: str, quarter: str) -> dict:
     """
-    Grouped SHAP for one province-quarter, ranked and normalised to 100%.
+    Grouped SHAP for one province-quarter: the five thesis-defined driver
+    categories (Market/Prices, Climate Stress, Fish Kill, Employment, OFW
+    Remittance), ranked and normalised to sum to 100% among themselves.
 
-    All seven groups are returned, including `seasonal` and `series_history`.
-    Those two are usually the largest, and dropping them to fit a
-    five-category panel would hide the model's strongest drivers.
+    The model also weighs the commodity series' own recent history and
+    seasonal position, plus general (non-fish-kill-specific) news volume --
+    real, often the largest single drivers, deliberately not folded into one
+    of the five bars (which would overstate it) or hidden. Their combined
+    share is `otherPct`, surfaced alongside the five and in `narrative`.
     """
     built = _drivers(province_code, quarter)
     drivers = built["drivers"]
@@ -533,6 +552,7 @@ def explainability(province_code: str, quarter: str) -> dict:
     return {
         "quarter": quarter,
         "triggers": triggers,
+        "otherPct": built["other_pct"],
         # The corpus is the single article count every surface quotes. The
         # trigger table keeps its own tally over a narrower keyword-matched
         # subset; it is reported separately rather than silently substituted.
@@ -590,12 +610,13 @@ def explainability_region(quarter: str) -> dict:
     return {
         "quarter": quarter,
         "triggers": triggers,
+        "otherPct": round(sum(r["otherPct"] for r in per_province) / len(per_province), 1),
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
     }
 
 
-def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:
+def compose_narrative(name: str, quarter: str, triggers: list[dict], other_pct: float = 0.0) -> str:
     """
     Plain-ASCII summary of a breakdown, for the chart caption and the PDF.
 
@@ -632,11 +653,20 @@ def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:
         parts.append(f"{phrase(lowering)} the {cutoff}% line while lowering it.")
     flagged = " ".join(parts) or f"No single group clears the {cutoff}% line this quarter."
 
+    other_sentence = (
+        f" These five drivers make up {round(100 - other_pct, 1)}% of the model's explained "
+        f"reasoning this quarter; the remaining {other_pct}% comes from the commodity "
+        f"series' own recent behavior and seasonal position, plus general food-insecurity "
+        f"news volume -- real model drivers, often the largest single ones, not itemized "
+        f"among the five research categories above."
+        if other_pct >= 1.0 else ""
+    )
+
     return (
         f"For {name} in {quarter}, the model's prediction breaks down as: {ranked}. "
         f"{top['label']} is the largest single contributor, {direction}. {flagged} "
         f"Shares are SHAP contributions to a production-shortfall prediction, "
-        f"recomputed every quarter."
+        f"recomputed every quarter.{other_sentence}"
     )
 
 
@@ -713,26 +743,39 @@ def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
 # News corpus
 # ---------------------------------------------------------------------------
 
+NAME_TO_CODE: dict[str, str] = {v["name"]: v["code"] for v in ref.PROVINCES.values()}
+
+
 @functools.lru_cache(maxsize=1)
 def _corpus() -> pd.DataFrame:
     """
-    Relevant, geocoded articles with display fields normalised once.
+    The same article set trigger_classifier.py scored to produce the model's
+    trigger_*/matched_articles features and this app's newsSignalProportion --
+    NOT a separately-scraped display corpus. They used to be two different
+    files with zero overlapping articles, so a reader could open this panel
+    expecting to see the article behind a SHAP driver and never find it. This
+    is the file build_matched_news() (scripts/train_food_availability.py) and
+    the trigger classifier both read, so what is shown here is what the model
+    actually saw.
 
-    `published` arrives as a mix of ISO dates and raw RSS timestamps, and the
-    topic column carries classifier hypothesis sentences. Both are cleaned here
-    so no route has to reformat them.
+    Every row is already relevance-filtered by construction (relevance_tier is
+    HIGH or MEDIUM for all 371 rows; there is no lower tier retained in the
+    file). `province` is a name ("Batangas") or null for region-scope articles
+    that don't pin to one province -- mapped to a PSGC code via ref.PROVINCES,
+    left null (unattributed) rather than guessed.
     """
     if not CORPUS_PATH.exists():
         return pd.DataFrame()
     df = pd.read_parquet(CORPUS_PATH)
-    if "is_relevant" in df.columns:
-        df = df[df["is_relevant"].astype("boolean").fillna(False)].copy()
 
-    published = pd.to_datetime(df.get("published"), errors="coerce", utc=True, format="mixed")
+    published = pd.to_datetime(df.get("publication_date"), errors="coerce", utc=True, format="mixed")
     df["_date"] = published.dt.strftime("%Y-%m-%d")
     df["_sort_date"] = published
+    df["quarter"] = published.dt.year.astype("Int64").astype(str) + "-Q" + published.dt.quarter.astype("Int64").astype(str)
+    df["province_code"] = df.get("province").map(NAME_TO_CODE)
+    df["article_id"] = df.get("url").fillna("").map(lambda u: hashlib.md5(u.encode()).hexdigest()[:12])
 
-    topics = df.get("top_topic_name")
+    topics = df.get("event_type")
     mapped = topics.map(lambda t: TOPIC_MAP.get(t, UNCLASSIFIED)) if topics is not None else None
     df["_topic_key"] = [m[0] for m in mapped] if mapped is not None else UNCLASSIFIED[0]
     df["_topic_label"] = [m[1] for m in mapped] if mapped is not None else UNCLASSIFIED[1]
@@ -789,16 +832,16 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
         {
             "id": str(r.get("article_id") or ""),
             "title": str(r.get("title") or ""),
-            "source": str(r.get("source_domain") or ""),
+            "source": str(r.get("news_source") or ""),
             "date": r["_date"] if pd.notna(r["_date"]) else None,
-            "url": str(r.get("link") or ""),
-            "excerpt": str(r.get("summary") or "")[:400],
+            "url": str(r.get("url") or ""),
+            "excerpt": str(r.get("content_lead") or "")[:400],
             "topicKey": r["_topic_key"],
             "topicLabel": r["_topic_label"],
-            "relevanceScore": (
-                round(float(r["food_insecurity_score"]), 4)
-                if pd.notna(r.get("food_insecurity_score")) else None
-            ),
+            # relevance_tier is categorical (HIGH/MEDIUM) in this corpus, not a
+            # float score -- left null rather than inventing a numeric value
+            # the source data doesn't have.
+            "relevanceScore": None,
         }
         for _, r in window.iterrows()
     ]

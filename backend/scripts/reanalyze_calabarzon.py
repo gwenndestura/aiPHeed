@@ -373,6 +373,9 @@ def classify_batch(records: list[dict]) -> list[dict]:
     return out
 
 
+CURRENT_RAW = Path("data/raw/corpus_raw.parquet")
+
+
 def assemble_corpus() -> pd.DataFrame:
     frames = []
     for s in ENRICHED_SOURCES:
@@ -388,6 +391,22 @@ def assemble_corpus() -> pd.DataFrame:
         keep = [c for c in ["article_id", "title", "link", "published",
                             "summary", "source_domain"] if c in d.columns]
         frames.append(d[keep])
+    # The corpus this pipeline was written against (the ENRICHED_SOURCES /
+    # gdelt checkpoint files above) has since been superseded by
+    # run_expanded_corpus_collection.py, which writes here instead. Added
+    # 2026-09-23 so a fresh scrape (e.g. the Sept-19 refresh that added
+    # Quezon/Rizal coverage) actually reaches the strict reanalysis + final
+    # dataset, instead of this function silently returning ~nothing.
+    if CURRENT_RAW.exists():
+        d = pd.read_parquet(CURRENT_RAW)
+        keep = [c for c in ["article_id", "title", "link", "published",
+                            "summary", "source_domain", "province_code"] if c in d.columns]
+        frames.append(d[keep])
+    if not frames:
+        raise FileNotFoundError(
+            "assemble_corpus: no source files found -- expected one of "
+            f"{ENRICHED_SOURCES} under data/raw/, gdelt checkpoints, or {CURRENT_RAW}."
+        )
     alldf = pd.concat(frames, ignore_index=True)
     alldf["_slen"] = alldf["summary"].fillna("").str.len() if "summary" in alldf.columns else 0
     # prefer the copy with the most body text per article_id

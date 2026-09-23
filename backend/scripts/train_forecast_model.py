@@ -152,7 +152,7 @@ def metrics(d: pd.DataFrame) -> dict:
     return out
 
 
-def persist(df: pd.DataFrame, cols: list[str], params: dict) -> None:
+def persist(df: pd.DataFrame, cols: list[str], params: dict, confidence_cutoff: float) -> None:
     """Fit on the full panel and store a servable bundle."""
     prior = df["label_shock"].mean()
     stats = df.groupby("commodity")["label_shock"].agg(["sum", "count"])
@@ -189,6 +189,7 @@ def persist(df: pd.DataFrame, cols: list[str], params: dict) -> None:
         "lagged_features": CONTEMPORANEOUS,
         "feature_lag": FEATURE_LAG,
         "lag_suffix": LAG_SUFFIX,
+        "confidence_cutoff": float(confidence_cutoff),
         "note": ("Forecast variant: every contemporaneous feature is taken at t-1, "
                  "so a quarter is scored only from information available before it "
                  "begins. Performance figures come from the walk-forward evaluation "
@@ -278,7 +279,8 @@ def main() -> None:
     print("  accuracy, and that its value is the forward RANKING (AUC) which a")
     print("  persistence rule cannot provide at all.")
 
-    persist(df, cols, params)
+    confidence_cutoff = float(operating["confidence"].min())
+    persist(df, cols, params, confidence_cutoff)
 
 
 if __name__ == "__main__":

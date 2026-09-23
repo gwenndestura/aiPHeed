@@ -73,7 +73,14 @@ def score(df: pd.DataFrame, cols: list[str], params: dict,
         if te["label_shock"].nunique() > 1:
             aucs.append(roc_auc_score(te["label_shock"], m.predict_proba(te[cols])[:, 1]))
         pers.append(accuracy_score(te["label_shock"], te["shock_lag1"].astype(int)))
-        pers4.append(accuracy_score(te["label_shock"], te["shock_lag4"].astype(int)))
+        # shock_lag4 is NaN wherever a series doesn't have a same-quarter-last-
+        # year value yet (2021 rows, or a commodity newly added mid-window) --
+        # excluded here the same way seasonal_baseline_acc() in
+        # train_food_availability.py does, rather than crashing on the cast.
+        m4 = te["shock_lag4"].notna()
+        if m4.any():
+            pers4.append(accuracy_score(te.loc[m4, "label_shock"],
+                                        te.loc[m4, "shock_lag4"].astype(int)))
     return {"accuracy": float(np.mean(acc)) if acc else 0.0,
             "f1": float(np.mean(f1s)) if f1s else 0.0,
             "roc_auc": float(np.mean(aucs)) if aucs else float("nan"),
