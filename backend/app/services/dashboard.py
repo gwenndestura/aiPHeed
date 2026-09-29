@@ -32,6 +32,8 @@ import pandas as pd
 from app.ml.inference.disaggregator import Disaggregator
 from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
+from app.ml.inference.thesis_explainer import ThesisExplainer
+from app.ml.inference.thesis_predictor import ThesisPredictor
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
@@ -144,12 +146,14 @@ HORIZON_INFO = {
     NOWCAST: {
         "id": NOWCAST,
         "name": "Same-quarter nowcast",
-        "question": "Which commodity series fell below their seasonal baseline last quarter?",
+        "question": "Which province is under food-insecurity stress this quarter?",
         "definition": (
-            "Scored using the same quarter's CPI, typhoon count, ENSO phase and "
-            "news volume, so it cannot run ahead of published data."
+            "Connected to the thesis's own methodology (Eq. 4/5, Algorithm 4): "
+            "label_cpi, the paper's 12 features, a single LightGBM classifier. "
+            "See app/ml/inference/thesis_predictor.py for what this does and "
+            "does not mean about real performance."
         ),
-        "resultsFile": "final_results.json",
+        "resultsFile": "thesis_results.json",
     },
     FORECAST: {
         "id": FORECAST,
@@ -168,10 +172,16 @@ HORIZON_INFO = {
 
 
 def _engine(horizon: str):
+    # Nowcast (default) is connected to the thesis's own methodology
+    # (label_cpi, Eq. 5's 12 features, single LightGBM) -- see
+    # app/ml/inference/thesis_predictor.py for what that does and does not
+    # mean about real performance. The one-quarter-ahead horizon is a
+    # distinct, t-1-lagged architecture the thesis does not describe, and
+    # stays on the original commodity-level Forecaster.
     if horizon == FORECAST:
         from app.ml.inference.forecaster import Forecaster
         return Forecaster()
-    return Predictor()
+    return ThesisPredictor()
 
 
 def check_horizon(horizon: str | None) -> str:
@@ -313,6 +323,12 @@ def province_summary(
         score = record["risk_probability"]
         delta, pct = _qoq(score, quarter, code, horizon)
         meta = ref.PROVINCES[slug]
+        # Prefer the engine's own risk_label over a blind 0.50 cutoff: each
+        # predictor's threshold means something specific to its own model
+        # (ThesisPredictor's is a real, honestly-picked decision boundary
+        # that is NOT 0.50 -- forcing 0.50 here silently overrode it and
+        # made a genuinely discriminating model look uniformly HIGH).
+        level = record.get("risk_label", ref.risk_level(score)).lower()
         rows.append({
             "id": slug,
             "name": meta["name"],
@@ -322,7 +338,7 @@ def province_summary(
             "povertyRate": poverty.get(code),
             "currentQuarter": quarter,
             "riskScore": score,
-            "riskLevel": ref.risk_level(score),
+            "riskLevel": level,
             "qoqChange": delta,
             "qoqChangePct": pct,
             "seriesMonitored": record.get("series_monitored"),
@@ -499,7 +515,10 @@ def _integer_shares(values: list[float]) -> list[int]:
 
 @functools.lru_cache(maxsize=256)
 def _drivers(province_code: str, quarter: str) -> dict:
-    explainer = Explainer()
+    # Connected to the same paper-faithful model ThesisPredictor serves (see
+    # _engine()), so the Risk Drivers panel explains the score actually on
+    # screen instead of the old commodity-level model's unrelated reasoning.
+    explainer = ThesisExplainer()
     records = explainer.explain_province_quarter(province_code, quarter)
     return explainer.build_drivers(province_code, quarter, records)
 
@@ -547,6 +566,11 @@ def explainability(province_code: str, quarter: str) -> dict:
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
             "newsSignalProportion": d["trigger_proportion"],
+            # Real BSP OFW/FX numbers, informational only -- not a model
+            # input, does not affect pct/signedContribution above. Only
+            # populated for ofw_remittance, and only in quarters where BSP
+            # data exists. Additive field; not yet rendered by the frontend.
+            "realDataContext": d.get("real_data_context"),
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
     return {

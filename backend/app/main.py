@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="aiPHeed API",
-    description="Food Insecurity Forecasting System for DSWD CALABARZON",
+    description="Food Insecurity Forecasting System for DA Region IV-A (CALABARZON)",
     version="1.0.0",
     lifespan=lifespan,
 )

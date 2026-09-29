@@ -231,6 +231,19 @@ class TimeseriesResponse(BaseModel):
 # Explainability
 # ---------------------------------------------------------------------------
 
+class RealDataContext(BaseModel):
+    """
+    Real government-source numbers shown as informational context on a
+    driver -- NOT a model input. Currently only populated on ofw_remittance
+    (BSP data), since that driver's only trained feature is a purely
+    news-derived proportion that reads 0 in most quarters. Does not affect
+    signedContribution, pct, or any reported accuracy/F1/AUC figure.
+    """
+    source: str
+    ofw_remit_yoy_pct: float | None = None
+    fx_usd_php_avg: float | None = None
+
+
 class Trigger(BaseModel):
     """
     One SHAP driver group.
@@ -248,6 +261,7 @@ class Trigger(BaseModel):
     direction: str
     color: str
     newsSignalProportion: float | None = None
+    realDataContext: RealDataContext | None = None
 
 
 class ExplainabilityResponse(BaseModel):

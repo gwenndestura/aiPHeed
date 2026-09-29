@@ -422,7 +422,11 @@ def _fetch_unemployment(start_year: int, end_year: int) -> pd.DataFrame:
     LFS is national-level only in this table. Applied uniformly to all
     CALABARZON provinces. Returns DataFrame with: year, month, unemployment_rate.
     """
-    dataset = "DB/1B/LFS/0021B3GKEI2.px"
+    # PSA reissued this table under a new PXWeb id (G -> F) at some point
+    # before 2026-09; the old id now 404s. Same dimension codes (Year/Month/
+    # Rates/Sex), verified against the new table's own metadata before
+    # switching -- confirmed via /LFS/ folder listing, not guessed.
+    dataset = "DB/1B/LFS/0021B3FKEI2.px"
     logger.info("Fetching LFS Unemployment Rate from OpenStat...")
 
     # Year codes: 0=2005, so offset is 2005

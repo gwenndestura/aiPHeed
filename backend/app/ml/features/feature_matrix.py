@@ -59,7 +59,12 @@ CALABARZON_PROVINCES = [
     "PH040100000", "PH040200000", "PH040300000", "PH040400000", "PH040500000",
 ]
 
-MODEL_START_YEAR = 2021
+MODEL_START_YEAR = 2020
+# Was 2021 with no stated data justification. The audited news corpus
+# (calabarzon_food_insecurity_dataset.parquet) has 63 real, fully-scored,
+# province-tagged 2020 articles across all 5 provinces -- real, already-
+# collected data that this constant was silently excluding. Widened to
+# recover it. (backend_thesis/ only -- not applied to the live backend/.)
 
 
 def last_completed_quarter(today: date | None = None) -> str:
