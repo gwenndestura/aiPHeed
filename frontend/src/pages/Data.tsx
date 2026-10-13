@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TopNavbar } from "@/components/TopNavbar";
 import { useQuarters, useProvinces } from "@/lib/queries";
+import { selectableQuarters } from "@/lib/quarters";
 import { RISK_COLORS, RISK_LABELS } from "@/data/types";
 import type { ProvinceSummary } from "@/lib/apiTypes";
 import { ArrowDown, ArrowUp, Download, Search } from "lucide-react";
@@ -130,7 +131,7 @@ export default function DataPage() {
               onChange={(e) => setQuarter(e.target.value)}
               className="h-8 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none"
             >
-              {(quartersRes?.quarters ?? []).map((q) => (
+              {selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => (
                 <option key={q.id} value={q.id}>{q.label} {q.year}</option>
               ))}
             </select>

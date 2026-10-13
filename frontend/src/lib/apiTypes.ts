@@ -260,9 +260,12 @@ export interface ExplainabilityResponse {
   quarter: string;
   riskScore: number;
   triggers: Trigger[];
+  otherPct: number;
   articleCount: number;
   triggerMatchedArticles: number;
   narrative: string;
+  /** Third-person interpretation for the PDF report. Plain ASCII. */
+  formalInterpretation: string;
   note: string;
 }
 

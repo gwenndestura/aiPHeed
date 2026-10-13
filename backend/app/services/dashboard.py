@@ -25,6 +25,7 @@ import functools
 import hashlib
 import json
 import logging
+import unicodedata
 from pathlib import Path
 
 import pandas as pd
@@ -585,7 +586,7 @@ def explainability(province_code: str, quarter: str) -> dict:
     }
 
 
-def explainability_region(quarter: str) -> dict:
+def explainability_region(quarter: str, withheld: frozenset[str] = frozenset()) -> dict:
     """
     Regional breakdown: the five province explanations pooled.
 
@@ -593,10 +594,17 @@ def explainability_region(quarter: str) -> dict:
     `signedContribution` averages so the direction still reads correctly -- a
     group that raises risk in one province and lowers it in another should not
     disappear from the ranking just because the two cancel.
+
+    Provinces in `withheld` are left out of the pool entirely, so a withheld
+    province-quarter cannot be read back from the regional figure.
     """
     per_province = [
-        explainability(ref.province_code(slug), quarter) for slug in ref.PROVINCES
+        explainability(ref.province_code(slug), quarter)
+        for slug in ref.PROVINCES if slug not in withheld
     ]
+    if not per_province:
+        return {"quarter": quarter, "triggers": [], "otherPct": 0.0,
+                "articleCount": 0, "triggerMatchedArticles": 0, "provincesIncluded": 0}
 
     totals: dict[str, dict] = {}
     for result in per_province:
@@ -637,6 +645,7 @@ def explainability_region(quarter: str) -> dict:
         "otherPct": round(sum(r["otherPct"] for r in per_province) / len(per_province), 1),
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+        "provincesIncluded": len(per_province),
     }
 
 
@@ -692,6 +701,147 @@ def compose_narrative(name: str, quarter: str, triggers: list[dict], other_pct: 
         f"Shares are SHAP contributions to a production-shortfall prediction, "
         f"recomputed every quarter.{other_sentence}"
     )
+
+
+# Typographic characters that reach this module through labels or names and
+# break jsPDF/reportlab. Anything else non-ASCII is decomposed and dropped.
+_ASCII_FOLD = str.maketrans({
+    "\u2014": "-", "\u2013": "-", "\u2012": "-", "\u2212": "-",
+    "\u2018": "'", "\u2019": "'", "\u201c": '"', "\u201d": '"',
+    "\u00b7": "-", "\u2026": "...", "\u00a0": " ",
+})
+
+
+def _ascii(text: str) -> str:
+    folded = unicodedata.normalize("NFKD", text.translate(_ASCII_FOLD))
+    return folded.encode("ascii", "ignore").decode("ascii")
+
+
+def _join_series(items: list[str]) -> str:
+    if len(items) <= 1:
+        return "".join(items)
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return f"{', '.join(items[:-1])}, and {items[-1]}"
+
+
+def compose_formal_interpretation(
+    name: str, quarter: str, triggers: list[dict], other_pct: float = 0.0,
+    withheld: bool = False, brief: bool = False,
+) -> str:
+    """
+    Third-person, academic interpretation of a breakdown, for the PDF report.
+
+    The on-screen caption stays with compose_narrative(); this is the formal
+    counterpart the exported report prints under "Interpretation". Every
+    sentence is driven by the actual shares and signs, so two quarters with
+    different SHAP output never read the same. Plain ASCII for the same reason
+    as compose_narrative().
+
+    `withheld` reports the province-quarter as withheld from publication and
+    nothing else. `brief` shortens the closing "other share" explanation for
+    multi-province reports, where the table caption already defines it.
+    """
+    period = quarter.replace("-", " ")
+    if withheld:
+        return _ascii(
+            f"The SHAP breakdown for {name} in {period} is withheld from publication."
+        )
+    if not triggers:
+        return _ascii(
+            f"No SHAP breakdown is available for {name} in {period}. "
+            f"Consequently, the contribution of the driver groups to the forecast "
+            f"for this period cannot be interpreted."
+        )
+
+    def effect(t: dict) -> str:
+        return ("increases the predicted Risk Level score" if t["direction"] == "increases_risk"
+                else "decreases the predicted Risk Level score")
+
+    def tag(t: dict) -> str:
+        sign = "increasing" if t["direction"] == "increases_risk" else "decreasing"
+        return f"{t['label']} ({t['pct']}%, {sign})"
+
+    cutoff = ref.TRIGGER_RED_CUTOFF
+    ranked = sorted(triggers, key=lambda t: t["pct"], reverse=True)
+    top = ranked[0]
+    above = [t for t in ranked if t["pct"] > cutoff]
+    below = [t for t in ranked if t["pct"] <= cutoff]
+    n = len(ranked)
+
+    sentences = [
+        f"For {name} in {period}, the SHAP decomposition assigns the largest share "
+        f"of the attributed model output among the {n} driver groups to "
+        f"{top['label']} ({top['pct']}%), which {effect(top)}."
+    ]
+
+    if not above:
+        sentences.append(
+            f"No driver group exceeds the {cutoff}% even-share cutoff, indicating that "
+            f"the attributed output is distributed approximately evenly across the groups."
+        )
+    else:
+        raising = [f"{t['label']} ({t['pct']}%)" for t in above if t["direction"] == "increases_risk"]
+        lowering = [f"{t['label']} ({t['pct']}%)" for t in above if t["direction"] != "increases_risk"]
+        if len(above) == 1:
+            sentences.append(
+                f"{top['label']} is the only driver group whose share exceeds the "
+                f"{cutoff}% even-share cutoff."
+            )
+        else:
+            clauses = []
+            if raising:
+                verb = "increases" if len(raising) == 1 else "increase"
+                clauses.append(f"{_join_series(raising)} {verb} the predicted Risk Level score")
+            if lowering:
+                verb = "decreases" if len(lowering) == 1 else "decrease"
+                clauses.append(f"{_join_series(lowering)} {verb} it")
+            sentences.append(
+                f"Among the {len(above)} groups exceeding the {cutoff}% even-share "
+                f"cutoff, {', whereas '.join(clauses)}."
+            )
+
+    if below:
+        active = [t for t in below if t["pct"] > 0]
+        silent = [t["label"] for t in below if t["pct"] == 0]
+        if active:
+            verb = "falls" if len(active) == 1 else "fall"
+            sentences.append(
+                f"By comparison, {_join_series([tag(t) for t in active])} {verb} at or "
+                f"below the cutoff and therefore exert{'s' if len(active) == 1 else ''} "
+                f"a comparatively limited influence on the forecast."
+            )
+        if silent:
+            verb = "receives" if len(silent) == 1 else "receive"
+            sentences.append(
+                f"{_join_series(silent)} {verb} no measurable share in this period."
+            )
+        # In brief mode a single group above the cutoff has already been
+        # stated with its share, so the totals would only repeat it.
+        if above and not (brief and len(above) == 1):
+            sentences.append(
+                f"Taken together, the groups above the cutoff account for "
+                f"{sum(t['pct'] for t in above)}% of the attributed share, compared with "
+                f"{sum(t['pct'] for t in below)}% for the groups at or below it."
+            )
+
+    if other_pct >= 1.0 and brief:
+        sentences.append(
+            f"The {n} groups represent {round(100 - other_pct, 1)}% of the total "
+            f"SHAP-explained output; the remaining {other_pct}% comes from the Food Stress "
+            f"Sentiment Index features, which are reported separately."
+        )
+    elif other_pct >= 1.0:
+        sentences.append(
+            f"The percentages above are normalized among the {n} driver groups, which "
+            f"together represent {round(100 - other_pct, 1)}% of the total SHAP-explained "
+            f"output. The remaining {other_pct}% is attributable to model inputs outside "
+            f"these groups, namely the Food Stress Sentiment Index (FSSI), its values in the "
+            f"two preceding quarters, and its acceleration. These inputs are reported "
+            f"separately rather than allocated to any single driver group."
+        )
+
+    return _ascii(" ".join(sentences))
 
 
 # ---------------------------------------------------------------------------
