@@ -58,6 +58,10 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                 const delta = prev ? p.riskScore - prev.riskScore : 0;
                 const band = p.riskScore >= displayCutoff ? "HIGH" : "LOW";
                 const q = quarters.find((qq) => qq.id === p.quarter);
+                // Only quarters the slider offers are listed, so a selection
+                // always lands on the timeline. QoQ above still compares
+                // against the true previous quarter.
+                if (!q) return null;
                 const selected = p.quarter === value;
                 return (
                   <HistoryRow

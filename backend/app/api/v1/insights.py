@@ -105,6 +105,7 @@ async def get_explainability(
         articleCount=article_count,
         triggerMatchedArticles=matched,
         narrative=svc.compose_narrative(name, q, triggers, other_pct),
+        formalInterpretation=svc.compose_formal_interpretation(name, q, triggers, other_pct),
         note=EXPLAINABILITY_NOTE,
     )
 

@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections } from "@/lib/queries";
+import { selectableQuarters } from "@/lib/quarters";
 import { PhilippineMap } from "@/components/PhilippineMap";
 import { LeftPanel, RfiiScoreCardBody, RiskDriversCardBody } from "@/components/LeftPanel";
 import { ProvinceRankingCardBody } from "@/components/ProvinceRanking";
@@ -55,7 +56,10 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const [historyOpen, setHistoryOpen] = useState(false);
 
   const { data: quartersRes } = useQuarters("nowcast");
-  const quarters = useMemo(() => (quartersRes?.quarters ?? []).map(apiQuarterToSlider), [quartersRes]);
+  const quarters = useMemo(
+    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map(apiQuarterToSlider),
+    [quartersRes]
+  );
 
   const [quarterId, setQuarterId] = useState<string>("");
   useEffect(() => {

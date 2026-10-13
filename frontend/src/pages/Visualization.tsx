@@ -1,10 +1,11 @@
 import { useMemo, useRef, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { TopNavbar } from "@/components/TopNavbar";
 import { toast } from "@/hooks/use-toast";
 import { useConfig, useQuarters, useTimeseries, useMunicipalities, useExplainability } from "@/lib/queries";
-import { X, ImageIcon, FileText, BarChart3, LineChart as LineIcon } from "lucide-react";
+import { selectableQuarters } from "@/lib/quarters";
+import { api, ApiError } from "@/lib/api";
+import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
+import { X, ImageIcon, FileText } from "lucide-react";
 import {
   CartesianGrid,
   Line,
@@ -39,14 +40,6 @@ const PROVINCE_COLORS: Record<string, string> = {
 
 type Tab = "trend" | "shap";
 
-async function captureChartCanvas(node: HTMLElement) {
-  return html2canvas(node, {
-    backgroundColor: null,
-    scale: 2,
-    useCORS: true,
-  });
-}
-
 function downloadCanvasAsPng(canvas: HTMLCanvasElement, filename: string) {
   const link = document.createElement("a");
   link.download = filename;
@@ -54,41 +47,14 @@ function downloadCanvasAsPng(canvas: HTMLCanvasElement, filename: string) {
   link.click();
 }
 
-function downloadCanvasAsPdf(canvas: HTMLCanvasElement, filename: string, title: string, subtitle: string) {
-  const imgData = canvas.toDataURL("image/png");
-  const pdf = new jsPDF({
-    orientation: canvas.width >= canvas.height ? "landscape" : "portrait",
-    unit: "pt",
-    format: "a4",
-  });
-  const pageW = pdf.internal.pageSize.getWidth();
-  const pageH = pdf.internal.pageSize.getHeight();
-  const margin = 32;
-
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(14);
-  pdf.setTextColor(20);
-  pdf.text(title, margin, margin);
-  pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(9);
-  pdf.setTextColor(120);
-  pdf.text(subtitle, margin, margin + 14);
-  pdf.setTextColor(0);
-
-  const availW = pageW - margin * 2;
-  const availH = pageH - margin * 2 - 40;
-  const ratio = Math.min(availW / canvas.width, availH / canvas.height);
-  const w = canvas.width * ratio;
-  const h = canvas.height * ratio;
-  const x = margin + (availW - w) / 2;
-  const y = margin + 40;
-  pdf.addImage(imgData, "PNG", x, y, w, h);
-  pdf.save(filename);
-}
-
-function useChartExport(chartRef: React.RefObject<HTMLElement>, canExport: boolean) {
-  const guard = () => {
-    if (!canExport || !chartRef.current) {
+// The PNG is `pngRef` -- the chart and its colour legend, nothing else --
+// captured in the light theme on white. The PDF is the formal report the
+// backend composes at /api/v1/report/data, laid out by renderReportPdf(); the
+// page supplies only the selection, never any of the report's content.
+function useChartExport(pngRef: React.RefObject<HTMLElement>, canExport: boolean) {
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const guard = (ref: React.RefObject<HTMLElement>) => {
+    if (!canExport || !ref.current) {
       toast({
         title: "No chart to export",
         description: "Generate a chart first.",
@@ -96,24 +62,34 @@ function useChartExport(chartRef: React.RefObject<HTMLElement>, canExport: boole
       });
       return null;
     }
-    return chartRef.current;
+    return ref.current;
   };
 
   const downloadPng = async (filename: string) => {
-    const node = guard();
+    const node = guard(pngRef);
     if (!node) return;
-    const canvas = await captureChartCanvas(node);
+    const canvas = await captureLightFigure(node);
     downloadCanvasAsPng(canvas, filename);
   };
 
-  const downloadPdf = async (filename: string, title: string, subtitle: string) => {
-    const node = guard();
-    if (!node) return;
-    const canvas = await captureChartCanvas(node);
-    downloadCanvasAsPdf(canvas, filename, title, subtitle);
+  const downloadPdf = async (params: Record<string, string | undefined>, filename: string) => {
+    if (!guard(pngRef) || pdfBusy) return;
+    setPdfBusy(true);
+    try {
+      const report = await api.get<ReportPayload>("/api/v1/report/data", params, { auth: false });
+      renderReportPdf(report).save(filename);
+    } catch (err) {
+      toast({
+        title: "Report could not be generated",
+        description: err instanceof ApiError ? err.message : "The report service did not respond.",
+        variant: "destructive",
+      });
+    } finally {
+      setPdfBusy(false);
+    }
   };
 
-  return { downloadPng, downloadPdf };
+  return { downloadPng, downloadPdf, pdfBusy };
 }
 
 export default function VisualizationPage() {
@@ -127,10 +103,10 @@ export default function VisualizationPage() {
         <div className="p-4 sm:p-6 max-w-6xl mx-auto">
           {/* Sub-tabs */}
           <div className="flex items-center gap-2 mb-4">
-            <SubTab active={tab === "trend"} onClick={() => setTab("trend")} icon={<LineIcon className="h-3.5 w-3.5" />}>
+            <SubTab active={tab === "trend"} onClick={() => setTab("trend")}>
               Province Risk Level Trend
             </SubTab>
-            <SubTab active={tab === "shap"} onClick={() => setTab("shap")} icon={<BarChart3 className="h-3.5 w-3.5" />}>
+            <SubTab active={tab === "shap"} onClick={() => setTab("shap")}>
               Feature Contribution Breakdown
             </SubTab>
           </div>
@@ -145,24 +121,21 @@ export default function VisualizationPage() {
 function SubTab({
   active,
   onClick,
-  icon,
   children,
 }: {
   active: boolean;
   onClick: () => void;
-  icon: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors ${
+      className={`flex items-center px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors ${
         active
           ? "bg-primary text-primary-foreground"
           : "bg-card border border-border/50 text-muted-foreground hover:text-foreground"
       }`}
     >
-      {icon}
       {children}
     </button>
   );
@@ -172,7 +145,10 @@ function SubTab({
 function TrendView() {
   const { data: config } = useConfig();
   const { data: quartersRes } = useQuarters("nowcast");
-  const QUARTERS = useMemo(() => (quartersRes?.quarters ?? []).map((q) => q.id), [quartersRes]);
+  const QUARTERS = useMemo(
+    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => q.id),
+    [quartersRes]
+  );
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
 
@@ -252,52 +228,38 @@ function TrendView() {
     setGenerated(null);
   };
 
-  const chartRef = useRef<HTMLDivElement>(null);
+  // The trend chart's legend is part of the Recharts figure, so the PNG and
+  // the PDF figure capture the same node.
+  const figureRef = useRef<HTMLDivElement>(null);
   const hasChart = !!generated && data.length > 0;
-  const { downloadPng, downloadPdf } = useChartExport(chartRef, hasChart);
+  const { downloadPng, downloadPdf, pdfBusy } = useChartExport(figureRef, hasChart);
 
-  const trendExplanation = useMemo(() => {
-    if (!generated || data.length < 2) return "";
-    const first = data[0] as Record<string, number | string>;
-    const last = data[data.length - 1] as Record<string, number | string>;
-    const range = `${generated.from.replace("-", " ")}–${generated.to.replace("-", " ")}`;
-    const parts = seriesKeys.map((k) => {
-      const a = Number(first[k] ?? 0);
-      const b = Number(last[k] ?? 0);
-      const d = b - a;
-      const dir = d > 0.005 ? "rose" : d < -0.005 ? "fell" : "held flat";
-      return `${k} ${dir} from ${a.toFixed(2)} to ${b.toFixed(2)} (${d >= 0 ? "+" : ""}${d.toFixed(2)})`;
-    });
-    const endHigh = seriesKeys.filter((k) => Number(last[k] ?? 0) >= displayCutoff);
-    const tail =
-      endHigh.length === 0
-        ? `None end above the ${displayCutoff.toFixed(2)} high-risk line.`
-        : `${endHigh.join(", ")} ${endHigh.length === 1 ? "ends" : "end"} above the ${displayCutoff.toFixed(2)} high-risk line${
-            seriesKeys.some((k) => Number(last[k] ?? 0) >= alertThreshold)
-              ? `, and past the ${alertThreshold.toFixed(2)} alert threshold`
-              : ""
-          }.`;
-    return `Across ${range}, ${parts.join("; ")}. ${tail} Values are AI forecasts recomputed each quarter, not official measurements.`;
-  }, [generated, data, seriesKeys, displayCutoff, alertThreshold]);
 
   const exportLabel = generated
     ? `${generated.province === "All" ? "all-provinces" : generated.province}${
         generated.municipality !== "All" ? `-${generated.municipality}` : ""
       }_${generated.from}_to_${generated.to}`
     : "trend";
-  const exportSubtitle = generated
-    ? `${generated.province === "All" ? "All provinces" : generated.province}${
-        generated.municipality !== "All" ? ` — ${generated.municipality}` : ""
-      } · ${generated.from} to ${generated.to}`
-    : "";
-
   const handleDownloadPng = () => downloadPng(`aipheed_trend_${exportLabel}.png`);
-  const handleDownloadPdf = () =>
-    downloadPdf(
-      `aipheed_trend_${exportLabel}.pdf`,
-      "Province / Municipality Risk Level Trend",
-      exportSubtitle
+  const handleDownloadPdf = () => {
+    if (!generated) return;
+    const allProvinces = generated.province === "All";
+    const muniId =
+      !allProvinces && generated.municipality !== "All"
+        ? muniList?.data.find((m) => m.name === generated.municipality)?.id
+        : undefined;
+    return downloadPdf(
+      {
+        type: "trend",
+        scope: allProvinces ? "region" : "province",
+        id: allProvinces ? undefined : PROVINCE_IDS[generated.province],
+        from: generated.from,
+        to: generated.to,
+        municipality: muniId,
+      },
+      `aipheed_trend_${toAscii(exportLabel)}.pdf`
     );
+  };
 
   return (
     <div>
@@ -351,20 +313,21 @@ function TrendView() {
           </button>
           <button
             onClick={handleDownloadPdf}
-            disabled={!hasChart}
+            disabled={!hasChart || pdfBusy}
             className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
-            <FileText className="h-4 w-4" /> Download PDF
+            <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
         </div>
       </div>
 
-      <div ref={chartRef} className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
         {!generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter range to view the trend.
           </div>
         ) : (
+          <div ref={figureRef}>
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
@@ -410,14 +373,6 @@ function TrendView() {
               ))}
             </LineChart>
           </ResponsiveContainer>
-        )}
-        {generated && data.length > 0 && trendExplanation && (
-          <div className="mt-4 rounded-xl border border-border/50 bg-secondary/20 px-4 py-3">
-            <div className="flex items-center gap-2 mb-1.5">
-              <LineIcon className="h-3.5 w-3.5 text-primary" />
-              <span className="text-[11px] font-bold uppercase tracking-wider">What this shows</span>
-            </div>
-            <p className="text-[11px] leading-relaxed text-muted-foreground">{trendExplanation}</p>
           </div>
         )}
       </div>
@@ -429,7 +384,10 @@ function TrendView() {
 function ShapView() {
   const { data: config } = useConfig();
   const { data: quartersRes } = useQuarters("nowcast");
-  const QUARTERS = useMemo(() => (quartersRes?.quarters ?? []).map((q) => q.id), [quartersRes]);
+  const QUARTERS = useMemo(
+    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => q.id),
+    [quartersRes]
+  );
   const redCutoff = config?.thresholds.triggerRedCutoff ?? 20;
 
   const [province, setProvince] = useState<string>("Quezon");
@@ -466,16 +424,20 @@ function ShapView() {
     setGenerated(null);
   };
 
-  const chartRef = useRef<HTMLDivElement>(null);
+  const pngRef = useRef<HTMLDivElement>(null);
   const hasChart = !!generated && data.length > 0;
-  const { downloadPng, downloadPdf } = useChartExport(chartRef, hasChart);
+  const { downloadPng, downloadPdf, pdfBusy } = useChartExport(pngRef, hasChart);
 
   const exportLabel = generated ? `${generated.province}_${generated.quarter}` : "shap";
-  const exportSubtitle = generated ? `${generated.province} · ${generated.quarter}` : "";
 
   const handleDownloadPng = () => downloadPng(`aipheed_shap_${exportLabel}.png`);
-  const handleDownloadPdf = () =>
-    downloadPdf(`aipheed_shap_${exportLabel}.pdf`, "SHAP Explainability — Driver Groups", exportSubtitle);
+  const handleDownloadPdf = () => {
+    if (!generated) return;
+    return downloadPdf(
+      { type: "shap", scope: "province", id: PROVINCE_IDS[generated.province], to: generated.quarter },
+      `aipheed_shap_${exportLabel}.pdf`
+    );
+  };
 
   return (
     <div>
@@ -516,15 +478,15 @@ function ShapView() {
           </button>
           <button
             onClick={handleDownloadPdf}
-            disabled={!hasChart}
+            disabled={!hasChart || pdfBusy}
             className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
-            <FileText className="h-4 w-4" /> Download PDF
+            <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
         </div>
       </div>
 
-      <div ref={chartRef} className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
         {!generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter to view the trigger contributions.
@@ -537,6 +499,7 @@ function ShapView() {
               </h2>
               <span className="text-[10px] text-muted-foreground uppercase tracking-widest">SHAP explainability</span>
             </div>
+            <div ref={pngRef}>
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={data} layout="vertical" margin={{ top: 10, right: 48, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
@@ -576,18 +539,11 @@ function ShapView() {
               </BarChart>
             </ResponsiveContainer>
 
-            <div className="mt-4 rounded-xl border border-border/50 bg-secondary/20 px-4 py-3">
-              <div className="flex items-center gap-2 mb-1.5">
-                <BarChart3 className="h-3.5 w-3.5 text-primary" />
-                <span className="text-[11px] font-bold uppercase tracking-wider">What this shows</span>
-              </div>
-              <p className="text-[11px] leading-relaxed text-muted-foreground">
-                {explain?.narrative ?? ""}
-              </p>
-              <div className="mt-2 flex flex-wrap gap-3 text-[9px] uppercase tracking-wider text-muted-foreground">
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-high))" }} /> Above {redCutoff}% even share</span>
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-moderate))" }} /> At or below {redCutoff}%</span>
-              </div>
+            {/* Colour key only. The written SHAP interpretation is in the PDF report. */}
+            <div className="mt-3 flex flex-wrap justify-center gap-4 text-[9px] uppercase tracking-wider text-muted-foreground">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-high))" }} /> Above {redCutoff}% even share</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-moderate))" }} /> At or below {redCutoff}%</span>
+            </div>
             </div>
           </>
         )}

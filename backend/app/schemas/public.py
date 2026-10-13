@@ -279,6 +279,9 @@ class ExplainabilityResponse(BaseModel):
     articleCount: int
     triggerMatchedArticles: int
     narrative: str
+    # Third-person, academic counterpart of `narrative`, printed under
+    # "Interpretation" in the exported PDF report. Plain ASCII.
+    formalInterpretation: str
     note: str
 
 
