@@ -110,7 +110,7 @@ async def get_quarters(
         serverTime=now.isoformat(),
         calendarQuarter=calendar_quarter,
         lagQuarters=max(lag, 0),
-        quarters=svc.timeline(h),
+        quarters=svc.timeline(h, through=calendar_quarter),
     )
 
 

@@ -94,7 +94,7 @@ export default function DataPage() {
         <div className="p-6 max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-lg font-bold tracking-tight">Risk Data — CALABARZON</h1>
+              <h1 className="text-lg font-bold tracking-tight">Risk Data</h1>
               <p className="text-[11px] text-muted-foreground">
                 Province-level forecasts for {activeQuarter ?? "the latest quarter"}. Click a row for details.
               </p>
@@ -134,7 +134,9 @@ export default function DataPage() {
               className="h-8 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none"
             >
               {selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => (
-                <option key={q.id} value={q.id}>{q.label} {q.year}</option>
+                <option key={q.id} value={q.id} disabled={q.state === "unavailable"} title={q.reason ?? undefined}>
+                  {q.label} {q.year}{q.state === "unavailable" ? " (no data)" : ""}
+                </option>
               ))}
             </select>
           </div>

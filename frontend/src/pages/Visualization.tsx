@@ -40,6 +40,9 @@ const PROVINCE_COLORS: Record<string, string> = {
 
 type Tab = "trend" | "shap";
 
+// Room right of the trend plot for "Alert Threshold (0.60)" at 9px.
+const THRESHOLD_LABEL_W = 124;
+
 function downloadCanvasAsPng(canvas: HTMLCanvasElement, filename: string) {
   const link = document.createElement("a");
   link.download = filename;
@@ -147,10 +150,11 @@ function TrendView() {
   const { data: quartersRes } = useQuarters("nowcast");
   const QUARTERS = useMemo(
     // Reports describe the nowcast indicator; the E20 forecast quarter is a
-    // different target and is left out of the report ranges.
+    // different target and is left out of the report ranges, as are quarters
+    // with no score.
     () =>
       selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
-        .filter((q) => q.state !== "forecast")
+        .filter((q) => q.state === "actual" || q.state === "current")
         .map((q) => q.id),
     [quartersRes]
   );
@@ -334,7 +338,9 @@ function TrendView() {
         ) : (
           <div ref={figureRef}>
           <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
+            {/* The right margin holds the threshold labels, drawn beside the
+                plot at the end of each reference line. */}
+            <LineChart data={data} margin={{ top: 20, right: THRESHOLD_LABEL_W, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
               <XAxis dataKey="quarter" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
               <YAxis
@@ -391,10 +397,11 @@ function ShapView() {
   const { data: quartersRes } = useQuarters("nowcast");
   const QUARTERS = useMemo(
     // Reports describe the nowcast indicator; the E20 forecast quarter is a
-    // different target and is left out of the report ranges.
+    // different target and is left out of the report ranges, as are quarters
+    // with no score.
     () =>
       selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
-        .filter((q) => q.state !== "forecast")
+        .filter((q) => q.state === "actual" || q.state === "current")
         .map((q) => q.id),
     [quartersRes]
   );

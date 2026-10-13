@@ -20,6 +20,7 @@
 import type { MunicipalitySummary, ProvinceSummary, Quarter as ApiQuarter } from "./apiTypes";
 import type { MunicipalityData, RegionData } from "@/data/types";
 import type { Quarter as SliderQuarter } from "@/components/QuarterTimeSlider";
+import { quarterOrdinal } from "./quarters";
 
 export function provinceToRegion(p: ProvinceSummary): RegionData {
   return {
@@ -70,19 +71,26 @@ export function municipalityToData(m: MunicipalitySummary, provinceName: string)
   };
 }
 
-// The backend's Quarter (state: "actual" | "current" | "forecast") -> the
-// slider's Quarter (forecast / current / past booleans). "forecast" is the
-// E20 quarter (2027-Q1) appended after the nowcast's newest quarter.
-export function apiQuarterToSlider(q: ApiQuarter): SliderQuarter {
+// The backend's Quarter (state: "actual" | "current" | "forecast" |
+// "unavailable") -> the slider's Quarter (forecast / current / past booleans).
+// "forecast" is the E20 quarter (2027-Q1) appended after the nowcast's newest
+// quarter; "unavailable" is a quarter with no score: selectable, shown gray.
+// Given the calendar quarter, `current` is the quarter that contains today --
+// the slider's meaning -- rather than the newest scored one.
+export function apiQuarterToSlider(q: ApiQuarter, calendarQuarter?: string): SliderQuarter {
+  const o = quarterOrdinal(q.id);
+  const now = calendarQuarter ? quarterOrdinal(calendarQuarter) : null;
   return {
     id: q.id,
     year: q.year,
     q: q.q as 1 | 2 | 3 | 4,
     label: q.label,
     monthsLabel: q.monthsLabel,
-    current: q.state === "current",
-    past: q.state === "actual",
-    forecast: q.state === "forecast",
+    current: now === null ? q.state === "current" : o === now,
+    past: now === null ? q.state === "actual" : o < now,
+    forecast: q.state === "forecast" || (now !== null && o > now),
     locked: false,
+    noData: q.state === "unavailable",
+    reason: q.reason ?? undefined,
   };
 }

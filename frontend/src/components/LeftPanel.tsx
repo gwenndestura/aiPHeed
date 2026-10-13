@@ -11,6 +11,7 @@ import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
 import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
 import { StatusDot } from "@/components/ui/status-dot";
+import { isHighRisk } from "@/lib/risk";
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -117,9 +118,9 @@ export function RfiiScoreCardBody({
     if (r.limitedSignal) limited++;
   });
 
-  // The server's band, not the count-up value: that one is rounded to two
-  // decimals, so 0.4993 would read "0.50" and flip to HIGH.
-  const isHigh = regionForecast?.riskLevel ? regionForecast.riskLevel === "high" : avgScore >= 0.5;
+  // The server's band, else the score as displayed: 0.4993 reads "0.50",
+  // and a score shown as 0.50 is HIGH.
+  const isHigh = regionForecast?.riskLevel ? regionForecast.riskLevel === "high" : isHighRisk(avgScore);
   const band =
     isHigh ? { label: "HIGH", color: "hsl(var(--risk-high))" }
     : { label: "LOW", color: "hsl(var(--risk-low))" };
@@ -131,7 +132,7 @@ export function RfiiScoreCardBody({
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
         <p className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground/80 font-semibold">
-          CALABARZON — Regional Average Risk Level
+          Regional Average Risk Level
         </p>
         {quarterLabel && (
           <p className="text-[9px] text-muted-foreground/70 font-mono-num tabular-nums shrink-0">{quarterLabel}</p>
@@ -447,7 +448,7 @@ function RegionDetail({
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const limited = region.limitedSignal;
-  const isHigh = region.riskScore >= displayCutoff;
+  const isHigh = isHighRisk(region.riskScore, displayCutoff);
   const isActiveAlert = region.riskScore >= alertThreshold;
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
 

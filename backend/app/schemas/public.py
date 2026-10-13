@@ -87,7 +87,9 @@ class Quarter(BaseModel):
     q: int
     label: str
     monthsLabel: str
-    state: str  # "actual" | "current" | "forecast"
+    state: str  # "actual" | "current" | "forecast" | "unavailable"
+    # Why an "unavailable" quarter has no score; None on every other state.
+    reason: str | None = None
 
 
 class QuartersResponse(BaseModel):

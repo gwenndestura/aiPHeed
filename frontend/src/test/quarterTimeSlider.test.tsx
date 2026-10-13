@@ -30,18 +30,18 @@ describe("quarterMonthRange", () => {
 });
 
 describe("QuarterTimeSlider", () => {
-  it("shows the quarter and its status, with the months as a tooltip", () => {
-    const { rerender } = render(<QuarterTimeSlider value="2026-Q3" onChange={() => {}} quarters={QS} />);
-    expect(screen.getByText("Q3 2026")).toHaveAttribute("title", "July – September 2026");
-    expect(screen.getByText("· Observed")).toBeInTheDocument();
+  it("shows the quarter, its months and its status", () => {
+    const { container, rerender } = render(<QuarterTimeSlider value="2026-Q3" onChange={() => {}} quarters={QS} />);
+    const tag = () => container.querySelector(".qt-tag");
+    expect(screen.getByText("July – September 2026")).toBeInTheDocument();
+    expect(tag()).toHaveTextContent("Observed");
 
     rerender(<QuarterTimeSlider value="2026-Q4" onChange={() => {}} quarters={QS} />);
-    expect(screen.getByText("· Current quarter")).toBeInTheDocument();
+    expect(tag()).toHaveTextContent("Current quarter");
 
     rerender(<QuarterTimeSlider value="2027-Q1" onChange={() => {}} quarters={QS} />);
-    expect(screen.getByText("Q1 2027")).toHaveAttribute("title", "January – March 2027");
-    expect(screen.getByText("· Forecast")).toBeInTheDocument();
-    expect(screen.queryByText("January – March 2027")).not.toBeInTheDocument();
+    expect(screen.getByText("January – March 2027")).toBeInTheDocument();
+    expect(tag()).toHaveTextContent("Forecast");
   });
 
   it("exposes the points as a radio group with status labels", () => {
@@ -51,7 +51,7 @@ describe("QuarterTimeSlider", () => {
     const selected = screen.getByRole("radio", { name: "Q1 2027, forecast" });
     expect(selected).toHaveAttribute("aria-checked", "true");
     expect(selected).toHaveAttribute("tabindex", "0");
-    expect(selected).toHaveTextContent("Q1 ’27");
+    expect(selected).toHaveTextContent("Q1 2027");
     const today = screen.getByRole("radio", { name: "Q4 2026, current quarter, today" });
     expect(today).toHaveAttribute("tabindex", "-1");
     expect(today).toHaveAttribute("title", "October – December 2026 · Today");

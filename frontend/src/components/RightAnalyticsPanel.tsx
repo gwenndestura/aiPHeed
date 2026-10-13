@@ -7,6 +7,7 @@ import { useConfig, useExplainability, useNews } from "@/lib/queries";
 import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
 import { forecastPeriodLabel } from "@/lib/quarters";
+import { isHighRisk } from "@/lib/risk";
 import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
@@ -83,7 +84,7 @@ export function ShapNarrativeCardBody({
 
       <div className="flex flex-wrap items-center gap-1.5 mb-2">
         <StatusBadge
-          level={finalScore >= displayCutoff ? "high" : "low"}
+          level={isHighRisk(finalScore, displayCutoff) ? "high" : "low"}
           title={`Forecast display cutoff: ${displayCutoff}`}
         />
         {finalScore >= alertThreshold && (

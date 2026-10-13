@@ -55,10 +55,11 @@ export function useQuarters(horizon: Horizon = "nowcast") {
   });
 }
 
-export function useProvinces(quarter?: string, horizon: Horizon = "nowcast") {
+export function useProvinces(quarter?: string, horizon: Horizon = "nowcast", enabled = true) {
   return useQuery({
     queryKey: ["provinces", quarter, horizon],
     queryFn: () => api.get<ProvincesResponse>("/api/v1/provinces", { quarter, horizon }, { auth: false }),
+    enabled,
     staleTime: HOUR,
   });
 }
@@ -126,10 +127,11 @@ export function useSearch(q: string) {
   });
 }
 
-export function useRejections(quarter?: string) {
+export function useRejections(quarter?: string, enabled = true) {
   return useQuery({
     queryKey: ["rejections", quarter],
     queryFn: () => api.get<RejectionsResponse>("/api/v1/rejections", { quarter }, { auth: false }),
+    enabled,
     staleTime: 60 * 1000, // short: an admin action elsewhere should be visible reasonably soon
   });
 }

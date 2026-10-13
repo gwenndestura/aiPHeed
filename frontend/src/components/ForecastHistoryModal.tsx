@@ -3,6 +3,7 @@ import { History, ArrowRight } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
 import { useConfig, useTimeseries, useExplainability } from "@/lib/queries";
 import { quarterOrdinal } from "@/lib/quarters";
+import { isHighRisk } from "@/lib/risk";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatSigned } from "@/components/ui/metric";
 
@@ -20,7 +21,9 @@ interface Props {
  * trigger. Selecting a row loads that quarter on the map.
  */
 export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSelect }: Props) {
-  const cur = quarters.find((q) => q.current);
+  // The newest quarter with a nowcast score (not the calendar quarter, which
+  // may have no score yet).
+  const cur = quarters.filter((q) => !q.forecast && !q.noData).pop();
   const { data: config } = useConfig();
   const { data: series } = useTimeseries("region", "calabarzon", undefined, undefined, "nowcast");
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
@@ -34,7 +37,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
         <DialogHeader>
           <div className="flex items-center gap-2">
             <History className="h-4 w-4 text-primary" />
-            <DialogTitle className="text-sm">Forecast history — CALABARZON</DialogTitle>
+            <DialogTitle className="text-sm">Forecast history</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
             Past quarterly forecasts and their verified regional risk. The current quarter
@@ -67,7 +70,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                   !!prev && !q?.forecast && !prevQ?.forecast &&
                   quarterOrdinal(p.quarter) - quarterOrdinal(prev.quarter) === 1;
                 const delta = comparable ? p.riskScore - prev.riskScore : null;
-                const band = p.riskScore >= displayCutoff ? "HIGH" : "LOW";
+                const band = isHighRisk(p.riskScore, displayCutoff) ? "HIGH" : "LOW";
                 // Only quarters the slider offers are listed, so a selection
                 // always lands on the timeline. QoQ above still compares
                 // against the true previous quarter.
@@ -78,7 +81,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                     key={p.quarter}
                     quarterId={p.quarter}
                     label={q ? `${q.label} ${q.year}` : p.quarter}
-                    isCurrent={!!q?.current}
+                    isCurrent={!!cur && q.id === cur.id}
                     isForecast={!!q?.forecast}
                     score={p.riskScore}
                     band={band}

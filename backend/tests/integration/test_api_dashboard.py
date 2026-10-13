@@ -37,13 +37,47 @@ def test_quarters_reports_only_scorable_quarters(latest_quarter):
     assert body["quarters"], "timeline must not be empty"
     # Nowcast quarters have published PSA volumes behind them; only the
     # appended E20 quarters, after the newest of them, are forecasts.
-    observed = [q for q in body["quarters"] if q["state"] != "forecast"]
-    forecast = [q["id"] for q in body["quarters"] if q["state"] == "forecast"]
+    scored = [q for q in body["quarters"] if q["state"] != "unavailable"]
+    observed = [q for q in scored if q["state"] != "forecast"]
+    forecast = [q["id"] for q in scored if q["state"] == "forecast"]
     assert {q["state"] for q in observed} <= {"actual", "current"}
     assert observed[-1]["id"] == latest_quarter
     assert observed[-1]["state"] == "current"
     assert forecast == client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
     assert all(q > latest_quarter for q in forecast)
+
+
+def test_quarters_timeline_has_no_gaps_and_explains_missing_ones():
+    body = client.get("/api/v1/quarters").json()
+    ids = [q["id"] for q in body["quarters"]]
+    idx = [int(i[:4]) * 4 + int(i[-1]) - 1 for i in ids]
+    # Every quarter in the range is listed, through the calendar quarter.
+    assert idx == list(range(idx[0], idx[0] + len(idx)))
+    assert ids[-1] >= body["calendarQuarter"]
+    for q in body["quarters"]:
+        if q["state"] == "unavailable":
+            assert q["reason"], q["id"]
+            r = client.get(f"/api/v1/provinces?quarter={q['id']}")
+            assert r.status_code == 404, q["id"]
+        else:
+            assert q["reason"] is None, q["id"]
+
+
+def test_a_score_shown_as_050_is_high():
+    from app.services import reference as ref
+    assert ref.risk_level(0.4982) == "high"
+    assert ref.risk_level(0.50) == "high"
+    assert ref.risk_level(0.4949) == "low"
+
+
+def test_province_band_follows_the_displayed_score():
+    for q in [q["id"] for q in client.get("/api/v1/quarters").json()["quarters"]
+              if q["state"] != "unavailable"]:
+        for p in client.get(f"/api/v1/provinces?quarter={q}").json()["data"]:
+            if p["withheld"]:
+                continue
+            expected = "high" if round(p["riskScore"], 2) >= 0.5 else "low"
+            assert p["riskLevel"] == expected, (q, p["id"], p["riskScore"])
 
 
 def test_forecast_quarter_is_labelled_and_has_no_qoq():
@@ -346,7 +380,8 @@ def test_responses_declare_which_horizon_produced_them():
 
 
 def test_forecast_timeline_marks_its_edge_as_forecast():
-    quarters = client.get("/api/v1/quarters?horizon=forecast").json()["quarters"]
+    quarters = [q for q in client.get("/api/v1/quarters?horizon=forecast").json()["quarters"]
+                if q["state"] != "unavailable"]
     assert quarters[-1]["state"] == "forecast"
     assert {q["state"] for q in quarters[:-1]} == {"actual"}
 

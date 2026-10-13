@@ -126,7 +126,9 @@ export interface Quarter {
   q: number;
   label: string;
   monthsLabel: string;
-  state: "actual" | "current" | "forecast";
+  state: "actual" | "current" | "forecast" | "unavailable";
+  // Why an "unavailable" quarter has no score; null on every other state.
+  reason?: string | null;
 }
 
 export interface QuartersResponse {

@@ -272,22 +272,59 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
     return quarter
 
 
-def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
+def _quarter_name(quarter: str) -> str:
+    year, qn = ref.quarter_parts(quarter)
+    return f"Q{qn} {year}"
+
+
+def _unavailable_reason(quarter: str, horizon: str = DEFAULT_HORIZON) -> str:
+    """Why a quarter on the timeline has no score, in plain language."""
+    latest = _scored_quarters(horizon)[-1]
+    if ref.quarter_index(quarter) < ref.quarter_index(latest):
+        return "No risk score: the model has no input data for this quarter."
+    reason = (
+        f"No risk score yet. Scores run through {_quarter_name(latest)}, the newest "
+        "quarter PSA has published data for"
+    )
+    forecasts = e20_forecast_quarters(horizon)
+    if forecasts:
+        reason += (
+            f", and the published forecast covers "
+            f"{', '.join(_quarter_name(q) for q in forecasts)} only"
+        )
+    return reason + "."
+
+
+def timeline(horizon: str = DEFAULT_HORIZON, through: str | None = None) -> list[dict]:
     """
-    Every scorable quarter for this horizon, oldest first.
+    Every quarter from the first scorable one to the last, oldest first --
+    and on to `through` (the calendar quarter) if that is later.
 
     For the nowcast every scored entry is `actual` -- it scores quarters PSA
     has already published volumes for -- and the newest is `current`. Published
     E20 quarters follow as `forecast`. The forecast horizon reaches one quarter
     further, and that newest quarter is marked `forecast` because its inputs
-    all predate it.
+    all predate it. A quarter in between with no score (2026-Q4, between the
+    nowcast's newest and the E20 forecast) is `unavailable`, with a `reason`.
     """
     quarters = available_quarters(horizon)
-    latest = _scored_quarters(horizon)[-1] if quarters else None
+    if not quarters:
+        return []
+    latest = _scored_quarters(horizon)[-1]
+    scored = set(quarters)
+    first = ref.quarter_index(quarters[0])
+    last = ref.quarter_index(quarters[-1])
+    if through and ref.is_valid_quarter(through):
+        last = max(last, ref.quarter_index(through))
     out = []
-    for q in quarters:
-        year, qn = ref.quarter_parts(q)
-        if is_forecast_quarter(q, horizon):
+    for i in range(first, last + 1):
+        year, qn = divmod(i, 4)
+        q = f"{year}-Q{qn + 1}"
+        reason = None
+        if q not in scored:
+            state = "unavailable"
+            reason = _unavailable_reason(q, horizon)
+        elif is_forecast_quarter(q, horizon):
             state = "forecast"
         elif q == latest:
             state = "forecast" if horizon == FORECAST else "current"
@@ -296,10 +333,11 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
         out.append({
             "id": q,
             "year": year,
-            "q": qn,
-            "label": f"Q{qn}",
-            "monthsLabel": ref.QUARTER_MONTHS[qn],
+            "q": qn + 1,
+            "label": f"Q{qn + 1}",
+            "monthsLabel": ref.QUARTER_MONTHS[qn + 1],
             "state": state,
+            "reason": reason,
         })
     return out
 
@@ -391,12 +429,11 @@ def province_summary(
         score = record["risk_probability"]
         delta, pct = _qoq(score, quarter, code, horizon)
         meta = ref.PROVINCES[slug]
-        # Prefer the engine's own risk_label over a blind 0.50 cutoff: each
-        # predictor's threshold means something specific to its own model
-        # (ThesisPredictor's is a real, honestly-picked decision boundary
-        # that is NOT 0.50 -- forcing 0.50 here silently overrode it and
-        # made a genuinely discriminating model look uniformly HIGH).
-        level = record.get("risk_label", ref.risk_level(score)).lower()
+        # The band is the one public rule -- a score shown as 0.50 or above is
+        # HIGH -- not each engine's own risk_label. ThesisPredictor's decision
+        # boundary (0.712) labelled scores up to 0.71 LOW while every panel,
+        # the legend and the report call 0.50+ HIGH.
+        level = ref.risk_level(score)
         rows.append({
             "id": slug,
             "name": meta["name"],

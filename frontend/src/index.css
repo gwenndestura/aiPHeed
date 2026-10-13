@@ -403,6 +403,13 @@
     --qt-today: 240 4% 52%;
     --qt-link: 35 91% 62%;            /* 9:1 on --qt-panel */
     --qt-focus: 0 0% 100%;
+    /* The timeline floats on the map with no panel behind it: a dark halo
+       keeps its text and lines legible over any tile colour. */
+    --qt-float-text: 0 0% 100%;
+    --qt-float-muted: 0 0% 88%;
+    --qt-halo: 0 0% 0%;
+    /* A quarter with no score: gray, the map's own no-data colour family. */
+    --qt-nodata: 220 9% 62%;
   }
   .light {
     --qt-panel: 0 0% 100%;
@@ -416,6 +423,10 @@
     --qt-today: 240 4% 46%;
     --qt-link: 28 90% 32%;            /* 6.2:1 on white */
     --qt-focus: 240 6% 10%;
+    --qt-float-text: 240 6% 6%;
+    --qt-float-muted: 240 5% 22%;
+    --qt-halo: 0 0% 100%;
+    --qt-nodata: 220 9% 42%;
   }
 }
 
@@ -441,6 +452,41 @@
   }
   .qt-muted { color: hsl(var(--qt-text-muted)); }
 
+  /* Quarter timeline: no box, high-contrast text with a halo. */
+  .qt-float {
+    --qt-text: var(--qt-float-text);
+    --qt-text-muted: var(--qt-float-muted);
+    --qt-track: var(--qt-float-muted);
+    --qt-track-forecast: var(--qt-float-muted);
+    --qt-dot-border: var(--qt-float-text);
+    --qt-today: var(--qt-float-muted);
+    color: hsl(var(--qt-text));
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+    text-shadow:
+      0 0 2px hsl(var(--qt-halo)),
+      0 0 4px hsl(var(--qt-halo)),
+      0 1px 3px hsl(var(--qt-halo) / 0.9);
+  }
+  .qt-float .qt-link { font-size: 11px; font-weight: 600; }
+  .qt-float .qt-line-observed,
+  .qt-float .qt-line-forecast,
+  .qt-float .qt-dot,
+  .qt-float .qt-today-line { filter: drop-shadow(0 0 2px hsl(var(--qt-halo))); }
+  .qt-tag {
+    font-size: 10px;
+    line-height: 14px;
+    padding: 0 5px;
+    border: 1px solid hsl(var(--qt-text) / 0.7);
+    border-radius: 3px;
+    box-shadow: 0 0 3px hsl(var(--qt-halo) / 0.8), inset 0 0 3px hsl(var(--qt-halo) / 0.8);
+  }
+  .qt-key { display: inline-block; width: 20px; }
+
   .qt-link {
     color: hsl(var(--qt-link));
     font-size: 12px;
@@ -451,9 +497,9 @@
   }
   .qt-link:hover { text-decoration: underline; text-underline-offset: 2px; }
 
-  /* Points sit --qt-track-w apart in total, squeezing down to
-     --qt-track-min before the track scrolls. */
-  .qt-track { width: var(--qt-track-w); max-width: 100%; min-width: var(--qt-track-min); }
+  /* The track spans the whole bar, squeezing down to --qt-track-min
+     before it scrolls. */
+  .qt-track { width: 100%; min-width: var(--qt-track-min); }
 
   /* A line segment with a 14px-tall hover area for its tooltip. */
   .qt-segment { height: 14px; }
@@ -465,21 +511,27 @@
   .qt-point { border-radius: 4px; color: hsl(var(--qt-text-muted)); }
   .qt-point:disabled { cursor: not-allowed; opacity: 0.45; }
   .qt-dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     border: 1.5px solid hsl(var(--qt-dot-border));
     background: hsl(var(--qt-panel));
   }
   .qt-point[aria-checked="true"] { color: hsl(var(--qt-text)); font-weight: 500; }
   .qt-point[aria-checked="true"] .qt-dot {
-    width: 13px;
-    height: 13px;
+    width: 11px;
+    height: 11px;
     border: 0;
     background: hsl(var(--qt-selected));
   }
   .qt-point:not(:disabled):hover { color: hsl(var(--qt-text)); }
   .qt-point:not(:disabled):hover .qt-dot { border-color: hsl(var(--qt-text)); }
+  /* A quarter with no score: still selectable, drawn gray. */
+  .qt-point.qt-point-nodata,
+  .qt-point.qt-point-nodata:hover,
+  .qt-point.qt-point-nodata[aria-checked="true"] { color: hsl(var(--qt-nodata)); }
+  .qt-point.qt-point-nodata .qt-dot,
+  .qt-point.qt-point-nodata:hover .qt-dot { border-color: hsl(var(--qt-nodata)); background: hsl(var(--qt-nodata)); }
 
   .qt-point:focus { outline: none; }
   /* Inset: the track's scroll box would clip an outer ring. */
@@ -489,39 +541,29 @@
   .qt-swatch { display: inline-block; width: 10px; height: 10px; }
 }
 
-/* Bottom row of the map: legend bottom-left, quarter bar bottom-centre.
-   The 1fr side columns keep the bar centred when there is room and push it
-   right, rather than under the legend, when there is not. The row is a
-   size container so the bar adapts to the map area left between the
-   sidebars, not just to the window. */
-.qt-row { container-type: inline-size; }
-.qt-row-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: end;
-  gap: 12px;
+/* Bottom of the map: the quarter bar spanning the whole map area between the
+   sidebars, the risk legend stacked above its left edge. The row is a size
+   container so the bar adapts to that area, not just to the window. */
+.qt-row { container-type: inline-size; display: flex; }
+.qt-row-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
-.qt-row-legend { justify-self: start; }
-.qt-row-bar { min-width: 0; max-width: 640px; }
+.qt-row-bar { align-self: stretch; min-width: 0; }
 .qt-history-short { display: none; }
 
-/* Too narrow for the full bar beside the legend (and on phones):
-   drop the status text and shorten the history link. */
-@container (max-width: 839px) {
+/* Too narrow for the full header line: drop the month range and shorten
+   the history link. */
+@container (max-width: 539px) {
   .qt-status, .qt-history-full { display: none; }
   .qt-history-short { display: inline; }
-}
-/* Too narrow for both on one row: the legend moves above. */
-@container (max-width: 719px) {
-  .qt-row-grid { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-  .qt-row-bar { align-self: center; max-width: 100%; }
 }
 @media (max-width: 639px) {
   .qt-status, .qt-history-full { display: none; }
   .qt-history-short { display: inline; }
 }
 
-/* Very narrow screens: keep full spacing and let the track scroll. */
-@media (max-width: 399px) {
-  .qt-track { min-width: var(--qt-track-w); max-width: none; }
-}

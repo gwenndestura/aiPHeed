@@ -12,6 +12,8 @@ export interface Quarter {
   locked?: boolean;
   current?: boolean;
   past?: boolean; // a quarter earlier than "now" — an actual, not a forecast
+  noData?: boolean; // selectable, but no score: shown gray
+  reason?: string; // why a noData quarter has no score
 }
 
 interface Props {
@@ -77,10 +79,9 @@ const STATUS_TAG: Record<Status, string> = {
   forecast: "Forecast",
 };
 
-// Distance between points: the preferred spacing, and the tightest the
-// track may squeeze to before it scrolls instead.
-const SPACING = 76;
-const MIN_SPACING = 52;
+// The track fills the map area between the sidebars; this is the tightest
+// the points may squeeze before it scrolls instead.
+const MIN_SPACING = 64;
 
 const fullName = (q: Quarter) => `Q${q.q} ${q.year}`;
 
@@ -158,34 +159,41 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
   };
 
   const gaps = Math.max(qs.length - 1, 1);
-  const trackSize = { "--qt-track-w": `${gaps * SPACING}px`, "--qt-track-min": `${gaps * MIN_SPACING}px` } as CSSProperties;
+  const trackSize = { "--qt-track-min": `${gaps * MIN_SPACING}px` } as CSSProperties;
 
   return (
-    <div className="qt-panel qt-bar gap-3 select-none">
+    <div className="qt-float select-none">
       {/* Selected quarter */}
-      <div className="shrink-0 whitespace-nowrap">
-        <span className="text-[14px] leading-5 font-medium" title={quarterMonthRange(shown)}>
-          {fullName(shown)}
-        </span>
-        <span className="qt-muted qt-status"> · {STATUS_TAG[statusOf(shown)]}</span>
+      <div className="flex items-center gap-x-3 gap-y-1 flex-wrap">
+        <span className="text-[13px] leading-5 font-semibold">{fullName(shown)}</span>
+        <span className="qt-muted qt-status text-[11px]">{quarterMonthRange(shown)}</span>
+        <span className="qt-tag">{STATUS_TAG[statusOf(shown)]}</span>
+        {onOpenHistory && (
+          <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link ml-auto whitespace-nowrap">
+            <span className="qt-history-full">View history</span>
+            <span className="qt-history-short">History</span>
+          </button>
+        )}
       </div>
 
-      {/* Track */}
-      <div ref={scrollRef} className="min-w-0 overflow-x-auto no-scrollbar px-6">
+      {/* Track. The scroll box clips at its padding edge, and the end points'
+          labels hang half their width (~24px plus the halo) past their dots,
+          so the inset must clear that or "Q1 2026" loses its first letter. */}
+      <div ref={scrollRef} className="min-w-0 overflow-x-auto no-scrollbar px-8 mt-1">
         <div
           role="radiogroup"
           aria-label="Quarter"
           aria-description={description}
-          className="qt-track relative h-[28px]"
+          className="qt-track relative h-[46px]"
           style={trackSize}
         >
           {split > 0 && (
-            <div className="qt-segment absolute left-0 top-0" style={{ width: `${split}%` }} title="Observed">
+            <div className="qt-segment absolute left-0 top-[16px]" style={{ width: `${split}%` }} title="Observed">
               <span className="qt-line-observed" />
             </div>
           )}
           {split < 100 && (
-            <div className="qt-segment absolute right-0 top-0" style={{ left: `${split}%` }} title="Forecast">
+            <div className="qt-segment absolute right-0 top-[16px]" style={{ left: `${split}%` }} title="Forecast">
               <span className="qt-line-forecast" />
             </div>
           )}
@@ -193,10 +201,11 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
             <div
               aria-hidden
               title="Today"
-              className="absolute top-0 h-[14px] w-[9px] -translate-x-1/2 flex justify-center"
+              className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
               style={{ left: `${split}%` }}
             >
-              <span className="qt-today-line mt-px h-3" />
+              <span className="qt-muted text-[10px] leading-[14px]">Today</span>
+              {todayOnPoint < 0 && <span className="qt-today-line mt-[2px] h-3" />}
             </div>
           )}
 
@@ -207,32 +216,35 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
               type="button"
               role="radio"
               aria-checked={i === idx}
-              aria-label={`${fullName(q)}, ${STATUS_TAG[statusOf(q)].toLowerCase()}${i === todayOnPoint ? ", today" : ""}${q.locked ? ", not yet available" : ""}`}
+              aria-label={`${fullName(q)}, ${STATUS_TAG[statusOf(q)].toLowerCase()}${i === todayOnPoint ? ", today" : ""}${q.noData ? ", no data" : ""}${q.locked ? ", not yet available" : ""}`}
               title={q.locked ? "Data not yet available." : `${quarterMonthRange(q)}${i === todayOnPoint ? " · Today" : ""}`}
               tabIndex={i === tabStop ? 0 : -1}
               disabled={q.locked}
               onClick={() => onChange(q.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
-              className="qt-point absolute top-0 -translate-x-1/2 flex flex-col items-center px-1 whitespace-nowrap"
+              className={`qt-point${q.noData ? " qt-point-nodata" : ""} absolute top-[16px] -translate-x-1/2 flex flex-col items-center px-1 whitespace-nowrap`}
               style={{ left: `${at(i)}%` }}
             >
               <span className="h-[14px] flex items-center justify-center">
                 <span className="qt-dot" />
               </span>
-              <span className="text-[11px] leading-[13px] mt-px">
-                Q{q.q} ’{String(q.year).slice(-2)}
-              </span>
+              <span className="text-[10px] leading-[14px] mt-0.5">{fullName(q)}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {onOpenHistory && (
-        <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link shrink-0 whitespace-nowrap">
-          <span className="qt-history-full">View history</span>
-          <span className="qt-history-short">History</span>
-        </button>
-      )}
+      {/* Legend */}
+      <div aria-hidden className="qt-muted flex items-center gap-4 text-[10px] leading-[14px]">
+        <span className="flex items-center gap-1.5">
+          <span className="qt-key qt-line-observed" />
+          Observed
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="qt-key qt-line-forecast" />
+          Forecast
+        </span>
+      </div>
     </div>
   );
 }

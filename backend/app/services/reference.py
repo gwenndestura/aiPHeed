@@ -114,7 +114,11 @@ ACTIVE_RISK_LEVELS = ["low", "high"]
 
 
 def risk_level(score: float) -> str:
-    return "high" if score >= RISK_DISPLAY_CUTOFF else "low"
+    """
+    HIGH at or above the display cutoff, judged on the score as shown (two
+    decimals): a 0.4982 reads "0.50" everywhere, so it is HIGH, not LOW.
+    """
+    return "high" if round(score, 2) >= RISK_DISPLAY_CUTOFF else "low"
 
 
 # ---------------------------------------------------------------------------

@@ -35,6 +35,15 @@ function FloatingCard({ children, className = "", style }: { children: React.Rea
   );
 }
 
+function NoDataCardBody({ reason }: { reason?: string }) {
+  return (
+    <div className="py-8 text-center space-y-2">
+      <p className="text-[11px] font-semibold text-muted-foreground">No data</p>
+      {reason && <p className="text-[10px] text-muted-foreground/60 leading-snug px-2">{reason}</p>}
+    </div>
+  );
+}
+
 const COL_W = 320;
 const PEEK_W = 24;
 const COL_TOP = 0;
@@ -58,15 +67,21 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
   const { data: quartersRes } = useQuarters("nowcast");
   const quarters = useMemo(
-    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map(apiQuarterToSlider),
+    () =>
+      selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) =>
+        apiQuarterToSlider(q, quartersRes?.calendarQuarter)
+      ),
     [quartersRes]
   );
 
   const [quarterId, setQuarterId] = useState<string>("");
   useEffect(() => {
-    // Default to the newest scorable quarter once the timeline loads.
-    if (!quarterId && quartersRes?.current) setQuarterId(quartersRes.current);
-  }, [quartersRes, quarterId]);
+    // Default to the newest forecast quarter once the timeline loads, falling
+    // back to the newest scorable quarter when no forecast is served.
+    if (quarterId || !quartersRes?.current) return;
+    const forecast = [...quarters].reverse().find((q) => q.forecast && !q.noData);
+    setQuarterId(forecast?.id ?? quartersRes.current);
+  }, [quartersRes, quarters, quarterId]);
 
   // The timeline shows only the newest quarters; History lists all of them.
   const timelineQuarters = useMemo(() => timelineWindow(quarters), [quarters]);
@@ -78,10 +93,17 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       ? forecastPeriodLabel(currentQuarter)
       : `${currentQuarter.label} ${currentQuarter.year} · ${currentQuarter.monthsLabel.toUpperCase()}`;
 
-  const { data: provincesRes } = useProvinces(quarterId || undefined, "nowcast");
-  const regionsData = useMemo(() => (provincesRes?.data ?? []).map(provinceToRegion), [provincesRes]);
+  // A quarter with no score is selectable: the map stays gray (no province
+  // has a score) and the panels say so.
+  const noData = !!currentQuarter?.noData;
 
-  const { data: rejectionsRes } = useRejections(quarterId || undefined);
+  const { data: provincesRes } = useProvinces(quarterId || undefined, "nowcast", !noData);
+  const regionsData = useMemo(
+    () => (noData ? [] : (provincesRes?.data ?? []).map(provinceToRegion)),
+    [provincesRes, noData]
+  );
+
+  const { data: rejectionsRes } = useRejections(quarterId || undefined, !noData);
   const rejectedIds = useMemo(
     () => new Set((rejectionsRes?.data ?? []).map((r) => r.provinceId)),
     [rejectionsRes]
@@ -116,6 +138,13 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   }, []);
 
   const handleHover = useCallback((r: RegionData | null) => setPreviewRegion(r), []);
+
+  useEffect(() => {
+    if (!noData) return;
+    setSelectedRegion(null);
+    setPreviewRegion(null);
+    setSelectedMunicipality(null);
+  }, [noData]);
 
   useEffect(() => {
     const onFocus = (e: Event) => {
@@ -192,7 +221,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         onClick={() => leftCollapsed && setLeftCollapsed(false)}
         aria-label={leftCollapsed ? "Show left sidebar" : undefined}
       >
-          {hasSelection ? (
+          {hasSelection && !noData ? (
             <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
               <FloatingCard className="p-0 overflow-hidden">
                 <LeftPanel
@@ -213,15 +242,23 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           ) : (
             <>
               <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2">
-                <FloatingCard>
-                  <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} />
-                </FloatingCard>
-                <FloatingCard>
-                  <RiskDriversCardBody quarterId={quarterId} />
-                </FloatingCard>
-                <FloatingCard>
-                  <ProvinceRankingCardBody onRegionClick={handleRegionClick} regionsData={regionsData} />
-                </FloatingCard>
+                {noData ? (
+                  <FloatingCard>
+                    <NoDataCardBody reason={currentQuarter?.reason} />
+                  </FloatingCard>
+                ) : (
+                  <>
+                    <FloatingCard>
+                      <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} />
+                    </FloatingCard>
+                    <FloatingCard>
+                      <RiskDriversCardBody quarterId={quarterId} />
+                    </FloatingCard>
+                    <FloatingCard>
+                      <ProvinceRankingCardBody onRegionClick={handleRegionClick} regionsData={regionsData} />
+                    </FloatingCard>
+                  </>
+                )}
               </div>
               {showAboutFeedback && (
                 <FloatingCard className="!py-2 shrink-0">
@@ -243,7 +280,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         onClick={() => rightCollapsed && setRightCollapsed(false)}
         aria-label={rightCollapsed ? "Show right sidebar" : undefined}
       >
-          {effectiveRegion && rejectedIds.has(effectiveRegion.id) ? (
+          {noData ? (
+            <FloatingCard>
+              <NoDataCardBody reason={currentQuarter?.reason} />
+            </FloatingCard>
+          ) : effectiveRegion && rejectedIds.has(effectiveRegion.id) ? (
             <FloatingCard>
               <div className="py-8 text-center space-y-2">
                 <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
@@ -287,18 +328,19 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         }}
       />
 
-      {/* Bottom row of the visible map: risk legend bottom-left, quarter bar
-          bottom-centre (layout in index.css, .qt-row). On phones, where the
-          sidebar offsets leave no room, the row spans the screen. */}
+      {/* Bottom of the visible map: the quarter bar spanning the gap between the
+          sidebars (same 12px inset as the search box), with the risk
+          legend above its left edge (layout in index.css, .qt-row). On phones,
+          where the sidebar offsets leave no room, the row spans the screen. */}
       <div
         className="qt-row absolute z-[1001] pointer-events-none transition-[left,right] duration-300"
         style={{
-          left: isPhone ? 16 : (leftCollapsed ? PEEK_W : COL_W) + 16,
-          right: isPhone ? 16 : (rightCollapsed ? PEEK_W : COL_W) + 16,
-          bottom: 16,
+          left: isPhone ? 12 : (leftCollapsed ? PEEK_W : COL_W) + 12,
+          right: isPhone ? 12 : (rightCollapsed ? PEEK_W : COL_W) + 12,
+          bottom: 12,
         }}
       >
-        <div className="qt-row-grid">
+        <div className="qt-row-stack">
           <div className="qt-row-legend pointer-events-auto animate-fade-in">
             <MapLegend />
           </div>
