@@ -89,6 +89,31 @@ export interface ConfigResponse {
   };
   horizons: { nowcast: HorizonInfo; forecast: HorizonInfo };
   modelPerformance: HorizonPerformance;
+  // The E20 headline forecast (2027-Q1); null when the backend does not serve it.
+  forecast?: ForecastMeta | null;
+}
+
+export interface ForecastMeta {
+  period: string;
+  periodLabel: string;
+  generatedAt: string | null;
+  informationCutoff: string;
+  informationCutoffReason: string | null;
+  horizonQuarters: number;
+  horizonCalculation: string | null;
+  model: string;
+  modelName: string;
+  selectionRule: string | null;
+  status: string;
+  statusLabel: string;
+  backtest: { roc_auc: number | null; roc_auc_ci95: [number, number] | null; brier: number | null };
+  evaluationQuarters: number | null;
+  differentiatesProvinces: boolean;
+  probabilityRange: [number, number];
+  limitations: string[];
+  target: { name: string; definition: string; caveat: string } | null;
+  notDisplayed: { lead: number; targetQuarter: string; reason: string }[];
+  context: { text: string; source: string; url: string } | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -101,7 +126,7 @@ export interface Quarter {
   q: number;
   label: string;
   monthsLabel: string;
-  state: "actual" | "current";
+  state: "actual" | "current" | "forecast";
 }
 
 export interface QuartersResponse {
@@ -142,6 +167,12 @@ export interface ProvinceSummary {
   limitedSignal: boolean;
   horizon: Horizon;
   withheld: boolean;
+  // Set on an E20 forecast quarter (2027-Q1).
+  isForecast?: boolean;
+  lead?: number | null;
+  originQuarter?: string | null;
+  modelId?: string | null;
+  confidenceNote?: string | null;
 }
 
 export interface ProvincesResponse {
@@ -292,6 +323,8 @@ export interface NewsResponse {
   scope: Scope;
   id: string;
   quarter: string;
+  /** Publication quarter of the articles; a forecast quarter shows its information-cutoff quarter. */
+  sourceQuarter: string;
   articleCount: number;
   provinceAttributed: number;
   topics: NewsTopic[];

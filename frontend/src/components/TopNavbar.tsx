@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Menu, LogIn, Sun, Moon, X, Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
+import { Home, Database, BarChart3, Menu, LogIn, Sun, Moon, X, Mail, Lock, ArrowRight } from "lucide-react";
+import { Note } from "@/components/ui/note";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
@@ -197,12 +198,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </button>
         </form>
 
-        <div className="mt-5 p-2.5 rounded-lg bg-secondary/40 border border-border/40 text-[10px] text-muted-foreground flex items-start gap-2">
-          <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-          <span>
-            Admin access is restricted to <span className="font-bold text-foreground">@calabarzon.da.gov.ph</span> emails.
-          </span>
-        </div>
+        <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
 
         <p className="text-center text-[10px] text-muted-foreground mt-4">
           <button

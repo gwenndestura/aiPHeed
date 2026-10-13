@@ -64,7 +64,16 @@ def _quarter_window(start: str, end: str) -> list[str]:
     start = svc.resolve_quarter(start)
     end = svc.resolve_quarter(end)
     lo, hi = sorted((ref.quarter_index(start), ref.quarter_index(end)))
-    return [q for q in svc.available_quarters() if lo <= ref.quarter_index(q) <= hi]
+    # Reports describe the nowcast indicator; the E20 forecast quarter is a
+    # different target and is left out rather than worded as a nowcast.
+    window = [q for q in svc.available_quarters()
+              if lo <= ref.quarter_index(q) <= hi and not svc.is_forecast_quarter(q)]
+    if not window:
+        raise ReportRequestError(
+            "Reports cover nowcast quarters only; the selected range holds only the "
+            "E20 forecast quarter. See the Forecast Period banner on the dashboard."
+        )
+    return window
 
 
 def _calendar() -> tuple[str, int, str]:

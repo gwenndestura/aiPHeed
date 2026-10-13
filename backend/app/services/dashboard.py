@@ -31,6 +31,7 @@ from pathlib import Path
 import pandas as pd
 
 from app.ml.inference.disaggregator import Disaggregator
+from app.ml.inference.e20_forecast import E20Forecast
 from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
 from app.ml.inference.thesis_explainer import ThesisExplainer
@@ -195,12 +196,63 @@ def check_horizon(horizon: str | None) -> str:
 
 
 @functools.lru_cache(maxsize=4)
-def available_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
+def _scored_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
+    """Quarters the horizon's own engine scores, oldest first."""
     return _engine(horizon).available_quarters()
 
 
+@functools.lru_cache(maxsize=4)
+def e20_forecast_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
+    """
+    Published E20 forecast quarters (2027-Q1) appended to the nowcast timeline.
+
+    Only quarters past the nowcast's newest scored quarter are added, so a
+    nowcast score is never replaced. E20 is a different target and model (see
+    app/ml/inference/e20_forecast.py); is_forecast_quarter() lets every
+    surface label it.
+    """
+    if horizon != NOWCAST:
+        return []
+    scored = _scored_quarters(horizon)
+    last = ref.quarter_index(scored[-1]) if scored else -1
+    return sorted(
+        (q for q in E20Forecast().forecast_quarters() if ref.quarter_index(q) > last),
+        key=ref.quarter_index,
+    )
+
+
+def is_forecast_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> bool:
+    return quarter in e20_forecast_quarters(horizon)
+
+
+def news_quarter(quarter: str) -> str:
+    """
+    The quarter whose articles stand behind a quarter's score.
+
+    A forecast quarter has no articles of its own -- it has not happened yet.
+    Its score was built from the information-cutoff (origin) quarter's news,
+    so that is the corpus to show.
+    """
+    if is_forecast_quarter(quarter):
+        return E20Forecast().origin_quarter(quarter) or quarter
+    return quarter
+
+
+def forecast_meta() -> dict | None:
+    """The E20 headline forecast for the dashboard banner, or None if not served."""
+    if not e20_forecast_quarters():
+        return None
+    return E20Forecast().forecast_meta(frozenset(_scored_quarters(NOWCAST)))
+
+
+@functools.lru_cache(maxsize=4)
+def available_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
+    return _scored_quarters(horizon) + e20_forecast_quarters(horizon)
+
+
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
-    quarters = available_quarters(horizon)
+    """The newest quarter the horizon's own engine scores (never an E20 forecast)."""
+    quarters = _scored_quarters(horizon)
     if not quarters:
         raise QuarterNotAvailable("The model panel is empty; no quarter is scorable.")
     return quarters[-1]
@@ -215,7 +267,7 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
     if quarter not in available_quarters(horizon):
         raise QuarterNotAvailable(
             f"No {horizon} exists for {quarter}. The {horizon} model can score "
-            f"{available_quarters(horizon)[0]} through {latest_quarter(horizon)}."
+            f"{available_quarters(horizon)[0]} through {available_quarters(horizon)[-1]}."
         )
     return quarter
 
@@ -224,17 +276,20 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """
     Every scorable quarter for this horizon, oldest first.
 
-    For the nowcast every entry is `actual` -- it scores quarters PSA has
-    already published volumes for. The forecast horizon reaches one quarter
+    For the nowcast every scored entry is `actual` -- it scores quarters PSA
+    has already published volumes for -- and the newest is `current`. Published
+    E20 quarters follow as `forecast`. The forecast horizon reaches one quarter
     further, and that newest quarter is marked `forecast` because its inputs
     all predate it.
     """
     quarters = available_quarters(horizon)
-    latest = quarters[-1] if quarters else None
+    latest = _scored_quarters(horizon)[-1] if quarters else None
     out = []
     for q in quarters:
         year, qn = ref.quarter_parts(q)
-        if q == latest:
+        if is_forecast_quarter(q, horizon):
+            state = "forecast"
+        elif q == latest:
             state = "forecast" if horizon == FORECAST else "current"
         else:
             state = "actual"
@@ -256,6 +311,8 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
 @functools.lru_cache(maxsize=64)
 def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """Raw model output for one quarter, from whichever engine the horizon names."""
+    if is_forecast_quarter(quarter, horizon):
+        return E20Forecast().forecast_quarter(quarter)
     return _engine(horizon).forecast_quarter(quarter)
 
 
@@ -264,9 +321,19 @@ def province_forecast_map(quarter: str, horizon: str = DEFAULT_HORIZON) -> dict[
 
 
 def _previous_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> str | None:
+    """
+    The immediately preceding calendar quarter, if it is scorable. A change
+    across a gap (2026-Q3 -> 2027-Q1) or from a nowcast score to an E20
+    forecast is not a quarter-on-quarter change.
+    """
+    if is_forecast_quarter(quarter, horizon):
+        return None
     quarters = available_quarters(horizon)
     i = quarters.index(quarter) if quarter in quarters else -1
-    return quarters[i - 1] if i > 0 else None
+    if i <= 0:
+        return None
+    prev = quarters[i - 1]
+    return prev if ref.quarter_index(quarter) - ref.quarter_index(prev) == 1 else None
 
 
 def _qoq(current: float, quarter: str, code: str,
@@ -346,10 +413,16 @@ def province_summary(
             "seriesAtRisk": record.get("series_at_risk"),
             "seriesNeedingReview": record.get("series_needing_review"),
             "topAtRiskCommodities": record.get("top_at_risk_commodities", []),
-            "articleCount": article_count(code, quarter),
+            "articleCount": article_count(code, news_quarter(quarter)),
             "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "horizon": horizon,
             "withheld": False,
+            "isForecast": bool(record.get("is_forecast")),
+            "lead": record.get("lead"),
+            "originQuarter": record.get("origin_quarter"),
+            "modelId": record.get("model_id"),
+            "confidenceNote": record.get("confidence_note"),
+            "uncertainty": record.get("uncertainty"),
         })
 
     for row in rows:
@@ -362,6 +435,7 @@ def province_summary(
                 "seriesAtRisk": None,
                 "seriesNeedingReview": None,
                 "topAtRiskCommodities": [],
+                "uncertainty": None,
                 "withheld": True,
             })
 
@@ -519,6 +593,9 @@ def _drivers(province_code: str, quarter: str) -> dict:
     # Connected to the same paper-faithful model ThesisPredictor serves (see
     # _engine()), so the Risk Drivers panel explains the score actually on
     # screen instead of the old commodity-level model's unrelated reasoning.
+    if is_forecast_quarter(quarter):
+        # The E20 model's own stored SHAP, not the nowcast's explainer.
+        return E20Forecast().build_drivers(province_code, quarter)
     explainer = ThesisExplainer()
     records = explainer.explain_province_quarter(province_code, quarter)
     return explainer.build_drivers(province_code, quarter, records)
@@ -581,7 +658,7 @@ def explainability(province_code: str, quarter: str) -> dict:
         # The corpus is the single article count every surface quotes. The
         # trigger table keeps its own tally over a narrower keyword-matched
         # subset; it is reported separately rather than silently substituted.
-        "articleCount": article_count(province_code, quarter),
+        "articleCount": article_count(province_code, news_quarter(quarter)),
         "triggerMatchedArticles": built["article_count"],
     }
 

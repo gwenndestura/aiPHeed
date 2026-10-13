@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { TopNavbar } from "@/components/TopNavbar";
 import logoDark from "@/assets/logo-dark.png";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { MetricLabel } from "@/components/ui/metric";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const THEME_KEY = "aipheed_theme";
@@ -377,18 +379,8 @@ function SummaryCard() {
           Q2 2026 · April to June
         </p>
         <div className="flex gap-2">
-          <span
-            className="text-[9px] font-bold uppercase tracking-wider px-2 py-1"
-            style={{ background: "rgba(249,115,22,0.14)", color: "#C2410C", border: "1px solid rgba(249,115,22,0.4)" }}
-          >
-            High risk
-          </span>
-          <span
-            className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 inline-flex items-center gap-1"
-            style={{ background: "rgba(239,68,68,0.14)", color: "#B91C1C", border: "1px solid rgba(239,68,68,0.4)" }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#B91C1C" }} /> Active alert
-          </span>
+          <StatusBadge level="high" />
+          <StatusBadge tone="high">Active alert</StatusBadge>
         </div>
       </div>
 
@@ -398,20 +390,15 @@ function SummaryCard() {
         </h3>
 
         <div className="mb-6">
-          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "var(--lp-muted2)" }}>
-            Regional Food Insecurity Index
-          </p>
+          <MetricLabel className="mb-2">Regional food insecurity index</MetricLabel>
           <p className="font-semibold leading-none" style={{ fontFamily: SERIF, fontSize: "3.25rem", color: AMBER }}>
             0.46
             <span className="text-lg ml-2" style={{ color: "var(--lp-muted2)" }}>/ 1.00</span>
           </p>
         </div>
 
-        <div className="flex items-center gap-2 mb-3">
-          <span className="h-2 w-2 rounded-full" style={{ background: "#EAB308" }} />
-          <span className="text-[12px] font-semibold uppercase tracking-wider text-[var(--lp-fg)]">
-            Moderate risk
-          </span>
+        <div className="mb-3">
+          <StatusBadge level="moderate" swatch="circle" />
         </div>
 
         <div

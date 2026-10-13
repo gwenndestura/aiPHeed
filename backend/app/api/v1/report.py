@@ -63,6 +63,13 @@ async def get_report(
     an admin has just withheld.
     """
     q = svc.resolve_quarter(quarter)
+    if svc.is_forecast_quarter(q):
+        # The report's wording describes the nowcast indicator; the E20
+        # forecast is a different target, so it is not rendered under it.
+        raise svc.QuarterNotAvailable(
+            f"Reports cover nowcast quarters only. The {q} forecast is a different "
+            "target and model; see the Forecast Period banner on the dashboard."
+        )
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
 
     if scope == "region":

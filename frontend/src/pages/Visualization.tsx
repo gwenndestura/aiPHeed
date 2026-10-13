@@ -146,7 +146,12 @@ function TrendView() {
   const { data: config } = useConfig();
   const { data: quartersRes } = useQuarters("nowcast");
   const QUARTERS = useMemo(
-    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => q.id),
+    // Reports describe the nowcast indicator; the E20 forecast quarter is a
+    // different target and is left out of the report ranges.
+    () =>
+      selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
+        .filter((q) => q.state !== "forecast")
+        .map((q) => q.id),
     [quartersRes]
   );
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
@@ -385,7 +390,12 @@ function ShapView() {
   const { data: config } = useConfig();
   const { data: quartersRes } = useQuarters("nowcast");
   const QUARTERS = useMemo(
-    () => selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => q.id),
+    // Reports describe the nowcast indicator; the E20 forecast quarter is a
+    // different target and is left out of the report ranges.
+    () =>
+      selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
+        .filter((q) => q.state !== "forecast")
+        .map((q) => q.id),
     [quartersRes]
   );
   const redCutoff = config?.thresholds.triggerRedCutoff ?? 20;

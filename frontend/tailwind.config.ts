@@ -50,10 +50,48 @@ export default {
         surface: "hsl(var(--surface))",
         "surface-hover": "hsl(var(--surface-hover))",
         risk: {
-          low: "hsl(var(--risk-low))",
-          moderate: "hsl(var(--risk-moderate))",
-          high: "hsl(var(--risk-high))",
+          low: {
+            DEFAULT: "hsl(var(--risk-low))",
+            bg: "hsl(var(--risk-low-bg))",
+            text: "hsl(var(--risk-low-text))",
+            border: "hsl(var(--risk-low-border))",
+          },
+          moderate: {
+            DEFAULT: "hsl(var(--risk-moderate))",
+            bg: "hsl(var(--risk-moderate-bg))",
+            text: "hsl(var(--risk-moderate-text))",
+            border: "hsl(var(--risk-moderate-border))",
+          },
+          high: {
+            DEFAULT: "hsl(var(--risk-high))",
+            bg: "hsl(var(--risk-high-bg))",
+            text: "hsl(var(--risk-high-text))",
+            border: "hsl(var(--risk-high-border))",
+          },
           severe: "hsl(var(--risk-severe))",
+        },
+        // Status components (index.css): neutral text and borders, review
+        // statuses, and values whose colour carries meaning.
+        ink: {
+          DEFAULT: "hsl(var(--text-primary))",
+          secondary: "hsl(var(--text-secondary))",
+          muted: "hsl(var(--text-muted))",
+        },
+        line: {
+          DEFAULT: "hsl(var(--border-subtle))",
+          strong: "hsl(var(--border-strong))",
+        },
+        status: {
+          "positive-bg": "hsl(var(--status-positive-bg))",
+          "positive-text": "hsl(var(--status-positive-text))",
+          "positive-border": "hsl(var(--status-positive-border))",
+          "neutral-bg": "hsl(var(--status-neutral-bg))",
+          "neutral-text": "hsl(var(--status-neutral-text))",
+          "neutral-border": "hsl(var(--status-neutral-border))",
+        },
+        value: {
+          danger: "hsl(var(--value-danger))",
+          success: "hsl(var(--value-success))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -74,6 +112,13 @@ export default {
       fontFamily: {
         sans: ['Sora', 'system-ui', 'sans-serif'],
         mono: ['"DM Mono"', 'ui-monospace', 'monospace'],
+      },
+      // Type scale for the status components: labels, body, emphasis, key figures.
+      fontSize: {
+        label: ["12px", "16px"],
+        body: ["14px", "20px"],
+        emphasis: ["16px", "24px"],
+        key: ["22px", "28px"],
       },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },

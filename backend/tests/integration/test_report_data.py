@@ -9,12 +9,17 @@ from app.services import dashboard as svc
 from app.services import report_data as rd
 
 
+def _nowcast_quarters() -> list[str]:
+    # Reports cover nowcast quarters only; the appended E20 quarter is excluded.
+    return [q for q in svc.available_quarters() if not svc.is_forecast_quarter(q)]
+
+
 def _score(slug: str, quarter: str) -> float:
     return next(p["riskScore"] for p in svc.province_summary(quarter) if p["id"] == slug)
 
 
 def test_trend_payload_is_ascii_and_structured():
-    quarters = svc.available_quarters()
+    quarters = _nowcast_quarters()
     body = rd.build_report("trend", "region", None, quarters[-3], quarters[-1], set())
     text = json.dumps(body)
     assert text.isascii()
@@ -26,7 +31,7 @@ def test_trend_payload_is_ascii_and_structured():
 
 
 def test_withheld_province_quarter_never_appears():
-    quarters = svc.available_quarters()
+    quarters = _nowcast_quarters()
     last = quarters[-1]
     held = _score("batangas", last)
     body = rd.build_report("trend", "region", None, quarters[-3], last, {("batangas", last)})
@@ -39,7 +44,7 @@ def test_withheld_province_quarter_never_appears():
 
 
 def test_shap_payload_for_withheld_province_reports_nothing():
-    last = svc.available_quarters()[-1]
+    last = _nowcast_quarters()[-1]
     body = rd.build_report("shap", "province", "rizal", last, last, {("rizal", last)})
     text = json.dumps(body)
     assert "withheld from publication" in text

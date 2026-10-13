@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { Sparkles, Lock, History } from "lucide-react";
+import { useEffect, useMemo, useRef, type CSSProperties, type KeyboardEvent } from "react";
 import { QUARTER_IDS } from "@/data/quarterData";
+import { quarterMonthRange } from "@/lib/quarters";
 
 export interface Quarter {
   id: string;
@@ -18,6 +18,10 @@ interface Props {
   value: string;
   onChange: (id: string) => void;
   quarters?: Quarter[];
+  // Every selectable quarter, when `quarters` is only the visible window: a
+  // quarter picked from History that is older than the window still gets
+  // its label, with no dot highlighted.
+  allQuarters?: Quarter[];
   onOpenHistory?: () => void;
 }
 
@@ -63,118 +67,172 @@ export function buildQuarters(now: Date = new Date()): Quarter[] {
   });
 }
 
-export function QuarterTimeSlider({ value, onChange, quarters, onOpenHistory }: Props) {
+type Status = "observed" | "current" | "forecast";
+
+const statusOf = (q: Quarter): Status => (q.forecast ? "forecast" : q.current ? "current" : "observed");
+
+const STATUS_TAG: Record<Status, string> = {
+  observed: "Observed",
+  current: "Current quarter",
+  forecast: "Forecast",
+};
+
+// Distance between points: the preferred spacing, and the tightest the
+// track may squeeze to before it scrolls instead.
+const SPACING = 76;
+const MIN_SPACING = 52;
+
+const fullName = (q: Quarter) => `Q${q.q} ${q.year}`;
+
+// Where today falls on the track, in dot-index units: on the current
+// quarter's dot, else between the last actual and the first forecast.
+// null when today lies outside the visible window.
+function todayPosition(qs: Quarter[]): number | null {
+  const cur = qs.findIndex((q) => q.current);
+  if (cur >= 0) return cur;
+  const firstForecast = qs.findIndex((q) => q.forecast);
+  return firstForecast > 0 ? firstForecast - 0.5 : null;
+}
+
+export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOpenHistory }: Props) {
   const qs = useMemo(() => quarters ?? buildQuarters(), [quarters]);
-  const idx = Math.max(0, qs.findIndex((q) => q.id === value));
-  const current = qs[idx] ?? qs[0];
-  const pct = qs.length > 1 ? (idx / (qs.length - 1)) * 100 : 0;
+  const found = qs.findIndex((q) => q.id === value);
+  const outsideWindow = found < 0 && !!allQuarters?.some((q) => q.id === value);
+  const idx = outsideWindow ? -1 : Math.max(0, found);
+  const shown = (outsideWindow ? allQuarters!.find((q) => q.id === value) : qs[idx]) ?? qs[0];
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pointRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const at = (i: number) => (qs.length > 1 ? (i / (qs.length - 1)) * 100 : 0);
+
+  // Solid up to today, dashed after it. With today outside the window the
+  // whole track is one style: dashed if it is all forecast, else solid.
+  const today = todayPosition(qs);
+  const todayOnPoint = today !== null && Number.isInteger(today) ? today : -1;
+  const split = today !== null ? at(today) : qs.every((q) => q.forecast) ? 0 : 100;
+
+  const description = [
+    "Solid line: observed quarters. Dashed line: forecast quarters.",
+    today === null
+      ? ""
+      : todayOnPoint >= 0
+        ? `Today is at ${fullName(qs[todayOnPoint])}.`
+        : `Today falls between ${fullName(qs[Math.floor(today)])} and ${fullName(qs[Math.ceil(today)])}.`,
+  ].join(" ").trim();
+
+  // Roving tab stop: the selected point, or the first usable one when the
+  // selected quarter sits outside the window.
+  const tabStop = idx >= 0 && !qs[idx]?.locked ? idx : qs.findIndex((q) => !q.locked);
+
+  // When the track scrolls (narrow screens), keep the selected point in view,
+  // including after the bar resizes (sidebars opening, window resizing).
+  useEffect(() => {
+    const sc = scrollRef.current;
+    const el = idx >= 0 ? pointRefs.current[idx] : null;
+    if (!sc || !el) return;
+    const keepInView = () => {
+      if (sc.scrollWidth <= sc.clientWidth) return;
+      const s = sc.getBoundingClientRect();
+      const p = el.getBoundingClientRect();
+      sc.scrollLeft += p.left + p.width / 2 - (s.left + s.width / 2);
+    };
+    keepInView();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(keepInView);
+    ro.observe(sc);
+    return () => ro.disconnect();
+  }, [idx, qs.length]);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const usable = qs.flatMap((q, j) => (q.locked ? [] : [j]));
+    let next: number | undefined;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = usable.find((j) => j > i);
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = usable.filter((j) => j < i).pop();
+    else if (e.key === "Home") next = usable[0];
+    else if (e.key === "End") next = usable[usable.length - 1];
+    else return;
+    e.preventDefault();
+    if (next === undefined || next === i) return;
+    pointRefs.current[next]?.focus();
+    onChange(qs[next].id);
+  };
+
+  const gaps = Math.max(qs.length - 1, 1);
+  const trackSize = { "--qt-track-w": `${gaps * SPACING}px`, "--qt-track-min": `${gaps * MIN_SPACING}px` } as CSSProperties;
 
   return (
-    <div className="px-4 pt-2 pb-1 select-none">
-      {/* Floating label row */}
-      <div className="flex items-center justify-center gap-2 mb-3">
-        {current.forecast && (
-          <span className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30">
-            <Sparkles className="h-2.5 w-2.5" />
-            Forecast
-          </span>
-        )}
-        {current.current && (
-          <span className="text-[8px] font-bold uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-full bg-risk-low/15 text-risk-low border border-risk-low/30">
-            Current
-          </span>
-        )}
-        {current.past && (
-          <span className="text-[8px] font-bold uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50">
-            Actual
-          </span>
-        )}
-        <span className="font-mono-num text-[11px] font-semibold tabular-nums text-foreground/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-          {current.label} {current.year}
+    <div className="qt-panel qt-bar gap-3 select-none">
+      {/* Selected quarter */}
+      <div className="shrink-0 whitespace-nowrap">
+        <span className="text-[14px] leading-5 font-medium" title={quarterMonthRange(shown)}>
+          {fullName(shown)}
         </span>
-        <span className="font-mono-num text-[10px] text-muted-foreground/80">· {current.monthsLabel}</span>
-        {onOpenHistory && (
-          <button
-            onClick={onOpenHistory}
-            title="Browse past forecasts"
-            className="ml-1 flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded-full border border-border/50 text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors"
-          >
-            <History className="h-2.5 w-2.5" />
-            History
-          </button>
-        )}
+        <span className="qt-muted qt-status"> · {STATUS_TAG[statusOf(shown)]}</span>
       </div>
 
       {/* Track */}
-      <div className="relative h-6">
-        {/* Glowing base line */}
+      <div ref={scrollRef} className="min-w-0 overflow-x-auto no-scrollbar px-6">
         <div
-          className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-px"
-          style={{
-            background: "linear-gradient(to right, hsl(var(--border) / 0.4), hsl(var(--border) / 0.6), hsl(var(--border) / 0.4))",
-          }}
-        />
-        {/* Filled glowing portion */}
-        <div
-          className="absolute top-1/2 -translate-y-1/2 left-0 h-[2px] rounded-full"
-          style={{
-            width: `${pct}%`,
-            background: "linear-gradient(to right, hsl(var(--primary) / 0.6), hsl(var(--primary)))",
-            boxShadow: "0 0 8px hsl(var(--primary) / 0.8)",
-          }}
-        />
-        {qs.map((q, i) => {
-          const left = qs.length > 1 ? (i / (qs.length - 1)) * 100 : 0;
-          const isActive = i === idx;
-          const isPast = i < idx;
-          const locked = q.locked;
-          return (
+          role="radiogroup"
+          aria-label="Quarter"
+          aria-description={description}
+          className="qt-track relative h-[28px]"
+          style={trackSize}
+        >
+          {split > 0 && (
+            <div className="qt-segment absolute left-0 top-0" style={{ width: `${split}%` }} title="Observed">
+              <span className="qt-line-observed" />
+            </div>
+          )}
+          {split < 100 && (
+            <div className="qt-segment absolute right-0 top-0" style={{ left: `${split}%` }} title="Forecast">
+              <span className="qt-line-forecast" />
+            </div>
+          )}
+          {today !== null && (
+            <div
+              aria-hidden
+              title="Today"
+              className="absolute top-0 h-[14px] w-[9px] -translate-x-1/2 flex justify-center"
+              style={{ left: `${split}%` }}
+            >
+              <span className="qt-today-line mt-px h-3" />
+            </div>
+          )}
+
+          {qs.map((q, i) => (
             <button
               key={q.id}
-              onClick={() => !locked && onChange(q.id)}
-              disabled={locked}
-              title={locked ? "Data not yet available." : `${q.label} ${q.year}`}
-              className="absolute top-0 h-full -translate-x-1/2 group flex flex-col items-center"
-              style={{ left: `${left}%`, cursor: locked ? "not-allowed" : "pointer" }}
-              aria-label={`${q.label} ${q.year}${locked ? " (locked)" : ""}`}
+              ref={(el) => (pointRefs.current[i] = el)}
+              type="button"
+              role="radio"
+              aria-checked={i === idx}
+              aria-label={`${fullName(q)}, ${STATUS_TAG[statusOf(q)].toLowerCase()}${i === todayOnPoint ? ", today" : ""}${q.locked ? ", not yet available" : ""}`}
+              title={q.locked ? "Data not yet available." : `${quarterMonthRange(q)}${i === todayOnPoint ? " · Today" : ""}`}
+              tabIndex={i === tabStop ? 0 : -1}
+              disabled={q.locked}
+              onClick={() => onChange(q.id)}
+              onKeyDown={(e) => onKeyDown(e, i)}
+              className="qt-point absolute top-0 -translate-x-1/2 flex flex-col items-center px-1 whitespace-nowrap"
+              style={{ left: `${at(i)}%` }}
             >
-              <span className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center">
-                {locked ? (
-                  <span className="w-2.5 h-2.5 rounded-full border border-muted-foreground/40 bg-transparent flex items-center justify-center">
-                    <Lock className="h-1.5 w-1.5 text-muted-foreground/60" />
-                  </span>
-                ) : isActive ? (
-                  <span
-                    className="w-3 h-3 rounded-full bg-primary"
-                    style={{ boxShadow: "0 0 0 3px hsl(var(--primary) / 0.25), 0 0 12px hsl(var(--primary) / 0.9)" }}
-                  />
-                ) : q.forecast ? (
-                  <span className="w-2.5 h-2.5 rounded-full border border-dashed border-primary/70 bg-primary/10" />
-                ) : q.current ? (
-                  <span className="w-2.5 h-2.5 rounded-full bg-risk-low/70 ring-2 ring-risk-low/25" />
-                ) : q.past || isPast ? (
-                  <span className="w-2 h-2 rounded-full bg-foreground/60" />
-                ) : (
-                  <span className="w-2 h-2 rounded-full border border-muted-foreground/50 bg-transparent" />
-                )}
+              <span className="h-[14px] flex items-center justify-center">
+                <span className="qt-dot" />
               </span>
-              <span
-                className={`absolute top-[calc(50%+12px)] font-mono-num text-[9px] tabular-nums whitespace-nowrap transition-colors ${
-                  isActive
-                    ? "text-primary font-bold"
-                    : locked
-                      ? "text-muted-foreground/40 italic"
-                      : q.forecast
-                        ? "text-primary/80 italic"
-                        : "text-muted-foreground/70 group-hover:text-foreground"
-                }`}
-              >
-                {q.label}'{String(q.year).slice(-2)}
+              <span className="text-[11px] leading-[13px] mt-px">
+                Q{q.q} ’{String(q.year).slice(-2)}
               </span>
             </button>
-          );
-        })}
+          ))}
+        </div>
       </div>
+
+      {onOpenHistory && (
+        <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link shrink-0 whitespace-nowrap">
+          <span className="qt-history-full">View history</span>
+          <span className="qt-history-short">History</span>
+        </button>
+      )}
     </div>
   );
 }

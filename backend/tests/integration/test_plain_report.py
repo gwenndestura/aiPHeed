@@ -56,7 +56,7 @@ def assert_apa(body: dict) -> None:
 
 @pytest.fixture(scope="module")
 def last():
-    return svc.available_quarters()[-1]
+    return svc.latest_quarter()  # newest nowcast quarter; reports exclude E20
 
 
 def test_single_quarter_region_has_no_trend_section(last):

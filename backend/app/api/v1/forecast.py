@@ -147,9 +147,9 @@ async def get_forecast(
         quarter=q,
         quarterLabel=_quarter_label(q),
         indicator=svc.INDICATOR,
-        # Nothing is ever a forecast quarter: the model scores quarters whose
-        # production volumes PSA has already published.
-        isForecast=False,
+        # Only the appended E20 quarter (2027-Q1) is a forecast; every nowcast
+        # quarter scores production volumes PSA has already published.
+        isForecast=svc.is_forecast_quarter(q, h),
         isCurrent=(q == svc.latest_quarter(h)),
         alert=(body["riskScore"] or 0) >= ref.ALERT_THRESHOLD,
         **body,
@@ -206,7 +206,7 @@ async def get_timeseries(
                 "quarter": q,
                 "riskScore": body["riskScore"],
                 "riskLevel": body["riskLevel"],
-                "isForecast": False,
+                "isForecast": svc.is_forecast_quarter(q, h),
             })
         return out
 

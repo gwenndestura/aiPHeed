@@ -122,15 +122,18 @@ async def get_news(
     The analysed article corpus for a subject-quarter, with its topic mix.
 
     Articles are geocoded to province, so municipality scope returns the parent
-    province's corpus.
+    province's corpus. A forecast quarter returns its information-cutoff
+    quarter's articles (`sourceQuarter`), the news the forecast was built from.
     """
     q = svc.resolve_quarter(quarter)
     code, _ = _resolve_province(scope, id)
-    body = svc.news(code, q, page, pageSize)
+    source_q = svc.news_quarter(q)
+    body = svc.news(code, source_q, page, pageSize)
     return NewsResponse(
         scope=scope,
         id=id.lower(),
         quarter=q,
+        sourceQuarter=source_q,
         page=page,
         pageSize=pageSize,
         **body,

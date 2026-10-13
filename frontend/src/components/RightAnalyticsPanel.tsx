@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { RegionData, MunicipalityData } from "@/data/types";
-import { ChevronDown, ChevronRight, Newspaper, Sparkles, Info, ShieldAlert, AlertCircle } from "lucide-react";
+import { ChevronDown, ChevronRight, Newspaper, Info } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useConfig, useExplainability, useNews } from "@/lib/queries";
 import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
+import { forecastPeriodLabel } from "@/lib/quarters";
 import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { ConfidenceTag } from "@/components/ui/confidence-tag";
 
 interface Props {
   quarter: Quarter;
@@ -62,8 +65,9 @@ export function ShapNarrativeCardBody({
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="min-w-0">
           <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold flex items-center gap-1.5">
-            {quarter.forecast && <Sparkles className="h-2.5 w-2.5 text-primary" />}
-            {quarter.label} {quarter.year} · {quarter.monthsLabel}
+            {quarter.forecast
+              ? forecastPeriodLabel(quarter)
+              : `${quarter.label} ${quarter.year} · ${quarter.monthsLabel}`}
           </p>
           <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} Summary</h2>
         </div>
@@ -78,25 +82,17 @@ export function ShapNarrativeCardBody({
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5 mb-2">
-        <span
-          className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-mono-num ${
-            finalScore >= displayCutoff ? "bg-risk-high/15 text-risk-high" : "bg-risk-low/15 text-risk-low"
-          }`}
+        <StatusBadge
+          level={finalScore >= displayCutoff ? "high" : "low"}
           title={`Forecast display cutoff: ${displayCutoff}`}
-        >
-          {finalScore >= displayCutoff ? "HIGH" : "LOW"} · risk
-        </span>
+        />
         {finalScore >= alertThreshold && (
-          <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse flex items-center gap-1" title={`Active alert threshold: ${alertThreshold}`}>
-            <ShieldAlert className="h-2.5 w-2.5" />
-            Risk jumped suddenly this quarter
-          </span>
+          <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
+            Active alert
+          </StatusBadge>
         )}
         {region?.limitedSignal && (
-          <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
-            <AlertCircle className="h-2.5 w-2.5" />
-            Limited signal
-          </span>
+          <ConfidenceTag explanation="This province had fewer than the minimum number of geocoded news articles this quarter." />
         )}
       </div>
 
@@ -187,12 +183,17 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
 
   const scope = selectedRegion ? "province" : "region";
   const id = selectedRegion?.id ?? "calabarzon";
-  // Only fetch once the drawer is opened -- the news corpus is the most
-  // expensive read on this panel and most visits never open it. useNews is
-  // enabled on a truthy id, so an empty id keeps it from firing until then.
-  const { data: news } = useNews(scope, open ? id : "", quarterId);
+  // Fetched even while collapsed: the header count needs it, and at region
+  // scope there is no selectedRegion to fall back on, so deferring the call
+  // until the drawer opened left CALABARZON reading 0. The corpus is cached
+  // server-side (lru_cache), so this is a cheap read.
+  const { data: news } = useNews(scope, id, quarterId);
 
   const articleCount = news?.articleCount ?? selectedRegion?.articleCount ?? 0;
+  // Region-wide articles (province = null in the corpus) count toward
+  // CALABARZON but toward no province, so the five province counts sum to
+  // less than the regional one.
+  const regionWide = !selectedRegion && news ? news.articleCount - news.provinceAttributed : 0;
 
   return (
     <div>
@@ -209,6 +210,17 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
       </button>
       {open && (
         <div className="mt-3 space-y-3 px-1">
+          {news && news.sourceQuarter !== news.quarter && (
+            <p className="text-[9px] italic text-muted-foreground leading-snug">
+              Forecast quarter — showing {news.sourceQuarter.split("-").reverse().join(" ")} articles, the latest news the forecast was built from.
+            </p>
+          )}
+          {regionWide > 0 && news && (
+            <p className="text-[9px] italic text-muted-foreground leading-snug">
+              {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
+            </p>
+          )}
+
           {/* Topic breakdown */}
           {news && news.topics.length > 0 && (
             <div className="space-y-2">

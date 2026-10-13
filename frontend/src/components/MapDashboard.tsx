@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections } from "@/lib/queries";
-import { selectableQuarters } from "@/lib/quarters";
+import { forecastPeriodLabel, selectableQuarters, timelineWindow } from "@/lib/quarters";
 import { PhilippineMap } from "@/components/PhilippineMap";
 import { LeftPanel, RfiiScoreCardBody, RiskDriversCardBody, ProvinceRankingCardBody } from "@/components/LeftPanel";
 import {
@@ -17,6 +17,7 @@ import { MapControls } from "@/components/MapControls";
 import { AboutModal } from "@/components/AboutModal";
 import { FeedbackModal } from "@/components/FeedbackModal";
 import { MapSearch } from "@/components/MapSearch";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function FloatingCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
@@ -53,6 +54,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const isPhone = useMediaQuery("(max-width: 639px)");
 
   const { data: quartersRes } = useQuarters("nowcast");
   const quarters = useMemo(
@@ -66,10 +68,15 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     if (!quarterId && quartersRes?.current) setQuarterId(quartersRes.current);
   }, [quartersRes, quarterId]);
 
+  // The timeline shows only the newest quarters; History lists all of them.
+  const timelineQuarters = useMemo(() => timelineWindow(quarters), [quarters]);
+
   const currentQuarter = quarters.find((q) => q.id === quarterId) ?? quarters[quarters.length - 1];
-  const quarterLabel = currentQuarter
-    ? `${currentQuarter.label} ${currentQuarter.year} · ${currentQuarter.monthsLabel.toUpperCase()}`
-    : "";
+  const quarterLabel = !currentQuarter
+    ? ""
+    : currentQuarter.forecast
+      ? forecastPeriodLabel(currentQuarter)
+      : `${currentQuarter.label} ${currentQuarter.year} · ${currentQuarter.monthsLabel.toUpperCase()}`;
 
   const { data: provincesRes } = useProvinces(quarterId || undefined, "nowcast");
   const regionsData = useMemo(() => (provincesRes?.data ?? []).map(provinceToRegion), [provincesRes]);
@@ -101,6 +108,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
   const handleMunicipalityClick = useCallback((m: MunicipalityData) => {
     setSelectedMunicipality((prev) => (prev?.id === m.id ? null : m));
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedRegion(null);
+    setSelectedMunicipality(null);
   }, []);
 
   const handleHover = useCallback((r: RegionData | null) => setPreviewRegion(r), []);
@@ -168,6 +180,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           onHover={handleHover}
           onClick={handleRegionClick}
           onMunicipalityClick={handleMunicipalityClick}
+          onBackgroundClick={clearSelection}
           rejectedProvinceIds={rejectedIds}
         />
       </div>
@@ -189,7 +202,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
                   quarterId={quarterId}
                   regionsData={regionsData}
                   municipalitiesData={municipalitiesData}
-                  onClose={() => { setSelectedRegion(null); setSelectedMunicipality(null); }}
+                  onClose={clearSelection}
                   onCloseMunicipality={() => setSelectedMunicipality(null)}
                   onRegionClick={handleRegionClick}
                   onMunicipalityClick={handleMunicipalityClick}
@@ -274,22 +287,33 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         }}
       />
 
-      {currentQuarter && (
-        <div
-          className="absolute z-[1001] pointer-events-auto animate-slide-up transition-[left,right] duration-300"
-          style={{ left: (leftCollapsed ? PEEK_W : COL_W) + 12, right: (rightCollapsed ? PEEK_W : COL_W) + 12, bottom: 12 }}
-        >
-          <QuarterTimeSlider
-            value={quarterId}
-            onChange={setQuarterId}
-            quarters={quarters}
-            onOpenHistory={() => setHistoryOpen(true)}
-          />
+      {/* Bottom row of the visible map: risk legend bottom-left, quarter bar
+          bottom-centre (layout in index.css, .qt-row). On phones, where the
+          sidebar offsets leave no room, the row spans the screen. */}
+      <div
+        className="qt-row absolute z-[1001] pointer-events-none transition-[left,right] duration-300"
+        style={{
+          left: isPhone ? 16 : (leftCollapsed ? PEEK_W : COL_W) + 16,
+          right: isPhone ? 16 : (rightCollapsed ? PEEK_W : COL_W) + 16,
+          bottom: 16,
+        }}
+      >
+        <div className="qt-row-grid">
+          <div className="qt-row-legend pointer-events-auto animate-fade-in">
+            <MapLegend />
+          </div>
+          {currentQuarter && (
+            <div className="qt-row-bar pointer-events-auto animate-slide-up">
+              <QuarterTimeSlider
+                value={quarterId}
+                onChange={setQuarterId}
+                quarters={timelineQuarters}
+                allQuarters={quarters}
+                onOpenHistory={() => setHistoryOpen(true)}
+              />
+            </div>
+          )}
         </div>
-      )}
-
-      <div className="absolute z-[1000] animate-fade-in transition-[left] duration-300" style={{ left: (leftCollapsed ? PEEK_W : COL_W) + 12, bottom: 72 }}>
-        <MapLegend />
       </div>
 
       <div className="absolute bottom-2 right-3 z-[1000] text-[9px] text-muted-foreground/70 px-2 py-1">

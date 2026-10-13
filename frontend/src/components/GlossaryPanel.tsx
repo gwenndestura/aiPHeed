@@ -10,7 +10,7 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "Income Decile", def: "Household income ranking from lowest (1) to highest (10). Lower deciles face greater food insecurity risk." },
   { term: "Baseline (φ₀)", def: "The average Risk Level across all areas before feature contributions are applied." },
   { term: "Impact", def: "The total change from baseline caused by all feature contributions combined." },
-  { term: "QoQ Change", def: "Quarter-over-Quarter Change. The percentage shift in the Risk Level score compared to the previous quarter. Positive values indicate worsening conditions." },
+  { term: "Quarter-on-quarter change", def: "The percentage shift in the Risk Level score compared to the previous quarter. Positive values indicate worsening conditions." },
   { term: "Forecast Quarter", def: "A future quarter for which the model has generated a risk prediction based on current signals." },
   { term: "IPC/CH Phase", def: "Integrated Food Security Phase Classification. International standard for measuring acute food insecurity severity." },
 ];

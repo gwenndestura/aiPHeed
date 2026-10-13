@@ -24,10 +24,33 @@ interface Props {
   onHover: (r: RegionData | null) => void;
   onClick: (r: RegionData) => void;
   onMunicipalityClick: (m: MunicipalityData) => void;
+  // A click that lands on no CALABARZON province or municipality (sea, the
+  // faint non-CALABARZON provinces, Metro Manila).
+  onBackgroundClick?: () => void;
   rejectedProvinceIds?: Set<string>;            // provinces with no forecast for current quarter
 }
 
 const AMBER = "hsl(35, 90%, 55%)";
+
+// Ray-cast test against the outer rings only. Holes are ignored on purpose:
+// a lake inside a province (Laguna's seven San Pablo lakes) reads as part of
+// that province, not as somewhere outside it.
+function outlineContains(geometry: GeoJSON.Geometry | undefined, lng: number, lat: number): boolean {
+  if (!geometry) return false;
+  const polygons =
+    geometry.type === "Polygon" ? [geometry.coordinates]
+    : geometry.type === "MultiPolygon" ? geometry.coordinates
+    : [];
+  return polygons.some(([outer]) => {
+    let inside = false;
+    for (let i = 0, j = outer.length - 1; i < outer.length; j = i++) {
+      const [xi, yi] = outer[i];
+      const [xj, yj] = outer[j];
+      if (yi > lat !== yj > lat && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  });
+}
 
 // Basemap flavor + page-background colour per theme. "black" / "white" Protomaps
 // flavors are near-monochrome (no cyan water) and match the app's dark/light
@@ -73,6 +96,7 @@ export function PhilippineMap({
   onHover,
   onClick,
   onMunicipalityClick,
+  onBackgroundClick,
   rejectedProvinceIds,
 }: Props) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -86,6 +110,7 @@ export function PhilippineMap({
   const onHoverRef = useRef(onHover);
   const onClickRef = useRef(onClick);
   const onMuniClickRef = useRef(onMunicipalityClick);
+  const onBackgroundClickRef = useRef(onBackgroundClick);
   const selectedRef = useRef(selectedRegion);
   const selectedMuniRef = useRef(selectedMunicipality);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -95,6 +120,7 @@ export function PhilippineMap({
   onHoverRef.current = onHover;
   onClickRef.current = onClick;
   onMuniClickRef.current = onMunicipalityClick;
+  onBackgroundClickRef.current = onBackgroundClick;
   selectedRef.current = selectedRegion;
   selectedMuniRef.current = selectedMunicipality;
 
@@ -215,7 +241,8 @@ export function PhilippineMap({
                 color: isSel ? AMBER : "rgba(255,255,255,0.35)",
               });
             },
-            click: () => {
+            click: (e) => {
+              L.DomEvent.stopPropagation(e);
               if (muni && !isProvRejected) onMuniClickRef.current(muni);
             },
           });
@@ -495,6 +522,24 @@ export function PhilippineMap({
 
     mapRef.current = map;
 
+    // Province and municipality clicks stop propagation, so a click reaching
+    // the map itself landed outside every CALABARZON shape. The one exception
+    // is the selected province: its path is click-through while zoomed (see
+    // zoomToProvince), so a click on its lakes or other gaps between
+    // municipalities also lands here and is filtered out by outline.
+    map.on("click", (e: L.LeafletMouseEvent) => {
+      const selectedId = selectedRef.current?.id;
+      if (!selectedId) return;
+      let insideSelected = false;
+      provincesLayerRef.current?.eachLayer((layer) => {
+        const feature = (layer as L.Polygon).feature;
+        if (feature?.properties?.id === selectedId) {
+          insideSelected = outlineContains(feature.geometry, e.latlng.lng, e.latlng.lat);
+        }
+      });
+      if (!insideSelected) onBackgroundClickRef.current?.();
+    });
+
     // Load provinces (filter to CALABARZON only) + municipalities
     Promise.all([
       fetch("/ph-provinces.json").then((r) => r.json()),
@@ -557,7 +602,8 @@ export function PhilippineMap({
                   l.setStyle(getProvinceStyle(id, sel, dimmed));
                   onHoverRef.current(null);
                 },
-                click: () => {
+                click: (e) => {
+                  L.DomEvent.stopPropagation(e);
                   const region = regionNow();
                   if (!region) return;
                   if (isZoomedRef.current && selectedRef.current?.id === id) return;
@@ -692,7 +738,7 @@ export function PhilippineMap({
       {isZoomed && (
         <button
           onClick={() => onClick(selectedRegion!)}
-          className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-card/90 backdrop-blur border rounded-lg px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors shadow-lg"
+          className="absolute top-14 left-1/2 -translate-x-1/2 z-[1000] bg-card/90 backdrop-blur border rounded-lg px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors shadow-lg"
         >
           ← Back to CALABARZON
         </button>

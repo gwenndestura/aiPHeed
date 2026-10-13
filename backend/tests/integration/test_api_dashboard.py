@@ -35,10 +35,28 @@ def latest_quarter() -> str:
 def test_quarters_reports_only_scorable_quarters(latest_quarter):
     body = client.get("/api/v1/quarters").json()
     assert body["quarters"], "timeline must not be empty"
-    # Nothing forward-looking: every quarter has published PSA volumes behind it.
-    assert {q["state"] for q in body["quarters"]} <= {"actual", "current"}
-    assert body["quarters"][-1]["id"] == latest_quarter
-    assert body["quarters"][-1]["state"] == "current"
+    # Nowcast quarters have published PSA volumes behind them; only the
+    # appended E20 quarters, after the newest of them, are forecasts.
+    observed = [q for q in body["quarters"] if q["state"] != "forecast"]
+    forecast = [q["id"] for q in body["quarters"] if q["state"] == "forecast"]
+    assert {q["state"] for q in observed} <= {"actual", "current"}
+    assert observed[-1]["id"] == latest_quarter
+    assert observed[-1]["state"] == "current"
+    assert forecast == client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
+    assert all(q > latest_quarter for q in forecast)
+
+
+def test_forecast_quarter_is_labelled_and_has_no_qoq():
+    forecast = client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
+    if not forecast:
+        pytest.skip("E20 serving file not present")
+    q = forecast[-1]
+    rows = client.get(f"/api/v1/provinces?quarter={q}").json()["data"]
+    assert rows and all(p["isForecast"] for p in rows)
+    # A different target after a gap: never a quarter-on-quarter change.
+    assert all(p["qoqChange"] is None for p in rows)
+    region = client.get(f"/api/v1/forecast?scope=region&id=calabarzon&quarter={q}").json()
+    assert region["isForecast"] is True and region["isCurrent"] is False
 
 
 def test_quarters_declares_its_lag_behind_the_calendar():
@@ -54,7 +72,7 @@ def test_quarters_declares_its_lag_behind_the_calendar():
 # ---------------------------------------------------------------------------
 
 def test_unscorable_quarter_is_404_not_a_zero_score():
-    r = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2027-Q1")
+    r = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2031-Q1")
     assert r.status_code == 404
     assert r.json()["error"]["code"] == "forecast_not_found"
 
@@ -213,17 +231,34 @@ def test_news_count_agrees_with_the_province_summary():
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
         assert news["articleCount"] == province["articleCount"]
+        assert news["sourceQuarter"] == quarter
+
+
+def test_forecast_quarter_news_comes_from_the_information_cutoff():
+    forecast = [q["id"] for q in client.get("/api/v1/quarters").json()["quarters"]
+                if q.get("state") == "forecast"]
+    if not forecast:
+        pytest.skip("no forecast quarter served")
+    quarter = forecast[-1]
+    provinces = {p["id"]: p for p in
+                 client.get(f"/api/v1/provinces?quarter={quarter}").json()["data"]}
+    for slug, province in provinces.items():
+        news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
+        assert news["quarter"] == quarter
+        assert news["sourceQuarter"] == province["originQuarter"] != quarter
+        assert news["articleCount"] == province["articleCount"]
 
 
 # ---------------------------------------------------------------------------
 # Timeseries & search
 # ---------------------------------------------------------------------------
 
-def test_timeseries_is_chronological_and_never_forecast():
+def test_timeseries_is_chronological_and_flags_only_e20_quarters():
     body = client.get("/api/v1/forecast/timeseries?scope=province&id=quezon").json()
     quarters = [p["quarter"] for p in body["series"]]
     assert quarters == sorted(quarters)
-    assert not any(p["isForecast"] for p in body["series"])
+    forecast = set(client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"])
+    assert {p["quarter"] for p in body["series"] if p["isForecast"]} == forecast & set(quarters)
 
 
 def test_search_matches_provinces_and_municipalities():

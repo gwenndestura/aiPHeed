@@ -48,11 +48,10 @@ export function AboutModal() {
             </p>
           </Section>
 
-          <Section title="LIMITED_SIGNAL flag">
+          <Section title="Limited data">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              Provinces with fewer than <b>5 geocoded articles</b> in a quarter are flagged{" "}
-              <b className="text-foreground">LIMITED_SIGNAL</b>. The badge propagates to all 142 LGUs
-              under that province (Algorithm Rule 5).
+              Provinces with fewer than 5 geocoded articles in a quarter are marked "Limited data".
+              The mark carries over to every LGU in that province (Algorithm Rule 5).
             </p>
           </Section>
 

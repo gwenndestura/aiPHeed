@@ -305,3 +305,223 @@
   80%  { opacity: 0; }
   100% { transform: scale(1.35); opacity: 0; }
 }
+
+/* ------------------------------------------------------------------
+   Status components shared by the public site and the DA Administrator
+   view (components/ui/status-badge, confidence-tag, note, metric,
+   status-dot). Dark theme on :root, light on .light. Every text and
+   background pair meets WCAG AA (4.5:1).
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    --text-primary: var(--foreground);
+    --text-secondary: 36 8% 76%;      /* 10:1 on --card */
+    --text-muted: 36 5% 64%;          /* 6.9:1 on --card */
+    --border-subtle: 240 4% 18%;
+    --border-strong: 240 4% 32%;
+
+    /* Risk: tinted background + same-hue text and border */
+    --risk-low-bg: 45 40% 15%;
+    --risk-low-text: 45 75% 70%;      /* 9:1 on its bg */
+    --risk-low-border: 45 40% 32%;
+    --risk-moderate-bg: 28 40% 15%;
+    --risk-moderate-text: 28 80% 72%;
+    --risk-moderate-border: 28 40% 32%;
+    --risk-high-bg: 2 40% 16%;
+    --risk-high-text: 2 80% 76%;      /* 8:1 on its bg */
+    --risk-high-border: 2 40% 34%;
+
+    /* Review statuses */
+    --status-positive-bg: 145 30% 14%;
+    --status-positive-text: 145 45% 68%;
+    --status-positive-border: 145 30% 30%;
+    --status-neutral-bg: 240 4% 16%;
+    --status-neutral-text: 36 8% 76%;
+    --status-neutral-border: 240 4% 30%;
+
+    /* Values whose direction has meaning: more risk = danger, less = success */
+    --value-danger: 2 80% 72%;
+    --value-success: 145 45% 62%;
+
+    --radius-badge: 4px;
+  }
+  .light {
+    --text-secondary: 36 5% 30%;      /* 9.6:1 on white */
+    --text-muted: 36 5% 40%;          /* 6.3:1 on white */
+    --border-subtle: 36 8% 86%;
+    --border-strong: 36 6% 70%;
+
+    --risk-low-bg: 45 80% 92%;
+    --risk-low-text: 35 85% 25%;      /* 8.5:1 on its bg */
+    --risk-low-border: 45 60% 70%;
+    --risk-moderate-bg: 28 85% 93%;
+    --risk-moderate-text: 22 80% 30%;
+    --risk-moderate-border: 28 60% 72%;
+    --risk-high-bg: 2 75% 95%;
+    --risk-high-text: 2 70% 36%;      /* 7.4:1 on its bg */
+    --risk-high-border: 2 55% 78%;
+
+    --status-positive-bg: 145 45% 93%;
+    --status-positive-text: 145 60% 23%;
+    --status-positive-border: 145 35% 70%;
+    --status-neutral-bg: 36 12% 93%;
+    --status-neutral-text: 36 5% 30%;
+    --status-neutral-border: 36 6% 75%;
+
+    --value-danger: 2 70% 40%;
+    --value-success: 145 60% 26%;
+  }
+}
+
+@layer components {
+  /* StatusBadge: 4px corners (named so the square-corner rule skips it). */
+  .ui-badge {
+    border-radius: var(--radius-badge);
+    line-height: 16px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Map quarter timeline and risk-level legend: two slim matching bars.
+   Neutral chrome only: the orange/red theme colours belong to the risk
+   data on the map, not to these controls. Radii are set here because
+   the site-wide rule above flattens every rounded-* utility.
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    --qt-panel: 240 5% 9%;
+    --qt-border: 240 4% 20%;
+    --qt-text: 0 0% 93%;
+    --qt-text-muted: 240 4% 68%;      /* 7.8:1 on --qt-panel */
+    --qt-track: 240 4% 64%;
+    --qt-track-forecast: 240 4% 44%;
+    --qt-dot-border: 240 4% 62%;
+    --qt-selected: 0 0% 100%;
+    --qt-today: 240 4% 52%;
+    --qt-link: 35 91% 62%;            /* 9:1 on --qt-panel */
+    --qt-focus: 0 0% 100%;
+  }
+  .light {
+    --qt-panel: 0 0% 100%;
+    --qt-border: 240 5% 86%;
+    --qt-text: 240 6% 10%;
+    --qt-text-muted: 240 4% 40%;      /* 6.2:1 on white */
+    --qt-track: 240 4% 46%;
+    --qt-track-forecast: 240 4% 58%;
+    --qt-dot-border: 240 4% 46%;
+    --qt-selected: 240 6% 10%;
+    --qt-today: 240 4% 46%;
+    --qt-link: 28 90% 32%;            /* 6.2:1 on white */
+    --qt-focus: 240 6% 10%;
+  }
+}
+
+@layer components {
+  .qt-panel {
+    background: hsl(var(--qt-panel) / 0.85);
+    border: 1px solid hsl(var(--qt-border));
+    border-radius: 6px;
+    color: hsl(var(--qt-text));
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  /* 42px tall: 28px of content + 6px padding + 1px border, top and bottom. */
+  .qt-bar {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 6px 12px;
+  }
+  .qt-muted { color: hsl(var(--qt-text-muted)); }
+
+  .qt-link {
+    color: hsl(var(--qt-link));
+    font-size: 12px;
+    background: none;
+    border: 0;
+    border-radius: 2px;
+    padding: 0;
+  }
+  .qt-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Points sit --qt-track-w apart in total, squeezing down to
+     --qt-track-min before the track scrolls. */
+  .qt-track { width: var(--qt-track-w); max-width: 100%; min-width: var(--qt-track-min); }
+
+  /* A line segment with a 14px-tall hover area for its tooltip. */
+  .qt-segment { height: 14px; }
+  .qt-segment > span { position: absolute; left: 0; right: 0; top: 6px; }
+  .qt-line-observed { display: block; border-top: 2px solid hsl(var(--qt-track)); }
+  .qt-line-forecast { display: block; border-top: 2px dashed hsl(var(--qt-track-forecast)); }
+  .qt-today-line { display: block; width: 1px; background: hsl(var(--qt-today)); }
+
+  .qt-point { border-radius: 4px; color: hsl(var(--qt-text-muted)); }
+  .qt-point:disabled { cursor: not-allowed; opacity: 0.45; }
+  .qt-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid hsl(var(--qt-dot-border));
+    background: hsl(var(--qt-panel));
+  }
+  .qt-point[aria-checked="true"] { color: hsl(var(--qt-text)); font-weight: 500; }
+  .qt-point[aria-checked="true"] .qt-dot {
+    width: 13px;
+    height: 13px;
+    border: 0;
+    background: hsl(var(--qt-selected));
+  }
+  .qt-point:not(:disabled):hover { color: hsl(var(--qt-text)); }
+  .qt-point:not(:disabled):hover .qt-dot { border-color: hsl(var(--qt-text)); }
+
+  .qt-point:focus { outline: none; }
+  /* Inset: the track's scroll box would clip an outer ring. */
+  .qt-point:focus-visible { outline: 2px solid hsl(var(--qt-focus)); outline-offset: -2px; }
+  .qt-link:focus-visible { outline: 2px solid hsl(var(--qt-focus)); outline-offset: 2px; }
+
+  .qt-swatch { display: inline-block; width: 10px; height: 10px; }
+}
+
+/* Bottom row of the map: legend bottom-left, quarter bar bottom-centre.
+   The 1fr side columns keep the bar centred when there is room and push it
+   right, rather than under the legend, when there is not. The row is a
+   size container so the bar adapts to the map area left between the
+   sidebars, not just to the window. */
+.qt-row { container-type: inline-size; }
+.qt-row-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 12px;
+}
+.qt-row-legend { justify-self: start; }
+.qt-row-bar { min-width: 0; max-width: 640px; }
+.qt-history-short { display: none; }
+
+/* Too narrow for the full bar beside the legend (and on phones):
+   drop the status text and shorten the history link. */
+@container (max-width: 839px) {
+  .qt-status, .qt-history-full { display: none; }
+  .qt-history-short { display: inline; }
+}
+/* Too narrow for both on one row: the legend moves above. */
+@container (max-width: 719px) {
+  .qt-row-grid { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .qt-row-bar { align-self: center; max-width: 100%; }
+}
+@media (max-width: 639px) {
+  .qt-status, .qt-history-full { display: none; }
+  .qt-history-short { display: inline; }
+}
+
+/* Very narrow screens: keep full spacing and let the track scroll. */
+@media (max-width: 399px) {
+  .qt-track { min-width: var(--qt-track-w); max-width: none; }
+}

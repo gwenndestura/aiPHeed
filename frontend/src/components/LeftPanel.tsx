@@ -1,11 +1,16 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS } from "@/data/types";
-import { X, TrendingUp, TrendingDown, BarChart3, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, AlertCircle, Info, Fish } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish } from "lucide-react";
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useConfig, useExplainability, useForecast } from "@/lib/queries";
 import type { Trigger } from "@/lib/apiTypes";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { ConfidenceTag } from "@/components/ui/confidence-tag";
+import { Note } from "@/components/ui/note";
+import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
+import { StatusDot } from "@/components/ui/status-dot";
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -112,8 +117,11 @@ export function RfiiScoreCardBody({
     if (r.limitedSignal) limited++;
   });
 
+  // The server's band, not the count-up value: that one is rounded to two
+  // decimals, so 0.4993 would read "0.50" and flip to HIGH.
+  const isHigh = regionForecast?.riskLevel ? regionForecast.riskLevel === "high" : avgScore >= 0.5;
   const band =
-    animScore >= 0.5 ? { label: "HIGH", color: "hsl(var(--risk-high))" }
+    isHigh ? { label: "HIGH", color: "hsl(var(--risk-high))" }
     : { label: "LOW", color: "hsl(var(--risk-low))" };
 
   // Position of pointer along 0..1 segmented track
@@ -121,7 +129,7 @@ export function RfiiScoreCardBody({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-baseline justify-between gap-2">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
         <p className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground/80 font-semibold">
           CALABARZON — Regional Average Risk Level
         </p>
@@ -154,13 +162,8 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <span
-              className="inline-block w-1.5 h-1.5 rounded-full"
-              style={{ background: band.color, boxShadow: `0 0 10px ${band.color}, 0 0 20px ${band.color}aa` }}
-            />
-            <span className="text-[9px] uppercase tracking-[0.28em] text-muted-foreground/80 font-bold">
-              Forecast Index
-            </span>
+            <StatusDot color={band.color} />
+            <MetricLabel>Forecast index</MetricLabel>
           </div>
 
           {/* Hero score */}
@@ -182,18 +185,7 @@ export function RfiiScoreCardBody({
 
           {/* Risk band pill */}
           <div className="mt-2.5">
-            <span
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.25em] px-3 py-1 rounded-full border"
-              style={{
-                background: `${band.color}1a`,
-                color: band.color,
-                borderColor: `${band.color}66`,
-                boxShadow: `0 0 14px ${band.color}55`,
-              }}
-            >
-              <span className="w-1 h-1 rounded-full" style={{ background: band.color, boxShadow: `0 0 6px ${band.color}` }} />
-              {band.label} · risk
-            </span>
+            <StatusBadge level={isHigh ? "high" : "low"} swatch="circle" />
           </div>
 
           <p className="mt-2.5 text-[10px] text-muted-foreground/85 leading-snug">
@@ -235,9 +227,14 @@ export function RfiiScoreCardBody({
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        <SummaryChip label="HIGH" value={high} color="hsl(var(--risk-high))" />
-        <SummaryChip label="LOW" value={low} color="hsl(var(--risk-low))" />
-        <SummaryChip label="LIMITED" value={limited} color="hsl(var(--muted-foreground))" tip="Provinces with < 5 geocoded articles" />
+        <SummaryChip label="High risk" value={high} color="hsl(var(--risk-high))" />
+        <SummaryChip label="Low risk" value={low} color="hsl(var(--risk-low))" />
+        <SummaryChip
+          label="Limited data"
+          value={limited}
+          color="hsl(var(--muted-foreground))"
+          tip="Provinces with fewer than 5 geocoded news articles this quarter."
+        />
       </div>
     </div>
   );
@@ -356,13 +353,7 @@ export function ProvinceRankingCardBody({
             >
               <div className="flex items-center justify-between text-[10px] mb-1">
                 <span className="font-semibold flex items-center gap-1.5">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{
-                      backgroundColor: RISK_COLORS[r.riskLevel],
-                      boxShadow: `0 0 6px ${RISK_COLORS[r.riskLevel]}`,
-                    }}
-                  />
+                  <StatusDot color={RISK_COLORS[r.riskLevel]} />
                   {r.name}
                   <span className="text-[9px] text-muted-foreground ml-1 opacity-60">
                     {RISK_LABELS[r.riskLevel]}
@@ -450,14 +441,13 @@ function RegionDetail({
 }) {
   const { data: config } = useConfig();
   const riskColor = RISK_COLORS[region.riskLevel];
-  const momPositive = region.momChange > 0;
-  const qoqText = `${momPositive ? "+" : ""}${region.momChange}%`;
+  const qoqText = formatSigned(region.momChange, 1, "%");
   const munis = municipalitiesData.slice().sort((a, b) => b.riskScore - a.riskScore);
 
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const limited = region.limitedSignal;
-  const specLabel = region.riskScore >= displayCutoff ? "HIGH" : "LOW";
+  const isHigh = region.riskScore >= displayCutoff;
   const isActiveAlert = region.riskScore >= alertThreshold;
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
 
@@ -470,32 +460,24 @@ function RegionDetail({
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">Province of</p>
             <h2 className="text-base font-bold leading-tight">{region.name}</h2>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-              <span
-                className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-mono-num"
-                style={{ backgroundColor: `${riskColor}20`, color: riskColor }}
+              <StatusBadge
+                level={isHigh ? "high" : "low"}
                 title={`Forecast risk level (${displayCutoff.toFixed(2)} display cutoff)`}
-              >
-                {specLabel} · risk
-              </span>
+              />
               {isActiveAlert && (
-                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse" title={`Active alert: Risk Level ≥ ${alertThreshold}`}>
+                <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
                   Active alert
-                </span>
+                </StatusBadge>
               )}
               {limited && (
-                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1" title="Province has fewer than the minimum geocoded articles">
-                  <AlertCircle className="h-2.5 w-2.5" />
-                  Limited signal
-                </span>
+                <ConfidenceTag explanation="This province had fewer than the minimum number of geocoded news articles this quarter." />
               )}
               {!!region.seriesNeedingReview && (
-                <span
-                  className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1"
-                  title={`${region.seriesNeedingReview} of ${region.seriesMonitored ?? "?"} monitored commodity series scored below the model's own confidence cutoff this quarter. They still count fully in the Risk Level Score above -- this flags them for analyst attention, it doesn't exclude them.`}
+                <ConfidenceTag
+                  explanation={`${region.seriesNeedingReview} of ${region.seriesMonitored ?? "?"} monitored commodity series scored below the model's confidence cutoff this quarter. They still count fully in the risk level score; this flags them for analyst review and does not exclude them.`}
                 >
-                  <AlertCircle className="h-2.5 w-2.5" />
-                  {region.seriesNeedingReview} need review
-                </span>
+                  {region.seriesNeedingReview} series need review
+                </ConfidenceTag>
               )}
             </div>
           </div>
@@ -508,32 +490,27 @@ function RegionDetail({
       </div>
 
       {/* Confidence statement */}
-      <div className="rounded-lg border border-border/40 bg-secondary/20 px-3 py-2 flex items-start gap-2">
-        <Info className="h-3 w-3 text-primary mt-0.5 shrink-0" />
-        <p className="text-[10px] text-muted-foreground leading-relaxed">
-          This is a <b className="text-foreground">{horizonLabel}</b> estimate for{" "}
-          <b className="text-foreground">{quarterId || "the selected quarter"}</b>, scored from PSA production
-          data already published for that quarter.
-        </p>
-      </div>
+      <Note>
+        This is a {horizonLabel} for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"},
+        based on PSA production data already published for that quarter.
+      </Note>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Risk Level Score</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight">{region.riskScore.toFixed(2)}</div>
+          <MetricLabel>Risk level score</MetricLabel>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
           </div>
         </div>
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30 overflow-hidden">
-          <div className="flex items-center gap-1.5">
-            {momPositive ? <TrendingUp className="h-3 w-3 text-destructive shrink-0" /> : <TrendingDown className="h-3 w-3 text-risk-low shrink-0" />}
-            <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">QoQ Change</span>
-          </div>
+          <MetricLabel>Quarter-on-quarter change</MetricLabel>
           <FitText
             text={qoqText}
-            className={`font-extrabold mt-1 tracking-tight ${momPositive ? "text-destructive" : "text-risk-low"}`}
+            className={`font-extrabold mt-1 tracking-tight tabular-nums ${
+              { neutral: "text-foreground", danger: "text-value-danger", success: "text-value-success" }[changeTone(region.momChange)]
+            }`}
             maxSize={30}
             minSize={11}
           />
@@ -543,10 +520,9 @@ function RegionDetail({
       {/* Population */}
       <div className="rounded-xl px-3 py-2.5 border border-border/50 bg-secondary/30 flex items-center justify-between">
         <div>
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Population</div>
+          <MetricLabel>Population</MetricLabel>
           <div className="text-sm font-bold mt-0.5 tabular-nums">{region.population.toLocaleString()}</div>
         </div>
-        <BarChart3 className="h-4 w-4 text-muted-foreground/40" />
       </div>
 
       {/* Trigger composition */}
@@ -582,11 +558,7 @@ function RegionDetail({
                   <div className="text-[11px] font-semibold truncate">{m.name}</div>
                   <div className="text-[9px] text-muted-foreground/70 flex items-center gap-1.5">
                     <span>{m.classification}</span>
-                    {m.limitedSignal && (
-                      <span className="px-1 rounded bg-muted text-muted-foreground text-[8px] font-bold uppercase tracking-wider" title="Limited signal, propagated from the province">
-                        LIMITED
-                      </span>
-                    )}
+                    {m.limitedSignal && <ConfidenceTag className="text-[9px]">Limited data</ConfidenceTag>}
                   </div>
                 </div>
               </div>
@@ -635,12 +607,7 @@ function MunicipalityDetail({
           <h2 className="text-base font-bold leading-tight">{municipality.name}</h2>
           <p className="text-[10px] text-muted-foreground mt-0.5">{municipality.provinceName}, CALABARZON</p>
           <div className="flex items-center gap-2 mt-1.5">
-            <span
-              className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-              style={{ backgroundColor: `${riskColor}20`, color: riskColor }}
-            >
-              {RISK_LABELS[municipality.riskLevel]}
-            </span>
+            <StatusBadge level={municipality.riskLevel} />
           </div>
         </div>
       </div>
@@ -648,8 +615,8 @@ function MunicipalityDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Risk Level Score</div>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight">{municipality.riskScore.toFixed(2)}</div>
+          <MetricLabel>Risk level score</MetricLabel>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
@@ -658,7 +625,7 @@ function MunicipalityDetail({
           </div>
         </div>
         <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Basis</div>
+          <MetricLabel className="mb-1">Basis</MetricLabel>
           <p className="text-[10px] leading-snug text-muted-foreground line-clamp-4">{municipality.disaggregationLabel}</p>
         </div>
       </div>
@@ -666,11 +633,11 @@ function MunicipalityDetail({
       {/* Demographics */}
       <div className="rounded-xl px-3 py-2.5 border border-border/50 bg-secondary/30 space-y-2">
         <div className="flex items-center justify-between">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Population</div>
+          <MetricLabel>Population</MetricLabel>
           <div className="text-[11px] font-bold tabular-nums">{municipality.population.toLocaleString()}</div>
         </div>
         <div className="flex items-center justify-between">
-          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Poverty Rate</div>
+          <MetricLabel>Poverty rate</MetricLabel>
           <div className="text-[11px] font-bold tabular-nums">{municipality.povertyRate}%</div>
         </div>
       </div>
@@ -715,7 +682,7 @@ function SummaryChip({ label, value, color, tip }: { label: string; value: numbe
       className="rounded-lg border border-border/40 bg-secondary/30 px-2 py-1.5 flex flex-col items-start"
       title={tip}
     >
-      <span className="text-[8px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</span>
+      <MetricLabel>{label}</MetricLabel>
       <span className="font-mono-num text-base font-bold tabular-nums leading-none mt-0.5" style={{ color }}>
         {value}
       </span>

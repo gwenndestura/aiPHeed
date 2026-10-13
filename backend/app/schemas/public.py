@@ -76,6 +76,9 @@ class ConfigResponse(BaseModel):
     # reaches, and its metrics with baselines.
     horizons: dict
     modelPerformance: dict
+    # The E20 headline forecast (2027-Q1) for the dashboard banner; None when
+    # it is not served.
+    forecast: dict | None = None
 
 
 class Quarter(BaseModel):
@@ -84,7 +87,7 @@ class Quarter(BaseModel):
     q: int
     label: str
     monthsLabel: str
-    state: str  # "actual" | "current"
+    state: str  # "actual" | "current" | "forecast"
 
 
 class QuartersResponse(BaseModel):
@@ -134,6 +137,14 @@ class ProvinceSummary(BaseModel):
     limitedSignal: bool = False
     horizon: str = "nowcast"
     withheld: bool = False
+    # Set on an E20 forecast quarter (2027-Q1): a different target and model
+    # from the nowcast, served from data/e20/serving.json.
+    isForecast: bool = False
+    lead: int | None = None
+    originQuarter: str | None = None
+    modelId: str | None = None
+    confidenceNote: str | None = None
+    uncertainty: dict | None = None
 
 
 class ProvincesResponse(BaseModel):
@@ -312,6 +323,9 @@ class NewsResponse(BaseModel):
     scope: str
     id: str
     quarter: str
+    # The quarter the articles were published in. Equal to `quarter` except on
+    # a forecast quarter, which shows its information-cutoff quarter's news.
+    sourceQuarter: str
     articleCount: int
     # How many of those are geocoded to a CALABARZON province. Most of the
     # corpus is not: at region scope this is far below articleCount, which is

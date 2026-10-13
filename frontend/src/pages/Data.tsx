@@ -6,6 +6,8 @@ import { selectableQuarters } from "@/lib/quarters";
 import { RISK_COLORS, RISK_LABELS } from "@/data/types";
 import type { ProvinceSummary } from "@/lib/apiTypes";
 import { ArrowDown, ArrowUp, Download, Search } from "lucide-react";
+import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
+import { formatSigned } from "@/components/ui/metric";
 
 type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCount";
 
@@ -80,7 +82,7 @@ export default function DataPage() {
     { key: "name", label: "Province" },
     { key: "riskScore", label: "Risk Level" },
     { key: "riskLevel", label: "Risk Level" },
-    { key: "qoqChangePct", label: "QoQ Change" },
+    { key: "qoqChangePct", label: "Quarter-on-quarter change" },
     { key: "articleCount", label: "Articles" },
   ];
 
@@ -169,17 +171,14 @@ export default function DataPage() {
                         {r.riskScore !== null ? r.riskScore.toFixed(2) : "—"}
                       </td>
                       <td className="px-4 py-2">
-                        {r.riskLevel ? (
-                          <span
-                            className="px-2 py-0.5 rounded-full text-[10px] font-bold"
-                            style={{ color, background: `${color}15`, border: `1px solid ${color}55` }}
-                          >
-                            {RISK_LABELS[r.riskLevel] ?? r.riskLevel}
-                          </span>
-                        ) : "—"}
+                        {r.riskLevel && r.riskLevel in RISK_LABELS ? (
+                          <StatusBadge level={r.riskLevel as RiskLevelKey} />
+                        ) : (
+                          r.riskLevel ?? "—"
+                        )}
                       </td>
                       <td className="px-4 py-2 tabular-nums">
-                        {r.qoqChangePct !== null ? `${r.qoqChangePct > 0 ? "+" : ""}${r.qoqChangePct.toFixed(1)}%` : "—"}
+                        {r.qoqChangePct !== null ? formatSigned(r.qoqChangePct, 1, "%") : "—"}
                       </td>
                       <td className="px-4 py-2 tabular-nums">{r.articleCount}</td>
                       <td className="px-4 py-2">{r.withheld ? "Withheld" : "Published"}</td>

@@ -70,10 +70,9 @@ export function municipalityToData(m: MunicipalitySummary, provinceName: string)
   };
 }
 
-// The backend's Quarter (state: "actual" | "current") -> the slider's Quarter
-// (forecast / current / past booleans). The API never returns a "forecast"
-// state today -- every scorable quarter is an observed one -- but the slider
-// keeps the field so it degrades gracefully if that ever changes.
+// The backend's Quarter (state: "actual" | "current" | "forecast") -> the
+// slider's Quarter (forecast / current / past booleans). "forecast" is the
+// E20 quarter (2027-Q1) appended after the nowcast's newest quarter.
 export function apiQuarterToSlider(q: ApiQuarter): SliderQuarter {
   return {
     id: q.id,
@@ -83,7 +82,7 @@ export function apiQuarterToSlider(q: ApiQuarter): SliderQuarter {
     monthsLabel: q.monthsLabel,
     current: q.state === "current",
     past: q.state === "actual",
-    forecast: false,
+    forecast: q.state === "forecast",
     locked: false,
   };
 }

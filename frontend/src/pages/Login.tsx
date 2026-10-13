@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Note } from "@/components/ui/note";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import logoIcon from "@/assets/logo-icon.png";
@@ -98,12 +99,7 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="mt-5 p-2.5 rounded-lg bg-secondary/40 border border-border/40 text-[10px] text-muted-foreground flex items-start gap-2">
-          <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-          <span>
-            Admin access is restricted to <span className="font-bold text-foreground">@calabarzon.da.gov.ph</span> emails.
-          </span>
-        </div>
+        <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
 
         <p className="text-center text-[10px] text-muted-foreground mt-4">
           <Link to="/" className="hover:text-foreground underline underline-offset-2">

@@ -2,6 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { History, ArrowRight } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
 import { useConfig, useTimeseries, useExplainability } from "@/lib/queries";
+import { quarterOrdinal } from "@/lib/quarters";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { formatSigned } from "@/components/ui/metric";
 
 interface Props {
   open: boolean;
@@ -55,9 +58,16 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <tbody>
               {rows.map((p, i) => {
                 const prev = rows[i + 1]; // rows is reversed; the previous quarter is the next entry
-                const delta = prev ? p.riskScore - prev.riskScore : 0;
-                const band = p.riskScore >= displayCutoff ? "HIGH" : "LOW";
                 const q = quarters.find((qq) => qq.id === p.quarter);
+                // A change is only quarter-on-quarter between adjacent nowcast
+                // quarters: the forecast quarter is a different target and model,
+                // and sits after a gap.
+                const prevQ = prev ? quarters.find((qq) => qq.id === prev.quarter) : undefined;
+                const comparable =
+                  !!prev && !q?.forecast && !prevQ?.forecast &&
+                  quarterOrdinal(p.quarter) - quarterOrdinal(prev.quarter) === 1;
+                const delta = comparable ? p.riskScore - prev.riskScore : null;
+                const band = p.riskScore >= displayCutoff ? "HIGH" : "LOW";
                 // Only quarters the slider offers are listed, so a selection
                 // always lands on the timeline. QoQ above still compares
                 // against the true previous quarter.
@@ -69,6 +79,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                     quarterId={p.quarter}
                     label={q ? `${q.label} ${q.year}` : p.quarter}
                     isCurrent={!!q?.current}
+                    isForecast={!!q?.forecast}
                     score={p.riskScore}
                     band={band}
                     delta={delta}
@@ -94,6 +105,7 @@ function HistoryRow({
   quarterId,
   label,
   isCurrent,
+  isForecast,
   score,
   band,
   delta,
@@ -103,9 +115,10 @@ function HistoryRow({
   quarterId: string;
   label: string;
   isCurrent: boolean;
+  isForecast: boolean;
   score: number;
   band: "HIGH" | "LOW";
-  delta: number;
+  delta: number | null;
   selected: boolean;
   onSelect: () => void;
 }) {
@@ -121,27 +134,26 @@ function HistoryRow({
     >
       <td className="py-2 pr-3 font-semibold whitespace-nowrap">
         {label}
-        {isCurrent && (
-          <span className="ml-1.5 text-[8px] font-bold uppercase tracking-wider text-risk-low">now</span>
-        )}
+        {isCurrent && <span className="ml-1.5 text-label font-normal text-ink-secondary">Current</span>}
+        {isForecast && <span className="ml-1.5 text-label font-normal text-ink-secondary">Forecast</span>}
       </td>
       <td className="text-right px-2 font-mono-num tabular-nums">{score.toFixed(2)}</td>
       <td className="text-center px-2">
-        <span
-          className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
-            band === "HIGH" ? "bg-risk-high/15 text-risk-high" : "bg-risk-low/15 text-risk-low"
-          }`}
-        >
-          {band}
-        </span>
+        <StatusBadge level={band === "HIGH" ? "high" : "low"} />
       </td>
       <td
         className={`text-right px-2 font-mono-num tabular-nums ${
-          delta > 0.001 ? "text-risk-high" : delta < -0.001 ? "text-risk-low" : "text-muted-foreground"
+          delta === null
+            ? "text-muted-foreground"
+            : delta > 0.001
+              ? "text-risk-high"
+              : delta < -0.001
+                ? "text-risk-low"
+                : "text-muted-foreground"
         }`}
+        title={delta === null ? "Not comparable with the previous row" : undefined}
       >
-        {delta > 0 ? "+" : ""}
-        {delta.toFixed(2)}
+        {delta === null ? "n/a" : formatSigned(delta, 2)}
       </td>
       <td className="px-2 whitespace-nowrap">
         {top?.label ?? "—"}{" "}

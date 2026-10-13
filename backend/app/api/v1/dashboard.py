@@ -75,14 +75,16 @@ async def get_config() -> ConfigResponse:
             "earliest": quarters[0] if quarters else None,
             "latest": quarters[-1] if quarters else None,
             "count": len(quarters),
-            "forecastQuarters": [],
+            "forecastQuarters": svc.e20_forecast_quarters(),
             "note": (
-                "Every scorable quarter is an observed one. The model scores "
-                "quarters PSA has already published production volumes for, so "
-                "there are no forward forecast quarters to display."
+                "Nowcast quarters score periods PSA has already published production "
+                "volumes for. Quarters listed in forecastQuarters are the E20 "
+                "forecast: a different target (relative food-price pressure) and "
+                "model, issued from an earlier information cutoff -- see `forecast`."
             ),
         },
         modelPerformance=svc.model_performance(),
+        forecast=svc.forecast_meta(),
     )
 
 

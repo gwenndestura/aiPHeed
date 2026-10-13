@@ -5,17 +5,17 @@ import {
   LogOut,
   Eye,
   FileText,
-  CheckCircle2,
-  CircleDashed,
   X,
   Map as MapIcon,
   Menu,
   Sun,
   Moon,
-  Star,
 } from "lucide-react";
 import { RISK_COLORS, RISK_LABELS } from "@/data/types";
 import { EarlyWarningBanner } from "@/components/EarlyWarningBanner";
+import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
+import { MetricLabel } from "@/components/ui/metric";
+import { Note } from "@/components/ui/note";
 import { MapDashboard } from "@/components/MapDashboard";
 import { SidebarPeek } from "@/components/SidebarPeek";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -246,6 +246,11 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
   );
 }
 
+/** Review state as a badge: the same element in the table and the review dialog. */
+function statusBadgeFor(s: ReviewItem["status"]) {
+  return <StatusBadge tone={s === "Approved" ? "positive" : s === "Rejected" ? "high" : "neutral"}>{s}</StatusBadge>;
+}
+
 /* ---------- Review ---------- */
 type ReviewTab = "queue" | "log";
 
@@ -261,7 +266,8 @@ function ReviewSection() {
 
   const { data: quartersRes } = useQuarters("nowcast");
   const years = useMemo(() => {
-    const set = new Set((quartersRes?.quarters ?? []).map((q) => q.year));
+    // The review queue covers nowcast quarters; the E20 forecast is not reviewed here.
+    const set = new Set((quartersRes?.quarters ?? []).filter((q) => q.state !== "forecast").map((q) => q.year));
     return Array.from(set).sort((a, b) => b - a);
   }, [quartersRes]);
   useEffect(() => {
@@ -279,18 +285,7 @@ function ReviewSection() {
   const undoMut = useUndoReview();
   const restoreMut = useRestoreRejection();
 
-  const statusBadge = (s: ReviewItem["status"]) => {
-    const cfg = {
-      Approved: { icon: <CheckCircle2 className="h-3 w-3" />, color: "text-risk-low" },
-      Staged: { icon: <CircleDashed className="h-3 w-3" />, color: "text-muted-foreground" },
-      Rejected: { icon: <X className="h-3 w-3" />, color: "text-destructive" },
-    }[s];
-    return (
-      <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold ${cfg.color}`}>
-        {cfg.icon} {s}
-      </span>
-    );
-  };
+  const statusBadge = statusBadgeFor;
 
   const approve = (it: ReviewItem) => {
     approveMut.mutate(it.id, {
@@ -425,16 +420,11 @@ function ReviewSection() {
                       <span className="font-semibold text-foreground">{r.quarter}</span>
                     </td>
                     <td className="px-4 py-2.5">
-                      <span
-                        className="px-2 py-0.5 rounded-full border text-[10px] font-bold"
-                        style={{
-                          color: RISK_COLORS[r.riskLevel] ?? "#6b7280",
-                          borderColor: `${RISK_COLORS[r.riskLevel] ?? "#6b7280"}55`,
-                          background: `${RISK_COLORS[r.riskLevel] ?? "#6b7280"}15`,
-                        }}
-                      >
-                        {RISK_LABELS[r.riskLevel] ?? r.riskLevel}
-                      </span>
+                      {r.riskLevel in RISK_LABELS ? (
+                        <StatusBadge level={r.riskLevel as RiskLevelKey} />
+                      ) : (
+                        r.riskLevel
+                      )}
                     </td>
                     <td className="px-4 py-2.5 tabular-nums font-bold" style={{ color: RISK_COLORS[r.riskLevel] ?? "#6b7280" }}>
                       {r.riskScore.toFixed(2)}
@@ -520,7 +510,7 @@ function RejectionLog({ rejected, onRestore }: { rejected: ReviewItem[]; onResto
           </tbody>
         </table>
       </div>
-      <p className="text-[10px] text-muted-foreground mt-2">Audit log of rejected forecasts. Restoring removes the rejection so the report can be re-reviewed.</p>
+      <Note className="mt-2">This is the audit log of rejected forecasts. Restoring a forecast removes its rejection so it can be reviewed again.</Note>
     </div>
   );
 }
@@ -559,8 +549,14 @@ function ReviewDetailModal({
           <div>
             <h2 className="text-base font-bold">{item.province} — Risk Review</h2>
             <p className="text-[10px] text-muted-foreground">
-              <span className="font-semibold text-primary">{item.quarter}</span> · Risk Level {item.riskScore.toFixed(2)} · {RISK_LABELS[item.riskLevel] ?? item.riskLevel} · Status: {item.status}
+              <span className="font-semibold text-primary">{item.quarter}</span> · Risk Level {item.riskScore.toFixed(2)} · Status: {item.status}
             </p>
+            {item.riskLevel in RISK_LABELS && (
+              <div className="mt-1.5 flex items-center gap-1.5">
+                <StatusBadge level={item.riskLevel as RiskLevelKey} />
+                {statusBadgeFor(item.status)}
+              </div>
+            )}
           </div>
           <button onClick={onClose} className="p-1.5 rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
         </div>
@@ -839,10 +835,10 @@ function FeedbackSection() {
                   <td className="px-4 py-2.5 text-muted-foreground">{f.demographics.agency || "—"}</td>
                   <td className="px-4 py-2.5">
                     <span
-                      className="inline-flex items-center gap-1 font-bold tabular-nums"
-                      style={{ color: f.score >= 68 ? "hsl(var(--risk-low))" : "hsl(var(--risk-high))" }}
+                      className={`font-bold tabular-nums ${f.score >= 68 ? "text-value-success" : "text-value-danger"}`}
+                      title={f.score >= 68 ? "At or above the SUS benchmark of 68" : "Below the SUS benchmark of 68"}
                     >
-                      <Star className="h-3 w-3" /> {f.score}/100
+                      {f.score}/100
                     </span>
                   </td>
                   <td className="px-4 py-2.5">
@@ -888,7 +884,7 @@ function FeedbackSection() {
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="bg-card border border-border/50 rounded-xl px-4 py-3">
-      <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">{label}</p>
+      <MetricLabel>{label}</MetricLabel>
       <p className={`font-mono-num text-2xl font-bold mt-1 tabular-nums ${accent ? "text-primary" : ""}`}>{value}</p>
     </div>
   );
@@ -937,13 +933,13 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
             <div className="grid grid-cols-1 gap-2">
               {item.liked && (
                 <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
-                  <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">Liked most</p>
+                  <MetricLabel className="mb-1">Liked most</MetricLabel>
                   <p className="text-[11px] leading-snug">{item.liked}</p>
                 </div>
               )}
               {item.improvements && (
                 <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
-                  <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">Suggestions</p>
+                  <MetricLabel className="mb-1">Suggestions</MetricLabel>
                   <p className="text-[11px] leading-snug">{item.improvements}</p>
                 </div>
               )}
@@ -962,7 +958,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
 function KV({ k, v }: { k: string; v: string }) {
   return (
     <div className="bg-secondary/30 border border-border/40 rounded-md px-2.5 py-1.5">
-      <p className="text-[9px] uppercase tracking-wider text-muted-foreground/70">{k}</p>
+      <MetricLabel>{k}</MetricLabel>
       <p className="text-[11px] font-medium truncate">{v}</p>
     </div>
   );

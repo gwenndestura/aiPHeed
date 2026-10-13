@@ -121,9 +121,19 @@ def test_unknown_province_is_404(api, quarter):
 
 
 def test_unscorable_quarter_is_404(api):
-    r = api.get("/api/v1/report?scope=region&id=calabarzon&quarter=2027-Q1")
+    r = api.get("/api/v1/report?scope=region&id=calabarzon&quarter=2031-Q1")
     assert r.status_code == 404
     assert r.json()["error"]["code"] == "forecast_not_found"
+
+
+def test_forecast_quarter_report_is_refused_not_mislabelled(api):
+    # The PDF wording describes the nowcast indicator; the E20 quarter is a
+    # different target, so it must not be rendered under that wording.
+    forecast = api.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
+    if not forecast:
+        pytest.skip("E20 serving file not present")
+    r = api.get(f"/api/v1/report?scope=region&id=calabarzon&quarter={forecast[-1]}")
+    assert r.status_code == 404
 
 
 # ---------------------------------------------------------------------------
