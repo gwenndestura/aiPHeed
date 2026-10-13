@@ -1,46 +1,40 @@
-# DRAFT: Thesis Results Interpretation (E13). Not inserted into the approved chapters.
+# DRAFT: Thesis Results Interpretation (E13, updated). Not inserted into the approved chapters.
 
-## Availability of Outcome Data
+## Outcome Data
 
-The study looked for an official measure of food insecurity that could serve as the outcome for Cavite, Laguna, Batangas, Rizal and Quezon. Only one repeated, independently measured hunger indicator was available: the Social Weather Stations (SWS) estimate of involuntary hunger. It is published for Balance Luzon, an area wider than CALABARZON, with one value per quarter. The Food Insecurity Experience Scale from DOST-FNRI was available only as a single regional value for 2025 (22.6 percent). The provincial subsistence incidence from PSA was available for 2021 and 2023. Most of its provincial estimates had coefficients of variation above 30 percent.
+The study looked for an official, repeated, province-level measure of food insecurity for Cavite, Laguna, Batangas, Rizal and Quezon. None was available for 2021–2025:
 
-No province-level measure of food insecurity was observed more than once during 2021–2025. As a result, the accuracy of provincial food-insecurity predictions could not be established.
+- **SWS hunger estimate:** the only repeated hunger measurement. It covers Balance Luzon, an area wider than CALABARZON, with one value per quarter.
+- **FNRI Food Insecurity Experience Scale:** available only as a single regional value for 2025.
+- **PSA subsistence incidence:** available by province for 2021 and 2023, but most provincial estimates had coefficients of variation above 30 percent.
 
-## Composition of the Risk Classification
+The accuracy of province-level food-insecurity prediction therefore could not be established. The study evaluated two narrower forecasting tasks instead.
 
-The composite stress indicator classified 33 of 35 province-quarters in the evaluation period as HIGH, and every province as HIGH from the second quarter of 2024. This pattern came from the regional hunger component:
+## Forecasting Regional Hunger
 
-- **The threshold** was set at the median of 2021–2023, when regional hunger was about 10.8 percent.
-- **Regional hunger then rose** to between 14.3 and 25.3 percent.
-- **The same regional value** is added to all five provinces.
+At the start of each quarter, using only values published before that date, the study forecast the SWS Balance-Luzon hunger rate for that quarter. Over nine test quarters (2023-Q4 to 2025-Q4):
 
-From the second quarter of 2024, a province would have needed food inflation at least 2.9 to 7.2 percentage points below the five-province average to be classified LOW. No province came close. The classification therefore restated the regional hunger level and did not distinguish between provinces.
+- **The latest published value had the lowest mean absolute error:** 4.8 percentage points.
+- **The alternatives were worse:** a trend-adjusted value (4.9), the historical average (6.7) and a regularized autoregressive model (6.6).
+- **Every method under-forecast** the rise in hunger during 2024 and 2025.
+- **Uncertainty was underestimated:** intervals based on earlier errors covered the realized value in only two of nine quarters.
 
-## Forecasting Performance
+## Forecasting Provincial Food-Price Pressure
 
-The study forecast three independently measured quantities at the start of each quarter, using only information published before that date:
+The study also forecast each province's food inflation and its deviation from the five-province average, over 11 test quarters (2023-Q2 to 2025-Q4).
 
-| Quantity | Best approach | Mean absolute error | Did any model do better? |
-|---|---|---|---|
-| Regional hunger (9 quarters) | Latest published value | 4.8 points | No. The models were worse (6.6). |
-| Provincial food inflation (11 quarters) | Value two quarters earlier | 2.4 points | No |
-| Relative provincial food-price pressure (11 quarters) | A shrinkage model | 1.18 (latest value: 1.36) | Yes, under the pre-specified rule |
+**Food inflation:** no model was more accurate than the value two quarters earlier (mean absolute error 2.4 percentage points).
 
-The shrinkage model's gain for relative price pressure has three limits:
+**Deviation from the average:** a model that shrank the latest deviation toward zero reduced the error from 1.36 to 1.18 points and met the study's pre-specified criteria. The improvement has three limits:
 
-1. It was observed on quarters examined in earlier analyses.
-2. It did not hold on the subset used in those analyses.
-3. It changed only three of 55 above-or-below-average calls.
+1. It did not hold against a forecast of no provincial difference from 2023-Q4 onward.
+2. It disappeared when older data were used to allow for uncertain release dates.
+3. It was observed on quarters examined in earlier analyses.
 
-The study therefore treats it as a hypothesis for future quarters, not as a validated model.
+## Comparison with Official Statistics
+
+Where sampling error allowed a clear comparison, provinces with higher subsistence incidence usually had higher relative food-price pressure in the same year: six of eight comparable pairs. Quezon, however, had the highest subsistence incidence in 2021 and the lowest relative price pressure in 2023. The comparison is descriptive and does not validate the indicator.
 
 ## Interpretation
 
-The results suggest that, with current data, aiPHeed can provide two kinds of early information:
-
-- a regional hunger signal;
-- a provincial food-price-pressure signal.
-
-Neither is a provincial measure of food insecurity. Provincial food-price pressure did not follow the provincial pattern of household vulnerability. Quezon had the highest poverty and subsistence incidence in 2021, but the lowest relative price pressure in 2023.
-
-Evaluating provincial food-insecurity prediction would require a provincial food-insecurity measure collected at least yearly, such as an FIES-type survey with provincial estimates or a community-based monitoring indicator of food shortage.
+With the available data, aiPHeed provides timely regional hunger context and provincial food-price-pressure information. It does not provide a validated forecast of provincial food insecurity. The more complex models, including LightGBM, did not outperform simple approaches.

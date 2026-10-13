@@ -33,3 +33,19 @@ Files 1 and 2 were **derived by E12** from mixed files: `psa_indicators.parquet`
 | E9 `input_frame.csv`, E10 `q4/*` | Not needed. The sealed Q4 forecast is left untouched. |
 | Served models, `*.db`, `mlruns`, news corpus, `Claude outputs/`, lean and simplified outputs | Protected or carrier files |
 | Web pages of PSA, SWS or RSSO | Not opened (they could display 2026 releases) |
+
+## Amendment 1 (2026-10-13, 11:02 onward)
+
+**No new data file was added.** Amendment 1 uses the same five hash-pinned files, read through the same guard (`runner/guard.py`, unchanged). In addition it reads, inside this folder:
+
+- the sealed v1 forecasts, `runs/20261013T022702Z/predictions.csv` (SHA-256 `868581d5…`, checked before use);
+- for the root tables only, the v1 comparison CSVs in the same run folder.
+
+LightGBM 4.6.0 is used from the existing `backend/venv`. Nothing was installed.
+
+**Still not opened:**
+
+- `cpi_final_month_release_dates.csv` and every other release-date file that could contain 2026 rows;
+- every mixed or protected file listed above.
+
+The timing evidence in `TARGET_AND_TIMING_AUDIT.md` comes from the E9 eligibility document and the calendar rule. It does not come from those files.

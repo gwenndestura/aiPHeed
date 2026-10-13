@@ -1,39 +1,42 @@
-# Model Selection Recommendation (E13)
+# Model Selection Recommendation (E13; updated with Amendment 1)
+
+**Rule used.** The frozen v1 four-condition rule (`EXPERIMENT_PROTOCOL.md` §4). Amendment 1 re-applied it with added trend baselines, which can only make it stricter.
+
+**What may be selected.** Candidates added in Amendment 1 (LightGBM) cannot be selected. The v1 version of this file is in commit `5f7765f`.
 
 ## 1. Decision by target
 
-| Target | What it measures | Rule outcome (protocol §4) | Recommendation |
-|---|---|---|---|
-| Provincial **food insecurity** | — | **Not evaluable** (no outcome) | **No defensible improvement can be established.** No model is selected for this purpose. |
-| **A**: regional hunger | SWS Balance Luzon | No model met the rule. Both ridge models were **worse** than carry-forward: MAE 6.57 and 6.58 against 4.77; the interval for the difference is entirely above 0. | **Keep carry-forward** of the latest published round, shown as regional context with its age and date. **No model selected.** |
-| **B1**: provincial food inflation | Food-price pressure | No model met the rule. The best model (ridge, MAE 2.52) was slightly worse than carry-forward (2.44). | **Keep carry-forward** of F(T−2), labelled as price pressure. **No model selected.** |
-| **B2**: relative provincial price pressure | Relative price pressure | `B2_ridge_DP` **met all four conditions**: MAE 1.180 against 1.355; difference −0.175 [−0.287, −0.049]; Holm p = 0.038; LOQO 11/11. | **Not selected for use.** Recorded as a **candidate for prospective testing** (see §2). |
-| **S1**: constructed indicator | Internal consistency | Covered by E9–E12 | No change. S1 remains the documented thesis indicator, with its limits (`CURRENT_MODEL_DIAGNOSIS.md`). |
+| Target | Best baseline | Models tested | Result | Recommendation |
+|---|---|---|---|---|
+| **Regional hunger** (verified timing) | Latest published value, MAE 4.77 (drift 4.89; mean 6.74) | Ridge AR(1); + regional food inflation | Both **worse** (6.57–6.58; the interval excludes 0) | **No model selected.** Use the latest published value, with its date. **No verified improvement.** |
+| **Provincial food inflation F** (timing exploratory) | Carry-forward, MAE 2.44 (drift 2.47) | Ridge (2), tree, LightGBM | None better. LightGBM 2.54. No feature adds value. Under conservative timing the training mean is best. | **No model selected.** Report the latest official value. **No verified improvement.** |
+| **Relative price pressure D** (timing exploratory) | Carry-forward, MAE 1.355 ("no difference" 1.369) | Ridge D; ridge D + province mean; tree; LightGBM | **B2_ridge_DP meets all four conditions** (−0.175, interval −0.287 to −0.049; Holm p 0.038; LOQO 11/11). Unchanged after Amendment 1. | **Recorded as a candidate for prospective testing, not selected for use.** It is pre-registered in E15's frozen protocol (needs at least 12 new quarters). |
+| **Provincial food insecurity** | — | — | **Not evaluable** (no independent outcome) | **No model can be recommended.** |
 
-## 2. Why B2_ridge_DP is not selected, despite meeting the rule
+## 2. Why B2_ridge_DP is still not selected
 
-The frozen rule was met. These caveats are disclosed, not used to override that result:
+1. **It does not beat the simplest relative baseline from 2023-Q4 onward.** "No difference" (0) has MAE 1.287 there; B2_ridge_DP has 1.288.
+2. **It is not robust to conservative timing.** With inputs at T−3 the zero baseline is best, and no model beats it.
+3. **Reused quarters, and the idea came from E12** on overlapping data.
+4. **Small practical gain:** 3 of 55 sign calls changed. Almost all of its gain comes from shrinking the latest deviation; the province-mean term adds −0.01 (−0.15 to +0.13).
 
-1. **The quarters are not new.** All 11 B2 test quarters were seen in E12. 7 of them were E9–E12 test quarters.
-2. **The hypothesis came from the same data.** E12 observed that shrinking the latest provincial deviation improved next-quarter S1 forecasts on overlapping quarters. E13 tested a version of that idea on a partly overlapping period. That is **consistency, not independent confirmation.**
-3. **The result is not robust to the period.** On the 7 E9–E12 quarters (S-B1), the best baseline is "no difference" (MAE 1.42). B2_ridge_DP scores 1.23, a difference of −0.19 with an interval of [−0.68, 0.28]. Under the same rule it would not pass.
-4. **The model's logic is period-specific.** It weights each province's own long-run deviation **negatively** (−0.34 to −0.59). That reflects the 2023–2024 reversals (Quezon, Rizal, Batangas), not a known mechanism.
-5. **The practical gain for DA is small.** It changes 3 of 55 sign calls (2 better, 1 worse), and Kendall τ rises from 0.40 to 0.45.
-6. **It forecasts price pressure, not food insecurity.**
+## 3. The simplest defensible approach
 
-**What would justify adopting it:** pre-registering it now (it is fixed by this protocol) and scoring it on **new quarters** against carry-forward and zero. That means 2026-Q3 onward, once those quarters are published and the protected-period rules allow scoring.
+| Layer | Approach |
+|---|---|
+| Regional | Latest published SWS value, with its date and age |
+| Provincial | Latest provincial F and D, with D's size. Any forecast of D should be at most a shrinkage toward 0, labelled exploratory. |
+| Accuracy claims | None about food insecurity |
 
-## 3. What the evidence does support
+**LightGBM and the 45-feature model are not recommended for any target.** With fixed settings, LightGBM was no better than ridge (D) or carry-forward (F).
 
-1. **Two layers, not one combined provincial HIGH/LOW** (this agrees with E12):
-   - a regional hunger layer, using carry-forward of the latest published round, its date and trend;
-   - a provincial price-pressure layer: F and D, with D's ranking when all five provinces are available.
-2. **Plain baselines are as good as or better than the trained models** for every target except B2. On B2 the gain is small and not yet confirmed.
-3. **LightGBM and the earlier 45-feature model are not recommended.** No target had the sample size, and E9 and E11 found no reliable gain.
-4. **No threshold change is recommended.** Re-anchoring τ would need an outcome to validate it. A threshold chosen to reduce HIGH labels would be fitted to the label distribution.
+## 4. Summary of the four kinds of evidence
 
-## 4. Statement for the record
-
-> No defensible improvement in **provincial food-insecurity** prediction has been established, because no independent provincial food-insecurity outcome exists for 2021–2025. For **regional hunger** and **provincial food inflation**, no model improved on carry-forward. For **relative provincial food-price pressure**, one compact shrinkage model met the pre-specified rule on reused quarters. It is recorded as a candidate for prospective testing and is not selected for use.
+| Kind | Status |
+|---|---|
+| Verified improvement in regional hunger forecasting | **No** |
+| Verified improvement in provincial food-price forecasting | **No** for F. **Exploratory only** for D (meets the rule against carry-forward, but not robust). |
+| Descriptive consistency with official indicators | **Limited and mixed** (6 of 8 distinguishable pairs; not validation) |
+| Provincial food-insecurity prediction accuracy | **Not evaluated** (no outcome) |
 
 **Production, the served model, the dashboard and the thesis methodology were not changed.**

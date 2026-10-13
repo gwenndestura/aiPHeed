@@ -1,58 +1,49 @@
-# DA Usefulness Assessment (E13)
+# DA Usefulness Assessment (E13; updated with Amendment 1)
 
-**The DA question:** can aiPHeed tell DA Region IV-A, ahead of the official figures, where food insecurity will be worse among Cavite, Laguna, Batangas, Rizal and Quezon?
+**Status of the evidence:**
 
-**Short answer.** Not with the evidence available.
+- All results are retrospective, on quarters examined before.
+- Provincial price results are also **exploratory (timing)**.
+- The v1 version of this file is in commit `5f7765f`.
 
-- Provincial food insecurity is not measured anywhere in a repeated way, so aiPHeed's provincial food-insecurity accuracy is **unknown**. It is not low and not high.
-- What aiPHeed can give DA is a **regional hunger signal** and a **provincial food-price-pressure signal**. Each comes with a measured forecast error.
+**Detailed reports:**
 
-## 1. What each output can honestly tell DA
+- `REGIONAL_HUNGER_FORECAST_REPORT.md`
+- `PROVINCIAL_PRICE_FORECAST_REPORT.md`
+- `OFFICIAL_OUTCOME_COMPARISON.md`
 
-| Output | What it means | Forecast skill found (retrospective, reused quarters) | Usefulness for DA |
-|---|---|---|---|
-| **Regional hunger** (SWS Balance Luzon) | Share of families reporting involuntary hunger, for an area wider than CALABARZON | Best: carry the latest published value forward. MAE 4.8 points. It under-forecast the 2024–2025 rise by about 3 points on average. **No model beat it.** The ridge models were worse (MAE 6.6). | **Context.** It shows when regional hunger is high against recent years. It cannot rank provinces. |
-| **Provincial food inflation** (F) | How fast food prices rose in the province, year on year | Best: the province's value two quarters earlier. MAE 2.4 points. "Above 4%" flagged with balanced accuracy 0.70 (14 false alarms and 4 misses in 55). **No model beat it.** | **Price monitoring.** It is useful as an early indication, if read as price pressure only. |
-| **Relative provincial price pressure** (D) | Whether a province's food prices rose faster or slower than the five-province average | Carry-forward MAE 1.36. A shrinkage model (`B2_ridge_DP`) reached MAE 1.18 and met the frozen improvement rule (see §2 for the limits). Sign right in about 70% of cases. Ranking agreement τ ≈ 0.45. | **Relative targeting of price monitoring.** It is not a food-insecurity ranking. |
-| **S1 HIGH/LOW** (current dashboard label) | Regional hunger level plus 2 × relative price pressure, against a 2021–2023 threshold | HIGH in 33/35 test rows, and every province HIGH from 2024-Q2 | **Low for prioritization.** It restates the regional level (`CURRENT_MODEL_DIAGNOSIS.md`). |
+## 1. Answers to the DA questions
 
-## 2. The one measured improvement, in DA terms
-
-`B2_ridge_DP` forecasts relative price pressure as **(recent deviation) shrunk, minus part of the province's long-run deviation.**
-
-- **Size:** it lowers the average error from 1.36 to 1.18 points (13%).
-- **Effect on calls:** it changes 3 of 55 "above or below average" calls (2 better, 1 worse). Two of the three were near zero.
-- **Practical impact:** a DA officer reading the dashboard would see almost the same picture as with simple carry-forward. The gain is mostly in the size of the deviation, not the direction.
-- **Why it cannot yet be relied on:**
-  1. The quarters were examined before (7 of the 11 were E9–E12 test quarters).
-  2. The idea of shrinking D came from E12's look at the same period.
-  3. On the 7 E9–E12 quarters alone, it does not meet the rule. There, "no difference" (0) is the best baseline, and the interval crosses zero.
-  4. Its negative weight on each province's history reflects the 2023–2024 reversals and may not persist.
-
-## 3. Lead time and timeliness
-
-| Output | Forecast issued | Official value available | Lead |
-|---|---|---|---|
-| Regional hunger for quarter T | Start of T | About 1–15 weeks after the SWS fieldwork (2021–2025 range) | About 1 to 6 months |
-| Provincial F and D for quarter T | Start of T | About 3 weeks after T ends (proxy date) | About 3.5 months |
-
-The lead time is real. However, the forecast errors are about the same size as the quarter-to-quarter movements DA would want to act on.
-
-## 4. Risks if the current outputs are used as food-insecurity predictions
-
-1. **False reassurance or false alarm by province.**
-   - D is not related to household vulnerability across provinces (ρ = −0.05 and +0.62 against subsistence incidence, n = 5).
-   - Quezon, the poorest province, had the **lowest** relative price pressure in 2023.
-2. **No differentiation.** An all-HIGH label gives no basis for allocating attention.
-3. **Regional values presented as provincial.**
-   - Hunger (SWS) and FIES (FNRI) are regional.
-   - The project's FIES file repeats one regional value five times.
-
-## 5. What would make aiPHeed useful for DA provincial decisions
-
-| Need | Example source | Status |
+| Question | Answer | Evidence |
 |---|---|---|
-| A provincial food-insecurity outcome, repeated yearly or more often | FNRI provincial FIES or HFIAS (from microdata with provincial weights); PSA CBMS food-shortage items; a DA- or LGU-run FIES module | **Not available in the project** |
-| Real-time vintages and verified release dates for provincial CPI | PSA release calendar and archived releases | Proxy dates only |
-| Prospective scoring on new quarters | 2026-H2 onward (protected; sealed Q4 forecast exists from E10) | Pending |
-| An adviser decision on presenting two layers (regional hunger + provincial price pressure) instead of one HIGH/LOW label | — | Pending (E12) |
+| **Can the model identify changes in regional hunger earlier than a simple baseline?** | **No.** No method beat the latest published value (MAE 4.8 points). Hunger rose against that value in 8 of 9 test quarters. No method's rise calls are informative with one negative case. | Task A |
+| **Can it identify provinces with increasing food-price pressure?** | **Partly, and mostly by regression to the mean.** "D will move back toward 0" gets rising and falling pressure right with balanced accuracy of about 0.69, against 0.50 for carry-forward. Absolute food inflation rising (14 of 55 cases) is not predicted better than baselines. | Task B |
+| **Can it separate price-pressure changes from the common regional hunger signal?** | **Yes, by construction.** D sums to 0 in every quarter (max \|ΣD\| = 6e-15), so it carries no regional level. Regional food inflation is **negatively** correlated with hunger in 2021–2025 (r ≈ −0.48), so price pressure and hunger are distinct signals here. | §9 of Amendment 1 |
+| **Are rankings and warnings stable across periods?** | **Moderately.** Realized D rankings agree with the previous quarter at Kendall τ 0.54. The best arm differs between the two halves of the test period for F. For D, the shrinkage arms beat carry-forward in both halves, but not the "no difference" baseline from 2023-Q4 onward. The 2024-Q2 ranking reversal (Quezon from lowest to highest) was not anticipated by any method. | Stability tables |
+| **Does it add information beyond official indicators?** | **Little beyond the latest official values.** The best forecasts are the latest value, or that value shrunk toward the average. The real gain is **timeliness**: a forecast at the start of a quarter, about 3.5 months before that quarter's provincial CPI and 1–6 months before the SWS release. | Task A and B |
+| **What would DA need before treating any output as an absolute food-insecurity classification?** | (1) An independent, repeated provincial food-insecurity outcome (FIES or HFIAS type, or a CBMS food-shortage item); (2) thresholds chosen on training data only; (3) validation on new quarters; (4) verified release dates. **None exists yet.** | `OUTCOME_DATA_AUDIT.md`, E15 `DATA_GAP_INVENTORY.md` |
+
+## 2. How each result should be described
+
+| Result | Allowed description | Not allowed |
+|---|---|---|
+| D shrinkage beat carry-forward | "Better relative food-price-pressure forecasting than carry-forward, on 2023–2025 data (exploratory)" | "Improved food-insecurity prediction" |
+| No gain for F | "Provincial food inflation is best forecast by its latest value" | — |
+| No gain for H | "Regional hunger forecasts did not improve on the latest published value" | Any provincial difference in hunger |
+| Subsistence comparison | "Limited, mixed descriptive consistency" | "Validated against PSA data" |
+
+## 3. Research-only dashboard recommendation (no production change)
+
+| Layer | What it shows | Label | Condition |
+|---|---|---|---|
+| **Regional hunger context** | SWS Balance-Luzon level, change, publication date, data age. Shown once. | "Regional hunger (Balance Luzon)" | Always, with its scope |
+| **Provincial relative food-price pressure** | F, D (with its size), and the rank when all five provinces are present | "Relative food-price pressure", **not risk** | No D or rank when any province is missing |
+| **Household vulnerability indicators** | Subsistence and poverty incidence with CIs and survey year | "Vulnerability context (survey year, CV)" | Values with CV ≥ 30% flagged as unreliable |
+| **Actual food-insecurity level** | **Nothing.** The panel reads "insufficient evidence". | — | Only once an independent outcome, training-only thresholds and validation on new quarters exist |
+| **Insufficient evidence** | An explicit state | "Insufficient evidence" | Wherever data are missing or unvalidated |
+
+**Rules for the display:**
+
+- **A rank is not a food-insecurity level.** A top-ranked province exists even when the differences are small, so the D values must be shown.
+- **No LOW labels are generated to avoid an all-HIGH display.**
+- **Implementation:** E15's development prototype (`TWO_LAYER_SCHEMA.json`) implements this layout. It is not connected to the dashboard.

@@ -70,3 +70,40 @@ No analysis was re-run to change a result. No arm, feature, threshold or setting
 1. **Release dates are not verified.** The tests show that the code uses only T−2 provincial data and rounds published before the origin. Provincial CPI release dates remain **proxies**.
 2. **The data are not real-time vintages.** The stored CPI values are the current ones, not the values as first released.
 3. **The test is not independent.** Every test quarter was examined in E1–E12. No test here creates an independent, out-of-sample evaluation.
+
+---
+
+# Amendment 1 (2026-10-13, 11:01–11:30 local)
+
+## A1.1 Order of work
+
+| Time | Step |
+|---|---|
+| 11:01 | E13 v1 file list verified (42/42 match). This brief continues E13, so no duplicate folder was created. |
+| **11:02:08** | **`EXPERIMENT_PROTOCOL_AMENDMENT_1.md` frozen** (SHA-256 `282f9339…9c28dc1`, in `runner/PROTOCOL_AMENDMENT_1_SHA256.txt`). Its text says "about 11:05"; the hash-file timestamp is the exact time. |
+| 11:04–11:15 | Run `runs/a1_20261013T030455Z/` (writes the updated root CSVs). New-arm forecasts sealed in `SEAL_A1.json` before the outcomes were joined. |
+| 11:16–11:27 | Replicate `runs/a1_20261013T031605Z/` (no root files). **All 10 output files byte-identical.** |
+| After | Documentation |
+
+**Kept unchanged on purpose:**
+
+- `EXPERIMENT_PROTOCOL.md`;
+- `runner/e13_lib.py` and `runner/run_e13.py` (E15's frozen prospective protocol pins them);
+- every v1 run output.
+
+The amendment runner checks the v1 protocol hash and the sealed v1 predictions hash before starting.
+
+## A1.2 Tests
+
+| Test | Result |
+|---|---|
+| Earlier E13 tests (23) | Pass |
+| `tests/test_amendment1_synthetic.py` (5): lag-3 features use only T−3; lag-3 training targets ≤ T−3; S-T3 forecasts unchanged when values after T−3 are set to 999; drift baselines use only published history and are unchanged under future perturbation; the B1 drift formula | Pass |
+| **Total** | **28 passed** (`tests/pytest_output_a1.txt`) |
+| Runtime future-perturbation check, A1 arms (9 A quarters and 11 B quarters) and S-T3 (9 quarters) | All identical |
+
+## A1.3 Deviations
+
+- **The 80% intervals for B2_ridge_D and B2_ridge_DP** use in-sample residuals, as the amendment states. They are labelled optimistic.
+- **The stability halves for the S-T3 analyses** (9 quarters) used a 5/4 split. The amendment specified halves only for the primary periods.
+- **No other deviation.** No arm, feature, threshold or setting was added after the amendment was frozen.

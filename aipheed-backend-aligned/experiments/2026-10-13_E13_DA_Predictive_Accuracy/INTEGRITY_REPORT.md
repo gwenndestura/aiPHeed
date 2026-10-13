@@ -64,3 +64,18 @@ Partway through E13, you asked to "push this to another new branch". That overri
 4. **No independent provincial food-insecurity outcome exists,** so provincial food-insecurity accuracy was not evaluated.
 5. **The web-search summaries about FNRI provincial ENNS** were not checked against FNRI's primary tables.
 6. **Not verifiable:** reads by other sessions or people.
+
+---
+
+# Amendment 1 integrity (2026-10-13; final checks about 11:30 local)
+
+| Check | Result |
+|---|---|
+| Files opened by the A1 runs (guard access log) | The same 5 allowlisted inputs (hash-verified), plus this folder's sealed v1 outputs. **No denial.** No protected, mixed or 2026 file was opened. |
+| 865 recorded hashes (protected baseline, E1–E7, served model metadata, 54 production files, E8) | **865/865 match.** Identical to the E13-start result. |
+| E9, E10 (both lists), E11, E12 and **E15** file lists | **0 failures** (E15's pinned E13 code and run files are unchanged) |
+| E13 v1 file list (42 files) | **Only the 7 intended root files differ:** `BASELINE_COMPARISON.csv`, `MODEL_COMPARISON.csv`, `DATA_DICTIONARY.md`, `INPUT_ALLOWLIST.md`, `DA_USEFULNESS_ASSESSMENT.md`, `MODEL_SELECTION_RECOMMENDATION.md`, `THESIS_RESULTS_INTERPRETATION.md`. This report and the test report were changed afterwards. **v1 code, protocol and run outputs are unchanged.** The v1 versions of every file are in commit `5f7765f` on branch `e13-da-predictive-accuracy`. |
+| Files modified outside E13 since 11:01:08 (excluding `backend/venv`, `node_modules`, `.git`) | **None** |
+| Git | **No commit or push for Amendment 1.** HEAD `eee269b` on `backend+frontend`; 23 status entries; `.git/index` unchanged. Branch `e13-da-predictive-accuracy` still at `5f7765f`, so it **does not contain Amendment 1**. |
+| Scheduled tasks | Still disabled (checked at the end of E15; not touched since) |
+| New file list | `E13_FILES_SHA256_v2.txt`, covering every file in the folder after Amendment 1. The v1 list is kept unchanged as a record. |

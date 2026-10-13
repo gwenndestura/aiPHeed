@@ -55,3 +55,36 @@
 | `best_baseline`, `MAE_diff_vs_best`, `ci_low`, `ci_high` | Comparison with the lowest-MAE baseline (quarter-cluster bootstrap, 10,000 draws) |
 | `quarters_better`, `p_signflip`, `p_holm`, `loqo_better` | Per-quarter wins, the exact one-sided sign-flip p, Holm-adjusted p, and leave-one-quarter-out wins |
 | `cond1`..`cond4`, `improvement_established` | The four frozen conditions (protocol §4) and their conjunction |
+
+## 5. Amendment 1 additions
+
+**Per-input timing and independence:** see `TARGET_AND_TIMING_AUDIT.md` §1–2. It gives, for each input and target:
+
+- the file and column;
+- the level and unit;
+- the period;
+- the publication evidence;
+- availability at the origin;
+- missingness;
+- whether it is constructed from the predictors;
+- whether it is independent.
+
+**New derived variables:**
+
+| Variable | Definition | Available at origin(T)? |
+|---|---|---|
+| `A_drift` | H_last + g × H_age. g = (last − first fully published quarterly H) ÷ quarters between them. | Yes (published rounds only) |
+| `B1_drift` | F[p,T−2] + 2 × (F[p,T−2] − F[p,2021-Q1]) ÷ quarters between them | Under the T−2 proxy rule |
+| `F_lag`, `D_lag`, `F5_lag` (S-T3) | Values of quarter T−3. Training targets are also limited to ≤ T−3. | Under the T−3 rule (about a 5-month margin) |
+| `lagv` (scored tables) | H_last (A), F[p,T−2] (B1) or D[p,T−2] (B2): the comparison point for the "rising" events | — |
+| `lower80`, `upper80` | forecast + the 10th and 90th percentiles of the training errors at that origin | Yes (training rows only) |
+
+**New output files** (`runs/a1_20261013T030455Z/`; replicate `runs/a1_20261013T031605Z/`):
+
+| File | Content |
+|---|---|
+| `predictions_a1.csv` | New arms, forecasts only; sealed in `SEAL_A1.json` |
+| `scored_wide_{A,B1,B2}.csv`, `scored_wide_{B1,B2}_ST3.csv` | One row per test unit, with realized `y`, `lagv` and one column per arm |
+| `metrics_a1.json` | All results, the re-checked rule, increments, stability, intervals, correlations and the official comparison |
+| `baseline_comparison_a1.csv`, `model_comparison_a1.csv` | A1 tables. The root `BASELINE_COMPARISON.csv` and `MODEL_COMPARISON.csv` now hold the v1 rows (`protocol = v1`) plus these (`protocol = A1`). |
+| `prediction_intervals.csv` | 80% empirical intervals, row by row |
