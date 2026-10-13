@@ -1,0 +1,184 @@
+DEV_20261013T222827Z {'predictions_T1_dev': '8bd8cb2ff683e43d9d99d2d0f84500c80a5bcc1cb1f8b55ce35db0fbe66b29ab', 'predictions_T2_dev': 'a4510f4d7f497b021bcab9cddc9af15cdaac72f9eddf8bfb657c834e9802d122', 'predictions_2026Q1Q2': 'dcc5539c7cab0dc0a7c1946def17105a57f4dcb4e09e2def13615e458f894c1f', 'pcf_T1_components': 'ec692fa2aac1b408369230ff3b17a1ae7873523e4be017ba61b19c88299b0010'}
+T1 1 8 37 3 final acc 0.9 brier 0.104 | B1 0.875 0.125 | B1p brier 0.162 | strongest B1_naive_persistence {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': True, 'C4_defensible_across_folds': True, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': False}
+T1 2 7 33 2 final acc 0.829 brier 0.126 | B1 0.829 0.171 | B1p brier 0.129 | strongest B1p_calibrated_persistence {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': False, 'C6_reliability_rule': False}
+T1 3 5 23 2 final acc 0.92 brier 0.119 | B1 0.84 0.16 | B1p brier 0.156 | strongest B5_lgbm_gov_only {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': True, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': False}
+T1 4 3 13 2 final acc 0.867 brier 0.118 | B1 0.867 0.133 | B1p brier 0.159 | strongest B5_lgbm_gov_only {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': False, 'C6_reliability_rule': False}
+T1 5 3 14 1 final acc 0.933 brier 0.091 | B1 0.933 0.067 | B1p brier 0.172 | strongest B1_naive_persistence {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': False, 'C6_reliability_rule': False}
+T1 6 2 9 1 final acc 0.9 brier 0.105 | B1 0.9 0.1 | B1p brier 0.207 | strongest B5_lgbm_gov_only {'C1_accuracy_gt_75': True, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': False, 'C6_reliability_rule': False}
+T2 1 11 24 31 final acc 0.836 brier 0.176 | B1 0.655 0.345 | B1p brier 0.229 | strongest B1p_calibrated_persistence {'C1_accuracy_gt_75': True, 'C2_beats_strongest': True, 'C3_not_HIGH_dominance': True, 'C4_defensible_across_folds': True, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': True}
+T2 2 10 22 28 final acc 0.7 brier 0.2 | B1 0.56 0.44 | B1p brier 0.252 | strongest B1_naive_persistence {'C1_accuracy_gt_75': False, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': True, 'C4_defensible_across_folds': True, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': True}
+T2 3 8 18 22 final acc 0.675 brier 0.212 | B1 0.4 0.6 | B1p brier 0.243 | strongest B1p_calibrated_persistence {'C1_accuracy_gt_75': False, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': True, 'C4_defensible_across_folds': True, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': True}
+T2 4 6 15 15 final acc 0.5 brier 0.245 | B1 0.4 0.6 | B1p brier 0.243 | strongest B1p_calibrated_persistence {'C1_accuracy_gt_75': False, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': False}
+T2 5 4 12 8 final acc 0.55 brier 0.246 | B1 0.35 0.65 | B1p brier 0.239 | strongest B1p_calibrated_persistence {'C1_accuracy_gt_75': False, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': False}
+T2 6 2 7 3 final acc 0.6 brier 0.242 | B1 0.4 0.6 | B1p brier 0.243 | strongest B4_lr_nlp_only {'C1_accuracy_gt_75': False, 'C2_beats_strongest': False, 'C3_not_HIGH_dominance': False, 'C4_defensible_across_folds': False, 'C5_info_beyond_persistence': True, 'C6_reliability_rule': False}
+{
+ "rows": 40,
+ "expected_sampling_flips_all_rows": 1.146832062632195,
+ "expected_sampling_flips_on_persistence_errors": 0.24753094082686597,
+ "persistence_errors": 5,
+ "label_change_rows": 5,
+ "rows_within_1_SE_of_tau": 3,
+ "rows_within_2_SE_of_tau": 6,
+ "per_change_row": [
+  {
+   "target_quarter": "2023-Q4",
+   "province_code": "PH040200000",
+   "S1": 14.78,
+   "tau": 10.843333333333334,
+   "z": 2.754519418697932,
+   "p_flip": 0.0029389200913513733
+  },
+  {
+   "target_quarter": "2024-Q1",
+   "province_code": "PH040200000",
+   "S1": 16.58,
+   "tau": 10.866666666666667,
+   "z": 3.8875659309109536,
+   "p_flip": 5.062724483122391e-05
+  },
+  {
+   "target_quarter": "2024-Q2",
+   "province_code": "PH040300000",
+   "S1": 26.74666666666667,
+   "tau": 11.366666666666664,
+   "z": 9.49021170388666,
+   "p_flip": 1.1528276438771738e-21
+  },
+  {
+   "target_quarter": "2024-Q3",
+   "province_code": "PH040300000",
+   "S1": 26.5,
+   "tau": 11.779999999999998,
+   "z": 9.364879571063762,
+   "p_flip": 3.8068534225639645e-21
+  },
+  {
+   "target_quarter": "2025-Q4",
+   "province_code": "PH040500000",
+   "S1": 13.06,
+   "tau": 14.11333333333333,
+   "z": -0.6917683956452947,
+   "p_flip": 0.24454139349068338
+  }
+ ]
+}
+{
+ "T1_k1": {
+  "B1_naive_persistence": {
+   "accuracy": 1.0,
+   "brier": 0.0,
+   "rows": 10
+  },
+  "B1p_calibrated_persistence": {
+   "accuracy": 1.0,
+   "brier": 0.07692743764172336,
+   "rows": 10
+  },
+  "FINAL_V2_PCF": {
+   "accuracy": 0.9,
+   "brier": 0.06837641225937341,
+   "rows": 10
+  },
+  "M2_lgbm_P_E24frozen": {
+   "accuracy": 0.9,
+   "brier": 0.08263889340739172,
+   "rows": 10
+  },
+  "PCF_NOW_A3": {
+   "accuracy": 0.9,
+   "brier": 0.07153553331272378,
+   "rows": 10
+  },
+  "PCF_S_supplementary": {
+   "accuracy": 0.9,
+   "brier": 0.07249100559044636,
+   "rows": 10
+  }
+ },
+ "T1_k2": {
+  "B1_naive_persistence": {
+   "accuracy": 0.8,
+   "brier": 0.2,
+   "rows": 5
+  },
+  "B1p_calibrated_persistence": {
+   "accuracy": 0.8,
+   "brier": 0.1600907029478458,
+   "rows": 5
+  },
+  "FINAL_V2_PCF": {
+   "accuracy": 0.8,
+   "brier": 0.17361324043170925,
+   "rows": 5
+  },
+  "M2_lgbm_P_E24frozen": {
+   "accuracy": 0.8,
+   "brier": 0.18076580966631386,
+   "rows": 5
+  },
+  "PCF_NOW_A3": {
+   "accuracy": 0.8,
+   "brier": 0.1595462796912745,
+   "rows": 5
+  },
+  "PCF_S_supplementary": {
+   "accuracy": 0.8,
+   "brier": 0.16518136248860285,
+   "rows": 5
+  }
+ },
+ "T2_k1": {
+  "B1_naive_persistence": {
+   "accuracy": 0.6,
+   "brier": 0.4,
+   "rows": 10
+  },
+  "B1p_calibrated_persistence": {
+   "accuracy": 0.6,
+   "brier": 0.24062300924128266,
+   "rows": 10
+  },
+  "FINAL_V2_M4_pcf_D_now": {
+   "accuracy": 0.9,
+   "brier": 0.1595056781012114,
+   "rows": 10
+  },
+  "M1_lr_P_1995window": {
+   "accuracy": 0.7,
+   "brier": 0.1666330648696804,
+   "rows": 10
+  },
+  "M3_pcf_D": {
+   "accuracy": 0.6,
+   "brier": 0.20824013256582305,
+   "rows": 10
+  }
+ },
+ "T2_k2": {
+  "B1_naive_persistence": {
+   "accuracy": 0.8,
+   "brier": 0.2,
+   "rows": 5
+  },
+  "B1p_calibrated_persistence": {
+   "accuracy": 0.8,
+   "brier": 0.24419333439213,
+   "rows": 5
+  },
+  "FINAL_V2_M4_pcf_D_now": {
+   "accuracy": 0.8,
+   "brier": 0.17973590837469805,
+   "rows": 5
+  },
+  "M1_lr_P_1995window": {
+   "accuracy": 0.4,
+   "brier": 0.2859520689573206,
+   "rows": 5
+  },
+  "M3_pcf_D": {
+   "accuracy": 0.8,
+   "brier": 0.24320236819837188,
+   "rows": 5
+  }
+ }
+}

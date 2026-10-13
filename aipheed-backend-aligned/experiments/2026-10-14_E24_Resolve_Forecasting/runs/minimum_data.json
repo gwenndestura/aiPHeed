@@ -1,0 +1,74 @@
+{
+ "assumptions": {
+  "P(quarter has a label change)": 0.625,
+  "P(row is LOW)": 0.075,
+  "rows per quarter": 5,
+  "test": "one-sided sign-flip on per-quarter accuracy difference",
+  "note": "f = share of label changes the model anticipates; r = false-flip rate on unchanged rows. The E23 models had f = 0 (0 of 5 changes)."
+ },
+ "table": [
+  {
+   "new_quarters": 8,
+   "P(>=5 LOW rows)": 0.1759,
+   "power f=1.0 r=0.0": 0.6433333333333333,
+   "power f=0.75 r=0.0": 0.2753333333333333,
+   "power f=0.5 r=0.0": 0.07133333333333333,
+   "power f=0.5 r=0.02": 0.03866666666666667,
+   "power f=0.75 r=0.05": 0.08133333333333333
+  },
+  {
+   "new_quarters": 12,
+   "P(>=5 LOW rows)": 0.47005,
+   "power f=1.0 r=0.0": 0.966,
+   "power f=0.75 r=0.0": 0.7393333333333333,
+   "power f=0.5 r=0.0": 0.2966666666666667,
+   "power f=0.5 r=0.02": 0.13266666666666665,
+   "power f=0.75 r=0.05": 0.19666666666666666
+  },
+  {
+   "new_quarters": 16,
+   "P(>=5 LOW rows)": 0.72365,
+   "power f=1.0 r=0.0": 0.9933333333333333,
+   "power f=0.75 r=0.0": 0.932,
+   "power f=0.5 r=0.0": 0.5946666666666667,
+   "power f=0.5 r=0.02": 0.26666666666666666,
+   "power f=0.75 r=0.05": 0.28
+  },
+  {
+   "new_quarters": 20,
+   "P(>=5 LOW rows)": 0.8767,
+   "power f=1.0 r=0.0": 1.0,
+   "power f=0.75 r=0.0": 0.9906666666666667,
+   "power f=0.5 r=0.0": 0.7846666666666666,
+   "power f=0.5 r=0.02": 0.36866666666666664,
+   "power f=0.75 r=0.05": 0.358
+  },
+  {
+   "new_quarters": 24,
+   "P(>=5 LOW rows)": 0.95365,
+   "power f=1.0 r=0.0": 1.0,
+   "power f=0.75 r=0.0": 0.9953333333333333,
+   "power f=0.5 r=0.0": 0.9173333333333333,
+   "power f=0.5 r=0.02": 0.46066666666666667,
+   "power f=0.75 r=0.05": 0.434
+  },
+  {
+   "new_quarters": 32,
+   "P(>=5 LOW rows)": 0.9933,
+   "power f=1.0 r=0.0": 1.0,
+   "power f=0.75 r=0.0": 1.0,
+   "power f=0.5 r=0.0": 0.9886666666666667,
+   "power f=0.5 r=0.02": 0.5926666666666667,
+   "power f=0.75 r=0.05": 0.568
+  },
+  {
+   "new_quarters": 40,
+   "P(>=5 LOW rows)": 0.99965,
+   "power f=1.0 r=0.0": 1.0,
+   "power f=0.75 r=0.0": 1.0,
+   "power f=0.5 r=0.0": 1.0,
+   "power f=0.5 r=0.02": 0.722,
+   "power f=0.75 r=0.05": 0.6493333333333333
+  }
+ ]
+}

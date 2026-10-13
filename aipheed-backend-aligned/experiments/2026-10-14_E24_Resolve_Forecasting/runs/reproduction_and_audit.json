@@ -1,0 +1,171 @@
+{
+ "reproduced": {
+  "max_abs_diff_vs_E23_results": 0.0,
+  "E23B_accuracy_lead1": 0.85,
+  "E23B_reported": 0.85,
+  "persistence_accuracy_lead1": 0.875,
+  "always_HIGH_lead1": 0.925,
+  "rows_lead1": 40,
+  "test_quarters_lead1": 8
+ },
+ "label_decomposition_2021_2025": {
+  "formula": "S1 = H(region, quarter) + 2 x D(province, quarter); D = provincial food CPI YoY - five-province mean",
+  "n_province_quarters": 80,
+  "var_S1": 38.90462231891702,
+  "share_var_H": 0.6521097888960197,
+  "share_var_2D": 0.3478902111039803,
+  "share_cov": 5.123349916511024e-17,
+  "between_quarter_share": 0.6521097888960199,
+  "measured_or_proxy": "constructed proxy (regional SWS hunger + provincial relative food inflation); not a measured provincial food-insecurity outcome",
+  "D_sums_to_zero_each_quarter": true,
+  "D_range": [
+   -3.3600000000000003,
+   5.22
+  ],
+  "H_range": [
+   8.7,
+   25.3
+  ]
+ },
+ "test_quarter_label_unanimity_lead1": [
+  {
+   "target_quarter": "2023-Q4",
+   "tau": 10.843333333333334,
+   "H": 14.3,
+   "n_HIGH": 4,
+   "unanimous": false,
+   "min_S1": 9.513333333333334,
+   "max_S1": 17.78,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2024-Q1",
+   "tau": 10.866666666666667,
+   "H": 15.3,
+   "n_HIGH": 4,
+   "unanimous": false,
+   "min_S1": 10.78,
+   "max_S1": 17.313333333333333,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2024-Q2",
+   "tau": 11.366666666666665,
+   "H": 19.6,
+   "n_HIGH": 5,
+   "unanimous": true,
+   "min_S1": 16.813333333333336,
+   "max_S1": 26.74666666666667,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2024-Q3",
+   "tau": 11.779999999999998,
+   "H": 18.1,
+   "n_HIGH": 5,
+   "unanimous": true,
+   "min_S1": 13.900000000000002,
+   "max_S1": 26.5,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2024-Q4",
+   "tau": 12.506666666666668,
+   "H": 25.3,
+   "n_HIGH": 5,
+   "unanimous": true,
+   "min_S1": 21.96666666666667,
+   "max_S1": 34.5,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2025-Q1",
+   "tau": 13.22,
+   "H": 24.0,
+   "n_HIGH": 5,
+   "unanimous": true,
+   "min_S1": 19.773333333333333,
+   "max_S1": 34.44,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2025-Q4",
+   "tau": 14.11333333333333,
+   "H": 16.7,
+   "n_HIGH": 4,
+   "unanimous": false,
+   "min_S1": 13.06,
+   "max_S1": 19.593333333333334,
+   "H_minus_tau": null
+  },
+  {
+   "target_quarter": "2026-Q1",
+   "tau": 14.11333333333333,
+   "H": null,
+   "n_HIGH": 5,
+   "unanimous": true,
+   "min_S1": 20.439999999999998,
+   "max_S1": 24.04,
+   "H_minus_tau": null
+  }
+ ],
+ "error_analysis_lead1_primary": {
+  "rows": 40,
+  "label_changes_vs_last_published": 5,
+  "persistence_errors": 5,
+  "persistence_errors_are_exactly_the_label_changes": true,
+  "proposed_errors": 7,
+  "proposed_errors_on_changed_rows": 5,
+  "proposed_errors_on_unchanged_rows": 2,
+  "E23B_errors": 6,
+  "E23B_errors_on_changed_rows": 4,
+  "E23B_errors_on_unchanged_rows": 2,
+  "changed_rows": [
+   {
+    "target_quarter": "2023-Q4",
+    "province": "Laguna",
+    "y": 1,
+    "S1": 14.78,
+    "threshold": 10.843333333333334,
+    "last_published_S1": 9.473333333333336
+   },
+   {
+    "target_quarter": "2024-Q1",
+    "province": "Laguna",
+    "y": 1,
+    "S1": 16.58,
+    "threshold": 10.866666666666667,
+    "last_published_S1": 7.4733333333333345
+   },
+   {
+    "target_quarter": "2024-Q2",
+    "province": "Quezon",
+    "y": 1,
+    "S1": 26.74666666666667,
+    "threshold": 11.366666666666664,
+    "last_published_S1": 9.513333333333334
+   },
+   {
+    "target_quarter": "2024-Q3",
+    "province": "Quezon",
+    "y": 1,
+    "S1": 26.5,
+    "threshold": 11.779999999999998,
+    "last_published_S1": 10.78
+   },
+   {
+    "target_quarter": "2025-Q4",
+    "province": "Batangas",
+    "y": 0,
+    "S1": 13.06,
+    "threshold": 14.11333333333333,
+    "last_published_S1": 19.973333333333336
+   }
+  ],
+  "abs_margin_median_changed": 5.713333333333331,
+  "abs_margin_median_unchanged": 6.526666666666671,
+  "proposed_predicts_all_HIGH_quarters": 4,
+  "proposed_within_quarter_prob_sd_median": 0.18196476544413498,
+  "quarters": 8
+ }
+}

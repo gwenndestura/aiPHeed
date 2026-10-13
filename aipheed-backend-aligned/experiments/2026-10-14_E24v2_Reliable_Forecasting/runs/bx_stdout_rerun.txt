@@ -1,0 +1,73 @@
+BX_20261013T223930Z b59d5e95e0245d3bc9626bb1211b7d576041ae2198d60207123b04b1a245496c
+{
+ "HB1": {
+  "model": "M1_lr_P_E24frozen",
+  "baseline": "B1p_calibrated_persistence",
+  "metric": "brier",
+  "effect": -0.030748830404963564,
+  "p_one_sided": 4e-05,
+  "p_holm": 0.00012000000000000002,
+  "halves": {
+   "first_half": -0.022397708429859553,
+   "second_half": -0.03909995238006758,
+   "split_origin": "2009-04-01"
+  },
+  "stable_both_halves": true,
+  "supported": true
+ },
+ "HB2": {
+  "model": "M1_lr_P_E24frozen",
+  "baseline": "B1_naive_persistence",
+  "metric": "acc",
+  "effect": 0.05319148936170215,
+  "p_one_sided": 0.03352,
+  "p_holm": 0.03352,
+  "halves": {
+   "first_half": 0.0340425531914893,
+   "second_half": 0.07234042553191489,
+   "split_origin": "2009-04-01"
+  },
+  "stable_both_halves": true,
+  "supported": true
+ },
+ "HB3": {
+  "model": "M4_pcf_D_now",
+  "baseline": "B1p_calibrated_persistence",
+  "metric": "brier",
+  "effect": -0.053829430152230046,
+  "p_one_sided": 0.0,
+  "p_holm": 0.0,
+  "halves": {
+   "first_half": -0.062007476233325975,
+   "second_half": -0.045651384071134116,
+   "split_origin": "2009-04-01"
+  },
+  "stable_both_halves": true,
+  "supported": true
+ },
+ "HB4": {
+  "model": "M4_pcf_D_now",
+  "baseline": "B1_naive_persistence",
+  "metric": "acc",
+  "effect": 0.0957446808510638,
+  "p_one_sided": 0.00028,
+  "p_holm": 0.00056,
+  "halves": {
+   "first_half": 0.09361702127659577,
+   "second_half": 0.09787234042553195,
+   "split_origin": "2009-04-01"
+  },
+  "stable_both_halves": true,
+  "supported": true
+ }
+}
+{"B1_naive_persistence": {"furthest": 5, "pass": {"1": true, "2": true, "3": true, "4": true, "5": true, "6": false, "7": false, "8": false}}, "B1p_calibrated_persistence": {"furthest": 2, "pass": {"1": true, "2": true, "3": false, "4": false, "5": false, "6": false, "7": false, "8": false}}}
+1 94 241 229 {'B1_naive_persistence': (0.617, 0.383), 'B1p_calibrated_persistence': (0.609, 0.24), 'MAJ_training_majority': (0.5, 0.5), 'CLIM_province_rate': (0.47, 0.264), 'M1_lr_P_E24frozen': (0.67, 0.209), 'M2_lgbm_P_E24frozen': (0.649, 0.219), 'M3_pcf_D': (0.617, 0.227), 'M4_pcf_D_now': (0.713, 0.186)}
+2 92 238 222 {'B1_naive_persistence': (0.496, 0.504), 'B1p_calibrated_persistence': (0.496, 0.253), 'MAJ_training_majority': (0.487, 0.513), 'CLIM_province_rate': (0.446, 0.269), 'M1_lr_P_E24frozen': (0.593, 0.24), 'M2_lgbm_P_E24frozen': (0.552, 0.247), 'M3_pcf_D': (0.498, 0.251), 'M4_pcf_D_now': (0.654, 0.222)}
+3 90 232 218 {'B1_naive_persistence': (0.407, 0.593), 'B1p_calibrated_persistence': (0.591, 0.244), 'MAJ_training_majority': (0.493, 0.507), 'CLIM_province_rate': (0.44, 0.269), 'M1_lr_P_E24frozen': (0.569, 0.247), 'M2_lgbm_P_E24frozen': (0.524, 0.253), 'M3_pcf_D': (0.593, 0.243), 'M4_pcf_D_now': (0.618, 0.238)}
+4 88 227 213 {'B1_naive_persistence': (0.427, 0.573), 'B1p_calibrated_persistence': (0.552, 0.248), 'MAJ_training_majority': (0.493, 0.507), 'CLIM_province_rate': (0.452, 0.266), 'M1_lr_P_E24frozen': (0.527, 0.25), 'M2_lgbm_P_E24frozen': (0.507, 0.261), 'M3_pcf_D': (0.573, 0.246), 'M4_pcf_D_now': (0.575, 0.244)}
+5 86 222 208 {'B1_naive_persistence': (0.451, 0.549), 'B1p_calibrated_persistence': (0.509, 0.25), 'MAJ_training_majority': (0.493, 0.507), 'CLIM_province_rate': (0.467, 0.266), 'M1_lr_P_E24frozen': (0.533, 0.252), 'M2_lgbm_P_E24frozen': (0.498, 0.264), 'M3_pcf_D': (0.54, 0.249), 'M4_pcf_D_now': (0.549, 0.246)}
+6 84 217 203 {'B1_naive_persistence': (0.481, 0.519), 'B1p_calibrated_persistence': (0.505, 0.253), 'MAJ_training_majority': (0.493, 0.507), 'CLIM_province_rate': (0.469, 0.268), 'M1_lr_P_E24frozen': (0.476, 0.259), 'M2_lgbm_P_E24frozen': (0.452, 0.266), 'M3_pcf_D': (0.512, 0.25), 'M4_pcf_D_now': (0.548, 0.249)}
+7 82 214 196 {'B1_naive_persistence': (0.488, 0.512), 'B1p_calibrated_persistence': (0.488, 0.254), 'MAJ_training_majority': (0.493, 0.507), 'CLIM_province_rate': (0.451, 0.27), 'M1_lr_P_E24frozen': (0.493, 0.262), 'M2_lgbm_P_E24frozen': (0.502, 0.261), 'M3_pcf_D': (0.52, 0.249), 'M4_pcf_D_now': (0.505, 0.251)}
+8 80 209 191 {'B1_naive_persistence': (0.465, 0.535), 'B1p_calibrated_persistence': (0.51, 0.251), 'MAJ_training_majority': (0.492, 0.507), 'CLIM_province_rate': (0.46, 0.268), 'M1_lr_P_E24frozen': (0.482, 0.258), 'M2_lgbm_P_E24frozen': (0.537, 0.253), 'M3_pcf_D': (0.53, 0.251), 'M4_pcf_D_now': (0.507, 0.252)}
+EXIT 0

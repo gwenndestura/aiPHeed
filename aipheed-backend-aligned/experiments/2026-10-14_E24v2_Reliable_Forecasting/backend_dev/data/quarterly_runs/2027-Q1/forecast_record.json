@@ -1,0 +1,251 @@
+{
+  "period": {
+    "reference_quarter": "2026-Q4",
+    "target_quarter": "2027-Q1",
+    "cutoff": "2026-12-31T23:59:59+08:00",
+    "timezone": "Asia/Manila",
+    "news_window_start": "2026-10-01T00:00:00+08:00",
+    "news_window_end": "2026-12-31T23:59:59+08:00",
+    "quarter_complete": true,
+    "target_display": "Q1 2027 (January\u2013March 2027)",
+    "news_display": "Q4 2026 (October\u2013December 2026)",
+    "model_version": "PCF v2 candidate (E24v2 frozen protocol c8bce7ce...)",
+    "feature_version": "E24v2: SWS rounds published before the origin; D through reference-1; Dnow months 1-2 of reference",
+    "requirements": [
+      {
+        "id": "news_reference_quarter",
+        "kind": "news",
+        "quarter": "2026-Q4",
+        "source_ids": [
+          "news_2026Q4"
+        ],
+        "blocking": false,
+        "note": "Supporting news (display only; the E24v2 forecaster does not use news). Authorized articles with verified publication times in the reference quarter."
+      },
+      {
+        "id": "sws_rounds",
+        "kind": "label",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "sws_rounds_verified"
+        ],
+        "note": "SWS Balance Luzon rounds with VERIFIED publication dates; latest needed round = 2026-Q3"
+      },
+      {
+        "id": "label_history",
+        "kind": "label",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "s1_labels"
+        ],
+        "note": "Published S1 labels (threshold rule and persistence)"
+      },
+      {
+        "id": "provincial_D_quarterly",
+        "kind": "indicator",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "d_quarterly_panel"
+        ],
+        "note": "Quarterly relative provincial food inflation D through the quarter before the reference quarter"
+      },
+      {
+        "id": "provincial_D_now",
+        "kind": "indicator",
+        "quarter": "2026-Q4",
+        "source_ids": [
+          "dnow_panel"
+        ],
+        "note": "Months 1-2 of the reference quarter (published before the cutoff)"
+      },
+      {
+        "id": "forecasting_model",
+        "kind": "model",
+        "source_ids": [
+          "pcf_model_card"
+        ],
+        "note": "E24v2 PCF candidate (frozen protocol); not adviser-approved"
+      },
+      {
+        "id": "lgu_vulnerability",
+        "kind": "static",
+        "source_ids": [
+          "lgu_vulnerability"
+        ],
+        "note": "142 LGUs: 2020 census density, PSA 2021 SAE where available, labelled province-mean substitute otherwise"
+      }
+    ]
+  },
+  "status": "INSUFFICIENT_DATA",
+  "missing": [
+    "sws_rounds: STALE (sws_rounds_verified: STALE)",
+    "label_history: STALE (s1_labels: STALE)",
+    "provincial_D_quarterly: STALE (d_quarterly_panel: STALE)",
+    "provincial_D_now: STALE (dnow_panel: STALE)",
+    "cutoff 2026-12-31T23:59:59+08:00 not yet reached at run time; the reference quarter's news is incomplete"
+  ],
+  "context_missing": [
+    "news_reference_quarter: MISSING (no registered source) - display context only, not used by the model"
+  ],
+  "mode": "LIVE",
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q4",
+      "sources": [],
+      "status": "MISSING",
+      "detail": "no registered source",
+      "blocking": false
+    },
+    {
+      "id": "sws_rounds",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "sws_rounds_verified",
+          "vintage": 1,
+          "sha256": "258fab535f5b7d438a86e145a927757f81ad4346c65638ddeac6ab6490228637",
+          "observation_end": "2025-Q4",
+          "available_at": "2026-01-14T00:00:00+08:00",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "sws_rounds_verified: STALE",
+      "blocking": true
+    },
+    {
+      "id": "label_history",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "s1_labels",
+          "vintage": 1,
+          "sha256": "08cbd6873fbae67d65e3f5aa69be842fdae6d5bc3a91974c9acb787dda80f61d",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "s1_labels: STALE",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "kind": "indicator",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "d_quarterly_panel",
+          "vintage": 1,
+          "sha256": "d6ac42e10a940a54c4b80fd245cf78e510607d1539f19b374b5593f46cbea3f2",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "d_quarterly_panel: STALE",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_now",
+      "kind": "indicator",
+      "quarter": "2026-Q4",
+      "sources": [
+        {
+          "source_id": "dnow_panel",
+          "vintage": 1,
+          "sha256": "b731ff53045f0f48bb5b6a93140c0f4f749d5179115e57293914a6d077cb8d18",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "dnow_panel: STALE",
+      "blocking": true
+    },
+    {
+      "id": "forecasting_model",
+      "kind": "model",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "pcf_model_card",
+          "vintage": 1,
+          "sha256": "4f2b7c6c260aafce5d707fde2eaabc19b832245ec2a16b42b2c12b02688525b8",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "pcf_model_card v1",
+      "blocking": true
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "lgu_vulnerability",
+          "vintage": 1,
+          "sha256": "f0ca2c53f716d95e81cbb5ea67908c1753d2640f15aafe775019695616d6233e",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "lgu_vulnerability v1",
+      "blocking": true
+    }
+  ],
+  "supporting_news": {
+    "window_start": "2026-10-01T00:00:00+08:00",
+    "window_end": "2026-12-31T23:59:59+08:00",
+    "quarter": "2026-Q4",
+    "display": "Q4 2026 (October\u2013December 2026)",
+    "quarter_complete": true,
+    "eligible": 0,
+    "by_province": {
+      "PH040100000": 0,
+      "PH040200000": 0,
+      "PH040300000": 0,
+      "PH040400000": 0,
+      "PH040500000": 0
+    },
+    "limited_signal": {
+      "PH040100000": true,
+      "PH040200000": true,
+      "PH040300000": true,
+      "PH040400000": true,
+      "PH040500000": true
+    },
+    "articles": []
+  },
+  "forecast": null,
+  "labels": {
+    "target": "Forecast target: Q1 2027 (January\u2013March 2027)",
+    "news": "Supporting news: Q4 2026 (October\u2013December 2026)",
+    "cutoff": "Information cutoff: 2026-12-31T23:59:59+08:00 (Asia/Manila)",
+    "caveat": "Relative ordinal risk estimates; not official food insecurity classifications.",
+    "mode": "LIVE"
+  },
+  "content_sha256": "80313f553f3a84ab0d0b180121049981ede0ca39a6ee042233ab7d8ab6534335",
+  "generated_at": "2026-10-13T16:48:19.527134+00:00",
+  "run_clock": "2026-10-14T00:48:19.489447+08:00",
+  "cutoff_reached": false
+}

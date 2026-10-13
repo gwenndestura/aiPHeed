@@ -1,0 +1,2666 @@
+{
+  "period": {
+    "reference_quarter": "2026-Q2",
+    "target_quarter": "2026-Q3",
+    "cutoff": "2026-06-30T23:59:59+08:00",
+    "timezone": "Asia/Manila",
+    "news_window_start": "2026-04-01T00:00:00+08:00",
+    "news_window_end": "2026-06-30T23:59:59+08:00",
+    "quarter_complete": true,
+    "target_display": "Q3 2026 (July\u2013September 2026)",
+    "news_display": "Q2 2026 (April\u2013June 2026)",
+    "model_version": "PCF v2 candidate (E24v2 frozen protocol c8bce7ce...)",
+    "feature_version": "E24v2: SWS rounds published before the origin; D through reference-1; Dnow months 1-2 of reference",
+    "requirements": [
+      {
+        "id": "news_reference_quarter",
+        "kind": "news",
+        "quarter": "2026-Q2",
+        "source_ids": [
+          "news_2026Q2"
+        ],
+        "blocking": false,
+        "note": "Supporting news (display only; the E24v2 forecaster does not use news). Authorized articles with verified publication times in the reference quarter."
+      },
+      {
+        "id": "sws_rounds",
+        "kind": "label",
+        "quarter": "2025-Q4",
+        "source_ids": [
+          "sws_rounds_verified"
+        ],
+        "note": "SWS Balance Luzon rounds with VERIFIED publication dates; latest needed round = 2025-Q4"
+      },
+      {
+        "id": "label_history",
+        "kind": "label",
+        "quarter": "2025-Q4",
+        "source_ids": [
+          "s1_labels"
+        ],
+        "note": "Published S1 labels (threshold rule and persistence)"
+      },
+      {
+        "id": "provincial_D_quarterly",
+        "kind": "indicator",
+        "quarter": "2026-Q1",
+        "source_ids": [
+          "d_quarterly_panel"
+        ],
+        "note": "Quarterly relative provincial food inflation D through the quarter before the reference quarter"
+      },
+      {
+        "id": "provincial_D_now",
+        "kind": "indicator",
+        "quarter": "2026-Q2",
+        "source_ids": [
+          "dnow_panel"
+        ],
+        "note": "Months 1-2 of the reference quarter (published before the cutoff)"
+      },
+      {
+        "id": "forecasting_model",
+        "kind": "model",
+        "source_ids": [
+          "pcf_model_card"
+        ],
+        "note": "E24v2 PCF candidate (frozen protocol); not adviser-approved"
+      },
+      {
+        "id": "lgu_vulnerability",
+        "kind": "static",
+        "source_ids": [
+          "lgu_vulnerability"
+        ],
+        "note": "142 LGUs: 2020 census density, PSA 2021 SAE where available, labelled province-mean substitute otherwise"
+      }
+    ]
+  },
+  "status": "READY",
+  "missing": [],
+  "context_missing": [
+    "news_reference_quarter: MISSING (no registered source) - display context only, not used by the model"
+  ],
+  "mode": "REPLAY",
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q2",
+      "sources": [],
+      "status": "MISSING",
+      "detail": "no registered source",
+      "blocking": false
+    },
+    {
+      "id": "sws_rounds",
+      "kind": "label",
+      "quarter": "2025-Q4",
+      "sources": [
+        {
+          "source_id": "sws_rounds_verified",
+          "vintage": 1,
+          "sha256": "258fab535f5b7d438a86e145a927757f81ad4346c65638ddeac6ab6490228637",
+          "observation_end": "2025-Q4",
+          "available_at": "2026-01-14T00:00:00+08:00",
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "sws_rounds_verified v1",
+      "blocking": true
+    },
+    {
+      "id": "label_history",
+      "kind": "label",
+      "quarter": "2025-Q4",
+      "sources": [
+        {
+          "source_id": "s1_labels",
+          "vintage": 1,
+          "sha256": "08cbd6873fbae67d65e3f5aa69be842fdae6d5bc3a91974c9acb787dda80f61d",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "s1_labels v1",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "kind": "indicator",
+      "quarter": "2026-Q1",
+      "sources": [
+        {
+          "source_id": "d_quarterly_panel",
+          "vintage": 1,
+          "sha256": "d6ac42e10a940a54c4b80fd245cf78e510607d1539f19b374b5593f46cbea3f2",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "d_quarterly_panel v1",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_now",
+      "kind": "indicator",
+      "quarter": "2026-Q2",
+      "sources": [
+        {
+          "source_id": "dnow_panel",
+          "vintage": 1,
+          "sha256": "b731ff53045f0f48bb5b6a93140c0f4f749d5179115e57293914a6d077cb8d18",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "dnow_panel v1",
+      "blocking": true
+    },
+    {
+      "id": "forecasting_model",
+      "kind": "model",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "pcf_model_card",
+          "vintage": 1,
+          "sha256": "4f2b7c6c260aafce5d707fde2eaabc19b832245ec2a16b42b2c12b02688525b8",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "pcf_model_card v1",
+      "blocking": true
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "lgu_vulnerability",
+          "vintage": 1,
+          "sha256": "f0ca2c53f716d95e81cbb5ea67908c1753d2640f15aafe775019695616d6233e",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "lgu_vulnerability v1",
+      "blocking": true
+    }
+  ],
+  "supporting_news": {
+    "window_start": "2026-04-01T00:00:00+08:00",
+    "window_end": "2026-06-30T23:59:59+08:00",
+    "quarter": "2026-Q2",
+    "display": "Q2 2026 (April\u2013June 2026)",
+    "quarter_complete": true,
+    "eligible": 0,
+    "by_province": {
+      "PH040100000": 0,
+      "PH040200000": 0,
+      "PH040300000": 0,
+      "PH040400000": 0,
+      "PH040500000": 0
+    },
+    "limited_signal": {
+      "PH040100000": true,
+      "PH040200000": true,
+      "PH040300000": true,
+      "PH040400000": true,
+      "PH040500000": true
+    },
+    "articles": []
+  },
+  "forecast": {
+    "origin": "2026-07-01T00:00:00+08:00",
+    "reference_quarter": "2026-Q2",
+    "threshold": 14.344999999999999,
+    "threshold_labels": 80,
+    "sws_rounds_used": [
+      {
+        "quarter": "2021-Q2",
+        "H": "15.7",
+        "published": "2021-07-12"
+      },
+      {
+        "quarter": "2021-Q2",
+        "H": "15.0",
+        "published": "2021-07-28"
+      },
+      {
+        "quarter": "2021-Q3",
+        "H": "10.3",
+        "published": "2021-12-06"
+      },
+      {
+        "quarter": "2021-Q4",
+        "H": "9.2",
+        "published": "2022-03-25"
+      },
+      {
+        "quarter": "2022-Q2",
+        "H": "11.7",
+        "published": "2022-06-06"
+      },
+      {
+        "quarter": "2022-Q2",
+        "H": "11.9",
+        "published": "2022-09-10"
+      },
+      {
+        "quarter": "2022-Q3",
+        "H": "9.6",
+        "published": "2022-10-29"
+      },
+      {
+        "quarter": "2022-Q4",
+        "H": "11.3",
+        "published": "2023-01-19"
+      },
+      {
+        "quarter": "2023-Q1",
+        "H": "8.7",
+        "published": "2023-05-11"
+      },
+      {
+        "quarter": "2023-Q2",
+        "H": "11.3",
+        "published": "2023-08-02"
+      },
+      {
+        "quarter": "2023-Q3",
+        "H": "10.3",
+        "published": "2023-11-20"
+      },
+      {
+        "quarter": "2023-Q4",
+        "H": "14.3",
+        "published": "2024-01-22"
+      },
+      {
+        "quarter": "2024-Q1",
+        "H": "15.3",
+        "published": "2024-04-30"
+      },
+      {
+        "quarter": "2024-Q2",
+        "H": "19.6",
+        "published": "2024-07-23"
+      },
+      {
+        "quarter": "2024-Q3",
+        "H": "18.1",
+        "published": "2024-10-17"
+      },
+      {
+        "quarter": "2024-Q4",
+        "H": "25.3",
+        "published": "2025-01-14"
+      },
+      {
+        "quarter": "2025-Q1",
+        "H": "24.0",
+        "published": "2025-03-29"
+      },
+      {
+        "quarter": "2025-Q4",
+        "H": "16.7",
+        "published": "2026-01-14"
+      }
+    ],
+    "leads": {
+      "1": {
+        "target_quarter": "2026-Q3",
+        "H": {
+          "mu_H": 17.328084265302785,
+          "V_H": 26.373240669781605,
+          "sigma_eta": 2.7,
+          "gap_quarters": 3.0,
+          "n_rounds": 18,
+          "last_round_quarter": "2025-Q4"
+        },
+        "D_model": {
+          "beta": [
+            0.38738359777191916
+          ],
+          "sigma": 1.479083921760403,
+          "pairs": 615
+        },
+        "D_now_model": {
+          "beta": [
+            0.6927740495643503,
+            -0.12895672804865552
+          ],
+          "sigma": 1.2485860197355811,
+          "pairs": 615
+        },
+        "provinces": {
+          "PH040100000": {
+            "province": "Cavite",
+            "risk": {
+              "p_high": 0.7205223420367816,
+              "decision": "HIGH",
+              "signal": "MODERATE",
+              "S1_forecast": 17.808439926539965,
+              "S1_80pct_interval": [
+                10.212973148365087,
+                25.403906704714842
+              ],
+              "threshold": 14.344999999999999,
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "components": {
+                "regional_hunger_H": {
+                  "value": 17.328084265302785,
+                  "kind": "model (filtered SWS level, regional)",
+                  "contribution": 17.328084265302785
+                },
+                "provincial_price_pressure_2D": {
+                  "value": 0.2401778306185899,
+                  "kind": "model (provincial)",
+                  "contribution": 0.4803556612371798
+                }
+              }
+            },
+            "price_pressure": {
+              "p_above_regional_mean": 0.5888101876408404,
+              "D_forecast": 0.28028933438329573,
+              "D_80pct_interval": [
+                -1.3198985085098252,
+                1.8804771772764166
+              ],
+              "signal": "UNCERTAIN",
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "latest_measured_D": {
+                "quarter": "2026-Q1",
+                "value": 0.6200000000000001,
+                "kind": "measured (PSA)"
+              },
+              "latest_measured_Dnow": {
+                "months": "months 1-2 of 2026-Q2",
+                "value": 0.52,
+                "kind": "measured (PSA)"
+              }
+            }
+          },
+          "PH040200000": {
+            "province": "Laguna",
+            "risk": {
+              "p_high": 0.7292477766754467,
+              "decision": "HIGH",
+              "signal": "MODERATE",
+              "S1_forecast": 17.96339336564873,
+              "S1_80pct_interval": [
+                10.367926587473853,
+                25.55886014382361
+              ],
+              "threshold": 14.344999999999999,
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "components": {
+                "regional_hunger_H": {
+                  "value": 17.328084265302785,
+                  "kind": "model (filtered SWS level, regional)",
+                  "contribution": 17.328084265302785
+                },
+                "provincial_price_pressure_2D": {
+                  "value": 0.3176545501729737,
+                  "kind": "model (provincial)",
+                  "contribution": 0.6353091003459475
+                }
+              }
+            },
+            "price_pressure": {
+              "p_above_regional_mean": 0.3320552890204237,
+              "D_forecast": -0.5421921682254383,
+              "D_80pct_interval": [
+                -2.142380011118559,
+                1.0579956746676826
+              ],
+              "signal": "MODERATE",
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "latest_measured_D": {
+                "quarter": "2026-Q1",
+                "value": 0.8200000000000001,
+                "kind": "measured (PSA)"
+              },
+              "latest_measured_Dnow": {
+                "months": "months 1-2 of 2026-Q2",
+                "value": -0.6300000000000001,
+                "kind": "measured (PSA)"
+              }
+            }
+          },
+          "PH040300000": {
+            "province": "Quezon",
+            "risk": {
+              "p_high": 0.6511035855236365,
+              "decision": "HIGH",
+              "signal": "MODERATE",
+              "S1_forecast": 16.646289133224208,
+              "S1_80pct_interval": [
+                9.05082235504933,
+                24.241755911399085
+              ],
+              "threshold": 14.344999999999999,
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "components": {
+                "regional_hunger_H": {
+                  "value": 17.328084265302785,
+                  "kind": "model (filtered SWS level, regional)",
+                  "contribution": 17.328084265302785
+                },
+                "provincial_price_pressure_2D": {
+                  "value": -0.3408975660392889,
+                  "kind": "model (provincial)",
+                  "contribution": -0.6817951320785778
+                }
+              }
+            },
+            "price_pressure": {
+              "p_above_regional_mean": 0.897451622391696,
+              "D_forecast": 1.5821629057592395,
+              "D_80pct_interval": [
+                -0.018024937133881425,
+                3.18235074865236
+              ],
+              "signal": "STRONG",
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "latest_measured_D": {
+                "quarter": "2026-Q1",
+                "value": -0.88,
+                "kind": "measured (PSA)"
+              },
+              "latest_measured_Dnow": {
+                "months": "months 1-2 of 2026-Q2",
+                "value": 2.12,
+                "kind": "measured (PSA)"
+              }
+            }
+          },
+          "PH040400000": {
+            "province": "Rizal",
+            "risk": {
+              "p_high": 0.7116625724001906,
+              "decision": "HIGH",
+              "signal": "MODERATE",
+              "S1_forecast": 17.6534864874312,
+              "S1_80pct_interval": [
+                10.058019709256321,
+                25.248953265606076
+              ],
+              "threshold": 14.344999999999999,
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "components": {
+                "regional_hunger_H": {
+                  "value": 17.328084265302785,
+                  "kind": "model (filtered SWS level, regional)",
+                  "contribution": 17.328084265302785
+                },
+                "provincial_price_pressure_2D": {
+                  "value": 0.1627011110642061,
+                  "kind": "model (provincial)",
+                  "contribution": 0.3254022221284122
+                }
+              }
+            },
+            "price_pressure": {
+              "p_above_regional_mean": 0.5313595182409612,
+              "D_forecast": 0.09824846512372187,
+              "D_80pct_interval": [
+                -1.501939377769399,
+                1.6984363080168428
+              ],
+              "signal": "UNCERTAIN",
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "latest_measured_D": {
+                "quarter": "2026-Q1",
+                "value": 0.4200000000000001,
+                "kind": "measured (PSA)"
+              },
+              "latest_measured_Dnow": {
+                "months": "months 1-2 of 2026-Q2",
+                "value": 0.2200000000000002,
+                "kind": "measured (PSA)"
+              }
+            }
+          },
+          "PH040500000": {
+            "province": "Batangas",
+            "risk": {
+              "p_high": 0.6462548485952172,
+              "decision": "HIGH",
+              "signal": "UNCERTAIN",
+              "S1_forecast": 16.568812413669825,
+              "S1_80pct_interval": [
+                8.973345635494947,
+                24.164279191844702
+              ],
+              "threshold": 14.344999999999999,
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "components": {
+                "regional_hunger_H": {
+                  "value": 17.328084265302785,
+                  "kind": "model (filtered SWS level, regional)",
+                  "contribution": 17.328084265302785
+                },
+                "provincial_price_pressure_2D": {
+                  "value": -0.37963592581648076,
+                  "kind": "model (provincial)",
+                  "contribution": -0.7592718516329615
+                }
+              }
+            },
+            "price_pressure": {
+              "p_above_regional_mean": 0.12795904000146774,
+              "D_forecast": -1.4185085370408186,
+              "D_80pct_interval": [
+                -3.0186963799339397,
+                0.1816793058523023
+              ],
+              "signal": "STRONG",
+              "evidence": {
+                "status": "NOT_EVALUATED"
+              },
+              "latest_measured_D": {
+                "quarter": "2026-Q1",
+                "value": -0.98,
+                "kind": "measured (PSA)"
+              },
+              "latest_measured_Dnow": {
+                "months": "months 1-2 of 2026-Q2",
+                "value": -2.23,
+                "kind": "measured (PSA)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "lgu_ranking": [
+      {
+        "lgu_code": "042123000",
+        "lgu_name": "Gen. Mariano Alvarez",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.5198,
+        "rank_region": 1.0,
+        "rank_in_province": 1.0,
+        "vulnerability_index": 0.7214285714,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 18343.9361702128,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045808000",
+        "lgu_name": "Rodriguez",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.4846,
+        "rank_region": 2.0,
+        "rank_in_province": 1.0,
+        "vulnerability_index": 0.6809377073,
+        "poverty_value_used": 6.5,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 2571.4103677961,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "043424000",
+        "lgu_name": "San Pablo",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.4663,
+        "rank_region": 3.0,
+        "rank_in_province": 1.0,
+        "vulnerability_index": 0.6394890453,
+        "poverty_value_used": 6.4,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 1444.361206722,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "042117000",
+        "lgu_name": "Rosario",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.4596,
+        "rank_region": 4.0,
+        "rank_in_province": 2.0,
+        "vulnerability_index": 0.6378064042,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 14560.7095926413,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043425000",
+        "lgu_name": "San Pedro",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.4542,
+        "rank_region": 5.0,
+        "rank_in_province": 2.0,
+        "vulnerability_index": 0.6228571429,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 13555.1351351351,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042119000",
+        "lgu_name": "Tagaytay",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.4493,
+        "rank_region": 6.0,
+        "rank_in_province": 3.0,
+        "vulnerability_index": 0.6235533187,
+        "poverty_value_used": 5.6,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 1312.7692307692,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "045645000",
+        "lgu_name": "Sariaya",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.4403,
+        "rank_region": 7.0,
+        "rank_in_province": 1.0,
+        "vulnerability_index": 0.6761697247,
+        "poverty_value_used": 18.7,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 762.9524886878,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "041028000",
+        "lgu_name": "Sto. Tomas",
+        "lgu_type": "city",
+        "province": "Batangas",
+        "risk_index": 0.4389,
+        "rank_region": 8.0,
+        "rank_in_province": 1.0,
+        "vulnerability_index": 0.6790697674,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 2290.1163400063,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041019000",
+        "lgu_name": "Nasugbu",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.4201,
+        "rank_region": 9.0,
+        "rank_in_province": 2.0,
+        "vulnerability_index": 0.6500553357,
+        "poverty_value_used": 9.4,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 490.1942479624,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "041029000",
+        "lgu_name": "Taal",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.4106,
+        "rank_region": 10.0,
+        "rank_in_province": 3.0,
+        "vulnerability_index": 0.6353387568,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 2065.188172043,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041017000",
+        "lgu_name": "Malvar",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3962,
+        "rank_region": 11.0,
+        "rank_in_province": 4.0,
+        "vulnerability_index": 0.6131144842,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1950.8787878788,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043403000",
+        "lgu_name": "Bi\u00f1an",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.3796,
+        "rank_region": 12.0,
+        "rank_in_province": 3.0,
+        "vulnerability_index": 0.5205302471,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 10117.630990812,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041031000",
+        "lgu_name": "Tanauan",
+        "lgu_type": "city",
+        "province": "Batangas",
+        "risk_index": 0.3785,
+        "rank_region": 13.0,
+        "rank_in_province": 5.0,
+        "vulnerability_index": 0.5856817141,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1809.7797685704,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042105000",
+        "lgu_name": "Cavite City",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.3749,
+        "rank_region": 14.0,
+        "rank_in_province": 4.0,
+        "vulnerability_index": 0.5203029329,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 9244.6280991736,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041006000",
+        "lgu_name": "Bauan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3652,
+        "rank_region": 15.0,
+        "rank_in_province": 6.0,
+        "vulnerability_index": 0.5650383251,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1703.6015756894,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041030000",
+        "lgu_name": "Talisay",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3571,
+        "rank_region": 16.0,
+        "rank_in_province": 7.0,
+        "vulnerability_index": 0.552603828,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1639.6453900709,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045648000",
+        "lgu_name": "Tiaong",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3533,
+        "rank_region": 17.0,
+        "rank_in_province": 2.0,
+        "vulnerability_index": 0.5425517853,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 631.102268678,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045641000",
+        "lgu_name": "San Antonio",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3504,
+        "rank_region": 18.0,
+        "rank_in_province": 3.0,
+        "vulnerability_index": 0.5381489432,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 588.4735202492,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045635000",
+        "lgu_name": "Plaridel",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3483,
+        "rank_region": 19.0,
+        "rank_in_province": 4.0,
+        "vulnerability_index": 0.5348821821,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 556.844420011,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041018000",
+        "lgu_name": "Mataasnakahoy",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3468,
+        "rank_region": 20.0,
+        "rank_in_province": 8.0,
+        "vulnerability_index": 0.5366383864,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1557.5279755849,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045615000",
+        "lgu_name": "Dolores",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3457,
+        "rank_region": 21.0,
+        "rank_in_province": 5.0,
+        "vulnerability_index": 0.531014069,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 519.392971246,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045630000",
+        "lgu_name": "Pagbilao",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3418,
+        "rank_region": 22.0,
+        "rank_in_province": 6.0,
+        "vulnerability_index": 0.5249150425,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 460.3416003744,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041022000",
+        "lgu_name": "San Jose",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3394,
+        "rank_region": 23.0,
+        "rank_in_province": 9.0,
+        "vulnerability_index": 0.5252092342,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1498.7427284669,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045623000",
+        "lgu_name": "Lucban",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3382,
+        "rank_region": 24.0,
+        "rank_in_province": 7.0,
+        "vulnerability_index": 0.5194008163,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 406.952322551,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043404000",
+        "lgu_name": "Cabuyao",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.3381,
+        "rank_region": 25.0,
+        "rank_in_province": 4.0,
+        "vulnerability_index": 0.4636322327,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 8206.2355658199,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045601000",
+        "lgu_name": "Agdangan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.338,
+        "rank_region": 26.0,
+        "rank_in_province": 8.0,
+        "vulnerability_index": 0.5191674093,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 404.6924540266,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045619000",
+        "lgu_name": "Gumaca",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3363,
+        "rank_region": 27.0,
+        "rank_in_province": 9.0,
+        "vulnerability_index": 0.5165490137,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 379.3408911152,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045629000",
+        "lgu_name": "Padre Burgos",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3337,
+        "rank_region": 28.0,
+        "rank_in_province": 10.0,
+        "vulnerability_index": 0.5124767844,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 339.9131693198,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045634000",
+        "lgu_name": "Pitogo",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3317,
+        "rank_region": 29.0,
+        "rank_in_province": 11.0,
+        "vulnerability_index": 0.5094535354,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 310.6417768088,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045610000",
+        "lgu_name": "Catanauan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3301,
+        "rank_region": 30.0,
+        "rank_in_province": 12.0,
+        "vulnerability_index": 0.5070610783,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 287.4777729482,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045602000",
+        "lgu_name": "Alabat",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3294,
+        "rank_region": 31.0,
+        "rank_in_province": 13.0,
+        "vulnerability_index": 0.5059395103,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 276.6186425968,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045603000",
+        "lgu_name": "Atimonan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3288,
+        "rank_region": 32.0,
+        "rank_in_province": 14.0,
+        "vulnerability_index": 0.505062759,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 268.1298506217,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045622000",
+        "lgu_name": "Lopez",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3287,
+        "rank_region": 33.0,
+        "rank_in_province": 15.0,
+        "vulnerability_index": 0.5048793767,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 266.3543249479,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045616000",
+        "lgu_name": "General Luna",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3273,
+        "rank_region": 34.0,
+        "rank_in_province": 16.0,
+        "vulnerability_index": 0.5027291415,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 245.5355375173,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045620000",
+        "lgu_name": "Infanta",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3258,
+        "rank_region": 35.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.500326419,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 222.2721437741,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045633000",
+        "lgu_name": "Perez",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3258,
+        "rank_region": 35.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.5003178677,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 222.1893491124,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045637000",
+        "lgu_name": "Quezon",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3258,
+        "rank_region": 35.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.5004073083,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 223.0553215389,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045607000",
+        "lgu_name": "Calauag",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3257,
+        "rank_region": 38.0,
+        "rank_in_province": 20.0,
+        "vulnerability_index": 0.5002103241,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 221.1481013828,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045625000",
+        "lgu_name": "Macalelon",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3256,
+        "rank_region": 39.0,
+        "rank_in_province": 21.0,
+        "vulnerability_index": 0.5001092288,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 220.169286578,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045640000",
+        "lgu_name": "San Andres",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3254,
+        "rank_region": 40.0,
+        "rank_in_province": 22.0,
+        "vulnerability_index": 0.4997390052,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 216.5847452727,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045608000",
+        "lgu_name": "Candelaria",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3251,
+        "rank_region": 41.0,
+        "rank_in_province": 23.0,
+        "vulnerability_index": 0.499256777,
+        "poverty_value_used": 15.4,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 1068.0170410534,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "045618000",
+        "lgu_name": "Guinayangan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3247,
+        "rank_region": 42.0,
+        "rank_in_province": 24.0,
+        "vulnerability_index": 0.4986150405,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 205.7024098636,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045642000",
+        "lgu_name": "San Francisco",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3246,
+        "rank_region": 43.0,
+        "rank_in_province": 25.0,
+        "vulnerability_index": 0.4984695058,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 204.2933280695,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045649000",
+        "lgu_name": "Unisan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3246,
+        "rank_region": 43.0,
+        "rank_in_province": 25.0,
+        "vulnerability_index": 0.4985402055,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 204.9778493758,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045605000",
+        "lgu_name": "Buenavista",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3238,
+        "rank_region": 45.0,
+        "rank_in_province": 27.0,
+        "vulnerability_index": 0.4973155428,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 193.1205453982,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045644000",
+        "lgu_name": "San Narciso",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3238,
+        "rank_region": 45.0,
+        "rank_in_province": 27.0,
+        "vulnerability_index": 0.4973763916,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 193.7096896578,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045813000",
+        "lgu_name": "Taytay",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.3235,
+        "rank_region": 47.0,
+        "rank_in_province": 2.0,
+        "vulnerability_index": 0.4545454545,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 9960.0773195876,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045627000",
+        "lgu_name": "Mauban",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3223,
+        "rank_region": 48.0,
+        "rank_in_province": 29.0,
+        "vulnerability_index": 0.4950180508,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 170.876003654,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041026000",
+        "lgu_name": "San Pascual",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3221,
+        "rank_region": 49.0,
+        "rank_in_province": 10.0,
+        "vulnerability_index": 0.4984531602,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1361.124260355,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045621000",
+        "lgu_name": "Jomalig",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3204,
+        "rank_region": 50.0,
+        "rank_in_province": 30.0,
+        "vulnerability_index": 0.4920527602,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 142.1657704432,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045628000",
+        "lgu_name": "Mulanay",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3197,
+        "rank_region": 51.0,
+        "rank_in_province": 31.0,
+        "vulnerability_index": 0.491036249,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 132.3238095238,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045639000",
+        "lgu_name": "Sampaloc",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3196,
+        "rank_region": 52.0,
+        "rank_in_province": 32.0,
+        "vulnerability_index": 0.4908037295,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 130.0725329261,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045636000",
+        "lgu_name": "Polillo",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3193,
+        "rank_region": 53.0,
+        "rank_in_province": 33.0,
+        "vulnerability_index": 0.4903953515,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 126.1185770751,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045606000",
+        "lgu_name": "Burdeos",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3191,
+        "rank_region": 54.0,
+        "rank_in_province": 34.0,
+        "vulnerability_index": 0.4901074408,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 123.3309978981,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045638000",
+        "lgu_name": "Real",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3185,
+        "rank_region": 55.0,
+        "rank_in_province": 35.0,
+        "vulnerability_index": 0.4891911152,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 114.4590435606,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045632000",
+        "lgu_name": "Patnanungan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3181,
+        "rank_region": 56.0,
+        "rank_in_province": 36.0,
+        "vulnerability_index": 0.4885376556,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 108.132183908,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045646000",
+        "lgu_name": "Tagkawayan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3176,
+        "rank_region": 57.0,
+        "rank_in_province": 37.0,
+        "vulnerability_index": 0.4878075235,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 101.0629737064,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041027000",
+        "lgu_name": "Santa Teresita",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3173,
+        "rank_region": 58.0,
+        "rank_in_province": 11.0,
+        "vulnerability_index": 0.4909705872,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1322.6380368098,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045631000",
+        "lgu_name": "Panukulan",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3157,
+        "rank_region": 59.0,
+        "rank_in_province": 38.0,
+        "vulnerability_index": 0.4848331838,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 72.2651251048,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042122000",
+        "lgu_name": "Trece Martires",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.3134,
+        "rank_region": 60.0,
+        "rank_in_province": 5.0,
+        "vulnerability_index": 0.4349634845,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 5383.7084398977,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045617000",
+        "lgu_name": "General Nakar",
+        "lgu_type": "municipality",
+        "province": "Quezon",
+        "risk_index": 0.3125,
+        "rank_region": 61.0,
+        "rank_in_province": 39.0,
+        "vulnerability_index": 0.48,
+        "poverty_value_used": 16.8,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 25.4697674419,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041020000",
+        "lgu_name": "Padre Garcia",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.3081,
+        "rank_region": 62.0,
+        "rank_in_province": 12.0,
+        "vulnerability_index": 0.4766865572,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1249.1688749699,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042108000",
+        "lgu_name": "General Trias",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.3074,
+        "rank_region": 63.0,
+        "rank_in_province": 6.0,
+        "vulnerability_index": 0.4266131103,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 5005.9215642706,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042111000",
+        "lgu_name": "Kawit",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2958,
+        "rank_region": 64.0,
+        "rank_in_province": 7.0,
+        "vulnerability_index": 0.4104737379,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 4275.745526839,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041016000",
+        "lgu_name": "Mabini",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2948,
+        "rank_region": 65.0,
+        "rank_in_province": 13.0,
+        "vulnerability_index": 0.4561708491,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1143.6474027434,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042120000",
+        "lgu_name": "Tanza",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2911,
+        "rank_region": 66.0,
+        "rank_in_province": 8.0,
+        "vulnerability_index": 0.4040390761,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 3984.6291331546,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041002000",
+        "lgu_name": "Alitagtag",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2872,
+        "rank_region": 67.0,
+        "rank_in_province": 14.0,
+        "vulnerability_index": 0.4444104335,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1083.1583198708,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045805000",
+        "lgu_name": "Cainta",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.2868,
+        "rank_region": 68.0,
+        "rank_in_province": 3.0,
+        "vulnerability_index": 0.4030650501,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 8767.9227727378,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042104000",
+        "lgu_name": "Carmona",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.2845,
+        "rank_region": 69.0,
+        "rank_in_province": 9.0,
+        "vulnerability_index": 0.3949103969,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 3571.6302521008,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041025000",
+        "lgu_name": "San Nicolas",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.284,
+        "rank_region": 70.0,
+        "rank_in_province": 15.0,
+        "vulnerability_index": 0.4394040458,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1057.4082264485,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042116000",
+        "lgu_name": "Noveleta",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2756,
+        "rank_region": 71.0,
+        "rank_in_province": 10.0,
+        "vulnerability_index": 0.3824933651,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 3009.8600121729,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041004000",
+        "lgu_name": "Balete",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.272,
+        "rank_region": 72.0,
+        "rank_in_province": 16.0,
+        "vulnerability_index": 0.4208934608,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 962.2,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042103000",
+        "lgu_name": "Bacoor",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.2716,
+        "rank_region": 73.0,
+        "rank_in_province": 11.0,
+        "vulnerability_index": 0.3770045599,
+        "poverty_value_used": 3.1,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 14395.170023825,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "041003000",
+        "lgu_name": "Balayan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2619,
+        "rank_region": 74.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.4053243029,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 882.1208498115,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042115000",
+        "lgu_name": "Naic",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2615,
+        "rank_region": 75.0,
+        "rank_in_province": 12.0,
+        "vulnerability_index": 0.3629030977,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 2123.5588972431,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045624000",
+        "lgu_name": "Lucena",
+        "lgu_type": "city",
+        "province": "Quezon",
+        "risk_index": 0.2604,
+        "rank_region": 76.0,
+        "rank_in_province": 40.0,
+        "vulnerability_index": 0.4,
+        "poverty_value_used": 9.2,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 3898.3088749126,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "041024000",
+        "lgu_name": "San Luis",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2579,
+        "rank_region": 77.0,
+        "rank_in_province": 18.0,
+        "vulnerability_index": 0.3990610265,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 849.9060150376,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041010000",
+        "lgu_name": "Ibaan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2577,
+        "rank_region": 78.0,
+        "rank_in_province": 19.0,
+        "vulnerability_index": 0.3987002621,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 848.0504420931,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041012000",
+        "lgu_name": "Lemery",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2577,
+        "rank_region": 78.0,
+        "rank_in_province": 19.0,
+        "vulnerability_index": 0.3988243194,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 848.6885245902,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042118000",
+        "lgu_name": "Silang",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2501,
+        "rank_region": 80.0,
+        "rank_in_province": 13.0,
+        "vulnerability_index": 0.3471677171,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1411.6602205988,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041001000",
+        "lgu_name": "Agoncillo",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2494,
+        "rank_region": 81.0,
+        "rank_in_province": 21.0,
+        "vulnerability_index": 0.3859842147,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 782.6461168935,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041007000",
+        "lgu_name": "Calaca",
+        "lgu_type": "city",
+        "province": "Batangas",
+        "risk_index": 0.2469,
+        "rank_region": 82.0,
+        "rank_in_province": 22.0,
+        "vulnerability_index": 0.3820567588,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 762.4454529586,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042102000",
+        "lgu_name": "Amadeo",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2457,
+        "rank_region": 83.0,
+        "rank_in_province": 14.0,
+        "vulnerability_index": 0.34105067,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1134.9133261105,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041013000",
+        "lgu_name": "Lian",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2432,
+        "rank_region": 84.0,
+        "rank_in_province": 23.0,
+        "vulnerability_index": 0.3762954574,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 732.8125,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042110000",
+        "lgu_name": "Indang",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2423,
+        "rank_region": 85.0,
+        "rank_in_province": 15.0,
+        "vulnerability_index": 0.336238678,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 917.2096128171,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042101000",
+        "lgu_name": "Alfonso",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2418,
+        "rank_region": 86.0,
+        "rank_in_province": 16.0,
+        "vulnerability_index": 0.3356537858,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 890.7479723641,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045647000",
+        "lgu_name": "Tayabas",
+        "lgu_type": "city",
+        "province": "Quezon",
+        "risk_index": 0.2408,
+        "rank_region": 87.0,
+        "rank_in_province": 41.0,
+        "vulnerability_index": 0.3698565665,
+        "poverty_value_used": 14.3,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 487.8025546655,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "042114000",
+        "lgu_name": "Mendez",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2405,
+        "rank_region": 88.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.3337822941,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 806.0781141669,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042107000",
+        "lgu_name": "General Emilio Aguinaldo",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2367,
+        "rank_region": 89.0,
+        "rank_in_province": 18.0,
+        "vulnerability_index": 0.3285426023,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 569.0244481367,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042121000",
+        "lgu_name": "Ternate",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2342,
+        "rank_region": 90.0,
+        "rank_in_province": 19.0,
+        "vulnerability_index": 0.325057754,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 411.3632571333,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042112000",
+        "lgu_name": "Magallanes",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2329,
+        "rank_region": 91.0,
+        "rank_in_province": 20.0,
+        "vulnerability_index": 0.3231800652,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 326.4130286027,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042113000",
+        "lgu_name": "Maragondon",
+        "lgu_type": "municipality",
+        "province": "Cavite",
+        "risk_index": 0.2316,
+        "rank_region": 92.0,
+        "rank_in_province": 21.0,
+        "vulnerability_index": 0.3214285714,
+        "poverty_value_used": 4.3,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 247.1721037604,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043426000",
+        "lgu_name": "Santa Cruz",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.2295,
+        "rank_region": 93.0,
+        "rank_in_province": 5.0,
+        "vulnerability_index": 0.3146740113,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 3202.2285566209,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041009000",
+        "lgu_name": "Cuenca",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2294,
+        "rank_region": 94.0,
+        "rank_in_province": 24.0,
+        "vulnerability_index": 0.3549082517,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 622.8085252664,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042106000",
+        "lgu_name": "Dasmari\u00f1as",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.2284,
+        "rank_region": 95.0,
+        "rank_in_province": 22.0,
+        "vulnerability_index": 0.3169743153,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 7801.4090757794,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "041011000",
+        "lgu_name": "Laurel",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2273,
+        "rank_region": 96.0,
+        "rank_in_province": 25.0,
+        "vulnerability_index": 0.3516628293,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 606.1158647777,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041033000",
+        "lgu_name": "Tingloy",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2241,
+        "rank_region": 97.0,
+        "rank_in_province": 26.0,
+        "vulnerability_index": 0.3467875689,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 581.04021772,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041008000",
+        "lgu_name": "Calatagan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2238,
+        "rank_region": 98.0,
+        "rank_in_province": 27.0,
+        "vulnerability_index": 0.3462960888,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 578.5123152709,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041021000",
+        "lgu_name": "Rosario",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2222,
+        "rank_region": 99.0,
+        "rank_in_province": 28.0,
+        "vulnerability_index": 0.3438102192,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 565.7263751763,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041034000",
+        "lgu_name": "Tuy",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2129,
+        "rank_region": 100.0,
+        "rank_in_province": 29.0,
+        "vulnerability_index": 0.3293759404,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 491.4844162705,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043411000",
+        "lgu_name": "Los Ba\u00f1os",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.2061,
+        "rank_region": 101.0,
+        "rank_in_province": 6.0,
+        "vulnerability_index": 0.2826816917,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 2127.4990778311,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041032000",
+        "lgu_name": "Taysan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.205,
+        "rank_region": 102.0,
+        "rank_in_province": 30.0,
+        "vulnerability_index": 0.3171923252,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 428.8186284982,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041023000",
+        "lgu_name": "San Juan",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.2035,
+        "rank_region": 103.0,
+        "rank_in_province": 31.0,
+        "vulnerability_index": 0.3149373323,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 417.2201901975,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043430000",
+        "lgu_name": "Victoria",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.2021,
+        "rank_region": 104.0,
+        "rank_in_province": 7.0,
+        "vulnerability_index": 0.2771655215,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1942.192393736,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043422000",
+        "lgu_name": "Pila",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.198,
+        "rank_region": 105.0,
+        "rank_in_province": 8.0,
+        "vulnerability_index": 0.2714567823,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1750.4166666667,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043419000",
+        "lgu_name": "Pagsanjan",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1951,
+        "rank_region": 106.0,
+        "rank_in_province": 9.0,
+        "vulnerability_index": 0.2675082952,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1617.7737226277,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041014000",
+        "lgu_name": "Lipa",
+        "lgu_type": "city",
+        "province": "Batangas",
+        "risk_index": 0.1945,
+        "rank_region": 107.0,
+        "rank_in_province": 32.0,
+        "vulnerability_index": 0.301006867,
+        "poverty_value_used": 5.1,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 1780.9503342884,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "043402000",
+        "lgu_name": "Bay",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1941,
+        "rank_region": 108.0,
+        "rank_in_province": 10.0,
+        "vulnerability_index": 0.2662297826,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1574.8241912799,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041005000",
+        "lgu_name": "Batangas City",
+        "lgu_type": "city",
+        "province": "Batangas",
+        "risk_index": 0.1899,
+        "rank_region": 109.0,
+        "rank_in_province": 33.0,
+        "vulnerability_index": 0.2938978877,
+        "poverty_value_used": 5.8,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 1242.0024031665,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "043405000",
+        "lgu_name": "Calamba",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.1883,
+        "rank_region": 110.0,
+        "rank_in_province": 11.0,
+        "vulnerability_index": 0.258236258,
+        "poverty_value_used": 3.8,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 3609.8394648829,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "043406000",
+        "lgu_name": "Calauan",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1844,
+        "rank_region": 111.0,
+        "rank_in_province": 12.0,
+        "vulnerability_index": 0.2528822416,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1126.4354527938,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043410000",
+        "lgu_name": "Liliw",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1819,
+        "rank_region": 112.0,
+        "rank_in_province": 13.0,
+        "vulnerability_index": 0.2494162157,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1010.0,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "041015000",
+        "lgu_name": "Lobo",
+        "lgu_type": "municipality",
+        "province": "Batangas",
+        "risk_index": 0.1804,
+        "rank_region": 113.0,
+        "rank_in_province": 34.0,
+        "vulnerability_index": 0.2790697674,
+        "poverty_value_used": 7.1,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 232.7372450437,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043401000",
+        "lgu_name": "Alaminos",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1795,
+        "rank_region": 114.0,
+        "rank_in_province": 14.0,
+        "vulnerability_index": 0.2460925432,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 898.3466759485,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043417000",
+        "lgu_name": "Nagcarlan",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.178,
+        "rank_region": 115.0,
+        "rank_in_province": 15.0,
+        "vulnerability_index": 0.2440744032,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 830.5505761844,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043413000",
+        "lgu_name": "Lumban",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1773,
+        "rank_region": 116.0,
+        "rank_in_province": 16.0,
+        "vulnerability_index": 0.2430959406,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 797.6807303232,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043415000",
+        "lgu_name": "Magdalena",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1772,
+        "rank_region": 117.0,
+        "rank_in_province": 17.0,
+        "vulnerability_index": 0.2430084866,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 794.7428571429,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043423000",
+        "lgu_name": "Rizal",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1742,
+        "rank_region": 118.0,
+        "rank_in_province": 18.0,
+        "vulnerability_index": 0.2389100002,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 657.0609318996,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043429000",
+        "lgu_name": "Siniloan",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1732,
+        "rank_region": 119.0,
+        "rank_in_province": 19.0,
+        "vulnerability_index": 0.2375593517,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 611.6881103705,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043421000",
+        "lgu_name": "Pangil",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.172,
+        "rank_region": 120.0,
+        "rank_in_province": 20.0,
+        "vulnerability_index": 0.2358945796,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 555.7628247835,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043409000",
+        "lgu_name": "Kalayaan",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1715,
+        "rank_region": 121.0,
+        "rank_in_province": 21.0,
+        "vulnerability_index": 0.2351640885,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 531.2231759657,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043420000",
+        "lgu_name": "Pakil",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1709,
+        "rank_region": 122.0,
+        "rank_in_province": 22.0,
+        "vulnerability_index": 0.2343914847,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 505.2688172043,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045801000",
+        "lgu_name": "Angono",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.1703,
+        "rank_region": 123.0,
+        "rank_in_province": 4.0,
+        "vulnerability_index": 0.239358079,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 4976.8878718535,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045811000",
+        "lgu_name": "San Mateo",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.1699,
+        "rank_region": 124.0,
+        "rank_in_province": 5.0,
+        "vulnerability_index": 0.2386755336,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 4961.0818660374,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043418000",
+        "lgu_name": "Paete",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1698,
+        "rank_region": 125.0,
+        "rank_in_province": 23.0,
+        "vulnerability_index": 0.2328468869,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 453.3805888768,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043416000",
+        "lgu_name": "Majayjay",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1687,
+        "rank_region": 126.0,
+        "rank_in_province": 24.0,
+        "vulnerability_index": 0.2312839619,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 400.8766887037,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043427000",
+        "lgu_name": "Santa Maria",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1669,
+        "rank_region": 127.0,
+        "rank_in_province": 25.0,
+        "vulnerability_index": 0.2288278357,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 318.3671586716,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043408000",
+        "lgu_name": "Famy",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1668,
+        "rank_region": 128.0,
+        "rank_in_province": 26.0,
+        "vulnerability_index": 0.2287708575,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 316.453071994,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043412000",
+        "lgu_name": "Luisiana",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1661,
+        "rank_region": 129.0,
+        "rank_in_province": 27.0,
+        "vulnerability_index": 0.2278206212,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 284.5314418224,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043414000",
+        "lgu_name": "Mabitac",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1657,
+        "rank_region": 130.0,
+        "rank_in_province": 28.0,
+        "vulnerability_index": 0.2271926229,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 263.4348687469,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045804000",
+        "lgu_name": "Binangonan",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.1627,
+        "rank_region": 131.0,
+        "rank_in_province": 6.0,
+        "vulnerability_index": 0.2285944779,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 4727.6303889056,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043407000",
+        "lgu_name": "Cavinti",
+        "lgu_type": "municipality",
+        "province": "Laguna",
+        "risk_index": 0.1625,
+        "rank_region": 132.0,
+        "rank_in_province": 29.0,
+        "vulnerability_index": 0.2228571429,
+        "poverty_value_used": 4.2,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 117.7915315846,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "043428000",
+        "lgu_name": "Santa Rosa",
+        "lgu_type": "city",
+        "province": "Laguna",
+        "risk_index": 0.1616,
+        "rank_region": 133.0,
+        "rank_in_province": 30.0,
+        "vulnerability_index": 0.2216583734,
+        "poverty_value_used": 2.9,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 7564.0408460977,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "045814000",
+        "lgu_name": "Teresa",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.1232,
+        "rank_region": 134.0,
+        "rank_in_province": 7.0,
+        "vulnerability_index": 0.1731155461,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 3442.8801719506,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045806000",
+        "lgu_name": "Cardona",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0974,
+        "rank_region": 135.0,
+        "rank_in_province": 8.0,
+        "vulnerability_index": 0.1368096162,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 2602.1276595745,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045809000",
+        "lgu_name": "Morong",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0756,
+        "rank_region": 136.0,
+        "rank_in_province": 9.0,
+        "vulnerability_index": 0.1062014556,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1893.3209153805,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045802000",
+        "lgu_name": "Antipolo",
+        "lgu_type": "city",
+        "province": "Rizal",
+        "risk_index": 0.0677,
+        "rank_region": 137.0,
+        "rank_in_province": 10.0,
+        "vulnerability_index": 0.0950860292,
+        "poverty_value_used": 3.2,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 2899.0493302842,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "045803000",
+        "lgu_name": "Baras",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0491,
+        "rank_region": 138.0,
+        "rank_in_province": 11.0,
+        "vulnerability_index": 0.0690018565,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1031.8733074296,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045810000",
+        "lgu_name": "Pililla",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0488,
+        "rank_region": 139.0,
+        "rank_in_province": 12.0,
+        "vulnerability_index": 0.06860396,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 1022.659042173,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "042109000",
+        "lgu_name": "Imus",
+        "lgu_type": "city",
+        "province": "Cavite",
+        "risk_index": 0.0422,
+        "rank_region": 140.0,
+        "rank_in_province": 23.0,
+        "vulnerability_index": 0.058505176,
+        "poverty_value_used": 2.8,
+        "poverty_value_kind": "PSA municipal SAE estimate",
+        "density": 2894.0580216707,
+        "limitation": "Municipal estimate available; compared within province against LGUs that carry a province-mean substitute."
+      },
+      {
+        "lgu_code": "045807000",
+        "lgu_name": "Jala-Jala",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0411,
+        "rank_region": 141.0,
+        "rank_in_province": 13.0,
+        "vulnerability_index": 0.0577371229,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 771.0108794198,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      },
+      {
+        "lgu_code": "045812000",
+        "lgu_name": "Tanay",
+        "lgu_type": "municipality",
+        "province": "Rizal",
+        "risk_index": 0.0388,
+        "rank_region": 142.0,
+        "rank_in_province": 14.0,
+        "vulnerability_index": 0.0545454545,
+        "poverty_value_used": 3.5,
+        "poverty_value_kind": "province-mean substitute (no municipal estimate)",
+        "density": 697.1,
+        "limitation": "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, so this LGU's position within its province reflects population density only."
+      }
+    ],
+    "model": {
+      "model": "PCF v2 (probabilistic component forecaster)",
+      "status": "CANDIDATE - not adviser-approved",
+      "protocol_sha256": "c8bce7ce93df064b5a50bfa8b5be9486b1b8cd0d04ecee1ad583b7c983013eb6",
+      "engine": "backend_dev/app/quarterly/pcf_engine.py",
+      "H": "local level, n=600, sigma_eta ML grid 0..8",
+      "D": "OLS no intercept on latest published D (T1) and [Dnow, D] (price-pressure indicator)",
+      "uses_news": false,
+      "why_no_news": "E23/E24 ablations: news-only arms worst; no measurable gain from news"
+    },
+    "inputs": [
+      {
+        "source_id": "sws_rounds_verified",
+        "sha256": "258fab535f5b7d438a86e145a927757f81ad4346c65638ddeac6ab6490228637",
+        "vintage": 1
+      },
+      {
+        "source_id": "s1_labels",
+        "sha256": "08cbd6873fbae67d65e3f5aa69be842fdae6d5bc3a91974c9acb787dda80f61d",
+        "vintage": 1
+      },
+      {
+        "source_id": "d_quarterly_panel",
+        "sha256": "d6ac42e10a940a54c4b80fd245cf78e510607d1539f19b374b5593f46cbea3f2",
+        "vintage": 1
+      },
+      {
+        "source_id": "dnow_panel",
+        "sha256": "b731ff53045f0f48bb5b6a93140c0f4f749d5179115e57293914a6d077cb8d18",
+        "vintage": 1
+      },
+      {
+        "source_id": "lgu_vulnerability",
+        "sha256": "f0ca2c53f716d95e81cbb5ea67908c1753d2640f15aafe775019695616d6233e",
+        "vintage": 1
+      },
+      {
+        "source_id": "pcf_model_card",
+        "sha256": "4f2b7c6c260aafce5d707fde2eaabc19b832245ec2a16b42b2c12b02688525b8",
+        "vintage": 1
+      }
+    ],
+    "reading_guide": {
+      "p_high": "model probability that the approved composite label S1 = H + 2D exceeds the threshold",
+      "measured": "official PSA / SWS values, shown as published",
+      "model": "estimates produced by aiPHeed; not official food-insecurity classifications",
+      "signal": "STRONG (p<=0.20 or >=0.80), MODERATE, UNCERTAIN (0.35-0.65)",
+      "evidence": "validation status of this lead; NOT_ESTABLISHED means the forecast is indicative only"
+    }
+  },
+  "labels": {
+    "target": "Forecast target: Q3 2026 (July\u2013September 2026)",
+    "news": "Supporting news: Q2 2026 (April\u2013June 2026)",
+    "cutoff": "Information cutoff: 2026-06-30T23:59:59+08:00 (Asia/Manila)",
+    "caveat": "Relative ordinal risk estimates; not official food insecurity classifications.",
+    "mode": "REPLAY - reconstructs a past cycle from files assembled after its cutoff; row-level publication rules enforced by the engine; not a live forecast"
+  },
+  "content_sha256": "bb24a71b892c393e63f94c1ba5b20b38dfb4b1102efd69654cb18c8c84fd0183",
+  "generated_at": "2026-10-13T16:48:17.360099+00:00",
+  "run_clock": "2026-10-14T00:48:17.261849+08:00",
+  "cutoff_reached": true
+}

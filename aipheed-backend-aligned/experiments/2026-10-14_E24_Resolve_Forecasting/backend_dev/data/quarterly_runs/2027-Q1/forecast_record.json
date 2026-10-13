@@ -1,0 +1,212 @@
+{
+  "period": {
+    "reference_quarter": "2026-Q4",
+    "target_quarter": "2027-Q1",
+    "cutoff": "2026-12-31T23:59:59+08:00",
+    "timezone": "Asia/Manila",
+    "news_window_start": "2026-10-01T00:00:00+08:00",
+    "news_window_end": "2026-12-31T23:59:59+08:00",
+    "quarter_complete": true,
+    "target_display": "Q1 2027 (January\u2013March 2027)",
+    "news_display": "Q4 2026 (October\u2013December 2026)",
+    "model_version": "none promoted (E23: no lead time met the frozen reliability rule)",
+    "feature_version": "E23 strict timing: news of reference quarter, government of reference-1, SWS published before cutoff",
+    "requirements": [
+      {
+        "id": "news_reference_quarter",
+        "kind": "news",
+        "quarter": "2026-Q4",
+        "source_ids": [
+          "news_2026Q4"
+        ],
+        "note": "Authorized articles with verified publication timestamps in 2026-10-01..cutoff (PHT)"
+      },
+      {
+        "id": "government_indicators",
+        "kind": "indicator",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "features_fused"
+        ],
+        "note": "36 government features of the quarter before the reference quarter"
+      },
+      {
+        "id": "provincial_food_cpi",
+        "kind": "indicator",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "provincial_food_cpi_2026H1"
+        ],
+        "note": "Provincial food CPI YoY through the quarter before the reference quarter (for cpi_dev and D)"
+      },
+      {
+        "id": "sws_hunger_latest_round",
+        "kind": "label",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "sws_hunger_production"
+        ],
+        "note": "Latest SWS round published before the cutoff (expected: the September 2026 round)"
+      },
+      {
+        "id": "promoted_model",
+        "kind": "model",
+        "source_ids": [
+          "promoted_model"
+        ],
+        "note": "A model that met the frozen reliability rule; none exists (E23)"
+      },
+      {
+        "id": "lgu_vulnerability",
+        "kind": "static",
+        "source_ids": [
+          "lgu_poverty",
+          "lgu_census"
+        ],
+        "note": "PSA 2021 municipal poverty incidence and 2020 census density for the 142 LGUs"
+      }
+    ]
+  },
+  "status": "INSUFFICIENT_DATA",
+  "missing": [
+    "news_reference_quarter: MISSING (no registered source)",
+    "government_indicators: STALE (features_fused: STALE)",
+    "provincial_food_cpi: STALE (provincial_food_cpi_2026H1: STALE)",
+    "sws_hunger_latest_round: STALE (sws_hunger_production: STALE)",
+    "promoted_model: MISSING (no registered source)",
+    "cutoff 2026-12-31T23:59:59+08:00 not yet reached at run time; the reference quarter's news is incomplete"
+  ],
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q4",
+      "sources": [],
+      "status": "MISSING",
+      "detail": "no registered source"
+    },
+    {
+      "id": "government_indicators",
+      "kind": "indicator",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "features_fused",
+          "vintage": 1,
+          "sha256": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+          "observation_end": "2025-Q4",
+          "available_at": "2026-10-13T05:20:40.588163+00:00",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "features_fused: STALE"
+    },
+    {
+      "id": "provincial_food_cpi",
+      "kind": "indicator",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "provincial_food_cpi_2026H1",
+          "vintage": 1,
+          "sha256": "57f09e91149be56f0602d63dad40216d3fc38d01e66499e07f110d1b2fd2e6e9",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "provincial_food_cpi_2026H1: STALE"
+    },
+    {
+      "id": "sws_hunger_latest_round",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "sws_hunger_production",
+          "vintage": 1,
+          "sha256": "64701ed66981697ddf2d7b083a0de4e7a14f004e349878703bfc784145d434c4",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-09-09T03:21:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "sws_hunger_production: STALE"
+    },
+    {
+      "id": "promoted_model",
+      "kind": "model",
+      "quarter": null,
+      "sources": [],
+      "status": "MISSING",
+      "detail": "no registered source"
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "lgu_poverty",
+          "vintage": 1,
+          "sha256": "03c92a8db785534e305c1fcd6dfb5bc9b5e1c26fd860f9cd655387edb9ef16b7",
+          "observation_end": "2021-Q4",
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        },
+        {
+          "source_id": "lgu_census",
+          "vintage": 1,
+          "sha256": "705cece6a8855f9fc8e9d2d4447d47dc067f5de0e4b717e75325593be19ec778",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "lgu_poverty v1, lgu_census v1"
+    }
+  ],
+  "supporting_news": {
+    "window_start": "2026-10-01T00:00:00+08:00",
+    "window_end": "2026-12-31T23:59:59+08:00",
+    "quarter": "2026-Q4",
+    "display": "Q4 2026 (October\u2013December 2026)",
+    "quarter_complete": true,
+    "eligible": 0,
+    "by_province": {
+      "PH040100000": 0,
+      "PH040200000": 0,
+      "PH040300000": 0,
+      "PH040400000": 0,
+      "PH040500000": 0
+    },
+    "limited_signal": {
+      "PH040100000": true,
+      "PH040200000": true,
+      "PH040300000": true,
+      "PH040400000": true,
+      "PH040500000": true
+    },
+    "articles": []
+  },
+  "forecast": null,
+  "labels": {
+    "target": "Forecast target: Q1 2027 (January\u2013March 2027)",
+    "news": "Supporting news: Q4 2026 (October\u2013December 2026)",
+    "cutoff": "Information cutoff: 2026-12-31T23:59:59+08:00 (Asia/Manila)",
+    "caveat": "Relative ordinal risk estimates; not official food insecurity classifications."
+  },
+  "content_sha256": "f0c270879f395756a6f63bed867e598bdaaacb4acdb4f14a170312f78e0363be",
+  "generated_at": "2026-10-13T16:05:02.567623+00:00",
+  "run_clock": "2026-10-14T00:05:02.553714+08:00",
+  "cutoff_reached": false
+}

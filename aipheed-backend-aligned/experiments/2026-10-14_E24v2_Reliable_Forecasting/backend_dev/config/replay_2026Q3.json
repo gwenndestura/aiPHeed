@@ -1,0 +1,72 @@
+{
+  "reference_quarter": "2026-Q2",
+  "target_quarter": "2026-Q3",
+  "cutoff": "2026-06-30T23:59:59+08:00",
+  "timezone": "Asia/Manila",
+  "model_version": "PCF v2 candidate (E24v2 frozen protocol c8bce7ce...)",
+  "feature_version": "E24v2: SWS rounds published before the origin; D through reference-1; Dnow months 1-2 of reference",
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q2",
+      "source_ids": [
+        "news_2026Q2"
+      ],
+      "blocking": false,
+      "note": "Supporting news (display only; the E24v2 forecaster does not use news). Authorized articles with verified publication times in the reference quarter."
+    },
+    {
+      "id": "sws_rounds",
+      "kind": "label",
+      "quarter": "2025-Q4",
+      "source_ids": [
+        "sws_rounds_verified"
+      ],
+      "note": "SWS Balance Luzon rounds with VERIFIED publication dates; latest needed round = 2025-Q4"
+    },
+    {
+      "id": "label_history",
+      "kind": "label",
+      "quarter": "2025-Q4",
+      "source_ids": [
+        "s1_labels"
+      ],
+      "note": "Published S1 labels (threshold rule and persistence)"
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "kind": "indicator",
+      "quarter": "2026-Q1",
+      "source_ids": [
+        "d_quarterly_panel"
+      ],
+      "note": "Quarterly relative provincial food inflation D through the quarter before the reference quarter"
+    },
+    {
+      "id": "provincial_D_now",
+      "kind": "indicator",
+      "quarter": "2026-Q2",
+      "source_ids": [
+        "dnow_panel"
+      ],
+      "note": "Months 1-2 of the reference quarter (published before the cutoff)"
+    },
+    {
+      "id": "forecasting_model",
+      "kind": "model",
+      "source_ids": [
+        "pcf_model_card"
+      ],
+      "note": "E24v2 PCF candidate (frozen protocol); not adviser-approved"
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "source_ids": [
+        "lgu_vulnerability"
+      ],
+      "note": "142 LGUs: 2020 census density, PSA 2021 SAE where available, labelled province-mean substitute otherwise"
+    }
+  ]
+}

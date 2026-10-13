@@ -1,0 +1,6864 @@
+{
+ "origin": {
+  "by_lead": {
+   "1": {
+    "n_origins": 8,
+    "origins": [
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-10-01",
+     "2026-01-01"
+    ],
+    "target_quarters": [
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1"
+    ],
+    "test_HIGH": 37,
+    "test_LOW": 3,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 31,
+      "FP": 1,
+      "FN": 6,
+      "TN": 2,
+      "accuracy": 0.825,
+      "precision": 0.96875,
+      "recall": 0.8378378378378378,
+      "F1": 0.8985507246376812,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.7027027027027027,
+      "Brier": 0.14227063423644098,
+      "predicted_HIGH_share": 0.8
+     },
+     "B1_naive_persistence": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 33,
+      "FP": 1,
+      "FN": 4,
+      "TN": 2,
+      "accuracy": 0.875,
+      "precision": 0.9705882352941176,
+      "recall": 0.8918918918918919,
+      "F1": 0.9295774647887325,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.7792792792792793,
+      "Brier": 0.125,
+      "predicted_HIGH_share": 0.85
+     },
+     "B2_lr_combined": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 24,
+      "FP": 1,
+      "FN": 13,
+      "TN": 2,
+      "accuracy": 0.65,
+      "precision": 0.96,
+      "recall": 0.6486486486486487,
+      "F1": 0.7741935483870968,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6216216216216216,
+      "Brier": 0.27528310427096614,
+      "predicted_HIGH_share": 0.625
+     },
+     "B3_lr_gov_only": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 24,
+      "FP": 1,
+      "FN": 13,
+      "TN": 2,
+      "accuracy": 0.65,
+      "precision": 0.96,
+      "recall": 0.6486486486486487,
+      "F1": 0.7741935483870968,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6396396396396397,
+      "Brier": 0.2860798384431542,
+      "predicted_HIGH_share": 0.625
+     },
+     "B4_lr_nlp_only": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 21,
+      "FP": 0,
+      "FN": 16,
+      "TN": 3,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5675675675675675,
+      "F1": 0.7241379310344828,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8018018018018018,
+      "Brier": 0.2312163738648465,
+      "predicted_HIGH_share": 0.525
+     },
+     "B5_lgbm_gov_only": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 32,
+      "FP": 1,
+      "FN": 5,
+      "TN": 2,
+      "accuracy": 0.85,
+      "precision": 0.9696969696969697,
+      "recall": 0.8648648648648649,
+      "F1": 0.9142857142857143,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6486486486486487,
+      "Brier": 0.13110287240592433,
+      "predicted_HIGH_share": 0.825
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 22,
+      "FP": 0,
+      "FN": 15,
+      "TN": 3,
+      "accuracy": 0.625,
+      "precision": 1.0,
+      "recall": 0.5945945945945946,
+      "F1": 0.7457627118644068,
+      "specificity": 1.0,
+      "ROC_AUC": 0.7297297297297297,
+      "Brier": 0.24878995243875196,
+      "predicted_HIGH_share": 0.55
+     },
+     "S_lr_psa_only": {
+      "n": 40,
+      "HIGH": 37,
+      "LOW": 3,
+      "TP": 28,
+      "FP": 1,
+      "FN": 9,
+      "TN": 2,
+      "accuracy": 0.75,
+      "precision": 0.9655172413793104,
+      "recall": 0.7567567567567568,
+      "F1": 0.8484848484848485,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6846846846846847,
+      "Brier": 0.18662357570333482,
+      "predicted_HIGH_share": 0.725
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2023-10-01",
+      "target_quarter": "2023-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.29300613989654384,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.26714301166380755,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.30395541250000185,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.21985581392297077,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.3142764300078171,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.22657073231076627,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.3296736060678424,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q1",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.3264515326823936,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.02101343828098417,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.024544240185514835,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.19312518463749168,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.23229617132869493,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.212068381285918,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.12219906238575307,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.1254732829893338,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.36241585462318404,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.3715322556481143,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.2941990834058691,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.15054098711045394,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.17146321830022523,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2288064169293357,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09055722829877771,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.7649584850338254,
+      "acc_B2_lr_combined": 0.0,
+      "brier_B3_lr_gov_only": 0.8562778146910969,
+      "acc_B3_lr_gov_only": 0.0,
+      "brier_B4_lr_nlp_only": 0.20682114533979754,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.08868633457663143,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.19071227103827088,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.17393427214988563,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.03606410659527768,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.3852944470441466,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.3446723690036439,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.275147764251748,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.014710430524034665,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2590978156753173,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.08840232185106174,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.020208483481791082,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.004974958153820555,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.007033653484911387,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.2798341825772807,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.01655727650648763,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.374276465728136,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2539985608691836,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19091288998204176,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.20654383460114775,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.21022830064636738,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.16833391688395707,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.19295672003593495,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.27998617419398153,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.21476007446181225,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2026-01-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.055491409965368464,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.1899208047668131,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.17039466138558307,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.21241389989965703,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.03879862915733998,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.27614456097740053,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.08121429091180435,
+      "acc_S_lr_psa_only": 1.0
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": 0.017270634236441,
+       "p_one_sided": 0.73046875,
+       "origins_better": 3,
+       "origins_worse": 5,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.13301247003452515,
+       "p_one_sided": 0.1171875,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.4375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.14380920420671323,
+       "p_one_sided": 0.109375,
+       "origins_better": 6,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.4375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.08894573962840548,
+       "p_one_sided": 0.0625,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": 0.011167761830516664,
+       "p_one_sided": 0.7109375,
+       "origins_better": 3,
+       "origins_worse": 5,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.10651931820231096,
+       "p_one_sided": 0.05078125,
+       "origins_better": 6,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.3046875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.04435294146689385,
+       "p_one_sided": 0.17578125,
+       "origins_better": 7,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "2": {
+    "n_origins": 7,
+    "origins": [
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-07-01",
+     "2025-10-01",
+     "2026-01-01"
+    ],
+    "target_quarters": [
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 33,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 31,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8857142857142857,
+      "precision": 0.9393939393939394,
+      "recall": 0.9393939393939394,
+      "F1": 0.9393939393939394,
+      "specificity": 0.0,
+      "ROC_AUC": 0.10606060606060606,
+      "Brier": 0.11282109498653807,
+      "predicted_HIGH_share": 0.9428571428571428
+     },
+     "B1_naive_persistence": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 29,
+      "FP": 2,
+      "FN": 4,
+      "TN": 0,
+      "accuracy": 0.8285714285714286,
+      "precision": 0.9354838709677419,
+      "recall": 0.8787878787878788,
+      "F1": 0.90625,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4393939393939394,
+      "Brier": 0.17142857142857143,
+      "predicted_HIGH_share": 0.8857142857142857
+     },
+     "B2_lr_combined": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 25,
+      "FP": 2,
+      "FN": 8,
+      "TN": 0,
+      "accuracy": 0.7142857142857143,
+      "precision": 0.9259259259259259,
+      "recall": 0.7575757575757576,
+      "F1": 0.8333333333333334,
+      "specificity": 0.0,
+      "ROC_AUC": 0.36363636363636365,
+      "Brier": 0.2237242202046183,
+      "predicted_HIGH_share": 0.7714285714285715
+     },
+     "B3_lr_gov_only": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 26,
+      "FP": 2,
+      "FN": 7,
+      "TN": 0,
+      "accuracy": 0.7428571428571429,
+      "precision": 0.9285714285714286,
+      "recall": 0.7878787878787878,
+      "F1": 0.8524590163934426,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2878787878787879,
+      "Brier": 0.1693693077987596,
+      "predicted_HIGH_share": 0.8
+     },
+     "B4_lr_nlp_only": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 20,
+      "FP": 0,
+      "FN": 13,
+      "TN": 2,
+      "accuracy": 0.6285714285714286,
+      "precision": 1.0,
+      "recall": 0.6060606060606061,
+      "F1": 0.7547169811320755,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8333333333333334,
+      "Brier": 0.2468941374954733,
+      "predicted_HIGH_share": 0.5714285714285714
+     },
+     "B5_lgbm_gov_only": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 28,
+      "FP": 2,
+      "FN": 5,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9333333333333333,
+      "recall": 0.8484848484848485,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.12121212121212122,
+      "Brier": 0.13751300757483204,
+      "predicted_HIGH_share": 0.8571428571428571
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 18,
+      "FP": 1,
+      "FN": 15,
+      "TN": 1,
+      "accuracy": 0.5428571428571428,
+      "precision": 0.9473684210526315,
+      "recall": 0.5454545454545454,
+      "F1": 0.6923076923076923,
+      "specificity": 0.5,
+      "ROC_AUC": 0.7424242424242424,
+      "Brier": 0.27792347691924246,
+      "predicted_HIGH_share": 0.5428571428571428
+     },
+     "S_lr_psa_only": {
+      "n": 35,
+      "HIGH": 33,
+      "LOW": 2,
+      "TP": 25,
+      "FP": 2,
+      "FN": 8,
+      "TN": 0,
+      "accuracy": 0.7142857142857143,
+      "precision": 0.9259259259259259,
+      "recall": 0.7575757575757576,
+      "F1": 0.8333333333333334,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2727272727272727,
+      "Brier": 0.2187088241176731,
+      "predicted_HIGH_share": 0.7714285714285715
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.13859385724194132,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.26475507071952753,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.06967376150684206,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.4701045624774175,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.16106622119282982,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.26545652670806974,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.18863388867047745,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.10909495526246105,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.03142335411938083,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.0684286480277839,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.18602865803741991,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.20652870680777496,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2767717461305828,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.1140760817819008,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09632905609679356,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.13706898866902745,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.10687682946898598,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.20659705029472084,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.15268201649052343,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.17087092220941394,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.49685715187141255,
+      "acc_S_lr_psa_only": 0.4
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.024677009058179995,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.562008026939821,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.30626232287407756,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.24016644880968746,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.035845102313883916,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.31297463165155104,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.22461796707776177,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19608579711627505,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.23158958133326163,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.23069782726258348,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.20006552739554873,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19510053223386797,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2670443179708022,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19847770030027412,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.008835410210915114,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.13952411654371236,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.2037482477223736,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.24320475531596064,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.005170543347204084,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.3367935524701585,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 0.0449806797831855,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2026-01-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.21613157991920046,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19970040310759726,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19989751772867087,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.18209196013755763,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.20619793063774008,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.31555264129411925,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 0.26331829933869916,
+      "acc_S_lr_psa_only": 0.6
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.05860747644203335,
+       "p_one_sided": 0.1171875,
+       "origins_better": 4,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.1109031252180802,
+       "p_one_sided": 0.078125,
+       "origins_better": 5,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.056548212812221554,
+       "p_one_sided": 0.203125,
+       "origins_better": 4,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.1340730425089352,
+       "p_one_sided": 0.0234375,
+       "origins_better": 6,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.1171875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.024691912588293955,
+       "p_one_sided": 0.078125,
+       "origins_better": 4,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.1651023819327044,
+       "p_one_sided": 0.0078125,
+       "origins_better": 7,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.046875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.10588772913113499,
+       "p_one_sided": 0.0078125,
+       "origins_better": 7,
+       "origins_worse": 0,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "3": {
+    "n_origins": 5,
+    "origins": [
+     "2024-04-01",
+     "2024-07-01",
+     "2025-04-01",
+     "2025-07-01",
+     "2025-10-01"
+    ],
+    "target_quarters": [
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 23,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 20,
+      "FP": 2,
+      "FN": 3,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9090909090909091,
+      "recall": 0.8695652173913043,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.13630726060224135,
+      "predicted_HIGH_share": 0.88
+     },
+     "B1_naive_persistence": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.45652173913043476,
+      "Brier": 0.16,
+      "predicted_HIGH_share": 0.92
+     },
+     "B2_lr_combined": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.3695652173913043,
+      "Brier": 0.13430289722758051,
+      "predicted_HIGH_share": 0.92
+     },
+     "B3_lr_gov_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2826086956521739,
+      "Brier": 0.14137035311536333,
+      "predicted_HIGH_share": 0.92
+     },
+     "B4_lr_nlp_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 18,
+      "FP": 0,
+      "FN": 5,
+      "TN": 2,
+      "accuracy": 0.8,
+      "precision": 1.0,
+      "recall": 0.782608695652174,
+      "F1": 0.878048780487805,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8913043478260869,
+      "Brier": 0.20778934256275505,
+      "predicted_HIGH_share": 0.72
+     },
+     "B5_lgbm_gov_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4891304347826087,
+      "Brier": 0.1255493573005588,
+      "predicted_HIGH_share": 0.92
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 0,
+      "FN": 10,
+      "TN": 2,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5652173913043478,
+      "F1": 0.7222222222222222,
+      "specificity": 1.0,
+      "ROC_AUC": 0.6521739130434783,
+      "Brier": 0.2615864449094294,
+      "predicted_HIGH_share": 0.52
+     },
+     "S_lr_psa_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 19,
+      "FP": 2,
+      "FN": 4,
+      "TN": 0,
+      "accuracy": 0.76,
+      "precision": 0.9047619047619048,
+      "recall": 0.8260869565217391,
+      "F1": 0.8636363636363636,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2391304347826087,
+      "Brier": 0.21400651368159745,
+      "predicted_HIGH_share": 0.84
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.24927461080627156,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.010592259409202453,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.0027775366909322035,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.15579340061134025,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.1860850606570366,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2585544517586015,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2625337767135577,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.0684698362418232,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.2612710443328109,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.30418328849663534,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.3324481017799515,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.06823787729816702,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.20269465413564852,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.40830504665362594,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.16166654516517567,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19972928863701817,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19990844603191793,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.17673930731611642,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.16474346278671267,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.23970365121123702,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.199182795265854,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.032326589979941076,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 8.637232380917768e-09,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 8.469858010308123e-10,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.19239765951293622,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.032848981693438764,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.32699329324767845,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 1.501390415613875e-05,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.1697987208179952,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19992188512163864,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19998249351034547,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.1815682435934308,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.1758314040674389,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.27998617419398153,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19999593587079356,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.02369273939775865,
+       "p_one_sided": 0.3125,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": 0.0020043633746608344,
+       "p_one_sided": 0.5625,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.005063092513121992,
+       "p_one_sided": 0.46875,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.0714820819605137,
+       "p_one_sided": 0.15625,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.78125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": 0.010757903301682557,
+       "p_one_sided": 0.5625,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.12527918430718804,
+       "p_one_sided": 0.03125,
+       "origins_better": 5,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.1875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.07769925307935613,
+       "p_one_sided": 0.125,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "4": {
+    "n_origins": 3,
+    "origins": [
+     "2025-01-01",
+     "2025-04-01",
+     "2025-07-01"
+    ],
+    "target_quarters": [
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 13,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.8269230769230769,
+      "Brier": 0.10958787623973795,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.13333333333333333,
+      "predicted_HIGH_share": 1.0
+     },
+     "B2_lr_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.46153846153846156,
+      "Brier": 0.13581420954749082,
+      "predicted_HIGH_share": 1.0
+     },
+     "B3_lr_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.13299169403495856,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6153846153846154,
+      "Brier": 0.1920504907597931,
+      "predicted_HIGH_share": 1.0
+     },
+     "B5_lgbm_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.25,
+      "Brier": 0.13105052178563287,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 7,
+      "FP": 0,
+      "FN": 6,
+      "TN": 2,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5384615384615384,
+      "F1": 0.7000000000000001,
+      "specificity": 1.0,
+      "ROC_AUC": 0.9615384615384616,
+      "Brier": 0.21935130900176636,
+      "predicted_HIGH_share": 0.4666666666666667
+     },
+     "S_lr_psa_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.38461538461538464,
+      "Brier": 0.13719232430848394,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.15706587818405196,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.20766360437003156,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19900246570496313,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.20920998395635118,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.18961008063551604,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.14781143581015085,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.21161228401388854,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.007580256402328634,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 4.98618290132196e-07,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 7.56953559056824e-09,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.16398514855646537,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.013537692848834973,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2563583630582008,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 4.170496377667715e-05,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.16411749413283325,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.1997785256541508,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19997260883037699,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.2029563397665628,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19000379187254757,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2538841281369474,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19992298394778668,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.02374545709359538,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.02622633330775287,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.023403817795220622,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.08246261452005516,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.021462645545894905,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.10976343276202838,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.027604448068746023,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "5": {
+    "n_origins": 3,
+    "origins": [
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01"
+    ],
+    "target_quarters": [
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 14,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9333333333333333,
+      "recall": 1.0,
+      "F1": 0.9655172413793104,
+      "specificity": 0.0,
+      "ROC_AUC": 0.14285714285714285,
+      "Brier": 0.0987641938635413,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9333333333333333,
+      "recall": 1.0,
+      "F1": 0.9655172413793104,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.06666666666666667,
+      "predicted_HIGH_share": 1.0
+     },
+     "B2_lr_combined": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 12,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.07142857142857142,
+      "Brier": 0.12205559654179433,
+      "predicted_HIGH_share": 0.8666666666666667
+     },
+     "B3_lr_gov_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9333333333333333,
+      "recall": 1.0,
+      "F1": 0.9655172413793104,
+      "specificity": 0.0,
+      "ROC_AUC": 0.07142857142857142,
+      "Brier": 0.07234622917103067,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 13,
+      "FP": 1,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.9285714285714286,
+      "recall": 0.9285714285714286,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.9285714285714286,
+      "Brier": 0.16752889789627098,
+      "predicted_HIGH_share": 0.9333333333333333
+     },
+     "B5_lgbm_gov_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9333333333333333,
+      "recall": 1.0,
+      "F1": 0.9655172413793104,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5357142857142857,
+      "Brier": 0.06704899538386197,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 8,
+      "FP": 0,
+      "FN": 6,
+      "TN": 1,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5714285714285714,
+      "F1": 0.7272727272727273,
+      "specificity": 1.0,
+      "ROC_AUC": 0.5714285714285714,
+      "Brier": 0.2134699521490601,
+      "predicted_HIGH_share": 0.5333333333333333
+     },
+     "S_lr_psa_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9333333333333333,
+      "recall": 1.0,
+      "F1": 0.9655172413793104,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2857142857142857,
+      "Brier": 0.07705332016795434,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.029000862544596544,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.09061016102230603,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.004563853905237666,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.15438785939569985,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.00024254514072841025,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.22116803874042237,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.017666483123318998,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09644410179885358,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.07563301880515239,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.012492353846090019,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.17020878942426504,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.024909848475766376,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.18585523184666988,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.014309449110690153,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.17084761724717373,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19992360979792462,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19998247976176436,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.17799004486884806,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.17599459253509112,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.23338658586008795,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19918402826985385,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.032097527196874615,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.023291402678253054,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.026417964692510607,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.0687647040327297,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.03171519847967931,
+       "p_one_sided": 0.875,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.11470575828551877,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.02171087369558695,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "6": {
+    "n_origins": 2,
+    "origins": [
+     "2024-10-01",
+     "2025-01-01"
+    ],
+    "target_quarters": [
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 9,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6111111111111112,
+      "Brier": 0.09249715057977392,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.1,
+      "predicted_HIGH_share": 1.0
+     },
+     "B2_lr_combined": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 8,
+      "FP": 1,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8888888888888888,
+      "recall": 0.8888888888888888,
+      "F1": 0.8888888888888888,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5555555555555556,
+      "Brier": 0.12412806833475006,
+      "predicted_HIGH_share": 0.9
+     },
+     "B3_lr_gov_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5555555555555556,
+      "Brier": 0.10153487660835617,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6666666666666666,
+      "Brier": 0.13194800610569757,
+      "predicted_HIGH_share": 1.0
+     },
+     "B5_lgbm_gov_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6666666666666666,
+      "Brier": 0.09797685003808619,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 6,
+      "FP": 0,
+      "FN": 3,
+      "TN": 1,
+      "accuracy": 0.7,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "F1": 0.8,
+      "specificity": 1.0,
+      "ROC_AUC": 0.7222222222222222,
+      "Brier": 0.18903569429285738,
+      "predicted_HIGH_share": 0.6
+     },
+     "S_lr_psa_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5555555555555556,
+      "Brier": 0.09999620104985876,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.027327102215731324,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.05037691649125812,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.0006796967019450157,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.11105436969061903,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.00021333570617940376,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2053342639190082,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.00013195626998222093,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.15766719894381653,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.197879220178242,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.2023900565147673,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.15284164252077606,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19574036436999298,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.17273712466670657,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.1998604458297353,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.00750284942022607,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.031630917754976125,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.009037726028582223,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.039450855525923624,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.005479699458312266,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.09653854371308347,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.007499050470084831,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "7": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   },
+   "8": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   }
+  },
+  "mode": "origin",
+  "reliability": {
+   "1": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "2": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "3": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "4": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "5": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "6": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "7": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "8": {
+    "evaluable": false,
+    "reliable": false
+   }
+  },
+  "max_reliable_lead": null,
+  "evaluable_leads": [],
+  "hypotheses": {
+   "H2": {
+    "decision": "not testable",
+    "why": "0 evaluable lead(s); the rule needs >= 2"
+   },
+   "primary_lead_for_H1_H3": null,
+   "H3": {
+    "decision": "not testable",
+    "why": "no evaluable lead"
+   },
+   "H1": {
+    "decision": "not testable",
+    "why": "no evaluable lead"
+   },
+   "H4": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   },
+   "H5": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   }
+  }
+ },
+ "origin_excluding_2026_targets": {
+  "by_lead": {
+   "1": {
+    "n_origins": 7,
+    "origins": [
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-10-01"
+    ],
+    "target_quarters": [
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4"
+    ],
+    "test_HIGH": 32,
+    "test_LOW": 3,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 26,
+      "FP": 1,
+      "FN": 6,
+      "TN": 2,
+      "accuracy": 0.8,
+      "precision": 0.9629629629629629,
+      "recall": 0.8125,
+      "F1": 0.8813559322033898,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.7083333333333334,
+      "Brier": 0.15466766627516565,
+      "predicted_HIGH_share": 0.7714285714285715
+     },
+     "B1_naive_persistence": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 28,
+      "FP": 1,
+      "FN": 4,
+      "TN": 2,
+      "accuracy": 0.8571428571428571,
+      "precision": 0.9655172413793104,
+      "recall": 0.875,
+      "F1": 0.9180327868852458,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.7708333333333334,
+      "Brier": 0.14285714285714285,
+      "predicted_HIGH_share": 0.8285714285714286
+     },
+     "B2_lr_combined": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 20,
+      "FP": 1,
+      "FN": 12,
+      "TN": 2,
+      "accuracy": 0.6285714285714286,
+      "precision": 0.9523809523809523,
+      "recall": 0.625,
+      "F1": 0.7547169811320755,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.625,
+      "Brier": 0.28747771848584514,
+      "predicted_HIGH_share": 0.6
+     },
+     "B3_lr_gov_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 21,
+      "FP": 1,
+      "FN": 11,
+      "TN": 2,
+      "accuracy": 0.6571428571428571,
+      "precision": 0.9545454545454546,
+      "recall": 0.65625,
+      "F1": 0.7777777777777778,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6354166666666666,
+      "Brier": 0.30260629230852154,
+      "predicted_HIGH_share": 0.6285714285714286
+     },
+     "B4_lr_nlp_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 18,
+      "FP": 0,
+      "FN": 14,
+      "TN": 3,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5625,
+      "F1": 0.72,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8020833333333334,
+      "Brier": 0.23390244157415926,
+      "predicted_HIGH_share": 0.5142857142857142
+     },
+     "B5_lgbm_gov_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 27,
+      "FP": 1,
+      "FN": 5,
+      "TN": 2,
+      "accuracy": 0.8285714285714286,
+      "precision": 0.9642857142857143,
+      "recall": 0.84375,
+      "F1": 0.8999999999999999,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6458333333333334,
+      "Brier": 0.14428919287000783,
+      "predicted_HIGH_share": 0.8
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 19,
+      "FP": 0,
+      "FN": 13,
+      "TN": 3,
+      "accuracy": 0.6285714285714286,
+      "precision": 1.0,
+      "recall": 0.59375,
+      "F1": 0.7450980392156863,
+      "specificity": 1.0,
+      "ROC_AUC": 0.7291666666666666,
+      "Brier": 0.24488215121894505,
+      "predicted_HIGH_share": 0.5428571428571428
+     },
+     "S_lr_psa_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 23,
+      "FP": 1,
+      "FN": 9,
+      "TN": 2,
+      "accuracy": 0.7142857142857143,
+      "precision": 0.9583333333333334,
+      "recall": 0.71875,
+      "F1": 0.8214285714285714,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.6875,
+      "Brier": 0.20168204495926778,
+      "predicted_HIGH_share": 0.6857142857142857
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2023-10-01",
+      "target_quarter": "2023-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.29300613989654384,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.26714301166380755,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.30395541250000185,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.21985581392297077,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.3142764300078171,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.22657073231076627,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.3296736060678424,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q1",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.3264515326823936,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.02101343828098417,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.024544240185514835,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.19312518463749168,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.23229617132869493,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.212068381285918,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.12219906238575307,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.1254732829893338,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.36241585462318404,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.3715322556481143,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.2941990834058691,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.15054098711045394,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.17146321830022523,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2288064169293357,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09055722829877771,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.7649584850338254,
+      "acc_B2_lr_combined": 0.0,
+      "brier_B3_lr_gov_only": 0.8562778146910969,
+      "acc_B3_lr_gov_only": 0.0,
+      "brier_B4_lr_nlp_only": 0.20682114533979754,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.08868633457663143,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.19071227103827088,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.17393427214988563,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.03606410659527768,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.3852944470441466,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.3446723690036439,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.275147764251748,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.014710430524034665,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2590978156753173,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.08840232185106174,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.020208483481791082,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.004974958153820555,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.007033653484911387,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.2798341825772807,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.01655727650648763,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.374276465728136,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2539985608691836,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19091288998204176,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.20654383460114775,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.21022830064636738,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.16833391688395707,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.19295672003593495,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.27998617419398153,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.21476007446181225,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": 0.011810523418022788,
+       "p_one_sided": 0.65625,
+       "origins_better": 3,
+       "origins_worse": 4,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.1328100522106795,
+       "p_one_sided": 0.171875,
+       "origins_better": 4,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.625
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.1479386260333559,
+       "p_one_sided": 0.15625,
+       "origins_better": 5,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.625
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.07923477529899361,
+       "p_one_sided": 0.109375,
+       "origins_better": 4,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.609375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": 0.010378473405157835,
+       "p_one_sided": 0.6640625,
+       "origins_better": 3,
+       "origins_worse": 4,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.09021448494377937,
+       "p_one_sided": 0.1015625,
+       "origins_better": 5,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.609375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.04701437868410213,
+       "p_one_sided": 0.1953125,
+       "origins_better": 6,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "2": {
+    "n_origins": 5,
+    "origins": [
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-07-01"
+    ],
+    "target_quarters": [
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4"
+    ],
+    "test_HIGH": 24,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 22,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.88,
+      "precision": 0.9565217391304348,
+      "recall": 0.9166666666666666,
+      "F1": 0.9361702127659574,
+      "specificity": 0.0,
+      "ROC_AUC": 0.041666666666666664,
+      "Brier": 0.11295613495513018,
+      "predicted_HIGH_share": 0.92
+     },
+     "B1_naive_persistence": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 20,
+      "FP": 1,
+      "FN": 4,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9523809523809523,
+      "recall": 0.8333333333333334,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4166666666666667,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.84
+     },
+     "B2_lr_combined": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 17,
+      "FP": 1,
+      "FN": 7,
+      "TN": 0,
+      "accuracy": 0.68,
+      "precision": 0.9444444444444444,
+      "recall": 0.7083333333333334,
+      "F1": 0.8095238095238096,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.24536900435620368,
+      "predicted_HIGH_share": 0.72
+     },
+     "B3_lr_gov_only": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 19,
+      "FP": 1,
+      "FN": 5,
+      "TN": 0,
+      "accuracy": 0.76,
+      "precision": 0.95,
+      "recall": 0.7916666666666666,
+      "F1": 0.8636363636363635,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4166666666666667,
+      "Brier": 0.1563878778280546,
+      "predicted_HIGH_share": 0.8
+     },
+     "B4_lr_nlp_only": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 15,
+      "FP": 0,
+      "FN": 9,
+      "TN": 1,
+      "accuracy": 0.64,
+      "precision": 1.0,
+      "recall": 0.625,
+      "F1": 0.7692307692307693,
+      "specificity": 1.0,
+      "ROC_AUC": 0.75,
+      "Brier": 0.2605924494029589,
+      "predicted_HIGH_share": 0.6
+     },
+     "B5_lgbm_gov_only": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 19,
+      "FP": 1,
+      "FN": 5,
+      "TN": 0,
+      "accuracy": 0.76,
+      "precision": 0.95,
+      "recall": 0.7916666666666666,
+      "F1": 0.8636363636363635,
+      "specificity": 0.0,
+      "ROC_AUC": 0.041666666666666664,
+      "Brier": 0.150244515807776,
+      "predicted_HIGH_share": 0.8
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 14,
+      "FP": 0,
+      "FN": 10,
+      "TN": 1,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5833333333333334,
+      "F1": 0.7368421052631579,
+      "specificity": 1.0,
+      "ROC_AUC": 0.9583333333333334,
+      "Brier": 0.25862362893408397,
+      "predicted_HIGH_share": 0.56
+     },
+     "S_lr_psa_only": {
+      "n": 25,
+      "HIGH": 24,
+      "LOW": 1,
+      "TP": 17,
+      "FP": 1,
+      "FN": 7,
+      "TN": 0,
+      "accuracy": 0.68,
+      "precision": 0.9444444444444444,
+      "recall": 0.7083333333333334,
+      "F1": 0.8095238095238096,
+      "specificity": 0.0,
+      "ROC_AUC": 0.3333333333333333,
+      "Brier": 0.24453255794036535,
+      "predicted_HIGH_share": 0.72
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.13859385724194132,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.26475507071952753,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.06967376150684206,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.4701045624774175,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.16106622119282982,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.26545652670806974,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.18863388867047745,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.10909495526246105,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.03142335411938083,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.0684286480277839,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.18602865803741991,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.20652870680777496,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2767717461305828,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.1140760817819008,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09632905609679356,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.13706898866902745,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.10687682946898598,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.20659705029472084,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.15268201649052343,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.17087092220941394,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.49685715187141255,
+      "acc_S_lr_psa_only": 0.4
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.024677009058179995,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.562008026939821,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.30626232287407756,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.24016644880968746,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.035845102313883916,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.31297463165155104,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.22461796707776177,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19608579711627505,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.23158958133326163,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.23069782726258348,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.20006552739554873,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19510053223386797,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2670443179708022,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19847770030027412,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.0870438650448698,
+       "p_one_sided": 0.09375,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.28125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.1324128694010735,
+       "p_one_sided": 0.15625,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.3125
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.043431742872924395,
+       "p_one_sided": 0.375,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.1476363144478287,
+       "p_one_sided": 0.03125,
+       "origins_better": 5,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.1875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.03728838085264582,
+       "p_one_sided": 0.0625,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.25
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.14566749397895373,
+       "p_one_sided": 0.03125,
+       "origins_better": 5,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.1875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.13157642298523517,
+       "p_one_sided": 0.03125,
+       "origins_better": 5,
+       "origins_worse": 0,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "3": {
+    "n_origins": 3,
+    "origins": [
+     "2024-04-01",
+     "2024-07-01",
+     "2025-04-01"
+    ],
+    "target_quarters": [
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4"
+    ],
+    "test_HIGH": 14,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 11,
+      "FP": 1,
+      "FN": 3,
+      "TN": 0,
+      "accuracy": 0.7333333333333333,
+      "precision": 0.9166666666666666,
+      "recall": 0.7857142857142857,
+      "F1": 0.8461538461538461,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.15980366407109015,
+      "predicted_HIGH_share": 0.8
+     },
+     "B1_naive_persistence": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 12,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.42857142857142855,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.8666666666666667
+     },
+     "B2_lr_combined": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 12,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.21428571428571427,
+      "Brier": 0.15719753079301052,
+      "predicted_HIGH_share": 0.8666666666666667
+     },
+     "B3_lr_gov_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 12,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.0,
+      "Brier": 0.16895642373982847,
+      "predicted_HIGH_share": 0.8666666666666667
+     },
+     "B4_lr_nlp_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 10,
+      "FP": 0,
+      "FN": 4,
+      "TN": 1,
+      "accuracy": 0.7333333333333333,
+      "precision": 1.0,
+      "recall": 0.7142857142857143,
+      "F1": 0.8333333333333333,
+      "specificity": 1.0,
+      "ROC_AUC": 0.7857142857142857,
+      "Brier": 0.22166026990246934,
+      "predicted_HIGH_share": 0.6666666666666666
+     },
+     "B5_lgbm_gov_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 12,
+      "FP": 1,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5357142857142857,
+      "Brier": 0.1396888002473054,
+      "predicted_HIGH_share": 0.8666666666666667
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 0,
+      "FN": 5,
+      "TN": 1,
+      "accuracy": 0.6666666666666666,
+      "precision": 1.0,
+      "recall": 0.6428571428571429,
+      "F1": 0.782608695652174,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8571428571428571,
+      "Brier": 0.23365091903516239,
+      "predicted_HIGH_share": 0.6
+     },
+     "S_lr_psa_only": {
+      "n": 15,
+      "HIGH": 14,
+      "LOW": 1,
+      "TP": 10,
+      "FP": 1,
+      "FN": 4,
+      "TN": 0,
+      "accuracy": 0.6666666666666666,
+      "precision": 0.9090909090909091,
+      "recall": 0.7142857142857143,
+      "F1": 0.8,
+      "specificity": 0.0,
+      "ROC_AUC": 0.07142857142857142,
+      "Brier": 0.29000720621101256,
+      "predicted_HIGH_share": 0.7333333333333333
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.24927461080627156,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.010592259409202453,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.0027775366909322035,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.15579340061134025,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.1860850606570366,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2585544517586015,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.2625337767135577,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.0684698362418232,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.2612710443328109,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.30418328849663534,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.3324481017799515,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.06823787729816702,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.20269465413564852,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.40830504665362594,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.16166654516517567,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19972928863701817,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19990844603191793,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.17673930731611642,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.16474346278671267,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.23970365121123702,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.199182795265854,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.040196335928909845,
+       "p_one_sided": 0.375,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.002606133278079637,
+       "p_one_sided": 0.625,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.009152759668738327,
+       "p_one_sided": 0.5,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.06185660583137925,
+       "p_one_sided": 0.375,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.02011486382378472,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.0738472549640722,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.13020354213992238,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "4": {
+    "n_origins": 1,
+    "origins": [
+     "2025-01-01"
+    ],
+    "target_quarters": [
+     "2025-Q4"
+    ],
+    "test_HIGH": 4,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.875,
+      "Brier": 0.15706587818405196,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 1.0
+     },
+     "B2_lr_combined": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.0,
+      "Brier": 0.20766360437003156,
+      "predicted_HIGH_share": 1.0
+     },
+     "B3_lr_gov_only": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.25,
+      "Brier": 0.19900246570496313,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5,
+      "Brier": 0.20920998395635118,
+      "predicted_HIGH_share": 1.0
+     },
+     "B5_lgbm_gov_only": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.625,
+      "Brier": 0.18961008063551604,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 3,
+      "FP": 0,
+      "FN": 1,
+      "TN": 1,
+      "accuracy": 0.8,
+      "precision": 1.0,
+      "recall": 0.75,
+      "F1": 0.8571428571428571,
+      "specificity": 1.0,
+      "ROC_AUC": 1.0,
+      "Brier": 0.14781143581015085,
+      "predicted_HIGH_share": 0.6
+     },
+     "S_lr_psa_only": {
+      "n": 5,
+      "HIGH": 4,
+      "LOW": 1,
+      "TP": 4,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8,
+      "recall": 1.0,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.25,
+      "Brier": 0.21161228401388854,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.15706587818405196,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.20766360437003156,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19900246570496313,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.20920998395635118,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.18961008063551604,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.14781143581015085,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.21161228401388854,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.04293412181594804,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.050597726185979575,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.04193658752091119,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.05214410577229921,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.03254420245146408,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": 0.009254442373901096,
+       "p_one_sided": 1.0,
+       "origins_better": 0,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.05454640582983659,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "5": {
+    "n_origins": 1,
+    "origins": [
+     "2024-10-01"
+    ],
+    "target_quarters": [
+     "2025-Q4"
+    ],
+    "test_HIGH": 5,
+    "test_LOW": 0,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 5,
+      "FP": 0,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "F1": 1.0,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.029000862544596544,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 5,
+      "FP": 0,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "F1": 1.0,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.0,
+      "predicted_HIGH_share": 1.0
+     },
+     "B2_lr_combined": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 4,
+      "FP": 0,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 1.0,
+      "recall": 0.8,
+      "F1": 0.888888888888889,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.09061016102230603,
+      "predicted_HIGH_share": 0.8
+     },
+     "B3_lr_gov_only": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 5,
+      "FP": 0,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "F1": 1.0,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.004563853905237666,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 4,
+      "FP": 0,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 1.0,
+      "recall": 0.8,
+      "F1": 0.888888888888889,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.15438785939569985,
+      "predicted_HIGH_share": 0.8
+     },
+     "B5_lgbm_gov_only": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 5,
+      "FP": 0,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "F1": 1.0,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.00024254514072841025,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 3,
+      "FP": 0,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.6,
+      "F1": 0.7499999999999999,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.22116803874042237,
+      "predicted_HIGH_share": 0.6
+     },
+     "S_lr_psa_only": {
+      "n": 5,
+      "HIGH": 5,
+      "LOW": 0,
+      "TP": 5,
+      "FP": 0,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "F1": 1.0,
+      "specificity": null,
+      "ROC_AUC": null,
+      "Brier": 0.017666483123318998,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.029000862544596544,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.09061016102230603,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.004563853905237666,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.15438785939569985,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.00024254514072841025,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.22116803874042237,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.017666483123318998,
+      "acc_S_lr_psa_only": 1.0
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": 0.02900086254459654,
+       "p_one_sided": 1.0,
+       "origins_better": 0,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.061609298477709476,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": 0.024437008639358875,
+       "p_one_sided": 1.0,
+       "origins_better": 0,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.12538699685110333,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": 0.02875831740386813,
+       "p_one_sided": 1.0,
+       "origins_better": 0,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": -0.19216717619582582,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 1,
+       "exact": true,
+       "mean_diff": 0.011334379421277541,
+       "p_one_sided": 1.0,
+       "origins_better": 0,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "6": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   },
+   "7": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   },
+   "8": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   }
+  },
+  "mode": "origin_excl_2026",
+  "reliability": {
+   "1": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "2": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "3": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "4": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "5": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "6": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "7": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "8": {
+    "evaluable": false,
+    "reliable": false
+   }
+  },
+  "max_reliable_lead": null,
+  "evaluable_leads": [],
+  "hypotheses": {
+   "H2": {
+    "decision": "not testable",
+    "why": "0 evaluable lead(s); the rule needs >= 2"
+   },
+   "primary_lead_for_H1_H3": null,
+   "H3": {
+    "decision": "not testable",
+    "why": "no evaluable lead"
+   },
+   "H1": {
+    "decision": "not testable",
+    "why": "no evaluable lead"
+   },
+   "H4": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   },
+   "H5": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   }
+  }
+ },
+ "fixed": {
+  "by_lead": {
+   "1": {
+    "n_origins": 8,
+    "origins": [
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-10-01",
+     "2026-01-01"
+    ],
+    "target_quarters": [
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1"
+    ],
+    "test_HIGH": 35,
+    "test_LOW": 5,
+    "evaluable": true,
+    "reason": null,
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 27,
+      "FP": 2,
+      "FN": 8,
+      "TN": 3,
+      "accuracy": 0.75,
+      "precision": 0.9310344827586207,
+      "recall": 0.7714285714285715,
+      "F1": 0.8437500000000001,
+      "specificity": 0.6,
+      "ROC_AUC": 0.76,
+      "Brier": 0.21448141754891462,
+      "predicted_HIGH_share": 0.725
+     },
+     "B1_naive_persistence": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 26,
+      "FP": 2,
+      "FN": 9,
+      "TN": 3,
+      "accuracy": 0.725,
+      "precision": 0.9285714285714286,
+      "recall": 0.7428571428571429,
+      "F1": 0.8253968253968255,
+      "specificity": 0.6,
+      "ROC_AUC": 0.6714285714285714,
+      "Brier": 0.275,
+      "predicted_HIGH_share": 0.7
+     },
+     "B2_lr_combined": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 23,
+      "FP": 1,
+      "FN": 12,
+      "TN": 4,
+      "accuracy": 0.675,
+      "precision": 0.9583333333333334,
+      "recall": 0.6571428571428571,
+      "F1": 0.7796610169491525,
+      "specificity": 0.8,
+      "ROC_AUC": 0.7371428571428571,
+      "Brier": 0.2506752708840651,
+      "predicted_HIGH_share": 0.6
+     },
+     "B3_lr_gov_only": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 22,
+      "FP": 1,
+      "FN": 13,
+      "TN": 4,
+      "accuracy": 0.65,
+      "precision": 0.9565217391304348,
+      "recall": 0.6285714285714286,
+      "F1": 0.7586206896551724,
+      "specificity": 0.8,
+      "ROC_AUC": 0.7542857142857143,
+      "Brier": 0.2512630322914866,
+      "predicted_HIGH_share": 0.575
+     },
+     "B4_lr_nlp_only": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 5,
+      "FP": 0,
+      "FN": 30,
+      "TN": 5,
+      "accuracy": 0.25,
+      "precision": 1.0,
+      "recall": 0.14285714285714285,
+      "F1": 0.25,
+      "specificity": 1.0,
+      "ROC_AUC": 0.64,
+      "Brier": 0.42020378078149817,
+      "predicted_HIGH_share": 0.125
+     },
+     "B5_lgbm_gov_only": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 28,
+      "FP": 2,
+      "FN": 7,
+      "TN": 3,
+      "accuracy": 0.775,
+      "precision": 0.9333333333333333,
+      "recall": 0.8,
+      "F1": 0.8615384615384616,
+      "specificity": 0.6,
+      "ROC_AUC": 0.7428571428571429,
+      "Brier": 0.2189759451777838,
+      "predicted_HIGH_share": 0.75
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 20,
+      "FP": 1,
+      "FN": 15,
+      "TN": 4,
+      "accuracy": 0.6,
+      "precision": 0.9523809523809523,
+      "recall": 0.5714285714285714,
+      "F1": 0.7142857142857142,
+      "specificity": 0.8,
+      "ROC_AUC": 0.7428571428571429,
+      "Brier": 0.30535901658728204,
+      "predicted_HIGH_share": 0.525
+     },
+     "S_lr_psa_only": {
+      "n": 40,
+      "HIGH": 35,
+      "LOW": 5,
+      "TP": 26,
+      "FP": 2,
+      "FN": 9,
+      "TN": 3,
+      "accuracy": 0.725,
+      "precision": 0.9285714285714286,
+      "recall": 0.7428571428571429,
+      "F1": 0.8253968253968255,
+      "specificity": 0.6,
+      "ROC_AUC": 0.68,
+      "Brier": 0.20172780274699717,
+      "predicted_HIGH_share": 0.7
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2023-10-01",
+      "target_quarter": "2023-Q4",
+      "HIGH": 3,
+      "brier_PROPOSED_lgbm_combined": 0.44555624314379383,
+      "acc_PROPOSED_lgbm_combined": 0.4,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.2989580724520385,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.2859769965889893,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.44181879005225505,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.39054661703175897,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2624045113211356,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.23609393065915443,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q1",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.5172155800220134,
+      "acc_PROPOSED_lgbm_combined": 0.4,
+      "brier_B1_naive_persistence": 0.6,
+      "acc_B1_naive_persistence": 0.4,
+      "brier_B2_lr_combined": 0.034810815202845964,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.20353076734078618,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.4201649770323745,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.5056127795246669,
+      "acc_B5_lgbm_gov_only": 0.4,
+      "brier_B6_lgbm_nlp_only": 0.23520509684282825,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.27520803543948863,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.2833588429059391,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.5723992660881267,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.5784218554787347,
+      "acc_B3_lr_gov_only": 0.4,
+      "brier_B4_lr_nlp_only": 0.7000576055764561,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.35784637339788605,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.5492895907011639,
+      "acc_B6_lgbm_nlp_only": 0.2,
+      "brier_S_lr_psa_only": 0.40633310135584055,
+      "acc_S_lr_psa_only": 0.4
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.12352833403129529,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.2735544108371874,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.17575119651556964,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.4813496706393046,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.15705206253548137,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.1762299865855979,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.1792357203808061,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.050708763343090255,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.3385519111837079,
+      "acc_B2_lr_combined": 0.4,
+      "brier_B3_lr_gov_only": 0.2741991036716268,
+      "acc_B3_lr_gov_only": 0.4,
+      "brier_B4_lr_nlp_only": 0.489976125105054,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.04891119855530477,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.30317330814952564,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.0413525032497266,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.06403289805564046,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.025276441642345954,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.05206326980769519,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.3800643964522874,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.0604836215273407,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.33204201458836596,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.16554249826555223,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19164433342534562,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.216247958264766,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.219050460386518,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.1986214337282432,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.18809686897387762,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2915173401438222,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.22415219248877732,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2026-01-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.03980634546419926,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.24560329140150242,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.2211106085419728,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.24957724766601103,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.04325803987595349,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2930102843658168,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.0859044401366315,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.06051858245108536,
+       "p_one_sided": 0.09375,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.46875
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.6714285714285714,
+       "auc_diff": 0.08857142857142863,
+       "p_one_sided": 0.33203125,
+       "p_holm": 1.0
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.03619385333515046,
+       "p_one_sided": 0.35546875,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.90234375
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.7371428571428571,
+       "auc_diff": 0.02285714285714291,
+       "p_one_sided": 0.34765625,
+       "p_holm": 1.0
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.036781614742571925,
+       "p_one_sided": 0.30078125,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0,
+       "p_holm": 0.90234375
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.7542857142857143,
+       "auc_diff": 0.005714285714285672,
+       "p_one_sided": 0.47265625,
+       "p_holm": 1.0
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.20572236323258358,
+       "p_one_sided": 0.0234375,
+       "origins_better": 6,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.140625
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.64,
+       "auc_diff": 0.12,
+       "p_one_sided": 0.2109375,
+       "p_holm": 1.0
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.0044945276288691025,
+       "p_one_sided": 0.37109375,
+       "origins_better": 3,
+       "origins_worse": 5,
+       "origins_tied": 0,
+       "p_holm": 0.90234375
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.7428571428571429,
+       "auc_diff": 0.017142857142857126,
+       "p_one_sided": 0.375,
+       "p_holm": 1.0
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": -0.0908775990383674,
+       "p_one_sided": 0.12890625,
+       "origins_better": 6,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.515625
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.7428571428571429,
+       "auc_diff": 0.017142857142857126,
+       "p_one_sided": 0.48828125,
+       "p_holm": 1.0
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 8,
+       "exact": true,
+       "mean_diff": 0.012753614801917466,
+       "p_one_sided": 0.60546875,
+       "origins_better": 5,
+       "origins_worse": 3,
+       "origins_tied": 0
+      },
+      "auc": {
+       "n_origins": 8,
+       "exact": true,
+       "auc_a": 0.76,
+       "auc_b": 0.68,
+       "auc_diff": 0.07999999999999996,
+       "p_one_sided": 0.25
+      }
+     }
+    },
+    "proposed_auc_ci": {
+     "ci_low": 0.40540540540540543,
+     "ci_high": 0.9743589743589743,
+     "valid_resamples": 3987
+    },
+    "leave_one_origin_out_auc_diff": {
+     "B1_naive_persistence": {
+      "min_diff": 0.012096774193548376,
+      "max_diff": 0.18145161290322576,
+      "sign_changes": false
+     },
+     "B2_lr_combined": {
+      "min_diff": 0.0,
+      "max_diff": 0.07291666666666674,
+      "sign_changes": false
+     },
+     "B3_lr_gov_only": {
+      "min_diff": -0.016129032258064502,
+      "max_diff": 0.04166666666666674,
+      "sign_changes": true
+     },
+     "B4_lr_nlp_only": {
+      "min_diff": 0.05208333333333337,
+      "max_diff": 0.22580645161290325,
+      "sign_changes": false
+     },
+     "B5_lgbm_gov_only": {
+      "min_diff": -0.008064516129032251,
+      "max_diff": 0.05208333333333337,
+      "sign_changes": true
+     },
+     "B6_lgbm_nlp_only": {
+      "min_diff": -0.20833333333333326,
+      "max_diff": 0.12903225806451613,
+      "sign_changes": true
+     }
+    }
+   },
+   "2": {
+    "n_origins": 7,
+    "origins": [
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-07-01",
+     "2025-10-01",
+     "2026-01-01"
+    ],
+    "target_quarters": [
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 32,
+    "test_LOW": 3,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 27,
+      "FP": 2,
+      "FN": 5,
+      "TN": 1,
+      "accuracy": 0.8,
+      "precision": 0.9310344827586207,
+      "recall": 0.84375,
+      "F1": 0.8852459016393444,
+      "specificity": 0.3333333333333333,
+      "ROC_AUC": 0.3541666666666667,
+      "Brier": 0.1984444621559414,
+      "predicted_HIGH_share": 0.8285714285714286
+     },
+     "B1_naive_persistence": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 26,
+      "FP": 2,
+      "FN": 6,
+      "TN": 1,
+      "accuracy": 0.7714285714285715,
+      "precision": 0.9285714285714286,
+      "recall": 0.8125,
+      "F1": 0.8666666666666666,
+      "specificity": 0.3333333333333333,
+      "ROC_AUC": 0.5729166666666666,
+      "Brier": 0.22857142857142856,
+      "predicted_HIGH_share": 0.8
+     },
+     "B2_lr_combined": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 25,
+      "FP": 3,
+      "FN": 7,
+      "TN": 0,
+      "accuracy": 0.7142857142857143,
+      "precision": 0.8928571428571429,
+      "recall": 0.78125,
+      "F1": 0.8333333333333334,
+      "specificity": 0.0,
+      "ROC_AUC": 0.5208333333333334,
+      "Brier": 0.17713845022282637,
+      "predicted_HIGH_share": 0.8
+     },
+     "B3_lr_gov_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 24,
+      "FP": 3,
+      "FN": 8,
+      "TN": 0,
+      "accuracy": 0.6857142857142857,
+      "precision": 0.8888888888888888,
+      "recall": 0.75,
+      "F1": 0.8135593220338982,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4375,
+      "Brier": 0.18108545775782459,
+      "predicted_HIGH_share": 0.7714285714285715
+     },
+     "B4_lr_nlp_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 7,
+      "FP": 0,
+      "FN": 25,
+      "TN": 3,
+      "accuracy": 0.2857142857142857,
+      "precision": 1.0,
+      "recall": 0.21875,
+      "F1": 0.358974358974359,
+      "specificity": 1.0,
+      "ROC_AUC": 0.5625,
+      "Brier": 0.4012457090868431,
+      "predicted_HIGH_share": 0.2
+     },
+     "B5_lgbm_gov_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 27,
+      "FP": 2,
+      "FN": 5,
+      "TN": 1,
+      "accuracy": 0.8,
+      "precision": 0.9310344827586207,
+      "recall": 0.84375,
+      "F1": 0.8852459016393444,
+      "specificity": 0.3333333333333333,
+      "ROC_AUC": 0.3854166666666667,
+      "Brier": 0.15415177550978332,
+      "predicted_HIGH_share": 0.8285714285714286
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 17,
+      "FP": 1,
+      "FN": 15,
+      "TN": 2,
+      "accuracy": 0.5428571428571428,
+      "precision": 0.9444444444444444,
+      "recall": 0.53125,
+      "F1": 0.6799999999999999,
+      "specificity": 0.6666666666666666,
+      "ROC_AUC": 0.75,
+      "Brier": 0.3204721377755112,
+      "predicted_HIGH_share": 0.5142857142857142
+     },
+     "S_lr_psa_only": {
+      "n": 35,
+      "HIGH": 32,
+      "LOW": 3,
+      "TP": 21,
+      "FP": 3,
+      "FN": 11,
+      "TN": 0,
+      "accuracy": 0.6,
+      "precision": 0.875,
+      "recall": 0.65625,
+      "F1": 0.75,
+      "specificity": 0.0,
+      "ROC_AUC": 0.3333333333333333,
+      "Brier": 0.28959596618111183,
+      "predicted_HIGH_share": 0.6857142857142857
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-01-01",
+      "target_quarter": "2024-Q2",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.6110478610550698,
+      "acc_PROPOSED_lgbm_combined": 0.2,
+      "brier_B1_naive_persistence": 0.8,
+      "acc_B1_naive_persistence": 0.2,
+      "brier_B2_lr_combined": 0.29845667433239587,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.3059860089816454,
+      "acc_B3_lr_gov_only": 0.4,
+      "brier_B4_lr_nlp_only": 0.7695985179962589,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.43088967520472937,
+      "acc_B5_lgbm_gov_only": 0.2,
+      "brier_B6_lgbm_nlp_only": 0.35526702368033636,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.8086293878905229,
+      "acc_S_lr_psa_only": 0.2
+     },
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q3",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.21545609890193393,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.11196922807742886,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.12879961074988172,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.4348016044158126,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.12848034537354872,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.16297435683201228,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.1398797895435293,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09802957496325435,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.14988180793468048,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.14943170635010314,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.47758574906301127,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.054142094002261096,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2599258243110349,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.524140959675305,
+      "acc_S_lr_psa_only": 0.2
+     },
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.050708763343090255,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.0008798061341035625,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.002601037007242153,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.40944126470518727,
+      "acc_B4_lr_nlp_only": 0.2,
+      "brier_B5_lgbm_gov_only": 0.04891119855530477,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.4450715209266944,
+      "acc_B6_lgbm_nlp_only": 0.2,
+      "brier_S_lr_psa_only": 0.0034189710881091196,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.19573585975947197,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.2709013525000614,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.2434092695336168,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.23284085775426613,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.19707730965455414,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.30185756806988395,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.20055973046542666,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.007296466319930162,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 0.20803631406664613,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.2374553603828607,
+      "acc_B3_lr_gov_only": 0.6,
+      "brier_B4_lr_nlp_only": 0.2707026691793892,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.005526309498724422,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.36673145616609737,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 0.05615725225053327,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2026-01-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.21083661074883908,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19984396851446826,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.1999152112994222,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.2137493004939761,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.21403549627936064,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.35147721444251906,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 0.29438567235435664,
+      "acc_S_lr_psa_only": 0.6
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.03012696641548721,
+       "p_one_sided": 0.2421875,
+       "origins_better": 3,
+       "origins_worse": 4,
+       "origins_tied": 0,
+       "p_holm": 0.96875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": 0.021306011933114988,
+       "p_one_sided": 0.6328125,
+       "origins_better": 3,
+       "origins_worse": 4,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": 0.017359004398116763,
+       "p_one_sided": 0.6484375,
+       "origins_better": 3,
+       "origins_worse": 4,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.2028012469309017,
+       "p_one_sided": 0.0078125,
+       "origins_better": 7,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.046875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": 0.044292686646158055,
+       "p_one_sided": 0.9375,
+       "origins_better": 2,
+       "origins_worse": 5,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.12202767561956984,
+       "p_one_sided": 0.109375,
+       "origins_better": 5,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 0.546875
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 7,
+       "exact": true,
+       "mean_diff": -0.0911515040251705,
+       "p_one_sided": 0.1015625,
+       "origins_better": 5,
+       "origins_worse": 2,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "3": {
+    "n_origins": 5,
+    "origins": [
+     "2024-04-01",
+     "2024-07-01",
+     "2025-04-01",
+     "2025-07-01",
+     "2025-10-01"
+    ],
+    "target_quarters": [
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 23,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2717391304347826,
+      "Brier": 0.14825607184064604,
+      "predicted_HIGH_share": 0.92
+     },
+     "B1_naive_persistence": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 20,
+      "FP": 2,
+      "FN": 3,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.9090909090909091,
+      "recall": 0.8695652173913043,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.43478260869565216,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.88
+     },
+     "B2_lr_combined": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2391304347826087,
+      "Brier": 0.13435277846653332,
+      "predicted_HIGH_share": 0.92
+     },
+     "B3_lr_gov_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 22,
+      "FP": 2,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.88,
+      "precision": 0.9166666666666666,
+      "recall": 0.9565217391304348,
+      "F1": 0.9361702127659574,
+      "specificity": 0.0,
+      "ROC_AUC": 0.1956521739130435,
+      "Brier": 0.12776940372897322,
+      "predicted_HIGH_share": 0.96
+     },
+     "B4_lr_nlp_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 12,
+      "FP": 0,
+      "FN": 11,
+      "TN": 2,
+      "accuracy": 0.56,
+      "precision": 1.0,
+      "recall": 0.5217391304347826,
+      "F1": 0.6857142857142856,
+      "specificity": 1.0,
+      "ROC_AUC": 0.717391304347826,
+      "Brier": 0.30643021513983065,
+      "predicted_HIGH_share": 0.48
+     },
+     "B5_lgbm_gov_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 21,
+      "FP": 2,
+      "FN": 2,
+      "TN": 0,
+      "accuracy": 0.84,
+      "precision": 0.9130434782608695,
+      "recall": 0.9130434782608695,
+      "F1": 0.9130434782608695,
+      "specificity": 0.0,
+      "ROC_AUC": 0.31521739130434784,
+      "Brier": 0.14001794841173318,
+      "predicted_HIGH_share": 0.92
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 0,
+      "FN": 10,
+      "TN": 2,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5652173913043478,
+      "F1": 0.7222222222222222,
+      "specificity": 1.0,
+      "ROC_AUC": 0.8043478260869565,
+      "Brier": 0.28152062848699255,
+      "predicted_HIGH_share": 0.52
+     },
+     "S_lr_psa_only": {
+      "n": 25,
+      "HIGH": 23,
+      "LOW": 2,
+      "TP": 19,
+      "FP": 2,
+      "FN": 4,
+      "TN": 0,
+      "accuracy": 0.76,
+      "precision": 0.9047619047619048,
+      "recall": 0.8260869565217391,
+      "F1": 0.8636363636363636,
+      "specificity": 0.0,
+      "ROC_AUC": 0.13043478260869565,
+      "Brier": 0.1772211453199848,
+      "predicted_HIGH_share": 0.84
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-04-01",
+      "target_quarter": "2024-Q4",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.2663534251744798,
+      "acc_PROPOSED_lgbm_combined": 0.6,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.007831406511350251,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 0.004502600986958521,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.544478777558748,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.21471163179559868,
+      "acc_B5_lgbm_gov_only": 0.6,
+      "brier_B6_lgbm_nlp_only": 0.2463390185956372,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.14901786774021547,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2024-07-01",
+      "target_quarter": "2025-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.09802957496325435,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.2640148546716307,
+      "acc_B2_lr_combined": 0.6,
+      "brier_B3_lr_gov_only": 0.23436240742992168,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.44635123796742154,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.10576132952304478,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2100032357037665,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.33706119074856966,
+      "acc_S_lr_psa_only": 0.6
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.17547349836187426,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19999573739081464,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19999951587065462,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.1673551570666168,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.17836952388821192,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.31509580124993153,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.20001571833618925,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.03332039174710921,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 8.637232380917768e-09,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 8.469858010308123e-10,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.19239765951293622,
+      "acc_B4_lr_nlp_only": 1.0,
+      "brier_B5_lgbm_gov_only": 0.030150390751370715,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.34464774674180515,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 1.501390415613875e-05,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-10-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.16810346895651268,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19992188512163864,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19998249351034547,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.1815682435934308,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.1710968661004398,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2915173401438222,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19999593587079356,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.051743928159353934,
+       "p_one_sided": 0.125,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.5
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": 0.01390329337411273,
+       "p_one_sided": 0.625,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": 0.020486668111672837,
+       "p_one_sided": 0.625,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.15817414329918456,
+       "p_one_sided": 0.0625,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": 0.00823812342891288,
+       "p_one_sided": 0.625,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.13326455664634645,
+       "p_one_sided": 0.0625,
+       "origins_better": 4,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.375
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 5,
+       "exact": true,
+       "mean_diff": -0.028965073479338754,
+       "p_one_sided": 0.375,
+       "origins_better": 3,
+       "origins_worse": 2,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "4": {
+    "n_origins": 3,
+    "origins": [
+     "2025-01-01",
+     "2025-04-01",
+     "2025-07-01"
+    ],
+    "target_quarters": [
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 13,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4230769230769231,
+      "Brier": 0.12724968099978712,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 12,
+      "FP": 2,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8571428571428571,
+      "recall": 0.9230769230769231,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.46153846153846156,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.9333333333333333
+     },
+     "B2_lr_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.15384615384615385,
+      "Brier": 0.1332948498463636,
+      "predicted_HIGH_share": 1.0
+     },
+     "B3_lr_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.23076923076923078,
+      "Brier": 0.13332022936532242,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 8,
+      "FP": 2,
+      "FN": 5,
+      "TN": 0,
+      "accuracy": 0.5333333333333333,
+      "precision": 0.8,
+      "recall": 0.6153846153846154,
+      "F1": 0.6956521739130435,
+      "specificity": 0.0,
+      "ROC_AUC": 0.2692307692307692,
+      "Brier": 0.2660336669150868,
+      "predicted_HIGH_share": 0.6666666666666666
+     },
+     "B5_lgbm_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.15384615384615385,
+      "Brier": 0.14115059093767135,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 7,
+      "FP": 0,
+      "FN": 6,
+      "TN": 2,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5384615384615384,
+      "F1": 0.7000000000000001,
+      "specificity": 1.0,
+      "ROC_AUC": 0.6730769230769231,
+      "Brier": 0.27421558375769356,
+      "predicted_HIGH_share": 0.4666666666666667
+     },
+     "S_lr_psa_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.15384615384615385,
+      "Brier": 0.13330553256256267,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.20121978188918782,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.20010430860704126,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19998806223319748,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.37676058029925397,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.20304760513220602,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.23045973340712353,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.1999927502145537,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.01641176697734028,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 1.715277898751088e-06,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 1.7032392771619992e-08,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.21838408067944362,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.030400375808260466,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.32912357427438277,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 8.635253476172485e-07,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-07-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.16411749413283325,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.1997785256541508,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19997260883037699,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.2029563397665628,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19000379187254757,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2630634435915745,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.19992298394778668,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.07275031900021288,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.006045168846576489,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.006070548365535288,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.1387839859152997,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.013900909937884218,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.14696590275790647,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.006055851562775553,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 2,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "5": {
+    "n_origins": 3,
+    "origins": [
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01"
+    ],
+    "target_quarters": [
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 13,
+    "test_LOW": 2,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.19230769230769232,
+      "Brier": 0.13141608923846454,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 12,
+      "FP": 2,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8571428571428571,
+      "recall": 0.9230769230769231,
+      "F1": 0.888888888888889,
+      "specificity": 0.0,
+      "ROC_AUC": 0.46153846153846156,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.9333333333333333
+     },
+     "B2_lr_combined": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.038461538461538464,
+      "Brier": 0.1335114180759448,
+      "predicted_HIGH_share": 1.0
+     },
+     "B3_lr_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.038461538461538464,
+      "Brier": 0.13336088901723328,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 5,
+      "FP": 1,
+      "FN": 8,
+      "TN": 1,
+      "accuracy": 0.4,
+      "precision": 0.8333333333333334,
+      "recall": 0.38461538461538464,
+      "F1": 0.5263157894736842,
+      "specificity": 0.5,
+      "ROC_AUC": 0.23076923076923078,
+      "Brier": 0.2857458658810519,
+      "predicted_HIGH_share": 0.4
+     },
+     "B5_lgbm_gov_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.36538461538461536,
+      "Brier": 0.1265502856483905,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 7,
+      "FP": 0,
+      "FN": 6,
+      "TN": 2,
+      "accuracy": 0.6,
+      "precision": 1.0,
+      "recall": 0.5384615384615384,
+      "F1": 0.7000000000000001,
+      "specificity": 1.0,
+      "ROC_AUC": 0.6923076923076923,
+      "Brier": 0.2451836342649814,
+      "predicted_HIGH_share": 0.4666666666666667
+     },
+     "S_lr_psa_only": {
+      "n": 15,
+      "HIGH": 13,
+      "LOW": 2,
+      "TP": 13,
+      "FP": 2,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8666666666666667,
+      "recall": 1.0,
+      "F1": 0.9285714285714286,
+      "specificity": 0.0,
+      "ROC_AUC": 0.15384615384615385,
+      "Brier": 0.13338789670434734,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2025-Q4",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.1724952858975351,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.20000013002187048,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19999936388117406,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.3803052071815531,
+      "acc_B4_lr_nlp_only": 0.0,
+      "brier_B5_lgbm_gov_only": 0.1969463551800234,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.1989942457002817,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.19999823509924647,
+      "acc_S_lr_psa_only": 0.8
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.047334628120000354,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.0005348977346840277,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 8.353951658724808e-05,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.25580145082736516,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.005853587875612949,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.2812487539793201,
+      "acc_B6_lgbm_nlp_only": 0.4,
+      "brier_S_lr_psa_only": 0.000204196226122117,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-04-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.17441835369785816,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.2,
+      "acc_B1_naive_persistence": 0.8,
+      "brier_B2_lr_combined": 0.19999922647127996,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.19999976365393857,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.22113093963423736,
+      "acc_B4_lr_nlp_only": 0.6,
+      "brier_B5_lgbm_gov_only": 0.17685091388953506,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.2553079031153425,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 0.1999612587876735,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.06858391076153546,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.0020953288374802614,
+       "p_one_sided": 0.5,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.0019447997787687364,
+       "p_one_sided": 0.5,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.1543297766425873,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": 0.004865803590074068,
+       "p_one_sided": 0.625,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.11376754502651686,
+       "p_one_sided": 0.125,
+       "origins_better": 3,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 0.75
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 3,
+       "exact": true,
+       "mean_diff": -0.001971807465882812,
+       "p_one_sided": 0.5,
+       "origins_better": 2,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "6": {
+    "n_origins": 2,
+    "origins": [
+     "2024-10-01",
+     "2025-01-01"
+    ],
+    "target_quarters": [
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "test_HIGH": 9,
+    "test_LOW": 1,
+    "evaluable": false,
+    "reason": "needs >= 8 origins and >= 5 HIGH and LOW test rows",
+    "metrics": {
+     "PROPOSED_lgbm_combined": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.3888888888888889,
+      "Brier": 0.11066692316643605,
+      "predicted_HIGH_share": 1.0
+     },
+     "B1_naive_persistence": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 8,
+      "FP": 1,
+      "FN": 1,
+      "TN": 0,
+      "accuracy": 0.8,
+      "precision": 0.8888888888888888,
+      "recall": 0.8888888888888888,
+      "F1": 0.8888888888888888,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4444444444444444,
+      "Brier": 0.2,
+      "predicted_HIGH_share": 0.9
+     },
+     "B2_lr_combined": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6666666666666666,
+      "Brier": 0.09729638711904462,
+      "predicted_HIGH_share": 1.0
+     },
+     "B3_lr_gov_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6666666666666666,
+      "Brier": 0.09997339784096344,
+      "predicted_HIGH_share": 1.0
+     },
+     "B4_lr_nlp_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 6,
+      "FP": 1,
+      "FN": 3,
+      "TN": 0,
+      "accuracy": 0.6,
+      "precision": 0.8571428571428571,
+      "recall": 0.6666666666666666,
+      "F1": 0.75,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4444444444444444,
+      "Brier": 0.22816974451900252,
+      "predicted_HIGH_share": 0.7
+     },
+     "B5_lgbm_gov_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.4444444444444444,
+      "Brier": 0.0980979999025797,
+      "predicted_HIGH_share": 1.0
+     },
+     "B6_lgbm_nlp_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 6,
+      "FP": 0,
+      "FN": 3,
+      "TN": 1,
+      "accuracy": 0.7,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "F1": 0.8,
+      "specificity": 1.0,
+      "ROC_AUC": 0.9444444444444444,
+      "Brier": 0.22155735018115333,
+      "predicted_HIGH_share": 0.6
+     },
+     "S_lr_psa_only": {
+      "n": 10,
+      "HIGH": 9,
+      "LOW": 1,
+      "TP": 9,
+      "FP": 1,
+      "FN": 0,
+      "TN": 0,
+      "accuracy": 0.9,
+      "precision": 0.9,
+      "recall": 1.0,
+      "F1": 0.9473684210526316,
+      "specificity": 0.0,
+      "ROC_AUC": 0.6666666666666666,
+      "Brier": 0.09996777573790433,
+      "predicted_HIGH_share": 1.0
+     }
+    },
+    "per_origin": [
+     {
+      "origin": "2024-10-01",
+      "target_quarter": "2026-Q1",
+      "HIGH": 5,
+      "brier_PROPOSED_lgbm_combined": 0.034453757243718346,
+      "acc_PROPOSED_lgbm_combined": 1.0,
+      "brier_B1_naive_persistence": 0.0,
+      "acc_B1_naive_persistence": 1.0,
+      "brier_B2_lr_combined": 1.2718534560961296e-09,
+      "acc_B2_lr_combined": 1.0,
+      "brier_B3_lr_gov_only": 6.205257621519659e-11,
+      "acc_B3_lr_gov_only": 1.0,
+      "brier_B4_lr_nlp_only": 0.27651392825599647,
+      "acc_B4_lr_nlp_only": 0.4,
+      "brier_B5_lgbm_gov_only": 0.0008991684714262118,
+      "acc_B5_lgbm_gov_only": 1.0,
+      "brier_B6_lgbm_nlp_only": 0.23432970579068554,
+      "acc_B6_lgbm_nlp_only": 0.6,
+      "brier_S_lr_psa_only": 3.154352293188938e-13,
+      "acc_S_lr_psa_only": 1.0
+     },
+     {
+      "origin": "2025-01-01",
+      "target_quarter": "2026-Q2",
+      "HIGH": 4,
+      "brier_PROPOSED_lgbm_combined": 0.18688008908915377,
+      "acc_PROPOSED_lgbm_combined": 0.8,
+      "brier_B1_naive_persistence": 0.4,
+      "acc_B1_naive_persistence": 0.6,
+      "brier_B2_lr_combined": 0.1945927729662358,
+      "acc_B2_lr_combined": 0.8,
+      "brier_B3_lr_gov_only": 0.1999467956198743,
+      "acc_B3_lr_gov_only": 0.8,
+      "brier_B4_lr_nlp_only": 0.17982556078200865,
+      "acc_B4_lr_nlp_only": 0.8,
+      "brier_B5_lgbm_gov_only": 0.19529683133373316,
+      "acc_B5_lgbm_gov_only": 0.8,
+      "brier_B6_lgbm_nlp_only": 0.20878499457162109,
+      "acc_B6_lgbm_nlp_only": 0.8,
+      "brier_S_lr_psa_only": 0.19993555147549322,
+      "acc_S_lr_psa_only": 0.8
+     }
+    ],
+    "paired_tests": {
+     "B1_naive_persistence": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.08933307683356394,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B2_lr_combined": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": 0.013370536047391426,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B3_lr_gov_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": 0.010693525325472618,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B4_lr_nlp_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.11750282135256651,
+       "p_one_sided": 0.5,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B5_lgbm_gov_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": 0.012568923263856365,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "B6_lgbm_nlp_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": -0.11089042701471725,
+       "p_one_sided": 0.25,
+       "origins_better": 2,
+       "origins_worse": 0,
+       "origins_tied": 0,
+       "p_holm": 1.0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable",
+       "p_holm": null
+      }
+     },
+     "S_lr_psa_only": {
+      "brier": {
+       "n_origins": 2,
+       "exact": true,
+       "mean_diff": 0.01069914742853173,
+       "p_one_sided": 0.75,
+       "origins_better": 1,
+       "origins_worse": 1,
+       "origins_tied": 0
+      },
+      "auc": {
+       "auc_diff": null,
+       "p_one_sided": null,
+       "note": "lead not evaluable"
+      }
+     }
+    },
+    "proposed_auc_ci": null
+   },
+   "7": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   },
+   "8": {
+    "evaluable": false,
+    "n_origins": 0,
+    "reason": "no origin with >= 8 training quarters"
+   }
+  },
+  "mode": "fixed",
+  "reliability": {
+   "1": {
+    "evaluable": true,
+    "auc_ci_low_gt_0.5": false,
+    "brier_better_than_persistence_holm_p": 0.09375,
+    "brier_beats_persistence": false,
+    "reliable": false
+   },
+   "2": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "3": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "4": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "5": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "6": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "7": {
+    "evaluable": false,
+    "reliable": false
+   },
+   "8": {
+    "evaluable": false,
+    "reliable": false
+   }
+  },
+  "max_reliable_lead": null,
+  "evaluable_leads": [
+   1
+  ],
+  "hypotheses": {
+   "H2": {
+    "decision": "not testable",
+    "why": "1 evaluable lead(s); the rule needs >= 2"
+   },
+   "primary_lead_for_H1_H3": 1,
+   "H3": {
+    "decision": "not rejected",
+    "lead": 1,
+    "per_baseline": {
+     "B1_naive_persistence": {
+      "auc_diff": 0.08857142857142863,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.06051858245108536,
+      "significantly_better": false
+     },
+     "B2_lr_combined": {
+      "auc_diff": 0.02285714285714291,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.03619385333515046,
+      "significantly_better": false
+     },
+     "B3_lr_gov_only": {
+      "auc_diff": 0.005714285714285672,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.036781614742571925,
+      "significantly_better": false
+     },
+     "B4_lr_nlp_only": {
+      "auc_diff": 0.12,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.20572236323258358,
+      "significantly_better": false
+     },
+     "B5_lgbm_gov_only": {
+      "auc_diff": 0.017142857142857126,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.0044945276288691025,
+      "significantly_better": false
+     },
+     "B6_lgbm_nlp_only": {
+      "auc_diff": 0.017142857142857126,
+      "p_holm_auc": 1.0,
+      "brier_diff": -0.0908775990383674,
+      "significantly_better": false
+     }
+    }
+   },
+   "H1": {
+    "decision": "not rejected",
+    "lead": 1,
+    "conditions": {
+     "FSSI": {
+      "rank": 4,
+      "top5_pooled": true,
+      "top5_share_of_origins": 0.625,
+      "perm_delta_brier": 0.002003460935428122,
+      "perm_ci_low": -0.005197452822043035
+     },
+     "cpi_dev": {
+      "rank": 23,
+      "top5_pooled": false,
+      "top5_share_of_origins": 0.0,
+      "perm_delta_brier": -0.00029776635347241343,
+      "perm_ci_low": -0.000784394190945796
+     }
+    },
+    "shap_rank_top10": [
+     [
+      "food_cpi",
+      1.0946815118578337
+     ],
+     [
+      "commodity_leafy_veg",
+      0.6213299221308923
+     ],
+     [
+      "commodity_rootcrops",
+      0.43720793065691504
+     ],
+     [
+      "FSSI",
+      0.18287803283795265
+     ],
+     [
+      "headline_cpi",
+      0.17348772390878645
+     ],
+     [
+      "commodity_livestock",
+      0.10311756449562716
+     ],
+     [
+      "unemployment_rate",
+      0.07905201481029157
+     ],
+     [
+      "unemployment_rate_accel",
+      0.07475560938731576
+     ],
+     [
+      "rainfall_anomaly_pct_lag1",
+      0.06648715909885186
+     ],
+     [
+      "rice_price_regular",
+      0.05430040619351047
+     ]
+    ],
+    "n_features_ranked": 44,
+    "permutation_importance": {
+     "FSSI": {
+      "delta_brier_mean": 0.002003460935428122,
+      "ci_low": -0.005197452822043035,
+      "ci_high": 0.011918214691897489
+     },
+     "cpi_dev": {
+      "delta_brier_mean": -0.00029776635347241343,
+      "ci_low": -0.000784394190945796,
+      "ci_high": -2.342540856182948e-05
+     },
+     "food_cpi": {
+      "delta_brier_mean": 0.004274751489932429,
+      "ci_low": -0.01033940034019811,
+      "ci_high": 0.018785852897386653
+     },
+     "commodity_leafy_veg": {
+      "delta_brier_mean": -0.013216441790234273,
+      "ci_low": -0.047117601899078175,
+      "ci_high": 0.01521869519675959
+     },
+     "commodity_rootcrops": {
+      "delta_brier_mean": -0.0038771183249020776,
+      "ci_low": -0.025564119096183745,
+      "ci_high": 0.014239661089148429
+     },
+     "headline_cpi": {
+      "delta_brier_mean": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0
+     },
+     "commodity_livestock": {
+      "delta_brier_mean": -0.0058106277575923244,
+      "ci_low": -0.013888040704989682,
+      "ci_high": 0.00013083707407498515
+     },
+     "unemployment_rate": {
+      "delta_brier_mean": -0.0012818277905736189,
+      "ci_low": -0.005804294391207622,
+      "ci_high": 0.00174721074802644
+     },
+     "unemployment_rate_accel": {
+      "delta_brier_mean": 0.0007598024789453612,
+      "ci_low": -0.006904538570309716,
+      "ci_high": 0.0091839460071458
+     },
+     "rainfall_anomaly_pct_lag1": {
+      "delta_brier_mean": 0.0024783159721612825,
+      "ci_low": 1.7226770942267667e-05,
+      "ci_high": 0.00642473837414069
+     },
+     "rice_price_regular": {
+      "delta_brier_mean": -0.0015145129087832223,
+      "ci_low": -0.006500212824184466,
+      "ci_high": 0.0014230427202416298
+     }
+    },
+    "drop_column_ablation": {
+     "FSSI": {
+      "brier_without": 0.2131006942628008,
+      "brier_with": 0.21448141754891462,
+      "auc_without": 0.7657142857142857,
+      "auc_with": 0.76
+     },
+     "cpi_dev": {
+      "brier_without": 0.2219974263948472,
+      "brier_with": 0.21448141754891462,
+      "auc_without": 0.76,
+      "auc_with": 0.76
+     }
+    }
+   },
+   "H4": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   },
+   "H5": {
+    "decision": "awaiting participant data",
+    "why": "requires DA Region IV-A evaluator responses"
+   }
+  }
+ }
+}
