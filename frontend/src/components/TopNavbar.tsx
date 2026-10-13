@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Menu, LogIn, Sun, Moon, X, Mail, Lock, ArrowRight } from "lucide-react";
+import { Home, Database, BarChart3, Menu, LogIn, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -124,6 +124,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,13 +179,23 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
             <div className="relative mt-1">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
-                className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
+                className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+                title={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+              </button>
             </div>
           </div>
 
