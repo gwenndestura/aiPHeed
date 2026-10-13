@@ -1,0 +1,6988 @@
+[
+ {
+  "target": "2023-Q4",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 20,
+  "train_LOW": 20,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.551021056068994,
+    "gain": {
+     "last_published_stress": 4451.720404624939,
+     "sws_hunger": 12.872099876403809,
+     "sws_change": 13.100899696350098
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.268678291798216,
+    "gain": {
+     "last_published_stress": 2791.649883747101,
+     "sws_hunger": 326.3529977798462,
+     "sws_change": 149.41025972366333
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.7172272659045333,
+    "gain": {
+     "last_published_stress": 3230.7893747091293,
+     "sws_hunger": 192.4268318414688,
+     "sws_change": 919.2539847791195
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.072191424949698,
+    "gain": {
+     "last_published_stress": 6929.228228330612,
+     "sws_hunger": 815.9608204364777,
+     "sws_change": 649.2302687168121
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 1.6513825289807662,
+     "C3_moderate": 1.4031689672910281
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.072191424949698,
+    "gain": {
+     "last_published_stress": 6929.228228330612,
+     "sws_hunger": 815.9608204364777,
+     "sws_change": 649.2302687168121
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.4955299633642807,
+    "gain": {
+     "last_published_stress": 3092.9838066101074,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "lps_change": 517.8733978271484,
+     "anchor_dev": 1149.2973175048828
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.198336779629174,
+    "gain": {
+     "last_published_stress": 2012.1479835510254,
+     "sws_hunger": 274.2796993255615,
+     "sws_change": 114.37195001170039,
+     "lps_change": 427.1387987136841,
+     "anchor_dev": 670.3108015060425
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.4874772104922764,
+    "gain": {
+     "last_published_stress": 2738.413289308548,
+     "sws_hunger": 237.64483499526978,
+     "sws_change": 509.75394266843796,
+     "lps_change": 603.7930829226971,
+     "anchor_dev": 496.1370378434658
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.854215570008466,
+    "gain": {
+     "last_published_stress": 5069.5951426029205,
+     "sws_hunger": 367.1814877986908,
+     "sws_change": 655.9253644943237,
+     "lps_change": 1061.8267107009888,
+     "anchor_dev": 2460.503040075302
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 1.1628363826014732,
+     "C3_moderate": 1.2591284465604438
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.4874772104922764,
+    "gain": {
+     "last_published_stress": 2738.413289308548,
+     "sws_hunger": 237.64483499526978,
+     "sws_change": 509.75394266843796,
+     "lps_change": 603.7930829226971,
+     "anchor_dev": 496.1370378434658
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.5452741439928883,
+    "gain": {
+     "last_published_stress": 3222.400203704834,
+     "sws_hunger": 0.0,
+     "sws_change": 26.356499671936035,
+     "cpi_rel": 1351.4673099517822,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.266805642329367,
+    "gain": {
+     "last_published_stress": 1987.6255922317505,
+     "sws_hunger": 192.4286994934082,
+     "sws_change": 197.76910877227783,
+     "cpi_rel": 921.1142163276672,
+     "cpi_rel_lag1": 17.596389770507812,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 59.57631874084473,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.4699009166881933,
+    "gain": {
+     "last_published_stress": 2707.0022706985474,
+     "sws_hunger": 438.064750790596,
+     "sws_change": 442.99778670072556,
+     "cpi_rel": 542.4814616441727,
+     "cpi_rel_lag1": 56.048740804195404,
+     "food_cpi_yoy": 127.78916037082672,
+     "food_cpi_yoy_lag1": 145.27988976240158,
+     "cpi_dev": 188.6118986606598
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.0114356053377387,
+    "gain": {
+     "last_published_stress": 5048.316408157349,
+     "sws_hunger": 781.9341487884521,
+     "sws_change": 612.6823174357414,
+     "cpi_rel": 2180.4042315483093,
+     "cpi_rel_lag1": 91.83257102966309,
+     "food_cpi_yoy": 11.214320950210094,
+     "food_cpi_yoy_lag1": 217.07784966379404,
+     "cpi_dev": 62.84882068634033
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 2.428623188412308,
+     "C3_moderate": 1.4146487945132278
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.0114356053377387,
+    "gain": {
+     "last_published_stress": 5048.316408157349,
+     "sws_hunger": 781.9341487884521,
+     "sws_change": 612.6823174357414,
+     "cpi_rel": 2180.4042315483093,
+     "cpi_rel_lag1": 91.83257102966309,
+     "food_cpi_yoy": 11.214320950210094,
+     "food_cpi_yoy_lag1": 217.07784966379404,
+     "cpi_dev": 62.84882068634033
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.4437493456603487,
+    "gain": {
+     "last_published_stress": 3084.0462017059326,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "cpi_rel": 1226.6340065002441,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 523.2680015563965
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.0944531444340635,
+    "gain": {
+     "last_published_stress": 1731.750783920288,
+     "sws_hunger": 0.0,
+     "sws_change": 55.819570541381836,
+     "cpi_rel": 835.0040988922119,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 11.562000274658203,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 115.68229866027832,
+     "unemployment_rate": 1218.8692135810852
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.2809236900253302,
+    "gain": {
+     "last_published_stress": 2714.9735429286957,
+     "sws_hunger": 30.02571988105774,
+     "sws_change": 211.46462094783783,
+     "cpi_rel": 624.2293574810028,
+     "cpi_rel_lag1": 82.5547906756401,
+     "food_cpi_yoy": 69.52143037319183,
+     "food_cpi_yoy_lag1": 159.20349699258804,
+     "cpi_dev": 132.99691462516785,
+     "headline_cpi": 24.547325253486633,
+     "food_minus_headline_yoy": 76.7902021408081,
+     "food_minus_headline_yoy_lag1": 49.26615905761719,
+     "unemployment_rate": 1109.3926484584808
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.8101725354059734,
+    "gain": {
+     "last_published_stress": 5666.487759590149,
+     "sws_hunger": 340.4557260274887,
+     "sws_change": 159.85061883926392,
+     "cpi_rel": 1137.0193634033203,
+     "cpi_rel_lag1": 31.854809761047363,
+     "food_cpi_yoy": 3.4488010108470917,
+     "food_cpi_yoy_lag1": 25.93464994430542,
+     "cpi_dev": 2.7872599735856056,
+     "headline_cpi": 31.897369980812073,
+     "food_minus_headline_yoy": 32.99543011188507,
+     "food_minus_headline_yoy_lag1": 78.52252899762243,
+     "unemployment_rate": 3122.9899534881115
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 2.0293118423755443,
+     "C1_shallow_reg": 1.3877381518960872,
+     "C0_e9_default": 2.4187778829140836,
+     "C3_moderate": 1.6878238594053194
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.0944531444340635,
+    "gain": {
+     "last_published_stress": 1731.750783920288,
+     "sws_hunger": 0.0,
+     "sws_change": 55.819570541381836,
+     "cpi_rel": 835.0040988922119,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 11.562000274658203,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 115.68229866027832,
+     "unemployment_rate": 1218.8692135810852
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.9752130004949158,
+    "gain": {
+     "cpi_rel": 963.6593799591064,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 43.93408012390137,
+     "dev_change": 43.085909843444824,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.8384146925096108,
+    "gain": {
+     "cpi_rel": 514.6181538105011,
+     "cpi_rel_lag1": 25.042909741401672,
+     "anchor_dev": 0.0,
+     "dev_change": 151.22633028030396,
+     "cpi_dev": 1.6892399787902832,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 6.370681047439575
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.240385617783479,
+    "gain": {
+     "cpi_rel": 566.0020930320024,
+     "cpi_rel_lag1": 22.38477598130703,
+     "anchor_dev": 0.5621300041675568,
+     "dev_change": 212.504538834095,
+     "cpi_dev": 91.28532069921494,
+     "food_cpi_yoy": 63.88556157052517,
+     "food_cpi_yoy_lag1": 2.185392990708351
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.7105184528922663,
+    "gain": {
+     "cpi_rel": 1215.3375828266144,
+     "cpi_rel_lag1": 7.910666048526764,
+     "anchor_dev": 17.717029809951782,
+     "dev_change": 367.36282581090927,
+     "cpi_dev": 13.467400074005127,
+     "food_cpi_yoy": 61.492415082175285,
+     "food_cpi_yoy_lag1": 7.471615137765184
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.935875384122437,
+     "C1_shallow_reg": 2.9157291870083757,
+     "C0_e9_default": 2.82798589565552,
+     "C3_moderate": 1.753707309932307
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.7105184528922663,
+    "gain": {
+     "cpi_rel": 1215.3375828266144,
+     "cpi_rel_lag1": 7.910666048526764,
+     "anchor_dev": 17.717029809951782,
+     "dev_change": 367.36282581090927,
+     "cpi_dev": 13.467400074005127,
+     "food_cpi_yoy": 61.492415082175285,
+     "food_cpi_yoy_lag1": 7.471615137765184
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.216925671247328,
+    "gain": {
+     "last_published_stress": 59.892879247665405,
+     "sws_hunger": 325.65896916389465,
+     "sws_change": 0.0,
+     "lps_change": 109.23415088653564,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 51.64830994606018
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.2128211089089693,
+    "gain": {
+     "last_published_stress": 39.06961965560913,
+     "sws_hunger": 200.2676100730896,
+     "sws_change": 0.0,
+     "lps_change": 70.23089075088501,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 40.75795030593872
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.136799070982618,
+    "gain": {
+     "last_published_stress": 277.685719370842,
+     "sws_hunger": 485.12048745155334,
+     "sws_change": 8.244050025939941,
+     "lps_change": 246.3441606760025,
+     "anchor_dev": 42.06626999378204,
+     "cpi_rel": 386.9327881336212,
+     "cpi_rel_lag1": 182.10138773918152,
+     "cpi_dev": 260.33233988285065
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.1295059493398965,
+    "gain": {
+     "last_published_stress": 260.0640392303467,
+     "sws_hunger": 322.8268983364105,
+     "sws_change": 0.0,
+     "lps_change": 84.13793897628784,
+     "anchor_dev": 45.88838982582092,
+     "cpi_rel": 77.48258996009827,
+     "cpi_rel_lag1": 476.7036304473877,
+     "cpi_dev": 64.1554503440857
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 1.3719999998013184,
+     "C1_shallow_reg": 1.3719999998013184,
+     "C0_e9_default": 2.3330378534969594,
+     "C3_moderate": 1.3719999998013184
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.216925671247328,
+    "gain": {
+     "last_published_stress": 59.892879247665405,
+     "sws_hunger": 325.65896916389465,
+     "sws_change": 0.0,
+     "lps_change": 109.23415088653564,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 51.64830994606018
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.18278555136563016,
+     "C1_shallow_reg": 0.16456952964249322,
+     "C0_e9_default": 0.017501867372186182,
+     "C3_moderate": 0.11128920577259076
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.188967830726481,
+     "C1_shallow_reg": 0.1760961666051686,
+     "C0_e9_default": 0.02645855115097905,
+     "C3_moderate": 0.11104332445544447
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2024-Q1",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3"
+  ],
+  "n_train_rows": 45,
+  "train_HIGH": 23,
+  "train_LOW": 22,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.36966147718589,
+    "gain": {
+     "last_published_stress": 5671.1418800354,
+     "sws_hunger": 0.0,
+     "sws_change": 27.197799682617188
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.135125201108551,
+    "gain": {
+     "last_published_stress": 3459.3839383125305,
+     "sws_hunger": 366.8449020385742,
+     "sws_change": 182.97254991531372
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.6892438503919083,
+    "gain": {
+     "last_published_stress": 4125.498832017183,
+     "sws_hunger": 165.5424113869667,
+     "sws_change": 725.7454133629799
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.8546202565212007,
+    "gain": {
+     "last_published_stress": 9159.646298766136,
+     "sws_hunger": 23.56742024421692,
+     "sws_change": 1688.3509532809258
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.6899473666376497,
+     "C1_shallow_reg": 1.6001824609393127,
+     "C0_e9_default": 1.7453944859512949,
+     "C3_moderate": 1.3276626460353131
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.8546202565212007,
+    "gain": {
+     "last_published_stress": 9159.646298766136,
+     "sws_hunger": 23.56742024421692,
+     "sws_change": 1688.3509532809258
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.337930442198628,
+    "gain": {
+     "last_published_stress": 4201.1403732299805,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "lps_change": 402.00679206848145,
+     "anchor_dev": 1314.6773052215576
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.097058109862375,
+    "gain": {
+     "last_published_stress": 3000.0257987976074,
+     "sws_hunger": 223.77960014343262,
+     "sws_change": 94.58684158325195,
+     "lps_change": 363.5313968658447,
+     "anchor_dev": 464.8339924812317
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.4588669546148958,
+    "gain": {
+     "last_published_stress": 3455.9441452026367,
+     "sws_hunger": 236.5344009399414,
+     "sws_change": 530.1009838581085,
+     "lps_change": 651.7969131469727,
+     "anchor_dev": 420.584989964962
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.7940579146327937,
+    "gain": {
+     "last_published_stress": 8364.939219594002,
+     "sws_hunger": 104.81812572898343,
+     "sws_change": 1063.7733117341995,
+     "lps_change": 1247.105880022049,
+     "anchor_dev": 544.6823909282684
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.742883305424156,
+     "C1_shallow_reg": 1.6313459414460547,
+     "C0_e9_default": 1.481846937914979,
+     "C3_moderate": 1.2768037827154515
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.7940579146327937,
+    "gain": {
+     "last_published_stress": 8364.939219594002,
+     "sws_hunger": 104.81812572898343,
+     "sws_change": 1063.7733117341995,
+     "lps_change": 1247.105880022049,
+     "anchor_dev": 544.6823909282684
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.3705749536651144,
+    "gain": {
+     "last_published_stress": 4284.475273132324,
+     "sws_hunger": 0.0,
+     "sws_change": 29.521099090576172,
+     "cpi_rel": 1511.6486053466797,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.141722245768824,
+    "gain": {
+     "last_published_stress": 2937.9778547286987,
+     "sws_hunger": 275.3282995223999,
+     "sws_change": 172.98372077941895,
+     "cpi_rel": 682.9593806266785,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 10.409249782562256
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.512902575721235,
+    "gain": {
+     "last_published_stress": 3495.19358587265,
+     "sws_hunger": 347.6083085536957,
+     "sws_change": 486.8950345516205,
+     "cpi_rel": 383.3009580373764,
+     "cpi_rel_lag1": 93.80486971139908,
+     "food_cpi_yoy": 123.67145889997482,
+     "food_cpi_yoy_lag1": 108.4126740694046,
+     "cpi_dev": 245.25809478759766
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.826030809730412,
+    "gain": {
+     "last_published_stress": 8539.994888544083,
+     "sws_hunger": 19.61196994781494,
+     "sws_change": 1567.887799397111,
+     "cpi_rel": 643.0812219381332,
+     "cpi_rel_lag1": 53.21015024185181,
+     "food_cpi_yoy": 76.95653998851776,
+     "food_cpi_yoy_lag1": 167.10295939445496,
+     "cpi_dev": 119.59382033348083
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.6806060040886777,
+     "C1_shallow_reg": 1.581349517797622,
+     "C0_e9_default": 2.591811095003342,
+     "C3_moderate": 1.4778358620421173
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.826030809730412,
+    "gain": {
+     "last_published_stress": 8539.994888544083,
+     "sws_hunger": 19.61196994781494,
+     "sws_change": 1567.887799397111,
+     "cpi_rel": 643.0812219381332,
+     "cpi_rel_lag1": 53.21015024185181,
+     "food_cpi_yoy": 76.95653998851776,
+     "food_cpi_yoy_lag1": 167.10295939445496,
+     "cpi_dev": 119.59382033348083
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.2870897966245542,
+    "gain": {
+     "last_published_stress": 4149.1575756073,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "cpi_rel": 1385.3091087341309,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 495.9851016998291
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.9968317951267223,
+    "gain": {
+     "last_published_stress": 2274.8882236480713,
+     "sws_hunger": 0.0,
+     "sws_change": 195.62022018432617,
+     "cpi_rel": 1058.6932983398438,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 1154.0820651054382
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.3268925810340697,
+    "gain": {
+     "last_published_stress": 3534.5155113339424,
+     "sws_hunger": 37.428759932518005,
+     "sws_change": 146.480610370636,
+     "cpi_rel": 482.7114232778549,
+     "cpi_rel_lag1": 55.09130907058716,
+     "food_cpi_yoy": 49.6065970659256,
+     "food_cpi_yoy_lag1": 97.81140959262848,
+     "cpi_dev": 147.43891459703445,
+     "headline_cpi": 6.26738977432251,
+     "food_minus_headline_yoy": 129.16162109375,
+     "food_minus_headline_yoy_lag1": 61.4138708114624,
+     "unemployment_rate": 1171.9001528024673
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.6157746782176812,
+    "gain": {
+     "last_published_stress": 7935.006479978561,
+     "sws_hunger": 0.0,
+     "sws_change": 205.51054072380066,
+     "cpi_rel": 946.4012393951416,
+     "cpi_rel_lag1": 256.7226195335388,
+     "food_cpi_yoy": 30.167760372161865,
+     "food_cpi_yoy_lag1": 62.29512023925781,
+     "cpi_dev": 128.3709923028946,
+     "headline_cpi": 20.607100009918213,
+     "food_minus_headline_yoy": 2.4230101108551025,
+     "food_minus_headline_yoy_lag1": 227.5853256471455,
+     "unemployment_rate": 3075.2513041496277
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 1.8138037706105838,
+     "C1_shallow_reg": 1.3559376303313306,
+     "C0_e9_default": 2.0608572175088455,
+     "C3_moderate": 1.4450339318228718
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.9968317951267223,
+    "gain": {
+     "last_published_stress": 2274.8882236480713,
+     "sws_hunger": 0.0,
+     "sws_change": 195.62022018432617,
+     "cpi_rel": 1058.6932983398438,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 1154.0820651054382
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.864957882545436,
+    "gain": {
+     "cpi_rel": 1285.0728905200958,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 0.0,
+     "dev_change": 33.29946994781494,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.6787137655764264,
+    "gain": {
+     "cpi_rel": 730.0831205844879,
+     "cpi_rel_lag1": 7.525590181350708,
+     "anchor_dev": 0.0,
+     "dev_change": 120.91370058059692,
+     "cpi_dev": 7.843740224838257,
+     "food_cpi_yoy": 1.9715579748153687,
+     "food_cpi_yoy_lag1": 5.240069031715393
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.252269145736301,
+    "gain": {
+     "cpi_rel": 642.2849894464016,
+     "cpi_rel_lag1": 111.19294717907906,
+     "anchor_dev": 54.78448259830475,
+     "dev_change": 247.92098654806614,
+     "cpi_dev": 40.93295067548752,
+     "food_cpi_yoy": 42.899949088692665,
+     "food_cpi_yoy_lag1": 3.6872569769620895
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.5367807731235343,
+    "gain": {
+     "cpi_rel": 1677.0601176172495,
+     "cpi_rel_lag1": 60.052277743816376,
+     "anchor_dev": 83.57990616559982,
+     "dev_change": 273.8232259750366,
+     "cpi_dev": 30.805724918842316,
+     "food_cpi_yoy": 8.773803949356079,
+     "food_cpi_yoy_lag1": 17.052180990576744
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.586236331175163,
+     "C1_shallow_reg": 2.5545019077930786,
+     "C0_e9_default": 2.372194568051345,
+     "C3_moderate": 1.8253310594338115
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.5367807731235343,
+    "gain": {
+     "cpi_rel": 1677.0601176172495,
+     "cpi_rel_lag1": 60.052277743816376,
+     "anchor_dev": 83.57990616559982,
+     "dev_change": 273.8232259750366,
+     "cpi_dev": 30.805724918842316,
+     "food_cpi_yoy": 8.773803949356079,
+     "food_cpi_yoy_lag1": 17.052180990576744
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.9466744500559445,
+    "gain": {
+     "last_published_stress": 149.7788805961609,
+     "sws_hunger": 933.2465229034424,
+     "sws_change": 0.0,
+     "lps_change": 12.638960361480713,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.9129145532388834,
+    "gain": {
+     "last_published_stress": 79.97323989868164,
+     "sws_hunger": 617.5205616950989,
+     "sws_change": 5.687790036201477,
+     "lps_change": 50.04003036022186,
+     "anchor_dev": 7.205559968948364,
+     "cpi_rel": 3.91090989112854,
+     "cpi_rel_lag1": 4.539169788360596,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.0046990890462448,
+    "gain": {
+     "last_published_stress": 659.4131337404251,
+     "sws_hunger": 533.597911298275,
+     "sws_change": 171.01324903964996,
+     "lps_change": 196.0527218580246,
+     "anchor_dev": 159.87442708015442,
+     "cpi_rel": 8.561449885368347,
+     "cpi_rel_lag1": 69.62608933448792,
+     "cpi_dev": 253.4301482439041
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.756034448670967,
+    "gain": {
+     "last_published_stress": 296.42268991470337,
+     "sws_hunger": 1412.951312303543,
+     "sws_change": 2.1255500316619873,
+     "lps_change": 92.80294036865234,
+     "anchor_dev": 27.4444100856781,
+     "cpi_rel": 640.714647769928,
+     "cpi_rel_lag1": 14.204230070114136,
+     "cpi_dev": 194.2608391046524
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.4854692647215222,
+     "C1_shallow_reg": 1.4903084779150482,
+     "C0_e9_default": 1.6063854649206022,
+     "C3_moderate": 1.4669527493655077
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.756034448670967,
+    "gain": {
+     "last_published_stress": 296.42268991470337,
+     "sws_hunger": 1412.951312303543,
+     "sws_change": 2.1255500316619873,
+     "lps_change": 92.80294036865234,
+     "anchor_dev": 27.4444100856781,
+     "cpi_rel": 640.714647769928,
+     "cpi_rel_lag1": 14.204230070114136,
+     "cpi_dev": 194.2608391046524
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_brier": {
+     "C2_stumps": 0.177748378910662,
+     "C1_shallow_reg": 0.15426827431457296,
+     "C0_e9_default": 0.12844933643572953,
+     "C3_moderate": 0.12634055010222464
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 2,
+     "oof_high": 6,
+     "oof_low": 4,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_brier": {
+     "C2_stumps": 0.18083951859108743,
+     "C1_shallow_reg": 0.16003159279591064,
+     "C0_e9_default": 0.19562301850842023,
+     "C3_moderate": 0.16834723402949253
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 2,
+     "oof_high": 6,
+     "oof_low": 4,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 2
+ },
+ {
+  "target": "2024-Q2",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4"
+  ],
+  "n_train_rows": 50,
+  "train_HIGH": 27,
+  "train_LOW": 23,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.2539173579813947,
+    "gain": {
+     "last_published_stress": 6543.631298065186,
+     "sws_hunger": 0.0,
+     "sws_change": 433.9311008453369
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.9896793509174537,
+    "gain": {
+     "last_published_stress": 4370.237270355225,
+     "sws_hunger": 0.0,
+     "sws_change": 466.6635036468506
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.6431358123256874,
+    "gain": {
+     "last_published_stress": 4602.258797347546,
+     "sws_hunger": 35.0208141207695,
+     "sws_change": 1164.2704425156116
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.798197311058807,
+    "gain": {
+     "last_published_stress": 10693.019514024258,
+     "sws_hunger": 10.077749967575073,
+     "sws_change": 1944.9783273488283
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.003331538183515,
+     "C1_shallow_reg": 1.9219864198167294,
+     "C0_e9_default": 1.967723383350527,
+     "C3_moderate": 1.6599645224848818
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.798197311058807,
+    "gain": {
+     "last_published_stress": 10693.019514024258,
+     "sws_hunger": 10.077749967575073,
+     "sws_change": 1944.9783273488283
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.1803209873748592,
+    "gain": {
+     "last_published_stress": 5309.775978088379,
+     "sws_hunger": 0.0,
+     "sws_change": 224.5925006866455,
+     "lps_change": 1184.6256103515625,
+     "anchor_dev": 627.8868999481201
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.9415318134622384,
+    "gain": {
+     "last_published_stress": 3410.1002883911133,
+     "sws_hunger": 0.0,
+     "sws_change": 362.6303014755249,
+     "lps_change": 590.075701713562,
+     "anchor_dev": 809.8833703994751
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.3828585811532357,
+    "gain": {
+     "last_published_stress": 3543.9199959635735,
+     "sws_hunger": 5.710421025753021,
+     "sws_change": 851.3165573477745,
+     "lps_change": 1265.6518821120262,
+     "anchor_dev": 589.3931468129158
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.6322369277776239,
+    "gain": {
+     "last_published_stress": 8359.260246917605,
+     "sws_hunger": 0.18926549889147282,
+     "sws_change": 1472.220954656601,
+     "lps_change": 1474.2595509001985,
+     "anchor_dev": 2556.206862458959
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.0185521158375352,
+     "C1_shallow_reg": 1.8946880548418281,
+     "C0_e9_default": 1.6364672627770578,
+     "C3_moderate": 1.5566377328451952
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.6322369277776239,
+    "gain": {
+     "last_published_stress": 8359.260246917605,
+     "sws_hunger": 0.18926549889147282,
+     "sws_change": 1472.220954656601,
+     "lps_change": 1474.2595509001985,
+     "anchor_dev": 2556.206862458959
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.2550788997129882,
+    "gain": {
+     "last_published_stress": 5886.162578582764,
+     "sws_hunger": 0.0,
+     "sws_change": 481.3670959472656,
+     "cpi_rel": 672.1955986022949,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.001119510141703,
+    "gain": {
+     "last_published_stress": 3626.9136991500854,
+     "sws_hunger": 0.0,
+     "sws_change": 469.7444009780884,
+     "cpi_rel": 756.8378882408142,
+     "cpi_rel_lag1": 46.96359920501709,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 79.72469997406006,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.4302150996027336,
+    "gain": {
+     "last_published_stress": 3843.4265916347504,
+     "sws_hunger": 246.90015548467636,
+     "sws_change": 668.6699121594429,
+     "cpi_rel": 597.799654006958,
+     "cpi_rel_lag1": 225.30665564537048,
+     "food_cpi_yoy": 163.20828920602798,
+     "food_cpi_yoy_lag1": 331.82482784986496,
+     "cpi_dev": 133.25479763746262
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.767258318851251,
+    "gain": {
+     "last_published_stress": 9389.159968197346,
+     "sws_hunger": 0.0,
+     "sws_change": 1657.0793699026108,
+     "cpi_rel": 1413.1132562160492,
+     "cpi_rel_lag1": 248.12839138507843,
+     "food_cpi_yoy": 151.43747067451477,
+     "food_cpi_yoy_lag1": 345.96727108955383,
+     "cpi_dev": 100.91082000732422
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.048315874746511,
+     "C1_shallow_reg": 1.8111757425830577,
+     "C0_e9_default": 2.3379103424544785,
+     "C3_moderate": 1.671116998878044
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.767258318851251,
+    "gain": {
+     "last_published_stress": 9389.159968197346,
+     "sws_hunger": 0.0,
+     "sws_change": 1657.0793699026108,
+     "cpi_rel": 1413.1132562160492,
+     "cpi_rel_lag1": 248.12839138507843,
+     "food_cpi_yoy": 151.43747067451477,
+     "food_cpi_yoy_lag1": 345.96727108955383,
+     "cpi_dev": 100.91082000732422
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.142863010227079,
+    "gain": {
+     "last_published_stress": 5473.492296218872,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "cpi_rel": 782.5396041870117,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 1299.4206924438477
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.887834423816162,
+    "gain": {
+     "last_published_stress": 3416.666506767273,
+     "sws_hunger": 0.0,
+     "sws_change": 73.30529975891113,
+     "cpi_rel": 406.82810401916504,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 9.285300254821777,
+     "poverty_incidence": 14.93340015411377,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 24.539730072021484,
+     "unemployment_rate": 1606.5677938461304
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.2602574549376047,
+    "gain": {
+     "last_published_stress": 3632.6715013980865,
+     "sws_hunger": 76.22456002235413,
+     "sws_change": 211.98124086856842,
+     "cpi_rel": 641.5456825494766,
+     "cpi_rel_lag1": 88.84549874067307,
+     "food_cpi_yoy": 163.5065108537674,
+     "food_cpi_yoy_lag1": 181.04790103435516,
+     "cpi_dev": 155.37222969532013,
+     "poverty_incidence": 134.51574063301086,
+     "headline_cpi": 73.26369953155518,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 190.15854382514954,
+     "unemployment_rate": 1321.0564790964127
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5525893524958478,
+    "gain": {
+     "last_published_stress": 9253.21332359314,
+     "sws_hunger": 29.905930042266846,
+     "sws_change": 493.4497216939926,
+     "cpi_rel": 305.6711812019348,
+     "cpi_rel_lag1": 365.8646197319031,
+     "food_cpi_yoy": 102.66732954978943,
+     "food_cpi_yoy_lag1": 162.1532506942749,
+     "cpi_dev": 181.52989101409912,
+     "poverty_incidence": 186.1951606273651,
+     "headline_cpi": 12.24731993675232,
+     "food_minus_headline_yoy": 42.702269315719604,
+     "food_minus_headline_yoy_lag1": 277.3039803504944,
+     "unemployment_rate": 3553.9594321250916
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.962292472507782,
+     "C1_shallow_reg": 1.7189953880634352,
+     "C0_e9_default": 1.954589557340059,
+     "C3_moderate": 1.7020989741684307
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5525893524958478,
+    "gain": {
+     "last_published_stress": 9253.21332359314,
+     "sws_hunger": 29.905930042266846,
+     "sws_change": 493.4497216939926,
+     "cpi_rel": 305.6711812019348,
+     "cpi_rel_lag1": 365.8646197319031,
+     "food_cpi_yoy": 102.66732954978943,
+     "food_cpi_yoy_lag1": 162.1532506942749,
+     "cpi_dev": 181.52989101409912,
+     "poverty_incidence": 186.1951606273651,
+     "headline_cpi": 12.24731993675232,
+     "food_minus_headline_yoy": 42.702269315719604,
+     "food_minus_headline_yoy_lag1": 277.3039803504944,
+     "unemployment_rate": 3553.9594321250916
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.7991009099430673,
+    "gain": {
+     "cpi_rel": 1254.1849632263184,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 114.3643012046814,
+     "dev_change": 17.03039002418518,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.687945748187631,
+    "gain": {
+     "cpi_rel": 711.6065410375595,
+     "cpi_rel_lag1": 5.870030045509338,
+     "anchor_dev": 133.3690800666809,
+     "dev_change": 30.47810310125351,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 7.876540184020996,
+     "food_cpi_yoy_lag1": 3.9691299200057983
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.311103406061844,
+    "gain": {
+     "cpi_rel": 832.2797042429447,
+     "cpi_rel_lag1": 55.90693727135658,
+     "anchor_dev": 6.501056909561157,
+     "dev_change": 167.3040601015091,
+     "cpi_dev": 74.15163208544254,
+     "food_cpi_yoy": 71.35193127393723,
+     "food_cpi_yoy_lag1": 7.815280050039291
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.549490034780633,
+    "gain": {
+     "cpi_rel": 2025.1239577024244,
+     "cpi_rel_lag1": 13.027985148131847,
+     "anchor_dev": 26.99822986125946,
+     "dev_change": 81.38605687767267,
+     "cpi_dev": 45.04969367722515,
+     "food_cpi_yoy": 44.33012492954731,
+     "food_cpi_yoy_lag1": 68.03012281656265
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.600412039113099,
+     "C1_shallow_reg": 2.570446329601888,
+     "C0_e9_default": 2.3409115258950304,
+     "C3_moderate": 1.9850641123735173
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.549490034780633,
+    "gain": {
+     "cpi_rel": 2025.1239577024244,
+     "cpi_rel_lag1": 13.027985148131847,
+     "anchor_dev": 26.99822986125946,
+     "dev_change": 81.38605687767267,
+     "cpi_dev": 45.04969367722515,
+     "food_cpi_yoy": 44.33012492954731,
+     "food_cpi_yoy_lag1": 68.03012281656265
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.122242297699318,
+    "gain": {
+     "last_published_stress": 44.238749980926514,
+     "sws_hunger": 799.9515895843506,
+     "sws_change": 0.0,
+     "lps_change": 222.81696796417236,
+     "anchor_dev": 0.0,
+     "cpi_rel": 61.983699798583984,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 29.67520046234131
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.0446083148673284,
+    "gain": {
+     "last_published_stress": 209.4966697692871,
+     "sws_hunger": 513.0662217140198,
+     "sws_change": 0.0,
+     "lps_change": 120.7212176322937,
+     "anchor_dev": 0.0,
+     "cpi_rel": 59.73046112060547,
+     "cpi_rel_lag1": 9.1734299659729,
+     "cpi_dev": 303.80650758743286
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 0.8574245181636223,
+    "gain": {
+     "last_published_stress": 749.0743981599808,
+     "sws_hunger": 783.2234791517258,
+     "sws_change": 255.91866838932037,
+     "lps_change": 368.48979008197784,
+     "anchor_dev": 94.66623055934906,
+     "cpi_rel": 255.9470694065094,
+     "cpi_rel_lag1": 131.87740778923035,
+     "cpi_dev": 101.45935720205307
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.649661960918847,
+    "gain": {
+     "last_published_stress": 1033.1543456315994,
+     "sws_hunger": 1209.0779902935028,
+     "sws_change": 0.0,
+     "lps_change": 621.3124709129333,
+     "anchor_dev": 0.0,
+     "cpi_rel": 476.3536093235016,
+     "cpi_rel_lag1": 25.93417000770569,
+     "cpi_dev": 626.0303881168365
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 1.9106477917534408,
+     "C1_shallow_reg": 1.911325829175044,
+     "C0_e9_default": 1.9719944576239776,
+     "C3_moderate": 1.9138945044476159
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.122242297699318,
+    "gain": {
+     "last_published_stress": 44.238749980926514,
+     "sws_hunger": 799.9515895843506,
+     "sws_change": 0.0,
+     "lps_change": 222.81696796417236,
+     "anchor_dev": 0.0,
+     "cpi_rel": 61.983699798583984,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 29.67520046234131
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.16260867087928638,
+     "C1_shallow_reg": 0.13289285132136489,
+     "C0_e9_default": 0.08806265951503756,
+     "C3_moderate": 0.11405378905221719
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 3,
+     "oof_high": 10,
+     "oof_low": 5,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_brier": {
+     "C2_stumps": 0.17105160175878176,
+     "C1_shallow_reg": 0.1435355058572673,
+     "C0_e9_default": 0.1446089790344427,
+     "C3_moderate": 0.1457575096043169
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 3,
+     "oof_high": 10,
+     "oof_low": 5,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 3
+ },
+ {
+  "target": "2024-Q3",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1"
+  ],
+  "n_train_rows": 55,
+  "train_HIGH": 31,
+  "train_LOW": 24,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.4253145238234475,
+    "gain": {
+     "last_published_stress": 6267.899524688721,
+     "sws_hunger": 0.0,
+     "sws_change": 510.51069831848145
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.179135789127922,
+    "gain": {
+     "last_published_stress": 3936.5445861816406,
+     "sws_hunger": 0.0,
+     "sws_change": 1006.3078022003174
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.6563126040892506,
+    "gain": {
+     "last_published_stress": 4265.065156519413,
+     "sws_hunger": 298.1426876783371,
+     "sws_change": 1950.142048895359
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.925380496669007,
+    "gain": {
+     "last_published_stress": 10174.74778142199,
+     "sws_hunger": 1.3744800090789795,
+     "sws_change": 3496.6764781177044
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.6531394790570255,
+     "C1_shallow_reg": 2.589863123598128,
+     "C0_e9_default": 2.3634495001770794,
+     "C3_moderate": 2.3154554367433717
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.925380496669007,
+    "gain": {
+     "last_published_stress": 10174.74778142199,
+     "sws_hunger": 1.3744800090789795,
+     "sws_change": 3496.6764781177044
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.420520406852147,
+    "gain": {
+     "last_published_stress": 5017.819036483765,
+     "sws_hunger": 0.0,
+     "sws_change": 386.1383991241455,
+     "lps_change": 139.9512004852295,
+     "anchor_dev": 1359.9752006530762
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.140218741223125,
+    "gain": {
+     "last_published_stress": 3247.465814590454,
+     "sws_hunger": 0.0,
+     "sws_change": 873.2337989807129,
+     "lps_change": 227.46260166168213,
+     "anchor_dev": 774.1846990585327
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.510429983395678,
+    "gain": {
+     "last_published_stress": 2808.791808128357,
+     "sws_hunger": 320.72727966308594,
+     "sws_change": 1577.0586049556732,
+     "lps_change": 441.93688011169434,
+     "anchor_dev": 1776.7328417301178
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.850515231639836,
+    "gain": {
+     "last_published_stress": 7466.063368320465,
+     "sws_hunger": 20.942519903182983,
+     "sws_change": 2854.4878408908844,
+     "lps_change": 1086.1039055087604,
+     "anchor_dev": 2988.6007385253906
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 2.7170568223994778,
+     "C1_shallow_reg": 2.6634019510198277,
+     "C0_e9_default": 2.465032544722019,
+     "C3_moderate": 2.4795197572541365
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.510429983395678,
+    "gain": {
+     "last_published_stress": 2808.791808128357,
+     "sws_hunger": 320.72727966308594,
+     "sws_change": 1577.0586049556732,
+     "lps_change": 441.93688011169434,
+     "anchor_dev": 1776.7328417301178
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.435535781209578,
+    "gain": {
+     "last_published_stress": 5203.613231658936,
+     "sws_hunger": 0.0,
+     "sws_change": 427.55660247802734,
+     "cpi_rel": 974.3417072296143,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 322.26109886169434,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.158299210321455,
+    "gain": {
+     "last_published_stress": 3365.916669845581,
+     "sws_hunger": 0.0,
+     "sws_change": 518.5182018280029,
+     "cpi_rel": 435.0717191696167,
+     "cpi_rel_lag1": 146.46295070648193,
+     "food_cpi_yoy": 130.95819854736328,
+     "food_cpi_yoy_lag1": 210.94120979309082,
+     "cpi_dev": 235.84880256652832
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.3687520539284952,
+    "gain": {
+     "last_published_stress": 2727.674286842346,
+     "sws_hunger": 473.6656303405762,
+     "sws_change": 721.4081041812897,
+     "cpi_rel": 1219.8003078699112,
+     "cpi_rel_lag1": 154.67793464660645,
+     "food_cpi_yoy": 807.7904492616653,
+     "food_cpi_yoy_lag1": 560.153898358345,
+     "cpi_dev": 487.57444310188293
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.7532914445450238,
+    "gain": {
+     "last_published_stress": 7042.396193027496,
+     "sws_hunger": 552.3247179985046,
+     "sws_change": 1489.9613614082336,
+     "cpi_rel": 2799.493620157242,
+     "cpi_rel_lag1": 179.45310020446777,
+     "food_cpi_yoy": 1205.8397197723389,
+     "food_cpi_yoy_lag1": 640.1387605667114,
+     "cpi_dev": 1106.69889113307
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.682831946318168,
+     "C1_shallow_reg": 2.5784001987409813,
+     "C0_e9_default": 2.6164112097802317,
+     "C3_moderate": 2.3067927732705105
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.7532914445450238,
+    "gain": {
+     "last_published_stress": 7042.396193027496,
+     "sws_hunger": 552.3247179985046,
+     "sws_change": 1489.9613614082336,
+     "cpi_rel": 2799.493620157242,
+     "cpi_rel_lag1": 179.45310020446777,
+     "food_cpi_yoy": 1205.8397197723389,
+     "food_cpi_yoy_lag1": 640.1387605667114,
+     "cpi_dev": 1106.69889113307
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.347719350849261,
+    "gain": {
+     "last_published_stress": 5007.898830413818,
+     "sws_hunger": 0.0,
+     "sws_change": 55.0786018371582,
+     "cpi_rel": 1002.7873001098633,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 1430.2243041992188
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.9902684994965323,
+    "gain": {
+     "last_published_stress": 2783.1912117004395,
+     "sws_hunger": 0.0,
+     "sws_change": 192.40179634094238,
+     "cpi_rel": 348.38970375061035,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 22.603300094604492,
+     "food_cpi_yoy_lag1": 163.58159828186035,
+     "cpi_dev": 333.98950004577637,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 186.6005973815918,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 93.4237003326416,
+     "unemployment_rate": 1757.510097503662
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.2667791780706854,
+    "gain": {
+     "last_published_stress": 2856.207970380783,
+     "sws_hunger": 6.5580902099609375,
+     "sws_change": 394.6948895454407,
+     "cpi_rel": 1118.390418767929,
+     "cpi_rel_lag1": 6.469100117683411,
+     "food_cpi_yoy": 407.16030192375183,
+     "food_cpi_yoy_lag1": 307.25356435775757,
+     "cpi_dev": 312.86698961257935,
+     "poverty_incidence": 99.98694002628326,
+     "headline_cpi": 222.73311066627502,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 208.6351306438446,
+     "unemployment_rate": 1891.0058331489563
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5451129282913443,
+    "gain": {
+     "last_published_stress": 6631.068209409714,
+     "sws_hunger": 0.0,
+     "sws_change": 1271.65016746521,
+     "cpi_rel": 2168.364804506302,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 405.02658128738403,
+     "food_cpi_yoy_lag1": 154.33345079421997,
+     "cpi_dev": 1021.4414074420929,
+     "poverty_incidence": 266.7180714607239,
+     "headline_cpi": 870.1597900390625,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 433.8854694366455,
+     "unemployment_rate": 3775.471374988556
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.664333774933644,
+     "C1_shallow_reg": 2.355055140353965,
+     "C0_e9_default": 2.4519260378551264,
+     "C3_moderate": 2.2794855053986165
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5451129282913443,
+    "gain": {
+     "last_published_stress": 6631.068209409714,
+     "sws_hunger": 0.0,
+     "sws_change": 1271.65016746521,
+     "cpi_rel": 2168.364804506302,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 405.02658128738403,
+     "food_cpi_yoy_lag1": 154.33345079421997,
+     "cpi_dev": 1021.4414074420929,
+     "poverty_incidence": 266.7180714607239,
+     "headline_cpi": 870.1597900390625,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 433.8854694366455,
+     "unemployment_rate": 3775.471374988556
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.0552182809325923,
+    "gain": {
+     "cpi_rel": 1304.582759141922,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 62.02835035324097,
+     "dev_change": 30.152870416641235,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.012069206576849,
+    "gain": {
+     "cpi_rel": 771.7642068862915,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 79.34605932235718,
+     "dev_change": 24.122310161590576,
+     "cpi_dev": 7.568570137023926,
+     "food_cpi_yoy": 17.38781988620758,
+     "food_cpi_yoy_lag1": 5.707740068435669
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.6087345986642596,
+    "gain": {
+     "cpi_rel": 912.0135760605335,
+     "cpi_rel_lag1": 16.784313142299652,
+     "anchor_dev": 3.2680100202560425,
+     "dev_change": 149.19033102691174,
+     "cpi_dev": 84.1051715016365,
+     "food_cpi_yoy": 126.92063371837139,
+     "food_cpi_yoy_lag1": 3.842840924859047
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.8536179818786995,
+    "gain": {
+     "cpi_rel": 2091.704156594351,
+     "cpi_rel_lag1": 33.53207929432392,
+     "anchor_dev": 8.03175973892212,
+     "dev_change": 56.780388832092285,
+     "cpi_dev": 147.48763985931873,
+     "food_cpi_yoy": 135.71751116216183,
+     "food_cpi_yoy_lag1": 13.062695026397705
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 3.102700115243816,
+     "C1_shallow_reg": 3.0685591603991162,
+     "C0_e9_default": 2.786538006518063,
+     "C3_moderate": 2.5944196943380406
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.8536179818786995,
+    "gain": {
+     "cpi_rel": 2091.704156594351,
+     "cpi_rel_lag1": 33.53207929432392,
+     "anchor_dev": 8.03175973892212,
+     "dev_change": 56.780388832092285,
+     "cpi_dev": 147.48763985931873,
+     "food_cpi_yoy": 135.71751116216183,
+     "food_cpi_yoy_lag1": 13.062695026397705
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.3885956007845746,
+    "gain": {
+     "last_published_stress": 0.0,
+     "sws_hunger": 1027.3248481750488,
+     "sws_change": 0.0,
+     "lps_change": 0.0,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 427.1378393173218,
+     "cpi_dev": 371.2933807373047
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.1260545607727024,
+    "gain": {
+     "last_published_stress": 57.10425043106079,
+     "sws_hunger": 703.9698457717896,
+     "sws_change": 14.710200309753418,
+     "lps_change": 7.620239973068237,
+     "anchor_dev": 97.69700145721436,
+     "cpi_rel": 35.271100997924805,
+     "cpi_rel_lag1": 364.17437076568604,
+     "cpi_dev": 561.3538055419922
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.1319533157284962,
+    "gain": {
+     "last_published_stress": 777.4487236738205,
+     "sws_hunger": 1232.0785716176033,
+     "sws_change": 205.67131066322327,
+     "lps_change": 259.6727703809738,
+     "anchor_dev": 219.37314081192017,
+     "cpi_rel": 34.383140087127686,
+     "cpi_rel_lag1": 353.688068151474,
+     "cpi_dev": 568.8879278898239
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.7491022649305328,
+    "gain": {
+     "last_published_stress": 1196.2293264865875,
+     "sws_hunger": 2157.76673913002,
+     "sws_change": 170.17403078079224,
+     "lps_change": 218.0747106075287,
+     "anchor_dev": 0.0,
+     "cpi_rel": 131.73806977272034,
+     "cpi_rel_lag1": 890.2177114486694,
+     "cpi_dev": 1318.5235533714294
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.803889899194264,
+     "C1_shallow_reg": 2.8569105595599043,
+     "C0_e9_default": 3.135605760977915,
+     "C3_moderate": 2.7924815204516444
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.7491022649305328,
+    "gain": {
+     "last_published_stress": 1196.2293264865875,
+     "sws_hunger": 2157.76673913002,
+     "sws_change": 170.17403078079224,
+     "lps_change": 218.0747106075287,
+     "anchor_dev": 0.0,
+     "cpi_rel": 131.73806977272034,
+     "cpi_rel_lag1": 890.2177114486694,
+     "cpi_dev": 1318.5235533714294
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.16780691443517348,
+     "C1_shallow_reg": 0.14943948228990472,
+     "C0_e9_default": 0.1146139903434088,
+     "C3_moderate": 0.13623738143703684
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 4,
+     "oof_high": 14,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_brier": {
+     "C2_stumps": 0.1731429652411283,
+     "C1_shallow_reg": 0.15323283829190695,
+     "C0_e9_default": 0.15731273264893156,
+     "C3_moderate": 0.15417219403651755
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 4,
+     "oof_high": 14,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 4
+ },
+ {
+  "target": "2024-Q4",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2"
+  ],
+  "n_train_rows": 60,
+  "train_HIGH": 36,
+  "train_LOW": 24,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.472739659681468,
+    "gain": {
+     "last_published_stress": 8498.882232666016,
+     "sws_hunger": 0.0,
+     "sws_change": 2291.104892730713
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.2369474927330244,
+    "gain": {
+     "last_published_stress": 5018.140894412994,
+     "sws_hunger": 838.075891494751,
+     "sws_change": 1462.1114497184753
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.7673574043392493,
+    "gain": {
+     "last_published_stress": 5551.1359422802925,
+     "sws_hunger": 1163.7487298250198,
+     "sws_change": 2713.6630049347878
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.9686529246533717,
+    "gain": {
+     "last_published_stress": 13853.124112606049,
+     "sws_hunger": 2334.1571357548237,
+     "sws_change": 3990.607854552567
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.3203095078443603,
+     "C1_shallow_reg": 3.172959603788339,
+     "C0_e9_default": 2.700959813198132,
+     "C3_moderate": 2.85336951313435
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.7673574043392493,
+    "gain": {
+     "last_published_stress": 5551.1359422802925,
+     "sws_hunger": 1163.7487298250198,
+     "sws_change": 2713.6630049347878
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.471977681911471,
+    "gain": {
+     "last_published_stress": 8460.424533843994,
+     "sws_hunger": 0.0,
+     "sws_change": 2254.1471977233887,
+     "lps_change": 77.841796875,
+     "anchor_dev": 0.0
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.2273499441553093,
+    "gain": {
+     "last_published_stress": 4379.322723388672,
+     "sws_hunger": 626.7785015106201,
+     "sws_change": 1514.5616855621338,
+     "lps_change": 538.5591926574707,
+     "anchor_dev": 350.20279598236084
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.6113119973155496,
+    "gain": {
+     "last_published_stress": 4701.312192559242,
+     "sws_hunger": 1287.4539723396301,
+     "sws_change": 2256.2269867658615,
+     "lps_change": 1210.6167472600937,
+     "anchor_dev": 492.9554395675659
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.8996058977256782,
+    "gain": {
+     "last_published_stress": 12960.56677532196,
+     "sws_hunger": 1337.9986681938171,
+     "sws_change": 3820.575456559658,
+     "lps_change": 2178.745410323143,
+     "anchor_dev": 438.58777952194214
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.4227238552748886,
+     "C1_shallow_reg": 3.2880413797850965,
+     "C0_e9_default": 2.9383686797068576,
+     "C3_moderate": 3.103245519995927
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.6113119973155496,
+    "gain": {
+     "last_published_stress": 4701.312192559242,
+     "sws_hunger": 1287.4539723396301,
+     "sws_change": 2256.2269867658615,
+     "lps_change": 1210.6167472600937,
+     "anchor_dev": 492.9554395675659
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.469806244033275,
+    "gain": {
+     "last_published_stress": 8343.57723236084,
+     "sws_hunger": 0.0,
+     "sws_change": 2058.704689025879,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 209.6620979309082,
+     "cpi_dev": 213.66659927368164
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.1266925320354493,
+    "gain": {
+     "last_published_stress": 4756.322906494141,
+     "sws_hunger": 460.3091049194336,
+     "sws_change": 837.6559991836548,
+     "cpi_rel": 402.5796928405762,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 32.957600593566895,
+     "food_cpi_yoy_lag1": 602.1928997039795,
+     "cpi_dev": 798.8042993545532
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.5114099350627164,
+    "gain": {
+     "last_published_stress": 4909.826344490051,
+     "sws_hunger": 840.6810998916626,
+     "sws_change": 1172.0345754623413,
+     "cpi_rel": 572.5460078716278,
+     "cpi_rel_lag1": 110.1991982460022,
+     "food_cpi_yoy": 330.441890001297,
+     "food_cpi_yoy_lag1": 952.8945314884186,
+     "cpi_dev": 1352.4859743118286
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.8211506290630817,
+    "gain": {
+     "last_published_stress": 13396.388116836548,
+     "sws_hunger": 2145.394326686859,
+     "sws_change": 1195.2433304786682,
+     "cpi_rel": 734.5361230373383,
+     "cpi_rel_lag1": 307.15549898147583,
+     "food_cpi_yoy": 200.97450971603394,
+     "food_cpi_yoy_lag1": 1962.2338635921478,
+     "cpi_dev": 1606.6296565532684
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 3.3702142939643975,
+     "C1_shallow_reg": 3.229572851129177,
+     "C0_e9_default": 3.0636803934295993,
+     "C3_moderate": 2.9091518859813297
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.8211506290630817,
+    "gain": {
+     "last_published_stress": 13396.388116836548,
+     "sws_hunger": 2145.394326686859,
+     "sws_change": 1195.2433304786682,
+     "cpi_rel": 734.5361230373383,
+     "cpi_rel_lag1": 307.15549898147583,
+     "food_cpi_yoy": 200.97450971603394,
+     "food_cpi_yoy_lag1": 1962.2338635921478,
+     "cpi_dev": 1606.6296565532684
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.2913995547757136,
+    "gain": {
+     "last_published_stress": 7582.895336151123,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 1602.86079788208,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 2944.7228240966797
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.9353079720221005,
+    "gain": {
+     "last_published_stress": 3583.473602294922,
+     "sws_hunger": 245.82769775390625,
+     "sws_change": 27.181100845336914,
+     "cpi_rel": 1192.194206237793,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 119.98650074005127,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 1757.1044940948486,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 16.61210060119629,
+     "unemployment_rate": 2051.6327018737793
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.3332338241253685,
+    "gain": {
+     "last_published_stress": 4420.3404750823975,
+     "sws_hunger": 233.3114013671875,
+     "sws_change": 228.50027108192444,
+     "cpi_rel": 720.9898464679718,
+     "cpi_rel_lag1": 109.61243915557861,
+     "food_cpi_yoy": 225.0338897705078,
+     "food_cpi_yoy_lag1": 413.55812764167786,
+     "cpi_dev": 829.4837639331818,
+     "poverty_incidence": 259.08672070503235,
+     "headline_cpi": 1408.4841079711914,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 107.81147861480713,
+     "unemployment_rate": 2146.6174840927124
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5767089341129161,
+    "gain": {
+     "last_published_stress": 10797.880165100098,
+     "sws_hunger": 737.3204002380371,
+     "sws_change": 350.8393406867981,
+     "cpi_rel": 1934.8605070114136,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 106.8280394077301,
+     "food_cpi_yoy_lag1": 393.59605073928833,
+     "cpi_dev": 763.66781270504,
+     "poverty_incidence": 243.8211693763733,
+     "headline_cpi": 3533.5411709547043,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 634.6877827644348,
+     "unemployment_rate": 4676.167944192886
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.277582214391063,
+     "C1_shallow_reg": 2.93907805303522,
+     "C0_e9_default": 2.7839859217668566,
+     "C3_moderate": 2.838688824114638
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.3332338241253685,
+    "gain": {
+     "last_published_stress": 4420.3404750823975,
+     "sws_hunger": 233.3114013671875,
+     "sws_change": 228.50027108192444,
+     "cpi_rel": 720.9898464679718,
+     "cpi_rel_lag1": 109.61243915557861,
+     "food_cpi_yoy": 225.0338897705078,
+     "food_cpi_yoy_lag1": 413.55812764167786,
+     "cpi_dev": 829.4837639331818,
+     "poverty_incidence": 259.08672070503235,
+     "headline_cpi": 1408.4841079711914,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 107.81147861480713,
+     "unemployment_rate": 2146.6174840927124
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.4107979883463297,
+    "gain": {
+     "cpi_rel": 930.9343297481537,
+     "cpi_rel_lag1": 23.03116011619568,
+     "anchor_dev": 15.104300498962402,
+     "dev_change": 108.36241030693054,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.288569600212243,
+    "gain": {
+     "cpi_rel": 457.4898428916931,
+     "cpi_rel_lag1": 163.15605974197388,
+     "anchor_dev": 0.0,
+     "dev_change": 84.27173018455505,
+     "cpi_dev": 34.753310203552246,
+     "food_cpi_yoy": 66.78181004524231,
+     "food_cpi_yoy_lag1": 2.443269968032837
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.049479640692964,
+    "gain": {
+     "cpi_rel": 579.1309826076031,
+     "cpi_rel_lag1": 135.63349092006683,
+     "anchor_dev": 0.0,
+     "dev_change": 321.6898459792137,
+     "cpi_dev": 110.7919634282589,
+     "food_cpi_yoy": 123.93302655220032,
+     "food_cpi_yoy_lag1": 35.535245805978775
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.227954049639607,
+    "gain": {
+     "cpi_rel": 1242.0866832137108,
+     "cpi_rel_lag1": 435.60640901327133,
+     "anchor_dev": 0.0,
+     "dev_change": 181.88812866597436,
+     "cpi_dev": 109.36500178277493,
+     "food_cpi_yoy": 158.34078234434128,
+     "food_cpi_yoy_lag1": 47.33458071947098
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 3.4475256311689035,
+     "C1_shallow_reg": 3.3928296143714363,
+     "C0_e9_default": 3.2335972420164416,
+     "C3_moderate": 3.0801001614248653
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.227954049639607,
+    "gain": {
+     "cpi_rel": 1242.0866832137108,
+     "cpi_rel_lag1": 435.60640901327133,
+     "anchor_dev": 0.0,
+     "dev_change": 181.88812866597436,
+     "cpi_dev": 109.36500178277493,
+     "food_cpi_yoy": 158.34078234434128,
+     "food_cpi_yoy_lag1": 47.33458071947098
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.6043249148444296,
+    "gain": {
+     "last_published_stress": 376.98359870910645,
+     "sws_hunger": 0.0,
+     "sws_change": 924.6663980484009,
+     "lps_change": 0.0,
+     "anchor_dev": 0.0,
+     "cpi_rel": 56.20180034637451,
+     "cpi_rel_lag1": 854.9527015686035,
+     "cpi_dev": 236.87819957733154
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.2638508668870845,
+    "gain": {
+     "last_published_stress": 476.36949348449707,
+     "sws_hunger": 501.74831342697144,
+     "sws_change": 794.968997001648,
+     "lps_change": 16.967400074005127,
+     "anchor_dev": 76.27325963973999,
+     "cpi_rel": 51.11190128326416,
+     "cpi_rel_lag1": 669.2668037414551,
+     "cpi_dev": 65.42159938812256
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.472549467651186,
+    "gain": {
+     "last_published_stress": 1152.783926486969,
+     "sws_hunger": 1495.9506735801697,
+     "sws_change": 582.669805765152,
+     "lps_change": 136.91063952445984,
+     "anchor_dev": 708.6696009635925,
+     "cpi_rel": 193.9312038421631,
+     "cpi_rel_lag1": 397.41554498672485,
+     "cpi_dev": 868.5997021198273
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.938356945001133,
+    "gain": {
+     "last_published_stress": 1218.5608668327332,
+     "sws_hunger": 1399.1385164260864,
+     "sws_change": 1902.3118314743042,
+     "lps_change": 14.715950012207031,
+     "anchor_dev": 343.56357192993164,
+     "cpi_rel": 694.707884144038,
+     "cpi_rel_lag1": 1543.0884737968445,
+     "cpi_dev": 1820.8256516754627
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.314159833806232,
+     "C1_shallow_reg": 3.35056346975247,
+     "C0_e9_default": 3.183006065049349,
+     "C3_moderate": 3.2602748246603026
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.472549467651186,
+    "gain": {
+     "last_published_stress": 1152.783926486969,
+     "sws_hunger": 1495.9506735801697,
+     "sws_change": 582.669805765152,
+     "lps_change": 136.91063952445984,
+     "anchor_dev": 708.6696009635925,
+     "cpi_rel": 193.9312038421631,
+     "cpi_rel_lag1": 397.41554498672485,
+     "cpi_dev": 868.5997021198273
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.14932681791540367,
+     "C1_shallow_reg": 0.1294626433699049,
+     "C0_e9_default": 0.09172593402925336,
+     "C3_moderate": 0.11727736477530763
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 5,
+     "oof_high": 19,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_brier": {
+     "C2_stumps": 0.15546249856606545,
+     "C1_shallow_reg": 0.1364069883271286,
+     "C0_e9_default": 0.13854933782692294,
+     "C3_moderate": 0.1362224827473711
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 5,
+     "oof_high": 19,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 5
+ },
+ {
+  "target": "2025-Q1",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3"
+  ],
+  "n_train_rows": 65,
+  "train_HIGH": 41,
+  "train_LOW": 24,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.5763851203218646,
+    "gain": {
+     "last_published_stress": 10824.073894500732,
+     "sws_hunger": 610.5399894714355,
+     "sws_change": 1212.132698059082
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.3566957761340497,
+    "gain": {
+     "last_published_stress": 6626.166107177734,
+     "sws_hunger": 1036.433292388916,
+     "sws_change": 1168.7545022964478
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.938820134585774,
+    "gain": {
+     "last_published_stress": 6833.348059952259,
+     "sws_hunger": 1811.2780487537384,
+     "sws_change": 2341.129146516323
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.0767902433677614,
+    "gain": {
+     "last_published_stress": 17420.710418581963,
+     "sws_hunger": 3664.7265989780426,
+     "sws_change": 3345.38219332695
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.4915421027161373,
+     "C1_shallow_reg": 3.3642037575531467,
+     "C0_e9_default": 2.9029808128691834,
+     "C3_moderate": 3.0591749435037694
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.938820134585774,
+    "gain": {
+     "last_published_stress": 6833.348059952259,
+     "sws_hunger": 1811.2780487537384,
+     "sws_change": 2341.129146516323
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.561020880965558,
+    "gain": {
+     "last_published_stress": 10219.033618927002,
+     "sws_hunger": 601.9682006835938,
+     "sws_change": 618.5743942260742,
+     "lps_change": 1452.795207977295,
+     "anchor_dev": 0.0
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.2724354091329575,
+    "gain": {
+     "last_published_stress": 6347.257497787476,
+     "sws_hunger": 955.7420082092285,
+     "sws_change": 679.3052978515625,
+     "lps_change": 945.0988903045654,
+     "anchor_dev": 157.02069854736328
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.683860850396662,
+    "gain": {
+     "last_published_stress": 5771.160231351852,
+     "sws_hunger": 1563.3589963912964,
+     "sws_change": 1789.461333990097,
+     "lps_change": 1638.4453716278076,
+     "anchor_dev": 1570.6439855098724
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.9867308523364144,
+    "gain": {
+     "last_published_stress": 15725.454728126526,
+     "sws_hunger": 2937.294979572296,
+     "sws_change": 2300.3345127105713,
+     "lps_change": 2909.892601251602,
+     "anchor_dev": 1810.542776942253
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.682237810609827,
+     "C1_shallow_reg": 3.589205942884791,
+     "C0_e9_default": 3.3910057989756055,
+     "C3_moderate": 3.4267165538368136
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.683860850396662,
+    "gain": {
+     "last_published_stress": 5771.160231351852,
+     "sws_hunger": 1563.3589963912964,
+     "sws_change": 1789.461333990097,
+     "lps_change": 1638.4453716278076,
+     "anchor_dev": 1570.6439855098724
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.528717479899635,
+    "gain": {
+     "last_published_stress": 10677.40979385376,
+     "sws_hunger": 483.43930435180664,
+     "sws_change": 575.7082138061523,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 1124.6828880310059
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.218677388852538,
+    "gain": {
+     "last_published_stress": 6562.896633148193,
+     "sws_hunger": 396.8488082885742,
+     "sws_change": 549.2257013320923,
+     "cpi_rel": 160.62049865722656,
+     "cpi_rel_lag1": 209.34850311279297,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 28.30069923400879,
+     "cpi_dev": 1458.75790309906
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.513090829834216,
+    "gain": {
+     "last_published_stress": 6302.211512088776,
+     "sws_hunger": 813.9770050048828,
+     "sws_change": 884.2234263420105,
+     "cpi_rel": 1475.0844914913177,
+     "cpi_rel_lag1": 335.8826265335083,
+     "food_cpi_yoy": 372.168221950531,
+     "food_cpi_yoy_lag1": 947.1413044929504,
+     "cpi_dev": 1634.1830344200134
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.8910540526956787,
+    "gain": {
+     "last_published_stress": 16831.62141561508,
+     "sws_hunger": 2202.181131839752,
+     "sws_change": 1146.3127508163452,
+     "cpi_rel": 1522.5044181346893,
+     "cpi_rel_lag1": 787.139922618866,
+     "food_cpi_yoy": 328.6253333091736,
+     "food_cpi_yoy_lag1": 997.8874101638794,
+     "cpi_dev": 2511.629755973816
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 3.5900471246330667,
+     "C1_shallow_reg": 3.4743311284841494,
+     "C0_e9_default": 3.548207243716135,
+     "C3_moderate": 3.2818425257879866
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.8910540526956787,
+    "gain": {
+     "last_published_stress": 16831.62141561508,
+     "sws_hunger": 2202.181131839752,
+     "sws_change": 1146.3127508163452,
+     "cpi_rel": 1522.5044181346893,
+     "cpi_rel_lag1": 787.139922618866,
+     "food_cpi_yoy": 328.6253333091736,
+     "food_cpi_yoy_lag1": 997.8874101638794,
+     "cpi_dev": 2511.629755973816
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.32895798443591,
+    "gain": {
+     "last_published_stress": 8619.202449798584,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 2616.7578353881836,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 3810.11629486084
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.047444742113611,
+    "gain": {
+     "last_published_stress": 4100.0604248046875,
+     "sws_hunger": 179.08820343017578,
+     "sws_change": 0.0,
+     "cpi_rel": 1247.0667972564697,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 241.62630462646484,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 2180.272798538208,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 16.73150062561035,
+     "unemployment_rate": 2672.472946166992
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.3163332086078243,
+    "gain": {
+     "last_published_stress": 4925.72371006012,
+     "sws_hunger": 139.7158031463623,
+     "sws_change": 206.35842108726501,
+     "cpi_rel": 1600.775312423706,
+     "cpi_rel_lag1": 195.99831247329712,
+     "food_cpi_yoy": 475.0843081474304,
+     "food_cpi_yoy_lag1": 283.37955141067505,
+     "cpi_dev": 768.3955342769623,
+     "poverty_incidence": 602.5491080284119,
+     "headline_cpi": 1926.9480285644531,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 183.6889100074768,
+     "unemployment_rate": 2466.0990998744965
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.7338789698983716,
+    "gain": {
+     "last_published_stress": 12316.214664936066,
+     "sws_hunger": 904.262698173523,
+     "sws_change": 232.04962062835693,
+     "cpi_rel": 2581.7636477947235,
+     "cpi_rel_lag1": 320.99221181869507,
+     "food_cpi_yoy": 112.94256043434143,
+     "food_cpi_yoy_lag1": 73.63549041748047,
+     "cpi_dev": 1398.2611228227615,
+     "poverty_incidence": 353.89601039886475,
+     "headline_cpi": 4730.11666226387,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 452.24211740493774,
+     "unemployment_rate": 5258.2447514534
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.4358166685634948,
+     "C1_shallow_reg": 3.08705979719144,
+     "C0_e9_default": 2.953822434000505,
+     "C3_moderate": 3.0406837338057264
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.3163332086078243,
+    "gain": {
+     "last_published_stress": 4925.72371006012,
+     "sws_hunger": 139.7158031463623,
+     "sws_change": 206.35842108726501,
+     "cpi_rel": 1600.775312423706,
+     "cpi_rel_lag1": 195.99831247329712,
+     "food_cpi_yoy": 475.0843081474304,
+     "food_cpi_yoy_lag1": 283.37955141067505,
+     "cpi_dev": 768.3955342769623,
+     "poverty_incidence": 602.5491080284119,
+     "headline_cpi": 1926.9480285644531,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 183.6889100074768,
+     "unemployment_rate": 2466.0990998744965
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.501991804280152,
+    "gain": {
+     "cpi_rel": 642.6225371360779,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 81.98164057731628,
+     "dev_change": 112.05785846710205,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 55.76670980453491,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.423638868590879,
+    "gain": {
+     "cpi_rel": 395.26464009284973,
+     "cpi_rel_lag1": 37.72738981246948,
+     "anchor_dev": 0.0,
+     "dev_change": 98.50080943107605,
+     "cpi_dev": 67.42977046966553,
+     "food_cpi_yoy": 181.79413866996765,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.1301661055174215,
+    "gain": {
+     "cpi_rel": 411.9634385108948,
+     "cpi_rel_lag1": 83.79463148117065,
+     "anchor_dev": 61.1422004699707,
+     "dev_change": 223.4008949995041,
+     "cpi_dev": 219.16292369365692,
+     "food_cpi_yoy": 368.38665640354156,
+     "food_cpi_yoy_lag1": 95.28723365068436
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.4197938993226207,
+    "gain": {
+     "cpi_rel": 978.6567795872688,
+     "cpi_rel_lag1": 243.49096536636353,
+     "anchor_dev": 0.0,
+     "dev_change": 312.8460577726364,
+     "cpi_dev": 446.3460410833359,
+     "food_cpi_yoy": 298.72967171669006,
+     "food_cpi_yoy_lag1": 11.694679975509644
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 3.4951780312046874,
+     "C1_shallow_reg": 3.464307853152128,
+     "C0_e9_default": 3.4774747855735626,
+     "C3_moderate": 3.2822988045403085
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.4197938993226207,
+    "gain": {
+     "cpi_rel": 978.6567795872688,
+     "cpi_rel_lag1": 243.49096536636353,
+     "anchor_dev": 0.0,
+     "dev_change": 312.8460577726364,
+     "cpi_dev": 446.3460410833359,
+     "food_cpi_yoy": 298.72967171669006,
+     "food_cpi_yoy_lag1": 11.694679975509644
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.7484005089836483,
+    "gain": {
+     "last_published_stress": 762.1460018157959,
+     "sws_hunger": 297.76469802856445,
+     "sws_change": 136.62739753723145,
+     "lps_change": 0.0,
+     "anchor_dev": 200.62420082092285,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 2200.4397926330566,
+     "cpi_dev": 402.2001037597656
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.491831426517952,
+    "gain": {
+     "last_published_stress": 443.2453908920288,
+     "sws_hunger": 1049.898696899414,
+     "sws_change": 125.37310028076172,
+     "lps_change": 0.0,
+     "anchor_dev": 357.9486999511719,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1054.2154006958008,
+     "cpi_dev": 555.8117017745972
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.2608748486243262,
+    "gain": {
+     "last_published_stress": 1482.1384720802307,
+     "sws_hunger": 976.1839876174927,
+     "sws_change": 206.84185242652893,
+     "lps_change": 682.2364392280579,
+     "anchor_dev": 1305.6414058208466,
+     "cpi_rel": 328.78568410873413,
+     "cpi_rel_lag1": 1490.7028460502625,
+     "cpi_dev": 1712.3642942905426
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.026241183218698,
+    "gain": {
+     "last_published_stress": 1914.3288326263428,
+     "sws_hunger": 3132.687349319458,
+     "sws_change": 68.29399919509888,
+     "lps_change": 304.761878490448,
+     "anchor_dev": 1852.712955713272,
+     "cpi_rel": 154.53133141994476,
+     "cpi_rel_lag1": 3048.494849205017,
+     "cpi_dev": 2207.4130322933197
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.450355638567091,
+     "C1_shallow_reg": 3.4353753558725924,
+     "C0_e9_default": 3.2802626477905563,
+     "C3_moderate": 3.3577665033285125
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.2608748486243262,
+    "gain": {
+     "last_published_stress": 1482.1384720802307,
+     "sws_hunger": 976.1839876174927,
+     "sws_change": 206.84185242652893,
+     "lps_change": 682.2364392280579,
+     "anchor_dev": 1305.6414058208466,
+     "cpi_rel": 328.78568410873413,
+     "cpi_rel_lag1": 1490.7028460502625,
+     "cpi_dev": 1712.3642942905426
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.13438838823136937,
+     "C1_shallow_reg": 0.11466777920882344,
+     "C0_e9_default": 0.07652750429181811,
+     "C3_moderate": 0.1032217230304322
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 6,
+     "oof_high": 24,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_brier": {
+     "C2_stumps": 0.1415594046325507,
+     "C1_shallow_reg": 0.12323192764532655,
+     "C0_e9_default": 0.126429069805311,
+     "C3_moderate": 0.12185546575363111
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 6,
+     "oof_high": 24,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 6
+ },
+ {
+  "target": "2025-Q4",
+  "window": "expanding",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1"
+  ],
+  "n_train_rows": 75,
+  "train_HIGH": 51,
+  "train_LOW": 24,
+  "arms": {
+   "FIXED|direct|core|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.8986362356858835,
+    "gain": {
+     "last_published_stress": 15476.786323547363,
+     "sws_hunger": 15082.663368225098,
+     "sws_change": 189.63829803466797
+    }
+   },
+   "FIXED|direct|core|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.5600035181014777,
+    "gain": {
+     "last_published_stress": 11822.999919891357,
+     "sws_hunger": 8373.672992706299,
+     "sws_change": 644.6198978424072
+    }
+   },
+   "FIXED|direct|core|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.1441885518775994,
+    "gain": {
+     "last_published_stress": 12798.583251953125,
+     "sws_hunger": 9264.637320518494,
+     "sws_change": 2629.5195326805115
+    }
+   },
+   "FIXED|direct|core|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.2856331412012194,
+    "gain": {
+     "last_published_stress": 28701.35819530487,
+     "sws_hunger": 23326.348306655884,
+     "sws_change": 3137.0857055187225
+    }
+   },
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.9072372970265015,
+     "C1_shallow_reg": 4.721712208165752,
+     "C0_e9_default": 3.5294811228644876,
+     "C3_moderate": 3.9711036305413288
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.1441885518775994,
+    "gain": {
+     "last_published_stress": 12798.583251953125,
+     "sws_hunger": 9264.637320518494,
+     "sws_change": 2629.5195326805115
+    }
+   },
+   "FIXED|direct|core_plus|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.8986362356858835,
+    "gain": {
+     "last_published_stress": 15476.786323547363,
+     "sws_hunger": 15082.663368225098,
+     "sws_change": 189.63829803466797,
+     "lps_change": 0.0,
+     "anchor_dev": 0.0
+    }
+   },
+   "FIXED|direct|core_plus|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.5387540574653715,
+    "gain": {
+     "last_published_stress": 11381.073139190674,
+     "sws_hunger": 8661.57258605957,
+     "sws_change": 313.8467960357666,
+     "lps_change": 572.1795043945312,
+     "anchor_dev": 42.48550033569336
+    }
+   },
+   "FIXED|direct|core_plus|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.8225734174055792,
+    "gain": {
+     "last_published_stress": 10840.989813804626,
+     "sws_hunger": 9649.565528392792,
+     "sws_change": 2481.4961619377136,
+     "lps_change": 1117.474519252777,
+     "anchor_dev": 2029.4888973236084
+    }
+   },
+   "FIXED|direct|core_plus|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.1372435871452624,
+    "gain": {
+     "last_published_stress": 25314.95751142502,
+     "sws_hunger": 23426.943558692932,
+     "sws_change": 2682.0736742019653,
+     "lps_change": 2704.211893081665,
+     "anchor_dev": 2626.6762108802795
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 5.108378490730305,
+     "C1_shallow_reg": 4.887398632528668,
+     "C0_e9_default": 4.022699674746048,
+     "C3_moderate": 4.485224184618516
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.8225734174055792,
+    "gain": {
+     "last_published_stress": 10840.989813804626,
+     "sws_hunger": 9649.565528392792,
+     "sws_change": 2481.4961619377136,
+     "lps_change": 1117.474519252777,
+     "anchor_dev": 2029.4888973236084
+    }
+   },
+   "FIXED|direct|compact|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.8986362356858835,
+    "gain": {
+     "last_published_stress": 15476.786323547363,
+     "sws_hunger": 15082.663368225098,
+     "sws_change": 189.63829803466797,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0
+    }
+   },
+   "FIXED|direct|compact|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.5595464142103284,
+    "gain": {
+     "last_published_stress": 11757.849227905273,
+     "sws_hunger": 8316.314094543457,
+     "sws_change": 498.2391014099121,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 32.22420120239258,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 136.83710098266602,
+     "cpi_dev": 141.40439987182617
+    }
+   },
+   "FIXED|direct|compact|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.6961432004608388,
+    "gain": {
+     "last_published_stress": 12667.370219230652,
+     "sws_hunger": 7356.403049945831,
+     "sws_change": 1244.1046261787415,
+     "cpi_rel": 1553.7314095497131,
+     "cpi_rel_lag1": 1201.455286026001,
+     "food_cpi_yoy": 430.23840713500977,
+     "food_cpi_yoy_lag1": 1382.392327785492,
+     "cpi_dev": 1374.3468527793884
+    }
+   },
+   "FIXED|direct|compact|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.106231549733294,
+    "gain": {
+     "last_published_stress": 28025.921751976013,
+     "sws_hunger": 21914.40027809143,
+     "sws_change": 1667.5901832580566,
+     "cpi_rel": 1632.0397958755493,
+     "cpi_rel_lag1": 1219.542833328247,
+     "food_cpi_yoy": 188.45940113067627,
+     "food_cpi_yoy_lag1": 1052.2103061676025,
+     "cpi_dev": 2123.9713850021362
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 5.019835450653138,
+     "C1_shallow_reg": 4.821146549032759,
+     "C0_e9_default": 4.374968099016169,
+     "C3_moderate": 4.468787178546469
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.6961432004608388,
+    "gain": {
+     "last_published_stress": 12667.370219230652,
+     "sws_hunger": 7356.403049945831,
+     "sws_change": 1244.1046261787415,
+     "cpi_rel": 1553.7314095497131,
+     "cpi_rel_lag1": 1201.455286026001,
+     "food_cpi_yoy": 430.23840713500977,
+     "food_cpi_yoy_lag1": 1382.392327785492,
+     "cpi_dev": 1374.3468527793884
+    }
+   },
+   "FIXED|direct|expanded|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.707930537594327,
+    "gain": {
+     "last_published_stress": 10582.84073638916,
+     "sws_hunger": 3906.7386627197266,
+     "sws_change": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 15981.793029785156,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 2526.8685150146484
+    }
+   },
+   "FIXED|direct|expanded|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.406549742776038,
+    "gain": {
+     "last_published_stress": 4576.518508911133,
+     "sws_hunger": 3113.21049118042,
+     "sws_change": 0.0,
+     "cpi_rel": 384.22999572753906,
+     "cpi_rel_lag1": 32.61589813232422,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 12288.474662780762,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 1656.5385131835938
+    }
+   },
+   "FIXED|direct|expanded|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5472195030629392,
+    "gain": {
+     "last_published_stress": 5824.279799938202,
+     "sws_hunger": 1165.6529703140259,
+     "sws_change": 140.81951022148132,
+     "cpi_rel": 2249.449782371521,
+     "cpi_rel_lag1": 460.64946365356445,
+     "food_cpi_yoy": 468.0507917404175,
+     "food_cpi_yoy_lag1": 465.53709506988525,
+     "cpi_dev": 1054.7416400909424,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 13713.269628047943,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 340.34314250946045,
+     "unemployment_rate": 2163.820239543915
+    }
+   },
+   "FIXED|direct|expanded|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.933824419075022,
+    "gain": {
+     "last_published_stress": 6501.721384048462,
+     "sws_hunger": 6383.882297515869,
+     "sws_change": 624.2193059921265,
+     "cpi_rel": 4097.37503862381,
+     "cpi_rel_lag1": 698.2815971374512,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 262.19209003448486,
+     "cpi_dev": 631.0301995277405,
+     "poverty_incidence": 213.97599983215332,
+     "headline_cpi": 37031.96530532837,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 55.25660037994385,
+     "unemployment_rate": 3813.2948780059814
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.783972890793366,
+     "C1_shallow_reg": 4.462156038066797,
+     "C0_e9_default": 3.8413545376524603,
+     "C3_moderate": 4.253650543597995
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5472195030629392,
+    "gain": {
+     "last_published_stress": 5824.279799938202,
+     "sws_hunger": 1165.6529703140259,
+     "sws_change": 140.81951022148132,
+     "cpi_rel": 2249.449782371521,
+     "cpi_rel_lag1": 460.64946365356445,
+     "food_cpi_yoy": 468.0507917404175,
+     "food_cpi_yoy_lag1": 465.53709506988525,
+     "cpi_dev": 1054.7416400909424,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 13713.269628047943,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 340.34314250946045,
+     "unemployment_rate": 2163.820239543915
+    }
+   },
+   "FIXED|decomp|provincial|C2_stumps": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.887439820453435,
+    "gain": {
+     "cpi_rel": 1192.4331860542297,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 14.484699726104736,
+     "dev_change": 312.9682517051697,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 38.54020977020264,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "FIXED|decomp|provincial|C1_shallow_reg": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.8924315815329713,
+    "gain": {
+     "cpi_rel": 690.9053122997284,
+     "cpi_rel_lag1": 9.25082015991211,
+     "anchor_dev": 0.0,
+     "dev_change": 247.8730206489563,
+     "cpi_dev": 114.93426895141602,
+     "food_cpi_yoy": 53.7227201461792,
+     "food_cpi_yoy_lag1": 20.096620321273804
+    }
+   },
+   "FIXED|decomp|provincial|C0_e9_default": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.6262127191281537,
+    "gain": {
+     "cpi_rel": 728.9310321807861,
+     "cpi_rel_lag1": 176.03152054548264,
+     "anchor_dev": 191.09320455789566,
+     "dev_change": 412.24659299850464,
+     "cpi_dev": 158.400035738945,
+     "food_cpi_yoy": 161.90826243162155,
+     "food_cpi_yoy_lag1": 105.7196444272995
+    }
+   },
+   "FIXED|decomp|provincial|C3_moderate": {
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.869990325649254,
+    "gain": {
+     "cpi_rel": 1760.736251950264,
+     "cpi_rel_lag1": 155.3045597076416,
+     "anchor_dev": 70.93520998954773,
+     "dev_change": 745.1301409602165,
+     "cpi_dev": 362.72473096847534,
+     "food_cpi_yoy": 201.8677397966385,
+     "food_cpi_yoy_lag1": 96.26435774564743
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 4.26699770367928,
+     "C1_shallow_reg": 4.306922495369947,
+     "C0_e9_default": 4.301510461570542,
+     "C3_moderate": 4.19583152269548
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.869990325649254,
+    "gain": {
+     "cpi_rel": 1760.736251950264,
+     "cpi_rel_lag1": 155.3045597076416,
+     "anchor_dev": 70.93520998954773,
+     "dev_change": 745.1301409602165,
+     "cpi_dev": 362.72473096847534,
+     "food_cpi_yoy": 201.8677397966385,
+     "food_cpi_yoy_lag1": 96.26435774564743
+    }
+   },
+   "FIXED|resid|residual|C2_stumps": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.6725733497457074,
+    "gain": {
+     "last_published_stress": 256.3167037963867,
+     "sws_hunger": 2614.211603164673,
+     "sws_change": 89.56100082397461,
+     "lps_change": 0.0,
+     "anchor_dev": 1102.48929977417,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1468.5091972351074,
+     "cpi_dev": 220.3831024169922
+    }
+   },
+   "FIXED|resid|residual|C1_shallow_reg": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.3583656970548437,
+    "gain": {
+     "last_published_stress": 788.7550010681152,
+     "sws_hunger": 1691.1377058029175,
+     "sws_change": 422.41550064086914,
+     "lps_change": 0.0,
+     "anchor_dev": 840.2155952453613,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1006.1708106994629,
+     "cpi_dev": 437.42499828338623
+    }
+   },
+   "FIXED|resid|residual|C0_e9_default": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.4502583574593484,
+    "gain": {
+     "last_published_stress": 1721.172338962555,
+     "sws_hunger": 2416.0591394901276,
+     "sws_change": 1111.7022218704224,
+     "lps_change": 161.96517944335938,
+     "anchor_dev": 1223.1655132770538,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1430.707272529602,
+     "cpi_dev": 1197.5464148521423
+    }
+   },
+   "FIXED|resid|residual|C3_moderate": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.9838801756779096,
+    "gain": {
+     "last_published_stress": 1964.1773376464844,
+     "sws_hunger": 6753.361848831177,
+     "sws_change": 1624.6352400779724,
+     "lps_change": 384.17270374298096,
+     "anchor_dev": 1743.0990676879883,
+     "cpi_rel": 421.18534660339355,
+     "cpi_rel_lag1": 3272.741879940033,
+     "cpi_dev": 1032.0183568000793
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 3.482307925389791,
+     "C1_shallow_reg": 3.340604739306828,
+     "C0_e9_default": 3.0962869036200065,
+     "C3_moderate": 3.202624973405648
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.4502583574593484,
+    "gain": {
+     "last_published_stress": 1721.172338962555,
+     "sws_hunger": 2416.0591394901276,
+     "sws_change": 1111.7022218704224,
+     "lps_change": 161.96517944335938,
+     "anchor_dev": 1223.1655132770538,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1430.707272529602,
+     "cpi_dev": 1197.5464148521423
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.11069694451744787,
+     "C1_shallow_reg": 0.09287620629622138,
+     "C0_e9_default": 0.05745114890308396,
+     "C3_moderate": 0.08190411559118835
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 8,
+     "oof_high": 34,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.11607520681833386,
+     "C1_shallow_reg": 0.09951249982399729,
+     "C0_e9_default": 0.09618682363938694,
+     "C3_moderate": 0.09805399307466892
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 8,
+     "oof_high": 34,
+     "oof_low": 6,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 8
+ },
+ {
+  "target": "2023-Q4",
+  "window": "rolling8",
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 20,
+  "train_LOW": 20,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 1.6513825289807662,
+     "C3_moderate": 1.4031689672910281
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.072191424949698,
+    "gain": {
+     "last_published_stress": 6929.228228330612,
+     "sws_hunger": 815.9608204364777,
+     "sws_change": 649.2302687168121
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 1.1628363826014732,
+     "C3_moderate": 1.2591284465604438
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.4874772104922764,
+    "gain": {
+     "last_published_stress": 2738.413289308548,
+     "sws_hunger": 237.64483499526978,
+     "sws_change": 509.75394266843796,
+     "lps_change": 603.7930829226971,
+     "anchor_dev": 496.1370378434658
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.973667649393305,
+     "C1_shallow_reg": 1.9598864952206412,
+     "C0_e9_default": 2.428623188412308,
+     "C3_moderate": 1.4146487945132278
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.0114356053377387,
+    "gain": {
+     "last_published_stress": 5048.316408157349,
+     "sws_hunger": 781.9341487884521,
+     "sws_change": 612.6823174357414,
+     "cpi_rel": 2180.4042315483093,
+     "cpi_rel_lag1": 91.83257102966309,
+     "food_cpi_yoy": 11.214320950210094,
+     "food_cpi_yoy_lag1": 217.07784966379404,
+     "cpi_dev": 62.84882068634033
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 2.0293118423755443,
+     "C1_shallow_reg": 1.3877381518960872,
+     "C0_e9_default": 2.4187778829140836,
+     "C3_moderate": 1.6878238594053194
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.0944531444340635,
+    "gain": {
+     "last_published_stress": 1731.750783920288,
+     "sws_hunger": 0.0,
+     "sws_change": 55.819570541381836,
+     "cpi_rel": 835.0040988922119,
+     "cpi_rel_lag1": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 0.0,
+     "headline_cpi": 11.562000274658203,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 115.68229866027832,
+     "unemployment_rate": 1218.8692135810852
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.935875384122437,
+     "C1_shallow_reg": 2.9157291870083757,
+     "C0_e9_default": 2.82798589565552,
+     "C3_moderate": 1.753707309932307
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.7105184528922663,
+    "gain": {
+     "cpi_rel": 1215.3375828266144,
+     "cpi_rel_lag1": 7.910666048526764,
+     "anchor_dev": 17.717029809951782,
+     "dev_change": 367.36282581090927,
+     "cpi_dev": 13.467400074005127,
+     "food_cpi_yoy": 61.492415082175285,
+     "food_cpi_yoy_lag1": 7.471615137765184
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 1.3719999998013184,
+     "C1_shallow_reg": 1.3719999998013184,
+     "C0_e9_default": 2.3330378534969594,
+     "C3_moderate": 1.3719999998013184
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.216925671247328,
+    "gain": {
+     "last_published_stress": 59.892879247665405,
+     "sws_hunger": 325.65896916389465,
+     "sws_change": 0.0,
+     "lps_change": 109.23415088653564,
+     "anchor_dev": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 0.0,
+     "cpi_dev": 51.64830994606018
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.18278555136563016,
+     "C1_shallow_reg": 0.16456952964249322,
+     "C0_e9_default": 0.017501867372186182,
+     "C3_moderate": 0.11128920577259076
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.188967830726481,
+     "C1_shallow_reg": 0.1760961666051686,
+     "C0_e9_default": 0.02645855115097905,
+     "C3_moderate": 0.11104332445544447
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2024-Q1",
+  "window": "rolling8",
+  "train_quarters": [
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 18,
+  "train_LOW": 22,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.3825865531024015,
+     "C1_shallow_reg": 1.2701105403330009,
+     "C0_e9_default": 1.8487838018170262,
+     "C3_moderate": 1.2478296077599442
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.676074409760189,
+    "gain": {
+     "last_published_stress": 9052.930832579732,
+     "sws_hunger": 0.0,
+     "sws_change": 495.3921328186989
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 1.491563309824183,
+     "C1_shallow_reg": 1.2011822796929708,
+     "C0_e9_default": 1.5554482999184456,
+     "C3_moderate": 1.2060282429287412
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.7746851395896062,
+    "gain": {
+     "last_published_stress": 1657.7719056606293,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "lps_change": 671.7273285984993,
+     "anchor_dev": 1589.977961063385
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.3672971444395756,
+     "C1_shallow_reg": 1.2863270251710883,
+     "C0_e9_default": 2.244819312727974,
+     "C3_moderate": 1.2048195710615475
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.6180433104492178,
+    "gain": {
+     "last_published_stress": 6044.917553424835,
+     "sws_hunger": 0.5785209983587265,
+     "sws_change": 292.28183022141457,
+     "cpi_rel": 3291.780821442604,
+     "cpi_rel_lag1": 54.676259875297546,
+     "food_cpi_yoy": 36.73443961143494,
+     "food_cpi_yoy_lag1": 271.8506600856781,
+     "cpi_dev": 76.05216981470585
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 1.3672971444395756,
+     "C1_shallow_reg": 1.2469480191604418,
+     "C0_e9_default": 2.244819312727974,
+     "C3_moderate": 1.2390556678171556
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.5977996685687355,
+    "gain": {
+     "last_published_stress": 6278.243325710297,
+     "sws_hunger": 0.0,
+     "sws_change": 239.3820481300354,
+     "cpi_rel": 3089.931298971176,
+     "cpi_rel_lag1": 15.717804849147797,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 178.15707504749298,
+     "cpi_dev": 59.443585366010666,
+     "poverty_incidence": 88.87889075279236,
+     "headline_cpi": 4.915440082550049,
+     "food_minus_headline_yoy": 36.398669958114624,
+     "food_minus_headline_yoy_lag1": 167.636315792799,
+     "unemployment_rate": 0.0
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.175611427880777,
+     "C1_shallow_reg": 2.1275170080351726,
+     "C0_e9_default": 1.9176182037117897,
+     "C3_moderate": 1.900112350332071
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.5358317063405846,
+    "gain": {
+     "cpi_rel": 1712.4475260078907,
+     "cpi_rel_lag1": 53.34099107980728,
+     "anchor_dev": 78.7422748208046,
+     "dev_change": 252.63514912128448,
+     "cpi_dev": 31.980120182037354,
+     "food_cpi_yoy": 11.032950043678284,
+     "food_cpi_yoy_lag1": 17.40840193629265
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 1.598938529641726,
+     "C1_shallow_reg": 1.6086169560287782,
+     "C0_e9_default": 0.8797330763442449,
+     "C3_moderate": 1.561905498929697
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.0046990890462448,
+    "gain": {
+     "last_published_stress": 659.4131337404251,
+     "sws_hunger": 533.597911298275,
+     "sws_change": 171.01324903964996,
+     "lps_change": 196.0527218580246,
+     "anchor_dev": 159.87442708015442,
+     "cpi_rel": 8.561449885368347,
+     "cpi_rel_lag1": 69.62608933448792,
+     "cpi_dev": 253.4301482439041
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_brier": {
+     "C2_stumps": 0.1376409224512811,
+     "C1_shallow_reg": 0.1122062241230031,
+     "C0_e9_default": 0.25144529424132944,
+     "C3_moderate": 0.10782028678237336
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_brier": {
+     "C2_stumps": 0.1376409224512811,
+     "C1_shallow_reg": 0.1122062241230031,
+     "C0_e9_default": 0.30079768760812126,
+     "C3_moderate": 0.10782028678237336
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2024-Q2",
+  "window": "rolling8",
+  "train_quarters": [
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 20,
+  "train_LOW": 20,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 2.6623436517914287,
+     "C1_shallow_reg": 2.643754470581546,
+     "C0_e9_default": 2.385646655275349,
+     "C3_moderate": 2.4251597578695425
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.313479985330449,
+    "gain": {
+     "last_published_stress": 4694.349032640457,
+     "sws_hunger": 0.8220049738883972,
+     "sws_change": 655.8891803622246
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.49729627828263,
+     "C1_shallow_reg": 2.469214862905259,
+     "C0_e9_default": 1.8619894737111822,
+     "C3_moderate": 1.8466478316158348
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.3393630888440473,
+    "gain": {
+     "last_published_stress": 9069.545485496521,
+     "sws_hunger": 0.0,
+     "sws_change": 0.0,
+     "lps_change": 953.1422001626343,
+     "anchor_dev": 2655.929087229073
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 2.827533199040723,
+     "C1_shallow_reg": 2.8024741837329104,
+     "C0_e9_default": 1.709085972129205,
+     "C3_moderate": 2.3488284557334635
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 0.9725071263154295,
+    "gain": {
+     "last_published_stress": 3945.788589477539,
+     "sws_hunger": 0.0,
+     "sws_change": 312.42610907554626,
+     "cpi_rel": 729.52741086483,
+     "cpi_rel_lag1": 97.71515047550201,
+     "food_cpi_yoy": 136.837797164917,
+     "food_cpi_yoy_lag1": 486.6414325237274,
+     "cpi_dev": 183.3688119649887
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 2.827533199040723,
+     "C1_shallow_reg": 2.8024741837329104,
+     "C0_e9_default": 1.8479483606947735,
+     "C3_moderate": 2.398145894703805
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 0.9001455622112771,
+    "gain": {
+     "last_published_stress": 4219.983217716217,
+     "sws_hunger": 5.648190021514893,
+     "sws_change": 284.2273770570755,
+     "cpi_rel": 382.3637000322342,
+     "cpi_rel_lag1": 109.41656982898712,
+     "food_cpi_yoy": 133.59883278608322,
+     "food_cpi_yoy_lag1": 279.28092098236084,
+     "cpi_dev": 159.21198904514313,
+     "poverty_incidence": 155.0574985742569,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 221.13029193878174,
+     "unemployment_rate": 4.866970062255859
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 2.700954931247692,
+     "C1_shallow_reg": 2.7194032159915684,
+     "C0_e9_default": 2.2605121305405604,
+     "C3_moderate": 2.232196235401976
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.544638445021153,
+    "gain": {
+     "cpi_rel": 2057.8053839029744,
+     "cpi_rel_lag1": 9.603121027350426,
+     "anchor_dev": 7.500565052032471,
+     "dev_change": 104.2306708227843,
+     "cpi_dev": 37.9160515263211,
+     "food_cpi_yoy": 35.27770509116817,
+     "food_cpi_yoy_lag1": 66.51638555712998
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 2.7610048458172782,
+     "C1_shallow_reg": 2.7533605316950354,
+     "C0_e9_default": 2.7032124430307287,
+     "C3_moderate": 2.8077780146118316
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 0.8574245181636223,
+    "gain": {
+     "last_published_stress": 749.0743981599808,
+     "sws_hunger": 783.2234791517258,
+     "sws_change": 255.91866838932037,
+     "lps_change": 368.48979008197784,
+     "anchor_dev": 94.66623055934906,
+     "cpi_rel": 255.9470694065094,
+     "cpi_rel_lag1": 131.87740778923035,
+     "cpi_dev": 101.45935720205307
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.12807981887230374,
+     "C1_shallow_reg": 0.10487713595463602,
+     "C0_e9_default": 0.002985373937943397,
+     "C3_moderate": 0.10487708028628469
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 4,
+     "oof_low": 1,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.14819294525302268,
+     "C1_shallow_reg": 0.13709398979522514,
+     "C0_e9_default": 0.07604638695405948,
+     "C3_moderate": 0.1265149257068428
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 4,
+     "oof_low": 1,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2024-Q3",
+  "window": "rolling8",
+  "train_quarters": [
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 23,
+  "train_LOW": 17,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.359758228061039,
+     "C1_shallow_reg": 4.285593622539679,
+     "C0_e9_default": 3.3853537954170116,
+     "C3_moderate": 4.280838825554777
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.4779308343829183,
+    "gain": {
+     "last_published_stress": 4402.60126054287,
+     "sws_hunger": 389.1462597846985,
+     "sws_change": 1165.0287822186947
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.8721421404460035,
+     "C1_shallow_reg": 4.887181602725282,
+     "C0_e9_default": 4.6430936540748515,
+     "C3_moderate": 5.399427445081832
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.173239649546794,
+    "gain": {
+     "last_published_stress": 3466.158350944519,
+     "sws_hunger": 295.5419909954071,
+     "sws_change": 1080.0241592526436,
+     "lps_change": 493.5201562643051,
+     "anchor_dev": 1058.5707141757011
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.390807516672121,
+     "C1_shallow_reg": 4.252512812109157,
+     "C0_e9_default": 3.2303352585753684,
+     "C3_moderate": 4.051645069217446
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.0571384667891817,
+    "gain": {
+     "last_published_stress": 3299.8045897483826,
+     "sws_hunger": 145.63348031044006,
+     "sws_change": 414.43558502197266,
+     "cpi_rel": 1003.6280801296234,
+     "cpi_rel_lag1": 19.80486011505127,
+     "food_cpi_yoy": 517.5608211755753,
+     "food_cpi_yoy_lag1": 756.6838986873627,
+     "cpi_dev": 477.84469199180603
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 4.5250369736951495,
+     "C1_shallow_reg": 4.47033904441547,
+     "C0_e9_default": 3.406296044849982,
+     "C3_moderate": 4.14094567734872
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 0.9281963631378712,
+    "gain": {
+     "last_published_stress": 3491.879927635193,
+     "sws_hunger": 48.960428953170776,
+     "sws_change": 343.6659061908722,
+     "cpi_rel": 818.6613677740097,
+     "cpi_rel_lag1": 47.693300008773804,
+     "food_cpi_yoy": 514.1102511882782,
+     "food_cpi_yoy_lag1": 518.3923013210297,
+     "cpi_dev": 359.14836382865906,
+     "poverty_incidence": 164.9303320646286,
+     "headline_cpi": 213.18087768554688,
+     "food_minus_headline_yoy": 3.22065007686615,
+     "food_minus_headline_yoy_lag1": 240.12231850624084,
+     "unemployment_rate": 0.0
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 4.457206020210522,
+     "C1_shallow_reg": 4.507014477635694,
+     "C0_e9_default": 4.790951656226408,
+     "C3_moderate": 4.232251773744994
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 2.5658066047102936,
+    "gain": {
+     "cpi_rel": 2190.4301665490493,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 53.119902551174164,
+     "dev_change": 21.281672602752224,
+     "cpi_dev": 69.21482735872269,
+     "food_cpi_yoy": 56.86569598852657,
+     "food_cpi_yoy_lag1": 1.984879970550537
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 5.483616221516732,
+     "C1_shallow_reg": 5.693664750714484,
+     "C0_e9_default": 6.626439671039726,
+     "C3_moderate": 5.42824256846373
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.7491022649305328,
+    "gain": {
+     "last_published_stress": 1196.2293264865875,
+     "sws_hunger": 2157.76673913002,
+     "sws_change": 170.17403078079224,
+     "lps_change": 218.0747106075287,
+     "anchor_dev": 0.0,
+     "cpi_rel": 131.73806977272034,
+     "cpi_rel_lag1": 890.2177114486694,
+     "cpi_dev": 1318.5235533714294
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_brier": {
+     "C2_stumps": 0.17664140874145992,
+     "C1_shallow_reg": 0.17300448407175015,
+     "C0_e9_default": 0.19481250750775717,
+     "C3_moderate": 0.17734673284025154
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 4,
+     "oof_low": 1,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_brier": {
+     "C2_stumps": 0.173164989242507,
+     "C1_shallow_reg": 0.16958460516113322,
+     "C0_e9_default": 0.19559726958711574,
+     "C3_moderate": 0.17711607440411622
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 4,
+     "oof_low": 1,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2024-Q4",
+  "window": "rolling8",
+  "train_quarters": [
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 26,
+  "train_LOW": 14,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.191754073427224,
+     "C1_shallow_reg": 6.1032941402034115,
+     "C0_e9_default": 4.06845057646885,
+     "C3_moderate": 5.381477397317292
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 1.7619556864098194,
+    "gain": {
+     "last_published_stress": 5487.092269957066,
+     "sws_hunger": 1671.6348365545273,
+     "sws_change": 759.2031251192093
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.006676372508649,
+     "C1_shallow_reg": 5.943119578128261,
+     "C0_e9_default": 4.29928391692602,
+     "C3_moderate": 5.30669183165546
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.5134129074650293,
+    "gain": {
+     "last_published_stress": 5240.701198935509,
+     "sws_hunger": 1656.2164957523346,
+     "sws_change": 674.9587894678116,
+     "lps_change": 427.4001564383507,
+     "anchor_dev": 499.39288783073425
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.191754073427224,
+     "C1_shallow_reg": 6.183005071768198,
+     "C0_e9_default": 4.340046419082331,
+     "C3_moderate": 5.763225285529453
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.2884107110154812,
+    "gain": {
+     "last_published_stress": 5324.247944355011,
+     "sws_hunger": 1144.7541131973267,
+     "sws_change": 38.35639953613281,
+     "cpi_rel": 162.66448068618774,
+     "cpi_rel_lag1": 187.58400905132294,
+     "food_cpi_yoy": 263.20860040187836,
+     "food_cpi_yoy_lag1": 739.7510249614716,
+     "cpi_dev": 998.108434677124
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.186943879829485,
+     "C1_shallow_reg": 6.183005071768198,
+     "C0_e9_default": 3.965725586832945,
+     "C3_moderate": 5.610958584646089
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.0857693594004427,
+    "gain": {
+     "last_published_stress": 4914.7127113342285,
+     "sws_hunger": 740.8279997110367,
+     "sws_change": 194.1721019744873,
+     "cpi_rel": 318.51250088214874,
+     "cpi_rel_lag1": 447.9930651187897,
+     "food_cpi_yoy": 90.14590978622437,
+     "food_cpi_yoy_lag1": 271.12447452545166,
+     "cpi_dev": 698.5079672336578,
+     "poverty_incidence": 308.1557106971741,
+     "headline_cpi": 1055.1054865121841,
+     "food_minus_headline_yoy": 28.832989931106567,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 11.522299766540527
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 4.707602091160606,
+     "C1_shallow_reg": 4.713534570337801,
+     "C0_e9_default": 5.196785833571946,
+     "C3_moderate": 5.2943718915496785
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.1883082210728846,
+    "gain": {
+     "cpi_rel": 727.3228843212128,
+     "cpi_rel_lag1": 97.98478984832764,
+     "anchor_dev": 0.0,
+     "dev_change": 107.94258046150208,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 5.334468367917591,
+     "C1_shallow_reg": 5.323298785624753,
+     "C0_e9_default": 3.602961611105215,
+     "C3_moderate": 4.61797500629764
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.422754101153108,
+    "gain": {
+     "last_published_stress": 633.8792324066162,
+     "sws_hunger": 1205.240698337555,
+     "sws_change": 718.2592697143555,
+     "lps_change": 503.7185752391815,
+     "anchor_dev": 303.92573392391205,
+     "cpi_rel": 68.49708986282349,
+     "cpi_rel_lag1": 897.3733854293823,
+     "cpi_dev": 793.5039229393005
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.06230401213703747,
+     "C1_shallow_reg": 0.048733609201896,
+     "C0_e9_default": 9.97296670143066e-05,
+     "C3_moderate": 0.042680246967948254
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.08004058920463955,
+     "C1_shallow_reg": 0.07228695159298573,
+     "C0_e9_default": 0.04540941462080524,
+     "C3_moderate": 0.06749231262013951
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2025-Q1",
+  "window": "rolling8",
+  "train_quarters": [
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 28,
+  "train_LOW": 12,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 4.110481705459608,
+     "C1_shallow_reg": 4.052493234178146,
+     "C0_e9_default": 4.030129419939496,
+     "C3_moderate": 3.8619421402695027
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.2993667576060703,
+    "gain": {
+     "last_published_stress": 12528.02176117897,
+     "sws_hunger": 3987.01767687127,
+     "sws_change": 472.01723812520504
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 4.541343459257442,
+     "C1_shallow_reg": 4.490831344661117,
+     "C0_e9_default": 4.836640597363222,
+     "C3_moderate": 4.883193312607142
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 2.389106602764138,
+    "gain": {
+     "last_published_stress": 4599.746290206909,
+     "sws_hunger": 1587.5021259784698,
+     "sws_change": 20.0204496383667,
+     "lps_change": 555.1426296234131,
+     "anchor_dev": 9.732730150222778
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 5.287965732734635,
+     "C1_shallow_reg": 5.34108186402596,
+     "C0_e9_default": 5.1695059255100615,
+     "C3_moderate": 5.102758573923775
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.003683535940534,
+    "gain": {
+     "last_published_stress": 12193.15650844574,
+     "sws_hunger": 1792.3685846328735,
+     "sws_change": 13.197099685668945,
+     "cpi_rel": 362.30023992061615,
+     "cpi_rel_lag1": 472.1579786539078,
+     "food_cpi_yoy": 194.96781086921692,
+     "food_cpi_yoy_lag1": 514.971265912056,
+     "cpi_dev": 3041.922083377838
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C1_shallow_reg",
+    "inner_mean_mae": {
+     "C2_stumps": 5.255833454616983,
+     "C1_shallow_reg": 4.835766438559351,
+     "C0_e9_default": 4.937267248810704,
+     "C3_moderate": 5.042511531589959
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 2.1126870111649745,
+    "gain": {
+     "last_published_stress": 3726.558053970337,
+     "sws_hunger": 225.54489707946777,
+     "sws_change": 0.0,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 259.6465187072754,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 765.1454162597656,
+     "poverty_incidence": 34.35939979553223,
+     "headline_cpi": 1600.683093070984,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 0.0,
+     "unemployment_rate": 802.449089050293
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C3_moderate",
+    "inner_mean_mae": {
+     "C2_stumps": 4.352580100476595,
+     "C1_shallow_reg": 4.368302036370359,
+     "C0_e9_default": 4.511267711301418,
+     "C3_moderate": 4.1269235914132905
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 3.2548398298180885,
+    "gain": {
+     "cpi_rel": 537.916505753994,
+     "cpi_rel_lag1": 155.91252649575472,
+     "anchor_dev": 0.0,
+     "dev_change": 229.9448077082634,
+     "cpi_dev": 342.64867809414864,
+     "food_cpi_yoy": 316.7968955859542,
+     "food_cpi_yoy_lag1": 6.551669016480446
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 5.1199051530435415,
+     "C1_shallow_reg": 5.084579054478455,
+     "C0_e9_default": 3.875191925786602,
+     "C3_moderate": 4.913328324622532
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.2867318342521468,
+    "gain": {
+     "last_published_stress": 1049.126623392105,
+     "sws_hunger": 402.34049129486084,
+     "sws_change": 291.34020256996155,
+     "lps_change": 191.4485912322998,
+     "anchor_dev": 1432.518874168396,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 1931.7733938694,
+     "cpi_dev": 1359.8294365406036
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.05653669976287705,
+     "C1_shallow_reg": 0.044662554505650945,
+     "C0_e9_default": 0.0005828769312584967,
+     "C3_moderate": 0.042588831386238604
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C2_stumps",
+    "inner_mean_brier": {
+     "C2_stumps": 0.13656203134845496,
+     "C1_shallow_reg": 0.13903301463681994,
+     "C0_e9_default": 0.4060070995664139,
+     "C3_moderate": 0.17930359925062883
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ },
+ {
+  "target": "2025-Q4",
+  "window": "rolling8",
+  "train_quarters": [
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 34,
+  "train_LOW": 6,
+  "arms": {
+   "NESTED|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.476644333946308,
+     "C1_shallow_reg": 6.239898402115031,
+     "C0_e9_default": 4.166740792026155,
+     "C3_moderate": 5.980377278969385
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "train_mae": 2.3552086768923313,
+    "gain": {
+     "last_published_stress": 2824.7278980612755,
+     "sws_hunger": 9577.261376410723,
+     "sws_change": 706.4614949822426
+    }
+   },
+   "NESTED|direct|core_plus": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 7.337475800966144,
+     "C1_shallow_reg": 6.599649004360984,
+     "C0_e9_default": 4.824603039414894,
+     "C3_moderate": 6.267400469014637
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev"
+    ],
+    "train_mae": 1.5990533965578009,
+    "gain": {
+     "last_published_stress": 1205.78742146492,
+     "sws_hunger": 9760.414412021637,
+     "sws_change": 133.101459980011,
+     "lps_change": 448.9776386022568,
+     "anchor_dev": 4116.409864902496
+    }
+   },
+   "NESTED|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 7.051803660576539,
+     "C1_shallow_reg": 6.542467238702946,
+     "C0_e9_default": 6.46475941758491,
+     "C3_moderate": 8.02490142975043
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 1.209520807878772,
+    "gain": {
+     "last_published_stress": 767.7604563236237,
+     "sws_hunger": 8236.975975036621,
+     "sws_change": 32.08990955352783,
+     "cpi_rel": 3232.921162843704,
+     "cpi_rel_lag1": 781.0242626667023,
+     "food_cpi_yoy": 769.396598815918,
+     "food_cpi_yoy_lag1": 14.922880172729492,
+     "cpi_dev": 2502.049415588379
+    }
+   },
+   "NESTED|direct|expanded": {
+    "chosen": "C0_e9_default",
+    "inner_mean_mae": {
+     "C2_stumps": 6.65465995264919,
+     "C1_shallow_reg": 6.295430667675741,
+     "C0_e9_default": 5.925098200756306,
+     "C3_moderate": 6.406388101893155
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "train_mae": 1.112955034071633,
+    "gain": {
+     "last_published_stress": 763.2698938846588,
+     "sws_hunger": 8063.933730602264,
+     "sws_change": 26.079710245132446,
+     "cpi_rel": 3393.9676580429077,
+     "cpi_rel_lag1": 786.020001411438,
+     "food_cpi_yoy": 621.6925611495972,
+     "food_cpi_yoy_lag1": 10.938799858093262,
+     "cpi_dev": 2324.1971209049225,
+     "poverty_incidence": 37.10094976425171,
+     "headline_cpi": 430.57494735717773,
+     "food_minus_headline_yoy": 40.334829568862915,
+     "food_minus_headline_yoy_lag1": 8.046010255813599,
+     "unemployment_rate": 0.0
+    }
+   },
+   "NESTED|decomp|provincial": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 6.691440609339928,
+     "C1_shallow_reg": 6.713521141930855,
+     "C0_e9_default": 6.868064735503384,
+     "C3_moderate": 7.08473543343653
+    },
+    "features_used": [
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "anchor_dev",
+     "dev_change",
+     "cpi_dev",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1"
+    ],
+    "train_mae": 4.352209121425849,
+    "gain": {
+     "cpi_rel": 296.7799196243286,
+     "cpi_rel_lag1": 0.0,
+     "anchor_dev": 0.0,
+     "dev_change": 308.7719495296478,
+     "cpi_dev": 0.0,
+     "food_cpi_yoy": 225.4321904182434,
+     "food_cpi_yoy_lag1": 0.0
+    }
+   },
+   "NESTED|resid|residual": {
+    "chosen": "C2_stumps",
+    "inner_mean_mae": {
+     "C2_stumps": 3.931102567985028,
+     "C1_shallow_reg": 3.999470833192828,
+     "C0_e9_default": 4.152408315333906,
+     "C3_moderate": 4.209160876201361
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "lps_change",
+     "anchor_dev",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "cpi_dev"
+    ],
+    "train_mae": 2.3997115541150413,
+    "gain": {
+     "last_published_stress": 0.0,
+     "sws_hunger": 416.4346008300781,
+     "sws_change": 0.0,
+     "lps_change": 0.0,
+     "anchor_dev": 1756.3690032958984,
+     "cpi_rel": 0.0,
+     "cpi_rel_lag1": 803.3824996948242,
+     "cpi_dev": 639.3379039764404
+    }
+   },
+   "NESTED_CLF|direct|core": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.011657717384103634,
+     "C1_shallow_reg": 0.007893554981971435,
+     "C0_e9_default": 1.3755960388099622e-06,
+     "C3_moderate": 0.00841395252516515
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   },
+   "NESTED_CLF|direct|compact": {
+    "chosen": "C0_e9_default",
+    "inner_mean_brier": {
+     "C2_stumps": 0.023961663722902916,
+     "C1_shallow_reg": 0.015973020798820525,
+     "C0_e9_default": 3.0385630578909763e-06,
+     "C3_moderate": 0.011688664032119307
+    },
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 5,
+     "oof_low": 0,
+     "reason": "insufficient (need >= 8 quarters and >= 10 per class)"
+    }
+   }
+  },
+  "n_inner_quarters": 1
+ }
+]

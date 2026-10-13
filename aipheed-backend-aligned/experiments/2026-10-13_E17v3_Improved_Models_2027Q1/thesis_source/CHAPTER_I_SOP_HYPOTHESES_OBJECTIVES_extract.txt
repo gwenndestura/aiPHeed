@@ -1,0 +1,110 @@
+1.3 Statement of the Problem
+         CALABARZON's food insecurity monitoring relies entirely on periodic surveys that are
+
+years outdated by the time shocks occur. This study aims to develop aiPHeed, a geospatial food
+insecurity forecasting system for DA Region IV-A using NLP and machine learning to support
+anticipatory intervention and decision-making.
+
+         Specifically, this study seeks to answer the following questions:
+    1. What variables most significantly predict food insecurity risk across the provinces of
+
+         CALABARZON, as identified through SHAP feature attribution?
+    2. What is the furthest lead time at which aiPHeed can reliably forecast province-level food
+
+         insecurity risk across CALABARZON?
+    3. How does the LightGBM model combining NLP-derived news signals and government
+
+         statistical indicators compare against six baseline approaches , naive persistence, three
+         logistic regression variants (combined features, government indicators only, and NLP
+         features only), and two LightGBM ablation variants trained on each data source
+         separately , in classifying provincial food insecurity risk?
+    4. How effectively do the city- and municipality-level food insecurity risk rankings derived
+         from province-level forecasts reflect relative vulnerability across CALABARZON?
+
+                                                                                                                             10
+    5. How do DA Region IV-A personnel, as system evaluators, and DEPDev Region IV-A
+         personnel, as usability evaluators, assess aiPHeed under the ISO/IEC 25010 software
+         quality model, in terms of functional accuracy and ease of use respectively?
+
+1.4 Hypothesis
+         This study tests five null hypotheses, each addressing the relationship between an
+
+independent variable and a dependent variable. The independent variables are the news-derived
+signals and the government socioeconomic indicators. The dependent variable is the binary food
+insecurity risk classification, either high or low, of a CALABARZON province in a given
+quarter. The study's assumptions are based on the null hypothesis that these independent
+variables do not carry predictive signals strong enough for aiPHeed to classify, forecast,
+disaggregate, or be judged useful for that purpose.
+
+         Specifically, the study sought to address the following:
+
+    1. The Food Stress Sentiment Index (FSSI) and food CPI deviation will not be among the
+         strongest predictors of food insecurity risk in CALABARZON when examined through
+         SHAP feature attribution.
+
+    2. aiPHeed will not reliably classify whether a CALABARZON province is at high or low
+         food insecurity risk across multiple forward-looking lead times.
+
+    3. The LightGBM model that combines news signals and government data will not
+         outperform the six comparison models, naive persistence, three logistic regression
+         variants (news-only, government data-only, and combined), and two LightGBM variants
+         trained on only one data source at a time, in classifying provincial food insecurity risk
+         across CALABARZON.
+
+                                                                                                                             11
+    4. The vulnerability-weighted spatial disaggregation of province-level forecasts will not
+         produce municipal and city risk rankings that are consistent with DA Region IV-A
+         evaluators' assessments of relative food insecurity vulnerability across CALABARZON,
+         as evaluated through the aiPHeed Post-Survey Questionnaire.
+
+    5. aiPHeed will not receive favorable functional suitability, accuracy, and usability ratings
+         from DA Region IV-A evaluators under the ISO/IEC 25010 software quality model.
+
+1.5 Research Objectives
+
+1.5.1 General Objective
+
+  To develop, validate, and deploy aiPHeed: A Geospatial Food Insecurity
+
+Forecasting System for DA Region IV-A Using NLP and Machine Learning.
+
+1.5.2 Specific Objectives
+    1. To design a two-tier pipeline combining zero-shot XLM-RoBERTa
+         Filipino-English sentiment extraction and BERTopic unsupervised topic modeling
+         to produce the bias-corrected Food Stress Sentiment Index and latent food
+         insecurity risk patterns per province-quarter from a Filipino-English news corpus.
+    2. To evaluate the performance of the proposed LightGBM forecasting model using
+         the following metrics:
+           I. Accuracy, to measure overall correctness of high- and low-risk
+                  province-level classifications
+          II. Precision and Recall, to assess the model's ability to correctly identify
+                  high-risk provinces while minimizing false alarms and missed detections
+                  respectively
+
+                                                                                                                   12
+     III. F1-Score, to capture the balance between Precision and Recall given the
+             binary classification task
+
+     IV. AUC-ROC, to evaluate the model's ability to distinguish between high-
+             and low-risk provinces across classification thresholds
+
+      V. Forecast performance across multiple lead times via walk-forward
+             expanding-window cross-validation to empirically determine the furthest
+             horizon at which reliable forecasting is achievable
+
+3. To produce spatially disaggregated municipal and city food insecurity risk
+    rankings from validated province-level forecasts, using PSA published poverty
+    incidence and population density as vulnerability weights.
+
+4. To compare the effectiveness of the proposed LightGBM forecasting model
+    against the following baseline approaches:
+       I. Naive persistence baseline
+      II. PSA-only indicator baseline
+     III. NLP-only sentiment baseline
+     IV. Logistic regression baseline
+
+5. 5. To deploy a public geospatial dashboard presenting forecast maps and
+    early-warning alerts, evaluate it under the ISO/IEC 25010 software quality model
+    with DA Region IV-A evaluators, and validate its forecasts against DOST-FNRI
+    NNS 2019 and 2023 CALABARZON prevalence figures as a face-validity
+    anchor.

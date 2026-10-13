@@ -1,0 +1,9 @@
+{
+  "amends": "PREREGISTRATION_v4.json sha 4ac66c03280ce87d3336067e9bd212053c2213c2a309d0b8466bcba23b9c896d",
+  "written": "2026-10-09T14:03:29",
+  "status_at_writing": "Still no model run in v4. Found by a timing check of training labels only.",
+  "finding": "In 7 of 8 outer folds the training set included the label of the quarter just before the test quarter, whose SWS round was released AFTER the forecast origin (2025-Q1 fold: two such labels). All earlier studies (MODEL-B2 81.8%, v2, v3) share this.",
+  "rule_L": "A labelled quarter s may be used for training (and as an inner-validation target) for a forecast of quarter T only if SWS round s was released before T starts. Applied to outer training, inner training/validation, and all quarter-level fits.",
+  "effect_on_design": "Stage A primary candidate stays N2. Descriptive comparisons are run both without L (as previously reported) and with L, so the effect of the correction is visible. P4 is re-run under L as a descriptive check.",
+  "no_other_change": true
+}

@@ -1,0 +1,1709 @@
+{
+  "label": "E3 EXPLORATORY: third design on 7 reused quarters; design informed by E1/E2; not a blind or independent validation; cannot establish the >75% requirement.",
+  "primary": "A-origin | base (fold-specific threshold; pending adviser approval)",
+  "secondary": "A-global | base (14.345; LEAKAGE-AFFECTED)",
+  "results": {
+    "A-global | +FSSI": {
+      "E3-LightGBM": {
+        "rows": 35,
+        "correct": 24,
+        "mean_quarter_accuracy": 0.6857,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.507,
+          0.831
+        ],
+        "balanced_accuracy": 0.65,
+        "weighted_precision": 0.8183,
+        "weighted_recall": 0.6857,
+        "weighted_f1": 0.7297,
+        "high_recall": 0.7,
+        "low_recall": 0.6,
+        "roc_auc": 0.6133,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            21
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 2,
+            "pred_high": 0,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 2,
+            "pred_high": 1,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 2,
+            "pred_high": 2,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "brier": 0.2443,
+        "quarter_bootstrap_accuracy_95": [
+          0.4857,
+          0.8857
+        ]
+      },
+      "Eq3-rule": {
+        "rows": 35,
+        "correct": 22,
+        "mean_quarter_accuracy": 0.6286,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.449,
+          0.785
+        ],
+        "balanced_accuracy": 0.6167,
+        "weighted_precision": 0.8061,
+        "weighted_recall": 0.6286,
+        "weighted_f1": 0.6838,
+        "high_recall": 0.6333,
+        "low_recall": 0.6,
+        "roc_auc": 0.78,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            11,
+            19
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 1,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 2,
+            "pred_high": 1,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 3,
+            "pred_high": 3,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 2,
+            "pred_high": 3,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.4857,
+          0.7714
+        ]
+      },
+      "always-HIGH (reference)": {
+        "rows": 35,
+        "correct": 30,
+        "mean_quarter_accuracy": 0.8571,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.697,
+          0.952
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.7347,
+        "weighted_recall": 0.8571,
+        "weighted_f1": 0.7912,
+        "high_recall": 1.0,
+        "low_recall": 0.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            30
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 5,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.7429,
+          0.9429
+        ]
+      },
+      "always-LOW (reference)": {
+        "rows": 35,
+        "correct": 5,
+        "mean_quarter_accuracy": 0.1429,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.048,
+          0.303
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.0204,
+        "weighted_recall": 0.1429,
+        "weighted_f1": 0.0357,
+        "high_recall": 0.0,
+        "low_recall": 1.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            5,
+            0
+          ],
+          [
+            30,
+            0
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 2,
+            "pred_high": 0,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.0571,
+          0.2571
+        ]
+      },
+      "carry-forward": {
+        "rows": 35,
+        "correct": 24,
+        "mean_quarter_accuracy": 0.6857,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.507,
+          0.831
+        ],
+        "balanced_accuracy": 0.65,
+        "weighted_precision": 0.8183,
+        "weighted_recall": 0.6857,
+        "weighted_f1": 0.7297,
+        "high_recall": 0.7,
+        "low_recall": 0.6,
+        "roc_auc": 0.7133,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            21
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 1,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 2,
+            "pred_high": 1,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 3,
+            "pred_high": 3,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.5429,
+          0.8286
+        ]
+      },
+      "paired_balanced_accuracy_bootstrap_E3_minus": {
+        "carry-forward": {
+          "point_diff": 0.0,
+          "ci95": [
+            -0.1034,
+            0.1
+          ],
+          "draws_used": 9969,
+          "draws_skipped_one_class": 31
+        },
+        "Eq3-rule": {
+          "point_diff": 0.0333,
+          "ci95": [
+            -0.0893,
+            0.1452
+          ],
+          "draws_used": 9969,
+          "draws_skipped_one_class": 31
+        }
+      },
+      "decision_rule": {
+        "better_baseline": "carry-forward",
+        "ba_gain_vs_better_baseline": 0.0,
+        "ci95_of_gain": [
+          -0.1034,
+          0.1
+        ],
+        "accuracy_not_below_carry_forward": true,
+        "verdict": "non-inferiority",
+        "interpretation": "exploratory criterion on 7 reused quarters (3 LOW rows under A-origin); not proof of generalization; does not freeze a 2026 candidate"
+      },
+      "tau_by_fold": {
+        "2023-Q4": 14.345,
+        "2024-Q1": 14.345,
+        "2024-Q2": 14.345,
+        "2024-Q3": 14.345,
+        "2024-Q4": 14.345,
+        "2025-Q1": 14.345,
+        "2025-Q4": 14.345
+      }
+    },
+    "A-global | base": {
+      "E3-LightGBM": {
+        "rows": 35,
+        "correct": 23,
+        "mean_quarter_accuracy": 0.6571,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.478,
+          0.809
+        ],
+        "balanced_accuracy": 0.6333,
+        "weighted_precision": 0.8122,
+        "weighted_recall": 0.6571,
+        "weighted_f1": 0.707,
+        "high_recall": 0.6667,
+        "low_recall": 0.6,
+        "roc_auc": 0.6667,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            10,
+            20
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 2,
+            "pred_high": 0,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 3,
+            "pred_high": 3,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "brier": 0.2447,
+        "quarter_bootstrap_accuracy_95": [
+          0.4571,
+          0.8286
+        ]
+      },
+      "Eq3-rule": {
+        "rows": 35,
+        "correct": 22,
+        "mean_quarter_accuracy": 0.6286,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.449,
+          0.785
+        ],
+        "balanced_accuracy": 0.6167,
+        "weighted_precision": 0.8061,
+        "weighted_recall": 0.6286,
+        "weighted_f1": 0.6838,
+        "high_recall": 0.6333,
+        "low_recall": 0.6,
+        "roc_auc": 0.78,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            11,
+            19
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 1,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 2,
+            "pred_high": 1,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 3,
+            "pred_high": 3,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 2,
+            "pred_high": 3,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.4857,
+          0.7714
+        ]
+      },
+      "always-HIGH (reference)": {
+        "rows": 35,
+        "correct": 30,
+        "mean_quarter_accuracy": 0.8571,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.697,
+          0.952
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.7347,
+        "weighted_recall": 0.8571,
+        "weighted_f1": 0.7912,
+        "high_recall": 1.0,
+        "low_recall": 0.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            30
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 5,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.7429,
+          0.9429
+        ]
+      },
+      "always-LOW (reference)": {
+        "rows": 35,
+        "correct": 5,
+        "mean_quarter_accuracy": 0.1429,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.048,
+          0.303
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.0204,
+        "weighted_recall": 0.1429,
+        "weighted_f1": 0.0357,
+        "high_recall": 0.0,
+        "low_recall": 1.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            5,
+            0
+          ],
+          [
+            30,
+            0
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 2,
+            "pred_high": 0,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.0571,
+          0.2571
+        ]
+      },
+      "carry-forward": {
+        "rows": 35,
+        "correct": 24,
+        "mean_quarter_accuracy": 0.6857,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.507,
+          0.831
+        ],
+        "balanced_accuracy": 0.65,
+        "weighted_precision": 0.8183,
+        "weighted_recall": 0.6857,
+        "weighted_f1": 0.7297,
+        "high_recall": 0.7,
+        "low_recall": 0.6,
+        "roc_auc": 0.7133,
+        "test_class_counts": {
+          "HIGH": 30,
+          "LOW": 5
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            21
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 3,
+            "pred_high": 1,
+            "actual_high": 3
+          },
+          "2024-Q1": {
+            "correct": 2,
+            "pred_high": 1,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 3,
+            "pred_high": 3,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.5429,
+          0.8286
+        ]
+      },
+      "paired_balanced_accuracy_bootstrap_E3_minus": {
+        "carry-forward": {
+          "point_diff": -0.0167,
+          "ci95": [
+            -0.0769,
+            0.0345
+          ],
+          "draws_used": 9969,
+          "draws_skipped_one_class": 31
+        },
+        "Eq3-rule": {
+          "point_diff": 0.0167,
+          "ci95": [
+            -0.069,
+            0.1034
+          ],
+          "draws_used": 9969,
+          "draws_skipped_one_class": 31
+        }
+      },
+      "decision_rule": {
+        "better_baseline": "carry-forward",
+        "ba_gain_vs_better_baseline": -0.0167,
+        "ci95_of_gain": [
+          -0.0769,
+          0.0345
+        ],
+        "accuracy_not_below_carry_forward": false,
+        "verdict": "non-inferiority",
+        "interpretation": "exploratory criterion on 7 reused quarters (3 LOW rows under A-origin); not proof of generalization; does not freeze a 2026 candidate"
+      },
+      "tau_by_fold": {
+        "2023-Q4": 14.345,
+        "2024-Q1": 14.345,
+        "2024-Q2": 14.345,
+        "2024-Q3": 14.345,
+        "2024-Q4": 14.345,
+        "2025-Q1": 14.345,
+        "2025-Q4": 14.345
+      }
+    },
+    "A-origin | +FSSI": {
+      "E3-LightGBM": {
+        "rows": 35,
+        "correct": 33,
+        "mean_quarter_accuracy": 0.9429,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.808,
+          0.993
+        ],
+        "balanced_accuracy": 0.8177,
+        "weighted_precision": 0.9429,
+        "weighted_recall": 0.9429,
+        "weighted_f1": 0.9429,
+        "high_recall": 0.9688,
+        "low_recall": 0.6667,
+        "roc_auc": 0.7344,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            31
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 5,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "brier": 0.0693,
+        "quarter_bootstrap_accuracy_95": [
+          0.8857,
+          1.0
+        ]
+      },
+      "Eq3-rule": {
+        "rows": 35,
+        "correct": 29,
+        "mean_quarter_accuracy": 0.8286,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.664,
+          0.934
+        ],
+        "balanced_accuracy": 0.7552,
+        "weighted_precision": 0.9061,
+        "weighted_recall": 0.8286,
+        "weighted_f1": 0.8571,
+        "high_recall": 0.8438,
+        "low_recall": 0.6667,
+        "roc_auc": 0.9271,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            5,
+            27
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.7429,
+          0.9143
+        ]
+      },
+      "always-HIGH (reference)": {
+        "rows": 35,
+        "correct": 32,
+        "mean_quarter_accuracy": 0.9143,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.769,
+          0.982
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.8359,
+        "weighted_recall": 0.9143,
+        "weighted_f1": 0.8733,
+        "high_recall": 1.0,
+        "low_recall": 0.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            32
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.8571,
+          0.9714
+        ]
+      },
+      "always-LOW (reference)": {
+        "rows": 35,
+        "correct": 3,
+        "mean_quarter_accuracy": 0.0857,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.018,
+          0.231
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.0073,
+        "weighted_recall": 0.0857,
+        "weighted_f1": 0.0135,
+        "high_recall": 0.0,
+        "low_recall": 1.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            0
+          ],
+          [
+            32,
+            0
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.0286,
+          0.1429
+        ]
+      },
+      "carry-forward": {
+        "rows": 35,
+        "correct": 30,
+        "mean_quarter_accuracy": 0.8571,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.697,
+          0.952
+        ],
+        "balanced_accuracy": 0.7708,
+        "weighted_precision": 0.9113,
+        "weighted_recall": 0.8571,
+        "weighted_f1": 0.8774,
+        "high_recall": 0.875,
+        "low_recall": 0.6667,
+        "roc_auc": 0.7396,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            4,
+            28
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.8,
+          0.9143
+        ]
+      },
+      "paired_balanced_accuracy_bootstrap_E3_minus": {
+        "carry-forward": {
+          "point_diff": 0.0469,
+          "ci95": [
+            0.0152,
+            0.0882
+          ],
+          "draws_used": 9791,
+          "draws_skipped_one_class": 209
+        },
+        "Eq3-rule": {
+          "point_diff": 0.0625,
+          "ci95": [
+            0.0294,
+            0.1
+          ],
+          "draws_used": 9791,
+          "draws_skipped_one_class": 209
+        }
+      },
+      "decision_rule": {
+        "better_baseline": "carry-forward",
+        "ba_gain_vs_better_baseline": 0.0469,
+        "ci95_of_gain": [
+          0.0152,
+          0.0882
+        ],
+        "accuracy_not_below_carry_forward": true,
+        "verdict": "non-inferiority",
+        "interpretation": "exploratory criterion on 7 reused quarters (3 LOW rows under A-origin); not proof of generalization; does not freeze a 2026 candidate"
+      },
+      "tau_by_fold": {
+        "2023-Q4": 10.8434,
+        "2024-Q1": 10.8667,
+        "2024-Q2": 11.3666,
+        "2024-Q3": 11.78,
+        "2024-Q4": 12.5066,
+        "2025-Q1": 13.22,
+        "2025-Q4": 14.1133
+      }
+    },
+    "A-origin | base": {
+      "E3-LightGBM": {
+        "rows": 35,
+        "correct": 32,
+        "mean_quarter_accuracy": 0.9143,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.769,
+          0.982
+        ],
+        "balanced_accuracy": 0.8021,
+        "weighted_precision": 0.9276,
+        "weighted_recall": 0.9143,
+        "weighted_f1": 0.9197,
+        "high_recall": 0.9375,
+        "low_recall": 0.6667,
+        "roc_auc": 0.7969,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            30
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 5,
+            "pred_high": 4,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "brier": 0.0715,
+        "quarter_bootstrap_accuracy_95": [
+          0.8286,
+          0.9714
+        ]
+      },
+      "Eq3-rule": {
+        "rows": 35,
+        "correct": 29,
+        "mean_quarter_accuracy": 0.8286,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.664,
+          0.934
+        ],
+        "balanced_accuracy": 0.7552,
+        "weighted_precision": 0.9061,
+        "weighted_recall": 0.8286,
+        "weighted_f1": 0.8571,
+        "high_recall": 0.8438,
+        "low_recall": 0.6667,
+        "roc_auc": 0.9271,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            5,
+            27
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 3,
+            "pred_high": 4,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.7429,
+          0.9143
+        ]
+      },
+      "always-HIGH (reference)": {
+        "rows": 35,
+        "correct": 32,
+        "mean_quarter_accuracy": 0.9143,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.769,
+          0.982
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.8359,
+        "weighted_recall": 0.9143,
+        "weighted_f1": 0.8733,
+        "high_recall": 1.0,
+        "low_recall": 0.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            32
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.8571,
+          0.9714
+        ]
+      },
+      "always-LOW (reference)": {
+        "rows": 35,
+        "correct": 3,
+        "mean_quarter_accuracy": 0.0857,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.018,
+          0.231
+        ],
+        "balanced_accuracy": 0.5,
+        "weighted_precision": 0.0073,
+        "weighted_recall": 0.0857,
+        "weighted_f1": 0.0135,
+        "high_recall": 0.0,
+        "low_recall": 1.0,
+        "roc_auc": null,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            0
+          ],
+          [
+            32,
+            0
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 0,
+            "pred_high": 0,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 1,
+            "pred_high": 0,
+            "actual_high": 4
+          }
+        },
+        "roc_auc_note": "undefined: constant or missing score, or one class absent",
+        "quarter_bootstrap_accuracy_95": [
+          0.0286,
+          0.1429
+        ]
+      },
+      "carry-forward": {
+        "rows": 35,
+        "correct": 30,
+        "mean_quarter_accuracy": 0.8571,
+        "accuracy_clopper_pearson_95_OPTIMISTIC": [
+          0.697,
+          0.952
+        ],
+        "balanced_accuracy": 0.7708,
+        "weighted_precision": 0.9113,
+        "weighted_recall": 0.8571,
+        "weighted_f1": 0.8774,
+        "high_recall": 0.875,
+        "low_recall": 0.6667,
+        "roc_auc": 0.7396,
+        "test_class_counts": {
+          "HIGH": 32,
+          "LOW": 3
+        },
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            4,
+            28
+          ]
+        ],
+        "per_quarter": {
+          "2023-Q4": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q1": {
+            "correct": 4,
+            "pred_high": 3,
+            "actual_high": 4
+          },
+          "2024-Q2": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q3": {
+            "correct": 4,
+            "pred_high": 4,
+            "actual_high": 5
+          },
+          "2024-Q4": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q1": {
+            "correct": 5,
+            "pred_high": 5,
+            "actual_high": 5
+          },
+          "2025-Q4": {
+            "correct": 4,
+            "pred_high": 5,
+            "actual_high": 4
+          }
+        },
+        "quarter_bootstrap_accuracy_95": [
+          0.8,
+          0.9143
+        ]
+      },
+      "paired_balanced_accuracy_bootstrap_E3_minus": {
+        "carry-forward": {
+          "point_diff": 0.0312,
+          "ci95": [
+            0.0,
+            0.069
+          ],
+          "draws_used": 9791,
+          "draws_skipped_one_class": 209
+        },
+        "Eq3-rule": {
+          "point_diff": 0.0469,
+          "ci95": [
+            0.0147,
+            0.0909
+          ],
+          "draws_used": 9791,
+          "draws_skipped_one_class": 209
+        }
+      },
+      "decision_rule": {
+        "better_baseline": "carry-forward",
+        "ba_gain_vs_better_baseline": 0.0313,
+        "ci95_of_gain": [
+          0.0,
+          0.069
+        ],
+        "accuracy_not_below_carry_forward": true,
+        "verdict": "non-inferiority",
+        "interpretation": "exploratory criterion on 7 reused quarters (3 LOW rows under A-origin); not proof of generalization; does not freeze a 2026 candidate"
+      },
+      "tau_by_fold": {
+        "2023-Q4": 10.8434,
+        "2024-Q1": 10.8667,
+        "2024-Q2": 11.3666,
+        "2024-Q3": 11.78,
+        "2024-Q4": 12.5066,
+        "2025-Q1": 13.22,
+        "2025-Q4": 14.1133
+      }
+    }
+  },
+  "e1_reference_not_refitted": {
+    "A-origin | base | primary": {
+      "MODEL-B2": {
+        "mean_quarter_accuracy": 0.5714,
+        "balanced_accuracy": 0.6146,
+        "roc_auc": 0.6875,
+        "high_recall": 0.5625,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            14,
+            18
+          ]
+        ]
+      },
+      "carry-forward": {
+        "mean_quarter_accuracy": 0.8571,
+        "balanced_accuracy": 0.7708,
+        "roc_auc": null,
+        "high_recall": 0.875,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            4,
+            28
+          ]
+        ]
+      },
+      "Eq3-rule": {
+        "mean_quarter_accuracy": 0.8286,
+        "balanced_accuracy": 0.7552,
+        "roc_auc": null,
+        "high_recall": 0.8438,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            2,
+            1
+          ],
+          [
+            5,
+            27
+          ]
+        ]
+      }
+    },
+    "A-global | base | primary": {
+      "MODEL-B2": {
+        "mean_quarter_accuracy": 0.6857,
+        "balanced_accuracy": 0.65,
+        "roc_auc": 0.7167,
+        "high_recall": 0.7,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            21
+          ]
+        ]
+      },
+      "carry-forward": {
+        "mean_quarter_accuracy": 0.6857,
+        "balanced_accuracy": 0.65,
+        "roc_auc": null,
+        "high_recall": 0.7,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            21
+          ]
+        ]
+      },
+      "Eq3-rule": {
+        "mean_quarter_accuracy": 0.6286,
+        "balanced_accuracy": 0.6167,
+        "roc_auc": null,
+        "high_recall": 0.6333,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            3,
+            2
+          ],
+          [
+            11,
+            19
+          ]
+        ]
+      }
+    }
+  }
+}

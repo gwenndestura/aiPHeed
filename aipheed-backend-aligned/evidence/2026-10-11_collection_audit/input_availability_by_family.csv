@@ -1,0 +1,17 @@
+input,observation_reference_period,verified_publication_date,proxy_date_if_any,date_verification_status,eligible_under_STRICT_rule_L,reason_if_ineligible
+SWS round (as input),survey fieldwork dates,per-round page/media-release date,none,21 of 21 stored+collected rounds 2021-2025 dated; 3 rounds only [V-single]; Jan/Feb/Apr 11-15 2025 [U],eligible when published before origin,rounds with unknown date excluded (L4)
+SWS round (in label),survey fieldwork dates,same,none,same,eligible only with CPI component (below),-
+"Provincial food CPI YoY, label month (final month of target quarter)",calendar month,RSSO IV-A regional release: verified only Dec 2024 (2025-01-13),"national release + 14 days (D1a, NOT approved)",national dates [S/N] for 20 months; provincial [U] for 19 of 20,INELIGIBLE (strict),provincial publication date unverified; national date is a proxy requiring approval
+"Provincial food CPI YoY, feature (quarter T-2)",calendar months,not verified per month,national release + 14 days (D1a),[U] provincial,INELIGIBLE (strict),same as above
+"Provincial food CPI YoY, Jan-Jun 2026 (collected)",2026-01..06,provincial [U]; national 2026-02-05..2026-07-07 [S],national + 14 days (D1a),values verified vs raw API; dates [U] provincial,INELIGIBLE (strict),same as above
+Regional CPI (cpi_full),calendar months,national-day release practice [S],-,"practice documented, not per value",INELIGIBLE (strict L3) until calendar/practice accepted,no per-value date
+Wholesale rice RMR,calendar months,not per value,PSA catalogue: ~35 days after month [S],[U] per value,INELIGIBLE (strict L3),release practice only
+Unemployment (LFS national),survey month/quarter,not per value,~37 days (Jul 2024 example) [N],[U] per value,INELIGIBLE (strict L3),release practice only
+OFW remittances (BSP),calendar months,not per value,~15th of 2nd month after [S],[U] per value,INELIGIBLE (strict L3),release practice only; bsp.gov.ph blocked
+Diesel/gasoline (DOE),weeks,not per value,weekly bulletin,[U] per value,INELIGIBLE (strict L3),hand-curated; doe.gov.ph blocked
+"Brent (FRED/EIA), FX (ECB)",days,daily series,-,practice documented,INELIGIBLE (strict L3) pending acceptance; low risk,no per-value date recorded
+ENSO ONI (NOAA CPC),3-month seasons,monthly; values revised up to 2 months [V],-,revised vintage,INELIGIBLE (strict L3) pending D2,revised values (not point-in-time)
+Typhoons (IBTrACS best track),storm dates,provisional then final best track [V],-,revised vintage,INELIGIBLE (strict L3) pending D2,revised values
+Rainfall (NASA POWER),calendar months,MERRA-2 ~3 weeks; near-real-time replaced [S],-,revised vintage,INELIGIBLE (strict L3) pending D2,revised values
+Poverty incidence,"survey years 2021, 2023",2022-08-15 [S]; 2024-08-15 provincial [N],-,verified release dates,ELIGIBLE after release,-
+"News (FSSI, triggers)",article dates,article timestamps [V],-,verified,ELIGIBLE,-

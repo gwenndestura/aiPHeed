@@ -11,6 +11,8 @@ admin_router  (auth: admin)   mounted at /api/v1/admin
     DELETE /rejections/{province_id}/{quarter}
     GET    /audit
     GET    /feedback
+    GET    /pipeline          scheduler status + last run record
+    POST   /pipeline/run      start the quarterly pipeline now (202, 409 if busy)
 
 public_router (no auth)       mounted at /api/v1
     GET    /rejections?quarter=
@@ -49,6 +51,7 @@ from app.services import feedback as fb
 from app.services import review as rv
 from app.services.ratelimit import feedback_guard
 from app.services.security import require_admin
+from app.tasks import scheduler
 
 logger = logging.getLogger(__name__)
 
@@ -242,6 +245,38 @@ async def list_feedback(
         pageSize=pageSize,
         total=total,
     )
+
+
+@admin_router.get("/pipeline")
+async def pipeline_status() -> dict:
+    """
+    The quarterly scheduler: its crontab, the next automatic run, whether a run
+    is in progress, and the full record of the most recent run, stage by stage.
+    """
+    return scheduler.status()
+
+
+@admin_router.post("/pipeline/run", status_code=202)
+async def pipeline_run(
+    user: AdminUser = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """
+    Start the quarterly pipeline now instead of waiting for the schedule.
+
+    Returns at once (202); poll GET /admin/pipeline for progress. 409 if a run
+    is already in progress. The start is written to the audit log.
+    """
+    scheduler.start_in_background(trigger=f"manual:{user.email}")
+    db.add(AuditRecord(
+        actor_id=user.id,
+        actor_email=user.email,
+        action="pipeline_run",
+        subject_type="pipeline",
+        subject_id=None,
+    ))
+    await db.commit()
+    return {"status": "started", "trigger": "manual"}
 
 
 # ---------------------------------------------------------------------------

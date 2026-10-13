@@ -1,0 +1,9 @@
+variant,accuracy_mean_fold,precision_weighted,recall_weighted,f1_weighted,roc_auc,acc_2022,acc_2023,acc_2024,acc_2025,TN,FP,FN,TP,reliable_improvement,seconds
+E0_baseline_default,0.7636,0.8081,0.7636,0.765,0.8244,0.8,0.85,0.6,0.9,20,2,11,22,,1.6
+E1_class_weight_balanced,0.8,0.808,0.8,0.8016,0.8072,0.6,0.9,0.7,0.9,18,4,7,26,False,0.2
+E2_scale_pos_weight_ratio,0.8182,0.8413,0.8182,0.82,0.8278,0.8,0.9,0.7,0.9,20,2,8,25,True,0.1
+E3_threshold_inner,0.7636,0.8081,0.7636,0.765,0.8244,0.8,0.85,0.6,0.9,20,2,11,22,False,1.1
+E4_featuresel_inner,0.7455,0.7978,0.7455,0.7463,0.823,0.8,0.85,0.55,0.9,20,2,12,21,False,7.7
+E5_tpe_tuned,0.7636,0.8081,0.7636,0.765,0.7824,0.8,0.85,0.65,0.8,20,2,11,22,False,96.7
+E6_tpe_tuned_with_classweight_choice,0.7636,0.8081,0.7636,0.765,0.7204,0.8,0.85,0.65,0.8,20,2,11,22,False,201.4
+E7_tpe_tuned_plus_threshold,0.7636,0.8081,0.7636,0.765,0.7824,0.8,0.85,0.65,0.8,20,2,11,22,False,91.7

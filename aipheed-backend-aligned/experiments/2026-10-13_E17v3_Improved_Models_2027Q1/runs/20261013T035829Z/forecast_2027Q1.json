@@ -1,0 +1,249 @@
+{
+ "target_quarter": "2027-Q1",
+ "horizon_h": 5,
+ "information_cutoff": "2025-Q4",
+ "outputs": {
+  "H": {
+   "label": "Research forecast of regional hunger (SWS Balance Luzon, % of families); this is not a forecast of provincial food insecurity.",
+   "selected_by_frozen_rule": "C1_carry_forward",
+   "selected_forecast": 16.7,
+   "all_candidates_experimental": {
+    "C1_carry_forward": 16.7,
+    "C2_mean": 15.061111111111112,
+    "C3_drift": 17.075,
+    "C6_damped_theilsen": 17.1975168,
+    "C4_ridge_ar1": 18.004558020444428,
+    "C5_ridge_ar2": 15.869083148108068,
+    "C7_ridge_indicators": 16.99979392388451,
+    "C7a_ridge_H_F5": 15.782610236637979,
+    "C7b_ridge_H_U": 18.3021989591202
+   },
+   "latest_observed": "2025-Q4",
+   "steps_to_target": 5
+  },
+  "F": {
+   "label": "Research forecast of provincial food inflation (year-on-year %); not a forecast of food insecurity.",
+   "selected_by_frozen_rule": "F1_carry_forward",
+   "selected_forecast_by_province": {
+    "PH040100000": 1.9,
+    "PH040200000": 2.766666666666667,
+    "PH040300000": 1.2,
+    "PH040400000": 1.2333333333333332,
+    "PH040500000": -0.5
+   },
+   "all_candidates_experimental": {
+    "PH040100000": {
+     "F1_carry_forward": 1.9,
+     "F2_pooled_mean": 4.842666666666667,
+     "F3_province_mean": 4.401666666666666,
+     "F4_ridge_ar": 5.5271695014466715
+    },
+    "PH040200000": {
+     "F1_carry_forward": 2.766666666666667,
+     "F2_pooled_mean": 4.842666666666667,
+     "F3_province_mean": 4.555,
+     "F4_ridge_ar": 5.372978320298693
+    },
+    "PH040300000": {
+     "F1_carry_forward": 1.2,
+     "F2_pooled_mean": 4.842666666666667,
+     "F3_province_mean": 4.828333333333333,
+     "F4_ridge_ar": 5.651708532373886
+    },
+    "PH040400000": {
+     "F1_carry_forward": 1.2333333333333332,
+     "F2_pooled_mean": 4.842666666666667,
+     "F3_province_mean": 5.4350000000000005,
+     "F4_ridge_ar": 5.645778102329732
+    },
+    "PH040500000": {
+     "F1_carry_forward": -0.5,
+     "F2_pooled_mean": 4.842666666666667,
+     "F3_province_mean": 4.993333333333334,
+     "F4_ridge_ar": 5.954160464625691
+    }
+   }
+  },
+  "D": {
+   "label": "Research forecast of relative provincial food-price pressure (points vs the unweighted five-province mean); not a forecast of food insecurity.",
+   "selected_by_frozen_rule": "D1_carry_forward",
+   "selected_forecast_by_province": {
+    "PH040100000": 0.5800000000000001,
+    "PH040200000": 1.446666666666667,
+    "PH040300000": -0.1200000000000001,
+    "PH040400000": -0.0866666666666668,
+    "PH040500000": -1.82
+   },
+   "all_candidates_experimental": {
+    "PH040100000": {
+     "D1_carry_forward": 0.5800000000000001,
+     "D2_zero": 0.0,
+     "D3_province_mean": -0.4410000000000001,
+     "D4_ridge_shrink": -0.08582023449075576,
+     "D5_ridge_D_pmean": 0.31719769098040423
+    },
+    "PH040200000": {
+     "D1_carry_forward": 1.446666666666667,
+     "D2_zero": 0.0,
+     "D3_province_mean": -0.2876666666666667,
+     "D4_ridge_shrink": -0.21405736648843673,
+     "D5_ridge_D_pmean": 0.27365343159169836
+    },
+    "PH040300000": {
+     "D1_carry_forward": -0.1200000000000001,
+     "D2_zero": 0.0,
+     "D3_province_mean": -0.014333333333333267,
+     "D4_ridge_shrink": 0.017755910584294224,
+     "D5_ridge_D_pmean": 0.0016348298604711435
+    },
+    "PH040400000": {
+     "D1_carry_forward": -0.0866666666666668,
+     "D2_zero": 0.0,
+     "D3_province_mean": 0.5923333333333333,
+     "D4_ridge_shrink": 0.012823713199768038,
+     "D5_ridge_D_pmean": -0.3827916703242967
+    },
+    "PH040500000": {
+     "D1_carry_forward": -1.82,
+     "D2_zero": 0.0,
+     "D3_province_mean": 0.15066666666666673,
+     "D4_ridge_shrink": 0.2692979771951299,
+     "D5_ridge_D_pmean": -0.20969428210827695
+    }
+   }
+  }
+ },
+ "artifacts": {
+  "H": {
+   "C4_ridge_ar1_model": {
+    "mu": [
+     12.453571428571426
+    ],
+    "sd": [
+     3.366031166867968
+    ],
+    "beta_std": [
+     1.563481123489734
+    ],
+    "intercept": 16.03214285714286,
+    "n": 14
+   },
+   "C5_ridge_ar2_model": {
+    "mu": [
+     12.23076923076923,
+     12.103846153846153
+    ],
+    "sd": [
+     3.3921594246335447,
+     3.028103083454008
+    ],
+    "beta_std": [
+     2.7582176650219403,
+     -1.1111462264720884
+    ],
+    "intercept": 16.52692307692308,
+    "n": 13
+   },
+   "C7_ridge_indicators_model": {
+    "mu": [
+     12.453571428571426,
+     5.218571428571429,
+     5.485357142857143
+    ],
+    "sd": [
+     3.366031166867968,
+     2.8870770395331586,
+     1.3648318372156882
+    ],
+    "beta_std": [
+     1.0165360620687898,
+     1.1908195055123116,
+     -3.4183426821028533
+    ],
+    "intercept": 16.03214285714286,
+    "n": 14
+   },
+   "C7a_ridge_H_F5_model": {
+    "mu": [
+     12.453571428571426,
+     5.218571428571429
+    ],
+    "sd": [
+     3.366031166867968,
+     2.8870770395331586
+    ],
+    "beta_std": [
+     2.0187796946475887,
+     2.0708159582775734
+    ],
+    "intercept": 16.03214285714286,
+    "n": 14
+   },
+   "C7b_ridge_H_U_model": {
+    "mu": [
+     12.453571428571426,
+     5.485357142857143
+    ],
+    "sd": [
+     3.366031166867968,
+     1.3648318372156882
+    ],
+    "beta_std": [
+     0.6816006193020004,
+     -3.7273797031535247
+    ],
+    "intercept": 16.03214285714286,
+    "n": 14
+   }
+  },
+  "F": {
+   "F4_ridge_ar_model": {
+    "mu": [
+     5.475111111111111
+    ],
+    "sd": [
+     3.396765752925408
+    ],
+    "beta_std": [
+     -0.6043284502229683
+    ],
+    "intercept": 4.891111111111112,
+    "n": 75
+   },
+   "n_train_quarters": 15
+  },
+  "D": {
+   "D4_ridge_shrink_model": {
+    "mu": [
+     -4.144832625267251e-17
+    ],
+    "sd": [
+     1.6843717369239333
+    ],
+    "beta_std": [
+     -0.24922961626278176
+    ],
+    "intercept": -6.809367884367626e-17,
+    "n": 75
+   },
+   "D5_ridge_D_pmean_model": {
+    "mu": [
+     -2.960594732333751e-17,
+     7.697546304067752e-17
+    ],
+    "sd": [
+     1.6843717369239335,
+     1.0243781933689624
+    ],
+    "beta_std": [
+     0.10523078781866921,
+     -0.652634150290581
+    ],
+    "intercept": -6.809367884367626e-17,
+    "n": 75
+   },
+   "n_train_quarters": 15
+  }
+ },
+ "generated_utc": "2026-10-13T03:58:33.992288+00:00"
+}

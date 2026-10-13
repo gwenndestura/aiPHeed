@@ -1,0 +1,32 @@
+{
+  "note": "Written after the run (post hoc). The runner's protected-file guard raised on E7's OWN outputs because the glob 'runs/20261012T*/*' (meant for the E6 folder) also matched this folder; all computation had completed and metrics.json was written; manifest.json was not. The glob has since been fixed; E7 was NOT re-run.",
+  "flagged_files_all_inside_this_run_folder": true,
+  "independent_integrity_verification": {
+    "inputs_vs_recorded_hashes_2026_10_11": "100/100 unchanged (data/processed, data/supplementary, evidence)",
+    "prior_runs_E1_to_E6_outputs_vs_manifests": "all unchanged",
+    "served_artifacts_vs_meta": "both match",
+    "models_dir": "lgbm_best.pkl last modified 2026-10-08 (before session)",
+    "production_backend": "54/54 baseline hashes match"
+  },
+  "prediction_before_label_order_by_mtime": {
+    "predictions": {
+      "pred_approved_14.345.csv": "2026-10-12T17:12:04",
+      "pred_regression.csv": "2026-10-12T17:15:23",
+      "pred_tau0_10.843.csv": "2026-10-12T17:08:23"
+    },
+    "scored_with_labels": {
+      "scored_approved_14.345.csv": "2026-10-12T17:19:26",
+      "scored_regression.csv": "2026-10-12T17:21:11",
+      "scored_tau0_10.843.csv": "2026-10-12T17:17:02"
+    }
+  },
+  "outputs_sha256": {
+    "metrics.json": "f376c902cf21f15161895104fcf087dd5443653677cd64e5177c2595ecc8bb96",
+    "pred_approved_14.345.csv": "55d1e84a743dba4aee643d40aa40d1f62a417e74e334a15797d42c5902e075bc",
+    "pred_regression.csv": "438bec992f29a4688b77b6f24e14b7237ff135b683f588f96080febdaa7a458a",
+    "pred_tau0_10.843.csv": "deeb6937722b21bcfbc36de70bd99a1a1b7eb2612e398fe3b7cdb582e4952c53",
+    "scored_approved_14.345.csv": "c3bb9c79d1e7a3531915a1c513e7e0de5dafdf96d008465b4e3a70cfaf367b8e",
+    "scored_regression.csv": "ab21ffa321b836701043e2ab6fc8f00db100501773aeea0cc710d73e33fa59ed",
+    "scored_tau0_10.843.csv": "e6279242b7524bd3e7f0f074b3e7fc96df661486bfef9fc1d043a3c362fc514e"
+  }
+}

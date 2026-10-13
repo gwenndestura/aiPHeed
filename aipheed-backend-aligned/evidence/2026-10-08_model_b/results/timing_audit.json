@@ -1,0 +1,259 @@
+{
+  "results": {
+    "T0 diagnostic (SWS of t)": {
+      "min_train=6": 0.7692,
+      "min_train=7": 0.7833,
+      "metrics": {
+        "accuracy_mean_fold": 0.7818,
+        "precision_weighted": 0.8187,
+        "recall_weighted": 0.7818,
+        "f1_weighted": 0.7836,
+        "roc_auc": 0.8154,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.75,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.6,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "min_train=8": 0.7818,
+      "min_train=9": 0.78,
+      "min_train=10": 0.7778
+    },
+    "T1 SWS as published, gov data of t": {
+      "min_train=6": 0.7538,
+      "min_train=7": 0.7667,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "roc_auc": 0.8044,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "min_train=8": 0.7636,
+      "min_train=9": 0.76,
+      "min_train=10": 0.7556
+    },
+    "T2 strict Rule 3, gov data of t-1": {
+      "min_train=6": 0.7538,
+      "min_train=7": 0.7667,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "roc_auc": 0.8244,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.6,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "min_train=8": 0.7636,
+      "min_train=9": 0.76,
+      "min_train=10": 0.7333
+    }
+  },
+  "audit": [
+    {
+      "forecast_quarter": "2022-Q4",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2022-10-01",
+      "training_targets": "2020-Q2 .. 2022-Q3",
+      "news_features_from": "2022-Q3",
+      "sws_value_from_quarter": "2022-Q2",
+      "sws_published": "2022-06-06",
+      "sws_of_quarter_t_published": "2022-10-29",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2018 survey",
+      "gov_series_T1": "2022-Q3",
+      "gov_series_T2_strict": "2022-Q2"
+    },
+    {
+      "forecast_quarter": "2023-Q1",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2023-01-01",
+      "training_targets": "2020-Q2 .. 2022-Q4",
+      "news_features_from": "2022-Q4",
+      "sws_value_from_quarter": "2022-Q3",
+      "sws_published": "2022-10-29",
+      "sws_of_quarter_t_published": "2023-01-19",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2022-Q4",
+      "gov_series_T2_strict": "2022-Q3"
+    },
+    {
+      "forecast_quarter": "2023-Q2",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2023-04-01",
+      "training_targets": "2020-Q2 .. 2023-Q1",
+      "news_features_from": "2023-Q1",
+      "sws_value_from_quarter": "2022-Q4",
+      "sws_published": "2023-01-19",
+      "sws_of_quarter_t_published": "2023-05-11",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2023-Q1",
+      "gov_series_T2_strict": "2022-Q4"
+    },
+    {
+      "forecast_quarter": "2023-Q3",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2023-07-01",
+      "training_targets": "2020-Q2 .. 2023-Q2",
+      "news_features_from": "2023-Q2",
+      "sws_value_from_quarter": "2023-Q1",
+      "sws_published": "2023-05-11",
+      "sws_of_quarter_t_published": "2023-08-02",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2023-Q2",
+      "gov_series_T2_strict": "2023-Q1"
+    },
+    {
+      "forecast_quarter": "2023-Q4",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2023-10-01",
+      "training_targets": "2020-Q2 .. 2023-Q3",
+      "news_features_from": "2023-Q3",
+      "sws_value_from_quarter": "2023-Q2",
+      "sws_published": "2023-08-02",
+      "sws_of_quarter_t_published": "2023-11-20",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2023-Q3",
+      "gov_series_T2_strict": "2023-Q2"
+    },
+    {
+      "forecast_quarter": "2024-Q1",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2024-01-01",
+      "training_targets": "2020-Q2 .. 2023-Q4",
+      "news_features_from": "2023-Q4",
+      "sws_value_from_quarter": "2023-Q3",
+      "sws_published": "2023-11-20",
+      "sws_of_quarter_t_published": "2024-01-22",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2023-Q4",
+      "gov_series_T2_strict": "2023-Q3"
+    },
+    {
+      "forecast_quarter": "2024-Q2",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2024-04-01",
+      "training_targets": "2020-Q2 .. 2024-Q1",
+      "news_features_from": "2024-Q1",
+      "sws_value_from_quarter": "2023-Q4",
+      "sws_published": "2024-01-22",
+      "sws_of_quarter_t_published": "2024-04-30",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2024-Q1",
+      "gov_series_T2_strict": "2023-Q4"
+    },
+    {
+      "forecast_quarter": "2024-Q3",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2024-07-01",
+      "training_targets": "2020-Q2 .. 2024-Q2",
+      "news_features_from": "2024-Q2",
+      "sws_value_from_quarter": "2024-Q1",
+      "sws_published": "2024-04-30",
+      "sws_of_quarter_t_published": "2024-07-23",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2024-Q2",
+      "gov_series_T2_strict": "2024-Q1"
+    },
+    {
+      "forecast_quarter": "2024-Q4",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2024-10-01",
+      "training_targets": "2020-Q2 .. 2024-Q3",
+      "news_features_from": "2024-Q3",
+      "sws_value_from_quarter": "2024-Q2",
+      "sws_published": "2024-07-23",
+      "sws_of_quarter_t_published": "2025-01-14",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2021 survey (released 2022-08-15)",
+      "gov_series_T1": "2024-Q3",
+      "gov_series_T2_strict": "2024-Q2"
+    },
+    {
+      "forecast_quarter": "2025-Q1",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2025-01-01",
+      "training_targets": "2020-Q2 .. 2024-Q4",
+      "news_features_from": "2024-Q4",
+      "sws_value_from_quarter": "2024-Q2",
+      "sws_published": "2024-07-23",
+      "sws_of_quarter_t_published": "2025-01-14",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2023 survey (released 2024-08)",
+      "gov_series_T1": "2024-Q4",
+      "gov_series_T2_strict": "2024-Q3"
+    },
+    {
+      "forecast_quarter": "2025-Q4",
+      "lead_time_quarters": 1,
+      "forecast_made_before": "2025-10-01",
+      "training_targets": "2020-Q2 .. 2025-Q1",
+      "news_features_from": "2025-Q3",
+      "sws_value_from_quarter": "2025-Q1",
+      "sws_published": "2025-03-29",
+      "sws_of_quarter_t_published": "no SWS round",
+      "sws_of_t_available_in_time": false,
+      "poverty_estimate": "2023 survey (released 2024-08)",
+      "gov_series_T1": "2025-Q3",
+      "gov_series_T2_strict": "2025-Q2"
+    }
+  ]
+}

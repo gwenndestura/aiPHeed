@@ -1,0 +1,160 @@
+{
+ "utc": "20261013T034941Z",
+ "code_sha256": {
+  "e17_lib.py": "7ec43dd1e884fb263d208a24b9ba1de0083e988ce195ecd0db76e83c3721d261",
+  "guard.py": "c1c75d16704b7b6922cbbee91d03786575d5ab88d881ebd0b5b394c53c3a2d22",
+  "inspect_inputs.py": "5383940ce14ac1be8c0257900efea250e991fece261bfc3e2119022d67e5b3a5",
+  "loaders.py": "867ac29b83d7a333fcb30681b70d309407e0cb8289063c71b1efbd9b0ff6142f",
+  "run_e17.py": "1d8333545ba743095e310e77dbd8b4749a16c3453361989a1b97563b986e8b9f",
+  "run_supporting.py": "a3cc9497a7b2e1c44307b73a9867e4ec53ee9c09c66ddd9c2e287c9145fb7a41"
+ },
+ "outputs_sha256": {
+  "objective_evidence.json": "8a2573e6b51446026abe30e185fe97dc26fd47155ccc255e8c65afd6d3dbe4f7",
+  "supporting_forecasts.csv": "dd5af33811c9226e5f22d85fca85c0eed1cebf6217d3ff23d68e35d55ad8a03a",
+  "supporting_horizons.csv": "ca0b10e2eb7a22789b796aaaa8298519e4cd08cb4e37baa12a86c34b5deb987c",
+  "supporting_per_quarter_province.csv": "2db972e5c751fc168832c65377238f804c9e83d00cddc1ec37e15b1ae42e24f4"
+ },
+ "access_log": [
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv",
+   "bytes": 9110
+  },
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json",
+   "bytes": 70271
+  },
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json",
+   "bytes": 5380
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\features_fused.parquet",
+   "columns": [
+    "FSSI",
+    "FSSI_accel",
+    "FSSI_lag1",
+    "FSSI_lag2",
+    "brent_usd_per_bbl",
+    "commodity_fruit_veg",
+    "commodity_leafy_veg",
+    "commodity_livestock",
+    "commodity_poultry",
+    "commodity_rootcrops",
+    "cpi_dev",
+    "diesel_php_per_l",
+    "diesel_php_per_l_accel",
+    "diesel_php_per_l_lag1",
+    "drought_alert",
+    "enso_numeric",
+    "food_cpi",
+    "food_cpi_yoy",
+    "food_cpi_yoy_accel",
+    "food_cpi_yoy_lag1",
+    "food_minus_headline_yoy",
+    "food_minus_headline_yoy_accel",
+    "food_minus_headline_yoy_lag1",
+    "fx_usd_php_avg",
+    "gasoline_php_per_l",
+    "headline_cpi",
+    "ofw_remit_yoy_pct",
+    "ofw_remit_yoy_pct_accel",
+    "ofw_remit_yoy_pct_lag1",
+    "poverty_incidence",
+    "province_code",
+    "quarter",
+    "rainfall_anomaly_pct",
+    "rainfall_anomaly_pct_accel",
+    "rainfall_anomaly_pct_lag1",
+    "rice_price_regular",
+    "rice_price_regular_accel",
+    "rice_price_regular_lag1",
+    "tc_count",
+    "tc_severe_flag",
+    "trigger_climate",
+    "trigger_employment",
+    "trigger_fish_kill",
+    "trigger_market",
+    "trigger_ofw_remittance",
+    "unemployment_rate",
+    "unemployment_rate_accel",
+    "unemployment_rate_lag1"
+   ],
+   "row_filter": "2021-Q1 <= quarter <= 2025-Q4",
+   "rows_returned": 100
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\topic_proportions.parquet",
+   "columns": [
+    "province_code",
+    "quarter",
+    "topic_other_pct",
+    "topic_outlier_pct"
+   ],
+   "row_filter": "2021-Q1 <= quarter <= 2025-Q4",
+   "rows_returned": 96
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_poverty.parquet",
+   "columns": [
+    "lgu_code",
+    "lgu_name",
+    "poverty_incidence_pct",
+    "poverty_normalized",
+    "province_code",
+    "province_name",
+    "source_note",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 142
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_census.parquet",
+   "columns": [
+    "density_normalized",
+    "density_per_km2",
+    "lgu_code",
+    "lgu_name",
+    "lgu_type",
+    "population_2020",
+    "population_source",
+    "province_code"
+   ],
+   "row_filter": null,
+   "rows_returned": 142
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\nns_fies.parquet",
+   "columns": [
+    "fies_moderate_severe_pct",
+    "geographic_level",
+    "provenance",
+    "region_name",
+    "survey_cycle",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 5
+  }
+ ]
+}

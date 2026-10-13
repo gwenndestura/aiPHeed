@@ -1,0 +1,34 @@
+{
+  "procedure": "P3 as pre-registered",
+  "selected": {
+    "id": "eq5_struct|lgbm|default|w=spw",
+    "family": "lgbm",
+    "small": false,
+    "w": "spw",
+    "cols": [
+      "FSSI",
+      "FSSI_lag1",
+      "FSSI_lag2",
+      "FSSI_accel",
+      "trigger_market",
+      "trigger_climate",
+      "trigger_employment",
+      "trigger_ofw_remittance",
+      "trigger_fish_kill",
+      "cpi_dev",
+      "unemployment_rate",
+      "rice_price_regular_accel",
+      "sws_hunger",
+      "cpi_rel",
+      "fssi_article_count"
+    ]
+  },
+  "inner_score_all_data": 0.7571,
+  "tied": [
+    "eq5_struct|lgbm|default|w=spw",
+    "gov_c|logistic|C=0.01|w=balanced",
+    "gov_c|logistic|C=0.1|w=None",
+    "gov_c|lgbm|default|w=spw"
+  ],
+  "preregistration_sha256": "380c005041806c492e94a9e628717b9a1f97f1715883800dac063604423bf8ca"
+}

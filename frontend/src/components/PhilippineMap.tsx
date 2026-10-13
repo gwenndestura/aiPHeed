@@ -65,6 +65,19 @@ const mixHex = (from: string, to: string, amount: number) => {
 
 const NO_DATA_COLOR = "#6b7280"; // gray for areas without data
 
+// The boundary file names component cities "City of Imus" / "City of Cavite";
+// the API names them "Imus" / "Cavite City". Both sides are reduced to the
+// same key so the 20 component cities join instead of rendering gray.
+export function muniKey(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/^city of\s+/, "")
+    .replace(/\s+city$/, "")
+    .trim();
+}
+
 export function PhilippineMap({
   regions,
   selectedRegion,
@@ -113,7 +126,7 @@ export function PhilippineMap({
     // Map by lowercased name + province for matching against geojson "name"
     const m = new Map<string, MunicipalityData>();
     municipalities.forEach((mu) => {
-      m.set(`${mu.provinceId}::${mu.name.toLowerCase()}`, mu);
+      m.set(`${mu.provinceId}::${muniKey(mu.name)}`, mu);
     });
     return m;
   }, [municipalities]);
@@ -174,7 +187,7 @@ export function PhilippineMap({
       { type: "FeatureCollection", features } as GeoJSON.FeatureCollection,
       {
         style: (feature) => {
-          const name = (feature?.properties?.name || "").toLowerCase();
+          const name = muniKey(feature?.properties?.name || "");
           const muni = muniMap.get(`${provinceId}::${name}`);
           const color = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
           const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
@@ -189,7 +202,7 @@ export function PhilippineMap({
         },
         onEachFeature: (feature, layer) => {
           const name: string = feature.properties?.name || "Unknown";
-          const muni = muniMap.get(`${provinceId}::${name.toLowerCase()}`);
+          const muni = muniMap.get(`${provinceId}::${muniKey(name)}`);
           const tipColor = muni ? RISK_COLORS[muni.riskLevel] : "#888";
           layer.bindTooltip(
             `<div style="font-size:11px">
@@ -226,7 +239,7 @@ export function PhilippineMap({
 
     muniLayer.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
-      const name = (feature?.properties?.name || "").toLowerCase();
+      const name = muniKey(feature?.properties?.name || "");
       const muni = muniMap.get(`${provinceId}::${name}`);
       const fill = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
       (layer as L.Path).setStyle({ fillColor: fill });
@@ -641,7 +654,7 @@ export function PhilippineMap({
     const isProvRejected = rejectedRef.current.has(provinceId);
     municipalitiesLayerRef.current.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
-      const name = (feature?.properties?.name || "").toLowerCase();
+      const name = muniKey(feature?.properties?.name || "");
       const muni = muniMap.get(`${provinceId}::${name}`);
       if (!muni) return;
       const isSel = !isProvRejected && selectedMunicipality?.id === muni.id;

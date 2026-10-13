@@ -23,6 +23,12 @@ export interface RegionData {
   whatIfFeatures: { feature: string; value: number; min: number; max: number; step: number; unit: string }[];
   lat: number;
   lng: number;
+  provinceCode?: string;
+  // Rank among the published provinces by risk probability (null when withheld).
+  rank?: number | null;
+  rankOf?: number | null;
+  gapToNextLower?: number | null;
+  tiedWithNextLower?: boolean | null;
 }
 
 export interface MunicipalityData {

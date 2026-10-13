@@ -3,7 +3,8 @@ import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections } from "@/lib/queries";
 import { PhilippineMap } from "@/components/PhilippineMap";
-import { LeftPanel, RfiiScoreCardBody, RiskDriversCardBody, ProvinceRankingCardBody } from "@/components/LeftPanel";
+import { LeftPanel, RfiiScoreCardBody, RiskDriversCardBody } from "@/components/LeftPanel";
+import { ProvinceRankingCardBody } from "@/components/ProvinceRanking";
 import {
   ShapNarrativeCardBody,
   NewsArticlesCardBody,
@@ -203,7 +204,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
                   <RiskDriversCardBody quarterId={quarterId} />
                 </FloatingCard>
                 <FloatingCard>
-                  <ProvinceRankingCardBody onRegionClick={handleRegionClick} regionsData={regionsData} />
+                  <ProvinceRankingCardBody quarterId={quarterId} regionsData={regionsData} onRegionClick={handleRegionClick} />
                 </FloatingCard>
               </div>
               {showAboutFeedback && (

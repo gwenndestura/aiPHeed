@@ -1,0 +1,1031 @@
+[
+ {
+  "target": "2023-Q4",
+  "n_train_quarters": 8,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2"
+  ],
+  "n_train_rows": 40,
+  "train_HIGH": 20,
+  "train_LOW": 20,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.7172272659045333,
+    "regressor_gain": {
+     "last_published_stress": 3230.7893747091293,
+     "sws_hunger": 192.4268318414688,
+     "sws_change": 919.2539847791195
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 0,
+     "reason": "no inner out-of-fold quarters"
+    },
+    "classifier_train_brier": 0.11478040211699714,
+    "classifier_gain": {
+     "last_published_stress": 185.77769040316343,
+     "sws_hunger": 1.2015098724514246,
+     "sws_change": 95.56215714663267
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.4699009166881933,
+    "regressor_gain": {
+     "last_published_stress": 2707.0022706985474,
+     "sws_hunger": 438.064750790596,
+     "sws_change": 442.99778670072556,
+     "cpi_rel": 542.4814616441727,
+     "cpi_rel_lag1": 56.048740804195404,
+     "food_cpi_yoy": 127.78916037082672,
+     "food_cpi_yoy_lag1": 145.27988976240158,
+     "cpi_dev": 188.6118986606598
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 0,
+     "reason": "no inner out-of-fold quarters"
+    },
+    "classifier_train_brier": 0.07971608682544126,
+    "classifier_gain": {
+     "last_published_stress": 102.46248312294483,
+     "sws_hunger": 9.062820926308632,
+     "sws_change": 76.99346898496151,
+     "cpi_rel": 67.79829177260399,
+     "cpi_rel_lag1": 17.40083995461464,
+     "food_cpi_yoy": 2.581837981939316,
+     "food_cpi_yoy_lag1": 0.45806899666786194,
+     "cpi_dev": 75.55196098983288
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [
+     "poverty_incidence"
+    ],
+    "regressor_train_mae": 1.2809236900253302,
+    "regressor_gain": {
+     "last_published_stress": 2714.9735429286957,
+     "sws_hunger": 30.02571988105774,
+     "sws_change": 211.46462094783783,
+     "cpi_rel": 624.2293574810028,
+     "cpi_rel_lag1": 82.5547906756401,
+     "food_cpi_yoy": 69.52143037319183,
+     "food_cpi_yoy_lag1": 159.20349699258804,
+     "cpi_dev": 132.99691462516785,
+     "headline_cpi": 24.547325253486633,
+     "food_minus_headline_yoy": 76.7902021408081,
+     "food_minus_headline_yoy_lag1": 49.26615905761719,
+     "unemployment_rate": 1109.3926484584808
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 0,
+     "reason": "no inner out-of-fold quarters"
+    },
+    "classifier_train_brier": 0.05855481593378449,
+    "classifier_gain": {
+     "last_published_stress": 90.94341225922108,
+     "sws_hunger": 0.1544799953699112,
+     "sws_change": 54.21441403031349,
+     "cpi_rel": 63.83069133758545,
+     "cpi_rel_lag1": 12.458399772644043,
+     "food_cpi_yoy": 0.0,
+     "food_cpi_yoy_lag1": 0.0,
+     "cpi_dev": 78.68642188608646,
+     "headline_cpi": 0.0,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 5.867079943418503,
+     "unemployment_rate": 94.92084035277367
+    }
+   }
+  }
+ },
+ {
+  "target": "2024-Q1",
+  "n_train_quarters": 9,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3"
+  ],
+  "n_train_rows": 45,
+  "train_HIGH": 23,
+  "train_LOW": 22,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.6892438503919083,
+    "regressor_gain": {
+     "last_published_stress": 4125.498832017183,
+     "sws_hunger": 165.5424113869667,
+     "sws_change": 725.7454133629799
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.10607436142654823,
+    "classifier_gain": {
+     "last_published_stress": 217.86274806410074,
+     "sws_hunger": 5.8444075509905815,
+     "sws_change": 115.15081497654319
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.512902575721235,
+    "regressor_gain": {
+     "last_published_stress": 3495.19358587265,
+     "sws_hunger": 347.6083085536957,
+     "sws_change": 486.8950345516205,
+     "cpi_rel": 383.3009580373764,
+     "cpi_rel_lag1": 93.80486971139908,
+     "food_cpi_yoy": 123.67145889997482,
+     "food_cpi_yoy_lag1": 108.4126740694046,
+     "cpi_dev": 245.25809478759766
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.07558356047063107,
+    "classifier_gain": {
+     "last_published_stress": 180.85665580630302,
+     "sws_hunger": 11.281190156936646,
+     "sws_change": 61.83115969598293,
+     "cpi_rel": 34.832245379686356,
+     "cpi_rel_lag1": 41.16892898082733,
+     "food_cpi_yoy": 9.496950954198837,
+     "food_cpi_yoy_lag1": 13.42797988653183,
+     "cpi_dev": 57.02597602456808
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [
+     "poverty_incidence"
+    ],
+    "regressor_train_mae": 1.3268925810340697,
+    "regressor_gain": {
+     "last_published_stress": 3534.5155113339424,
+     "sws_hunger": 37.428759932518005,
+     "sws_change": 146.480610370636,
+     "cpi_rel": 482.7114232778549,
+     "cpi_rel_lag1": 55.09130907058716,
+     "food_cpi_yoy": 49.6065970659256,
+     "food_cpi_yoy_lag1": 97.81140959262848,
+     "cpi_dev": 147.43891459703445,
+     "headline_cpi": 6.26738977432251,
+     "food_minus_headline_yoy": 129.16162109375,
+     "food_minus_headline_yoy_lag1": 61.4138708114624,
+     "unemployment_rate": 1171.9001528024673
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 1,
+     "oof_high": 3,
+     "oof_low": 2,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.05748240331863504,
+    "classifier_gain": {
+     "last_published_stress": 161.51132595539093,
+     "sws_hunger": 1.3639379888772964,
+     "sws_change": 20.48593696951866,
+     "cpi_rel": 13.53726801276207,
+     "cpi_rel_lag1": 39.682702764868736,
+     "food_cpi_yoy": 5.024381995201111,
+     "food_cpi_yoy_lag1": 5.442964062094688,
+     "cpi_dev": 59.337611958384514,
+     "headline_cpi": 0.6396909952163696,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 23.754414975643158,
+     "unemployment_rate": 128.658349737525
+    }
+   }
+  }
+ },
+ {
+  "target": "2024-Q2",
+  "n_train_quarters": 10,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4"
+  ],
+  "n_train_rows": 50,
+  "train_HIGH": 27,
+  "train_LOW": 23,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.6431358123256874,
+    "regressor_gain": {
+     "last_published_stress": 4602.258797347546,
+     "sws_hunger": 35.0208141207695,
+     "sws_change": 1164.2704425156116
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 2,
+     "oof_high": 7,
+     "oof_low": 3,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.09264169092425917,
+    "classifier_gain": {
+     "last_published_stress": 272.5699025169015,
+     "sws_hunger": 8.362230986356735,
+     "sws_change": 130.94578331708908
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.4302150996027336,
+    "regressor_gain": {
+     "last_published_stress": 3843.4265916347504,
+     "sws_hunger": 246.90015548467636,
+     "sws_change": 668.6699121594429,
+     "cpi_rel": 597.799654006958,
+     "cpi_rel_lag1": 225.30665564537048,
+     "food_cpi_yoy": 163.20828920602798,
+     "food_cpi_yoy_lag1": 331.82482784986496,
+     "cpi_dev": 133.25479763746262
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 2,
+     "oof_high": 7,
+     "oof_low": 3,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.06626323855640988,
+    "classifier_gain": {
+     "last_published_stress": 192.31372609734535,
+     "sws_hunger": 16.083720088005066,
+     "sws_change": 80.29163993895054,
+     "cpi_rel": 91.24263519048691,
+     "cpi_rel_lag1": 22.238763108849525,
+     "food_cpi_yoy": 5.601689010858536,
+     "food_cpi_yoy_lag1": 39.23361627757549,
+     "cpi_dev": 37.99523983895779
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.2602574549376047,
+    "regressor_gain": {
+     "last_published_stress": 3632.6715013980865,
+     "sws_hunger": 76.22456002235413,
+     "sws_change": 211.98124086856842,
+     "cpi_rel": 641.5456825494766,
+     "cpi_rel_lag1": 88.84549874067307,
+     "food_cpi_yoy": 163.5065108537674,
+     "food_cpi_yoy_lag1": 181.04790103435516,
+     "cpi_dev": 155.37222969532013,
+     "poverty_incidence": 134.51574063301086,
+     "headline_cpi": 73.26369953155518,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 190.15854382514954,
+     "unemployment_rate": 1321.0564790964127
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 2,
+     "oof_high": 7,
+     "oof_low": 3,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.05117917228017308,
+    "classifier_gain": {
+     "last_published_stress": 173.03074991703033,
+     "sws_hunger": 0.6497759819030762,
+     "sws_change": 38.174146980047226,
+     "cpi_rel": 59.18816667795181,
+     "cpi_rel_lag1": 18.328584864735603,
+     "food_cpi_yoy": 1.627331018447876,
+     "food_cpi_yoy_lag1": 12.737511932849884,
+     "cpi_dev": 35.241782799363136,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 2.8293140530586243,
+     "food_minus_headline_yoy": 0.3759639859199524,
+     "food_minus_headline_yoy_lag1": 41.24988889694214,
+     "unemployment_rate": 143.79575718939304
+    }
+   }
+  }
+ },
+ {
+  "target": "2024-Q3",
+  "n_train_quarters": 11,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1"
+  ],
+  "n_train_rows": 55,
+  "train_HIGH": 31,
+  "train_LOW": 24,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.6563126040892506,
+    "regressor_gain": {
+     "last_published_stress": 4265.065156519413,
+     "sws_hunger": 298.1426876783371,
+     "sws_change": 1950.142048895359
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 3,
+     "oof_high": 11,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.0964950877960766,
+    "classifier_gain": {
+     "last_published_stress": 257.01421397924423,
+     "sws_hunger": 38.61696915328503,
+     "sws_change": 133.06637378036976
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.3687520539284952,
+    "regressor_gain": {
+     "last_published_stress": 2727.674286842346,
+     "sws_hunger": 473.6656303405762,
+     "sws_change": 721.4081041812897,
+     "cpi_rel": 1219.8003078699112,
+     "cpi_rel_lag1": 154.67793464660645,
+     "food_cpi_yoy": 807.7904492616653,
+     "food_cpi_yoy_lag1": 560.153898358345,
+     "cpi_dev": 487.57444310188293
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 3,
+     "oof_high": 11,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.06525444363228246,
+    "classifier_gain": {
+     "last_published_stress": 167.02777586877346,
+     "sws_hunger": 35.64534020423889,
+     "sws_change": 81.41371767222881,
+     "cpi_rel": 86.60408356785774,
+     "cpi_rel_lag1": 41.522804856300354,
+     "food_cpi_yoy": 46.17253616452217,
+     "food_cpi_yoy_lag1": 19.6357209533453,
+     "cpi_dev": 39.0376248806715
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.2667791780706854,
+    "regressor_gain": {
+     "last_published_stress": 2856.207970380783,
+     "sws_hunger": 6.5580902099609375,
+     "sws_change": 394.6948895454407,
+     "cpi_rel": 1118.390418767929,
+     "cpi_rel_lag1": 6.469100117683411,
+     "food_cpi_yoy": 407.16030192375183,
+     "food_cpi_yoy_lag1": 307.25356435775757,
+     "cpi_dev": 312.86698961257935,
+     "poverty_incidence": 99.98694002628326,
+     "headline_cpi": 222.73311066627502,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 208.6351306438446,
+     "unemployment_rate": 1891.0058331489563
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 3,
+     "oof_high": 11,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.04998593250639593,
+    "classifier_gain": {
+     "last_published_stress": 145.65910260379314,
+     "sws_hunger": 15.774809122085571,
+     "sws_change": 40.5195399671793,
+     "cpi_rel": 134.86524023115635,
+     "cpi_rel_lag1": 7.977881848812103,
+     "food_cpi_yoy": 5.796108961105347,
+     "food_cpi_yoy_lag1": 3.8599990010261536,
+     "cpi_dev": 31.407643139362335,
+     "poverty_incidence": 2.856809973716736,
+     "headline_cpi": 3.343480110168457,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 15.785229921340942,
+     "unemployment_rate": 166.91562534868717
+    }
+   }
+  }
+ },
+ {
+  "target": "2024-Q4",
+  "n_train_quarters": 12,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2"
+  ],
+  "n_train_rows": 60,
+  "train_HIGH": 36,
+  "train_LOW": 24,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.7673574043392493,
+    "regressor_gain": {
+     "last_published_stress": 5551.1359422802925,
+     "sws_hunger": 1163.7487298250198,
+     "sws_change": 2713.6630049347878
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 4,
+     "oof_high": 16,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.0866297195760946,
+    "classifier_gain": {
+     "last_published_stress": 304.1931057497859,
+     "sws_hunger": 38.717281110584736,
+     "sws_change": 147.09910432994366
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.5114099350627164,
+    "regressor_gain": {
+     "last_published_stress": 4909.826344490051,
+     "sws_hunger": 840.6810998916626,
+     "sws_change": 1172.0345754623413,
+     "cpi_rel": 572.5460078716278,
+     "cpi_rel_lag1": 110.1991982460022,
+     "food_cpi_yoy": 330.441890001297,
+     "food_cpi_yoy_lag1": 952.8945314884186,
+     "cpi_dev": 1352.4859743118286
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 4,
+     "oof_high": 16,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.062348391939891855,
+    "classifier_gain": {
+     "last_published_stress": 238.8190971314907,
+     "sws_hunger": 63.22317826747894,
+     "sws_change": 69.23803105950356,
+     "cpi_rel": 50.71730896830559,
+     "cpi_rel_lag1": 31.76687303185463,
+     "food_cpi_yoy": 16.922831028699875,
+     "food_cpi_yoy_lag1": 60.31920397281647,
+     "cpi_dev": 28.115590900182724
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.3332338241253685,
+    "regressor_gain": {
+     "last_published_stress": 4420.3404750823975,
+     "sws_hunger": 233.3114013671875,
+     "sws_change": 228.50027108192444,
+     "cpi_rel": 720.9898464679718,
+     "cpi_rel_lag1": 109.61243915557861,
+     "food_cpi_yoy": 225.0338897705078,
+     "food_cpi_yoy_lag1": 413.55812764167786,
+     "cpi_dev": 829.4837639331818,
+     "poverty_incidence": 259.08672070503235,
+     "headline_cpi": 1408.4841079711914,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 107.81147861480713,
+     "unemployment_rate": 2146.6174840927124
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 4,
+     "oof_high": 16,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.04675188580400078,
+    "classifier_gain": {
+     "last_published_stress": 216.88418757915497,
+     "sws_hunger": 28.256171464920044,
+     "sws_change": 38.77307906746864,
+     "cpi_rel": 83.76564139127731,
+     "cpi_rel_lag1": 26.328392893075943,
+     "food_cpi_yoy": 2.9261780083179474,
+     "food_cpi_yoy_lag1": 22.005036920309067,
+     "cpi_dev": 17.800952047109604,
+     "poverty_incidence": 1.9133910536766052,
+     "headline_cpi": 29.34217308461666,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 10.741589784622192,
+     "unemployment_rate": 144.93458777666092
+    }
+   }
+  }
+ },
+ {
+  "target": "2025-Q1",
+  "n_train_quarters": 13,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3"
+  ],
+  "n_train_rows": 65,
+  "train_HIGH": 41,
+  "train_LOW": 24,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.938820134585774,
+    "regressor_gain": {
+     "last_published_stress": 6833.348059952259,
+     "sws_hunger": 1811.2780487537384,
+     "sws_change": 2341.129146516323
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 5,
+     "oof_high": 21,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.08165981482858288,
+    "classifier_gain": {
+     "last_published_stress": 332.2012212499976,
+     "sws_hunger": 58.77105253189802,
+     "sws_change": 140.68401673436165
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.513090829834216,
+    "regressor_gain": {
+     "last_published_stress": 6302.211512088776,
+     "sws_hunger": 813.9770050048828,
+     "sws_change": 884.2234263420105,
+     "cpi_rel": 1475.0844914913177,
+     "cpi_rel_lag1": 335.8826265335083,
+     "food_cpi_yoy": 372.168221950531,
+     "food_cpi_yoy_lag1": 947.1413044929504,
+     "cpi_dev": 1634.1830344200134
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 5,
+     "oof_high": 21,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.05725666707657509,
+    "classifier_gain": {
+     "last_published_stress": 288.8541948199272,
+     "sws_hunger": 72.25501537322998,
+     "sws_change": 75.07334169745445,
+     "cpi_rel": 52.37420405447483,
+     "cpi_rel_lag1": 26.594726890325546,
+     "food_cpi_yoy": 15.192093014717102,
+     "food_cpi_yoy_lag1": 53.956216126680374,
+     "cpi_dev": 26.315654918551445
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.3163332086078243,
+    "regressor_gain": {
+     "last_published_stress": 4925.72371006012,
+     "sws_hunger": 139.7158031463623,
+     "sws_change": 206.35842108726501,
+     "cpi_rel": 1600.775312423706,
+     "cpi_rel_lag1": 195.99831247329712,
+     "food_cpi_yoy": 475.0843081474304,
+     "food_cpi_yoy_lag1": 283.37955141067505,
+     "cpi_dev": 768.3955342769623,
+     "poverty_incidence": 602.5491080284119,
+     "headline_cpi": 1926.9480285644531,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 183.6889100074768,
+     "unemployment_rate": 2466.0990998744965
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 5,
+     "oof_high": 21,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.0435029531561267,
+    "classifier_gain": {
+     "last_published_stress": 286.3682011961937,
+     "sws_hunger": 20.028383135795593,
+     "sws_change": 36.926319882273674,
+     "cpi_rel": 55.26371178030968,
+     "cpi_rel_lag1": 18.310789078474045,
+     "food_cpi_yoy": 7.174911022186279,
+     "food_cpi_yoy_lag1": 11.63869097828865,
+     "cpi_dev": 25.35932284593582,
+     "poverty_incidence": 6.614802896976471,
+     "headline_cpi": 33.51898032426834,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 10.727142170071602,
+     "unemployment_rate": 159.79057097434998
+    }
+   }
+  }
+ },
+ {
+  "target": "2025-Q4",
+  "n_train_quarters": 15,
+  "train_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1"
+  ],
+  "n_train_rows": 75,
+  "train_HIGH": 51,
+  "train_LOW": 24,
+  "arms": {
+   "M1_core": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 2.1441885518775994,
+    "regressor_gain": {
+     "last_published_stress": 12798.583251953125,
+     "sws_hunger": 9264.637320518494,
+     "sws_change": 2629.5195326805115
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 7,
+     "oof_high": 31,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.07111268817383319,
+    "classifier_gain": {
+     "last_published_stress": 418.22795943915844,
+     "sws_hunger": 59.62276962399483,
+     "sws_change": 136.3153191804886
+    }
+   },
+   "M2_compact": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.6961432004608388,
+    "regressor_gain": {
+     "last_published_stress": 12667.370219230652,
+     "sws_hunger": 7356.403049945831,
+     "sws_change": 1244.1046261787415,
+     "cpi_rel": 1553.7314095497131,
+     "cpi_rel_lag1": 1201.455286026001,
+     "food_cpi_yoy": 430.23840713500977,
+     "food_cpi_yoy_lag1": 1382.392327785492,
+     "cpi_dev": 1374.3468527793884
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 7,
+     "oof_high": 31,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.04871891828559158,
+    "classifier_gain": {
+     "last_published_stress": 368.9425269663334,
+     "sws_hunger": 76.63350185751915,
+     "sws_change": 72.84339287877083,
+     "cpi_rel": 50.31707112491131,
+     "cpi_rel_lag1": 30.792859882116318,
+     "food_cpi_yoy": 15.661042004823685,
+     "food_cpi_yoy_lag1": 60.394157856702805,
+     "cpi_dev": 22.142377078533173
+    }
+   },
+   "M3_expanded": {
+    "features_used": [
+     "last_published_stress",
+     "sws_hunger",
+     "sws_change",
+     "cpi_rel",
+     "cpi_rel_lag1",
+     "food_cpi_yoy",
+     "food_cpi_yoy_lag1",
+     "cpi_dev",
+     "poverty_incidence",
+     "headline_cpi",
+     "food_minus_headline_yoy",
+     "food_minus_headline_yoy_lag1",
+     "unemployment_rate"
+    ],
+    "features_dropped_training_filter": [],
+    "regressor_train_mae": 1.5472195030629392,
+    "regressor_gain": {
+     "last_published_stress": 5824.279799938202,
+     "sws_hunger": 1165.6529703140259,
+     "sws_change": 140.81951022148132,
+     "cpi_rel": 2249.449782371521,
+     "cpi_rel_lag1": 460.64946365356445,
+     "food_cpi_yoy": 468.0507917404175,
+     "food_cpi_yoy_lag1": 465.53709506988525,
+     "cpi_dev": 1054.7416400909424,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 13713.269628047943,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 340.34314250946045,
+     "unemployment_rate": 2163.820239543915
+    },
+    "calibration": {
+     "applied": false,
+     "oof_quarters": 7,
+     "oof_high": 31,
+     "oof_low": 4,
+     "reason": "insufficient inner evidence (need >= 8 quarters, >= 10 per class)"
+    },
+    "classifier_train_brier": 0.03735478755894262,
+    "classifier_gain": {
+     "last_published_stress": 332.5022686421871,
+     "sws_hunger": 16.098905980587006,
+     "sws_change": 44.6337411403656,
+     "cpi_rel": 77.5750887542963,
+     "cpi_rel_lag1": 34.205920323729515,
+     "food_cpi_yoy": 6.166010022163391,
+     "food_cpi_yoy_lag1": 13.343285962939262,
+     "cpi_dev": 14.837544977664948,
+     "poverty_incidence": 0.0,
+     "headline_cpi": 30.477614045143127,
+     "food_minus_headline_yoy": 0.0,
+     "food_minus_headline_yoy_lag1": 25.47221028804779,
+     "unemployment_rate": 159.90183483064175
+    }
+   }
+  }
+ }
+]

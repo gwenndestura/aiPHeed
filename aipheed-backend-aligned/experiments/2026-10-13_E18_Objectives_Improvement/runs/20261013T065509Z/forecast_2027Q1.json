@@ -1,0 +1,140 @@
+{
+ "target_quarter": "2027-Q1",
+ "horizon": 3,
+ "information_cutoff": "2026-Q2",
+ "H": {
+  "label": "Research forecast of regional hunger (SWS Balance Luzon, % of families); not a forecast of provincial food insecurity.",
+  "selected": "C1_carry_forward",
+  "forecast": 17.3,
+  "all_candidates": {
+   "C1_carry_forward": 17.3,
+   "C2_mean": 15.540000000000001,
+   "C3_drift": 17.5925,
+   "C6_damped_theilsen": 16.4216,
+   "C4_ridge_ar1": 17.703285041064987,
+   "C5_ridge_ar2": 18.709292456208356,
+   "C7a_ridge_H_F5": 17.720411430783347,
+   "C8_recent4_mean": 20.05,
+   "C9_ewma": 19.03834238052368
+  },
+  "latest_observed": "2026-Q2"
+ },
+ "F": {
+  "label": "Research forecast of provincial food inflation (YoY %); not food insecurity.",
+  "selected": "F1_carry_forward",
+  "forecast": {
+   "PH040100000": 4.733333333333333,
+   "PH040200000": 3.966666666666667,
+   "PH040300000": 4.866666666666666,
+   "PH040400000": 4.333333333333333,
+   "PH040500000": 1.4333333333333333
+  },
+  "all_candidates": {
+   "PH040100000": {
+    "F1_carry_forward": 4.733333333333333,
+    "F2_pooled_mean": 4.616666666666666,
+    "F3_province_mean": 4.283333333333333,
+    "F4_ridge_ar": 4.2129197168675425
+   },
+   "PH040200000": {
+    "F1_carry_forward": 3.966666666666667,
+    "F2_pooled_mean": 4.616666666666666,
+    "F3_province_mean": 4.396969696969697,
+    "F4_ridge_ar": 4.216407313719426
+   },
+   "PH040300000": {
+    "F1_carry_forward": 4.866666666666666,
+    "F2_pooled_mean": 4.616666666666666,
+    "F3_province_mean": 4.609090909090909,
+    "F4_ridge_ar": 4.212313178284607
+   },
+   "PH040400000": {
+    "F1_carry_forward": 4.333333333333333,
+    "F2_pooled_mean": 4.616666666666666,
+    "F3_province_mean": 5.195454545454545,
+    "F4_ridge_ar": 4.214739332616351
+   },
+   "PH040500000": {
+    "F1_carry_forward": 1.4333333333333333,
+    "F2_pooled_mean": 4.616666666666666,
+    "F3_province_mean": 4.598484848484849,
+    "F4_ridge_ar": 4.2279315467952125
+   }
+  }
+ },
+ "D": {
+  "label": "Research forecast of relative provincial food-price pressure (points vs the unweighted five-province mean); not food insecurity.",
+  "selected": "D1_carry_forward",
+  "forecast": {
+   "PH040100000": 0.8666666666666671,
+   "PH040200000": 0.10000000000000053,
+   "PH040300000": 1.0,
+   "PH040400000": 0.4666666666666668,
+   "PH040500000": -2.4333333333333327
+  },
+  "all_candidates": {
+   "PH040100000": {
+    "D1_carry_forward": 0.8666666666666671,
+    "D2_zero": 0.0,
+    "D3_province_mean": -0.3333333333333334,
+    "D4_ridge_shrink": 0.2319930440176051,
+    "D5_ridge_D_pmean": 0.5547434909067613
+   },
+   "PH040200000": {
+    "D1_carry_forward": 0.10000000000000053,
+    "D2_zero": 0.0,
+    "D3_province_mean": -0.21969696969696972,
+    "D4_ridge_shrink": 0.026768428155877634,
+    "D5_ridge_D_pmean": 0.1759605312103293
+   },
+   "PH040300000": {
+    "D1_carry_forward": 1.0,
+    "D2_zero": 0.0,
+    "D3_province_mean": -0.007575757575757519,
+    "D4_ridge_shrink": 0.267684281558775,
+    "D5_ridge_D_pmean": 0.40718597946944707
+   },
+   "PH040400000": {
+    "D1_carry_forward": 0.4666666666666668,
+    "D2_zero": 0.0,
+    "D3_province_mean": 0.5787878787878787,
+    "D4_ridge_shrink": 0.12491933139409499,
+    "D5_ridge_D_pmean": -0.16968910128261352
+   },
+   "PH040500000": {
+    "D1_carry_forward": -2.4333333333333327,
+    "D2_zero": 0.0,
+    "D3_province_mean": -0.01818181818181812,
+    "D4_ridge_shrink": -0.6513650851263523,
+    "D5_ridge_D_pmean": -0.9682009003039231
+   }
+  }
+ },
+ "constructed_label": {
+  "label": "Research forecast of the constructed composite label (HIGH if regional hunger + 2 x relative price pressure > 14.6); NOT a measurement or forecast of provincial food insecurity.",
+  "selected_by_rule": "P_persistence",
+  "news_models_available": false,
+  "persistence_2026Q2_label": {
+   "PH040100000": "HIGH",
+   "PH040200000": "HIGH",
+   "PH040300000": "HIGH",
+   "PH040400000": "HIGH",
+   "PH040500000": "LOW"
+  },
+  "N1_structural_rule_S1_hat": {
+   "PH040100000": 19.033,
+   "PH040200000": 17.5,
+   "PH040300000": 19.3,
+   "PH040400000": 18.233,
+   "PH040500000": 12.433
+  },
+  "N1_structural_rule_label": {
+   "PH040100000": "HIGH",
+   "PH040200000": "HIGH",
+   "PH040300000": "HIGH",
+   "PH040400000": "HIGH",
+   "PH040500000": "LOW"
+  }
+ },
+ "generated_utc": "2026-10-13T06:55:25.784328+00:00"
+}

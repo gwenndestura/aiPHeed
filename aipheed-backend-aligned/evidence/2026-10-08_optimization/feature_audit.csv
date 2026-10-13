@@ -1,0 +1,48 @@
+feature,source,frequency,transformation,derived_from_other_feature,lagged,quarter_used_for_forecast_of_t+1,typical_release,available_before_forecast_quarter,contains_target_period_information
+FSSI,"News corpus, XLM-RoBERTa (Algorithm 1), Eq. 2",Continuous,Bias-weighted mean score,False,False,"t (lags t-1, t-2)",Same day,True,False
+trigger_market,"News corpus, regex (Algorithm 2)",Continuous,Share of articles per category,False,False,t,Same day,True,False
+trigger_climate,"News corpus, regex (Algorithm 2)",Continuous,Share of articles per category,False,False,t,Same day,True,False
+trigger_employment,"News corpus, regex (Algorithm 2)",Continuous,Share of articles per category,False,False,t,Same day,True,False
+trigger_ofw_remittance,"News corpus, regex (Algorithm 2)",Continuous,Share of articles per category,False,False,t,Same day,True,False
+trigger_fish_kill,"News corpus, regex (Algorithm 2)",Continuous,Share of articles per category,False,False,t,Same day,True,False
+food_cpi,"PSA OpenStat CPI 2018=100, provincial",Monthly,Quarterly mean; YoY; lag; accel,False,True,t-1,Early next month,True,False
+food_cpi_yoy,"PSA OpenStat CPI 2018=100, provincial",Monthly,Quarterly mean; YoY; lag; accel,False,True,t-1,Early next month,True,False
+rice_price_regular,PSA OpenStat regular milled rice,Monthly,Quarterly mean; lag; accel,False,True,t-1,Within weeks,True,False
+unemployment_rate,PSA Labor Force Survey (national),Monthly/quarterly,Rate; lag; accel,False,True,t-1,About 6 weeks,True,False
+poverty_incidence,PSA Full Year Official Poverty Statistics,Triennial,Province incidence,False,True,Latest release before t+1,2021 survey 2022-08-15; 2023 survey 2024-08,True,False
+food_minus_headline_yoy,PSA OpenStat CPI,Monthly,Food minus headline YoY; lag; accel,False,True,t-1,Early next month,True,False
+headline_cpi,PSA OpenStat CPI,Monthly,Quarterly mean,False,True,t-1,Early next month,True,False
+ofw_remit_yoy_pct,BSP (hand-curated),Monthly,YoY; lag; accel,False,True,t-1,About 6-7 weeks,True,False
+fx_usd_php_avg,ECB reference rate (Frankfurter API),Daily,Quarterly mean,False,True,t-1,Daily,True,False
+diesel_php_per_l,DOE Oil Monitor (hand-curated),Weekly,Quarterly mean; lag; accel,False,True,t-1,Weekly,True,False
+gasoline_php_per_l,DOE Oil Monitor (hand-curated),Weekly,Quarterly mean,False,True,t-1,Weekly,True,False
+brent_usd_per_bbl,US EIA via FRED,Daily,Quarterly mean,False,True,t-1,Daily,True,False
+tc_count,PAGASA,Event,Count / severe flag,False,True,t-1,Real time,True,False
+tc_severe_flag,PAGASA,Event,Count / severe flag,False,True,t-1,Real time,True,False
+rainfall_anomaly_pct,Measured provincial rainfall,Monthly,% anomaly; lag; accel,False,True,t-1,Within the month,True,False
+drought_alert,PAGASA,Event,Binary,False,True,t-1,Real time,True,False
+enso_numeric,NOAA CPC ONI,Monthly,Integer phase,False,True,t-1,Early next month,True,False
+commodity_fruit_veg,PSA NRP to 2021; derived from food CPI after,Monthly,Quarterly mean,False,True,t-1,As CPI,True,False
+commodity_leafy_veg,PSA NRP to 2021; derived from food CPI after,Monthly,Quarterly mean,False,True,t-1,As CPI,True,False
+commodity_livestock,PSA NRP to 2021; derived from food CPI after,Monthly,Quarterly mean,False,True,t-1,As CPI,True,False
+commodity_poultry,PSA NRP to 2021; derived from food CPI after,Monthly,Quarterly mean,False,True,t-1,As CPI,True,False
+commodity_rootcrops,PSA NRP to 2021; derived from food CPI after,Monthly,Quarterly mean,False,True,t-1,As CPI,True,False
+FSSI_lag1,"News corpus, XLM-RoBERTa (Algorithm 1), Eq. 2",Continuous,Bias-weighted mean score,True,True,"t (lags t-1, t-2)",Same day,True,False
+FSSI_accel,"News corpus, XLM-RoBERTa (Algorithm 1), Eq. 2",Continuous,Bias-weighted mean score,True,False,"t (lags t-1, t-2)",Same day,True,False
+food_cpi_yoy_lag1,"PSA OpenStat CPI 2018=100, provincial",Monthly,Quarterly mean; YoY; lag; accel,True,True,t-1,Early next month,True,False
+food_cpi_yoy_accel,"PSA OpenStat CPI 2018=100, provincial",Monthly,Quarterly mean; YoY; lag; accel,True,True,t-1,Early next month,True,False
+food_minus_headline_yoy_lag1,PSA OpenStat CPI,Monthly,Food minus headline YoY; lag; accel,True,True,t-1,Early next month,True,False
+food_minus_headline_yoy_accel,PSA OpenStat CPI,Monthly,Food minus headline YoY; lag; accel,True,True,t-1,Early next month,True,False
+unemployment_rate_lag1,PSA Labor Force Survey (national),Monthly/quarterly,Rate; lag; accel,True,True,t-1,About 6 weeks,True,False
+unemployment_rate_accel,PSA Labor Force Survey (national),Monthly/quarterly,Rate; lag; accel,True,True,t-1,About 6 weeks,True,False
+ofw_remit_yoy_pct_lag1,BSP (hand-curated),Monthly,YoY; lag; accel,True,True,t-1,About 6-7 weeks,True,False
+ofw_remit_yoy_pct_accel,BSP (hand-curated),Monthly,YoY; lag; accel,True,True,t-1,About 6-7 weeks,True,False
+rainfall_anomaly_pct_lag1,Measured provincial rainfall,Monthly,% anomaly; lag; accel,True,True,t-1,Within the month,True,False
+rainfall_anomaly_pct_accel,Measured provincial rainfall,Monthly,% anomaly; lag; accel,True,True,t-1,Within the month,True,False
+rice_price_regular_lag1,PSA OpenStat regular milled rice,Monthly,Quarterly mean; lag; accel,True,True,t-1,Within weeks,True,False
+rice_price_regular_accel,PSA OpenStat regular milled rice,Monthly,Quarterly mean; lag; accel,True,True,t-1,Within weeks,True,False
+diesel_php_per_l_lag1,DOE Oil Monitor (hand-curated),Weekly,Quarterly mean; lag; accel,True,True,t-1,Weekly,True,False
+diesel_php_per_l_accel,DOE Oil Monitor (hand-curated),Weekly,Quarterly mean; lag; accel,True,True,t-1,Weekly,True,False
+FSSI_lag2,"News corpus, XLM-RoBERTa (Algorithm 1), Eq. 2",Continuous,Bias-weighted mean score,True,True,"t (lags t-1, t-2)",Same day,True,False
+cpi_dev,PSA OpenStat CPI,Monthly,YoY minus province's mean of prior 4 quarters,True,True,t-1 (mean over t-5..t-2),Early next month,True,False
+sws_hunger,SWS Social Weather Survey (Balance Luzon),Quarterly,Total hunger %,False,True,Latest round released before t+1,2-12 weeks after fieldwork (article dates),True,False

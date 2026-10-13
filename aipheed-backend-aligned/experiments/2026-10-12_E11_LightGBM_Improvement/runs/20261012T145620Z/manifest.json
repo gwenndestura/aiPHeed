@@ -1,0 +1,236 @@
+{
+ "started_utc": "2026-10-12T14:56:20.020018+00:00",
+ "protocol_sha256": "878b8b4d708f18fcaa399967dfd4280b86757952ff95fed2674f5d181312df81",
+ "allowlist_sha256_start": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1"
+ },
+ "code_sha256": {
+  "run_e11.py": "96b95f9898d4f85e6f6b60bafd30c434bafc2e6ce6f2397f86a36b9b6026ed1e",
+  "e11_lib.py": "d5f997f8cea86f79eb6c1535454b81a1f2caebcc270b6a2e9a5cf23c33c5e5e1",
+  "guard.py": "87145714fca57005b978ba1f7501e34fc5bfd4e65208ec91603210e029e5f5e3",
+  "E9 safe_frame.py": "89cd1edeec0df9ac88272cee30d2d064656a9e8042b269ed9e95be05837f87c3",
+  "E9 metrics.py": "651274a178f3d21af77370ebaeaefb2dcde53e6e7b30ce36d680e56b1b36bc89",
+  "risk_score_v2.py": "5b6c83d6d12ecab7054f6249d0f0f098f8be50ebf16d1072b58e9c6be0abea49",
+  "devprotocol_rule_l.py": "c126ca68953f6ba354293b2772c8caeff2d22541033e85a512d2c3d5c83841ec"
+ },
+ "environment": {
+  "python": "3.13.2",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "pandas": "2.3.3",
+  "numpy": "2.4.4",
+  "lightgbm": "4.6.0",
+  "sklearn": "1.8.0",
+  "pyarrow": "23.0.1"
+ },
+ "configs": {
+  "C2_stumps": {
+   "max_depth": 1,
+   "num_leaves": 2,
+   "min_child_samples": 10,
+   "n_estimators": 100,
+   "learning_rate": 0.03,
+   "reg_lambda": 10.0
+  },
+  "C1_shallow_reg": {
+   "max_depth": 2,
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50,
+   "learning_rate": 0.05,
+   "reg_lambda": 5.0
+  },
+  "C0_e9_default": {
+   "num_leaves": 4,
+   "min_child_samples": 5,
+   "n_estimators": 100,
+   "learning_rate": 0.05
+  },
+  "C3_moderate": {
+   "max_depth": 3,
+   "num_leaves": 4,
+   "min_child_samples": 8,
+   "n_estimators": 200,
+   "learning_rate": 0.02,
+   "reg_alpha": 1.0,
+   "reg_lambda": 5.0
+  }
+ },
+ "common": {
+  "random_state": 42,
+  "verbosity": -1,
+  "deterministic": true,
+  "force_row_wise": true,
+  "n_jobs": 1
+ },
+ "feature_sets": {
+  "core": [
+   "last_published_stress",
+   "sws_hunger",
+   "sws_change"
+  ],
+  "core_plus": [
+   "last_published_stress",
+   "sws_hunger",
+   "sws_change",
+   "lps_change",
+   "anchor_dev"
+  ],
+  "compact": [
+   "last_published_stress",
+   "sws_hunger",
+   "sws_change",
+   "cpi_rel",
+   "cpi_rel_lag1",
+   "food_cpi_yoy",
+   "food_cpi_yoy_lag1",
+   "cpi_dev"
+  ],
+  "expanded": [
+   "last_published_stress",
+   "sws_hunger",
+   "sws_change",
+   "cpi_rel",
+   "cpi_rel_lag1",
+   "food_cpi_yoy",
+   "food_cpi_yoy_lag1",
+   "cpi_dev",
+   "poverty_incidence",
+   "headline_cpi",
+   "food_minus_headline_yoy",
+   "food_minus_headline_yoy_lag1",
+   "unemployment_rate"
+  ],
+  "provincial": [
+   "cpi_rel",
+   "cpi_rel_lag1",
+   "anchor_dev",
+   "dev_change",
+   "cpi_dev",
+   "food_cpi_yoy",
+   "food_cpi_yoy_lag1"
+  ],
+  "residual": [
+   "last_published_stress",
+   "sws_hunger",
+   "sws_change",
+   "lps_change",
+   "anchor_dev",
+   "cpi_rel",
+   "cpi_rel_lag1",
+   "cpi_dev"
+  ]
+ },
+ "seed": 42,
+ "tau0": 10.843333333333334,
+ "tau0_quarters": [
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2"
+ ],
+ "label_quarters": [
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4"
+ ],
+ "tests": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4"
+ ],
+ "frame_equals_e9": true,
+ "predictions_sealed_sha256": "362d0fa1749035b4cb5b0c424fb98cb9b6fc25f735c70a23be2f2fcd876c1aff",
+ "determinism": "two passes identical",
+ "n_arms": 48,
+ "access_log_parquet": [
+  {
+   "op": "read_parquet",
+   "path": "data/processed/psa_indicators.parquet",
+   "columns": [
+    "food_cpi_yoy",
+    "province_code",
+    "quarter"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/features_fused.parquet",
+   "columns": [
+    "food_minus_headline_yoy",
+    "headline_cpi",
+    "poverty_incidence",
+    "province_code",
+    "quarter",
+    "unemployment_rate"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/labels.parquet",
+   "columns": [
+    "province_code",
+    "quarter",
+    "stress_score",
+    "sws_hunger_pct"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 95
+  }
+ ],
+ "access_log_opens": [
+  "config/governing_model.json",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv"
+ ],
+ "allowlist_sha256_end": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1"
+ },
+ "finished_utc": "2026-10-12T14:57:26.110876+00:00",
+ "outputs_sha256": {
+  "comparisons.json": "0921efca95a5d38378046fd1e7b834d313487005e4385292ae98c25c81a06f9b",
+  "diagnostics.json": "b4774217ccbec96fc0adda7858f3a60a8188450a1efd35ee6155417a4f504970",
+  "folds.json": "af6a1e2fc6c35c561653ad03653e52cb0691113c9ea5ee461a2162940c456823",
+  "frame_e11.csv": "6148e47a63b73d5c9a470a505a1cf9f68bd00b743b35dfba3ab6e3626e7b14e0",
+  "metrics.json": "9a28a7d218863ce3e7ea0d625b4a2fa4b7e725dfcce3ec2d8b4cd9b5dcfe2cfd",
+  "predictions.csv": "362d0fa1749035b4cb5b0c424fb98cb9b6fc25f735c70a23be2f2fcd876c1aff",
+  "recommendation.json": "689a1bdf885d4840dec3cd0dfa0a506481ca5610d061b731a82b78428404b2cb",
+  "scored_rows.csv": "7f84a99cd4add81f42a1e308305eac2fadfcc82f54b00cd539727d40f9771b28"
+ }
+}

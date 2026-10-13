@@ -492,3 +492,34 @@ class TestRateLimiting:
         # One caller exhausting its allowance must not lock everyone out.
         assert api.post("/api/v1/feedback", json={"answers": FULL_ANSWERS},
                         headers=second).status_code == 201
+
+
+# ---------------------------------------------------------------------------
+# Quarterly pipeline scheduler
+# ---------------------------------------------------------------------------
+
+class TestPipeline:
+
+    def test_pipeline_status_requires_admin(self, api):
+        assert api.get("/api/v1/admin/pipeline").status_code == 401
+        assert api.post("/api/v1/admin/pipeline/run").status_code == 401
+
+    def test_pipeline_status_reports_the_schedule(self, api):
+        make_user(api)
+        r = api.get("/api/v1/admin/pipeline", headers=auth_headers(api))
+        assert r.status_code == 200
+        body = r.json()
+        assert body["schedule"] == settings.PIPELINE_CRON
+        assert body["timezone"] == settings.PIPELINE_TIMEZONE
+        assert "lastRun" in body and "running" in body
+
+    def test_manual_run_is_refused_while_one_is_in_progress(self, api, tmp_path, monkeypatch):
+        """Never actually starts a run: the lock is held, so the endpoint must 409."""
+        from app.tasks import quarterly_pipeline as qp
+        lock = tmp_path / ".lock"
+        lock.write_text("1")
+        monkeypatch.setattr(qp, "LOCK_PATH", lock)
+        make_user(api)
+        r = api.post("/api/v1/admin/pipeline/run", headers=auth_headers(api))
+        assert r.status_code == 409
+        assert r.json()["error"]["code"] == "pipeline_running"

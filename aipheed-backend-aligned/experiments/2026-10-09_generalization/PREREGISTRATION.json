@@ -1,0 +1,60 @@
+{
+  "title": "aiPHeed generalization study: pre-registered protocol and acceptance rule",
+  "written": "2026-10-09T13:30:23",
+  "written_before_running": "No model in this study had been run when this file was written. Earlier runs on the same 55 outer rows (MODEL-A, MODEL-B, MODEL-B2, E0-E7, robustness and overfitting audits) are disclosed as prior exposure.",
+  "fixed_elements": {
+    "frame": "scripts/supplementary/algorithm4_timing_valid.frame_t2 (strict Rule 3 timing)",
+    "target": "label_stress, Eq. 3, global median 14.6 (approved; unchanged)",
+    "horizon": "k = 1",
+    "outer_folds": "expanding window, minimum 8 target quarters, 11 outer test quarters 2022-Q4..2025-Q4, 55 rows; five provinces of a quarter always together",
+    "inner_validation": "walk-forward inside the outer training set, minimum 5 inner target quarters; score = mean inner quarter accuracy",
+    "seed": 42,
+    "decision_threshold": "0.50 unless chosen inside training (candidates marked 'thr')"
+  },
+  "primary_estimand": "Outer mean quarter accuracy of the NESTED PROCEDURE P, which inside every outer fold picks one configuration from the fixed pool below using inner validation only; ties go to the earliest entry in the pool order (simplest first).",
+  "pool_order_simplest_first": {
+    "feature_sets": [
+      "eq5_12",
+      "gov47_no_commodity (42)",
+      "gov47"
+    ],
+    "families": [
+      "logistic_l2 (standardised in-fold; C in {0.01,0.1,1,10}; class_weight in {none, balanced})",
+      "decision_tree (max_depth in {1,2,3}; min_samples_leaf 5; class_weight in {none, balanced})",
+      "lightgbm (defaults, and num_leaves 4 / min_child_samples 10 / n_estimators 100 / learning_rate 0.05; weighting in {none, scale_pos_weight})"
+    ],
+    "order": "feature set (12, 42, 47) x family (logistic, tree, lightgbm) x complexity ascending x weighting (none first)"
+  },
+  "descriptive_comparisons_not_used_for_selection": [
+    "each pool member at fixed configuration",
+    "MODEL-A configuration (eq5_12 LightGBM default)",
+    "MODEL-B2 (gov47 LightGBM scale_pos_weight)",
+    "timing-valid persistence",
+    "clock-only LightGBM",
+    "training-majority class",
+    "ablations: no commodity, no price levels, no price-related, quarter-common features only, province-varying features only",
+    "label-threshold sensitivity (training-only median) - diagnostic only"
+  ],
+  "acceptance_rule": {
+    "C1_observed": "P outer mean quarter accuracy >= 0.75",
+    "C2_statistical": "one-sided 95% lower bound >= 0.75 for P's accuracy, BOTH (a) quarter-cluster bootstrap 5th percentile (10,000 draws of the 11 quarters) and (b) exact Clopper-Pearson one-sided 95% on rows",
+    "C3_beats_baselines": "P better than timing-valid persistence AND clock-only: mean quarter difference > 0 with quarter-bootstrap 5th percentile > 0",
+    "C4_stability": "leave-one-calendar-year-out mean accuracy >= 0.75 for every year removed",
+    "C5_prospective": "accuracy on labelled quarters after 2025-Q4, scored with the configuration frozen before those labels existed; NOT evaluable now (no labels)",
+    "verdicts": {
+      "MEETS_WITHIN_PERIOD": "C1-C4 all pass",
+      "OBSERVED_ONLY": "C1 passes but C2, C3 or C4 fails",
+      "FAILS": "C1 fails",
+      "OBJECTIVE_ACHIEVED": "requires MEETS_WITHIN_PERIOD and C5 pass"
+    }
+  },
+  "feasibility_computed_before_running": {
+    "min_correct_of_55_for_C2b": 47,
+    "probability_of_meeting_C2b_if_true_accuracy_is": {
+      "0.80": 0.202,
+      "0.85": 0.555,
+      "0.90": 0.906
+    },
+    "note": "Rows are not independent (5 provinces share a quarter), so these powers are optimistic."
+  }
+}

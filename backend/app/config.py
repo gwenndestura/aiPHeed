@@ -45,6 +45,23 @@ class Settings(BaseSettings):
     )
     CORS_PREVIEW_REGEX: str = r"https://aipheed-frontend-[a-z0-9-]+\.vercel\.app"
 
+    # ── Quarterly pipeline scheduler (Rule 1: Quarter Self-Update) ────────
+    # The scheduler starts with the API and runs app/tasks/quarterly_pipeline.py
+    # on this crontab. Default: 02:00 Manila time on the 15th of January, April,
+    # July and October, i.e. two weeks into each quarter, after PSA has
+    # published the CPI month that closes the previous quarter.
+    SCHEDULER_ENABLED: bool = True
+    PIPELINE_CRON: str = "0 2 15 1,4,7,10 *"
+    PIPELINE_TIMEZONE: str = "Asia/Manila"
+    # Upper bound on one run. News scoring with XLM-RoBERTa on CPU dominates.
+    PIPELINE_TIMEOUT_SECONDS: int = 6 * 3600
+    # Budget for the news step alone. Google News throttles sustained querying
+    # with back-offs of up to ten minutes; past this budget the run continues
+    # on the corpus already stored rather than starving the retrain.
+    PIPELINE_NEWS_TIMEOUT_SECONDS: int = 90 * 60
+    # Optuna trials for the quarterly retrain (Algorithm 4 uses 100).
+    PIPELINE_OPTUNA_TRIALS: int = 100
+
     @property
     def cors_origins(self) -> list[str]:
         return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]

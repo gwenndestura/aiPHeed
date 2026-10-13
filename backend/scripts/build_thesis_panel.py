@@ -38,6 +38,7 @@ from pathlib import Path
 import pandas as pd
 
 from app.ml.features import label_generator as lg
+from app.ml.features.feature_matrix import last_completed_quarter
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "data" / "thesis"
@@ -62,8 +63,14 @@ def build_labels() -> pd.DataFrame:
     # (openstat_fetcher.py's unemployment endpoint was stale/404ing and was
     # fixed to pull live data before this was widened) -- adding real rows,
     # not padding the window with anything invented.
-    lg.MODEL_QUARTERS = [f"{yr}-Q{q}" for yr in range(2020, 2027) for q in range(1, 5)
-                         if (yr, q) <= (2026, 3)]
+    # The end edge was a literal (2026, 3), which would freeze the panel once the
+    # quarterly scheduler runs it unattended. It now follows the calendar: the
+    # last quarter that has fully ended (the in-progress quarter's CPI is
+    # partial). On 2026-10-10 this is still 2026-Q3, so today's panel is
+    # unchanged.
+    end_year, end_q = (int(x) for x in last_completed_quarter().split("-Q"))
+    lg.MODEL_QUARTERS = [f"{yr}-Q{q}" for yr in range(2020, end_year + 1) for q in range(1, 5)
+                         if (yr, q) <= (end_year, end_q)]
     cpi_labels = lg._build_cpi_labels(ROOT / "data/processed/psa_indicators.parquet")
     return cpi_labels.rename(columns={"label_cpi": "label_stress"})
 

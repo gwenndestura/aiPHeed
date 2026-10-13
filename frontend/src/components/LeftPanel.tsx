@@ -4,7 +4,7 @@ import { X, TrendingUp, TrendingDown, BarChart3, ChevronRight, ArrowLeft, Briefc
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { useCountUp } from "@/hooks/useCountUp";
-import { useConfig, useExplainability, useForecast } from "@/lib/queries";
+import { useConfig, useConfirmedAlerts, useExplainability, useForecast } from "@/lib/queries";
 import type { Trigger } from "@/lib/apiTypes";
 
 interface Props {
@@ -458,7 +458,13 @@ function RegionDetail({
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const limited = region.limitedSignal;
   const specLabel = region.riskScore >= displayCutoff ? "HIGH" : "LOW";
-  const isActiveAlert = region.riskScore >= alertThreshold;
+  // Rule 7: an alert fires against the province's own rolling threshold and is
+  // shown only after an administrator confirms it. The badge therefore reads
+  // the confirmed alerts the backend publishes, not a fixed score cutoff.
+  const { data: alertsRes } = useConfirmedAlerts();
+  const isActiveAlert = (alertsRes?.data ?? []).some(
+    (a) => a.quarter === quarterId && a.province_code === region.provinceCode
+  );
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
 
   return (
@@ -478,7 +484,7 @@ function RegionDetail({
                 {specLabel} · risk
               </span>
               {isActiveAlert && (
-                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse" title={`Active alert: Risk Level ≥ ${alertThreshold}`}>
+                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground severe-pulse" title="Early-warning alert confirmed by a DA reviewer: this province's probability exceeded its own rolling historical threshold (Rule 7)">
                   Active alert
                 </span>
               )}
@@ -511,9 +517,10 @@ function RegionDetail({
       <div className="rounded-lg border border-border/40 bg-secondary/20 px-3 py-2 flex items-start gap-2">
         <Info className="h-3 w-3 text-primary mt-0.5 shrink-0" />
         <p className="text-[10px] text-muted-foreground leading-relaxed">
-          This is a <b className="text-foreground">{horizonLabel}</b> estimate for{" "}
-          <b className="text-foreground">{quarterId || "the selected quarter"}</b>, scored from PSA production
-          data already published for that quarter.
+          This is a <b className="text-foreground">same-quarter</b> estimate for{" "}
+          <b className="text-foreground">{quarterId || "the selected quarter"}</b>, scored from the news signals
+          and PSA indicators available for that quarter. It is an indicative risk probability, not an official
+          food insecurity classification.
         </p>
       </div>
 
@@ -539,6 +546,24 @@ function RegionDetail({
           />
         </div>
       </div>
+
+      {/* Rank among provinces */}
+      {region.rank != null && (
+        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30 space-y-1">
+          <div className="text-[8px] text-muted-foreground uppercase tracking-widest font-semibold">Rank this quarter</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-extrabold tracking-tight">#{region.rank}</span>
+            <span className="text-[10px] text-muted-foreground">of {region.rankOf} provinces, by risk probability</span>
+          </div>
+          {region.gapToNextLower != null && (
+            <p className="text-[9px] text-muted-foreground leading-snug">
+              {region.tiedWithNextLower
+                ? "Tied with the next province down: same probability."
+                : `${Math.round(region.gapToNextLower * 100)} percentage points above the next province down.`}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Population */}
       <div className="rounded-xl px-3 py-2.5 border border-border/50 bg-secondary/30 flex items-center justify-between">

@@ -1,0 +1,52 @@
+feature,family,development_protocol,strict_realtime_protocol,basis
+FSSI,news,USE,USE,article publication timestamps [V]
+trigger_market,news,USE,USE,article publication timestamps [V]
+trigger_climate,news,USE,USE,article publication timestamps [V]
+trigger_employment,news,USE,USE,article publication timestamps [V]
+trigger_ofw_remittance,news,USE,USE,article publication timestamps [V]
+trigger_fish_kill,news,USE,USE,article publication timestamps [V]
+food_cpi,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+food_cpi_yoy,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+rice_price_regular,wholesale_rice,USE (documented schedule ~35 d),EXCLUDE until PSA schedule confirmed,schedule seen only via PhilRice-hosted PSA metadata + one example [S]
+unemployment_rate,lfs_unemployment,USE (practice ~5-6 weeks),EXCLUDE,"one dated example, no calendar"
+poverty_incidence,poverty,USE,USE,"releases 2022-08-15 [S], 2024-08-15 [N]"
+food_minus_headline_yoy,regional_cpi,USE,USE (from 2022-02-04 for 2021 values),national/regional release dates documented per final month [S/N]; 2018-base rule
+headline_cpi,regional_cpi,USE,USE (from 2022-02-04 for 2021 values),national/regional release dates documented per final month [S/N]; 2018-base rule
+ofw_remit_yoy_pct,bsp_remittances,USE (practice ~15th of 2nd month),EXCLUDE,"pattern from 5 dated examples, no calendar; hand-curated"
+fx_usd_php_avg,ecb_fx,USE,USE,"daily reference rate, same-day publication; margin >= ~90 d"
+diesel_php_per_l,doe_fuel,USE (weekly bulletins),EXCLUDE,"hand-curated, no per-value dates; 15 rows missing"
+gasoline_php_per_l,doe_fuel,USE (weekly bulletins),EXCLUDE,"hand-curated, no per-value dates; 15 rows missing"
+brent_usd_per_bbl,fred_brent,USE,USE,daily series; margin >= ~90 d
+tc_count,ibtracs_typhoon,USE (revised best track; disclosed),EXCLUDE,final best-track values differ from provisional real-time records [V]
+tc_severe_flag,ibtracs_typhoon,USE (revised best track; disclosed),EXCLUDE,final best-track values differ from provisional real-time records [V]
+rainfall_anomaly_pct,nasa_power_rain,USE (revised; disclosed),EXCLUDE,near-real-time values replaced by MERRA-2 [S]
+drought_alert,drought_alert,USE (derived from revised ONI; disclosed),EXCLUDE,derived in pagasa_climate_fetcher.py as (El Nino phase AND ONI >= 1.0); inherits ONI revisions
+enso_numeric,noaa_oni,USE (revised; disclosed),EXCLUDE,ONI values revised up to 2 months after release; base-period updates [V]
+FSSI_lag1,news,USE,USE,article publication timestamps [V]
+FSSI_accel,news,USE,USE,article publication timestamps [V]
+food_cpi_yoy_lag1,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+food_cpi_yoy_accel,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+food_minus_headline_yoy_lag1,regional_cpi,USE,USE (from 2022-02-04 for 2021 values),national/regional release dates documented per final month [S/N]; 2018-base rule
+food_minus_headline_yoy_accel,regional_cpi,USE,USE (from 2022-02-04 for 2021 values),national/regional release dates documented per final month [S/N]; 2018-base rule
+unemployment_rate_lag1,lfs_unemployment,USE (practice ~5-6 weeks),EXCLUDE,"one dated example, no calendar"
+unemployment_rate_accel,lfs_unemployment,USE (practice ~5-6 weeks),EXCLUDE,"one dated example, no calendar"
+ofw_remit_yoy_pct_lag1,bsp_remittances,USE (practice ~15th of 2nd month),EXCLUDE,"pattern from 5 dated examples, no calendar; hand-curated"
+ofw_remit_yoy_pct_accel,bsp_remittances,USE (practice ~15th of 2nd month),EXCLUDE,"pattern from 5 dated examples, no calendar; hand-curated"
+rainfall_anomaly_pct_lag1,nasa_power_rain,USE (revised; disclosed),EXCLUDE,near-real-time values replaced by MERRA-2 [S]
+rainfall_anomaly_pct_accel,nasa_power_rain,USE (revised; disclosed),EXCLUDE,near-real-time values replaced by MERRA-2 [S]
+rice_price_regular_lag1,wholesale_rice,USE (documented schedule ~35 d),EXCLUDE until PSA schedule confirmed,schedule seen only via PhilRice-hosted PSA metadata + one example [S]
+rice_price_regular_accel,wholesale_rice,USE (documented schedule ~35 d),EXCLUDE until PSA schedule confirmed,schedule seen only via PhilRice-hosted PSA metadata + one example [S]
+diesel_php_per_l_lag1,doe_fuel,USE (weekly bulletins),EXCLUDE,"hand-curated, no per-value dates; 15 rows missing"
+diesel_php_per_l_accel,doe_fuel,USE (weekly bulletins),EXCLUDE,"hand-curated, no per-value dates; 15 rows missing"
+FSSI_lag2,news,USE,USE,article publication timestamps [V]
+cpi_dev,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+fssi_article_count,news,USE,USE,article publication timestamps [V]
+cpi_rel,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+rice_retail_regular,retail_rice_psa_indicators,EXCLUDE,EXCLUDE,OpenStat retail table 0042M4ARN01 covers 2012-2021 only (openstat_fetcher.py); source of 2022-2025 values in psa_indicators unresolved
+rice_retail_well,retail_rice_psa_indicators,EXCLUDE,EXCLUDE,OpenStat retail table 0042M4ARN01 covers 2012-2021 only (openstat_fetcher.py); source of 2022-2025 values in psa_indicators unresolved
+news_ph_fssi,news,USE,USE,article publication timestamps [V]
+news_ph_count,news,USE,USE,article publication timestamps [V]
+cpi_rel_lag1,provincial_cpi,USE via proxy (national release + 14 d),EXCLUDE,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification
+sws_hunger,sws,USE,USE (rounds [V-single] need manual confirmation),per-round SWS publication dates; [U]-dated rounds excluded
+sws_change,sws,USE,USE (rounds [V-single] need manual confirmation),per-round SWS publication dates; [U]-dated rounds excluded
+sws_age,sws,USE,USE (rounds [V-single] need manual confirmation),per-round SWS publication dates; [U]-dated rounds excluded

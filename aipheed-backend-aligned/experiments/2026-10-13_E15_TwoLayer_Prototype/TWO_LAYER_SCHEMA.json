@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aipheed/e15/two-layer-0.1",
+  "title": "aiPHeed two-layer output (E15 development prototype)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "data_through", "caveats", "quarters"],
+  "properties": {
+    "schema_version": {"const": "e15-two-layer-0.1"},
+    "status": {"type": "string"},
+    "data_through": {"type": "string", "pattern": "^20[0-9]{2}-Q[1-4]$"},
+    "caveats": {"type": "array", "minItems": 6, "items": {"type": "string"}},
+    "quarters": {"type": "array", "items": {"$ref": "#/$defs/quarter"}}
+  },
+  "$defs": {
+    "num_or_null": {"type": ["number", "null"]},
+    "quarter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quarter", "regional_layer", "provincial_layer", "legacy_layer"],
+      "properties": {
+        "quarter": {"type": "string", "pattern": "^20[0-9]{2}-Q[1-4]$"},
+        "regional_layer": {"$ref": "#/$defs/regional"},
+        "provincial_layer": {"$ref": "#/$defs/provincial"},
+        "legacy_layer": {"$ref": "#/$defs/legacy"}
+      }
+    },
+    "regional": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["indicator", "scope", "status", "level_pct", "rounds", "latest_publication_date", "trend"],
+      "properties": {
+        "indicator": {"type": "string"},
+        "scope": {"const": "Balance Luzon"},
+        "status": {"enum": ["AVAILABLE", "NO_ROUND"]},
+        "level_pct": {"$ref": "#/$defs/num_or_null"},
+        "rounds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["round", "value_pct", "published", "date_status", "series"],
+            "properties": {
+              "round": {"type": "string"},
+              "value_pct": {"type": "number"},
+              "published": {"type": "string", "format": "date"},
+              "date_status": {"type": "string"},
+              "series": {"enum": ["production", "supplementary"]}
+            }
+          }
+        },
+        "latest_publication_date": {"type": ["string", "null"]},
+        "trend": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["change_pct_points", "compared_with_quarter", "quarters_apart"],
+          "properties": {
+            "change_pct_points": {"type": "number"},
+            "compared_with_quarter": {"type": "string", "pattern": "^20[0-9]{2}-Q[1-4]$"},
+            "quarters_apart": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    },
+    "provincial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "status", "missing_provinces", "five_province_mean_F_pct_unweighted", "rank_rule", "provinces"],
+      "properties": {
+        "label": {"const": "relative food-price pressure"},
+        "status": {"enum": ["COMPLETE", "INCOMPLETE_NO_D_OR_RANK"]},
+        "missing_provinces": {"type": "array", "items": {"type": "string"}},
+        "five_province_mean_F_pct_unweighted": {"$ref": "#/$defs/num_or_null"},
+        "rank_rule": {"type": "string"},
+        "provinces": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["province_code", "province", "food_inflation_yoy_pct", "relative_pressure_D_pp", "relative_pressure_rank", "tied_with"],
+            "properties": {
+              "province_code": {"type": "string", "pattern": "^PH04[0-9]{7}$"},
+              "province": {"enum": ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"]},
+              "food_inflation_yoy_pct": {"$ref": "#/$defs/num_or_null"},
+              "relative_pressure_D_pp": {"$ref": "#/$defs/num_or_null"},
+              "relative_pressure_rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 5},
+              "tied_with": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "legacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "placement", "formula", "threshold", "threshold_display", "rule", "H_A_production_rounds_pct", "status", "provinces"],
+      "properties": {
+        "label": {"const": "legacy composite, not validated as food insecurity"},
+        "placement": {"const": "secondary"},
+        "formula": {"const": "S1 = H_A + 2 * D"},
+        "threshold": {"type": "number"},
+        "threshold_display": {"const": "10.843"},
+        "rule": {"type": "string"},
+        "H_A_production_rounds_pct": {"$ref": "#/$defs/num_or_null"},
+        "status": {"enum": ["AVAILABLE", "UNAVAILABLE_NO_PRODUCTION_ROUND", "UNAVAILABLE_INCOMPLETE_PROVINCES"]},
+        "provinces": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["province_code", "province", "S1", "label"],
+            "properties": {
+              "province_code": {"type": "string", "pattern": "^PH04[0-9]{7}$"},
+              "province": {"enum": ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"]},
+              "S1": {"$ref": "#/$defs/num_or_null"},
+              "label": {"enum": ["HIGH", "LOW", null]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

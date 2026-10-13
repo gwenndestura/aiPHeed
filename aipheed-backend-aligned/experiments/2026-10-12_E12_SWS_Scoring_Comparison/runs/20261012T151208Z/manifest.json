@@ -1,0 +1,124 @@
+{
+ "started_utc": "2026-10-12T15:12:08.150238+00:00",
+ "protocol_sha256": "33707016dc2ebac5a7e8cba18568731bbe59998b85aa261d7412c4fa52d2aaec",
+ "allowlist_sha256_start": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1"
+ },
+ "code_sha256": {
+  "run_e12.py": "f7dfae959a79dd995513f64699931e36041e0efe3deccb37e19d568f97cc76bb",
+  "e12_lib.py": "669593539956c8ed8d93c136b4448861748f6989b4bdf5e42996a30e191e99f5",
+  "guard.py": "f3fca66ab0763b32da0a65ee3d00e9f7868002b781558eb15ed41416b52f913a",
+  "E9 safe_frame.py": "89cd1edeec0df9ac88272cee30d2d064656a9e8042b269ed9e95be05837f87c3",
+  "risk_score_v2.py": "5b6c83d6d12ecab7054f6249d0f0f098f8be50ebf16d1072b58e9c6be0abea49"
+ },
+ "environment": {
+  "python": "3.13.2",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "pandas": "2.3.3",
+  "numpy": "2.4.4"
+ },
+ "tests": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4"
+ ],
+ "skipped": {
+  "2021-Q2": "0 eligible training quarters (< 8)",
+  "2021-Q3": "0 eligible training quarters (< 8)",
+  "2021-Q4": "0 eligible training quarters (< 8)",
+  "2022-Q2": "3 eligible training quarters (< 8)",
+  "2022-Q3": "3 eligible training quarters (< 8)",
+  "2022-Q4": "4 eligible training quarters (< 8)",
+  "2023-Q1": "5 eligible training quarters (< 8)",
+  "2023-Q2": "6 eligible training quarters (< 8)",
+  "2023-Q3": "7 eligible training quarters (< 8)"
+ },
+ "access_log_parquet": [
+  {
+   "op": "read_parquet",
+   "path": "data/processed/psa_indicators.parquet",
+   "columns": [
+    "food_cpi_yoy",
+    "province_code",
+    "quarter"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/features_fused.parquet",
+   "columns": [
+    "food_minus_headline_yoy",
+    "headline_cpi",
+    "poverty_incidence",
+    "province_code",
+    "quarter",
+    "unemployment_rate"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/labels.parquet",
+   "columns": [
+    "province_code",
+    "quarter",
+    "stress_score",
+    "sws_hunger_pct"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 95
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/labels.parquet",
+   "columns": [
+    "province_code",
+    "province_name",
+    "quarter"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 95
+  }
+ ],
+ "access_log_opens": [
+  "config/governing_model.json",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv"
+ ],
+ "allowlist_sha256_end": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1"
+ },
+ "finished_utc": "2026-10-12T15:12:14.471951+00:00",
+ "outputs_sha256": {
+  "categoryB_predictions.csv": "776c5a0ae6fc5d861b0a21252fc44de9fbf8638c2a4ee8cdb55862dd06e0140d",
+  "details.json": "ee022c35135d86fa9ec987d52212bd9c229037b835628ef03f2e4ec281a6865c",
+  "realized_components_2021_2025.csv": "6719baf75ad60dd47f94cfb269058354783414d7437b19a93101582432e67ce1"
+ },
+ "deliverables_sha256": {
+  "OPTION_A_WEIGHT_GRID.csv": "06d0ef94419c8323569154c4e62cd7955cbbe068bfcdc72e40147e7355f0fb91",
+  "OPTION_A_EQUIVALENCE_GROUPS.csv": "4dcaf595c52d0ee5efd3b9c897ca0a548aba7d365fba0a09b7accb7638f9e2b5",
+  "OPTION_B_STANDARDIZED_GRID.csv": "1cbe43f57cfbe6e1f78b0d918cd33057c94cafa76ef521851a5171f5c1ed3419",
+  "OPTION_C_PROVINCIAL_ONLY.csv": "1fb8d6c2f0b96766186038c59fe5fce3a908a2d9d7aa431b042746df3e4c8cf3",
+  "BASELINE_COMPARISON.csv": "6fe6c90d514483c1ecb2a82fc472ce5335852c3e8d6e34cdcb37b039582ebcb5",
+  "QUARTERLY_RESULTS.csv": "e7d06c0f09147c23418004e0a014ca513bf530130227936d8e0686287335b8e7"
+ }
+}

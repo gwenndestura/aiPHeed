@@ -1,0 +1,131 @@
+{
+ "same_rows_all_arms": true,
+ "rows_per_arm": 35,
+ "single_truth_per_row": true,
+ "tests": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4"
+ ],
+ "true_HIGH": 33,
+ "true_LOW": 2,
+ "LOW_rows": [
+  [
+   "2023-Q4",
+   "PH040300000"
+  ],
+  [
+   "2024-Q1",
+   "PH040300000"
+  ]
+ ],
+ "metrics_reproduced": true,
+ "metrics_mismatches": [],
+ "bootstrap_reproduced": true,
+ "bootstrap_entries": 23,
+ "M1_minus_B1_ci95_other_seeds": [
+  [
+   -1.0999072466282742,
+   -0.2142033032484079
+  ],
+  [
+   -1.0965953059840514,
+   -0.2192819456251052
+  ],
+  [
+   -1.1120289666102314,
+   -0.2173626791978587
+  ],
+  [
+   -1.092895120487208,
+   -0.20006293452769572
+  ]
+ ],
+ "M1_minus_B1_per_quarter": {
+  "2023-Q4": -0.5876,
+  "2024-Q1": -1.4494,
+  "2024-Q2": -1.249,
+  "2024-Q3": -0.4229,
+  "2024-Q4": 0.3943,
+  "2025-Q1": -1.1764,
+  "2025-Q4": -0.2892
+ },
+ "M1_minus_B2_regional_per_quarter": {
+  "2023-Q4": -1.3023,
+  "2024-Q1": -1.4494,
+  "2024-Q2": -1.249,
+  "2024-Q3": 0.5531,
+  "2024-Q4": 0.3943,
+  "2025-Q1": -1.1764,
+  "2025-Q4": 4.7148
+ },
+ "M1_minus_B3_eq3_rule_per_quarter": {
+  "2023-Q4": -0.5876,
+  "2024-Q1": -1.4494,
+  "2024-Q2": -1.249,
+  "2024-Q3": -0.4229,
+  "2024-Q4": 0.3943,
+  "2025-Q1": -1.1764,
+  "2025-Q4": 4.4108
+ },
+ "B3_minus_B1_per_quarter": {
+  "2023-Q4": 0.0,
+  "2024-Q1": 0.0,
+  "2024-Q2": 0.0,
+  "2024-Q3": 0.0,
+  "2024-Q4": 0.0,
+  "2025-Q1": 0.0,
+  "2025-Q4": -4.7
+ },
+ "signflip_p_two_sided": {
+  "M1_vs_B1": 0.046875,
+  "M1_vs_B2": 0.984375,
+  "M1_vs_B3": 0.984375,
+  "B3_vs_B1": 1.0,
+  "B2_vs_B1": 0.5,
+  "note": "post hoc, not prespecified; 7 quarters; descriptive"
+ },
+ "availability_violations": [],
+ "availability_rows_checked": 95,
+ "date_types_in_test_rows": {
+  "sws_date_type": [
+   "verified",
+   "verified-single"
+  ],
+  "anchor_date_type": [
+   "proxy"
+  ],
+  "prov_cpi_date_type": [
+   "proxy"
+  ],
+  "reg_cpi_date_type": [
+   "verified"
+  ],
+  "unemp_date_type": [
+   "schedule"
+  ]
+ },
+ "tau0_quarters_published_before_2023_10_01": true,
+ "fold_labels_published_before_origin": true,
+ "train_quarters_per_fold": {
+  "2023-Q4": 8,
+  "2024-Q1": 9,
+  "2024-Q2": 10,
+  "2024-Q3": 11,
+  "2024-Q4": 12,
+  "2025-Q1": 13,
+  "2025-Q4": 15
+ },
+ "selection_mae_reproduced": true,
+ "selection_used_only": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4"
+ ]
+}

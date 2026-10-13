@@ -1,0 +1,575 @@
+{
+ "utc": "20261013T034224Z",
+ "allowlist_sha256": {
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv": "6719baf75ad60dd47f94cfb269058354783414d7437b19a93101582432e67ce1",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json": "ee022c35135d86fa9ec987d52212bd9c229037b835628ef03f2e4ec281a6865c",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\topic_proportions.parquet": "c8cc63e39390e3f4589f5e3e533a364f5d30b448f17ea8f163122f006f2b7907",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_poverty.parquet": "03c92a8db785534e305c1fcd6dfb5bc9b5e1c26fd860f9cd655387edb9ef16b7",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_census.parquet": "705cece6a8855f9fc8e9d2d4447d47dc067f5de0e4b717e75325593be19ec778",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\nns_fies.parquet": "4f68d37626e830677a74a3f2f897e59374d3724d51298bb6a6b08e0581edb411",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1"
+ },
+ "governing": {
+  "name": "aiPHeed governing model configuration: 45-candidate feature set (MODEL-B2)",
+  "status": "Governing configuration for thesis evaluation. NOT served: production still serves MODEL-A (12 features, models/lgbm_best.pkl) until replacement is separately authorized.",
+  "target": "label_stress (Eq. 3; HIGH if stress_score > global median 14.6)",
+  "horizon": "k = 1: features of quarter t -> label of t+1",
+  "timing": "strict Rule 3 (frame_t2): government series of t-1; news of t; SWS latest round released before t+1; poverty incidence as published",
+  "decision_threshold": 0.5,
+  "algorithm": "Algorithm 3: LightGBM LGBMClassifier, library defaults except scale_pos_weight",
+  "lightgbm_params": {
+   "objective": "binary",
+   "verbosity": -1,
+   "random_state": 42
+  },
+  "class_weighting": {
+   "parameter": "scale_pos_weight",
+   "rule": "(1 - p) / p, p = HIGH share of the fold's training rows",
+   "note": "Departs from Algorithm 3's 'default LightGBM classifier'; requires adviser approval (see docs/CHAPTER_III_RECONCILIATION_2026-10-09.md, item R6)"
+  }
+ },
+ "governing_model_inputs": [
+  "FSSI",
+  "trigger_market",
+  "trigger_climate",
+  "trigger_employment",
+  "trigger_ofw_remittance",
+  "trigger_fish_kill",
+  "food_cpi",
+  "food_cpi_yoy",
+  "rice_price_regular",
+  "unemployment_rate",
+  "poverty_incidence",
+  "food_minus_headline_yoy",
+  "headline_cpi",
+  "ofw_remit_yoy_pct",
+  "fx_usd_php_avg",
+  "diesel_php_per_l",
+  "gasoline_php_per_l",
+  "brent_usd_per_bbl",
+  "tc_count",
+  "tc_severe_flag",
+  "rainfall_anomaly_pct",
+  "drought_alert",
+  "enso_numeric",
+  "commodity_fruit_veg",
+  "commodity_leafy_veg",
+  "commodity_livestock",
+  "commodity_poultry",
+  "commodity_rootcrops",
+  "FSSI_lag1",
+  "FSSI_accel",
+  "food_cpi_yoy_lag1",
+  "food_cpi_yoy_accel",
+  "food_minus_headline_yoy_lag1",
+  "food_minus_headline_yoy_accel",
+  "unemployment_rate_lag1",
+  "unemployment_rate_accel",
+  "ofw_remit_yoy_pct_lag1",
+  "ofw_remit_yoy_pct_accel",
+  "rainfall_anomaly_pct_lag1",
+  "rainfall_anomaly_pct_accel",
+  "rice_price_regular_lag1",
+  "rice_price_regular_accel",
+  "diesel_php_per_l_lag1",
+  "diesel_php_per_l_accel",
+  "FSSI_lag2",
+  "cpi_dev",
+  "sws_hunger"
+ ],
+ "features_fused": {
+  "rows": 100,
+  "quarters": [
+   "2021-Q1",
+   "2025-Q4"
+  ],
+  "provinces": 5,
+  "per_column": {
+   "FSSI": {
+    "nan": 0,
+    "exact_zero": 4,
+    "distinct": 28
+   },
+   "trigger_market": {
+    "nan": 0,
+    "exact_zero": 98,
+    "distinct": 3
+   },
+   "trigger_climate": {
+    "nan": 0,
+    "exact_zero": 52,
+    "distinct": 23
+   },
+   "trigger_employment": {
+    "nan": 0,
+    "exact_zero": 100,
+    "distinct": 1
+   },
+   "trigger_ofw_remittance": {
+    "nan": 0,
+    "exact_zero": 100,
+    "distinct": 1
+   },
+   "trigger_fish_kill": {
+    "nan": 0,
+    "exact_zero": 93,
+    "distinct": 7
+   },
+   "food_cpi": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 92
+   },
+   "food_cpi_yoy": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 88
+   },
+   "rice_price_regular": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 97
+   },
+   "unemployment_rate": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "poverty_incidence": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 7
+   },
+   "food_minus_headline_yoy": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "headline_cpi": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "ofw_remit_yoy_pct": {
+    "nan": 0,
+    "exact_zero": 20,
+    "distinct": 17
+   },
+   "fx_usd_php_avg": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "diesel_php_per_l": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 18
+   },
+   "gasoline_php_per_l": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "brent_usd_per_bbl": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "tc_count": {
+    "nan": 0,
+    "exact_zero": 39,
+    "distinct": 5
+   },
+   "tc_severe_flag": {
+    "nan": 0,
+    "exact_zero": 68,
+    "distinct": 2
+   },
+   "rainfall_anomaly_pct": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 100
+   },
+   "drought_alert": {
+    "nan": 0,
+    "exact_zero": 85,
+    "distinct": 2
+   },
+   "enso_numeric": {
+    "nan": 0,
+    "exact_zero": 50,
+    "distinct": 3
+   },
+   "commodity_fruit_veg": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 100
+   },
+   "commodity_leafy_veg": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 100
+   },
+   "commodity_livestock": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 100
+   },
+   "commodity_poultry": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 99
+   },
+   "commodity_rootcrops": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 98
+   },
+   "FSSI_lag1": {
+    "nan": 0,
+    "exact_zero": 5,
+    "distinct": 31
+   },
+   "FSSI_accel": {
+    "nan": 0,
+    "exact_zero": 75,
+    "distinct": 26
+   },
+   "food_cpi_yoy_lag1": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 91
+   },
+   "food_cpi_yoy_accel": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 94
+   },
+   "food_minus_headline_yoy_lag1": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "food_minus_headline_yoy_accel": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "unemployment_rate_lag1": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "unemployment_rate_accel": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 20
+   },
+   "ofw_remit_yoy_pct_lag1": {
+    "nan": 0,
+    "exact_zero": 25,
+    "distinct": 16
+   },
+   "ofw_remit_yoy_pct_accel": {
+    "nan": 0,
+    "exact_zero": 25,
+    "distinct": 16
+   },
+   "rainfall_anomaly_pct_lag1": {
+    "nan": 0,
+    "exact_zero": 5,
+    "distinct": 96
+   },
+   "rainfall_anomaly_pct_accel": {
+    "nan": 0,
+    "exact_zero": 5,
+    "distinct": 96
+   },
+   "rice_price_regular_lag1": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 98
+   },
+   "rice_price_regular_accel": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 95
+   },
+   "diesel_php_per_l_lag1": {
+    "nan": 0,
+    "exact_zero": 5,
+    "distinct": 18
+   },
+   "diesel_php_per_l_accel": {
+    "nan": 0,
+    "exact_zero": 5,
+    "distinct": 18
+   },
+   "FSSI_lag2": {
+    "nan": 0,
+    "exact_zero": 6,
+    "distinct": 30
+   },
+   "cpi_dev": {
+    "nan": 0,
+    "exact_zero": 0,
+    "distinct": 99
+   }
+  }
+ },
+ "poverty_change_quarters_by_province": {
+  "PH040100000": [
+   "2023-Q1"
+  ],
+  "PH040200000": [
+   "2023-Q1"
+  ],
+  "PH040300000": [
+   "2023-Q1"
+  ],
+  "PH040400000": [
+   "2023-Q1"
+  ],
+  "PH040500000": [
+   "2023-Q1"
+  ]
+ },
+ "labels": {
+  "rows": 80,
+  "quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4"
+  ],
+  "median_S1_eligible": 14.344999999999999,
+  "HIGH_at_14.6": 39,
+  "HIGH_at_10.84335": 56,
+  "S1_within_1e-3_of_14.6": 0,
+  "HIGH_at_14.6_by_year": {
+   "2021": "3/15",
+   "2022": "4/15",
+   "2023": "5/20",
+   "2024": "18/20",
+   "2025": "9/10"
+  }
+ },
+ "sws_rounds": {
+  "rows": 21,
+  "definition_A": 18
+ },
+ "topics": {
+  "rows": 96,
+  "quarters": [
+   "2021-Q1",
+   "2025-Q4"
+  ],
+  "province_quarters": 96
+ },
+ "lgu": {
+  "poverty_rows": 142,
+  "census_rows": 142,
+  "poverty_fallback_rows": 126,
+  "population_source": {
+   "cph2020": 142
+  }
+ },
+ "fies": [
+  {
+   "survey_cycle": "NNS_2025",
+   "year": 2025,
+   "region_name": "Region IV-A (CALABARZON)",
+   "fies_moderate_severe_pct": 22.6,
+   "geographic_level": "region_inherited",
+   "provenance": "secondary_reporting"
+  },
+  {
+   "survey_cycle": "NNS_2025",
+   "year": 2025,
+   "region_name": "Region IV-A (CALABARZON)",
+   "fies_moderate_severe_pct": 22.6,
+   "geographic_level": "region_inherited",
+   "provenance": "secondary_reporting"
+  },
+  {
+   "survey_cycle": "NNS_2025",
+   "year": 2025,
+   "region_name": "Region IV-A (CALABARZON)",
+   "fies_moderate_severe_pct": 22.6,
+   "geographic_level": "region_inherited",
+   "provenance": "secondary_reporting"
+  },
+  {
+   "survey_cycle": "NNS_2025",
+   "year": 2025,
+   "region_name": "Region IV-A (CALABARZON)",
+   "fies_moderate_severe_pct": 22.6,
+   "geographic_level": "region_inherited",
+   "provenance": "secondary_reporting"
+  },
+  {
+   "survey_cycle": "NNS_2025",
+   "year": 2025,
+   "region_name": "Region IV-A (CALABARZON)",
+   "fies_moderate_severe_pct": 22.6,
+   "geographic_level": "region_inherited",
+   "provenance": "secondary_reporting"
+  }
+ ],
+ "access_log": [
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json",
+   "bytes": 5380
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\features_fused.parquet",
+   "columns": [
+    "FSSI",
+    "FSSI_accel",
+    "FSSI_lag1",
+    "FSSI_lag2",
+    "brent_usd_per_bbl",
+    "commodity_fruit_veg",
+    "commodity_leafy_veg",
+    "commodity_livestock",
+    "commodity_poultry",
+    "commodity_rootcrops",
+    "cpi_dev",
+    "diesel_php_per_l",
+    "diesel_php_per_l_accel",
+    "diesel_php_per_l_lag1",
+    "drought_alert",
+    "enso_numeric",
+    "food_cpi",
+    "food_cpi_yoy",
+    "food_cpi_yoy_accel",
+    "food_cpi_yoy_lag1",
+    "food_minus_headline_yoy",
+    "food_minus_headline_yoy_accel",
+    "food_minus_headline_yoy_lag1",
+    "fx_usd_php_avg",
+    "gasoline_php_per_l",
+    "headline_cpi",
+    "ofw_remit_yoy_pct",
+    "ofw_remit_yoy_pct_accel",
+    "ofw_remit_yoy_pct_lag1",
+    "poverty_incidence",
+    "province_code",
+    "quarter",
+    "rainfall_anomaly_pct",
+    "rainfall_anomaly_pct_accel",
+    "rainfall_anomaly_pct_lag1",
+    "rice_price_regular",
+    "rice_price_regular_accel",
+    "rice_price_regular_lag1",
+    "tc_count",
+    "tc_severe_flag",
+    "trigger_climate",
+    "trigger_employment",
+    "trigger_fish_kill",
+    "trigger_market",
+    "trigger_ofw_remittance",
+    "unemployment_rate",
+    "unemployment_rate_accel",
+    "unemployment_rate_lag1"
+   ],
+   "row_filter": "2021-Q1 <= quarter <= 2025-Q4",
+   "rows_returned": 100
+  },
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv",
+   "bytes": 9110
+  },
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json",
+   "bytes": 70271
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\topic_proportions.parquet",
+   "columns": [
+    "province_code",
+    "quarter",
+    "topic_other_pct",
+    "topic_outlier_pct"
+   ],
+   "row_filter": "2021-Q1 <= quarter <= 2025-Q4",
+   "rows_returned": 96
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_poverty.parquet",
+   "columns": [
+    "lgu_code",
+    "lgu_name",
+    "poverty_incidence_pct",
+    "poverty_normalized",
+    "province_code",
+    "province_name",
+    "source_note",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 142
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_census.parquet",
+   "columns": [
+    "density_normalized",
+    "density_per_km2",
+    "lgu_code",
+    "lgu_name",
+    "lgu_type",
+    "population_2020",
+    "population_source",
+    "province_code"
+   ],
+   "row_filter": null,
+   "rows_returned": 142
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\nns_fies.parquet",
+   "columns": [
+    "fies_moderate_severe_pct",
+    "geographic_level",
+    "provenance",
+    "region_name",
+    "survey_cycle",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 5
+  }
+ ]
+}

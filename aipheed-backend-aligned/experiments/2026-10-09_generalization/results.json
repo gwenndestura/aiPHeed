@@ -1,0 +1,3886 @@
+{
+  "provenance": {
+    "git_head": "eee269b92b47482d07aac769c54dd1d6c558c5ce",
+    "note_git": "aipheed-backend-aligned/ is untracked; provenance rests on the hashes below",
+    "preregistration_sha256": "3183c4232e308be86fad77dfe2076e64f23c8050098d3272834d99b3485fc453",
+    "governing_config_sha256": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1",
+    "script_sha256": "0877937346bc8bb310168ed3df38698a85460362fc107f22839bdc49342c5360",
+    "data_sha256": {
+      "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+      "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+      "data/processed/sws_hunger.parquet": "1fdcb88b879f1e714189a70f8efe7022f0bd918124a348a0362724a6b1198535",
+      "data/processed/commodity_prices.parquet": "efcdf6a2d34da8dc862523093e521be1fbc108153eeaeb408ea2f70dfd60d189",
+      "data/processed/cpi_full.parquet": "2a0e69d5f6203d5b4c96523d06161042bcbcdf824112b74e60cf79f131b1a93f",
+      "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c"
+    },
+    "seed": 42,
+    "outer_min": 8,
+    "inner_min": 5,
+    "threshold": 0.5,
+    "outer_quarters": [
+      "2022-Q4",
+      "2023-Q1",
+      "2023-Q2",
+      "2023-Q3",
+      "2023-Q4",
+      "2024-Q1",
+      "2024-Q2",
+      "2024-Q3",
+      "2024-Q4",
+      "2025-Q1",
+      "2025-Q4"
+    ],
+    "pool_size": 54
+  },
+  "data_audit": {
+    "quarter_common_features": [
+      "trigger_ofw_remittance",
+      "unemployment_rate",
+      "food_minus_headline_yoy",
+      "headline_cpi",
+      "ofw_remit_yoy_pct",
+      "fx_usd_php_avg",
+      "diesel_php_per_l",
+      "gasoline_php_per_l",
+      "brent_usd_per_bbl",
+      "drought_alert",
+      "enso_numeric",
+      "food_minus_headline_yoy_lag1",
+      "food_minus_headline_yoy_accel",
+      "unemployment_rate_lag1",
+      "unemployment_rate_accel",
+      "ofw_remit_yoy_pct_lag1",
+      "ofw_remit_yoy_pct_accel",
+      "diesel_php_per_l_lag1",
+      "diesel_php_per_l_accel"
+    ],
+    "province_varying_features": [
+      "FSSI",
+      "trigger_market",
+      "trigger_climate",
+      "trigger_employment",
+      "trigger_fish_kill",
+      "food_cpi",
+      "food_cpi_yoy",
+      "rice_price_regular",
+      "poverty_incidence",
+      "tc_count",
+      "tc_severe_flag",
+      "rainfall_anomaly_pct",
+      "commodity_fruit_veg",
+      "commodity_leafy_veg",
+      "commodity_livestock",
+      "commodity_poultry",
+      "commodity_rootcrops",
+      "FSSI_lag1",
+      "FSSI_accel",
+      "food_cpi_yoy_lag1",
+      "food_cpi_yoy_accel",
+      "rainfall_anomaly_pct_lag1",
+      "rainfall_anomaly_pct_accel",
+      "rice_price_regular_lag1",
+      "rice_price_regular_accel",
+      "FSSI_lag2",
+      "cpi_dev"
+    ],
+    "label_structure": {
+      "share_of_stress_variance_between_quarters": 0.6579,
+      "sws_is_one_value_per_quarter": true,
+      "label_equals_sws_above_threshold_share": 0.8211,
+      "quarters_single_class": 7,
+      "n_labelled_quarters": 19,
+      "global_threshold": 14.6,
+      "rows_from_outer_test_period_in_threshold": 55,
+      "rows_total_in_threshold": 95
+    },
+    "cpi_full": {
+      "source_note": "PSA OpenStat 2018=100 CPI by Commodity Group, table 0012M4ACP22. Region IV-A inherited to provinces. Monthly mean -> quarterly.",
+      "food_yoy_varies_across_provinces": false
+    },
+    "feature_food_cpi_yoy_varies_across_provinces": true,
+    "label_food_cpi_yoy_varies_across_provinces": true,
+    "commodity_post2021_ratio_to_province_anchor_max_within_quarter_sd": {
+      "commodity_fruit_veg": 3.2e-05,
+      "commodity_leafy_veg": 4e-05,
+      "commodity_livestock": 8e-06,
+      "commodity_poultry": 3.1e-05,
+      "commodity_rootcrops": 3.9e-05
+    },
+    "sws_alignment_outer": [
+      {
+        "target_quarter": "2022-Q4",
+        "latest_sws_round_released_before": "2022-Q2",
+        "release_date": "2022-06-06",
+        "sws_feature_value": 11.7,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2023-Q1",
+        "latest_sws_round_released_before": "2022-Q3",
+        "release_date": "2022-10-29",
+        "sws_feature_value": 9.6,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2023-Q2",
+        "latest_sws_round_released_before": "2022-Q4",
+        "release_date": "2023-01-19",
+        "sws_feature_value": 11.3,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2023-Q3",
+        "latest_sws_round_released_before": "2023-Q1",
+        "release_date": "2023-05-11",
+        "sws_feature_value": 8.7,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2023-Q4",
+        "latest_sws_round_released_before": "2023-Q2",
+        "release_date": "2023-08-02",
+        "sws_feature_value": 11.3,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "latest_sws_round_released_before": "2023-Q3",
+        "release_date": "2023-11-20",
+        "sws_feature_value": 10.3,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "latest_sws_round_released_before": "2023-Q4",
+        "release_date": "2024-01-22",
+        "sws_feature_value": 14.3,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "latest_sws_round_released_before": "2024-Q1",
+        "release_date": "2024-04-30",
+        "sws_feature_value": 15.3,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "latest_sws_round_released_before": "2024-Q2",
+        "release_date": "2024-07-23",
+        "sws_feature_value": 19.6,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2025-Q1",
+        "latest_sws_round_released_before": "2024-Q2",
+        "release_date": "2024-07-23",
+        "sws_feature_value": 19.6,
+        "target_round_used_as_feature": false
+      },
+      {
+        "target_quarter": "2025-Q4",
+        "latest_sws_round_released_before": "2025-Q1",
+        "release_date": "2025-03-29",
+        "sws_feature_value": 24.0,
+        "target_round_used_as_feature": false
+      }
+    ],
+    "fill_provenance": {},
+    "max_abs_corr_feature_vs_target": 0.485
+  },
+  "P_nested": {
+    "metrics": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7978,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7463,
+      "roc_auc": 0.7879,
+      "brier": 0.1995,
+      "within_quarter_auc_mean": 0.56,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.85,
+        "2024": 0.6,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "choices": [
+      {
+        "outer_quarter": "2022-Q4",
+        "chosen": "eq5_12|logistic|C=0.01|w=None",
+        "inner_score": 0.8,
+        "n_tied_at_top": 13,
+        "top5": [
+          [
+            "eq5_12|logistic|C=0.01|w=None",
+            0.8
+          ],
+          [
+            "eq5_12|logistic|C=0.1|w=None",
+            0.8
+          ],
+          [
+            "eq5_12|lgbm|default|w=None",
+            0.8
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=None",
+            0.8
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2023-Q1",
+        "chosen": "eq5_12|logistic|C=0.01|w=None",
+        "inner_score": 0.8,
+        "n_tied_at_top": 11,
+        "top5": [
+          [
+            "eq5_12|logistic|C=0.01|w=None",
+            0.8
+          ],
+          [
+            "eq5_12|lgbm|default|w=None",
+            0.8
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=None",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2023-Q2",
+        "chosen": "eq5_12|logistic|C=0.01|w=None",
+        "inner_score": 0.84,
+        "n_tied_at_top": 8,
+        "top5": [
+          [
+            "eq5_12|logistic|C=0.01|w=None",
+            0.84
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=None",
+            0.84
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.84
+          ],
+          [
+            "gov47_no_commodity|lgbm|default|w=None",
+            0.84
+          ],
+          [
+            "gov47|logistic|C=0.01|w=None",
+            0.84
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2023-Q3",
+        "chosen": "eq5_12|logistic|C=0.01|w=None",
+        "inner_score": 0.8333,
+        "n_tied_at_top": 9,
+        "top5": [
+          [
+            "eq5_12|logistic|C=0.01|w=None",
+            0.8333
+          ],
+          [
+            "eq5_12|lgbm|default|w=None",
+            0.8333
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=None",
+            0.8333
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8333
+          ],
+          [
+            "gov47_no_commodity|lgbm|default|w=None",
+            0.8333
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2023-Q4",
+        "chosen": "gov47|lgbm|default|w=spw",
+        "inner_score": 0.8571,
+        "n_tied_at_top": 1,
+        "top5": [
+          [
+            "gov47|lgbm|default|w=spw",
+            0.8571
+          ],
+          [
+            "eq5_12|logistic|C=0.01|w=None",
+            0.8286
+          ],
+          [
+            "eq5_12|lgbm|default|w=None",
+            0.8286
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.8286
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=None",
+            0.8286
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2024-Q1",
+        "chosen": "gov47|lgbm|default|w=spw",
+        "inner_score": 0.85,
+        "n_tied_at_top": 1,
+        "top5": [
+          [
+            "gov47|lgbm|default|w=spw",
+            0.85
+          ],
+          [
+            "gov47|lgbm|default|w=None",
+            0.825
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|lgbm|default|w=spw",
+            0.8
+          ],
+          [
+            "gov47|lgbm|small|w=spw",
+            0.775
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2024-Q2",
+        "chosen": "gov47|lgbm|default|w=spw",
+        "inner_score": 0.8222,
+        "n_tied_at_top": 1,
+        "top5": [
+          [
+            "gov47|lgbm|default|w=spw",
+            0.8222
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47|lgbm|small|w=spw",
+            0.7778
+          ],
+          [
+            "gov47|lgbm|default|w=None",
+            0.7778
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2024-Q3",
+        "chosen": "gov47_no_commodity|logistic|C=0.01|w=balanced",
+        "inner_score": 0.82,
+        "n_tied_at_top": 2,
+        "top5": [
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.82
+          ],
+          [
+            "gov47|logistic|C=0.01|w=balanced",
+            0.82
+          ],
+          [
+            "gov47|lgbm|default|w=spw",
+            0.78
+          ],
+          [
+            "gov47|lgbm|small|w=spw",
+            0.74
+          ],
+          [
+            "gov47|lgbm|default|w=None",
+            0.74
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2024-Q4",
+        "chosen": "gov47_no_commodity|logistic|C=0.01|w=balanced",
+        "inner_score": 0.8182,
+        "n_tied_at_top": 2,
+        "top5": [
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8182
+          ],
+          [
+            "gov47|logistic|C=0.01|w=balanced",
+            0.8182
+          ],
+          [
+            "gov47|lgbm|default|w=spw",
+            0.7818
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.7455
+          ],
+          [
+            "gov47_no_commodity|lgbm|small|w=None",
+            0.7455
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2025-Q1",
+        "chosen": "gov47_no_commodity|logistic|C=0.01|w=balanced",
+        "inner_score": 0.8,
+        "n_tied_at_top": 3,
+        "top5": [
+          [
+            "gov47|lgbm|default|w=spw",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.1|w=balanced",
+            0.7667
+          ],
+          [
+            "eq5_12|lgbm|default|w=spw",
+            0.75
+          ]
+        ]
+      },
+      {
+        "outer_quarter": "2025-Q4",
+        "chosen": "gov47|lgbm|default|w=spw",
+        "inner_score": 0.8154,
+        "n_tied_at_top": 1,
+        "top5": [
+          [
+            "gov47|lgbm|default|w=spw",
+            0.8154
+          ],
+          [
+            "gov47_no_commodity|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47|logistic|C=0.01|w=balanced",
+            0.8
+          ],
+          [
+            "gov47_no_commodity|lgbm|small|w=None",
+            0.7692
+          ],
+          [
+            "gov47|lgbm|small|w=spw",
+            0.7692
+          ]
+        ]
+      }
+    ],
+    "times_chosen": {
+      "eq5_12|logistic|C=0.01|w=None": 4,
+      "gov47|lgbm|default|w=spw": 4,
+      "gov47_no_commodity|logistic|C=0.01|w=balanced": 3
+    },
+    "acceptance": {
+      "C1_observed": {
+        "value": 0.7455,
+        "pass": false
+      },
+      "C2_statistical": {
+        "quarter_bootstrap_p5": 0.6727,
+        "clopper_pearson_one_sided_95_low": 0.631,
+        "pass": false
+      },
+      "C3_beats_baselines": {
+        "comparisons": {
+          "persistence_timing_valid": {
+            "mean_quarter_difference": -0.0182,
+            "bootstrap_p5": -0.1273,
+            "bootstrap_95ci": [
+              -0.1455,
+              0.0909
+            ],
+            "rows_model_only_right": 5,
+            "rows_ref_only_right": 6,
+            "mcnemar_p": 1.0,
+            "pass": false
+          },
+          "clock_only": {
+            "mean_quarter_difference": -0.0364,
+            "bootstrap_p5": -0.1818,
+            "bootstrap_95ci": [
+              -0.2,
+              0.1273
+            ],
+            "rows_model_only_right": 4,
+            "rows_ref_only_right": 6,
+            "mcnemar_p": 0.7539,
+            "pass": false
+          }
+        },
+        "pass": false
+      },
+      "C4_stability": {
+        "leave_one_year_out": {
+          "2022": 0.74,
+          "2023": 0.6857,
+          "2024": 0.8286,
+          "2025": 0.7333
+        },
+        "pass": false
+      },
+      "C5_prospective": {
+        "pass": null,
+        "status": "not evaluable: no labelled quarter after 2025-Q4"
+      },
+      "verdict": "FAILS"
+    }
+  },
+  "nested_by_family": {
+    "logistic": {
+      "metrics": {
+        "n": 55,
+        "correct": 40,
+        "incorrect": 15,
+        "accuracy_mean_quarter": 0.7273,
+        "precision_weighted": 0.81,
+        "recall_weighted": 0.7273,
+        "f1_weighted": 0.7249,
+        "roc_auc": 0.814,
+        "brier": 0.2126,
+        "within_quarter_auc_mean": 0.714,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            21,
+            1
+          ],
+          [
+            14,
+            19
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.65,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.2,
+          "2024-Q2": 1.0,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.6,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      },
+      "times_chosen": {
+        "eq5_12|logistic|C=0.01|w=None": 6,
+        "gov47_no_commodity|logistic|C=0.01|w=balanced": 5
+      }
+    },
+    "tree": {
+      "metrics": {
+        "n": 55,
+        "correct": 37,
+        "incorrect": 18,
+        "accuracy_mean_quarter": 0.6727,
+        "precision_weighted": 0.6859,
+        "recall_weighted": 0.6727,
+        "f1_weighted": 0.6758,
+        "roc_auc": 0.7886,
+        "brier": 0.1989,
+        "within_quarter_auc_mean": 0.188,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            15,
+            7
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.2,
+          "2023": 0.75,
+          "2024": 0.75,
+          "2025": 0.6
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.2,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.8,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.2
+        }
+      },
+      "times_chosen": {
+        "gov47|tree|depth=1|w=balanced": 8,
+        "gov47|tree|depth=2|w=balanced": 2,
+        "gov47_no_commodity|tree|depth=1|w=balanced": 1
+      }
+    },
+    "lgbm": {
+      "metrics": {
+        "n": 55,
+        "correct": 43,
+        "incorrect": 12,
+        "accuracy_mean_quarter": 0.7818,
+        "precision_weighted": 0.8048,
+        "recall_weighted": 0.7818,
+        "f1_weighted": 0.784,
+        "roc_auc": 0.8196,
+        "brier": 0.1705,
+        "within_quarter_auc_mean": 0.569,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            19,
+            3
+          ],
+          [
+            9,
+            24
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "times_chosen": {
+        "gov47|lgbm|default|w=spw": 7,
+        "eq5_12|lgbm|default|w=None": 3,
+        "gov47_no_commodity|lgbm|default|w=None": 1
+      }
+    }
+  },
+  "fixed_configurations": {
+    "eq5_12|logistic|C=0.01|w=None": {
+      "n": 55,
+      "correct": 24,
+      "incorrect": 31,
+      "accuracy_mean_quarter": 0.4364,
+      "precision_weighted": 0.766,
+      "recall_weighted": 0.4364,
+      "f1_weighted": 0.3032,
+      "roc_auc": 0.7576,
+      "brier": 0.2678,
+      "within_quarter_auc_mean": 0.643,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          22,
+          0
+        ],
+        [
+          31,
+          2
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.15,
+        "2025": 0.2
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.4,
+        "2024-Q4": 0.0,
+        "2025-Q1": 0.0,
+        "2025-Q4": 0.4
+      }
+    },
+    "eq5_12|logistic|C=0.01|w=balanced": {
+      "n": 55,
+      "correct": 36,
+      "incorrect": 19,
+      "accuracy_mean_quarter": 0.6545,
+      "precision_weighted": 0.6822,
+      "recall_weighted": 0.6545,
+      "f1_weighted": 0.6578,
+      "roc_auc": 0.6722,
+      "brier": 0.242,
+      "within_quarter_auc_mean": 0.643,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          16,
+          6
+        ],
+        [
+          13,
+          20
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.7,
+        "2024": 0.6,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.6,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=0.1|w=None": {
+      "n": 55,
+      "correct": 31,
+      "incorrect": 24,
+      "accuracy_mean_quarter": 0.5636,
+      "precision_weighted": 0.6982,
+      "recall_weighted": 0.5636,
+      "f1_weighted": 0.537,
+      "roc_auc": 0.7066,
+      "brier": 0.2548,
+      "within_quarter_auc_mean": 0.679,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          22,
+          11
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.75,
+        "2024": 0.4,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.2,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=0.1|w=balanced": {
+      "n": 55,
+      "correct": 33,
+      "incorrect": 22,
+      "accuracy_mean_quarter": 0.6,
+      "precision_weighted": 0.6138,
+      "recall_weighted": 0.6,
+      "f1_weighted": 0.6038,
+      "roc_auc": 0.6433,
+      "brier": 0.2388,
+      "within_quarter_auc_mean": 0.714,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          13,
+          20
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.6,
+        "2024": 0.6,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.2,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.6,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=1.0|w=None": {
+      "n": 55,
+      "correct": 33,
+      "incorrect": 22,
+      "accuracy_mean_quarter": 0.6,
+      "precision_weighted": 0.6737,
+      "recall_weighted": 0.6,
+      "f1_weighted": 0.5944,
+      "roc_auc": 0.6446,
+      "brier": 0.2648,
+      "within_quarter_auc_mean": 0.631,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          18,
+          15
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.7,
+        "2024": 0.55,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.4,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=1.0|w=balanced": {
+      "n": 55,
+      "correct": 31,
+      "incorrect": 24,
+      "accuracy_mean_quarter": 0.5636,
+      "precision_weighted": 0.5704,
+      "recall_weighted": 0.5636,
+      "f1_weighted": 0.5663,
+      "roc_auc": 0.5868,
+      "brier": 0.2576,
+      "within_quarter_auc_mean": 0.631,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          11,
+          11
+        ],
+        [
+          13,
+          20
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.2,
+        "2023": 0.55,
+        "2024": 0.6,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.2,
+        "2023-Q1": 0.2,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.6,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=10.0|w=None": {
+      "n": 55,
+      "correct": 32,
+      "incorrect": 23,
+      "accuracy_mean_quarter": 0.5818,
+      "precision_weighted": 0.6443,
+      "recall_weighted": 0.5818,
+      "f1_weighted": 0.5782,
+      "roc_auc": 0.635,
+      "brier": 0.2738,
+      "within_quarter_auc_mean": 0.679,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          17,
+          5
+        ],
+        [
+          18,
+          15
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.65,
+        "2024": 0.55,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.4,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|logistic|C=10.0|w=balanced": {
+      "n": 55,
+      "correct": 30,
+      "incorrect": 25,
+      "accuracy_mean_quarter": 0.5455,
+      "precision_weighted": 0.5489,
+      "recall_weighted": 0.5455,
+      "f1_weighted": 0.547,
+      "roc_auc": 0.5799,
+      "brier": 0.2681,
+      "within_quarter_auc_mean": 0.631,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          10,
+          12
+        ],
+        [
+          13,
+          20
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.2,
+        "2023": 0.5,
+        "2024": 0.6,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.2,
+        "2023-Q1": 0.2,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.6,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.6,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=1|w=None": {
+      "n": 55,
+      "correct": 33,
+      "incorrect": 22,
+      "accuracy_mean_quarter": 0.6,
+      "precision_weighted": 0.6737,
+      "recall_weighted": 0.6,
+      "f1_weighted": 0.5944,
+      "roc_auc": 0.7514,
+      "brier": 0.2598,
+      "within_quarter_auc_mean": 0.694,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          18,
+          15
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.8,
+        "2024": 0.5,
+        "2025": 0.4
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.2,
+        "2025-Q1": 0.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=1|w=balanced": {
+      "n": 55,
+      "correct": 32,
+      "incorrect": 23,
+      "accuracy_mean_quarter": 0.5818,
+      "precision_weighted": 0.6185,
+      "recall_weighted": 0.5818,
+      "f1_weighted": 0.5843,
+      "roc_auc": 0.6508,
+      "brier": 0.2346,
+      "within_quarter_auc_mean": 0.758,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          15,
+          7
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.2,
+        "2023": 0.85,
+        "2024": 0.5,
+        "2025": 0.4
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.2,
+        "2023-Q1": 0.8,
+        "2023-Q2": 1.0,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.2,
+        "2025-Q1": 0.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=2|w=None": {
+      "n": 55,
+      "correct": 35,
+      "incorrect": 20,
+      "accuracy_mean_quarter": 0.6364,
+      "precision_weighted": 0.6975,
+      "recall_weighted": 0.6364,
+      "f1_weighted": 0.6349,
+      "roc_auc": 0.7424,
+      "brier": 0.2586,
+      "within_quarter_auc_mean": 0.674,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.8,
+        "2024": 0.55,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.2,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=2|w=balanced": {
+      "n": 55,
+      "correct": 38,
+      "incorrect": 17,
+      "accuracy_mean_quarter": 0.6909,
+      "precision_weighted": 0.6935,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.692,
+      "roc_auc": 0.739,
+      "brier": 0.2265,
+      "within_quarter_auc_mean": 0.674,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          14,
+          8
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.65,
+        "2024": 0.85,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.6,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.8,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.8,
+        "2025-Q1": 0.2,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=3|w=None": {
+      "n": 55,
+      "correct": 34,
+      "incorrect": 21,
+      "accuracy_mean_quarter": 0.6182,
+      "precision_weighted": 0.6565,
+      "recall_weighted": 0.6182,
+      "f1_weighted": 0.6205,
+      "roc_auc": 0.7555,
+      "brier": 0.2581,
+      "within_quarter_auc_mean": 0.736,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          16,
+          6
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.2,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|tree|depth=3|w=balanced": {
+      "n": 55,
+      "correct": 43,
+      "incorrect": 12,
+      "accuracy_mean_quarter": 0.7818,
+      "precision_weighted": 0.7818,
+      "recall_weighted": 0.7818,
+      "f1_weighted": 0.7818,
+      "roc_auc": 0.7431,
+      "brier": 0.2144,
+      "within_quarter_auc_mean": 0.646,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          16,
+          6
+        ],
+        [
+          6,
+          27
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.75,
+        "2024": 0.85,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.8,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.8,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "eq5_12|lgbm|small|w=None": {
+      "n": 55,
+      "correct": 36,
+      "incorrect": 19,
+      "accuracy_mean_quarter": 0.6545,
+      "precision_weighted": 0.7091,
+      "recall_weighted": 0.6545,
+      "f1_weighted": 0.6545,
+      "roc_auc": 0.7948,
+      "brier": 0.2314,
+      "within_quarter_auc_mean": 0.679,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.7,
+        "2024": 0.7,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.8,
+        "2025-Q1": 0.4,
+        "2025-Q4": 0.6
+      }
+    },
+    "eq5_12|lgbm|small|w=spw": {
+      "n": 55,
+      "correct": 37,
+      "incorrect": 18,
+      "accuracy_mean_quarter": 0.6727,
+      "precision_weighted": 0.7207,
+      "recall_weighted": 0.6727,
+      "f1_weighted": 0.6738,
+      "roc_auc": 0.7727,
+      "brier": 0.2177,
+      "within_quarter_auc_mean": 0.714,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.75,
+        "2024": 0.7,
+        "2025": 0.5
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.8,
+        "2025-Q1": 0.4,
+        "2025-Q4": 0.6
+      }
+    },
+    "eq5_12|lgbm|default|w=None": {
+      "n": 55,
+      "correct": 38,
+      "incorrect": 17,
+      "accuracy_mean_quarter": 0.6909,
+      "precision_weighted": 0.7686,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.6882,
+      "roc_auc": 0.7576,
+      "brier": 0.2216,
+      "within_quarter_auc_mean": 0.792,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 1.0,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.6,
+        "2025-Q4": 1.0
+      }
+    },
+    "eq5_12|lgbm|default|w=spw": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.7893,
+      "brier": 0.1812,
+      "within_quarter_auc_mean": 0.819,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.8,
+        "2025-Q1": 0.6,
+        "2025-Q4": 1.0
+      }
+    },
+    "gov47_no_commodity|logistic|C=0.01|w=None": {
+      "n": 55,
+      "correct": 32,
+      "incorrect": 23,
+      "accuracy_mean_quarter": 0.5818,
+      "precision_weighted": 0.7453,
+      "recall_weighted": 0.5818,
+      "f1_weighted": 0.5518,
+      "roc_auc": 0.8554,
+      "brier": 0.2359,
+      "within_quarter_auc_mean": 0.714,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          11
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.25,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|logistic|C=0.01|w=balanced": {
+      "n": 55,
+      "correct": 44,
+      "incorrect": 11,
+      "accuracy_mean_quarter": 0.8,
+      "precision_weighted": 0.846,
+      "recall_weighted": 0.8,
+      "f1_weighted": 0.8012,
+      "roc_auc": 0.8926,
+      "brier": 0.2004,
+      "within_quarter_auc_mean": 0.714,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          21,
+          1
+        ],
+        [
+          10,
+          23
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.85,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|logistic|C=0.1|w=None": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_mean_quarter": 0.7636,
+      "precision_weighted": 0.8273,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.7636,
+      "roc_auc": 0.8871,
+      "brier": 0.1857,
+      "within_quarter_auc_mean": 0.786,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          21,
+          1
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.75,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|logistic|C=0.1|w=balanced": {
+      "n": 55,
+      "correct": 45,
+      "incorrect": 10,
+      "accuracy_mean_quarter": 0.8182,
+      "precision_weighted": 0.856,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.8196,
+      "roc_auc": 0.8994,
+      "brier": 0.1579,
+      "within_quarter_auc_mean": 0.786,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          21,
+          1
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.9,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|logistic|C=1.0|w=None": {
+      "n": 55,
+      "correct": 36,
+      "incorrect": 19,
+      "accuracy_mean_quarter": 0.6545,
+      "precision_weighted": 0.7495,
+      "recall_weighted": 0.6545,
+      "f1_weighted": 0.6477,
+      "roc_auc": 0.792,
+      "brier": 0.236,
+      "within_quarter_auc_mean": 0.821,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          17,
+          16
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.2,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47_no_commodity|logistic|C=1.0|w=balanced": {
+      "n": 55,
+      "correct": 37,
+      "incorrect": 18,
+      "accuracy_mean_quarter": 0.6727,
+      "precision_weighted": 0.7378,
+      "recall_weighted": 0.6727,
+      "f1_weighted": 0.6714,
+      "roc_auc": 0.7727,
+      "brier": 0.2312,
+      "within_quarter_auc_mean": 0.821,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.6,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47_no_commodity|logistic|C=10.0|w=None": {
+      "n": 55,
+      "correct": 30,
+      "incorrect": 25,
+      "accuracy_mean_quarter": 0.5455,
+      "precision_weighted": 0.5716,
+      "recall_weighted": 0.5455,
+      "f1_weighted": 0.5497,
+      "roc_auc": 0.6129,
+      "brier": 0.3993,
+      "within_quarter_auc_mean": 0.75,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.5,
+        "2024": 0.45,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.2,
+        "2023-Q2": 0.4,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.2,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.4
+      }
+    },
+    "gov47_no_commodity|logistic|C=10.0|w=balanced": {
+      "n": 55,
+      "correct": 30,
+      "incorrect": 25,
+      "accuracy_mean_quarter": 0.5455,
+      "precision_weighted": 0.5716,
+      "recall_weighted": 0.5455,
+      "f1_weighted": 0.5497,
+      "roc_auc": 0.6129,
+      "brier": 0.407,
+      "within_quarter_auc_mean": 0.786,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.5,
+        "2024": 0.45,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.2,
+        "2023-Q2": 0.4,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.2,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.4
+      }
+    },
+    "gov47_no_commodity|tree|depth=1|w=None": {
+      "n": 55,
+      "correct": 38,
+      "incorrect": 17,
+      "accuracy_mean_quarter": 0.6909,
+      "precision_weighted": 0.7,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.6934,
+      "roc_auc": 0.7321,
+      "brier": 0.2178,
+      "within_quarter_auc_mean": 0.438,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          15,
+          7
+        ],
+        [
+          10,
+          23
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.65,
+        "2024": 0.65,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.6,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.6,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|tree|depth=1|w=balanced": {
+      "n": 55,
+      "correct": 37,
+      "incorrect": 18,
+      "accuracy_mean_quarter": 0.6727,
+      "precision_weighted": 0.6727,
+      "recall_weighted": 0.6727,
+      "f1_weighted": 0.6727,
+      "roc_auc": 0.7362,
+      "brier": 0.2112,
+      "within_quarter_auc_mean": 0.347,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.2,
+        "2023": 0.7,
+        "2024": 0.8,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.2,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47_no_commodity|tree|depth=2|w=None": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7505,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.747,
+      "roc_auc": 0.7348,
+      "brier": 0.2272,
+      "within_quarter_auc_mean": 0.483,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          16,
+          6
+        ],
+        [
+          8,
+          25
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.75,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|tree|depth=2|w=balanced": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_mean_quarter": 0.7636,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.7474,
+      "roc_auc": 0.7176,
+      "brier": 0.2023,
+      "within_quarter_auc_mean": 0.577,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          11,
+          11
+        ],
+        [
+          2,
+          31
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.65,
+        "2024": 0.9,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.6,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|tree|depth=3|w=None": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7455,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7455,
+      "roc_auc": 0.7197,
+      "brier": 0.2453,
+      "within_quarter_auc_mean": 0.444,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          15,
+          7
+        ],
+        [
+          7,
+          26
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.7,
+        "2024": 0.75,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.6,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|tree|depth=3|w=balanced": {
+      "n": 55,
+      "correct": 35,
+      "incorrect": 20,
+      "accuracy_mean_quarter": 0.6364,
+      "precision_weighted": 0.6364,
+      "recall_weighted": 0.6364,
+      "f1_weighted": 0.6364,
+      "roc_auc": 0.6908,
+      "brier": 0.2675,
+      "within_quarter_auc_mean": 0.667,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          12,
+          10
+        ],
+        [
+          10,
+          23
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.6,
+        "2024": 0.6,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.4,
+        "2023-Q2": 0.6,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|lgbm|small|w=None": {
+      "n": 55,
+      "correct": 44,
+      "incorrect": 11,
+      "accuracy_mean_quarter": 0.8,
+      "precision_weighted": 0.808,
+      "recall_weighted": 0.8,
+      "f1_weighted": 0.8016,
+      "roc_auc": 0.8567,
+      "brier": 0.1572,
+      "within_quarter_auc_mean": 0.75,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          7,
+          26
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.7,
+        "2024": 0.85,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|lgbm|small|w=spw": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_mean_quarter": 0.7636,
+      "precision_weighted": 0.7622,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.7627,
+      "roc_auc": 0.8347,
+      "brier": 0.1678,
+      "within_quarter_auc_mean": 0.845,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          15,
+          7
+        ],
+        [
+          6,
+          27
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.7,
+        "2024": 0.85,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|lgbm|default|w=None": {
+      "n": 55,
+      "correct": 40,
+      "incorrect": 15,
+      "accuracy_mean_quarter": 0.7273,
+      "precision_weighted": 0.7879,
+      "recall_weighted": 0.7273,
+      "f1_weighted": 0.7273,
+      "roc_auc": 0.7548,
+      "brier": 0.2067,
+      "within_quarter_auc_mean": 0.56,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          13,
+          20
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.6,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47_no_commodity|lgbm|default|w=spw": {
+      "n": 55,
+      "correct": 40,
+      "incorrect": 15,
+      "accuracy_mean_quarter": 0.7273,
+      "precision_weighted": 0.756,
+      "recall_weighted": 0.7273,
+      "f1_weighted": 0.7298,
+      "roc_auc": 0.7824,
+      "brier": 0.1854,
+      "within_quarter_auc_mean": 0.595,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.55,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|logistic|C=0.01|w=None": {
+      "n": 55,
+      "correct": 30,
+      "incorrect": 25,
+      "accuracy_mean_quarter": 0.5455,
+      "precision_weighted": 0.7267,
+      "recall_weighted": 0.5455,
+      "f1_weighted": 0.5019,
+      "roc_auc": 0.8471,
+      "brier": 0.2375,
+      "within_quarter_auc_mean": 0.679,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          21,
+          1
+        ],
+        [
+          24,
+          9
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.25,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 0.6,
+        "2025-Q4": 0.6
+      }
+    },
+    "gov47|logistic|C=0.01|w=balanced": {
+      "n": 55,
+      "correct": 43,
+      "incorrect": 12,
+      "accuracy_mean_quarter": 0.7818,
+      "precision_weighted": 0.8187,
+      "recall_weighted": 0.7818,
+      "f1_weighted": 0.7836,
+      "roc_auc": 0.8871,
+      "brier": 0.2024,
+      "within_quarter_auc_mean": 0.679,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          10,
+          23
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.85,
+        "2025": 0.7
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.6
+      }
+    },
+    "gov47|logistic|C=0.1|w=None": {
+      "n": 55,
+      "correct": 38,
+      "incorrect": 17,
+      "accuracy_mean_quarter": 0.6909,
+      "precision_weighted": 0.7686,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.6882,
+      "roc_auc": 0.8774,
+      "brier": 0.2004,
+      "within_quarter_auc_mean": 0.643,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.65,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.4,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.4
+      }
+    },
+    "gov47|logistic|C=0.1|w=balanced": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7978,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7463,
+      "roc_auc": 0.8815,
+      "brier": 0.1719,
+      "within_quarter_auc_mean": 0.643,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.8,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 1.0,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.8,
+        "2025-Q4": 0.4
+      }
+    },
+    "gov47|logistic|C=1.0|w=None": {
+      "n": 55,
+      "correct": 35,
+      "incorrect": 20,
+      "accuracy_mean_quarter": 0.6364,
+      "precision_weighted": 0.6975,
+      "recall_weighted": 0.6364,
+      "f1_weighted": 0.6349,
+      "roc_auc": 0.7782,
+      "brier": 0.2578,
+      "within_quarter_auc_mean": 0.75,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.5,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.6,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47|logistic|C=1.0|w=balanced": {
+      "n": 55,
+      "correct": 36,
+      "incorrect": 19,
+      "accuracy_mean_quarter": 0.6545,
+      "precision_weighted": 0.6944,
+      "recall_weighted": 0.6545,
+      "f1_weighted": 0.6566,
+      "roc_auc": 0.7645,
+      "brier": 0.2547,
+      "within_quarter_auc_mean": 0.75,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          17,
+          5
+        ],
+        [
+          14,
+          19
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.5,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.6,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47|logistic|C=10.0|w=None": {
+      "n": 55,
+      "correct": 34,
+      "incorrect": 21,
+      "accuracy_mean_quarter": 0.6182,
+      "precision_weighted": 0.628,
+      "recall_weighted": 0.6182,
+      "f1_weighted": 0.6213,
+      "roc_auc": 0.6694,
+      "brier": 0.3476,
+      "within_quarter_auc_mean": 0.762,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.6,
+        "2024": 0.45,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.4,
+        "2023-Q2": 0.4,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.2,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|logistic|C=10.0|w=balanced": {
+      "n": 55,
+      "correct": 34,
+      "incorrect": 21,
+      "accuracy_mean_quarter": 0.6182,
+      "precision_weighted": 0.628,
+      "recall_weighted": 0.6182,
+      "f1_weighted": 0.6213,
+      "roc_auc": 0.6667,
+      "brier": 0.3503,
+      "within_quarter_auc_mean": 0.762,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          13,
+          9
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.6,
+        "2024": 0.45,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.4,
+        "2023-Q2": 0.4,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.2,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|tree|depth=1|w=None": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.8567,
+      "brier": 0.2091,
+      "within_quarter_auc_mean": 0.312,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.65,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.6,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|tree|depth=1|w=balanced": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.8464,
+      "brier": 0.1927,
+      "within_quarter_auc_mean": 0.188,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.8,
+        "2025": 0.6
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.4,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "gov47|tree|depth=2|w=None": {
+      "n": 55,
+      "correct": 43,
+      "incorrect": 12,
+      "accuracy_mean_quarter": 0.7818,
+      "precision_weighted": 0.8048,
+      "recall_weighted": 0.7818,
+      "f1_weighted": 0.784,
+      "roc_auc": 0.8395,
+      "brier": 0.2221,
+      "within_quarter_auc_mean": 0.508,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|tree|depth=2|w=balanced": {
+      "n": 55,
+      "correct": 44,
+      "incorrect": 11,
+      "accuracy_mean_quarter": 0.8,
+      "precision_weighted": 0.808,
+      "recall_weighted": 0.8,
+      "f1_weighted": 0.8016,
+      "roc_auc": 0.8574,
+      "brier": 0.1603,
+      "within_quarter_auc_mean": 0.658,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          7,
+          26
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.75,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|tree|depth=3|w=None": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.7789,
+      "brier": 0.2351,
+      "within_quarter_auc_mean": 0.508,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.6,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.6,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|tree|depth=3|w=balanced": {
+      "n": 55,
+      "correct": 40,
+      "incorrect": 15,
+      "accuracy_mean_quarter": 0.7273,
+      "precision_weighted": 0.7702,
+      "recall_weighted": 0.7273,
+      "f1_weighted": 0.7289,
+      "roc_auc": 0.8258,
+      "brier": 0.2109,
+      "within_quarter_auc_mean": 0.611,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          12,
+          21
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.6,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.6,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.6
+      }
+    },
+    "gov47|lgbm|small|w=None": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.843,
+      "brier": 0.194,
+      "within_quarter_auc_mean": 0.798,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          19,
+          3
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.6
+      }
+    },
+    "gov47|lgbm|small|w=spw": {
+      "n": 55,
+      "correct": 41,
+      "incorrect": 14,
+      "accuracy_mean_quarter": 0.7455,
+      "precision_weighted": 0.7581,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7478,
+      "roc_auc": 0.8223,
+      "brier": 0.1809,
+      "within_quarter_auc_mean": 0.762,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          17,
+          5
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.4,
+        "2023": 0.85,
+        "2024": 0.7,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.4,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.6
+      }
+    },
+    "gov47|lgbm|default|w=None": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_mean_quarter": 0.7636,
+      "precision_weighted": 0.8081,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.765,
+      "roc_auc": 0.8244,
+      "brier": 0.1842,
+      "within_quarter_auc_mean": 0.685,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          11,
+          22
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.85,
+        "2024": 0.6,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "gov47|lgbm|default|w=spw": {
+      "n": 55,
+      "correct": 45,
+      "incorrect": 10,
+      "accuracy_mean_quarter": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8278,
+      "brier": 0.1668,
+      "within_quarter_auc_mean": 0.631,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          8,
+          25
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    }
+  },
+  "named_comparisons": {
+    "MODEL-A config (eq5_12 LightGBM default)": {
+      "n": 55,
+      "correct": 38,
+      "incorrect": 17,
+      "accuracy_mean_quarter": 0.6909,
+      "precision_weighted": 0.7686,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.6882,
+      "roc_auc": 0.7576,
+      "brier": 0.2216,
+      "within_quarter_auc_mean": 0.792,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          15,
+          18
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.8
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 1.0,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.4,
+        "2024-Q3": 1.0,
+        "2024-Q4": 0.6,
+        "2025-Q1": 0.6,
+        "2025-Q4": 1.0
+      }
+    },
+    "MODEL-B2 (gov47 LightGBM spw)": {
+      "n": 55,
+      "correct": 45,
+      "incorrect": 10,
+      "accuracy_mean_quarter": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8278,
+      "brier": 0.1668,
+      "within_quarter_auc_mean": 0.631,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          8,
+          25
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "clock_only": {
+      "n": 55,
+      "correct": 43,
+      "incorrect": 12,
+      "accuracy_mean_quarter": 0.7818,
+      "precision_weighted": 0.8187,
+      "recall_weighted": 0.7818,
+      "f1_weighted": 0.7836,
+      "roc_auc": 0.8857,
+      "brier": 0.1529,
+      "within_quarter_auc_mean": null,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          20,
+          2
+        ],
+        [
+          10,
+          23
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.75,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "training_majority": {
+      "n": 55,
+      "correct": 22,
+      "incorrect": 33,
+      "accuracy_mean_quarter": 0.4,
+      "precision_weighted": 0.16,
+      "recall_weighted": 0.4,
+      "f1_weighted": 0.2286,
+      "roc_auc": 0.7342,
+      "brier": 0.2774,
+      "within_quarter_auc_mean": null,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          22,
+          0
+        ],
+        [
+          33,
+          0
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.1,
+        "2025": 0.1
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 0.0,
+        "2024-Q3": 0.2,
+        "2024-Q4": 0.0,
+        "2025-Q1": 0.0,
+        "2025-Q4": 0.2
+      }
+    },
+    "persistence_timing_valid": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_mean_quarter": 0.7636,
+      "precision_weighted": 0.781,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.766,
+      "roc_auc": null,
+      "brier": null,
+      "within_quarter_auc_mean": null,
+      "confusion_[[TN,FP],[FN,TP]]": [
+        [
+          18,
+          4
+        ],
+        [
+          9,
+          24
+        ]
+      ],
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.9
+      },
+      "accuracy_by_quarter": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 1.0,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.6,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    }
+  },
+  "MODEL-B2_against_acceptance_rule_(descriptive, not primary)": {
+    "C1_observed": {
+      "value": 0.8182,
+      "pass": true
+    },
+    "C2_statistical": {
+      "quarter_bootstrap_p5": 0.7273,
+      "clopper_pearson_one_sided_95_low": 0.7111,
+      "pass": false
+    },
+    "C3_beats_baselines": {
+      "comparisons": {
+        "persistence_timing_valid": {
+          "mean_quarter_difference": 0.0545,
+          "bootstrap_p5": -0.0182,
+          "bootstrap_95ci": [
+            -0.0364,
+            0.1455
+          ],
+          "rows_model_only_right": 6,
+          "rows_ref_only_right": 3,
+          "mcnemar_p": 0.5078,
+          "pass": false
+        },
+        "clock_only": {
+          "mean_quarter_difference": 0.0364,
+          "bootstrap_p5": -0.0909,
+          "bootstrap_95ci": [
+            -0.1273,
+            0.1818
+          ],
+          "rows_model_only_right": 5,
+          "rows_ref_only_right": 3,
+          "mcnemar_p": 0.7266,
+          "pass": false
+        }
+      },
+      "pass": false
+    },
+    "C4_stability": {
+      "leave_one_year_out": {
+        "2022": 0.82,
+        "2023": 0.7714,
+        "2024": 0.8857,
+        "2025": 0.8
+      },
+      "pass": true
+    },
+    "C5_prospective": {
+      "pass": null,
+      "status": "not evaluable: no labelled quarter after 2025-Q4"
+    },
+    "verdict": "OBSERVED_ONLY"
+  },
+  "ablations": {
+    "gov47": {
+      "n": 47,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 45,
+        "incorrect": 10,
+        "accuracy_mean_quarter": 0.8182,
+        "precision_weighted": 0.8413,
+        "recall_weighted": 0.8182,
+        "f1_weighted": 0.82,
+        "roc_auc": 0.8278,
+        "brier": 0.1668,
+        "within_quarter_auc_mean": 0.631,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            8,
+            25
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.9,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 38,
+        "incorrect": 17,
+        "accuracy_mean_quarter": 0.6909,
+        "precision_weighted": 0.7686,
+        "recall_weighted": 0.6909,
+        "f1_weighted": 0.6882,
+        "roc_auc": 0.8774,
+        "brier": 0.2004,
+        "within_quarter_auc_mean": 0.643,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            15,
+            18
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.65,
+          "2025": 0.6
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 1.0,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.4
+        }
+      }
+    },
+    "gov47_no_commodity": {
+      "n": 42,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 40,
+        "incorrect": 15,
+        "accuracy_mean_quarter": 0.7273,
+        "precision_weighted": 0.756,
+        "recall_weighted": 0.7273,
+        "f1_weighted": 0.7298,
+        "roc_auc": 0.7824,
+        "brier": 0.1854,
+        "within_quarter_auc_mean": 0.595,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            18,
+            4
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.55,
+          "2025": 0.9
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 42,
+        "incorrect": 13,
+        "accuracy_mean_quarter": 0.7636,
+        "precision_weighted": 0.8273,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.7636,
+        "roc_auc": 0.8871,
+        "brier": 0.1857,
+        "within_quarter_auc_mean": 0.786,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            21,
+            1
+          ],
+          [
+            12,
+            21
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.75,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 1.0,
+          "2024-Q2": 0.8,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      }
+    },
+    "gov47_no_price_levels": {
+      "n": 33,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 33,
+        "incorrect": 22,
+        "accuracy_mean_quarter": 0.6,
+        "precision_weighted": 0.6222,
+        "recall_weighted": 0.6,
+        "f1_weighted": 0.604,
+        "roc_auc": 0.6178,
+        "brier": 0.2606,
+        "within_quarter_auc_mean": 0.625,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            14,
+            8
+          ],
+          [
+            14,
+            19
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.2,
+          "2023": 0.75,
+          "2024": 0.45,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.2,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.6,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 44,
+        "incorrect": 11,
+        "accuracy_mean_quarter": 0.8,
+        "precision_weighted": 0.846,
+        "recall_weighted": 0.8,
+        "f1_weighted": 0.8012,
+        "roc_auc": 0.8802,
+        "brier": 0.1802,
+        "within_quarter_auc_mean": 0.679,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            21,
+            1
+          ],
+          [
+            10,
+            23
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.85,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 1.0,
+          "2024-Q2": 0.8,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      }
+    },
+    "gov47_no_price_related": {
+      "n": 24,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 42,
+        "incorrect": 13,
+        "accuracy_mean_quarter": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "roc_auc": 0.7837,
+        "brier": 0.1816,
+        "within_quarter_auc_mean": 0.819,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.75,
+          "2025": 0.7
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.8,
+          "2024-Q3": 1.0,
+          "2024-Q4": 0.8,
+          "2025-Q1": 0.6,
+          "2025-Q4": 0.8
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 44,
+        "incorrect": 11,
+        "accuracy_mean_quarter": 0.8,
+        "precision_weighted": 0.846,
+        "recall_weighted": 0.8,
+        "f1_weighted": 0.8012,
+        "roc_auc": 0.8884,
+        "brier": 0.1619,
+        "within_quarter_auc_mean": 0.714,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            21,
+            1
+          ],
+          [
+            10,
+            23
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.75,
+          "2025": 1.0
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.4,
+          "2024-Q2": 1.0,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 1.0,
+          "2025-Q4": 1.0
+        }
+      }
+    },
+    "quarter_common_only": {
+      "n": 20,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 36,
+        "incorrect": 19,
+        "accuracy_mean_quarter": 0.6545,
+        "precision_weighted": 0.664,
+        "recall_weighted": 0.6545,
+        "f1_weighted": 0.6573,
+        "roc_auc": 0.7204,
+        "brier": 0.2145,
+        "within_quarter_auc_mean": null,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            14,
+            8
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.65,
+          "2024": 0.5,
+          "2025": 0.9
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.2,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.0,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 38,
+        "incorrect": 17,
+        "accuracy_mean_quarter": 0.6909,
+        "precision_weighted": 0.7686,
+        "recall_weighted": 0.6909,
+        "f1_weighted": 0.6882,
+        "roc_auc": 0.8147,
+        "brier": 0.1928,
+        "within_quarter_auc_mean": 0.375,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            15,
+            18
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.5,
+          "2025": 0.9
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.2,
+          "2024-Q2": 1.0,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      }
+    },
+    "province_varying_only": {
+      "n": 27,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 40,
+        "incorrect": 15,
+        "accuracy_mean_quarter": 0.7273,
+        "precision_weighted": 0.756,
+        "recall_weighted": 0.7273,
+        "f1_weighted": 0.7298,
+        "roc_auc": 0.7741,
+        "brier": 0.1995,
+        "within_quarter_auc_mean": 0.595,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            18,
+            4
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.6,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.6,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.6,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.6
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 31,
+        "incorrect": 24,
+        "accuracy_mean_quarter": 0.5636,
+        "precision_weighted": 0.6982,
+        "recall_weighted": 0.5636,
+        "f1_weighted": 0.537,
+        "roc_auc": 0.741,
+        "brier": 0.266,
+        "within_quarter_auc_mean": 0.714,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            22,
+            11
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.6,
+          "2023": 0.75,
+          "2024": 0.55,
+          "2025": 0.2
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.6,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.2,
+          "2025-Q4": 0.2
+        }
+      }
+    },
+    "eq5_12": {
+      "n": 12,
+      "lgbm_spw": {
+        "n": 55,
+        "correct": 41,
+        "incorrect": 14,
+        "accuracy_mean_quarter": 0.7455,
+        "precision_weighted": 0.7813,
+        "recall_weighted": 0.7455,
+        "f1_weighted": 0.7475,
+        "roc_auc": 0.7893,
+        "brier": 0.1812,
+        "within_quarter_auc_mean": 0.819,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            19,
+            3
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.65,
+          "2025": 0.8
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 1.0,
+          "2024-Q4": 0.8,
+          "2025-Q1": 0.6,
+          "2025-Q4": 1.0
+        }
+      },
+      "logistic_C0.1": {
+        "n": 55,
+        "correct": 31,
+        "incorrect": 24,
+        "accuracy_mean_quarter": 0.5636,
+        "precision_weighted": 0.6982,
+        "recall_weighted": 0.5636,
+        "f1_weighted": 0.537,
+        "roc_auc": 0.7066,
+        "brier": 0.2548,
+        "within_quarter_auc_mean": 0.679,
+        "confusion_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            22,
+            11
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.6,
+          "2023": 0.75,
+          "2024": 0.4,
+          "2025": 0.5
+        },
+        "accuracy_by_quarter": {
+          "2022-Q4": 0.6,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.0,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.2,
+          "2025-Q4": 0.8
+        }
+      }
+    }
+  },
+  "P_with_training_median_labels_(diagnostic)": {
+    "n": 55,
+    "correct": 40,
+    "incorrect": 15,
+    "accuracy_mean_quarter": 0.7273,
+    "precision_weighted": 0.8414,
+    "recall_weighted": 0.7273,
+    "f1_weighted": 0.7448,
+    "roc_auc": 0.797,
+    "brier": 0.2327,
+    "within_quarter_auc_mean": 0.542,
+    "confusion_[[TN,FP],[FN,TP]]": [
+      [
+        13,
+        1
+      ],
+      [
+        14,
+        27
+      ]
+    ],
+    "accuracy_by_year": {
+      "2022": 0.6,
+      "2023": 0.75,
+      "2024": 0.7,
+      "2025": 0.8
+    },
+    "accuracy_by_quarter": {
+      "2022-Q4": 0.6,
+      "2023-Q1": 0.8,
+      "2023-Q2": 0.8,
+      "2023-Q3": 0.8,
+      "2023-Q4": 0.6,
+      "2024-Q1": 0.6,
+      "2024-Q2": 0.4,
+      "2024-Q3": 1.0,
+      "2024-Q4": 0.8,
+      "2025-Q1": 0.8,
+      "2025-Q4": 0.8
+    }
+  },
+  "frozen_prospective": {
+    "procedure": "nested P, pool and order as pre-registered",
+    "selected_with_data_through": "2025-Q4",
+    "selected_configuration": {
+      "id": "gov47|lgbm|default|w=spw",
+      "fs": "gov47",
+      "family": "lgbm",
+      "small": false,
+      "w": "spw"
+    },
+    "inner_score_all_data": 0.8143,
+    "tied_at_top": [
+      "gov47|lgbm|default|w=spw"
+    ],
+    "comparison_frozen": {
+      "file": "evidence/2026-10-08_b2_robustness/MODEL_B2_FROZEN_CONFIG.json",
+      "config_sha256": "92c12807a7cb15056a6741fd5c59252632ec6b8a87bb34b27176ff979bcd0050",
+      "input_frame_sha256": "118c32979657579de7d59115c17cb9fa0ed996a9c1400de8f2d9ad5c177811c1"
+    },
+    "preregistration_sha256": "3183c4232e308be86fad77dfe2076e64f23c8050098d3272834d99b3485fc453",
+    "protocol": "Fit the selected configuration on every labelled row through 2025-Q4 with the strict-timing frame; forecast each quarter from 2026-Q1 onward from data released before that quarter; score against Eq. 3 labels (global threshold 14.6 unchanged) once SWS publishes the round; report every quarter, whatever the result, alongside persistence and clock-only.",
+    "sha256": "4a33609b0e79d0bad3600c01c2b4513eaab4e133c13948ec693d989beccb9c67"
+  }
+}

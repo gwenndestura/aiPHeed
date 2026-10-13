@@ -1,0 +1,2967 @@
+{
+ "periods": {
+  "selection": [
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4"
+  ],
+  "final": [
+   "2025-Q1",
+   "2025-Q4"
+  ],
+  "all": [
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4"
+  ]
+ },
+ "arms": {
+  "B1_carry_forward|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.84,
+     "balanced_accuracy": 0.9130434782608696,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.8260869565217391,
+      "f1": 0.9047619047619047,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 19,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 19,
+      "LOW": 6
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.667199999999999,
+     "rmse": 6.282851440406833,
+     "mean_regional_level_error": 4.36,
+     "mean_concordant_share": 0.58,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.999999999999998,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.49999999999999994,
+       "pred_spread": 10.666666666666664,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999998,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 9.0,
+       "pairs": 10,
+       "spearman": 0.8999999999999998,
+       "pred_spread": 10.866666666666667,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.3000000000000025,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.19999999999999998,
+       "pred_spread": 8.266666666666667,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 4.335999999999999,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.39999999999999997,
+       "pred_spread": 6.533333333333331,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999998,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.3,
+       "pred_spread": 9.933333333333334,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 6.6,
+     "rmse": 7.811458819509252,
+     "mean_regional_level_error": 6.6,
+     "mean_concordant_share": 0.7,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999998,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 8.0,
+       "pairs": 10,
+       "spearman": 0.7,
+       "pred_spread": 12.599999999999998,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.3,
+       "regional_level_error": 7.300000000000001,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.19999999999999998,
+       "pred_spread": 14.666666666666664,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.8857142857142857,
+     "balanced_accuracy": 0.9393939393939394,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.8787878787878788,
+      "f1": 0.9354838709677419,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 29,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 29,
+      "LOW": 6
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 5.21942857142857,
+     "rmse": 6.754986400418676,
+     "mean_regional_level_error": 5.0,
+     "mean_concordant_share": 0.6142857142857142,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.999999999999998,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.49999999999999994,
+       "pred_spread": 10.666666666666664,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999998,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 9.0,
+       "pairs": 10,
+       "spearman": 0.8999999999999998,
+       "pred_spread": 10.866666666666667,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.3000000000000025,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.19999999999999998,
+       "pred_spread": 8.266666666666667,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 4.335999999999999,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.39999999999999997,
+       "pred_spread": 6.533333333333331,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999998,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.3,
+       "pred_spread": 9.933333333333334,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999998,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 8.0,
+       "pairs": 10,
+       "spearman": 0.7,
+       "pred_spread": 12.599999999999998,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.3,
+       "regional_level_error": 7.300000000000001,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.19999999999999998,
+       "pred_spread": 14.666666666666664,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "B2_regional|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.8,
+     "balanced_accuracy": 0.6630434782608696,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 0.95,
+      "recall": 0.8260869565217391,
+      "f1": 0.8837209302325583,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.2,
+      "recall": 0.5,
+      "f1": 0.28571428571428575,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 19,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 1,
+      "true_LOW_pred_LOW": 1
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 20,
+      "LOW": 5
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.614933333333333,
+     "rmse": 5.842478925935463,
+     "mean_regional_level_error": 4.36,
+     "mean_concordant_share": 0.5,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 3.714666666666666,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999999,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.300000000000002,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.3600000000000008,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999999,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.2,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 4.097999999999998,
+     "rmse": 5.938748465235189,
+     "mean_regional_level_error": 3.6499999999999986,
+     "mean_concordant_share": 0.5,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999999,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 2.2959999999999994,
+       "regional_level_error": 1.3999999999999986,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.8571428571428571,
+     "balanced_accuracy": 0.6893939393939394,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 0.9666666666666667,
+      "recall": 0.8787878787878788,
+      "f1": 0.9206349206349207,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.2,
+      "recall": 0.5,
+      "f1": 0.28571428571428575,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 29,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 1,
+      "true_LOW_pred_LOW": 1
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 30,
+      "LOW": 5
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 4.467238095238094,
+     "rmse": 5.8701456135099,
+     "mean_regional_level_error": 4.157142857142857,
+     "mean_concordant_share": 0.5,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 3.714666666666666,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999999,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.300000000000002,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.3600000000000008,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999999,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999999,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 2.2959999999999994,
+       "regional_level_error": 1.3999999999999986,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.2,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "B3_eq3_rule|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.84,
+     "balanced_accuracy": 0.9130434782608696,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.8260869565217391,
+      "f1": 0.9047619047619047,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 19,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 19,
+      "LOW": 6
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.667199999999999,
+     "rmse": 6.282851440406833,
+     "mean_regional_level_error": 4.36,
+     "mean_concordant_share": 0.58,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.999999999999998,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.49999999999999994,
+       "pred_spread": 10.666666666666664,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999998,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 9.0,
+       "pairs": 10,
+       "spearman": 0.8999999999999998,
+       "pred_spread": 10.866666666666667,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.3000000000000025,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.19999999999999998,
+       "pred_spread": 8.266666666666667,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 4.335999999999999,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.39999999999999997,
+       "pred_spread": 6.533333333333331,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999998,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.3,
+       "pred_spread": 9.933333333333334,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 4.249999999999998,
+     "rmse": 4.885873059705455,
+     "mean_regional_level_error": 3.6499999999999986,
+     "mean_concordant_share": 0.7,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999998,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 8.0,
+       "pairs": 10,
+       "spearman": 0.7,
+       "pred_spread": 12.599999999999998,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 2.599999999999999,
+       "regional_level_error": 1.3999999999999986,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.19999999999999998,
+       "pred_spread": 6.933333333333334,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.8857142857142857,
+     "balanced_accuracy": 0.9393939393939394,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.8787878787878788,
+      "f1": 0.9354838709677419,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 29,
+      "true_HIGH_pred_LOW": 4,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 29,
+      "LOW": 6
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 4.547999999999998,
+     "rmse": 5.917463527828,
+     "mean_regional_level_error": 4.157142857142857,
+     "mean_concordant_share": 0.6142857142857142,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.999999999999998,
+       "regional_level_error": 3.0,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.49999999999999994,
+       "pred_spread": 10.666666666666664,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 4.999999999999998,
+       "regional_level_error": 5.0,
+       "concordant_pairs": 9.0,
+       "pairs": 10,
+       "spearman": 0.8999999999999998,
+       "pred_spread": 10.866666666666667,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 5.3000000000000025,
+       "regional_level_error": 5.300000000000001,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.19999999999999998,
+       "pred_spread": 8.266666666666667,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 4.335999999999999,
+       "regional_level_error": 2.8000000000000007,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.39999999999999997,
+       "pred_spread": 6.533333333333331,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 5.699999999999998,
+       "regional_level_error": 5.699999999999999,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.3,
+       "pred_spread": 9.933333333333334,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 5.899999999999998,
+       "regional_level_error": 5.899999999999999,
+       "concordant_pairs": 8.0,
+       "pairs": 10,
+       "spearman": 0.7,
+       "pred_spread": 12.599999999999998,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 2.599999999999999,
+       "regional_level_error": 1.3999999999999986,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.19999999999999998,
+       "pred_spread": 6.933333333333334,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "B4_majority|class_only": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.92,
+     "balanced_accuracy": 0.5,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 0.92,
+      "recall": 1.0,
+      "f1": 0.9583333333333334,
+      "support": 23
+     },
+     "LOW": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 23,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 2,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 25,
+      "LOW": 0
+     }
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9428571428571428,
+     "balanced_accuracy": 0.5,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 0.9428571428571428,
+      "recall": 1.0,
+      "f1": 0.9705882352941176,
+      "support": 33
+     },
+     "LOW": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 33,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 2,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 35,
+      "LOW": 0
+     }
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M1_core|probability": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.96,
+     "balanced_accuracy": 0.9782608695652174,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9565217391304348,
+      "f1": 0.9777777777777777,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 22,
+      "true_HIGH_pred_LOW": 1,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 22,
+      "LOW": 3
+     }
+    },
+    "brier": 0.04046940844809439,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.8611676543313261,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "brier": 0.00022171485165500045,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.9859966366622299,
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9714285714285714,
+     "balanced_accuracy": 0.9848484848484849,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9696969696969697,
+      "f1": 0.9846153846153847,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 32,
+      "true_HIGH_pred_LOW": 1,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 32,
+      "LOW": 3
+     }
+    },
+    "brier": 0.02897006742054028,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.8968330778544417,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M1_core|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.92,
+     "balanced_accuracy": 0.9565217391304348,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9130434782608695,
+      "f1": 0.9545454545454545,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 21,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 21,
+      "LOW": 4
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.004287381821231,
+     "rmse": 5.613611231216366,
+     "mean_regional_level_error": 3.8977462788405774,
+     "mean_concordant_share": 0.53,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.4123811781489914,
+       "regional_level_error": 2.293687807916845,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6668859288553501,
+       "pred_spread": 8.396979789743899,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.550627850656736,
+       "regional_level_error": 3.4689867039717512,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6708203932499368,
+       "pred_spread": 9.470614053053232,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.051001065282343,
+       "regional_level_error": 4.0510010652823425,
+       "concordant_pairs": 3.5,
+       "pairs": 10,
+       "spearman": -0.44721359549995787,
+       "pred_spread": 0.6196345539326664,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.913085811224441,
+       "regional_level_error": 3.580714813238309,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.7071067811865475,
+       "pred_spread": 1.0582115410181974,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 6.094341003793641,
+       "regional_level_error": 6.094341003793641,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 5.867234180593998,
+     "rmse": 7.213345338832616,
+     "mean_regional_level_error": 5.867234180593998,
+     "mean_concordant_share": 0.55,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 4.723623101907158,
+       "regional_level_error": 4.723623101907158,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.010845259280837,
+       "regional_level_error": 7.010845259280838,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.28867513459481287,
+       "pred_spread": 2.052578880408383,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9428571428571428,
+     "balanced_accuracy": 0.9696969696969697,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9393939393939394,
+      "f1": 0.96875,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 31,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 31,
+      "LOW": 4
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 4.5365578957563075,
+     "rmse": 6.113543013328325,
+     "mean_regional_level_error": 4.460457107912983,
+     "mean_concordant_share": 0.5357142857142857,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 2.4123811781489914,
+       "regional_level_error": 2.293687807916845,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6668859288553501,
+       "pred_spread": 8.396979789743899,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.550627850656736,
+       "regional_level_error": 3.4689867039717512,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6708203932499368,
+       "pred_spread": 9.470614053053232,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.051001065282343,
+       "regional_level_error": 4.0510010652823425,
+       "concordant_pairs": 3.5,
+       "pairs": 10,
+       "spearman": -0.44721359549995787,
+       "pred_spread": 0.6196345539326664,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.913085811224441,
+       "regional_level_error": 3.580714813238309,
+       "concordant_pairs": 3.0,
+       "pairs": 10,
+       "spearman": -0.7071067811865475,
+       "pred_spread": 1.0582115410181974,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 6.094341003793641,
+       "regional_level_error": 6.094341003793641,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 4.723623101907158,
+       "regional_level_error": 4.723623101907158,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": NaN,
+       "pred_spread": 0.0,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.010845259280837,
+       "regional_level_error": 7.010845259280838,
+       "concordant_pairs": 6.0,
+       "pairs": 10,
+       "spearman": 0.28867513459481287,
+       "pred_spread": 2.052578880408383,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 0.8,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M2_compact|probability": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.88,
+     "balanced_accuracy": 0.9347826086956521,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.8695652173913043,
+      "f1": 0.9302325581395349,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.4,
+      "recall": 1.0,
+      "f1": 0.5714285714285715,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 20,
+      "true_HIGH_pred_LOW": 3,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 20,
+      "LOW": 5
+     }
+    },
+    "brier": 0.07364075275235055,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.7952814646506057,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "brier": 0.005360535390772461,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.9397993877864916,
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9142857142857143,
+     "balanced_accuracy": 0.9545454545454546,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9090909090909091,
+      "f1": 0.9523809523809523,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.4,
+      "recall": 1.0,
+      "f1": 0.5714285714285715,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 30,
+      "true_HIGH_pred_LOW": 3,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 30,
+      "LOW": 5
+     }
+    },
+    "brier": 0.05413211922047109,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.8365722998322874,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 0.8,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M2_compact|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.92,
+     "balanced_accuracy": 0.9565217391304348,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9130434782608695,
+      "f1": 0.9545454545454545,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 21,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 21,
+      "LOW": 4
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.722986328218159,
+     "rmse": 6.7769155345664025,
+     "mean_regional_level_error": 4.587482145953525,
+     "mean_concordant_share": 0.56,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 1.8301088373567524,
+       "regional_level_error": 1.1818016987975,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 7.748907531278374,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.4519138117574917,
+       "regional_level_error": 3.422700038993577,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6668859288553501,
+       "pred_spread": 9.03023748126187,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.85275712802707,
+       "regional_level_error": 4.8527571280270685,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 4.642717840547105,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 5.970841495148814,
+       "regional_level_error": 5.970841495148813,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.3,
+       "pred_spread": 4.332042794945343,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 7.509310368800669,
+       "regional_level_error": 7.509310368800669,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 1.4666197218001464,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 6.510750640048721,
+     "rmse": 8.576109746115792,
+     "mean_regional_level_error": 6.510750640048723,
+     "mean_concordant_share": 0.225,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 6.201190961031867,
+       "regional_level_error": 6.201190961031866,
+       "concordant_pairs": 2.5,
+       "pairs": 10,
+       "spearman": -0.6668859288553501,
+       "pred_spread": 6.720260543433209,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 6.8203103190655785,
+       "regional_level_error": 6.82031031906558,
+       "concordant_pairs": 2.0,
+       "pairs": 10,
+       "spearman": -0.7,
+       "pred_spread": 4.0199833779158425,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9428571428571428,
+     "balanced_accuracy": 0.9696969696969697,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9393939393939394,
+      "f1": 0.96875,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 31,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 31,
+      "LOW": 4
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 5.2337761315983204,
+     "rmse": 7.336135977553479,
+     "mean_regional_level_error": 5.136987429980725,
+     "mean_concordant_share": 0.46428571428571436,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 1.8301088373567524,
+       "regional_level_error": 1.1818016987975,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 7.748907531278374,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.4519138117574917,
+       "regional_level_error": 3.422700038993577,
+       "concordant_pairs": 7.5,
+       "pairs": 10,
+       "spearman": 0.6668859288553501,
+       "pred_spread": 9.03023748126187,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.85275712802707,
+       "regional_level_error": 4.8527571280270685,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 4.642717840547105,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 5.970841495148814,
+       "regional_level_error": 5.970841495148813,
+       "concordant_pairs": 4.0,
+       "pairs": 10,
+       "spearman": -0.3,
+       "pred_spread": 4.332042794945343,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 7.509310368800669,
+       "regional_level_error": 7.509310368800669,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 1.4666197218001464,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 6.201190961031867,
+       "regional_level_error": 6.201190961031866,
+       "concordant_pairs": 2.5,
+       "pairs": 10,
+       "spearman": -0.6668859288553501,
+       "pred_spread": 6.720260543433209,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 6.8203103190655785,
+       "regional_level_error": 6.82031031906558,
+       "concordant_pairs": 2.0,
+       "pairs": 10,
+       "spearman": -0.7,
+       "pred_spread": 4.0199833779158425,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M3_expanded|probability": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.92,
+     "balanced_accuracy": 0.9565217391304348,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9130434782608695,
+      "f1": 0.9545454545454545,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 21,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 21,
+      "LOW": 4
+     }
+    },
+    "brier": 0.07200239869269899,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.8229964220162596,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "brier": 0.00015417397429409485,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.9896133196135283,
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9428571428571428,
+     "balanced_accuracy": 0.9696969696969697,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9393939393939394,
+      "f1": 0.96875,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 31,
+      "true_HIGH_pred_LOW": 2,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 31,
+      "LOW": 4
+     }
+    },
+    "brier": 0.05147433448744045,
+    "auc": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "mean_probability": 0.8706012499011936,
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 0.8,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  },
+  "M3_expanded|stress": {
+   "selection": {
+    "rows": 25,
+    "quarters": 5,
+    "classification": {
+     "n": 25,
+     "accuracy": 0.96,
+     "balanced_accuracy": 0.9782608695652174,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9565217391304348,
+      "f1": 0.9777777777777777,
+      "support": 23
+     },
+     "LOW": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 22,
+      "true_HIGH_pred_LOW": 1,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 23,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 22,
+      "LOW": 3
+     }
+    },
+    "stress": {
+     "n_rows": 25,
+     "n_quarters": 5,
+     "mae": 4.036362904144055,
+     "rmse": 5.962085720259155,
+     "mean_regional_level_error": 3.797016743350253,
+     "mean_concordant_share": 0.56,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 1.742054237002486,
+       "regional_level_error": 1.077143848679464,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 8.269434790619073,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.943935479400328,
+       "regional_level_error": 3.9439354794003307,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 8.322612037037864,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.112225457413777,
+       "regional_level_error": 4.112225457413775,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 3.3743657822619983,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.8030049951687466,
+       "regional_level_error": 3.271184579522755,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 3.872136043146911,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 6.580594351734942,
+       "regional_level_error": 6.580594351734941,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 0.9147520662315998,
+       "true_spread": 12.533333333333331
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 23 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0
+    }
+   },
+   "final": {
+    "rows": 10,
+    "quarters": 2,
+    "classification": {
+     "n": 10,
+     "accuracy": 1.0,
+     "balanced_accuracy": null,
+     "balanced_accuracy_note": "undefined: one true class absent",
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+     },
+     "LOW": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 10,
+      "true_HIGH_pred_LOW": 0,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 0
+     },
+     "true_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     },
+     "pred_distribution": {
+      "HIGH": 10,
+      "LOW": 0
+     }
+    },
+    "stress": {
+     "n_rows": 10,
+     "n_quarters": 2,
+     "mae": 6.964645809279219,
+     "rmse": 8.53151444876431,
+     "mean_regional_level_error": 6.9646458092792205,
+     "mean_concordant_share": 0.475,
+     "per_quarter": [
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 6.427307345481711,
+       "regional_level_error": 6.427307345481715,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.15389675281277312,
+       "pred_spread": 3.5912010130665397,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.501984273076727,
+       "regional_level_error": 7.501984273076726,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 4.260827411751539,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 0 LOW / 10 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   },
+   "all": {
+    "rows": 35,
+    "quarters": 7,
+    "classification": {
+     "n": 35,
+     "accuracy": 0.9714285714285714,
+     "balanced_accuracy": 0.9848484848484849,
+     "balanced_accuracy_note": null,
+     "HIGH": {
+      "precision": 1.0,
+      "recall": 0.9696969696969697,
+      "f1": 0.9846153846153847,
+      "support": 33
+     },
+     "LOW": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8,
+      "support": 2
+     },
+     "confusion": {
+      "true_HIGH_pred_HIGH": 32,
+      "true_HIGH_pred_LOW": 1,
+      "true_LOW_pred_HIGH": 0,
+      "true_LOW_pred_LOW": 2
+     },
+     "true_distribution": {
+      "HIGH": 33,
+      "LOW": 2
+     },
+     "pred_distribution": {
+      "HIGH": 32,
+      "LOW": 3
+     }
+    },
+    "stress": {
+     "n_rows": 35,
+     "n_quarters": 7,
+     "mae": 4.873015162754102,
+     "rmse": 6.796068277819999,
+     "mean_regional_level_error": 4.702053619329958,
+     "mean_concordant_share": 0.5357142857142858,
+     "per_quarter": [
+      {
+       "quarter": "2023-Q4",
+       "n": 5,
+       "mae": 1.742054237002486,
+       "regional_level_error": 1.077143848679464,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 8.269434790619073,
+       "true_spread": 8.266666666666667
+      },
+      {
+       "quarter": "2024-Q1",
+       "n": 5,
+       "mae": 3.943935479400328,
+       "regional_level_error": 3.9439354794003307,
+       "concordant_pairs": 7.0,
+       "pairs": 10,
+       "spearman": 0.39999999999999997,
+       "pred_spread": 8.322612037037864,
+       "true_spread": 6.533333333333331
+      },
+      {
+       "quarter": "2024-Q2",
+       "n": 5,
+       "mae": 4.112225457413777,
+       "regional_level_error": 4.112225457413775,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 3.3743657822619983,
+       "true_spread": 9.933333333333334
+      },
+      {
+       "quarter": "2024-Q3",
+       "n": 5,
+       "mae": 3.8030049951687466,
+       "regional_level_error": 3.271184579522755,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 3.872136043146911,
+       "true_spread": 12.599999999999998
+      },
+      {
+       "quarter": "2024-Q4",
+       "n": 5,
+       "mae": 6.580594351734942,
+       "regional_level_error": 6.580594351734941,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.22360679774997894,
+       "pred_spread": 0.9147520662315998,
+       "true_spread": 12.533333333333331
+      },
+      {
+       "quarter": "2025-Q1",
+       "n": 5,
+       "mae": 6.427307345481711,
+       "regional_level_error": 6.427307345481715,
+       "concordant_pairs": 4.5,
+       "pairs": 10,
+       "spearman": -0.15389675281277312,
+       "pred_spread": 3.5912010130665397,
+       "true_spread": 14.666666666666664
+      },
+      {
+       "quarter": "2025-Q4",
+       "n": 5,
+       "mae": 7.501984273076727,
+       "regional_level_error": 7.501984273076726,
+       "concordant_pairs": 5.0,
+       "pairs": 10,
+       "spearman": -0.09999999999999999,
+       "pred_spread": 4.260827411751539,
+       "true_spread": 6.533333333333335
+      }
+     ]
+    },
+    "auc_of_stress_score": {
+     "roc_auc": null,
+     "pr_auc": null,
+     "note": "not meaningful: 2 LOW / 33 HIGH (< 5 per class)"
+    },
+    "per_quarter_accuracy": {
+     "2023-Q4": 1.0,
+     "2024-Q1": 0.8,
+     "2024-Q2": 1.0,
+     "2024-Q3": 1.0,
+     "2024-Q4": 1.0,
+     "2025-Q1": 1.0,
+     "2025-Q4": 1.0
+    }
+   }
+  }
+ },
+ "per_province": [
+  {
+   "arm": "B1_carry_forward",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.6380952380952385
+  },
+  {
+   "arm": "B1_carry_forward",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143,
+   "mae": 4.939047619047618
+  },
+  {
+   "arm": "B1_carry_forward",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143,
+   "mae": 11.148571428571428
+  },
+  {
+   "arm": "B1_carry_forward",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 2.676190476190475
+  },
+  {
+   "arm": "B1_carry_forward",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.695238095238096
+  },
+  {
+   "arm": "B2_regional",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 3.01047619047619
+  },
+  {
+   "arm": "B2_regional",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 4.296190476190476
+  },
+  {
+   "arm": "B2_regional",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 8.33047619047619
+  },
+  {
+   "arm": "B2_regional",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 3.1152380952380945
+  },
+  {
+   "arm": "B2_regional",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 3.5838095238095247
+  },
+  {
+   "arm": "B3_eq3_rule",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.488571428571429
+  },
+  {
+   "arm": "B3_eq3_rule",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143,
+   "mae": 4.589523809523809
+  },
+  {
+   "arm": "B3_eq3_rule",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143,
+   "mae": 8.760952380952379
+  },
+  {
+   "arm": "B3_eq3_rule",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 2.9457142857142844
+  },
+  {
+   "arm": "B3_eq3_rule",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 2.955238095238095
+  },
+  {
+   "arm": "B4_majority",
+   "kind": "class_only",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "B4_majority",
+   "kind": "class_only",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "B4_majority",
+   "kind": "class_only",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143
+  },
+  {
+   "arm": "B4_majority",
+   "kind": "class_only",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "B4_majority",
+   "kind": "class_only",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M1_core",
+   "kind": "probability",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M1_core",
+   "kind": "probability",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571
+  },
+  {
+   "arm": "M1_core",
+   "kind": "probability",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M1_core",
+   "kind": "probability",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M1_core",
+   "kind": "probability",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M1_core",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 1.9987259621239168
+  },
+  {
+   "arm": "M1_core",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143,
+   "mae": 4.672933710860354
+  },
+  {
+   "arm": "M1_core",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 10.251473031458696
+  },
+  {
+   "arm": "M1_core",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 2.4422322479125476
+  },
+  {
+   "arm": "M1_core",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.3174245264260205
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "probability",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "probability",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "probability",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.7142857142857143
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "probability",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "probability",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 1.961407914667563
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 4.962081793956003
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 11.839446830736676
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.4075868056366923
+  },
+  {
+   "arm": "M2_compact",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.9983573129946657
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "probability",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "probability",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "probability",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "probability",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "probability",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "stress",
+   "province_code": "PH040100000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 2.377863037110702
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "stress",
+   "province_code": "PH040200000",
+   "rows": 7,
+   "accuracy": 0.8571428571428571,
+   "mae": 4.198002676226421
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "stress",
+   "province_code": "PH040300000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 10.839934980590389
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "stress",
+   "province_code": "PH040400000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.314399120493703
+  },
+  {
+   "arm": "M3_expanded",
+   "kind": "stress",
+   "province_code": "PH040500000",
+   "rows": 7,
+   "accuracy": 1.0,
+   "mae": 3.6348759993493
+  }
+ ],
+ "n_common_rows": 35,
+ "insufficient_rows": []
+}

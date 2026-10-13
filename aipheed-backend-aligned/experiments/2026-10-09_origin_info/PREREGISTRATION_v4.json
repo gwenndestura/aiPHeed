@@ -1,0 +1,43 @@
+{
+  "title": "aiPHeed origin-information study v4 (2021-2026), pre-registered",
+  "written": "2026-10-09T14:02:54",
+  "status_at_writing": "No model in this study has been run. Monthly CPI/rice data are NOT in the project; Stage B waits for authorized collection.",
+  "inherits": "window rule W, K1-K4, strict timing, threshold 14.345, outer protocol (8 quarters 2023-Q3..2025-Q4, 40 rows, already reused), seed 42 from PREREGISTRATION_v3 (sha 34ea59d4...)",
+  "stage_A_now (no new data)": {
+    "primary_candidate": "N2: regional SWS nowcast + Eq. 3. Inside each outer fold, fit ridge regression (alpha = 1.0 on standardized inputs) on prior labelled QUARTERS: SWS(target) ~ sws_known, sws_change, sws_age, regional food CPI YoY (t-1), regional mean wholesale rice YoY-style change (t-1 accel), news_ph_count. Predicted stress = SWS_hat + 2*cpi_rel(t-1). P(HIGH) = Phi((stress_hat - 14.345)/sigma), sigma = in-fold residual SD of SWS_hat (training quarters, inner leave-future-out) combined with in-fold SD of cpi_rel errors. HIGH if P >= 0.5.",
+    "secondary_descriptive": [
+      "N1: SWS_hat = training-mean + phi*(sws_known - training-mean), phi = in-fold OLS slope on training quarters, then Eq. 3 as N2",
+      "frozen MODEL-B2 configuration (gov_c, spw) on the window frame",
+      "Eq. 3 rule",
+      "timing-valid persistence",
+      "clock-only"
+    ],
+    "missing_input_rule": "a missing quarter-level input is replaced by its training-fold median"
+  },
+  "stage_B_after_authorized_collection": {
+    "data": "monthly provincial food CPI YoY (PSA OpenStat, 2018=100) and monthly provincial wholesale RMR price (PSA OpenStat 0052M4AWB01), 2021-01..2026-latest, each with a verified release date; a month enters a forecast for quarter T only if released before T starts",
+    "features": {
+      "cpi_m": [
+        "food_cpi_yoy of the latest released month",
+        "change over the last 2 released months",
+        "cpi_rel_m: province minus five-province mean, latest released month"
+      ],
+      "rice_m": [
+        "wholesale RMR of the latest released month",
+        "% change over the last 2 released months",
+        "province minus five-province mean"
+      ]
+    },
+    "candidates": [
+      "B1 MODEL-B2 config + cpi_m",
+      "B2 MODEL-B2 config + rice_m",
+      "B3 MODEL-B2 config + cpi_m + rice_m",
+      "B4 N2 with cpi_m/rice_m added to the SWS nowcast and cpi_rel_m replacing cpi_rel"
+    ],
+    "primary_candidate": "B4",
+    "comparison": "each against frozen MODEL-B2 config, Eq. 3 rule, persistence, clock-only on the same 40 rows"
+  },
+  "acceptance_rule": "C1-C4 as in v3 applied to the stage's primary candidate only; C5 = scored 2026 quarters. Secondary results are descriptive and never promoted on outer results.",
+  "news_stage": "Re-geocode retained (>= 0.30) 2021+ articles lacking a province with app/ml/corpus/location_geocoder.py; count assignments; manually classify each assignment as genuine/false; if fewer than 10 genuine, record and make no data change.",
+  "prospective": "freeze label-blind 2026-Q1/Q2 forecasts for N2 (and later B4); label every 2026 forecast as retrospective simulation unless issued before its origin"
+}

@@ -13,6 +13,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 import type {
+  AlertResponse,
   AuditResponse,
   ConfigResponse,
   ExplainabilityResponse,
@@ -23,6 +24,7 @@ import type {
   Horizon,
   MunicipalitiesResponse,
   NewsResponse,
+  RankingResponse,
   ProvincesResponse,
   QuartersResponse,
   RejectionsResponse,
@@ -59,6 +61,23 @@ export function useProvinces(quarter?: string, horizon: Horizon = "nowcast") {
   return useQuery({
     queryKey: ["provinces", quarter, horizon],
     queryFn: () => api.get<ProvincesResponse>("/api/v1/provinces", { quarter, horizon }, { auth: false }),
+    staleTime: HOUR,
+  });
+}
+
+export function useConfirmedAlerts() {
+  return useQuery({
+    queryKey: ["alerts"],
+    queryFn: () => api.get<AlertResponse>("/api/v1/alerts", undefined, { auth: false }),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useRanking(quarter?: string, horizon: Horizon = "nowcast") {
+  return useQuery({
+    queryKey: ["ranking", quarter, horizon],
+    queryFn: () => api.get<RankingResponse>("/api/v1/ranking", { quarter, horizon }, { auth: false }),
+    enabled: !!quarter,
     staleTime: HOUR,
   });
 }

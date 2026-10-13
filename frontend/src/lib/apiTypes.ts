@@ -142,6 +142,44 @@ export interface ProvinceSummary {
   limitedSignal: boolean;
   horizon: Horizon;
   withheld: boolean;
+  // Rank among the published provinces by risk probability (Section 1.2).
+  // Null when withheld.
+  rank?: number | null;
+  rankOf?: number | null;
+  gapToNextLower?: number | null;
+  tiedWithNextLower?: boolean | null;
+}
+
+export interface ShapDifference {
+  feature: string;
+  label: string;
+  difference: number;
+  value: number | null;
+  valueNextLower: number | null;
+}
+
+export interface RankingRow {
+  id: string;
+  name: string;
+  provinceCode: string;
+  riskScore: number;
+  riskLevel: string;
+  rank: number;
+  rankOf: number;
+  qoqChange: number | null;
+  gapToNextLower: number | null;
+  tiedWithNextLower: boolean | null;
+  nextLowerId: string | null;
+  whyAboveNextLower: ShapDifference[];
+  limitedSignal: boolean;
+}
+
+export interface RankingResponse {
+  quarter: string;
+  indicator: Indicator;
+  method: string;
+  horizonLabel: string;
+  data: RankingRow[];
 }
 
 export interface ProvincesResponse {
@@ -444,5 +482,23 @@ export interface FeedbackListResponse {
   data: FeedbackRow[];
   page: number;
   pageSize: number;
+  total: number;
+}
+
+// ---------------------------------------------------------------------------
+// /alerts (public) -- only alerts an administrator has confirmed (Rule 7)
+// ---------------------------------------------------------------------------
+
+export interface AlertRecord {
+  id: number;
+  quarter: string;
+  province_code: string;
+  threshold_exceeded: boolean;
+  confirmed: boolean;
+  created_at: string | null;
+}
+
+export interface AlertResponse {
+  data: AlertRecord[];
   total: number;
 }

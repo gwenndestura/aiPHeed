@@ -9,15 +9,19 @@ from app.services.feedback import FeedbackError
 from app.services.review import ReviewError, ReviewNotFound
 from app.services.ratelimit import RateLimited
 from app.services.security import AuthError, ForbiddenError, ServerMisconfigured
+from app.tasks import scheduler
+from app.tasks.quarterly_pipeline import PipelineBusy
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     print("Starting up aiPHeed backend...")
-    # Scheduler and model loading will be added in Week 14
+    # Quarterly self-update (Rule 1): runs the pipeline on PIPELINE_CRON.
+    scheduler.start()
     yield
     # Shutdown
+    scheduler.shutdown()
     print("Shutting down aiPHeed backend...")
 
 
@@ -124,6 +128,12 @@ async def review_not_found(request: Request, exc: ReviewNotFound):
 @app.exception_handler(ReviewError)
 async def review_error(request: Request, exc: ReviewError):
     return _error(400, exc.code, str(exc))
+
+
+@app.exception_handler(PipelineBusy)
+async def pipeline_busy(request: Request, exc: PipelineBusy):
+    """409: a run is already in progress; starting a second would race it."""
+    return _error(409, "pipeline_running", str(exc))
 
 
 @app.exception_handler(FeedbackError)

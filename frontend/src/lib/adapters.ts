@@ -36,6 +36,11 @@ export function provinceToRegion(p: ProvinceSummary): RegionData {
     seriesNeedingReview: p.seriesNeedingReview,
     lat: p.centroid.lat,
     lng: p.centroid.lng,
+    provinceCode: p.provinceCode,
+    rank: p.rank ?? null,
+    rankOf: p.rankOf ?? null,
+    gapToNextLower: p.gapToNextLower ?? null,
+    tiedWithNextLower: p.tiedWithNextLower ?? null,
     // Not produced by the API -- see file header. Left inert; no rendered
     // screen reads these off a province.
     unemploymentRate: 0,

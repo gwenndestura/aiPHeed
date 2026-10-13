@@ -1,0 +1,359 @@
+{
+  "features": [
+    "shock_lag1",
+    "shock_lag2",
+    "dev_lag1",
+    "shock_lag4",
+    "dev_lag4",
+    "dev_roll4",
+    "series_vol",
+    "shock_rate_qoy",
+    "dev_qoy_mean",
+    "quarter_num",
+    "group_code",
+    "province_idx"
+  ],
+  "n_features": 12,
+  "params": {
+    "objective": "binary",
+    "verbosity": -1,
+    "random_state": 42,
+    "class_weight": "balanced",
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "num_leaves": 16,
+    "max_depth": 4,
+    "min_child_samples": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.5,
+    "reg_lambda": 0.5
+  },
+  "quarters": [
+    "2021-Q3",
+    "2026-Q2"
+  ],
+  "all_folds": {
+    "n": 3862,
+    "accuracy": 0.7299326773692387,
+    "shock": {
+      "precision": 0.5539246968730057,
+      "recall": 0.7161716171617162,
+      "f1": 0.6246851385390428
+    },
+    "weighted": {
+      "precision": 0.7571583126965428,
+      "recall": 0.7299326773692387,
+      "f1": 0.7374883651922356
+    },
+    "confusion": {
+      "tp": 868,
+      "fp": 699,
+      "fn": 344,
+      "tn": 1951
+    },
+    "positive_rate": 0.3138270326255826,
+    "roc_auc": 0.7935670029267078,
+    "baselines": {
+      "majority": 0.6861729673744175,
+      "seasonal_persistence": 0.7465897166841553,
+      "seasonal_n": 3812
+    },
+    "skill_vs_majority": 0.04375970999482126,
+    "skill_vs_seasonal": -0.016657039314916577
+  },
+  "mature_folds": {
+    "n": 2647,
+    "accuracy": 0.7559501322251606,
+    "shock": {
+      "precision": 0.5682859761686526,
+      "recall": 0.779874213836478,
+      "f1": 0.6574761399787911
+    },
+    "weighted": {
+      "precision": 0.7916497403181724,
+      "recall": 0.7559501322251606,
+      "f1": 0.7645030376550095
+    },
+    "confusion": {
+      "tp": 620,
+      "fp": 471,
+      "fn": 175,
+      "tn": 1381
+    },
+    "positive_rate": 0.3003400075557235,
+    "roc_auc": 0.8297784479128462,
+    "baselines": {
+      "majority": 0.6996599924442766,
+      "seasonal_persistence": 0.7640320733104238,
+      "seasonal_n": 2619
+    },
+    "skill_vs_majority": 0.05629013978088404,
+    "skill_vs_seasonal": -0.008081941085263167
+  },
+  "cold_start_folds": {
+    "n": 1215,
+    "accuracy": 0.6732510288065844,
+    "shock": {
+      "precision": 0.5210084033613446,
+      "recall": 0.5947242206235012,
+      "f1": 0.555431131019037
+    },
+    "weighted": {
+      "precision": 0.68540571744159,
+      "recall": 0.6732510288065844,
+      "f1": 0.6777737184418904
+    },
+    "confusion": {
+      "tp": 248,
+      "fp": 228,
+      "fn": 169,
+      "tn": 570
+    },
+    "positive_rate": 0.3432098765432099,
+    "roc_auc": 0.7251537116171723,
+    "baselines": {
+      "majority": 0.6567901234567901,
+      "seasonal_persistence": 0.7082984073763621,
+      "seasonal_n": 1193
+    },
+    "skill_vs_majority": 0.016460905349794275,
+    "skill_vs_seasonal": -0.03504737856977769
+  },
+  "by_group": {
+    "fisheries": {
+      "n": 192,
+      "accuracy": 0.75,
+      "shock": {
+        "precision": 0.7647058823529411,
+        "recall": 0.9069767441860465,
+        "f1": 0.8297872340425532
+      },
+      "weighted": {
+        "precision": 0.7409502262443439,
+        "recall": 0.75,
+        "f1": 0.731226533166458
+      },
+      "confusion": {
+        "tp": 117,
+        "fp": 36,
+        "fn": 12,
+        "tn": 27
+      },
+      "positive_rate": 0.671875,
+      "roc_auc": 0.7988187523071244,
+      "baselines": {
+        "majority": 0.671875,
+        "seasonal_persistence": 0.71875,
+        "seasonal_n": 192
+      },
+      "skill_vs_majority": 0.078125,
+      "skill_vs_seasonal": 0.03125
+    },
+    "fruit_crops": {
+      "n": 1429,
+      "accuracy": 0.7137858642407278,
+      "shock": {
+        "precision": 0.551433389544688,
+        "recall": 0.6957446808510638,
+        "f1": 0.6152398871119473
+      },
+      "weighted": {
+        "precision": 0.7376726517857194,
+        "recall": 0.7137858642407278,
+        "f1": 0.7205385969353463
+      },
+      "confusion": {
+        "tp": 327,
+        "fp": 266,
+        "fn": 143,
+        "tn": 693
+      },
+      "positive_rate": 0.3289013296011197,
+      "roc_auc": 0.7790373394271516,
+      "baselines": {
+        "majority": 0.6710986703988804,
+        "seasonal_persistence": 0.7015449438202247,
+        "seasonal_n": 1424
+      },
+      "skill_vs_majority": 0.04268719384184738,
+      "skill_vs_seasonal": 0.012240920420503065
+    },
+    "vegetables_rootcrops": {
+      "n": 2241,
+      "accuracy": 0.7385095939312807,
+      "shock": {
+        "precision": 0.5164433617539586,
+        "recall": 0.6916802610114192,
+        "f1": 0.5913528591352859
+      },
+      "weighted": {
+        "precision": 0.7710376054051419,
+        "recall": 0.7385095939312807,
+        "f1": 0.7485517858071229
+      },
+      "confusion": {
+        "tp": 424,
+        "fp": 397,
+        "fn": 189,
+        "tn": 1231
+      },
+      "positive_rate": 0.27353859883980364,
+      "roc_auc": 0.7828709252037147,
+      "baselines": {
+        "majority": 0.7264614011601964,
+        "seasonal_persistence": 0.7782331511839709,
+        "seasonal_n": 2196
+      },
+      "skill_vs_majority": 0.012048192771084265,
+      "skill_vs_seasonal": -0.03972355725269017
+    }
+  },
+  "by_province": {
+    "Batangas": {
+      "n": 748,
+      "accuracy": 0.6818181818181818,
+      "shock": {
+        "precision": 0.5543237250554324,
+        "recall": 0.8710801393728222,
+        "f1": 0.6775067750677507
+      },
+      "weighted": {
+        "precision": 0.7522191613100704,
+        "recall": 0.6818181818181818,
+        "f1": 0.6827509927773779
+      },
+      "confusion": {
+        "tp": 250,
+        "fp": 201,
+        "fn": 37,
+        "tn": 260
+      },
+      "positive_rate": 0.3836898395721925,
+      "roc_auc": 0.7802270476996682,
+      "baselines": {
+        "majority": 0.6163101604278075,
+        "seasonal_persistence": 0.7123473541383989,
+        "seasonal_n": 737
+      },
+      "skill_vs_majority": 0.06550802139037426,
+      "skill_vs_seasonal": -0.030529172320217124
+    },
+    "Cavite": {
+      "n": 709,
+      "accuracy": 0.6967559943582511,
+      "shock": {
+        "precision": 0.5674157303370787,
+        "recall": 0.7680608365019012,
+        "f1": 0.6526655896607432
+      },
+      "weighted": {
+        "precision": 0.7308314746811096,
+        "recall": 0.6967559943582511,
+        "f1": 0.7018879188099009
+      },
+      "confusion": {
+        "tp": 202,
+        "fp": 154,
+        "fn": 61,
+        "tn": 292
+      },
+      "positive_rate": 0.3709449929478138,
+      "roc_auc": 0.7765435045780832,
+      "baselines": {
+        "majority": 0.6290550070521862,
+        "seasonal_persistence": 0.7321937321937322,
+        "seasonal_n": 702
+      },
+      "skill_vs_majority": 0.06770098730606489,
+      "skill_vs_seasonal": -0.0354377378354811
+    },
+    "Laguna": {
+      "n": 899,
+      "accuracy": 0.6418242491657397,
+      "shock": {
+        "precision": 0.5066666666666667,
+        "recall": 0.6951219512195121,
+        "f1": 0.5861182519280206
+      },
+      "weighted": {
+        "precision": 0.6785485811588063,
+        "recall": 0.6418242491657397,
+        "f1": 0.6484871233451531
+      },
+      "confusion": {
+        "tp": 228,
+        "fp": 222,
+        "fn": 100,
+        "tn": 349
+      },
+      "positive_rate": 0.36484983314794217,
+      "roc_auc": 0.7304045107000983,
+      "baselines": {
+        "majority": 0.6351501668520578,
+        "seasonal_persistence": 0.6985539488320356,
+        "seasonal_n": 899
+      },
+      "skill_vs_majority": 0.006674082313681828,
+      "skill_vs_seasonal": -0.05672969966629593
+    },
+    "Quezon": {
+      "n": 849,
+      "accuracy": 0.8138987043580683,
+      "shock": {
+        "precision": 0.5786516853932584,
+        "recall": 0.553763440860215,
+        "f1": 0.5659340659340659
+      },
+      "weighted": {
+        "precision": 0.8110939708979811,
+        "recall": 0.8138987043580683,
+        "f1": 0.8124116600496785
+      },
+      "confusion": {
+        "tp": 103,
+        "fp": 75,
+        "fn": 83,
+        "tn": 588
+      },
+      "positive_rate": 0.21908127208480566,
+      "roc_auc": 0.776650610616455,
+      "baselines": {
+        "majority": 0.7809187279151943,
+        "seasonal_persistence": 0.7930204572803851,
+        "seasonal_n": 831
+      },
+      "skill_vs_majority": 0.03297997644287398,
+      "skill_vs_seasonal": 0.020878247077683265
+    },
+    "Rizal": {
+      "n": 657,
+      "accuracy": 0.832572298325723,
+      "shock": {
+        "precision": 0.6439393939393939,
+        "recall": 0.5743243243243243,
+        "f1": 0.6071428571428571
+      },
+      "weighted": {
+        "precision": 0.8268234860015682,
+        "recall": 0.832572298325723,
+        "f1": 0.829084028442816
+      },
+      "confusion": {
+        "tp": 85,
+        "fp": 47,
+        "fn": 63,
+        "tn": 462
+      },
+      "positive_rate": 0.2252663622526636,
+      "roc_auc": 0.8392582169595922,
+      "baselines": {
+        "majority": 0.7747336377473364,
+        "seasonal_persistence": 0.8087091757387247,
+        "seasonal_n": 643
+      },
+      "skill_vs_majority": 0.0578386605783866,
+      "skill_vs_seasonal": 0.023863122586998298
+    }
+  }
+}

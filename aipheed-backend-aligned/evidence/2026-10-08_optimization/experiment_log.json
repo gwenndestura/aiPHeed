@@ -1,0 +1,1445 @@
+{
+  "meta": {
+    "script_sha256": "9bc908cbfebab77537958827473d4c94cd21cc006a6b3f433bd3520b81f138d0",
+    "seed": 42,
+    "outer_min": 8,
+    "inner_min": 5,
+    "n_trials": 50,
+    "features": [
+      "FSSI",
+      "trigger_market",
+      "trigger_climate",
+      "trigger_employment",
+      "trigger_ofw_remittance",
+      "trigger_fish_kill",
+      "food_cpi",
+      "food_cpi_yoy",
+      "rice_price_regular",
+      "unemployment_rate",
+      "poverty_incidence",
+      "food_minus_headline_yoy",
+      "headline_cpi",
+      "ofw_remit_yoy_pct",
+      "fx_usd_php_avg",
+      "diesel_php_per_l",
+      "gasoline_php_per_l",
+      "brent_usd_per_bbl",
+      "tc_count",
+      "tc_severe_flag",
+      "rainfall_anomaly_pct",
+      "drought_alert",
+      "enso_numeric",
+      "commodity_fruit_veg",
+      "commodity_leafy_veg",
+      "commodity_livestock",
+      "commodity_poultry",
+      "commodity_rootcrops",
+      "FSSI_lag1",
+      "FSSI_accel",
+      "food_cpi_yoy_lag1",
+      "food_cpi_yoy_accel",
+      "food_minus_headline_yoy_lag1",
+      "food_minus_headline_yoy_accel",
+      "unemployment_rate_lag1",
+      "unemployment_rate_accel",
+      "ofw_remit_yoy_pct_lag1",
+      "ofw_remit_yoy_pct_accel",
+      "rainfall_anomaly_pct_lag1",
+      "rainfall_anomaly_pct_accel",
+      "rice_price_regular_lag1",
+      "rice_price_regular_accel",
+      "diesel_php_per_l_lag1",
+      "diesel_php_per_l_accel",
+      "FSSI_lag2",
+      "cpi_dev",
+      "sws_hunger"
+    ],
+    "n_outer_test_rows": 55,
+    "rule": "reliable = acc >= base+0.018 AND no year worse by >0.10 AND AUC >= base-0.02"
+  },
+  "experiments": [
+    {
+      "variant": "E0_baseline_default",
+      "seconds": 1.6,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.8244,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.6,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "reliable_improvement": null,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        }
+      ]
+    },
+    {
+      "variant": "E1_class_weight_balanced",
+      "seconds": 0.2,
+      "metrics": {
+        "accuracy_mean_fold": 0.8,
+        "precision_weighted": 0.808,
+        "recall_weighted": 0.8,
+        "f1_weighted": 0.8016,
+        "precision_high": 0.8667,
+        "recall_high": 0.7879,
+        "roc_auc": 0.8072,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            18,
+            4
+          ],
+          [
+            7,
+            26
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.6,
+          "2023": 0.9,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.6,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "class_weight": "balanced"
+          }
+        }
+      ]
+    },
+    {
+      "variant": "E2_scale_pos_weight_ratio",
+      "seconds": 0.1,
+      "metrics": {
+        "accuracy_mean_fold": 0.8182,
+        "precision_weighted": 0.8413,
+        "recall_weighted": 0.8182,
+        "f1_weighted": 0.82,
+        "precision_high": 0.9259,
+        "recall_high": 0.7576,
+        "roc_auc": 0.8278,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            8,
+            25
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.9,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "reliable_improvement": true,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.8571428571428574
+          },
+          "scale_pos_weight": 1.857
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 2.0000000000000004
+          },
+          "scale_pos_weight": 2.0
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 2.3333333333333335
+          },
+          "scale_pos_weight": 2.333
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 2.4375
+          },
+          "scale_pos_weight": 2.438
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 2.5294117647058822
+          },
+          "scale_pos_weight": 2.529
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 2.25
+          },
+          "scale_pos_weight": 2.25
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.9166666666666667
+          },
+          "scale_pos_weight": 1.917
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.586206896551724
+          },
+          "scale_pos_weight": 1.586
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.4242424242424243
+          },
+          "scale_pos_weight": 1.424
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.236842105263158
+          },
+          "scale_pos_weight": 1.237
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "scale_pos_weight": 1.0930232558139532
+          },
+          "scale_pos_weight": 1.093
+        }
+      ]
+    },
+    {
+      "variant": "E3_threshold_inner",
+      "seconds": 1.1,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.8244,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.6,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.8,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.45,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.45,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.45,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.45,
+          "n_features": 47,
+          "params": {}
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.45,
+          "n_features": 47,
+          "params": {}
+        }
+      ]
+    },
+    {
+      "variant": "E4_featuresel_inner",
+      "seconds": 7.7,
+      "metrics": {
+        "accuracy_mean_fold": 0.7455,
+        "precision_weighted": 0.7978,
+        "recall_weighted": 0.7455,
+        "f1_weighted": 0.7463,
+        "precision_high": 0.913,
+        "recall_high": 0.6364,
+        "roc_auc": 0.823,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            12,
+            21
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.55,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.6,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 10,
+          "params": {},
+          "k": 10
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 20,
+          "params": {},
+          "k": 20
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 20,
+          "params": {},
+          "k": 20
+        }
+      ]
+    },
+    {
+      "variant": "E5_tpe_tuned",
+      "seconds": 96.7,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.7824,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.65,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.6
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.84
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8333
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8571
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.85
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.76
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.07888062606220496,
+            "n_estimators": 101,
+            "num_leaves": 32,
+            "max_depth": 10,
+            "min_child_samples": 23,
+            "subsample": 0.9345031004895319,
+            "colsample_bytree": 0.8472147933184166,
+            "reg_alpha": 4.4254280094142006e-05,
+            "reg_lambda": 6.097522550653517e-07,
+            "min_split_gain": 0.5576903944847573,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7818
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7833
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        }
+      ]
+    },
+    {
+      "variant": "E6_tpe_tuned_with_classweight_choice",
+      "seconds": 201.4,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.7204,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.65,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.6
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.013481575603601416,
+            "n_estimators": 404,
+            "num_leaves": 14,
+            "max_depth": 6,
+            "min_child_samples": 20,
+            "subsample": 0.6185801650879991,
+            "colsample_bytree": 0.8037724259507192,
+            "reg_alpha": 3.425445902633376e-07,
+            "reg_lambda": 3.850031979199519e-08,
+            "min_split_gain": 0.9488855372533332,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.013481575603601416,
+            "n_estimators": 404,
+            "num_leaves": 14,
+            "max_depth": 6,
+            "min_child_samples": 20,
+            "subsample": 0.6185801650879991,
+            "colsample_bytree": 0.8037724259507192,
+            "reg_alpha": 3.425445902633376e-07,
+            "reg_lambda": 3.850031979199519e-08,
+            "min_split_gain": 0.9488855372533332,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.013481575603601416,
+            "n_estimators": 404,
+            "num_leaves": 14,
+            "max_depth": 6,
+            "min_child_samples": 20,
+            "subsample": 0.6185801650879991,
+            "colsample_bytree": 0.8037724259507192,
+            "reg_alpha": 3.425445902633376e-07,
+            "reg_lambda": 3.850031979199519e-08,
+            "min_split_gain": 0.9488855372533332,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.84
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.013481575603601416,
+            "n_estimators": 404,
+            "num_leaves": 14,
+            "max_depth": 6,
+            "min_child_samples": 20,
+            "subsample": 0.6185801650879991,
+            "colsample_bytree": 0.8037724259507192,
+            "reg_alpha": 3.425445902633376e-07,
+            "reg_lambda": 3.850031979199519e-08,
+            "min_split_gain": 0.9488855372533332,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8333
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.2835441853210852,
+            "n_estimators": 353,
+            "num_leaves": 4,
+            "max_depth": 8,
+            "min_child_samples": 17,
+            "subsample": 0.6825897269979835,
+            "colsample_bytree": 0.7827269765584528,
+            "reg_alpha": 2.530361318319482e-06,
+            "reg_lambda": 0.00040020105012719714,
+            "min_split_gain": 0.8424922174083082,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8571
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.14016362340960623,
+            "n_estimators": 268,
+            "num_leaves": 10,
+            "max_depth": 4,
+            "min_child_samples": 16,
+            "subsample": 0.7527998447162595,
+            "colsample_bytree": 0.6684550712751357,
+            "reg_alpha": 0.002494909476254384,
+            "reg_lambda": 2.8085441297837546e-07,
+            "min_split_gain": 0.31116050115886196,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.825
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.03655572927009978,
+            "n_estimators": 422,
+            "num_leaves": 23,
+            "max_depth": 4,
+            "min_child_samples": 9,
+            "subsample": 0.6547899562190108,
+            "colsample_bytree": 0.9989161241996318,
+            "reg_alpha": 0.016497167687367413,
+            "reg_lambda": 1.9124488621364825e-06,
+            "min_split_gain": 0.8368801715559179,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.026632480705969214,
+            "n_estimators": 398,
+            "num_leaves": 51,
+            "max_depth": 4,
+            "min_child_samples": 16,
+            "subsample": 0.7012251759407941,
+            "colsample_bytree": 0.8970867141861337,
+            "reg_alpha": 1.9647519937115823e-05,
+            "reg_lambda": 0.0005260786978866848,
+            "min_split_gain": 0.48358047972258966,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.76
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.026632480705969214,
+            "n_estimators": 398,
+            "num_leaves": 51,
+            "max_depth": 4,
+            "min_child_samples": 16,
+            "subsample": 0.7012251759407941,
+            "colsample_bytree": 0.8970867141861337,
+            "reg_alpha": 1.9647519937115823e-05,
+            "reg_lambda": 0.0005260786978866848,
+            "min_split_gain": 0.48358047972258966,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7636
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.026632480705969214,
+            "n_estimators": 398,
+            "num_leaves": 51,
+            "max_depth": 4,
+            "min_child_samples": 16,
+            "subsample": 0.7012251759407941,
+            "colsample_bytree": 0.8970867141861337,
+            "reg_alpha": 1.9647519937115823e-05,
+            "reg_lambda": 0.0005260786978866848,
+            "min_split_gain": 0.48358047972258966,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7833
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.026632480705969214,
+            "n_estimators": 398,
+            "num_leaves": 51,
+            "max_depth": 4,
+            "min_child_samples": 16,
+            "subsample": 0.7012251759407941,
+            "colsample_bytree": 0.8970867141861337,
+            "reg_alpha": 1.9647519937115823e-05,
+            "reg_lambda": 0.0005260786978866848,
+            "min_split_gain": 0.48358047972258966,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        }
+      ]
+    },
+    {
+      "variant": "E7_tpe_tuned_plus_threshold",
+      "seconds": 91.7,
+      "metrics": {
+        "accuracy_mean_fold": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.7824,
+        "confusion_matrix_[[TN,FP],[FN,TP]]": [
+          [
+            20,
+            2
+          ],
+          [
+            11,
+            22
+          ]
+        ],
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.65,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.6
+        }
+      },
+      "reliable_improvement": false,
+      "per_fold_choices": [
+        {
+          "test_quarter": "2022-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2023-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.84
+        },
+        {
+          "test_quarter": "2023-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.001124579825911934,
+            "n_estimators": 487,
+            "num_leaves": 54,
+            "max_depth": 3,
+            "min_child_samples": 9,
+            "subsample": 0.6733618039413735,
+            "colsample_bytree": 0.6521211214797689,
+            "reg_alpha": 0.00052821153945323,
+            "reg_lambda": 7.71800699380605e-05,
+            "min_split_gain": 0.2912291401980419,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8333
+        },
+        {
+          "test_quarter": "2023-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8571
+        },
+        {
+          "test_quarter": "2024-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.85
+        },
+        {
+          "test_quarter": "2024-Q2",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        },
+        {
+          "test_quarter": "2024-Q3",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.76
+        },
+        {
+          "test_quarter": "2024-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.07888062606220496,
+            "n_estimators": 101,
+            "num_leaves": 32,
+            "max_depth": 10,
+            "min_child_samples": 23,
+            "subsample": 0.9345031004895319,
+            "colsample_bytree": 0.8472147933184166,
+            "reg_alpha": 4.4254280094142006e-05,
+            "reg_lambda": 6.097522550653517e-07,
+            "min_split_gain": 0.5576903944847573,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7818
+        },
+        {
+          "test_quarter": "2025-Q1",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.7833
+        },
+        {
+          "test_quarter": "2025-Q4",
+          "threshold": 0.5,
+          "n_features": 47,
+          "params": {
+            "learning_rate": 0.25221951700214285,
+            "n_estimators": 399,
+            "num_leaves": 61,
+            "max_depth": 10,
+            "min_child_samples": 20,
+            "subsample": 0.9687496940092467,
+            "colsample_bytree": 0.5442462510259598,
+            "reg_alpha": 5.805581976088804e-07,
+            "reg_lambda": 2.5529693461039728e-08,
+            "min_split_gain": 0.32533033076326434,
+            "subsample_freq": 1
+          },
+          "inner_acc": 0.8
+        }
+      ]
+    }
+  ]
+}

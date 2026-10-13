@@ -1,0 +1,214 @@
+{
+  "config_file": "config\\governing_model.json",
+  "config_sha256": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1",
+  "checks": [
+    {
+      "check": "45 candidates == features_fused.parquet columns (excluding keys and cpi_dev)",
+      "pass": true,
+      "detail": "45"
+    },
+    {
+      "check": "model inputs == 45 candidates + cpi_dev + sws_hunger (47)",
+      "pass": true,
+      "detail": "47"
+    },
+    {
+      "check": "no label column among inputs",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "timing-valid frame produces the configured inputs in order",
+      "pass": true,
+      "detail": "47"
+    },
+    {
+      "check": "input frame hash matches frozen MODEL-B2",
+      "pass": true,
+      "detail": "118c32979657"
+    },
+    {
+      "check": "test folds == configured quarters",
+      "pass": true,
+      "detail": "11"
+    },
+    {
+      "check": "55 rows matched to frozen predictions",
+      "pass": true,
+      "detail": "55"
+    },
+    {
+      "check": "identical predictions",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "identical probabilities (< 1e-12)",
+      "pass": true,
+      "detail": "1.1e-16"
+    },
+    {
+      "check": "predictions hash",
+      "pass": true,
+      "detail": "25f2ea5e75d4"
+    },
+    {
+      "check": "45/55 correct",
+      "pass": true,
+      "detail": "45"
+    },
+    {
+      "check": "mean fold accuracy 0.8182",
+      "pass": true,
+      "detail": "0.8182"
+    },
+    {
+      "check": "weighted F1 0.8200",
+      "pass": true,
+      "detail": "0.82"
+    },
+    {
+      "check": "ROC-AUC 0.8278",
+      "pass": true,
+      "detail": "0.8278"
+    }
+  ],
+  "reproduction_pass": true,
+  "governing_metrics": {
+    "n": 55,
+    "correct": 45,
+    "accuracy_mean_fold": 0.8182,
+    "precision_weighted": 0.8413,
+    "recall_weighted": 0.8182,
+    "f1_weighted": 0.82,
+    "roc_auc": 0.8278,
+    "accuracy_by_year": {
+      "2022": 0.8,
+      "2023": 0.9,
+      "2024": 0.7,
+      "2025": 0.9
+    }
+  },
+  "comparison_same_protocol": {
+    "governing_47_weighted (MODEL-B2)": {
+      "n": 55,
+      "correct": 45,
+      "accuracy_mean_fold": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8278,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      }
+    },
+    "governing_47_default (MODEL-B)": {
+      "n": 55,
+      "correct": 42,
+      "accuracy_mean_fold": 0.7636,
+      "precision_weighted": 0.8081,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.765,
+      "roc_auc": 0.8244,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.85,
+        "2024": 0.6,
+        "2025": 0.9
+      }
+    },
+    "eq5_12_weighted": {
+      "n": 55,
+      "correct": 41,
+      "accuracy_mean_fold": 0.7455,
+      "precision_weighted": 0.7813,
+      "recall_weighted": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.7893,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.8
+      }
+    },
+    "eq5_12_default": {
+      "n": 55,
+      "correct": 38,
+      "accuracy_mean_fold": 0.6909,
+      "precision_weighted": 0.7686,
+      "recall_weighted": 0.6909,
+      "f1_weighted": 0.6882,
+      "roc_auc": 0.7576,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.8
+      }
+    },
+    "candidates_45_only_weighted (no cpi_dev, no sws_hunger)": {
+      "n": 55,
+      "correct": 45,
+      "accuracy_mean_fold": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8223,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      }
+    },
+    "candidates_45_plus_cpi_dev_weighted (no sws_hunger)": {
+      "n": 55,
+      "correct": 45,
+      "accuracy_mean_fold": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8347,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      }
+    }
+  },
+  "paired_tests": {
+    "governing_47 vs eq5_12 (both weighted)": {
+      "first_right_second_wrong": 8,
+      "second_right_first_wrong": 4,
+      "exact_p_two_sided": 0.3877
+    },
+    "governing_47 vs eq5_12 (both default)": {
+      "first_right_second_wrong": 7,
+      "second_right_first_wrong": 3,
+      "exact_p_two_sided": 0.3438
+    }
+  },
+  "provenance_0618": {
+    "eq5_12_default_on_T1_frame": {
+      "n": 55,
+      "correct": 34,
+      "accuracy_mean_fold": 0.6182,
+      "precision_weighted": 0.8047,
+      "recall_weighted": 0.6182,
+      "f1_weighted": 0.5908,
+      "roc_auc": 0.8602,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.45,
+        "2025": 0.6
+      }
+    },
+    "note": "Earlier documents report 0.618 for the 12-feature set; that run used the T1 frame (government series of quarter t). Under the governing strict timing (T2) the same 12-feature default model scores the value in comparison['eq5_12_default']."
+  }
+}

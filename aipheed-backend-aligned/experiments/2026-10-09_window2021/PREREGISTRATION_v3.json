@@ -1,0 +1,59 @@
+{
+  "title": "aiPHeed window study v3: approved period 2021-2026, corrected data, pre-registered",
+  "written": "2026-10-09T13:52:56",
+  "status_at_writing": "No model has been run on the 2021+ frame. Only the label median (14.345) and the feasibility numbers below were computed.",
+  "scope_note": "Researcher instruction 2026-10-09: approved study period is 2021-2026. The extracted Chapter III text (THESIS 2 (9).pdf) states 2020-Q1..2025-Q4; this discrepancy is flagged for the adviser, and the researcher's instruction is followed.",
+  "window_rule_W": {
+    "labels": "target quarters >= 2021-Q1 only (16 labelled quarters, 80 rows; 2026 has no released SWS round, so no 2026 labels)",
+    "features": "every value whose reference period is before 2021-Q1 is excluded (missing): 2020 government observations (including the t-1 values that strict timing would take from 2020-Q4), 2020 news, 2020 SWS rounds, the 2018 poverty survey (used through 2022-Q3), and any lag/accel/rolling statistic that would reach into 2020",
+    "allowed_reference_bases": "published statistics for 2021+ reference periods are kept even when defined relative to a base: CPI 2018=100 index and its published YoY rates, rainfall anomalies against the WMO 1991-2020 normal (flagged for adviser)",
+    "release_dates": "strict Rule 3 timing unchanged: government series of t-1, news of t, SWS latest round released before t+1, poverty as released"
+  },
+  "data_corrections": "K1-K4 of PREREGISTRATION_v2 kept unchanged",
+  "new_features_pre_declared": {
+    "sws_change": "latest released SWS round minus the previous released round (both >= 2021-Q1, both released before t+1)",
+    "sws_age": "quarters between the latest released SWS round and the target quarter",
+    "cpi_rel_lag1": "cpi_rel one quarter earlier",
+    "rice_retail_regular, rice_retail_well": "PSA OpenStat provincial retail RMR and WMR (psa_indicators; previously unused), t-1",
+    "news_ph_fssi, news_ph_count": "mean Algorithm-1 score and count of ALL retained (>= 0.30) articles in quarter t regardless of province (national/regional news pool; same scoring, no new model)"
+  },
+  "target": {
+    "primary": "Eq. 3 definition applied to the approved period: HIGH if stress > global median of the 80 labelled 2021-2025 rows = 14.345 (differs from 14.6 on 1 row)",
+    "sensitivity": "threshold 14.6 (the 2020-2025 value) reported alongside",
+    "disclosure": "the global median uses all labelled rows including the test quarters, as Eq. 3 specifies"
+  },
+  "outer_protocol": "expanding window, minimum 8 labelled target quarters -> 8 outer test quarters 2023-Q3..2025-Q4 (40 rows), seed 42, cut-off 0.50; these 40 rows are a subset of rows used in earlier studies (disclosed)",
+  "primary_estimand": "Outer mean quarter accuracy of nested procedure P4 (pool below; inner walk-forward, minimum 5 inner quarters, training rows only; exact ties -> earliest in pool order)",
+  "pool_P4_order": [
+    "struct_rule: HIGH if sws_hunger + 2*cpi_rel > label threshold (no fitting)",
+    "feature sets in order: struct2 [sws_hunger, cpi_rel]; struct5 [sws_hunger, sws_change, sws_age, cpi_rel, cpi_rel_lag1]; eq5_struct; gov_c; gov_c_plus (gov_c + rice_retail_regular, rice_retail_well, news_ph_fssi, news_ph_count)",
+    "families per set: logistic L2 C {0.01,0.1,1,10} x {none,balanced}; tree depth {1,2,3} leaf 5 x {none,balanced}; LightGBM {small,default} x {none, scale_pos_weight}"
+  ],
+  "descriptive_only": [
+    "MODEL-B2 config (gov_c, spw) and MODEL-A config (eq5) on the 2021+ frame",
+    "struct_rule",
+    "every pool member",
+    "timing-valid persistence (recomputed with 2021+ labels and the primary threshold)",
+    "clock-only",
+    "training majority",
+    "alternative-target diagnostics",
+    "14.6 threshold sensitivity"
+  ],
+  "acceptance_rule": {
+    "C1": "P4 mean quarter accuracy >= 0.75",
+    "C2": "one-sided 95% lower bounds >= 0.75 (quarter bootstrap AND Clopper-Pearson)",
+    "C3": "beats timing-valid persistence AND clock-only (bootstrap p5 > 0)",
+    "C4": "every leave-one-year-out >= 0.75",
+    "C5": "2026 quarters scored when SWS releases them, using forecasts frozen in this study before any 2026 label is seen"
+  },
+  "feasibility": {
+    "min_correct_of_40_for_C2b": 35,
+    "power_if_true_accuracy": {
+      "0.80": 0.161,
+      "0.85": 0.433,
+      "0.90": 0.794
+    }
+  },
+  "prospective_2026": "Train each frozen candidate on all labelled 2021-2025 rows and issue forecasts for every 2026 quarter whose origin data exist in the project (2026-Q1, 2026-Q2). Hash and store them now; score only after SWS publishes the rounds. Forecasts are issued late but label-blind; input vintages are current, not as-released.",
+  "commitment": "P4's score is the reported primary result whatever it is; no pool or correction change after outer results are seen."
+}

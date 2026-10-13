@@ -1,0 +1,50 @@
+group,feature,family,availability_basis,missing_share,zero_share,province_specific_variance_share,pre_eval_rows,pre_eval_spearman_with_stress,pre_eval_spearman_within_quarter
+R,sws_hunger,sws,per-round SWS publication dates; [U]-dated rounds excluded,0.11,0.0,0.0,30,-0.1,
+R,sws_change,sws,per-round SWS publication dates; [U]-dated rounds excluded,0.11,0.0,0.0,30,0.1,
+R,last_published_stress,lagged outcome,Rule L label publication,0.21,0.0,0.31,25,0.81,0.76
+GP,cpi_rel,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,1.0,25,0.73,0.71
+GP,cpi_rel_lag1,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,1.0,25,0.52,0.45
+GP,cpi_dev,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,0.18,25,0.24,0.2
+GP,food_cpi,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,0.26,25,0.45,0.48
+GP,food_cpi_yoy,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,0.3,25,0.39,0.33
+GP,food_cpi_yoy_lag1,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,0.31,25,0.29,0.27
+GP,food_cpi_yoy_accel,provincial_cpi,provincial (RSSO IV-A) date verified for Dec 2024 only; proxy is not verification,0.21,0.0,0.18,25,0.18,0.11
+GP,rice_price_regular,wholesale_rice,schedule seen only via PhilRice-hosted PSA metadata + one example [S],0.05,0.0,0.17,35,-0.29,-0.25
+GP,rice_price_regular_lag1,wholesale_rice,schedule seen only via PhilRice-hosted PSA metadata + one example [S],0.11,0.0,0.16,30,-0.28,-0.26
+GP,rice_price_regular_accel,wholesale_rice,schedule seen only via PhilRice-hosted PSA metadata + one example [S],0.11,0.0,0.43,30,-0.17,-0.04
+GP,poverty_incidence,poverty,"releases 2022-08-15 [S], 2024-08-15 [N]",0.37,0.0,0.91,10,-0.61,-0.67
+GN,unemployment_rate,lfs_unemployment,"one dated example, no calendar",0.05,0.0,0.0,35,-0.05,-0.02
+GN,unemployment_rate_lag1,lfs_unemployment,"one dated example, no calendar",0.11,0.0,0.0,30,-0.12,-0.02
+GN,unemployment_rate_accel,lfs_unemployment,"one dated example, no calendar",0.11,0.0,0.0,30,-0.01,-0.03
+GN,ofw_remit_yoy_pct,bsp_remittances,"pattern from 5 dated examples, no calendar; hand-curated",0.26,0.0,0.0,20,0.3,0.05
+GN,ofw_remit_yoy_pct_lag1,bsp_remittances,"pattern from 5 dated examples, no calendar; hand-curated",0.32,0.0,0.0,15,-0.3,-0.06
+GN,ofw_remit_yoy_pct_accel,bsp_remittances,"pattern from 5 dated examples, no calendar; hand-curated",0.32,0.0,0.0,15,0.3,
+GN,diesel_php_per_l,doe_fuel,"hand-curated, no per-value dates; 15 rows missing",0.05,0.0,0.0,35,0.03,
+GN,diesel_php_per_l_lag1,doe_fuel,"hand-curated, no per-value dates; 15 rows missing",0.11,0.0,0.0,30,0.01,
+GN,diesel_php_per_l_accel,doe_fuel,"hand-curated, no per-value dates; 15 rows missing",0.11,0.0,0.0,30,0.04,
+GN,gasoline_php_per_l,doe_fuel,"hand-curated, no per-value dates; 15 rows missing",0.05,0.0,0.0,35,0.03,
+GN,fx_usd_php_avg,ecb_fx,"daily reference rate, same-day publication; margin >= ~90 d",0.05,0.0,0.0,35,0.08,0.02
+GN,brent_usd_per_bbl,fred_brent,daily series; margin >= ~90 d,0.05,0.0,0.0,35,0.02,
+GN,headline_cpi,regional_cpi,national/regional release dates documented per final month [S/N]; 2018-base rule,0.21,0.0,0.0,25,-0.05,-0.03
+GN,food_minus_headline_yoy,regional_cpi,national/regional release dates documented per final month [S/N]; 2018-base rule,0.21,0.0,0.0,25,0.01,
+GN,food_minus_headline_yoy_lag1,regional_cpi,national/regional release dates documented per final month [S/N]; 2018-base rule,0.21,0.0,0.0,25,0.08,
+GN,food_minus_headline_yoy_accel,regional_cpi,national/regional release dates documented per final month [S/N]; 2018-base rule,0.21,0.0,0.0,25,0.04,-0.02
+GN,enso_numeric,noaa_oni,ONI values revised up to 2 months after release; base-period updates [V],0.05,0.47,0.0,35,-0.15,
+GN,drought_alert,drought_alert,derived in pagasa_climate_fetcher.py as (El Nino phase AND ONI >= 1.0); inherits ONI revisions,0.05,0.79,0.0,35,,
+GN,tc_count,ibtracs_typhoon,final best-track values differ from provisional real-time records [V],0.05,0.41,0.11,35,-0.1,0.02
+GN,tc_severe_flag,ibtracs_typhoon,final best-track values differ from provisional real-time records [V],0.05,0.72,0.07,35,-0.02,0.01
+GN,rainfall_anomaly_pct,nasa_power_rain,near-real-time values replaced by MERRA-2 [S],0.05,0.0,0.06,35,0.1,0.03
+GN,rainfall_anomaly_pct_lag1,nasa_power_rain,near-real-time values replaced by MERRA-2 [S],0.11,0.0,0.05,30,-0.14,-0.05
+GN,rainfall_anomaly_pct_accel,nasa_power_rain,near-real-time values replaced by MERRA-2 [S],0.11,0.0,0.05,30,0.18,0.07
+N,FSSI,news,article publication timestamps [V],0.73,0.0,0.75,10,-0.36,-0.33
+N,FSSI_lag1,news,article publication timestamps [V],0.75,0.0,0.71,8,-0.86,-0.74
+N,FSSI_lag2,news,article publication timestamps [V],0.75,0.0,0.71,7,-0.21,-0.21
+N,FSSI_accel,news,article publication timestamps [V],0.94,0.0,0.0,2,,
+N,fssi_article_count,news,article publication timestamps [V],0.0,0.73,0.69,40,-0.08,-0.2
+N,news_ph_fssi,news,article publication timestamps [V],0.11,0.0,0.0,30,0.17,0.03
+N,news_ph_count,news,article publication timestamps [V],0.0,0.11,0.0,40,-0.0,
+N,trigger_market,news,article publication timestamps [V],0.04,0.94,0.81,39,-0.17,-0.23
+N,trigger_climate,news,article publication timestamps [V],0.04,0.51,0.78,39,-0.21,0.01
+N,trigger_fish_kill,news,article publication timestamps [V],0.04,0.89,0.83,39,0.17,0.08
+N,trigger_employment,news,article publication timestamps [V],0.04,0.96,,39,,
+N,trigger_ofw_remittance,news,article publication timestamps [V],0.04,0.96,,39,,

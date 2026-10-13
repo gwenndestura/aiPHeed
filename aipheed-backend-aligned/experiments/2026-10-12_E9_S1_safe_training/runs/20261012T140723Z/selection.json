@@ -1,0 +1,66 @@
+{
+ "rule": "simplest stress arm; move only if MAE <= 0.90x current and better in >= 3 of 5 selection quarters",
+ "selection_quarters": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4"
+ ],
+ "selection_mae": {
+  "B1_carry_forward": 4.667199999999999,
+  "B2_regional": 4.614933333333333,
+  "B3_eq3_rule": 4.667199999999999,
+  "M1_core": 4.00428738182123,
+  "M2_compact": 4.72298632821816,
+  "M3_expanded": 4.036362904144056
+ },
+ "trail": [
+  {
+   "candidate": "B2_regional",
+   "vs": "B1_carry_forward",
+   "mae_candidate": 4.614933333333333,
+   "mae_current": 4.667199999999999,
+   "ratio": 0.9888012798537311,
+   "quarters_better": 2,
+   "moved": false
+  },
+  {
+   "candidate": "B3_eq3_rule",
+   "vs": "B1_carry_forward",
+   "mae_candidate": 4.667199999999999,
+   "mae_current": 4.667199999999999,
+   "ratio": 1.0,
+   "quarters_better": 0,
+   "moved": false
+  },
+  {
+   "candidate": "M1_core",
+   "vs": "B1_carry_forward",
+   "mae_candidate": 4.00428738182123,
+   "mae_current": 4.667199999999999,
+   "ratio": 0.8579635288441102,
+   "quarters_better": 4,
+   "moved": true
+  },
+  {
+   "candidate": "M2_compact",
+   "vs": "M1_core",
+   "mae_candidate": 4.72298632821816,
+   "mae_current": 4.00428738182123,
+   "ratio": 1.1794823592481645,
+   "quarters_better": 2,
+   "moved": false
+  },
+  {
+   "candidate": "M3_expanded",
+   "vs": "M1_core",
+   "mae_candidate": 4.036362904144056,
+   "mae_current": 4.00428738182123,
+   "ratio": 1.008010294782648,
+   "quarters_better": 2,
+   "moved": false
+  }
+ ],
+ "selected": "M1_core"
+}

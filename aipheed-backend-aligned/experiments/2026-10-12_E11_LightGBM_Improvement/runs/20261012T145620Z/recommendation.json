@@ -1,0 +1,105 @@
+{
+ "NESTED|direct|core": {
+  "criteria": {
+   "1_better_in_>=5_of_7": true,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": false,
+   "4_rolling_same_direction": true
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": 0.24179053341908993,
+  "ci95": [
+   -0.7153163788906476,
+   1.7061336051463865
+  ],
+  "quarters_better": 5,
+  "concordance": 0.5285714285714286,
+  "B3_concordance": 0.6142857142857142
+ },
+ "NESTED|direct|core_plus": {
+  "criteria": {
+   "1_better_in_>=5_of_7": false,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": false,
+   "4_rolling_same_direction": false
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": 0.7459517608971682,
+  "ci95": [
+   -0.28150487711494654,
+   1.9901218189713257
+  ],
+  "quarters_better": 2,
+  "concordance": 0.4357142857142858,
+  "B3_concordance": 0.6142857142857142
+ },
+ "NESTED|direct|compact": {
+  "criteria": {
+   "1_better_in_>=5_of_7": false,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": false,
+   "4_rolling_same_direction": false
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": 1.1112765747647289,
+  "ci95": [
+   -0.16964074614316804,
+   2.5640081846409215
+  ],
+  "quarters_better": 2,
+  "concordance": 0.4571428571428572,
+  "B3_concordance": 0.6142857142857142
+ },
+ "NESTED|direct|expanded": {
+  "criteria": {
+   "1_better_in_>=5_of_7": false,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": false,
+   "4_rolling_same_direction": false
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": 0.6440559503266398,
+  "ci95": [
+   -0.3835852532552672,
+   2.1646558589501597
+  ],
+  "quarters_better": 4,
+  "concordance": 0.5214285714285715,
+  "B3_concordance": 0.6142857142857142
+ },
+ "NESTED|decomp|provincial": {
+  "criteria": {
+   "1_better_in_>=5_of_7": true,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": true,
+   "4_rolling_same_direction": true
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": 0.05027260096216717,
+  "ci95": [
+   -0.44943338600581323,
+   0.7246991678950891
+  ],
+  "quarters_better": 5,
+  "concordance": 0.7071428571428572,
+  "B3_concordance": 0.6142857142857142
+ },
+ "NESTED|resid|residual": {
+  "criteria": {
+   "1_better_in_>=5_of_7": false,
+   "2_mean<0_and_upper<0": false,
+   "3_concordance>=B3": true,
+   "4_rolling_same_direction": true
+  },
+  "all_met": false,
+  "mean_diff_vs_B3": -0.8045665531437608,
+  "ci95": [
+   -2.196048397040236,
+   0.29000494987732045
+  ],
+  "quarters_better": 4,
+  "concordance": 0.6285714285714284,
+  "B3_concordance": 0.6142857142857142
+ },
+ "decision": "no candidate meets all four criteria: S1 rule stays primary; LightGBM experimental"
+}

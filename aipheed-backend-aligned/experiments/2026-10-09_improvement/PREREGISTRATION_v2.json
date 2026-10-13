@@ -1,0 +1,34 @@
+{
+  "title": "aiPHeed improvement study v2: data corrections + Eq.3-structured model, pre-registered",
+  "written": "2026-10-09T13:42:45",
+  "status_at_writing": "No model has been run on the corrected frame. The corrections are justified by data provenance alone and will be applied whatever their effect on accuracy.",
+  "prior_exposure": "The 55 outer rows (2022-Q4..2025-Q4) were used by MODEL-A, MODEL-B/B2, E0-E7, robustness, overfitting and generalization studies. No untouched labelled data exist. Protection used here: a single pre-registered primary procedure; every other result is descriptive.",
+  "data_corrections_K": {
+    "K1_missing_not_zero": "Cells zero-filled only because the source starts later (feature_provenance leading gaps: fx, diesel, gasoline, brent 2020; ofw 2020-21; ENSO, typhoon, drought 2020) become missing (NaN); the strict-timing t-1 shift no longer zero-fills; lag/accel recomputed NaN-aware on the calendar grid.",
+    "K2_restore_rainfall": "rainfall_anomaly_pct taken from the province-measured NASA POWER table for every quarter it covers (restores 2020 lost in the PAGASA merge).",
+    "K3_no_stale_news": "FSSI and trigger proportions are missing where no retained article exists, instead of forward-filled; add fssi_article_count (genuine count, 0 when none). FSSI lags/accel recomputed on the calendar grid.",
+    "K4_drop_derived_commodity": "The five commodity_* series are dropped: after 2021-Q4 they are regional food CPI x a fixed 2021-Q4 province anchor, not observed prices, and every outer test row falls after 2021-Q4.",
+    "unchanged": "target (Eq. 3, threshold 14.6), strict timing, SWS release alignment, poverty vintage, outer folds, seed 42, cut-off 0.50"
+  },
+  "new_features_M": {
+    "cpi_rel": "Eq. 3's province term known at the origin: province food CPI YoY (t-1) minus the five-province mean (t-1)",
+    "fssi_article_count": "see K3"
+  },
+  "missing_value_handling": "LightGBM native NaN; logistic and tree: in-fold median imputation with missing indicators, then scaling (logistic), all inside one fitted pipeline",
+  "primary_estimand": "Outer mean quarter accuracy of nested procedure P3 on the corrected frame: inside each outer fold, choose one configuration from the pool below by inner walk-forward mean quarter accuracy (min 5 inner quarters, training rows only); exact ties -> earliest in pool order.",
+  "pool_P3_order_simplest_first": [
+    "struct_rule: HIGH if sws_hunger + 2*cpi_rel > 14.6 (no fitting; uses the approved threshold constant)",
+    "feature sets in order: struct2 [sws_hunger, cpi_rel]; eq5_12c (Eq.5 12 features on the corrected frame); eq5_struct (eq5_12c + sws_hunger + cpi_rel + fssi_article_count); gov_c (corrected 42 non-commodity inputs + cpi_rel + fssi_article_count)",
+    "families per set in order: logistic L2 C in {0.01,0.1,1,10} x class_weight {none,balanced}; tree depth {1,2,3} min_leaf 5 x {none,balanced}; LightGBM {small, default} x {none, scale_pos_weight}"
+  ],
+  "descriptive_only": [
+    "MODEL-A config and MODEL-B2 config on original and corrected frames",
+    "struct_rule and struct2 logistic at fixed settings",
+    "every pool member at fixed settings",
+    "persistence (timing-valid), clock-only, training majority",
+    "component predictability diagnostics",
+    "alternative-target diagnostics (training-only threshold; regional regime; province-relative stress)"
+  ],
+  "acceptance_rule": "identical to experiments/2026-10-09_generalization/PREREGISTRATION.json C1-C5 (C1 >=0.75; C2 one-sided 95% lower bounds >=0.75 by quarter bootstrap AND Clopper-Pearson; C3 beats timing-valid persistence AND clock-only with bootstrap p5 > 0; C4 every leave-one-year-out >= 0.75; C5 prospective, not evaluable)",
+  "commitment": "Whatever P3 scores is the reported primary result. No correction is reverted and no pool member is added or removed after outer results are seen."
+}

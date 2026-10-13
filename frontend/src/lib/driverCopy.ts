@@ -65,6 +65,28 @@ const DRIVER_COPY: Record<string, { risk: Copy; protective: Copy }> = {
       description: "Money from relatives working abroad is holding steady or rising.",
     },
   },
+  // The model's driver groups (backend feature_display.DRIVER_GROUP_FEATURES)
+  // also include the Food Stress Sentiment Index and the macro/OFW block.
+  nlp_sentiment: {
+    risk: {
+      title: "News is signalling food stress",
+      description: "Local news this quarter and the two before it carried more food-stress coverage than usual.",
+    },
+    protective: {
+      title: "News shows little food stress",
+      description: "Local news coverage of food stress is lower than usual this quarter.",
+    },
+  },
+  macro_ofw: {
+    risk: {
+      title: "Remittances or fuel costs add pressure",
+      description: "Money sent home by OFWs or fuel prices moved in a direction that raises risk.",
+    },
+    protective: {
+      title: "Remittances and fuel costs are steady",
+      description: "Money sent home by OFWs and fuel prices are not adding pressure this quarter.",
+    },
+  },
 };
 
 export function driverCopy(t: Pick<Trigger, "key" | "direction">): Copy {

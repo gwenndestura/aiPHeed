@@ -1,0 +1,175 @@
+{
+  "generated_utc": "2026-10-12T08:31:36.747806+00:00",
+  "reference": "approved",
+  "tau": 14.345,
+  "tau_as_of": "2026-07-01",
+  "tau_quarters": [
+    "2021-Q2",
+    "2021-Q3",
+    "2021-Q4",
+    "2022-Q2",
+    "2022-Q3",
+    "2022-Q4",
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4"
+  ],
+  "served": false,
+  "leakage_note": "14.345 uses labels up to 2025-Q4; on 2021-2025 quarters it is leakage-affected (evaluation only)",
+  "model": {
+    "family": "LightGBM",
+    "params": {
+      "objective": "binary",
+      "num_leaves": 4,
+      "min_child_samples": 5,
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "random_state": 42,
+      "verbosity": -1
+    },
+    "inputs": [
+      "last_published_stress",
+      "sws_hunger",
+      "sws_change",
+      "cpi_rel",
+      "food_cpi_yoy",
+      "rice_price_regular_accel",
+      "unemployment_rate"
+    ],
+    "monotone": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "class_weight": null
+  },
+  "calibration_by_quarter": {
+    "2021-Q2": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2021-Q3": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2021-Q4": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2022-Q1": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2022-Q2": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2022-Q3": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2022-Q4": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2023-Q1": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2023-Q2": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2023-Q3": {
+      "applied": false,
+      "reason": "no model fitted"
+    },
+    "2023-Q4": {
+      "applied": false,
+      "reason": "no inner out-of-fold quarters",
+      "oof_quarters": 0
+    },
+    "2024-Q1": {
+      "applied": false,
+      "oof_quarters": 1,
+      "oof_high": 1,
+      "oof_low": 4,
+      "oof_brier": 0.1489,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2024-Q2": {
+      "applied": false,
+      "oof_quarters": 2,
+      "oof_high": 4,
+      "oof_low": 6,
+      "oof_brier": 0.341,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2024-Q3": {
+      "applied": false,
+      "oof_quarters": 3,
+      "oof_high": 8,
+      "oof_low": 7,
+      "oof_brier": 0.3826,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2024-Q4": {
+      "applied": false,
+      "oof_quarters": 4,
+      "oof_high": 13,
+      "oof_low": 7,
+      "oof_brier": 0.3494,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2025-Q1": {
+      "applied": false,
+      "oof_quarters": 5,
+      "oof_high": 17,
+      "oof_low": 8,
+      "oof_brier": 0.3188,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2025-Q2": {
+      "applied": false,
+      "oof_quarters": 6,
+      "oof_high": 22,
+      "oof_low": 8,
+      "oof_brier": 0.2666,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2025-Q3": {
+      "applied": false,
+      "oof_quarters": 7,
+      "oof_high": 27,
+      "oof_low": 8,
+      "oof_brier": 0.2701,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    },
+    "2025-Q4": {
+      "applied": false,
+      "oof_quarters": 7,
+      "oof_high": 27,
+      "oof_low": 8,
+      "oof_brier": 0.2701,
+      "reason": "insufficient inner evidence (need >= 8 quarters and >= 10 rows per class)"
+    }
+  },
+  "sha256": {
+    "artifact": "dfa4c3f0418013e787aa25d05100eb8df4ee48f458c72ae0aa9e8c1c26f89556",
+    "labels": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+    "psa": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+    "revised_trainer": "0205a6fd03a322149967520f071f5af96d8115bff3c58fc053b3de24092e2cca",
+    "risk_score_v2": "5b6c83d6d12ecab7054f6249d0f0f098f8be50ebf16d1072b58e9c6be0abea49"
+  }
+}
