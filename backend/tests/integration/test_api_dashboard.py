@@ -231,6 +231,14 @@ def test_narrative_is_plain_ascii_for_pdf_export():
     body["narrative"].encode("ascii")
 
 
+def test_explainability_note_is_plain_language():
+    note = client.get("/api/v1/explainability?scope=region&id=calabarzon").json()["note"]
+    # Shown to the public under the bars and exported to PDF verbatim.
+    note.encode("ascii")
+    for term in ("`", "direction", "color", "otherPct", "newsSignalProportion", "SHAP", "--"):
+        assert term not in note, term
+
+
 def test_seasonal_and_history_groups_are_not_dropped():
     body = client.get("/api/v1/explainability?scope=province&id=laguna").json()
     keys = {t["key"] for t in body["triggers"]}

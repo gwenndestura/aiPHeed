@@ -21,23 +21,33 @@ router = APIRouter()
 # Five research-defined categories (Market/Prices, Climate Stress, Fish Kill,
 # Employment, OFW Remittance). Percentages are grouped SHAP values from the
 # food-availability shock model, rescaled so these five sum to 100% AMONG
-# THEMSELVES -- see `otherPct` and the caveats below for what that excludes.
+# THEMSELVES. Developer detail, kept here rather than in the public note:
+#   * A group can hold a large share while pushing risk down -- read
+#     `direction`, not bar size alone. `color` has three values: yellow below
+#     the 20% line, red above it while raising the score, green above it while
+#     lowering it (the frontend maps these onto its own risk palette).
+#   * OFW Remittance holds actual remittance features only; fuel/transport-cost
+#     features moved to Market/Prices.
+#   * Fish Kill is a real but thin news-derived signal (`newsSignalProportion`),
+#     not a structured dataset.
+#   * `otherPct` is the share from the commodity series' own recent history and
+#     seasonal position plus general (non-fish-kill) news volume -- not folded
+#     into the five bars, which would overstate it, nor hidden.
+#
+# The note itself is shown to the public under the bars: plain, formal, ASCII
+# (the PDF exporter renders text verbatim), no field names.
 EXPLAINABILITY_NOTE = (
-    "Contributions are grouped SHAP values from the food-availability shock "
-    "model, rescaled so the five research-defined driver categories sum to "
-    "100% among themselves. A group can hold a large share while pushing risk "
-    "down -- read `direction`, not bar size alone. `color` takes three values, "
-    "not two: yellow below the 20% line, red above it while raising the score, "
-    "GREEN above it while lowering the score. "
-    "Two caveats on what these five categories contain: OFW Remittance is "
-    "restricted to actual remittance features (fuel/transport-cost features "
-    "that used to sit here moved to Market/Prices, where they belong); Fish "
-    "Kill reflects a real but comparatively thin news-derived signal (see "
-    "`newsSignalProportion`), not a dedicated structured dataset. `otherPct` "
-    "is the share of the model's real, often-dominant reasoning that comes "
-    "from the commodity series' own recent history and seasonal position, "
-    "plus general (non-fish-kill) news volume -- deliberately not folded into "
-    "one of the five bars, which would overstate it, nor hidden."
+    "The bars show how much each of five factor groups (Market / Prices, "
+    "Climate Stress, Fish Kill, Employment and OFW Remittance) contributed to "
+    "this forecast. The five shares add up to 100 percent. A long bar does not "
+    "by itself mean that a factor raised the risk: the colour of each bar shows "
+    "whether that factor raised or lowered the forecast. The OFW Remittance "
+    "group uses remittance data only. The Fish Kill group is based on news "
+    "reports and is therefore a limited measure. Part of the forecast also "
+    "depends on each commodity's recent production history, its usual seasonal "
+    "pattern and the overall volume of news; that part is not shown in the five "
+    "groups. These figures are model estimates, not official government "
+    "statistics."
 )
 
 
