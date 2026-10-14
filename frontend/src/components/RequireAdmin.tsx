@@ -5,11 +5,12 @@
 // /api/v1/admin/** call, enforced server-side -- this only avoids flashing
 // the admin UI at an anonymous visitor before the redirect happens.
 
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 
 export function RequireAdmin({ children }: { children: React.ReactNode }) {
   const { status } = useAuth();
+  const location = useLocation();
 
   if (status === "loading") {
     return (
@@ -23,7 +24,8 @@ export function RequireAdmin({ children }: { children: React.ReactNode }) {
   }
 
   if (status !== "authenticated") {
-    return <Navigate to="/login" replace />;
+    // Remember the page so sign-in can return to it (checked in Login).
+    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
   }
 
   return <>{children}</>;

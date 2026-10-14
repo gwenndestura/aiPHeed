@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { safeRedirectPath } from "@/lib/redirect";
 import logoIcon from "@/assets/logo-icon.png";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+  // The admin page that sent us here (RequireAdmin), if it is a path on this site.
+  const returnTo = safeRedirectPath((location.state as { from?: unknown } | null)?.from);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +30,7 @@ export default function Login() {
         title: "Welcome, DA Administrator",
         description: "Routing to admin dashboard…",
       });
-      navigate("/admin");
+      navigate(returnTo, { replace: true });
     } catch (err) {
       toast({
         title: "Sign-in failed",
