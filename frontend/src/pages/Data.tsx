@@ -83,7 +83,7 @@ export default function DataPage() {
 
   const columns: { key: SortKey; label: string }[] = [
     { key: "name", label: "Province" },
-    { key: "riskScore", label: "Risk Level" },
+    { key: "riskScore", label: "Risk score" },
     { key: "riskLevel", label: "Risk Level" },
     { key: "qoqChangePct", label: "Quarter-on-quarter change" },
     { key: "articleCount", label: "Articles" },
