@@ -188,3 +188,23 @@ def test_alert_workflow_stage_confirm_publish():
         hit = [a for a in pub if a["id"] == target["id"]]
         assert hit and hit[0]["alert_reason"] == target["alert_reason"] and "Not an official" in hit[0]["statement"]
         assert s.post(BASE + f"/admin/alerts/{target['id']}/dismiss", headers=h, timeout=30).status_code >= 400
+
+
+def test_visualization_report_payloads_match_the_record(rec):
+    t = get("/report/data", type="trend", scope="region", **{"from": "2026-Q2", "to": "2027-Q1"}).json()
+    assert t["type"] == "trend" and t["metadata"][0][1] == rec["content_sha256"][:16]
+    fig = next(b for b in t["blocks"] if b["kind"] == "figure")["chart"]
+    assert fig["quarters"] == ["2026-Q2", "2026-Q3", "2026-Q4", "2027-Q1"]
+    qu = next(s for s in fig["series"] if s["name"] == "Quezon")["values"]
+    now = q(rec, "2026-Q4", "NOWCAST")["provinces"]["PH040300000"]["p_high"]
+    assert qu[2] == round(now * 100, 1)
+    s = get("/report/data", type="shap", scope="province", id="quezon", to="2026-Q4").json()
+    tab = next(b for b in s["blocks"] if b["kind"] == "table")["rows"]
+    want = q(rec, "2026-Q4", "NOWCAST")["provinces"]["PH040300000"]["drivers"]
+    assert [r[2] for r in tab] == [f"{d['contribution']:+.2f}" for d in want]
+    assert get("/report/data", type="shap", scope="province", id="quezon").status_code == 422
+
+
+def test_legacy_pdf_report_renders():
+    r = get("/report", scope="province", id="quezon", quarter="2026-Q4")
+    assert r.ok and r.content[:4] == b"%PDF"

@@ -1094,6 +1094,7 @@ def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
                                                                      "roc_auc", "brier")}}
                          for L, x in arms["PCF21_E25"]["by_lead"].items()],
         "baselines": {a["label"]: r(a["by_lead"]["1"]["accuracy"]) for k, a in arms.items() if k != "PCF21_E25"},
-        "sameFoldsAsBaselines": True,
+        # the walk-forward rows ARE the baselines' rows (E28 protocol), so the same-fold figures are these
+        "sameFoldsAsBaselines": {"accuracy": r(m["accuracy"]), "weighted_f1": r(m["f1"]), "roc_auc": r(m["roc_auc"])},
         "unseenQuarter": v["unseen_quarter_2026Q3"],
     }

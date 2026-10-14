@@ -74,3 +74,29 @@ async def get_report(
             "Cache-Control": "no-store",
         },
     )
+
+
+@router.get("/report/data")
+async def get_report_data(
+    type: str = Query("trend", pattern="^(trend|shap)$"),
+    scope: str = Query("region", pattern="^(region|province)$"),
+    id: str | None = Query(None),
+    from_: str | None = Query(None, alias="from"),
+    to: str | None = Query(None),
+    municipality: str | None = Query(None),
+):
+    """E31: the Visualization page's report payload, built from the E31 record (same numbers as the map)."""
+    from fastapi import HTTPException
+
+    from app.services import report_data_e31 as R
+
+    if not svc.e31_active():
+        raise HTTPException(status_code=404, detail="report data is served from the E31 record only")
+    try:
+        if type == "trend":
+            return R.trend(scope, id, from_, to)
+        if not id or not to:
+            raise HTTPException(status_code=422, detail="a driver report needs a province id and a quarter (to)")
+        return R.drivers(id, to)
+    except KeyError as ex:
+        raise HTTPException(status_code=404, detail=str(ex))

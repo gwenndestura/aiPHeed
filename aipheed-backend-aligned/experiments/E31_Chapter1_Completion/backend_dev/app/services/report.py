@@ -326,8 +326,9 @@ def _method_block(performance: dict) -> list:
         ["Recall (weighted)", _num(performance.get("recall"), 4)],
         ["F1 score (weighted)", _num(performance.get("f1"), 4)],
         ["AUC-ROC", _num(performance.get("rocAuc"), 4)],
-        ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
-        ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"],
+        *([["Accuracy requirement", str(targets["note"])[:180]]] if targets.get("note") else [
+            ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
+            ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"]]),
         ["Features in the model", str(performance.get("nFeatures", "--"))],
     ]
     same = performance.get("sameFoldsAsBaselines") or {}
