@@ -675,6 +675,10 @@ export function PhilippineMap({
       if (!insideSelected) onBackgroundClickRef.current?.();
     });
 
+    // Set on unmount: the GeoJSON can arrive after the map is gone, and adding
+    // layers to a removed map throws.
+    let disposed = false;
+
     // Load provinces (filter to CALABARZON only) + municipalities
     Promise.all([
       fetch("/ph-provinces.json").then((r) => r.json()),
@@ -682,6 +686,7 @@ export function PhilippineMap({
       fetch("/calabarzon-lakes.json").then((r) => r.json()),
     ])
       .then(([provincesGeo, muniGeo, lakeGeo]: GeoJSON.FeatureCollection[]) => {
+        if (disposed) return;
         muniGeoDataRef.current = muniGeo;
         lakeGeoDataRef.current = lakeGeo;
 
@@ -800,7 +805,12 @@ export function PhilippineMap({
       .catch(console.error);
 
     return () => {
+      disposed = true;
       (map as any).__aipheedZoomCleanup?.();
+      // Without this the theme listener outlives the map: the next page's
+      // header announces its theme on mount, and the stale handler adds a
+      // basemap layer to the removed map ("reading 'appendChild'").
+      (map as any).__aipheedThemeCleanup?.();
       map.remove();
       mapRef.current = null;
       provincesLayerRef.current = null;
