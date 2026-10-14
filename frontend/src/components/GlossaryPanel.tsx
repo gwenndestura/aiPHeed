@@ -1,18 +1,20 @@
 import { X } from "lucide-react";
 
 const TERMS: Array<{ term: string; def: string }> = [
-  { term: "Risk Level", def: "A composite score from 0 to 1 forecasting the likelihood of food insecurity in a province or municipality. Higher values indicate greater risk. Formerly referred to as RFII (Regional Food Insecurity Index)." },
-  { term: "SHAP", def: "SHapley Additive exPlanations. A method that explains how each feature contributed to the model's prediction. Positive values increase risk; negative values are protective." },
-  { term: "Engel Coefficient", def: "The proportion of household income spent on food. Higher values indicate lower income and greater food vulnerability." },
-  { term: "FPSI Price Stress", def: "Food Price Stress Index. Measures pressure from rising food retail prices on household food access." },
-  { term: "Fish Kill", def: "Mass mortality of fish in inland or coastal waters due to pollution, algal blooms, or oxygen depletion. Disrupts local protein supply and livelihoods, directly elevating food insecurity risk in affected communities." },
-  { term: "Dependency Rate", def: "The ratio of non-working household members to working members. Higher rates increase economic vulnerability." },
-  { term: "Income Decile", def: "Household income ranking from lowest (1) to highest (10). Lower deciles face greater food insecurity risk." },
-  { term: "Baseline (φ₀)", def: "The average Risk Level across all areas before feature contributions are applied." },
-  { term: "Impact", def: "The total change from baseline caused by all feature contributions combined." },
+  { term: "Risk Level", def: "A score from 0 to 1 estimating the likelihood of food insecurity in a province or municipality. Higher values indicate greater risk. Formerly referred to as RFII (Regional Food Insecurity Index)." },
+  { term: "High / Low risk", def: "The band a Risk Level falls in. It is judged on the score as shown, rounded to two decimals: 0.50 and above is High, below 0.50 is Low. A score of 0.4982 reads 0.50, so it is High." },
+  { term: "Active alert", def: "A stricter flag for anticipatory action, raised when the Risk Level is at or above 0.60. Every active alert is High risk, but not every High risk area has an active alert." },
+  { term: "Observed quarter", def: "A quarter PSA has already published data for, scored from that quarter's own data (a nowcast). The newest one is marked as the current quarter. Shown with a solid line on the timeline." },
+  { term: "Forecast Quarter", def: "A quarter beyond the newest published PSA data. Its Risk Level is predicted from earlier quarters' signals. Shown with a dashed line on the timeline." },
+  { term: "No data", def: "A quarter on the timeline with no Risk Level, shown in gray. Either the model has no input data for it, or PSA has not published its data yet and the forecast does not reach it. Select the quarter to see which." },
+  { term: "Limited data", def: "Fewer than 5 news articles about the province were found for the quarter, so its score rests on less evidence. The tag carries over to every municipality in that province." },
   { term: "Quarter-on-quarter change", def: "The percentage shift in the Risk Level score compared to the previous quarter. Positive values indicate worsening conditions." },
-  { term: "Forecast Quarter", def: "A future quarter for which the model has generated a risk prediction based on current signals." },
-  { term: "IPC/CH Phase", def: "Integrated Food Security Phase Classification. International standard for measuring acute food insecurity severity." },
+  { term: "SHAP", def: "SHapley Additive exPlanations. A method that explains how each input contributed to the model's prediction. The dashboard groups these contributions into five drivers and shows each one's share, adding up to 100%. A driver either pushes risk up or is protective." },
+  { term: "Market / Prices", def: "Food retail prices, including rice, and how fast they are rising. Higher prices make it harder for households to afford enough food." },
+  { term: "Climate Stress", def: "Typhoons, heavy rain, flooding and other weather that damage farms and disrupt food supply." },
+  { term: "Fish Kill", def: "Mass mortality of fish in inland or coastal waters due to pollution, algal blooms, or oxygen depletion. Disrupts local protein supply and livelihoods, directly elevating food insecurity risk in affected communities." },
+  { term: "Employment", def: "How many people have jobs. Rising unemployment leaves households with less income for food." },
+  { term: "OFW Remittance", def: "Money sent home by relatives working abroad (Overseas Filipino Workers). A drop leaves families with less to spend on food." },
 ];
 
 export function GlossaryPanel({ open, onClose }: { open: boolean; onClose: () => void }) {

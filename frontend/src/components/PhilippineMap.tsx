@@ -32,6 +32,18 @@ interface Props {
 
 const AMBER = "hsl(35, 90%, 55%)";
 
+type Ring = number[][];
+
+const ringContains = (ring: Ring, lng: number, lat: number) => {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (yi > lat !== yj > lat && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+};
+
 // Ray-cast test against the outer rings only. Holes are ignored on purpose:
 // a lake inside a province (Laguna's seven San Pablo lakes) reads as part of
 // that province, not as somewhere outside it.
@@ -41,15 +53,7 @@ function outlineContains(geometry: GeoJSON.Geometry | undefined, lng: number, la
     geometry.type === "Polygon" ? [geometry.coordinates]
     : geometry.type === "MultiPolygon" ? geometry.coordinates
     : [];
-  return polygons.some(([outer]) => {
-    let inside = false;
-    for (let i = 0, j = outer.length - 1; i < outer.length; j = i++) {
-      const [xi, yi] = outer[i];
-      const [xj, yj] = outer[j];
-      if (yi > lat !== yj > lat && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
-    }
-    return inside;
-  });
+  return polygons.some(([outer]) => ringContains(outer, lng, lat));
 }
 
 // Basemap flavor + page-background colour per theme. "black" / "white" Protomaps
@@ -88,6 +92,70 @@ const mixHex = (from: string, to: string, amount: number) => {
 
 const NO_DATA_COLOR = "#6b7280"; // gray for areas without data
 
+// Lakes are drawn in their province's colour, this much darker, so they read
+// as part of the province but clearly not a municipality with its own score.
+const LAKE_SHADE = 0.28;
+
+// The boundary file names component cities "City of Antipolo" while the API
+// says "Antipolo" (and "Cavite City" for "City of Cavite"), so both sides are
+// reduced to the bare place name before matching.
+const muniKey = (provinceId: string, name: string) =>
+  `${provinceId}::${name.toLowerCase().trim().replace(/^city of\s+/, "").replace(/\s+city$/, "")}`;
+
+const ringDistance = (ring: Ring, lng: number, lat: number) => {
+  let best = Infinity;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [ax, ay] = ring[j];
+    const [bx, by] = ring[i];
+    const dx = bx - ax;
+    const dy = by - ay;
+    const len = dx * dx + dy * dy;
+    const t = len ? Math.max(0, Math.min(1, ((lng - ax) * dx + (lat - ay) * dy) / len)) : 0;
+    best = Math.min(best, Math.hypot(lng - (ax + t * dx), lat - (ay + t * dy)));
+  }
+  return best;
+};
+
+// Where a municipality's name goes. The bounding-box centre is fine for most
+// shapes, but one that wraps around water (San Nicolas around Taal Lake) has
+// its centre in the lake, so those fall back to the point of the largest
+// polygon that sits furthest from any edge.
+function labelPoint(geometry: GeoJSON.Geometry | undefined, fallback: L.LatLng): L.LatLng {
+  if (!geometry || (geometry.type !== "Polygon" && geometry.type !== "MultiPolygon")) return fallback;
+  const polygons = (geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates) as Ring[][];
+  const inPolygon = (rings: Ring[], lng: number, lat: number) =>
+    ringContains(rings[0], lng, lat) && !rings.slice(1).some((h) => ringContains(h, lng, lat));
+  if (polygons.some((rings) => inPolygon(rings, fallback.lng, fallback.lat))) return fallback;
+
+  const extent = (rings: Ring[]) => {
+    const xs = rings[0].map((c) => c[0]);
+    const ys = rings[0].map((c) => c[1]);
+    return { minX: Math.min(...xs), maxX: Math.max(...xs), minY: Math.min(...ys), maxY: Math.max(...ys) };
+  };
+  const largest = polygons.reduce((a, b) => {
+    const ea = extent(a);
+    const eb = extent(b);
+    return (eb.maxX - eb.minX) * (eb.maxY - eb.minY) > (ea.maxX - ea.minX) * (ea.maxY - ea.minY) ? b : a;
+  });
+  const { minX, maxX, minY, maxY } = extent(largest);
+  const steps = 24;
+  let best: [number, number] | null = null;
+  let bestDist = -1;
+  for (let i = 1; i < steps; i++) {
+    for (let j = 1; j < steps; j++) {
+      const lng = minX + ((maxX - minX) * i) / steps;
+      const lat = minY + ((maxY - minY) * j) / steps;
+      if (!inPolygon(largest, lng, lat)) continue;
+      const d = Math.min(...largest.map((r) => ringDistance(r, lng, lat)));
+      if (d > bestDist) {
+        bestDist = d;
+        best = [lat, lng];
+      }
+    }
+  }
+  return best ? L.latLng(best[0], best[1]) : fallback;
+}
+
 export function PhilippineMap({
   regions,
   selectedRegion,
@@ -103,6 +171,7 @@ export function PhilippineMap({
   const mapRef = useRef<L.Map | null>(null);
   const provincesLayerRef = useRef<L.GeoJSON | null>(null);
   const municipalitiesLayerRef = useRef<L.GeoJSON | null>(null);
+  const lakesLayerRef = useRef<L.GeoJSON | null>(null);
   const provincePulsesRef = useRef<{ marker: L.Marker; provinceId: string }[]>([]);
   const provinceLabelsRef = useRef<L.Marker[]>([]);
   const municipalityLabelsRef = useRef<L.Marker[]>([]);
@@ -116,6 +185,9 @@ export function PhilippineMap({
   const [isZoomed, setIsZoomed] = useState(false);
   const isZoomedRef = useRef(false);
   const muniGeoDataRef = useRef<GeoJSON.FeatureCollection | null>(null);
+  // Lakes the province outline covers but no municipality does (Laguna de
+  // Bay, Taal Lake), cut from the two boundary files so the edges line up.
+  const lakeGeoDataRef = useRef<GeoJSON.FeatureCollection | null>(null);
 
   onHoverRef.current = onHover;
   onClickRef.current = onClick;
@@ -139,7 +211,7 @@ export function PhilippineMap({
     // Map by lowercased name + province for matching against geojson "name"
     const m = new Map<string, MunicipalityData>();
     municipalities.forEach((mu) => {
-      m.set(`${mu.provinceId}::${mu.name.toLowerCase()}`, mu);
+      m.set(muniKey(mu.provinceId, mu.name), mu);
     });
     return m;
   }, [municipalities]);
@@ -179,6 +251,11 @@ export function PhilippineMap({
       map.removeLayer(municipalitiesLayerRef.current);
       municipalitiesLayerRef.current = null;
     }
+    if (lakesLayerRef.current) {
+      map.removeLayer(lakesLayerRef.current);
+      lakesLayerRef.current = null;
+    }
+    map.closePopup();
     municipalityLabelsRef.current.forEach((l) => map.removeLayer(l));
     municipalityLabelsRef.current = [];
   }, []);
@@ -195,13 +272,59 @@ export function PhilippineMap({
     if (!features.length) return;
 
     const isProvRejected = rejectedRef.current.has(provinceId);
+    const labels: L.Marker[] = [];
+
+    // Lakes go in first so the municipalities draw over their shorelines.
+    const lakes = (lakeGeoDataRef.current?.features ?? []).filter(
+      (f) => f.properties?.province_id === provinceId
+    );
+    if (lakes.length) {
+      const lakeFill = mixHex(getProvinceStyle(provinceId, true, false).fillColor as string, "#000000", LAKE_SHADE);
+      lakesLayerRef.current = L.geoJSON(
+        { type: "FeatureCollection", features: lakes } as GeoJSON.FeatureCollection,
+        {
+          style: () => ({ fillColor: lakeFill, fillOpacity: 0.95, stroke: false }),
+          onEachFeature: (feature, layer) => {
+            layer.bindTooltip(
+              `<div style="font-size:11px"><strong>${feature.properties?.name}</strong><br/><span style="color:#9ca3af;font-style:italic">Lake · No data</span></div>`,
+              { sticky: true }
+            );
+            layer.on("click", (e) => L.DomEvent.stopPropagation(e));
+          },
+        }
+      ).addTo(map);
+      lakes.forEach((f) => {
+        const [lat, lng] = f.properties?.label as [number, number];
+        labels.push(
+          L.marker([lat, lng], {
+            icon: L.divIcon({
+              className: "",
+              html: `<div style="
+                color: rgba(255,255,255,0.85);
+                font-size: 11px;
+                font-style: italic;
+                font-weight: 600;
+                letter-spacing: 0.06em;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+                white-space: nowrap;
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+              ">${f.properties?.name}</div>`,
+              iconSize: [0, 0],
+              iconAnchor: [0, 0],
+            }),
+            interactive: false,
+          }).addTo(map)
+        );
+      });
+    }
 
     const muniLayer = L.geoJSON(
       { type: "FeatureCollection", features } as GeoJSON.FeatureCollection,
       {
         style: (feature) => {
           const name = (feature?.properties?.name || "").toLowerCase();
-          const muni = muniMap.get(`${provinceId}::${name}`);
+          const muni = muniMap.get(muniKey(provinceId, name));
           const color = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
           const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
           return {
@@ -215,14 +338,15 @@ export function PhilippineMap({
         },
         onEachFeature: (feature, layer) => {
           const name: string = feature.properties?.name || "Unknown";
-          const muni = muniMap.get(`${provinceId}::${name.toLowerCase()}`);
+          const muni = muniMap.get(muniKey(provinceId, name));
           const tipColor = muni ? RISK_COLORS[muni.riskLevel] : "#888";
           layer.bindTooltip(
             `<div style="font-size:11px">
               <strong>${name}</strong>
               ${isProvRejected
                 ? `<br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span>`
-                : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>` : ""}
+                : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>`
+                : `<br/><span style="color:#9ca3af;font-style:italic">No data available</span>`}
             </div>`,
             { sticky: true }
           );
@@ -243,7 +367,19 @@ export function PhilippineMap({
             },
             click: (e) => {
               L.DomEvent.stopPropagation(e);
-              if (muni && !isProvRejected) onMuniClickRef.current(muni);
+              if (muni && !isProvRejected) {
+                onMuniClickRef.current(muni);
+                return;
+              }
+              // Nothing to open in the side panel, so say so where they clicked.
+              L.popup({ closeButton: false })
+                .setLatLng(e.latlng)
+                .setContent(
+                  `<div style="font-size:12px"><strong>${name}</strong><br/><span style="color:#6b7280;font-style:italic">${
+                    isProvRejected ? "No forecast available for this quarter" : "No data available"
+                  }</span></div>`
+                )
+                .openOn(map);
             },
           });
         },
@@ -254,20 +390,19 @@ export function PhilippineMap({
     muniLayer.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = (feature?.properties?.name || "").toLowerCase();
-      const muni = muniMap.get(`${provinceId}::${name}`);
+      const muni = muniMap.get(muniKey(provinceId, name));
       const fill = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
       (layer as L.Path).setStyle({ fillColor: fill });
     });
 
     // Add muni name labels (only for larger features, capped to avoid clutter)
-    const labels: L.Marker[] = [];
     let labelCount = 0;
     muniLayer.eachLayer((layer) => {
       if (labelCount >= 60) return;
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = feature?.properties?.name || "";
       if (!name) return;
-      const center = (layer as L.Polygon).getBounds().getCenter();
+      const center = labelPoint(feature.geometry, (layer as L.Polygon).getBounds().getCenter());
       labels.push(
         L.marker([center.lat, center.lng], {
           icon: L.divIcon({
@@ -290,7 +425,7 @@ export function PhilippineMap({
       labelCount++;
     });
     municipalityLabelsRef.current = labels;
-  }, [muniMap, clearMunicipalities]);
+  }, [muniMap, clearMunicipalities, getProvinceStyle]);
 
   // Pulse markers + permanent name labels, one per province. Rebuildable
   // (not just run-once): province data arrives from the network, so this is
@@ -544,9 +679,11 @@ export function PhilippineMap({
     Promise.all([
       fetch("/ph-provinces.json").then((r) => r.json()),
       fetch("/calabarzon-municities.json").then((r) => r.json()),
+      fetch("/calabarzon-lakes.json").then((r) => r.json()),
     ])
-      .then(([provincesGeo, muniGeo]: [GeoJSON.FeatureCollection, GeoJSON.FeatureCollection]) => {
+      .then(([provincesGeo, muniGeo, lakeGeo]: GeoJSON.FeatureCollection[]) => {
         muniGeoDataRef.current = muniGeo;
+        lakeGeoDataRef.current = lakeGeo;
 
         // Filter & re-tag provinces: use province name → our id
         const NAME_TO_ID: Record<string, string> = {
@@ -688,7 +825,7 @@ export function PhilippineMap({
     municipalitiesLayerRef.current.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = (feature?.properties?.name || "").toLowerCase();
-      const muni = muniMap.get(`${provinceId}::${name}`);
+      const muni = muniMap.get(muniKey(provinceId, name));
       if (!muni) return;
       const isSel = !isProvRejected && selectedMunicipality?.id === muni.id;
       (layer as L.Path).setStyle({
