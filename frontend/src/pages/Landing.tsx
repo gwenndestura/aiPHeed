@@ -766,7 +766,7 @@ function Footer() {
               food stress before it peaks.
             </p>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[14px]" style={{ color: "var(--lp-muted)" }}>
-              <a href="#about" className="hover:text-[var(--lp-fg)] transition-colors">Home</a>
+              <a href="#" className="hover:text-[var(--lp-fg)] transition-colors">Home</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
               <a href="#about" className="hover:text-[var(--lp-fg)] transition-colors">About</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
