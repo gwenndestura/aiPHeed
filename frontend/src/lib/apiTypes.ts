@@ -482,3 +482,16 @@ export interface FeedbackListResponse {
   pageSize: number;
   total: number;
 }
+
+// ---------------------------------------------------------------------------
+// Account self-service (ACCT-1)
+// ---------------------------------------------------------------------------
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface VerifyEmailResponse {
+  status: string;
+  message: string;
+}

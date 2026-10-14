@@ -205,6 +205,21 @@ def refresh_guard(request: Request) -> None:
           settings.RATE_LIMIT_REFRESH_PER_15MIN, 15 * 60)
 
 
+def signup_guard(request: Request) -> None:
+    """New accounts: each one sends an email."""
+    limit(request, "signup", settings.RATE_LIMIT_SIGNUP_PER_HOUR, 60 * 60)
+
+
+def email_link_guard(request: Request) -> None:
+    """Resend verification / forgot password: each may send an email."""
+    limit(request, "email_link", settings.RATE_LIMIT_EMAIL_LINK_PER_HOUR, 60 * 60)
+
+
+def link_redeem_guard(request: Request) -> None:
+    """Redeeming a verification or reset link: stops guessing tokens."""
+    limit(request, "link_redeem", settings.RATE_LIMIT_LINK_REDEEM_PER_HOUR, 60 * 60)
+
+
 def report_guard(request: Request) -> None:
     """Seconds of CPU per call; the tightest limit of the three."""
     limit(request, "report",

@@ -6,6 +6,11 @@ POST /api/v1/auth/refresh   new access token from the refresh cookie (rotated)
 GET  /api/v1/auth/me
 POST /api/v1/auth/logout    revoke the access token and the session; clear the cookie
 
+Account self-service (ACCT-1), public and rate-limited per IP:
+POST /api/v1/auth/signup                new account, pending email verification
+POST /api/v1/auth/verify-email          redeem the emailed link -> pending approval
+POST /api/v1/auth/resend-verification   a fresh verification link
+
 Replaces both client-side login paths. Neither talked to a server: one ignored
 the password field entirely, the other compared against a credential compiled
 into the JS bundle and printed in the UI. `/admin` was gated by a
@@ -20,7 +25,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Request, Response
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,14 +33,28 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.db.models import AdminUser, AuditRecord
 from app.dependencies import get_db
-from app.schemas.admin import LoginRequest, LoginResponse, LogoutResponse, UserOut
-from app.services import accounts, security, sessions
+from app.schemas.admin import (
+    EmailRequest,
+    LoginRequest,
+    LoginResponse,
+    LogoutResponse,
+    MessageResponse,
+    SignupRequest,
+    TokenRequest,
+    UserOut,
+    VerifyEmailResponse,
+)
+from app.services import accounts, mailer, security, sessions
+from app.services.passwords import password_problem
 from app.services.ratelimit import (
     account_locked,
     clear_login_failures,
+    email_link_guard,
+    link_redeem_guard,
     login_guard,
     record_login_failure,
     refresh_guard,
+    signup_guard,
 )
 
 logger = logging.getLogger(__name__)
@@ -219,3 +238,117 @@ async def logout(
         revoked=True,
         message="Signed out. This token will no longer be accepted.",
     )
+
+
+
+# ---------------------------------------------------------------------------
+# Account self-service (ACCT-1)
+# ---------------------------------------------------------------------------
+#
+# Sign-up and resend give the same answer whether or not the address is
+# registered, and their emails are sent after the response (BackgroundTasks),
+# so neither the reply nor its timing says which addresses have accounts.
+
+SIGNUP_ACCEPTED = (
+    "Thank you. If this address can be registered, a verification link has been "
+    "sent to it. The link expires in 24 hours."
+)
+RESEND_ACCEPTED = (
+    "If this address has an account waiting for verification, a new link has been "
+    "sent to it. The link expires in 24 hours."
+)
+
+
+async def _find(db: AsyncSession, email: str) -> AdminUser | None:
+    return await db.scalar(select(AdminUser).where(AdminUser.email == email))
+
+
+@router.post("/signup", status_code=202, response_model=MessageResponse,
+             dependencies=[Depends(signup_guard)])
+async def signup(
+    body: SignupRequest,
+    background: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+) -> MessageResponse:
+    """
+    Request an admin account. Only ADMIN_EMAIL_DOMAIN addresses, and the
+    shared password policy. The account starts "pending_verification" with no
+    access; the verification link is emailed.
+
+    An address that already has an account gets an email saying so (or, if it
+    is still unverified, a fresh verification link) -- never a different reply.
+    """
+    email = body.email.strip().lower()
+    if not security.email_domain_allowed(email):
+        raise accounts.AccountError(
+            f"Only @{settings.ADMIN_EMAIL_DOMAIN} addresses can create an account.", "domain_not_allowed")
+    problem = password_problem(body.password)
+    if problem:
+        raise accounts.AccountError(problem, "weak_password")
+
+    # Hashed whether or not it is used, so a registered address costs the
+    # same time as a new one.
+    password_hash = security.hash_password(body.password)
+
+    user = await _find(db, email)
+    if user is None:
+        user = AdminUser(
+            email=email,
+            full_name=body.fullName.strip(),
+            office_unit=body.office.strip(),
+            password_hash=password_hash,
+            role="admin",
+        )
+        accounts.set_status(user, accounts.PENDING_VERIFICATION)
+        db.add(user)
+        await db.flush()  # assigns user.id
+        accounts.audit(db, action="signup", subject=user)
+        token = await accounts.issue_link_token(db, user, accounts.VERIFY_EMAIL)
+        background.add_task(mailer.send_email, *accounts.verification_email(user, token))
+    elif user.status == accounts.PENDING_VERIFICATION:
+        # The earlier sign-up was never verified: send its owner a fresh link.
+        # The password just typed is NOT applied -- whoever is signing up again
+        # may not be the owner.
+        token = await accounts.issue_link_token(db, user, accounts.VERIFY_EMAIL)
+        background.add_task(mailer.send_email, *accounts.verification_email(user, token))
+    else:
+        background.add_task(mailer.send_email, *accounts.already_registered_email(user))
+    await db.commit()
+    return MessageResponse(message=SIGNUP_ACCEPTED)
+
+
+@router.post("/verify-email", response_model=VerifyEmailResponse,
+             dependencies=[Depends(link_redeem_guard)])
+async def verify_email(body: TokenRequest, db: AsyncSession = Depends(get_db)) -> VerifyEmailResponse:
+    """Redeem a verification link: the account moves to pending_approval."""
+    user = await accounts.redeem_link_token(db, body.token, accounts.VERIFY_EMAIL)
+    if user.status == accounts.PENDING_VERIFICATION:
+        user.email_verified_at = datetime.now(timezone.utc).replace(tzinfo=None)
+        accounts.set_status(user, accounts.PENDING_APPROVAL)
+        accounts.audit(db, action="email_verified", subject=user)
+    await db.commit()
+    return VerifyEmailResponse(
+        status=user.status,
+        message=(
+            "Your email address is verified. An administrator will review your account; "
+            "you will get an email when it is approved."
+            if user.status == accounts.PENDING_APPROVAL
+            else "Your email address is verified."
+        ),
+    )
+
+
+@router.post("/resend-verification", status_code=202, response_model=MessageResponse,
+             dependencies=[Depends(email_link_guard)])
+async def resend_verification(
+    body: EmailRequest,
+    background: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+) -> MessageResponse:
+    """A fresh verification link (earlier ones stop working). Same reply for every address."""
+    user = await _find(db, body.email.strip().lower())
+    if user is not None and user.status == accounts.PENDING_VERIFICATION:
+        token = await accounts.issue_link_token(db, user, accounts.VERIFY_EMAIL)
+        await db.commit()
+        background.add_task(mailer.send_email, *accounts.verification_email(user, token))
+    return MessageResponse(message=RESEND_ACCEPTED)

@@ -44,6 +44,20 @@ class Settings(BaseSettings):
     # localhost / 127.0.0.1, where browsers would otherwise drop the cookie.
     REFRESH_COOKIE_SECURE: bool = True
 
+    # ── Email (account links and notices; app/services/mailer.py) ─────────
+    # Leave SMTP_HOST empty in development: emails, links included, are then
+    # printed to the backend terminal instead of being sent.
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM: str = "aiPHeed <no-reply@localhost>"
+    SMTP_USE_TLS: bool = True    # STARTTLS on SMTP_PORT (usually 587)
+    SMTP_USE_SSL: bool = False   # implicit TLS instead (usually port 465)
+    SMTP_TIMEOUT_SECONDS: int = 15
+    # Where the links in those emails point: the frontend's public address.
+    FRONTEND_BASE_URL: str = "http://localhost:8080"
+
     @field_validator("REFRESH_COOKIE_SAMESITE")
     @classmethod
     def _samesite(cls, v: str) -> str:
@@ -72,6 +86,11 @@ class Settings(BaseSettings):
     RATE_LIMIT_FEEDBACK_PER_HOUR: int = 20
     # Session refreshes per IP: one per page load or tab, plus one an hour.
     RATE_LIMIT_REFRESH_PER_15MIN: int = 120
+    # Account self-service, per IP: sign-ups; requests that send an email
+    # (resend verification, forgot password); redeeming a link.
+    RATE_LIMIT_SIGNUP_PER_HOUR: int = 5
+    RATE_LIMIT_EMAIL_LINK_PER_HOUR: int = 5
+    RATE_LIMIT_LINK_REDEEM_PER_HOUR: int = 30
 
     # ── CORS ──────────────────────────────────────────────────────────────
     # The previous regex was https://.*\.vercel\.app -- ANY Vercel deployment,

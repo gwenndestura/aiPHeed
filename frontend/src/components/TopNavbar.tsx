@@ -7,6 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { ApiError } from "@/lib/api";
+import { authLinkClass, authLinksRowClass } from "@/components/AuthCard";
+import { PENDING_CODES, SignInNotice } from "@/components/SignInNotice";
 import { ADMIN_NAV, isActivePath } from "@/lib/adminNav";
 import { PSTClock } from "./PSTClock";
 import logoDark from "@/assets/logo-dark.png";
@@ -144,21 +147,28 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [notice, setNotice] = useState<{ code: string; message: string; email: string } | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setNotice(null);
+    const address = email.trim().toLowerCase();
     try {
-      await login(email.trim().toLowerCase(), password);
+      await login(address, password);
       toast({ title: "Welcome, DA Administrator", description: "Routing to admin dashboard…" });
       onOpenChange(false);
       navigate("/admin");
     } catch (err) {
-      toast({
-        title: "Sign-in failed",
-        description: err instanceof Error ? err.message : "Could not reach the server.",
-        variant: "destructive",
-      });
+      if (err instanceof ApiError && PENDING_CODES.has(err.code)) {
+        setNotice({ code: err.code, message: err.message, email: address });
+      } else {
+        toast({
+          title: "Sign-in failed",
+          description: err instanceof Error ? err.message : "Could not reach the server.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -232,13 +242,18 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </button>
         </form>
 
+        {notice && <SignInNotice {...notice} />}
+
         <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
 
-        <p className="text-center text-[10px] text-muted-foreground mt-4">
+        <p className={authLinksRowClass}>
+          <Link to="/signup" onClick={() => onOpenChange(false)} className={authLinkClass}>
+            Create an account
+          </Link>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="hover:text-foreground underline underline-offset-2"
+            className={authLinkClass}
           >
             Back to public map
           </button>

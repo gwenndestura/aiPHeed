@@ -57,6 +57,34 @@ class LogoutResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Account self-service (ACCT-1)
+# ---------------------------------------------------------------------------
+
+class SignupRequest(BaseModel):
+    fullName: str = Field(min_length=1, max_length=NAME_MAX)
+    email: Annotated[EmailStr, Field(max_length=NAME_MAX)]
+    office: str = Field(min_length=1, max_length=NAME_MAX)
+    password: str = Field(min_length=1, max_length=PASSWORD_MAX)
+
+
+class EmailRequest(BaseModel):
+    email: Annotated[EmailStr, Field(max_length=NAME_MAX)]
+
+
+class TokenRequest(BaseModel):
+    token: str = Field(min_length=1, max_length=200)
+
+
+class MessageResponse(BaseModel):
+    message: str
+
+
+class VerifyEmailResponse(BaseModel):
+    status: str
+    message: str
+
+
+# ---------------------------------------------------------------------------
 # Review pipeline
 # ---------------------------------------------------------------------------
 
