@@ -97,8 +97,8 @@ class RejectionRow(BaseModel):
     quarter: str
     reason: str | None = None
     notes: str | None = None
-    rejectedBy: int | None = None
-    rejectedByName: str | None = None
+    # No reviewer id or name: this list is public. Who rejected what is in
+    # the admin-only review queue and audit log.
     timestamp: datetime | None = None
 
 

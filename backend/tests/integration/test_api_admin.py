@@ -296,7 +296,16 @@ class TestRejectionIsEnforced:
         assert r.status_code == 200
         rows = r.json()["data"]
         assert [row["provinceId"] for row in rows] == ["laguna"]
-        assert rows[0]["rejectedByName"] == "J. Dela Cruz"
+
+    def test_public_rejections_do_not_identify_the_reviewer(self, api, rejected):
+        row = api.get("/api/v1/rejections?quarter=2025-Q4").json()["data"][0]
+        # Public endpoint: the admin's id and name stay in the admin views.
+        assert "rejectedBy" not in row and "rejectedByName" not in row
+        assert "J. Dela Cruz" not in str(row)
+        # ...where they are still recorded.
+        queue = api.get("/api/v1/admin/review?quarter=2025-Q4", headers=rejected).json()["data"]
+        laguna = next(r for r in queue if r["provinceId"] == "laguna")
+        assert laguna["updatedByName"] == "J. Dela Cruz"
 
     def test_withheld_forecast_is_404_with_its_own_code(self, api, rejected):
         r = api.get("/api/v1/forecast?scope=province&id=laguna&quarter=2025-Q4")

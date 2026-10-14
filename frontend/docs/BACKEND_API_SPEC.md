@@ -529,10 +529,11 @@ admin "Rejection Log" tab.
   { "provinceId": "quezon", "province": "Quezon", "quarter": "2026-Q4",
     "reason": "Sensitive context — withhold publication",
     "notes": null,
-    "rejectedBy": "u_123", "rejectedByName": "J. Dela Cruz",
     "timestamp": "2026-06-30T08:00:00Z" }
 ] }
 ```
+No reviewer id or name: this list is public. Who rejected each item is in the
+admin-only review queue (`updatedBy` / `updatedByName`) and the audit log.
 Frontend keys on `(provinceId, quarter)` — at most one active rejection per pair.
 Replaces `src/lib/rejections.ts` (`loadRejections`, `addRejection`,
 `removeRejection`, `isRejected`, `getRejectedProvinceIdsForQuarter`). Keep the

@@ -85,8 +85,6 @@ def _rejection(row: ReviewRecord) -> RejectionRow:
         quarter=row.quarter,
         reason=row.rejection_reason,
         notes=row.rejection_notes,
-        rejectedBy=row.updated_by,
-        rejectedByName=row.updated_by_name,
         timestamp=row.updated_at,
     )
 

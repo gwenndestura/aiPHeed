@@ -387,16 +387,14 @@ export interface ReviewListResponse {
   data: ReviewItem[];
 }
 
-// Public rejections endpoint. The backend's current RejectionRow also carries
-// reason/notes/rejectedBy/rejectedByName; the map only needs provinceId +
-// quarter to grey a tile out, so this mirror only declares what's consumed.
+// Public rejections endpoint. The backend's RejectionRow also carries the
+// province name; the map only needs provinceId + quarter to grey a tile out.
+// It deliberately carries no reviewer id or name -- those are admin-only.
 export interface PublicRejectionRow {
   provinceId: string;
   quarter: string;
   reason?: string | null;
   notes?: string | null;
-  rejectedBy?: number | null;
-  rejectedByName?: string | null;
   timestamp?: string | null;
 }
 
