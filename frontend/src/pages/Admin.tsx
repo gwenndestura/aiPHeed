@@ -162,8 +162,8 @@ function AdminNavbar({
 
       <div className="flex-1" />
 
-      {/* PST clock -- in the menu below 1024px */}
-      <PSTClock />
+      {/* PST clock -- in the menu below 1280px, where the five links need the room */}
+      <PSTClock from="xl" />
 
       {/* Hamburger */}
       <Sheet>
@@ -176,7 +176,7 @@ function AdminNavbar({
           </SheetHeader>
           <div className="mt-6 space-y-1">
             <AdminMenuLinks demo={!!user.isDemo} />
-            <PSTClockMenuRow />
+            <PSTClockMenuRow from="xl" />
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>

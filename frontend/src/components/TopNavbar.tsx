@@ -68,8 +68,8 @@ export function TopNavbar({ active = "none" }: Props) {
 
       <div className="flex-1" />
 
-      {/* PST clock -- in the menu below 1024px */}
-      <PSTClock />
+      {/* PST clock -- in the menu below 1024px (1280px for admins) */}
+      <PSTClock from={isAdmin ? "xl" : "lg"} />
 
       {/* Hamburger */}
       <Sheet>
@@ -82,7 +82,7 @@ export function TopNavbar({ active = "none" }: Props) {
           </SheetHeader>
           <div className="mt-6 space-y-1">
             {isAdmin ? <AdminMenuLinks demo={isDemo} /> : <PublicMenuLinks active={active} />}
-            <PSTClockMenuRow />
+            <PSTClockMenuRow from={isAdmin ? "xl" : "lg"} />
             {/* Public visitors have no account section: administrators sign in
                 at /login (linked from the landing page footer). */}
             {isAdmin && (
