@@ -78,7 +78,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 maxLength={200}
                 placeholder=""
-                autoComplete="off"
+                autoComplete="username"
                 className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
             </div>
@@ -98,7 +98,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 maxLength={1024}
                 placeholder=""
-                autoComplete="new-password"
+                autoComplete="current-password"
                 className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
               <button
