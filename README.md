@@ -68,12 +68,18 @@ set by PSA's publication schedule.
 
 ## What does NOT work straight after cloning
 
-**The database is created empty and nothing populates it.** Run the migrations
-first:
+**The database is not in the repository.** `backend/aipheed.db` holds account
+rows and password hashes, so it is gitignored (`backend/*.db`, `backend/*.db.*`)
+and every clone starts without one. Create a fresh, empty database from
+`backend/`:
 
 ```bash
 alembic upgrade head
 ```
+
+Then create the first admin account with `scripts/create_admin.py` (see below).
+The database file lands at the path in `DATABASE_URL` (default
+`backend/aipheed.db`). Back it up by copying the file while the API is stopped.
 
 That creates 11 tables. Three of them are used by the auth, review and feedback
 endpoints. The rest — `forecast_records`, `shap_records`, `driver_records`,
