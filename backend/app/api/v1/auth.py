@@ -29,7 +29,7 @@ from app.config import settings
 from app.db.models import AdminUser, AuditRecord
 from app.dependencies import get_db
 from app.schemas.admin import LoginRequest, LoginResponse, LogoutResponse, UserOut
-from app.services import security, sessions
+from app.services import accounts, security, sessions
 from app.services.ratelimit import (
     account_locked,
     clear_login_failures,
@@ -92,7 +92,17 @@ async def login(
 
     # Domain is checked at account creation; re-checked here so a row that
     # predates the rule cannot sign in.
-    if not (user and password_ok and user.is_active and security.email_domain_allowed(email)):
+    credentials_ok = bool(user and password_ok and security.email_domain_allowed(email))
+
+    # Right password, but the account is not approved yet: say why. Only after
+    # the password checks out, so this cannot be used to probe addresses.
+    if credentials_ok and user.status in accounts.PENDING_MESSAGES:
+        code, message = accounts.PENDING_MESSAGES[user.status]
+        await _audit_failed_login(db, request, email, user.status)
+        raise security.AuthError(message, code=code)
+
+    # Rejected and deactivated accounts fail exactly like a wrong password.
+    if not (credentials_ok and user.is_active):
         record_login_failure(email)
         logger.warning("failed login for %s from %s", email, request.client.host if request.client else "?")
         await _audit_failed_login(db, request, email, "invalid_credentials")

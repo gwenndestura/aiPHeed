@@ -28,6 +28,7 @@ import asyncio
 import getpass
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -37,7 +38,7 @@ from sqlalchemy import select  # noqa: E402
 from app.config import settings  # noqa: E402
 from app.db.database import AsyncSessionLocal  # noqa: E402
 from app.db.models import AdminUser  # noqa: E402
-from app.services import security  # noqa: E402
+from app.services import accounts, security  # noqa: E402
 from app.services.passwords import password_problem  # noqa: E402
 
 
@@ -67,11 +68,10 @@ async def list_accounts() -> None:
     if not rows:
         print("No admin accounts exist yet.")
         return
-    print(f"{'EMAIL':<40} {'NAME':<24} {'ROLE':<8} ACTIVE  LAST LOGIN")
+    print(f"{'EMAIL':<40} {'NAME':<24} {'STATUS':<21} LAST LOGIN")
     for u in rows:
         last = u.last_login_at.strftime("%Y-%m-%d %H:%M") if u.last_login_at else "never"
-        print(f"{u.email:<40} {u.full_name:<24} {u.role:<8} "
-              f"{'yes' if u.is_active else 'no':<7} {last}")
+        print(f"{u.email:<40} {u.full_name:<24} {u.status:<21} {last}")
 
 
 async def deactivate(email: str) -> None:
@@ -79,7 +79,7 @@ async def deactivate(email: str) -> None:
         user = await db.scalar(select(AdminUser).where(AdminUser.email == email))
         if user is None:
             sys.exit(f"No account for {email}.")
-        user.is_active = False
+        accounts.set_status(user, accounts.DEACTIVATED)
         # Every access token is refused and no browser can renew its session.
         await security.end_all_sessions(db, user)
         await db.commit()
@@ -91,20 +91,31 @@ async def upsert(email: str, name: str, password: str) -> None:
     async with AsyncSessionLocal() as db:
         user = await db.scalar(select(AdminUser).where(AdminUser.email == email))
         if user is None:
-            db.add(AdminUser(
+            # Created by someone with server access: verified and approved
+            # already (this is how the first admin is made).
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
+            user = AdminUser(
                 email=email,
                 full_name=name,
                 password_hash=security.hash_password(password),
                 role="admin",
-                is_active=True,
-            ))
+                email_verified_at=now,
+                approved_at=now,
+            )
+            accounts.set_status(user, accounts.ACTIVE)
+            db.add(user)
             action = "Created"
         else:
             user.full_name = name or user.full_name
             # Ends every existing session of the account (tokens and refresh
             # cookies) -- whoever knew the old password is signed out.
             await security.set_password(db, user, password)
-            user.is_active = True
+            # The script is run by someone with server access: whatever state
+            # the account was in, it is now verified, approved and active.
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
+            user.email_verified_at = user.email_verified_at or now
+            user.approved_at = user.approved_at or now
+            accounts.set_status(user, accounts.ACTIVE)
             action = "Updated (all existing sessions ended)"
         await db.commit()
     print(f"{action} admin account {email}.")

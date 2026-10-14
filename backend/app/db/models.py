@@ -188,6 +188,19 @@ class AdminUser(Base):
     # deactivation) invalidates every access token already issued.
     token_version = Column(Integer, nullable=False, default=0, server_default="0")
 
+    # Account lifecycle (app/services/accounts.py):
+    #   pending_verification -> pending_approval -> active
+    #   pending_* -> rejected;  active -> deactivated
+    # `is_active` is kept equal to (status == "active") by accounts.set_status,
+    # so every existing "may this account act?" check keeps working.
+    status = Column(String, nullable=False, default="active", server_default="active")
+    office_unit = Column(String, nullable=True)
+    email_verified_at = Column(DateTime, nullable=True)
+    approved_at = Column(DateTime, nullable=True)
+    approved_by_id = Column(Integer, nullable=True)
+    # The one view-only presentation account (create_admin.py --demo).
+    is_demo = Column(Boolean, nullable=False, default=False, server_default="0")
+
 
 class RevokedToken(Base):
     """
@@ -226,6 +239,25 @@ class RefreshToken(Base):
     absolute_expires_at = Column(DateTime, nullable=False)  # max session lifetime
     rotated_at = Column(DateTime, nullable=True)
     revoked_at = Column(DateTime, nullable=True)
+
+
+class AccountToken(Base):
+    """
+    A single-use link token: email verification (24 h) or password reset (1 h).
+
+    Only the SHA-256 of the token is stored; the token itself exists only in
+    the emailed link. `used_at` is set when it is redeemed, or when a newer
+    token of the same purpose replaces it.
+    """
+    __tablename__ = "account_tokens"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("admin_users.id", ondelete="CASCADE"), nullable=False, index=True)
+    purpose = Column(String, nullable=False)          # verify_email | reset_password
+    token_hash = Column(String, nullable=False, unique=True, index=True)
+    created_at = Column(DateTime, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    used_at = Column(DateTime, nullable=True)
 
 
 class ReviewRecord(Base):
