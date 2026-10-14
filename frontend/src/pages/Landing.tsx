@@ -817,7 +817,13 @@ function Footer() {
           className="pt-6 flex flex-row items-center justify-between gap-x-6 gap-y-2 text-[12px] flex-wrap"
           style={{ borderTop: "1px solid rgba(255,255,255,0.06)", color: "var(--lp-muted2)" }}
         >
-          <p>© 2026 aiPHeed. All rights reserved.</p>
+          <p className="flex items-center gap-x-3 flex-wrap">
+            <span>© 2026 aiPHeed. All rights reserved.</span>
+            {/* The only public way in for administrators; the header menu has no sign-in. */}
+            <Link to="/login" className="underline underline-offset-2 hover:text-[var(--lp-fg)] transition-colors max-lg:inline-flex max-lg:items-center max-lg:min-h-11">
+              Admin sign in
+            </Link>
+          </p>
           <p className="flex items-center gap-1.5 flex-wrap">
             <span>Developed by</span>
             {team.map((m, i) => (

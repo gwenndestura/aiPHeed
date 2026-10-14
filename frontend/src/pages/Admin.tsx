@@ -20,7 +20,7 @@ import { Note } from "@/components/ui/note";
 import { MapDashboard } from "@/components/MapDashboard";
 import { SidebarPeek } from "@/components/SidebarPeek";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { PSTClock } from "@/components/PSTClock";
+import { PSTClock, PSTClockMenuRow } from "@/components/PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import logoIcon from "@/assets/logo-icon.png";
@@ -29,7 +29,7 @@ import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { adminPath, sectionFromPath } from "@/lib/adminNav";
-import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks, DemoBadge } from "@/components/TopNavbar";
+import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks, DemoBadge, MENU_TRIGGER_CLASS } from "@/components/TopNavbar";
 import { AccountsSection } from "@/components/AccountsSection";
 import { ApiError } from "@/lib/api";
 import {
@@ -144,7 +144,7 @@ function AdminNavbar({
           admin stays signed in (the public header then shows the admin nav). */}
       <Link
         to="/"
-        className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0"
+        className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0 max-lg:min-h-11 max-lg:min-w-11"
         aria-label="aiPHeed home"
       >
         <img src={logoIcon} alt="aiPHeed" className="sm:hidden h-9 w-9 object-contain" />
@@ -162,12 +162,12 @@ function AdminNavbar({
 
       <div className="flex-1" />
 
-      {/* PST clock */}
+      {/* PST clock -- in the menu below 1024px */}
       <PSTClock />
 
       {/* Hamburger */}
       <Sheet>
-        <SheetTrigger className="p-1.5 rounded-md hover:bg-secondary/60 transition-colors" aria-label="Menu">
+        <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
         <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100]">
@@ -176,6 +176,7 @@ function AdminNavbar({
           </SheetHeader>
           <div className="mt-6 space-y-1">
             <AdminMenuLinks demo={!!user.isDemo} />
+            <PSTClockMenuRow />
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
@@ -188,7 +189,7 @@ function AdminNavbar({
             </div>
             <button
               onClick={onLogout}
-              className="mt-1 w-full flex items-center gap-2 px-2 py-2 rounded-md text-[11px] hover:bg-secondary/60 text-foreground"
+              className="mt-1 w-full flex items-center gap-2 px-2 py-2 max-lg:min-h-11 rounded-md text-[11px] hover:bg-secondary/60 text-foreground"
             >
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
@@ -209,14 +210,14 @@ function AdminNavbar({
                   role="switch"
                   aria-checked={theme === "light"}
                   aria-label="Toggle dark / light mode"
-                  className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors border ${
+                  className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors border after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] ${
                     theme === "light"
                       ? "bg-primary/30 border-primary/50"
                       : "bg-secondary border-border/50"
                   }`}
                 >
-                  <span className="absolute left-1 text-[8px]">🌙</span>
-                  <span className="absolute right-1 text-[8px]">☀️</span>
+                  <span aria-hidden className="absolute left-1 text-[8px]">🌙</span>
+                  <span aria-hidden className="absolute right-1 text-[8px]">☀️</span>
                   <span
                     className={`relative z-10 inline-block h-4 w-4 transform rounded-full bg-card shadow-md transition-transform ${
                       theme === "light" ? "translate-x-5" : "translate-x-0.5"

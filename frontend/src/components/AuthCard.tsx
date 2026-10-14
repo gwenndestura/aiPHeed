@@ -1,8 +1,8 @@
 // src/components/AuthCard.tsx
 // -----------------------------
 // The account pages' card, field, button and messages, shared by sign-in,
-// request access, verify email and forgot / reset password -- and by the
-// header sign-in dialog -- so they all look the same.
+// request access, verify email and forgot / reset password, so they all
+// look the same.
 //
 // Flat on purpose: a solid card with a 1px border, no glows or blurs.
 // Secondary text uses the foreground colour at reduced opacity rather than
@@ -25,7 +25,7 @@ export const authLinkClass =
 /** A row of secondary links under the form. */
 export const authLinksRowClass = "mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[13px] text-foreground/80";
 
-/** Logo, product name and the agency line -- the top of the card and of the header dialog. */
+/** Logo, product name and the agency line, at the top of the card. */
 export function AuthBrand() {
   return (
     <div className="flex items-center gap-3">

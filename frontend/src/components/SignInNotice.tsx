@@ -4,7 +4,7 @@
 // not active yet (the server only reveals this after a correct password):
 //   email_not_verified       -> "Verify your email to continue." + resend
 //   account_pending_approval -> "Your account is waiting for approval."
-// Used by /login and the header sign-in dialog.
+// Used by /login.
 
 import { useState } from "react";
 import { Note } from "@/components/ui/note";
