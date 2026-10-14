@@ -1,0 +1,403 @@
+{
+ "record": "E31 frozen 2026-Q3 forecasts (retrospective-blind)",
+ "target_quarter": "2026-Q3",
+ "label": "T1 = S1 = H + 2D > tau (approved Chapter I composite); HIGH if S1 > tau",
+ "frozen_at_utc": "2026-10-14T15:31:48+00:00",
+ "status": "RETROSPECTIVE-BLIND: frozen before the project retrieved any 2026-Q3 outcome; quarter already ended",
+ "known_partial_exposures": [
+  "E26 (2026-10-14): a search summary quoted August-September 2026 PSA bottom-30% CPI values (not the provincial food CPI used for D, but correlated). Logged in E26 CONTAMINATION_LOG.",
+  "E27 (2026-10-14): an SWS September 2026 *satisfaction* headline was seen (not the hunger series H)."
+ ],
+ "engine": "backend_dev/app/quarterly/pcf_engine.py (unchanged from E29)",
+ "engine_sha256": "c947b27aab4e90b6e8317dd1971a89cd6fb81673a96ea588cacd8f2542e0875c",
+ "inputs_sha256": {
+  "sws_rounds.csv": "2a99771a13580ec6dc4d13d56bd9dbae98f70de89e8f83978574a1ed20b16d92",
+  "s1_labels.csv": "6efdaeb4665599daf360ed436f1c630d3579d08d1850a9149d1d031a9bad00ec",
+  "d_quarterly_panel.csv": "1f3e15ac7898865ec8a4515d045531b1ceb927d2bd2a63e5383e7680ce77736a",
+  "dnow_panel.csv": "af5a14247ba0c973f61c7377f059cf4f36a4423be16ee025f68cd6d89dc27d24"
+ },
+ "also_frozen_elsewhere": "E24v2 SEAL_20261013T164218Z (git 5113ae5): B1, B1p, M2_lgbm_P_E24frozen for 2026-Q3 lead 1",
+ "not_frozen": {
+  "P45 (PROPOSED_lgbm_combined)": "needs a 2026-Q2 news row and 2026-Q1 government features, which the pinned feature file does not contain; building them is a separate step (see E31 FINAL_REPORT). Not produced before outcome retrieval."
+ },
+ "leads": {
+  "1": {
+   "origin": "2026-07-01",
+   "reference_quarter": "2026-Q2",
+   "information_cutoff": "2026-06-30T23:59:59+08:00",
+   "threshold_tau": 14.344999999999999,
+   "threshold_labels": 80,
+   "sws_rounds_used": [
+    {
+     "quarter": "2021-Q2",
+     "H": "15.7",
+     "published": "2021-07-12"
+    },
+    {
+     "quarter": "2021-Q2",
+     "H": "15.0",
+     "published": "2021-07-28"
+    },
+    {
+     "quarter": "2021-Q3",
+     "H": "10.3",
+     "published": "2021-12-06"
+    },
+    {
+     "quarter": "2021-Q4",
+     "H": "9.2",
+     "published": "2022-03-25"
+    },
+    {
+     "quarter": "2022-Q2",
+     "H": "11.7",
+     "published": "2022-06-06"
+    },
+    {
+     "quarter": "2022-Q2",
+     "H": "11.9",
+     "published": "2022-09-10"
+    },
+    {
+     "quarter": "2022-Q3",
+     "H": "9.6",
+     "published": "2022-10-29"
+    },
+    {
+     "quarter": "2022-Q4",
+     "H": "11.3",
+     "published": "2023-01-19"
+    },
+    {
+     "quarter": "2023-Q1",
+     "H": "8.7",
+     "published": "2023-05-11"
+    },
+    {
+     "quarter": "2023-Q2",
+     "H": "11.3",
+     "published": "2023-08-02"
+    },
+    {
+     "quarter": "2023-Q3",
+     "H": "10.3",
+     "published": "2023-11-20"
+    },
+    {
+     "quarter": "2023-Q4",
+     "H": "14.3",
+     "published": "2024-01-22"
+    },
+    {
+     "quarter": "2024-Q1",
+     "H": "15.3",
+     "published": "2024-04-30"
+    },
+    {
+     "quarter": "2024-Q2",
+     "H": "19.6",
+     "published": "2024-07-23"
+    },
+    {
+     "quarter": "2024-Q3",
+     "H": "18.1",
+     "published": "2024-10-17"
+    },
+    {
+     "quarter": "2024-Q4",
+     "H": "25.3",
+     "published": "2025-01-14"
+    },
+    {
+     "quarter": "2025-Q1",
+     "H": "24.0",
+     "published": "2025-03-29"
+    },
+    {
+     "quarter": "2025-Q4",
+     "H": "16.7",
+     "published": "2026-01-14"
+    }
+   ],
+   "last_label_quarter": "2026-Q1",
+   "H_forecast": {
+    "mu_H": 17.328084265302785,
+    "V_H": 26.373240669781605,
+    "sigma_eta": 2.7,
+    "gap_quarters": 3.0,
+    "n_rounds": 18,
+    "last_round_quarter": "2025-Q4",
+    "sampling_n": "600 assumed for every round (unverified)"
+   },
+   "D_model": {
+    "beta": [
+     0.5419512119377027
+    ],
+    "sigma": 1.4411974665610965,
+    "pairs": 95
+   },
+   "S1_forecast": {
+    "PH040100000": 18.000103768105536,
+    "PH040200000": 18.216884252880618,
+    "PH040300000": 16.374250132292428,
+    "PH040400000": 17.783323283330454,
+    "PH040500000": 16.26585988990489
+   },
+   "S1_80pct_interval": {
+    "PH040100000": [
+     10.452639474515385,
+     25.547568061695685
+    ],
+    "PH040200000": [
+     10.669419959290467,
+     25.76434854647077
+    ],
+    "PH040300000": [
+     8.826785838702277,
+     23.921714425882577
+    ],
+    "PH040400000": [
+     10.235858989740303,
+     25.330787576920606
+    ],
+    "PH040500000": [
+     8.718395596314737,
+     23.81332418349504
+    ]
+   },
+   "price_pressure_T2": {
+    "PH040100000": 0.6052790890121557,
+    "PH040200000": 0.3874698084703141,
+    "PH040300000": 0.8430622466999156,
+    "PH040400000": 0.5464712244299901,
+    "PH040500000": 0.1345819797273473
+   },
+   "arms_p_high": {
+    "PCF21": {
+     "PH040100000": 0.732587094070344,
+     "PH040200000": 0.7445595797329252,
+     "PH040300000": 0.6347940178004011,
+     "PH040400000": 0.7203379601012001,
+     "PH040500000": 0.6278530135062893
+    },
+    "B1_persistence": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 1.0
+    },
+    "B1p_calibrated_persistence": {
+     "PH040100000": 0.7837837837837838,
+     "PH040200000": 0.7837837837837838,
+     "PH040300000": 0.7837837837837838,
+     "PH040400000": 0.7837837837837838,
+     "PH040500000": 0.7837837837837838
+    },
+    "CLIM_climatology": {
+     "PH040100000": 0.5287356321839081,
+     "PH040200000": 0.5287356321839081,
+     "PH040300000": 0.5287356321839081,
+     "PH040400000": 0.5287356321839081,
+     "PH040500000": 0.5287356321839081
+    },
+    "ALWAYS_HIGH": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 1.0
+    }
+   }
+  },
+  "2": {
+   "origin": "2026-04-01",
+   "reference_quarter": "2026-Q1",
+   "information_cutoff": "2026-03-31T23:59:59+08:00",
+   "threshold_tau": 14.344999999999999,
+   "threshold_labels": 80,
+   "sws_rounds_used": [
+    {
+     "quarter": "2021-Q2",
+     "H": "15.7",
+     "published": "2021-07-12"
+    },
+    {
+     "quarter": "2021-Q2",
+     "H": "15.0",
+     "published": "2021-07-28"
+    },
+    {
+     "quarter": "2021-Q3",
+     "H": "10.3",
+     "published": "2021-12-06"
+    },
+    {
+     "quarter": "2021-Q4",
+     "H": "9.2",
+     "published": "2022-03-25"
+    },
+    {
+     "quarter": "2022-Q2",
+     "H": "11.7",
+     "published": "2022-06-06"
+    },
+    {
+     "quarter": "2022-Q2",
+     "H": "11.9",
+     "published": "2022-09-10"
+    },
+    {
+     "quarter": "2022-Q3",
+     "H": "9.6",
+     "published": "2022-10-29"
+    },
+    {
+     "quarter": "2022-Q4",
+     "H": "11.3",
+     "published": "2023-01-19"
+    },
+    {
+     "quarter": "2023-Q1",
+     "H": "8.7",
+     "published": "2023-05-11"
+    },
+    {
+     "quarter": "2023-Q2",
+     "H": "11.3",
+     "published": "2023-08-02"
+    },
+    {
+     "quarter": "2023-Q3",
+     "H": "10.3",
+     "published": "2023-11-20"
+    },
+    {
+     "quarter": "2023-Q4",
+     "H": "14.3",
+     "published": "2024-01-22"
+    },
+    {
+     "quarter": "2024-Q1",
+     "H": "15.3",
+     "published": "2024-04-30"
+    },
+    {
+     "quarter": "2024-Q2",
+     "H": "19.6",
+     "published": "2024-07-23"
+    },
+    {
+     "quarter": "2024-Q3",
+     "H": "18.1",
+     "published": "2024-10-17"
+    },
+    {
+     "quarter": "2024-Q4",
+     "H": "25.3",
+     "published": "2025-01-14"
+    },
+    {
+     "quarter": "2025-Q1",
+     "H": "24.0",
+     "published": "2025-03-29"
+    },
+    {
+     "quarter": "2025-Q4",
+     "H": "16.7",
+     "published": "2026-01-14"
+    }
+   ],
+   "last_label_quarter": "2025-Q4",
+   "H_forecast": {
+    "mu_H": 17.328084265302785,
+    "V_H": 26.373240669781605,
+    "sigma_eta": 2.7,
+    "gap_quarters": 3.0,
+    "n_rounds": 18,
+    "last_round_quarter": "2025-Q4",
+    "sampling_n": "600 assumed for every round (unverified)"
+   },
+   "D_model": {
+    "beta": [
+     0.2751617024353792
+    ],
+    "sigma": 1.6959621153140134,
+    "pairs": 85
+   },
+   "S1_forecast": {
+    "PH040100000": 17.647271840127825,
+    "PH040200000": 18.124218791015814,
+    "PH040300000": 17.262045456718294,
+    "PH040400000": 17.280389570213984,
+    "PH040500000": 16.326495668438003
+   },
+   "S1_80pct_interval": {
+    "PH040100000": [
+     9.759610456183477,
+     25.534933224072173
+    ],
+    "PH040200000": [
+     10.236557407071466,
+     26.01188017496016
+    ],
+    "PH040300000": [
+     9.374384072773946,
+     25.149706840662642
+    ],
+    "PH040400000": [
+     9.392728186269636,
+     25.168050954158332
+    ],
+    "PH040500000": [
+     8.438834284493655,
+     24.21415705238235
+    ]
+   },
+   "price_pressure_T2": {
+    "PH040100000": 0.5403980293622206,
+    "PH040200000": 0.5882024597286276,
+    "PH040300000": 0.4165184603877359,
+    "PH040400000": 0.538188249599837,
+    "PH040500000": 0.4170593464861673
+   },
+   "arms_p_high": {
+    "PCF21": {
+     "PH040100000": 0.7042136841536837,
+     "PH040200000": 0.7304100430491351,
+     "PH040300000": 0.6822380203581528,
+     "PH040400000": 0.6833000162458792,
+     "PH040500000": 0.6262572232274441
+    },
+    "B1_persistence": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 0.0
+    },
+    "B1p_calibrated_persistence": {
+     "PH040100000": 0.7407407407407407,
+     "PH040200000": 0.7407407407407407,
+     "PH040300000": 0.7407407407407407,
+     "PH040400000": 0.7407407407407407,
+     "PH040500000": 0.35135135135135137
+    },
+    "CLIM_climatology": {
+     "PH040100000": 0.5,
+     "PH040200000": 0.5,
+     "PH040300000": 0.5,
+     "PH040400000": 0.5,
+     "PH040500000": 0.5
+    },
+    "ALWAYS_HIGH": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 1.0
+    }
+   }
+  }
+ }
+}
