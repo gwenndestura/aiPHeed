@@ -74,3 +74,51 @@ def classify(title: str) -> str:
 
 def is_relevant(title: str) -> bool:
     return classify(title) != "NONE"
+
+
+# ------------------------------------------------------------------------------------------- R1.1 (deployed)
+# R1.1 = R1 plus corrections of the two false-positive patterns found on the blind holdout (validation/holdout/):
+#   * price / inflation / shortage / supply terms now need a food referent in the same title (fuel, fare and power
+#     prices were admitted by R1);
+#   * "relief" counts only as relief goods / operations / help to affected people, not in other senses ("comic
+#     relief", "relief of cops", "relief to commuters");
+#   * end-of-outbreak headlines ("ASF-free", "eradicate ASF") and animal-welfare items are not food-system stress.
+# Because these changes were informed by the holdout, R1.1's holdout figures are optimistic; R1's holdout figures
+# are the unbiased validation. A fresh sample of future quarters should validate R1.1 (FINAL_REPORT, next steps).
+VERSION_DEPLOYED = "R1.1"
+_FOOD_REF = re.compile(r"(?<![a-z])(?:food|rice|bigas|palay|pork|baboy|chicken|manok|poultry|egg|eggs|fish|isda|"
+                       r"tilapia|bangus|tawilis|vegetable\w*|veggies|gulay|onion\w*|sugar|asukal|meat|karne|corn|mais|"
+                       r"milk|crop\w*|farm\w*|harvest|staple\w*|commodit\w*|grocer\w*|palengke|market)", re.IGNORECASE)
+_PRICE_RE = re.compile(r"(?<![a-z])(?:(?:price|presyo)s? (?:hike|increase|surge|spike|soar|up|gap|at)|"
+                       r"(?:mahal|taas)(?:-| )?(?:presyo|na)|inflation|shortage|scarcity|supply (?:shortage|disruption|woes)|"
+                       r"prices at .{0,10}low)", re.IGNORECASE)
+_RELIEF_OK = re.compile(r"(?<![a-z])(?:relief (?:goods|packs?|bags|operations?|efforts?|drive|assistance|items)|"
+                        r"relief (?:to|for) .{0,40}(?:victims|families|evacuees|residents|fisher\w*|farmers))", re.IGNORECASE)
+_NOT_STRESS = re.compile(r"(?<![a-z])(?:asf-free|free of asf|eradicat\w* asf|regains .{0,12}free|starving (?:cats|dogs|"
+                         r"animals))", re.IGNORECASE)
+
+
+def classify_v11(title: str) -> str:
+    t = title or ""
+    if _NOT_STRESS.search(t):
+        return "NONE"
+    base = classify(t)
+    if base == "DIRECT":
+        # a DIRECT decided only by a bare "relief" must be a relief-goods / relief-to-people sense
+        hits = [m.group(0).lower() for m in _DIRECT_RE.finditer(t)]
+        if hits and all(h == "relief" for h in hits) and not _RELIEF_OK.search(t):
+            return "NONE"
+        return "DIRECT"
+    if base == "INDIRECT":
+        stress = [m.group(0) for m in _STRESS_RE.finditer(t)]
+        only_price = stress and all(_PRICE_RE.fullmatch(s) or _PRICE_RE.match(s) for s in stress)
+        if only_price and not _FOOD_REF.search(t):
+            return "NONE"
+        return "INDIRECT"
+    if _RELIEF_OK.search(t) and not _EXCLUDE_RE.search(t):
+        return "DIRECT"
+    return "NONE"
+
+
+def classify_deployed(title: str) -> str:
+    return classify_v11(title)

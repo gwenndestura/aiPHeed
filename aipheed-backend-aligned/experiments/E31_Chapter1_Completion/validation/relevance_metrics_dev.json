@@ -1,0 +1,274 @@
+{
+ "sample": "dev",
+ "rule_version": "R1",
+ "population_by_stratum": {
+  "S1_IN_FSSI": 55,
+  "S2_BELOW_THR": 266,
+  "S3_NO_NEXUS": 2499,
+  "S4_NOT_GEO": 5500
+ },
+ "sample_by_stratum": {
+  "S1_IN_FSSI": 55,
+  "S2_BELOW_THR": 80,
+  "S3_NO_NEXUS": 140,
+  "S4_NOT_GEO": 80
+ },
+ "n_rows_province_attributed": 275,
+ "n_relevant": 68,
+ "n_direct": 20,
+ "geography": {
+  "YES": 272,
+  "NO": 2,
+  "UNCLEAR": 1
+ },
+ "gates": {
+  "E28 gate (food-nexus guard + XLM-R 10-hypothesis max >= 0.30)": {
+   "relevant": {
+    "precision": 0.6182,
+    "recall": 0.1292,
+    "f1": 0.2137,
+    "TP": 34,
+    "FP": 21,
+    "FN": 34,
+    "TN": 186,
+    "precision_95ci": [
+     0.4909090909090909,
+     0.7454545454545455
+    ],
+    "recall_95ci": [
+     0.0871624901826389,
+     0.2058399468811897
+    ],
+    "f1_95ci": [
+     0.14998681427818852,
+     0.31713170387420614
+    ]
+   },
+   "direct_recall": 0.0291
+  },
+  "R1 rule (R1)": {
+   "relevant": {
+    "precision": 0.8388,
+    "recall": 0.7713,
+    "f1": 0.8036,
+    "TP": 63,
+    "FP": 3,
+    "FN": 5,
+    "TN": 204,
+    "precision_95ci": [
+     0.6530974387535475,
+     1.0
+    ],
+    "recall_95ci": [
+     0.5906683003974388,
+     0.9652146608890213
+    ],
+    "f1_95ci": [
+     0.6557069662288921,
+     0.9345814975814632
+    ]
+   },
+   "direct_recall": 0.6537
+  },
+  "R-NLI relevance hypothesis >= 0.5": {
+   "relevant": {
+    "precision": NaN,
+    "recall": 0.0,
+    "f1": NaN,
+    "TP": 0,
+    "FP": 0,
+    "FN": 68,
+    "TN": 207,
+    "precision_95ci": null,
+    "recall_95ci": [
+     0.0,
+     0.0
+    ],
+    "f1_95ci": null
+   },
+   "direct_recall": 0.0
+  },
+  "R-NLI relevance hypothesis >= 0.7": {
+   "relevant": {
+    "precision": NaN,
+    "recall": 0.0,
+    "f1": NaN,
+    "TP": 0,
+    "FP": 0,
+    "FN": 68,
+    "TN": 207,
+    "precision_95ci": null,
+    "recall_95ci": [
+     0.0,
+     0.0
+    ],
+    "f1_95ci": null
+   },
+   "direct_recall": 0.0
+  },
+  "R-NLI relevance hypothesis >= 0.8": {
+   "relevant": {
+    "precision": NaN,
+    "recall": 0.0,
+    "f1": NaN,
+    "TP": 0,
+    "FP": 0,
+    "FN": 68,
+    "TN": 207,
+    "precision_95ci": null,
+    "recall_95ci": [
+     0.0,
+     0.0
+    ],
+    "f1_95ci": null
+   },
+   "direct_recall": 0.0
+  },
+  "R-NLI relevance hypothesis >= 0.9": {
+   "relevant": {
+    "precision": NaN,
+    "recall": 0.0,
+    "f1": NaN,
+    "TP": 0,
+    "FP": 0,
+    "FN": 68,
+    "TN": 207,
+    "precision_95ci": null,
+    "recall_95ci": [
+     0.0,
+     0.0
+    ],
+    "f1_95ci": null
+   },
+   "direct_recall": 0.0
+  },
+  "R-NLI relevance hypothesis >= 0.95": {
+   "relevant": {
+    "precision": NaN,
+    "recall": 0.0,
+    "f1": NaN,
+    "TP": 0,
+    "FP": 0,
+    "FN": 68,
+    "TN": 207,
+    "precision_95ci": null,
+    "recall_95ci": [
+     0.0,
+     0.0
+    ],
+    "f1_95ci": null
+   },
+   "direct_recall": 0.0
+  },
+  "E28 guard + XLM-R >= 0.5": {
+   "relevant": {
+    "precision": 0.6667,
+    "recall": 0.1064,
+    "f1": 0.1835,
+    "TP": 28,
+    "FP": 14,
+    "FN": 40,
+    "TN": 193,
+    "precision_95ci": [
+     0.525,
+     0.8108893777498425
+    ],
+    "recall_95ci": [
+     0.07010161828958741,
+     0.17187210637431005
+    ],
+    "f1_95ci": [
+     0.12537490043889354,
+     0.2787515557934629
+    ]
+   },
+   "direct_recall": 0.0097
+  },
+  "E28 guard + XLM-R >= 0.7": {
+   "relevant": {
+    "precision": 0.8621,
+    "recall": 0.095,
+    "f1": 0.1711,
+    "TP": 25,
+    "FP": 4,
+    "FN": 43,
+    "TN": 203,
+    "precision_95ci": [
+     0.7142857142857143,
+     0.967741935483871
+    ],
+    "recall_95ci": [
+     0.05855746953826201,
+     0.1536635866595571
+    ],
+    "f1_95ci": [
+     0.10896306899866888,
+     0.26263731331128304
+    ]
+   },
+   "direct_recall": 0.0097
+  },
+  "E28 guard + XLM-R >= 0.9": {
+   "relevant": {
+    "precision": 0.9091,
+    "recall": 0.076,
+    "f1": 0.1402,
+    "TP": 20,
+    "FP": 2,
+    "FN": 48,
+    "TN": 205,
+    "precision_95ci": [
+     0.7727272727272727,
+     1.0
+    ],
+    "recall_95ci": [
+     0.044825586894450625,
+     0.12725968498908694
+    ],
+    "f1_95ci": [
+     0.08523144684608176,
+     0.22462308306192427
+    ]
+   },
+   "direct_recall": 0.0097
+  }
+ },
+ "half_DEV": {
+  "E28 gate (food-nexus guard + XLM-R 10-hypothesis max >= 0.30)": 0.1782,
+  "R1 rule (R1)": 0.8131,
+  "R-NLI relevance hypothesis >= 0.5": NaN,
+  "R-NLI relevance hypothesis >= 0.7": NaN,
+  "R-NLI relevance hypothesis >= 0.8": NaN,
+  "R-NLI relevance hypothesis >= 0.9": NaN,
+  "R-NLI relevance hypothesis >= 0.95": NaN,
+  "E28 guard + XLM-R >= 0.5": 0.1415,
+  "E28 guard + XLM-R >= 0.7": 0.1245,
+  "E28 guard + XLM-R >= 0.9": 0.1042
+ },
+ "half_TEST": {
+  "E28 gate (food-nexus guard + XLM-R 10-hypothesis max >= 0.30)": 0.2667,
+  "R1 rule (R1)": 0.7893,
+  "R-NLI relevance hypothesis >= 0.5": NaN,
+  "R-NLI relevance hypothesis >= 0.7": NaN,
+  "R-NLI relevance hypothesis >= 0.8": NaN,
+  "R-NLI relevance hypothesis >= 0.9": NaN,
+  "R-NLI relevance hypothesis >= 0.95": NaN,
+  "E28 guard + XLM-R >= 0.5": 0.247,
+  "E28 guard + XLM-R >= 0.7": 0.2425,
+  "E28 guard + XLM-R >= 0.9": 0.1956
+ },
+ "errors": {
+  "R1_false_positive": [
+   "Cavite police support local farmers through Kadiwa ng Pangulo",
+   "50,000 CARP beneficiaries in Nasugbu to lose land",
+   "Pilgrims walk to Kamay ni Hesus Shrine in Quezon amid fuel price hike"
+  ],
+  "R1_false_negative": [
+   "Reclamation is altering Laguna de Bay's shores, and lives that rely on it",
+   "Batangas pastor grows all Bahay Kubo veggies after Taal eruption for his family's survival amid pandemic",
+   "El Niño Cavite rice field | Photos",
+   "Shawarma Shack continues assistance to Typhoon Paeng victims in Noveleta, Cavite",
+   "Nasugbu farmers get P40.95M in aid"
+  ]
+ }
+}

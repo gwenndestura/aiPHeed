@@ -1,0 +1,3793 @@
+{
+ "T1_A": {
+  "furthest_reliable_horizon": {
+   "ALWAYS_HIGH": "not determinable on the available outcomes",
+   "B1": "not determinable on the available outcomes",
+   "B1p_E25": "not determinable on the available outcomes",
+   "CLIM": "not determinable on the available outcomes",
+   "LR_COMB": "not determinable on the available outcomes",
+   "LR_STRUCT": "not determinable on the available outcomes",
+   "M4_21_E25": "not determinable on the available outcomes",
+   "MAJ": "not determinable on the available outcomes",
+   "NLP_LGBM": "not determinable on the available outcomes",
+   "NLP_LR": "not determinable on the available outcomes",
+   "PCF21_E25": "not determinable on the available outcomes",
+   "PROPOSED": "not determinable on the available outcomes",
+   "PROPOSED_E25": "not determinable on the available outcomes",
+   "PROPOSED_NESTED": "not determinable on the available outcomes",
+   "PROPOSED_PERSIST": "not determinable on the available outcomes",
+   "PSA_LGBM": "not determinable on the available outcomes",
+   "PSA_LR": "not determinable on the available outcomes"
+  },
+  "qualifies_E27_rule_pooled": {
+   "ALWAYS_HIGH": false,
+   "B1": false,
+   "B1p_E25": false,
+   "CLIM": false,
+   "LR_COMB": false,
+   "LR_STRUCT": false,
+   "M4_21_E25": false,
+   "MAJ": false,
+   "NLP_LGBM": false,
+   "NLP_LR": false,
+   "PCF21_E25": false,
+   "PROPOSED": false,
+   "PROPOSED_E25": false,
+   "PROPOSED_NESTED": false,
+   "PROPOSED_PERSIST": false,
+   "PSA_LGBM": false,
+   "PSA_LR": false
+  },
+  "reachability_by_lead": {
+   "1": {
+    "C6_evaluable_possible": false,
+    "HIGH": 41,
+    "LOW": 4,
+    "dates": 9,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 1,
+    "missing_dates": 0
+   },
+   "2": {
+    "C6_evaluable_possible": false,
+    "HIGH": 33,
+    "LOW": 2,
+    "dates": 7,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 3,
+    "missing_dates": 1
+   },
+   "3": {
+    "C6_evaluable_possible": false,
+    "HIGH": 23,
+    "LOW": 2,
+    "dates": 5,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 3,
+    "missing_dates": 3
+   },
+   "4": {
+    "C6_evaluable_possible": false,
+    "HIGH": 13,
+    "LOW": 2,
+    "dates": 3,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 3,
+    "missing_dates": 5
+   },
+   "5": {
+    "C6_evaluable_possible": false,
+    "HIGH": 14,
+    "LOW": 1,
+    "dates": 3,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 4,
+    "missing_dates": 5
+   },
+   "6": {
+    "C6_evaluable_possible": false,
+    "HIGH": 9,
+    "LOW": 1,
+    "dates": 2,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 4,
+    "missing_dates": 6
+   }
+  },
+  "reliability_detail": {
+   "ALWAYS_HIGH": {
+    "1": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.022222222222222223,
+      "brier_diff_mean": 0.022222177777777775,
+      "dates": 9,
+      "holm_acc": 0.5,
+      "holm_brier": 0.5,
+      "p_acc": 0.5,
+      "p_brier": 0.5
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.5 diff=0.022222177777777775"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1142857142857143,
+      "brier_diff_mean": 0.11428548571428569,
+      "dates": 7,
+      "holm_acc": 0.125,
+      "holm_brier": 0.125,
+      "p_acc": 0.125,
+      "p_brier": 0.125
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.125 diff=0.11428548571428569"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.08,
+      "brier_diff_mean": 0.07999983999999999,
+      "dates": 5,
+      "holm_acc": 0.25,
+      "holm_brier": 0.25,
+      "p_acc": 0.25,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.07999983999999999"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    }
+   },
+   "B1": {
+    "1": {
+     "auc_lower": 0.5762195121951219,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.38235294117647056,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.38235294117647056",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.4166666666666667,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4166666666666667",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=None diff=None"
+     ]
+    }
+   },
+   "B1p_E25": {
+    "1": {
+     "auc_lower": 0.37147596153846163,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.04084115299292611,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.974609375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.37147596153846163",
+      "Brier vs B1 p=0.974609375 diff=-0.04084115299292611"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.058823529411764705,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.042631827027291014,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 0.171875,
+      "p_acc": 1.0,
+      "p_brier": 0.0859375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.058823529411764705",
+      "Brier vs B1 p=0.0859375 diff=0.042631827027291014"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.08333333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.004222727591412739,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 0.9375,
+      "p_acc": 1.0,
+      "p_brier": 0.46875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.08333333333333333",
+      "Brier vs B1 p=0.46875 diff=0.004222727591412739"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.14285714285714285,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.02599528272765141,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.14285714285714285",
+      "Brier vs B1 p=0.625 diff=-0.02599528272765141"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.14285714285714285,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.10520778180915923,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.14285714285714285",
+      "Brier vs B1 p=0.875 diff=-0.10520778180915923"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.2222222222222222,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.10677820734505473,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2222222222222222",
+      "Brier vs B1 p=1.0 diff=-0.10677820734505473"
+     ]
+    }
+   },
+   "CLIM": {
+    "1": {
+     "auc_lower": 0.20930232558139536,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.4444444444444444,
+      "brier_diff_mean": -0.14271919022358828,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.9921875,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.20930232558139536",
+      "Brier vs B1 p=1.0 diff=-0.14271919022358828"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.12121212121212122,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.7714285714285715,
+      "brier_diff_mean": -0.12088457523946312,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.9765625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.12121212121212122",
+      "Brier vs B1 p=0.9765625 diff=-0.12088457523946312"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.08333333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.64,
+      "brier_diff_mean": -0.11471392216132015,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.08333333333333333",
+      "Brier vs B1 p=1.0 diff=-0.11471392216132015"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.08844116045201501,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=-0.08844116045201501"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.14285714285714285,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.1513905220681766,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.14285714285714285",
+      "Brier vs B1 p=1.0 diff=-0.1513905220681766"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.2222222222222222,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.11112674320887653,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2222222222222222",
+      "Brier vs B1 p=1.0 diff=-0.11112674320887653"
+     ]
+    }
+   },
+   "LR_COMB": {
+    "1": {
+     "auc_lower": 0.5454545454545454,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3111111111111111,
+      "brier_diff_mean": -0.1772604534396554,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.994140625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.994140625 diff=-0.1772604534396554"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.3375,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.177455764060409,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3375",
+      "Brier vs B1 p=1.0 diff=-0.177455764060409"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.6666666666666666,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.44000000000000006,
+      "brier_diff_mean": -0.18887420013709005,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.18887420013709005"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.17737543591493155,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=-0.17737543591493155"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.75,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.4666666666666666,
+      "brier_diff_mean": -0.22097648958290458,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.22097648958290458"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.8888888888888888,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.30000000000000004,
+      "brier_diff_mean": -0.10846805834241235,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.10846805834241235"
+     ]
+    }
+   },
+   "LR_STRUCT": {
+    "1": {
+     "auc_lower": 0.5317460317460317,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.022222222222222216,
+      "brier_diff_mean": -0.017145320695155303,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.75,
+      "p_brier": 0.69921875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.69921875 diff=-0.017145320695155303"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.06060606060606061,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.028571428571428574,
+      "brier_diff_mean": 0.0612723231353476,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 0.09375,
+      "p_acc": 0.5,
+      "p_brier": 0.046875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.06060606060606061"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.3333333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.025357243324360845,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 0.28125,
+      "p_acc": 1.0,
+      "p_brier": 0.125
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3333333333333333",
+      "Brier vs B1 p=0.125 diff=0.025357243324360845"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.07142857142857142,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.13333333333333333,
+      "brier_diff_mean": -0.06124473611525614,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.75
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.07142857142857142",
+      "Brier vs B1 p=0.75 diff=-0.06124473611525614"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.6428571428571429,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.05825373001771026,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.875 diff=-0.05825373001771026"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.2222222222222222,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.6,
+      "brier_diff_mean": -0.20780193970133423,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2222222222222222",
+      "Brier vs B1 p=1.0 diff=-0.20780193970133423"
+     ]
+    }
+   },
+   "M4_21_E25": {
+    "1": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "2": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "3": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "4": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "5": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "6": {
+     "reliable": false,
+     "why": "no rows"
+    }
+   },
+   "MAJ": {
+    "1": {
+     "auc_lower": 0.20930232558139536,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.4444444444444444,
+      "brier_diff_mean": -0.4444435555555556,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.9921875,
+      "p_brier": 0.9921875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.20930232558139536",
+      "Brier vs B1 p=0.9921875 diff=-0.4444435555555556"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.7714285714285715,
+      "brier_diff_mean": -0.7714270285714286,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=-0.7714270285714286"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.08333333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.64,
+      "brier_diff_mean": -0.63999872,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.08333333333333333",
+      "Brier vs B1 p=1.0 diff=-0.63999872"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=0.0"
+     ]
+    }
+   },
+   "NLP_LGBM": {
+    "1": {
+     "auc_lower": 0.2976190476190476,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.4666666666666667,
+      "brier_diff_mean": -0.12804716262752897,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.998046875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2976190476190476",
+      "Brier vs B1 p=0.998046875 diff=-0.12804716262752897"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.058823529411764705,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.6,
+      "brier_diff_mean": -0.12448693052423357,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.9921875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.058823529411764705",
+      "Brier vs B1 p=0.9921875 diff=-0.12448693052423357"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.5217391304347826,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.44000000000000006,
+      "brier_diff_mean": -0.10543919847426979,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.10543919847426979"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.125,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.6,
+      "brier_diff_mean": -0.13446278267228134,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.125",
+      "Brier vs B1 p=1.0 diff=-0.13446278267228134"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.625,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.15038709224493393,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.15038709224493393"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.05555555555555555,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.12223310096351668,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.05555555555555555",
+      "Brier vs B1 p=1.0 diff=-0.12223310096351668"
+     ]
+    }
+   },
+   "NLP_LR": {
+    "1": {
+     "auc_lower": 0.3068181818181818,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.5111111111111111,
+      "brier_diff_mean": -0.1489779467296083,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3068181818181818",
+      "Brier vs B1 p=1.0 diff=-0.1489779467296083"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.23484848484848486,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.5428571428571429,
+      "brier_diff_mean": -0.13125358261319145,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.23484848484848486",
+      "Brier vs B1 p=1.0 diff=-0.13125358261319145"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.43478260869565216,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.52,
+      "brier_diff_mean": -0.10219928306778645,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.96875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.43478260869565216",
+      "Brier vs B1 p=0.96875 diff=-0.10219928306778645"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.2857142857142857,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.09263266166895139,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2857142857142857",
+      "Brier vs B1 p=0.875 diff=-0.09263266166895139"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.4642857142857143,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.19999999999999998,
+      "brier_diff_mean": -0.1509958350907001,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4642857142857143",
+      "Brier vs B1 p=1.0 diff=-0.1509958350907001"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.75,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.1,
+      "brier_diff_mean": -0.08541328224496705,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.08541328224496705"
+     ]
+    }
+   },
+   "PCF21_E25": {
+    "1": {
+     "auc_lower": 0.39634146341463417,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.022222222222222223,
+      "brier_diff_mean": 0.007622437285952993,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 0.71875,
+      "p_acc": 1.0,
+      "p_brier": 0.359375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.39634146341463417",
+      "Brier vs B1 p=0.359375 diff=0.007622437285952993"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.11764705882352941,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.028571428571428574,
+      "brier_diff_mean": 0.03952730787421491,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 0.09375,
+      "p_acc": 0.5,
+      "p_brier": 0.046875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.11764705882352941"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.08333333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.04,
+      "brier_diff_mean": 0.03990339397316659,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 0.28125,
+      "p_acc": 0.5,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.08333333333333333",
+      "Brier vs B1 p=0.0625 diff=0.03990339397316659"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.019519257943121485,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.019519257943121485"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.14285714285714285,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.02686476536394917,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.14285714285714285",
+      "Brier vs B1 p=0.875 diff=-0.02686476536394917"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.011815817841739094,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.75
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.75 diff=-0.011815817841739094"
+     ]
+    }
+   },
+   "PROPOSED": {
+    "1": {
+     "auc_lower": 0.5104282022886675,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3111111111111111,
+      "brier_diff_mean": -0.1900354401458918,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.998046875,
+      "p_brier": 0.99609375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.99609375 diff=-0.1900354401458918"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.23529411764705882,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.34285714285714286,
+      "brier_diff_mean": -0.18268488703265515,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.23529411764705882",
+      "Brier vs B1 p=1.0 diff=-0.18268488703265515"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.532608695652174,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.32,
+      "brier_diff_mean": -0.1513048589189691,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.1513048589189691"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3333333333333333,
+      "brier_diff_mean": -0.20180758728918025,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.875 diff=-0.20180758728918025"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.4642857142857143,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.15128615107957585,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4642857142857143",
+      "Brier vs B1 p=1.0 diff=-0.15128615107957585"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.75,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.0006527955126370763,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.75
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.75 diff=-0.0006527955126370763"
+     ]
+    }
+   },
+   "PROPOSED_E25": {
+    "1": {
+     "auc_lower": 0.05128205128205128,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.05,
+      "brier_diff_mean": -0.008434868108164888,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.609375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=8 HIGH=37 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.05128205128205128",
+      "Brier vs B1 p=0.609375 diff=-0.008434868108164888"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.0,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.05714285714285715,
+      "brier_diff_mean": 0.051836668758386474,
+      "dates": 7,
+      "holm_acc": 0.5,
+      "holm_brier": 0.21875,
+      "p_acc": 0.25,
+      "p_brier": 0.109375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.0",
+      "Brier vs B1 p=0.109375 diff=0.051836668758386474"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.125,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0219082727514196,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 0.625,
+      "p_acc": 0.75,
+      "p_brier": 0.3125
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.125",
+      "Brier vs B1 p=0.3125 diff=0.0219082727514196"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.125,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0212230904801816,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.125",
+      "Brier vs B1 p=0.25 diff=0.0212230904801816"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.10714285714285714,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.02333570599937666,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.10714285714285714",
+      "Brier vs B1 p=0.875 diff=-0.02333570599937666"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.1111111111111111,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.0010098165968327986,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.5
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.1111111111111111",
+      "Brier vs B1 p=0.5 diff=0.0010098165968327986"
+     ]
+    }
+   },
+   "PROPOSED_NESTED": {
+    "1": {
+     "auc_lower": 0.4504228329809726,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3555555555555555,
+      "brier_diff_mean": -0.20882157605510673,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.990234375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4504228329809726",
+      "Brier vs B1 p=0.990234375 diff=-0.20882157605510673"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.25588235294117656,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.37142857142857144,
+      "brier_diff_mean": -0.16124722416561302,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25588235294117656",
+      "Brier vs B1 p=1.0 diff=-0.16124722416561302"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.5625,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.28,
+      "brier_diff_mean": -0.13707636112912377,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.13707636112912377"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3333333333333333,
+      "brier_diff_mean": -0.23873610657907818,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.875 diff=-0.23873610657907818"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3333333333333333,
+      "brier_diff_mean": -0.17194188209142422,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=-0.17194188209142422"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.1,
+      "brier_diff_mean": -0.06401273714998368,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=1.0 diff=-0.06401273714998368"
+     ]
+    }
+   },
+   "PROPOSED_PERSIST": {
+    "1": {
+     "auc_lower": 0.3880681818181818,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.15555555555555556,
+      "brier_diff_mean": -0.08876577821351739,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.9921875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3880681818181818",
+      "Brier vs B1 p=0.9921875 diff=-0.08876577821351739"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.029411764705882353,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.2285714285714286,
+      "brier_diff_mean": -0.12227819029345459,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.96875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.029411764705882353",
+      "Brier vs B1 p=0.96875 diff=-0.12227819029345459"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.16,
+      "brier_diff_mean": -0.05821247051255809,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.84375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.84375 diff=-0.05821247051255809"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.35714285714285715,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.2506059605874956,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.35714285714285715",
+      "Brier vs B1 p=0.875 diff=-0.2506059605874956"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.4642857142857143,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.20000000000000004,
+      "brier_diff_mean": -0.09565935870126102,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4642857142857143",
+      "Brier vs B1 p=1.0 diff=-0.09565935870126102"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.75,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.19999999999999998,
+      "brier_diff_mean": -0.09684177440300361,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.09684177440300361"
+     ]
+    }
+   },
+   "PSA_LGBM": {
+    "1": {
+     "auc_lower": 0.4318181818181818,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3777777777777778,
+      "brier_diff_mean": -0.202042238049989,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.99609375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4318181818181818",
+      "Brier vs B1 p=0.99609375 diff=-0.202042238049989"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.24242424242424243,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.170179052145413,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.24242424242424243",
+      "Brier vs B1 p=1.0 diff=-0.170179052145413"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.375,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.32,
+      "brier_diff_mean": -0.1656334171759588,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.375",
+      "Brier vs B1 p=1.0 diff=-0.1656334171759588"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.39999999999999997,
+      "brier_diff_mean": -0.21771638236172056,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.875 diff=-0.21771638236172056"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.4642857142857143,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.3333333333333333,
+      "brier_diff_mean": -0.1484235256416044,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4642857142857143",
+      "Brier vs B1 p=1.0 diff=-0.1484235256416044"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.75,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": -0.0006527955126370763,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.75
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.75 diff=-0.0006527955126370763"
+     ]
+    }
+   },
+   "PSA_LR": {
+    "1": {
+     "auc_lower": 0.4186046511627907,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.28888888888888886,
+      "brier_diff_mean": -0.16863001540952377,
+      "dates": 9,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.98828125
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=9 HIGH=41 LOW=4 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4186046511627907",
+      "Brier vs B1 p=0.98828125 diff=-0.16863001540952377"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.4117647058823529,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.42857142857142866,
+      "brier_diff_mean": -0.1721102859957065,
+      "dates": 7,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=7 HIGH=33 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4117647058823529",
+      "Brier vs B1 p=1.0 diff=-0.1721102859957065"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.4583333333333333,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.48,
+      "brier_diff_mean": -0.2187166551376563,
+      "dates": 5,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=5 HIGH=23 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4583333333333333",
+      "Brier vs B1 p=1.0 diff=-0.2187166551376563"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.42857142857142855,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.5333333333333333,
+      "brier_diff_mean": -0.19506219859526328,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=13 LOW=2 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.42857142857142855",
+      "Brier vs B1 p=1.0 diff=-0.19506219859526328"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.8571428571428571,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.6,
+      "brier_diff_mean": -0.2264160328925859,
+      "dates": 3,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=3 HIGH=14 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=1.0 diff=-0.2264160328925859"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.4444444444444444,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.5,
+      "brier_diff_mean": -0.1343687733507411,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=9 LOW=1 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.4444444444444444",
+      "Brier vs B1 p=1.0 diff=-0.1343687733507411"
+     ]
+    }
+   }
+  },
+  "reliable_leads": {
+   "ALWAYS_HIGH": [],
+   "B1": [],
+   "B1p_E25": [],
+   "CLIM": [],
+   "LR_COMB": [],
+   "LR_STRUCT": [],
+   "M4_21_E25": [],
+   "MAJ": [],
+   "NLP_LGBM": [],
+   "NLP_LR": [],
+   "PCF21_E25": [],
+   "PROPOSED": [],
+   "PROPOSED_E25": [],
+   "PROPOSED_NESTED": [],
+   "PROPOSED_PERSIST": [],
+   "PSA_LGBM": [],
+   "PSA_LR": []
+  },
+  "status": "development evidence only (every 2021-2026Q2 outcome was examined before E28)"
+ },
+ "T2": {
+  "furthest_reliable_horizon": {
+   "ALWAYS_HIGH": "not determinable on the available outcomes",
+   "B1": "not determinable on the available outcomes",
+   "B1p_E25": "not determinable on the available outcomes",
+   "CLIM": "not determinable on the available outcomes",
+   "LR_COMB": 1,
+   "LR_STRUCT": 1,
+   "M4_21_E25": 1,
+   "MAJ": "not determinable on the available outcomes",
+   "NLP_LGBM": "not determinable on the available outcomes",
+   "NLP_LR": "not determinable on the available outcomes",
+   "PCF21_E25": "not determinable on the available outcomes",
+   "PROPOSED": 1,
+   "PROPOSED_E25": "not determinable on the available outcomes",
+   "PROPOSED_NESTED": 1,
+   "PROPOSED_PERSIST": 1,
+   "PSA_LGBM": 1,
+   "PSA_LR": 2
+  },
+  "note": "T2 (D > 0) is a constructed provincial price-pressure indicator, never a food-insecurity forecast.",
+  "qualifies_E27_rule_pooled": {
+   "ALWAYS_HIGH": false,
+   "B1": false,
+   "B1p_E25": false,
+   "CLIM": false,
+   "LR_COMB": false,
+   "LR_STRUCT": false,
+   "M4_21_E25": false,
+   "MAJ": false,
+   "NLP_LGBM": false,
+   "NLP_LR": false,
+   "PCF21_E25": false,
+   "PROPOSED": false,
+   "PROPOSED_E25": false,
+   "PROPOSED_NESTED": false,
+   "PROPOSED_PERSIST": false,
+   "PSA_LGBM": false,
+   "PSA_LR": false
+  },
+  "reachability_by_lead": {
+   "1": {
+    "C6_evaluable_possible": true,
+    "HIGH": 28,
+    "LOW": 32,
+    "dates": 12,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 0,
+    "missing_dates": 0
+   },
+   "2": {
+    "C6_evaluable_possible": true,
+    "HIGH": 22,
+    "LOW": 28,
+    "dates": 10,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 0,
+    "missing_dates": 0
+   },
+   "3": {
+    "C6_evaluable_possible": true,
+    "HIGH": 18,
+    "LOW": 22,
+    "dates": 8,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 0,
+    "missing_dates": 0
+   },
+   "4": {
+    "C6_evaluable_possible": false,
+    "HIGH": 15,
+    "LOW": 15,
+    "dates": 6,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 0,
+    "missing_dates": 2
+   },
+   "5": {
+    "C6_evaluable_possible": false,
+    "HIGH": 12,
+    "LOW": 8,
+    "dates": 4,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 0,
+    "missing_dates": 4
+   },
+   "6": {
+    "C6_evaluable_possible": false,
+    "HIGH": 7,
+    "LOW": 3,
+    "dates": 2,
+    "missing_HIGH_rows": 0,
+    "missing_LOW_rows": 2,
+    "missing_dates": 6
+   }
+  },
+  "reliability_detail": {
+   "ALWAYS_HIGH": {
+    "1": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.18333333333333335,
+      "brier_diff_mean": -0.18333296666666665,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.984375,
+      "p_brier": 0.984375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.984375 diff=-0.18333296666666665"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.12,
+      "brier_diff_mean": -0.11999976000000001,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.875,
+      "p_brier": 0.875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.875 diff=-0.11999976000000001"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.05000000000000002,
+      "brier_diff_mean": 0.04999990000000003,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.40625,
+      "p_brier": 0.40625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.40625 diff=0.04999990000000003"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000002,
+      "brier_diff_mean": 0.09999980000000001,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.25,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.09999980000000001"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.25,
+      "brier_diff_mean": 0.24999949999999999,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.125,
+      "p_brier": 0.125
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.125 diff=0.24999949999999999"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.30000000000000004,
+      "brier_diff_mean": 0.2999994,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.25,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.2999994"
+     ]
+    }
+   },
+   "B1": {
+    "1": {
+     "auc_lower": 0.5257142857142857,
+     "brier_vs_B1": {},
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.37775664829481936,
+     "brier_vs_B1": {},
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.37775664829481936",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.18957903526869044,
+     "brier_vs_B1": {},
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.18957903526869044",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.25892857142857145,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25892857142857145",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.22916666666666666,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.22916666666666666",
+      "Brier vs B1 p=None diff=None"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {},
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=None diff=None"
+     ]
+    }
+   },
+   "B1p_E25": {
+    "1": {
+     "auc_lower": 0.4308002271487326,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.10548159833291416,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 0.042724609375,
+      "p_acc": 1.0,
+      "p_brier": 0.006103515625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.4308002271487326"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.2938283437699821,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.17246991069611578,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.15234375,
+      "p_acc": 1.0,
+      "p_brier": 0.025390625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.2938283437699821"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.11328125,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.025,
+      "brier_diff_mean": 0.31541797053740217,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.109375,
+      "p_acc": 0.5,
+      "p_brier": 0.015625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.11328125"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.2373660714285714,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000002,
+      "brier_diff_mean": 0.3405225755713644,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.375,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2373660714285714"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.47619047619047616,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.19999999999999998,
+      "brier_diff_mean": 0.4089544031668825,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.125,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.47619047619047616",
+      "Brier vs B1 p=0.0625 diff=0.4089544031668825"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.20000000000000007,
+      "brier_diff_mean": 0.35678426736673186,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.35678426736673186"
+     ]
+    }
+   },
+   "CLIM": {
+    "1": {
+     "auc_lower": 0.32142857142857145,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.23333333333333336,
+      "brier_diff_mean": 0.09551031284736859,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 0.341796875,
+      "p_acc": 1.0,
+      "p_brier": 0.08544921875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.32142857142857145",
+      "Brier vs B1 p=0.08544921875 diff=0.09551031284736859"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.27562606112054333,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.2,
+      "brier_diff_mean": 0.18075168053489254,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.2578125,
+      "p_acc": 0.96875,
+      "p_brier": 0.04296875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.27562606112054333"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.23057644110275688,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.024999999999999994,
+      "brier_diff_mean": 0.33865629520552626,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.09375,
+      "p_acc": 0.6875,
+      "p_brier": 0.015625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.23057644110275688"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.2398190045248869,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.033333333333333326,
+      "brier_diff_mean": 0.33780451976110976,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.125,
+      "p_acc": 0.875,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2398190045248869"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.3076923076923077,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.09999999999999998,
+      "brier_diff_mean": 0.3999137080358943,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5,
+      "p_acc": 0.375,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3076923076923077",
+      "Brier vs B1 p=0.0625 diff=0.3999137080358943"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.38095238095238093,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.30000000000000004,
+      "brier_diff_mean": 0.3631932444454444,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.25,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.38095238095238093",
+      "Brier vs B1 p=0.25 diff=0.3631932444454444"
+     ]
+    }
+   },
+   "LR_COMB": {
+    "1": {
+     "auc_lower": 0.5725409815368455,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.05000000000000001,
+      "brier_diff_mean": 0.1258454048720452,
+      "dates": 12,
+      "holm_acc": 0.84375,
+      "holm_brier": 0.0615234375,
+      "p_acc": 0.28125,
+      "p_brier": 0.01025390625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.411371875,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.03999999999999999,
+      "brier_diff_mean": 0.1445360194795851,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.1640625,
+      "p_acc": 0.390625,
+      "p_brier": 0.02734375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.411371875"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.18173939393939395,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.05000000000000002,
+      "brier_diff_mean": 0.18433709839582987,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.30078125,
+      "p_acc": 0.390625,
+      "p_brier": 0.04296875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.18173939393939395"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.16666666666666666,
+     "brier_vs_B1": {
+      "acc_diff_mean": 1.850371707708594e-17,
+      "brier_diff_mean": 0.21119153054571646,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.375,
+      "p_acc": 0.625,
+      "p_brier": 0.046875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.16666666666666666"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.26373626373626374,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.3,
+      "brier_diff_mean": 0.3328455524694993,
+      "dates": 4,
+      "holm_acc": 0.5,
+      "holm_brier": 0.5,
+      "p_acc": 0.0625,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.26373626373626374",
+      "Brier vs B1 p=0.0625 diff=0.3328455524694993"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1,
+      "brier_diff_mean": 0.21322529140903856,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.21322529140903856"
+     ]
+    }
+   },
+   "LR_STRUCT": {
+    "1": {
+     "auc_lower": 0.6194063740079365,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.11666666666666665,
+      "brier_diff_mean": 0.1697895996106361,
+      "dates": 12,
+      "holm_acc": 0.0625,
+      "holm_brier": 0.015380859375,
+      "p_acc": 0.015625,
+      "p_brier": 0.002197265625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.49759961352657006,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.07999999999999999,
+      "brier_diff_mean": 0.21649048168337504,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.076171875,
+      "p_acc": 0.3125,
+      "p_brier": 0.0126953125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.49759961352657006"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.3874269005847953,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.12500000000000003,
+      "brier_diff_mean": 0.33843089333092263,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.08203125,
+      "p_acc": 0.2265625,
+      "p_brier": 0.01171875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.3874269005847953"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.23076923076923078,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.033333333333333326,
+      "brier_diff_mean": 0.2974113951805095,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.5,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.23076923076923078"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.35353535353535354,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.09999999999999999,
+      "brier_diff_mean": 0.3633444985027915,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.375,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.35353535353535354",
+      "Brier vs B1 p=0.0625 diff=0.3633444985027915"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000003,
+      "brier_diff_mean": 0.34536497700094826,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.34536497700094826"
+     ]
+    }
+   },
+   "M4_21_E25": {
+    "1": {
+     "auc_lower": 0.6243438643399943,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.11666666666666668,
+      "brier_diff_mean": 0.16418598309218932,
+      "dates": 12,
+      "holm_acc": 0.068359375,
+      "holm_brier": 0.011962890625,
+      "p_acc": 0.015625,
+      "p_brier": 0.001708984375
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.48469455748316315,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.13999999999999999,
+      "brier_diff_mean": 0.2014606544420195,
+      "dates": 10,
+      "holm_acc": 0.5,
+      "holm_brier": 0.0751953125,
+      "p_acc": 0.125,
+      "p_brier": 0.0107421875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.48469455748316315"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.25816197691197695,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.3121923555880074,
+      "dates": 8,
+      "holm_acc": 0.9375,
+      "holm_brier": 0.0625,
+      "p_acc": 0.125,
+      "p_brier": 0.0078125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.25816197691197695"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.2,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.06666666666666667,
+      "brier_diff_mean": 0.29170001248445515,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.25,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.2857142857142857,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.14999999999999997,
+      "brier_diff_mean": 0.37210873898533375,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.25,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2857142857142857",
+      "Brier vs B1 p=0.0625 diff=0.37210873898533375"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.09999999999999998,
+      "brier_diff_mean": 0.306262332536062,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.306262332536062"
+     ]
+    }
+   },
+   "MAJ": {
+    "1": {
+     "auc_lower": 0.3265508705475811,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.23333333333333336,
+      "brier_diff_mean": -0.23333286666666664,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 1.0
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.3265508705475811",
+      "Brier vs B1 p=1.0 diff=-0.23333286666666664"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.28365384615384615,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.2,
+      "brier_diff_mean": -0.1999996,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.96875,
+      "p_brier": 0.96875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.28365384615384615",
+      "Brier vs B1 p=0.96875 diff=-0.1999996"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.28535353535353536,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.024999999999999994,
+      "brier_diff_mean": -0.02499994999999998,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.6875,
+      "p_brier": 0.6875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.28535353535353536",
+      "Brier vs B1 p=0.6875 diff=-0.02499994999999998"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.2767857142857143,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.033333333333333326,
+      "brier_diff_mean": -0.03333326666666666,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.875,
+      "p_brier": 0.875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2767857142857143",
+      "Brier vs B1 p=0.875 diff=-0.03333326666666666"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.32142857142857145,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.09999999999999998,
+      "brier_diff_mean": 0.09999979999999997,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.375,
+      "p_brier": 0.375
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.32142857142857145",
+      "Brier vs B1 p=0.375 diff=0.09999979999999997"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.30000000000000004,
+      "brier_diff_mean": 0.2999994,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.25,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.2999994"
+     ]
+    }
+   },
+   "NLP_LGBM": {
+    "1": {
+     "auc_lower": 0.23915218181069126,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.18333333333333332,
+      "brier_diff_mean": 0.054754002431144956,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.978515625,
+      "p_brier": 0.219482421875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.23915218181069126",
+      "Brier vs B1 p=0.219482421875 diff=0.054754002431144956"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.33331249999999996,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.12000000000000002,
+      "brier_diff_mean": 0.17510507620913868,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.22265625,
+      "p_acc": 0.96875,
+      "p_brier": 0.037109375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.33331249999999996"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.19998721227621485,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.024999999999999994,
+      "brier_diff_mean": 0.329491205988244,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.09375,
+      "p_acc": 0.6875,
+      "p_brier": 0.015625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.19998721227621485"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.3190045248868778,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0666666666666667,
+      "brier_diff_mean": 0.3282197894318864,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.125,
+      "p_acc": 0.3125,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3190045248868778"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.375,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.19999999999999998,
+      "brier_diff_mean": 0.39915750880782375,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5,
+      "p_acc": 0.125,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.375",
+      "Brier vs B1 p=0.0625 diff=0.39915750880782375"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1,
+      "brier_diff_mean": 0.3363204914289549,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.3363204914289549"
+     ]
+    }
+   },
+   "NLP_LR": {
+    "1": {
+     "auc_lower": 0.2912945166047188,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.18333333333333332,
+      "brier_diff_mean": 0.05526344957377713,
+      "dates": 12,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.994140625,
+      "p_brier": 0.203125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.2912945166047188",
+      "Brier vs B1 p=0.203125 diff=0.05526344957377713"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.2233123973727422,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.16,
+      "brier_diff_mean": 0.10230321376671739,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.474609375,
+      "p_acc": 0.99609375,
+      "p_brier": 0.0791015625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.2233123973727422",
+      "Brier vs B1 p=0.0791015625 diff=0.10230321376671739"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.08479567307692308,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.09999999999999998,
+      "brier_diff_mean": 0.16721374831588984,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.421875,
+      "p_acc": 0.96875,
+      "p_brier": 0.0703125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.08479567307692308",
+      "Brier vs B1 p=0.0703125 diff=0.16721374831588984"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.17824074074074073,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.0,
+      "brier_diff_mean": 0.22077675452120116,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.125,
+      "p_acc": 0.625,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.17824074074074073"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.32142857142857145,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.19999999999999998,
+      "brier_diff_mean": 0.3296331220192399,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5,
+      "p_acc": 0.125,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.32142857142857145",
+      "Brier vs B1 p=0.0625 diff=0.3296331220192399"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1,
+      "brier_diff_mean": 0.2926685236373772,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.2926685236373772"
+     ]
+    }
+   },
+   "PCF21_E25": {
+    "1": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "2": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "3": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "4": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "5": {
+     "reliable": false,
+     "why": "no rows"
+    },
+    "6": {
+     "reliable": false,
+     "why": "no rows"
+    }
+   },
+   "PROPOSED": {
+    "1": {
+     "auc_lower": 0.5440822379298942,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.13333333333333333,
+      "brier_diff_mean": 0.15220756675635344,
+      "dates": 12,
+      "holm_acc": 0.0625,
+      "holm_brier": 0.01708984375,
+      "p_acc": 0.015625,
+      "p_brier": 0.00244140625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.48131040224631055,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.06,
+      "brier_diff_mean": 0.1899217365517154,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.1298828125,
+      "p_acc": 0.265625,
+      "p_brier": 0.01953125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.48131040224631055"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.24087351142902813,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.29483684561141366,
+      "dates": 8,
+      "holm_acc": 0.5,
+      "holm_brier": 0.03515625,
+      "p_acc": 0.0625,
+      "p_brier": 0.00390625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.24087351142902813"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.18981481481481483,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000002,
+      "brier_diff_mean": 0.3073431669431293,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.25,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.18981481481481483"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.3385416666666667,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.15000000000000002,
+      "brier_diff_mean": 0.40098318250818793,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.25,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3385416666666667",
+      "Brier vs B1 p=0.0625 diff=0.40098318250818793"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.16666666666666666,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1,
+      "brier_diff_mean": 0.32568289140423723,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.16666666666666666",
+      "Brier vs B1 p=0.25 diff=0.32568289140423723"
+     ]
+    }
+   },
+   "PROPOSED_E25": {
+    "1": {
+     "auc_lower": 0.35573468114036066,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.14545454545454545,
+      "brier_diff_mean": 0.0454349536250121,
+      "dates": 11,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 1.0,
+      "p_brier": 0.1865234375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.35573468114036066",
+      "Brier vs B1 p=0.1865234375 diff=0.0454349536250121"
+     ]
+    },
+    "2": {
+     "auc_lower": 0.28323163905060456,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.13999999999999999,
+      "brier_diff_mean": 0.0867561454470673,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.9365234375,
+      "p_acc": 0.9375,
+      "p_brier": 0.1337890625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.28323163905060456",
+      "Brier vs B1 p=0.1337890625 diff=0.0867561454470673"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.07691815856777494,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.07499999999999998,
+      "brier_diff_mean": 0.18199691217462216,
+      "dates": 8,
+      "holm_acc": 1.0,
+      "holm_brier": 0.4375,
+      "p_acc": 0.84375,
+      "p_brier": 0.0546875
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.07691815856777494",
+      "Brier vs B1 p=0.0546875 diff=0.18199691217462216"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.135,
+     "brier_vs_B1": {
+      "acc_diff_mean": -0.13333333333333333,
+      "brier_diff_mean": 0.1695087420682847,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.375,
+      "p_acc": 0.96875,
+      "p_brier": 0.046875
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.135"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.1,
+     "brier_vs_B1": {
+      "acc_diff_mean": -2.7755575615628914e-17,
+      "brier_diff_mean": 0.3346760496289647,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.75,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.1",
+      "Brier vs B1 p=0.0625 diff=0.3346760496289647"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.6190476190476191,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000003,
+      "brier_diff_mean": 0.3446882823241666,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "Brier vs B1 p=0.25 diff=0.3446882823241666"
+     ]
+    }
+   },
+   "PROPOSED_NESTED": {
+    "1": {
+     "auc_lower": 0.5393574912891986,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.06666666666666667,
+      "brier_diff_mean": 0.10400453720464568,
+      "dates": 12,
+      "holm_acc": 0.625,
+      "holm_brier": 0.042724609375,
+      "p_acc": 0.15625,
+      "p_brier": 0.006103515625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.4363878536922015,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.12,
+      "brier_diff_mean": 0.15748156332459132,
+      "dates": 10,
+      "holm_acc": 0.53125,
+      "holm_brier": 0.287109375,
+      "p_acc": 0.1328125,
+      "p_brier": 0.041015625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.4363878536922015"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.21871603260869565,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.2966120087066282,
+      "dates": 8,
+      "holm_acc": 0.5,
+      "holm_brier": 0.0546875,
+      "p_acc": 0.0625,
+      "p_brier": 0.0078125
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.21871603260869565"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.13574660633484162,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.03333333333333335,
+      "brier_diff_mean": 0.33070884880801393,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.5,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.13574660633484162"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.30303030303030304,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.25,
+      "brier_diff_mean": 0.4057960248760625,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.125,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.30303030303030304",
+      "Brier vs B1 p=0.0625 diff=0.4057960248760625"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 5.551115123125783e-17,
+      "brier_diff_mean": 0.3200018953715743,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.75,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.3200018953715743"
+     ]
+    }
+   },
+   "PROPOSED_PERSIST": {
+    "1": {
+     "auc_lower": 0.5440822379298942,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.13333333333333333,
+      "brier_diff_mean": 0.15220756675635344,
+      "dates": 12,
+      "holm_acc": 0.0625,
+      "holm_brier": 0.01708984375,
+      "p_acc": 0.015625,
+      "p_brier": 0.00244140625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.48131374092152424,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.06,
+      "brier_diff_mean": 0.18771976535868468,
+      "dates": 10,
+      "holm_acc": 1.0,
+      "holm_brier": 0.1298828125,
+      "p_acc": 0.265625,
+      "p_brier": 0.021484375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.48131374092152424"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.23527843137254903,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.29436490168047913,
+      "dates": 8,
+      "holm_acc": 0.5,
+      "holm_brier": 0.03515625,
+      "p_acc": 0.0625,
+      "p_brier": 0.00390625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.23527843137254903"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.18981481481481483,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000002,
+      "brier_diff_mean": 0.3073431669431293,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.140625,
+      "p_acc": 0.25,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.18981481481481483"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.3385416666666667,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.15000000000000002,
+      "brier_diff_mean": 0.40098318250818793,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5625,
+      "p_acc": 0.25,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.3385416666666667",
+      "Brier vs B1 p=0.0625 diff=0.40098318250818793"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.16666666666666666,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.1,
+      "brier_diff_mean": 0.32568289140423723,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.16666666666666666",
+      "Brier vs B1 p=0.25 diff=0.32568289140423723"
+     ]
+    }
+   },
+   "PSA_LGBM": {
+    "1": {
+     "auc_lower": 0.5399626116071429,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.13333333333333333,
+      "brier_diff_mean": 0.15261272427196446,
+      "dates": 12,
+      "holm_acc": 0.046875,
+      "holm_brier": 0.01318359375,
+      "p_acc": 0.015625,
+      "p_brier": 0.002197265625
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.4816164687028658,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.059999999999999984,
+      "brier_diff_mean": 0.1890463605653867,
+      "dates": 10,
+      "holm_acc": 0.9375,
+      "holm_brier": 0.12890625,
+      "p_acc": 0.3125,
+      "p_brier": 0.021484375
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.4816164687028658"
+     ]
+    },
+    "3": {
+     "auc_lower": 0.262898946585213,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.29827193396439067,
+      "dates": 8,
+      "holm_acc": 0.4375,
+      "holm_brier": 0.03125,
+      "p_acc": 0.0625,
+      "p_brier": 0.00390625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.262898946585213"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.17873303167420815,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.06666666666666668,
+      "brier_diff_mean": 0.2993607088167028,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.125,
+      "p_acc": 0.375,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.17873303167420815"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.2,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.15000000000000002,
+      "brier_diff_mean": 0.4023653688088173,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5,
+      "p_acc": 0.25,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.2",
+      "Brier vs B1 p=0.0625 diff=0.4023653688088173"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.5,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000003,
+      "brier_diff_mean": 0.3168641474977694,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.5",
+      "Brier vs B1 p=0.25 diff=0.3168641474977694"
+     ]
+    }
+   },
+   "PSA_LR": {
+    "1": {
+     "auc_lower": 0.6116442199775532,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.09999999999999999,
+      "brier_diff_mean": 0.16380723727615878,
+      "dates": 12,
+      "holm_acc": 0.09375,
+      "holm_brier": 0.00732421875,
+      "p_acc": 0.03125,
+      "p_brier": 0.001220703125
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "2": {
+     "auc_lower": 0.5032467532467533,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.12,
+      "brier_diff_mean": 0.20005875850294927,
+      "dates": 10,
+      "holm_acc": 0.28125,
+      "holm_brier": 0.068359375,
+      "p_acc": 0.09375,
+      "p_brier": 0.013671875
+     },
+     "evaluable": true,
+     "reliable": true,
+     "why": []
+    },
+    "3": {
+     "auc_lower": 0.2699375,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.175,
+      "brier_diff_mean": 0.3064361026761916,
+      "dates": 8,
+      "holm_acc": 0.65625,
+      "holm_brier": 0.03125,
+      "p_acc": 0.09375,
+      "p_brier": 0.00390625
+     },
+     "evaluable": true,
+     "reliable": false,
+     "why": [
+      "AUC bootstrap lower bound 0.2699375"
+     ]
+    },
+    "4": {
+     "auc_lower": 0.11994117647058823,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.03333333333333336,
+      "brier_diff_mean": 0.29233454415548027,
+      "dates": 6,
+      "holm_acc": 1.0,
+      "holm_brier": 0.125,
+      "p_acc": 0.5,
+      "p_brier": 0.015625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=6 HIGH=15 LOW=15 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.11994117647058823"
+     ]
+    },
+    "5": {
+     "auc_lower": 0.12087912087912088,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.19999999999999998,
+      "brier_diff_mean": 0.3853754809801525,
+      "dates": 4,
+      "holm_acc": 1.0,
+      "holm_brier": 0.5,
+      "p_acc": 0.125,
+      "p_brier": 0.0625
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=4 HIGH=12 LOW=8 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.12087912087912088",
+      "Brier vs B1 p=0.0625 diff=0.3853754809801525"
+     ]
+    },
+    "6": {
+     "auc_lower": 0.25,
+     "brier_vs_B1": {
+      "acc_diff_mean": 0.10000000000000003,
+      "brier_diff_mean": 0.32817179048829404,
+      "dates": 2,
+      "holm_acc": 1.0,
+      "holm_brier": 1.0,
+      "p_acc": 0.5,
+      "p_brier": 0.25
+     },
+     "evaluable": false,
+     "reliable": false,
+     "why": [
+      "not evaluable: dates=2 HIGH=7 LOW=3 (needs >= 8, >= 5, >= 5)",
+      "AUC bootstrap lower bound 0.25",
+      "Brier vs B1 p=0.25 diff=0.32817179048829404"
+     ]
+    }
+   }
+  },
+  "reliable_leads": {
+   "ALWAYS_HIGH": [],
+   "B1": [],
+   "B1p_E25": [],
+   "CLIM": [],
+   "LR_COMB": [
+    1
+   ],
+   "LR_STRUCT": [
+    1
+   ],
+   "M4_21_E25": [
+    1
+   ],
+   "MAJ": [],
+   "NLP_LGBM": [],
+   "NLP_LR": [],
+   "PCF21_E25": [],
+   "PROPOSED": [
+    1
+   ],
+   "PROPOSED_E25": [],
+   "PROPOSED_NESTED": [
+    1
+   ],
+   "PROPOSED_PERSIST": [
+    1
+   ],
+   "PSA_LGBM": [
+    1
+   ],
+   "PSA_LR": [
+    1,
+    2
+   ]
+  },
+  "status": "development evidence only (every 2021-2026Q2 outcome was examined before E28)"
+ }
+}

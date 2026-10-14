@@ -35,7 +35,7 @@ import pandas as pd  # noqa: E402
 from app.quarterly import pcf_engine as P  # noqa: E402
 from app.quarterly.cycle import reference_probabilities  # noqa: E402
 
-INP = EXP / "backend_dev" / "data" / "inputs"
+INP = EXP / "backend_dev" / "data" / "inputs_vintage1_e29"   # E31: vintage 1 (ends 2026-Q2), kept for reproduction
 OUT = EXP / "frozen"
 FILES = ["sws_rounds.csv", "s1_labels.csv", "d_quarterly_panel.csv", "dnow_panel.csv"]
 
@@ -103,6 +103,9 @@ def main():
     }
     body = json.dumps(rec, indent=1, sort_keys=False, default=float).encode("utf-8")
     OUT.mkdir(exist_ok=True)
+    if "--verify" in sys.argv:
+        print("reproduced" if body[body.index(b'"status"'):] == (OUT / "E31_FROZEN_Q3.json").read_bytes()[(OUT / "E31_FROZEN_Q3.json").read_bytes().index(b'"status"'):] else "DIFFERS")
+        return
     (OUT / "E31_FROZEN_Q3.json").write_bytes(body)
     h = hashlib.sha256(body).hexdigest()
     (OUT / "E31_FROZEN_Q3.sha256").write_bytes(f"{h}  E31_FROZEN_Q3.json\n".encode())

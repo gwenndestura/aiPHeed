@@ -1,0 +1,423 @@
+{
+ "components": {
+  "H": "SWS self-rated involuntary hunger, Balance Luzon (Luzon outside Metro Manila): a MEASURED experience-based hunger rate, but REGIONAL - one value for all five provinces, not a CALABARZON or provincial estimate",
+  "D": "relative provincial food inflation (provincial food CPI YoY minus the CALABARZON mean): a CONSTRUCTED price-pressure indicator, not a measure of food insecurity",
+  "S1": "H + 2D: a composite proxy; Chapter I calls it 'a composite food stress label combining SWS quarterly hunger data and PSA province-level food CPI deviation'",
+  "share_of_S1_variance_from_regional_H": 0.6767,
+  "share_of_S1_variance_from_2D": 0.3233,
+  "labelled_quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2"
+  ],
+  "n_labelled_quarters": 18,
+  "independent_regional_hunger_values": 18,
+  "province_quarter_labels": 90,
+  "quarters_without_label_2021Q1_2026Q2": [
+   "2021-Q1",
+   "2022-Q1",
+   "2025-Q2",
+   "2025-Q3"
+  ]
+ },
+ "provincial_independence": {
+  "test_dates": 29,
+  "dates_where_all_five_provinces_share_the_label": 17,
+  "share": 0.5862,
+  "interpretation": "the five provinces of one date share one regional H draw; rows are not independent observations. Sample size for any reliability claim is the number of dates, not rows."
+ },
+ "class_balance": {
+  "by_lead": {
+   "1": {
+    "rows": 45,
+    "HIGH": 41,
+    "dates": 9,
+    "LOW": 4
+   },
+   "2": {
+    "rows": 35,
+    "HIGH": 33,
+    "dates": 7,
+    "LOW": 2
+   },
+   "3": {
+    "rows": 25,
+    "HIGH": 23,
+    "dates": 5,
+    "LOW": 2
+   },
+   "4": {
+    "rows": 15,
+    "HIGH": 13,
+    "dates": 3,
+    "LOW": 2
+   },
+   "5": {
+    "rows": 15,
+    "HIGH": 14,
+    "dates": 3,
+    "LOW": 1
+   },
+   "6": {
+    "rows": 10,
+    "HIGH": 9,
+    "dates": 2,
+    "LOW": 1
+   }
+  },
+  "training_HIGH_share_lead1_mean": 0.4954,
+  "test_HIGH_share_lead1": 0.9111,
+  "tau_and_hunger_level_by_origin": [
+   {
+    "t": "2023-Q3",
+    "tau": 10.843,
+    "last_published_H": 11.3,
+    "mean_H_usable": 11.47
+   },
+   {
+    "t": "2023-Q4",
+    "tau": 10.867,
+    "last_published_H": 10.3,
+    "mean_H_usable": 11.364
+   },
+   {
+    "t": "2024-Q1",
+    "tau": 11.367,
+    "last_published_H": 14.3,
+    "mean_H_usable": 11.608
+   },
+   {
+    "t": "2024-Q2",
+    "tau": 11.78,
+    "last_published_H": 15.3,
+    "mean_H_usable": 11.892
+   },
+   {
+    "t": "2024-Q3",
+    "tau": 12.507,
+    "last_published_H": 19.6,
+    "mean_H_usable": 12.443
+   },
+   {
+    "t": "2024-Q4",
+    "tau": 13.22,
+    "last_published_H": 18.1,
+    "mean_H_usable": 12.82
+   },
+   {
+    "t": "2025-Q1",
+    "tau": 13.687,
+    "last_published_H": 24.0,
+    "mean_H_usable": 14.212
+   },
+   {
+    "t": "2025-Q2",
+    "tau": 14.113,
+    "last_published_H": 24.0,
+    "mean_H_usable": 14.212
+   },
+   {
+    "t": "2025-Q3",
+    "tau": 14.113,
+    "last_published_H": 24.0,
+    "mean_H_usable": 14.212
+   },
+   {
+    "t": "2025-Q4",
+    "tau": 14.113,
+    "last_published_H": 24.0,
+    "mean_H_usable": 14.212
+   },
+   {
+    "t": "2026-Q1",
+    "tau": 14.345,
+    "last_published_H": 16.7,
+    "mean_H_usable": 14.35
+   }
+  ],
+  "mechanism": "tau is the median of the S1 labels usable at the origin, so training labels are ~50/50 by construction; Balance Luzon hunger rose from about 9-12% (2021-2023) to 15-25% (2024-2026), so almost every test quarter is above the trailing median and test labels are ~90% HIGH. LOW test rows occur only where a quarter's H fell back below the trailing median."
+ },
+ "survey_uncertainty": {
+  "assumption": "simple random sampling SE of H = sqrt(H(1-H)/n); D has no sampling error (CPI). Balance Luzon n per round is 300 or 600 (partly verified, E27 O5a); design effects would widen this.",
+  "per_round_n_table_rows": 23,
+  "share_of_test_labels_within_1.96_SE_of_tau": {
+   "300": 0.2966,
+   "600": 0.1448
+  },
+  "share_of_LOW_test_labels_within_1.96_SE_of_tau": {
+   "300": 1.0,
+   "600": 1.0
+  },
+  "interpretation": "a label within about 2 standard errors of tau could flip under resampling of the survey; such labels cannot discriminate a good forecast from a lucky one."
+ },
+ "publication_and_coverage": {
+  "rounds": [
+   {
+    "quarter": "2021-Q2",
+    "round": "First Quarter 2021 SWS Survey, April 28-May 2, 2021",
+    "H": 15.7,
+    "published_eff": "2021-07-12T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 12
+   },
+   {
+    "quarter": "2021-Q2",
+    "round": "Second Quarter 2021 SWS Survey, June 23-26, 2021",
+    "H": 15.0,
+    "published_eff": "2021-07-28T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 28
+   },
+   {
+    "quarter": "2021-Q3",
+    "round": "Third Quarter 2021 SWS Survey, September 12-16, 2021",
+    "H": 10.3,
+    "published_eff": "2021-12-06T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 67
+   },
+   {
+    "quarter": "2021-Q4",
+    "round": "Fourth Quarter 2021 SWS Survey, December 12-16, 2021",
+    "H": 9.2,
+    "published_eff": "2022-03-25T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 84
+   },
+   {
+    "quarter": "2022-Q2",
+    "round": "First Quarter 2022 SWS Survey, April 19-27, 2022",
+    "H": 11.7,
+    "published_eff": "2022-06-06T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": -24
+   },
+   {
+    "quarter": "2022-Q2",
+    "round": "Second Quarter 2022 SWS Survey, June 26-29, 2022",
+    "H": 11.9,
+    "published_eff": "2022-09-10T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 72
+   },
+   {
+    "quarter": "2022-Q3",
+    "round": "Third Quarter 2022 SWS Survey, September 29-October 2, 2022",
+    "H": 9.6,
+    "published_eff": "2022-10-29T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 29
+   },
+   {
+    "quarter": "2022-Q4",
+    "round": "Fourth Quarter 2022 SWS Survey, December 10-14, 2022",
+    "H": 11.3,
+    "published_eff": "2023-01-19T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 19
+   },
+   {
+    "quarter": "2023-Q1",
+    "round": "First Quarter 2023 SWS Survey, March 26-29, 2023",
+    "H": 8.7,
+    "published_eff": "2023-05-11T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 41
+   },
+   {
+    "quarter": "2023-Q2",
+    "round": "Second Quarter 2023 SWS Survey, June 28-July 1, 2023",
+    "H": 11.3,
+    "published_eff": "2023-08-02T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 33
+   },
+   {
+    "quarter": "2023-Q3",
+    "round": "Third Quarter 2023 SWS Survey, September 28-October 1, 2023",
+    "H": 10.3,
+    "published_eff": "2023-11-20T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 51
+   },
+   {
+    "quarter": "2023-Q4",
+    "round": "Fourth Quarter 2023 SWS Survey, December 8-11, 2023",
+    "H": 14.3,
+    "published_eff": "2024-01-22T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 22
+   },
+   {
+    "quarter": "2024-Q1",
+    "round": "First Quarter 2024 SWS Survey, March 21-25, 2024",
+    "H": 15.3,
+    "published_eff": "2024-04-30T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 30
+   },
+   {
+    "quarter": "2024-Q2",
+    "round": "Second Quarter 2024 SWS Survey, June 23-July 1, 2024",
+    "H": 19.6,
+    "published_eff": "2024-07-23T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 23
+   },
+   {
+    "quarter": "2024-Q3",
+    "round": "September 2024 SWS Survey",
+    "H": 18.1,
+    "published_eff": "2024-10-17T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 17
+   },
+   {
+    "quarter": "2024-Q4",
+    "round": "December 2024 SWS Survey",
+    "H": 25.3,
+    "published_eff": "2025-01-14T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 14
+   },
+   {
+    "quarter": "2025-Q1",
+    "round": "Stratbase-SWS March 15-20, 2025 National Survey",
+    "H": 24.0,
+    "published_eff": "2025-03-29T00:00:00",
+    "date_type": "verified",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": -2
+   },
+   {
+    "quarter": "2025-Q2",
+    "round": "First Quarter 2025 Social Weather Survey (SWS naming)",
+    "H": 17.0,
+    "published_eff": "2025-06-27T00:00:00",
+    "date_type": "verified",
+    "definition_A": false,
+    "source": "supplementary",
+    "days_after_quarter_end": -3
+   },
+   {
+    "quarter": "2025-Q2",
+    "round": "June 2025 Social Weather Survey",
+    "H": 15.3,
+    "published_eff": "2025-08-15T00:00:00",
+    "date_type": "verified-single",
+    "definition_A": false,
+    "source": "supplementary",
+    "days_after_quarter_end": 46
+   },
+   {
+    "quarter": "2025-Q3",
+    "round": "Third Quarter 2025 Social Weather Survey",
+    "H": 23.8,
+    "published_eff": "2025-11-05T00:00:00",
+    "date_type": "verified-single",
+    "definition_A": false,
+    "source": "supplementary",
+    "days_after_quarter_end": 36
+   },
+   {
+    "quarter": "2025-Q4",
+    "round": "November 2025 SWS Survey",
+    "H": 16.7,
+    "published_eff": "2026-01-14T00:00:00",
+    "date_type": "verified-single",
+    "definition_A": true,
+    "source": "production",
+    "days_after_quarter_end": 14
+   },
+   {
+    "quarter": "2026-Q1",
+    "round": "March 2026 SWS Survey",
+    "H": 22.4,
+    "published_eff": "2026-09-10T00:00:00",
+    "date_type": "unverified; upper bound = fetch time in the production file",
+    "definition_A": true,
+    "source": "production_2026_authorized",
+    "days_after_quarter_end": 163
+   },
+   {
+    "quarter": "2026-Q2",
+    "round": "June 2026 SWS Survey",
+    "H": 17.3,
+    "published_eff": "2026-09-10T00:00:00",
+    "date_type": "unverified; upper bound = fetch time in the production file",
+    "definition_A": true,
+    "source": "production_2026_authorized",
+    "days_after_quarter_end": 72
+   }
+  ],
+  "median_days_after_quarter_end_verified": 28.0,
+  "notes": [
+   "2026-Q1 and 2026-Q2 publication dates are unverified upper bounds (fetch time) - conservative for eligibility, but the true release may be earlier",
+   "2025-Q2 and 2025-Q3 rounds are supplementary with definition_A = False and are excluded, leaving two quarters without a label inside the evaluation window",
+   "2025-Q1 is a Stratbase-SWS commissioned survey published before the quarter ended",
+   "2021-Q2 and 2022-Q2 hold two rounds each; the label uses their mean and becomes usable only after the second round's publication"
+  ]
+ },
+ "what_the_target_can_support": [
+  "a regional (Balance Luzon) statement about whether self-rated hunger plus local food-price pressure is above its recent median, issued per province",
+  "province-to-province differences only through the price term 2D (34-35% of the label variance)"
+ ],
+ "what_it_cannot_support": [
+  "a measured provincial or municipal food-insecurity rate",
+  "a horizon reliability claim under the C6 rule: no lead has >= 5 LOW rows (by lead: 1: 4, 2: 2, 3: 2, 4: 2, 5: 1, 6: 1)",
+  "five independent provincial evaluations per quarter"
+ ],
+ "what_would_be_needed": [
+  "more quarters with LOW outcomes under the approved rule (each future quarter adds one regional date); at least 5 LOW and 8 dates per lead",
+  "a provincial outcome measured with known sampling error: CBMS LGU FIES (O1) or NNS 2023 provincial FIES (O2)",
+  "per-round Balance Luzon sample sizes (O5a) to quantify label noise exactly"
+ ]
+}
