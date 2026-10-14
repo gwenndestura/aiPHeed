@@ -43,12 +43,6 @@ export function selectableQuarters<T extends { id: string }>(quarters: T[], cale
   });
 }
 
-const FULL_MONTHS = ["January–March", "April–June", "July–September", "October–December"];
-
-/** "Forecast Period: 2027 Q1 (January–March 2027)" for a forecast quarter on the timeline. */
-export function forecastPeriodLabel(q: { year: number; q: number }): string {
-  return `Forecast Period: ${q.year} Q${q.q} (${FULL_MONTHS[q.q - 1]} ${q.year})`;
-}
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -59,4 +53,9 @@ const MONTH_NAMES = [
 export function quarterMonthRange(q: { year: number; q: number }): string {
   const first = (q.q - 1) * 3;
   return `${MONTH_NAMES[first]} – ${MONTH_NAMES[first + 2]} ${q.year}`;
+}
+
+/** "Q1 2027 · January – March 2027": the selected quarter, the one format the map's panels use. */
+export function quarterPeriodLabel(q: { year: number; q: number }): string {
+  return `Q${q.q} ${q.year} · ${quarterMonthRange(q)}`;
 }

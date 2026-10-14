@@ -6,12 +6,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { useConfig, useExplainability, useNews } from "@/lib/queries";
 import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
-import { forecastPeriodLabel } from "@/lib/quarters";
+import { quarterPeriodLabel } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
 import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
+import { StatusDot } from "@/components/ui/status-dot";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
 interface Props {
@@ -71,11 +72,7 @@ export function ShapNarrativeCardBody({
     <div key={`${subjectName}-${quarter.id}`} className="animate-fade-in">
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="min-w-0">
-          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold flex items-center gap-1.5">
-            {quarter.forecast
-              ? forecastPeriodLabel(quarter)
-              : `${quarter.label} ${quarter.year} · ${quarter.monthsLabel}`}
-          </p>
+          <p className="text-[11px] text-muted-foreground">{quarterPeriodLabel(quarter)}</p>
           <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} Summary</h2>
         </div>
         <button
@@ -169,7 +166,8 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
 function DriverGroup({ heading, headingColor, items }: { heading: string; headingColor: string; items: Trigger[] }) {
   return (
     <div className="space-y-1.5">
-      <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: headingColor }}>
+      <p className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground/90">
+        <StatusDot color={headingColor} />
         {heading}
       </p>
       <div className="space-y-1">
@@ -220,7 +218,7 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
       >
         <div className="flex items-center gap-2">
           <Newspaper className="h-3.5 w-3.5 text-primary" />
-          <span className="text-[11px] font-bold uppercase tracking-wider">News Articles Analyzed</span>
+          <span className="text-[13px] font-semibold leading-tight">News articles analyzed</span>
           <span className="text-[10px] text-muted-foreground tabular-nums font-mono-num font-bold">{articleCount}</span>
         </div>
         {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}

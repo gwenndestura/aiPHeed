@@ -11,6 +11,7 @@ import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
 import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
 import { StatusDot } from "@/components/ui/status-dot";
+import { ExplainTip } from "@/components/ui/explain-tip";
 import { isHighRisk } from "@/lib/risk";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
@@ -141,29 +142,14 @@ export function RfiiScoreCardBody({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-        <p className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground/80 font-semibold">
-          Regional Average Risk Level
-        </p>
+        <h3 className="text-[13px] font-semibold leading-tight">Regional average risk level</h3>
         {quarterLabel && (
-          <p className="text-[9px] text-muted-foreground/70 font-mono-num tabular-nums shrink-0">{quarterLabel}</p>
+          <p className="text-[11px] text-muted-foreground tabular-nums">{quarterLabel}</p>
         )}
       </div>
 
-      <div
-        className="relative rounded-2xl border border-border/40 bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden"
-        style={{
-          ['--accent-color' as any]: band.color.replace('hsl(', '').replace(')', ''),
-          animation: 'rfii-hero-pulse 3.6s ease-in-out infinite',
-        }}
-      >
-        {/* Aurora sweep */}
-        <div
-          className="pointer-events-none absolute -inset-[30%] opacity-50 blur-2xl"
-          style={{
-            background: `conic-gradient(from 0deg, transparent 0deg, ${band.color}55 90deg, transparent 180deg, ${band.color}33 270deg, transparent 360deg)`,
-            animation: 'rfii-aurora 14s linear infinite',
-          }}
-        />
+      {/* Flat, as the other cards: no glow around the card or the figure. */}
+      <div className="relative rounded-2xl border border-border/40 bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden">
         {/* Top edge accent line */}
         <div
           className="pointer-events-none absolute top-0 left-4 right-4 h-px"
@@ -180,18 +166,12 @@ export function RfiiScoreCardBody({
           {/* Hero score */}
           <div className="flex items-end gap-3">
             <span
-              className="font-mono-num font-black tabular-nums leading-[0.85] tracking-tight"
-              style={{
-                fontSize: '5.5rem',
-                color: band.color,
-                textShadow: `0 0 32px ${band.color}cc, 0 0 70px ${band.color}66`,
-                animation: 'rfii-score-breathe 3.2s ease-in-out infinite',
-                transformOrigin: 'left bottom',
-              }}
+              className="font-bold tabular-nums leading-[0.85] tracking-tight"
+              style={{ fontSize: '5.5rem', color: band.color }}
             >
               {hasScore ? animScore.toFixed(2) : "—"}
             </span>
-            <span className="text-[10px] text-muted-foreground/70 font-mono-num pb-2">/ 1.00</span>
+            <span className="text-[11px] text-muted-foreground tabular-nums pb-2">/ 1.00</span>
           </div>
 
           {/* Risk band pill -- only for a real score */}
@@ -229,12 +209,11 @@ export function RfiiScoreCardBody({
                 style={{
                   left: `calc(${trackPct}% - 1.5px)`,
                   background: 'hsl(var(--foreground))',
-                  boxShadow: `0 0 10px ${band.color}, 0 0 20px ${band.color}cc`,
                   transition: 'left 1.4s cubic-bezier(0.22,1,0.36,1)',
                 }}
               />}
             </div>
-            <div className="flex justify-between text-[8px] uppercase tracking-wider text-muted-foreground/60 font-mono-num mt-1.5">
+            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums mt-1.5">
               <span>0.0 low</span>
               <span>0.5</span>
               <span>1.0 high</span>
@@ -243,14 +222,15 @@ export function RfiiScoreCardBody({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      {/* Columns share the width but never get narrower than their label. */}
+      <div className="grid grid-cols-[repeat(3,minmax(max-content,1fr))] gap-2">
         <SummaryChip label="High risk" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
         <SummaryChip label="Low risk" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
         <SummaryChip
           label="Limited data"
           value={failed ? "—" : limited}
           color="hsl(var(--muted-foreground))"
-          tip="Provinces with fewer than 5 geocoded news articles this quarter."
+          tip="Provinces with fewer than 5 news articles linked to them this quarter, so their forecast rests on less news evidence."
         />
       </div>
     </div>
@@ -281,7 +261,7 @@ export function RiskDriversCardBody({
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-1 h-4 rounded-full bg-primary" />
-        <h3 className="text-[11px] font-bold uppercase tracking-wider">Why is this Province at Risk?</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Why is this province at risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
           {isLoading ? "Computing…" : failed ? "" : "Ranked"}
         </span>
@@ -362,7 +342,7 @@ export function ProvinceRankingCardBody({
     <div>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-1 h-4 rounded-full bg-primary" />
-        <h3 className="text-[11px] font-bold uppercase tracking-wider">Province Ranking</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Province ranking</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">High → Low</span>
       </div>
       {loadFailed && <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>}
@@ -427,7 +407,7 @@ function RejectedForecastPlaceholder({
               Back
             </button>
           )}
-          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">Province of</p>
+          <p className="text-[11px] text-muted-foreground">Province of</p>
           <h2 className="text-base font-bold leading-tight">{name}</h2>
         </div>
         {isLocked && onClose && (
@@ -481,7 +461,7 @@ function RegionDetail({
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-3">
           <div>
-            <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">Province of</p>
+            <p className="text-[11px] text-muted-foreground">Province of</p>
             <h2 className="text-base font-bold leading-tight">{region.name}</h2>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <StatusBadge
@@ -557,9 +537,7 @@ function RegionDetail({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-1 h-4 rounded-full bg-primary" />
-            <h3 className="text-[11px] font-bold uppercase tracking-wider">
-              Cities & Municipalities
-            </h3>
+            <h3 className="text-[13px] font-semibold leading-tight">Cities and municipalities</h3>
           </div>
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
         </div>
@@ -625,9 +603,7 @@ function MunicipalityDetail({
       {/* Header */}
       <div className="flex items-start gap-3">
         <div>
-          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-semibold">
-            {municipality.classification} of
-          </p>
+          <p className="text-[11px] text-muted-foreground">{municipality.classification} of</p>
           <h2 className="text-base font-bold leading-tight">{municipality.name}</h2>
           <p className="text-[10px] text-muted-foreground mt-0.5">{municipality.provinceName}, CALABARZON</p>
           <div className="flex items-center gap-2 mt-1.5">
@@ -701,16 +677,31 @@ function FitText({
 
 /* ─── Region summary chip ─── */
 function SummaryChip({ label, value, color, tip }: { label: string; value: number | string; color: string; tip?: string }) {
+  const box = "rounded-lg border border-border/40 bg-secondary/30 px-2 py-1.5 flex flex-col items-start";
+  const figure = (
+    <span className="font-mono-num text-base font-bold tabular-nums leading-none mt-0.5" style={{ color }}>
+      {value}
+    </span>
+  );
+  if (!tip) {
+    return (
+      <div className={box}>
+        <MetricLabel className="whitespace-nowrap">{label}</MetricLabel>
+        {figure}
+      </div>
+    );
+  }
+  // Dotted underline, as ConfidenceTag: this label has an explanation.
   return (
-    <div
-      className="rounded-lg border border-border/40 bg-secondary/30 px-2 py-1.5 flex flex-col items-start"
-      title={tip}
-    >
-      <MetricLabel>{label}</MetricLabel>
-      <span className="font-mono-num text-base font-bold tabular-nums leading-none mt-0.5" style={{ color }}>
-        {value}
-      </span>
-    </div>
+    <ExplainTip explanation={tip}>
+      <button
+        type="button"
+        className={`${box} text-left cursor-help hover:bg-secondary/50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}
+      >
+        <MetricLabel className="whitespace-nowrap underline decoration-dotted underline-offset-2">{label}</MetricLabel>
+        {figure}
+      </button>
+    </ExplainTip>
   );
 }
 
@@ -725,7 +716,7 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
     <div>
       <div className="flex items-center gap-2 mb-2">
         <div className="w-1 h-4 rounded-full bg-primary" />
-        <h3 className="text-[11px] font-bold uppercase tracking-wider">Trigger Composition</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Trigger composition</h3>
       </div>
       {isLoading ? (
         <div className="animate-pulse">

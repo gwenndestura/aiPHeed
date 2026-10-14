@@ -274,32 +274,6 @@
   50% { opacity: 0.85; }
 }
 
-/* Hero card — prominent breathing border + ambient halo */
-@keyframes rfii-hero-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 1px hsl(var(--accent-color) / 0.55),
-      0 0 24px -2px hsl(var(--accent-color) / 0.45),
-      0 0 60px -10px hsl(var(--accent-color) / 0.35),
-      inset 0 0 30px -8px hsl(var(--accent-color) / 0.25);
-  }
-  50% {
-    box-shadow:
-      0 0 0 2px hsl(var(--accent-color) / 0.85),
-      0 0 38px 0 hsl(var(--accent-color) / 0.65),
-      0 0 90px -8px hsl(var(--accent-color) / 0.55),
-      inset 0 0 42px -6px hsl(var(--accent-color) / 0.4);
-  }
-}
-@keyframes rfii-aurora {
-  0%   { transform: translate(-15%, -10%) rotate(0deg); }
-  50%  { transform: translate(15%, 10%) rotate(180deg); }
-  100% { transform: translate(-15%, -10%) rotate(360deg); }
-}
-@keyframes rfii-score-breathe {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.025); }
-}
 @keyframes rfii-ring-expand {
   0%   { transform: scale(0.85); opacity: 0.55; }
   80%  { opacity: 0; }

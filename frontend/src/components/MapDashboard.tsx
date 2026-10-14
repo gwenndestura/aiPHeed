@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections } from "@/lib/queries";
-import { forecastPeriodLabel, selectableQuarters, timelineWindow } from "@/lib/quarters";
+import { quarterPeriodLabel, selectableQuarters, timelineWindow } from "@/lib/quarters";
 import { PhilippineMap } from "@/components/PhilippineMap";
 import { LeftPanel, RfiiScoreCardBody, RiskDriversCardBody, ProvinceRankingCardBody } from "@/components/LeftPanel";
 import {
@@ -88,11 +88,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const timelineQuarters = useMemo(() => timelineWindow(quarters), [quarters]);
 
   const currentQuarter = quarters.find((q) => q.id === quarterId) ?? quarters[quarters.length - 1];
-  const quarterLabel = !currentQuarter
-    ? ""
-    : currentQuarter.forecast
-      ? forecastPeriodLabel(currentQuarter)
-      : `${currentQuarter.label} ${currentQuarter.year} · ${currentQuarter.monthsLabel.toUpperCase()}`;
+  const quarterLabel = currentQuarter ? quarterPeriodLabel(currentQuarter) : "";
 
   // A quarter with no score is selectable: the map stays gray (no province
   // has a score) and the panels say so.

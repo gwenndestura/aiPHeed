@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { ExplainTip } from "@/components/ui/explain-tip";
 
 interface Props {
   /** The tag text, e.g. "Limited data" or "Low confidence". */
   children?: React.ReactNode;
-  /** Why the tag applies. Shown in a tooltip on hover and keyboard focus. */
+  /** Why the tag applies: a tooltip on hover and keyboard focus, a popover on a tap (ExplainTip). */
   explanation?: string;
   className?: string;
 }
@@ -17,20 +17,17 @@ export function ConfidenceTag({ children = "Limited data", explanation, classNam
   const base = "text-label text-ink-secondary whitespace-nowrap";
   if (!explanation) return <span className={cn(base, className)}>{children}</span>;
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span
-          tabIndex={0}
-          className={cn(
-            base,
-            "cursor-help underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-            className,
-          )}
-        >
-          {children}
-        </span>
-      </TooltipTrigger>
-      <TooltipContent>{explanation}</TooltipContent>
-    </Tooltip>
+    <ExplainTip explanation={explanation}>
+      <span
+        tabIndex={0}
+        className={cn(
+          base,
+          "cursor-help underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          className,
+        )}
+      >
+        {children}
+      </span>
+    </ExplainTip>
   );
 }
