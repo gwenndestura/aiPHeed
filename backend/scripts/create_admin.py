@@ -38,8 +38,7 @@ from app.config import settings  # noqa: E402
 from app.db.database import AsyncSessionLocal  # noqa: E402
 from app.db.models import AdminUser  # noqa: E402
 from app.services import security  # noqa: E402
-
-MIN_PASSWORD_LENGTH = 12
+from app.services.passwords import password_problem  # noqa: E402
 
 
 def read_password() -> str:
@@ -56,12 +55,10 @@ def read_password() -> str:
 
 
 def check_password(password: str) -> None:
-    if len(password) < MIN_PASSWORD_LENGTH:
-        sys.exit(
-            f"Password must be at least {MIN_PASSWORD_LENGTH} characters. "
-            "A passphrase of a few words is easier to remember and stronger "
-            "than a short complex string."
-        )
+    """The shared policy in app/services/passwords.py: length and common-password list."""
+    problem = password_problem(password)
+    if problem:
+        sys.exit(problem)
 
 
 async def list_accounts() -> None:
