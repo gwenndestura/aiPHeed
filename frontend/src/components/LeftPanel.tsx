@@ -12,6 +12,7 @@ import { Note } from "@/components/ui/note";
 import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
 import { StatusDot } from "@/components/ui/status-dot";
 import { isHighRisk } from "@/lib/risk";
+import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -102,13 +103,21 @@ export function RfiiScoreCardBody({
   quarterId,
   quarterLabel,
   regionsData,
+  loadFailed = false,
 }: {
   quarterId?: string;
   quarterLabel?: string;
   regionsData: RegionData[];
+  /** The province list or timeline failed to load. */
+  loadFailed?: boolean;
 }) {
-  const { data: regionForecast } = useForecast("region", "calabarzon", quarterId || undefined, "nowcast");
-  const avgScore = regionForecast?.riskScore ?? 0;
+  const { data: regionForecast, error: forecastError } = useForecast("region", "calabarzon", quarterId || undefined, "nowcast");
+  const failed = loadFailed || isLoadFailure(forecastError);
+  // No score is not a score of zero: while loading, after a failure, or when
+  // every province is withheld, show "—" and no band rather than 0.00 / LOW.
+  const rawScore = regionForecast?.riskScore;
+  const hasScore = !failed && typeof rawScore === "number";
+  const avgScore = hasScore ? rawScore : 0;
   const animScore = useCountUp(avgScore, 1000, 2);
 
   let high = 0, low = 0, limited = 0;
@@ -122,7 +131,8 @@ export function RfiiScoreCardBody({
   // and a score shown as 0.50 is HIGH.
   const isHigh = regionForecast?.riskLevel ? regionForecast.riskLevel === "high" : isHighRisk(avgScore);
   const band =
-    isHigh ? { label: "HIGH", color: "hsl(var(--risk-high))" }
+    !hasScore ? { label: "", color: "hsl(var(--muted-foreground))" }
+    : isHigh ? { label: "HIGH", color: "hsl(var(--risk-high))" }
     : { label: "LOW", color: "hsl(var(--risk-low))" };
 
   // Position of pointer along 0..1 segmented track
@@ -179,19 +189,25 @@ export function RfiiScoreCardBody({
                 transformOrigin: 'left bottom',
               }}
             >
-              {animScore.toFixed(2)}
+              {hasScore ? animScore.toFixed(2) : "—"}
             </span>
             <span className="text-[10px] text-muted-foreground/70 font-mono-num pb-2">/ 1.00</span>
           </div>
 
-          {/* Risk band pill */}
-          <div className="mt-2.5">
-            <StatusBadge level={isHigh ? "high" : "low"} swatch="circle" />
-          </div>
+          {/* Risk band pill -- only for a real score */}
+          {hasScore && (
+            <div className="mt-2.5">
+              <StatusBadge level={isHigh ? "high" : "low"} swatch="circle" />
+            </div>
+          )}
 
-          <p className="mt-2.5 text-[10px] text-muted-foreground/85 leading-snug">
-            Average across all {regionsData.length || 5} provinces
-          </p>
+          {failed ? (
+            <Note label={null} className="mt-2.5">{LOAD_ERROR_MESSAGE}</Note>
+          ) : (
+            <p className="mt-2.5 text-[10px] text-muted-foreground/85 leading-snug">
+              Average across all {regionsData.length || 5} provinces
+            </p>
+          )}
 
           {/* Segmented 0–1 risk scale with pointer */}
           <div className="mt-3.5">
@@ -207,8 +223,8 @@ export function RfiiScoreCardBody({
               {[50].map((p) => (
                 <div key={p} className="absolute top-0 bottom-0 w-px bg-background/60" style={{ left: `${p}%` }} />
               ))}
-              {/* Pointer */}
-              <div
+              {/* Pointer -- only for a real score */}
+              {hasScore && <div
                 className="absolute -top-1 -bottom-1 w-[3px] rounded-full"
                 style={{
                   left: `calc(${trackPct}% - 1.5px)`,
@@ -216,7 +232,7 @@ export function RfiiScoreCardBody({
                   boxShadow: `0 0 10px ${band.color}, 0 0 20px ${band.color}cc`,
                   transition: 'left 1.4s cubic-bezier(0.22,1,0.36,1)',
                 }}
-              />
+              />}
             </div>
             <div className="flex justify-between text-[8px] uppercase tracking-wider text-muted-foreground/60 font-mono-num mt-1.5">
               <span>0.0 low</span>
@@ -228,11 +244,11 @@ export function RfiiScoreCardBody({
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        <SummaryChip label="High risk" value={high} color="hsl(var(--risk-high))" />
-        <SummaryChip label="Low risk" value={low} color="hsl(var(--risk-low))" />
+        <SummaryChip label="High risk" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
+        <SummaryChip label="Low risk" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
         <SummaryChip
           label="Limited data"
-          value={limited}
+          value={failed ? "—" : limited}
           color="hsl(var(--muted-foreground))"
           tip="Provinces with fewer than 5 geocoded news articles this quarter."
         />
@@ -257,8 +273,9 @@ export function RiskDriversCardBody({
   // the model reports, always shown (even at 0%), ranked high → low.
   const scope = provinceId ? "province" : "region";
   const id = provinceId ?? "calabarzon";
-  const { data, isLoading } = useExplainability(scope, id, quarterId || undefined);
+  const { data, isLoading, error } = useExplainability(scope, id, quarterId || undefined);
   const drivers: Trigger[] = data?.triggers ?? [];
+  const failed = isLoadFailure(error);
 
   return (
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
@@ -266,11 +283,13 @@ export function RiskDriversCardBody({
         <div className="w-1 h-4 rounded-full bg-primary" />
         <h3 className="text-[11px] font-bold uppercase tracking-wider">Why is this Province at Risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
-          {isLoading ? "Computing…" : "Ranked"}
+          {isLoading ? "Computing…" : failed ? "" : "Ranked"}
         </span>
       </div>
       {isLoading ? (
         <DriverRowsSkeleton />
+      ) : failed ? (
+        <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>
       ) : (
       <div className="space-y-2">
         {drivers.map((d, i) => {
@@ -329,9 +348,12 @@ function DriverRowsSkeleton() {
 export function ProvinceRankingCardBody({
   onRegionClick,
   regionsData,
+  loadFailed = false,
 }: {
   onRegionClick: (r: RegionData) => void;
   regionsData: RegionData[];
+  /** The province list failed to load. */
+  loadFailed?: boolean;
 }) {
   const sortedProvinces = regionsData.slice().sort((a, b) => b.riskScore - a.riskScore);
   const maxScore = Math.max(...regionsData.map((r) => r.riskScore), 0.01);
@@ -343,6 +365,7 @@ export function ProvinceRankingCardBody({
         <h3 className="text-[11px] font-bold uppercase tracking-wider">Province Ranking</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">High → Low</span>
       </div>
+      {loadFailed && <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>}
       <div className="space-y-1.5">
         {sortedProvinces.map((r) => {
           const widthPct = (r.riskScore / maxScore) * 100;
@@ -677,7 +700,7 @@ function FitText({
 }
 
 /* ─── Region summary chip ─── */
-function SummaryChip({ label, value, color, tip }: { label: string; value: number; color: string; tip?: string }) {
+function SummaryChip({ label, value, color, tip }: { label: string; value: number | string; color: string; tip?: string }) {
   return (
     <div
       className="rounded-lg border border-border/40 bg-secondary/30 px-2 py-1.5 flex flex-col items-start"

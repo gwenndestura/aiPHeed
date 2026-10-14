@@ -6,6 +6,7 @@ import { selectableQuarters } from "@/lib/quarters";
 import { api, ApiError } from "@/lib/api";
 import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
 import { X, ImageIcon, FileText } from "lucide-react";
+import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 import {
   CartesianGrid,
   Line,
@@ -147,7 +148,7 @@ function SubTab({
 /* ─── Sub-tab A — Province Risk Level Trend ─── */
 function TrendView() {
   const { data: config } = useConfig();
-  const { data: quartersRes } = useQuarters("nowcast");
+  const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const QUARTERS = useMemo(
     // Reports describe the nowcast indicator; the E20 forecast quarter is a
     // different target and is left out of the report ranges, as are quarters
@@ -202,6 +203,10 @@ function TrendView() {
   const singleProvinceTs = useTimeseries("province", isSingleProvince ? (provinceId ?? "") : "", genFrom, genTo);
   const muniTs = useTimeseries("municipality", isMuni ? (municipalityId ?? "") : "", genFrom, genTo);
 
+  // A failed fetch is not "nothing selected": say so in the chart area.
+  const loadFailed = [quartersError, caviteTs.error, lagunaTs.error, batangasTs.error, rizalTs.error,
+    quezonTs.error, singleProvinceTs.error, muniTs.error].some(isLoadFailure);
+
   const seriesKeys = isMuni ? [generated!.municipality] : isSingleProvince ? [generated!.province] : isAllProvinces ? PROVINCES : [];
 
   const data = useMemo(() => {
@@ -240,7 +245,7 @@ function TrendView() {
   // The trend chart's legend is part of the Recharts figure, so the PNG and
   // the PDF figure capture the same node.
   const figureRef = useRef<HTMLDivElement>(null);
-  const hasChart = !!generated && data.length > 0;
+  const hasChart = !loadFailed && !!generated && data.length > 0;
   const { downloadPng, downloadPdf, pdfBusy } = useChartExport(figureRef, hasChart);
 
 
@@ -331,7 +336,11 @@ function TrendView() {
       </div>
 
       <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
-        {!generated || data.length === 0 ? (
+        {loadFailed ? (
+          <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
+            {LOAD_ERROR_MESSAGE}
+          </div>
+        ) : !generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter range to view the trend.
           </div>
@@ -394,7 +403,7 @@ function TrendView() {
 /* ─── Sub-tab B — Feature Contribution Breakdown ─── */
 function ShapView() {
   const { data: config } = useConfig();
-  const { data: quartersRes } = useQuarters("nowcast");
+  const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const QUARTERS = useMemo(
     // Reports describe the nowcast indicator; the E20 forecast quarter is a
     // different target and is left out of the report ranges, as are quarters
@@ -415,12 +424,13 @@ function ShapView() {
     if (!quarter && quartersRes?.current) setQuarter(quartersRes.current);
   }, [quarter, quartersRes]);
 
-  const { data: explain } = useExplainability(
+  const { data: explain, error: explainError } = useExplainability(
     "province",
     generated ? PROVINCE_IDS[generated.province] : "",
     generated?.quarter
   );
   const triggers = explain?.triggers ?? [];
+  const loadFailed = isLoadFailure(quartersError) || isLoadFailure(explainError);
 
   const data = useMemo(
     () =>
@@ -442,7 +452,7 @@ function ShapView() {
   };
 
   const pngRef = useRef<HTMLDivElement>(null);
-  const hasChart = !!generated && data.length > 0;
+  const hasChart = !loadFailed && !!generated && data.length > 0;
   const { downloadPng, downloadPdf, pdfBusy } = useChartExport(pngRef, hasChart);
 
   const exportLabel = generated ? `${generated.province}_${generated.quarter}` : "shap";
@@ -504,7 +514,11 @@ function ShapView() {
       </div>
 
       <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
-        {!generated || data.length === 0 ? (
+        {loadFailed ? (
+          <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
+            {LOAD_ERROR_MESSAGE}
+          </div>
+        ) : !generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             Select a province and quarter to view the trigger contributions.
           </div>

@@ -18,6 +18,7 @@ import { AboutModal } from "@/components/AboutModal";
 import { FeedbackModal } from "@/components/FeedbackModal";
 import { MapSearch } from "@/components/MapSearch";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { isLoadFailure } from "@/lib/loadError";
 
 function FloatingCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
@@ -65,7 +66,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const isPhone = useMediaQuery("(max-width: 639px)");
 
-  const { data: quartersRes } = useQuarters("nowcast");
+  const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const quarters = useMemo(
     () =>
       selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) =>
@@ -97,7 +98,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   // has a score) and the panels say so.
   const noData = !!currentQuarter?.noData;
 
-  const { data: provincesRes } = useProvinces(quarterId || undefined, "nowcast", !noData);
+  const { data: provincesRes, error: provincesError } = useProvinces(quarterId || undefined, "nowcast", !noData);
+  // Fetch failure (not a 404): the panels say so instead of showing zeros.
+  const loadFailed = isLoadFailure(quartersError) || isLoadFailure(provincesError);
   const regionsData = useMemo(
     () => (noData ? [] : (provincesRes?.data ?? []).map(provinceToRegion)),
     [provincesRes, noData]
@@ -249,13 +252,13 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
                 ) : (
                   <>
                     <FloatingCard>
-                      <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} />
+                      <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} loadFailed={loadFailed} />
                     </FloatingCard>
                     <FloatingCard>
                       <RiskDriversCardBody quarterId={quarterId} />
                     </FloatingCard>
                     <FloatingCard>
-                      <ProvinceRankingCardBody onRegionClick={handleRegionClick} regionsData={regionsData} />
+                      <ProvinceRankingCardBody onRegionClick={handleRegionClick} regionsData={regionsData} loadFailed={loadFailed} />
                     </FloatingCard>
                   </>
                 )}

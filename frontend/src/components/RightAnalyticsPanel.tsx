@@ -11,6 +11,8 @@ import { isHighRisk } from "@/lib/risk";
 import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
+import { Note } from "@/components/ui/note";
+import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
 interface Props {
   quarter: Quarter;
@@ -50,10 +52,14 @@ export function ShapNarrativeCardBody({
   // Recomputed per province × quarter.
   const scope = region ? "province" : "region";
   const id = region?.id ?? "calabarzon";
-  const { data: explain, isLoading: explainLoading } = useExplainability(scope, id, quarter.id);
+  const { data: explain, isLoading: explainLoading, error: explainError } = useExplainability(scope, id, quarter.id);
   const triggers: Trigger[] = explain?.triggers ?? [];
+  const explainFailed = isLoadFailure(explainError);
 
-  const finalScore = explain?.riskScore ?? region?.riskScore ?? 0;
+  // Badges only for a real score -- never a 0 standing in for "unknown".
+  const rawScore = explain?.riskScore ?? region?.riskScore;
+  const hasScore = !explainFailed && typeof rawScore === "number";
+  const finalScore = hasScore ? rawScore : 0;
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
 
@@ -83,11 +89,13 @@ export function ShapNarrativeCardBody({
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5 mb-2">
-        <StatusBadge
-          level={isHighRisk(finalScore, displayCutoff) ? "high" : "low"}
-          title={`Forecast display cutoff: ${displayCutoff}`}
-        />
-        {finalScore >= alertThreshold && (
+        {hasScore && (
+          <StatusBadge
+            level={isHighRisk(finalScore, displayCutoff) ? "high" : "low"}
+            title={`Forecast display cutoff: ${displayCutoff}`}
+          />
+        )}
+        {hasScore && finalScore >= alertThreshold && (
           <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
             Active alert
           </StatusBadge>
@@ -97,13 +105,21 @@ export function ShapNarrativeCardBody({
         )}
       </div>
 
-      {explainLoading ? <ShapDriverListSkeleton /> : <ShapDriverList items={triggers} />}
+      {explainLoading ? (
+        <ShapDriverListSkeleton />
+      ) : explainFailed ? (
+        <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>
+      ) : (
+        <ShapDriverList items={triggers} />
+      )}
 
-      <p className="mt-2 px-1 text-[9px] italic text-muted-foreground leading-snug">
-        {explainLoading
-          ? "Computing the SHAP breakdown for this quarter…"
-          : (explain?.note ?? "SHAP explainability — grouped driver shares, sum to 100%. AI-generated estimate only; not an official government report.")}
-      </p>
+      {!explainFailed && (
+        <p className="mt-2 px-1 text-[9px] italic text-muted-foreground leading-snug">
+          {explainLoading
+            ? "Computing the SHAP breakdown for this quarter…"
+            : (explain?.note ?? "SHAP explainability — grouped driver shares, sum to 100%. AI-generated estimate only; not an official government report.")}
+        </p>
+      )}
 
       <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
     </div>

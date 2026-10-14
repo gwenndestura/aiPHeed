@@ -8,6 +8,7 @@ import type { ProvinceSummary } from "@/lib/apiTypes";
 import { ArrowDown, ArrowUp, Download, Search } from "lucide-react";
 import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { formatSigned } from "@/components/ui/metric";
+import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
 type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCount";
 
@@ -20,10 +21,12 @@ export default function DataPage() {
   const [quarter, setQuarter] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState("");
 
-  const { data: quartersRes } = useQuarters("nowcast");
+  const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const activeQuarter = quarter ?? quartersRes?.current;
-  const { data: provincesRes, isLoading } = useProvinces(activeQuarter, "nowcast");
-  const rows = provincesRes?.data ?? [];
+  const { data: provincesRes, isLoading, error: provincesError } = useProvinces(activeQuarter, "nowcast");
+  // A failed fetch is not an empty result: say so rather than "No rows".
+  const loadFailed = isLoadFailure(quartersError) || isLoadFailure(provincesError);
+  const rows = useMemo(() => (loadFailed ? [] : provincesRes?.data ?? []), [loadFailed, provincesRes]);
 
   const filtered = useMemo(() => {
     let r = rows.filter((row) => {
@@ -157,7 +160,9 @@ export default function DataPage() {
                 </tr>
               </thead>
               <tbody>
-                {!isLoading && filtered.length === 0 && (
+                {loadFailed ? (
+                  <tr><td colSpan={6} className="px-4 py-6 text-center text-muted-foreground text-[11px]">{LOAD_ERROR_MESSAGE}</td></tr>
+                ) : !isLoading && filtered.length === 0 && (
                   <tr><td colSpan={6} className="px-4 py-6 text-center text-muted-foreground text-[11px]">No rows for this filter.</td></tr>
                 )}
                 {filtered.map((r) => {
@@ -190,7 +195,7 @@ export default function DataPage() {
               </tbody>
             </table>
           </div>
-          <p className="text-[10px] text-muted-foreground mt-2">{filtered.length} rows</p>
+          <p className="text-[10px] text-muted-foreground mt-2">{loadFailed ? "—" : `${filtered.length} rows`}</p>
         </div>
       </main>
     </div>
