@@ -79,23 +79,28 @@ and every clone starts without one. Create a fresh, empty database from
 alembic upgrade head
 ```
 
-Then create the first admin account with `scripts/create_admin.py` (see below).
-The database file lands at the path in `DATABASE_URL` (default
-`backend/aipheed.db`). Back it up by copying the file while the API is stopped.
+That creates 11 tables in the file named by `DATABASE_URL` (default
+`backend/aipheed.db`); back it up by copying the file while the API is stopped.
+Then create the first admin account with `scripts/create_admin.py` (below).
 
-That creates 11 tables. Three of them are used by the auth, review and feedback
-endpoints. The rest — `forecast_records`, `shap_records`, `driver_records`,
+Five of the tables are used today: `admin_users` and `revoked_tokens` by
+sign-in, `review_records` and `audit_records` by the review pipeline, and
+`feedback_records` by the survey. The rest — `forecast_records`, `shap_records`, `driver_records`,
 `alert_records`, `municipal_forecast_records` — have **never held a row**. Their
 repository classes in `app/db/repository/` are written but have no callers, and
 `Predictor.detect_alerts()` is implemented but never invoked. Every endpoint
 currently reads the parquet files directly at request time.
 
-**No admin account exists**, so all eight `/api/v1/admin` endpoints are
-unreachable until you create one:
+**A new database has no admin account**, so all seven `/api/v1/admin`
+endpoints are unreachable until you create one. Only addresses in
+`ADMIN_EMAIL_DOMAIN` (default `calabarzon.da.gov.ph`) are accepted, and the
+password -- read from a hidden prompt, or from `AIPHEED_ADMIN_PASSWORD` -- must
+be at least 12 characters and not a commonly used password:
 
 ```bash
-python scripts/create_admin.py --email you@example.com --name "Your Name"
+python scripts/create_admin.py --email juan.delacruz@calabarzon.da.gov.ph --name "Juan Dela Cruz"
 python scripts/create_admin.py --list
+python scripts/create_admin.py --email juan.delacruz@calabarzon.da.gov.ph --deactivate
 ```
 
 **`app/tasks/` is an empty stub.** There is no scheduler and no background

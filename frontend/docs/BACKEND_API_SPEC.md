@@ -446,8 +446,8 @@ items). Provide the endpoint only if the dataset grows.
 
 **Today: no real auth.** Two inconsistent client-side checks
 (`Login.tsx` = any `@calabarzon.da.gov.ph` email, password ignored;
-`TopNavbar.tsx` `AdminLoginModal` = hardcoded `admin@calabarzon.da.gov.ph` /
-`admin2026`). Session = `sessionStorage.aipheed_user = { email, role: "admin" }`.
+`TopNavbar.tsx` `AdminLoginModal` = a hardcoded demo credential (removed)).
+Session = `sessionStorage.aipheed_user = { email, role: "admin" }`.
 The `/admin` route is gated purely client-side and is trivially bypassable via
 devtools.
 

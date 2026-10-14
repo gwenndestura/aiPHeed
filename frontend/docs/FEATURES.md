@@ -157,7 +157,7 @@ Three sections (tab state only, same URL for `/admin`):
 This is worth flagging explicitly for the backend developer, since it's a real inconsistency in the current code:
 
 1. **[Login.tsx](src/pages/Login.tsx)** (`/login` page): only checks that the email **ends with `@calabarzon.da.gov.ph`**. The password field exists in the form but **is never read or validated** — any password works, or none.
-2. **[TopNavbar.tsx](src/components/TopNavbar.tsx#L119-L153)** (`AdminLoginModal`, opened from the hamburger menu on any public page): checks the email is **exactly** `admin@calabarzon.da.gov.ph` **and** the password is **exactly** `admin2026` — both are hardcoded in plaintext in client-side JS (visible to anyone reading the bundled JS), and shown in the UI itself as demo credentials.
+2. **[TopNavbar.tsx](src/components/TopNavbar.tsx#L119-L153)** (`AdminLoginModal`, opened from the hamburger menu on any public page): compared the email and password against a hardcoded demo credential (removed), held in plaintext in client-side JS and shown in the UI itself.
 
 Both paths, on "success", just write the same `sessionStorage.aipheed_user` object and navigate to `/admin`. **Neither talks to a server.** When real auth is built, both entry points need to be unified against it, and the password fields need to actually do something.
 
