@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link, Navigate } from "react-router-dom";
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
 import { toast } from "@/hooks/use-toast";
@@ -10,13 +10,19 @@ import logoIcon from "@/assets/logo-icon.png";
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, status } = useAuth();
   // The admin page that sent us here (RequireAdmin), if it is a path on this site.
   const returnTo = safeRedirectPath((location.state as { from?: unknown } | null)?.from);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Already signed in: no form to show. Same destination as after a sign-in
+  // (the requested page, else /admin), so the two cannot race each other.
+  if (status === "authenticated") {
+    return <Navigate to={returnTo} replace />;
+  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
