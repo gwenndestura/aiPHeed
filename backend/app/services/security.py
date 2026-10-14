@@ -132,6 +132,8 @@ def create_access_token(user: AdminUser, session_id: str | None = None) -> tuple
         "role": user.role,
         "iss": ISSUER,
         "jti": uuid.uuid4().hex,
+        # Raised by end_all_sessions(); a token carrying an older value is refused.
+        "ver": user.token_version or 0,
         "iat": int(now.timestamp()),
         "exp": int(expires_at.timestamp()),
     }
@@ -208,9 +210,51 @@ async def current_user(
     user = await db.scalar(select(AdminUser).where(AdminUser.id == int(payload["sub"])))
     if user is None or not user.is_active:
         raise AuthError("Account is no longer active.", code="account_inactive")
+    # Tokens issued before a password change (or deactivation) carry an older
+    # version. Tokens from before versions existed carry none and count as 0.
+    if int(payload.get("ver", 0)) != (user.token_version or 0):
+        raise AuthError("This session has ended. Sign in again.", code="session_ended")
 
     request.state.token_payload = payload
     return user
+
+
+# ---------------------------------------------------------------------------
+# Ending sessions
+# ---------------------------------------------------------------------------
+
+class WeakPassword(ValueError):
+    """The new password fails the shared policy (app/services/passwords.py)."""
+
+
+async def end_all_sessions(db: AsyncSession, user: AdminUser) -> None:
+    """
+    Sign the account out everywhere, immediately: every access token already
+    issued is refused (token_version moves on) and every refresh token is
+    revoked, so no browser can renew. The caller commits.
+
+    Used on password change and deactivation.
+    """
+    from app.services import sessions  # sessions imports this module
+
+    user.token_version = (user.token_version or 0) + 1
+    await sessions.revoke_all_for_user(db, user.id)
+
+
+async def set_password(db: AsyncSession, user: AdminUser, new_password: str) -> None:
+    """
+    The one way to change an existing account's password: checks it against
+    the shared policy, stores the new hash and ends every session the account
+    has. scripts/create_admin.py uses it; the self-service reset form (ACCT-1)
+    should too. The caller commits.
+    """
+    from app.services.passwords import password_problem
+
+    problem = password_problem(new_password)
+    if problem:
+        raise WeakPassword(problem)
+    user.password_hash = hash_password(new_password)
+    await end_all_sessions(db, user)
 
 
 async def require_admin(user: AdminUser = Depends(current_user)) -> AdminUser:

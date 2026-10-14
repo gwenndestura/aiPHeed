@@ -316,3 +316,78 @@ class TestEndingSessions:
 
         r = present(api, cookie)
         assert r.status_code == 401 and r.json()["error"]["code"] == "account_inactive"
+
+
+# ---------------------------------------------------------------------------
+# Password change ends every session (QA_REPORT AUTH-02)
+# ---------------------------------------------------------------------------
+
+NEW_PASSWORD = "lambanog-tricycle-sampaguita-77"
+
+
+def change_password(api, new_password=NEW_PASSWORD):
+    async def _change(db):
+        user = await db.scalar(select(AdminUser).where(AdminUser.email == EMAIL))
+        await security.set_password(db, user, new_password)
+    run(api, _change)
+
+
+class TestPasswordChange:
+
+    def test_old_access_token_is_refused_at_once(self, api):
+        make_user(api)
+        token = login(api).json()["token"]
+        assert api.get("/api/v1/admin/review", headers=bearer(token)).status_code == 200
+        change_password(api)
+        r = api.get("/api/v1/admin/review", headers=bearer(token))
+        assert r.status_code == 401
+        assert r.json()["error"]["code"] == "session_ended"
+
+    def test_every_refresh_token_on_every_device_is_revoked(self, api):
+        make_user(api)
+        login(api)
+        laptop = api.cookies.get(sessions.COOKIE_NAME)
+        api.cookies.clear()
+        login(api)
+        phone = api.cookies.get(sessions.COOKIE_NAME)
+        change_password(api)
+        assert present(api, laptop).status_code == 401
+        assert present(api, phone).status_code == 401
+
+    def test_the_new_password_signs_in_and_the_old_one_does_not(self, api):
+        make_user(api)
+        change_password(api)
+        assert api.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).status_code == 401
+        fresh = api.post("/api/v1/auth/login", json={"email": EMAIL, "password": NEW_PASSWORD})
+        assert fresh.status_code == 200
+        # The session started after the change works normally, refresh included.
+        assert api.get("/api/v1/admin/review", headers=bearer(fresh.json()["token"])).status_code == 200
+        assert api.post(REFRESH, headers=CSRF).status_code == 200
+
+    def test_a_weak_password_is_refused_and_nothing_changes(self, api):
+        make_user(api)
+        token = login(api).json()["token"]
+        with pytest.raises(security.WeakPassword):
+            change_password(api, "password1234")
+        assert api.get("/api/v1/admin/review", headers=bearer(token)).status_code == 200
+
+    def test_deactivation_also_refuses_issued_tokens(self, api):
+        make_user(api)
+        token = login(api).json()["token"]
+        cookie = api.cookies.get(sessions.COOKIE_NAME)
+
+        async def _deactivate(db):
+            user = await db.scalar(select(AdminUser).where(AdminUser.email == EMAIL))
+            user.is_active = False
+            await security.end_all_sessions(db, user)
+        run(api, _deactivate)
+
+        assert api.get("/api/v1/admin/review", headers=bearer(token)).status_code == 401
+        assert present(api, cookie).status_code == 401
+
+    def test_ordinary_sign_ins_and_refreshes_do_not_end_sessions(self, api):
+        make_user(api)
+        first = login(api).json()["token"]
+        api.post(REFRESH, headers=CSRF)
+        login(api)
+        assert api.get("/api/v1/admin/review", headers=bearer(first)).status_code == 200
