@@ -1,0 +1,22 @@
+{
+  "reference_quarter": "2026-Q4",
+  "target_quarter": "2027-Q1",
+  "cutoff": "2026-12-31T23:59:59+08:00",
+  "timezone": "Asia/Manila",
+  "model_version": "none promoted (E23: no lead time met the frozen reliability rule)",
+  "feature_version": "E23 strict timing: news of reference quarter, government of reference-1, SWS published before cutoff",
+  "requirements": [
+    {"id": "news_reference_quarter", "kind": "news", "quarter": "2026-Q4", "source_ids": ["news_2026Q4"],
+     "note": "Authorized articles with verified publication timestamps in 2026-10-01..cutoff (PHT)"},
+    {"id": "government_indicators", "kind": "indicator", "quarter": "2026-Q3", "source_ids": ["features_fused"],
+     "note": "36 government features of the quarter before the reference quarter"},
+    {"id": "provincial_food_cpi", "kind": "indicator", "quarter": "2026-Q3", "source_ids": ["provincial_food_cpi_2026H1"],
+     "note": "Provincial food CPI YoY through the quarter before the reference quarter (for cpi_dev and D)"},
+    {"id": "sws_hunger_latest_round", "kind": "label", "quarter": "2026-Q3", "source_ids": ["sws_hunger_production"],
+     "note": "Latest SWS round published before the cutoff (expected: the September 2026 round)"},
+    {"id": "promoted_model", "kind": "model", "source_ids": ["promoted_model"],
+     "note": "A model that met the frozen reliability rule; none exists (E23)"},
+    {"id": "lgu_vulnerability", "kind": "static", "source_ids": ["lgu_poverty", "lgu_census"],
+     "note": "PSA 2021 municipal poverty incidence and 2020 census density for the 142 LGUs"}
+  ]
+}

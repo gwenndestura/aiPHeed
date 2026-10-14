@@ -1,0 +1,35 @@
+# E25 defects found, fixed or reported (including my own mistakes)
+
+**Rule followed:** every fix is justified by correctness, never by its effect on a model's rank.
+
+- **E25-isolated code was fixed:** `backend_dev/`, `dashboard_dev/`, `runner/`.
+- **Not modified:** `backend/`, `frontend/` source, deployed models, thesis chapters, and the read-only experiments.
+- **Frozen run code unchanged since the two runs:** the files the run imports (`run_e25.py`, `score_e25.py`, `e25lib.py`, `e23_lib.py`, `pcf.py`, `guard.py`) still have the hashes recorded in `runs/reproducibility.json`.
+
+## Fixed
+
+| # | Where | Defect | Why it is a correctness problem | Fix | Effect |
+|---|---|---|---|---|---|
+| F1 | Pipeline (`backend_dev/app/quarterly/pcf_engine.py`, inherited from E24v2) | The D component was trained from **1995-Q1** (`FIRST_D_QUARTER`), and the pipeline inputs `d_quarterly_panel.csv` / `dnow_panel.csv` held 1995–2020 rows | Violates the 2021–2026 study window | `FIRST_D_QUARTER = "2021-Q1"`. Inputs rebuilt from in-window data only (`runner/export_pipeline_inputs.py`). Test `test_engine_never_uses_pre2021_D_pairs`. | The pipeline can no longer use a pre-2021 value |
+| F2 | Pipeline (`rounds_at_origin`, `threshold_at`) | Every SWS round without a verified publication date was dropped for ever. The authorized March and June 2026 rounds could never inform a forecast, even at origins long after they were certainly public. | The 2027-Q1 forecast would silently rest on a stale regional hunger level (November 2025) | A round is usable from its verified publication date, or else from its documented upper bound (the fetch time in the authorized file). A round with neither is never usable. Test `test_unverified_round_usable_only_after_its_upper_bound`. | No backtest origin is affected (the bound is 2026-09-10). Real-time origins from 2026-09-10 on use the 2026 rounds. |
+| F3 | **My mistake** in F2 | `pd.to_datetime` inferred the date format from the first row, so a timestamp in another ISO form became NaT and the round stayed unusable | Found by the test above | `format="ISO8601"` | The live 2027-Q1 record was unaffected (it never reached the forecaster; re-run gives the same content hash `6c4f4c9e…`) |
+| F4 | Pipeline evidence (`config/evidence_status.json`, E24v2) | T2 leads were marked `SUPPORTED` / `SUPPORTED_STRICT` from the void 1995–2020 back-cast | A forecast label of "validated" with no in-scope evidence | Rebuilt from the E25 frozen run. T1: every lead `NOT_ESTABLISHED`. T2 lead 1: `DEVELOPMENT_EVIDENCE_ONLY`. Others: `NOT_ESTABLISHED`. | The record and dashboard show every forecast as **indicative only** |
+| F5 | Pipeline output | No explicit flag tied the forecast to its validation status | The dashboard must flag unvalidated leads | `indicative_only` added to every risk and price-pressure block (true unless the status is `VALIDATED`) | — |
+| F6 | Features (inherited E23/E24) | In-window cells carried 2020 values: `*_lag1` and `*_accel` at 2021-Q1, `FSSI_lag2` at 2021-Q1/Q2, and `cpi_dev` over 2021 | Pre-2021 information in a 2021+ study | Masked or recomputed (protocol §1.4): **90 cells set missing and 20 `cpi_dev` rows changed** (`runs/<run>/manifest.json`) | Required baselines re-run within the window |
+| F7 | Timing (inherited E18/E24) | The 2026 SWS rounds were treated as known at the next quarter's origin, although their publication dates are unverified | Possible look-ahead | Strict rule (protocol §1.3) | No backtest origin uses a 2026 round or a 2026 label |
+| F8 | **My mistake** (verification) | `git archive` of commit 5113ae5 converted line endings, so the first hash check showed false mismatches | Would have reported changes that are not there | Extracted with `core.autocrlf=false`. The comparison accepts only git's line-ending normalization (CRLF↔LF, mixed shell logs), never other changes. | Every listed file is textually unchanged (`docs/READONLY_VERIFICATION.md`) |
+| F9 | **My mistake** (dashboard test) | The first `vitest` run wrote its cache through the `node_modules` junction into `frontend/node_modules/.vite/vitest/` (a new folder, an ignored cache, no source file) | E25 must not write outside its folder | Removed that newly created folder (the parent's timestamp showed it was new). Set `cacheDir: ".vite-cache"` in the copy's Vite and Vitest configs. Later runs leave `frontend/` untouched (checked). | — |
+| F10 | Dashboard (my omission) | Sealed cells did not show their information cutoff | Required by the task (section 5) | Cutoff shown in every sealed cell; E24v2 seal entries carry 2026-06-30 23:59:59 PHT | — |
+| F11 | Instruments | The copied scorer test read an E23 ranking file that is absent from this working tree, and the E25 ranking table lacked `province_code` | The scorer could not run on the E25 ranking | `province_code` added to `LGU_RANKING_VALIDATION.csv` (values unchanged; deterministic); test repointed | 5 scorer tests pass |
+
+## Found and reported, not fixed
+
+| # | Where | Finding | Why not fixed |
+|---|---|---|---|
+| R1 | Features (`features_fused.parquet`) | **22 of the "provincial" features are identical for the five provinces in ≥ 90% of quarters** (e.g. `unemployment_rate`, `headline_cpi`, fuel prices, ENSO), and 2 news triggers (`trigger_employment`, `trigger_ofw_remittance`) are **constant over 2021–2025**. They can describe time, never differences between provinces. | Needs provincial source data; not a code error. Constant columns are already dropped in every training fold. |
+| R2 | `features_fused.parquet` | Built by forward-fill then zero-fill. A 2021 value could be a 2020 value carried forward. | Not detectable from authorized 2021+ rows |
+| R3 | Pipeline `eligibility.classify_news` | Duplicates are marked "keep first" regardless of status. If the first copy of a URL is AFTER_CUTOFF and a later copy is ELIGIBLE, the eligible copy is labelled DUPLICATE. | Conservative (it can only lower the eligible count); no 2026 news is authorized to test it on. Flagged for the pipeline owner. |
+| R4 | Dashboard copy | Pre-existing TypeScript errors in `src/data/mockData.ts` (mock objects lack `limitedSignal` and similar fields). Identical in `frontend/`. | Mock data only; the build and all tests pass. Changing the production frontend is out of scope. |
+| R5 | Task premise | The task states that persistence is wrong on "5 rows at 4 forecast dates". The data show **5 rows at 5 dates** (one per date) on the approved label at lead 1 (`docs/REACHABILITY.md`). | A correction of a stated fact; it changes the reachability conclusion: a **perfect** model could reach p = 0.031 |
+| R6 | Label rule | The training-window median makes a quarter's label depend on the origin | **Not a defect.** Only 2 of 75 province-quarter cells change label with the origin (2.7%). No correctness reason to replace the approved rule. T1-F (fixed 14.6) is reported as sensitivity. |
+| R7 | E23 | 16 modified tracked files of `aipheed-backend-aligned/` from E23 sit in `stash@{0}` (branch e25-window-2021-2026) | Your keep/revert decision; untouched |

@@ -1,0 +1,104 @@
+{
+  "status": "PROPOSAL for adviser review - not adopted, not wired",
+  "candidate": "S1",
+  "rule": "median Eq.3 stress over complete labelled quarters published before as_of (Rule L, development protocol); frozen",
+  "value": 14.345,
+  "as_of": "2026-07-01",
+  "valid_for_forecast_origins": "2026-Q3 onward until a documented review",
+  "freeze_rule": "do NOT recompute when later labels are published; change only through a documented, dated review",
+  "window_filter": "2021-Q1..2025-Q4 (approved window; 2020-Q2..Q4 rows in labels.parquet excluded)",
+  "quarters": [
+    "2021-Q2",
+    "2021-Q3",
+    "2021-Q4",
+    "2022-Q2",
+    "2022-Q3",
+    "2022-Q4",
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4"
+  ],
+  "rows": 80,
+  "label_publication": {
+    "2021-Q2": [
+      "2022-02-04",
+      "proxy"
+    ],
+    "2021-Q3": [
+      "2022-02-04",
+      "proxy"
+    ],
+    "2021-Q4": [
+      "2022-03-25",
+      "proxy"
+    ],
+    "2022-Q2": [
+      "2022-09-10",
+      "proxy"
+    ],
+    "2022-Q3": [
+      "2022-10-29",
+      "proxy"
+    ],
+    "2022-Q4": [
+      "2023-01-19",
+      "proxy"
+    ],
+    "2023-Q1": [
+      "2023-05-11",
+      "proxy"
+    ],
+    "2023-Q2": [
+      "2023-08-02",
+      "proxy"
+    ],
+    "2023-Q3": [
+      "2023-11-20",
+      "proxy"
+    ],
+    "2023-Q4": [
+      "2024-01-22",
+      "proxy"
+    ],
+    "2024-Q1": [
+      "2024-04-30",
+      "proxy"
+    ],
+    "2024-Q2": [
+      "2024-07-23",
+      "proxy"
+    ],
+    "2024-Q3": [
+      "2024-10-18",
+      "proxy"
+    ],
+    "2024-Q4": [
+      "2025-01-14",
+      "verified"
+    ],
+    "2025-Q1": [
+      "2025-04-18",
+      "proxy"
+    ],
+    "2025-Q4": [
+      "2026-01-20",
+      "proxy"
+    ]
+  },
+  "source": {
+    "file": "data/processed/labels.parquet",
+    "sha256": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e"
+  },
+  "robustness": {
+    "all_proxy_dates_plus_90_days": "unchanged (14.345, 16 quarters)",
+    "strict_verified_dates_only": "undefined (1 quarter < 8)"
+  },
+  "standing": "EMPIRICAL (thesis median rule). NOT an official DA or government cutoff."
+}

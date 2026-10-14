@@ -1,0 +1,1535 @@
+{
+  "reproduction": {
+    "rows_now": 55,
+    "rows_saved": 55,
+    "rows_matched": 55,
+    "identical_fold_assignment": true,
+    "identical_labels": true,
+    "identical_predictions": true,
+    "max_abs_probability_difference": 1.1102230246251565e-16,
+    "accuracy_mean_fold": 0.8182,
+    "f1_weighted": 0.82,
+    "roc_auc": 0.8278,
+    "correct": 45,
+    "n": 55,
+    "predictions_sha256": "25f2ea5e75d4adc8a0b03938be58e7b5c8de957719a8379c6f81799341e2e817",
+    "expected_45_of_55": true,
+    "matches_saved_metrics": true,
+    "PASS": true
+  },
+  "changed_rows": {
+    "b2_fixed": [
+      {
+        "target_quarter": "2023-Q3",
+        "province": "Rizal",
+        "y": 1,
+        "p_baseline": 0.4455,
+        "p": 0.6209,
+        "stress_score": 14.94
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Batangas",
+        "y": 1,
+        "p_baseline": 0.4968,
+        "p": 0.6206,
+        "stress_score": 16.78
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Cavite",
+        "y": 1,
+        "p_baseline": 0.4146,
+        "p": 0.5618,
+        "stress_score": 21.9667
+      }
+    ],
+    "b2_broke": [],
+    "fixed_distinct_quarters": 3,
+    "fixed_distinct_provinces": 3,
+    "all_fixed_are_high": true,
+    "rows_where_pred_changed": 3,
+    "b2_prob_minus_baseline_prob_mean": 0.0623,
+    "errors_by_province_b2": {
+      "Batangas": 1,
+      "Cavite": 3,
+      "Laguna": 3,
+      "Quezon": 1,
+      "Rizal": 2
+    },
+    "errors_by_province_baseline": {
+      "Batangas": 2,
+      "Cavite": 4,
+      "Laguna": 3,
+      "Quezon": 1,
+      "Rizal": 3
+    }
+  },
+  "persistence_inputs": {
+    "naive_missing": 0,
+    "timing_valid_missing": 0,
+    "naive_vs_timing_valid_disagree": 10
+  },
+  "comparison_same_55_rows": {
+    "MODEL-B baseline": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_pooled": 0.7636,
+      "precision_weighted": 0.8081,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.765,
+      "precision_high": 0.9167,
+      "recall_high": 0.6667,
+      "roc_auc": 0.8244,
+      "accuracy_mean_fold": 0.7636,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.85,
+        "2024": 0.6,
+        "2025": 0.9
+      },
+      "accuracy_by_fold": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "MODEL-B2": {
+      "n": 55,
+      "correct": 45,
+      "incorrect": 10,
+      "accuracy_pooled": 0.8182,
+      "precision_weighted": 0.8413,
+      "recall_weighted": 0.8182,
+      "f1_weighted": 0.82,
+      "precision_high": 0.9259,
+      "recall_high": 0.7576,
+      "roc_auc": 0.8278,
+      "accuracy_mean_fold": 0.8182,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "accuracy_by_fold": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.8,
+        "2024-Q1": 0.6,
+        "2024-Q2": 0.4,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "Persistence (naive: label of t, optimistic)": {
+      "n": 55,
+      "correct": 44,
+      "incorrect": 11,
+      "accuracy_pooled": 0.8,
+      "precision_weighted": 0.808,
+      "recall_weighted": 0.8,
+      "f1_weighted": 0.8016,
+      "precision_high": 0.8667,
+      "recall_high": 0.7879,
+      "roc_auc": null,
+      "accuracy_mean_fold": 0.8,
+      "accuracy_by_year": {
+        "2022": 0.6,
+        "2023": 0.8,
+        "2024": 0.8,
+        "2025": 0.9
+      },
+      "accuracy_by_fold": {
+        "2022-Q4": 0.6,
+        "2023-Q1": 0.8,
+        "2023-Q2": 0.8,
+        "2023-Q3": 1.0,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.8,
+        "2024-Q2": 0.8,
+        "2024-Q3": 0.8,
+        "2024-Q4": 0.8,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "Persistence (timing-valid: last label released before t+1)": {
+      "n": 55,
+      "correct": 42,
+      "incorrect": 13,
+      "accuracy_pooled": 0.7636,
+      "precision_weighted": 0.781,
+      "recall_weighted": 0.7636,
+      "f1_weighted": 0.766,
+      "precision_high": 0.8571,
+      "recall_high": 0.7273,
+      "roc_auc": null,
+      "accuracy_mean_fold": 0.7636,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.9
+      },
+      "accuracy_by_fold": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 0.8,
+        "2023-Q2": 1.0,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.6,
+        "2024-Q1": 0.4,
+        "2024-Q2": 0.6,
+        "2024-Q3": 0.6,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    }
+  },
+  "paired_tests": {
+    "B2_vs_baseline": {
+      "a_right_b_wrong": 3,
+      "b_right_a_wrong": 0,
+      "mcnemar_exact_p_two_sided": 0.25,
+      "mean_fold_difference": 0.0545,
+      "bootstrap_95ci_mean_fold_difference": [
+        0.0,
+        0.1091
+      ],
+      "bootstrap_share_difference_le_0": 0.0278
+    },
+    "B2_vs_persistence_naive": {
+      "a_right_b_wrong": 4,
+      "b_right_a_wrong": 3,
+      "mcnemar_exact_p_two_sided": 1.0,
+      "mean_fold_difference": 0.0182,
+      "bootstrap_95ci_mean_fold_difference": [
+        -0.0909,
+        0.1091
+      ],
+      "bootstrap_share_difference_le_0": 0.4018
+    },
+    "B2_vs_persistence_timing_valid": {
+      "a_right_b_wrong": 6,
+      "b_right_a_wrong": 3,
+      "mcnemar_exact_p_two_sided": 0.5078,
+      "mean_fold_difference": 0.0545,
+      "bootstrap_95ci_mean_fold_difference": [
+        -0.0364,
+        0.1455
+      ],
+      "bootstrap_share_difference_le_0": 0.1517
+    },
+    "baseline_vs_persistence_naive": {
+      "a_right_b_wrong": 3,
+      "b_right_a_wrong": 5,
+      "mcnemar_exact_p_two_sided": 0.7266,
+      "mean_fold_difference": -0.0364,
+      "bootstrap_95ci_mean_fold_difference": [
+        -0.1636,
+        0.0727
+      ],
+      "bootstrap_share_difference_le_0": 0.7572
+    }
+  },
+  "uncertainty": {
+    "point_estimate_pooled": 0.8182,
+    "point_estimate_mean_fold": 0.8182,
+    "correct": 45,
+    "n": 55,
+    "wilson_95": [
+      0.6967,
+      0.8981
+    ],
+    "clopper_pearson_95": [
+      0.691,
+      0.9092
+    ],
+    "quarter_cluster_bootstrap_95_mean_fold": [
+      0.7091,
+      0.9091
+    ],
+    "one_sided_exact_p_accuracy_le_0.75": 0.1554,
+    "baseline_wilson_95": [
+      0.6365,
+      0.8563
+    ]
+  },
+  "fold_comparison": [
+    {
+      "fold": 1,
+      "target_quarter": "2022-Q4",
+      "baseline": 0.8,
+      "model_b2": 0.8,
+      "high_rows": 1,
+      "change": 0.0
+    },
+    {
+      "fold": 2,
+      "target_quarter": "2023-Q1",
+      "baseline": 1.0,
+      "model_b2": 1.0,
+      "high_rows": 0,
+      "change": 0.0
+    },
+    {
+      "fold": 3,
+      "target_quarter": "2023-Q2",
+      "baseline": 0.8,
+      "model_b2": 0.8,
+      "high_rows": 1,
+      "change": 0.0
+    },
+    {
+      "fold": 4,
+      "target_quarter": "2023-Q3",
+      "baseline": 0.8,
+      "model_b2": 1.0,
+      "high_rows": 1,
+      "change": 0.2
+    },
+    {
+      "fold": 5,
+      "target_quarter": "2023-Q4",
+      "baseline": 0.8,
+      "model_b2": 0.8,
+      "high_rows": 3,
+      "change": 0.0
+    },
+    {
+      "fold": 6,
+      "target_quarter": "2024-Q1",
+      "baseline": 0.4,
+      "model_b2": 0.6,
+      "high_rows": 4,
+      "change": 0.2
+    },
+    {
+      "fold": 7,
+      "target_quarter": "2024-Q2",
+      "baseline": 0.4,
+      "model_b2": 0.4,
+      "high_rows": 5,
+      "change": 0.0
+    },
+    {
+      "fold": 8,
+      "target_quarter": "2024-Q3",
+      "baseline": 0.8,
+      "model_b2": 0.8,
+      "high_rows": 4,
+      "change": 0.0
+    },
+    {
+      "fold": 9,
+      "target_quarter": "2024-Q4",
+      "baseline": 0.8,
+      "model_b2": 1.0,
+      "high_rows": 5,
+      "change": 0.2
+    },
+    {
+      "fold": 10,
+      "target_quarter": "2025-Q1",
+      "baseline": 1.0,
+      "model_b2": 1.0,
+      "high_rows": 5,
+      "change": 0.0
+    },
+    {
+      "fold": 11,
+      "target_quarter": "2025-Q4",
+      "baseline": 0.8,
+      "model_b2": 0.8,
+      "high_rows": 4,
+      "change": 0.0
+    }
+  ],
+  "fold_gain_distribution": {
+    "folds_improved": 3,
+    "folds_unchanged": 8,
+    "folds_worse": 0
+  },
+  "price_stress_test": {
+    "A_all_47": {
+      "n_features": 47,
+      "dropped": [],
+      "b2_rule": {
+        "n": 55,
+        "correct": 45,
+        "incorrect": 10,
+        "accuracy_pooled": 0.8182,
+        "precision_weighted": 0.8413,
+        "recall_weighted": 0.8182,
+        "f1_weighted": 0.82,
+        "precision_high": 0.9259,
+        "recall_high": 0.7576,
+        "roc_auc": 0.8278,
+        "accuracy_mean_fold": 0.8182,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.9,
+          "2024": 0.7,
+          "2025": 0.9
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.8,
+          "2024-Q1": 0.6,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 1.0,
+          "2025-Q1": 1.0,
+          "2025-Q4": 0.8
+        }
+      },
+      "default_lightgbm": {
+        "accuracy_mean_fold": 0.7636,
+        "f1_weighted": 0.765,
+        "roc_auc": 0.8244,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.85,
+          "2024": 0.6,
+          "2025": 0.9
+        }
+      }
+    },
+    "B1_without_food_price_levels": {
+      "n_features": 38,
+      "dropped": [
+        "food_cpi",
+        "rice_price_regular",
+        "headline_cpi",
+        "commodity_fruit_veg",
+        "commodity_leafy_veg",
+        "commodity_livestock",
+        "commodity_poultry",
+        "commodity_rootcrops",
+        "rice_price_regular_lag1"
+      ],
+      "b2_rule": {
+        "n": 55,
+        "correct": 31,
+        "incorrect": 24,
+        "accuracy_pooled": 0.5636,
+        "precision_weighted": 0.5947,
+        "recall_weighted": 0.5636,
+        "f1_weighted": 0.5671,
+        "precision_high": 0.68,
+        "recall_high": 0.5152,
+        "roc_auc": 0.6274,
+        "accuracy_mean_fold": 0.5636,
+        "accuracy_by_year": {
+          "2022": 0.2,
+          "2023": 0.65,
+          "2024": 0.45,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.2,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.4,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.4,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      },
+      "default_lightgbm": {
+        "accuracy_mean_fold": 0.6727,
+        "f1_weighted": 0.664,
+        "roc_auc": 0.6983,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.45,
+          "2025": 0.8
+        }
+      }
+    },
+    "B2_without_any_price_level": {
+      "n_features": 33,
+      "dropped": [
+        "food_cpi",
+        "rice_price_regular",
+        "headline_cpi",
+        "fx_usd_php_avg",
+        "diesel_php_per_l",
+        "gasoline_php_per_l",
+        "brent_usd_per_bbl",
+        "commodity_fruit_veg",
+        "commodity_leafy_veg",
+        "commodity_livestock",
+        "commodity_poultry",
+        "commodity_rootcrops",
+        "rice_price_regular_lag1",
+        "diesel_php_per_l_lag1"
+      ],
+      "b2_rule": {
+        "n": 55,
+        "correct": 33,
+        "incorrect": 22,
+        "accuracy_pooled": 0.6,
+        "precision_weighted": 0.6222,
+        "recall_weighted": 0.6,
+        "f1_weighted": 0.604,
+        "precision_high": 0.7037,
+        "recall_high": 0.5758,
+        "roc_auc": 0.6178,
+        "accuracy_mean_fold": 0.6,
+        "accuracy_by_year": {
+          "2022": 0.2,
+          "2023": 0.75,
+          "2024": 0.45,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.2,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.6,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      },
+      "default_lightgbm": {
+        "accuracy_mean_fold": 0.6545,
+        "f1_weighted": 0.6516,
+        "roc_auc": 0.6453,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.55,
+          "2025": 0.6
+        }
+      }
+    },
+    "B3_without_any_price_variable": {
+      "n_features": 24,
+      "dropped": [
+        "food_cpi",
+        "food_cpi_yoy",
+        "rice_price_regular",
+        "food_minus_headline_yoy",
+        "headline_cpi",
+        "fx_usd_php_avg",
+        "diesel_php_per_l",
+        "gasoline_php_per_l",
+        "brent_usd_per_bbl",
+        "commodity_fruit_veg",
+        "commodity_leafy_veg",
+        "commodity_livestock",
+        "commodity_poultry",
+        "commodity_rootcrops",
+        "food_cpi_yoy_lag1",
+        "food_cpi_yoy_accel",
+        "food_minus_headline_yoy_lag1",
+        "food_minus_headline_yoy_accel",
+        "rice_price_regular_lag1",
+        "rice_price_regular_accel",
+        "diesel_php_per_l_lag1",
+        "diesel_php_per_l_accel",
+        "cpi_dev"
+      ],
+      "b2_rule": {
+        "n": 55,
+        "correct": 42,
+        "incorrect": 13,
+        "accuracy_pooled": 0.7636,
+        "precision_weighted": 0.8081,
+        "recall_weighted": 0.7636,
+        "f1_weighted": 0.765,
+        "precision_high": 0.9167,
+        "recall_high": 0.6667,
+        "roc_auc": 0.7837,
+        "accuracy_mean_fold": 0.7636,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.8,
+          "2024": 0.75,
+          "2025": 0.7
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.8,
+          "2023-Q1": 0.8,
+          "2023-Q2": 0.8,
+          "2023-Q3": 1.0,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.4,
+          "2024-Q2": 0.8,
+          "2024-Q3": 1.0,
+          "2024-Q4": 0.8,
+          "2025-Q1": 0.6,
+          "2025-Q4": 0.8
+        }
+      },
+      "default_lightgbm": {
+        "accuracy_mean_fold": 0.7273,
+        "f1_weighted": 0.7249,
+        "roc_auc": 0.7824,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.7,
+          "2025": 0.7
+        }
+      }
+    },
+    "C_transformed_prices_only": {
+      "n_features": 33,
+      "dropped": [
+        "food_cpi",
+        "rice_price_regular",
+        "headline_cpi",
+        "fx_usd_php_avg",
+        "diesel_php_per_l",
+        "gasoline_php_per_l",
+        "brent_usd_per_bbl",
+        "commodity_fruit_veg",
+        "commodity_leafy_veg",
+        "commodity_livestock",
+        "commodity_poultry",
+        "commodity_rootcrops",
+        "rice_price_regular_lag1",
+        "diesel_php_per_l_lag1"
+      ],
+      "b2_rule": {
+        "n": 55,
+        "correct": 33,
+        "incorrect": 22,
+        "accuracy_pooled": 0.6,
+        "precision_weighted": 0.6222,
+        "recall_weighted": 0.6,
+        "f1_weighted": 0.604,
+        "precision_high": 0.7037,
+        "recall_high": 0.5758,
+        "roc_auc": 0.6178,
+        "accuracy_mean_fold": 0.6,
+        "accuracy_by_year": {
+          "2022": 0.2,
+          "2023": 0.75,
+          "2024": 0.45,
+          "2025": 0.8
+        },
+        "accuracy_by_fold": {
+          "2022-Q4": 0.2,
+          "2023-Q1": 1.0,
+          "2023-Q2": 0.6,
+          "2023-Q3": 0.8,
+          "2023-Q4": 0.6,
+          "2024-Q1": 0.2,
+          "2024-Q2": 0.4,
+          "2024-Q3": 0.8,
+          "2024-Q4": 0.4,
+          "2025-Q1": 0.8,
+          "2025-Q4": 0.8
+        }
+      },
+      "default_lightgbm": {
+        "accuracy_mean_fold": 0.6545,
+        "f1_weighted": 0.6516,
+        "roc_auc": 0.6398,
+        "accuracy_by_year": {
+          "2022": 0.8,
+          "2023": 0.75,
+          "2024": 0.55,
+          "2025": 0.6
+        }
+      }
+    }
+  },
+  "time_trend": {
+    "top10_by_gain": [
+      {
+        "feature": "rice_price_regular",
+        "spearman_with_time_index": 0.547,
+        "b2_gain_share": 0.2512427316237526
+      },
+      {
+        "feature": "commodity_rootcrops",
+        "spearman_with_time_index": 0.302,
+        "b2_gain_share": 0.1971281218758797
+      },
+      {
+        "feature": "commodity_livestock",
+        "spearman_with_time_index": 0.577,
+        "b2_gain_share": 0.1005874650593331
+      },
+      {
+        "feature": "FSSI_lag2",
+        "spearman_with_time_index": 0.348,
+        "b2_gain_share": 0.0669568706584359
+      },
+      {
+        "feature": "headline_cpi",
+        "spearman_with_time_index": 0.995,
+        "b2_gain_share": 0.0635758121620574
+      },
+      {
+        "feature": "unemployment_rate_lag1",
+        "spearman_with_time_index": -0.354,
+        "b2_gain_share": 0.0511841628718653
+      },
+      {
+        "feature": "commodity_fruit_veg",
+        "spearman_with_time_index": 0.27,
+        "b2_gain_share": 0.0362095081237357
+      },
+      {
+        "feature": "rice_price_regular_lag1",
+        "spearman_with_time_index": 0.656,
+        "b2_gain_share": 0.0343901423315075
+      },
+      {
+        "feature": "food_cpi",
+        "spearman_with_time_index": 0.917,
+        "b2_gain_share": 0.0316021978966842
+      },
+      {
+        "feature": "food_cpi_yoy_lag1",
+        "spearman_with_time_index": 0.321,
+        "b2_gain_share": 0.0219007629890448
+      }
+    ],
+    "gain_weighted_mean_abs_rho_top10": 0.501,
+    "time_index_only_model_b2_rule": {
+      "accuracy_mean_fold": 0.7818,
+      "f1_weighted": 0.7836,
+      "roc_auc": 0.8857,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.75,
+        "2025": 0.9
+      },
+      "accuracy_by_fold": {
+        "2022-Q4": 0.8,
+        "2023-Q1": 1.0,
+        "2023-Q2": 0.8,
+        "2023-Q3": 0.8,
+        "2023-Q4": 0.4,
+        "2024-Q1": 0.2,
+        "2024-Q2": 1.0,
+        "2024-Q3": 0.8,
+        "2024-Q4": 1.0,
+        "2025-Q1": 1.0,
+        "2025-Q4": 0.8
+      }
+    },
+    "time_index_plus_sws_hunger": {
+      "accuracy_mean_fold": 0.7818,
+      "f1_weighted": 0.7836,
+      "roc_auc": 0.8926,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.75,
+        "2025": 0.9
+      }
+    },
+    "b2_vs_time_only_prediction_agreement": 0.8545,
+    "label_high_share_by_target_year": {
+      "2020": 0.533,
+      "2021": 0.2,
+      "2022": 0.2,
+      "2023": 0.45,
+      "2024": 0.95,
+      "2025": 0.8
+    },
+    "within_year_signal": {
+      "rice_price_regular": {
+        "auc_raw_level": 0.813,
+        "auc_within_year_centred": 0.637
+      },
+      "commodity_rootcrops": {
+        "auc_raw_level": 0.621,
+        "auc_within_year_centred": 0.626
+      },
+      "commodity_livestock": {
+        "auc_raw_level": 0.439,
+        "auc_within_year_centred": 0.412
+      },
+      "headline_cpi": {
+        "auc_raw_level": 0.719,
+        "auc_within_year_centred": 0.524
+      },
+      "food_cpi": {
+        "auc_raw_level": 0.732,
+        "auc_within_year_centred": 0.64
+      }
+    }
+  },
+  "cpi_derived": {
+    "commodity_first_derived_quarter": "2022-Q1",
+    "commodity_last_observed_quarter": "2021-Q4",
+    "commodity_derivation": "price_q = price_2021Q4(province, item) x (1 + food_cpi_yoy_q / 100); backend/fix_primary_data.py fix_commodity_prices(); NOT cumulative",
+    "min_within_province_corr_with_food_cpi_yoy_2022plus": {
+      "commodity_fruit_veg": 1.0,
+      "commodity_leafy_veg": 0.999999,
+      "commodity_livestock": 1.0,
+      "commodity_poultry": 1.0,
+      "commodity_rootcrops": 1.0
+    },
+    "rice_psa_wholesale_quarters": [
+      "2021-Q1",
+      "2026-Q3"
+    ],
+    "rice_source_note": "PSA OpenStat, Cereals: Wholesale Selling Prices of Agricultural Commodities (table 0052M4AWB01.px), Regular Milled Rice (RMR), quarterly mean of monthly provinc",
+    "psa_indicators_has_rice": true,
+    "fused_rice_by_year": {
+      "2020": 38.04,
+      "2021": 33.43,
+      "2022": 35.05,
+      "2023": 39.1,
+      "2024": 46.68,
+      "2025": 36.77
+    },
+    "fused_rootcrops_by_year": {
+      "2020": 58.21,
+      "2021": 55.56,
+      "2022": 62.45,
+      "2023": 64.12,
+      "2024": 61.61,
+      "2025": 61.3
+    },
+    "fused_livestock_by_year": {
+      "2020": 276.76,
+      "2021": 350.19,
+      "2022": 360.59,
+      "2023": 370.27,
+      "2024": 355.77,
+      "2025": 353.94
+    }
+  },
+  "y2024": {
+    "class_distribution_by_quarter": {
+      "2024-Q1": {
+        "rows": 5,
+        "high": 4
+      },
+      "2024-Q2": {
+        "rows": 5,
+        "high": 5
+      },
+      "2024-Q3": {
+        "rows": 5,
+        "high": 4
+      },
+      "2024-Q4": {
+        "rows": 5,
+        "high": 5
+      }
+    },
+    "rows": [
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Cavite",
+        "y": 1,
+        "pred": 0,
+        "p": 0.145,
+        "p_baseline": 0.078,
+        "stress_score": 15.047,
+        "target_sws": 15.3,
+        "sws_hunger": 10.3,
+        "train_high_share": 0.308
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Laguna",
+        "y": 1,
+        "pred": 0,
+        "p": 0.259,
+        "p_baseline": 0.135,
+        "stress_score": 16.58,
+        "target_sws": 15.3,
+        "sws_hunger": 10.3,
+        "train_high_share": 0.308
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Quezon",
+        "y": 0,
+        "pred": 0,
+        "p": 0.221,
+        "p_baseline": 0.131,
+        "stress_score": 10.78,
+        "target_sws": 15.3,
+        "sws_hunger": 10.3,
+        "train_high_share": 0.308
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Rizal",
+        "y": 1,
+        "pred": 1,
+        "p": 0.867,
+        "p_baseline": 0.783,
+        "stress_score": 17.313,
+        "target_sws": 15.3,
+        "sws_hunger": 10.3,
+        "train_high_share": 0.308
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Batangas",
+        "y": 1,
+        "pred": 1,
+        "p": 0.621,
+        "p_baseline": 0.497,
+        "stress_score": 16.78,
+        "target_sws": 15.3,
+        "sws_hunger": 10.3,
+        "train_high_share": 0.308
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Cavite",
+        "y": 1,
+        "pred": 0,
+        "p": 0.381,
+        "p_baseline": 0.236,
+        "stress_score": 17.28,
+        "target_sws": 19.6,
+        "sws_hunger": 14.3,
+        "train_high_share": 0.343
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Laguna",
+        "y": 1,
+        "pred": 0,
+        "p": 0.446,
+        "p_baseline": 0.378,
+        "stress_score": 16.813,
+        "target_sws": 19.6,
+        "sws_hunger": 14.3,
+        "train_high_share": 0.343
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Quezon",
+        "y": 1,
+        "pred": 0,
+        "p": 0.248,
+        "p_baseline": 0.209,
+        "stress_score": 26.747,
+        "target_sws": 19.6,
+        "sws_hunger": 14.3,
+        "train_high_share": 0.343
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Rizal",
+        "y": 1,
+        "pred": 1,
+        "p": 0.984,
+        "p_baseline": 0.961,
+        "stress_score": 18.88,
+        "target_sws": 19.6,
+        "sws_hunger": 14.3,
+        "train_high_share": 0.343
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Batangas",
+        "y": 1,
+        "pred": 1,
+        "p": 0.949,
+        "p_baseline": 0.898,
+        "stress_score": 18.28,
+        "target_sws": 19.6,
+        "sws_hunger": 14.3,
+        "train_high_share": 0.343
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Cavite",
+        "y": 0,
+        "pred": 1,
+        "p": 0.831,
+        "p_baseline": 0.787,
+        "stress_score": 13.9,
+        "target_sws": 18.1,
+        "sws_hunger": 15.3,
+        "train_high_share": 0.387
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Laguna",
+        "y": 1,
+        "pred": 1,
+        "p": 0.696,
+        "p_baseline": 0.645,
+        "stress_score": 18.7,
+        "target_sws": 18.1,
+        "sws_hunger": 15.3,
+        "train_high_share": 0.387
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Quezon",
+        "y": 1,
+        "pred": 1,
+        "p": 0.67,
+        "p_baseline": 0.597,
+        "stress_score": 26.5,
+        "target_sws": 18.1,
+        "sws_hunger": 15.3,
+        "train_high_share": 0.387
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Rizal",
+        "y": 1,
+        "pred": 1,
+        "p": 0.916,
+        "p_baseline": 0.88,
+        "stress_score": 15.5,
+        "target_sws": 18.1,
+        "sws_hunger": 15.3,
+        "train_high_share": 0.387
+      },
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Batangas",
+        "y": 1,
+        "pred": 1,
+        "p": 0.972,
+        "p_baseline": 0.976,
+        "stress_score": 15.9,
+        "target_sws": 18.1,
+        "sws_hunger": 15.3,
+        "train_high_share": 0.387
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Cavite",
+        "y": 1,
+        "pred": 1,
+        "p": 0.562,
+        "p_baseline": 0.415,
+        "stress_score": 21.967,
+        "target_sws": 25.3,
+        "sws_hunger": 19.6,
+        "train_high_share": 0.412
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Laguna",
+        "y": 1,
+        "pred": 1,
+        "p": 0.582,
+        "p_baseline": 0.508,
+        "stress_score": 24.5,
+        "target_sws": 25.3,
+        "sws_hunger": 19.6,
+        "train_high_share": 0.412
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Quezon",
+        "y": 1,
+        "pred": 1,
+        "p": 0.618,
+        "p_baseline": 0.592,
+        "stress_score": 34.5,
+        "target_sws": 25.3,
+        "sws_hunger": 19.6,
+        "train_high_share": 0.412
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Rizal",
+        "y": 1,
+        "pred": 1,
+        "p": 0.834,
+        "p_baseline": 0.721,
+        "stress_score": 22.5,
+        "target_sws": 25.3,
+        "sws_hunger": 19.6,
+        "train_high_share": 0.412
+      },
+      {
+        "target_quarter": "2024-Q4",
+        "province": "Batangas",
+        "y": 1,
+        "pred": 1,
+        "p": 0.862,
+        "p_baseline": 0.841,
+        "stress_score": 23.033,
+        "target_sws": 25.3,
+        "sws_hunger": 19.6,
+        "train_high_share": 0.412
+      }
+    ],
+    "accuracy_by_quarter_b2": {
+      "2024-Q1": 0.6,
+      "2024-Q2": 0.4,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0
+    },
+    "top_contributions_q1_q2": [
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Cavite",
+        "y": 1,
+        "p": 0.145,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 0.854,
+          "commodity_livestock": -0.54,
+          "commodity_rootcrops": -0.411,
+          "commodity_poultry": -0.375,
+          "unemployment_rate_lag1": 0.37
+        }
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Laguna",
+        "y": 1,
+        "p": 0.259,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 0.854,
+          "commodity_livestock": -0.54,
+          "commodity_rootcrops": -0.398,
+          "commodity_poultry": -0.375,
+          "unemployment_rate_lag1": 0.37
+        }
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Quezon",
+        "y": 0,
+        "p": 0.221,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 0.854,
+          "commodity_livestock": -0.54,
+          "commodity_rootcrops": -0.398,
+          "commodity_poultry": -0.375,
+          "unemployment_rate_lag1": 0.37
+        }
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Rizal",
+        "y": 1,
+        "p": 0.867,
+        "top5_log_odds_contributions": {
+          "commodity_rootcrops": 1.931,
+          "rice_price_regular": 0.854,
+          "commodity_livestock": -0.434,
+          "food_minus_headline_yoy_accel": -0.329,
+          "commodity_poultry": 0.266
+        }
+      },
+      {
+        "target_quarter": "2024-Q1",
+        "province": "Batangas",
+        "y": 1,
+        "p": 0.621,
+        "top5_log_odds_contributions": {
+          "commodity_rootcrops": 1.964,
+          "rice_price_regular": 0.854,
+          "commodity_livestock": -0.434,
+          "commodity_poultry": -0.375,
+          "food_minus_headline_yoy_accel": -0.329
+        }
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Cavite",
+        "y": 1,
+        "p": 0.381,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 0.948,
+          "commodity_rootcrops": -0.79,
+          "commodity_fruit_veg": 0.676,
+          "unemployment_rate_lag1": 0.479,
+          "commodity_livestock": -0.4
+        }
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Laguna",
+        "y": 1,
+        "p": 0.446,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 1.11,
+          "commodity_rootcrops": -0.801,
+          "unemployment_rate_lag1": 0.479,
+          "commodity_fruit_veg": -0.467,
+          "commodity_livestock": -0.38
+        }
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Quezon",
+        "y": 1,
+        "p": 0.248,
+        "top5_log_odds_contributions": {
+          "rice_price_regular": 1.185,
+          "commodity_rootcrops": -0.572,
+          "unemployment_rate_lag1": 0.479,
+          "commodity_livestock": -0.475,
+          "FSSI_lag2": 0.357
+        }
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Rizal",
+        "y": 1,
+        "p": 0.984,
+        "top5_log_odds_contributions": {
+          "commodity_rootcrops": 1.62,
+          "rice_price_regular": 1.134,
+          "commodity_fruit_veg": 0.555,
+          "FSSI_lag2": 0.413,
+          "rice_price_regular_accel": 0.357
+        }
+      },
+      {
+        "target_quarter": "2024-Q2",
+        "province": "Batangas",
+        "y": 1,
+        "p": 0.949,
+        "top5_log_odds_contributions": {
+          "commodity_rootcrops": 1.408,
+          "rice_price_regular": 1.164,
+          "commodity_fruit_veg": 0.555,
+          "rice_price_regular_accel": 0.357,
+          "unemployment_rate_lag1": 0.289
+        }
+      }
+    ],
+    "sws_available_at_forecast": {
+      "2024-Q1": {
+        "latest_sws_round_known_at_forecast": "2023-Q3",
+        "sws_value_known": 10.3,
+        "target_quarter_sws": 15.3
+      },
+      "2024-Q2": {
+        "latest_sws_round_known_at_forecast": "2023-Q4",
+        "sws_value_known": 14.3,
+        "target_quarter_sws": 19.6
+      },
+      "2024-Q3": {
+        "latest_sws_round_known_at_forecast": "2024-Q1",
+        "sws_value_known": 15.3,
+        "target_quarter_sws": 18.1
+      },
+      "2024-Q4": {
+        "latest_sws_round_known_at_forecast": "2024-Q2",
+        "sws_value_known": 19.6,
+        "target_quarter_sws": 25.3
+      }
+    },
+    "distribution_shift_vs_pre2024_training": {
+      "enso_numeric": {
+        "train_min": -1.0,
+        "train_max": 0.0,
+        "test2024_mean": 0.75,
+        "train_mean": -0.46,
+        "smd": 2.41,
+        "share_2024_outside_train_range": 0.75
+      },
+      "rice_price_regular": {
+        "train_min": 0.0,
+        "train_max": 39.96,
+        "test2024_mean": 45.04,
+        "train_mean": 32.82,
+        "smd": 1.24,
+        "share_2024_outside_train_range": 0.9
+      },
+      "rice_price_regular_accel": {
+        "train_min": -8.21,
+        "train_max": 3.1,
+        "test2024_mean": 2.95,
+        "train_mean": -0.1,
+        "smd": 1.65,
+        "share_2024_outside_train_range": 0.45
+      },
+      "sws_hunger": {
+        "train_min": 0.0,
+        "train_max": 17.8,
+        "test2024_mean": 14.88,
+        "train_mean": 11.42,
+        "smd": 0.83,
+        "share_2024_outside_train_range": 0.25
+      },
+      "commodity_rootcrops": {
+        "train_min": 0.0,
+        "train_max": 77.61,
+        "test2024_mean": 62.42,
+        "train_mean": 56.34,
+        "smd": 0.34,
+        "share_2024_outside_train_range": 0.0
+      },
+      "commodity_livestock": {
+        "train_min": 0.0,
+        "train_max": 390.65,
+        "test2024_mean": 360.46,
+        "train_mean": 312.7,
+        "smd": 0.48,
+        "share_2024_outside_train_range": 0.0
+      },
+      "rainfall_anomaly_pct": {
+        "train_min": -39.56,
+        "train_max": 84.18,
+        "test2024_mean": -17.67,
+        "train_mean": 13.41,
+        "smd": -0.99,
+        "share_2024_outside_train_range": 0.25
+      },
+      "drought_alert": {
+        "train_min": 0.0,
+        "train_max": 0.0,
+        "test2024_mean": 0.75,
+        "train_mean": 0.0,
+        "smd": 0.75,
+        "share_2024_outside_train_range": 0.75
+      },
+      "food_cpi_yoy": {
+        "train_min": -1.3,
+        "train_max": 12.97,
+        "test2024_mean": 4.62,
+        "train_mean": 5.12,
+        "smd": -0.14,
+        "share_2024_outside_train_range": 0.0
+      }
+    },
+    "pre2024_training_rows": 65,
+    "pre2024_training_high": 20,
+    "pre2024_training_rows_with_sws_hunger_ge_15": 10
+  },
+  "algorithm4": {
+    "holdout_quarters": [
+      "2024-Q3",
+      "2024-Q4",
+      "2025-Q1",
+      "2025-Q4"
+    ],
+    "n": 20,
+    "n_low": 2,
+    "n_high_low_pairs": 36,
+    "auc_resolution": 0.0278,
+    "low_rows": [
+      {
+        "target_quarter": "2024-Q3",
+        "province": "Cavite",
+        "stress_score": 13.9,
+        "target_sws": 18.1,
+        "p": 0.831
+      },
+      {
+        "target_quarter": "2025-Q4",
+        "province": "Batangas",
+        "stress_score": 13.06,
+        "target_sws": 16.7,
+        "p": 0.964
+      }
+    ],
+    "low_rows_margin_below_threshold_14.6": [
+      0.7,
+      1.54
+    ],
+    "high_rows_stress_scores": [
+      15.5,
+      15.9,
+      16.46,
+      16.53,
+      17.86,
+      18.7,
+      19.59,
+      19.77,
+      19.97,
+      21.97,
+      22.5,
+      22.51,
+      23.03,
+      23.31,
+      24.5,
+      26.5,
+      34.44,
+      34.5
+    ],
+    "saved_algorithm4_results": [
+      {
+        "setting": "default",
+        "cv_weighted_f1": 0.7839,
+        "holdout_accuracy": 0.8,
+        "holdout_f1_weighted": 0.8,
+        "holdout_auc": 0.5,
+        "low_row_probabilities": [
+          0.98,
+          0.764
+        ],
+        "high_rows_scored_below_lowest_LOW": 6,
+        "n_holdout": 20,
+        "n_low": 2,
+        "meets_f1": true,
+        "meets_auc": false
+      },
+      {
+        "setting": "balanced",
+        "cv_weighted_f1": 0.788,
+        "holdout_accuracy": 0.8,
+        "holdout_f1_weighted": 0.8,
+        "holdout_auc": 0.5,
+        "low_row_probabilities": [
+          0.649,
+          0.754
+        ],
+        "high_rows_scored_below_lowest_LOW": 7,
+        "n_holdout": 20,
+        "n_low": 2,
+        "meets_f1": true,
+        "meets_auc": false
+      },
+      {
+        "setting": "scale_pos_weight_ratio",
+        "cv_weighted_f1": 0.8094,
+        "holdout_accuracy": 0.8,
+        "holdout_f1_weighted": 0.8,
+        "holdout_auc": 0.4444,
+        "low_row_probabilities": [
+          0.908,
+          0.922
+        ],
+        "high_rows_scored_below_lowest_LOW": 10,
+        "n_holdout": 20,
+        "n_low": 2,
+        "meets_f1": true,
+        "meets_auc": false
+      }
+    ],
+    "walkforward_b2_auc_on_same_20_rows": 0.3333,
+    "walkforward_baseline_auc_on_same_20_rows": 0.4722,
+    "manual_pair_count_auc_b2_matches_sklearn": true,
+    "random_score_auc_sd": 0.2204,
+    "random_score_share_auc_ge_0.80": 0.1069,
+    "sws_hunger_feature_auc_on_holdout": 0.5,
+    "train_high_share_cv_window": 0.3867
+  },
+  "features_45_vs_12": {
+    "equation5_features": [
+      "FSSI",
+      "FSSI_lag1",
+      "FSSI_lag2",
+      "FSSI_accel",
+      "trigger_market",
+      "trigger_climate",
+      "trigger_employment",
+      "trigger_ofw_remittance",
+      "trigger_fish_kill",
+      "cpi_dev",
+      "unemployment_rate",
+      "rice_price_regular_accel"
+    ],
+    "eq5_12_b2_rule": {
+      "accuracy_mean_fold": 0.7455,
+      "f1_weighted": 0.7475,
+      "roc_auc": 0.7893,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.8,
+        "2024": 0.65,
+        "2025": 0.8
+      },
+      "correct": 41
+    },
+    "eq5_12_default": {
+      "accuracy_mean_fold": 0.6909,
+      "f1_weighted": 0.6882,
+      "roc_auc": 0.7576,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.75,
+        "2024": 0.55,
+        "2025": 0.8
+      },
+      "correct": 38
+    },
+    "eq5_12_plus_sws_b2_rule": {
+      "accuracy_mean_fold": 0.7455,
+      "f1_weighted": 0.748,
+      "roc_auc": 0.8471,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.85,
+        "2024": 0.6,
+        "2025": 0.8
+      },
+      "correct": 41
+    },
+    "model_b2_47": {
+      "accuracy_mean_fold": 0.8182,
+      "f1_weighted": 0.82,
+      "roc_auc": 0.8278,
+      "accuracy_by_year": {
+        "2022": 0.8,
+        "2023": 0.9,
+        "2024": 0.7,
+        "2025": 0.9
+      },
+      "correct": 45
+    }
+  },
+  "model_b2_summary": {
+    "n": 55,
+    "correct": 45,
+    "incorrect": 10,
+    "accuracy_pooled": 0.8182,
+    "precision_weighted": 0.8413,
+    "recall_weighted": 0.8182,
+    "f1_weighted": 0.82,
+    "precision_high": 0.9259,
+    "recall_high": 0.7576,
+    "roc_auc": 0.8278,
+    "accuracy_mean_fold": 0.8182,
+    "accuracy_by_year": {
+      "2022": 0.8,
+      "2023": 0.9,
+      "2024": 0.7,
+      "2025": 0.9
+    },
+    "accuracy_by_fold": {
+      "2022-Q4": 0.8,
+      "2023-Q1": 1.0,
+      "2023-Q2": 0.8,
+      "2023-Q3": 1.0,
+      "2023-Q4": 0.8,
+      "2024-Q1": 0.6,
+      "2024-Q2": 0.4,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.8
+    }
+  }
+}

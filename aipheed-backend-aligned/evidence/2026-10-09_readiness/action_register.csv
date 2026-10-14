@@ -1,0 +1,15 @@
+step,type,action,depends_on,status
+0.1,safeguard,No search/open/download of Sept/Dec 2026 SWS results,none,now
+0.2,safeguard,"Freeze SWS fetcher table at (2026,2); no SWS refresh",none,now
+0.3,safeguard,Log accidental exposure; downgrade quarter,none,now
+1,adviser approval,Decide D1-D8,package,blocked: all later steps
+2.1,manual verification,SWS April 2025 respondent base,D3,pending
+2.2,manual verification,Confirm Jun/Sep/Nov 2025 SWS release dates on pages,-,pending
+2.3,manual verification,Jan/Feb 2025 SWS release dates,D3 includes them,conditional
+2.4,manual verification,June 2026 SWS publication date only,D5/D6,pending
+2.5,manual verification,RSSO IV-A monthly CPI dates,D1=(b),conditional
+3a,data collection (authorization),SWS Balance-Luzon Apr/Jun/Sep 2025 (+Jan/Feb if D3),"D7, 2.2",blocked
+3b,data collection (authorization),"OpenStat 0012M4ACP23 01.1 Food, 5 provinces, Jan-Jun 2026 (30 values)",D7,blocked
+4,implementation (experimental only),Encode Rule L + label definition; tests; pre-registration,1-3,blocked
+5,exploratory run,Walk-forward 2021-2025 under Rule L; exploratory only,4 approved,blocked
+6,protected evaluation,"Freeze 2026-Q3/Q4 forecasts, hash, then collect outcomes, score once","D5,D6,3b,5",blocked

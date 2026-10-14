@@ -1,0 +1,504 @@
+CHAPTER I 
+
+INTRODUCTION 
+
+Food  insecurity  remains  a  critical  global  and  national  challenge.  According  to 
+
+DOST-FNRI  (2024),  food  insecurity  is  intensified  by  rising  food  prices,  climate-related 
+
+agricultural  disruptions,  and  unequal  access  to  social  protection,  with  44%  of  households 
+
+experiencing  moderate  to  severe  food  insecurity  in  2023.  The  issue  is  particularly  evident  in 
+
+Region  IV-A  (CALABARZON),  where  around  237,800  residents  remain  unable  to  meet basic 
+
+food needs and poverty incidence varies significantly across provinces (PSA RSSO IV-A, 2025). 
+
+Existing  monitoring  systems  rely  on  infrequent  data  collection  cycles  and  lack  the  ability  to 
+
+provide timely, spatially detailed, and predictive insights for anticipatory intervention. 
+
+Recent advances in machine learning and natural language processing have shown strong 
+
+potential  for  anticipatory  food  insecurity  monitoring  using  news-derived  signals.  Studies  by 
+
+Balashankar  et  al.  (2023),  Ahn  et  al.  (2023), and Van Wanrooij et al. (2024) demonstrated that 
+
+NLP and deep learning models can improve food crisis prediction accuracy and detect emerging 
+
+risk patterns months ahead of traditional indicators. However, these approaches remain limited in 
+
+Filipino-English  settings  and  do  not address rural media undercoverage. To address these gaps, 
+
+this study will develop aiPHeed, a geospatial food insecurity forecasting system for DA Region 
+
+IV-A that integrates zero-shot Filipino-English NLP and ensemble machine learning. The system 
+
+will  aim  to  support  earlier  detection  of  food  stress and improve the timeliness and targeting of 
+
+government interventions. 
+
+6 
+
+ 
+ 
+ 
+1.1 Project Context 
+
+Monitoring  systems  for  food  insecurity  exist  at  different  governance  levels,  but  none 
+
+addresses  the  operational  needs  of  a  regional agency like DA Region IV-A. WFP (World Food 
+
+Programme)’s  HungerMap  Live  monitors  food  security  in  over  95  countries  using  machine 
+
+learning,  climate,  and  economic  data  (WFP,  2026),  but  its  predictive  functions  cover  only  16 
+
+Hunger  Hotspot  countries,  excluding  the  Philippines.  Within  the  Philippines, the government’s 
+
+primary  food-insecurity  and  poverty-targeting  datasets  are  updated  only  once  every  several 
+
+years,  so  the  information  available  to  plan  a  response  is  already outdated by the time a shock, 
+
+such as a commodity price spike or a crop failure, actually occurs. The 2023 DSWD-FAO (Food 
+
+and  Agriculture  Organization  of  the  United  Nations)  Digital  Mapping  System  under  the 
+
+Enhanced  Partnership  Against  Hunger  and  Poverty  program  focuses  on  supply-side  market 
+
+linkages, not food insecurity risk prediction (DSWD, 2023). 
+
+In  the  research  literature,  several  studies  informed  the  construction  of  aiPHeed  while 
+
+revealing gaps it will resolve. Balashankar et al. (2023) built a news-based early warning system 
+
+across  21 countries using 11.2 million articles, but their model depends on English corpora and 
+
+IPC 
+
+(Integrated  Food  Security  Phase  Classification)  phase 
+
+labels  unavailable 
+
+in 
+
+CALABARZON.  Carneiro  et  al.  (2025)  used  NLP  and machine learning on over 4,028 FEWS 
+
+NET  (Famine  Early  Warning  Systems  Network)  reports  to  identify  market  disturbances  as the 
+
+strongest  predictor  of  food  insecurity,  but  relied  on  FEWS  NET  data,  which  is  absent  in  all 
+
+Philippine  regions.  Van  Wanrooij  et  al.  (2024)  applied  unsupervised  BERTopic  modeling  on 
+
+news  data  to  detect  food  insecurity  risk  patterns,  but  their  approach  does  not  handle 
+
+Filipino-English data or address geographic media bias where capital-city-concentrated reporting 
+
+under-reports  food  stress  in  rural  provinces.  Ahn  et  al.  (2023)  demonstrated  that  ML  models 
+
+7 
+
+ 
+using  news  data  outperform  those  using  traditional  indicators, yet were limited to English data 
+
+labeled  by  IPC.  Collectively,  no  system  produces  quarterly,  province-level  food  insecurity 
+
+forecasts  for  CALABARZON  disaggregated  to  the  municipality  level;  no  NLP  study  has 
+
+addressed  a  Filipino-English  news  environment  or  corrected  for  rural  undercoverage;  and  no 
+
+study  has  derived  forecast  labels  from  PSA  food  CPI  data  as  a  proxy  for  regions  where  IPC 
+
+classifications are permanently unavailable. 
+
+aiPHeed  addresses  these  gaps  through  a  two-tier  architecture  combining  zero-shot 
+
+Filipino-English NLP (Natural Language Processing), unsupervised topic modeling, spatial bias 
+
+correction, and ensemble machine learning into a single quarterly forecasting pipeline built for a 
+
+Philippine  regional  context.  The  name  aiPHeed  itself  follows  the  “i-”  naming  convention 
+
+common  to  Philippine  government  platforms  such  as  iGovPhil  and  iTax,  with  “i”  replaced  by 
+
+“ai”  to  reflect  its  AI  foundation,  and  “Feed”  adapted  to  “PHeed”  for  its  Philippine, 
+
+food-insecurity  focus.  It  processes  Filipino-English  news  without  annotated  training  data, 
+
+corrects  for  rural  media  undercoverage,  derives  a  validated  forecast  target  from  publicly 
+
+available  CPI  (Consumer  Price  Index)  data,  and  delivers  spatially  disaggregated  quarterly  risk 
+
+forecasts  to  DA  4A  officers  through  a  geospatial  web  dashboard.  By  relying  exclusively  on 
+
+publicly  and  permanently  available  data,  aiPHeed  also  addresses  the  sustainability  limitation 
+
+common to existing early warning systems that depend on restricted or non-renewable sources.  
+
+1.2 Purpose and Description 
+
+The  purpose  of  this  research  is  to  build  an  interactive  web-based  geospatial  system, 
+
+aiPHeed,  which  will  utilize  zero-shot  Filipino-English  NLP  and  a  LightGBM  (Light  Gradient 
+
+Boosting  Machine)  ensemble  in  conducting  forward-looking forecasting of food insecurity risk 
+
+in  Region  IV-A  (CALABARZON). The Department of Agriculture Regional Field Office IV-A 
+
+8 
+
+ 
+(DA 4A) and local government units in CALABARZON have been relying on the DOST-FNRI 
+
+Expanded National Nutrition Survey and Philippine Statistics Authority poverty statistics, which 
+
+are  typically  released  only  every  two to three years. As a result, there exists a critical response 
+
+lag  where  households  facing food insecurity arising from commodity price shocks, crop losses, 
+
+or  employment  disruptions  in  the  post-survey  period  remain uncovered under current targeting 
+
+interventions  (PSA  RSSO  IV-A,  2025;  DOST-FNRI,  2024a; World Bank, 2020). The proposed 
+
+aiPHeed  will  aim 
+
+to  bridge 
+
+this  gap  by  offering  DA  4A  a  continuously  updated, 
+
+evidence-informed  forecasting  tool  that  will  estimate  and  rank  LGU  (Local  Government 
+
+Unit)-level potential risk of food insecurity on a quarterly basis, intended to inform and support 
+
+anticipatory  planning  and  preparedness  decisions.  As  with  most  modern  machine  learning 
+
+techniques, the model at the core of aiPHeed identifies patterns in a way that is not immediately 
+
+visible or easy to explain on its own, often described as a “black box.” aiPHeed addresses this by 
+
+pairing  every  forecast  with  a  SHAP  (SHapley  Additive  exPlanations)-based  explanation  that 
+
+shows, in plain terms, which factors most influenced the prediction, so that a non-technical DA 
+
+reviewer can understand and trust a result before acting on it.  
+
+In addition, the system will produce risk rankings for all 142 cities and municipalities in 
+
+CALABARZON, 
+
+incorporating  a  bias-corrected  Food  Stress  Sentiment  Index, 
+
+trigger 
+
+composition  scores,  temporal  momentum  features,  and  PSA  food  price  stress  indicators  as 
+
+reflected  in  newly released government data. The risk rankings produced will be indicative and 
+
+not  absolute,  as  they  will  be  relative  ordinal  estimates  of  potential  risk  and  not  definitive 
+
+determinations  of  actual  food  insecurity  status.  Most  significantly,  aiPHeed  applies  zero-shot 
+
+Filipino-English  transfer  learning  to  a  news  corpus  and  integrates  this  with  a  composite  food 
+
+stress  label  combining  SWS  (Social  Weather  Stations)  quarterly  hunger  data  and  PSA 
+
+9 
+
+ 
+province-level  food  CPI  deviation,  anchored to the FAO SDG 2.1.2 baseline established by the 
+
+DOST-FNRI ENNS, and provides results through a publicly accessible geospatial interface with 
+
+SHAP-attributed  forecast  reports.  aiPHeed  is  designed  to  be  a  proactive,  interpretable,  and 
+
+scalable  system  to  identify  LGUs  where  the  risk  of  food  insecurity  is  most likely to be rising, 
+
+thereby contributing to the achievement of SDG 1 (No Poverty) and SDG 2 (Zero Hunger).  
+
+1.3 Statement of the Problem 
+
+CALABARZON's food insecurity monitoring relies entirely on periodic surveys that are 
+
+years outdated by the time shocks occur. This study aims to develop aiPHeed, a geospatial food 
+
+insecurity  forecasting  system  for  DA  Region IV-A using NLP and machine learning to support 
+
+anticipatory intervention and decision-making.  
+
+Specifically, this study seeks to answer the following questions: 
+
+1.  What  variables  most  significantly  predict  food  insecurity  risk  across  the  provinces  of 
+
+CALABARZON, as identified through SHAP feature attribution? 
+
+2.  What is the furthest lead time at which aiPHeed can reliably forecast province-level food 
+
+insecurity risk across CALABARZON? 
+
+3.  How  does  the  LightGBM  model  combining  NLP-derived news signals and government 
+
+statistical  indicators  compare  against  six  baseline  approaches  ,  naive  persistence,  three 
+
+logistic  regression  variants  (combined  features,  government  indicators  only,  and  NLP 
+
+features  only),  and  two  LightGBM  ablation  variants  trained  on  each  data  source 
+
+separately , in classifying provincial food insecurity risk? 
+
+4.  How effectively do the city- and municipality-level food insecurity risk rankings derived 
+
+from province-level forecasts reflect relative vulnerability across CALABARZON? 
+
+10 
+
+ 
+5.  How  do  DA  Region  IV-A  personnel,  as  system  evaluators,  [second evaluator group named in the manuscript — withdrawn by the researchers on 2026-10-10; DA Region IV-A is the only participating agency],  assess  aiPHeed  under  the  ISO/IEC  25010  software 
+
+quality model, in terms of functional accuracy and ease of use respectively?  
+
+1.4 Hypothesis 
+
+This  study  tests  five  null  hypotheses,  each  addressing  the  relationship  between  an 
+
+independent  variable and a dependent variable. The independent variables are the news-derived 
+
+signals and the government socioeconomic indicators. The dependent variable is the binary food 
+
+insecurity  risk  classification,  either  high  or  low,  of  a  CALABARZON  province  in  a  given 
+
+quarter.  The  study's  assumptions  are  based  on  the  null  hypothesis  that  these  independent 
+
+variables  do  not  carry  predictive  signals  strong  enough  for  aiPHeed  to  classify,  forecast, 
+
+disaggregate, or be judged useful for that purpose.  
+
+Specifically, the study sought to address the following: 
+
+1.  The  Food  Stress  Sentiment  Index  (FSSI) and food CPI deviation will not be among the 
+
+strongest  predictors  of  food  insecurity  risk  in CALABARZON when examined through 
+
+SHAP feature attribution. 
+
+2.  aiPHeed  will not reliably classify whether a CALABARZON province is at high or low 
+
+food insecurity risk across multiple forward-looking lead times. 
+
+3.  The  LightGBM  model  that  combines  news  signals  and  government  data  will  not 
+
+outperform  the  six  comparison  models,  naive  persistence,  three  logistic  regression 
+
+variants  (news-only, government data-only, and combined), and two LightGBM variants 
+
+trained  on  only  one  data  source  at  a  time,  in  classifying  provincial food insecurity risk 
+
+across CALABARZON. 
+
+11 
+
+ 
+4.  The  vulnerability-weighted  spatial  disaggregation  of  province-level  forecasts  will  not 
+
+produce  municipal  and  city  risk  rankings  that  are  consistent  with  DA  Region  IV-A 
+
+evaluators'  assessments of relative food insecurity vulnerability across CALABARZON, 
+
+as evaluated through the aiPHeed Post-Survey Questionnaire. 
+
+5.  aiPHeed  will  not  receive  favorable  functional  suitability, accuracy, and usability ratings 
+
+from DA Region IV-A evaluators under the ISO/IEC 25010 software quality model. 
+
+1.5 Research Objectives 
+
+1.5.1 General Objective 
+
+To  develop,  validate,  and  deploy  aiPHeed:  A  Geospatial  Food  Insecurity 
+
+Forecasting System for DA Region IV-A Using NLP and Machine Learning. 
+
+1.5.2 Specific Objectives 
+
+1.  To  design  a 
+
+two-tier  pipeline  combining  zero-shot  XLM-RoBERTa 
+
+Filipino-English sentiment extraction and BERTopic unsupervised topic modeling 
+
+to  produce  the  bias-corrected  Food  Stress  Sentiment  Index  and  latent  food 
+
+insecurity risk patterns per province-quarter from a Filipino-English news corpus. 
+
+2.  To evaluate the performance of the proposed LightGBM forecasting model using 
+
+the following metrics: 
+
+I.  Accuracy, 
+
+to  measure  overall  correctness  of  high-  and 
+
+low-risk 
+
+province-level classifications 
+
+II. 
+
+Precision  and  Recall,  to  assess  the  model's  ability  to  correctly  identify 
+
+high-risk  provinces  while  minimizing  false  alarms and missed detections 
+
+respectively 
+
+12 
+
+ 
+ 
+III. 
+
+F1-Score,  to  capture  the  balance  between  Precision  and Recall given the 
+
+binary classification task 
+
+IV.  AUC-ROC,  to  evaluate  the  model's  ability  to  distinguish  between  high- 
+
+and low-risk provinces across classification thresholds 
+
+V. 
+
+Forecast  performance  across  multiple  lead  times  via  walk-forward 
+
+expanding-window  cross-validation  to  empirically  determine  the  furthest 
+
+horizon at which reliable forecasting is achievable 
+
+3.  To  produce  spatially  disaggregated  municipal  and  city  food  insecurity  risk 
+
+rankings  from  validated  province-level  forecasts,  using  PSA  published  poverty 
+
+incidence and population density as vulnerability weights. 
+
+4.  To  compare  the  effectiveness  of  the  proposed  LightGBM  forecasting  model 
+
+against the following baseline approaches: 
+
+I.  Naive persistence baseline 
+
+II. 
+
+PSA-only indicator baseline 
+
+III.  NLP-only sentiment baseline 
+
+IV. 
+
+Logistic regression baseline 
+
+5.  5. 
+
+To  deploy  a  public  geospatial  dashboard  presenting  forecast  maps  and 
+
+early-warning alerts, evaluate it under the ISO/IEC 25010 software quality model 
+
+with  DA  Region  IV-A  evaluators,  and validate its forecasts against DOST-FNRI 
+
+NNS  2019  and  2023  CALABARZON  prevalence  figures  as  a  face-validity 
+
+anchor. 
+
+13 
+
+ 
+1.6 Significance of the Study 
+
+The  development  of  aiPHeed  carries  significant  implications  for  the  following 
+
+stakeholders:  
+
+DA  Region  IV-A. As the government agency directly mandated to promote agricultural 
+
+productivity  and  food  security  across  CALABARZON,  DA  Region  IV-A will review and gain 
+
+access to quarterly province-level food insecurity risk forecasts through a secure web dashboard, 
+
+supporting  more  proactive  planning  of  agricultural  interventions  and  allocation  of  resources. 
+
+SHAP-based explanations will make model predictions interpretable for decision-makers, while 
+
+the  system  may  also  serve  as  a  model  for  integrating  artificial  intelligence  into  public  service 
+
+delivery elsewhere in government. 
+
+Local Government Units (LGUs). LGU social welfare officers across CALABARZON 
+
+will have access to spatially disaggregated municipal and city-level forecasts to support proactive 
+
+intervention and local planning. The system’s localized outputs can help officials identify at-risk 
+
+communities earlier to improve disaster preparedness and resource mobilization efforts. 
+
+Communities and Vulnerable Populations. Earlier identification of high-risk areas will 
+
+support  faster  and  more targeted delivery of food assistance, nutritional support, and livelihood 
+
+programs. The system’s spatial targeting approach may also help reduce resource misallocation, 
+
+particularly in vulnerable and geographically isolated communities across CALABARZON. 
+
+1.7 Scope and Limitations 
+
+This  study  will  develop  and  evaluate  aiPHeed,  a  web-based  system  that  forecasts  food 
+
+insecurity  risk  for  the  142  cities  and  municipalities  in  Region  IV-A,  covering  Cavite,  Laguna, 
+
+Batangas,  Rizal,  and  Quezon.  The  system  will  provide  an  interactive  map  showing  food 
+
+14 
+
+ 
+insecurity  risk  levels  and  rankings,  together  with  the  factors  influencing  each  forecast.  A 
+
+downloadable  PDF  assessment  report  containing  forecast  scores,  SHAP  driver  breakdowns, 
+
+performance  metrics,  and  data-sufficiency  disclosures  will  be  available  for  each  province  and 
+
+CALABARZON as a whole. The system will use Filipino and English news articles from 2020 
+
+to 2025 and publicly available data from PSA, DOST-FNRI, SWS, PAGASA, PhilRice, BSP, and 
+
+DOE, covering food prices, hunger, nutrition, agriculture, climate, and economic conditions. 
+
+SWS  quarterly  hunger  data  and  PSA  food  price  data  will  be  used  to  determine  food 
+
+insecurity  risk,  while DOST-FNRI data will provide regional food security references. City and 
+
+municipal  estimates  will  be  derived  from  province-level  forecasts  using  PSA  Small  Area 
+
+Estimates  and  population  data;  therefore,  these  estimates  will  not  represent  official  food 
+
+insecurity  classifications.  Areas  with  limited  news  coverage  will  also  be  identified  to  disclose 
+
+insufficient information. 
+
+The  study  is  limited  to Region IV-A and publicly available data. Restricted government 
+
+records, real-time field reports, and satellite-based data will not be included. The availability and 
+
+release  schedules  of  government  data may affect forecast timeliness, as publication delays may 
+
+postpone  data  collection,  model  updates,  and  report  generation.  The  system  will  provide  food 
+
+insecurity  risk 
+
+indicators  only  and  will  not  replace  official  government  assessments, 
+
+classifications, or policy decisions. Evaluation will involve 50 DA Region IV-A evaluators using 
+
+the ISO/IEC 25010 software quality standard. 
+
+15 
+
+ 
+ 
+ 
+ 
+ 
+

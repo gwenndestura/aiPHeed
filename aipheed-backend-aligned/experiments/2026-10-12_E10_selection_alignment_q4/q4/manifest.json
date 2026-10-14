@@ -1,0 +1,223 @@
+{
+ "protocol": {
+  "file": "05_Q4_2026_PROSPECTIVE_PROTOCOL.md",
+  "sha256": "55c96b54d25d518e8a1cf9f14707c98e676e71cb70442e5c730ce97465e0963e",
+  "verified_at_start": true
+ },
+ "authorization": "user message 2026-10-12: 'Generate and seal the Q4 forecast now'",
+ "target_quarter": "2026-Q4",
+ "tau": 14.344999999999999,
+ "tau_quarters": [
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4"
+ ],
+ "tau_approved": 14.345,
+ "snapshot_time_manila": "2026-10-12 22:51:48.318634",
+ "issue_time_utc": "2026-10-12T14:51:50.678190+00:00",
+ "issue_deadline_manila": "2026-10-31 23:59:59+08:00",
+ "deadline_met": true,
+ "sws_input": {
+  "round": "March 2026 SWS Survey",
+  "quarter": "2026-Q1",
+  "published": "2026-05-12 00:00:00",
+  "date_type": "verified",
+  "age_quarters": 3,
+  "previous_round": "November 2025 SWS Survey"
+ },
+ "h1_cpi_checks": {
+  "rows": 30,
+  "commodity": [
+   "01.1 - FOOD"
+  ],
+  "status": [
+   "reported"
+  ],
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06"
+  ],
+  "provinces": [
+   "PH040100000",
+   "PH040200000",
+   "PH040300000",
+   "PH040400000",
+   "PH040500000"
+  ],
+  "retrieved_at_utc": [
+   "2026-10-09T14:40:49.508579+00:00"
+  ]
+ },
+ "training": {
+  "primary": {
+   "variant": "primary_lps_2026Q1",
+   "train_quarters": [
+    "2021-Q2",
+    "2021-Q3",
+    "2021-Q4",
+    "2022-Q2",
+    "2022-Q3",
+    "2022-Q4",
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1"
+   ],
+   "n_train_rows": 85,
+   "train_HIGH": 45,
+   "train_LOW": 40,
+   "features_used": [
+    "last_published_stress",
+    "sws_hunger",
+    "sws_change"
+   ]
+  },
+  "sensitivity": {
+   "variant": "sensitivity_lps_2025Q4",
+   "train_quarters": [
+    "2021-Q2",
+    "2021-Q3",
+    "2021-Q4",
+    "2022-Q2",
+    "2022-Q3",
+    "2022-Q4",
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4"
+   ],
+   "n_train_rows": 80,
+   "train_HIGH": 40,
+   "train_LOW": 40,
+   "features_used": [
+    "last_published_stress",
+    "sws_hunger",
+    "sws_change"
+   ]
+  }
+ },
+ "allowlist_sha256_start": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1",
+  "data/supplementary/collection_2026-10-09/provincial_food_cpi_yoy_2026H1_raw.csv": "57f09e91149be56f0602d63dad40216d3fc38d01e66499e07f110d1b2fd2e6e9"
+ },
+ "allowlist_sha256_end": {
+  "data/processed/labels.parquet": "eeb55983d8cf2de0c01e3654120c827a217bcbdb5221f4ebfe2108943ae32d1e",
+  "data/processed/psa_indicators.parquet": "947be05fcab7d493edf585e59893e830d66eb52483bc43e951be94cbd3a9ff4c",
+  "data/processed/features_fused.parquet": "0080dd5c3cafd82e68a6baa198c6d37894890e4fd9eeb44a72e34e3a2fda1292",
+  "data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv": "1d7bd40ac52e6cf33a4b9c1a0a8598498bc0829a49f621c5e2bfb9d6e5789580",
+  "evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv": "38ea731073b0897d28789a1d92a2651c60be7b19fe736b0d133237ad098a3de6",
+  "evidence/2026-10-11_working_decisions/feature_eligibility_by_protocol.csv": "1c8b9667ae0b1f8ba88f61dd3a15810bd8df82581235f757fbf09a8fa4c5657c",
+  "config/governing_model.json": "c9697b6b920cdf32986b422ea9c48533db72b7b1632dae221f4200dd2557dcc1",
+  "data/supplementary/collection_2026-10-09/provincial_food_cpi_yoy_2026H1_raw.csv": "57f09e91149be56f0602d63dad40216d3fc38d01e66499e07f110d1b2fd2e6e9"
+ },
+ "code_sha256": {
+  "q4_forecast.py": "a175688513667061787ee8dfea234d616a940229f03ae00abbf4a857cc1ae082",
+  "guard.py": "736a979d2182fb71c858cbbe34f1978299d222ab2ebfe19de047908c304e5324",
+  "E9 safe_frame.py": "89cd1edeec0df9ac88272cee30d2d064656a9e8042b269ed9e95be05837f87c3",
+  "risk_score_v2.py": "5b6c83d6d12ecab7054f6249d0f0f098f8be50ebf16d1072b58e9c6be0abea49",
+  "devprotocol_rule_l.py": "c126ca68953f6ba354293b2772c8caeff2d22541033e85a512d2c3d5c83841ec",
+  "sws_hunger_fetcher.py": "37e86d921f0f9a7823b69c6c6690b2d2810c9f9aa6a302b66469b3f9ad74b2c0"
+ },
+ "environment": {
+  "python": "3.13.2",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "pandas": "2.3.3",
+  "numpy": "2.4.4",
+  "lightgbm": "4.6.0",
+  "sklearn": "1.8.0"
+ },
+ "params": {
+  "num_leaves": 4,
+  "min_child_samples": 5,
+  "n_estimators": 100,
+  "learning_rate": 0.05,
+  "random_state": 42,
+  "verbosity": -1
+ },
+ "determinism_check": "models fitted twice; identical predictions",
+ "outputs_sha256": {
+  "inputs_snapshot.csv": "f0d1ae00dde00f46e01971e6441c0d54984523b8ac7d3db85ae9af2fe89e4c07",
+  "predictions.csv": "c16c42afaa8816b2a95014d246245c2e4d263078a0bbda37beec48cc4a079b71",
+  "training_labels.csv": "7b8139268097793cdba97a1d1454811a003ac1d9c0b131923bd63666515a54e8"
+ },
+ "access_log": [
+  {
+   "op": "read_parquet",
+   "path": "data/processed/psa_indicators.parquet",
+   "columns": [
+    "food_cpi_yoy",
+    "province_code",
+    "quarter"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/features_fused.parquet",
+   "columns": [
+    "food_minus_headline_yoy",
+    "headline_cpi",
+    "poverty_incidence",
+    "province_code",
+    "quarter",
+    "unemployment_rate"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 120
+  },
+  {
+   "op": "read_parquet",
+   "path": "data/processed/labels.parquet",
+   "columns": [
+    "province_code",
+    "quarter",
+    "stress_score",
+    "sws_hunger_pct"
+   ],
+   "row_filter": "quarter <= 2025-Q4",
+   "rows_returned": 95
+  },
+  "{\"op\": \"open\", \"path\": \"config/governing_model.json\"}",
+  "{\"op\": \"open\", \"path\": \"data/supplementary/collection_2026-10-09/provincial_food_cpi_yoy_2026H1_raw.csv\"}",
+  "{\"op\": \"open\", \"path\": \"data/supplementary/collection_2026-10-09/sws_balance_luzon_2025_raw.csv\"}",
+  "{\"op\": \"open\", \"path\": \"evidence/2026-10-09_readiness/cpi_final_month_release_dates.csv\"}"
+ ],
+ "outcome_information_accessed": false
+}
