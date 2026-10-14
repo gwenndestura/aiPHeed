@@ -811,6 +811,12 @@ export function PhilippineMap({
       // header announces its theme on mount, and the stale handler adds a
       // basemap layer to the removed map ("reading 'appendChild'").
       (map as any).__aipheedThemeCleanup?.();
+      // A zoom animation (e.g. the fit-to-CALABARZON once the outlines load)
+      // finishes on a 250 ms timer that map.remove() does not cancel; leaving
+      // the page inside that window threw "reading '_leaflet_pos'". Leaflet's
+      // handler does nothing once the animation is marked finished.
+      map.stop();
+      (map as any)._animatingZoom = false;
       map.remove();
       mapRef.current = null;
       provincesLayerRef.current = null;
