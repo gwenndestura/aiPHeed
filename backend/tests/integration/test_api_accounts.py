@@ -377,3 +377,129 @@ class TestApproval:
     def test_accounts_need_an_admin_session(self, api):
         assert api.get("/api/v1/admin/accounts").status_code == 401
         assert api.post("/api/v1/admin/accounts/1/approve").status_code == 401
+
+
+
+# ---------------------------------------------------------------------------
+# Forgot / reset password
+# ---------------------------------------------------------------------------
+
+NEW_PASSWORD = "kalesa-bibingka-puto-bumbong-8"
+
+
+def forgot(api, email=EMAIL):
+    return api.post("/api/v1/auth/forgot-password", json={"email": email})
+
+
+def reset(api, token, password=NEW_PASSWORD):
+    return api.post("/api/v1/auth/reset-password", json={"token": token, "password": password})
+
+
+class TestForgotAndReset:
+
+    def test_same_reply_whether_or_not_the_address_exists(self, api, outbox):
+        add_user(api)
+        add_user(api, email="pending@calabarzon.da.gov.ph", status=accounts.PENDING_APPROVAL)
+        replies = [forgot(api, e) for e in (EMAIL, "nobody@calabarzon.da.gov.ph", "pending@calabarzon.da.gov.ph")]
+        assert {r.status_code for r in replies} == {202}
+        assert len({r.text for r in replies}) == 1
+        # Only the active account gets an email.
+        assert [m[0] for m in outbox] == [EMAIL]
+        assert "/reset-password?token=" in outbox[0][2]
+
+    def test_reset_sets_the_password_and_ends_every_old_session(self, api, outbox):
+        add_user(api)
+        old = sign_in(api)
+        old_token = old.json()["token"]
+        old_cookie = api.cookies.get(sessions.COOKIE_NAME)
+        forgot(api)
+        r = reset(api, link_token(outbox[-1]))
+        assert r.status_code == 200 and "signed out everywhere" in r.json()["message"]
+        assert api.get("/api/v1/admin/review", headers=bearer(old_token)).status_code == 401
+        assert present(api, old_cookie).status_code == 401
+        assert error(sign_in(api))["message"] == GENERIC                 # old password
+        assert sign_in(api, EMAIL, NEW_PASSWORD).status_code == 200      # new password
+
+    def test_reset_link_lasts_one_hour_and_is_stored_hashed(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        row = run(api, lambda db: db.scalar(select(AccountToken).where(AccountToken.purpose == accounts.RESET_PASSWORD)))
+        assert row.token_hash != token and row.expires_at - row.created_at == timedelta(hours=1)
+
+    def test_a_reset_link_works_once(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        assert reset(api, token).status_code == 200
+        again = reset(api, token, "yet-another-strong-passphrase-3")
+        assert again.status_code == 400 and error(again)["code"] == "link_used"
+
+    def test_an_expired_reset_link_is_refused(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        past = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(seconds=1)
+        run(api, lambda db: db.execute(update(AccountToken).values(expires_at=past)))
+        r = reset(api, token)
+        assert r.status_code == 400 and error(r)["code"] == "link_expired"
+        assert sign_in(api).status_code == 200  # password unchanged
+
+    def test_a_made_up_reset_link_is_refused(self, api):
+        r = reset(api, "not-a-real-token")
+        assert r.status_code == 400 and error(r)["code"] == "link_invalid"
+
+    def test_a_weak_password_is_refused_and_the_link_still_works(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        weak = reset(api, token, "password1234")
+        assert weak.status_code == 400 and error(weak)["code"] == "weak_password"
+        assert reset(api, token).status_code == 200
+
+    def test_a_newer_link_retires_the_older_one(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        first = link_token(outbox[-1])
+        forgot(api)
+        assert error(reset(api, first))["code"] == "link_used"
+        assert reset(api, link_token(outbox[-1])).status_code == 200
+
+    def test_the_demo_account_cannot_reset_its_password(self, api, outbox):
+        add_user(api, email="demo@calabarzon.da.gov.ph", is_demo=True)
+        forgot(api, "demo@calabarzon.da.gov.ph")
+        assert outbox == []  # no link is ever sent
+        # Even a link obtained some other way is refused.
+        async def _issue(db):
+            demo = await db.scalar(select(AdminUser).where(AdminUser.email == "demo@calabarzon.da.gov.ph"))
+            return await accounts.issue_link_token(db, demo, accounts.RESET_PASSWORD)
+        token = run(api, _issue)
+        r = reset(api, token)
+        assert r.status_code == 400 and error(r)["code"] == "link_invalid"
+        demo = find(api, "demo@calabarzon.da.gov.ph")
+        assert security.verify_password(PASSWORD, demo.password_hash)  # password unchanged
+
+    def test_reset_is_audited_without_secrets(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        reset(api, token)
+        rows = run(api, lambda db: _scalars(db, select(AuditRecord).where(AuditRecord.action == "password_reset")))
+        assert len(rows) == 1 and rows[0].actor_email == EMAIL
+        assert token not in str(rows[0].__dict__) and NEW_PASSWORD not in str(rows[0].__dict__)
+
+    def test_reset_clears_a_sign_in_lockout(self, api, outbox, monkeypatch):
+        from app.services import ratelimit
+        ratelimit.reset()
+        monkeypatch.setattr(settings, "RATE_LIMIT_ENABLED", True)
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_PER_15MIN", 1000)
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR", 2)
+        add_user(api)
+        for _ in range(2):
+            sign_in(api, password="wrong-password-xyz")
+        assert sign_in(api).status_code == 401  # locked
+        forgot(api)
+        reset(api, link_token(outbox[-1]))
+        ok = sign_in(api, EMAIL, NEW_PASSWORD).status_code
+        ratelimit.reset()
+        assert ok == 200

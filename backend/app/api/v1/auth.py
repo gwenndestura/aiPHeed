@@ -10,6 +10,8 @@ Account self-service (ACCT-1), public and rate-limited per IP:
 POST /api/v1/auth/signup                new account, pending email verification
 POST /api/v1/auth/verify-email          redeem the emailed link -> pending approval
 POST /api/v1/auth/resend-verification   a fresh verification link
+POST /api/v1/auth/forgot-password       a password reset link (active accounts only)
+POST /api/v1/auth/reset-password        redeem it: new password, every session ended
 
 Replaces both client-side login paths. Neither talked to a server: one ignored
 the password field entirely, the other compared against a credential compiled
@@ -39,6 +41,7 @@ from app.schemas.admin import (
     LoginResponse,
     LogoutResponse,
     MessageResponse,
+    ResetPasswordRequest,
     SignupRequest,
     TokenRequest,
     UserOut,
@@ -352,3 +355,57 @@ async def resend_verification(
         await db.commit()
         background.add_task(mailer.send_email, *accounts.verification_email(user, token))
     return MessageResponse(message=RESEND_ACCEPTED)
+
+
+
+FORGOT_ACCEPTED = (
+    "If this address has an active administrator account, a password reset link has "
+    "been sent to it. The link expires in 1 hour."
+)
+
+
+@router.post("/forgot-password", status_code=202, response_model=MessageResponse,
+             dependencies=[Depends(email_link_guard)])
+async def forgot_password(
+    body: EmailRequest,
+    background: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+) -> MessageResponse:
+    """
+    Email a password reset link. Same reply for every address; the email goes
+    out after the response. Only active accounts get one -- pending, rejected
+    and deactivated accounts cannot sign in anyway, and the demo account's
+    password is set only by create_admin.py --demo.
+    """
+    user = await _find(db, body.email.strip().lower())
+    if user is not None and user.status == accounts.ACTIVE and not user.is_demo:
+        token = await accounts.issue_link_token(db, user, accounts.RESET_PASSWORD)
+        await db.commit()
+        background.add_task(mailer.send_email, *accounts.reset_email(user, token))
+    return MessageResponse(message=FORGOT_ACCEPTED)
+
+
+@router.post("/reset-password", response_model=MessageResponse,
+             dependencies=[Depends(link_redeem_guard)])
+async def reset_password(body: ResetPasswordRequest, db: AsyncSession = Depends(get_db)) -> MessageResponse:
+    """
+    Redeem a reset link and set the new password with security.set_password(),
+    which ends every existing session of the account. A weak password is
+    refused before the link is used, so the person can try again with it.
+    """
+    problem = password_problem(body.password)
+    if problem:
+        raise accounts.AccountError(problem, "weak_password")
+    user = await accounts.redeem_link_token(db, body.token, accounts.RESET_PASSWORD)
+    if user.is_demo or user.status != accounts.ACTIVE:
+        # Not committed: the link is left as it was, and says nothing more.
+        raise accounts.link_error("link_invalid")
+    await security.set_password(db, user, body.password)
+    accounts.audit(db, action="password_reset", subject=user)
+    await db.commit()
+    # A lockout from failed guesses should not outlive the reset.
+    clear_login_failures(user.email)
+    return MessageResponse(
+        message="Your password has been changed and you have been signed out everywhere. "
+                "Sign in with the new password."
+    )

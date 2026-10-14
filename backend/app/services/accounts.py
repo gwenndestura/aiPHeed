@@ -163,6 +163,19 @@ def already_registered_email(user: AdminUser) -> tuple[str, str, str]:
     )
 
 
+def reset_email(user: AdminUser, token: str) -> tuple[str, str, str]:
+    return (
+        user.email,
+        "Reset your aiPHeed password",
+        f"Hello {user.full_name},\n\n"
+        "Someone (hopefully you) asked to reset the password of your aiPHeed "
+        "administrator account. To choose a new password, open this link within 1 hour:\n\n"
+        f"{link_url('/reset-password', token)}\n\n"
+        "Choosing a new password signs you out on every device.\n\n"
+        "If you did not ask for this, ignore this email; your password stays the same.\n",
+    )
+
+
 def approved_email(user: AdminUser) -> tuple[str, str, str]:
     return (
         user.email,

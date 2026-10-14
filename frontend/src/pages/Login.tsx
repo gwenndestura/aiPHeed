@@ -72,6 +72,7 @@ export default function Login() {
       <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
 
       <p className={authLinksRowClass}>
+        <Link to="/forgot-password" className={authLinkClass}>Forgot password?</Link>
         <Link to="/signup" className={authLinkClass}>Create an account</Link>
         <Link to="/" className={authLinkClass}>Back to public map</Link>
       </p>

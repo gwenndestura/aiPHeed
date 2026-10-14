@@ -14,6 +14,8 @@ import VisualizationPage from "./pages/Visualization.tsx";
 import Landing from "./pages/Landing.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import VerifyEmail from "./pages/VerifyEmail.tsx";
+import ForgotPassword from "./pages/ForgotPassword.tsx";
+import ResetPassword from "./pages/ResetPassword.tsx";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin" element={<RequireAdmin><Admin /></RequireAdmin>} />
             <Route path="/admin/feedback" element={<RequireAdmin><Admin /></RequireAdmin>} />
             <Route path="/admin/review" element={<RequireAdmin><Admin /></RequireAdmin>} />
