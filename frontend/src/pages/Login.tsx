@@ -75,7 +75,7 @@ export default function Login() {
       <p className={authLinksRowClass}>
         <Link to="/forgot-password" className={authLinkClass}>Forgot password?</Link>
         <Link to="/signup" className={authLinkClass}>Create an account</Link>
-        <Link to="/" className={authLinkClass}>Back to public map</Link>
+        <Link to="/dashboard" className={authLinkClass}>Back to public map</Link>
       </p>
     </AuthCard>
   );

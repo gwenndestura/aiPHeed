@@ -69,7 +69,7 @@ export default function SignUp() {
 
       <p className={authLinksRowClass}>
         <Link to="/login" className={authLinkClass}>Already have an account? Sign in</Link>
-        <Link to="/" className={authLinkClass}>Back to public map</Link>
+        <Link to="/dashboard" className={authLinkClass}>Back to public map</Link>
       </p>
     </AuthCard>
   );

@@ -44,7 +44,7 @@ export default function VerifyEmail() {
         <Note label={null}>{state.message}</Note>
         <p className={authLinksRowClass}>
           <Link to="/login" className={authLinkClass}>Back to sign in</Link>
-          <Link to="/" className={authLinkClass}>Back to public map</Link>
+          <Link to="/dashboard" className={authLinkClass}>Back to public map</Link>
         </p>
       </AuthCard>
     );
