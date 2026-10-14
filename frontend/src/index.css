@@ -567,3 +567,14 @@
   .qt-history-short { display: inline; }
 }
 
+
+/* ------------------------------------------------------------------
+   Phones, upright or sideways (and very short windows): the layout
+   these widths and heights get (see lib/breakpoints.ts).
+   - No text under 12px. Desktop keeps its compact 8-11px labels.
+   - No automatic text inflation when a phone is turned sideways.
+   ------------------------------------------------------------------ */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (max-width: 767px), (max-height: 500px) {
+  .text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\] { font-size: 12px !important; }
+}
