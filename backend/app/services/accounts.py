@@ -58,6 +58,10 @@ class AccountError(Exception):
         self.code = code
 
 
+class AccountNotFound(Exception):
+    """404: no account with that id."""
+
+
 # ---------------------------------------------------------------------------
 # Single-use link tokens (verification 24 h, password reset 1 h)
 # ---------------------------------------------------------------------------
@@ -156,6 +160,16 @@ def already_registered_email(user: AdminUser) -> tuple[str, str, str]:
         f"If you have forgotten your password, use \"Forgot password?\" on the sign-in "
         f"page: {settings.FRONTEND_BASE_URL.rstrip('/')}/login\n\n"
         "If this was not you, no action is needed.\n",
+    )
+
+
+def approved_email(user: AdminUser) -> tuple[str, str, str]:
+    return (
+        user.email,
+        "Your aiPHeed administrator account is approved",
+        f"Hello {user.full_name},\n\n"
+        "Your aiPHeed administrator account has been approved. You can now sign in:\n\n"
+        f"{settings.FRONTEND_BASE_URL.rstrip('/')}/login\n",
     )
 
 

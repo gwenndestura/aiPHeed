@@ -84,6 +84,27 @@ class VerifyEmailResponse(BaseModel):
     message: str
 
 
+class AccountRow(BaseModel):
+    id: int
+    email: str
+    name: str
+    office: str | None = None
+    status: str
+    createdAt: datetime | None = None
+    emailVerifiedAt: datetime | None = None
+    approvedAt: datetime | None = None
+    lastLoginAt: datetime | None = None
+    isDemo: bool = False
+    isSelf: bool = False
+
+
+class AccountsResponse(BaseModel):
+    """GET /admin/accounts: requests to decide on, and who has access now."""
+    pending: list[AccountRow]          # verified, waiting for approval
+    active: list[AccountRow]
+    pendingCount: int
+
+
 # ---------------------------------------------------------------------------
 # Review pipeline
 # ---------------------------------------------------------------------------

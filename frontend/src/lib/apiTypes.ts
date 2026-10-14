@@ -495,3 +495,23 @@ export interface VerifyEmailResponse {
   status: string;
   message: string;
 }
+
+export interface AccountRow {
+  id: number;
+  email: string;
+  name: string;
+  office: string | null;
+  status: string;
+  createdAt: string | null;
+  emailVerifiedAt: string | null;
+  approvedAt: string | null;
+  lastLoginAt: string | null;
+  isDemo: boolean;
+  isSelf: boolean;
+}
+
+export interface AccountsResponse {
+  pending: AccountRow[];
+  active: AccountRow[];
+  pendingCount: number;
+}

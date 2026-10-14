@@ -9,7 +9,7 @@ from app.services.feedback import FeedbackError
 from app.services.review import ReviewError, ReviewNotFound
 from app.services.ratelimit import RateLimited
 from app.services.security import AuthError, ForbiddenError, ServerMisconfigured
-from app.services.accounts import AccountError
+from app.services.accounts import AccountError, AccountNotFound
 
 
 @asynccontextmanager
@@ -139,6 +139,11 @@ async def review_error(request: Request, exc: ReviewError):
 async def account_error(request: Request, exc: AccountError):
     """Sign-up / link problems the person can fix: wrong domain, weak password, bad link."""
     return _error(400, exc.code, str(exc))
+
+
+@app.exception_handler(AccountNotFound)
+async def account_not_found(request: Request, exc: AccountNotFound):
+    return _error(404, "account_not_found", str(exc))
 
 
 @app.exception_handler(FeedbackError)

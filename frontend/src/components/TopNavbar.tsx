@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -10,7 +10,9 @@ import { useAuth } from "@/lib/auth";
 import { ApiError } from "@/lib/api";
 import { authLinkClass, authLinksRowClass } from "@/components/AuthCard";
 import { PENDING_CODES, SignInNotice } from "@/components/SignInNotice";
-import { ADMIN_NAV, isActivePath } from "@/lib/adminNav";
+import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
+import { useAccounts } from "@/lib/queries";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { PSTClock } from "./PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -31,6 +33,8 @@ export function TopNavbar({ active = "none" }: Props) {
   // the server-confirmed session only -- never a URL parameter or a stored flag.
   const { status, user, logout } = useAuth();
   const isAdmin = status === "authenticated";
+  // Fetched with the header, so the menu's pending count is ready when it opens.
+  useAccounts(isAdmin);
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
@@ -82,6 +86,7 @@ export function TopNavbar({ active = "none" }: Props) {
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
+            {isAdmin && <AdminAccountsMenuItem />}
             {isAdmin ? (
               <button onClick={() => void logout()} className="w-full">
                 <MenuRow icon={LogOut} label="Sign out" hint={user?.email} />
@@ -305,6 +310,27 @@ export function AdminMenuLinks() {
   );
 }
 
+/**
+ * "Accounts" in the menu (not the header, which is full), with the number of
+ * requests waiting for approval. In both headers.
+ */
+export function AdminAccountsMenuItem() {
+  const { data } = useAccounts();
+  const pending = data?.pendingCount ?? 0;
+  return (
+    <SheetClose asChild>
+      <Link to={adminPath("accounts")} className="block w-full">
+        <MenuRow
+          icon={Users}
+          label="Accounts"
+          hint="Approve requests, manage admins"
+          badge={pending > 0 ? <StatusBadge tone="moderate" title={`${pending} waiting for approval`}>{pending}</StatusBadge> : null}
+        />
+      </Link>
+    </SheetClose>
+  );
+}
+
 export function NavBtn({ label, active, to }: { label: string; active?: boolean; to: string }) {
   return (
     <Link
@@ -323,7 +349,7 @@ export function NavBtn({ label, active, to }: { label: string; active?: boolean;
   );
 }
 
-function MenuRow({ icon: Icon, label, hint }: { icon: typeof Home; label: string; hint?: string }) {
+function MenuRow({ icon: Icon, label, hint, badge }: { icon: typeof Home; label: string; hint?: string; badge?: React.ReactNode }) {
   return (
     <span className="w-full flex items-center gap-3 px-2 py-2 rounded-md hover:bg-secondary/60 transition-colors text-left">
       <Icon className="h-3.5 w-3.5 text-muted-foreground" />
@@ -331,6 +357,7 @@ function MenuRow({ icon: Icon, label, hint }: { icon: typeof Home; label: string
         <span className="block text-[11px] font-medium">{label}</span>
         {hint && <span className="block text-[9px] text-muted-foreground/70 truncate">{hint}</span>}
       </span>
+      {badge}
     </span>
   );
 }

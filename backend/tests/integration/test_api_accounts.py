@@ -19,11 +19,16 @@ from app.config import settings
 from app.db.models import AccountToken, AdminUser, AuditRecord
 from app.services import accounts, mailer, security
 from tests.integration.test_api_sessions import (  # noqa: F401  (api is a fixture)
+    CSRF,
     EMAIL,
     PASSWORD,
+    REFRESH,
     api,
+    bearer,
+    present,
     run,
 )
+from app.services import sessions
 
 GENERIC = "Email or password is incorrect."
 
@@ -263,3 +268,112 @@ class TestVerification:
         assert all(r.actor_email == NEW_EMAIL and r.subject_type == "account" for r in rows)
         dump = str([(r.reason, r.notes, r.subject_id) for r in rows])
         assert token not in dump and GOOD_PASSWORD not in dump
+
+
+
+# ---------------------------------------------------------------------------
+# Admin approval (Accounts page)
+# ---------------------------------------------------------------------------
+
+ADMIN = "approver@calabarzon.da.gov.ph"
+
+
+def admin_headers(api):
+    add_user(api, email=ADMIN)
+    r = sign_in(api, ADMIN)
+    assert r.status_code == 200, r.text
+    return bearer(r.json()["token"])
+
+
+def verified_request(api, outbox, email=NEW_EMAIL):
+    signup(api, email=email)
+    api.post("/api/v1/auth/verify-email", json={"token": link_token(outbox[-1])})
+    return find(api, email)
+
+
+class TestApproval:
+
+    def test_pending_list_shows_verified_requests_only(self, api, outbox):
+        h = admin_headers(api)
+        verified_request(api, outbox)
+        signup(api, email="not.verified@calabarzon.da.gov.ph")
+        body = api.get("/api/v1/admin/accounts", headers=h).json()
+        assert [a["email"] for a in body["pending"]] == [NEW_EMAIL]
+        assert body["pendingCount"] == 1
+        assert body["pending"][0]["office"] == "Regional Field Office IV-A"
+        me = [a for a in body["active"] if a["email"] == ADMIN]
+        assert me and me[0]["isSelf"]
+
+    def test_approve_lets_the_new_admin_sign_in_and_tells_them(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        r = api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        assert r.status_code == 200 and r.json()["status"] == accounts.ACTIVE
+        assert outbox[-1][0] == NEW_EMAIL and "approved" in outbox[-1][1]
+        new = sign_in(api, NEW_EMAIL, GOOD_PASSWORD)
+        assert new.status_code == 200
+        assert api.get("/api/v1/admin/review", headers=bearer(new.json()["token"])).status_code == 200
+        user = find(api)
+        assert user.approved_at is not None and user.approved_by_id is not None
+
+    def test_reject_means_the_generic_error_at_sign_in(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        assert api.post(f"/api/v1/admin/accounts/{target.id}/reject", headers=h).json()["status"] == accounts.REJECTED
+        r = sign_in(api, NEW_EMAIL, GOOD_PASSWORD)
+        assert r.status_code == 401 and error(r)["message"] == GENERIC
+        assert api.get("/api/v1/admin/accounts", headers=h).json()["pendingCount"] == 0
+
+    def test_only_pending_requests_can_be_approved_or_rejected(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        again = api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        assert again.status_code == 400 and error(again)["code"] == "not_pending_approval"
+        assert api.post(f"/api/v1/admin/accounts/{target.id}/reject", headers=h).status_code == 400
+
+    def test_unknown_account_is_404(self, api):
+        h = admin_headers(api)
+        assert api.post("/api/v1/admin/accounts/9999/approve", headers=h).status_code == 404
+
+    def test_deactivate_ends_every_session_at_once(self, api, outbox):
+        add_user(api)  # analyst, the one to deactivate
+        target_login = sign_in(api)
+        target_token = target_login.json()["token"]
+        target_cookie = api.cookies.get(sessions.COOKIE_NAME)
+        api.cookies.clear()
+        h = admin_headers(api)
+        target_id = find(api, EMAIL).id
+        r = api.post(f"/api/v1/admin/accounts/{target_id}/deactivate", headers=h)
+        assert r.status_code == 200 and r.json()["status"] == accounts.DEACTIVATED
+        assert api.get("/api/v1/admin/review", headers=bearer(target_token)).status_code == 401
+        assert present(api, target_cookie).status_code == 401
+        assert error(sign_in(api))["message"] == GENERIC
+
+    def test_an_admin_cannot_deactivate_themselves(self, api):
+        h = admin_headers(api)
+        me = find(api, ADMIN)
+        r = api.post(f"/api/v1/admin/accounts/{me.id}/deactivate", headers=h)
+        assert r.status_code == 400 and error(r)["code"] == "cannot_deactivate_self"
+        assert api.get("/api/v1/admin/review", headers=h).status_code == 200
+
+    def test_decisions_are_audited_with_who_whom_and_when(self, api, outbox):
+        h = admin_headers(api)
+        a = verified_request(api, outbox)
+        b = verified_request(api, outbox, email="second.person@calabarzon.da.gov.ph")
+        api.post(f"/api/v1/admin/accounts/{a.id}/approve", headers=h)
+        api.post(f"/api/v1/admin/accounts/{b.id}/reject", headers=h)
+        api.post(f"/api/v1/admin/accounts/{a.id}/deactivate", headers=h)
+        rows = run(api, lambda db: _scalars(db, select(AuditRecord).where(AuditRecord.subject_type == "account")))
+        decisions = [(r.action, r.actor_email, r.subject_id, r.notes) for r in rows if r.action.startswith("account_")]
+        assert decisions == [
+            ("account_approved", ADMIN, str(a.id), NEW_EMAIL),
+            ("account_rejected", ADMIN, str(b.id), "second.person@calabarzon.da.gov.ph"),
+            ("account_deactivated", ADMIN, str(a.id), NEW_EMAIL),
+        ]
+        assert all(r.timestamp is not None for r in rows)
+        assert GOOD_PASSWORD not in str([(r.reason, r.notes) for r in rows])
+
+    def test_accounts_need_an_admin_session(self, api):
+        assert api.get("/api/v1/admin/accounts").status_code == 401
+        assert api.post("/api/v1/admin/accounts/1/approve").status_code == 401

@@ -29,12 +29,14 @@ import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { adminPath, sectionFromPath } from "@/lib/adminNav";
-import { AdminMenuLinks, AdminNavLinks } from "@/components/TopNavbar";
+import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks } from "@/components/TopNavbar";
+import { AccountsSection } from "@/components/AccountsSection";
 import { ApiError } from "@/lib/api";
 import {
   useConfig,
   useQuarters,
   useReviewQueue,
+  useAccounts,
   useApproveReview,
   useRejectReview,
   useUndoReview,
@@ -99,6 +101,12 @@ export default function Admin() {
         </div>
         {section === "review" && <div className="h-full overflow-auto"><ReviewSection /></div>}
         {section === "feedback" && <div className="h-full overflow-auto"><FeedbackSection /></div>}
+        {section === "accounts" && (
+          <div className="h-full overflow-auto">
+            <SectionHeader title="Accounts" subtitle="Approve requests for administrator access and manage who has it" />
+            <AccountsSection />
+          </div>
+        )}
       </main>
     </div>
   );
@@ -122,6 +130,8 @@ function AdminNavbar({
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+  // Fetched with the header, so the menu's pending count is ready when it opens.
+  useAccounts();
 
   return (
     <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
@@ -163,6 +173,7 @@ function AdminNavbar({
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
+            <AdminAccountsMenuItem />
             <div className="px-2 py-2 rounded-md bg-secondary/40 flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
                 {user.email.slice(0, 2).toUpperCase()}

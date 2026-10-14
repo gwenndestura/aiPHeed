@@ -27,6 +27,8 @@ import type {
   QuartersResponse,
   RejectionsResponse,
   ReviewItem,
+  AccountRow,
+  AccountsResponse,
   ReviewListResponse,
   Scope,
   SearchResponse,
@@ -213,5 +215,29 @@ export function useAdminFeedback(page = 1, pageSize = 50) {
   return useQuery({
     queryKey: ["admin", "feedback", page, pageSize],
     queryFn: () => api.get<FeedbackListResponse>("/api/v1/admin/feedback", { page, pageSize }),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Accounts (ACCT-1)
+// ---------------------------------------------------------------------------
+
+export function useAccounts(enabled = true) {
+  return useQuery({
+    queryKey: ["admin", "accounts"],
+    queryFn: () => api.get<AccountsResponse>("/api/v1/admin/accounts"),
+    enabled,
+    retry: false, // 403 for the demo account is an answer, not a blip
+  });
+}
+
+export type AccountAction = "approve" | "reject" | "deactivate";
+
+export function useAccountAction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, action }: { id: number; action: AccountAction }) =>
+      api.post<AccountRow>(`/api/v1/admin/accounts/${id}/${action}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "accounts"] }),
   });
 }

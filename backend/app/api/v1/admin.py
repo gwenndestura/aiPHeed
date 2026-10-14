@@ -11,6 +11,10 @@ admin_router  (auth: admin)   mounted at /api/v1/admin
     DELETE /rejections/{province_id}/{quarter}
     GET    /audit
     GET    /feedback
+    GET    /accounts                      pending requests and active admins
+    POST   /accounts/{id}/approve         pending_approval -> active (emails the person)
+    POST   /accounts/{id}/reject          pending_* -> rejected
+    POST   /accounts/{id}/deactivate      active -> deactivated, every session ended
 
 public_router (no auth)       mounted at /api/v1
     GET    /rejections?quarter=
@@ -24,12 +28,17 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import APIRouter, Depends, Query
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, BackgroundTasks, Depends, Query
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import AdminUser, AuditRecord, FeedbackRecord, ReviewRecord
 from app.dependencies import get_db
 from app.schemas.admin import (
+    AccountRow,
+    AccountsResponse,
     AuditResponse,
     AuditRow,
     Demographics,
@@ -44,9 +53,12 @@ from app.schemas.admin import (
     ReviewItem,
     ReviewListResponse,
 )
+from app.services import accounts
 from app.services import dashboard as svc
 from app.services import feedback as fb
+from app.services import mailer
 from app.services import review as rv
+from app.services import security
 from app.services.ratelimit import feedback_guard
 from app.services.security import require_admin
 
@@ -240,6 +252,104 @@ async def list_feedback(
         pageSize=pageSize,
         total=total,
     )
+
+
+# ---------------------------------------------------------------------------
+# Accounts (ACCT-1)
+# ---------------------------------------------------------------------------
+
+def _account_row(row: AdminUser, me: AdminUser) -> AccountRow:
+    return AccountRow(
+        id=row.id,
+        email=row.email,
+        name=row.full_name,
+        office=row.office_unit,
+        status=row.status,
+        createdAt=row.created_at,
+        emailVerifiedAt=row.email_verified_at,
+        approvedAt=row.approved_at,
+        lastLoginAt=row.last_login_at,
+        isDemo=bool(row.is_demo),
+        isSelf=row.id == me.id,
+    )
+
+
+async def _account(db: AsyncSession, account_id: int) -> AdminUser:
+    row = await db.scalar(select(AdminUser).where(AdminUser.id == account_id))
+    if row is None:
+        raise accounts.AccountNotFound(f"No account {account_id}.")
+    return row
+
+
+@admin_router.get("/accounts", response_model=AccountsResponse)
+async def list_accounts(
+    user: AdminUser = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+) -> AccountsResponse:
+    """Requests waiting for a decision (email verified) and the admins with access."""
+    rows = list((await db.scalars(select(AdminUser).order_by(AdminUser.created_at, AdminUser.id))).all())
+    pending = [_account_row(r, user) for r in rows if r.status == accounts.PENDING_APPROVAL]
+    active = [_account_row(r, user) for r in rows if r.status == accounts.ACTIVE]
+    return AccountsResponse(pending=pending, active=active, pendingCount=len(pending))
+
+
+@admin_router.post("/accounts/{account_id}/approve", response_model=AccountRow)
+async def approve_account(
+    account_id: int,
+    background: BackgroundTasks,
+    user: AdminUser = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+) -> AccountRow:
+    """Give a verified request admin access, and tell the person by email."""
+    target = await _account(db, account_id)
+    if target.status != accounts.PENDING_APPROVAL:
+        raise accounts.AccountError("Only accounts waiting for approval can be approved.", "not_pending_approval")
+    accounts.set_status(target, accounts.ACTIVE)
+    target.approved_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    target.approved_by_id = user.id
+    accounts.audit(db, action="account_approved", subject=target, actor=user)
+    await db.commit()
+    background.add_task(mailer.send_email, *accounts.approved_email(target))
+    return _account_row(target, user)
+
+
+@admin_router.post("/accounts/{account_id}/reject", response_model=AccountRow)
+async def reject_account(
+    account_id: int,
+    user: AdminUser = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+) -> AccountRow:
+    """Turn down a request. The row is kept for the audit trail; it cannot sign in."""
+    target = await _account(db, account_id)
+    if target.status not in (accounts.PENDING_APPROVAL, accounts.PENDING_VERIFICATION):
+        raise accounts.AccountError("Only pending requests can be rejected.", "not_pending")
+    accounts.set_status(target, accounts.REJECTED)
+    accounts.audit(db, action="account_rejected", subject=target, actor=user)
+    await db.commit()
+    return _account_row(target, user)
+
+
+@admin_router.post("/accounts/{account_id}/deactivate", response_model=AccountRow)
+async def deactivate_account(
+    account_id: int,
+    user: AdminUser = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+) -> AccountRow:
+    """
+    Remove an admin's access and end every session they have, at once. Not
+    your own account: that would lock you out mid-task (and could leave no
+    admin at all).
+    """
+    target = await _account(db, account_id)
+    if target.id == user.id:
+        raise accounts.AccountError("You cannot deactivate your own account.", "cannot_deactivate_self")
+    if target.status != accounts.ACTIVE:
+        raise accounts.AccountError("Only active accounts can be deactivated.", "not_active")
+    accounts.set_status(target, accounts.DEACTIVATED)
+    await security.end_all_sessions(db, target)
+    accounts.audit(db, action="account_deactivated", subject=target, actor=user)
+    await db.commit()
+    return _account_row(target, user)
 
 
 # ---------------------------------------------------------------------------
