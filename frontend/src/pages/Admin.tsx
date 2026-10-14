@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MessageSquareText,
   ClipboardCheck,
@@ -28,6 +28,8 @@ import logoIcon from "@/assets/logo-icon.png";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { ADMIN_SECTIONS, adminPath, sectionFromPath, type AdminSection } from "@/lib/adminNav";
+import { NavBtn } from "@/components/TopNavbar";
 import { ApiError } from "@/lib/api";
 import {
   useConfig,
@@ -52,11 +54,14 @@ import {
   Tooltip,
 } from "recharts";
 
-type Section = "map" | "review" | "feedback";
 const THEME_KEY = "aipheed_theme";
 
-export default function Admin({ initialSection }: { initialSection?: Section } = {}) {
-  const [section, setSection] = useState<Section>(initialSection ?? "map");
+export default function Admin() {
+  // The URL is the only source of truth for the section: /admin, /admin/review,
+  // /admin/feedback. Back/Forward and links therefore move between sections.
+  const location = useLocation();
+  const navigate = useNavigate();
+  const section = sectionFromPath(location.pathname);
   const { user, logout } = useAuth();
 
   const { data: quartersRes } = useQuarters("nowcast");
@@ -79,14 +84,13 @@ export default function Admin({ initialSection }: { initialSection?: Section } =
       <AdminNavbar
         user={user}
         section={section}
-        onSection={setSection}
         onLogout={doLogout}
       />
 
       {topWarning && (
         <EarlyWarningBanner
           message={`${topWarning.province} — ${topWarning.riskLevel === "high" ? "High" : topWarning.riskLevel} risk detected for ${topWarning.quarter}. ${warningItems.length} item${warningItems.length === 1 ? "" : "s"} awaiting review.`}
-          onReview={() => setSection("review")}
+          onReview={() => navigate(adminPath("review"))}
         />
       )}
 
@@ -105,12 +109,10 @@ export default function Admin({ initialSection }: { initialSection?: Section } =
 function AdminNavbar({
   user,
   section,
-  onSection,
   onLogout,
 }: {
   user: { email: string; role: string };
-  section: Section;
-  onSection: (s: Section) => void;
+  section: AdminSection;
   onLogout: () => void;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">(
@@ -141,9 +143,9 @@ function AdminNavbar({
 
       {/* Nav links — centered */}
       <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
-        <NavBtn label="Mapping" active={section === "map"} onClick={() => onSection("map")} />
-        <NavBtn label="Review" active={section === "review"} onClick={() => onSection("review")} />
-        <NavBtn label="Feedback" active={section === "feedback"} onClick={() => onSection("feedback")} />
+        {ADMIN_SECTIONS.map((s) => (
+          <NavBtn key={s.section} label={s.label} to={s.path} active={section === s.section} />
+        ))}
       </nav>
 
       <div className="flex-1" />
@@ -219,24 +221,6 @@ function AdminNavbar({
 /* ---------- Admin Map View — same floating-card layout as user page ---------- */
 function AdminMapView() {
   return <MapDashboard showAboutFeedback={false} />;
-}
-
-function NavBtn({ label, active, onClick }: { label: string; active?: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`group relative px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors ${
-        active ? "text-primary" : "text-foreground/80 hover:text-primary"
-      }`}
-    >
-      <span>{label}</span>
-      <span
-        className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-1 h-[2px] rounded-full bg-primary transition-all duration-300 ${
-          active ? "w-6 opacity-100" : "w-0 opacity-0 group-hover:w-6 group-hover:opacity-100"
-        }`}
-      />
-    </button>
-  );
 }
 
 function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
