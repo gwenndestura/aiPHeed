@@ -7,6 +7,8 @@ import { api, ApiError } from "@/lib/api";
 import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
 import { X, ImageIcon, FileText } from "lucide-react";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { COMPACT_QUERY } from "@/lib/breakpoints";
 import {
   CartesianGrid,
   Line,
@@ -43,6 +45,15 @@ type Tab = "trend" | "shap";
 
 // Room right of the trend plot for "Alert Threshold (0.60)" at 9px.
 const THRESHOLD_LABEL_W = 124;
+
+/**
+ * Chart text size: the desktop size, and at least 12px on phones (the chart
+ * text is drawn by Recharts, so the page's CSS rule cannot reach it).
+ */
+function useChartFont() {
+  const compact = useMediaQuery(COMPACT_QUERY);
+  return { compact, fs: (desktop: number) => (compact ? Math.max(12, desktop) : desktop) };
+}
 
 function downloadCanvasAsPng(canvas: HTMLCanvasElement, filename: string) {
   const link = document.createElement("a");
@@ -134,7 +145,7 @@ function SubTab({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors ${
+      className={`flex items-center px-3 py-2 compact:min-h-11 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors ${
         active
           ? "bg-primary text-primary-foreground"
           : "bg-card border border-border/50 text-muted-foreground hover:text-foreground"
@@ -148,6 +159,7 @@ function SubTab({
 /* ─── Sub-tab A — Province Risk Level Trend ─── */
 function TrendView() {
   const { data: config } = useConfig();
+  const { compact, fs } = useChartFont();
   const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const QUARTERS = useMemo(
     // Reports describe the nowcast indicator; the E20 forecast quarter is a
@@ -279,7 +291,7 @@ function TrendView() {
     <div>
       <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality Risk Level Trend</h1>
-        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest">
+        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
           Risk Level time series across selected province, municipality, and quarters
         </p>
       </div>
@@ -321,14 +333,14 @@ function TrendView() {
           <button
             onClick={handleDownloadPng}
             disabled={!hasChart}
-            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <ImageIcon className="h-4 w-4" /> Download PNG
           </button>
           <button
             onClick={handleDownloadPdf}
             disabled={!hasChart || pdfBusy}
-            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
@@ -348,35 +360,36 @@ function TrendView() {
           <div ref={figureRef}>
           <ResponsiveContainer width="100%" height={400}>
             {/* The right margin holds the threshold labels, drawn beside the
-                plot at the end of each reference line. */}
-            <LineChart data={data} margin={{ top: 20, right: THRESHOLD_LABEL_W, left: 0, bottom: 0 }}>
+                plot at the end of each reference line. Phones have no room for
+                it: the labels sit inside the plot, above their lines. */}
+            <LineChart data={data} margin={{ top: 20, right: compact ? 12 : THRESHOLD_LABEL_W, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
-              <XAxis dataKey="quarter" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+              <XAxis dataKey="quarter" tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }} />
               <YAxis
                 domain={[0, 1]}
-                tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
-                label={{ value: "Risk Level Score", angle: -90, position: "insideLeft", fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
+                label={{ value: "Risk Level Score", angle: -90, position: "insideLeft", fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip
                 contentStyle={{
-                  fontSize: 11,
+                  fontSize: fs(11),
                   borderRadius: 0,
                   background: "hsl(var(--card))",
                   border: "1px solid hsl(var(--border))",
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Legend wrapperStyle={{ fontSize: fs(11) }} />
               <ReferenceLine
                 y={alertThreshold}
                 stroke="hsl(var(--risk-high))"
                 strokeDasharray="5 4"
-                label={{ value: `Alert Threshold (${alertThreshold.toFixed(2)})`, position: "right", fontSize: 9, fill: "hsl(var(--risk-high))" }}
+                label={{ value: `Alert Threshold (${alertThreshold.toFixed(2)})`, position: compact ? "insideTopRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-high))" }}
               />
               <ReferenceLine
                 y={displayCutoff}
                 stroke="hsl(var(--risk-moderate))"
                 strokeDasharray="5 4"
-                label={{ value: `High Risk (${displayCutoff.toFixed(2)})`, position: "right", fontSize: 9, fill: "hsl(var(--risk-moderate))" }}
+                label={{ value: `High Risk (${displayCutoff.toFixed(2)})`, position: compact ? "insideBottomRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-moderate))" }}
               />
               {seriesKeys.map((p) => (
                 <Line
@@ -388,7 +401,11 @@ function TrendView() {
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
                 >
-                  <LabelList dataKey={p} position="top" fontSize={9} fill="hsl(var(--foreground))" />
+                  {/* Phones: value labels only for a single line; with five they
+                      overlap. Every value is in the tooltip (tap a point). */}
+                  {(!compact || seriesKeys.length === 1) && (
+                    <LabelList dataKey={p} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" />
+                  )}
                 </Line>
               ))}
             </LineChart>
@@ -402,6 +419,7 @@ function TrendView() {
 
 /* ─── Sub-tab B — Feature Contribution Breakdown ─── */
 function ShapView() {
+  const { fs } = useChartFont();
   const { data: config } = useConfig();
   const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
   const QUARTERS = useMemo(
@@ -470,7 +488,7 @@ function ShapView() {
     <div>
       <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">SHAP Explainability — Driver Groups</h1>
-        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest">
+        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
           Per-group contribution to the risk forecast, by province and quarter
         </p>
       </div>
@@ -499,14 +517,14 @@ function ShapView() {
           <button
             onClick={handleDownloadPng}
             disabled={!hasChart}
-            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <ImageIcon className="h-4 w-4" /> Download PNG
           </button>
           <button
             onClick={handleDownloadPdf}
             disabled={!hasChart || pdfBusy}
-            className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
@@ -536,19 +554,19 @@ function ShapView() {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
                 <XAxis
                   type="number"
-                  tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
                   domain={[0, 50]}
                   tickFormatter={(v: number) => `${v}%`}
                 />
                 <YAxis
                   type="category"
                   dataKey="feature"
-                  tick={{ fontSize: 11, fill: "hsl(var(--foreground))" }}
+                  tick={{ fontSize: fs(11), fill: "hsl(var(--foreground))" }}
                   width={120}
                 />
                 <Tooltip
                   contentStyle={{
-                    fontSize: 11,
+                    fontSize: fs(11),
                     borderRadius: 0,
                     background: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
@@ -559,13 +577,13 @@ function ShapView() {
                   x={redCutoff}
                   stroke="hsl(var(--risk-high))"
                   strokeDasharray="4 4"
-                  label={{ value: `${redCutoff}% even share`, position: "top", fontSize: 8.5, fill: "hsl(var(--risk-high))" }}
+                  label={{ value: `${redCutoff}% even share`, position: "top", fontSize: fs(8.5), fill: "hsl(var(--risk-high))" }}
                 />
                 <Bar dataKey="pct" radius={[0, 0, 0, 0]}>
                   {data.map((d, i) => (
                     <Cell key={i} fill={d.color} />
                   ))}
-                  <LabelList dataKey="pct" position="right" fontSize={10} fill="hsl(var(--foreground))" formatter={(v: number) => `${v}%`} />
+                  <LabelList dataKey="pct" position="right" fontSize={fs(10)} fill="hsl(var(--foreground))" formatter={(v: number) => `${v}%`} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
