@@ -461,7 +461,7 @@ function Capabilities() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="text-[var(--lp-fg)] font-semibold text-[15px] mb-2">{it.title}</h3>
-              <p className="text-[13px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{it.body}</p>
+              <p className="text-[13px] compact:text-[14px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{it.body}</p>
             </div>
           ))}
         </div>
@@ -514,7 +514,7 @@ function RiskDrivers() {
               >
                 <div className="min-w-0">
                   <p className="text-[var(--lp-fg)] font-semibold text-[13px]">{d.label}</p>
-                  <p className="text-[12px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{d.body}</p>
+                  <p className="text-[12px] compact:text-[14px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{d.body}</p>
                 </div>
 
                 {/* Diverging magnitude bar */}
@@ -545,7 +545,7 @@ function RiskDrivers() {
             );
           })}
         </div>
-        <p className="mt-3 text-[11px]" style={{ color: "var(--lp-muted2)" }}>
+        <p className="mt-3 text-[11px] compact:text-[14px]" style={{ color: "var(--lp-muted2)" }}>
           Red bars raise forecast risk; green bars lower it. Values are SHAP contributions to the regional index.
         </p>
       </div>
@@ -601,7 +601,7 @@ function Methodology() {
               >
                 {s.tag}
               </span>
-              <p className="text-[13px]" style={{ color: "var(--lp-muted)" }}>{s.body}</p>
+              <p className="text-[13px] compact:text-[14px]" style={{ color: "var(--lp-muted)" }}>{s.body}</p>
             </div>
           ))}
         </div>
@@ -624,7 +624,7 @@ function Methodology() {
                 </span>
                 <p className="text-[var(--lp-fg)] font-semibold text-[13px]">{s.t}</p>
               </div>
-              <p className="text-[12px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{s.d}</p>
+              <p className="text-[12px] compact:text-[14px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>{s.d}</p>
             </div>
           ))}
         </div>
@@ -741,7 +741,7 @@ function FAQ() {
                   />
                 </button>
                 {isOpen && (
-                  <div className="pl-14 pr-5 pb-5 text-[13px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>
+                  <div className="pl-14 pr-5 pb-5 text-[13px] compact:text-[14px] leading-relaxed" style={{ color: "var(--lp-muted)" }}>
                     {it.a}
                   </div>
                 )}
@@ -779,36 +779,36 @@ function Footer() {
               food stress before it peaks.
             </p>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[14px]" style={{ color: "var(--lp-muted)" }}>
-              <a href="#" className="hover:text-[var(--lp-fg)] transition-colors">Home</a>
+              <a href="#" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Home</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
-              <a href="#about" className="hover:text-[var(--lp-fg)] transition-colors">About</a>
+              <a href="#about" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">About</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
-              <a href="#capabilities" className="hover:text-[var(--lp-fg)] transition-colors">Capabilities</a>
+              <a href="#capabilities" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Capabilities</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
-              <a href="#faq" className="hover:text-[var(--lp-fg)] transition-colors">FAQ</a>
+              <a href="#faq" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">FAQ</a>
               <span style={{ color: "var(--lp-divider)" }}>•</span>
-              <a href="mailto:aipheed.research@dlsud.edu.ph" className="hover:text-[var(--lp-fg)] transition-colors">Contact</a>
+              <a href="mailto:aipheed.research@dlsud.edu.ph" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Contact</a>
             </div>
           </div>
 
           {/* Product */}
           <div className="lg:pl-6 col-span-1">
             <h4 className="text-[var(--lp-fg)] font-semibold text-[15px] mb-5">Product</h4>
-            <ul className="space-y-3 text-[14px]" style={{ color: "var(--lp-muted)" }}>
-              <li><Link to="/dashboard" className="hover:text-[var(--lp-fg)] transition-colors">Mapping</Link></li>
-              <li><Link to="/data" className="hover:text-[var(--lp-fg)] transition-colors">Data</Link></li>
-              <li><Link to="/visualization" className="hover:text-[var(--lp-fg)] transition-colors">Visualization</Link></li>
-              <li><a href="#methodology" className="hover:text-[var(--lp-fg)] transition-colors">Methodology</a></li>
+            <ul className="space-y-3 compact:space-y-0 text-[14px]" style={{ color: "var(--lp-muted)" }}>
+              <li><Link to="/dashboard" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Mapping</Link></li>
+              <li><Link to="/data" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Data</Link></li>
+              <li><Link to="/visualization" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Visualization</Link></li>
+              <li><a href="#methodology" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Methodology</a></li>
             </ul>
           </div>
 
           {/* Company */}
           <div>
             <h4 className="text-[var(--lp-fg)] font-semibold text-[15px] mb-5">Company</h4>
-            <ul className="space-y-3 text-[14px]" style={{ color: "var(--lp-muted)" }}>
-              <li><a href="#about" className="hover:text-[var(--lp-fg)] transition-colors">About</a></li>
-              <li><a href="#disclaimer" className="hover:text-[var(--lp-fg)] transition-colors">Disclaimer</a></li>
-              <li><a href="mailto:aipheed.research@dlsud.edu.ph" className="hover:text-[var(--lp-fg)] transition-colors">Contact</a></li>
+            <ul className="space-y-3 compact:space-y-0 text-[14px]" style={{ color: "var(--lp-muted)" }}>
+              <li><a href="#about" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">About</a></li>
+              <li><a href="#disclaimer" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Disclaimer</a></li>
+              <li><a href="mailto:aipheed.research@dlsud.edu.ph" className="hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">Contact</a></li>
             </ul>
           </div>
         </div>
@@ -820,7 +820,7 @@ function Footer() {
           <p className="flex items-center gap-x-3 flex-wrap">
             <span>© 2026 aiPHeed. All rights reserved.</span>
             {/* The only public way in for administrators; the header menu has no sign-in. */}
-            <Link to="/login" className="underline underline-offset-2 hover:text-[var(--lp-fg)] transition-colors max-lg:inline-flex max-lg:items-center max-lg:min-h-11">
+            <Link to="/login" className="underline underline-offset-2 hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">
               Admin sign in
             </Link>
           </p>
@@ -832,7 +832,7 @@ function Footer() {
                   href={m.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-semibold hover:text-[var(--lp-fg)] transition-colors"
+                  className="font-semibold hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11"
                   style={{ color: "var(--lp-muted)" }}
                 >
                   {m.name}

@@ -20,7 +20,7 @@ export const DOMAIN_HINT = "Use your @calabarzon.da.gov.ph email address.";
 
 /** Links on the account pages: 13px, readable, with a visible keyboard focus ring. */
 export const authLinkClass =
-  "text-[13px] text-foreground/90 underline underline-offset-2 hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card";
+  "text-[13px] compact:inline-flex compact:items-center compact:min-h-11 text-foreground/90 underline underline-offset-2 hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card";
 
 /** A row of secondary links under the form. */
 export const authLinksRowClass = "mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[13px] text-foreground/80";
@@ -104,7 +104,7 @@ export function AuthField({ id, label, icon: Icon, value, onChange, type = "text
           placeholder=""
           autoComplete={autoComplete}
           aria-describedby={hint ? `${id}-hint` : undefined}
-          className={`w-full h-10 pl-9 ${isPassword ? "pr-10" : "pr-3"} text-[13px] bg-background border border-border/20 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/60`}
+          className={`w-full h-10 compact:h-11 compact:text-[16px] pl-9 ${isPassword ? "pr-10 compact:pr-12" : "pr-3"} text-[13px] bg-background border border-border/20 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/60`}
         />
         {isPassword && (
           <button
@@ -113,14 +113,14 @@ export function AuthField({ id, label, icon: Icon, value, onChange, type = "text
             aria-label={show ? "Hide password" : "Show password"}
             aria-pressed={show}
             title={show ? "Hide password" : "Show password"}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-foreground/70 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="absolute right-1.5 compact:right-0 top-1/2 -translate-y-1/2 p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md text-foreground/70 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {show ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
           </button>
         )}
       </div>
       {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-[12px] text-foreground/75 leading-snug">
+        <p id={`${id}-hint`} className="mt-1.5 text-[12px] compact:text-[14px] text-foreground/75 leading-snug">
           {hint}
         </p>
       )}
@@ -135,7 +135,7 @@ export function AuthSubmit({ loading, label, loadingLabel }: { loading: boolean;
     <button
       type="submit"
       disabled={loading}
-      className="w-full h-10 rounded-md bg-primary text-[#0D0F14] text-[13px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+      className="w-full h-10 compact:h-11 compact:text-[14px] rounded-md bg-primary text-[#0D0F14] text-[13px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
     >
       {loading ? loadingLabel : label}
     </button>
