@@ -79,7 +79,7 @@ export default function Login() {
                 maxLength={200}
                 placeholder=""
                 autoComplete="username"
-                className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
+                className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function Login() {
                 maxLength={1024}
                 placeholder=""
                 autoComplete="current-password"
-                className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
+                className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
               <button
                 type="button"
