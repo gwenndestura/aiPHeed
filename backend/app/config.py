@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -22,6 +23,35 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_TTL_SECONDS: int = 3600
 
+    # ── Sessions (refresh tokens) ─────────────────────────────────────────
+    # The access token above lives in browser memory only, so a reload loses
+    # it. A refresh token in an httpOnly cookie brings the session back. See
+    # app/services/sessions.py.
+    #   idle: signed out after this long without a refresh (page load, or
+    #         access-token renewal while working)
+    #   max:  signed out this long after signing in, however active
+    REFRESH_TOKEN_IDLE_TTL_SECONDS: int = 8 * 3600
+    REFRESH_TOKEN_MAX_TTL_SECONDS: int = 7 * 24 * 3600
+    # strict | lax | none. Strict works when the frontend and the API are on
+    # the same site (e.g. localhost:8080 + localhost:8000, or app.example.ph +
+    # api.example.ph). A cross-site deployment (a *.vercel.app frontend calling
+    # an API on another domain) needs "none" -- but only after the CORS preview
+    # regex (CORS_PREVIEW_REGEX) is pinned to this project's own deployments
+    # (QA_REPORT SEC-08): with SameSite=None the browser sends the cookie on
+    # cross-site requests, and CORS is then what stops other sites using it.
+    REFRESH_COOKIE_SAMESITE: str = "strict"
+    # Leave true. It is relaxed automatically only for plain-http requests to
+    # localhost / 127.0.0.1, where browsers would otherwise drop the cookie.
+    REFRESH_COOKIE_SECURE: bool = True
+
+    @field_validator("REFRESH_COOKIE_SAMESITE")
+    @classmethod
+    def _samesite(cls, v: str) -> str:
+        v = v.strip().lower()
+        if v not in ("strict", "lax", "none"):
+            raise ValueError("REFRESH_COOKIE_SAMESITE must be strict, lax or none")
+        return v
+
     # ── API docs ──────────────────────────────────────────────────────────
     # /docs, /redoc and /openapi.json list every route, admin ones included.
     # Off unless asked for, so a deployment does not publish its own map.
@@ -40,6 +70,8 @@ class Settings(BaseSettings):
     RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR: int = 10
     RATE_LIMIT_REPORT_PER_HOUR: int = 60
     RATE_LIMIT_FEEDBACK_PER_HOUR: int = 20
+    # Session refreshes per IP: one per page load or tab, plus one an hour.
+    RATE_LIMIT_REFRESH_PER_15MIN: int = 120
 
     # ── CORS ──────────────────────────────────────────────────────────────
     # The previous regex was https://.*\.vercel\.app -- ANY Vercel deployment,

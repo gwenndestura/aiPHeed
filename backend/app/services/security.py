@@ -114,8 +114,13 @@ def _assert_signable() -> None:
         )
 
 
-def create_access_token(user: AdminUser) -> tuple[str, int, datetime]:
-    """Return (token, expires_in_seconds, absolute_expiry)."""
+def create_access_token(user: AdminUser, session_id: str | None = None) -> tuple[str, int, datetime]:
+    """
+    Return (token, expires_in_seconds, absolute_expiry).
+
+    `session_id` is the refresh-token family the token belongs to ("sid"), so
+    signing out can end that session's refresh tokens too.
+    """
     _assert_signable()
     now = datetime.now(timezone.utc)
     ttl = settings.ACCESS_TOKEN_TTL_SECONDS
@@ -130,6 +135,8 @@ def create_access_token(user: AdminUser) -> tuple[str, int, datetime]:
         "iat": int(now.timestamp()),
         "exp": int(expires_at.timestamp()),
     }
+    if session_id:
+        payload["sid"] = session_id
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     return token, ttl, expires_at
 

@@ -1,6 +1,6 @@
 from sqlalchemy import (
     Column, Integer, String, Float, Boolean,
-    DateTime, Index, JSON, Text, UniqueConstraint
+    DateTime, ForeignKey, Index, JSON, Text, UniqueConstraint
 )
 from sqlalchemy.sql import func
 from app.db.database import Base
@@ -184,6 +184,9 @@ class AdminUser(Base):
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, server_default=func.now())
     last_login_at = Column(DateTime, nullable=True)
+    # Carried in every access token as "ver". Raising it (password change,
+    # deactivation) invalidates every access token already issued.
+    token_version = Column(Integer, nullable=False, default=0, server_default="0")
 
 
 class RevokedToken(Base):
@@ -200,6 +203,29 @@ class RevokedToken(Base):
     jti = Column(String, nullable=False, unique=True, index=True)
     expires_at = Column(DateTime, nullable=False)
     revoked_at = Column(DateTime, server_default=func.now())
+
+
+class RefreshToken(Base):
+    """
+    One refresh token in a sign-in session ("family").
+
+    Only the SHA-256 of the token is stored; the token itself lives in the
+    browser's httpOnly cookie. Each use rotates it: the row is marked
+    `rotated_at` and a new row joins the same family. A rotated token
+    presented again after the grace window means it was copied, and the
+    whole family is revoked. See app/services/sessions.py.
+    """
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("admin_users.id", ondelete="CASCADE"), nullable=False, index=True)
+    family_id = Column(String, nullable=False, index=True)
+    token_hash = Column(String, nullable=False, unique=True, index=True)
+    created_at = Column(DateTime, nullable=False)
+    expires_at = Column(DateTime, nullable=False)           # idle limit
+    absolute_expires_at = Column(DateTime, nullable=False)  # max session lifetime
+    rotated_at = Column(DateTime, nullable=True)
+    revoked_at = Column(DateTime, nullable=True)
 
 
 class ReviewRecord(Base):

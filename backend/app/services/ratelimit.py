@@ -199,6 +199,12 @@ def clear_login_failures(email: str) -> None:
     _window.clear(_account_key(email))
 
 
+def refresh_guard(request: Request) -> None:
+    """Session refreshes: cheap, but each one writes a row."""
+    limit(request, "auth_refresh",
+          settings.RATE_LIMIT_REFRESH_PER_15MIN, 15 * 60)
+
+
 def report_guard(request: Request) -> None:
     """Seconds of CPU per call; the tightest limit of the three."""
     limit(request, "report",

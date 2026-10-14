@@ -45,7 +45,10 @@ app.add_middleware(
     allow_origin_regex=settings.CORS_PREVIEW_REGEX,
     allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    # X-CSRF-Protection: required on /auth/refresh (app/services/sessions.py).
+    # Being a custom header, a cross-origin request carrying it must pass this
+    # preflight first, which only the origins above do.
+    allow_headers=["Authorization", "Content-Type", "X-CSRF-Protection"],
 )
 
 

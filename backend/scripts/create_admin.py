@@ -37,7 +37,7 @@ from sqlalchemy import select  # noqa: E402
 from app.config import settings  # noqa: E402
 from app.db.database import AsyncSessionLocal  # noqa: E402
 from app.db.models import AdminUser  # noqa: E402
-from app.services import security  # noqa: E402
+from app.services import security, sessions  # noqa: E402
 from app.services.passwords import password_problem  # noqa: E402
 
 
@@ -80,9 +80,12 @@ async def deactivate(email: str) -> None:
         if user is None:
             sys.exit(f"No account for {email}.")
         user.is_active = False
+        # Signed-in browsers would otherwise renew their access with the
+        # refresh cookie; end every session the account has.
+        await sessions.revoke_all_for_user(db, user.id)
         await db.commit()
     # The row is kept so the audit trail still resolves who did what.
-    print(f"Deactivated {email}. Their audit history is retained.")
+    print(f"Deactivated {email}. Their audit history is retained; all sessions ended.")
 
 
 async def upsert(email: str, name: str, password: str) -> None:

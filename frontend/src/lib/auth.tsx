@@ -1,13 +1,14 @@
 // src/lib/auth.tsx
 // -----------------
-// Session state. The token lives in memory (api.ts), never localStorage,
-// never a cookie -- this component is the only thing that reads or writes it.
-// On mount it calls GET /auth/me rather than trusting a stored identity
-// object, so a session that was revoked server-side (logout elsewhere,
-// deactivated account) is noticed immediately rather than on next expiry.
+// Session state. The access token lives in memory (api.ts), never
+// localStorage or a readable cookie. On mount -- a reload, a new tab, a typed
+// URL -- the server's httpOnly refresh cookie is traded for a new access token
+// (refreshSession), then GET /auth/me confirms it rather than trusting a
+// stored identity object, so a session revoked server-side (sign-out,
+// deactivation, password change) is noticed immediately.
 
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import { api, ApiError, setToken, getToken, onSessionExpired } from "./api";
+import { api, ApiError, setToken, getToken, onSessionExpired, refreshSession } from "./api";
 import type { AuthUser, LoginResponse } from "./apiTypes";
 
 type Status = "loading" | "authenticated" | "anonymous";
@@ -38,12 +39,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // the session here. Login/route guards react to `status` changing.
   useEffect(() => onSessionExpired(clearSession), [clearSession]);
 
-  // On mount: if a token is already held (e.g. survived a hot reload in dev),
-  // confirm it against the server rather than assuming it's still good.
+  // On mount: restore the session from the refresh cookie when no access
+  // token is held (a reload or a new tab), then confirm it against the server
+  // rather than assuming it's still good. RequireAdmin shows "Checking
+  // session…" meanwhile, so admin pages never flash or bounce to /login.
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!getToken()) {
+      if (!getToken() && !(await refreshSession())) {
         if (!cancelled) setStatus("anonymous");
         return;
       }
@@ -68,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await api.post<LoginResponse>(
         "/api/v1/auth/login",
         { email, password },
-        { auth: false }
+        { auth: false, withCredentials: true } // receives the refresh cookie
       );
       setToken(res.token);
       setUser(res.user);
@@ -94,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(async () => {
     try {
-      await api.post("/api/v1/auth/logout");
+      await api.post("/api/v1/auth/logout", undefined, { withCredentials: true }); // clears the cookie
     } catch {
       // Revocation failing server-side shouldn't trap the user in a "signed
       // in" state client-side -- clear the local session regardless.

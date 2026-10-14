@@ -1,9 +1,10 @@
 """
 app/api/v1/auth.py
 -------------------
-POST /api/v1/auth/login
+POST /api/v1/auth/login     sign in: access token in the body, refresh cookie set
+POST /api/v1/auth/refresh   new access token from the refresh cookie (rotated)
 GET  /api/v1/auth/me
-POST /api/v1/auth/logout
+POST /api/v1/auth/logout    revoke the access token and the session; clear the cookie
 
 Replaces both client-side login paths. Neither talked to a server: one ignored
 the password field entirely, the other compared against a credential compiled
@@ -19,7 +20,8 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Response
+from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -27,12 +29,13 @@ from app.config import settings
 from app.db.models import AdminUser, AuditRecord
 from app.dependencies import get_db
 from app.schemas.admin import LoginRequest, LoginResponse, LogoutResponse, UserOut
-from app.services import security
+from app.services import security, sessions
 from app.services.ratelimit import (
     account_locked,
     clear_login_failures,
     login_guard,
     record_login_failure,
+    refresh_guard,
 )
 
 logger = logging.getLogger(__name__)
@@ -63,6 +66,7 @@ async def _audit_failed_login(db: AsyncSession, request: Request, email: str, re
 async def login(
     body: LoginRequest,
     request: Request,
+    response: Response,
     db: AsyncSession = Depends(get_db),
 ) -> LoginResponse:
     """
@@ -99,7 +103,8 @@ async def login(
     if security.needs_rehash(user.password_hash):
         user.password_hash = security.hash_password(body.password)
 
-    token, expires_in, expires_at = security.create_access_token(user)
+    refresh_token, refresh_row = await sessions.start_session(db, user)
+    token, expires_in, expires_at = security.create_access_token(user, session_id=refresh_row.family_id)
     user.last_login_at = datetime.now(timezone.utc).replace(tzinfo=None)
     db.add(AuditRecord(
         actor_id=user.id,
@@ -109,7 +114,53 @@ async def login(
         subject_id=None,
     ))
     await db.commit()
+    sessions.set_refresh_cookie(response, request, refresh_token, refresh_row)
 
+    return LoginResponse(
+        token=token,
+        expiresIn=expires_in,
+        expiresAt=expires_at,
+        user=UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role),
+    )
+
+
+@router.post("/refresh", response_model=LoginResponse,
+             responses={204: {"description": "No session to restore"}},
+             dependencies=[Depends(refresh_guard)])
+async def refresh(
+    request: Request,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    A new access token from the refresh cookie, which is rotated.
+
+    Called on page load and when the access token expires, so a reload or a
+    new tab does not sign the admin out. Requires the X-CSRF-Protection header
+    (see app/services/sessions.py).
+
+    No cookie at all is the normal case for a public visitor, so it is 204
+    "nothing to restore", not an error (every page load calls this). A cookie
+    that is invalid, expired or revoked is 401, and the cookie is cleared.
+    """
+    sessions.check_refresh_csrf(request)
+    presented = request.cookies.get(sessions.COOKIE_NAME)
+    if not presented:
+        return Response(status_code=204)
+    try:
+        user, refresh_token, refresh_row = await sessions.rotate(db, presented)
+    except sessions.RefreshError as exc:
+        failed = JSONResponse(
+            status_code=401,
+            content={"error": {"code": exc.code, "message": str(exc), "details": {}}},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        sessions.clear_refresh_cookie(failed, request)
+        return failed
+
+    token, expires_in, expires_at = security.create_access_token(user, session_id=refresh_row.family_id)
+    await db.commit()
+    sessions.set_refresh_cookie(response, request, refresh_token, refresh_row)
     return LoginResponse(
         token=token,
         expiresIn=expires_in,
@@ -127,15 +178,18 @@ async def me(user: AdminUser = Depends(security.current_user)) -> UserOut:
 @router.post("/logout", response_model=LogoutResponse)
 async def logout(
     request: Request,
+    response: Response,
     user: AdminUser = Depends(security.current_user),
     db: AsyncSession = Depends(get_db),
 ) -> LogoutResponse:
     """
-    Revoke the presented token.
+    Revoke the presented token and end its session.
 
     A JWT stays valid until it expires, so this records the token id in the
     revocation table. Without it, logout would only clear the browser's copy
-    while the token itself kept working for the rest of its hour.
+    while the token itself kept working for the rest of its hour. The
+    session's refresh tokens are revoked and the cookie cleared, so a reload
+    afterwards stays signed out. Other devices' sessions are unaffected.
     """
     # Added before revoke(), which commits: the sign-out and its audit row
     # land together.
@@ -146,7 +200,11 @@ async def logout(
         subject_type="session",
         subject_id=None,
     ))
+    session_id = request.state.token_payload.get("sid")
+    if session_id:
+        await sessions.revoke_family(db, session_id)
     await security.revoke(db, request.state.token_payload)
+    sessions.clear_refresh_cookie(response, request)
     return LogoutResponse(
         revoked=True,
         message="Signed out. This token will no longer be accepted.",

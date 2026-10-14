@@ -4,14 +4,17 @@
 // this is what makes the token-storage, error-envelope and 401 rules apply
 // uniformly instead of being reimplemented (and drifting) per call site.
 
+import type { LoginResponse } from "./apiTypes";
+
 export const API_BASE_URL: string =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
-// Token storage — in memory only. Never localStorage, never a cookie: a
-// token surviving a page reload is not worth an XSS payload being able to
-// read it out of storage. The cost is that a hard refresh signs the admin
-// out and auth.tsx re-establishes the session via /auth/me on next load.
+// Token storage — in memory only. Never localStorage, never a readable
+// cookie: an XSS payload must not be able to read the access token out of
+// storage. What survives a reload is the server's httpOnly refresh cookie,
+// which page scripts cannot read; refreshSession() trades it for a new
+// access token (on page load, and when the access token expires).
 // ---------------------------------------------------------------------------
 
 let _token: string | null = null;
@@ -83,6 +86,10 @@ export function buildUrl(path: string, params?: Record<string, unknown>): string
 interface RequestOptions {
   auth?: boolean; // default true — send the bearer token when one is held
   timeoutMs?: number;
+  /** Send/accept cookies cross-origin: sign-in and sign-out, which set and clear the refresh cookie. */
+  withCredentials?: boolean;
+  /** Internal: this is the retry after renewing an expired access token. */
+  retried?: boolean;
 }
 
 const DEFAULT_TIMEOUT_MS = 20_000;
@@ -92,14 +99,12 @@ async function request<T>(
   path: string,
   { params, body, opts }: { params?: Record<string, unknown>; body?: unknown; opts?: RequestOptions } = {}
 ): Promise<T> {
-  const { auth = true, timeoutMs = DEFAULT_TIMEOUT_MS } = opts ?? {};
+  const { auth = true, timeoutMs = DEFAULT_TIMEOUT_MS, withCredentials = false, retried = false } = opts ?? {};
 
   const headers: Record<string, string> = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
-  if (auth) {
-    const token = getToken();
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-  }
+  const sentToken = auth ? getToken() : null;
+  if (sentToken) headers["Authorization"] = `Bearer ${sentToken}`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -111,6 +116,7 @@ async function request<T>(
       headers,
       body: body !== undefined ? JSON.stringify(body) : undefined,
       signal: controller.signal,
+      credentials: withCredentials ? "include" : "same-origin",
     });
   } catch (err) {
     clearTimeout(timer);
@@ -149,6 +155,11 @@ async function request<T>(
     const apiErr = new ApiError(res.status, code, message, details);
 
     if (res.status === 401) {
+      // The access token ran out while working: renew it from the refresh
+      // cookie once and repeat the request, rather than signing the admin out.
+      if (sentToken && code === "token_expired" && !retried && (await refreshSession())) {
+        return request<T>(method, path, { params, body, opts: { ...opts, retried: true } });
+      }
       emitSessionExpired();
     }
     if (res.status === 429) {
@@ -168,6 +179,48 @@ function safeParse(text: string): unknown {
   } catch {
     return null;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Session refresh
+// ---------------------------------------------------------------------------
+
+let refreshing: Promise<LoginResponse | null> | null = null;
+
+/**
+ * Trade the httpOnly refresh cookie for a new access token (POST
+ * /auth/refresh). Resolves to the session, or null when there is none to
+ * restore. Concurrent callers share one request: the server rotates the
+ * cookie on every use, so two parallel refreshes from one tab would race.
+ * The X-CSRF-Protection header is required by the server (see
+ * backend/app/services/sessions.py).
+ */
+export function refreshSession(): Promise<LoginResponse | null> {
+  if (!refreshing) {
+    refreshing = (async () => {
+      try {
+        const res = await fetch(buildUrl("/api/v1/auth/refresh"), {
+          method: "POST",
+          credentials: "include",
+          headers: { "X-CSRF-Protection": "1" },
+        });
+        // 204: no cookie, nothing to restore (a public visitor). 401: the
+        // cookie was invalid, expired or revoked, and the server cleared it.
+        if (res.status === 204 || !res.ok) {
+          setToken(null);
+          return null;
+        }
+        const session = (await res.json()) as LoginResponse;
+        setToken(session.token);
+        return session;
+      } catch {
+        return null;
+      } finally {
+        refreshing = null;
+      }
+    })();
+  }
+  return refreshing;
 }
 
 export const api = {
