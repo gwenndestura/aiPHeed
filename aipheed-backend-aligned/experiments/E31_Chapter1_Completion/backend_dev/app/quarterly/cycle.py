@@ -129,13 +129,27 @@ def _laplace(y: pd.Series) -> float:
     return float((y.sum() + 1.0) / (len(y) + 2.0))
 
 
-def reference_probabilities(labels: pd.DataFrame, tau: float, reference_quarter: str, lead: int = 1) -> dict:
+def reference_probabilities(labels: pd.DataFrame, tau: float, reference_quarter: str, lead: int = 1,
+                            rounds: pd.DataFrame | None = None, origin=None) -> dict:
     """Persistence (last published label), calibrated persistence (Laplace rate of HIGH after the same last label,
-    over published label pairs k quarters apart) and climatology (Laplace rate), from S1 labels <= reference-1."""
+    over published label pairs k quarters apart) and climatology (Laplace rate), from S1 labels <= reference-1.
+
+    E32 fix: with `rounds` and `origin`, only quarters whose definition-A SWS rounds were ALL posted before the origin
+    count as published. Without them (the pre-E32 behaviour) the label of reference-1 is used even when its round was
+    posted after the origin, which happens at 90% of origins and gives persistence information it could not have had."""
     t = Quarter.parse(reference_quarter).index
     S = labels.copy()
     S["qi"] = S["quarter"].map(lambda q: Quarter.parse(q).index)
     S = S[S["qi"] <= t - 1]
+    if rounds is not None and origin is not None:
+        from app.quarterly.pcf_engine import _usable_from
+
+        r = rounds[rounds["definition_A"].astype(str).str.lower() == "true"].copy()
+        r["u"] = _usable_from(r)
+        o = pd.Timestamp(origin)
+        o = o.tz_localize(None) if o.tzinfo else o
+        ok = {q for q, g in r.groupby("quarter") if g["u"].notna().all() and (g["u"] < o).all()}
+        S = S[S["quarter"].isin(ok)]
     S["y"] = (S["S1"] > tau).astype(int)
     piv = S.pivot_table(index="qi", columns="province_code", values="y")
     last_q = int(S["qi"].max())
@@ -158,7 +172,8 @@ def reference_probabilities(labels: pd.DataFrame, tau: float, reference_quarter:
     return out
 
 
-def seal_record(rec: dict, ledger: Ledger, labels: pd.DataFrame, now: datetime | None = None) -> list[dict]:
+def seal_record(rec: dict, ledger: Ledger, labels: pd.DataFrame, now: datetime | None = None,
+                rounds: pd.DataFrame | None = None) -> list[dict]:
     """Seal the READY forecast of a record and its references. Idempotent: an existing seal is reported, not
     duplicated; a refused seal (e.g. target already ended) is reported with the reason."""
     fc = rec.get("forecast") or {}
@@ -170,7 +185,7 @@ def seal_record(rec: dict, ledger: Ledger, labels: pd.DataFrame, now: datetime |
     inputs = [{**i, "authorized": True} for i in fc.get("inputs", [])]
     for k, blk in (fc.get("leads") or {}).items():
         q = blk["target_quarter"]
-        refs = reference_probabilities(labels, tau, fc["reference_quarter"], int(k))
+        refs = reference_probabilities(labels, tau, fc["reference_quarter"], int(k), rounds=rounds, origin=origin)
         arms = [(f"PCF21:lead{k}", "candidate", {p: v["risk"]["p_high"] for p, v in blk["provinces"].items()}),
                 (f"B1:lead{k}", "baseline_persistence", refs["persistence"]),
                 (f"B1p:lead{k}", "baseline_calibrated_persistence", refs["calibrated_persistence"]),
@@ -278,7 +293,8 @@ def run_cycle(root: Path, now: pd.Timestamp | None = None, forecaster=None, news
     report["seals"] = []
     if rec["status"] == "READY" and rec.get("forecast"):
         S1 = pd.read_csv(reg.latest("s1_labels").path, dtype={"province_code": str})
-        report["seals"] = seal_record(rec, ledger, S1, now=now.tz_convert("UTC").to_pydatetime())
+        rounds = pd.read_csv(reg.latest("sws_rounds").path)
+        report["seals"] = seal_record(rec, ledger, S1, now=now.tz_convert("UTC").to_pydatetime(), rounds=rounds)
         sealed = all(s["result"] in ("SEALED", "ALREADY_SEALED") for s in report["seals"])
         if sealed and rec.get("cutoff_reached"):
             save_period(period.advanced(), root / "config" / "forecast_period.json")
