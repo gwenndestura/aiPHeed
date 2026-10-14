@@ -257,7 +257,7 @@ class AuditRecord(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     actor_id = Column(Integer, nullable=True)
     actor_email = Column(String, nullable=False)
-    action = Column(String, nullable=False)        # approve|reject|undo|restore|login
+    action = Column(String, nullable=False)        # approve|reject|undo|restore|login|login_failed|logout
     subject_type = Column(String, nullable=False)  # review|rejection|session
     subject_id = Column(String, nullable=True)
     province_id = Column(String, nullable=True)

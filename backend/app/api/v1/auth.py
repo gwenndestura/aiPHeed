@@ -40,6 +40,24 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+async def _audit_failed_login(db: AsyncSession, request: Request, email: str, reason: str) -> None:
+    """
+    Record a refused sign-in. The attempted address and the client IP only --
+    never the password. No account id either: the row must not say whether
+    the address belongs to a real account.
+    """
+    db.add(AuditRecord(
+        actor_id=None,
+        actor_email=email,
+        action="login_failed",
+        subject_type="session",
+        subject_id=None,
+        reason=reason,
+        notes=f"from {request.client.host}" if request.client else None,
+    ))
+    await db.commit()
+
+
 @router.post("/login", response_model=LoginResponse,
              dependencies=[Depends(login_guard)])
 async def login(
@@ -62,6 +80,7 @@ async def login(
         security.verify_password(body.password, None)
         logger.warning("login refused for %s from %s: account failure limit reached",
                        email, request.client.host if request.client else "?")
+        await _audit_failed_login(db, request, email, "account_failure_limit")
         raise security.AuthError("Email or password is incorrect.")
 
     user = await db.scalar(select(AdminUser).where(AdminUser.email == email))
@@ -72,6 +91,7 @@ async def login(
     if not (user and password_ok and user.is_active and security.email_domain_allowed(email)):
         record_login_failure(email)
         logger.warning("failed login for %s from %s", email, request.client.host if request.client else "?")
+        await _audit_failed_login(db, request, email, "invalid_credentials")
         raise security.AuthError("Email or password is incorrect.")
 
     clear_login_failures(email)
@@ -117,6 +137,15 @@ async def logout(
     revocation table. Without it, logout would only clear the browser's copy
     while the token itself kept working for the rest of its hour.
     """
+    # Added before revoke(), which commits: the sign-out and its audit row
+    # land together.
+    db.add(AuditRecord(
+        actor_id=user.id,
+        actor_email=user.email,
+        action="logout",
+        subject_type="session",
+        subject_id=None,
+    ))
     await security.revoke(db, request.state.token_payload)
     return LogoutResponse(
         revoked=True,

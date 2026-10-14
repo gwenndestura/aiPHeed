@@ -187,6 +187,28 @@ class TestAuth:
         assert r.status_code == 500
         assert r.json()["error"]["code"] == "server_misconfigured"
 
+    def test_failed_sign_ins_are_audited_without_the_password(self, api):
+        make_user(api)
+        api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "wrong-secret-guess-1"})
+        api.post("/api/v1/auth/login", json={"email": "ghost@calabarzon.da.gov.ph",
+                                             "password": "wrong-secret-guess-2"})
+        rows = api.get("/api/v1/admin/audit", headers=auth_headers(api)).json()["data"]
+        failed = [r for r in rows if r["action"] == "login_failed"]
+        assert {r["actorEmail"] for r in failed} == {EMAIL, "ghost@calabarzon.da.gov.ph"}
+        assert all(r["reason"] == "invalid_credentials" for r in failed)
+        # No account id, so the log does not say which address is real...
+        assert all(r["actorId"] is None for r in failed)
+        # ...and the attempted password is stored nowhere.
+        assert "wrong-secret-guess" not in str(rows)
+
+    def test_sign_out_is_audited(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        assert api.post("/api/v1/auth/logout", headers=headers).status_code == 200
+        rows = api.get("/api/v1/admin/audit", headers=auth_headers(api)).json()["data"]
+        logout = [r for r in rows if r["action"] == "logout"]
+        assert len(logout) == 1 and logout[0]["actorEmail"] == EMAIL
+
     def test_outside_domain_cannot_sign_in(self, api):
         make_user(api, email="outsider@gmail.com", password=PASSWORD)
         r = api.post("/api/v1/auth/login",
