@@ -464,6 +464,58 @@ class TestRateLimiting:
         assert api.post("/api/v1/auth/login",
                         json={"email": EMAIL, "password": PASSWORD}).status_code == 429
 
+    @pytest.fixture
+    def per_account(self, monkeypatch):
+        """Per-account limit of 3; the per-IP limit out of the way; one IP per request."""
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR", 3)
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_PER_15MIN", 1000)
+        monkeypatch.setattr(settings, "RATE_LIMIT_TRUST_FORWARDED", True)
+        counter = iter(range(1, 255))
+        return lambda: {"X-Forwarded-For": f"198.51.100.{next(counter)}"}
+
+    def test_failed_logins_are_capped_per_account_across_ips(self, api, per_account):
+        make_user(api)
+        for _ in range(3):
+            r = api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "wrong"},
+                         headers=per_account())
+            assert r.status_code == 401
+        # A fresh IP with the right password is still refused -- spreading
+        # guesses over many addresses is what the per-IP limit cannot stop.
+        locked = api.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD},
+                          headers=per_account())
+        assert locked.status_code == 401
+        # Same answer as a wrong password: the lock is not an oracle.
+        assert locked.json()["error"]["message"] == "Email or password is incorrect."
+        assert locked.json()["error"]["code"] == "invalid_credentials"
+
+    def test_unknown_address_locks_the_same_way(self, api, per_account):
+        ghost = "nobody@calabarzon.da.gov.ph"
+        responses = [api.post("/api/v1/auth/login", json={"email": ghost, "password": "wrong"},
+                              headers=per_account()) for _ in range(4)]
+        # Locking only real accounts would reveal which addresses exist.
+        assert [r.status_code for r in responses] == [401, 401, 401, 401]
+        assert len({r.json()["error"]["message"] for r in responses}) == 1
+
+    def test_a_successful_login_clears_the_failure_count(self, api, per_account):
+        make_user(api)
+        for _ in range(2):
+            api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "wrong"}, headers=per_account())
+        assert api.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD},
+                        headers=per_account()).status_code == 200
+        for _ in range(2):
+            api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "wrong"}, headers=per_account())
+        assert api.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD},
+                        headers=per_account()).status_code == 200
+
+    def test_one_locked_account_does_not_lock_another(self, api, per_account):
+        make_user(api)
+        other = "other@calabarzon.da.gov.ph"
+        make_user(api, email=other)
+        for _ in range(3):
+            api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "wrong"}, headers=per_account())
+        assert api.post("/api/v1/auth/login", json={"email": other, "password": PASSWORD},
+                        headers=per_account()).status_code == 200
+
     def test_report_generation_is_capped(self, api, monkeypatch):
         monkeypatch.setattr(settings, "RATE_LIMIT_REPORT_PER_HOUR", 2)
         for _ in range(2):

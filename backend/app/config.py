@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     # identity per request and the limits become decorative.
     RATE_LIMIT_TRUST_FORWARDED: bool = False
     RATE_LIMIT_LOGIN_PER_15MIN: int = 10
+    # Failed sign-ins per email per hour, from any IP. See ratelimit.py.
+    RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR: int = 10
     RATE_LIMIT_REPORT_PER_HOUR: int = 60
     RATE_LIMIT_FEEDBACK_PER_HOUR: int = 20
 

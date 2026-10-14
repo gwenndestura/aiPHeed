@@ -91,6 +91,26 @@ class SlidingWindow:
                 )
             hits.append(now)
 
+    def exceeded(self, key: str, limit: int, window: int) -> bool:
+        """True when `key` already has `limit` hits in the window. Consumes nothing."""
+        now = time.monotonic()
+        with self._lock:
+            self._sweep(now, window)
+            hits = self._hits.get(key)
+            if not hits:
+                return False
+            while hits and hits[0] <= now - window:
+                hits.popleft()
+            return len(hits) >= limit
+
+    def record(self, key: str) -> None:
+        with self._lock:
+            self._hits[key].append(time.monotonic())
+
+    def clear(self, key: str) -> None:
+        with self._lock:
+            self._hits.pop(key, None)
+
     def _sweep(self, now: float, window: int) -> None:
         """Drop keys that have gone quiet, so the map cannot grow unbounded."""
         if now - self._last_sweep < 300:
@@ -142,6 +162,41 @@ def login_guard(request: Request) -> None:
     """Counts every attempt, successful or not -- otherwise it is a guess oracle."""
     limit(request, "auth_login",
           settings.RATE_LIMIT_LOGIN_PER_15MIN, 15 * 60)
+
+
+# ---------------------------------------------------------------------------
+# Per-account sign-in failures
+# ---------------------------------------------------------------------------
+#
+# The per-IP login limit above does nothing against guesses spread across many
+# addresses. This second limit counts *failed* sign-ins per email, from any IP.
+# It is keyed on the address as typed (normalised), whether or not an account
+# exists, so a locked address says nothing about which accounts are real; and
+# the caller answers a locked attempt with the same generic 401 as a wrong
+# password.
+
+ACCOUNT_FAILURE_WINDOW = 60 * 60
+
+
+def _account_key(email: str) -> str:
+    return f"auth_fail_account:{email.strip().lower()}"
+
+
+def account_locked(email: str) -> bool:
+    if not settings.RATE_LIMIT_ENABLED:
+        return False
+    return _window.exceeded(_account_key(email),
+                            settings.RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR,
+                            ACCOUNT_FAILURE_WINDOW)
+
+
+def record_login_failure(email: str) -> None:
+    if settings.RATE_LIMIT_ENABLED:
+        _window.record(_account_key(email))
+
+
+def clear_login_failures(email: str) -> None:
+    _window.clear(_account_key(email))
 
 
 def report_guard(request: Request) -> None:

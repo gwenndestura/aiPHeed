@@ -28,7 +28,12 @@ from app.db.models import AdminUser, AuditRecord
 from app.dependencies import get_db
 from app.schemas.admin import LoginRequest, LoginResponse, LogoutResponse, UserOut
 from app.services import security
-from app.services.ratelimit import login_guard
+from app.services.ratelimit import (
+    account_locked,
+    clear_login_failures,
+    login_guard,
+    record_login_failure,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -50,14 +55,26 @@ async def login(
     """
     email = body.email.strip().lower()
 
+    # Too many recent failures for this address: refuse without checking the
+    # password, but still pay the hashing cost and give the same answer, so a
+    # locked address looks exactly like a wrong password.
+    if account_locked(email):
+        security.verify_password(body.password, None)
+        logger.warning("login refused for %s from %s: account failure limit reached",
+                       email, request.client.host if request.client else "?")
+        raise security.AuthError("Email or password is incorrect.")
+
     user = await db.scalar(select(AdminUser).where(AdminUser.email == email))
     password_ok = security.verify_password(body.password, user.password_hash if user else None)
 
     # Domain is checked at account creation; re-checked here so a row that
     # predates the rule cannot sign in.
     if not (user and password_ok and user.is_active and security.email_domain_allowed(email)):
+        record_login_failure(email)
         logger.warning("failed login for %s from %s", email, request.client.host if request.client else "?")
         raise security.AuthError("Email or password is incorrect.")
+
+    clear_login_failures(email)
 
     if security.needs_rehash(user.password_hash):
         user.password_hash = security.hash_password(body.password)
