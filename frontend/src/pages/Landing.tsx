@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { TopNavbar } from "@/components/TopNavbar";
+import { useAuth } from "@/lib/auth";
 import logoDark from "@/assets/logo-dark.png";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { MetricLabel } from "@/components/ui/metric";
@@ -182,6 +183,8 @@ function CountUp({
 
 /* ---------------- HERO ---------------- */
 function Hero() {
+  // Server-confirmed session only (see lib/auth.tsx).
+  const isAdmin = useAuth().status === "authenticated";
   return (
     <section
       className="relative overflow-hidden px-6 sm:px-10 pt-20 pb-24 text-center"
@@ -250,6 +253,16 @@ function Hero() {
             Read the methodology
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </a>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="group inline-flex items-center gap-2 px-6 py-3 font-semibold text-[14px] border transition-colors hover:bg-[var(--lp-hover)]"
+              style={{ borderColor: "var(--lp-fg)", color: "var(--lp-fg)" }}
+            >
+              Go to admin dashboard
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          )}
         </div>
 
         {/* Risk scale legend */}

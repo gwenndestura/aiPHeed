@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Menu, LogIn, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Home, Database, BarChart3, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { ADMIN_SECTIONS } from "@/lib/adminNav";
 import { PSTClock } from "./PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -23,6 +24,10 @@ export function TopNavbar({ active = "none" }: Props) {
     return (localStorage.getItem(THEME_KEY) as "dark" | "light") ?? "dark";
   });
   const [loginOpen, setLoginOpen] = useState(false);
+  // Signed-in admins get the admin navigation on public pages too. Decided by
+  // the server-confirmed session only -- never a URL parameter or a stored flag.
+  const { status, user, logout } = useAuth();
+  const isAdmin = status === "authenticated";
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
@@ -43,9 +48,15 @@ export function TopNavbar({ active = "none" }: Props) {
 
       {/* Nav links — centered */}
       <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
-        <NavBtn label="Mapping" active={active === "home"} to="/dashboard" />
-        <NavBtn label="Data" active={active === "data"} to="/data" />
-        <NavBtn label="Visualization" active={active === "viz"} to="/visualization" />
+        {isAdmin ? (
+          ADMIN_SECTIONS.map((s) => <NavBtn key={s.section} label={s.label} to={s.path} />)
+        ) : (
+          <>
+            <NavBtn label="Mapping" active={active === "home"} to="/dashboard" />
+            <NavBtn label="Data" active={active === "data"} to="/data" />
+            <NavBtn label="Visualization" active={active === "viz"} to="/visualization" />
+          </>
+        )}
       </nav>
 
       <div className="flex-1" />
@@ -66,9 +77,15 @@ export function TopNavbar({ active = "none" }: Props) {
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
-            <button onClick={() => setLoginOpen(true)} className="w-full">
-              <MenuRow icon={LogIn} label="DA Admin Login" hint="Restricted administrator access" />
-            </button>
+            {isAdmin ? (
+              <button onClick={() => void logout()} className="w-full">
+                <MenuRow icon={LogOut} label="Sign out" hint={user?.email} />
+              </button>
+            ) : (
+              <button onClick={() => setLoginOpen(true)} className="w-full">
+                <MenuRow icon={LogIn} label="DA Admin Login" hint="Restricted administrator access" />
+              </button>
+            )}
 
             <div className="pt-3 mt-3 border-t border-border/40">
               <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-2">
@@ -229,7 +246,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
   );
 }
 
-function NavBtn({ label, active, to }: { label: string; active?: boolean; to: string }) {
+export function NavBtn({ label, active, to }: { label: string; active?: boolean; to: string }) {
   return (
     <Link
       to={to}
