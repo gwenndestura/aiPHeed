@@ -123,8 +123,9 @@ async def login(
         await _audit_failed_login(db, request, email, user.status)
         raise security.AuthError(message, code=code)
 
-    # Rejected and deactivated accounts fail exactly like a wrong password.
-    if not (credentials_ok and user.is_active):
+    # Rejected and deactivated accounts -- and the demo account while
+    # ENABLE_DEMO_ACCOUNT is off -- fail exactly like a wrong password.
+    if not (credentials_ok and user.is_active and not security.demo_blocked(user)):
         record_login_failure(email)
         logger.warning("failed login for %s from %s", email, request.client.host if request.client else "?")
         await _audit_failed_login(db, request, email, "invalid_credentials")
@@ -152,7 +153,7 @@ async def login(
         token=token,
         expiresIn=expires_in,
         expiresAt=expires_at,
-        user=UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role),
+        user=UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role, isDemo=bool(user.is_demo)),
     )
 
 
@@ -197,14 +198,14 @@ async def refresh(
         token=token,
         expiresIn=expires_in,
         expiresAt=expires_at,
-        user=UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role),
+        user=UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role, isDemo=bool(user.is_demo)),
     )
 
 
 @router.get("/me", response_model=UserOut)
 async def me(user: AdminUser = Depends(security.current_user)) -> UserOut:
     """Who the bearer token belongs to. 401 if it is missing, expired or revoked."""
-    return UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role)
+    return UserOut(id=user.id, email=user.email, name=user.full_name, role=user.role, isDemo=bool(user.is_demo))
 
 
 @router.post("/logout", response_model=LogoutResponse)

@@ -58,6 +58,14 @@ class Settings(BaseSettings):
     # Where the links in those emails point: the frontend's public address.
     FRONTEND_BASE_URL: str = "http://localhost:8080"
 
+    # ── Demo account (view-only, for presentations) ──────────────────────
+    # Created by `python scripts/create_admin.py --demo` from the two values
+    # below. While ENABLE_DEMO_ACCOUNT is false the demo account cannot sign
+    # in, refresh, or use a token it already has. Keep it false when live.
+    ENABLE_DEMO_ACCOUNT: bool = False
+    DEMO_ADMIN_EMAIL: str = ""
+    DEMO_ADMIN_PASSWORD: str = ""
+
     @field_validator("REFRESH_COOKIE_SAMESITE")
     @classmethod
     def _samesite(cls, v: str) -> str:

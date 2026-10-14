@@ -128,7 +128,7 @@ async def rotate(db: AsyncSession, presented: str) -> tuple[AdminUser, str, Refr
         raise RefreshError("Session has been signed out. Sign in again.", code="session_revoked")
 
     user = await db.scalar(select(AdminUser).where(AdminUser.id == row.user_id))
-    if user is None or not user.is_active:
+    if user is None or not user.is_active or (user.is_demo and not settings.ENABLE_DEMO_ACCOUNT):
         await revoke_family(db, row.family_id)
         await db.commit()
         raise RefreshError("Account is no longer active.", code="account_inactive")

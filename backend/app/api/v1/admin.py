@@ -60,11 +60,14 @@ from app.services import mailer
 from app.services import review as rv
 from app.services import security
 from app.services.ratelimit import feedback_guard
-from app.services.security import require_admin
+from app.services.security import forbid_demo, forbid_demo_writes, require_admin
 
 logger = logging.getLogger(__name__)
 
-admin_router = APIRouter(dependencies=[Depends(require_admin)])
+# require_admin: 401/403 for anyone who is not a signed-in admin.
+# forbid_demo_writes: the demo account is view-only on every route here,
+# present and future (403 on anything but GET/HEAD/OPTIONS).
+admin_router = APIRouter(dependencies=[Depends(require_admin), Depends(forbid_demo_writes)])
 public_router = APIRouter()
 
 
@@ -101,7 +104,12 @@ def _rejection(row: ReviewRecord) -> RejectionRow:
     )
 
 
-def _feedback_row(row: FeedbackRecord) -> FeedbackRow:
+DEMO_HIDDEN = "Hidden in the demo account"
+
+
+def _feedback_row(row: FeedbackRecord, mask_personal: bool = False) -> FeedbackRow:
+    """`mask_personal`: the demo account sees no respondent's name, email, agency or designation."""
+    hide = (lambda v: DEMO_HIDDEN if v else v) if mask_personal else (lambda v: v)
     return FeedbackRow(
         id=row.id,
         date=row.submitted_at,
@@ -109,10 +117,10 @@ def _feedback_row(row: FeedbackRecord) -> FeedbackRow:
         susVersion=row.sus_version,
         answers=row.answers,
         demographics=Demographics(
-            fullName=row.full_name,
-            email=row.email,
-            agency=row.agency,
-            designation=row.designation,
+            fullName=hide(row.full_name),
+            email=hide(row.email),
+            agency=hide(row.agency),
+            designation=hide(row.designation),
             age=row.age_band,
             sex=row.sex,
             clientType=row.client_type,
@@ -235,6 +243,7 @@ async def audit(
 async def list_feedback(
     page: int = Query(1, ge=1),
     pageSize: int = Query(50, ge=1, le=200),
+    user: AdminUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ) -> FeedbackListResponse:
     """
@@ -247,7 +256,9 @@ async def list_feedback(
     return FeedbackListResponse(
         summary=FeedbackSummary(**summary),
         questions=list(fb.SUS_QUESTIONS),
-        data=[_feedback_row(r) for r in rows],
+        # Respondents' personal details are masked for the demo account here,
+        # on the server -- not merely hidden in the page.
+        data=[_feedback_row(r, mask_personal=bool(user.is_demo)) for r in rows],
         page=page,
         pageSize=pageSize,
         total=total,
@@ -281,19 +292,21 @@ async def _account(db: AsyncSession, account_id: int) -> AdminUser:
     return row
 
 
-@admin_router.get("/accounts", response_model=AccountsResponse)
+@admin_router.get("/accounts", response_model=AccountsResponse, dependencies=[Depends(forbid_demo)])
 async def list_accounts(
     user: AdminUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ) -> AccountsResponse:
     """Requests waiting for a decision (email verified) and the admins with access."""
     rows = list((await db.scalars(select(AdminUser).order_by(AdminUser.created_at, AdminUser.id))).all())
+    # The demo account is listed only while it is enabled.
+    rows = [r for r in rows if not security.demo_blocked(r)]
     pending = [_account_row(r, user) for r in rows if r.status == accounts.PENDING_APPROVAL]
     active = [_account_row(r, user) for r in rows if r.status == accounts.ACTIVE]
     return AccountsResponse(pending=pending, active=active, pendingCount=len(pending))
 
 
-@admin_router.post("/accounts/{account_id}/approve", response_model=AccountRow)
+@admin_router.post("/accounts/{account_id}/approve", response_model=AccountRow, dependencies=[Depends(forbid_demo)])
 async def approve_account(
     account_id: int,
     background: BackgroundTasks,
@@ -313,7 +326,7 @@ async def approve_account(
     return _account_row(target, user)
 
 
-@admin_router.post("/accounts/{account_id}/reject", response_model=AccountRow)
+@admin_router.post("/accounts/{account_id}/reject", response_model=AccountRow, dependencies=[Depends(forbid_demo)])
 async def reject_account(
     account_id: int,
     user: AdminUser = Depends(require_admin),
@@ -329,7 +342,7 @@ async def reject_account(
     return _account_row(target, user)
 
 
-@admin_router.post("/accounts/{account_id}/deactivate", response_model=AccountRow)
+@admin_router.post("/accounts/{account_id}/deactivate", response_model=AccountRow, dependencies=[Depends(forbid_demo)])
 async def deactivate_account(
     account_id: int,
     user: AdminUser = Depends(require_admin),

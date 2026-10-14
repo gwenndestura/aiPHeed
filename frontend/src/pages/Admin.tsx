@@ -29,7 +29,7 @@ import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { adminPath, sectionFromPath } from "@/lib/adminNav";
-import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks } from "@/components/TopNavbar";
+import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks, DemoBadge } from "@/components/TopNavbar";
 import { AccountsSection } from "@/components/AccountsSection";
 import { ApiError } from "@/lib/api";
 import {
@@ -45,7 +45,7 @@ import {
   useMunicipalities,
   useExplainability,
 } from "@/lib/queries";
-import type { ReviewItem, FeedbackRow, Trigger } from "@/lib/apiTypes";
+import { DEMO_READ_ONLY_NOTE, type ReviewItem, type FeedbackRow, type Trigger } from "@/lib/apiTypes";
 import {
   BarChart,
   Bar,
@@ -104,7 +104,11 @@ export default function Admin() {
         {section === "accounts" && (
           <div className="h-full overflow-auto">
             <SectionHeader title="Accounts" subtitle="Approve requests for administrator access and manage who has it" />
-            <AccountsSection />
+            {user.isDemo ? (
+              <div className="px-6 py-5"><Note label={null}>{DEMO_READ_ONLY_NOTE}</Note></div>
+            ) : (
+              <AccountsSection />
+            )}
           </div>
         )}
       </main>
@@ -117,7 +121,7 @@ function AdminNavbar({
   user,
   onLogout,
 }: {
-  user: { email: string; role: string };
+  user: { email: string; role: string; isDemo?: boolean };
   onLogout: () => void;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">(
@@ -131,7 +135,8 @@ function AdminNavbar({
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
   // Fetched with the header, so the menu's pending count is ready when it opens.
-  useAccounts();
+  // Never for the demo account, which may not see account requests at all.
+  useAccounts(!user.isDemo);
 
   return (
     <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
@@ -147,10 +152,11 @@ function AdminNavbar({
         <img src={logoLight} alt="aiPHeed" className="hidden sm:block light-only h-10 w-auto object-contain" />
         <span className="hidden md:inline ml-2 text-[9px] uppercase tracking-widest text-primary font-bold">Admin</span>
       </Link>
+      {user.isDemo && <DemoBadge />}
 
       {/* Nav links — centered */}
       {/* Five links; below 1024px they move into the menu (AdminMenuLinks). */}
-      <nav className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-1">
+      <nav className={`absolute left-1/2 -translate-x-1/2 ${user.isDemo ? "hidden xl:flex" : "hidden lg:flex"} items-center gap-1`}>
         <AdminNavLinks />
       </nav>
 
@@ -169,11 +175,11 @@ function AdminNavbar({
             <SheetTitle className="text-sm">Admin Menu</SheetTitle>
           </SheetHeader>
           <div className="mt-6 space-y-1">
-            <AdminMenuLinks />
+            <AdminMenuLinks demo={!!user.isDemo} />
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
-            <AdminAccountsMenuItem />
+            {!user.isDemo && <AdminAccountsMenuItem />}
             <div className="px-2 py-2 rounded-md bg-secondary/40 flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
                 {user.email.slice(0, 2).toUpperCase()}
@@ -280,7 +286,10 @@ function ReviewSection() {
   const restoreMut = useRestoreRejection();
   // One review action at a time: the buttons are disabled while any of these
   // is in flight, so a double click cannot send the same decision twice.
-  const busy = approveMut.isPending || rejectMut.isPending || undoMut.isPending || restoreMut.isPending;
+  // The demo account is view-only (the server refuses every change); its
+  // buttons are disabled like during a request, with a note saying why.
+  const readOnly = !!useAuth().user?.isDemo;
+  const busy = readOnly || approveMut.isPending || rejectMut.isPending || undoMut.isPending || restoreMut.isPending;
 
   const statusBadge = statusBadgeFor;
 
@@ -350,6 +359,7 @@ function ReviewSection() {
   return (
     <div>
       <SectionHeader title="Review" subtitle="Approve, monitor, and audit risk reports per province" />
+      {readOnly && <div className="px-6 pt-4"><Note label={null}>{DEMO_READ_ONLY_NOTE}</Note></div>}
 
       <div className="px-6 pt-4">
         <div className="inline-flex rounded-lg border border-border/50 bg-card p-0.5">
@@ -458,6 +468,7 @@ function ReviewSection() {
           onReject={(reason, notes) => reject(open, reason, notes)}
           onRestore={() => restore(open)}
           busy={busy}
+          readOnly={readOnly}
         />
       )}
     </div>
@@ -523,6 +534,7 @@ function ReviewDetailModal({
   onReject,
   onRestore,
   busy = false,
+  readOnly = false,
 }: {
   item: ReviewItem;
   rejectionReasons: string[];
@@ -533,6 +545,8 @@ function ReviewDetailModal({
   onRestore: () => void;
   /** A review request is in flight: the action buttons are disabled. */
   busy?: boolean;
+  /** The demo account: actions disabled, with the note shown. */
+  readOnly?: boolean;
 }) {
   const [rejectOpen, setRejectOpen] = useState(false);
 
@@ -649,6 +663,7 @@ function ReviewDetailModal({
         </div>
 
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
+          {readOnly && <Note label={null} className="mr-auto">{DEMO_READ_ONLY_NOTE}</Note>}
           <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
           {item.status === "Rejected" ? (
             <button onClick={onRestore} disabled={busy} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Restore</button>

@@ -40,6 +40,7 @@ class UserOut(BaseModel):
     email: str
     name: str
     role: str
+    isDemo: bool = False   # the view-only presentation account
 
     model_config = {"from_attributes": True}
 

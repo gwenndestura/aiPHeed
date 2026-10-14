@@ -33,8 +33,10 @@ export function TopNavbar({ active = "none" }: Props) {
   // the server-confirmed session only -- never a URL parameter or a stored flag.
   const { status, user, logout } = useAuth();
   const isAdmin = status === "authenticated";
+  const isDemo = isAdmin && !!user?.isDemo;
   // Fetched with the header, so the menu's pending count is ready when it opens.
-  useAccounts(isAdmin);
+  // Never for the demo account, which may not see account requests at all.
+  useAccounts(isAdmin && !isDemo);
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
@@ -52,10 +54,13 @@ export function TopNavbar({ active = "none" }: Props) {
         <img src={logoDark} alt="aiPHeed — Food Insecurity Forecasting" className="hidden sm:block dark-only h-10 w-auto object-contain" />
         <img src={logoLight} alt="aiPHeed — Food Insecurity Forecasting" className="hidden sm:block light-only h-10 w-auto object-contain" />
       </Link>
+      {isDemo && <DemoBadge />}
 
       {/* Nav links — centered */}
       {/* A signed-in admin has five links; below 1024px they move into the menu. */}
-      <nav className={`absolute left-1/2 -translate-x-1/2 items-center gap-1 ${isAdmin ? "hidden lg:flex" : "flex"}`}>
+      {/* The demo account also shows a "Demo account" badge, so its links move
+          into the menu below 1280px instead of 1024px (see AdminMenuLinks). */}
+      <nav className={`absolute left-1/2 -translate-x-1/2 items-center gap-1 ${isDemo ? "hidden xl:flex" : isAdmin ? "hidden lg:flex" : "flex"}`}>
         {isAdmin ? (
           <AdminNavLinks />
         ) : (
@@ -82,11 +87,11 @@ export function TopNavbar({ active = "none" }: Props) {
             <SheetTitle className="text-sm">Menu</SheetTitle>
           </SheetHeader>
           <div className="mt-6 space-y-1">
-            {isAdmin && <AdminMenuLinks />}
+            {isAdmin && <AdminMenuLinks demo={isDemo} />}
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
-            {isAdmin && <AdminAccountsMenuItem />}
+            {isAdmin && !isDemo && <AdminAccountsMenuItem />}
             {isAdmin ? (
               <button onClick={() => void logout()} className="w-full">
                 <MenuRow icon={LogOut} label="Sign out" hint={user?.email} />
@@ -295,10 +300,10 @@ const ADMIN_NAV_ICONS: Record<string, typeof Home> = {
  * The same links as AdminNavLinks, as menu rows, for widths below 1024px where
  * the header has no room for them. Hidden from 1024px up. Each closes the menu.
  */
-export function AdminMenuLinks() {
+export function AdminMenuLinks({ demo = false }: { demo?: boolean }) {
   const { pathname } = useLocation();
   return (
-    <div className="lg:hidden pb-3 mb-3 border-b border-border/40">
+    <div className={`${demo ? "xl:hidden" : "lg:hidden"} pb-3 mb-3 border-b border-border/40`}>
       <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
         Navigate
       </p>
@@ -317,6 +322,15 @@ export function AdminMenuLinks() {
  * "Accounts" in the menu (not the header, which is full), with the number of
  * requests waiting for approval. In both headers.
  */
+/** "Demo account" next to the logo while the view-only presentation account is signed in. */
+export function DemoBadge() {
+  return (
+    <StatusBadge tone="moderate" className="shrink-0" title="View-only: changes are not available in the demo account.">
+      Demo account
+    </StatusBadge>
+  );
+}
+
 export function AdminAccountsMenuItem() {
   const { data } = useAccounts();
   const pending = data?.pendingCount ?? 0;

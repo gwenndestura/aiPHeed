@@ -208,7 +208,7 @@ async def current_user(
         raise AuthError("Session has been signed out.", code="token_revoked")
 
     user = await db.scalar(select(AdminUser).where(AdminUser.id == int(payload["sub"])))
-    if user is None or not user.is_active:
+    if user is None or not user.is_active or demo_blocked(user):
         raise AuthError("Account is no longer active.", code="account_inactive")
     # Tokens issued before a password change (or deactivation) carry an older
     # version. Tokens from before versions existed carry none and count as 0.
@@ -262,3 +262,32 @@ async def require_admin(user: AdminUser = Depends(current_user)) -> AdminUser:
     if user.role != "admin":
         raise ForbiddenError("This action requires an admin account.")
     return user
+
+
+# ---------------------------------------------------------------------------
+# The view-only demo account (create_admin.py --demo)
+# ---------------------------------------------------------------------------
+
+DEMO_READ_ONLY = "Not available in the demo account."
+SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
+
+
+def demo_blocked(user: AdminUser) -> bool:
+    """The demo account while ENABLE_DEMO_ACCOUNT is off: treated as switched off."""
+    return bool(user.is_demo) and not settings.ENABLE_DEMO_ACCOUNT
+
+
+async def forbid_demo_writes(request: Request, user: AdminUser = Depends(current_user)) -> None:
+    """
+    On the whole admin router: the demo account may look but never change
+    anything. Any method other than GET/HEAD/OPTIONS is 403 for it, so routes
+    added later are covered without remembering to.
+    """
+    if user.is_demo and request.method.upper() not in SAFE_METHODS:
+        raise ForbiddenError(DEMO_READ_ONLY, code="demo_read_only")
+
+
+async def forbid_demo(user: AdminUser = Depends(current_user)) -> None:
+    """For pages the demo account may not even read (account management)."""
+    if user.is_demo:
+        raise ForbiddenError(DEMO_READ_ONLY, code="demo_read_only")

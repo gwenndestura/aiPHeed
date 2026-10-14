@@ -345,7 +345,11 @@ export interface AuthUser {
   email: string;
   name: string;
   role: string;
+  /** The view-only presentation account: every change is refused by the server. */
+  isDemo?: boolean;
 }
+
+export const DEMO_READ_ONLY_NOTE = "Not available in the demo account.";
 
 export interface LoginResponse {
   token: string;

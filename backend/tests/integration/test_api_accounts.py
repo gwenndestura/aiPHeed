@@ -503,3 +503,177 @@ class TestForgotAndReset:
         ok = sign_in(api, EMAIL, NEW_PASSWORD).status_code
         ratelimit.reset()
         assert ok == 200
+
+
+
+# ---------------------------------------------------------------------------
+# The view-only demo account
+# ---------------------------------------------------------------------------
+
+DEMO = "demo.account@calabarzon.da.gov.ph"
+SAFE = {"GET", "HEAD", "OPTIONS"}
+
+
+@pytest.fixture
+def demo_on(monkeypatch):
+    monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+
+
+def demo_headers(api):
+    add_user(api, email=DEMO, is_demo=True)
+    r = sign_in(api, DEMO)
+    assert r.status_code == 200, r.text
+    assert r.json()["user"]["isDemo"] is True
+    return bearer(r.json()["token"])
+
+
+def admin_write_routes():
+    """Every state-changing route under /api/v1/admin, as the app registers them."""
+    from fastapi.routing import APIRoute
+    from app.main import app
+    for route in app.routes:
+        if isinstance(route, APIRoute) and route.path.startswith("/api/v1/admin"):
+            for method in sorted(route.methods - SAFE):
+                path = re.sub(r"\{[^}]+\}", "1", route.path)
+                yield method, path
+
+
+class TestDemoAccount:
+
+    def test_there_are_write_routes_to_check(self):
+        routes = list(admin_write_routes())
+        assert len(routes) >= 7  # review x3, rejections, accounts x3
+
+    def test_every_admin_write_is_403_for_the_demo_account(self, api, demo_on):
+        h = demo_headers(api)
+        for method, path in admin_write_routes():
+            r = api.request(method, path, headers=h, json={"reason": "Data quality issue"})
+            assert r.status_code == 403, (method, path, r.status_code)
+            assert error(r)["code"] == "demo_read_only", (method, path)
+            assert error(r)["message"] == "Not available in the demo account."
+
+    def test_the_demo_account_can_read_admin_pages(self, api, demo_on):
+        h = demo_headers(api)
+        for path in ("/api/v1/admin/review", "/api/v1/admin/audit", "/api/v1/admin/feedback"):
+            assert api.get(path, headers=h).status_code == 200, path
+
+    def test_the_demo_account_cannot_even_read_accounts(self, api, demo_on):
+        h = demo_headers(api)
+        r = api.get("/api/v1/admin/accounts", headers=h)
+        assert r.status_code == 403 and error(r)["code"] == "demo_read_only"
+
+    def test_feedback_personal_details_are_masked_for_the_demo_account(self, api, demo_on):
+        from app.db.models import FeedbackRecord
+        async def _add(db):
+            db.add(FeedbackRecord(score=80.0, answers={str(i): 3 for i in range(10)}, sus_version="sus-v1",
+                                  full_name="Juana Respondent", email="juana@example.com", agency="DA RFO IV-A",
+                                  designation="Analyst", province="Laguna"))
+        run(api, _add)
+        h = demo_headers(api)
+        shown = api.get("/api/v1/admin/feedback", headers=h).json()["data"][0]["demographics"]
+        assert shown["fullName"] == shown["email"] == shown["agency"] == "Hidden in the demo account"
+        assert "Juana" not in str(shown) and "juana@" not in str(shown)
+        assert shown["province"] == "Laguna"  # non-identifying fields stay
+        # A real admin still sees them.
+        api.cookies.clear()
+        real = admin_headers(api)
+        full = api.get("/api/v1/admin/feedback", headers=real).json()["data"][0]["demographics"]
+        assert full["fullName"] == "Juana Respondent" and full["email"] == "juana@example.com"
+
+    def test_switched_off_the_demo_account_cannot_sign_in(self, api):
+        add_user(api, email=DEMO, is_demo=True)
+        r = sign_in(api, DEMO)
+        assert r.status_code == 401 and error(r)["message"] == GENERIC
+
+    def test_switching_it_off_ends_tokens_and_refresh_already_issued(self, api, monkeypatch):
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+        h = demo_headers(api)
+        cookie = api.cookies.get(sessions.COOKIE_NAME)
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", False)
+        assert api.get("/api/v1/admin/review", headers=h).status_code == 401
+        assert present(api, cookie).status_code == 401
+
+    def test_demo_account_is_listed_only_while_enabled(self, api, monkeypatch):
+        add_user(api, email=DEMO, is_demo=True)
+        h = admin_headers(api)
+        listed = lambda: [a["email"] for a in api.get("/api/v1/admin/accounts", headers=h).json()["active"]]
+        assert DEMO not in listed()
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+        assert DEMO in listed()
+
+    def test_me_reports_whether_this_is_the_demo_account(self, api, demo_on):
+        h = demo_headers(api)
+        assert api.get("/api/v1/auth/me", headers=h).json()["isDemo"] is True
+        api.cookies.clear()
+        assert api.get("/api/v1/auth/me", headers=admin_headers(api)).json()["isDemo"] is False
+        assert api.post(REFRESH, headers=CSRF).json()["user"]["isDemo"] is False
+
+    def test_the_demo_account_can_still_sign_out(self, api, demo_on):
+        h = demo_headers(api)
+        assert api.post("/api/v1/auth/logout", headers=h).status_code == 200
+
+
+# ---------------------------------------------------------------------------
+# create_admin.py --demo (run as the real script against a throwaway DB)
+# ---------------------------------------------------------------------------
+
+def _script(tmp_path, *args, **env):
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path as _P
+    backend = _P(__file__).resolve().parents[2]
+    full_env = {**os.environ, "DATABASE_URL": f"sqlite+aiosqlite:///{tmp_path / 'demo.db'}",
+                "SECRET_KEY": "test-signing-key-not-for-production", **env}
+    full_env.pop("AIPHEED_ADMIN_PASSWORD", None)
+    full_env.update({k: v for k, v in env.items()})
+    return subprocess.run([sys.executable, "-W", "ignore", "scripts/create_admin.py", *args], cwd=backend,
+                          env=full_env, capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=120)
+
+
+def _rows(tmp_path):
+    import sqlite3
+    c = sqlite3.connect(tmp_path / "demo.db")
+    return {r[0]: r[1:] for r in c.execute("select email, status, is_demo, email_verified_at is not null, approved_at is not null from admin_users")}
+
+
+@pytest.fixture
+def demo_db(tmp_path):
+    from sqlalchemy import create_engine
+    from app.db.database import Base
+    engine = create_engine(f"sqlite:///{tmp_path / 'demo.db'}")
+    Base.metadata.create_all(engine)
+    engine.dispose()
+    return tmp_path
+
+
+class TestDemoScript:
+
+    def test_creates_one_verified_approved_demo_account(self, demo_db):
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode == 0, r.stdout + r.stderr
+        assert "ENABLE_DEMO_ACCOUNT is OFF" in r.stdout
+        assert _rows(demo_db)[DEMO] == ("active", 1, 1, 1)
+
+    def test_refuses_another_domain_and_a_weak_password(self, demo_db):
+        bad_domain = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL="demo@da.gov.ph", DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        weak = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD="password1234")
+        assert bad_domain.returncode != 0 and weak.returncode != 0
+        assert _rows(demo_db) == {}
+
+    def test_never_turns_a_real_admin_into_the_demo(self, demo_db):
+        made = _script(demo_db, "--email", EMAIL, "--name", "Real Admin", AIPHEED_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert made.returncode == 0, made.stdout + made.stderr
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=EMAIL, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode != 0 and "regular admin" in (r.stdout + r.stderr)
+        assert _rows(demo_db)[EMAIL][1] == 0  # still not a demo
+
+    def test_a_new_demo_address_retires_the_old_demo_account(self, demo_db):
+        _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        other = "presentation@calabarzon.da.gov.ph"
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=other, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode == 0, r.stdout + r.stderr
+        rows = _rows(demo_db)
+        assert rows[other][:2] == ("active", 1)
+        # Un-marked AND deactivated: never left behind as a full admin.
+        assert rows[DEMO][:2] == ("deactivated", 0)
