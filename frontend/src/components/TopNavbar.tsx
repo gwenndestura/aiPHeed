@@ -160,10 +160,11 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
         <form onSubmit={submit} className="space-y-3 mt-2">
           <div>
-            <label className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Email</label>
+            <label htmlFor="admin-dialog-email" className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Email</label>
             <div className="relative mt-1">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
               <input
+                id="admin-dialog-email"
                 type="email"
                 required
                 value={email}
@@ -176,10 +177,11 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </div>
 
           <div>
-            <label className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Password</label>
+            <label htmlFor="admin-dialog-password" className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Password</label>
             <div className="relative mt-1">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
               <input
+                id="admin-dialog-password"
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
