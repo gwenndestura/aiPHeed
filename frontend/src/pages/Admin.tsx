@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   MessageSquareText,
   ClipboardCheck,
@@ -125,17 +126,18 @@ function AdminNavbar({
 
   return (
     <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
-      {/* Brand → admin map (stays within admin, no sign-out) */}
-      <button
-        onClick={() => onSection("map")}
+      {/* Brand → landing page, as on public pages. In-app navigation, so the
+          admin stays signed in (the public header then shows the admin nav). */}
+      <Link
+        to="/"
         className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0"
-        aria-label="aiPHeed admin home"
+        aria-label="aiPHeed home"
       >
         <img src={logoIcon} alt="aiPHeed" className="sm:hidden h-9 w-9 object-contain" />
         <img src={logoDark} alt="aiPHeed" className="hidden sm:block dark-only h-10 w-auto object-contain" />
         <img src={logoLight} alt="aiPHeed" className="hidden sm:block light-only h-10 w-auto object-contain" />
         <span className="hidden md:inline ml-2 text-[9px] uppercase tracking-widest text-primary font-bold">Admin</span>
-      </button>
+      </Link>
 
       {/* Nav links — centered */}
       <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
