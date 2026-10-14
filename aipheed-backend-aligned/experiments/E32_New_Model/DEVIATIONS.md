@@ -27,3 +27,8 @@ These close gaps the frozen protocol left open. No result had been seen when the
    - P45's stored probabilities came from E25 inputs (vintage 1); only its labels are recomputed.
    - Where the τ in force differs between vintages (targets whose origin falls after a 2026 round's true posting date), this is listed in the results.
 7. **Lead 2** uses the same feature vector and the same rules. H_gap carries the extra quarter.
+8. **Evaluable dates (added after the first run crashed before producing any score).**
+   - A (lead, target) date is evaluated only when every E32 candidate AND PCF21 can be computed at its origin.
+   - PCF21's D-model needs 40 published pairs, so the earliest lead-2 dates are not computable for PCF21.
+   - Skipped dates are listed in `results.json` (`skipped_dates`).
+   - P45 is compared on its own common rows.

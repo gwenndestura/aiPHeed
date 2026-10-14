@@ -57,7 +57,7 @@ def main():
     proto = verify_protocol()
     d = L.Data()
     p45 = p45_rows()
-    rows, meta = [], {}
+    rows, meta, skipped = [], {}, []
     for k in (1, 2):
         for target in range(FIRST_TARGET, LAST_TARGET + 1):
             t = target - k
@@ -65,8 +65,12 @@ def main():
             if any(v is None for v in labs.values()):
                 continue                                    # no released definition-A label (2025-Q2/Q3)
             info = {}
-            arms = {"E32-PCFN": L.pcfn(d, t, k, info), "E32-LR": L.lr(d, t, k), "E32-LGBM": L.lgbm(d, t, k),
-                    "E32-ENS": L.ens(d, t, k), "PCF21": L.pcf21(d, t, k), **L.references(d, t, k)}
+            try:
+                arms = {"E32-PCFN": L.pcfn(d, t, k, info), "E32-LR": L.lr(d, t, k), "E32-LGBM": L.lgbm(d, t, k),
+                        "E32-ENS": L.ens(d, t, k), "PCF21": L.pcf21(d, t, k), **L.references(d, t, k)}
+            except ValueError as ex:                        # DEVIATIONS A8: not computable for every arm
+                skipped.append({"lead": k, "target": C.qs(target), "reason": str(ex)})
+                continue
             tq = C.qs(target)
             if all((k, tq, p) in p45 for p in C.PROVS):
                 arms["P45"] = {p: p45[(k, tq, p)] for p in C.PROVS}
@@ -132,6 +136,7 @@ def main():
                          **A, "A4": "checked separately (inference at the operational origin; tests; API)",
                          "A1_A3_pass": all(A.values())}
     res["meta"] = meta
+    res["skipped_dates"] = skipped
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run = C.E32 / "runs" / stamp
     run.mkdir(parents=True)
