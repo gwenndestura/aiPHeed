@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_TTL_SECONDS: int = 3600
 
+    # ── API docs ──────────────────────────────────────────────────────────
+    # /docs, /redoc and /openapi.json list every route, admin ones included.
+    # Off unless asked for, so a deployment does not publish its own map.
+    ENABLE_API_DOCS: bool = False
+
     # ── Rate limiting ─────────────────────────────────────────────────────
     # Counters are per-process; behind multiple workers the effective limit
     # multiplies by the worker count. See app/services/ratelimit.py.

@@ -48,7 +48,9 @@ python -m pytest tests -q
 uvicorn app.main:app --reload
 ```
 
-Interactive docs at <http://127.0.0.1:8000/docs>.
+Interactive docs at <http://127.0.0.1:8000/docs> when `ENABLE_API_DOCS=true` is
+set in `.env`. They are off by default, so a deployment does not publish its
+full route list.
 
 ---
 

@@ -26,6 +26,11 @@ app = FastAPI(
     description="Food Insecurity Forecasting System for DA Region IV-A (CALABARZON)",
     version="1.0.0",
     lifespan=lifespan,
+    # Interactive docs and the schema are opt-in (ENABLE_API_DOCS=true): they
+    # describe every route, admin ones included, to anyone who asks.
+    docs_url="/docs" if settings.ENABLE_API_DOCS else None,
+    redoc_url="/redoc" if settings.ENABLE_API_DOCS else None,
+    openapi_url="/openapi.json" if settings.ENABLE_API_DOCS else None,
 )
 
 # CORS: local dev servers + the deployed Vercel frontend. The prod origin is
