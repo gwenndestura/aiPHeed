@@ -351,6 +351,9 @@ export interface AuthUser {
 
 export const DEMO_READ_ONLY_NOTE = "Not available in the demo account.";
 
+/** Sign-in refusals that mean "right password, account not active yet" (see SignInNotice). */
+export const PENDING_SIGN_IN_CODES: ReadonlySet<string> = new Set(["email_not_verified", "account_pending_approval"]);
+
 export interface LoginResponse {
   token: string;
   expiresIn: number;

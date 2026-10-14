@@ -7,7 +7,8 @@ import { useAuth } from "@/lib/auth";
 import { ApiError } from "@/lib/api";
 import { safeRedirectPath } from "@/lib/redirect";
 import { AuthCard, AuthField, AuthSubmit, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
-import { PENDING_CODES, SignInNotice } from "@/components/SignInNotice";
+import { SignInNotice } from "@/components/SignInNotice";
+import { PENDING_SIGN_IN_CODES } from "@/lib/apiTypes";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function Login() {
       });
       navigate(returnTo, { replace: true });
     } catch (err) {
-      if (err instanceof ApiError && PENDING_CODES.has(err.code)) {
+      if (err instanceof ApiError && PENDING_SIGN_IN_CODES.has(err.code)) {
         setNotice({ code: err.code, message: err.message, email: address });
       } else {
         toast({

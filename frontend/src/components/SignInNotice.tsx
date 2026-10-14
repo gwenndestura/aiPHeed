@@ -11,8 +11,6 @@ import { Note } from "@/components/ui/note";
 import { api, ApiError } from "@/lib/api";
 import type { MessageResponse } from "@/lib/apiTypes";
 
-export const PENDING_CODES = new Set(["email_not_verified", "account_pending_approval"]);
-
 export function SignInNotice({ code, message, email }: { code: string; message: string; email: string }) {
   const [sent, setSent] = useState<string | null>(null);
   const [sending, setSending] = useState(false);

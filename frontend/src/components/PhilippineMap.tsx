@@ -816,7 +816,7 @@ export function PhilippineMap({
       // the page inside that window threw "reading '_leaflet_pos'". Leaflet's
       // handler does nothing once the animation is marked finished.
       map.stop();
-      (map as any)._animatingZoom = false;
+      (map as unknown as { _animatingZoom?: boolean })._animatingZoom = false;
       map.remove();
       mapRef.current = null;
       provincesLayerRef.current = null;

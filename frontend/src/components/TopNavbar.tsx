@@ -9,7 +9,8 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { ApiError } from "@/lib/api";
 import { authLinkClass, authLinksRowClass } from "@/components/AuthCard";
-import { PENDING_CODES, SignInNotice } from "@/components/SignInNotice";
+import { SignInNotice } from "@/components/SignInNotice";
+import { PENDING_SIGN_IN_CODES } from "@/lib/apiTypes";
 import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
 import { useAccounts } from "@/lib/queries";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -170,7 +171,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
       onOpenChange(false);
       navigate("/admin");
     } catch (err) {
-      if (err instanceof ApiError && PENDING_CODES.has(err.code)) {
+      if (err instanceof ApiError && PENDING_SIGN_IN_CODES.has(err.code)) {
         setNotice({ code: err.code, message: err.message, email: address });
       } else {
         toast({
