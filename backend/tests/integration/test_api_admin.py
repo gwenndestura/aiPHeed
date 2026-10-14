@@ -417,6 +417,66 @@ class TestFeedback:
 
 
 # ---------------------------------------------------------------------------
+# Input limits
+# ---------------------------------------------------------------------------
+
+class TestInputLimits:
+    """Every body that reaches the database is bounded -- the feedback form without signing in."""
+
+    def test_feedback_free_text_is_capped_at_2000(self, api):
+        ok = api.post("/api/v1/feedback", json={"answers": FULL_ANSWERS, "improvements": "x" * 2000})
+        assert ok.status_code == 201
+        too_long = api.post("/api/v1/feedback", json={"answers": FULL_ANSWERS, "liked": "x" * 2001})
+        assert too_long.status_code == 422
+
+    def test_feedback_names_and_emails_are_capped_at_200(self, api):
+        for field in ("fullName", "email", "agency"):
+            r = api.post("/api/v1/feedback",
+                         json={"answers": FULL_ANSWERS, "demographics": {field: "x" * 201}})
+            assert r.status_code == 422, field
+        assert api.post("/api/v1/feedback", json={
+            "answers": FULL_ANSWERS, "demographics": {"fullName": "x" * 200}}).status_code == 201
+
+    def test_rejection_notes_are_capped_at_2000(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject", headers=headers,
+                     json={"reason": "Data quality issue", "notes": "x" * 2001})
+        assert r.status_code == 422
+        r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject", headers=headers,
+                     json={"reason": "Data quality issue", "notes": "x" * 2000})
+        assert r.status_code == 200
+
+    def test_login_password_and_email_are_capped(self, api):
+        make_user(api)
+        long_pw = api.post("/api/v1/auth/login", json={"email": EMAIL, "password": "x" * 1025})
+        assert long_pw.status_code == 422
+        long_email = api.post("/api/v1/auth/login",
+                              json={"email": "a" * 190 + "@calabarzon.da.gov.ph", "password": PASSWORD})
+        assert long_email.status_code == 422
+        # The cap is generous: an ordinary sign-in is unaffected.
+        assert api.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).status_code == 200
+
+    def test_admin_listing_survives_a_row_stored_before_the_caps(self, api):
+        import asyncio
+        from app.db.models import FeedbackRecord
+
+        async def _old_row():
+            async with api.session_factory() as db:
+                db.add(FeedbackRecord(score=50.0, answers=FULL_ANSWERS, sus_version="sus-v1",
+                                      full_name="x" * 500, improvements="y" * 50_000))
+                await db.commit()
+
+        asyncio.run(_old_row())
+        make_user(api)
+        r = api.get("/api/v1/admin/feedback", headers=auth_headers(api))
+        # Caps apply to what is submitted, not to what is read back.
+        assert r.status_code == 200
+        assert r.json()["total"] == 1
+
+
+# ---------------------------------------------------------------------------
 # Rate limiting
 # ---------------------------------------------------------------------------
 

@@ -168,6 +168,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                maxLength={200}
                 autoComplete="off"
                 className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />
@@ -183,6 +184,7 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                maxLength={1024}
                 autoComplete="new-password"
                 className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
               />

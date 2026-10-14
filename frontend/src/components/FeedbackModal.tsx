@@ -197,6 +197,7 @@ export function FeedbackModal() {
             <textarea
               value={liked}
               onChange={(e) => setLiked(e.target.value)}
+              maxLength={2000}
               rows={2}
               className="w-full text-[11px] p-2 rounded-md bg-secondary/40 border border-border/40 focus:outline-none focus:border-primary/50 resize-none"
             />
@@ -206,6 +207,7 @@ export function FeedbackModal() {
             <textarea
               value={improvements}
               onChange={(e) => setImprovements(e.target.value)}
+              maxLength={2000}
               rows={2}
               className="w-full text-[11px] p-2 rounded-md bg-secondary/40 border border-border/40 focus:outline-none focus:border-primary/50 resize-none"
             />
@@ -234,6 +236,7 @@ function Input({ label, value, onChange }: { label: string; value: string; onCha
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        maxLength={200}
         className="mt-1 w-full h-9 px-2 text-[12px] bg-secondary/50 border border-border/40 rounded-md focus:outline-none focus:border-primary/50"
       />
     </div>

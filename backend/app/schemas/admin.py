@@ -10,8 +10,18 @@ consumes both.
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Annotated
 
 from pydantic import BaseModel, EmailStr, Field
+
+# Input caps. Every request body here can reach the database (the feedback
+# form without signing in), so nothing is unbounded.
+NAME_MAX = 200          # names, emails and other short identifying fields
+FREE_TEXT_MAX = 2000    # feedback comments, rejection notes
+PASSWORD_MAX = 1024     # far beyond any real passphrase; stops multi-MB hashing input
+
+ShortText = Annotated[str, Field(max_length=NAME_MAX)]
+FreeText = Annotated[str, Field(max_length=FREE_TEXT_MAX)]
 
 
 # ---------------------------------------------------------------------------
@@ -19,9 +29,10 @@ from pydantic import BaseModel, EmailStr, Field
 # ---------------------------------------------------------------------------
 
 class LoginRequest(BaseModel):
-    email: EmailStr
-    # No max: a passphrase is a good password. Argon2 handles length fine.
-    password: str = Field(min_length=1)
+    email: Annotated[EmailStr, Field(max_length=NAME_MAX)]
+    # A passphrase is a good password, so the cap is generous -- it only
+    # stops a multi-megabyte body being fed to the hasher.
+    password: str = Field(min_length=1, max_length=PASSWORD_MAX)
 
 
 class UserOut(BaseModel):
@@ -76,8 +87,8 @@ class ReviewListResponse(BaseModel):
 class RejectRequest(BaseModel):
     # Constrained on purpose: a rejection removes a number the public would
     # otherwise see, so "why" has to outlive the person who clicked it.
-    reason: str
-    notes: str | None = None
+    reason: ShortText
+    notes: FreeText | None = None
 
 
 class RejectionRow(BaseModel):
@@ -132,6 +143,7 @@ class AuditResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 class Demographics(BaseModel):
+    """As stored and returned. Uncapped: a response must not fail on an old row."""
     fullName: str | None = None
     email: str | None = None
     agency: str | None = None
@@ -143,13 +155,26 @@ class Demographics(BaseModel):
     municipality: str | None = None
 
 
+class DemographicsIn(BaseModel):
+    """As submitted. Capped."""
+    fullName: ShortText | None = None
+    email: ShortText | None = None
+    agency: ShortText | None = None
+    designation: ShortText | None = None
+    age: ShortText | None = None
+    sex: ShortText | None = None
+    clientType: ShortText | None = None
+    province: ShortText | None = None
+    municipality: ShortText | None = None
+
+
 class FeedbackSubmit(BaseModel):
-    demographics: Demographics = Field(default_factory=Demographics)
+    demographics: DemographicsIn = Field(default_factory=DemographicsIn)
     # qIndex "0".."9" -> 1..5. Validated and scored server-side; a
     # client-supplied total is never stored.
     answers: dict[str, int]
-    liked: str | None = None
-    improvements: str | None = None
+    liked: FreeText | None = None
+    improvements: FreeText | None = None
 
 
 class FeedbackCreated(BaseModel):

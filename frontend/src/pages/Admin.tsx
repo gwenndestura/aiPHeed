@@ -768,6 +768,7 @@ function RejectReasonModal({
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
+              maxLength={2000}
               rows={3}
               placeholder="Additional context for audit log…"
               className="w-full rounded-md border border-border/60 bg-background px-2 py-1.5 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive resize-none"
