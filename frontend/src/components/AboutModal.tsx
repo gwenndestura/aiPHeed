@@ -15,7 +15,7 @@ export function AboutModal() {
             <div className="rounded-lg p-1 bg-transparent">
               <img src={logoIcon} alt="aiPHeed" className="h-7 w-7 object-contain" />
             </div>
-            <DialogTitle className="text-sm">About aiPHeed — DA REGION IV-A</DialogTitle>
+            <DialogTitle className="text-sm">About aiPHeed</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
             aiPHeed is an interactive geospatial food-insecurity forecasting system for DA Region IV-A.
