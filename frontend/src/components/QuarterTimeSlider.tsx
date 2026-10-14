@@ -25,6 +25,11 @@ interface Props {
   // its label, with no dot highlighted.
   allQuarters?: Quarter[];
   onOpenHistory?: () => void;
+  /**
+   * "bar" (default): the track with labelled points. "strip": a row of 44px
+   * quarter buttons that scrolls sideways, for the phone layout.
+   */
+  variant?: "bar" | "strip";
 }
 
 const MONTHS = ["Jan–Mar", "Apr–Jun", "Jul–Sep", "Oct–Dec"];
@@ -78,6 +83,7 @@ const STATUS_TAG: Record<Status, string> = {
   current: "Current quarter",
   forecast: "Forecast",
 };
+const STRIP_TAG: Record<Status, string> = { observed: "Observed", current: "Current", forecast: "Forecast" };
 
 // The track fills the map area between the sidebars; this is the tightest
 // the points may squeeze before it scrolls instead.
@@ -95,7 +101,7 @@ function todayPosition(qs: Quarter[]): number | null {
   return firstForecast > 0 ? firstForecast - 0.5 : null;
 }
 
-export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOpenHistory }: Props) {
+export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOpenHistory, variant = "bar" }: Props) {
   const qs = useMemo(() => quarters ?? buildQuarters(), [quarters]);
   const found = qs.findIndex((q) => q.id === value);
   const outsideWindow = found < 0 && !!allQuarters?.some((q) => q.id === value);
@@ -161,6 +167,52 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
   const gaps = Math.max(qs.length - 1, 1);
   const trackSize = { "--qt-track-min": `${gaps * MIN_SPACING}px` } as CSSProperties;
 
+  const pointProps = (q: Quarter, i: number) => ({
+    ref: (el: HTMLButtonElement | null) => (pointRefs.current[i] = el),
+    type: "button" as const,
+    role: "radio",
+    "aria-checked": i === idx,
+    "aria-label": `${fullName(q)}, ${STATUS_TAG[statusOf(q)].toLowerCase()}${i === todayOnPoint ? ", today" : ""}${q.noData ? ", no data" : ""}${q.locked ? ", not yet available" : ""}`,
+    title: q.locked ? "Data not yet available." : `${quarterMonthRange(q)}${i === todayOnPoint ? " · Today" : ""}`,
+    tabIndex: i === tabStop ? 0 : -1,
+    disabled: q.locked,
+    onClick: () => onChange(q.id),
+    onKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => onKeyDown(e, i),
+  });
+
+  if (variant === "strip") {
+    return (
+      <div ref={scrollRef} className="qt-strip min-w-0 overflow-x-auto no-scrollbar">
+        <div className="flex items-stretch gap-1.5 w-max">
+          {/* A quarter picked from History, older than the window. */}
+          {outsideWindow && (
+            <span className="qt-chip" aria-current="true">
+              <span className="font-semibold">{fullName(shown)}</span>
+              <span className="qt-muted">{STRIP_TAG[statusOf(shown)]}</span>
+            </span>
+          )}
+          <div role="radiogroup" aria-label="Quarter" aria-description={description} className="flex items-stretch gap-1.5">
+            {qs.map((q, i) => (
+              <button
+                key={q.id}
+                {...pointProps(q, i)}
+                className={`qt-chip${q.forecast ? " qt-chip-forecast" : ""}${q.noData ? " qt-point-nodata" : ""}`}
+              >
+                <span className="font-semibold">{fullName(q)}</span>
+                <span className="qt-muted">{STRIP_TAG[statusOf(q)]}</span>
+              </button>
+            ))}
+          </div>
+          {onOpenHistory && (
+            <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-chip justify-center font-semibold">
+              History
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="qt-float select-none">
       {/* Selected quarter */}
@@ -212,16 +264,7 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
           {qs.map((q, i) => (
             <button
               key={q.id}
-              ref={(el) => (pointRefs.current[i] = el)}
-              type="button"
-              role="radio"
-              aria-checked={i === idx}
-              aria-label={`${fullName(q)}, ${STATUS_TAG[statusOf(q)].toLowerCase()}${i === todayOnPoint ? ", today" : ""}${q.noData ? ", no data" : ""}${q.locked ? ", not yet available" : ""}`}
-              title={q.locked ? "Data not yet available." : `${quarterMonthRange(q)}${i === todayOnPoint ? " · Today" : ""}`}
-              tabIndex={i === tabStop ? 0 : -1}
-              disabled={q.locked}
-              onClick={() => onChange(q.id)}
-              onKeyDown={(e) => onKeyDown(e, i)}
+              {...pointProps(q, i)}
               className={`qt-point${q.noData ? " qt-point-nodata" : ""} absolute top-[16px] -translate-x-1/2 flex flex-col items-center px-1 whitespace-nowrap`}
               style={{ left: `${at(i)}%` }}
             >

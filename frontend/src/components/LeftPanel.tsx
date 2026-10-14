@@ -353,7 +353,7 @@ export function ProvinceRankingCardBody({
             <button
               key={r.id}
               onClick={() => onRegionClick(r)}
-              className="w-full text-left group px-1 py-1 rounded-md hover:bg-secondary/40 transition-colors"
+              className="w-full text-left group px-1 py-1 compact:min-h-11 rounded-md hover:bg-secondary/40 transition-colors"
             >
               <div className="flex items-center justify-between text-[10px] mb-1">
                 <span className="font-semibold flex items-center gap-1.5">
@@ -401,7 +401,7 @@ function RejectedForecastPlaceholder({
           {onBack && (
             <button
               onClick={onBack}
-              className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors group mb-2"
+              className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors group mb-2"
             >
               <ArrowLeft className="h-3 w-3 group-hover:-translate-x-0.5 transition-transform" />
               Back
@@ -411,7 +411,7 @@ function RejectedForecastPlaceholder({
           <h2 className="text-base font-bold leading-tight">{name}</h2>
         </div>
         {isLocked && onClose && (
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
+          <button onClick={onClose} aria-label="Close" className="p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-lg hover:bg-secondary transition-colors">
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         )}
@@ -487,7 +487,7 @@ function RegionDetail({
           </div>
         </div>
         {isLocked && (
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
+          <button onClick={onClose} aria-label="Close" className="p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-lg hover:bg-secondary transition-colors">
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         )}
@@ -549,7 +549,7 @@ function RegionDetail({
             <button
               key={m.id}
               onClick={() => onMunicipalityClick(m)}
-              className="w-full flex items-center justify-between bg-secondary/30 hover:bg-secondary/70 border border-border/40 hover:border-border rounded-lg px-2.5 py-2 transition-all text-left group"
+              className="w-full flex items-center justify-between bg-secondary/30 hover:bg-secondary/70 border border-border/40 hover:border-border rounded-lg px-2.5 py-2 compact:min-h-11 transition-all text-left group"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <span
@@ -594,7 +594,7 @@ function MunicipalityDetail({
       {/* Back to province */}
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors group"
+        className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors group"
       >
         <ArrowLeft className="h-3 w-3 group-hover:-translate-x-0.5 transition-transform" />
         Back to {municipality.provinceName}

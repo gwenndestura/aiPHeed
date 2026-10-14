@@ -3,7 +3,8 @@ import { Search } from "lucide-react";
 import { useSearch } from "@/lib/queries";
 import type { SearchHit } from "@/lib/apiTypes";
 
-export function MapSearch() {
+/** `fill`: as wide as its container, 44px tall (the phone layout). */
+export function MapSearch({ fill = false }: { fill?: boolean }) {
   const [searchQ, setSearchQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const { data } = useSearch(searchQ);
@@ -20,9 +21,9 @@ export function MapSearch() {
   };
 
   return (
-    <div className="relative w-[240px]">
+    <div className={`relative ${fill ? "w-full" : "w-[240px]"}`}>
       <div className="relative bg-card/85 border border-border/60 shadow-lg rounded-md" style={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}>
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground/70 pointer-events-none" />
+        <Search className={`absolute left-2.5 top-1/2 -translate-y-1/2 ${fill ? "h-4 w-4" : "h-3 w-3"} text-muted-foreground/70 pointer-events-none`} />
         <input
           type="search"
           value={searchQ}
@@ -33,17 +34,17 @@ export function MapSearch() {
           }}
           onBlur={() => setTimeout(() => setSearchOpen(false), 200)}
           placeholder="Search provinces, municipalities…"
-          className="w-full h-7 pl-7 pr-2.5 text-[11px] bg-transparent rounded-md focus:outline-none placeholder:text-muted-foreground/60"
+          className={`w-full ${fill ? "h-11 pl-9 text-[16px]" : "h-7 pl-7 text-[11px]"} pr-2.5 bg-transparent rounded-md focus:outline-none placeholder:text-muted-foreground/60`}
         />
       </div>
       {searchOpen && results.length > 0 && (
-        <div className="absolute top-9 left-0 right-0 max-h-72 overflow-y-auto bg-card border border-border/60 rounded-lg shadow-xl z-[1100]">
+        <div className={`absolute ${fill ? "top-12" : "top-9"} left-0 right-0 max-h-72 overflow-y-auto bg-card border border-border/60 rounded-lg shadow-xl z-[1100]`}>
           {results.map((r) => (
             <button
               key={`${r.type}-${r.id}`}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => onPick(r)}
-              className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-secondary/60 transition-colors"
+              className={`w-full flex items-center justify-between gap-x-3 px-3 py-2 text-left hover:bg-secondary/60 transition-colors ${fill ? "min-h-11 flex-wrap" : ""}`}
             >
               <span className="text-[11px] font-medium">{r.name}</span>
               <span className="text-[9px] uppercase tracking-wider text-muted-foreground/70">

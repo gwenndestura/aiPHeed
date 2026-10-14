@@ -513,6 +513,40 @@
   .qt-link:focus-visible { outline: 2px solid hsl(var(--qt-focus)); outline-offset: 2px; }
 
   .qt-swatch { display: inline-block; width: 10px; height: 10px; }
+
+  /* Phone layout: a slimmer legend box, and the timeline as a row of
+     44px quarter buttons (dashed: forecast, as the track's dashed line). */
+  .qt-bar-compact { display: flex; align-items: center; padding: 4px 8px; }
+  .qt-chip {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 4px 10px;
+    background: hsl(var(--qt-panel) / 0.92);
+    border: 1px solid hsl(var(--qt-border));
+    border-radius: 6px;
+    color: hsl(var(--qt-text));
+    font-size: 12px;
+    line-height: 16px;
+    text-align: left;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .qt-chip-forecast { border-style: dashed; }
+  .qt-chip[aria-checked="true"],
+  .qt-chip[aria-current="true"] {
+    background: hsl(var(--qt-selected));
+    border-color: hsl(var(--qt-selected));
+    color: hsl(var(--qt-panel));
+  }
+  .qt-chip[aria-checked="true"] .qt-muted,
+  .qt-chip[aria-current="true"] .qt-muted { color: inherit; opacity: 0.8; }
+  .qt-chip.qt-point-nodata { color: hsl(var(--qt-nodata)); }
+  .qt-chip:disabled { opacity: 0.45; cursor: not-allowed; }
+  .qt-chip:focus { outline: none; }
+  .qt-chip:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: -3px; }
 }
 
 /* Bottom of the map: the quarter bar spanning the whole map area between the
@@ -549,6 +583,12 @@
    - No automatic text inflation when a phone is turned sideways.
    ------------------------------------------------------------------ */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* Mobile browsers count the hidden address bar in 100vh; the app pages
+   (h-screen) use the visible height, so the map's sheet is never under it. */
+@supports (height: 100dvh) {
+  .h-screen { height: 100dvh; }
+}
 @media (max-width: 767px), (max-height: 500px) {
-  .text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\] { font-size: 12px !important; }
+  .text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\],
+  .map-label { font-size: 12px !important; }
 }

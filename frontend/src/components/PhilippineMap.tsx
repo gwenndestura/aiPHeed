@@ -28,6 +28,20 @@ interface Props {
   // faint non-CALABARZON provinces, Metro Manila).
   onBackgroundClick?: () => void;
   rejectedProvinceIds?: Set<string>;            // provinces with no forecast for current quarter
+  // Map area covered by panels (phone layout: the search box, legend, sheet
+  // and timeline), kept clear when fitting CALABARZON or a province.
+  fitInsets?: { top: number; right: number; bottom: number; left: number };
+  // Lowest zoom. Phones need to go further out to fit CALABARZON.
+  minZoom?: number;
+  // Zoom levels a fit may land on: 1 = whole levels. Phones use quarter
+  // levels, so CALABARZON fills the small map instead of rounding down.
+  zoomSnap?: number;
+}
+
+/** fitBounds / flyToBounds padding: 40px; on phones 12px plus whatever the panels cover. */
+function fitPadding(insets?: Props["fitInsets"]): Pick<L.FitBoundsOptions, "padding" | "paddingTopLeft" | "paddingBottomRight"> {
+  if (!insets) return { padding: [40, 40] };
+  return { paddingTopLeft: [12 + insets.left, 12 + insets.top], paddingBottomRight: [12 + insets.right, 12 + insets.bottom] };
 }
 
 const AMBER = "hsl(35, 90%, 55%)";
@@ -166,8 +180,14 @@ export function PhilippineMap({
   onMunicipalityClick,
   onBackgroundClick,
   rejectedProvinceIds,
+  fitInsets,
+  minZoom = 8,
+  zoomSnap = 1,
 }: Props) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  // Read when a fit starts, so a fit uses the layout of that moment.
+  const fitInsetsRef = useRef(fitInsets);
+  fitInsetsRef.current = fitInsets;
   const mapRef = useRef<L.Map | null>(null);
   const provincesLayerRef = useRef<L.GeoJSON | null>(null);
   const municipalitiesLayerRef = useRef<L.GeoJSON | null>(null);
@@ -299,7 +319,7 @@ export function PhilippineMap({
           L.marker([lat, lng], {
             icon: L.divIcon({
               className: "",
-              html: `<div style="
+              html: `<div class="map-label" style="
                 color: rgba(255,255,255,0.85);
                 font-size: 11px;
                 font-style: italic;
@@ -314,6 +334,7 @@ export function PhilippineMap({
               iconAnchor: [0, 0],
             }),
             interactive: false,
+            keyboard: false,
           }).addTo(map)
         );
       });
@@ -407,7 +428,7 @@ export function PhilippineMap({
         L.marker([center.lat, center.lng], {
           icon: L.divIcon({
             className: "",
-            html: `<div style="
+            html: `<div class="map-label" style="
               color: white;
               font-size: 9px;
               font-weight: 600;
@@ -420,6 +441,7 @@ export function PhilippineMap({
             iconAnchor: [0, 0],
           }),
           interactive: false,
+          keyboard: false,
         }).addTo(map)
       );
       labelCount++;
@@ -468,14 +490,14 @@ export function PhilippineMap({
           iconSize: [20, 20],
           iconAnchor: [10, 10],
         });
-        const pulse = L.marker([center.lat, center.lng], { icon: pulseIcon, interactive: false }).addTo(map);
+        const pulse = L.marker([center.lat, center.lng], { icon: pulseIcon, interactive: false, keyboard: false }).addTo(map);
         pulses.push({ marker: pulse, provinceId: id });
       }
 
       const label = L.marker([center.lat, center.lng], {
         icon: L.divIcon({
           className: "",
-          html: `<div style="
+          html: `<div class="map-label" style="
             color: white;
             font-size: 11px;
             font-weight: 700;
@@ -490,6 +512,7 @@ export function PhilippineMap({
           iconAnchor: [0, 0],
         }),
         interactive: false,
+        keyboard: false,
       }).addTo(map);
       labels.push(label);
     });
@@ -553,7 +576,7 @@ export function PhilippineMap({
       if (el) el.style.pointerEvents = "";
     });
 
-    map.flyToBounds(L.latLngBounds(CALABARZON_BOUNDS), { padding: [40, 40], duration: 0.8 });
+    map.flyToBounds(L.latLngBounds(CALABARZON_BOUNDS), { ...fitPadding(fitInsetsRef.current), duration: 0.8 });
   }, [getProvinceStyle, clearMunicipalities]);
 
   const zoomToProvince = useCallback((provinceId: string) => {
@@ -582,7 +605,7 @@ export function PhilippineMap({
     });
 
     if (targetBounds) {
-      map.flyToBounds(targetBounds, { padding: [40, 40], duration: 0.8, maxZoom: 11 });
+      map.flyToBounds(targetBounds, { ...fitPadding(fitInsetsRef.current), duration: 0.8, maxZoom: 11 });
       // Show municipalities after the zoom animation
       setTimeout(() => {
         showMunicipalities(provinceId);
@@ -618,9 +641,20 @@ export function PhilippineMap({
     const onZoomOut = () => map.zoomOut();
     window.addEventListener("aipheed:zoom-in", onZoomIn);
     window.addEventListener("aipheed:zoom-out", onZoomOut);
+    // Redraw at the new size whenever the map's box changes (window resized,
+    // phone rotated, header or banner changing height) or the panels over it
+    // change ("aipheed:map-resize"), so no grey strip is left uncovered.
+    const resize = () => map.invalidateSize({ pan: false });
+    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(resize);
+    ro?.observe(mapContainerRef.current);
+    window.addEventListener("aipheed:map-resize", resize);
+    window.addEventListener("orientationchange", resize);
     (map as any).__aipheedZoomCleanup = () => {
       window.removeEventListener("aipheed:zoom-in", onZoomIn);
       window.removeEventListener("aipheed:zoom-out", onZoomOut);
+      ro?.disconnect();
+      window.removeEventListener("aipheed:map-resize", resize);
+      window.removeEventListener("orientationchange", resize);
     };
 
     const isLight = () => document.documentElement.classList.contains("light");
@@ -800,7 +834,7 @@ export function PhilippineMap({
         syncProvinceMarkers();
 
         // Fit to CALABARZON bounds
-        map.fitBounds(L.latLngBounds(CALABARZON_BOUNDS), { padding: [40, 40] });
+        map.fitBounds(L.latLngBounds(CALABARZON_BOUNDS), fitPadding(fitInsetsRef.current));
       })
       .catch(console.error);
 
@@ -823,6 +857,13 @@ export function PhilippineMap({
       municipalitiesLayerRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    map.options.zoomSnap = zoomSnap;
+    map.setMinZoom(minZoom);
+  }, [minZoom, zoomSnap]);
 
   // Selection changes
   useEffect(() => {

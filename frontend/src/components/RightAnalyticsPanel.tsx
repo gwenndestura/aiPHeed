@@ -77,7 +77,7 @@ export function ShapNarrativeCardBody({
         </div>
         <button
           onClick={() => setGlossaryOpen(true)}
-          className="shrink-0 p-1 rounded-md hover:bg-secondary/60 text-muted-foreground hover:text-foreground transition-colors"
+          className="shrink-0 p-1 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-secondary/60 text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Open glossary"
           title="Glossary of terms"
         >
@@ -214,7 +214,8 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
     <div>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between"
+        aria-expanded={open}
+        className="w-full flex items-center justify-between compact:min-h-11"
       >
         <div className="flex items-center gap-2">
           <Newspaper className="h-3.5 w-3.5 text-primary" />
@@ -262,7 +263,7 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
               <button
                 key={a.id}
                 onClick={() => setActiveArticle(a)}
-                className="w-full text-left text-[10px] py-1.5 px-2 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
+                className="w-full text-left text-[10px] py-1.5 px-2 compact:min-h-11 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <p className="truncate font-semibold text-foreground/90">{a.title}</p>
                 <p className="text-[9px]">{a.source}{a.date ? ` · ${a.date}` : ""}</p>

@@ -5,7 +5,7 @@ import logoIcon from "@/assets/logo-icon.png";
 export function AboutModal() {
   return (
     <Dialog>
-      <DialogTrigger className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
+      <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
         <Info className="h-3 w-3" />
         About & Methodology
       </DialogTrigger>

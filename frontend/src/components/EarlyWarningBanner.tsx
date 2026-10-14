@@ -26,14 +26,14 @@ export function EarlyWarningBanner({
         </p>
         <button
           onClick={onReview}
-          className="text-[11px] font-bold px-3 py-1 rounded-md bg-destructive-foreground/15 hover:bg-destructive-foreground/25 transition-colors"
+          className="text-[11px] font-bold px-3 py-1 compact:min-h-11 rounded-md bg-destructive-foreground/15 hover:bg-destructive-foreground/25 transition-colors"
         >
           Review
         </button>
         <button
           onClick={() => setOpen(false)}
           aria-label="Dismiss"
-          className="p-1 rounded-md hover:bg-destructive-foreground/15 transition-colors"
+          className="p-1 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-destructive-foreground/15 transition-colors"
         >
           <X className="h-3.5 w-3.5" />
         </button>

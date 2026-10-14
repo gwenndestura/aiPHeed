@@ -101,7 +101,7 @@ export function FeedbackModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
+      <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
         <MessageSquare className="h-3 w-3" />
         Send Feedback
       </DialogTrigger>

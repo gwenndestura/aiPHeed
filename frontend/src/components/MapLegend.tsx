@@ -5,9 +5,10 @@ const LEVELS: Array<{ key: keyof typeof RISK_COLORS; label: string }> = [
   { key: "high", label: "High" },
 ];
 
-export function MapLegend() {
+/** `compact`: a slimmer box, for the phone layout's top-left corner. */
+export function MapLegend({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="qt-panel qt-bar gap-3 whitespace-nowrap">
+    <div className={`qt-panel ${compact ? "qt-bar-compact" : "qt-bar"} gap-3 whitespace-nowrap`}>
       <span className="font-medium">Risk level</span>
       <ul className="flex items-center gap-3">
         {LEVELS.map((l) => (

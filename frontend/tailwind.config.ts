@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
   darkMode: ["class"],
@@ -130,5 +131,11 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    // The phone layout (lib/breakpoints.ts COMPACT_QUERY), e.g. `compact:min-h-11`.
+    // A variant, not a `screens` entry: a raw media query among the screens
+    // turns off Tailwind's max-* variants (max-lg:) everywhere.
+    plugin(({ addVariant }) => addVariant("compact", "@media (max-width: 767px), (max-height: 500px)")),
+  ],
 } satisfies Config;
