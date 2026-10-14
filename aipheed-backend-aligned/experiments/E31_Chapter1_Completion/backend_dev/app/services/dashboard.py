@@ -963,6 +963,7 @@ def _e31_articles() -> list[dict]:
 
 def article_count(province_code: str | None, quarter: str) -> int:
     if e31_active():
+        quarter = e31_news_evidence(quarter)[0]
         return sum(1 for a in _e31_articles() if a["quarter"] == quarter
                    and (province_code is None or a["province_code"] == province_code))
     df = _corpus()
@@ -1047,13 +1048,30 @@ E31_TOPICS = {"DIRECT": ("direct", "Direct food-insecurity report"),
               "INDIRECT": ("indirect", "Food-system stress (prices, losses, supply)")}
 
 
+def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
+    """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy)."""
+    r = E31.quarter_row(quarter, NOWCAST)
+    if r is not None and r["mode"] == "FORECAST":
+        w = r["provenance"]["news_evidence_window"]
+        return (w["evidence_quarter"], "FORECAST",
+                f"Supporting news for the {quarter} forecast: {w['evidence_quarter']} articles published by "
+                f"{w['information_cutoff_ph'][:10]} ({w['coverage'].lower()} quarter). A forecast never uses news of "
+                f"its own target quarter.")
+    if r is not None and r["mode"] == "NOWCAST":
+        w = r["provenance"]["news_evidence_window"]
+        return (quarter, "NOWCAST", f"Same-quarter news published by {w['information_cutoff_ph'][:10]} "
+                                    f"({w['days_covered']} of {w['days_in_quarter']} days).")
+    return (quarter, "OBSERVED", f"News published in {quarter} (describes the quarter; its one-quarter-ahead "
+                                 f"estimate was made with the previous quarter's news).")
+
+
 def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
-    """Validated articles (relevance rule R1) for a subject-quarter, newest first. Titles only: the source gives no
-    lead text, so the excerpt is empty rather than invented."""
+    """Validated articles (relevance rule R1.1) behind a subject-quarter's estimate, newest first. Titles only: the
+    source gives no lead text, so the excerpt is empty rather than invented."""
+    ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
+    quarter = ev_q
     rows = [a for a in _e31_articles() if a["quarter"] == quarter
             and (province_code is None or a["province_code"] == province_code)]
-    funnel = [r for r in E31.record()["news"]["by_province_quarter"] if r["quarter"] == quarter
-              and (province_code is None or r["province_code"] == province_code)]
     counts: dict[str, int] = {}
     for a in rows:
         counts[a["relevance"]] = counts.get(a["relevance"], 0) + 1
@@ -1066,8 +1084,10 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
              "url": a["link"], "excerpt": "", "topicKey": E31_TOPICS[a["relevance"]][0],
              "topicLabel": E31_TOPICS[a["relevance"]][1], "relevanceScore": None}
             for a in rows[start:start + page_size]]
-    return {"articleCount": len(rows), "provinceAttributed": sum(r["province_attributed"] for r in funnel),
-            "topics": topics, "data": data, "total": len(rows)}
+    # every validated article is province-attributed (R1.1 runs on attributed titles), so the two counts agree
+    return {"articleCount": len(rows), "provinceAttributed": len(rows),
+            "topics": topics, "data": data, "total": len(rows), "evidenceQuarter": ev_q, "sourceQuarter": ev_q,
+            "evidenceMode": ev_mode, "evidenceNote": ev_note}
 
 
 def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:

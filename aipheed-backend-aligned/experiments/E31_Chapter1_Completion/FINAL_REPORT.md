@@ -65,6 +65,7 @@ This is one regional observation (five rows sharing one H), so it supports no st
 | R7 | The municipalities endpoint returned 500 for every quarter | The schema required a string after E28 removed LGU bands; it also dropped the rank fields | Schema fixed | live test |
 | R8 | The record held NaN (invalid JSON) | Undefined metrics | Sanitised to null; `allow_nan=False` | live test |
 | R9 | A fresh deployment had no tables | Missing `alembic.ini`; migrations undocumented | `runner/start_e2e_server.sh` runs `alembic upgrade head` | §9 |
+| R11 | The Visualization PDF export and the legacy PDF failed (404 and 500); the brief pages used URLs without `/api/v1` (silent fallback, dead PDF links); the map's explanation text described a model that is not served; a forecast quarter showed 0 news | Endpoints missing or stale after the engine change | `/report/data` from the record; `/report` fixed; URLs fixed; E31 explanation note; news shown from the forecast's evidence quarter (`sourceQuarter`); legend labelled "Estimate (unvalidated)" | live tests; screenshots |
 | R10 | Explanations came from a different model | SHAP of the old LightGBM | Exact decomposition of the served engine, S1 − τ = (H − τ) + 2D; recomputed backtests equal E25 to 1e-6 (assert) | builder |
 
 ## 4. News coverage audit
@@ -185,9 +186,10 @@ They are not five copies of the regional signal, and both are STAGED until a DA 
 
 ## 9. Tests and reproducibility
 
-- **Backend:** 141 passed and 2 skipped (live tests run separately). This includes the new alignment, date-limit and record tests. Two inherited tests were updated for the new data limit: the refusal test no longer makes live requests.
-- **Live E2E** against a running server (`tests/test_e31_e2e_live.py`): **13/13**. It covers map, ranking, explanations, LGUs, news, PDF hash, error codes, admin login and the alert workflow.
-- **Dashboard:** 42/42 vitest (6 new); build succeeds; 11 TypeScript errors, identical to the E29 baseline (none new).
+- **Backend:** 146 passed and 2 skipped (live tests run separately). This includes the new alignment, date-limit and record tests. Two inherited tests were updated for the new data limit: the refusal test no longer makes live requests.
+- **Live E2E** against a running server (`tests/test_e31_e2e_live.py`): **16/16**. It covers map, ranking, explanations, LGUs, news (including forecast evidence quarter), both report paths, PDF hash, error codes, admin login and the alert workflow.
+- **Visual check:** headless Edge screenshots of `/dashboard`, `/da-brief` and `/news` against the live backend.
+- **Dashboard:** 43/43 vitest (7 new); build succeeds; 11 TypeScript errors, identical to the E29 baseline (none new).
 - **Commands:** see `REPRODUCE.md`.
 
 ## 10. Remaining blockers and decisions

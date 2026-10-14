@@ -42,7 +42,7 @@ export function E31BriefView({ rec }: { rec: E31Record }) {
       <header>
         <h1 className="text-xl font-semibold">{rec.title}</h1>
         <div data-testid="cutoff">Information cutoff {rec.information_cutoff}. Data {rec.data_authorization}.</div>
-        <div className="border border-amber-600 bg-amber-50 p-2 mt-1" data-testid="disclaimer">{rec.disclaimer}</div>
+        <div className="border border-amber-600 bg-amber-50 text-amber-950 p-2 mt-1" data-testid="disclaimer">{rec.disclaimer}</div>
       </header>
 
       <section className="border-2 border-slate-500 p-2" data-testid="regional-hunger">
@@ -121,7 +121,7 @@ export function E31BriefView({ rec }: { rec: E31Record }) {
         <ul className="list-disc pl-5">{rec.limitations.map((l) => <li key={l}>{l}</li>)}</ul>
       </section>
       <div className="flex gap-4">
-        <a className="underline" href={`${API_BASE_URL}/quarterly/e31/report.pdf`}>Download the PDF assessment report</a>
+        <a className="underline" href={`${API_BASE_URL}/api/v1/quarterly/e31/report.pdf`}>Download the PDF assessment report</a>
         <a className="underline" href="/news">News evidence</a>
         <span className="text-[10px]">Record {rec.content_sha256.slice(0, 16)}…</span>
       </div>

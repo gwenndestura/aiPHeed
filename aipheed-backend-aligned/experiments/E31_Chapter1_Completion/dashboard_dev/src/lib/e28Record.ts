@@ -102,7 +102,7 @@ export function estimateWording(b: ProvinceBrief): { text: string; classified: b
 
 export async function loadE28Record(): Promise<E28Record> {
   try {
-    const r = await fetch(`${API_BASE_URL}/quarterly/e28/brief`);
+    const r = await fetch(`${API_BASE_URL}/api/v1/quarterly/e28/brief`);
     if (r.ok) return (await r.json()) as E28Record;
   } catch {
     /* fall back to the identical static copy */

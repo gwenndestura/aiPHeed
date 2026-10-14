@@ -319,6 +319,12 @@ class NewsResponse(BaseModel):
     page: int
     pageSize: int
     total: int
+    # E31: which quarter's articles these are and why (a forecast is supported by the PREVIOUS quarter's news;
+    # a nowcast by the same quarter up to its cutoff; an observed quarter by its own news)
+    evidenceQuarter: str | None = None
+    sourceQuarter: str | None = None      # the frontend contract's name for evidenceQuarter
+    evidenceMode: str | None = None
+    evidenceNote: str | None = None
 
 
 # ---------------------------------------------------------------------------

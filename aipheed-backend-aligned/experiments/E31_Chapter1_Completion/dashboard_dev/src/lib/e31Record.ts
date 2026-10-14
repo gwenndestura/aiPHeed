@@ -110,7 +110,7 @@ export const MODE_TEXT: Record<Mode, string> = {
 
 export async function loadE31(): Promise<E31Record> {
   try {
-    const r = await fetch(`${API_BASE_URL}/quarterly/e31/record`);
+    const r = await fetch(`${API_BASE_URL}/api/v1/quarterly/e31/record`);
     if (r.ok) return (await r.json()) as E31Record;
   } catch {
     /* fall back to the identical static copy */

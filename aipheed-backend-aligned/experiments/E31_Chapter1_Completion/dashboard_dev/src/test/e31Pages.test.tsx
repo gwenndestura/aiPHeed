@@ -67,3 +67,24 @@ describe.skipIf(!rec)("E31 news evidence page", () => {
     expect(screen.getByTestId("empty")).toBeTruthy();
   });
 });
+
+describe("E31 record loader", () => {
+  it("asks the API under /api/v1 first and falls back to the identical static copy", async () => {
+    const { loadE31 } = await import("@/lib/e31Record");
+    const calls: string[] = [];
+    const orig = globalThis.fetch;
+    globalThis.fetch = (async (u: string) => {
+      calls.push(String(u));
+      if (String(u).includes("/api/v1/quarterly/e31/record")) return { ok: false, status: 503 } as Response;
+      return { ok: true, json: async () => ({ schema: "e31/1" }) } as unknown as Response;
+    }) as typeof fetch;
+    try {
+      const r = await loadE31();
+      expect(r.schema).toBe("e31/1");
+      expect(calls[0]).toMatch(/\/api\/v1\/quarterly\/e31\/record$/);
+      expect(calls[1]).toBe("/e31_record.json");
+    } finally {
+      globalThis.fetch = orig;
+    }
+  });
+});

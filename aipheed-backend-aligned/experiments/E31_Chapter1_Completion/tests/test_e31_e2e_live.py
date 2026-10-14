@@ -208,3 +208,15 @@ def test_visualization_report_payloads_match_the_record(rec):
 def test_legacy_pdf_report_renders():
     r = get("/report", scope="province", id="quezon", quarter="2026-Q4")
     assert r.ok and r.content[:4] == b"%PDF"
+
+
+def test_forecast_news_is_the_previous_quarter_and_labelled(rec):
+    body = get("/news", scope="province", id="batangas", quarter="2027-Q1", pageSize=100).json()
+    assert body["sourceQuarter"] == "2026-Q4" and body["evidenceMode"] == "FORECAST"
+    assert all(a["date"] <= "2026-10-14" for a in body["data"])
+    now = get("/news", scope="province", id="batangas", quarter="2026-Q4", pageSize=100).json()
+    assert now["sourceQuarter"] == "2026-Q4" and now["evidenceMode"] == "NOWCAST"
+    obs = get("/news", scope="province", id="batangas", quarter="2026-Q3", pageSize=100).json()
+    assert obs["sourceQuarter"] == "2026-Q3" and obs["evidenceMode"] == "OBSERVED"
+    ex = get("/explainability", scope="province", id="quezon", quarter="2026-Q4").json()
+    assert "not a SHAP approximation" in ex["note"]

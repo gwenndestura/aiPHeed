@@ -54,7 +54,7 @@ export function E28BriefView({ rec }: { rec: E28Record }) {
       <h1 className="text-xl font-bold">{rec.title}</h1>
       <div data-testid="status-banner" className="border-2 border-slate-600 bg-slate-50 p-2 text-sm">{rec.status_banner}</div>
       <div className="text-[11px]">Record SHA-256: <span data-testid="record-hash">{rec.content_sha256}</span> ·{" "}
-        <a className="underline" href={`${API_BASE_URL}/quarterly/e28/brief.pdf`}>PDF</a></div>
+        <a className="underline" href={`${API_BASE_URL}/api/v1/quarterly/e28/brief.pdf`}>PDF</a></div>
 
       <section>
         <h2 className="font-semibold">{fq.quarter}: {fq.kind}</h2>

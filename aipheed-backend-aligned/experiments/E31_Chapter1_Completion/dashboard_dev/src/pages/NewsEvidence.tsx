@@ -31,11 +31,11 @@ export function NewsEvidenceView({ rec }: { rec: E31Record }) {
         a food-insecurity condition or response (DIRECT) or a food-system stress such as losses, disease, supply or staple
         prices (INDIRECT). General agriculture, weather and business news are not counted.</div>
       <div className="flex flex-wrap gap-2" data-testid="filters">
-        <label>Province <select data-testid="f-province" value={province} onChange={(e) => setProvince(e.target.value)}>
+        <label>Province <select className="bg-background text-foreground border rounded px-1" data-testid="f-province" value={province} onChange={(e) => setProvince(e.target.value)}>
           <option value="all">All five</option>{provinces.map((p) => <option key={p}>{p}</option>)}</select></label>
-        <label>Quarter <select data-testid="f-quarter" value={quarter} onChange={(e) => setQuarter(e.target.value)}>
+        <label>Quarter <select className="bg-background text-foreground border rounded px-1" data-testid="f-quarter" value={quarter} onChange={(e) => setQuarter(e.target.value)}>
           <option value="all">All quarters</option>{quarters.map((q) => <option key={q}>{q}</option>)}</select></label>
-        <label>Relevance <select data-testid="f-relevance" value={relevance} onChange={(e) => setRelevance(e.target.value)}>
+        <label>Relevance <select className="bg-background text-foreground border rounded px-1" data-testid="f-relevance" value={relevance} onChange={(e) => setRelevance(e.target.value)}>
           <option value="all">Direct and indirect</option><option value="DIRECT">Direct only</option>
           <option value="INDIRECT">Indirect only</option></select></label>
       </div>

@@ -58,7 +58,7 @@ export function E29BriefView({ rec }: { rec: E29Record }) {
             );
           })}
         </section>
-        <a className="underline text-[11px]" href={`${API_BASE_URL}/quarterly/e29/brief.pdf`}>E29 PDF</a>
+        <a className="underline text-[11px]" href={`${API_BASE_URL}/api/v1/quarterly/e29/brief.pdf`}>E29 PDF</a>
       </div>
       <E28BriefView rec={rec} />
     </div>
@@ -71,7 +71,7 @@ export default function E29Brief() {
   useEffect(() => {
     (async () => {
       try {
-        const r = await fetch(`${API_BASE_URL}/quarterly/e29/brief`);
+        const r = await fetch(`${API_BASE_URL}/api/v1/quarterly/e29/brief`);
         if (r.ok) return setRec((await r.json()) as E29Record);
       } catch { /* fall back to the identical static copy */ }
       const s = await fetch("/e29_da_brief_record.json");

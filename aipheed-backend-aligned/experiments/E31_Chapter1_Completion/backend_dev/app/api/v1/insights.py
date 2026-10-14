@@ -35,6 +35,15 @@ EXPLAINABILITY_NOTE = (
 )
 
 
+E31_EXPLAINABILITY_NOTE = (
+    "Exact breakdown of the served estimate (PCF21), not a SHAP approximation: the estimate's margin over the "
+    "threshold equals (regional hunger - threshold) + 2 x provincial relative food-price pressure. Regional hunger "
+    "is one SWS Balance Luzon value shared by all five provinces; only the price term differs between provinces. "
+    "These are the model's inputs, not causes. Shares are rescaled to 100%; read `direction`, not bar size alone. "
+    "`color`: yellow below the 20% line, red above it while raising the estimate, green while lowering it."
+)
+
+
 def _resolve_province(scope: str, subject_id: str) -> tuple[str | None, str]:
     """Return (province PSGC code or None for region, display name)."""
     if scope == "region":
@@ -92,7 +101,7 @@ async def get_explainability(
         articleCount=article_count,
         triggerMatchedArticles=matched,
         narrative=svc.compose_narrative(name, q, triggers),
-        note=EXPLAINABILITY_NOTE,
+        note=E31_EXPLAINABILITY_NOTE if svc.e31_active() else EXPLAINABILITY_NOTE,
     )
 
 
