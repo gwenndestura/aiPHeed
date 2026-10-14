@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Note } from "@/components/ui/note";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
-import { ADMIN_SECTIONS } from "@/lib/adminNav";
+import { ADMIN_NAV, isActivePath } from "@/lib/adminNav";
 import { PSTClock } from "./PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -47,9 +47,10 @@ export function TopNavbar({ active = "none" }: Props) {
       </Link>
 
       {/* Nav links — centered */}
-      <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
+      {/* A signed-in admin has five links; below 1024px they move into the menu. */}
+      <nav className={`absolute left-1/2 -translate-x-1/2 items-center gap-1 ${isAdmin ? "hidden lg:flex" : "flex"}`}>
         {isAdmin ? (
-          ADMIN_SECTIONS.map((s) => <NavBtn key={s.section} label={s.label} to={s.path} />)
+          <AdminNavLinks />
         ) : (
           <>
             <NavBtn label="Mapping" active={active === "home"} to="/dashboard" />
@@ -74,6 +75,7 @@ export function TopNavbar({ active = "none" }: Props) {
             <SheetTitle className="text-sm">Menu</SheetTitle>
           </SheetHeader>
           <div className="mt-6 space-y-1">
+            {isAdmin && <AdminMenuLinks />}
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>
@@ -243,6 +245,48 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
         </p>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** The signed-in admin's links (lib/adminNav.ts), used by this header and the admin header alike. */
+export function AdminNavLinks() {
+  const { pathname } = useLocation();
+  return (
+    <>
+      {ADMIN_NAV.map((l) => (
+        <NavBtn key={l.path} label={l.label} to={l.path} active={isActivePath(pathname, l.path)} />
+      ))}
+    </>
+  );
+}
+
+const ADMIN_NAV_ICONS: Record<string, typeof Home> = {
+  "/admin": MapIcon,
+  "/data": Database,
+  "/visualization": BarChart3,
+  "/admin/review": ClipboardCheck,
+  "/admin/feedback": MessageSquareText,
+};
+
+/**
+ * The same links as AdminNavLinks, as menu rows, for widths below 1024px where
+ * the header has no room for them. Hidden from 1024px up. Each closes the menu.
+ */
+export function AdminMenuLinks() {
+  const { pathname } = useLocation();
+  return (
+    <div className="lg:hidden pb-3 mb-3 border-b border-border/40">
+      <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
+        Navigate
+      </p>
+      {ADMIN_NAV.map((l) => (
+        <SheetClose asChild key={l.path}>
+          <Link to={l.path} className="block w-full" aria-current={isActivePath(pathname, l.path) ? "page" : undefined}>
+            <MenuRow icon={ADMIN_NAV_ICONS[l.path] ?? Home} label={l.label} />
+          </Link>
+        </SheetClose>
+      ))}
+    </div>
   );
 }
 

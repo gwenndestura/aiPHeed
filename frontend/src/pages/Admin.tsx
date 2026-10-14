@@ -28,8 +28,8 @@ import logoIcon from "@/assets/logo-icon.png";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
-import { ADMIN_SECTIONS, adminPath, sectionFromPath, type AdminSection } from "@/lib/adminNav";
-import { NavBtn } from "@/components/TopNavbar";
+import { adminPath, sectionFromPath } from "@/lib/adminNav";
+import { AdminMenuLinks, AdminNavLinks } from "@/components/TopNavbar";
 import { ApiError } from "@/lib/api";
 import {
   useConfig,
@@ -83,7 +83,6 @@ export default function Admin() {
     <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
       <AdminNavbar
         user={user}
-        section={section}
         onLogout={doLogout}
       />
 
@@ -108,11 +107,9 @@ export default function Admin() {
 /* ---------- Admin Navbar — mirrors TopNavbar styling ---------- */
 function AdminNavbar({
   user,
-  section,
   onLogout,
 }: {
   user: { email: string; role: string };
-  section: AdminSection;
   onLogout: () => void;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">(
@@ -142,10 +139,9 @@ function AdminNavbar({
       </Link>
 
       {/* Nav links — centered */}
-      <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
-        {ADMIN_SECTIONS.map((s) => (
-          <NavBtn key={s.section} label={s.label} to={s.path} active={section === s.section} />
-        ))}
+      {/* Five links; below 1024px they move into the menu (AdminMenuLinks). */}
+      <nav className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-1">
+        <AdminNavLinks />
       </nav>
 
       <div className="flex-1" />
@@ -163,6 +159,7 @@ function AdminNavbar({
             <SheetTitle className="text-sm">Admin Menu</SheetTitle>
           </SheetHeader>
           <div className="mt-6 space-y-1">
+            <AdminMenuLinks />
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
               Account
             </p>

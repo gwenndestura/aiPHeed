@@ -12,12 +12,29 @@ export const ADMIN_SECTIONS: readonly { section: AdminSection; label: string; pa
   { section: "feedback", label: "Feedback", path: "/admin/feedback" },
 ];
 
+/**
+ * A signed-in admin's header links, in order -- the same in the admin header
+ * and the public header, so moving between them never changes the menu.
+ * Data and Visualization are the public pages; the rest are admin sections.
+ */
+export const ADMIN_NAV: readonly { label: string; path: string }[] = [
+  { label: "Mapping", path: "/admin" },
+  { label: "Data", path: "/data" },
+  { label: "Visualization", path: "/visualization" },
+  { label: "Review", path: "/admin/review" },
+  { label: "Feedback", path: "/admin/feedback" },
+];
+
+/** A link is active when it points at the page being shown. */
+export function isActivePath(pathname: string, path: string): boolean {
+  return (pathname.replace(/\/+$/, "") || "/") === path;
+}
+
 export function adminPath(section: AdminSection): string {
   return ADMIN_SECTIONS.find((s) => s.section === section)!.path;
 }
 
 /** The section a pathname shows; the map for /admin and anything unrecognised. */
 export function sectionFromPath(pathname: string): AdminSection {
-  const path = pathname.replace(/\/+$/, "") || "/";
-  return ADMIN_SECTIONS.find((s) => s.path === path)?.section ?? "map";
+  return ADMIN_SECTIONS.find((s) => isActivePath(pathname, s.path))?.section ?? "map";
 }
