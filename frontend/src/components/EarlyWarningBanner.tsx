@@ -20,7 +20,7 @@ export function EarlyWarningBanner({
           <span className="absolute inline-flex h-6 w-6 rounded-full bg-destructive-foreground/20 animate-ping" />
           <AlertTriangle className="h-4 w-4 relative" />
         </div>
-        <p className="text-[11px] font-medium flex-1 truncate">
+        <p className="text-[11px] compact:text-[14px] font-medium flex-1 truncate">
           <span className="font-bold uppercase tracking-wider mr-2 text-[10px]">Early Warning</span>
           {message}
         </p>

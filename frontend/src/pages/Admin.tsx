@@ -32,6 +32,8 @@ import { adminPath, sectionFromPath } from "@/lib/adminNav";
 import { AdminAccountsMenuItem, AdminMenuLinks, AdminNavLinks, DemoBadge, MENU_TRIGGER_CLASS } from "@/components/TopNavbar";
 import { AccountsSection } from "@/components/AccountsSection";
 import { ApiError } from "@/lib/api";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { COMPACT_QUERY } from "@/lib/breakpoints";
 import {
   useConfig,
   useQuarters,
@@ -240,9 +242,9 @@ function AdminMapView() {
 
 function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <div className="px-6 pt-6 pb-4 border-b border-border/40">
+    <div className="px-6 compact:px-4 pt-6 pb-4 border-b border-border/40">
       <h1 className="text-lg font-bold tracking-tight">{title}</h1>
-      <p className="text-[11px] text-muted-foreground mt-0.5">{subtitle}</p>
+      <p className="text-[11px] compact:text-[14px] text-muted-foreground mt-0.5">{subtitle}</p>
     </div>
   );
 }
@@ -368,7 +370,7 @@ function ReviewSection() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-3 py-1.5 text-[11px] font-bold rounded-md transition-colors ${
+              className={`px-3 py-1.5 compact:min-h-11 text-[11px] font-bold rounded-md transition-colors ${
                 tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -385,7 +387,7 @@ function ReviewSection() {
             <select
               value={year ?? ""}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="h-8 rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-8 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {years.map((y) => (
                 <option key={y} value={y}>{y}</option>
@@ -395,7 +397,7 @@ function ReviewSection() {
             <select
               value={quarter}
               onChange={(e) => setQuarter(e.target.value as typeof quarter)}
-              className="h-8 rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-8 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="all">All quarters</option>
               <option value="Q4">Q4</option>
@@ -409,39 +411,39 @@ function ReviewSection() {
             </span>
           </div>
           <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
-            <table className="w-full text-[11px]">
-              <thead className="bg-secondary/40 text-muted-foreground">
-                <tr>
-                  <th className="text-left font-semibold px-4 py-2.5">Province</th>
-                  <th className="text-left font-semibold px-4 py-2.5">Quarter</th>
-                  <th className="text-left font-semibold px-4 py-2.5">Risk Level</th>
-                  <th className="text-left font-semibold px-4 py-2.5">Risk Level Score</th>
-                  <th className="text-left font-semibold px-4 py-2.5">Status</th>
-                  <th className="text-left font-semibold px-4 py-2.5">Action</th>
+            <table role="table" className="w-full text-[11px] stack-table">
+              <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
+                <tr role="row">
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Province</th>
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Quarter</th>
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Risk Level</th>
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Risk Level Score</th>
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Status</th>
+                  <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody role="rowgroup">
                 {sorted.map((r) => (
-                  <tr key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
-                    <td className="px-4 py-2.5 font-medium">{r.province}</td>
-                    <td className="px-4 py-2.5 tabular-nums text-muted-foreground">
+                  <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+                    <td role="cell" data-label="Province" className="px-4 py-2.5 font-medium">{r.province}</td>
+                    <td role="cell" data-label="Quarter" className="px-4 py-2.5 tabular-nums text-muted-foreground">
                       <span className="font-semibold text-foreground">{r.quarter}</span>
                     </td>
-                    <td className="px-4 py-2.5">
+                    <td role="cell" data-label="Risk Level" className="px-4 py-2.5">
                       {r.riskLevel in RISK_LABELS ? (
                         <StatusBadge level={r.riskLevel as RiskLevelKey} />
                       ) : (
                         r.riskLevel
                       )}
                     </td>
-                    <td className="px-4 py-2.5 tabular-nums font-bold" style={{ color: RISK_COLORS[r.riskLevel] ?? "#6b7280" }}>
+                    <td role="cell" data-label="Risk Level Score" className="px-4 py-2.5 tabular-nums font-bold" style={{ color: RISK_COLORS[r.riskLevel] ?? "#6b7280" }}>
                       {r.riskScore.toFixed(2)}
                     </td>
-                    <td className="px-4 py-2.5">{statusBadge(r.status)}</td>
-                    <td className="px-4 py-2.5">
+                    <td role="cell" data-label="Status" className="px-4 py-2.5">{statusBadge(r.status)}</td>
+                    <td role="cell" data-label="Action" className="px-4 py-2.5">
                       <button
                         onClick={() => setOpen(r)}
-                        className="text-primary hover:underline text-[11px] font-semibold flex items-center gap-1"
+                        className="text-primary hover:underline text-[11px] font-semibold flex items-center gap-1 compact:min-h-11"
                       >
                         <Eye className="h-3 w-3" /> View Details
                       </button>
@@ -449,7 +451,7 @@ function ReviewSection() {
                   </tr>
                 ))}
                 {!isLoading && sorted.length === 0 && (
-                  <tr><td colSpan={6} className="px-4 py-6 text-center text-muted-foreground text-[11px]">No reports for this filter.</td></tr>
+                  <tr role="row"><td role="cell" colSpan={6} className="px-4 py-6 text-center text-muted-foreground text-[11px]">No reports for this filter.</td></tr>
                 )}
               </tbody>
             </table>
@@ -485,33 +487,33 @@ function RejectionLog({ rejected, onRestore, busy = false }: { rejected: ReviewI
   return (
     <div className="p-6 pt-4">
       <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
-        <table className="w-full text-[11px]">
-          <thead className="bg-secondary/40 text-muted-foreground">
-            <tr>
-              <th className="text-left font-semibold px-4 py-2.5">Province</th>
-              <th className="text-left font-semibold px-4 py-2.5">Quarter</th>
-              <th className="text-left font-semibold px-4 py-2.5">Reason</th>
-              <th className="text-left font-semibold px-4 py-2.5">Notes</th>
-              <th className="text-left font-semibold px-4 py-2.5">Timestamp</th>
-              <th className="text-left font-semibold px-4 py-2.5">Action</th>
+        <table role="table" className="w-full text-[11px] stack-table">
+          <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
+            <tr role="row">
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Province</th>
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Quarter</th>
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Reason</th>
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Notes</th>
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Timestamp</th>
+              <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody role="rowgroup">
             {rejected.length === 0 && (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-muted-foreground italic">No rejections logged.</td></tr>
+              <tr role="row"><td role="cell" colSpan={6} className="px-4 py-8 text-center text-muted-foreground italic">No rejections logged.</td></tr>
             )}
             {rejected.map((r) => (
-              <tr key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
-                <td className="px-4 py-2.5 font-medium">{r.province}</td>
-                <td className="px-4 py-2.5 tabular-nums">{r.quarter}</td>
-                <td className="px-4 py-2.5">{r.rejectionReason ?? "—"}</td>
-                <td className="px-4 py-2.5 text-muted-foreground">{r.rejectionNotes || "—"}</td>
-                <td className="px-4 py-2.5 tabular-nums text-muted-foreground">{r.updatedAt ? new Date(r.updatedAt).toLocaleString() : "—"}</td>
-                <td className="px-4 py-2.5">
+              <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+                <td role="cell" data-label="Province" className="px-4 py-2.5 font-medium">{r.province}</td>
+                <td role="cell" data-label="Quarter" className="px-4 py-2.5 tabular-nums">{r.quarter}</td>
+                <td role="cell" data-label="Reason" className="px-4 py-2.5">{r.rejectionReason ?? "—"}</td>
+                <td role="cell" data-label="Notes" className="px-4 py-2.5 text-muted-foreground">{r.rejectionNotes || "—"}</td>
+                <td role="cell" data-label="Timestamp" className="px-4 py-2.5 tabular-nums text-muted-foreground">{r.updatedAt ? new Date(r.updatedAt).toLocaleString() : "—"}</td>
+                <td role="cell" data-label="Action" className="px-4 py-2.5">
                   <button
                     onClick={() => onRestore(r)}
                     disabled={busy}
-                    className="text-primary hover:underline text-[11px] font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="text-primary hover:underline text-[11px] font-semibold compact:min-h-11 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Restore
                   </button>
@@ -550,6 +552,9 @@ function ReviewDetailModal({
   readOnly?: boolean;
 }) {
   const [rejectOpen, setRejectOpen] = useState(false);
+  // Chart text: 12px on phones (Recharts draws it; CSS cannot reach it).
+  const compact = useMediaQuery(COMPACT_QUERY);
+  const chartFs = compact ? 12 : 10;
 
   // Real municipality / city scores for this province-quarter.
   const { data: muniRes } = useMunicipalities(item.provinceId, item.quarter);
@@ -560,8 +565,8 @@ function ReviewDetailModal({
   const triggers: Trigger[] = explain?.triggers ?? [];
 
   return (
-    <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6">
-      <div className="bg-card border border-border/60 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[88vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6 compact:p-0">
+      <div className="bg-card border border-border/60 rounded-2xl compact:rounded-none shadow-2xl w-full max-w-3xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold">{item.province} — Risk Review</h2>
@@ -575,10 +580,10 @@ function ReviewDetailModal({
               </div>
             )}
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
+          <button onClick={onClose} aria-label="Close" className="p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5 grid grid-cols-2 gap-4">
+        <div className="flex-1 overflow-y-auto p-5 compact:p-4 grid grid-cols-2 gap-4">
           <div className="col-span-2 p-3 rounded-lg border border-border/50 bg-secondary/30 flex items-center gap-3">
             <div className="bg-primary/15 rounded-lg p-2"><FileText className="h-4 w-4 text-primary" /></div>
             <div>
@@ -593,7 +598,7 @@ function ReviewDetailModal({
               <span className="text-[10px] text-muted-foreground">{muniData.length} LGUs · sorted by Risk Level</span>
             </div>
             <div className="max-h-64 overflow-y-auto thin-scrollbar pr-1">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+              <div className="grid grid-cols-2 compact:grid-cols-1 gap-x-4 gap-y-1">
                 {muniData.map((m) => (
                   <div key={m.id} className="flex items-center gap-2 text-[11px] py-0.5">
                     <span className="flex-1 truncate" title={m.name}>{m.name}</span>
@@ -622,9 +627,9 @@ function ReviewDetailModal({
                   layout="vertical"
                   margin={{ left: 8, right: 16, top: 4, bottom: 4 }}
                 >
-                  <XAxis type="number" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                  <YAxis type="category" dataKey="label" width={130} tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: 11, borderRadius: 0, background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} formatter={(v: number) => v.toFixed(3)} />
+                  <XAxis type="number" tick={{ fontSize: chartFs, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                  <YAxis type="category" dataKey="label" width={130} tick={{ fontSize: chartFs, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ fontSize: compact ? 12 : 11, borderRadius: 0, background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} formatter={(v: number) => v.toFixed(3)} />
                   <Bar dataKey="value" radius={[0, 0, 0, 0]}>
                     {triggers.map((t, i) => (
                       <Cell key={i} fill={t.signedContribution >= 0 ? "hsl(var(--risk-high))" : "hsl(var(--risk-low))"} />
@@ -640,7 +645,7 @@ function ReviewDetailModal({
           {/* SHAP explanations — narrative */}
           <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
             <h4 className="text-[11px] font-bold mb-1">SHAP explanations</h4>
-            <p className="text-[10px] text-muted-foreground mb-3">
+            <p className="text-[10px] compact:text-[14px] text-muted-foreground mb-3">
               {explain?.narrative ?? "Grouped driver reasons behind this quarter's Risk Level forecast."}
             </p>
             <ol className="space-y-2.5">
@@ -648,7 +653,7 @@ function ReviewDetailModal({
                 .slice()
                 .sort((a, b) => Math.abs(b.signedContribution) - Math.abs(a.signedContribution))
                 .map((t) => (
-                  <li key={t.key} className="text-[11px] leading-snug">
+                  <li key={t.key} className="text-[11px] compact:text-[14px] leading-snug">
                     <p className="font-bold text-foreground">{t.label} — {t.pct}%</p>
                     <p className="text-muted-foreground">
                       {t.direction === "increases_risk" ? "Pushed risk up" : "Pushed risk down"} (signed contribution {t.signedContribution.toFixed(3)}).
@@ -663,32 +668,32 @@ function ReviewDetailModal({
           </div>
         </div>
 
-        <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
-          {readOnly && <Note label={null} className="mr-auto">{DEMO_READ_ONLY_NOTE}</Note>}
-          <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
+        <div className="px-5 py-3 border-t border-border/40 flex flex-wrap items-center justify-end gap-2">
+          {readOnly && <Note label={null} className="mr-auto compact:basis-full">{DEMO_READ_ONLY_NOTE}</Note>}
+          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
           {item.status === "Rejected" ? (
-            <button onClick={onRestore} disabled={busy} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Restore</button>
+            <button onClick={onRestore} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Restore</button>
           ) : item.status === "Approved" ? (
             <>
               <button
                 onClick={() => setRejectOpen(true)}
                 disabled={busy}
-                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 compact:min-h-11 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Reject
               </button>
-              <button onClick={onUnpublish} disabled={busy} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Undo Publishing</button>
+              <button onClick={onUnpublish} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Undo Publishing</button>
             </>
           ) : (
             <>
               <button
                 onClick={() => setRejectOpen(true)}
                 disabled={busy}
-                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 compact:min-h-11 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Reject
               </button>
-              <button onClick={onApprove} disabled={busy} className="px-3 py-1.5 rounded-md bg-risk-low text-white text-[11px] font-bold hover:bg-risk-low/90 disabled:opacity-40 disabled:cursor-not-allowed">Approve & Publish</button>
+              <button onClick={onApprove} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md bg-risk-low text-white text-[11px] font-bold hover:bg-risk-low/90 disabled:opacity-40 disabled:cursor-not-allowed">Approve & Publish</button>
             </>
           )}
         </div>
@@ -746,7 +751,7 @@ function RejectReasonModal({
   const valid = finalReason.length > 0;
 
   return (
-    <div className="fixed inset-0 z-[2100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-[2100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-6 compact:p-3">
       <div className="bg-card border border-destructive/40 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
@@ -755,7 +760,7 @@ function RejectReasonModal({
               {item.province} · {item.quarter} · This action is permanent until restored from the Rejection Log.
             </p>
           </div>
-          <button onClick={onCancel} className="p-1.5 rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
+          <button onClick={onCancel} aria-label="Close" className="p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
         </div>
 
         <div className="p-5 space-y-3">
@@ -766,7 +771,7 @@ function RejectReasonModal({
             <select
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full h-9 rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
+              className="w-full h-9 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
             >
               <option value="">Select a reason…</option>
               {reasons.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -776,7 +781,7 @@ function RejectReasonModal({
                 value={other}
                 onChange={(e) => setOther(e.target.value)}
                 placeholder="Specify reason…"
-                className="mt-2 w-full h-9 rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
+                className="mt-2 w-full h-9 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
               />
             )}
           </div>
@@ -791,17 +796,17 @@ function RejectReasonModal({
               maxLength={2000}
               rows={3}
               placeholder="Additional context for audit log…"
-              className="w-full rounded-md border border-border/60 bg-background px-2 py-1.5 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive resize-none"
+              className="w-full rounded-md border border-border/60 bg-background px-2 py-1.5 text-[12px] compact:text-[16px] focus:outline-none focus:ring-2 focus:ring-destructive resize-none"
             />
           </div>
         </div>
 
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
-          <button onClick={onCancel} className="px-3 py-1.5 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Cancel</button>
+          <button onClick={onCancel} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Cancel</button>
           <button
             onClick={() => valid && onConfirm(finalReason, notes.trim() || undefined)}
             disabled={!valid}
-            className="px-3 py-1.5 rounded-md bg-destructive text-destructive-foreground text-[11px] font-bold hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 compact:min-h-11 rounded-md bg-destructive text-destructive-foreground text-[11px] font-bold hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Confirm rejection
           </button>
@@ -831,30 +836,30 @@ function FeedbackSection() {
         </div>
 
         <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
-          <table className="w-full text-[11px]">
-            <thead className="bg-secondary/40 text-muted-foreground">
-              <tr>
-                <th className="text-left font-semibold px-4 py-2.5">Date</th>
-                <th className="text-left font-semibold px-4 py-2.5">Name</th>
-                <th className="text-left font-semibold px-4 py-2.5">Agency</th>
-                <th className="text-left font-semibold px-4 py-2.5">Score</th>
-                <th className="text-left font-semibold px-4 py-2.5">Action</th>
+          <table role="table" className="w-full text-[11px] stack-table">
+            <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
+              <tr role="row">
+                <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Date</th>
+                <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Name</th>
+                <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Agency</th>
+                <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Score</th>
+                <th role="columnheader" className="text-left font-semibold px-4 py-2.5">Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {!isLoading && items.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground italic">
+                <tr role="row">
+                  <td role="cell" colSpan={5} className="px-4 py-8 text-center text-muted-foreground italic">
                     No feedback submissions yet.
                   </td>
                 </tr>
               )}
               {items.map((f) => (
-                <tr key={f.id} className="border-t border-border/40 hover:bg-secondary/30">
-                  <td className="px-4 py-2.5 tabular-nums">{new Date(f.date).toLocaleDateString()}</td>
-                  <td className="px-4 py-2.5 font-medium">{f.demographics.fullName || "Anonymous"}</td>
-                  <td className="px-4 py-2.5 text-muted-foreground">{f.demographics.agency || "—"}</td>
-                  <td className="px-4 py-2.5">
+                <tr role="row" key={f.id} className="border-t border-border/40 hover:bg-secondary/30">
+                  <td role="cell" data-label="Date" className="px-4 py-2.5 tabular-nums">{new Date(f.date).toLocaleDateString()}</td>
+                  <td role="cell" data-label="Name" className="px-4 py-2.5 font-medium">{f.demographics.fullName || "Anonymous"}</td>
+                  <td role="cell" data-label="Agency" className="px-4 py-2.5 text-muted-foreground">{f.demographics.agency || "—"}</td>
+                  <td role="cell" data-label="Score" className="px-4 py-2.5">
                     <span
                       className={`font-bold tabular-nums ${f.score >= 68 ? "text-value-success" : "text-value-danger"}`}
                       title={f.score >= 68 ? "At or above the SUS benchmark of 68" : "Below the SUS benchmark of 68"}
@@ -862,10 +867,10 @@ function FeedbackSection() {
                       {f.score}/100
                     </span>
                   </td>
-                  <td className="px-4 py-2.5">
+                  <td role="cell" data-label="Action" className="px-4 py-2.5">
                     <button
                       onClick={() => setOpen(f)}
-                      className="text-primary hover:underline text-[11px] font-semibold flex items-center gap-1"
+                      className="text-primary hover:underline text-[11px] font-semibold flex items-center gap-1 compact:min-h-11"
                     >
                       <Eye className="h-3 w-3" /> View
                     </button>
@@ -881,7 +886,7 @@ function FeedbackSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="px-3 py-1.5 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
+              className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
             >
               Previous
             </button>
@@ -889,7 +894,7 @@ function FeedbackSection() {
             <button
               onClick={() => setPage((p) => p + 1)}
               disabled={page * feedbackRes.pageSize >= feedbackRes.total}
-              className="px-3 py-1.5 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
+              className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
             >
               Next
             </button>
@@ -913,8 +918,8 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 
 function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; questions: string[]; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6">
-      <div className="bg-card border border-border/60 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6 compact:p-0">
+      <div className="bg-card border border-border/60 rounded-2xl compact:rounded-none shadow-2xl w-full max-w-2xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold">SUS Feedback · {new Date(item.date).toLocaleDateString()}</h2>
@@ -923,11 +928,11 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
               <span className="font-bold text-foreground">{item.score}/100</span>
             </p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
+          <button onClick={onClose} aria-label="Close" className="p-1.5 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-secondary/60"><X className="h-4 w-4" /></button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 space-y-3">
-          <div className="grid grid-cols-2 gap-2 text-[11px]">
+          <div className="grid grid-cols-2 compact:grid-cols-1 gap-2 text-[11px]">
             <KV k="Email" v={item.demographics.email || "—"} />
             <KV k="Designation" v={item.demographics.designation || "—"} />
             <KV k="Age" v={item.demographics.age || "—"} />
@@ -941,7 +946,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
             <h4 className="text-[11px] font-bold uppercase tracking-wider mb-2">Likert responses</h4>
             <ol className="space-y-1.5">
               {questions.map((q, i) => (
-                <li key={i} className="text-[11px] flex items-start gap-2">
+                <li key={i} className="text-[11px] compact:text-[14px] flex items-start gap-2">
                   <span className="text-muted-foreground tabular-nums w-5">{i + 1}.</span>
                   <span className="flex-1">{q}</span>
                   <span className="font-bold tabular-nums w-6 text-right">{item.answers[String(i)] ?? "—"}</span>
@@ -955,13 +960,13 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
               {item.liked && (
                 <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
                   <MetricLabel className="mb-1">Liked most</MetricLabel>
-                  <p className="text-[11px] leading-snug">{item.liked}</p>
+                  <p className="text-[11px] compact:text-[14px] leading-snug">{item.liked}</p>
                 </div>
               )}
               {item.improvements && (
                 <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
                   <MetricLabel className="mb-1">Suggestions</MetricLabel>
-                  <p className="text-[11px] leading-snug">{item.improvements}</p>
+                  <p className="text-[11px] compact:text-[14px] leading-snug">{item.improvements}</p>
                 </div>
               )}
             </div>
@@ -969,7 +974,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
         </div>
 
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end">
-          <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
+          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
         </div>
       </div>
     </div>

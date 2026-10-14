@@ -589,6 +589,28 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .h-screen { height: 100dvh; }
 }
 @media (max-width: 767px), (max-height: 500px) {
-  .text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\],
+  /* Not where the element sets its own phone size (compact:text-[14px]). */
+  :is(.text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\]):not([class*="compact:text-"]),
   .map-label { font-size: 12px !important; }
+
+  /* Tables marked .stack-table become one card per row: each cell on its
+     own line, its column heading (data-label) on the left. The headings
+     stay in the page for screen readers. */
+  .stack-table thead {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .stack-table, .stack-table tbody, .stack-table tr, .stack-table td { display: block; width: 100%; }
+  .stack-table tr { padding: 8px 16px; }
+  .stack-table td {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end;
+    gap: 4px 8px; padding: 6px 0 !important; min-height: 32px;
+    text-align: right; overflow-wrap: anywhere;
+  }
+  .stack-table td::before {
+    content: attr(data-label); margin-right: auto; text-align: left;
+    font-size: 12px; font-weight: 500; color: hsl(var(--muted-foreground));
+  }
+  .stack-table td:not([data-label])::before { content: none; }
+  .stack-table td:not([data-label]) { justify-content: center; text-align: center; }
 }
