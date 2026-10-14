@@ -24,7 +24,7 @@
 - **Charts:** `recharts`.
 - **PDF/PNG export:** `jspdf` + `html2canvas`.
 - **Data fetching layer:** `@tanstack/react-query` is installed and wired into `App.tsx`, but **no query actually calls anything** — there is no API client, no `fetch` to any backend endpoint anywhere in the app. It's present but unused (presumably scaffolded for future backend integration).
-- **Bot protection:** Cloudflare Turnstile widget exists ([TurnstileGate.tsx](src/components/TurnstileGate.tsx)) but **is not mounted anywhere** in the app — dead code, not currently gating anything.
+- **Bot protection:** none. An unused Cloudflare Turnstile component (never mounted, never verified server-side, and passing on error) was removed.
 
 ---
 
@@ -72,7 +72,7 @@ This is a **second, partially overlapping** dataset, used by the map and left pa
 ### 3c. Real data: static geography files
 
 - [public/ph-provinces.json](public/ph-provinces.json), [public/ph-regions.json](public/ph-regions.json), [public/calabarzon-municities.json](public/calabarzon-municities.json) — these **are real** GeoJSON polygon boundaries for Philippine provinces/regions/municipalities, fetched client-side via plain `fetch("/ph-provinces.json")` calls in [PhilippineMap.tsx](src/components/PhilippineMap.tsx#L364-L367). They're static files served from Vite's public folder, not an API.
-- Map tiles (the visual basemap) are loaded live from CARTO's public tile CDN (`basemaps.cartocdn.com`, dark/light variants) — the only genuinely "live" network dependency in the whole app besides fonts/Turnstile's script.
+- Map tiles (the visual basemap) are loaded live from CARTO's public tile CDN (`basemaps.cartocdn.com`, dark/light variants) — the only genuinely "live" network dependency in the whole app besides fonts.
 
 ### 3d. Browser-storage "state" (not a backend)
 
@@ -173,7 +173,6 @@ These files exist in the repo but are **not imported by any active page or compo
 - [src/components/AnimatedStatWidgets.tsx](src/components/AnimatedStatWidgets.tsx)
 - [src/components/WhatIfSandbox.tsx](src/components/WhatIfSandbox.tsx) — a full "what-if" slider sandbox for adjusting features and seeing a simulated risk score recompute; not wired into any page.
 - [src/components/CalabarzonSilhouette.tsx](src/components/CalabarzonSilhouette.tsx)
-- [src/components/TurnstileGate.tsx](src/components/TurnstileGate.tsx) — Cloudflare Turnstile bot-check widget, not mounted anywhere.
 - [src/lib/pdfReport.ts](src/lib/pdfReport.ts) (843 lines) — a fully-built multi-page PDF report generator (`downloadRegionReport`, `downloadProvinceReport`, `downloadMunicipalityReport`) with cover pages, executive summary, municipal breakdown, and actions sections. **Not called from any button in the current UI** — the PDF export that *is* wired up (§4.4) is a much simpler chart-snapshot export in `Visualization.tsx`, unrelated to this file.
 - `nationalTrendData` export in [mockData.ts](src/data/mockData.ts) — only consumer was the now-orphaned `NationalTrendChart`.
 
