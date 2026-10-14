@@ -40,7 +40,11 @@ Then edit `.env` and set `SECRET_KEY` to anything other than `changeme`.
 python -m pytest tests -q
 ```
 
-102 tests should pass. If they do, everything below will work.
+There are 193 tests. 188 should pass. Five in
+`tests/integration/test_api_dashboard.py` currently fail: the served forecast
+model was saved with scikit-learn 1.7.2 while 1.8.0 is installed, and some of
+their expectations predate the E20 forecast change. Any other failure means the
+install is not right.
 
 ### Run the API
 
@@ -164,7 +168,7 @@ backend/
   scripts/         pipeline entry points and measured experiments
   data/processed/  panel, feature matrix, news dataset, results
   models/          served model bundles
-  tests/           102 tests
+  tests/           193 tests
 ```
 
 ## Current model
