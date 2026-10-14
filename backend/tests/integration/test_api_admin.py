@@ -275,6 +275,19 @@ class TestReviewPipeline:
         assert reject_row["provinceId"] == "quezon"
         assert reject_row["reason"] == "Model anomaly / outlier prediction"
 
+    def test_approving_twice_changes_nothing_the_second_time(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        first = api.post("/api/v1/admin/review/rv_2025Q4_quezon/approve", headers=headers)
+        second = api.post("/api/v1/admin/review/rv_2025Q4_quezon/approve", headers=headers)
+        assert first.status_code == second.status_code == 200
+        assert second.json()["status"] == "Approved"
+        # A double click or a retried request is not a second decision.
+        assert second.json()["updatedAt"] == first.json()["updatedAt"]
+        rows = api.get("/api/v1/admin/audit", headers=headers).json()["data"]
+        assert sum(1 for r in rows if r["action"] == "approve") == 1
+
 
 # ---------------------------------------------------------------------------
 # What a rejection does to the public API

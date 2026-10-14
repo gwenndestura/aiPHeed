@@ -284,6 +284,9 @@ function ReviewSection() {
   const rejectMut = useRejectReview();
   const undoMut = useUndoReview();
   const restoreMut = useRestoreRejection();
+  // One review action at a time: the buttons are disabled while any of these
+  // is in flight, so a double click cannot send the same decision twice.
+  const busy = approveMut.isPending || rejectMut.isPending || undoMut.isPending || restoreMut.isPending;
 
   const statusBadge = statusBadgeFor;
 
@@ -448,7 +451,7 @@ function ReviewSection() {
           </div>
         </div>
       ) : (
-        <RejectionLog rejected={rejectedItems} onRestore={restore} />
+        <RejectionLog rejected={rejectedItems} onRestore={restore} busy={busy} />
       )}
 
       {open && (
@@ -460,6 +463,7 @@ function ReviewSection() {
           onUnpublish={() => unpublish(open)}
           onReject={(reason, notes) => reject(open, reason, notes)}
           onRestore={() => restore(open)}
+          busy={busy}
         />
       )}
     </div>
@@ -471,7 +475,7 @@ function formatQuarterLabel(qid: string): string {
   return `${q} ${y}`;
 }
 
-function RejectionLog({ rejected, onRestore }: { rejected: ReviewItem[]; onRestore: (it: ReviewItem) => void }) {
+function RejectionLog({ rejected, onRestore, busy = false }: { rejected: ReviewItem[]; onRestore: (it: ReviewItem) => void; busy?: boolean }) {
   return (
     <div className="p-6 pt-4">
       <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
@@ -500,7 +504,8 @@ function RejectionLog({ rejected, onRestore }: { rejected: ReviewItem[]; onResto
                 <td className="px-4 py-2.5">
                   <button
                     onClick={() => onRestore(r)}
-                    className="text-primary hover:underline text-[11px] font-semibold"
+                    disabled={busy}
+                    className="text-primary hover:underline text-[11px] font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Restore
                   </button>
@@ -523,6 +528,7 @@ function ReviewDetailModal({
   onUnpublish,
   onReject,
   onRestore,
+  busy = false,
 }: {
   item: ReviewItem;
   rejectionReasons: string[];
@@ -531,6 +537,8 @@ function ReviewDetailModal({
   onUnpublish: () => void;
   onReject: (reason: string, notes?: string) => void;
   onRestore: () => void;
+  /** A review request is in flight: the action buttons are disabled. */
+  busy?: boolean;
 }) {
   const [rejectOpen, setRejectOpen] = useState(false);
 
@@ -649,26 +657,28 @@ function ReviewDetailModal({
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
           <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
           {item.status === "Rejected" ? (
-            <button onClick={onRestore} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10">Restore</button>
+            <button onClick={onRestore} disabled={busy} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Restore</button>
           ) : item.status === "Approved" ? (
             <>
               <button
                 onClick={() => setRejectOpen(true)}
-                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10"
+                disabled={busy}
+                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Reject
               </button>
-              <button onClick={onUnpublish} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10">Undo Publishing</button>
+              <button onClick={onUnpublish} disabled={busy} className="px-3 py-1.5 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Undo Publishing</button>
             </>
           ) : (
             <>
               <button
                 onClick={() => setRejectOpen(true)}
-                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10"
+                disabled={busy}
+                className="px-3 py-1.5 rounded-md border border-destructive/60 text-destructive text-[11px] font-bold hover:bg-destructive/10 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Reject
               </button>
-              <button onClick={onApprove} className="px-3 py-1.5 rounded-md bg-risk-low text-white text-[11px] font-bold hover:bg-risk-low/90">Approve & Publish</button>
+              <button onClick={onApprove} disabled={busy} className="px-3 py-1.5 rounded-md bg-risk-low text-white text-[11px] font-bold hover:bg-risk-low/90 disabled:opacity-40 disabled:cursor-not-allowed">Approve & Publish</button>
             </>
           )}
         </div>

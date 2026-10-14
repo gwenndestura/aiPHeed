@@ -144,6 +144,10 @@ async def _audit(
 
 async def approve(db: AsyncSession, item_id: str, user: AdminUser) -> ReviewRecord:
     row = await get_item(db, item_id)
+    if row.status == "Approved":
+        # Already published (a double click, a retried request): nothing
+        # changes, so nothing is written -- not even an audit row.
+        return row
     row.status = "Approved"
     row.rejection_reason = None
     row.rejection_notes = None
