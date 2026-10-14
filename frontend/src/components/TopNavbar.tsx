@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
-import { Note } from "@/components/ui/note";
+import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogIn, LogOut, Sun, Moon, X, Mail, Lock } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { ApiError } from "@/lib/api";
-import { authLinkClass, authLinksRowClass } from "@/components/AuthCard";
+import { AccessPrompt, AuthAlert, AuthBrand, AuthField, AuthSubmit, DOMAIN_HINT, authLinkClass } from "@/components/AuthCard";
 import { SignInNotice } from "@/components/SignInNotice";
 import { PENDING_SIGN_IN_CODES } from "@/lib/apiTypes";
 import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
@@ -157,13 +156,14 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [notice, setNotice] = useState<{ code: string; message: string; email: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setNotice(null);
+    setError(null);
     const address = email.trim().toLowerCase();
     try {
       await login(address, password);
@@ -174,11 +174,8 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
       if (err instanceof ApiError && PENDING_SIGN_IN_CODES.has(err.code)) {
         setNotice({ code: err.code, message: err.message, email: address });
       } else {
-        toast({
-          title: "Sign-in failed",
-          description: err instanceof Error ? err.message : "Could not reach the server.",
-          variant: "destructive",
-        });
+        // Wrong password, rate limited, server unreachable: inline, under the fields.
+        setError(err instanceof Error ? err.message : "Could not reach the server.");
       }
     } finally {
       setLoading(false);
@@ -187,91 +184,39 @@ function AdminLoginModal({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="z-[1300] max-w-sm p-7 bg-card/95 backdrop-blur-md border border-border/50 rounded-2xl shadow-2xl shadow-primary/10">
-        <DialogHeader>
-          <div className="flex flex-col items-center text-center">
-            <img src={logoIcon} alt="aiPHeed" className="h-20 w-20 object-contain mb-3 drop-shadow-[0_0_24px_rgba(232,69,60,0.35)]" />
-            <DialogTitle className="text-lg font-bold tracking-tight">DA Admin Sign In</DialogTitle>
-            <DialogDescription className="text-[11px] text-muted-foreground mt-1">
-              Authorized access for feedback and review workflows
-            </DialogDescription>
-          </div>
+      <DialogContent
+        className="z-[1300] max-w-sm gap-0 p-6 sm:p-7 bg-card border border-border/15 rounded-xl shadow-none"
+        // Start in the Email field, as before -- not on the Back link above it.
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+          document.getElementById("admin-dialog-email")?.focus();
+        }}
+      >
+        {/* Closes the dialog and leaves you on the page you were on. */}
+        <button type="button" onClick={() => onOpenChange(false)} className={authLinkClass + " no-underline hover:underline justify-self-start"}>
+          ← Back
+        </button>
+        <div className="mt-5">
+          <AuthBrand />
+        </div>
+        <DialogHeader className="mt-6 text-left">
+          <DialogTitle className="text-xl font-semibold tracking-tight">Sign in</DialogTitle>
+          <DialogDescription className="sr-only">Sign in to the aiPHeed administrator console.</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={submit} className="space-y-3 mt-2">
-          <div>
-            <label htmlFor="admin-dialog-email" className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Email</label>
-            <div className="relative mt-1">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
-              <input
-                id="admin-dialog-email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                maxLength={200}
-                autoComplete="username"
-                className="w-full h-10 pl-9 pr-3 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="admin-dialog-password" className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">Password</label>
-            <div className="relative mt-1">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
-              <input
-                id="admin-dialog-password"
-                type={showPassword ? "text" : "password"}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                maxLength={1024}
-                autoComplete="current-password"
-                className="w-full h-10 pl-9 pr-10 text-[12px] bg-secondary/50 border border-border/40 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary/50 focus:bg-secondary/80 placeholder:text-muted-foreground/50"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                aria-pressed={showPassword}
-                title={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-10 mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold hover:bg-primary/90 transition-colors shadow-md shadow-primary/20 disabled:opacity-60"
-          >
-            {loading ? "Checking access…" : "Sign in to Admin"}
-            {!loading && <ArrowRight className="h-3.5 w-3.5" />}
-          </button>
+        <form onSubmit={submit} className="mt-5 space-y-4">
+          <AuthField id="admin-dialog-email" label="Email" icon={Mail} type="email" value={email} onChange={setEmail}
+            autoComplete="username" hint={DOMAIN_HINT} />
+          <AuthField id="admin-dialog-password" label="Password" icon={Lock} type="password" value={password} onChange={setPassword}
+            autoComplete="current-password" maxLength={1024}
+            aside={<Link to="/forgot-password" onClick={() => onOpenChange(false)} className={authLinkClass}>Forgot password?</Link>} />
+          {error && <AuthAlert>{error}</AuthAlert>}
+          <AuthSubmit loading={loading} label="Sign in" loadingLabel="Signing in…" />
         </form>
 
         {notice && <SignInNotice {...notice} />}
 
-        <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
-
-        <p className={authLinksRowClass}>
-          <Link to="/forgot-password" onClick={() => onOpenChange(false)} className={authLinkClass}>
-            Forgot password?
-          </Link>
-          <Link to="/signup" onClick={() => onOpenChange(false)} className={authLinkClass}>
-            Create an account
-          </Link>
-          <button
-            type="button"
-            onClick={() => onOpenChange(false)}
-            className={authLinkClass}
-          >
-            Back to public map
-          </button>
-        </p>
+        <AccessPrompt onNavigate={() => onOpenChange(false)} />
       </DialogContent>
     </Dialog>
   );

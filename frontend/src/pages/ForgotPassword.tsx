@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { Note } from "@/components/ui/note";
-import { AuthCard, AuthField, AuthSubmit, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
+import { AuthAlert, AuthCard, AuthField, AuthSubmit, DOMAIN_HINT, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
 import { api, ApiError } from "@/lib/api";
 import type { MessageResponse } from "@/lib/apiTypes";
 
@@ -29,13 +29,13 @@ export default function ForgotPassword() {
   };
 
   return (
-    <AuthCard title="Forgot password" subtitle="We will email you a link to choose a new one">
+    <AuthCard title="Forgot password" subtitle="We will email you a link to choose a new password.">
       {reply ? (
         <Note label={null}>{reply}</Note>
       ) : (
-        <form onSubmit={submit} className="space-y-3">
-          <AuthField id="forgot-email" label="Official email" icon={Mail} type="email" value={email} onChange={setEmail} autoComplete="username" />
-          {problem && <Note label={null}>{problem}</Note>}
+        <form onSubmit={submit} className="space-y-4">
+          <AuthField id="forgot-email" label="Official email" icon={Mail} type="email" value={email} onChange={setEmail} autoComplete="username" hint={DOMAIN_HINT} />
+          {problem && <AuthAlert>{problem}</AuthAlert>}
           <AuthSubmit loading={loading} label="Send reset link" loadingLabel="Sending…" />
         </form>
       )}

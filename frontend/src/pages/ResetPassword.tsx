@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock } from "lucide-react";
 import { Note } from "@/components/ui/note";
-import { AuthCard, AuthField, AuthSubmit, PASSWORD_RULES, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
+import { AuthAlert, AuthCard, AuthField, AuthSubmit, PASSWORD_RULES, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
 import { api, ApiError } from "@/lib/api";
 import type { MessageResponse } from "@/lib/apiTypes";
 import { useLinkToken } from "@/lib/linkToken";
@@ -40,7 +40,7 @@ export default function ResetPassword() {
 
   if (done) {
     return (
-      <AuthCard title="Password changed" subtitle="Sign in with your new password">
+      <AuthCard title="Password changed">
         <Note label={null}>{done}</Note>
         <p className={authLinksRowClass}>
           <Link to="/login" className={authLinkClass}>Sign in</Link>
@@ -51,7 +51,7 @@ export default function ResetPassword() {
 
   if (linkProblem) {
     return (
-      <AuthCard title="Link not accepted" subtitle="Password reset links work once, for 1 hour">
+      <AuthCard title="Link not accepted" subtitle="Password reset links work once, for 1 hour.">
         <Note label={null}>{linkProblem}</Note>
         <p className={authLinksRowClass}>
           <Link to="/forgot-password" className={authLinkClass}>Request a new link</Link>
@@ -62,13 +62,13 @@ export default function ResetPassword() {
   }
 
   return (
-    <AuthCard title="Choose a new password" subtitle="This signs you out on every device">
-      <form onSubmit={submit} className="space-y-3">
+    <AuthCard title="Choose a new password" subtitle="Changing it signs you out on every device.">
+      <form onSubmit={submit} className="space-y-4">
         <AuthField id="reset-password" label="New password" icon={Lock} type="password" value={password} onChange={setPassword}
           autoComplete="new-password" maxLength={1024} hint={PASSWORD_RULES} />
         <AuthField id="reset-confirm" label="Confirm new password" icon={Lock} type="password" value={confirm} onChange={setConfirm}
           autoComplete="new-password" maxLength={1024} />
-        {problem && <Note label={null}>{problem}</Note>}
+        {problem && <AuthAlert>{problem}</AuthAlert>}
         <AuthSubmit loading={loading} label="Change password" loadingLabel="Changing password…" />
       </form>
       <p className={authLinksRowClass}>

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useLocation, Link, Navigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
-import { Note } from "@/components/ui/note";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
 import { ApiError } from "@/lib/api";
 import { safeRedirectPath } from "@/lib/redirect";
-import { AuthCard, AuthField, AuthSubmit, authLinkClass, authLinksRowClass } from "@/components/AuthCard";
+import { AccessPrompt, AuthAlert, AuthCard, AuthField, AuthSubmit, DOMAIN_HINT, authLinkClass } from "@/components/AuthCard";
 import { SignInNotice } from "@/components/SignInNotice";
 import { PENDING_SIGN_IN_CODES } from "@/lib/apiTypes";
 
@@ -21,6 +20,9 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   // Right password, account not active yet: said on the page, not in a toast.
   const [notice, setNotice] = useState<{ code: string; message: string; email: string } | null>(null);
+  // Any other refusal (wrong password, rate limited, server unreachable):
+  // inline under the fields, announced to screen readers.
+  const [error, setError] = useState<string | null>(null);
 
   // Already signed in: no form to show. Same destination as after a sign-in
   // (the requested page, else /admin), so the two cannot race each other.
@@ -32,6 +34,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setNotice(null);
+    setError(null);
     const address = email.trim().toLowerCase();
     try {
       // The backend is now the sole authority on the email/password check
@@ -47,11 +50,7 @@ export default function Login() {
       if (err instanceof ApiError && PENDING_SIGN_IN_CODES.has(err.code)) {
         setNotice({ code: err.code, message: err.message, email: address });
       } else {
-        toast({
-          title: "Sign-in failed",
-          description: err instanceof Error ? err.message : "Could not reach the server.",
-          variant: "destructive",
-        });
+        setError(err instanceof Error ? err.message : "Could not reach the server.");
       }
     } finally {
       setLoading(false);
@@ -59,24 +58,20 @@ export default function Login() {
   };
 
   return (
-    <AuthCard title="DA Admin Sign In" subtitle="Authorized access for feedback and review workflows">
-      <form onSubmit={submit} className="space-y-3">
+    <AuthCard title="Sign in">
+      <form onSubmit={submit} className="space-y-4">
         <AuthField id="login-email" label="Email" icon={Mail} type="email" value={email} onChange={setEmail}
-          autoComplete="username" />
+          autoComplete="username" hint={DOMAIN_HINT} />
         <AuthField id="login-password" label="Password" icon={Lock} type="password" value={password} onChange={setPassword}
-          autoComplete="current-password" maxLength={1024} />
-        <AuthSubmit loading={loading} label="Sign in to Admin" loadingLabel="Checking access…" />
+          autoComplete="current-password" maxLength={1024}
+          aside={<Link to="/forgot-password" className={authLinkClass}>Forgot password?</Link>} />
+        {error && <AuthAlert>{error}</AuthAlert>}
+        <AuthSubmit loading={loading} label="Sign in" loadingLabel="Signing in…" />
       </form>
 
       {notice && <SignInNotice {...notice} />}
 
-      <Note className="mt-5">Administrator access is restricted to @calabarzon.da.gov.ph email addresses.</Note>
-
-      <p className={authLinksRowClass}>
-        <Link to="/forgot-password" className={authLinkClass}>Forgot password?</Link>
-        <Link to="/signup" className={authLinkClass}>Create an account</Link>
-        <Link to="/dashboard" className={authLinkClass}>Back to public map</Link>
-      </p>
+      <AccessPrompt />
     </AuthCard>
   );
 }

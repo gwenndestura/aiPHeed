@@ -32,7 +32,7 @@ export default function VerifyEmail() {
 
   if (state.kind === "checking") {
     return (
-      <AuthCard title="Verifying your email" subtitle="One moment…">
+      <AuthCard title="Verifying your email">
         <Note label={null}>Checking your link…</Note>
       </AuthCard>
     );
@@ -40,18 +40,17 @@ export default function VerifyEmail() {
 
   if (state.kind === "verified") {
     return (
-      <AuthCard title="Email verified" subtitle="Your account request is with the administrators">
+      <AuthCard title="Email verified">
         <Note label={null}>{state.message}</Note>
         <p className={authLinksRowClass}>
           <Link to="/login" className={authLinkClass}>Back to sign in</Link>
-          <Link to="/dashboard" className={authLinkClass}>Back to public map</Link>
         </p>
       </AuthCard>
     );
   }
 
   return (
-    <AuthCard title="Link not accepted" subtitle="Request a new verification email below">
+    <AuthCard title="Link not accepted" subtitle="Request a new verification email below.">
       <Note label={null}>{state.message}</Note>
       <ResendForm />
       <p className={authLinksRowClass}>
@@ -83,7 +82,7 @@ function ResendForm() {
 
   if (reply) return <Note label={null} className="mt-4">{reply}</Note>;
   return (
-    <form onSubmit={submit} className="space-y-3 mt-4">
+    <form onSubmit={submit} className="space-y-4 mt-4">
       <AuthField id="resend-email" label="Your official email" icon={Mail} type="email" value={email} onChange={setEmail} autoComplete="email" />
       <AuthSubmit loading={loading} label="Resend verification email" loadingLabel="Sending…" />
     </form>
