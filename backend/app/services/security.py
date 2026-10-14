@@ -5,7 +5,7 @@ Password hashing, token issuing, and the dependencies that gate admin routes.
 
 What this replaces: two client-side checks that never talked to a server. One
 accepted any password against an @calabarzon.da.gov.ph address; the other
-compared against `admin2026` hardcoded in the bundle. Both wrote a
+compared against a hardcoded demo credential (removed) in the bundle. Both wrote a
 sessionStorage flag that anyone could set from devtools.
 
 Design notes worth keeping:

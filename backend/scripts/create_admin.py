@@ -3,8 +3,8 @@ scripts/create_admin.py
 ------------------------
 Create or update a DA CALABARZON admin account.
 
-There is deliberately no seeded default account. The old console shipped
-admin@calabarzon.da.gov.ph / admin2026 compiled into the JS bundle and printed
+There is deliberately no seeded default account. The old console shipped a
+hardcoded demo credential (removed), compiled into the JS bundle and printed
 in the UI; anything comparable committed here would be the same mistake in a
 new place.
 
