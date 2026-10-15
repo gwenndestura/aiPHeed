@@ -361,7 +361,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     </Card>
   ) : (
     <>
-      <Card>
+      {/* Its glow stays inside this panel: not over the map, the other panels or the screen edge.
+          shrink-0: with overflow hidden the column could otherwise squeeze it. */}
+      <Card className="overflow-hidden shrink-0">
         <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} loadFailed={loadFailed} />
       </Card>
       <Card>

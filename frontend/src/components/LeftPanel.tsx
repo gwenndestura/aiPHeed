@@ -14,6 +14,7 @@ import { StatusDot } from "@/components/ui/status-dot";
 import { ExplainTip } from "@/components/ui/explain-tip";
 import { isHighRisk } from "@/lib/risk";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -139,6 +140,14 @@ export function RfiiScoreCardBody({
   // Position of pointer along 0..1 segmented track
   const trackPct = Math.min(Math.max(animScore, 0), 1) * 100;
 
+  // The glow follows the band's colour (red for high, yellow for low). The
+  // colour is "hsl(var(--risk-high))": `accent` is its "var(--risk-high)", so
+  // `glow(0.4)` is that colour at 40% opacity. With reduced motion the glow
+  // stays, still.
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const accent = band.color.replace('hsl(', '').replace(')', '');
+  const glow = (alpha: number) => `hsl(${accent} / ${alpha})`;
+
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
@@ -148,8 +157,24 @@ export function RfiiScoreCardBody({
         )}
       </div>
 
-      {/* Flat, as the other cards: no glow around the card or the figure. */}
-      <div className="relative rounded-2xl border border-border/40 bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden">
+      <div
+        className="relative rounded-2xl border border-border/40 bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden"
+        style={{
+          ['--accent-color' as string]: accent,
+          // Still: the pulse's resting glow (rfii-hero-pulse at 0%).
+          ...(reduceMotion
+            ? { boxShadow: `0 0 0 1px ${glow(0.55)}, 0 0 24px -2px ${glow(0.45)}, 0 0 60px -10px ${glow(0.35)}, inset 0 0 30px -8px ${glow(0.25)}` }
+            : { animation: 'rfii-hero-pulse 3.6s ease-in-out infinite' }),
+        } as React.CSSProperties}
+      >
+        {/* Aurora sweep */}
+        <div
+          className="pointer-events-none absolute -inset-[30%] opacity-50 blur-2xl"
+          style={{
+            background: `conic-gradient(from 0deg, transparent 0deg, ${glow(0.33)} 90deg, transparent 180deg, ${glow(0.2)} 270deg, transparent 360deg)`,
+            animation: reduceMotion ? undefined : 'rfii-aurora 14s linear infinite',
+          }}
+        />
         {/* Top edge accent line */}
         <div
           className="pointer-events-none absolute top-0 left-4 right-4 h-px"
@@ -167,7 +192,13 @@ export function RfiiScoreCardBody({
           <div className="flex items-end gap-3">
             <span
               className="font-bold tabular-nums leading-[0.85] tracking-tight"
-              style={{ fontSize: '5.5rem', color: band.color }}
+              style={{
+                fontSize: '5.5rem',
+                color: band.color,
+                textShadow: `0 0 32px ${glow(0.8)}, 0 0 70px ${glow(0.4)}`,
+                animation: reduceMotion ? undefined : 'rfii-score-breathe 3.2s ease-in-out infinite',
+                transformOrigin: 'left bottom',
+              }}
             >
               {hasScore ? animScore.toFixed(2) : "—"}
             </span>
@@ -209,6 +240,7 @@ export function RfiiScoreCardBody({
                 style={{
                   left: `calc(${trackPct}% - 1.5px)`,
                   background: 'hsl(var(--foreground))',
+                  boxShadow: `0 0 10px ${band.color}, 0 0 20px ${glow(0.8)}`,
                   transition: 'left 1.4s cubic-bezier(0.22,1,0.36,1)',
                 }}
               />}
