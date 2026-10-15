@@ -1,0 +1,381 @@
+{
+ "eval_run": "eval_20261015T093024Z",
+ "label_recovery_rule_check": {
+  "rows": 45,
+  "HIGH": 5,
+  "note": "fixed rules, not fitted; a rule that matches the label shows how much of the target is already fixed by origin-time inputs (the label is a deterministic function of SWS and CPI)",
+  "both_proxy": {
+   "accuracy": 0.9111111111111111,
+   "balanced_accuracy": 0.95,
+   "recall_HIGH": 1.0,
+   "flags": 9,
+   "uses_cpi": true
+  },
+  "cpi_sig": {
+   "accuracy": 0.4444444444444444,
+   "balanced_accuracy": 0.6875,
+   "recall_HIGH": 1.0,
+   "flags": 30,
+   "uses_cpi": true
+  },
+  "sws_hi": {
+   "accuracy": 0.6666666666666666,
+   "balanced_accuracy": 0.8125,
+   "recall_HIGH": 1.0,
+   "flags": 20,
+   "uses_cpi": false
+  },
+  "y_last": {
+   "accuracy": 0.9111111111111111,
+   "balanced_accuracy": 0.6,
+   "recall_HIGH": 0.2,
+   "flags": 1,
+   "uses_cpi": true
+  }
+ },
+ "face_validity": {
+  "E40_dev_HIGH_share_pct": 11.1,
+  "references_pct": {
+   "FIES moderate-to-severe, national, 2023 NNS (DOST-FNRI)": 31.4,
+   "FIES moderate-to-severe, national, 2021 ENNS (DOST-FNRI)": 33.4,
+   "SWS hunger, national, March 2026": 23.2,
+   "SWS hunger, national, September 2026": 22.6,
+   "PSA poverty incidence among families/population, CALABARZON, 2023": 7.9,
+   "PSA poverty incidence, CALABARZON, 2021": 10.2
+  },
+  "reading": "Not like-for-like: the E40 share is the fraction of province-quarters flagged HIGH by a relative (window-percentile) rule, not a household prevalence. The references bound what an absolute food-insecurity rate looks like (FIES 31-33% national; SWS hunger 22-23% national in 2026; CALABARZON poverty 8-10%). A province-quarter HIGH share of 11% says the label marks the upper tail of the region's own 2021-2022 experience, not that 11% of households are food insecure.",
+  "chapter1_44pct_claim": {
+   "text": "Chapter I (verbatim extraction, line 9): '... with 44% of households experiencing moderate to severe food insecurity in 2023', attributed to DOST-FNRI (2024).",
+   "issue": "The researcher-supplied national figure for moderate-to-severe food insecurity in 2023 (FIES, 2023 NNS) is 31.4%, not 44%. 44% may be a different measure (for example mild-to-severe, or a sub-population); this run did not verify either figure.",
+   "proposed_correction": "'... with 31.4% of households experiencing moderate to severe food insecurity in 2023 (DOST-FNRI, 2024)' -- after checking the FNRI 2023 NNS FIES table; the thesis file was not edited."
+  }
+ },
+ "before_after": {
+  "before_v1": {
+   "source": "served v1 dashboard (/api/v1/provinces?horizon=forecast), engine aiPHeed-E36-LGBM",
+   "province_quarters": 70,
+   "quarters": [
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3",
+    "2026-Q4"
+   ],
+   "HIGH_share_overall": 0.7,
+   "HIGH_share_by_year": {
+    "2023": 0.45,
+    "2024": 0.65,
+    "2025": 0.8,
+    "2026": 0.95
+   },
+   "score_P10_P50_P90": [
+    0.07863,
+    0.8684499999999999,
+    0.99834
+   ],
+   "share_score_gt_0_95": 0.37142857142857144,
+   "rows_in_a_tie": 29,
+   "quarters_with_a_tie": 9,
+   "metrics": {
+    "basis": "E36 frozen protocol c83d11cb2ac8; lead 1; nested rolling-origin; run 20261015T023921Z",
+    "dates": [
+     "2023-Q1",
+     "2023-Q2",
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2",
+     "2026-Q3"
+    ],
+    "rows": [
+     {
+      "arm": "Proposed: combined LightGBM (government + news), nested selection",
+      "key": "E36-LGBM",
+      "correct": 53,
+      "n": 65,
+      "accuracy_lead1": 0.8154,
+      "accuracy_ci95": [
+       0.738462,
+       0.892308
+      ],
+      "balanced_accuracy": 0.8223,
+      "precision": 0.9556,
+      "recall": 0.8113,
+      "specificity": 0.8333,
+      "f1": 0.8776,
+      "roc_auc": 0.8498,
+      "brier": 0.1543,
+      "above_75pct": true
+     },
+     {
+      "arm": "B1 Naive persistence",
+      "key": "B1_PERSISTENCE",
+      "correct": 57,
+      "n": 65,
+      "accuracy_lead1": 0.8769,
+      "accuracy_ci95": [
+       0.8,
+       0.938462
+      ],
+      "balanced_accuracy": 0.8601,
+      "precision": 0.9592,
+      "recall": 0.8868,
+      "specificity": 0.8333,
+      "f1": 0.9216,
+      "roc_auc": 0.8601,
+      "brier": 0.1231,
+      "above_75pct": true
+     },
+     {
+      "arm": "B2 Logistic regression, combined features",
+      "key": "B2_LR_COMB",
+      "correct": 56,
+      "n": 65,
+      "accuracy_lead1": 0.8615,
+      "accuracy_ci95": [
+       0.784615,
+       0.938462
+      ],
+      "balanced_accuracy": 0.8184,
+      "precision": 0.94,
+      "recall": 0.8868,
+      "specificity": 0.75,
+      "f1": 0.9126,
+      "roc_auc": 0.8396,
+      "brier": 0.1198,
+      "above_75pct": true
+     },
+     {
+      "arm": "B3 Logistic regression, government indicators only",
+      "key": "B3_LR_GOV",
+      "correct": 55,
+      "n": 65,
+      "accuracy_lead1": 0.8462,
+      "accuracy_ci95": [
+       0.753846,
+       0.923077
+      ],
+      "balanced_accuracy": 0.809,
+      "precision": 0.9388,
+      "recall": 0.8679,
+      "specificity": 0.75,
+      "f1": 0.902,
+      "roc_auc": 0.8664,
+      "brier": 0.1019,
+      "above_75pct": true
+     },
+     {
+      "arm": "B4 Logistic regression, NLP features only",
+      "key": "B4_LR_NLP",
+      "correct": 46,
+      "n": 65,
+      "accuracy_lead1": 0.7077,
+      "accuracy_ci95": [
+       0.553846,
+       0.846154
+      ],
+      "balanced_accuracy": 0.6918,
+      "precision": 0.9048,
+      "recall": 0.717,
+      "specificity": 0.6667,
+      "f1": 0.8,
+      "roc_auc": 0.658,
+      "brier": 0.1975,
+      "above_75pct": false
+     },
+     {
+      "arm": "B5 LightGBM, government indicators only",
+      "key": "B5_LGBM_GOV",
+      "correct": 55,
+      "n": 65,
+      "accuracy_lead1": 0.8462,
+      "accuracy_ci95": [
+       0.769231,
+       0.923077
+      ],
+      "balanced_accuracy": 0.8412,
+      "precision": 0.9574,
+      "recall": 0.8491,
+      "specificity": 0.8333,
+      "f1": 0.9,
+      "roc_auc": 0.8703,
+      "brier": 0.1449,
+      "above_75pct": true
+     },
+     {
+      "arm": "B6 LightGBM, NLP features only",
+      "key": "B6_LGBM_NLP",
+      "correct": 44,
+      "n": 65,
+      "accuracy_lead1": 0.6769,
+      "accuracy_ci95": [
+       0.492308,
+       0.846154
+      ],
+      "balanced_accuracy": 0.673,
+      "precision": 0.9,
+      "recall": 0.6792,
+      "specificity": 0.6667,
+      "f1": 0.7742,
+      "roc_auc": 0.7358,
+      "brier": 0.1953,
+      "above_75pct": false
+     },
+     {
+      "arm": "Diagnostic: always HIGH (majority class)",
+      "key": "ALWAYS_HIGH",
+      "correct": 53,
+      "n": 65,
+      "accuracy_lead1": 0.8154,
+      "accuracy_ci95": [
+       0.676923,
+       0.923077
+      ],
+      "balanced_accuracy": 0.5,
+      "precision": 0.8154,
+      "recall": 1.0,
+      "specificity": 0.0,
+      "f1": 0.8983,
+      "roc_auc": 0.5,
+      "brier": 0.1846,
+      "above_75pct": true
+     }
+    ],
+    "paired_vs_baselines": {
+     "ALWAYS_HIGH": {
+      "mean_brier_gain_vs_ref": 0.0304,
+      "p_two_sided": 0.6987,
+      "holm": null,
+      "accuracy_diff": 0.0
+     },
+     "B1_PERSISTENCE": {
+      "mean_brier_gain_vs_ref": -0.0312,
+      "p_two_sided": 0.3718,
+      "holm": 0.7566,
+      "accuracy_diff": -0.0615
+     },
+     "B1p_CAL_PERSISTENCE": {
+      "mean_brier_gain_vs_ref": -0.0564,
+      "p_two_sided": 0.0933,
+      "holm": null,
+      "accuracy_diff": -0.0615
+     },
+     "B2_LR_COMB": {
+      "mean_brier_gain_vs_ref": -0.0344,
+      "p_two_sided": 0.2629,
+      "holm": 0.7566,
+      "accuracy_diff": -0.0462
+     },
+     "B3_LR_GOV": {
+      "mean_brier_gain_vs_ref": -0.0524,
+      "p_two_sided": 0.0828,
+      "holm": 0.4966,
+      "accuracy_diff": -0.0308
+     },
+     "B4_LR_NLP": {
+      "mean_brier_gain_vs_ref": 0.0433,
+      "p_two_sided": 0.2522,
+      "holm": 0.7566,
+      "accuracy_diff": 0.1077
+     },
+     "B5_LGBM_GOV": {
+      "mean_brier_gain_vs_ref": -0.0094,
+      "p_two_sided": 0.1016,
+      "holm": 0.5078,
+      "accuracy_diff": -0.0308
+     },
+     "B6_LGBM_NLP": {
+      "mean_brier_gain_vs_ref": 0.041,
+      "p_two_sided": 0.1631,
+      "holm": 0.6523,
+      "accuracy_diff": 0.1385
+     },
+     "CLIMATOLOGY": {
+      "mean_brier_gain_vs_ref": 0.0416,
+      "p_two_sided": 0.1538,
+      "holm": null,
+      "accuracy_diff": 0.0769
+     },
+     "PCF21": {
+      "mean_brier_gain_vs_ref": -0.0742,
+      "p_two_sided": 0.0312,
+      "holm": null,
+      "accuracy_diff": -0.1
+     }
+    }
+   }
+  },
+  "after_E40": {
+   "label": "E40 binary label (P60, sustain 2), development quarters 2023-Q1..2025-Q1",
+   "HIGH_share_overall": 0.1111111111111111,
+   "HIGH_share_by_year": {
+    "2023": 0.0,
+    "2024": 0.1,
+    "2025": 0.6
+   },
+   "dev_quarters_per_year": {
+    "2023": 4,
+    "2024": 4,
+    "2025": 1
+   },
+   "quarters_all_five_identical": 6,
+   "calibrated_dev_scores": "none: every development fold failed the >= 2-HIGH training gate",
+   "sealed_forecast_scores_P10_P50_P90 (uncalibrated, not scored)": [
+    0.0867892,
+    0.146062,
+    0.42050020000000005
+   ],
+   "sealed_share_gt_0_95": 0.0,
+   "sealed_rows_in_a_tie": 0,
+   "metrics": {
+    "E40_BLEND": {
+     "status": "not evaluated: no fold passed the >= 2-HIGH training gate"
+    },
+    "PERSISTENCE": {
+     "n": 30,
+     "accuracy": 0.8666666666666667,
+     "balanced_accuracy": 0.6,
+     "Brier": 0.13333333333333333,
+     "CI95_balanced_accuracy": [
+      0.5,
+      0.6666666666666666
+     ],
+     "CI95_Brier": [
+      0.03333333333333333,
+      0.26666666666666666
+     ]
+    },
+    "ALWAYS_MAJORITY": {
+     "n": 30,
+     "accuracy": 0.8333333333333334,
+     "balanced_accuracy": 0.5,
+     "Brier": 0.15892639281603807,
+     "CI95_Brier": [
+      0.03256444669116267,
+      0.34706098746432207
+     ]
+    }
+   }
+  },
+  "market": {
+   "news_market_share_of_trigger_hits_v1": 0.052083333333333336,
+   "news_market_share_of_trigger_hits_v2": 0.037037037037037035,
+   "dashboard_driver_split_market": "100% in every province-quarter (SHAP grouping artefact, not news)"
+  }
+ }
+}

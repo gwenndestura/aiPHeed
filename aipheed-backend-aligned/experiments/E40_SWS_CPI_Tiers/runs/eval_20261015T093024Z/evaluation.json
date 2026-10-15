@@ -1,0 +1,417 @@
+{
+ "run": "eval_20261015T093024Z",
+ "folds": [
+  {
+   "target": "2023-Q1",
+   "origin": "2023-01-01",
+   "train_label_quarters": 5,
+   "train_rows": 25,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": false,
+   "gate_ge2_HIGH": false,
+   "status": "not a fold (fewer than 8 training quarters)"
+  },
+  {
+   "target": "2023-Q2",
+   "origin": "2023-04-01",
+   "train_label_quarters": 6,
+   "train_rows": 30,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": false,
+   "gate_ge2_HIGH": false,
+   "status": "not a fold (fewer than 8 training quarters)"
+  },
+  {
+   "target": "2023-Q3",
+   "origin": "2023-07-01",
+   "train_label_quarters": 7,
+   "train_rows": 35,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": false,
+   "gate_ge2_HIGH": false,
+   "status": "not a fold (fewer than 8 training quarters)"
+  },
+  {
+   "target": "2023-Q4",
+   "origin": "2023-10-01",
+   "train_label_quarters": 8,
+   "train_rows": 40,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  },
+  {
+   "target": "2024-Q1",
+   "origin": "2024-01-01",
+   "train_label_quarters": 9,
+   "train_rows": 45,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  },
+  {
+   "target": "2024-Q2",
+   "origin": "2024-04-01",
+   "train_label_quarters": 10,
+   "train_rows": 50,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 0,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  },
+  {
+   "target": "2024-Q3",
+   "origin": "2024-07-01",
+   "train_label_quarters": 11,
+   "train_rows": 55,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 1,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  },
+  {
+   "target": "2024-Q4",
+   "origin": "2024-10-01",
+   "train_label_quarters": 12,
+   "train_rows": 60,
+   "train_HIGH": 0,
+   "test_rows": 5,
+   "test_HIGH": 1,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  },
+  {
+   "target": "2025-Q1",
+   "origin": "2025-01-01",
+   "train_label_quarters": 13,
+   "train_rows": 65,
+   "train_HIGH": 1,
+   "test_rows": 5,
+   "test_HIGH": 3,
+   "has_min_8_quarters": true,
+   "gate_ge2_HIGH": false,
+   "status": "fold; GATE FAILED (fewer than 2 HIGH training rows): no trained model"
+  }
+ ],
+ "gate_failed_folds": [
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1"
+ ],
+ "table": {
+  "PERSISTENCE": {
+   "n": 30,
+   "HIGH": 5,
+   "accuracy": 0.8666666666666667,
+   "balanced_accuracy": 0.6,
+   "precision_HIGH": 1.0,
+   "recall_HIGH": 0.2,
+   "F1_HIGH": 0.33333333333333337,
+   "AUC": 0.6,
+   "Brier": 0.13333333333333333,
+   "spearman_per_quarter_mean": 0.7071067811865475,
+   "spearman_quarters": 1,
+   "reliability_5bin": [
+    {
+     "bin": "(-0.001, 0.2]",
+     "n": 29,
+     "mean_p": 0.0,
+     "obs_rate": 0.13793103448275862
+    },
+    {
+     "bin": "(0.8, 1.0]",
+     "n": 1,
+     "mean_p": 1.0,
+     "obs_rate": 1.0
+    }
+   ],
+   "CI95_accuracy": [
+    0.7333333333333333,
+    0.9666666666666667
+   ],
+   "CI95_balanced_accuracy": [
+    0.5,
+    0.6666666666666666
+   ],
+   "CI95_Brier": [
+    0.03333333333333333,
+    0.26666666666666666
+   ],
+   "folds_scored": [
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1"
+   ]
+  },
+  "ALWAYS_MAJORITY": {
+   "n": 30,
+   "HIGH": 5,
+   "accuracy": 0.8333333333333334,
+   "balanced_accuracy": 0.5,
+   "precision_HIGH": NaN,
+   "recall_HIGH": 0.0,
+   "F1_HIGH": NaN,
+   "AUC": 0.64,
+   "Brier": 0.15892639281603807,
+   "spearman_per_quarter_mean": NaN,
+   "spearman_quarters": 0,
+   "reliability_5bin": [
+    {
+     "bin": "(-0.001, 0.2]",
+     "n": 30,
+     "mean_p": 0.021306754493469655,
+     "obs_rate": 0.16666666666666666
+    }
+   ],
+   "CI95_accuracy": [
+    0.6333333333333333,
+    0.9666666666666667
+   ],
+   "CI95_balanced_accuracy": [
+    0.5,
+    0.5
+   ],
+   "CI95_Brier": [
+    0.03256444669116267,
+    0.34706098746432207
+   ],
+   "folds_scored": [
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1"
+   ]
+  },
+  "E40_BLEND": {
+   "status": "not evaluated: no fold passed the >= 2-HIGH training gate"
+  },
+  "E40_BLEND_NO_CPI": {
+   "status": "not evaluated: no fold passed the >= 2-HIGH training gate"
+  },
+  "LR_GOV_ONLY": {
+   "status": "not evaluated: no fold passed the >= 2-HIGH training gate"
+  },
+  "LR_NLP_ONLY": {
+   "status": "not evaluated: no fold passed the >= 2-HIGH training gate"
+  }
+ },
+ "fold_metrics": [
+  {
+   "method": "PERSISTENCE",
+   "target": "2023-Q4",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.0,
+   "accuracy": 1.0
+  },
+  {
+   "method": "PERSISTENCE",
+   "target": "2024-Q1",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.0,
+   "accuracy": 1.0
+  },
+  {
+   "method": "PERSISTENCE",
+   "target": "2024-Q2",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.0,
+   "accuracy": 1.0
+  },
+  {
+   "method": "PERSISTENCE",
+   "target": "2024-Q3",
+   "n": 5,
+   "HIGH": 1,
+   "Brier": 0.2,
+   "accuracy": 0.8
+  },
+  {
+   "method": "PERSISTENCE",
+   "target": "2024-Q4",
+   "n": 5,
+   "HIGH": 1,
+   "Brier": 0.2,
+   "accuracy": 0.8
+  },
+  {
+   "method": "PERSISTENCE",
+   "target": "2025-Q1",
+   "n": 5,
+   "HIGH": 3,
+   "Brier": 0.4,
+   "accuracy": 0.6
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2023-Q4",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.0005668934240362811,
+   "accuracy": 1.0
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2024-Q1",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.0004526935264825713,
+   "accuracy": 1.0
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2024-Q2",
+   "n": 5,
+   "HIGH": 0,
+   "Brier": 0.00036982248520710064,
+   "accuracy": 1.0
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2024-Q3",
+   "n": 5,
+   "HIGH": 1,
+   "Brier": 0.19329024315173898,
+   "accuracy": 0.8
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2024-Q4",
+   "n": 5,
+   "HIGH": 1,
+   "Brier": 0.1938085327783559,
+   "accuracy": 0.8
+  },
+  {
+   "method": "ALWAYS_MAJORITY",
+   "target": "2025-Q1",
+   "n": 5,
+   "HIGH": 3,
+   "Brier": 0.5650701715304076,
+   "accuracy": 0.4
+  }
+ ],
+ "band_cutoff": 0.5,
+ "band_cutoff_rule": "default 0.50 (fewer than 2 HIGH out-of-fold rows)",
+ "verdict": "NOT DEMONSTRATED: no trained model could be evaluated, because every development fold failed the >= 2-HIGH training gate. The system cannot be presented as a classifier on this sample; at most it is a ranking/monitoring display of the observed inputs.",
+ "holdout_forecasts_sha256": "58e31a6b1e362faca76cb8e2ba0039a4c93f2866a075e6635076d79cfa4b1303",
+ "lgbm_params": {
+  "objective": "binary",
+  "num_leaves": 4,
+  "max_depth": 3,
+  "min_child_samples": 10,
+  "reg_alpha": 1.0,
+  "reg_lambda": 5.0,
+  "n_estimators": 100,
+  "learning_rate": 0.05,
+  "colsample_bytree": 0.8,
+  "subsample": 1.0,
+  "n_jobs": 1,
+  "random_state": 40,
+  "deterministic": true,
+  "force_col_wise": true,
+  "verbose": -1
+ },
+ "feature_sets": {
+  "BLEND": [
+   "H_last",
+   "H_age",
+   "H_trend",
+   "H_margin",
+   "sws_last_hi",
+   "food_now",
+   "headline_now",
+   "gap_now",
+   "rel_now",
+   "food_margin",
+   "gap_margin",
+   "cpi_sig_now",
+   "food_chg",
+   "both_proxy",
+   "y_last",
+   "news_n",
+   "news_adm",
+   "news_direct_share",
+   "fssi_v2",
+   "fssi_missing",
+   "news_reg",
+   "comp_market",
+   "comp_climate",
+   "comp_fish_kill",
+   "comp_reliable"
+  ],
+  "NO_CPI": [
+   "H_last",
+   "H_age",
+   "H_trend",
+   "H_margin",
+   "sws_last_hi",
+   "news_n",
+   "news_adm",
+   "news_direct_share",
+   "fssi_v2",
+   "fssi_missing",
+   "news_reg",
+   "comp_market",
+   "comp_climate",
+   "comp_fish_kill",
+   "comp_reliable"
+  ],
+  "GOV": [
+   "H_last",
+   "H_age",
+   "H_trend",
+   "H_margin",
+   "sws_last_hi",
+   "food_now",
+   "headline_now",
+   "gap_now",
+   "rel_now",
+   "food_margin",
+   "gap_margin",
+   "cpi_sig_now",
+   "food_chg",
+   "both_proxy",
+   "y_last"
+  ],
+  "NLP": [
+   "news_n",
+   "news_adm",
+   "news_direct_share",
+   "fssi_v2",
+   "fssi_missing",
+   "news_reg",
+   "comp_market",
+   "comp_climate",
+   "comp_fish_kill",
+   "comp_reliable"
+  ]
+ }
+}
