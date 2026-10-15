@@ -1,0 +1,67 @@
+# E26 test results
+
+**Command:** `cd tests` then `python -B -m pytest -q -rA`, under the E26 guard. Raw output: `runs/test_results.txt`.
+
+**Result:** 38 passed in 33.65s.
+
+**Fixtures:** all synthetic; no real outcome is used. The two exceptions are recorded outputs and file hashes (`test_guard_and_outputs.py`), and the static LGU vulnerability list (transition test).
+
+| File | Tests | Passed | What is covered |
+|---|---|---|---|
+| `test_guard_and_outputs.py` | 7 | 7 | Guard denials; frozen protocol and amendment hashes; recorded outputs consistent (identical VOI rows; predictions hash); horizon and reproducibility records; E25 and its seal unchanged; development ledgers hold the E25 seal only |
+| `test_ledger.py` | 18 | 18 | Prospective ledger: hash chain and tamper detection; seal, outcome and NO_OUTCOME refusals; scoring order and origin matching; exact sign-flip vs enumeration; type-I error of the sign-flip and the e-process under the null; e-process power defect; A1 first eligible year, single look and second-look refusal; A3 references and power cost; import of an existing seal (hash, duplicate, timing) |
+| `test_local_validation_and_layers.py` | 4 | 4 | Local validation detection and attribution; bootstrap CI coverage under the null; two-layer forecast output and constructed-indicator labels; per-round SWS sample size |
+| `test_outcomes_adapters.py` | 8 | 8 | Outcome/signal adapters: hash, window (pre-2021 and after the authorized limit refuse the whole file), geography, publication dates, values never filled, years, duplicates, signal labelling |
+| `test_pipeline_transition.py` | 1 | 1 | Quarterly transition with synthetic complete inputs through the patched engine (READY, indicative, 142 LGUs, layers present) |
+
+## Every test
+
+| File | Test | Result |
+|---|---|---|
+| `test_guard_and_outputs.py` | `test_guard_denies_unlisted_data_other_experiments_and_writes_outside` | PASSED |
+| `test_guard_and_outputs.py` | `test_frozen_protocol_and_amendments_match_their_hashes` | PASSED |
+| `test_guard_and_outputs.py` | `test_root_cause_outputs_are_consistent` | PASSED |
+| `test_guard_and_outputs.py` | `test_voi_rows_identical_across_sets_and_models` | PASSED |
+| `test_guard_and_outputs.py` | `test_horizon_and_reproducibility_records` | PASSED |
+| `test_guard_and_outputs.py` | `test_e25_and_its_seal_unchanged_record` | PASSED |
+| `test_guard_and_outputs.py` | `test_dev_ledgers_hold_the_e25_seal_only` | PASSED |
+| `test_ledger.py` | `test_hash_chain_and_tamper_detection` | PASSED |
+| `test_ledger.py` | `test_seal_refusals` | PASSED |
+| `test_ledger.py` | `test_outcome_requires_matching_authorized_file_and_blocks_later_seals` | PASSED |
+| `test_ledger.py` | `test_no_outcome_declaration_is_final` | PASSED |
+| `test_ledger.py` | `test_score_uses_only_seals_made_before_the_outcome` | PASSED |
+| `test_ledger.py` | `test_signflip_matches_enumeration` | PASSED |
+| `test_ledger.py` | `test_signflip_and_eprocess_type_I_error_under_null` | PASSED |
+| `test_ledger.py` | `test_eprocess_needs_many_dates_even_for_a_steady_advantage` | PASSED |
+| `test_ledger.py` | `test_a1_first_eligible_year_and_single_look` | PASSED |
+| `test_ledger.py` | `test_a1_no_claim_when_the_candidate_is_persistence` | PASSED |
+| `test_ledger.py` | `test_a1_look_refused_before_eligibility_and_missing_quarters_delay_it` | PASSED |
+| `test_ledger.py` | `test_a1_look_refused_while_a_sealed_target_is_unresolved` | PASSED |
+| `test_ledger.py` | `test_baselines_must_share_the_candidate_origin` | PASSED |
+| `test_ledger.py` | `test_import_of_an_existing_seal_verifies_its_hash` | PASSED |
+| `test_ledger.py` | `test_import_refused_when_a_target_ended_before_the_seal` | PASSED |
+| `test_ledger.py` | `test_a3_tests_always_high_and_climatology` | PASSED |
+| `test_ledger.py` | `test_a3_is_stricter_than_a1` | PASSED |
+| `test_ledger.py` | `test_a3_no_success_when_the_candidate_is_always_high` | PASSED |
+| `test_local_validation_and_layers.py` | `test_agreement_detects_a_real_ordering_and_attributes_it` | PASSED |
+| `test_local_validation_and_layers.py` | `test_agreement_ci_has_nominal_coverage_without_signal_and_refuses_tiny_samples` | PASSED |
+| `test_local_validation_and_layers.py` | `test_forecast_reports_regional_and_provincial_layers_separately` | PASSED |
+| `test_local_validation_and_layers.py` | `test_per_round_sample_size_is_optional_and_exact` | PASSED |
+| `test_outcomes_adapters.py` | `test_valid_files_pass` | PASSED |
+| `test_outcomes_adapters.py` | `test_hash_must_match_and_be_complete` | PASSED |
+| `test_outcomes_adapters.py` | `test_pre2021_rows_refuse_the_whole_file` | PASSED |
+| `test_outcomes_adapters.py` | `test_rows_after_the_authorized_limit_refuse_the_whole_file` | PASSED |
+| `test_outcomes_adapters.py` | `test_geography_checks` | PASSED |
+| `test_outcomes_adapters.py` | `test_publication_date_required_and_not_before_reference_end` | PASSED |
+| `test_outcomes_adapters.py` | `test_values_never_filled_and_years_and_duplicates_checked` | PASSED |
+| `test_outcomes_adapters.py` | `test_signal_adapter_is_labelled_as_signal_not_outcome` | PASSED |
+| `test_pipeline_transition.py` | `test_quarterly_transition_with_synthetic_inputs_carries_layers` | PASSED |
+
+## Other checks
+
+| Check | Result | Record |
+|---|---|---|
+| Outputs reproduce byte for byte (root cause, VOI predictions, horizon, HORIZON.md, local power) | identical | `runs/reproducibility.json` |
+| E25 unchanged (451 files, including the 3 seal files) | unchanged | `runs/e25_unchanged.json` |
+| Development ledgers: hash chains verify; E25 forecasts hash matches its seal | verified | `runs/ledger/status.json` |
+| Exact sign-flip vs brute-force enumeration (400 random cases) | identical | session check, repeated in `test_signflip_matches_enumeration` |

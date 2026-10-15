@@ -98,7 +98,12 @@ def needs_rehash(stored_hash: str) -> bool:
 
 
 def email_domain_allowed(email: str) -> bool:
-    return email.strip().lower().endswith("@" + settings.ADMIN_EMAIL_DOMAIN.lower())
+    """
+    True when the address belongs to one of the validating agency — DA Region
+    IV-A. Enforced server-side; the frontend's own check is advisory.
+    """
+    addr = email.strip().lower()
+    return any(addr.endswith("@" + d) for d in settings.admin_email_domains)
 
 
 # ---------------------------------------------------------------------------

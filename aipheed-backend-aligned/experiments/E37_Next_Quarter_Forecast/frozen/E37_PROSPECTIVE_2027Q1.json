@@ -1,0 +1,357 @@
+{
+ "artifact_sha256": "14cf6a45a2f7a9098f950959251fb58fc0c61a730af96739cb8216944984c3b7",
+ "baselines": {
+  "ALWAYS_HIGH": {
+   "formal_thesis_baseline": false,
+   "p_high": {
+    "PH040100000": 1.0,
+    "PH040200000": 1.0,
+    "PH040300000": 1.0,
+    "PH040400000": 1.0,
+    "PH040500000": 1.0
+   }
+  },
+  "B1_PERSISTENCE": {
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 1.0,
+    "PH040200000": 1.0,
+    "PH040300000": 1.0,
+    "PH040400000": 1.0,
+    "PH040500000": 0.0
+   }
+  },
+  "B2_LR_COMB": {
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 0.9503576382440437,
+    "PH040200000": 0.9854535878288981,
+    "PH040300000": 0.9781733111655239,
+    "PH040400000": 0.9678281063005162,
+    "PH040500000": 0.6252251649625661
+   }
+  },
+  "B3_LR_GOV": {
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 0.882752374643047,
+    "PH040200000": 0.9718865302910029,
+    "PH040300000": 0.9467808735598658,
+    "PH040400000": 0.919374511776416,
+    "PH040500000": 0.4282666422970222
+   }
+  },
+  "B4_LR_NLP": {
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 0.8308905423364112,
+    "PH040200000": 0.9080080994564649,
+    "PH040300000": 0.8308905423364112,
+    "PH040400000": 0.8431943929547329,
+    "PH040500000": 0.8308905423364112
+   }
+  },
+  "B5_LGBM_GOV": {
+   "config": "GOVxG3",
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 0.9243196771476956,
+    "PH040200000": 0.9305280772006009,
+    "PH040300000": 0.9243196771476956,
+    "PH040400000": 0.9243196771476956,
+    "PH040500000": 0.7605658963383527
+   }
+  },
+  "B6_LGBM_NLP": {
+   "config": "NLPxG3",
+   "formal_thesis_baseline": true,
+   "p_high": {
+    "PH040100000": 0.8911993039602352,
+    "PH040200000": 0.907164790887936,
+    "PH040300000": 0.8911993039602352,
+    "PH040400000": 0.907164790887936,
+    "PH040500000": 0.8911993039602352
+   }
+  },
+  "CLIMATOLOGY": {
+   "formal_thesis_baseline": false,
+   "p_high": {
+    "PH040100000": 0.75,
+    "PH040200000": 0.75,
+    "PH040300000": 0.75,
+    "PH040400000": 0.75,
+    "PH040500000": 0.75
+   }
+  }
+ },
+ "config": "COMPACTxG3",
+ "feature_availability": {
+  "D_last": "PSA food CPI of 2026-Q2",
+  "Dnow/rice_rel": "PSA food and rice CPI, months 1-2 of 2026-Q3",
+  "H_last/H_trend/H_margin": "SWS rounds posted before the origin; latest quarter 2026-Q2",
+  "news": "validated articles published in 2026-Q3",
+  "y_last": "label of 2026-Q2"
+ },
+ "frozen_at_utc": "2026-10-15T03:16:47Z",
+ "information_cutoff": "2026-10-01T00:00:00+08:00 (exclusive)",
+ "lead": 2,
+ "mode": "FORECAST",
+ "model_id": "aiPHeed-E37-LGBM-NQ",
+ "origin": "2026-10-01",
+ "provinces": {
+  "PH040100000": {
+   "drivers": [
+    {
+     "contribution": 0.468479122582612,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.8666666666666671
+    },
+    {
+     "contribution": 0.2821338289121622,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.26492614972176587,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.23758893217322594,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.0599999999999999
+    },
+    {
+     "contribution": 0.0157471848406721,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 1.4475683563969428,
+   "p_high": 0.9379899970347942,
+   "persistence_p": 1.0,
+   "province": "Cavite"
+  },
+  "PH040200000": {
+   "drivers": [
+    {
+     "contribution": 0.468479122582612,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.1000000000000005
+    },
+    {
+     "contribution": 0.26576461576431426,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.4600000000000001
+    },
+    {
+     "contribution": 0.2610330266610453,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.25785126838179445,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.0157471848406721,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.505386
+    }
+   ],
+   "expected_value_logodds": 1.4475683563969428,
+   "p_high": 0.9379899970347942,
+   "persistence_p": 1.0,
+   "province": "Laguna"
+  },
+  "PH040300000": {
+   "drivers": [
+    {
+     "contribution": 0.468479122582612,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.26576461576431426,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 1.16
+    },
+    {
+     "contribution": 0.2610330266610453,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.25785126838179445,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.0157471848406721,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 1.4475683563969428,
+   "p_high": 0.9379899970347942,
+   "persistence_p": 1.0,
+   "province": "Quezon"
+  },
+  "PH040400000": {
+   "drivers": [
+    {
+     "contribution": 0.468479122582612,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.4666666666666668
+    },
+    {
+     "contribution": 0.26576461576431426,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.5099999999999999
+    },
+    {
+     "contribution": 0.2610330266610453,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.25785126838179445,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.0157471848406721,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 1.4475683563969428,
+   "p_high": 0.9379899970347942,
+   "persistence_p": 1.0,
+   "province": "Rizal"
+  },
+  "PH040500000": {
+   "drivers": [
+    {
+     "contribution": 0.7205698569567093,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": -0.5629427024367695,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": -2.4333333333333327
+    },
+    {
+     "contribution": 0.533810513991587,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": -0.4436704426244473,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": -2.19
+    },
+    {
+     "contribution": 0.005796183196534153,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 1.4475683563969428,
+   "p_high": 0.8456824921940779,
+   "persistence_p": 0.0,
+   "province": "Batangas"
+  }
+ },
+ "quarter": "2027-Q1",
+ "scoring": "after the SWS 2027-Q1 round is posted and 2027-Q1 CPI is released; never re-fitted before then",
+ "tau": 14.993333333333334,
+ "version": "E37.1"
+}

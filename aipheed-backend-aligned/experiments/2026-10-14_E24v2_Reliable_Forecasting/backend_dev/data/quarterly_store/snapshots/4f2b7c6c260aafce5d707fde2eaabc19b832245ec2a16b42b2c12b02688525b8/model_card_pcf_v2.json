@@ -1,0 +1,10 @@
+{
+ "model": "PCF v2 (probabilistic component forecaster)",
+ "status": "CANDIDATE - not adviser-approved",
+ "protocol_sha256": "c8bce7ce93df064b5a50bfa8b5be9486b1b8cd0d04ecee1ad583b7c983013eb6",
+ "engine": "backend_dev/app/quarterly/pcf_engine.py",
+ "H": "local level, n=600, sigma_eta ML grid 0..8",
+ "D": "OLS no intercept on latest published D (T1) and [Dnow, D] (price-pressure indicator)",
+ "uses_news": false,
+ "why_no_news": "E23/E24 ablations: news-only arms worst; no measurable gain from news"
+}

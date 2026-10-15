@@ -340,7 +340,7 @@ def build_plain_report(kind: str, scope: str, province_id: str | None,
         [[r["name"],
           f"{r['population']:,}" if r["population"] is not None else "Not available",
           f"{round(r['poverty'])}%" if r["poverty"] is not None else "Not available"] for r in profile],
-        "Population is from the PSA 2020 Census of Population and Housing. Poverty incidence is "
+        "Population is from the PSA 2024 Census of Population. Poverty incidence is "
         "the share of people living below the poverty line, from PSA 2021 estimates averaged "
         "over each province's cities and municipalities."))
 

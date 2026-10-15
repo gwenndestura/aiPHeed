@@ -1,0 +1,402 @@
+{
+ "outcome_2026Q3": {
+  "H_balance_luzon_sept2026": 23.6,
+  "F_food_yoy_julsep": {
+   "Cavite": 3.833,
+   "Laguna": 3.633,
+   "Quezon": 4.533,
+   "Rizal": 4.067,
+   "Batangas": 0.733
+  },
+  "D": {
+   "Cavite": 0.473,
+   "Laguna": 0.273,
+   "Quezon": 1.173,
+   "Rizal": 0.707,
+   "Batangas": -2.627
+  },
+  "S1": {
+   "Cavite": 24.547,
+   "Laguna": 24.147,
+   "Quezon": 25.947,
+   "Rizal": 25.013,
+   "Batangas": 18.347
+  }
+ },
+ "inputs_sha256": {
+  "cpi": "dbd9a0aefdae22f479992a44639961dd669c8418b0f666e4848dd2ac85b8a223",
+  "sws": "6ccdd9a084b6160e9836ca6e77a8896ac0a1e19a0e10155d0c9abf7f118bd784"
+ },
+ "e24v2_groups_found": 5,
+ "scores": [
+  {
+   "source": "E24v2 SEAL_20261013T164218Z (git 96e388e)",
+   "arm": "B1_naive_persistence",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.2,
+   "accuracy": 0.8,
+   "p": {
+    "Cavite": 1.0,
+    "Laguna": 1.0,
+    "Quezon": 1.0,
+    "Rizal": 1.0,
+    "Batangas": 0.0
+   }
+  },
+  {
+   "source": "E24v2 SEAL_20261013T164218Z (git 96e388e)",
+   "arm": "B1p_calibrated_persistence",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1389,
+   "accuracy": 0.8,
+   "p": {
+    "Cavite": 0.75,
+    "Laguna": 0.75,
+    "Quezon": 0.75,
+    "Rizal": 0.75,
+    "Batangas": 0.333
+   }
+  },
+  {
+   "source": "E24v2 SEAL_20261013T164218Z (git 96e388e)",
+   "arm": "FINAL_V2_PCF",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0963,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.721,
+    "Laguna": 0.729,
+    "Quezon": 0.651,
+    "Rizal": 0.712,
+    "Batangas": 0.646
+   }
+  },
+  {
+   "source": "E24v2 SEAL_20261013T164218Z (git 96e388e)",
+   "arm": "M2_lgbm_P_E24frozen",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0375,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.784,
+    "Laguna": 0.83,
+    "Quezon": 0.784,
+    "Rizal": 0.83,
+    "Batangas": 0.809
+   }
+  },
+  {
+   "source": "E24v2 SEAL_20261013T164218Z (git 96e388e)",
+   "arm": "PCF_S_supplementary",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1028,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.707,
+    "Laguna": 0.714,
+    "Quezon": 0.645,
+    "Rizal": 0.699,
+    "Batangas": 0.641
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "PCF21",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0974,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.733,
+    "Laguna": 0.745,
+    "Quezon": 0.635,
+    "Rizal": 0.72,
+    "Batangas": 0.628
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "B1_persistence",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 1.0,
+    "Laguna": 1.0,
+    "Quezon": 1.0,
+    "Rizal": 1.0,
+    "Batangas": 1.0
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "B1p_calibrated_persistence",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0467,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.784,
+    "Laguna": 0.784,
+    "Quezon": 0.784,
+    "Rizal": 0.784,
+    "Batangas": 0.784
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "CLIM_climatology",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.2221,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.529,
+    "Laguna": 0.529,
+    "Quezon": 0.529,
+    "Rizal": 0.529,
+    "Batangas": 0.529
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "ALWAYS_HIGH",
+   "lead": 1,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 1.0,
+    "Laguna": 1.0,
+    "Quezon": 1.0,
+    "Rizal": 1.0,
+    "Batangas": 1.0
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "PCF21",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1002,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.704,
+    "Laguna": 0.73,
+    "Quezon": 0.682,
+    "Rizal": 0.683,
+    "Batangas": 0.626
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "B1_persistence",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.2,
+   "accuracy": 0.8,
+   "p": {
+    "Cavite": 1.0,
+    "Laguna": 1.0,
+    "Quezon": 1.0,
+    "Rizal": 1.0,
+    "Batangas": 0.0
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "B1p_calibrated_persistence",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1379,
+   "accuracy": 0.8,
+   "p": {
+    "Cavite": 0.741,
+    "Laguna": 0.741,
+    "Quezon": 0.741,
+    "Rizal": 0.741,
+    "Batangas": 0.351
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "CLIM_climatology",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.25,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.5,
+    "Laguna": 0.5,
+    "Quezon": 0.5,
+    "Rizal": 0.5,
+    "Batangas": 0.5
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3 (git 70d8770)",
+   "arm": "ALWAYS_HIGH",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 1.0,
+    "Laguna": 1.0,
+    "Quezon": 1.0,
+    "Rizal": 1.0,
+    "Batangas": 1.0
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "P45",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1942,
+   "accuracy": 0.6,
+   "p": {
+    "Cavite": 0.311,
+    "Laguna": 0.844,
+    "Quezon": 0.345,
+    "Rizal": 0.859,
+    "Batangas": 0.85
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "F12",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0934,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.583,
+    "Laguna": 0.783,
+    "Quezon": 0.551,
+    "Rizal": 0.791,
+    "Batangas": 0.977
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "F12_SWS",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1052,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.569,
+    "Laguna": 0.789,
+    "Quezon": 0.5,
+    "Rizal": 0.789,
+    "Batangas": 0.969
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "B2_lr_combined",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0007,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.949,
+    "Laguna": 1.0,
+    "Quezon": 0.97,
+    "Rizal": 1.0,
+    "Batangas": 0.992
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "B3_lr_gov_only",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0003,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.984,
+    "Laguna": 0.998,
+    "Quezon": 0.971,
+    "Rizal": 0.999,
+    "Batangas": 0.985
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "B4_lr_nlp_only",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1885,
+   "accuracy": 0.8,
+   "p": {
+    "Cavite": 0.248,
+    "Laguna": 0.768,
+    "Quezon": 0.504,
+    "Rizal": 0.869,
+    "Batangas": 0.755
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "B5_lgbm_gov_only",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.0398,
+   "accuracy": 1.0,
+   "p": {
+    "Cavite": 0.731,
+    "Laguna": 0.888,
+    "Quezon": 0.784,
+    "Rizal": 0.877,
+    "Batangas": 0.772
+   }
+  },
+  {
+   "source": "E31_FROZEN_Q3_P45_LEAD2 (git bbbe104)",
+   "arm": "B6_lgbm_nlp_only",
+   "lead": 2,
+   "tau": 14.345,
+   "n_HIGH_outcome": 5,
+   "brier": 0.1888,
+   "accuracy": 0.6,
+   "p": {
+    "Cavite": 0.401,
+    "Laguna": 0.674,
+    "Quezon": 0.401,
+    "Rizal": 0.674,
+    "Batangas": 0.886
+   }
+  }
+ ],
+ "caveat": "ONE quarter, five rows that share one regional H: a single observation of regional hunger. No statistical claim of skill can rest on it; it is the first unseen-quarter data point."
+}

@@ -1,0 +1,142 @@
+== allowlist verification
+True False ['quarter', '2021-Q1', '2025-Q4'] -backend-aligned\data\processed\features_fused.parquet
+True False None -backend-aligned\data\processed\lgu_census.parquet
+True False ['year', 2021, 2025] -backend-aligned\data\processed\lgu_poverty.parquet
+True False ['year', 2021, 2025] -backend-aligned\data\processed\nns_fies.parquet
+True False ['quarter', '2021-Q1', '2025-Q4'] -backend-aligned\data\processed\topic_proportions.parquet
+True True None -backend-aligned\data\supplementary\collection_2026-10-09\cpi_2026_release_dates.csv
+True True None -backend-aligned\data\supplementary\collection_2026-10-09\provincial_food_cpi_yoy_2026H1_raw.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\config\governing_model.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e12\details.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e12\realized_components_2021_2025.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24\runs\20261013T160107Z\SEAL_T1.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24\runs\20261013T160107Z\SEAL_T2.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24\runs\20261013T160749Z\SEAL_T1.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24\runs\20261013T160749Z\SEAL_T2.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\cpi_index_2021_2025_ACP22.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T164218Z\SEAL_PROSPECTIVE.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T164218Z\pcf_components.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T164218Z\prospective_forecasts.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T222814Z\SEAL_PROSPECTIVE.json
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T222814Z\pcf_components.csv
+True False None -backend-aligned\experiments\E25_Reliable_Forecasts_2021_2026\inputs\e24v2\runs\SEAL_20261013T222814Z\prospective_forecasts.csv
+True True ['quarter', '2026-Q1', '2026-Q2'] \backend\data\processed\sws_hunger.parquet
+
+== CPI 2026 H1 (authorized) (30, 11)
+   province_code province_name reference_month    commodity food_cpi_yoy_pct_raw value_status                                                                geographic_level                                                                                                                                         source_table                                                                       source_url                  retrieved_at_utc                                                                         publication_date
+0    PH040100000        Cavite         2026-01  01.1 - FOOD                  1.6     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+1    PH040100000        Cavite         2026-02  01.1 - FOOD                  0.5     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+2    PH040100000        Cavite         2026-03  01.1 - FOOD                  2.3     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+3    PH040100000        Cavite         2026-04  01.1 - FOOD                  5.6     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+4    PH040100000        Cavite         2026-05  01.1 - FOOD                  4.2     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+5    PH040100000        Cavite         2026-06  01.1 - FOOD                  4.4     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+6    PH040200000        Laguna         2026-01  01.1 - FOOD                  1.6     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+7    PH040200000        Laguna         2026-02  01.1 - FOOD                  1.7     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+8    PH040200000        Laguna         2026-03  01.1 - FOOD                  1.7     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+9    PH040200000        Laguna         2026-04  01.1 - FOOD                  4.1     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+10   PH040200000        Laguna         2026-05  01.1 - FOOD                  3.4     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+11   PH040200000        Laguna         2026-06  01.1 - FOOD                  4.4     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+12   PH040300000        Quezon         2026-01  01.1 - FOOD                 -0.7     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+13   PH040300000        Quezon         2026-02  01.1 - FOOD                  0.8     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+14   PH040300000        Quezon         2026-03  01.1 - FOOD                 -0.2     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+15   PH040300000        Quezon         2026-04  01.1 - FOOD                  6.1     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+16   PH040300000        Quezon         2026-05  01.1 - FOOD                  6.9     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+17   PH040300000        Quezon         2026-06  01.1 - FOOD                  1.6     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+18   PH040400000         Rizal         2026-01  01.1 - FOOD                  0.3     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+19   PH040400000         Rizal         2026-02  01.1 - FOOD                  1.3     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+20   PH040400000         Rizal         2026-03  01.1 - FOOD                  2.2     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+21   PH040400000         Rizal         2026-04  01.1 - FOOD                  4.8     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+22   PH040400000         Rizal         2026-05  01.1 - FOOD                  4.4     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+23   PH040400000         Rizal         2026-06  01.1 - FOOD                  3.8     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+24   PH040500000      Batangas         2026-01  01.1 - FOOD                 -0.4     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+25   PH040500000      Batangas         2026-02  01.1 - FOOD                 -0.7     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+26   PH040500000      Batangas         2026-03  01.1 - FOOD                  0.7     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+27   PH040500000      Batangas         2026-04  01.1 - FOOD                  2.3     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+28   PH040500000      Batangas         2026-05  01.1 - FOOD                  2.0     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+29   PH040500000      Batangas         2026-06  01.1 - FOOD                  0.0     reported  province (PSA CPI geolocation; 'Quezon' listed separately from City of Lucena)  PSA OpenStat 0012M4ACP23 - Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026  https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px  2026-10-09T14:40:49.508579+00:00  see cpi_2026_release_dates.csv (national release; provincial RSSO IV-A date unverified)
+
+== CPI 2026 release dates (authorized)
+  reference_month national_release_date                                            evidence                                                                     provincial_release_date
+0         2026-01            2026-02-05                     Philstar/Tribune/DOF 2026-02-05  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+1         2026-02            2026-03-05                             DZRH; Trading Economics  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+2         2026-03            2026-04-07  Manila Times via ICE; Trading Economics 2026-04-07  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+3         2026-04            2026-05-05        ABS-CBN 2026-05-05; Manila Bulletin (Balita)  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+4         2026-05            2026-06-05                           Philstar 2026-06-05; DZRH  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+5         2026-06            2026-07-07        Trading Economics; FocusEconomics 2026-07-07  UNVERIFIED (RSSO IV-A regional release; one verified 2024 case was +6 days after national)
+
+== production SWS rows 2026-Q1..2026-Q2 (authorized)
+   quarter province_code   survey_quarter_label  pct_total_hunger        stratum                                                                                               source_url  verified
+0  2026-Q1   PH040100000  March 2026 SWS Survey              22.4  balance_luzon  https://sws.org.ph/social-weather-report-hunger-rises-from-20-1-in-november-2025-to-23-2-in-march-2026/      True
+5  2026-Q2   PH040100000   June 2026 SWS Survey              17.3  balance_luzon      https://sws.org.ph/social-weather-report-hunger-falls-to-20-3-in-june-2026-from-23-2-in-march-2026/      True
+10 rows; 5 provinces
+
+== governing_model candidates: 45
+['FSSI', 'trigger_market', 'trigger_climate', 'trigger_employment', 'trigger_ofw_remittance', 'trigger_fish_kill', 'food_cpi', 'food_cpi_yoy', 'rice_price_regular', 'unemployment_rate', 'poverty_incidence', 'food_minus_headline_yoy', 'headline_cpi', 'ofw_remit_yoy_pct', 'fx_usd_php_avg', 'diesel_php_per_l', 'gasoline_php_per_l', 'brent_usd_per_bbl', 'tc_count', 'tc_severe_flag', 'rainfall_anomaly_pct', 'drought_alert', 'enso_numeric', 'commodity_fruit_veg', 'commodity_leafy_veg', 'commodity_livestock', 'commodity_poultry', 'commodity_rootcrops', 'FSSI_lag1', 'FSSI_accel', 'food_cpi_yoy_lag1', 'food_cpi_yoy_accel', 'food_minus_headline_yoy_lag1', 'food_minus_headline_yoy_accel', 'unemployment_rate_lag1', 'unemployment_rate_accel', 'ofw_remit_yoy_pct_lag1', 'ofw_remit_yoy_pct_accel', 'rainfall_anomaly_pct_lag1', 'rainfall_anomaly_pct_accel', 'rice_price_regular_lag1', 'rice_price_regular_accel', 'diesel_php_per_l_lag1', 'diesel_php_per_l_accel', 'FSSI_lag2']
+
+== features_fused (read-time filter 2021-Q1..2025-Q4) (100, 48) 2021-Q1 2025-Q4
+quarter                        2021  2022  2023  2024  2025
+province_code                   1.0   1.0   1.0   1.0   1.0
+quarter                         1.0   1.0   1.0   1.0   1.0
+FSSI                            1.0   1.0   1.0   1.0   1.0
+trigger_market                  1.0   1.0   1.0   1.0   1.0
+trigger_climate                 1.0   1.0   1.0   1.0   1.0
+trigger_employment              1.0   1.0   1.0   1.0   1.0
+trigger_ofw_remittance          1.0   1.0   1.0   1.0   1.0
+trigger_fish_kill               1.0   1.0   1.0   1.0   1.0
+food_cpi                        1.0   1.0   1.0   1.0   1.0
+food_cpi_yoy                    1.0   1.0   1.0   1.0   1.0
+rice_price_regular              1.0   1.0   1.0   1.0   1.0
+unemployment_rate               1.0   1.0   1.0   1.0   1.0
+poverty_incidence               1.0   1.0   1.0   1.0   1.0
+food_minus_headline_yoy         1.0   1.0   1.0   1.0   1.0
+headline_cpi                    1.0   1.0   1.0   1.0   1.0
+ofw_remit_yoy_pct               1.0   1.0   1.0   1.0   1.0
+fx_usd_php_avg                  1.0   1.0   1.0   1.0   1.0
+diesel_php_per_l                1.0   1.0   1.0   1.0   1.0
+gasoline_php_per_l              1.0   1.0   1.0   1.0   1.0
+brent_usd_per_bbl               1.0   1.0   1.0   1.0   1.0
+tc_count                        1.0   1.0   1.0   1.0   1.0
+tc_severe_flag                  1.0   1.0   1.0   1.0   1.0
+rainfall_anomaly_pct            1.0   1.0   1.0   1.0   1.0
+drought_alert                   1.0   1.0   1.0   1.0   1.0
+enso_numeric                    1.0   1.0   1.0   1.0   1.0
+commodity_fruit_veg             1.0   1.0   1.0   1.0   1.0
+commodity_leafy_veg             1.0   1.0   1.0   1.0   1.0
+commodity_livestock             1.0   1.0   1.0   1.0   1.0
+commodity_poultry               1.0   1.0   1.0   1.0   1.0
+commodity_rootcrops             1.0   1.0   1.0   1.0   1.0
+FSSI_lag1                       1.0   1.0   1.0   1.0   1.0
+FSSI_accel                      1.0   1.0   1.0   1.0   1.0
+food_cpi_yoy_lag1               1.0   1.0   1.0   1.0   1.0
+food_cpi_yoy_accel              1.0   1.0   1.0   1.0   1.0
+food_minus_headline_yoy_lag1    1.0   1.0   1.0   1.0   1.0
+food_minus_headline_yoy_accel   1.0   1.0   1.0   1.0   1.0
+unemployment_rate_lag1          1.0   1.0   1.0   1.0   1.0
+unemployment_rate_accel         1.0   1.0   1.0   1.0   1.0
+ofw_remit_yoy_pct_lag1          1.0   1.0   1.0   1.0   1.0
+ofw_remit_yoy_pct_accel         1.0   1.0   1.0   1.0   1.0
+rainfall_anomaly_pct_lag1       1.0   1.0   1.0   1.0   1.0
+rainfall_anomaly_pct_accel      1.0   1.0   1.0   1.0   1.0
+rice_price_regular_lag1         1.0   1.0   1.0   1.0   1.0
+rice_price_regular_accel        1.0   1.0   1.0   1.0   1.0
+diesel_php_per_l_lag1           1.0   1.0   1.0   1.0   1.0
+diesel_php_per_l_accel          1.0   1.0   1.0   1.0   1.0
+FSSI_lag2                       1.0   1.0   1.0   1.0   1.0
+cpi_dev                         1.0   1.0   1.0   1.0   1.0
+
+== CPI index 2021-2025 (E24v2 acquisition) (900, 10)
+  Commodity Description Commodity Description_code   Geolocation Geolocation_code Period Period_code  Year Year_code           source  value
+0         0 - ALL ITEMS                          0  ....Batangas               33    Jan           0  2021         3  ACP22_2021_2025  109.2
+1         0 - ALL ITEMS                          0  ....Batangas               33    Feb           1  2021         3  ACP22_2021_2025  108.8
+2         0 - ALL ITEMS                          0  ....Batangas               33    Mar           2  2021         3  ACP22_2021_2025  108.2
+3         0 - ALL ITEMS                          0  ....Batangas               33    Apr           3  2021         3  ACP22_2021_2025  107.8
+4         0 - ALL ITEMS                          0  ....Batangas               33    May           4  2021         3  ACP22_2021_2025  108.1
+['0 - ALL ITEMS' '01.1 - FOOD' '01.1.1.12 - Rice'] ['....Batangas' '....Cavite' '....Laguna' '....Quezon' '....Rizal'] ['2021' '2022' '2023' '2024' '2025']
+
+== access log
+{'op': 'read_text', 'path': 'C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\supplementary\\collection_2026-10-09\\provincial_food_cpi_yoy_2026H1_raw.csv', 'bytes': 14604}
+{'op': 'read_text', 'path': 'C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\supplementary\\collection_2026-10-09\\cpi_2026_release_dates.csv', 'bytes': 961}
+{'op': 'read_parquet', 'path': 'C:\\Users\\admin\\aipheed\\backend\\data\\processed\\sws_hunger.parquet', 'columns': ['pct_total_hunger', 'province_code', 'quarter', 'source_url', 'stratum', 'survey_quarter_label', 'verified'], 'row_filter': '2026-Q1 <= quarter <= 2026-Q2', 'rows_returned': 10}
+{'op': 'read_text', 'path': 'C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\E25_Reliable_Forecasts_2021_2026\\inputs\\config\\governing_model.json', 'bytes': 5542}
+{'op': 'read_parquet', 'path': 'C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\features_fused.parquet', 'columns': ['FSSI', 'FSSI_accel', 'FSSI_lag1', 'FSSI_lag2', 'brent_usd_per_bbl', 'commodity_fruit_veg', 'commodity_leafy_veg', 'commodity_livestock', 'commodity_poultry', 'commodity_rootcrops', 'cpi_dev', 'diesel_php_per_l', 'diesel_php_per_l_accel', 'diesel_php_per_l_lag1', 'drought_alert', 'enso_numeric', 'food_cpi', 'food_cpi_yoy', 'food_cpi_yoy_accel', 'food_cpi_yoy_lag1', 'food_minus_headline_yoy', 'food_minus_headline_yoy_accel', 'food_minus_headline_yoy_lag1', 'fx_usd_php_avg', 'gasoline_php_per_l', 'headline_cpi', 'ofw_remit_yoy_pct', 'ofw_remit_yoy_pct_accel', 'ofw_remit_yoy_pct_lag1', 'poverty_incidence', 'province_code', 'quarter', 'rainfall_anomaly_pct', 'rainfall_anomaly_pct_accel', 'rainfall_anomaly_pct_lag1', 'rice_price_regular', 'rice_price_regular_accel', 'rice_price_regular_lag1', 'tc_count', 'tc_severe_flag', 'trigger_climate', 'trigger_employment', 'trigger_fish_kill', 'trigger_market', 'trigger_ofw_remittance', 'unemployment_rate', 'unemployment_rate_accel', 'unemployment_rate_lag1'], 'row_filter': '2021-Q1 <= quarter <= 2025-Q4', 'rows_returned': 100}
+{'op': 'read_text', 'path': 'C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\E25_Reliable_Forecasts_2021_2026\\inputs\\e24v2\\cpi_index_2021_2025_ACP22.csv', 'bytes': 62522}

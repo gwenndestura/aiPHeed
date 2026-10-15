@@ -1,0 +1,1786 @@
+{
+ "T1_A|k1|2023-Q3": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2023-Q3",
+  "origin": "2023-10-01",
+  "target_quarter": "2023-Q4",
+  "tau": 14.599113311652646,
+  "n_train_quarters": 8,
+  "n_train_rows": 40,
+  "train_HIGH": 20,
+  "train_LOW": 20,
+  "test_HIGH": 5,
+  "test_LOW": 0,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.14755929223647643,
+   "FSSI_lag2": 0.19781946989855675,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.014323814421891706,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.23709018680523336,
+   "food_cpi_yoy": 0.0,
+   "food_cpi_yoy_lag1": 0.014234674450713266,
+   "unemployment_rate": 0.18185788810156694,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.016154242622210508,
+   "sws_hunger": 0.895453596071126,
+   "lead": 0.2470786558043277
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "lead",
+   "trigger_fish_kill",
+   "FSSI_lag2",
+   "unemployment_rate"
+  ],
+  "n_train_rows_features": 40
+ },
+ "T1_A|k1|2023-Q4": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2023-Q4",
+  "origin": "2024-01-01",
+  "target_quarter": "2024-Q1",
+  "tau": 14.863832967263004,
+  "n_train_quarters": 9,
+  "n_train_rows": 45,
+  "train_HIGH": 22,
+  "train_LOW": 23,
+  "test_HIGH": 4,
+  "test_LOW": 1,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.03846730306260697,
+   "FSSI_lag2": 0.032542832788152135,
+   "FSSI_accel": 0.010847919344394837,
+   "trigger_market": 0.29903967813941523,
+   "trigger_climate": 0.016350464907115593,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.01643699934641695,
+   "trigger_fish_kill": 0.014690165744052231,
+   "food_cpi_yoy": 0.010059578148086838,
+   "food_cpi_yoy_lag1": 0.022735049388929833,
+   "unemployment_rate": 0.2892435147468587,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.0,
+   "sws_hunger": 1.5780806185201819
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "trigger_market",
+   "unemployment_rate",
+   "FSSI_lag1",
+   "FSSI_lag2"
+  ],
+  "n_train_rows_features": 45
+ },
+ "T1_A|k1|2024-Q1": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2024-Q1",
+  "origin": "2024-04-01",
+  "target_quarter": "2024-Q2",
+  "tau": 15.515665554266993,
+  "n_train_quarters": 10,
+  "n_train_rows": 50,
+  "train_HIGH": 25,
+  "train_LOW": 25,
+  "test_HIGH": 3,
+  "test_LOW": 2,
+  "gate": "PCF21",
+  "cal_temperature": 2.0,
+  "inner": {
+   "n": 5,
+   "brier_pcf": 0.05639801192303345,
+   "brier_b1p": 0.09000000000000002
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 150
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.06077592835425807,
+   "FSSI_lag1": 0.03308375616197533,
+   "FSSI_lag2": 0.25068305294727333,
+   "FSSI_accel": 0.06091098534961301,
+   "trigger_market": 0.05161433497121835,
+   "trigger_climate": 0.21948663923892422,
+   "trigger_employment": 0.04732874065598473,
+   "trigger_ofw_remittance": 0.35804576110200226,
+   "trigger_fish_kill": 0.08041521227284235,
+   "food_cpi_yoy": 0.04543153584115167,
+   "food_cpi_yoy_lag1": 0.212361958282313,
+   "unemployment_rate": 0.277589169703631,
+   "rice_price_regular": 0.2554461478525485,
+   "cpi_dev": 0.009483831886136473,
+   "sws_hunger": 3.055404385596918
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "trigger_ofw_remittance",
+   "unemployment_rate",
+   "rice_price_regular",
+   "FSSI_lag2"
+  ],
+  "n_train_rows_features": 50
+ },
+ "T1_A|k1|2024-Q2": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2024-Q2",
+  "origin": "2024-07-01",
+  "target_quarter": "2024-Q3",
+  "tau": 15.739337670579049,
+  "n_train_quarters": 11,
+  "n_train_rows": 55,
+  "train_HIGH": 27,
+  "train_LOW": 28,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "PCF21",
+  "cal_temperature": 1.55,
+  "inner": {
+   "n": 10,
+   "brier_pcf": 0.1525942532940352,
+   "brier_b1p": 0.20964334705075446
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.013666897014803928,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.014557346290214174,
+   "FSSI_accel": 0.01778878378191383,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.18738138527163792,
+   "trigger_employment": 0.013790344353119908,
+   "trigger_ofw_remittance": 0.09045644962046553,
+   "trigger_fish_kill": 0.25981561723986213,
+   "food_cpi_yoy": 0.004929443341428743,
+   "food_cpi_yoy_lag1": 0.0,
+   "unemployment_rate": 0.05631663070306381,
+   "rice_price_regular": 0.3251962178843759,
+   "cpi_dev": 0.0,
+   "sws_hunger": 1.1139138786887441
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "rice_price_regular",
+   "trigger_fish_kill",
+   "trigger_climate",
+   "trigger_ofw_remittance"
+  ],
+  "n_train_rows_features": 55
+ },
+ "T1_A|k1|2024-Q3": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2024-Q3",
+  "origin": "2024-10-01",
+  "target_quarter": "2024-Q4",
+  "tau": 15.703636419390786,
+  "n_train_quarters": 12,
+  "n_train_rows": 60,
+  "train_HIGH": 30,
+  "train_LOW": 30,
+  "test_HIGH": 3,
+  "test_LOW": 2,
+  "gate": "PCF21",
+  "cal_temperature": 1.05,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.19917950212421562,
+   "brier_b1p": 0.2572923875432525
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0825864824262291,
+   "FSSI_lag1": 0.010412547101022702,
+   "FSSI_lag2": 0.02678551941456637,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.015019741899635152,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.049475318012088085,
+   "trigger_fish_kill": 0.005865754934612205,
+   "food_cpi_yoy": 0.26025888189104596,
+   "food_cpi_yoy_lag1": 0.009639528814790913,
+   "unemployment_rate": 0.07241832269689023,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.09067971893084868,
+   "sws_hunger": 0.18538284543931394,
+   "lead": 0.23685731127625503
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "lead",
+   "sws_hunger",
+   "cpi_dev",
+   "FSSI"
+  ],
+  "n_train_rows_features": 60
+ },
+ "T1_A|k1|2024-Q4": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2024-Q4",
+  "origin": "2025-01-01",
+  "target_quarter": "2025-Q1",
+  "tau": 15.291993437954938,
+  "n_train_quarters": 13,
+  "n_train_rows": 65,
+  "train_HIGH": 32,
+  "train_LOW": 33,
+  "test_HIGH": 4,
+  "test_LOW": 1,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.29402615544639027,
+   "brier_b1p": 0.33805307200499995
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.11424094504919902,
+   "FSSI_lag1": 0.010319845641707789,
+   "FSSI_lag2": 0.01063006255391954,
+   "FSSI_accel": 0.007928677121814578,
+   "trigger_market": 0.030672413004602928,
+   "trigger_climate": 0.010397493837460987,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.04228418627247656,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.09200888795061468,
+   "food_cpi_yoy_lag1": 0.005573655328303802,
+   "unemployment_rate": 0.06402417738381964,
+   "rice_price_regular": 0.03573669719308965,
+   "cpi_dev": 0.15945213149114368,
+   "sws_hunger": 0.00847925705363968,
+   "lead": 0.17597026571520186
+  },
+  "shap_rank_top5": [
+   "lead",
+   "cpi_dev",
+   "FSSI",
+   "food_cpi_yoy",
+   "unemployment_rate"
+  ],
+  "n_train_rows_features": 65
+ },
+ "T1_A|k1|2025-Q3": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2025-Q3",
+  "origin": "2025-10-01",
+  "target_quarter": "2025-Q4",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 15,
+  "n_train_rows": 75,
+  "train_HIGH": 37,
+  "train_LOW": 38,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.30440061728903783,
+   "brier_b1p": 0.31112622650200833
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.020177298454903795,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.06773193196571953,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.08656977748484349,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.002853097385224074,
+   "food_cpi_yoy": 0.1734247223514594,
+   "food_cpi_yoy_lag1": 0.029018850752469426,
+   "unemployment_rate": 0.07608304718686607,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.04232753265542558,
+   "sws_hunger": 0.0759369650011941,
+   "lead": 0.07310980191241825
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "trigger_market",
+   "unemployment_rate",
+   "sws_hunger",
+   "lead"
+  ],
+  "n_train_rows_features": 75
+ },
+ "T1_A|k1|2025-Q4": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2025-Q4",
+  "origin": "2026-01-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 15,
+  "n_train_rows": 75,
+  "train_HIGH": 37,
+  "train_LOW": 38,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.30440061728903783,
+   "brier_b1p": 0.31112622650200833
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.02537442960914902,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.07001113401600295,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.08031373458377769,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.002853097385224074,
+   "food_cpi_yoy": 0.12482874648157243,
+   "food_cpi_yoy_lag1": 0.02560133259764665,
+   "unemployment_rate": 0.06780569820890983,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.05900793477917761,
+   "sws_hunger": 0.05023579557309571,
+   "lead": 0.12008992432303242
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "lead",
+   "trigger_market",
+   "FSSI_lag2",
+   "unemployment_rate"
+  ],
+  "n_train_rows_features": 75
+ },
+ "T1_A|k1|2026-Q1": {
+  "target": "T1_A",
+  "lead": 1,
+  "t": "2026-Q1",
+  "origin": "2026-04-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.271374609084344,
+  "n_train_quarters": 16,
+  "n_train_rows": 80,
+  "train_HIGH": 40,
+  "train_LOW": 40,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.26347970786634584,
+   "brier_b1p": 0.29488531661749706
+  }
+ },
+ "T1_A|k2|2023-Q4": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2023-Q4",
+  "origin": "2024-01-01",
+  "target_quarter": "2024-Q2",
+  "tau": 14.863832967263004,
+  "n_train_quarters": 8,
+  "n_train_rows": 40,
+  "train_HIGH": 19,
+  "train_LOW": 21,
+  "test_HIGH": 4,
+  "test_LOW": 1,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.10287246573331447,
+   "FSSI_lag1": 0.11023570174407704,
+   "FSSI_lag2": 0.0723569368270665,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.04446514414689815,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.035552523177887305,
+   "food_cpi_yoy": 0.0,
+   "food_cpi_yoy_lag1": 0.059224563409075205,
+   "unemployment_rate": 0.10632499446429633,
+   "rice_price_regular": 0.008535369199450827,
+   "cpi_dev": 0.008472259236905179,
+   "sws_hunger": 1.1586321510580906,
+   "lead": 0.2532935936290516
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "lead",
+   "FSSI_lag1",
+   "unemployment_rate",
+   "FSSI"
+  ],
+  "n_train_rows_features": 40
+ },
+ "T1_A|k2|2024-Q1": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2024-Q1",
+  "origin": "2024-04-01",
+  "target_quarter": "2024-Q3",
+  "tau": 15.515665554266993,
+  "n_train_quarters": 9,
+  "n_train_rows": 45,
+  "train_HIGH": 23,
+  "train_LOW": 22,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.013550120533860305,
+   "FSSI_lag1": 0.038670486246755634,
+   "FSSI_lag2": 0.007203125685587329,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.10376026392634172,
+   "food_cpi_yoy": 0.007299903079999559,
+   "food_cpi_yoy_lag1": 0.04719420485453498,
+   "unemployment_rate": 0.04815459189245255,
+   "rice_price_regular": 0.03131098555648341,
+   "cpi_dev": 0.02160755383114748,
+   "sws_hunger": 1.5375552392571228,
+   "lead": 0.32526865874226224
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "lead",
+   "trigger_fish_kill",
+   "unemployment_rate",
+   "food_cpi_yoy_lag1"
+  ],
+  "n_train_rows_features": 45
+ },
+ "T1_A|k2|2024-Q2": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2024-Q2",
+  "origin": "2024-07-01",
+  "target_quarter": "2024-Q4",
+  "tau": 15.739337670579049,
+  "n_train_quarters": 10,
+  "n_train_rows": 50,
+  "train_HIGH": 25,
+  "train_LOW": 25,
+  "test_HIGH": 3,
+  "test_LOW": 2,
+  "gate": "PCF21",
+  "cal_temperature": 0.65,
+  "inner": {
+   "n": 5,
+   "brier_pcf": 0.23335135274339808,
+   "brier_b1p": 0.2625
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.36978385509940703,
+   "FSSI_accel": 0.07860068219138971,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.06867551849085621,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.013723442015331332,
+   "food_cpi_yoy": 0.08626023047494046,
+   "food_cpi_yoy_lag1": 0.1599359219838528,
+   "unemployment_rate": 0.0,
+   "rice_price_regular": 0.09014292437186155,
+   "cpi_dev": 0.0,
+   "sws_hunger": 0.8492108006478111
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "FSSI_lag2",
+   "food_cpi_yoy_lag1",
+   "rice_price_regular",
+   "food_cpi_yoy"
+  ],
+  "n_train_rows_features": 50
+ },
+ "T1_A|k2|2024-Q3": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2024-Q3",
+  "origin": "2024-10-01",
+  "target_quarter": "2025-Q1",
+  "tau": 15.703636419390786,
+  "n_train_quarters": 11,
+  "n_train_rows": 55,
+  "train_HIGH": 28,
+  "train_LOW": 27,
+  "test_HIGH": 4,
+  "test_LOW": 1,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 10,
+   "brier_pcf": 0.27976039622257676,
+   "brier_b1p": 0.3640625
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.027905266791218557,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.375148900599524,
+   "FSSI_accel": 0.05123974189840047,
+   "trigger_market": 0.08212094741124895,
+   "trigger_climate": 0.008154767571493127,
+   "trigger_employment": 0.0039931822933124365,
+   "trigger_ofw_remittance": 0.027934378472745762,
+   "trigger_fish_kill": 0.019150878576776588,
+   "food_cpi_yoy": 0.016819048567259468,
+   "food_cpi_yoy_lag1": 0.17831371137778493,
+   "unemployment_rate": 0.1271220361631425,
+   "rice_price_regular": 0.20928853341130785,
+   "cpi_dev": 0.019322916414798903,
+   "sws_hunger": 0.6847465614659898
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "FSSI_lag2",
+   "rice_price_regular",
+   "food_cpi_yoy_lag1",
+   "unemployment_rate"
+  ],
+  "n_train_rows_features": 55
+ },
+ "T1_A|k2|2025-Q2": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2025-Q2",
+  "origin": "2025-07-01",
+  "target_quarter": "2025-Q4",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 14,
+  "n_train_rows": 70,
+  "train_HIGH": 35,
+  "train_LOW": 35,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.2854977979039347,
+   "brier_b1p": 0.41077685295283395
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.45503101392475376,
+   "FSSI_lag1": 0.011813427607160757,
+   "FSSI_lag2": 0.02504758096417309,
+   "FSSI_accel": 0.112371849765416,
+   "trigger_market": 0.09228665356550284,
+   "trigger_climate": 0.03971975774864093,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.01017963215832158,
+   "food_cpi_yoy_lag1": 0.06085951603268871,
+   "unemployment_rate": 0.0,
+   "rice_price_regular": 0.04133383758836341,
+   "cpi_dev": 0.10167387991082526,
+   "sws_hunger": 0.32287704729995637
+  },
+  "shap_rank_top5": [
+   "FSSI",
+   "sws_hunger",
+   "FSSI_accel",
+   "cpi_dev",
+   "trigger_market"
+  ],
+  "n_train_rows_features": 70
+ },
+ "T1_A|k2|2025-Q3": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2025-Q3",
+  "origin": "2025-10-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 14,
+  "n_train_rows": 70,
+  "train_HIGH": 35,
+  "train_LOW": 35,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.2854977979039347,
+   "brier_b1p": 0.41077685295283395
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.29409073693336374,
+   "FSSI_lag1": 0.016005289016153286,
+   "FSSI_lag2": 0.038593751021492866,
+   "FSSI_accel": 0.12994031005322443,
+   "trigger_market": 0.10649113473423762,
+   "trigger_climate": 0.01926340220205699,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.009314796503929515,
+   "food_cpi_yoy_lag1": 0.0392380359872235,
+   "unemployment_rate": 0.0,
+   "rice_price_regular": 0.0606648118198632,
+   "cpi_dev": 0.09900633174146636,
+   "sws_hunger": 0.5877897329932007
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "FSSI",
+   "FSSI_accel",
+   "trigger_market",
+   "cpi_dev"
+  ],
+  "n_train_rows_features": 70
+ },
+ "T1_A|k2|2025-Q4": {
+  "target": "T1_A",
+  "lead": 2,
+  "t": "2025-Q4",
+  "origin": "2026-01-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 14,
+  "n_train_rows": 70,
+  "train_HIGH": 35,
+  "train_LOW": 35,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "PCF21",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.2854977979039347,
+   "brier_b1p": 0.41077685295283395
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.21120422687955798,
+   "FSSI_lag1": 0.008383722817985054,
+   "FSSI_lag2": 0.04857102967041013,
+   "FSSI_accel": 0.10110151675059553,
+   "trigger_market": 0.10836182880518645,
+   "trigger_climate": 0.028362356717865366,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.005521929593133775,
+   "food_cpi_yoy_lag1": 0.026116808341014486,
+   "unemployment_rate": 0.0,
+   "rice_price_regular": 0.06832586904896702,
+   "cpi_dev": 0.0667644087379125,
+   "sws_hunger": 0.4598885415077939
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "FSSI",
+   "trigger_market",
+   "FSSI_accel",
+   "rice_price_regular"
+  ],
+  "n_train_rows_features": 70
+ },
+ "T1_A|k3|2024-Q1": {
+  "target": "T1_A",
+  "lead": 3,
+  "t": "2024-Q1",
+  "origin": "2024-04-01",
+  "target_quarter": "2024-Q4",
+  "tau": 15.515665554266993,
+  "n_train_quarters": 8,
+  "n_train_rows": 40,
+  "train_HIGH": 23,
+  "train_LOW": 17,
+  "test_HIGH": 3,
+  "test_LOW": 2,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.1401404031689377,
+   "FSSI_lag1": 0.05603447975485296,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.034224874612245486,
+   "trigger_climate": 0.09480839726656912,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.09966570379292475,
+   "trigger_fish_kill": 0.09452807620231864,
+   "food_cpi_yoy": 0.28583073128063,
+   "food_cpi_yoy_lag1": 0.1095686254470782,
+   "unemployment_rate": 0.021873426155380137,
+   "rice_price_regular": 0.27285761634894395,
+   "cpi_dev": 0.07260827688469182,
+   "sws_hunger": 0.0
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "rice_price_regular",
+   "FSSI",
+   "food_cpi_yoy_lag1",
+   "trigger_ofw_remittance"
+  ],
+  "n_train_rows_features": 40
+ },
+ "T1_A|k3|2024-Q2": {
+  "target": "T1_A",
+  "lead": 3,
+  "t": "2024-Q2",
+  "origin": "2024-07-01",
+  "target_quarter": "2025-Q1",
+  "tau": 15.739337670579049,
+  "n_train_quarters": 9,
+  "n_train_rows": 45,
+  "train_HIGH": 25,
+  "train_LOW": 20,
+  "test_HIGH": 4,
+  "test_LOW": 1,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.2274630667844541,
+   "FSSI_lag1": 0.014543520652949343,
+   "FSSI_lag2": 0.049919876865944166,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.013093951164215478,
+   "trigger_ofw_remittance": 0.0072754988254531295,
+   "trigger_fish_kill": 0.044373268119025075,
+   "food_cpi_yoy": 0.12565448420804784,
+   "food_cpi_yoy_lag1": 0.023829761911326512,
+   "unemployment_rate": 0.017692075492978247,
+   "rice_price_regular": 0.07297604498224337,
+   "cpi_dev": 0.04492000676443646,
+   "sws_hunger": 0.5092853544668795,
+   "lead": 0.17767487939769963
+  },
+  "shap_rank_top5": [
+   "sws_hunger",
+   "FSSI",
+   "lead",
+   "food_cpi_yoy",
+   "rice_price_regular"
+  ],
+  "n_train_rows_features": 45
+ },
+ "T1_A|k3|2025-Q1": {
+  "target": "T1_A",
+  "lead": 3,
+  "t": "2025-Q1",
+  "origin": "2025-04-01",
+  "target_quarter": "2025-Q4",
+  "tau": 15.439999739807309,
+  "n_train_quarters": 12,
+  "n_train_rows": 60,
+  "train_HIGH": 33,
+  "train_LOW": 27,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.30310366593499066,
+   "brier_b1p": 0.25999999999999995
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 150
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.0,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.0,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.11729794958555977,
+   "trigger_ofw_remittance": 0.19492298824693494,
+   "trigger_fish_kill": 0.04646819498976299,
+   "food_cpi_yoy": 0.14864480178156797,
+   "food_cpi_yoy_lag1": 0.09661422761586798,
+   "unemployment_rate": 0.07278069330904204,
+   "rice_price_regular": 0.20018632706845732,
+   "cpi_dev": 0.0352100270561038,
+   "sws_hunger": 0.05257979556740846
+  },
+  "shap_rank_top5": [
+   "rice_price_regular",
+   "trigger_ofw_remittance",
+   "food_cpi_yoy",
+   "trigger_employment",
+   "food_cpi_yoy_lag1"
+  ],
+  "n_train_rows_features": 60
+ },
+ "T1_A|k3|2025-Q2": {
+  "target": "T1_A",
+  "lead": 3,
+  "t": "2025-Q2",
+  "origin": "2025-07-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 13,
+  "n_train_rows": 65,
+  "train_HIGH": 35,
+  "train_LOW": 30,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.3020177928632588,
+   "brier_b1p": 0.22986111111111107
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.015126234571284569,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.03464189269248765,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.018239777132430864,
+   "trigger_ofw_remittance": 0.047704756236564866,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.6004280245091458,
+   "food_cpi_yoy_lag1": 0.0,
+   "unemployment_rate": 0.4143138520160384,
+   "rice_price_regular": 0.13001542337393673,
+   "cpi_dev": 0.023313044133537686,
+   "sws_hunger": 0.010913369264135225
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "unemployment_rate",
+   "rice_price_regular",
+   "trigger_ofw_remittance",
+   "trigger_market"
+  ],
+  "n_train_rows_features": 65
+ },
+ "T1_A|k3|2025-Q3": {
+  "target": "T1_A",
+  "lead": 3,
+  "t": "2025-Q3",
+  "origin": "2025-10-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 13,
+  "n_train_rows": 65,
+  "train_HIGH": 35,
+  "train_LOW": 30,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.3020177928632588,
+   "brier_b1p": 0.22986111111111107
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.0,
+   "FSSI_lag1": 0.013977149188726482,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.012986044419677645,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.02328134847246672,
+   "trigger_ofw_remittance": 0.08382779578668968,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.5820968389684307,
+   "food_cpi_yoy_lag1": 0.0,
+   "unemployment_rate": 0.1310082388050852,
+   "rice_price_regular": 0.13197527653175495,
+   "cpi_dev": 0.01708283406336813,
+   "sws_hunger": 0.012332107268472805
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "rice_price_regular",
+   "unemployment_rate",
+   "trigger_ofw_remittance",
+   "trigger_employment"
+  ],
+  "n_train_rows_features": 65
+ },
+ "T1_A|k4|2024-Q4": {
+  "target": "T1_A",
+  "lead": 4,
+  "t": "2024-Q4",
+  "origin": "2025-01-01",
+  "target_quarter": "2025-Q4",
+  "tau": 15.291993437954938,
+  "n_train_quarters": 10,
+  "n_train_rows": 50,
+  "train_HIGH": 30,
+  "train_LOW": 20,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 5,
+   "brier_pcf": 0.42940112378041906,
+   "brier_b1p": 0.1625
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.08412892347254555,
+   "FSSI_lag1": 0.23107424523348538,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.051014935999001,
+   "trigger_market": 0.3052848518383562,
+   "trigger_climate": 0.17525521871498898,
+   "trigger_employment": 0.023020356780787222,
+   "trigger_ofw_remittance": 0.08847656779308229,
+   "trigger_fish_kill": 0.1340219144187224,
+   "food_cpi_yoy": 0.5317307513476909,
+   "food_cpi_yoy_lag1": 0.027303957913418074,
+   "unemployment_rate": 0.5820099300746755,
+   "rice_price_regular": 0.326941788835486,
+   "cpi_dev": 0.04557734276847599,
+   "sws_hunger": 0.5742338918987981
+  },
+  "shap_rank_top5": [
+   "unemployment_rate",
+   "sws_hunger",
+   "food_cpi_yoy",
+   "rice_price_regular",
+   "trigger_market"
+  ],
+  "n_train_rows_features": 50
+ },
+ "T1_A|k4|2025-Q1": {
+  "target": "T1_A",
+  "lead": 4,
+  "t": "2025-Q1",
+  "origin": "2025-04-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.439999739807309,
+  "n_train_quarters": 11,
+  "n_train_rows": 55,
+  "train_HIGH": 33,
+  "train_LOW": 22,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 10,
+   "brier_pcf": 0.33261525486710125,
+   "brier_b1p": 0.22125
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.4001088198684086,
+   "FSSI_lag1": 0.011240310074498387,
+   "FSSI_lag2": 0.0,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.12992746744255673,
+   "trigger_climate": 0.24941509796489542,
+   "trigger_employment": 0.14961190936359228,
+   "trigger_ofw_remittance": 0.187937633515523,
+   "trigger_fish_kill": 0.1937292691042656,
+   "food_cpi_yoy": 0.5259965623944771,
+   "food_cpi_yoy_lag1": 0.012529714834410236,
+   "unemployment_rate": 0.6320101520090954,
+   "rice_price_regular": 0.4267215275079622,
+   "cpi_dev": 0.03323446428143416,
+   "sws_hunger": 0.20657032107774725
+  },
+  "shap_rank_top5": [
+   "unemployment_rate",
+   "food_cpi_yoy",
+   "rice_price_regular",
+   "FSSI",
+   "trigger_climate"
+  ],
+  "n_train_rows_features": 55
+ },
+ "T1_A|k4|2025-Q2": {
+  "target": "T1_A",
+  "lead": 4,
+  "t": "2025-Q2",
+  "origin": "2025-07-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.667935168202526,
+  "n_train_quarters": 12,
+  "n_train_rows": 60,
+  "train_HIGH": 35,
+  "train_LOW": 25,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 0.2,
+  "inner": {
+   "n": 15,
+   "brier_pcf": 0.3053094457172705,
+   "brier_b1p": 0.19749999999999998
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.03844718214289119,
+   "FSSI_lag1": 0.0018159201168843093,
+   "FSSI_lag2": 0.015732709441773837,
+   "FSSI_accel": 0.11782076058817592,
+   "trigger_market": 0.7575515932418826,
+   "trigger_climate": 0.06664768071524663,
+   "trigger_employment": 0.026719611548544298,
+   "trigger_ofw_remittance": 0.029335345723794204,
+   "trigger_fish_kill": 0.08249083618670545,
+   "food_cpi_yoy": 0.8310193423903728,
+   "food_cpi_yoy_lag1": 0.028161710520831933,
+   "unemployment_rate": 0.02746325930500975,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.016572075406718668,
+   "sws_hunger": 0.146468858673474
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "trigger_market",
+   "sws_hunger",
+   "FSSI_accel",
+   "trigger_fish_kill"
+  ],
+  "n_train_rows_features": 60
+ },
+ "T1_A|k5|2024-Q3": {
+  "target": "T1_A",
+  "lead": 5,
+  "t": "2024-Q3",
+  "origin": "2024-10-01",
+  "target_quarter": "2025-Q4",
+  "tau": 15.703636419390786,
+  "n_train_quarters": 9,
+  "n_train_rows": 45,
+  "train_HIGH": 28,
+  "train_LOW": 17,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 150
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.07409965297129179,
+   "FSSI_lag1": 0.010412547101022702,
+   "FSSI_lag2": 0.02678551941456637,
+   "FSSI_accel": 0.0,
+   "trigger_market": 0.015019741899635152,
+   "trigger_climate": 0.0,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.049475318012088085,
+   "trigger_fish_kill": 0.004983496200272714,
+   "food_cpi_yoy": 0.27648031426370534,
+   "food_cpi_yoy_lag1": 0.009639528814790913,
+   "unemployment_rate": 0.07241832269689023,
+   "rice_price_regular": 0.0,
+   "cpi_dev": 0.12464457579139557,
+   "sws_hunger": 0.14118549007427314,
+   "lead": 0.07933349234330407
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "sws_hunger",
+   "cpi_dev",
+   "lead",
+   "FSSI"
+  ],
+  "n_train_rows_features": 45
+ },
+ "T1_A|k5|2024-Q4": {
+  "target": "T1_A",
+  "lead": 5,
+  "t": "2024-Q4",
+  "origin": "2025-01-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.291993437954938,
+  "n_train_quarters": 10,
+  "n_train_rows": 50,
+  "train_HIGH": 30,
+  "train_LOW": 20,
+  "test_HIGH": 2,
+  "test_LOW": 3,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.19734936289247357,
+   "FSSI_lag1": 0.15800099710329474,
+   "FSSI_lag2": 0.3210654978300865,
+   "FSSI_accel": 0.07815313472620952,
+   "trigger_market": 0.07231554219011618,
+   "trigger_climate": 0.22686409794898696,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.0,
+   "trigger_fish_kill": 0.015217452514129362,
+   "food_cpi_yoy": 0.3298459591568844,
+   "food_cpi_yoy_lag1": 0.08786706854505481,
+   "unemployment_rate": 0.0,
+   "rice_price_regular": 0.10604645299094259,
+   "cpi_dev": 0.05001836628678523,
+   "sws_hunger": 0.04563055372875856
+  },
+  "shap_rank_top5": [
+   "food_cpi_yoy",
+   "FSSI_lag2",
+   "trigger_climate",
+   "FSSI",
+   "FSSI_lag1"
+  ],
+  "n_train_rows_features": 50
+ },
+ "T1_A|k5|2025-Q1": {
+  "target": "T1_A",
+  "lead": 5,
+  "t": "2025-Q1",
+  "origin": "2025-04-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.439999739807309,
+  "n_train_quarters": 11,
+  "n_train_rows": 55,
+  "train_HIGH": 33,
+  "train_LOW": 22,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 0.45,
+  "inner": {
+   "n": 5,
+   "brier_pcf": 0.25209624762317895,
+   "brier_b1p": 0.25
+  },
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 150
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "single",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 150
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.305634843678399,
+   "FSSI_lag1": 0.4730897355285065,
+   "FSSI_lag2": 0.6106288956922958,
+   "FSSI_accel": 0.2384949126846468,
+   "trigger_market": 0.12637398903683053,
+   "trigger_climate": 0.13448987676005503,
+   "trigger_employment": 0.05633094604067758,
+   "trigger_ofw_remittance": 0.1271224709765903,
+   "trigger_fish_kill": 0.12284660062473415,
+   "food_cpi_yoy": 0.42494093361123114,
+   "food_cpi_yoy_lag1": 0.1228110103848515,
+   "unemployment_rate": 0.06631527616389254,
+   "rice_price_regular": 0.12705507128527338,
+   "cpi_dev": 0.03806543457865903,
+   "sws_hunger": 0.21675417717113357
+  },
+  "shap_rank_top5": [
+   "FSSI_lag2",
+   "FSSI_lag1",
+   "food_cpi_yoy",
+   "FSSI",
+   "FSSI_accel"
+  ],
+  "n_train_rows_features": 55
+ },
+ "T1_A|k6|2024-Q3": {
+  "target": "T1_A",
+  "lead": 6,
+  "t": "2024-Q3",
+  "origin": "2024-10-01",
+  "target_quarter": "2026-Q1",
+  "tau": 15.703636419390786,
+  "n_train_quarters": 8,
+  "n_train_rows": 40,
+  "train_HIGH": 27,
+  "train_LOW": 13,
+  "test_HIGH": 0,
+  "test_LOW": 5,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 7,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 7,
+   "min_child_samples": 10,
+   "n_estimators": 150
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.14621167458829257,
+   "FSSI_lag1": 0.08657481305869555,
+   "FSSI_lag2": 0.2717410220985709,
+   "FSSI_accel": 0.024477673906013638,
+   "trigger_market": 0.038213599044310945,
+   "trigger_climate": 0.024160311121585235,
+   "trigger_employment": 0.01476682534526724,
+   "trigger_ofw_remittance": 0.26533339333327116,
+   "trigger_fish_kill": 0.035329062995026306,
+   "food_cpi_yoy": 0.4401344745991997,
+   "food_cpi_yoy_lag1": 0.04913628873317723,
+   "unemployment_rate": 0.08881020895388833,
+   "rice_price_regular": 0.11929120283664177,
+   "cpi_dev": 0.07983223880432064,
+   "sws_hunger": 0.047963075048011714,
+   "lead": 0.491836465575538
+  },
+  "shap_rank_top5": [
+   "lead",
+   "food_cpi_yoy",
+   "FSSI_lag2",
+   "trigger_ofw_remittance",
+   "FSSI"
+  ],
+  "n_train_rows_features": 40
+ },
+ "T1_A|k6|2024-Q4": {
+  "target": "T1_A",
+  "lead": 6,
+  "t": "2024-Q4",
+  "origin": "2025-01-01",
+  "target_quarter": "2026-Q2",
+  "tau": 15.291993437954938,
+  "n_train_quarters": 9,
+  "n_train_rows": 45,
+  "train_HIGH": 29,
+  "train_LOW": 16,
+  "test_HIGH": 1,
+  "test_LOW": 4,
+  "gate": "B1p",
+  "cal_temperature": 1.0,
+  "inner": null,
+  "cfg_B5_lgbm_gov_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 5,
+   "n_estimators": 50
+  },
+  "cfg_B6_lgbm_nlp_only": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "cfg_PROPOSED_lgbm_combined": {
+   "mode": "pooled",
+   "num_leaves": 3,
+   "min_child_samples": 10,
+   "n_estimators": 50
+  },
+  "shap_mean_abs": {
+   "FSSI": 0.10207586061893452,
+   "FSSI_lag1": 0.010319845641707789,
+   "FSSI_lag2": 0.01063006255391954,
+   "FSSI_accel": 0.007928677121814578,
+   "trigger_market": 0.030672413004602928,
+   "trigger_climate": 0.010397493837460987,
+   "trigger_employment": 0.0,
+   "trigger_ofw_remittance": 0.027562831539020376,
+   "trigger_fish_kill": 0.0,
+   "food_cpi_yoy": 0.09200888795061468,
+   "food_cpi_yoy_lag1": 0.005573655328303802,
+   "unemployment_rate": 0.06402417738381964,
+   "rice_price_regular": 0.03573669719308965,
+   "cpi_dev": 0.17871341260578658,
+   "sws_hunger": 0.0033510215992763907,
+   "lead": 0.13529867380447677
+  },
+  "shap_rank_top5": [
+   "cpi_dev",
+   "lead",
+   "FSSI",
+   "food_cpi_yoy",
+   "unemployment_rate"
+  ],
+  "n_train_rows_features": 45
+ }
+}

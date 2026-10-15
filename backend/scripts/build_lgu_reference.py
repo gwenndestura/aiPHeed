@@ -261,6 +261,10 @@ def build() -> pd.DataFrame:
 
 
 def main() -> None:
+    # The roster's population is now the 2024 POPCEN (scripts/build_lgu_psa_2021_2024.py). Rebuilding from the 2020
+    # CPH table would put pre-2021 figures back into the served inputs, against the 2021-2026 study window.
+    raise SystemExit("superseded: calabarzon_lgus.csv carries 2024 POPCEN population; "
+                     "run scripts/build_lgu_psa_2021_2024.py instead")
     df = build()
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT, index=False, encoding="utf-8")

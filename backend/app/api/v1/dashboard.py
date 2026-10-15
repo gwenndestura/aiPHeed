@@ -7,6 +7,7 @@ draws attribute data onto.
 GET /api/v1/config
 GET /api/v1/quarters
 GET /api/v1/provinces
+GET /api/v1/ranking
 GET /api/v1/provinces/{province_id}/municipalities
 GET /api/v1/search
 """
@@ -16,13 +17,13 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.concurrency import run_in_threadpool
 
 from app.dependencies import get_db
 from app.schemas.public import (
     ConfigResponse,
     MunicipalitiesResponse,
     ProvincesResponse,
+    RankingResponse,
     QuartersResponse,
     SearchResponse,
 )
@@ -44,7 +45,7 @@ async def get_config() -> ConfigResponse:
     """
     Thresholds, active risk bands, what the score means, and both models.
 
-    `horizons` describes the nowcast and the one-quarter-ahead forecast side by
+    `horizons` describes the single operational horizon (Rule 2) side by
     side -- what each answers, the quarters it reaches, and its metrics with
     their baselines -- so the UI can offer the choice without hardcoding either.
     """
@@ -53,7 +54,7 @@ async def get_config() -> ConfigResponse:
     for h in svc.HORIZONS:
         hq = svc.available_quarters(h)
         horizons[h] = {
-            **svc.HORIZON_INFO[h],
+            **(svc.E31_HORIZON_INFO if svc.e31_active() else svc.HORIZON_INFO)[h],
             "earliest": hq[0] if hq else None,
             "latest": hq[-1] if hq else None,
             "count": len(hq),
@@ -75,16 +76,19 @@ async def get_config() -> ConfigResponse:
             "earliest": quarters[0] if quarters else None,
             "latest": quarters[-1] if quarters else None,
             "count": len(quarters),
-            "forecastQuarters": svc.e20_forecast_quarters(),
+            "forecastQuarters": ([q for q in svc.available_quarters(svc.NOWCAST)
+                                  if svc.E31.quarter_row(q, svc.NOWCAST)["mode"] in ("FORECAST", "NOWCAST")]
+                                 if svc.e31_active() else []),
             "note": (
-                "Nowcast quarters score periods PSA has already published production "
-                "volumes for. Quarters listed in forecastQuarters are the E20 "
-                "forecast: a different target (relative food-price pressure) and "
-                "model, issued from an earlier information cutoff -- see `forecast`."
+                "E31 record: backtests and a scored 2026-Q3 are observed quarters; 2026-Q4 is a same-quarter "
+                "nowcast and 2027-Q1 a one-quarter-ahead forecast (information cutoff 2026-10-14)."
+                if svc.e31_active() else
+                "Every scorable quarter is an observed one. The model scores "
+                "quarters PSA has already published production volumes for, so "
+                "there are no forward forecast quarters to display."
             ),
         },
         modelPerformance=svc.model_performance(),
-        forecast=svc.forecast_meta(),
     )
 
 
@@ -110,7 +114,7 @@ async def get_quarters(
         serverTime=now.isoformat(),
         calendarQuarter=calendar_quarter,
         lagQuarters=max(lag, 0),
-        quarters=svc.timeline(h, through=calendar_quarter),
+        quarters=svc.timeline(h),
     )
 
 
@@ -129,16 +133,28 @@ async def get_provinces(
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
-    # Scores all 5 provinces' commodity ensembles -- CPU-bound, off the event
-    # loop so it doesn't queue behind (or get queued behind by) a concurrent
-    # SHAP call the way it did before this endpoint moved off the loop too.
-    data = await run_in_threadpool(svc.province_summary, q, withheld, h)
     return ProvincesResponse(
         quarter=q,
         horizon=h,
         indicator=svc.INDICATOR,
-        data=data,
+        data=svc.province_summary(q, withheld, h),
     )
+
+
+@router.get("/ranking", response_model=RankingResponse)
+async def get_ranking(
+    quarter: str | None = Query(None, description="Defaults to the latest scorable quarter"),
+    horizon: str = Query(svc.DEFAULT_HORIZON, pattern="^(nowcast|forecast)$"),
+    db: AsyncSession = Depends(get_db),
+) -> RankingResponse:
+    """
+    The published provinces ranked by risk probability, with the SHAP features
+    that separate each from the next one down. Withheld provinces are left out.
+    """
+    h = svc.check_horizon(horizon)
+    q = svc.resolve_quarter(quarter, h)
+    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    return RankingResponse(**svc.ranking(q, withheld, h))
 
 
 @router.get(
@@ -159,12 +175,11 @@ async def get_municipalities(
     if slug not in ref.PROVINCES:
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
     q = svc.resolve_quarter(quarter)
-    data = await run_in_threadpool(svc.municipality_summary, q, slug)
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,
         indicator=svc.INDICATOR,
-        data=data,
+        data=svc.municipality_summary(q, province_id=slug),
     )
 
 

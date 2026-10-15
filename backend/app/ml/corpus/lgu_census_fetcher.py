@@ -36,7 +36,7 @@ data/processed/lgu_census.parquet — columns:
     lgu_name          : str (PSGC-canonical spelling)
     lgu_aliases       : str (pipe-separated alternate spellings, may be empty)
     lgu_type          : str ("city" | "municipality")
-    population_2020   : int
+    population_2024   : int (2024 POPCEN)
     land_area_km2     : float
     density_per_km2   : float
     population_source : str ("cph2020" exact PSA total | "estimate" rounded)
@@ -179,20 +179,14 @@ def fetch_lgu_census() -> pd.DataFrame:
             )
         rows = ref.to_dict("records")
     else:
-        logger.warning("Reference CSV not found at %s — using curated subset (%d of %d LGUs). "
-                       "Run `python scripts/build_lgu_reference.py` for the full region.",
-                       csv_path, len(CURATED_LGUS), EXPECTED_LGU_COUNT)
-        rows = [
-            {"province_code": p, "lgu_name": n, "lgu_type": t,
-             "population_2020": pop, "land_area_km2": area, "lgu_psgc": ""}
-            for p, n, t, pop, area in CURATED_LGUS
-        ]
+        # The curated subset carries 2020 CPH figures, outside the 2021-2026 study window: refuse, do not fall back.
+        raise FileNotFoundError(f"Reference CSV not found at {csv_path}; the curated 2020 subset is no longer used.")
 
     fetched_at = datetime.now(timezone.utc).isoformat()
     out_rows = []
     for row in rows:
         prov_code = row["province_code"]
-        pop, area = int(row["population_2020"]), float(row["land_area_km2"])
+        pop, area = int(row["population_2024"]), float(row["land_area_km2"])
         density = pop / area if area > 0 else 0.0
         # Real 9-digit PSGC from the gazetteer. The curated fallback has none,
         # so it keeps a deterministic province-scoped placeholder.
@@ -206,10 +200,10 @@ def fetch_lgu_census() -> pd.DataFrame:
             "lgu_name": row["lgu_name"],
             "lgu_aliases": str(row.get("lgu_aliases") or ""),
             "lgu_type": row["lgu_type"],
-            "population_2020": pop,
+            "population_2024": pop,
             "land_area_km2": area,
             "density_per_km2": float(density),
-            "population_source": str(row.get("pop_source") or "cph2020"),
+            "population_source": str(row["pop_source"]),
             "source_url": SOURCE_URL,
             "fetched_at": fetched_at,
         })

@@ -1,0 +1,84 @@
+﻿python.exe : Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher 
+rate limits and faster downloads.
+At line:1 char:403
++ ... esolution"; & C:\Users\admin\aipheed\backend\venv\Scripts\python.exe  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: You ar...ster downloads.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 393/393 [00:00<00:00, 7416.97it/s]
+[transformers] [1mXLMRobertaForSequenceClassification LOAD REPORT[0m from: joeddav/xlm-roberta-large-xnli
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+roberta.pooler.dense.bias   | UNEXPECTED |  | 
+roberta.pooler.dense.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+compute_bias_weights: 4 province-quarters flagged LIMITED_SIGNAL (< 5 articles)
+compute_bias_weights: 4 province-quarters flagged LIMITED_SIGNAL (< 5 articles)
+{
+ "collect": {
+  "windows": 320,
+  "requests": 320,
+  "articles": 335
+ },
+ "score": {
+  "model_key": "joeddav/xlm-roberta-large-xnli@b227ee8435ce|clf:35119d382e163448",
+  "scored": 108,
+  "failed": 0,
+  "already_scored": 0,
+  "pending": 0
+ },
+ "compare": {
+  "shadow_articles": 335,
+  "shadow_by_domain": {
+   "tribune.net.ph": 216,
+   "pco.gov.ph": 34,
+   "dar.gov.ph": 28,
+   "verafiles.org": 21,
+   "dole.gov.ph": 6,
+   "fda.gov.ph": 5,
+   "davaocity.gov.ph": 5,
+   "laguna.gov.ph": 5,
+   "philsa.gov.ph": 2,
+   "uplift.gov.ph": 2,
+   "lto.gov.ph": 2,
+   "calabarzon.denr.gov.ph": 2,
+   "ncsc.gov.ph": 2,
+   "bangsamoro.gov.ph": 1,
+   "pangasinan.gov.ph": 1,
+   "philsys.gov.ph": 1,
+   "sc.judiciary.gov.ph": 1,
+   "ncr.dole.gov.ph": 1
+  },
+  "shadow_title_geocoded": 108,
+  "evidence_status_v1": {
+   "NO_USABLE_EVIDENCE": 78,
+   "LIMITED_SIGNAL": 32
+  },
+  "evidence_status_v2": {
+   "NO_USABLE_EVIDENCE": 78,
+   "LIMITED_SIGNAL": 32
+  },
+  "articles_in_fssi_v1": 49,
+  "articles_in_fssi_v2": 50,
+  "province_quarters_changed": [
+   {
+    "province": "Cavite",
+    "quarter": "2025-Q4",
+    "n_in_fssi_v1": 1,
+    "n_in_fssi_v2": 2,
+    "status_v1": "LIMITED_SIGNAL",
+    "status_v2": "LIMITED_SIGNAL",
+    "FSSI_v1": 0.527268,
+    "FSSI_v2": 0.405668
+   }
+  ],
+  "v1_panel_sha256": "0c677119e42d7cd2c6e268a03e98f07dface88a6fcafad68c9b109df00a05354",
+  "v2_panel_sha256": "5e048e83bee4430f73bf6226450d946d295f25b15301e2def80e8b35eac2a81e",
+  "status": "SHADOW ONLY: policy v2 is not active (D8 pending); the E28 FSSI is unchanged"
+ }
+}

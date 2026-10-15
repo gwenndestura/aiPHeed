@@ -1,0 +1,63 @@
+{
+ "dataset_sha256": {
+  "sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+  "s1_labels.csv": "2128866651d4e1cd30d90bd49a8e075ad06cb33732d944428bcbcf1a5e2807f1",
+  "d_quarterly_panel.csv": "87b927987973c089bd888ad61533db1b0a014bafb7a750bdb1efc1516e15f871",
+  "dnow_panel.csv": "255542eb1cc249b01c06a9da508625d07d51ccc2bc7bfe27d45460742cf7cddb",
+  "news_e31/articles.jsonl": "3015d193c8753565a3fcf06752bb3452cd5f63827bba51da78ab39d7d548cc4f",
+  "news_e31/scores.jsonl": "e89c67b7a73b530bcd06874b814ecb38f0911bb6448ca847800cffa0e4f1442c",
+  "news_e31/fssi_v2_panel.csv": "2a0a10499d2f2eb382f78cd914a27fcf083b86e542be498455f3c7330b742b1b",
+  "rice_cpi": "f59194fa5f29f71de5a08fe4afe95e342fbc937e4bfac541461fba11302f4a9e"
+ },
+ "checks": {
+  "V1_target_S1_H_plus_2D": {
+   "pass": true,
+   "max_abs_S1_error": 3.552713678800501e-15,
+   "max_abs_D_error": 1.9984014443252818e-15,
+   "max_abs_sum_D": 6.2450045135165055e-15,
+   "max_abs_sum_Dnow": 2.9976021664879227e-15,
+   "max_abs_sum_rice_rel": 5.329070518200751e-15,
+   "S1_rows": 95
+  },
+  "V2_threshold_and_labels": {
+   "pass": true,
+   "max_abs_tau_error": 0.0,
+   "tau_mismatches": [],
+   "E32_label_mismatches": 0
+  },
+  "V3_probability_law": {
+   "pass": true,
+   "max_abs_mc_error": 0.0018141981238727345,
+   "draws": 400000,
+   "note": "tolerance 0.004 (about 5 Monte-Carlo standard errors at p = 0.5)"
+  },
+  "V4_scoring_arithmetic": {
+   "pass": true,
+   "max_abs_brier_error": 5.775505074190335e-12,
+   "tolerance": "1e-9: predictions.csv stores 10 significant digits, results.json full precision",
+   "rows_per_date": [
+    5
+   ],
+   "note": "five provinces per date, so the per-date mean weights every row equally"
+  },
+  "V5_publication_timing": {
+   "pass": true,
+   "origins_checked": 20,
+   "issues": [],
+   "release_assumption": "PSA CPI for month m is released in month m+1 (E25/E31 convention): D(t-1) and months 1-2 of t are public before O(t) = first day of t+1; D(t) is not."
+  },
+  "V6_scramble_the_future_all_configs": {
+   "pass": true,
+   "max_abs_change": 0.0,
+   "probabilities_compared": 7200,
+   "scrambled": "SWS rounds not usable at O(t); S1 of quarters >= t or not posted at O(t); D of quarters >= t; Dnow, rice and news of quarters > t"
+  },
+  "V7_default_config_equals_E32_PCFN": {
+   "pass": true,
+   "max_abs_diff_vs_E32_predictions_csv": 4.9785287004056045e-11,
+   "rows": 90,
+   "note": "E32 wrote probabilities with 10 significant digits"
+  }
+ },
+ "all_pass": true
+}

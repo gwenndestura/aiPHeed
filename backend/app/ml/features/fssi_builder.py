@@ -107,6 +107,22 @@ def compute_fssi(
 
     df["food_insecurity_score"] = pd.to_numeric(df["food_insecurity_score"], errors="coerce").fillna(0.0)
 
+    # Algorithm 1, score thresholding: "Exclude articles scoring below 0.30
+    # from aggregation to remove low-confidence signals." Equation 2's N is
+    # therefore the count of RETAINED articles, not of all geocoded ones.
+    from app.ml.nlp.classifier import RELEVANCE_THRESHOLD
+
+    before = len(df)
+    df = df[df["food_insecurity_score"] >= RELEVANCE_THRESHOLD].copy()
+    logger.info(
+        "compute_fssi: %d of %d geocoded articles retained at the %.2f relevance "
+        "threshold (Algorithm 1 score thresholding)",
+        len(df), before, RELEVANCE_THRESHOLD,
+    )
+    if df.empty:
+        logger.warning("compute_fssi: no article clears the relevance threshold.")
+        return _empty_fssi_df()
+
     # Aggregate to province-quarter: mean of per-article max-hypothesis scores
     agg = (
         df.groupby(["province_code", "quarter"])

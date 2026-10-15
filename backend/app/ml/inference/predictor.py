@@ -3,37 +3,41 @@ app/ml/inference/predictor.py
 ------------------------------
 Province-level food insecurity forecast predictor.
 
-Serves the food-availability shock model: for a given quarter, scores every
-province-commodity series and rolls the results up to a province-level risk.
+Serves the approved model: the LightGBM binary classifier of Equation 5,
 
-The target changed on 2026-09-01. The former model predicted a composite
-SWS + food-CPI stress label at province-quarter resolution; that label was
-withdrawn once its inputs were found to be fabricated and its only province-
-varying term traced to a leaking feature. The current model predicts a
-production shortfall against a series' own seasonal baseline, at province x
-quarter x COMMODITY resolution, from PSA OpenStat volumes.
+    y_hat(p, t+h) = F[ FSSI(t), FSSI(t-1), FSSI(t-2), dFSSI(t),
+                       trigger(t), CPI_dev(t), unemp(t), rice_change(t) ]
 
-A province therefore no longer has one prediction but many -- one per commodity
-series it grows or fishes. `risk_probability` is the share of that province's
-series flagged as at risk, which is both interpretable for DSWD ("a third of
-Quezon's monitored commodities are at risk this quarter") and usable for the
-existing sudden-rise alert logic unchanged.
+which outputs the probability that province p is at HIGH food insecurity risk
+h quarters ahead, where h is the Maximum Reliable Lead Time discovered by
+Algorithm 3 and carried inside the model bundle. One model, one horizon
+(Rule 2, Single Forecast Horizon).
 
-Loads models/food_availability_model.joblib, written by scripts/train_final.py.
-That bundle carries the per-group ensembles, the commodity target-encoding map
-and the per-group decision thresholds, so serving cannot drift from training.
+Every forecast carries, per Rules 5 and 6:
+  * an explicit horizon label (forecast_horizon_quarters)
+  * a data sufficiency flag — LIMITED_SIGNAL when the province-quarter holds
+    fewer than five geocoded articles, propagated to all municipal outputs
+  * a verification date
+
+Rule 7, Early Warning Trigger: an alert fires when a province's forecast
+exceeds that province's rolling historical threshold. Human confirmation is
+required before the partner agencies are notified, so detect_alerts() only
+stages records — it never publishes.
+
+Loads models/lgbm_best.pkl, written by app/ml/training/trainer.py. The bundle
+carries the model, the Section 3.3.2.7 feature list and the discovered lead
+time, so serving cannot drift from training.
 
 Usage:
     from app.ml.inference.predictor import Predictor
     predictor = Predictor()
-    forecasts = predictor.forecast_quarter("2026-Q1")          # by province
-    detail    = predictor.forecast_commodities("2026-Q1")      # by series
+    forecasts = predictor.forecast_quarter("2025-Q4")
 """
 
 from __future__ import annotations
 
 import logging
-from functools import lru_cache
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import joblib
@@ -46,9 +50,8 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-MODEL_PATH    = Path("models/food_availability_model.joblib")
-PANEL_PATH    = Path("data/processed/food_availability_panel.parquet")
-FEATURES_PATH = Path("data/processed/features_fused.parquet")
+MODEL_PATH        = Path("models/lgbm_best.pkl")
+FEATURES_PATH     = Path("data/processed/features_fused.parquet")
 BIAS_WEIGHTS_PATH = Path("data/processed/bias_weights.parquet")
 
 PROVINCE_NAMES: dict[str, str] = {
@@ -59,326 +62,325 @@ PROVINCE_NAMES: dict[str, str] = {
     "PH040500000": "Batangas",
 }
 
-# The feature list travels inside the bundle rather than being imported, so
-# serving cannot drift from training. It previously imported trainer.FEATURE_COLS
-# and drifted anyway when the trainer changed underneath it.
+# Section 3.3.2.3 / Rule 5: province-quarters with fewer than five geocoded
+# articles are flagged LIMITED_SIGNAL, propagated to all 142 municipal outputs.
 DATA_SUFFICIENCY_MIN_ARTICLES = 5
 
-# ---------------------------------------------------------------------------
-# Alert thresholds — sudden-rise detection
-# ---------------------------------------------------------------------------
-# An alert is staged when BOTH conditions are true:
-#   1. risk_probability rose by >= ALERT_DELTA_THRESHOLD from the previous quarter
-#   2. current risk_probability >= ALERT_FLOOR
-#
-# Rationale for 0.15 delta:
-#   A 15-point quarter-on-quarter jump represents a fast deterioration in the
-#   model's predicted risk — the signal that DSWD needs to act on early.
-#   Flat or slowly rising probabilities are informational, not urgent.
-#
-# Rationale for 0.35 floor:
-#   Prevents noise alerts from very-low-risk provinces (e.g. 0.05 → 0.21 is
-#   a big jump but still a low absolute risk).  0.35 is below the historical
-#   median risk (≈0.54 baseline) but above the noise floor.
-ALERT_DELTA_THRESHOLD: float = 0.15   # minimum quarter-on-quarter rise
-ALERT_FLOOR: float = 0.35             # minimum current probability for alert to fire
+# A province is classified HIGH when its risk probability is at or above this
+# value — the natural cut for a binary classifier trained on a median-split
+# label (Equation 3 guarantees a balanced class split).
+RISK_CUTOFF = 0.50
 
+# ---------------------------------------------------------------------------
+# Rule 7 — Early Warning Trigger
+# ---------------------------------------------------------------------------
+# "An alert will fire when a province's forecast exceeds the rolling historical
+# threshold." The threshold is that province's own rolling history of published
+# risk probabilities: mean + 1 standard deviation over the trailing window. A
+# province is compared against its own past, not against the other provinces,
+# so a structurally higher-risk province does not alert every quarter.
+ALERT_ROLLING_WINDOW = 8   # trailing quarters forming the rolling history
+ALERT_ROLLING_MIN    = 4   # minimum history before a threshold can be computed
+ALERT_SIGMA          = 1.0 # standard deviations above the rolling mean
+
+
+VALIDATION_STATEMENT = (
+    "EXPERIMENTAL relative risk estimate, not validated: no model has beaten the persistence, calibrated-"
+    "persistence, always-HIGH and climatology baselines on unseen quarters, and accuracy above 75% is not evidence "
+    "of skill here because a rule that always says HIGH scores higher. Not an official food insecurity "
+    "classification."
+)
 
 class Predictor:
-    """
-    Singleton predictor: loads model once, forecasts on demand.
-
-    Thread-safe for FastAPI concurrent requests (read-only after init).
-    """
+    """Singleton: the model bundle and feature matrix are loaded once."""
 
     _instance: Predictor | None = None
-    _model = None
-    _features: pd.DataFrame | None = None
-    _panel: pd.DataFrame | None = None
-    _bias_weights: pd.DataFrame | None = None
 
     def __new__(cls) -> Predictor:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._instance._model = None
+            cls._instance._feature_cols = None
+            cls._instance._lead_time = None
+            cls._instance._features = None
+            cls._instance._bias = None
         return cls._instance
 
+    # ------------------------------------------------------------------
+    # Loading
+    # ------------------------------------------------------------------
+
     def load(self) -> None:
-        """Load the model bundle and scored panel into memory (idempotent)."""
-        if self._model is None:
-            if not MODEL_PATH.exists():
-                raise FileNotFoundError(
-                    f"Trained model not found at {MODEL_PATH}. "
-                    "Run scripts/train_final.py first."
-                )
-            self._model = joblib.load(MODEL_PATH)
-            logger.info(
-                "Predictor: bundle loaded from %s (%d groups, trained through %s)",
-                MODEL_PATH, len(self._model["groups"]),
-                self._model.get("trained_through", "?"),
+        """Load the model bundle, the fused feature matrix and the bias weights."""
+        if self._model is not None:
+            return
+
+        if not MODEL_PATH.exists():
+            raise FileNotFoundError(
+                f"{MODEL_PATH} not found. Run app.ml.training.trainer.train_model() "
+                "to produce the production model (Algorithm 4)."
             )
 
-        if self._panel is None and PANEL_PATH.exists():
-            self._panel = self._prepare_panel()
-            logger.info("Predictor: panel prepared (%d series-quarters)", len(self._panel))
+        bundle = joblib.load(MODEL_PATH)
+        if isinstance(bundle, dict):
+            self._model = bundle["model"]
+            self._feature_cols = list(bundle["feature_cols"])
+            self._lead_time = int(bundle.get("max_reliable_lead_time", 0))
+        else:
+            # A bare estimator from an older run: fall back to the selected set.
+            from app.ml.features.feature_selector import load_selected
 
-        if self._bias_weights is None and BIAS_WEIGHTS_PATH.exists():
-            self._bias_weights = pd.read_parquet(BIAS_WEIGHTS_PATH)
+            self._model = bundle
+            self._feature_cols = load_selected()
+            self._lead_time = 0
+            logger.warning(
+                "lgbm_best.pkl holds a bare estimator with no feature list; "
+                "falling back to selected_features.json. Re-run training to "
+                "regenerate a self-describing bundle."
+            )
 
-    def _prepare_panel(self) -> pd.DataFrame:
-        """
-        Rebuild the exact feature frame training used.
+        if not FEATURES_PATH.exists():
+            raise FileNotFoundError(
+                f"{FEATURES_PATH} not found. Run feature_matrix.build_feature_matrix() first."
+            )
+        self._features = pd.read_parquet(FEATURES_PATH)
 
-        Delegates to the training loader so the two cannot diverge: it derives
-        the same series lags, seasonal terms and commodity-matched news counts,
-        then joins the government feature matrix.
-        """
-        from scripts.train_food_availability import load as load_panel
+        self._bias = (
+            pd.read_parquet(BIAS_WEIGHTS_PATH)
+            if BIAS_WEIGHTS_PATH.exists() else None
+        )
+        if self._bias is None:
+            logger.warning(
+                "%s not found — data sufficiency flags cannot be computed and "
+                "will be reported as None.", BIAS_WEIGHTS_PATH,
+            )
 
-        df = load_panel()
-        enc = self._model["commodity_encoding"]
-        prior = self._model["encoding_prior"]
-        df["commodity_te"] = df["commodity"].map(enc).fillna(prior)
-        return df
+        logger.info(
+            "Predictor ready: %d features, Maximum Reliable Lead Time = %d quarter(s)",
+            len(self._feature_cols), self._lead_time,
+        )
 
-    def _score(self, rows: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-        """Ensemble probability and the group's decision threshold for each row."""
-        cols = self._model["feature_cols"]
-        prob = np.zeros(len(rows))
-        thr = np.zeros(len(rows))
-        for grp, spec in self._model["groups"].items():
-            mask = (rows["group"] == grp).to_numpy()
-            if not mask.any():
-                continue
-            sub = rows.loc[mask, cols]
-            member_probs = [
-                m.predict_proba(sub.fillna(-999) if name in ("rf", "et") else sub)[:, 1]
-                for name, m in spec["members"]
-            ]
-            prob[mask] = np.mean(member_probs, axis=0)
-            thr[mask] = spec["threshold"]
-        return prob, thr
+    # ------------------------------------------------------------------
+    # Horizon and provenance labelling (Rule 6)
+    # ------------------------------------------------------------------
 
-    def _low_confidence(self, prob: np.ndarray, thr: np.ndarray) -> np.ndarray:
-        """
-        Flag rows below the confidence cutoff stored in the model bundle.
-
-        That cutoff is the minimum |prob - threshold| among the walk-forward
-        operating set the reported accuracy/precision are actually measured
-        on (COVERAGE in train_final.py) -- so "low confidence" here means the
-        same thing live as it does in that report, instead of the report
-        describing a 90%-coverage behavior nothing serves.
-        """
-        cutoff = self._model.get("confidence_cutoff")
-        if cutoff is None:
-            return np.zeros(len(prob), dtype=bool)
-        return np.abs(prob - thr) < cutoff
-
-    def forecast_commodities(self, quarter: str) -> list[dict]:
-        """
-        Score every province-commodity series for one quarter.
-
-        This is the model's native resolution; forecast_quarter() rolls it up.
-        """
+    @property
+    def lead_time(self) -> int:
+        """The Maximum Reliable Lead Time, in quarters, from Algorithm 3."""
         self.load()
-        if self._panel is None:
-            raise RuntimeError("Panel not loaded.")
+        return int(self._lead_time)
 
-        rows = self._panel[self._panel["quarter"] == quarter]
+    def horizon_label(self) -> str:
+        """The explicit horizon label Rule 6 requires on every forecast."""
+        k = self.lead_time
+        if k == 0:
+            return ("Same-quarter estimate (lead 0): not a forecast. No forward lead time has been validated "
+                    "against the baselines.")
+        return f"{k} quarter(s) ahead (not validated)"
+
+    def confidence_statement(self) -> str:
+        """The confidence statement Rule 6 requires on every forecast."""
+        # E27 fix: accuracy above 75% is not evidence of skill on these quarters (always-HIGH scores 0.925 at
+        # lead 1, persistence 0.875), so it is never quoted as validation.
+        return VALIDATION_STATEMENT + (" Reported as a same-quarter estimate, not a forecast."
+                                       if self.lead_time == 0 else "")
+
+    # ------------------------------------------------------------------
+    # Scoring
+    # ------------------------------------------------------------------
+
+    def _rows_for(self, quarter: str) -> pd.DataFrame:
+        """The feature rows for one quarter, over the selected feature set."""
+        rows = self._features[self._features["quarter"] == quarter]
         if rows.empty:
-            logger.warning("forecast_commodities: no rows for quarter=%s", quarter)
-            return []
-
-        prob, thr = self._score(rows)
-        low_conf = self._low_confidence(prob, thr)
-        out = [
-            {
-                "province_code": r["province_code"],
-                "province_name": PROVINCE_NAMES.get(r["province_code"], r["province_code"]),
-                "quarter": quarter,
-                "commodity_group": r["group"],
-                "commodity": r["commodity"],
-                "shock_probability": round(float(p), 4),
-                "at_risk": bool(p >= t),
-                "low_confidence": bool(lc),
-            }
-            for (_, r), p, t, lc in zip(rows.iterrows(), prob, thr, low_conf)
-        ]
-        out.sort(key=lambda d: d["shock_probability"], reverse=True)
-        return out
+            return rows
+        missing = [c for c in self._feature_cols if c not in rows.columns]
+        if missing:
+            raise ValueError(
+                f"Feature matrix is missing model columns {missing}. Rebuild it "
+                "with feature_matrix.build_feature_matrix()."
+            )
+        return rows
 
     def forecast_quarter(self, quarter: str) -> list[dict]:
         """
-        Produce province-level forecasts for a specific quarter.
+        Province-level forecasts for one quarter (Equation 5).
 
-        Parameters
-        ----------
-        quarter : str  e.g. "2026-Q1"
-
-        Returns
-        -------
-        list[dict] — one dict per province (5 CALABARZON provinces), sorted by
-                     risk_probability descending. Each dict has:
-            province_code, province_name, quarter,
-            risk_probability, risk_label, data_sufficiency_flag
+        Returns one dict per CALABARZON province, sorted by risk_probability
+        descending, each carrying:
+            province_code, province_name, quarter, risk_probability, risk_label,
+            data_sufficiency_flag, forecast_horizon_quarters, horizon_label,
+            confidence_statement, verification_date
         """
         self.load()
 
-        if self._panel is None:
-            raise RuntimeError("Panel not loaded.")
-
-        rows = self._panel[self._panel["quarter"] == quarter]
+        rows = self._rows_for(quarter)
         if rows.empty:
-            logger.warning(
-                "forecast_quarter: no panel rows for quarter=%s. "
-                "Returning zero-probability forecasts.",
-                quarter,
-            )
-            return self._zero_forecasts(quarter)
+            logger.warning("forecast_quarter: no feature rows for %s.", quarter)
+            return []
 
-        prob, thr = self._score(rows)
-        scored = rows[["province_code", "group", "commodity"]].copy()
-        scored["prob"] = prob
-        scored["at_risk"] = prob >= thr
-        scored["low_confidence"] = self._low_confidence(prob, thr)
+        X = rows[self._feature_cols]
+        probs = self._model.predict_proba(X)[:, 1]
 
-        results = []
-        for province_code, d in scored.groupby("province_code"):
-            # Province risk = share of that province's monitored series flagged.
-            # The model predicts per commodity, so a province has many
-            # predictions rather than one; the share is what a DSWD reader can
-            # act on ("a third of Quezon's monitored commodities are at risk").
-            share = float(d["at_risk"].mean())
-            data_flag = self._get_data_sufficiency(province_code, quarter)
-            at_risk = d[d["at_risk"]].nlargest(3, "prob")["commodity"].tolist()
-
+        verified = datetime.now(timezone.utc).date().isoformat()
+        results: list[dict] = []
+        for (_, row), prob in zip(rows.iterrows(), probs):
+            province_code = row["province_code"]
             results.append({
-                "province_code":        province_code,
-                "province_name":        PROVINCE_NAMES.get(province_code, province_code),
-                "quarter":              quarter,
-                "risk_probability":     round(share, 4),
-                "risk_label":           "HIGH" if share >= 0.5 else "LOW",
-                "series_monitored":     int(len(d)),
-                "series_at_risk":       int(d["at_risk"].sum()),
-                # Of series_monitored, how many scored below the confidence
-                # cutoff the reported accuracy/precision are measured at --
-                # real per-commodity uncertainty, not a hidden exclusion: the
-                # headline riskScore above still counts every series.
-                "series_needing_review": int(d["low_confidence"].sum()),
-                "mean_shock_probability": round(float(d["prob"].mean()), 4),
-                "top_at_risk_commodities": at_risk,
-                "data_sufficiency_flag": data_flag,
+                "province_code":  province_code,
+                "province_name":  PROVINCE_NAMES.get(province_code, province_code),
+                "quarter":        quarter,
+                "risk_probability": round(float(prob), 4),
+                "risk_label":     "HIGH" if prob >= RISK_CUTOFF else "LOW",
+                "data_sufficiency_flag": self._data_sufficiency(province_code, quarter),
+                "forecast_horizon_quarters": self.lead_time,
+                "horizon_label":       self.horizon_label(),
+                "confidence_statement": self.confidence_statement(),
+                "verification_date":   verified,
             })
 
-        # Sort by risk probability descending
-        results.sort(key=lambda x: x["risk_probability"], reverse=True)
-        logger.info(
-            "forecast_quarter(%s): %d provinces forecast", quarter, len(results)
-        )
+        results.sort(key=lambda r: r["risk_probability"], reverse=True)
+        logger.info("forecast_quarter(%s): %d provinces forecast", quarter, len(results))
         return results
+
+    def forecast_all_quarters(self) -> list[dict]:
+        """Province forecasts for every scoreable quarter, oldest first."""
+        out: list[dict] = []
+        for q in self.available_quarters():
+            out.extend(self.forecast_quarter(q))
+        return out
+
+    def available_quarters(self) -> list[str]:
+        """Quarters the feature matrix can score, oldest first."""
+        self.load()
+        return sorted(self._features["quarter"].unique().tolist())
+
+    # ------------------------------------------------------------------
+    # Rule 7 — Early Warning Trigger
+    # ------------------------------------------------------------------
+
+    def rolling_threshold(self, history: list[float]) -> float | None:
+        """
+        A province's rolling historical alert threshold: the mean plus one
+        standard deviation of its trailing published risk probabilities.
+
+        Returns None when the province has fewer than ALERT_ROLLING_MIN prior
+        quarters — no threshold can be formed, so no alert can fire.
+        """
+        window = [float(v) for v in history][-ALERT_ROLLING_WINDOW:]
+        if len(window) < ALERT_ROLLING_MIN:
+            return None
+        mean = float(np.mean(window))
+        sd = float(np.std(window, ddof=1)) if len(window) > 1 else 0.0
+        return mean + ALERT_SIGMA * sd
 
     def detect_alerts(
         self,
         current_forecasts: list[dict],
-        prev_forecasts: list[dict],
+        history: dict[str, list[float]] | None = None,
+        prev_forecasts: list[dict] | None = None,
     ) -> list[dict]:
         """
-        Compare current quarter forecasts against the previous quarter and
-        return alert dicts for provinces with a sudden rise.
-
-        A sudden rise is defined as:
-            risk_delta >= ALERT_DELTA_THRESHOLD  (>= 0.15 points)
-            AND current risk_probability >= ALERT_FLOOR  (>= 0.35)
+        Stage early warning alerts for provinces whose forecast exceeds their
+        own rolling historical threshold (Rule 7).
 
         Parameters
         ----------
-        current_forecasts : list[dict]  — output of forecast_quarter() for this quarter
-        prev_forecasts    : list[dict]  — output of forecast_quarter() for last quarter
-                                         (or DB records cast to dicts)
+        current_forecasts : output of forecast_quarter() for the current cycle.
+        history           : {province_code: [risk_probability, ...]} in
+                            chronological order, oldest first, EXCLUDING the
+                            current quarter. Reconstructed from the feature
+                            matrix when not supplied.
+        prev_forecasts    : the previous quarter's forecasts, used only to
+                            record prev_risk_probability and risk_delta on the
+                            staged row for the reviewer's context.
 
-        Returns
-        -------
-        list[dict] — one dict per triggered province, ready for AlertRepository.insert()
-            keys: quarter, province_code, threshold_exceeded,
-                  prev_risk_probability, risk_delta, alert_reason
+        Every returned record is STAGED. Nothing is published and no partner
+        agency is notified until an administrator confirms it.
         """
-        prev_map = {f["province_code"]: f.get("risk_probability", 0.0) for f in prev_forecasts}
+        self.load()
 
-        alerts = []
-        for fc in current_forecasts:
-            province_code = fc["province_code"]
-            current_prob  = fc["risk_probability"]
-            prev_prob     = prev_map.get(province_code, 0.0)
-            delta         = round(current_prob - prev_prob, 4)
+        if history is None:
+            history = self._history_from_matrix(
+                exclude_quarter=current_forecasts[0]["quarter"] if current_forecasts else None
+            )
 
-            if delta >= ALERT_DELTA_THRESHOLD and current_prob >= ALERT_FLOOR:
-                alerts.append({
-                    "quarter":               fc["quarter"],
-                    "province_code":         province_code,
-                    "threshold_exceeded":    True,
-                    "prev_risk_probability": round(prev_prob, 4),
-                    "risk_delta":            delta,
-                    "alert_reason":          "SUDDEN_RISE",
-                })
+        prev_by_province = {
+            f["province_code"]: f["risk_probability"] for f in (prev_forecasts or [])
+        }
+
+        alerts: list[dict] = []
+        for f in current_forecasts:
+            province_code = f["province_code"]
+            threshold = self.rolling_threshold(history.get(province_code, []))
+            if threshold is None:
                 logger.info(
-                    "ALERT staged — %s | %s | prob %.3f → %.3f (Δ=%.3f)",
-                    fc["quarter"], fc.get("province_name", province_code),
-                    prev_prob, current_prob, delta,
+                    "%s / %s: fewer than %d prior quarters — no rolling threshold, "
+                    "no alert.", province_code, f["quarter"], ALERT_ROLLING_MIN,
                 )
+                continue
 
+            current_prob = float(f["risk_probability"])
+            if current_prob < threshold:
+                continue
+
+            prev_prob = prev_by_province.get(province_code)
+            alerts.append({
+                "quarter":               f["quarter"],
+                "province_code":         province_code,
+                "province_name":         f["province_name"],
+                "threshold_exceeded":    True,
+                "risk_probability":      round(current_prob, 4),
+                "rolling_threshold":     round(threshold, 4),
+                "prev_risk_probability": (
+                    round(float(prev_prob), 4) if prev_prob is not None else None
+                ),
+                "risk_delta": (
+                    round(current_prob - float(prev_prob), 4)
+                    if prev_prob is not None else None
+                ),
+                "alert_reason": "ROLLING_THRESHOLD_EXCEEDED",
+                "confirmed": False,
+                "dismissed": False,
+            })
+            logger.info(
+                "ALERT staged — %s | %s | probability %.3f >= rolling threshold %.3f",
+                f["province_name"], f["quarter"], current_prob, threshold,
+            )
+
+        if not alerts:
+            logger.info(
+                "No province exceeded its rolling threshold — the cycle concludes "
+                "with no public-facing alert."
+            )
         return alerts
 
-    def available_quarters(self) -> list[str]:
+    def _history_from_matrix(self, exclude_quarter: str | None) -> dict[str, list[float]]:
+        """Score every earlier quarter to reconstruct each province's history."""
+        history: dict[str, list[float]] = {}
+        for q in self.available_quarters():
+            if exclude_quarter is not None and q >= exclude_quarter:
+                continue
+            for f in self.forecast_quarter(q):
+                history.setdefault(f["province_code"], []).append(f["risk_probability"])
+        return history
+
+    # ------------------------------------------------------------------
+    # Rule 5 — Data Sufficiency Flag
+    # ------------------------------------------------------------------
+
+    def _data_sufficiency(self, province_code: str, quarter: str) -> str | None:
         """
-        Quarters the model can actually score, oldest first.
-
-        The panel is the binding constraint, not the calendar: a quarter is
-        scorable only once PSA has published its production volumes and the
-        feature merge has kept the row. Callers use this to decide what the
-        timeline may offer rather than assuming the current calendar quarter
-        is available.
+        'LIMITED_SIGNAL' when the province-quarter holds fewer than five
+        geocoded articles, else 'OK'. None when the bias weights are absent.
         """
-        self.load()
-        if self._panel is None:
-            return []
-        return sorted(self._panel["quarter"].unique().tolist())
-
-    def forecast_all_quarters(self) -> list[dict]:
-        """Forecast all quarters present in the feature matrix."""
-        self.load()
-        if self._features is None:
-            return []
-        quarters = sorted(self._features["quarter"].unique())
-        all_results = []
-        for q in quarters:
-            all_results.extend(self.forecast_quarter(q))
-        return all_results
-
-    def _get_data_sufficiency(self, province_code: str, quarter: str) -> str | None:
-        """Return 'LIMITED_SIGNAL' if below article threshold, else None."""
-        if self._bias_weights is None:
+        if self._bias is None:
             return None
-        mask = (
-            (self._bias_weights["province_code"] == province_code)
-            & (self._bias_weights["quarter"] == quarter)
-        )
-        row = self._bias_weights[mask]
+        row = self._bias[
+            (self._bias["province_code"] == province_code)
+            & (self._bias["quarter"] == quarter)
+        ]
         if row.empty:
             return "LIMITED_SIGNAL"
-        article_count = row.iloc[0].get("article_count", 0)
-        if article_count < DATA_SUFFICIENCY_MIN_ARTICLES:
-            return "LIMITED_SIGNAL"
-        return None
-
-    def _zero_forecasts(self, quarter: str) -> list[dict]:
-        """Return zero-probability forecasts for all 5 provinces."""
-        return [
-            {
-                "province_code":         code,
-                "province_name":         name,
-                "quarter":               quarter,
-                "risk_probability":      0.0,
-                "risk_label":            "LOW",
-                "data_sufficiency_flag": "LIMITED_SIGNAL",
-            }
-            for code, name in PROVINCE_NAMES.items()
-        ]
+        count = int(row.iloc[0]["article_count"])
+        return "OK" if count >= DATA_SUFFICIENCY_MIN_ARTICLES else "LIMITED_SIGNAL"

@@ -1,0 +1,23 @@
+{
+ "active": "v1",
+ "active_note": "v1 stays active until the adviser/researcher answers D8 (ADVISER_DECISION_BRIEFS.md). Changing 'active' changes which future items are accepted; earlier stores and FSSI panels are never rewritten.",
+ "versions": {
+  "v1": {
+   "status": "APPROVED_BASELINE (E28 corpus)",
+   "rule": "publisher domain is in app.ml.corpus.rss_fetcher.CREDIBLE_DOMAINS, or a subdomain of one",
+   "additions": [],
+   "suffix_rules": []
+  },
+  "v2": {
+   "status": "PROPOSED (D8) - not active",
+   "rule": "v1, plus (a) official Philippine government domains (*.gov.ph; the .gov.ph space is restricted to government entities by dotPH), plus (b) news organisations the project's own query bank already targets with site: queries",
+   "additions": [
+    {"domain": "tribune.net.ph", "publisher": "Daily Tribune (national daily, Manila)", "basis": "targeted by gnews_rss_fetcher _SITE_TRIBUNE; refused by v1", "identity_check": "domain owner = Daily Tribune; outlet listed in the project's own query bank"},
+    {"domain": "verafiles.org", "publisher": "VERA Files (non-profit investigative and fact-checking organisation)", "basis": "targeted by gnews_rss_fetcher _SITE_VERAFILES; refused by v1", "identity_check": "domain owner = VERA Files; outlet listed in the project's own query bank"}
+   ],
+   "suffix_rules": [".gov.ph"],
+   "not_included_pending_review": ["journal.com.ph", "journalnews.com.ph", "malaya.com.ph", "manilastandard.net", "pcij.org", "dzrh.com.ph", "bnc.ph", "politiko.com.ph", "thechronicle.com.ph"],
+   "never": ["facebook.com", "youtu.be", "youtube.com", "msn.com", "pressreader.com"]
+  }
+ }
+}

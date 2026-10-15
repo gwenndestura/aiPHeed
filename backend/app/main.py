@@ -10,21 +10,28 @@ from app.services.review import ReviewError, ReviewNotFound
 from app.services.ratelimit import RateLimited
 from app.services.security import AuthError, ForbiddenError, ServerMisconfigured
 from app.services.accounts import AccountError, AccountNotFound
+from app.tasks.scheduler import shutdown_scheduler, start_scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    # Startup — Rule 1, Quarter Self-Update. The scheduler stages outputs for
+    # review; it never publishes.
     print("Starting up aiPHeed backend...")
-    # Scheduler and model loading will be added in Week 14
+    start_scheduler()
     yield
     # Shutdown
+    shutdown_scheduler()
     print("Shutting down aiPHeed backend...")
 
 
 app = FastAPI(
     title="aiPHeed API",
-    description="Food Insecurity Forecasting System for DA Region IV-A (CALABARZON)",
+    description=(
+        "Interactive web-based geospatial food insecurity forecasting system "
+        "for Region IV-A (CALABARZON). Validated by the Department of "
+        "Agriculture Region IV-A (DA IV-A)."
+    ),
     version="1.0.0",
     lifespan=lifespan,
     # Interactive docs and the schema are opt-in (ENABLE_API_DOCS=true): they

@@ -9,10 +9,10 @@ Everything the frontend renders resolves here. The rules this module enforces:
   not decide; PSA's publication lag does. Quarters outside that range raise
   QuarterNotAvailable rather than returning a zero-filled forecast, so the map
   greys out instead of showing a confident-looking 0.00.
-* riskScore is the share of a province's monitored commodity series predicted
-  to fall more than 10% below their own seasonal baseline. It is a food
-  AVAILABILITY measure, not a household food-insecurity probability, and every
-  response says so in `indicator`.
+* riskScore is the LightGBM probability that a province is at HIGH food
+  insecurity risk at the Maximum Reliable Lead Time (Equation 5). It is a
+  relative ordinal estimate of potential risk, not a definitive determination
+  of food insecurity status, and every response says so in `indicator`.
 * Driver percentages are integers summing to exactly 100 (largest remainder).
 
 Scoring a quarter costs a model pass and SHAP costs a TreeExplainer pass, so
@@ -22,7 +22,6 @@ both are memoised per quarter for the life of the process.
 from __future__ import annotations
 
 import functools
-import hashlib
 import json
 import logging
 import unicodedata
@@ -31,35 +30,39 @@ from pathlib import Path
 import pandas as pd
 
 from app.ml.inference.disaggregator import Disaggregator
-from app.ml.inference.e20_forecast import E20Forecast
 from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
-from app.ml.inference.thesis_explainer import ThesisExplainer
-from app.ml.inference.thesis_predictor import ThesisPredictor
+from app.ml.inference import e31_engine as E31
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
 
-CORPUS_PATH = Path("data/processed/calabarzon_food_insecurity_dataset.parquet")
+CORPUS_PATH = Path("data/processed/corpus_geocoded.parquet")
 LGU_POVERTY_PATH = Path("data/processed/lgu_poverty.parquet")
 RESULTS_PATH = Path("data/processed/final_results.json")
 
 # What the number on screen actually is. Carried on every forecast response so
 # no surface can relabel it on its own.
 INDICATOR = {
-    "id": "food_availability_shock_share",
-    "name": "Food Availability Shock Share",
+    "id": "food_insecurity_risk_probability",
+    "name": "Food Insecurity Risk Probability",
     "definition": (
-        "Share of the province's monitored PSA commodity series predicted to "
-        "fall more than 10% below that series' own expanding seasonal baseline."
+        "LightGBM probability that a CALABARZON province falls in the HIGH "
+        "class of the composite food stress label (S1 = SWS regional hunger + "
+        "2 x the province's food-CPI deviation from the five-province mean), "
+        "HIGH when S1 is above the trailing median of the published quarters."
     ),
-    "unit": "share of monitored series (0-1)",
-    "horizon": "same-quarter nowcast",
-    "source": "PSA OpenStat production volumes, CALABARZON, 2021-2026",
+    "unit": "probability (0-1)",
+    "horizon": "One quarter ahead (lead 1), issued at the start of the quarter with information published before it; "
+               "not validated against the baselines (E36)",
+    "source": (
+        "SWS Balance Luzon hunger rounds, PSA provincial food and rice CPI, and "
+        "validated Google News titles (FSSI-v2), CALABARZON, 2021 to 14 October 2026"
+    ),
     "caveat": (
-        "This is a food availability signal, not a household food-insecurity "
-        "probability. It measures production shortfall against seasonal "
-        "expectation for crops, vegetables and fisheries."
+        "Risk rankings are indicative, not absolute. They are relative ordinal "
+        "estimates of potential risk and must not be construed as official "
+        "food insecurity classifications or policy recommendations."
     ),
 }
 
@@ -93,18 +96,6 @@ TOPIC_MAP: dict[str, tuple[str, str]] = {
     "This article is about poverty, unemployment, or economic hardship of families":
         ("poverty", "Poverty & unemployment"),
     "poverty_hardship": ("poverty", "Poverty & unemployment"),
-    # event_type values from calabarzon_food_insecurity_dataset.parquet --
-    # the corpus that actually produced the trigger/SHAP scores (see _corpus()
-    # below). Mapped onto the same keys/labels above wherever the category is
-    # the same thing under a different name; fishery_loss is the one with no
-    # prior equivalent short-code, so it takes the "fishkill" bucket the
-    # sentence-form hypothesis already defines.
-    "fishery_loss":         ("fishkill", "Fish kill & fisheries"),
-    "food_assistance":      ("food_assistance", "Food assistance & relief"),
-    "crop_production_loss": ("crop_damage", "Crop damage & harvest loss"),
-    "malnutrition_nutrition": ("hunger_nutrition", "Hunger & nutrition"),
-    "unrest_disruption":    ("unrest", "Strikes & unrest"),
-    "supply_disruption":    ("logistics", "Transport & storage"),
 }
 
 UNCLASSIFIED = ("unclassified", "Unclassified")
@@ -137,53 +128,86 @@ class ForecastWithheld(Exception):
 # Timeline
 # ---------------------------------------------------------------------------
 
-# Two models are served. They answer different questions and reach different
-# quarters, so the horizon is a first-class parameter rather than a setting.
-NOWCAST = "nowcast"
+# Rule 2, Single Forecast Horizon: one LightGBM model is evaluated across
+# multiple forward lead times, and the furthest one achieving reliable
+# classification is adopted as THE operational forecast horizon. There is
+# therefore one engine and one horizon.
+#
+# "nowcast" is retained as an accepted alias so the published frontend contract
+# does not break; it resolves to the same single model. Both ids describe the
+# forecast at the Maximum Reliable Lead Time, which is 0 quarters when no
+# forward horizon clears the Section 3.4.4 threshold.
 FORECAST = "forecast"
-HORIZONS = (NOWCAST, FORECAST)
-DEFAULT_HORIZON = NOWCAST
+NOWCAST = "nowcast"
+HORIZONS = (FORECAST, NOWCAST)
+DEFAULT_HORIZON = FORECAST
 
 HORIZON_INFO = {
-    NOWCAST: {
-        "id": NOWCAST,
-        "name": "Same-quarter nowcast",
-        "question": "Which province is under food-insecurity stress this quarter?",
-        "definition": (
-            "Connected to the thesis's own methodology (Eq. 4/5, Algorithm 4): "
-            "label_cpi, the paper's 12 features, a single LightGBM classifier. "
-            "See app/ml/inference/thesis_predictor.py for what this does and "
-            "does not mean about real performance."
-        ),
-        "resultsFile": "thesis_results.json",
-    },
     FORECAST: {
         "id": FORECAST,
-        "name": "One-quarter-ahead forecast",
-        "question": "Which commodity series should be watched next quarter?",
-        "definition": (
-            "Every input is taken from before the quarter being scored, so it "
-            "reaches one quarter further than the nowcast. Slightly less "
-            "accurate, and it does not beat a seasonal-persistence rule on "
-            "binary accuracy -- its value is the forward ranking, which "
-            "persistence cannot express."
+        "name": "Province food insecurity risk estimate (experimental)",
+        "question": (
+            "Which CALABARZON provinces are at high risk of food insecurity at "
+            "the furthest lead time the model forecasts reliably?"
         ),
-        "resultsFile": "forecast_results.json",
+        # E27 fix: the old text claimed a horizon adopted by a 75%-accuracy rule. No lead time has been
+        # validated against the baselines (E25-E27), and 75% accuracy is not evidence of skill here.
+        "definition": (
+            "One LightGBM classifier, evaluated across lead times 1 through 8 "
+            "quarters by walk-forward expanding-window cross-validation. No "
+            "lead time has been validated: no model beat the persistence, "
+            "calibrated-persistence, always-HIGH and climatology baselines, "
+            "so every output is an experimental same-quarter estimate."
+        ),
+        "evidenceStatus": "EXPERIMENTAL",
+        "resultsFile": "training_results.json",
     },
+}
+# The alias resolves to the same entry; see the Rule 2 note above.
+HORIZON_INFO[NOWCAST] = {**HORIZON_INFO[FORECAST], "id": NOWCAST, "alias_of": FORECAST}
+
+# E36: the served estimates come from the E36 record (aiPHeed-E36-LGBM). Every row is lead 1, so both ids show the
+# same rows; "nowcast" is kept for contract compatibility. The E31 (PCF21) record stays available via
+# AIPHEED_E31_RECORD.
+E31_HORIZON_INFO = {
+    FORECAST: {
+        "id": FORECAST, "name": "One-quarter-ahead forecasts (lead 1)",
+        "question": "What did the served LightGBM estimate one quarter ahead, using only information released before "
+                    "the quarter began?",
+        "definition": ("aiPHeed-E36-LGBM estimates of P(S1 = H + 2D above its trailing-median threshold) one quarter "
+                       "ahead: development backtests 2023-Q1..2026-Q3 (refitted at each origin, nested selection) and "
+                       "the 2026-Q4 forecast frozen at origin 2026-10-01. News evidence is the previous quarter's. "
+                       "Not validated: no baseline is beaten significantly (E36)."),
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
+    NOWCAST: {
+        "id": NOWCAST, "name": "Latest estimate per quarter",
+        "question": "What is the best available estimate for each quarter, including the one under way?",
+        "definition": ("The E36 model issues no same-quarter nowcast: every quarter, including 2026-Q4, shows its "
+                       "one-quarter-ahead (lead 1) estimate, labelled with its mode."),
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
 }
 
 
-def _engine(horizon: str):
-    # Nowcast (default) is connected to the thesis's own methodology
-    # (label_cpi, Eq. 5's 12 features, single LightGBM) -- see
-    # app/ml/inference/thesis_predictor.py for what that does and does not
-    # mean about real performance. The one-quarter-ahead horizon is a
-    # distinct, t-1-lagged architecture the thesis does not describe, and
-    # stays on the original commodity-level Forecaster.
-    if horizon == FORECAST:
-        from app.ml.inference.forecaster import Forecaster
-        return Forecaster()
-    return ThesisPredictor()
+def e31_active() -> bool:
+    """E31: the dashboard serves the E31 record unless AIPHEED_DATA_LAYER=legacy (the pre-E31 production model)."""
+    import os
+
+    return os.getenv("AIPHEED_DATA_LAYER", "e31").lower() != "legacy" and E31.available()
+
+
+def _engine(horizon: str = DEFAULT_HORIZON):
+    """
+    E31: the served PCF21 estimates from the E31 record. "forecast" = lead-1 estimates (backtests, the frozen
+    2026-Q3 forecast, the 2027-Q1 forecast); "nowcast" = the 2026-Q4 same-quarter estimate. Legacy: the single
+    LightGBM Predictor (Rule 2), with the horizon accepted only for contract compatibility.
+    """
+    if e31_active():
+        return E31.E31Engine(horizon)
+    return Predictor()
+
+
+def _explainer():
+    return E31.E31Explainer() if e31_active() else Explainer()
 
 
 def check_horizon(horizon: str | None) -> str:
@@ -196,63 +220,14 @@ def check_horizon(horizon: str | None) -> str:
 
 
 @functools.lru_cache(maxsize=4)
-def _scored_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
-    """Quarters the horizon's own engine scores, oldest first."""
+def available_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
     return _engine(horizon).available_quarters()
 
 
-@functools.lru_cache(maxsize=4)
-def e20_forecast_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
-    """
-    Published E20 forecast quarters (2027-Q1) appended to the nowcast timeline.
-
-    Only quarters past the nowcast's newest scored quarter are added, so a
-    nowcast score is never replaced. E20 is a different target and model (see
-    app/ml/inference/e20_forecast.py); is_forecast_quarter() lets every
-    surface label it.
-    """
-    if horizon != NOWCAST:
-        return []
-    scored = _scored_quarters(horizon)
-    last = ref.quarter_index(scored[-1]) if scored else -1
-    return sorted(
-        (q for q in E20Forecast().forecast_quarters() if ref.quarter_index(q) > last),
-        key=ref.quarter_index,
-    )
-
-
-def is_forecast_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> bool:
-    return quarter in e20_forecast_quarters(horizon)
-
-
-def news_quarter(quarter: str) -> str:
-    """
-    The quarter whose articles stand behind a quarter's score.
-
-    A forecast quarter has no articles of its own -- it has not happened yet.
-    Its score was built from the information-cutoff (origin) quarter's news,
-    so that is the corpus to show.
-    """
-    if is_forecast_quarter(quarter):
-        return E20Forecast().origin_quarter(quarter) or quarter
-    return quarter
-
-
-def forecast_meta() -> dict | None:
-    """The E20 headline forecast for the dashboard banner, or None if not served."""
-    if not e20_forecast_quarters():
-        return None
-    return E20Forecast().forecast_meta(frozenset(_scored_quarters(NOWCAST)))
-
-
-@functools.lru_cache(maxsize=4)
-def available_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
-    return _scored_quarters(horizon) + e20_forecast_quarters(horizon)
-
-
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
-    """The newest quarter the horizon's own engine scores (never an E20 forecast)."""
-    quarters = _scored_quarters(horizon)
+    if e31_active() and horizon == NOWCAST and E31.current_quarter():
+        return E31.current_quarter()      # the default view opens on the quarter under way, not on the forecast
+    quarters = available_quarters(horizon)
     if not quarters:
         raise QuarterNotAvailable("The model panel is empty; no quarter is scorable.")
     return quarters[-1]
@@ -264,82 +239,97 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
         return latest_quarter(horizon)
     if not ref.is_valid_quarter(quarter):
         raise QuarterNotAvailable(f"'{quarter}' is not a quarter id (expected YYYY-Qn).")
+    if quarter not in available_quarters(horizon) and e31_active():
+        other = NOWCAST if horizon == FORECAST else FORECAST
+        if quarter in available_quarters(other):      # E31: a nowcast-only quarter (2026-Q4) is still served
+            return quarter
     if quarter not in available_quarters(horizon):
         raise QuarterNotAvailable(
             f"No {horizon} exists for {quarter}. The {horizon} model can score "
-            f"{available_quarters(horizon)[0]} through {available_quarters(horizon)[-1]}."
+            f"{available_quarters(horizon)[0]} through {latest_quarter(horizon)}."
         )
     return quarter
 
 
-def _quarter_name(quarter: str) -> str:
-    year, qn = ref.quarter_parts(quarter)
-    return f"Q{qn} {year}"
-
-
-def _unavailable_reason(quarter: str, horizon: str = DEFAULT_HORIZON) -> str:
-    """Why a quarter on the timeline has no score, in plain language."""
-    latest = _scored_quarters(horizon)[-1]
-    if ref.quarter_index(quarter) < ref.quarter_index(latest):
-        return "No risk score: the model has no input data for this quarter."
-    reason = (
-        f"No risk score yet. Scores run through {_quarter_name(latest)}, the newest "
-        "quarter PSA has published data for"
-    )
-    forecasts = e20_forecast_quarters(horizon)
-    if forecasts:
-        reason += (
-            f", and the published forecast covers "
-            f"{', '.join(_quarter_name(q) for q in forecasts)} only"
-        )
-    return reason + "."
-
-
-def timeline(horizon: str = DEFAULT_HORIZON, through: str | None = None) -> list[dict]:
+def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """
-    Every quarter from the first scorable one to the last, oldest first --
-    and on to `through` (the calendar quarter) if that is later.
+    Every scorable quarter for this horizon, oldest first.
 
-    For the nowcast every scored entry is `actual` -- it scores quarters PSA
-    has already published volumes for -- and the newest is `current`. Published
-    E20 quarters follow as `forecast`. The forecast horizon reaches one quarter
-    further, and that newest quarter is marked `forecast` because its inputs
-    all predate it. A quarter in between with no score (2026-Q4, between the
-    nowcast's newest and the E20 forecast) is `unavailable`, with a `reason`.
+    Every quarter but the newest is marked `actual`. The newest is marked
+    `forecast` because it is the one the model projects forward to at the
+    Maximum Reliable Lead Time.
     """
     quarters = available_quarters(horizon)
-    if not quarters:
-        return []
-    latest = _scored_quarters(horizon)[-1]
-    scored = set(quarters)
-    first = ref.quarter_index(quarters[0])
-    last = ref.quarter_index(quarters[-1])
-    if through and ref.is_valid_quarter(through):
-        last = max(last, ref.quarter_index(through))
+    latest = quarters[-1] if quarters else None
+    # E27 fix: with a Maximum Reliable Lead Time of 0 the newest quarter is a same-quarter estimate of an
+    # observed quarter, not a forecast; "current" is the contract's state for it.
+    newest_state = "forecast" if _engine(horizon).lead_time > 0 else "current"
     out = []
-    for i in range(first, last + 1):
-        year, qn = divmod(i, 4)
-        q = f"{year}-Q{qn + 1}"
-        reason = None
-        if q not in scored:
-            state = "unavailable"
-            reason = _unavailable_reason(q, horizon)
-        elif is_forecast_quarter(q, horizon):
-            state = "forecast"
+    for q in quarters:
+        year, qn = ref.quarter_parts(q)
+        if e31_active():                   # E31: the state is the row's own mode
+            mode = E31.quarter_row(q, horizon)["mode"]
+            state = {"FORECAST": "forecast", "NOWCAST": "current"}.get(mode, "actual")
         elif q == latest:
-            state = "forecast" if horizon == FORECAST else "current"
+            state = newest_state
         else:
             state = "actual"
         out.append({
             "id": q,
             "year": year,
-            "q": qn + 1,
-            "label": f"Q{qn + 1}",
-            "monthsLabel": ref.QUARTER_MONTHS[qn + 1],
+            "q": qn,
+            "label": f"Q{qn}",
+            "monthsLabel": ref.QUARTER_MONTHS[qn],
             "state": state,
-            "reason": reason,
         })
+    if e31_active() and out:
+        out = _e31_fill_gaps(out, horizon)
     return out
+
+
+def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
+    """Why the E31 record has no row for this quarter in this view (E34, D1). Derived from the data, never assumed."""
+    other = NOWCAST if horizon == FORECAST else FORECAST
+    if quarter in available_quarters(other):
+        return (f"{quarter} is the quarter under way; its estimate is a same-quarter nowcast, shown in the nowcast "
+                "view. A forecast view never shows a nowcast.")
+    p = Path("data/inputs/sws_rounds.csv")
+    if p.exists():
+        r = pd.read_csv(p)
+        r = r[r["quarter"] == quarter]
+        if len(r) and not r["definition_A"].astype(str).str.lower().eq("true").any():
+            return (f"No estimate for {quarter}: its SWS hunger rounds are recorded as supplementary, not as the "
+                    "approved (definition A) series, so the quarter has no approved label to estimate or score. "
+                    "This is missing data, not a low score.")
+        if not len(r):
+            return (f"No estimate for {quarter}: no SWS hunger round is recorded for it. This is missing data, not a "
+                    "low score.")
+    return f"The E31 record holds no estimate for {quarter}. This is missing data, not a low score."
+
+
+def _e31_fill_gaps(rows: list[dict], horizon: str) -> list[dict]:
+    """List every quarter between the first and last served one; gaps become "unavailable" with a reason (E34, D1)."""
+    have = {r["id"]: r for r in rows}
+    idx = [ref.quarter_index(r["id"]) for r in rows]
+    out = []
+    for i in range(min(idx), max(idx) + 1):
+        q = f"{i // 4}-Q{i % 4 + 1}"
+        if q in have:
+            out.append(have[q])
+            continue
+        year, qn = ref.quarter_parts(q)
+        out.append({"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn],
+                    "state": "unavailable", "reason": _e31_unavailable_reason(q, horizon)})
+    return out
+
+
+def is_estimate_quarter(quarter: str) -> bool:
+    """E31: True for the quarters whose outcome is not yet known (the 2026-Q4 nowcast, the 2027-Q1 forecast); False for
+    backtests and the scored 2026-Q3. Same rule as /config quarterRange.forecastQuarters (E34, D2)."""
+    if not e31_active():
+        return False
+    row = E31.quarter_row(quarter, NOWCAST)
+    return bool(row) and row["mode"] in ("FORECAST", "NOWCAST")
 
 
 # ---------------------------------------------------------------------------
@@ -349,9 +339,10 @@ def timeline(horizon: str = DEFAULT_HORIZON, through: str | None = None) -> list
 @functools.lru_cache(maxsize=64)
 def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """Raw model output for one quarter, from whichever engine the horizon names."""
-    if is_forecast_quarter(quarter, horizon):
-        return E20Forecast().forecast_quarter(quarter)
-    return _engine(horizon).forecast_quarter(quarter)
+    out = _engine(horizon).forecast_quarter(quarter)
+    if not out and e31_active():                       # E31: the quarter exists only under the other mode
+        out = _engine(NOWCAST if horizon == FORECAST else FORECAST).forecast_quarter(quarter)
+    return out
 
 
 def province_forecast_map(quarter: str, horizon: str = DEFAULT_HORIZON) -> dict[str, dict]:
@@ -359,26 +350,28 @@ def province_forecast_map(quarter: str, horizon: str = DEFAULT_HORIZON) -> dict[
 
 
 def _previous_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> str | None:
-    """
-    The immediately preceding calendar quarter, if it is scorable. A change
-    across a gap (2026-Q3 -> 2027-Q1) or from a nowcast score to an E20
-    forecast is not a quarter-on-quarter change.
-    """
-    if is_forecast_quarter(quarter, horizon):
-        return None
     quarters = available_quarters(horizon)
     i = quarters.index(quarter) if quarter in quarters else -1
-    if i <= 0:
-        return None
-    prev = quarters[i - 1]
-    return prev if ref.quarter_index(quarter) - ref.quarter_index(prev) == 1 else None
+    return quarters[i - 1] if i > 0 else None
+
+
+def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
+    """E35-D3: a change is shown only between consecutive quarters estimated the same way (same lead; a nowcast is
+    never compared with a forecast). Across a gap (2025-Q1 -> 2025-Q4) it would mix three quarters of change."""
+    if ref.quarter_index(quarter) - ref.quarter_index(prev_q) != 1:
+        return False
+    if not e31_active():
+        return True
+    a = E31.quarter_row(quarter, horizon) or E31.quarter_row(quarter, NOWCAST if horizon == FORECAST else FORECAST)
+    b = E31.quarter_row(prev_q, horizon)
+    return bool(a and b) and a["lead"] == b["lead"] and (a["mode"] == "NOWCAST") == (b["mode"] == "NOWCAST")
 
 
 def _qoq(current: float, quarter: str, code: str,
          horizon: str = DEFAULT_HORIZON) -> tuple[float | None, float | None]:
-    """Absolute and percentage change against the previous scorable quarter."""
+    """Absolute and percentage change against the previous quarter, when the two are comparable (E35-D3)."""
     prev_q = _previous_quarter(quarter, horizon)
-    if prev_q is None:
+    if prev_q is None or not _comparable(quarter, prev_q, horizon):
         return None, None
     prev = province_forecast_map(prev_q, horizon).get(code)
     if prev is None:
@@ -391,7 +384,15 @@ def _qoq(current: float, quarter: str, code: str,
 
 @functools.lru_cache(maxsize=1)
 def _province_poverty() -> dict[str, float]:
-    """Province-mean PSA 2021 poverty incidence, from the LGU table."""
+    """E35-D7: population-weighted mean of the PSA 2021 municipal SAE (2024 POPCEN weights) over the LGUs that have
+    an estimate. It is not a PSA province figure and never mixes in a substitute (Lucena City has none)."""
+    if e31_active() and LGU_PROVENANCE_PATH.exists():
+        df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+        df = df[df["poverty_lgu_estimate"].notna()].copy()
+        df["province_code"] = df["province"].map({m["name"]: m["code"] for m in ref.PROVINCES.values()})
+        df["w"] = df["population_2024"] * df["poverty_lgu_estimate"]
+        g = df.groupby("province_code")[["w", "population_2024"]].sum()
+        return (g["w"] / g["population_2024"]).round(1).to_dict()
     if not LGU_POVERTY_PATH.exists():
         return {}
     df = pd.read_parquet(LGU_POVERTY_PATH)
@@ -401,7 +402,7 @@ def _province_poverty() -> dict[str, float]:
 @functools.lru_cache(maxsize=1)
 def _province_population() -> dict[str, int]:
     roster = ref.lgu_roster()
-    return roster.groupby("province_code")["population_2020"].sum().astype(int).to_dict()
+    return roster.groupby("province_code")["population_2024"].sum().astype(int).to_dict()
 
 
 def province_summary(
@@ -429,11 +430,6 @@ def province_summary(
         score = record["risk_probability"]
         delta, pct = _qoq(score, quarter, code, horizon)
         meta = ref.PROVINCES[slug]
-        # The band is the one public rule -- a score shown as 0.50 or above is
-        # HIGH -- not each engine's own risk_label. ThesisPredictor's decision
-        # boundary (0.712) labelled scores up to 0.71 LOW while every panel,
-        # the legend and the report call 0.50+ HIGH.
-        level = ref.risk_level(score)
         rows.append({
             "id": slug,
             "name": meta["name"],
@@ -441,26 +437,41 @@ def province_summary(
             "centroid": {"lat": meta["lat"], "lng": meta["lng"]},
             "population": population.get(code),
             "povertyRate": poverty.get(code),
+            "povertyRateBasis": POVERTY_RATE_BASIS,
             "currentQuarter": quarter,
             "riskScore": score,
-            "riskLevel": level,
+            "riskLevel": ref.risk_level(score),
             "qoqChange": delta,
             "qoqChangePct": pct,
-            "seriesMonitored": record.get("series_monitored"),
-            "seriesAtRisk": record.get("series_at_risk"),
-            "seriesNeedingReview": record.get("series_needing_review"),
-            "topAtRiskCommodities": record.get("top_at_risk_commodities", []),
-            "articleCount": article_count(code, news_quarter(quarter)),
+            "riskLabel": record.get("risk_label"),
+            "evidenceStatus": "EXPERIMENTAL",
+            "riskLevelBasis": RISK_LEVEL_BASIS,
+            # Rule 6: every forecast carries an explicit horizon label, a
+            # confidence statement and a verification date.
+            "forecastHorizonQuarters": record.get("forecast_horizon_quarters"),
+            "horizonLabel": record.get("horizon_label"),
+            "confidenceStatement": record.get("confidence_statement"),
+            "verificationDate": record.get("verification_date"),
+            "articleCount": article_count(code, quarter),
             "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "horizon": horizon,
             "withheld": False,
-            "isForecast": bool(record.get("is_forecast")),
-            "lead": record.get("lead"),
-            "originQuarter": record.get("origin_quarter"),
-            "modelId": record.get("model_id"),
-            "confidenceNote": record.get("confidence_note"),
-            "uncertainty": record.get("uncertainty"),
         })
+
+    # Rank the published provinces by the model's own probability. A withheld
+    # province is left out: ranking it, or ranking the others around it, would
+    # reveal where its score sits.
+    published = sorted(
+        (r for r in rows if r["id"] not in withheld and r["riskScore"] is not None),
+        key=lambda r: r["riskScore"], reverse=True,
+    )
+    for i, row in enumerate(published):
+        nxt = published[i + 1] if i + 1 < len(published) else None
+        row["rank"] = i + 1
+        row["rankOf"] = len(published)
+        row["gapToNextLower"] = (round(row["riskScore"] - nxt["riskScore"], 4)
+                                 if nxt else None)
+        row["tiedWithNextLower"] = (row["gapToNextLower"] == 0.0) if nxt else None
 
     for row in rows:
         if row["id"] in withheld:
@@ -469,15 +480,74 @@ def province_summary(
                 "riskLevel": None,
                 "qoqChange": None,
                 "qoqChangePct": None,
-                "seriesAtRisk": None,
-                "seriesNeedingReview": None,
-                "topAtRiskCommodities": [],
-                "uncertainty": None,
+                "riskLabel": None,
                 "withheld": True,
             })
 
     rows.sort(key=lambda r: (r["riskScore"] is not None, r["riskScore"] or 0), reverse=True)
     return rows
+
+
+RANKING_METHOD = (
+    "Provinces are ordered by the model's risk probability for the quarter. "
+    "The gap is the difference in probability to the next province down; "
+    "provinces with the same probability are marked as tied rather than "
+    "ordered arbitrarily. The features listed for each province are the SHAP "
+    "contributions (Equation 7) that differ most between it and the next "
+    "province down; because SHAP values are additive, all the differences "
+    "together equal the gap. The ranking is relative and indicative, not an "
+    "official classification."
+)
+
+
+def ranking(quarter: str, withheld: frozenset[str] = frozenset(),
+            horizon: str = DEFAULT_HORIZON) -> dict:
+    """
+    The published provinces in rank order, each with the SHAP features that
+    separate it from the next province down (Section 1.2; Equation 7).
+    """
+    rows = [r for r in province_summary(quarter, withheld, horizon)
+            if not r["withheld"] and r["riskScore"] is not None]
+    rows.sort(key=lambda r: r["rank"])
+    explainer = _explainer()
+    shap_by = {r["provinceCode"]: explainer.explain_province_quarter(r["provinceCode"], quarter)
+               for r in rows}
+
+    data = []
+    for i, r in enumerate(rows):
+        nxt = rows[i + 1] if i + 1 < len(rows) else None
+        why = []
+        if nxt is not None:
+            other = {d["feature_name"]: d for d in shap_by[nxt["provinceCode"]]}
+            for d in shap_by[r["provinceCode"]]:
+                o = other.get(d["feature_name"])
+                if o is None:
+                    continue
+                why.append({
+                    "feature": d["feature_name"],
+                    "label": d["display_name"],
+                    "difference": round(d["shap_value"] - o["shap_value"], 4),
+                    "value": d["feature_value"],
+                    "valueNextLower": o["feature_value"],
+                })
+            why.sort(key=lambda x: abs(x["difference"]), reverse=True)
+        data.append({
+            "id": r["id"], "name": r["name"], "provinceCode": r["provinceCode"],
+            "riskScore": r["riskScore"], "riskLevel": r["riskLevel"],
+            "rank": r["rank"], "rankOf": r["rankOf"], "qoqChange": r["qoqChange"],
+            "gapToNextLower": r["gapToNextLower"],
+            "tiedWithNextLower": r["tiedWithNextLower"],
+            "nextLowerId": nxt["id"] if nxt else None,
+            "whyAboveNextLower": why[:3],
+            "limitedSignal": r["limitedSignal"],
+        })
+    return {
+        "quarter": quarter,
+        "indicator": INDICATOR,
+        "method": RANKING_METHOD,
+        "horizonLabel": rows[0]["horizonLabel"] if rows else "",
+        "data": data,
+    }
 
 
 def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
@@ -516,6 +586,11 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
         "riskScore": score,
         "riskLevel": ref.risk_level(score) if score is not None else None,
         "qoqChange": delta,
+        "horizonLabel": next(
+            (p.get("horizonLabel") for p in published if p.get("horizonLabel")), None),
+        "confidenceStatement": next(
+            (p.get("confidenceStatement") for p in published
+             if p.get("confidenceStatement")), None),
         "provinceCounts": {
             "high": sum(1 for p in published if p["riskLevel"] == "high"),
             "low": sum(1 for p in published if p["riskLevel"] == "low"),
@@ -539,11 +614,19 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 @functools.lru_cache(maxsize=32)
 def _municipal_frame(quarter: str) -> pd.DataFrame:
     forecasts = _province_forecasts(quarter)
+    if e31_active():
+        if not forecasts:                      # a quarter that exists only as a nowcast (2026-Q4)
+            forecasts = _province_forecasts(quarter, NOWCAST)
+        return E31.E31Disaggregator().disaggregate(forecasts, quarter=quarter)
     return Disaggregator().disaggregate(forecasts, quarter=quarter)
 
 
 @functools.lru_cache(maxsize=1)
 def _lgu_poverty_map() -> dict[str, float]:
+    if e31_active() and LGU_PROVENANCE_PATH.exists():     # measured municipal SAE only; substitutes stay null
+        df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+        return {str(r.lgu_code).zfill(9): float(r.poverty_lgu_estimate) for r in df.itertuples()
+                if pd.notna(r.poverty_lgu_estimate)}
     if not LGU_POVERTY_PATH.exists():
         return {}
     df = pd.read_parquet(LGU_POVERTY_PATH)
@@ -551,6 +634,41 @@ def _lgu_poverty_map() -> dict[str, float]:
         str(c): float(v)
         for c, v in zip(df["lgu_code"], df["poverty_incidence_pct"])
     }
+
+
+POVERTY_RATE_BASIS = (
+    "Population-weighted mean of the PSA 2021 city and municipal Small Area Estimates of poverty incidence (2024 "
+    "POPCEN weights), over the cities and municipalities with an estimate; Lucena City has none (highly urbanized "
+    "city, not in the PSA no-HUC table). Derived by aiPHeed; not an official PSA province figure."
+)
+RISK_LEVEL_BASIS = (
+    "Band of an unvalidated relative score (>= 0.50 shown as high); not a validated classification and not a "
+    "measured local food-insecurity rate."
+)
+LGU_PROVENANCE_PATH = Path("data/inputs/lgu_vulnerability.csv")
+
+
+@functools.lru_cache(maxsize=1)
+def _lgu_provenance() -> dict[str, dict]:
+    if not LGU_PROVENANCE_PATH.exists():
+        return {}
+    df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+    return {r.lgu_code: {"value_used": float(r.poverty_value_used), "has_own": bool(pd.notna(r.poverty_lgu_estimate))}
+            for r in df.itertuples()}
+
+
+def _poverty_provenance(code: str, own: float | None) -> dict:
+    """E27 fix: say what the ranking used for an LGU's poverty term and why, instead of returning a bare null."""
+    p = _lgu_provenance().get(code)
+    if own is not None or (p and p["has_own"]):
+        return {"povertyEstimateKind": "PSA municipal SAE estimate (2021)",
+                "povertyValueUsed": own if own is not None else p["value_used"], "povertyLimitation": None}
+    return {"povertyEstimateKind": "province substitute (no municipal estimate)",
+            "povertyValueUsed": p["value_used"] if p else None,
+            "povertyLimitation": ("No PSA 2021 municipal poverty estimate exists for this LGU (a highly urbanized "
+                                  "city, excluded from the PSA no-HUC table). The ranking uses the province value "
+                                  "stored in the aiPHeed inputs as a substitute; its source workbook is not in the "
+                                  "repository, so it is unverified.")}
 
 
 def municipality_summary(quarter: str, province_id: str | None = None) -> list[dict]:
@@ -572,24 +690,42 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
         meta = roster.loc[code]
         if province_id and meta["provinceId"] != province_id:
             continue
-        score = round(float(r["risk_index"]), 4)
+        # E28 fix: a province without an estimate gives risk_index = null; float(None) used to crash the endpoint.
+        score = None if r["risk_index"] is None or pd.isna(r["risk_index"]) else round(float(r["risk_index"]), 4)
+        rank_r = r.get("rank_region")
+        rank_p = r.get("rank_in_province")
         rows.append({
             "id": meta["id"],
             "name": meta["lgu_name"],
             "provinceId": meta["provinceId"],
             "lguCode": code,
             "classification": meta["classification"],
-            "population": int(meta["population_2020"]),
+            "population": int(meta["population_2024"]),
             "densityPerKm2": float(meta["densityPerKm2"]),
             "povertyRate": poverty.get(code),
+            **_poverty_provenance(code, poverty.get(code)),
             "quarter": quarter,
             "riskIndex": score,
-            "riskLevel": ref.risk_level(score),
+            # E28 fix: no HIGH/LOW band for an LGU. The province estimate it is derived from is not validated
+            # (E25-E28), and a disaggregated index is a relative position, not a classification (Chapter I, 1.7).
+            "riskLevel": None,
+            "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
+            "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
+            "tied": bool(r.get("tied", False)),
+            "evidenceStatus": "EXPERIMENTAL",
+            "riskLevelBasis": LGU_POSITION_BASIS,
             "disaggregationLabel": r["disaggregation_label"],
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
+            "noProvinceEstimate": score is None,
         })
-    rows.sort(key=lambda x: x["riskIndex"], reverse=True)
+    rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
+
+
+LGU_POSITION_BASIS = (
+    "Relative position only: the province estimate re-weighted by PSA poverty incidence (60%) and population density "
+    "(40%) within the province. No HIGH/LOW band is shown because the province estimate is not validated; this is not "
+    "a measured or official municipal food-insecurity classification.")
 
 
 def municipality_forecast(municipality_id: str, quarter: str) -> dict:
@@ -627,13 +763,7 @@ def _integer_shares(values: list[float]) -> list[int]:
 
 @functools.lru_cache(maxsize=256)
 def _drivers(province_code: str, quarter: str) -> dict:
-    # Connected to the same paper-faithful model ThesisPredictor serves (see
-    # _engine()), so the Risk Drivers panel explains the score actually on
-    # screen instead of the old commodity-level model's unrelated reasoning.
-    if is_forecast_quarter(quarter):
-        # The E20 model's own stored SHAP, not the nowcast's explainer.
-        return E20Forecast().build_drivers(province_code, quarter)
-    explainer = ThesisExplainer()
+    explainer = _explainer()
     records = explainer.explain_province_quarter(province_code, quarter)
     return explainer.build_drivers(province_code, quarter, records)
 
@@ -656,15 +786,12 @@ def trigger_color(pct: int, direction: str) -> str:
 
 def explainability(province_code: str, quarter: str) -> dict:
     """
-    Grouped SHAP for one province-quarter: the five thesis-defined driver
-    categories (Market/Prices, Climate Stress, Fish Kill, Employment, OFW
-    Remittance), ranked and normalised to sum to 100% among themselves.
+    Grouped SHAP for one province-quarter, ranked and normalised to 100%.
 
-    The model also weighs the commodity series' own recent history and
-    seasonal position, plus general (non-fish-kill-specific) news volume --
-    real, often the largest single drivers, deliberately not folded into one
-    of the five bars (which would overstate it) or hidden. Their combined
-    share is `otherPct`, surfaced alongside the five and in `narrative`.
+    Every group with a contribution is returned. The groups follow the approved
+    feature vector of Equation 5 -- news sentiment, food prices, weather,
+    employment, macro/OFW -- so a panel built for those five categories fits
+    without anything being dropped.
     """
     built = _drivers(province_code, quarter)
     drivers = built["drivers"]
@@ -681,26 +808,20 @@ def explainability(province_code: str, quarter: str) -> dict:
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
             "newsSignalProportion": d["trigger_proportion"],
-            # Real BSP OFW/FX numbers, informational only -- not a model
-            # input, does not affect pct/signedContribution above. Only
-            # populated for ofw_remittance, and only in quarters where BSP
-            # data exists. Additive field; not yet rendered by the frontend.
-            "realDataContext": d.get("real_data_context"),
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
     return {
         "quarter": quarter,
         "triggers": triggers,
-        "otherPct": built["other_pct"],
         # The corpus is the single article count every surface quotes. The
         # trigger table keeps its own tally over a narrower keyword-matched
         # subset; it is reported separately rather than silently substituted.
-        "articleCount": article_count(province_code, news_quarter(quarter)),
+        "articleCount": article_count(province_code, quarter),
         "triggerMatchedArticles": built["article_count"],
     }
 
 
-def explainability_region(quarter: str, withheld: frozenset[str] = frozenset()) -> dict:
+def explainability_region(quarter: str) -> dict:
     """
     Regional breakdown: the five province explanations pooled.
 
@@ -708,17 +829,10 @@ def explainability_region(quarter: str, withheld: frozenset[str] = frozenset()) 
     `signedContribution` averages so the direction still reads correctly -- a
     group that raises risk in one province and lowers it in another should not
     disappear from the ranking just because the two cancel.
-
-    Provinces in `withheld` are left out of the pool entirely, so a withheld
-    province-quarter cannot be read back from the regional figure.
     """
     per_province = [
-        explainability(ref.province_code(slug), quarter)
-        for slug in ref.PROVINCES if slug not in withheld
+        explainability(ref.province_code(slug), quarter) for slug in ref.PROVINCES
     ]
-    if not per_province:
-        return {"quarter": quarter, "triggers": [], "otherPct": 0.0,
-                "articleCount": 0, "triggerMatchedArticles": 0, "provincesIncluded": 0}
 
     totals: dict[str, dict] = {}
     for result in per_province:
@@ -756,14 +870,12 @@ def explainability_region(quarter: str, withheld: frozenset[str] = frozenset()) 
     return {
         "quarter": quarter,
         "triggers": triggers,
-        "otherPct": round(sum(r["otherPct"] for r in per_province) / len(per_province), 1),
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
-        "provincesIncluded": len(per_province),
     }
 
 
-def compose_narrative(name: str, quarter: str, triggers: list[dict], other_pct: float = 0.0) -> str:
+def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:
     """
     Plain-ASCII summary of a breakdown, for the chart caption and the PDF.
 
@@ -800,23 +912,17 @@ def compose_narrative(name: str, quarter: str, triggers: list[dict], other_pct: 
         parts.append(f"{phrase(lowering)} the {cutoff}% line while lowering it.")
     flagged = " ".join(parts) or f"No single group clears the {cutoff}% line this quarter."
 
-    other_sentence = (
-        f" These five drivers make up {round(100 - other_pct, 1)}% of the model's explained "
-        f"reasoning this quarter; the remaining {other_pct}% comes from the commodity "
-        f"series' own recent behavior and seasonal position, plus general food-insecurity "
-        f"news volume -- real model drivers, often the largest single ones, not itemized "
-        f"among the five research categories above."
-        if other_pct >= 1.0 else ""
-    )
-
     return (
         f"For {name} in {quarter}, the model's prediction breaks down as: {ranked}. "
         f"{top['label']} is the largest single contributor, {direction}. {flagged} "
-        f"Shares are SHAP contributions to a production-shortfall prediction, "
-        f"recomputed every quarter.{other_sentence}"
+        f"Shares are SHAP contributions to the province's food insecurity risk "
+        f"probability, recomputed every quarter."
     )
 
 
+# Kept from the main backend when E31 was promoted (E34): the plain-language report helpers
+# (plain_report, report_data, report_text) import these. Pure text functions; the E31 data layer
+# does not call them.
 # Typographic characters that reach this module through labels or names and
 # break jsPDF/reportlab. Anything else non-ASCII is decomposed and dropped.
 _ASCII_FOLD = str.maketrans({
@@ -965,65 +1071,73 @@ def compose_formal_interpretation(
 @functools.lru_cache(maxsize=4)
 def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
     """
-    Headline metrics with the baselines they must be quoted against.
+    The Specific Objective 2 metrics, with the Research Question 3 baselines
+    they must be quoted against.
 
-    Accuracy alone is misleading here: the majority class already scores 0.72
-    and seasonal persistence 0.79, so the skill margins travel with the number
-    wherever it is displayed.
+    Objective 2 names accuracy, precision, recall, F1-score, AUC-ROC and the
+    Maximum Reliable Lead Time. All six are reported here from
+    training_results.json, written by trainer.train_model().
 
-    `precision`, `recall` and `f1` are for the SHOCK class -- of the
-    province-quarter-commodity cells flagged as a production shock, how many
-    were one, and of the real shocks, how many were caught. At a positive rate
-    near 0.29 those are the figures that describe alert quality. The
-    support-weighted averages across both classes are exposed separately under
-    `weightedAvg`, and the raw confusion counts under `confusion` so any of
-    these can be recomputed.
+    Accuracy alone is not enough: Research Question 3 asks how the combined
+    LightGBM compares against six baselines, so whichever of them the last
+    evaluation run produced travel with the number wherever it is displayed.
+    A metric absent from the results file is reported as null, never as 0.0 --
+    a displayed precision of 0.0000 reads as "the model gets nothing right"
+    rather than "this results file predates the metric".
     """
-    path = Path("data/processed") / HORIZON_INFO[horizon]["resultsFile"]
+    if e31_active():
+        return e31_model_performance(horizon)
+    path = Path("data/processed/training_results.json")
     if not path.exists():
         return {}
     results = json.loads(path.read_text())
-    op = results.get("operating", {})
 
-    # A metric absent from the results file is reported as null, never as 0.0 --
-    # a displayed precision of 0.0000 reads as "the model flags nothing
-    # correctly" rather than "this results file predates the metric".
     def _m(key: str) -> float | None:
-        v = op.get(key)
+        v = results.get(key)
         return round(v, 4) if isinstance(v, (int, float)) else None
+
+    baselines: dict[str, float | None] = {}
+    eval_path = Path("data/processed/eval_results.json")
+    if eval_path.exists():
+        rows = json.loads(eval_path.read_text()).get("baselines", {})
+        for name, block in rows.items():
+            acc = block.get("overall", {}).get("accuracy")
+            baselines[name] = round(acc, 4) if isinstance(acc, (int, float)) else None
 
     return {
         "horizon": horizon,
-        "evaluation": "operating set (>=12 quarters history, 90% coverage, mature folds)",
-        "n": op.get("n"),
-        "accuracy": _m("accuracy"),
-        # Precision, recall and F1 for the SHOCK class. The positive rate is
-        # about 0.29, so the weighted averages (also exposed, below) are lifted
-        # by the easy majority class and say little about alert quality.
-        "precision": _m("precision_shock"),
-        "recall": _m("recall_shock"),
-        "f1": _m("f1_shock"),
-        "weightedAvg": {
-            "precision": _m("precision_weighted"),
-            "recall": _m("recall_weighted"),
-            "f1": _m("f1_weighted"),
+        "evaluation": (
+            "holdout — the last 4 quarters, never exposed to the Optuna search "
+            "(Algorithm 4)"
+        ),
+        "maxReliableLeadTime": results.get("max_reliable_lead_time"),
+        "accuracyThreshold": _m("accuracy_threshold"),
+        "nFeatures": results.get("n_features"),
+        "accuracy":  _m("holdout_accuracy"),
+        "precision": _m("holdout_precision"),
+        "recall":    _m("holdout_recall"),
+        "f1":        _m("holdout_f1"),
+        "rocAuc":    _m("holdout_roc_auc"),
+        "cvF1":      _m("best_cv_f1"),
+        "targets": {
+            "f1": 0.75,
+            "rocAuc": 0.80,
+            "meetsF1": results.get("meets_f1_target"),
+            "meetsRocAuc": results.get("meets_roc_auc_target"),
         },
-        "confusion": {
-            "tp": op.get("tp"), "fp": op.get("fp"),
-            "fn": op.get("fn"), "tn": op.get("tn"),
-        },
-        "rocAuc": _m("roc_auc"),
-        "baselines": {
-            "majorityClass": _m("majority_class"),
-            "seasonalPersistence": _m("seasonal_persistence"),
-            "naivePersistence": _m("naive_persistence"),
-        },
-        "skill": {
-            "vsMajority": _m("skill_vs_majority"),
-            "vsSeasonal": _m("skill_vs_seasonal"),
-            "vsNaive": _m("skill_vs_naive"),
-        },
-        "abstainPct": results.get("operating_spec", {}).get("abstain_pct"),
+        # Per-k scan from Algorithm 3: accuracy, precision, recall, F1 and
+        # AUC-ROC at every lead time tested, so the horizon choice is legible.
+        "leadTimeScan": results.get("lead_time_scan", []),
+        # Accuracy of each Research Question 3 comparison model on the same
+        # walk-forward folds. Empty until run_baseline_evaluation() has run.
+        "baselines": baselines,
+        # The model scored on the same walk-forward folds as the baselines.
+        # Research Question 3 asks how the model compares against them, and a
+        # comparison requires one evaluation set: the holdout figures above are
+        # Algorithm 4's acceptance test on the last four quarters, while the
+        # baselines run across every fold. These are the model's five metrics
+        # under the same walk-forward cross-validation the baselines use.
+        "sameFoldsAsBaselines": results.get("walk_forward_same_folds_as_baselines"),
     }
 
 
@@ -1031,46 +1145,44 @@ def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
 # News corpus
 # ---------------------------------------------------------------------------
 
-NAME_TO_CODE: dict[str, str] = {v["name"]: v["code"] for v in ref.PROVINCES.values()}
-
-
 @functools.lru_cache(maxsize=1)
 def _corpus() -> pd.DataFrame:
     """
-    The same article set trigger_classifier.py scored to produce the model's
-    trigger_*/matched_articles features and this app's newsSignalProportion --
-    NOT a separately-scraped display corpus. They used to be two different
-    files with zero overlapping articles, so a reader could open this panel
-    expecting to see the article behind a SHAP driver and never find it. This
-    is the file build_matched_news() (scripts/train_food_availability.py) and
-    the trigger classifier both read, so what is shown here is what the model
-    actually saw.
+    Relevant, geocoded articles with display fields normalised once.
 
-    Every row is already relevance-filtered by construction (relevance_tier is
-    HIGH or MEDIUM for all 371 rows; there is no lower tier retained in the
-    file). `province` is a name ("Batangas") or null for region-scope articles
-    that don't pin to one province -- mapped to a PSGC code via ref.PROVINCES,
-    left null (unattributed) rather than guessed.
+    `published` arrives as a mix of ISO dates and raw RSS timestamps, and the
+    topic column carries classifier hypothesis sentences. Both are cleaned here
+    so no route has to reformat them.
     """
     if not CORPUS_PATH.exists():
         return pd.DataFrame()
     df = pd.read_parquet(CORPUS_PATH)
+    if "is_relevant" in df.columns:
+        df = df[df["is_relevant"].astype("boolean").fillna(False)].copy()
 
-    published = pd.to_datetime(df.get("publication_date"), errors="coerce", utc=True, format="mixed")
-    df["_date"] = published.dt.strftime("%Y-%m-%d")
+    published = pd.to_datetime(df.get("published"), errors="coerce", utc=True, format="mixed")
+    # E27 fix: show the Philippine calendar date, the clock that assigns the article's quarter
+    # (app.ml.corpus._dates.quarter_of_publication). A UTC date put early-morning articles on the previous day,
+    # and on the first day of a quarter, visibly in the previous quarter.
+    df["_date"] = published.dt.tz_convert("Asia/Manila").dt.strftime("%Y-%m-%d")
     df["_sort_date"] = published
-    df["quarter"] = published.dt.year.astype("Int64").astype(str) + "-Q" + published.dt.quarter.astype("Int64").astype(str)
-    df["province_code"] = df.get("province").map(NAME_TO_CODE)
-    df["article_id"] = df.get("url").fillna("").map(lambda u: hashlib.md5(u.encode()).hexdigest()[:12])
 
-    topics = df.get("event_type")
+    topics = df.get("top_topic_name")
     mapped = topics.map(lambda t: TOPIC_MAP.get(t, UNCLASSIFIED)) if topics is not None else None
     df["_topic_key"] = [m[0] for m in mapped] if mapped is not None else UNCLASSIFIED[0]
     df["_topic_label"] = [m[1] for m in mapped] if mapped is not None else UNCLASSIFIED[1]
     return df
 
 
+def _e31_articles() -> list[dict]:
+    return E31.record()["news"]["articles"]
+
+
 def article_count(province_code: str | None, quarter: str) -> int:
+    if e31_active():
+        quarter = e31_news_evidence(quarter)[0]
+        return sum(1 for a in _e31_articles() if a["quarter"] == quarter
+                   and (province_code is None or a["province_code"] == province_code))
     df = _corpus()
     if df.empty:
         return 0
@@ -1089,6 +1201,8 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
     and without it the regional count looks irreconcilable with the five
     province counts that are supposed to add up to it.
     """
+    if e31_active():
+        return _e31_news(province_code, quarter, page, page_size)
     df = _corpus()
     if df.empty:
         return {"articleCount": 0, "provinceAttributed": 0,
@@ -1120,16 +1234,16 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
         {
             "id": str(r.get("article_id") or ""),
             "title": str(r.get("title") or ""),
-            "source": str(r.get("news_source") or ""),
+            "source": str(r.get("source_domain") or ""),
             "date": r["_date"] if pd.notna(r["_date"]) else None,
-            "url": str(r.get("url") or ""),
-            "excerpt": str(r.get("content_lead") or "")[:400],
+            "url": str(r.get("link") or ""),
+            "excerpt": str(r.get("summary") or "")[:400],
             "topicKey": r["_topic_key"],
             "topicLabel": r["_topic_label"],
-            # relevance_tier is categorical (HIGH/MEDIUM) in this corpus, not a
-            # float score -- left null rather than inventing a numeric value
-            # the source data doesn't have.
-            "relevanceScore": None,
+            "relevanceScore": (
+                round(float(r["food_insecurity_score"]), 4)
+                if pd.notna(r.get("food_insecurity_score")) else None
+            ),
         }
         for _, r in window.iterrows()
     ]
@@ -1139,4 +1253,110 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
         "topics": topics,
         "data": articles,
         "total": int(len(subset)),
+    }
+
+
+
+# ---------------------------------------------------------------------------
+# E31 data layer: news and model performance from the E31 record
+# ---------------------------------------------------------------------------
+
+E31_TOPICS = {"DIRECT": ("direct", "Direct food-insecurity report"),
+              "INDIRECT": ("indirect", "Food-system stress (prices, losses, supply)")}
+
+
+def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
+    """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy)."""
+    r = E31.quarter_row(quarter, NOWCAST)
+    if r is not None and r["mode"] == "FORECAST":
+        w = r["provenance"]["news_evidence_window"]
+        return (w["evidence_quarter"], "FORECAST",
+                f"Supporting news for the {quarter} forecast: {w['evidence_quarter']} articles published by "
+                f"{w['information_cutoff_ph'][:10]} ({w['coverage'].lower()} quarter). A forecast never uses news of "
+                f"its own target quarter.")
+    if r is not None and r["mode"] == "NOWCAST":
+        w = r["provenance"]["news_evidence_window"]
+        return (quarter, "NOWCAST", f"Same-quarter news published by {w['information_cutoff_ph'][:10]} "
+                                    f"({w['days_covered']} of {w['days_in_quarter']} days).")
+    return (quarter, "OBSERVED", f"News published in {quarter} (describes the quarter; its one-quarter-ahead "
+                                 f"estimate was made with the previous quarter's news).")
+
+
+def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
+    """Validated articles (relevance rule R1.1) behind a subject-quarter's estimate, newest first. Titles only: the
+    source gives no lead text, so the excerpt is empty rather than invented."""
+    ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
+    quarter = ev_q
+    rows = [a for a in _e31_articles() if a["quarter"] == quarter
+            and (province_code is None or a["province_code"] == province_code)]
+    counts: dict[str, int] = {}
+    for a in rows:
+        counts[a["relevance"]] = counts.get(a["relevance"], 0) + 1
+    labels = list(counts)
+    pcts = _integer_shares([counts[k] for k in labels])
+    topics = [{"key": E31_TOPICS[k][0], "label": E31_TOPICS[k][1], "count": counts[k], "pct": p}
+              for k, p in zip(labels, pcts)]
+    start = (page - 1) * page_size
+    data = [{"id": a["article_key"], "title": a["title"], "source": a["outlet"], "date": a["published_ph"][:10],
+             "url": a["link"], "excerpt": "", "topicKey": E31_TOPICS[a["relevance"]][0],
+             "topicLabel": E31_TOPICS[a["relevance"]][1], "relevanceScore": None}
+            for a in rows[start:start + page_size]]
+    # every validated article is province-attributed (R1.1 runs on attributed titles), so the two counts agree
+    return {"articleCount": len(rows), "provinceAttributed": len(rows),
+            "topics": topics, "data": data, "total": len(rows), "evidenceQuarter": ev_q, "sourceQuarter": ev_q,
+            "evidenceMode": ev_mode, "evidenceNote": ev_note}
+
+
+def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
+    """Objective 2 metrics of the served engine and the Objective 4 baselines, on the SAME walk-forward rows (E28
+    frozen protocol, lead 1, development evidence), plus the one unseen quarter. Nulls stay null."""
+    rec = E31.record()
+    v = rec["validation"]
+
+    def r(x):
+        return round(x, 4) if isinstance(x, (int, float)) else None
+
+    if rec.get("schema") == "e36/1":
+        # E36: the served LightGBM and the six Chapter I baselines on identical lead-1 rows (nested walk-forward).
+        ev = v["model_evaluation"]
+        rows = {x["key"]: x for x in ev["rows"]}
+        m = rows["E36-LGBM"]
+        return {
+            "horizon": horizon, "evaluation": ev["basis"], "maxReliableLeadTime": None, "accuracyThreshold": None,
+            "nFeatures": len(rec["served_engine"]["config"]["features"]),
+            "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]), "recall": r(m["recall"]),
+            "f1": r(m["f1"]), "rocAuc": r(m["roc_auc"]), "cvF1": None,
+            "correct": m["correct"], "n": m["n"], "accuracyCi95": m["accuracy_ci95"],
+            "balancedAccuracy": r(m["balanced_accuracy"]), "brier": r(m["brier"]),
+            "targets": {"f1": None, "rocAuc": None, "meetsF1": None, "meetsRocAuc": None,
+                        "note": v["threshold_75pct"]["verdict"]},
+            "leadTimeScan": [{"lead": 1, "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]),
+                              "recall": r(m["recall"]), "f1": r(m["f1"]), "roc_auc": r(m["roc_auc"]),
+                              "brier": r(m["brier"])}],
+            "baselines": {x["arm"]: r(x["accuracy_lead1"]) for k, x in rows.items() if k != "E36-LGBM"},
+            "sameFoldsAsBaselines": {"accuracy": r(m["accuracy_lead1"]), "weighted_f1": r(m["f1"]),
+                                     "roc_auc": r(m["roc_auc"])},
+            "unseenQuarter": v["prospective_2026Q4"],
+        }
+
+    arms = v["development_metrics_T1"]["arms"]
+    m = arms["PCF21_E25"]["by_lead"]["1"]
+
+    return {
+        "horizon": horizon,
+        "evaluation": v["development_metrics_T1"]["basis"],
+        "maxReliableLeadTime": None,
+        "accuracyThreshold": None,
+        "nFeatures": 2,
+        "accuracy": r(m["accuracy"]), "precision": r(m["precision"]), "recall": r(m["recall"]), "f1": r(m["f1"]),
+        "rocAuc": r(m["roc_auc"]), "cvF1": None,
+        "targets": {"f1": None, "rocAuc": None, "meetsF1": None, "meetsRocAuc": None,
+                    "note": v["threshold_75pct"]["verdict"]},
+        "leadTimeScan": [{"lead": int(L), **{k: r(x.get(k)) for k in ("accuracy", "precision", "recall", "f1",
+                                                                     "roc_auc", "brier")}}
+                         for L, x in arms["PCF21_E25"]["by_lead"].items()],
+        "baselines": {a["label"]: r(a["by_lead"]["1"]["accuracy"]) for k, a in arms.items() if k != "PCF21_E25"},
+        # the walk-forward rows ARE the baselines' rows (E28 protocol), so the same-fold figures are these
+        "sameFoldsAsBaselines": {"accuracy": r(m["accuracy"]), "weighted_f1": r(m["f1"]), "roc_auc": r(m["roc_auc"])},
+        "unseenQuarter": v["unseen_quarter_2026Q3"],
     }

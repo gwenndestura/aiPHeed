@@ -1,0 +1,54 @@
+﻿python.exe : Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher 
+rate limits and faster downloads.
+At line:1 char:403
++ ... esolution"; & C:\Users\admin\aipheed\backend\venv\Scripts\python.exe  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: You ar...ster downloads.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 393/393 [00:00<00:00, 8537.06it/s]
+[transformers] [1mXLMRobertaForSequenceClassification LOAD REPORT[0m from: joeddav/xlm-roberta-large-xnli
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+roberta.pooler.dense.bias   | UNEXPECTED |  | 
+roberta.pooler.dense.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+Applied processor reduces input query to empty string, all comparisons will have score 0. [Query: '- -']
+{
+ "items": 3162,
+ "snapshots_fetched": 165,
+ "fetch_errors": 133,
+ "title_only": {
+  "geo": 26,
+  "geo_food": 1,
+  "geo_fssi": 0
+ },
+ "title_plus_lead": {
+  "geo": 56,
+  "geo_food": 7,
+  "geo_fssi": 1
+ },
+ "ratio_fssi_eligible_B_over_A": null,
+ "note": "same items, same geocoder and classifier; only the premise differs. Sample: up to 60 evenly spaced daily snapshots per feed, 2025-07..2026-06; items outside the window are dropped."
+}

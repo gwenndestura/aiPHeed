@@ -1,0 +1,124 @@
+{
+ "model_id": "E32-PCFN",
+ "version": "E32.1-candidate",
+ "origin": "2026-10-01",
+ "definition": "PCF21 local-level H filter + news shift beta*(news_reg - mean); D = OLS(no intercept) of D(t+k) on [D_last, Dnow, rice_rel, news_n]; P = 1 - Phi((tau - (mu_H + 2 mu_D)) / sqrt(V_H + 4 sigma_D^2))",
+ "feature_definitions": {
+  "H_last": "mean Balance Luzon hunger of the latest quarter whose rounds were posted before the origin",
+  "D_last": "province food YoY minus five-province mean, quarter t-1 (PSA)",
+  "Dnow": "same, months 1-2 of quarter t",
+  "rice_rel": "province rice CPI YoY minus five-province mean, months 1-2 of t",
+  "news_n": "log1p(validated R1.1 articles, province, quarter t)",
+  "news_reg": "log1p(validated R1.1 articles, five provinces, quarter t)"
+ },
+ "dataset_version": {
+  "sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+  "s1_labels.csv": "2128866651d4e1cd30d90bd49a8e075ad06cb33732d944428bcbcf1a5e2807f1",
+  "d_quarterly_panel.csv": "87b927987973c089bd888ad61533db1b0a014bafb7a750bdb1efc1516e15f871",
+  "dnow_panel.csv": "255542eb1cc249b01c06a9da508625d07d51ccc2bc7bfe27d45460742cf7cddb",
+  "news_e31/articles.jsonl": "3015d193c8753565a3fcf06752bb3452cd5f63827bba51da78ab39d7d548cc4f",
+  "news_e31/scores.jsonl": "e89c67b7a73b530bcd06874b814ecb38f0911bb6448ca847800cffa0e4f1442c",
+  "news_e31/fssi_v2_panel.csv": "2a0a10499d2f2eb382f78cd914a27fcf083b86e542be498455f3c7330b742b1b"
+ },
+ "leads": {
+  "1": {
+   "beta_news_H": 0.9984354172848671,
+   "D_pairs": 85,
+   "D_fallback": false,
+   "D_coef": [
+    0.0342670684962299,
+    0.7650713503592953,
+    -0.10080541078901206,
+    -0.10500123816435887
+   ],
+   "sigma_D": 1.3007468745085147,
+   "mu_H": 18.80314585368326,
+   "artifacts": {
+    "training_rows": 75,
+    "training_HIGH_share": 0.7333333333333333,
+    "training_target_quarters": [
+     "2022-Q2",
+     "2022-Q3",
+     "2022-Q4",
+     "2023-Q1",
+     "2023-Q2",
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "LR_coefficients_standardized": {
+     "H_last": 0.3301795317861094,
+     "H_gap": 0.1209933318266986,
+     "H_trend": 0.5668012449681638,
+     "H_margin": 0.25631616149951236,
+     "D_last": 0.29959695419003635,
+     "Dnow": 1.5965489337635794,
+     "rice_rel": -0.4125651181446365,
+     "news_n": -0.4685919663178518,
+     "news_reg": 0.35182709576611726,
+     "news_direct_share": 0.09482072467736449,
+     "fssi_v2": -0.35054683950064514,
+     "fssi_missing": -0.089227153405072,
+     "y_last": 1.0323304386484002
+    },
+    "LR_intercept": 2.068653925795768
+   }
+  },
+  "2": {
+   "beta_news_H": 0.9984354172848671,
+   "D_pairs": 80,
+   "D_fallback": false,
+   "D_coef": [
+    -0.2554619265935856,
+    0.8434934809515302,
+    -0.1356933700821379,
+    -0.045034127725741044
+   ],
+   "sigma_D": 1.4848650894854079,
+   "mu_H": 18.80314585368326,
+   "artifacts": {
+    "training_rows": 70,
+    "training_HIGH_share": 0.7571428571428571,
+    "training_target_quarters": [
+     "2022-Q3",
+     "2022-Q4",
+     "2023-Q1",
+     "2023-Q2",
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4",
+     "2026-Q1",
+     "2026-Q2"
+    ],
+    "LR_coefficients_standardized": {
+     "H_last": 0.07698260547433537,
+     "H_gap": -0.2765759140516395,
+     "H_trend": -0.15435963384196788,
+     "H_margin": 0.16359037525744105,
+     "D_last": 0.6240745107768779,
+     "Dnow": 0.9872914541611878,
+     "rice_rel": -0.26208288138675206,
+     "news_n": 0.0803835363890877,
+     "news_reg": 0.6073422812854306,
+     "news_direct_share": 0.002875276485809577,
+     "fssi_v2": -0.28505620499701767,
+     "fssi_missing": -0.08109615882949923,
+     "y_last": 0.4709035697088741
+    },
+    "LR_intercept": 1.7936321145101102
+   }
+  }
+ }
+}

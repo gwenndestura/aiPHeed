@@ -929,7 +929,12 @@ def _parse_entry(entry) -> dict | None:
         except Exception:
             pass
     if not published_iso and entry.get("published"):
-        published_iso = entry["published"]
+        # Feeds publish RFC 822 dates. Storing that string verbatim is what
+        # produced the 213 unrecoverable "Mon, 25 Ma" values in the corpus, so
+        # it is normalised here and dropped if it cannot be read.
+        from app.ml.corpus._dates import normalize_published
+
+        published_iso = normalize_published(entry["published"])
 
     source_domain = _extract_domain(source_href)
 

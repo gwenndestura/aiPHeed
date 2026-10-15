@@ -179,7 +179,7 @@ def demo_from_env() -> None:
     if not email or not password:
         sys.exit("Set DEMO_ADMIN_EMAIL and DEMO_ADMIN_PASSWORD in backend/.env first.")
     if not security.email_domain_allowed(email):
-        sys.exit(f"DEMO_ADMIN_EMAIL must be an @{settings.ADMIN_EMAIL_DOMAIN} address.")
+        sys.exit(f"DEMO_ADMIN_EMAIL must be an {' or '.join('@' + d for d in settings.admin_email_domains)} address.")
     if settings.secret_is_default:
         sys.exit("SECRET_KEY is still 'changeme'. Set a strong random SECRET_KEY in backend/.env first.")
     check_password(password)
@@ -214,9 +214,9 @@ def main() -> None:
     email = args.email.strip().lower()
     if not security.email_domain_allowed(email):
         sys.exit(
-            f"{email} is outside the permitted domain "
-            f"@{settings.ADMIN_EMAIL_DOMAIN}. Change ADMIN_EMAIL_DOMAIN if that "
-            "is wrong."
+            f"{email} is outside the permitted domain(s) "
+            f"{', '.join('@' + d for d in settings.admin_email_domains)}. "
+            "Change ADMIN_EMAIL_DOMAINS if that is wrong."
         )
 
     if args.deactivate:

@@ -157,7 +157,7 @@ def _sources() -> list[str]:
             + ": scored into the Food Stress Sentiment Index and the five driver-group "
             "trigger proportions."
         )
-    out.append("PSA 2020 Census of Population and Housing: provincial population.")
+    out.append("PSA 2024 Census of Population (POPCEN): provincial population.")
     out.append("PSA 2021 poverty incidence, averaged over each province's LGU estimates: "
                "provincial poverty incidence.")
     return out
@@ -600,10 +600,10 @@ def build_report(kind: str, scope: str, province_id: str | None,
                 f"decision threshold ({_model_meta()['decisionThreshold']:.3f}) and 0 otherwise.")
     blocks.append(_table(
         tab_n,
-        f"Table {tab_n}. Provincial context, {txt.qlabel(last_q)}. Population: PSA 2020 Census "
-        f"of Population and Housing. Poverty incidence: PSA 2021, mean of the province's LGU "
+        f"Table {tab_n}. Provincial context, {txt.qlabel(last_q)}. Population: PSA 2024 Census "
+        f"of Population (POPCEN). Poverty incidence: PSA 2021, mean of the province's LGU "
         f"estimates. Series at risk: model output (province_summary).",
-        [("Province", "left", 0.25), ("Population (2020 CPH)", "right", 0.25),
+        [("Province", "left", 0.25), ("Population (2024 POPCEN)", "right", 0.25),
          ("Poverty incidence (PSA 2021)", "right", 0.25), ("Series at risk / monitored", "center", 0.25)],
         ctx_rows, note=note,
     ))

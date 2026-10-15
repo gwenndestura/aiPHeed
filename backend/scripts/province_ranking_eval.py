@@ -62,7 +62,7 @@ def load_predictors() -> pd.DataFrame:
     art["year"] = pd.to_datetime(art["publication_date"], errors="coerce").dt.year
 
     census = pd.read_parquet(CENSUS)
-    prov = (census.groupby(["province_code", "province_name"])["population_2020"]
+    prov = (census.groupby(["province_code", "province_name"])["population_2024"]
                   .sum().reset_index())
     name_to_code = dict(zip(prov["province_name"], prov["province_code"]))
     art["psgc_code"] = art["province"].map(name_to_code)
@@ -73,7 +73,7 @@ def load_predictors() -> pd.DataFrame:
                  .reset_index())
     counts["high_share"] = counts["high_tier"] / counts["article_count"]
 
-    pop = dict(zip(prov["province_code"], prov["population_2020"]))
+    pop = dict(zip(prov["province_code"], prov["population_2024"]))
     counts["articles_per_100k"] = counts.apply(
         lambda r: 1e5 * r["article_count"] / pop.get(r["psgc_code"], np.nan), axis=1)
 

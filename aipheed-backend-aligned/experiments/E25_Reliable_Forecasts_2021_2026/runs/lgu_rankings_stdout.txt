@@ -1,0 +1,51 @@
+{
+ "census_rows": 142,
+ "poverty_rows": 142,
+ "reference_rows": 142,
+ "codes_census_eq_poverty": true,
+ "codes_census_eq_reference": true,
+ "names_census_eq_reference": true,
+ "province_prefix_ok": true,
+ "population_matches_reference": true,
+ "density_recomputed_max_abs_diff": 0.0,
+ "lgus_per_province": {
+  "Cavite": 23,
+  "Laguna": 30,
+  "Quezon": 41,
+  "Rizal": 14,
+  "Batangas": 34
+ },
+ "deterministic_under_shuffled_input": true,
+ "density_vs_poverty_where_both_exist": {
+  "n_lgus": 16,
+  "spearman_rho": -0.7558823529411764,
+  "p_two_sided": 0.0007058905869098934,
+  "reading": "density runs OPPOSITE to poverty (denser LGUs are less poor)",
+  "by_province": {
+   "Cavite": 4,
+   "Laguna": 3,
+   "Quezon": 4,
+   "Rizal": 2,
+   "Batangas": 3
+  }
+ },
+ "lgus_with_municipal_estimate": 16,
+ "lgus_with_substitute": 126,
+ "ties_in_risk_index": 4,
+ "version": "v1 (authorized lgu_poverty.parquet: municipal estimates only where the source is municipal)",
+ "province_probabilities": {
+  "source": "SEAL_E25_20261014T002548Z (sha256 417ce60fd07106179f6ea84d109442b15b97f29a57191bb457f42ba5ebcce4d0)",
+  "arm": "PCF21 = FINAL_T1",
+  "target_quarter": "2026-Q4",
+  "lead": 1,
+  "status": "INDICATIVE ONLY (lead not validated)",
+  "values": {
+   "Cavite": 0.7815012664,
+   "Laguna": 0.7309156845,
+   "Quezon": 0.7897035939,
+   "Rizal": 0.7558182727,
+   "Batangas": 0.532401904
+  }
+ },
+ "sae_ingestion": "not run: the PSA municipal SAE workbook has not been supplied (psa.gov.ph/foi.gov.ph returned HTTP 403 to automated access in E24; never bypassed)"
+}

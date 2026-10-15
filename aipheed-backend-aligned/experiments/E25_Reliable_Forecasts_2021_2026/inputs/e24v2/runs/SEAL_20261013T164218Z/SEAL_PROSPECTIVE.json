@@ -1,0 +1,198 @@
+{
+ "sha256": "ac8babbcfbb36729e16226356d1cb8250be0730d437d08eb465ecc5830673ef0",
+ "rows": 150,
+ "created_utc": "2026-10-13T16:42:18+00:00",
+ "origin": "2026-07-01T00:00:00 PHT",
+ "targets": [
+  "2026-Q3",
+  "2026-Q4",
+  "2027-Q1"
+ ],
+ "threshold_T1": 14.344999999999999,
+ "threshold_labels_used": 80,
+ "sws_rounds_used": [
+  {
+   "quarter": "2021-Q2",
+   "H": "15.7",
+   "published": "2021-07-12",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2021-Q2",
+   "H": "15.0",
+   "published": "2021-07-28",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2021-Q3",
+   "H": "10.3",
+   "published": "2021-12-06",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2021-Q4",
+   "H": "9.2",
+   "published": "2022-03-25",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2022-Q2",
+   "H": "11.7",
+   "published": "2022-06-06",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2022-Q2",
+   "H": "11.9",
+   "published": "2022-09-10",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2022-Q3",
+   "H": "9.6",
+   "published": "2022-10-29",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2022-Q4",
+   "H": "11.3",
+   "published": "2023-01-19",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2023-Q1",
+   "H": "8.7",
+   "published": "2023-05-11",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2023-Q2",
+   "H": "11.3",
+   "published": "2023-08-02",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2023-Q3",
+   "H": "10.3",
+   "published": "2023-11-20",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2023-Q4",
+   "H": "14.3",
+   "published": "2024-01-22",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2024-Q1",
+   "H": "15.3",
+   "published": "2024-04-30",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2024-Q2",
+   "H": "19.6",
+   "published": "2024-07-23",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2024-Q3",
+   "H": "18.1",
+   "published": "2024-10-17",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2024-Q4",
+   "H": "25.3",
+   "published": "2025-01-14",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2025-Q1",
+   "H": "24.0",
+   "published": "2025-03-29",
+   "definition_A": "True",
+   "source": "production"
+  },
+  {
+   "quarter": "2025-Q2",
+   "H": "17.0",
+   "published": "2025-06-27",
+   "definition_A": "False",
+   "source": "supplementary"
+  },
+  {
+   "quarter": "2025-Q2",
+   "H": "15.3",
+   "published": "2025-08-15",
+   "definition_A": "False",
+   "source": "supplementary"
+  },
+  {
+   "quarter": "2025-Q3",
+   "H": "23.8",
+   "published": "2025-11-05",
+   "definition_A": "False",
+   "source": "supplementary"
+  },
+  {
+   "quarter": "2025-Q4",
+   "H": "16.7",
+   "published": "2026-01-14",
+   "definition_A": "True",
+   "source": "production"
+  }
+ ],
+ "protocol_sha256": "c8bce7ce93df064b5a50bfa8b5be9486b1b8cd0d04ecee1ad583b7c983013eb6",
+ "inputs": [
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv",
+   "op": "read_text"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json",
+   "op": "read_text"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\config\\governing_model.json",
+   "op": "read_text"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\features_fused.parquet",
+   "op": "read_parquet"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\supplementary\\collection_2026-10-09\\provincial_food_cpi_yoy_2026H1_raw.csv",
+   "op": "read_text"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\backend\\data\\processed\\sws_hunger.parquet",
+   "op": "read_parquet"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\supplementary\\collection_2026-10-09\\provincial_food_cpi_yoy_2026H1_raw.csv",
+   "op": "read_text"
+  },
+  {
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\supplementary\\collection_2026-10-09\\provincial_food_cpi_yoy_2026H1_raw.csv",
+   "op": "read_text"
+  }
+ ],
+ "statement": "Made before any 2026-Q3+ outcome was opened; outcomes are protected and unseen. Score only with runner/score_prospective.py after the owner authorizes the outcome files."
+}

@@ -40,6 +40,11 @@ FEATURE_DISPLAY_MAP: dict[str, dict[str, str]] = {
         "feature_group": "market",
         "unit": "% change",
     },
+    "cpi_dev": {
+        "display_name": "Food CPI Growth vs Province's Recent Average",
+        "feature_group": "market",
+        "unit": "pp",
+    },
     "food_cpi_yoy_lag1": {
         "display_name": "Food CPI Growth (Prior Qtr)",
         "feature_group": "market",
@@ -265,44 +270,6 @@ FEATURE_DISPLAY_MAP: dict[str, dict[str, str]] = {
 
 
 # ---------------------------------------------------------------------------
-# Food-availability target features (added 2026-09-01)
-# ---------------------------------------------------------------------------
-# The model predicts a production shortfall per province-commodity series, so
-# the series' own history and its position in the annual cycle are first-class
-# drivers. Empirically they are the strongest: the annual cycle alone was worth
-# +0.11 accuracy.
-FEATURE_DISPLAY_MAP.update({
-    "shock_lag1":   {"display_name": "Shortfall last quarter",
-                     "feature_group": "series_history", "unit": "0/1"},
-    "shock_lag2":   {"display_name": "Shortfall two quarters ago",
-                     "feature_group": "series_history", "unit": "0/1"},
-    "dev_lag1":     {"display_name": "Deviation from normal, last quarter",
-                     "feature_group": "series_history", "unit": "%"},
-    "group_code":   {"display_name": "Commodity group",
-                     "feature_group": "series_history", "unit": "code"},
-    "province_idx": {"display_name": "Province",
-                     "feature_group": "series_history", "unit": "code"},
-    "commodity_te": {"display_name": "Commodity historical shortfall rate",
-                     "feature_group": "series_history", "unit": "rate"},
-    "shock_lag4":   {"display_name": "Shortfall same quarter last year",
-                     "feature_group": "seasonal", "unit": "0/1"},
-    "dev_lag4":     {"display_name": "Deviation same quarter last year",
-                     "feature_group": "seasonal", "unit": "%"},
-    "dev_roll4":    {"display_name": "Average deviation, past year",
-                     "feature_group": "seasonal", "unit": "%"},
-    "series_vol":   {"display_name": "Series volatility",
-                     "feature_group": "seasonal", "unit": "%"},
-    "quarter_num":  {"display_name": "Quarter of year",
-                     "feature_group": "seasonal", "unit": "1-4"},
-    "matched_articles": {"display_name": "Matched news articles",
-                         "feature_group": "nlp", "unit": "count"},
-    "matched_lag1":     {"display_name": "Matched articles, last quarter",
-                         "feature_group": "nlp", "unit": "count"},
-    "total_articles":   {"display_name": "All food-insecurity articles",
-                         "feature_group": "nlp", "unit": "count"},
-})
-
-# ---------------------------------------------------------------------------
 # DRIVER_GROUP_FEATURES
 # ---------------------------------------------------------------------------
 # Maps each Risk Driver panel category to the feature names whose SHAP values
@@ -316,53 +283,15 @@ FEATURE_DISPLAY_MAP.update({
 #   negative  → protective / suppressor  (shown in yellow, labeled PROTECTIVE)
 # ---------------------------------------------------------------------------
 
-## ---------------------------------------------------------------------------
-## Presentation scheme: five thesis-defined categories (reinstated 2026-09-20)
-## ---------------------------------------------------------------------------
-## This app previously shipped a seven-group scheme (see git history) after
-## finding that a strict five-category panel misrepresented two of the labels:
-##   - "OFW Remittance" was roughly half diesel/fuel-price features -- a rising
-##     bar there could mean fuel, not remittances.
-##   - Folding the fish-kill news signal into a broader "News Coverage" bucket
-##     (FSSI + article counts) was judged noisy (~88% non-signal at province
-##     level) if presented as its own driver.
-## The thesis defense requires exactly five named categories
-## (Market/Prices, Climate Stress, Fish Kill, Employment, OFW Remittance), so
-## this reverts to that scheme -- but keeps the fix for the mislabeling problem
-## that motivated the seven-group change in the first place, rather than
-## silently reintroducing it:
-##   - OFW Remittance now contains ONLY the real remittance features
-##     (ofw_remit_yoy_pct*, trigger_ofw_remittance). The fuel/FX features that
-##     used to sit here move to Market/Prices, where "a rising bar might mean
-##     transport/input costs, not just farmgate prices" is at least consistent
-##     with what that label already covers.
-##   - Fish Kill contains ONLY the real fish-kill-specific signal
-##     (trigger_fish_kill), not the broader, noisier FSSI/article-count
-##     features -- so the bar reflects what it's named, at the cost of being a
-##     thinner signal (few articles mention fish kills specifically; see the
-##     `newsSignalProportion` caveat surfaced alongside it).
-## The model's other real, often-dominant drivers -- the commodity series' own
-## recent history and seasonal position (previously "series_history" /
-## "seasonal"), plus general food-insecurity news volume/sentiment (FSSI,
-## matched/total article counts) -- are NOT dropped from the model, only from
-## this five-category presentation. Their combined share is disclosed via
-## `other_pct` in build_drivers() and surfaced in the narrative text, rather
-## than folded into one of the five bars (which would inflate that bar beyond
-## what it actually represents) or hidden.
 DRIVER_GROUP_FEATURES: dict[str, list[str]] = {
     "market": [
-        "food_cpi", "food_cpi_yoy", "food_cpi_yoy_lag1", "food_cpi_yoy_accel",
+        "food_cpi", "food_cpi_yoy", "cpi_dev", "food_cpi_yoy_lag1", "food_cpi_yoy_accel",
         "food_minus_headline_yoy", "food_minus_headline_yoy_lag1", "food_minus_headline_yoy_accel",
         "headline_cpi",
         "rice_price_regular", "rice_price_regular_lag1", "rice_price_regular_accel",
         "commodity_fruit_veg", "commodity_leafy_veg", "commodity_livestock",
         "commodity_poultry", "commodity_rootcrops",
         "trigger_market",
-        # Fuel/transport/FX costs feed into commodity prices; kept here
-        # rather than under OFW Remittance, which is what made that label
-        # misleading before (see note above).
-        "fx_usd_php_avg", "diesel_php_per_l", "diesel_php_per_l_lag1",
-        "diesel_php_per_l_accel", "gasoline_php_per_l", "brent_usd_per_bbl",
     ],
     "climate": [
         "tc_count", "tc_severe_flag",
@@ -370,39 +299,41 @@ DRIVER_GROUP_FEATURES: dict[str, list[str]] = {
         "drought_alert", "enso_numeric",
         "trigger_climate",
     ],
-    "fish_kill": [
-        "trigger_fish_kill",
-    ],
     "employment": [
         "unemployment_rate", "unemployment_rate_lag1", "unemployment_rate_accel",
         "poverty_incidence",
         "trigger_employment",
     ],
-    "ofw_remittance": [
+    "macro_ofw": [
         "ofw_remit_yoy_pct", "ofw_remit_yoy_pct_lag1", "ofw_remit_yoy_pct_accel",
+        "fx_usd_php_avg",
+        "diesel_php_per_l", "diesel_php_per_l_lag1", "diesel_php_per_l_accel",
+        "gasoline_php_per_l", "brent_usd_per_bbl",
         "trigger_ofw_remittance",
+    ],
+    "nlp_sentiment": [
+        "FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel",
+        "trigger_fish_kill",
     ],
 }
 
-# Real, trained model features that are NOT itemized among the five thesis
-# categories above -- the commodity series' own recent/seasonal dynamics and
-# general (non-fish-kill-specific) news volume/sentiment. Real and often the
-# largest single drivers (the annual-cycle features alone were worth +0.11
-# accuracy) -- excluded from the five bars on purpose so no bar overstates
-# its share, and their combined magnitude is disclosed separately rather
-# than hidden. See build_drivers()'s `other_pct`.
-UNGROUPED_FEATURES: list[str] = [
-    "FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel",
-    "matched_articles", "matched_lag1", "total_articles",
-    "shock_lag1", "shock_lag2", "dev_lag1",
-    "group_code", "province_idx", "commodity_te",
-    "shock_lag4", "dev_lag4", "dev_roll4", "series_vol", "quarter_num",
-]
-
+# Dashboard display labels for each group
+# Each label must survive a reader checking it against the feature list above.
+# Two of the previous names did not:
+#
+#   "OFW Remittance"     was half diesel price. A rising bar reads as
+#                        remittances falling when it may be fuel.
+#   "Food Stress Signal" counts news ARTICLES, not stress. Heavy coverage
+#                        after a typhoon is more reporting, not more hunger --
+#                        and this corpus was ~88% noise at province level.
+#
+# "Employment" also overstated a single feature (last quarter's unemployment
+# rate), and the two model-dynamics groups were named like filler when they
+# carry most of the explanation and deserve to state what they are.
 DRIVER_GROUP_LABELS: dict[str, str] = {
-    "market":         "Market / Prices",
-    "climate":        "Climate Stress",
-    "fish_kill":      "Fish Kill",
-    "employment":     "Employment",
-    "ofw_remittance": "OFW Remittance",
+    "market":         "Food Prices",            # CPI, rice, produce, livestock
+    "climate":        "Weather & Typhoons",     # typhoons, rainfall, drought, ENSO
+    "employment":     "Unemployment",           # one feature: unemployment rate
+    "macro_ofw":      "Fuel & Remittances",     # diesel price + OFW remittances
+    "nlp_sentiment":  "News Coverage",          # FSSI and the fish-kill trigger
 }

@@ -10,7 +10,6 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 from __future__ import annotations
 
 from fastapi import APIRouter, Query
-from starlette.concurrency import run_in_threadpool
 
 from app.schemas.public import ExplainabilityResponse, NewsResponse
 from app.services import dashboard as svc
@@ -51,6 +50,31 @@ EXPLAINABILITY_NOTE = (
 )
 
 
+E36_EXPLAINABILITY_NOTE = (
+    "The bars show how much each input of the forecasting model moved this province's estimate up or down. "
+    "Regional hunger survey results, provincial food and rice price movements and the latest published risk "
+    "level come from government data; the news items come from validated news reports. A long bar does not by "
+    "itself mean that a factor raised the risk: the colour of each bar shows whether it raised or lowered the "
+    "estimate. These are patterns the model learned from 2021 to 2026 data, not proven causes, and the figures "
+    "are model estimates, not official government statistics."
+)
+
+
+def _served_note() -> str:
+    from app.ml.inference import e31_engine as E31
+
+    return E36_EXPLAINABILITY_NOTE if E31.record().get("schema") == "e36/1" else E31_EXPLAINABILITY_NOTE
+
+
+E31_EXPLAINABILITY_NOTE = (
+    "Exact breakdown of the served estimate (PCF21), not a SHAP approximation: the estimate's margin over the "
+    "threshold equals (regional hunger - threshold) + 2 x provincial relative food-price pressure. Regional hunger "
+    "is one SWS Balance Luzon value shared by all five provinces; only the price term differs between provinces. "
+    "These are the model's inputs, not causes. Shares are rescaled to 100%; read `direction`, not bar size alone. "
+    "`color`: yellow below the 20% line, red above it while raising the estimate, green while lowering it."
+)
+
+
 def _resolve_province(scope: str, subject_id: str) -> tuple[str | None, str]:
     """Return (province PSGC code or None for region, display name)."""
     if scope == "region":
@@ -83,19 +107,14 @@ async def get_explainability(
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
 
-    # SHAP is CPU-bound and, on a quarter not yet cached this process, blocks
-    # for several seconds per province. Run it off the event loop so it
-    # doesn't stall every other request on the server while it computes --
-    # confirmed by measurement that a concurrent /config call queued behind
-    # an in-flight SHAP call the way it would if this ran inline.
     if code is None:
-        result = await run_in_threadpool(svc.explainability_region, q)
+        result = svc.explainability_region(q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
         risk_score = svc.region_forecast(q)["riskScore"]
     else:
-        result = await run_in_threadpool(svc.explainability, code, q)
+        result = svc.explainability(code, q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
@@ -103,7 +122,6 @@ async def get_explainability(
         match = [p for p in svc.province_summary(q) if p["id"] == slug]
         risk_score = match[0]["riskScore"] if match else 0.0
 
-    other_pct = result["otherPct"]
     return ExplainabilityResponse(
         scope=scope,
         id=id.lower(),
@@ -111,12 +129,10 @@ async def get_explainability(
         quarter=q,
         riskScore=risk_score,
         triggers=triggers,
-        otherPct=other_pct,
         articleCount=article_count,
         triggerMatchedArticles=matched,
-        narrative=svc.compose_narrative(name, q, triggers, other_pct),
-        formalInterpretation=svc.compose_formal_interpretation(name, q, triggers, other_pct),
-        note=EXPLAINABILITY_NOTE,
+        narrative=svc.compose_narrative(name, q, triggers),
+        note=_served_note() if svc.e31_active() else EXPLAINABILITY_NOTE,
     )
 
 
@@ -132,18 +148,15 @@ async def get_news(
     The analysed article corpus for a subject-quarter, with its topic mix.
 
     Articles are geocoded to province, so municipality scope returns the parent
-    province's corpus. A forecast quarter returns its information-cutoff
-    quarter's articles (`sourceQuarter`), the news the forecast was built from.
+    province's corpus.
     """
     q = svc.resolve_quarter(quarter)
     code, _ = _resolve_province(scope, id)
-    source_q = svc.news_quarter(q)
-    body = svc.news(code, source_q, page, pageSize)
+    body = svc.news(code, q, page, pageSize)
     return NewsResponse(
         scope=scope,
         id=id.lower(),
         quarter=q,
-        sourceQuarter=source_q,
         page=page,
         pageSize=pageSize,
         **body,
