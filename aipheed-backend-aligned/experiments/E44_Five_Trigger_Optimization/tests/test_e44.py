@@ -134,3 +134,22 @@ def test_i4_ignores_post_origin_data_and_uses_five_triggers():
 def test_bivariate_price_probability_bounds():
     p = P2.p_price_biv([0.0, 50.0], [-50.0, 0.0], 2.0, 1.0, 0.5, ["PH040100000", "PH040100000"])
     assert p[0] < 0.01 and p[1] > 0.99
+
+
+def test_i5_addendum_frozen():
+    want = (HERE.parent / "runner" / "ADDENDUM_I5_SHA256.txt").read_text().split()[0]
+    assert hashlib.sha256((HERE.parent / "ADDENDUM_I5.md").read_bytes().replace(b"\r\n", b"\n")).hexdigest() == want
+
+
+def test_i5_forward_inner_validation_and_leakage():
+    assert P2.forward_quarters(list(range(10))) == [4, 5, 6, 7, 8, 9]
+    t = L.qi("2025-Q1")
+    o = list(range(L.qi("2021-Q3"), t + 1))
+    outs = []
+    for d, x in ((D, XR), (perturb(D, t), perturb_extra(XR, t))):
+        Xd = P2.features(d, x, o)
+        f = P2.forecast_i5(d, Xd, P2.bases(d, o), t, n_jobs=1)
+        outs.append((list(np.round(f["p"], 12)), f["threshold"], f["food_cfg"], f["gap_cfg"], f["hunger_alpha"]))
+        for m in (f["food_model"], f["gap_model"]):
+            assert FIVE <= {g for g in P2.ALL_GROUPS for c in P2.PRICE_GROUPS[g] if c in m.cols}
+    assert outs[0] == outs[1]

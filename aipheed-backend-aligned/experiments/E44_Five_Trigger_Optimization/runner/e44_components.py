@@ -347,3 +347,113 @@ def forecast_i4(d, X, B, t, groups=ALL_GROUPS, hunger_rw=False, n_jobs=8):
             "gap_cfg": gc["cfg"], "food_rmse": fc["rmse"], "gap_rmse": gc["rmse"], "hunger_alpha": hc["alpha"],
             "hunger_rmse": hc["rmse"], "platt": platt is not None, "food_model": fc["model"], "gap_model": gc["model"],
             "hunger_model": hc["model"], "te": te, "hte": hte, "pcols": pcols, "hcols": hcols}
+
+
+# ================================================================================================ I5 (ADDENDUM_I5.md)
+N_FORWARD, MIN_EARLIER = 6, 4
+
+
+def price_grid_i5():
+    g = [{"mult": m, "model": "ridge", "alpha": a} for m in MULTS for a in (1.0, 10.0, 100.0, 1000.0)]
+    g += [{"mult": m, "model": "lgbm", "leaves": nl, "n_est": ne} for m in MULTS for nl in (2, 4) for ne in (50, 150)]
+    return g
+
+
+def forward_quarters(qs):
+    qs = sorted(qs)
+    return [q for i, q in enumerate(qs) if i >= MIN_EARLIER][-N_FORWARD:]
+
+
+def _oof_forward(args):
+    tr, cfg, cols, ycol, bfmt = args
+    b = bfmt.format(cfg["mult"])
+    tr = tr.dropna(subset=[b, ycol])
+    out = []
+    for q in forward_quarters(tr["q"].unique()):
+        fit, hold = tr[tr["q"] < q], tr[tr["q"] == q]
+        m = make_price(cfg, cols).fit(fit, fit[ycol] - fit[b])
+        out.append(hold[["q", "province_code"]].assign(y_true=hold[ycol].to_numpy(), y_hat=hold[b].to_numpy() + m.predict(hold)))
+    if not out:
+        return float("inf"), pd.DataFrame(columns=["q", "province_code", "y_true", "y_hat"])
+    o = pd.concat(out, ignore_index=True)
+    return float(np.sqrt(np.mean((o["y_hat"] - o["y_true"]) ** 2))), o
+
+
+def component_forward(tr, te, cols, ycol, bfmt, n_jobs=8):
+    from joblib import Parallel, delayed
+    grid = price_grid_i5()
+    res = Parallel(n_jobs=n_jobs, backend="loky")(delayed(_oof_forward)((tr, g, cols, ycol, bfmt)) for g in grid)
+    best = min(range(len(grid)), key=lambda i: (round(res[i][0], 10), price_simplicity(grid[i])))
+    cfg, (rmse, o) = grid[best], res[best]
+    b = bfmt.format(cfg["mult"])
+    trb = tr.dropna(subset=[b, ycol])
+    model = make_price(cfg, cols).fit(trb, trb[ycol] - trb[b])
+    return {"cfg": cfg, "rmse": rmse, "oof": o, "model": model, "hat": te[b].to_numpy() + model.predict(te)}
+
+
+def hunger_forward(htr, hte, cols):
+    alphas = (1.0, 10.0, 100.0, 1000.0)
+    res = {}
+    for a in alphas:
+        out = []
+        for q in forward_quarters(htr["q"].unique()):
+            fit, hold = htr[htr["q"] < q], htr[htr["q"] == q]
+            m = Ridge(cols, a).fit(fit, fit["H_true"] - fit["H_base"])
+            out.append(hold[["q"]].assign(H_hat=hold["H_base"].to_numpy() + m.predict(hold), H_true=hold["H_true"].to_numpy()))
+        o = pd.concat(out, ignore_index=True) if out else pd.DataFrame(columns=["q", "H_hat", "H_true"])
+        res[a] = (float(np.sqrt(np.mean((o["H_hat"] - o["H_true"]) ** 2))) if len(o) else float("inf"), o)
+    a = min(alphas, key=lambda z: (round(res[z][0], 10), -z))
+    rmse, o = res[a]
+    m = Ridge(cols, a).fit(htr, htr["H_true"] - htr["H_base"])
+    H_hat = float(hte["H_base"].iloc[0] + m.predict(hte)[0])
+    return {"alpha": a, "rmse": rmse, "oof": o, "model": m, "H_hat": H_hat,
+            "p": float(1 - norm.cdf((L.e40_spec()["H"] - H_hat) / max(rmse, 1e-6)))}
+
+
+def forecast_i5(d, X, B, t, groups=ALL_GROUPS, hunger_rw=False, n_jobs=8):
+    pcols = [c for g in groups for c in PRICE_GROUPS[g]]
+    hcols = [] if hunger_rw else [c for g in groups if g in HUNGER_GROUPS for c in HUNGER_GROUPS[g]]
+    c = d.cut(t)
+    F = L.quarter_F(c).rename(columns={"F": "F_true"})
+    HL = L.quarter_F(c, "all_items").rename(columns={"F": "HL_true"})
+    FG = F.merge(HL, on=["province_code", "q"]).assign(G_true=lambda f: f["F_true"] - f["HL_true"])
+    XB = X.merge(B, on=["t", "province_code"])
+    for m in MULTS:
+        XB[f"gbase_{m}"] = XB[f"base_{m}"] - XB[f"hl_{m}"]
+    tr = XB[XB["t"] + 2 <= t - 1].assign(q=lambda f: f["t"] + 2).merge(FG, on=["province_code", "q"])
+    te = XB[XB["t"] == t].set_index("province_code").loc[L.PROVS].reset_index()
+    htr, hte = hunger_frame(X, h_series(d, t, False), t, hcols)
+    if (tr["q"].nunique() < MIN_PRICE_Q or len(htr) < MIN_H_PAIRS or not len(hte)
+            or te[[f"base_{m}" for m in MULTS]].isna().all().all()):
+        return None
+    fc = component_forward(tr, te, pcols, "F_true", "base_{}", n_jobs)
+    gc = component_forward(tr, te, pcols, "G_true", "gbase_{}", n_jobs)
+    if not np.isfinite(fc["rmse"]) or not np.isfinite(gc["rmse"]):
+        return None
+    j = fc["oof"].merge(gc["oof"], on=["q", "province_code"], suffixes=("_F", "_G"))
+    rho = float(np.corrcoef(j["y_hat_F"] - j["y_true_F"], j["y_hat_G"] - j["y_true_G"])[0, 1]) if len(j) > 2 else 0.0
+    if hunger_rw:
+        hc = hunger_component(htr, hte, [])
+    else:
+        hc = hunger_forward(htr, hte, hcols)
+        if not np.isfinite(hc["rmse"]):
+            return None
+    pp = p_price_biv(fc["hat"], gc["hat"], fc["rmse"], gc["rmse"], rho, te["province_code"])
+    p_joint = hc["p"] * pp
+    lab = K.available_labels(d, t)
+    hoof = hc["oof"].groupby("q")["H_hat"].first().rename("H_hat").reset_index()
+    o = j.merge(hoof, on="q").merge(lab[["province_code", "q", "y"]], on=["province_code", "q"])
+    thr, platt, p_cal = 0.5, None, p_joint
+    if len(o) and o["y"].nunique() == 2:
+        ph = 1 - norm.cdf((L.e40_spec()["H"] - o["H_hat"]) / max(hc["rmse"], 1e-6))
+        po = ph * p_price_biv(o["y_hat_F"], o["y_hat_G"], fc["rmse"], gc["rmse"], rho, o["province_code"])
+        if o["y"].sum() >= 3:
+            platt = C.platt_fit(po, o["y"])
+            po = C.platt_apply(platt, po)
+            p_cal = C.platt_apply(platt, p_joint)
+        thr = max(C.THRESHOLDS, key=lambda th: (round(C.balanced(o["y"], po >= th), 10), th == 0.5, th))
+    return {"t": t, "p": np.asarray(p_cal), "p_raw": p_joint, "p_hunger": hc["p"], "p_price": pp, "threshold": thr,
+            "F_hat": fc["hat"], "G_hat": gc["hat"], "rho": rho, "H_hat": hc["H_hat"], "food_cfg": fc["cfg"],
+            "gap_cfg": gc["cfg"], "food_rmse": fc["rmse"], "gap_rmse": gc["rmse"], "hunger_alpha": hc["alpha"],
+            "hunger_rmse": hc["rmse"], "platt": platt is not None, "food_model": fc["model"], "gap_model": gc["model"],
+            "hunger_model": hc["model"], "te": te, "hte": hte, "pcols": pcols, "hcols": hcols}
