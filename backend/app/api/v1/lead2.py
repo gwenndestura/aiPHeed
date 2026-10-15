@@ -33,10 +33,24 @@ def _record() -> dict:
     return rec
 
 
+def _timing() -> dict:
+    """E44: the temporal convention, stated on every Lead-2 response (dashboard rule = Lead 2 from the latest
+    completed quarter; app/quarterly/target.py)."""
+    from app.quarterly.target import forecast_target
+
+    ft = forecast_target()
+    return {"originQuarter": ft["latest_complete_data_quarter"], "currentQuarter": ft["calendar_quarter"],
+            "targetQuarter": ft["target_quarter"], "leadFromOrigin": ft["lead_from_latest_data_quarter"],
+            "issuedAt": ft["origin"],
+            "convention": "Nowcast = current quarter; Lead 1 = one quarter after the latest completed quarter; "
+                          "Lead 2 = two quarters after it. The dashboard shows the quarter after the current calendar "
+                          "quarter, which is Lead 2 from the latest completed quarter."}
+
+
 @router.get("/lead2/summary")
 def lead2_summary():
     rec = _record()
-    return {k: rec[k] for k in ("name", "status", "origin", "targetQuarter", "lead", "information", "scoreTypes",
+    return {"timing": _timing()} | {k: rec[k] for k in ("name", "status", "origin", "targetQuarter", "lead", "information", "scoreTypes",
                                 "operationalRules", "evaluation", "limitations", "content_sha256")} | (
         {"assessment": rec["assessment"]} if "assessment" in rec else {}) | {
         "provinces": [{"id": ref.province_slug(c), "provinceCode": c, "name": v["name"],
@@ -58,5 +72,6 @@ def lead2_province(province_id: str):
     code = ref.province_code(province_id) or province_id
     if code not in rec["provinces"]:
         raise HTTPException(status_code=404, detail=f"unknown province '{province_id}'")
-    return {"targetQuarter": rec["targetQuarter"], "origin": rec["origin"], "scoreTypes": rec["scoreTypes"],
+    return {"timing": _timing(), "targetQuarter": rec["targetQuarter"], "origin": rec["origin"],
+            "scoreTypes": rec["scoreTypes"],
             "operationalRules": rec["operationalRules"], **rec["provinces"][code]}

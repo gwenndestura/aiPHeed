@@ -147,3 +147,19 @@ def test_alert_candidates_use_only_the_target_quarter(monkeypatch):
     assert all("Not an official" in x["statement"] for x in c)
     monkeypatch.setenv("AIPHEED_NOW", "2027-01-15T09:00:00")
     assert candidates(REC) == []                               # 2027-Q2 has no forecast: nothing to stage
+
+
+@pytest.mark.parametrize("viewed,latest,current,target", [
+    ("2026-11-15T09:00:00", "2026-Q3", "2026-Q4", "2027-Q1"),
+    ("2027-02-15T09:00:00", "2026-Q4", "2027-Q1", "2027-Q2"),
+    ("2027-05-15T09:00:00", "2027-Q1", "2027-Q2", "2027-Q3"),
+    ("2027-08-15T09:00:00", "2027-Q2", "2027-Q3", "2027-Q4"),
+    ("2031-12-31T23:00:00", "2031-Q3", "2031-Q4", "2032-Q1"),
+])
+def test_dashboard_rule_table_e44(viewed, latest, current, target):
+    """E44 brief: viewing quarter q -> latest completed q-1 -> target q+1 (= Lead 2 from q-1); never hard-coded."""
+    from app.quarterly.target import forecast_target, shift
+
+    ft = forecast_target(viewed)
+    assert (ft["latest_complete_data_quarter"], ft["calendar_quarter"], ft["target_quarter"]) == (latest, current, target)
+    assert shift(ft["latest_complete_data_quarter"], ft["lead_from_latest_data_quarter"]) == ft["target_quarter"]
