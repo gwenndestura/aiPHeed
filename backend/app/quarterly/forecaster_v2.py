@@ -30,7 +30,10 @@ def _read(reg: Registry, sid: str) -> pd.DataFrame:
 
 
 def lgu_table(lg: pd.DataFrame, province_probability: dict | None) -> pd.DataFrame:
-    census = lg[["lgu_code", "lgu_name", "lgu_type", "province", "population_2020", "land_area_km2"]].copy()
+    if "population_2024" not in lg.columns:   # vintage 1 carried the 2020 census, outside the 2021-2026 window
+        raise ValueError("lgu_vulnerability has no population_2024 column; register vintage 2 "
+                         "(scripts/build_lgu_psa_2021_2024.py)")
+    census = lg[["lgu_code", "lgu_name", "lgu_type", "province", "population_2024", "land_area_km2"]].copy()
     census["province_code"] = census["province"].map(NAME2CODE)
     assert census["province_code"].notna().all() and len(census) == 142
     pov = lg[["lgu_code", "poverty_lgu_estimate", "poverty_source"]].copy()

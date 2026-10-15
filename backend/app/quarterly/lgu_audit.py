@@ -42,31 +42,36 @@ EXPECTED_COUNTS = {"Batangas": 34, "Cavite": 23, "Laguna": 30, "Quezon": 41, "Ri
 
 MEANING = (
     "Indicative, relative ordering of the 142 cities and municipalities for planning attention. It is the province "
-    "estimate re-weighted by PSA poverty incidence (60%) and PSA 2020 population density (40%) inside each province. "
+    "estimate re-weighted by PSA 2021 poverty incidence (60%) and 2024 POPCEN population density (40%) inside each province. "
     "It is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official "
     "classification (Chapter I, 1.7). The province estimate it starts from has NOT been validated against baselines "
     "(E25-E28), so the ranking inherits that status: EXPERIMENTAL.")
 DOES_NOT_MEAN = [
     "It does not say that any LGU is food insecure, or how many households are.",
-    "Positions across provinces mostly reflect the province estimate; positions inside a province reflect the "
-    "vulnerability weights only.",
-    "For the 126 LGUs without a PSA municipal poverty estimate, the poverty term is a province-mean substitute, so "
-    "their order inside the province comes from population density alone.",
+    "Positions inside a province reflect the vulnerability weights only. Positions across provinces are not a "
+    "measured comparison: the vulnerability index is scaled 0 to 1 inside each province, so the region-wide order "
+    "mixes five different scales and follows the within-province index more than the province estimate (E35-D4). "
+    "Compare LGUs within their province.",
+    "For an LGU without a PSA municipal poverty estimate (Lucena City, a highly urbanized city that the PSA no-HUC "
+    "table excludes), the poverty term is a province substitute, so its position inside the province comes from "
+    "population density and the substitute value, not from a municipal measurement.",
     "Two LGUs with equal risk_index share a rank; their listing order (PSGC) carries no meaning.",
 ]
 
 PROVENANCE = {
-    "population_2020": {"source": "PSA 2020 Census of Population and Housing (CPH)", "reference_year": 2020,
+    "population_2024": {"source": "PSA 2024 Census of Population (POPCEN), Table B, 1 July 2024",
+                        "reference_year": 2024,
                         "unit": "city/municipality", "transformation": "persons; density = population / land area"},
     "land_area_km2": {"source": "aiPHeed reference roster (data/reference/calabarzon_lgus.csv)", "reference_year": None,
                       "unit": "city/municipality", "transformation": "km2; denominator of density"},
-    "poverty_lgu_estimate": {"source": "PSA 2021 Small Area Estimates of Poverty (released 2024), as exported by E25",
-                             "reference_year": 2021, "unit": "city/municipality (16 LGUs)",
+    "poverty_lgu_estimate": {"source": "PSA 2021 City and Municipal Level Small Area Estimates of Poverty "
+                                       "(no-HUC table, sheet 2018-2021_NoHUC, 2021 columns only)",
+                             "reference_year": 2021, "unit": "city/municipality (141 LGUs; not Lucena City)",
                              "transformation": "poverty incidence among population, %"},
-    "poverty_value_used": {"source": "LGU estimate where published; otherwise the province value exported by E25",
+    "poverty_value_used": {"source": "LGU estimate where published; otherwise the PSA 2021 province value",
                            "reference_year": 2021, "unit": "city/municipality or province substitute",
                            "transformation": "min-max within province -> poverty_norm (weight 0.6)"},
-    "density": {"source": "derived", "reference_year": 2020, "unit": "city/municipality",
+    "density": {"source": "derived", "reference_year": 2024, "unit": "city/municipality",
                 "transformation": "min-max within province -> density_norm (weight 0.4)"},
     "province_probability": {"source": "the stored province estimate the ranking is computed from",
                              "reference_year": None, "unit": "province",
@@ -85,7 +90,7 @@ def audit_inputs(vuln: pd.DataFrame, roster: pd.DataFrame) -> tuple[pd.DataFrame
     r = roster.copy()
     r["lgu_psgc"] = r["lgu_psgc"].map(_code9)
     m = v.merge(r.rename(columns={"lgu_psgc": "lgu_code", "lgu_name": "roster_name", "lgu_type": "roster_type",
-                                  "population_2020": "roster_population", "land_area_km2": "roster_area"}),
+                                  "population_2024": "roster_population", "land_area_km2": "roster_area"}),
                 on="lgu_code", how="outer", indicator=True)
     checks = {
         "rows_vulnerability": int(len(v)), "rows_roster": int(len(r)),
@@ -105,10 +110,10 @@ def audit_inputs(vuln: pd.DataFrame, roster: pd.DataFrame) -> tuple[pd.DataFrame
     checks["psgc_prefix_mismatches"] = both.loc[both["prefix_province"] != both["prov_code_from_name"],
                                                 "lgu_code"].tolist()
     checks["type_mismatches"] = both.loc[both["lgu_type"] != both["roster_type"], "lgu_code"].tolist()
-    checks["population_mismatches"] = both.loc[both["population_2020"] != both["roster_population"],
+    checks["population_mismatches"] = both.loc[both["population_2024"] != both["roster_population"],
                                                "lgu_code"].tolist()
     checks["area_mismatches"] = both.loc[~np.isclose(both["land_area_km2"], both["roster_area"]), "lgu_code"].tolist()
-    checks["nonpositive_area_or_population"] = both.loc[(both["land_area_km2"] <= 0) | (both["population_2020"] <= 0),
+    checks["nonpositive_area_or_population"] = both.loc[(both["land_area_km2"] <= 0) | (both["population_2024"] <= 0),
                                                         "lgu_code"].tolist()
     pv = both["poverty_lgu_estimate"]
     checks["poverty_out_of_range"] = both.loc[pv.notna() & ((pv < 0) | (pv > 100)), "lgu_code"].tolist()
@@ -155,7 +160,7 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
         rows.append({
             "lgu_code": r.lgu_code, "lgu_name": r.lgu_name, "lgu_type": r.lgu_type, "province": r.province,
             "province_code": r.province_code,
-            "population_2020": int(r.population_2020), "land_area_km2": float(r.land_area_km2),
+            "population_2024": int(r.population_2024), "land_area_km2": float(r.land_area_km2),
             "density_per_km2": round(float(r.density), 3),
             "poverty_lgu_estimate": None if pd.isna(r.poverty_lgu_estimate) else float(r.poverty_lgu_estimate),
             "poverty_value_used": float(r.poverty_value_used), "poverty_value_kind": r.poverty_value_kind,

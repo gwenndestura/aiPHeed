@@ -105,7 +105,7 @@ def rank_lgus(census: pd.DataFrame, poverty: pd.DataFrame, province_probability:
     listing order inside a tie = lgu_code ascending. A missing province probability gives risk_index = null."""
     m = census.merge(poverty, on="lgu_code", how="left", validate="one_to_one")
     assert len(m) == len(census)
-    m["density"] = m["population_2020"] / m["land_area_km2"]
+    m["density"] = m["population_2024"] / m["land_area_km2"]
     sub = m.groupby("province_code")["poverty_lgu_estimate"].transform("mean")
     m["poverty_value_used"] = m["poverty_lgu_estimate"].fillna(m.get("poverty_province_value", sub)).fillna(sub)
     m["poverty_value_kind"] = np.where(m["poverty_lgu_estimate"].notna(), "PSA municipal SAE estimate",
@@ -128,8 +128,8 @@ def rank_lgus(census: pd.DataFrame, poverty: pd.DataFrame, province_probability:
     n_sub = m.groupby("province_code")["poverty_lgu_estimate"].transform(lambda s: s.isna().sum())
     m["limitation"] = np.where(
         m["poverty_lgu_estimate"].isna(),
-        "No PSA municipal poverty estimate in the authorized data: the poverty term is a province-mean substitute, "
-        "so this LGU's position within its province reflects population density only.",
+        "No PSA municipal poverty estimate in the authorized data: the poverty term is a province substitute, "
+        "not a municipal measurement, so this LGU's position within its province is indicative only.",
         np.where(n_sub > 0, "Municipal estimate available; compared within province against LGUs that carry a "
                             "province-mean substitute.", "Municipal estimate available."))
     return m

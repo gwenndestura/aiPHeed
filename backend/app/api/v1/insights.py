@@ -35,6 +35,22 @@ EXPLAINABILITY_NOTE = (
 )
 
 
+E36_EXPLAINABILITY_NOTE = (
+    "Exact TreeSHAP breakdown of the served LightGBM (aiPHeed-E36-LGBM): each input's contribution to this "
+    "province's estimate, in log-odds, which add up exactly to the estimate. Government indicators (SWS regional "
+    "hunger, PSA food and rice prices, the last published label) and news signals are listed separately. These are "
+    "associations the model learned from 2021-2026 data, not causes. Shares are rescaled to 100%; read `direction`, "
+    "not bar size alone. `color`: yellow below the 20% line, red above it while raising the estimate, green while "
+    "lowering it."
+)
+
+
+def _served_note() -> str:
+    from app.ml.inference import e31_engine as E31
+
+    return E36_EXPLAINABILITY_NOTE if E31.record().get("schema") == "e36/1" else E31_EXPLAINABILITY_NOTE
+
+
 E31_EXPLAINABILITY_NOTE = (
     "Exact breakdown of the served estimate (PCF21), not a SHAP approximation: the estimate's margin over the "
     "threshold equals (regional hunger - threshold) + 2 x provincial relative food-price pressure. Regional hunger "
@@ -101,7 +117,7 @@ async def get_explainability(
         articleCount=article_count,
         triggerMatchedArticles=matched,
         narrative=svc.compose_narrative(name, q, triggers),
-        note=E31_EXPLAINABILITY_NOTE if svc.e31_active() else EXPLAINABILITY_NOTE,
+        note=_served_note() if svc.e31_active() else EXPLAINABILITY_NOTE,
     )
 
 

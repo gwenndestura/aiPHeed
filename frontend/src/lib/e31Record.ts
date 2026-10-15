@@ -1,6 +1,7 @@
 /**
- * E31 record (schema e31/1). ONE record is produced by runner/build_record_e31.py; the API
- * (/api/v1/quarterly/e31/*), the main map (E31 engine), /da-brief, /news and the PDF read the same bytes.
+ * Served record. Schema e36/1 (backend/scripts/build_record_e36.py, the E36 LightGBM) is served now; schema e31/1
+ * (runner/build_record_e31.py, PCF21) is the earlier record and is still readable. The API (/api/v1/quarterly/e31/*,
+ * paths kept), the main map, /da-brief, /news and the PDF read the same bytes.
  */
 import { API_BASE_URL } from "@/lib/api";
 
@@ -70,6 +71,46 @@ export interface ProvinceNow {
   disclaimer: string;
 }
 
+export interface E36ProvinceNow {
+  province: string;
+  forecast_quarter: string;
+  forecast: ProvinceEstimate;
+  latest_backtest: ProvinceEstimate & { quarter: string };
+  measured_relative_food_inflation_pp: Record<string, number>;
+  price_pressure_text: string;
+  news_evidence: FunnelRow | null;
+  news_evidence_quarter: string;
+  explanation_text: string;
+  attention: string;
+  suggested_use: string;
+  evidence_status: string;
+  disclaimer: string;
+}
+
+export interface ModelEvalRow {
+  arm: string; key: string; correct: number; n: number; accuracy_lead1: number; accuracy_ci95: [number, number];
+  balanced_accuracy: number | null; precision: number | null; recall: number | null; specificity: number | null;
+  f1: number | null; roc_auc: number | null; brier: number; above_75pct: boolean;
+}
+
+export interface E36Record extends Omit<E31Record, "schema" | "provinces_now" | "validation" | "served_engine"> {
+  schema: "e36/1";
+  served_engine: { name: string; version: string; why_served: string; evidence_status: string; sha256: string;
+    config: { feature_set: string; features: string[]; grid_id: string; training_rows: number } };
+  provinces_now: Record<string, E36ProvinceNow>;
+  validation: {
+    news_relevance: E31Record["validation"]["news_relevance"];
+    model_evaluation: { basis: string; dates: string[]; rows: ModelEvalRow[] };
+    threshold_75pct: { verdict: string; point_met: boolean; demonstrated: boolean;
+      rows: { arm: string; accuracy_lead1: number; above_75pct: boolean }[] };
+    prospective_2026Q4: { frozen_sha256: string; origin: string; status: string };
+  };
+}
+
+export type ServedRecord = E31Record | E36Record;
+
+export const isE36 = (r: ServedRecord): r is E36Record => r.schema === "e36/1";
+
 export interface E31Record {
   schema: "e31/1";
   title: string;
@@ -108,16 +149,16 @@ export const MODE_TEXT: Record<Mode, string> = {
   FORECAST: "Forecast: one quarter ahead",
 };
 
-export async function loadE31(): Promise<E31Record> {
+export async function loadE31(): Promise<ServedRecord> {
   try {
     const r = await fetch(`${API_BASE_URL}/api/v1/quarterly/e31/record`);
-    if (r.ok) return (await r.json()) as E31Record;
+    if (r.ok) return (await r.json()) as ServedRecord;
   } catch {
     /* fall back to the identical static copy */
   }
-  const s = await fetch("/e31_record.json");
+  const s = await fetch("/e36_record.json");
   if (!s.ok) throw new Error(`record unavailable (${s.status})`);
-  return (await s.json()) as E31Record;
+  return (await s.json()) as ServedRecord;
 }
 
 export const pct = (p: number | null | undefined) => (p == null ? "–" : `${Math.round(p * 100)}%`);

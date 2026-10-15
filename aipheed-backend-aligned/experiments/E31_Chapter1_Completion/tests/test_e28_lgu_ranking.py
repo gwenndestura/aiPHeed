@@ -9,7 +9,8 @@ import _paths  # noqa: F401
 from _paths import EXP
 
 BD = _paths.BD
-ROSTER = EXP.parents[1] / "data" / "reference" / "calabarzon_lgus.csv"
+# the roster shipped with the backend under test (its population year must match the vulnerability table)
+ROSTER = BD / "data" / "reference" / "calabarzon_lgus.csv"
 PROB = {"PH040100000": 0.52, "PH040200000": 0.61, "PH040300000": 0.73, "PH040400000": 0.44, "PH040500000": 0.58}
 
 
@@ -42,9 +43,9 @@ def test_every_lgu_gets_a_reproducible_ranking_and_substitutes_are_labelled(tabl
     assert all(r["risk_index"] is not None and 0 <= r["risk_index"] <= 1 for r in rows)
     assert sorted(r["rank_region"] for r in rows)[0] == 1
     subs = [r for r in rows if r["poverty_lgu_estimate"] is None]
-    assert len(subs) == 126
+    assert len(subs) == int(tables[0]["poverty_lgu_estimate"].isna().sum()) >= 1
     assert all(r["poverty_value_kind"].startswith("province-mean substitute") for r in subs)
-    assert all("density only" in r["limitation"] for r in subs)
+    assert all(r["limitation"].startswith("No PSA municipal poverty estimate") for r in subs)
     # never a zero poverty value presented for a missing estimate
     assert all(r["poverty_value_used"] > 0 for r in rows)
     # ranks follow risk_index; ties share a rank and are listed by PSGC
@@ -71,11 +72,12 @@ def test_ties_are_deterministic(tables):
 
     v, r = tables
     v = v.copy()
-    v.loc[v["province"] == "Rizal", ["population_2020", "land_area_km2"]] = [1000, 10.0]   # identical density
+    pop = next(c for c in v.columns if c.startswith("population_"))      # population_2020 (E31) or _2024
+    v.loc[v["province"] == "Rizal", [pop, "land_area_km2"]] = [1000, 10.0]   # identical density
     v.loc[v["province"] == "Rizal", "poverty_lgu_estimate"] = np.nan
     v.loc[v["province"] == "Rizal", "poverty_value_used"] = 5.0          # one substitute value for the whole province
     r = r.copy()
-    r.loc[r["province_code"] == "PH040400000", ["population_2020", "land_area_km2"]] = [1000, 10.0]
+    r.loc[r["province_code"] == "PH040400000", [pop, "land_area_km2"]] = [1000, 10.0]
     rows = build_ranking(v, r, PROB, {})["rows"]
     riz = [x for x in rows if x["province"] == "Rizal"]
     assert len({x["risk_index"] for x in riz}) == 1 and all(x["tied"] for x in riz)

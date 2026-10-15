@@ -228,8 +228,8 @@ export function RfiiScoreCardBody({
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        <SummaryChip label="High risk" value={high} color="hsl(var(--risk-high))" />
-        <SummaryChip label="Low risk" value={low} color="hsl(var(--risk-low))" />
+        <SummaryChip label="Estimated high" value={high} color="hsl(var(--risk-high))" />
+        <SummaryChip label="Estimated low" value={low} color="hsl(var(--risk-low))" />
         <SummaryChip
           label="Limited data"
           value={limited}
@@ -451,7 +451,7 @@ function RegionDetail({
   // E34: an alert is public only after a DA administrator confirms it (E31 alert workflow); never a score threshold.
   const { data: provinceForecast } = useForecast("province", region.id, quarterId || undefined, "nowcast");
   const isActiveAlert = !!provinceForecast?.alert;
-  const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
+  const horizonLabel = config?.indicator.horizon ?? "one-quarter-ahead estimate";
 
   return (
     <div className="px-5 py-4 space-y-4">
@@ -464,7 +464,7 @@ function RegionDetail({
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <StatusBadge
                 level={isHigh ? "high" : "low"}
-                title={`Forecast risk level (${displayCutoff.toFixed(2)} display cutoff)`}
+                title={`Model estimate: probability at or above ${displayCutoff.toFixed(2)} is shown as high. Not a validated classification.`}
               />
               {isActiveAlert && (
                 <StatusBadge tone="high" title="Active alert: a model-generated warning confirmed by a DA Region IV-A administrator">
@@ -493,8 +493,9 @@ function RegionDetail({
 
       {/* Confidence statement */}
       <Note>
-        This is a {horizonLabel} for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"},
-        based on PSA production data already published for that quarter.
+        Estimate for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"}: {horizonLabel}.
+        It uses only SWS hunger rounds, PSA food-price data and news published before the estimate was issued, so it
+        is a model estimate, not a measurement of that quarter.
       </Note>
 
       {/* Key Metrics */}
@@ -542,7 +543,7 @@ function RegionDetail({
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
         </div>
         <p className="text-[9px] text-muted-foreground/70 italic mb-2 leading-snug">
-          Spatially disaggregated estimates derived from the validated province forecast.
+          Relative positions inside the province: the province estimate (not validated) re-weighted by PSA 2021 poverty incidence and 2024 population density. Not municipal forecasts.
         </p>
         <div className="space-y-1 max-h-[260px] overflow-y-auto pr-1">
           {munis.map((m) => (

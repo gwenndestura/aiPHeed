@@ -67,9 +67,10 @@ const DRIVER_COPY: Record<string, { risk: Copy; protective: Copy }> = {
   },
 };
 
-export function driverCopy(t: Pick<Trigger, "key" | "direction">): Copy {
+export function driverCopy(t: Pick<Trigger, "key" | "direction"> & Partial<Pick<Trigger, "label">>): Copy {
   const entry = DRIVER_COPY[t.key];
-  if (!entry) return { title: t.key, description: "" };
+  // E36: the served LightGBM explains per input feature; show the server's plain label, never the raw key.
+  if (!entry) return { title: t.label || t.key, description: "" };
   return t.direction === "protective" ? entry.protective : entry.risk;
 }
 

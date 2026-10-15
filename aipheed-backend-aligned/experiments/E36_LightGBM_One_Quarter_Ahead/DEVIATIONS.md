@@ -14,3 +14,8 @@ Every entry was written **before any E36 score was computed** unless it says oth
 
 - `pcf_engine.d_fit` needs at least 40 published D pairs. At the P-early origins it raises, so PCF21 has no prediction there.
 - PCF21 is a diagnostic (§5), so it is reported on the dates it covers; paired tests use common dates and rows only.
+
+## D-3. Counting errors in the protocol text (written after scoring; no rule changed)
+
+- PROTOCOL.md section 2 says the four early dates add "11 LOW rows" and the full set has "15 LOW". The label probe shows 10 LOW rows on 2022-Q4..2023-Q3 and 14 LOW rows on 2022-Q4..2026-Q3. With D-1 the scored set has 12 LOW rows (53 HIGH / 12 LOW).
+- These were prose summaries of the probe, not rules; the date and row rules are unaffected.

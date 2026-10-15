@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 
 const TERMS: Array<{ term: string; def: string }> = [
   { term: "Risk Level", def: "A score from 0 to 1 estimating the likelihood of food insecurity in a province or municipality. Higher values indicate greater risk. Formerly referred to as RFII (Regional Food Insecurity Index)." },
-  { term: "High / Low risk", def: "The band a Risk Level falls in. It is judged on the score as shown, rounded to two decimals: 0.50 and above is High, below 0.50 is Low. A score of 0.4982 reads 0.50, so it is High." },
+  { term: "Estimated high / low", def: "The band the model's probability falls in, judged on the score as shown (two decimals): 0.50 and above is shown as estimated high, below 0.50 as estimated low. It is the model's estimate, not a validated classification and not a measured food-insecurity rate." },
   { term: "Active alert", def: "A model-generated early-warning candidate that a DA Region IV-A administrator has reviewed and confirmed. Candidates follow documented evidence rules (high regional hunger, strong province estimate with high measured food-price pressure, or a sudden rise); a high score alone never raises one. It is a warning for review, not an official finding or a confirmed emergency." },
   { term: "Observed quarter", def: "A quarter PSA has already published data for, scored from that quarter's own data (a nowcast). The newest one is marked as the current quarter. Shown with a solid line on the timeline." },
   { term: "Forecast Quarter", def: "A quarter beyond the newest published PSA data. Its Risk Level is predicted from earlier quarters' signals. Shown with a dashed line on the timeline." },

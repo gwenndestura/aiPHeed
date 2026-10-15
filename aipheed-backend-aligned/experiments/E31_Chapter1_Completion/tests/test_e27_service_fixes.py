@@ -63,15 +63,18 @@ def test_municipal_poverty_provenance_is_disclosed(monkeypatch):
     monkeypatch.setattr(svc, "LGU_PROVENANCE_PATH", _paths.BD / "data" / "inputs" / "lgu_vulnerability.csv")
     svc._lgu_provenance.cache_clear()
     try:
-        sub = svc._poverty_provenance("042123000", None)           # Gen. Mariano Alvarez: no municipal SAE
-        assert sub["povertyEstimateKind"].startswith("province-mean substitute")
-        assert sub["povertyValueUsed"] == 4.3 and "density only" in sub["povertyLimitation"]
-        own = svc._poverty_provenance("045645000", 18.7)           # Sariaya: PSA municipal SAE 18.7
-        assert own == {"povertyEstimateKind": "PSA municipal SAE estimate (2021)", "povertyValueUsed": 18.7,
-                       "povertyLimitation": None}
         lg = pd.read_csv(_paths.BD / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
+        s = lg[lg["poverty_lgu_estimate"].isna()].iloc[0]            # an LGU without a municipal SAE
+        sub = svc._poverty_provenance(s["lgu_code"], None)
+        assert sub["povertyEstimateKind"].startswith(("province-mean substitute", "province substitute"))   # E36 label
+        assert sub["povertyValueUsed"] == s["poverty_value_used"] and sub["povertyLimitation"]
+        o = lg[lg["poverty_lgu_estimate"].notna()].iloc[0]           # an LGU with a PSA municipal SAE
+        own = svc._poverty_provenance(o["lgu_code"], float(o["poverty_lgu_estimate"]))
+        assert own == {"povertyEstimateKind": "PSA municipal SAE estimate (2021)",
+                       "povertyValueUsed": float(o["poverty_lgu_estimate"]), "povertyLimitation": None}
         kinds = [svc._poverty_provenance(c, None)["povertyEstimateKind"] for c in lg["lgu_code"]]
-        assert sum(k.startswith("province-mean") for k in kinds) == 126 and len(kinds) == 142
+        assert sum(k.startswith(("province-mean", "province substitute")) for k in kinds) == int(lg["poverty_lgu_estimate"].isna().sum())
+        assert len(kinds) == 142
     finally:
         svc._lgu_provenance.cache_clear()
 

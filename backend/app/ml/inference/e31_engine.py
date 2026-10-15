@@ -28,13 +28,16 @@ from pathlib import Path
 
 import pandas as pd
 
-RECORD_PATH = Path(os.getenv("AIPHEED_E31_RECORD", "data/e31/e31_record.json"))
+# E36: the served record is the E36 LightGBM record (scripts/build_record_e36.py); the E31 PCF21 record stays in
+# data/e31/ as history and can be served again with AIPHEED_E31_RECORD=data/e31/e31_record.json.
+RECORD_PATH = Path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
 FORECAST_MODES = ("BACKTEST", "RETROSPECTIVE_BLIND", "FORECAST")
 NOWCAST_MODES = ("NOWCAST",)
 MODE_LABEL = {
-    "BACKTEST": "Backtest (development evidence; the outcome was examined before the model froze)",
+    "BACKTEST": "Backtest (development evidence; refitted at its origin with earlier data only, but the outcome had "
+                "been examined in earlier experiments)",
     "RETROSPECTIVE_BLIND": "Frozen forecast scored on an unseen outcome",
-    "FORECAST": "Forecast (lead 1; reliability not established)",
+    "FORECAST": "Forecast (lead 1, frozen before the outcome exists; reliability not established)",
     "NOWCAST": "Same-quarter nowcast (lead 0; never evaluated)",
 }
 
@@ -79,6 +82,14 @@ def current_quarter() -> str | None:
     return next((q["quarter"] for q in record()["quarters"] if q["mode"] in NOWCAST_MODES), None)
 
 
+def _confidence(q: dict, v: dict) -> str:
+    """The row's mode, origin and signal; the S1 interval only for an engine that produces one (PCF21)."""
+    model = record().get("served_engine", {}).get("name", "served engine")
+    iv = f"; S1 80% interval {v['S1_80pct_interval']}" if v.get("S1_80pct_interval") else ""
+    return (f"{MODE_LABEL[q['mode']]}. {model}, issued at {q['origin']} with information published before it. "
+            f"Signal {v['signal']}{iv}. Indicative only.")
+
+
 class E31Engine:
     def __init__(self, horizon: str = "forecast"):
         self.horizon = "nowcast" if horizon == "nowcast" else "forecast"
@@ -98,6 +109,8 @@ class E31Engine:
             return "Backtest: one-quarter-ahead estimate made on development data"
         if q is not None and q["mode"] == "RETROSPECTIVE_BLIND":
             return "One quarter ahead (frozen 1 July 2026), scored on the released outcome"
+        if q is not None and q["mode"] == "FORECAST":
+            return f"One quarter ahead (forecast issued {q['origin'][:10]}), lead 1"
         return "One quarter ahead (forecast), lead 1"
 
     def forecast_quarter(self, quarter: str) -> list[dict]:
@@ -117,8 +130,7 @@ class E31Engine:
                 "risk_label": None, "observed_label": v.get("observed_label"), "observed_S1": v.get("observed_S1"),
                 "data_sufficiency_flag": (n or {}).get("evidence_status_v2", "NO_USABLE_EVIDENCE"),
                 "forecast_horizon_quarters": q["lead"], "horizon_label": self.horizon_label(q),
-                "confidence_statement": f"{MODE_LABEL[q['mode']]}. Signal {v['signal']}; S1 80% interval "
-                                        f"{v.get('S1_80pct_interval')}. Indicative only.",
+                "confidence_statement": _confidence(q, v),
                 "verification_date": q["information_cutoff"], "mode": q["mode"], "origin": q["origin"],
                 "information_cutoff": q["information_cutoff"], "provenance": q.get("provenance"),
             })
@@ -130,6 +142,7 @@ class E31Explainer:
     """Driver decomposition of the served engine for one province-quarter (forecast horizon first, then nowcast)."""
 
     GROUPS = {"regional_hunger": "Regional hunger (SWS, shared)", "price_pressure": "Provincial food-price pressure"}
+    # E36: the drivers are the exact TreeSHAP values of the served LightGBM (log-odds), one per input feature.
 
     def _prov(self, code: str, quarter: str) -> dict | None:
         q = quarter_row(quarter, "forecast") or quarter_row(quarter, "nowcast")

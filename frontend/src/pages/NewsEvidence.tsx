@@ -4,7 +4,7 @@
  * for the same selection. Titles only: the source supplies no lead text, so no description is invented.
  */
 import { useEffect, useMemo, useState } from "react";
-import { E31Record, loadE31 } from "@/lib/e31Record";
+import { loadE31, ServedRecord } from "@/lib/e31Record";
 
 const STATUS_TEXT: Record<string, string> = {
   SUFFICIENT: "sufficient (5+ validated articles)",
@@ -12,7 +12,7 @@ const STATUS_TEXT: Record<string, string> = {
   NO_USABLE_EVIDENCE: "no usable evidence",
 };
 
-export function NewsEvidenceView({ rec }: { rec: E31Record }) {
+export function NewsEvidenceView({ rec }: { rec: ServedRecord }) {
   const quarters = useMemo(() => Array.from(new Set(rec.news.by_province_quarter.map((r) => r.quarter))).sort().reverse(), [rec]);
   const provinces = useMemo(() => Array.from(new Set(rec.news.by_province_quarter.map((r) => r.province))).sort(), [rec]);
   const [province, setProvince] = useState("all");
@@ -71,7 +71,7 @@ export function NewsEvidenceView({ rec }: { rec: E31Record }) {
 }
 
 export default function NewsEvidence() {
-  const [rec, setRec] = useState<E31Record | null>(null);
+  const [rec, setRec] = useState<ServedRecord | null>(null);
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => { loadE31().then(setRec).catch((e) => setErr(String(e))); }, []);
   if (err) return <div className="p-4">Could not load the news evidence: {err}</div>;

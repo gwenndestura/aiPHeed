@@ -82,7 +82,7 @@ describe("E31 record loader", () => {
       const r = await loadE31();
       expect(r.schema).toBe("e31/1");
       expect(calls[0]).toMatch(/\/api\/v1\/quarterly\/e31\/record$/);
-      expect(calls[1]).toBe("/e31_record.json");
+      expect(calls[1]).toBe("/e36_record.json");   // E36: the served record's static copy
     } finally {
       globalThis.fetch = orig;
     }

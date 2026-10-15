@@ -48,15 +48,16 @@ INDICATOR = {
     "name": "Food Insecurity Risk Probability",
     "definition": (
         "LightGBM probability that a CALABARZON province falls in the HIGH "
-        "class of the composite food stress label — SWS quarterly hunger "
-        "prevalence combined with the province's food CPI deviation from the "
-        "regional mean, thresholded at the global median (Equation 3)."
+        "class of the composite food stress label (S1 = SWS regional hunger + "
+        "2 x the province's food-CPI deviation from the five-province mean), "
+        "HIGH when S1 is above the trailing median of the published quarters."
     ),
     "unit": "probability (0-1)",
-    "horizon": "Same-quarter estimate (lead 0); no forward lead time has been validated against the baselines (E27)",
+    "horizon": "One quarter ahead (lead 1), issued at the start of the quarter with information published before it; "
+               "not validated against the baselines (E36)",
     "source": (
-        "Filipino-English news corpus (RSS, Google News, GDELT) and PSA, BSP, "
-        "DOE, PAGASA, PhilRice and SWS indicators, CALABARZON, 2020-2025"
+        "SWS Balance Luzon hunger rounds, PSA provincial food and rice CPI, and "
+        "validated Google News titles (FSSI-v2), CALABARZON, 2021 to 14 October 2026"
     ),
     "caveat": (
         "Risk rankings are indicative, not absolute. They are relative ordinal "
@@ -165,24 +166,25 @@ HORIZON_INFO = {
 # The alias resolves to the same entry; see the Rule 2 note above.
 HORIZON_INFO[NOWCAST] = {**HORIZON_INFO[FORECAST], "id": NOWCAST, "alias_of": FORECAST}
 
-# E31: the served estimates come from the E31 record (PCF21). The two ids are now different views.
+# E36: the served estimates come from the E36 record (aiPHeed-E36-LGBM). Every row is lead 1, so both ids show the
+# same rows; "nowcast" is kept for contract compatibility. The E31 (PCF21) record stays available via
+# AIPHEED_E31_RECORD.
 E31_HORIZON_INFO = {
     FORECAST: {
         "id": FORECAST, "name": "One-quarter-ahead forecasts (lead 1)",
-        "question": "What did the served engine estimate one quarter ahead, using only information released before "
+        "question": "What did the served LightGBM estimate one quarter ahead, using only information released before "
                     "the quarter began?",
-        "definition": ("PCF21 estimates of P(S1 = H + 2D above its trailing-median threshold) one quarter ahead: "
-                       "development backtests 2023-Q4..2026-Q2, the 2026-Q3 forecast frozen on 1 July 2026 and "
-                       "scored on its released outcome, and the 2027-Q1 forecast (cutoff 2026-10-14). News evidence "
-                       "is the previous quarter's. No lead is validated against persistence and always-HIGH."),
-        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e31/e31_record.json"},
+        "definition": ("aiPHeed-E36-LGBM estimates of P(S1 = H + 2D above its trailing-median threshold) one quarter "
+                       "ahead: development backtests 2023-Q1..2026-Q3 (refitted at each origin, nested selection) and "
+                       "the 2026-Q4 forecast frozen at origin 2026-10-01. News evidence is the previous quarter's. "
+                       "Not validated: no baseline is beaten significantly (E36)."),
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
     NOWCAST: {
-        "id": NOWCAST, "name": "Latest estimate per quarter (nowcast for the quarter under way)",
+        "id": NOWCAST, "name": "Latest estimate per quarter",
         "question": "What is the best available estimate for each quarter, including the one under way?",
-        "definition": ("The same-quarter nowcast where the quarter is under way (2026-Q4, inputs and same-quarter "
-                       "news released by 2026-10-14) and the lead-1 estimate for every other quarter. Each row is "
-                       "labelled with its mode; lead 0 has never been evaluated."),
-        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e31/e31_record.json"},
+        "definition": ("The E36 model issues no same-quarter nowcast: every quarter, including 2026-Q4, shows its "
+                       "one-quarter-ahead (lead 1) estimate, labelled with its mode."),
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
 }
 
 
@@ -353,11 +355,23 @@ def _previous_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> str | Non
     return quarters[i - 1] if i > 0 else None
 
 
+def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
+    """E35-D3: a change is shown only between consecutive quarters estimated the same way (same lead; a nowcast is
+    never compared with a forecast). Across a gap (2025-Q1 -> 2025-Q4) it would mix three quarters of change."""
+    if ref.quarter_index(quarter) - ref.quarter_index(prev_q) != 1:
+        return False
+    if not e31_active():
+        return True
+    a = E31.quarter_row(quarter, horizon) or E31.quarter_row(quarter, NOWCAST if horizon == FORECAST else FORECAST)
+    b = E31.quarter_row(prev_q, horizon)
+    return bool(a and b) and a["lead"] == b["lead"] and (a["mode"] == "NOWCAST") == (b["mode"] == "NOWCAST")
+
+
 def _qoq(current: float, quarter: str, code: str,
          horizon: str = DEFAULT_HORIZON) -> tuple[float | None, float | None]:
-    """Absolute and percentage change against the previous scorable quarter."""
+    """Absolute and percentage change against the previous quarter, when the two are comparable (E35-D3)."""
     prev_q = _previous_quarter(quarter, horizon)
-    if prev_q is None:
+    if prev_q is None or not _comparable(quarter, prev_q, horizon):
         return None, None
     prev = province_forecast_map(prev_q, horizon).get(code)
     if prev is None:
@@ -370,11 +384,15 @@ def _qoq(current: float, quarter: str, code: str,
 
 @functools.lru_cache(maxsize=1)
 def _province_poverty() -> dict[str, float]:
-    """Province-mean PSA 2021 poverty incidence, from the LGU table."""
+    """E35-D7: population-weighted mean of the PSA 2021 municipal SAE (2024 POPCEN weights) over the LGUs that have
+    an estimate. It is not a PSA province figure and never mixes in a substitute (Lucena City has none)."""
     if e31_active() and LGU_PROVENANCE_PATH.exists():
         df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+        df = df[df["poverty_lgu_estimate"].notna()].copy()
         df["province_code"] = df["province"].map({m["name"]: m["code"] for m in ref.PROVINCES.values()})
-        return df.groupby("province_code")["poverty_value_used"].mean().round(1).to_dict()
+        df["w"] = df["population_2024"] * df["poverty_lgu_estimate"]
+        g = df.groupby("province_code")[["w", "population_2024"]].sum()
+        return (g["w"] / g["population_2024"]).round(1).to_dict()
     if not LGU_POVERTY_PATH.exists():
         return {}
     df = pd.read_parquet(LGU_POVERTY_PATH)
@@ -384,7 +402,7 @@ def _province_poverty() -> dict[str, float]:
 @functools.lru_cache(maxsize=1)
 def _province_population() -> dict[str, int]:
     roster = ref.lgu_roster()
-    return roster.groupby("province_code")["population_2020"].sum().astype(int).to_dict()
+    return roster.groupby("province_code")["population_2024"].sum().astype(int).to_dict()
 
 
 def province_summary(
@@ -419,6 +437,7 @@ def province_summary(
             "centroid": {"lat": meta["lat"], "lng": meta["lng"]},
             "population": population.get(code),
             "povertyRate": poverty.get(code),
+            "povertyRateBasis": POVERTY_RATE_BASIS,
             "currentQuarter": quarter,
             "riskScore": score,
             "riskLevel": ref.risk_level(score),
@@ -617,6 +636,11 @@ def _lgu_poverty_map() -> dict[str, float]:
     }
 
 
+POVERTY_RATE_BASIS = (
+    "Population-weighted mean of the PSA 2021 city and municipal Small Area Estimates of poverty incidence (2024 "
+    "POPCEN weights), over the cities and municipalities with an estimate; Lucena City has none (highly urbanized "
+    "city, not in the PSA no-HUC table). Derived by aiPHeed; not an official PSA province figure."
+)
 RISK_LEVEL_BASIS = (
     "Band of an unvalidated relative score (>= 0.50 shown as high); not a validated classification and not a "
     "measured local food-insecurity rate."
@@ -639,11 +663,12 @@ def _poverty_provenance(code: str, own: float | None) -> dict:
     if own is not None or (p and p["has_own"]):
         return {"povertyEstimateKind": "PSA municipal SAE estimate (2021)",
                 "povertyValueUsed": own if own is not None else p["value_used"], "povertyLimitation": None}
-    return {"povertyEstimateKind": "province-mean substitute (no municipal estimate)",
+    return {"povertyEstimateKind": "province substitute (no municipal estimate)",
             "povertyValueUsed": p["value_used"] if p else None,
-            "povertyLimitation": ("No PSA municipal poverty estimate is available for this LGU; the ranking uses a "
-                                  "province-mean substitute, so its position within the province reflects "
-                                  "population density only.")}
+            "povertyLimitation": ("No PSA 2021 municipal poverty estimate exists for this LGU (a highly urbanized "
+                                  "city, excluded from the PSA no-HUC table). The ranking uses the province value "
+                                  "stored in the aiPHeed inputs as a substitute; its source workbook is not in the "
+                                  "repository, so it is unverified.")}
 
 
 def municipality_summary(quarter: str, province_id: str | None = None) -> list[dict]:
@@ -675,7 +700,7 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "provinceId": meta["provinceId"],
             "lguCode": code,
             "classification": meta["classification"],
-            "population": int(meta["population_2020"]),
+            "population": int(meta["population_2024"]),
             "densityPerKm2": float(meta["densityPerKm2"]),
             "povertyRate": poverty.get(code),
             **_poverty_provenance(code, poverty.get(code)),
@@ -1285,12 +1310,37 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
 def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
     """Objective 2 metrics of the served engine and the Objective 4 baselines, on the SAME walk-forward rows (E28
     frozen protocol, lead 1, development evidence), plus the one unseen quarter. Nulls stay null."""
-    v = E31.record()["validation"]
-    arms = v["development_metrics_T1"]["arms"]
-    m = arms["PCF21_E25"]["by_lead"]["1"]
+    rec = E31.record()
+    v = rec["validation"]
 
     def r(x):
         return round(x, 4) if isinstance(x, (int, float)) else None
+
+    if rec.get("schema") == "e36/1":
+        # E36: the served LightGBM and the six Chapter I baselines on identical lead-1 rows (nested walk-forward).
+        ev = v["model_evaluation"]
+        rows = {x["key"]: x for x in ev["rows"]}
+        m = rows["E36-LGBM"]
+        return {
+            "horizon": horizon, "evaluation": ev["basis"], "maxReliableLeadTime": None, "accuracyThreshold": None,
+            "nFeatures": len(rec["served_engine"]["config"]["features"]),
+            "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]), "recall": r(m["recall"]),
+            "f1": r(m["f1"]), "rocAuc": r(m["roc_auc"]), "cvF1": None,
+            "correct": m["correct"], "n": m["n"], "accuracyCi95": m["accuracy_ci95"],
+            "balancedAccuracy": r(m["balanced_accuracy"]), "brier": r(m["brier"]),
+            "targets": {"f1": None, "rocAuc": None, "meetsF1": None, "meetsRocAuc": None,
+                        "note": v["threshold_75pct"]["verdict"]},
+            "leadTimeScan": [{"lead": 1, "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]),
+                              "recall": r(m["recall"]), "f1": r(m["f1"]), "roc_auc": r(m["roc_auc"]),
+                              "brier": r(m["brier"])}],
+            "baselines": {x["arm"]: r(x["accuracy_lead1"]) for k, x in rows.items() if k != "E36-LGBM"},
+            "sameFoldsAsBaselines": {"accuracy": r(m["accuracy_lead1"]), "weighted_f1": r(m["f1"]),
+                                     "roc_auc": r(m["roc_auc"])},
+            "unseenQuarter": v["prospective_2026Q4"],
+        }
+
+    arms = v["development_metrics_T1"]["arms"]
+    m = arms["PCF21_E25"]["by_lead"]["1"]
 
     return {
         "horizon": horizon,

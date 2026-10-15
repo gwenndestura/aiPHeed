@@ -11,7 +11,7 @@ where:
                   from Predictor.forecast_quarter()
     poverty_m   = PSA 2021 small area poverty incidence, min-max normalized
                   within the municipality's own province
-    density_m   = PSA 2020 census population density, min-max normalized
+    density_m   = PSA 2024 POPCEN population density, min-max normalized
                   within the municipality's own province
 
 Outputs are relative within-province vulnerability rankings, NOT independent
@@ -59,8 +59,8 @@ LGU_POVERTY_PATH = Path("data/processed/lgu_poverty.parquet")
 DISAGGREGATION_LABEL = (
     "Spatially disaggregated estimate derived from the province-level "
     "province food insecurity risk forecast, weighted by LGU poverty incidence (60%) "
-    "and PSA 2020 CPH population density (40%). Poverty values are largely "
-    "province means rather than municipal Small Area Estimates, so "
+    "and 2024 POPCEN population density (40%). Poverty values are PSA 2021 "
+    "municipal Small Area Estimates (province value for Lucena City), and "
     "within-province ordering is indicative only. Municipal-level uncertainty "
     "is higher than province-level uncertainty. Not an independent municipal "
     "forecast."
@@ -140,8 +140,8 @@ class Disaggregator:
             raise ValueError("LGU poverty values missing for a whole province; refusing to substitute 0")
 
         # Compute population density (persons / km²)
-        if "land_area_km2" in merged.columns and "population_2020" in merged.columns:
-            merged["density"] = merged["population_2020"] / merged["land_area_km2"].replace(0, np.nan)
+        if "land_area_km2" in merged.columns and "population_2024" in merged.columns:
+            merged["density"] = merged["population_2024"] / merged["land_area_km2"].replace(0, np.nan)
         elif "population_density" in merged.columns:
             merged["density"] = merged["population_density"]
         else:

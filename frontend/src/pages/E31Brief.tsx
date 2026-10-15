@@ -7,7 +7,8 @@
  */
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
-import { E31Record, loadE31, MODE_TEXT, pct, PROVINCE_ORDER, ProvinceEstimate } from "@/lib/e31Record";
+import { E31Record, isE36, loadE31, MODE_TEXT, pct, PROVINCE_ORDER, ProvinceEstimate, ServedRecord } from "@/lib/e31Record";
+import { E36BriefView } from "@/pages/E36Brief";
 
 function Estimate({ e, testid }: { e: ProvinceEstimate; testid: string }) {
   return (
@@ -130,10 +131,10 @@ export function E31BriefView({ rec }: { rec: E31Record }) {
 }
 
 export default function E31Brief() {
-  const [rec, setRec] = useState<E31Record | null>(null);
+  const [rec, setRec] = useState<ServedRecord | null>(null);
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => { loadE31().then(setRec).catch((e) => setErr(String(e))); }, []);
   if (err) return <div className="p-4">Could not load the assessment: {err}</div>;
   if (!rec) return <div className="p-4">Loading…</div>;
-  return <E31BriefView rec={rec} />;
+  return isE36(rec) ? <E36BriefView rec={rec} /> : <E31BriefView rec={rec} />;
 }

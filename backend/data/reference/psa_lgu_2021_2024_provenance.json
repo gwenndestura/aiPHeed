@@ -1,0 +1,281 @@
+{
+ "built_at": "2026-10-15T02:46:41+00:00",
+ "rule": "study window 2021-2026: only the SAE 2021 columns and the POPCEN 2024 column are read",
+ "sae": {
+  "file": "2018 - 2021 SAE_with PSGC_noHUC.xlsx",
+  "sha256": "5f3c95bb01ed45c2ec1ae7a126fa96f0ea53c12c55fd634a9b3d460a78ff1fa0",
+  "sheet": "2018-2021_NoHUC",
+  "columns_read": {
+   "poverty_incidence_2021": "column 5",
+   "cv_2021": "column 7",
+   "ci90_low_2021": "column 10",
+   "ci90_high_2021": "column 11"
+  },
+  "reference_year": 2021,
+  "calabarzon_rows": 141,
+  "matched_by": "PSGC (6-digit RRPPMM in the workbook -> legacy 9-digit)",
+  "not_in_table": {
+   "045624000": "Lucena: highly urbanized city, excluded from the no-HUC table"
+  },
+  "cv_over_20pct": [
+   {
+    "lgu_code": "043424000",
+    "lgu_name": "San Pablo",
+    "poverty_cv": 22.6984
+   },
+   {
+    "lgu_code": "045620000",
+    "lgu_name": "Infanta",
+    "poverty_cv": 20.6143
+   },
+   {
+    "lgu_code": "045646000",
+    "lgu_name": "Tagkawayan",
+    "poverty_cv": 32.2872
+   },
+   {
+    "lgu_code": "045631000",
+    "lgu_name": "Panukulan",
+    "poverty_cv": 21.9181
+   },
+   {
+    "lgu_code": "041028000",
+    "lgu_name": "Sto. Tomas",
+    "poverty_cv": 21.407
+   },
+   {
+    "lgu_code": "045813000",
+    "lgu_name": "Taytay",
+    "poverty_cv": 37.6297
+   },
+   {
+    "lgu_code": "045805000",
+    "lgu_name": "Cainta",
+    "poverty_cv": 23.0331
+   },
+   {
+    "lgu_code": "042106000",
+    "lgu_name": "Dasmariñas",
+    "poverty_cv": 26.9674
+   },
+   {
+    "lgu_code": "041002000",
+    "lgu_name": "Alitagtag",
+    "poverty_cv": 21.1269
+   },
+   {
+    "lgu_code": "043419000",
+    "lgu_name": "Pagsanjan",
+    "poverty_cv": 21.7527
+   },
+   {
+    "lgu_code": "041011000",
+    "lgu_name": "Laurel",
+    "poverty_cv": 22.6174
+   },
+   {
+    "lgu_code": "043401000",
+    "lgu_name": "Alaminos",
+    "poverty_cv": 22.4616
+   },
+   {
+    "lgu_code": "043417000",
+    "lgu_name": "Nagcarlan",
+    "poverty_cv": 20.5184
+   },
+   {
+    "lgu_code": "043413000",
+    "lgu_name": "Lumban",
+    "poverty_cv": 23.557
+   },
+   {
+    "lgu_code": "045804000",
+    "lgu_name": "Binangonan",
+    "poverty_cv": 47.1812
+   },
+   {
+    "lgu_code": "043409000",
+    "lgu_name": "Kalayaan",
+    "poverty_cv": 23.2861
+   },
+   {
+    "lgu_code": "043420000",
+    "lgu_name": "Pakil",
+    "poverty_cv": 27.7572
+   },
+   {
+    "lgu_code": "043408000",
+    "lgu_name": "Famy",
+    "poverty_cv": 45.2747
+   },
+   {
+    "lgu_code": "043412000",
+    "lgu_name": "Luisiana",
+    "poverty_cv": 20.1725
+   },
+   {
+    "lgu_code": "045806000",
+    "lgu_name": "Cardona",
+    "poverty_cv": 22.7323
+   },
+   {
+    "lgu_code": "045809000",
+    "lgu_name": "Morong",
+    "poverty_cv": 22.1235
+   },
+   {
+    "lgu_code": "045803000",
+    "lgu_name": "Baras",
+    "poverty_cv": 20.0604
+   },
+   {
+    "lgu_code": "045810000",
+    "lgu_name": "Pililla",
+    "poverty_cv": 22.9055
+   },
+   {
+    "lgu_code": "045807000",
+    "lgu_name": "Jala-Jala",
+    "poverty_cv": 26.8289
+   },
+   {
+    "lgu_code": "045812000",
+    "lgu_name": "Tanay",
+    "poverty_cv": 24.6962
+   }
+  ],
+  "cv_summary": {
+   "median": 14.5,
+   "max": 47.18
+  }
+ },
+ "popcen": {
+  "file": "3_Table B - Population and Annual PGR by Province, City, and Municipality - By Region - rev_0.xlsx",
+  "sha256": "80482c27f10e2672f5af894bf012f0169d9d8eb662003023461c7ec38604d42a",
+  "sheet": "R04A",
+  "census_date": "2024-07-01",
+  "lgus": 142,
+  "matched_by": "name within province (Table B has no PSGC); every roster LGU matched once",
+  "province_totals": {
+   "Batangas": 2994795,
+   "Cavite": 4573884,
+   "Laguna": 3687345,
+   "Quezon": 1980338,
+   "Rizal": 3416541
+  },
+  "sum_of_lgus_by_province": {
+   "Batangas": 2994795,
+   "Cavite": 4573884,
+   "Laguna": 3687345,
+   "Quezon": 1980338,
+   "Rizal": 3416541
+  },
+  "province_sums_match": true,
+  "region_total": 16933234,
+  "region_matches_provinces_plus_huc": true,
+  "column_read": "01-Jul-24 (column 6)"
+ },
+ "land_area_km2": "unchanged from data/reference/calabarzon_lgus.csv (not part of either workbook)",
+ "replaced_lgu_specific_values": [
+  {
+   "lgu_code": "045645000",
+   "lgu_name": "Sariaya",
+   "old_value": 18.7,
+   "official_2021": 14.803454
+  },
+  {
+   "lgu_code": "045808000",
+   "lgu_name": "Rodriguez",
+   "old_value": 6.5,
+   "official_2021": 7.368951
+  },
+  {
+   "lgu_code": "042119000",
+   "lgu_name": "Tagaytay",
+   "old_value": 5.6,
+   "official_2021": 15.283253
+  },
+  {
+   "lgu_code": "043424000",
+   "lgu_name": "San Pablo",
+   "old_value": 6.4,
+   "official_2021": 6.611328
+  },
+  {
+   "lgu_code": "045608000",
+   "lgu_name": "Candelaria",
+   "old_value": 15.4,
+   "official_2021": 15.848865
+  },
+  {
+   "lgu_code": "041019000",
+   "lgu_name": "Nasugbu",
+   "old_value": 9.4,
+   "official_2021": 7.106104
+  },
+  {
+   "lgu_code": "045624000",
+   "lgu_name": "Lucena",
+   "old_value": 9.2,
+   "official_2021": null
+  },
+  {
+   "lgu_code": "042103000",
+   "lgu_name": "Bacoor",
+   "old_value": 3.1,
+   "official_2021": 5.360826
+  },
+  {
+   "lgu_code": "045647000",
+   "lgu_name": "Tayabas",
+   "old_value": 14.3,
+   "official_2021": 12.875776
+  },
+  {
+   "lgu_code": "042106000",
+   "lgu_name": "Dasmariñas",
+   "old_value": 3.5,
+   "official_2021": 8.783765
+  },
+  {
+   "lgu_code": "043405000",
+   "lgu_name": "Calamba",
+   "old_value": 3.8,
+   "official_2021": 3.968799
+  },
+  {
+   "lgu_code": "043428000",
+   "lgu_name": "Santa Rosa",
+   "old_value": 2.9,
+   "official_2021": 3.669882
+  },
+  {
+   "lgu_code": "041014000",
+   "lgu_name": "Lipa",
+   "old_value": 5.1,
+   "official_2021": 12.027362
+  },
+  {
+   "lgu_code": "041005000",
+   "lgu_name": "Batangas City",
+   "old_value": 5.8,
+   "official_2021": 6.235051
+  },
+  {
+   "lgu_code": "045802000",
+   "lgu_name": "Antipolo",
+   "old_value": 3.2,
+   "official_2021": 9.294249
+  },
+  {
+   "lgu_code": "042109000",
+   "lgu_name": "Imus",
+   "old_value": 2.8,
+   "official_2021": 9.285844
+  }
+ ],
+ "counts": {
+  "municipal_sae": 141,
+  "province_substitute": 1
+ }
+}

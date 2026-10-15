@@ -367,7 +367,7 @@ function TrendView() {
                 y={displayCutoff}
                 stroke="hsl(var(--risk-moderate))"
                 strokeDasharray="5 4"
-                label={{ value: `High Risk (${displayCutoff.toFixed(2)})`, position: "right", fontSize: 9, fill: "hsl(var(--risk-moderate))" }}
+                label={{ value: `Estimated high (${displayCutoff.toFixed(2)}+)`, position: "right", fontSize: 9, fill: "hsl(var(--risk-moderate))" }}
               />
               {seriesKeys.map((p) => (
                 <Line

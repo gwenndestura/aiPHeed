@@ -231,3 +231,18 @@ The brief asks for a new model only if development is incomplete, and for contin
    - the 75% wording (and a co-metric such as balanced accuracy or Brier);
    - the NNS anchor.
 5. **Laguna de Bay attribution** (6 FSSI articles): keep Laguna only, or share with Rizal. A change would need a new frozen FSSI version.
+
+---
+
+## Addendum (E36, 2026-10-15): verified updates to this audit and the completion matrix
+
+Source: `../E36_LightGBM_One_Quarter_Ahead/FINAL_REPORT.md` (sections 6, 7, 9, 10). The original matrix above is kept for traceability; these rows supersede it.
+
+| Objective | Implemented and verified (system) | Scientifically achieved |
+|---|---|---|
+| 2. LightGBM metrics I-V | **PASS** for lead 1 with the served LightGBM (aiPHeed-E36-LGBM): 53/65 = 0.815 (date-bootstrap 95% CI 0.738-0.892), all metrics, leakage tests | **FAIL / not demonstrated**: equals always-HIGH, below persistence 0.877; no lead shown reliable |
+| 3. LGU rankings | **PASS**: inputs now in-window and verified against the supplied workbooks: **141/142 LGUs use their own PSA 2021 municipal SAE**; Lucena City (HUC, absent from the no-HUC table) uses a substitute labelled unverified; **142/142 use 2024 POPCEN**. Record, API (`/lgu-ranking`, `/provinces/{id}/municipalities`), map and PDF agree (tests) | **PARTIAL**: province forecasts unvalidated; Lucena value unverified |
+| 4. Baselines | **PASS**: all six SOP 3 baselines on identical rows | Negative: none beaten significantly (Holm p >= .50) |
+| 5. Dashboard | **PARTIAL**: E35 display defects D1, D3-D7 fixed and tested; not deployed | **BLOCKED** (no DA evaluation) |
+
+Section 6 rows superseded: "LGU poverty substitutes (126/142)" and "Density from the 2020 census" are **resolved** (data supplied by the researcher on 2026-10-15 and integrated on branch `e36-lgbm-one-quarter-ahead`). The old 16 "LGU-specific" values were wrong (e.g. Imus 2.8 vs 9.29) and are replaced. **Still not complete**: no validated model, prospective outcomes pending, Objective 5 evaluation not done.

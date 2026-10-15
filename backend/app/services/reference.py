@@ -86,7 +86,7 @@ def lgu_roster() -> pd.DataFrame:
     df["id"] = df["provinceId"] + "-" + df["muniSlug"]
     df["classification"] = df["lgu_type"].str.title()
     df["densityPerKm2"] = (
-        df["population_2020"] / df["land_area_km2"].replace(0, pd.NA)
+        df["population_2024"] / df["land_area_km2"].replace(0, pd.NA)
     ).round(1)
     return df
 

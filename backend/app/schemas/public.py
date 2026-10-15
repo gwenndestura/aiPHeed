@@ -118,6 +118,8 @@ class ProvinceSummary(BaseModel):
     centroid: Centroid
     population: int | None = None
     povertyRate: float | None = None
+    # E35-D7: how povertyRate was derived (population-weighted PSA 2021 municipal SAE; not a PSA province figure)
+    povertyRateBasis: str | None = None
     currentQuarter: str
     # Null when withheld. The province still appears so the map can draw it,
     # but the number an admin held back is not served alongside a flag.
@@ -126,6 +128,9 @@ class ProvinceSummary(BaseModel):
     qoqChange: float | None = None
     qoqChangePct: float | None = None
     riskLabel: str | None = None
+    # E35-D1: what the riskLevel band is (a model estimate at the display cutoff, never a validated class)
+    riskLevelBasis: str | None = None
+    evidenceStatus: str | None = None
     forecastHorizonQuarters: int | None = None
     horizonLabel: str | None = None
     confidenceStatement: str | None = None

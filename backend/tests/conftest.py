@@ -10,6 +10,30 @@ from app.dependencies import get_db
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 
+async def _memory_db():
+    """A fresh, empty in-memory database per request. E36: tests must never open the production backend/aipheed.db
+    (the app's default DATABASE_URL); module-level TestClient(app) calls used to reach it through get_db."""
+    from sqlalchemy.pool import StaticPool
+
+    engine = create_async_engine(TEST_DATABASE_URL, echo=False, poolclass=StaticPool)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    async with async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)() as session:
+        yield session
+    await engine.dispose()
+
+
+app.dependency_overrides[get_db] = _memory_db          # covers module-scope calls made before any fixture runs
+
+
+@pytest.fixture(autouse=True)
+def _never_open_production_db():
+    """Re-install the in-memory default after a test's own override was cleared; a test may still install its own."""
+    app.dependency_overrides.setdefault(get_db, _memory_db)
+    yield
+    app.dependency_overrides.setdefault(get_db, _memory_db)
+
+
 @pytest_asyncio.fixture(scope="function")
 async def test_db():
     """

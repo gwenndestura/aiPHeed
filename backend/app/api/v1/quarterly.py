@@ -185,8 +185,9 @@ def forecast_period():
 
 
 # ============================================================================================ E31
-E31_RECORD = Path(os.getenv("AIPHEED_E31_RECORD", "data/e31/e31_record.json"))
-E31_PDF = Path(os.getenv("AIPHEED_E31_PDF", "data/e31/aiPHeed_E31_assessment_report.pdf"))
+# E36: the served record (same endpoints); see app/ml/inference/e31_engine.RECORD_PATH
+E31_RECORD = Path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
+E31_PDF = Path(os.getenv("AIPHEED_E31_PDF", "data/e36/aiPHeed_E36_assessment_report.pdf"))
 E31_NEWS_STORE = Path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
 _E31_CACHE: dict = {}
 

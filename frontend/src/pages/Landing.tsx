@@ -672,7 +672,7 @@ function FAQ() {
   const items = [
     {
       q: "Why does aiPHeed forecast province-level risk instead of household-level?",
-      a: "Household-level forecasts require granular survey microdata that is not publicly released at quarterly cadence. aiPHeed forecasts at the province level, the finest reliable signal in public data, and disaggregates to municipalities using PSA vulnerability weights.",
+      a: "Household-level forecasts require granular survey microdata that is not publicly released at quarterly cadence. aiPHeed estimates risk at the province level because that is where quarterly public price data exist, and re-weights the province estimate to municipalities using PSA poverty and population weights. The province estimates are experimental: no forecast horizon is validated yet, and the hunger input is one regional (Balance Luzon) value shared by all five provinces.",
     },
     {
       q: "What does \"zero-shot\" NLP mean?",
@@ -688,7 +688,7 @@ function FAQ() {
     },
     {
       q: "Can the system be adapted for other Philippine regions?",
-      a: "Yes. The pipeline is region-agnostic. Only the news corpus filters, PSA province codes, and vulnerability weights need to be re-fit for a new region.",
+      a: "Possibly, but not by a simple switch. The label depends on SWS hunger rounds for the wider area (Balance Luzon here) and on provincial CPI, the news queries name CALABARZON places, and the model would have to be re-trained and re-evaluated on that region's own quarters.",
     },
   ];
   const [open, setOpen] = useState<number | null>(0);
