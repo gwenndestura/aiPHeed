@@ -33,6 +33,7 @@ from app.ml.inference.disaggregator import Disaggregator
 from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
 from app.ml.inference import e31_engine as E31
+from app.ml.inference import e41_lead2 as E41L2
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
@@ -362,9 +363,17 @@ def is_estimate_quarter(quarter: str) -> bool:
 # Province-level forecasts
 # ---------------------------------------------------------------------------
 
-@functools.lru_cache(maxsize=64)
 def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[dict]:
-    """Raw model output for one quarter, from whichever engine the horizon names."""
+    """Raw model output for one quarter, from whichever engine the horizon names (cache keyed by the Lead-2 mode)."""
+    return _province_forecasts_cached(quarter, horizon, E41L2.mode())
+
+
+@functools.lru_cache(maxsize=64)
+def _province_forecasts_cached(quarter: str, horizon: str, lead2_mode: str) -> list[dict]:
+    # E41: with AIPHEED_LEAD2_MODEL=e41, the candidate's frozen Lead-2 forecast replaces the E38 row for exactly its
+    # target quarter; every other quarter, and the default mode, are unchanged.
+    if E41L2.serves(quarter):
+        return E41L2.forecast_rows(quarter)
     out = _engine(horizon).forecast_quarter(quarter)
     if not out and e31_active():                       # E31: the quarter exists only under the other mode
         out = _engine(NOWCAST if horizon == FORECAST else FORECAST).forecast_quarter(quarter)
@@ -470,6 +479,9 @@ def province_summary(
             "qoqChange": delta,
             "qoqChangePct": pct,
             "riskLabel": record.get("risk_label"),
+            # E41: what the score is (present only for the E41 candidate; absent rows keep the E38 meaning)
+            **({"scoreType": record["score_type"], "scoreDefinition": record["score_definition"],
+                "riskBand": record["band"]} if record.get("score_type") else {}),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": RISK_LEVEL_BASIS,
             # Rule 6: every forecast carries an explicit horizon label, a
@@ -640,8 +652,12 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 # Municipal disaggregation
 # ---------------------------------------------------------------------------
 
-@functools.lru_cache(maxsize=32)
 def _municipal_frame(quarter: str) -> pd.DataFrame:
+    return _municipal_frame_cached(quarter, E41L2.mode())
+
+
+@functools.lru_cache(maxsize=32)
+def _municipal_frame_cached(quarter: str, lead2_mode: str) -> pd.DataFrame:
     forecasts = _province_forecasts(quarter)
     if e31_active():
         if not forecasts:                      # a quarter that exists only as a nowcast (2026-Q4)
@@ -790,8 +806,14 @@ def _integer_shares(values: list[float]) -> list[int]:
     return floors
 
 
-@functools.lru_cache(maxsize=256)
 def _drivers(province_code: str, quarter: str) -> dict:
+    return _drivers_cached(province_code, quarter, E41L2.mode())
+
+
+@functools.lru_cache(maxsize=256)
+def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
+    if E41L2.serves(quarter):
+        return E41L2.drivers(province_code, quarter)
     explainer = _explainer()
     records = explainer.explain_province_quarter(province_code, quarter)
     return explainer.build_drivers(province_code, quarter, records)

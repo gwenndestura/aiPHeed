@@ -130,6 +130,10 @@ class ProvinceSummary(BaseModel):
     qoqChange: float | None = None
     qoqChangePct: float | None = None
     riskLabel: str | None = None
+    # E41 (only with AIPHEED_LEAD2_MODEL=e41, for its target quarter): what riskScore is, and the documented band
+    scoreType: str | None = None
+    scoreDefinition: str | None = None
+    riskBand: str | None = None
     # E35-D1: what the riskLevel band is (a model estimate at the display cutoff, never a validated class)
     riskLevelBasis: str | None = None
     evidenceStatus: str | None = None

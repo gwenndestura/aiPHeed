@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, forecast, fpp, health, insights, quarterly, report,
+    admin, alerts, assessments, auth, dashboard, forecast, fpp, health, insights, lead2, quarterly, report,
 )
 
 router = APIRouter()
@@ -22,6 +22,8 @@ router.include_router(assessments.router, prefix=API_V1, tags=["Assessments"])
 router.include_router(quarterly.router, prefix=API_V1, tags=["Quarterly"])
 # Label v2: Food Price Pressure (exploratory), served only when LABEL_VERSION=v2 (E39); v1 stays the default.
 router.include_router(fpp.router, prefix=API_V1, tags=["Food Price Pressure (exploratory)"])
+# E41 Lead-2 two-layer candidate, served only when AIPHEED_LEAD2_MODEL=e41; E38 stays the default.
+router.include_router(lead2.router, prefix=API_V1, tags=["Lead-2 candidate (E41)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.
