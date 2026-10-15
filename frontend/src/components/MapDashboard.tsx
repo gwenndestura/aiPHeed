@@ -25,11 +25,13 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isLoadFailure } from "@/lib/loadError";
 import { isHighRisk } from "@/lib/risk";
+import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { readStorage, removeStorage } from "@/lib/storage";
 
-function FloatingCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+function FloatingCard({ children, className = "", style, tour }: { children: React.ReactNode; className?: string; style?: React.CSSProperties; tour?: string }) {
   return (
     <div
+      data-tour={tour}
       className={`px-4 py-3.5 shadow-xl bg-card/85 text-card-foreground border border-border/60 ${className}`}
       style={{
         backdropFilter: "blur(14px)",
@@ -62,8 +64,8 @@ function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: stri
 }
 
 /** A card inside the phone sheet, which already has the blur and shadow. */
-function SheetCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`px-4 py-3.5 border border-border/50 bg-card/60 ${className}`}>{children}</div>;
+function SheetCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
+  return <div data-tour={tour} className={`px-4 py-3.5 border border-border/50 bg-card/60 ${className}`}>{children}</div>;
 }
 
 function NoDataCardBody({ reason }: { reason?: string }) {
@@ -289,6 +291,25 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     return () => clearTimeout(t);
   }, [compact, medium, leftCollapsed, rightCollapsed, sheetSnap]);
 
+  // The guided tour (MapTour) asks for a panel or a sheet height per step.
+  useEffect(() => {
+    const onTourLayout = (e: Event) => {
+      const { panel, sheet } = (e as CustomEvent<TourLayout>).detail;
+      if (compact) {
+        if (panel) setSheetTab(panel);
+        if (sheet) setSheetSnap(sheet);
+      } else if (panel === "summary") {
+        setLeftCollapsed(false);
+        if (medium) setRightCollapsed(true);
+      } else if (panel === "why") {
+        setRightCollapsed(false);
+        if (medium) setLeftCollapsed(true);
+      }
+    };
+    window.addEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+    return () => window.removeEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+  }, [compact, medium]);
+
   // On tablets, opening one panel closes the other.
   const showLeft = () => {
     setLeftCollapsed(false);
@@ -322,7 +343,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const Card = compact ? SheetCard : FloatingCard;
 
   const aboutFeedback = showAboutFeedback && (
-    <Card className={compact ? "" : "!py-2 shrink-0"}>
+    <Card className={compact ? "" : "!py-2 shrink-0"} tour="about">
       <div className="flex items-center justify-between gap-2">
         <AboutModal />
         <span className="text-[10px] text-muted-foreground/30">·</span>
@@ -409,7 +430,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const wideCompact = compact && rootW >= WIDE_COMPACT_W;
 
   const map = (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0" data-tour="map">
       <PhilippineMap
         regions={filteredRegions}
         selectedRegion={selectedRegion}
@@ -461,6 +482,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         <div
           className="absolute z-[1002]"
           style={wideCompact ? { left: EDGE, top: EDGE, width: Math.min(SEARCH_MAX_W, rootW - 2 * EDGE - 200) } : { left: EDGE, right: EDGE, top: EDGE }}
+          data-tour="search"
         >
           <MapSearch fill />
         </div>
@@ -470,13 +492,13 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             className={`absolute z-[1001] flex flex-col ${wideCompact ? "items-end" : "items-start"} gap-1 pointer-events-none`}
             style={wideCompact ? { right: EDGE, top: EDGE } : { left: EDGE, top: SHEET_TOP_RESERVE }}
           >
-            <MapLegend compact />
+            <div data-tour="legend"><MapLegend compact /></div>
             <span className="qt-float text-[12px]">© OpenStreetMap · Protomaps</span>
           </div>
         )}
 
         {rowVisible && (
-          <div className="absolute z-[1002] flex items-end gap-2" style={{ left: EDGE, right: EDGE, bottom: rowBottom }}>
+          <div className="absolute z-[1002] flex items-end gap-2" style={{ left: EDGE, right: EDGE, bottom: rowBottom }} data-tour="timeline">
             <div className="flex-1 min-w-0">
               {currentQuarter && (
                 <QuarterTimeSlider
@@ -559,6 +581,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
         onClick={() => leftCollapsed && showLeft()}
         aria-label={leftCollapsed ? "Show left sidebar" : undefined}
+        data-tour="summary"
       >
           {hasSelection && !noData ? (
             <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
@@ -580,6 +603,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
         onClick={() => rightCollapsed && showRight()}
         aria-label={rightCollapsed ? "Show right sidebar" : undefined}
+        data-tour="why"
       >
           {rightCards}
       </div>
@@ -591,6 +615,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       <div
         className="absolute z-[1001] animate-fade-in transition-[left] duration-300"
         style={{ left: (leftCollapsed ? closedW : COL_W) + 12, top: 12 }}
+        data-tour="search"
       >
         <MapSearch />
       </div>
@@ -614,11 +639,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         }}
       >
         <div className="qt-row-stack">
-          <div className="qt-row-legend pointer-events-auto animate-fade-in">
+          <div className="qt-row-legend pointer-events-auto animate-fade-in" data-tour="legend">
             <MapLegend />
           </div>
           {currentQuarter && (
-            <div className="qt-row-bar pointer-events-auto animate-slide-up">
+            <div className="qt-row-bar pointer-events-auto animate-slide-up" data-tour="timeline">
               <QuarterTimeSlider
                 value={quarterId}
                 onChange={setQuarterId}

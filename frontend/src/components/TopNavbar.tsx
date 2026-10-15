@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogOut, Sun, Moon } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogOut, Sun, Moon, Compass } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { useAuth } from "@/lib/auth";
@@ -8,6 +8,7 @@ import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
 import { useAccounts } from "@/lib/queries";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { PSTClock, PSTClockMenuRow } from "./PSTClock";
+import { requestTour } from "@/lib/tour";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import logoIcon from "@/assets/logo-icon.png";
@@ -26,6 +27,8 @@ export function TopNavbar({ active = "none" }: Props) {
   // Signed-in admins get the admin navigation on public pages too. Decided by
   // the server-confirmed session only -- never a URL parameter or a stored flag.
   const { status, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const isAdmin = status === "authenticated";
   const isDemo = isAdmin && !!user?.isDemo;
   // Fetched with the header, so the menu's pending count is ready when it opens.
@@ -55,7 +58,7 @@ export function TopNavbar({ active = "none" }: Props) {
       {/* A signed-in admin has five links; below 1024px they move into the menu. */}
       {/* The demo account also shows a "Demo account" badge, so its links move
           into the menu below 1280px instead of 1024px (see AdminMenuLinks). */}
-      <nav className={`absolute left-1/2 -translate-x-1/2 items-center gap-1 ${isDemo ? "hidden xl:flex" : isAdmin ? "hidden lg:flex" : "hidden md:flex"}`}>
+      <nav data-tour="pages" className={`absolute left-1/2 -translate-x-1/2 items-center gap-1 ${isDemo ? "hidden xl:flex" : isAdmin ? "hidden lg:flex" : "hidden md:flex"}`}>
         {isAdmin ? (
           <AdminNavLinks />
         ) : (
@@ -74,7 +77,7 @@ export function TopNavbar({ active = "none" }: Props) {
 
       {/* Hamburger */}
       <Sheet>
-        <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu">
+        <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu" data-tour="pages">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
         <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100]">
@@ -136,6 +139,18 @@ export function TopNavbar({ active = "none" }: Props) {
                 Settings
               </p>
               <DisplayPreferencesModal />
+            </div>
+
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
+                Help
+              </p>
+              {/* Replays the map page's guided tour (opening the map page first if needed). */}
+              <SheetClose asChild>
+                <button type="button" onClick={() => requestTour(navigate, pathname)} className="w-full">
+                  <MenuRow icon={Compass} label="Take the tour" hint="A short guide to the map" />
+                </button>
+              </SheetClose>
             </div>
           </div>
         </SheetContent>

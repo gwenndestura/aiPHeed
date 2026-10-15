@@ -89,7 +89,7 @@ export function LeftPanel({
       </div>
 
       {/* Footer: About + Feedback */}
-      <div className="shrink-0 border-t border-border/40 px-4 py-2.5 flex items-center justify-between gap-2 bg-card/60">
+      <div className="shrink-0 border-t border-border/40 px-4 py-2.5 flex items-center justify-between gap-2 bg-card/60" data-tour="about">
         <AboutModal />
         <span className="text-[10px] text-muted-foreground/30">·</span>
         <FeedbackModal />
