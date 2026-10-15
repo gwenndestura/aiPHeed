@@ -210,7 +210,7 @@ def walk_forward(d: Data) -> tuple[pd.DataFrame, dict]:
 
 
 # ------------------------------------------------------------------ the operational model
-def operational_choice(d: Data, preds_df: pd.DataFrame) -> tuple[tuple[str, str], dict]:
+def operational_choice(d: Data, preds_df: pd.DataFrame, pool_key: str = "E36-LGBM") -> tuple[tuple[str, str], dict]:
     """The configuration the nested rule picks at O(2026-Q3) = 2026-10-01 (only targets posted before then)."""
     dates = sorted({qk(x) for x in preds_df["t"].unique()})
     prior = eligible_prior_dates(d, OPERATIONAL_T, dates)
@@ -219,7 +219,7 @@ def operational_choice(d: Data, preds_df: pd.DataFrame) -> tuple[tuple[str, str]
         s = preds_df[preds_df["t"] == qs(tj)]
         preds[tj] = {a: dict(zip(g["province_code"], g["p"])) for a, g in s.groupby("arm")}
         labels[tj] = dict(zip(s[s["arm"] == "ALWAYS_HIGH"]["province_code"], s[s["arm"] == "ALWAYS_HIGH"]["y"]))
-    return select("E36-LGBM", prior, preds, labels)
+    return select(pool_key, prior, preds, labels)
 
 
 def shap_contributions(model, X: pd.DataFrame) -> pd.DataFrame:
@@ -228,3 +228,21 @@ def shap_contributions(model, X: pd.DataFrame) -> pd.DataFrame:
         warnings.simplefilter("ignore")
         c = model.booster_.predict(X.astype(float), pred_contrib=True)
     return pd.DataFrame(c, columns=list(X.columns) + ["expected_value"], index=X.index)
+
+
+DISPLAY = {
+    "H_last": "Latest regional hunger rate (SWS Balance Luzon)",
+    "H_gap": "Quarters between the latest hunger survey and the forecast quarter",
+    "H_trend": "Change in regional hunger between the two latest surveys",
+    "H_margin": "Latest regional hunger relative to the HIGH threshold",
+    "D_last": "Province food-price pressure last quarter (PSA food CPI)",
+    "Dnow": "Province food-price pressure in the first two months of this quarter",
+    "rice_rel": "Province rice-price inflation relative to the regional mean",
+    "y_last": "Latest published risk label for the province",
+    "news_n": "Relevant food-insecurity news about the province (count)",
+    "news_reg": "Relevant food-insecurity news in the region (count)",
+    "news_direct_share": "Share of the province's news directly about food",
+    "fssi_v2": "Food Stress Sentiment Index (FSSI-v2)",
+    "fssi_missing": "No FSSI evidence for the province this quarter",
+}
+SOURCE = {f: "government" for f in GOV} | {f: "news" for f in NLP}
