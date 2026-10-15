@@ -8,7 +8,7 @@ import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
 import { useAccounts } from "@/lib/queries";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { PSTClock, PSTClockMenuRow } from "./PSTClock";
-import { requestTour } from "@/lib/tour";
+import { requestTour, tourForPath, TOUR_HINTS } from "@/lib/tour";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import logoIcon from "@/assets/logo-icon.png";
@@ -145,10 +145,10 @@ export function TopNavbar({ active = "none" }: Props) {
               <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
                 Help
               </p>
-              {/* Replays the map page's guided tour (opening the map page first if needed). */}
+              {/* Replays this page's guided tour; pages without one get the map's (opening the map page first). */}
               <SheetClose asChild>
                 <button type="button" onClick={() => requestTour(navigate, pathname)} className="w-full">
-                  <MenuRow icon={Compass} label="Take the tour" hint="A short guide to the map" />
+                  <MenuRow icon={Compass} label="Take the tour" hint={TOUR_HINTS[tourForPath(pathname) ?? "map"]} />
                 </button>
               </SheetClose>
             </div>

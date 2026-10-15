@@ -120,6 +120,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const [sheetSnap, setSheetSnap] = useState<SheetSnap>("collapsed");
   const [sheetTab, setSheetTab] = useState("summary");
   const [sheetH, setSheetH] = useState(SHEET_PEEK_H);
+  // The tour's news step holds the News articles analyzed card open.
+  const [tourNews, setTourNews] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [rootH, setRootH] = useState(0);
   const [rootW, setRootW] = useState(0);
@@ -291,10 +293,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     return () => clearTimeout(t);
   }, [compact, medium, leftCollapsed, rightCollapsed, sheetSnap]);
 
-  // The guided tour (MapTour) asks for a panel or a sheet height per step.
+  // The guided tour (MapTour) asks for a panel, a sheet height or the open news card per step.
   useEffect(() => {
     const onTourLayout = (e: Event) => {
-      const { panel, sheet } = (e as CustomEvent<TourLayout>).detail;
+      const { panel, sheet, news } = (e as CustomEvent<TourLayout>).detail;
+      setTourNews(!!news);
       if (compact) {
         if (panel) setSheetTab(panel);
         if (sheet) setSheetSnap(sheet);
@@ -409,7 +412,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         />
       </Card>
       <Card>
-        <NewsArticlesCardBody selectedRegion={effectiveRegion} quarterId={quarterId} />
+        <NewsArticlesCardBody selectedRegion={effectiveRegion} quarterId={quarterId} tourOpen={tourNews} />
       </Card>
     </>
   ) : null;

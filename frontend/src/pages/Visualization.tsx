@@ -1,5 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TopNavbar } from "@/components/TopNavbar";
+import { VizTour } from "@/components/PageTours";
+import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { toast } from "@/hooks/use-toast";
 import { useConfig, useQuarters, useTimeseries, useMunicipalities, useExplainability } from "@/lib/queries";
 import { selectableQuarters } from "@/lib/quarters";
@@ -110,6 +112,16 @@ function useChartExport(pngRef: React.RefObject<HTMLElement>, canExport: boolean
 export default function VisualizationPage() {
   const [tab, setTab] = useState<Tab>("trend");
 
+  // The guided tour (VizTour) explains the trend tab.
+  useEffect(() => {
+    const onTourLayout = (e: Event) => {
+      const { vizTab } = (e as CustomEvent<TourLayout>).detail;
+      if (vizTab) setTab(vizTab);
+    };
+    window.addEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+    return () => window.removeEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+  }, []);
+
   return (
     <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
       <TopNavbar active="viz" />
@@ -117,7 +129,7 @@ export default function VisualizationPage() {
       <main className="flex-1 overflow-auto">
         <div className="p-4 sm:p-6 max-w-6xl mx-auto">
           {/* Sub-tabs */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4" data-tour="viz-tabs">
             <SubTab active={tab === "trend"} onClick={() => setTab("trend")}>
               Province Risk Level Trend
             </SubTab>
@@ -129,6 +141,8 @@ export default function VisualizationPage() {
           {tab === "trend" ? <TrendView /> : <ShapView />}
         </div>
       </main>
+      {/* First-visit guide for public visitors (also "Take the tour" in the menu). */}
+      <VizTour />
     </div>
   );
 }
@@ -246,6 +260,20 @@ function TrendView() {
   }, [generated, isMuni, isSingleProvince, isAllProvinces, muniTs, singleProvinceTs, caviteTs, lagunaTs, batangasTs, rizalTs, quezonTs]);
 
   const handleGenerate = () => setGenerated({ province, municipality, from, to });
+
+  // The tour's chart step draws the chart for the current choices if there is none yet.
+  const tourGenerate = useRef<() => void>();
+  tourGenerate.current = () => {
+    if (!generated && from && to) handleGenerate();
+  };
+  useEffect(() => {
+    const onTourLayout = (e: Event) => {
+      if ((e as CustomEvent<TourLayout>).detail.generate) tourGenerate.current?.();
+    };
+    window.addEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+    return () => window.removeEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+  }, []);
+
   const handleClear = () => {
     setProvince("All");
     setMunicipality("All");
@@ -297,7 +325,7 @@ function TrendView() {
       </div>
 
       <div className="rounded-b-2xl bg-secondary/20 border border-t-0 border-border/50 px-5 sm:px-6 py-5 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-tour="viz-filters">
           <FloatingSelect
             label="Province"
             value={province}
@@ -314,7 +342,7 @@ function TrendView() {
           <FloatingSelect label="To" value={to} onChange={setTo} options={QUARTERS} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-tour="viz-generate">
           <button
             onClick={handleGenerate}
             className="h-12 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
@@ -329,7 +357,7 @@ function TrendView() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-between pt-2" data-tour="viz-download">
           <button
             onClick={handleDownloadPng}
             disabled={!hasChart}
@@ -347,7 +375,7 @@ function TrendView() {
         </div>
       </div>
 
-      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6" data-tour="viz-chart">
         {loadFailed ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             {LOAD_ERROR_MESSAGE}
