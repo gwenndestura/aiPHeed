@@ -185,3 +185,20 @@ class FeedbackListResponse(BaseModel):
     page: int
     pageSize: int
     total: int
+
+
+class PipelineRunRequest(BaseModel):
+    """Options for a manually triggered quarterly cycle (Figure 3.6.1)."""
+    skipCollect: bool = False
+    skipTrain: bool = False
+    quarter: str | None = None
+
+
+class PipelineRunStatus(BaseModel):
+    status: str
+    running: bool
+    startedAt: str | None = None
+    startedBy: str | None = None
+    finishedAt: str | None = None
+    error: str | None = None
+    lastRun: dict | None = None

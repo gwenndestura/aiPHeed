@@ -8,9 +8,10 @@ These models are camelCase and address subjects by slug ("quezon",
 internal schemas in forecasts.py / shap.py stay snake_case and PSGC-keyed for
 the DB and ML layers; app/services/reference.py is the only translation point.
 
-Every forecast response carries `indicator`. The number is a food AVAILABILITY
-shock share, not a household food-insecurity probability, and the label
-travels with the value so no screen can rename it in isolation.
+Every forecast response carries `indicator`. The number is the province's food
+insecurity RISK PROBABILITY — an indicative, relative ordinal estimate, not a
+definitive determination of food insecurity status — and the label travels with
+the value so no screen can rename it in isolation.
 """
 
 from __future__ import annotations
@@ -76,9 +77,6 @@ class ConfigResponse(BaseModel):
     # reaches, and its metrics with baselines.
     horizons: dict
     modelPerformance: dict
-    # The E20 headline forecast (2027-Q1) for the dashboard banner; None when
-    # it is not served.
-    forecast: dict | None = None
 
 
 class Quarter(BaseModel):
@@ -88,7 +86,7 @@ class Quarter(BaseModel):
     label: str
     monthsLabel: str
     state: str  # "actual" | "current" | "forecast" | "unavailable"
-    # Why an "unavailable" quarter has no score; None on every other state.
+    # Why an "unavailable" quarter has no score; None on every other state (main backend 1658d31, restored in E34).
     reason: str | None = None
 
 
@@ -127,26 +125,22 @@ class ProvinceSummary(BaseModel):
     riskLevel: str | None = None
     qoqChange: float | None = None
     qoqChangePct: float | None = None
-    seriesMonitored: int | None = None
-    seriesAtRisk: int | None = None
-    # Of seriesMonitored, how many scored below the confidence cutoff the
-    # reported accuracy/precision are actually measured at. Real per-
-    # commodity uncertainty disclosed alongside the score, not a hidden
-    # exclusion -- riskScore above still counts every monitored series.
-    seriesNeedingReview: int | None = None
-    topAtRiskCommodities: list[str] = Field(default_factory=list)
+    riskLabel: str | None = None
+    forecastHorizonQuarters: int | None = None
+    horizonLabel: str | None = None
+    confidenceStatement: str | None = None
+    verificationDate: str | None = None
     articleCount: int = 0
     limitedSignal: bool = False
     horizon: str = "nowcast"
     withheld: bool = False
-    # Set on an E20 forecast quarter (2027-Q1): a different target and model
-    # from the nowcast, served from data/e20/serving.json.
-    isForecast: bool = False
-    lead: int | None = None
-    originQuarter: str | None = None
-    modelId: str | None = None
-    confidenceNote: str | None = None
-    uncertainty: dict | None = None
+    # Ranking of the published provinces by the model's probability (Section
+    # 1.2: the system "will estimate and rank" potential risk). Null when
+    # withheld, so a withheld score cannot be inferred from its position.
+    rank: int | None = None
+    rankOf: int | None = None
+    gapToNextLower: float | None = None
+    tiedWithNextLower: bool | None = None
 
 
 class ProvincesResponse(BaseModel):
@@ -166,12 +160,25 @@ class MunicipalitySummary(BaseModel):
     densityPerKm2: float | None = None
     povertyRate: float | None = None
     quarter: str
-    riskIndex: float
-    riskLevel: str
+    # E31 fix: null when the province has no estimate (E28 removed the zero fill but not this type).
+    riskIndex: float | None = None
+    # E28/E31: LGUs are never banded (the province estimate is not validated), so this is null. The schema still
+    # required a string, which made the endpoint return 500 for every quarter.
+    riskLevel: str | None = None
     # Never null. These are reweighted province numbers, not independent
     # municipal forecasts, and the label says so on every row.
     disaggregationLabel: str
     limitedSignal: bool = False
+    # E31: the ranking and provenance fields the service returns were silently dropped by the schema
+    rankRegion: int | None = None
+    rankInProvince: int | None = None
+    tied: bool = False
+    evidenceStatus: str | None = None
+    riskLevelBasis: str | None = None
+    povertyEstimateKind: str | None = None
+    povertyValueUsed: float | None = None
+    povertyLimitation: str | None = None
+    noProvinceEstimate: bool = False
 
 
 class MunicipalitiesResponse(BaseModel):
@@ -217,10 +224,11 @@ class ForecastResponse(BaseModel):
     provinceCounts: dict | None = None
     provincesIncluded: int | None = None
     horizon: str = "nowcast"
-    seriesMonitored: int | None = None
-    seriesAtRisk: int | None = None
-    seriesNeedingReview: int | None = None
-    topAtRiskCommodities: list[str] | None = None
+    riskLabel: str | None = None
+    forecastHorizonQuarters: int | None = None
+    horizonLabel: str | None = None
+    confidenceStatement: str | None = None
+    verificationDate: str | None = None
     disaggregationLabel: str | None = None
     derivation: str | None = None
 
@@ -244,19 +252,6 @@ class TimeseriesResponse(BaseModel):
 # Explainability
 # ---------------------------------------------------------------------------
 
-class RealDataContext(BaseModel):
-    """
-    Real government-source numbers shown as informational context on a
-    driver -- NOT a model input. Currently only populated on ofw_remittance
-    (BSP data), since that driver's only trained feature is a purely
-    news-derived proportion that reads 0 in most quarters. Does not affect
-    signedContribution, pct, or any reported accuracy/F1/AUC figure.
-    """
-    source: str
-    ofw_remit_yoy_pct: float | None = None
-    fx_usd_php_avg: float | None = None
-
-
 class Trigger(BaseModel):
     """
     One SHAP driver group.
@@ -274,7 +269,6 @@ class Trigger(BaseModel):
     direction: str
     color: str
     newsSignalProportion: float | None = None
-    realDataContext: RealDataContext | None = None
 
 
 class ExplainabilityResponse(BaseModel):
@@ -284,17 +278,9 @@ class ExplainabilityResponse(BaseModel):
     quarter: str
     riskScore: float
     triggers: list[Trigger]
-    # Share (0-100) of the model's real SHAP-explained reasoning that comes
-    # from drivers not itemized among the five `triggers` (the commodity
-    # series' own recent/seasonal dynamics, general news volume). Disclosed
-    # rather than folded into one of the five or omitted.
-    otherPct: float
     articleCount: int
     triggerMatchedArticles: int
     narrative: str
-    # Third-person, academic counterpart of `narrative`, printed under
-    # "Interpretation" in the exported PDF report. Plain ASCII.
-    formalInterpretation: str
     note: str
 
 
@@ -325,9 +311,6 @@ class NewsResponse(BaseModel):
     scope: str
     id: str
     quarter: str
-    # The quarter the articles were published in. Equal to `quarter` except on
-    # a forecast quarter, which shows its information-cutoff quarter's news.
-    sourceQuarter: str
     articleCount: int
     # How many of those are geocoded to a CALABARZON province. Most of the
     # corpus is not: at region scope this is far below articleCount, which is
@@ -338,3 +321,45 @@ class NewsResponse(BaseModel):
     page: int
     pageSize: int
     total: int
+    # E31: which quarter's articles these are and why (a forecast is supported by the PREVIOUS quarter's news;
+    # a nowcast by the same quarter up to its cutoff; an observed quarter by its own news)
+    evidenceQuarter: str | None = None
+    sourceQuarter: str | None = None      # the frontend contract's name for evidenceQuarter
+    evidenceMode: str | None = None
+    evidenceNote: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Province ranking (Section 1.2, Equation 7)
+# ---------------------------------------------------------------------------
+
+class ShapDifference(BaseModel):
+    feature: str
+    label: str
+    difference: float
+    value: float | None = None
+    valueNextLower: float | None = None
+
+
+class RankingRow(BaseModel):
+    id: str
+    name: str
+    provinceCode: str
+    riskScore: float
+    riskLevel: str
+    rank: int
+    rankOf: int
+    qoqChange: float | None = None
+    gapToNextLower: float | None = None
+    tiedWithNextLower: bool | None = None
+    nextLowerId: str | None = None
+    whyAboveNextLower: list[ShapDifference] = Field(default_factory=list)
+    limitedSignal: bool = False
+
+
+class RankingResponse(BaseModel):
+    quarter: str
+    indicator: Indicator
+    method: str
+    horizonLabel: str
+    data: list[RankingRow]

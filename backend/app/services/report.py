@@ -259,8 +259,8 @@ class _Canvas:
         canvas.setFillColor(MUTED)
         canvas.drawString(
             18 * mm, 11 * mm,
-            "Food availability shock share -- production shortfall against seasonal "
-            "baseline. Not a household food-insecurity probability.")
+            "Food insecurity risk probability -- indicative relative risk only. "
+            "Not an official food insecurity classification.")
         canvas.drawRightString(width - 18 * mm, 11 * mm, f"Page {doc.page}")
         canvas.restoreState()
 
@@ -277,7 +277,7 @@ def _quarter_label(quarter: str) -> str:
 def _headline(name: str, score: float | None, level: str | None,
               qoq: float | None, extra: list[tuple[str, str]], width: float) -> list:
     left = [
-        _p("FOOD AVAILABILITY SHOCK SHARE", "eyebrow"),
+        _p("FOOD INSECURITY RISK PROBABILITY", "eyebrow"),
         Spacer(1, 1.5 * mm),
         _p(_num(score, 3) if score is not None else "--", "figure"),
         _p(f"{(level or 'n/a').upper()}  ·  quarter-on-quarter {_signed(qoq)}", "small"),
@@ -315,58 +315,66 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
 
 def _method_block(performance: dict) -> list:
     baselines = performance.get("baselines", {})
-    skill = performance.get("skill", {})
-    weighted = performance.get("weightedAvg", {})
+    targets = performance.get("targets", {})
+    lead = performance.get("maxReliableLeadTime")
     rows = [
-        ["Model accuracy", _num(performance.get("accuracy"), 4)],
-        # Shock class: of the series flagged, how many were shocked, and of the
-        # shocked series, how many were caught. These describe alert quality;
-        # accuracy on its own does not.
-        ["Precision (shock class)", _num(performance.get("precision"), 4)],
-        ["Recall (shock class)", _num(performance.get("recall"), 4)],
-        ["F1 score (shock class)", _num(performance.get("f1"), 4)],
-        ["F1 score (weighted avg)", _num(weighted.get("f1"), 4)],
-        ["ROC AUC", _num(performance.get("rocAuc"), 4)],
-        ["Majority-class baseline", _num(baselines.get("majorityClass"), 4)],
-        ["Seasonal-persistence baseline", _num(baselines.get("seasonalPersistence"), 4)],
-        ["Skill over majority class", _signed(skill.get("vsMajority"))],
-        ["Skill over seasonal persistence", _signed(skill.get("vsSeasonal"))],
-        ["Evaluation set size", str(performance.get("n", "--"))],
-        ["Referred to analyst review", f"{performance.get('abstainPct', '--')}%"],
+        # Specific Objective 2 names these five metrics plus the lead time.
+        ["Maximum Reliable Lead Time",
+         f"{lead} quarter(s)" if lead is not None else "--"],
+        ["Accuracy", _num(performance.get("accuracy"), 4)],
+        ["Precision (weighted)", _num(performance.get("precision"), 4)],
+        ["Recall (weighted)", _num(performance.get("recall"), 4)],
+        ["F1 score (weighted)", _num(performance.get("f1"), 4)],
+        ["AUC-ROC", _num(performance.get("rocAuc"), 4)],
+        *([["Accuracy requirement", str(targets["note"])[:180]]] if targets.get("note") else [
+            ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
+            ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"]]),
+        ["Features in the model", str(performance.get("nFeatures", "--"))],
     ]
+    same = performance.get("sameFoldsAsBaselines") or {}
+    if same:
+        rows.append(["--- on the baselines' own folds ---", ""])
+        rows.append(["Model accuracy (same folds)", _num(same.get("accuracy"), 4)])
+        rows.append(["Model F1 (same folds)", _num(same.get("weighted_f1"), 4)])
+        rows.append(["Model AUC-ROC (same folds)", _num(same.get("roc_auc"), 4)])
+    for name, acc in sorted(baselines.items()):
+        rows.append([f"Baseline: {name.replace('_', ' ')}", _num(acc, 4)])
+
     return [
         _p(
-            "The model predicts, for each monitored commodity series in a province, "
-            "whether that quarter's production falls more than 10% below the series' "
-            "own expanding seasonal baseline. The province figure is the share of its "
-            "series flagged. Inputs are PSA OpenStat production volumes and prices, "
-            "PSA consumer price indices, NOAA ENSO and tropical-cyclone records, "
-            "NASA POWER rainfall, exchange-rate and fuel benchmarks, and a geocoded "
-            "news corpus.", "body"),
+            "The model predicts, for each CALABARZON province, the probability that "
+            "the province falls in the HIGH class of the composite food stress label "
+            "-- SWS quarterly hunger prevalence combined with the province's food CPI "
+            "deviation from the regional mean, thresholded at the global median. "
+            "Inputs are the bias-corrected Food Stress Sentiment Index and its lags "
+            "and acceleration, the five bilingual trigger proportions, and government "
+            "indicators from PSA, BSP, DOE, PAGASA and PhilRice.", "body"),
         Spacer(1, 3 * mm),
         _data_table(["Measure", "Value"], rows, [78 * mm, 30 * mm], {1: "RIGHT"}),
         Spacer(1, 3 * mm),
         _p(
-            "<b>Accuracy must be read against its baselines.</b> Always predicting the "
-            "majority class already scores "
-            f"{_num(baselines.get('majorityClass'), 3)}, and repeating what the same "
-            "quarter did last year scores "
-            f"{_num(baselines.get('seasonalPersistence'), 3)}. The model's advantage "
-            "over seasonal persistence is small; its value is in flagging which "
-            "series and which province, not in beating the calendar by a wide "
-            "margin.", "small"),
+            "<b>Accuracy must be read against its baselines.</b> The comparison "
+            "models above are evaluated on the same walk-forward folds at the same "
+            "forecast gap, so the figures are directly comparable. Naive persistence "
+            "in particular is a demanding baseline on an autocorrelated label: a "
+            "model that does not clearly beat it is not earning its complexity.",
+            "small"),
     ]
 
 
 def _limitations_block(limited_signal: bool, article_count: int,
                        includes_municipal: bool) -> list:
     items = [
-        ("Same-quarter nowcast, not a forecast",
-         "Figures cover a quarter whose production volumes PSA has already published. "
-         "The system does not currently project forward: there is no forecast quarter."),
-        ("Availability, not household hunger",
-         "A production shortfall is a supply-side signal. It does not measure whether "
-         "households went hungry, and it should not be read as a hunger estimate."),
+        ("Indicative risk, not official classification",
+         "Outputs are relative ordinal estimates of potential risk. They are not "
+         "definitive determinations of food insecurity status and must not be read as "
+         "official government assessments or policy recommendations."),
+        ("Proxy label, not a direct measurement",
+         "No publicly accessible province-quarter food insecurity label exists in the "
+         "Philippines. The training target is a composite of SWS hunger prevalence, "
+         "which has no province-level resolution, and PSA food CPI deviation, which "
+         "reflects supply-side price conditions rather than household hunger "
+         "experience directly."),
     ]
     if limited_signal:
         items.append((
@@ -453,7 +461,7 @@ def _escape(text: str) -> str:
 def _cover(title: str, subject: str, quarter: str, width: float) -> list:
     generated = datetime.now(timezone.utc).astimezone().strftime("%d %B %Y")
     return [
-        _p("DEPARTMENT OF AGRICULTURE · CALABARZON", "eyebrow"),
+        _p("DEPARTMENT OF AGRICULTURE REGION IV-A", "eyebrow"),
         Spacer(1, 2 * mm),
         _p(title, "title"),
         _p(f"{subject} · {_quarter_label(quarter)}", "subtitle"),
@@ -463,11 +471,11 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
         Spacer(1, 5 * mm),
         _callout(
             "What this number is",
-            "The share of this area's monitored PSA commodity series predicted to fall "
-            "more than 10% below that series' own expanding seasonal baseline. "
-            "<b>It is a food availability signal, not a household food-insecurity "
-            "probability</b>, and it describes a quarter that has already occurred "
-            "rather than one ahead."),
+            "The modelled probability that this area falls in the HIGH class of the "
+            "composite food stress label. "
+            "<b>It is an indicative relative risk estimate, not an official food "
+            "insecurity classification</b>, and it is published at the Maximum "
+            "Reliable Lead Time the model established empirically."),
     ]
 
 
@@ -503,19 +511,18 @@ def build_province_report(province_id: str, quarter: str,
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed {province['name']} {quarter}",
-        author="aiPHeed", subject="Food availability shock assessment",
+        author="aiPHeed", subject="Food insecurity risk forecast",
     )
     width = doc.width
 
-    flow = _cover("Food Availability Shock Assessment", province["name"], quarter, width)
+    flow = _cover("Food Insecurity Risk Forecast", province["name"], quarter, width)
 
     flow += _section("Headline")
     flow += _headline(
         province["name"], province["riskScore"], province["riskLevel"],
         province["qoqChange"],
         [
-            ("Series flagged at risk",
-             f"{province['seriesAtRisk']} of {province['seriesMonitored']}"),
+            ("Risk class", (province["riskLabel"] or "--").upper()),
             ("Rank in CALABARZON", f"{position} of {len(published)}" if position else "--"),
             ("Population (2020 CPH)", f"{province['population']:,}"),
             ("Poverty incidence (PSA 2021)", f"{province['povertyRate']}%"),
@@ -530,23 +537,11 @@ def build_province_report(province_id: str, quarter: str,
             "this province for the quarter. News-derived drivers should be treated as "
             "weak evidence.", WARN_BG)]
 
-    if province["topAtRiskCommodities"]:
-        flow += _section("Commodity series at risk")
-        commodities = [
-            c for c in Predictor().forecast_commodities(quarter)
-            if c["province_code"] == code and c["at_risk"]
-        ]
-        flow += [_p(
-            f"{len(commodities)} of {province['seriesMonitored']} monitored series are "
-            "predicted to fall below their seasonal baseline. The highest-probability "
-            "series are listed first.", "body"), Spacer(1, 3 * mm)]
-        rows = [[_p(_escape(c["commodity"]), "cellb"),
-                 _p(c["commodity_group"].replace("_", " "), "cell"),
-                 _p(_num(c["shock_probability"], 3), "cell")]
-                for c in commodities[:18]]
-        flow.append(_data_table(
-            ["Commodity series", "Group", "Shock probability"],
-            rows, [width - 62 * mm, 32 * mm, 30 * mm], {2: "RIGHT"}))
+    flow += _section("Forecast horizon")
+    flow += [_p(
+        f"{_escape(str(province.get('horizonLabel') or 'Not published'))}. "
+        f"{_escape(str(province.get('confidenceStatement') or ''))}", "body"),
+        Spacer(1, 3 * mm)]
 
     flow.append(PageBreak())
 
@@ -602,21 +597,19 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed CALABARZON {quarter}",
-        author="aiPHeed", subject="Food availability shock assessment",
+        author="aiPHeed", subject="Food insecurity risk forecast",
     )
     width = doc.width
 
-    flow = _cover("Regional Food Availability Assessment", ref.REGION_NAME, quarter, width)
-
-    total_monitored = sum(p["seriesMonitored"] or 0 for p in published)
-    total_at_risk = sum(p["seriesAtRisk"] or 0 for p in published)
+    flow = _cover("Regional Food Insecurity Risk Forecast", ref.REGION_NAME, quarter, width)
 
     flow += _section("Headline")
     flow += _headline(
         ref.REGION_NAME, region["riskScore"], region["riskLevel"], region["qoqChange"],
         [
             ("Provinces covered", f"{region['provincesIncluded']} of {len(provinces)}"),
-            ("Series flagged at risk", f"{total_at_risk} of {total_monitored}"),
+            ("Forecast horizon",
+             str(region.get("horizonLabel") or "Not published")),
             ("Provinces above cutoff", str(region["provinceCounts"]["high"])),
             ("Provinces withheld", str(region["provinceCounts"]["withheld"])),
             ("Articles analysed",
@@ -648,13 +641,13 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     rows = [[_p(_escape(p["name"]), "cellb"),
              _p(_num(p["riskScore"], 4), "cell"),
              _p((p["riskLevel"] or "--").upper(), "cell"),
-             _p(f"{p['seriesAtRisk']}/{p['seriesMonitored']}", "cell"),
+             _p((p["riskLabel"] or "--").upper(), "cell"),
              _p(_signed(p["qoqChange"]), "cell"),
              _p(f"{p['povertyRate']}%", "cell"),
              _p(str(p["articleCount"]), "cell")]
             for p in sorted(published, key=lambda x: x["riskScore"], reverse=True)]
     flow.append(_data_table(
-        ["Province", "Index", "Level", "At risk", "QoQ", "Poverty", "Articles"],
+        ["Province", "Probability", "Level", "Class", "QoQ", "Poverty", "Articles"],
         rows,
         [width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm],
         {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT", 6: "RIGHT"}))
@@ -662,7 +655,7 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     flow += [Spacer(1, 4 * mm), _p(
         "Poverty incidence and availability shock are different signals and do not "
         "track together. A province may hold the region's highest poverty rate and its "
-        "lowest production shortfall in the same quarter.", "small")]
+        "lowest modelled risk in the same quarter.", "small")]
 
     flow.append(PageBreak())
 

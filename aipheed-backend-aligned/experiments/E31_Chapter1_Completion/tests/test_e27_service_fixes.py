@@ -60,7 +60,7 @@ def test_news_dates_are_philippine_calendar_dates(monkeypatch, tmp_path):
 
 
 def test_municipal_poverty_provenance_is_disclosed(monkeypatch):
-    monkeypatch.setattr(svc, "LGU_PROVENANCE_PATH", EXP / "backend_dev" / "data" / "inputs" / "lgu_vulnerability.csv")
+    monkeypatch.setattr(svc, "LGU_PROVENANCE_PATH", _paths.BD / "data" / "inputs" / "lgu_vulnerability.csv")
     svc._lgu_provenance.cache_clear()
     try:
         sub = svc._poverty_provenance("042123000", None)           # Gen. Mariano Alvarez: no municipal SAE
@@ -69,7 +69,7 @@ def test_municipal_poverty_provenance_is_disclosed(monkeypatch):
         own = svc._poverty_provenance("045645000", 18.7)           # Sariaya: PSA municipal SAE 18.7
         assert own == {"povertyEstimateKind": "PSA municipal SAE estimate (2021)", "povertyValueUsed": 18.7,
                        "povertyLimitation": None}
-        lg = pd.read_csv(EXP / "backend_dev" / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
+        lg = pd.read_csv(_paths.BD / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
         kinds = [svc._poverty_provenance(c, None)["povertyEstimateKind"] for c in lg["lgu_code"]]
         assert sum(k.startswith("province-mean") for k in kinds) == 126 and len(kinds) == 142
     finally:
@@ -77,7 +77,7 @@ def test_municipal_poverty_provenance_is_disclosed(monkeypatch):
 
 
 def test_risk_payloads_carry_evidence_status_and_basis():
-    src = (EXP / "backend_dev" / "app" / "services" / "dashboard.py").read_text(encoding="utf-8")
+    src = (_paths.BD / "app" / "services" / "dashboard.py").read_text(encoding="utf-8")
     # E28: the LGU payload no longer carries a band at all (riskLevel None, LGU_POSITION_BASIS); the province payload
     # keeps the E27 basis text. So RISK_LEVEL_BASIS appears once and LGU_POSITION_BASIS once.
     assert src.count('"evidenceStatus": "EXPERIMENTAL"') >= 3 and src.count('"riskLevelBasis": RISK_LEVEL_BASIS') == 1

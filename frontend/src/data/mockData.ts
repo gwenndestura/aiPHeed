@@ -96,6 +96,7 @@ export const municipalitiesData: MunicipalityData[] = (muniListRaw as RawMuni[])
     riskLevel: getRiskLevel(score),
     population: pop,
     povertyRate: Math.round(povertyRate * 10) / 10,
+    povertyNote: null,
     householdsAtRisk: Math.round(pop * (povertyRate / 100) * 0.6),
     fpsi: Math.round((1.5 + variance * 6 + base * 2) * 10) / 10,
     momChange: Math.round((variance * 8 + 1) * 10) / 10,

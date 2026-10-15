@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type RiskLevelKey = "low" | "moderate" | "high" | "severe";
+export type RiskLevelKey = "low" | "moderate" | "high" | "severe" | "unrated";
 export type StatusTone = "low" | "moderate" | "high" | "positive" | "neutral";
 
 /** The words a risk badge shows. "Severe" has no band of its own: it reads as high. */
@@ -9,6 +9,8 @@ export const RISK_BADGE_TEXT: Record<RiskLevelKey, string> = {
   moderate: "Moderate risk",
   high: "High risk",
   severe: "High risk",
+  // E28: an LGU position derived from an unvalidated province estimate carries no band.
+  unrated: "Not classified",
 };
 
 const TONE_CLASS: Record<StatusTone, string> = {
@@ -27,10 +29,11 @@ const SWATCH_CLASS: Record<StatusTone, string> = {
   neutral: "bg-ink-muted",
 };
 
-const toneOf = (level: RiskLevelKey): StatusTone => (level === "severe" ? "high" : level);
+const toneOf = (level: RiskLevelKey): StatusTone =>
+  level === "severe" ? "high" : level === "unrated" ? "neutral" : level;
 
 interface Props {
-  /** A risk band: the badge text ("Low risk", …) follows from it. */
+  /** A risk band: the badge text ("Low risk", â€¦) follows from it. */
   level?: RiskLevelKey | null;
   /** Any other status (e.g. a review state), with its text as children. */
   tone?: StatusTone;

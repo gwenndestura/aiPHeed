@@ -57,10 +57,17 @@ export function municipalityToData(m: MunicipalitySummary, provinceName: string)
     name: m.name,
     provinceId: m.provinceId,
     provinceName,
-    riskScore: m.riskIndex,
-    riskLevel: m.riskLevel as MunicipalityData["riskLevel"],
+    // E28: the API sends riskLevel null for every LGU (no band for an unvalidated, disaggregated index) and
+    // riskIndex null when its province has no estimate; neither becomes a band or a zero here.
+    riskScore: m.riskIndex ?? Number.NaN,
+    riskLevel: (m.riskLevel ?? "unrated") as MunicipalityData["riskLevel"],
     population: m.population,
-    povertyRate: m.povertyRate ?? 0,
+    // E27 fix: a missing municipal estimate stays missing (it used to become 0%).
+    povertyRate: m.povertyRate ?? null,
+    povertyNote: m.povertyRate == null
+      ? (m.povertyLimitation ??
+        "No PSA municipal poverty estimate; the ranking uses a province-mean substitute, so this LGU's position within its province reflects population density only.")
+      : null,
     classification: m.classification as MunicipalityData["classification"],
     limitedSignal: m.limitedSignal,
     disaggregationLabel: m.disaggregationLabel,

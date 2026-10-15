@@ -3,7 +3,7 @@ import { RegionData, MunicipalityData } from "@/data/types";
 import { ChevronDown, ChevronRight, Newspaper, Info } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useConfig, useExplainability, useNews } from "@/lib/queries";
+import { useConfig, useExplainability, useForecast, useNews } from "@/lib/queries";
 import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
 import { forecastPeriodLabel } from "@/lib/quarters";
@@ -55,7 +55,8 @@ export function ShapNarrativeCardBody({
 
   const finalScore = explain?.riskScore ?? region?.riskScore ?? 0;
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
-  const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
+  // E34: an alert is public only after a DA administrator confirms it (E31 alert workflow); never a score threshold.
+  const { data: forecast } = useForecast(scope, id, quarter.id, "nowcast");
 
   const subjectName = selectedMunicipality
     ? `${selectedMunicipality.name}, ${selectedMunicipality.provinceName}`
@@ -87,8 +88,8 @@ export function ShapNarrativeCardBody({
           level={isHighRisk(finalScore, displayCutoff) ? "high" : "low"}
           title={`Forecast display cutoff: ${displayCutoff}`}
         />
-        {finalScore >= alertThreshold && (
-          <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
+        {forecast?.alert && (
+          <StatusBadge tone="high" title="Active alert: a model-generated warning confirmed by a DA Region IV-A administrator">
             Active alert
           </StatusBadge>
         )}

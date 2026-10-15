@@ -43,7 +43,7 @@ def test_bottom30_series_is_complete_and_inside_the_window():
 
 
 def test_real_subsistence_file_passes_the_outcome_adapter_and_a_2018_row_is_refused():
-    f = EXP / "backend_dev" / "data" / "inputs" / "psa_subsistence_population_2021_2023.csv"
+    f = _paths.BD / "data" / "inputs" / "psa_subsistence_population_2021_2023.csv"
     raw = f.read_bytes()
     df, rep = OC.validate("psa_subsistence_incidence", raw, authorized_sha256=_sha(f), authorized_until="2026-06-30")
     assert rep["rows"] == 10 and rep["reference_min"] == "2021-01-01"
@@ -57,9 +57,9 @@ def test_sws_sample_size_table_names_real_rounds_and_never_guesses():
     n = pd.read_csv(VAL / "sws_round_sample_sizes_partial.csv")
     # E31: the E27 table describes the rounds of input vintage 1 (to 2026-Q2); the September 2026 round added in
     # vintage 2 has its sample size verified on its SWS release (data_acquired/sws/sws_rounds_2026_verified.csv)
-    r = pd.read_csv(EXP / "backend_dev" / "data" / "inputs_vintage1_e29" / "sws_rounds.csv")
+    r = pd.read_csv(_paths.BD / "data" / "inputs_vintage1_e29" / "sws_rounds.csv")
     assert set(n["round"]) == set(r["round"])
-    v2 = pd.read_csv(EXP / "backend_dev" / "data" / "inputs" / "sws_rounds.csv")
+    v2 = pd.read_csv(_paths.BD / "data" / "inputs" / "sws_rounds.csv")
     new = set(v2["round"]) - set(r["round"])
     ver = pd.read_csv(EXP / "data_acquired" / "sws" / "sws_rounds_2026_verified.csv")
     assert new == {"September 2026 SWS Survey"} and new <= set(ver["round"])

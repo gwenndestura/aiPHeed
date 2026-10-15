@@ -446,10 +446,11 @@ function RegionDetail({
   const munis = municipalitiesData.slice().sort((a, b) => b.riskScore - a.riskScore);
 
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
-  const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const limited = region.limitedSignal;
   const isHigh = isHighRisk(region.riskScore, displayCutoff);
-  const isActiveAlert = region.riskScore >= alertThreshold;
+  // E34: an alert is public only after a DA administrator confirms it (E31 alert workflow); never a score threshold.
+  const { data: provinceForecast } = useForecast("province", region.id, quarterId || undefined, "nowcast");
+  const isActiveAlert = !!provinceForecast?.alert;
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
 
   return (
@@ -466,7 +467,7 @@ function RegionDetail({
                 title={`Forecast risk level (${displayCutoff.toFixed(2)} display cutoff)`}
               />
               {isActiveAlert && (
-                <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
+                <StatusBadge tone="high" title="Active alert: a model-generated warning confirmed by a DA Region IV-A administrator">
                   Active alert
                 </StatusBadge>
               )}
@@ -639,8 +640,13 @@ function MunicipalityDetail({
         </div>
         <div className="flex items-center justify-between">
           <MetricLabel>Poverty rate</MetricLabel>
-          <div className="text-[11px] font-bold tabular-nums">{municipality.povertyRate}%</div>
+          <div className="text-[11px] font-bold tabular-nums" data-testid="lgu-poverty">
+            {municipality.povertyRate == null ? "No municipal estimate" : `${municipality.povertyRate}%`}
+          </div>
         </div>
+        {municipality.povertyNote && (
+          <p className="text-[10px] leading-snug text-muted-foreground" data-testid="lgu-poverty-note">{municipality.povertyNote}</p>
+        )}
       </div>
 
     </div>

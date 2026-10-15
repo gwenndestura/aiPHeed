@@ -8,7 +8,7 @@ EXP = _paths.EXP
 
 
 def test_persistence_ignores_a_label_posted_after_the_origin():
-    inp = EXP / "backend_dev" / "data" / "inputs"
+    inp = _paths.BD / "data" / "inputs"
     S1 = pd.read_csv(inp / "s1_labels.csv", dtype={"province_code": str})
     rounds = pd.read_csv(inp / "sws_rounds.csv")
     # origin 2026-07-01, reference 2026-Q2: the June 2026 round was posted 2026-08-24, the March round 2026-05-12

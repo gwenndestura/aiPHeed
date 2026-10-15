@@ -8,9 +8,10 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+import _paths  # noqa: F401
 from _paths import EXP
 
-BD = EXP / "backend_dev"
+BD = _paths.BD
 REC = BD / "data" / "e29" / "da_brief_record.json"
 PDF = BD / "data" / "e29" / "aiPHeed_E29_DA_brief.pdf"
 pytestmark = pytest.mark.skipif(not REC.exists(), reason="E29 record not built yet")

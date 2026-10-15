@@ -87,7 +87,7 @@ def test_L3_measured_outcome_requires_one_regional_H_and_a_matching_file(tmp_pat
 
 def test_L3_real_E25_seal_threshold_is_read_from_the_hash_verified_sealed_file():
     """The E25 seal was imported by E26 before thresholds were stored. Its tau must be recoverable, unchanged."""
-    L = LG.Ledger(EXP / "backend_dev" / "data" / "ledger" / "T1_A.jsonl")
+    L = LG.Ledger(_paths.BD / "data" / "ledger" / "T1_A.jsonl")
     pcf = [e["payload"] for e in L.seals() if e["payload"]["arm"].startswith("PCF21:lead")]
     assert {p["target_quarter"] for p in pcf} == {"2026-Q4", "2027-Q1"}
     for p in pcf:

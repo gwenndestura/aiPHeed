@@ -1,0 +1,28 @@
+.......................................s...s.....s..s........s......sss. [ 42%]
+......................ss.s.s........ss.ssss............................. [ 85%]
+........................                                                 [100%]
+============================== warnings summary ===============================
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [5] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [3] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [3] tests\integration\test_plain_report.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+SKIPPED [3] tests\integration\test_report_data.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+150 passed, 18 skipped, 3 warnings in 14.14s

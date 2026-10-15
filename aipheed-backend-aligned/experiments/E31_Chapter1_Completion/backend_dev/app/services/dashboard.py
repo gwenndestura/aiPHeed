@@ -279,7 +279,54 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
             "monthsLabel": ref.QUARTER_MONTHS[qn],
             "state": state,
         })
+    if e31_active() and out:
+        out = _e31_fill_gaps(out, horizon)
     return out
+
+
+def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
+    """Why the E31 record has no row for this quarter in this view (E34, D1). Derived from the data, never assumed."""
+    other = NOWCAST if horizon == FORECAST else FORECAST
+    if quarter in available_quarters(other):
+        return (f"{quarter} is the quarter under way; its estimate is a same-quarter nowcast, shown in the nowcast "
+                "view. A forecast view never shows a nowcast.")
+    p = Path("data/inputs/sws_rounds.csv")
+    if p.exists():
+        r = pd.read_csv(p)
+        r = r[r["quarter"] == quarter]
+        if len(r) and not r["definition_A"].astype(str).str.lower().eq("true").any():
+            return (f"No estimate for {quarter}: its SWS hunger rounds are recorded as supplementary, not as the "
+                    "approved (definition A) series, so the quarter has no approved label to estimate or score. "
+                    "This is missing data, not a low score.")
+        if not len(r):
+            return (f"No estimate for {quarter}: no SWS hunger round is recorded for it. This is missing data, not a "
+                    "low score.")
+    return f"The E31 record holds no estimate for {quarter}. This is missing data, not a low score."
+
+
+def _e31_fill_gaps(rows: list[dict], horizon: str) -> list[dict]:
+    """List every quarter between the first and last served one; gaps become "unavailable" with a reason (E34, D1)."""
+    have = {r["id"]: r for r in rows}
+    idx = [ref.quarter_index(r["id"]) for r in rows]
+    out = []
+    for i in range(min(idx), max(idx) + 1):
+        q = f"{i // 4}-Q{i % 4 + 1}"
+        if q in have:
+            out.append(have[q])
+            continue
+        year, qn = ref.quarter_parts(q)
+        out.append({"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn],
+                    "state": "unavailable", "reason": _e31_unavailable_reason(q, horizon)})
+    return out
+
+
+def is_estimate_quarter(quarter: str) -> bool:
+    """E31: True for the quarters whose outcome is not yet known (the 2026-Q4 nowcast, the 2027-Q1 forecast); False for
+    backtests and the scored 2026-Q3. Same rule as /config quarterRange.forecastQuarters (E34, D2)."""
+    if not e31_active():
+        return False
+    row = E31.quarter_row(quarter, NOWCAST)
+    return bool(row) and row["mode"] in ("FORECAST", "NOWCAST")
 
 
 # ---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
-export type RiskLevel = "low" | "moderate" | "high" | "severe";
+// E28: "unrated" = a relative LGU position with no HIGH/LOW band (its province estimate is not validated).
+export type RiskLevel = "low" | "moderate" | "high" | "severe" | "unrated";
 
 export interface RegionData {
   id: string;
@@ -33,7 +34,10 @@ export interface MunicipalityData {
   riskScore: number;
   riskLevel: RiskLevel;
   population: number;
-  povertyRate: number;
+  // E27: null when PSA publishes no municipal estimate for this LGU -- never shown as 0%.
+  povertyRate: number | null;
+  // What the ranking used instead, and why (e.g. "province-mean substitute ..."); null when the LGU has its own estimate.
+  povertyNote: string | null;
   householdsAtRisk: number;
   fpsi: number;
   momChange: number;
@@ -54,6 +58,7 @@ export const RISK_COLORS: Record<RiskLevel, string> = {
   moderate: "#eab308",
   high: "#EF4444",
   severe: "#ef4444",
+  unrated: "#94a3b8",
 };
 
 export const RISK_LABELS: Record<RiskLevel, string> = {
@@ -61,4 +66,5 @@ export const RISK_LABELS: Record<RiskLevel, string> = {
   moderate: "Moderate Risk",
   high: "High Risk",
   severe: "Severe Risk",
+  unrated: "Relative position (not validated)",
 };

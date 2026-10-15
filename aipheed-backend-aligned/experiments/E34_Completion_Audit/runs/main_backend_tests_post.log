@@ -1,0 +1,712 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\admin\aipheed\backend\venv\Scripts\python.exe
+rootdir: C:\Users\admin\aipheed\backend
+configfile: pytest.ini
+plugins: anyio-4.13.0, asyncio-1.3.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 168 items
+
+tests/integration/test_api_admin.py::TestAuth::test_admin_route_requires_a_token PASSED [  0%]
+tests/integration/test_api_admin.py::TestAuth::test_wrong_password_is_rejected PASSED [  1%]
+tests/integration/test_api_admin.py::TestAuth::test_unknown_account_is_indistinguishable_from_a_wrong_password PASSED [  1%]
+tests/integration/test_api_admin.py::TestAuth::test_login_returns_a_working_token PASSED [  2%]
+tests/integration/test_api_admin.py::TestAuth::test_a_forged_token_is_rejected PASSED [  2%]
+tests/integration/test_api_admin.py::TestAuth::test_logout_actually_revokes_the_token PASSED [  3%]
+tests/integration/test_api_admin.py::TestAuth::test_deactivated_account_stops_working_immediately PASSED [  4%]
+tests/integration/test_api_admin.py::TestAuth::test_non_admin_role_is_forbidden_not_unauthorised PASSED [  4%]
+tests/integration/test_api_admin.py::TestAuth::test_default_secret_key_refuses_to_sign PASSED [  5%]
+tests/integration/test_api_admin.py::TestAuth::test_outside_domain_cannot_sign_in PASSED [  5%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_queue_seeds_from_real_forecasts PASSED [  6%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_seeding_twice_does_not_reset_a_decision FAILED [  7%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_rejection_reason_must_be_recognised PASSED [  7%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_rejection_records_who_and_why FAILED [  8%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_undo_on_a_staged_item_is_an_error PASSED [  8%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_unknown_review_item_is_404 PASSED [  9%]
+tests/integration/test_api_admin.py::TestReviewPipeline::test_audit_trail_captures_the_transition PASSED [ 10%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_public_rejections_list_needs_no_auth PASSED [ 10%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_withheld_forecast_is_404_with_its_own_code PASSED [ 11%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_withheld_province_keeps_its_row_but_loses_its_score PASSED [ 11%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_region_mean_excludes_the_withheld_province PASSED [ 12%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_municipality_inside_a_withheld_province_is_withheld PASSED [ 13%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_timeseries_drops_the_quarter_rather_than_plotting_zero FAILED [ 13%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_undo_republishes PASSED [ 14%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_restore_by_province_and_quarter PASSED [ 14%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_restoring_something_not_rejected_is_404 PASSED [ 15%]
+tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_changing_publication_state_requires_admin PASSED [ 16%]
+tests/integration/test_api_admin.py::TestFeedback::test_score_is_computed_server_side PASSED [ 16%]
+tests/integration/test_api_admin.py::TestFeedback::test_a_client_supplied_score_is_ignored PASSED [ 17%]
+tests/integration/test_api_admin.py::TestFeedback::test_partial_submissions_are_refused PASSED [ 17%]
+tests/integration/test_api_admin.py::TestFeedback::test_out_of_range_answers_are_refused PASSED [ 18%]
+tests/integration/test_api_admin.py::TestFeedback::test_submissions_are_visible_across_users PASSED [ 19%]
+tests/integration/test_api_admin.py::TestFeedback::test_reading_feedback_requires_admin PASSED [ 19%]
+tests/integration/test_api_admin.py::TestFeedback::test_response_version_is_pinned PASSED [ 20%]
+tests/integration/test_api_admin.py::TestRateLimiting::test_login_attempts_are_capped PASSED [ 20%]
+tests/integration/test_api_admin.py::TestRateLimiting::test_the_cap_counts_successful_logins_too PASSED [ 21%]
+tests/integration/test_api_admin.py::TestRateLimiting::test_report_generation_is_capped PASSED [ 22%]
+tests/integration/test_api_admin.py::TestRateLimiting::test_feedback_submission_is_capped PASSED [ 22%]
+tests/integration/test_api_admin.py::TestRateLimiting::test_limits_are_per_client PASSED [ 23%]
+tests/integration/test_api_dashboard.py::test_quarters_reports_only_scorable_quarters FAILED [ 23%]
+tests/integration/test_api_dashboard.py::test_quarters_timeline_has_no_gaps_and_explains_missing_ones FAILED [ 24%]
+tests/integration/test_api_dashboard.py::test_a_score_shown_as_050_is_high PASSED [ 25%]
+tests/integration/test_api_dashboard.py::test_province_band_follows_the_displayed_score PASSED [ 25%]
+tests/integration/test_api_dashboard.py::test_forecast_quarter_is_labelled_and_has_no_qoq FAILED [ 26%]
+tests/integration/test_api_dashboard.py::test_quarters_declares_its_lag_behind_the_calendar PASSED [ 26%]
+tests/integration/test_api_dashboard.py::test_unscorable_quarter_is_404_not_a_zero_score PASSED [ 27%]
+tests/integration/test_api_dashboard.py::test_malformed_quarter_is_rejected PASSED [ 27%]
+tests/integration/test_api_dashboard.py::test_unknown_subject_is_404 PASSED [ 28%]
+tests/integration/test_api_dashboard.py::test_provinces_returns_five_ranked_by_risk PASSED [ 29%]
+tests/integration/test_api_dashboard.py::test_every_forecast_carries_what_the_number_means FAILED [ 29%]
+tests/integration/test_api_dashboard.py::test_risk_level_matches_the_published_cutoff PASSED [ 30%]
+tests/integration/test_api_dashboard.py::test_config_distinguishes_active_from_defined_risk_bands PASSED [ 30%]
+tests/integration/test_api_dashboard.py::test_accuracy_is_served_with_its_baselines FAILED [ 31%]
+tests/integration/test_api_dashboard.py::test_municipalities_cover_the_full_roster PASSED [ 32%]
+tests/integration/test_api_dashboard.py::test_every_municipal_row_declares_it_is_disaggregated FAILED [ 32%]
+tests/integration/test_api_dashboard.py::test_driver_percentages_sum_to_exactly_100[province-quezon] PASSED [ 33%]
+tests/integration/test_api_dashboard.py::test_driver_percentages_sum_to_exactly_100[province-laguna] PASSED [ 33%]
+tests/integration/test_api_dashboard.py::test_driver_percentages_sum_to_exactly_100[region-calabarzon] PASSED [ 34%]
+tests/integration/test_api_dashboard.py::test_drivers_are_ranked_descending PASSED [ 35%]
+tests/integration/test_api_dashboard.py::test_protective_drivers_are_never_painted_red PASSED [ 35%]
+tests/integration/test_api_dashboard.py::test_narrative_is_plain_ascii_for_pdf_export PASSED [ 36%]
+tests/integration/test_api_dashboard.py::test_seasonal_and_history_groups_are_not_dropped FAILED [ 36%]
+tests/integration/test_api_dashboard.py::test_news_topic_percentages_sum_to_100_when_articles_exist PASSED [ 37%]
+tests/integration/test_api_dashboard.py::test_article_dates_are_iso_or_absent PASSED [ 38%]
+tests/integration/test_api_dashboard.py::test_news_count_agrees_with_the_province_summary FAILED [ 38%]
+tests/integration/test_api_dashboard.py::test_forecast_quarter_news_comes_from_the_information_cutoff FAILED [ 39%]
+tests/integration/test_api_dashboard.py::test_timeseries_is_chronological_and_flags_only_e20_quarters FAILED [ 39%]
+tests/integration/test_api_dashboard.py::test_search_matches_provinces_and_municipalities PASSED [ 40%]
+tests/integration/test_api_dashboard.py::test_config_describes_both_models FAILED [ 41%]
+tests/integration/test_api_dashboard.py::test_both_horizons_reach_the_same_edge FAILED [ 41%]
+tests/integration/test_api_dashboard.py::test_neither_horizon_scores_past_the_panel_edge FAILED [ 42%]
+tests/integration/test_api_dashboard.py::test_responses_declare_which_horizon_produced_them PASSED [ 42%]
+tests/integration/test_api_dashboard.py::test_forecast_timeline_marks_its_edge_as_forecast PASSED [ 43%]
+tests/integration/test_api_dashboard.py::test_unknown_horizon_is_rejected PASSED [ 44%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_get_latest_forecasts_returns_200 PASSED [ 44%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_get_latest_forecasts_returns_list PASSED [ 45%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_get_forecast_history_returns_200 PASSED [ 45%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_get_municipal_forecasts_returns_200 PASSED [ 46%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_municipal_response_has_disaggregation_label PASSED [ 47%]
+tests/integration/test_api_forecasts.py::TestForecastEndpoints::test_invalid_province_returns_404 PASSED [ 47%]
+tests/integration/test_api_health.py::TestHealthEndpoints::test_health_returns_200 PASSED [ 48%]
+tests/integration/test_api_health.py::TestHealthEndpoints::test_health_returns_correct_json PASSED [ 48%]
+tests/integration/test_api_health.py::TestHealthEndpoints::test_readiness_returns_200 PASSED [ 49%]
+tests/integration/test_api_health.py::TestHealthEndpoints::test_readiness_returns_correct_json PASSED [ 50%]
+tests/integration/test_api_report.py::test_region_report_renders PASSED  [ 50%]
+tests/integration/test_api_report.py::test_every_province_renders[quezon] PASSED [ 51%]
+tests/integration/test_api_report.py::test_every_province_renders[laguna] PASSED [ 51%]
+tests/integration/test_api_report.py::test_every_province_renders[cavite] PASSED [ 52%]
+tests/integration/test_api_report.py::test_every_province_renders[rizal] PASSED [ 52%]
+tests/integration/test_api_report.py::test_every_province_renders[batangas] PASSED [ 53%]
+tests/integration/test_api_report.py::test_report_is_not_cached PASSED   [ 54%]
+tests/integration/test_api_report.py::test_municipality_scope_is_rejected PASSED [ 54%]
+tests/integration/test_api_report.py::test_unknown_province_is_404 PASSED [ 55%]
+tests/integration/test_api_report.py::test_unscorable_quarter_is_404 PASSED [ 55%]
+tests/integration/test_api_report.py::test_forecast_quarter_report_is_refused_not_mislabelled FAILED [ 56%]
+tests/integration/test_api_report.py::test_report_states_what_the_number_is_not FAILED [ 57%]
+tests/integration/test_api_report.py::test_report_does_not_recommend_interventions PASSED [ 57%]
+tests/integration/test_api_report.py::test_report_quotes_accuracy_with_its_baselines FAILED [ 58%]
+tests/integration/test_api_report.py::test_province_report_labels_municipal_figures_as_derived PASSED [ 58%]
+tests/integration/test_api_report.py::test_report_declares_it_is_a_nowcast FAILED [ 59%]
+tests/integration/test_api_report.py::test_region_report_reconciles_its_article_count PASSED [ 60%]
+tests/integration/test_api_report.py::TestWithheld::test_withheld_province_has_no_report PASSED [ 60%]
+tests/integration/test_api_report.py::TestWithheld::test_region_report_omits_the_withheld_score PASSED [ 61%]
+tests/integration/test_api_report.py::TestWithheld::test_region_report_reports_the_smaller_denominator PASSED [ 61%]
+tests/integration/test_api_shap.py::TestSHAPEndpoints::test_get_shap_returns_200 PASSED [ 62%]
+tests/integration/test_api_shap.py::TestSHAPEndpoints::test_get_shap_returns_features_list PASSED [ 63%]
+tests/integration/test_api_shap.py::TestSHAPEndpoints::test_get_shap_sorted_by_magnitude PASSED [ 63%]
+tests/integration/test_api_shap.py::TestSHAPEndpoints::test_get_shap_invalid_province_returns_404 PASSED [ 64%]
+tests/integration/test_plain_report.py::test_single_quarter_region_has_no_trend_section FAILED [ 64%]
+tests/integration/test_plain_report.py::test_two_quarter_province_trend FAILED [ 65%]
+tests/integration/test_plain_report.py::test_factors_report_for_one_province PASSED [ 66%]
+tests/integration/test_plain_report.py::test_withheld_results_never_appear FAILED [ 66%]
+tests/integration/test_report_data.py::test_trend_payload_is_ascii_and_structured FAILED [ 67%]
+tests/integration/test_report_data.py::test_withheld_province_quarter_never_appears FAILED [ 67%]
+tests/integration/test_report_data.py::test_shap_payload_for_withheld_province_reports_nothing FAILED [ 68%]
+tests/unit/test_formal_interpretation.py::test_names_dominant_group_share_and_direction PASSED [ 69%]
+tests/unit/test_formal_interpretation.py::test_states_direction_of_each_major_driver PASSED [ 69%]
+tests/unit/test_formal_interpretation.py::test_compares_groups_above_and_below_cutoff PASSED [ 70%]
+tests/unit/test_formal_interpretation.py::test_is_data_driven_not_a_fixed_template PASSED [ 70%]
+tests/unit/test_formal_interpretation.py::test_is_ascii_and_third_person PASSED [ 71%]
+tests/unit/test_formal_interpretation.py::test_typographic_characters_are_folded_to_ascii PASSED [ 72%]
+tests/unit/test_formal_interpretation.py::test_empty_trigger_list PASSED [ 72%]
+tests/unit/test_formal_interpretation.py::test_nonzero_other_share_is_explained PASSED [ 73%]
+tests/unit/test_formal_interpretation.py::test_negligible_other_share_is_omitted PASSED [ 73%]
+tests/unit/test_formal_interpretation.py::test_single_group_above_cutoff PASSED [ 74%]
+tests/unit/test_formal_interpretation.py::test_compose_narrative_is_unchanged_for_the_caption PASSED [ 75%]
+tests/unit/test_plain_text.py::test_risk_level_scale_and_rounding PASSED [ 75%]
+tests/unit/test_plain_text.py::test_change_wording_adds_up_and_handles_no_change PASSED [ 76%]
+tests/unit/test_plain_text.py::test_plain_factor_names_in_one_place PASSED [ 76%]
+tests/unit/test_plain_text.py::test_score_explainer_matches_the_training_label PASSED [ 77%]
+tests/unit/test_plain_text.py::test_key_points_region PASSED             [ 77%]
+tests/unit/test_plain_text.py::test_key_points_single_province PASSED    [ 78%]
+tests/unit/test_plain_text.py::test_key_points_withheld_and_missing_factors PASSED [ 79%]
+tests/unit/test_plain_text.py::test_trend_paragraph_region_and_single PASSED [ 79%]
+tests/unit/test_plain_text.py::test_factors_province_plain_wording PASSED [ 80%]
+tests/unit/test_plain_text.py::test_factors_region_said_once_when_provinces_agree PASSED [ 80%]
+tests/unit/test_plain_text.py::test_factors_region_names_a_province_that_differs PASSED [ 81%]
+tests/unit/test_plain_text.py::test_profile_and_news PASSED              [ 82%]
+tests/unit/test_plain_text.py::test_notes[1-which is one quarter behind the current quarter (2026 Q4).] PASSED [ 82%]
+tests/unit/test_plain_text.py::test_notes[0-which is the current quarter.] PASSED [ 83%]
+tests/unit/test_plain_text.py::test_counts_at_the_start_of_a_sentence_are_spelled_out PASSED [ 83%]
+tests/unit/test_plain_text.py::test_news_only_factors_are_not_called_ineffective_when_news_is_incomplete PASSED [ 84%]
+tests/unit/test_plain_text.py::test_region_news_only_factors_when_news_is_incomplete PASSED [ 85%]
+tests/unit/test_plain_text.py::test_news_share_range_across_provinces PASSED [ 85%]
+tests/unit/test_report_text.py::test_formal_interpretation_withheld_reports_nothing_else PASSED [ 86%]
+tests/unit/test_report_text.py::test_formal_interpretation_empty_states_missing_breakdown PASSED [ 86%]
+tests/unit/test_report_text.py::test_formal_interpretation_brief_other_share PASSED [ 87%]
+tests/unit/test_report_text.py::test_vintage_states_lag_and_missing_inputs PASSED [ 88%]
+tests/unit/test_report_text.py::test_vintage_all_provinces_and_complete_inputs PASSED [ 88%]
+tests/unit/test_report_text.py::test_summary_normal PASSED               [ 89%]
+tests/unit/test_report_text.py::test_summary_withheld_province_is_excluded PASSED [ 89%]
+tests/unit/test_report_text.py::test_province_summary_withheld_and_missing PASSED [ 90%]
+tests/unit/test_report_text.py::test_trend_single_series PASSED          [ 91%]
+tests/unit/test_report_text.py::test_trend_withheld_quarter_is_omitted_and_span_stated PASSED [ 91%]
+tests/unit/test_report_text.py::test_trend_empty PASSED                  [ 92%]
+tests/unit/test_report_text.py::test_driver_change_normal_and_direction_flip PASSED [ 92%]
+tests/unit/test_report_text.py::test_driver_change_empty_and_withheld PASSED [ 93%]
+tests/unit/test_report_text.py::test_news_normal_with_matches PASSED     [ 94%]
+tests/unit/test_report_text.py::test_news_limited_signal_uses_actual_count PASSED [ 94%]
+tests/unit/test_report_text.py::test_news_empty_triggers_and_withheld PASSED [ 95%]
+tests/unit/test_report_text.py::test_reliability_quotes_backend_figures_and_missing_baseline PASSED [ 95%]
+tests/unit/test_report_text.py::test_reliability_with_seasonal_baseline_and_empty PASSED [ 96%]
+tests/unit/test_report_text.py::test_limitations_keep_the_findings_only_position PASSED [ 97%]
+tests/unit/test_report_text.py::test_method_is_filled_from_model_metadata PASSED [ 97%]
+tests/unit/test_report_text.py::test_names_with_typographic_characters_are_folded[Las Pi\xf1as] PASSED [ 98%]
+tests/unit/test_report_text.py::test_names_with_typographic_characters_are_folded[Quezon \u201cNorth\u201d] PASSED [ 98%]
+tests/unit/test_report_text.py::test_limited_signal_note_uses_each_actual_count PASSED [ 99%]
+tests/unit/test_report_text.py::test_brief_interpretation_drops_repeated_total_only_for_a_single_major_group PASSED [100%]
+
+================================== FAILURES ===================================
+_______ TestReviewPipeline.test_seeding_twice_does_not_reset_a_decision _______
+
+self = <tests.integration.test_api_admin.TestReviewPipeline object at 0x000001D3BFA17250>
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEF020>
+
+    def test_seeding_twice_does_not_reset_a_decision(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        api.post("/api/v1/admin/review/rv_2025Q4_quezon/approve", headers=headers)
+    
+        again = api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers).json()["data"]
+        quezon = next(i for i in again if i["provinceId"] == "quezon")
+>       assert quezon["status"] == "Approved"
+E       AssertionError: assert 'Published' == 'Approved'
+E         
+E         - Approved
+E         + Published
+
+tests\integration\test_api_admin.py:224: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+Starting up aiPHeed backend...
+-------------------------- Captured stdout teardown ---------------------------
+Shutting down aiPHeed backend...
+____________ TestReviewPipeline.test_rejection_records_who_and_why ____________
+
+self = <tests.integration.test_api_admin.TestReviewPipeline object at 0x000001D3BFE610F0>
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEFBD0>
+
+    def test_rejection_records_who_and_why(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject", headers=headers,
+                     json={"reason": "Data quality issue", "notes": "PSA revision pending."})
+        assert r.status_code == 200
+        item = r.json()
+>       assert item["status"] == "Rejected"
+E       AssertionError: assert 'Pending' == 'Rejected'
+E         
+E         - Rejected
+E         + Pending
+
+tests\integration\test_api_admin.py:244: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+Starting up aiPHeed backend...
+-------------------------- Captured stdout teardown ---------------------------
+Shutting down aiPHeed backend...
+_ TestRejectionIsEnforced.test_timeseries_drops_the_quarter_rather_than_plotting_zero _
+
+self = <tests.integration.test_api_admin.TestRejectionIsEnforced object at 0x000001D3BFA0B460>
+api = <starlette.testclient.TestClient object at 0x000001D3BFBDF570>
+rejected = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhbmFseXN0QGNhbGFiYXJ6b24uZGE...IyNzg1OTg0MzFiZmQzMjE4MWQiLCJpYXQiOjE3OTIwMjMwNDAsImV4cCI6MTc5MjAyNjY0MH0.-o3GVyOxfrS7UyRs83oItjtoxszyaLbTLjxBnPaLzc8'}
+
+    def test_timeseries_drops_the_quarter_rather_than_plotting_zero(self, api, rejected):
+        series = api.get("/api/v1/forecast/timeseries?scope=province&id=laguna").json()["series"]
+        quarters = [p["quarter"] for p in series]
+        # A zero here would read as a real fall to no risk.
+        assert "2025-Q4" not in quarters
+>       assert "2025-Q3" in quarters
+E       AssertionError: assert '2025-Q3' in ['2023-Q4', '2024-Q1', '2024-Q2', '2024-Q3', '2024-Q4', '2025-Q1', ...]
+
+tests\integration\test_api_admin.py:339: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+Starting up aiPHeed backend...
+-------------------------- Captured stdout teardown ---------------------------
+Shutting down aiPHeed backend...
+________________ test_quarters_reports_only_scorable_quarters _________________
+
+latest_quarter = '2027-Q1'
+
+    def test_quarters_reports_only_scorable_quarters(latest_quarter):
+        body = client.get("/api/v1/quarters").json()
+        assert body["quarters"], "timeline must not be empty"
+        # Nowcast quarters have published PSA volumes behind them; only the
+        # appended E20 quarters, after the newest of them, are forecasts.
+        scored = [q for q in body["quarters"] if q["state"] != "unavailable"]
+        observed = [q for q in scored if q["state"] != "forecast"]
+        forecast = [q["id"] for q in scored if q["state"] == "forecast"]
+        assert {q["state"] for q in observed} <= {"actual", "current"}
+>       assert observed[-1]["id"] == latest_quarter
+E       AssertionError: assert '2026-Q3' == '2027-Q1'
+E         
+E         - 2027-Q1
+E         + 2026-Q3
+
+tests\integration\test_api_dashboard.py:44: AssertionError
+________ test_quarters_timeline_has_no_gaps_and_explains_missing_ones _________
+
+    def test_quarters_timeline_has_no_gaps_and_explains_missing_ones():
+        body = client.get("/api/v1/quarters").json()
+        ids = [q["id"] for q in body["quarters"]]
+        idx = [int(i[:4]) * 4 + int(i[-1]) - 1 for i in ids]
+        # Every quarter in the range is listed, through the calendar quarter.
+>       assert idx == list(range(idx[0], idx[0] + len(idx)))
+E       AssertionError: assert [8095, 8096, ...99, 8100, ...] == [8095, 8096, ...99, 8100, ...]
+E         
+E         At index 6 diff: 8103 != 8101
+E         
+E         Full diff:
+E           [
+E               8095,
+E               8096,...
+E         
+E         ...Full output truncated (12 lines hidden), use '-vv' to show
+
+tests\integration\test_api_dashboard.py:55: AssertionError
+______________ test_forecast_quarter_is_labelled_and_has_no_qoq _______________
+
+    def test_forecast_quarter_is_labelled_and_has_no_qoq():
+        forecast = client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
+        if not forecast:
+            pytest.skip("E20 serving file not present")
+        q = forecast[-1]
+        rows = client.get(f"/api/v1/provinces?quarter={q}").json()["data"]
+>       assert rows and all(p["isForecast"] for p in rows)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_api_dashboard.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = <list_iterator object at 0x000001D3ED49C2E0>
+
+>   assert rows and all(p["isForecast"] for p in rows)
+                        ^^^^^^^^^^^^^^^
+E   KeyError: 'isForecast'
+
+tests\integration\test_api_dashboard.py:89: KeyError
+______________ test_every_forecast_carries_what_the_number_means ______________
+
+    def test_every_forecast_carries_what_the_number_means():
+        body = client.get("/api/v1/forecast?scope=region&id=calabarzon").json()
+        indicator = body["indicator"]
+        # The score is a production-shortfall share. A surface that relabels it as
+        # a household food-insecurity probability is the failure this guards.
+>       assert indicator["id"] == "food_availability_shock_share"
+E       AssertionError: assert 'food_insecur...k_probability' == 'food_availab...y_shock_share'
+E         
+E         - food_availability_shock_share
+E         + food_insecurity_risk_probability
+
+tests\integration\test_api_dashboard.py:145: AssertionError
+_________________ test_accuracy_is_served_with_its_baselines __________________
+
+    def test_accuracy_is_served_with_its_baselines():
+        perf = client.get("/api/v1/config").json()["modelPerformance"]
+        # Accuracy alone overstates the result: the majority class already scores
+        # ~0.73. The baselines must travel with the headline number.
+>       assert perf["baselines"]["majorityClass"] > 0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'majorityClass'
+
+tests\integration\test_api_dashboard.py:167: KeyError
+____________ test_every_municipal_row_declares_it_is_disaggregated ____________
+
+    def test_every_municipal_row_declares_it_is_disaggregated():
+        data = client.get("/api/v1/provinces/quezon/municipalities").json()["data"]
+        assert data
+        for row in data:
+            # Rule 8: the label is never null. These are reweighted province
+            # numbers and a reader must not mistake one for a municipal model run.
+            assert row["disaggregationLabel"]
+>           assert "disaggregated" in row["disaggregationLabel"].lower()
+E           AssertionError: assert 'disaggregated' in 'indicative, relative ordering of the 142 cities and municipalities for planning attention. it is the province estimate re-weighted by psa poverty incidence (60%) and psa 2020 population density (40%) inside each province. it is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official classification (chapter i, 1.7). the province estimate it starts from has not been validated against baselines (e25-e28), so the ranking inherits that status: experimental.'
+E            +  where 'indicative, relative ordering of the 142 cities and municipalities for planning attention. it is the province estimate re-weighted by psa poverty incidence (60%) and psa 2020 population density (40%) inside each province. it is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official classification (chapter i, 1.7). the province estimate it starts from has not been validated against baselines (e25-e28), so the ranking inherits that status: experimental.' = <built-in method lower of str object at 0x000001D3C235E620>()
+E            +    where <built-in method lower of str object at 0x000001D3C235E620> = 'Indicative, relative ordering of the 142 cities and municipalities for planning attention. It is the province estimate re-weighted by PSA poverty incidence (60%) and PSA 2020 population density (40%) inside each province. It is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official classification (Chapter I, 1.7). The province estimate it starts from has NOT been validated against baselines (E25-E28), so the ranking inherits that status: EXPERIMENTAL.'.lower
+
+tests\integration\test_api_dashboard.py:193: AssertionError
+______________ test_seasonal_and_history_groups_are_not_dropped _______________
+
+    def test_seasonal_and_history_groups_are_not_dropped():
+        body = client.get("/api/v1/explainability?scope=province&id=laguna").json()
+        keys = {t["key"] for t in body["triggers"]}
+        # These two are usually the largest contributors. Collapsing the response
+        # to the frontend's original five categories would hide them.
+>       assert {"seasonal", "series_history"} <= keys
+E       AssertionError: assert {'seasonal', 'series_history'} <= {'price_press...ional_hunger'}
+E         
+E         Extra items in the left set:
+E         'series_history'
+E         'seasonal'
+
+tests\integration\test_api_dashboard.py:239: AssertionError
+______________ test_news_count_agrees_with_the_province_summary _______________
+
+    def test_news_count_agrees_with_the_province_summary():
+        quarter = client.get("/api/v1/quarters").json()["current"]
+        provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
+        for slug, province in provinces.items():
+            news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
+            assert news["articleCount"] == province["articleCount"]
+>           assert news["sourceQuarter"] == quarter
+E           AssertionError: assert '2026-Q4' == '2027-Q1'
+E             
+E             - 2027-Q1
+E             + 2026-Q4
+
+tests\integration\test_api_dashboard.py:268: AssertionError
+________ test_forecast_quarter_news_comes_from_the_information_cutoff _________
+
+    def test_forecast_quarter_news_comes_from_the_information_cutoff():
+        forecast = [q["id"] for q in client.get("/api/v1/quarters").json()["quarters"]
+                    if q.get("state") == "forecast"]
+        if not forecast:
+            pytest.skip("no forecast quarter served")
+        quarter = forecast[-1]
+        provinces = {p["id"]: p for p in
+                     client.get(f"/api/v1/provinces?quarter={quarter}").json()["data"]}
+        for slug, province in provinces.items():
+            news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
+            assert news["quarter"] == quarter
+>           assert news["sourceQuarter"] == province["originQuarter"] != quarter
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'originQuarter'
+
+tests\integration\test_api_dashboard.py:282: KeyError
+________ test_timeseries_is_chronological_and_flags_only_e20_quarters _________
+
+    def test_timeseries_is_chronological_and_flags_only_e20_quarters():
+        body = client.get("/api/v1/forecast/timeseries?scope=province&id=quezon").json()
+        quarters = [p["quarter"] for p in body["series"]]
+        assert quarters == sorted(quarters)
+        forecast = set(client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"])
+>       assert {p["quarter"] for p in body["series"] if p["isForecast"]} == forecast & set(quarters)
+E       AssertionError: assert set() == {'2027-Q1'}
+E         
+E         Extra items in the right set:
+E         '2027-Q1'
+E         
+E         Full diff:
+E         + set()
+E         - {
+E         -     '2027-Q1',
+E         - }
+
+tests\integration\test_api_dashboard.py:295: AssertionError
+______________________ test_config_describes_both_models ______________________
+
+    def test_config_describes_both_models():
+        horizons = client.get("/api/v1/config").json()["horizons"]
+        assert set(horizons) == {"nowcast", "forecast"}
+        for h in horizons.values():
+            # Each must carry its own metrics with baselines, not share the other's.
+>           assert h["performance"]["baselines"]["majorityClass"] > 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'majorityClass'
+
+tests\integration\test_api_dashboard.py:314: KeyError
+___________________ test_both_horizons_reach_the_same_edge ____________________
+
+    def test_both_horizons_reach_the_same_edge():
+        """
+        The forecast horizon used to reach one quarter further than the nowcast,
+        and until 2026-09-09 it did: the feature matrix was capped at 2025-Q4 by a
+        hardcoded MODEL_QUARTERS range, so joining the government features at t-1
+        bought the forecast model 2026-Q1 that the nowcast had no features for.
+    
+        That cap is gone -- the window now tracks the calendar -- so the binding
+        constraint is the PSA production panel itself. Neither horizon can score a
+        quarter with no production row to compare against, and the t-1 join no
+        longer buys any reach.
+    
+        The forecast model is still worth serving, but for the other reason: it
+        uses no same-quarter information, so it is the one that could be run before
+        a quarter closes.
+        """
+        now = client.get("/api/v1/quarters?horizon=nowcast").json()
+        fut = client.get("/api/v1/quarters?horizon=forecast").json()
+    
+>       assert ref_index(fut["current"]) == ref_index(now["current"])
+E       AssertionError: assert 8108 == 8107
+E        +  where 8108 = ref_index('2027-Q1')
+E        +  and   8107 = ref_index('2026-Q4')
+
+tests\integration\test_api_dashboard.py:347: AssertionError
+_______________ test_neither_horizon_scores_past_the_panel_edge _______________
+
+    def test_neither_horizon_scores_past_the_panel_edge():
+        """A quarter with no production row is absent for both horizons, not zero."""
+        edge = client.get("/api/v1/quarters?horizon=nowcast").json()["current"]
+        beyond = next_quarter(edge)
+    
+        for horizon in ("nowcast", "forecast"):
+            ok = client.get(
+                f"/api/v1/forecast?scope=province&id=batangas&quarter={edge}&horizon={horizon}"
+            )
+            assert ok.status_code == 200, horizon
+            assert ok.json()["riskScore"] is not None, horizon
+    
+            gone = client.get(
+                f"/api/v1/forecast?scope=province&id=batangas&quarter={beyond}&horizon={horizon}"
+            )
+>           assert gone.status_code == 404, horizon
+E           AssertionError: nowcast
+E           assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+
+tests\integration\test_api_dashboard.py:369: AssertionError
+___________ test_forecast_quarter_report_is_refused_not_mislabelled ___________
+
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEE030>
+
+    def test_forecast_quarter_report_is_refused_not_mislabelled(api):
+        # The PDF wording describes the nowcast indicator; the E20 quarter is a
+        # different target, so it must not be rendered under that wording.
+        forecast = api.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"]
+        if not forecast:
+            pytest.skip("E20 serving file not present")
+        r = api.get(f"/api/v1/report?scope=region&id=calabarzon&quarter={forecast[-1]}")
+>       assert r.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests\integration\test_api_report.py:136: AssertionError
+__________________ test_report_states_what_the_number_is_not __________________
+
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEE030>
+quarter = '2027-Q1'
+
+    def test_report_states_what_the_number_is_not(api, quarter):
+        body = text_of(api.get(f"/api/v1/report?scope=province&id=quezon&quarter={quarter}"))
+>       assert "food availability" in body.lower()
+E       assert 'food availability' in "aipheed\n\nquezon  |  2027-q1\n\ndepartment of agriculture region iv-a\n\nfood insecurity risk forecast\nquezon � q1 2027 (jan-mar)\n\ngenerated 15 october 2026 from aipheed model output.\n\nwhat this number is\n\nthe modelled probability that this area falls in the high class of the composite food stress label. it is an indicative relative risk\nestimate, not an official food insecurity classification, and it is published at the maximum reliable lead time the model\nestablished empirically.\n\nheadline\n\nfood insecurity risk probability\n\n0.935\n\nhigh � quarter-on-quarter +0.2999\n\nrisk class\n\n--\n\nrank in calabarzon\n\n1 of 5\n\npopulation (2020 cph)\n\n2,229,383\n\npoverty incidence (psa\n2021)\n\n16.6%\n\narticles analysed\n\n1\n\nlimited signal\n\nonly 1 relevant news articles were geocoded to this province for the quarter. news-derived drivers should be treated as weak\nevidence.\n\nforecast horizon\n\none quarter ahead (forecast), lead 1. forecast (lead 1; reliability not established). signal strong; s1 80% interval\n[16.7071, 30.468]. indicative only.\n\nfood insecurity risk probability -- indicative relative risk only. not an official food insecurity classificati...o province-level resolution, and psa food cpi deviation, which reflects supply-side price conditions rather than\nhousehold hunger experience directly.\n\nlimited news signal\n\nonly 1 relevant articles were geocoded to this subject for the quarter, below the threshold for a dependable news component. the\nnews-derived drivers carry correspondingly little weight.\n\nmunicipal figures are disaggregated, not modelled\n\nmunicipal values reweight the province figure by poverty incidence (60%) and population density (40%). poverty values are largely\nprovince means rather than municipal small area estimates, so within-province ordering is indicative only.\n\nreviewed before publication\n\nprovince-quarter figures pass through analyst review. a withheld figure is excluded from this report and from the regional average.\n\nscope of this assessment\n\nthis assessment reports findings only. it does not recommend interventions: no validated mapping exists between this indicator\nand a response protocol. pair it with the department's own standing guidance.\n\nfood insecurity risk probability -- indicative relative risk only. not an official food insecurity classification.\n\npage 5\n\n\x0c"
+E        +  where "aipheed\n\nquezon  |  2027-q1\n\ndepartment of agriculture region iv-a\n\nfood insecurity risk forecast\nquezon � q1 2027 (jan-mar)\n\ngenerated 15 october 2026 from aipheed model output.\n\nwhat this number is\n\nthe modelled probability that this area falls in the high class of the composite food stress label. it is an indicative relative risk\nestimate, not an official food insecurity classification, and it is published at the maximum reliable lead time the model\nestablished empirically.\n\nheadline\n\nfood insecurity risk probability\n\n0.935\n\nhigh � quarter-on-quarter +0.2999\n\nrisk class\n\n--\n\nrank in calabarzon\n\n1 of 5\n\npopulation (2020 cph)\n\n2,229,383\n\npoverty incidence (psa\n2021)\n\n16.6%\n\narticles analysed\n\n1\n\nlimited signal\n\nonly 1 relevant news articles were geocoded to this province for the quarter. news-derived drivers should be treated as weak\nevidence.\n\nforecast horizon\n\none quarter ahead (forecast), lead 1. forecast (lead 1; reliability not established). signal strong; s1 80% interval\n[16.7071, 30.468]. indicative only.\n\nfood insecurity risk probability -- indicative relative risk only. not an official food insecurity classificati...o province-level resolution, and psa food cpi deviation, which reflects supply-side price conditions rather than\nhousehold hunger experience directly.\n\nlimited news signal\n\nonly 1 relevant articles were geocoded to this subject for the quarter, below the threshold for a dependable news component. the\nnews-derived drivers carry correspondingly little weight.\n\nmunicipal figures are disaggregated, not modelled\n\nmunicipal values reweight the province figure by poverty incidence (60%) and population density (40%). poverty values are largely\nprovince means rather than municipal small area estimates, so within-province ordering is indicative only.\n\nreviewed before publication\n\nprovince-quarter figures pass through analyst review. a withheld figure is excluded from this report and from the regional average.\n\nscope of this assessment\n\nthis assessment reports findings only. it does not recommend interventions: no validated mapping exists between this indicator\nand a response protocol. pair it with the department's own standing guidance.\n\nfood insecurity risk probability -- indicative relative risk only. not an official food insecurity classification.\n\npage 5\n\n\x0c" = <built-in method lower of str object at 0x000001D3C258DCD0>()
+E        +    where <built-in method lower of str object at 0x000001D3C258DCD0> = "aiPHeed\n\nQuezon  |  2027-Q1\n\nDEPARTMENT OF AGRICULTURE REGION IV-A\n\nFood Insecurity Risk Forecast\nQuezon � Q1 2027 (Jan-Mar)\n\nGenerated 15 October 2026 from aiPHeed model output.\n\nWhat this number is\n\nThe modelled probability that this area falls in the HIGH class of the composite food stress label. It is an indicative relative risk\nestimate, not an official food insecurity classification, and it is published at the Maximum Reliable Lead Time the model\nestablished empirically.\n\nHeadline\n\nFOOD INSECURITY RISK PROBABILITY\n\n0.935\n\nHIGH � quarter-on-quarter +0.2999\n\nRisk class\n\n--\n\nRank in CALABARZON\n\n1 of 5\n\nPopulation (2020 CPH)\n\n2,229,383\n\nPoverty incidence (PSA\n2021)\n\n16.6%\n\nArticles analysed\n\n1\n\nLimited signal\n\nOnly 1 relevant news articles were geocoded to this province for the quarter. News-derived drivers should be treated as weak\nevidence.\n\nForecast horizon\n\nOne quarter ahead (forecast), lead 1. Forecast (lead 1; reliability not established). Signal STRONG; S1 80% interval\n[16.7071, 30.468]. Indicative only.\n\nFood insecurity risk probability -- indicative relative risk only. Not an official food insecurity classificati...o province-level resolution, and PSA food CPI deviation, which reflects supply-side price conditions rather than\nhousehold hunger experience directly.\n\nLimited news signal\n\nOnly 1 relevant articles were geocoded to this subject for the quarter, below the threshold for a dependable news component. The\nnews-derived drivers carry correspondingly little weight.\n\nMunicipal figures are disaggregated, not modelled\n\nMunicipal values reweight the province figure by poverty incidence (60%) and population density (40%). Poverty values are largely\nprovince means rather than municipal Small Area Estimates, so within-province ordering is indicative only.\n\nReviewed before publication\n\nProvince-quarter figures pass through analyst review. A withheld figure is excluded from this report and from the regional average.\n\nScope of this assessment\n\nThis assessment reports findings only. It does not recommend interventions: no validated mapping exists between this indicator\nand a response protocol. Pair it with the Department's own standing guidance.\n\nFood insecurity risk probability -- indicative relative risk only. Not an official food insecurity classification.\n\nPage 5\n\n\x0c".lower
+
+tests\integration\test_api_report.py:145: AssertionError
+_______________ test_report_quotes_accuracy_with_its_baselines ________________
+
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEE030>
+quarter = '2027-Q1'
+
+    def test_report_quotes_accuracy_with_its_baselines(api, quarter):
+        body = text_of(api.get(f"/api/v1/report?scope=region&id=calabarzon&quarter={quarter}"))
+>       assert "Majority-class baseline" in body
+E       assert 'Majority-class baseline' in "aiPHeed\n\nCALABARZON  |  2027-Q1\n\nDEPARTMENT OF AGRICULTURE REGION IV-A\n\nRegional Food Insecurity Risk Forecast\nCALABARZON � Q1 2027 (Jan-Mar)\n\nGenerated 15 October 2026 from aiPHeed model output.\n\nWhat this number is\n\nThe modelled probability that this area falls in the HIGH class of the composite food stress label. It is an indicative relative risk\nestimate, not an official food insecurity classification, and it is published at the Maximum Reliable Lead Time the model\nestablished empirically.\n\nHeadline\n\nFOOD INSECURITY RISK PROBABILITY\n\n0.889\n\nHIGH � quarter-on-quarter +0.1972\n\nProvinces covered\n\n5 of 5\n\nForecast horizon\n\nOne quarter ahead\n(forecast), lead 1\n\nProvinces above cutoff\n\nProvinces withheld\n\n5\n\n0\n\nArticles analysed\n\n3 (3 located)\n\nThe regional figure is the mean of 5 published province scores. The model has no region-level series of its own. A province withheld by\na reviewer is excluded from the mean rather than counted as zero.\n\nProvinces compared\n\nQuezon\n\nRizal\n\nCavite\n\nLaguna\n\nBatangas\n\nProvince\n\nQuezon\n\nRizal\n\nCavite\n\nLaguna\n\nBatangas\n\n0.935 high\n\n0.922 high\n\n0.914 high\n\n0.908 high\n\n... not earning its complexity.\n\nLimitations\n\nIndicative risk, not official classification\n\nOutputs are relative ordinal estimates of potential risk. They are not definitive determinations of food insecurity status and must not be\nread as official government assessments or policy recommendations.\n\nProxy label, not a direct measurement\n\nNo publicly accessible province-quarter food insecurity label exists in the Philippines. The training target is a composite of SWS hunger\nprevalence, which has no province-level resolution, and PSA food CPI deviation, which reflects supply-side price conditions rather than\nhousehold hunger experience directly.\n\nReviewed before publication\n\nProvince-quarter figures pass through analyst review. A withheld figure is excluded from this report and from the regional average.\n\nScope of this assessment\n\nThis assessment reports findings only. It does not recommend interventions: no validated mapping exists between this indicator\nand a response protocol. Pair it with the Department's own standing guidance.\n\nFood insecurity risk probability -- indicative relative risk only. Not an official food insecurity classification.\n\nPage 3\n\n\x0c"
+
+tests\integration\test_api_report.py:163: AssertionError
+____________________ test_report_declares_it_is_a_nowcast _____________________
+
+api = <starlette.testclient.TestClient object at 0x000001D3BFEEE030>
+quarter = '2027-Q1'
+
+    def test_report_declares_it_is_a_nowcast(api, quarter):
+        body = text_of(api.get(f"/api/v1/report?scope=region&id=calabarzon&quarter={quarter}"))
+        flat = body.replace("\n", " ")
+>       assert "not a forecast" in flat.lower()
+E       assert 'not a forecast' in "aipheed  calabarzon  |  2027-q1  department of agriculture region iv-a  regional food insecurity risk forecast calabarzon � q1 2027 (jan-mar)  generated 15 october 2026 from aipheed model output.  what this number is  the modelled probability that this area falls in the high class of the composite food stress label. it is an indicative relative risk estimate, not an official food insecurity classification, and it is published at the maximum reliable lead time the model established empirically.  headline  food insecurity risk probability  0.889  high � quarter-on-quarter +0.1972  provinces covered  5 of 5  forecast horizon  one quarter ahead (forecast), lead 1  provinces above cutoff  provinces withheld  5  0  articles analysed  3 (3 located)  the regional figure is the mean of 5 published province scores. the model has no region-level series of its own. a province withheld by a reviewer is excluded from the mean rather than counted as zero.  provinces compared  quezon  rizal  cavite  laguna  batangas  province  quezon  rizal  cavite  laguna  batangas  0.935 high  0.922 high  0.914 high  0.908 high  0.768 high  probability  level  class  qoq  poverty  articles  0.9347  0.9216  0.... does not clearly beat it is not earning its complexity.  limitations  indicative risk, not official classification  outputs are relative ordinal estimates of potential risk. they are not definitive determinations of food insecurity status and must not be read as official government assessments or policy recommendations.  proxy label, not a direct measurement  no publicly accessible province-quarter food insecurity label exists in the philippines. the training target is a composite of sws hunger prevalence, which has no province-level resolution, and psa food cpi deviation, which reflects supply-side price conditions rather than household hunger experience directly.  reviewed before publication  province-quarter figures pass through analyst review. a withheld figure is excluded from this report and from the regional average.  scope of this assessment  this assessment reports findings only. it does not recommend interventions: no validated mapping exists between this indicator and a response protocol. pair it with the department's own standing guidance.  food insecurity risk probability -- indicative relative risk only. not an official food insecurity classification.  page 3  \x0c"
+E        +  where "aipheed  calabarzon  |  2027-q1  department of agriculture region iv-a  regional food insecurity risk forecast calabarzon � q1 2027 (jan-mar)  generated 15 october 2026 from aipheed model output.  what this number is  the modelled probability that this area falls in the high class of the composite food stress label. it is an indicative relative risk estimate, not an official food insecurity classification, and it is published at the maximum reliable lead time the model established empirically.  headline  food insecurity risk probability  0.889  high � quarter-on-quarter +0.1972  provinces covered  5 of 5  forecast horizon  one quarter ahead (forecast), lead 1  provinces above cutoff  provinces withheld  5  0  articles analysed  3 (3 located)  the regional figure is the mean of 5 published province scores. the model has no region-level series of its own. a province withheld by a reviewer is excluded from the mean rather than counted as zero.  provinces compared  quezon  rizal  cavite  laguna  batangas  province  quezon  rizal  cavite  laguna  batangas  0.935 high  0.922 high  0.914 high  0.908 high  0.768 high  probability  level  class  qoq  poverty  articles  0.9347  0.9216  0.... does not clearly beat it is not earning its complexity.  limitations  indicative risk, not official classification  outputs are relative ordinal estimates of potential risk. they are not definitive determinations of food insecurity status and must not be read as official government assessments or policy recommendations.  proxy label, not a direct measurement  no publicly accessible province-quarter food insecurity label exists in the philippines. the training target is a composite of sws hunger prevalence, which has no province-level resolution, and psa food cpi deviation, which reflects supply-side price conditions rather than household hunger experience directly.  reviewed before publication  province-quarter figures pass through analyst review. a withheld figure is excluded from this report and from the regional average.  scope of this assessment  this assessment reports findings only. it does not recommend interventions: no validated mapping exists between this indicator and a response protocol. pair it with the department's own standing guidance.  food insecurity risk probability -- indicative relative risk only. not an official food insecurity classification.  page 3  \x0c" = <built-in method lower of str object at 0x000001D3C274A030>()
+E        +    where <built-in method lower of str object at 0x000001D3C274A030> = "aiPHeed  CALABARZON  |  2027-Q1  DEPARTMENT OF AGRICULTURE REGION IV-A  Regional Food Insecurity Risk Forecast CALABARZON � Q1 2027 (Jan-Mar)  Generated 15 October 2026 from aiPHeed model output.  What this number is  The modelled probability that this area falls in the HIGH class of the composite food stress label. It is an indicative relative risk estimate, not an official food insecurity classification, and it is published at the Maximum Reliable Lead Time the model established empirically.  Headline  FOOD INSECURITY RISK PROBABILITY  0.889  HIGH � quarter-on-quarter +0.1972  Provinces covered  5 of 5  Forecast horizon  One quarter ahead (forecast), lead 1  Provinces above cutoff  Provinces withheld  5  0  Articles analysed  3 (3 located)  The regional figure is the mean of 5 published province scores. The model has no region-level series of its own. A province withheld by a reviewer is excluded from the mean rather than counted as zero.  Provinces compared  Quezon  Rizal  Cavite  Laguna  Batangas  Province  Quezon  Rizal  Cavite  Laguna  Batangas  0.935 high  0.922 high  0.914 high  0.908 high  0.768 high  Probability  Level  Class  QoQ  Poverty  Articles  0.9347  0.9216  0.... does not clearly beat it is not earning its complexity.  Limitations  Indicative risk, not official classification  Outputs are relative ordinal estimates of potential risk. They are not definitive determinations of food insecurity status and must not be read as official government assessments or policy recommendations.  Proxy label, not a direct measurement  No publicly accessible province-quarter food insecurity label exists in the Philippines. The training target is a composite of SWS hunger prevalence, which has no province-level resolution, and PSA food CPI deviation, which reflects supply-side price conditions rather than household hunger experience directly.  Reviewed before publication  Province-quarter figures pass through analyst review. A withheld figure is excluded from this report and from the regional average.  Scope of this assessment  This assessment reports findings only. It does not recommend interventions: no validated mapping exists between this indicator and a response protocol. Pair it with the Department's own standing guidance.  Food insecurity risk probability -- indicative relative risk only. Not an official food insecurity classification.  Page 3  \x0c".lower
+
+tests\integration\test_api_report.py:179: AssertionError
+_______________ test_single_quarter_region_has_no_trend_section _______________
+
+last = '2027-Q1'
+
+    def test_single_quarter_region_has_no_trend_section(last):
+>       body = pr.build_plain_report("trend", "region", None, last, last, set())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_plain_report.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\services\plain_report.py:105: in build_plain_report
+    window = _quarter_window(start, end) if kind == "trend" else [svc.resolve_quarter(end)]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = '2027-Q1', end = '2027-Q1'
+
+    def _quarter_window(start: str, end: str) -> list[str]:
+        start = svc.resolve_quarter(start)
+        end = svc.resolve_quarter(end)
+        lo, hi = sorted((ref.quarter_index(start), ref.quarter_index(end)))
+        # Reports describe the nowcast indicator; the E20 forecast quarter is a
+        # different target and is left out rather than worded as a nowcast.
+        window = [q for q in svc.available_quarters()
+>                 if lo <= ref.quarter_index(q) <= hi and not svc.is_forecast_quarter(q)]
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+app\services\report_data.py:70: AttributeError
+_______________________ test_two_quarter_province_trend _______________________
+
+last = '2027-Q1'
+
+    def test_two_quarter_province_trend(last):
+        prev = svc._previous_quarter(last)
+>       body = pr.build_plain_report("trend", "province", "cavite", prev, last, set())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_plain_report.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\services\plain_report.py:105: in build_plain_report
+    window = _quarter_window(start, end) if kind == "trend" else [svc.resolve_quarter(end)]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = '2026-Q3', end = '2027-Q1'
+
+    def _quarter_window(start: str, end: str) -> list[str]:
+        start = svc.resolve_quarter(start)
+        end = svc.resolve_quarter(end)
+        lo, hi = sorted((ref.quarter_index(start), ref.quarter_index(end)))
+        # Reports describe the nowcast indicator; the E20 forecast quarter is a
+        # different target and is left out rather than worded as a nowcast.
+        window = [q for q in svc.available_quarters()
+>                 if lo <= ref.quarter_index(q) <= hi and not svc.is_forecast_quarter(q)]
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+app\services\report_data.py:70: AttributeError
+_____________________ test_withheld_results_never_appear ______________________
+
+last = '2027-Q1'
+
+    def test_withheld_results_never_appear(last):
+        held = next(p["riskScore"] for p in svc.province_summary(last) if p["id"] == "batangas")
+>       body = pr.build_plain_report("trend", "region", None, last, last, {("batangas", last)})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_plain_report.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\services\plain_report.py:105: in build_plain_report
+    window = _quarter_window(start, end) if kind == "trend" else [svc.resolve_quarter(end)]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = '2027-Q1', end = '2027-Q1'
+
+    def _quarter_window(start: str, end: str) -> list[str]:
+        start = svc.resolve_quarter(start)
+        end = svc.resolve_quarter(end)
+        lo, hi = sorted((ref.quarter_index(start), ref.quarter_index(end)))
+        # Reports describe the nowcast indicator; the E20 forecast quarter is a
+        # different target and is left out rather than worded as a nowcast.
+        window = [q for q in svc.available_quarters()
+>                 if lo <= ref.quarter_index(q) <= hi and not svc.is_forecast_quarter(q)]
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+app\services\report_data.py:70: AttributeError
+_________________ test_trend_payload_is_ascii_and_structured __________________
+
+    def test_trend_payload_is_ascii_and_structured():
+>       quarters = _nowcast_quarters()
+                   ^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_report_data.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _nowcast_quarters() -> list[str]:
+        # Reports cover nowcast quarters only; the appended E20 quarter is excluded.
+>       return [q for q in svc.available_quarters() if not svc.is_forecast_quarter(q)]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+tests\integration\test_report_data.py:14: AttributeError
+________________ test_withheld_province_quarter_never_appears _________________
+
+    def test_withheld_province_quarter_never_appears():
+>       quarters = _nowcast_quarters()
+                   ^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_report_data.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _nowcast_quarters() -> list[str]:
+        # Reports cover nowcast quarters only; the appended E20 quarter is excluded.
+>       return [q for q in svc.available_quarters() if not svc.is_forecast_quarter(q)]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+tests\integration\test_report_data.py:14: AttributeError
+___________ test_shap_payload_for_withheld_province_reports_nothing ___________
+
+    def test_shap_payload_for_withheld_province_reports_nothing():
+>       last = _nowcast_quarters()[-1]
+               ^^^^^^^^^^^^^^^^^^^
+
+tests\integration\test_report_data.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _nowcast_quarters() -> list[str]:
+        # Reports cover nowcast quarters only; the appended E20 quarter is excluded.
+>       return [q for q in svc.available_quarters() if not svc.is_forecast_quarter(q)]
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'app.services.dashboard' has no attribute 'is_forecast_quarter'
+
+tests\integration\test_report_data.py:14: AttributeError
+============================== warnings summary ===============================
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/integration/test_api_admin.py::TestReviewPipeline::test_seeding_twice_does_not_reset_a_decision
+FAILED tests/integration/test_api_admin.py::TestReviewPipeline::test_rejection_records_who_and_why
+FAILED tests/integration/test_api_admin.py::TestRejectionIsEnforced::test_timeseries_drops_the_quarter_rather_than_plotting_zero
+FAILED tests/integration/test_api_dashboard.py::test_quarters_reports_only_scorable_quarters
+FAILED tests/integration/test_api_dashboard.py::test_quarters_timeline_has_no_gaps_and_explains_missing_ones
+FAILED tests/integration/test_api_dashboard.py::test_forecast_quarter_is_labelled_and_has_no_qoq
+FAILED tests/integration/test_api_dashboard.py::test_every_forecast_carries_what_the_number_means
+FAILED tests/integration/test_api_dashboard.py::test_accuracy_is_served_with_its_baselines
+FAILED tests/integration/test_api_dashboard.py::test_every_municipal_row_declares_it_is_disaggregated
+FAILED tests/integration/test_api_dashboard.py::test_seasonal_and_history_groups_are_not_dropped
+FAILED tests/integration/test_api_dashboard.py::test_news_count_agrees_with_the_province_summary
+FAILED tests/integration/test_api_dashboard.py::test_forecast_quarter_news_comes_from_the_information_cutoff
+FAILED tests/integration/test_api_dashboard.py::test_timeseries_is_chronological_and_flags_only_e20_quarters
+FAILED tests/integration/test_api_dashboard.py::test_config_describes_both_models
+FAILED tests/integration/test_api_dashboard.py::test_both_horizons_reach_the_same_edge
+FAILED tests/integration/test_api_dashboard.py::test_neither_horizon_scores_past_the_panel_edge
+FAILED tests/integration/test_api_report.py::test_forecast_quarter_report_is_refused_not_mislabelled
+FAILED tests/integration/test_api_report.py::test_report_states_what_the_number_is_not
+FAILED tests/integration/test_api_report.py::test_report_quotes_accuracy_with_its_baselines
+FAILED tests/integration/test_api_report.py::test_report_declares_it_is_a_nowcast
+FAILED tests/integration/test_plain_report.py::test_single_quarter_region_has_no_trend_section
+FAILED tests/integration/test_plain_report.py::test_two_quarter_province_trend
+FAILED tests/integration/test_plain_report.py::test_withheld_results_never_appear
+FAILED tests/integration/test_report_data.py::test_trend_payload_is_ascii_and_structured
+FAILED tests/integration/test_report_data.py::test_withheld_province_quarter_never_appears
+FAILED tests/integration/test_report_data.py::test_shap_payload_for_withheld_province_reports_nothing
+================= 26 failed, 142 passed, 3 warnings in 21.01s =================

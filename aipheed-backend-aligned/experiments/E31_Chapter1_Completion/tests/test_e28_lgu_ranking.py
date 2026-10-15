@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import _paths  # noqa: F401
 from _paths import EXP
 
-BD = EXP / "backend_dev"
+BD = _paths.BD
 ROSTER = EXP.parents[1] / "data" / "reference" / "calabarzon_lgus.csv"
 PROB = {"PH040100000": 0.52, "PH040200000": 0.61, "PH040300000": 0.73, "PH040400000": 0.44, "PH040500000": 0.58}
 

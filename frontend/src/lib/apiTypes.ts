@@ -193,9 +193,18 @@ export interface MunicipalitySummary {
   population: number;
   densityPerKm2: number | null;
   povertyRate: number | null;
+  // E27: provenance of the poverty term the ranking used (municipal estimate or province-mean substitute).
+  povertyEstimateKind?: string | null;
+  povertyValueUsed?: number | null;
+  povertyLimitation?: string | null;
   quarter: string;
-  riskIndex: number;
-  riskLevel: string;
+  // E28: null when the LGU's province has no estimate; riskLevel is always null for LGUs (no band).
+  riskIndex: number | null;
+  riskLevel: string | null;
+  rankRegion?: number | null;
+  rankInProvince?: number | null;
+  tied?: boolean;
+  noProvinceEstimate?: boolean;
   // Never null -- a reweighted province number, not an independent forecast.
   disaggregationLabel: string;
   limitedSignal: boolean;
@@ -360,7 +369,7 @@ export interface LogoutResponse {
 }
 
 // ---------------------------------------------------------------------------
-// Admin — review pipeline
+// Admin â€” review pipeline
 // ---------------------------------------------------------------------------
 
 export interface ReviewItem {

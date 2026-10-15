@@ -59,21 +59,25 @@ CALABARZON_PROVINCES = [
     "PH040100000", "PH040200000", "PH040300000", "PH040400000", "PH040500000",
 ]
 
+# Section 3.3.2.6 / 3.3.1.1: the training window is 2020-Q1 through 2025-Q4 —
+# 24 quarters across 5 provinces, the 120-row backbone grid the approved
+# methodology fuses onto. The window is a methodological constant, not a
+# calendar-tracking value: Algorithm 3's fold structure, the 4-quarter holdout
+# in Algorithm 4 and the "120 province-quarter pairs" median in Equation 3 are
+# all defined against it.
 MODEL_START_YEAR = 2020
-# Was 2021 with no stated data justification. The audited news corpus
-# (calabarzon_food_insecurity_dataset.parquet) has 63 real, fully-scored,
-# province-tagged 2020 articles across all 5 provinces -- real, already-
-# collected data that this constant was silently excluding. Widened to
-# recover it. (backend_thesis/ only -- not applied to the live backend/.)
+MODEL_END_QUARTER = "2025-Q4"
+
+# Equation 5, CPI_dev: trailing quarters in the province's own rolling mean.
+CPI_DEV_WINDOW = 4
 
 
 def last_completed_quarter(today: date | None = None) -> str:
     """
     The most recent quarter that has actually finished.
 
-    The in-progress quarter is excluded on purpose: its CPI, production volumes
-    and article counts are all partial, so a row built for it would look like a
-    real observation while describing an unfinished period.
+    Used by the quarterly scheduler (Rule 1, Quarter Self-Update) to name the
+    cycle being run. It does NOT set the training window — see MODEL_QUARTERS.
     """
     today = today or datetime.now(timezone.utc).date()
     q = (today.month - 1) // 3 + 1
@@ -82,9 +86,8 @@ def last_completed_quarter(today: date | None = None) -> str:
 
 
 def model_quarters(start_year: int = MODEL_START_YEAR,
-                   end_quarter: str | None = None) -> list[str]:
+                   end_quarter: str = MODEL_END_QUARTER) -> list[str]:
     """Every quarter from start_year-Q1 through end_quarter, inclusive."""
-    end_quarter = end_quarter or last_completed_quarter()
     end_year, end_q = int(end_quarter[:4]), int(end_quarter[-1])
     return [f"{yr}-Q{q}"
             for yr in range(start_year, end_year + 1)
@@ -92,9 +95,7 @@ def model_quarters(start_year: int = MODEL_START_YEAR,
             if (yr, q) <= (end_year, end_q)]
 
 
-# The window was a hardcoded 2020-2025 literal, which is why the feature matrix
-# stopped dead at 2025-Q4 while the production panel ran on to 2026-Q2. It now
-# tracks the calendar, so a re-run picks up each quarter as it closes.
+# 2020-Q1 .. 2025-Q4 — 24 quarters; × 5 provinces = the 120-row backbone.
 MODEL_QUARTERS: list[str] = model_quarters()
 
 # ENSO phase → numeric encoding (for LightGBM ordinal)
@@ -133,9 +134,20 @@ def _quarter_to_int(q: str) -> int:
 # ---------------------------------------------------------------------------
 
 def _load_fssi(path: Path) -> pd.DataFrame:
-    """Load FSSI features: FSSI, FSSI_lag1, FSSI_lag2, FSSI_accel."""
+    """
+    Load the FSSI level only.
+
+    The lags and the acceleration are deliberately NOT taken from this file.
+    `fssi_builder` computes them with `shift(1)` over the rows it holds, and it
+    holds only the province-quarters that have at least one retained article --
+    110 of the 120 here. A shift over that frame reaches the last quarter that
+    carried news, not the previous calendar quarter, so after a gap `FSSI_lag1`
+    named a quarter two or three periods back and `FSSI_accel` reported a change
+    that spanned the gap. They are rebuilt below on the completed 120-row
+    backbone, by the same true calendar shift every other lag feature uses.
+    """
     df = pd.read_parquet(path)
-    cols = ["province_code", "quarter", "FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel"]
+    cols = ["province_code", "quarter", "FSSI"]
     return df[[c for c in cols if c in df.columns]].copy()
 
 
@@ -347,7 +359,11 @@ def build_feature_matrix(
     commodity_path:  Path = Path("data/processed/commodity_prices.parquet"),
     sws_path:        Path = Path("data/processed/sws_hunger.parquet"),
     ricelytics_path: Path = Path("data/processed/psa_rice_prices.parquet"),
-    topic_path:      Path = Path("data/processed/topic_proportions.parquet"),
+    # Section 3.3.2.6 fuses ten sources into a 120 x 45 matrix and does not list
+    # BERTopic among them. Topic proportions are Objective 1's latent risk
+    # patterns, reported on their own; they enter the matrix only if a path is
+    # passed explicitly.
+    topic_path:      Path | None = None,
     save_path:       Path = OUTPUT_PATH,
 ) -> pd.DataFrame:
     """
@@ -362,8 +378,8 @@ def build_feature_matrix(
     -------
     pd.DataFrame
         province_code, quarter (join keys) + all feature columns.
-        Filtered to MODEL_QUARTERS (2021-Q1 through the last completed
-        quarter), 5 CALABARZON provinces only.
+        Filtered to MODEL_QUARTERS (2020-Q1 through 2025-Q4), 5 CALABARZON
+        provinces only — the 120-row backbone of Section 3.3.2.6.
     """
 
     # --- Backbone grid: 5 provinces × every quarter in the window ---
@@ -409,11 +425,22 @@ def build_feature_matrix(
 
     # 4. CPI full (food-vs-headline gap)
     df = _left_merge(df, _load_cpi_full(cpi_full_path), "CPI_Full")
-    # The live CPI wins over the stale psa_indicators copy wherever it exists.
+    # Provincial PSA wins; the region-level series only fills what it leaves
+    # empty. cpi_full is OpenStat table 0012M4ACP22 queried at the Region IV-A
+    # geocode and cross-joined to the five provinces ("Region IV-A inherited to
+    # provinces", per its own source_note), so it is identical across provinces
+    # in every quarter. psa_indicators is table 0012M4ACP23 queried per
+    # province, and does vary. Letting the region copy win erased the
+    # provincial dimension of food_cpi_yoy -- the one term in Equation 3 that
+    # separates provinces within a quarter, and an input Equation 5 names per
+    # province. Section 3.3.1.2 specifies provincial indicators, so the
+    # provincial source takes precedence. The live series still covers quarters
+    # PSA has not published, which is what it was added for; inside the
+    # approved window PSA is complete, so there it changes nothing.
     for live, stale in (("food_cpi_live", "food_cpi"),
                         ("food_cpi_yoy_live", "food_cpi_yoy")):
         if live in df.columns:
-            df[stale] = (df[live].combine_first(df[stale])
+            df[stale] = (df[stale].combine_first(df[live])
                          if stale in df.columns else df[live])
     df = df.drop(columns=["food_cpi_live", "food_cpi_yoy_live"], errors="ignore")
 
@@ -457,63 +484,70 @@ def build_feature_matrix(
         logger.warning("PSA rice load failed: %s", exc)
 
     # 11. BERTopic proportions (optional)
-    topic_df = _load_topic_proportions(topic_path)
+    topic_df = _load_topic_proportions(topic_path) if topic_path is not None else None
     if topic_df is not None:
         df = _left_merge(df, topic_df, "BERTopic")
 
     # --- Post-merge cleanup ---
 
-    # Forward-fill macro series within each province (fills gaps from sparse surveys)
-    # pct_total_hunger is excluded — see module docstring.
-    ff_cols = [
-        "FSSI", "food_cpi", "food_cpi_yoy", "unemployment_rate", "poverty_incidence",
-        "ofw_remit_yoy_pct", "fx_usd_php_avg", "diesel_php_per_l",
-        "brent_usd_per_bbl", "headline_cpi", "food_minus_headline_yoy",
-    ]
-    # Every filled cell is recorded. A forward-filled value is indistinguishable
-    # from a measured one once it is in the matrix, so without this an exhausted
-    # source looks like full coverage -- which is exactly how diesel, OFW
-    # remittances and unemployment came to show complete 2026 values when their
-    # upstream series all stop at 2025-Q4.
-    #
-    # ffill and bfill are logged apart on purpose. Carrying the last observation
-    # forward is a defensible stopgap; back-filling takes a value from a LATER
-    # quarter, so any back-filled cell is look-ahead and must not be reported as
-    # observed.
-    provenance: dict[str, dict] = {}
-    for col in ff_cols:
-        if col not in df.columns:
+    # Coerce every feature column to a numeric dtype before the fill rule runs.
+    # A source that yields nothing leaves an all-None column of dtype object,
+    # which silently escapes both the forward fill and the zero fill below --
+    # `rainfall_anomaly_pct` reached the model that way, entirely empty, and
+    # broke three of the Research Question 3 baselines before it was caught.
+    # Coercing first means a dead source produces zeros the fill rule accounts
+    # for, and feature_provenance.json records how many.
+    for col in df.columns:
+        if col in ("province_code", "quarter"):
             continue
+        if df[col].dtype == object:
+            coerced = pd.to_numeric(df[col], errors="coerce")
+            logger.warning(
+                "%s arrived as dtype object (%d of %d values null); coerced to "
+                "numeric so the Section 3.3.2.6 fill rule applies to it",
+                col, int(coerced.isna().sum()), len(coerced),
+            )
+            df[col] = coerced
+
+    # Section 3.3.2.6: "Sparse series will be forward-filled within each
+    # province." Applied to every numeric column, which is what the approved
+    # rule says — the fill is per-province so no value ever crosses a province
+    # boundary, and forward-only so no value is ever drawn from a later quarter
+    # (Rule 3, No Look-Ahead Bias).
+    #
+    # pct_total_hunger is not in this matrix at all — see module docstring. It
+    # is an input to the label, so carrying it as a feature would be leakage.
+    #
+    # Every filled cell is recorded in feature_provenance.json. A forward-filled
+    # value is indistinguishable from a measured one once it is in the matrix,
+    # so without this record an exhausted source looks like full coverage. The
+    # record changes no value; it reports what the approved fill rule did.
+    provenance: dict[str, dict] = {}
+    ff_cols = [c for c in df.select_dtypes(include=[np.number]).columns
+               if c != "_q_int"]
+    for col in ff_cols:
         missing_before = df[col].isna()
+        if not missing_before.any():
+            continue
         forward = df.groupby("province_code")[col].transform(lambda s: s.ffill())
         ff_mask = missing_before & forward.notna()
-        # Leading gaps stay NaN. Back-filling them would take a value from a
-        # LATER quarter, which is look-ahead in a forecasting model; LightGBM
-        # splits on NaN natively, so an honest gap costs nothing.
-        bf_mask = missing_before & forward.isna()
+        # Leading gaps have no earlier observation to carry forward; they fall
+        # through to the zero-fill below, which is the approved second clause.
+        lead_mask = missing_before & forward.isna()
         df[col] = forward
 
-        if ff_mask.any() or bf_mask.any():
-            provenance[col] = {
-                "forward_filled": int(ff_mask.sum()),
-                "left_nan": int(bf_mask.sum()),
-                "forward_filled_quarters": sorted(df.loc[ff_mask, "quarter"].unique()),
-                "left_nan_quarters": sorted(df.loc[bf_mask, "quarter"].unique()),
-            }
-            if bf_mask.any():
-                logger.info(
-                    "%s: %d leading cells left NaN (%s) -- no earlier "
-                    "observation exists and back-filling would be look-ahead",
-                    col, int(bf_mask.sum()),
-                    ", ".join(sorted(df.loc[bf_mask, "quarter"].unique())),
-                )
-            if ff_mask.any():
-                logger.warning(
-                    "%s: %d cells carried forward from the last observation (%s) "
-                    "-- the upstream series does not cover these quarters",
-                    col, int(ff_mask.sum()),
-                    ", ".join(sorted(df.loc[ff_mask, "quarter"].unique())),
-                )
+        provenance[col] = {
+            "forward_filled": int(ff_mask.sum()),
+            "leading_gap": int(lead_mask.sum()),
+            "forward_filled_quarters": sorted(df.loc[ff_mask, "quarter"].unique()),
+            "leading_gap_quarters": sorted(df.loc[lead_mask, "quarter"].unique()),
+        }
+        if ff_mask.any():
+            logger.info(
+                "%s: %d cells carried forward within province (%s)",
+                col, int(ff_mask.sum()),
+                ", ".join(sorted(df.loc[ff_mask, "quarter"].unique())),
+            )
 
     prov_path = Path("data/processed/feature_provenance.json")
     prov_path.parent.mkdir(parents=True, exist_ok=True)
@@ -531,6 +565,7 @@ def build_feature_matrix(
     # primary signals: food prices, labor, climate, remittances, fuel.
     df = df.sort_values(["province_code", "quarter"]).reset_index(drop=True)
     LAG_FEATURES = [
+        "FSSI",
         "food_cpi_yoy",
         "food_minus_headline_yoy",
         "unemployment_rate",
@@ -544,33 +579,55 @@ def build_feature_matrix(
             df[f"{col}_lag1"]  = df.groupby("province_code")[col].shift(1)
             df[f"{col}_accel"] = df[col] - df[f"{col}_lag1"]
 
-    # Zero-fill ONLY where zero is the true meaning of absence: a quarter with
-    # no articles really did have no articles, and no storm within the radius
-    # really is a count of zero.
-    #
-    # This used to be a blanket fillna(0.0) over every numeric column, which
-    # also hit price levels and rates. That wrote commodity_livestock = 0.00
-    # PHP for 2026-Q1 and 2026-Q2 once commodity_prices.parquet ran out --
-    # the model reads that as a total price collapse, not as a gap. A price of
-    # zero is a false observation; NaN is an honest one, and LightGBM splits on
-    # NaN natively.
-    ZERO_MEANS_ABSENT = [c for c in df.columns
-                         if c.startswith("trigger_")] + [
-        "tc_count", "tc_severe_flag", "drought_alert", "enso_numeric",
-    ]
-    for col in ZERO_MEANS_ABSENT:
-        if col in df.columns:
-            df[col] = df[col].fillna(0.0)
+    # Equation 5 names a two-quarter FSSI lag as well, which no other feature
+    # carries, so it is built here rather than in the loop above.
+    if "FSSI" in df.columns:
+        df["FSSI_lag2"] = df.groupby("province_code")["FSSI"].shift(2)
 
-    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-    still_nan = {c: int(df[c].isna().sum())
-                 for c in numeric_cols if df[c].isna().any()}
-    if still_nan:
-        logger.warning(
-            "left as NaN rather than zero-filled (LightGBM handles these; a "
-            "zero would be a false observation): %s",
-            ", ".join(f"{c}={n}" for c, n in sorted(still_nan.items())),
+    # CPI_dev(t), Equation 5. The legend defines it as "food CPI deviation from
+    # the rolling provincial mean": the province's food CPI year-on-year change
+    # minus the mean of that same province's previous quarters. The model was
+    # previously fed the raw food_cpi_yoy level in this slot, which is not a
+    # deviation at all.
+    #
+    # The legend does not fix the window. Four quarters is used -- one year,
+    # matching the year-on-year basis of the series -- over quarters t-4..t-1
+    # only, so the mean never includes the quarter being estimated or any later
+    # one (Rule 3). At least two prior quarters are required; the first
+    # quarters of the window have none and are zero-filled below with every
+    # other remaining gap (Section 3.3.2.6), which the provenance record counts.
+    if "food_cpi_yoy" in df.columns:
+        prior_mean = (
+            df.groupby("province_code")["food_cpi_yoy"]
+            .transform(lambda s: s.shift(1).rolling(CPI_DEV_WINDOW, min_periods=2).mean())
         )
+        df["cpi_dev"] = df["food_cpi_yoy"] - prior_mean
+
+    # Section 3.3.2.6: "Sparse series will be forward-filled within each
+    # province; remaining gaps will be zero-filled." The forward fill above
+    # covers the first clause; every numeric column still carrying a gap is
+    # zero-filled here, which is the second.
+    #
+    # Each zero-filled cell is counted into the provenance record written
+    # below, so a reader can always tell an imputed zero from a measured one.
+    # The record changes no value — it only reports what the approved fill
+    # rule did.
+    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    zero_filled = {c: int(df[c].isna().sum())
+                   for c in numeric_cols if df[c].isna().any()}
+    for col in zero_filled:
+        df[col] = df[col].fillna(0.0)
+    if zero_filled:
+        logger.info(
+            "zero-filled remaining gaps per Section 3.3.2.6: %s",
+            ", ".join(f"{c}={n}" for c, n in sorted(zero_filled.items())),
+        )
+        for col, n in zero_filled.items():
+            provenance.setdefault(col, {})["zero_filled"] = n
+        prov_path.write_text(json.dumps(
+            {"window": [MODEL_QUARTERS[0], MODEL_QUARTERS[-1]],
+             "generated_at": datetime.now(timezone.utc).isoformat(),
+             "imputed": provenance}, indent=2))
 
     # Drop helper column
     df = df.drop(columns=["_q_int"], errors="ignore")

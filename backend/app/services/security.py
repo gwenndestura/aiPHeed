@@ -4,7 +4,7 @@ app/services/security.py
 Password hashing, token issuing, and the dependencies that gate admin routes.
 
 What this replaces: two client-side checks that never talked to a server. One
-accepted any password against an @calabarzon.da.gov.ph address; the other
+accepted any password against an agency address; the other
 compared against `admin2026` hardcoded in the bundle. Both wrote a
 sessionStorage flag that anyone could set from devtools.
 
@@ -98,7 +98,12 @@ def needs_rehash(stored_hash: str) -> bool:
 
 
 def email_domain_allowed(email: str) -> bool:
-    return email.strip().lower().endswith("@" + settings.ADMIN_EMAIL_DOMAIN.lower())
+    """
+    True when the address belongs to one of the validating agency — DA Region
+    IV-A. Enforced server-side; the frontend's own check is advisory.
+    """
+    addr = email.strip().lower()
+    return any(addr.endswith("@" + d) for d in settings.admin_email_domains)
 
 
 # ---------------------------------------------------------------------------

@@ -10,7 +10,7 @@ import _paths  # noqa: F401
 from _paths import EXP
 from app.quarterly.ledger import Ledger
 
-BD = EXP / "backend_dev"
+BD = _paths.BD
 REC = BD / "data" / "e27" / "timeline_record.json"
 PDF = BD / "data" / "e27" / "aiPHeed_E27_forecast_report.pdf"
 PROVS = ["PH040100000", "PH040200000", "PH040300000", "PH040400000", "PH040500000"]

@@ -1,22 +1,28 @@
 """
 app/ml/training/evaluator.py
 ------------------------------
-Four-baseline benchmark on walk-forward folds.
+Baseline benchmark answering Research Question 3 and Specific Objective 4.
 
-Baselines evaluated on the SAME walk-forward CV folds as the LightGBM trainer,
-including the same forecast_gap so the comparison is fair:
+Research Question 3 names six comparison approaches; Specific Objective 4 names
+four of them as the headline comparison. All six are evaluated here on the SAME
+walk-forward CV folds as the LightGBM trainer, at the same forecast gap, so the
+comparison is fair:
 
-  1. Naive Persistence  : predict(t+k) = label(t) for each province
-  2. PSA-Only Logistic  : LogisticRegression on economic/climate features only
-  3. NLP-Only Logistic  : LogisticRegression on FSSI + 5-trigger features only
-  4. Full-Feature Logistic: LogisticRegression on all 31 features (no pct_total_hunger)
+  1. Naive Persistence       : predict(t+k) = label(t) for each province
+  2. PSA-Only Logistic       : LogisticRegression on government indicators only
+  3. NLP-Only Logistic       : LogisticRegression on FSSI + 5 trigger features
+  4. Full-Feature Logistic   : LogisticRegression on the combined feature set
+  5. LightGBM NLP-only       : ablation variant, news signals only
+  6. LightGBM PSA-only       : ablation variant, government indicators only
 
 Metrics per fold and aggregated:
   - Weighted F1, ROC-AUC, Accuracy, Precision (weighted), Recall (weighted)
 
-pct_total_hunger is EXCLUDED from all feature sets: it is the raw SWS value
-that directly determines label_stress (composite stress label combining SWS hunger + PSA food CPI deviation), so including
-it would constitute label leakage.
+pct_total_hunger is EXCLUDED from every feature set. It is the raw SWS value
+that is the temporal term of stress_score itself, so including it would be
+label leakage. Food CPI deviation is NOT excluded: Equation 5 names CPI_dev(t)
+as a model input and Section 3.3.2.7 retains it among the final twelve
+features, so both the model and the baselines receive it.
 
 Output:
   data/processed/eval_results.json
@@ -63,13 +69,14 @@ NLP_FEATURES: list[str] = [
     "trigger_ofw_remittance", "trigger_fish_kill",
 ]
 
-# food_cpi and every feature derived from it are EXCLUDED as label leakage.
-# stress_score = sws_hunger_t + 2 * (food_cpi_yoy_p,t - regional_mean_t), and
-# sws_hunger_t is constant across provinces within a quarter, so food_cpi_yoy
-# supplies all province-level variation in label_stress. Keeping these in the
-# baselines while the model (trainer.LEAKY_LABEL_FEATURES) excludes them would
-# hand the baselines information the model is denied.
+# Government indicators, per Section 3.3.1.2 and 3.3.2.5. food_cpi_yoy and the
+# food-minus-headline gap are INCLUDED: Equation 5 names CPI_dev(t) as a model
+# input and Section 3.3.2.7 retains food CPI deviation among the final twelve
+# features. The baselines get the same information the model gets.
 PSA_FEATURES: list[str] = [
+    "food_cpi", "food_cpi_yoy", "cpi_dev", "food_minus_headline_yoy",
+    "food_cpi_yoy_lag1", "food_cpi_yoy_accel",
+    "food_minus_headline_yoy_lag1", "food_minus_headline_yoy_accel",
     "headline_cpi",
     "rice_price_regular",
     "unemployment_rate", "poverty_incidence",
@@ -119,7 +126,8 @@ def _load_merged(
 ) -> pd.DataFrame:
     """Merge features and labels on (province_code, quarter)."""
     feat_df = pd.read_parquet(features_path)
-    lab_df  = pd.read_parquet(labels_path)[
+    from app.ml.features.label_guard import assert_not_leaky  # E29 (D9): refuse whole-period-median labels
+    lab_df  = assert_not_leaky(pd.read_parquet(labels_path), "evaluator")[
         ["province_code", "quarter", LABEL_COL]
     ]
     df = feat_df.merge(lab_df, on=["province_code", "quarter"], how="inner")
@@ -246,6 +254,9 @@ def _lgbm_fold(
         verbosity=-1,
         random_state=42,
         class_weight="balanced",
+        # Same bagging switch the trainer uses, so the baselines are fitted
+        # under the same configuration the tuned parameters were chosen under.
+        subsample_freq=1,
     )
 
     X_train = train_df[cols]
@@ -362,6 +373,17 @@ def run_baseline_evaluation(
 
     # Add LightGBM ablation baselines only if best_params is available
     if best_params is not None:
+        # The model's own row. Research Question 3 compares aiPHeed against the
+        # six baselines, so the model has to be measured on the same folds, at
+        # the same gap, with the same hyperparameters and class weighting --
+        # otherwise the comparison is between numbers produced by different
+        # code paths. It was previously computed outside the repository, which
+        # left the headline RQ3 claim unreproducible.
+        from app.ml.features.feature_selector import model_features
+
+        baselines["aipheed_lgbm_combined"] = {
+            "feature_cols": model_features(), "type": "lgbm",
+        }
         baselines["lgbm_nlp_only"] = {"feature_cols": NLP_FEATURES, "type": "lgbm"}
         baselines["lgbm_psa_only"] = {"feature_cols": PSA_FEATURES, "type": "lgbm"}
         logger.info("LightGBM ablation baselines enabled (best_params provided).")

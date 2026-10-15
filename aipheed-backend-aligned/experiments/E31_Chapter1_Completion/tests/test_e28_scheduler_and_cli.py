@@ -25,7 +25,7 @@ def test_scheduler_registers_the_quarterly_cycle_and_the_daily_news_job(monkeypa
 def test_incremental_refuses_an_unauthorized_active_quarter(tmp_path, capsys, monkeypatch):
     from scripts import news_collect
 
-    monkeypatch.chdir(EXP / "backend_dev")
+    monkeypatch.chdir(_paths.BD)
     # E31: data are authorized to 2026-10-14 (authorized_until 2026-Q4), so the refusal is tested on 2027-Q1
     code = news_collect.main(["incremental", "--store", str(tmp_path / "s"), "--now", "2027-03-01T10:00:00+08:00"])
     out = json.loads(capsys.readouterr().out)

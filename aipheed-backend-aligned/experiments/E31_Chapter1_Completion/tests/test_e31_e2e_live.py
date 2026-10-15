@@ -10,7 +10,7 @@ import _paths  # noqa: F401
 
 requests = pytest.importorskip("requests")
 BASE = os.getenv("AIPHEED_E2E_URL", "http://127.0.0.1:8031").rstrip("/") + "/api/v1"
-REC_PATH = _paths.EXP / "backend_dev" / "data" / "e31" / "e31_record.json"
+REC_PATH = _paths.BD / "data" / "e31" / "e31_record.json"
 SLUG = {"PH040100000": "cavite", "PH040200000": "laguna", "PH040300000": "quezon", "PH040400000": "rizal",
         "PH040500000": "batangas"}
 
@@ -61,7 +61,9 @@ def test_default_quarters_are_nowcast_and_forecast(rec):
     f = get("/quarters", horizon="forecast").json()
     n = get("/quarters", horizon="nowcast").json()
     assert f["current"] == "2027-Q1" and f["quarters"][-1]["state"] == "forecast"
-    assert "2026-Q4" not in [x["id"] for x in f["quarters"]]          # a forecast view never shows a nowcast
+    # a forecast view never shows a nowcast: E34 lists 2026-Q4 there only as "unavailable", with the reason
+    fq = {x["id"]: x for x in f["quarters"]}
+    assert fq["2026-Q4"]["state"] == "unavailable" and "nowcast view" in fq["2026-Q4"]["reason"]
     # the default (nowcast) timeline opens on the quarter under way and keeps every mode labelled
     states = {x["id"]: x["state"] for x in n["quarters"]}
     assert n["current"] == "2026-Q4" and states["2026-Q4"] == "current" and states["2027-Q1"] == "forecast"

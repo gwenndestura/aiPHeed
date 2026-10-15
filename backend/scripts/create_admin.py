@@ -127,9 +127,9 @@ def main() -> None:
     email = args.email.strip().lower()
     if not security.email_domain_allowed(email):
         sys.exit(
-            f"{email} is outside the permitted domain "
-            f"@{settings.ADMIN_EMAIL_DOMAIN}. Change ADMIN_EMAIL_DOMAIN if that "
-            "is wrong."
+            f"{email} is outside the permitted domain(s) "
+            f"{', '.join('@' + d for d in settings.admin_email_domains)}. "
+            "Change ADMIN_EMAIL_DOMAINS if that is wrong."
         )
 
     if args.deactivate:

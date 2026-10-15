@@ -2,11 +2,8 @@
 app/api/v1/report.py
 ---------------------
 GET /api/v1/report?scope=region|province&id=&quarter=
-GET /api/v1/report/data?type=trend|shap&scope=&id=&from=&to=&municipality=
 
-/report returns a rendered PDF assessment for CALABARZON or for one province.
-/report/data returns the structured content the Visualization page lays out
-as its PDF (see app/services/report_data.py).
+Returns a rendered PDF assessment for CALABARZON or for one province.
 
 Public, like the dashboard it summarises -- and subject to the same review
 gate: a province a reviewer has withheld returns 404 forecast_withheld rather
@@ -23,16 +20,12 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
-from fastapi.concurrency import run_in_threadpool
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_db
 from app.services import dashboard as svc
 from app.services import report as rpt
-from app.services import plain_report
-from app.services import report_data as rdata
 from app.services import review as rv
 from app.services.ratelimit import report_guard
 
@@ -63,13 +56,6 @@ async def get_report(
     an admin has just withheld.
     """
     q = svc.resolve_quarter(quarter)
-    if svc.is_forecast_quarter(q):
-        # The report's wording describes the nowcast indicator; the E20
-        # forecast is a different target, so it is not rendered under it.
-        raise svc.QuarterNotAvailable(
-            f"Reports cover nowcast quarters only. The {q} forecast is a different "
-            "target and model; see the Forecast Period banner on the dashboard."
-        )
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
 
     if scope == "region":
@@ -90,34 +76,27 @@ async def get_report(
     )
 
 
-@router.get("/report/data", dependencies=[Depends(report_guard)])
+@router.get("/report/data")
 async def get_report_data(
-    type: str = Query(..., pattern="^(trend|shap)$"),
+    type: str = Query("trend", pattern="^(trend|shap)$"),
     scope: str = Query("region", pattern="^(region|province)$"),
-    id: str | None = Query(None, description="Province id for scope=province"),
-    from_: str | None = Query(None, alias="from", description="First quarter (trend)"),
-    to: str | None = Query(None, description="Last quarter (trend), or the quarter (shap)"),
-    municipality: str | None = Query(None, description="Optional LGU id inside the province"),
-    db: AsyncSession = Depends(get_db),
-) -> JSONResponse:
-    """
-    Structured content for the Visualization page's PDF reports.
+    id: str | None = Query(None),
+    from_: str | None = Query(None, alias="from"),
+    to: str | None = Query(None),
+    municipality: str | None = Query(None),
+):
+    """E31: the Visualization page's report payload, built from the E31 record (same numbers as the map)."""
+    from fastapi import HTTPException
 
-    Returns the plain-language report for DA Region IV-A staff
-    (app/services/plain_report.py). Every finding, number and sentence is
-    produced here from model output and backend data; the frontend only lays
-    it out. The technical payload (report_data.build_report) is kept for other
-    uses but no longer feeds these PDFs. Costs a SHAP pass per
-    province-quarter, hence the report rate limit. Withheld province-quarters
-    are blanked before any text is composed, and the response is never cached
-    for the same reason as /report.
-    """
-    end = to or svc.latest_quarter()
-    start = from_ or end
-    rejected = await rv.rejected_pairs(db)
+    from app.services import report_data_e31 as R
+
+    if not svc.e31_active():
+        raise HTTPException(status_code=404, detail="report data is served from the E31 record only")
     try:
-        body = await run_in_threadpool(
-            plain_report.build_plain_report, type, scope, id, start, end, rejected, municipality)
-    except rdata.ReportRequestError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    return JSONResponse(body, headers={"Cache-Control": "no-store"})
+        if type == "trend":
+            return R.trend(scope, id, from_, to)
+        if not id or not to:
+            raise HTTPException(status_code=422, detail="a driver report needs a province id and a quarter (to)")
+        return R.drivers(id, to)
+    except KeyError as ex:
+        raise HTTPException(status_code=404, detail=str(ex))

@@ -221,7 +221,8 @@ class TestReviewPipeline:
 
         again = api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers).json()["data"]
         quezon = next(i for i in again if i["provinceId"] == "quezon")
-        assert quezon["status"] == "Approved"
+        # E31 review statuses follow Figure 3.6.3 (Pending / Staged / Published / Archived): approving publishes.
+        assert quezon["status"] == "Published"
         assert len(again) == 5
 
     def test_rejection_reason_must_be_recognised(self, api):
@@ -241,7 +242,9 @@ class TestReviewPipeline:
                      json={"reason": "Data quality issue", "notes": "PSA revision pending."})
         assert r.status_code == 200
         item = r.json()
-        assert item["status"] == "Rejected"
+        # Figure 3.6.3: a rejection returns the record to Pending and keeps its reason; a Pending row with a
+        # reason is what "withheld" means publicly.
+        assert item["status"] == "Pending"
         assert item["rejectionReason"] == "Data quality issue"
         assert item["updatedByName"] == "J. Dela Cruz"
 
@@ -336,7 +339,8 @@ class TestRejectionIsEnforced:
         quarters = [p["quarter"] for p in series]
         # A zero here would read as a real fall to no risk.
         assert "2025-Q4" not in quarters
-        assert "2025-Q3" in quarters
+        # Neighbouring quarters stay. (E31 has no released label for 2025-Q2/Q3, so 2026-Q1 is the neighbour.)
+        assert "2026-Q1" in quarters
 
     def test_undo_republishes(self, api, rejected):
         api.post("/api/v1/admin/review/rv_2025Q4_laguna/undo", headers=rejected)

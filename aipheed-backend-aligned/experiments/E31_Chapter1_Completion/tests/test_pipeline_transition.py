@@ -26,7 +26,7 @@ def test_quarterly_transition_with_synthetic_inputs_carries_layers(tmp_path):
     S1 = D.merge(rounds[["quarter", "H"]], on="quarter").assign(S1=lambda x: x["H"] + 2 * x["D"])[["province_code", "quarter", "S1"]]
     N = D[D["quarter"] >= "2022-Q1"].assign(Dnow=lambda x: x["D"])[["province_code", "quarter", "Dnow"]]
     N = pd.concat([N, pd.DataFrame([{"province_code": p, "quarter": "2026-Q4", "Dnow": 0.1} for p in PROVS])])
-    lg = pd.read_csv(EXP / "backend_dev" / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
+    lg = pd.read_csv(_paths.BD / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
     files = {"sws_rounds": rounds, "s1_labels": S1, "d_quarterly_panel": D, "dnow_panel": N, "lgu_vulnerability": lg}
     reg = Registry(tmp_path / "reg.json")
     for sid, df in files.items():

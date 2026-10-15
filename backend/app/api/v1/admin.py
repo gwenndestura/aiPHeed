@@ -11,6 +11,8 @@ admin_router  (auth: admin)   mounted at /api/v1/admin
     DELETE /rejections/{province_id}/{quarter}
     GET    /audit
     GET    /feedback
+    POST   /pipeline/run
+    GET    /pipeline/status
 
 public_router (no auth)       mounted at /api/v1
     GET    /rejections?quarter=
@@ -40,14 +42,18 @@ from app.schemas.admin import (
     FeedbackSummary,
     RejectionRow,
     RejectionsResponse,
+    PipelineRunRequest,
+    PipelineRunStatus,
     RejectRequest,
     ReviewItem,
     ReviewListResponse,
 )
 from app.services import dashboard as svc
 from app.services import feedback as fb
+from app.services import pipeline_runs as runs
 from app.services import review as rv
 from app.services.ratelimit import feedback_guard
+from app.services.review import ReviewError
 from app.services.security import require_admin
 
 logger = logging.getLogger(__name__)
@@ -203,6 +209,54 @@ async def restore(
 ) -> ReviewItem:
     """Lift a rejection so the forecast publishes again."""
     return _item(await rv.restore(db, province_id.lower(), quarter, user))
+
+
+def _run_status(payload: dict) -> PipelineRunStatus:
+    return PipelineRunStatus(
+        status=payload["status"],
+        running=payload["running"],
+        startedAt=payload.get("started_at"),
+        startedBy=payload.get("started_by"),
+        finishedAt=payload.get("finished_at"),
+        error=payload.get("error"),
+        lastRun=payload.get("last_run"),
+    )
+
+
+@admin_router.post("/pipeline/run", response_model=PipelineRunStatus, status_code=202)
+async def run_pipeline(
+    body: PipelineRunRequest,
+    user: AdminUser = Depends(require_admin),
+) -> PipelineRunStatus:
+    """
+    Trigger the quarterly cycle (Figure 3.6.1, Run Quarterly Pipeline).
+
+    Collecting that quarter's news and government data is included in the run,
+    since no forecast can be produced without it. The cycle takes far longer
+    than a request, so this returns 202 immediately and the work continues on a
+    worker thread; poll `GET /pipeline/status`.
+
+    Every forecast and alert the run produces is STAGED. Nothing reaches the
+    public dashboard until an administrator approves it.
+    """
+    try:
+        payload = runs.start(
+            actor_email=user.email,
+            skip_collect=body.skipCollect,
+            skip_train=body.skipTrain,
+            quarter=body.quarter,
+        )
+    except RuntimeError as exc:
+        raise ReviewError(str(exc), code="pipeline_already_running") from exc
+    return _run_status(payload)
+
+
+@admin_router.get("/pipeline/status", response_model=PipelineRunStatus)
+async def pipeline_status(
+    user: AdminUser = Depends(require_admin),
+) -> PipelineRunStatus:
+    """State of the current or most recent quarterly cycle."""
+    return _run_status(runs.status())
 
 
 @admin_router.get("/audit", response_model=AuditResponse)

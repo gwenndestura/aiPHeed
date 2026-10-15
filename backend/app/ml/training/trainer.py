@@ -1,32 +1,52 @@
 """
 app/ml/training/trainer.py
 
-LightGBM training with Walk-Forward Expanding-Window Cross-Validation.
+Algorithm 3 — LightGBM Lead Time Discovery
+Algorithm 4 — Optuna Tree-structured Parzen Estimator (TPE)
 
-Walk-Forward CV is MANDATORY for time-series data.
-The forecast gap is NOT fixed. discover_max_lead_time() iterates k = 1, 2, 3 ...
-and halts at the first k where mean walk-forward Accuracy drops below
-ACCURACY_THRESHOLD (75%). The last passing k becomes the Operationally Valid
-Forecast Horizon used for the Optuna search and production model.
+Both are implemented as approved in Section 3.4 of the proposal.
 
-This directly answers Research Question 2:
-  "What is the furthest lead time at which aiPHeed can reliably forecast
-   province-level food insecurity risk across CALABARZON?"
+Algorithm 3 (Section 3.4, Figure 3.4.3)
+    Iterate forecast horizons k from 1 to 8 quarters. At each k, run
+    walk-forward expanding-window cross-validation with a forecast gap of k
+    quarters and a minimum training window of 8 quarters. Fit a default
+    LightGBM classifier and evaluate per fold, recording accuracy, precision,
+    recall, F1 and AUC-ROC. If mean fold accuracy meets the 75% threshold,
+    record k and advance. When accuracy first drops below 75%, halt and return
+    the last passing k as the Maximum Reliable Lead Time.
 
-Overfitting controls:
-  - dynamic forecast_gap   : empirically discovered, no look-ahead leakage
-  - HOLDOUT_QUARTERS : last N quarters never seen during Optuna search; used for
-                       the final honest out-of-sample evaluation
-  - class_weight="balanced" : counters class imbalance without hand-tuning
-  - min_child_samples in [10, 50] : prevents leaves with too few samples
-  - reg_alpha / reg_lambda searched log-uniformly over [1e-8, 10]
+Algorithm 4 (Section 3.4, Figure 3.4.4)
+    A 100-trial Optuna TPE study optimizes nine LightGBM hyperparameters
+    (number of leaves, maximum depth, learning rate, number of estimators,
+    minimum child samples, subsample ratio, column subsample ratio, L1
+    regularization, L2 regularization) using the Maximum Reliable Lead Time k
+    as the fixed forecast gap. Each trial runs a walk-forward CV and returns
+    mean weighted F1. The best parameter set is evaluated once on the last four
+    holdout quarters, never exposed to Optuna, targeting F1 >= 0.75 and
+    AUC-ROC >= 0.80. The final model is retrained on all available data and
+    serialized to lgbm_best.pkl.
+
+Feature vector (Equation 5, Section 3.4.2)
+    y_hat(p, t+h) = F[ FSSI(t), FSSI(t-1), FSSI(t-2), dFSSI(t),
+                       trigger(t), CPI_dev(t), unemp(t), rice_change(t) ]
+    — the twelve features Section 3.3.2.7 retains. The two-stage selection
+    process runs and records what it retains on the current data; where that
+    differs, Equation 5 is the approved model input and wins, and the
+    difference is logged. See feature_selector.model_features().
+
+Overfitting controls named in the approved methodology:
+  - two-stage feature selection (Section 3.3.2.7) reducing the candidate pool
+  - walk-forward expanding-window CV with no look-ahead (Rule 3)
+  - HOLDOUT_QUARTERS: last 4 quarters never seen during the Optuna search
+  - L1/L2 regularization searched by the TPE sampler
 
 Usage:
     from app.ml.training.trainer import train_model
     result = train_model()
-    print(result["max_reliable_lead_time"])  # e.g. 3
+    print(result["max_reliable_lead_time"])
 """
 
+import json
 import logging
 import joblib
 import mlflow
@@ -37,6 +57,8 @@ import pandas as pd
 from pathlib import Path
 from lightgbm import LGBMClassifier
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+
+from app.ml.features.feature_selector import model_features
 from app.ml.training.cross_validation import WalkForwardSplitter
 
 logger = logging.getLogger(__name__)
@@ -46,137 +68,60 @@ FEATURES_PATH = Path("data/processed/features_fused.parquet")
 LABELS_PATH   = Path("data/processed/labels.parquet")
 MODEL_PATH    = Path("models/lgbm_best.pkl")
 STUDY_PATH    = Path("models/optuna_study.pkl")
-
-# ── Feature columns — reduced to 15 (2026-07-29) ────────────────────────────
-# Cut from 45 to 15 by LightGBM gain importance (averaged over 10 seeds; see
-# scripts/select_top_features.py), with slots RESERVED for the NLP signal so
-# the study's news contribution is retained even though it ranks low at the
-# current article density:
-#   • NLP (5): the 4 FSSI features + trigger_climate (top-ranked trigger)
-#   • Government (10): the 10 highest-importance primary-data features
-# pct_total_hunger stays excluded (label leakage — see label_generator).
-# Features derived from food CPI are EXCLUDED as label leakage. stress_score is
-#   sws_hunger_t + 2 * (food_cpi_yoy_p,t - regional_mean_food_cpi_yoy_t)
-# and sws_hunger_t is identical across all five provinces in a given quarter, so
-# the food-CPI deviation term is the ONLY source of province-level variation in
-# label_stress. Feeding food_cpi_yoy (or its lag/accel/level, or the
-# food-minus-headline contrast that contains it) to the model hands it the
-# entire province-discriminating signal of its own target. Same class of
-# leakage as pct_total_hunger, one step removed.
-LEAKY_LABEL_FEATURES = [
-    "food_cpi_yoy", "food_cpi_yoy_lag1", "food_cpi_yoy_accel", "food_cpi",
-    "food_minus_headline_yoy", "food_minus_headline_yoy_lag1",
-    "food_minus_headline_yoy_accel",
-]
-
-# Lagged label features. label_stress is autocorrelated at 0.81, and naive
-# persistence scores 0.8125 accuracy purely on y_{t-1}. Withholding the lagged
-# label while benchmarking against persistence compares a model to a baseline
-# holding strictly more information. At forecast_gap=0 y_{t-1} is known at
-# prediction time; _add_label_lags shifts by (gap + 1) so the lag is never
-# drawn from inside the forecast window.
-LABEL_LAG_COLS = ["label_lag1", "label_lag2", "quarters_since_flip"]
-
-# Features that carry NO province-level variation — the same value is inherited
-# by all five provinces in a given quarter. They contribute temporal signal only.
-# Measured cross-province correlation of the underlying series:
-#   rainfall_anomaly_pct  1.0000  (was manufactured as Quezon x a constant;
-#                                  demoted to a regional series 2026-09-01)
-#   unemployment_rate     1.0000  (PSA publishes no province cut)
-#   headline_cpi          1.0000
-#   ofw_remit_yoy_pct     1.0000  (national BSP series)
-#   diesel_php_per_l      1.0000  (national DOE series)
-# Kept because their time variation is real, but none of them can help the model
-# tell one province from another. FSSI (corr -0.0095) is the only feature in this
-# matrix carrying genuinely independent province-level variation.
-REGIONAL_ONLY_FEATURES = [
-    "rainfall_anomaly_pct", "rainfall_anomaly_pct_lag1", "rainfall_anomaly_pct_accel",
-    "unemployment_rate", "unemployment_rate_lag1", "unemployment_rate_accel",
-    "headline_cpi", "ofw_remit_yoy_pct", "ofw_remit_yoy_pct_lag1",
-    "diesel_php_per_l", "diesel_php_per_l_lag1",
-]
-
-FEATURE_COLS = [
-    # ── NLP / FSSI (secondary data) — reserved ──
-    "FSSI", "FSSI_lag1", "FSSI_lag2", "FSSI_accel",
-    "trigger_climate",
-    # ── Label persistence — what the naive baseline gets ──
-    "label_lag1", "label_lag2", "quarters_since_flip",
-    # ── Primary data, province-varying ──
-    "commodity_livestock", "commodity_leafy_veg", "commodity_fruit_veg",
-    "rice_price_regular_lag1",
-    # ── Primary data, regional only (temporal signal; see above) ──
-    "ofw_remit_yoy_pct_lag1", "unemployment_rate_lag1",
-    "headline_cpi", "diesel_php_per_l_lag1",
-    "rainfall_anomaly_pct_lag1", "rainfall_anomaly_pct_accel",
-]
+# The dashboard and the PDF read this file. It is written here, beside the
+# model bundle, so the served metrics always describe the model on disk.
+RESULTS_PATH  = Path("data/processed/training_results.json")
 
 LABEL_COL    = "label_stress"
 PROVINCE_COL = "province_code"
 QUARTER_COL  = "quarter"
 
-# ── Training configuration ────────────────────────────────────────────────────
-N_TRIALS           = 100
+# ── Training configuration (Section 3.4) ─────────────────────────────────────
+N_TRIALS           = 100  # Algorithm 4: 100-trial Optuna TPE study
 RANDOM_SEED        = 42
-HOLDOUT_QUARTERS   = 4   # last N quarters withheld from Optuna; used for final eval
-MIN_TRAIN_QUARTERS = 8   # minimum training window for the first CV fold
+HOLDOUT_QUARTERS   = 4    # Algorithm 4: last 4 quarters, never exposed to Optuna
+MIN_TRAIN_QUARTERS = 8    # Algorithm 3: minimum training window of 8 quarters
 
-# ── Lead time discovery configuration ────────────────────────────────────────
-# FORECAST_GAP is no longer a fixed constant. discover_max_lead_time() iterates
-# k = 1 .. MAX_LEAD_QUARTERS and returns the furthest k where Accuracy >= threshold.
-ACCURACY_THRESHOLD  = 0.75   # reliable forecasting standard (75%)
-MAX_LEAD_QUARTERS   = 8      # upper bound for the lead-time search
+# ── Algorithm 3 configuration ────────────────────────────────────────────────
+ACCURACY_THRESHOLD = 0.75  # Section 3.4.4 reliability threshold
+MAX_LEAD_QUARTERS  = 8     # Algorithm 3 iterates k = 1 .. 8
 
-# ── Performance targets ───────────────────────────────────────────────────────
+# ── Algorithm 4 performance targets (Section 3.4.4) ──────────────────────────
 TARGET_F1      = 0.75
 TARGET_ROC_AUC = 0.80
 
+# Default LightGBM for the Algorithm 3 discovery scan. Algorithm 3 specifies
+# "a default LightGBM classifier"; hyperparameter search belongs to Algorithm 4,
+# which runs after the horizon is known.
+DISCOVERY_PARAMS: dict = {
+    "objective":     "binary",
+    "verbosity":     -1,
+    "boosting_type": "gbdt",
+    "random_state":  RANDOM_SEED,
+    "class_weight":  "balanced",
+}
 
-def _add_label_lags(df: pd.DataFrame, forecast_gap: int) -> pd.DataFrame:
+
+def feature_columns() -> list[str]:
     """
-    Add lagged-label features, shifted to respect the forecast horizon.
+    The model's input vector: Equation 5's arguments (Section 3.3.2.7).
 
-    Predicting quarter t at a gap of k means the most recent label actually
-    observable is y_{t-k-1}, so every lag is offset by (gap + 1). At gap=0 that
-    is y_{t-1} — exactly what naive persistence uses. Rows with no history are
-    dropped by the caller via NaN handling rather than imputed, since a filled
-    lag would be a fabricated observation.
-
-    quarters_since_flip counts quarters since the label last changed value, so
-    the model can learn how stale a persistent run is — the signal that
-    distinguishes "still stressed" from "about to flip".
+    The two-stage selection process still runs and records what it retains on
+    the current data; where that differs from Equation 5, the difference is
+    logged and Equation 5 wins, because it is the approved model input.
+    See feature_selector.model_features().
     """
-    out = df.sort_values([PROVINCE_COL, QUARTER_COL]).copy()
-    shift = forecast_gap + 1
-    g = out.groupby(PROVINCE_COL)[LABEL_COL]
-
-    out["label_lag1"] = g.shift(shift)
-    out["label_lag2"] = g.shift(shift + 1)
-
-    def _since_flip(s: pd.Series) -> pd.Series:
-        lagged = s.shift(shift)
-        run = lagged.groupby((lagged != lagged.shift()).cumsum()).cumcount()
-        return run.where(lagged.notna())
-
-    out["quarters_since_flip"] = (
-        out.groupby(PROVINCE_COL)[LABEL_COL].transform(_since_flip)
-    )
-
-    before = len(out)
-    out = out.dropna(subset=["label_lag1", "label_lag2"]).reset_index(drop=True)
-    logger.info(
-        "_add_label_lags: gap=%d -> shift=%d | %d rows (dropped %d without label history)",
-        forecast_gap, shift, len(out), before - len(out),
-    )
-    return out
+    return model_features()
 
 
-def _load_data(forecast_gap: int = 0) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
+def _load_data() -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """
-    Load features_fused.parquet and labels.parquet.
-    Join on province_code + quarter, then attach lagged-label features at the
-    given forecast gap.
-    Returns X (features), y (labels), quarters (for walk-forward splits).
+    Load features_fused.parquet and labels.parquet, join on province-quarter,
+    and return (X, y, quarters) over the selected feature set.
+
+    No lagged-label features are constructed: the approved feature vector
+    (Equation 5) is FSSI and its lags, the five trigger proportions, and the
+    three government indicators. The label's own history is not among them.
     """
     if not FEATURES_PATH.exists():
         raise FileNotFoundError(
@@ -191,232 +136,241 @@ def _load_data(forecast_gap: int = 0) -> tuple[pd.DataFrame, pd.Series, pd.Serie
 
     features = pd.read_parquet(FEATURES_PATH)
     labels   = pd.read_parquet(LABELS_PATH)
-
-    leaked = [c for c in LEAKY_LABEL_FEATURES if c in FEATURE_COLS]
-    if leaked:
-        raise ValueError(
-            f"Label-leaking features present in FEATURE_COLS: {leaked}. "
-            "These are inputs to stress_score — see LEAKY_LABEL_FEATURES."
-        )
+    from app.ml.features.label_guard import assert_not_leaky  # E29 (D9): refuse whole-period-median labels
+    assert_not_leaky(labels, "trainer")
 
     df = features.merge(
         labels[[PROVINCE_COL, QUARTER_COL, LABEL_COL]],
         on=[PROVINCE_COL, QUARTER_COL],
         how="inner",
-    )
+    ).sort_values([QUARTER_COL, PROVINCE_COL]).reset_index(drop=True)
 
-    df = df.sort_values([QUARTER_COL, PROVINCE_COL]).reset_index(drop=True)
-    df = _add_label_lags(df, forecast_gap=forecast_gap)
-
-    missing = [c for c in FEATURE_COLS if c not in df.columns]
+    cols = feature_columns()
+    missing = [c for c in cols if c not in df.columns]
     if missing:
-        raise ValueError(f"Missing feature columns: {missing}")
+        raise ValueError(
+            f"Selected feature columns absent from the fused matrix: {missing}. "
+            "Re-run feature_matrix.py, then feature_selector.select_features()."
+        )
 
-    X        = df[FEATURE_COLS]
+    X        = df[cols]
     y        = df[LABEL_COL].astype(int)
     quarters = df[QUARTER_COL]
 
     logger.info(
-        "Data loaded: %d rows | %d features | label distribution: %s",
-        len(df), len(FEATURE_COLS),
-        y.value_counts().to_dict(),
+        "Data loaded: %d province-quarter rows | %d features | label distribution: %s",
+        len(df), len(cols), y.value_counts().to_dict(),
     )
     return X, y, quarters
+
+
+def _quarter_to_index(q: str) -> int:
+    """Calendar position of a quarter, so gaps are measured in real quarters."""
+    year, part = str(q).split("-Q")
+    return int(year) * 4 + int(part) - 1
+
+
+def _province_of(index: pd.Index) -> pd.Series:
+    """
+    Province code per training row.
+
+    Rebuilt with the same join and the same sort `_load_data` uses, rather than
+    assuming an ordering, because the k-ahead pairing matches a province to
+    itself and a silent misalignment would pair provinces across each other.
+    """
+    features = pd.read_parquet(FEATURES_PATH)
+    labels   = pd.read_parquet(LABELS_PATH)
+    from app.ml.features.label_guard import assert_not_leaky  # E29 (D9): refuse whole-period-median labels
+    assert_not_leaky(labels, "trainer")
+    df = features.merge(
+        labels[[PROVINCE_COL, QUARTER_COL, LABEL_COL]],
+        on=[PROVINCE_COL, QUARTER_COL], how="inner",
+    ).sort_values([QUARTER_COL, PROVINCE_COL]).reset_index(drop=True)
+    if len(df) != len(index):
+        raise ValueError(
+            f"province lookup built {len(df)} rows for a {len(index)}-row "
+            "training frame; the join no longer matches _load_data()."
+        )
+    return pd.Series(df[PROVINCE_COL].values, index=index)
 
 
 def discover_max_lead_time(
     X: pd.DataFrame | None = None,
     y: pd.Series | None = None,
     quarters: pd.Series | None = None,
-) -> int:
+) -> tuple[int, list[dict]]:
     """
-    Empirically identify the furthest lead time k where mean walk-forward
-    Accuracy >= ACCURACY_THRESHOLD (75%).
+    Algorithm 3 — LightGBM Lead Time Discovery.
 
-    Strategy
-    --------
-    Uses a fast default LightGBM (no Optuna) to scan k = 1, 2, ... MAX_LEAD_QUARTERS.
-    For each k, walk-forward CV is run and mean Accuracy is computed across folds.
-    The loop halts at the first k where mean Accuracy < ACCURACY_THRESHOLD.
-    The last k that passed the threshold is returned as the Operationally Valid
-    Forecast Horizon used for the full Optuna training run.
+    Iterates k = 1 .. MAX_LEAD_QUARTERS. At each k, walk-forward
+    expanding-window CV runs with forecast gap k and a minimum training window
+    of 8 quarters; a default LightGBM is fitted per fold and accuracy,
+    precision, recall, F1 and AUC-ROC are recorded. k is recorded when mean
+    fold accuracy meets the 75% threshold; the search halts at the first k that
+    does not, returning the last passing k.
 
-    This directly answers Research Question 2:
-      "What is the furthest lead time at which aiPHeed can reliably forecast
-       province-level food insecurity risk across CALABARZON?"
+    Answers Research Question 2: "What is the furthest lead time at which
+    aiPHeed can reliably forecast province-level food insecurity risk across
+    CALABARZON?"
 
     Returns
     -------
-    int : max reliable lead time in quarters, or 0 when no horizon reaches the
-          threshold — including k=1. 0 is a real answer, not an error: it says
-          the model cannot forecast ahead reliably and is operating as a
-          nowcast (forecast_gap=0 tests on the immediately next quarter).
-          This previously floored at 1, which reported a passing horizon even
-          when the k=1 scan had failed.
+    (k_max, per_k_metrics)
+        k_max is the Maximum Reliable Lead Time. It is 0 when no horizon
+        reaches the threshold, k=1 included — a real answer meaning no lead
+        time is publishable under Section 3.4.4, not an error.
     """
+    if X is None or y is None or quarters is None:
+        X, y, quarters = _load_data()
+
     logger.info("=" * 60)
     logger.info(
-        "LEAD TIME DISCOVERY — Accuracy threshold: %.0f%% | Max search: %d quarters",
+        "ALGORITHM 3 — LEAD TIME DISCOVERY | accuracy threshold %.0f%% | k = 1..%d",
         ACCURACY_THRESHOLD * 100, MAX_LEAD_QUARTERS,
     )
     logger.info("=" * 60)
 
-    # Default params for the discovery scan — fast, no Optuna overhead.
-    discovery_params = {
-        "objective":     "binary",
-        "verbosity":     -1,
-        "boosting_type": "gbdt",
-        "random_state":  RANDOM_SEED,
-        "class_weight":  "balanced",
-        "n_estimators":  200,
-        "learning_rate": 0.05,
-        "num_leaves":    63,
-        "max_depth":     6,
-    }
-
-    # 0 until a horizon actually passes. Do NOT floor this at 1: doing so
-    # reports a reliable 1-quarter horizon even when the k=1 scan failed.
+    df_quarters = pd.DataFrame({QUARTER_COL: quarters.values}, index=X.index)
     k_max = 0
+    per_k: list[dict] = []
+
+    # Rule 2 evaluates "forward-looking lead times", and Rule 3 requires every
+    # feature to come from "data available before the forecast period". A k-step
+    # forecast therefore has to pair the features of quarter q with the LABEL of
+    # quarter q + k, so that predicting quarter T uses only quarter T - k.
+    #
+    # The earlier implementation walked the splitter with forecast_gap=k over
+    # same-quarter rows, which trains features(q) -> label(q) and tests
+    # features(T) -> label(T). That is a nowcast whose training window is merely
+    # staler by k; it never asks the model to predict ahead, and at test time it
+    # reads features from inside the forecast period. Two further consequences
+    # made it wrong in detail: the splitter indexes POSITIONS in the list of
+    # labelled quarters, and five calendar quarters carry no SWS round, so the
+    # last k=1 fold was really a four-quarter horizon (train to 2024-Q4, test
+    # 2025-Q4) while being counted as one.
+    #
+    # Pairing is done on calendar indices and within province, so a missing
+    # quarter drops the pair rather than silently widening the horizon.
+    cal = quarters.map(_quarter_to_index)
+    provinces = _province_of(X.index)
 
     for k in range(1, MAX_LEAD_QUARTERS + 1):
-        # Reload per k: lagged-label features must be shifted by (k + 1) so the
-        # lag never comes from inside the forecast window.
-        X, y, quarters = _load_data(forecast_gap=k)
-        df_quarters = pd.DataFrame({QUARTER_COL: quarters.values}, index=X.index)
+        pair = pd.DataFrame({
+            "row": X.index, "province": provinces.values,
+            "cal": cal.values, "y_now": y.values,
+        })
+        future = pair[["province", "cal", "y_now"]].rename(
+            columns={"cal": "cal_target", "y_now": "y_future"})
+        future["cal"] = future["cal_target"] - k
+        pair = pair.merge(future, on=["province", "cal"], how="inner")
 
-        splitter = WalkForwardSplitter(
-            min_train_quarters=MIN_TRAIN_QUARTERS,
-            forecast_gap=k,
-        )
-
-        try:
-            n_folds = splitter.get_n_splits(df_quarters)
-        except ValueError:
-            logger.info("k=%d: not enough quarters for gap=%d. Stopping search.", k, k)
-            break
-
-        if n_folds < 2:
-            logger.info("k=%d: only %d fold(s) — insufficient for reliable estimate. Stopping.", k, n_folds)
+        target_quarters = sorted(pair["cal_target"].unique())
+        if len(target_quarters) <= MIN_TRAIN_QUARTERS:
+            logger.info("k=%d: not enough paired quarters. Search stops here.", k)
             break
 
         fold_metrics: dict[str, list[float]] = {
-            "accuracy":  [],
-            "precision": [],
-            "recall":    [],
-            "f1":        [],
-            "roc_auc":   [],
-            "persistence_accuracy": [],
+            "accuracy": [], "precision": [], "recall": [], "f1": [], "roc_auc": [],
         }
 
-        for train_idx, test_idx in splitter.split(df_quarters):
-            if len(train_idx) < 5 or len(test_idx) < 1:
+        for i in range(MIN_TRAIN_QUARTERS, len(target_quarters)):
+            t_target = target_quarters[i]
+            tr = pair[pair["cal_target"] < t_target]
+            te = pair[pair["cal_target"] == t_target]
+            if len(tr) < 5 or len(te) < 1:
                 continue
+            train_idx, test_idx = tr["row"].values, te["row"].values
+            y_train = pd.Series(tr["y_future"].values, index=train_idx)
+            y_test  = pd.Series(te["y_future"].values, index=test_idx)
 
-            y_train = y.loc[train_idx]
-            y_test  = y.loc[test_idx]
-
-            model = LGBMClassifier(**discovery_params)
+            model = LGBMClassifier(**DISCOVERY_PARAMS)
             model.fit(X.loc[train_idx], y_train)
             y_pred  = model.predict(X.loc[test_idx])
             y_proba = model.predict_proba(X.loc[test_idx])[:, 1]
 
             fold_metrics["accuracy"].append(accuracy_score(y_test, y_pred))
-            # Persistence on the same fold: predict the last observable label.
-            fold_metrics["persistence_accuracy"].append(
-                accuracy_score(y_test, X.loc[test_idx, "label_lag1"].astype(int))
-            )
             fold_metrics["precision"].append(
-                precision_score(y_test, y_pred, average="weighted", zero_division=0)
-            )
+                precision_score(y_test, y_pred, average="weighted", zero_division=0))
             fold_metrics["recall"].append(
-                recall_score(y_test, y_pred, average="weighted", zero_division=0)
-            )
+                recall_score(y_test, y_pred, average="weighted", zero_division=0))
             fold_metrics["f1"].append(
-                f1_score(y_test, y_pred, average="weighted", zero_division=0)
-            )
+                f1_score(y_test, y_pred, average="weighted", zero_division=0))
             if y_test.nunique() > 1:
                 fold_metrics["roc_auc"].append(roc_auc_score(y_test, y_proba))
 
         if not fold_metrics["accuracy"]:
-            logger.info("k=%d: no valid folds produced. Stopping.", k)
+            logger.info("k=%d: no valid fold produced. Search stops here.", k)
             break
+        n_folds = len(fold_metrics["accuracy"])
 
-        # Skill over persistence. An absolute accuracy threshold is not a
-        # standard here: label_stress is autocorrelated at ~0.81, so copying
-        # y_{t-1} already scores ~0.8125 and clears the 75% bar without a model.
-        # What matters is whether the model beats that baseline.
-        persist_acc = float(np.mean(fold_metrics["persistence_accuracy"])) \
-            if fold_metrics.get("persistence_accuracy") else float("nan")
+        def _mean(key: str) -> float:
+            vals = fold_metrics[key]
+            return float(np.mean(vals)) if vals else float("nan")
 
-        mean_acc       = float(np.mean(fold_metrics["accuracy"]))
-        mean_precision = float(np.mean(fold_metrics["precision"])) if fold_metrics["precision"] else float("nan")
-        mean_recall    = float(np.mean(fold_metrics["recall"]))    if fold_metrics["recall"]    else float("nan")
-        mean_f1        = float(np.mean(fold_metrics["f1"]))        if fold_metrics["f1"]        else float("nan")
-        mean_auc       = float(np.mean(fold_metrics["roc_auc"]))   if fold_metrics["roc_auc"]   else float("nan")
-        passed         = mean_acc >= ACCURACY_THRESHOLD
+        mean_acc = _mean("accuracy")
+        record = {
+            "k": k,
+            "n_folds": len(fold_metrics["accuracy"]),
+            "accuracy":  round(mean_acc, 4),
+            "precision": round(_mean("precision"), 4),
+            "recall":    round(_mean("recall"), 4),
+            "f1":        round(_mean("f1"), 4),
+            "roc_auc":   round(_mean("roc_auc"), 4),
+            "passed":    bool(mean_acc >= ACCURACY_THRESHOLD),
+        }
+        per_k.append(record)
 
-        skill = mean_acc - persist_acc
         logger.info(
-            "k=%-2d | Accuracy=%.4f | persistence=%.4f | skill=%+.4f | "
+            "k=%-2d | folds=%d | Accuracy=%.4f | Precision=%.4f | Recall=%.4f | "
             "F1=%.4f | AUC-ROC=%.4f | %s",
-            k, mean_acc, persist_acc, skill, mean_f1, mean_auc,
-            "PASS  (>= 75%)" if passed else "FAIL  (< 75%) — HALTING",
+            k, record["n_folds"], mean_acc, record["precision"], record["recall"],
+            record["f1"], record["roc_auc"],
+            "PASS (>= 75%)" if record["passed"] else "FAIL (< 75%) — HALTING",
         )
-        if passed and skill <= 0:
-            logger.warning(
-                "k=%d clears the %.0f%% bar but does NOT beat persistence "
-                "(skill %+.4f). The absolute threshold is weaker than the naive "
-                "baseline — report skill, not raw accuracy.",
-                k, ACCURACY_THRESHOLD * 100, skill,
-            )
 
-        if passed:
+        if record["passed"]:
             k_max = k
+            continue
+
+        if k_max == 0:
+            logger.warning(
+                "Accuracy %.4f < %.0f%% at the shortest horizon (k=1). No lead "
+                "time meets the Section 3.4.4 reliability threshold, so none is "
+                "published operationally and the Maximum Reliable Lead Time is 0.",
+                mean_acc, ACCURACY_THRESHOLD * 100,
+            )
         else:
-            if k_max == 0:
-                logger.warning(
-                    "Accuracy %.4f < %.0f%% at the shortest horizon (k=1). "
-                    "NO lead time meets the reliability threshold — reporting 0. "
-                    "The model is a nowcast, not a forecaster.",
-                    mean_acc, ACCURACY_THRESHOLD * 100,
-                )
-            else:
-                logger.info(
-                    "Accuracy fell below %.0f%% at k=%d. "
-                    "Maximum Reliable Lead Time = %d quarter(s) ahead.",
-                    ACCURACY_THRESHOLD * 100, k, k_max,
-                )
-            break
+            logger.info(
+                "Accuracy fell below %.0f%% at k=%d. Maximum Reliable Lead Time "
+                "= %d quarter(s) ahead.",
+                ACCURACY_THRESHOLD * 100, k, k_max,
+            )
+        break
     else:
         logger.info(
-            "All lead times up to k=%d passed the threshold. "
-            "Maximum Reliable Lead Time = %d quarter(s) ahead.",
+            "Every lead time up to k=%d passed. Maximum Reliable Lead Time = %d quarter(s).",
             MAX_LEAD_QUARTERS, k_max,
         )
 
     logger.info("=" * 60)
-    logger.info("OPERATIONALLY VALID FORECAST HORIZON: %d quarter(s)", k_max)
+    logger.info("MAXIMUM RELIABLE LEAD TIME: %d quarter(s)", k_max)
     logger.info("=" * 60)
-    return k_max
+    return k_max, per_k
 
 
 def _make_objective(
     X_cv: pd.DataFrame,
     y_cv: pd.Series,
     df_cv: pd.DataFrame,
-    forecast_gap: int = 1,
+    forecast_gap: int,
 ) -> callable:
     """
-    Build Optuna objective using Walk-Forward CV on the CV window only.
+    Algorithm 4 objective: run walk-forward CV with forecast gap k, fit
+    LightGBM on each fold, and return mean weighted F1.
 
-    Optimizes the COMPOSITE objective:
-        score = 0.6 * mean(weighted_F1) + 0.4 * mean(ROC-AUC across folds with both classes)
-
-    F1 captures classification quality; ROC-AUC captures ranking quality. Weight
-    favours F1 slightly because the holdout positive rate (40%) is still below
-    50%, so threshold-based F1 is a stronger signal than threshold-free AUC.
-    Both targets must be hit per Backend Guide v3 (F1 ≥ 0.75, AUC ≥ 0.80).
-    Folds with single-class y_test contribute only to F1 (AUC undefined there).
+    Nine hyperparameters are proposed per trial, exactly those Section 3.4
+    names: num_leaves, max_depth, learning_rate, n_estimators,
+    min_child_samples, subsample, colsample_bytree, reg_alpha, reg_lambda.
     """
     def objective(trial: optuna.Trial) -> float:
         params = {
@@ -425,138 +379,132 @@ def _make_objective(
             "boosting_type":     "gbdt",
             "random_state":      RANDOM_SEED,
             "class_weight":      "balanced",
-            # Search space sized for the data, not for a large dataset. With
-            # ~115 rows the previous space (num_leaves up to 150, depth to 10,
-            # reg_alpha down to 1e-8) could fit a leaf per observation; Optuna
-            # never converged, swinging num_leaves 137->78->112 across runs.
-            # A tree here can only afford a handful of splits.
-            "num_leaves":        trial.suggest_int("num_leaves", 2, 8),
-            "max_depth":         trial.suggest_int("max_depth", 2, 4),
-            "learning_rate":     trial.suggest_float("learning_rate", 1e-3, 0.2, log=True),
-            "n_estimators":      trial.suggest_int("n_estimators", 50, 400),
-            "min_child_samples": trial.suggest_int("min_child_samples", 10, 30),
+            "num_leaves":        trial.suggest_int("num_leaves", 2, 64),
+            "max_depth":         trial.suggest_int("max_depth", 2, 10),
+            "learning_rate":     trial.suggest_float("learning_rate", 1e-3, 0.3, log=True),
+            "n_estimators":      trial.suggest_int("n_estimators", 50, 500),
+            "min_child_samples": trial.suggest_int("min_child_samples", 10, 50),
+            # Algorithm 4 tunes `subsample`, and LightGBM ignores it unless
+            # bagging is switched on: `bagging_fraction` only applies when
+            # `bagging_freq > 0`, and the default is 0. Verified directly --
+            # subsample 0.6 and 1.0 produce byte-identical predictions without
+            # this line. One of the nine approved hyperparameters was therefore
+            # being searched across all 100 trials with no effect on the model.
+            "subsample_freq":    1,
             "subsample":         trial.suggest_float("subsample", 0.6, 1.0),
             "colsample_bytree":  trial.suggest_float("colsample_bytree", 0.5, 1.0),
-            "reg_alpha":         trial.suggest_float("reg_alpha", 1e-3, 10.0, log=True),
-            "reg_lambda":        trial.suggest_float("reg_lambda", 1e-3, 10.0, log=True),
+            "reg_alpha":         trial.suggest_float("reg_alpha", 1e-8, 10.0, log=True),
+            "reg_lambda":        trial.suggest_float("reg_lambda", 1e-8, 10.0, log=True),
         }
 
         splitter = WalkForwardSplitter(
-            min_train_quarters=MIN_TRAIN_QUARTERS,
-            forecast_gap=forecast_gap,
+            min_train_quarters=MIN_TRAIN_QUARTERS, forecast_gap=forecast_gap,
         )
-        fold_f1_scores  = []
-        fold_auc_scores = []
+        fold_f1: list[float] = []
 
         for train_idx, test_idx in splitter.split(df_cv):
             if len(train_idx) < 5 or len(test_idx) < 1:
                 continue
-
-            X_train = X_cv.loc[train_idx]
-            y_train = y_cv.loc[train_idx]
-            X_test  = X_cv.loc[test_idx]
-            y_test  = y_cv.loc[test_idx]
-
             model = LGBMClassifier(**params)
-            model.fit(X_train, y_train)
+            model.fit(X_cv.loc[train_idx], y_cv.loc[train_idx])
 
-            y_pred  = model.predict(X_test)
-            y_proba = model.predict_proba(X_test)[:, 1]
+            # A fit that found no split is not a model. It happens here because
+            # `min_child_samples` ranges to 50 while the earliest walk-forward
+            # fold trains on 8 quarters x 5 provinces = 40 rows: no leaf can
+            # hold 50 samples, so LightGBM returns one tree, zero splits, and a
+            # constant 0.5 for every row.
+            #
+            # Such a configuration has to be rejected rather than scored,
+            # because the objective Algorithm 4 specifies -- mean weighted F1 --
+            # *rewards* it. Whole quarters in this label are unanimous (2021-Q3,
+            # 2021-Q4 and 2023-Q1 are entirely negative; 2024-Q2, 2024-Q4 and
+            # 2025-Q1 entirely positive), and a constant predictor scores F1 1.0
+            # on every unanimous fold. Left unguarded the search converges on
+            # not learning, and the holdout then reports accuracy 0.9000 and F1
+            # 0.8526 -- the majority rate of an 18-of-20-positive holdout -- with
+            # AUC-ROC of exactly 0.5000.
+            #
+            # This reads only the fitted model's own split count. It touches no
+            # test data, no fold assignment, no metric and no threshold; the
+            # search space stays exactly as Section 3.4 specifies it.
+            if int(model.booster_.feature_importance("split").sum()) == 0:
+                raise optuna.TrialPruned()
 
-            fold_f1 = f1_score(y_test, y_pred, average="weighted", zero_division=0)
-            fold_f1_scores.append(fold_f1)
+            y_pred = model.predict(X_cv.loc[test_idx])
+            fold_f1.append(
+                f1_score(y_cv.loc[test_idx], y_pred, average="weighted", zero_division=0)
+            )
 
-            # ROC-AUC only defined when both classes appear in y_test
-            if y_test.nunique() > 1:
-                fold_auc_scores.append(roc_auc_score(y_test, y_proba))
-
-        if not fold_f1_scores:
+        if not fold_f1:
             return 0.0
-
-        # Pure F1 objective — best empirical result (holdout F1=0.84) when
-        # paired with global-stress-threshold labeling. Composite F1+AUC was
-        # tested but cost F1 without meaningfully lifting AUC.
-        return float(np.mean(fold_f1_scores))
+        return float(np.mean(fold_f1))
 
     return objective
 
 
 def train_model() -> dict:
     """
-    Full training pipeline:
-    1.  Load features_fused.parquet + labels.parquet
-    2.  Discover maximum reliable lead time (Accuracy >= 75% threshold)
-    3.  Reserve last HOLDOUT_QUARTERS as a true out-of-sample test set
-    4.  Run Optuna 100-trial walk-forward search on the CV window only
-        using the empirically discovered forecast gap
-    5.  Evaluate the best params on the holdout window (honest final metrics)
-    6.  Retrain production model on ALL data with best params
-    7.  Serialize lgbm_best.pkl and optuna_study.pkl
-    8.  Log with MLflow including max_reliable_lead_time
+    Full training pipeline, Algorithms 3 and 4.
 
-    Returns:
-        dict with best_params, best_cv_f1, holdout metrics,
-        and max_reliable_lead_time (the answer to Research Question 2).
+    1.  Load features_fused.parquet + labels.parquet over the Section 3.3.2.7
+        feature set
+    2.  Algorithm 3: discover the Maximum Reliable Lead Time
+    3.  Reserve the last 4 quarters as the holdout, never exposed to Optuna
+    4.  Algorithm 4: 100-trial TPE walk-forward search on the CV window, using
+        the discovered lead time as the fixed forecast gap
+    5.  Evaluate the best parameters once on the holdout
+    6.  Retrain on all available data and serialize to lgbm_best.pkl
+    7.  Log with MLflow
+
+    Returns a dict with best_params, CV F1, holdout metrics and
+    max_reliable_lead_time (the answer to Research Question 2).
     """
     logger.info("=" * 60)
     logger.info("LIGHTGBM TRAINING PIPELINE — aiPHeed")
     logger.info("=" * 60)
 
-    # ── Step 1: Empirically discover maximum reliable lead time ──────────
-    # This removes the fixed FORECAST_GAP=3 assumption and answers:
-    # "What is the furthest lead time at which aiPHeed can reliably forecast
-    #  province-level food insecurity risk across CALABARZON?"
-    # The scan reloads per k because the lagged-label features depend on the
-    # gap: at gap k only y_{t-k-1} and older are observable.
-    max_reliable_lead_time = discover_max_lead_time(None, None, None)
+    X, y, quarters = _load_data()
+
+    # ── Algorithm 3 ──────────────────────────────────────────────────────
+    max_reliable_lead_time, lead_time_scan = discover_max_lead_time(X, y, quarters)
     forecast_gap = max_reliable_lead_time
 
-    # Reload at the discovered horizon so the lags match the horizon trained on.
-    X, y, quarters = _load_data(forecast_gap=forecast_gap)
-
     logger.info(
-        "LIGHTGBM TRAINING — WALK-FORWARD CV (gap=%d, holdout=%d quarters)",
+        "ALGORITHM 4 — OPTUNA TPE | forecast gap = %d | holdout = %d quarters",
         forecast_gap, HOLDOUT_QUARTERS,
     )
 
-    # ── Split CV window from holdout ──────────────────────────────────────
+    # ── Split the CV window from the holdout ─────────────────────────────
     all_quarters = sorted(quarters.unique())
-
     min_needed = MIN_TRAIN_QUARTERS + forecast_gap + 1 + HOLDOUT_QUARTERS
     if len(all_quarters) < min_needed:
         raise ValueError(
-            f"Not enough quarters for this configuration: need >= {min_needed}, "
-            f"got {len(all_quarters)}."
+            f"Not enough labelled quarters for Algorithm 4: need >= {min_needed} "
+            f"(min train {MIN_TRAIN_QUARTERS} + gap {forecast_gap} + 1 test + "
+            f"holdout {HOLDOUT_QUARTERS}), got {len(all_quarters)} "
+            f"({all_quarters[0]}..{all_quarters[-1]}). The methodology is "
+            "unchanged; the labelled window is too short to execute it. See "
+            "docs/DATA_AVAILABILITY.md."
         )
 
     holdout_qs   = set(all_quarters[-HOLDOUT_QUARTERS:])
     cv_mask      = ~quarters.isin(holdout_qs)
     holdout_mask = quarters.isin(holdout_qs)
 
-    X_cv        = X[cv_mask]
-    y_cv        = y[cv_mask]
-    # Thin DataFrame used only so WalkForwardSplitter can look up the quarter column
-    df_cv       = pd.DataFrame(
-        {QUARTER_COL: quarters[cv_mask].values},
-        index=X_cv.index,
-    )
-    X_holdout   = X[holdout_mask]
-    y_holdout   = y[holdout_mask]
+    X_cv  = X[cv_mask]
+    y_cv  = y[cv_mask]
+    df_cv = pd.DataFrame({QUARTER_COL: quarters[cv_mask].values}, index=X_cv.index)
+    X_holdout = X[holdout_mask]
+    y_holdout = y[holdout_mask]
 
-    logger.info(
-        "CV window : %s → %s  (%d rows)",
-        all_quarters[0], all_quarters[-HOLDOUT_QUARTERS - 1], len(X_cv),
-    )
-    logger.info(
-        "Holdout   : %s → %s  (%d rows) — never seen during Optuna search",
-        all_quarters[-HOLDOUT_QUARTERS], all_quarters[-1], len(X_holdout),
-    )
+    logger.info("CV window : %s → %s  (%d rows)",
+                all_quarters[0], all_quarters[-HOLDOUT_QUARTERS - 1], len(X_cv))
+    logger.info("Holdout   : %s → %s  (%d rows) — never seen during Optuna search",
+                all_quarters[-HOLDOUT_QUARTERS], all_quarters[-1], len(X_holdout))
 
-    # ── Optuna search on CV window only ──────────────────────────────────
-    logger.info(
-        "Starting Optuna: %d trials, walk-forward CV, gap=%d quarters",
-        N_TRIALS, forecast_gap,
-    )
+    # ── Algorithm 4: 100-trial TPE search ────────────────────────────────
+    logger.info("Starting Optuna: %d trials, walk-forward CV, gap=%d quarters",
+                N_TRIALS, forecast_gap)
     optuna.logging.set_verbosity(optuna.logging.WARNING)
 
     study = optuna.create_study(
@@ -576,16 +524,17 @@ def train_model() -> dict:
     logger.info("Best trial CV-F1 : %.4f", best_cv_f1)
     logger.info("Best params      : %s", best_params)
 
-    # ── Honest holdout evaluation ─────────────────────────────────────────
-    # Train on CV window only, evaluate on holdout — the model has never
-    # seen the holdout rows at any point in the Optuna search.
+    # ── Holdout evaluation (once, per Algorithm 4) ───────────────────────
     eval_params = {
         **best_params,
-        "objective":     "binary",
-        "boosting_type": "gbdt",
-        "verbosity":     -1,
-        "random_state":  RANDOM_SEED,
-        "class_weight":  "balanced",
+        "objective":      "binary",
+        "boosting_type":  "gbdt",
+        "verbosity":      -1,
+        "random_state":   RANDOM_SEED,
+        "class_weight":   "balanced",
+        # Must match the search: without it the tuned `subsample` is inert, so
+        # the evaluated model would differ from the one Optuna scored.
+        "subsample_freq": 1,
     }
 
     eval_model = LGBMClassifier(**eval_params)
@@ -601,7 +550,6 @@ def train_model() -> dict:
     try:
         holdout_auc = float(roc_auc_score(y_holdout, y_prob_h))
     except ValueError:
-        # Holdout may contain only one class in small datasets
         holdout_auc = float("nan")
         logger.warning("roc_auc_score undefined on holdout (single class present)")
 
@@ -610,37 +558,44 @@ def train_model() -> dict:
     logger.info("Holdout Precision : %.4f", holdout_precision)
     logger.info("Holdout Recall    : %.4f", holdout_recall)
     logger.info("Holdout ROC-AUC   : %.4f", holdout_auc)
-    logger.info(
-        "F1 target  (%s) : %s", TARGET_F1,
-        "PASS" if holdout_f1 >= TARGET_F1 else "FAIL",
-    )
-    logger.info(
-        "AUC target (%s) : %s", TARGET_ROC_AUC,
-        "PASS" if holdout_auc >= TARGET_ROC_AUC else "FAIL",
-    )
+    logger.info("F1 target  (%.2f) : %s", TARGET_F1,
+                "PASS" if holdout_f1 >= TARGET_F1 else "FAIL")
+    logger.info("AUC target (%.2f) : %s", TARGET_ROC_AUC,
+                "PASS" if holdout_auc >= TARGET_ROC_AUC else "FAIL")
 
-    # ── Production model: retrain on ALL data ────────────────────────────
-    # Maximises training data for deployment; metrics above are the honest estimate.
+    # ── Production model: retrain on all available data ──────────────────
     prod_model = LGBMClassifier(**eval_params)
     prod_model.fit(X, y)
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(prod_model, MODEL_PATH)
+    # The bundle carries the feature list and the horizon alongside the model,
+    # so serving cannot drift from training.
+    joblib.dump(
+        {
+            "model": prod_model,
+            "feature_cols": list(X.columns),
+            "max_reliable_lead_time": max_reliable_lead_time,
+            "label_col": LABEL_COL,
+            "best_params": best_params,
+        },
+        MODEL_PATH,
+    )
     joblib.dump(study, STUDY_PATH)
     logger.info("Production model saved to %s", MODEL_PATH)
 
-    # ── MLflow logging (best-effort; model already saved to disk) ────────
     if max_reliable_lead_time == 0:
         logger.warning(
-            "ANSWER — Research Question 2: NO reliable forecast horizon. Walk-forward "
-            "Accuracy stayed below %.0f%% at every lead time tested, k=1 included, so "
-            "the model is reported as a nowcast (gap=0) rather than a forecaster.",
+            "ANSWER — Research Question 2: no reliable forecast horizon. "
+            "Walk-forward accuracy stayed below %.0f%% at every lead time "
+            "tested, k=1 included. Under Rule 2 and Section 3.4.4 no horizon is "
+            "published to the dashboard; the system reports at gap 0.",
             ACCURACY_THRESHOLD * 100,
         )
     else:
         logger.info(
-            "ANSWER — Research Question 2: Maximum Reliable Lead Time = %d quarter(s) ahead "
-            "(furthest horizon where walk-forward Accuracy >= %.0f%%)",
+            "ANSWER — Research Question 2: Maximum Reliable Lead Time = %d "
+            "quarter(s) ahead (furthest horizon where walk-forward accuracy "
+            ">= %.0f%%)",
             max_reliable_lead_time, ACCURACY_THRESHOLD * 100,
         )
 
@@ -650,13 +605,13 @@ def train_model() -> dict:
             mlflow.log_param("max_reliable_lead_time", max_reliable_lead_time)
             mlflow.log_param("accuracy_threshold",     ACCURACY_THRESHOLD)
             mlflow.log_param("holdout_quarters",       HOLDOUT_QUARTERS)
+            mlflow.log_param("n_features",             X.shape[1])
             mlflow.log_metric("best_cv_f1",            best_cv_f1)
             mlflow.log_metric("holdout_accuracy",      holdout_accuracy)
             mlflow.log_metric("holdout_f1",            holdout_f1)
             mlflow.log_metric("holdout_precision",     holdout_precision)
             mlflow.log_metric("holdout_recall",        holdout_recall)
-            # ROC-AUC may be NaN when holdout has a single class — skip in that case
-            if not (holdout_auc != holdout_auc):  # NaN check
+            if holdout_auc == holdout_auc:  # not NaN
                 mlflow.log_metric("holdout_roc_auc", holdout_auc)
             mlflow.log_metric("n_trials", N_TRIALS)
             try:
@@ -669,9 +624,12 @@ def train_model() -> dict:
             exc, MODEL_PATH,
         )
 
-    return {
+    results = {
         "max_reliable_lead_time":  max_reliable_lead_time,   # answer to RQ2
+        "lead_time_scan":          lead_time_scan,
         "accuracy_threshold":      ACCURACY_THRESHOLD,
+        "feature_cols":            list(X.columns),
+        "n_features":              X.shape[1],
         "best_params":             best_params,
         "best_cv_f1":              round(best_cv_f1, 4),
         "holdout_accuracy":        round(holdout_accuracy, 4),
@@ -682,3 +640,14 @@ def train_model() -> dict:
         "meets_f1_target":         holdout_f1 >= TARGET_F1,
         "meets_roc_auc_target":    holdout_auc >= TARGET_ROC_AUC,
     }
+
+    # Persist beside the bundle. The dashboard and the PDF read this file, and
+    # it used to be written only by run_quarterly_pipeline.py -- so training
+    # through any other entry point (including the per-stage command in the
+    # README) left them serving the previous run's metrics while lgbm_best.pkl
+    # held the new model. Writing it here makes that drift impossible.
+    RESULTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    RESULTS_PATH.write_text(json.dumps(results, indent=2, default=str))
+    logger.info("Training results saved to %s", RESULTS_PATH)
+
+    return results

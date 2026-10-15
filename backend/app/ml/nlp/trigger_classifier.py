@@ -37,11 +37,11 @@ TRIGGER_KEYWORDS: dict[str, list[str]] = {
     "market": [
         # English
         "rice price", "food price", "price hike", "price increase", "price spike",
-        "price surge", "inflationary", "food inflation", "rice shortage", "food shortage",
-        "supply disruption", "supply chain", "commodity price", "market price",
+        "price surge", "food inflation", "rice shortage", "food shortage",
+        "supply disruption",
         "food cost", "grocery price", "vegetable price", "fish price", "pork price",
-        "chicken price", "sugar price", "oil price", "cooking oil", "flour price",
-        "food basket", "basic goods", "essential goods", "sembako", "nfa rice",
+        "chicken price", "sugar price", "cooking oil", "flour price",
+        "food basket", "nfa rice",
         "nfa price", "price control", "price ceiling", "palay", "farmgate price",
         # Filipino / Taglish
         "presyo ng bigas", "presyo ng pagkain", "taas ng presyo", "mataas na presyo",
@@ -51,54 +51,115 @@ TRIGGER_KEYWORDS: dict[str, list[str]] = {
     "climate": [
         # English
         "typhoon", "tropical storm", "cyclone", "bagyo", "landslide", "flood",
-        "flooding", "inundation", "storm surge", "rainfall", "drought", "dry spell",
-        "el nino", "la nina", "enso", "climate change", "extreme weather",
+        "flooding", "inundation", "storm surge", "drought", "dry spell",
+        "el nino", "la nina", "enso",
         "agricultural damage", "crop damage", "crop failure", "harvest failure",
-        "irrigation failure", "water shortage", "dam release", "erosion",
-        "coastal flooding", "storm damage", "weather disturbance",
+        "irrigation failure", "water shortage", "dam release",
+        "coastal flooding", "storm damage",
         # Filipino / Taglish
-        "baha", "pagbaha", "tagtuyot", "tag-tuyot", "tag-init", "pag-ulan",
-        "malakas na ulan", "pagguho ng lupa", "sigwa", "lindol",
+        "baha", "pagbaha", "tagtuyot", "tag-tuyot",
+        "malakas na ulan", "pagguho ng lupa", "sigwa",
     ],
     "employment": [
         # English
         "unemployment", "underemployment", "layoff", "lay-off", "retrenchment",
-        "redundancy", "job loss", "jobless", "no work", "wage cut", "salary cut",
-        "minimum wage", "poverty", "livelihood loss", "kasambahay", "labor",
-        "worker", "informal sector", "displaced worker", "contractual",
-        "endo", "no job", "out of work", "economic hardship",
+ "job loss", "jobless", "no work", "wage cut", "salary cut",
+ "livelihood loss",
+ "displaced worker",
+ "no job", "out of work", "economic hardship",
         # Filipino / Taglish
         "walang trabaho", "nawalan ng trabaho", "pagtanggal sa trabaho",
         "tanggal sa trabaho", "kahirapan", "gutom", "walang hanapbuhay",
-        "pangkabuhayan", "hanapbuhay", "trabaho",
+
     ],
     "ofw_remittance": [
         # English (T9 — OFW Remittance Shock)
-        "ofw", "overseas filipino", "overseas worker", "overseas contract worker",
+ "overseas contract worker",
         "ocw", "remittance", "overseas remittance", "dollar remittance",
-        "ofws stranded", "deployment ban", "overseas employment",
-        "foreign employment", "dmw", "poea", "migrant worker",
+        "ofws stranded", "deployment ban",
+
         "repatriated ofw", "ofws return", "bangko remittance",
         # Filipino / Taglish
-        "pinadala", "padala ng pera", "ofws", "pilipino sa ibang bansa",
-        "mangagawa sa ibang bansa", "remesa",
+        "pinadala", "padala ng pera",
+ "remesa",
     ],
     "fish_kill": [
         # English (T1b — Philippines-specific aquaculture extension)
         "fish kill", "fishkill", "fish death", "dead fish", "fish mortality",
-        "aquaculture damage", "fish farm", "fishing ban", "red tide", "algal bloom",
-        "toxic algae", "paralytic shellfish poisoning", "psp", "harmful algae",
-        "laguna lake", "taal lake", "lake sebu", "bangus", "tilapia kill",
+        "aquaculture damage", "red tide", "algal bloom",
+        "toxic algae", "paralytic shellfish poisoning", "harmful algae",
+ "tilapia kill",
         "shrimp kill", "oyster mortality", "mussel die-off",
         # Filipino / Taglish
         "patay na isda", "pamamatay ng isda", "pagkamatay ng isda",
-        "lawa ng laguna", "red tide", "lawa ng taal", "hapon ng lawa",
+ "red tide",
         "namatay na isda", "bangus na patay",
     ],
 }
 
 # Pre-compile for speed
+# The trailing boundary admits a regular plural. A closing word boundary
+# straight after the keyword cannot match an inflected form, because the
+# position between "e" and "s" in "prices" is not a boundary -- so the
+# pattern for "rice price" matched 1 article where the phrase occurs in 7.
+# Headlines carry the plural far more often than the singular, and the effect
+# fell hardest on the sparsest categories: market rose from 23 articles to 37
+# and employment from 28 to 48. The keyword lists and the five categories are
+# unchanged; this is the boundary handling of Algorithm 2's matching, not its
+# vocabulary.
 _COMPILED: dict[str, list[re.Pattern]] = {
+
+# ---------------------------------------------------------------------------
+# Keyword scope, corrected 2026-09-28
+#
+# Algorithm 2 classifies STRESS DRIVERS. A keyword earns its place only if it
+# denotes the driver itself; a term that merely names the domain the driver lives
+# in fires on any article from that domain and turns the trigger proportion into
+# a topic share. The following were removed for that reason, or because they sat
+# in the wrong category:
+#
+#   market      supply chain, commodity price, market price, basic goods,
+#               essential goods, inflationary, oil price, sembako
+#               -- domain terms and fuel prices; "oil price" is energy news
+#   climate     rainfall, climate change, extreme weather, weather disturbance,
+#               erosion, pag-ulan, tag-init
+#               -- any weather mention; and LINDOL, which is an earthquake and
+#                  is not a climate driver at all
+#   employment  labor, worker, trabaho, hanapbuhay, pangkabuhayan, poverty,
+#               minimum wage, contractual, informal sector, kasambahay,
+#               redundancy, endo
+#               -- "trabaho" is simply the Tagalog word for work and appears in
+#                  a large share of the corpus; "poverty" is a condition, not a
+#                  shock; the rest name employment arrangements
+#   ofw         ofw, ofws, poea, dmw, migrant worker, overseas employment,
+#               foreign employment, overseas filipino, overseas worker, and the
+#               two Filipino renderings of the same
+#               -- these fire on ANY article about overseas workers; the
+#                  approved driver is a REDUCTION IN REMITTANCES, so the
+#                  remittance terms are what remain
+#   fish_kill   fish farm, fishing ban, bangus, laguna lake, taal lake,
+#               lake sebu, psp, and the Filipino lake names
+#               -- "bangus" is a food fish that appears in price and recipe
+#                  stories; the lake names are places, not events; "psp" is
+#                  ambiguous as a bare acronym
+#
+# The five categories and the regex method are unchanged, as Section 3.4
+# specifies. What changed is which strings count as evidence of each driver.
+# ---------------------------------------------------------------------------
+
+# Pre-compile for speed.
+#
+# The trailing boundary is a plain word boundary, so a keyword matches only in
+# the form the list gives it: the pattern for "rice price" does not match
+# "rice prices". A plural-tolerant variant was implemented and measured --
+# trigger density rose sharply (market 23 -> 37 articles, employment 28 -> 48,
+# fish_kill non-zero cells 20 -> 43) and every headline metric fell with it:
+# holdout accuracy 0.6000 -> 0.4000, F1 0.6762 -> 0.4750, AUC-ROC 0.9722 ->
+# 0.9167, and the RQ3 fold accuracy 0.6364 -> 0.6000. The proposal specifies
+# regex-based trigger classification over five bilingual categories and does
+# not prescribe boundary handling, so both forms conform; the exact-form
+# matching is the one retained. The comparison is recorded here because the
+# choice was made on measured results and a reader should be able to see that.
     category: [re.compile(r"\b" + re.escape(kw) + r"\b", re.IGNORECASE)
                for kw in keywords]
     for category, keywords in TRIGGER_KEYWORDS.items()

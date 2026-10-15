@@ -32,6 +32,15 @@ TEMP = Path(tempfile.gettempdir()).resolve()
 PROTECTED_DIRS = [ROOT / "backend" / "data", AL / "data", AL / "mlruns", AL / "models", ROOT / "backend" / "models",
                   ROOT / "Claude outputs"]
 ALLOWED_UNDER_PROTECTED = [AL / "data" / "reference"]
+# E34 promoted E31's in-window runtime data into backend/data as NEW sub-folders (byte copies of backend_dev/data, see
+# E34 runner/e34_promote_backend.py). Only those copies and the 142-LGU roster are readable; backend/data/processed,
+# thesis, raw, archive, e20-e22 and reference/cph2020_* stay protected.
+E34_PROMOTED = ["e25", "e27", "e28", "e29", "e31", "inputs", "inputs_vintage1_e29", "news_e28", "news_e31", "ledger",
+                "quarterly_runs", "quarterly_store", "outcomes", "inbox"]
+ALLOWED_UNDER_PROTECTED += [ROOT / "backend" / "data" / d for d in E34_PROMOTED]
+ALLOWED_UNDER_PROTECTED += [ROOT / "backend" / "data" / f for f in ("cycle_log.jsonl", "evidence_status_derived.json",
+                                                                     "reference/calabarzon_lgus.csv",
+                                                                     "reference/SOURCE.txt")]
 PROTECTED_FILES = [E26 / "docs" / "CONTAMINATION_LOG.md", E26 / "docs" / "CONTAMINATION_LOG_ADDENDUM.md"]
 PROTECTED_SUFFIXES = {".db", ".sqlite", ".sqlite3"}
 _INSTALLED = False

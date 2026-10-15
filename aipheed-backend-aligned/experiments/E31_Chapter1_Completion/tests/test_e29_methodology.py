@@ -6,9 +6,10 @@ import json
 import pandas as pd
 import pytest
 
+import _paths  # noqa: F401
 from _paths import EXP
 
-BD = EXP / "backend_dev"
+BD = _paths.BD
 
 
 # ------------------------------------------------------------------ reachability / outcome eligibility

@@ -33,6 +33,24 @@ async def _withheld_for(db: AsyncSession, quarter: str) -> frozenset[str]:
     return frozenset(pid for pid, q in await rv.rejected_pairs(db, quarter))
 
 
+async def _confirmed_alert(db: AsyncSession, scope: str, subject_id: str, quarter: str, body: dict) -> bool:
+    """True when a DA administrator has confirmed an alert for this area and quarter (E34, D3). The region view uses
+    the regional alert; a province its own; a municipality its province's."""
+    from app.db.repository.alert_repo import AlertRepository
+    from app.quarterly.alerts_e31 import REGION_CODE
+
+    if scope == "region":
+        code = REGION_CODE
+    elif scope == "province":
+        code = ref.province_code(subject_id.lower())
+    else:
+        code = ref.province_code(body.get("provinceId") or "")
+    if code is None:
+        return False
+    return any(a.quarter == quarter and a.province_code == code and not a.dismissed
+               for a in await AlertRepository(db).get_confirmed())
+
+
 def _quarter_label(quarter: str) -> str:
     year, qn = ref.quarter_parts(quarter)
     return f"Q{qn} {year} ({ref.QUARTER_MONTHS[qn]})"
@@ -148,11 +166,11 @@ async def get_forecast(
         quarter=q,
         quarterLabel=_quarter_label(q),
         indicator=svc.INDICATOR,
-        # Nothing is ever a forecast quarter: the model scores quarters whose
-        # production volumes PSA has already published.
-        isForecast=False,
+        # E34: true for a quarter whose outcome is not yet known (E31 nowcast/forecast); backtests are false.
+        isForecast=svc.is_estimate_quarter(q),
         isCurrent=(q == svc.latest_quarter(h)),
-        alert=(body["riskScore"] or 0) >= ref.ALERT_THRESHOLD,
+        # E34 (D3): only an alert a DA administrator has CONFIRMED is public; never a score threshold alone.
+        alert=await _confirmed_alert(db, scope, id, q, body),
         **body,
     )
 
@@ -202,7 +220,7 @@ async def get_timeseries(
             "quarter": q,
             "riskScore": body["riskScore"],
             "riskLevel": body["riskLevel"],
-            "isForecast": False,
+            "isForecast": svc.is_estimate_quarter(q),
         })
 
     return TimeseriesResponse(

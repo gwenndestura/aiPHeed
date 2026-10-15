@@ -10,7 +10,6 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 from __future__ import annotations
 
 from fastapi import APIRouter, Query
-from starlette.concurrency import run_in_threadpool
 
 from app.schemas.public import ExplainabilityResponse, NewsResponse
 from app.services import dashboard as svc
@@ -18,26 +17,30 @@ from app.services import reference as ref
 
 router = APIRouter()
 
-# Five research-defined categories (Market/Prices, Climate Stress, Fish Kill,
-# Employment, OFW Remittance). Percentages are grouped SHAP values from the
-# food-availability shock model, rescaled so these five sum to 100% AMONG
-# THEMSELVES -- see `otherPct` and the caveats below for what that excludes.
+# Five driver groups, matching the approved feature vector. The commodity-series
+# groups (`seasonal`, `series_history`) that the superseded food-availability
+# model needed are gone: Equation 5 has no commodity history and no annual-cycle
+# terms, so nothing feeds them.
 EXPLAINABILITY_NOTE = (
-    "Contributions are grouped SHAP values from the food-availability shock "
-    "model, rescaled so the five research-defined driver categories sum to "
-    "100% among themselves. A group can hold a large share while pushing risk "
-    "down -- read `direction`, not bar size alone. `color` takes three values, "
-    "not two: yellow below the 20% line, red above it while raising the score, "
-    "GREEN above it while lowering the score. "
-    "Two caveats on what these five categories contain: OFW Remittance is "
-    "restricted to actual remittance features (fuel/transport-cost features "
-    "that used to sit here moved to Market/Prices, where they belong); Fish "
-    "Kill reflects a real but comparatively thin news-derived signal (see "
-    "`newsSignalProportion`), not a dedicated structured dataset. `otherPct` "
-    "is the share of the model's real, often-dominant reasoning that comes "
-    "from the commodity series' own recent history and seasonal position, "
-    "plus general (non-fish-kill) news volume -- deliberately not folded into "
-    "one of the five bars, which would overstate it, nor hidden."
+    "Contributions are grouped SHAP values from the food insecurity risk "
+    "model, rescaled so the groups sum to 100%. A group can hold a large share "
+    "while pushing risk down -- read `direction`, not bar size alone. The "
+    "groups follow the approved feature vector: news sentiment (the "
+    "bias-corrected FSSI and its lags), food prices, weather, employment and "
+    "the macro/OFW indicators. "
+    "`color` takes three values, not two: yellow below the 20% line, red above "
+    "it while raising the score, GREEN above it while lowering the score. The "
+    "original two-colour rule predates signed contributions and would paint a "
+    "large protective driver red."
+)
+
+
+E31_EXPLAINABILITY_NOTE = (
+    "Exact breakdown of the served estimate (PCF21), not a SHAP approximation: the estimate's margin over the "
+    "threshold equals (regional hunger - threshold) + 2 x provincial relative food-price pressure. Regional hunger "
+    "is one SWS Balance Luzon value shared by all five provinces; only the price term differs between provinces. "
+    "These are the model's inputs, not causes. Shares are rescaled to 100%; read `direction`, not bar size alone. "
+    "`color`: yellow below the 20% line, red above it while raising the estimate, green while lowering it."
 )
 
 
@@ -73,19 +76,14 @@ async def get_explainability(
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
 
-    # SHAP is CPU-bound and, on a quarter not yet cached this process, blocks
-    # for several seconds per province. Run it off the event loop so it
-    # doesn't stall every other request on the server while it computes --
-    # confirmed by measurement that a concurrent /config call queued behind
-    # an in-flight SHAP call the way it would if this ran inline.
     if code is None:
-        result = await run_in_threadpool(svc.explainability_region, q)
+        result = svc.explainability_region(q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
         risk_score = svc.region_forecast(q)["riskScore"]
     else:
-        result = await run_in_threadpool(svc.explainability, code, q)
+        result = svc.explainability(code, q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
@@ -93,7 +91,6 @@ async def get_explainability(
         match = [p for p in svc.province_summary(q) if p["id"] == slug]
         risk_score = match[0]["riskScore"] if match else 0.0
 
-    other_pct = result["otherPct"]
     return ExplainabilityResponse(
         scope=scope,
         id=id.lower(),
@@ -101,12 +98,10 @@ async def get_explainability(
         quarter=q,
         riskScore=risk_score,
         triggers=triggers,
-        otherPct=other_pct,
         articleCount=article_count,
         triggerMatchedArticles=matched,
-        narrative=svc.compose_narrative(name, q, triggers, other_pct),
-        formalInterpretation=svc.compose_formal_interpretation(name, q, triggers, other_pct),
-        note=EXPLAINABILITY_NOTE,
+        narrative=svc.compose_narrative(name, q, triggers),
+        note=E31_EXPLAINABILITY_NOTE if svc.e31_active() else EXPLAINABILITY_NOTE,
     )
 
 
@@ -122,18 +117,15 @@ async def get_news(
     The analysed article corpus for a subject-quarter, with its topic mix.
 
     Articles are geocoded to province, so municipality scope returns the parent
-    province's corpus. A forecast quarter returns its information-cutoff
-    quarter's articles (`sourceQuarter`), the news the forecast was built from.
+    province's corpus.
     """
     q = svc.resolve_quarter(quarter)
     code, _ = _resolve_province(scope, id)
-    source_q = svc.news_quarter(q)
-    body = svc.news(code, source_q, page, pageSize)
+    body = svc.news(code, q, page, pageSize)
     return NewsResponse(
         scope=scope,
         id=id.lower(),
         quarter=q,
-        sourceQuarter=source_q,
         page=page,
         pageSize=pageSize,
         **body,
