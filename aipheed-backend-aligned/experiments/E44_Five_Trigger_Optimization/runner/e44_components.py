@@ -267,3 +267,83 @@ def forecast(d, X, B, t, groups=ALL_GROUPS, supplementary=False, hunger_rw=False
             "hunger_alpha": hc["alpha"], "hunger_rmse": hc["rmse"], "platt": platt is not None,
             "price_model": pc["model"], "hunger_model": hc["model"], "te": te, "hte": hte, "pcols": pcols, "hcols": hcols,
             "n_price_train_q": int(tr["q"].nunique()), "n_hunger_pairs": int(len(htr))}
+
+
+# ================================================================================================ I4 (ADDENDUM_I4.md)
+def _oof_generic(args):
+    tr, cfg, cols, ycol, bfmt = args
+    b = bfmt.format(cfg["mult"])
+    tr = tr.dropna(subset=[b, ycol])
+    out = []
+    for q in sorted(tr["q"].unique()):
+        fit, hold = tr[tr["q"] != q], tr[tr["q"] == q]
+        m = make_price(cfg, cols).fit(fit, fit[ycol] - fit[b])
+        out.append(hold[["q", "province_code"]].assign(y_true=hold[ycol].to_numpy(), y_hat=hold[b].to_numpy() + m.predict(hold)))
+    o = pd.concat(out, ignore_index=True)
+    return float(np.sqrt(np.mean((o["y_hat"] - o["y_true"]) ** 2))), o
+
+
+def component_generic(tr, te, cols, ycol, bfmt, n_jobs=8):
+    from joblib import Parallel, delayed
+    grid = price_grid()
+    res = Parallel(n_jobs=n_jobs, backend="loky")(delayed(_oof_generic)((tr, g, cols, ycol, bfmt)) for g in grid)
+    best = min(range(len(grid)), key=lambda i: (round(res[i][0], 10), price_simplicity(grid[i])))
+    cfg, (rmse, o) = grid[best], res[best]
+    b = bfmt.format(cfg["mult"])
+    trb = tr.dropna(subset=[b, ycol])
+    model = make_price(cfg, cols).fit(trb, trb[ycol] - trb[b])
+    return {"cfg": cfg, "rmse": rmse, "oof": o, "model": model, "hat": te[b].to_numpy() + model.predict(te)}
+
+
+def p_price_biv(F_hat, G_hat, sF, sG, rho, provs):
+    from scipy.stats import multivariate_normal
+    th = L.e40_spec()
+    rho = float(np.clip(rho, -0.95, 0.95))
+    cov = [[1.0, rho], [rho, 1.0]]
+    out = []
+    for f, g, p in zip(F_hat, G_hat, provs):
+        zf, zg = (th["food"][p] - f) / sF, (th["gap"][p] - g) / sG
+        out.append(1 - float(multivariate_normal(mean=[0, 0], cov=cov).cdf([zf, zg])))
+    return np.array(out)
+
+
+def forecast_i4(d, X, B, t, groups=ALL_GROUPS, hunger_rw=False, n_jobs=8):
+    pcols = [c for g in groups for c in PRICE_GROUPS[g]]
+    hcols = [] if hunger_rw else [c for g in groups if g in HUNGER_GROUPS for c in HUNGER_GROUPS[g]]
+    c = d.cut(t)
+    F = L.quarter_F(c).rename(columns={"F": "F_true"})
+    HL = L.quarter_F(c, "all_items").rename(columns={"F": "HL_true"})
+    FG = F.merge(HL, on=["province_code", "q"]).assign(G_true=lambda f: f["F_true"] - f["HL_true"])
+    XB = X.merge(B, on=["t", "province_code"])
+    for m in MULTS:
+        XB[f"gbase_{m}"] = XB[f"base_{m}"] - XB[f"hl_{m}"]
+    tr = XB[XB["t"] + 2 <= t - 1].assign(q=lambda f: f["t"] + 2).merge(FG, on=["province_code", "q"])
+    te = XB[XB["t"] == t].set_index("province_code").loc[L.PROVS].reset_index()
+    hs = h_series(d, t, False)
+    htr, hte = hunger_frame(X, hs, t, hcols)
+    if tr["q"].nunique() < MIN_PRICE_Q or len(htr) < MIN_H_PAIRS or not len(hte) or te[[f"base_{m}" for m in MULTS]].isna().all().all():
+        return None
+    fc = component_generic(tr, te, pcols, "F_true", "base_{}", n_jobs)
+    gc = component_generic(tr, te, pcols, "G_true", "gbase_{}", n_jobs)
+    j = fc["oof"].merge(gc["oof"], on=["q", "province_code"], suffixes=("_F", "_G"))
+    rho = float(np.corrcoef(j["y_hat_F"] - j["y_true_F"], j["y_hat_G"] - j["y_true_G"])[0, 1]) if len(j) > 2 else 0.0
+    hc = hunger_component(htr, hte, hcols)
+    pp = p_price_biv(fc["hat"], gc["hat"], fc["rmse"], gc["rmse"], rho, te["province_code"])
+    p_joint = hc["p"] * pp
+    lab = K.available_labels(d, t)
+    o = j.merge(hc["oof"].groupby("q")["H_hat"].first().rename("H_hat").reset_index(), on="q")
+    o = o.merge(lab[["province_code", "q", "y"]], on=["province_code", "q"])
+    thr, platt, p_cal = 0.5, None, p_joint
+    if len(o) and o["y"].nunique() == 2:
+        ph = 1 - norm.cdf((L.e40_spec()["H"] - o["H_hat"]) / max(hc["rmse"], 1e-6))
+        po = ph * p_price_biv(o["y_hat_F"], o["y_hat_G"], fc["rmse"], gc["rmse"], rho, o["province_code"])
+        if o["y"].sum() >= 3:
+            platt = C.platt_fit(po, o["y"])
+            po = C.platt_apply(platt, po)
+            p_cal = C.platt_apply(platt, p_joint)
+        thr = max(C.THRESHOLDS, key=lambda th: (round(C.balanced(o["y"], po >= th), 10), th == 0.5, th))
+    return {"t": t, "p": np.asarray(p_cal), "p_raw": p_joint, "p_hunger": hc["p"], "p_price": pp, "threshold": thr,
+            "F_hat": fc["hat"], "G_hat": gc["hat"], "rho": rho, "H_hat": hc["H_hat"], "food_cfg": fc["cfg"],
+            "gap_cfg": gc["cfg"], "food_rmse": fc["rmse"], "gap_rmse": gc["rmse"], "hunger_alpha": hc["alpha"],
+            "hunger_rmse": hc["rmse"], "platt": platt is not None, "food_model": fc["model"], "gap_model": gc["model"],
+            "hunger_model": hc["model"], "te": te, "hte": hte, "pcols": pcols, "hcols": hcols}
