@@ -284,7 +284,12 @@ export interface Trigger {
   direction: "increases_risk" | "protective";
   color: "yellow" | "red" | "green";
   newsSignalProportion: number | null;
+  /** E42: what the group is in this forecast. Absent from older backends. */
+  status?: TriggerStatus;
+  statusNote?: string;
 }
+
+export type TriggerStatus = "contributes" | "no_effect" | "no_model_input" | "no_data";
 
 export interface ExplainabilityResponse {
   scope: Scope;

@@ -8,7 +8,7 @@ import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
 import { quarterPeriodLabel } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
-import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
+import { driverCopy, isContributing, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
@@ -149,8 +149,11 @@ function ShapDriverListSkeleton() {
 
 function ShapDriverList({ items }: { items: Trigger[] }) {
   if (!items.length) return null;
-  const risky = items.filter((t) => t.direction !== "protective");
-  const protective = items.filter((t) => t.direction === "protective");
+  // E42: only groups that moved the forecast are listed as pushing risk up or down; the rest are listed separately.
+  const moving = items.filter((t) => isContributing(t));
+  const risky = moving.filter((t) => t.direction !== "protective");
+  const protective = moving.filter((t) => t.direction === "protective");
+  const inactive = items.filter((t) => !isContributing(t));
   return (
     <section className="mb-2 space-y-3">
       {risky.length > 0 && (
@@ -158,6 +161,9 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
       )}
       {protective.length > 0 && (
         <DriverGroup heading="Factors pulling risk down" headingColor="hsl(var(--risk-moderate))" items={protective} />
+      )}
+      {inactive.length > 0 && (
+        <DriverGroup heading="Not part of this forecast" headingColor="hsl(var(--muted-foreground))" items={inactive} />
       )}
     </section>
   );

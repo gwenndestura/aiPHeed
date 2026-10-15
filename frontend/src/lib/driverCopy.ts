@@ -7,7 +7,7 @@
 // friendlier presentation of the same key + direction for the general
 // public dashboard, not a different value or a different computation.
 
-import type { Trigger } from "./apiTypes";
+import type { Trigger, TriggerStatus } from "./apiTypes";
 
 interface Copy {
   title: string;
@@ -67,8 +67,44 @@ const DRIVER_COPY: Record<string, { risk: Copy; protective: Copy }> = {
   },
 };
 
-export function driverCopy(t: Pick<Trigger, "key" | "direction">): Copy {
+// E42: a direction is only stated for a group that actually moved the forecast. A group with no model input, no
+// official data, or no measurable effect gets neutral copy that says exactly that (previously a 0% climate group read
+// "Weather is hurting food supply").
+const FRIENDLY_NAME: Record<string, string> = {
+  market: "Food prices",
+  climate: "Weather and farm supply",
+  fish_kill: "Fish kills and fisheries",
+  employment: "Jobs and livelihoods",
+  ofw_remittance: "OFW remittances",
+};
+
+const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string) => Copy> = {
+  no_effect: (name) => ({
+    title: `${name}: no measurable effect`,
+    description: "This factor is in the model but did not move this quarter's score.",
+  }),
+  no_model_input: (name) => ({
+    title: `${name}: not used in this forecast`,
+    description: "The current model has no input for this factor, so it neither raised nor lowered the score.",
+  }),
+  no_data: (name) => ({
+    title: `${name}: no official data`,
+    description: "No official data series is available for this factor. Missing data is not a sign of low risk.",
+  }),
+};
+
+/** True when the group moved the forecast, so a direction may be stated. */
+export function isContributing(t: Pick<Trigger, "status" | "pct">): boolean {
+  return t.status ? t.status === "contributes" : t.pct > 0;
+}
+
+export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct">): Copy {
   const entry = DRIVER_COPY[t.key];
+  if (!isContributing(t)) {
+    const status: Exclude<TriggerStatus, "contributes"> =
+      t.status && t.status !== "contributes" ? t.status : "no_effect";
+    return NEUTRAL_COPY[status](FRIENDLY_NAME[t.key] ?? t.key);
+  }
   if (!entry) return { title: t.key, description: "" };
   return t.direction === "protective" ? entry.protective : entry.risk;
 }

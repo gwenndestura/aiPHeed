@@ -165,7 +165,7 @@ async def get_forecast(
         name=_subject_name(scope, id),
         quarter=q,
         quarterLabel=_quarter_label(q),
-        indicator=svc.INDICATOR,
+        indicator=svc.indicator_for(q),
         # E34: true for a quarter whose outcome is not yet known (E31 nowcast/forecast); backtests are false.
         isForecast=svc.is_estimate_quarter(q),
         isCurrent=(q == svc.latest_quarter(h)),
@@ -221,6 +221,8 @@ async def get_timeseries(
             "riskScore": body["riskScore"],
             "riskLevel": body["riskLevel"],
             "isForecast": svc.is_estimate_quarter(q),
+            # E42: a series can mix score types when the Lead-2 candidate is enabled; each point says which it is
+            "scoreType": svc.indicator_for(q)["id"],
         })
 
     return TimeseriesResponse(

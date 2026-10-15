@@ -1,0 +1,14 @@
+20261015T131923Z S-P 19 dates 95 rows
+  PS               acc 0.589 [0.453, 0.726] bal 0.587 recH 0.57 recL 0.60 brier 0.222 slope 0.544467319888082
+  M1               acc 0.632 [0.505, 0.768] bal 0.617 recH 0.53 recL 0.71 brier 0.203 slope 0.5976680287489048
+  M1z              acc 0.716 [0.589, 0.842] bal 0.673 recH 0.40 recL 0.95 brier 0.189 slope 1.2853912813612254
+  M1h              acc 0.695 [0.6, 0.8] bal 0.665 recH 0.47 recL 0.85 brier 0.188 slope 0.8601844946716505
+  B0_majority      acc 0.432 [0.274, 0.611] bal 0.502 recH 0.95 recL 0.05 brier 0.311 slope -0.7586495376560254
+  B1_persistence   acc 0.516 [0.389, 0.642] bal 0.510 recH 0.47 recL 0.55 brier 0.484 slope 0.004466093878439595
+  B2_latest_month  acc 0.600 [0.484, 0.716] bal 0.597 recH 0.57 recL 0.62 brier 0.400 slope 0.0425643131426787
+  B3_seasonal      acc 0.400 [0.284, 0.516] bal 0.400 recH 0.40 recL 0.40 brier 0.600 slope -0.044021589725123496
+  gates {'G0_validity': True, 'G1_accuracy_ge_0.75': False, 'G2_not_degenerate': False, 'G3a': False, 'G3b': True, 'G4': False, 'G5_improves_on_E41_M1': False, 'G3': False, 'classification': 'Insufficient evidence to support Lead-2 operational use'}
+  S-C 9 {'PS': (0.533, 0.258), 'M1': (0.622, 0.219), 'M1z': (0.8, 0.159), 'B0_majority': (0.244, 0.309), 'B1_persistence': (0.578, 0.422), 'B2_latest_month': (0.689, 0.311), 'B3_seasonal': (0.467, 0.533), 'LR-GOV': (0.733, 0.252), 'LR-NLP': (0.556, 0.295), 'LR-COMB': (0.711, 0.26), 'LGBM-GOV': (0.644, 0.276), 'LGBM-NLP': (0.511, 0.295), 'LGBM-COMB': (0.667, 0.261)}
+  NLP value {'LR-COMB_vs_LR-GOV': -0.0083, 'LGBM-COMB_vs_LGBM-GOV': 0.0142}
+  hunger {'dates': 16, 'MAE_persist': 4.23125, 'MAE_mean': 4.928047833243146, 'ridge_dates': 6, 'MAE_ridge_on_its_dates': 8.998500749846308, 'MAE_persist_on_ridge_dates': 6.150000000000001}
+  e40 {'all_scored': {'SIM': (0.917, 0.073), 'PERSIST': (0.767, 0.233), 'LOW': (0.917, 0.083)}, 'not_exposed': {'SIM': (0.925, 0.071), 'PERSIST': (0.875, 0.125), 'LOW': (0.875, 0.125)}, 'exposed_only': {'SIM': (0.9, 0.078), 'PERSIST': (0.55, 0.45), 'LOW': (1.0, 0.0)}} {'n': 20, 'positives': 0, 'prevalence': 0.0, 'TP': 0, 'TN': 18, 'FP': 2, 'FN': 0, 'accuracy': 0.9, 'precision': 0.0, 'recall_HIGH': None, 'recall_LOW': 0.9, 'f1': 0.0, 'balanced_accuracy': None, 'brier': 0.09538653937045, 'log_loss': 0.3355713582101452, 'mean_p': 0.26395515, 'citl': -0.26395515, 'dates': 4, 'status': 'forecasts sealed 09:30:46Z before C-1; scored after exposure', 'methods_note_claim_all_LOW_is_false': True}

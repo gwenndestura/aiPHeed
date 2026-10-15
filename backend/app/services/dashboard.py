@@ -68,6 +68,22 @@ INDICATOR = {
 }
 
 
+
+def indicator_for(quarter: str) -> dict:
+    """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
+    target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
+    if not E41L2.serves(quarter):
+        return INDICATOR
+    rec = E41L2.record()
+    return {"id": "price_pressure_probability", "name": "Food Price Pressure Probability (experimental)",
+            "definition": rec["scoreTypes"]["price_pressure_probability"], "unit": "probability (0-1)",
+            "horizon": f"Lead 2: issued {rec['origin']} for {rec['targetQuarter']} with information published before "
+                       f"the origin; experimental, not validated (E41/E42)",
+            "source": "PSA provincial food CPI (OpenStat 0012M4ACP22/23), CALABARZON, 2021-01 to "
+                      + rec["information"]["cpiMonthsThrough"],
+            "caveat": "Price pressure is not food insecurity. Indicative decision support only; not an official "
+                      "classification or policy recommendation."}
+
 # The corpus labels topics with two vocabularies: the NLI hypothesis sentence
 # the classifier scored against, and a handful of bare slugs from an earlier
 # pass. Neither belongs on screen, and the two overlap, so both fold into one
@@ -584,7 +600,7 @@ def ranking(quarter: str, withheld: frozenset[str] = frozenset(),
         })
     return {
         "quarter": quarter,
-        "indicator": INDICATOR,
+        "indicator": indicator_for(quarter),
         "method": RANKING_METHOD,
         "horizonLabel": rows[0]["horizonLabel"] if rows else "",
         "data": data,
@@ -819,6 +835,33 @@ def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
     return explainer.build_drivers(province_code, quarter, records)
 
 
+# E42: what each of the five trigger groups is in the served forecast, so the dashboard never states a direction for a
+# group that has no model input or no official data (the "0% Weather is hurting food supply" defect).
+TRIGGER_STATUS_NOTES = {
+    "contributes": "This factor is a model input and moved this forecast in the direction shown.",
+    "no_effect": "This factor is a model input but did not measurably move this forecast.",
+    "no_model_input": "The current model has no input for this factor, so it neither raised nor lowered the score. "
+                      "News shares and official indicators, where available, are shown as evidence only.",
+    "no_data": "No official in-window data series exists for this factor (E41/E42 search), so it is not part of the "
+               "forecast. Missing data is not evidence of low risk.",
+}
+NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
+
+
+def _model_trigger_groups(quarter: str) -> frozenset[str]:
+    if E41L2.serves(quarter):
+        return frozenset({"market"})
+    if e31_active():
+        return frozenset(g for g, fs in E31.TRIGGER_GROUP_FEATURES.items() if fs)
+    return frozenset(E31.TRIGGER_GROUP_FEATURES)
+
+
+def trigger_status(key: str, quarter: str, pct: int) -> str:
+    if key in _model_trigger_groups(quarter):
+        return "contributes" if pct > 0 else "no_effect"
+    return "no_data" if key in NO_OFFICIAL_DATA_GROUPS else "no_model_input"
+
+
 def trigger_color(pct: int, direction: str) -> str:
     """
     Bar colour for a driver group.
@@ -858,6 +901,8 @@ def explainability(province_code: str, quarter: str) -> dict:
             "signedContribution": d["group_shap"],
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
+            "status": (st := trigger_status(d["driver_group"], quarter, pct)),
+            "statusNote": TRIGGER_STATUS_NOTES[st],
             "newsSignalProportion": d["trigger_proportion"],
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
@@ -914,6 +959,8 @@ def explainability_region(quarter: str) -> dict:
             "signedContribution": round(acc["signed"] / len(per_province), 4),
             "direction": direction,
             "color": trigger_color(pct, direction),
+            "status": (st := trigger_status(key, quarter, pct)),
+            "statusNote": TRIGGER_STATUS_NOTES[st],
             "newsSignalProportion": (
                 round(sum(acc["news"]) / len(acc["news"]), 4) if acc["news"] else None
             ),

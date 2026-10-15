@@ -17,8 +17,8 @@ router = APIRouter()
 
 def _record() -> dict:
     if not E41.active():
-        raise HTTPException(status_code=404, detail="The E41 Lead-2 candidate is not enabled. The served model is "
-                                                    "E38; set AIPHEED_LEAD2_MODEL=e41 to serve the candidate.")
+        raise HTTPException(status_code=404, detail="The Lead-2 candidate is not enabled. The served model is E38; set "
+                                                    "AIPHEED_LEAD2_MODEL=e41 or e42 to serve the candidate.")
     try:
         rec = E41.record()
     except E41.RecordError as e:
@@ -37,12 +37,16 @@ def _record() -> dict:
 def lead2_summary():
     rec = _record()
     return {k: rec[k] for k in ("name", "status", "origin", "targetQuarter", "lead", "information", "scoreTypes",
-                                "operationalRules", "evaluation", "limitations", "content_sha256")} | {
+                                "operationalRules", "evaluation", "limitations", "content_sha256")} | (
+        {"assessment": rec["assessment"]} if "assessment" in rec else {}) | {
         "provinces": [{"id": ref.province_slug(c), "provinceCode": c, "name": v["name"],
                        "probabilityAbove4pct": v["forecast"]["probabilityAbove4pct"], "band": v["forecast"]["band"],
                        "foodInflationPoint": v["forecast"]["foodInflationPoint"],
                        "interval80": v["forecast"]["interval80"], "alertCandidate": v["operational"]["alertCandidate"],
-                       "e40Probability": v["exploratory"]["e40Probability"]}
+                       "e40Probability": v["exploratory"]["e40Probability"],
+                       # E42 record only (absent for E41)
+                       "variantRange": v["forecast"].get("variantRange"),
+                       "signalCount": (v.get("signalCount") or {}).get("value")}
                       for c, v in sorted(rec["provinces"].items(),
                                          key=lambda kv: -kv[1]["forecast"]["probabilityAbove4pct"])]}
 

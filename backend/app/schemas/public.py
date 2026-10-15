@@ -251,6 +251,7 @@ class TimeseriesPoint(BaseModel):
     riskScore: float
     riskLevel: str
     isForecast: bool = False
+    scoreType: str | None = None
 
 
 class TimeseriesResponse(BaseModel):
@@ -280,6 +281,10 @@ class Trigger(BaseModel):
     pct: int
     signedContribution: float
     direction: str
+    # E42: contributes | no_effect | no_model_input | no_data, and the plain note for it (the dashboard builds its
+    # card text from the status, never a fixed direction, for a group that has no model input or no data)
+    status: str | None = None
+    statusNote: str | None = None
     color: str
     newsSignalProportion: float | None = None
 

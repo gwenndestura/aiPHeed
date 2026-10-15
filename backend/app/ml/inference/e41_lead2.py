@@ -2,7 +2,8 @@
 app/ml/inference/e41_lead2.py
 -----------------------------
 E41 Lead-2 two-layer candidate (aipheed-backend-aligned/experiments/E41_Lead2_Audit). Served only when
-AIPHEED_LEAD2_MODEL=e41; the default (e38) leaves the dashboard exactly as it is.
+AIPHEED_LEAD2_MODEL=e41 or e42 (E42: same forecast plus the E42 evidence); the default (e38) leaves the dashboard
+exactly as it is.
 
 The record keeps three things apart: observed evidence (what PSA/SWS reported, with level and age), the forecast
 probability (P(provincial food inflation > 4%) in the target quarter: price pressure, not food insecurity), and the
@@ -17,6 +18,8 @@ import os
 from pathlib import Path
 
 RECORD = Path(os.getenv("AIPHEED_E41_RECORD", "data/e41/e41_lead2_record.json"))
+# E42: same E41 forecast, enriched with the E42 evidence (variants, signal count, trigger status, backtest)
+RECORD_E42 = Path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -30,16 +33,17 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() == "e41"
+    return mode() in ("e41", "e42")
 
 
 def record() -> dict:
-    if not RECORD.exists():
-        raise RecordError("no E41 record has been generated (scripts/build_record_e41.py)")
-    rec = json.loads(RECORD.read_text(encoding="utf-8"))
+    path = RECORD_E42 if mode() == "e42" else RECORD
+    if not path.exists():
+        raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
+    rec = json.loads(path.read_text(encoding="utf-8"))
     body = {k: v for k, v in rec.items() if k != "content_sha256"}
     if hashlib.sha256(json.dumps(body, sort_keys=True, default=str).encode()).hexdigest() != rec.get("content_sha256"):
-        raise RecordError("E41 record failed its integrity check")
+        raise RecordError(f"{mode().upper()} record failed its integrity check")
     return rec
 
 
