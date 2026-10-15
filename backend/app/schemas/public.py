@@ -145,6 +145,8 @@ class ProvinceSummary(BaseModel):
     # 1.2: the system "will estimate and rank" potential risk). Null when
     # withheld, so a withheld score cannot be inferred from its position.
     rank: int | None = None
+    # E39: true when another published province has the same score (they share the rank)
+    rankTied: bool | None = None
     rankOf: int | None = None
     gapToNextLower: float | None = None
     tiedWithNextLower: bool | None = None

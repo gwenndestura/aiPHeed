@@ -493,7 +493,10 @@ def province_summary(
     )
     for i, row in enumerate(published):
         nxt = published[i + 1] if i + 1 < len(published) else None
-        row["rank"] = i + 1
+        # E39: equal scores share one rank (competition ranking: 1, 1, 3, ...) instead of consecutive ranks that
+        # pretended an order (five 0.40 scores were ranked 1-5). The API rank stays an integer.
+        row["rank"] = 1 + sum(1 for o in published if o["riskScore"] > row["riskScore"])
+        row["rankTied"] = sum(1 for o in published if o["riskScore"] == row["riskScore"]) > 1
         row["rankOf"] = len(published)
         row["gapToNextLower"] = (round(row["riskScore"] - nxt["riskScore"], 4)
                                  if nxt else None)

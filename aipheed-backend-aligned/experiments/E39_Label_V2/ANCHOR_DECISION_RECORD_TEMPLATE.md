@@ -1,3 +1,5 @@
+> **WITHDRAWN 2026-10-15 by the researcher.** No constants will be set.
+
 # E39 Label v2: anchor decision record (to be completed by the researcher and adviser)
 
 **Status: BLANK.** No E39 label, specification or model run may proceed until every field below is filled, dated and signed.
