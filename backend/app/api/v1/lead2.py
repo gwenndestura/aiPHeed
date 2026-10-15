@@ -18,7 +18,7 @@ router = APIRouter()
 def _record() -> dict:
     if not E41.active():
         raise HTTPException(status_code=404, detail="The Lead-2 candidate is not enabled. The served model is E38; set "
-                                                    "AIPHEED_LEAD2_MODEL=e41 or e42 to serve the candidate.")
+                                                    "AIPHEED_LEAD2_MODEL=e41, e42 or e43 to serve the candidate.")
     try:
         rec = E41.record()
     except E41.RecordError as e:
@@ -40,15 +40,16 @@ def lead2_summary():
                                 "operationalRules", "evaluation", "limitations", "content_sha256")} | (
         {"assessment": rec["assessment"]} if "assessment" in rec else {}) | {
         "provinces": [{"id": ref.province_slug(c), "provinceCode": c, "name": v["name"],
-                       "probabilityAbove4pct": v["forecast"]["probabilityAbove4pct"], "band": v["forecast"]["band"],
-                       "foodInflationPoint": v["forecast"]["foodInflationPoint"],
-                       "interval80": v["forecast"]["interval80"], "alertCandidate": v["operational"]["alertCandidate"],
-                       "e40Probability": v["exploratory"]["e40Probability"],
+                       "probability": E41.probability(v), "scoreType": v["forecast"]["scoreType"],
+                       "probabilityAbove4pct": v["forecast"].get("probabilityAbove4pct"), "band": v["forecast"]["band"],
+                       "foodInflationPoint": v["forecast"].get("foodInflationPoint"),
+                       "interval80": v["forecast"].get("interval80"), "alertCandidate": v["operational"]["alertCandidate"],
+                       "e40Probability": (v.get("exploratory") or {}).get("e40Probability"),
                        # E42 record only (absent for E41)
                        "variantRange": v["forecast"].get("variantRange"),
                        "signalCount": (v.get("signalCount") or {}).get("value")}
                       for c, v in sorted(rec["provinces"].items(),
-                                         key=lambda kv: -kv[1]["forecast"]["probabilityAbove4pct"])]}
+                                         key=lambda kv: -E41.probability(kv[1]))]}
 
 
 @router.get("/lead2/provinces/{province_id}")

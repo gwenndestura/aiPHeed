@@ -1,0 +1,1519 @@
+{
+ "schema": "e43/1",
+ "name": "aiPHeed five-trigger food-stress risk forecast (E43 candidate)",
+ "status": "EXPERIMENTAL CANDIDATE: not the served dashboard model; enabled only with AIPHEED_LEAD2_MODEL=e43",
+ "generated_at": "2026-10-15T14:28:43Z",
+ "origin": "2026-10-01",
+ "targetQuarter": "2027-Q1",
+ "lead": 2,
+ "information": {
+  "cpiMonthsThrough": "2026-08",
+  "swsLatestQuarter": "2026-Q2",
+  "rule": "only data published before the origin (E43 PROTOCOL section 2)"
+ },
+ "indicator": {
+  "id": "food_stress_risk_probability",
+  "name": "Food-Stress Risk Probability (exploratory)",
+  "definition": "Probability that the province is in concurrent elevated food stress in the target quarter: SWS self-rated hunger in Balance Luzon above 11.3% (regional; shared by all five provinces) AND the province's PSA food inflation above its 2021-2022 60th percentile, or food minus headline inflation above its 2021-2022 60th percentile (E40 signals, single quarter). An exploratory food-stress outcome from the two sources Chapter I section 1.7 names; not independently verified household food insecurity.",
+  "unit": "probability (0-1)",
+  "horizon": "Lead 2: issued 2026-10-01 for 2027-Q1; experimental (E43)",
+  "source": "SWS Balance Luzon hunger (approved rounds) and PSA provincial food and headline CPI; five-trigger evidence from PSA, NOAA, BSP (curated) and news",
+  "caveat": "Exploratory food-stress estimate, not verified household food insecurity; SWS is regional. Decision support only; not an official classification."
+ },
+ "scoreTypes": {
+  "food_stress_risk_probability": "Probability that the province is in concurrent elevated food stress in the target quarter: SWS self-rated hunger in Balance Luzon above 11.3% (regional; shared by all five provinces) AND the province's PSA food inflation above its 2021-2022 60th percentile, or food minus headline inflation above its 2021-2022 60th percentile (E40 signals, single quarter). An exploratory food-stress outcome from the two sources Chapter I section 1.7 names; not independently verified household food insecurity."
+ },
+ "operationalRules": {
+  "band": "Low if P < 0.33; Watch if 0.33 <= P < 0.67; High if P >= 0.67",
+  "alert": "Alert candidate when the band is High; staged for administrator confirmation.",
+  "municipal": "No municipal probability; LGU rankings are relative prioritization."
+ },
+ "provinces": {
+  "PH040100000": {
+   "provinceCode": "PH040100000",
+   "name": "Cavite",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "probability": 0.14545,
+    "band": "Low",
+    "servedModel": "SIM-0",
+    "components": {
+     "regionalHungerAbove11_3": 0.835,
+     "provincialPriceSignal": 0.177
+    },
+    "explanation": "Probability that Cavite is in concurrent elevated food stress in 2027-Q1: 15% (Low). Chance that regional hunger stays above 11.3%: 84% (latest approved round 17.3%, 2026-Q2). Chance that Cavite's food prices are above its 2021-22 reference: 18%.",
+    "variants": {
+     "SIM-5T (hunger path informed by triggers)": 0.153,
+     "LGBM-COMB (five-trigger LightGBM, Chapter I model)": 0.115,
+     "LGBM-GOV (government triggers only)": 0.152,
+     "LR-COMB (logistic baseline)": 0.145,
+     "B-clim (province base rate)": 0.25
+    },
+    "sensitivityL4": 0.198
+   },
+   "fiveTriggerModel": {
+    "model": "LGBM-COMB",
+    "probability": 0.115,
+    "groupContributionsLogOdds": {
+     "market": -0.3248,
+     "climate": -0.3867,
+     "fish_kill": -0.056,
+     "employment": 0.2015,
+     "ofw_remittance": 0.1004,
+     "hunger_history": 0.0
+    },
+    "note": "TreeSHAP of the five-trigger LightGBM at this origin. A contribution is a model attribution, not proof that the event causes food insecurity. This model was not served: it over-predicts HIGH (calibration-in-the-large -0.40) and its Brier is worse than the base rate on the common evaluation quarters."
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.5,
+     "provinceReferenceP60": 4.71,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -2.1,
+     "provinceReferenceP60": 0.74
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 2,
+     "category": "HIGH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -18.2,
+     "cornProductionYoY": 29.5,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": 8.3,
+     "aquacultureYoY": 55.2,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 57.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.1579,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component"
+    },
+    "climate": {
+     "status": "data_not_in_model",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model"
+    },
+    "fish_kill": {
+     "status": "data_not_in_model",
+     "evidence": "fisheries production shown"
+    },
+    "employment": {
+     "status": "data_not_in_model",
+     "evidence": "national LFS shown"
+    },
+    "ofw_remittance": {
+     "status": "data_not_in_model",
+     "evidence": "national remittances through 2025-Q4"
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -1.7707,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.1579
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 57,
+    "other_pct": 9.4,
+    "evidence_quarter": "2026-Q3"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2023-Q2",
+     "probability": 0.374,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q3",
+     "probability": 0.491,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q4",
+     "probability": 0.109,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q1",
+     "probability": 0.37,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.254,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.204,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.157,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.496,
+     "band": "Watch",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.302,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.321,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.221,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.308,
+     "band": "Low",
+     "observedHigh": false
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the served model at each past origin (information available then); not forecasts issued live at the time.",
+   "warnings": [
+    "SWS hunger is regional (Balance Luzon); provinces differ only through food prices.",
+    "Exploratory food-stress outcome; not verified household food insecurity.",
+    "No model met the E43 gates; Lead-2 operational use remains experimental.",
+    "Employment and OFW evidence are national, not provincial."
+   ]
+  },
+  "PH040200000": {
+   "provinceCode": "PH040200000",
+   "name": "Laguna",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "probability": 0.00375,
+    "band": "Low",
+    "servedModel": "SIM-0",
+    "components": {
+     "regionalHungerAbove11_3": 0.835,
+     "provincialPriceSignal": 0.005
+    },
+    "explanation": "Probability that Laguna is in concurrent elevated food stress in 2027-Q1: 0% (Low). Chance that regional hunger stays above 11.3%: 84% (latest approved round 17.3%, 2026-Q2). Chance that Laguna's food prices are above its 2021-22 reference: 0%.",
+    "variants": {
+     "SIM-5T (hunger path informed by triggers)": 0.004,
+     "LGBM-COMB (five-trigger LightGBM, Chapter I model)": 0.537,
+     "LGBM-GOV (government triggers only)": 0.548,
+     "LR-COMB (logistic baseline)": 0.693,
+     "B-clim (province base rate)": 0.25
+    },
+    "sensitivityL4": 0.061
+   },
+   "fiveTriggerModel": {
+    "model": "LGBM-COMB",
+    "probability": 0.537,
+    "groupContributionsLogOdds": {
+     "market": -0.3764,
+     "climate": 1.0999,
+     "fish_kill": 0.0676,
+     "employment": 0.4283,
+     "ofw_remittance": 0.1004,
+     "hunger_history": 0.0
+    },
+    "note": "TreeSHAP of the five-trigger LightGBM at this origin. A contribution is a model attribution, not proof that the event causes food insecurity. This model was not served: it over-predicts HIGH (calibration-in-the-large -0.40) and its Brier is worse than the base rate on the common evaluation quarters."
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.9,
+     "provinceReferenceP60": 6.05,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -4.0,
+     "provinceReferenceP60": 0.61
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -32.2,
+     "cornProductionYoY": -83.9,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -7.7,
+     "aquacultureYoY": -11.5,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 52.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.2308,
+      "fish_kill": 0.0385,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": 0.5054
+    }
+   },
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component"
+    },
+    "climate": {
+     "status": "data_not_in_model",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model"
+    },
+    "fish_kill": {
+     "status": "data_not_in_model",
+     "evidence": "fisheries production shown"
+    },
+    "employment": {
+     "status": "data_not_in_model",
+     "evidence": "national LFS shown"
+    },
+    "ofw_remittance": {
+     "status": "data_not_in_model",
+     "evidence": "national remittances through 2025-Q4"
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -5.5822,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.2308
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0385
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 52,
+    "other_pct": 3.2,
+    "evidence_quarter": "2026-Q3"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2023-Q2",
+     "probability": 0.368,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q3",
+     "probability": 0.492,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q4",
+     "probability": 0.166,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q1",
+     "probability": 0.373,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.311,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.373,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.104,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.522,
+     "band": "Watch",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.649,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.311,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.422,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.056,
+     "band": "Low",
+     "observedHigh": false
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the served model at each past origin (information available then); not forecasts issued live at the time.",
+   "warnings": [
+    "SWS hunger is regional (Balance Luzon); provinces differ only through food prices.",
+    "Exploratory food-stress outcome; not verified household food insecurity.",
+    "No model met the E43 gates; Lead-2 operational use remains experimental.",
+    "Employment and OFW evidence are national, not provincial."
+   ]
+  },
+  "PH040300000": {
+   "provinceCode": "PH040300000",
+   "name": "Quezon",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "probability": 0.29875,
+    "band": "Low",
+    "servedModel": "SIM-0",
+    "components": {
+     "regionalHungerAbove11_3": 0.835,
+     "provincialPriceSignal": 0.356
+    },
+    "explanation": "Probability that Quezon is in concurrent elevated food stress in 2027-Q1: 30% (Low). Chance that regional hunger stays above 11.3%: 84% (latest approved round 17.3%, 2026-Q2). Chance that Quezon's food prices are above its 2021-22 reference: 36%.",
+    "variants": {
+     "SIM-5T (hunger path informed by triggers)": 0.314,
+     "LGBM-COMB (five-trigger LightGBM, Chapter I model)": 0.195,
+     "LGBM-GOV (government triggers only)": 0.198,
+     "LR-COMB (logistic baseline)": 0.096,
+     "B-clim (province base rate)": 0.35
+    },
+    "sensitivityL4": 0.411
+   },
+   "fiveTriggerModel": {
+    "model": "LGBM-COMB",
+    "probability": 0.195,
+    "groupContributionsLogOdds": {
+     "market": -0.3009,
+     "climate": 0.1579,
+     "fish_kill": -0.0623,
+     "employment": 0.3112,
+     "ofw_remittance": 0.0307,
+     "hunger_history": 0.0
+    },
+    "note": "TreeSHAP of the five-trigger LightGBM at this origin. A contribution is a model attribution, not proof that the event causes food insecurity. This model was not served: it over-predicts HIGH (calibration-in-the-large -0.40) and its Brier is worse than the base rate on the common evaluation quarters."
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 3.6,
+     "provinceReferenceP60": 6.24,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -2.5,
+     "provinceReferenceP60": -0.56
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": 51.3,
+     "cornProductionYoY": -7.2,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -1.2,
+     "aquacultureYoY": 10.1,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 40.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.025,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component"
+    },
+    "climate": {
+     "status": "data_not_in_model",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model"
+    },
+    "fish_kill": {
+     "status": "data_not_in_model",
+     "evidence": "fisheries production shown"
+    },
+    "employment": {
+     "status": "data_not_in_model",
+     "evidence": "national LFS shown"
+    },
+    "ofw_remittance": {
+     "status": "data_not_in_model",
+     "evidence": "national remittances through 2025-Q4"
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -0.8533,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.025
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 40,
+    "other_pct": 14.9,
+    "evidence_quarter": "2026-Q3"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2023-Q2",
+     "probability": 0.293,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q3",
+     "probability": 0.444,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q4",
+     "probability": 0.109,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q1",
+     "probability": 0.297,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.264,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.386,
+     "band": "Watch",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.796,
+     "band": "High",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.946,
+     "band": "High",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.497,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.392,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.399,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.651,
+     "band": "Watch",
+     "observedHigh": false
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the served model at each past origin (information available then); not forecasts issued live at the time.",
+   "warnings": [
+    "SWS hunger is regional (Balance Luzon); provinces differ only through food prices.",
+    "Exploratory food-stress outcome; not verified household food insecurity.",
+    "No model met the E43 gates; Lead-2 operational use remains experimental.",
+    "Employment and OFW evidence are national, not provincial."
+   ]
+  },
+  "PH040400000": {
+   "provinceCode": "PH040400000",
+   "name": "Rizal",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "probability": 0.06965,
+    "band": "Low",
+    "servedModel": "SIM-0",
+    "components": {
+     "regionalHungerAbove11_3": 0.835,
+     "provincialPriceSignal": 0.083
+    },
+    "explanation": "Probability that Rizal is in concurrent elevated food stress in 2027-Q1: 7% (Low). Chance that regional hunger stays above 11.3%: 84% (latest approved round 17.3%, 2026-Q2). Chance that Rizal's food prices are above its 2021-22 reference: 8%.",
+    "variants": {
+     "SIM-5T (hunger path informed by triggers)": 0.073,
+     "LGBM-COMB (five-trigger LightGBM, Chapter I model)": 0.057,
+     "LGBM-GOV (government triggers only)": 0.036,
+     "LR-COMB (logistic baseline)": 0.057,
+     "B-clim (province base rate)": 0.05
+    },
+    "sensitivityL4": 0.276
+   },
+   "fiveTriggerModel": {
+    "model": "LGBM-COMB",
+    "probability": 0.057,
+    "groupContributionsLogOdds": {
+     "market": -0.304,
+     "climate": -1.3504,
+     "fish_kill": -0.0378,
+     "employment": 0.099,
+     "ofw_remittance": 0.0307,
+     "hunger_history": 0.0
+    },
+    "note": "TreeSHAP of the five-trigger LightGBM at this origin. A contribution is a model attribution, not proof that the event causes food insecurity. This model was not served: it over-predicts HIGH (calibration-in-the-large -0.40) and its Brier is worse than the base rate on the common evaluation quarters."
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.95,
+     "provinceReferenceP60": 7.1,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -3.65,
+     "provinceReferenceP60": 0.92
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 1.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": 24.3,
+     "cornProductionYoY": 233.0,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -18.1,
+     "aquacultureYoY": -20.8,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 40.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.25,
+      "fish_kill": 0.025,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component"
+    },
+    "climate": {
+     "status": "data_not_in_model",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model"
+    },
+    "fish_kill": {
+     "status": "data_not_in_model",
+     "evidence": "fisheries production shown"
+    },
+    "employment": {
+     "status": "data_not_in_model",
+     "evidence": "national LFS shown"
+    },
+    "ofw_remittance": {
+     "status": "data_not_in_model",
+     "evidence": "national remittances through 2025-Q4"
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -2.5921,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.25
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.025
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 40,
+    "other_pct": 6.8,
+    "evidence_quarter": "2026-Q3"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2023-Q2",
+     "probability": 0.374,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q3",
+     "probability": 0.465,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q4",
+     "probability": 0.087,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q1",
+     "probability": 0.328,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.271,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.093,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.03,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.16,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.076,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.308,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.342,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.128,
+     "band": "Low",
+     "observedHigh": false
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the served model at each past origin (information available then); not forecasts issued live at the time.",
+   "warnings": [
+    "SWS hunger is regional (Balance Luzon); provinces differ only through food prices.",
+    "Exploratory food-stress outcome; not verified household food insecurity.",
+    "No model met the E43 gates; Lead-2 operational use remains experimental.",
+    "Employment and OFW evidence are national, not provincial."
+   ]
+  },
+  "PH040500000": {
+   "provinceCode": "PH040500000",
+   "name": "Batangas",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "probability": 0.01125,
+    "band": "Low",
+    "servedModel": "SIM-0",
+    "components": {
+     "regionalHungerAbove11_3": 0.835,
+     "provincialPriceSignal": 0.013
+    },
+    "explanation": "Probability that Batangas is in concurrent elevated food stress in 2027-Q1: 1% (Low). Chance that regional hunger stays above 11.3%: 84% (latest approved round 17.3%, 2026-Q2). Chance that Batangas's food prices are above its 2021-22 reference: 1%.",
+    "variants": {
+     "SIM-5T (hunger path informed by triggers)": 0.012,
+     "LGBM-COMB (five-trigger LightGBM, Chapter I model)": 0.209,
+     "LGBM-GOV (government triggers only)": 0.226,
+     "LR-COMB (logistic baseline)": 0.438,
+     "B-clim (province base rate)": 0.25
+    },
+    "sensitivityL4": 0.093
+   },
+   "fiveTriggerModel": {
+    "model": "LGBM-COMB",
+    "probability": 0.209,
+    "groupContributionsLogOdds": {
+     "market": 0.4812,
+     "climate": -0.6027,
+     "fish_kill": -0.0367,
+     "employment": 0.2075,
+     "ofw_remittance": 0.1004,
+     "hunger_history": 0.0
+    },
+    "note": "TreeSHAP of the five-trigger LightGBM at this origin. A contribution is a model attribution, not proof that the event causes food insecurity. This model was not served: it over-predicts HIGH (calibration-in-the-large -0.40) and its Brier is worse than the base rate on the common evaluation quarters."
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 0.25,
+     "provinceReferenceP60": 7.15,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -4.15,
+     "provinceReferenceP60": 0.66
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -30.6,
+     "cornProductionYoY": 10.7,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": 4.3,
+     "aquacultureYoY": -12.8,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 73.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0137,
+      "climate": 0.0274,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component"
+    },
+    "climate": {
+     "status": "data_not_in_model",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model"
+    },
+    "fish_kill": {
+     "status": "data_not_in_model",
+     "evidence": "fisheries production shown"
+    },
+    "employment": {
+     "status": "data_not_in_model",
+     "evidence": "national LFS shown"
+    },
+    "ofw_remittance": {
+     "status": "data_not_in_model",
+     "evidence": "national remittances through 2025-Q4"
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -4.4761,
+      "direction": "protective",
+      "trigger_proportion": 0.0137
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0274
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 73,
+    "other_pct": 4.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2023-Q2",
+     "probability": 0.362,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q3",
+     "probability": 0.489,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2023-Q4",
+     "probability": 0.116,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q1",
+     "probability": 0.239,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.245,
+     "band": "Low",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.128,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.273,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.402,
+     "band": "Watch",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.171,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.495,
+     "band": "Watch",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.009,
+     "band": "Low",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.064,
+     "band": "Low",
+     "observedHigh": false
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the served model at each past origin (information available then); not forecasts issued live at the time.",
+   "warnings": [
+    "SWS hunger is regional (Balance Luzon); provinces differ only through food prices.",
+    "Exploratory food-stress outcome; not verified household food insecurity.",
+    "No model met the E43 gates; Lead-2 operational use remains experimental.",
+    "Employment and OFW evidence are national, not provincial."
+   ]
+  }
+ },
+ "evaluation": {
+  "S_C": {
+   "dates": 5,
+   "rows": 25,
+   "HIGH": 5,
+   "period": [
+    "2025-Q1",
+    "2026-Q3"
+   ],
+   "arms": {
+    "B-maj": {
+     "accuracy": 0.8,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "brier": 0.177,
+     "roc_auc": 0.15
+    },
+    "B-persist": {
+     "accuracy": 0.56,
+     "balanced_accuracy": 0.725,
+     "recall_HIGH": 1.0,
+     "recall_LOW": 0.45,
+     "brier": 0.44,
+     "roc_auc": 0.725
+    },
+    "B-clim": {
+     "accuracy": 0.8,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "brier": 0.179,
+     "roc_auc": 0.37
+    },
+    "SIM-0": {
+     "accuracy": 0.8,
+     "balanced_accuracy": 0.65,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.9,
+     "brier": 0.158,
+     "roc_auc": 0.77
+    },
+    "SIM-5T": {
+     "accuracy": 0.76,
+     "balanced_accuracy": 0.7,
+     "recall_HIGH": 0.6,
+     "recall_LOW": 0.8,
+     "brier": 0.158,
+     "roc_auc": 0.78
+    },
+    "E38-served": {
+     "accuracy": 0.12,
+     "balanced_accuracy": 0.225,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.05,
+     "brier": 0.71,
+     "roc_auc": 0.225
+    },
+    "E41-M1": {
+     "accuracy": 0.84,
+     "balanced_accuracy": 0.6,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 1.0,
+     "brier": 0.132,
+     "roc_auc": 0.81
+    },
+    "LR-GOV": {
+     "accuracy": 0.28,
+     "balanced_accuracy": 0.25,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 0.3,
+     "brier": 0.675,
+     "roc_auc": 0.23
+    },
+    "LR-NLP": {
+     "accuracy": 0.28,
+     "balanced_accuracy": 0.4,
+     "recall_HIGH": 0.6,
+     "recall_LOW": 0.2,
+     "brier": 0.321,
+     "roc_auc": 0.55
+    },
+    "LR-COMB": {
+     "accuracy": 0.4,
+     "balanced_accuracy": 0.475,
+     "recall_HIGH": 0.6,
+     "recall_LOW": 0.35,
+     "brier": 0.602,
+     "roc_auc": 0.33
+    },
+    "LGBM-GOV": {
+     "accuracy": 0.6,
+     "balanced_accuracy": 0.75,
+     "recall_HIGH": 1.0,
+     "recall_LOW": 0.5,
+     "brier": 0.278,
+     "roc_auc": 0.87
+    },
+    "LGBM-NLP": {
+     "accuracy": 0.56,
+     "balanced_accuracy": 0.575,
+     "recall_HIGH": 0.6,
+     "recall_LOW": 0.55,
+     "brier": 0.231,
+     "roc_auc": 0.655
+    },
+    "LGBM-COMB": {
+     "accuracy": 0.56,
+     "balanced_accuracy": 0.725,
+     "recall_HIGH": 1.0,
+     "recall_LOW": 0.45,
+     "brier": 0.275,
+     "roc_auc": 0.845
+    }
+   }
+  },
+  "S_SIM": {
+   "dates": 12,
+   "rows": 60,
+   "HIGH": 16,
+   "period": [
+    "2023-Q2",
+    "2026-Q3"
+   ],
+   "arms": {
+    "B-maj": {
+     "accuracy": 0.733,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "brier": 0.231,
+     "roc_auc": 0.315
+    },
+    "B-persist": {
+     "accuracy": 0.617,
+     "balanced_accuracy": 0.54,
+     "recall_HIGH": 0.375,
+     "recall_LOW": 0.705,
+     "brier": 0.383,
+     "roc_auc": 0.54
+    },
+    "B-clim": {
+     "accuracy": 0.733,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "brier": 0.215,
+     "roc_auc": 0.47
+    },
+    "SIM-0": {
+     "accuracy": 0.75,
+     "balanced_accuracy": 0.571,
+     "recall_HIGH": 0.188,
+     "recall_LOW": 0.955,
+     "brier": 0.216,
+     "roc_auc": 0.507
+    },
+    "SIM-5T": {
+     "accuracy": 0.683,
+     "balanced_accuracy": 0.585,
+     "recall_HIGH": 0.375,
+     "recall_LOW": 0.795,
+     "brier": 0.223,
+     "roc_auc": 0.567
+    }
+   }
+  },
+  "gates": {
+   "G0": true,
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "classification": "insufficient evidence for Lead-2 operational use",
+   "served": "SIM-0"
+  },
+  "status": "development evidence (all quarters seen; E40 holdout exposed)"
+ },
+ "limitations": [
+  "Target needs adviser approval (E40 signals without the sustain-2 rule).",
+  "Only 5 common evaluation quarters (25 rows, 5 HIGH); 12 quarters for the structural models.",
+  "Climate data are NOAA-derived (not PAGASA); OFW and employment are national.",
+  "No model beat the base rate convincingly; 75% accuracy is reachable by always-LOW (0.80)."
+ ],
+ "sources": {
+  "frozen_forecast": "E43_PROSPECTIVE_2027Q1.json",
+  "frozen_sha256": "b07aeae2d2bac1292b71081d0b6ac931b7742f3d56ce2bd1c49debc901d5313f",
+  "evaluation_run": "20261015T134756Z",
+  "protocol_sha256": "f23f029b5497100b8eb35653ec3cd0ca30d0cbf08b6cedba513ee1a33913a3f7"
+ },
+ "content_sha256": "fc9e42662cfa554e6368ac63b3712dc27bddbf4b9987930a1f4cf9ab5037f78b"
+}

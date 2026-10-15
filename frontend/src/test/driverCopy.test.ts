@@ -27,4 +27,11 @@ describe("trigger card copy (E42)", () => {
       .toBe("Fish kills and fisheries: no measurable effect");
     expect(isContributing({ pct: 12 })).toBe(true);
   });
+
+  it("describes available-but-unused and stale data without a direction", () => {
+    expect(driverCopy({ key: "employment", direction: "protective", status: "data_not_in_model", pct: 0 }).title)
+      .toBe("Jobs and livelihoods: data shown, not in the model");
+    expect(driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "stale", pct: 0 }).title)
+      .toBe("OFW remittances: data out of date");
+  });
 });

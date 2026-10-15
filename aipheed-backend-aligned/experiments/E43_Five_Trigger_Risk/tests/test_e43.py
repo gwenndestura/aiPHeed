@@ -98,3 +98,11 @@ def test_prospective_freeze_intact():
     assert hashlib.sha256(fz.read_bytes()).hexdigest() == want
     r = json.loads(fz.read_text())
     assert r["origin"] == "2026-10-01" and r["target_quarter"] == "2027-Q1" and r["cpi_months_used_through"] == "2026-08"
+
+
+def test_component_output_does_not_change_the_forecast():
+    """D-1: `components=True` (added after the run, for the serving record) reproduces the default output exactly."""
+    t = L.qi("2026-Q3")
+    a = K.simulate(D.cut(t), t, n=4000)
+    b = K.simulate(D.cut(t), t, n=4000, components=True)
+    assert a == {p: v["joint"] for p, v in b.items()}

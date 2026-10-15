@@ -20,6 +20,8 @@ from pathlib import Path
 RECORD = Path(os.getenv("AIPHEED_E41_RECORD", "data/e41/e41_lead2_record.json"))
 # E42: same E41 forecast, enriched with the E42 evidence (variants, signal count, trigger status, backtest)
 RECORD_E42 = Path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.json"))
+# E43: five-trigger food-stress risk forecast (Chapter I section 1.7 target); own score type, drivers and statuses
+RECORD_E43 = Path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -33,11 +35,11 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42")
+    return mode() in ("e41", "e42", "e43")
 
 
 def record() -> dict:
-    path = RECORD_E42 if mode() == "e42" else RECORD
+    path = {"e42": RECORD_E42, "e43": RECORD_E43}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
@@ -65,13 +67,15 @@ def forecast_rows(quarter: str) -> list[dict]:
     out = []
     for code, v in rec["provinces"].items():
         f = v["forecast"]
+        prob = probability(v)
         out.append({
             "province_code": code, "province_name": v["name"], "quarter": quarter,
-            "risk_probability": f["probabilityAbove4pct"], "risk_label": None, "observed_label": None,
+            "risk_probability": prob, "risk_label": None, "observed_label": None,
             "observed_S1": None,
             "data_sufficiency_flag": "SUFFICIENT" if v["observed"]["news"]["sufficient"] else "LIMITED_SIGNAL",
             "forecast_horizon_quarters": 2, "horizon_label": f"Lead 2 ({quarter}), issued {rec['origin']}",
-            "confidence_statement": f["explanation"], "verification_date": rec["origin"], "mode": "E41_LEAD2",
+            "confidence_statement": f["explanation"], "verification_date": rec["origin"],
+            "mode": f"{mode().upper()}_LEAD2",
             "origin": rec["origin"], "information_cutoff": rec["origin"], "provenance": rec["sources"],
             "score_type": f["scoreType"], "score_definition": rec["scoreTypes"][f["scoreType"]], "band": f["band"],
         })
@@ -79,11 +83,40 @@ def forecast_rows(quarter: str) -> list[dict]:
     return out
 
 
+def probability(v: dict) -> float:
+    """The served probability of a province entry (E43: food-stress risk; E41/E42: price pressure)."""
+    f = v["forecast"]
+    return f["probability"] if "probability" in f else f["probabilityAbove4pct"]
+
+
+STATUS_ORDER = ["contributes", "no_effect", "stale", "data_not_in_model", "no_model_input", "no_data"]
+
+
+def trigger_statuses(quarter: str, code: str | None = None) -> dict[str, str] | None:
+    """E43 records carry their own per-province trigger status; for the region a group takes its strongest status
+    across provinces. None for records without statuses (E41/E42 use the dashboard's model-input rule)."""
+    if not serves(quarter):
+        return None
+    provs = record()["provinces"]
+    if not all(isinstance(next(iter(v.get("triggerStatus", {}).values()), None), dict)
+               and "status" in next(iter(v["triggerStatus"].values())) for v in provs.values()):
+        return None
+    if code:
+        return {g: s["status"] for g, s in provs[code]["triggerStatus"].items()}
+    out: dict[str, str] = {}
+    for v in provs.values():
+        for g, s in v["triggerStatus"].items():
+            out[g] = min(out.get(g, s["status"]), s["status"], key=STATUS_ORDER.index)
+    return out
+
+
 def drivers(code: str, quarter: str) -> dict:
-    """Five-trigger structure for the dashboard: every model input of E41 is a price input (Market / Prices); the
-    other four groups have no model input (0), and their measured news shares are reported as they are."""
+    """Five-trigger structure for the dashboard. E43 records carry the served model's own grouped contributions;
+    for E41/E42 every model input is a price input (Market / Prices) and the other four groups have no input (0)."""
     v = record()["provinces"][code]
-    p = min(max(v["forecast"]["probabilityAbove4pct"], 1e-6), 1 - 1e-6)
+    if "drivers" in v:
+        return v["drivers"]
+    p = min(max(probability(v), 1e-6), 1 - 1e-6)
     logit = math.log(p / (1 - p))
     shares = v["observed"]["news"]["triggerShares"]
     rows = []

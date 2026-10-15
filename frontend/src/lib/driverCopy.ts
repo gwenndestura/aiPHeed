@@ -83,6 +83,14 @@ const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string)
     title: `${name}: no measurable effect`,
     description: "This factor is in the model but did not move this quarter's score.",
   }),
+  data_not_in_model: (name) => ({
+    title: `${name}: data shown, not in the model`,
+    description: "Official data exist and are shown as evidence, but the model does not use them for this score.",
+  }),
+  stale: (name) => ({
+    title: `${name}: data out of date`,
+    description: "The latest official figure is more than two quarters old, so it says little about this quarter.",
+  }),
   no_model_input: (name) => ({
     title: `${name}: not used in this forecast`,
     description: "The current model has no input for this factor, so it neither raised nor lowered the score.",

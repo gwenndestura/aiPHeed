@@ -142,7 +142,8 @@ def eligible(tr: pd.DataFrame) -> bool:
 
 
 # ================================================================================================ structural
-def simulate(d_cut: L.Data, t: int, which: str = "T43", h_shift: float = 0.0, n: int = 20000, seed: int = 43) -> dict:
+def simulate(d_cut: L.Data, t: int, which: str = "T43", h_shift: float = 0.0, n: int = 20000, seed: int = 43,
+             components: bool = False) -> dict:
     """P(label HIGH at t+2) per province: H random walk (+ h_shift mean change per quarter), food/headline RW+drift."""
     th = L.e40_spec()
     rng = np.random.default_rng(seed + t)
@@ -170,7 +171,8 @@ def simulate(d_cut: L.Data, t: int, which: str = "T43", h_shift: float = 0.0, n:
         Fq = np.mean([100 * (np.exp(pf[:, m - m0 - 1]) / np.exp(lf[m - 12]) - 1) for m in ms], axis=0)
         Hq = np.mean([100 * (np.exp(ph[:, m - m0 - 1]) / np.exp(lh[m - 12]) - 1) for m in ms], axis=0)
         price = ((Fq > th["food"][p]) | ((Fq - Hq) > th["gap"][p])) if which == "T43" else (Fq > 4.0)
-        out[p] = float(np.mean(sws & price))
+        out[p] = (float(np.mean(sws & price)) if not components else
+                  {"joint": float(np.mean(sws & price)), "hunger": float(np.mean(sws)), "price": float(np.mean(price))})
     return out
 
 

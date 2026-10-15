@@ -289,7 +289,13 @@ export interface Trigger {
   statusNote?: string;
 }
 
-export type TriggerStatus = "contributes" | "no_effect" | "no_model_input" | "no_data";
+export type TriggerStatus =
+  | "contributes"
+  | "no_effect"
+  | "data_not_in_model"
+  | "stale"
+  | "no_model_input"
+  | "no_data";
 
 export interface ExplainabilityResponse {
   scope: Scope;

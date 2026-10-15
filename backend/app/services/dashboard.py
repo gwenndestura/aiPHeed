@@ -75,6 +75,8 @@ def indicator_for(quarter: str) -> dict:
     if not E41L2.serves(quarter):
         return INDICATOR
     rec = E41L2.record()
+    if "indicator" in rec:                                        # E43 states the definition of its own score
+        return rec["indicator"]
     return {"id": "price_pressure_probability", "name": "Food Price Pressure Probability (experimental)",
             "definition": rec["scoreTypes"]["price_pressure_probability"], "unit": "probability (0-1)",
             "horizon": f"Lead 2: issued {rec['origin']} for {rec['targetQuarter']} with information published before "
@@ -844,6 +846,10 @@ TRIGGER_STATUS_NOTES = {
                       "News shares and official indicators, where available, are shown as evidence only.",
     "no_data": "No official in-window data series exists for this factor (E41/E42 search), so it is not part of the "
                "forecast. Missing data is not evidence of low risk.",
+    "data_not_in_model": "Official data for this factor exist and are shown as evidence, but the served model does "
+                         "not use them, so they neither raised nor lowered the score.",
+    "stale": "The latest official observation for this factor is more than two quarters old at the forecast date; "
+             "treat its contribution with caution.",
 }
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 
@@ -856,7 +862,10 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
     return frozenset(E31.TRIGGER_GROUP_FEATURES)
 
 
-def trigger_status(key: str, quarter: str, pct: int) -> str:
+def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
+    own = E41L2.trigger_statuses(quarter, code)                  # E43 records state their own statuses
+    if own and key in own:
+        return "no_effect" if own[key] == "contributes" and pct == 0 else own[key]
     if key in _model_trigger_groups(quarter):
         return "contributes" if pct > 0 else "no_effect"
     return "no_data" if key in NO_OFFICIAL_DATA_GROUPS else "no_model_input"
@@ -901,7 +910,7 @@ def explainability(province_code: str, quarter: str) -> dict:
             "signedContribution": d["group_shap"],
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
-            "status": (st := trigger_status(d["driver_group"], quarter, pct)),
+            "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
             "newsSignalProportion": d["trigger_proportion"],
         })
