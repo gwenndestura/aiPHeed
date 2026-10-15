@@ -1,0 +1,93 @@
+{
+ "model_id": "aiPHeed-E37-LGBM-NQ",
+ "version": "E37.1",
+ "artifact": "E37-LGBM-NQ_O2026-10-01_lead2.txt",
+ "artifact_sha256": "14cf6a45a2f7a9098f950959251fb58fc0c61a730af96739cb8216944984c3b7",
+ "lead": 2,
+ "feature_set": "COMPACT",
+ "features": [
+  "H_margin",
+  "H_trend",
+  "D_last",
+  "Dnow",
+  "news_reg",
+  "fssi_v2"
+ ],
+ "grid_id": "G3",
+ "params": {
+  "objective": "binary",
+  "n_jobs": 1,
+  "seed": 36,
+  "deterministic": true,
+  "force_col_wise": true,
+  "bagging_fraction": 1.0,
+  "bagging_freq": 0,
+  "verbose": -1,
+  "num_leaves": 3,
+  "max_depth": 2,
+  "min_data_in_leaf": 8,
+  "n_estimators": 80,
+  "learning_rate": 0.05,
+  "reg_lambda": 5.0,
+  "colsample_bytree": 0.8
+ },
+ "selection": {
+  "origin": "2026-10-01",
+  "target": "2027-Q1",
+  "chosen": "COMPACTxG3",
+  "rule": "lowest mean per-date Brier on eligible prior dates (tie 0.002 -> simpler)",
+  "prior_dates": [
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2"
+  ],
+  "scores": {
+   "COMPACTxG1": 0.22629573036152686,
+   "COMPACTxG4": 0.2518021516429201,
+   "COMPACTxG3": 0.2057808511261602,
+   "COMPACTxG2": 0.2589148922846077,
+   "COMBxG1": 0.22935791080706264,
+   "COMBxG4": 0.2538043139761841,
+   "COMBxG3": 0.2068754065903311,
+   "COMBxG2": 0.27967823788480944
+  }
+ },
+ "lightgbm_version": "4.6.0",
+ "training_rows": 70,
+ "training_target_quarters": [
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2"
+ ],
+ "protocol_sha256": "2179d101fcc8209a305751720d815bc74ac9b62d639ab58f962fb14e1b4d27e0",
+ "evaluation_run": "20261015T031545Z",
+ "origin": "2026-10-01",
+ "information_cutoff": "2026-10-01T00:00:00+08:00 (exclusive)",
+ "feature_availability": {
+  "H_last/H_trend/H_margin": "SWS rounds posted before the origin; latest quarter 2026-Q2",
+  "y_last": "label of 2026-Q2",
+  "D_last": "PSA food CPI of 2026-Q2",
+  "Dnow/rice_rel": "PSA food and rice CPI, months 1-2 of 2026-Q3",
+  "news": "validated articles published in 2026-Q3"
+ },
+ "tau": 14.993333333333334,
+ "status": "EXPERIMENTAL / NOT VALIDATED"
+}
