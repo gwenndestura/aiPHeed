@@ -173,11 +173,13 @@ def main():
             "nested_distinct_selections": int(g["selected"].nunique()),
             "nested_origins_using_default_for_lack_of_inner_dates": int((g["n_inner"] < MIN_INNER).sum()),
             "nested_origins_selecting_default": int((g["selected"] == DEFAULT_ID).sum()),
-            "full_selected": full_pick, "full_best_brier": float(full.min()), "default_full_brier": float(full[DEFAULT_ID]),
+            "full_selected": full_pick, "full_selected_brier": float(full[full_pick]),
+            "min_config": str(full.idxmin()), "full_best_brier": float(full.min()), "default_full_brier": float(full[DEFAULT_ID]),
             "configs_within_tie_of_best": int((full <= full.min() + TIE).sum()),
             "bootstrap_selection_frequency": {c: v / B_SEL for c, v in sorted(wins.items(), key=lambda x: -x[1])},
             "bootstrap_default_selected_share": wins.get(DEFAULT_ID, 0) / B_SEL,
-            "optimism_nested_minus_full_best": res["metrics"][f"lead{k}"]["E35-TUNED"]["mean_per_date_brier"] - float(full.min()),
+            "optimism_nested_minus_full_selected": res["metrics"][f"lead{k}"]["E35-TUNED"]["mean_per_date_brier"] - float(full[full_pick]),
+            "optimism_nested_minus_min_config": res["metrics"][f"lead{k}"]["E35-TUNED"]["mean_per_date_brier"] - float(full.min()),
             "config_full_brier": {c: {"brier": float(full[c]), "ci95": ci[c]} for c in full.sort_values().index},
             "range_of_config_brier": [float(full.min()), float(full.max())]}
 
@@ -276,10 +278,12 @@ def results_table(res: dict) -> str:
                        f"{f(x['p_one_sided'], 3)} | {f(x['p_holm'], 3)} |")
         s = res["selection"][k]
         out += ["", f"Nested selections: {s['nested_selected_per_origin']}", "",
-                f"Full-period best {s['full_selected']} ({f(s['full_best_brier'])}); default {f(s['default_full_brier'])}; "
-                f"{s['configs_within_tie_of_best']} configurations within 0.005 of the best; "
+                f"In-sample (S-FULL) selection {s['full_selected']} (Brier {f(s['full_selected_brier'])}; the lowest of the 36 is "
+                f"{s['min_config']} at {f(s['full_best_brier'])}, inside the 0.005 tie); E32 default {f(s['default_full_brier'])}; "
+                f"{s['configs_within_tie_of_best']} configurations within 0.005 of the lowest; "
                 f"bootstrap: default selected in {s['bootstrap_default_selected_share']:.1%} of resamples; "
-                f"optimism (nested − in-sample best) {f(s['optimism_nested_minus_full_best'])}.", ""]
+                f"optimism (nested E35-TUNED − S-FULL) {f(s['optimism_nested_minus_full_selected'])} "
+                f"(− lowest configuration: {f(s['optimism_nested_minus_min_config'])}).", ""]
     a = res["acceptance"]
     out += ["## Acceptance (lead 1)", "", f"Verdict: **{a['verdict']}**", ""] + \
         [f"- {k}: {v}" for k, v in a.items() if k[:2] in ("A1", "A2", "A3", "A4", "T_")]

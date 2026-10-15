@@ -1,0 +1,116 @@
+{
+ "record": "E35 prospective research arm: nested-selected E32-PCFN configuration; NOT served",
+ "verdict_on_development_dates": "NO IMPROVEMENT",
+ "protocol_sha256": "4af6492af821e01d02d6845f70515d438369f8e1b7915ebe13a3d8b0bcad4d6d",
+ "dataset_sha256": {
+  "sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+  "s1_labels.csv": "2128866651d4e1cd30d90bd49a8e075ad06cb33732d944428bcbcf1a5e2807f1",
+  "d_quarterly_panel.csv": "87b927987973c089bd888ad61533db1b0a014bafb7a750bdb1efc1516e15f871",
+  "dnow_panel.csv": "255542eb1cc249b01c06a9da508625d07d51ccc2bc7bfe27d45460742cf7cddb",
+  "news_e31/articles.jsonl": "3015d193c8753565a3fcf06752bb3452cd5f63827bba51da78ab39d7d548cc4f",
+  "news_e31/scores.jsonl": "e89c67b7a73b530bcd06874b814ecb38f0911bb6448ca847800cffa0e4f1442c",
+  "news_e31/fssi_v2_panel.csv": "2a0a10499d2f2eb382f78cd914a27fcf083b86e542be498455f3c7330b742b1b",
+  "rice_cpi": "f59194fa5f29f71de5a08fe4afe95e342fbc937e4bfac541461fba11302f4a9e"
+ },
+ "source_run": "20261015T005446Z",
+ "source_results_sha256": "b911a85375a00667acaca3570a7ed9fd07096bdca53a35029953467ab929bb82",
+ "e32_frozen_record": {
+  "path": "E32_New_Model/frozen/E32_PROSPECTIVE.json",
+  "sha256": "37e0d66bffc7d757314463ada611bd6ae33de978465a1dd6f7f68679926ab159"
+ },
+ "origin": "2026-10-01",
+ "information_cutoff": "2026-09-30T23:59:59+08:00",
+ "leads": {
+  "1": {
+   "target_quarter": "2026-Q4",
+   "tau": 14.993333333333334,
+   "inner_dates": [
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "selected_config": {
+    "id": "lam1.0|D1|c0.80",
+    "lambda": 1.0,
+    "D_set": [
+     "D_last"
+    ],
+    "c": 0.8
+   },
+   "equals_E32_default": false,
+   "p_high": {
+    "PH040100000": 0.9042081099039763,
+    "PH040200000": 0.8646894177452598,
+    "PH040300000": 0.9101102524755775,
+    "PH040400000": 0.8848001612733565,
+    "PH040500000": 0.6651783514123134
+   },
+   "decision_at_0.5": {
+    "PH040100000": "HIGH",
+    "PH040200000": "HIGH",
+    "PH040300000": "HIGH",
+    "PH040400000": "HIGH",
+    "PH040500000": "HIGH"
+   },
+   "E32_PCFN_frozen_p_high": {
+    "PH040100000": 0.7050238792538686,
+    "PH040200000": 0.8752254436705135,
+    "PH040300000": 0.8279549127166976,
+    "PH040400000": 0.7627582621753246,
+    "PH040500000": 0.6074334092806063
+   }
+  },
+  "2": {
+   "target_quarter": "2027-Q1",
+   "tau": 14.993333333333334,
+   "inner_dates": [
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "selected_config": {
+    "id": "lam1.0|D4|c1.00",
+    "lambda": 1.0,
+    "D_set": [
+     "D_last",
+     "Dnow",
+     "rice_rel",
+     "news_n"
+    ],
+    "c": 1.0
+   },
+   "equals_E32_default": false,
+   "p_high": {
+    "PH040100000": 0.6657301385580193,
+    "PH040200000": 0.8952465302243332,
+    "PH040300000": 0.7924108675309126,
+    "PH040400000": 0.751610609420289,
+    "PH040500000": 0.7253910862343086
+   },
+   "decision_at_0.5": {
+    "PH040100000": "HIGH",
+    "PH040200000": "HIGH",
+    "PH040300000": "HIGH",
+    "PH040400000": "HIGH",
+    "PH040500000": "HIGH"
+   },
+   "E32_PCFN_frozen_p_high": {
+    "PH040100000": 0.6204226257867624,
+    "PH040200000": 0.8714685123354452,
+    "PH040300000": 0.7559245535147172,
+    "PH040400000": 0.7115794316551403,
+    "PH040500000": 0.6834508541688236
+   }
+  }
+ }
+}
