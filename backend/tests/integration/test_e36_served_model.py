@@ -34,8 +34,8 @@ def test_record_integrity_and_schema():
     assert hashlib.sha256(json.dumps(body, sort_keys=True, default=str).encode()).hexdigest() == REC["content_sha256"]
     assert REC["schema"] == "e36/1"
     assert "LightGBM" in REC["served_engine"]["name"]
-    assert [q["mode"] for q in REC["quarters"]] == ["BACKTEST"] * 13 + ["FORECAST"]
-    assert all(q["lead"] == 1 for q in REC["quarters"])
+    assert [q["mode"] for q in REC["quarters"]] == ["BACKTEST"] * 13 + ["FORECAST"] * 2
+    assert [q["lead"] for q in REC["quarters"]] == [1] * 14 + [2]          # next quarter = lead 2 (E38)
 
 
 def test_forecast_is_issued_before_its_quarter_with_previous_quarter_news():
@@ -122,7 +122,8 @@ def test_psa_2021_sae_reaches_all_142_lgus_with_lucena_flagged():
 def test_lgu_ranking_in_record_api_and_recompute_agree():
     vul = pd.read_csv("data/inputs/lgu_vulnerability.csv", dtype={"lgu_code": str})
     ros = pd.read_csv("data/reference/calabarzon_lgus.csv", dtype={"lgu_psgc": str})
-    rk = build_ranking(vul, ros, {c: v["p_high"] for c, v in FC["provinces"].items()}, {})
+    NQ = next(q for q in REC["quarters"] if q.get("role") == "next_quarter")      # the dashboard target
+    rk = build_ranking(vul, ros, {c: v["p_high"] for c, v in NQ["provinces"].items()}, {})
     rec_rows = {r["lgu_code"]: r for r in REC["lgu_ranking"]["rows"]}
     assert len(rec_rows) == 142
     for r in rk["rows"]:
@@ -132,7 +133,7 @@ def test_lgu_ranking_in_record_api_and_recompute_agree():
     api = client.get("/api/v1/quarterly/e31/lgu-ranking").json()["rows"]
     assert {r["lgu_code"]: r["risk_index"] for r in api} == {k: v["risk_index"] for k, v in rec_rows.items()}
     for code, slug in SLUG.items():
-        m = client.get(f"/api/v1/provinces/{slug}/municipalities?quarter=2026-Q4").json()["data"]
+        m = client.get(f"/api/v1/provinces/{slug}/municipalities?quarter=2027-Q1").json()["data"]
         for row in m:
             assert row["riskIndex"] == pytest.approx(rec_rows[row["lguCode"]]["risk_index"], abs=1e-4)
             if row["lguCode"] == "045624000":

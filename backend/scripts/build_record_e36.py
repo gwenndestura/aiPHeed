@@ -41,6 +41,11 @@ BUNDLE = E36 / "frozen" / "E36_SERVING_BUNDLE.json"
 PROSPECTIVE = E36 / "frozen" / "E36_PROSPECTIVE_2026Q4.json"
 MODEL_TXT = E36 / "models" / "E36-LGBM_O2026-10-01.txt"
 MODEL_CFG = E36 / "models" / "E36-LGBM_O2026-10-01.json"
+E38 = ROOT.parent / "aipheed-backend-aligned" / "experiments" / "E38_Lead2_Diagnosis_Tuning"
+NQ_BUNDLE = E38 / "frozen" / "E38_SERVING_BUNDLE.json"              # next-quarter (lead 2) forecast, E38 procedure
+NQ_PROSPECTIVE = E38 / "frozen" / "E38_PROSPECTIVE_2027Q1.json"
+NQ_MODEL_TXT = E38 / "models" / "E38-LGBM-NQ_O2026-10-01_lead2.txt"
+NQ_MODEL_CFG = E38 / "models" / "E38-LGBM-NQ_O2026-10-01_lead2.json"
 OUT = ROOT / "data" / "e36"
 BASE = ROOT / "data" / "e31" / "e31_record.json"
 NAMES = {"PH040100000": "Cavite", "PH040200000": "Laguna", "PH040300000": "Quezon", "PH040400000": "Rizal",
@@ -88,13 +93,18 @@ PLAIN = {"fssi_v2": "Food-stress tone of the province's validated news",
 
 
 def estimate(v: dict) -> dict:
+    shift = v.get("prior_shift_logodds", 0.0)
     out = {"province": v["province"], "p_high": r4(v["p_high"]), "signal": signal(v["p_high"]),
            "drivers": [{"key": d["key"], "factor": PLAIN.get(d["key"], d["factor"]), "value": r4(d["value"]),
                         "contribution": r4(d["contribution"]),
                         "kind": "government indicator" if d["source"] == "government" else "news signal"}
                        for d in v["drivers"]],
-           "driver_method": DRIVER_METHOD, "shap_expected_value_logodds": r4(v["expected_value_logodds"]),
+           "driver_method": DRIVER_METHOD,
+           # the model's TreeSHAP baseline plus, for the next-quarter model, its prior-shift offset (E38 section 2)
+           "shap_expected_value_logodds": r4(v["expected_value_logodds"] + shift),
            "persistence_p": v.get("persistence_p")}
+    if "decision_threshold" in v:
+        out.update(decision_threshold=v["decision_threshold"], prior_shift_logodds=r4(shift))
     if "observed_label" in v:
         out.update(observed_label=v["observed_label"], observed_S1=r4(v["observed_S1"]))
     return out
@@ -113,6 +123,7 @@ def quarters(b: dict, base: dict) -> list[dict]:
         used = sum((funnel.get((c, ev["evidence_quarter"])) or {}).get("admitted_after_dedup", 0) for c in ORDER)
         out.append({
             "quarter": q["quarter"], "mode": mode, "lead": 1, "origin": q["origin"],
+            "role": "backtest" if mode == "BACKTEST" else "current_quarter",
             "information_cutoff": q["information_cutoff"],
             "status": ("development backtest: nested walk-forward, refitted at this origin with only information "
                        "published before it; the outcome had been examined in earlier experiments" if mode == "BACKTEST"
@@ -127,6 +138,27 @@ def quarters(b: dict, base: dict) -> list[dict]:
             "provinces": {c: estimate(q["provinces"][c]) for c in ORDER},
         })
     return out
+
+
+def next_quarter_row(nb: dict, base: dict) -> dict:
+    """The frozen E38 next-quarter forecast (lead 2 from the quarter-start origin)."""
+    f = nb["forecast"]
+    funnel = {(r["province_code"], r["quarter"]): r for r in base["news"]["by_province_quarter"]}
+    ev = evidence_window(f["quarter"], "forecast", f"{f['origin']}T00:00:00+08:00", lead=f["lead"]).to_dict()
+    return {"quarter": f["quarter"], "mode": "FORECAST", "lead": f["lead"], "role": "next_quarter",
+            "origin": f["origin"], "information_cutoff": f["information_cutoff"],
+            "status": ("next-quarter forecast, frozen before the outcome exists; development accuracy 39/55 = 0.709 at "
+                       "this horizon (E38), reliability not established"),
+            "threshold": r4(f["tau"]), "model_config": f["config"], "model_id": f["model_id"],
+            "decision_threshold": f["decision_threshold"], "feature_availability": f["feature_availability"],
+            "provenance": {"mode": "forecast", "generated_at": f["frozen_at_utc"], "information_cutoff": f["information_cutoff"],
+                           "news_evidence_window": ev, "frozen_sha256": nb["prospective_sha256"],
+                           "n_articles_used_by_model": sum((funnel.get((c, ev["evidence_quarter"])) or {}).get(
+                               "admitted_after_dedup", 0) for c in ORDER),
+                           "news_version": {"store": base["news"]["source"],
+                                            "articles_jsonl_sha256": base["news"]["articles_jsonl_sha256"]}},
+            "provinces": {c: {**estimate({**f["provinces"][c], "expected_value_logodds": f["provinces"][c]["expected_value_logodds"]}),
+                              "model_estimate": f["provinces"][c]["model_estimate"]} for c in ORDER}}
 
 
 def provinces_now(fc: dict, last: dict, base: dict) -> dict:
@@ -199,6 +231,24 @@ def validation(b: dict, base: dict) -> dict:
     }
 
 
+def next_quarter_validation(nb: dict) -> dict:
+    ev = nb["evaluation"]
+    m = ev["metrics"]
+    label = {**BASELINE_LABEL, "E38-LGBM": "Proposed: combined LightGBM, next quarter (E38 tuned, nested)",
+             "E36-LGBM": "Proposed before tuning (E37 procedure)", "CLIMATOLOGY": "Diagnostic: climatology"}
+    rows = [{"arm": label.get(a, a), "key": a, "correct": v["correct"], "n": v["n"], "accuracy": r4(v["accuracy"]),
+             "accuracy_ci95": [round(x, 6) for x in v["accuracy_ci95"]], "balanced_accuracy": r4(v["balanced_accuracy"]),
+             "low_recall": f"{v['TN']}/{v['TN'] + v['FP']}", "brier": r4(v["brier"]),
+             "formal_thesis_baseline": a in BASELINE_LABEL and a not in ("E36-LGBM", "ALWAYS_HIGH")}
+            for a, v in m.items()]
+    return {"basis": f"E38 frozen protocol; lead 2 (next calendar quarter); nested walk-forward; run {ev['run']}; "
+                     "11 development dates examined before (not independent)",
+            "dates": ev["dates"], "rows": rows, "adoption": ev["adoption"],
+            "verdict": ("Next-quarter accuracy 39/55 = 0.709 (95% date-bootstrap 0.582-0.836): the 75% target is NOT "
+                        "met. Persistence reaches 0.800. No paired difference with the six thesis models is "
+                        "significant. Validation status: NOT DEMONSTRATED.")}
+
+
 def _clean(o):
     if isinstance(o, float):
         return None if (math.isnan(o) or math.isinf(o)) else o
@@ -212,16 +262,22 @@ def _clean(o):
 def build() -> dict:
     b = frozen_ok(BUNDLE)
     frozen_ok(PROSPECTIVE)
-    if sha_file(MODEL_TXT) != b["model"]["artifact_sha256"] and hashlib.sha256(
-            MODEL_TXT.read_bytes().replace(b"\r\n", b"\n")).hexdigest() != b["model"]["artifact_sha256"]:
+    lf = hashlib.sha256(MODEL_TXT.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    known = json.loads((MODEL_TXT.parent / "ARTIFACT_HASHES.json").read_text(encoding="utf-8"))[MODEL_TXT.name]
+    # the freeze-time bytes mixed line endings and are not recoverable (ARTIFACT_HASHES.json); identity = LF hash
+    if not (known["sha256_at_freeze"] == b["model"]["artifact_sha256"] and known["sha256_lf_normalized"] == lf):
         raise SystemExit("model artifact does not match the bundle")
     base = json.loads(BASE.read_text(encoding="utf-8"))
-    qs = quarters(b, base)
-    fc = qs[-1]
+    nb = frozen_ok(NQ_BUNDLE)
+    frozen_ok(NQ_PROSPECTIVE)
+    if hashlib.sha256(NQ_MODEL_TXT.read_bytes().replace(b"\r\n", b"\n")).hexdigest() != nb["model"]["artifact_sha256_lf"]:
+        raise SystemExit("next-quarter model artifact does not match its bundle")
+    qs = quarters(b, base) + [next_quarter_row(nb, base)]
+    fc = qs[-1]                                    # the dashboard's target: the next calendar quarter
     vul = pd.read_csv(ROOT / "data" / "inputs" / "lgu_vulnerability.csv", dtype={"lgu_code": str})
     ros = pd.read_csv(ROOT / "data" / "reference" / "calabarzon_lgus.csv", dtype={"lgu_psgc": str})
     rk = build_ranking(vul, ros, {c: fc["provinces"][c]["p_high"] for c in ORDER},
-                       {"source": f"E36 FORECAST {fc['quarter']} (aiPHeed-E36-LGBM, origin {fc['origin']})",
+                       {"source": f"next-quarter FORECAST {fc['quarter']} ({fc['model_id']}, origin {fc['origin']})",
                         "evidence_status": "EXPERIMENTAL"})
     n_sae = int(vul["poverty_lgu_estimate"].notna().sum())
     mc = b["model"]
@@ -245,10 +301,19 @@ def build() -> dict:
         "target_definition": base["target_definition"],
         "regional_hunger": base["regional_hunger"],
         "quarters": qs,
-        "provinces_now": provinces_now(fc, qs[-2], base),
+        "provinces_now": provinces_now(fc, next(q for q in reversed(qs) if q["mode"] == "BACKTEST"), base),
+        "next_quarter_model": {
+            "name": nb["model"]["model_id"], "version": nb["model"]["version"], "lead": nb["model"]["lead"],
+            "file": "data/e36/model/" + NQ_MODEL_TXT.name, "sha256_lf": nb["model"]["artifact_sha256_lf"],
+            "config": {"feature_set": nb["model"]["feature_set"], "features": nb["model"]["features"],
+                       "grid_id": nb["model"]["grid_id"], "adjustment": nb["model"]["adjustment"],
+                       "decision_threshold": nb["model"]["decision_threshold"]},
+            "why_served": "chosen by the frozen E38 nested rule and adopted by its pre-declared rule over E37 "
+                          "(equal accuracy and balanced accuracy, lower Brier)",
+            "evidence_status": nb["model"]["status"]},
         "lgu_ranking": rk,
         "news": base["news"],
-        "validation": validation(b, base),
+        "validation": {**validation(b, base), "next_quarter_evaluation": next_quarter_validation(nb)},
         "limitations": [
             "The label is dominated by one regional SWS hunger value, so in most quarters all five provinces share a "
             "label; 53 of 65 development labels are HIGH. Provincial differences come mainly from relative food "
@@ -263,8 +328,10 @@ def build() -> dict:
             f"LGU rankings re-weight the province forecast by PSA 2021 municipal poverty ({n_sae} of 142 LGUs; Lucena "
             "City, a highly urbanized city absent from the PSA no-HUC table, uses a province substitute of "
             "unverified source) and 2024 POPCEN density. They are relative positions, not municipal forecasts.",
-            "The 2026-Q4 forecast is the first untouched test; it can be scored only after the SWS December 2026 "
-            "round is released.",
+            "The next-quarter forecast (two quarters after the latest complete data quarter) scored 39/55 = 0.709 on "
+            "development dates (E38), below 75%; persistence scored 0.800. Reliability is not established.",
+            "The 2026-Q4 and 2027-Q1 forecasts are the first untouched tests; they can be scored only after the SWS "
+            "December 2026 and March 2027 rounds are released.",
         ],
         "disclaimer": DISCLAIMER,
     }
@@ -285,7 +352,7 @@ def write_pdf(rec: dict, path: Path):
     pct = lambda x: "-" if x is None else f"{100 * x:.0f}%"  # noqa: E731
     f3 = lambda x: "-" if x is None else f"{x:.3f}"  # noqa: E731
     se = rec["served_engine"]
-    fcq = next(q for q in rec["quarters"] if q["mode"] == "FORECAST")
+    fcq = next(q for q in rec["quarters"] if q.get("role") == "next_quarter")
     els = [P(rec["title"], "Title"),
            P(f"Model {se['name']} {se['version']}. Forecast quarter {fcq['quarter']}, issued at origin {fcq['origin']} "
              f"with information published before it. Record SHA-256 {rec['content_sha256']}."),
@@ -301,7 +368,7 @@ def write_pdf(rec: dict, path: Path):
     for c, b in rec["provinces_now"].items():
         e, lb = b["forecast"], b["latest_backtest"]
         ne = b["news_evidence"] or {}
-        els += [P(f"{b['province']}: {b['forecast_quarter']} forecast (lead 1)", "Heading2"),
+        els += [P(f"{b['province']}: {b['forecast_quarter']} forecast (next quarter, issued {fcq['origin']})", "Heading2"),
                 Table([["", f"{b['forecast_quarter']} FORECAST", f"{lb['quarter']} backtest (observed {lb.get('observed_label')})"],
                        ["P(HIGH)", pct(e["p_high"]), pct(lb["p_high"])], ["Signal", e["signal"], lb["signal"]]]),
                 P("Main drivers (TreeSHAP, log-odds):"),
@@ -325,7 +392,14 @@ def write_pdf(rec: dict, path: Path):
         rows.append([r["arm"][:52], f"{r['correct']}/{r['n']}", f3(r["accuracy_lead1"]),
                      f"{f3(r['accuracy_ci95'][0])}-{f3(r['accuracy_ci95'][1])}", f3(r["balanced_accuracy"]),
                      f3(r["precision"]), f3(r["recall"]), f3(r["f1"]), f3(r["roc_auc"]), f3(r["brier"])])
-    els += [Table(rows), P(v["threshold_75pct"]["verdict"])]
+    els += [Table(rows), P(v["threshold_75pct"]["verdict"]),
+            P("Model evaluation: next quarter (the dashboard target), development quarters", "Heading2"),
+            P(v["next_quarter_evaluation"]["basis"]),
+            Table([["Approach", "Correct/n", "Acc", "Acc 95% CI", "Bal.acc", "LOW recall", "Brier"]] +
+                  [[r["arm"][:52], f"{r['correct']}/{r['n']}", f3(r["accuracy"]),
+                    f"{f3(r['accuracy_ci95'][0])}-{f3(r['accuracy_ci95'][1])}", f3(r["balanced_accuracy"]),
+                    r["low_recall"], f3(r["brier"])] for r in v["next_quarter_evaluation"]["rows"]]),
+            P(v["next_quarter_evaluation"]["verdict"])]
     ho = v["news_relevance"]["holdout"]["gates"]["R1"]
     els += [P("News relevance validation (blind holdout)", "Heading2"),
             P(f"Rule R1: precision {ho['precision']}, recall {ho['recall']}, F1 {ho['f1']}."),
@@ -340,7 +414,9 @@ def write_pdf(rec: dict, path: Path):
 def main():
     rec = build()
     (OUT / "model").mkdir(parents=True, exist_ok=True)
-    for src in (MODEL_TXT, MODEL_CFG, BUNDLE, PROSPECTIVE, BUNDLE.with_suffix(".sha256"), PROSPECTIVE.with_suffix(".sha256")):
+    for src in (MODEL_TXT, MODEL_CFG, BUNDLE, PROSPECTIVE, BUNDLE.with_suffix(".sha256"), PROSPECTIVE.with_suffix(".sha256"),
+                NQ_MODEL_TXT, NQ_MODEL_CFG, NQ_BUNDLE, NQ_PROSPECTIVE, NQ_BUNDLE.with_suffix(".sha256"),
+                NQ_PROSPECTIVE.with_suffix(".sha256")):
         shutil.copyfile(src, OUT / "model" / src.name)
     blob = json.dumps(rec, indent=1, ensure_ascii=False, default=str, allow_nan=False).encode("utf-8")
     (OUT / "e36_record.json").write_bytes(blob)

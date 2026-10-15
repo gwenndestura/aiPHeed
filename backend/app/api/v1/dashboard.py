@@ -79,9 +79,11 @@ async def get_config() -> ConfigResponse:
             "forecastQuarters": ([q for q in svc.available_quarters(svc.NOWCAST)
                                   if svc.E31.quarter_row(q, svc.NOWCAST)["mode"] in ("FORECAST", "NOWCAST")]
                                  if svc.e31_active() else []),
+            "forecastTarget": svc.forecast_target(),
             "note": (
-                "E31 record: backtests and a scored 2026-Q3 are observed quarters; 2026-Q4 is a same-quarter "
-                "nowcast and 2027-Q1 a one-quarter-ahead forecast (information cutoff 2026-10-14)."
+                "Backtests are observed quarters. The current quarter and the next calendar quarter (the dashboard's "
+                "target) are forecasts issued at the start of the current quarter with information published before "
+                "it; neither outcome is known yet."
                 if svc.e31_active() else
                 "Every scorable quarter is an observed one. The model scores "
                 "quarters PSA has already published production volumes for, so "
@@ -104,8 +106,9 @@ async def get_quarters(
     the slider stops where it does instead of looking broken.
     """
     h = svc.check_horizon(horizon)
-    now = datetime.now(PST)
-    calendar_quarter = f"{now.year}-Q{(now.month - 1) // 3 + 1}"
+    target = svc.forecast_target()                    # app/quarterly/target.py: the only clock (Asia/Manila)
+    now = datetime.fromisoformat(target["now_ph"])
+    calendar_quarter = target["calendar_quarter"]
     current = svc.latest_quarter(h)
     lag = ref.quarter_index(calendar_quarter) - ref.quarter_index(current)
     return QuartersResponse(
@@ -114,6 +117,7 @@ async def get_quarters(
         serverTime=now.isoformat(),
         calendarQuarter=calendar_quarter,
         lagQuarters=max(lag, 0),
+        forecastTarget={**target, "available": current == target["target_quarter"]},
         quarters=svc.timeline(h),
     )
 

@@ -104,6 +104,8 @@ class QuartersResponse(BaseModel):
     serverTime: str
     calendarQuarter: str
     lagQuarters: int
+    # The dynamic next-quarter target (app/quarterly/target.py) and whether its forecast exists.
+    forecastTarget: dict | None = None
     quarters: list[Quarter]
 
 

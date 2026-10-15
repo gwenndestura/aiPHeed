@@ -1,0 +1,1255 @@
+{
+ "evaluation": {
+  "adoption": {
+   "E37_mean_date_brier": 0.2156272317556787,
+   "E38_mean_date_brier": 0.19964707957443853,
+   "accuracy_ge_E37": true,
+   "adopt_E38": true,
+   "balanced_ge_E37": true,
+   "mean_date_brier_le_E37": true,
+   "validation_status": "NOT DEMONSTRATED"
+  },
+  "dates": [
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "lead": 2,
+  "metrics": {
+   "ALWAYS_HIGH": {
+    "FN": 0,
+    "FP": 6,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 0,
+    "TP": 49,
+    "accuracy": 0.8909090909090909,
+    "accuracy_ci95": [
+     0.8181818181818182,
+     0.9636363636363636
+    ],
+    "balanced_accuracy": 0.5,
+    "brier": 0.10909069091009091,
+    "correct": 49,
+    "dates": 11,
+    "f1": 0.9423076923076923,
+    "n": 55,
+    "pr_auc": 0.8909090909090909,
+    "precision": 0.8909090909090909,
+    "recall": 1.0,
+    "roc_auc": 0.5,
+    "specificity": 0.0
+   },
+   "B1_PERSISTENCE": {
+    "FN": 9,
+    "FP": 2,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 4,
+    "TP": 40,
+    "accuracy": 0.8,
+    "accuracy_ci95": [
+     0.6909090909090909,
+     0.8909090909090909
+    ],
+    "balanced_accuracy": 0.7414965986394557,
+    "brier": 0.199999600001,
+    "correct": 44,
+    "dates": 11,
+    "f1": 0.8791208791208791,
+    "n": 55,
+    "pr_auc": 0.941090202314692,
+    "precision": 0.9523809523809523,
+    "recall": 0.8163265306122449,
+    "roc_auc": 0.7414965986394558,
+    "specificity": 0.6666666666666666
+   },
+   "B2_LR_COMB": {
+    "FN": 20,
+    "FP": 2,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 4,
+    "TP": 29,
+    "accuracy": 0.6,
+    "accuracy_ci95": [
+     0.38181818181818183,
+     0.8
+    ],
+    "balanced_accuracy": 0.629251700680272,
+    "brier": 0.2861610097998922,
+    "correct": 33,
+    "dates": 11,
+    "f1": 0.7249999999999999,
+    "n": 55,
+    "pr_auc": 0.933800172702483,
+    "precision": 0.9354838709677419,
+    "recall": 0.5918367346938775,
+    "roc_auc": 0.6972789115646258,
+    "specificity": 0.6666666666666666
+   },
+   "B3_LR_GOV": {
+    "FN": 20,
+    "FP": 2,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 4,
+    "TP": 29,
+    "accuracy": 0.6,
+    "accuracy_ci95": [
+     0.38181818181818183,
+     0.8
+    ],
+    "balanced_accuracy": 0.629251700680272,
+    "brier": 0.25338912545058684,
+    "correct": 33,
+    "dates": 11,
+    "f1": 0.7249999999999999,
+    "n": 55,
+    "pr_auc": 0.9420136730295309,
+    "precision": 0.9354838709677419,
+    "recall": 0.5918367346938775,
+    "roc_auc": 0.7108843537414966,
+    "specificity": 0.6666666666666666
+   },
+   "B4_LR_NLP": {
+    "FN": 19,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 30,
+    "accuracy": 0.5818181818181818,
+    "accuracy_ci95": [
+     0.38181818181818183,
+     0.7818181818181819
+    ],
+    "balanced_accuracy": 0.4727891156462585,
+    "brier": 0.221424210422254,
+    "correct": 32,
+    "dates": 11,
+    "f1": 0.7228915662650602,
+    "n": 55,
+    "pr_auc": 0.9182961307222312,
+    "precision": 0.8823529411764706,
+    "recall": 0.6122448979591837,
+    "roc_auc": 0.5306122448979592,
+    "specificity": 0.3333333333333333
+   },
+   "B5_LGBM_GOV": {
+    "FN": 12,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 37,
+    "accuracy": 0.7090909090909091,
+    "accuracy_ci95": [
+     0.5818181818181818,
+     0.8363636363636363
+    ],
+    "balanced_accuracy": 0.5442176870748299,
+    "brier": 0.2225671630742497,
+    "correct": 39,
+    "dates": 11,
+    "f1": 0.8222222222222222,
+    "n": 55,
+    "pr_auc": 0.9387040562891112,
+    "precision": 0.9024390243902439,
+    "recall": 0.7551020408163265,
+    "roc_auc": 0.6445578231292517,
+    "specificity": 0.3333333333333333
+   },
+   "B6_LGBM_NLP": {
+    "FN": 12,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 37,
+    "accuracy": 0.7090909090909091,
+    "accuracy_ci95": [
+     0.4909090909090909,
+     0.8909090909090909
+    ],
+    "balanced_accuracy": 0.5442176870748299,
+    "brier": 0.21028581843790523,
+    "correct": 39,
+    "dates": 11,
+    "f1": 0.8222222222222222,
+    "n": 55,
+    "pr_auc": 0.9075393917151063,
+    "precision": 0.9024390243902439,
+    "recall": 0.7551020408163265,
+    "roc_auc": 0.5714285714285714,
+    "specificity": 0.3333333333333333
+   },
+   "CLIMATOLOGY": {
+    "FN": 13,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 36,
+    "accuracy": 0.6909090909090909,
+    "accuracy_ci95": [
+     0.4727272727272727,
+     0.8909090909090909
+    ],
+    "balanced_accuracy": 0.5340136054421769,
+    "brier": 0.19525246831887189,
+    "correct": 38,
+    "dates": 11,
+    "f1": 0.8089887640449438,
+    "n": 55,
+    "pr_auc": 0.9204111081662103,
+    "precision": 0.9,
+    "recall": 0.7346938775510204,
+    "roc_auc": 0.6190476190476191,
+    "specificity": 0.3333333333333333
+   },
+   "E36-LGBM": {
+    "FN": 12,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 37,
+    "accuracy": 0.7090909090909091,
+    "accuracy_ci95": [
+     0.5818181818181818,
+     0.8363636363636363
+    ],
+    "balanced_accuracy": 0.5442176870748299,
+    "brier": 0.21562723175567877,
+    "correct": 39,
+    "dates": 11,
+    "f1": 0.8222222222222222,
+    "n": 55,
+    "pr_auc": 0.9391298189663413,
+    "precision": 0.9024390243902439,
+    "recall": 0.7551020408163265,
+    "roc_auc": 0.6530612244897959,
+    "specificity": 0.3333333333333333
+   },
+   "E38-LGBM": {
+    "FN": 12,
+    "FP": 4,
+    "HIGH": 49,
+    "LOW": 6,
+    "TN": 2,
+    "TP": 37,
+    "accuracy": 0.7090909090909091,
+    "accuracy_ci95": [
+     0.5818181818181818,
+     0.8363636363636363
+    ],
+    "balanced_accuracy": 0.5442176870748299,
+    "brier": 0.1996470795744385,
+    "correct": 39,
+    "dates": 11,
+    "f1": 0.8222222222222222,
+    "n": 55,
+    "pr_auc": 0.9377898187483158,
+    "precision": 0.9024390243902439,
+    "recall": 0.7551020408163265,
+    "roc_auc": 0.6547619047619048,
+    "specificity": 0.3333333333333333
+   }
+  },
+  "paired": {
+   "ALWAYS_HIGH": {
+    "accuracy_diff": -0.18181818181818177,
+    "formal_thesis_baseline": false,
+    "mcnemar": {
+     "arm_only_correct": 2,
+     "p_two_sided": 0.012939453125,
+     "ref_only_correct": 12
+    },
+    "mean_brier_gain_vs_ref": -0.09055638866434762,
+    "p_two_sided": 0.15625
+   },
+   "B1_PERSISTENCE": {
+    "accuracy_diff": -0.09090909090909094,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 1.0,
+    "mcnemar": {
+     "arm_only_correct": 3,
+     "p_two_sided": 0.2265625,
+     "ref_only_correct": 8
+    },
+    "mean_brier_gain_vs_ref": 0.0003525204265614857,
+    "p_two_sided": 0.99609375
+   },
+   "B2_LR_COMB": {
+    "accuracy_diff": 0.10909090909090913,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 0.357421875,
+    "mcnemar": {
+     "arm_only_correct": 8,
+     "p_two_sided": 0.109375,
+     "ref_only_correct": 2
+    },
+    "mean_brier_gain_vs_ref": 0.08651393022545362,
+    "p_two_sided": 0.0595703125
+   },
+   "B3_LR_GOV": {
+    "accuracy_diff": 0.10909090909090913,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 1.0,
+    "mcnemar": {
+     "arm_only_correct": 8,
+     "p_two_sided": 0.109375,
+     "ref_only_correct": 2
+    },
+    "mean_brier_gain_vs_ref": 0.053742045876148385,
+    "p_two_sided": 0.24609375
+   },
+   "B4_LR_NLP": {
+    "accuracy_diff": 0.12727272727272732,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 1.0,
+    "mcnemar": {
+     "arm_only_correct": 13,
+     "p_two_sided": 0.1670684814453125,
+     "ref_only_correct": 6
+    },
+    "mean_brier_gain_vs_ref": 0.021777130847815487,
+    "p_two_sided": 0.615234375
+   },
+   "B5_LGBM_GOV": {
+    "accuracy_diff": 0.0,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 1.0,
+    "mcnemar": {
+     "arm_only_correct": 0,
+     "p_two_sided": 1.0,
+     "ref_only_correct": 0
+    },
+    "mean_brier_gain_vs_ref": 0.022920083499811242,
+    "p_two_sided": 0.28125
+   },
+   "B6_LGBM_NLP": {
+    "accuracy_diff": 0.0,
+    "formal_thesis_baseline": true,
+    "holm_two_sided_over_six_baselines": 1.0,
+    "mcnemar": {
+     "arm_only_correct": 8,
+     "p_two_sided": 1.0,
+     "ref_only_correct": 8
+    },
+    "mean_brier_gain_vs_ref": 0.010638738863466763,
+    "p_two_sided": 0.798828125
+   },
+   "CLIMATOLOGY": {
+    "accuracy_diff": 0.018181818181818188,
+    "formal_thesis_baseline": false,
+    "mcnemar": {
+     "arm_only_correct": 9,
+     "p_two_sided": 1.0,
+     "ref_only_correct": 8
+    },
+    "mean_brier_gain_vs_ref": -0.004394611255566588,
+    "p_two_sided": 0.90234375
+   },
+   "E36-LGBM": {
+    "accuracy_diff": 0.0,
+    "formal_thesis_baseline": false,
+    "mcnemar": {
+     "arm_only_correct": 0,
+     "p_two_sided": 1.0,
+     "ref_only_correct": 0
+    },
+    "mean_brier_gain_vs_ref": 0.015980152181240253,
+    "p_two_sided": 0.28125
+   }
+  },
+  "path": {
+   "2023-Q3": {
+    "chosen": "COMBxG1",
+    "prior_dates": [],
+    "prior_shift_logodds": -0.36772478012531723,
+    "selection": {
+     "rule": "default (fewer than 3 eligible prior dates)"
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "rule": "0.5 (fewer than 3 LOW rows on prior dates)"
+    }
+   },
+   "2023-Q4": {
+    "chosen": "COMBxG1",
+    "prior_dates": [],
+    "prior_shift_logodds": 0.17435338714477785,
+    "selection": {
+     "rule": "default (fewer than 3 eligible prior dates)"
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "rule": "0.5 (fewer than 3 LOW rows on prior dates)"
+    }
+   },
+   "2024-Q1": {
+    "chosen": "COMBxG1",
+    "prior_dates": [],
+    "prior_shift_logodds": 0.1823215567939546,
+    "selection": {
+     "rule": "default (fewer than 3 eligible prior dates)"
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "rule": "0.5 (fewer than 3 LOW rows on prior dates)"
+    }
+   },
+   "2024-Q2": {
+    "chosen": "COMBxG1",
+    "prior_dates": [
+     "2023-Q3"
+    ],
+    "prior_shift_logodds": 0.07410797215372208,
+    "selection": {
+     "rule": "default (fewer than 3 eligible prior dates)"
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "rule": "0.5 (fewer than 3 LOW rows on prior dates)"
+    }
+   },
+   "2024-Q3": {
+    "chosen": "COMBxG1",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4"
+    ],
+    "prior_shift_logodds": 0.05715841383994841,
+    "selection": {
+     "rule": "default (fewer than 3 eligible prior dates)"
+    },
+    "threshold": 0.6,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.5952380952380952,
+      "0.4": 0.5952380952380952,
+      "0.5": 0.5952380952380952,
+      "0.6": 0.7142857142857143,
+      "0.7": 0.5714285714285714
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2024-Q4": {
+    "chosen": "COMPACTxG1+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1"
+    ],
+    "prior_shift_logodds": 0.4902063365632549,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.19390800412368603,
+      "COMB_T5xG1+PS": 0.18742076230020385,
+      "COMB_T5xG3": 0.2491148860531767,
+      "COMB_T5xG3+PS": 0.24158924951108587,
+      "COMB_T5xG5": 0.2595908354830751,
+      "COMB_T5xG5+PS": 0.24944656156401246,
+      "COMB_T5xG6": 0.20060257721624275,
+      "COMB_T5xG6+PS": 0.19609864976924518,
+      "COMBxG1": 0.19390800412368603,
+      "COMBxG1+PS": 0.18742076230020385,
+      "COMBxG3": 0.24835697498340084,
+      "COMBxG3+PS": 0.2410109065038867,
+      "COMBxG5": 0.2595908354830751,
+      "COMBxG5+PS": 0.24944656156401246,
+      "COMBxG6": 0.20177973123422613,
+      "COMBxG6+PS": 0.19727626431963038,
+      "COMPACTxG1": 0.18293678476439781,
+      "COMPACTxG1+PS": 0.17929788219458595,
+      "COMPACTxG3": 0.24871506627329373,
+      "COMPACTxG3+PS": 0.24130415065036748,
+      "COMPACTxG5": 0.2595908354830751,
+      "COMPACTxG5+PS": 0.24944656156401246,
+      "COMPACTxG6": 0.1938438583799953,
+      "COMPACTxG6+PS": 0.18986460888077158
+     }
+    },
+    "threshold": 0.6,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.6590909090909092,
+      "0.4": 0.6590909090909092,
+      "0.5": 0.6590909090909092,
+      "0.6": 0.7727272727272727,
+      "0.7": 0.7727272727272727
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2025-Q1": {
+    "chosen": "COMPACTxG1+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2"
+    ],
+    "prior_shift_logodds": 0.49532143723002536,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.22044386642539127,
+      "COMB_T5xG1+PS": 0.21373126352698904,
+      "COMB_T5xG3": 0.26271075094812585,
+      "COMB_T5xG3+PS": 0.25429234146700425,
+      "COMB_T5xG5": 0.2615758391111107,
+      "COMB_T5xG5+PS": 0.2505879814733285,
+      "COMB_T5xG6": 0.23334150333228068,
+      "COMB_T5xG6+PS": 0.22824505762187156,
+      "COMBxG1": 0.22044386642539127,
+      "COMBxG1+PS": 0.21373126352698904,
+      "COMBxG3": 0.2620160259557782,
+      "COMBxG3+PS": 0.25375309646741007,
+      "COMBxG5": 0.2615758391111107,
+      "COMBxG5+PS": 0.2505879814733285,
+      "COMBxG6": 0.23646524674700453,
+      "COMBxG6+PS": 0.23134860426102122,
+      "COMPACTxG1": 0.20963829772113515,
+      "COMPACTxG1+PS": 0.20503781818366296,
+      "COMPACTxG3": 0.263190061530845,
+      "COMPACTxG3+PS": 0.2548429055076292,
+      "COMPACTxG5": 0.2615758391111107,
+      "COMPACTxG5+PS": 0.2505879814733285,
+      "COMPACTxG6": 0.228894829051255,
+      "COMPACTxG6+PS": 0.22425216699779985
+     }
+    },
+    "threshold": 0.6,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.625,
+      "0.4": 0.625,
+      "0.5": 0.625,
+      "0.6": 0.78125,
+      "0.7": 0.78125
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2025-Q4": {
+    "chosen": "COMPACTxG5+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1"
+    ],
+    "prior_shift_logodds": 1.3616017485295189,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.2872956402003137,
+      "COMB_T5xG1+PS": 0.25681295761969,
+      "COMB_T5xG3": 0.25517859696754713,
+      "COMB_T5xG3+PS": 0.22511328650705784,
+      "COMB_T5xG5": 0.25222360842480657,
+      "COMB_T5xG5+PS": 0.21935177647463774,
+      "COMB_T5xG6": 0.27788202937694045,
+      "COMB_T5xG6+PS": 0.2485753761103491,
+      "COMBxG1": 0.2872956402003137,
+      "COMBxG1+PS": 0.25681295761969,
+      "COMBxG3": 0.2514408438197438,
+      "COMBxG3+PS": 0.22205079774617936,
+      "COMBxG5": 0.25222360842480657,
+      "COMBxG5+PS": 0.21935177647463774,
+      "COMBxG6": 0.27623452822529787,
+      "COMBxG6+PS": 0.2469626870315625,
+      "COMPACTxG1": 0.284934487158779,
+      "COMPACTxG1+PS": 0.2557405524569428,
+      "COMPACTxG3": 0.25370596499638726,
+      "COMPACTxG3+PS": 0.2238165619196207,
+      "COMPACTxG5": 0.25222360842480657,
+      "COMPACTxG5+PS": 0.21935177647463774,
+      "COMPACTxG6": 0.2706062157106869,
+      "COMPACTxG6+PS": 0.24248040613765243
+     }
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.46774193548387094,
+      "0.4": 0.5443548387096775,
+      "0.5": 0.7741935483870968,
+      "0.6": 0.7096774193548387,
+      "0.7": 0.6612903225806451
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2026-Q1": {
+    "chosen": "COMPACTxG5+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1"
+    ],
+    "prior_shift_logodds": 1.3616017485295189,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.2872956402003137,
+      "COMB_T5xG1+PS": 0.25681295761969,
+      "COMB_T5xG3": 0.25517859696754713,
+      "COMB_T5xG3+PS": 0.22511328650705784,
+      "COMB_T5xG5": 0.25222360842480657,
+      "COMB_T5xG5+PS": 0.21935177647463774,
+      "COMB_T5xG6": 0.27788202937694045,
+      "COMB_T5xG6+PS": 0.2485753761103491,
+      "COMBxG1": 0.2872956402003137,
+      "COMBxG1+PS": 0.25681295761969,
+      "COMBxG3": 0.2514408438197438,
+      "COMBxG3+PS": 0.22205079774617936,
+      "COMBxG5": 0.25222360842480657,
+      "COMBxG5+PS": 0.21935177647463774,
+      "COMBxG6": 0.27623452822529787,
+      "COMBxG6+PS": 0.2469626870315625,
+      "COMPACTxG1": 0.284934487158779,
+      "COMPACTxG1+PS": 0.2557405524569428,
+      "COMPACTxG3": 0.25370596499638726,
+      "COMPACTxG3+PS": 0.2238165619196207,
+      "COMPACTxG5": 0.25222360842480657,
+      "COMPACTxG5+PS": 0.21935177647463774,
+      "COMPACTxG6": 0.2706062157106869,
+      "COMPACTxG6+PS": 0.24248040613765243
+     }
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.46774193548387094,
+      "0.4": 0.5443548387096775,
+      "0.5": 0.7741935483870968,
+      "0.6": 0.7096774193548387,
+      "0.7": 0.6612903225806451
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2026-Q2": {
+    "chosen": "COMPACTxG5+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1"
+    ],
+    "prior_shift_logodds": 1.3616017485295189,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.2872956402003137,
+      "COMB_T5xG1+PS": 0.25681295761969,
+      "COMB_T5xG3": 0.25517859696754713,
+      "COMB_T5xG3+PS": 0.22511328650705784,
+      "COMB_T5xG5": 0.25222360842480657,
+      "COMB_T5xG5+PS": 0.21935177647463774,
+      "COMB_T5xG6": 0.27788202937694045,
+      "COMB_T5xG6+PS": 0.2485753761103491,
+      "COMBxG1": 0.2872956402003137,
+      "COMBxG1+PS": 0.25681295761969,
+      "COMBxG3": 0.2514408438197438,
+      "COMBxG3+PS": 0.22205079774617936,
+      "COMBxG5": 0.25222360842480657,
+      "COMBxG5+PS": 0.21935177647463774,
+      "COMBxG6": 0.27623452822529787,
+      "COMBxG6+PS": 0.2469626870315625,
+      "COMPACTxG1": 0.284934487158779,
+      "COMPACTxG1+PS": 0.2557405524569428,
+      "COMPACTxG3": 0.25370596499638726,
+      "COMPACTxG3+PS": 0.2238165619196207,
+      "COMPACTxG5": 0.25222360842480657,
+      "COMPACTxG5+PS": 0.21935177647463774,
+      "COMPACTxG6": 0.2706062157106869,
+      "COMPACTxG6+PS": 0.24248040613765243
+     }
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.46774193548387094,
+      "0.4": 0.5443548387096775,
+      "0.5": 0.7741935483870968,
+      "0.6": 0.7096774193548387,
+      "0.7": 0.6612903225806451
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   },
+   "2026-Q3": {
+    "chosen": "COMPACTxG5+PS",
+    "prior_dates": [
+     "2023-Q3",
+     "2023-Q4",
+     "2024-Q1",
+     "2024-Q2",
+     "2024-Q3",
+     "2024-Q4",
+     "2025-Q1",
+     "2025-Q4"
+    ],
+    "prior_shift_logodds": 0.8723775447842271,
+    "selection": {
+     "rule": "lowest mean per-date Brier (tie 0.002)",
+     "scores": {
+      "COMB_T5xG1": 0.27310835819871915,
+      "COMB_T5xG1+PS": 0.24815182285167103,
+      "COMB_T5xG3": 0.2456558558919502,
+      "COMB_T5xG3+PS": 0.22076304052953222,
+      "COMB_T5xG5": 0.24133304278897022,
+      "COMB_T5xG5+PS": 0.21413957919296991,
+      "COMB_T5xG6": 0.26529068909110065,
+      "COMB_T5xG6+PS": 0.24121014168101693,
+      "COMBxG1": 0.27310835819871915,
+      "COMBxG1+PS": 0.24815182285167103,
+      "COMBxG3": 0.24262624989571188,
+      "COMBxG3+PS": 0.21808806051164914,
+      "COMBxG5": 0.24133304278897022,
+      "COMBxG5+PS": 0.21413957919296991,
+      "COMBxG6": 0.26413091676838896,
+      "COMBxG6+PS": 0.24000263467408817,
+      "COMPACTxG1": 0.2711508644578504,
+      "COMPACTxG1+PS": 0.24689753164052308,
+      "COMPACTxG3": 0.24407981010698487,
+      "COMPACTxG3+PS": 0.2191086130574773,
+      "COMPACTxG5": 0.24202776682712512,
+      "COMPACTxG5+PS": 0.21372732255831542,
+      "COMPACTxG6": 0.25891165707431296,
+      "COMPACTxG6+PS": 0.23538431364307436
+     }
+    },
+    "threshold": 0.5,
+    "threshold_rule": {
+     "balanced_accuracy": {
+      "0.3": 0.4714285714285714,
+      "0.4": 0.5285714285714286,
+      "0.5": 0.7,
+      "0.6": 0.6428571428571429,
+      "0.7": 0.6000000000000001
+     },
+     "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+    }
+   }
+  },
+  "run": "20261015T033922Z"
+ },
+ "forecast": {
+  "artifact_sha256_lf": "ce6f7973221df69fdb61ee764a470e53aa4e47a2b1c372904375683358c3670f",
+  "baselines_source": "E37 frozen record E37_PROSPECTIVE_2027Q1.json (identical definitions and inputs)",
+  "config": "COMPACTxG5+PS",
+  "decision_threshold": 0.5,
+  "feature_availability": {
+   "D_last": "PSA food CPI of 2026-Q2",
+   "Dnow/rice_rel": "PSA food and rice CPI, months 1-2 of 2026-Q3",
+   "H_last/H_trend/H_margin": "SWS rounds posted before the origin; latest quarter 2026-Q2",
+   "news": "validated articles published in 2026-Q3",
+   "y_last": "label of 2026-Q2"
+  },
+  "frozen_at_utc": "2026-10-15T03:43:19Z",
+  "information_cutoff": "2026-10-01T00:00:00+08:00 (exclusive)",
+  "latest_H_quarter": "2026-Q2",
+  "latest_label_quarter": "2026-Q2",
+  "lead": 2,
+  "mode": "FORECAST",
+  "model_id": "aiPHeed-E38-LGBM-NQ",
+  "origin": "2026-10-01",
+  "provinces": {
+   "PH040100000": {
+    "decision_threshold": 0.5,
+    "drivers": [
+     {
+      "contribution": 0.38942395452869855,
+      "factor": "Province food-price pressure last quarter (PSA food CPI)",
+      "key": "D_last",
+      "source": "government",
+      "value": 0.8666666666666671
+     },
+     {
+      "contribution": 0.3113554074481305,
+      "factor": "Latest regional hunger relative to the HIGH threshold",
+      "key": "H_margin",
+      "source": "government",
+      "value": 2.3066666666666666
+     },
+     {
+      "contribution": 0.2883589347982513,
+      "factor": "Province food-price pressure in the first two months of this quarter",
+      "key": "Dnow",
+      "source": "government",
+      "value": 0.0599999999999999
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Change in regional hunger between the two latest surveys",
+      "key": "H_trend",
+      "source": "government",
+      "value": -5.099999999999998
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Relevant food-insecurity news in the region (count)",
+      "key": "news_reg",
+      "source": "news",
+      "value": 2.302585092994046
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Food Stress Sentiment Index (FSSI-v2)",
+      "key": "fssi_v2",
+      "source": "news",
+      "value": 0.0
+     }
+    ],
+    "expected_value_logodds": 1.2526534061482646,
+    "model_estimate": "HIGH",
+    "p_high": 0.9520749808582573,
+    "persistence_p": 1.0,
+    "prior_shift_logodds": 0.7472144018302211,
+    "province": "Cavite"
+   },
+   "PH040200000": {
+    "decision_threshold": 0.5,
+    "drivers": [
+     {
+      "contribution": 0.38942395452869855,
+      "factor": "Province food-price pressure last quarter (PSA food CPI)",
+      "key": "D_last",
+      "source": "government",
+      "value": 0.1000000000000005
+     },
+     {
+      "contribution": 0.3113554074481305,
+      "factor": "Latest regional hunger relative to the HIGH threshold",
+      "key": "H_margin",
+      "source": "government",
+      "value": 2.3066666666666666
+     },
+     {
+      "contribution": 0.2883589347982513,
+      "factor": "Province food-price pressure in the first two months of this quarter",
+      "key": "Dnow",
+      "source": "government",
+      "value": 0.4600000000000001
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Change in regional hunger between the two latest surveys",
+      "key": "H_trend",
+      "source": "government",
+      "value": -5.099999999999998
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Relevant food-insecurity news in the region (count)",
+      "key": "news_reg",
+      "source": "news",
+      "value": 2.302585092994046
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Food Stress Sentiment Index (FSSI-v2)",
+      "key": "fssi_v2",
+      "source": "news",
+      "value": 0.505386
+     }
+    ],
+    "expected_value_logodds": 1.2526534061482646,
+    "model_estimate": "HIGH",
+    "p_high": 0.9520749808582573,
+    "persistence_p": 1.0,
+    "prior_shift_logodds": 0.7472144018302211,
+    "province": "Laguna"
+   },
+   "PH040300000": {
+    "decision_threshold": 0.5,
+    "drivers": [
+     {
+      "contribution": 0.38942395452869855,
+      "factor": "Province food-price pressure last quarter (PSA food CPI)",
+      "key": "D_last",
+      "source": "government",
+      "value": 1.0
+     },
+     {
+      "contribution": 0.3113554074481305,
+      "factor": "Latest regional hunger relative to the HIGH threshold",
+      "key": "H_margin",
+      "source": "government",
+      "value": 2.3066666666666666
+     },
+     {
+      "contribution": 0.2883589347982513,
+      "factor": "Province food-price pressure in the first two months of this quarter",
+      "key": "Dnow",
+      "source": "government",
+      "value": 1.16
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Change in regional hunger between the two latest surveys",
+      "key": "H_trend",
+      "source": "government",
+      "value": -5.099999999999998
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Relevant food-insecurity news in the region (count)",
+      "key": "news_reg",
+      "source": "news",
+      "value": 2.302585092994046
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Food Stress Sentiment Index (FSSI-v2)",
+      "key": "fssi_v2",
+      "source": "news",
+      "value": 0.0
+     }
+    ],
+    "expected_value_logodds": 1.2526534061482646,
+    "model_estimate": "HIGH",
+    "p_high": 0.9520749808582573,
+    "persistence_p": 1.0,
+    "prior_shift_logodds": 0.7472144018302211,
+    "province": "Quezon"
+   },
+   "PH040400000": {
+    "decision_threshold": 0.5,
+    "drivers": [
+     {
+      "contribution": 0.38942395452869855,
+      "factor": "Province food-price pressure last quarter (PSA food CPI)",
+      "key": "D_last",
+      "source": "government",
+      "value": 0.4666666666666668
+     },
+     {
+      "contribution": 0.3113554074481305,
+      "factor": "Latest regional hunger relative to the HIGH threshold",
+      "key": "H_margin",
+      "source": "government",
+      "value": 2.3066666666666666
+     },
+     {
+      "contribution": 0.2883589347982513,
+      "factor": "Province food-price pressure in the first two months of this quarter",
+      "key": "Dnow",
+      "source": "government",
+      "value": 0.5099999999999999
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Change in regional hunger between the two latest surveys",
+      "key": "H_trend",
+      "source": "government",
+      "value": -5.099999999999998
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Relevant food-insecurity news in the region (count)",
+      "key": "news_reg",
+      "source": "news",
+      "value": 2.302585092994046
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Food Stress Sentiment Index (FSSI-v2)",
+      "key": "fssi_v2",
+      "source": "news",
+      "value": 0.0
+     }
+    ],
+    "expected_value_logodds": 1.2526534061482646,
+    "model_estimate": "HIGH",
+    "p_high": 0.9520749808582573,
+    "persistence_p": 1.0,
+    "prior_shift_logodds": 0.7472144018302211,
+    "province": "Rizal"
+   },
+   "PH040500000": {
+    "decision_threshold": 0.5,
+    "drivers": [
+     {
+      "contribution": -0.49824289083884593,
+      "factor": "Province food-price pressure last quarter (PSA food CPI)",
+      "key": "D_last",
+      "source": "government",
+      "value": -2.4333333333333327
+     },
+     {
+      "contribution": -0.42086822310603234,
+      "factor": "Province food-price pressure in the first two months of this quarter",
+      "key": "Dnow",
+      "source": "government",
+      "value": -2.19
+     },
+     {
+      "contribution": 0.3113554074481305,
+      "factor": "Latest regional hunger relative to the HIGH threshold",
+      "key": "H_margin",
+      "source": "government",
+      "value": 2.3066666666666666
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Change in regional hunger between the two latest surveys",
+      "key": "H_trend",
+      "source": "government",
+      "value": -5.099999999999998
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Relevant food-insecurity news in the region (count)",
+      "key": "news_reg",
+      "source": "news",
+      "value": 2.302585092994046
+     },
+     {
+      "contribution": 0.0,
+      "factor": "Food Stress Sentiment Index (FSSI-v2)",
+      "key": "fssi_v2",
+      "source": "news",
+      "value": 0.0
+     }
+    ],
+    "expected_value_logodds": 1.2526534061482646,
+    "model_estimate": "HIGH",
+    "p_high": 0.8009292140591998,
+    "persistence_p": 0.0,
+    "prior_shift_logodds": 0.7472144018302211,
+    "province": "Batangas"
+   }
+  },
+  "quarter": "2027-Q1",
+  "scoring": "after the SWS 2027-Q1 round is posted and 2027-Q1 PSA CPI is released; never re-fitted before then",
+  "six_baselines_2027Q1": {
+   "ALWAYS_HIGH": {
+    "formal_thesis_baseline": false,
+    "p_high": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 1.0
+    }
+   },
+   "B1_PERSISTENCE": {
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 1.0,
+     "PH040200000": 1.0,
+     "PH040300000": 1.0,
+     "PH040400000": 1.0,
+     "PH040500000": 0.0
+    }
+   },
+   "B2_LR_COMB": {
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 0.9503576382440437,
+     "PH040200000": 0.9854535878288981,
+     "PH040300000": 0.9781733111655239,
+     "PH040400000": 0.9678281063005162,
+     "PH040500000": 0.6252251649625661
+    }
+   },
+   "B3_LR_GOV": {
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 0.882752374643047,
+     "PH040200000": 0.9718865302910029,
+     "PH040300000": 0.9467808735598658,
+     "PH040400000": 0.919374511776416,
+     "PH040500000": 0.4282666422970222
+    }
+   },
+   "B4_LR_NLP": {
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 0.8308905423364112,
+     "PH040200000": 0.9080080994564649,
+     "PH040300000": 0.8308905423364112,
+     "PH040400000": 0.8431943929547329,
+     "PH040500000": 0.8308905423364112
+    }
+   },
+   "B5_LGBM_GOV": {
+    "config": "GOVxG3",
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 0.9243196771476956,
+     "PH040200000": 0.9305280772006009,
+     "PH040300000": 0.9243196771476956,
+     "PH040400000": 0.9243196771476956,
+     "PH040500000": 0.7605658963383527
+    }
+   },
+   "B6_LGBM_NLP": {
+    "config": "NLPxG3",
+    "formal_thesis_baseline": true,
+    "p_high": {
+     "PH040100000": 0.8911993039602352,
+     "PH040200000": 0.907164790887936,
+     "PH040300000": 0.8911993039602352,
+     "PH040400000": 0.907164790887936,
+     "PH040500000": 0.8911993039602352
+    }
+   },
+   "CLIMATOLOGY": {
+    "formal_thesis_baseline": false,
+    "p_high": {
+     "PH040100000": 0.75,
+     "PH040200000": 0.75,
+     "PH040300000": 0.75,
+     "PH040400000": 0.75,
+     "PH040500000": 0.75
+    }
+   }
+  },
+  "tau": 14.993333333333334,
+  "version": "E38.1"
+ },
+ "model": {
+  "adjustment": "prior_shift",
+  "artifact": "E38-LGBM-NQ_O2026-10-01_lead2.txt",
+  "artifact_sha256_lf": "ce6f7973221df69fdb61ee764a470e53aa4e47a2b1c372904375683358c3670f",
+  "decision_threshold": 0.5,
+  "evaluation_run": "20261015T033922Z",
+  "feature_set": "COMPACT",
+  "features": [
+   "H_margin",
+   "H_trend",
+   "D_last",
+   "Dnow",
+   "news_reg",
+   "fssi_v2"
+  ],
+  "grid_id": "G5",
+  "lead": 2,
+  "lightgbm_version": "4.6.0",
+  "model_id": "aiPHeed-E38-LGBM-NQ",
+  "params": {
+   "colsample_bytree": 1.0,
+   "deterministic": true,
+   "force_col_wise": true,
+   "learning_rate": 0.05,
+   "max_depth": 1,
+   "min_child_samples": 10,
+   "n_estimators": 60,
+   "n_jobs": 1,
+   "num_leaves": 2,
+   "objective": "binary",
+   "reg_alpha": 1.0,
+   "reg_lambda": 5.0,
+   "seed": 36,
+   "verbose": -1
+  },
+  "prior_shift_logodds": 0.7472144018302211,
+  "protocol_sha256": "3e851f343185e1cacd5ae4d0dade73a7ee7836bfb1769ac7453ad783aebaa216",
+  "selection": {
+   "chosen": "COMPACTxG5+PS",
+   "origin": "2026-10-01",
+   "prior_dates": [
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "selection": {
+    "rule": "lowest mean per-date Brier (tie 0.002)",
+    "scores": {
+     "COMB_T5xG1": 0.22935791080706264,
+     "COMB_T5xG1+PS": 0.21505884383376772,
+     "COMB_T5xG3": 0.20965510341231547,
+     "COMB_T5xG3+PS": 0.19385020271804565,
+     "COMB_T5xG5": 0.20748893362970322,
+     "COMB_T5xG5+PS": 0.1875226079158958,
+     "COMB_T5xG6": 0.2237719745521359,
+     "COMB_T5xG6+PS": 0.20992075717978795,
+     "COMBxG1": 0.22935791080706264,
+     "COMBxG1+PS": 0.21505884383376772,
+     "COMBxG3": 0.2068754065903311,
+     "COMBxG3+PS": 0.19149923668278915,
+     "COMBxG5": 0.20748893362970322,
+     "COMBxG5+PS": 0.1875226079158958,
+     "COMBxG6": 0.2230747655221012,
+     "COMBxG6+PS": 0.20908838200956675,
+     "COMPACTxG1": 0.22629573036152686,
+     "COMPACTxG1+PS": 0.213063864246837,
+     "COMPACTxG3": 0.2057808511261602,
+     "COMPACTxG3+PS": 0.1910562796485083,
+     "COMPACTxG5": 0.20802683420181894,
+     "COMPACTxG5+PS": 0.18626464477071192,
+     "COMPACTxG6": 0.21576570122094957,
+     "COMPACTxG6+PS": 0.20347552760854165
+    }
+   },
+   "target": "2027-Q1",
+   "threshold": 0.5,
+   "threshold_rule": {
+    "balanced_accuracy": {
+     "0.3": 0.4772727272727273,
+     "0.4": 0.5265151515151515,
+     "0.5": 0.6742424242424242,
+     "0.6": 0.6287878787878788,
+     "0.7": 0.5946969696969697
+    },
+    "rule": "max balanced accuracy on prior dates (>= 3 LOW rows)"
+   }
+  },
+  "status": "EXPERIMENTAL / NOT VALIDATED (development accuracy 39/55 = 0.709; 75% not met)",
+  "training_rows": 70,
+  "training_target_quarters": [
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2"
+  ],
+  "version": "E38.1"
+ },
+ "prospective_sha256": "9549071cb774e6b711b3252c336881cfa868eb15ee89872a0c620690399a6eff",
+ "schema": "e38-bundle/1"
+}

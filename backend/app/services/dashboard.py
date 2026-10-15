@@ -224,7 +224,22 @@ def available_quarters(horizon: str = DEFAULT_HORIZON) -> list[str]:
     return _engine(horizon).available_quarters()
 
 
+def forecast_target() -> dict:
+    """The dashboard's dynamic forecast target (app/quarterly/target.py; Asia/Manila; next calendar quarter)."""
+    from app.quarterly.target import forecast_target as _ft
+
+    return _ft()
+
+
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
+    if e31_active():
+        target = forecast_target()["target_quarter"]
+        served = set(available_quarters(FORECAST)) | set(available_quarters(NOWCAST))
+        if target in served:
+            return target                 # the dynamic next-quarter target, when its forecast exists
+        older = [q for q in available_quarters(horizon) if ref.quarter_index(q) <= ref.quarter_index(target)]
+        if older:                         # never relabelled: the newest quarter that HAS a record, under its own id
+            return older[-1]
     if e31_active() and horizon == NOWCAST and E31.current_quarter():
         return E31.current_quarter()      # the default view opens on the quarter under way, not on the forecast
     quarters = available_quarters(horizon)
@@ -284,6 +299,17 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
         })
     if e31_active() and out:
         out = _e31_fill_gaps(out, horizon)
+        target = forecast_target()
+        last = ref.quarter_index(out[-1]["id"])
+        for i in range(last + 1, ref.quarter_index(target["target_quarter"]) + 1):
+            q = f"{i // 4}-Q{i % 4 + 1}"          # quarters up to the target that have no record yet
+            year, qn = ref.quarter_parts(q)
+            out.append({"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn],
+                        "state": "unavailable",
+                        "reason": (f"The forecast for {q} has not been generated. It is issued at the origin "
+                                   f"{target['origin']} with information published before it, once those inputs "
+                                   "are authorized and the forecasting pipeline has run. No older forecast is "
+                                   "shown in its place.")})
     return out
 
 
@@ -818,6 +844,8 @@ def explainability(province_code: str, quarter: str) -> dict:
         # subset; it is reported separately rather than silently substituted.
         "articleCount": article_count(province_code, quarter),
         "triggerMatchedArticles": built["article_count"],
+        # E36/E38: share of the model's attribution outside the five trigger groups (E20 convention)
+        "otherPct": built.get("other_pct"),
     }
 
 

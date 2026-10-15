@@ -51,12 +51,14 @@ EXPLAINABILITY_NOTE = (
 
 
 E36_EXPLAINABILITY_NOTE = (
-    "The bars show how much each input of the forecasting model moved this province's estimate up or down. "
-    "Regional hunger survey results, provincial food and rice price movements and the latest published risk "
-    "level come from government data; the news items come from validated news reports. A long bar does not by "
-    "itself mean that a factor raised the risk: the colour of each bar shows whether it raised or lowered the "
-    "estimate. These are patterns the model learned from 2021 to 2026 data, not proven causes, and the figures "
-    "are model estimates, not official government statistics."
+    "The bars show how much each of five factor groups (Market / Prices, Climate Stress, Fish Kill, Employment and "
+    "OFW Remittance) contributed to this forecast. The five shares add up to 100 percent. A long bar does not by "
+    "itself mean that a factor raised the risk: the colour of each bar shows whether that factor raised or lowered "
+    "the forecast. In the current model only Market / Prices (provincial food and rice price movements) is an "
+    "input; Climate Stress, Fish Kill, Employment and OFW Remittance have no input in it, so they show 0 percent, "
+    "and the news reports linked to them are listed separately. Part of the forecast also depends on the regional "
+    "hunger survey, the latest published risk level and the overall volume of news; that part is not shown in the "
+    "five groups. These figures are model estimates, not official government statistics."
 )
 
 

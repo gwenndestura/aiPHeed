@@ -37,7 +37,7 @@ MODE_LABEL = {
     "BACKTEST": "Backtest (development evidence; refitted at its origin with earlier data only, but the outcome had "
                 "been examined in earlier experiments)",
     "RETROSPECTIVE_BLIND": "Frozen forecast scored on an unseen outcome",
-    "FORECAST": "Forecast (lead 1, frozen before the outcome exists; reliability not established)",
+    "FORECAST": "Forecast (frozen before the outcome exists; reliability not established)",
     "NOWCAST": "Same-quarter nowcast (lead 0; never evaluated)",
 }
 
@@ -109,6 +109,11 @@ class E31Engine:
             return "Backtest: one-quarter-ahead estimate made on development data"
         if q is not None and q["mode"] == "RETROSPECTIVE_BLIND":
             return "One quarter ahead (frozen 1 July 2026), scored on the released outcome"
+        if q is not None and q.get("role") == "next_quarter":
+            return (f"Next quarter (forecast issued {q['origin'][:10]}, two quarters after the latest complete "
+                    "data quarter)")
+        if q is not None and q.get("role") == "current_quarter":
+            return f"Current quarter (forecast issued {q['origin'][:10]}), lead 1"
         if q is not None and q["mode"] == "FORECAST":
             return f"One quarter ahead (forecast issued {q['origin'][:10]}), lead 1"
         return "One quarter ahead (forecast), lead 1"
@@ -156,6 +161,8 @@ class E31Explainer:
                  "feature_value": d["value"]} for d in v.get("drivers", [])]
 
     def build_drivers(self, code: str, quarter: str, records: list[dict]) -> dict:
+        if record().get("schema") == "e36/1":
+            return five_trigger_drivers(code, quarter, records)
         drivers = [{"driver_group": r["feature_name"], "driver_label": self.GROUPS.get(r["feature_name"], r["display_name"]),
                     "group_shap": r["shap_value"],
                     "direction": "increases_risk" if (r["shap_value"] or 0) >= 0 else "protective",
@@ -177,3 +184,59 @@ class E31Disaggregator:
                  "disaggregation_label": rk["meaning"], "data_sufficiency_flag": suff.get(r["province_code"])}
                 for r in rk["rows"]]
         return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------------------------- the five triggers
+# The approved dashboard (branch 10-15-updated-flexible-ui) explains every estimate with the thesis's five trigger
+# groups. The served E36/E38 LightGBM is grouped exactly as the E20 forecaster did (app/ml/inference/e20_forecast.py):
+# a group's contribution is the sum of the exact TreeSHAP of the model inputs that belong to it, the five shares are
+# rescaled among themselves, and every other input (regional hunger, the last published label, news volume, FSSI) is
+# reported as `other_pct`, not folded into a group. The served model's only trigger-group inputs are the provincial
+# food and rice price features (Market / Prices); climate, fish kill, employment and OFW have no input in it (E38:
+# the five news trigger proportions carry almost no data in the title-only corpus and were not selected), so their
+# contribution is exactly 0. `trigger_proportion` is the measured share of the province's attributed news titles in
+# the forecast's evidence quarter that the existing classifier (app/ml/nlp/trigger_classifier.py) assigns to the group.
+TRIGGER_GROUP_FEATURES = {"market": ["D_last", "Dnow", "rice_rel"], "climate": [], "fish_kill": [], "employment": [],
+                          "ofw_remittance": []}
+NEWS_STORE = Path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
+
+
+@lru_cache(maxsize=1)
+def _trigger_proportions() -> dict:
+    from app.ml.nlp.trigger_classifier import classify_triggers
+
+    out: dict = {}
+    path = NEWS_STORE / "articles.jsonl"
+    if not path.exists():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        a = json.loads(line)
+        code = a.get("geo_province_code")
+        if not code:
+            continue
+        cell = out.setdefault((code, a["quarter"]), {"n": 0, **{g: 0 for g in TRIGGER_GROUP_FEATURES}})
+        cell["n"] += 1
+        for g in classify_triggers(a.get("title") or ""):
+            cell[g] += 1
+    return out
+
+
+def five_trigger_drivers(code: str, quarter: str, records: list[dict]) -> dict:
+    from app.ml.inference.e20_forecast import DRIVER_GROUP_LABELS
+
+    shap = {r["feature_name"]: float(r["shap_value"] or 0.0) for r in records}
+    q = quarter_row(quarter, "forecast") or quarter_row(quarter, "nowcast") or {}
+    ev_q = (q.get("provenance") or {}).get("news_evidence_window", {}).get("evidence_quarter") or quarter
+    cell = _trigger_proportions().get((code, ev_q))
+    group = {g: sum(shap.get(f, 0.0) for f in fs) for g, fs in TRIGGER_GROUP_FEATURES.items()}
+    grouped = {f for fs in TRIGGER_GROUP_FEATURES.values() for f in fs}
+    other_abs = sum(abs(v) for f, v in shap.items() if f not in grouped)
+    total_abs = sum(abs(v) for v in group.values())
+    grand = total_abs + other_abs
+    drivers = [{"driver_group": g, "driver_label": DRIVER_GROUP_LABELS[g], "group_shap": round(v, 4),
+                "direction": "increases_risk" if v >= 0 else "protective",
+                "trigger_proportion": (round(cell[g] / cell["n"], 4) if cell and cell["n"] else None)}
+               for g, v in group.items()]
+    drivers.sort(key=lambda d: abs(d["group_shap"]), reverse=True)
+    return {"drivers": drivers, "article_count": int(sum(cell[g] for g in group) if cell else 0),
+            "other_pct": round(other_abs / grand * 100, 1) if grand else 0.0, "evidence_quarter": ev_q}

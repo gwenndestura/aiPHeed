@@ -30,8 +30,15 @@ STATEMENT = ("Model-generated early-warning candidate for review by DA Region IV
              "classification and not a confirmed emergency.")
 
 
-def candidates(rec: dict) -> list[dict]:
-    qs = [q for q in rec["quarters"] if q["mode"] in ("NOWCAST", "FORECAST")]
+def candidates(rec: dict, target_quarter: str | None = None) -> list[dict]:
+    """target_quarter (default: the dashboard's dynamic target, app/quarterly/target.py) limits staging to the quarter
+    every other surface shows; pass "all" for every nowcast/forecast quarter in the record."""
+    if target_quarter is None:
+        from app.quarterly.target import forecast_target
+
+        target_quarter = forecast_target()["target_quarter"]
+    qs = [q for q in rec["quarters"] if q["mode"] in ("NOWCAST", "FORECAST")
+          and (target_quarter == "all" or q["quarter"] == target_quarter)]
     by_q = {}
     for q in rec["quarters"]:
         by_q.setdefault(q["quarter"], q)
@@ -69,7 +76,7 @@ def candidates(rec: dict) -> list[dict]:
     return [c for c in out if c["evidence"]["mode"] == "NOWCAST" or (c["province_code"], c["alert_reason"]) not in now_keys]
 
 
-async def stage(db, rec: dict) -> dict:
+async def stage(db, rec: dict, target_quarter: str | None = None) -> dict:
     """Insert candidates not already present (same quarter, province and reason). Idempotent."""
     from sqlalchemy import select
 
@@ -78,7 +85,7 @@ async def stage(db, rec: dict) -> dict:
 
     repo = AlertRepository(db)
     res = {"staged": [], "existing": []}
-    for c in candidates(rec):
+    for c in candidates(rec, target_quarter):
         q = select(AlertRecord).where(AlertRecord.quarter == c["quarter"], AlertRecord.province_code == c["province_code"],
                                       AlertRecord.alert_reason == c["alert_reason"])
         if (await db.execute(q)).scalar_one_or_none() is not None:

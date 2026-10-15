@@ -1,0 +1,71 @@
+{
+ "base": "http://127.0.0.1:8000",
+ "target": "2027-Q1",
+ "results": [
+  {
+   "check": "quarters: current is the dynamic target",
+   "pass": true,
+   "detail": "target 2027-Q1, calendar 2026-Q4"
+  },
+  {
+   "check": "provinces default to the target",
+   "pass": true,
+   "detail": "Cavite 0.9521, Laguna 0.9521, Rizal 0.9521, Quezon 0.9521, Batangas 0.8009"
+  },
+  {
+   "check": "municipal ranking on the target",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "five triggers on the target",
+   "pass": true,
+   "detail": "market 100%, climate 0%, fish_kill 0%, employment 0%, ofw_remittance 0%"
+  },
+  {
+   "check": "PDF is the served record",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "no public alert before confirmation",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "create admin in scratch DB",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "admin sign-in",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "review queue uses the approved vocabulary",
+   "pass": true,
+   "detail": "{'Staged'}"
+  },
+  {
+   "check": "approve is idempotent and shows Approved",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "alert staging limited to the target quarter",
+   "pass": true,
+   "detail": "0 staged"
+  },
+  {
+   "check": "staged alerts are not public",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "confirmed alert becomes public",
+   "pass": true,
+   "detail": "PH040500000"
+  }
+ ]
+}
