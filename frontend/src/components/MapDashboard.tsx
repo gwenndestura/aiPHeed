@@ -529,8 +529,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           >
             <div className="px-3 pb-3">
               <TabsContent value="summary" className="mt-0 flex flex-col gap-2">
-                {hasSelection && !noData ? <SheetCard className="p-0">{selectionPanel}</SheetCard> : leftCards}
-                {aboutFeedback}
+                {/* The province panel has its own About / Feedback footer. */}
+                {hasSelection && !noData ? <SheetCard className="p-0">{selectionPanel}</SheetCard> : <>{leftCards}{aboutFeedback}</>}
               </TabsContent>
               <TabsContent value="why" className="mt-0 flex flex-col gap-2">
                 {rightCards}
