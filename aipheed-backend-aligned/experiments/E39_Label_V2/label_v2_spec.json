@@ -1,0 +1,74 @@
+{
+ "name": "Food Price Pressure (exploratory)",
+ "version": "label-v2.0 (revised 2026-10-15; supersedes the withdrawn FSI anchor design)",
+ "data_cutoff": "2026-10-14 (researcher authorization; nothing before 2021-01 is used)",
+ "framing": "Food Price Pressure (exploratory) measures provincial food price pressure, not food insecurity. HIGH means the province's food inflation (PSA, year on year) was above 4 percent, the ceiling of the BSP inflation target, which is a headline-inflation target and not a food-specific one. The 4 percent rule is a tool-adopted default; it is not adviser-endorsed and not validated. High food inflation does not prove hunger, and low food inflation does not prove adequate food.",
+ "not_measured": [
+  "food insecurity",
+  "hunger prevalence",
+  "adequacy of food"
+ ],
+ "units": {
+  "F": "percent, year-on-year change of the provincial food CPI (01.1 FOOD)",
+  "H": "percent of families (SWS self-rated involuntary hunger, Balance Luzon)"
+ },
+ "sources": {
+  "F": {
+   "what": "PSA provincial food CPI (01.1 FOOD) year-on-year rate as PUBLISHED by PSA (one decimal, monthly); quarter value = mean of the quarter's three published monthly rates",
+   "files": {
+    "backend/data/inputs/d_quarterly_panel.csv (column F)": "87b927987973c089bd888ad61533db1b0a014bafb7a750bdb1efc1516e15f871",
+    "E31 data_acquired/cpi/provincial_food_cpi_yoy_2026_raw.csv (2026 monthly published)": "dbd9a0aefdae22f479992a44639961dd669c8418b0f666e4848dd2ac85b8a223",
+    "E25 inputs/e12/realized_components_2021_2025.csv (2021-2025 published quarter means)": "f19d6780bec15fc1457de449cf146c65c884dd81b7e38d63061697bb51001aed"
+   },
+   "table": "PSA OpenStat 0012M4ACP23 (2026) / the same published series for 2021-2025",
+   "release_timing": "monthly CPI is released by PSA in the first week of the following month; the quarter value of quarter q is treated as available only at origins O(t) with t >= q + 1 (conservative: all three months published before the origin)",
+   "coverage": "2021-Q1 .. 2026-Q3, 5 provinces, no gap"
+  },
+  "H": {
+   "what": "SWS Balance Luzon hunger, approved series only (definition_A = True); quarter value = mean of the quarter's approved rounds",
+   "file": {
+    "backend/data/inputs/sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3"
+   },
+   "missing_quarters_never_imputed": [
+    "2021-Q1",
+    "2022-Q1",
+    "2025-Q2",
+    "2025-Q3"
+   ],
+   "availability": "a quarter's H is usable only after ALL its approved rounds were posted (posted date in the file)"
+  },
+  "D": {
+   "what": "F minus the five-province mean of F (informational only; not part of any target)"
+  }
+ },
+ "label_A": {
+  "name": "Food Price Pressure HIGH",
+  "rule": "HIGH if F_pq > 4.0, else NOT HIGH; missing F -> no label",
+  "threshold": 4.0,
+  "threshold_source": "Bangko Sentral ng Pilipinas inflation-targeting framework: the inflation target of 3.0 percent +/- 1.0 percentage point set by the Development Budget Coordination Committee; 4.0 percent is its ceiling. It is a HEADLINE CPI target, not a food-specific one. (Cited from the BSP framework; the page was not re-fetched in this run.)",
+  "status": "tool-adopted default; not adviser-endorsed; not validated; not tuned or selected from any result",
+  "sensitivity_for_information_only": [
+   3.0,
+   5.0
+  ],
+  "no_weights_tiers_or_severity_anchors": true
+ },
+ "target_B": {
+  "name": "Provincial food CPI YoY (continuous)",
+  "value": "F_pq",
+  "threshold": null
+ },
+ "target_C": {
+  "name": "Regional SWS hunger H (continuous)",
+  "value": "H_q (one value shared by all five provinces)",
+  "threshold": null,
+  "missing_quarters": "not imputed; not scored"
+ },
+ "provincial_ranking": {
+  "rule": "rank provinces within a quarter by F (descending: rank 1 = highest food inflation); ties share the average rank and carry a tied flag",
+  "vulnerability_weights": "not part of any label; used only by the existing LGU ranking (PSA 2021 SAE, POPCEN 2024)"
+ },
+ "no_leakage": "every label value uses only data of its own quarter; no reference window, no anchor fitted to data, no constant other than 4.0",
+ "pre_2021_data": "none",
+ "evaluation_dependence": "the five provinces share H (target C is regional) but differ in F; scoring is date-level (see scoring_v2_spec.json)"
+}
