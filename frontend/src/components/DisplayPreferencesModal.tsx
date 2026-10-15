@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Sliders } from "lucide-react";
+import { readStorage, writeStorage } from "@/lib/storage";
 
 const STORAGE_KEY = "aipheed_display_prefs_v2";
 
@@ -20,7 +21,7 @@ const DEFAULTS: DisplayPrefs = {
 
 export function loadDisplayPrefs(): DisplayPrefs {
   try {
-    return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}") };
+    return { ...DEFAULTS, ...JSON.parse(readStorage(STORAGE_KEY) ?? "{}") };
   } catch {
     return DEFAULTS;
   }
@@ -43,7 +44,7 @@ export function DisplayPreferencesModal({ trigger }: { trigger?: React.ReactNode
 
   useEffect(() => {
     applyPrefs(prefs);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+    writeStorage(STORAGE_KEY, JSON.stringify(prefs));
   }, [prefs]);
 
   const set = <K extends keyof DisplayPrefs>(k: K, v: DisplayPrefs[K]) => setPrefs((p) => ({ ...p, [k]: v }));

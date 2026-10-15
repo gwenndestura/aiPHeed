@@ -25,6 +25,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isLoadFailure } from "@/lib/loadError";
 import { isHighRisk } from "@/lib/risk";
+import { readStorage, removeStorage } from "@/lib/storage";
 
 function FloatingCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
@@ -228,16 +229,16 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   // mounted yet when that click happens. Province data loads asynchronously,
   // so this retries as regionsData fills in.
   useEffect(() => {
-    const raw = sessionStorage.getItem("aipheed_focus");
+    const raw = readStorage("aipheed_focus", "session");
     if (!raw || regionsData.length === 0) return;
     try {
       const detail = JSON.parse(raw) as { provinceId?: string };
       if (detail.provinceId && regionsData.some((r) => r.id === detail.provinceId)) {
-        sessionStorage.removeItem("aipheed_focus");
+        removeStorage("aipheed_focus", "session");
         window.dispatchEvent(new CustomEvent("aipheed:focus-region", { detail }));
       }
     } catch {
-      sessionStorage.removeItem("aipheed_focus");
+      removeStorage("aipheed_focus", "session");
     }
   }, [regionsData]);
 

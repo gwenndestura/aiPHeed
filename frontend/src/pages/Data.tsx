@@ -9,6 +9,7 @@ import { ArrowDown, ArrowUp, Download, Search } from "lucide-react";
 import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { formatSigned } from "@/components/ui/metric";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { writeStorage } from "@/lib/storage";
 
 type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCount";
 
@@ -91,7 +92,7 @@ export default function DataPage() {
   };
 
   const goToRow = (r: ProvinceSummary) => {
-    sessionStorage.setItem("aipheed_focus", JSON.stringify({ provinceId: r.id }));
+    writeStorage("aipheed_focus", JSON.stringify({ provinceId: r.id }), "session");
     navigate("/dashboard");
   };
 

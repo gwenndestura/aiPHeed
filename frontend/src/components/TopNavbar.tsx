@@ -11,6 +11,7 @@ import { PSTClock, PSTClockMenuRow } from "./PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import logoIcon from "@/assets/logo-icon.png";
+import { readStorage, writeStorage } from "@/lib/storage";
 
 interface Props {
   active?: "home" | "data" | "viz" | "none";
@@ -20,7 +21,7 @@ const THEME_KEY = "aipheed_theme";
 
 export function TopNavbar({ active = "none" }: Props) {
   const [theme, setTheme] = useState<"dark" | "light">(() => {
-    return (localStorage.getItem(THEME_KEY) as "dark" | "light") ?? "dark";
+    return (readStorage(THEME_KEY) as "dark" | "light" | null) ?? "dark";
   });
   // Signed-in admins get the admin navigation on public pages too. Decided by
   // the server-confirmed session only -- never a URL parameter or a stored flag.
@@ -33,7 +34,7 @@ export function TopNavbar({ active = "none" }: Props) {
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
-    localStorage.setItem(THEME_KEY, theme);
+    writeStorage(THEME_KEY, theme);
     window.dispatchEvent(new CustomEvent("aipheed:theme", { detail: { theme } }));
   }, [theme]);
 
