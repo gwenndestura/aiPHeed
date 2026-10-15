@@ -185,13 +185,14 @@ export function RfiiScoreCardBody({
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
             <StatusDot color={band.color} />
-            <MetricLabel>Forecast index</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">Forecast index</MetricLabel>
           </div>
 
-          {/* Hero score */}
-          <div className="flex items-end gap-3">
+          {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
+              spacing and gap keep "/ 1.00" beside it in the 320px side panel. */}
+          <div className="flex items-end gap-2">
             <span
-              className="font-bold tabular-nums leading-[0.85] tracking-tight"
+              className="font-mono-num font-black tabular-nums leading-[0.85] tracking-[-0.06em]"
               style={{
                 fontSize: '5.5rem',
                 color: band.color,
@@ -202,7 +203,7 @@ export function RfiiScoreCardBody({
             >
               {hasScore ? animScore.toFixed(2) : "—"}
             </span>
-            <span className="text-[11px] text-muted-foreground tabular-nums pb-2">/ 1.00</span>
+            <span className="text-[11px] text-muted-foreground font-mono-num whitespace-nowrap pb-2">/ 1.00</span>
           </div>
 
           {/* Risk band pill -- only for a real score */}
@@ -245,7 +246,7 @@ export function RfiiScoreCardBody({
                 }}
               />}
             </div>
-            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums mt-1.5">
+            <div className="flex justify-between text-[10px] uppercase tracking-wider text-muted-foreground font-mono-num mt-1.5">
               <span>0.0 low</span>
               <span>0.5</span>
               <span>1.0 high</span>
