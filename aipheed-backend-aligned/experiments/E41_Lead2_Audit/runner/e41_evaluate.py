@@ -217,6 +217,8 @@ def e40_dev(d) -> dict:
             rows.append({"t": t, "target_q": t + 2, "province_code": p, "y": int(truth[(p, t + 2)]),
                          "SIM_p": sim.get(p, np.nan), "PERSIST_p": float(last.get(p, 0)), "LOW_p": rate})
     E = pd.DataFrame(rows)
+    withheld = E[E["SIM_p"].isna()]
+    E = E.dropna(subset=["SIM_p"]).copy()               # no forecast -> not scored (PROTOCOL 4.4); common rows only
     E["SIM_yhat"] = (E["SIM_p"] >= 0.5).astype(int)
     E["PERSIST_yhat"] = E["PERSIST_p"].astype(int)
     E["LOW_yhat"] = 0
@@ -224,6 +226,8 @@ def e40_dev(d) -> dict:
     out["paired_brier_SIM_vs"] = {o: L.sign_flip((per_date(E, o)["br"] - per_date(E, "SIM")["br"]).to_numpy())
                                   for o in ("PERSIST", "LOW")}
     out["dates"] = int(E["target_q"].nunique())
+    out["withheld_rows"] = int(len(withheld))
+    out["withheld_targets"] = sorted({L.qs(int(q)) for q in withheld["target_q"]})
     return out, E
 
 

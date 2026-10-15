@@ -1,0 +1,12 @@
+20261015T101418Z lead2 S-P dates 19 rows 95
+  M1               acc 0.632 [0.5052631578947369, 0.7684210526315789] bal 0.617 recH 0.53 recL 0.71 brier 0.203 MAE 2.88
+  M1z              acc 0.716 [0.5894736842105263, 0.8421052631578947] bal 0.673 recH 0.40 recL 0.95 brier 0.189 MAE 2.53
+  B0_majority      acc 0.432 [0.2736842105263158, 0.6105263157894737] bal 0.502 recH 0.95 recL 0.05 brier 0.311 MAE nan
+  B1_persistence   acc 0.516 [0.3894736842105263, 0.6423684210526301] bal 0.510 recH 0.47 recL 0.55 brier 0.484 MAE 3.50
+  B2_latest_month  acc 0.600 [0.4842105263157895, 0.7157894736842105] bal 0.597 recH 0.57 recL 0.62 brier 0.400 MAE 3.21
+  B3_seasonal      acc 0.400 [0.28421052631578947, 0.5157894736842106] bal 0.400 recH 0.40 recL 0.40 brier 0.600 MAE nan
+  gates {'G0_validity': True, 'G1_accuracy_ge_0.75': False, 'G2_not_degenerate': False, 'G3a_point_better_than_all_baselines': True, 'G3b_brier_gain_vs_persistence_holm_p_lt_0.05': True, 'G4_citl_ci_contains_0': True, 'G3_beats_baselines': True, 'verdict': 'experimental (failed: G1_accuracy_ge_0.75, G2_not_degenerate)'}
+  S-ML {'M1': 0.622, 'M2': 0.733, 'M3': 0.556, 'B0_majority': 0.244, 'B1_persistence': 0.578, 'B2_latest_month': 0.689, 'B3_seasonal': 0.467} dates 9
+  lead1 {'M1': 0.842, 'M1z': 0.789, 'B0_majority': 0.421, 'B1_persistence': 0.6, 'B2_latest_month': 0.705, 'B3_seasonal': 0.4}
+  hunger {'dates': 16, 'MAE_persist': 4.23125, 'MAE_mean': 4.928047833243146}
+  E40 dev {'SIM': (0.925, 0.071), 'PERSIST': (0.875, 0.125), 'LOW': (0.875, 0.121)}
