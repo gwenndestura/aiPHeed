@@ -1,0 +1,285 @@
+{
+ "labelled_dates_A_B": [
+  "2021-Q1",
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q1",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q2",
+  "2025-Q3",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "labelled_dates_C": [
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "previously_missing_quarters_now_with_CPI_values": {
+  "2021-Q1": true,
+  "2022-Q1": true,
+  "2025-Q2": true,
+  "2025-Q3": true
+ },
+ "D1_prevalence": {
+  "overall": {
+   "HIGH": 54,
+   "rows": 115,
+   "share": 0.46956521739130436
+  },
+  "by_year": {
+   "2021": {
+    "HIGH": 14,
+    "rows": 20,
+    "share": 0.7
+   },
+   "2022": {
+    "HIGH": 10,
+    "rows": 20,
+    "share": 0.5
+   },
+   "2023": {
+    "HIGH": 17,
+    "rows": 20,
+    "share": 0.85
+   },
+   "2024": {
+    "HIGH": 5,
+    "rows": 20,
+    "share": 0.25
+   },
+   "2025": {
+    "HIGH": 3,
+    "rows": 20,
+    "share": 0.15
+   },
+   "2026": {
+    "HIGH": 5,
+    "rows": 15,
+    "share": 0.3333333333333333
+   }
+  }
+ },
+ "D2_dates": {
+  "with_at_least_one_HIGH": 16,
+  "with_none": 7,
+  "dates_with_none": [
+   "2021-Q4",
+   "2022-Q1",
+   "2024-Q1",
+   "2025-Q2",
+   "2025-Q3",
+   "2025-Q4",
+   "2026-Q1"
+  ],
+  "total": 23
+ },
+ "D3_mixed": {
+  "mixed_dates": 11,
+  "all_five_HIGH": 5,
+  "all_five_HIGH_dates": [
+   "2021-Q1",
+   "2021-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q3"
+  ],
+  "HIGH_count_by_date": {
+   "2021-Q1": 5,
+   "2021-Q2": 4,
+   "2021-Q3": 5,
+   "2021-Q4": 0,
+   "2022-Q1": 0,
+   "2022-Q2": 2,
+   "2022-Q3": 3,
+   "2022-Q4": 5,
+   "2023-Q1": 5,
+   "2023-Q2": 4,
+   "2023-Q3": 5,
+   "2023-Q4": 3,
+   "2024-Q1": 0,
+   "2024-Q2": 3,
+   "2024-Q3": 1,
+   "2024-Q4": 1,
+   "2025-Q1": 3,
+   "2025-Q2": 0,
+   "2025-Q3": 0,
+   "2025-Q4": 0,
+   "2026-Q1": 0,
+   "2026-Q2": 3,
+   "2026-Q3": 2
+  }
+ },
+ "D4_recompute": {
+  "rows_compared": 100,
+  "max_abs_diff": 3.33333360913457e-09,
+  "labels_reproduced": true,
+  "2026_rows": "F equals the mean of the PSA published monthly YoY (asserted when label_v2.csv was built)"
+ },
+ "D5_sensitivity_information_only": {
+  "3pct": {
+   "HIGH_share": 0.6086956521739131,
+   "dates_with_HIGH": 19,
+   "kappa_vs_4pct": 0.7253731343283583
+  },
+  "5pct": {
+   "HIGH_share": 0.34782608695652173,
+   "dates_with_HIGH": 14,
+   "kappa_vs_4pct": 0.7519260400616333
+  },
+  "rule": "reported only; the 4% threshold is not changed"
+ },
+ "D6_context_no_validation": {
+  "mean_F_by_province_2021_2026": {
+   "Rizal": 5.146,
+   "Quezon": 4.606,
+   "Batangas": 4.43,
+   "Laguna": 4.364,
+   "Cavite": 4.264
+  },
+  "PSA_2021_poverty_pop_weighted_SAE": {
+   "Quezon": 19.65,
+   "Cavite": 9.91,
+   "Batangas": 8.79,
+   "Rizal": 7.06,
+   "Laguna": 6.04
+  },
+  "spearman_meanF_vs_poverty": 0.0,
+  "NNS_2023_FIES_CALABARZON": "19.1% of households (annual, regional, absolute experience scale): different geography, period and construct; no comparison is a validation",
+  "HIGH_share_2023": 0.85,
+  "statement": "context only; no validation is claimed"
+ },
+ "D7_v1_vs_v2": {
+  "rows": 85,
+  "confusion_v1_rows_v2_cols": {
+   "HIGH": {
+    "HIGH": 30,
+    "NOT HIGH": 10
+   },
+   "NOT HIGH": {
+    "HIGH": 30,
+    "NOT HIGH": 15
+   }
+  },
+  "agreement": 0.5294117647058824,
+  "per_date": {
+   "2021-Q4": {
+    "v1_HIGH": 0,
+    "v2_HIGH": 0,
+    "disagree": 0
+   },
+   "2022-Q2": {
+    "v1_HIGH": 2,
+    "v2_HIGH": 2,
+    "disagree": 0
+   },
+   "2022-Q3": {
+    "v1_HIGH": 2,
+    "v2_HIGH": 3,
+    "disagree": 1
+   },
+   "2022-Q4": {
+    "v1_HIGH": 3,
+    "v2_HIGH": 5,
+    "disagree": 2
+   },
+   "2023-Q1": {
+    "v1_HIGH": 1,
+    "v2_HIGH": 5,
+    "disagree": 4
+   },
+   "2023-Q2": {
+    "v1_HIGH": 3,
+    "v2_HIGH": 4,
+    "disagree": 1
+   },
+   "2023-Q3": {
+    "v1_HIGH": 3,
+    "v2_HIGH": 5,
+    "disagree": 2
+   },
+   "2023-Q4": {
+    "v1_HIGH": 4,
+    "v2_HIGH": 3,
+    "disagree": 1
+   },
+   "2024-Q1": {
+    "v1_HIGH": 4,
+    "v2_HIGH": 0,
+    "disagree": 4
+   },
+   "2024-Q2": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 3,
+    "disagree": 2
+   },
+   "2024-Q3": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 1,
+    "disagree": 4
+   },
+   "2024-Q4": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 1,
+    "disagree": 4
+   },
+   "2025-Q1": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 3,
+    "disagree": 2
+   },
+   "2025-Q4": {
+    "v1_HIGH": 4,
+    "v2_HIGH": 0,
+    "disagree": 4
+   },
+   "2026-Q1": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 0,
+    "disagree": 5
+   },
+   "2026-Q2": {
+    "v1_HIGH": 4,
+    "v2_HIGH": 3,
+    "disagree": 1
+   },
+   "2026-Q3": {
+    "v1_HIGH": 5,
+    "v2_HIGH": 2,
+    "disagree": 3
+   }
+  },
+  "explanation": "v1 HIGH follows regional hunger above a lagging median (shared by all provinces); v2 HIGH follows each province's own food inflation above 4%. They disagree when hunger is high while food inflation is low (2024-2026) and when food inflation is high while hunger is near its median (2022-2023)."
+ },
+ "D8_no_leakage": "each label uses only its own quarter's published CPI (and, for C, its own posted rounds); the only constant is 4.0 (BSP target ceiling); no reference window, no fitted anchor"
+}
