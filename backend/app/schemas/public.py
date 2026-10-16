@@ -192,12 +192,6 @@ class MunicipalitySummary(BaseModel):
     povertyValueUsed: float | None = None
     povertyLimitation: str | None = None
     noProvinceEstimate: bool = False
-    # E45: what the map colour means (vulnerability index band, or insufficient data); never a municipal forecast
-    vulnerabilityIndex: float | None = None
-    mapStatus: str | None = None
-    mapCategory: str | None = None
-    mapLabel: str | None = None
-    mapNote: str | None = None
 
 
 class MunicipalitiesResponse(BaseModel):

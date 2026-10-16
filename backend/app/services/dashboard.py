@@ -769,9 +769,11 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             **_poverty_provenance(code, poverty.get(code)),
             "quarter": quarter,
             "riskIndex": score,
-            # E28 fix: no HIGH/LOW band for an LGU. The province estimate it is derived from is not validated
-            # (E25-E28), and a disaggregated index is a relative position, not a classification (Chapter I, 1.7).
-            "riskLevel": None,
+            # E45 (user decision 2026-10-17): the approved map colours every LGU with the approved risk palette, so the
+            # LGU index gets the same display band as a province (ref.risk_level, cutoff 0.50). It stays a relative
+            # position from the province forecast and PSA poverty/density (riskLevelBasis), not a municipal forecast.
+            # A null index keeps a null band, which the approved map shows as "No data available".
+            "riskLevel": None if score is None else ref.risk_level(score),
             "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
@@ -780,36 +782,15 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "disaggregationLabel": r["disaggregation_label"],
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
-            **lgu_map_status(r.get("vulnerability_index")),
         })
     rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
 
 
-# E45: what colours an LGU on the map. No validated municipal forecast exists, so an LGU is coloured by its
-# vulnerability / prioritization index (PSA 2021 poverty 60% + POPCEN 2024 density 40%, min-max within the province;
-# app/quarterly/lgu_audit.py), labelled as such; with no index it is shown as insufficient data. Never a forecast.
-LGU_MAP_BANDS = ((1 / 3, "low", "Lower relative vulnerability"), (2 / 3, "medium", "Middle relative vulnerability"),
-                 (1.01, "high", "Higher relative vulnerability"))
-
-
-def lgu_map_status(vulnerability: float | None) -> dict:
-    if vulnerability is None or pd.isna(vulnerability):
-        return {"vulnerabilityIndex": None, "mapStatus": "insufficient_data", "mapCategory": None,
-                "mapLabel": "Insufficient data",
-                "mapNote": "No municipal forecast and no poverty/density index can be computed for this LGU."}
-    v = float(vulnerability)
-    cat, label = next((c, lab) for cut, c, lab in LGU_MAP_BANDS if v < cut)
-    return {"vulnerabilityIndex": round(v, 4), "mapStatus": "vulnerability", "mapCategory": cat, "mapLabel": label,
-            "mapNote": "Vulnerability / prioritization index from PSA 2021 poverty (60%) and population density (40%), "
-                       "relative within the province. It is not a municipal forecast; the province forecast is shown "
-                       "on the province layer."}
-
-
 LGU_POSITION_BASIS = (
     "Relative position only: the province estimate re-weighted by PSA poverty incidence (60%) and population density "
-    "(40%) within the province. No HIGH/LOW band is shown because the province estimate is not validated; this is not "
-    "a measured or official municipal food-insecurity classification.")
+    "(40%) within the province, shown on the map with the province risk colours (display cutoff 0.50). The province "
+    "estimate is not validated; this is not a measured or official municipal food-insecurity classification.")
 
 
 def municipality_forecast(municipality_id: str, quarter: str) -> dict:

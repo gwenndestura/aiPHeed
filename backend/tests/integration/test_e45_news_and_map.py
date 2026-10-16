@@ -62,7 +62,11 @@ def _key(province, name):
     return province + "::" + re.sub(r"\s+city$", "", re.sub(r"^city of\s+", "", name.lower().strip()))
 
 
-def test_every_lgu_has_an_honest_map_status_and_joins_its_geometry():
+def test_every_lgu_gets_an_approved_palette_band_and_joins_its_geometry():
+    """The approved map colours an LGU with RISK_COLORS[riskLevel]; every LGU must carry a band (or null only when it
+    has no index, shown as the approved gray), and every boundary feature must join an API record."""
+    from app.services import reference as ref
+
     rows = {}
     for p in ("cavite", "laguna", "batangas", "rizal", "quezon"):
         for x in client.get(f"/api/v1/provinces/{p}/municipalities?quarter=2027-Q1").json()["data"]:
@@ -71,12 +75,9 @@ def test_every_lgu_has_an_honest_map_status_and_joins_its_geometry():
     keys = {_key(f["properties"]["province_id"], f["properties"]["name"]) for f in geo}
     assert len(rows) == len(keys) == 142 and set(rows) == keys
     for x in rows.values():
-        assert x["mapStatus"] in ("vulnerability", "insufficient_data") and x["mapLabel"]
-        assert x["riskLevel"] is None                                          # never banded as a forecast
-        if x["mapStatus"] == "vulnerability":
-            v = x["vulnerabilityIndex"]
-            assert 0 <= v <= 1
-            assert x["mapCategory"] == ("low" if v < 1 / 3 else "medium" if v < 2 / 3 else "high")
-            assert "not a municipal forecast" in x["mapNote"]
+        if x["riskIndex"] is None:
+            assert x["riskLevel"] is None
         else:
-            assert x["mapCategory"] is None
+            assert x["riskLevel"] == ref.risk_level(x["riskIndex"]) and x["riskLevel"] in ("low", "high")
+        assert "not a measured or official municipal" in x["riskLevelBasis"]
+    assert sum(x["riskLevel"] is not None for x in rows.values()) == 142

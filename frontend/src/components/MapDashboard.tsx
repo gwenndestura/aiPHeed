@@ -469,7 +469,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             className={`absolute z-[1001] flex flex-col ${wideCompact ? "items-end" : "items-start"} gap-1 pointer-events-none`}
             style={wideCompact ? { right: EDGE, top: EDGE } : { left: EDGE, top: SHEET_TOP_RESERVE }}
           >
-            <MapLegend compact municipal={!!selectedRegion} />
+            <MapLegend compact />
             <span className="qt-float text-[12px]">© OpenStreetMap · Protomaps</span>
           </div>
         )}
@@ -614,7 +614,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       >
         <div className="qt-row-stack">
           <div className="qt-row-legend pointer-events-auto animate-fade-in">
-            <MapLegend municipal={!!selectedRegion} />
+            <MapLegend />
           </div>
           {currentQuarter && (
             <div className="qt-row-bar pointer-events-auto animate-slide-up">

@@ -1,5 +1,7 @@
 # E45: news feed restored, every city and municipality coloured, model diagnostics
 
+> **Correction (2026-10-17, user instruction):** the purple "vulnerability" colour scale and the extra legend that E45 first added were **removed**. `PhilippineMap.tsx`, `MapLegend.tsx`, `MapDashboard.tsx`, `data/types.ts` and `lib/adapters.ts` are byte-identical again to the approved frontend (`2c45882`). Every LGU is now coloured with the **approved** palette: the backend gives each LGU the approved display band (`ref.risk_level` of its index, cutoff 0.50), and the approved map paints it yellow (low) or red (high). A null index stays null, which the approved map shows as its gray "No data available". The LGU index is still the relative prioritization from the province forecast and PSA poverty/density (`riskLevelBasis`); it is not a municipal forecast. Live check: Quezon 41/41 LGUs coloured approved yellow (#eab308), approved legend. Section 2 below describes the superseded first version.
+
 **Date:** 2026-10-16.
 **Branch:** `e43-five-trigger-risk` (local, not pushed).
 **Builds on:** E44 (`9745340`).
