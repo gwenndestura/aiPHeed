@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, useMemo, useCallback } from "react";
-import { ChevronUp, PanelLeft, PanelRight, PanelsTopLeft, PanelsRightBottom } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp, PanelLeft, PanelRight, PanelsTopLeft, PanelsRightBottom } from "lucide-react";
 import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections, useForecast } from "@/lib/queries";
@@ -21,6 +21,7 @@ import { FeedbackModal } from "@/components/FeedbackModal";
 import { MapSearch } from "@/components/MapSearch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isLoadFailure } from "@/lib/loadError";
@@ -45,21 +46,33 @@ function FloatingCard({ children, className = "", style, tour }: { children: Rea
   );
 }
 
+/** The arrow on a closed panel's edge: it points the way the panel opens. */
+const EdgeChevron = ({ side }: { side: "left" | "right" }) => {
+  const Icon = side === "left" ? ChevronRight : ChevronLeft;
+  return <Icon aria-hidden className="h-5 w-5" />;
+};
+
 /**
- * Tablets: the closed side panel as a labelled tab at the screen edge.
+ * Tablets: the closed side panel as a tab at the screen edge, with an arrow
+ * pointing the way it opens; its name is in the label and, on hover, a tooltip.
  * Opening it closes the other panel.
  */
 function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: string; onClick: () => void }) {
+  const name = `Show the ${label} panel`;
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`Show the ${label} panel`}
-      className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0" : "right-0 border-r-0"} w-11 py-5 flex items-center justify-center bg-card/95 border border-border/60 shadow-xl text-[13px] font-semibold text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
-      style={{ writingMode: "vertical-rl" }}
-    >
-      {label}
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={name}
+          className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0" : "right-0 border-r-0"} w-11 h-16 flex items-center justify-center bg-card/95 border border-border/60 shadow-xl text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+        >
+          <EdgeChevron side={side} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side={side === "left" ? "right" : "left"}>{name}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -615,6 +628,19 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
       {medium && leftCollapsed && <EdgeTab side="left" label="Summary" onClick={showLeft} />}
       {medium && rightCollapsed && <EdgeTab side="right" label="Why" onClick={showRight} />}
+
+      {/* Wide desktops: the same arrow, centred on a closed panel's 24px strip.
+          It lets clicks through, so the strip works exactly as before. */}
+      {!medium && leftCollapsed && (
+        <div aria-hidden className="absolute z-[1002] left-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
+          <EdgeChevron side="left" />
+        </div>
+      )}
+      {!medium && rightCollapsed && (
+        <div aria-hidden className="absolute z-[1002] right-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
+          <EdgeChevron side="right" />
+        </div>
+      )}
 
       {/* Map search — top, beside left sidebar */}
       <div
