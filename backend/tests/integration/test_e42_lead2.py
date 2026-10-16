@@ -99,7 +99,8 @@ def test_indicator_matches_the_score_served(monkeypatch):
     ts = client.get("/api/v1/forecast/timeseries?scope=province&id=quezon&horizon=forecast").json()["series"]
     types = {p["quarter"]: p["scoreType"] for p in ts}
     assert types.get("2027-Q1") == "price_pressure_probability"
-    assert all(v == "food_insecurity_risk_probability" for q, v in types.items() if q != "2027-Q1")
+    # E46: a trend line carries one score type; past quarters come from the candidate's own backtest
+    assert set(types.values()) == {"price_pressure_probability"}
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "e38")
     f = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2027-Q1&horizon=forecast").json()
     assert f["indicator"]["id"] == "food_insecurity_risk_probability"

@@ -112,6 +112,25 @@ def trigger_statuses(quarter: str, code: str | None = None) -> dict[str, str] | 
     return out
 
 
+def backtest_series(code: str | None) -> dict[str, float]:
+    """E46: the served candidate's own development backtest (same model procedure, information available at each past
+    origin), quarter -> probability; region = mean of the five provinces where all five exist. Empty if the record has
+    no backtest. Used so a trend line never joins the old v1 label scores to the candidate's probabilities."""
+    if not active():
+        return {}
+    provs = record()["provinces"]
+    by_q: dict[str, list[float]] = {}
+    for c, v in provs.items():
+        if code and c != code:
+            continue
+        for x in v.get("pastForecasts", []):
+            p = x.get("probability", x.get("probabilityAbove4pct"))
+            if p is not None:
+                by_q.setdefault(x["targetQuarter"], []).append(float(p))
+    need = 1 if code else len(provs)
+    return {q: sum(ps) / len(ps) for q, ps in by_q.items() if len(ps) == need}
+
+
 def trigger_evidence(quarter: str, code: str | None) -> dict[str, str]:
     """E44: the observed evidence sentence per trigger (province scope only; empty otherwise)."""
     if not code or not serves(quarter):

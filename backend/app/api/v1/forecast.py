@@ -225,10 +225,27 @@ async def get_timeseries(
             "scoreType": svc.indicator_for(q)["id"],
         })
 
+    # E46: with a Lead-2 candidate enabled, a line must not join two different scores (the v1 label probability of
+    # past quarters, about 0.9, and the candidate's probability of its own target event, about 0.2). Past quarters
+    # then come from the candidate's own as-of backtest, and points of any other score type are left out.
+    target = svc.forecast_target()["target_quarter"]
+    if svc.E41L2.serves(target):
+        cand = svc.indicator_for(target)["id"]
+        code = None if scope == "region" else ref.province_code(id.lower().split("-")[0])
+        bt = svc.E41L2.backtest_series(code)
+        series = [p for p in series if p["scoreType"] == cand] + [
+            {"quarter": q, "riskScore": round(v, 4), "riskLevel": ref.risk_level(v), "isForecast": False,
+             "scoreType": cand}
+            for q, v in bt.items() if lo <= ref.quarter_index(q) <= hi]
+        series.sort(key=lambda p: ref.quarter_index(p["quarter"]))
+        indicator = svc.indicator_for(target)
+    else:
+        indicator = svc.INDICATOR
+
     return TimeseriesResponse(
         scope=scope,
         id=id.lower(),
         name=_subject_name(scope, id),
-        indicator=svc.INDICATOR,
+        indicator=indicator,
         series=series,
     )

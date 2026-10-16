@@ -91,3 +91,20 @@ def test_notes_and_config_describe_the_served_candidate(e44):
     assert prov["indicator"]["id"] == "food_stress_risk_probability"
     old = client.get("/api/v1/provinces?quarter=2026-Q3&horizon=forecast").json()
     assert old["indicator"]["id"] == "food_insecurity_risk_probability"
+
+
+def test_trend_line_uses_one_score_type(e44):
+    """E46: the history line never joins the v1 label probabilities (~0.9) to the candidate's probabilities."""
+    rec = LEAD2.record()
+    for scope, id_ in (("province", "quezon"), ("region", "calabarzon")):
+        body = client.get(f"/api/v1/forecast/timeseries?scope={scope}&id={id_}&horizon=forecast").json()
+        types = {p["scoreType"] for p in body["series"]}
+        assert types == {"food_stress_risk_probability"} and body["indicator"]["id"] == "food_stress_risk_probability"
+        qs = [p["quarter"] for p in body["series"]]
+        assert qs == sorted(qs) and qs[-1] == "2027-Q1"
+    past = {x["targetQuarter"]: x["probability"] for x in rec["provinces"]["PH040300000"]["pastForecasts"]}
+    pts = {p["quarter"]: p["riskScore"] for p in client.get(
+        "/api/v1/forecast/timeseries?scope=province&id=quezon&horizon=forecast").json()["series"]}
+    for q, v in past.items():
+        if q in pts:
+            assert pts[q] == pytest.approx(v, abs=1e-3)

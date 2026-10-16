@@ -1,0 +1,185 @@
+{
+ "issued_by": "E46",
+ "origin": "2026-10-01",
+ "origin_quarter": "2026-Q3",
+ "target_quarter": "2027-Q1",
+ "lead_from_origin": 2,
+ "protocol_sha256": "2781791daa9f6a50feff1140fbba37adee1bcb6a9499bf15fc18447e53c4f466",
+ "policy_features_at_origin": {
+  "tariff_yoy_regime": 0.0,
+  "import_suspension_share": 0.0,
+  "price_ceiling_share": 0.0,
+  "food_emergency_share": 0.0
+ },
+ "selections_at_origin": {
+  "I6": {
+   "price_cfg": {
+    "mult": 0.0,
+    "model": "lgbm",
+    "leaves": 4,
+    "n_est": 50
+   },
+   "threshold": 0.2,
+   "price_features": [
+    "F_hat_M1",
+    "F_now",
+    "D_now",
+    "gap_now",
+    "rice_whsl_yoy",
+    "tc_count",
+    "tc_count_l1",
+    "enso",
+    "enso_l2",
+    "palay_yoy",
+    "corn_yoy",
+    "enso_x_mom",
+    "tcl1_x_palay",
+    "fish_yoy",
+    "aqua_yoy",
+    "ur_yoy",
+    "under_yoy",
+    "remit_usd_yoy",
+    "remit_php_yoy",
+    "fx_yoy",
+    "news_market",
+    "news_climate",
+    "news_fish_kill",
+    "news_employment",
+    "news_ofw_remittance",
+    "news_n",
+    "tariff_yoy_regime",
+    "import_suspension_share",
+    "price_ceiling_share",
+    "food_emergency_share"
+   ],
+   "hunger_features": [
+    "F_now",
+    "enso",
+    "enso_l2",
+    "tc_count",
+    "tc_count_l1",
+    "palay_yoy",
+    "fish_yoy",
+    "ur_yoy",
+    "under_yoy",
+    "remit_php_yoy",
+    "fx_yoy",
+    "news_n"
+   ]
+  },
+  "I6b": {
+   "price_cfg": {
+    "mult": 0.0,
+    "model": "lgbm",
+    "leaves": 4,
+    "n_est": 50
+   },
+   "threshold": 0.5,
+   "price_features": [
+    "F_hat_M1",
+    "F_now",
+    "D_now",
+    "gap_now",
+    "rice_whsl_yoy",
+    "tc_count",
+    "tc_count_l1",
+    "enso",
+    "enso_l2",
+    "palay_yoy",
+    "corn_yoy",
+    "enso_x_mom",
+    "tcl1_x_palay",
+    "fish_yoy",
+    "aqua_yoy",
+    "ur_yoy",
+    "under_yoy",
+    "remit_usd_yoy",
+    "remit_php_yoy",
+    "fx_yoy",
+    "news_market",
+    "news_climate",
+    "news_fish_kill",
+    "news_employment",
+    "news_ofw_remittance",
+    "news_n",
+    "tariff_yoy_regime",
+    "import_suspension_share",
+    "price_ceiling_share",
+    "food_emergency_share"
+   ],
+   "hunger_features": [
+    "F_now",
+    "enso",
+    "enso_l2",
+    "tc_count",
+    "tc_count_l1",
+    "palay_yoy",
+    "fish_yoy",
+    "news_n"
+   ]
+  },
+  "I6-MKT": {
+   "price_cfg": {
+    "mult": 0.0,
+    "model": "lgbm",
+    "leaves": 2,
+    "n_est": 50
+   },
+   "threshold": 0.2,
+   "price_features": [
+    "F_hat_M1",
+    "F_now",
+    "D_now",
+    "gap_now",
+    "rice_whsl_yoy",
+    "tariff_yoy_regime",
+    "import_suspension_share",
+    "price_ceiling_share",
+    "food_emergency_share"
+   ],
+   "hunger_features": []
+  }
+ },
+ "provinces": {
+  "Cavite": {
+   "I6_p": 0.19305655309179295,
+   "I6_yhat": 0.0,
+   "I6b_p": 0.20909180849131495,
+   "I6b_yhat": 0.0,
+   "I6-MKT_p": 0.19126073449970984,
+   "I6-MKT_yhat": 0.0
+  },
+  "Laguna": {
+   "I6_p": 0.19686495323951828,
+   "I6_yhat": 0.0,
+   "I6b_p": 0.20991053569533902,
+   "I6b_yhat": 0.0,
+   "I6-MKT_p": 0.2030910891863032,
+   "I6-MKT_yhat": 1.0
+  },
+  "Quezon": {
+   "I6_p": 0.21037295413220033,
+   "I6_yhat": 1.0,
+   "I6b_p": 0.21272431524219193,
+   "I6b_yhat": 0.0,
+   "I6-MKT_p": 0.23237053842360963,
+   "I6-MKT_yhat": 1.0
+  },
+  "Rizal": {
+   "I6_p": 0.19061339031886357,
+   "I6_yhat": 0.0,
+   "I6b_p": 0.20856061143068377,
+   "I6b_yhat": 0.0,
+   "I6-MKT_p": 0.19066596533306762,
+   "I6-MKT_yhat": 0.0
+  },
+  "Batangas": {
+   "I6_p": 0.19648070877651264,
+   "I6_yhat": 0.0,
+   "I6b_p": 0.20982844159283429,
+   "I6b_yhat": 0.0,
+   "I6-MKT_p": 0.20673670162621186,
+   "I6-MKT_yhat": 1.0
+  }
+ }
+}
