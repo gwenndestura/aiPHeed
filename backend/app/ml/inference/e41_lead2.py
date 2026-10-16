@@ -22,6 +22,8 @@ RECORD = Path(os.getenv("AIPHEED_E41_RECORD", "data/e41/e41_lead2_record.json"))
 RECORD_E42 = Path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.json"))
 # E43: five-trigger food-stress risk forecast (Chapter I section 1.7 target); own score type, drivers and statuses
 RECORD_E43 = Path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
+# E44: final five-trigger candidate (I2, forecasting acceptance not met)
+RECORD_E44 = Path(os.getenv("AIPHEED_E44_RECORD", "data/e44/e44_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -35,11 +37,11 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43")
+    return mode() in ("e41", "e42", "e43", "e44")
 
 
 def record() -> dict:
-    path = {"e42": RECORD_E42, "e43": RECORD_E43}.get(mode(), RECORD)
+    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
@@ -108,6 +110,14 @@ def trigger_statuses(quarter: str, code: str | None = None) -> dict[str, str] | 
         for g, s in v["triggerStatus"].items():
             out[g] = min(out.get(g, s["status"]), s["status"], key=STATUS_ORDER.index)
     return out
+
+
+def trigger_evidence(quarter: str, code: str | None) -> dict[str, str]:
+    """E44: the observed evidence sentence per trigger (province scope only; empty otherwise)."""
+    if not code or not serves(quarter):
+        return {}
+    ts = record()["provinces"].get(code, {}).get("triggerStatus", {})
+    return {g: v["evidenceNote"] for g, v in ts.items() if isinstance(v, dict) and v.get("evidenceNote")}
 
 
 def drivers(code: str, quarter: str) -> dict:

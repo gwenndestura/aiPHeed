@@ -285,6 +285,8 @@ class Trigger(BaseModel):
     # card text from the status, never a fixed direction, for a group that has no model input or no data)
     status: str | None = None
     statusNote: str | None = None
+    # E44: the observed evidence behind a model-attributed trigger (province scope, candidate records only)
+    evidenceNote: str | None = None
     color: str
     newsSignalProportion: float | None = None
 

@@ -287,6 +287,8 @@ export interface Trigger {
   /** E42: what the group is in this forecast. Absent from older backends. */
   status?: TriggerStatus;
   statusNote?: string;
+  /** E44: the observed evidence behind a model-attributed trigger (province scope, candidate models only). */
+  evidenceNote?: string | null;
 }
 
 export type TriggerStatus =

@@ -106,8 +106,17 @@ export function isContributing(t: Pick<Trigger, "status" | "pct">): boolean {
   return t.status ? t.status === "contributes" : t.pct > 0;
 }
 
-export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct">): Copy {
+export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct" | "evidenceNote">): Copy {
   const entry = DRIVER_COPY[t.key];
+  // E44: when the backend states the evidence behind a model-attributed group, say what the model did with it and
+  // show the actual observation, instead of asserting an event ("Typhoons damaged farms") that may not have happened.
+  if (isContributing(t) && t.evidenceNote) {
+    const name = FRIENDLY_NAME[t.key] ?? t.key;
+    return {
+      title: `${name}: ${t.direction === "protective" ? "lowers" : "raises"} the forecast`,
+      description: t.evidenceNote,
+    };
+  }
   if (!isContributing(t)) {
     const status: Exclude<TriggerStatus, "contributes"> =
       t.status && t.status !== "contributes" ? t.status : "no_effect";

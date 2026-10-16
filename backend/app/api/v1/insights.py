@@ -62,9 +62,22 @@ E36_EXPLAINABILITY_NOTE = (
 )
 
 
-def _served_note() -> str:
-    from app.ml.inference import e31_engine as E31
+CANDIDATE_EXPLAINABILITY_NOTE = (
+    "The bars show how much each of five factor groups (Market / Prices, Climate Stress, Fish Kill, Employment and "
+    "OFW Remittance) moved this experimental forecast; the five shares add up to 100 percent. Each card states "
+    "whether the group raised or lowered the forecast and the official observation behind it. Every group has inputs "
+    "in this model; a 0 percent bar means no measurable effect this quarter, not missing data. Employment and OFW "
+    "figures are national, so they shift every province equally. Contributions are model attributions, not proof "
+    "that an event causes food insecurity. These figures are model estimates, not official government statistics."
+)
 
+
+def _served_note(quarter: str | None = None) -> str:
+    from app.ml.inference import e31_engine as E31
+    from app.ml.inference import e41_lead2 as LEAD2
+
+    if quarter and LEAD2.serves(quarter) and LEAD2.mode() == "e44":
+        return CANDIDATE_EXPLAINABILITY_NOTE
     return E36_EXPLAINABILITY_NOTE if E31.record().get("schema") == "e36/1" else E31_EXPLAINABILITY_NOTE
 
 
@@ -134,7 +147,7 @@ async def get_explainability(
         articleCount=article_count,
         triggerMatchedArticles=matched,
         narrative=svc.compose_narrative(name, q, triggers),
-        note=_served_note() if svc.e31_active() else EXPLAINABILITY_NOTE,
+        note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,
     )
 
 

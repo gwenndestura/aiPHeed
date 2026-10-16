@@ -71,7 +71,8 @@ async def get_config() -> ConfigResponse:
         },
         riskLevelsActive=ref.ACTIVE_RISK_LEVELS,
         riskLevelsDefined=RISK_LEVELS_DEFINED,
-        indicator=svc.INDICATOR,
+        # E44: the definition of the score served for the dashboard's default (target) quarter
+        indicator=svc.indicator_for(svc.forecast_target()["target_quarter"]),
         quarterRange={
             "earliest": quarters[0] if quarters else None,
             "latest": quarters[-1] if quarters else None,
@@ -140,7 +141,7 @@ async def get_provinces(
     return ProvincesResponse(
         quarter=q,
         horizon=h,
-        indicator=svc.INDICATOR,
+        indicator=svc.indicator_for(q),
         data=svc.province_summary(q, withheld, h),
     )
 
@@ -182,7 +183,7 @@ async def get_municipalities(
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,
-        indicator=svc.INDICATOR,
+        indicator=svc.indicator_for(q),
         data=svc.municipality_summary(q, province_id=slug),
     )
 

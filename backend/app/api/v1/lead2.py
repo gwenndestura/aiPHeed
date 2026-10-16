@@ -51,8 +51,8 @@ def _timing() -> dict:
 def lead2_summary():
     rec = _record()
     return {"timing": _timing()} | {k: rec[k] for k in ("name", "status", "origin", "targetQuarter", "lead", "information", "scoreTypes",
-                                "operationalRules", "evaluation", "limitations", "content_sha256")} | (
-        {"assessment": rec["assessment"]} if "assessment" in rec else {}) | {
+                                "operationalRules", "limitations", "content_sha256")} | {
+        k: rec[k] for k in ("evaluation", "assessment", "indicator") if k in rec} | {
         "provinces": [{"id": ref.province_slug(c), "provinceCode": c, "name": v["name"],
                        "probability": E41.probability(v), "scoreType": v["forecast"]["scoreType"],
                        "probabilityAbove4pct": v["forecast"].get("probabilityAbove4pct"), "band": v["forecast"]["band"],

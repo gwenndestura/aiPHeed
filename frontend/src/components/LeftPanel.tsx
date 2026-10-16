@@ -496,7 +496,7 @@ function RegionDetail({
       {/* Confidence statement */}
       <Note>
         This is a {horizonLabel} for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"},
-        based on PSA production data already published for that quarter.
+        based only on information published before the forecast was issued.
       </Note>
 
       {/* Key Metrics */}
@@ -542,7 +542,7 @@ function RegionDetail({
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
         </div>
         <p className="text-[9px] text-muted-foreground/70 italic mb-2 leading-snug">
-          Spatially disaggregated estimates derived from the validated province forecast.
+          Relative prioritization derived from the province forecast with PSA poverty and population density; not validated municipal forecasts.
         </p>
         <div className="space-y-1 max-h-[260px] overflow-y-auto pr-1">
           {munis.map((m) => (

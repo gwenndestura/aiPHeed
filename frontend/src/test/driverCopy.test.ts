@@ -34,4 +34,12 @@ describe("trigger card copy (E42)", () => {
     expect(driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "stale", pct: 0 }).title)
       .toBe("OFW remittances: data out of date");
   });
+
+  it("describes a model-attributed trigger by its effect and the actual evidence", () => {
+    const c = driverCopy({ key: "climate", direction: "increases_risk", status: "contributes", pct: 30,
+      evidenceNote: "0 typhoon(s) within 300 km in 2026-Q3; ENSO Neutral in the previous quarter." });
+    expect(c.title).toBe("Weather and farm supply: raises the forecast");
+    expect(c.description).toMatch(/0 typhoon/);
+    expect(c.title).not.toMatch(/hurting/);
+  });
 });

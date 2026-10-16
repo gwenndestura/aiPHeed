@@ -912,6 +912,7 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
+            "evidenceNote": E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
             "newsSignalProportion": d["trigger_proportion"],
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
