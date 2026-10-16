@@ -199,7 +199,8 @@ function DriverGroup({ heading, headingColor, items }: { heading: string; headin
 }
 
 export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRegion: RegionData | null; quarterId?: string }) {
-  const [open, setOpen] = useState(false);
+  // E45: open by default so the supporting articles are visible without an extra click
+  const [open, setOpen] = useState(true);
   const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
 
   const scope = selectedRegion ? "province" : "region";
@@ -208,7 +209,7 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
   // scope there is no selectedRegion to fall back on, so deferring the call
   // until the drawer opened left CALABARZON reading 0. The corpus is cached
   // server-side (lru_cache), so this is a cheap read.
-  const { data: news } = useNews(scope, id, quarterId);
+  const { data: news, isLoading: newsLoading, isError: newsError, refetch: refetchNews } = useNews(scope, id, quarterId);
 
   const articleCount = news?.articleCount ?? selectedRegion?.articleCount ?? 0;
   // Region-wide articles (province = null in the corpus) count toward
@@ -232,11 +233,19 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
       </button>
       {open && (
         <div className="mt-3 space-y-3 px-1">
-          {news && news.sourceQuarter !== news.quarter && (
-            <p className="text-[9px] italic text-muted-foreground leading-snug">
-              Forecast quarter — showing {news.sourceQuarter.split("-").reverse().join(" ")} articles, the latest news the forecast was built from.
+          {newsLoading && <p className="text-[10px] text-muted-foreground italic">Loading articles…</p>}
+          {newsError && (
+            <p className="text-[10px] text-destructive">
+              The news feed could not be loaded.{" "}
+              <button className="underline" onClick={() => refetchNews()}>Try again</button>
             </p>
           )}
+          {news && news.sourceQuarter !== news.quarter && (
+            <p className="text-[9px] italic text-muted-foreground leading-snug">
+              Forecast quarter — showing articles up to {news.sourceQuarter.split("-").reverse().join(" ")}, the latest news available when the forecast was made.
+            </p>
+          )}
+          {news?.feedNote && <p className="text-[9px] text-muted-foreground leading-snug">{news.feedNote}</p>}
           {regionWide > 0 && news && (
             <p className="text-[9px] italic text-muted-foreground leading-snug">
               {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
@@ -262,8 +271,12 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
 
           {/* Clickable articles */}
           <div className="space-y-1 border-t border-border/30 pt-2">
-            {!news?.data.length && (
-              <p className="text-[10px] text-muted-foreground/70 italic px-2 py-1.5">No articles for this quarter.</p>
+            {news && !news.data.length && (
+              <p className="text-[10px] text-muted-foreground/70 italic px-2 py-1.5">
+                No validated or trigger-matched food-stress articles were found for this area in the news window
+                {news.windowQuarters?.length ? ` (${news.windowQuarters.join(", ")})` : ""}. This reflects news coverage,
+                not low risk.
+              </p>
             )}
             {news?.data.map((a) => (
               <button
@@ -272,7 +285,21 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
                 className="w-full text-left text-[10px] py-1.5 px-2 compact:min-h-11 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <p className="truncate font-semibold text-foreground/90">{a.title}</p>
-                <p className="text-[9px]">{a.source}{a.date ? ` · ${a.date}` : ""}</p>
+                <p className="text-[9px]">
+                  {a.source}{a.date ? ` · ${a.date}` : ""}{a.province ? ` · ${a.province}` : ""}
+                </p>
+                {(a.relevanceStatus || (a.triggers && a.triggers.length > 0)) && (
+                  <p className="text-[9px] flex flex-wrap gap-1 mt-0.5">
+                    {a.relevanceStatus && (
+                      <span className={`rounded px-1 ${a.relevanceStatus === "validated" ? "bg-primary/15 text-primary" : "bg-secondary text-muted-foreground"}`}>
+                        {a.relevanceStatus === "validated" ? "Validated" : "Keyword match"}
+                      </span>
+                    )}
+                    {a.triggers?.map((t) => (
+                      <span key={t} className="rounded px-1 bg-secondary/60 text-foreground/70">{t}</span>
+                    ))}
+                  </p>
+                )}
               </button>
             ))}
           </div>
@@ -287,7 +314,17 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
               {activeArticle?.source}{activeArticle?.date ? ` · ${activeArticle.date}` : ""}
             </DialogDescription>
           </DialogHeader>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">{activeArticle?.excerpt}</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">
+            {activeArticle?.excerpt || "Headline only: the news source supplies no lead text."}
+          </p>
+          {activeArticle?.relevanceLabel && (
+            <p className="text-[11px] text-muted-foreground">
+              {activeArticle.relevanceLabel}
+              {activeArticle.province ? ` · ${activeArticle.province}` : ""}
+              {activeArticle.triggers?.length ? ` · ${activeArticle.triggers.join(", ")}` : ""}
+              {activeArticle.collectedRetrospectively ? " · collected retrospectively (Oct 2026)" : ""}
+            </p>
+          )}
           {activeArticle?.url && (
             <a
               href={activeArticle.url}

@@ -194,11 +194,17 @@ export interface MunicipalitySummary {
   densityPerKm2: number | null;
   povertyRate: number | null;
   quarter: string;
-  riskIndex: number;
-  riskLevel: string;
+  riskIndex: number | null;
+  riskLevel: string | null;
   // Never null -- a reweighted province number, not an independent forecast.
   disaggregationLabel: string;
   limitedSignal: boolean;
+  /** E45: what colours the LGU on the map. */
+  vulnerabilityIndex?: number | null;
+  mapStatus?: "vulnerability" | "insufficient_data" | null;
+  mapCategory?: "low" | "medium" | "high" | null;
+  mapLabel?: string | null;
+  mapNote?: string | null;
 }
 
 export interface MunicipalitiesResponse {
@@ -332,6 +338,13 @@ export interface NewsArticle {
   topicKey: string;
   topicLabel: string;
   relevanceScore: number | null;
+  /** E45: why the article is in the feed and where it is attributed. Absent from older backends. */
+  relevanceStatus?: "validated" | "trigger_match" | null;
+  relevanceLabel?: string | null;
+  province?: string | null;
+  triggers?: string[];
+  quarter?: string | null;
+  collectedRetrospectively?: boolean | null;
 }
 
 export interface NewsResponse {
@@ -347,6 +360,11 @@ export interface NewsResponse {
   page: number;
   pageSize: number;
   total: number;
+  /** E45: quarters covered (the evidence quarter, extended back when it holds fewer than 5 articles). */
+  windowQuarters?: string[];
+  validatedCount?: number;
+  triggerMatchCount?: number;
+  feedNote?: string | null;
 }
 
 // ---------------------------------------------------------------------------

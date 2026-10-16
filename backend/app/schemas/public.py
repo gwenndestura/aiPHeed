@@ -192,6 +192,12 @@ class MunicipalitySummary(BaseModel):
     povertyValueUsed: float | None = None
     povertyLimitation: str | None = None
     noProvinceEstimate: bool = False
+    # E45: what the map colour means (vulnerability index band, or insufficient data); never a municipal forecast
+    vulnerabilityIndex: float | None = None
+    mapStatus: str | None = None
+    mapCategory: str | None = None
+    mapLabel: str | None = None
+    mapNote: str | None = None
 
 
 class MunicipalitiesResponse(BaseModel):
@@ -325,6 +331,14 @@ class Article(BaseModel):
     topicKey: str
     topicLabel: str
     relevanceScore: float | None = None
+    # E45: why the article is in the feed, where it is attributed, which triggers its title matches
+    relevanceStatus: str | None = None          # validated | trigger_match
+    relevanceLabel: str | None = None
+    province: str | None = None
+    provinceCode: str | None = None
+    triggers: list[str] = []
+    quarter: str | None = None
+    collectedRetrospectively: bool | None = None
 
 
 class NewsResponse(BaseModel):
@@ -347,6 +361,11 @@ class NewsResponse(BaseModel):
     sourceQuarter: str | None = None      # the frontend contract's name for evidenceQuarter
     evidenceMode: str | None = None
     evidenceNote: str | None = None
+    # E45: the quarters the feed covers (the evidence quarter, extended back when it holds fewer than 5 articles)
+    windowQuarters: list[str] = []
+    validatedCount: int = 0
+    triggerMatchCount: int = 0
+    feedNote: str | None = None
 
 
 # ---------------------------------------------------------------------------

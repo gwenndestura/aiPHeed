@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import L from "leaflet";
 import { leafletLayer } from "protomaps-leaflet";
-import { RegionData, MunicipalityData, RISK_COLORS } from "@/data/types";
+import { RegionData, MunicipalityData, RISK_COLORS, lguMapColor } from "@/data/types";
 import "leaflet/dist/leaflet.css";
 
 // Self-hosted open basemap — a single Protomaps .pmtiles file built from
@@ -346,7 +346,7 @@ export function PhilippineMap({
         style: (feature) => {
           const name = (feature?.properties?.name || "").toLowerCase();
           const muni = muniMap.get(muniKey(provinceId, name));
-          const color = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
+          const color = isProvRejected ? NO_DATA_COLOR : lguMapColor(muni);
           const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
           return {
             fillColor: color,
@@ -360,14 +360,18 @@ export function PhilippineMap({
         onEachFeature: (feature, layer) => {
           const name: string = feature.properties?.name || "Unknown";
           const muni = muniMap.get(muniKey(provinceId, name));
-          const tipColor = muni ? RISK_COLORS[muni.riskLevel] : "#888";
+          const tipColor = lguMapColor(muni);
+          // E45: say what the colour is (a vulnerability band, not a municipal forecast) and its limitation.
+          const vuln = muni?.vulnerabilityIndex;
           layer.bindTooltip(
-            `<div style="font-size:11px">
+            `<div style="font-size:11px;max-width:240px;white-space:normal">
               <strong>${name}</strong>
               ${isProvRejected
-                ? `<br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span>`
-                : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>`
-                : `<br/><span style="color:#9ca3af;font-style:italic">No data available</span>`}
+                ? `<br/><span style="color:#9ca3af;font-style:italic">Province forecast withheld for this quarter</span>`
+                : muni && muni.mapStatus === "vulnerability"
+                ? `<br/><span style="color:${tipColor}">${muni.mapLabel}${vuln != null ? ` (index ${vuln.toFixed(2)})` : ""}</span>
+                   <br/><span style="color:#9ca3af">Vulnerability / prioritization indicator, not a forecast</span>`
+                : `<br/><span style="color:#9ca3af;font-style:italic">Insufficient data</span>`}
             </div>`,
             { sticky: true }
           );
@@ -412,7 +416,7 @@ export function PhilippineMap({
       const feature = (layer as any).feature as GeoJSON.Feature;
       const name = (feature?.properties?.name || "").toLowerCase();
       const muni = muniMap.get(muniKey(provinceId, name));
-      const fill = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
+      const fill = isProvRejected ? NO_DATA_COLOR : lguMapColor(muni);
       (layer as L.Path).setStyle({ fillColor: fill });
     });
 
@@ -886,7 +890,7 @@ export function PhilippineMap({
       if (!muni) return;
       const isSel = !isProvRejected && selectedMunicipality?.id === muni.id;
       (layer as L.Path).setStyle({
-        fillColor: isProvRejected ? NO_DATA_COLOR : (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR),
+        fillColor: isProvRejected ? NO_DATA_COLOR : lguMapColor(muni),
         fillOpacity: isSel ? 0.98 : 0.9,
         color: isSel ? AMBER : "rgba(255,255,255,0.35)",
         weight: isSel ? 2.5 : 0.8,

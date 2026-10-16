@@ -181,6 +181,7 @@ class E31Disaggregator:
         suff = {f["province_code"]: f.get("data_sufficiency_flag") for f in forecasts}
         rows = [{"lgu_code": r["lgu_code"], "risk_index": r["risk_index"], "rank_region": r["rank_region"],
                  "rank_in_province": r["rank_in_province"], "tied": r["tied"],
+                 "vulnerability_index": r["vulnerability_index"],
                  "disaggregation_label": rk["meaning"], "data_sufficiency_flag": suff.get(r["province_code"])}
                 for r in rk["rows"]]
         return pd.DataFrame(rows)

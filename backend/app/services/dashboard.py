@@ -780,9 +780,30 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "disaggregationLabel": r["disaggregation_label"],
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
+            **lgu_map_status(r.get("vulnerability_index")),
         })
     rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
+
+
+# E45: what colours an LGU on the map. No validated municipal forecast exists, so an LGU is coloured by its
+# vulnerability / prioritization index (PSA 2021 poverty 60% + POPCEN 2024 density 40%, min-max within the province;
+# app/quarterly/lgu_audit.py), labelled as such; with no index it is shown as insufficient data. Never a forecast.
+LGU_MAP_BANDS = ((1 / 3, "low", "Lower relative vulnerability"), (2 / 3, "medium", "Middle relative vulnerability"),
+                 (1.01, "high", "Higher relative vulnerability"))
+
+
+def lgu_map_status(vulnerability: float | None) -> dict:
+    if vulnerability is None or pd.isna(vulnerability):
+        return {"vulnerabilityIndex": None, "mapStatus": "insufficient_data", "mapCategory": None,
+                "mapLabel": "Insufficient data",
+                "mapNote": "No municipal forecast and no poverty/density index can be computed for this LGU."}
+    v = float(vulnerability)
+    cat, label = next((c, lab) for cut, c, lab in LGU_MAP_BANDS if v < cut)
+    return {"vulnerabilityIndex": round(v, 4), "mapStatus": "vulnerability", "mapCategory": cat, "mapLabel": label,
+            "mapNote": "Vulnerability / prioritization index from PSA 2021 poverty (60%) and population density (40%), "
+                       "relative within the province. It is not a municipal forecast; the province forecast is shown "
+                       "on the province layer."}
 
 
 LGU_POSITION_BASIS = (
@@ -1290,9 +1311,8 @@ def _e31_articles() -> list[dict]:
 
 def article_count(province_code: str | None, quarter: str) -> int:
     if e31_active():
-        quarter = e31_news_evidence(quarter)[0]
-        return sum(1 for a in _e31_articles() if a["quarter"] == quarter
-                   and (province_code is None or a["province_code"] == province_code))
+        # E45: the same restored feed window the news panel lists, so every surface quotes one count
+        return len(_feed_window(province_code, e31_news_evidence(quarter)[0])[0])
     df = _corpus()
     if df.empty:
         return 0
@@ -1392,7 +1412,108 @@ def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
                                  f"estimate was made with the previous quarter's news).")
 
 
+TRIGGER_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
+                  "employment": "Employment", "ofw_remittance": "OFW Remittance"}
+FEED_MIN_ARTICLES, FEED_MAX_BACK = 5, 3
+# A trigger keyword alone ("flood", "price surge") also matches politics and transport stories; an unvalidated title
+# must additionally name a food, farm, fisheries, livelihood or remittance context to enter the feed.
+FOOD_CONTEXT = __import__("re").compile(
+    r"\b(food|rice|bigas|palay|farm\w*|crop\w*|harvest\w*|agri\w*|fish\w*|aquaculture|livestock|poultry|pork|hog\w*|"
+    r"chicken|egg\w*|vegetable\w*|sugar|corn|coconut|drought|tagtuyot|el ni[nñ]o|hunger|gutom|nutrition|"
+    r"livelihood\w*|remittance\w*|ofws?|jobless\w*|unemploy\w*|layoff\w*|retrench\w*|pagkain|presyo|irrigation|"
+    r"water crisis|water shortage|dry spell)\b", __import__("re").IGNORECASE)
+
+
+@functools.lru_cache(maxsize=1)
+def _news_pool() -> list[dict]:
+    """E45: the dashboard news feed pool. Province-attributed titles from the E31 store that are either validated
+    by relevance rule R1.1 (the articles behind FSSI-v2) or match a food-stress trigger keyword
+    (app/ml/nlp/trigger_classifier.py). Titles that only pass the generic food filter (restaurant guides, PPE
+    production, ...) are excluded. Every article keeps its publisher date; all were collected retrospectively."""
+    import json as _json
+
+    from app.ml.nlp.trigger_classifier import classify_triggers
+
+    validated = {a["article_key"]: a for a in _e31_articles()}
+    path = E31.NEWS_STORE / "articles.jsonl"
+    codes = {meta["code"]: meta["name"] for meta in ref.PROVINCES.values()}
+    pool, seen = [], set()
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            a = _json.loads(line)
+            code = a.get("geo_province_code")
+            if code not in codes or a["article_key"] in seen:
+                continue
+            title = (a.get("title") or "").strip()
+            trig = classify_triggers(title)
+            v = validated.get(a["article_key"])
+            if v is None and not (trig and FOOD_CONTEXT.search(title)):
+                continue
+            seen.add(a["article_key"])
+            pool.append({
+                "key": a["article_key"], "title": title, "outlet": a.get("source_domain") or "",
+                "date": (a.get("published_ph") or a.get("ph_date") or "")[:10], "quarter": a["quarter"],
+                "province_code": code, "province": codes[code], "link": a.get("link") or "",
+                "status": "validated" if v is not None else "trigger_match",
+                "relevance": v["relevance"] if v is not None else None, "triggers": trig,
+                "retrospective": str(a.get("first_seen_at", ""))[:10] > (a.get("ph_date") or "")[:10],
+            })
+    pool.sort(key=lambda r: r["date"], reverse=True)
+    return pool
+
+
+def _feed_window(province_code: str | None, ev_q: str) -> tuple[list[dict], list[str]]:
+    pool = [r for r in _news_pool() if province_code is None or r["province_code"] == province_code]
+    quarters, rows = [], []
+    for back in range(FEED_MAX_BACK + 1):
+        quarters.append(_shift_q(ev_q, -back))
+        rows = [r for r in pool if r["quarter"] in quarters]
+        if len(rows) >= FEED_MIN_ARTICLES:
+            break
+    return rows, quarters
+
+
+def _shift_q(q: str, k: int) -> str:
+    i = int(q[:4]) * 4 + int(q[-1]) - 1 + k
+    return f"{i // 4}-Q{i % 4 + 1}"
+
+
 def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
+    """E45: the restored feed (validated + trigger-matched titles) for the estimate's evidence window, newest first."""
+    ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
+    rows, window = _feed_window(province_code, ev_q)
+    counts: dict[str, int] = {}
+    for r in rows:
+        k = r["relevance"] or "TRIGGER"
+        counts[k] = counts.get(k, 0) + 1
+    labels = list(counts)
+    pcts = _integer_shares([counts[k] for k in labels])
+    names = {**E31_TOPICS, "TRIGGER": ("trigger_match", "Food-stress trigger keyword match (not validated)")}
+    topics = [{"key": names[k][0], "label": names[k][1], "count": counts[k], "pct": p} for k, p in zip(labels, pcts)]
+    start = (page - 1) * page_size
+    data = [{"id": r["key"], "title": r["title"], "source": r["outlet"], "date": r["date"], "url": r["link"],
+             "excerpt": "", "topicKey": names[r["relevance"] or "TRIGGER"][0],
+             "topicLabel": names[r["relevance"] or "TRIGGER"][1], "relevanceScore": None,
+             "relevanceStatus": r["status"],
+             "relevanceLabel": ("Validated food-stress article (rule R1.1)" if r["status"] == "validated"
+                                else "Trigger keyword match (not validated by rule R1.1)"),
+             "province": r["province"], "provinceCode": r["province_code"],
+             "triggers": [TRIGGER_LABELS[t] for t in r["triggers"]], "quarter": r["quarter"],
+             "collectedRetrospectively": r["retrospective"]}
+            for r in rows[start:start + page_size]]
+    n_val = sum(r["status"] == "validated" for r in rows)
+    note = (f"{len(rows)} article(s) from {', '.join(sorted(window))}: {n_val} validated by rule R1.1 and "
+            f"{len(rows) - n_val} matched by food-stress trigger keywords. Headlines only (the source gives no lead "
+            f"text). Collected retrospectively in October 2026 by publication date"
+            + ("; the window was extended to earlier quarters because the evidence quarter had fewer than "
+               f"{FEED_MIN_ARTICLES} articles." if len(window) > 1 else "."))
+    return {"articleCount": len(rows), "provinceAttributed": len(rows), "topics": topics, "data": data,
+            "total": len(rows), "evidenceQuarter": ev_q, "sourceQuarter": ev_q, "evidenceMode": ev_mode,
+            "evidenceNote": ev_note, "windowQuarters": sorted(window), "validatedCount": n_val,
+            "triggerMatchCount": len(rows) - n_val, "feedNote": note}
+
+
+def _e31_news_validated_only(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
     """Validated articles (relevance rule R1.1) behind a subject-quarter's estimate, newest first. Titles only: the
     source gives no lead text, so the excerpt is empty rather than invented."""
     ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
