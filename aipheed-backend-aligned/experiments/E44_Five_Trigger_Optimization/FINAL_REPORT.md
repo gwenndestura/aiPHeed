@@ -301,3 +301,22 @@ cd backend && venv/Scripts/python.exe -B scripts/build_record_e44.py && venv/Scr
 - pursue the data in section 7.
 
 **DA validation:** has not happened and is not claimed.
+
+---
+
+## Correction (E46, 2026-10-17): defects found in the I2 price and decision layers
+
+E46 found three defects in the I2 component model, which E44 serves behind `AIPHEED_LEAD2_MODEL=e44`. The scores reported above are correct measurements of the procedure as frozen; they are not changed. What changes is the interpretation.
+
+| Defect | What happens | Effect |
+|---|---|---|
+| **D1 (I2, I3, I2 variants)** | The food residual model corrects projected food YoY (+2.6 points on average), but the headline projection it is compared with is not corrected (bias −1.95). | The implied food-headline gap is biased +3.07 points, which produces systematic false HIGHs through the gap rule. |
+| **D2 (I2–I5)** | Platt scaling and the threshold are refitted at every origin on 3–9 HIGH out-of-fold labels. | The same probability maps to HIGH at one origin and LOW at another. |
+| **D3 (I4, I5)** | The gap residuals learned a 2022–2024 level that did not carry into 2025–2026. | Gap bias of about +0.9. |
+
+**Corrected model (E46 I7, same data, origins and S44 rows):**
+- accuracy 0.800, against I2's 0.686;
+- Brier 0.174 and AUC 0.735, against 0.181 and 0.603;
+- 14 of 35 decisions change: false positives 9 → 2, false negatives 2 → 5.
+
+I7 still fails the balanced-discrimination gate (HIGH recall 0.44). See `E46_Rice_Policy/FINAL_REPORT.md`. The served E44 record now carries a warning naming D1 and D2.

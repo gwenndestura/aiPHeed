@@ -185,3 +185,21 @@ backend/venv/Scripts/python.exe -B aipheed-backend-aligned/experiments/E45_News_
 - **Software:** ready for a controlled demonstration behind `AIPHEED_LEAD2_MODEL=e44`. The production default is unchanged.
 - **Forecasting:** acceptance (75% Lead-2 accuracy with balanced discrimination) **NOT met**. The blocker and the concrete paths above are documented.
 - **DA validation:** not done and not claimed.
+
+---
+
+## Correction (E46, 2026-10-17)
+
+The section 3 statement that **"all 9 false positives had observed food inflation below the province reference while I2 forecast it above"** misattributes the cause. The original text above is kept unchanged; this note corrects it.
+
+**What actually happened:** most of those false HIGHs came through the *gap* rule (food − headline > the province's 2021–2022 P60), not the food rule. Example: Batangas 2025-Q4 was forecast at 2.8% against a 7.15% food reference.
+
+**Why the gap rule fired:** E46 found a defect (D1) in the E44 I2 price component.
+- Its residual model raised projected food inflation by +2.6 points on average.
+- The headline projection it is compared with stayed uncorrected (bias −1.95).
+- So the implied gap was biased **+3.07 points**, against +0.45 for the uncorrected projections.
+- The mean price-signal probability was 0.80, against an observed rate of 0.36.
+
+Rice-policy shocks contributed, but the systematic driver of the false HIGHs was this inconsistency.
+
+**Evidence and correction:** `E46_Rice_Policy/runs/gap_defect_quantification.json`, `tests/test_e46_gap_defect.py`, and `E46_Rice_Policy/FINAL_REPORT.md`. The employment-sensitivity finding above is unaffected; it concerns the hunger component.

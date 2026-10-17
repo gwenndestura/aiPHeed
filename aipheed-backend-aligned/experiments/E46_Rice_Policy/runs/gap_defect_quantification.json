@@ -1,0 +1,66 @@
+{
+ "rows_all_evaluable": 50,
+ "targets": [
+  "2024-Q2",
+  "2026-Q3"
+ ],
+ "I6_selected_multipliers": [
+  0.0
+ ],
+ "bias": {
+  "all_evaluable": {
+   "residual_correction_to_F": 2.619060023827568,
+   "headline_projection_bias": -1.9476811565735823,
+   "gap_bias_I6_implied": 3.065740871656166,
+   "gap_bias_uncorrected_bases": 0.4466808478285975,
+   "gap_bias_I7": 0.4439176900102036,
+   "food_bias_I6": 1.1180597150825833,
+   "food_bias_I7": -0.8421858219661223
+  },
+  "S44_rows": {
+   "residual_correction_to_F": 2.857342850637236,
+   "headline_projection_bias": -2.4087096307181177,
+   "gap_bias_I6_implied": 3.1091194739042174,
+   "gap_bias_uncorrected_bases": 0.2517766232669809,
+   "gap_bias_I7": 0.24782925495498956,
+   "food_bias_I6": 0.7004098431860996,
+   "food_bias_I7": -1.536291357948017
+  }
+ },
+ "price_probability_mean": {
+  "I6_p_price": 0.7951970477938943,
+  "I7_p_price": 0.45410247516033087,
+  "observed_price_signal_rate": 0.36
+ },
+ "decision_changes_I6_to_I7": {
+  "all_labelled": {
+   "rows": 40,
+   "decisions_changed": 14,
+   "HIGH_to_LOW": 12,
+   "LOW_to_HIGH": 2,
+   "changes_that_fixed_an_error": 9,
+   "changes_that_created_an_error": 5,
+   "false_positives_I6": 9,
+   "false_positives_I7": 2,
+   "false_negatives_I6": 6,
+   "false_negatives_I7": 9,
+   "accuracy_I6": 0.625,
+   "accuracy_I7": 0.725
+  },
+  "S44_rows": {
+   "rows": 35,
+   "decisions_changed": 14,
+   "HIGH_to_LOW": 12,
+   "LOW_to_HIGH": 2,
+   "changes_that_fixed_an_error": 9,
+   "changes_that_created_an_error": 5,
+   "false_positives_I6": 9,
+   "false_positives_I7": 2,
+   "false_negatives_I6": 2,
+   "false_negatives_I7": 5,
+   "accuracy_I6": 0.6857142857142857,
+   "accuracy_I7": 0.8
+  }
+ },
+ "note": "I7 also changes the decision layer (fixed p >= 0.5 instead of a per-origin Platt + threshold refit) and the residual (ridge without intercept, forward-chaining selection); the decision counts are the total effect of D1-D3, the bias rows isolate D1."
+}

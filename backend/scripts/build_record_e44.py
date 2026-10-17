@@ -162,7 +162,11 @@ def main():
                          "discrimination; treat as experimental decision support.",
                          "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
                          "Employment and OFW evidence are national.",
-                         "Exploratory food-stress outcome; not verified household food insecurity."],
+                         "Exploratory food-stress outcome; not verified household food insecurity.",
+                         "KNOWN DEFECT (found in E46): I2 compares a residual-corrected food-inflation projection with an "
+                         "uncorrected headline projection, which overstates the food-minus-headline gap (+3.1 points on "
+                         "average) and raises the price-signal probability; its decision threshold is refitted at every "
+                         "origin on a few labels. Probabilities are kept as frozen; see E46 FINAL_REPORT."],
         }
     s44 = res1["S44"]
     pick = lambda m: {k: (None if m.get(k) is None else round(float(m[k]), 3)) for k in  # noqa: E731
