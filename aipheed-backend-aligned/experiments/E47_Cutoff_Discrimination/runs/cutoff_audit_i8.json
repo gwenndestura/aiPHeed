@@ -1,0 +1,1704 @@
+{
+ "convention": "i8",
+ "lags": {
+  "cpi_provincial": {
+   "days": 13,
+   "evidence": "PSA national CPI on about the 5th-7th of the next month (e.g. Jul 2026 on 2026-08-05, Sep 2026 on Tue 2026-10-06); RSSO IV-A provincial releases follow within days (Feb 2024 on 2024-03-07, Mar 2024 on 2024-04-08). Upper bound used: 13 days after month end."
+  },
+  "lfs_national": {
+   "days": 45,
+   "evidence": "PSA LFS about 5-6 weeks after the reference month. Upper bound: 45 days."
+  },
+  "production_quarterly": {
+   "days": 60,
+   "evidence": "PSA palay/corn and fisheries quarterly reports about 45-60 days after the quarter. Upper bound: 60."
+  },
+  "remittances_quarterly": {
+   "days": 50,
+   "evidence": "BSP cash remittances about 6-7 weeks after the last month of the quarter. Upper bound: 50."
+  },
+  "rice_wholesale_quarterly": {
+   "days": 30,
+   "evidence": "PSA wholesale price bulletins about 2-4 weeks after the month. Upper bound: 30."
+  },
+  "enso_quarterly": {
+   "days": 10,
+   "evidence": "NOAA ONI updated in the first days of the following month. Upper bound: 10."
+  },
+  "fx_quarterly": {
+   "days": 1,
+   "evidence": "ECB daily reference rates, same day. Upper bound: 1."
+  },
+  "typhoons_quarter": {
+   "days": 0,
+   "evidence": "PAGASA/JTWC advisories in real time: a storm in quarter t is known by midnight at its end (counts within 300 km; later best-track intensity revisions are a vintage risk, not modelled)."
+  },
+  "news_quarter": {
+   "days": 0,
+   "evidence": "Articles counted by publication date within quarter t: all published by midnight at its end."
+  }
+ },
+ "origins": [
+  {
+   "origin_quarter": "2021-Q3",
+   "issue": "2021-10-15 00:00:00",
+   "target": "2022-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2021-09",
+     "publication_upper_bound": "2021-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2021-06",
+     "publication_upper_bound": "2021-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2021-Q2",
+     "publication_upper_bound": "2021-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2021-Q2",
+     "publication_upper_bound": "2021-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2021-Q2",
+     "publication_upper_bound": "2021-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2021-Q2",
+     "publication_upper_bound": "2021-08-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2021-Q2",
+     "publication_upper_bound": "2021-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2021-Q2",
+     "publication_exact": "2021-07-28",
+     "margin_days": 79,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2021-Q2",
+    "cpi_month3_publication_upper_bound": "2021-07-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2021-Q4",
+   "issue": "2022-01-15 00:00:00",
+   "target": "2022-Q2",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2021-12",
+     "publication_upper_bound": "2022-01-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2021-09",
+     "publication_upper_bound": "2021-11-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-11-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-10-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-10-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-11-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2021-Q3",
+     "publication_upper_bound": "2021-10-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2021-Q3",
+     "publication_exact": "2021-12-06",
+     "margin_days": 40,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2021-Q3",
+    "cpi_month3_publication_upper_bound": "2021-10-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2022-Q1",
+   "issue": "2022-04-15 00:00:00",
+   "target": "2022-Q3",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2022-03",
+     "publication_upper_bound": "2022-04-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2021-12",
+     "publication_upper_bound": "2022-02-14",
+     "margin_days": 60,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-03-01",
+     "margin_days": 45,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-01-10",
+     "margin_days": 95,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-01-30",
+     "margin_days": 75,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-02-19",
+     "margin_days": 55,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2021-Q4",
+     "publication_upper_bound": "2022-01-01",
+     "margin_days": 104,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2021-Q4",
+     "publication_exact": "2022-03-25",
+     "margin_days": 21,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2021-Q4",
+    "cpi_month3_publication_upper_bound": "2022-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2022-Q2",
+   "issue": "2022-07-15 00:00:00",
+   "target": "2022-Q4",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2022-06",
+     "publication_upper_bound": "2022-07-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2022-03",
+     "publication_upper_bound": "2022-05-15",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-05-30",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-04-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-05-20",
+     "margin_days": 56,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2022-Q1",
+     "publication_upper_bound": "2022-04-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2022-Q2",
+     "publication_exact": "2022-06-06",
+     "margin_days": 39,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2021-Q4",
+    "cpi_month3_publication_upper_bound": "2022-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2022-Q3",
+   "issue": "2022-10-15 00:00:00",
+   "target": "2023-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2022-09",
+     "publication_upper_bound": "2022-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2022-06",
+     "publication_upper_bound": "2022-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-08-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2022-Q2",
+     "publication_upper_bound": "2022-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2022-Q2",
+     "publication_exact": "2022-09-10",
+     "margin_days": 35,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2022-Q2",
+    "cpi_month3_publication_upper_bound": "2022-07-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2022-Q4",
+   "issue": "2023-01-15 00:00:00",
+   "target": "2023-Q2",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2022-12",
+     "publication_upper_bound": "2023-01-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2022-09",
+     "publication_upper_bound": "2022-11-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-11-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-10-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-10-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-11-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2022-Q3",
+     "publication_upper_bound": "2022-10-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2022-Q3",
+     "publication_exact": "2022-10-29",
+     "margin_days": 78,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2022-Q3",
+    "cpi_month3_publication_upper_bound": "2022-10-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2023-Q1",
+   "issue": "2023-04-15 00:00:00",
+   "target": "2023-Q3",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2023-03",
+     "publication_upper_bound": "2023-04-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2022-12",
+     "publication_upper_bound": "2023-02-14",
+     "margin_days": 60,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-03-01",
+     "margin_days": 45,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-01-10",
+     "margin_days": 95,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-01-30",
+     "margin_days": 75,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-02-19",
+     "margin_days": 55,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2022-Q4",
+     "publication_upper_bound": "2023-01-01",
+     "margin_days": 104,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2022-Q4",
+     "publication_exact": "2023-01-19",
+     "margin_days": 86,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2022-Q4",
+    "cpi_month3_publication_upper_bound": "2023-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2023-Q2",
+   "issue": "2023-07-15 00:00:00",
+   "target": "2023-Q4",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2023-06",
+     "publication_upper_bound": "2023-07-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2023-03",
+     "publication_upper_bound": "2023-05-15",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-05-30",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-04-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-05-20",
+     "margin_days": 56,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2023-Q1",
+     "publication_upper_bound": "2023-04-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2023-Q1",
+     "publication_exact": "2023-05-11",
+     "margin_days": 65,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2023-Q1",
+    "cpi_month3_publication_upper_bound": "2023-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2023-Q3",
+   "issue": "2023-10-15 00:00:00",
+   "target": "2024-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2023-09",
+     "publication_upper_bound": "2023-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2023-06",
+     "publication_upper_bound": "2023-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-08-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2023-Q2",
+     "publication_upper_bound": "2023-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2023-Q2",
+     "publication_exact": "2023-08-02",
+     "margin_days": 74,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2023-Q2",
+    "cpi_month3_publication_upper_bound": "2023-07-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2023-Q4",
+   "issue": "2024-01-15 00:00:00",
+   "target": "2024-Q2",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2023-12",
+     "publication_upper_bound": "2024-01-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2023-09",
+     "publication_upper_bound": "2023-11-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-11-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-10-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-10-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-11-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2023-Q3",
+     "publication_upper_bound": "2023-10-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2023-Q3",
+     "publication_exact": "2023-11-20",
+     "margin_days": 56,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2023-Q3",
+    "cpi_month3_publication_upper_bound": "2023-10-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2024-Q1",
+   "issue": "2024-04-15 00:00:00",
+   "target": "2024-Q3",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2024-03",
+     "publication_upper_bound": "2024-04-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2023-12",
+     "publication_upper_bound": "2024-02-14",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-02-29",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-01-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-01-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-02-19",
+     "margin_days": 56,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2023-Q4",
+     "publication_upper_bound": "2024-01-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2023-Q4",
+     "publication_exact": "2024-01-22",
+     "margin_days": 84,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2023-Q4",
+    "cpi_month3_publication_upper_bound": "2024-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2024-Q2",
+   "issue": "2024-07-15 00:00:00",
+   "target": "2024-Q4",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2024-06",
+     "publication_upper_bound": "2024-07-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2024-03",
+     "publication_upper_bound": "2024-05-15",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-05-30",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-04-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-05-20",
+     "margin_days": 56,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2024-Q1",
+     "publication_upper_bound": "2024-04-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2024-Q1",
+     "publication_exact": "2024-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2024-Q1",
+    "cpi_month3_publication_upper_bound": "2024-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2024-Q3",
+   "issue": "2024-10-15 00:00:00",
+   "target": "2025-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2024-09",
+     "publication_upper_bound": "2024-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2024-06",
+     "publication_upper_bound": "2024-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-08-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2024-Q2",
+     "publication_upper_bound": "2024-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2024-Q2",
+     "publication_exact": "2024-07-23",
+     "margin_days": 84,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2024-Q2",
+    "cpi_month3_publication_upper_bound": "2024-07-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2024-Q4",
+   "issue": "2025-01-15 00:00:00",
+   "target": "2025-Q2",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2024-12",
+     "publication_upper_bound": "2025-01-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2024-09",
+     "publication_upper_bound": "2024-11-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-11-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-10-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-10-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-11-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2024-Q3",
+     "publication_upper_bound": "2024-10-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2024-Q4",
+     "publication_exact": "2025-01-14",
+     "margin_days": 1,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2024-Q3",
+    "cpi_month3_publication_upper_bound": "2024-10-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2025-Q1",
+   "issue": "2025-04-15 00:00:00",
+   "target": "2025-Q3",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2025-03",
+     "publication_upper_bound": "2025-04-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2024-12",
+     "publication_upper_bound": "2025-02-14",
+     "margin_days": 60,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-03-01",
+     "margin_days": 45,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-01-10",
+     "margin_days": 95,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-01-30",
+     "margin_days": 75,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-02-19",
+     "margin_days": 55,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2024-Q4",
+     "publication_upper_bound": "2025-01-01",
+     "margin_days": 104,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2025-Q1",
+     "publication_exact": "2025-03-29",
+     "margin_days": 17,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2024-Q4",
+    "cpi_month3_publication_upper_bound": "2025-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2025-Q2",
+   "issue": "2025-07-15 00:00:00",
+   "target": "2025-Q4",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2025-06",
+     "publication_upper_bound": "2025-07-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2025-03",
+     "publication_upper_bound": "2025-05-15",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-05-30",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-04-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-05-20",
+     "margin_days": 56,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2025-Q1",
+     "publication_upper_bound": "2025-04-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2025-Q1",
+     "publication_exact": "2025-03-29",
+     "margin_days": 108,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2025-Q1",
+    "cpi_month3_publication_upper_bound": "2025-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2025-Q3",
+   "issue": "2025-10-15 00:00:00",
+   "target": "2026-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2025-09",
+     "publication_upper_bound": "2025-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2025-06",
+     "publication_upper_bound": "2025-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-08-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2025-Q2",
+     "publication_upper_bound": "2025-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2025-Q1",
+     "publication_exact": "2025-03-29",
+     "margin_days": 200,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025",
+      "EO93_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2025-Q1",
+    "cpi_month3_publication_upper_bound": "2025-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2025-Q4",
+   "issue": "2026-01-15 00:00:00",
+   "target": "2026-Q2",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2025-12",
+     "publication_upper_bound": "2026-01-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2025-09",
+     "publication_upper_bound": "2025-11-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-11-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-10-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-10-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-01-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-11-19",
+     "margin_days": 57,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2025-Q3",
+     "publication_upper_bound": "2025-10-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2025-Q4",
+     "publication_exact": "2026-01-14",
+     "margin_days": 1,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025",
+      "EO93_2025",
+      "EO102_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2025-Q1",
+    "cpi_month3_publication_upper_bound": "2025-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2026-Q1",
+   "issue": "2026-04-15 00:00:00",
+   "target": "2026-Q3",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2026-03",
+     "publication_upper_bound": "2026-04-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2025-12",
+     "publication_upper_bound": "2026-02-14",
+     "margin_days": 60,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-03-01",
+     "margin_days": 45,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-01-10",
+     "margin_days": 95,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-01-30",
+     "margin_days": 75,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-04-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-02-19",
+     "margin_days": 55,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-01-01",
+     "margin_days": 104,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2025-Q4",
+     "publication_exact": "2026-01-14",
+     "margin_days": 91,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025",
+      "EO93_2025",
+      "EO102_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2025-Q4",
+    "cpi_month3_publication_upper_bound": "2026-01-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2026-Q2",
+   "issue": "2026-07-15 00:00:00",
+   "target": "2026-Q4",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2026-06",
+     "publication_upper_bound": "2026-07-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2026-03",
+     "publication_upper_bound": "2026-05-15",
+     "margin_days": 61,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-05-30",
+     "margin_days": 46,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-04-10",
+     "margin_days": 96,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-04-30",
+     "margin_days": 76,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-07-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-02-19",
+     "margin_days": 146,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2026-Q1",
+     "publication_upper_bound": "2026-04-01",
+     "margin_days": 105,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2026-Q1",
+     "publication_exact": "2026-05-12",
+     "margin_days": 64,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025",
+      "EO93_2025",
+      "EO102_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2026-Q1",
+    "cpi_month3_publication_upper_bound": "2026-04-13"
+   },
+   "all_available": true
+  },
+  {
+   "origin_quarter": "2026-Q3",
+   "issue": "2026-10-15 00:00:00",
+   "target": "2027-Q1",
+   "sources": {
+    "cpi_provincial": {
+     "latest_observation": "2026-09",
+     "publication_upper_bound": "2026-10-13",
+     "margin_days": 2,
+     "available": true
+    },
+    "lfs_national": {
+     "latest_observation": "2026-06",
+     "publication_upper_bound": "2026-08-14",
+     "margin_days": 62,
+     "available": true
+    },
+    "production_quarterly": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-08-29",
+     "margin_days": 47,
+     "available": true
+    },
+    "typhoons_quarter": {
+     "latest_observation": "2026-Q3",
+     "publication_upper_bound": "2026-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "enso_quarterly": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-07-10",
+     "margin_days": 97,
+     "available": true
+    },
+    "rice_wholesale_quarterly": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-07-30",
+     "margin_days": 77,
+     "available": true
+    },
+    "news_quarter": {
+     "latest_observation": "2026-Q3",
+     "publication_upper_bound": "2026-10-01",
+     "margin_days": 14,
+     "available": true
+    },
+    "remittances_quarterly": {
+     "latest_observation": "2025-Q4",
+     "publication_upper_bound": "2026-02-19",
+     "margin_days": 238,
+     "available": true
+    },
+    "fx_quarterly": {
+     "latest_observation": "2026-Q2",
+     "publication_upper_bound": "2026-07-01",
+     "margin_days": 106,
+     "available": true
+    },
+    "sws_rounds": {
+     "latest_observation": "2026-Q3",
+     "publication_exact": "2026-10-14",
+     "margin_days": 1,
+     "available": true
+    },
+    "rice_policy_events": {
+     "events_known": [
+      "EO39_2023",
+      "EO62_2024",
+      "DA_FSE_2025",
+      "EO93_2025",
+      "EO102_2025"
+     ],
+     "available": true
+    }
+   },
+   "training_labels": {
+    "latest_label_quarter": "2026-Q2",
+    "cpi_month3_publication_upper_bound": "2026-07-13"
+   },
+   "all_available": true
+  }
+ ],
+ "all_origins_available": true,
+ "min_margin_days": {
+  "cpi_provincial": 2,
+  "lfs_national": 60,
+  "production_quarterly": 45,
+  "remittances_quarterly": 55,
+  "rice_wholesale_quarterly": 75,
+  "enso_quarterly": 95,
+  "fx_quarterly": 104,
+  "typhoons_quarter": 14,
+  "news_quarter": 14,
+  "sws_rounds": 1
+ }
+}
