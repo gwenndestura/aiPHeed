@@ -890,6 +890,8 @@ TRIGGER_STATUS_NOTES = {
                     "are recorded only for the issued forecast, so no direction is stated here.",
 }
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
+REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
+                        "the official figures behind this factor.")
 
 
 def _model_trigger_groups(quarter: str) -> frozenset[str]:
@@ -1011,6 +1013,10 @@ def explainability_region(quarter: str) -> dict:
             "color": trigger_color(pct, direction),
             "status": (st := trigger_status(key, quarter, pct)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
+            # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
+            # ("prices are too high") that no regional observation supports
+            "evidenceNote": (REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
+                             else None),
             "newsSignalProportion": (
                 round(sum(acc["news"]) / len(acc["news"]), 4) if acc["news"] else None
             ),

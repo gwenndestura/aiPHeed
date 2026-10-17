@@ -72,12 +72,22 @@ CANDIDATE_EXPLAINABILITY_NOTE = (
 )
 
 
+NOT_RECORDED_EXPLAINABILITY_NOTE = (
+    "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
+    "recorded for it, so no factor is described as raising or lowering the score."
+)
+
+
 def _served_note(quarter: str | None = None) -> str:
     from app.ml.inference import e31_engine as E31
     from app.ml.inference import e41_lead2 as LEAD2
 
-    if quarter and LEAD2.serves(quarter) and LEAD2.mode() == "e44":
+    # E47: any five-trigger candidate (e44, e46) on a quarter whose attribution it carries (the issued forecast or a
+    # past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() in ("e44", "e46") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return CANDIDATE_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.governs():
+        return NOT_RECORDED_EXPLAINABILITY_NOTE
     return E36_EXPLAINABILITY_NOTE if E31.record().get("schema") == "e36/1" else E31_EXPLAINABILITY_NOTE
 
 
