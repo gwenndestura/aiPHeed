@@ -206,6 +206,8 @@ async def get_timeseries(
     """
     h = svc.check_horizon(horizon)
     quarters = svc.available_quarters(h)
+    if svc.E41L2.governs():              # E52: the candidate's own quarters (a CPI-only target covers 2025-Q2/Q3)
+        quarters = sorted(set(quarters) | set(svc.E41L2.candidate_quarters()), key=ref.quarter_index)
     start = from_ or (quarters[0] if quarters else None)
     end = to or (quarters[-1] if quarters else None)
     lo, hi = ref.quarter_index(start), ref.quarter_index(end)

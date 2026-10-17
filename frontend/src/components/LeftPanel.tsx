@@ -487,6 +487,11 @@ function RegionDetail({
   const isHigh = isHighRisk(region.riskScore, displayCutoff);
   const isActiveAlert = region.riskScore >= alertThreshold;
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
+  // E52: a past quarter of an experimental candidate is a backtest or an earlier forecast, not the issued forecast
+  // that config.indicator.horizon describes (same request as the right panel's, shared cache).
+  const { data: explain } = useExplainability("province", region.id, quarterId || undefined);
+  const est = explain?.summary;
+  const quarterText = quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter";
 
   return (
     <div className="px-5 py-4 space-y-4">
@@ -528,8 +533,11 @@ function RegionDetail({
 
       {/* Confidence statement */}
       <Note>
-        This is a {horizonLabel} for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"},
-        based only on information published before the forecast was issued.
+        {est && est.estimateKind === "backtest"
+          ? `This is a backtest estimate for ${quarterText}, made as of ${est.issued} with only information published before that date (development evidence, not a forecast issued live). Observed outcome: ${est.observedOutcome ?? "not available"}.`
+          : est && est.estimateKind === "earlier_forecast"
+            ? `This is the Lead-2 forecast for ${quarterText} issued ${est.issued}, based only on information published before that date; its outcome is not yet published.`
+            : `This is a ${horizonLabel} for ${quarterText}, based only on information published before the forecast was issued.`}
       </Note>
 
       {/* Key Metrics */}

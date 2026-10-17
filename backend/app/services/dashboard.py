@@ -273,8 +273,10 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
         return latest_quarter(horizon)
     if not ref.is_valid_quarter(quarter):
         raise QuarterNotAvailable(f"'{quarter}' is not a quarter id (expected YYYY-Qn).")
-    if E41L2.governs() and quarter not in E41L2.candidate_quarters():
-        raise QuarterNotAvailable(candidate_unavailable_reason(quarter))
+    if E41L2.governs():
+        if quarter not in E41L2.candidate_quarters():
+            raise QuarterNotAvailable(candidate_unavailable_reason(quarter))
+        return quarter                    # E52: a CPI-only target also covers quarters without an SWS round
     if quarter not in available_quarters(horizon) and e31_active():
         other = NOWCAST if horizon == FORECAST else FORECAST
         if quarter in available_quarters(other):      # E31: a nowcast-only quarter (2026-Q4) is still served
@@ -336,6 +338,9 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
         for r in out:
             if r["id"] not in have and r["state"] != "unavailable":
                 r["state"], r["reason"] = "unavailable", candidate_unavailable_reason(r["id"])
+            elif r["id"] in have and r["state"] == "unavailable":
+                r["state"] = "actual"     # E52: the candidate's backtest covers a quarter the base engine lacks
+                r.pop("reason", None)
     return out
 
 
@@ -1030,6 +1035,82 @@ def explainability_region(quarter: str) -> dict:
         "triggers": triggers,
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+    }
+
+
+# E52: what each experimental candidate's probability is of, in plain words
+CANDIDATE_EVENTS = {
+    "e52": "food-price pressure",
+    "e46": "food stress (high hunger together with food-price pressure)",
+    "e44": "food stress (high hunger together with food-price pressure)",
+    "e43": "food stress (high hunger together with food-price pressure)",
+}
+LIMITED_STATUSES = ("insufficient_data", "stale", "no_data")
+
+
+def plain_summary(province_code: str | None, quarter: str, name: str, triggers: list[dict]) -> dict | None:
+    """
+    E52: plain-language reading of the governing experimental candidate's estimate for one subject-quarter: result
+    (HIGH/LOW at 0.5), probability, target quarter, the top two or three contributing groups with direction and
+    evidence, data status and one sentence. None unless a Lead-2 candidate governs the dashboard and covers the
+    quarter. Region scope uses the mean of the five provincial probabilities and carries no province evidence.
+    ASCII only (PDF export).
+    """
+    if not E41L2.governs():
+        return None
+    rows = E41L2.rows_for(quarter)
+    if not rows:
+        return None
+    if province_code:
+        rows = [r for r in rows if r["province_code"] == province_code]
+        if not rows:
+            return None
+    p = sum(r["risk_probability"] for r in rows) / len(rows)
+    kind = rows[0]["estimate_kind"]
+    obs = rows[0]["observed_label"] if province_code else None
+    result = "HIGH" if p >= 0.5 else "LOW"
+    event = CANDIDATE_EVENTS.get(E41L2.mode(), "the experimental Lead-2 score")
+
+    statuses = {t["key"]: t["status"] for t in triggers}
+    contributing = [t for t in triggers if t["status"] == "contributes" and t["pct"] > 0]
+    reasons = [t for t in contributing if t["pct"] >= 10][:3] or contributing[:1]
+    if "not_recorded" in statuses.values() or not triggers:
+        data_status, data_note = "unavailable", "Factor contributions were not recorded for this estimate."
+        reasons = []
+    else:
+        limited = [t["label"] for t in triggers if t["status"] in LIMITED_STATUSES]
+        thin = any(r["data_sufficiency_flag"] != "SUFFICIENT" for r in rows)
+        if limited or thin:
+            data_status = "limited"
+            data_note = "; ".join(filter(None, [
+                f"no current observation for {', '.join(limited)}" if limited else "",
+                "few news articles this quarter" if thin else ""])).capitalize() + "."
+        else:
+            data_status, data_note = "sufficient", "Every factor group had observed data at the issue date."
+
+    def verb(t: dict) -> str:
+        return "raised" if t["direction"] == "increases_risk" else "lowered"
+
+    if kind == "forecast":
+        head = f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} ({p:.0%} probability)"
+    elif kind == "earlier_forecast":
+        head = (f"The earlier Lead-2 forecast of {event} in {name} for {quarter} was {result} ({p:.0%} probability; "
+                f"outcome not yet published)")
+    else:
+        head = (f"The backtest estimate of {event} in {name} for {quarter} was {result} ({p:.0%} probability"
+                + (f"; observed {obs})" if obs else ")"))
+    if reasons:
+        parts = [f"{t['label']} {verb(t)} it" for t in reasons]
+        why = parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]
+        sentence = f"{head}, mainly because {why}."
+    else:
+        sentence = f"{head}; no factor breakdown is available for it."
+    return {
+        "event": event, "targetQuarter": quarter, "estimateKind": kind,
+        "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
+        "reasons": [{"key": t["key"], "label": t["label"], "direction": t["direction"], "pct": t["pct"],
+                     "evidence": t.get("evidenceNote")} for t in reasons],
+        "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),
     }
 
 

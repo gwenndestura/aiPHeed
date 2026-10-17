@@ -297,6 +297,29 @@ class Trigger(BaseModel):
     newsSignalProportion: float | None = None
 
 
+class SummaryReason(BaseModel):
+    key: str
+    label: str
+    direction: str                    # increases_risk | protective
+    pct: int
+    evidence: str | None = None       # observed indicator, its period and source (province scope)
+
+
+class PlainSummary(BaseModel):
+    """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
+    event: str                        # what the probability is of, e.g. "food-price pressure"
+    targetQuarter: str
+    estimateKind: str                 # forecast | earlier_forecast | backtest
+    issued: str | None = None         # issue (origin) date
+    probability: float
+    result: str                       # HIGH | LOW at the fixed 0.5 decision
+    observedOutcome: str | None = None
+    reasons: list[SummaryReason]      # top 2-3 contributing groups
+    dataStatus: str                   # sufficient | limited | unavailable
+    dataStatusNote: str
+    sentence: str                     # one plain-language sentence
+
+
 class ExplainabilityResponse(BaseModel):
     scope: str
     id: str
@@ -308,6 +331,7 @@ class ExplainabilityResponse(BaseModel):
     triggerMatchedArticles: int
     narrative: str
     note: str
+    summary: PlainSummary | None = None
 
 
 # ---------------------------------------------------------------------------

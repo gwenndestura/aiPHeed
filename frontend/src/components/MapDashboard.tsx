@@ -215,6 +215,15 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
   const handleHover = useCallback((r: RegionData | null) => setPreviewRegion(r), []);
 
+  // A selection follows the selected quarter: the card shows that quarter's score, not the one the province or
+  // municipality had when it was clicked.
+  useEffect(() => {
+    setSelectedRegion((prev) => (prev ? regionsData.find((r) => r.id === prev.id) ?? prev : prev));
+  }, [regionsData]);
+  useEffect(() => {
+    setSelectedMunicipality((prev) => (prev ? municipalitiesData.find((m) => m.id === prev.id) ?? prev : prev));
+  }, [municipalitiesData]);
+
   useEffect(() => {
     if (!noData) return;
     setSelectedRegion(null);

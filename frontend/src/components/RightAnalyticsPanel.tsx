@@ -110,6 +110,12 @@ export function ShapNarrativeCardBody({
         <ShapDriverList items={triggers} />
       )}
 
+      {!explainLoading && !explainFailed && explain?.summary && (
+        <p className="mt-2 px-1 text-[11px] text-foreground leading-snug" data-testid="plain-summary">
+          {explain.summary.sentence} Data: {explain.summary.dataStatus} ({explain.summary.dataStatusNote})
+        </p>
+      )}
+
       {!explainFailed && (
         <p className="mt-2 px-1 text-[9px] italic text-muted-foreground leading-snug">
           {explainLoading

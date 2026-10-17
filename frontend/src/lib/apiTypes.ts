@@ -321,6 +321,22 @@ export interface ExplainabilityResponse {
   /** Third-person interpretation for the PDF report. Plain ASCII. */
   formalInterpretation: string;
   note: string;
+  /** E52: plain-language reading of an experimental candidate's estimate. Absent/null otherwise. */
+  summary?: PlainSummary | null;
+}
+
+export interface PlainSummary {
+  event: string;
+  targetQuarter: string;
+  estimateKind: "forecast" | "earlier_forecast" | "backtest";
+  issued: string | null;
+  probability: number;
+  result: "HIGH" | "LOW";
+  observedOutcome: "HIGH" | "LOW" | null;
+  reasons: { key: string; label: string; direction: "increases_risk" | "protective"; pct: number; evidence: string | null }[];
+  dataStatus: "sufficient" | "limited" | "unavailable";
+  dataStatusNote: string;
+  sentence: string;
 }
 
 export interface NewsTopic {

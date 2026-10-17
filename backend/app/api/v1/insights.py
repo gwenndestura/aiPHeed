@@ -83,6 +83,17 @@ E46_EXPLAINABILITY_NOTE = (
 )
 
 
+E52_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of food-price pressure (PSA food inflation, or food minus headline "
+    "inflation, above the province's usual 2021-2022 level), not of hunger or household food insecurity. The bars "
+    "show how much each of five factor groups moved it, measured as the change in the forecast's log-odds when that "
+    "group's inputs are set to their historical average (all else fixed). Market / Prices includes the projected food "
+    "inflation and food-minus-headline gap built from PSA CPI. The five shares add up to 100 percent of the five "
+    "groups' combined effect; each card states whether the group raised or lowered the forecast and the official "
+    "observation behind it. Employment and OFW figures are national. These are model attributions, not causes."
+)
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -93,11 +104,13 @@ def _served_note(quarter: str | None = None) -> str:
     from app.ml.inference import e31_engine as E31
     from app.ml.inference import e41_lead2 as LEAD2
 
-    # E47: any five-trigger candidate (e44, e46) on a quarter whose attribution it carries (the issued forecast or a
-    # past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
+    # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e52" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E52_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e46" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E46_EXPLAINABILITY_NOTE
-    if quarter and LEAD2.mode() in ("e44", "e46") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+    if quarter and LEAD2.mode() in ("e44", "e46", "e52") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return CANDIDATE_EXPLAINABILITY_NOTE
     if quarter and LEAD2.governs():
         return NOT_RECORDED_EXPLAINABILITY_NOTE
@@ -160,6 +173,10 @@ async def get_explainability(
         match = [p for p in svc.province_summary(q) if p["id"] == slug]
         risk_score = match[0]["riskScore"] if match else 0.0
 
+    # E52: plain-language summary of an experimental candidate's estimate. A municipality has no forecast of its own,
+    # so its summary is the parent province's, named as such.
+    subject = name if scope != "municipality" else f"{ref.province_name(ref.province_slug(code))} (province of {name})"
+    summary = svc.plain_summary(code, q, subject, triggers) if svc.e31_active() else None
     return ExplainabilityResponse(
         scope=scope,
         id=id.lower(),
@@ -169,8 +186,10 @@ async def get_explainability(
         triggers=triggers,
         articleCount=article_count,
         triggerMatchedArticles=matched,
-        narrative=svc.compose_narrative(name, q, triggers),
+        narrative=(f"{summary['sentence']} These are model attributions, not causes." if summary
+                   else svc.compose_narrative(name, q, triggers)),
         note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,
+        summary=summary,
     )
 
 
