@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, useMemo, useCallback } from "react";
-import { ChevronUp, PanelLeft, PanelRight, PanelsTopLeft, PanelsRightBottom } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp, PanelLeft, PanelRight, PanelsTopLeft, PanelsRightBottom } from "lucide-react";
 import { FilterState, RegionData, MunicipalityData } from "@/data/types";
 import { provinceToRegion, municipalityToData, apiQuarterToSlider } from "@/lib/adapters";
 import { useQuarters, useProvinces, useMunicipalities, useRejections, useForecast } from "@/lib/queries";
@@ -21,14 +21,18 @@ import { FeedbackModal } from "@/components/FeedbackModal";
 import { MapSearch } from "@/components/MapSearch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isLoadFailure } from "@/lib/loadError";
 import { isHighRisk } from "@/lib/risk";
+import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
+import { readStorage, removeStorage } from "@/lib/storage";
 
-function FloatingCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+function FloatingCard({ children, className = "", style, tour }: { children: React.ReactNode; className?: string; style?: React.CSSProperties; tour?: string }) {
   return (
     <div
+      data-tour={tour}
       className={`px-4 py-3.5 shadow-xl bg-card/85 text-card-foreground border border-border/60 ${className}`}
       style={{
         backdropFilter: "blur(14px)",
@@ -42,27 +46,39 @@ function FloatingCard({ children, className = "", style }: { children: React.Rea
   );
 }
 
+/** The arrow on a closed panel's edge: it points the way the panel opens. */
+const EdgeChevron = ({ side }: { side: "left" | "right" }) => {
+  const Icon = side === "left" ? ChevronRight : ChevronLeft;
+  return <Icon aria-hidden className="h-5 w-5" />;
+};
+
 /**
- * Tablets: the closed side panel as a labelled tab at the screen edge.
+ * Tablets: the closed side panel as a tab at the screen edge, with an arrow
+ * pointing the way it opens; its name is in the label and, on hover, a tooltip.
  * Opening it closes the other panel.
  */
 function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: string; onClick: () => void }) {
+  const name = `Show the ${label} panel`;
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`Show the ${label} panel`}
-      className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0" : "right-0 border-r-0"} w-11 py-5 flex items-center justify-center bg-card/95 border border-border/60 shadow-xl text-[13px] font-semibold text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
-      style={{ writingMode: "vertical-rl" }}
-    >
-      {label}
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={name}
+          className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0" : "right-0 border-r-0"} w-11 h-16 flex items-center justify-center bg-card/95 border border-border/60 shadow-xl text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+        >
+          <EdgeChevron side={side} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side={side === "left" ? "right" : "left"}>{name}</TooltipContent>
+    </Tooltip>
   );
 }
 
 /** A card inside the phone sheet, which already has the blur and shadow. */
-function SheetCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`px-4 py-3.5 border border-border/50 bg-card/60 ${className}`}>{children}</div>;
+function SheetCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
+  return <div data-tour={tour} className={`px-4 py-3.5 border border-border/50 bg-card/60 ${className}`}>{children}</div>;
 }
 
 function NoDataCardBody({ reason }: { reason?: string }) {
@@ -117,6 +133,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const [sheetSnap, setSheetSnap] = useState<SheetSnap>("collapsed");
   const [sheetTab, setSheetTab] = useState("summary");
   const [sheetH, setSheetH] = useState(SHEET_PEEK_H);
+  // The tour's news step holds the News articles analyzed card open.
+  const [tourNews, setTourNews] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [rootH, setRootH] = useState(0);
   const [rootW, setRootW] = useState(0);
@@ -228,16 +246,16 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   // mounted yet when that click happens. Province data loads asynchronously,
   // so this retries as regionsData fills in.
   useEffect(() => {
-    const raw = sessionStorage.getItem("aipheed_focus");
+    const raw = readStorage("aipheed_focus", "session");
     if (!raw || regionsData.length === 0) return;
     try {
       const detail = JSON.parse(raw) as { provinceId?: string };
       if (detail.provinceId && regionsData.some((r) => r.id === detail.provinceId)) {
-        sessionStorage.removeItem("aipheed_focus");
+        removeStorage("aipheed_focus", "session");
         window.dispatchEvent(new CustomEvent("aipheed:focus-region", { detail }));
       }
     } catch {
-      sessionStorage.removeItem("aipheed_focus");
+      removeStorage("aipheed_focus", "session");
     }
   }, [regionsData]);
 
@@ -288,6 +306,26 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     return () => clearTimeout(t);
   }, [compact, medium, leftCollapsed, rightCollapsed, sheetSnap]);
 
+  // The guided tour (MapTour) asks for a panel, a sheet height or the open news card per step.
+  useEffect(() => {
+    const onTourLayout = (e: Event) => {
+      const { panel, sheet, news } = (e as CustomEvent<TourLayout>).detail;
+      setTourNews(!!news);
+      if (compact) {
+        if (panel) setSheetTab(panel);
+        if (sheet) setSheetSnap(sheet);
+      } else if (panel === "summary") {
+        setLeftCollapsed(false);
+        if (medium) setRightCollapsed(true);
+      } else if (panel === "why") {
+        setRightCollapsed(false);
+        if (medium) setLeftCollapsed(true);
+      }
+    };
+    window.addEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+    return () => window.removeEventListener(TOUR_LAYOUT_EVENT, onTourLayout);
+  }, [compact, medium]);
+
   // On tablets, opening one panel closes the other.
   const showLeft = () => {
     setLeftCollapsed(false);
@@ -321,7 +359,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const Card = compact ? SheetCard : FloatingCard;
 
   const aboutFeedback = showAboutFeedback && (
-    <Card className={compact ? "" : "!py-2 shrink-0"}>
+    <Card className={compact ? "" : "!py-2 shrink-0"} tour="about">
       <div className="flex items-center justify-between gap-2">
         <AboutModal />
         <span className="text-[10px] text-muted-foreground/30">·</span>
@@ -336,7 +374,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     </Card>
   ) : (
     <>
-      <Card>
+      {/* Its glow stays inside this panel: not over the map, the other panels or the screen edge.
+          shrink-0: with overflow hidden the column could otherwise squeeze it. */}
+      <Card className="overflow-hidden shrink-0">
         <RfiiScoreCardBody quarterId={quarterId} quarterLabel={quarterLabel} regionsData={regionsData} loadFailed={loadFailed} />
       </Card>
       <Card>
@@ -387,7 +427,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         />
       </Card>
       <Card>
-        <NewsArticlesCardBody selectedRegion={effectiveRegion} quarterId={quarterId} />
+        <NewsArticlesCardBody selectedRegion={effectiveRegion} quarterId={quarterId} tourOpen={tourNews} />
       </Card>
     </>
   ) : null;
@@ -408,7 +448,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const wideCompact = compact && rootW >= WIDE_COMPACT_W;
 
   const map = (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0" data-tour="map">
       <PhilippineMap
         regions={filteredRegions}
         selectedRegion={selectedRegion}
@@ -460,6 +500,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         <div
           className="absolute z-[1002]"
           style={wideCompact ? { left: EDGE, top: EDGE, width: Math.min(SEARCH_MAX_W, rootW - 2 * EDGE - 200) } : { left: EDGE, right: EDGE, top: EDGE }}
+          data-tour="search"
         >
           <MapSearch fill />
         </div>
@@ -469,13 +510,13 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             className={`absolute z-[1001] flex flex-col ${wideCompact ? "items-end" : "items-start"} gap-1 pointer-events-none`}
             style={wideCompact ? { right: EDGE, top: EDGE } : { left: EDGE, top: SHEET_TOP_RESERVE }}
           >
-            <MapLegend compact />
+            <div data-tour="legend"><MapLegend compact /></div>
             <span className="qt-float text-[12px]">© OpenStreetMap · Protomaps</span>
           </div>
         )}
 
         {rowVisible && (
-          <div className="absolute z-[1002] flex items-end gap-2" style={{ left: EDGE, right: EDGE, bottom: rowBottom }}>
+          <div className="absolute z-[1002] flex items-end gap-2" style={{ left: EDGE, right: EDGE, bottom: rowBottom }} data-tour="timeline">
             <div className="flex-1 min-w-0">
               {currentQuarter && (
                 <QuarterTimeSlider
@@ -529,8 +570,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           >
             <div className="px-3 pb-3">
               <TabsContent value="summary" className="mt-0 flex flex-col gap-2">
-                {hasSelection && !noData ? <SheetCard className="p-0">{selectionPanel}</SheetCard> : leftCards}
-                {aboutFeedback}
+                {/* The province panel has its own About / Feedback footer. */}
+                {hasSelection && !noData ? <SheetCard className="p-0">{selectionPanel}</SheetCard> : <>{leftCards}{aboutFeedback}</>}
               </TabsContent>
               <TabsContent value="why" className="mt-0 flex flex-col gap-2">
                 {rightCards}
@@ -558,6 +599,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
         onClick={() => leftCollapsed && showLeft()}
         aria-label={leftCollapsed ? "Show left sidebar" : undefined}
+        data-tour="summary"
       >
           {hasSelection && !noData ? (
             <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
@@ -579,6 +621,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
         onClick={() => rightCollapsed && showRight()}
         aria-label={rightCollapsed ? "Show right sidebar" : undefined}
+        data-tour="why"
       >
           {rightCards}
       </div>
@@ -586,10 +629,24 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       {medium && leftCollapsed && <EdgeTab side="left" label="Summary" onClick={showLeft} />}
       {medium && rightCollapsed && <EdgeTab side="right" label="Why" onClick={showRight} />}
 
+      {/* Wide desktops: the same arrow, centred on a closed panel's 24px strip.
+          It lets clicks through, so the strip works exactly as before. */}
+      {!medium && leftCollapsed && (
+        <div aria-hidden className="absolute z-[1002] left-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
+          <EdgeChevron side="left" />
+        </div>
+      )}
+      {!medium && rightCollapsed && (
+        <div aria-hidden className="absolute z-[1002] right-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
+          <EdgeChevron side="right" />
+        </div>
+      )}
+
       {/* Map search — top, beside left sidebar */}
       <div
         className="absolute z-[1001] animate-fade-in transition-[left] duration-300"
         style={{ left: (leftCollapsed ? closedW : COL_W) + 12, top: 12 }}
+        data-tour="search"
       >
         <MapSearch />
       </div>
@@ -613,11 +670,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         }}
       >
         <div className="qt-row-stack">
-          <div className="qt-row-legend pointer-events-auto animate-fade-in">
+          <div className="qt-row-legend pointer-events-auto animate-fade-in" data-tour="legend">
             <MapLegend />
           </div>
           {currentQuarter && (
-            <div className="qt-row-bar pointer-events-auto animate-slide-up">
+            <div className="qt-row-bar pointer-events-auto animate-slide-up" data-tour="timeline">
               <QuarterTimeSlider
                 value={quarterId}
                 onChange={setQuarterId}

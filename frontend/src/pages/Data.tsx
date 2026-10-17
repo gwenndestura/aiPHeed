@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TopNavbar } from "@/components/TopNavbar";
+import { DataTour } from "@/components/PageTours";
 import { useQuarters, useProvinces } from "@/lib/queries";
 import { selectableQuarters } from "@/lib/quarters";
 import { RISK_COLORS, RISK_LABELS } from "@/data/types";
@@ -9,6 +10,7 @@ import { ArrowDown, ArrowUp, Download, Search } from "lucide-react";
 import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { formatSigned } from "@/components/ui/metric";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { writeStorage } from "@/lib/storage";
 
 type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCount";
 
@@ -91,7 +93,7 @@ export default function DataPage() {
   };
 
   const goToRow = (r: ProvinceSummary) => {
-    sessionStorage.setItem("aipheed_focus", JSON.stringify({ provinceId: r.id }));
+    writeStorage("aipheed_focus", JSON.stringify({ provinceId: r.id }), "session");
     navigate("/dashboard");
   };
 
@@ -122,6 +124,7 @@ export default function DataPage() {
             <button
               onClick={exportCsv}
               disabled={filtered.length === 0}
+              data-tour="data-export"
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 compact:h-11 compact:text-[14px] rounded-md bg-primary text-primary-foreground text-[11px] font-bold hover:bg-primary/90 disabled:opacity-50"
             >
               <Download className="h-3.5 w-3.5" /> Export CSV
@@ -130,7 +133,7 @@ export default function DataPage() {
 
           {/* Filters: four in a row, two per row on phones (with a sort menu
               there, in place of the table's sortable headings). */}
-          <div className="grid grid-cols-4 compact:grid-cols-2 gap-2 mb-4">
+          <div className="grid grid-cols-4 compact:grid-cols-2 gap-2 mb-4" data-tour="data-filters">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60" />
               <input
@@ -170,6 +173,7 @@ export default function DataPage() {
                 setSortDir(d as "asc" | "desc");
               }}
               aria-label="Sort by"
+              data-tour="data-sort"
               className="hidden compact:block col-span-2 h-11 text-[16px] min-w-0 bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none"
             >
               {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -177,16 +181,16 @@ export default function DataPage() {
           </div>
 
           {/* Phones: one card per province instead of the table. */}
-          <ul className="hidden compact:flex flex-col gap-2" aria-label="Provinces">
+          <ul className="hidden compact:flex flex-col gap-2" aria-label="Provinces" data-tour="data-table">
             {loadFailed ? (
               <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border border-border/50 rounded-xl">{LOAD_ERROR_MESSAGE}</li>
             ) : !isLoading && filtered.length === 0 && (
               <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border border-border/50 rounded-xl">No rows for this filter.</li>
             )}
-            {filtered.map((r) => {
+            {filtered.map((r, i) => {
               const color = r.riskLevel ? RISK_COLORS[r.riskLevel] : "#6b7280";
               return (
-                <li key={r.id}>
+                <li key={r.id} data-tour={i === 0 ? "data-row" : undefined}>
                   <button
                     type="button"
                     onClick={() => goToRow(r)}
@@ -220,9 +224,9 @@ export default function DataPage() {
             })}
           </ul>
 
-          <div className="bg-card border border-border/50 rounded-xl overflow-hidden compact:hidden">
+          <div className="bg-card border border-border/50 rounded-xl overflow-hidden compact:hidden" data-tour="data-table">
             <table className="w-full text-[11px]">
-              <thead className="bg-secondary/40 text-muted-foreground">
+              <thead className="bg-secondary/40 text-muted-foreground" data-tour="data-sort">
                 <tr>
                   {columns.map((c) => (
                     <th key={c.key} className="text-left font-semibold px-4 py-2.5 cursor-pointer hover:text-foreground" onClick={() => setSort(c.key)}>
@@ -274,6 +278,8 @@ export default function DataPage() {
           <p className="text-[10px] text-muted-foreground mt-2" aria-live="polite">{loadFailed ? "—" : `${filtered.length} rows`}</p>
         </div>
       </main>
+      {/* First-visit guide for public visitors (also "Take the tour" in the menu). */}
+      <DataTour />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RegionData, MunicipalityData } from "@/data/types";
 import { ChevronDown, ChevronRight, Newspaper, Info } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
@@ -198,9 +198,31 @@ function DriverGroup({ heading, headingColor, items }: { heading: string; headin
   );
 }
 
-export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRegion: RegionData | null; quarterId?: string }) {
-  // E45: open by default so the supporting articles are visible without an extra click
+export function NewsArticlesCardBody({
+  selectedRegion,
+  quarterId,
+  tourOpen = false,
+}: {
+  selectedRegion: RegionData | null;
+  quarterId?: string;
+  /** The map tour's news step: open while it shows, then back as it was. */
+  tourOpen?: boolean;
+}) {
+  // E45: open by default so the supporting articles are visible without an extra click; the tour keeps its own
+  // open/restore behaviour on top of that
   const [open, setOpen] = useState(true);
+  const openRef = useRef(open);
+  openRef.current = open;
+  const openedByTour = useRef(false);
+  useEffect(() => {
+    if (tourOpen && !openRef.current) {
+      openedByTour.current = true;
+      setOpen(true);
+    } else if (!tourOpen && openedByTour.current) {
+      openedByTour.current = false;
+      setOpen(false);
+    }
+  }, [tourOpen]);
   const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
 
   const scope = selectedRegion ? "province" : "region";
@@ -217,58 +239,68 @@ export function NewsArticlesCardBody({ selectedRegion, quarterId }: { selectedRe
   // less than the regional one.
   const regionWide = !selectedRegion && news ? news.articleCount - news.provinceAttributed : 0;
 
+  const notes = news && (news.sourceQuarter !== news.quarter || regionWide > 0);
+  const topics = news && news.topics.length > 0;
+
   return (
     <div>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="w-full flex items-center justify-between compact:min-h-11"
-      >
-        <div className="flex items-center gap-2">
-          <Newspaper className="h-3.5 w-3.5 text-primary" />
-          <span className="text-[13px] font-semibold leading-tight">News articles analyzed</span>
-          <span className="text-[10px] text-muted-foreground tabular-nums font-mono-num font-bold">{articleCount}</span>
-        </div>
-        {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
-      </button>
+      {/* The tour outlines the heading and the topics; the article list shows below. */}
+      <div data-tour="news">
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="w-full flex items-center justify-between compact:min-h-11"
+        >
+          <div className="flex items-center gap-2">
+            <Newspaper className="h-3.5 w-3.5 text-primary" />
+            <span className="text-[13px] font-semibold leading-tight">News articles analyzed</span>
+            <span className="text-[10px] text-muted-foreground tabular-nums font-mono-num font-bold">{articleCount}</span>
+          </div>
+          {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
+        </button>
+        {open && (notes || topics || newsLoading || newsError || news?.feedNote) && (
+          <div className="mt-3 space-y-3 px-1">
+            {newsLoading && <p className="text-[10px] text-muted-foreground italic">Loading articles…</p>}
+            {newsError && (
+              <p className="text-[10px] text-destructive">
+                The news feed could not be loaded.{" "}
+                <button className="underline" onClick={() => refetchNews()}>Try again</button>
+              </p>
+            )}
+            {news && news.sourceQuarter !== news.quarter && (
+              <p className="text-[9px] italic text-muted-foreground leading-snug">
+                Forecast quarter — showing articles up to {news.sourceQuarter.split("-").reverse().join(" ")}, the latest news available when the forecast was made.
+              </p>
+            )}
+            {news?.feedNote && <p className="text-[9px] text-muted-foreground leading-snug">{news.feedNote}</p>}
+            {regionWide > 0 && news && (
+              <p className="text-[9px] italic text-muted-foreground leading-snug">
+                {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
+              </p>
+            )}
+
+            {/* Topic breakdown */}
+            {news && news.topics.length > 0 && (
+              <div className="space-y-2">
+                {news.topics.map((t) => (
+                  <div key={t.key}>
+                    <div className="flex items-center justify-between text-[10px] mb-0.5">
+                      <span className="text-foreground/80 font-medium">{TOPIC_FRIENDLY_LABELS[t.key] ?? t.label}</span>
+                      <span className="font-mono-num font-bold text-foreground/70">{t.pct}%</span>
+                    </div>
+                    <div className="h-[4px] rounded-full bg-border/30 overflow-hidden">
+                      <div className="h-full rounded-full opacity-80" style={{ width: `${t.pct}%`, backgroundColor: "hsl(var(--primary))" }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {open && (
-        <div className="mt-3 space-y-3 px-1">
-          {newsLoading && <p className="text-[10px] text-muted-foreground italic">Loading articles…</p>}
-          {newsError && (
-            <p className="text-[10px] text-destructive">
-              The news feed could not be loaded.{" "}
-              <button className="underline" onClick={() => refetchNews()}>Try again</button>
-            </p>
-          )}
-          {news && news.sourceQuarter !== news.quarter && (
-            <p className="text-[9px] italic text-muted-foreground leading-snug">
-              Forecast quarter — showing articles up to {news.sourceQuarter.split("-").reverse().join(" ")}, the latest news available when the forecast was made.
-            </p>
-          )}
-          {news?.feedNote && <p className="text-[9px] text-muted-foreground leading-snug">{news.feedNote}</p>}
-          {regionWide > 0 && news && (
-            <p className="text-[9px] italic text-muted-foreground leading-snug">
-              {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
-            </p>
-          )}
-
-          {/* Topic breakdown */}
-          {news && news.topics.length > 0 && (
-            <div className="space-y-2">
-              {news.topics.map((t) => (
-                <div key={t.key}>
-                  <div className="flex items-center justify-between text-[10px] mb-0.5">
-                    <span className="text-foreground/80 font-medium">{TOPIC_FRIENDLY_LABELS[t.key] ?? t.label}</span>
-                    <span className="font-mono-num font-bold text-foreground/70">{t.pct}%</span>
-                  </div>
-                  <div className="h-[4px] rounded-full bg-border/30 overflow-hidden">
-                    <div className="h-full rounded-full opacity-80" style={{ width: `${t.pct}%`, backgroundColor: "hsl(var(--primary))" }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
+        <div className="mt-3 px-1">
           {/* Clickable articles */}
           <div className="space-y-1 border-t border-border/30 pt-2">
             {news && !news.data.length && (
