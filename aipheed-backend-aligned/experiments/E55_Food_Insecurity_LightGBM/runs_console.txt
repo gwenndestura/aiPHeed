@@ -10,62 +10,43 @@ origin 2025-Q4 done
 origin 2026-Q1 done
 origin 2026-Q2 done
 origin 2026-Q3 done
-Traceback (most recent call last):
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
-    return self._engine.get_loc(casted_key)
-           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
-  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
-  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
-  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
-KeyError: '2025-Q2'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "pandas/_libs/index.pyx", line 786, in pandas._libs.index.BaseMultiIndexCodesEngine.get_loc
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 3819, in get_loc
-    raise KeyError(key) from err
-KeyError: '2025-Q2'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\multi.py", line 3239, in _get_loc_level
-    return (self._engine.get_loc(key), None)
-            ~~~~~~~~~~~~~~~~~~~~^^^^^
-  File "pandas/_libs/index.pyx", line 789, in pandas._libs.index.BaseMultiIndexCodesEngine.get_loc
-KeyError: ('2025-Q2', 'PH040100000')
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E55_Food_Insecurity_LightGBM\runner\e55_evaluate.py", line 240, in <module>
-    main()
-    ~~~~^^
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E55_Food_Insecurity_LightGBM\runner\e55_evaluate.py", line 157, in main
-    R["E38-served_p"] = [float(p38.loc[k, "p"]) for k in keys]
-                               ~~~~~~~^^^^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1185, in __getitem__
-    return self._getitem_tuple(key)
-           ~~~~~~~~~~~~~~~~~~~^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1369, in _getitem_tuple
-    return self._getitem_lowerdim(tup)
-           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1042, in _getitem_lowerdim
-    return self._getitem_nested_tuple(tup)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1154, in _getitem_nested_tuple
-    obj = getattr(obj, self.name)._getitem_axis(key, axis=axis)
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1432, in _getitem_axis
-    return self._get_label(key, axis=axis)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1382, in _get_label
-    return self.obj.xs(label, axis=axis)
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\generic.py", line 4315, in xs
-    loc, new_index = index._get_loc_level(key, level=0)
-                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\multi.py", line 3241, in _get_loc_level
-    raise KeyError(key) from err
-KeyError: ('2025-Q2', 'PH040100000')
+20261017T153947Z rows 45 quarters 9 HIGH 14 served E55-LGBM
+  E55-LGBM             acc 0.733 [0.62, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  POV-AS               acc 0.733 [0.6, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  POV-LA               acc 0.733 [0.6, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  FE                   acc 0.733 [0.62, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-climate            acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.176 auc 0.786 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-fish_kill          acc 0.733 [0.62, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-employment         acc 0.733 [0.62, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-ofw_remittance     acc 0.733 [0.62, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.182 auc 0.772 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-news               acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  D-policy             acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  MKT-ONLY             acc 0.733 [0.6, 0.84] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.182 auc 0.772 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  F0_naive             acc 0.533 [0.38, 0.69] bal 0.642 recH 0.929 recL 0.355 F1 0.553 brier 0.244 auc 0.785 {'TP': 13, 'TN': 11, 'FP': 20, 'FN': 1}
+  F1_struct_features   acc 0.600 [0.4, 0.78] bal 0.671 recH 0.857 recL 0.484 F1 0.571 brier 0.242 auc 0.76 {'TP': 12, 'TN': 15, 'FP': 16, 'FN': 2}
+  F2_offset            acc 0.756 [0.69, 0.8] bal 0.744 recH 0.714 recL 0.774 F1 0.645 brier 0.190 auc 0.786 {'TP': 10, 'TN': 24, 'FP': 7, 'FN': 4}
+  F3_offset_centred    acc 0.711 [0.62, 0.8] bal 0.673 recH 0.571 recL 0.774 F1 0.552 brier 0.186 auc 0.779 {'TP': 8, 'TN': 24, 'FP': 7, 'FN': 6}
+  F4_recency           acc 0.733 [0.64, 0.8] bal 0.728 recH 0.714 recL 0.742 F1 0.625 brier 0.184 auc 0.813 {'TP': 10, 'TN': 23, 'FP': 8, 'FN': 4}
+  F5_complex           acc 0.667 [0.51, 0.8] bal 0.66 recH 0.643 recL 0.677 F1 0.545 brier 0.198 auc 0.758 {'TP': 9, 'TN': 21, 'FP': 10, 'FN': 5}
+  F6_class_weight      acc 0.711 [0.62, 0.8] bal 0.673 recH 0.571 recL 0.774 F1 0.552 brier 0.183 auc 0.783 {'TP': 8, 'TN': 24, 'FP': 7, 'FN': 6}
+  F7_tuned_threshold   acc 0.533 [0.4, 0.67] bal 0.485 recH 0.357 recL 0.613 F1 0.323 brier 0.186 auc 0.779 {'TP': 5, 'TN': 19, 'FP': 12, 'FN': 9}
+  F8_platt             acc 0.733 [0.6, 0.84] bal 0.65 recH 0.429 recL 0.871 F1 0.5 brier 0.192 auc 0.705 {'TP': 6, 'TN': 27, 'FP': 4, 'FN': 8}
+  F9_no_remittance     acc 0.689 [0.6, 0.78] bal 0.657 recH 0.571 recL 0.742 F1 0.533 brier 0.196 auc 0.765 {'TP': 8, 'TN': 23, 'FP': 8, 'FN': 6}
+  F10_last8q           acc 0.711 [0.64, 0.78] bal 0.712 recH 0.714 recL 0.71 F1 0.606 brier 0.203 auc 0.756 {'TP': 10, 'TN': 22, 'FP': 9, 'FN': 4}
+  B1_PERSIST           acc 0.600 [0.44, 0.78] bal 0.592 recH 0.571 recL 0.613 F1 0.471 brier 0.400 auc 0.592 {'TP': 8, 'TN': 19, 'FP': 12, 'FN': 6}
+  B2_LR_GOV            acc 0.378 [0.18, 0.58] bal 0.333 recH 0.214 recL 0.452 F1 0.176 brier 0.598 auc 0.295 {'TP': 3, 'TN': 14, 'FP': 17, 'FN': 11}
+  B3_LGBM_GOV          acc 0.400 [0.22, 0.6] bal 0.29 recH 0.0 recL 0.581 F1 None brier 0.424 auc 0.221 {'TP': 0, 'TN': 18, 'FP': 13, 'FN': 14}
+  B4_LR_NLP            acc 0.667 [0.51, 0.82] bal 0.523 recH 0.143 recL 0.903 F1 0.211 brier 0.235 auc 0.488 {'TP': 2, 'TN': 28, 'FP': 3, 'FN': 12}
+  B5_LGBM_NLP          acc 0.644 [0.42, 0.82] bal 0.546 recH 0.286 recL 0.806 F1 0.333 brier 0.267 auc 0.45 {'TP': 4, 'TN': 25, 'FP': 6, 'FN': 10}
+  B6_LR_COMB           acc 0.333 [0.18, 0.49] bal 0.301 recH 0.214 recL 0.387 F1 0.167 brier 0.646 auc 0.247 {'TP': 3, 'TN': 12, 'FP': 19, 'FN': 11}
+  B7_E38PROC           acc 0.356 [0.18, 0.58] bal 0.278 recH 0.071 recL 0.484 F1 0.065 brier 0.433 auc 0.301 {'TP': 1, 'TN': 15, 'FP': 16, 'FN': 13}
+  CLIM                 acc 0.689 [0.49, 0.87] bal 0.5 recH 0.0 recL 1.0 F1 None brier 0.255 auc 0.235 {'TP': 0, 'TN': 31, 'FP': 0, 'FN': 14}
+  HIGH                 acc 0.311 [0.13, 0.49] bal 0.5 recH 1.0 recL 0.0 F1 0.475 brier 0.689 auc None {'TP': 14, 'TN': 0, 'FP': 31, 'FN': 0}
+  LOW                  acc 0.689 [0.49, 0.87] bal 0.5 recH 0.0 recL 1.0 F1 None brier 0.311 auc None {'TP': 0, 'TN': 31, 'FP': 0, 'FN': 14}
+  I7                   acc 0.756 [0.64, 0.87] bal 0.725 recH 0.643 recL 0.806 F1 0.621 brier 0.186 auc 0.776 {'TP': 9, 'TN': 25, 'FP': 6, 'FN': 5}
+  I7-BASE              acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 recL 0.774 F1 0.6 brier 0.184 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  E52                  acc 0.756 [0.64, 0.89] bal 0.725 recH 0.643 recL 0.806 F1 0.621 brier 0.188 auc 0.776 {'TP': 9, 'TN': 25, 'FP': 6, 'FN': 5}
+  criteria E55-LGBM {'A1_accuracy_ge_0.75': False, 'A2_balanced_and_recalls': True, 'A3_brier_below_every_baseline': True, 'A4_balanced_above_every_baseline': True, 'A5_min_leave_one_quarter_out_ge_0.70': True, 'accepted_for_development': False}
+  poverty {'POV-AS': 'IDENTICAL', 'POV-LA': 'IDENTICAL', 'FE': 'IDENTICAL'}
+  ablation {'D-climate': ('NO DEMONSTRATED DIFFERENCE', [-0.0106, 0.0008]), 'D-fish_kill': ('IDENTICAL', [0.0, 0.0]), 'D-employment': ('NO DEMONSTRATED DIFFERENCE', [0.0, 0.0028]), 'D-ofw_remittance': ('NO DEMONSTRATED DIFFERENCE', [0.0, 0.0076]), 'D-news': ('IDENTICAL', [0.0, 0.0]), 'D-policy': ('IDENTICAL', [0.0, 0.0]), 'MKT-ONLY': ('NO DEMONSTRATED DIFFERENCE', [0.0, 0.0064])}
+  prospective written {'Cavite': 0.109104, 'Laguna': 0.070258, 'Quezon': 0.146098, 'Rizal': 0.049909, 'Batangas': 0.042653}
