@@ -125,16 +125,21 @@ def main():
     W = W.dropna(subset=["y"])
     W["y"] = W["y"].astype(int)
     assert (W["y"] == W["PS"]).all(), "T43 differs from PS on an evaluation row (hunger condition not met)"
-    r52 = pd.read_csv(ROWS52, dtype={"province_code": str}).set_index(["target", "province_code"])
-    assert len(W) == len(r52) == 50, (len(W), len(r52))
-    assert all(int(r52.loc[(q, p), "y"]) == y for q, p, y in zip(W["target"], W["province_code"], W["y"])), "rows differ from E52"
     bl_dir = sorted(p for p in (F.E55 / "runs").glob("baselines_*"))[0]
     BL = pd.read_csv(bl_dir / "rows_baselines.csv", dtype={"province_code": str}).set_index(["target", "province_code"])
+    r52 = pd.read_csv(ROWS52, dtype={"province_code": str}).set_index(["target", "province_code"])
+    assert len(W) == len(r52) == 50, (len(W), len(r52))   # before the D-1 restriction
+    assert all(int(r52.loc[(q, p), "y"]) == y for q, p, y in zip(W["target"], W["province_code"], W["y"])), "rows differ from E52"
     p7 = pd.read_csv(RUN7, dtype={"province_code": str})
     p7["target"] = (p7["t"] + 2).map(L.qs)
     p7 = p7.set_index(["target", "province_code"])
     p38 = pd.read_csv(RUN38, dtype={"province_code": str})
     p38 = p38[p38["arm"] == "E38-LGBM"].set_index(["target_quarter", "province_code"])
+    # DEVIATIONS.md D-1: the E38-framework baselines skip a date whose as-of T43 training set has < 10 rows or one class
+    # (target 2024-Q2); PROTOCOL 3 rows = where every arm AND baseline has a prediction. W50 (all 50 rows) is kept for
+    # the arms that cover it (supplementary block).
+    W50 = W.copy()
+    W = W[[(q, p) in BL.index for q, p in zip(W["target"], W["province_code"])]].copy()
     R = W[["target", "t", "province_code", "y"]].copy()
     for a in list(ARMS) + DIAGS:
         R[f"{a}_p"] = W[a].to_numpy()
@@ -155,6 +160,19 @@ def main():
     R["E38-served_yhat"] = (R["E38-served_p"] >= np.array([float(p38.loc[k, "threshold"]) for k in keys])).astype(int)
     R = R.sort_values(["target", "province_code"]).reset_index(drop=True)
     R.to_csv(out / "rows.csv", index=False, float_format="%.12g")
+    keys50 = list(zip(W50["target"], W50["province_code"]))
+    R50 = W50[["target", "t", "province_code", "y"]].copy()
+    for a in list(ARMS) + DIAGS:
+        R50[f"{a}_p"] = W50[a].to_numpy()
+        thr = T.set_index(["t", "province_code"]).loc[list(zip(W50["t"], W50["province_code"])), a].to_numpy()
+        R50[f"{a}_yhat"] = (R50[f"{a}_p"] >= thr).astype(int)
+    for a, col in (("I7", "I7_p"), ("I7-BASE", "I7-BASE_p"), ("E52", "I7_p_price")):
+        R50[f"{a}_p"] = [float(p7.loc[k, col]) for k in keys50]
+        R50[f"{a}_yhat"] = (R50[f"{a}_p"] >= 0.5).astype(int)
+    for a, v in (("HIGH", 1.0), ("LOW", 0.0)):
+        R50[f"{a}_p"], R50[f"{a}_yhat"] = v, int(v)
+    R50 = R50.sort_values(["target", "province_code"]).reset_index(drop=True)
+    M50 = E.block(R50, list(ARMS) + DIAGS + ["I7", "I7-BASE", "E52", "HIGH", "LOW"], seed=55)
 
     # ------------------------------------------------------------------ metrics
     all_arms = list(ARMS) + DIAGS + BASELINES + COMPARATORS
@@ -197,7 +215,9 @@ def main():
            "rows": int(len(R)), "independent_quarters": int(R["target"].nunique()), "HIGH": int(R["y"].sum()),
            "LOW": int((R["y"] == 0).sum()), "quarters": sorted(R["target"].unique().tolist()),
            "t43_equals_ps_on_rows": True, "approved_subset": {"rows": int(len(app)), "HIGH": int(app["y"].sum()), "metrics": M_app},
-           "metrics": M, "calibration": cal, "criteria": crit, "paired_brier_vs_E55_LGBM": paired,
+           "metrics": M, "calibration": cal,
+           "supplementary_50_rows": {"rows": int(len(R50)), "HIGH": int(R50["y"].sum()), "metrics": M50,
+                                     "note": "all 50 E52 rows incl. 2024-Q2; Objective 4 baselines B1-B7 absent there (D-1)"}, "criteria": crit, "paired_brier_vs_E55_LGBM": paired,
            "poverty": pov, "poverty_LA_vs_FE": pov_fe, "trigger_ablation": abl, "served_arm": served,
            "trees_nonconstant_origins": trees_used, "by_quarter_confusion": byq,
            "prospective": {"file": FROZEN.name, "status": frozen_status, "sha256": sha_file(FROZEN)}}
