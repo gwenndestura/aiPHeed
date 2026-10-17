@@ -1,0 +1,14 @@
+20261017T124452Z identical rows {'rows': 35, 'independent_quarters': 7, 'quarters': ['2024-Q3', '2024-Q4', '2025-Q1', '2025-Q4', '2026-Q1', '2026-Q2', '2026-Q3']}
+reproduce E38 39 / 55 | reproduce E46 I7 acc 0.8 | label checks A/B True True
+targetA_EQ3 HIGH 33
+  E38       acc 0.714 [0.51, 0.89] bal 0.379 recH 0.758 recL 0.0 prec 0.926 brier 0.188 auc 0.477 {'TP': 25, 'TN': 0, 'FP': 2, 'FN': 8} HIGHcalls 0.77
+  E46toEQ3  acc 0.943 [0.89, 1.0] bal 0.5 recH 1.0 recL 0.0 prec 0.943 brier 0.079 auc 0.53 {'TP': 33, 'TN': 0, 'FP': 2, 'FN': 0} HIGHcalls 1.00
+  PERSIST   acc 0.857 [0.8, 0.91] bal 0.455 recH 0.909 recL 0.0 prec 0.938 brier 0.143 auc 0.455 {'TP': 30, 'TN': 0, 'FP': 2, 'FN': 3} HIGHcalls 0.91
+  LOW       acc 0.057 [0.0, 0.11] bal 0.5 recH 0.0 recL 1.0 prec None brier 0.943 auc None {'TP': 0, 'TN': 2, 'FP': 0, 'FN': 33} HIGHcalls 0.00
+  HIGH      acc 0.943 [0.89, 1.0] bal 0.5 recH 1.0 recL 0.0 prec 0.943 brier 0.057 auc None {'TP': 33, 'TN': 0, 'FP': 2, 'FN': 0} HIGHcalls 1.00
+targetB_T43 HIGH 9
+  E46       acc 0.800 [0.66, 0.94] bal 0.684 recH 0.444 recL 0.923 prec 0.667 brier 0.174 auc 0.735 {'TP': 4, 'TN': 24, 'FP': 2, 'FN': 5} HIGHcalls 0.17
+  E38toT43  acc 0.371 [0.11, 0.63] bal 0.286 recH 0.111 recL 0.462 prec 0.067 brier 0.421 auc 0.312 {'TP': 1, 'TN': 12, 'FP': 14, 'FN': 8} HIGHcalls 0.43
+  PERSIST   acc 0.543 [0.34, 0.8] bal 0.583 recH 0.667 recL 0.5 prec 0.316 brier 0.457 auc 0.583 {'TP': 6, 'TN': 13, 'FP': 13, 'FN': 3} HIGHcalls 0.54
+  LOW       acc 0.743 [0.51, 0.94] bal 0.5 recH 0.0 recL 1.0 prec None brier 0.257 auc None {'TP': 0, 'TN': 26, 'FP': 0, 'FN': 9} HIGHcalls 0.00
+  HIGH      acc 0.257 [0.06, 0.49] bal 0.5 recH 1.0 recL 0.0 prec 0.257 brier 0.743 auc None {'TP': 9, 'TN': 0, 'FP': 26, 'FN': 0} HIGHcalls 1.00
