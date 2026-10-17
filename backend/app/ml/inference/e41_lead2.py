@@ -29,6 +29,8 @@ RECORD_E46 = Path(os.getenv("AIPHEED_E46_RECORD", "data/e46/e46_record.json"))
 # E52: provincial food-price pressure (target PS) from the E46 I7 price component; development criteria met, not
 # independently validated
 RECORD_E52 = Path(os.getenv("AIPHEED_E52_RECORD", "data/e52/e52_record.json"))
+# E53: E52 price model with the arm adopted in E53 (calibration audit) and the corrected D-1 attribution
+RECORD_E53 = Path(os.getenv("AIPHEED_E53_RECORD", "data/e53/e53_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -42,11 +44,11 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52")
+    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53")
 
 
 def record() -> dict:
-    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52}.get(mode(), RECORD)
+    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
@@ -229,6 +231,22 @@ def rows_for(quarter: str) -> list[dict]:
             "estimate_kind": e["kind"],
         })
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
+    return out
+
+
+def partial_inputs(quarter: str, code: str | None) -> list[str]:
+    """E53: trigger groups some of whose observed inputs had no value at the issue date (inputsPresent < 1), for one
+    province or, for the region, in any province. Empty for records without coverage data."""
+    if not (serves(quarter) or has_past_drivers(quarter)):
+        return []
+    provs = record()["provinces"]
+    out: list[str] = []
+    for c, v in provs.items():
+        if code and c != code:
+            continue
+        for g, s in _status_block(v, quarter).items():
+            if isinstance(s, dict) and s.get("inputsPresent", 1) < 1 and g not in out:
+                out.append(g)
     return out
 
 

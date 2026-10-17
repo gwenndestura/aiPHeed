@@ -94,6 +94,18 @@ E52_EXPLAINABILITY_NOTE = (
 )
 
 
+E53_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of food-price pressure (PSA food inflation, or food minus headline "
+    "inflation, above the province's usual 2021-2022 level), not of hunger or household food insecurity. The bars "
+    "show how much each of five factor groups moved it, measured as the change in the forecast's log-odds when that "
+    "group's inputs are set to their historical average (all else fixed). Market / Prices includes the projected food "
+    "inflation and food-minus-headline gap built from PSA CPI and the rice-policy orders; each group includes its own "
+    "news share; the total volume of news is not one of the five groups and is left out of the bars. Each card states "
+    "whether the group raised or lowered the forecast and the official observation behind it. Employment and OFW "
+    "figures are national. These are model attributions, not causes."
+)
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -106,11 +118,13 @@ def _served_note(quarter: str | None = None) -> str:
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e53" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E53_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e52" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E52_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e46" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E46_EXPLAINABILITY_NOTE
-    if quarter and LEAD2.mode() in ("e44", "e46", "e52") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+    if quarter and LEAD2.mode() in ("e44", "e46", "e52", "e53") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return CANDIDATE_EXPLAINABILITY_NOTE
     if quarter and LEAD2.governs():
         return NOT_RECORDED_EXPLAINABILITY_NOTE

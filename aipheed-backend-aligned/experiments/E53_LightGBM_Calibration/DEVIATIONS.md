@@ -29,3 +29,11 @@
 - **Cause:** E52 computed B6_LR_COMB's Brier from in-memory probabilities, while E53 reads them back from the CSV. The two values differ by 5.6e-17, which is float round-off.
 - **No E53 metric was seen:** the run stopped before any E53 metric was computed or printed. Only the per-origin probabilities had been printed.
 - **Fix:** the check compares floats with an absolute tolerance of 1e-12 (accuracy CIs still exactly). The run is then repeated from scratch, with no other change.
+
+## D-3: what is served behind `e53` when no arm is adopted (serving only; no score changes)
+
+- **Situation:** protocol section 6 serves "an arm adopted under section 4". After run 1 and addendum I2, no calibrated arm (C1–C4) and no LightGBM arm (LGB-R, LGB-RL, LGB-C, LGB-R2, LGB-C2) passed its rule, so R0 (the E52 model) remains the development candidate.
+- **What `e53` serves:** R0's probabilities, identical to E52's and to E52's frozen 2027-Q1 file, with:
+  - the D-1 corrected attribution: every input is attributed, rice policy goes to Market, each news share to its own trigger, and total news volume to "other";
+  - a per-trigger data-coverage field (`inputsPresent`), so a group with some inputs missing at the issue date (OFW: BSP remittances end at 2025-Q4 in the dataset) shows a "limited" data status instead of a silent "no effect".
+- **No new frozen forecast:** none is written, because the R0 probabilities are E52's and are already frozen. E52 remains in the record and serving unchanged.

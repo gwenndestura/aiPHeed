@@ -1040,12 +1040,15 @@ def explainability_region(quarter: str) -> dict:
 
 # E52: what each experimental candidate's probability is of, in plain words
 CANDIDATE_EVENTS = {
+    "e53": "food-price pressure",
     "e52": "food-price pressure",
     "e46": "food stress (high hunger together with food-price pressure)",
     "e44": "food stress (high hunger together with food-price pressure)",
     "e43": "food stress (high hunger together with food-price pressure)",
 }
 LIMITED_STATUSES = ("insufficient_data", "stale", "no_data")
+LABEL_OF = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
+            "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
 
 def plain_summary(province_code: str | None, quarter: str, name: str, triggers: list[dict]) -> dict | None:
@@ -1080,11 +1083,15 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     else:
         limited = [t["label"] for t in triggers if t["status"] in LIMITED_STATUSES]
         thin = any(r["data_sufficiency_flag"] != "SUFFICIENT" for r in rows)
-        if limited or thin:
+        partial = E41L2.partial_inputs(quarter, province_code)     # E53: groups with some inputs missing at issue
+        partial = [LABEL_OF.get(g, g) for g in partial if LABEL_OF.get(g, g) not in limited]
+        if limited or thin or partial:
             data_status = "limited"
             data_note = "; ".join(filter(None, [
                 f"no current observation for {', '.join(limited)}" if limited else "",
-                "few news articles this quarter" if thin else ""])).capitalize() + "."
+                f"some inputs not available at the issue date for {', '.join(partial)}" if partial else "",
+                "few news articles this quarter" if thin else ""]))
+            data_note = data_note[0].upper() + data_note[1:] + "."     # not str.capitalize(): keeps group names
         else:
             data_status, data_note = "sufficient", "Every factor group had observed data at the issue date."
 
