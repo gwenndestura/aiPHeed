@@ -106,6 +106,18 @@ E53_EXPLAINABILITY_NOTE = (
 )
 
 
+E55_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of HIGH food-insecurity risk: the regional SWS hunger rate staying "
+    "above 11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above "
+    "the province's usual 2021-2022 level). Hunger is measured for the whole region only, so differences between "
+    "provinces come from food prices. The bars are exact SHAP values (TreeSHAP) of the LightGBM model's food-price "
+    "part, in log-odds, grouped into the five factor groups: Market / Prices also includes the projected food "
+    "inflation built from PSA CPI (the model's starting point) and the rice-policy orders; each group includes its own "
+    "news share; the total volume of news is left out of the bars. A group with no observed input at the issue date is "
+    "shown as insufficient data. Employment and OFW figures are national. These are model attributions, not causes."
+)
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -118,6 +130,8 @@ def _served_note(quarter: str | None = None) -> str:
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e55" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E55_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e53" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E53_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e52" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
