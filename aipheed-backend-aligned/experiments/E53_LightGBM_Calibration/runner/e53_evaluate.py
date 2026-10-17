@@ -97,7 +97,8 @@ def main():
     old = json.loads((E52_RUN / "results.json").read_text())["metrics"]
     for a in E52_ARMS:
         for k in ("accuracy", "balanced_accuracy", "brier", "auc", "accuracy_ci95"):
-            assert old[a][k] == M52[a][k] or (k == "auc" and old[a][k] is None and M52[a][k] is None), (a, k)
+            o_, n_ = old[a][k], M52[a][k]                         # D-2: 1e-12 float tolerance (CSV round-off)
+            assert (o_ is None and n_ is None) or (k == "accuracy_ci95" and o_ == n_) or                 (k != "accuracy_ci95" and o_ is not None and abs(o_ - n_) < 1e-12), (a, k, o_, n_)
     MN = E.block(R, NEW, seed=53)
     allm = {**M52, **MN}
     loqo = {a: {q: float((R[R["target"] != q][f"{a}_yhat"] == R[R["target"] != q]["y"]).mean()) for q in R["target"].unique()}

@@ -22,3 +22,10 @@
 **Additivity:** the ridge contributions of all inputs + the base-projection deviation reconcile with F̂ and Ĝ, as in E52 (check < 1e-8). The five groups + other now cover every input.
 
 **Scope:** E52's committed record is kept unchanged as the E52 artifact. E53 documents the defect and serves the corrected attribution. Whether E46's record has the same gap is checked and reported in the E53 report.
+
+## D-2: float tolerance in the E52 reproduction check (no effect on any score)
+
+- **What happened:** the first run (`runs/20261017T135737Z`, kept with `ABORTED.txt`) stopped at the check that recomputes E52's metrics from E52's `rows.csv`.
+- **Cause:** E52 computed B6_LR_COMB's Brier from in-memory probabilities, while E53 reads them back from the CSV. The two values differ by 5.6e-17, which is float round-off.
+- **No E53 metric was seen:** the run stopped before any E53 metric was computed or printed. Only the per-origin probabilities had been printed.
+- **Fix:** the check compares floats with an absolute tolerance of 1e-12 (accuracy CIs still exactly). The run is then repeated from scratch, with no other change.

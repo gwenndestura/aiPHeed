@@ -1,0 +1,1672 @@
+{
+ "2024-Q2": {
+  "origin": "2024-01-01",
+  "R0": {
+   "food": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.7453191213552604,
+   "inner_rows": 5
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 0.0,
+   "fitted": false,
+   "n": 5
+  },
+  "C2": {
+   "a": 1.0,
+   "b": 0.0,
+   "fitted": false,
+   "n": 5
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.0,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   },
+   "food_rmse": 1.908775073879176,
+   "gap_rmse": 0.7928534305245138
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.0,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 2,
+    "trees": 200
+   },
+   "logloss": 0.7857059913824366
+  },
+  "R0_rmse": {
+   "food": 1.908775073879176,
+   "gap": 0.7928534305245138
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.0,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   }
+  }
+ },
+ "2024-Q3": {
+  "origin": "2024-04-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "rho": 0.9164067652145648,
+   "inner_rows": 10
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 1.208242818864441,
+   "fitted": true,
+   "n": 10
+  },
+  "C2": {
+   "a": 0.847051960516416,
+   "b": 1.0948124919247915,
+   "fitted": true,
+   "n": 10
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "market",
+    "linear": false
+   },
+   "food_rmse": 2.4124077099817947,
+   "gap_rmse": 0.977354745309807
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.5,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 2,
+    "trees": 200
+   },
+   "logloss": 0.8669146692031676
+  },
+  "R0_rmse": {
+   "food": 2.4124077099817947,
+   "gap": 1.3330127718499345
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": null
+    }
+   }
+  }
+ },
+ "2024-Q4": {
+  "origin": "2024-07-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.7630559346687489,
+   "inner_rows": 15
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 0.06213856347215076,
+   "fitted": true,
+   "n": 15
+  },
+  "C2": {
+   "a": 0.7212340206739494,
+   "b": -0.004613022710972611,
+   "fitted": true,
+   "n": 15
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 200,
+    "feat": "market",
+    "linear": false
+   },
+   "food_rmse": 2.1356438896100047,
+   "gap_rmse": 1.1214181007005541
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "constant"
+   },
+   "logloss": 0.8738785714096521
+  },
+  "R0_rmse": {
+   "food": 2.1356438896100047,
+   "gap": 1.3260061828232026
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2025-Q1": {
+  "origin": "2024-10-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.7620766090186631,
+   "inner_rows": 20
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 0.06399255711349786,
+   "fitted": true,
+   "n": 20
+  },
+  "C2": {
+   "a": 0.7570294832456718,
+   "b": 0.08493743075173878,
+   "fitted": true,
+   "n": 20
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "market",
+    "linear": false
+   },
+   "food_rmse": 2.211897670852258,
+   "gap_rmse": 1.4221726317678138
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "constant"
+   },
+   "logloss": 0.8096969791636838
+  },
+  "R0_rmse": {
+   "food": 2.211897670852258,
+   "gap": 1.4347327510921315
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2025-Q2": {
+  "origin": "2025-01-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.7983662965824639,
+   "inner_rows": 25
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.03577320570844629,
+   "fitted": true,
+   "n": 25
+  },
+  "C2": {
+   "a": 0.8550467680013012,
+   "b": -0.03592285783894426,
+   "fitted": true,
+   "n": 25
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "market",
+    "linear": false
+   },
+   "food_rmse": 2.2108255451072676,
+   "gap_rmse": 1.370307106007657
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "constant"
+   },
+   "logloss": 0.8067995704675737
+  },
+  "R0_rmse": {
+   "food": 2.2108255451072676,
+   "gap": 1.408819123640533
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2025-Q3": {
+  "origin": "2025-04-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.8242534060385943,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 0.29556817517904727,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.7170473811167494,
+   "b": 0.2231290052250374,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "food_rmse": 2.2362234900975793,
+   "gap_rmse": 1.4371161822948193
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "constant"
+   },
+   "logloss": 0.7871578052012287
+  },
+  "R0_rmse": {
+   "food": 2.2362234900975793,
+   "gap": 1.5716899015966996
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": null
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2025-Q4": {
+  "origin": "2025-07-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": 1000.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": 1000.0
+   },
+   "rho": 0.919028037898497,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": 0.10351622164850488,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.6935296062542299,
+   "b": 0.07114420826654883,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "food_rmse": 2.094250665386071,
+   "gap_rmse": 1.5078566859427274
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "constant"
+   },
+   "logloss": 0.6945381160533816
+  },
+  "R0_rmse": {
+   "food": 1.9817504021891559,
+   "gap": 1.6085214247074588
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 1.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 1.0,
+     "alpha": 100.0
+    }
+   }
+  }
+ },
+ "2026-Q1": {
+  "origin": "2025-10-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": 1000.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.9055888294782216,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.05495580269194304,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.8028498229065268,
+   "b": -0.04063584531666277,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "food_rmse": 2.114110969097638,
+   "gap_rmse": 1.625630855683822
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 4,
+    "trees": 50
+   },
+   "logloss": 0.6859764181484853
+  },
+  "R0_rmse": {
+   "food": 2.032594755958721,
+   "gap": 1.669443818019035
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2026-Q2": {
+  "origin": "2026-01-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": 1000.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": 1000.0
+   },
+   "rho": 0.935336238882898,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.14262737744101472,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.7092044712449793,
+   "b": -0.04400550302320747,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "food_rmse": 2.2755528933900115,
+   "gap_rmse": 1.5525353384044276
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": null
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 4,
+    "trees": 50
+   },
+   "logloss": 0.6463961789463667
+  },
+  "R0_rmse": {
+   "food": 2.12528587895737,
+   "gap": 1.687289944780234
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2026-Q3": {
+  "origin": "2026-04-01",
+  "R0": {
+   "food": {
+    "mult": 0.5,
+    "alpha": 1000.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": 1000.0
+   },
+   "rho": 0.9141943953641156,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.3329194747624533,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.7383991521793848,
+   "b": -0.30456019238323334,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "food_rmse": 1.905374230602533,
+   "gap_rmse": 1.492925034460174
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 200,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 2,
+    "trees": 200
+   },
+   "logloss": 0.6483703281711557
+  },
+  "R0_rmse": {
+   "food": 1.9554122873667483,
+   "gap": 1.506798048772102
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.5,
+     "alpha": 100.0
+    }
+   }
+  }
+ },
+ "2026-Q4": {
+  "origin": "2026-07-01",
+  "R0": {
+   "food": {
+    "mult": 0.0,
+    "alpha": 100.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.8558023046983121,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.2469712411083705,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 0.7964503445931872,
+   "b": -0.27063224257400603,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   },
+   "food_rmse": 1.8797249499703508,
+   "gap_rmse": 1.6101534488982132
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 4,
+    "trees": 200
+   },
+   "logloss": 0.5340249347921174
+  },
+  "R0_rmse": {
+   "food": 1.6997351841687187,
+   "gap": 1.6101534488982132
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 1.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 1000.0
+    }
+   }
+  }
+ },
+ "2027-Q1": {
+  "origin": "2026-10-01",
+  "R0": {
+   "food": {
+    "mult": 0.0,
+    "alpha": 100.0
+   },
+   "gap": {
+    "mult": 0.0,
+    "alpha": null
+   },
+   "rho": 0.1883068815486646,
+   "inner_rows": 30
+  },
+  "C1": {
+   "a": 1.0,
+   "b": -0.6862875929744756,
+   "fitted": true,
+   "n": 30
+  },
+  "C2": {
+   "a": 1.056903321513996,
+   "b": -0.6903067615899098,
+   "fitted": true,
+   "n": 30
+  },
+  "LGB-R": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": false
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": null
+   },
+   "food_rmse": 2.094464624515857,
+   "gap_rmse": 1.8001430656347444
+  },
+  "LGB-RL": {
+   "food": {
+    "mult": 0.5,
+    "res": "lgb",
+    "leaves": 4,
+    "trees": 50,
+    "feat": "all",
+    "linear": true
+   },
+   "gap": {
+    "mult": 0.0,
+    "res": "lgb",
+    "leaves": 2,
+    "trees": 200,
+    "feat": "all",
+    "linear": true
+   }
+  },
+  "LGB-C": {
+   "cfg": {
+    "kind": "lgb",
+    "leaves": 4,
+    "trees": 200
+   },
+   "logloss": 0.5126857374671739
+  },
+  "R0_rmse": {
+   "food": 2.09793268024178,
+   "gap": 1.8001430656347444
+  },
+  "ablations": {
+   "A-climate": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-fish_kill": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-employment": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": 100.0
+    }
+   },
+   "A-ofw_remittance": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-news": {
+    "food": {
+     "mult": 0.0,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-policy": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 1000.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   },
+   "A-mkt": {
+    "food": {
+     "mult": 0.5,
+     "alpha": 100.0
+    },
+    "gap": {
+     "mult": 0.0,
+     "alpha": null
+    }
+   }
+  }
+ }
+}
