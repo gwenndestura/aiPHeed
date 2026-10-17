@@ -304,6 +304,7 @@ export type TriggerStatus =
   | "stale"
   | "no_model_input"
   | "no_data"
+  | "insufficient_data"
   | "not_recorded";
 
 export interface ExplainabilityResponse {

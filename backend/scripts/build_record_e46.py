@@ -35,6 +35,25 @@ SCORE_DEF = ("Probability that the province is in concurrent elevated food stres
              "outcome; not independently verified household food insecurity.")
 
 
+# E47 trigger-status rule (documented): a group "contributes" when removing its inputs moves the food-inflation,
+# food-minus-headline or hunger forecast by at least NEGLIGIBLE_POINTS percentage points; below that it has
+# "no_effect" (a computed, negligible contribution); it is "insufficient_data" when none of its observed inputs has a
+# value at that issue date (any contribution would come only from imputation and missing flags, not evidence).
+NEGLIGIBLE_POINTS = 0.1
+OBSERVED_INPUTS = {"market": ["F_now", "gap_now", "F_hat_M1", "rice_whsl_yoy"],
+                   "climate": ["tc_count", "enso", "palay_yoy", "corn_yoy"],
+                   "fish_kill": ["fish_yoy", "aqua_yoy"],
+                   "employment": ["ur_yoy", "under_yoy"],
+                   "ofw_remittance": ["remit_usd_yoy", "remit_php_yoy", "fx_yoy"]}
+
+
+def group_status(row, g, dF, dG, dH) -> str:
+    vals = [row.get(c) for c in OBSERVED_INPUTS[g]]
+    if all(v is None or not math.isfinite(float(v)) for v in vals):
+        return "insufficient_data"
+    return "contributes" if max(abs(dF), abs(dG), abs(dH)) >= NEGLIGIBLE_POINTS else "no_effect"
+
+
 def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
@@ -121,7 +140,7 @@ def main():
                           "logOddsEffect": round(lg, 4),
                           "features": sorted(set(P2.PRICE_GROUPS[g]) | set(P2.HUNGER_GROUPS.get(g, []))),
                           "featuresWithNonzeroWeight": sorted(set(fc) | set(gc) | set(hc))}
-            st = "contributes" if max(abs(dF), abs(dG), abs(dH)) >= 0.1 else "no_effect"
+            st = group_status(X[(X["t"] == t) & (X["province_code"] == p)].iloc[0], g, dF, dG, dH)
             status[g] = {"status": st, "evidence": e43["provinces"][p]["triggerStatus"][g]["evidence"],
                          "evidenceNote": notes[g]}
             drivers.append({"driver_group": g, "driver_label": LABELS[g],
@@ -233,9 +252,24 @@ def main():
                                   f"({L.qs(tp - 1)}); USD/PHP {num(r['fx_yoy'], suf='%')}; national figure.",
             }
             att = attribute(fx, i)
+            # additivity: the ridge residuals have no intercept, so the per-feature contributions must sum exactly to
+            # each component's correction of its base projection (food, gap) or of the latest hunger level
+            tex = fx["te"]
+            checks = {}
+            for nm, mdl, frame, hat, base, k in (("food", fx["food_model"], tex, fx["F_hat"][i], fx["F_base"][i], i),
+                                                 ("gap", fx["gap_model"], tex, fx["G_hat"][i], fx["G_base"][i], i),
+                                                 ("hunger", fx["hunger_model"], fx["hte"], fx["H_hat"],
+                                                  float(fx["hte"]["H_base"].iloc[0]), 0)):
+                tot = 0.0 if mdl is None else float(mdl.contributions(frame).iloc[k].sum())
+                # the E44 hunger ridge keeps its intercept (a constant shift attributed to no trigger group)
+                icpt = 0.0 if mdl is None else float(getattr(mdl.m, "intercept_", 0.0))
+                checks[f"{nm}_intercept_not_attributed"] = icpt
+                checks[f"{nm}_additivity_error"] = abs(tot + icpt - (float(hat) - float(base)))
+                assert checks[f"{nm}_additivity_error"] < 1e-8, (L.qs(tp), p, nm, checks)
+            sws_cut = d.cut(tp).sws
             contrib, drivers, status = {}, [], {}
             for g, (dF, dG, dH, lg, nz) in att.items():
-                st = "contributes" if max(abs(dF), abs(dG), abs(dH)) >= 0.1 else "no_effect"
+                st = group_status(r, g, dF, dG, dH)
                 contrib[g] = {"foodInflationPoints": round(dF, 3), "gapPoints": round(dG, 3), "hungerPoints": round(dH, 3),
                               "logOddsEffect": round(lg, 4), "featuresWithNonzeroWeight": nz}
                 status[g] = {"status": st, "evidenceNote": notes[g]}
@@ -247,7 +281,12 @@ def main():
             drivers.sort(key=lambda dd: abs(dd["group_shap"]), reverse=True)
             nn = r.get("news_n")
             provinces[p].setdefault("pastDrivers", {})[q] = {
-                "origin": str(L.origin(tp).date()), "probability": round(float(fx["p"][i]), 4),
+                "origin": str(L.origin(tp).date()), "originQuarter": L.qs(tp), "probability": round(float(fx["p"][i]), 4),
+                "informationCutoff": {"cpiThrough": L.ym_s(int(d.cut(tp).idx["ym"].max())),
+                                      "swsLatestQuarter": L.qs(int(sws_cut.loc[sws_cut["published"].idxmax(), "q"])),
+                                      "swsLatestPosted": str(sws_cut["published"].max().date()),
+                                      "typhoonsAndNewsThrough": L.qs(tp), "productionLfsRemittancesThrough": L.qs(tp - 1)},
+                "checks": {k: float(v) for k, v in checks.items()},
                 "fiveTriggerContributions": contrib, "triggerStatus": status,
                 "drivers": {"drivers": drivers, "article_count": int(nn) if nn is not None and math.isfinite(nn) else 0,
                             "other_pct": 0.0, "evidence_quarter": L.qs(tp)}}

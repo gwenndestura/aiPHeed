@@ -886,6 +886,8 @@ TRIGGER_STATUS_NOTES = {
                          "not use them, so they neither raised nor lowered the score.",
     "stale": "The latest official observation for this factor is more than two quarters old at the forecast date; "
              "treat its contribution with caution.",
+    "insufficient_data": "None of this factor's inputs had a published value at this forecast's issue date, so no "
+                         "contribution is reported. Missing data is not evidence of low risk.",
     "not_recorded": "This quarter shows the experimental model's backtest or earlier forecast; trigger contributions "
                     "are recorded only for the issued forecast, so no direction is stated here.",
 }

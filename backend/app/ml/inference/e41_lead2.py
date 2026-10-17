@@ -94,7 +94,7 @@ def probability(v: dict) -> float:
     return f["probability"] if "probability" in f else f["probabilityAbove4pct"]
 
 
-STATUS_ORDER = ["contributes", "no_effect", "stale", "data_not_in_model", "no_model_input", "no_data"]
+STATUS_ORDER = ["contributes", "no_effect", "stale", "data_not_in_model", "no_model_input", "insufficient_data", "no_data"]
 
 
 def has_past_drivers(quarter: str) -> bool:

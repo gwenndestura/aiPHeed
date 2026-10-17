@@ -93,3 +93,87 @@ def test_past_quarters_carry_their_own_as_of_triggers(e46):
         assert origin_q in climate["evidenceNote"]             # the evidence is that issue date's own inputs
     region = client.get("/api/v1/explainability?scope=region&id=calabarzon&quarter=2026-Q2").json()["triggers"]
     assert {x["key"] for x in region} == FIVE and all(x["status"] != "not_recorded" for x in region)
+
+
+def _builder():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("build_record_e46", Path("scripts") / "build_record_e46.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _qi(q):
+    return int(q[:4]) * 4 + int(q[-1]) - 1
+
+
+def _qs(i):
+    return f"{i // 4}-Q{i % 4 + 1}"
+
+
+def test_historical_quarter_mapping_and_information_cutoff(e46):
+    """Lead 2 (E41 convention, as coded in e41_lib.origin/m0_of and as in the frozen 2027-Q1 artifact): target q is
+    issued at 00:00 on the first day of quarter q-1 after quarter q-2; CPI through month 2 of q-2, typhoons and news
+    through q-2, production / LFS / remittances through q-3, SWS rounds posted before the issue date. Checked for
+    every past quarter, including the year boundaries (2024-Q2 -> 2024-01-01, 2025-Q1 -> 2024-10-01)."""
+    rec = LEAD2.record()
+    frozen = json.loads((FROZEN / "E46_I7_PROSPECTIVE_2027Q1.json").read_text())
+    assert (frozen["origin"], frozen["origin_quarter"]) == ("2026-10-01", "2026-Q3") and rec["targetQuarter"] == "2027-Q1"
+    seen = set()
+    for v in rec["provinces"].values():
+        for q, x in v["pastDrivers"].items():
+            t = _qi(q) - 2
+            first = t + 1
+            assert x["origin"] == f"{first // 4}-{(first % 4) * 3 + 1:02d}-01" and x["originQuarter"] == _qs(t)
+            cut = x["informationCutoff"]
+            assert cut["cpiThrough"] == f"{t // 4}-{(t % 4) * 3 + 2:02d}"
+            assert cut["typhoonsAndNewsThrough"] == _qs(t) and cut["productionLfsRemittancesThrough"] == _qs(t - 1)
+            assert cut["swsLatestPosted"] < x["origin"]
+            seen.add((q, x["origin"]))
+    assert ("2024-Q2", "2024-01-01") in seen and ("2025-Q1", "2024-10-01") in seen
+
+
+def test_contributions_are_consistent_with_each_quarters_own_prediction(e46):
+    """Per province and past quarter: the ridge contributions add up to the model's own correction (exactly, with the
+    hunger intercept stated as unattributed), the probability is that quarter's backtest, and the dashboard shares are
+    the integer split of |log-odds effect| of the contributing groups."""
+    rec = LEAD2.record()
+    b = _builder()
+    for code, v in rec["provinces"].items():
+        past = {x["targetQuarter"]: x["probability"] for x in v["pastForecasts"] + v["earlierForecasts"]}
+        for q, x in v["pastDrivers"].items():
+            assert all(err < 1e-8 for k, err in x["checks"].items() if k.endswith("additivity_error"))
+            assert x["probability"] == pytest.approx(past[q], abs=1e-3)
+            for g, c in x["fiveTriggerContributions"].items():
+                st = x["triggerStatus"][g]["status"]
+                big = max(abs(c["foodInflationPoints"]), abs(c["gapPoints"]), abs(c["hungerPoints"])) >= b.NEGLIGIBLE_POINTS
+                assert st == "insufficient_data" or st == ("contributes" if big else "no_effect")
+    lo = rec["provinces"]["PH040300000"]["pastDrivers"]
+    t = {x["key"]: x for x in client.get("/api/v1/explainability?scope=province&id=quezon&quarter=2026-Q3").json()["triggers"]}
+    eff = {g: abs(c["logOddsEffect"]) for g, c in lo["2026-Q3"]["fiveTriggerContributions"].items()
+           if lo["2026-Q3"]["triggerStatus"][g]["status"] == "contributes"}
+    top = max(eff, key=eff.get)
+    assert t[top]["pct"] == max(x["pct"] for x in t.values()) and sum(x["pct"] for x in t.values()) == 100
+
+
+def test_contributions_are_not_copied_across_quarters_or_provinces(e46):
+    rec = LEAD2.record()
+    q = rec["provinces"]["PH040300000"]["pastDrivers"]
+    assert q["2026-Q2"]["fiveTriggerContributions"] != q["2026-Q3"]["fiveTriggerContributions"]
+    clim = {c: v["pastDrivers"]["2026-Q3"]["fiveTriggerContributions"]["climate"]["foodInflationPoints"]
+            for c, v in rec["provinces"].items()}
+    assert len(set(clim.values())) > 1                          # climate inputs are provincial
+    assert rec["provinces"]["PH040300000"]["pastDrivers"]["2026-Q3"]["fiveTriggerContributions"] != \
+        rec["provinces"]["PH040300000"]["fiveTriggerContributions"]
+
+
+def test_insufficient_data_rule_is_distinct_from_negligible():
+    b = _builder()
+    import math
+    nan = float("nan")
+    row = {"remit_usd_yoy": nan, "remit_php_yoy": nan, "fx_yoy": nan}
+    assert b.group_status(row, "ofw_remittance", 0.5, 0.0, 0.0) == "insufficient_data"
+    row["fx_yoy"] = 1.2
+    assert b.group_status(row, "ofw_remittance", 0.05, 0.0, 0.0) == "no_effect"
+    assert b.group_status(row, "ofw_remittance", 0.0, 0.0, 0.2) == "contributes"
+    assert math.isclose(b.NEGLIGIBLE_POINTS, 0.1)

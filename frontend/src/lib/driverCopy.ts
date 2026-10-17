@@ -99,6 +99,10 @@ const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string)
     title: `${name}: no official data`,
     description: "No official data series is available for this factor. Missing data is not a sign of low risk.",
   }),
+  insufficient_data: (name) => ({
+    title: `${name}: insufficient data`,
+    description: "None of this factor's inputs had a published value when this forecast was issued, so no effect is reported. Missing data is not a sign of low risk.",
+  }),
   not_recorded: (name) => ({
     title: `${name}: not recorded for this quarter`,
     description: "This quarter shows the model's backtest or an earlier forecast; factor contributions are recorded only for the issued forecast.",

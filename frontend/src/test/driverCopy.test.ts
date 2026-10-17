@@ -43,3 +43,18 @@ describe("trigger card copy (E42)", () => {
     expect(c.title).not.toMatch(/hurting/);
   });
 });
+
+describe("insufficient data vs negligible effect (E47)", () => {
+  it("separates missing inputs from a computed, negligible contribution", () => {
+    const missing = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "insufficient_data", pct: 0 });
+    const negligible = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "no_effect", pct: 0 });
+    expect(missing.title).toBe("OFW remittances: insufficient data");
+    expect(missing.description).toMatch(/not a sign of low risk/);
+    expect(negligible.title).toBe("OFW remittances: no measurable effect");
+  });
+
+  it("states that past-quarter contributions were not recorded instead of a direction", () => {
+    const c = driverCopy({ key: "climate", direction: "increases_risk", status: "not_recorded", pct: 0 });
+    expect(c.title).toBe("Weather and farm supply: not recorded for this quarter");
+  });
+});
