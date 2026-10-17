@@ -256,3 +256,43 @@ $PY -B -m pytest -q tests/test_e47.py tests/test_e47_a1.py
   - provincial hunger or FIES (CBMS);
   - provincial labour and remittance series;
   - an archived real-time CPI release log, which would let I8's 15th-of-month timing be adopted with a verified cutoff.
+
+---
+
+## 13. Addendum: five-trigger contributions for past quarters (commits a151cba, eee70a4, 68a9bc3)
+
+**Implementation:**
+- `scripts/build_record_e46.py` refits I7 at every past issue date (2023-Q4..2026-Q2 origins), using only that date's data.
+- Each refit must reproduce the committed backtest probability (asserted, to 1e-9).
+- The record stores per quarter (`pastDrivers`): the five-group contributions, statuses, as-of evidence notes, an information-cutoff block and additivity checks.
+- `e41_lead2` and `dashboard` serve them for past quarters. The region pools the province attributions and says so.
+- The explainability note describes the five-trigger model on every quarter it attributes.
+
+**Quarter mapping:**
+- Target q is issued at 00:00 on the first day of quarter q−1, after quarter q−2. This is the rule coded in `e41_lib.origin`/`m0_of` and the one in the frozen 2027-Q1 artifact.
+- Information cutoff: CPI through month 2 of q−2; typhoons and news through q−2; production, LFS and remittances through q−3; SWS rounds posted before the issue date.
+- It is tested for every past quarter, including the year boundaries: 2024-Q2 → 2024-01-01, 2025-Q1 → 2024-10-01.
+
+**Status rule:**
+- **contributes:** removing the group moves food YoY, the gap or hunger by ≥ 0.1 percentage points.
+- **no_effect:** a computed contribution below that.
+- **insufficient_data:** none of the group's observed inputs had a value at the issue date.
+- Across 225 province-quarter-group cells: 190 contributes, 35 no_effect, 0 insufficient_data. OFW always has USD/PHP, even where remittances are missing (2026).
+- Percentages are shares of each group's |log-odds effect| on that quarter's own prediction. They are model attributions, not causes.
+
+**Checks:**
+- Ridge contributions sum to each component's correction within 1.8e-15.
+- The hunger ridge's intercept is recorded as not attributed to any trigger.
+
+**Quezon examples** (reproduced from the refits):
+
+| Quarter | Issued | p | Climate | Market | OFW | Employment | Fisheries |
+|---|---|---|---|---|---|---|---|
+| 2026-Q2 | 2026-01-01 | 0.546 | 57% | 18% | 7% | 13% | 5% |
+| 2026-Q3 | 2026-04-01 | 0.852 | 54% | 15% | 28% | 3% | 0% (no_effect) |
+
+**Tests:** see section 9 and E48.
+- Backend: 367 passed / 18 skipped.
+- Frontend: 45 passed, including the merged updated-ui-with-tutorial frontend and the `insufficient_data` and `not_recorded` copy.
+
+**Metrics:** unchanged (no model refit), re-verified by `runner/e47_verify_e46.py`. I7: 0.800 / balanced 0.684 / HIGH recall 0.44 / Brier 0.174 / AUC 0.735. **75% with discrimination is not met.**
