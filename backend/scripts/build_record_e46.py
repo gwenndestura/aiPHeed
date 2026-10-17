@@ -179,6 +179,78 @@ def main():
                          "Employment and OFW evidence are national.",
                          "Exploratory food-stress outcome; not verified household food insecurity."],
         }
+    # ---- E47: five-trigger attributions for every past quarter on the timeline (backtests and the earlier 2026-Q4
+    # forecast). The I7 model is refitted at each quarter's own issue date with only the data published before it; the
+    # refit must reproduce the committed backtest probability, and the evidence notes are that origin's own inputs.
+    enso_name = {1.0: "El Nino", 0.0: "neutral", -1.0: "La Nina"}
+
+    def num(v, fmt="{:.1f}", suf=""):
+        return "n/a (no published figure)" if v is None or (isinstance(v, float) and not math.isfinite(v)) else fmt.format(v) + suf
+
+    def attribute(fx, i):
+        tex = fx["te"]
+        fc_ = fx["food_model"].contributions(tex) if fx["food_model"] is not None else None
+        gc_ = fx["gap_model"].contributions(tex) if fx["gap_model"] is not None else None
+        hc_ = fx["hunger_model"].contributions(fx["hte"]) if fx["hunger_model"] is not None else None
+
+        def pj(dF=0.0, dG=0.0, dH=0.0):
+            ph = 1 - I7.norm.cdf((th["H"] - (fx["H_hat"] - dH)) / max(fx["hunger_rmse"], 1e-6))
+            return ph * P2.p_price_biv([fx["F_hat"][i] - dF], [fx["G_hat"][i] - dG], fx["food_rmse"], fx["gap_rmse"],
+                                       fx["rho"], [tex["province_code"].iloc[i]])[0]
+        base_ = pj()
+        out = {}
+        for g in LABELS:
+            dF, a = grp(fc_, P2.PRICE_GROUPS[g], i)
+            dG, b = grp(gc_, P2.PRICE_GROUPS[g], i)
+            dH, c = grp(hc_, P2.HUNGER_GROUPS.get(g, []), 0)
+            wo = pj(dF, dG, dH)
+            lg = math.log(max(base_, 1e-6) / max(1 - base_, 1e-6)) - math.log(max(wo, 1e-6) / max(1 - wo, 1e-6))
+            out[g] = (dF, dG, dH, lg, sorted(set(a) | set(b) | set(c)))
+        return out
+
+    origins_past = sorted({L.qi(x["targetQuarter"]) - 2 for v in provinces.values()
+                           for x in v["pastForecasts"] + v["earlierForecasts"]})
+    committed = P7.set_index(["t", "province_code"])["I7_p"]
+    for tp in origins_past:
+        fx = I7.forecast(d, X, B, tp, n_jobs=8)
+        q = L.qs(tp + 2)
+        row = X[X["t"] == tp].set_index("province_code")
+        for i, p in enumerate(L.PROVS):
+            assert abs(float(fx["p"][i]) - float(committed[(tp, p)])) < 1e-9, f"refit at {L.qs(tp)} differs from the backtest"
+            r = row.loc[p]
+            notes = {
+                "market": f"Food inflation {num(r['F_now'], suf='%')} in the latest two months (through "
+                          f"{L.ym_s(L.m0_of(tp))}) vs this province's reference {th['food'][p]:.2f}%; food minus headline "
+                          f"{num(r['gap_now'], '{:+.1f}')} points.",
+                "climate": f"{num(r['tc_count'], '{:.0f}')} typhoon(s) within 300 km in {L.qs(tp)}; ENSO "
+                           f"{enso_name.get(r['enso'], 'n/a')} in {L.qs(tp - 1)}; palay production "
+                           f"{num(r['palay_yoy'], suf='%')} year on year ({L.qs(tp - 1)}).",
+                "fish_kill": f"Fisheries production {num(r['fish_yoy'], suf='%')} and aquaculture "
+                             f"{num(r['aqua_yoy'], suf='%')} year on year ({L.qs(tp - 1)}); no official fish-kill event series.",
+                "employment": f"National unemployment {num(r['ur_last'], '{:.2f}', '%')} ({L.qs(tp - 1)}), "
+                              f"{num(r['ur_yoy'], '{:+.2f}')} points year on year; national figure, the same for every province.",
+                "ofw_remittance": f"National cash remittances {num(r['remit_usd_yoy'], suf='%')} year on year "
+                                  f"({L.qs(tp - 1)}); USD/PHP {num(r['fx_yoy'], suf='%')}; national figure.",
+            }
+            att = attribute(fx, i)
+            contrib, drivers, status = {}, [], {}
+            for g, (dF, dG, dH, lg, nz) in att.items():
+                st = "contributes" if max(abs(dF), abs(dG), abs(dH)) >= 0.1 else "no_effect"
+                contrib[g] = {"foodInflationPoints": round(dF, 3), "gapPoints": round(dG, 3), "hungerPoints": round(dH, 3),
+                              "logOddsEffect": round(lg, 4), "featuresWithNonzeroWeight": nz}
+                status[g] = {"status": st, "evidenceNote": notes[g]}
+                share = r.get(f"news_{g}")
+                drivers.append({"driver_group": g, "driver_label": LABELS[g],
+                                "group_shap": round(lg, 4) if st == "contributes" else 0.0,
+                                "direction": "increases_risk" if lg >= 0 else "protective",
+                                "trigger_proportion": None if share is None or not math.isfinite(share) else float(share)})
+            drivers.sort(key=lambda dd: abs(dd["group_shap"]), reverse=True)
+            nn = r.get("news_n")
+            provinces[p].setdefault("pastDrivers", {})[q] = {
+                "origin": str(L.origin(tp).date()), "probability": round(float(fx["p"][i]), 4),
+                "fiveTriggerContributions": contrib, "triggerStatus": status,
+                "drivers": {"drivers": drivers, "article_count": int(nn) if nn is not None and math.isfinite(nn) else 0,
+                            "other_pct": 0.0, "evidence_quarter": L.qs(tp)}}
     s44, ext = res7["S44"], res7["EXT"]
     pick = lambda m: {k: (None if m.get(k) is None else round(float(m[k]), 3)) for k in  # noqa: E731
                       ("accuracy", "balanced_accuracy", "recall_HIGH", "recall_LOW", "precision_HIGH", "f1_HIGH",

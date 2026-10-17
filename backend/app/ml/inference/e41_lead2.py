@@ -97,20 +97,37 @@ def probability(v: dict) -> float:
 STATUS_ORDER = ["contributes", "no_effect", "stale", "data_not_in_model", "no_model_input", "no_data"]
 
 
+def has_past_drivers(quarter: str) -> bool:
+    """E47: the governing record carries as-of five-trigger attributions for this past quarter, for every province."""
+    if not governs():
+        return False
+    provs = record()["provinces"]
+    return all(quarter in v.get("pastDrivers", {}) for v in provs.values())
+
+
+def _status_block(v: dict, quarter: str) -> dict:
+    """Trigger statuses of one province entry for this quarter: the issued forecast's, or the past quarter's own."""
+    if quarter == record()["targetQuarter"]:
+        return v.get("triggerStatus", {})
+    return v.get("pastDrivers", {}).get(quarter, {}).get("triggerStatus", {})
+
+
 def trigger_statuses(quarter: str, code: str | None = None) -> dict[str, str] | None:
     """E43 records carry their own per-province trigger status; for the region a group takes its strongest status
-    across provinces. None for records without statuses (E41/E42 use the dashboard's model-input rule)."""
-    if not serves(quarter):
+    across provinces. None for records without statuses (E41/E42 use the dashboard's model-input rule). E47: past
+    quarters of a governing record use their own as-of statuses."""
+    if not (serves(quarter) or has_past_drivers(quarter)):
         return None
     provs = record()["provinces"]
-    if not all(isinstance(next(iter(v.get("triggerStatus", {}).values()), None), dict)
-               and "status" in next(iter(v["triggerStatus"].values())) for v in provs.values()):
+    blocks = {c: _status_block(v, quarter) for c, v in provs.items()}
+    if not all(isinstance(next(iter(b.values()), None), dict) and "status" in next(iter(b.values()))
+               for b in blocks.values()):
         return None
     if code:
-        return {g: s["status"] for g, s in provs[code]["triggerStatus"].items()}
+        return {g: s["status"] for g, s in blocks[code].items()}
     out: dict[str, str] = {}
-    for v in provs.values():
-        for g, s in v["triggerStatus"].items():
+    for b in blocks.values():
+        for g, s in b.items():
             out[g] = min(out.get(g, s["status"]), s["status"], key=STATUS_ORDER.index)
     return out
 
@@ -214,9 +231,9 @@ def rows_for(quarter: str) -> list[dict]:
 
 def trigger_evidence(quarter: str, code: str | None) -> dict[str, str]:
     """E44: the observed evidence sentence per trigger (province scope only; empty otherwise)."""
-    if not code or not serves(quarter):
+    if not code or not (serves(quarter) or has_past_drivers(quarter)):
         return {}
-    ts = record()["provinces"].get(code, {}).get("triggerStatus", {})
+    ts = _status_block(record()["provinces"].get(code, {}), quarter)
     return {g: v["evidenceNote"] for g, v in ts.items() if isinstance(v, dict) and v.get("evidenceNote")}
 
 
@@ -224,6 +241,8 @@ def drivers(code: str, quarter: str) -> dict:
     """Five-trigger structure for the dashboard. E43 records carry the served model's own grouped contributions;
     for E41/E42 every model input is a price input (Market / Prices) and the other four groups have no input (0)."""
     v = record()["provinces"][code]
+    if quarter != record()["targetQuarter"] and quarter in v.get("pastDrivers", {}):
+        return v["pastDrivers"][quarter]["drivers"]               # E47: the past quarter's own as-of attribution
     if "drivers" in v:
         return v["drivers"]
     p = min(max(probability(v), 1e-6), 1 - 1e-6)

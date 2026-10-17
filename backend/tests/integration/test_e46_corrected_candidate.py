@@ -71,3 +71,25 @@ def test_default_remains_e38(monkeypatch):
     monkeypatch.delenv("AIPHEED_LEAD2_MODEL", raising=False)
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-17T09:00:00")
     assert client.get("/api/v1/lead2/summary").status_code == 404
+
+
+def test_past_quarters_carry_their_own_as_of_triggers(e46):
+    """E47: every past quarter on the timeline shows the five trigger groups attributed by the model refitted at that
+    quarter's own issue date (never 'not recorded', never another quarter's or another model's drivers)."""
+    rec = LEAD2.record()
+    shown = {r["provinceCode"]: r["riskScore"] for r in
+             client.get("/api/v1/provinces?quarter=2026-Q3&horizon=nowcast").json()["data"]}
+    for code, v in rec["provinces"].items():
+        assert {"2026-Q1", "2026-Q2", "2026-Q3", "2026-Q4"} <= set(v["pastDrivers"])
+        assert v["pastDrivers"]["2026-Q3"]["origin"] == "2026-04-01"
+        assert v["pastDrivers"]["2026-Q3"]["probability"] == pytest.approx(shown[code], abs=1e-3)
+    # Lead 2: the target quarter q is issued after quarter q-2, so its evidence names q-2 (typhoons in that quarter)
+    for q, origin_q in (("2026-Q2", "2025-Q4"), ("2026-Q3", "2026-Q1"), ("2026-Q4", "2026-Q2")):
+        t = client.get(f"/api/v1/explainability?scope=province&id=quezon&quarter={q}").json()["triggers"]
+        assert {x["key"] for x in t} == FIVE
+        assert all(x["status"] in ("contributes", "no_effect") and x["evidenceNote"] for x in t)
+        assert any(x["status"] == "contributes" for x in t)
+        climate = next(x for x in t if x["key"] == "climate")
+        assert origin_q in climate["evidenceNote"]             # the evidence is that issue date's own inputs
+    region = client.get("/api/v1/explainability?scope=region&id=calabarzon&quarter=2026-Q2").json()["triggers"]
+    assert {x["key"] for x in region} == FIVE and all(x["status"] != "not_recorded" for x in region)

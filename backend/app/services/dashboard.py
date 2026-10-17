@@ -862,6 +862,8 @@ def _drivers(province_code: str, quarter: str) -> dict:
 def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
     if E41L2.serves(quarter):
         return E41L2.drivers(province_code, quarter)
+    if lead2_mode.endswith(":governs") and E41L2.has_past_drivers(quarter):
+        return E41L2.drivers(province_code, quarter)  # E47: as-of attribution refitted at that quarter's issue date
     if lead2_mode.endswith(":governs"):              # E46: backtest quarters carry no recorded attribution
         return {"drivers": [{"driver_group": g, "driver_label": lab, "group_shap": 0.0, "direction": "increases_risk",
                              "trigger_proportion": None} for g, lab in E41L2.GROUP_LABELS.items()],
@@ -899,7 +901,7 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
 
 
 def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
-    if E41L2.governs() and not E41L2.serves(quarter):
+    if E41L2.governs() and not E41L2.serves(quarter) and not E41L2.has_past_drivers(quarter):
         return "not_recorded"
     own = E41L2.trigger_statuses(quarter, code)                  # E43 records state their own statuses
     if own and key in own:

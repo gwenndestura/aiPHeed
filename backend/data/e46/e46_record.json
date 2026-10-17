@@ -2,7 +2,7 @@
  "schema": "e46/1",
  "name": "aiPHeed five-trigger food-stress risk forecast (E46 I7, defect-corrected)",
  "status": "EXPERIMENTAL - FORECASTING ACCEPTANCE NOT MET; enabled only with AIPHEED_LEAD2_MODEL=e46",
- "generated_at": "2026-10-17T02:41:06Z",
+ "generated_at": "2026-10-17T04:17:50Z",
  "modelVersion": "E46-I7 (ADDENDUM_I7 sha256 ed0db548849848a5)",
  "origin": "2026-10-01",
  "originQuarter": "2026-Q3",
@@ -370,7 +370,1143 @@
     "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
     "Employment and OFW evidence are national.",
     "Exploratory food-stress outcome; not verified household food insecurity."
-   ]
+   ],
+   "pastDrivers": {
+    "2024-Q2": {
+     "origin": "2024-01-01",
+     "probability": 0.1953,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.001,
+       "logOddsEffect": 0.0008,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.256,
+       "logOddsEffect": 0.2235,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.19,
+       "logOddsEffect": -0.1613,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.334,
+       "logOddsEffect": -0.2815,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.125,
+       "logOddsEffect": -0.1067,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 4.2% in the latest two months (through 2023-11) vs this province's reference 4.71%; food minus headline -0.8 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2023-Q4; ENSO El Nino in 2023-Q3; palay production -12.9% year on year (2023-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -27.6% and aquaculture 105.0% year on year (2023-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.61% (2023-Q3), -0.56 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.9% year on year (2023-Q3); USD/PHP -0.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.2815,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.2235,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.06451612903225806
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.1613,
+        "direction": "protective",
+        "trigger_proportion": 0.22580645161290322
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1067,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 31,
+      "other_pct": 0.0,
+      "evidence_quarter": "2023-Q4"
+     }
+    },
+    "2024-Q3": {
+     "origin": "2024-04-01",
+     "probability": 0.1276,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.161,
+       "logOddsEffect": -0.0001,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.142,
+       "logOddsEffect": 0.0081,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.931,
+       "logOddsEffect": -0.0004,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.041,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.338,
+       "logOddsEffect": 0.0103,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 0.6% in the latest two months (through 2024-02) vs this province's reference 4.71%; food minus headline -1.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2024-Q1; ENSO El Nino in 2023-Q4; palay production -7.4% year on year (2023-Q4)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -14.8% and aquaculture -5.4% year on year (2023-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "no_effect",
+       "evidenceNote": "National unemployment 3.61% (2023-Q4), -0.75 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 3.7% year on year (2023-Q4); USD/PHP -2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0103,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0081,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.037037037037037035
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0004,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0001,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 27,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q1"
+     }
+    },
+    "2024-Q4": {
+     "origin": "2024-07-01",
+     "probability": 0.0571,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.044,
+       "logOddsEffect": -0.0003,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.344,
+       "logOddsEffect": 0.0223,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.581,
+       "logOddsEffect": -0.0023,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -3.934,
+       "logOddsEffect": -0.0037,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.624,
+       "logOddsEffect": 0.0332,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 3.7% in the latest two months (through 2024-05) vs this province's reference 4.71%; food minus headline +1.0 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2024-Q2; ENSO El Nino in 2024-Q1; palay production -22.5% year on year (2024-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -13.6% and aquaculture -41.8% year on year (2024-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2024-Q1), -0.80 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2024-Q1); USD/PHP 2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0332,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0223,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0037,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0023,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 37,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q2"
+     }
+    },
+    "2025-Q1": {
+     "origin": "2024-10-01",
+     "probability": 0.5727,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.024,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.923,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.105,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.779,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.966,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 2.5% in the latest two months (through 2024-08) vs this province's reference 4.71%; food minus headline +0.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "2 typhoon(s) within 300 km in 2024-Q3; ENSO neutral in 2024-Q2; palay production -18.9% year on year (2024-Q2)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -9.4% and aquaculture -73.4% year on year (2024-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.77% (2024-Q2), -0.68 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.8% year on year (2024-Q2); USD/PHP 3.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.04918032786885246
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 61,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q3"
+     }
+    },
+    "2025-Q4": {
+     "origin": "2025-07-01",
+     "probability": 0.17,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.114,
+       "gapPoints": 0.038,
+       "hungerPoints": -0.228,
+       "logOddsEffect": 0.0425,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.107,
+       "gapPoints": 0.154,
+       "hungerPoints": -0.496,
+       "logOddsEffect": 0.1742,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.022,
+       "gapPoints": 0.023,
+       "hungerPoints": 0.354,
+       "logOddsEffect": 0.0257,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.108,
+       "gapPoints": 0.126,
+       "hungerPoints": 0.854,
+       "logOddsEffect": 0.1415,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.004,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.648,
+       "logOddsEffect": 0.0482,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.8% in the latest two months (through 2025-05) vs this province's reference 4.71%; food minus headline +1.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2025-Q2; ENSO neutral in 2025-Q1; palay production 16.7% year on year (2025-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -28.3% and aquaculture -5.6% year on year (2025-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2025-Q1), -0.00 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q1); USD/PHP 3.5%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.1742,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.04
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1415,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0482,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0425,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0257,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 25,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q2"
+     }
+    },
+    "2026-Q1": {
+     "origin": "2025-10-01",
+     "probability": 0.1854,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.107,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.261,
+       "logOddsEffect": 0.0283,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.261,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.232,
+       "logOddsEffect": 0.0617,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.026,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.0076,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.1,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.792,
+       "logOddsEffect": 0.0264,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.015,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.794,
+       "logOddsEffect": 0.0042,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.6% in the latest two months (through 2025-08) vs this province's reference 4.71%; food minus headline -0.1 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "4 typhoon(s) within 300 km in 2025-Q3; ENSO neutral in 2025-Q2; palay production 73.6% year on year (2025-Q2)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -19.8% and aquaculture -23.0% year on year (2025-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.89% (2025-Q2), +0.12 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.8% year on year (2025-Q2); USD/PHP -2.7%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0617,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.058823529411764705
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0283,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0264,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0042,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 51,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q3"
+     }
+    },
+    "2026-Q2": {
+     "origin": "2026-01-01",
+     "probability": 0.2422,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.172,
+       "gapPoints": 0.036,
+       "hungerPoints": -0.331,
+       "logOddsEffect": 0.038,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.458,
+       "gapPoints": -0.258,
+       "hungerPoints": 1.073,
+       "logOddsEffect": -0.2588,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.034,
+       "gapPoints": 0.016,
+       "hungerPoints": 0.12,
+       "logOddsEffect": 0.0158,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.898,
+       "logOddsEffect": 0.043,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.005,
+       "gapPoints": 0.023,
+       "hungerPoints": 1.407,
+       "logOddsEffect": 0.0227,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.8% in the latest two months (through 2025-11) vs this province's reference 4.71%; food minus headline -0.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q4; ENSO neutral in 2025-Q3; palay production -5.9% year on year (2025-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -11.2% and aquaculture -8.7% year on year (2025-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.34% (2025-Q3), +0.19 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q3); USD/PHP -0.2%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.2588,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.043,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.038,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0227,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0158,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 38,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q4"
+     }
+    },
+    "2026-Q3": {
+     "origin": "2026-04-01",
+     "probability": 0.4491,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.194,
+       "gapPoints": 0.054,
+       "hungerPoints": -0.076,
+       "logOddsEffect": 0.0517,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.226,
+       "gapPoints": -0.127,
+       "hungerPoints": -0.308,
+       "logOddsEffect": -0.1413,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.035,
+       "gapPoints": 0.016,
+       "hungerPoints": -0.072,
+       "logOddsEffect": 0.0132,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.059,
+       "gapPoints": -0.017,
+       "hungerPoints": 0.152,
+       "logOddsEffect": -0.0104,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.006,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.412,
+       "logOddsEffect": 0.0356,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.1% in the latest two months (through 2026-02) vs this province's reference 4.71%; food minus headline -1.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q1; ENSO La Nina in 2025-Q4; palay production 5.0% year on year (2025-Q4)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -4.2% and aquaculture 6.4% year on year (2025-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.57% (2025-Q4), +1.13 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.1% year on year (2025-Q4); USD/PHP 0.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.1413,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0517,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.03333333333333333
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0356,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0104,
+        "direction": "protective",
+        "trigger_proportion": 0.03333333333333333
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 30,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q1"
+     }
+    },
+    "2026-Q4": {
+     "origin": "2026-07-01",
+     "probability": 0.0246,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.485,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.007,
+       "logOddsEffect": 0.2663,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.806,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.225,
+       "logOddsEffect": 0.3568,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.08,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.053,
+       "logOddsEffect": -0.0603,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.467,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.235,
+       "logOddsEffect": -0.4126,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.137,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.1067,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 4.9% in the latest two months (through 2026-05) vs this province's reference 4.71%; food minus headline -2.0 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q2; ENSO neutral in 2026-Q1; palay production -36.2% year on year (2026-Q1)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -2.9% and aquaculture -68.6% year on year (2026-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 5.30% (2026-Q1), +1.32 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances n/a (no published figure) year on year (2026-Q1); USD/PHP 1.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.4126,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.3568,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.2663,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1067,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 53,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q2"
+     }
+    }
+   }
   },
   "PH040200000": {
    "provinceCode": "PH040200000",
@@ -709,7 +1845,1143 @@
     "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
     "Employment and OFW evidence are national.",
     "Exploratory food-stress outcome; not verified household food insecurity."
-   ]
+   ],
+   "pastDrivers": {
+    "2024-Q2": {
+     "origin": "2024-01-01",
+     "probability": 0.1727,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.001,
+       "logOddsEffect": 0.0008,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.256,
+       "logOddsEffect": 0.218,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.19,
+       "logOddsEffect": -0.1565,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.334,
+       "logOddsEffect": -0.2726,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.125,
+       "logOddsEffect": -0.1036,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 4.2% in the latest two months (through 2023-11) vs this province's reference 6.05%; food minus headline +1.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2023-Q4; ENSO El Nino in 2023-Q3; palay production -7.3% year on year (2023-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -66.3% and aquaculture -95.2% year on year (2023-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.61% (2023-Q3), -0.56 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.9% year on year (2023-Q3); USD/PHP -0.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.2726,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.218,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.1565,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1036,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 15,
+      "other_pct": 0.0,
+      "evidence_quarter": "2023-Q4"
+     }
+    },
+    "2024-Q3": {
+     "origin": "2024-04-01",
+     "probability": 0.4774,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.161,
+       "logOddsEffect": -0.0002,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.142,
+       "logOddsEffect": 0.0136,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.931,
+       "logOddsEffect": -0.0006,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.041,
+       "logOddsEffect": 0.0001,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.338,
+       "logOddsEffect": 0.0171,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.4% in the latest two months (through 2024-02) vs this province's reference 6.05%; food minus headline +0.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2024-Q1; ENSO El Nino in 2023-Q4; palay production 14.9% year on year (2023-Q4)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -33.3% and aquaculture -41.2% year on year (2023-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "no_effect",
+       "evidenceNote": "National unemployment 3.61% (2023-Q4), -0.75 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 3.7% year on year (2023-Q4); USD/PHP -2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0171,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0136,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.034482758620689655
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0006,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0002,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 29,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q1"
+     }
+    },
+    "2024-Q4": {
+     "origin": "2024-07-01",
+     "probability": 0.0865,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.044,
+       "logOddsEffect": -0.0003,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.344,
+       "logOddsEffect": 0.023,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.581,
+       "logOddsEffect": -0.0024,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -3.934,
+       "logOddsEffect": -0.0038,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.624,
+       "logOddsEffect": 0.0342,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-05) vs this province's reference 6.05%; food minus headline +0.7 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2024-Q2; ENSO El Nino in 2024-Q1; palay production -2.8% year on year (2024-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -17.0% and aquaculture -18.7% year on year (2024-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2024-Q1), -0.80 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2024-Q1); USD/PHP 2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0342,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.023,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0038,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0024,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 17,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q2"
+     }
+    },
+    "2025-Q1": {
+     "origin": "2024-10-01",
+     "probability": 0.4792,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.024,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.923,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.105,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.779,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.966,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 4.2% in the latest two months (through 2024-08) vs this province's reference 6.05%; food minus headline +0.7 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "2 typhoon(s) within 300 km in 2024-Q3; ENSO neutral in 2024-Q2; palay production -18.5% year on year (2024-Q2)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -15.1% and aquaculture -15.0% year on year (2024-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.77% (2024-Q2), -0.68 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.8% year on year (2024-Q2); USD/PHP 3.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.21428571428571427
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 14,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q3"
+     }
+    },
+    "2025-Q4": {
+     "origin": "2025-07-01",
+     "probability": 0.4597,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": -0.009,
+       "hungerPoints": -0.228,
+       "logOddsEffect": -0.0088,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.039,
+       "gapPoints": 0.091,
+       "hungerPoints": -0.496,
+       "logOddsEffect": 0.0906,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.061,
+       "gapPoints": 0.026,
+       "hungerPoints": 0.354,
+       "logOddsEffect": 0.0262,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.108,
+       "gapPoints": 0.126,
+       "hungerPoints": 0.854,
+       "logOddsEffect": 0.1251,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.004,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.648,
+       "logOddsEffect": 0.0429,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 4.2% in the latest two months (through 2025-05) vs this province's reference 6.05%; food minus headline +1.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2025-Q2; ENSO neutral in 2025-Q1; palay production 37.1% year on year (2025-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 78.8% and aquaculture 91.1% year on year (2025-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2025-Q1), -0.00 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q1); USD/PHP 3.5%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1251,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0906,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0429,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0262,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0088,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 28,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q2"
+     }
+    },
+    "2026-Q1": {
+     "origin": "2025-10-01",
+     "probability": 0.2403,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.085,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.261,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.349,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.232,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.054,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.1,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.792,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.015,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.794,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.8% in the latest two months (through 2025-08) vs this province's reference 6.05%; food minus headline +0.8 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "4 typhoon(s) within 300 km in 2025-Q3; ENSO neutral in 2025-Q2; palay production 59.1% year on year (2025-Q2)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production 27.0% and aquaculture 57.6% year on year (2025-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.89% (2025-Q2), +0.12 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.8% year on year (2025-Q2); USD/PHP -2.7%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.23333333333333334
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 30,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q3"
+     }
+    },
+    "2026-Q2": {
+     "origin": "2026-01-01",
+     "probability": 0.3953,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.062,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.331,
+       "logOddsEffect": 0.0003,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.318,
+       "gapPoints": -0.209,
+       "hungerPoints": 1.073,
+       "logOddsEffect": -0.199,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.04,
+       "gapPoints": 0.019,
+       "hungerPoints": 0.12,
+       "logOddsEffect": 0.0179,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.898,
+       "logOddsEffect": 0.0413,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.005,
+       "gapPoints": 0.023,
+       "hungerPoints": 1.407,
+       "logOddsEffect": 0.0218,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.9% in the latest two months (through 2025-11) vs this province's reference 6.05%; food minus headline +0.5 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q4; ENSO neutral in 2025-Q3; palay production 15.5% year on year (2025-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 6.3% and aquaculture 55.0% year on year (2025-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.34% (2025-Q3), +0.19 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q3); USD/PHP -0.2%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.199,
+        "direction": "protective",
+        "trigger_proportion": 0.14285714285714285
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0413,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0218,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0179,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0003,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 28,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q4"
+     }
+    },
+    "2026-Q3": {
+     "origin": "2026-04-01",
+     "probability": 0.0642,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.197,
+       "gapPoints": 0.052,
+       "hungerPoints": -0.076,
+       "logOddsEffect": 0.0783,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.028,
+       "gapPoints": -0.054,
+       "hungerPoints": -0.308,
+       "logOddsEffect": -0.078,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.06,
+       "gapPoints": 0.016,
+       "hungerPoints": -0.072,
+       "logOddsEffect": 0.014,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.059,
+       "gapPoints": -0.017,
+       "hungerPoints": 0.152,
+       "logOddsEffect": -0.0219,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.006,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.412,
+       "logOddsEffect": 0.0324,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.6% in the latest two months (through 2026-02) vs this province's reference 6.05%; food minus headline -1.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q1; ENSO La Nina in 2025-Q4; palay production 38.2% year on year (2025-Q4)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production 43.7% and aquaculture 106.9% year on year (2025-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.57% (2025-Q4), +1.13 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.1% year on year (2025-Q4); USD/PHP 0.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0783,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.078,
+        "direction": "protective",
+        "trigger_proportion": 0.08333333333333333
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0324,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0219,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 24,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q1"
+     }
+    },
+    "2026-Q4": {
+     "origin": "2026-07-01",
+     "probability": 0.0126,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.699,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.007,
+       "logOddsEffect": 1.0978,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.801,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.225,
+       "logOddsEffect": 1.2573,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.05,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.053,
+       "logOddsEffect": 0.0758,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.467,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.235,
+       "logOddsEffect": -0.685,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.137,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.206,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 3.8% in the latest two months (through 2026-05) vs this province's reference 6.05%; food minus headline -4.3 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q2; ENSO neutral in 2026-Q1; palay production -12.7% year on year (2026-Q1)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -33.9% and aquaculture -47.4% year on year (2026-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 5.30% (2026-Q1), +1.32 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances n/a (no published figure) year on year (2026-Q1); USD/PHP 1.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 1.2573,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.0978,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.685,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.206,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 27,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q2"
+     }
+    }
+   }
   },
   "PH040300000": {
    "provinceCode": "PH040300000",
@@ -1048,7 +3320,1143 @@
     "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
     "Employment and OFW evidence are national.",
     "Exploratory food-stress outcome; not verified household food insecurity."
-   ]
+   ],
+   "pastDrivers": {
+    "2024-Q2": {
+     "origin": "2024-01-01",
+     "probability": 0.2081,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.001,
+       "logOddsEffect": 0.0008,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.256,
+       "logOddsEffect": 0.2267,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.19,
+       "logOddsEffect": -0.1641,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.334,
+       "logOddsEffect": -0.2867,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.125,
+       "logOddsEffect": -0.1085,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 1.9% in the latest two months (through 2023-11) vs this province's reference 6.24%; food minus headline +0.0 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2023-Q4; ENSO El Nino in 2023-Q3; palay production 21.5% year on year (2023-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -12.9% and aquaculture -17.0% year on year (2023-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.61% (2023-Q3), -0.56 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.9% year on year (2023-Q3); USD/PHP -0.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.2867,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.2267,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.07142857142857142
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.1641,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1085,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 14,
+      "other_pct": 0.0,
+      "evidence_quarter": "2023-Q4"
+     }
+    },
+    "2024-Q3": {
+     "origin": "2024-04-01",
+     "probability": 0.5969,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.161,
+       "logOddsEffect": -0.0002,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.142,
+       "logOddsEffect": 0.0175,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.931,
+       "logOddsEffect": -0.0008,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.041,
+       "logOddsEffect": 0.0001,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.338,
+       "logOddsEffect": 0.0222,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation -2.3% in the latest two months (through 2024-02) vs this province's reference 6.24%; food minus headline -2.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2024-Q1; ENSO El Nino in 2023-Q4; palay production 25.0% year on year (2023-Q4)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -29.3% and aquaculture -12.4% year on year (2023-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "no_effect",
+       "evidenceNote": "National unemployment 3.61% (2023-Q4), -0.75 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 3.7% year on year (2023-Q4); USD/PHP -2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0222,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0175,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0008,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0002,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 14,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q1"
+     }
+    },
+    "2024-Q4": {
+     "origin": "2024-07-01",
+     "probability": 0.9562,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.044,
+       "logOddsEffect": -0.0056,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.344,
+       "logOddsEffect": 0.3963,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.581,
+       "logOddsEffect": -0.0514,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -3.934,
+       "logOddsEffect": -0.083,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.624,
+       "logOddsEffect": 0.5466,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 8.0% in the latest two months (through 2024-05) vs this province's reference 6.24%; food minus headline +3.5 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2024-Q2; ENSO El Nino in 2024-Q1; palay production -21.8% year on year (2024-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -65.3% and aquaculture 226.0% year on year (2024-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2024-Q1), -0.80 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2024-Q1); USD/PHP 2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.5466,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.3963,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.3125
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.083,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0514,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 32,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q2"
+     }
+    },
+    "2025-Q1": {
+     "origin": "2024-10-01",
+     "probability": 0.9857,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.024,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.923,
+       "logOddsEffect": 0.0013,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.105,
+       "logOddsEffect": 0.0001,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.779,
+       "logOddsEffect": -0.0003,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.966,
+       "logOddsEffect": 0.0014,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 8.7% in the latest two months (through 2024-08) vs this province's reference 6.24%; food minus headline +3.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "2 typhoon(s) within 300 km in 2024-Q3; ENSO neutral in 2024-Q2; palay production -20.1% year on year (2024-Q2)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -3.1% and aquaculture -81.3% year on year (2024-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.77% (2024-Q2), -0.68 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.8% year on year (2024-Q2); USD/PHP 3.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0014,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0013,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.08333333333333333
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0003,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0001,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 12,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q3"
+     }
+    },
+    "2025-Q4": {
+     "origin": "2025-07-01",
+     "probability": 0.3954,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.049,
+       "gapPoints": -0.024,
+       "hungerPoints": -0.228,
+       "logOddsEffect": -0.0239,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.033,
+       "gapPoints": 0.103,
+       "hungerPoints": -0.496,
+       "logOddsEffect": 0.1035,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.041,
+       "gapPoints": 0.021,
+       "hungerPoints": 0.354,
+       "logOddsEffect": 0.0207,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.108,
+       "gapPoints": 0.126,
+       "hungerPoints": 0.854,
+       "logOddsEffect": 0.1263,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.004,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.648,
+       "logOddsEffect": 0.0432,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 3.8% in the latest two months (through 2025-05) vs this province's reference 6.24%; food minus headline +1.5 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2025-Q2; ENSO neutral in 2025-Q1; palay production 3.2% year on year (2025-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 15.6% and aquaculture -14.1% year on year (2025-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2025-Q1), -0.00 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q1); USD/PHP 3.5%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1263,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.1035,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0432,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0239,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0207,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 9,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q2"
+     }
+    },
+    "2026-Q1": {
+     "origin": "2025-10-01",
+     "probability": 0.2532,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.183,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.261,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.041,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.232,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.024,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.1,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.792,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.015,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.794,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.1% in the latest two months (through 2025-08) vs this province's reference 6.24%; food minus headline +0.1 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q3; ENSO neutral in 2025-Q2; palay production 7.7% year on year (2025-Q2)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -19.3% and aquaculture 5.5% year on year (2025-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.89% (2025-Q2), +0.12 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.8% year on year (2025-Q2); USD/PHP -2.7%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 16,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q3"
+     }
+    },
+    "2026-Q2": {
+     "origin": "2026-01-01",
+     "probability": 0.5457,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.227,
+       "gapPoints": 0.059,
+       "hungerPoints": -0.331,
+       "logOddsEffect": 0.0563,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.37,
+       "gapPoints": -0.185,
+       "hungerPoints": 1.073,
+       "logOddsEffect": -0.1754,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.039,
+       "gapPoints": 0.015,
+       "hungerPoints": 0.12,
+       "logOddsEffect": 0.0141,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.898,
+       "logOddsEffect": 0.0409,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.005,
+       "gapPoints": 0.023,
+       "hungerPoints": 1.407,
+       "logOddsEffect": 0.0216,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 0.9% in the latest two months (through 2025-11) vs this province's reference 6.24%; food minus headline -0.8 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q4; ENSO neutral in 2025-Q3; palay production -13.8% year on year (2025-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -4.6% and aquaculture -8.4% year on year (2025-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.34% (2025-Q3), +0.19 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q3); USD/PHP -0.2%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.1754,
+        "direction": "protective",
+        "trigger_proportion": 0.07407407407407407
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0563,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0409,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0216,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0141,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 27,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q4"
+     }
+    },
+    "2026-Q3": {
+     "origin": "2026-04-01",
+     "probability": 0.8524,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.205,
+       "gapPoints": 0.06,
+       "hungerPoints": -0.076,
+       "logOddsEffect": 0.0422,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.161,
+       "gapPoints": -0.119,
+       "hungerPoints": -0.308,
+       "logOddsEffect": -0.1542,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.038,
+       "gapPoints": 0.013,
+       "hungerPoints": -0.072,
+       "logOddsEffect": 0.0005,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.059,
+       "gapPoints": -0.017,
+       "hungerPoints": 0.152,
+       "logOddsEffect": 0.0094,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.006,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.412,
+       "logOddsEffect": 0.081,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 0.1% in the latest two months (through 2026-02) vs this province's reference 6.24%; food minus headline -1.4 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2026-Q1; ENSO La Nina in 2025-Q4; palay production 19.4% year on year (2025-Q4)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -5.7% and aquaculture -26.6% year on year (2025-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.57% (2025-Q4), +1.13 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.1% year on year (2025-Q4); USD/PHP 0.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.1542,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.081,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0422,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0094,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 35,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q1"
+     }
+    },
+    "2026-Q4": {
+     "origin": "2026-07-01",
+     "probability": 0.281,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.149,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.007,
+       "logOddsEffect": 0.0328,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.122,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.225,
+       "logOddsEffect": 0.028,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.066,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.053,
+       "logOddsEffect": -0.0169,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.467,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.235,
+       "logOddsEffect": -0.1603,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.137,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.0373,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 6.5% in the latest two months (through 2026-05) vs this province's reference 6.24%; food minus headline -1.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q2; ENSO neutral in 2026-Q1; palay production -20.1% year on year (2026-Q1)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production 6.5% and aquaculture -17.5% year on year (2026-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 5.30% (2026-Q1), +1.32 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances n/a (no published figure) year on year (2026-Q1); USD/PHP 1.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.1603,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.0373,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0328,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.02040816326530612
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.028,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.02040816326530612
+       }
+      ],
+      "article_count": 49,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q2"
+     }
+    }
+   }
   },
   "PH040400000": {
    "provinceCode": "PH040400000",
@@ -1387,7 +4795,1143 @@
     "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
     "Employment and OFW evidence are national.",
     "Exploratory food-stress outcome; not verified household food insecurity."
-   ]
+   ],
+   "pastDrivers": {
+    "2024-Q2": {
+     "origin": "2024-01-01",
+     "probability": 0.2032,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.001,
+       "logOddsEffect": 0.0008,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.256,
+       "logOddsEffect": 0.2254,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.19,
+       "logOddsEffect": -0.163,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.334,
+       "logOddsEffect": -0.2847,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.125,
+       "logOddsEffect": -0.1078,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 5.1% in the latest two months (through 2023-11) vs this province's reference 7.10%; food minus headline -0.4 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2023-Q4; ENSO El Nino in 2023-Q3; palay production 76.7% year on year (2023-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -0.5% and aquaculture -10.8% year on year (2023-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.61% (2023-Q3), -0.56 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.9% year on year (2023-Q3); USD/PHP -0.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.2847,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.2254,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.163,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1078,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 9,
+      "other_pct": 0.0,
+      "evidence_quarter": "2023-Q4"
+     }
+    },
+    "2024-Q3": {
+     "origin": "2024-04-01",
+     "probability": 0.0265,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.161,
+       "logOddsEffect": -0.0001,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.142,
+       "logOddsEffect": 0.0073,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.931,
+       "logOddsEffect": -0.0003,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.041,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.338,
+       "logOddsEffect": 0.0092,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.3% in the latest two months (through 2024-02) vs this province's reference 7.10%; food minus headline -2.3 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2024-Q1; ENSO El Nino in 2023-Q4; palay production 4.0% year on year (2023-Q4)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 5.1% and aquaculture -18.8% year on year (2023-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "no_effect",
+       "evidenceNote": "National unemployment 3.61% (2023-Q4), -0.75 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 3.7% year on year (2023-Q4); USD/PHP -2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0092,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0073,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0003,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0001,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 17,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q1"
+     }
+    },
+    "2024-Q4": {
+     "origin": "2024-07-01",
+     "probability": 0.0022,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.044,
+       "logOddsEffect": -0.0002,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.344,
+       "logOddsEffect": 0.0211,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.581,
+       "logOddsEffect": -0.0022,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -3.934,
+       "logOddsEffect": -0.0035,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.624,
+       "logOddsEffect": 0.0314,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 4.3% in the latest two months (through 2024-05) vs this province's reference 7.10%; food minus headline -0.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2024-Q2; ENSO El Nino in 2024-Q1; palay production -61.8% year on year (2024-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 17.4% and aquaculture 41.8% year on year (2024-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2024-Q1), -0.80 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2024-Q1); USD/PHP 2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0314,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0211,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0035,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0022,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 27,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q2"
+     }
+    },
+    "2025-Q1": {
+     "origin": "2024-10-01",
+     "probability": 0.2765,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.024,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.923,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.105,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.779,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.966,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-08) vs this province's reference 7.10%; food minus headline -1.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "2 typhoon(s) within 300 km in 2024-Q3; ENSO neutral in 2024-Q2; palay production -1.3% year on year (2024-Q2)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -13.4% and aquaculture -10.1% year on year (2024-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.77% (2024-Q2), -0.68 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.8% year on year (2024-Q2); USD/PHP 3.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.35
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 40,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q3"
+     }
+    },
+    "2025-Q4": {
+     "origin": "2025-07-01",
+     "probability": 0.0242,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.293,
+       "gapPoints": 0.087,
+       "hungerPoints": -0.228,
+       "logOddsEffect": 0.131,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.018,
+       "gapPoints": 0.081,
+       "hungerPoints": -0.496,
+       "logOddsEffect": 0.1226,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.038,
+       "gapPoints": 0.022,
+       "hungerPoints": 0.354,
+       "logOddsEffect": 0.0331,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.108,
+       "gapPoints": 0.126,
+       "hungerPoints": 0.854,
+       "logOddsEffect": 0.1906,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.004,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.648,
+       "logOddsEffect": 0.0648,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 0.6% in the latest two months (through 2025-05) vs this province's reference 7.10%; food minus headline -1.7 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2025-Q2; ENSO neutral in 2025-Q1; palay production 24.3% year on year (2025-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 11.4% and aquaculture 2.4% year on year (2025-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2025-Q1), -0.00 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q1); USD/PHP 3.5%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1906,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.131,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.1226,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0648,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0331,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 26,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q2"
+     }
+    },
+    "2026-Q1": {
+     "origin": "2025-10-01",
+     "probability": 0.242,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.201,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.261,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.039,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.232,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.028,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.1,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.792,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.015,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.794,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.0% in the latest two months (through 2025-08) vs this province's reference 7.10%; food minus headline -1.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "4 typhoon(s) within 300 km in 2025-Q3; ENSO neutral in 2025-Q2; palay production -24.0% year on year (2025-Q2)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -19.0% and aquaculture -40.3% year on year (2025-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.89% (2025-Q2), +0.12 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.8% year on year (2025-Q2); USD/PHP -2.7%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.175
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 40,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q3"
+     }
+    },
+    "2026-Q2": {
+     "origin": "2026-01-01",
+     "probability": 0.4677,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.19,
+       "gapPoints": 0.042,
+       "hungerPoints": -0.331,
+       "logOddsEffect": 0.0402,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.436,
+       "gapPoints": -0.26,
+       "hungerPoints": 1.073,
+       "logOddsEffect": -0.2462,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.047,
+       "gapPoints": 0.014,
+       "hungerPoints": 0.12,
+       "logOddsEffect": 0.0133,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.898,
+       "logOddsEffect": 0.0409,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.005,
+       "gapPoints": 0.023,
+       "hungerPoints": 1.407,
+       "logOddsEffect": 0.0216,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.4% in the latest two months (through 2025-11) vs this province's reference 7.10%; food minus headline -1.3 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q4; ENSO neutral in 2025-Q3; palay production 1.5% year on year (2025-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 10.2% and aquaculture 17.8% year on year (2025-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.34% (2025-Q3), +0.19 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q3); USD/PHP -0.2%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.2462,
+        "direction": "protective",
+        "trigger_proportion": 0.037037037037037035
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0409,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0402,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0216,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0133,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 27,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q4"
+     }
+    },
+    "2026-Q3": {
+     "origin": "2026-04-01",
+     "probability": 0.0949,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.235,
+       "gapPoints": 0.062,
+       "hungerPoints": -0.076,
+       "logOddsEffect": 0.0779,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.066,
+       "gapPoints": -0.068,
+       "hungerPoints": -0.308,
+       "logOddsEffect": -0.0943,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.022,
+       "gapPoints": 0.019,
+       "hungerPoints": -0.072,
+       "logOddsEffect": 0.0227,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.059,
+       "gapPoints": -0.017,
+       "hungerPoints": 0.152,
+       "logOddsEffect": -0.0175,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.006,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.412,
+       "logOddsEffect": 0.0333,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 0.8% in the latest two months (through 2026-02) vs this province's reference 7.10%; food minus headline -1.8 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q1; ENSO La Nina in 2025-Q4; palay production 32.1% year on year (2025-Q4)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -24.0% and aquaculture -6.0% year on year (2025-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.57% (2025-Q4), +1.13 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.1% year on year (2025-Q4); USD/PHP 0.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.0943,
+        "direction": "protective",
+        "trigger_proportion": 0.02857142857142857
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0779,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0333,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0175,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 35,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q1"
+     }
+    },
+    "2026-Q4": {
+     "origin": "2026-07-01",
+     "probability": 0.0011,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.526,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.007,
+       "logOddsEffect": 0.5279,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.752,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.225,
+       "logOddsEffect": 0.6531,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.047,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.053,
+       "logOddsEffect": 0.0603,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.467,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.235,
+       "logOddsEffect": -0.6971,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.137,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.1885,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 4.6% in the latest two months (through 2026-05) vs this province's reference 7.10%; food minus headline -3.2 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q2; ENSO neutral in 2026-Q1; palay production 1.7% year on year (2026-Q1)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -26.6% and aquaculture -22.7% year on year (2026-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 5.30% (2026-Q1), +1.32 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances n/a (no published figure) year on year (2026-Q1); USD/PHP 1.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.6971,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.6531,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.034482758620689655
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.5279,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.06896551724137931
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1885,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 29,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q2"
+     }
+    }
+   }
   },
   "PH040500000": {
    "provinceCode": "PH040500000",
@@ -1726,7 +6270,1143 @@
     "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
     "Employment and OFW evidence are national.",
     "Exploratory food-stress outcome; not verified household food insecurity."
-   ]
+   ],
+   "pastDrivers": {
+    "2024-Q2": {
+     "origin": "2024-01-01",
+     "probability": 0.1609,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.001,
+       "logOddsEffect": 0.0008,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.256,
+       "logOddsEffect": 0.2152,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.19,
+       "logOddsEffect": -0.1541,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.334,
+       "logOddsEffect": -0.2683,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.125,
+       "logOddsEffect": -0.1021,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 5.9% in the latest two months (through 2023-11) vs this province's reference 7.15%; food minus headline +1.0 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2023-Q4; ENSO El Nino in 2023-Q3; palay production -29.5% year on year (2023-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -33.2% and aquaculture -42.0% year on year (2023-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.61% (2023-Q3), -0.56 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.9% year on year (2023-Q3); USD/PHP -0.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.2683,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.2152,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.1541,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.1021,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 42,
+      "other_pct": 0.0,
+      "evidence_quarter": "2023-Q4"
+     }
+    },
+    "2024-Q3": {
+     "origin": "2024-04-01",
+     "probability": 0.0556,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.161,
+       "logOddsEffect": -0.0001,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.142,
+       "logOddsEffect": 0.0075,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.931,
+       "logOddsEffect": -0.0004,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.041,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 2.338,
+       "logOddsEffect": 0.0095,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.4% in the latest two months (through 2024-02) vs this province's reference 7.15%; food minus headline -1.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2024-Q1; ENSO El Nino in 2023-Q4; palay production 26.4% year on year (2023-Q4)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -37.6% and aquaculture -48.8% year on year (2023-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "no_effect",
+       "evidenceNote": "National unemployment 3.61% (2023-Q4), -0.75 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 3.7% year on year (2023-Q4); USD/PHP -2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0095,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0075,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0004,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0001,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 38,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q1"
+     }
+    },
+    "2024-Q4": {
+     "origin": "2024-07-01",
+     "probability": 0.1569,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.044,
+       "logOddsEffect": -0.0003,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.344,
+       "logOddsEffect": 0.0249,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.581,
+       "logOddsEffect": -0.0026,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -3.934,
+       "logOddsEffect": -0.0041,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.624,
+       "logOddsEffect": 0.0371,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 4.2% in the latest two months (through 2024-05) vs this province's reference 7.15%; food minus headline +0.7 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "1 typhoon(s) within 300 km in 2024-Q2; ENSO El Nino in 2024-Q1; palay production -22.1% year on year (2024-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -21.5% and aquaculture -23.8% year on year (2024-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2024-Q1), -0.80 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2024-Q1); USD/PHP 2.1%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0371,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0249,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.022222222222222223
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0041,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": -0.0026,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 45,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q2"
+     }
+    },
+    "2025-Q1": {
+     "origin": "2024-10-01",
+     "probability": 0.4133,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.024,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "F_now"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.923,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "enso",
+        "enso_l2",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.105,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.779,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.0,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.966,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "no_effect",
+       "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-08) vs this province's reference 7.15%; food minus headline +0.4 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "2 typhoon(s) within 300 km in 2024-Q3; ENSO neutral in 2024-Q2; palay production -38.0% year on year (2024-Q2)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production 19.4% and aquaculture -0.8% year on year (2024-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.77% (2024-Q2), -0.68 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.8% year on year (2024-Q2); USD/PHP 3.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.02631578947368421
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.13157894736842105
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 38,
+      "other_pct": 0.0,
+      "evidence_quarter": "2024-Q3"
+     }
+    },
+    "2025-Q4": {
+     "origin": "2025-07-01",
+     "probability": 0.2863,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.149,
+       "gapPoints": 0.04,
+       "hungerPoints": -0.228,
+       "logOddsEffect": 0.0411,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.053,
+       "gapPoints": 0.108,
+       "hungerPoints": -0.496,
+       "logOddsEffect": 0.1128,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.032,
+       "gapPoints": 0.021,
+       "hungerPoints": 0.354,
+       "logOddsEffect": 0.0221,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.108,
+       "gapPoints": 0.126,
+       "hungerPoints": 0.854,
+       "logOddsEffect": 0.1309,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.004,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.648,
+       "logOddsEffect": 0.0447,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.8% in the latest two months (through 2025-05) vs this province's reference 7.15%; food minus headline +0.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2025-Q2; ENSO neutral in 2025-Q1; palay production 24.2% year on year (2025-Q1)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -6.5% and aquaculture -16.4% year on year (2025-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.98% (2025-Q1), -0.00 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q1); USD/PHP 3.5%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1309,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.1128,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0447,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0411,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0221,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 42,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q2"
+     }
+    },
+    "2026-Q1": {
+     "origin": "2025-10-01",
+     "probability": 0.39,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.128,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.261,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.126,
+       "gapPoints": 0.0,
+       "hungerPoints": -1.232,
+       "logOddsEffect": -0.0,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.034,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": 0.1,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.792,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": 0.015,
+       "gapPoints": 0.0,
+       "hungerPoints": 1.794,
+       "logOddsEffect": 0.0,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 1.7% in the latest two months (through 2025-08) vs this province's reference 7.15%; food minus headline +0.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q3; ENSO neutral in 2025-Q2; palay production 76.2% year on year (2025-Q2)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -6.4% and aquaculture -0.6% year on year (2025-Q2); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 3.89% (2025-Q2), +0.12 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 2.8% year on year (2025-Q2); USD/PHP -2.7%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.0,
+        "direction": "protective",
+        "trigger_proportion": 0.09090909090909091
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 55,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q3"
+     }
+    },
+    "2026-Q2": {
+     "origin": "2026-01-01",
+     "probability": 0.0562,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.363,
+       "gapPoints": 0.102,
+       "hungerPoints": -0.331,
+       "logOddsEffect": 0.1305,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.303,
+       "gapPoints": -0.166,
+       "hungerPoints": 1.073,
+       "logOddsEffect": -0.2071,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.029,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.12,
+       "logOddsEffect": 0.0213,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.007,
+       "gapPoints": 0.043,
+       "hungerPoints": 0.898,
+       "logOddsEffect": 0.0548,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.005,
+       "gapPoints": 0.023,
+       "hungerPoints": 1.407,
+       "logOddsEffect": 0.0289,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation -0.7% in the latest two months (through 2025-11) vs this province's reference 7.15%; food minus headline -1.4 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "3 typhoon(s) within 300 km in 2025-Q4; ENSO neutral in 2025-Q3; palay production 1.2% year on year (2025-Q3)."
+      },
+      "fish_kill": {
+       "status": "contributes",
+       "evidenceNote": "Fisheries production -19.3% and aquaculture -22.3% year on year (2025-Q3); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.34% (2025-Q3), +0.19 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.6% year on year (2025-Q3); USD/PHP -0.2%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.2071,
+        "direction": "protective",
+        "trigger_proportion": 0.08695652173913043
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.1305,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.0548,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0289,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0213,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 23,
+      "other_pct": 0.0,
+      "evidence_quarter": "2025-Q4"
+     }
+    },
+    "2026-Q3": {
+     "origin": "2026-04-01",
+     "probability": 0.0655,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.31,
+       "gapPoints": 0.089,
+       "hungerPoints": -0.076,
+       "logOddsEffect": 0.1203,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": -0.301,
+       "gapPoints": -0.152,
+       "hungerPoints": -0.308,
+       "logOddsEffect": -0.2116,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": -0.055,
+       "gapPoints": 0.019,
+       "hungerPoints": -0.072,
+       "logOddsEffect": 0.025,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.059,
+       "gapPoints": -0.017,
+       "hungerPoints": 0.152,
+       "logOddsEffect": -0.019,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.006,
+       "gapPoints": 0.017,
+       "hungerPoints": 0.412,
+       "logOddsEffect": 0.0343,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation -0.6% in the latest two months (through 2026-02) vs this province's reference 7.15%; food minus headline -1.6 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q1; ENSO La Nina in 2025-Q4; palay production -9.3% year on year (2025-Q4)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production 42.4% and aquaculture 136.5% year on year (2025-Q4); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 4.57% (2025-Q4), +1.13 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances 1.1% year on year (2025-Q4); USD/PHP 0.9%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.2116,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.1203,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": 0.0343,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.019,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 40,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q1"
+     }
+    },
+    "2026-Q4": {
+     "origin": "2026-07-01",
+     "probability": 0.0546,
+     "fiveTriggerContributions": {
+      "market": {
+       "foodInflationPoints": 0.408,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.007,
+       "logOddsEffect": 0.0072,
+       "featuresWithNonzeroWeight": [
+        "D_now",
+        "F_hat_M1",
+        "F_now",
+        "gap_now",
+        "rice_whsl_yoy"
+       ]
+      },
+      "climate": {
+       "foodInflationPoints": 0.82,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.225,
+       "logOddsEffect": 0.0095,
+       "featuresWithNonzeroWeight": [
+        "corn_yoy",
+        "enso",
+        "enso_l2",
+        "enso_x_mom",
+        "palay_yoy",
+        "tc_count",
+        "tc_count_l1",
+        "tcl1_x_palay"
+       ]
+      },
+      "fish_kill": {
+       "foodInflationPoints": 0.026,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.053,
+       "logOddsEffect": 0.0009,
+       "featuresWithNonzeroWeight": [
+        "aqua_yoy",
+        "fish_yoy"
+       ]
+      },
+      "employment": {
+       "foodInflationPoints": -0.467,
+       "gapPoints": 0.0,
+       "hungerPoints": -0.235,
+       "logOddsEffect": -0.0299,
+       "featuresWithNonzeroWeight": [
+        "under_yoy",
+        "ur_yoy"
+       ]
+      },
+      "ofw_remittance": {
+       "foodInflationPoints": -0.137,
+       "gapPoints": 0.0,
+       "hungerPoints": 0.071,
+       "logOddsEffect": -0.0051,
+       "featuresWithNonzeroWeight": [
+        "fx_yoy",
+        "remit_php_yoy",
+        "remit_usd_yoy"
+       ]
+      }
+     },
+     "triggerStatus": {
+      "market": {
+       "status": "contributes",
+       "evidenceNote": "Food inflation 2.1% in the latest two months (through 2026-05) vs this province's reference 7.15%; food minus headline -2.9 points."
+      },
+      "climate": {
+       "status": "contributes",
+       "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q2; ENSO neutral in 2026-Q1; palay production -59.0% year on year (2026-Q1)."
+      },
+      "fish_kill": {
+       "status": "no_effect",
+       "evidenceNote": "Fisheries production -22.8% and aquaculture -30.2% year on year (2026-Q1); no official fish-kill event series."
+      },
+      "employment": {
+       "status": "contributes",
+       "evidenceNote": "National unemployment 5.30% (2026-Q1), +1.32 points year on year; national figure, the same for every province."
+      },
+      "ofw_remittance": {
+       "status": "contributes",
+       "evidenceNote": "National cash remittances n/a (no published figure) year on year (2026-Q1); USD/PHP 1.8%; national figure."
+      }
+     },
+     "drivers": {
+      "drivers": [
+       {
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": -0.0299,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 0.0095,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0072,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.03125
+       },
+       {
+        "driver_group": "ofw_remittance",
+        "driver_label": "OFW Remittance",
+        "group_shap": -0.0051,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
+        "driver_group": "fish_kill",
+        "driver_label": "Fish Kill",
+        "group_shap": 0.0,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       }
+      ],
+      "article_count": 32,
+      "other_pct": 0.0,
+      "evidence_quarter": "2026-Q2"
+     }
+    }
+   }
   }
  },
  "assessment": {
@@ -1856,5 +7536,5 @@
   "addendum_sha256": "ed0db548849848a51ff23f872759e4b38be0b70f8805d3175656321740df455c",
   "e43_record_sha256": "fc9e42662cfa554e6368ac63b3712dc27bddbf4b9987930a1f4cf9ab5037f78b"
  },
- "content_sha256": "ca9359e45970e0102e401ed29ff445666a89907bf80b4adf908f25be38908fb3"
+ "content_sha256": "069c3653fe031b6ee9cff6556fcdacf6086adad32e413a7ebbcaa0a5b8a63812"
 }
