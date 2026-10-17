@@ -1,0 +1,34 @@
+feature,group,source,geography,reference_at_issue,transformation,share_missing_2023Q4_2026Q3_origins,origins_all_missing,use,in_market_only_set
+F_hat_M1,market,PSA CPI food index (OpenSTAT 0012M4ACP22),province,months through m0 (published before O(t)),E41 M1 drift projection of quarter-mean food YoY at t+2,0.0,,E55-LGBM trees (all-groups configurations),True
+F_now,market,PSA CPI food YoY,province,latest two published months,"mean YoY, %",0.0,,E55-LGBM trees (all-groups configurations),True
+D_now,market,PSA CPI food YoY,province,latest two published months,province minus five-province mean,0.0,,E55-LGBM trees (all-groups configurations),True
+gap_now,market,PSA CPI food and all-items YoY,province,latest two published months,food minus headline YoY,0.0,,E55-LGBM trees (all-groups configurations),True
+rice_whsl_yoy,market,PSA wholesale rice prices,province,quarter t-1,YoY %,0.083,,E55-LGBM trees (all-groups configurations),True
+tariff_yoy_regime,market,EO 62 (2024) rice tariff cut,national,orders announced before O(t),share of target months whose YoY compares post-cut with pre-cut,0.0,,E55-LGBM trees (all-groups configurations),True
+import_suspension_share,market,DA rice import suspension orders,national,announced before O(t),share of target months covered,0.0,,E55-LGBM trees (all-groups configurations),True
+price_ceiling_share,market,rice price ceiling / MSRP orders,national,announced before O(t),share of target months covered,0.0,,E55-LGBM trees (all-groups configurations),True
+food_emergency_share,market,food security emergency declaration,national,announced before O(t),share of target months covered,0.0,,E55-LGBM trees (all-groups configurations),True
+tc_count,climate,IBTrACS typhoon tracks,province (300 km),quarter t,count,0.0,,E55-LGBM trees (all-groups configurations),False
+tc_count_l1,climate,IBTrACS typhoon tracks,province (300 km),quarter t-1,count,0.0,,E55-LGBM trees (all-groups configurations),False
+enso,climate,NOAA ONI,national,quarter t-1,El Nino 1 / neutral 0 / La Nina -1,0.0,,E55-LGBM trees (all-groups configurations),False
+enso_l2,climate,NOAA ONI,national,quarter t-2,phase code,0.0,,E55-LGBM trees (all-groups configurations),False
+palay_yoy,climate,PSA palay production (OpenSTAT 0012E4EVCP0),province,quarter t-1,YoY %,0.0,,E55-LGBM trees (all-groups configurations),False
+corn_yoy,climate,PSA corn production,province,quarter t-1,YoY %,0.0,,E55-LGBM trees (all-groups configurations),False
+enso_x_mom,climate,ONI x CPI momentum,province,t-1 / latest months,interaction,0.0,,E55-LGBM trees (all-groups configurations),False
+tcl1_x_palay,climate,typhoons x palay,province,t-1,interaction,0.0,,E55-LGBM trees (all-groups configurations),False
+fish_yoy,fish_kill,PSA fisheries production (0132E4GVFP1),province,quarter t-1,YoY %; no official fish-kill event series exists,0.0,,E55-LGBM trees (all-groups configurations),False
+aqua_yoy,fish_kill,PSA aquaculture production,province,quarter t-1,YoY %,0.0,,E55-LGBM trees (all-groups configurations),False
+ur_yoy,employment,PSA LFS unemployment rate,national,quarter t-1,YoY points,0.0,,E55-LGBM trees (all-groups configurations),False
+under_yoy,employment,PSA LFS underemployment rate,national,quarter t-1,YoY points,0.0,,E55-LGBM trees (all-groups configurations),False
+remit_usd_yoy,ofw_remittance,BSP OF cash remittances,national,quarter t-1 (dataset ends 2025-Q4),YoY %,0.167,2026-Q2;2026-Q3,E55-LGBM trees (all-groups configurations),False
+remit_php_yoy,ofw_remittance,BSP remittances x USD/PHP,national,quarter t-1 (dataset ends 2025-Q4),YoY %,0.167,2026-Q2;2026-Q3,E55-LGBM trees (all-groups configurations),False
+fx_yoy,ofw_remittance,ECB USD/PHP reference rate,national,quarter t-1,YoY %,0.0,,E55-LGBM trees (all-groups configurations),False
+news_market,market,"news corpus, trigger classifier",province,quarter t,share of titles,0.0,,E55-LGBM trees (all-groups configurations),False
+news_climate,climate,"news corpus, trigger classifier",province,quarter t,share of titles,0.0,,E55-LGBM trees (all-groups configurations),False
+news_fish_kill,fish_kill,"news corpus, trigger classifier",province,quarter t,share of titles,0.0,,E55-LGBM trees (all-groups configurations),False
+news_employment,employment,"news corpus, trigger classifier",province,quarter t,share of titles,0.0,,E55-LGBM trees (all-groups configurations),False
+news_ofw_remittance,ofw_remittance,"news corpus, trigger classifier",province,quarter t,share of titles,0.0,,E55-LGBM trees (all-groups configurations),False
+news_n,other,news corpus,province,quarter t,article count,0.0,,E55-LGBM trees (all-groups configurations),False
+pov,poverty,PSA 2021 municipal SAE (141 LGUs),province mean of municipal estimates,2021 (published 2024; known from O >= 2025-01-01 in POV-AS),centred across provinces,0.333,2023-Q4;2024-Q1;2024-Q2;2024-Q3,POV-AS / POV-LA arms only,False
+base_m (offset),market,PSA CPI food and all-items index,province,months through m0,base-effect projection of food YoY and gap at t+2 -> structural probability -> LightGBM init_score,0.0,,E55-LGBM offset,False
+H (hunger gate),hunger,"SWS Balance Luzon hunger (sws_rounds.csv, approved rounds)",region,rounds posted before O(t),I7 ridge -> P(H(t+2) > 11.3),0.0,,E55-LGBM hunger gate,False
