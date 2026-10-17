@@ -19,6 +19,21 @@ sys.path.insert(0, str(EXP / "E38_Lead2_Diagnosis_Tuning" / "runner"))
 import e38_lib as E  # noqa: E402  (installs the E32 guard)
 
 E.L7.L6.guard32.EXP = E51
+
+# DEVIATIONS.md D-1: E38's inner threshold rule guards against < 3 LOW prior rows but not < 3 HIGH rows (never reached on
+# its own label). On a target whose prior dates hold no HIGH row its maximisation is over NaNs and fails. The symmetric
+# guard returns 0.5, exactly like the existing LOW guard; every case the original handles is passed through unchanged.
+_E38_THRESHOLD = E.threshold
+
+
+def _threshold_guarded(prior, preds, labels, cfg):
+    ys = [labels[tj][p] for tj in prior for p in E.PROVS]
+    if sum(1 for y in ys if y == 1) < 3:
+        return 0.5, {"rule": "0.5 (fewer than 3 HIGH rows on prior dates; E51 D-1 symmetric guard)"}
+    return _E38_THRESHOLD(prior, preds, labels, cfg)
+
+
+E.threshold = _threshold_guarded
 np, pd, qk, qs, PROVS, L6 = E.np, E.pd, E.qk, E.qs, E.PROVS, E.L6
 K2 = 2
 RUN36 = EXP / "E36_LightGBM_One_Quarter_Ahead" / "runs" / "20261015T023921Z" / "predictions.csv"

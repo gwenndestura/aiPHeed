@@ -1,0 +1,17 @@
+C:\Users\admin\aipheed\backend\venv\Lib\site-packages\numpy\_core\fromnumeric.py:3824: RuntimeWarning: Mean of empty slice
+  return _methods._mean(a, axis=axis, dtype=dtype,
+C:\Users\admin\aipheed\backend\venv\Lib\site-packages\numpy\_core\_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+Traceback (most recent call last):
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E51_Target_Definition\runner\e51_compare.py", line 255, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E51_Target_Definition\runner\e51_compare.py", line 191, in main
+    Pr, info = E.walk_forward(dl)
+               ~~~~~~~~~~~~~~^^^^
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E38_Lead2_Diagnosis_Tuning\runner\e38_lib.py", line 152, in walk_forward
+    th, tinfo = threshold(prior, preds, labels, cfg)
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E38_Lead2_Diagnosis_Tuning\runner\e38_lib.py", line 138, in threshold
+    th = min((x for x in THRESHOLDS if res[x] >= best - 1e-12), key=lambda x: (abs(x - 0.5), x))
+ValueError: min() iterable argument is empty
