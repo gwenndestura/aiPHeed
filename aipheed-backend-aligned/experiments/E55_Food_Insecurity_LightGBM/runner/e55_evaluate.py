@@ -34,7 +34,7 @@ ARMS = {"E55-LGBM": {}, "POV-AS": {"pov": "AS"}, "POV-LA": {"pov": "LA"}, "FE": 
 DIAGS = list(F.DIAG)
 BASELINES = ["B1_PERSIST", "B2_LR_GOV", "B3_LGBM_GOV", "B4_LR_NLP", "B5_LGBM_NLP", "B6_LR_COMB", "B7_E38PROC",
              "CLIM", "HIGH", "LOW"]
-COMPARATORS = ["I7", "I7-BASE", "E52", "E38-served"]
+COMPARATORS = ["I7", "I7-BASE", "E52"]   # D-2: E38-served (EQ3-T, non-equivalent) scored separately on its own rows
 FROZEN = F.E55 / "frozen" / "E55_LGBM_PROSPECTIVE_2027Q1.json"
 
 
@@ -154,10 +154,11 @@ def main():
     R["I7_p"] = [float(p7.loc[k, "I7_p"]) for k in keys]
     R["I7-BASE_p"] = [float(p7.loc[k, "I7-BASE_p"]) for k in keys]
     R["E52_p"] = [float(p7.loc[k, "I7_p_price"]) for k in keys]
-    R["E38-served_p"] = [float(p38.loc[k, "p"]) for k in keys]
+    R["E38-served_p"] = [float(p38.loc[k, "p"]) if k in p38.index else np.nan for k in keys]
+    R["E38-served_thr"] = [float(p38.loc[k, "threshold"]) if k in p38.index else np.nan for k in keys]
     for a in ("I7", "I7-BASE", "E52"):
         R[f"{a}_yhat"] = (R[f"{a}_p"] >= 0.5).astype(int)
-    R["E38-served_yhat"] = (R["E38-served_p"] >= np.array([float(p38.loc[k, "threshold"]) for k in keys])).astype(int)
+    R["E38-served_yhat"] = (R["E38-served_p"] >= R["E38-served_thr"]).astype(int)
     R = R.sort_values(["target", "province_code"]).reset_index(drop=True)
     R.to_csv(out / "rows.csv", index=False, float_format="%.12g")
     keys50 = list(zip(W50["target"], W50["province_code"]))
@@ -177,6 +178,8 @@ def main():
     # ------------------------------------------------------------------ metrics
     all_arms = list(ARMS) + DIAGS + BASELINES + COMPARATORS
     M = E.block(R, all_arms, seed=55)
+    R38 = R[R["E38-served_p"].notna()]
+    M38 = E.block(R38, ["E38-served", "E55-LGBM", "B1_PERSIST", "HIGH", "LOW"], seed=55)
     cal = {a: E.calibration(R["y"], R[f"{a}_p"]) for a in all_arms if a not in ("HIGH", "LOW")}
     crit = {a: criteria(R, a, M) for a in list(ARMS) + DIAGS + COMPARATORS}
     paired = {a: E.paired_brier(R, a, "E55-LGBM", seed=55) for a in all_arms if a != "E55-LGBM"}
@@ -216,6 +219,9 @@ def main():
            "LOW": int((R["y"] == 0).sum()), "quarters": sorted(R["target"].unique().tolist()),
            "t43_equals_ps_on_rows": True, "approved_subset": {"rows": int(len(app)), "HIGH": int(app["y"].sum()), "metrics": M_app},
            "metrics": M, "calibration": cal,
+           "e38_served_non_equivalent": {"rows": int(len(R38)), "quarters": sorted(R38["target"].unique().tolist()),
+                                         "metrics": M38, "note": "E38 forecasts the thesis Eq.3 label (EQ3-T), not T43; "
+                                         "scored against T43 for information only; no E38 forecast for 2025-Q2/Q3"},
            "supplementary_50_rows": {"rows": int(len(R50)), "HIGH": int(R50["y"].sum()), "metrics": M50,
                                      "note": "all 50 E52 rows incl. 2024-Q2; Objective 4 baselines B1-B7 absent there (D-1)"}, "criteria": crit, "paired_brier_vs_E55_LGBM": paired,
            "poverty": pov, "poverty_LA_vs_FE": pov_fe, "trigger_ablation": abl, "served_arm": served,

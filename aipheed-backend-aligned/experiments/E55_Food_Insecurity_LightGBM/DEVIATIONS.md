@@ -19,3 +19,15 @@
 **What did not change.** The labels, the rows' labels (checked against E52), the models, the grids and the decision rules.
 
 **Information seen before this deviation:** only the baseline run's row count, quarters and HIGH count (14). No model score was seen.
+
+## D-2 (2026-10-17, run aborted before any metric)
+
+**What happened.**
+- Run `runs/<first stamp>` (marked `ABORTED.txt`) stopped with a KeyError while it was assembling the rows.
+- The committed E38 predictions forecast the thesis Eq.3 label. That label has no value in 2025-Q2/Q3 (no approved SWS round), so E38 has no prediction there.
+- No metric had been computed. The predictions file of the aborted run is kept.
+
+**Fix.**
+- E38-served is a non-equivalent comparator (PROTOCOL section 7). It is removed from the identical-rows block.
+- It is scored separately, against T43 and for information only, on the 35 rows where it exists.
+- Nothing else changes.

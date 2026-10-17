@@ -1,0 +1,71 @@
+origin 2023-Q4 done
+origin 2024-Q1 done
+origin 2024-Q2 done
+origin 2024-Q3 done
+origin 2024-Q4 done
+origin 2025-Q1 done
+origin 2025-Q2 done
+origin 2025-Q3 done
+origin 2025-Q4 done
+origin 2026-Q1 done
+origin 2026-Q2 done
+origin 2026-Q3 done
+Traceback (most recent call last):
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    return self._engine.get_loc(casted_key)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: '2025-Q2'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "pandas/_libs/index.pyx", line 786, in pandas._libs.index.BaseMultiIndexCodesEngine.get_loc
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 3819, in get_loc
+    raise KeyError(key) from err
+KeyError: '2025-Q2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\multi.py", line 3239, in _get_loc_level
+    return (self._engine.get_loc(key), None)
+            ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "pandas/_libs/index.pyx", line 789, in pandas._libs.index.BaseMultiIndexCodesEngine.get_loc
+KeyError: ('2025-Q2', 'PH040100000')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E55_Food_Insecurity_LightGBM\runner\e55_evaluate.py", line 240, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E55_Food_Insecurity_LightGBM\runner\e55_evaluate.py", line 157, in main
+    R["E38-served_p"] = [float(p38.loc[k, "p"]) for k in keys]
+                               ~~~~~~~^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1185, in __getitem__
+    return self._getitem_tuple(key)
+           ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1369, in _getitem_tuple
+    return self._getitem_lowerdim(tup)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1042, in _getitem_lowerdim
+    return self._getitem_nested_tuple(tup)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1154, in _getitem_nested_tuple
+    obj = getattr(obj, self.name)._getitem_axis(key, axis=axis)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1432, in _getitem_axis
+    return self._get_label(key, axis=axis)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexing.py", line 1382, in _get_label
+    return self.obj.xs(label, axis=axis)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\generic.py", line 4315, in xs
+    loc, new_index = index._get_loc_level(key, level=0)
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\indexes\multi.py", line 3241, in _get_loc_level
+    raise KeyError(key) from err
+KeyError: ('2025-Q2', 'PH040100000')
