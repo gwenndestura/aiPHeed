@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogOut, Sun, Moon, Compass } from "lucide-react";
+import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogIn, LogOut, Sun, Moon, Compass } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { useAuth } from "@/lib/auth";
@@ -30,6 +30,7 @@ export function TopNavbar({ active = "none" }: Props) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const isAdmin = status === "authenticated";
+  const signedOut = status === "anonymous";
   const isDemo = isAdmin && !!user?.isDemo;
   // Fetched with the header, so the menu's pending count is ready when it opens.
   // Never for the demo account, which may not see account requests at all.
@@ -80,15 +81,17 @@ export function TopNavbar({ active = "none" }: Props) {
         <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu" data-tour="pages">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
-        <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100]">
-          <SheetHeader>
+        {/* A full-height column: the items scroll when the screen is short
+            (a phone held sideways); the sign-in footer stays at the bottom. */}
+        <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100] flex flex-col gap-0 p-0">
+          <SheetHeader className="shrink-0 px-6 pt-6">
             <SheetTitle className="text-sm">Menu</SheetTitle>
           </SheetHeader>
-          <div className="mt-6 space-y-1">
+          <div className={`flex-1 min-h-0 overflow-y-auto thin-scrollbar px-6 mt-6 space-y-1 ${signedOut ? "pb-4" : "pb-[calc(1.5rem+env(safe-area-inset-bottom))]"}`}>
             {isAdmin ? <AdminMenuLinks demo={isDemo} /> : <PublicMenuLinks active={active} />}
             <PSTClockMenuRow from={isAdmin ? "xl" : "lg"} />
-            {/* Public visitors have no account section: administrators sign in
-                at /login (linked from the landing page footer). */}
+            {/* Signed in: Accounts and Sign out. Visitors who are not signed in
+                get "Admin sign in" in the footer at the bottom of the menu. */}
             {isAdmin && (
               <>
                 <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
@@ -153,6 +156,21 @@ export function TopNavbar({ active = "none" }: Props) {
               </SheetClose>
             </div>
           </div>
+
+          {/* Footer for visitors who are not signed in: the way to /login for DA
+              staff (the only sign-in form). Kept apart from the items above. */}
+          {signedOut && (
+            <div className="shrink-0 border-t border-border/40 px-6 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
+                DA staff
+              </p>
+              <SheetClose asChild>
+                <Link to="/login" className="block w-full">
+                  <MenuRow icon={LogIn} label="Admin sign in" hint="For DA CALABARZON staff only" wrapHint />
+                </Link>
+              </SheetClose>
+            </div>
+          )}
         </SheetContent>
       </Sheet>
 
@@ -277,13 +295,14 @@ export function NavBtn({ label, active, to }: { label: string; active?: boolean;
   );
 }
 
-function MenuRow({ icon: Icon, label, hint, badge }: { icon: typeof Home; label: string; hint?: string; badge?: React.ReactNode }) {
+/** `wrapHint`: the hint may take a second line instead of being cut off (phones show it larger). */
+function MenuRow({ icon: Icon, label, hint, badge, wrapHint = false }: { icon: typeof Home; label: string; hint?: string; badge?: React.ReactNode; wrapHint?: boolean }) {
   return (
     <span className="w-full flex items-center gap-3 px-2 py-2 max-lg:min-h-11 rounded-md hover:bg-secondary/60 transition-colors text-left">
       <Icon className="h-3.5 w-3.5 text-muted-foreground" />
       <span className="flex-1 min-w-0">
         <span className="block text-[11px] font-medium">{label}</span>
-        {hint && <span className="block text-[9px] text-muted-foreground/70 truncate">{hint}</span>}
+        {hint && <span className={`block text-[9px] text-muted-foreground/70 ${wrapHint ? "leading-snug" : "truncate"}`}>{hint}</span>}
       </span>
       {badge}
     </span>
