@@ -1,0 +1,669 @@
+{
+ "before_fix_explanation": "In AIPHEED_LEAD2_MODEL=e44 the timeline's past and current quarters showed the E31/E36 LightGBM probability of the v1 label (S1 = SWS hunger + 2 x food-CPI deviation, HIGH when above the trailing median), while the target quarter showed the E44 probability of T43. Two models, two target events.",
+ "provinces": {
+  "Cavite": {
+   "latest_observed_quarter": "2026-Q3",
+   "observed_raw": {
+    "sws_hunger_balance_luzon_pct": 23.6,
+    "food_yoy_pct": 3.833,
+    "headline_yoy_pct": 5.233,
+    "food_minus_headline": -1.4,
+    "thresholds": {
+     "H": 11.3,
+     "food_P60": 4.713,
+     "gap_P60": 0.74
+    }
+   },
+   "observed_T43_label": "LOW",
+   "v1_label_for_comparison": {
+    "observed_S1": 24.5467,
+    "observed_label": "HIGH",
+    "E36_backtest_probability_shown_before_fix": 0.9841
+   },
+   "candidate_backtest_2026Q3": {
+    "probability": 0.261,
+    "decision": "LOW",
+    "observedHigh": false
+   },
+   "forecast_target_quarter": "2027-Q1",
+   "forecast_uncalibrated_p_hunger_x_p_price": 0.2492,
+   "forecast_calibrated_probability": 0.19305655309179295,
+   "displayed_before_fix": {
+    "2026-Q3": 0.9841,
+    "2027-Q1": 0.19305655309179295
+   },
+   "displayed_after_fix": {
+    "2026-Q1": 0.291,
+    "2026-Q2": 0.21,
+    "2026-Q3": 0.261,
+    "2026-Q4": 0.221,
+    "2027-Q1": 0.19305655309179295
+   },
+   "difference_backtest_vs_forecast_same_score": -0.0679
+  },
+  "Laguna": {
+   "latest_observed_quarter": "2026-Q3",
+   "observed_raw": {
+    "sws_hunger_balance_luzon_pct": 23.6,
+    "food_yoy_pct": 3.633,
+    "headline_yoy_pct": 7.333,
+    "food_minus_headline": -3.7,
+    "thresholds": {
+     "H": 11.3,
+     "food_P60": 6.053,
+     "gap_P60": 0.607
+    }
+   },
+   "observed_T43_label": "LOW",
+   "v1_label_for_comparison": {
+    "observed_S1": 24.1467,
+    "observed_label": "HIGH",
+    "E36_backtest_probability_shown_before_fix": 0.9987
+   },
+   "candidate_backtest_2026Q3": {
+    "probability": 0.233,
+    "decision": "LOW",
+    "observedHigh": false
+   },
+   "forecast_target_quarter": "2027-Q1",
+   "forecast_uncalibrated_p_hunger_x_p_price": 0.2915,
+   "forecast_calibrated_probability": 0.19686495323951828,
+   "displayed_before_fix": {
+    "2026-Q3": 0.9987,
+    "2027-Q1": 0.19686495323951828
+   },
+   "displayed_after_fix": {
+    "2026-Q1": 0.308,
+    "2026-Q2": 0.315,
+    "2026-Q3": 0.233,
+    "2026-Q4": 0.224,
+    "2027-Q1": 0.19686495323951828
+   },
+   "difference_backtest_vs_forecast_same_score": -0.0361
+  },
+  "Quezon": {
+   "latest_observed_quarter": "2026-Q3",
+   "observed_raw": {
+    "sws_hunger_balance_luzon_pct": 23.6,
+    "food_yoy_pct": 4.533,
+    "headline_yoy_pct": 6.5,
+    "food_minus_headline": -1.967,
+    "thresholds": {
+     "H": 11.3,
+     "food_P60": 6.24,
+     "gap_P60": -0.56
+    }
+   },
+   "observed_T43_label": "LOW",
+   "v1_label_for_comparison": {
+    "observed_S1": 25.9467,
+    "observed_label": "HIGH",
+    "E36_backtest_probability_shown_before_fix": 0.9952
+   },
+   "candidate_backtest_2026Q3": {
+    "probability": 0.3,
+    "decision": "LOW",
+    "observedHigh": false
+   },
+   "forecast_target_quarter": "2027-Q1",
+   "forecast_uncalibrated_p_hunger_x_p_price": 0.4637,
+   "forecast_calibrated_probability": 0.21037295413220033,
+   "displayed_before_fix": {
+    "2026-Q3": 0.9952,
+    "2027-Q1": 0.21037295413220033
+   },
+   "displayed_after_fix": {
+    "2026-Q1": 0.323,
+    "2026-Q2": 0.211,
+    "2026-Q3": 0.3,
+    "2026-Q4": 0.214,
+    "2027-Q1": 0.21037295413220033
+   },
+   "difference_backtest_vs_forecast_same_score": -0.0896
+  },
+  "Rizal": {
+   "latest_observed_quarter": "2026-Q3",
+   "observed_raw": {
+    "sws_hunger_balance_luzon_pct": 23.6,
+    "food_yoy_pct": 4.067,
+    "headline_yoy_pct": 7.1,
+    "food_minus_headline": -3.033,
+    "thresholds": {
+     "H": 11.3,
+     "food_P60": 7.1,
+     "gap_P60": 0.92
+    }
+   },
+   "observed_T43_label": "LOW",
+   "v1_label_for_comparison": {
+    "observed_S1": 25.0133,
+    "observed_label": "HIGH",
+    "E36_backtest_probability_shown_before_fix": 0.9846
+   },
+   "candidate_backtest_2026Q3": {
+    "probability": 0.227,
+    "decision": "LOW",
+    "observedHigh": false
+   },
+   "forecast_target_quarter": "2027-Q1",
+   "forecast_uncalibrated_p_hunger_x_p_price": 0.2241,
+   "forecast_calibrated_probability": 0.19061339031886357,
+   "displayed_before_fix": {
+    "2026-Q3": 0.9846,
+    "2027-Q1": 0.19061339031886357
+   },
+   "displayed_after_fix": {
+    "2026-Q1": 0.357,
+    "2026-Q2": 0.386,
+    "2026-Q3": 0.227,
+    "2026-Q4": 0.227,
+    "2027-Q1": 0.19061339031886357
+   },
+   "difference_backtest_vs_forecast_same_score": -0.0364
+  },
+  "Batangas": {
+   "latest_observed_quarter": "2026-Q3",
+   "observed_raw": {
+    "sws_hunger_balance_luzon_pct": 23.6,
+    "food_yoy_pct": 0.733,
+    "headline_yoy_pct": 4.8,
+    "food_minus_headline": -4.067,
+    "thresholds": {
+     "H": 11.3,
+     "food_P60": 7.153,
+     "gap_P60": 0.66
+    }
+   },
+   "observed_T43_label": "LOW",
+   "v1_label_for_comparison": {
+    "observed_S1": 18.3467,
+    "observed_label": "HIGH",
+    "E36_backtest_probability_shown_before_fix": 0.9953
+   },
+   "candidate_backtest_2026Q3": {
+    "probability": 0.2,
+    "decision": "LOW",
+    "observedHigh": false
+   },
+   "forecast_target_quarter": "2027-Q1",
+   "forecast_uncalibrated_p_hunger_x_p_price": 0.2867,
+   "forecast_calibrated_probability": 0.19648070877651264,
+   "displayed_before_fix": {
+    "2026-Q3": 0.9953,
+    "2027-Q1": 0.19648070877651264
+   },
+   "displayed_after_fix": {
+    "2026-Q1": 0.385,
+    "2026-Q2": 0.195,
+    "2026-Q3": 0.2,
+    "2026-Q4": 0.216,
+    "2027-Q1": 0.19648070877651264
+   },
+   "difference_backtest_vs_forecast_same_score": -0.0035
+  }
+ },
+ "api_after_fix_e44": {
+  "2026-Q1": {
+   "status": 200,
+   "indicator": "food_stress_risk_probability",
+   "rows": {
+    "Batangas": {
+     "riskScore": 0.385,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q1 made as of 2025-10-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Rizal": {
+     "riskScore": 0.357,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q1 made as of 2025-10-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Quezon": {
+     "riskScore": 0.323,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q1 made as of 2025-10-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Laguna": {
+     "riskScore": 0.308,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q1 made as of 2025-10-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Cavite": {
+     "riskScore": 0.291,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q1 made as of 2025-10-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    }
+   }
+  },
+  "2026-Q2": {
+   "status": 200,
+   "indicator": "food_stress_risk_probability",
+   "rows": {
+    "Rizal": {
+     "riskScore": 0.386,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q2 made as of 2026-01-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Laguna": {
+     "riskScore": 0.315,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q2 made as of 2026-01-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Quezon": {
+     "riskScore": 0.211,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q2 made as of 2026-01-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Cavite": {
+     "riskScore": 0.21,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "HIGH",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q2 made as of 2026-01-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: HIGH."
+    },
+    "Batangas": {
+     "riskScore": 0.195,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q2 made as of 2026-01-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    }
+   }
+  },
+  "2026-Q3": {
+   "status": 200,
+   "indicator": "food_stress_risk_probability",
+   "rows": {
+    "Quezon": {
+     "riskScore": 0.3,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q3 made as of 2026-04-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Cavite": {
+     "riskScore": 0.261,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q3 made as of 2026-04-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Laguna": {
+     "riskScore": 0.233,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q3 made as of 2026-04-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Rizal": {
+     "riskScore": 0.227,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q3 made as of 2026-04-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    },
+    "Batangas": {
+     "riskScore": 0.2,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "backtest",
+     "observedOutcome": "LOW",
+     "horizonLabel": "Backtest of the E44 candidate: Lead-2 estimate for 2026-Q3 made as of 2026-04-01 with information published before it (development evidence, not a forecast issued live). Observed outcome of the same event: LOW."
+    }
+   }
+  },
+  "2026-Q4": {
+   "status": 200,
+   "indicator": "food_stress_risk_probability",
+   "rows": {
+    "Rizal": {
+     "riskScore": 0.227,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "earlier_forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead-2 forecast for 2026-Q4 issued 2026-07-01 by the E44 candidate procedure with information published before it; the outcome is not yet published."
+    },
+    "Laguna": {
+     "riskScore": 0.224,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "earlier_forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead-2 forecast for 2026-Q4 issued 2026-07-01 by the E44 candidate procedure with information published before it; the outcome is not yet published."
+    },
+    "Cavite": {
+     "riskScore": 0.221,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "earlier_forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead-2 forecast for 2026-Q4 issued 2026-07-01 by the E44 candidate procedure with information published before it; the outcome is not yet published."
+    },
+    "Batangas": {
+     "riskScore": 0.216,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "earlier_forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead-2 forecast for 2026-Q4 issued 2026-07-01 by the E44 candidate procedure with information published before it; the outcome is not yet published."
+    },
+    "Quezon": {
+     "riskScore": 0.214,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "earlier_forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead-2 forecast for 2026-Q4 issued 2026-07-01 by the E44 candidate procedure with information published before it; the outcome is not yet published."
+    }
+   }
+  },
+  "2027-Q1": {
+   "status": 200,
+   "indicator": "food_stress_risk_probability",
+   "rows": {
+    "Quezon": {
+     "riskScore": 0.21037295413220033,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead 2 (2027-Q1), issued 2026-10-01"
+    },
+    "Laguna": {
+     "riskScore": 0.19686495323951828,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead 2 (2027-Q1), issued 2026-10-01"
+    },
+    "Batangas": {
+     "riskScore": 0.19648070877651264,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead 2 (2027-Q1), issued 2026-10-01"
+    },
+    "Cavite": {
+     "riskScore": 0.19305655309179295,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead 2 (2027-Q1), issued 2026-10-01"
+    },
+    "Rizal": {
+     "riskScore": 0.19061339031886357,
+     "riskLevel": "low",
+     "scoreType": "food_stress_risk_probability",
+     "estimateKind": "forecast",
+     "observedOutcome": null,
+     "horizonLabel": "Lead 2 (2027-Q1), issued 2026-10-01"
+    }
+   }
+  }
+ },
+ "api_default_e38": {
+  "2026-Q1": {
+   "status": 200,
+   "indicator": "food_insecurity_risk_probability",
+   "rows": {
+    "Laguna": {
+     "riskScore": 0.9998,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Rizal": {
+     "riskScore": 0.9996,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Cavite": {
+     "riskScore": 0.9992,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Quezon": {
+     "riskScore": 0.9983,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Batangas": {
+     "riskScore": 0.9926,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    }
+   }
+  },
+  "2026-Q2": {
+   "status": 200,
+   "indicator": "food_insecurity_risk_probability",
+   "rows": {
+    "Laguna": {
+     "riskScore": 0.9789,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Rizal": {
+     "riskScore": 0.9729,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Quezon": {
+     "riskScore": 0.9682,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Cavite": {
+     "riskScore": 0.9652,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Batangas": {
+     "riskScore": 0.6489,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    }
+   }
+  },
+  "2026-Q3": {
+   "status": 200,
+   "indicator": "food_insecurity_risk_probability",
+   "rows": {
+    "Laguna": {
+     "riskScore": 0.9987,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Batangas": {
+     "riskScore": 0.9953,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Quezon": {
+     "riskScore": 0.9952,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Rizal": {
+     "riskScore": 0.9846,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    },
+    "Cavite": {
+     "riskScore": 0.9841,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Backtest: one-quarter-ahead estimate made on development data"
+    }
+   }
+  },
+  "2026-Q4": {
+   "status": 200,
+   "indicator": "food_insecurity_risk_probability",
+   "rows": {
+    "Laguna": {
+     "riskScore": 0.9886,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Current quarter (forecast issued 2026-10-01), lead 1"
+    },
+    "Quezon": {
+     "riskScore": 0.9862,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Current quarter (forecast issued 2026-10-01), lead 1"
+    },
+    "Cavite": {
+     "riskScore": 0.983,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Current quarter (forecast issued 2026-10-01), lead 1"
+    },
+    "Rizal": {
+     "riskScore": 0.9807,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Current quarter (forecast issued 2026-10-01), lead 1"
+    },
+    "Batangas": {
+     "riskScore": 0.169,
+     "riskLevel": "low",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Current quarter (forecast issued 2026-10-01), lead 1"
+    }
+   }
+  },
+  "2027-Q1": {
+   "status": 200,
+   "indicator": "food_insecurity_risk_probability",
+   "rows": {
+    "Cavite": {
+     "riskScore": 0.9521,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Next quarter (forecast issued 2026-10-01, two quarters after the latest complete data quarter)"
+    },
+    "Laguna": {
+     "riskScore": 0.9521,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Next quarter (forecast issued 2026-10-01, two quarters after the latest complete data quarter)"
+    },
+    "Rizal": {
+     "riskScore": 0.9521,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Next quarter (forecast issued 2026-10-01, two quarters after the latest complete data quarter)"
+    },
+    "Quezon": {
+     "riskScore": 0.9521,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Next quarter (forecast issued 2026-10-01, two quarters after the latest complete data quarter)"
+    },
+    "Batangas": {
+     "riskScore": 0.8009,
+     "riskLevel": "high",
+     "scoreType": null,
+     "estimateKind": null,
+     "observedOutcome": null,
+     "horizonLabel": "Next quarter (forecast issued 2026-10-01, two quarters after the latest complete data quarter)"
+    }
+   }
+  }
+ }
+}

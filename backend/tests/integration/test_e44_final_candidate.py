@@ -90,7 +90,7 @@ def test_notes_and_config_describe_the_served_candidate(e44):
     prov = client.get("/api/v1/provinces?quarter=2027-Q1&horizon=forecast").json()
     assert prov["indicator"]["id"] == "food_stress_risk_probability"
     old = client.get("/api/v1/provinces?quarter=2026-Q3&horizon=forecast").json()
-    assert old["indicator"]["id"] == "food_insecurity_risk_probability"
+    assert old["indicator"]["id"] == "food_stress_risk_probability"     # E46: one score on every quarter
 
 
 def test_trend_line_uses_one_score_type(e44):

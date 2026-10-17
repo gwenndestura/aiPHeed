@@ -44,8 +44,9 @@ def test_indicator_describes_the_food_stress_target(e43):
     ind = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2027-Q1&horizon=forecast").json()["indicator"]
     assert ind["id"] == "food_stress_risk_probability"
     assert "SWS" in ind["definition"] and "not independently verified household food insecurity" in ind["definition"]
-    old = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2026-Q3&horizon=forecast").json()["indicator"]
-    assert old["id"] == "food_insecurity_risk_probability"
+    # E46: a past quarter carries the candidate's own score (backtest) or is unavailable; never the v1 label
+    r = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2026-Q3&horizon=forecast")
+    assert r.status_code == 404 or r.json()["indicator"]["id"] == "food_stress_risk_probability"
 
 
 @pytest.mark.parametrize("scope,id_", [("province", "quezon"), ("region", "calabarzon")])

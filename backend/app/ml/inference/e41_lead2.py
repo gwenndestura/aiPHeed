@@ -80,6 +80,7 @@ def forecast_rows(quarter: str) -> list[dict]:
             "mode": f"{mode().upper()}_LEAD2",
             "origin": rec["origin"], "information_cutoff": rec["origin"], "provenance": rec["sources"],
             "score_type": f["scoreType"], "score_definition": rec["scoreTypes"][f["scoreType"]], "band": f["band"],
+            "estimate_kind": "forecast",
         })
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
     return out
@@ -129,6 +130,84 @@ def backtest_series(code: str | None) -> dict[str, float]:
                 by_q.setdefault(x["targetQuarter"], []).append(float(p))
     need = 1 if code else len(provs)
     return {q: sum(ps) / len(ps) for q, ps in by_q.items() if len(ps) == need}
+
+
+def governs() -> bool:
+    """E46: True when a candidate is enabled AND its record is for the dashboard's current target quarter. Every quarter
+    the dashboard shows then carries the candidate's own score of its own target event (as-of backtest, an earlier
+    Lead-2 forecast, or the issued forecast), or nothing: never the v1 label probability of another model next to it
+    (the "observed about 0.98, forecast about 0.2" discrepancy)."""
+    if not active():
+        return False
+    from app.quarterly.target import forecast_target
+
+    try:
+        return record()["targetQuarter"] == forecast_target()["target_quarter"]
+    except RecordError:
+        return False
+
+
+def _origin_for_target(quarter: str) -> str:
+    """Lead-2 origin of a target quarter (E41 convention): first day of the quarter before it."""
+    y, q = int(quarter[:4]), int(quarter[-1])
+    i = y * 4 + q - 1 - 1
+    return f"{i // 4}-{(i % 4) * 3 + 1:02d}-01"
+
+
+def _entries(v: dict) -> dict[str, dict]:
+    out = {}
+    for kind, key in (("backtest", "pastForecasts"), ("earlier_forecast", "earlierForecasts")):
+        for x in v.get(key, []):
+            p = x.get("probability", x.get("probabilityAbove4pct"))
+            if p is not None:
+                out[x["targetQuarter"]] = {"probability": float(p), "kind": kind, "observedHigh": x.get("observedHigh"),
+                                           "origin": x.get("origin") or _origin_for_target(x["targetQuarter"])}
+    return out
+
+
+def candidate_quarters() -> list[str]:
+    """Quarters for which the governing candidate has a value for every province (its target included)."""
+    rec = record()
+    provs = rec["provinces"]
+    per = [set(_entries(v)) for v in provs.values()]
+    qs = set.intersection(*per) if per else set()
+    return sorted(qs | {rec["targetQuarter"]}, key=lambda q: (int(q[:4]), int(q[-1])))
+
+
+def rows_for(quarter: str) -> list[dict]:
+    """Engine-shaped rows of the governing candidate for any quarter it covers; [] otherwise."""
+    rec = record()
+    if quarter == rec["targetQuarter"]:
+        return forecast_rows(quarter)
+    if quarter not in candidate_quarters():
+        return []
+    st = next(iter(rec["scoreTypes"]))
+    name = mode().upper()
+    out = []
+    for code, v in rec["provinces"].items():
+        e = _entries(v)[quarter]
+        if e["kind"] == "backtest":
+            obs = None if e["observedHigh"] is None else ("HIGH" if e["observedHigh"] else "LOW")
+            label = (f"Backtest of the {name} candidate: Lead-2 estimate for {quarter} made as of {e['origin']} with "
+                     f"information published before it (development evidence, not a forecast issued live). "
+                     f"Observed outcome of the same event: {obs or 'not available'}.")
+        else:
+            obs = None
+            label = (f"Lead-2 forecast for {quarter} issued {e['origin']} by the {name} candidate procedure with "
+                     "information published before it; the outcome is not yet published.")
+        out.append({
+            "province_code": code, "province_name": v["name"], "quarter": quarter,
+            "risk_probability": e["probability"], "risk_label": None, "observed_label": obs,
+            "observed_S1": None, "data_sufficiency_flag": "SUFFICIENT",
+            "forecast_horizon_quarters": 2, "horizon_label": label, "confidence_statement": label,
+            "verification_date": e["origin"], "mode": f"{name}_LEAD2_{e['kind'].upper()}", "origin": e["origin"],
+            "information_cutoff": e["origin"], "provenance": rec.get("sources"),
+            "score_type": st, "score_definition": rec["scoreTypes"][st],
+            "band": "High" if e["probability"] >= 2 / 3 else ("Watch" if e["probability"] >= 1 / 3 else "Low"),
+            "estimate_kind": e["kind"],
+        })
+    out.sort(key=lambda r: r["risk_probability"], reverse=True)
+    return out
 
 
 def trigger_evidence(quarter: str, code: str | None) -> dict[str, str]:

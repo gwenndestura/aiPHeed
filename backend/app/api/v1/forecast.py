@@ -104,7 +104,10 @@ def _score_for(
                 f"The {quarter} forecast for this province has been withheld from "
                 "publication by a reviewer."
             )
-        match = [p for p in svc.province_summary(quarter, horizon=horizon) if p["id"] == slug]
+        rows = svc.province_summary(quarter, horizon=horizon)
+        if not rows:
+            raise svc.QuarterNotAvailable(f"No province scores exist for {quarter}.")
+        match = [p for p in rows if p["id"] == slug]
         if not match:
             raise svc.SubjectNotFound(f"Unknown province id '{subject_id}'.")
         p = match[0]
@@ -118,6 +121,8 @@ def _score_for(
             "horizonLabel": p["horizonLabel"],
             "confidenceStatement": p["confidenceStatement"],
             "verificationDate": p["verificationDate"],
+            "estimateKind": p.get("estimateKind"),
+            "observedOutcome": p.get("observedOutcome"),
             "horizon": horizon,
         }
 
@@ -175,6 +180,13 @@ async def get_forecast(
     )
 
 
+def _backtest_quarters() -> set[str]:
+    rec = svc.E41L2.record()
+    return {q for q in svc.E41L2.candidate_quarters()
+            if q != rec["targetQuarter"] and all(any(x["targetQuarter"] == q for x in v.get("pastForecasts", []))
+                                                 for v in rec["provinces"].values())}
+
+
 @router.get("/forecast/timeseries", response_model=TimeseriesResponse)
 async def get_timeseries(
     scope: str = Query("province", pattern="^(region|province|municipality)$"),
@@ -225,20 +237,14 @@ async def get_timeseries(
             "scoreType": svc.indicator_for(q)["id"],
         })
 
-    # E46: with a Lead-2 candidate enabled, a line must not join two different scores (the v1 label probability of
-    # past quarters, about 0.9, and the candidate's probability of its own target event, about 0.2). Past quarters
-    # then come from the candidate's own as-of backtest, and points of any other score type are left out.
-    target = svc.forecast_target()["target_quarter"]
-    if svc.E41L2.serves(target):
-        cand = svc.indicator_for(target)["id"]
-        code = None if scope == "region" else ref.province_code(id.lower().split("-")[0])
-        bt = svc.E41L2.backtest_series(code)
-        series = [p for p in series if p["scoreType"] == cand] + [
-            {"quarter": q, "riskScore": round(v, 4), "riskLevel": ref.risk_level(v), "isForecast": False,
-             "scoreType": cand}
-            for q, v in bt.items() if lo <= ref.quarter_index(q) <= hi]
-        series.sort(key=lambda p: ref.quarter_index(p["quarter"]))
-        indicator = svc.indicator_for(target)
+    # E46: with a Lead-2 candidate governing the dashboard, every quarter is the candidate's own estimate of its own
+    # event (as-of backtest, earlier Lead-2 forecast, issued forecast); quarters it has no estimate for drop out, so
+    # the line never joins the v1 label probability (about 0.98) to the candidate's probability (about 0.2).
+    if svc.E41L2.governs():
+        cand = svc.indicator_for(svc.forecast_target()["target_quarter"])
+        bt = _backtest_quarters()
+        series = [p | {"isForecast": p["quarter"] not in bt} for p in series if p["scoreType"] == cand["id"]]
+        indicator = cand
     else:
         indicator = svc.INDICATOR
 

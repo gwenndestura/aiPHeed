@@ -94,8 +94,9 @@ def test_indicator_matches_the_score_served(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "e42")
     f = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2027-Q1&horizon=forecast").json()
     assert f["indicator"]["id"] == "price_pressure_probability" and "not food insecurity" in f["indicator"]["caveat"]
+    # E46: past quarters show the candidate's own as-of backtest of the same score, never the v1 label probability
     old = client.get("/api/v1/forecast?scope=province&id=quezon&quarter=2026-Q3&horizon=forecast").json()
-    assert old["indicator"]["id"] == "food_insecurity_risk_probability"
+    assert old["indicator"]["id"] == "price_pressure_probability" and old["estimateKind"] == "backtest"
     ts = client.get("/api/v1/forecast/timeseries?scope=province&id=quezon&horizon=forecast").json()["series"]
     types = {p["quarter"]: p["scoreType"] for p in ts}
     assert types.get("2027-Q1") == "price_pressure_probability"

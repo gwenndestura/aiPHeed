@@ -134,6 +134,10 @@ class ProvinceSummary(BaseModel):
     scoreType: str | None = None
     scoreDefinition: str | None = None
     riskBand: str | None = None
+    # E46: "forecast" | "earlier_forecast" | "backtest" (candidate mode) and, for a backtest, the observed outcome of
+    # the same event ("HIGH" | "LOW"): an estimate and an observation are never presented as one number
+    estimateKind: str | None = None
+    observedOutcome: str | None = None
     # E35-D1: what the riskLevel band is (a model estimate at the display cutoff, never a validated class)
     riskLevelBasis: str | None = None
     evidenceStatus: str | None = None
@@ -244,6 +248,8 @@ class ForecastResponse(BaseModel):
     verificationDate: str | None = None
     disaggregationLabel: str | None = None
     derivation: str | None = None
+    estimateKind: str | None = None
+    observedOutcome: str | None = None
 
 
 class TimeseriesPoint(BaseModel):

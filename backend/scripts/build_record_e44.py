@@ -156,6 +156,14 @@ def main():
             "pastForecasts": [{"targetQuarter": L.qs(int(r.target_q)), "probability": round(float(r.I2_p), 3),
                                "decision": "HIGH" if r.I2_yhat == 1 else "LOW", "observedHigh": bool(int(r.y))}
                               for r in hp.itertuples()],
+            # E46: Lead-2 forecasts the same procedure issued for quarters still without a published outcome (2026-Q4,
+            # issued 2026-07-01), so the dashboard's current quarter shows this score, not another model's
+            "earlierForecasts": [{"targetQuarter": L.qs(int(r.target_q)), "probability": round(float(r.I2_p), 3),
+                                  "origin": str(L.origin(int(r.t)).date()),
+                                  "decision": "HIGH" if r.I2_yhat == 1 else "LOW"}
+                                 for r in hist[(hist["province_code"] == p) & hist["I2_p"].notna()
+                                               & (hist["target_q"] > L.qi("2026-Q3"))
+                                               & (hist["target_q"] < L.qi(F["target_quarter"]))].itertuples()],
             "pastForecastsNote": "Development backtest of the I2 procedure at each past origin (information available "
                                  "then); not forecasts issued live at the time.",
             "warnings": ["FORECASTING ACCEPTANCE NOT MET: no E44 iteration reached 75% Lead-2 accuracy with balanced "

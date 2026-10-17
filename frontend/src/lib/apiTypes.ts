@@ -303,7 +303,8 @@ export type TriggerStatus =
   | "data_not_in_model"
   | "stale"
   | "no_model_input"
-  | "no_data";
+  | "no_data"
+  | "not_recorded";
 
 export interface ExplainabilityResponse {
   scope: Scope;

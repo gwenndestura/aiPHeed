@@ -72,7 +72,7 @@ INDICATOR = {
 def indicator_for(quarter: str) -> dict:
     """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
     target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
-    if not E41L2.serves(quarter):
+    if not (E41L2.serves(quarter) or E41L2.governs()):
         return INDICATOR
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
@@ -273,6 +273,8 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
         return latest_quarter(horizon)
     if not ref.is_valid_quarter(quarter):
         raise QuarterNotAvailable(f"'{quarter}' is not a quarter id (expected YYYY-Qn).")
+    if E41L2.governs() and quarter not in E41L2.candidate_quarters():
+        raise QuarterNotAvailable(candidate_unavailable_reason(quarter))
     if quarter not in available_quarters(horizon) and e31_active():
         other = NOWCAST if horizon == FORECAST else FORECAST
         if quarter in available_quarters(other):      # E31: a nowcast-only quarter (2026-Q4) is still served
@@ -329,7 +331,25 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
                                    f"{target['origin']} with information published before it, once those inputs "
                                    "are authorized and the forecasting pipeline has run. No older forecast is "
                                    "shown in its place.")})
+    if E41L2.governs():
+        have = set(E41L2.candidate_quarters())
+        for r in out:
+            if r["id"] not in have and r["state"] != "unavailable":
+                r["state"], r["reason"] = "unavailable", candidate_unavailable_reason(r["id"])
     return out
+
+
+def candidate_unavailable_reason(quarter: str) -> str:
+    """E46: why a quarter shows no score while a Lead-2 candidate governs the dashboard."""
+    qs = E41L2.candidate_quarters()
+    return (f"No estimate of the served score for {quarter}. The experimental Lead-2 model ({E41L2.mode().upper()}) has "
+            f"as-of estimates for {qs[0]} to {qs[-1]} (quarters with an approved SWS round); showing another model's "
+            "score of a different target here would not be comparable. This is missing data, not a low score.")
+
+
+def _lead2_key() -> str:
+    """Cache key part: the Lead-2 mode and whether it governs every quarter at this moment (it depends on the clock)."""
+    return E41L2.mode() + (":governs" if E41L2.governs() else "")
 
 
 def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
@@ -383,13 +403,15 @@ def is_estimate_quarter(quarter: str) -> bool:
 
 def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """Raw model output for one quarter, from whichever engine the horizon names (cache keyed by the Lead-2 mode)."""
-    return _province_forecasts_cached(quarter, horizon, E41L2.mode())
+    return _province_forecasts_cached(quarter, horizon, _lead2_key())
 
 
 @functools.lru_cache(maxsize=64)
 def _province_forecasts_cached(quarter: str, horizon: str, lead2_mode: str) -> list[dict]:
     # E41: with AIPHEED_LEAD2_MODEL=e41, the candidate's frozen Lead-2 forecast replaces the E38 row for exactly its
     # target quarter; every other quarter, and the default mode, are unchanged.
+    if lead2_mode.endswith(":governs"):              # E46: one score on every quarter (candidate's own estimates)
+        return E41L2.rows_for(quarter)
     if E41L2.serves(quarter):
         return E41L2.forecast_rows(quarter)
     out = _engine(horizon).forecast_quarter(quarter)
@@ -413,6 +435,9 @@ def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
     never compared with a forecast). Across a gap (2025-Q1 -> 2025-Q4) it would mix three quarters of change."""
     if ref.quarter_index(quarter) - ref.quarter_index(prev_q) != 1:
         return False
+    if E41L2.governs():                              # every candidate estimate is a Lead-2 estimate of the same event
+        have = set(E41L2.candidate_quarters())
+        return quarter in have and prev_q in have
     if not e31_active():
         return True
     a = E31.quarter_row(quarter, horizon) or E31.quarter_row(quarter, NOWCAST if horizon == FORECAST else FORECAST)
@@ -500,6 +525,9 @@ def province_summary(
             # E41: what the score is (present only for the E41 candidate; absent rows keep the E38 meaning)
             **({"scoreType": record["score_type"], "scoreDefinition": record["score_definition"],
                 "riskBand": record["band"]} if record.get("score_type") else {}),
+            # E46: what kind of estimate this is, and the observed outcome of the same event (backtest quarters only)
+            **({"estimateKind": record["estimate_kind"], "observedOutcome": record.get("observed_label")}
+               if record.get("estimate_kind") else {}),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": RISK_LEVEL_BASIS,
             # Rule 6: every forecast carries an explicit horizon label, a
@@ -671,7 +699,7 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 # ---------------------------------------------------------------------------
 
 def _municipal_frame(quarter: str) -> pd.DataFrame:
-    return _municipal_frame_cached(quarter, E41L2.mode())
+    return _municipal_frame_cached(quarter, _lead2_key())
 
 
 @functools.lru_cache(maxsize=32)
@@ -827,13 +855,17 @@ def _integer_shares(values: list[float]) -> list[int]:
 
 
 def _drivers(province_code: str, quarter: str) -> dict:
-    return _drivers_cached(province_code, quarter, E41L2.mode())
+    return _drivers_cached(province_code, quarter, _lead2_key())
 
 
 @functools.lru_cache(maxsize=256)
 def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
     if E41L2.serves(quarter):
         return E41L2.drivers(province_code, quarter)
+    if lead2_mode.endswith(":governs"):              # E46: backtest quarters carry no recorded attribution
+        return {"drivers": [{"driver_group": g, "driver_label": lab, "group_shap": 0.0, "direction": "increases_risk",
+                             "trigger_proportion": None} for g, lab in E41L2.GROUP_LABELS.items()],
+                "article_count": 0, "other_pct": 0.0, "evidence_quarter": None}
     explainer = _explainer()
     records = explainer.explain_province_quarter(province_code, quarter)
     return explainer.build_drivers(province_code, quarter, records)
@@ -852,6 +884,8 @@ TRIGGER_STATUS_NOTES = {
                          "not use them, so they neither raised nor lowered the score.",
     "stale": "The latest official observation for this factor is more than two quarters old at the forecast date; "
              "treat its contribution with caution.",
+    "not_recorded": "This quarter shows the experimental model's backtest or earlier forecast; trigger contributions "
+                    "are recorded only for the issued forecast, so no direction is stated here.",
 }
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 
@@ -865,6 +899,8 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
 
 
 def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
+    if E41L2.governs() and not E41L2.serves(quarter):
+        return "not_recorded"
     own = E41L2.trigger_statuses(quarter, code)                  # E43 records state their own statuses
     if own and key in own:
         return "no_effect" if own[key] == "contributes" and pct == 0 else own[key]

@@ -80,8 +80,8 @@ def test_dashboard_serves_the_candidate_only_for_its_target(e41):
         r = rows[v["province_code"]]
         assert r["riskScore"] == pytest.approx(v["lead2_fpp_probability"], abs=5e-4)
         assert r["scoreType"] == "price_pressure_probability" and r["riskBand"] == v["lead2_band"]
-    other = _rows("2026-Q3")                                    # any other quarter keeps its E36/E38 meaning
-    assert all(r.get("scoreType") is None for r in other.values())
+    # E46: a quarter the candidate has no estimate for is unavailable; it never shows another model's v1 score
+    assert client.get("/api/v1/provinces?quarter=2026-Q3&horizon=forecast").status_code == 404
 
 
 def test_no_stale_forecast_when_the_target_moves(e41, monkeypatch):
