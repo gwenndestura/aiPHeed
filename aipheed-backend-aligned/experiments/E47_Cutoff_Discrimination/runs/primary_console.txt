@@ -1,0 +1,15 @@
+20261017T031323Z rows 35 quarters 7 HIGH 9 ['2024-Q3', '2024-Q4', '2025-Q1', '2025-Q4', '2026-Q1', '2026-Q2', '2026-Q3']
+  I7-E        acc 0.800 [0.66, 0.94] bal 0.684 recH 0.44 recL 0.92 brier 0.179 auc 0.722 {'TP': 4, 'TN': 24, 'FP': 2, 'FN': 5}
+  SL-P        acc 0.343 [0.14, 0.6] bal 0.267 recH 0.11 recL 0.42 brier 0.521 auc 0.12 {'TP': 1, 'TN': 11, 'FP': 15, 'FN': 8}
+  SL-5T       acc 0.429 [0.2, 0.69] bal 0.325 recH 0.11 recL 0.54 brier 0.420 auc 0.184 {'TP': 1, 'TN': 14, 'FP': 12, 'FN': 8}
+  LGBM-C      acc 0.400 [0.17, 0.66] bal 0.269 recH 0.0 recL 0.54 brier 0.323 auc 0.299 {'TP': 0, 'TN': 14, 'FP': 12, 'FN': 9}
+  I7          acc 0.800 [0.66, 0.94] bal 0.684 recH 0.44 recL 0.92 brier 0.174 auc 0.735 {'TP': 4, 'TN': 24, 'FP': 2, 'FN': 5}
+  I8          acc 0.771 [0.57, 0.94] bal 0.665 recH 0.44 recL 0.88 brier 0.132 auc 0.902 {'TP': 4, 'TN': 23, 'FP': 3, 'FN': 5}
+  I2          acc 0.686 [0.46, 0.89] bal 0.716 recH 0.78 recL 0.65 brier 0.181 auc 0.603 {'TP': 7, 'TN': 17, 'FP': 9, 'FN': 2}
+  BASE-m1.0   acc 0.743 [0.69, 0.8] bal 0.682 recH 0.56 recL 0.81 brier 0.257 auc 0.682 {'TP': 5, 'TN': 21, 'FP': 5, 'FN': 4}
+  B-maj       acc 0.743 [0.51, 0.94] bal 0.5 recH 0.0 recL 1.0 brier 0.220 auc 0.222 {'TP': 0, 'TN': 26, 'FP': 0, 'FN': 9}
+  B-persist   acc 0.543 [0.31, 0.77] bal 0.583 recH 0.67 recL 0.5 brier 0.457 auc 0.583 {'TP': 6, 'TN': 13, 'FP': 13, 'FN': 3}
+  E38-served  acc 0.143 [0.06, 0.26] bal 0.205 recH 0.33 recL 0.08 brier 0.653 auc 0.207 {'TP': 3, 'TN': 2, 'FP': 24, 'FN': 6}
+  E41-M1      acc 0.771 [0.6, 0.94] bal 0.592 recH 0.22 recL 0.96 brier 0.164 auc 0.697 {'TP': 2, 'TN': 25, 'FP': 1, 'FN': 7}
+  track-record Brier: {'I7': 0.171, 'I7-E': 0.1772, 'SL-5T': 0.48, 'LGBM-C': 0.3678} -> selected I7
+  gates: {'A0': True, 'A1': True, 'A2': False, 'A3': True, 'A4': True, 'passes': False} | LOQO min: 0.767 | rule: {'A0_A4': False, 'min_leave_one_quarter_out_ge_0.70': True, 'development_criteria_met': False}
