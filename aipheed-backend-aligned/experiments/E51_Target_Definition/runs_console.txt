@@ -1,17 +1,67 @@
-C:\Users\admin\aipheed\backend\venv\Lib\site-packages\numpy\_core\fromnumeric.py:3824: RuntimeWarning: Mean of empty slice
-  return _methods._mean(a, axis=axis, dtype=dtype,
-C:\Users\admin\aipheed\backend\venv\Lib\site-packages\numpy\_core\_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
-  ret = ret.dtype.type(ret / rcount)
-Traceback (most recent call last):
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E51_Target_Definition\runner\e51_compare.py", line 255, in <module>
-    main()
-    ~~~~^^
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E51_Target_Definition\runner\e51_compare.py", line 191, in main
-    Pr, info = E.walk_forward(dl)
-               ~~~~~~~~~~~~~~^^^^
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E38_Lead2_Diagnosis_Tuning\runner\e38_lib.py", line 152, in walk_forward
-    th, tinfo = threshold(prior, preds, labels, cfg)
-                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\admin\aipheed\aipheed-backend-aligned\experiments\E38_Lead2_Diagnosis_Tuning\runner\e38_lib.py", line 138, in threshold
-    th = min((x for x in THRESHOLDS if res[x] >= best - 1e-12), key=lambda x: (abs(x - 0.5), x))
-ValueError: min() iterable argument is empty
+20261017T131027Z global median S1 15.473
+  EQ3-G  recent HIGH 0.889 within-share 0.337 by year [('2021', 2, 15), ('2022', 3, 15), ('2023', 2, 20), ('2024', 17, 20), ('2025', 9, 10), ('2026', 14, 15)]
+  EQ3-T  recent HIGH 0.925 within-share 0.582 by year [('2021', 3, 15), ('2022', 7, 15), ('2023', 11, 20), ('2024', 19, 20), ('2025', 9, 10), ('2026', 9, 10)]
+  T43    recent HIGH 0.289 within-share 0.466 by year [('2021', 2, 15), ('2022', 0, 15), ('2023', 3, 20), ('2024', 8, 20), ('2025', 4, 10), ('2026', 1, 15)]
+  PS     recent HIGH 0.327 within-share 0.449 by year [('2021', 11, 20), ('2022', 6, 20), ('2023', 17, 20), ('2024', 8, 20), ('2025', 9, 20), ('2026', 1, 15)]
+  RQ     recent HIGH 0.4 within-share 1.0 by year [('2021', 8, 20), ('2022', 8, 20), ('2023', 8, 20), ('2024', 8, 20), ('2025', 8, 20), ('2026', 6, 15)]
+  YW     recent HIGH 0.829 within-share 0.563 by year [('2022', 7, 15), ('2023', 8, 15), ('2024', 20, 20), ('2025', 5, 10), ('2026', 4, 5)]
+  reproduce E36 lead1 E36-LGBM: acc 0.815 auc 0.8498427672955976 brier 0.154 {'TP': 43, 'TN': 10, 'FP': 2, 'FN': 10}
+  reproduce E36 lead1 B1_PERSISTENCE: acc 0.877 auc 0.8600628930817611 brier 0.123 {'TP': 47, 'TN': 10, 'FP': 2, 'FN': 6}
+  reproduce E36 lead1 ALWAYS_HIGH: acc 0.815 auc None brier 0.185 {'TP': 53, 'TN': 0, 'FP': 12, 'FN': 0}
+  reproduce E38 lead2 E38-LGBM: acc 0.709 auc 0.6547619047619048 brier 0.200 {'TP': 37, 'TN': 2, 'FP': 4, 'FN': 12}
+  reproduce E38 lead2 B1_PERSISTENCE: acc 0.800 auc 0.7414965986394559 brier 0.200 {'TP': 40, 'TN': 4, 'FP': 2, 'FN': 9}
+  reproduce E38 lead2 ALWAYS_HIGH: acc 0.891 auc None brier 0.109 {'TP': 49, 'TN': 0, 'FP': 6, 'FN': 0}
+EQ3-T quarters 11 rows 55 HIGH 49 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': False, 'C4_as_of': True, 'C5_eval_quarters_ge_8': True, 'all': False}
+   [all] LGBM    acc 0.709 bal 0.544 recH 0.755 recL 0.333 brier 0.200 auc 0.655 {'TP': 37, 'TN': 2, 'FP': 4, 'FN': 12}
+   [all] LR      acc 0.818 bal 0.752 recH 0.837 recL 0.667 brier 0.189 auc 0.731 {'TP': 41, 'TN': 4, 'FP': 2, 'FN': 8}
+   [all] PERSIST acc 0.800 bal 0.741 recH 0.816 recL 0.667 brier 0.200 auc 0.741 {'TP': 40, 'TN': 4, 'FP': 2, 'FN': 9}
+   [all] HIGH    acc 0.891 bal 0.5 recH 1.0 recL 0.0 brier 0.109 auc None {'TP': 49, 'TN': 0, 'FP': 6, 'FN': 0}
+   [all] LOW     acc 0.109 bal 0.5 recH 0.0 recL 1.0 brier 0.891 auc None {'TP': 0, 'TN': 6, 'FP': 0, 'FN': 49}
+   accepted: {'LGBM': False, 'LR': False} None
+EQ3-G quarters 11 rows 55 HIGH 42 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': False, 'C4_as_of': False, 'C5_eval_quarters_ge_8': True, 'all': False}
+   [all] LGBM    acc 0.545 bal 0.649 recH 0.452 recL 0.846 brier 0.361 auc 0.636 {'TP': 19, 'TN': 11, 'FP': 2, 'FN': 23}
+   [all] LR      acc 0.509 bal 0.599 recH 0.429 recL 0.769 brier 0.448 auc 0.625 {'TP': 18, 'TN': 10, 'FP': 3, 'FN': 24}
+   [all] PERSIST acc 0.673 bal 0.706 recH 0.643 recL 0.769 brier 0.327 auc 0.706 {'TP': 27, 'TN': 10, 'FP': 3, 'FN': 15}
+   [all] HIGH    acc 0.764 bal 0.5 recH 1.0 recL 0.0 brier 0.236 auc None {'TP': 42, 'TN': 0, 'FP': 13, 'FN': 0}
+   [all] LOW     acc 0.236 bal 0.5 recH 0.0 recL 1.0 brier 0.764 auc None {'TP': 0, 'TN': 13, 'FP': 0, 'FN': 42}
+   accepted: {'LGBM': False, 'LR': False} None
+T43 quarters 7 rows 35 HIGH 9 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': True, 'C4_as_of': True, 'C5_eval_quarters_ge_8': False, 'all': False}
+   [all] LGBM    acc 0.371 bal 0.286 recH 0.111 recL 0.462 brier 0.421 auc 0.312 {'TP': 1, 'TN': 12, 'FP': 14, 'FN': 8}
+   [all] LR      acc 0.257 bal 0.209 recH 0.111 recL 0.308 brier 0.660 auc 0.252 {'TP': 1, 'TN': 8, 'FP': 18, 'FN': 8}
+   [all] PERSIST acc 0.543 bal 0.583 recH 0.667 recL 0.5 brier 0.457 auc 0.583 {'TP': 6, 'TN': 13, 'FP': 13, 'FN': 3}
+   [all] HIGH    acc 0.257 bal 0.5 recH 1.0 recL 0.0 brier 0.743 auc None {'TP': 9, 'TN': 0, 'FP': 26, 'FN': 0}
+   [all] LOW     acc 0.743 bal 0.5 recH 0.0 recL 1.0 brier 0.257 auc None {'TP': 0, 'TN': 26, 'FP': 0, 'FN': 9}
+   [withE46] LGBM    acc 0.371 bal 0.286 recH 0.111 recL 0.462 brier 0.421 auc 0.312 {'TP': 1, 'TN': 12, 'FP': 14, 'FN': 8}
+   [withE46] LR      acc 0.257 bal 0.209 recH 0.111 recL 0.308 brier 0.660 auc 0.252 {'TP': 1, 'TN': 8, 'FP': 18, 'FN': 8}
+   [withE46] PERSIST acc 0.543 bal 0.583 recH 0.667 recL 0.5 brier 0.457 auc 0.583 {'TP': 6, 'TN': 13, 'FP': 13, 'FN': 3}
+   [withE46] HIGH    acc 0.257 bal 0.5 recH 1.0 recL 0.0 brier 0.743 auc None {'TP': 9, 'TN': 0, 'FP': 26, 'FN': 0}
+   [withE46] LOW     acc 0.743 bal 0.5 recH 0.0 recL 1.0 brier 0.257 auc None {'TP': 0, 'TN': 26, 'FP': 0, 'FN': 9}
+   [withE46] E46     acc 0.800 bal 0.684 recH 0.444 recL 0.923 brier 0.174 auc 0.735 {'TP': 4, 'TN': 24, 'FP': 2, 'FN': 5}
+   accepted: {'LGBM': False, 'LR': False} {'LGBM': False, 'LR': False, 'E46': False}
+PS quarters 13 rows 65 HIGH 26 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': True, 'C4_as_of': True, 'C5_eval_quarters_ge_8': True, 'all': True}
+   [all] LGBM    acc 0.446 bal 0.526 recH 0.923 recL 0.128 brier 0.340 auc 0.547 {'TP': 24, 'TN': 5, 'FP': 34, 'FN': 2}
+   [all] LR      acc 0.400 bal 0.462 recH 0.769 recL 0.154 brier 0.426 auc 0.515 {'TP': 20, 'TN': 6, 'FP': 33, 'FN': 6}
+   [all] PERSIST acc 0.600 bal 0.622 recH 0.731 recL 0.513 brier 0.400 auc 0.622 {'TP': 19, 'TN': 20, 'FP': 19, 'FN': 7}
+   [all] HIGH    acc 0.400 bal 0.5 recH 1.0 recL 0.0 brier 0.600 auc None {'TP': 26, 'TN': 0, 'FP': 39, 'FN': 0}
+   [all] LOW     acc 0.600 bal 0.5 recH 0.0 recL 1.0 brier 0.400 auc None {'TP': 0, 'TN': 39, 'FP': 0, 'FN': 26}
+   [withE46] LGBM    acc 0.460 bal 0.578 recH 1.0 recL 0.156 brier 0.333 auc 0.601 {'TP': 18, 'TN': 5, 'FP': 27, 'FN': 0}
+   [withE46] LR      acc 0.440 bal 0.538 recH 0.889 recL 0.188 brier 0.402 auc 0.639 {'TP': 16, 'TN': 6, 'FP': 26, 'FN': 2}
+   [withE46] PERSIST acc 0.620 bal 0.63 recH 0.667 recL 0.594 brier 0.380 auc 0.63 {'TP': 12, 'TN': 19, 'FP': 13, 'FN': 6}
+   [withE46] HIGH    acc 0.360 bal 0.5 recH 1.0 recL 0.0 brier 0.640 auc None {'TP': 18, 'TN': 0, 'FP': 32, 'FN': 0}
+   [withE46] LOW     acc 0.640 bal 0.5 recH 0.0 recL 1.0 brier 0.360 auc None {'TP': 0, 'TN': 32, 'FP': 0, 'FN': 18}
+   [withE46] E46     acc 0.760 bal 0.752 recH 0.722 recL 0.781 brier 0.190 auc 0.797 {'TP': 13, 'TN': 25, 'FP': 7, 'FN': 5}
+   accepted: {'LGBM': False, 'LR': False} {'LGBM': False, 'LR': False, 'E46': True}
+RQ quarters 13 rows 65 HIGH 26 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': True, 'C4_as_of': True, 'C5_eval_quarters_ge_8': True, 'all': True}
+   [all] LGBM    acc 0.600 bal 0.571 recH 0.423 recL 0.718 brier 0.253 auc 0.59 {'TP': 11, 'TN': 28, 'FP': 11, 'FN': 15}
+   [all] LR      acc 0.631 bal 0.59 recH 0.385 recL 0.795 brier 0.252 auc 0.591 {'TP': 10, 'TN': 31, 'FP': 8, 'FN': 16}
+   [all] PERSIST acc 0.538 bal 0.519 recH 0.423 recL 0.615 brier 0.462 auc 0.519 {'TP': 11, 'TN': 24, 'FP': 15, 'FN': 15}
+   [all] HIGH    acc 0.400 bal 0.5 recH 1.0 recL 0.0 brier 0.600 auc None {'TP': 26, 'TN': 0, 'FP': 39, 'FN': 0}
+   [all] LOW     acc 0.600 bal 0.5 recH 0.0 recL 1.0 brier 0.400 auc None {'TP': 0, 'TN': 39, 'FP': 0, 'FN': 26}
+   accepted: {'LGBM': False, 'LR': False} None
+YW quarters 6 rows 30 HIGH 24 criteria {'C1_relevance': True, 'C2_within_quarter_ge_0.25': True, 'C3_recent_balance': False, 'C4_as_of': True, 'C5_eval_quarters_ge_8': False, 'all': False}
+   [all] LGBM    acc 0.600 bal 0.375 recH 0.75 recL 0.0 brier 0.305 auc 0.087 {'TP': 18, 'TN': 0, 'FP': 6, 'FN': 6}
+   [all] LR      acc 0.600 bal 0.375 recH 0.75 recL 0.0 brier 0.306 auc 0.174 {'TP': 18, 'TN': 0, 'FP': 6, 'FN': 6}
+   [all] PERSIST acc 0.667 bal 0.417 recH 0.833 recL 0.0 brier 0.333 auc 0.417 {'TP': 20, 'TN': 0, 'FP': 6, 'FN': 4}
+   [all] HIGH    acc 0.800 bal 0.5 recH 1.0 recL 0.0 brier 0.200 auc None {'TP': 24, 'TN': 0, 'FP': 6, 'FN': 0}
+   [all] LOW     acc 0.200 bal 0.5 recH 0.0 recL 1.0 brier 0.800 auc None {'TP': 0, 'TN': 6, 'FP': 0, 'FN': 24}
+   accepted: {'LGBM': False, 'LR': False} None
