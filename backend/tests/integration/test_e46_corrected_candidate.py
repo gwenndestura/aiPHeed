@@ -177,3 +177,25 @@ def test_insufficient_data_rule_is_distinct_from_negligible():
     assert b.group_status(row, "ofw_remittance", 0.05, 0.0, 0.0) == "no_effect"
     assert b.group_status(row, "ofw_remittance", 0.0, 0.0, 0.2) == "contributes"
     assert math.isclose(b.NEGLIGIBLE_POINTS, 0.1)
+
+
+def test_e50_market_attribution_includes_the_cpi_projection(e46):
+    """E50: the market group is credited with the base-effect food / gap projections (the model's price inputs), all
+    groups use the training-mean reference, the SWS level is reported separately, and probabilities are unchanged."""
+    rec = LEAD2.record()
+    assert "training-set mean" in rec["attributionMethod"] and "not causal" in rec["attributionMethod"]
+    first = {g: 0 for g in FIVE}
+    for v in rec["provinces"].values():
+        entries = list(v["pastDrivers"].values()) + [v]
+        for x in entries:
+            c, s = x["fiveTriggerContributions"], x["triggerStatus"]
+            m = c["market"]
+            assert {"baseProjectionFoodPoints", "baseProjectionGapPoints", "residualOnlyLogOddsEffect"} <= set(m)
+            for g in FIVE - {"market"}:
+                assert c[g]["logOddsEffect"] == c[g]["residualOnlyLogOddsEffect"]   # unchanged for the other groups
+            assert 0.0 <= x["drivers"]["other_pct"] <= 100.0 and "otherContribution" in x
+            eff = {g: abs(c[g]["logOddsEffect"]) if s[g]["status"] == "contributes" else 0.0 for g in FIVE}
+            first[max(eff, key=eff.get)] += 1
+    assert first["market"] > sum(first.values()) / 2                      # measured result, not a rule (E50 report)
+    note = client.get("/api/v1/explainability?scope=province&id=quezon&quarter=2027-Q1").json()["note"]
+    assert "historical average" in note and "not causes" in note

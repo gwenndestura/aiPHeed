@@ -105,6 +105,56 @@ def main():
         c = [k for k in cols if k in con.columns]
         return (float(con.iloc[i][c].sum()) if c else 0.0), c
 
+    # E50 attribution: every input is moved to its training-set mean (the same reference for every group). The market
+    # group therefore includes the base-effect food and food-minus-headline projections (the model's price inputs, built
+    # from PSA CPI), not only the ridge corrections; the latest SWS hunger level is not a trigger and is reported
+    # separately as "other". Before E50 only the residual corrections were attributed (kept as residualOnlyLogOddsEffect).
+    def training_means(fx, tq):
+        Fq = L.quarter_F(d.cut(tq))
+        XB = X.merge(B, on=["t", "province_code"])
+        trq = XB[XB["t"] + 2 <= tq - 1].assign(q=lambda f_: f_["t"] + 2).merge(Fq, on=["province_code", "q"])
+        mf, mg = fx["food_cfg"]["mult"], fx["gap_cfg"]["mult"]
+        htr_, _ = P2.hunger_frame(X, P2.h_series(d, tq, False), tq, fx["hcols"])
+        return (float(trq[f"base_{mf}"].mean()), float((trq[f"base_{mg}"] - trq[f"hl_{mg}"]).mean()),
+                float(htr_["H_base"].mean()))
+
+    def full_attribution(fx, i, tq):
+        tex = fx["te"]
+        fc_ = fx["food_model"].contributions(tex) if fx["food_model"] is not None else None
+        gc_ = fx["gap_model"].contributions(tex) if fx["gap_model"] is not None else None
+        hc_ = fx["hunger_model"].contributions(fx["hte"]) if fx["hunger_model"] is not None else None
+        mF, mG, mH = training_means(fx, tq)
+        Fh, Gh, Hh = float(fx["F_hat"][i]), float(fx["G_hat"][i]), float(fx["H_hat"])
+
+        def pj(dF=0.0, dG=0.0, dH=0.0):
+            ph = 1 - I7.norm.cdf((th["H"] - (Hh - dH)) / max(fx["hunger_rmse"], 1e-6))
+            return ph * P2.p_price_biv([Fh - dF], [Gh - dG], fx["food_rmse"], fx["gap_rmse"], fx["rho"],
+                                       [tex["province_code"].iloc[i]])[0]
+
+        def lo(a, b):
+            return math.log(max(a, 1e-6) / max(1 - a, 1e-6)) - math.log(max(b, 1e-6) / max(1 - b, 1e-6))
+        base_ = pj()
+        out = {}
+        for g in LABELS:
+            dF, a = grp(fc_, P2.PRICE_GROUPS[g], i)
+            dG, b = grp(gc_, P2.PRICE_GROUPS[g], i)
+            dH, c = grp(hc_, P2.HUNGER_GROUPS.get(g, []), 0)
+            resid = lo(base_, pj(dF, dG, dH))
+            bF = bG = 0.0
+            if g == "market":
+                bF, bG = float(fx["F_base"][i]) - mF, float(fx["G_base"][i]) - mG
+            out[g] = {"dF": dF + bF, "dG": dG + bG, "dH": dH, "lg": lo(base_, pj(dF + bF, dG + bG, dH)), "resid": resid,
+                      "baseF": bF, "baseG": bG, "nz": sorted(set(a) | set(b) | set(c))}
+        hb = float(fx["hte"]["H_base"].iloc[0]) - mH
+        other = {"hungerLevelPoints": round(hb, 3), "logOddsEffect": round(lo(base_, pj(0.0, 0.0, hb)), 4),
+                 "reference": {"foodBaseTrainMean": round(mF, 3), "gapBaseTrainMean": round(mG, 3),
+                               "hungerBaseTrainMean": round(mH, 3)}}
+        return out, other
+
+    def other_pct(att, other, statuses):
+        tot = sum(abs(v["lg"]) for g, v in att.items() if statuses[g] == "contributes") + abs(other["logOddsEffect"])
+        return round(100 * abs(other["logOddsEffect"]) / tot, 1) if tot > 0 else 0.0
+
     provinces = {}
     for i, p in enumerate(L.PROVS):
         name = L.NAMES[p]
@@ -130,16 +180,17 @@ def main():
                               f"{of['latestRemittanceQuarter']}); USD/PHP {fmt(of['usdPhpYoY'], '%')}; national figure.",
         }
         contrib, drivers, status = {}, [], {}
+        att_t, other_t = full_attribution(f, i, t)
         for g in LABELS:
-            dF, fc = grp(fcon, P2.PRICE_GROUPS[g], i)
-            dG, gc = grp(gcon, P2.PRICE_GROUPS[g], i)
-            dH, hc = grp(hcon, P2.HUNGER_GROUPS.get(g, []), 0)
-            without = p_joint(i, dF, dG, dH)
-            lg = (math.log(max(base, 1e-6) / max(1 - base, 1e-6)) - math.log(max(without, 1e-6) / max(1 - without, 1e-6)))
+            a_ = att_t[g]
+            dF, dG, dH, lg = a_["dF"], a_["dG"], a_["dH"], a_["lg"]
             contrib[g] = {"foodInflationPoints": round(dF, 3), "gapPoints": round(dG, 3), "hungerPoints": round(dH, 3),
-                          "logOddsEffect": round(lg, 4),
-                          "features": sorted(set(P2.PRICE_GROUPS[g]) | set(P2.HUNGER_GROUPS.get(g, []))),
-                          "featuresWithNonzeroWeight": sorted(set(fc) | set(gc) | set(hc))}
+                          "logOddsEffect": round(lg, 4), "residualOnlyLogOddsEffect": round(a_["resid"], 4),
+                          **({"baseProjectionFoodPoints": round(a_["baseF"], 3),
+                              "baseProjectionGapPoints": round(a_["baseG"], 3)} if g == "market" else {}),
+                          "features": sorted(set(P2.PRICE_GROUPS[g]) | set(P2.HUNGER_GROUPS.get(g, []))
+                                             | ({"base-effect CPI projection"} if g == "market" else set())),
+                          "featuresWithNonzeroWeight": a_["nz"]}
             st = group_status(X[(X["t"] == t) & (X["province_code"] == p)].iloc[0], g, dF, dG, dH)
             status[g] = {"status": st, "evidence": e43["provinces"][p]["triggerStatus"][g]["evidence"],
                          "evidenceNote": notes[g]}
@@ -148,6 +199,7 @@ def main():
                             "direction": "increases_risk" if lg >= 0 else "protective",
                             "trigger_proportion": e43["provinces"][p]["observed"]["news"]["triggerShares"].get(g)})
         drivers.sort(key=lambda dd: abs(dd["group_shap"]), reverse=True)
+        other_t_pct = other_pct(att_t, other_t, {g: status[g]["status"] for g in LABELS})
         hp = hist[(hist["province_code"] == p) & hist["I7_p"].notna()]
         past = hp[hp["y"].notna() & (hp["target_q"] <= t)]
         earlier = hp[(hp["t"] + 2 > t) & (hp["t"] + 2 < L.qi(F["target_quarter"]))]
@@ -177,7 +229,8 @@ def main():
                                 "food insecurity). Employment and OFW indicators are national."),
             "triggerStatus": status,
             "drivers": {"drivers": drivers, "article_count": e43["provinces"][p]["observed"]["news"]["articles"] or 0,
-                        "other_pct": 0.0, "evidence_quarter": e43["provinces"][p]["observed"]["news"]["quarter"]},
+                        "other_pct": other_t_pct, "evidence_quarter": e43["provinces"][p]["observed"]["news"]["quarter"]},
+            "otherContribution": {**other_t, "label": "Latest regional hunger level (SWS), not one of the five triggers"},
             "observed": e43["provinces"][p]["observed"],
             "operational": {"category": band(prob), "alertCandidate": band(prob) == "High"},
             "pastForecasts": [{"targetQuarter": L.qs(int(r.target_q)), "probability": round(float(r.I7_p), 3),
@@ -251,7 +304,8 @@ def main():
                 "ofw_remittance": f"National cash remittances {num(r['remit_usd_yoy'], suf='%')} year on year "
                                   f"({L.qs(tp - 1)}); USD/PHP {num(r['fx_yoy'], suf='%')}; national figure.",
             }
-            att = attribute(fx, i)
+            att = attribute(fx, i)                      # residual-only (kept for the additivity checks)
+            fullatt, other = full_attribution(fx, i, tp)
             # additivity: the ridge residuals have no intercept, so the per-feature contributions must sum exactly to
             # each component's correction of its base projection (food, gap) or of the latest hunger level
             tex = fx["te"]
@@ -268,10 +322,15 @@ def main():
                 assert checks[f"{nm}_additivity_error"] < 1e-8, (L.qs(tp), p, nm, checks)
             sws_cut = d.cut(tp).sws
             contrib, drivers, status = {}, [], {}
-            for g, (dF, dG, dH, lg, nz) in att.items():
+            for g in LABELS:
+                a_ = fullatt[g]
+                dF, dG, dH, lg, nz = a_["dF"], a_["dG"], a_["dH"], a_["lg"], a_["nz"]
                 st = group_status(r, g, dF, dG, dH)
                 contrib[g] = {"foodInflationPoints": round(dF, 3), "gapPoints": round(dG, 3), "hungerPoints": round(dH, 3),
-                              "logOddsEffect": round(lg, 4), "featuresWithNonzeroWeight": nz}
+                              "logOddsEffect": round(lg, 4), "residualOnlyLogOddsEffect": round(a_["resid"], 4),
+                              **({"baseProjectionFoodPoints": round(a_["baseF"], 3),
+                                  "baseProjectionGapPoints": round(a_["baseG"], 3)} if g == "market" else {}),
+                              "featuresWithNonzeroWeight": nz}
                 status[g] = {"status": st, "evidenceNote": notes[g]}
                 share = r.get(f"news_{g}")
                 drivers.append({"driver_group": g, "driver_label": LABELS[g],
@@ -289,7 +348,9 @@ def main():
                 "checks": {k: float(v) for k, v in checks.items()},
                 "fiveTriggerContributions": contrib, "triggerStatus": status,
                 "drivers": {"drivers": drivers, "article_count": int(nn) if nn is not None and math.isfinite(nn) else 0,
-                            "other_pct": 0.0, "evidence_quarter": L.qs(tp)}}
+                            "other_pct": other_pct(fullatt, other, {g: status[g]["status"] for g in LABELS}),
+                            "evidence_quarter": L.qs(tp)},
+                "otherContribution": {**other, "label": "Latest regional hunger level (SWS), not one of the five triggers"}}
     s44, ext = res7["S44"], res7["EXT"]
     pick = lambda m: {k: (None if m.get(k) is None else round(float(m[k]), 3)) for k in  # noqa: E731
                       ("accuracy", "balanced_accuracy", "recall_HIGH", "recall_LOW", "precision_HIGH", "f1_HIGH",
@@ -314,6 +375,11 @@ def main():
                       "caveat": "Forecasting acceptance (75% Lead-2 accuracy with balanced discrimination) was not met. "
                                 "Exploratory estimate; not an official classification."},
         "scoreTypes": {"food_stress_risk_probability": SCORE_DEF},
+        "attributionMethod": ("Log-odds effect of moving each trigger group's inputs to their training-set mean, all "
+                              "else fixed (E50). Market / Prices includes the base-effect food and food-minus-headline "
+                              "projections built from PSA CPI; the latest SWS hunger level is reported separately as "
+                              "'other'. Dashboard percentages are each contributing group's share of the total absolute "
+                              "effect - model attributions, not causal effects or shares of food insecurity."),
         "operationalRules": {"band": "Low if P < 0.33; Watch if 0.33 <= P < 0.67; High if P >= 0.67",
                              "decision": "HIGH if P >= 0.5 (fixed; ADDENDUM_I7)",
                              "alert": "Alert candidate when the band is High; staged for administrator confirmation.",

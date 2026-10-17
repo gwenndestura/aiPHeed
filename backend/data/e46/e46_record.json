@@ -2,7 +2,7 @@
  "schema": "e46/1",
  "name": "aiPHeed five-trigger food-stress risk forecast (E46 I7, defect-corrected)",
  "status": "EXPERIMENTAL - FORECASTING ACCEPTANCE NOT MET; enabled only with AIPHEED_LEAD2_MODEL=e46",
- "generated_at": "2026-10-17T12:18:58Z",
+ "generated_at": "2026-10-17T12:56:16Z",
  "modelVersion": "E46-I7 (ADDENDUM_I7 sha256 ed0db548849848a5)",
  "origin": "2026-10-01",
  "originQuarter": "2026-Q3",
@@ -26,6 +26,7 @@
  "scoreTypes": {
   "food_stress_risk_probability": "Probability that the province is in concurrent elevated food stress in the target quarter (target T43): SWS self-rated hunger in Balance Luzon above 11.3% (regional) AND the province's PSA food inflation above its 2021-2022 60th percentile, or food minus headline inflation above its 2021-2022 60th percentile. Estimated by the E46 defect-corrected five-trigger component model (I7). Exploratory food-stress outcome; not independently verified household food insecurity."
  },
+ "attributionMethod": "Log-odds effect of moving each trigger group's inputs to their training-set mean, all else fixed (E50). Market / Prices includes the base-effect food and food-minus-headline projections built from PSA CPI; the latest SWS hunger level is reported separately as 'other'. Dashboard percentages are each contributing group's share of the total absolute effect - model attributions, not causal effects or shares of food insecurity.",
  "operationalRules": {
   "band": "Low if P < 0.33; Watch if 0.33 <= P < 0.67; High if P >= 0.67",
   "decision": "HIGH if P >= 0.5 (fixed; ADDENDUM_I7)",
@@ -61,14 +62,18 @@
    },
    "fiveTriggerContributions": {
     "market": {
-     "foodInflationPoints": 0.638,
-     "gapPoints": 0.0,
+     "foodInflationPoints": -0.456,
+     "gapPoints": -2.643,
      "hungerPoints": -1.408,
-     "logOddsEffect": 0.2655,
+     "logOddsEffect": -2.2437,
+     "residualOnlyLogOddsEffect": 0.2655,
+     "baseProjectionFoodPoints": -1.094,
+     "baseProjectionGapPoints": -2.643,
      "features": [
       "D_now",
       "F_hat_M1",
       "F_now",
+      "base-effect CPI projection",
       "gap_now",
       "rice_whsl_yoy"
      ],
@@ -85,6 +90,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 3.837,
      "logOddsEffect": 0.1744,
+     "residualOnlyLogOddsEffect": 0.1744,
      "features": [
       "corn_yoy",
       "enso",
@@ -111,6 +117,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -0.36,
      "logOddsEffect": -0.0015,
+     "residualOnlyLogOddsEffect": -0.0015,
      "features": [
       "aqua_yoy",
       "fish_yoy"
@@ -125,6 +132,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -6.074,
      "logOddsEffect": -0.162,
+     "residualOnlyLogOddsEffect": -0.162,
      "features": [
       "under_yoy",
       "ur_yoy"
@@ -139,6 +147,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 0.824,
      "logOddsEffect": -0.0134,
+     "residualOnlyLogOddsEffect": -0.0134,
      "features": [
       "fx_yoy",
       "remit_php_yoy",
@@ -184,8 +193,8 @@
      {
       "driver_group": "market",
       "driver_label": "Market / Prices",
-      "group_shap": 0.2655,
-      "direction": "increases_risk",
+      "group_shap": -2.2437,
+      "direction": "protective",
       "trigger_proportion": 0.0
      },
      {
@@ -218,8 +227,18 @@
      }
     ],
     "article_count": 57.0,
-    "other_pct": 0.0,
+    "other_pct": 3.2,
     "evidence_quarter": "2026-Q3"
+   },
+   "otherContribution": {
+    "hungerLevelPoints": 2.94,
+    "logOddsEffect": 0.0855,
+    "reference": {
+     "foodBaseTrainMean": 2.126,
+     "gapBaseTrainMean": 0.115,
+     "hungerBaseTrainMean": 14.36
+    },
+    "label": "Latest regional hunger level (SWS), not one of the five triggers"
    },
    "observed": {
     "hungerRegional": {
@@ -393,10 +412,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 1.17,
+       "gapPoints": 1.631,
        "hungerPoints": 0.001,
-       "logOddsEffect": 0.0008,
+       "logOddsEffect": 1.1752,
+       "residualOnlyLogOddsEffect": 0.0008,
+       "baseProjectionFoodPoints": 1.17,
+       "baseProjectionGapPoints": 1.631,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -406,6 +428,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.256,
        "logOddsEffect": 0.2235,
+       "residualOnlyLogOddsEffect": 0.2235,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -419,6 +442,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.19,
        "logOddsEffect": -0.1613,
+       "residualOnlyLogOddsEffect": -0.1613,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -428,6 +452,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.334,
        "logOddsEffect": -0.2815,
+       "residualOnlyLogOddsEffect": -0.2815,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -438,6 +463,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.125,
        "logOddsEffect": -0.1067,
+       "residualOnlyLogOddsEffect": -0.1067,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -446,7 +472,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 4.2% in the latest two months (through 2023-11) vs this province's reference 4.71%; food minus headline -0.8 points."
       },
       "climate": {
@@ -468,6 +494,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.1752,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "employment",
         "driver_label": "Employment",
@@ -495,18 +528,21 @@
         "group_shap": -0.1067,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 31,
-      "other_pct": 0.0,
+      "other_pct": 13.1,
       "evidence_quarter": "2023-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": -0.35,
+      "logOddsEffect": -0.2944,
+      "reference": {
+       "foodBaseTrainMean": 3.214,
+       "gapBaseTrainMean": 0.234,
+       "hungerBaseTrainMean": 10.65
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q3": {
@@ -530,10 +566,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.409,
+       "gapPoints": -0.488,
        "hungerPoints": -0.161,
-       "logOddsEffect": -0.0001,
+       "logOddsEffect": -1.2717,
+       "residualOnlyLogOddsEffect": -0.0001,
+       "baseProjectionFoodPoints": -2.409,
+       "baseProjectionGapPoints": -0.488,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -543,6 +582,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.142,
        "logOddsEffect": 0.0081,
+       "residualOnlyLogOddsEffect": 0.0081,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -556,6 +596,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.931,
        "logOddsEffect": -0.0004,
+       "residualOnlyLogOddsEffect": -0.0004,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -565,6 +606,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.041,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -575,6 +617,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.338,
        "logOddsEffect": 0.0103,
+       "residualOnlyLogOddsEffect": 0.0103,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -606,6 +649,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.2717,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0103,
@@ -627,13 +677,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0001,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0,
@@ -642,8 +685,18 @@
        }
       ],
       "article_count": 27,
-      "other_pct": 0.0,
+      "other_pct": 4.0,
       "evidence_quarter": "2024-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.929,
+      "logOddsEffect": 0.0532,
+      "reference": {
+       "foodBaseTrainMean": 3.657,
+       "gapBaseTrainMean": -0.366,
+       "hungerBaseTrainMean": 10.371
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q4": {
@@ -667,10 +720,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -3.845,
+       "gapPoints": -1.406,
        "hungerPoints": -0.044,
-       "logOddsEffect": -0.0003,
+       "logOddsEffect": -2.3564,
+       "residualOnlyLogOddsEffect": -0.0003,
+       "baseProjectionFoodPoints": -3.845,
+       "baseProjectionGapPoints": -1.406,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -680,6 +736,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.344,
        "logOddsEffect": 0.0223,
+       "residualOnlyLogOddsEffect": 0.0223,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -693,6 +750,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.581,
        "logOddsEffect": -0.0023,
+       "residualOnlyLogOddsEffect": -0.0023,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -702,6 +760,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -3.934,
        "logOddsEffect": -0.0037,
+       "residualOnlyLogOddsEffect": -0.0037,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -712,6 +771,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.624,
        "logOddsEffect": 0.0332,
+       "residualOnlyLogOddsEffect": 0.0332,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -720,7 +780,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 3.7% in the latest two months (through 2024-05) vs this province's reference 4.71%; food minus headline +1.0 points."
       },
       "climate": {
@@ -742,6 +802,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -2.3564,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -769,18 +836,21 @@
         "group_shap": -0.0023,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 37,
-      "other_pct": 0.0,
+      "other_pct": 20.9,
       "evidence_quarter": "2024-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 4.812,
+      "logOddsEffect": 0.6392,
+      "reference": {
+       "foodBaseTrainMean": 3.564,
+       "gapBaseTrainMean": 0.023,
+       "hungerBaseTrainMean": 10.488
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q1": {
@@ -804,10 +874,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.921,
+       "gapPoints": 0.821,
        "hungerPoints": -0.024,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": 0.5557,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -1.921,
+       "baseProjectionGapPoints": 0.821,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -817,6 +890,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.923,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -830,6 +904,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.105,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -839,6 +914,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.779,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -849,6 +925,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.966,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -857,7 +934,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 2.5% in the latest two months (through 2024-08) vs this province's reference 4.71%; food minus headline +0.6 points."
       },
       "climate": {
@@ -882,8 +959,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
+        "group_shap": 0.5557,
+        "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
        {
@@ -916,8 +993,18 @@
        }
       ],
       "article_count": 61,
-      "other_pct": 0.0,
+      "other_pct": 41.1,
       "evidence_quarter": "2024-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 9.133,
+      "logOddsEffect": 0.3884,
+      "reference": {
+       "foodBaseTrainMean": 3.661,
+       "gapBaseTrainMean": 0.178,
+       "hungerBaseTrainMean": 10.467
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q4": {
@@ -941,10 +1028,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.114,
-       "gapPoints": 0.038,
+       "foodInflationPoints": -3.969,
+       "gapPoints": -1.214,
        "hungerPoints": -0.228,
-       "logOddsEffect": 0.0425,
+       "logOddsEffect": -1.3208,
+       "residualOnlyLogOddsEffect": 0.0425,
+       "baseProjectionFoodPoints": -4.083,
+       "baseProjectionGapPoints": -1.252,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -958,6 +1048,7 @@
        "gapPoints": 0.154,
        "hungerPoints": -0.496,
        "logOddsEffect": 0.1742,
+       "residualOnlyLogOddsEffect": 0.1742,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -974,6 +1065,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 0.354,
        "logOddsEffect": 0.0257,
+       "residualOnlyLogOddsEffect": 0.0257,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -984,6 +1076,7 @@
        "gapPoints": 0.126,
        "hungerPoints": 0.854,
        "logOddsEffect": 0.1415,
+       "residualOnlyLogOddsEffect": 0.1415,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -994,6 +1087,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.648,
        "logOddsEffect": 0.0482,
+       "residualOnlyLogOddsEffect": 0.0482,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -1026,6 +1120,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.3208,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": 0.1742,
@@ -1047,13 +1148,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0425,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "fish_kill",
         "driver_label": "Fish Kill",
         "group_shap": 0.0257,
@@ -1062,8 +1156,18 @@
        }
       ],
       "article_count": 25,
-      "other_pct": 0.0,
+      "other_pct": 4.9,
       "evidence_quarter": "2025-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0885,
+      "reference": {
+       "foodBaseTrainMean": 3.367,
+       "gapBaseTrainMean": 0.082,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q1": {
@@ -1087,10 +1191,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.107,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.321,
+       "gapPoints": -1.091,
        "hungerPoints": -0.261,
-       "logOddsEffect": 0.0283,
+       "logOddsEffect": -1.1058,
+       "residualOnlyLogOddsEffect": 0.0283,
+       "baseProjectionFoodPoints": -1.429,
+       "baseProjectionGapPoints": -1.091,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -1104,6 +1211,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.232,
        "logOddsEffect": 0.0617,
+       "residualOnlyLogOddsEffect": 0.0617,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -1120,6 +1228,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.0076,
+       "residualOnlyLogOddsEffect": -0.0076,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -1130,6 +1239,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.792,
        "logOddsEffect": 0.0264,
+       "residualOnlyLogOddsEffect": 0.0264,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -1140,6 +1250,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.794,
        "logOddsEffect": 0.0042,
+       "residualOnlyLogOddsEffect": 0.0042,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -1172,18 +1283,18 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.1058,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": 0.0617,
         "direction": "increases_risk",
         "trigger_proportion": 0.058823529411764705
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0283,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        },
        {
         "driver_group": "employment",
@@ -1208,8 +1319,18 @@
        }
       ],
       "article_count": 51,
-      "other_pct": 0.0,
+      "other_pct": 4.3,
       "evidence_quarter": "2025-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0533,
+      "reference": {
+       "foodBaseTrainMean": 3.416,
+       "gapBaseTrainMean": 0.196,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q2": {
@@ -1233,10 +1354,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.172,
-       "gapPoints": 0.036,
+       "foodInflationPoints": -1.305,
+       "gapPoints": -0.534,
        "hungerPoints": -0.331,
-       "logOddsEffect": 0.038,
+       "logOddsEffect": -0.5489,
+       "residualOnlyLogOddsEffect": 0.038,
+       "baseProjectionFoodPoints": -1.478,
+       "baseProjectionGapPoints": -0.571,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -1250,6 +1374,7 @@
        "gapPoints": -0.258,
        "hungerPoints": 1.073,
        "logOddsEffect": -0.2588,
+       "residualOnlyLogOddsEffect": -0.2588,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -1266,6 +1391,7 @@
        "gapPoints": 0.016,
        "hungerPoints": 0.12,
        "logOddsEffect": 0.0158,
+       "residualOnlyLogOddsEffect": 0.0158,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -1276,6 +1402,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.898,
        "logOddsEffect": 0.043,
+       "residualOnlyLogOddsEffect": 0.043,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -1286,6 +1413,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 1.407,
        "logOddsEffect": 0.0227,
+       "residualOnlyLogOddsEffect": 0.0227,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -1318,6 +1446,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.5489,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.2588,
@@ -1328,13 +1463,6 @@
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.043,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.038,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -1354,8 +1482,18 @@
        }
       ],
       "article_count": 38,
-      "other_pct": 0.0,
+      "other_pct": 2.6,
       "evidence_quarter": "2025-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0241,
+      "reference": {
+       "foodBaseTrainMean": 3.458,
+       "gapBaseTrainMean": 0.272,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q3": {
@@ -1379,10 +1517,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.194,
-       "gapPoints": 0.054,
+       "foodInflationPoints": -1.485,
+       "gapPoints": 0.523,
        "hungerPoints": -0.076,
-       "logOddsEffect": 0.0517,
+       "logOddsEffect": 0.5075,
+       "residualOnlyLogOddsEffect": 0.0517,
+       "baseProjectionFoodPoints": -1.678,
+       "baseProjectionGapPoints": 0.469,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -1396,6 +1537,7 @@
        "gapPoints": -0.127,
        "hungerPoints": -0.308,
        "logOddsEffect": -0.1413,
+       "residualOnlyLogOddsEffect": -0.1413,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -1412,6 +1554,7 @@
        "gapPoints": 0.016,
        "hungerPoints": -0.072,
        "logOddsEffect": 0.0132,
+       "residualOnlyLogOddsEffect": 0.0132,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -1422,6 +1565,7 @@
        "gapPoints": -0.017,
        "hungerPoints": 0.152,
        "logOddsEffect": -0.0104,
+       "residualOnlyLogOddsEffect": -0.0104,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -1432,6 +1576,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.412,
        "logOddsEffect": 0.0356,
+       "residualOnlyLogOddsEffect": 0.0356,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -1464,18 +1609,18 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.5075,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.03333333333333333
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.1413,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0517,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.03333333333333333
        },
        {
         "driver_group": "ofw_remittance",
@@ -1500,8 +1645,18 @@
        }
       ],
       "article_count": 30,
-      "other_pct": 0.0,
+      "other_pct": 29.2,
       "evidence_quarter": "2026-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.823,
+      "logOddsEffect": 0.287,
+      "reference": {
+       "foodBaseTrainMean": 3.247,
+       "gapBaseTrainMean": 0.187,
+       "hungerBaseTrainMean": 12.877
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q4": {
@@ -1525,10 +1680,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.485,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.727,
+       "gapPoints": -2.845,
        "hungerPoints": -0.007,
-       "logOddsEffect": 0.2663,
+       "logOddsEffect": -3.0782,
+       "residualOnlyLogOddsEffect": 0.2663,
+       "baseProjectionFoodPoints": -1.212,
+       "baseProjectionGapPoints": -2.845,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -1542,6 +1700,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.225,
        "logOddsEffect": 0.3568,
+       "residualOnlyLogOddsEffect": 0.3568,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -1558,6 +1717,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.053,
        "logOddsEffect": -0.0603,
+       "residualOnlyLogOddsEffect": -0.0603,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -1568,6 +1728,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.235,
        "logOddsEffect": -0.4126,
+       "residualOnlyLogOddsEffect": -0.4126,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -1578,6 +1739,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.1067,
+       "residualOnlyLogOddsEffect": -0.1067,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -1610,6 +1772,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -3.0782,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": -0.4126,
@@ -1620,13 +1789,6 @@
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": 0.3568,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.2663,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -1646,8 +1808,18 @@
        }
       ],
       "article_count": 53,
-      "other_pct": 0.0,
+      "other_pct": 4.5,
       "evidence_quarter": "2026-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 8.729,
+      "logOddsEffect": 0.1879,
+      "reference": {
+       "foodBaseTrainMean": 2.198,
+       "gapBaseTrainMean": 0.139,
+       "hungerBaseTrainMean": 13.671
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     }
    }
@@ -1680,14 +1852,18 @@
    },
    "fiveTriggerContributions": {
     "market": {
-     "foodInflationPoints": 0.964,
-     "gapPoints": 0.0,
+     "foodInflationPoints": -0.298,
+     "gapPoints": -2.533,
      "hungerPoints": -1.408,
-     "logOddsEffect": 0.0887,
+     "logOddsEffect": -2.4648,
+     "residualOnlyLogOddsEffect": 0.0887,
+     "baseProjectionFoodPoints": -1.263,
+     "baseProjectionGapPoints": -2.533,
      "features": [
       "D_now",
       "F_hat_M1",
       "F_now",
+      "base-effect CPI projection",
       "gap_now",
       "rice_whsl_yoy"
      ],
@@ -1704,6 +1880,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 3.837,
      "logOddsEffect": 0.1573,
+     "residualOnlyLogOddsEffect": 0.1573,
      "features": [
       "corn_yoy",
       "enso",
@@ -1730,6 +1907,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -0.36,
      "logOddsEffect": -0.0057,
+     "residualOnlyLogOddsEffect": -0.0057,
      "features": [
       "aqua_yoy",
       "fish_yoy"
@@ -1744,6 +1922,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -6.074,
      "logOddsEffect": -0.0842,
+     "residualOnlyLogOddsEffect": -0.0842,
      "features": [
       "under_yoy",
       "ur_yoy"
@@ -1758,6 +1937,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 0.824,
      "logOddsEffect": 0.0058,
+     "residualOnlyLogOddsEffect": 0.0058,
      "features": [
       "fx_yoy",
       "remit_php_yoy",
@@ -1801,18 +1981,18 @@
    "drivers": {
     "drivers": [
      {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -2.4648,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
       "driver_group": "climate",
       "driver_label": "Climate Stress",
       "group_shap": 0.1573,
       "direction": "increases_risk",
       "trigger_proportion": 0.2308
-     },
-     {
-      "driver_group": "market",
-      "driver_label": "Market / Prices",
-      "group_shap": 0.0887,
-      "direction": "increases_risk",
-      "trigger_proportion": 0.0
      },
      {
       "driver_group": "employment",
@@ -1837,8 +2017,18 @@
      }
     ],
     "article_count": 52.0,
-    "other_pct": 0.0,
+    "other_pct": 3.0,
     "evidence_quarter": "2026-Q3"
+   },
+   "otherContribution": {
+    "hungerLevelPoints": 2.94,
+    "logOddsEffect": 0.0846,
+    "reference": {
+     "foodBaseTrainMean": 2.126,
+     "gapBaseTrainMean": 0.115,
+     "hungerBaseTrainMean": 14.36
+    },
+    "label": "Latest regional hunger level (SWS), not one of the five triggers"
    },
    "observed": {
     "hungerRegional": {
@@ -2012,10 +2202,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.181,
+       "gapPoints": 1.087,
        "hungerPoints": 0.001,
-       "logOddsEffect": 0.0008,
+       "logOddsEffect": 1.0394,
+       "residualOnlyLogOddsEffect": 0.0008,
+       "baseProjectionFoodPoints": -0.181,
+       "baseProjectionGapPoints": 1.087,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -2025,6 +2218,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.256,
        "logOddsEffect": 0.218,
+       "residualOnlyLogOddsEffect": 0.218,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -2038,6 +2232,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.19,
        "logOddsEffect": -0.1565,
+       "residualOnlyLogOddsEffect": -0.1565,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -2047,6 +2242,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.334,
        "logOddsEffect": -0.2726,
+       "residualOnlyLogOddsEffect": -0.2726,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2057,6 +2253,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.125,
        "logOddsEffect": -0.1036,
+       "residualOnlyLogOddsEffect": -0.1036,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -2065,7 +2262,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 4.2% in the latest two months (through 2023-11) vs this province's reference 6.05%; food minus headline +1.6 points."
       },
       "climate": {
@@ -2087,6 +2284,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.0394,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "employment",
         "driver_label": "Employment",
@@ -2114,18 +2318,21 @@
         "group_shap": -0.1036,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 15,
-      "other_pct": 0.0,
+      "other_pct": 13.7,
       "evidence_quarter": "2023-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": -0.35,
+      "logOddsEffect": -0.2851,
+      "reference": {
+       "foodBaseTrainMean": 3.214,
+       "gapBaseTrainMean": 0.234,
+       "hungerBaseTrainMean": 10.65
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q3": {
@@ -2149,10 +2356,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.264,
+       "gapPoints": 0.897,
        "hungerPoints": -0.161,
-       "logOddsEffect": -0.0002,
+       "logOddsEffect": 1.0056,
+       "residualOnlyLogOddsEffect": -0.0002,
+       "baseProjectionFoodPoints": -0.264,
+       "baseProjectionGapPoints": 0.897,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -2162,6 +2372,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.142,
        "logOddsEffect": 0.0136,
+       "residualOnlyLogOddsEffect": 0.0136,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -2175,6 +2386,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.931,
        "logOddsEffect": -0.0006,
+       "residualOnlyLogOddsEffect": -0.0006,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -2184,6 +2396,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.041,
        "logOddsEffect": 0.0001,
+       "residualOnlyLogOddsEffect": 0.0001,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2194,6 +2407,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.338,
        "logOddsEffect": 0.0171,
+       "residualOnlyLogOddsEffect": 0.0171,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -2225,6 +2439,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.0056,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0171,
@@ -2246,13 +2467,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0002,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0,
@@ -2261,8 +2475,18 @@
        }
       ],
       "article_count": 29,
-      "other_pct": 0.0,
+      "other_pct": 7.8,
       "evidence_quarter": "2024-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.929,
+      "logOddsEffect": 0.0873,
+      "reference": {
+       "foodBaseTrainMean": 3.657,
+       "gapBaseTrainMean": -0.366,
+       "hungerBaseTrainMean": 10.371
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q4": {
@@ -2286,10 +2510,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.827,
+       "gapPoints": -1.228,
        "hungerPoints": -0.044,
-       "logOddsEffect": -0.0003,
+       "logOddsEffect": -1.7118,
+       "residualOnlyLogOddsEffect": -0.0003,
+       "baseProjectionFoodPoints": -2.827,
+       "baseProjectionGapPoints": -1.228,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -2299,6 +2526,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.344,
        "logOddsEffect": 0.023,
+       "residualOnlyLogOddsEffect": 0.023,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -2312,6 +2540,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.581,
        "logOddsEffect": -0.0024,
+       "residualOnlyLogOddsEffect": -0.0024,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -2321,6 +2550,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -3.934,
        "logOddsEffect": -0.0038,
+       "residualOnlyLogOddsEffect": -0.0038,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2331,6 +2561,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.624,
        "logOddsEffect": 0.0342,
+       "residualOnlyLogOddsEffect": 0.0342,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -2339,7 +2570,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-05) vs this province's reference 6.05%; food minus headline +0.7 points."
       },
       "climate": {
@@ -2361,6 +2592,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.7118,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -2388,18 +2626,21 @@
         "group_shap": -0.0024,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 17,
-      "other_pct": 0.0,
+      "other_pct": 26.9,
       "evidence_quarter": "2024-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 4.812,
+      "logOddsEffect": 0.6543,
+      "reference": {
+       "foodBaseTrainMean": 3.564,
+       "gapBaseTrainMean": 0.023,
+       "hungerBaseTrainMean": 10.488
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q1": {
@@ -2423,10 +2664,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.902,
+       "gapPoints": 0.349,
        "hungerPoints": -0.024,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": 0.3361,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -0.902,
+       "baseProjectionGapPoints": 0.349,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -2436,6 +2680,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.923,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -2449,6 +2694,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.105,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -2458,6 +2704,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.779,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2468,6 +2715,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.966,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -2476,7 +2724,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 4.2% in the latest two months (through 2024-08) vs this province's reference 6.05%; food minus headline +0.7 points."
       },
       "climate": {
@@ -2501,8 +2749,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
+        "group_shap": 0.3361,
+        "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
        {
@@ -2535,8 +2783,18 @@
        }
       ],
       "article_count": 14,
-      "other_pct": 0.0,
+      "other_pct": 49.4,
       "evidence_quarter": "2024-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 9.133,
+      "logOddsEffect": 0.3288,
+      "reference": {
+       "foodBaseTrainMean": 3.661,
+       "gapBaseTrainMean": 0.178,
+       "hungerBaseTrainMean": 10.467
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q4": {
@@ -2560,10 +2818,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": -0.007,
-       "gapPoints": -0.009,
+       "foodInflationPoints": -1.561,
+       "gapPoints": 0.082,
        "hungerPoints": -0.228,
-       "logOddsEffect": -0.0088,
+       "logOddsEffect": 0.0809,
+       "residualOnlyLogOddsEffect": -0.0088,
+       "baseProjectionFoodPoints": -1.554,
+       "baseProjectionGapPoints": 0.09,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -2577,6 +2838,7 @@
        "gapPoints": 0.091,
        "hungerPoints": -0.496,
        "logOddsEffect": 0.0906,
+       "residualOnlyLogOddsEffect": 0.0906,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -2593,6 +2855,7 @@
        "gapPoints": 0.026,
        "hungerPoints": 0.354,
        "logOddsEffect": 0.0262,
+       "residualOnlyLogOddsEffect": 0.0262,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -2603,6 +2866,7 @@
        "gapPoints": 0.126,
        "hungerPoints": 0.854,
        "logOddsEffect": 0.1251,
+       "residualOnlyLogOddsEffect": 0.1251,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2613,6 +2877,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.648,
        "logOddsEffect": 0.0429,
+       "residualOnlyLogOddsEffect": 0.0429,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -2659,6 +2924,13 @@
         "trigger_proportion": 0.0
        },
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0809,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0429,
@@ -2671,18 +2943,21 @@
         "group_shap": 0.0262,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0088,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 28,
-      "other_pct": 0.0,
+      "other_pct": 26.7,
       "evidence_quarter": "2025-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.1329,
+      "reference": {
+       "foodBaseTrainMean": 3.367,
+       "gapBaseTrainMean": 0.082,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q1": {
@@ -2706,10 +2981,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.085,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.207,
+       "gapPoints": -0.767,
        "hungerPoints": -0.261,
-       "logOddsEffect": 0.0,
+       "logOddsEffect": -0.762,
+       "residualOnlyLogOddsEffect": 0.0,
+       "baseProjectionFoodPoints": -2.292,
+       "baseProjectionGapPoints": -0.767,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -2723,6 +3001,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.232,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -2739,6 +3018,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -2749,6 +3029,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.792,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2759,6 +3040,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.794,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -2793,8 +3075,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
+        "group_shap": -0.762,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
@@ -2827,8 +3109,18 @@
        }
       ],
       "article_count": 30,
-      "other_pct": 0.0,
+      "other_pct": 7.0,
       "evidence_quarter": "2025-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.057,
+      "reference": {
+       "foodBaseTrainMean": 3.416,
+       "gapBaseTrainMean": 0.196,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q2": {
@@ -2852,10 +3144,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.062,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.801,
+       "gapPoints": 0.022,
        "hungerPoints": -0.331,
-       "logOddsEffect": 0.0003,
+       "logOddsEffect": 0.0205,
+       "residualOnlyLogOddsEffect": 0.0003,
+       "baseProjectionFoodPoints": -0.863,
+       "baseProjectionGapPoints": 0.021,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -2869,6 +3164,7 @@
        "gapPoints": -0.209,
        "hungerPoints": 1.073,
        "logOddsEffect": -0.199,
+       "residualOnlyLogOddsEffect": -0.199,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -2885,6 +3181,7 @@
        "gapPoints": 0.019,
        "hungerPoints": 0.12,
        "logOddsEffect": 0.0179,
+       "residualOnlyLogOddsEffect": 0.0179,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -2895,6 +3192,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.898,
        "logOddsEffect": 0.0413,
+       "residualOnlyLogOddsEffect": 0.0413,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -2905,6 +3203,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 1.407,
        "logOddsEffect": 0.0218,
+       "residualOnlyLogOddsEffect": 0.0218,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -2958,23 +3257,33 @@
         "trigger_proportion": 0.0
        },
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.0205,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "fish_kill",
         "driver_label": "Fish Kill",
         "group_shap": 0.0179,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0003,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 28,
-      "other_pct": 0.0,
+      "other_pct": 9.1,
       "evidence_quarter": "2025-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0301,
+      "reference": {
+       "foodBaseTrainMean": 3.458,
+       "gapBaseTrainMean": 0.272,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q3": {
@@ -2998,10 +3307,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.197,
-       "gapPoints": 0.052,
+       "foodInflationPoints": -1.05,
+       "gapPoints": -1.805,
        "hungerPoints": -0.076,
-       "logOddsEffect": 0.0783,
+       "logOddsEffect": -2.1076,
+       "residualOnlyLogOddsEffect": 0.0783,
+       "baseProjectionFoodPoints": -1.247,
+       "baseProjectionGapPoints": -1.858,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -3015,6 +3327,7 @@
        "gapPoints": -0.054,
        "hungerPoints": -0.308,
        "logOddsEffect": -0.078,
+       "residualOnlyLogOddsEffect": -0.078,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -3031,6 +3344,7 @@
        "gapPoints": 0.016,
        "hungerPoints": -0.072,
        "logOddsEffect": 0.014,
+       "residualOnlyLogOddsEffect": 0.014,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -3041,6 +3355,7 @@
        "gapPoints": -0.017,
        "hungerPoints": 0.152,
        "logOddsEffect": -0.0219,
+       "residualOnlyLogOddsEffect": -0.0219,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -3051,6 +3366,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.412,
        "logOddsEffect": 0.0324,
+       "residualOnlyLogOddsEffect": 0.0324,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -3085,8 +3401,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0783,
-        "direction": "increases_risk",
+        "group_shap": -2.1076,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
@@ -3119,8 +3435,18 @@
        }
       ],
       "article_count": 24,
-      "other_pct": 0.0,
+      "other_pct": 7.4,
       "evidence_quarter": "2026-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.823,
+      "logOddsEffect": 0.1787,
+      "reference": {
+       "foodBaseTrainMean": 3.247,
+       "gapBaseTrainMean": 0.187,
+       "hungerBaseTrainMean": 12.877
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q4": {
@@ -3144,10 +3470,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.699,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.157,
+       "gapPoints": -4.623,
        "hungerPoints": -0.007,
-       "logOddsEffect": 1.0978,
+       "logOddsEffect": -3.8953,
+       "residualOnlyLogOddsEffect": 1.0978,
+       "baseProjectionFoodPoints": -0.856,
+       "baseProjectionGapPoints": -4.623,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -3161,6 +3490,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.225,
        "logOddsEffect": 1.2573,
+       "residualOnlyLogOddsEffect": 1.2573,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -3177,6 +3507,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.053,
        "logOddsEffect": 0.0758,
+       "residualOnlyLogOddsEffect": 0.0758,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -3187,6 +3518,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.235,
        "logOddsEffect": -0.685,
+       "residualOnlyLogOddsEffect": -0.685,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -3197,6 +3529,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.206,
+       "residualOnlyLogOddsEffect": -0.206,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -3229,16 +3562,16 @@
      "drivers": {
       "drivers": [
        {
-        "driver_group": "climate",
-        "driver_label": "Climate Stress",
-        "group_shap": 1.2573,
-        "direction": "increases_risk",
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -3.8953,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 1.0978,
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": 1.2573,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -3265,8 +3598,18 @@
        }
       ],
       "article_count": 27,
-      "other_pct": 0.0,
+      "other_pct": 3.0,
       "evidence_quarter": "2026-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 8.729,
+      "logOddsEffect": 0.1858,
+      "reference": {
+       "foodBaseTrainMean": 2.198,
+       "gapBaseTrainMean": 0.139,
+       "hungerBaseTrainMean": 13.671
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     }
    }
@@ -3299,14 +3642,18 @@
    },
    "fiveTriggerContributions": {
     "market": {
-     "foodInflationPoints": 0.657,
-     "gapPoints": 0.0,
+     "foodInflationPoints": 0.606,
+     "gapPoints": -2.69,
      "hungerPoints": -1.408,
-     "logOddsEffect": 0.0666,
+     "logOddsEffect": -2.3238,
+     "residualOnlyLogOddsEffect": 0.0666,
+     "baseProjectionFoodPoints": -0.051,
+     "baseProjectionGapPoints": -2.69,
      "features": [
       "D_now",
       "F_hat_M1",
       "F_now",
+      "base-effect CPI projection",
       "gap_now",
       "rice_whsl_yoy"
      ],
@@ -3323,6 +3670,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 3.837,
      "logOddsEffect": 0.1372,
+     "residualOnlyLogOddsEffect": 0.1372,
      "features": [
       "corn_yoy",
       "enso",
@@ -3349,6 +3697,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -0.36,
      "logOddsEffect": -0.0069,
+     "residualOnlyLogOddsEffect": -0.0069,
      "features": [
       "aqua_yoy",
       "fish_yoy"
@@ -3363,6 +3712,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -6.074,
      "logOddsEffect": -0.0865,
+     "residualOnlyLogOddsEffect": -0.0865,
      "features": [
       "under_yoy",
       "ur_yoy"
@@ -3377,6 +3727,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 0.824,
      "logOddsEffect": 0.008,
+     "residualOnlyLogOddsEffect": 0.008,
      "features": [
       "fx_yoy",
       "remit_php_yoy",
@@ -3420,6 +3771,13 @@
    "drivers": {
     "drivers": [
      {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -2.3238,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
       "driver_group": "climate",
       "driver_label": "Climate Stress",
       "group_shap": 0.1372,
@@ -3431,13 +3789,6 @@
       "driver_label": "Employment",
       "group_shap": -0.0865,
       "direction": "protective",
-      "trigger_proportion": 0.0
-     },
-     {
-      "driver_group": "market",
-      "driver_label": "Market / Prices",
-      "group_shap": 0.0666,
-      "direction": "increases_risk",
       "trigger_proportion": 0.0
      },
      {
@@ -3456,8 +3807,18 @@
      }
     ],
     "article_count": 40.0,
-    "other_pct": 0.0,
+    "other_pct": 3.5,
     "evidence_quarter": "2026-Q3"
+   },
+   "otherContribution": {
+    "hungerLevelPoints": 2.94,
+    "logOddsEffect": 0.0936,
+    "reference": {
+     "foodBaseTrainMean": 2.126,
+     "gapBaseTrainMean": 0.115,
+     "hungerBaseTrainMean": 14.36
+    },
+    "label": "Latest regional hunger level (SWS), not one of the five triggers"
    },
    "observed": {
     "hungerRegional": {
@@ -3631,10 +3992,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.013,
+       "gapPoints": 0.891,
        "hungerPoints": 0.001,
-       "logOddsEffect": 0.0008,
+       "logOddsEffect": 0.1934,
+       "residualOnlyLogOddsEffect": 0.0008,
+       "baseProjectionFoodPoints": -0.013,
+       "baseProjectionGapPoints": 0.891,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -3644,6 +4008,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.256,
        "logOddsEffect": 0.2267,
+       "residualOnlyLogOddsEffect": 0.2267,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -3657,6 +4022,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.19,
        "logOddsEffect": -0.1641,
+       "residualOnlyLogOddsEffect": -0.1641,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -3666,6 +4032,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.334,
        "logOddsEffect": -0.2867,
+       "residualOnlyLogOddsEffect": -0.2867,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -3676,6 +4043,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.125,
        "logOddsEffect": -0.1085,
+       "residualOnlyLogOddsEffect": -0.1085,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -3684,7 +4052,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 1.9% in the latest two months (through 2023-11) vs this province's reference 6.24%; food minus headline +0.0 points."
       },
       "climate": {
@@ -3721,6 +4089,13 @@
         "trigger_proportion": 0.07142857142857142
        },
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.1934,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "fish_kill",
         "driver_label": "Fish Kill",
         "group_shap": -0.1641,
@@ -3733,18 +4108,21 @@
         "group_shap": -0.1085,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 14,
-      "other_pct": 0.0,
+      "other_pct": 23.4,
       "evidence_quarter": "2023-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": -0.35,
+      "logOddsEffect": -0.2999,
+      "reference": {
+       "foodBaseTrainMean": 3.214,
+       "gapBaseTrainMean": 0.234,
+       "hungerBaseTrainMean": 10.65
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q3": {
@@ -3768,10 +4146,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.993,
+       "gapPoints": 0.134,
        "hungerPoints": -0.161,
-       "logOddsEffect": -0.0002,
+       "logOddsEffect": 0.1605,
+       "residualOnlyLogOddsEffect": -0.0002,
+       "baseProjectionFoodPoints": -0.993,
+       "baseProjectionGapPoints": 0.134,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -3781,6 +4162,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.142,
        "logOddsEffect": 0.0175,
+       "residualOnlyLogOddsEffect": 0.0175,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -3794,6 +4176,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.931,
        "logOddsEffect": -0.0008,
+       "residualOnlyLogOddsEffect": -0.0008,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -3803,6 +4186,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.041,
        "logOddsEffect": 0.0001,
+       "residualOnlyLogOddsEffect": 0.0001,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -3813,6 +4197,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.338,
        "logOddsEffect": 0.0222,
+       "residualOnlyLogOddsEffect": 0.0222,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -3844,6 +4229,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.1605,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0222,
@@ -3865,13 +4257,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0002,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0,
@@ -3880,8 +4265,18 @@
        }
       ],
       "article_count": 14,
-      "other_pct": 0.0,
+      "other_pct": 35.7,
       "evidence_quarter": "2024-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.929,
+      "logOddsEffect": 0.1118,
+      "reference": {
+       "foodBaseTrainMean": 3.657,
+       "gapBaseTrainMean": -0.366,
+       "hungerBaseTrainMean": 10.371
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q4": {
@@ -3905,10 +4300,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 2.779,
+       "gapPoints": 1.725,
        "hungerPoints": -0.044,
-       "logOddsEffect": -0.0056,
+       "logOddsEffect": 2.3833,
+       "residualOnlyLogOddsEffect": -0.0056,
+       "baseProjectionFoodPoints": 2.779,
+       "baseProjectionGapPoints": 1.725,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -3918,6 +4316,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.344,
        "logOddsEffect": 0.3963,
+       "residualOnlyLogOddsEffect": 0.3963,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -3931,6 +4330,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.581,
        "logOddsEffect": -0.0514,
+       "residualOnlyLogOddsEffect": -0.0514,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -3940,6 +4340,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -3.934,
        "logOddsEffect": -0.083,
+       "residualOnlyLogOddsEffect": -0.083,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -3950,6 +4351,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.624,
        "logOddsEffect": 0.5466,
+       "residualOnlyLogOddsEffect": 0.5466,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -3958,7 +4360,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 8.0% in the latest two months (through 2024-05) vs this province's reference 6.24%; food minus headline +3.5 points."
       },
       "climate": {
@@ -3980,6 +4382,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 2.3833,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -4007,18 +4416,21 @@
         "group_shap": -0.0514,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 32,
-      "other_pct": 0.0,
+      "other_pct": 46.5,
       "evidence_quarter": "2024-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 4.812,
+      "logOddsEffect": 3.0101,
+      "reference": {
+       "foodBaseTrainMean": 3.564,
+       "gapBaseTrainMean": 0.023,
+       "hungerBaseTrainMean": 10.488
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q1": {
@@ -4042,10 +4454,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 3.182,
+       "gapPoints": 2.4,
        "hungerPoints": -0.024,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": 3.4019,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": 3.182,
+       "baseProjectionGapPoints": 2.4,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -4055,6 +4470,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.923,
        "logOddsEffect": 0.0013,
+       "residualOnlyLogOddsEffect": 0.0013,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -4068,6 +4484,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.105,
        "logOddsEffect": 0.0001,
+       "residualOnlyLogOddsEffect": 0.0001,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -4077,6 +4494,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.779,
        "logOddsEffect": -0.0003,
+       "residualOnlyLogOddsEffect": -0.0003,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4087,6 +4505,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.966,
        "logOddsEffect": 0.0014,
+       "residualOnlyLogOddsEffect": 0.0014,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -4095,7 +4514,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 8.7% in the latest two months (through 2024-08) vs this province's reference 6.24%; food minus headline +3.2 points."
       },
       "climate": {
@@ -4117,6 +4536,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 3.4019,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -4144,18 +4570,21 @@
         "group_shap": 0.0001,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 12,
-      "other_pct": 0.0,
+      "other_pct": 44.4,
       "evidence_quarter": "2024-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 9.133,
+      "logOddsEffect": 2.7223,
+      "reference": {
+       "foodBaseTrainMean": 3.661,
+       "gapBaseTrainMean": 0.178,
+       "hungerBaseTrainMean": 10.467
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q4": {
@@ -4179,10 +4608,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.049,
-       "gapPoints": -0.024,
+       "foodInflationPoints": -2.558,
+       "gapPoints": -1.352,
        "hungerPoints": -0.228,
-       "logOddsEffect": -0.0239,
+       "logOddsEffect": -1.356,
+       "residualOnlyLogOddsEffect": -0.0239,
+       "baseProjectionFoodPoints": -2.607,
+       "baseProjectionGapPoints": -1.328,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -4196,6 +4628,7 @@
        "gapPoints": 0.103,
        "hungerPoints": -0.496,
        "logOddsEffect": 0.1035,
+       "residualOnlyLogOddsEffect": 0.1035,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -4212,6 +4645,7 @@
        "gapPoints": 0.021,
        "hungerPoints": 0.354,
        "logOddsEffect": 0.0207,
+       "residualOnlyLogOddsEffect": 0.0207,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -4222,6 +4656,7 @@
        "gapPoints": 0.126,
        "hungerPoints": 0.854,
        "logOddsEffect": 0.1263,
+       "residualOnlyLogOddsEffect": 0.1263,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4232,6 +4667,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.648,
        "logOddsEffect": 0.0432,
+       "residualOnlyLogOddsEffect": 0.0432,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -4264,6 +4700,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.356,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.1263,
@@ -4285,13 +4728,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0239,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "fish_kill",
         "driver_label": "Fish Kill",
         "group_shap": 0.0207,
@@ -4300,8 +4736,18 @@
        }
       ],
       "article_count": 9,
-      "other_pct": 0.0,
+      "other_pct": 6.8,
       "evidence_quarter": "2025-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.1196,
+      "reference": {
+       "foodBaseTrainMean": 3.367,
+       "gapBaseTrainMean": 0.082,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q1": {
@@ -4325,10 +4771,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.183,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -3.8,
+       "gapPoints": -1.865,
        "hungerPoints": -0.261,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": -1.811,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -3.982,
+       "baseProjectionGapPoints": -1.865,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -4342,6 +4791,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.232,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -4358,6 +4808,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -4368,6 +4819,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.792,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4378,6 +4830,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.794,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -4412,7 +4865,7 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": -0.0,
+        "group_shap": -1.811,
         "direction": "protective",
         "trigger_proportion": 0.0
        },
@@ -4446,8 +4899,18 @@
        }
       ],
       "article_count": 16,
-      "other_pct": 0.0,
+      "other_pct": 3.1,
       "evidence_quarter": "2025-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.058,
+      "reference": {
+       "foodBaseTrainMean": 3.416,
+       "gapBaseTrainMean": 0.196,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q2": {
@@ -4471,10 +4934,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.227,
-       "gapPoints": 0.059,
+       "foodInflationPoints": -3.281,
+       "gapPoints": -0.529,
        "hungerPoints": -0.331,
-       "logOddsEffect": 0.0563,
+       "logOddsEffect": -0.5064,
+       "residualOnlyLogOddsEffect": 0.0563,
+       "baseProjectionFoodPoints": -3.509,
+       "baseProjectionGapPoints": -0.589,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -4488,6 +4954,7 @@
        "gapPoints": -0.185,
        "hungerPoints": 1.073,
        "logOddsEffect": -0.1754,
+       "residualOnlyLogOddsEffect": -0.1754,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -4504,6 +4971,7 @@
        "gapPoints": 0.015,
        "hungerPoints": 0.12,
        "logOddsEffect": 0.0141,
+       "residualOnlyLogOddsEffect": 0.0141,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -4514,6 +4982,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.898,
        "logOddsEffect": 0.0409,
+       "residualOnlyLogOddsEffect": 0.0409,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4524,6 +4993,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 1.407,
        "logOddsEffect": 0.0216,
+       "residualOnlyLogOddsEffect": 0.0216,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -4556,18 +5026,18 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.5064,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.1754,
         "direction": "protective",
         "trigger_proportion": 0.07407407407407407
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0563,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        },
        {
         "driver_group": "employment",
@@ -4592,8 +5062,18 @@
        }
       ],
       "article_count": 27,
-      "other_pct": 0.0,
+      "other_pct": 5.0,
       "evidence_quarter": "2025-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0399,
+      "reference": {
+       "foodBaseTrainMean": 3.458,
+       "gapBaseTrainMean": 0.272,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q3": {
@@ -4617,10 +5097,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.205,
-       "gapPoints": 0.06,
+       "foodInflationPoints": 0.418,
+       "gapPoints": 1.283,
        "hungerPoints": -0.076,
-       "logOddsEffect": 0.0422,
+       "logOddsEffect": 1.2192,
+       "residualOnlyLogOddsEffect": 0.0422,
+       "baseProjectionFoodPoints": 0.213,
+       "baseProjectionGapPoints": 1.223,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -4634,6 +5117,7 @@
        "gapPoints": -0.119,
        "hungerPoints": -0.308,
        "logOddsEffect": -0.1542,
+       "residualOnlyLogOddsEffect": -0.1542,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -4650,6 +5134,7 @@
        "gapPoints": 0.013,
        "hungerPoints": -0.072,
        "logOddsEffect": 0.0005,
+       "residualOnlyLogOddsEffect": 0.0005,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -4660,6 +5145,7 @@
        "gapPoints": -0.017,
        "hungerPoints": 0.152,
        "logOddsEffect": 0.0094,
+       "residualOnlyLogOddsEffect": 0.0094,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4670,6 +5156,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.412,
        "logOddsEffect": 0.081,
+       "residualOnlyLogOddsEffect": 0.081,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -4702,6 +5189,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.2192,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.1542,
@@ -4712,13 +5206,6 @@
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.081,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0422,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -4738,8 +5225,18 @@
        }
       ],
       "article_count": 35,
-      "other_pct": 0.0,
+      "other_pct": 35.5,
       "evidence_quarter": "2026-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.823,
+      "logOddsEffect": 0.8067,
+      "reference": {
+       "foodBaseTrainMean": 3.247,
+       "gapBaseTrainMean": 0.187,
+       "hungerBaseTrainMean": 12.877
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q4": {
@@ -4763,10 +5260,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.149,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 3.358,
+       "gapPoints": -1.748,
        "hungerPoints": -0.007,
-       "logOddsEffect": 0.0328,
+       "logOddsEffect": -1.6299,
+       "residualOnlyLogOddsEffect": 0.0328,
+       "baseProjectionFoodPoints": 3.21,
+       "baseProjectionGapPoints": -1.748,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -4780,6 +5280,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.225,
        "logOddsEffect": 0.028,
+       "residualOnlyLogOddsEffect": 0.028,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -4796,6 +5297,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.053,
        "logOddsEffect": -0.0169,
+       "residualOnlyLogOddsEffect": -0.0169,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -4806,6 +5308,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.235,
        "logOddsEffect": -0.1603,
+       "residualOnlyLogOddsEffect": -0.1603,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -4816,6 +5319,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.0373,
+       "residualOnlyLogOddsEffect": -0.0373,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -4848,6 +5352,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.6299,
+        "direction": "protective",
+        "trigger_proportion": 0.02040816326530612
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": -0.1603,
@@ -4860,13 +5371,6 @@
         "group_shap": -0.0373,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0328,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.02040816326530612
        },
        {
         "driver_group": "climate",
@@ -4884,8 +5388,18 @@
        }
       ],
       "article_count": 49,
-      "other_pct": 0.0,
+      "other_pct": 11.8,
       "evidence_quarter": "2026-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 8.729,
+      "logOddsEffect": 0.2472,
+      "reference": {
+       "foodBaseTrainMean": 2.198,
+       "gapBaseTrainMean": 0.139,
+       "hungerBaseTrainMean": 13.671
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     }
    }
@@ -4918,14 +5432,18 @@
    },
    "fiveTriggerContributions": {
     "market": {
-     "foodInflationPoints": 0.87,
-     "gapPoints": 0.0,
+     "foodInflationPoints": 0.418,
+     "gapPoints": -2.661,
      "hungerPoints": -1.408,
-     "logOddsEffect": 0.0799,
+     "logOddsEffect": -2.7374,
+     "residualOnlyLogOddsEffect": 0.0799,
+     "baseProjectionFoodPoints": -0.452,
+     "baseProjectionGapPoints": -2.661,
      "features": [
       "D_now",
       "F_hat_M1",
       "F_now",
+      "base-effect CPI projection",
       "gap_now",
       "rice_whsl_yoy"
      ],
@@ -4942,6 +5460,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 3.837,
      "logOddsEffect": 0.0835,
+     "residualOnlyLogOddsEffect": 0.0835,
      "features": [
       "corn_yoy",
       "enso",
@@ -4968,6 +5487,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -0.36,
      "logOddsEffect": -0.0002,
+     "residualOnlyLogOddsEffect": -0.0002,
      "features": [
       "aqua_yoy",
       "fish_yoy"
@@ -4982,6 +5502,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -6.074,
      "logOddsEffect": -0.0838,
+     "residualOnlyLogOddsEffect": -0.0838,
      "features": [
       "under_yoy",
       "ur_yoy"
@@ -4996,6 +5517,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 0.824,
      "logOddsEffect": 0.0054,
+     "residualOnlyLogOddsEffect": 0.0054,
      "features": [
       "fx_yoy",
       "remit_php_yoy",
@@ -5039,6 +5561,13 @@
    "drivers": {
     "drivers": [
      {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -2.7374,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
       "driver_group": "employment",
       "driver_label": "Employment",
       "group_shap": -0.0838,
@@ -5051,13 +5580,6 @@
       "group_shap": 0.0835,
       "direction": "increases_risk",
       "trigger_proportion": 0.25
-     },
-     {
-      "driver_group": "market",
-      "driver_label": "Market / Prices",
-      "group_shap": 0.0799,
-      "direction": "increases_risk",
-      "trigger_proportion": 0.0
      },
      {
       "driver_group": "ofw_remittance",
@@ -5075,8 +5597,18 @@
      }
     ],
     "article_count": 40.0,
-    "other_pct": 0.0,
+    "other_pct": 2.8,
     "evidence_quarter": "2026-Q3"
+   },
+   "otherContribution": {
+    "hungerLevelPoints": 2.94,
+    "logOddsEffect": 0.0828,
+    "reference": {
+     "foodBaseTrainMean": 2.126,
+     "gapBaseTrainMean": 0.115,
+     "hungerBaseTrainMean": 14.36
+    },
+    "label": "Latest regional hunger level (SWS), not one of the five triggers"
    },
    "observed": {
     "hungerRegional": {
@@ -5250,10 +5782,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 1.461,
+       "gapPoints": 2.076,
        "hungerPoints": 0.001,
-       "logOddsEffect": 0.0008,
+       "logOddsEffect": 1.7781,
+       "residualOnlyLogOddsEffect": 0.0008,
+       "baseProjectionFoodPoints": 1.461,
+       "baseProjectionGapPoints": 2.076,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -5263,6 +5798,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.256,
        "logOddsEffect": 0.2254,
+       "residualOnlyLogOddsEffect": 0.2254,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -5276,6 +5812,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.19,
        "logOddsEffect": -0.163,
+       "residualOnlyLogOddsEffect": -0.163,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -5285,6 +5822,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.334,
        "logOddsEffect": -0.2847,
+       "residualOnlyLogOddsEffect": -0.2847,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5295,6 +5833,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.125,
        "logOddsEffect": -0.1078,
+       "residualOnlyLogOddsEffect": -0.1078,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -5303,7 +5842,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 5.1% in the latest two months (through 2023-11) vs this province's reference 7.10%; food minus headline -0.4 points."
       },
       "climate": {
@@ -5325,6 +5864,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.7781,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "employment",
         "driver_label": "Employment",
@@ -5352,18 +5898,21 @@
         "group_shap": -0.1078,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 9,
-      "other_pct": 0.0,
+      "other_pct": 10.4,
       "evidence_quarter": "2023-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": -0.35,
+      "logOddsEffect": -0.2978,
+      "reference": {
+       "foodBaseTrainMean": 3.214,
+       "gapBaseTrainMean": 0.234,
+       "hungerBaseTrainMean": 10.65
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q3": {
@@ -5387,10 +5936,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.232,
+       "gapPoints": -2.284,
        "hungerPoints": -0.161,
-       "logOddsEffect": -0.0001,
+       "logOddsEffect": -2.0368,
+       "residualOnlyLogOddsEffect": -0.0001,
+       "baseProjectionFoodPoints": -1.232,
+       "baseProjectionGapPoints": -2.284,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -5400,6 +5952,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.142,
        "logOddsEffect": 0.0073,
+       "residualOnlyLogOddsEffect": 0.0073,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -5413,6 +5966,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.931,
        "logOddsEffect": -0.0003,
+       "residualOnlyLogOddsEffect": -0.0003,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -5422,6 +5976,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.041,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5432,6 +5987,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.338,
        "logOddsEffect": 0.0092,
+       "residualOnlyLogOddsEffect": 0.0092,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -5463,6 +6019,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -2.0368,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0092,
@@ -5484,13 +6047,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0001,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0,
@@ -5499,8 +6055,18 @@
        }
       ],
       "article_count": 17,
-      "other_pct": 0.0,
+      "other_pct": 2.3,
       "evidence_quarter": "2024-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.929,
+      "logOddsEffect": 0.0478,
+      "reference": {
+       "foodBaseTrainMean": 3.657,
+       "gapBaseTrainMean": -0.366,
+       "hungerBaseTrainMean": 10.371
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q4": {
@@ -5524,10 +6090,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.998,
+       "gapPoints": -3.089,
        "hungerPoints": -0.044,
-       "logOddsEffect": -0.0002,
+       "logOddsEffect": -5.0583,
+       "residualOnlyLogOddsEffect": -0.0002,
+       "baseProjectionFoodPoints": -2.998,
+       "baseProjectionGapPoints": -3.089,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -5537,6 +6106,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.344,
        "logOddsEffect": 0.0211,
+       "residualOnlyLogOddsEffect": 0.0211,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -5550,6 +6120,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.581,
        "logOddsEffect": -0.0022,
+       "residualOnlyLogOddsEffect": -0.0022,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -5559,6 +6130,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -3.934,
        "logOddsEffect": -0.0035,
+       "residualOnlyLogOddsEffect": -0.0035,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5569,6 +6141,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.624,
        "logOddsEffect": 0.0314,
+       "residualOnlyLogOddsEffect": 0.0314,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -5577,7 +6150,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 4.3% in the latest two months (through 2024-05) vs this province's reference 7.10%; food minus headline -0.9 points."
       },
       "climate": {
@@ -5599,6 +6172,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -5.0583,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -5626,18 +6206,21 @@
         "group_shap": -0.0022,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 27,
-      "other_pct": 0.0,
+      "other_pct": 10.7,
       "evidence_quarter": "2024-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 4.812,
+      "logOddsEffect": 0.6129,
+      "reference": {
+       "foodBaseTrainMean": 3.564,
+       "gapBaseTrainMean": 0.023,
+       "hungerBaseTrainMean": 10.488
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q1": {
@@ -5661,10 +6244,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.699,
+       "gapPoints": -0.11,
        "hungerPoints": -0.024,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": -0.1484,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -1.699,
+       "baseProjectionGapPoints": -0.11,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -5674,6 +6260,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.923,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -5687,6 +6274,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.105,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -5696,6 +6284,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.779,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5706,6 +6295,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.966,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -5714,7 +6304,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-08) vs this province's reference 7.10%; food minus headline -1.6 points."
       },
       "climate": {
@@ -5739,7 +6329,7 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
+        "group_shap": -0.1484,
         "direction": "protective",
         "trigger_proportion": 0.0
        },
@@ -5773,8 +6363,18 @@
        }
       ],
       "article_count": 40,
-      "other_pct": 0.0,
+      "other_pct": 62.5,
       "evidence_quarter": "2024-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 9.133,
+      "logOddsEffect": 0.2471,
+      "reference": {
+       "foodBaseTrainMean": 3.661,
+       "gapBaseTrainMean": 0.178,
+       "hungerBaseTrainMean": 10.467
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q4": {
@@ -5798,10 +6398,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.293,
-       "gapPoints": 0.087,
+       "foodInflationPoints": -4.829,
+       "gapPoints": -2.602,
        "hungerPoints": -0.228,
-       "logOddsEffect": 0.131,
+       "logOddsEffect": -3.1251,
+       "residualOnlyLogOddsEffect": 0.131,
+       "baseProjectionFoodPoints": -5.122,
+       "baseProjectionGapPoints": -2.689,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -5815,6 +6418,7 @@
        "gapPoints": 0.081,
        "hungerPoints": -0.496,
        "logOddsEffect": 0.1226,
+       "residualOnlyLogOddsEffect": 0.1226,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -5831,6 +6435,7 @@
        "gapPoints": 0.022,
        "hungerPoints": 0.354,
        "logOddsEffect": 0.0331,
+       "residualOnlyLogOddsEffect": 0.0331,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -5841,6 +6446,7 @@
        "gapPoints": 0.126,
        "hungerPoints": 0.854,
        "logOddsEffect": 0.1906,
+       "residualOnlyLogOddsEffect": 0.1906,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5851,6 +6457,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.648,
        "logOddsEffect": 0.0648,
+       "residualOnlyLogOddsEffect": 0.0648,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -5883,16 +6490,16 @@
      "drivers": {
       "drivers": [
        {
-        "driver_group": "employment",
-        "driver_label": "Employment",
-        "group_shap": 0.1906,
-        "direction": "increases_risk",
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -3.1251,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.131,
+        "driver_group": "employment",
+        "driver_label": "Employment",
+        "group_shap": 0.1906,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -5919,8 +6526,18 @@
        }
       ],
       "article_count": 26,
-      "other_pct": 0.0,
+      "other_pct": 2.1,
       "evidence_quarter": "2025-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0757,
+      "reference": {
+       "foodBaseTrainMean": 3.367,
+       "gapBaseTrainMean": 0.082,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q1": {
@@ -5944,10 +6561,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.201,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.677,
+       "gapPoints": -0.445,
        "hungerPoints": -0.261,
-       "logOddsEffect": 0.0,
+       "logOddsEffect": -0.4441,
+       "residualOnlyLogOddsEffect": 0.0,
+       "baseProjectionFoodPoints": -1.878,
+       "baseProjectionGapPoints": -0.445,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -5961,6 +6581,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.232,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -5977,6 +6598,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -5987,6 +6609,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.792,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -5997,6 +6620,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.794,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -6031,8 +6655,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
+        "group_shap": -0.4441,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
@@ -6065,8 +6689,18 @@
        }
       ],
       "article_count": 40,
-      "other_pct": 0.0,
+      "other_pct": 11.4,
       "evidence_quarter": "2025-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0571,
+      "reference": {
+       "foodBaseTrainMean": 3.416,
+       "gapBaseTrainMean": 0.196,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q2": {
@@ -6090,10 +6724,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.19,
-       "gapPoints": 0.042,
+       "foodInflationPoints": -0.645,
+       "gapPoints": 0.693,
        "hungerPoints": -0.331,
-       "logOddsEffect": 0.0402,
+       "logOddsEffect": 0.6644,
+       "residualOnlyLogOddsEffect": 0.0402,
+       "baseProjectionFoodPoints": -0.834,
+       "baseProjectionGapPoints": 0.651,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -6107,6 +6744,7 @@
        "gapPoints": -0.26,
        "hungerPoints": 1.073,
        "logOddsEffect": -0.2462,
+       "residualOnlyLogOddsEffect": -0.2462,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -6123,6 +6761,7 @@
        "gapPoints": 0.014,
        "hungerPoints": 0.12,
        "logOddsEffect": 0.0133,
+       "residualOnlyLogOddsEffect": 0.0133,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -6133,6 +6772,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.898,
        "logOddsEffect": 0.0409,
+       "residualOnlyLogOddsEffect": 0.0409,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -6143,6 +6783,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 1.407,
        "logOddsEffect": 0.0216,
+       "residualOnlyLogOddsEffect": 0.0216,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -6175,6 +6816,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 0.6644,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.2462,
@@ -6185,13 +6833,6 @@
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0409,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0402,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
        },
@@ -6211,8 +6852,18 @@
        }
       ],
       "article_count": 27,
-      "other_pct": 0.0,
+      "other_pct": 3.4,
       "evidence_quarter": "2025-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0342,
+      "reference": {
+       "foodBaseTrainMean": 3.458,
+       "gapBaseTrainMean": 0.272,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q3": {
@@ -6236,10 +6887,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.235,
-       "gapPoints": 0.062,
+       "foodInflationPoints": -1.745,
+       "gapPoints": -1.141,
        "hungerPoints": -0.076,
-       "logOddsEffect": 0.0779,
+       "logOddsEffect": -1.3366,
+       "residualOnlyLogOddsEffect": 0.0779,
+       "baseProjectionFoodPoints": -1.981,
+       "baseProjectionGapPoints": -1.203,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -6253,6 +6907,7 @@
        "gapPoints": -0.068,
        "hungerPoints": -0.308,
        "logOddsEffect": -0.0943,
+       "residualOnlyLogOddsEffect": -0.0943,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -6269,6 +6924,7 @@
        "gapPoints": 0.019,
        "hungerPoints": -0.072,
        "logOddsEffect": 0.0227,
+       "residualOnlyLogOddsEffect": 0.0227,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -6279,6 +6935,7 @@
        "gapPoints": -0.017,
        "hungerPoints": 0.152,
        "logOddsEffect": -0.0175,
+       "residualOnlyLogOddsEffect": -0.0175,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -6289,6 +6946,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.412,
        "logOddsEffect": 0.0333,
+       "residualOnlyLogOddsEffect": 0.0333,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -6321,18 +6979,18 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.3366,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.0943,
         "direction": "protective",
         "trigger_proportion": 0.02857142857142857
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0779,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        },
        {
         "driver_group": "ofw_remittance",
@@ -6357,8 +7015,18 @@
        }
       ],
       "article_count": 35,
-      "other_pct": 0.0,
+      "other_pct": 11.1,
       "evidence_quarter": "2026-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.823,
+      "logOddsEffect": 0.1843,
+      "reference": {
+       "foodBaseTrainMean": 3.247,
+       "gapBaseTrainMean": 0.187,
+       "hungerBaseTrainMean": 12.877
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q4": {
@@ -6382,10 +7050,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.526,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.562,
+       "gapPoints": -4.516,
        "hungerPoints": -0.007,
-       "logOddsEffect": 0.5279,
+       "logOddsEffect": -6.0027,
+       "residualOnlyLogOddsEffect": 0.5279,
+       "baseProjectionFoodPoints": -1.087,
+       "baseProjectionGapPoints": -4.516,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -6399,6 +7070,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.225,
        "logOddsEffect": 0.6531,
+       "residualOnlyLogOddsEffect": 0.6531,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -6415,6 +7087,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.053,
        "logOddsEffect": 0.0603,
+       "residualOnlyLogOddsEffect": 0.0603,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -6425,6 +7098,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.235,
        "logOddsEffect": -0.6971,
+       "residualOnlyLogOddsEffect": -0.6971,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -6435,6 +7109,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.1885,
+       "residualOnlyLogOddsEffect": -0.1885,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -6467,6 +7142,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -6.0027,
+        "direction": "protective",
+        "trigger_proportion": 0.06896551724137931
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": -0.6971,
@@ -6479,13 +7161,6 @@
         "group_shap": 0.6531,
         "direction": "increases_risk",
         "trigger_proportion": 0.034482758620689655
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.5279,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.06896551724137931
        },
        {
         "driver_group": "ofw_remittance",
@@ -6503,8 +7178,18 @@
        }
       ],
       "article_count": 29,
-      "other_pct": 0.0,
+      "other_pct": 2.4,
       "evidence_quarter": "2026-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 8.729,
+      "logOddsEffect": 0.1839,
+      "reference": {
+       "foodBaseTrainMean": 2.198,
+       "gapBaseTrainMean": 0.139,
+       "hungerBaseTrainMean": 13.671
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     }
    }
@@ -6537,14 +7222,18 @@
    },
    "fiveTriggerContributions": {
     "market": {
-     "foodInflationPoints": 0.964,
-     "gapPoints": 0.0,
+     "foodInflationPoints": -0.41,
+     "gapPoints": -2.62,
      "hungerPoints": -1.408,
-     "logOddsEffect": -0.0014,
+     "logOddsEffect": -2.698,
+     "residualOnlyLogOddsEffect": -0.0014,
+     "baseProjectionFoodPoints": -1.374,
+     "baseProjectionGapPoints": -2.62,
      "features": [
       "D_now",
       "F_hat_M1",
       "F_now",
+      "base-effect CPI projection",
       "gap_now",
       "rice_whsl_yoy"
      ],
@@ -6561,6 +7250,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 3.837,
      "logOddsEffect": 0.1298,
+     "residualOnlyLogOddsEffect": 0.1298,
      "features": [
       "corn_yoy",
       "enso",
@@ -6587,6 +7277,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -0.36,
      "logOddsEffect": -0.0074,
+     "residualOnlyLogOddsEffect": -0.0074,
      "features": [
       "aqua_yoy",
       "fish_yoy"
@@ -6601,6 +7292,7 @@
      "gapPoints": 0.0,
      "hungerPoints": -6.074,
      "logOddsEffect": -0.0473,
+     "residualOnlyLogOddsEffect": -0.0473,
      "features": [
       "under_yoy",
       "ur_yoy"
@@ -6615,6 +7307,7 @@
      "gapPoints": 0.0,
      "hungerPoints": 0.824,
      "logOddsEffect": 0.0142,
+     "residualOnlyLogOddsEffect": 0.0142,
      "features": [
       "fx_yoy",
       "remit_php_yoy",
@@ -6658,6 +7351,13 @@
    "drivers": {
     "drivers": [
      {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -2.698,
+      "direction": "protective",
+      "trigger_proportion": 0.0137
+     },
+     {
       "driver_group": "climate",
       "driver_label": "Climate Stress",
       "group_shap": 0.1298,
@@ -6684,18 +7384,21 @@
       "group_shap": -0.0074,
       "direction": "protective",
       "trigger_proportion": 0.0
-     },
-     {
-      "driver_group": "market",
-      "driver_label": "Market / Prices",
-      "group_shap": -0.0014,
-      "direction": "protective",
-      "trigger_proportion": 0.0137
      }
     ],
     "article_count": 73.0,
-    "other_pct": 0.0,
+    "other_pct": 2.8,
     "evidence_quarter": "2026-Q3"
+   },
+   "otherContribution": {
+    "hungerLevelPoints": 2.94,
+    "logOddsEffect": 0.0836,
+    "reference": {
+     "foodBaseTrainMean": 2.126,
+     "gapBaseTrainMean": 0.115,
+     "hungerBaseTrainMean": 14.36
+    },
+    "label": "Latest regional hunger level (SWS), not one of the five triggers"
    },
    "observed": {
     "hungerRegional": {
@@ -6869,10 +7572,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -0.059,
+       "gapPoints": 0.988,
        "hungerPoints": 0.001,
-       "logOddsEffect": 0.0008,
+       "logOddsEffect": 1.055,
+       "residualOnlyLogOddsEffect": 0.0008,
+       "baseProjectionFoodPoints": -0.059,
+       "baseProjectionGapPoints": 0.988,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -6882,6 +7588,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.256,
        "logOddsEffect": 0.2152,
+       "residualOnlyLogOddsEffect": 0.2152,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -6895,6 +7602,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.19,
        "logOddsEffect": -0.1541,
+       "residualOnlyLogOddsEffect": -0.1541,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -6904,6 +7612,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.334,
        "logOddsEffect": -0.2683,
+       "residualOnlyLogOddsEffect": -0.2683,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -6914,6 +7623,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.125,
        "logOddsEffect": -0.1021,
+       "residualOnlyLogOddsEffect": -0.1021,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -6922,7 +7632,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 5.9% in the latest two months (through 2023-11) vs this province's reference 7.15%; food minus headline +1.0 points."
       },
       "climate": {
@@ -6944,6 +7654,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": 1.055,
+        "direction": "increases_risk",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "employment",
         "driver_label": "Employment",
@@ -6971,18 +7688,21 @@
         "group_shap": -0.1021,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 42,
-      "other_pct": 0.0,
+      "other_pct": 13.5,
       "evidence_quarter": "2023-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": -0.35,
+      "logOddsEffect": -0.2805,
+      "reference": {
+       "foodBaseTrainMean": 3.214,
+       "gapBaseTrainMean": 0.234,
+       "hungerBaseTrainMean": 10.65
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q3": {
@@ -7006,10 +7726,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.313,
+       "gapPoints": -1.1,
        "hungerPoints": -0.161,
-       "logOddsEffect": -0.0001,
+       "logOddsEffect": -1.5814,
+       "residualOnlyLogOddsEffect": -0.0001,
+       "baseProjectionFoodPoints": -2.313,
+       "baseProjectionGapPoints": -1.1,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -7019,6 +7742,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.142,
        "logOddsEffect": 0.0075,
+       "residualOnlyLogOddsEffect": 0.0075,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -7032,6 +7756,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.931,
        "logOddsEffect": -0.0004,
+       "residualOnlyLogOddsEffect": -0.0004,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -7041,6 +7766,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.041,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7051,6 +7777,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 2.338,
        "logOddsEffect": 0.0095,
+       "residualOnlyLogOddsEffect": 0.0095,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -7082,6 +7809,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.5814,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
         "group_shap": 0.0095,
@@ -7103,13 +7837,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": -0.0001,
-        "direction": "protective",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.0,
@@ -7118,8 +7845,18 @@
        }
       ],
       "article_count": 38,
-      "other_pct": 0.0,
+      "other_pct": 3.0,
       "evidence_quarter": "2024-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.929,
+      "logOddsEffect": 0.0492,
+      "reference": {
+       "foodBaseTrainMean": 3.657,
+       "gapBaseTrainMean": -0.366,
+       "hungerBaseTrainMean": 10.371
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2024-Q4": {
@@ -7143,10 +7880,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.509,
+       "gapPoints": -0.699,
        "hungerPoints": -0.044,
-       "logOddsEffect": -0.0003,
+       "logOddsEffect": -0.9141,
+       "residualOnlyLogOddsEffect": -0.0003,
+       "baseProjectionFoodPoints": -1.509,
+       "baseProjectionGapPoints": -0.699,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -7156,6 +7896,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.344,
        "logOddsEffect": 0.0249,
+       "residualOnlyLogOddsEffect": 0.0249,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -7169,6 +7910,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.581,
        "logOddsEffect": -0.0026,
+       "residualOnlyLogOddsEffect": -0.0026,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -7178,6 +7920,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -3.934,
        "logOddsEffect": -0.0041,
+       "residualOnlyLogOddsEffect": -0.0041,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7188,6 +7931,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.624,
        "logOddsEffect": 0.0371,
+       "residualOnlyLogOddsEffect": 0.0371,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -7196,7 +7940,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 4.2% in the latest two months (through 2024-05) vs this province's reference 7.15%; food minus headline +0.7 points."
       },
       "climate": {
@@ -7218,6 +7962,13 @@
      },
      "drivers": {
       "drivers": [
+       {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.9141,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
        {
         "driver_group": "ofw_remittance",
         "driver_label": "OFW Remittance",
@@ -7245,18 +7996,21 @@
         "group_shap": -0.0026,
         "direction": "protective",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
-        "trigger_proportion": 0.0
        }
       ],
       "article_count": 45,
-      "other_pct": 0.0,
+      "other_pct": 41.4,
       "evidence_quarter": "2024-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 4.812,
+      "logOddsEffect": 0.6937,
+      "reference": {
+       "foodBaseTrainMean": 3.564,
+       "gapBaseTrainMean": 0.023,
+       "hungerBaseTrainMean": 10.488
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q1": {
@@ -7280,10 +8034,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.0,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -1.659,
+       "gapPoints": 0.168,
        "hungerPoints": -0.024,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": 0.1779,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -1.659,
+       "baseProjectionGapPoints": 0.168,
        "featuresWithNonzeroWeight": [
         "F_now"
        ]
@@ -7293,6 +8050,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.923,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "enso",
         "enso_l2",
@@ -7306,6 +8064,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.105,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fish_yoy"
        ]
@@ -7315,6 +8074,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.779,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7325,6 +8085,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.966,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy"
@@ -7333,7 +8094,7 @@
      },
      "triggerStatus": {
       "market": {
-       "status": "no_effect",
+       "status": "contributes",
        "evidenceNote": "Food inflation 3.5% in the latest two months (through 2024-08) vs this province's reference 7.15%; food minus headline +0.4 points."
       },
       "climate": {
@@ -7358,8 +8119,8 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": 0.0,
-        "direction": "protective",
+        "group_shap": 0.1779,
+        "direction": "increases_risk",
         "trigger_proportion": 0.02631578947368421
        },
        {
@@ -7392,8 +8153,18 @@
        }
       ],
       "article_count": 38,
-      "other_pct": 0.0,
+      "other_pct": 62.5,
       "evidence_quarter": "2024-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 9.133,
+      "logOddsEffect": 0.2968,
+      "reference": {
+       "foodBaseTrainMean": 3.661,
+       "gapBaseTrainMean": 0.178,
+       "hungerBaseTrainMean": 10.467
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2025-Q4": {
@@ -7417,10 +8188,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.149,
-       "gapPoints": 0.04,
+       "foodInflationPoints": -2.932,
+       "gapPoints": -0.625,
        "hungerPoints": -0.228,
-       "logOddsEffect": 0.0411,
+       "logOddsEffect": -0.6326,
+       "residualOnlyLogOddsEffect": 0.0411,
+       "baseProjectionFoodPoints": -3.081,
+       "baseProjectionGapPoints": -0.664,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -7434,6 +8208,7 @@
        "gapPoints": 0.108,
        "hungerPoints": -0.496,
        "logOddsEffect": 0.1128,
+       "residualOnlyLogOddsEffect": 0.1128,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -7450,6 +8225,7 @@
        "gapPoints": 0.021,
        "hungerPoints": 0.354,
        "logOddsEffect": 0.0221,
+       "residualOnlyLogOddsEffect": 0.0221,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -7460,6 +8236,7 @@
        "gapPoints": 0.126,
        "hungerPoints": 0.854,
        "logOddsEffect": 0.1309,
+       "residualOnlyLogOddsEffect": 0.1309,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7470,6 +8247,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.648,
        "logOddsEffect": 0.0447,
+       "residualOnlyLogOddsEffect": 0.0447,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -7502,6 +8280,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -0.6326,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": 0.1309,
@@ -7523,13 +8308,6 @@
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0411,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
-       },
-       {
         "driver_group": "fish_kill",
         "driver_label": "Fish Kill",
         "group_shap": 0.0221,
@@ -7538,8 +8316,18 @@
        }
       ],
       "article_count": 42,
-      "other_pct": 0.0,
+      "other_pct": 9.8,
       "evidence_quarter": "2025-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.1022,
+      "reference": {
+       "foodBaseTrainMean": 3.367,
+       "gapBaseTrainMean": 0.082,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q1": {
@@ -7563,10 +8351,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.128,
-       "gapPoints": 0.0,
+       "foodInflationPoints": -2.345,
+       "gapPoints": -0.002,
        "hungerPoints": -0.261,
-       "logOddsEffect": -0.0,
+       "logOddsEffect": -0.0023,
+       "residualOnlyLogOddsEffect": -0.0,
+       "baseProjectionFoodPoints": -2.473,
+       "baseProjectionGapPoints": -0.002,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -7580,6 +8371,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -1.232,
        "logOddsEffect": -0.0,
+       "residualOnlyLogOddsEffect": -0.0,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -7596,6 +8388,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -7606,6 +8399,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.792,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7616,6 +8410,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 1.794,
        "logOddsEffect": 0.0,
+       "residualOnlyLogOddsEffect": 0.0,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -7650,7 +8445,7 @@
        {
         "driver_group": "market",
         "driver_label": "Market / Prices",
-        "group_shap": -0.0,
+        "group_shap": -0.0023,
         "direction": "protective",
         "trigger_proportion": 0.0
        },
@@ -7684,8 +8479,18 @@
        }
       ],
       "article_count": 55,
-      "other_pct": 0.0,
+      "other_pct": 96.9,
       "evidence_quarter": "2025-Q3"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0705,
+      "reference": {
+       "foodBaseTrainMean": 3.416,
+       "gapBaseTrainMean": 0.196,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q2": {
@@ -7709,10 +8514,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.363,
-       "gapPoints": 0.102,
+       "foodInflationPoints": -5.583,
+       "gapPoints": -2.204,
        "hungerPoints": -0.331,
-       "logOddsEffect": 0.1305,
+       "logOddsEffect": -2.3704,
+       "residualOnlyLogOddsEffect": 0.1305,
+       "baseProjectionFoodPoints": -5.946,
+       "baseProjectionGapPoints": -2.306,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -7726,6 +8534,7 @@
        "gapPoints": -0.166,
        "hungerPoints": 1.073,
        "logOddsEffect": -0.2071,
+       "residualOnlyLogOddsEffect": -0.2071,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -7742,6 +8551,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.12,
        "logOddsEffect": 0.0213,
+       "residualOnlyLogOddsEffect": 0.0213,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -7752,6 +8562,7 @@
        "gapPoints": 0.043,
        "hungerPoints": 0.898,
        "logOddsEffect": 0.0548,
+       "residualOnlyLogOddsEffect": 0.0548,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7762,6 +8573,7 @@
        "gapPoints": 0.023,
        "hungerPoints": 1.407,
        "logOddsEffect": 0.0289,
+       "residualOnlyLogOddsEffect": 0.0289,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -7794,18 +8606,18 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -2.3704,
+        "direction": "protective",
+        "trigger_proportion": 0.0
+       },
+       {
         "driver_group": "climate",
         "driver_label": "Climate Stress",
         "group_shap": -0.2071,
         "direction": "protective",
         "trigger_proportion": 0.08695652173913043
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.1305,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.0
        },
        {
         "driver_group": "employment",
@@ -7830,8 +8642,18 @@
        }
       ],
       "article_count": 23,
-      "other_pct": 0.0,
+      "other_pct": 0.7,
       "evidence_quarter": "2025-Q4"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 12.05,
+      "logOddsEffect": 0.0194,
+      "reference": {
+       "foodBaseTrainMean": 3.458,
+       "gapBaseTrainMean": 0.272,
+       "hungerBaseTrainMean": 11.95
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q3": {
@@ -7855,10 +8677,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.31,
-       "gapPoints": 0.089,
+       "foodInflationPoints": -3.521,
+       "gapPoints": -1.62,
        "hungerPoints": -0.076,
-       "logOddsEffect": 0.1203,
+       "logOddsEffect": -1.9261,
+       "residualOnlyLogOddsEffect": 0.1203,
+       "baseProjectionFoodPoints": -3.831,
+       "baseProjectionGapPoints": -1.709,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -7872,6 +8697,7 @@
        "gapPoints": -0.152,
        "hungerPoints": -0.308,
        "logOddsEffect": -0.2116,
+       "residualOnlyLogOddsEffect": -0.2116,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -7888,6 +8714,7 @@
        "gapPoints": 0.019,
        "hungerPoints": -0.072,
        "logOddsEffect": 0.025,
+       "residualOnlyLogOddsEffect": 0.025,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -7898,6 +8725,7 @@
        "gapPoints": -0.017,
        "hungerPoints": 0.152,
        "logOddsEffect": -0.019,
+       "residualOnlyLogOddsEffect": -0.019,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -7908,6 +8736,7 @@
        "gapPoints": 0.017,
        "hungerPoints": 0.412,
        "logOddsEffect": 0.0343,
+       "residualOnlyLogOddsEffect": 0.0343,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -7940,17 +8769,17 @@
      "drivers": {
       "drivers": [
        {
-        "driver_group": "climate",
-        "driver_label": "Climate Stress",
-        "group_shap": -0.2116,
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -1.9261,
         "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.1203,
-        "direction": "increases_risk",
+        "driver_group": "climate",
+        "driver_label": "Climate Stress",
+        "group_shap": -0.2116,
+        "direction": "protective",
         "trigger_proportion": 0.0
        },
        {
@@ -7976,8 +8805,18 @@
        }
       ],
       "article_count": 40,
-      "other_pct": 0.0,
+      "other_pct": 7.6,
       "evidence_quarter": "2026-Q1"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 3.823,
+      "logOddsEffect": 0.179,
+      "reference": {
+       "foodBaseTrainMean": 3.247,
+       "gapBaseTrainMean": 0.187,
+       "hungerBaseTrainMean": 12.877
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     },
     "2026-Q4": {
@@ -8001,10 +8840,13 @@
      },
      "fiveTriggerContributions": {
       "market": {
-       "foodInflationPoints": 0.408,
-       "gapPoints": 0.0,
+       "foodInflationPoints": 0.595,
+       "gapPoints": -2.062,
        "hungerPoints": -0.007,
-       "logOddsEffect": 0.0072,
+       "logOddsEffect": -2.3274,
+       "residualOnlyLogOddsEffect": 0.0072,
+       "baseProjectionFoodPoints": 0.187,
+       "baseProjectionGapPoints": -2.062,
        "featuresWithNonzeroWeight": [
         "D_now",
         "F_hat_M1",
@@ -8018,6 +8860,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.225,
        "logOddsEffect": 0.0095,
+       "residualOnlyLogOddsEffect": 0.0095,
        "featuresWithNonzeroWeight": [
         "corn_yoy",
         "enso",
@@ -8034,6 +8877,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.053,
        "logOddsEffect": 0.0009,
+       "residualOnlyLogOddsEffect": 0.0009,
        "featuresWithNonzeroWeight": [
         "aqua_yoy",
         "fish_yoy"
@@ -8044,6 +8888,7 @@
        "gapPoints": 0.0,
        "hungerPoints": -0.235,
        "logOddsEffect": -0.0299,
+       "residualOnlyLogOddsEffect": -0.0299,
        "featuresWithNonzeroWeight": [
         "under_yoy",
         "ur_yoy"
@@ -8054,6 +8899,7 @@
        "gapPoints": 0.0,
        "hungerPoints": 0.071,
        "logOddsEffect": -0.0051,
+       "residualOnlyLogOddsEffect": -0.0051,
        "featuresWithNonzeroWeight": [
         "fx_yoy",
         "remit_php_yoy",
@@ -8086,6 +8932,13 @@
      "drivers": {
       "drivers": [
        {
+        "driver_group": "market",
+        "driver_label": "Market / Prices",
+        "group_shap": -2.3274,
+        "direction": "protective",
+        "trigger_proportion": 0.03125
+       },
+       {
         "driver_group": "employment",
         "driver_label": "Employment",
         "group_shap": -0.0299,
@@ -8098,13 +8951,6 @@
         "group_shap": 0.0095,
         "direction": "increases_risk",
         "trigger_proportion": 0.0
-       },
-       {
-        "driver_group": "market",
-        "driver_label": "Market / Prices",
-        "group_shap": 0.0072,
-        "direction": "increases_risk",
-        "trigger_proportion": 0.03125
        },
        {
         "driver_group": "ofw_remittance",
@@ -8122,8 +8968,18 @@
        }
       ],
       "article_count": 32,
-      "other_pct": 0.0,
+      "other_pct": 7.5,
       "evidence_quarter": "2026-Q2"
+     },
+     "otherContribution": {
+      "hungerLevelPoints": 8.729,
+      "logOddsEffect": 0.1933,
+      "reference": {
+       "foodBaseTrainMean": 2.198,
+       "gapBaseTrainMean": 0.139,
+       "hungerBaseTrainMean": 13.671
+      },
+      "label": "Latest regional hunger level (SWS), not one of the five triggers"
      }
     }
    }
@@ -8256,5 +9112,5 @@
   "addendum_sha256": "ed0db548849848a51ff23f872759e4b38be0b70f8805d3175656321740df455c",
   "e43_record_sha256": "fc9e42662cfa554e6368ac63b3712dc27bddbf4b9987930a1f4cf9ab5037f78b"
  },
- "content_sha256": "66b50de646fa0a4b3cfa70a3cc451178f7693b1e7a5f78e0e5f170a728bf94aa"
+ "content_sha256": "f49c5549e2fd0673893310c9d2a5d3a1efb353fdb25b24a91d8e7b28b75a589b"
 }

@@ -72,6 +72,17 @@ CANDIDATE_EXPLAINABILITY_NOTE = (
 )
 
 
+E46_EXPLAINABILITY_NOTE = (
+    "The bars show how much each of five factor groups moved this experimental forecast, measured as the change in "
+    "the forecast's log-odds when that group's inputs are set to their historical average (all else fixed). Market / "
+    "Prices includes the projected food inflation and food-minus-headline gap built from PSA CPI, which is the "
+    "model's main price input. The latest regional hunger level (SWS) is not one of the five groups and is left out "
+    "of the bars. The five shares add up to 100 percent of the five groups' combined effect; each card states whether "
+    "the group raised or lowered the forecast and the official observation behind it. Employment and OFW figures are "
+    "national. These are model attributions, not causes and not shares of food insecurity."
+)
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -84,6 +95,8 @@ def _served_note(quarter: str | None = None) -> str:
 
     # E47: any five-trigger candidate (e44, e46) on a quarter whose attribution it carries (the issued forecast or a
     # past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e46" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E46_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() in ("e44", "e46") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return CANDIDATE_EXPLAINABILITY_NOTE
     if quarter and LEAD2.governs():
