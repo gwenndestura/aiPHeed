@@ -57,6 +57,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { readStorage, writeStorage } from "@/lib/storage";
 
 const THEME_KEY = "aipheed_theme";
 
@@ -127,11 +128,11 @@ function AdminNavbar({
   onLogout: () => void;
 }) {
   const [theme, setTheme] = useState<"dark" | "light">(
-    () => (localStorage.getItem(THEME_KEY) as "dark" | "light") ?? "dark"
+    () => (readStorage(THEME_KEY) as "dark" | "light" | null) ?? "dark"
   );
   useEffect(() => {
     document.documentElement.classList.toggle("light", theme === "light");
-    localStorage.setItem(THEME_KEY, theme);
+    writeStorage(THEME_KEY, theme);
     window.dispatchEvent(new CustomEvent("aipheed:theme", { detail: { theme } }));
   }, [theme]);
 

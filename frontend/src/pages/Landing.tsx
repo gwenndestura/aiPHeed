@@ -7,6 +7,7 @@ import logoDark from "@/assets/logo-dark.png";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { MetricLabel } from "@/components/ui/metric";
 import heroBg from "@/assets/hero-bg.jpg";
+import { readStorage } from "@/lib/storage";
 
 const THEME_KEY = "aipheed_theme";
 
@@ -19,7 +20,7 @@ export default function Landing() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    const t = (localStorage.getItem(THEME_KEY) as "light" | "dark") ?? "dark";
+    const t = (readStorage(THEME_KEY) as "light" | "dark" | null) ?? "dark";
     document.documentElement.classList.toggle("light", t === "light");
     setTheme(t);
     const obs = new MutationObserver(() => {

@@ -1,10 +1,16 @@
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Info } from "lucide-react";
+import { Compass, Info } from "lucide-react";
+import { requestTour } from "@/lib/tour";
 import logoIcon from "@/assets/logo-icon.png";
 
 export function AboutModal() {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
         <Info className="h-3 w-3" />
         About & Methodology
@@ -76,6 +82,18 @@ export function AboutModal() {
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
             <Row k="Refresh" v="Quarterly · 3-mo lead" />
           </div>
+
+          {/* Replays the map page's guided tour once this dialog has closed. */}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              requestTour(navigate, pathname, 300, "map");
+            }}
+            className="mt-1 w-full flex items-center justify-center gap-2 h-9 compact:h-11 rounded-md border border-border/60 text-[12px] compact:text-[14px] font-semibold hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Compass className="h-4 w-4" /> Take the tour
+          </button>
         </div>
       </DialogContent>
     </Dialog>
