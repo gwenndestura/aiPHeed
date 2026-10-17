@@ -1,0 +1,18 @@
+2023-Q4 -> 2024-Q2 C3 b 0.0 R2 None None C2 lgb
+2024-Q1 -> 2024-Q3 C3 b 0.0 R2 None lgb C2 lgb
+2024-Q2 -> 2024-Q4 C3 b 0.0 R2 None lgb C2 constant
+2024-Q3 -> 2025-Q1 C3 b 0.0 R2 None lgb C2 constant
+2024-Q4 -> 2025-Q2 C3 b -0.34 R2 None lgb C2 constant
+2025-Q1 -> 2025-Q3 C3 b 0.41 R2 None lgb C2 constant
+2025-Q2 -> 2025-Q4 C3 b 0.67 R2 lgb lgb C2 constant
+2025-Q3 -> 2026-Q1 C3 b 0.36 R2 None lgb C2 constant
+2025-Q4 -> 2026-Q2 C3 b 0.05 R2 None lgb C2 lgb
+2026-Q1 -> 2026-Q3 C3 b -0.18 R2 None lgb C2 lgb
+2026-Q2 -> 2026-Q4 C3 b -0.36 R2 None None C2 lgb
+2026-Q3 -> 2027-Q1 C3 b -0.41 R2 None None C2 lgb
+  C3       acc 0.740 [0.66, 0.84] bal 0.736 recH 0.722 recL 0.75 brier 0.206 auc 0.774 citl -0.113 slope 0.548 dBrier 0.016 [-0.003, 0.037]
+  C4       acc 0.700 [0.6, 0.8] bal 0.705 recH 0.722 recL 0.688 brier 0.209 auc 0.753 citl -0.133 slope 0.61 dBrier 0.019 [-0.009, 0.055]
+  LGB-R2   acc 0.700 [0.56, 0.8] bal 0.729 recH 0.833 recL 0.625 brier 0.221 auc 0.786 citl -0.154 slope 0.545 dBrier 0.031 [-0.015, 0.09]
+  LGB-C2   acc 0.480 [0.32, 0.66] bal 0.582 recH 0.944 recL 0.219 brier 0.259 auc 0.538 citl -0.193 slope 0.776 dBrier 0.069 [-0.01, 0.145]
+  criteria {"C3": {"A1": false, "A2": true, "A3": true, "A4": true, "A5": true, "K1": false, "K2": false}, "C4": {"A1": false, "A2": true, "A3": true, "A4": true, "A5": false, "K1": false, "K2": false}, "LGB-R2": {"A1": false, "A2": true, "A3": true, "A4": true, "A5": false, "K1": false, "K2": false}, "LGB-C2": {"A1": false, "A2": false, "A3": true, "A4": false, "A5": false, "K1": false, "K2": false}}
+  decision {"calibrated_replaces_R0": null, "LightGBM_meets_requirement_for_development": [], "lightgbm_origins_using_trees": {"LGB-R2": 9, "LGB-C2": 6}}
