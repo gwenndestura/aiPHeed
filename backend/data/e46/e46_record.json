@@ -1,0 +1,1860 @@
+{
+ "schema": "e46/1",
+ "name": "aiPHeed five-trigger food-stress risk forecast (E46 I7, defect-corrected)",
+ "status": "EXPERIMENTAL - FORECASTING ACCEPTANCE NOT MET; enabled only with AIPHEED_LEAD2_MODEL=e46",
+ "generated_at": "2026-10-17T02:41:06Z",
+ "modelVersion": "E46-I7 (ADDENDUM_I7 sha256 ed0db548849848a5)",
+ "origin": "2026-10-01",
+ "originQuarter": "2026-Q3",
+ "targetQuarter": "2027-Q1",
+ "lead": 2,
+ "leadFromOrigin": 2,
+ "information": {
+  "cpiMonthsThrough": "2026-08",
+  "swsLatestQuarter": "2026-Q2",
+  "rule": "only data published before the origin 2026-10-01 (E41/E46 protocols)"
+ },
+ "indicator": {
+  "id": "food_stress_risk_probability",
+  "name": "Food-Stress Risk Probability (exploratory)",
+  "definition": "Probability that the province is in concurrent elevated food stress in the target quarter (target T43): SWS self-rated hunger in Balance Luzon above 11.3% (regional) AND the province's PSA food inflation above its 2021-2022 60th percentile, or food minus headline inflation above its 2021-2022 60th percentile. Estimated by the E46 defect-corrected five-trigger component model (I7). Exploratory food-stress outcome; not independently verified household food insecurity.",
+  "unit": "probability (0-1)",
+  "horizon": "Lead 2: issued 2026-10-01 (latest completed quarter 2026-Q3) for 2027-Q1; experimental (E46 I7)",
+  "source": "SWS Balance Luzon hunger; PSA provincial food and headline CPI and wholesale rice; NOAA typhoon tracks and ENSO; PSA palay/corn and fisheries production; PSA LFS (national); BSP remittances and ECB USD/PHP (national); province-attributed news; official rice-policy orders (as of announcement)",
+  "caveat": "Forecasting acceptance (75% Lead-2 accuracy with balanced discrimination) was not met. Exploratory estimate; not an official classification."
+ },
+ "scoreTypes": {
+  "food_stress_risk_probability": "Probability that the province is in concurrent elevated food stress in the target quarter (target T43): SWS self-rated hunger in Balance Luzon above 11.3% (regional) AND the province's PSA food inflation above its 2021-2022 60th percentile, or food minus headline inflation above its 2021-2022 60th percentile. Estimated by the E46 defect-corrected five-trigger component model (I7). Exploratory food-stress outcome; not independently verified household food insecurity."
+ },
+ "operationalRules": {
+  "band": "Low if P < 0.33; Watch if 0.33 <= P < 0.67; High if P >= 0.67",
+  "decision": "HIGH if P >= 0.5 (fixed; ADDENDUM_I7)",
+  "alert": "Alert candidate when the band is High; staged for administrator confirmation.",
+  "municipal": "No municipal probability; LGU rankings are relative prioritization."
+ },
+ "provinces": {
+  "PH040100000": {
+   "provinceCode": "PH040100000",
+   "name": "Cavite",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "kind": "FORECAST (outcome not yet known)",
+    "probability": 0.06117113732850199,
+    "band": "Low",
+    "decisionThreshold": 0.5,
+    "decision": "LOW",
+    "servedModel": "E46-I7 defect-corrected five-trigger component model",
+    "components": {
+     "regionalHungerAbove11_3": 0.962,
+     "provincialPriceSignal": 0.064,
+     "foodInflationForecast": 0.81,
+     "foodMinusHeadlineForecast": -2.53,
+     "hungerForecast": 20.6
+    },
+    "explanation": "Cavite, 2027-Q1 (forecast issued 2026-10-01): estimated probability of concurrent elevated food stress 6% (Low; decision LOW at p >= 0.5). Regional hunger is forecast at 20.6% (chance above 11.3%: 96%); Cavite's food inflation at 0.8% and food minus headline at -2.5 points (chance its price signal is on: 6%).",
+    "variants": {
+     "I7-BASE (no residual)": 0.07009925452349634,
+     "I7-MKT (market residual only)": 0.1154236375465171
+    }
+   },
+   "fiveTriggerContributions": {
+    "market": {
+     "foodInflationPoints": 0.638,
+     "gapPoints": 0.0,
+     "hungerPoints": -1.408,
+     "logOddsEffect": 0.2655,
+     "features": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ]
+    },
+    "climate": {
+     "foodInflationPoints": 0.088,
+     "gapPoints": 0.0,
+     "hungerPoints": 3.837,
+     "logOddsEffect": 0.1744,
+     "features": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ],
+     "featuresWithNonzeroWeight": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ]
+    },
+    "fish_kill": {
+     "foodInflationPoints": 0.008,
+     "gapPoints": 0.0,
+     "hungerPoints": -0.36,
+     "logOddsEffect": -0.0015,
+     "features": [
+      "aqua_yoy",
+      "fish_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "aqua_yoy",
+      "fish_yoy"
+     ]
+    },
+    "employment": {
+     "foodInflationPoints": -0.223,
+     "gapPoints": 0.0,
+     "hungerPoints": -6.074,
+     "logOddsEffect": -0.162,
+     "features": [
+      "under_yoy",
+      "ur_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "under_yoy",
+      "ur_yoy"
+     ]
+    },
+    "ofw_remittance": {
+     "foodInflationPoints": -0.057,
+     "gapPoints": 0.0,
+     "hungerPoints": 0.824,
+     "logOddsEffect": -0.0134,
+     "features": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ]
+    }
+   },
+   "fiveTriggerNote": "Contributions of each trigger group to the food-inflation, food-minus-headline and hunger forecasts of the served model (model attributions, not proof that an event causes food insecurity). Employment and OFW indicators are national.",
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component",
+     "evidenceNote": "Food inflation 2.5% in the latest two months vs this province's reference 4.71%; food minus headline -2.1 points."
+    },
+    "climate": {
+     "status": "contributes",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model",
+     "evidenceNote": "0.0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in the previous quarter; palay production -18.2% year on year."
+    },
+    "fish_kill": {
+     "status": "contributes",
+     "evidence": "fisheries production shown",
+     "evidenceNote": "Fisheries production 8.3% and aquaculture 55.2% year on year (2026-Q2); no official fish-kill event series."
+    },
+    "employment": {
+     "status": "contributes",
+     "evidence": "national LFS shown",
+     "evidenceNote": "National unemployment 4.79% (2026-Q2), 0.9 points year on year; national figure, the same for every province."
+    },
+    "ofw_remittance": {
+     "status": "contributes",
+     "evidence": "national remittances through 2025-Q4",
+     "evidenceNote": "National cash remittances n/a year on year (latest 2025-Q4); USD/PHP 8.35%; national figure."
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": 0.2655,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.1744,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.1579
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": -0.162,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": -0.0134,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": -0.0015,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 57.0,
+    "other_pct": 0.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.5,
+     "provinceReferenceP60": 4.71,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -2.1,
+     "provinceReferenceP60": 0.74
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 2,
+     "category": "HIGH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -18.2,
+     "cornProductionYoY": 29.5,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": 8.3,
+     "aquacultureYoY": 55.2,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 57.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.1579,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.195,
+     "origin": "2024-01-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.128,
+     "origin": "2024-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.057,
+     "origin": "2024-07-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.573,
+     "origin": "2024-10-01",
+     "decision": "HIGH",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.17,
+     "origin": "2025-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.185,
+     "origin": "2025-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.242,
+     "origin": "2026-01-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.449,
+     "origin": "2026-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    }
+   ],
+   "earlierForecasts": [
+    {
+     "targetQuarter": "2026-Q4",
+     "probability": 0.025,
+     "origin": "2026-07-01",
+     "decision": "LOW"
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the I7 procedure at each past origin (only information published before that origin; verified by deleting all later data); not forecasts issued live, and the outcomes were examined while the correction was designed.",
+   "warnings": [
+    "FORECASTING ACCEPTANCE NOT MET: I7 reaches 0.800 accuracy on the 35 development rows but detects 4 of 9 HIGH quarters (HIGH recall 0.44); experimental decision support only.",
+    "Historical scores are development evidence (outcomes examined while diagnosing the defect); acceptance requires the prospective quarters 2027-Q1..Q4.",
+    "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
+    "Employment and OFW evidence are national.",
+    "Exploratory food-stress outcome; not verified household food insecurity."
+   ]
+  },
+  "PH040200000": {
+   "provinceCode": "PH040200000",
+   "name": "Laguna",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "kind": "FORECAST (outcome not yet known)",
+    "probability": 0.05137294672774257,
+    "band": "Low",
+    "decisionThreshold": 0.5,
+    "decision": "LOW",
+    "servedModel": "E46-I7 defect-corrected five-trigger component model",
+    "components": {
+     "regionalHungerAbove11_3": 0.962,
+     "provincialPriceSignal": 0.053,
+     "foodInflationForecast": 0.99,
+     "foodMinusHeadlineForecast": -2.42,
+     "hungerForecast": 20.6
+    },
+    "explanation": "Laguna, 2027-Q1 (forecast issued 2026-10-01): estimated probability of concurrent elevated food stress 5% (Low; decision LOW at p >= 0.5). Regional hunger is forecast at 20.6% (chance above 11.3%: 96%); Laguna's food inflation at 1.0% and food minus headline at -2.4 points (chance its price signal is on: 5%).",
+    "variants": {
+     "I7-BASE (no residual)": 0.050555671818499785,
+     "I7-MKT (market residual only)": 0.07074196407057251
+    }
+   },
+   "fiveTriggerContributions": {
+    "market": {
+     "foodInflationPoints": 0.964,
+     "gapPoints": 0.0,
+     "hungerPoints": -1.408,
+     "logOddsEffect": 0.0887,
+     "features": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ]
+    },
+    "climate": {
+     "foodInflationPoints": 0.176,
+     "gapPoints": 0.0,
+     "hungerPoints": 3.837,
+     "logOddsEffect": 0.1573,
+     "features": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ],
+     "featuresWithNonzeroWeight": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ]
+    },
+    "fish_kill": {
+     "foodInflationPoints": 0.0,
+     "gapPoints": 0.0,
+     "hungerPoints": -0.36,
+     "logOddsEffect": -0.0057,
+     "features": [
+      "aqua_yoy",
+      "fish_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "aqua_yoy",
+      "fish_yoy"
+     ]
+    },
+    "employment": {
+     "foodInflationPoints": -0.223,
+     "gapPoints": 0.0,
+     "hungerPoints": -6.074,
+     "logOddsEffect": -0.0842,
+     "features": [
+      "under_yoy",
+      "ur_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "under_yoy",
+      "ur_yoy"
+     ]
+    },
+    "ofw_remittance": {
+     "foodInflationPoints": -0.057,
+     "gapPoints": 0.0,
+     "hungerPoints": 0.824,
+     "logOddsEffect": 0.0058,
+     "features": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ]
+    }
+   },
+   "fiveTriggerNote": "Contributions of each trigger group to the food-inflation, food-minus-headline and hunger forecasts of the served model (model attributions, not proof that an event causes food insecurity). Employment and OFW indicators are national.",
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component",
+     "evidenceNote": "Food inflation 2.9% in the latest two months vs this province's reference 6.05%; food minus headline -4.0 points."
+    },
+    "climate": {
+     "status": "contributes",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model",
+     "evidenceNote": "0.0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in the previous quarter; palay production -32.2% year on year."
+    },
+    "fish_kill": {
+     "status": "contributes",
+     "evidence": "fisheries production shown",
+     "evidenceNote": "Fisheries production -7.7% and aquaculture -11.5% year on year (2026-Q2); no official fish-kill event series."
+    },
+    "employment": {
+     "status": "contributes",
+     "evidence": "national LFS shown",
+     "evidenceNote": "National unemployment 4.79% (2026-Q2), 0.9 points year on year; national figure, the same for every province."
+    },
+    "ofw_remittance": {
+     "status": "contributes",
+     "evidence": "national remittances through 2025-Q4",
+     "evidenceNote": "National cash remittances n/a year on year (latest 2025-Q4); USD/PHP 8.35%; national figure."
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.1573,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.2308
+     },
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": 0.0887,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": -0.0842,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0058,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": -0.0057,
+      "direction": "protective",
+      "trigger_proportion": 0.0385
+     }
+    ],
+    "article_count": 52.0,
+    "other_pct": 0.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.9,
+     "provinceReferenceP60": 6.05,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -4.0,
+     "provinceReferenceP60": 0.61
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -32.2,
+     "cornProductionYoY": -83.9,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -7.7,
+     "aquacultureYoY": -11.5,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 52.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.2308,
+      "fish_kill": 0.0385,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": 0.5054
+    }
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.173,
+     "origin": "2024-01-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.477,
+     "origin": "2024-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.086,
+     "origin": "2024-07-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.479,
+     "origin": "2024-10-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.46,
+     "origin": "2025-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.24,
+     "origin": "2025-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.395,
+     "origin": "2026-01-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.064,
+     "origin": "2026-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    }
+   ],
+   "earlierForecasts": [
+    {
+     "targetQuarter": "2026-Q4",
+     "probability": 0.013,
+     "origin": "2026-07-01",
+     "decision": "LOW"
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the I7 procedure at each past origin (only information published before that origin; verified by deleting all later data); not forecasts issued live, and the outcomes were examined while the correction was designed.",
+   "warnings": [
+    "FORECASTING ACCEPTANCE NOT MET: I7 reaches 0.800 accuracy on the 35 development rows but detects 4 of 9 HIGH quarters (HIGH recall 0.44); experimental decision support only.",
+    "Historical scores are development evidence (outcomes examined while diagnosing the defect); acceptance requires the prospective quarters 2027-Q1..Q4.",
+    "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
+    "Employment and OFW evidence are national.",
+    "Exploratory food-stress outcome; not verified household food insecurity."
+   ]
+  },
+  "PH040300000": {
+   "provinceCode": "PH040300000",
+   "name": "Quezon",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "kind": "FORECAST (outcome not yet known)",
+    "probability": 0.14581419337591542,
+    "band": "Low",
+    "decisionThreshold": 0.5,
+    "decision": "LOW",
+    "servedModel": "E46-I7 defect-corrected five-trigger component model",
+    "components": {
+     "regionalHungerAbove11_3": 0.962,
+     "provincialPriceSignal": 0.152,
+     "foodInflationForecast": 2.18,
+     "foodMinusHeadlineForecast": -2.58,
+     "hungerForecast": 20.6
+    },
+    "explanation": "Quezon, 2027-Q1 (forecast issued 2026-10-01): estimated probability of concurrent elevated food stress 15% (Low; decision LOW at p >= 0.5). Regional hunger is forecast at 20.6% (chance above 11.3%: 96%); Quezon's food inflation at 2.2% and food minus headline at -2.6 points (chance its price signal is on: 15%).",
+    "variants": {
+     "I7-BASE (no residual)": 0.1414222601077675,
+     "I7-MKT (market residual only)": 0.17666349419380192
+    }
+   },
+   "fiveTriggerContributions": {
+    "market": {
+     "foodInflationPoints": 0.657,
+     "gapPoints": 0.0,
+     "hungerPoints": -1.408,
+     "logOddsEffect": 0.0666,
+     "features": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ]
+    },
+    "climate": {
+     "foodInflationPoints": -0.025,
+     "gapPoints": 0.0,
+     "hungerPoints": 3.837,
+     "logOddsEffect": 0.1372,
+     "features": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ],
+     "featuresWithNonzeroWeight": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ]
+    },
+    "fish_kill": {
+     "foodInflationPoints": -0.002,
+     "gapPoints": 0.0,
+     "hungerPoints": -0.36,
+     "logOddsEffect": -0.0069,
+     "features": [
+      "aqua_yoy",
+      "fish_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "aqua_yoy",
+      "fish_yoy"
+     ]
+    },
+    "employment": {
+     "foodInflationPoints": -0.223,
+     "gapPoints": 0.0,
+     "hungerPoints": -6.074,
+     "logOddsEffect": -0.0865,
+     "features": [
+      "under_yoy",
+      "ur_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "under_yoy",
+      "ur_yoy"
+     ]
+    },
+    "ofw_remittance": {
+     "foodInflationPoints": -0.057,
+     "gapPoints": 0.0,
+     "hungerPoints": 0.824,
+     "logOddsEffect": 0.008,
+     "features": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ]
+    }
+   },
+   "fiveTriggerNote": "Contributions of each trigger group to the food-inflation, food-minus-headline and hunger forecasts of the served model (model attributions, not proof that an event causes food insecurity). Employment and OFW indicators are national.",
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component",
+     "evidenceNote": "Food inflation 3.6% in the latest two months vs this province's reference 6.24%; food minus headline -2.5 points."
+    },
+    "climate": {
+     "status": "contributes",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model",
+     "evidenceNote": "0.0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in the previous quarter; palay production 51.3% year on year."
+    },
+    "fish_kill": {
+     "status": "contributes",
+     "evidence": "fisheries production shown",
+     "evidenceNote": "Fisheries production -1.2% and aquaculture 10.1% year on year (2026-Q2); no official fish-kill event series."
+    },
+    "employment": {
+     "status": "contributes",
+     "evidence": "national LFS shown",
+     "evidenceNote": "National unemployment 4.79% (2026-Q2), 0.9 points year on year; national figure, the same for every province."
+    },
+    "ofw_remittance": {
+     "status": "contributes",
+     "evidence": "national remittances through 2025-Q4",
+     "evidenceNote": "National cash remittances n/a year on year (latest 2025-Q4); USD/PHP 8.35%; national figure."
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.1372,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.025
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": -0.0865,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": 0.0666,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.008,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": -0.0069,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     }
+    ],
+    "article_count": 40.0,
+    "other_pct": 0.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 3.6,
+     "provinceReferenceP60": 6.24,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -2.5,
+     "provinceReferenceP60": -0.56
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": 51.3,
+     "cornProductionYoY": -7.2,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -1.2,
+     "aquacultureYoY": 10.1,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 40.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.025,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.208,
+     "origin": "2024-01-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.597,
+     "origin": "2024-04-01",
+     "decision": "HIGH",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.956,
+     "origin": "2024-07-01",
+     "decision": "HIGH",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.986,
+     "origin": "2024-10-01",
+     "decision": "HIGH",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.395,
+     "origin": "2025-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.253,
+     "origin": "2025-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.546,
+     "origin": "2026-01-01",
+     "decision": "HIGH",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.852,
+     "origin": "2026-04-01",
+     "decision": "HIGH",
+     "observedHigh": false
+    }
+   ],
+   "earlierForecasts": [
+    {
+     "targetQuarter": "2026-Q4",
+     "probability": 0.281,
+     "origin": "2026-07-01",
+     "decision": "LOW"
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the I7 procedure at each past origin (only information published before that origin; verified by deleting all later data); not forecasts issued live, and the outcomes were examined while the correction was designed.",
+   "warnings": [
+    "FORECASTING ACCEPTANCE NOT MET: I7 reaches 0.800 accuracy on the 35 development rows but detects 4 of 9 HIGH quarters (HIGH recall 0.44); experimental decision support only.",
+    "Historical scores are development evidence (outcomes examined while diagnosing the defect); acceptance requires the prospective quarters 2027-Q1..Q4.",
+    "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
+    "Employment and OFW evidence are national.",
+    "Exploratory food-stress outcome; not verified household food insecurity."
+   ]
+  },
+  "PH040400000": {
+   "provinceCode": "PH040400000",
+   "name": "Rizal",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "kind": "FORECAST (outcome not yet known)",
+    "probability": 0.029795376396416596,
+    "band": "Low",
+    "decisionThreshold": 0.5,
+    "decision": "LOW",
+    "servedModel": "E46-I7 defect-corrected five-trigger component model",
+    "components": {
+     "regionalHungerAbove11_3": 0.962,
+     "provincialPriceSignal": 0.031,
+     "foodInflationForecast": 1.57,
+     "foodMinusHeadlineForecast": -2.55,
+     "hungerForecast": 20.6
+    },
+    "explanation": "Rizal, 2027-Q1 (forecast issued 2026-10-01): estimated probability of concurrent elevated food stress 3% (Low; decision LOW at p >= 0.5). Regional hunger is forecast at 20.6% (chance above 11.3%: 96%); Rizal's food inflation at 1.6% and food minus headline at -2.5 points (chance its price signal is on: 3%).",
+    "variants": {
+     "I7-BASE (no residual)": 0.03085557451737214,
+     "I7-MKT (market residual only)": 0.0419471267516802
+    }
+   },
+   "fiveTriggerContributions": {
+    "market": {
+     "foodInflationPoints": 0.87,
+     "gapPoints": 0.0,
+     "hungerPoints": -1.408,
+     "logOddsEffect": 0.0799,
+     "features": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ]
+    },
+    "climate": {
+     "foodInflationPoints": -0.207,
+     "gapPoints": 0.0,
+     "hungerPoints": 3.837,
+     "logOddsEffect": 0.0835,
+     "features": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ],
+     "featuresWithNonzeroWeight": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ]
+    },
+    "fish_kill": {
+     "foodInflationPoints": 0.031,
+     "gapPoints": 0.0,
+     "hungerPoints": -0.36,
+     "logOddsEffect": -0.0002,
+     "features": [
+      "aqua_yoy",
+      "fish_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "aqua_yoy",
+      "fish_yoy"
+     ]
+    },
+    "employment": {
+     "foodInflationPoints": -0.223,
+     "gapPoints": 0.0,
+     "hungerPoints": -6.074,
+     "logOddsEffect": -0.0838,
+     "features": [
+      "under_yoy",
+      "ur_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "under_yoy",
+      "ur_yoy"
+     ]
+    },
+    "ofw_remittance": {
+     "foodInflationPoints": -0.057,
+     "gapPoints": 0.0,
+     "hungerPoints": 0.824,
+     "logOddsEffect": 0.0054,
+     "features": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ]
+    }
+   },
+   "fiveTriggerNote": "Contributions of each trigger group to the food-inflation, food-minus-headline and hunger forecasts of the served model (model attributions, not proof that an event causes food insecurity). Employment and OFW indicators are national.",
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component",
+     "evidenceNote": "Food inflation 2.95% in the latest two months vs this province's reference 7.1%; food minus headline -3.65 points."
+    },
+    "climate": {
+     "status": "contributes",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model",
+     "evidenceNote": "1.0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in the previous quarter; palay production 24.3% year on year."
+    },
+    "fish_kill": {
+     "status": "contributes",
+     "evidence": "fisheries production shown",
+     "evidenceNote": "Fisheries production -18.1% and aquaculture -20.8% year on year (2026-Q2); no official fish-kill event series."
+    },
+    "employment": {
+     "status": "contributes",
+     "evidence": "national LFS shown",
+     "evidenceNote": "National unemployment 4.79% (2026-Q2), 0.9 points year on year; national figure, the same for every province."
+    },
+    "ofw_remittance": {
+     "status": "contributes",
+     "evidence": "national remittances through 2025-Q4",
+     "evidenceNote": "National cash remittances n/a year on year (latest 2025-Q4); USD/PHP 8.35%; national figure."
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": -0.0838,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.0835,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.25
+     },
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": 0.0799,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0054,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": -0.0002,
+      "direction": "protective",
+      "trigger_proportion": 0.025
+     }
+    ],
+    "article_count": 40.0,
+    "other_pct": 0.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 2.95,
+     "provinceReferenceP60": 7.1,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -3.65,
+     "provinceReferenceP60": 0.92
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 1.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": 24.3,
+     "cornProductionYoY": 233.0,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": -18.1,
+     "aquacultureYoY": -20.8,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 40.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0,
+      "climate": 0.25,
+      "fish_kill": 0.025,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.203,
+     "origin": "2024-01-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.026,
+     "origin": "2024-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.002,
+     "origin": "2024-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.276,
+     "origin": "2024-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.024,
+     "origin": "2025-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.242,
+     "origin": "2025-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.468,
+     "origin": "2026-01-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.095,
+     "origin": "2026-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    }
+   ],
+   "earlierForecasts": [
+    {
+     "targetQuarter": "2026-Q4",
+     "probability": 0.001,
+     "origin": "2026-07-01",
+     "decision": "LOW"
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the I7 procedure at each past origin (only information published before that origin; verified by deleting all later data); not forecasts issued live, and the outcomes were examined while the correction was designed.",
+   "warnings": [
+    "FORECASTING ACCEPTANCE NOT MET: I7 reaches 0.800 accuracy on the 35 development rows but detects 4 of 9 HIGH quarters (HIGH recall 0.44); experimental decision support only.",
+    "Historical scores are development evidence (outcomes examined while diagnosing the defect); acceptance requires the prospective quarters 2027-Q1..Q4.",
+    "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
+    "Employment and OFW evidence are national.",
+    "Exploratory food-stress outcome; not verified household food insecurity."
+   ]
+  },
+  "PH040500000": {
+   "provinceCode": "PH040500000",
+   "name": "Batangas",
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "food_stress_risk_probability",
+    "kind": "FORECAST (outcome not yet known)",
+    "probability": 0.038675202232575416,
+    "band": "Low",
+    "decisionThreshold": 0.5,
+    "decision": "LOW",
+    "servedModel": "E46-I7 defect-corrected five-trigger component model",
+    "components": {
+     "regionalHungerAbove11_3": 0.962,
+     "provincialPriceSignal": 0.04,
+     "foodInflationForecast": 0.62,
+     "foodMinusHeadlineForecast": -2.5,
+     "hungerForecast": 20.6
+    },
+    "explanation": "Batangas, 2027-Q1 (forecast issued 2026-10-01): estimated probability of concurrent elevated food stress 4% (Low; decision LOW at p >= 0.5). Regional hunger is forecast at 20.6% (chance above 11.3%: 96%); Batangas's food inflation at 0.6% and food minus headline at -2.5 points (chance its price signal is on: 4%).",
+    "variants": {
+     "I7-BASE (no residual)": 0.03892815919004663,
+     "I7-MKT (market residual only)": 0.04062780996099532
+    }
+   },
+   "fiveTriggerContributions": {
+    "market": {
+     "foodInflationPoints": 0.964,
+     "gapPoints": 0.0,
+     "hungerPoints": -1.408,
+     "logOddsEffect": -0.0014,
+     "features": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "D_now",
+      "F_hat_M1",
+      "F_now",
+      "gap_now",
+      "rice_whsl_yoy"
+     ]
+    },
+    "climate": {
+     "foodInflationPoints": 0.1,
+     "gapPoints": 0.0,
+     "hungerPoints": 3.837,
+     "logOddsEffect": 0.1298,
+     "features": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ],
+     "featuresWithNonzeroWeight": [
+      "corn_yoy",
+      "enso",
+      "enso_l2",
+      "enso_x_mom",
+      "palay_yoy",
+      "tc_count",
+      "tc_count_l1",
+      "tcl1_x_palay"
+     ]
+    },
+    "fish_kill": {
+     "foodInflationPoints": -0.047,
+     "gapPoints": 0.0,
+     "hungerPoints": -0.36,
+     "logOddsEffect": -0.0074,
+     "features": [
+      "aqua_yoy",
+      "fish_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "aqua_yoy",
+      "fish_yoy"
+     ]
+    },
+    "employment": {
+     "foodInflationPoints": -0.223,
+     "gapPoints": 0.0,
+     "hungerPoints": -6.074,
+     "logOddsEffect": -0.0473,
+     "features": [
+      "under_yoy",
+      "ur_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "under_yoy",
+      "ur_yoy"
+     ]
+    },
+    "ofw_remittance": {
+     "foodInflationPoints": -0.057,
+     "gapPoints": 0.0,
+     "hungerPoints": 0.824,
+     "logOddsEffect": 0.0142,
+     "features": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ],
+     "featuresWithNonzeroWeight": [
+      "fx_yoy",
+      "remit_php_yoy",
+      "remit_usd_yoy"
+     ]
+    }
+   },
+   "fiveTriggerNote": "Contributions of each trigger group to the food-inflation, food-minus-headline and hunger forecasts of the served model (model attributions, not proof that an event causes food insecurity). Employment and OFW indicators are national.",
+   "triggerStatus": {
+    "market": {
+     "status": "contributes",
+     "evidence": "food and headline CPI enter the served price component",
+     "evidenceNote": "Food inflation 0.25% in the latest two months vs this province's reference 7.15%; food minus headline -4.15 points."
+    },
+    "climate": {
+     "status": "contributes",
+     "evidence": "typhoons, ENSO, palay/corn shown; used by the five-trigger LightGBM, not by the served model",
+     "evidenceNote": "0.0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in the previous quarter; palay production -30.6% year on year."
+    },
+    "fish_kill": {
+     "status": "contributes",
+     "evidence": "fisheries production shown",
+     "evidenceNote": "Fisheries production 4.3% and aquaculture -12.8% year on year (2026-Q2); no official fish-kill event series."
+    },
+    "employment": {
+     "status": "contributes",
+     "evidence": "national LFS shown",
+     "evidenceNote": "National unemployment 4.79% (2026-Q2), 0.9 points year on year; national figure, the same for every province."
+    },
+    "ofw_remittance": {
+     "status": "contributes",
+     "evidence": "national remittances through 2025-Q4",
+     "evidenceNote": "National cash remittances n/a year on year (latest 2025-Q4); USD/PHP 8.35%; national figure."
+    }
+   },
+   "drivers": {
+    "drivers": [
+     {
+      "driver_group": "climate",
+      "driver_label": "Climate Stress",
+      "group_shap": 0.1298,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0274
+     },
+     {
+      "driver_group": "employment",
+      "driver_label": "Employment",
+      "group_shap": -0.0473,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "ofw_remittance",
+      "driver_label": "OFW Remittance",
+      "group_shap": 0.0142,
+      "direction": "increases_risk",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "fish_kill",
+      "driver_label": "Fish Kill",
+      "group_shap": -0.0074,
+      "direction": "protective",
+      "trigger_proportion": 0.0
+     },
+     {
+      "driver_group": "market",
+      "driver_label": "Market / Prices",
+      "group_shap": -0.0014,
+      "direction": "protective",
+      "trigger_proportion": 0.0137
+     }
+    ],
+    "article_count": 73.0,
+    "other_pct": 0.0,
+    "evidence_quarter": "2026-Q3"
+   },
+   "observed": {
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1,
+     "above11_3": true,
+     "level": "region (Balance Luzon)",
+     "source": "SWS approved rounds"
+    },
+    "foodInflationLatestMonths": {
+     "value": 0.25,
+     "provinceReferenceP60": 7.15,
+     "above4pct": false,
+     "level": "province",
+     "source": "PSA CPI (OpenStat 0012M4ACP23)"
+    },
+    "foodMinusHeadline": {
+     "value": -4.15,
+     "provinceReferenceP60": 0.66
+    },
+    "latestObservedSignals": {
+     "quarter": "2026-Q2",
+     "count": 1,
+     "category": "WATCH"
+    },
+    "climate": {
+     "typhoonsWithin300km": 0.0,
+     "maxSignalBand": 0.0,
+     "quarter": "2026-Q3",
+     "ensoPhasePreviousQuarter": "El Nino",
+     "palayProductionYoY": -30.6,
+     "cornProductionYoY": 10.7,
+     "source": "NOAA IBTrACS and CPC ONI (not PAGASA); PSA palay/corn production",
+     "level": "province (typhoons, production); global index (ENSO)"
+    },
+    "fisheries": {
+     "fisheriesProductionYoY": 4.3,
+     "aquacultureYoY": -12.8,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (no BFAR fish-kill event series)",
+     "level": "province"
+    },
+    "employment": {
+     "unemploymentRate": 4.79,
+     "unemploymentChangeYoY": 0.9,
+     "underemploymentRate": 13.13,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS",
+     "level": "national only"
+    },
+    "ofwRemittance": {
+     "remittanceUsdYoY": null,
+     "usdPhpYoY": 8.35,
+     "latestRemittanceQuarter": "2025-Q4",
+     "stale": false,
+     "source": "BSP cash remittances curated in bsp_macro.parquet (national; unverified re-download); ECB USD/PHP",
+     "level": "national only"
+    },
+    "news": {
+     "articles": 73.0,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "market": 0.0137,
+      "climate": 0.0274,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "fssiV2": null
+    }
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "pastForecasts": [
+    {
+     "targetQuarter": "2024-Q2",
+     "probability": 0.161,
+     "origin": "2024-01-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2024-Q3",
+     "probability": 0.056,
+     "origin": "2024-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2024-Q4",
+     "probability": 0.157,
+     "origin": "2024-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2025-Q1",
+     "probability": 0.413,
+     "origin": "2024-10-01",
+     "decision": "LOW",
+     "observedHigh": true
+    },
+    {
+     "targetQuarter": "2025-Q4",
+     "probability": 0.286,
+     "origin": "2025-07-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q1",
+     "probability": 0.39,
+     "origin": "2025-10-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q2",
+     "probability": 0.056,
+     "origin": "2026-01-01",
+     "decision": "LOW",
+     "observedHigh": false
+    },
+    {
+     "targetQuarter": "2026-Q3",
+     "probability": 0.066,
+     "origin": "2026-04-01",
+     "decision": "LOW",
+     "observedHigh": false
+    }
+   ],
+   "earlierForecasts": [
+    {
+     "targetQuarter": "2026-Q4",
+     "probability": 0.055,
+     "origin": "2026-07-01",
+     "decision": "LOW"
+    }
+   ],
+   "pastForecastsNote": "Development backtest of the I7 procedure at each past origin (only information published before that origin; verified by deleting all later data); not forecasts issued live, and the outcomes were examined while the correction was designed.",
+   "warnings": [
+    "FORECASTING ACCEPTANCE NOT MET: I7 reaches 0.800 accuracy on the 35 development rows but detects 4 of 9 HIGH quarters (HIGH recall 0.44); experimental decision support only.",
+    "Historical scores are development evidence (outcomes examined while diagnosing the defect); acceptance requires the prospective quarters 2027-Q1..Q4.",
+    "SWS hunger is regional; provinces differ through food prices and provincial trigger data.",
+    "Employment and OFW evidence are national.",
+    "Exploratory food-stress outcome; not verified household food insecurity."
+   ]
+  }
+ },
+ "assessment": {
+  "forecastingAcceptanceMet": false,
+  "finalCandidate": null,
+  "servedCandidate": "I7",
+  "S44": {
+   "dates": 7,
+   "rows": 35,
+   "HIGH": 9,
+   "metrics": {
+    "I7": {
+     "accuracy": 0.8,
+     "balanced_accuracy": 0.684,
+     "recall_HIGH": 0.444,
+     "recall_LOW": 0.923,
+     "precision_HIGH": 0.667,
+     "f1_HIGH": 0.533,
+     "brier": 0.174,
+     "roc_auc": 0.735
+    },
+    "I2": {
+     "accuracy": 0.686,
+     "balanced_accuracy": 0.716,
+     "recall_HIGH": 0.778,
+     "recall_LOW": 0.654,
+     "precision_HIGH": 0.438,
+     "f1_HIGH": 0.56,
+     "brier": 0.181,
+     "roc_auc": 0.603
+    },
+    "B-maj": {
+     "accuracy": 0.743,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "precision_HIGH": null,
+     "f1_HIGH": null,
+     "brier": 0.22,
+     "roc_auc": 0.222
+    },
+    "B-persist": {
+     "accuracy": 0.543,
+     "balanced_accuracy": 0.583,
+     "recall_HIGH": 0.667,
+     "recall_LOW": 0.5,
+     "precision_HIGH": 0.316,
+     "f1_HIGH": 0.429,
+     "brier": 0.457,
+     "roc_auc": 0.583
+    },
+    "SIM-0": {
+     "accuracy": 0.771,
+     "balanced_accuracy": 0.628,
+     "recall_HIGH": 0.333,
+     "recall_LOW": 0.923,
+     "precision_HIGH": 0.6,
+     "f1_HIGH": 0.429,
+     "brier": 0.176,
+     "roc_auc": 0.701
+    }
+   },
+   "confusion_I7": {
+    "TP": 4,
+    "TN": 24,
+    "FP": 2,
+    "FN": 5
+   }
+  },
+  "EXT": {
+   "dates": 8,
+   "rows": 40,
+   "metrics": {
+    "I7": {
+     "accuracy": 0.725,
+     "balanced_accuracy": 0.617,
+     "recall_HIGH": 0.308,
+     "recall_LOW": 0.926,
+     "precision_HIGH": 0.667,
+     "f1_HIGH": 0.421,
+     "brier": 0.22,
+     "roc_auc": 0.641
+    },
+    "I2": {
+     "accuracy": 0.625,
+     "balanced_accuracy": 0.603,
+     "recall_HIGH": 0.538,
+     "recall_LOW": 0.667,
+     "precision_HIGH": 0.438,
+     "f1_HIGH": 0.483,
+     "brier": 0.222,
+     "roc_auc": 0.481
+    },
+    "B-maj": {
+     "accuracy": 0.675,
+     "balanced_accuracy": 0.5,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "precision_HIGH": null,
+     "f1_HIGH": null,
+     "brier": 0.28,
+     "roc_auc": 0.179
+    }
+   }
+  },
+  "gates": {
+   "A0": true,
+   "A1": true,
+   "A2": false,
+   "A3": true,
+   "A4": true,
+   "passes": false
+  },
+  "evidenceStatus": "HINDSIGHT-INFORMED development evidence (ADDENDUM_I7 section 0); acceptance is prospective only (PROTOCOL section 5 / ADDENDUM_I7 section 6).",
+  "forecastingReadiness": "not accepted; experimental; prospective validation 2027-Q1..Q4"
+ },
+ "limitations": [
+  "I7 fails A2: HIGH recall 0.44 on 9 HIGH development rows.",
+  "No untouched historical evaluation exists; every 2022-2026 quarter was examined.",
+  "7 independent development quarters; accuracy CI 0.66-0.94.",
+  "Target T43 needs adviser approval; SWS is regional; employment and OFW are national."
+ ],
+ "sources": {
+  "frozen_forecast": "E46_I7_PROSPECTIVE_2027Q1.json",
+  "frozen_sha256": "5592d53ee00eb3e1e13d5112d1f69223f561e97c9f7077d8a05d5c587647be8d",
+  "evaluation_run": "i7_20261017T000111Z",
+  "addendum_sha256": "ed0db548849848a51ff23f872759e4b38be0b70f8805d3175656321740df455c",
+  "e43_record_sha256": "fc9e42662cfa554e6368ac63b3712dc27bddbf4b9987930a1f4cf9ab5037f78b"
+ },
+ "content_sha256": "ca9359e45970e0102e401ed29ff445666a89907bf80b4adf908f25be38908fb3"
+}

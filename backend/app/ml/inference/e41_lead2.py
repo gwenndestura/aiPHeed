@@ -24,6 +24,8 @@ RECORD_E42 = Path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.jso
 RECORD_E43 = Path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
 # E44: final five-trigger candidate (I2, forecasting acceptance not met)
 RECORD_E44 = Path(os.getenv("AIPHEED_E44_RECORD", "data/e44/e44_record.json"))
+# E46: defect-corrected five-trigger component model (I7, forecasting acceptance not met)
+RECORD_E46 = Path(os.getenv("AIPHEED_E46_RECORD", "data/e46/e46_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -37,11 +39,11 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43", "e44")
+    return mode() in ("e41", "e42", "e43", "e44", "e46")
 
 
 def record() -> dict:
-    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44}.get(mode(), RECORD)
+    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
