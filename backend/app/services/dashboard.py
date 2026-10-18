@@ -1040,6 +1040,7 @@ def explainability_region(quarter: str) -> dict:
 
 # E52: what each experimental candidate's probability is of, in plain words
 CANDIDATE_EVENTS = {
+    "e58": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e56": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e55": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e53": "food-price pressure",
@@ -1114,12 +1115,21 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         sentence = f"{head}, mainly because {why}."
     else:
         sentence = f"{head}; no factor breakdown is available for it."
+    # E58: the two-signal early warning (model warning for DA review), appended to the same sentence field
+    warnings = E41L2.early_warning(quarter, province_code)
+    if province_code and warnings:
+        sentence = f"{sentence} {warnings[0]['text']}"
+    elif warnings:
+        active = [w for w in warnings if w["warn"]]
+        sentence += (" Early warnings: " + "; ".join(f"{w['province']} {w['level']} ({w['direction']})" for w in active) + "."
+                     if active else " No province has an early warning for this quarter.")
     return {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
         "reasons": [{"key": t["key"], "label": t["label"], "direction": t["direction"], "pct": t["pct"],
                      "evidence": t.get("evidenceNote")} for t in reasons],
         "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),
+        **({"earlyWarning": warnings} if warnings else {}),
     }
 
 

@@ -305,6 +305,22 @@ class SummaryReason(BaseModel):
     evidence: str | None = None       # observed indicator, its period and source (province scope)
 
 
+class EarlyWarning(BaseModel):
+    """E58: two-signal early warning of one province for one quarter (a model warning, not an official classification)."""
+    provinceCode: str
+    province: str
+    level: str                        # ALERT | EMERGING | NONE
+    warn: bool
+    probabilityHigh: float
+    probabilityPricePressure: float
+    direction: str                    # rising | steady | easing | unknown (vs the latest known label)
+    latestKnownLabel: str | None = None
+    latestKnownLabelQuarter: str | None = None
+    latestHunger: float | None = None
+    latestHungerQuarter: str | None = None
+    text: str
+
+
 class PlainSummary(BaseModel):
     """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
     event: str                        # what the probability is of, e.g. "food-price pressure"
@@ -318,6 +334,7 @@ class PlainSummary(BaseModel):
     dataStatus: str                   # sufficient | limited | unavailable
     dataStatusNote: str
     sentence: str                     # one plain-language sentence
+    earlyWarning: list[EarlyWarning] | None = None   # E58: model early warnings for DA review (not official)
 
 
 class ExplainabilityResponse(BaseModel):

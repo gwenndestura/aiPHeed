@@ -1,0 +1,16 @@
+20261018T140649Z {'HIGH': 18, 'ONSET': 10, 'RISEP': 18}
+  C0_E56       HIGH acc 0.720 bal 0.684 rec 0.556 prec 0.625 FP 6 FN 8 fpr 0.188 brier 0.214 | ONSET rec 0.3 (3/10) newwarn-prec 0.429 | RISEP rec 0.333 prec 0.375
+  EW           HIGH acc 0.780 bal 0.78 rec 0.778 prec 0.667 FP 7 FN 4 fpr 0.219 brier 0.182 | ONSET rec 0.7 (7/10) newwarn-prec 0.583 | RISEP rec 0.389 prec 0.333
+  C1_cost      HIGH acc 0.640 bal 0.634 rec 0.611 prec 0.5 FP 11 FN 7 fpr 0.344 brier 0.214 | ONSET rec 0.3 (3/10) newwarn-prec 0.333 | RISEP rec 0.389 prec 0.318
+  C2_tau       HIGH acc 0.620 bal 0.667 rec 0.833 prec 0.484 FP 16 FN 3 fpr 0.5 brier 0.182 | ONSET rec 0.7 (7/10) newwarn-prec 0.438 | RISEP rec 0.611 prec 0.355
+  C3_cw        HIGH acc 0.720 bal 0.66 rec 0.444 prec 0.667 FP 4 FN 10 fpr 0.125 brier 0.209 | ONSET rec 0.3 (3/10) newwarn-prec 0.5 | RISEP rec 0.278 prec 0.417
+  C4_twostage  HIGH acc 0.640 bal 0.622 rec 0.556 prec 0.5 FP 10 FN 8 fpr 0.312 brier 0.214 | ONSET rec 0.3 (3/10) newwarn-prec 0.273 | RISEP rec 0.5 prec 0.45
+  B_PERSIST    HIGH acc 0.560 bal 0.535 rec 0.444 prec 0.4 FP 12 FN 10 fpr 0.375 brier 0.44 | ONSET rec 0.0 (0/10) newwarn-prec None | RISEP rec 0.278 prec 0.25
+  B_CLIM       HIGH acc 0.640 bal 0.5 rec 0.0 prec None FP 0 FN 18 fpr 0.0 brier 0.304 | ONSET rec 0.0 (0/10) newwarn-prec None | RISEP rec 0.0 prec None
+  B_HIGH       HIGH acc 0.360 bal 0.5 rec 1.0 prec 0.36 FP 32 FN 0 fpr 1.0 brier 0.64 | ONSET rec 1.0 (10/10) newwarn-prec 0.333 | RISEP rec 1.0 prec 0.36
+  B_RECENT     HIGH acc 0.640 bal 0.585 rec 0.389 prec 0.5 FP 7 FN 11 fpr 0.219 brier 0.36 | ONSET rec 0.3 (3/10) newwarn-prec 0.5 | RISEP rec 0.278 prec 0.357
+  B_PROJ       HIGH acc 0.740 bal 0.748 rec 0.778 prec 0.609 FP 9 FN 4 fpr 0.281 brier 0.188 | ONSET rec 0.7 (7/10) newwarn-prec 0.636 | RISEP rec 0.389 prec 0.304
+  EW missed onsets [{'target': '2024-Q4', 'province': 'Cavite'}, {'target': '2024-Q4', 'province': 'Laguna'}, {'target': '2026-Q2', 'province': 'Cavite'}]
+  acceptance {'W1_onset_recall': True, 'W2_high_recall': True, 'W3_balanced_ge_E56': True, 'W4_accuracy_ge_0.75': True, 'W5_fp_rate_le_0.30': True, 'W6_beats_simple_baselines': True, 'EW_adopted': True}
+  CIs EW [0.2, 1.0] [0.5383333333333333, 1.0] [0.7, 0.86] E56 [0.0, 0.8181818181818182]
+  low-hunger cost {'rows_2021_2023': 50, 'PS_HIGH': 29, 'PS_HIGH_but_T43_LOW': 24, 'note': 'a perfect price-pressure warning would have flagged these as warnings that were not T43 HIGH (hunger at or below 11.3%)'}

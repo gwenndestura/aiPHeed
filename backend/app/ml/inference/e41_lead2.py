@@ -37,6 +37,8 @@ RECORD_E55 = Path(os.getenv("AIPHEED_E55_RECORD", "data/e55/e55_record.json"))
 # E56: final model of the E56 LightGBM optimization cycle (two-quarter food-insecurity risk, T43), saved artifacts in
 # data/e56/model/, data-freshness disclosure
 RECORD_E56 = Path(os.getenv("AIPHEED_E56_RECORD", "data/e56/e56_record.json"))
+# E58: E56 record + two-signal early warning (ALERT / EMERGING / NONE, direction) per province and quarter
+RECORD_E58 = Path(os.getenv("AIPHEED_E58_RECORD", "data/e58/e58_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -50,12 +52,12 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56")
+    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56", "e58")
 
 
 def record() -> dict:
     path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53,
-            "e55": RECORD_E55, "e56": RECORD_E56}.get(mode(), RECORD)
+            "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
@@ -238,6 +240,22 @@ def rows_for(quarter: str) -> list[dict]:
             "estimate_kind": e["kind"],
         })
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
+    return out
+
+
+def early_warning(quarter: str, code: str | None) -> list[dict]:
+    """E58: early-warning blocks of the governing record for this quarter (one province, or every province for the
+    region), each with the province name; [] for records without warnings or quarters they do not cover."""
+    if not (serves(quarter) or has_past_drivers(quarter)):
+        return []
+    rec = record()
+    out = []
+    for c, v in rec["provinces"].items():
+        if code and c != code:
+            continue
+        w = v.get("earlyWarning") if quarter == rec["targetQuarter"] else v.get("pastDrivers", {}).get(quarter, {}).get("earlyWarning")
+        if w:
+            out.append({"provinceCode": c, "province": v["name"], **w})
     return out
 
 
