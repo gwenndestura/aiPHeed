@@ -1,0 +1,16 @@
+dataset,role,geography,frequency,latest_observation_in_dataset,latest_used_for_2027Q1_forecast,availability_rule,note
+PSA CPI food and all-items index (OpenSTAT 0012M4ACP22),target (price part) + predictor,province,monthly,2026-09,2026-08,months through month 2 of quarter t (published before O(t)),September 2026 CPI was released after the 2026-10-01 issue date and is not used in the 2027-Q1 forecast
+"PSA CPI YoY, food and headline (0012M4ACP23)",target (price part) + predictor,province,monthly,2026-09,2026-08,as above,
+"SWS hunger, Balance Luzon (sws_rounds.csv)",target (hunger part) + hunger gate,region (Balance Luzon),quarterly (rounds),2026-Q3 (posted 2026-10-14),2026-Q2 (posted 2026-08-24),rounds posted before O(t); approved (definition A) rounds for the gate; all rounds for labels,"2026-Q3 round posted 2026-10-14, after the issue date: it labels 2026-Q3 but is not a 2027-Q1 predictor"
+PSA palay/corn production (0012E4EVCP0),predictor (climate group),province,quarterly,2026-Q2,2026-Q2,quarter t-1,
+PSA fisheries/aquaculture production (0132E4GVFP1),predictor (fish-kill group),province,quarterly,2026-Q2,2026-Q2,quarter t-1,no official fish-kill event series exists
+PSA LFS unemployment/underemployment (national),predictor (employment group),national,monthly,2026-08,2026-06,months of quarter t-1,
+IBTrACS typhoon tracks + NOAA ONI (pagasa_climate.parquet),predictor (climate group),province / national,quarterly,2026-Q3,typhoons 2026-Q3; ENSO 2026-Q2,typhoons quarter t; ENSO quarter t-1,
+BSP OF cash remittances + ECB USD/PHP (bsp_macro.parquet),predictor (OFW group),national,quarterly,2025-Q4,2025-Q4,quarter t-1,remittances end 2025-Q4 in the dataset: missing at the 2026 issue dates (data refresh needs authorization)
+PSA wholesale rice prices,predictor (market group),province,quarterly,2026-Q3,2026-Q2,quarter t-1,
+News corpus trigger shares (E40 composition),predictor (NLP),province,quarterly,2026-Q4,2026-Q3,quarter t,
+FSSI v2 panel,NLP index (not an E55/E56 tree input),province,quarterly,2026-Q4,2026-Q3,quarter t,
+"Rice-policy orders (EO 62, import suspensions, MSRP, food security emergency)",predictor (market group),national,events,2025-10-30,2025-10-30,announced before O(t),
+PSA 2021 municipal SAE poverty incidence,candidate predictor (E54/E55: no gain); Objective 3 weight,city/municipality (141 LGUs),one-off (2021),2021,2021 (POV-AS arm only),published 2024; known from O(t) >= 2025-01-01,
+PSA subsistence incidence (food poverty),"direct measure, not a target (2 points)",province,triennial,2023,not used,published 2024-08-15,
+DOST-FNRI NNS FIES (moderate or severe household food insecurity),direct measure; face-validity anchor (Obj 5),region,survey years,2023 (CALABARZON 19.1%),not used,survey publication,regional only; annual/triennial; cannot be a quarterly provincial target
