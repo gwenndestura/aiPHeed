@@ -1,0 +1,32 @@
+origin 2023-Q4 cfg 46
+origin 2024-Q1 cfg 27
+origin 2024-Q2 cfg 41
+origin 2024-Q3 cfg 41
+origin 2024-Q4 cfg 37
+origin 2025-Q1 cfg 68
+origin 2025-Q2 cfg 61
+origin 2025-Q3 cfg 54
+origin 2025-Q4 cfg 50
+origin 2026-Q1 cfg 23
+origin 2026-Q2 cfg 68
+origin 2026-Q3 cfg 23
+20261018T132444Z rows 45 HIGH 14 final E56-TUNED {'a_brier_lower': True, 'b_balanced_not_worse_by_0.02': True}
+  E56-TUNED    acc 0.778 [0.69, 0.87] bal 0.76 recH 0.714 precH 0.625 recL 0.806 precL 0.862 F1 0.667 brier 0.178 auc 0.763 {'TP': 10, 'TN': 25, 'FP': 6, 'FN': 4}
+  E55-LGBM     acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 precH 0.562 recL 0.774 precL 0.828 F1 0.6 brier 0.180 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  I7           acc 0.756 [0.64, 0.87] bal 0.725 recH 0.643 precH 0.6 recL 0.806 precL 0.833 F1 0.621 brier 0.186 auc 0.776 {'TP': 9, 'TN': 25, 'FP': 6, 'FN': 5}
+  I7-BASE      acc 0.733 [0.6, 0.87] bal 0.709 recH 0.643 precH 0.562 recL 0.774 precL 0.828 F1 0.6 brier 0.184 auc 0.779 {'TP': 9, 'TN': 24, 'FP': 7, 'FN': 5}
+  E52          acc 0.756 [0.64, 0.87] bal 0.725 recH 0.643 precH 0.6 recL 0.806 precL 0.833 F1 0.621 brier 0.188 auc 0.776 {'TP': 9, 'TN': 25, 'FP': 6, 'FN': 5}
+  B1_PERSIST   acc 0.600 [0.44, 0.78] bal 0.592 recH 0.571 precH 0.4 recL 0.613 precL 0.76 F1 0.471 brier 0.400 auc 0.592 {'TP': 8, 'TN': 19, 'FP': 12, 'FN': 6}
+  B2_LR_GOV    acc 0.378 [0.18, 0.6] bal 0.333 recH 0.214 precH 0.15 recL 0.452 precL 0.56 F1 0.176 brier 0.598 auc 0.295 {'TP': 3, 'TN': 14, 'FP': 17, 'FN': 11}
+  B3_LGBM_GOV  acc 0.400 [0.22, 0.6] bal 0.29 recH 0.0 precH 0.0 recL 0.581 precL 0.562 F1 None brier 0.424 auc 0.221 {'TP': 0, 'TN': 18, 'FP': 13, 'FN': 14}
+  B4_LR_NLP    acc 0.667 [0.51, 0.82] bal 0.523 recH 0.143 precH 0.4 recL 0.903 precL 0.7 F1 0.211 brier 0.235 auc 0.488 {'TP': 2, 'TN': 28, 'FP': 3, 'FN': 12}
+  B5_LGBM_NLP  acc 0.644 [0.42, 0.82] bal 0.546 recH 0.286 precH 0.4 recL 0.806 precL 0.714 F1 0.333 brier 0.267 auc 0.45 {'TP': 4, 'TN': 25, 'FP': 6, 'FN': 10}
+  B6_LR_COMB   acc 0.333 [0.18, 0.49] bal 0.301 recH 0.214 precH 0.136 recL 0.387 precL 0.522 F1 0.167 brier 0.646 auc 0.247 {'TP': 3, 'TN': 12, 'FP': 19, 'FN': 11}
+  B7_E38PROC   acc 0.356 [0.16, 0.58] bal 0.278 recH 0.071 precH 0.059 recL 0.484 precL 0.536 F1 0.065 brier 0.433 auc 0.301 {'TP': 1, 'TN': 15, 'FP': 16, 'FN': 13}
+  CLIM         acc 0.689 [0.51, 0.87] bal 0.5 recH 0.0 precH None recL 1.0 precL 0.689 F1 None brier 0.255 auc 0.235 {'TP': 0, 'TN': 31, 'FP': 0, 'FN': 14}
+  HIGH         acc 0.311 [0.13, 0.49] bal 0.5 recH 1.0 precH 0.311 recL 0.0 precL None F1 0.475 brier 0.689 auc None {'TP': 14, 'TN': 0, 'FP': 31, 'FN': 0}
+  LOW          acc 0.689 [0.49, 0.89] bal 0.5 recH 0.0 precH None recL 1.0 precL 0.689 F1 None brier 0.311 auc None {'TP': 0, 'TN': 31, 'FP': 0, 'FN': 14}
+  criteria {'E56-TUNED': True, 'E55-LGBM': False, 'I7': True, 'E52': True}
+  paired E56-E55 {'diff': -0.0010358538116864908, 'ci95': [-0.014597745685299863, 0.011245355142103487]}
+  spread {'E56-TUNED': (0.767, 0.188, 6), 'E55-LGBM': (0.767, 0.189, 7), 'I7': (0.733, 0.218, 6), 'E52': (0.733, 0.22, 6), 'B1_PERSIST': (0.667, 0.351, 7)}
+  configs {'2023-Q4': 46, '2024-Q1': 27, '2024-Q2': 41, '2024-Q3': 41, '2024-Q4': 37, '2025-Q1': 68, '2025-Q2': 61, '2025-Q3': 54, '2025-Q4': 50, '2026-Q1': 23, '2026-Q2': 68, '2026-Q3': 23} prospective written
