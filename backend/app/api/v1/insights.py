@@ -118,6 +118,11 @@ E55_EXPLAINABILITY_NOTE = (
 )
 
 
+E56_EXPLAINABILITY_NOTE = E55_EXPLAINABILITY_NOTE.replace(
+    "the total volume of news is left out of the bars",
+    "the total volume of news and, at origins where the model selected it, PSA 2021 poverty are left out of the bars")
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -130,6 +135,8 @@ def _served_note(quarter: str | None = None) -> str:
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e56" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E56_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e55" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E55_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e53" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):

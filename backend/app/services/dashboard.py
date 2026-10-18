@@ -1040,6 +1040,7 @@ def explainability_region(quarter: str) -> dict:
 
 # E52: what each experimental candidate's probability is of, in plain words
 CANDIDATE_EVENTS = {
+    "e56": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e55": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e53": "food-price pressure",
     "e52": "food-price pressure",

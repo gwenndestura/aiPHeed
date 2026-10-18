@@ -34,6 +34,9 @@ RECORD_E53 = Path(os.getenv("AIPHEED_E53_RECORD", "data/e53/e53_record.json"))
 # E55: food-insecurity risk (target T43: regional SWS hunger > 11.3 AND provincial food-price pressure) from the E55
 # LightGBM model, exact TreeSHAP explanations
 RECORD_E55 = Path(os.getenv("AIPHEED_E55_RECORD", "data/e55/e55_record.json"))
+# E56: final model of the E56 LightGBM optimization cycle (two-quarter food-insecurity risk, T43), saved artifacts in
+# data/e56/model/, data-freshness disclosure
+RECORD_E56 = Path(os.getenv("AIPHEED_E56_RECORD", "data/e56/e56_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -47,12 +50,12 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55")
+    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56")
 
 
 def record() -> dict:
     path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53,
-            "e55": RECORD_E55}.get(mode(), RECORD)
+            "e55": RECORD_E55, "e56": RECORD_E56}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     rec = json.loads(path.read_text(encoding="utf-8"))
