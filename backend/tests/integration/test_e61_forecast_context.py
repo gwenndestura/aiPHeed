@@ -105,7 +105,10 @@ def test_employment_note_only_when_direction_conflicts(e58):
     rec = LEAD2.record()
     for code, v in rec["provinces"].items():
         s = _summary("province", SLUG[code])
-        lowered = any(r["key"] == "employment" and r["direction"] == "protective" for r in s["reasons"])
+        # E62: every Employment bar drawn as lowering the score counts, not only the named reasons (Rizal, Batangas)
+        ex = client.get(f"/api/v1/explainability?scope=province&id={SLUG[code]}&quarter=2027-Q1").json()
+        lowered = any(t["key"] == "employment" and t["direction"] == "protective" and t["pct"] > 0
+                      and t["status"] == "contributes" for t in ex["triggers"])
         rising = (v["observed"]["employment"].get("unemploymentChangeYoY") or 0) > 0
         assert ("not evidence that job losses reduce food stress" in s["caveat"]) == (lowered and rising)
 

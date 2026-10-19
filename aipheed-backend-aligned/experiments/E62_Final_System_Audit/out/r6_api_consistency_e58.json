@@ -1,0 +1,951 @@
+{
+ "mode": "e58",
+ "record_target": "2027-Q1",
+ "record_origin": "2026-10-01",
+ "checks": [
+  {
+   "check": "C8 record not mutated by serving",
+   "pass": true
+  },
+  {
+   "check": "C8b two passes identical",
+   "pass": false
+  },
+  {
+   "check": "C1 current target quarter dynamic",
+   "pass": true,
+   "current": "2027-Q1",
+   "record_target": "2027-Q1"
+  },
+  {
+   "check": "C2 province scores equal record",
+   "pass": true,
+   "max_abs_diff": 0.0
+  },
+  {
+   "check": "C3 region score is a documented aggregation",
+   "pass": true,
+   "region": 0.0836,
+   "candidates": {
+    "mean": 0.08360433638266448,
+    "max": 0.14609801839959138,
+    "median": 0.07025763418012257
+   },
+   "matches": [
+    "mean"
+   ]
+  },
+  {
+   "check": "C4 province timeseries equal record",
+   "pass": true,
+   "mismatches": []
+  },
+  {
+   "check": "C4b region timeseries = mean of five provinces' record values",
+   "pass": true,
+   "mismatches": [],
+   "quarters": [
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q2",
+    "2025-Q3",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3",
+    "2026-Q4",
+    "2027-Q1"
+   ]
+  },
+  {
+   "check": "C5 LGU outputs",
+   "pass": false,
+   "n": 142,
+   "unique": 142,
+   "finite": true,
+   "region_ranks": false,
+   "province_ranks": false,
+   "rank_follows_index": true,
+   "labels": [
+    "Indicative, relative ordering of the 142 cities and municipalities for planning attention. It is the province estimate re-weighted by PSA 2021 poverty incidence (60%) and 2024 POPCEN population density (40%) inside each province. It is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official classification (Chapter I, 1.7). The province estimate it starts from has NOT been validated against baselines (E25-E28), so the ranking inherits that status: EXPERIMENTAL."
+   ],
+   "risk_levels": [
+    "low"
+   ],
+   "indicator": "Food-Insecurity Risk Probability (experimental)"
+  },
+  {
+   "check": "C6 explanations equal record",
+   "pass": false,
+   "mismatches": [
+    {
+     "province": "Rizal",
+     "unemployment_note_missing": true
+    },
+    {
+     "province": "Rizal",
+     "food_yoy_not_quoted": 2.95
+    },
+    {
+     "province": "Batangas",
+     "unemployment_note_missing": true
+    },
+    {
+     "province": "Batangas",
+     "food_yoy_not_quoted": 0.25
+    }
+   ]
+  },
+  {
+   "check": "C7 news items have source/url/date",
+   "pass": true,
+   "stats": {
+    "region_news": {
+     "items": 10,
+     "empty_excerpt": 10,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    },
+    "cavite_news": {
+     "items": 5,
+     "empty_excerpt": 5,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    },
+    "laguna_news": {
+     "items": 7,
+     "empty_excerpt": 7,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    },
+    "quezon_news": {
+     "items": 3,
+     "empty_excerpt": 3,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    },
+    "rizal_news": {
+     "items": 8,
+     "empty_excerpt": 8,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    },
+    "batangas_news": {
+     "items": 5,
+     "empty_excerpt": 5,
+     "excerpt_equals_title": 0,
+     "dated_on_or_after_issue": 0
+    }
+   }
+  },
+  {
+   "check": "C9 sufficiency label matches record coverage",
+   "pass": true,
+   "detail": {
+    "Cavite": {
+     "dataStatus": "limited",
+     "partial_groups_record": [
+      "ofw_remittance"
+     ]
+    },
+    "Laguna": {
+     "dataStatus": "limited",
+     "partial_groups_record": [
+      "ofw_remittance"
+     ]
+    },
+    "Quezon": {
+     "dataStatus": "limited",
+     "partial_groups_record": [
+      "ofw_remittance"
+     ]
+    },
+    "Rizal": {
+     "dataStatus": "limited",
+     "partial_groups_record": [
+      "ofw_remittance"
+     ]
+    },
+    "Batangas": {
+     "dataStatus": "limited",
+     "partial_groups_record": [
+      "ofw_remittance"
+     ]
+    }
+   }
+  }
+ ],
+ "news": {
+  "region_news": {
+   "items": 10,
+   "total": 10,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 10,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2026-Q3"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  },
+  "cavite_news": {
+   "items": 5,
+   "total": 5,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 5,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  },
+  "laguna_news": {
+   "items": 7,
+   "total": 7,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 7,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2026-Q3"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  },
+  "quezon_news": {
+   "items": 3,
+   "total": 3,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 3,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  },
+  "rizal_news": {
+   "items": 8,
+   "total": 8,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 8,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  },
+  "batangas_news": {
+   "items": 5,
+   "total": 5,
+   "no_source": 0,
+   "no_url": 0,
+   "no_date": 0,
+   "empty_excerpt": 5,
+   "excerpt_equals_title": 0,
+   "dated_on_or_after_issue": 0,
+   "quarters": [
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "evidenceQuarter": "2026-Q3",
+   "evidenceMode": "FORECAST",
+   "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published by 2026-10-01 (full quarter). A forecast never uses news of its own target quarter."
+  }
+ },
+ "timings_in_process_ms": [
+  {
+   "path": "/api/v1/quarters",
+   "params": {
+    "horizon": "nowcast"
+   },
+   "ms": 42.0,
+   "status": 200,
+   "bytes": 3798
+  },
+  {
+   "path": "/api/v1/provinces",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 496.4,
+   "status": 200,
+   "bytes": 11666
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 26.7,
+   "status": 200,
+   "bytes": 2240
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon"
+   },
+   "ms": 26.5,
+   "status": 200,
+   "bytes": 3169
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 25.5,
+   "status": 200,
+   "bytes": 8981
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.6,
+   "status": 200,
+   "bytes": 9785
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "cavite"
+   },
+   "ms": 14.2,
+   "status": 200,
+   "bytes": 3164
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.7,
+   "status": 200,
+   "bytes": 10320
+  },
+  {
+   "path": "/api/v1/provinces/cavite/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 1149.8,
+   "status": 200,
+   "bytes": 33072
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.5,
+   "status": 200,
+   "bytes": 6178
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1"
+   },
+   "ms": 7.4,
+   "status": 200,
+   "bytes": 2413
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "laguna"
+   },
+   "ms": 17.7,
+   "status": 200,
+   "bytes": 3163
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.3,
+   "status": 200,
+   "bytes": 10161
+  },
+  {
+   "path": "/api/v1/provinces/laguna/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 14.1,
+   "status": 200,
+   "bytes": 42533
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 1.7,
+   "status": 200,
+   "bytes": 7086
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1"
+   },
+   "ms": 5.9,
+   "status": 200,
+   "bytes": 2411
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "quezon"
+   },
+   "ms": 17.8,
+   "status": 200,
+   "bytes": 3168
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 8.1,
+   "status": 200,
+   "bytes": 10140
+  },
+  {
+   "path": "/api/v1/provinces/quezon/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 10.8,
+   "status": 200,
+   "bytes": 57922
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.2,
+   "status": 200,
+   "bytes": 3582
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 7.2,
+   "status": 200,
+   "bytes": 2414
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "rizal"
+   },
+   "ms": 15.5,
+   "status": 200,
+   "bytes": 3157
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1"
+   },
+   "ms": 4.5,
+   "status": 200,
+   "bytes": 9303
+  },
+  {
+   "path": "/api/v1/provinces/rizal/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 12.1,
+   "status": 200,
+   "bytes": 20708
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 1.2,
+   "status": 200,
+   "bytes": 8565
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1"
+   },
+   "ms": 5.4,
+   "status": 200,
+   "bytes": 2408
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "batangas"
+   },
+   "ms": 11.4,
+   "status": 200,
+   "bytes": 3168
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1"
+   },
+   "ms": 4.3,
+   "status": 200,
+   "bytes": 9352
+  },
+  {
+   "path": "/api/v1/provinces/batangas/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 10.0,
+   "status": 200,
+   "bytes": 48140
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 1.6,
+   "status": 200,
+   "bytes": 5411
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1"
+   },
+   "ms": 5.6,
+   "status": 200,
+   "bytes": 2417
+  },
+  {
+   "path": "/api/v1/quarters",
+   "params": {
+    "horizon": "nowcast"
+   },
+   "ms": 6.2,
+   "status": 200,
+   "bytes": 3798
+  },
+  {
+   "path": "/api/v1/provinces",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 4.3,
+   "status": 200,
+   "bytes": 11666
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 8.0,
+   "status": 200,
+   "bytes": 2240
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon"
+   },
+   "ms": 26.9,
+   "status": 200,
+   "bytes": 3169
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 15.1,
+   "status": 200,
+   "bytes": 8981
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "region",
+    "id": "calabarzon",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 1.7,
+   "status": 200,
+   "bytes": 9785
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "cavite"
+   },
+   "ms": 21.2,
+   "status": 200,
+   "bytes": 3164
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.2,
+   "status": 200,
+   "bytes": 10320
+  },
+  {
+   "path": "/api/v1/provinces/cavite/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 14.8,
+   "status": 200,
+   "bytes": 33072
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.0,
+   "status": 200,
+   "bytes": 6178
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "cavite",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.7,
+   "status": 200,
+   "bytes": 2413
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "laguna"
+   },
+   "ms": 20.1,
+   "status": 200,
+   "bytes": 3163
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1"
+   },
+   "ms": 4.8,
+   "status": 200,
+   "bytes": 10161
+  },
+  {
+   "path": "/api/v1/provinces/laguna/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 13.1,
+   "status": 200,
+   "bytes": 42533
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 1.7,
+   "status": 200,
+   "bytes": 7086
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "laguna",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.5,
+   "status": 200,
+   "bytes": 2411
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "quezon"
+   },
+   "ms": 23.0,
+   "status": 200,
+   "bytes": 3168
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 7.5,
+   "status": 200,
+   "bytes": 10140
+  },
+  {
+   "path": "/api/v1/provinces/quezon/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 11.5,
+   "status": 200,
+   "bytes": 57922
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.1,
+   "status": 200,
+   "bytes": 3582
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "quezon",
+    "quarter": "2027-Q1"
+   },
+   "ms": 6.4,
+   "status": 200,
+   "bytes": 2414
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "rizal"
+   },
+   "ms": 16.2,
+   "status": 200,
+   "bytes": 3157
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1"
+   },
+   "ms": 7.4,
+   "status": 200,
+   "bytes": 9303
+  },
+  {
+   "path": "/api/v1/provinces/rizal/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 15.4,
+   "status": 200,
+   "bytes": 20708
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.4,
+   "status": 200,
+   "bytes": 8565
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "rizal",
+    "quarter": "2027-Q1"
+   },
+   "ms": 8.1,
+   "status": 200,
+   "bytes": 2408
+  },
+  {
+   "path": "/api/v1/forecast/timeseries",
+   "params": {
+    "scope": "province",
+    "id": "batangas"
+   },
+   "ms": 14.4,
+   "status": 200,
+   "bytes": 3168
+  },
+  {
+   "path": "/api/v1/explainability",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1"
+   },
+   "ms": 7.4,
+   "status": 200,
+   "bytes": 9352
+  },
+  {
+   "path": "/api/v1/provinces/batangas/municipalities",
+   "params": {
+    "quarter": "2027-Q1"
+   },
+   "ms": 14.1,
+   "status": 200,
+   "bytes": 48140
+  },
+  {
+   "path": "/api/v1/news",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1",
+    "page": 1,
+    "pageSize": 20
+   },
+   "ms": 2.2,
+   "status": 200,
+   "bytes": 5411
+  },
+  {
+   "path": "/api/v1/forecast",
+   "params": {
+    "scope": "province",
+    "id": "batangas",
+    "quarter": "2027-Q1"
+   },
+   "ms": 9.4,
+   "status": 200,
+   "bytes": 2417
+  }
+ ]
+}

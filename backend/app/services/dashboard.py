@@ -1139,7 +1139,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                      if active else " No province has an early warning for this quarter.")
     # E61: what a two-part forecast does and does not mean goes into the same sentence field the dashboard already
     # shows, so the approved layout is unchanged (no new UI element)
-    caveat = (_forecast_caveat(province_code, comp, reasons,
+    # E62: the employment note follows every group drawn as a bar (contributing), not only the named reasons, so a
+    # province whose Employment bar is below the 10% naming line (Rizal, Batangas 2027-Q1) still gets it
+    caveat = (_forecast_caveat(province_code, comp, contributing,
                                [LABEL_OF.get(g, g) for g in E41L2.partial_inputs(quarter, province_code)])
               if comp else None)
     if caveat:
@@ -1190,8 +1192,9 @@ def _forecast_components(province_code: str | None, quarter: str) -> dict | None
             "entry": None}
 
 
-def _forecast_caveat(province_code: str | None, comp: dict, reasons: list[dict], partial: list[str] = ()) -> str:
-    """E61: what the low/high value does and does not mean, from the record's own observations only."""
+def _forecast_caveat(province_code: str | None, comp: dict, shown: list[dict], partial: list[str] = ()) -> str:
+    """E61: what the low/high value does and does not mean, from the record's own observations only. `shown` is every
+    factor group with a non-zero contribution (each drawn as a bar)."""
     out = []
     v = comp["entry"]
     if v is not None:
@@ -1216,7 +1219,7 @@ def _forecast_caveat(province_code: str | None, comp: dict, reasons: list[dict],
             out.append("Slower food inflation does not mean food has become affordable; it means prices are rising "
                        "more slowly.")
         emp = ob.get("employment", {})
-        if (any(r["key"] == "employment" and r["direction"] == "protective" for r in reasons)
+        if (any(r["key"] == "employment" and r["direction"] == "protective" for r in shown)
                 and (emp.get("unemploymentChangeYoY") or 0) > 0):
             out.append(f"The model lowered its estimate while national unemployment rose "
                        f"({emp['unemploymentChangeYoY']:+.2f} points); this is a statistical pattern in a short "
@@ -1626,8 +1629,33 @@ E31_TOPICS = {"DIRECT": ("direct", "Direct food-insecurity report"),
               "INDIRECT": ("indirect", "Food-system stress (prices, losses, supply)")}
 
 
+def _lead2_news_evidence(quarter: str) -> tuple[str, str, str] | None:
+    """E62: when a Lead-2 candidate governs, the news beside an estimate follows THAT estimate's timing, not E31's
+    one-quarter-ahead rule. A Lead-2 estimate of quarter q is made as of day 1 of q-1 with news of q-2, so an earlier
+    forecast (2026-Q4, issued 2026-07-01) is shown with 2026-Q2 news, never with articles published after its issue
+    date; a backtest quarter still shows its own news, with the correct timing note."""
+    if not E41L2.governs() or quarter not in E41L2.candidate_quarters():
+        return None
+    rows = E41L2.rows_for(quarter)
+    if not rows:
+        return None
+    kind, origin = rows[0]["estimate_kind"], rows[0]["origin"]
+    news_q = _shift_q(quarter, -2)
+    if kind in ("forecast", "earlier_forecast"):
+        return (news_q, "FORECAST",
+                f"Supporting news for the {quarter} forecast: {news_q} articles published before {origin}, its issue "
+                f"date (full quarter). This two-quarter-ahead forecast uses news of the quarter before its issue date, "
+                f"never news published after it or of its own target quarter.")
+    return (quarter, "OBSERVED",
+            f"News published in {quarter} (describes the quarter; its two-quarter-ahead estimate was made as of "
+            f"{origin} with {news_q} news).")
+
+
 def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
     """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy)."""
+    lead2 = _lead2_news_evidence(quarter)
+    if lead2 is not None:
+        return lead2
     r = E31.quarter_row(quarter, NOWCAST)
     if r is not None and r["mode"] == "FORECAST":
         w = r["provenance"]["news_evidence_window"]

@@ -1,0 +1,1025 @@
+AIPHEED: A GEOSPATIAL FOOD INSECURITY FORECASTING SYSTEM
+       FOR DA REGION IV-A USING NLP AND MACHINE LEARNING
+
+                          An Undergraduate Thesis Presented to the
+                          Faculty of Computer Science Department
+                       College of Information and Computer Studies
+
+                             De La Salle University - Dasmariñas
+                                     Dasmariñas City, Cavite
+
+                 In Partial Fulfillment of the Requirements for the Degree
+       Bachelor of Science in Computer Science with Intelligent Systems Track
+
+                                  Destura, Princess Gwenn A.
+                                       Esico, Christina M.
+
+                                     Melindo, Angel Vhea P.
+
+                                   Dr. Rolando B. Barrameda
+                                          Thesis Adviser
+
+                                             May 2026
+                                          TABLE OF CONTENTS
+CHAPTER I................................................................................................................................... 7
+INTRODUCTION......................................................................................................................... 7
+
+    1.1 Project Context.....................................................................................................................8
+    1.2 Purpose and Description...................................................................................................... 9
+    1.3 Statement of the Problem...................................................................................................11
+    1.4 Hypothesis..........................................................................................................................12
+
+         1.5.1 General Objective..................................................................................................... 13
+         1.5.2 Specific Objectives................................................................................................... 13
+    1.6 Significance of the Study................................................................................................... 15
+    1.7 Scope and Limitations........................................................................................................15
+CHAPTER II................................................................................................................................17
+REVIEW OF RELATED LITERATURE................................................................................. 17
+    2.1 Foreign Literature.............................................................................................................. 17
+    2.2 Foreign Studies.................................................................................................................. 19
+    2.3 Local Literature..................................................................................................................20
+    2.4 Local Studies......................................................................................................................22
+    2.5 Synthesis............................................................................................................................ 23
+CHAPTER III.............................................................................................................................. 28
+RESEARCH METHODOLOGY............................................................................................... 28
+    3.1 Software Development Methodology................................................................................ 28
+
+                                                                                                                               2
+    3.2 Conceptual Framework......................................................................................................30
+    3.3 Data Gathering and Pre-processing................................................................................... 32
+    3.4 Algorithm and Its Rules..................................................................................................... 38
+    3.5 Operational Framework..................................................................................................... 59
+    3.7 Respondents....................................................................................................................... 67
+REFERENCES.............................................................................................................................70
+
+                                                                                                                               3
+                                             LIST OF TABLES
+Table 2.5.1 Synthesis of Related Literature and Studies............................................... 22
+Table 3.4.2.1 Variable Legend for the Spatial Bias Weight Formula............................... 49
+Table 3.4.2.2 Variable Legend for the Food Stress Sentiment Index Formula................. 50
+Table 3.4.2.3 Variable Legend for the Forecast Target Label Formula........................... 51
+Table 3.4.2.4 Variable Legend for the LightGBM Forecast Function.............................. 52
+Table 3.4.2.5 Variable Legend for the Spatial Disaggregation of Forecasts Formula.... 54
+Table 3.4.2.6 Variable Legend for the SHAP Forecast Attribution Formula................... 55
+Table 3.4.3.1 Time and Space Complexity of the aiPHeed Pipeline................................ 56
+
+                                                                                                                             4
+                                            LIST OF FIGURES
+
+Figure 3.1.1 aiPHeed Agile Software Development Methodology............................... 27
+Figure 3.2.1 Conceptual Framework........................................................................... 29
+Figure 3.3.1.1 Article Fetcher Configuration and RSS Feed Sources
+
+                     (gnews_rss_fetcher.py)............................................................................. 32
+Figure 3.3.1.2 PSA OpenStat Portal Showing Provincial Food CPI Data..................... 33
+Figure 3.3.2.2 PSGC Province Registry and Alias Mapping (geocoder.py)................... 34
+Figure 3.3.2.3 Bias Weight Formula Implementation and Data Sufficiency Flag
+
+                     (bias_weighter.py).................................................................................... 35
+Figure 3.3.2.4 Government Indicator Feature Engineering (feature_matrix.py) .......... 36
+Figure 3.3.2.6 Eleven Primary Data Source Paths in Feature Matrix Fusion
+
+                     (feature_matrix.py).................................................................................. 37
+Figure 3.4.1 Zero-Shot XLM-RoBERTa Filipino-English Sentiment Scoring.............. 39
+Figure 3.4.2 Regex-Based Trigger Classification........................................................ 41
+Figure 3.4.3 LightGBM Lead Time Discovery.............................................................. 43
+Figure 3.4.4 Optuna Tree-structured Parzen Estimator (TPE).................................... 45
+Figure 3.4.5 Vulnerability-Weighted Spatial Disaggregation...................................... 47
+Figure 3.5.1 Operational Framework of aiPHeed....................................................... 58
+Figure 3.6.1 Use Case Diagram of aiPHeed................................................................ 61
+Figure 3.6.2 aiPHeed Quarterly Pipeline System Flowchart....................................... 63
+Figure 3.6.3 aiPHeed Forecast and Alert Records State Diagram.............................. 66
+
+                                                                                                                             5
+                                                  CHAPTER I
+
+                                              INTRODUCTION
+         Food insecurity remains a critical global and national challenge. According to
+DOST-FNRI (2024), food insecurity is intensified by rising food prices, climate-related
+agricultural disruptions, and unequal access to social protection, with 44% of households
+experiencing moderate to severe food insecurity in 2023. The issue is particularly evident in
+Region IV-A (CALABARZON), where around 237,800 residents remain unable to meet basic
+food needs and poverty incidence varies significantly across provinces (PSA RSSO IV-A, 2025).
+Existing monitoring systems rely on infrequent data collection cycles and lack the ability to
+provide timely, spatially detailed, and predictive insights for anticipatory intervention.
+         Recent advances in machine learning and natural language processing have shown strong
+potential for anticipatory food insecurity monitoring using news-derived signals. Studies by
+Balashankar et al. (2023), Ahn et al. (2023), and Van Wanrooij et al. (2024) demonstrated that
+NLP and deep learning models can improve food crisis prediction accuracy and detect emerging
+risk patterns months ahead of traditional indicators. However, these approaches remain limited in
+Filipino-English settings and do not address rural media undercoverage. To address these gaps,
+this study will develop aiPHeed, a geospatial food insecurity forecasting system for DA Region
+IV-A that integrates zero-shot Filipino-English NLP and ensemble machine learning. The system
+will aim to support earlier detection of food stress and improve the timeliness and targeting of
+government interventions.
+
+                                                                                                                               6
+1.1 Project Context
+         Monitoring systems for food insecurity exist at different governance levels, but none
+
+addresses the operational needs of a regional agency like DA Region IV-A. WFP (World Food
+Programme)'s HungerMap Live monitors food security in over 95 countries using machine
+learning, climate, and economic data (WFP, 2026), but its predictive functions cover only 16
+Hunger Hotspot countries, excluding the Philippines. Within the Philippines, the government's
+primary food-insecurity and poverty-targeting datasets are updated only once every several
+years, so the information available to plan a response is already outdated by the time a shock,
+such as a commodity price spike or a crop failure, actually occurs. The 2023 DSWD-FAO (Food
+and Agriculture Organization of the United Nations) Digital Mapping System under the
+Enhanced Partnership Against Hunger and Poverty program focuses on supply-side market
+linkages, not food insecurity risk prediction (DSWD, 2023).
+
+         In the research literature, several studies informed the construction of aiPHeed while
+revealing gaps it will resolve. Balashankar et al. (2023) built a news-based early warning system
+across 21 countries using 11.2 million articles, but their model depends on English corpora and
+IPC (Integrated Food Security Phase Classification) phase labels unavailable in
+CALABARZON. Carneiro et al. (2025) used NLP and machine learning on over 4,028 FEWS
+NET (Famine Early Warning Systems Network) reports to identify market disturbances as the
+strongest predictor of food insecurity, but relied on FEWS NET data, which is absent in all
+Philippine regions. Van Wanrooij et al. (2024) applied unsupervised BERTopic modeling on
+news data to detect food insecurity risk patterns, but their approach does not handle
+Filipino-English data or address geographic media bias where capital-city-concentrated reporting
+under-reports food stress in rural provinces. Ahn et al. (2023) demonstrated that ML models
+
+                                                                                                                               7
+using news data outperform those using traditional indicators, yet were limited to English data
+labeled by IPC. Collectively, no system produces quarterly, province-level food insecurity
+forecasts for CALABARZON disaggregated to the municipality level; no NLP study has
+addressed a Filipino-English news environment or corrected for rural undercoverage; and no
+study has derived forecast labels from PSA food CPI data as a proxy for regions where IPC
+classifications are permanently unavailable.
+
+         aiPHeed addresses these gaps through a two-tier architecture combining zero-shot
+Filipino-English NLP (Natural Language Processing), unsupervised topic modeling, spatial bias
+correction, and ensemble machine learning into a single quarterly forecasting pipeline built for a
+Philippine regional context. The name aiPHeed itself follows the "i-" naming convention
+common to Philippine government platforms such as iGovPhil and iTax, with "i" replaced by
+"ai" to reflect its AI foundation, and "Feed" adapted to "PHeed" for its Philippine,
+food-insecurity focus. It processes Filipino-English news without annotated training data,
+corrects for rural media undercoverage, derives a validated forecast target from publicly
+available CPI (Consumer Price Index) data, and delivers spatially disaggregated quarterly risk
+forecasts to DA 4A officers through a geospatial web dashboard. By relying exclusively on
+publicly and permanently available data, aiPHeed also addresses the sustainability limitation
+common to existing early warning systems that depend on restricted or non-renewable sources.
+
+1.2 Purpose and Description
+
+         The purpose of this research is to build an interactive web-based geospatial system,
+aiPHeed, which will utilize zero-shot Filipino-English NLP and a LightGBM (Light Gradient
+Boosting Machine) ensemble in conducting forward-looking forecasting of food insecurity risk
+in Region IV-A (CALABARZON). The Department of Agriculture Regional Field Office IV-A
+
+                                                                                                                               8
+(DA 4A) and local government units in CALABARZON have been relying on the DOST-FNRI
+Expanded National Nutrition Survey and Philippine Statistics Authority poverty statistics, which
+are typically released only every two to three years. As a result, there exists a critical response
+lag where households facing food insecurity arising from commodity price shocks, crop losses,
+or employment disruptions in the post-survey period remain uncovered under current targeting
+interventions (PSA RSSO IV-A, 2025; DOST-FNRI, 2024a; World Bank, 2020). The proposed
+aiPHeed will aim to bridge this gap by offering DA 4A a continuously updated,
+evidence-informed forecasting tool that will estimate and rank LGU (Local Government
+Unit)-level potential risk of food insecurity on a quarterly basis, intended to inform and support
+anticipatory planning and preparedness decisions. As with most modern machine learning
+techniques, the model at the core of aiPHeed identifies patterns in a way that is not immediately
+visible or easy to explain on its own, often described as a "black box." aiPHeed addresses this by
+pairing every forecast with a SHAP (SHapley Additive exPlanations)-based explanation that
+shows, in plain terms, which factors most influenced the prediction, so that a non-technical DA
+reviewer can understand and trust a result before acting on it.
+
+         In addition, the system will produce risk rankings for all 142 cities and municipalities in
+CALABARZON, incorporating a bias-corrected Food Stress Sentiment Index, trigger
+composition scores, temporal momentum features, and PSA food price stress indicators as
+reflected in newly released government data. The risk rankings produced will be indicative and
+not absolute, as they will be relative ordinal estimates of potential risk and not definitive
+determinations of actual food insecurity status. Most significantly, aiPHeed applies zero-shot
+Filipino-English transfer learning to a news corpus and integrates this with a composite food
+stress label combining SWS (Social Weather Stations) quarterly hunger data and PSA
+
+                                                                                                                               9
+province-level food CPI deviation, anchored to the FAO SDG 2.1.2 baseline established by the
+DOST-FNRI ENNS, and provides results through a publicly accessible geospatial interface with
+SHAP-attributed forecast reports. aiPHeed is designed to be a proactive, interpretable, and
+scalable system to identify LGUs where the risk of food insecurity is most likely to be rising,
+thereby contributing to the achievement of SDG 1 (No Poverty) and SDG 2 (Zero Hunger).
+
+1.3 Statement of the Problem
+         CALABARZON's food insecurity monitoring relies entirely on periodic surveys that are
+
+years outdated by the time shocks occur. This study aims to develop aiPHeed, a geospatial food
+insecurity forecasting system for DA Region IV-A using NLP and machine learning to support
+anticipatory intervention and decision-making.
+
+         Specifically, this study seeks to answer the following questions:
+    1. What variables most significantly predict food insecurity risk across the provinces of
+
+         CALABARZON, as identified through SHAP feature attribution?
+    2. What is the furthest lead time at which aiPHeed can reliably forecast province-level food
+
+         insecurity risk across CALABARZON?
+    3. How does the LightGBM model combining NLP-derived news signals and government
+
+         statistical indicators compare against six baseline approaches , naive persistence, three
+         logistic regression variants (combined features, government indicators only, and NLP
+         features only), and two LightGBM ablation variants trained on each data source
+         separately , in classifying provincial food insecurity risk?
+    4. How effectively do the city- and municipality-level food insecurity risk rankings derived
+         from province-level forecasts reflect relative vulnerability across CALABARZON?
+
+                                                                                                                             10
+    5. How do DA Region IV-A personnel, as system evaluators, and DEPDev Region IV-A
+         personnel, as usability evaluators, assess aiPHeed under the ISO/IEC 25010 software
+         quality model, in terms of functional accuracy and ease of use respectively?
+
+1.4 Hypothesis
+         This study tests five null hypotheses, each addressing the relationship between an
+
+independent variable and a dependent variable. The independent variables are the news-derived
+signals and the government socioeconomic indicators. The dependent variable is the binary food
+insecurity risk classification, either high or low, of a CALABARZON province in a given
+quarter. The study's assumptions are based on the null hypothesis that these independent
+variables do not carry predictive signals strong enough for aiPHeed to classify, forecast,
+disaggregate, or be judged useful for that purpose.
+
+         Specifically, the study sought to address the following:
+
+    1. The Food Stress Sentiment Index (FSSI) and food CPI deviation will not be among the
+         strongest predictors of food insecurity risk in CALABARZON when examined through
+         SHAP feature attribution.
+
+    2. aiPHeed will not reliably classify whether a CALABARZON province is at high or low
+         food insecurity risk across multiple forward-looking lead times.
+
+    3. The LightGBM model that combines news signals and government data will not
+         outperform the six comparison models, naive persistence, three logistic regression
+         variants (news-only, government data-only, and combined), and two LightGBM variants
+         trained on only one data source at a time, in classifying provincial food insecurity risk
+         across CALABARZON.
+
+                                                                                                                             11
+    4. The vulnerability-weighted spatial disaggregation of province-level forecasts will not
+         produce municipal and city risk rankings that are consistent with DA Region IV-A
+         evaluators' assessments of relative food insecurity vulnerability across CALABARZON,
+         as evaluated through the aiPHeed Post-Survey Questionnaire.
+
+    5. aiPHeed will not receive favorable functional suitability, accuracy, and usability ratings
+         from DA Region IV-A evaluators under the ISO/IEC 25010 software quality model.
+
+1.5 Research Objectives
+
+1.5.1 General Objective
+
+  To develop, validate, and deploy aiPHeed: A Geospatial Food Insecurity
+
+Forecasting System for DA Region IV-A Using NLP and Machine Learning.
+
+1.5.2 Specific Objectives
+    1. To design a two-tier pipeline combining zero-shot XLM-RoBERTa
+         Filipino-English sentiment extraction and BERTopic unsupervised topic modeling
+         to produce the bias-corrected Food Stress Sentiment Index and latent food
+         insecurity risk patterns per province-quarter from a Filipino-English news corpus.
+    2. To evaluate the performance of the proposed LightGBM forecasting model using
+         the following metrics:
+           I. Accuracy, to measure overall correctness of high- and low-risk
+                  province-level classifications
+          II. Precision and Recall, to assess the model's ability to correctly identify
+                  high-risk provinces while minimizing false alarms and missed detections
+                  respectively
+
+                                                                                                                   12
+     III. F1-Score, to capture the balance between Precision and Recall given the
+             binary classification task
+
+     IV. AUC-ROC, to evaluate the model's ability to distinguish between high-
+             and low-risk provinces across classification thresholds
+
+      V. Forecast performance across multiple lead times via walk-forward
+             expanding-window cross-validation to empirically determine the furthest
+             horizon at which reliable forecasting is achievable
+
+3. To produce spatially disaggregated municipal and city food insecurity risk
+    rankings from validated province-level forecasts, using PSA published poverty
+    incidence and population density as vulnerability weights.
+
+4. To compare the effectiveness of the proposed LightGBM forecasting model
+    against the following baseline approaches:
+       I. Naive persistence baseline
+      II. PSA-only indicator baseline
+     III. NLP-only sentiment baseline
+     IV. Logistic regression baseline
+
+5. 5. To deploy a public geospatial dashboard presenting forecast maps and
+    early-warning alerts, evaluate it under the ISO/IEC 25010 software quality model
+    with DA Region IV-A evaluators, and validate its forecasts against DOST-FNRI
+    NNS 2019 and 2023 CALABARZON prevalence figures as a face-validity
+    anchor.
+
+                                                                                                              13
+1.6 Significance of the Study
+         The development of aiPHeed carries significant implications for the following
+
+stakeholders:
+         DA Region IV-A. As the government agency directly mandated to promote agricultural
+
+productivity and food security across CALABARZON, DA Region IV-A will review and gain
+access to quarterly province-level food insecurity risk forecasts through a secure web dashboard,
+supporting more proactive planning of agricultural interventions and allocation of resources.
+SHAP-based explanations will make model predictions interpretable for decision-makers, while
+the system may also serve as a model for integrating artificial intelligence into public service
+delivery elsewhere in government.
+
+         Local Government Units (LGUs). LGU social welfare officers across CALABARZON
+will have access to spatially disaggregated municipal and city-level forecasts to support proactive
+intervention and local planning. The system's localized outputs can help officials identify at-risk
+communities earlier to improve disaster preparedness and resource mobilization efforts.
+
+         Communities and Vulnerable Populations. Earlier identification of high-risk areas will
+support faster and more targeted delivery of food assistance, nutritional support, and livelihood
+programs. The system's spatial targeting approach may also help reduce resource misallocation,
+particularly in vulnerable and geographically isolated communities across CALABARZON.
+
+1.7 Scope and Limitations
+         This study will develop and evaluate aiPHeed, a web-based system that forecasts food
+
+insecurity risk for the 142 cities and municipalities in Region IV-A, covering Cavite, Laguna,
+Batangas, Rizal, and Quezon. The system will provide an interactive map showing food
+
+                                                                                                                             14
+insecurity risk levels and rankings, together with the factors influencing each forecast. A
+downloadable PDF assessment report containing forecast scores, SHAP driver breakdowns,
+performance metrics, and data-sufficiency disclosures will be available for each province and
+CALABARZON as a whole. The system will use Filipino and English news articles from 2020
+to 2025 and publicly available data from PSA, DOST-FNRI, SWS, PAGASA, PhilRice, BSP, and
+DOE, covering food prices, hunger, nutrition, agriculture, climate, and economic conditions.
+
+         SWS quarterly hunger data and PSA food price data will be used to determine food
+insecurity risk, while DOST-FNRI data will provide regional food security references. City and
+municipal estimates will be derived from province-level forecasts using PSA Small Area
+Estimates and population data; therefore, these estimates will not represent official food
+insecurity classifications. Areas with limited news coverage will also be identified to disclose
+insufficient information.
+
+         The study is limited to Region IV-A and publicly available data. Restricted government
+records, real-time field reports, and satellite-based data will not be included. The availability and
+release schedules of government data may affect forecast timeliness, as publication delays may
+postpone data collection, model updates, and report generation. The system will provide food
+insecurity risk indicators only and will not replace official government assessments,
+classifications, or policy decisions. Evaluation will involve 50 DA Region IV-A evaluators using
+the ISO/IEC 25010 software quality standard.
+
+                                                                                                                             15
+                                                  CHAPTER II
+
+                                REVIEW OF RELATED LITERATURE
+         This chapter reviews existing literature and studies, both foreign and local, that are
+relevant to the theoretical grounding, methodological design, and contextual understanding of the
+proposed system. The works examined herein cover a range of topics, all of which collectively
+inform the development of aiPHeed.
+
+2.1 Foreign Literature
+         The Food and Agriculture Organization of the United Nations defines food security as
+
+existing when all people, at all times, have physical, social, and economic access to sufficient,
+safe, and nutritious food that meets their dietary needs and food preferences for an active and
+healthy life, operationalized through four interrelated dimensions: availability, access, utilization,
+and stability. Ibnu (2025) integrated these dimensions into a national conceptual model and
+strategic roadmap, arguing that institutional repositioning and predictive digital systems are
+essential for affordability, equitable distribution, and resilience to disruptions. The study
+proposes no operational forecasting tool or deployable system.
+
+         International organizations have developed structured assessment frameworks that
+informed the use of machine learning for food security forecasting. Westerveld et al. (2021)
+demonstrated that machine learning models coupled with IPC transition data can forecast
+monthly food security changes at livelihood-zone granularity with lead times of up to twelve
+months, with predictions of deteriorations and improvements outperforming conventional
+baselines and remaining transferable across geographic contexts. The study produced no
+geospatial visualization interface and incorporated no NLP-derived signals.
+
+                                                                                                                             16
+         Among machine learning algorithms suited for structured prediction tasks, LightGBM
+offers faster training speed and lower memory usage through its histogram-based splitting and
+leaf-wise tree growth strategy. Indah et al. (2025) directly compared Random Forest, XGBoost,
+and LightGBM on a structured socioeconomic classification task, finding that LightGBM
+achieved superior predictive accuracy while maintaining computational efficiency. The study
+applied no temporal forecasting, NLP features, or geospatial output, making it a static
+cross-sectional exercise.
+
+         Composite index construction and geospatial visualization have also been applied to food
+security monitoring at the community level. Pontin et al. (2023) constructed a multi-domain
+Priority Places for Food Index synthesizing open data across seven domains, including healthy
+food access, food bank demand, and deprivation indicators, paired with an interactive
+geovisualization shaped through iterative engagement with policymakers to support reactive
+monitoring and prioritization of intervention areas. The work included no machine learning
+forecasting pipeline or NLP-derived leading indicators.
+
+         The convergence of machine learning, remote sensing, and geospatial visualization has
+produced international systems for food security prediction and agricultural risk modeling.
+Preston and Basener (2023) integrated MODIS satellite imagery, demographic data, economic
+indicators, climate variables, and supply-chain information into probabilistic machine learning
+models estimating country-level food insecurity probabilities across Africa, demonstrating that
+combining heterogeneous data sources substantially improves prediction reliability. The
+approach is limited to the African context and excludes NLP signals.
+
+                                                                                                                             17
+2.2 Foreign Studies
+         The global shift toward data-driven food security monitoring has accelerated since 2020,
+
+driven by advances in machine learning, growing availability of secondary datasets, and the
+recognition that periodic survey-based systems respond too slowly to emerging food stress
+events. Martini et al. (2022) demonstrated in Nature Food that machine learning applied
+exclusively to secondary data can reliably estimate sub-national food insecurity conditions, with
+food inflation emerging as one of the strongest predictors and models explaining up to 81% of
+variation in insufficient food consumption and 73% of crisis-level coping.
+
+         Similarly, Foini et al. (2023) constructed XGBoost models trained on near real-time WFP
+food consumption observations, introducing a walk-forward expanding-window retraining
+scheme. Both studies, however, were limited to Africa and the Middle East, operated without
+geospatial visualization, and made no use of NLP-derived signals.
+
+         Examining forecast reliability across longer horizons, Busker et al. (2024) trained
+separate XGBoost models for seven lead times spanning 0 to 12 months, capturing food security
+dynamics up to a 3-month lead time with an R-squared above 0.6, performing comparably to
+FEWS NET outlooks. Herteux et al. (2024) benchmarked five algorithm families for 60-day
+ahead food consumption forecasts, finding gradient boosting remained competitive with more
+computationally intensive deep learning architectures. Both studies validated forecasts only at
+the first sub-national administrative level without municipal disaggregation and neither adapted
+their frameworks for Southeast Asian data environments.
+
+         Among the algorithms evaluated, Indah et al. (2025) directly compared Random Forest,
+XGBoost, and LightGBM using 2023 Indonesian data, finding LightGBM achieved the highest
+classification accuracy at 94.4%, attributed to its leaf-wise tree growth strategy, with per capita
+
+                                                                                                                             18
+expenditure identified as the most influential predictor. The study applied no temporal
+forecasting, NLP features, or geospatial output, making it a static cross-sectional exercise.
+
+         Beyond structured data, Balashankar et al. (2023) demonstrated in Science Advances that
+a Random Forest classifier trained on 170 text features from 11.2 million news articles reduced
+forecast RMSE by 34% over traditional baselines, with the combination of news and traditional
+indicators achieving a 45% reduction and outperforming expert FEWS NET forecasts across all
+16 countries. The study relied on English-language news only and required a supervised keyword
+taxonomy with manual feature engineering.
+
+2.3 Local Literature
+         The Expanded National Nutrition Survey is the most extensive official research on
+
+household food insecurity in the Philippines. The Department of Science and Technology
+through the Food and Nutrition Research Institute (2024a) carried out a three-year rolling survey
+from 2018 to 2021, covering all 81 provinces and 33 highly urbanized cities, using the Food
+Insecurity Experience Scale to ascertain the level of difficulty families faced in accessing food.
+Because the survey is cyclical, official data remains unchanged even as prices rise, typhoons
+strike, and jobs are lost between survey cycles.
+
+         Reporting on nutrition conditions across the Philippines, DOST-FNRI (2024b) found
+mixed results: moderate-to-severe food insecurity showed marginal overall improvement, yet
+severe food insecurity worsened among the highest-risk households, and economic recovery
+from the 2022 price shock did not extend to the most vulnerable. These findings, presented a full
+year after data collection, illustrate how far behind real time official reporting can run, and will
+later serve alongside the 2021 ENNS as a validation baseline in Chapter III.
+
+                                                                                                                             19
+         The National Economic and Development Authority (2023) through the Philippine
+Development Plan 2023 to 2028 commits to anticipatory and adaptive social protection,
+acknowledging that Pantawid Pamilyang Pilipino Program and Listahanan rely on household
+assessments conducted only once every four to five years. The plan articulates this direction
+clearly but provides no technique, example, or instance of how anticipatory tools should be
+implemented.
+
+         The Philippine Statistics Authority (2024) publishes monthly Price Situationer reports
+covering prevailing prices for rice, corn, vegetables, fish, and meat across regions, including the
+rice price crisis of 2023 and 2024. Price movements alone, however, do not capture how
+households are affected, as the impact varies by socioeconomic context.
+
+         The Philippine Statistics Authority Regional Statistical Services Office IV-A (2025)
+produces the most detailed official poverty data for CALABARZON broken down by province
+and municipality, showing poverty rates ranging from 6.7 percent in Cavite to 10.2 percent in
+Quezon. Published only once every three years, it includes no quarterly risk breakdowns that
+anticipatory programs require.
+
+         PAGASA (2024) observes and evaluates the impact of rainfall patterns, droughts, floods,
+and vegetation health on rice and corn production, but does not translate these into
+household-level implications, which is critical in CALABARZON where typhoons hit Quezon
+severely, Taal's activity affects Batangas, and irregular rainfall disrupts crops in Laguna and
+Rizal.
+
+         The Ateneo School of Government and SDSN Philippines (2024) compiled an anthology
+of webinar reports from the SDSN Working Group on SDG2, representing perspectives from
+policymakers, academics, agricultural scientists, and civil society practitioners on Philippine
+
+                                                                                                                             20
+food system and nutrition gaps. The collection identifies common problems but offers no
+practical tools, though the need for more frequent and reliable information to fill the gap between
+official survey timelines is clearly articulated throughout.
+
+2.4 Local Studies
+         The 2018­2021 ENNS rounds provide a longitudinal basis for identifying
+
+household-level predictors of food insecurity in the Philippines. Semeniano et al. (2025) found
+that vulnerability was associated with older household heads, larger families, renting a dwelling,
+4Ps membership, and residing in historically food-insecure regions, while marriage, higher
+education, greater wealth, rural residence, and home gardening reduced vulnerability. The
+analysis is limited by a static time-series that cannot estimate changes over time or account for
+price and climate shocks.
+
+         Machine learning has also been applied to nutrition-related outcomes in the Philippines.
+Siy Van et al. (2021) tested four algorithms on data from 618 students across one rural and one
+urban site, finding Random Forest achieved the highest accuracy at 78.55% in identifying
+children at nutritional risk. The study is limited to a single demographic subgroup and two
+locations, with no forecasting component or broader geographic coverage.
+
+         Parreño and Anter (2024) compared four machine learning models for forecasting rice
+and corn yield using historical quarterly PSA data from 1987 to 2023, with Random Forest
+obtaining the lowest error values across all three error metrics. The study carried out forecasts
+only at the national aggregate level without provincial disaggregation, used no NLP-based
+leading indicators, and produced no interactive geospatial visualization.
+
+         At the sub-provincial level, machine learning has demonstrated strong predictive power
+for poverty classification in the Philippines. Onsay and Rabajante (2025) applied it to
+
+                                                                                                                             21
+Community-Based Monitoring System datasets across 34 localities in the poorest region of
+Luzon, where Random Forest regression achieved an R-squared of 0.92 and classification
+achieved 95.94% accuracy. The study incorporated no NLP-derived features, produced no
+geospatial visualization, and generated no forward-looking forecasts.
+
+         Ledesma et al. (2020) developed an interpretable poverty estimation approach in the
+Philippines using social media indicators, low-resolution satellite imagery, and volunteered
+geographic information, demonstrating the feasibility of combining alternative data sources for
+sub-national welfare estimation. The study's reliance on low-resolution inputs and black-box
+deep learning models limits its operational deployment in resource-constrained government
+settings.
+
+2.5 Synthesis
+
+Table 2.5.1
+Synthesis of Related Literature and Studies
+
+Author/        Focus of          Methodology       Key Findings       Synthesis/
+  Year          Study                                                Implication
+
+Ibnu (2025)    FAO four          Conceptual and    Availability, access, Grounds aiPHeed in
+               dimensions of     policy
+               food security     framework         utilization, and  the FAO
+                                 analysis
+                                                   stability must guide four-dimensional
+
+                                                   governance        framework
+
+Westerveld ML                    Gradient          12-month lead-time Validates aiPHeed's
+et al. (2021) forecasting of     boosting on IPC
+                                 phase transition  forecasting at    sub-provincial ML
+                  food security  data
+                  transitions                      sub-national scale forecasting approach
+
+Indah et al. LightGBM vs. Algorithm                LightGBM          Justifies LightGBM
+
+                                                                                          22
+(2025)         Random Forest benchmarking        outperforms in       as aiPHeed's
+               vs. XGBoost on structured         accuracy and         primary classifier
+               comparison tabular data           efficiency
+
+Pontin et al.  Interactive     Seven-domain      Multi-indicator      Templates aiPHeed's
+(2023)                                           index enables local  interactive
+               geospatial food open-data index   government           geospatial web
+                                                 targeting            dashboard
+               insecurity      with web
+
+               dashboard       visualization
+
+Preston &      Multi- source   Probabilistic ML Interactive GIS       Models aiPHeed's
+Basener        ML for food                                            multi-source data
+(2023)         insecurity      with MODIS, supports                   fusion and GIS
+               prediction                                             output
+                               climate, and      humanitarian
+
+                               supply chain      decision-making
+
+                               data
+
+Martini et     ML food         Machine           Secondary data       Validates aiPHeed's
+al. (2022)                                       alone reliably       use of PSA
+               security        learning on       guides food          secondary data
+                                                 security efforts     features
+               monitoring socioeconomic
+
+               from            and climate
+
+               secondary data indicators
+
+Foini et al.   Forecastability Temporal          Food insecurity is   Justifies aiPHeed's
+(2023)                                           inherently           quarterly forecasting
+               of food         autocorrelation   forecastable         premise
+
+               insecurity      and lead-lag
+
+               using ML        modeling
+
+Busker et al. ML prediction    Ensemble ML       Crises predicted up  Supports aiPHeed's
+                               on climate,       to 12 months in      use of climate and
+(2024)         of food crises  market, and       advance              price features
+                               conflict data
+               with extended
+
+               lead times
+
+Herteux et     Real-time       Benchmarking High-frequency            Supports aiPHeed's
+al. (2024)                                                            real-time NLP and
+               news and        of five algorithm data improves        price data
+                                                                      integration
+               market data for families with forecast accuracy
+
+               food            real-time inputs
+
+                                                                                          23
+            forecasting
+
+Balashankar NLP-based         Multi-stage NLP News streams alone Establishes NLP
+et al. (2023) food crisis
+                              pipeline on news predict food crises precedent for
+                  prediction
+                  from news   article corpus with sufficient lead aiPHeed's zero-shot
+                  streams
+                                               time                 module
+
+DOST-FNR    Philippine        National ENNS    Stunting 26.7%;      Provides baseline
+I (2024a)                                      wasting 5.4%         data aiPHeed
+            nutrition and cross-sectional      among children       forecasts aim to
+                                               under five           anticipate
+            food insecurity nutrition survey
+
+            baseline
+
+DOST-FNR    Latest            FNRI national    Persistent           Highlights the
+I (2024b)
+            Philippine        nutrition        malnutrition         between-survey gap
+
+            nutrition         surveillance     requires continuous aiPHeed fills
+
+            situation trends reports           monitoring           quarterly
+
+NEDA        Philippine        National         Food security is a   Establishes policy
+(2023)      Development       multi-sectoral   national resilience  mandate for
+            Plan              policy planning  priority             aiPHeed's DSWD
+            2023­2028         document                              deployment
+
+PSA (2024)  Monthly price     Price data       Staple food price    Supplies aiPHeed's
+            monitoring of                                           primary price-based
+            staple            collection across volatility drives   feature inputs
+            commodities
+                              national and     access insecurity
+
+                              regional levels
+
+PSA RSSO CALABARZO FIES-based                  7.8% poverty         Provides
+                                               incidence;           vulnerability
+IV-A (2025) N poverty         sub-provincial   significant          weights for
+                                               intra-provincial     aiPHeed's
+            incidence         poverty          variation            sub-provincial
+                                                                    model
+            statistics 2023 disaggregation
+
+PAGASA Climate impact Agrometeorolog Rainfall and                   Supplies climate
+
+                                                                                        24
+(2024)       on Philippine   ical monitoring    typhoon events      leading indicators
+             agriculture     and impact         disrupt             for aiPHeed's
+                             assessment         CALABARZON          feature matrix
+                                                crop production
+
+Ateneo &     Philippine      Multi-sectoral     Integrated          Contextualizes
+SDSN         food systems    policy webinar     monitoring needed   aiPHeed within
+Philippines  perspectives    compilation        across food system  Philippine food
+(2024)       anthology                          domains             systems discourse
+
+Semeniano Socioeconomic Cross-sectional         Income, education, Informs aiPHeed's
+
+et al. (2025) determinants logistic             and 4Ps             feature set;
+
+             of food         regression on      membership predict highlights
+
+             insecurity in ENNS data            food insecurity     forecasting gap
+
+             PH
+
+Parreño &    ML              Random Forest, Random Forest           Confirms ensemble
+Anter        forecasting of
+(2024)       rice and corn   ESN, NARX, outperforms all             trees as best fit for
+             production in
+             PH              ARSVR on PSA models for PH crop PSA quarterly
+
+                             quarterly data forecasting             datasets
+
+Onsay &      Ensemble ML     12 classification  Random Forest       Strongest PH
+Rabajante    for poverty     algorithms on      achieves 95.94%     validation of
+(2025)       prediction in   CBMS               sub-provincial      ensemble ML for
+             Philippines     sub-provincial     accuracy            aiPHeed's design
+                             data
+
+         The literature reviewed above shows three gaps. Geographically and linguistically, the
+systems with genuine predictive power, such as Westerveld et al. (2021), Martini et al. (2022),
+Foini et al. (2023), and Balashankar et al. (2023), were built and validated in IPC-reporting
+regions on English-language news, leaving a Filipino-English media environment and the Metro
+
+                                                                                                                             25
+Manila-versus-rural reporting imbalance in Philippine news coverage unaddressed. Technically,
+the reviewed systems each cover at most one or two of the three components aiPHeed integrates,
+NLP-derived indicators, machine learning forecasting, and a geospatial dashboard: forecasting
+appears in Pontin et al. (2023) and Onsay & Rabajante (2025), geospatial disaggregation in
+Parreño & Anter (2024) and Semeniano et al. (2025), and Filipino-English NLP in Preston &
+Basener (2023), but not combined in one pipeline. Operationally, official Philippine monitoring,
+ENNS, Listahanan, and PSA poverty statistics, is comprehensive but multi-year, and while the
+Philippine Development Plan 2023­2028 calls for anticipatory, quarter-level tools, it does not
+specify how to build one; the Philippine studies reviewed here, including Ledesma et al. (2020),
+Siy Van et al. (2021), and Onsay and Rabajante (2025), forecast food insecurity at the regional
+level rather than below it. aiPHeed responds to all three gaps within one deployable pipeline: it
+applies zero-shot Filipino-English transfer learning to a Philippine news corpus for food
+insecurity monitoring without annotated training data, derives a quarterly, province-level
+CALABARZON forecast target from SWS hunger prevalence and PSA food CPI deviation
+anchored to the FAO SDG 2.1.2 baseline given the continued absence of a public Philippine food
+insecurity label, and pairs that forecast with bias correction for rural media undercoverage,
+multi-lead-time LightGBM classification, SHAP explanation, and vulnerability-weighted
+disaggregation to the municipal and city level, delivered through a public dashboard for DA
+Region IV-A.
+
+                                                                                                                             26
+  CHAPTER III
+
+  RESEARCH METHODOLOGY
+
+  This chapter outlines the research methodology, covering software development, data
+
+gathering, preprocessing, algorithm design and its rules, and feature engineering. It further
+
+presents the frameworks and process flow diagrams. These describe the approach employed in
+
+the design, implementation, and evaluation of aiPHeed.
+
+3.1 Software Development Methodology
+Figure 3.1.1
+aiPHeed Agile Software Development Methodology
+
+         The aiPHeed system will be developed using an Agile methodology organized into a
+continuous six-phase cycle: Plan, Design, Develop, Test, Deploy, and Review. This will ensure
+that aiPHeed will evolve with each iteration as a continuously self-improving anticipatory
+intelligence system rather than as a one-time deliverable.
+
+                                                                                                                             27
+         The Plan phase will consolidate the research direction. The researchers will define the
+research direction by reviewing related food insecurity monitoring systems, formulating the
+study objectives, identifying system requirements, and determining the primary data sources.
+This phase will establish the core components of aiPHeed, including the Filipino-English NLP
+pipeline, LightGBM forecasting model, and interactive geospatial dashboard.
+
+         The Design phase will translate the plan into architecture. The researchers will design
+data processing pipeline, Food Stress Sentiment Index (FSSI), feature matrix structure,
+composite stress labeling method, spatial disaggregation process, SHAP interpretability
+integration, and dashboard wireframes. MLOps configurations such as MLflow tracking and
+APScheduler automation will also be prepared.
+
+         During the Develop phase, the researchers will implement the system modules, including
+geocoding, sentiment analysis, trigger classification, topic modeling, FSSI generation, feature
+fusion, LightGBM forecasting, spatial prediction, and SHAP-based explanations. The FastAPI
+backend and React-based dashboard will also be developed.
+
+         The Test phase will validate system accuracy, reliability, and integration. Unit and
+integration testing will verify individual modules and end-to-end workflows. The LightGBM
+model will be evaluated using walk-forward cross-validation and compared against baseline
+models using metrics such as accuracy, precision, recall, F1-score, and ROC-AUC.
+
+         In the Deploy phase, the validated system will be deployed through a FastAPI backend
+and React-Leaflet dashboard integrated with the DA Region IV-A review interface. APScheduler
+will automate quarterly retraining and forecasting, while MLflow will manage model versioning
+and experiment tracking.
+
+                                                                                                                             28
+         Finally, the Review phase will evaluate the deployed system through system accuracy
+and usability assessments guided by the ISO/IEC 25010 software quality model, conducted by
+DA Region IV-A evaluators. Feedback gathered from this phase will guide future improvements
+to the dashboard, forecasting thresholds, explainability features, and data integration, supporting
+continuous system enhancement through succeeding Agile iterations.
+3.2 Conceptual Framework
+Figure 3.2.1
+Conceptual Framework
+
+                                                                                                                             29
+         This framework will follow a six-stage sequential pipeline. Stage 1 will collect a
+Filipino-English news corpus of 6,085 articles together with structured government indicators,
+then preprocess the articles by removing HTML noise, merging the title and summary, truncating
+the text to 250 characters, assigning each article to a quarter, and geocoding it to a
+CALABARZON province through alias, substring, and fuzzy PSGC matching. Stage 2 will
+apply XLM-RoBERTa in zero-shot mode to score every article against 10 bilingual hypotheses
+adapted from the HungerGist taxonomy (Ahn et al., 2023), taking the highest entailment
+probability among the five core food hypotheses as the article score. An article will be retained
+as relevant only when this score is at least 0.30 and exceeds the best non-food hypothesis by at
+least 0.20, and the relevant, province-level articles will be audited into a 371-article
+CALABARZON set. Stage 2 will also classify stress drivers into five bilingual trigger
+categories. Stage 3 will engineer features by correcting coverage bias, computing the FSSI with
+its two lags and acceleration, computing the five trigger proportions, and deriving food CPI
+deviation, unemployment rate, and rice price change, then merging these with the CPI-based
+food stress label into a 135-row panel of 12 features covering five provinces across 27 quarters
+(2020-Q1 to 2026-Q3).
+
+         Stage 4 will train the risk classifier as a weighted blend of an Optuna-tuned LightGBM
+model on all 12 features (weight 0.4), a logistic regression on the three government features
+(weight 0.4), and a logistic regression on the climate, fish kill, and OFW remittance triggers
+(weight 0.2), and a province-quarter will be classified HIGH when the blended score reaches
+0.712. SHAP TreeExplainer will explain the LightGBM component, and province scores will be
+disaggregated to 142 cities and municipalities using poverty and population density weights.
+Stage 5 will validate the model through walk-forward expanding-window cross-validation and a
+
+                                                                                                                             30
+blind four-quarter holdout (2025-Q4 to 2026-Q3), route each province-quarter forecast through
+DA administrator review, and measure system quality through an ISO/IEC 25010-based
+questionnaire administered to 50 DA Region IV-A personnel. Stage 6 will report Accuracy,
+Precision, Recall, F1-Score, AUC-ROC, and ISO/IEC 25010 quality scores as measures of
+forecasting reliability and system quality.
+
+3.3 Data Gathering and Pre-processing
+         3.3.1 Data Gathering
+                  The aiPHeed system will use two data types: a Filipino and English news corpus
+         from publicly accessible online sources, and structured provincial statistical indicators
+         from official Philippine government portals.
+                  3.3.1.1 Gathering of News Corpus
+                   A Python-based article fetcher will collect Filipino-English news articles
+                  via Philippine RSS feeds, the Google News RSS feed, and the GDELT DOC 2.0
+                  API, covering CALABARZON provinces from January 2020 to December 2025.
+                  The final raw corpus contained 17,791 unique articles after URL-hash
+                  deduplication, drawn from credible Philippine domains. Each record will be
+                  stored with its title, link, publication timestamp, summary, source domain, and
+                  unique identifier.
+
+                                                                                                                             31
+Figure 3.3.1.1
+Article Fetcher Configuration and RSS Feed Sources (gnews_rss_fetcher.py)
+
+                  3.3.1.2 Gathering of Structured Indicators
+                           Provincial indicators will be sourced from PSA OpenStat and RSSO IV-A
+
+                  (food CPI, unemployment, rice retail price, poverty incidence), BSP (OFW
+                  remittance growth, USD/PHP exchange rate), Department of Energy (weekly fuel
+                  prices, aggregated quarterly), PAGASA (typhoon count, rainfall anomaly, ENSO
+                  phase, drought alert), PhilRice Ricelytics (rice prices, 2022­2025), Social
+                  Weather Stations (quarterly hunger prevalence), and PSA NRP (vegetable, fish,
+                  and livestock prices). There are about a total of 2,732 collected government
+
+                                                                                                                             32
+                  datasets. All indicators will be standardized to the province-quarter level and
+                  saved as parquet files.
+Figure 3.3.1.2
+PSA OpenStat Portal Showing Provincial Food CPI Data
+
+         3.3.2 Data Pre-processing
+                  3.3.2.1 HTML Cleaning, Text Concatenation, and Truncation
+                   Each article's title and summary will be stripped of HTML, concatenated,
+                  and truncated to 512 characters, the XLM-RoBERTa context window limit, before
+                  any inference. Implemented in classifier.py line 230, this step will run
+                  immediately after article collection, before geocoding or scoring.
+                  3.3.2.2 Geocoding and Province Assignment
+                           Each article will be assigned to a CALABARZON province through
+                  three-stage PSGC matching in geocoder.py: (1) a 92-entry alias lookup table for
+                  city names and demonyms; (2) exact case-insensitive substring matching against
+
+                                                                                                                             33
+                  the five province names; and (3) fuzzy matching via thefuzz token_set_ratio at a
+                  threshold of 85. Articles with no match will retain a null province_code and will
+                  be excluded from all downstream computation. The province_code itself will not
+                  enter the feature matrix.
+Figure 3.3.2.2
+PSGC Province Registry and Alias Mapping (geocoder.py)
+
+                  3.3.2.3 Spatial Bias Weight Computation
+                            Interior provinces (Quezon, Rizal) will receive fewer articles than urban
+
+                  provinces (Cavite, Laguna), which would understate their NLP food stress signal.
+                  The bias_weighter.py module will correct this with an inverse-coverage log-ratio
+                  weight per province-quarter: provinces below the cross-province median article
+                  count receive a weight above 1.0, amplifying their NLP signal. Province-quarters
+
+                                                                                                                             34
+                  with fewer than five articles will be flagged LIMITED_SIGNAL, propagated to
+                  all 142 municipal outputs.
+Figure 3.3.2.3
+Bias Weight Formula Implementation and Data Sufficiency Flag (bias_weighter.py)
+
+                  3.3.2.4 Food Stress Sentiment Index and Trigger Proportion Feature
+                  Engineering
+                   Two NLP feature sets will be built from geocoded, bias-weighted articles.
+                  The fssi_builder.py module will aggregate XLM-RoBERTa scores into the
+                  bias-corrected FSSI per province-quarter, then derived FSSI_lag1, FSSI_lag2, and
+                  FSSI_accel -- four NLP feature columns total. Concurrently, trigger_classifier.py
+                  line 224 will apply precompiled word-boundary regex patterns to classify each
+                  article into one or more of five bilingual driver categories: market, climate,
+                  employment, ofw_remittance, and fish_kill. The proportion of articles triggering
+                  each category per province-quarter will produce five continuous features bounded
+                  between zero and one.
+
+                                                                                                                             35
+                  3.3.2.5 Government Indicator Feature Engineering
+                           Government indicators will be transformed into model-ready features
+
+                  using feature_matrix.py. Year-on-year growth rates will be computed for food CPI
+                  and OFW remittances. The food-minus-headline CPI gap will be derived per
+                  province-quarter. ENSO phase will be encoded as an integer (-1 La Niña, 0
+                  neutral, 1 El Niño); drought alert as a binary indicator. One-quarter lag and
+                  quarter-on-quarter acceleration features will be constructed for each of seven
+                  designated lag series, adding fourteen feature columns.
+Figure 3.3.2.4
+Government Indicator Feature Engineering (feature_matrix.py)
+
+                  3.3.2.6 Feature Matrix Fusion
+                   All NLP and government features will be merged into a single training
+                  matrix in feature_matrix.py via sequential left merges onto a 120-row backbone
+                  grid (5 provinces × 24 quarters, 2020-Q1 to 2025-Q4). Ten parquet sources will
+                  be joined: FSSI (4 NLP features), trigger proportions (5 features), PSA indicators,
+
+                                                                                                                             36
+                  full CPI, BSP macro, DOE oil prices, PAGASA climate, PSA NRP commodity
+                  prices, SWS hunger, and PhilRice Ricelytics. Sparse series will be forward-filled
+                  within each province; remaining gaps will be zero-filled. The output will be a
+                  120-row × 45-column matrix saved to features_fused.parquet.
+Figure 3.3.2.6
+Eleven Primary Data Source Paths in Feature Matrix Fusion (feature_matrix.py)
+
+3.4 Algorithm and Its Rules
+Algorithm 1: Zero-Shot XLM-RoBERTa Multilingual Sentiment Scoring
+
+         Each article will be cleaned, concatenated, and truncated to 512 characters, then scored
+by XLM-RoBERTa against ten bilingual HungerGist hypotheses (food supply disruption,
+economic hardship, climate damage, displacement, OFW remittance loss). The maximum
+entailment probability across all ten hypotheses will serve as the article's food insecurity score.
+Articles scoring below 0.30 will be dropped. Qualifying scores will be averaged per
+province-quarter, bias-corrected, and stored as the FSSI, from which lag and acceleration
+features will be derived.
+
+         The architecture of the proposed Zero-Shot XLM-RoBERTa Filipino-English Sentiment
+Scoring contains:
+
+                                                                                                                             37
+     HTML cleaning and text preparation: HTML noise will be stripped from each
+         article, the title and summary will be concatenated, and the resulting text will be
+         truncated to 512 characters.
+
+     Zero-shot scoring: The cleaned text will be passed through XLM-RoBERTa
+         (joeddav/xlm-roberta-large-xnli) against each of the ten bilingual HungerGist
+         hypotheses. The article's food insecurity score will be determined as the
+         maximum entailment probability across all ten hypotheses.
+
+     Score thresholding: Exclude articles scoring below 0.30 from aggregation to
+         remove low-confidence signals.
+
+     Bias-corrected FSSI aggregation: Average qualifying article scores per
+         province-quarter and multiply by the spatial bias weight to produce FSSI(p,t)
+         (fssi_builder.py).
+
+     Lag feature construction: Derive FSSI_lag1, FSSI_lag2, and FSSI_accel for use in
+         the LightGBM feature vector.
+
+Components:
+     Input Layer -- cleaned and truncated article text, max 512 characters per article
+     XLM-RoBERTa Transformer Encoder -- will produce contextual embeddings
+         that will be used for zero-shot classification via the
+         joeddav/xlm-roberta-large-xnli checkpoint
+     Output Layer -- continuous article-level food insecurity score that will be
+         aggregated to province-quarter FSSI via bias-weighted mean
+     Lag Feature Construction -- will compute FSSI_lag1, FSSI_lag2, and FSSI_accel
+         for the LightGBM feature vector
+
+                                                                                                                   38
+         Pseudocode:
+Figure 3.4.1
+Zero-Shot XLM-RoBERTa Filipino-English Sentiment Scoring
+
+               
+
+Algorithm 2: Regex-Based Trigger Classification
+         Each geocoded article will be matched against precompiled word-boundary regex
+
+patterns across five bilingual categories: market, climate, employment, ofw_remittance, and
+fish_kill. An article may trigger multiple categories simultaneously. Per province-quarter, the
+proportion of articles triggering each category produces five continuous features (0­1) that will
+enter the feature matrix and drive SHAP attribution narratives on the dashboard.
+
+         The architecture of the proposed Regex-Based Trigger Classification contains:
+              Taxonomy matching: Apply precompiled word-boundary regex patterns for each
+                  of the five bilingual driver categories simultaneously to the combined article title
+                  and summary.
+              Multi-label assignment: Assign each article to all categories whose patterns
+                  match. One article may trigger multiple categories.
+                                                                                                                             39
+     Proportion computation: For each province-quarter, divide the trigger count per
+         category by the total article count, producing five continuous proportion scores
+         bounded between zero and one.
+
+     Feature output: Enter all five proportion scores as independent columns in the
+         feature matrix and use them to populate SHAP attribution narratives in the
+         dashboard.
+
+Components:
+     Input -- geocoded articles per province-quarter
+     Bilingual Regex Matcher -- precompiled word-boundary patterns across five
+         driver vocabularies in English and Filipino/Taglish
+     Multi-label Assignment -- one article may trigger multiple categories
+         simultaneously
+     Output -- five continuous trigger proportion features per province-quarter,
+         bounded between zero and one
+
+                                                                                                                   40
+
