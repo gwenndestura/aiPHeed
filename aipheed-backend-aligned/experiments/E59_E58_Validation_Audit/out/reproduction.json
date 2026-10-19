@@ -1,0 +1,68 @@
+{
+ "sealed_files": {
+  "E57_E56_Rolling_Origin_Test\\sealed\\predictions.csv": {
+   "sha256": "4d52b1f3e3b4597ee0d218d2c24c9f7e15d4243093b9b0a443a4837256048910",
+   "matches_seal": true
+  },
+  "E58_Rising_Stress_Early_Warning\\sealed\\predictions.csv": {
+   "sha256": "8e8e417aeed0944996b93be52d41efde8311f38d4acec53eed645b5ed364e087",
+   "matches_seal": true
+  }
+ },
+ "checks": {
+  "E57_E58_sealed_E56_equal": 0.0,
+  "onset_labels_equal_E58_events": true,
+  "T43_equals_PS_on_all_rows": true,
+  "E56_reexecution_max_abs_diff": 4.992117830227016e-13,
+  "E56_reexecution_configs_match": true
+ },
+ "recomputed": {
+  "E56": {
+   "accuracy": 0.72,
+   "TP": 10,
+   "TN": 26,
+   "FP": 6,
+   "FN": 8,
+   "onsets_detected": 3
+  },
+  "EW": {
+   "accuracy": 0.78,
+   "TP": 14,
+   "TN": 25,
+   "FP": 7,
+   "FN": 4,
+   "onsets_detected": 7
+  },
+  "PROJ": {
+   "accuracy": 0.74,
+   "TP": 14,
+   "TN": 23,
+   "FP": 9,
+   "FN": 4,
+   "onsets_detected": 7
+  },
+  "PERSIST": {
+   "accuracy": 0.56,
+   "TP": 8,
+   "TN": 20,
+   "FP": 12,
+   "FN": 10,
+   "onsets_detected": 0
+  }
+ },
+ "onsets": 10,
+ "rows": 50,
+ "quarters_where_EW_differs_from_E56": [
+  "2024-Q2"
+ ],
+ "reported": {
+  "E56_accuracy": 0.72,
+  "E56_onsets_detected": 3,
+  "EW_accuracy": 0.78,
+  "EW_onsets_detected": 7,
+  "onsets": 10,
+  "rows": 50,
+  "PROJ_onsets_detected": 7
+ },
+ "discrepancies": []
+}

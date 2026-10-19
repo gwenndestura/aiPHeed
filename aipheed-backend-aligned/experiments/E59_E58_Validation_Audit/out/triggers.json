@@ -1,0 +1,89 @@
+{
+ "by_group": {
+  "climate": {
+   "origins": 12,
+   "origins_offered": 6,
+   "origins_used_in_trees": 6,
+   "total_splits": 205,
+   "served_entries_contributes": 20,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "enso",
+    "enso_l2",
+    "tc_count",
+    "tc_count_l1",
+    "palay_yoy"
+   ]
+  },
+  "employment": {
+   "origins": 12,
+   "origins_offered": 6,
+   "origins_used_in_trees": 5,
+   "total_splits": 52,
+   "served_entries_contributes": 15,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "ur_yoy",
+    "under_yoy"
+   ]
+  },
+  "fish_kill": {
+   "origins": 12,
+   "origins_offered": 6,
+   "origins_used_in_trees": 2,
+   "total_splits": 12,
+   "served_entries_contributes": 0,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "fish_yoy"
+   ]
+  },
+  "market": {
+   "origins": 12,
+   "origins_offered": 12,
+   "origins_used_in_trees": 10,
+   "total_splits": 550,
+   "served_entries_contributes": 58,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "F_now"
+   ]
+  },
+  "news_volume": {
+   "origins": 12,
+   "origins_offered": 6,
+   "origins_used_in_trees": 1,
+   "total_splits": 29,
+   "served_entries_contributes": null,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "news_n"
+   ]
+  },
+  "ofw_remittance": {
+   "origins": 12,
+   "origins_offered": 6,
+   "origins_used_in_trees": 6,
+   "total_splits": 89,
+   "served_entries_contributes": 25,
+   "served_entries": 60,
+   "hunger_component_inputs": [
+    "remit_php_yoy",
+    "fx_yoy"
+   ]
+  },
+  "poverty": {
+   "origins": 12,
+   "origins_offered": 5,
+   "origins_used_in_trees": 1,
+   "total_splits": 1,
+   "served_entries_contributes": null,
+   "served_entries": 60,
+   "hunger_component_inputs": []
+  }
+ },
+ "max_reproduction_diff": 4.972908741096571e-05,
+ "price_offset_note": "Every forecast's starting point (offset) is the base-effect projection of provincial food CPI inflation, attributed to Market / Prices; the trees add the trigger effects on top.",
+ "hunger_component": "I7 ridge on regional means of F_now, enso, enso_l2, fish_yoy, fx_yoy, news_n, palay_yoy, remit_php_yoy, tc_count, tc_count_l1, under_yoy, ur_yoy (not LightGBM; not in the TreeSHAP bars)",
+ "ew_rule_inputs": "EW uses P_price (LightGBM price part: offset + trees) and P(HIGH) = P_price x P_hunger; it adds no input of its own"
+}
