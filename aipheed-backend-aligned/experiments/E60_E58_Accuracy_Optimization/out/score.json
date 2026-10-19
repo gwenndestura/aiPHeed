@@ -1,0 +1,71 @@
+{
+ "final_candidate": "A gov-only",
+ "q_news": {
+  "C_vs_A_brier": {
+   "diff": 0.0026930879795356065,
+   "ci95": [
+    -0.01827051990746699,
+    0.02660180509919813
+   ]
+  },
+  "C_vs_A_sign": {
+   "a_better_quarters": 6,
+   "a_worse_quarters": 3,
+   "p": 0.5078125
+  },
+  "D_vs_A_brier": {
+   "diff": 0.010629166677076047,
+   "ci95": [
+    -0.019583798979521446,
+    0.04311005908203322
+   ]
+  },
+  "C_vs_A_warning_onsets": {
+   "C": 6,
+   "A": 7
+  },
+  "B_vs_majority_brier": {
+   "diff": 0.0847964427205281,
+   "ci95": [
+    -0.1663551740846873,
+    0.34657346491583996
+   ]
+  },
+  "C_vs_E56_brier": {
+   "diff": 0.00103149514137087,
+   "ci95": [
+    -0.02036681948839545,
+    0.025485570795246007
+   ]
+  },
+  "news_adds_measurable_value": false
+ },
+ "q_improve": {
+  "final_candidate": "A gov-only",
+  "dev_brier": {
+   "A gov-only": 0.264927536471491,
+   "C gov+news": 0.26997140798420016,
+   "D gov+news+history": 0.2766961389666615
+  },
+  "criteria": {
+   "accuracy_ge_EW": 1.0,
+   "balanced_ge_EW": 1.0,
+   "onset_recall_ge_EW": 1.0,
+   "fp_rate_le_EW_plus_0.05": 1.0,
+   "paired_brier_ci_upper_lt_0": false
+  },
+  "paired_brier_vs_EW": {
+   "diff": -0.001661667233268652,
+   "ci95": [
+    -0.005812606861160448,
+    0.0008276789496433838
+   ]
+  },
+  "sign_vs_EW": {
+   "a_better_quarters": 8,
+   "a_worse_quarters": 2,
+   "p": 0.109375
+  },
+  "improved_over_EW": false
+ }
+}

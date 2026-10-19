@@ -1,0 +1,79 @@
+item,split,stratum,ph_date,source_domain,title,relevant,trigger,province_true,kind,event_in_title_date,repeat,annotator,human_verified,v1_relevant,v1_trigger,v2_relevant,v2_trigger,v2_rule,geocoder_province,province_correct
+ACD001,EVAL,A,2022-09-25,gmanetwork.com,Sierra Madre trends as Luzon braces for Super Typhoon Karding,0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD002,EVAL,D,2025-11-09,gmanetwork.com,"LIST: Cancelled sea trips as of November 9, 2025 due to Super Typhoon Uwan",0,none,NATIONAL,event,2025-11,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD003,EVAL,C,2024-04-05,mb.com.ph,Police investigate viral ATM scam in Cavite,0,none,PH040100000,event,,0,claude-ai,,0,none,0,none,exclusion,PH040100000,True
+ACD004,EVAL,A,2024-07-27,mb.com.ph,"National gov't, LGUs continue distributing relief goods to flood-affected families in Rizal Province",1,climate,PH040400000,event,,0,claude-ai,,1,climate,1,climate,(flood|flooding|baha)\b.*\b(famil|resident|evacuat|displac|trapped|affected|victim|relief|food pack),PH040400000,True
+ACD005,EVAL,A,2026-01-27,mb.com.ph,"No work, classes in Cavite City on Jan. 28 for Julian Felipe Day",0,none,PH040100000,announcement,2026-01,0,claude-ai,,1,employment,0,none,no trigger phrase,PH040100000,True
+ACD008,EVAL,A,2024-11-17,mb.com.ph,Binangonan LGU evacuates 25 families affected by flood due to 'Pepito',1,climate,PH040400000,event,,0,claude-ai,,1,climate,1,climate,(famil|resident|evacuat|displac|victim)\w*\b.*\b(flood|flooding|baha|typhoon|storm|bagyo),PH040400000,True
+ACD010,EVAL,D,2021-02-02,pna.gov.ph,Benguet farmers to benefit from TESDA agri training hub,0,none,OTHER,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD011,EVAL,A,2025-12-10,da.gov.ph,"NFA rice auction breakthrough frees warehouse space, to boost farmers’ support",1,market,NATIONAL,announcement,,0,claude-ai,,1,market,1,market,\bnfa rice\b,,True
+ACD012,EVAL,A,2025-11-10,rappler.com,Uwan downgraded to typhoon after landfall in Aurora as super typhoon,0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD013,EVAL,C,2026-04-16,mb.com.ph,"Tanay LGU gives fuel cash aid to jeepney, tricycle operators",1,employment,PH040400000,announcement,,0,claude-ai,,0,none,1,employment,(cash|fuel) (aid|subsidy) (to|for) (drivers|jeepney|tricycle|operators|farmers|fisherfolk),PH040400000,True
+ACD014,EVAL,A,2022-09-10,abs-cbn.com,"Thunderstorm triggers flooding in Cabuyao, Laguna",1,climate,PH040200000,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,PH040200000,True
+ACD019,EVAL,A,2026-07-11,newsinfo.inquirer.net,Habagat to drench PH as typhoon exits – Pagasa,0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD021,EVAL,A,2025-09-27,newsinfo.inquirer.net,Opong reintensifies into typhoon as it exits PAR,0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD022,EVAL,C,2025-04-16,abs-cbn.com,Visita Iglesia: Historic churches to visit in Cavite,0,none,PH040100000,unrelated,,0,claude-ai,,0,none,0,none,exclusion,PH040100000,True
+ACD023,EVAL,D,2025-11-03,fo4a.dswd.gov.ph,DSWD establishes 4 new partnership supporting 4Ps beneficiaries in the CALABARZON Region,1,other_food,REGION,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD024,EVAL,A,2024-01-22,business.inquirer.net,DA mulls setting farm-gate prices for non-palay produce,1,market,NATIONAL,announcement,,0,claude-ai,,1,market,0,none,no trigger phrase,,True
+ACD025,EVAL,C,2022-06-14,abs-cbn.com,LOOK: ‘Airport-like’ sea port opens in Batangas,0,none,PH040500000,event,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040500000,True
+ACD027,EVAL,C,2025-01-30,newsinfo.inquirer.net,More cops tapped to watch Marilaque stretch in Rizal,0,none,PH040400000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040400000,True
+ACD033,EVAL,A,2025-08-22,abs-cbn.com,"Occidental Mindoro governor, Rizal mayor ask Senate to probe flood control projects",0,none,PH040400000,unrelated,,0,claude-ai,,1,climate,0,none,exclusion,PH040400000,True
+ACD035,EVAL,D,2026-09-30,philstar.com,"DOH: Leptospirosis cases up, dengue down",0,none,NATIONAL,event,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD038,EVAL,C,2025-09-27,gmanetwork.com,Popular wings place opens first Rizal store,0,none,PH040400000,unrelated,,0,claude-ai,,0,none,0,none,exclusion,PH040400000,True
+ACD040,EVAL,C,2024-10-27,mb.com.ph,"IN PICTURES: Willie Revillame helps victims of storm Kristine in Talisay, Batangas",1,climate,PH040500000,event,,0,claude-ai,,0,none,1,climate,(famil|resident|evacuat|displac|victim)\w*\b.*\b(flood|flooding|baha|typhoon|storm|bagyo),PH040500000,True
+ACD042,EVAL,A,2025-07-22,newsinfo.inquirer.net,PH flooding displaces thousands as new storm threatens,0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD043,EVAL,D,2025-12-04,da.gov.ph,DA chief signals leaner rice imports amid strong harvest,1,market,NATIONAL,announcement,,0,claude-ai,,0,none,1,market,rice (import|imports|tariff|supply|stocks),,True
+ACD044,EVAL,A,2025-09-20,philstar.com,"‘Nando’ intensifies, may hit Batanes-Babuyan as super typhoon",0,none,OTHER,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD045,EVAL,A,2026-08-18,newsinfo.inquirer.net,96 families flee flooding as heavy rains batter Lian in Batangas,1,climate,PH040500000,event,,0,claude-ai,,1,climate,1,climate,(famil|resident|evacuat|displac|victim)\w*\b.*\b(flood|flooding|baha|typhoon|storm|bagyo),PH040500000,True
+ACD048,EVAL,A,2025-07-24,mb.com.ph,Meralco nears full restoration in flood-hit areas,0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD050,EVAL,A,2026-08-09,newsinfo.inquirer.net,"Many areas in NCR, Laguna, Rizal under flood threat due to habagat",1,climate,REGION,forecast,,0,claude-ai,,1,climate,1,climate,(rainfall|flood|storm surge) (warning|alert|threat),PH040200000,False
+ACD051,EVAL,A,2024-09-06,gmanetwork.com,"Trough of Super Typhoon, habagat to bring cloudy skies, scattered rain over parts of Luzon",0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD060,EVAL,A,2025-05-13,da.gov.ph,"Ship with 35,000 bags of well-milled NFA rice arrives in Cebu",0,none,OTHER,event,,0,claude-ai,,1,market,1,market,\bnfa rice\b,,True
+ACD062,EVAL,C,2025-12-02,newsinfo.inquirer.net,Laguna solon Agarao denies any connection to Discayas,0,none,PH040200000,unrelated,,0,claude-ai,,0,none,0,none,exclusion,PH040200000,True
+ACD064,EVAL,A,2026-07-08,gmanetwork.com,"LIST: Cancelled trips as of 7 p.m. on July 8, 2026 due to Super Typhoon Inday",0,none,NATIONAL,event,2026-07,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD065,EVAL,A,2022-05-16,da.gov.ph,FROM PHILSTAR: Rice Tariffication Law trims prices by up to P7/kilo,1,market,NATIONAL,event,,0,claude-ai,,1,market,1,market,rice (import|imports|tariff|supply|stocks),,True
+ACD067,EVAL,C,2024-03-05,gmanetwork.com,Bamboo farm in Antipolo holds biannual seminars on fastest-growing plant,0,none,PH040400000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040400000,True
+ACD069,EVAL,A,2023-01-07,newsinfo.inquirer.net,‘Worst’ flood to hit Palawan town shocks villagers,0,none,OTHER,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD071,EVAL,D,2025-08-18,mb.com.ph,DA seeks ₱3.5 trillion in public-private investments to transform Philippine agriculture sector,0,none,NATIONAL,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD074,EVAL,A,2022-10-30,abs-cbn.com,"Nearly 100 people trapped in CEZ as severe flooding hits Rosario, Cavite",1,climate,PH040100000,event,,0,claude-ai,,1,climate,1,climate,(flood|flooding|baha) (persists|hits|submerges?|inundates?|swamps?),PH040100000,True
+ACD076,EVAL,A,2025-10-04,philstar.com,"Paolo slams Luzon, weakens into tropical storm",0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD079,EVAL,D,2024-05-27,philstar.com,Department of Agriculture seeks more funding for high-value crops,0,none,NATIONAL,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD080,EVAL,C,2024-02-29,mb.com.ph,D&L sees 10%-15% growth as Batangas plant ramps up production,0,none,PH040500000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040500000,True
+ACD081,EVAL,A,2025-06-29,philstar.com,Damaged river wall causes neck-deep flooding in Navotas,0,none,OTHER,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD082,EVAL,A,2025-11-22,mb.com.ph,'A big lie': Philippine Reclamation Authority blasted for claiming reclamation helps ease flooding,0,none,NATIONAL,opinion,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD085,EVAL,C,2024-10-25,gmanetwork.com,Residents in Quezon Province and Batangas affected by Kristine receive food packs from GMA Kapuso Foundation,1,climate,REGION,event,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040500000,False
+ACD086,EVAL,A,2025-07-24,gmanetwork.com,Emong intensifies into a typhoon,0,none,NATIONAL,event,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD087,EVAL,A,2026-07-13,newsinfo.inquirer.net,Pagasa warns of flood risks in parts of Luzon amid habagat,0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD088,EVAL,A,2022-11-06,mb.com.ph,"DPWH, JICA survey proposed Marikina River flood control project area",0,none,OTHER,announcement,,0,claude-ai,,1,climate,0,none,exclusion,,True
+ACD089,EVAL,A,2024-11-16,newsinfo.inquirer.net,"Storm surge alert up in Luzon, Visayas as Pepito’s landfall nears",0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD093,EVAL,D,2025-03-19,mb.com.ph,"SMART/MVPSF national CPJ taekwondo tilt draws 2,000 fighters",0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,exclusion,,True
+ACD094,EVAL,C,2026-09-03,mb.com.ph,"Cavite leg of LRT-1 extension to break ground before year's end, Lopez assures solons",0,none,PH040100000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040100000,True
+ACD096,EVAL,C,2024-12-23,mb.com.ph,"Senior citizens of Binangonan, Rizal receive Christmas gift packs",0,none,PH040400000,event,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040400000,True
+ACD101,EVAL,A,2023-07-31,newsinfo.inquirer.net,"Typhoon Falcon-enhanced ‘habagat’ to trigger rains in parts of Luzon, Visayas",0,none,NATIONAL,forecast,,0,claude-ai,,1,climate,0,none,no trigger phrase,,True
+ACD102,EVAL,D,2025-11-25,gmanetwork.com,AmCham Philippines recognizes outstanding CSR programs at the 2025 Corporate Social Impact Awards,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+ACD105,EVAL,A,2026-08-14,mb.com.ph,MMDA backs Cainta mayor’s drainage plan to reduce flooding,0,none,PH040400000,announcement,,0,claude-ai,,1,climate,0,none,no trigger phrase,PH040400000,True
+B000,EVAL,B,2025-11-12,newsinfo.inquirer.net,Illegal fishing endangers turtle nesting in Quezon – group,0,none,PH040300000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040300000,True
+B001,EVAL,B,2024-05-01,newsinfo.inquirer.net,‘Pawikan’ found dead in Lamon Bay in Quezon,0,none,PH040300000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040300000,True
+B002,EVAL,B,2023-03-01,newsinfo.inquirer.net,21 protected marine areas may be affected by Mindoro oil spill,9,fish_kill,OTHER,forecast,,0,claude-ai,,0,none,1,fish_kill,oil spill,,True
+B004,EVAL,B,2022-08-03,businessmirror.com.ph,OFW group thanks PBBM for keeping OFWs in mind,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B005,EVAL,B,2026-05-15,mb.com.ph,Overseas remittances rebound even as Mideast tension escalates,1,ofw_remittance,NATIONAL,event,,0,claude-ai,,0,none,1,ofw_remittance,remittances?,,True
+B006,EVAL,B,2025-07-22,philstar.com,Quezon City under state of calamity due to habagat; Manila to declare next,0,none,OTHER,event,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B008,EVAL,B,2023-02-14,gmanetwork.com,UAE OFW who used to be a mental rehab worker turns to caring for stray cats,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B009,EVAL,B,2026-03-24,newsinfo.inquirer.net,"OIL PRICE WATCH as of March 24, 2026",0,none,NATIONAL,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B010,EVAL,B,2025-04-18,gmanetwork.com,"College student dies after LPG tank explosion, family seeks help for other relatives",0,none,UNKNOWN,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B011,EVAL,B,2026-04-03,newsinfo.inquirer.net,5 fishermen rescued after boat engine fails in rough seas off Batangas,0,none,PH040500000,event,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040500000,True
+B012,EVAL,B,2023-05-07,gmanetwork.com,Remains of 4 Pinoys who died in Taiwan factory fire arrive in PH,0,none,NATIONAL,event,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B016,EVAL,B,2023-10-18,philstar.com,Fishers reject government claim of ‘economic benefits’ from reclamation projects,0,none,NATIONAL,opinion,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B019,EVAL,B,2023-06-09,philstar.com,Albay declares state of calamity due to threat of Mayon eruption,0,none,OTHER,event,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B020,EVAL,B,2024-10-05,gmanetwork.com,"Alden Richards, Kathryn Bernardo kick off 'Hello, Love, Again' tour",0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B021,EVAL,B,2021-08-25,newsinfo.inquirer.net,Whale shark caught in fishing net freed in Quezon,0,none,PH040300000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040300000,True
+B022,EVAL,B,2022-06-07,gmanetwork.com,OFW stabbed to death as man runs amok in Lucena City,0,none,PH040300000,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040300000,True
+B024,EVAL,B,2025-01-03,cebudailynews.inquirer.net,Cebu town asks SC to reconsider ruling on commercial fishing case,0,none,OTHER,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B025,EVAL,B,2021-01-01,gmanetwork.com,Gov't-owned firms remit P160.62B to Treasury —DOF,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B026,EVAL,B,2025-06-07,globalnation.inquirer.net,AFP says Philippines-Japan RAA `significant step in regional stability’,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B029,EVAL,B,2026-07-13,globalnation.inquirer.net,Fishers protest US-backed Luzon economic security zone,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B030,EVAL,B,2026-07-10,business.inquirer.net,NFRDI earns ISO certification for fisheries research,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B034,EVAL,B,2026-01-01,mb.com.ph,House of Representatives 2025 yearender: They came in pairs,0,none,NATIONAL,unrelated,,0,claude-ai,,0,none,0,none,no trigger phrase,,True
+B037,EVAL,B,2024-07-31,abs-cbn.com,Oil spill from MT Terra Nova projected to reach Batangas: UP MSI,1,fish_kill,PH040500000,forecast,,0,claude-ai,,0,none,1,fish_kill,oil spill,PH040500000,True
+B038,EVAL,B,2024-04-28,philstar.com,"Cavite, La Union LGUs adopt 4-day workweek",0,none,PH040100000,announcement,,0,claude-ai,,0,none,0,none,no trigger phrase,PH040100000,True
+B039,EVAL,B,2025-05-01,rappler.com,"Manila Bay reclamation harms fishers, marine habitats, experts say",0,none,OTHER,opinion,,0,claude-ai,,0,none,0,none,no trigger phrase,,True

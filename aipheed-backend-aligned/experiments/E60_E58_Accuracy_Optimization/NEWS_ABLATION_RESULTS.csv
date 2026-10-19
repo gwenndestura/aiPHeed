@@ -1,0 +1,9 @@
+model,accuracy,balanced_accuracy,brier,roc_auc,recall_HIGH,fp_rate,onset_recall_warning,ci_low,ci_high
+A gov-only (forecast),0.74,0.6997,0.2124,0.6563,0.5556,0.1562,0.7,,
+B news-only (forecast),0.36,0.4271,0.4448,0.4844,0.6667,0.8125,0.8,,
+C gov+news (forecast),0.74,0.6753,0.2151,0.6493,0.4444,0.0938,0.6,,
+D gov+news+history (forecast),0.68,0.6285,0.223,0.6528,0.4444,0.1875,0.4,,
+paired Brier C_vs_A_brier,,,0.0027,,,,,-0.0183,0.0266
+paired Brier D_vs_A_brier,,,0.0106,,,,,-0.0196,0.0431
+paired Brier B_vs_majority_brier,,,0.0848,,,,,-0.1664,0.3466
+paired Brier C_vs_E56_brier,,,0.001,,,,,-0.0204,0.0255
