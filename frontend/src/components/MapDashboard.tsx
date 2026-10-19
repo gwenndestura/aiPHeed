@@ -497,8 +497,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         onMunicipalityClick={handleMunicipalityClick}
         onBackgroundClick={clearSelection}
         rejectedProvinceIds={rejectedIds}
-        // Phones: fit CALABARZON into the part of the map left uncovered.
-        fitInsets={compact ? { top: wideCompact ? EDGE + SEARCH_H : SHEET_TOP_RESERVE + LEGEND_STACK_H, right: 0, bottom: SHEET_PEEK_H + 8 + ROW_H, left: 0 } : undefined}
+        // Phones: fit CALABARZON (or the chosen place) into the part of the map
+        // left uncovered, above the sheet at its current height.
+        fitInsets={compact ? { top: wideCompact ? EDGE + SEARCH_H : SHEET_TOP_RESERVE + LEGEND_STACK_H, right: 0, bottom: sheetH + 8 + ROW_H, left: 0 } : undefined}
         minZoom={compact ? 6.5 : 8}
         zoomSnap={compact ? 0.25 : 1}
       />
