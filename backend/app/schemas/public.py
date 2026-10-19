@@ -327,6 +327,22 @@ class EarlyWarning(BaseModel):
     text: str
 
 
+class ClimateWatch(BaseModel):
+    """E66: Climate Food-Stress Watch, a rule-based El Nino hazard layer beside the Lead-2 forecast (opt-in e66 mode).
+    Not a model input and not a food-insecurity probability; it changes no number."""
+    layer: str
+    level: str | None = None          # CLIMATE WATCH + LOCAL EXPOSURE | CLIMATE WATCH | NO CLIMATE WATCH | INSUFFICIENT DATA
+    hazard: bool | None = None
+    hazardStatus: str
+    householdStress: bool | None = None
+    latestHunger: float | None = None
+    localExposure: bool | None = None   # None = production data unknown (never read as "no exposure")
+    exposureNote: str | None = None
+    issueDate: str
+    provinces: dict[str, str] | None = None   # region scope: level per province code
+    sentence: str
+
+
 class PlainSummary(BaseModel):
     """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
     event: str                        # what the probability is of, e.g. "food-price pressure"
@@ -344,6 +360,7 @@ class PlainSummary(BaseModel):
     # E61: the two parts of an issued two-part forecast (E55+ records) and what a low/high value does and does not mean
     components: SummaryComponents | None = None
     caveat: str | None = None
+    climateWatch: ClimateWatch | None = None   # E66 (e66 mode only)
 
 
 class SummaryComponents(BaseModel):

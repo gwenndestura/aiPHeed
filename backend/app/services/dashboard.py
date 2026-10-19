@@ -34,6 +34,7 @@ from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
 from app.ml.inference import e31_engine as E31
 from app.ml.inference import e41_lead2 as E41L2
+from app.ml.inference import climate_watch as CW
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -1065,6 +1066,10 @@ def explainability_region(quarter: str) -> dict:
 
 # E52: what each experimental candidate's probability is of, in plain words
 CANDIDATE_EVENTS = {
+    # E66: on every evaluated quarter (2024-Q2..2026-Q3) regional hunger was above 11.3%, so T43 was exactly the
+    # provincial food-price-pressure condition (E66 r1/r7); the wording says what was actually evaluated
+    "e66": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
+            "pressure; on every evaluated quarter this reduced to food-price pressure)"),
     "e64": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e58": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e56": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
@@ -1179,6 +1184,11 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         sentence = f"{sentence} {caveat}"
     elif enso:
         sentence = f"{sentence} {enso}"
+    # E66: the Climate Food-Stress Watch, a separate rule-based El Nino hazard layer (not a model input, changes no
+    # number); its text goes into the same sentence field, its values into a separate API field
+    cfsw = _climate_watch(quarter, province_code) if kind in ("forecast", "earlier_forecast") else None
+    if cfsw and cfsw["sentence"]:
+        sentence = f"{sentence} {cfsw['sentence']}"
     return {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
@@ -1191,7 +1201,37 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                            "combination": "product of the two parts (an approximation: the two conditions are not "
                                           "independent; the joint probability cannot exceed the smaller part)"},
             "caveat": _ascii(caveat)} if comp else {}),
+        **({"climateWatch": cfsw} if cfsw else {}),
     }
+
+
+def _climate_watch(quarter: str, province_code: str | None) -> dict | None:
+    """E66 (AIPHEED_LEAD2_MODEL=e66 only): Climate Food-Stress Watch for an issued or earlier Lead-2 forecast.
+    Province scope: the province's watch. Region scope: the provinces under a watch. None outside e66 mode."""
+    if E41L2.mode() != "e66":
+        return None
+    rec = E41L2.record()
+    codes = [province_code] if province_code else list(rec.get("provinces", {}))
+    ws = {c: CW.for_quarter(rec, quarter, c) for c in codes}
+    ws = {c: w for c, w in ws.items() if w is not None}
+    if not ws:
+        return None
+    if province_code:
+        w = ws[province_code]
+        return {"layer": "Climate Food-Stress Watch (E66; rule-based hazard watch, not a model input, not validated)",
+                **{k: w[k] for k in ("level", "hazard", "hazardStatus", "householdStress", "latestHunger",
+                                     "localExposure", "exposureNote", "issueDate")},
+                "sentence": _ascii(CW.sentence(w, w["issueDate"]) or "")}
+    on = {c: w for c, w in ws.items() if w["level"].startswith("CLIMATE WATCH")}
+    names = [rec["provinces"][c]["name"] for c in on]
+    any_w = next(iter(ws.values()))
+    text = (f"Climate food-stress watch: {len(on)} of {len(ws)} provinces are under a watch ({', '.join(names)}), "
+            f"because {any_w['hazardStatus']} was in force at the issue date ({any_w['issueDate']}) and regional hunger "
+            f"was above 11.3%. This is a separate rule-based hazard flag, not a model input and not a validated "
+            f"food-insecurity probability." if on else "")
+    return {"layer": "Climate Food-Stress Watch (E66; rule-based hazard watch, not a model input, not validated)",
+            "provinces": {c: w["level"] for c, w in ws.items()}, "hazardStatus": any_w["hazardStatus"],
+            "issueDate": any_w["issueDate"], "sentence": _ascii(text)}
 
 
 # E61 (aipheed-backend-aligned/experiments/E61_E58_Low_Forecast_Investigation, out/a2_calibration_joint.json,

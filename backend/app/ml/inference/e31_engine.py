@@ -172,12 +172,14 @@ class E31Explainer:
 
 class E31Disaggregator:
     def disaggregate(self, forecasts: list[dict], quarter: str | None = None) -> pd.DataFrame:
+        from app.ml.inference import e41_lead2 as LEAD2
         from app.quarterly.lgu_audit import build_ranking
 
         vul = pd.read_csv(Path("data/inputs/lgu_vulnerability.csv"), dtype={"lgu_code": str})
         ros = pd.read_csv(Path("data/reference/calabarzon_lgus.csv"), dtype={"lgu_psgc": str})
         prob = {f["province_code"]: f["risk_probability"] for f in forecasts} or None
-        rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"})
+        # E66 (opt-in mode only): exact ranks, so 4-dp display rounding of small probabilities creates no ties
+        rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"}, exact_ranks=LEAD2.mode() == "e66")
         suff = {f["province_code"]: f.get("data_sufficiency_flag") for f in forecasts}
         # E64 (Objective 3 traceability): the province estimate each LGU index scales, where it came from, and the index
         src = {f["province_code"]: {"mode": f.get("mode"), "origin": f.get("origin"), "quarter": f.get("quarter"),

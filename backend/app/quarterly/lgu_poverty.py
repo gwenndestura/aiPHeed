@@ -95,14 +95,19 @@ def validate_against_census(sae: pd.DataFrame, census: pd.DataFrame) -> tuple[pd
     return m.drop(columns="_merge"), rep
 
 
-def rank_lgus(census: pd.DataFrame, poverty: pd.DataFrame, province_probability: dict | None) -> pd.DataFrame:
+def rank_lgus(census: pd.DataFrame, poverty: pd.DataFrame, province_probability: dict | None,
+              exact_ranks: bool = False) -> pd.DataFrame:
     """Approved method (0.6 poverty_norm + 0.4 density_norm within province; x province probability; clamp [0,1]).
 
     `poverty` columns: lgu_code, poverty_lgu_estimate (null when PSA publishes none), poverty_source.
     Where the LGU estimate is null, the formula uses the province mean of the AVAILABLE municipal estimates if any
     exist, else the stored province value, and labels it 'province-mean substitute' (never 'municipal').
     Deterministic ranking: risk_index (rounded 4 dp) descending, ties share the same competition rank (1,2,2,4),
-    listing order inside a tie = lgu_code ascending. A missing province probability gives risk_index = null."""
+    listing order inside a tie = lgu_code ascending. A missing province probability gives risk_index = null.
+
+    E66 (D-E66-3): with exact_ranks=True the ranks use the unrounded index (risk_index_exact); risk_index stays the
+    4-dp display value. With small province probabilities (2027-Q1: 0.04-0.15) 4-dp rounding creates ties that are an
+    artefact of display precision, not equal vulnerability. Default False keeps the approved behaviour."""
     m = census.merge(poverty, on="lgu_code", how="left", validate="one_to_one")
     assert len(m) == len(census)
     m["density"] = m["population_2024"] / m["land_area_km2"]
@@ -119,10 +124,12 @@ def rank_lgus(census: pd.DataFrame, poverty: pd.DataFrame, province_probability:
         m["province_probability"] = np.nan
     else:
         m["province_probability"] = m["province_code"].map(province_probability)
-    m["risk_index"] = (m["province_probability"] * m["vulnerability_index"]).clip(0, 1).round(4)
-    m = m.sort_values(["risk_index", "lgu_code"], ascending=[False, True], na_position="last").reset_index(drop=True)
-    m["rank_region"] = m["risk_index"].rank(ascending=False, method="min")
-    m["rank_in_province"] = m.groupby("province_code")["risk_index"].rank(ascending=False, method="min")
+    m["risk_index_exact"] = (m["province_probability"] * m["vulnerability_index"]).clip(0, 1)
+    m["risk_index"] = m["risk_index_exact"].round(4)
+    key = "risk_index_exact" if exact_ranks else "risk_index"
+    m = m.sort_values([key, "lgu_code"], ascending=[False, True], na_position="last").reset_index(drop=True)
+    m["rank_region"] = m[key].rank(ascending=False, method="min")
+    m["rank_in_province"] = m.groupby("province_code")[key].rank(ascending=False, method="min")
     m["vulnerability_rank_in_province"] = m.groupby("province_code")["vulnerability_index"].rank(
         ascending=False, method="min")
     n_sub = m.groupby("province_code")["poverty_lgu_estimate"].transform(lambda s: s.isna().sum())

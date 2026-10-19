@@ -161,7 +161,7 @@ def _served_note(quarter: str | None = None) -> str:
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
     if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E64_EXPLAINABILITY_NOTE
-    if quarter and LEAD2.mode() == "e58" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+    if quarter and LEAD2.mode() in ("e58", "e66") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E58_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e56" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E56_EXPLAINABILITY_NOTE

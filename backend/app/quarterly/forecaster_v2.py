@@ -29,7 +29,7 @@ def _read(reg: Registry, sid: str) -> pd.DataFrame:
     return pd.read_csv(e.path, dtype={"province_code": str, "lgu_code": str})
 
 
-def lgu_table(lg: pd.DataFrame, province_probability: dict | None) -> pd.DataFrame:
+def lgu_table(lg: pd.DataFrame, province_probability: dict | None, exact_ranks: bool = False) -> pd.DataFrame:
     if "population_2024" not in lg.columns:   # vintage 1 carried the 2020 census, outside the 2021-2026 window
         raise ValueError("lgu_vulnerability has no population_2024 column; register vintage 2 "
                          "(scripts/build_lgu_psa_2021_2024.py)")
@@ -38,7 +38,7 @@ def lgu_table(lg: pd.DataFrame, province_probability: dict | None) -> pd.DataFra
     assert census["province_code"].notna().all() and len(census) == 142
     pov = lg[["lgu_code", "poverty_lgu_estimate", "poverty_source"]].copy()
     pov["poverty_province_value"] = np.where(lg["poverty_lgu_estimate"].isna(), lg["poverty_value_used"], np.nan)
-    return rank_lgus(census, pov, province_probability)
+    return rank_lgus(census, pov, province_probability, exact_ranks=exact_ranks)
 
 
 def make_pcf_forecaster(evidence: dict, leads=(1,)):

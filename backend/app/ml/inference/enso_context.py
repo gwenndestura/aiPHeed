@@ -58,7 +58,7 @@ E65_ENSO_USE = {
                                   "point",
                 "typhoon_note": None},
 }
-MODES = ("e56", "e58")     # the records E65 verified; other candidates are not described here
+MODES = ("e56", "e58", "e66")     # the records E65 verified (e66 serves the E58 record); others not described
 
 
 def _el_nino_alert(text: str) -> bool:

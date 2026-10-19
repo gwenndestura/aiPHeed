@@ -137,11 +137,12 @@ def audit_inputs(vuln: pd.DataFrame, roster: pd.DataFrame) -> tuple[pd.DataFrame
 
 
 def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability: dict | None,
-                  probability_source: dict) -> dict:
+                  probability_source: dict, exact_ranks: bool = False) -> dict:
+    """exact_ranks (E66, opt-in): rank on the unrounded index so 4-dp display rounding creates no ties."""
     both, checks = audit_inputs(vuln, roster)
     lg = vuln.copy()
     lg["lgu_code"] = lg["lgu_code"].map(_code9)
-    rk = lgu_table(lg, province_probability)
+    rk = lgu_table(lg, province_probability, exact_ranks=exact_ranks)
     rk["lgu_code"] = rk["lgu_code"].map(_code9)
     # drivers of the within-province order
     drivers = {}
@@ -154,7 +155,8 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
                 "lgus_with_municipal_poverty_estimate": int(g["poverty_lgu_estimate"].notna().sum()),
                 "lgus": int(len(g)),
             }
-    ties = rk[rk["risk_index"].notna()].groupby("risk_index").size()
+    tie_key = "risk_index_exact" if exact_ranks else "risk_index"
+    ties = rk[rk[tie_key].notna()].groupby(tie_key).size()
     rows = []
     for r in rk.itertuples():
         rows.append({
@@ -171,7 +173,7 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
             "rank_region": None if pd.isna(r.rank_region) else int(r.rank_region),
             "rank_in_province": None if pd.isna(r.rank_in_province) else int(r.rank_in_province),
             "vulnerability_rank_in_province": int(r.vulnerability_rank_in_province),
-            "tied": bool(pd.notna(r.risk_index) and ties.get(r.risk_index, 0) > 1),
+            "tied": bool(pd.notna(getattr(r, tie_key)) and ties.get(getattr(r, tie_key), 0) > 1),
             "limitation": r.limitation,
             "evidence_status": "EXPERIMENTAL",
         })
@@ -179,6 +181,7 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
     return {"meaning": MEANING, "does_not_mean": DOES_NOT_MEAN, "provenance": PROVENANCE,
             "method": "vulnerability = 0.6 x poverty_norm + 0.4 x density_norm (min-max within province); "
                       "risk_index = province probability x vulnerability, clamp [0,1], 4 dp; competition ranks, "
-                      "ties by PSGC; null probability -> null risk and ranks",
+                      + ("ranked on the unrounded index (E66), " if exact_ranks else "")
+                      + "ties by PSGC; null probability -> null risk and ranks",
             "probability_source": probability_source, "input_checks": checks, "within_province_drivers": drivers,
             "rows": rows, "rows_sha256": hashlib.sha256(blob).hexdigest()}
