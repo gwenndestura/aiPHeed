@@ -215,17 +215,33 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
 
   return (
     <div className="qt-float select-none">
-      {/* Selected quarter */}
-      <div className="flex items-center gap-x-3 gap-y-1 flex-wrap">
-        <span className="text-[13px] leading-5 font-semibold">{fullName(shown)}</span>
-        <span className="qt-muted qt-status text-[11px]">{quarterMonthRange(shown)}</span>
-        <span className="qt-tag">{STATUS_TAG[statusOf(shown)]}</span>
-        {onOpenHistory && (
-          <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link ml-auto whitespace-nowrap">
-            <span className="qt-history-full">View history</span>
-            <span className="qt-history-short">History</span>
-          </button>
-        )}
+      {/* Selected quarter, centred over the track, with View history at the
+          right end. The two side boxes share the leftover width equally and
+          never shrink below the history link (the left one holds an invisible
+          copy of it), so the group stays centred; when space runs out the group
+          shrinks and wraps, still centred, before it could reach the link. */}
+      <div className="flex items-center gap-x-3">
+        <div className="flex-1 basis-0 flex justify-start">
+          {onOpenHistory && (
+            <span aria-hidden className="qt-link invisible whitespace-nowrap">
+              <span className="qt-history-full">View history</span>
+              <span className="qt-history-short">History</span>
+            </span>
+          )}
+        </div>
+        <div className="min-w-0 flex items-center justify-center gap-x-3 gap-y-1 flex-wrap">
+          <span className="text-[13px] leading-5 font-semibold">{fullName(shown)}</span>
+          <span className="qt-muted qt-status text-[11px]">{quarterMonthRange(shown)}</span>
+          <span className="qt-tag">{STATUS_TAG[statusOf(shown)]}</span>
+        </div>
+        <div className="flex-1 basis-0 flex justify-end">
+          {onOpenHistory && (
+            <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link whitespace-nowrap">
+              <span className="qt-history-full">View history</span>
+              <span className="qt-history-short">History</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Track. The scroll box clips at its padding edge, and the end points'
@@ -277,8 +293,8 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
         </div>
       </div>
 
-      {/* Legend */}
-      <div aria-hidden className="qt-muted flex items-center gap-4 text-[10px] leading-[14px]">
+      {/* Legend, centred under the track */}
+      <div aria-hidden className="qt-muted flex items-center justify-center gap-4 text-[10px] leading-[14px]">
         <span className="flex items-center gap-1.5">
           <span className="qt-key qt-line-observed" />
           Observed
