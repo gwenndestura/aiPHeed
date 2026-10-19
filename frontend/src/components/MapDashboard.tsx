@@ -109,6 +109,9 @@ const MIN_MAP_H = 96;
 // Phones held sideways: wide enough for the legend beside the search box.
 const WIDE_COMPACT_W = 600;
 const SEARCH_MAX_W = 420;
+// Room kept for the compact legend beside the search box (about 285px with
+// Low / High / No forecast, plus a gap).
+const LEGEND_BESIDE_W = 300;
 // Tablets: width of the closed panel's edge tab.
 const EDGE_TAB_W = 44;
 
@@ -136,6 +139,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   // The tour's news step holds the News articles analyzed card open.
   const [tourNews, setTourNews] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  // Height of the timeline (it wraps on narrow widths): the legend sits above it.
+  const timelineRowRef = useRef<HTMLDivElement>(null);
+  const [timelineRowH, setTimelineRowH] = useState(0);
   const [rootH, setRootH] = useState(0);
   const [rootW, setRootW] = useState(0);
 
@@ -279,6 +285,17 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       setRootH(el.clientHeight);
       setRootW(el.clientWidth);
     };
+    read();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [compact]);
+
+  useLayoutEffect(() => {
+    const el = timelineRowRef.current;
+    if (!el) return;
+    const read = () => setTimelineRowH(el.offsetHeight);
     read();
     if (typeof ResizeObserver === "undefined") return;
     const ro = new ResizeObserver(read);
@@ -499,7 +516,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
         <div
           className="absolute z-[1002]"
-          style={wideCompact ? { left: EDGE, top: EDGE, width: Math.min(SEARCH_MAX_W, rootW - 2 * EDGE - 200) } : { left: EDGE, right: EDGE, top: EDGE }}
+          style={wideCompact ? { left: EDGE, top: EDGE, width: Math.min(SEARCH_MAX_W, rootW - 2 * EDGE - LEGEND_BESIDE_W) } : { left: EDGE, right: EDGE, top: EDGE }}
           data-tour="search"
         >
           <MapSearch fill />
@@ -659,9 +676,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       />
 
       {/* Bottom of the visible map: the quarter bar spanning the gap between the
-          sidebars (same 12px inset as the search box), with the risk
-          legend above its left edge (layout in index.css, .qt-row). */}
+          sidebars (same 12px inset as the search box; layout in index.css, .qt-row). */}
       <div
+        ref={timelineRowRef}
         className="qt-row absolute z-[1001] pointer-events-none transition-[left,right] duration-300"
         style={{
           left: (leftCollapsed ? closedW : COL_W) + 12,
@@ -670,9 +687,6 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         }}
       >
         <div className="qt-row-stack">
-          <div className="qt-row-legend pointer-events-auto animate-fade-in" data-tour="legend">
-            <MapLegend />
-          </div>
           {currentQuarter && (
             <div className="qt-row-bar pointer-events-auto animate-slide-up" data-tour="timeline">
               <QuarterTimeSlider
@@ -685,6 +699,17 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Risk legend: in the map buttons' column (same width and right edge),
+          just above the right end of the timeline; it moves with the right
+          panel like the buttons. */}
+      <div
+        className="absolute z-[1001] transition-[right] duration-300 animate-fade-in"
+        style={{ right: (rightCollapsed ? closedW : COL_W) + 12, bottom: 12 + timelineRowH + 8 }}
+        data-tour="legend"
+      >
+        <MapLegend />
       </div>
 
       <div className="absolute bottom-2 right-3 z-[1000] text-[9px] text-muted-foreground/70 px-2 py-1">

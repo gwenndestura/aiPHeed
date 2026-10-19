@@ -54,7 +54,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Reading the colours",
       body: ({ cutoff }) =>
-        `Yellow means low risk. Red means high risk: a risk score of ${cutoff} or more, on a scale from 0 to 1.`,
+        `Red means high risk: a score of ${cutoff} or more, on a scale from 0 to 1. Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
       target: () => "legend",
       layout: { sheet: "collapsed" },
     },

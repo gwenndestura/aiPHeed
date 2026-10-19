@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import L from "leaflet";
 import { leafletLayer } from "protomaps-leaflet";
-import { RegionData, MunicipalityData, RISK_COLORS } from "@/data/types";
+import { RegionData, MunicipalityData, RISK_COLORS, NO_DATA_COLOR } from "@/data/types";
 import "leaflet/dist/leaflet.css";
 
 // Self-hosted open basemap — a single Protomaps .pmtiles file built from
@@ -104,7 +104,6 @@ const mixHex = (from: string, to: string, amount: number) => {
   });
 };
 
-const NO_DATA_COLOR = "#6b7280"; // gray for areas without data
 
 // Lakes are drawn in their province's colour, this much darker, so they read
 // as part of the province but clearly not a municipality with its own score.
