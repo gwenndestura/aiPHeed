@@ -34,6 +34,7 @@ from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
 from app.ml.inference import e31_engine as E31
 from app.ml.inference import e41_lead2 as E41L2
+from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,15 @@ def indicator_for(quarter: str) -> dict:
         return INDICATOR
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
-        return rec["indicator"]
+        ind = rec["indicator"]
+        # E65: the record's horizon text describes its issued forecast; a back-test or an earlier forecast of another
+        # quarter was made at its own issue date, so the issue date shown must be that one
+        rows = E41L2.rows_for(quarter) if quarter != rec.get("targetQuarter") and E41L2.governs() else []
+        if rows and "horizon" in ind:
+            what = "back-test estimate" if rows[0]["estimate_kind"] == "backtest" else "earlier forecast"
+            ind = {**ind, "horizon": f"two-quarter-ahead {what} for {quarter}, made as of {rows[0]['origin']} with "
+                                     f"information published before that date"}
+        return ind
     return {"id": "price_pressure_probability", "name": "Food Price Pressure Probability (experimental)",
             "definition": rec["scoreTypes"]["price_pressure_probability"], "unit": "probability (0-1)",
             "horizon": f"Lead 2: issued {rec['origin']} for {rec['targetQuarter']} with information published before "
@@ -936,6 +945,15 @@ def trigger_color(pct: int, direction: str) -> str:
     return "red" if direction == "increases_risk" else "green"
 
 
+def _with_enso(note: str | None, group: str, quarter: str) -> str | None:
+    """E65: the Climate Stress note of an E56/E58 forecast also states the PAGASA El Nino status at the issue date and
+    that it is not a model input (text only; the approved card already renders evidenceNote)."""
+    extra = ENSO.climate_evidence(quarter, E41L2.mode()) if group == "climate" and E41L2.governs() else None
+    if not extra:
+        return note
+    return f"{note} {extra}" if note else extra
+
+
 def explainability(province_code: str, quarter: str) -> dict:
     """
     Grouped SHAP for one province-quarter, ranked and normalised to 100%.
@@ -961,7 +979,8 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
+            "evidenceNote": _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
+                                       d["driver_group"], quarter),
             "newsSignalProportion": d["trigger_proportion"],
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
@@ -1144,8 +1163,15 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     caveat = (_forecast_caveat(province_code, comp, contributing,
                                [LABEL_OF.get(g, g) for g in E41L2.partial_inputs(quarter, province_code)])
               if comp else None)
+    # E65: the official El Nino status known at the issue date, and that the model barely uses ENSO; part of the caveat
+    # when there is one (the sentence still ends with the caveat, E61), else appended to the sentence
+    enso = ENSO.forecast_sentence(quarter, E41L2.mode()) if kind in ("forecast", "earlier_forecast") else None
+    if enso and caveat:
+        caveat = f"{caveat} {enso}"
     if caveat:
         sentence = f"{sentence} {caveat}"
+    elif enso:
+        sentence = f"{sentence} {enso}"
     return {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,

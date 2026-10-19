@@ -1,0 +1,84 @@
+                                                                      condition  rows  T43_LOW  share_LOW  quarters
+                                                              all labelled rows   105       82   0.780952        21
+                                                        regional hunger > 11.3%    70       47   0.671429        14
+                                                         regional hunger >= 20%    25       16   0.640000         5
+                          ENSO El Nino in the quarter or the previous one (ONI)    30       22   0.733333         6
+                                 PAGASA El Nino Alert/Advisory at quarter start    25       18   0.720000         5
+                                provincial palay or corn production YoY <= -10%    55       45   0.818182        16
+                                             hunger > 11.3% AND production drop    38       28   0.736842        11
+                                     hunger > 11.3% AND headline inflation > 4%    31       24   0.774194        11
+hunger > 11.3% AND food YoY >= 4% but below the province threshold and gap rule    10       10   1.000000         6
+{'rows_hunger_high': 70, 'T43_equals_PS_when_hunger_high': 70, 'share_rows_hunger_high': 0.6666666666666666, 'share_rows_hunger_high_2024_2026': 1.0, 'hunger_level_HIGH_vs_LOW_mannwhitney_p': 0.11140474587634062, 'mean_H_HIGH': 19.797826086956523, 'mean_H_LOW': 18.364893617021277}
+province quarter enso_phase_q enso_intensity_q  pagasa_status_at_quarter_start  H_all     F   HL     G  thr_food  thr_gap  PS  T43  palay_yoy  corn_yoy
+  Cavite 2023-Q2      NEUTRAL          NEUTRAL                             0.5   11.3  8.10 6.23  1.87      4.71     0.74   1    0      -7.15     29.76
+  Cavite 2023-Q3      EL_NINO         MODERATE                             1.0   10.3  8.67 6.00  2.67      4.71     0.74   1    0     -12.94     -2.15
+  Cavite 2023-Q4      EL_NINO           STRONG                             2.0   14.3  3.60 4.57 -0.97      4.71     0.74   0    0      -7.39     -6.24
+  Cavite 2024-Q1      EL_NINO           STRONG                             2.0   15.3  1.93 2.23 -0.30      4.71     0.74   0    0     -22.48     -4.84
+  Cavite 2024-Q2      NEUTRAL          NEUTRAL                             2.0   19.6  3.90 2.47  1.43      4.71     0.74   1    1     -18.88    -72.00
+  Cavite 2024-Q3      NEUTRAL          NEUTRAL                            -0.5   18.1  1.20 1.30 -0.10      4.71     0.74   0    0     -21.00     20.17
+  Laguna 2023-Q2      NEUTRAL          NEUTRAL                             0.5   11.3  6.10 3.47  2.63      6.05     0.61   1    0      28.40    -62.20
+  Laguna 2023-Q3      EL_NINO         MODERATE                             1.0   10.3  6.17 3.17  3.00      6.05     0.61   1    0      -7.29    -21.70
+  Laguna 2023-Q4      EL_NINO           STRONG                             2.0   14.3  4.03 2.57  1.47      6.05     0.61   1    1      14.94    182.08
+  Laguna 2024-Q1      EL_NINO           STRONG                             2.0   15.3  2.70 2.33  0.37      6.05     0.61   0    0      -2.77     -1.10
+  Laguna 2024-Q2      NEUTRAL          NEUTRAL                             2.0   19.6  3.67 2.57  1.10      6.05     0.61   1    1     -18.47    -40.16
+  Laguna 2024-Q3      NEUTRAL          NEUTRAL                            -0.5   18.1  3.60 3.17  0.43      6.05     0.61   0    0      -2.94     43.51
+  Quezon 2023-Q2      NEUTRAL          NEUTRAL                             0.5   11.3  3.77 4.83 -1.07      6.24    -0.56   0    0       2.06      4.95
+  Quezon 2023-Q3      EL_NINO         MODERATE                             1.0   10.3  4.47 2.93  1.53      6.24    -0.56   1    0      21.48    -15.77
+  Quezon 2023-Q4      EL_NINO           STRONG                             2.0   14.3  1.40 1.77 -0.37      6.24    -0.56   1    1      24.95      0.54
+  Quezon 2024-Q1      EL_NINO           STRONG                             2.0   15.3 -0.20 0.97 -1.17      6.24    -0.56   0    0     -21.78      1.81
+  Quezon 2024-Q2      NEUTRAL          NEUTRAL                             2.0   19.6  8.63 4.80  3.83      6.24    -0.56   1    1     -20.07    -16.76
+  Quezon 2024-Q3      NEUTRAL          NEUTRAL                            -0.5   18.1  7.50 4.70  2.80      6.24    -0.56   1    1     -16.91    -19.41
+   Rizal 2023-Q2      NEUTRAL          NEUTRAL                             0.5   11.3  9.10 7.47  1.63      7.10     0.92   1    0       0.88     -0.96
+   Rizal 2023-Q3      EL_NINO         MODERATE                             1.0   10.3  9.90 7.40  2.50      7.10     0.92   1    0      76.68    -45.91
+   Rizal 2023-Q4      EL_NINO           STRONG                             2.0   14.3  4.40 4.97 -0.57      7.10     0.92   0    0       3.96     11.69
+   Rizal 2024-Q1      EL_NINO           STRONG                             2.0   15.3  3.07 4.90 -1.83      7.10     0.92   0    0     -61.82     -8.00
+   Rizal 2024-Q2      NEUTRAL          NEUTRAL                             2.0   19.6  4.70 5.03 -0.33      7.10     0.92   0    0      -1.34    -12.16
+   Rizal 2024-Q3      NEUTRAL          NEUTRAL                            -0.5   18.1  2.00 4.43 -2.43      7.10     0.92   0    0     -51.09     48.19
+Batangas 2023-Q2      NEUTRAL          NEUTRAL                             0.5   11.3  8.00 7.97  0.03      7.15     0.66   1    0      78.25    112.45
+Batangas 2023-Q3      EL_NINO         MODERATE                             1.0   10.3  8.70 6.23  2.47      7.15     0.66   1    0     -29.46    -49.32
+Batangas 2023-Q4      EL_NINO           STRONG                             2.0   14.3  5.53 4.77  0.77      7.15     0.66   1    1      26.37     37.72
+Batangas 2024-Q1      EL_NINO           STRONG                             2.0   15.3  2.80 3.77 -0.97      7.15     0.66   0    0     -22.11    -10.43
+Batangas 2024-Q2      NEUTRAL          NEUTRAL                             2.0   19.6  4.40 3.67  0.73      7.15     0.66   1    1     -38.01    -47.67
+Batangas 2024-Q3      NEUTRAL          NEUTRAL                            -0.5   18.1  2.20 2.60 -0.40      7.15     0.66   0    0     -57.21    -25.17
+province quarter enso_phase_q enso_intensity_q  H_all     F   HL     G  thr_food  thr_gap  PS  T43  palay_yoy  corn_yoy
+  Cavite 2025-Q4      LA_NINA             WEAK   16.7  1.90 2.60 -0.70      4.71     0.74   0    0       4.98    -30.61
+  Cavite 2026-Q1      NEUTRAL          NEUTRAL   22.4  1.47 2.67 -1.20      4.71     0.74   0    0     -36.20     11.21
+  Cavite 2026-Q2      EL_NINO             WEAK   17.3  4.73 6.63 -1.90      4.71     0.74   1    1     -18.16     29.46
+  Cavite 2026-Q3      EL_NINO           STRONG   23.6  3.83 5.23 -1.40      4.71     0.74   0    0        NaN       NaN
+  Laguna 2025-Q4      LA_NINA             WEAK   16.7  2.77 2.23  0.53      6.05     0.61   0    0      38.21    -31.52
+  Laguna 2026-Q1      NEUTRAL          NEUTRAL   22.4  1.67 4.27 -2.60      6.05     0.61   0    0     -12.70    -33.46
+  Laguna 2026-Q2      EL_NINO             WEAK   17.3  3.97 8.03 -4.07      6.05     0.61   0    0     -32.21    -83.92
+  Laguna 2026-Q3      EL_NINO           STRONG   23.6  3.63 7.33 -3.70      6.05     0.61   0    0        NaN       NaN
+  Quezon 2025-Q4      LA_NINA             WEAK   16.7  1.20 1.97 -0.77      6.24    -0.56   0    0      19.36    -12.65
+  Quezon 2026-Q1      NEUTRAL          NEUTRAL   22.4 -0.03 1.83 -1.87      6.24    -0.56   0    0     -20.10    -13.30
+  Quezon 2026-Q2      EL_NINO             WEAK   17.3  4.87 7.20 -2.33      6.24    -0.56   0    0      51.35     -7.24
+  Quezon 2026-Q3      EL_NINO           STRONG   23.6  4.53 6.50 -1.97      6.24    -0.56   0    0        NaN       NaN
+   Rizal 2025-Q4      LA_NINA             WEAK   16.7  1.23 2.53 -1.30      7.10     0.92   0    0      32.10    -36.85
+   Rizal 2026-Q1      NEUTRAL          NEUTRAL   22.4  1.27 3.50 -2.23      7.10     0.92   0    0       1.75     65.13
+   Rizal 2026-Q2      EL_NINO             WEAK   17.3  4.33 7.53 -3.20      7.10     0.92   0    0      24.26    233.04
+   Rizal 2026-Q3      EL_NINO           STRONG   23.6  4.07 7.10 -3.03      7.10     0.92   0    0        NaN       NaN
+Batangas 2025-Q4      LA_NINA             WEAK   16.7 -0.50 0.87 -1.37      7.15     0.66   0    0      -9.26    -24.26
+Batangas 2026-Q1      NEUTRAL          NEUTRAL   22.4 -0.13 1.57 -1.70      7.15     0.66   0    0     -58.99     27.72
+Batangas 2026-Q2      EL_NINO             WEAK   17.3  1.43 4.60 -3.17      7.15     0.66   0    0     -30.63     10.70
+Batangas 2026-Q3      EL_NINO           STRONG   23.6  0.73 4.80 -4.07      7.15     0.66   0    0        NaN       NaN
+issue_date  target province  pagasa_el_nino_advisory  latest_hunger  palay_yoy_prevq  corn_yoy_prevq  local_production_drop                                                  CRFS_X
+2024-01-01 2024-Q2   Cavite                     True           10.3       -12.936579       -2.151119                   True                                                    none
+2024-01-01 2024-Q2   Laguna                     True           10.3        -7.292225      -21.695876                   True                                                    none
+2024-01-01 2024-Q2   Quezon                     True           10.3        21.475689      -15.770609                   True                                                    none
+2024-01-01 2024-Q2    Rizal                     True           10.3        76.684006      -45.906336                   True                                                    none
+2024-01-01 2024-Q2 Batangas                     True           10.3       -29.455656      -49.315099                   True                                                    none
+2024-04-01 2024-Q3   Cavite                     True           14.3        -7.388300       -6.238331                  False                         CLIMATE WATCH (hazard + hunger)
+2024-04-01 2024-Q3   Laguna                     True           14.3        14.942240      182.083863                  False                         CLIMATE WATCH (hazard + hunger)
+2024-04-01 2024-Q3   Quezon                     True           14.3        24.954626        0.540339                  False                         CLIMATE WATCH (hazard + hunger)
+2024-04-01 2024-Q3    Rizal                     True           14.3         3.960139       11.694301                  False                         CLIMATE WATCH (hazard + hunger)
+2024-04-01 2024-Q3 Batangas                     True           14.3        26.370332       37.715084                  False                         CLIMATE WATCH (hazard + hunger)
+2026-07-01 2026-Q4   Cavite                     True           22.4       -36.204461       11.214431                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-07-01 2026-Q4   Laguna                     True           22.4       -12.696311      -33.455925                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-07-01 2026-Q4   Quezon                     True           22.4       -20.104029      -13.299939                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-07-01 2026-Q4    Rizal                     True           22.4         1.748569       65.134166                  False                         CLIMATE WATCH (hazard + hunger)
+2026-07-01 2026-Q4 Batangas                     True           22.4       -58.991431       27.718631                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-10-01 2027-Q1   Cavite                     True           17.3       -18.158868       29.455663                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-10-01 2027-Q1   Laguna                     True           17.3       -32.205940      -83.919399                   True CLIMATE WATCH (hazard + hunger + local production drop)
+2026-10-01 2027-Q1   Quezon                     True           17.3        51.345554       -7.242913                  False                         CLIMATE WATCH (hazard + hunger)
+2026-10-01 2027-Q1    Rizal                     True           17.3        24.261588      233.041244                  False                         CLIMATE WATCH (hazard + hunger)
+2026-10-01 2027-Q1 Batangas                     True           17.3       -30.629729       10.699723                   True CLIMATE WATCH (hazard + hunger + local production drop)
