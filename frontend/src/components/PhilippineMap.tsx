@@ -187,6 +187,8 @@ export function PhilippineMap({
   // Read when a fit starts, so a fit uses the layout of that moment.
   const fitInsetsRef = useRef(fitInsets);
   fitInsetsRef.current = fitInsets;
+  // The municipality the map last zoomed to (to zoom back out when cleared).
+  const focusedMuniRef = useRef<string | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const provincesLayerRef = useRef<L.GeoJSON | null>(null);
   const municipalitiesLayerRef = useRef<L.GeoJSON | null>(null);
@@ -261,6 +263,24 @@ export function PhilippineMap({
       color: isSelected ? AMBER : "#1f2937",
       weight: isSelected ? 2.5 : 1,
     };
+  }, []);
+
+  // Zoom to the selected city / municipality, once its shape is on the map
+  // (the province's layer is built after the province zoom, so this runs
+  // both when the selection changes and right after the layer is built).
+  const focusSelectedMunicipality = useCallback(() => {
+    const map = mapRef.current;
+    const layerGroup = municipalitiesLayerRef.current;
+    const sel = selectedMuniRef.current;
+    if (!map || !layerGroup || !sel || focusedMuniRef.current === sel.id) return;
+    let target: L.Polygon | null = null;
+    layerGroup.eachLayer((layer) => {
+      const name = ((layer as L.Layer & { feature?: GeoJSON.Feature }).feature?.properties?.name || "").toLowerCase();
+      if (muniKey(sel.provinceId, name) === muniKey(sel.provinceId, sel.name.toLowerCase())) target = layer as L.Polygon;
+    });
+    if (!target) return;
+    focusedMuniRef.current = sel.id;
+    map.flyToBounds((target as L.Polygon).getBounds(), { ...fitPadding(fitInsetsRef.current), duration: 0.6, maxZoom: 12 });
   }, []);
 
   const clearMunicipalities = useCallback(() => {
@@ -446,7 +466,8 @@ export function PhilippineMap({
       labelCount++;
     });
     municipalityLabelsRef.current = labels;
-  }, [muniMap, clearMunicipalities, getProvinceStyle]);
+    focusSelectedMunicipality();
+  }, [muniMap, clearMunicipalities, getProvinceStyle, focusSelectedMunicipality]);
 
   // Pulse markers + permanent name labels, one per province. Rebuildable
   // (not just run-once): province data arrives from the network, so this is
@@ -872,6 +893,28 @@ export function PhilippineMap({
       resetZoom();
     }
   }, [selectedRegion, zoomToProvince, resetZoom]);
+
+  // A city / municipality picked (search or map): zoom to it. Cleared while
+  // its province stays selected: back out to the province.
+  useEffect(() => {
+    if (selectedMunicipality) {
+      focusSelectedMunicipality();
+      return;
+    }
+    if (focusedMuniRef.current && selectedRegion) {
+      focusedMuniRef.current = null;
+      const map = mapRef.current;
+      let bounds: L.LatLngBounds | null = null;
+      provincesLayerRef.current?.eachLayer((layer) => {
+        if ((layer as L.Layer & { feature?: GeoJSON.Feature }).feature?.properties?.id === selectedRegion.id) bounds = (layer as L.Polygon).getBounds();
+      });
+      if (map && bounds) map.flyToBounds(bounds, { ...fitPadding(fitInsetsRef.current), duration: 0.6, maxZoom: 11 });
+    } else {
+      focusedMuniRef.current = null;
+    }
+    // Only when the selection itself changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMunicipality?.id]);
 
   // Re-style municipalities when selection changes
   useEffect(() => {

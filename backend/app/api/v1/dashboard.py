@@ -29,6 +29,7 @@ from app.schemas.public import (
 from app.services import dashboard as svc
 from app.services import reference as ref
 from app.services import review as rv
+from app.services import search as search_svc
 
 router = APIRouter()
 
@@ -170,23 +171,13 @@ async def get_municipalities(
 
 @router.get("/search", response_model=SearchResponse)
 async def search(
-    q: str = Query(..., min_length=1, description="Substring of a province or LGU name"),
-    limit: int = Query(10, ge=1, le=50),
+    q: str = Query(..., min_length=1, max_length=100, description="Name of a province, city or municipality"),
+    limit: int = Query(search_svc.DEFAULT_LIMIT, ge=1, le=50),
 ) -> SearchResponse:
-    """Substring match over the five provinces and 142 LGUs."""
-    needle = q.strip().lower()
-    hits = [
-        {"type": "province", "id": slug, "name": meta["name"]}
-        for slug, meta in ref.PROVINCES.items()
-        if needle in meta["name"].lower()
-    ]
-    roster = ref.lgu_roster()
-    for _, r in roster[roster["lgu_name"].str.lower().str.contains(needle, regex=False)].iterrows():
-        hits.append({
-            "type": "municipality",
-            "id": r["id"],
-            "name": r["lgu_name"],
-            "provinceId": r["provinceId"],
-            "provinceName": r["province_name"],
-        })
-    return SearchResponse(data=hits[:limit])
+    """
+    The five provinces and 142 LGUs, ranked: exact, starts with, a word
+    starts with, contains, close spelling (accents, "city", "sta"/"sto" and
+    punctuation ignored). When nothing matches, the nearest names come back
+    flagged `suggestion` (app/services/search.py).
+    """
+    return SearchResponse(data=search_svc.search(q, limit))

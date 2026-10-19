@@ -216,8 +216,12 @@ export interface SearchHit {
   type: "province" | "municipality";
   id: string;
   name: string;
+  /** "Province" | "City" | "Municipality" */
+  classification?: string | null;
   provinceId?: string | null;
   provinceName?: string | null;
+  /** Nothing matched closely: one of the nearest names ("Did you mean"). */
+  suggestion?: boolean;
 }
 
 export interface SearchResponse {

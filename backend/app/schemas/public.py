@@ -185,8 +185,11 @@ class SearchHit(BaseModel):
     type: str  # "province" | "municipality"
     id: str
     name: str
+    classification: str | None = None  # "Province" | "City" | "Municipality"
     provinceId: str | None = None
     provinceName: str | None = None
+    # Nothing matched closely: one of the nearest names ("Did you mean").
+    suggestion: bool = False
 
 
 class SearchResponse(BaseModel):

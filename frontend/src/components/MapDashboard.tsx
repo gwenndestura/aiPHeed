@@ -228,24 +228,33 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     setSelectedMunicipality(null);
   }, [noData]);
 
+  // Search (and the Data page) focus a province, or a city / municipality
+  // with its province. The request is kept as pending and resolved as the
+  // data arrives: the province once the province list is in (it reloads on a
+  // quarter change), then the municipality once that province's list is in.
+  // The listener is added once and only records the request: re-adding it
+  // whenever the data changed left a moment in which a pick fired from the
+  // search box's own effect found no listener and was lost.
+  const [pendingMunicipalityId, setPendingMunicipalityId] = useState<string | null>(null);
+  const [pendingProvinceId, setPendingProvinceId] = useState<string | null>(null);
   useEffect(() => {
     const onFocus = (e: Event) => {
       const detail = (e as CustomEvent).detail as { provinceId?: string; municipalityId?: string };
-      if (detail.provinceId) {
-        const r = regionsData.find((rr) => rr.id === detail.provinceId);
-        if (r) setSelectedRegion(r);
-      }
-      // A municipality focus needs its province selected first (the roster
-      // loads per-province); resolved once that province's data is in.
-      if (detail.municipalityId) {
-        window.dispatchEvent(
-          new CustomEvent("aipheed:pending-municipality", { detail: { municipalityId: detail.municipalityId } })
-        );
-      }
+      setPendingProvinceId(detail.provinceId ?? null);
+      setPendingMunicipalityId(detail.municipalityId ?? null);
     };
     window.addEventListener("aipheed:focus-region", onFocus as EventListener);
     return () => window.removeEventListener("aipheed:focus-region", onFocus as EventListener);
-  }, [regionsData]);
+  }, []);
+  useEffect(() => {
+    if (!pendingProvinceId) return;
+    const r = regionsData.find((rr) => rr.id === pendingProvinceId);
+    if (!r) return;
+    // Another province: its municipality from before no longer applies.
+    if (selectedRegion?.id !== r.id) setSelectedMunicipality(null);
+    setSelectedRegion(r);
+    setPendingProvinceId(null);
+  }, [pendingProvinceId, regionsData, selectedRegion]);
 
   // The Data page hands off a row click via sessionStorage (setItem before
   // navigating here) rather than a live event, since this component isn't
@@ -266,14 +275,26 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   }, [regionsData]);
 
   useEffect(() => {
-    const onPending = (e: Event) => {
-      const detail = (e as CustomEvent).detail as { municipalityId?: string };
-      const m = municipalitiesData.find((mm) => mm.id === detail.municipalityId);
-      if (m) setSelectedMunicipality(m);
-    };
-    window.addEventListener("aipheed:pending-municipality", onPending as EventListener);
-    return () => window.removeEventListener("aipheed:pending-municipality", onPending as EventListener);
-  }, [municipalitiesData]);
+    if (!pendingMunicipalityId) return;
+    const m = municipalitiesData.find((mm) => mm.id === pendingMunicipalityId);
+    if (!m) return;
+    setSelectedMunicipality(m);
+    setPendingMunicipalityId(null);
+    // Its details: the Summary panel (tablets: closing Why; phones: the
+    // sheet's Summary tab, opened halfway below).
+    if (compact) {
+      setSheetTab("summary");
+    } else {
+      setLeftCollapsed(false);
+      if (medium) setRightCollapsed(true);
+    }
+  }, [pendingMunicipalityId, municipalitiesData, compact, medium]);
+
+  // Phones: a municipality picked on the map or from search opens the sheet halfway.
+  useEffect(() => {
+    if (!compact || !selectedMunicipality) return;
+    setSheetSnap((s) => (s === "collapsed" ? "half" : s));
+  }, [compact, selectedMunicipality]);
 
   // ─── Layout ───
   // Height of the map area, for the sheet's three heights. Re-attached when

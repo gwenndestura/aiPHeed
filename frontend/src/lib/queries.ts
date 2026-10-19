@@ -123,7 +123,7 @@ export function useNews(scope: Scope, id: string, quarter?: string, page = 1, pa
 export function useSearch(q: string) {
   return useQuery({
     queryKey: ["search", q],
-    queryFn: () => api.get<SearchResponse>("/api/v1/search", { q, limit: 10 }, { auth: false }),
+    queryFn: () => api.get<SearchResponse>("/api/v1/search", { q, limit: 8 }, { auth: false }),
     enabled: q.trim().length > 0,
     staleTime: 5 * 60 * 1000,
   });
