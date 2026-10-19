@@ -824,6 +824,12 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "disaggregationLabel": r["disaggregation_label"],
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
+            # E64 (Objective 3): what this relative index is built from, so every ranking traces to its model run
+            "provinceEstimate": None if pd.isna(r.get("province_probability")) else r.get("province_probability"),
+            "provinceEstimateSource": r.get("estimate_source"),
+            "vulnerabilityIndex": None if pd.isna(r.get("vulnerability_index")) else r.get("vulnerability_index"),
+            "rankingMethod": r.get("ranking_method"),
+            "rankingRowsSha256": r.get("rows_sha256"),
         })
     rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
@@ -1059,6 +1065,7 @@ def explainability_region(quarter: str) -> dict:
 
 # E52: what each experimental candidate's probability is of, in plain words
 CANDIDATE_EVENTS = {
+    "e64": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e58": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e56": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e55": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
@@ -1256,8 +1263,9 @@ def _forecast_caveat(province_code: str | None, comp: dict, shown: list[dict], p
         out.append(f"Some {', '.join(partial)} figures were not yet published when the forecast was issued; the "
                    f"model's effect for {'that group' if len(partial) == 1 else 'those groups'} partly or wholly reflects "
                    f"how it handles a missing figure, not an observed value.")
-    if comp["price"] < E61_LOW_PRICE_BACKTEST["cutoff"]:
-        b = E61_LOW_PRICE_BACKTEST
+    # E64: a record may carry its own back-test count for low price-part values (the served candidate's, not E56's)
+    b = (E41L2.record().get("assessment") or {}).get("lowPriceBacktest") or E61_LOW_PRICE_BACKTEST
+    if comp["price"] < b["cutoff"]:
         out.append(f"In back-tests, {b['high']} of {b['n']} price-pressure probabilities below "
                    f"{b['cutoff']:.0%} were followed by HIGH, so a low value can miss emerging stress; treat it "
                    f"as uncertain.")
@@ -1747,8 +1755,29 @@ def _news_pool() -> list[dict]:
     return pool
 
 
+@functools.lru_cache(maxsize=1)
+def _news_pool_v3() -> list[dict]:
+    """E64: the improved news pipeline (E31 + E60 corpora, classifier v2, syndication de-duplication) as the feed pool,
+    used when the e64 candidate is enabled. Same row shape as _news_pool; relevance = the classifier v2 trigger."""
+    from app.news import pipeline_v3 as P3
+
+    codes = {meta["code"]: meta["name"] for meta in ref.PROVINCES.values()}
+    pool = [{"key": a["article_key"], "title": a["title"], "outlet": a["outlet"], "date": a["ph_date"],
+             "quarter": a["quarter"], "province_code": a["province_code"], "province": codes[a["province_code"]],
+             "link": a["link"], "status": "classifier_v2", "relevance": f"V2_{a['trigger']}", "triggers": [a["trigger"]],
+             "retrospective": str(a.get("first_seen_at") or "")[:10] > a["ph_date"],
+             "published_ph": a["published_ph"]}
+            for a in P3.admitted() if a["province_code"] in codes]
+    pool.sort(key=lambda r: r["published_ph"], reverse=True)
+    return pool
+
+
+def _feed_pool() -> list[dict]:
+    return _news_pool_v3() if E41L2.mode() == "e64" else _news_pool()
+
+
 def _feed_window(province_code: str | None, ev_q: str) -> tuple[list[dict], list[str]]:
-    pool = [r for r in _news_pool() if province_code is None or r["province_code"] == province_code]
+    pool = [r for r in _feed_pool() if province_code is None or r["province_code"] == province_code]
     quarters, rows = [], []
     for back in range(FEED_MAX_BACK + 1):
         quarters.append(_shift_q(ev_q, -back))
@@ -1773,22 +1802,28 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
         counts[k] = counts.get(k, 0) + 1
     labels = list(counts)
     pcts = _integer_shares([counts[k] for k in labels])
-    names = {**E31_TOPICS, "TRIGGER": ("trigger_match", "Food-stress trigger keyword match (not validated)")}
+    names = {**E31_TOPICS, "TRIGGER": ("trigger_match", "Food-stress trigger keyword match (not validated)"),
+             **{f"V2_{g}": (g, lab) for g, lab in TRIGGER_LABELS.items()}}
     topics = [{"key": names[k][0], "label": names[k][1], "count": counts[k], "pct": p} for k, p in zip(labels, pcts)]
     start = (page - 1) * page_size
+    relevance_label = {"validated": "Validated food-stress article (rule R1.1)",
+                       "trigger_match": "Trigger keyword match (not validated by rule R1.1)",
+                       "classifier_v2": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a "
+                                        "bare topic word)"}
     data = [{"id": r["key"], "title": r["title"], "source": r["outlet"], "date": r["date"], "url": r["link"],
              "excerpt": "", "topicKey": names[r["relevance"] or "TRIGGER"][0],
              "topicLabel": names[r["relevance"] or "TRIGGER"][1], "relevanceScore": None,
              "relevanceStatus": r["status"],
-             "relevanceLabel": ("Validated food-stress article (rule R1.1)" if r["status"] == "validated"
-                                else "Trigger keyword match (not validated by rule R1.1)"),
+             "relevanceLabel": relevance_label[r["status"]],
              "province": r["province"], "provinceCode": r["province_code"],
              "triggers": [TRIGGER_LABELS[t] for t in r["triggers"]], "quarter": r["quarter"],
              "collectedRetrospectively": r["retrospective"]}
             for r in rows[start:start + page_size]]
-    n_val = sum(r["status"] == "validated" for r in rows)
-    note = (f"{len(rows)} article(s) from {', '.join(sorted(window))}: {n_val} validated by rule R1.1 and "
-            f"{len(rows) - n_val} matched by food-stress trigger keywords. Headlines only (the source gives no lead "
+    n_val = sum(r["status"] in ("validated", "classifier_v2") for r in rows)
+    how = (f"{n_val} classified relevant by the E60 classifier v2 (syndicated copies removed)"
+           if E41L2.mode() == "e64" else
+           f"{n_val} validated by rule R1.1 and {len(rows) - n_val} matched by food-stress trigger keywords")
+    note = (f"{len(rows)} article(s) from {', '.join(sorted(window))}: {how}. Headlines only (the source gives no lead "
             f"text). Collected retrospectively in October 2026 by publication date"
             + ("; the window was extended to earlier quarters because the evidence quarter had fewer than "
                f"{FEED_MIN_ARTICLES} articles." if len(window) > 1 else "."))

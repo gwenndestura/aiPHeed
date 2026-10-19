@@ -40,6 +40,8 @@ RECORD_E55 = Path(os.getenv("AIPHEED_E55_RECORD", "data/e55/e55_record.json"))
 RECORD_E56 = Path(os.getenv("AIPHEED_E56_RECORD", "data/e56/e56_record.json"))
 # E58: E56 record + two-signal early warning (ALERT / EMERGING / NONE, direction) per province and quarter
 RECORD_E58 = Path(os.getenv("AIPHEED_E58_RECORD", "data/e58/e58_record.json"))
+# E64: Objectives 1-3 completion candidate (improved news pipeline v3 + E56 procedure family, same Lead-2 target T43)
+RECORD_E64 = Path(os.getenv("AIPHEED_E64_RECORD", "data/e64/e64_record.json"))
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -53,12 +55,13 @@ def mode() -> str:
 
 
 def active() -> bool:
-    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56", "e58")
+    return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56", "e58", "e64")
 
 
 def record() -> dict:
     path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53,
-            "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58}.get(mode(), RECORD)
+            "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58,
+            "e64": RECORD_E64}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     st = path.stat()

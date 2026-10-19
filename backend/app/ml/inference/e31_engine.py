@@ -179,9 +179,15 @@ class E31Disaggregator:
         prob = {f["province_code"]: f["risk_probability"] for f in forecasts} or None
         rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"})
         suff = {f["province_code"]: f.get("data_sufficiency_flag") for f in forecasts}
+        # E64 (Objective 3 traceability): the province estimate each LGU index scales, where it came from, and the index
+        src = {f["province_code"]: {"mode": f.get("mode"), "origin": f.get("origin"), "quarter": f.get("quarter"),
+                                    "score_type": f.get("score_type")} for f in forecasts}
         rows = [{"lgu_code": r["lgu_code"], "risk_index": r["risk_index"], "rank_region": r["rank_region"],
                  "rank_in_province": r["rank_in_province"], "tied": r["tied"],
-                 "disaggregation_label": rk["meaning"], "data_sufficiency_flag": suff.get(r["province_code"])}
+                 "disaggregation_label": rk["meaning"], "data_sufficiency_flag": suff.get(r["province_code"]),
+                 "province_probability": r["province_probability"], "vulnerability_index": r["vulnerability_index"],
+                 "estimate_source": src.get(r["province_code"]), "ranking_method": rk["method"],
+                 "rows_sha256": rk["rows_sha256"]}
                 for r in rk["rows"]]
         return pd.DataFrame(rows)
 

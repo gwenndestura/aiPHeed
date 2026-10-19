@@ -1,0 +1,134 @@
+{
+ "coverage": {
+  "eval_rows": 50,
+  "zero_share_eval": {
+   "n3_cov": 0.34,
+   "n3_market_rw": 0.76,
+   "n3_climate_rw": 0.56,
+   "n3_fish_kill_rw": 0.8,
+   "n3_employment_rw": 0.88,
+   "n3_nat_market_rw": 0.0,
+   "n3_nat_employment_rw": 0.1,
+   "n3_nat_ofw_remittance_rw": 0.1,
+   "n3_src": 0.34
+  },
+  "fssi_missing_eval": 0.34,
+  "fssi_status_all": {
+   "NO_USABLE_EVIDENCE": 53,
+   "LIMITED_SIGNAL": 42,
+   "SUFFICIENT": 20
+  },
+  "admitted_province_articles_by_year": {
+   "2021": 11,
+   "2022": 20,
+   "2023": 32,
+   "2024": 114,
+   "2025": 46,
+   "2026": 68
+  },
+  "province_quarters_with_0_admitted_eval": 17
+ },
+ "association": [
+  {
+   "feature": "n3_cov",
+   "n": 95,
+   "spearman_PS_t2": 0.13,
+   "auc_PS_t2": 0.571,
+   "partial_r_given_F_now": 0.185,
+   "quarter_permutation_p": 0.359
+  },
+  {
+   "feature": "n3_market_rw",
+   "n": 95,
+   "spearman_PS_t2": -0.013,
+   "auc_PS_t2": 0.495,
+   "partial_r_given_F_now": 0.012,
+   "quarter_permutation_p": 0.878
+  },
+  {
+   "feature": "n3_climate_rw",
+   "n": 95,
+   "spearman_PS_t2": 0.156,
+   "auc_PS_t2": 0.576,
+   "partial_r_given_F_now": 0.182,
+   "quarter_permutation_p": 0.296
+  },
+  {
+   "feature": "n3_fish_kill_rw",
+   "n": 95,
+   "spearman_PS_t2": 0.108,
+   "auc_PS_t2": 0.542,
+   "partial_r_given_F_now": 0.171,
+   "quarter_permutation_p": 0.315
+  },
+  {
+   "feature": "n3_employment_rw",
+   "n": 95,
+   "spearman_PS_t2": -0.206,
+   "auc_PS_t2": 0.439,
+   "partial_r_given_F_now": -0.098,
+   "quarter_permutation_p": 0.07
+  },
+  {
+   "feature": "n3_nat_market_rw",
+   "n": 95,
+   "spearman_PS_t2": -0.016,
+   "auc_PS_t2": 0.491,
+   "partial_r_given_F_now": -0.109,
+   "quarter_permutation_p": 0.928
+  },
+  {
+   "feature": "n3_nat_employment_rw",
+   "n": 95,
+   "spearman_PS_t2": 0.356,
+   "auc_PS_t2": 0.706,
+   "partial_r_given_F_now": 0.211,
+   "quarter_permutation_p": 0.043
+  },
+  {
+   "feature": "n3_nat_ofw_remittance_rw",
+   "n": 95,
+   "spearman_PS_t2": -0.008,
+   "auc_PS_t2": 0.495,
+   "partial_r_given_F_now": -0.067,
+   "quarter_permutation_p": 0.976
+  },
+  {
+   "feature": "n3_src",
+   "n": 95,
+   "spearman_PS_t2": 0.126,
+   "auc_PS_t2": 0.569,
+   "partial_r_given_F_now": 0.17,
+   "quarter_permutation_p": 0.379
+  },
+  {
+   "feature": "n3_fssi",
+   "n": 49,
+   "spearman_PS_t2": 0.089,
+   "auc_PS_t2": 0.552,
+   "partial_r_given_F_now": 0.079,
+   "quarter_permutation_p": 0.594
+  }
+ ],
+ "volume": {
+  "n3_market_rw": 0.41,
+  "n3_climate_rw": 0.795,
+  "n3_fish_kill_rw": 0.458,
+  "n3_employment_rw": 0.371,
+  "n3_nat_market_rw": 0.258,
+  "n3_nat_employment_rw": 0.333,
+  "n3_nat_ofw_remittance_rw": 0.261,
+  "n3_src": 0.989,
+  "n3_fssi": 0.183
+ },
+ "timing": {
+  "articles": 673,
+  "median_age_days_at_issue": 49.0,
+  "share_in_last_30_days": 0.281,
+  "note": "the target is 4-6 months after the issue date; an article is on average this old at issue"
+ },
+ "reference_F_now": {
+  "spearman_PS_t2": 0.35,
+  "auc_PS_t2": 0.704
+ }
+}

@@ -188,6 +188,12 @@ class MunicipalitySummary(BaseModel):
     limitedSignal: bool = False
     # E31: the ranking and provenance fields the service returns were silently dropped by the schema
     rankRegion: int | None = None
+    # E64 (Objective 3 traceability): the province estimate the index scales, its source run, the vulnerability index
+    provinceEstimate: float | None = None
+    provinceEstimateSource: dict | None = None
+    vulnerabilityIndex: float | None = None
+    rankingMethod: str | None = None
+    rankingRowsSha256: str | None = None
     rankInProvince: int | None = None
     tied: bool = False
     evidenceStatus: str | None = None

@@ -130,6 +130,23 @@ E58_EXPLAINABILITY_NOTE = E56_EXPLAINABILITY_NOTE + (
 )
 
 
+# E64: the Objectives 1-3 candidate (improved news pipeline v3); the product of the two parts is a model score
+E64_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above "
+    "11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above the "
+    "province's usual 2021-2022 level). The two parts are estimated separately and multiplied; because they are not "
+    "independent, the product is a score, not a tested probability. Hunger is measured for the whole region only, so "
+    "differences between provinces come from food prices. The bars are exact SHAP values (TreeSHAP) of the food-price "
+    "part, in log-odds, grouped into the five factor groups; Market / Prices also includes the projected food "
+    "inflation built from PSA CPI. Each group includes its own news signals from the improved news pipeline (E60 "
+    "classifier v2, articles published before the issue date, syndicated copies removed) when the model uses them; "
+    "news coverage, outlet count and FSSI-v3 are left out of the bars. Employment and OFW figures are national. These "
+    "are model attributions, not causes. Early warning: ALERT when HIGH risk is forecast; EMERGING when food-price "
+    "pressure is likely but the hunger condition is not confirmed; model warnings for DA review, not official "
+    "classifications."
+)
+
+
 NOT_RECORDED_EXPLAINABILITY_NOTE = (
     "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
     "recorded for it, so no factor is described as raising or lowering the score."
@@ -142,6 +159,8 @@ def _served_note(quarter: str | None = None) -> str:
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E64_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e58" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E58_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e56" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):

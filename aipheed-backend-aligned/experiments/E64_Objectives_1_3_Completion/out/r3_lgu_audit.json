@@ -1,0 +1,262 @@
+{
+ "completeness": {
+  "rows_vulnerability": 142,
+  "rows_roster": 142,
+  "unique_codes_vulnerability": 142,
+  "codes_only_in_vulnerability": [],
+  "codes_only_in_roster": [],
+  "per_province_matches_expected": true,
+  "name_mismatches": [],
+  "province_mismatches": [],
+  "psgc_prefix_mismatches": [],
+  "type_mismatches": [],
+  "population_mismatches": [],
+  "area_mismatches": [],
+  "nonpositive_area_or_population": [],
+  "poverty_out_of_range": [],
+  "poverty_value_used_missing": [],
+  "lgu_specific_poverty_estimates": 141,
+  "province_mean_substitutes": 1,
+  "namesakes_across_provinces_resolved_by_psgc": [
+   "rosario"
+  ],
+  "substitute_values_per_province": {
+   "Quezon": 1
+  },
+  "passes": true,
+  "per_province": {
+   "Batangas": 34,
+   "Cavite": 23,
+   "Laguna": 30,
+   "Quezon": 41,
+   "Rizal": 14
+  }
+ },
+ "reproducible_sha": true,
+ "rows_sha256": "fe77da4f42210a6efcc33f70bf34f66ca410ae6adb2e87a59d2cf21d9e790db2",
+ "replica_max_abs_diff": 0.0,
+ "method": "vulnerability = 0.6 x poverty_norm + 0.4 x density_norm (min-max within province); risk_index = province probability x vulnerability, clamp [0,1], 4 dp; competition ranks, ties by PSGC; null probability -> null risk and ranks",
+ "lgus_with_index_exactly_0": [],
+ "within_province_drivers": {
+  "Batangas": {
+   "n": 34,
+   "spearman_vs_density": 0.572,
+   "spearman_vs_poverty": 0.823,
+   "spearman_vs_population": 0.396,
+   "spearman_poverty_vs_density": 0.065
+  },
+  "Cavite": {
+   "n": 23,
+   "spearman_vs_density": 0.137,
+   "spearman_vs_poverty": 0.699,
+   "spearman_vs_population": -0.179,
+   "spearman_poverty_vs_density": -0.447
+  },
+  "Laguna": {
+   "n": 30,
+   "spearman_vs_density": 0.345,
+   "spearman_vs_poverty": 0.386,
+   "spearman_vs_population": 0.385,
+   "spearman_poverty_vs_density": -0.551
+  },
+  "Quezon": {
+   "n": 41,
+   "spearman_vs_density": 0.193,
+   "spearman_vs_poverty": 0.906,
+   "spearman_vs_population": 0.039,
+   "spearman_poverty_vs_density": -0.05
+  },
+  "Rizal": {
+   "n": 14,
+   "spearman_vs_density": 0.345,
+   "spearman_vs_poverty": 0.864,
+   "spearman_vs_population": 0.218,
+   "spearman_poverty_vs_density": -0.046
+  }
+ },
+ "sensitivity_summary": {
+  "0.5/0.5": {
+   "min_spearman": 0.921,
+   "mean_top5_overlap": 4.2
+  },
+  "0.6/0.4 rank-normalised": {
+   "min_spearman": 0.754,
+   "mean_top5_overlap": 3.2
+  },
+  "0.7/0.3": {
+   "min_spearman": 0.959,
+   "mean_top5_overlap": 4.2
+  },
+  "0.8/0.2": {
+   "min_spearman": 0.824,
+   "mean_top5_overlap": 3.8
+  },
+  "density only": {
+   "min_spearman": 0.137,
+   "mean_top5_overlap": 2.0
+  },
+  "poverty only": {
+   "min_spearman": 0.386,
+   "mean_top5_overlap": 3.2
+  }
+ },
+ "stability": [
+  {
+   "quarter": "2024-Q2",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 4,
+   "region_spearman_with_previous_quarter": null,
+   "province_probabilities": {
+    "PH040300000": 0.204,
+    "PH040400000": 0.202,
+    "PH040100000": 0.197,
+    "PH040500000": 0.185,
+    "PH040200000": 0.171
+   }
+  },
+  {
+   "quarter": "2024-Q3",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 4,
+   "region_spearman_with_previous_quarter": 0.733,
+   "province_probabilities": {
+    "PH040300000": 0.814,
+    "PH040100000": 0.66,
+    "PH040200000": 0.513,
+    "PH040400000": 0.28,
+    "PH040500000": 0.246
+   }
+  },
+  {
+   "quarter": "2024-Q4",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 4,
+   "region_spearman_with_previous_quarter": 0.791,
+   "province_probabilities": {
+    "PH040300000": 0.822,
+    "PH040500000": 0.181,
+    "PH040200000": 0.133,
+    "PH040100000": 0.105,
+    "PH040400000": 0.05
+   }
+  },
+  {
+   "quarter": "2025-Q1",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 0,
+   "region_spearman_with_previous_quarter": 0.927,
+   "province_probabilities": {
+    "PH040300000": 0.931,
+    "PH040100000": 0.567,
+    "PH040200000": 0.51,
+    "PH040500000": 0.453,
+    "PH040400000": 0.303
+   }
+  },
+  {
+   "quarter": "2025-Q2",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 2,
+   "region_spearman_with_previous_quarter": 0.978,
+   "province_probabilities": {
+    "PH040300000": 0.958,
+    "PH040200000": 0.765,
+    "PH040100000": 0.721,
+    "PH040500000": 0.594,
+    "PH040400000": 0.458
+   }
+  },
+  {
+   "quarter": "2025-Q3",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 2,
+   "region_spearman_with_previous_quarter": 0.968,
+   "province_probabilities": {
+    "PH040300000": 0.931,
+    "PH040100000": 0.776,
+    "PH040200000": 0.62,
+    "PH040500000": 0.544,
+    "PH040400000": 0.24
+   }
+  },
+  {
+   "quarter": "2025-Q4",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 4,
+   "region_spearman_with_previous_quarter": 0.832,
+   "province_probabilities": {
+    "PH040200000": 0.402,
+    "PH040300000": 0.363,
+    "PH040500000": 0.249,
+    "PH040100000": 0.159,
+    "PH040400000": 0.032
+   }
+  },
+  {
+   "quarter": "2026-Q1",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 2,
+   "region_spearman_with_previous_quarter": 0.574,
+   "province_probabilities": {
+    "PH040500000": 0.412,
+    "PH040300000": 0.278,
+    "PH040200000": 0.275,
+    "PH040400000": 0.274,
+    "PH040100000": 0.24
+   }
+  },
+  {
+   "quarter": "2026-Q2",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 12,
+   "region_spearman_with_previous_quarter": 0.259,
+   "province_probabilities": {
+    "PH040300000": 0.311,
+    "PH040200000": 0.301,
+    "PH040400000": 0.262,
+    "PH040100000": 0.171,
+    "PH040500000": 0.027
+   }
+  },
+  {
+   "quarter": "2026-Q3",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 6,
+   "region_spearman_with_previous_quarter": 0.768,
+   "province_probabilities": {
+    "PH040300000": 0.806,
+    "PH040100000": 0.434,
+    "PH040400000": 0.124,
+    "PH040200000": 0.12,
+    "PH040500000": 0.097
+   }
+  },
+  {
+   "quarter": "2026-Q4",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 19,
+   "region_spearman_with_previous_quarter": 0.779,
+   "province_probabilities": {
+    "PH040300000": 0.285,
+    "PH040200000": 0.061,
+    "PH040100000": 0.024,
+    "PH040500000": 0.019,
+    "PH040400000": 0.005
+   }
+  },
+  {
+   "quarter": "2027-Q1",
+   "within_province_order_equals_vulnerability_order": true,
+   "lgus_tied_within_province_after_4dp_rounding": 12,
+   "region_spearman_with_previous_quarter": 0.785,
+   "province_probabilities": {
+    "PH040300000": 0.146,
+    "PH040100000": 0.109,
+    "PH040200000": 0.07,
+    "PH040400000": 0.05,
+    "PH040500000": 0.043
+   }
+  }
+ ],
+ "independent_municipal_outcomes": "none in the project data: no CBMS, no municipal FIES, no PSA SAE after 2021; the SAE 2021 poverty used here is an input, so it cannot validate the ranking"
+}

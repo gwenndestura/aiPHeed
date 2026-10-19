@@ -1,0 +1,447 @@
+{
+ "region": {
+  "scope": "region",
+  "id": "calabarzon",
+  "name": "CALABARZON",
+  "quarter": "2027-Q1",
+  "quarterLabel": "Q1 2027 (Jan-Mar)",
+  "indicator": {
+   "id": "food_insecurity_risk_probability",
+   "name": "Food-Stress Risk Score (experimental)",
+   "definition": "Model score for HIGH food-insecurity risk in the target quarter (target T43, Chapter I section 1.7): regional SWS hunger (Balance Luzon) above 11.3% AND provincial food-price pressure (PSA food inflation, or food minus headline inflation, above the province's 2021-2022 60th percentile). The regional hunger part and the provincial price part are estimated separately and multiplied; the two conditions are not independent, so the product is a model score, not a tested joint probability. A food-stress risk indicator, not a measured prevalence of household food insecurity.",
+   "unit": "model score (0-1)",
+   "horizon": "two-quarter-ahead forecast issued 2026-10-01 from predictors through 2026-Q3",
+   "source": "SWS hunger (Balance Luzon); PSA provincial food and headline CPI and wholesale rice; typhoon tracks and ENSO; PSA production; PSA LFS (national); BSP remittances and ECB USD/PHP (national); news pipeline v3 (classifier v2, FSSI-v3); official rice-policy orders",
+   "caveat": "Food-stress risk indicator from regional hunger and provincial food prices, not a measured provincial prevalence. Development evidence only (E64). Indicative decision support only."
+  },
+  "riskScore": 0.0836,
+  "riskLevel": "low",
+  "qoqChange": -0.0698,
+  "isForecast": true,
+  "isCurrent": true,
+  "limitedSignal": false,
+  "alert": false,
+  "provinceId": null,
+  "provinceCounts": {
+   "high": 0,
+   "low": 5,
+   "limited": 0,
+   "withheld": 0
+  },
+  "provincesIncluded": 5,
+  "horizon": "forecast",
+  "riskLabel": null,
+  "forecastHorizonQuarters": null,
+  "horizonLabel": null,
+  "confidenceStatement": null,
+  "verificationDate": null,
+  "disaggregationLabel": null,
+  "derivation": "Mean of 5 published province scores; the model has no region-level series.",
+  "estimateKind": null,
+  "observedOutcome": null
+ },
+ "laguna_expl": {
+  "scope": "province",
+  "id": "laguna",
+  "name": "Laguna",
+  "quarter": "2027-Q1",
+  "riskScore": 0.07025763418012257,
+  "triggers": [
+   {
+    "key": "market",
+    "label": "Market / Prices",
+    "share": 0.86,
+    "pct": 86,
+    "signedContribution": -2.0842,
+    "direction": "protective",
+    "status": "contributes",
+    "statusNote": "This factor is a model input and moved this forecast in the direction shown.",
+    "evidenceNote": "Food inflation 2.9% in the latest two months (through 2026-08) vs this province's reference 6.05%; food minus headline -4.0 points; the projected food inflation for the target quarter and rice-policy orders in force are included. Source: PSA CPI, DA/BOC orders. News (classifier v2, published before the issue date): 0 Market / Prices article(s) for this province and 7 national.",
+    "color": "green",
+    "newsSignalProportion": 0.0
+   },
+   {
+    "key": "employment",
+    "label": "Employment",
+    "share": 0.1,
+    "pct": 10,
+    "signedContribution": -0.2455,
+    "direction": "protective",
+    "status": "contributes",
+    "statusNote": "This factor is a model input and moved this forecast in the direction shown.",
+    "evidenceNote": "National unemployment 4.79% (2026-Q2), +0.90 points year on year; national figure. Source: PSA LFS. News (classifier v2, published before the issue date): 0 Employment article(s) for this province and 5 national.",
+    "color": "yellow",
+    "newsSignalProportion": 0.0
+   },
+   {
+    "key": "ofw_remittance",
+    "label": "OFW Remittance",
+    "share": 0.04,
+    "pct": 4,
+    "signedContribution": -0.0967,
+    "direction": "protective",
+    "status": "contributes",
+    "statusNote": "This factor is a model input and moved this forecast in the direction shown.",
+    "evidenceNote": "National cash remittances n/a (not in the dataset at the issue date) year on year (2026-Q2); USD/PHP 8.3%; national figures. Sources: BSP, ECB. News (classifier v2, published before the issue date): 0 OFW Remittance article(s) for this province and 4 national.",
+    "color": "yellow",
+    "newsSignalProportion": 0.0
+   },
+   {
+    "key": "climate",
+    "label": "Climate Stress",
+    "share": 0.0,
+    "pct": 0,
+    "signedContribution": 0.0,
+    "direction": "increases_risk",
+    "status": "no_effect",
+    "statusNote": "This factor is a model input but did not measurably move this forecast.",
+    "evidenceNote": "0 typhoon(s) within 300 km in 2026-Q3; ENSO El Nino in 2026-Q2; palay production -32.2% year on year (2026-Q2). Sources: typhoon tracks, NOAA ONI, PSA. News (classifier v2, published before the issue date): 8 Climate Stress article(s) for this province.",
+    "color": "yellow",
+    "newsSignalProportion": 0.6667
+   },
+   {
+    "key": "fish_kill",
+    "label": "Fish Kill",
+    "share": 0.0,
+    "pct": 0,
+    "signedContribution": 0.0,
+    "direction": "increases_risk",
+    "status": "no_effect",
+    "statusNote": "This factor is a model input but did not measurably move this forecast.",
+    "evidenceNote": "Fisheries production -7.7% and aquaculture -11.5% year on year (2026-Q2); no official fish-kill event series exists. Source: PSA. News (classifier v2, published before the issue date): 4 Fish Kill article(s) for this province.",
+    "color": "yellow",
+    "newsSignalProportion": 0.3333
+   }
+  ],
+  "articleCount": 12,
+  "triggerMatchedArticles": 12,
+  "narrative": "Food-insecurity risk (high regional hunger together with provincial food-price pressure) in Laguna for 2027-Q1 is forecast LOW (model score 7%: the two parts that follow, multiplied together; not a tested probability): regional hunger is likely to stay above 11.3% (96%) and provincial food-price pressure is unlikely (7%); the target needs both. Within the price part, Market / Prices lowered it and Employment lowered it. No early warning: food-price pressure 7%, HIGH-risk score 7%. Food prices in Laguna were 2.9% higher than a year earlier (latest months to 2026-08); the price condition needs more than 6.05% (this province's usual 2021-2022 level) or food prices rising faster than prices overall. Prices overall rose faster (6.9%), which this target counts as less food-price pressure, although it also means a peso buys less. Regional hunger (SWS, Balance Luzon) was 17.3% in 2026-Q2, above the 11.3% line. Slower food inflation does not mean food has become affordable; it means prices are rising more slowly. The model lowered its estimate while national unemployment rose (+0.90 points); this is a statistical pattern in a short history, not evidence that job losses reduce food stress. Some OFW Remittance figures were not yet published when the forecast was issued; the model's effect for that group partly or wholly reflects how it handles a missing figure, not an observed value. In back-tests, 2 of 10 price-pressure probabilities below 20% were followed by HIGH, so a low value can miss emerging stress; treat it as uncertain. This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA food prices), not a measure of household food insecurity. These are model attributions, not causes.",
+  "note": "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above 11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above the province's usual 2021-2022 level). The two parts are estimated separately and multiplied; because they are not independent, the product is a score, not a tested probability. Hunger is measured for the whole region only, so differences between provinces come from food prices. The bars are exact SHAP values (TreeSHAP) of the food-price part, in log-odds, grouped into the five factor groups; Market / Prices also includes the projected food inflation built from PSA CPI. Each group includes its own news signals from the improved news pipeline (E60 classifier v2, articles published before the issue date, syndicated copies removed) when the model uses them; news coverage, outlet count and FSSI-v3 are left out of the bars. Employment and OFW figures are national. These are model attributions, not causes. Early warning: ALERT when HIGH risk is forecast; EMERGING when food-price pressure is likely but the hunger condition is not confirmed; model warnings for DA review, not official classifications.",
+  "summary": {
+   "event": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
+   "targetQuarter": "2027-Q1",
+   "estimateKind": "forecast",
+   "issued": "2026-10-01",
+   "probability": 0.0703,
+   "result": "LOW",
+   "observedOutcome": null,
+   "reasons": [
+    {
+     "key": "market",
+     "label": "Market / Prices",
+     "direction": "protective",
+     "pct": 86,
+     "evidence": "Food inflation 2.9% in the latest two months (through 2026-08) vs this province's reference 6.05%; food minus headline -4.0 points; the projected food inflation for the target quarter and rice-policy orders in force are included. Source: PSA CPI, DA/BOC orders. News (classifier v2, published before the issue date): 0 Market / Prices article(s) for this province and 7 national."
+    },
+    {
+     "key": "employment",
+     "label": "Employment",
+     "direction": "protective",
+     "pct": 10,
+     "evidence": "National unemployment 4.79% (2026-Q2), +0.90 points year on year; national figure. Source: PSA LFS. News (classifier v2, published before the issue date): 0 Employment article(s) for this province and 5 national."
+    }
+   ],
+   "dataStatus": "limited",
+   "dataStatusNote": "Some inputs not available at the issue date for OFW Remittance.",
+   "sentence": "Food-insecurity risk (high regional hunger together with provincial food-price pressure) in Laguna for 2027-Q1 is forecast LOW (model score 7%: the two parts that follow, multiplied together; not a tested probability): regional hunger is likely to stay above 11.3% (96%) and provincial food-price pressure is unlikely (7%); the target needs both. Within the price part, Market / Prices lowered it and Employment lowered it. No early warning: food-price pressure 7%, HIGH-risk score 7%. Food prices in Laguna were 2.9% higher than a year earlier (latest months to 2026-08); the price condition needs more than 6.05% (this province's usual 2021-2022 level) or food prices rising faster than prices overall. Prices overall rose faster (6.9%), which this target counts as less food-price pressure, although it also means a peso buys less. Regional hunger (SWS, Balance Luzon) was 17.3% in 2026-Q2, above the 11.3% line. Slower food inflation does not mean food has become affordable; it means prices are rising more slowly. The model lowered its estimate while national unemployment rose (+0.90 points); this is a statistical pattern in a short history, not evidence that job losses reduce food stress. Some OFW Remittance figures were not yet published when the forecast was issued; the model's effect for that group partly or wholly reflects how it handles a missing figure, not an observed value. In back-tests, 2 of 10 price-pressure probabilities below 20% were followed by HIGH, so a low value can miss emerging stress; treat it as uncertain. This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA food prices), not a measure of household food insecurity.",
+   "earlyWarning": [
+    {
+     "provinceCode": "PH040200000",
+     "province": "Laguna",
+     "level": "NONE",
+     "warn": false,
+     "probabilityHigh": 0.0703,
+     "probabilityPricePressure": 0.073,
+     "direction": "steady",
+     "latestKnownLabel": "LOW",
+     "latestKnownLabelQuarter": "2026-Q2",
+     "latestHunger": 17.3,
+     "latestHungerQuarter": "2026-Q2",
+     "text": "No early warning: food-price pressure 7%, HIGH-risk probability 7%."
+    }
+   ],
+   "components": {
+    "probabilityHungerElevated": 0.9623,
+    "probabilityPricePressure": 0.073,
+    "combination": "product of the two parts (an approximation: the two conditions are not independent; the joint probability cannot exceed the smaller part)"
+   },
+   "caveat": "Food prices in Laguna were 2.9% higher than a year earlier (latest months to 2026-08); the price condition needs more than 6.05% (this province's usual 2021-2022 level) or food prices rising faster than prices overall. Prices overall rose faster (6.9%), which this target counts as less food-price pressure, although it also means a peso buys less. Regional hunger (SWS, Balance Luzon) was 17.3% in 2026-Q2, above the 11.3% line. Slower food inflation does not mean food has become affordable; it means prices are rising more slowly. The model lowered its estimate while national unemployment rose (+0.90 points); this is a statistical pattern in a short history, not evidence that job losses reduce food stress. Some OFW Remittance figures were not yet published when the forecast was issued; the model's effect for that group partly or wholly reflects how it handles a missing figure, not an observed value. In back-tests, 2 of 10 price-pressure probabilities below 20% were followed by HIGH, so a low value can miss emerging stress; treat it as uncertain. This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA food prices), not a measure of household food insecurity."
+  }
+ },
+ "laguna_news": {
+  "scope": "province",
+  "id": "laguna",
+  "quarter": "2027-Q1",
+  "articleCount": 12,
+  "provinceAttributed": 12,
+  "topics": [
+   {
+    "key": "fish_kill",
+    "label": "Fish Kill",
+    "count": 4,
+    "pct": 33
+   },
+   {
+    "key": "climate",
+    "label": "Climate Stress",
+    "count": 8,
+    "pct": 67
+   }
+  ],
+  "data": [
+   {
+    "id": "128dc330d236f1ef58d51cb3ad98d30b998d18768a4b168f6780d8c513e4b298",
+    "title": "Over 20,000 kg of fish die in latest Laguna de Bay fish kill",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-09-01",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNT3NOSjhTYU1rVGwyRFFLZ1dIVTIxSGl4UGdCbTdFTTRFTGx6cnAxU2tweDF4VWEzeEd4M2p2c0dTX3kzQ0k0dnY0bnZ6V19YWFNKc0gySm1SZnBjNkduX01nbFFLSzhPWUNLb09GMWV6dTR0VWpGMVZMT0sxeDhNemxpblVVMXBwYm41M1dDdU05dVdvTEJhV1RjQ3RLZ9IBowFBVV95cUxPMEN1Rmh1djN6ZHYzSjRDUVFYRVN4ZUh6c25Mc0c2WVIxT3hrRUNEemVuVHBKY1pxcDVlcFFrWnJSOVg5bzRUTDZJX21Cd3k0VUtIU2dpcnJ2ZWl1dmRhcHVrS1BXTFMwTDVZOVVvSldUdkVpRTB6UUxfSGpQQXRMSWUxUEswMFUzaUE1RHRDTHA5OUxvc2VsbGJpaFFMT0pRNVNv?oc=5",
+    "excerpt": "",
+    "topicKey": "fish_kill",
+    "topicLabel": "Fish Kill",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Fish Kill"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "c7d23c89c85cad1b2017d376455a1cc57e829de218771021fb989856bd69fe78",
+    "title": "Laguna prov\u2019l gov\u2019t intensifies relief drive to help displaced families affected by flooding",
+    "source": "mb.com.ph",
+    "date": "2026-08-31",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNd3dNR0NZS0huZmM1bVZURlk5UWFUSW9HSmZSREg2WFZUZUlwNTcyMml2QkJ1aFQ2QW0wbmJXamVTX0FTZV9jMUQyQ3cxRXhGUEJDekJSSDRZOTRyanpmRzBOZ1dOOE5hMk1ncHhRZEV6ZkRiQy1IWHZtWUIzVmJCTTNpTFQ0OWxvODhONU1XbjhMSF9LZmItNjBHT2FzaVNyU2c1eDh3bkQ4V1dQUm9CNGdVVTNwd0xmemtz?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "98f731cf8f358be6585a2104f6e9c4fc4bb3fdcd624252ba7725e23e4cf08cab",
+    "title": "Laguna de Bay water level drops, LLDA warns of algal blooms, fish kills",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-08-25",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQWVdjT3Rab2lTZzJVXzB5QVdaLUwwVl9ZbnZzZW1wNDNLektZcmo3Rzl3Uks2Mkd1Tmx6b3MtOUNfc0lPOUpSa0w1MHZlMjNpamxMYXFRTVUtdjJsLWFkWnQ5cWktcGpYcTdFampTbUxBUkdQQTdSXzhtWDRmNVA5b2J0RXpvNXFtYi1MX05BZUpGUnZQZk05MmpCTkd3VU03QW82NGw2b0lKb2_SAbABQVVfeXFMTjJLakcxQV95N3dUTXpsbUdyUkdOY2J0NHBlRFExNU9rSDRIclRBMEExY1B0VmhmNnFUUFk4NGR0WVZQZVUwaXZ5YUFUNHctZ1BGd2s0SU9jRGNmSmw4Vm1Gc1JhcXEwV0dKSTdWWk14WFRrdG9JbEpHM2gyQ0pRVFI4bFZzdGo3X0NVUTB4WXcxc2pJNW9IU1JwdjZtZE9fU1NlTTdMbHJSN1BsQXpnNHg?oc=5",
+    "excerpt": "",
+    "topicKey": "fish_kill",
+    "topicLabel": "Fish Kill",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Fish Kill"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "8bd017df34814fb631d876eaad58edde5011fac95a7596151c6337c7e91887fb",
+    "title": "Laguna gov\u2019t, DSWD extend food assistance to families displaced by storm Maymay, Habagat",
+    "source": "pia.gov.ph",
+    "date": "2026-08-12",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOSElZaDhFSHdlNHQ1eGlXam1DQ2JydUE0UVR0eXZibkNQZk0wTktVOWxVbHVtWlBNVEhMSG5Tb3paRVo0eUhRUUZ3aUFna1d0REJseUlLUHhCLXVPVndnRklHSHAxWjlRWGc1Yk81bndpaU14VHhmM1lxOXZyZkxvWHNKM0ZUSFdHTUV4NHlJZjBzb19qVkN4NWt2X3B1dnNWZndZcWlEdllQSzNpUFl3?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "fc4088a0bc917aebabcbdb7793ec80ecbd462ed6dea262cb440d679aea5e67c0",
+    "title": "Many areas in NCR, Laguna, Rizal under flood threat due to habagat",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-08-09",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPMUlvNGV5NlA1N0dOQk5CR3dISWkxSVlYeFlTd0c3RkswNEhPY0lrZkJkczdyenRBYlAxTjd1V2R4Q0hZcWIxbVIzT3NIT0ZTQlMtVzNxVTlCS3h2SVhDMUd1OGc4aFlMMk53cFJWcm44aWhwTklSTUQ4SzIyN1hQZzYydGxIcDdPUUlxTzlwX2x1YS1MTnAtREpyNW1NNi1YNzF2V9IBqgFBVV95cUxNaW9QV1hjSFBWdzNobVpiR01JUXFBUXNZMVhsLUhjaExLaE5qQU9BNXhEbHJQSzdDV3Y0M0dET2lCQ0xOazlIZ2o3Z3AwTkFoTk84eVo1Nnl0LW9ZVlBieWwzdV9VUGRPN3lwZk53WDZIVk5Td3ZlZkgyUktVSDFjbnUzTGsySlFBUnlJbXIyOElVdnRwQ0t6NlIwY3hBSEo5azNqbVplV2M3dw?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "5a7be1236955a8f7b930d803929bce7d2385fc2df400ad07709f93d6cbfa7219",
+    "title": "Flash flood, landslide force over 100 families to evacuate in Calamba City; 2 kids still missing",
+    "source": "abs-cbn.com",
+    "date": "2026-07-20",
+    "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQaDdnNk53ZEoxVk9xTUs1bE5RekRKZ0kxRndoUFNPN1FFb0lOVEVLSEUteWNFYVFKdERyWWEwSnBHeFpMdmxweDA3VGw1dTQzcGgzTG5pQ0NWd0ZCS1B3bFlpbUF0SmhJX3Jyd3U3THJzN0xZXy1BUGJFYlpEa2gxbUtqUXlYZU9vNUpPRWVQc0JDdkpiSGJyTC0xVHVwRUxGa2V0SDN1LWVkUGh2b19VRXZVajJZUzR4Tktfb0hKcExBcVY3cl9IdGtRYklEYTA3N2wxVHBTcG1kekp6Rzg4?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "9e07774b8f62266daff55a0f8d81d701e7ba8f6250f456fcaed2abe2dc7905df",
+    "title": "2 kids missing after riverbank landslide in Calamba City",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-07-20",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOc3dnMkl1N01MUzB0OWROTnFnQWpXR0NtNkdiYzJhRUlMYWZhZERpYzR1STl5elVUTzd2WndhQXVTS05uWk9uVktrT2NjQzFZN3E1NEx5ME9YM085dV9JRER5aTk5TkdVZEJGWm5wQ2NmcWFLczRlZEhUdXpMYm5GY21CaG5rdG55UGpsdWpQM1pjejVIckJXM3h30gGfAUFVX3lxTE5MM3FtYi1qWG1MVTk0WGtCUmJiTGFjSUEwc1R1UjM5emNzekEwb28yRjNJUUlFaktVWDRPVkVlc25QcVBTZm9hV1BBd0JpU291c2ZpSnMtZ2ZfWjM5Z25wTE9HYzNuRkZBbVh1Y1NucDFjcjlTUHlCQ3hnNFRLOEd4TlN6X1RWaVdwcDFoSy04RGZuNWtCM1ZRblYtWTRIUQ?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "d4a538abf76a8e1e26fb65611b9dff027deb1b168835d1340979350ae380d279",
+    "title": "2 children missing after flash flood sweeps away homes in Laguna; 28 families displaced",
+    "source": "abs-cbn.com",
+    "date": "2026-07-19",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQT3RnRDFwa3hVdmN3ZlFKTlZjdnAxZnVRUGx2cDEzWnBzcm01cnBoZGs3VEoyaDF4Q0FVUkg0aDhoWFplTFE1XzdaQmdqbFpXRFRCQmJoU1VPcURBZmsxdHV6UE5GRXhtLWVwbmpGZ25pMHlneVhuZTNOekNmNFc4Q2VlNmxRMnlPU0xsTHJDN3pySkdqUERpSnFsTmhWUkJ4TDV1NFV3MTJJMkxHRUdBeFJlTkltYjg?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "652ee5b1372c7d9decc6c6f52eae5f78feaa5a09c604cd0e0a300b3a51e4f728",
+    "title": "Laguna Water boosts El Ni\u00f1o response to maintain reliable water supply",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-07-17",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNNmZIRnlXcnE1d3g2Tk81MXZvMUdOUzFEODVlLV9HVE5zVXJTbUhwSnV3SDg1TXoxSjRIWlBtUXltVkkxZi1sV3VrMnEwNHlMcXJmZXhiMzRmWlpVcXZzTElpTHA2OFlUT0NpVFV3U2piVXpFMmV1UWEza3VKN3AzZjhZT01fRGNGRDFRT2xsZkROdmFSM3ZvMzlSdW5PUFFfZi1tQ0xTT2ZSUEp30gGyAUFVX3lxTE81RDJiTHhYMjlwZFZEcUFYZmFTcUI0WTFyMTJQWElPcVJ3Yk5TVGJJMWRQSmJiQ2RSdkhEcGQ2dkhvVWFIanJPV3FzZzFCdXpJMGhLTXl6ZDlKT3U4UnVoOUc2MGRQd3hEU2o1Q0ljUVRqUHE1Q1J2SXlDeGp3WHFyWmMtWkczdVlYVGQ1WlhnTDZQbDlvVFNlR09oVzJkUXpDUWsyVzdLUzNrZDhTX05jZUE?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "5fec02adc1e264b5915edb2986118e71069ba62980b9264ed2e99a418f543aa2",
+    "title": "LLDA probes Laguna de Bay fish kill",
+    "source": "newsinfo.inquirer.net",
+    "date": "2026-07-14",
+    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBqd3R0SjdMc2lhS1NuVFpIWnhHSTBOWHp1cUVpT0lyY0FZbkdzY2d4WEtxR3FLUHJPN0gtOVFURGc1MHJxUkVlYUZxSnZTYWtVSFV5blF1UUlYbUI2MExkOEY5OEZsUmxfLTJCbU1OTzVwUllvamdKWWFqdko0Z9IBgwFBVV95cUxOcU1sblpsYVE0N0J2V1BMOW9NUklhbm1ZSW1FTUREZkhMM2NDOG5lOU9rWU1TOW53eGtFcHdJczVRaDZVb3hrcllRYkFuZlJGRkpZSm80OFNjbTUteVBaRWtMclhWbHh5QnJ5RVl1bGpwRUZjd1gzWjFIbG9aUFlSY0lDUQ?oc=5",
+    "excerpt": "",
+    "topicKey": "fish_kill",
+    "topicLabel": "Fish Kill",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Fish Kill"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "0ff9e09c59b2a45d62fcd648ea0273bbd717c4e601074ac34691be28e3d29d27",
+    "title": "BFAR: 'Flowerhorn' fish in Laguna lake are safe-to-eat golden tilapia",
+    "source": "gmanetwork.com",
+    "date": "2026-07-12",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNbm5Icm5aaF8zRU91Y19lVWUzekpBaUJQa1NGM1FCT0tseWY5LUxqUUJCUldNTllONEh5MTlPM0VyT1N4VUtDSTh5VjlVaW1Td1NzMDlLYnJQRWZGdzZxMUNlR0ZvazFvM3FybnBVQ2RkeUczN3pKWk1VcHFzc21xc053aXdoWHZrRjNickU1c2RPMlVEYXFPemg1anN1dU1JMmR5Z2pPSl83WFY4NkRveFprMG9iRFR4Z3BIcXVzS05OQlZuRHZrVk5tSdIB0AFBVV95cUxPYlU3TnFQVnFzazdCRkNMc2tHRlB0VnI1SFllSEZQalZQSDhOYjZVYXVPVGZkT0pEaFZCN1JBMjZSU0RrTXVUb1dxeWQ0OWpxWDJHSjkzdHQ2aHd6TW5mM1BneUxTeXRnWmEtTlRSTnc0RndFUmU3OVFQelVkSVUycHB0OW9iSU5xRkExcDljcXhsbERLcVFTbDRGeW02cGlkVnBJOGc3d2l6OU90T0VJWTh4c0pvdzRfY2ktR3RQdkp0MXM4SjlDZjJYTmc1bzJF?oc=5",
+    "excerpt": "",
+    "topicKey": "fish_kill",
+    "topicLabel": "Fish Kill",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Fish Kill"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   },
+   {
+    "id": "f3156eea4a4354550156a1052379663c7ce198e40b48c696d2418878a3bb98f0",
+    "title": "Manila Water banking on Wawa, Laguna de Bay for supplemental supply with onset of El Ni\u00f1o",
+    "source": "bworldonline.com",
+    "date": "2026-07-07",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQV3N6NkJlWWhBQ00wcHlHc0pHRmJVWjhnRzBiT3lXWTUtcFJ4Y2ZmRUdCUHJfRE9tV3J1SHVZaG1MUzVNajZQVEJnUlhKRlhRVkZiSHUzbnVSQTRQUEhYT1pSa01qdWdxbXBWVXZyMjc1N0ViZnBGNnhkSGxWVzlSRmVQM0dYRWZoZHc2NDNqNHJTVDNNc21wZDVmWFNzVmlWNzNZZGJYSlNnNEN3Nk5mejVoRW5vY3g3Uy10Nkpjdm5KUmc2OV9TMGNDejZEb2NkV3RHX1JnUQ?oc=5",
+    "excerpt": "",
+    "topicKey": "climate",
+    "topicLabel": "Climate Stress",
+    "relevanceScore": null,
+    "relevanceStatus": "classifier_v2",
+    "relevanceLabel": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a bare topic word)",
+    "province": "Laguna",
+    "provinceCode": "PH040200000",
+    "triggers": [
+     "Climate Stress"
+    ],
+    "quarter": "2026-Q3",
+    "collectedRetrospectively": true
+   }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "total": 12,
+  "evidenceQuarter": "2026-Q3",
+  "sourceQuarter": "2026-Q3",
+  "evidenceMode": "FORECAST",
+  "evidenceNote": "Supporting news for the 2027-Q1 forecast: 2026-Q3 articles published before 2026-10-01, its issue date (full quarter). This two-quarter-ahead forecast uses news of the quarter before its issue date, never news published after it or of its own target quarter.",
+  "windowQuarters": [
+   "2026-Q3"
+  ],
+  "validatedCount": 12,
+  "triggerMatchCount": 0,
+  "feedNote": "12 article(s) from 2026-Q3: 12 classified relevant by the E60 classifier v2 (syndicated copies removed). Headlines only (the source gives no lead text). Collected retrospectively in October 2026 by publication date."
+ }
+}

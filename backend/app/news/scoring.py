@@ -38,7 +38,9 @@ def _snapshot_revision(model_name: str) -> str:
 def current_model_key() -> str:
     import app.ml.nlp.classifier as C
 
-    code = hashlib.sha256(Path(C.__file__).read_bytes()).hexdigest()[:16]
+    # E64 (D-E64-1): hash the LF-normalised source. Hashing raw bytes made the key depend on the checkout's line endings
+    # (git core.autocrlf), so an identical classifier got a new key and every stored score stopped matching.
+    code = hashlib.sha256(Path(C.__file__).read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:16]
     return f"{C.MODEL_NAME}@{_snapshot_revision(C.MODEL_NAME)[:12]}|clf:{code}"
 
 
