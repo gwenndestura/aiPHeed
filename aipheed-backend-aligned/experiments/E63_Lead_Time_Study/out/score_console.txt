@@ -1,0 +1,170 @@
+ lead      arm  n  quarters  actual_HIGH  accuracy  accuracy_lo  accuracy_hi  balanced_accuracy  recall_HIGH  precision_HIGH  brier  brier_lo  brier_hi  log_loss   auc   citl  slope
+    1      E56 60        12           21     0.850        0.733        0.933              0.819        0.714           0.833  0.130     0.078     0.188     0.420 0.901 -0.005  0.968
+    1   E58_EW 60        12           21     0.883        0.800        0.950              0.877        0.857           0.818  0.118     0.080     0.157     0.403 0.923 -0.065  1.142
+    1  PERSIST 60        12           21     0.683        0.567        0.800              0.647        0.524           0.550  0.317     0.200     0.433     2.188 0.647  0.017    NaN
+    1     CLIM 60        12           21     0.650        0.467        0.817              0.500        0.000             NaN  0.284     0.164     0.414     0.851 0.344  0.184 -0.458
+    1 MAJORITY 60        12           21     0.650        0.467        0.817              0.500        0.000             NaN  0.350     0.183     0.533     2.418 0.500  0.350    NaN
+    1 PROVCLIM 60        12           21     0.650        0.467        0.817              0.500        0.000             NaN  0.269     0.163     0.387     0.891 0.567  0.184  0.133
+    2      E56 50        10           18     0.720        0.560        0.840              0.684        0.556           0.625  0.214     0.146     0.304     0.623 0.649 -0.029  0.550
+    2   E58_EW 50        10           18     0.780        0.700        0.860              0.780        0.778           0.667  0.182     0.143     0.222     0.562 0.786 -0.103  0.753
+    2  PERSIST 50        10           18     0.560        0.400        0.740              0.535        0.444           0.400  0.440     0.260     0.600     3.040 0.535 -0.040    NaN
+    2     CLIM 50        10           18     0.640        0.440        0.820              0.500        0.000             NaN  0.304     0.167     0.457     0.939 0.214  0.190 -1.709
+    2 MAJORITY 50        10           18     0.640        0.440        0.820              0.500        0.000             NaN  0.360     0.180     0.560     2.487 0.500  0.360    NaN
+    2 PROVCLIM 50        10           18     0.640        0.440        0.820              0.500        0.000             NaN  0.293     0.166     0.439     1.070 0.477  0.190  0.064
+    3      E56 45         9           14     0.622        0.467        0.800              0.569        0.429           0.400  0.251     0.154     0.343     0.726 0.620 -0.053  0.249
+    3   E58_EW 45         9           14     0.644        0.511        0.800              0.624        0.571           0.444  0.244     0.151     0.334     0.705 0.657 -0.112  0.321
+    3  PERSIST 45         9           14     0.511        0.333        0.667              0.488        0.429           0.300  0.489     0.333     0.667     3.378 0.488 -0.133    NaN
+    3     CLIM 45         9           14     0.689        0.489        0.867              0.500        0.000             NaN  0.266     0.134     0.412     0.816 0.247  0.149 -1.038
+    3 MAJORITY 45         9           14     0.689        0.489        0.867              0.500        0.000             NaN  0.311     0.133     0.511     2.150 0.500  0.311    NaN
+    3 PROVCLIM 45         9           14     0.689        0.489        0.867              0.500        0.000             NaN  0.258     0.138     0.393     0.915 0.487  0.149  0.081
+ lead    set  model baseline  quarters  mean_brier_diff   ci_lo   ci_hi  quarter_wins  quarter_losses  quarter_ties  sign_p  ci_below_0  sign_test_supports                     verdict
+    1   full    E56  PERSIST        12          -0.1870 -0.2875 -0.0847             9               3             0  0.1460        True               False suggestive, not established
+    1   full    E56     CLIM        12          -0.1548 -0.2583 -0.0555             9               3             0  0.1460        True               False suggestive, not established
+    1   full E58_EW  PERSIST        12          -0.1983 -0.3126 -0.0839             9               3             0  0.1460        True               False suggestive, not established
+    1   full E58_EW     CLIM        12          -0.1660 -0.2862 -0.0496             9               3             0  0.1460        True               False suggestive, not established
+    1 common    E56  PERSIST         9          -0.2205 -0.3413 -0.0956             7               2             0  0.1797        True               False suggestive, not established
+    1 common    E56     CLIM         9          -0.1337 -0.2539 -0.0275             7               2             0  0.1797        True               False suggestive, not established
+    1 common E58_EW  PERSIST         9          -0.2194 -0.3412 -0.0942             7               2             0  0.1797        True               False suggestive, not established
+    1 common E58_EW     CLIM         9          -0.1326 -0.2539 -0.0247             7               2             0  0.1797        True               False suggestive, not established
+    2   full    E56  PERSIST        10          -0.2260 -0.3894 -0.0575             7               3             0  0.3438        True               False suggestive, not established
+    2   full    E56     CLIM        10          -0.0904 -0.1922  0.0010             5               5             0  1.0000       False               False               not supported
+    2   full E58_EW  PERSIST        10          -0.2581 -0.4376 -0.0724             7               3             0  0.3438        True               False suggestive, not established
+    2   full E58_EW     CLIM        10          -0.1225 -0.2644 -0.0020             5               5             0  1.0000        True               False suggestive, not established
+    2 common    E56  PERSIST         9          -0.2215 -0.4119 -0.0388             6               3             0  0.5078        True               False suggestive, not established
+    2 common    E56     CLIM         9          -0.0786 -0.1951  0.0196             4               5             0  1.0000       False               False               not supported
+    2 common E58_EW  PERSIST         9          -0.2194 -0.4117 -0.0324             6               3             0  0.5078        True               False suggestive, not established
+    2 common E58_EW     CLIM         9          -0.0765 -0.1948  0.0239             4               5             0  1.0000       False               False               not supported
+    3   full    E56  PERSIST         9          -0.2374 -0.4187 -0.0671             7               2             0  0.1797        True               False suggestive, not established
+    3   full    E56     CLIM         9          -0.0147 -0.1138  0.0847             6               3             0  0.5078       False               False               not supported
+    3   full E58_EW  PERSIST         9          -0.2450 -0.4225 -0.0717             6               3             0  0.5078        True               False suggestive, not established
+    3   full E58_EW     CLIM         9          -0.0222 -0.1340  0.0845             5               4             0  1.0000       False               False               not supported
+    3 common    E56  PERSIST         9          -0.2374 -0.4187 -0.0671             7               2             0  0.1797        True               False suggestive, not established
+    3 common    E56     CLIM         9          -0.0147 -0.1138  0.0847             6               3             0  0.5078       False               False               not supported
+    3 common E58_EW  PERSIST         9          -0.2450 -0.4225 -0.0717             6               3             0  0.5078        True               False suggestive, not established
+    3 common E58_EW     CLIM         9          -0.0222 -0.1340  0.0845             5               4             0  1.0000       False               False               not supported
+{
+ "E56_full": {
+  "per_lead": {
+   "1": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "suggestive, not established"
+    }
+   },
+   "2": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "3": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "4": {
+    "reliable": false,
+    "reason": "not computable under the pre-registered cutoffs (PROTOCOL 1)"
+   }
+  },
+  "furthest_reliable_lead": null,
+  "all_shorter_leads_reliable": null
+ },
+ "E56_common": {
+  "per_lead": {
+   "1": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "suggestive, not established"
+    }
+   },
+   "2": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "3": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "4": {
+    "reliable": false,
+    "reason": "not computable under the pre-registered cutoffs (PROTOCOL 1)"
+   }
+  },
+  "furthest_reliable_lead": null,
+  "all_shorter_leads_reliable": null
+ },
+ "E58_EW_full": {
+  "per_lead": {
+   "1": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "suggestive, not established"
+    }
+   },
+   "2": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "suggestive, not established"
+    }
+   },
+   "3": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "4": {
+    "reliable": false,
+    "reason": "not computable under the pre-registered cutoffs (PROTOCOL 1)"
+   }
+  },
+  "furthest_reliable_lead": null,
+  "all_shorter_leads_reliable": null
+ },
+ "E58_EW_common": {
+  "per_lead": {
+   "1": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "suggestive, not established"
+    }
+   },
+   "2": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "3": {
+    "reliable": false,
+    "vs": {
+     "PERSIST": "suggestive, not established",
+     "CLIM": "not supported"
+    }
+   },
+   "4": {
+    "reliable": false,
+    "reason": "not computable under the pre-registered cutoffs (PROTOCOL 1)"
+   }
+  },
+  "furthest_reliable_lead": null,
+  "all_shorter_leads_reliable": null
+ }
+}
