@@ -109,6 +109,28 @@ const mixHex = (from: string, to: string, amount: number) => {
 // as part of the province but clearly not a municipality with its own score.
 const LAKE_SHADE = 0.28;
 
+// The selected city / municipality: a thick outline in the page's text colour
+// (drawn as a wide stroke under the shape, whose fill hides the inner half)
+// around a thin dark edge, so it reads on both light and dark maps; the
+// province's other municipalities fade. No glow, shadow or animation.
+const SELECTED_OUTLINE_WEIGHT = 7; // about 3px shows outside the shape
+const SELECTED_INNER_EDGE = "#0D0F14";
+const FADED_MUNI_OPACITY = 0.35;
+// The selected province's own shape lies under its municipalities in the
+// same colour: faded too while one of them is selected, or the faded
+// municipalities would still look as strong as the chosen one.
+const PROVINCE_FILL_WITH_MUNI = 0.1;
+const MUNI_OPACITY = 0.9;
+const MUNI_STROKE = "rgba(255,255,255,0.35)";
+
+const featureOf = (layer: L.Layer) => (layer as L.Layer & { feature?: GeoJSON.Feature }).feature;
+
+/** The page's text colour (light on the dark theme, dark on the light one). */
+function foregroundColor(): string {
+  const v = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim();
+  return v ? `hsl(${v.split(/\s+/).join(", ")})` : "#ffffff";
+}
+
 // The boundary file names component cities "City of Antipolo" while the API
 // says "Antipolo" (and "Cavite City" for "City of Cavite"), so both sides are
 // reduced to the bare place name before matching.
@@ -236,6 +258,29 @@ export function PhilippineMap({
     });
     return m;
   }, [municipalities]);
+  // Read from timers and map events, where the closure's copy may be old.
+  const muniMapRef = useRef(muniMap);
+  muniMapRef.current = muniMap;
+  const selectedOutlineRef = useRef<L.GeoJSON | null>(null);
+  const selectedLabelRef = useRef<L.Marker | null>(null);
+  const selectedMuniLayerRef = useRef<L.Path | null>(null);
+  const muniLabelsByKeyRef = useRef(new Map<string, L.Marker>());
+
+  /** A municipality shape's look; `selectedId` is the chosen one in its province, if any. */
+  const muniStyle = (provinceId: string, muni: MunicipalityData | undefined, selectedId: string | null): L.PathOptions => {
+    const rejected = rejectedRef.current.has(provinceId);
+    const fill = rejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
+    if (!rejected && muni && muni.id === selectedId) {
+      return { fillColor: fill, fillOpacity: 1, color: SELECTED_INNER_EDGE, weight: 1.5, opacity: 1, lineJoin: "round", lineCap: "round" };
+    }
+    return { fillColor: fill, fillOpacity: selectedId && !rejected ? FADED_MUNI_OPACITY : MUNI_OPACITY, color: MUNI_STROKE, weight: 0.8, opacity: 1, lineJoin: "round", lineCap: "round" };
+  };
+
+  /** Outline, then the selected shape, above every other municipality. */
+  const raiseSelectedMunicipality = () => {
+    selectedOutlineRef.current?.bringToFront();
+    selectedMuniLayerRef.current?.bringToFront();
+  };
 
   const getProvinceStyle = useCallback((id: string | undefined, isSelected: boolean, isDimmed: boolean): L.PathOptions => {
     const region = id ? regionMapRef.current.get(id) : null;
@@ -264,6 +309,8 @@ export function PhilippineMap({
       weight: isSelected ? 2.5 : 1,
     };
   }, []);
+  const getProvinceStyleRef = useRef(getProvinceStyle);
+  getProvinceStyleRef.current = getProvinceStyle;
 
   // Zoom to the selected city / municipality, once its shape is on the map
   // (the province's layer is built after the province zoom, so this runs
@@ -283,9 +330,88 @@ export function PhilippineMap({
     map.flyToBounds((target as L.Polygon).getBounds(), { ...fitPadding(fitInsetsRef.current), duration: 0.6, maxZoom: 12 });
   }, []);
 
+  // Style every municipality for the current selection; draw the outline and
+  // the bold name label of the selected one (its label even where small
+  // areas' labels are left out). Cleared selection: the normal look.
+  const applyMuniSelection = useCallback(() => {
+    const map = mapRef.current;
+    const group = municipalitiesLayerRef.current;
+    selectedOutlineRef.current?.remove();
+    selectedOutlineRef.current = null;
+    selectedLabelRef.current?.remove();
+    selectedLabelRef.current = null;
+    selectedMuniLayerRef.current = null;
+    muniLabelsByKeyRef.current.forEach((m) => m.setOpacity(1));
+    if (!map || !group) return;
+
+    const sel = selectedMuniRef.current;
+    let selLayer: L.Polygon | null = null;
+    group.eachLayer((layer) => {
+      const f = featureOf(layer);
+      const pid = f?.properties?.province_id as string;
+      const muni = muniMapRef.current.get(muniKey(pid, (f?.properties?.name || "").toLowerCase()));
+      if (sel && muni?.id === sel.id && !rejectedRef.current.has(pid)) selLayer = layer as L.Polygon;
+    });
+    const selectedId = selLayer ? sel!.id : null;
+    group.eachLayer((layer) => {
+      const f = featureOf(layer);
+      const pid = f?.properties?.province_id as string;
+      const muni = muniMapRef.current.get(muniKey(pid, (f?.properties?.name || "").toLowerCase()));
+      (layer as L.Path).setStyle(muniStyle(pid, muni, selectedId));
+    });
+    const provinceId = selectedRef.current?.id;
+    if (provinceId) {
+      provincesLayerRef.current?.eachLayer((layer) => {
+        if (featureOf(layer)?.properties?.id !== provinceId) return;
+        const base = getProvinceStyleRef.current(provinceId, true, false);
+        (layer as L.Path).setStyle(selectedId ? { ...base, fillOpacity: PROVINCE_FILL_WITH_MUNI } : base);
+      });
+    }
+    if (!selLayer) return;
+
+    const target = selLayer as L.Polygon;
+    const feature = featureOf(target)!;
+    selectedOutlineRef.current = L.geoJSON(feature as GeoJSON.Feature, {
+      interactive: false,
+      style: () => ({ color: foregroundColor(), weight: SELECTED_OUTLINE_WEIGHT, opacity: 1, fill: false, lineJoin: "round", lineCap: "round" }),
+    }).addTo(map);
+    selectedMuniLayerRef.current = target;
+    raiseSelectedMunicipality();
+
+    const key = muniKey(feature.properties?.province_id, (feature.properties?.name || "").toLowerCase());
+    muniLabelsByKeyRef.current.get(key)?.setOpacity(0);
+    const center = labelPoint(feature.geometry, target.getBounds().getCenter());
+    selectedLabelRef.current = L.marker([center.lat, center.lng], {
+      icon: L.divIcon({
+        className: "",
+        html: `<div class="map-label" data-selected-label="true" style="
+          color: white;
+          font-size: 11px;
+          font-weight: 700;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+          white-space: nowrap;
+          pointer-events: none;
+          transform: translate(-50%, -50%);
+        ">${feature.properties?.name ?? ""}</div>`,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+      }),
+      interactive: false,
+      keyboard: false,
+      zIndexOffset: 1000,
+    }).addTo(map);
+    // Refs carry the current selection and data.
+  }, []);
+
   const clearMunicipalities = useCallback(() => {
     const map = mapRef.current;
     if (!map) return;
+    selectedOutlineRef.current?.remove();
+    selectedOutlineRef.current = null;
+    selectedLabelRef.current?.remove();
+    selectedLabelRef.current = null;
+    selectedMuniLayerRef.current = null;
+    muniLabelsByKeyRef.current.clear();
     if (municipalitiesLayerRef.current) {
       map.removeLayer(municipalitiesLayerRef.current);
       municipalitiesLayerRef.current = null;
@@ -362,19 +488,10 @@ export function PhilippineMap({
     const muniLayer = L.geoJSON(
       { type: "FeatureCollection", features } as GeoJSON.FeatureCollection,
       {
+        // The selection's look is applied once the layer is built (applyMuniSelection).
         style: (feature) => {
           const name = (feature?.properties?.name || "").toLowerCase();
-          const muni = muniMap.get(muniKey(provinceId, name));
-          const color = isProvRejected ? NO_DATA_COLOR : muni ? (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR) : NO_DATA_COLOR;
-          const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
-          return {
-            fillColor: color,
-            fillOpacity: isSel ? 0.98 : 0.9,
-            color: isSel ? AMBER : "rgba(255,255,255,0.45)",
-            weight: isSel ? 2.5 : 0.6,
-            lineJoin: "round",
-            lineCap: "round",
-          };
+          return muniStyle(provinceId, muniMap.get(muniKey(provinceId, name)), null);
         },
         onEachFeature: (feature, layer) => {
           const name: string = feature.properties?.name || "Unknown";
@@ -398,12 +515,11 @@ export function PhilippineMap({
             },
             mouseout: (e) => {
               const l = e.target as L.Path;
-              const isSel = !isProvRejected && muni && selectedMuniRef.current?.id === muni.id;
-              l.setStyle({
-                fillOpacity: isSel ? 0.98 : 0.9,
-                weight: isSel ? 2.5 : 0.8,
-                color: isSel ? AMBER : "rgba(255,255,255,0.35)",
-              });
+              const current = muniMapRef.current.get(muniKey(provinceId, name.toLowerCase()));
+              const sel = selectedMuniRef.current;
+              const selectedId = sel && selectedMuniLayerRef.current ? sel.id : null;
+              l.setStyle(muniStyle(provinceId, current, selectedId));
+              raiseSelectedMunicipality();
             },
             click: (e) => {
               L.DomEvent.stopPropagation(e);
@@ -443,8 +559,7 @@ export function PhilippineMap({
       const name = feature?.properties?.name || "";
       if (!name) return;
       const center = labelPoint(feature.geometry, (layer as L.Polygon).getBounds().getCenter());
-      labels.push(
-        L.marker([center.lat, center.lng], {
+      const label = L.marker([center.lat, center.lng], {
           icon: L.divIcon({
             className: "",
             html: `<div class="map-label" style="
@@ -461,13 +576,15 @@ export function PhilippineMap({
           }),
           interactive: false,
           keyboard: false,
-        }).addTo(map)
-      );
+        }).addTo(map);
+      labels.push(label);
+      muniLabelsByKeyRef.current.set(muniKey(provinceId, name.toLowerCase()), label);
       labelCount++;
     });
     municipalityLabelsRef.current = labels;
+    applyMuniSelection();
     focusSelectedMunicipality();
-  }, [muniMap, clearMunicipalities, getProvinceStyle, focusSelectedMunicipality]);
+  }, [muniMap, clearMunicipalities, getProvinceStyle, focusSelectedMunicipality, applyMuniSelection]);
 
   // Pulse markers + permanent name labels, one per province. Rebuildable
   // (not just run-once): province data arrives from the network, so this is
@@ -570,7 +687,9 @@ export function PhilippineMap({
         { sticky: true }
       );
     });
-  }, [regions, getProvinceStyle]);
+    // The province's fade under a selected municipality (applyMuniSelection).
+    applyMuniSelection();
+  }, [regions, getProvinceStyle, applyMuniSelection]);
 
   const resetZoom = useCallback(() => {
     const map = mapRef.current;
@@ -916,26 +1035,18 @@ export function PhilippineMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMunicipality?.id]);
 
-  // Re-style municipalities when selection changes
+  // Re-style municipalities when the selection or their data changes.
   useEffect(() => {
-    if (!municipalitiesLayerRef.current || !selectedRegion) return;
-    const provinceId = selectedRegion.id;
-    const isProvRejected = rejectedRef.current.has(provinceId);
-    municipalitiesLayerRef.current.eachLayer((layer) => {
-      const feature = (layer as any).feature as GeoJSON.Feature;
-      const name = (feature?.properties?.name || "").toLowerCase();
-      const muni = muniMap.get(muniKey(provinceId, name));
-      if (!muni) return;
-      const isSel = !isProvRejected && selectedMunicipality?.id === muni.id;
-      (layer as L.Path).setStyle({
-        fillColor: isProvRejected ? NO_DATA_COLOR : (RISK_COLORS[muni.riskLevel] ?? NO_DATA_COLOR),
-        fillOpacity: isSel ? 0.98 : 0.9,
-        color: isSel ? AMBER : "rgba(255,255,255,0.35)",
-        weight: isSel ? 2.5 : 0.8,
-      });
-      if (isSel) (layer as L.Path).bringToFront();
-    });
-  }, [selectedMunicipality, selectedRegion, muniMap, rejectedProvinceIds]);
+    if (!municipalitiesLayerRef.current) return;
+    applyMuniSelection();
+  }, [selectedMunicipality, selectedRegion, muniMap, rejectedProvinceIds, applyMuniSelection]);
+
+  // The outline is in the page's text colour: redraw it when the theme changes.
+  useEffect(() => {
+    const onTheme = () => window.setTimeout(applyMuniSelection, 0);
+    window.addEventListener("aipheed:theme", onTheme);
+    return () => window.removeEventListener("aipheed:theme", onTheme);
+  }, [applyMuniSelection]);
 
   // Apply rejection updates: re-style provinces, re-bind tooltips, hide pulses for rejected.
   useEffect(() => {
@@ -967,7 +1078,9 @@ export function PhilippineMap({
         if (el) el.style.display = rejectedRef.current.has(provinceId) ? "none" : "";
       });
     }
-  }, [rejectedProvinceIds, getProvinceStyle]);
+    // The province's fade under a selected municipality (applyMuniSelection).
+    applyMuniSelection();
+  }, [rejectedProvinceIds, getProvinceStyle, applyMuniSelection]);
 
   return (
     <div className="absolute inset-0 w-full h-full">
