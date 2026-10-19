@@ -1109,20 +1109,41 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     else:
         head = (f"The backtest estimate of {event} in {name} for {quarter} was {result} ({p:.0%} probability"
                 + (f"; observed {obs})" if obs else ")"))
+    comp = _forecast_components(province_code, quarter) if kind == "forecast" else None
+    if comp:
+        # E61: the two parts are not independent, so their product is a score, not a tested probability (same value)
+        head = (f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} (model score {p:.0%}: the "
+                f"two parts that follow, multiplied together; not a tested probability)")
     if reasons:
         parts = [f"{t['label']} {verb(t)} it" for t in reasons]
         why = parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]
-        sentence = f"{head}, mainly because {why}."
+        if comp:
+            # E61: say which of the two required conditions makes the estimate low or high before naming factors
+            sentence = (f"{head}: regional hunger is {_likely(comp['hunger'])} to stay above 11.3% "
+                        f"({comp['hunger']:.0%}) and provincial food-price pressure is {_likely(comp['price'])} "
+                        f"({comp['price_text']}); the target needs both. Within the price part, {why}.")
+        else:
+            sentence = f"{head}, mainly because {why}."
     else:
         sentence = f"{head}; no factor breakdown is available for it."
     # E58: the two-signal early warning (model warning for DA review), appended to the same sentence field
     warnings = E41L2.early_warning(quarter, province_code)
     if province_code and warnings:
-        sentence = f"{sentence} {warnings[0]['text']}"
+        text = warnings[0]["text"]
+        if comp:                                         # same wording rule as the head (record text kept as stored)
+            text = text.replace("HIGH-risk probability", "HIGH-risk score")
+        sentence = f"{sentence} {text}"
     elif warnings:
         active = [w for w in warnings if w["warn"]]
         sentence += (" Early warnings: " + "; ".join(f"{w['province']} {w['level']} ({w['direction']})" for w in active) + "."
                      if active else " No province has an early warning for this quarter.")
+    # E61: what a two-part forecast does and does not mean goes into the same sentence field the dashboard already
+    # shows, so the approved layout is unchanged (no new UI element)
+    caveat = (_forecast_caveat(province_code, comp, reasons,
+                               [LABEL_OF.get(g, g) for g in E41L2.partial_inputs(quarter, province_code)])
+              if comp else None)
+    if caveat:
+        sentence = f"{sentence} {caveat}"
     return {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
@@ -1130,7 +1151,90 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                      "evidence": t.get("evidenceNote")} for t in reasons],
         "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),
         **({"earlyWarning": warnings} if warnings else {}),
+        **({"components": {"probabilityHungerElevated": round(comp["hunger"], 4),
+                           "probabilityPricePressure": round(comp["price"], 4),
+                           "combination": "product of the two parts (an approximation: the two conditions are not "
+                                          "independent; the joint probability cannot exceed the smaller part)"},
+            "caveat": _ascii(caveat)} if comp else {}),
     }
+
+
+# E61 (aipheed-backend-aligned/experiments/E61_E58_Low_Forecast_Investigation, out/a2_calibration_joint.json,
+# low_probability_cutoffs["E56_p_price<0.2"]): in the 50-row rolling-origin back-test, 3 of 11 price-part probabilities
+# below 0.2 were followed by a HIGH outcome (Wilson 95% CI 10%-57%). Checked against that file by a test.
+E61_LOW_PRICE_BACKTEST = {"n": 11, "high": 3, "cutoff": 0.2}
+
+
+def _likely(p: float) -> str:
+    return "likely" if p >= 0.5 else "unlikely"
+
+
+def _forecast_components(province_code: str | None, quarter: str) -> dict | None:
+    """E61: the two parts of a Lead-2 record's issued forecast (records E55+ store them); region = province range."""
+    rec = E41L2.record()
+    if quarter != rec.get("targetQuarter"):
+        return None
+    provs = rec["provinces"]
+    comps = {c: v.get("forecast", {}).get("components") or {} for c, v in provs.items()}
+    if not all({"probabilityHungerElevated", "probabilityPricePressure"} <= set(c) for c in comps.values()):
+        return None                                     # E43-E53 records store other components (or a price-only target)
+    if province_code:
+        c = comps[province_code]
+        return {"hunger": c["probabilityHungerElevated"], "price": c["probabilityPricePressure"],
+                "price_text": f"{c['probabilityPricePressure']:.0%}", "entry": provs[province_code]}
+    prices = [c["probabilityPricePressure"] for c in comps.values()]
+    lo, hi = min(prices), max(prices)
+    return {"hunger": sum(c["probabilityHungerElevated"] for c in comps.values()) / len(comps),
+            "price": sum(prices) / len(prices),
+            "price_text": f"{lo:.0%} to {hi:.0%} across the five provinces" if round(lo, 2) != round(hi, 2) else f"{lo:.0%}",
+            "entry": None}
+
+
+def _forecast_caveat(province_code: str | None, comp: dict, reasons: list[dict], partial: list[str] = ()) -> str:
+    """E61: what the low/high value does and does not mean, from the record's own observations only."""
+    out = []
+    v = comp["entry"]
+    if v is not None:
+        ob = v.get("observed", {})
+        f, g = ob.get("foodInflationLatestMonths", {}), ob.get("foodMinusHeadline", {})
+        h = ob.get("hungerRegional", {})
+        months = E41L2.record().get("dataFreshness", {}).get("latestPredictorPeriods", {})
+        cpi_to = next((p for k, p in months.items() if "CPI YoY" in k), None)
+        if f.get("value") is not None and g.get("value") is not None:
+            headline = f["value"] - g["value"]
+            out.append(f"Food prices in {v['name']} were {f['value']:.1f}% higher than a year earlier"
+                       + (f" (latest months to {cpi_to})" if cpi_to else "")
+                       + f"; the price condition needs more than {f["provinceReferenceP60"]:.2f}% (this province's "
+                       f"usual 2021-2022 level) or food prices rising faster than prices overall.")
+            if headline > f["value"]:
+                out.append(f"Prices overall rose faster ({headline:.1f}%), which this target counts as less "
+                           f"food-price pressure, although it also means a peso buys less.")
+        if h.get("value") is not None:
+            out.append(f"Regional hunger (SWS, Balance Luzon) was {h['value']:.1f}% in {h['quarter']}, "
+                       f"{'above' if h['value'] > 11.3 else 'at or below'} the 11.3% line.")
+        if comp["price"] < 0.5:
+            out.append("Slower food inflation does not mean food has become affordable; it means prices are rising "
+                       "more slowly.")
+        emp = ob.get("employment", {})
+        if (any(r["key"] == "employment" and r["direction"] == "protective" for r in reasons)
+                and (emp.get("unemploymentChangeYoY") or 0) > 0):
+            out.append(f"The model lowered its estimate while national unemployment rose "
+                       f"({emp['unemploymentChangeYoY']:+.2f} points); this is a statistical pattern in a short "
+                       f"history, not evidence that job losses reduce food stress.")
+    if partial:
+        # E61: a LightGBM split sends a missing input down a branch learned from other missing rows, so the group's
+        # attribution then reflects the missing value, not an observed figure
+        out.append(f"Some {', '.join(partial)} figures were not yet published when the forecast was issued; the "
+                   f"model's effect for {'that group' if len(partial) == 1 else 'those groups'} partly or wholly reflects "
+                   f"how it handles a missing figure, not an observed value.")
+    if comp["price"] < E61_LOW_PRICE_BACKTEST["cutoff"]:
+        b = E61_LOW_PRICE_BACKTEST
+        out.append(f"In back-tests, {b['high']} of {b['n']} price-pressure probabilities below "
+                   f"{b['cutoff']:.0%} were followed by HIGH, so a low value can miss emerging stress; treat it "
+                   f"as uncertain.")
+    out.append("This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA "
+               "food prices), not a measure of household food insecurity.")
+    return " ".join(out)
 
 
 def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:

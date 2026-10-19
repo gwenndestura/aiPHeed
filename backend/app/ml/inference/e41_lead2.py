@@ -11,6 +11,7 @@ operational band and alert candidate derived from a documented rule.
 """
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import math
@@ -60,10 +61,19 @@ def record() -> dict:
             "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
-    rec = json.loads(path.read_text(encoding="utf-8"))
+    st = path.stat()
+    return _load(str(path), st.st_mtime_ns, st.st_size, mode().upper())
+
+
+@functools.lru_cache(maxsize=4)
+def _load(path: str, mtime_ns: int, size: int, name: str) -> dict:
+    """Parsed and integrity-checked record, cached per file version (path, mtime, size), as E31 caches its record.
+    A dashboard request used to re-read and re-hash the record up to ~400 times; a changed file is re-read and
+    re-checked on the next call. Callers treat the record as read-only."""
+    rec = json.loads(Path(path).read_text(encoding="utf-8"))
     body = {k: v for k, v in rec.items() if k != "content_sha256"}
     if hashlib.sha256(json.dumps(body, sort_keys=True, default=str).encode()).hexdigest() != rec.get("content_sha256"):
-        raise RecordError(f"{mode().upper()} record failed its integrity check")
+        raise RecordError(f"{name} record failed its integrity check")
     return rec
 
 

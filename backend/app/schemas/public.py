@@ -335,6 +335,15 @@ class PlainSummary(BaseModel):
     dataStatusNote: str
     sentence: str                     # one plain-language sentence
     earlyWarning: list[EarlyWarning] | None = None   # E58: model early warnings for DA review (not official)
+    # E61: the two parts of an issued two-part forecast (E55+ records) and what a low/high value does and does not mean
+    components: SummaryComponents | None = None
+    caveat: str | None = None
+
+
+class SummaryComponents(BaseModel):
+    probabilityHungerElevated: float  # P(regional SWS hunger > 11.3% in the target quarter)
+    probabilityPricePressure: float   # P(provincial food-price pressure in the target quarter)
+    combination: str
 
 
 class ExplainabilityResponse(BaseModel):
