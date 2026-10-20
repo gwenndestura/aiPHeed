@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { TopNavbar } from "@/components/TopNavbar";
+import { FeedbackModal } from "@/components/FeedbackModal";
 import { useAuth } from "@/lib/auth";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -17,9 +18,6 @@ const HERO_TEXT = "hsl(36 22% 92%)";
 const HERO_MUTED = "hsl(36 22% 92% / 0.78)";
 
 const GMA_URL = "https://www.gmanetwork.com/news/specials/content/193/the-hunger-pandemic/";
-
-/** Not yet confirmed by the research team: shown as plain text, never as a link. */
-const RESEARCH_EMAIL_PLACEHOLDER = "[CONFIRM: research team email]";
 
 export default function Landing() {
   useEffect(() => {
@@ -636,10 +634,19 @@ const FOOT_LINK =
   "transition-colors hover:text-foreground compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11";
 const FOOT_HEAD = "mb-4 text-[13px] font-bold uppercase tracking-[0.14em] text-foreground";
 
+/* The one gradient on the landing page (CLAUDE.local.md style rule): the page background into a soft
+   amber and risk-red tint, existing tokens only, low enough that the footer text keeps its contrast. */
+const FOOTER_BG =
+  "bg-[linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--background))_40%,hsl(var(--primary)/0.14)_78%,hsl(var(--risk-high)/0.16)_100%)]";
+
+/* The site's feedback form (components/FeedbackModal), its trigger restyled here as a footer link. */
+const FEEDBACK_LINK =
+  "[&>button[type]]:!text-[14px] [&>button]:text-ink-secondary [&>button]:underline [&>button]:rounded-sm [&>button:hover]:text-foreground [&>button:focus-visible]:outline-none [&>button:focus-visible]:ring-2 [&>button:focus-visible]:ring-ring [&_svg]:hidden";
+
 function Footer() {
   const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
   return (
-    <footer className="mt-6 border-t edge-faint bg-card px-4 sm:px-8 pt-14 pb-8">
+    <footer className={`mt-6 border-t edge-faint px-4 sm:px-8 pt-14 pb-8 ${FOOTER_BG}`}>
       <div className="mx-auto max-w-[1200px]">
         <div className="grid gap-10 sm:grid-cols-2 xl:grid-cols-[1.5fr_0.8fr_1.2fr_1.1fr] xl:gap-12">
           <div>
@@ -674,10 +681,22 @@ function Footer() {
           <div>
             <h4 className={FOOT_HEAD}>Contact</h4>
             <div className="space-y-4 text-[14px] leading-relaxed text-ink-secondary">
-              <p>
+              <div>
                 <span className="block font-semibold text-foreground">Research team</span>
-                <span className="font-mono">{RESEARCH_EMAIL_PLACEHOLDER}</span>
-              </p>
+                <p className="flex flex-wrap items-center gap-x-2">
+                  {TEAM.map((m, i) => (
+                    <span key={m.name} className="flex items-center gap-x-2">
+                      <a href={m.url} {...ext} className={`underline compact:justify-center ${FOOT_LINK}`}>
+                        {m.name}
+                      </a>
+                      {i < TEAM.length - 1 && <span aria-hidden>·</span>}
+                    </span>
+                  ))}
+                </p>
+                <div className={`mt-1 ${FEEDBACK_LINK}`}>
+                  <FeedbackModal />
+                </div>
+              </div>
               <p>
                 <span className="block font-semibold text-foreground">Official agricultural services</span>
                 <a href="https://calabarzon.da.gov.ph/" {...ext} className={`underline ${FOOT_LINK}`}>
@@ -701,47 +720,8 @@ function Footer() {
           </nav>
         </div>
 
-        <p className="mt-12 border-t edge-faint pt-6 text-[13px] compact:text-[14px] leading-relaxed text-ink-muted">
-          Credits: hero photo by Atom Araullo,{" "}
-          <a href={GMA_URL} {...ext} className="underline hover:text-foreground">
-            GMA News
-          </a>
-          . Basemap ©{" "}
-          <a href="https://www.openstreetmap.org/copyright" {...ext} className="underline hover:text-foreground">
-            OpenStreetMap
-          </a>{" "}
-          contributors · ©{" "}
-          <a href="https://protomaps.com" {...ext} className="underline hover:text-foreground">
-            Protomaps
-          </a>
-          . Data: Philippine Statistics Authority (Consumer Price Index, wholesale rice prices, 2021 Small Area
-          Estimates of poverty, 2024 Census of Population, palay, corn and fisheries production, Labor Force Survey);
-          Bangko Sentral ng Pilipinas (cash remittances); PAGASA (El Niño advisories);{" "}
-          <a
-            href="https://www.ncei.noaa.gov/products/international-best-track-archive"
-            {...ext}
-            className="underline hover:text-foreground"
-          >
-            NOAA NCEI IBTrACS
-          </a>{" "}
-          (tropical cyclone tracks); Social Weather Stations (hunger survey, Balance Luzon); news headlines via Google
-          News. Each source's data remains the property of its publisher. The aiPHeed index is not an official
-          statistic of any of these agencies.
-        </p>
-
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-[13px] text-ink-muted">
+        <div className="mt-12 border-t edge-faint pt-6 text-[13px] text-ink-muted">
           <p>© 2026 aiPHeed. All rights reserved.</p>
-          <p className="flex flex-wrap items-center gap-x-2">
-            <span>Developed by</span>
-            {TEAM.map((m, i) => (
-              <span key={m.name} className="flex items-center gap-x-2">
-                <a href={m.url} {...ext} className={`font-semibold text-ink-secondary ${FOOT_LINK}`}>
-                  {m.name}
-                </a>
-                {i < TEAM.length - 1 && <span aria-hidden>·</span>}
-              </span>
-            ))}
-          </p>
         </div>
       </div>
     </footer>

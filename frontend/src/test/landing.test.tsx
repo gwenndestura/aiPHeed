@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 vi.mock("@/components/TopNavbar", () => ({ TopNavbar: () => <header>header</header> }));
 vi.mock("@/lib/auth", () => ({ useAuth: () => ({ status: "anonymous" }) }));
@@ -9,11 +10,14 @@ vi.mock("@/lib/tour", () => ({ requestTour: vi.fn() }));
 import Landing from "@/pages/Landing";
 import { AboutModal } from "@/components/AboutModal";
 
+// The footer's feedback form submits through react-query.
 const renderLanding = () =>
   render(
-    <MemoryRouter>
-      <Landing />
-    </MemoryRouter>,
+    <QueryClientProvider client={new QueryClient()}>
+      <MemoryRouter>
+        <Landing />
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 
 const openAbout = () => {
@@ -71,19 +75,39 @@ describe("Landing page", () => {
     expect(container.textContent).toContain("It uses the FIRI v2 risk index, with a LightGBM food-price-pressure forecast as one input");
   });
 
-  it("shows the research email only as an unlinked [CONFIRM] placeholder", () => {
+  it("has no research email and no [CONFIRM] placeholder", () => {
     const { container } = renderLanding();
     expect(container.innerHTML).not.toContain("aipheed.research@dlsud.edu.ph");
-    const placeholder = screen.getByText("[CONFIRM: research team email]");
-    expect(placeholder.closest("a")).toBeNull();
+    expect(container.textContent).not.toContain("[CONFIRM");
   });
 
-  it("lists the researchers in one order", () => {
+  it("lists the researchers in one order, in the footer's Contact column", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).toContain("Destura, Princess Gwenn A.; Esico, Christina M.; and Melindo, Angel Vhea P.");
-    const team = [...container.querySelectorAll("footer a[href*='linkedin']")].map((a) => a.textContent);
+    const contact = screen.getByRole("heading", { name: "Contact" }).parentElement as HTMLElement;
+    const team = [...contact.querySelectorAll("a[href*='linkedin']")].map((a) => a.textContent);
     expect(team).toEqual(["Destura", "Esico", "Melindo"]);
+    expect(container.querySelectorAll("footer a[href*='linkedin']")).toHaveLength(3);
+    expect(within(contact).getByRole("link", { name: /Department of Agriculture Regional Field Office IV-A/ })).toBeTruthy();
+  });
+
+  it("opens the site's feedback form from the footer", () => {
+    renderLanding();
+    const contact = screen.getByRole("heading", { name: "Contact" }).parentElement as HTMLElement;
+    fireEvent.click(within(contact).getByRole("button", { name: /Send Feedback/i }));
+    expect(screen.getByRole("dialog", { name: "aiPHeed System Usability Feedback" })).toBeTruthy();
+  });
+
+  it("footer: gradient background, no credits paragraph, no 'Developed by' line, copyright kept", () => {
+    const { container } = renderLanding();
+    const footer = container.querySelector("footer") as HTMLElement;
+    expect(footer.className).toMatch(/bg-\[linear-gradient\(135deg,hsl\(var\(--background\)\).*--primary.*--risk-high/);
+    expect(footer.textContent).not.toContain("Credits:");
+    expect(footer.textContent).not.toContain("Developed by");
+    expect(footer.textContent).toContain("© 2026 aiPHeed. All rights reserved.");
+    // The hero keeps its own photo credit.
+    expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
   });
 
   it("shows the LightGBM lead-time table exactly as in the report, with Lead 2 marked as the map's", () => {
