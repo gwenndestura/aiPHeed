@@ -110,14 +110,6 @@ export function ShapNarrativeCardBody({
         <ShapDriverList items={triggers} />
       )}
 
-      {!explainFailed && (
-        <p className="mt-2 px-1 text-[9px] italic text-muted-foreground leading-snug">
-          {explainLoading
-            ? "Computing the SHAP breakdown for this quarter…"
-            : (explain?.note ?? "SHAP explainability — grouped driver shares, sum to 100%. AI-generated estimate only; not an official government report.")}
-        </p>
-      )}
-
       <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
     </div>
   );
