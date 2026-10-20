@@ -97,6 +97,8 @@
     --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.35);
     /* The header: a soft shadow cast down onto the page, no bottom line. */
     --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.6);
+    /* A card floating over the map: small and diffuse, fading out. */
+    --shadow-card: 0 4px 14px -4px rgb(0 0 0 / 0.45), 0 1px 3px rgb(0 0 0 / 0.2);
     --surface-alpha-header: 0.82;
 
     /* Map labels: the page's text colour on a soft halo of its background
@@ -157,6 +159,7 @@
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.18);
     --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.08);
     --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.16);
+    --shadow-card: 0 4px 14px -4px rgb(0 0 0 / 0.14), 0 1px 3px rgb(0 0 0 / 0.07);
 
     --primary-ink: var(--foreground);
   }
@@ -468,15 +471,25 @@
     border-radius: var(--radius-panel);
     box-shadow: var(--shadow-float);
   }
-  /* A side panel over the map: one floating surface with one shadow. It
-     clips its contents; a scroll area inside it holds the cards. */
-  .surface-panel {
+  /* A card in the map's side columns: its own floating surface (the
+     translucent card colour with a blur), rounded, with a soft shadow. */
+  .surface-card {
     background-color: hsl(var(--card) / var(--surface-alpha-panel));
     -webkit-backdrop-filter: blur(var(--surface-blur));
     backdrop-filter: blur(var(--surface-blur));
     border-radius: var(--radius-float);
-    box-shadow: var(--shadow-float);
-    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  /* A side column's scroll area: 12px of padding on every side, taken back
+     by a negative margin, so the cards stay in place and their shadows fade
+     out inside the scroll area instead of being cut off at its edge. */
+  .shadow-room {
+    margin: -12px;
+    padding: 12px;
+    /* Cards scrolled past the top or bottom fade out over that 12px instead
+       of being cut off by a hard edge (unscrolled, nothing is faded). */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, hsl(var(--background)) 12px, hsl(var(--background)) calc(100% - 12px), transparent);
+    mask-image: linear-gradient(to bottom, transparent, hsl(var(--background)) 12px, hsl(var(--background)) calc(100% - 12px), transparent);
   }
   /* A card inside a panel or sheet: flat, a step lighter than the panel,
      no edge and no shadow. */

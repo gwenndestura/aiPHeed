@@ -29,10 +29,10 @@ import { isHighRisk } from "@/lib/risk";
 import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { readStorage, removeStorage } from "@/lib/storage";
 
-/** A card inside a side panel: flat; the panel around it floats. */
+/** A card in a side column: its own floating card, with its own soft shadow. */
 function PanelCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
   return (
-    <div data-tour={tour} className={`px-4 py-3.5 inner-card text-card-foreground ${className}`}>
+    <div data-tour={tour} className={`px-4 py-3.5 surface-card text-card-foreground ${className}`}>
       {children}
     </div>
   );
@@ -396,11 +396,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       <FeedbackModal />
     </div>
   );
-  // Desktop: a floating bar of its own at the foot of the left column.
+  // Desktop: a floating card of its own at the foot of the left column.
   const aboutFeedback = showAboutFeedback && (compact ? (
     <SheetCard tour="about">{aboutFeedbackRow}</SheetCard>
   ) : (
-    <div data-tour="about" className="surface-panel mt-auto shrink-0 px-4 py-2 text-card-foreground">
+    <div data-tour="about" className="relative surface-card mt-auto shrink-0 px-4 py-2 text-card-foreground">
       {aboutFeedbackRow}
     </div>
   ));
@@ -641,25 +641,24 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
       {/* LEFT floating column */}
       <div
-        className={`absolute z-[1001] flex flex-col gap-2 transition-[left,visibility] duration-300 ${leftCollapsed ? "invisible" : "animate-slide-in-left"}`}
+        className={`absolute z-[1001] flex flex-col gap-2.5 transition-[left,visibility] duration-300 ${leftCollapsed ? "invisible" : "animate-slide-in-left"}`}
         style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W + EDGE) : EDGE, width: COL_W }}
         aria-hidden={leftCollapsed || undefined}
         data-tour="summary"
       >
-          {/* One floating panel, as tall as its cards (at most the column);
-              the cards scroll inside it. */}
-          <div className="surface-panel min-h-0 flex flex-col">
-            {hasSelection && !noData ? (
-              <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
-                {selectionPanel}
-              </div>
-            ) : (
-              <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2 p-2">
+          {/* Separate floating cards, 10px apart; they scroll together. */}
+          {hasSelection && !noData ? (
+            <div className="left-sidebar-scrollbar-left shadow-room flex-1 min-h-0 overflow-y-auto thin-scrollbar">
+              <div className="surface-card overflow-hidden text-card-foreground">{selectionPanel}</div>
+            </div>
+          ) : (
+            <>
+              <div className="left-sidebar-scrollbar-left shadow-room flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2.5">
                 {leftCards}
               </div>
-            )}
-          </div>
-          {!(hasSelection && !noData) && aboutFeedback}
+              {aboutFeedback}
+            </>
+          )}
       </div>
 
       {/* RIGHT floating column */}
@@ -670,10 +669,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         data-tour="why"
       >
           {rightCards && (
-            <div className="surface-panel min-h-0 flex flex-col">
-              <div className="flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2 p-2">
-                {rightCards}
-              </div>
+            <div className="shadow-room min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2.5">
+              {rightCards}
             </div>
           )}
       </div>
