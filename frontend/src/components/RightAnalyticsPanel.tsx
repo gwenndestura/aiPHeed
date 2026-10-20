@@ -131,7 +131,7 @@ function ShapDriverListSkeleton() {
           <div className="h-2.5 w-32 rounded bg-secondary/50" />
           <div className="space-y-1">
             {[0, 1].map((i) => (
-              <div key={i} className="rounded-md border edge-faint bg-secondary/20 px-2 py-1.5">
+              <div key={i} className="inner-box px-2 py-1.5">
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="h-2.5 w-28 rounded bg-secondary/50" />
                   <div className="h-2.5 w-6 rounded bg-secondary/50" />
@@ -175,7 +175,7 @@ function DriverGroup({ heading, headingColor, items }: { heading: string; headin
           const color = s.color === "red" ? "hsl(var(--risk-high))" : s.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))";
           const copy = driverCopy(s);
           return (
-            <div key={s.key} className="rounded-md border edge-faint bg-secondary/20 px-2 py-1.5">
+            <div key={s.key} className="inner-box px-2 py-1.5">
               <div className="flex items-center justify-between mb-0.5">
                 <span className="truncate text-[10px] font-bold text-foreground/90">{copy.title}</span>
                 <span className="text-[10px] font-mono-num font-bold ml-2 shrink-0" style={{ color }}>{s.pct}%</span>

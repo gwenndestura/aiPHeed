@@ -451,7 +451,7 @@ export function PhilippineMap({
           style: () => ({ fillColor: lakeFill, fillOpacity: 0.95, stroke: false }),
           onEachFeature: (feature, layer) => {
             layer.bindTooltip(
-              `<div style="font-size:11px"><strong>${feature.properties?.name}</strong><br/><span style="color:#9ca3af;font-style:italic">Lake · No data</span></div>`,
+              `<div style="font-size:11px"><strong>${feature.properties?.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">Lake · No data</span></div>`,
               { sticky: true }
             );
             layer.on("click", (e) => L.DomEvent.stopPropagation(e));
@@ -501,9 +501,9 @@ export function PhilippineMap({
             `<div style="font-size:11px">
               <strong>${name}</strong>
               ${isProvRejected
-                ? `<br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span>`
+                ? `<br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span>`
                 : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>`
-                : `<br/><span style="color:#9ca3af;font-style:italic">No data available</span>`}
+                : `<br/><span style="color:var(--map-tip-muted);font-style:italic">No data available</span>`}
             </div>`,
             { sticky: true }
           );
@@ -531,7 +531,7 @@ export function PhilippineMap({
               L.popup({ closeButton: false })
                 .setLatLng(e.latlng)
                 .setContent(
-                  `<div style="font-size:12px"><strong>${name}</strong><br/><span style="color:#6b7280;font-style:italic">${
+                  `<div style="font-size:12px"><strong>${name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">${
                     isProvRejected ? "No forecast available for this quarter" : "No data available"
                   }</span></div>`
                 )
@@ -682,7 +682,7 @@ export function PhilippineMap({
       (layer as any).unbindTooltip?.();
       (layer as any).bindTooltip(
         isRej
-          ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span></div>`
+          ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
           : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
         { sticky: true }
       );
@@ -931,7 +931,7 @@ export function PhilippineMap({
                 const isRej = rejectedRef.current.has(id);
                 layer.bindTooltip(
                   isRej
-                    ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span></div>`
+                    ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
                     : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
                   { sticky: true }
                 );
@@ -1065,7 +1065,7 @@ export function PhilippineMap({
       (layer as any).unbindTooltip?.();
       (layer as any).bindTooltip(
         isRej
-          ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:#9ca3af;font-style:italic">No Forecast Available</span></div>`
+          ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
           : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
         { sticky: true }
       );

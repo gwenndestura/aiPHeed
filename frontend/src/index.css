@@ -200,11 +200,8 @@
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
-  .thin-scrollbar { scrollbar-width: thin; scrollbar-color: hsl(var(--border) / 0.4) transparent; }
-  .thin-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-  .thin-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .thin-scrollbar::-webkit-scrollbar-thumb { background: hsl(var(--foreground) / 0.18); border-radius: 3px; }
-  .thin-scrollbar::-webkit-scrollbar-thumb:hover { background: hsl(var(--foreground) / 0.3); }
+  /* Same as every scroll area (below): thin, shown on hover. */
+  .thin-scrollbar { scrollbar-width: thin; }
   .left-sidebar-scrollbar-left { direction: rtl; }
   .left-sidebar-scrollbar-left > * { direction: ltr; }
 
@@ -296,12 +293,16 @@
   100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: hsl(var(--background)); }
-::-webkit-scrollbar-thumb { background: hsl(var(--muted)); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.6); }
-* { scrollbar-width: thin; scrollbar-color: hsl(var(--muted)) hsl(var(--background)); }
+/* Scrollbars: thin, on a clear track, the thumb hidden until the pointer
+   is over the scroll area (or focus is inside it). */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: var(--radius-pill); }
+:hover::-webkit-scrollbar-thumb,
+:focus-within::-webkit-scrollbar-thumb { background: hsl(var(--foreground) / 0.2); }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--foreground) / 0.32); }
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+*:hover, *:focus-within { scrollbar-color: hsl(var(--foreground) / 0.25) transparent; }
 
 /* Leaflet focus reset */
 .leaflet-interactive:focus,
@@ -312,17 +313,35 @@
 .leaflet-container *:focus-visible { outline: none !important; outline-offset: 0 !important; }
 .leaflet-container path.leaflet-interactive { outline: none; }
 
-/* Square corners for Leaflet controls, popups and tooltips */
-.leaflet-bar,
-.leaflet-bar a,
-.leaflet-bar a:first-child,
-.leaflet-bar a:last-child,
-.leaflet-control-zoom,
-.leaflet-control-layers,
-.leaflet-control-attribution,
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip,
-.leaflet-tooltip { border-radius: 0 !important; }
+/* Map tooltips and popups: a rounded, translucent dark surface with a soft
+   shadow in both themes, so the risk colours and grey notes in them stay
+   readable (dark mode: the card colour; light mode: the page text colour,
+   with the page background colour as text). */
+:root {
+  --map-tip-bg: hsl(var(--card) / var(--surface-alpha));
+  --map-tip-text: hsl(var(--foreground));
+  --map-tip-muted: hsl(var(--foreground) / 0.68);
+}
+.light {
+  --map-tip-bg: hsl(var(--foreground) / 0.9);
+  --map-tip-text: hsl(var(--background));
+  --map-tip-muted: hsl(var(--background) / 0.72);
+}
+.leaflet-container .leaflet-tooltip,
+.leaflet-container .leaflet-popup-content-wrapper {
+  background: var(--map-tip-bg);
+  color: var(--map-tip-text);
+  border: 0;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-float);
+  -webkit-backdrop-filter: blur(var(--surface-blur));
+  backdrop-filter: blur(var(--surface-blur));
+  font-family: 'Sora', system-ui, -apple-system, sans-serif;
+}
+.leaflet-container .leaflet-tooltip { padding: 6px 10px; }
+.leaflet-container .leaflet-tooltip::before { display: none; }
+.leaflet-container .leaflet-popup-tip { background: var(--map-tip-bg); box-shadow: none; }
+.leaflet-container .leaflet-popup-content { margin: 10px 14px; }
 
 @keyframes rfii-gauge-pulse {
   0%, 100% { opacity: 0.45; }
@@ -464,6 +483,13 @@
   .inner-card {
     background-color: hsl(var(--secondary) / 0.55);
     border-radius: var(--radius-inner);
+  }
+
+  /* A box inside a panel, card or dialog (a figure, a factor, a detail):
+     flat, a step lighter than what it sits on, no edge. */
+  .inner-box {
+    background-color: hsl(var(--secondary));
+    border-radius: var(--radius-control);
   }
 
   /* Dialogs and sheets: the same surface, larger corners, deeper shadow.

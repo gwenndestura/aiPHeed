@@ -585,7 +585,7 @@ function ReviewDetailModal({
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 compact:p-4 grid grid-cols-2 gap-4">
-          <div className="col-span-2 p-3 rounded-lg border edge-faint bg-secondary/30 flex items-center gap-3">
+          <div className="col-span-2 p-3 inner-box flex items-center gap-3">
             <div className="bg-primary/15 rounded-lg p-2"><FileText className="h-4 w-4 text-primary" /></div>
             <div>
               <p className="text-[12px] font-semibold">{item.province} — {item.quarter} Risk Report</p>
@@ -593,7 +593,7 @@ function ReviewDetailModal({
             </div>
           </div>
 
-          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
+          <div className="col-span-2 inner-box p-3">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-[11px] font-bold">Municipality / City scores</h4>
               <span className="text-[10px] text-muted-foreground">{muniData.length} LGUs · sorted by Risk Level</span>
@@ -619,7 +619,7 @@ function ReviewDetailModal({
             </div>
           </div>
 
-          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
+          <div className="col-span-2 inner-box p-3">
             <h4 className="text-[11px] font-bold mb-2">SHAP driver contributions</h4>
             {triggers.length > 0 ? (
               <ResponsiveContainer width="100%" height={Math.max(180, triggers.length * 28)}>
@@ -644,7 +644,7 @@ function ReviewDetailModal({
           </div>
 
           {/* SHAP explanations — narrative */}
-          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
+          <div className="col-span-2 inner-box p-3">
             <h4 className="text-[11px] font-bold mb-1">SHAP explanations</h4>
             <p className="text-[10px] compact:text-[14px] text-muted-foreground mb-3">
               {explain?.narrative ?? "Grouped driver reasons behind this quarter's Risk Level forecast."}
@@ -663,7 +663,7 @@ function ReviewDetailModal({
                 ))}
             </ol>
           </div>
-          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
+          <div className="col-span-2 inner-box p-3">
             <h4 className="text-[11px] font-bold mb-2">Provincial ranking (CALABARZON)</h4>
             <ProvincialRanking currentProvince={item.province} quarter={item.quarter} />
           </div>
@@ -959,13 +959,13 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
           {(item.liked || item.improvements) && (
             <div className="grid grid-cols-1 gap-2">
               {item.liked && (
-                <div className="bg-secondary/30 border edge-faint rounded-md p-3">
+                <div className="inner-box p-3">
                   <MetricLabel className="mb-1">Liked most</MetricLabel>
                   <p className="text-[11px] compact:text-[14px] leading-snug">{item.liked}</p>
                 </div>
               )}
               {item.improvements && (
-                <div className="bg-secondary/30 border edge-faint rounded-md p-3">
+                <div className="inner-box p-3">
                   <MetricLabel className="mb-1">Suggestions</MetricLabel>
                   <p className="text-[11px] compact:text-[14px] leading-snug">{item.improvements}</p>
                 </div>
@@ -984,7 +984,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
 
 function KV({ k, v }: { k: string; v: string }) {
   return (
-    <div className="bg-secondary/30 border edge-faint rounded-md px-2.5 py-1.5">
+    <div className="inner-box px-2.5 py-1.5">
       <MetricLabel>{k}</MetricLabel>
       <p className="text-[11px] font-medium truncate">{v}</p>
     </div>
