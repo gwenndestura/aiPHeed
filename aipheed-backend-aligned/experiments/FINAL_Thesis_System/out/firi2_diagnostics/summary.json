@@ -1,0 +1,41 @@
+{
+ "regional": {
+  "H1 alone (regional hunger outlook)": {
+   "quarters": 18,
+   "accuracy": 0.6666666666666666,
+   "auc": 0.7615384615384615,
+   "brier": 0.17224366666666666,
+   "spearman_with_hunger_level": 0.568024271192204
+  },
+  "FIRI v1 regional mean": {
+   "quarters": 18,
+   "accuracy": 0.8888888888888888,
+   "auc": 0.9384615384615385,
+   "brier": 0.18809426007700003,
+   "spearman_with_hunger_level": 0.8177595307636584
+  },
+  "FIRI v1 without H": {
+   "quarters": 16,
+   "accuracy": 0.75,
+   "auc": 0.9583333333333333,
+   "brier": 0.2081229098208125,
+   "spearman_with_hunger_level": 0.53715982165605
+  },
+  "always elevated": {
+   "quarters": 18,
+   "accuracy": 0.7222222222222222
+  }
+ },
+ "lgbm_calibration": {
+  "rows": 50,
+  "base_rate": 0.36,
+  "mean_p": 0.38937508810459803,
+  "brier": 0.21404436047269074,
+  "murphy_reliability": 0.049314878244900176,
+  "murphy_resolution": 0.05449523809523811,
+  "murphy_uncertainty": 0.2304,
+  "calibration_slope": 0.5501248559727542,
+  "missed_HIGH": 8,
+  "false_alarms": 6
+ }
+}
