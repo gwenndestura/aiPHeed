@@ -664,7 +664,7 @@ function Methodology() {
   const notes = [
     {
       t: "Forecast lead",
-      d: "Estimates are issued at the start of each quarter for the quarter two quarters ahead (Lead-2), using only information published before the issue date.",
+      d: "Estimates are issued on the first day of each quarter for the following quarter, which is two quarters after the latest complete data quarter (Lead-2). For example, the estimate issued on 1 October 2026 is for January to March 2027. Only information published before the issue date is used.",
     },
     {
       t: "Missing data",
@@ -908,7 +908,7 @@ function FAQ() {
     },
     {
       q: "How far ahead does it forecast?",
-      a: "Two quarters. Each estimate is issued at the start of a quarter, using only information published before that date. No forecast horizon has yet met the study's reliability criterion.",
+      a: "Two quarters after the latest complete data quarter. Each estimate is issued on the first day of a quarter for the following quarter (for example, 1 October 2026 for January to March 2027), using only information published before that date. No forecast horizon has yet met the study's reliability criterion.",
     },
     {
       q: "How accurate is it?",
