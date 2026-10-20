@@ -96,9 +96,14 @@
 
 ## 4. Thesis-demo system: startup and configuration
 
-From a fresh checkout of `final-thesis-system`:
+From a fresh checkout of `final-thesis-system`. On Windows, clone with long paths enabled: one old experiment
+snapshot path exceeds 260 characters, and a plain clone fails with "Filename too long".
 
 ```
+git -c core.longpaths=true clone https://github.com/gwenndestura/aiPHeed.git
+cd aiPHeed
+git config core.longpaths true
+git checkout final-thesis-system
 cd backend
 python -m venv venv
 venv\Scripts\pip install -r requirements.txt
@@ -278,8 +283,8 @@ Removing any single group changes Lead-2 Brier by ≤ 0.012 (n.s.).
 | Check | Result |
 |---|---|
 | Backend full suite (`pytest -q tests`) | **518 passed, 18 skipped, 0 failed** (`FINAL_Thesis_System/out/backend_full_suite.txt`); includes 13 new thesis-system tests |
-| Backend, committed tree only (another session's uncommitted E46 D-1 hunks swapped out) | see `FINAL_Thesis_System/out/backend_committed_tree_suite.txt` |
-| Fresh checkout (git worktree of the final commit) | see `FINAL_Thesis_System/out/fresh_checkout_check.txt` |
+| Backend, committed tree only (another session's uncommitted E46 D-1 hunks swapped out, then restored byte-identical) | **509 passed, 18 skipped, 0 failed** (`FINAL_Thesis_System/out/backend_committed_tree_suite.txt`) |
+| Fresh checkout (`git -c core.longpaths=true clone` of commit e5af602, committed files only) | full suite **509 passed, 18 skipped, 0 failed**; the startup script starts in strict thesis mode and serves the 2027-Q1 outlook; wrong mode with strict exits with code 3 (`FINAL_Thesis_System/out/fresh_checkout_check.txt`). A clone without long paths fails on Windows: documented in §4. |
 | Frontend vitest | 46/46 |
 | Production build (`vite build`) | passed |
 | `tsc --noEmit` | 6 errors, **pre-existing**, all in `src/data/mockData.ts`; the mock data is not rendered in the dashboard |

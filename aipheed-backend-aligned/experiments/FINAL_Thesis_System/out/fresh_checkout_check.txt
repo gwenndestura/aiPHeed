@@ -1,0 +1,15 @@
+Fresh-checkout reproducibility check (2026-10-20)
+
+1. git worktree add of e5af602 into a long temp path FAILED on Windows: "Filename too long"
+   (aipheed-backend-aligned/experiments/2026-10-14_E24_Resolve_Forecasting/backend_dev/data/quarterly_store/snapshots/<sha>...).
+   => A fresh Windows clone needs long paths:  git -c core.longpaths=true clone ...  (documented in FINAL_THESIS_SYSTEM_REPORT.md section 4).
+2. git -c core.longpaths=true clone (local, --no-checkout) + checkout e5af602 (only committed files):
+   - required artifacts present: backend/data/e58/e58_record.json, data/thesis/final_evaluation.json, data/e69/e69_disclosure.json,
+     data/news_v3/*, data/inputs/sws_rounds.csv, backend/config/thesis_demo.env
+   - thesis-related tests (test_thesis_system, e69, e68, e67, e66, e56, e58): 75 passed
+   - full backend suite: 509 passed, 18 skipped, 0 failed (76.6 s)
+   - scripts/start_thesis_demo.py --api-only --api-port 8075: started in strict thesis mode;
+     /api/v1/config servingModel = {mode: thesis, issued: 2026-10-01, targetQuarter: 2027-Q1, lead: 2, servesTargetNow: true, strict: true};
+     Cavite 2027-Q1 outlook ELEVATED, score 0.1091
+   - AIPHEED_LEAD2_MODEL=e69 + AIPHEED_STRICT_MODEL=1: uvicorn exited with code 3, "AIPHEED_STRICT_MODEL=1 requires AIPHEED_LEAD2_MODEL=thesis"
+   Python environment: the existing backend venv (Python 3.13, requirements.txt installed); frontend not re-installed in the clone.
