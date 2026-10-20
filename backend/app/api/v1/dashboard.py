@@ -92,6 +92,7 @@ async def get_config() -> ConfigResponse:
             ),
         },
         modelPerformance=svc.model_performance(),
+        servingModel=svc.serving_model(),
     )
 
 

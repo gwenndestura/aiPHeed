@@ -51,6 +51,8 @@ DISCLOSURE_E67 = Path(os.getenv("AIPHEED_E67_DISCLOSURE", "data/e67/e67_disclosu
 # (app.ml.inference.e68_disclosure, data/e68/e68_disclosure.json); opt-in only
 # E69: the same numbers again, with the two-scale food-insecurity risk outlook (regional hunger outlook + provincial
 # evidence-fusion tier + vulnerability profile; app.ml.inference.e69_disclosure); opt-in only
+# THESIS: the final thesis system (app.ml.inference.thesis_system): the E58 record score plus the runtime two-scale
+# risk outlook, the Objective 1 news evidence and the final Objective 2/4 evaluation; set by the thesis-demo config
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 
@@ -65,18 +67,18 @@ def mode() -> str:
 
 def active() -> bool:
     return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56", "e58", "e64", "e66", "e67",
-                      "e68", "e69")
+                      "e68", "e69", "thesis")
 
 
 def layered() -> bool:
     """E66/E67: the layered early-warning system (E58 record + climate watch + exact LGU ranks)."""
-    return mode() in ("e66", "e67", "e68", "e69")
+    return mode() in ("e66", "e67", "e68", "e69", "thesis")
 
 
 def record() -> dict:
     path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53,
             "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58,
-            "e64": RECORD_E64, "e66": RECORD_E58, "e67": RECORD_E58, "e68": RECORD_E58, "e69": RECORD_E58}.get(mode(), RECORD)
+            "e64": RECORD_E64, "e66": RECORD_E58, "e67": RECORD_E58, "e68": RECORD_E58, "e69": RECORD_E58, "thesis": RECORD_E58}.get(mode(), RECORD)
     if not path.exists():
         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")
     st = path.stat()

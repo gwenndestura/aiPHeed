@@ -199,7 +199,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     });
   }, [regionsData, filters]);
 
-  const handleRegionClick = useCallback((r: RegionData) => {
+  const handleRegionClick = useCallback((r: RegionData | null) => {
+    if (!r) return;                    // never toggle on a missing region (double-click on "Back to CALABARZON")
     setSelectedRegion((prev) => (prev?.id === r.id ? null : r));
     setSelectedMunicipality(null);
   }, []);

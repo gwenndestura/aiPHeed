@@ -13,11 +13,30 @@ from app.services.accounts import AccountError, AccountNotFound
 from app.tasks.scheduler import shutdown_scheduler, start_scheduler
 
 
+def strict_model_check() -> None:
+    """Thesis-demo configuration (AIPHEED_STRICT_MODEL=1): the API must serve the final thesis system and refuses to
+    start when the mode is different or a required artifact is missing (no silent fallback to an older model)."""
+    import os
+
+    if os.getenv("AIPHEED_STRICT_MODEL", "").strip() not in ("1", "true", "True"):
+        return
+    from app.ml.inference import thesis_system as THESIS
+
+    if not THESIS.active():
+        raise RuntimeError(f"AIPHEED_STRICT_MODEL=1 requires AIPHEED_LEAD2_MODEL=thesis (got "
+                           f"{os.getenv('AIPHEED_LEAD2_MODEL', 'unset (e38)')})")
+    problems = THESIS.validate()
+    if problems:
+        raise RuntimeError("thesis system not ready: " + "; ".join(problems))
+    print(f"Serving {THESIS.MODEL_NAME} (strict)")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup — Rule 1, Quarter Self-Update. The scheduler stages outputs for
     # review; it never publishes.
     print("Starting up aiPHeed backend...")
+    strict_model_check()
     start_scheduler()
     yield
     # Shutdown

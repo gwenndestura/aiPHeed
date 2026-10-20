@@ -259,8 +259,9 @@ class _Canvas:
         canvas.setFillColor(MUTED)
         canvas.drawString(
             18 * mm, 11 * mm,
-            "Food insecurity risk probability -- indicative relative risk only. "
-            "Not an official food insecurity classification.")
+            (THESIS_FOOTER if _thesis() else
+             "Food insecurity risk probability -- indicative relative risk only. "
+             "Not an official food insecurity classification."))
         canvas.drawRightString(width - 18 * mm, 11 * mm, f"Page {doc.page}")
         canvas.restoreState()
 
@@ -277,7 +278,7 @@ def _quarter_label(quarter: str) -> str:
 def _headline(name: str, score: float | None, level: str | None,
               qoq: float | None, extra: list[tuple[str, str]], width: float) -> list:
     left = [
-        _p("FOOD INSECURITY RISK PROBABILITY", "eyebrow"),
+        _p("EXPLORATORY FOOD-PRICE-PRESSURE SCORE (LEAD-2)" if _thesis() else "FOOD INSECURITY RISK PROBABILITY", "eyebrow"),
         Spacer(1, 1.5 * mm),
         _p(_num(score, 3) if score is not None else "--", "figure"),
         _p(f"{(level or 'n/a').upper()}  ·  quarter-on-quarter {_signed(qoq)}", "small"),
@@ -314,6 +315,16 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
 
 
 def _method_block(performance: dict) -> list:
+    if "leads" in performance:                       # thesis system: Objective 2 leads and Objective 4 baselines
+        from app.ml.inference import thesis_system as THESIS
+        tb = THESIS.performance_tables(performance)
+        flow = [_p(svc._ascii(s), "body") for s in tb["sentences"][:1]]
+        flow += [Spacer(1, 2 * mm), _data_table(tb["leadHeader"], tb["leadRows"],
+                                                [52 * mm] + [16 * mm] * 6 + [14 * mm], {i: "RIGHT" for i in range(1, 8)})]
+        flow += [Spacer(1, 3 * mm), _data_table(tb["baselineHeader"], tb["baselineRows"],
+                                                [80 * mm] + [20 * mm] * 4, {i: "RIGHT" for i in range(1, 5)})]
+        flow += [Spacer(1, 2 * mm)] + [_p(svc._ascii(s), "small") for s in tb["sentences"][1:]]
+        return flow
     baselines = performance.get("baselines", {})
     targets = performance.get("targets", {})
     lead = performance.get("maxReliableLeadTime")
@@ -469,7 +480,7 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
         _rule(1.2, INK, 0, 4),
         _p(f"Generated {generated} from aiPHeed model output.", "small"),
         Spacer(1, 5 * mm),
-        _callout(
+        _callout("What these outputs are", THESIS_COVER) if _thesis() else _callout(
             "What this number is",
             "The modelled probability that this area falls in the HIGH class of the "
             "composite food stress label. "
@@ -477,6 +488,46 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
             "insecurity classification</b>, and it is published at the Maximum "
             "Reliable Lead Time the model established empirically."),
     ]
+
+
+# ---------------------------------------------------------------------------
+# Thesis system (AIPHEED_LEAD2_MODEL=thesis): the outlook block and honest labels
+# ---------------------------------------------------------------------------
+THESIS_FOOTER = ("Food-insecurity risk outlook (evidence-based, not a probability) and exploratory food-price-pressure "
+                 "score -- not an official food insecurity classification.")
+THESIS_COVER = ("<b>1. Food-insecurity risk outlook</b> (ELEVATED / WATCH / NO ELEVATED SIGNAL): combines the regional "
+                "hunger outlook with this area's affordability, climate and crop-production evidence. It is an evidence "
+                "summary for planning, <b>not a probability and not validated against provincial outcomes</b>. "
+                "<b>2. The number below</b> is the Lead-2 exploratory food-price-pressure score of the LightGBM model "
+                "(high regional hunger together with provincial food-price pressure); it is <b>not a food-insecurity "
+                "probability</b>, and no forecast lead met the pre-registered reliability criterion.")
+THESIS_SECTIONS = ("REGIONAL HUNGER", "CLIMATE:", "NEWS (", "DATA AT THE ISSUE DATE", "MODEL:")
+
+
+def _thesis() -> bool:
+    from app.ml.inference import thesis_system as THESIS
+    return THESIS.active()
+
+
+def _thesis_outlook_block(code: str | None, quarter: str, name: str, triggers: list[dict]) -> list:
+    summary = svc.plain_summary(code, quarter, name, triggers)
+    if not summary or not summary.get("riskOutlook"):
+        return [_p("No risk outlook is available for this quarter.", "body")]
+    text = summary["sentence"]
+    cuts = sorted({text.find(k) for k in THESIS_SECTIONS if text.find(k) > 0})
+    pieces, start = [], 0
+    for c in cuts:
+        pieces.append(text[start:c].strip())
+        start = c
+    pieces.append(text[start:].strip())
+    lead, rest = pieces[0], pieces[1:]
+    i = lead.find(" The exploratory food-price-pressure score")
+    head, score_text = (lead[:i], lead[i + 1:]) if i > 0 else (lead, "")
+    flow = [_callout("Food-insecurity risk outlook", _escape(head))]
+    flow += [Spacer(1, 2 * mm)] + [_p(_escape(x), "body") for x in rest]
+    if score_text:
+        flow += [Spacer(1, 2 * mm), _p("<b>About the score:</b> " + _escape(score_text), "small")]
+    return flow
 
 
 def build_province_report(province_id: str, quarter: str,
@@ -542,6 +593,9 @@ def build_province_report(province_id: str, quarter: str,
         f"{_escape(str(province.get('horizonLabel') or 'Not published'))}. "
         f"{_escape(str(province.get('confidenceStatement') or ''))}", "body"),
         Spacer(1, 3 * mm)]
+    if _thesis():
+        flow += _section("Food-insecurity risk outlook and evidence")
+        flow += _thesis_outlook_block(code, quarter, province["name"], explain["triggers"])
 
     flow.append(PageBreak())
 
@@ -651,6 +705,10 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         rows,
         [width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm],
         {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT", 6: "RIGHT"}))
+
+    if _thesis():
+        flow += _section("Food-insecurity risk outlook and evidence")
+        flow += _thesis_outlook_block(None, quarter, ref.REGION_NAME, explain["triggers"])
 
     flow += [Spacer(1, 4 * mm), _p(
         "Poverty incidence and availability shock are different signals and do not "

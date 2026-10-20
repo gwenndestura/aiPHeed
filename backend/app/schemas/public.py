@@ -77,6 +77,8 @@ class ConfigResponse(BaseModel):
     # reaches, and its metrics with baselines.
     horizons: dict
     modelPerformance: dict
+    # thesis mode: the explicitly configured serving model (no silent fallback; see thesis_system.validate)
+    servingModel: dict | None = None
 
 
 class Quarter(BaseModel):
@@ -416,6 +418,7 @@ class PlainSummary(BaseModel):
     riskOutlook: dict | None = None
     regionalHungerOutlook: dict | None = None
     vulnerabilityProfile: dict | None = None
+    newsEvidence: dict | None = None                      # thesis mode: Objective 1 news evidence (FSSI-v3, topics)
 
 
 class SummaryComponents(BaseModel):

@@ -614,7 +614,18 @@ def build_report(kind: str, scope: str, province_id: str | None,
     perf = svc.model_performance()
     for sentence in txt.compose_reliability(perf):
         blocks.append(_p(sentence))
-    if perf:
+    if perf and "leads" in perf:                      # thesis system: Objective 2 leads and Objective 4 baselines
+        from app.ml.inference import thesis_system as THESIS
+        tb = THESIS.performance_tables(perf)
+        tab_n += 1
+        blocks.append(_table(tab_n, f"Table {tab_n}. Walk-forward evaluation by lead (E56-TUNED LightGBM, sealed predictions).",
+                             [(h, "left" if i == 0 else "right", 0.3 if i == 0 else 0.1) for i, h in enumerate(tb["leadHeader"])],
+                             tb["leadRows"]))
+        tab_n += 1
+        blocks.append(_table(tab_n, f"Table {tab_n}. LightGBM against the four Chapter I baselines and the majority class.",
+                             [(h, "left" if i == 0 else "right", 0.4 if i == 0 else 0.15) for i, h in enumerate(tb["baselineHeader"])],
+                             tb["baselineRows"]))
+    elif perf:
         tab_n += 1
         base, skill = perf.get("baselines", {}), perf.get("skill", {})
 

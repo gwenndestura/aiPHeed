@@ -1,0 +1,652 @@
+{
+ "schema": "aipheed.thesis.final_evaluation/1",
+ "evidenceStatus": "Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose.",
+ "target": "T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+ "objective2": {
+  "leads": [
+   {
+    "lead": 1,
+    "quarters": 12,
+    "rows": 60,
+    "targets": [
+     "2023-Q4",
+     "2026-Q3"
+    ],
+    "metrics": {
+     "LightGBM E56-TUNED P(HIGH)": {
+      "n": 60,
+      "positives": 21,
+      "accuracy": 0.85,
+      "accuracy_wilson95": [
+       0.7388517410884038,
+       0.9190265075770431
+      ],
+      "precision_HIGH": 0.8333333333333334,
+      "recall_HIGH": 0.7142857142857143,
+      "recall_LOW": 0.9230769230769231,
+      "f1_HIGH": 0.7692307692307693,
+      "balanced_accuracy": 0.8186813186813187,
+      "auc_roc": 0.9010989010989011,
+      "brier": 0.1296690573527516,
+      "confusion": {
+       "TP": 15,
+       "FP": 3,
+       "FN": 6,
+       "TN": 36
+      }
+     },
+     "LightGBM early-warning reading (price part >= 0.5)": {
+      "n": 60,
+      "positives": 21,
+      "accuracy": 0.8833333333333333,
+      "accuracy_wilson95": [
+       0.7782097940014187,
+       0.9423235259654995
+      ],
+      "precision_HIGH": 0.8181818181818182,
+      "recall_HIGH": 0.8571428571428571,
+      "recall_LOW": 0.8974358974358975,
+      "f1_HIGH": 0.8372093023255814,
+      "balanced_accuracy": 0.8772893772893773,
+      "auc_roc": 0.9230769230769231,
+      "brier": 0.11839411885504934,
+      "confusion": {
+       "TP": 18,
+       "FP": 4,
+       "FN": 3,
+       "TN": 35
+      }
+     },
+     "Naive persistence": {
+      "n": 60,
+      "positives": 21,
+      "accuracy": 0.6833333333333333,
+      "accuracy_wilson95": [
+       0.5576599505698345,
+       0.7869429415882567
+      ],
+      "precision_HIGH": 0.55,
+      "recall_HIGH": 0.5238095238095238,
+      "recall_LOW": 0.7692307692307693,
+      "f1_HIGH": 0.5365853658536586,
+      "balanced_accuracy": 0.6465201465201466,
+      "auc_roc": 0.6465201465201464,
+      "brier": 0.31666666666666665,
+      "confusion": {
+       "TP": 11,
+       "FP": 9,
+       "FN": 10,
+       "TN": 30
+      }
+     },
+     "Majority class (always LOW)": {
+      "n": 60,
+      "positives": 21,
+      "accuracy": 0.65,
+      "accuracy_wilson95": [
+       0.5236238380947751,
+       0.7583239827618451
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.5,
+      "brier": 0.35,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 21,
+       "TN": 39
+      }
+     },
+     "Climatology (training base rate)": {
+      "n": 60,
+      "positives": 21,
+      "accuracy": 0.65,
+      "accuracy_wilson95": [
+       0.5236238380947751,
+       0.7583239827618451
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.3443223443223443,
+      "brier": 0.284430146864745,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 21,
+       "TN": 39
+      }
+     }
+    },
+    "vs_persistence": {
+     "mean_brier_diff": -0.18699760931391504,
+     "ci95_lo": -0.28748145912229445,
+     "ci95_hi": -0.08344872865727165,
+     "quarter_wins": 9,
+     "quarter_losses": 3,
+     "sign_p_two_sided": 0.14599609375,
+     "holds": false
+    },
+    "vs_climatology": {
+     "mean_brier_diff": -0.15476108951199327,
+     "ci95_lo": -0.2603778862690695,
+     "ci95_hi": -0.055526102593410426,
+     "quarter_wins": 9,
+     "quarter_losses": 3,
+     "sign_p_two_sided": 0.14599609375,
+     "holds": false
+    },
+    "reliable": false
+   },
+   {
+    "lead": 2,
+    "quarters": 10,
+    "rows": 50,
+    "targets": [
+     "2024-Q2",
+     "2026-Q3"
+    ],
+    "metrics": {
+     "LightGBM E56-TUNED P(HIGH)": {
+      "n": 50,
+      "positives": 18,
+      "accuracy": 0.72,
+      "accuracy_wilson95": [
+       0.5833461285401034,
+       0.8252598564231963
+      ],
+      "precision_HIGH": 0.625,
+      "recall_HIGH": 0.5555555555555556,
+      "recall_LOW": 0.8125,
+      "f1_HIGH": 0.5882352941176471,
+      "balanced_accuracy": 0.6840277777777778,
+      "auc_roc": 0.6493055555555556,
+      "brier": 0.21404436047269074,
+      "confusion": {
+       "TP": 10,
+       "FP": 6,
+       "FN": 8,
+       "TN": 26
+      }
+     },
+     "LightGBM early-warning reading (price part >= 0.5)": {
+      "n": 50,
+      "positives": 18,
+      "accuracy": 0.78,
+      "accuracy_wilson95": [
+       0.6475818431054045,
+       0.8724621377569771
+      ],
+      "precision_HIGH": 0.6666666666666666,
+      "recall_HIGH": 0.7777777777777778,
+      "recall_LOW": 0.78125,
+      "f1_HIGH": 0.717948717948718,
+      "balanced_accuracy": 0.7795138888888888,
+      "auc_roc": 0.7864583333333334,
+      "brier": 0.18191947056631297,
+      "confusion": {
+       "TP": 14,
+       "FP": 7,
+       "FN": 4,
+       "TN": 25
+      }
+     },
+     "Naive persistence": {
+      "n": 50,
+      "positives": 18,
+      "accuracy": 0.56,
+      "accuracy_wilson95": [
+       0.4230578680014353,
+       0.6883801278976466
+      ],
+      "precision_HIGH": 0.4,
+      "recall_HIGH": 0.4444444444444444,
+      "recall_LOW": 0.625,
+      "f1_HIGH": 0.42105263157894735,
+      "balanced_accuracy": 0.5347222222222222,
+      "auc_roc": 0.5347222222222222,
+      "brier": 0.44,
+      "confusion": {
+       "TP": 8,
+       "FP": 12,
+       "FN": 10,
+       "TN": 20
+      }
+     },
+     "Majority class (always LOW)": {
+      "n": 50,
+      "positives": 18,
+      "accuracy": 0.64,
+      "accuracy_wilson95": [
+       0.5014076201030195,
+       0.7586143703281711
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.5,
+      "brier": 0.36,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 18,
+       "TN": 32
+      }
+     },
+     "Climatology (training base rate)": {
+      "n": 50,
+      "positives": 18,
+      "accuracy": 0.64,
+      "accuracy_wilson95": [
+       0.5014076201030195,
+       0.7586143703281711
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.21354166666666666,
+      "brier": 0.3044600444844947,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 18,
+       "TN": 32
+      }
+     }
+    },
+    "vs_persistence": {
+     "mean_brier_diff": -0.22595563952730932,
+     "ci95_lo": -0.38750056926205156,
+     "ci95_hi": -0.05530699505397476,
+     "quarter_wins": 7,
+     "quarter_losses": 3,
+     "sign_p_two_sided": 0.34375,
+     "holds": false
+    },
+    "vs_climatology": {
+     "mean_brier_diff": -0.09041568401180408,
+     "ci95_lo": -0.19172223827201157,
+     "ci95_hi": 6.524389756099898e-05,
+     "quarter_wins": 5,
+     "quarter_losses": 5,
+     "sign_p_two_sided": 1.0,
+     "holds": false
+    },
+    "reliable": false
+   },
+   {
+    "lead": 3,
+    "quarters": 9,
+    "rows": 45,
+    "targets": [
+     "2024-Q3",
+     "2026-Q3"
+    ],
+    "metrics": {
+     "LightGBM E56-TUNED P(HIGH)": {
+      "n": 45,
+      "positives": 14,
+      "accuracy": 0.6222222222222222,
+      "accuracy_wilson95": [
+       0.4762967000646754,
+       0.7489211470165014
+      ],
+      "precision_HIGH": 0.4,
+      "recall_HIGH": 0.42857142857142855,
+      "recall_LOW": 0.7096774193548387,
+      "f1_HIGH": 0.41379310344827586,
+      "balanced_accuracy": 0.5691244239631337,
+      "auc_roc": 0.6198156682027649,
+      "brier": 0.25146838803244465,
+      "confusion": {
+       "TP": 6,
+       "FP": 9,
+       "FN": 8,
+       "TN": 22
+      }
+     },
+     "LightGBM early-warning reading (price part >= 0.5)": {
+      "n": 45,
+      "positives": 14,
+      "accuracy": 0.6444444444444445,
+      "accuracy_wilson95": [
+       0.49835546011952203,
+       0.7678110864309596
+      ],
+      "precision_HIGH": 0.4444444444444444,
+      "recall_HIGH": 0.5714285714285714,
+      "recall_LOW": 0.6774193548387096,
+      "f1_HIGH": 0.5,
+      "balanced_accuracy": 0.6244239631336406,
+      "auc_roc": 0.6566820276497696,
+      "brier": 0.2439173383731075,
+      "confusion": {
+       "TP": 8,
+       "FP": 10,
+       "FN": 6,
+       "TN": 21
+      }
+     },
+     "Naive persistence": {
+      "n": 45,
+      "positives": 14,
+      "accuracy": 0.5111111111111111,
+      "accuracy_wilson95": [
+       0.3700422432648975,
+       0.6504321064697549
+      ],
+      "precision_HIGH": 0.3,
+      "recall_HIGH": 0.42857142857142855,
+      "recall_LOW": 0.5483870967741935,
+      "f1_HIGH": 0.35294117647058826,
+      "balanced_accuracy": 0.48847926267281105,
+      "auc_roc": 0.48847926267281105,
+      "brier": 0.4888888888888889,
+      "confusion": {
+       "TP": 6,
+       "FP": 14,
+       "FN": 8,
+       "TN": 17
+      }
+     },
+     "Majority class (always LOW)": {
+      "n": 45,
+      "positives": 14,
+      "accuracy": 0.6888888888888889,
+      "accuracy_wilson95": [
+       0.5433492001245104,
+       0.8047147453645809
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.5,
+      "brier": 0.3111111111111111,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 14,
+       "TN": 31
+      }
+     },
+     "Climatology (training base rate)": {
+      "n": 45,
+      "positives": 14,
+      "accuracy": 0.6888888888888889,
+      "accuracy_wilson95": [
+       0.5433492001245104,
+       0.8047147453645809
+      ],
+      "precision_HIGH": null,
+      "recall_HIGH": 0.0,
+      "recall_LOW": 1.0,
+      "f1_HIGH": 0.0,
+      "balanced_accuracy": 0.5,
+      "auc_roc": 0.2465437788018433,
+      "brier": 0.2661618174743836,
+      "confusion": {
+       "TP": 0,
+       "FP": 0,
+       "FN": 14,
+       "TN": 31
+      }
+     }
+    },
+    "vs_persistence": {
+     "mean_brier_diff": -0.2374205008564443,
+     "ci95_lo": -0.4097263686779216,
+     "ci95_hi": -0.06492743397368213,
+     "quarter_wins": 7,
+     "quarter_losses": 2,
+     "sign_p_two_sided": 0.1796875,
+     "holds": false
+    },
+    "vs_climatology": {
+     "mean_brier_diff": -0.01469342944193895,
+     "ci95_lo": -0.1116374543708615,
+     "ci95_hi": 0.08276032817335267,
+     "quarter_wins": 6,
+     "quarter_losses": 3,
+     "sign_p_two_sided": 0.5078125,
+     "holds": false
+    },
+    "reliable": false
+   }
+  ],
+  "lead4": "not computable under the pre-registered information cutoffs",
+  "reliabilityCriterion": "E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05",
+  "furthestReliableLead": null,
+  "verdict": "no lead meets the reliability criterion"
+ },
+ "objective4": {
+  "rows": 45,
+  "quarters": 9,
+  "targets": [
+   "2024-Q3",
+   "2026-Q3"
+  ],
+  "label": "T43",
+  "models": {
+   "LightGBM E56-TUNED (proposed)": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.7777777777777778,
+    "accuracy_wilson95": [
+     0.637304262026367,
+     0.8745544813399436
+    ],
+    "precision_HIGH": 0.625,
+    "recall_HIGH": 0.7142857142857143,
+    "recall_LOW": 0.8064516129032258,
+    "f1_HIGH": 0.6666666666666666,
+    "balanced_accuracy": 0.76036866359447,
+    "auc_roc": 0.7626728110599078,
+    "brier": 0.1784676345424615,
+    "confusion": {
+     "TP": 10,
+     "FP": 6,
+     "FN": 4,
+     "TN": 25
+    }
+   },
+   "I. Naive persistence": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.6,
+    "accuracy_wilson95": [
+     0.4545159420914473,
+     0.7297532055204246
+    ],
+    "precision_HIGH": 0.4,
+    "recall_HIGH": 0.5714285714285714,
+    "recall_LOW": 0.6129032258064516,
+    "f1_HIGH": 0.47058823529411764,
+    "balanced_accuracy": 0.5921658986175116,
+    "auc_roc": 0.5921658986175116,
+    "brier": 0.4,
+    "confusion": {
+     "TP": 8,
+     "FP": 12,
+     "FN": 6,
+     "TN": 19
+    },
+    "paired_vs_lightgbm": {
+     "brier_diff_lightgbm_minus_baseline": -0.22153236545753852,
+     "ci95": [
+      -0.40919264850559417,
+      -0.03681402548795936
+     ],
+     "quarter_wins_lightgbm": 6,
+     "quarter_losses_lightgbm": 3,
+     "quarter_sign_p": 0.25390625,
+     "brier_advantage_established": false,
+     "mcnemar_rows_lightgbm_right_only": 13,
+     "mcnemar_rows_baseline_right_only": 5,
+     "mcnemar_p": 0.09625244140625
+    }
+   },
+   "II. PSA-only indicator (logistic regression on government indicators)": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.37777777777777777,
+    "accuracy_wilson95": [
+     0.25107885298349863,
+     0.5237032999353246
+    ],
+    "precision_HIGH": 0.15,
+    "recall_HIGH": 0.21428571428571427,
+    "recall_LOW": 0.45161290322580644,
+    "f1_HIGH": 0.17647058823529413,
+    "balanced_accuracy": 0.33294930875576034,
+    "auc_roc": 0.2949308755760369,
+    "brier": 0.5984197026918154,
+    "confusion": {
+     "TP": 3,
+     "FP": 17,
+     "FN": 11,
+     "TN": 14
+    },
+    "paired_vs_lightgbm": {
+     "brier_diff_lightgbm_minus_baseline": -0.4199520681493539,
+     "ci95": [
+      -0.6563566057500986,
+      -0.19865364311559128
+     ],
+     "quarter_wins_lightgbm": 8,
+     "quarter_losses_lightgbm": 1,
+     "quarter_sign_p": 0.01953125,
+     "brier_advantage_established": true,
+     "mcnemar_rows_lightgbm_right_only": 23,
+     "mcnemar_rows_baseline_right_only": 5,
+     "mcnemar_p": 0.0009122341871261597
+    }
+   },
+   "III. NLP-only sentiment (logistic regression on news features)": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.6666666666666666,
+    "accuracy_wilson95": [
+     0.520702168092554,
+     0.7864130779272324
+    ],
+    "precision_HIGH": 0.4,
+    "recall_HIGH": 0.14285714285714285,
+    "recall_LOW": 0.9032258064516129,
+    "f1_HIGH": 0.21052631578947367,
+    "balanced_accuracy": 0.5230414746543779,
+    "auc_roc": 0.48847926267281105,
+    "brier": 0.23546327482331242,
+    "confusion": {
+     "TP": 2,
+     "FP": 3,
+     "FN": 12,
+     "TN": 28
+    },
+    "paired_vs_lightgbm": {
+     "brier_diff_lightgbm_minus_baseline": -0.05699564028085088,
+     "ci95": [
+      -0.12158897265472557,
+      0.007851970334491644
+     ],
+     "quarter_wins_lightgbm": 7,
+     "quarter_losses_lightgbm": 2,
+     "quarter_sign_p": 0.08984375,
+     "brier_advantage_established": false,
+     "mcnemar_rows_lightgbm_right_only": 12,
+     "mcnemar_rows_baseline_right_only": 7,
+     "mcnemar_p": 0.359283447265625
+    }
+   },
+   "IV. Logistic regression (combined government + news)": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.3333333333333333,
+    "accuracy_wilson95": [
+     0.21358692207276764,
+     0.479297831907446
+    ],
+    "precision_HIGH": 0.13636363636363635,
+    "recall_HIGH": 0.21428571428571427,
+    "recall_LOW": 0.3870967741935484,
+    "f1_HIGH": 0.16666666666666666,
+    "balanced_accuracy": 0.30069124423963134,
+    "auc_roc": 0.24654377880184333,
+    "brier": 0.6456957028251958,
+    "confusion": {
+     "TP": 3,
+     "FP": 19,
+     "FN": 11,
+     "TN": 12
+    },
+    "paired_vs_lightgbm": {
+     "brier_diff_lightgbm_minus_baseline": -0.4672280682827343,
+     "ci95": [
+      -0.6702210595907532,
+      -0.27551690687216107
+     ],
+     "quarter_wins_lightgbm": 9,
+     "quarter_losses_lightgbm": 0,
+     "quarter_sign_p": 0.001953125,
+     "brier_advantage_established": true,
+     "mcnemar_rows_lightgbm_right_only": 25,
+     "mcnemar_rows_baseline_right_only": 5,
+     "mcnemar_p": 0.0003249142318964005
+    }
+   },
+   "Majority class (always LOW)": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.6888888888888889,
+    "accuracy_wilson95": [
+     0.5433492001245104,
+     0.8047147453645809
+    ],
+    "precision_HIGH": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1_HIGH": 0.0,
+    "balanced_accuracy": 0.5,
+    "auc_roc": 0.5,
+    "brier": 0.3111111111111111,
+    "confusion": {
+     "TP": 0,
+     "FP": 0,
+     "FN": 14,
+     "TN": 31
+    },
+    "paired_vs_lightgbm": {
+     "brier_diff_lightgbm_minus_baseline": -0.1326434765686496,
+     "ci95": [
+      -0.30371597467057565,
+      0.021427512165764457
+     ],
+     "quarter_wins_lightgbm": 6,
+     "quarter_losses_lightgbm": 3,
+     "quarter_sign_p": 0.25390625,
+     "brier_advantage_established": false,
+     "mcnemar_rows_lightgbm_right_only": 10,
+     "mcnemar_rows_baseline_right_only": 6,
+     "mcnemar_p": 0.454498291015625
+    }
+   }
+  }
+ },
+ "goal75": "Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.",
+ "sources": {
+  "e63_predictions_sha256": "7acae3a1c89f72fc17fe740cf345d0c7f612e7b01ecea52730caaac4f17c16d3",
+  "e57_predictions_sha256": "4d52b1f3e3b4597ee0d218d2c24c9f7e15d4243093b9b0a443a4837256048910",
+  "e55_baselines_sha256": "4a4ff0036db7493293af21d5a75fa72348652712c5f1045b5fb3688c5f7f67b5"
+ }
+}

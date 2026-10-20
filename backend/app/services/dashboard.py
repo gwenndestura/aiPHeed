@@ -24,6 +24,7 @@ from __future__ import annotations
 import functools
 import json
 import logging
+import os
 import unicodedata
 from pathlib import Path
 
@@ -38,6 +39,7 @@ from app.ml.inference import climate_watch as CW
 from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
+from app.ml.inference import thesis_system as THESIS
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -552,7 +554,8 @@ def province_summary(
             # confidence statement and a verification date.
             "forecastHorizonQuarters": record.get("forecast_horizon_quarters"),
             "horizonLabel": record.get("horizon_label"),
-            "confidenceStatement": record.get("confidence_statement"),
+            "confidenceStatement": (THESIS.relabel(record.get("confidence_statement")) if THESIS.active()
+                                    else record.get("confidence_statement")),
             "verificationDate": record.get("verification_date"),
             "articleCount": article_count(code, quarter),
             "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
@@ -1076,6 +1079,8 @@ CANDIDATE_EVENTS = {
     # E68: what the score is, in the words the E68 target-validity review supports
     "e68": D68.event(),
     "e69": D68.event(),
+    "thesis": ("the exploratory food-price-pressure score (high regional hunger together with provincial food-price "
+               "pressure; not a measure of household food insecurity)"),
     # E67: same wording as E66 (same record, same target)
     "e67": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
@@ -1187,6 +1192,8 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     # E65: the official El Nino status known at the issue date, and that the model barely uses ENSO; part of the caveat
     # when there is one (the sentence still ends with the caveat, E61), else appended to the sentence
     enso = ENSO.forecast_sentence(quarter, E41L2.mode()) if kind in ("forecast", "earlier_forecast") else None
+    if THESIS.active():
+        enso = None                                     # the thesis passage states the climate evidence once
     if enso and caveat:
         caveat = f"{caveat} {enso}"
     if caveat:
@@ -1196,7 +1203,7 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     # E66: the Climate Food-Stress Watch, a separate rule-based El Nino hazard layer (not a model input, changes no
     # number); its text goes into the same sentence field, its values into a separate API field
     cfsw = _climate_watch(quarter, province_code) if kind in ("forecast", "earlier_forecast") else None
-    if cfsw and cfsw["sentence"]:
+    if cfsw and cfsw["sentence"] and not THESIS.active():
         sentence = f"{sentence} {cfsw['sentence']}"
     # E67: why the score is LOW under a climate watch, what each trigger group's data can and cannot show, and the
     # model identity; text into the same sentence field, values into optional API fields (no new UI element)
@@ -1207,6 +1214,11 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     # E69: the two-scale food-insecurity risk outlook (regional hunger outlook + provincial evidence-fusion tier)
     if E41L2.mode() == "e69":
         e67 = D69.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw)
+    # THESIS: the final system's passage: the risk outlook first, then the score, then hunger, climate, news, data, model
+    if THESIS.active():
+        e67 = _thesis_summary(quarter, province_code, kind, result, cfsw)
+        if e67:
+            sentence = f"{e67['lead']} {sentence}"
     if e67 and e67["sentence"]:
         sentence = f"{sentence} {e67['sentence']}"
     return {
@@ -1225,8 +1237,47 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
         **({"inputStatus": e67["inputStatus"]} if e67 and e67.get("inputStatus") else {}),
         **({"affordability": e67["affordability"]} if e67 and e67.get("affordability") else {}),
-        **({k: e67[k] for k in ("riskOutlook", "regionalHungerOutlook", "vulnerabilityProfile") if e67 and e67.get(k)}),
+        **({k: e67[k] for k in ("riskOutlook", "regionalHungerOutlook", "vulnerabilityProfile", "newsEvidence")
+            if e67 and e67.get(k)}),
     }
+
+
+def _thesis_summary(quarter: str, province_code: str | None, kind: str, result: str, cfsw: dict | None) -> dict | None:
+    """THESIS mode: the final passage and fields (thesis_system), with the E68 input status of the issue date."""
+    rec = E41L2.record()
+    d68 = D68.disclosure() or {}
+    status = d68.get("inputStatus", {}).get(quarter, {})
+    runtime = quarter == rec.get("targetQuarter")       # the record's own forecast: computed from the record itself
+    if province_code:
+        items = (THESIS.input_status(rec, province_code) if runtime else
+                 (status.get(rec["provinces"][province_code]["name"]) or {}).get("inputs"))
+        o = rec["provinces"][province_code]["observed"]
+        food = (o.get("foodInflationLatestMonths") or {}).get("value")
+        gap = (o.get("foodMinusHeadline") or {}).get("value")
+        afford = ({"headline": round(food - gap, 2), "headlineUsual": round(THESIS.HEADLINE_USUAL[province_code], 2),
+                   "food": food, "foodUsual": (o.get("foodInflationLatestMonths") or {}).get("provinceReferenceP60"),
+                   "headlineAbove": (food - gap) > THESIS.HEADLINE_USUAL[province_code]}
+                  if runtime and food is not None and gap is not None else
+                  d68.get("affordability", {}).get(quarter, {}).get(rec["provinces"][province_code]["name"]))
+    else:
+        lists = ([THESIS.input_status(rec, c) for c in rec["provinces"]] if runtime else
+                 [(v or {}).get("inputs", []) for v in status.values()])
+        per = [{(i["key"], i["status"]) for i in li} for li in lists]
+        common = set.intersection(*per) if per else set()
+        first = lists[0] if lists else []
+        items = [i for i in first if (i["key"], i["status"]) in common] or None
+        afford = None
+    out = THESIS.for_summary(rec, quarter, province_code, kind, result, cfsw, items)
+    if out is None:
+        return None
+    vul = None
+    if province_code:
+        d69 = D69.disclosure() or {}
+        name = rec["provinces"][province_code]["name"]
+        prof = d69.get("vulnerabilityProfile", {}).get(name)
+        vul = {"province": name, **prof, "note": d69.get("vulnerabilityNote")} if prof else None
+    return {**out, "triggerCoverage": None, "inputStatus": items if province_code else None, "affordability": afford,
+            "vulnerabilityProfile": vul}
 
 
 def _climate_watch(quarter: str, province_code: str | None) -> dict | None:
@@ -1531,8 +1582,29 @@ def compose_formal_interpretation(
 # Model performance
 # ---------------------------------------------------------------------------
 
-@functools.lru_cache(maxsize=4)
+def serving_model() -> dict | None:
+    """The explicitly configured Lead-2 serving model (None under the E38 default)."""
+    if not E41L2.active():
+        return None
+    try:
+        rec = E41L2.record()
+    except E41L2.RecordError:
+        return {"mode": E41L2.mode(), "status": "record missing"}
+    return {"mode": E41L2.mode(), "model": THESIS.MODEL_NAME if THESIS.active() else rec.get("modelFamily"),
+            "issued": rec.get("origin"), "targetQuarter": rec.get("targetQuarter"), "lead": rec.get("lead"),
+            "servesTargetNow": E41L2.serves(forecast_target()["target_quarter"]),
+            "strict": os.getenv("AIPHEED_STRICT_MODEL", "") in ("1", "true", "True")}
+
+
 def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
+    # THESIS: the final Objective 2/4 evaluation, read outside the per-horizon cache (the cache key has no mode)
+    if THESIS.active():
+        return THESIS.model_performance()
+    return _model_performance(horizon)
+
+
+@functools.lru_cache(maxsize=4)
+def _model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
     """
     The Specific Objective 2 metrics, with the Research Question 3 baselines
     they must be quoted against.
@@ -1837,7 +1909,7 @@ def _news_pool_v3() -> list[dict]:
 
 
 def _feed_pool() -> list[dict]:
-    return _news_pool_v3() if E41L2.mode() == "e64" else _news_pool()
+    return _news_pool_v3() if E41L2.mode() in ("e64", "thesis") else _news_pool()
 
 
 def _feed_window(province_code: str | None, ev_q: str) -> tuple[list[dict], list[str]]:
