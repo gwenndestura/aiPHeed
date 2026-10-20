@@ -194,11 +194,17 @@ export interface MunicipalitySummary {
   densityPerKm2: number | null;
   povertyRate: number | null;
   quarter: string;
-  riskIndex: number;
-  riskLevel: string;
+  riskIndex: number | null;
+  riskLevel: string | null;
   // Never null -- a reweighted province number, not an independent forecast.
   disaggregationLabel: string;
   limitedSignal: boolean;
+  /** E45: what colours the LGU on the map. */
+  vulnerabilityIndex?: number | null;
+  mapStatus?: "vulnerability" | "insufficient_data" | null;
+  mapCategory?: "low" | "medium" | "high" | null;
+  mapLabel?: string | null;
+  mapNote?: string | null;
 }
 
 export interface MunicipalitiesResponse {
@@ -288,7 +294,22 @@ export interface Trigger {
   direction: "increases_risk" | "protective";
   color: "yellow" | "red" | "green";
   newsSignalProportion: number | null;
+  /** E42: what the group is in this forecast. Absent from older backends. */
+  status?: TriggerStatus;
+  statusNote?: string;
+  /** E44: the observed evidence behind a model-attributed trigger (province scope, candidate models only). */
+  evidenceNote?: string | null;
 }
+
+export type TriggerStatus =
+  | "contributes"
+  | "no_effect"
+  | "data_not_in_model"
+  | "stale"
+  | "no_model_input"
+  | "no_data"
+  | "insufficient_data"
+  | "not_recorded";
 
 export interface ExplainabilityResponse {
   scope: Scope;
@@ -304,6 +325,22 @@ export interface ExplainabilityResponse {
   /** Third-person interpretation for the PDF report. Plain ASCII. */
   formalInterpretation: string;
   note: string;
+  /** E52: plain-language reading of an experimental candidate's estimate. Absent/null otherwise. */
+  summary?: PlainSummary | null;
+}
+
+export interface PlainSummary {
+  event: string;
+  targetQuarter: string;
+  estimateKind: "forecast" | "earlier_forecast" | "backtest";
+  issued: string | null;
+  probability: number;
+  result: "HIGH" | "LOW";
+  observedOutcome: "HIGH" | "LOW" | null;
+  reasons: { key: string; label: string; direction: "increases_risk" | "protective"; pct: number; evidence: string | null }[];
+  dataStatus: "sufficient" | "limited" | "unavailable";
+  dataStatusNote: string;
+  sentence: string;
 }
 
 export interface NewsTopic {
@@ -323,6 +360,13 @@ export interface NewsArticle {
   topicKey: string;
   topicLabel: string;
   relevanceScore: number | null;
+  /** E45: why the article is in the feed and where it is attributed. Absent from older backends. */
+  relevanceStatus?: "validated" | "trigger_match" | "classifier_v2" | null;
+  relevanceLabel?: string | null;
+  province?: string | null;
+  triggers?: string[];
+  quarter?: string | null;
+  collectedRetrospectively?: boolean | null;
 }
 
 export interface NewsResponse {
@@ -338,6 +382,11 @@ export interface NewsResponse {
   page: number;
   pageSize: number;
   total: number;
+  /** E45: quarters covered (the evidence quarter, extended back when it holds fewer than 5 articles). */
+  windowQuarters?: string[];
+  validatedCount?: number;
+  triggerMatchCount?: number;
+  feedNote?: string | null;
 }
 
 // ---------------------------------------------------------------------------

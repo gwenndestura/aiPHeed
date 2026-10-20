@@ -7,7 +7,7 @@
 // friendlier presentation of the same key + direction for the general
 // public dashboard, not a different value or a different computation.
 
-import type { Trigger } from "./apiTypes";
+import type { Trigger, TriggerStatus } from "./apiTypes";
 
 interface Copy {
   title: string;
@@ -67,8 +67,69 @@ const DRIVER_COPY: Record<string, { risk: Copy; protective: Copy }> = {
   },
 };
 
-export function driverCopy(t: Pick<Trigger, "key" | "direction">): Copy {
+// E42: a direction is only stated for a group that actually moved the forecast. A group with no model input, no
+// official data, or no measurable effect gets neutral copy that says exactly that (previously a 0% climate group read
+// "Weather is hurting food supply").
+const FRIENDLY_NAME: Record<string, string> = {
+  market: "Food prices",
+  climate: "Weather and farm supply",
+  fish_kill: "Fish kills and fisheries",
+  employment: "Jobs and livelihoods",
+  ofw_remittance: "OFW remittances",
+};
+
+const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string) => Copy> = {
+  no_effect: (name) => ({
+    title: `${name}: no measurable effect`,
+    description: "This factor is in the model but did not move this quarter's score.",
+  }),
+  data_not_in_model: (name) => ({
+    title: `${name}: data shown, not in the model`,
+    description: "Official data exist and are shown as evidence, but the model does not use them for this score.",
+  }),
+  stale: (name) => ({
+    title: `${name}: data out of date`,
+    description: "The latest official figure is more than two quarters old, so it says little about this quarter.",
+  }),
+  no_model_input: (name) => ({
+    title: `${name}: not used in this forecast`,
+    description: "The current model has no input for this factor, so it neither raised nor lowered the score.",
+  }),
+  no_data: (name) => ({
+    title: `${name}: no official data`,
+    description: "No official data series is available for this factor. Missing data is not a sign of low risk.",
+  }),
+  insufficient_data: (name) => ({
+    title: `${name}: insufficient data`,
+    description: "None of this factor's inputs had a published value when this forecast was issued, so no effect is reported. Missing data is not a sign of low risk.",
+  }),
+  not_recorded: (name) => ({
+    title: `${name}: not recorded for this quarter`,
+    description: "This quarter shows the model's backtest or an earlier forecast; factor contributions are recorded only for the issued forecast.",
+  }),
+};
+
+/** True when the group moved the forecast, so a direction may be stated. */
+export function isContributing(t: Pick<Trigger, "status" | "pct">): boolean {
+  return t.status ? t.status === "contributes" : t.pct > 0;
+}
+
+export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct" | "evidenceNote">): Copy {
   const entry = DRIVER_COPY[t.key];
+  // E44: when the backend states the evidence behind a model-attributed group, say what the model did with it and
+  // show the actual observation, instead of asserting an event ("Typhoons damaged farms") that may not have happened.
+  if (isContributing(t) && t.evidenceNote) {
+    const name = FRIENDLY_NAME[t.key] ?? t.key;
+    return {
+      title: `${name}: ${t.direction === "protective" ? "lowers" : "raises"} the forecast`,
+      description: t.evidenceNote,
+    };
+  }
+  if (!isContributing(t)) {
+    const status: Exclude<TriggerStatus, "contributes"> =
+      t.status && t.status !== "contributes" ? t.status : "no_effect";
+    return NEUTRAL_COPY[status](FRIENDLY_NAME[t.key] ?? t.key);
+  }
   if (!entry) return { title: t.key, description: "" };
   return t.direction === "protective" ? entry.protective : entry.risk;
 }
