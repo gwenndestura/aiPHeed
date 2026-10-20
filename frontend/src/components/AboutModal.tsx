@@ -23,7 +23,7 @@ export function AboutModal() {
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
             aiPHeed is an estimated food-insecurity risk index for the five CALABARZON provinces,
-            forecast two quarters ahead to support planning. It was developed by a student research
+            forecast three months ahead (for the next quarter) to support planning. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
           </DialogDescription>
@@ -49,7 +49,8 @@ export function AboutModal() {
               ))}
             </ul>
             <p className="text-[10px] text-muted-foreground/70 mt-1.5">
-              Only data from 2021 onward is used. Estimates are issued quarterly, two quarters ahead.
+              Only data from 2021 onward is used. Estimates are issued at the start of each quarter for the next
+              quarter, three months ahead.
             </p>
           </Section>
 
@@ -80,17 +81,13 @@ export function AboutModal() {
               <a href="mailto:ored@calabarzon.da.gov.ph" className={CONTACT_CHIP}>
                 <Mail aria-hidden className="h-3.5 w-3.5" /> ored@calabarzon.da.gov.ph
               </a>
-              {/* Not yet confirmed by the research team: plain text, not a link. */}
-              <span className="inline-flex items-center gap-1.5 h-8 compact:h-11 px-3 rounded-full border border-dashed edge-control text-[11px] font-medium text-muted-foreground">
-                Research team: [CONFIRM: research team email]
-              </span>
             </div>
           </Section>
 
           <div className="grid gap-2 pt-1">
             <Row k="Model" v="Risk index FIRI v2 · LightGBM price input" />
-            <Row k="Price input (LightGBM, Lead-2)" v="accuracy 0.72 · F1 0.59 · AUC 0.65" />
-            <Row k="Lead time" v="Two quarters ahead. No forecast horizon has yet met the reliability test." />
+            <Row k="Price input (LightGBM, three months ahead)" v="accuracy 0.72 · F1 0.59 · AUC 0.65" />
+            <Row k="Lead time" v="Three months ahead (next quarter)" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 

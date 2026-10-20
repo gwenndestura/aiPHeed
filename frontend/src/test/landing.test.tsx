@@ -130,6 +130,15 @@ describe("Landing page", () => {
     expect(container.textContent).toContain("It uses the FIRI v2 risk index, with a LightGBM food-price-pressure forecast as one input");
   });
 
+  it("words the lead time one way: three months ahead, never two quarters or Lead-2", () => {
+    const { container } = renderLanding();
+    const text = container.textContent ?? "";
+    expect(text).not.toMatch(/two quarters|two-quarter|Lead-2|\(Lead 2\)/i);
+    expect(text).toContain("Estimates are issued at the start of each quarter for the next quarter, three months ahead");
+    fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
+    expect(screen.getByText(/^Three months ahead\. Each estimate is issued at the start of a quarter for the next quarter/)).toBeTruthy();
+  });
+
   it("has no research email and no [CONFIRM] placeholder", () => {
     const { container } = renderLanding();
     expect(container.innerHTML).not.toContain("aipheed.research@dlsud.edu.ph");
@@ -177,14 +186,14 @@ describe("Landing page", () => {
       ["0.62", "0.40", "0.43", "0.41", "0.62"],
     ]);
     const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
-    expect(heads[0]).toBe("One quarter ahead (Lead 1)");
-    expect(heads[1]).toBe("Two quarters ahead (Lead 2)The forecast shown on the map");
-    expect(heads[2]).toBe("Three quarters ahead (Lead 3)");
+    expect(heads[0]).toBe("Lead 1: current quarter");
+    expect(heads[1]).toBe("Lead 2: three months ahead (used by the map)The forecast shown on the map");
+    expect(heads[2]).toBe("Lead 3: six months ahead");
     expect(table.textContent).toContain("60 province-quarters, 12 quarters");
     expect(table.textContent).toContain("50 province-quarters, 10 quarters");
     expect(table.textContent).toContain("45 province-quarters, 9 quarters");
     const acc = container.querySelector("#accuracy")?.textContent ?? "";
-    expect(acc).toContain("Accuracy falls the further ahead the forecast looks; the map forecasts two quarters ahead.");
+    expect(acc).toContain("Accuracy falls the further ahead the forecast looks; the map forecasts three months ahead.");
     expect(acc).toContain("All results below are development evidence");
     expect(acc).toContain("The 75% accuracy goal");
   });
@@ -223,16 +232,19 @@ describe("About dialog", () => {
     expect(titles).toEqual(["How to read the map", "Data sources", "Missing and limited data", "Disclaimer", "Contact"]);
   });
 
-  it("labels the performance row as the price input and words the lead time plainly", () => {
+  it("labels the performance row as the price input and gives the lead time as three months ahead", () => {
     const dlg = openAbout();
-    expect(dlg.textContent).toContain("Price input (LightGBM, Lead-2)");
+    expect(dlg.textContent).toContain("Price input (LightGBM, three months ahead)");
     expect(dlg.textContent).toContain("accuracy 0.72 · F1 0.59 · AUC 0.65");
-    expect(dlg.textContent).toContain("Two quarters ahead. No forecast horizon has yet met the reliability test.");
+    const lead = within(dlg).getByText("Lead time").parentElement as HTMLElement;
+    expect(lead.textContent).toBe("Lead timeThree months ahead (next quarter)");
+    expect(dlg.textContent).not.toContain("reliability test");
   });
 
-  it("drops the research email and shows an unlinked placeholder", () => {
+  it("has no research email and no [CONFIRM] text", () => {
     const dlg = openAbout();
     expect(dlg.innerHTML).not.toContain("aipheed.research@dlsud.edu.ph");
-    expect(screen.getByText(/\[CONFIRM: research team email\]/).closest("a")).toBeNull();
+    expect(dlg.textContent).not.toContain("[CONFIRM");
+    expect(dlg.textContent).not.toContain("Research team:");
   });
 });

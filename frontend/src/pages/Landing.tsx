@@ -148,8 +148,8 @@ function About() {
       <Card>
         <div className="space-y-5">
           <p>
-            aiPHeed estimates the relative risk of food insecurity in each of the five CALABARZON provinces two
-            quarters ahead. It combines public data on prices, poverty, climate, food production, jobs, remittances,
+            aiPHeed estimates the relative risk of food insecurity in each of the five CALABARZON provinces three
+            months ahead (for the next quarter). It combines public data on prices, poverty, climate, food production, jobs, remittances,
             news and hunger into one index from 0 to 1. A score of 0.50 or higher is shown as High risk. The index is
             not an official statistic.
           </p>
@@ -169,7 +169,7 @@ function About() {
               at the issue date;
             </li>
             <li>
-              a food-price-pressure forecast from a LightGBM model, two quarters ahead. It is one input to the index
+              a food-price-pressure forecast from a LightGBM model, three months ahead. It is one input to the index
               and is also shown on its own;
             </li>
             <li>
@@ -233,7 +233,7 @@ const STEPS = [
 const NOTES = [
   {
     t: "Forecast lead",
-    d: "Estimates are issued at the start of each quarter for the quarter two quarters ahead (Lead-2), using only information published before the issue date.",
+    d: "Estimates are issued at the start of each quarter for the next quarter, three months ahead, using only information published before the issue date.",
   },
   {
     t: "Missing data",
@@ -323,9 +323,9 @@ function Methodology() {
 /* Figures copied exactly from FINAL_THESIS_SYSTEM_REPORT.md sections 1-2 and 11 and /api/v1/config (FIRI v2); never rounded here. */
 /* LightGBM food-price-pressure lead-time table: report section 11 (sealed walk-forward predictions) = /api/v1/config modelPerformance.leads. */
 const LEADS = [
-  { label: "One quarter ahead (Lead 1)", acc: "0.85", prec: "0.83", rec: "0.71", f1: "0.77", auc: "0.90", tested: "60 province-quarters, 12 quarters" },
-  { label: "Two quarters ahead (Lead 2)", onMap: true, acc: "0.72", prec: "0.63", rec: "0.56", f1: "0.59", auc: "0.65", tested: "50 province-quarters, 10 quarters" },
-  { label: "Three quarters ahead (Lead 3)", acc: "0.62", prec: "0.40", rec: "0.43", f1: "0.41", auc: "0.62", tested: "45 province-quarters, 9 quarters" },
+  { label: "Lead 1: current quarter", acc: "0.85", prec: "0.83", rec: "0.71", f1: "0.77", auc: "0.90", tested: "60 province-quarters, 12 quarters" },
+  { label: "Lead 2: three months ahead (used by the map)", onMap: true, acc: "0.72", prec: "0.63", rec: "0.56", f1: "0.59", auc: "0.65", tested: "50 province-quarters, 10 quarters" },
+  { label: "Lead 3: six months ahead", acc: "0.62", prec: "0.40", rec: "0.43", f1: "0.41", auc: "0.62", tested: "45 province-quarters, 9 quarters" },
 ];
 const LEAD_METRICS = [
   ["acc", "Accuracy"],
@@ -344,7 +344,7 @@ const BRIER = [
 const RESULTS = [
   {
     t: "Lead time",
-    d: "Leads of one, two and three quarters were tested. No lead met the pre-registered reliability criterion, so no reliable forecast horizon has been established.",
+    d: "Leads 1, 2 and 3 (the current quarter, three months ahead and six months ahead) were tested. No lead met the pre-registered reliability criterion, so no reliable forecast horizon has been established.",
   },
   {
     t: "The 75% accuracy goal",
@@ -352,7 +352,7 @@ const RESULTS = [
   },
   {
     t: "Risk index against observed regional hunger",
-    d: "Two quarters ahead, the regional average index matched whether SWS hunger in Balance Luzon was above 11.3% with accuracy 0.94 over 17 quarters; always predicting elevated and the regional hunger outlook alone each scored 0.71. No paired test establishes an advantage over these baselines. The outcome is regional, the index also uses SWS hunger as an input, and every quarter was examined during development.",
+    d: "Three months ahead, the regional average index matched whether SWS hunger in Balance Luzon was above 11.3% with accuracy 0.94 over 17 quarters; always predicting elevated and the regional hunger outlook alone each scored 0.71. No paired test establishes an advantage over these baselines. The outcome is regional, the index also uses SWS hunger as an input, and every quarter was examined during development.",
   },
   {
     t: "What could not be tested, and the next test",
@@ -438,7 +438,7 @@ function LeadTimeTable() {
         ))}
       </ul>
 
-      <p className="mt-3">Accuracy falls the further ahead the forecast looks; the map forecasts two quarters ahead.</p>
+      <p className="mt-3">Accuracy falls the further ahead the forecast looks; the map forecasts three months ahead.</p>
     </div>
   );
 }
@@ -505,7 +505,7 @@ const DISCLAIMER = [
   "Missing data is not low risk. When a source has not yet published, the indicator is left out and the estimate is based on fewer domains. The dashboard says which inputs are missing.",
   "Back-test results are not live results. Past-quarter results were computed after the fact on quarters examined during development. Only the sealed 2026-Q4 and 2027-Q1 estimates will be a true test.",
   // Quarter counts from /api/v1/config modelPerformance: LightGBM leads 1-3 use 12, 10 and 9 quarters; the FIRI v2 regional result at Lead 2 uses 17.
-  "Small sample. The food-price-pressure forecast has only 9 to 12 quarters of evidence for each lead time, and the risk index's regional result two quarters ahead rests on 17 quarters. There was one El Niño episode in 2021 to 2026.",
+  "Small sample. The food-price-pressure forecast has only 9 to 12 quarters of evidence for each lead time, and the risk index's regional result three months ahead rests on 17 quarters. There was one El Niño episode in 2021 to 2026.",
   "aiPHeed outputs must not replace official assessment procedures or be used as official food-insecurity classifications or policy recommendations.",
 ];
 
@@ -527,7 +527,7 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "An estimated food-insecurity risk index for the five CALABARZON provinces, forecast two quarters ahead to support planning. It is a student research system, not an official statistic.",
+    a: "An estimated food-insecurity risk index for the five CALABARZON provinces, forecast three months ahead (for the next quarter) to support planning. It is a student research system, not an official statistic.",
   },
   {
     q: "Is the score the probability that people will go hungry?",
@@ -539,11 +539,11 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "Two quarters. Each estimate is issued at the start of a quarter, using only information published before that date. No forecast horizon has yet met the study's reliability criterion.",
+    a: "Three months ahead. Each estimate is issued at the start of a quarter for the next quarter, using only information published before that date.",
   },
   {
     q: "How accurate is it?",
-    a: "Two quarters ahead, the food-price-pressure model reached 0.72 accuracy on past data, below the 75% goal. The risk index matched observed regional hunger with accuracy 0.94 over 17 past quarters, but that outcome is regional. All results come from quarters examined during development; see \"How accurate it is\".",
+    a: "Three months ahead, the food-price-pressure model reached 0.72 accuracy on past data, below the 75% goal. The risk index matched observed regional hunger with accuracy 0.94 over 17 past quarters, but that outcome is regional. All results come from quarters examined during development; see \"How accurate it is\".",
   },
   {
     q: "Are the city and municipal values forecasts?",
@@ -655,7 +655,7 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed estimates food-insecurity risk for the five CALABARZON provinces each quarter, two quarters
+              aiPHeed estimates food-insecurity risk for the five CALABARZON provinces each quarter, three months
               ahead. It uses the FIRI v2 risk index, with a LightGBM food-price-pressure forecast as one input, and
               Filipino-English news analysis. It is not an official statistic.
             </p>

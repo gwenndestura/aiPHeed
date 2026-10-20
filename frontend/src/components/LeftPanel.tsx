@@ -534,7 +534,7 @@ function RegionDetail({
         {est && est.estimateKind === "backtest"
           ? `This is a backtest estimate for ${quarterText}, made as of ${est.issued} with only information published before that date (development evidence, not a forecast issued live). Observed outcome: ${est.observedOutcome ?? "not available"}.`
           : est && est.estimateKind === "earlier_forecast"
-            ? `This is the Lead-2 forecast for ${quarterText} issued ${est.issued}, based only on information published before that date; its outcome is not yet published.`
+            ? `This is the three-months-ahead forecast for ${quarterText} issued ${est.issued}, based only on information published before that date; its outcome is not yet published.`
             : `This is a ${horizonLabel} for ${quarterText}, based only on information published before the forecast was issued.`}
       </Note>
 
