@@ -465,9 +465,13 @@ function ShapView() {
   const [quarter, setQuarter] = useState<string>("");
   const [generated, setGenerated] = useState<{ province: string; quarter: string } | null>(null);
 
+  // E73 fix: the default must be a quarter the dropdown offers. In thesis mode `current` is the forecast target
+  // (2027-Q1), which the report ranges leave out, so the select showed its first option while the chart used 2027-Q1.
+  const defaultQuarter = (cur?: string | null) =>
+    cur && QUARTERS.includes(cur) ? cur : (QUARTERS[QUARTERS.length - 1] ?? "");
   useMemo(() => {
-    if (!quarter && quartersRes?.current) setQuarter(quartersRes.current);
-  }, [quarter, quartersRes]);
+    if (!quarter && QUARTERS.length) setQuarter(defaultQuarter(quartersRes?.current));
+  }, [quarter, quartersRes, QUARTERS]);
 
   const { data: explain, error: explainError } = useExplainability(
     "province",
@@ -492,7 +496,7 @@ function ShapView() {
   const handleGenerate = () => setGenerated({ province, quarter });
   const handleClear = () => {
     setProvince("Quezon");
-    setQuarter(quartersRes?.current ?? "");
+    setQuarter(defaultQuarter(quartersRes?.current));
     setGenerated(null);
   };
 
