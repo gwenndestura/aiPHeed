@@ -50,7 +50,7 @@ export function AuthCard({
 }) {
   return (
     <div className="min-h-screen w-full bg-background flex items-center justify-center px-4 py-8 sm:p-6">
-      <div className="w-full max-w-sm bg-card border border-border/15 rounded-xl p-6 sm:p-7">
+      <div className="w-full max-w-sm bg-card border edge-faint rounded-xl shadow-lg p-6 sm:p-7">
         <Link to="/dashboard" className={authLinkClass + " no-underline hover:underline"}>
           ← Back to map
         </Link>

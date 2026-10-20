@@ -33,13 +33,8 @@ function FloatingCard({ children, className = "", style, tour }: { children: Rea
   return (
     <div
       data-tour={tour}
-      className={`px-4 py-3.5 shadow-xl bg-card/85 text-card-foreground border border-border/60 ${className}`}
-      style={{
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderRadius: 0,
-        ...style,
-      }}
+      className={`px-4 py-3.5 surface-float text-card-foreground border ${className}`}
+      style={style}
     >
       {children}
     </div>
@@ -66,7 +61,7 @@ function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: stri
           type="button"
           onClick={onClick}
           aria-label={name}
-          className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0" : "right-0 border-r-0"} w-11 h-16 flex items-center justify-center bg-card/95 border border-border/60 shadow-xl text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+          className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0 rounded-l-none" : "right-0 border-r-0 rounded-r-none"} w-11 h-16 flex items-center justify-center surface-float border text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
         >
           <EdgeChevron side={side} />
         </button>
@@ -78,7 +73,7 @@ function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: stri
 
 /** A card inside the phone sheet, which already has the blur and shadow. */
 function SheetCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
-  return <div data-tour={tour} className={`px-4 py-3.5 border border-border/50 bg-card/60 ${className}`}>{children}</div>;
+  return <div data-tour={tour} className={`px-4 py-3.5 border edge-faint bg-card/60 rounded-panel ${className}`}>{children}</div>;
 }
 
 function NoDataCardBody({ reason }: { reason?: string }) {
@@ -610,7 +605,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             <div className="px-3 pb-3">
               <TabsContent value="summary" className="mt-0 flex flex-col gap-2">
                 {/* The province panel has its own About / Feedback footer. */}
-                {hasSelection && !noData ? <SheetCard className="p-0">{selectionPanel}</SheetCard> : <>{leftCards}{aboutFeedback}</>}
+                {hasSelection && !noData ? <SheetCard className="p-0 overflow-hidden">{selectionPanel}</SheetCard> : <>{leftCards}{aboutFeedback}</>}
               </TabsContent>
               <TabsContent value="why" className="mt-0 flex flex-col gap-2">
                 {rightCards}

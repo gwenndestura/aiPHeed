@@ -111,7 +111,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex items-center justify-between text-[11px] border border-border/40 rounded-md px-2 py-1.5 bg-secondary/30">
+    <div className="flex items-center justify-between text-[11px] border edge-faint rounded-md px-2 py-1.5 bg-secondary/30">
       <span className="text-muted-foreground">{k}</span>
       <span className="font-semibold text-right">{v}</span>
     </div>

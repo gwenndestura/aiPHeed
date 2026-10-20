@@ -79,7 +79,7 @@ function Section({ icon: Icon, title, children }: { icon: typeof Info; title: st
         <h3 className="text-[10px] font-bold uppercase tracking-wider">{title}</h3>
         <Info className="h-2.5 w-2.5 text-muted-foreground/50 ml-auto" />
       </div>
-      <div className="rounded-lg border border-border/40 bg-secondary/20 p-2.5 space-y-1">{children}</div>
+      <div className="rounded-lg border edge-faint bg-secondary/20 p-2.5 space-y-1">{children}</div>
     </div>
   );
 }
@@ -95,7 +95,7 @@ function Row({ k, v, accent }: { k: string; v: string; accent?: string }) {
 
 function Driver({ icon: Icon, label, value }: { icon: typeof Info; label: string; value: string }) {
   return (
-    <div className="rounded-md bg-card border border-border/40 px-2 py-1.5">
+    <div className="rounded-md bg-card border edge-faint px-2 py-1.5">
       <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/80 font-semibold">
         <Icon className="h-3 w-3" />
         {label}

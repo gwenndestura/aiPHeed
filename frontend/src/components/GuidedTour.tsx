@@ -333,7 +333,7 @@ export function GuidedTour({ tour }: { tour: TourDef }) {
             close();
           }}
           onInteractOutside={(e) => e.preventDefault()}
-          className={`fixed z-[2500] bg-card text-card-foreground border border-border/60 rounded-xl shadow-2xl p-5 [@media(max-height:500px)]:py-4 focus:outline-none ${motion} ${cardPos ? "" : "opacity-0"}`}
+          className={`fixed z-[2500] bg-card text-card-foreground border edge-faint rounded-xl shadow-2xl p-5 [@media(max-height:500px)]:py-4 focus:outline-none ${motion} ${cardPos ? "" : "opacity-0"}`}
           style={cardPos ?? { top: 0, left: 0, width: layout === "phone" ? Math.min(window.innerWidth - 2 * GAP, PHONE_MAX_W) : DESKTOP_W }}
         >
           <p className="text-[12px] text-foreground/75 tabular-nums">

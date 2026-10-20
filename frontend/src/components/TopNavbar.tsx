@@ -45,7 +45,7 @@ export function TopNavbar({ active = "none" }: Props) {
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
-    <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
+    <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b edge-faint z-[1002] flex items-center px-4 gap-3">
       {/* Brand → landing */}
       <Link to="/" className="flex items-center mr-2 hover:opacity-90 transition-opacity shrink-0 max-lg:min-h-11 max-lg:min-w-11" aria-label="aiPHeed home">
         <img src={logoIcon} alt="aiPHeed" className="sm:hidden h-9 w-9 object-contain" />
@@ -83,7 +83,7 @@ export function TopNavbar({ active = "none" }: Props) {
         </SheetTrigger>
         {/* A full-height column: the items scroll when the screen is short
             (a phone held sideways); the sign-in footer stays at the bottom. */}
-        <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100] flex flex-col gap-0 p-0">
+        <SheetContent side="right" className="w-[280px] [--surface-base:var(--card)] border-l z-[1100] flex flex-col gap-0 p-0">
           <SheetHeader className="shrink-0 px-6 pt-6">
             <SheetTitle className="text-sm">Menu</SheetTitle>
           </SheetHeader>

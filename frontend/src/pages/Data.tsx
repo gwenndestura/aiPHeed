@@ -183,9 +183,9 @@ export default function DataPage() {
           {/* Phones: one card per province instead of the table. */}
           <ul className="hidden compact:flex flex-col gap-2" aria-label="Provinces" data-tour="data-table">
             {loadFailed ? (
-              <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border border-border/50 rounded-xl">{LOAD_ERROR_MESSAGE}</li>
+              <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border edge-faint rounded-xl shadow-md">{LOAD_ERROR_MESSAGE}</li>
             ) : !isLoading && filtered.length === 0 && (
-              <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border border-border/50 rounded-xl">No rows for this filter.</li>
+              <li className="px-4 py-6 text-center text-muted-foreground text-[14px] bg-card border edge-faint rounded-xl shadow-md">No rows for this filter.</li>
             )}
             {filtered.map((r, i) => {
               const color = r.riskLevel ? RISK_COLORS[r.riskLevel] : "#6b7280";
@@ -194,7 +194,7 @@ export default function DataPage() {
                   <button
                     type="button"
                     onClick={() => goToRow(r)}
-                    className="w-full text-left bg-card border border-border/50 rounded-xl px-4 py-3 hover:bg-secondary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="w-full text-left bg-card border edge-faint rounded-xl shadow-md px-4 py-3 hover:bg-secondary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span className="flex items-center justify-between gap-3">
                       <span className="text-[15px] font-semibold">{r.name}</span>
@@ -224,7 +224,7 @@ export default function DataPage() {
             })}
           </ul>
 
-          <div className="bg-card border border-border/50 rounded-xl overflow-hidden compact:hidden" data-tour="data-table">
+          <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden compact:hidden" data-tour="data-table">
             <table className="w-full text-[11px]">
               <thead className="bg-secondary/40 text-muted-foreground" data-tour="data-sort">
                 <tr>

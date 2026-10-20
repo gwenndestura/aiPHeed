@@ -76,8 +76,10 @@
        faint line rather than a hard one (form fields keep their borders). */
     --edge-alpha: 0.08;
 
-    /* Floating surfaces: the --card colour at this opacity, blurred. */
+    /* Floating surfaces: the --card colour at this opacity, blurred.
+       Dialogs and sheets hold reading text: nearly opaque. */
     --surface-alpha: 0.92;
+    --surface-alpha-dialog: 0.97;
     --surface-blur: 14px;
 
     /* Soft shadows, black only. */
@@ -419,16 +421,18 @@
      colour at --surface-alpha with a blur behind, a faint edge, rounded
      corners and a soft shadow. */
   .surface-float {
-    background-color: hsl(var(--card) / var(--surface-alpha));
+    background-color: hsl(var(--surface-base, var(--card)) / var(--surface-alpha));
     border-color: hsl(var(--border) / var(--edge-alpha));
     -webkit-backdrop-filter: blur(var(--surface-blur));
     backdrop-filter: blur(var(--surface-blur));
     border-radius: var(--radius-panel);
     box-shadow: var(--shadow-float);
   }
-  /* Dialogs and sheets: the same surface, larger corners, deeper shadow. */
+  /* Dialogs and sheets: the same surface, larger corners, deeper shadow.
+     Either sets --surface-base to sit on another existing colour token
+     (dialogs keep --background). */
   .surface-dialog {
-    background-color: hsl(var(--card) / var(--surface-alpha));
+    background-color: hsl(var(--surface-base, var(--card)) / var(--surface-alpha-dialog));
     border-color: hsl(var(--border) / var(--edge-alpha));
     -webkit-backdrop-filter: blur(var(--surface-blur));
     backdrop-filter: blur(var(--surface-blur));

@@ -119,7 +119,7 @@ export function MapBottomSheet({ snap, onSnapChange, containerHeight, topReserve
     <section
       aria-label="Map details"
       data-tour="sheet"
-      className={`absolute inset-x-0 bottom-0 z-[1003] flex flex-col bg-card/95 text-card-foreground border-t border-border/60 shadow-[0_-8px_24px_rgba(0,0,0,0.35)] ${dragH === null ? "transition-[height] duration-300 ease-out" : ""}`}
+      className={`absolute inset-x-0 bottom-0 z-[1003] flex flex-col surface-dialog rounded-b-none text-card-foreground border-t shadow-[0_-8px_24px_rgba(0,0,0,0.35)] ${dragH === null ? "transition-[height] duration-300 ease-out" : ""}`}
       style={{ height, backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
     >
       <button

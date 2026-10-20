@@ -317,14 +317,14 @@ function TrendView() {
 
   return (
     <div>
-      <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
+      <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality Risk Level Trend</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
           Risk Level time series across selected province, municipality, and quarters
         </p>
       </div>
 
-      <div className="rounded-b-2xl bg-secondary/20 border border-t-0 border-border/50 px-5 sm:px-6 py-5 space-y-4">
+      <div className="rounded-b-xl bg-secondary/20 border border-t-0 edge-faint px-5 sm:px-6 py-5 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-tour="viz-filters">
           <FloatingSelect
             label="Province"
@@ -375,7 +375,7 @@ function TrendView() {
         </div>
       </div>
 
-      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6" data-tour="viz-chart">
+      <div className="mt-4 bg-card border edge-faint rounded-xl shadow-lg p-4 sm:p-6" data-tour="viz-chart">
         {loadFailed ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             {LOAD_ERROR_MESSAGE}
@@ -514,14 +514,14 @@ function ShapView() {
 
   return (
     <div>
-      <div className="rounded-t-2xl bg-card/80 border border-border/50 px-5 sm:px-6 py-4">
+      <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">SHAP Explainability — Driver Groups</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
           Per-group contribution to the risk forecast, by province and quarter
         </p>
       </div>
 
-      <div className="rounded-b-2xl bg-secondary/20 border border-t-0 border-border/50 px-5 sm:px-6 py-5 space-y-4">
+      <div className="rounded-b-xl bg-secondary/20 border border-t-0 edge-faint px-5 sm:px-6 py-5 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FloatingSelect label="Province" value={province} onChange={setProvince} options={PROVINCES} />
           <FloatingSelect label="Quarter" value={quarter} onChange={setQuarter} options={QUARTERS} />
@@ -559,7 +559,7 @@ function ShapView() {
         </div>
       </div>
 
-      <div className="mt-4 bg-card border border-border/50 rounded-2xl p-4 sm:p-6">
+      <div className="mt-4 bg-card border edge-faint rounded-xl shadow-lg p-4 sm:p-6">
         {loadFailed ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
             {LOAD_ERROR_MESSAGE}

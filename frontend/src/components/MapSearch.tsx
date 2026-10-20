@@ -144,7 +144,7 @@ export function MapSearch({ fill = false }: { fill?: boolean }) {
       </p>
 
       {expanded && (
-        <div className={`absolute ${fill ? "top-12" : "top-9"} left-0 right-0 max-h-72 overflow-y-auto bg-card border border-border/60 rounded-lg shadow-xl z-[1100]`}>
+        <div className={`absolute ${fill ? "top-12" : "top-9"} left-0 right-0 max-h-72 overflow-y-auto surface-float border z-[1100]`}>
           {noMatch ? (
             <p className={`px-3 py-2 text-[11px] text-muted-foreground ${fill ? "min-h-11 flex items-center" : ""}`}>
               No places match "{typed}"

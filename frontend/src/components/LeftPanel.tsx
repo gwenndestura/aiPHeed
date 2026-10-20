@@ -158,7 +158,7 @@ export function RfiiScoreCardBody({
       </div>
 
       <div
-        className="relative rounded-2xl border border-border/40 bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden"
+        className="relative rounded-xl border edge-faint bg-gradient-to-br from-secondary/35 via-card/60 to-background/40 px-5 pt-5 pb-4 overflow-hidden"
         style={{
           ['--accent-color' as string]: accent,
           // Still: the pulse's resting glow (rfii-hero-pulse at 0%).
@@ -449,7 +449,7 @@ function RejectedForecastPlaceholder({
           </button>
         )}
       </div>
-      <div className="rounded-xl border border-border/40 bg-secondary/20 px-4 py-8 flex flex-col items-center text-center space-y-2">
+      <div className="rounded-xl border edge-faint bg-secondary/20 px-4 py-8 flex flex-col items-center text-center space-y-2">
         <span className="text-3xl text-muted-foreground/30 select-none">—</span>
         <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
         <p className="text-[10px] text-muted-foreground/60 leading-snug max-w-[200px]">
@@ -534,14 +534,14 @@ function RegionDetail({
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
+        <div className="rounded-xl px-3 py-3 border edge-faint bg-secondary/30">
           <MetricLabel>Risk level score</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
           </div>
         </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30 overflow-hidden">
+        <div className="rounded-xl px-3 py-3 border edge-faint bg-secondary/30 overflow-hidden">
           <MetricLabel>Quarter-on-quarter change</MetricLabel>
           <FitText
             text={qoqText}
@@ -555,7 +555,7 @@ function RegionDetail({
       </div>
 
       {/* Population */}
-      <div className="rounded-xl px-3 py-2.5 border border-border/50 bg-secondary/30 flex items-center justify-between">
+      <div className="rounded-xl px-3 py-2.5 border edge-faint bg-secondary/30 flex items-center justify-between">
         <div>
           <MetricLabel>Population</MetricLabel>
           <div className="text-sm font-bold mt-0.5 tabular-nums">{region.population.toLocaleString()}</div>
@@ -582,7 +582,7 @@ function RegionDetail({
             <button
               key={m.id}
               onClick={() => onMunicipalityClick(m)}
-              className="w-full flex items-center justify-between bg-secondary/30 hover:bg-secondary/70 border border-border/40 hover:border-border rounded-lg px-2.5 py-2 compact:min-h-11 transition-all text-left group"
+              className="w-full flex items-center justify-between bg-secondary/30 hover:bg-secondary/70 border edge-faint hover:border-border/40 rounded-lg px-2.5 py-2 compact:min-h-11 transition-all text-left group"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <span
@@ -647,7 +647,7 @@ function MunicipalityDetail({
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
+        <div className="rounded-xl px-3 py-3 border edge-faint bg-secondary/30">
           <MetricLabel>Risk level score</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
@@ -657,14 +657,14 @@ function MunicipalityDetail({
             />
           </div>
         </div>
-        <div className="rounded-xl px-3 py-3 border border-border/50 bg-secondary/30">
+        <div className="rounded-xl px-3 py-3 border edge-faint bg-secondary/30">
           <MetricLabel className="mb-1">Basis</MetricLabel>
           <p className="text-[10px] leading-snug text-muted-foreground line-clamp-4">{municipality.disaggregationLabel}</p>
         </div>
       </div>
 
       {/* Demographics */}
-      <div className="rounded-xl px-3 py-2.5 border border-border/50 bg-secondary/30 space-y-2">
+      <div className="rounded-xl px-3 py-2.5 border edge-faint bg-secondary/30 space-y-2">
         <div className="flex items-center justify-between">
           <MetricLabel>Population</MetricLabel>
           <div className="text-[11px] font-bold tabular-nums">{municipality.population.toLocaleString()}</div>
@@ -710,7 +710,7 @@ function FitText({
 
 /* ─── Region summary chip ─── */
 function SummaryChip({ label, value, color, tip }: { label: string; value: number | string; color: string; tip?: string }) {
-  const box = "rounded-lg border border-border/40 bg-secondary/30 px-2 py-1.5 flex flex-col items-start";
+  const box = "rounded-lg border edge-faint bg-secondary/30 px-2 py-1.5 flex flex-col items-start";
   const figure = (
     <span className="font-mono-num text-base font-bold tabular-nums leading-none mt-0.5" style={{ color }}>
       {value}
