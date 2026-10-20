@@ -251,7 +251,7 @@ export default function DataPage() {
                     <tr
                       key={r.id}
                       onClick={() => goToRow(r)}
-                      className="border-t border-border/40 hover:bg-secondary/30 cursor-pointer"
+                      className="border-t edge-control hover:bg-secondary/30 cursor-pointer"
                     >
                       <td className="px-4 py-2 font-medium">{r.name}</td>
                       <td className="px-4 py-2 tabular-nums font-bold" style={{ color }}>

@@ -142,7 +142,7 @@ function AdminNavbar({
   useAccounts(!user.isDemo);
 
   return (
-    <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b border-border/50 z-[1002] flex items-center px-4 gap-3">
+    <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b edge-faint z-[1002] flex items-center px-4 gap-3">
       {/* Brand → landing page, as on public pages. In-app navigation, so the
           admin stays signed in (the public header then shows the admin nav). */}
       <Link
@@ -173,7 +173,7 @@ function AdminNavbar({
         <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
-        <SheetContent side="right" className="w-[280px] bg-card border-l border-border/50 z-[1100]">
+        <SheetContent side="right" className="w-[280px] [--surface-base:var(--card)] border-l z-[1100]">
           <SheetHeader>
             <SheetTitle className="text-sm">Admin Menu</SheetTitle>
           </SheetHeader>
@@ -215,7 +215,7 @@ function AdminNavbar({
                   aria-label="Toggle dark / light mode"
                   className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors border after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] ${
                     theme === "light"
-                      ? "bg-primary/30 border-primary/50"
+                      ? "bg-primary border-primary"
                       : "bg-secondary border-border/50"
                   }`}
                 >
@@ -366,13 +366,13 @@ function ReviewSection() {
       {readOnly && <div className="px-6 pt-4"><Note label={null}>{DEMO_READ_ONLY_NOTE}</Note></div>}
 
       <div className="px-6 pt-4">
-        <div className="inline-flex rounded-lg border border-border/50 bg-card p-0.5">
+        <div className="inline-flex rounded-full border edge-faint bg-card shadow-sm p-0.5">
           {(["queue", "log"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-3 py-1.5 compact:min-h-11 text-[11px] font-bold rounded-md transition-colors ${
-                tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              className={`px-3 py-1.5 compact:min-h-11 text-[11px] font-bold seg-option transition-colors ${
+                tab === t ? "seg-on" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {t === "queue" ? "Review Queue" : "Rejection Log"}
@@ -388,7 +388,7 @@ function ReviewSection() {
             <select
               value={year ?? ""}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="h-8 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-8 compact:h-11 compact:text-[16px] rounded-full border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {years.map((y) => (
                 <option key={y} value={y}>{y}</option>
@@ -398,7 +398,7 @@ function ReviewSection() {
             <select
               value={quarter}
               onChange={(e) => setQuarter(e.target.value as typeof quarter)}
-              className="h-8 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-8 compact:h-11 compact:text-[16px] rounded-full border border-border/60 bg-card px-2 text-[11px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="all">All quarters</option>
               <option value="Q4">Q4</option>
@@ -411,7 +411,7 @@ function ReviewSection() {
               {quarter !== "all" ? ` · ${quarter}` : ""}
             </span>
           </div>
-          <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
+          <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden">
             <table role="table" className="w-full text-[11px] stack-table">
               <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
                 <tr role="row">
@@ -425,7 +425,7 @@ function ReviewSection() {
               </thead>
               <tbody role="rowgroup">
                 {sorted.map((r) => (
-                  <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+                  <tr role="row" key={r.id} className="border-t edge-control hover:bg-secondary/30">
                     <td role="cell" data-label="Province" className="px-4 py-2.5 font-medium">{r.province}</td>
                     <td role="cell" data-label="Quarter" className="px-4 py-2.5 tabular-nums text-muted-foreground">
                       <span className="font-semibold text-foreground">{r.quarter}</span>
@@ -487,7 +487,7 @@ function formatQuarterLabel(qid: string): string {
 function RejectionLog({ rejected, onRestore, busy = false }: { rejected: ReviewItem[]; onRestore: (it: ReviewItem) => void; busy?: boolean }) {
   return (
     <div className="p-6 pt-4">
-      <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
+      <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden">
         <table role="table" className="w-full text-[11px] stack-table">
           <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
             <tr role="row">
@@ -504,7 +504,7 @@ function RejectionLog({ rejected, onRestore, busy = false }: { rejected: ReviewI
               <tr role="row"><td role="cell" colSpan={6} className="px-4 py-8 text-center text-muted-foreground italic">No rejections logged.</td></tr>
             )}
             {rejected.map((r) => (
-              <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+              <tr role="row" key={r.id} className="border-t edge-control hover:bg-secondary/30">
                 <td role="cell" data-label="Province" className="px-4 py-2.5 font-medium">{r.province}</td>
                 <td role="cell" data-label="Quarter" className="px-4 py-2.5 tabular-nums">{r.quarter}</td>
                 <td role="cell" data-label="Reason" className="px-4 py-2.5">{r.rejectionReason ?? "—"}</td>
@@ -567,7 +567,7 @@ function ReviewDetailModal({
 
   return (
     <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6 compact:p-0">
-      <div className="bg-card border border-border/60 rounded-2xl compact:rounded-none shadow-2xl w-full max-w-3xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
+      <div className="surface-dialog border compact:rounded-none w-full max-w-3xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold">{item.province} — Risk Review</h2>
@@ -585,7 +585,7 @@ function ReviewDetailModal({
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 compact:p-4 grid grid-cols-2 gap-4">
-          <div className="col-span-2 p-3 rounded-lg border border-border/50 bg-secondary/30 flex items-center gap-3">
+          <div className="col-span-2 p-3 rounded-lg border edge-faint bg-secondary/30 flex items-center gap-3">
             <div className="bg-primary/15 rounded-lg p-2"><FileText className="h-4 w-4 text-primary" /></div>
             <div>
               <p className="text-[12px] font-semibold">{item.province} — {item.quarter} Risk Report</p>
@@ -593,7 +593,7 @@ function ReviewDetailModal({
             </div>
           </div>
 
-          <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
+          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-[11px] font-bold">Municipality / City scores</h4>
               <span className="text-[10px] text-muted-foreground">{muniData.length} LGUs · sorted by Risk Level</span>
@@ -619,7 +619,7 @@ function ReviewDetailModal({
             </div>
           </div>
 
-          <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
+          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
             <h4 className="text-[11px] font-bold mb-2">SHAP driver contributions</h4>
             {triggers.length > 0 ? (
               <ResponsiveContainer width="100%" height={Math.max(180, triggers.length * 28)}>
@@ -644,7 +644,7 @@ function ReviewDetailModal({
           </div>
 
           {/* SHAP explanations — narrative */}
-          <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
+          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
             <h4 className="text-[11px] font-bold mb-1">SHAP explanations</h4>
             <p className="text-[10px] compact:text-[14px] text-muted-foreground mb-3">
               {explain?.narrative ?? "Grouped driver reasons behind this quarter's Risk Level forecast."}
@@ -663,7 +663,7 @@ function ReviewDetailModal({
                 ))}
             </ol>
           </div>
-          <div className="col-span-2 bg-card border border-border/40 rounded-lg p-3">
+          <div className="col-span-2 bg-card border edge-faint rounded-lg p-3">
             <h4 className="text-[11px] font-bold mb-2">Provincial ranking (CALABARZON)</h4>
             <ProvincialRanking currentProvince={item.province} quarter={item.quarter} />
           </div>
@@ -671,7 +671,7 @@ function ReviewDetailModal({
 
         <div className="px-5 py-3 border-t border-border/40 flex flex-wrap items-center justify-end gap-2">
           {readOnly && <Note label={null} className="mr-auto compact:basis-full">{DEMO_READ_ONLY_NOTE}</Note>}
-          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
+          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control text-[11px] hover:bg-secondary/60">Close</button>
           {item.status === "Rejected" ? (
             <button onClick={onRestore} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10 disabled:opacity-40 disabled:cursor-not-allowed">Restore</button>
           ) : item.status === "Approved" ? (
@@ -694,7 +694,7 @@ function ReviewDetailModal({
               >
                 Reject
               </button>
-              <button onClick={onApprove} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md bg-risk-low text-white text-[11px] font-bold hover:bg-risk-low/90 disabled:opacity-40 disabled:cursor-not-allowed">Approve & Publish</button>
+              <button onClick={onApprove} disabled={busy} className="px-3 py-1.5 compact:min-h-11 rounded-md bg-risk-low shadow-md text-white text-[11px] font-bold hover:bg-risk-low/90 disabled:opacity-40 disabled:cursor-not-allowed">Approve & Publish</button>
             </>
           )}
         </div>
@@ -753,7 +753,7 @@ function RejectReasonModal({
 
   return (
     <div className="fixed inset-0 z-[2100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-6 compact:p-3">
-      <div className="bg-card border border-destructive/40 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div className="surface-dialog border border-destructive/40 w-full max-w-md overflow-hidden">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold text-destructive">Reject forecast</h2>
@@ -803,11 +803,11 @@ function RejectReasonModal({
         </div>
 
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
-          <button onClick={onCancel} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Cancel</button>
+          <button onClick={onCancel} className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control text-[11px] hover:bg-secondary/60">Cancel</button>
           <button
             onClick={() => valid && onConfirm(finalReason, notes.trim() || undefined)}
             disabled={!valid}
-            className="px-3 py-1.5 compact:min-h-11 rounded-md bg-destructive text-destructive-foreground text-[11px] font-bold hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 compact:min-h-11 rounded-md bg-destructive shadow-md text-destructive-foreground text-[11px] font-bold hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Confirm rejection
           </button>
@@ -836,7 +836,7 @@ function FeedbackSection() {
           <Stat label="Latest" value={items[0] ? new Date(items[0].date).toLocaleDateString() : "—"} />
         </div>
 
-        <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
+        <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden">
           <table role="table" className="w-full text-[11px] stack-table">
             <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
               <tr role="row">
@@ -856,7 +856,7 @@ function FeedbackSection() {
                 </tr>
               )}
               {items.map((f) => (
-                <tr role="row" key={f.id} className="border-t border-border/40 hover:bg-secondary/30">
+                <tr role="row" key={f.id} className="border-t edge-control hover:bg-secondary/30">
                   <td role="cell" data-label="Date" className="px-4 py-2.5 tabular-nums">{new Date(f.date).toLocaleDateString()}</td>
                   <td role="cell" data-label="Name" className="px-4 py-2.5 font-medium">{f.demographics.fullName || "Anonymous"}</td>
                   <td role="cell" data-label="Agency" className="px-4 py-2.5 text-muted-foreground">{f.demographics.agency || "—"}</td>
@@ -887,7 +887,7 @@ function FeedbackSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
+              className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control hover:bg-secondary/60 disabled:opacity-40"
             >
               Previous
             </button>
@@ -895,7 +895,7 @@ function FeedbackSection() {
             <button
               onClick={() => setPage((p) => p + 1)}
               disabled={page * feedbackRes.pageSize >= feedbackRes.total}
-              className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 hover:bg-secondary/60 disabled:opacity-40"
+              className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control hover:bg-secondary/60 disabled:opacity-40"
             >
               Next
             </button>
@@ -910,7 +910,7 @@ function FeedbackSection() {
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="bg-card border border-border/50 rounded-xl px-4 py-3">
+    <div className="bg-card border edge-faint rounded-xl shadow-md px-4 py-3">
       <MetricLabel>{label}</MetricLabel>
       <p className={`font-mono-num text-2xl font-bold mt-1 tabular-nums ${accent ? "text-primary" : ""}`}>{value}</p>
     </div>
@@ -920,7 +920,7 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; questions: string[]; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[2000] bg-background/70 backdrop-blur-sm flex items-center justify-center p-6 compact:p-0">
-      <div className="bg-card border border-border/60 rounded-2xl compact:rounded-none shadow-2xl w-full max-w-2xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
+      <div className="surface-dialog border compact:rounded-none w-full max-w-2xl max-h-[88vh] compact:h-full compact:max-h-full overflow-hidden flex flex-col">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold">SUS Feedback · {new Date(item.date).toLocaleDateString()}</h2>
@@ -959,13 +959,13 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
           {(item.liked || item.improvements) && (
             <div className="grid grid-cols-1 gap-2">
               {item.liked && (
-                <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
+                <div className="bg-secondary/30 border edge-faint rounded-md p-3">
                   <MetricLabel className="mb-1">Liked most</MetricLabel>
                   <p className="text-[11px] compact:text-[14px] leading-snug">{item.liked}</p>
                 </div>
               )}
               {item.improvements && (
-                <div className="bg-secondary/30 border border-border/40 rounded-md p-3">
+                <div className="bg-secondary/30 border edge-faint rounded-md p-3">
                   <MetricLabel className="mb-1">Suggestions</MetricLabel>
                   <p className="text-[11px] compact:text-[14px] leading-snug">{item.improvements}</p>
                 </div>
@@ -975,7 +975,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
         </div>
 
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end">
-          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border border-border/50 text-[11px] hover:bg-secondary/60">Close</button>
+          <button onClick={onClose} className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control text-[11px] hover:bg-secondary/60">Close</button>
         </div>
       </div>
     </div>
@@ -984,7 +984,7 @@ function FeedbackDetailModal({ item, questions, onClose }: { item: FeedbackRow; 
 
 function KV({ k, v }: { k: string; v: string }) {
   return (
-    <div className="bg-secondary/30 border border-border/40 rounded-md px-2.5 py-1.5">
+    <div className="bg-secondary/30 border edge-faint rounded-md px-2.5 py-1.5">
       <MetricLabel>{k}</MetricLabel>
       <p className="text-[11px] font-medium truncate">{v}</p>
     </div>

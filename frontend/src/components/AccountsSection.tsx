@@ -48,7 +48,7 @@ export function AccountsSection({ readOnlyNote }: { readOnlyNote?: string | null
         <h2 className="text-[13px] font-bold tracking-tight mb-2">
           Waiting for approval{data ? ` (${data.pendingCount})` : ""}
         </h2>
-        <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
+        <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden">
           <table role="table" className="w-full text-[11px] stack-table">
             <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
               <tr role="row">
@@ -61,7 +61,7 @@ export function AccountsSection({ readOnlyNote }: { readOnlyNote?: string | null
             </thead>
             <tbody role="rowgroup">
               {(data?.pending ?? []).map((r) => (
-                <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+                <tr role="row" key={r.id} className="border-t edge-control hover:bg-secondary/30">
                   <td role="cell" data-label="Name" className={`${td} font-medium`}>{r.name}</td>
                   <td role="cell" data-label="Email" className={td}>{r.email}</td>
                   <td role="cell" data-label="Office / unit" className={td}>{r.office ?? "—"}</td>
@@ -86,7 +86,7 @@ export function AccountsSection({ readOnlyNote }: { readOnlyNote?: string | null
 
       <section>
         <h2 className="text-[13px] font-bold tracking-tight mb-2">Active admins</h2>
-        <div className="bg-card border border-border/50 rounded-xl overflow-hidden">
+        <div className="bg-card border edge-faint rounded-xl shadow-lg overflow-hidden">
           <table role="table" className="w-full text-[11px] stack-table">
             <thead role="rowgroup" className="bg-secondary/40 text-muted-foreground">
               <tr role="row">
@@ -99,7 +99,7 @@ export function AccountsSection({ readOnlyNote }: { readOnlyNote?: string | null
             </thead>
             <tbody role="rowgroup">
               {(data?.active ?? []).map((r) => (
-                <tr role="row" key={r.id} className="border-t border-border/40 hover:bg-secondary/30">
+                <tr role="row" key={r.id} className="border-t edge-control hover:bg-secondary/30">
                   <td role="cell" data-label="Name" className={`${td} font-medium`}>
                     {r.name}
                     {r.isSelf && <StatusBadge tone="neutral" className="ml-2">You</StatusBadge>}
