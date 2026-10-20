@@ -355,7 +355,7 @@ export function GuidedTour({ tour }: { tour: TourDef }) {
             </button>
             <span className="flex-1" />
             {index > 0 && (
-              <button type="button" onClick={back} className={`${btn} border border-border/60 hover:bg-secondary/60`}>
+              <button type="button" onClick={back} className={`${btn} border edge-control hover:bg-secondary/60`}>
                 Back
               </button>
             )}

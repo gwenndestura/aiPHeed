@@ -75,15 +75,13 @@ export function DisplayPreferencesModal({ trigger }: { trigger?: React.ReactNode
 
           <div>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold mb-1.5">Animation speed</p>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1.5 seg-track seg-track-flush">
               {(["slow", "normal", "fast"] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => set("animationSpeed", s)}
-                  className={`h-8 rounded-md text-[11px] font-semibold border transition-colors capitalize ${
-                    prefs.animationSpeed === s
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "border-border/50 hover:bg-secondary/60"
+                  className={`h-8 seg-option text-[11px] font-semibold border transition-colors capitalize ${
+                    prefs.animationSpeed === s ? "seg-on" : "hover:bg-secondary/60"
                   }`}
                 >
                   {s}

@@ -159,10 +159,8 @@ function SubTab({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center px-3 py-2 compact:min-h-11 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors ${
-        active
-          ? "bg-primary text-primary-foreground"
-          : "bg-card border border-border/50 text-muted-foreground hover:text-foreground"
+      className={`flex items-center px-3 py-2 compact:min-h-11 seg-option text-[11px] font-bold uppercase tracking-wider transition-colors ${
+        active ? "seg-on" : "border text-muted-foreground hover:text-foreground"
       }`}
     >
       {children}

@@ -75,6 +75,8 @@
     /* Edges of panels and cards: the --border colour at this opacity, a
        faint line rather than a hard one (form fields keep their borders). */
     --edge-alpha: 0.08;
+    /* Outline of a secondary button: faint, still visible. */
+    --edge-control-alpha: 0.2;
 
     /* Floating surfaces: the --card colour at this opacity, blurred.
        Dialogs and sheets hold reading text: nearly opaque. */
@@ -87,6 +89,7 @@
     --shadow-control: 0 4px 12px rgb(0 0 0 / 0.3);
     --shadow-float: 0 8px 24px rgb(0 0 0 / 0.35);
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.5);
+    --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.35);
 
     /* Text on a filled amber control: the existing --primary-foreground
        here, the existing --foreground in light mode (AA on the amber). */
@@ -137,6 +140,7 @@
     --shadow-control: 0 3px 10px rgb(0 0 0 / 0.1);
     --shadow-float: 0 8px 24px rgb(0 0 0 / 0.12);
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.18);
+    --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.08);
 
     --primary-ink: var(--foreground);
   }
@@ -175,6 +179,7 @@
 
   /* A panel or card edge: the faint --edge-alpha line. */
   .edge-faint { border-color: hsl(var(--border) / var(--edge-alpha)); }
+  .edge-control { border-color: hsl(var(--border) / var(--edge-control-alpha)); }
 
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
@@ -446,6 +451,9 @@
     background-color: hsl(var(--muted));
     border-radius: var(--radius-pill);
   }
+  /* A track drawn around options that have no padding of their own,
+     without changing their size or position. */
+  .seg-track-flush { box-shadow: 0 0 0 4px hsl(var(--muted)); }
   .seg-option {
     border-radius: var(--radius-pill);
     border-color: transparent;
@@ -458,6 +466,15 @@
     background-color: hsl(var(--primary));
     color: hsl(var(--primary-ink));
     box-shadow: var(--shadow-sm);
+  }
+
+  /* The map search: a darker field inset in its pill (the ring is the
+     pill's own surface colour), with an inner shadow. */
+  .field-inset {
+    background-color: hsl(var(--secondary));
+    box-shadow:
+      inset 0 0 0 3px hsl(var(--surface-base, var(--card)) / var(--surface-alpha)),
+      var(--shadow-inset);
   }
 
   /* Section heading mark: a small amber dot before the label. */

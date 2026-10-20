@@ -240,7 +240,7 @@ function Hero() {
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <Link
             to="/dashboard"
-            className="group inline-flex items-center gap-2 px-6 py-3 font-semibold text-[14px] transition-colors"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-md shadow-md font-semibold text-[14px] transition-colors"
             style={{ background: AMBER, color: "#0D0F14" }}
           >
             Explore the dashboard
@@ -248,7 +248,7 @@ function Hero() {
           </Link>
           <a
             href="#methodology"
-            className="group inline-flex items-center gap-2 px-6 py-3 font-semibold text-[14px] border transition-colors hover:bg-[var(--lp-hover)]"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold text-[14px] border transition-colors hover:bg-[var(--lp-hover)]"
             style={{ borderColor: "var(--lp-fg)", color: "var(--lp-fg)" }}
           >
             Read the methodology
@@ -257,7 +257,7 @@ function Hero() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="group inline-flex items-center gap-2 px-6 py-3 font-semibold text-[14px] border transition-colors hover:bg-[var(--lp-hover)]"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold text-[14px] border transition-colors hover:bg-[var(--lp-hover)]"
               style={{ borderColor: "var(--lp-fg)", color: "var(--lp-fg)" }}
             >
               Go to admin dashboard

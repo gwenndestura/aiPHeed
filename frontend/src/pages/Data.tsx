@@ -125,7 +125,7 @@ export default function DataPage() {
               onClick={exportCsv}
               disabled={filtered.length === 0}
               data-tour="data-export"
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 compact:h-11 compact:text-[14px] rounded-md bg-primary text-primary-foreground text-[11px] font-bold hover:bg-primary/90 disabled:opacity-50"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 compact:h-11 compact:text-[14px] rounded-full bg-primary text-primary-foreground shadow-md text-[11px] font-bold hover:bg-primary/90 disabled:opacity-50"
             >
               <Download className="h-3.5 w-3.5" /> Export CSV
             </button>
@@ -141,14 +141,14 @@ export default function DataPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search province"
                 aria-label="Search province"
-                className="w-full h-8 compact:h-11 compact:text-[16px] pl-8 pr-2 text-[11px] bg-secondary/50 border border-border/40 rounded-md focus:outline-none focus:border-primary/50"
+                className="w-full h-8 compact:h-11 compact:text-[16px] pl-8 pr-2 text-[11px] bg-secondary/50 border border-border/40 rounded-full focus:outline-none focus:border-primary/50"
               />
             </div>
-            <select value={filterProv} onChange={(e) => setFilterProv(e.target.value)} aria-label="Province" className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none">
+            <select value={filterProv} onChange={(e) => setFilterProv(e.target.value)} aria-label="Province" className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-full px-2 focus:outline-none">
               <option value="all">All provinces</option>
               {rows.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
             </select>
-            <select value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)} aria-label="Risk level" className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none">
+            <select value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)} aria-label="Risk level" className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-full px-2 focus:outline-none">
               <option value="all">All risk levels</option>
               <option value="low">Low</option>
               <option value="high">High</option>
@@ -157,7 +157,7 @@ export default function DataPage() {
               value={activeQuarter ?? ""}
               onChange={(e) => setQuarter(e.target.value)}
               aria-label="Quarter"
-              className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none"
+              className="h-8 compact:h-11 compact:text-[16px] min-w-0 text-[11px] bg-secondary/50 border border-border/40 rounded-full px-2 focus:outline-none"
             >
               {selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter).map((q) => (
                 <option key={q.id} value={q.id} disabled={q.state === "unavailable"} title={q.reason ?? undefined}>
@@ -174,7 +174,7 @@ export default function DataPage() {
               }}
               aria-label="Sort by"
               data-tour="data-sort"
-              className="hidden compact:block col-span-2 h-11 text-[16px] min-w-0 bg-secondary/50 border border-border/40 rounded-md px-2 focus:outline-none"
+              className="hidden compact:block col-span-2 h-11 text-[16px] min-w-0 bg-secondary/50 border border-border/40 rounded-full px-2 focus:outline-none"
             >
               {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>

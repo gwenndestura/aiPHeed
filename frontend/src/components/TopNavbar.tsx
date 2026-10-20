@@ -122,7 +122,7 @@ export function TopNavbar({ active = "none" }: Props) {
                   aria-label="Toggle dark / light mode"
                   className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors border after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] ${
                     theme === "light"
-                      ? "bg-primary/30 border-primary/50"
+                      ? "bg-primary border-primary"
                       : "bg-secondary border-border/50"
                   }`}
                 >

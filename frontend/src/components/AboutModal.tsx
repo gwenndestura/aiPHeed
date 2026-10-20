@@ -90,7 +90,7 @@ export function AboutModal() {
               setOpen(false);
               requestTour(navigate, pathname, 300, "map");
             }}
-            className="mt-1 w-full flex items-center justify-center gap-2 h-9 compact:h-11 rounded-md border border-border/60 text-[12px] compact:text-[14px] font-semibold hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-1 w-full flex items-center justify-center gap-2 h-9 compact:h-11 rounded-md border edge-control text-[12px] compact:text-[14px] font-semibold hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Compass className="h-4 w-4" /> Take the tour
           </button>

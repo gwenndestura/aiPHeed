@@ -171,10 +171,8 @@ export function FeedbackModal() {
                       key={v}
                       onClick={() => setAnswers((p) => ({ ...p, [i]: v }))}
                       title={LIKERT_LABELS[v - 1]}
-                      className={`flex-1 h-8 rounded-md text-[11px] font-bold transition-all border ${
-                        active
-                          ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/30"
-                          : "border-border/40 bg-secondary/30 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                      className={`flex-1 h-8 seg-option text-[11px] font-bold transition-all border ${
+                        active ? "seg-on" : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
                       }`}
                     >
                       {v}
@@ -218,7 +216,7 @@ export function FeedbackModal() {
           <button
             onClick={submit}
             disabled={submitFeedback.isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-[11px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground shadow-md text-[11px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60"
           >
             <Send className="h-3 w-3" />
             {submitFeedback.isPending ? "Submitting…" : "Submit Feedback"}
@@ -252,10 +250,8 @@ function RadioGroup({ label, options, value, onChange }: { label: string; option
           <button
             key={o}
             onClick={() => onChange(o)}
-            className={`px-3 py-1.5 rounded-md text-[10px] font-semibold border transition-colors ${
-              value === o
-                ? "bg-primary text-primary-foreground border-primary"
-                : "border-border/50 hover:bg-secondary/60"
+            className={`px-3 py-1.5 seg-option text-[10px] font-semibold border transition-colors ${
+              value === o ? "seg-on" : "border-border/50 hover:bg-secondary/60"
             }`}
           >
             {o}

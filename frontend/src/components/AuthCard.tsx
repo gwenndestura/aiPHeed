@@ -135,7 +135,7 @@ export function AuthSubmit({ loading, label, loadingLabel }: { loading: boolean;
     <button
       type="submit"
       disabled={loading}
-      className="w-full h-10 compact:h-11 compact:text-[14px] rounded-md bg-primary text-[#0D0F14] text-[13px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+      className="w-full h-10 compact:h-11 compact:text-[14px] rounded-md bg-primary shadow-md text-[#0D0F14] text-[13px] font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
     >
       {loading ? loadingLabel : label}
     </button>
