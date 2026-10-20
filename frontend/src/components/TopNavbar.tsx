@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, Database, BarChart3, Map as MapIcon, ClipboardCheck, MessageSquareText, Users, Menu, LogIn, LogOut, Sun, Moon, Compass } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MENU_SHEET_CLASS, MenuSection, MenuSheetHeader } from "./MenuSection";
 import { DisplayPreferencesModal } from "./DisplayPreferencesModal";
 import { useAuth } from "@/lib/auth";
 import { ADMIN_NAV, adminPath, isActivePath } from "@/lib/adminNav";
@@ -81,33 +82,25 @@ export function TopNavbar({ active = "none" }: Props) {
         <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu" data-tour="pages">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
-        {/* A full-height column: the items scroll when the screen is short
-            (a phone held sideways); the sign-in footer stays at the bottom. */}
-        <SheetContent side="right" className="w-[280px] [--surface-base:var(--card)] border-l z-[1100] flex flex-col gap-0 p-0">
-          <SheetHeader className="shrink-0 px-6 pt-6">
-            <SheetTitle className="text-sm">Menu</SheetTitle>
-          </SheetHeader>
-          <div className={`flex-1 min-h-0 overflow-y-auto thin-scrollbar px-6 mt-6 space-y-1 ${signedOut ? "pb-4" : "pb-[calc(1.5rem+env(safe-area-inset-bottom))]"}`}>
+        {/* A floating column: the items scroll when the screen is short (a
+            phone held sideways); the sign-in footer stays at the bottom. */}
+        <SheetContent side="right" className={MENU_SHEET_CLASS}>
+          <MenuSheetHeader title="Menu" />
+          <div className={`flex-1 min-h-0 overflow-y-auto thin-scrollbar px-3 mt-4 space-y-2 ${signedOut ? "pb-2" : "pb-[calc(0.75rem+env(safe-area-inset-bottom))]"}`}>
             {isAdmin ? <AdminMenuLinks demo={isDemo} /> : <PublicMenuLinks active={active} />}
             <PSTClockMenuRow from={isAdmin ? "xl" : "lg"} />
             {/* Signed in: Accounts and Sign out. Visitors who are not signed in
                 get "Admin sign in" in the footer at the bottom of the menu. */}
             {isAdmin && (
-              <>
-                <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-                  Account
-                </p>
+              <MenuSection heading="Account">
                 {!isDemo && <AdminAccountsMenuItem />}
                 <button onClick={() => void logout()} className="w-full">
                   <MenuRow icon={LogOut} label="Sign out" hint={user?.email} />
                 </button>
-              </>
+              </MenuSection>
             )}
 
-            <div className={`${isAdmin ? "pt-3 mt-3 border-t border-border/40" : ""}`}>
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-2">
-                Appearance
-              </p>
+            <MenuSection heading="Appearance">
               <div className="flex items-center justify-between gap-3 px-2 py-2 rounded-md">
                 <span className="flex items-center gap-3">
                   {theme === "dark" ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
@@ -126,8 +119,8 @@ export function TopNavbar({ active = "none" }: Props) {
                       : "bg-secondary border-border/50"
                   }`}
                 >
-                  <span aria-hidden className="absolute left-1 text-[8px]">🌙</span>
-                  <span aria-hidden className="absolute right-1 text-[8px]">☀️</span>
+                  <Moon aria-hidden className="absolute left-1 h-2.5 w-2.5 text-muted-foreground" />
+                  <Sun aria-hidden className="absolute right-1 h-2.5 w-2.5 text-primary-foreground" />
                   <span
                     className={`relative z-10 inline-block h-4 w-4 transform rounded-full bg-card shadow-md transition-transform ${
                       theme === "light" ? "translate-x-5" : "translate-x-0.5"
@@ -135,40 +128,33 @@ export function TopNavbar({ active = "none" }: Props) {
                   />
                 </button>
               </div>
-            </div>
+            </MenuSection>
 
-            <div className="pt-3 mt-3 border-t border-border/40">
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-2">
-                Settings
-              </p>
+            <MenuSection heading="Settings">
               <DisplayPreferencesModal />
-            </div>
+            </MenuSection>
 
-            <div className="pt-3 mt-3 border-t border-border/40">
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-                Help
-              </p>
+            <MenuSection heading="Help">
               {/* Replays this page's guided tour; pages without one get the map's (opening the map page first). */}
               <SheetClose asChild>
                 <button type="button" onClick={() => requestTour(navigate, pathname)} className="w-full">
                   <MenuRow icon={Compass} label="Take the tour" hint={TOUR_HINTS[tourForPath(pathname) ?? "map"]} />
                 </button>
               </SheetClose>
-            </div>
+            </MenuSection>
           </div>
 
           {/* Footer for visitors who are not signed in: the way to /login for DA
               staff (the only sign-in form). Kept apart from the items above. */}
           {signedOut && (
-            <div className="shrink-0 border-t border-border/40 px-6 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-                DA staff
-              </p>
-              <SheetClose asChild>
-                <Link to="/login" className="block w-full">
-                  <MenuRow icon={LogIn} label="Admin sign in" hint="For DA CALABARZON staff only" wrapHint />
-                </Link>
-              </SheetClose>
+            <div className="shrink-0 px-3 pt-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+              <MenuSection heading="DA staff">
+                <SheetClose asChild>
+                  <Link to="/login" className="block w-full">
+                    <MenuRow icon={LogIn} label="Admin sign in" hint="For DA CALABARZON staff only" wrapHint />
+                  </Link>
+                </SheetClose>
+              </MenuSection>
             </div>
           )}
         </SheetContent>
@@ -190,10 +176,7 @@ function PublicMenuLinks({ active }: { active: Props["active"] }) {
     { to: "/visualization", label: "Visualization", icon: BarChart3, on: active === "viz" },
   ];
   return (
-    <div className="md:hidden pb-3 mb-3 border-b border-border/40">
-      <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-        Navigate
-      </p>
+    <MenuSection heading="Navigate" className="md:hidden">
       {links.map((l) => (
         <SheetClose asChild key={l.to}>
           <Link to={l.to} className="block w-full" aria-current={l.on ? "page" : undefined}>
@@ -201,7 +184,7 @@ function PublicMenuLinks({ active }: { active: Props["active"] }) {
           </Link>
         </SheetClose>
       ))}
-    </div>
+    </MenuSection>
   );
 }
 
@@ -232,10 +215,7 @@ const ADMIN_NAV_ICONS: Record<string, typeof Home> = {
 export function AdminMenuLinks({ demo = false }: { demo?: boolean }) {
   const { pathname } = useLocation();
   return (
-    <div className={`${demo ? "xl:hidden" : "lg:hidden"} pb-3 mb-3 border-b border-border/40`}>
-      <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-        Navigate
-      </p>
+    <MenuSection heading="Navigate" className={demo ? "xl:hidden" : "lg:hidden"}>
       {ADMIN_NAV.map((l) => (
         <SheetClose asChild key={l.path}>
           <Link to={l.path} className="block w-full" aria-current={isActivePath(pathname, l.path) ? "page" : undefined}>
@@ -243,7 +223,7 @@ export function AdminMenuLinks({ demo = false }: { demo?: boolean }) {
           </Link>
         </SheetClose>
       ))}
-    </div>
+    </MenuSection>
   );
 }
 
@@ -283,7 +263,7 @@ export function NavBtn({ label, active, to }: { label: string; active?: boolean;
       to={to}
       aria-current={active ? "page" : undefined}
       className={`relative px-4 py-2 max-lg:min-h-11 max-lg:inline-flex max-lg:items-center rounded-full text-[13px] font-medium transition-colors ${
-        active ? "nav-active" : "text-foreground/80 hover:text-foreground hover:bg-secondary/60"
+        active ? "tint-primary" : "text-foreground/80 hover:text-foreground hover:bg-secondary/60"
       }`}
     >
       <span>{label}</span>
@@ -294,7 +274,7 @@ export function NavBtn({ label, active, to }: { label: string; active?: boolean;
 /** `wrapHint`: the hint may take a second line instead of being cut off (phones show it larger). */
 function MenuRow({ icon: Icon, label, hint, badge, wrapHint = false }: { icon: typeof Home; label: string; hint?: string; badge?: React.ReactNode; wrapHint?: boolean }) {
   return (
-    <span className="w-full flex items-center gap-3 px-2 py-2 max-lg:min-h-11 rounded-md hover:bg-secondary/60 transition-colors text-left">
+    <span className="w-full flex items-center gap-3 px-2 py-2 max-lg:min-h-11 rounded-md hover:bg-secondary transition-colors text-left">
       <Icon className="h-3.5 w-3.5 text-muted-foreground" />
       <span className="flex-1 min-w-0">
         <span className="block text-[11px] font-medium">{label}</span>

@@ -513,14 +513,14 @@
     box-shadow: var(--shadow-header);
   }
 
-  /* Header links: plain text; the current page a filled pill in the amber
-     tint (its text amber in dark mode, the page text in light mode, AA on
-     the tint either way). */
-  .nav-active {
+  /* The amber tint: the current page's link in the header, the icon tile
+     in a menu or dialog header. Its text or icon is amber in dark mode and
+     the page text colour in light mode (AA on the tint either way). */
+  .tint-primary {
     background-color: hsl(var(--primary) / 0.15);
     color: hsl(var(--primary));
   }
-  .light .nav-active { color: hsl(var(--primary-ink)); }
+  .light .tint-primary { color: hsl(var(--primary-ink)); }
 
   /* Segmented choices: a pill track, the chosen option a filled amber pill,
      the others plain text. */

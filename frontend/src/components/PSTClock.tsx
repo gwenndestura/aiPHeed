@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MenuSection } from "./MenuSection";
 
 function fmtDate(d: Date) {
   return new Intl.DateTimeFormat("en-US", {
@@ -57,13 +58,10 @@ export function PSTClock({ from = "lg" }: { from?: ShowFrom }) {
 export function PSTClockMenuRow({ from = "lg" }: { from?: ShowFrom }) {
   const now = useNow();
   return (
-    <div className={`${from === "xl" ? "xl:hidden" : "lg:hidden"} pb-3 mb-3 border-b border-border/40 px-2`} title="Philippine Standard Time (UTC+8)">
-      <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold mb-1">
-        Philippine Standard Time
-      </p>
-      <p className="font-mono-num text-[12px] tabular-nums text-foreground/90">
+    <MenuSection heading="Philippine Standard Time" className={from === "xl" ? "xl:hidden" : "lg:hidden"} title="Philippine Standard Time (UTC+8)">
+      <p className="px-2 pb-1.5 font-mono-num text-[12px] tabular-nums text-foreground/90">
         {fmtDate(now)} · {fmtTime(now)}
       </p>
-    </div>
+    </MenuSection>
   );
 }

@@ -62,25 +62,31 @@ export function DisplayPreferencesModal({ trigger }: { trigger?: React.ReactNode
           </button>
         )}
       </DialogTrigger>
-      <DialogContent className="z-[1200] max-w-sm">
-        <DialogHeader>
-          <DialogTitle className="text-sm">Display preferences</DialogTitle>
-          <DialogDescription className="text-[11px]">Tune how aiPHeed feels for you.</DialogDescription>
+      <DialogContent className="z-[1200] max-w-sm w-[calc(100%-24px)] rounded-sheet border-0">
+        <DialogHeader className="flex-row items-center gap-3 space-y-0 pr-8 text-left sm:text-left">
+          <span aria-hidden className="tint-primary h-10 w-10 rounded-xl flex items-center justify-center shrink-0">
+            <Sliders className="h-4 w-4" />
+          </span>
+          <span className="min-w-0 space-y-1">
+            <DialogTitle className="text-[14px] leading-5">Display preferences</DialogTitle>
+            <DialogDescription className="text-[11px] leading-4 text-foreground/70">Choose what the map shows</DialogDescription>
+          </span>
         </DialogHeader>
 
-        <div className="space-y-3 mt-2">
+        <div className="space-y-2 mt-1">
           <Toggle label="Show province labels on map" value={prefs.showProvinceLabels} onChange={(v) => set("showProvinceLabels", v)} />
           <Toggle label="Show municipality boundaries" value={prefs.showMunicipalityBoundaries} onChange={(v) => set("showMunicipalityBoundaries", v)} />
           <Toggle label="Show risk score numbers on map" value={prefs.showRiskNumbers} onChange={(v) => set("showRiskNumbers", v)} />
 
-          <div>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold mb-1.5">Animation speed</p>
-            <div className="grid grid-cols-3 gap-1.5 seg-track seg-track-flush">
+          <div className="inner-card px-3 py-2.5">
+            <p aria-hidden className="text-[11px] font-semibold mb-2">Animation speed</p>
+            <div role="group" aria-label="Animation speed" className="grid grid-cols-3 gap-1 seg-track p-1">
               {(["slow", "normal", "fast"] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => set("animationSpeed", s)}
-                  className={`h-8 seg-option text-[11px] font-semibold border transition-colors capitalize ${
+                  aria-pressed={prefs.animationSpeed === s}
+                  className={`h-8 compact:h-11 seg-option text-[11px] font-semibold border transition-colors capitalize ${
                     prefs.animationSpeed === s ? "seg-on" : "hover:bg-secondary/60"
                   }`}
                 >
@@ -95,24 +101,26 @@ export function DisplayPreferencesModal({ trigger }: { trigger?: React.ReactNode
   );
 }
 
+/** An on/off option: its label and a segmented Show | Hide choice, the active one a filled amber pill. */
 function Toggle({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button
-      onClick={() => onChange(!value)}
-      className="w-full flex items-center justify-between gap-3 p-2 rounded-md hover:bg-secondary/40 transition-colors text-left"
-    >
+    <div className="inner-card flex items-center justify-between gap-3 px-3 py-2">
       <p className="text-[11px] font-semibold">{label}</p>
-      <span
-        className={`relative w-9 h-5 rounded-full transition-colors shrink-0 ${
-          value ? "bg-primary" : "bg-secondary border border-border/60"
-        }`}
-      >
-        <span
-          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-            value ? "translate-x-4" : "translate-x-0"
-          }`}
-        />
-      </span>
-    </button>
+      <div role="group" aria-label={label} className="flex shrink-0 gap-1 seg-track p-1">
+        {([true, false] as const).map((on) => (
+          <button
+            key={String(on)}
+            type="button"
+            onClick={() => onChange(on)}
+            aria-pressed={value === on}
+            className={`h-7 compact:h-11 min-w-[52px] px-3 seg-option text-[11px] font-semibold border transition-colors ${
+              value === on ? "seg-on" : "hover:bg-secondary/60"
+            }`}
+          >
+            {on ? "Show" : "Hide"}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

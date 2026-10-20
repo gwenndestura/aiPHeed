@@ -19,7 +19,8 @@ import { MetricLabel } from "@/components/ui/metric";
 import { Note } from "@/components/ui/note";
 import { MapDashboard } from "@/components/MapDashboard";
 import { SidebarPeek } from "@/components/SidebarPeek";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MENU_SHEET_CLASS, MenuSection, MenuSheetHeader } from "@/components/MenuSection";
 import { PSTClock, PSTClockMenuRow } from "@/components/PSTClock";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -173,34 +174,28 @@ function AdminNavbar({
         <SheetTrigger className={MENU_TRIGGER_CLASS} aria-label="Menu">
           <Menu className="h-4 w-4" />
         </SheetTrigger>
-        <SheetContent side="right" className="w-[280px] [--surface-base:var(--card)] border-l z-[1100]">
-          <SheetHeader>
-            <SheetTitle className="text-sm">Admin Menu</SheetTitle>
-          </SheetHeader>
-          <div className="mt-6 space-y-1">
+        <SheetContent side="right" className={MENU_SHEET_CLASS}>
+          <MenuSheetHeader title="Admin Menu" />
+          <div className="flex-1 min-h-0 overflow-y-auto thin-scrollbar px-3 mt-4 space-y-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <AdminMenuLinks demo={!!user.isDemo} />
             <PSTClockMenuRow from="xl" />
-            <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-1">
-              Account
-            </p>
-            {!user.isDemo && <AdminAccountsMenuItem />}
-            <div className="px-2 py-2 rounded-md bg-secondary/40 flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
-                {user.email.slice(0, 2).toUpperCase()}
+            <MenuSection heading="Account">
+              {!user.isDemo && <AdminAccountsMenuItem />}
+              <div className="px-2 py-2 rounded-md bg-secondary flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
+                  {user.email.slice(0, 2).toUpperCase()}
+                </div>
+                <span className="text-[10px] text-muted-foreground truncate">{user.email}</span>
               </div>
-              <span className="text-[10px] text-muted-foreground truncate">{user.email}</span>
-            </div>
-            <button
-              onClick={onLogout}
-              className="mt-1 w-full flex items-center gap-2 px-2 py-2 max-lg:min-h-11 rounded-md text-[11px] hover:bg-secondary/60 text-foreground"
-            >
-              <LogOut className="h-3.5 w-3.5" /> Sign out
-            </button>
+              <button
+                onClick={onLogout}
+                className="mt-1 w-full flex items-center gap-2 px-2 py-2 max-lg:min-h-11 rounded-md text-[11px] hover:bg-secondary text-foreground"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Sign out
+              </button>
+            </MenuSection>
 
-            <div className="pt-3 mt-3 border-t border-border/40">
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-2 mb-2">
-                Appearance
-              </p>
+            <MenuSection heading="Appearance">
               <div className="flex items-center justify-between gap-3 px-2 py-2 rounded-md">
                 <span className="flex items-center gap-3">
                   {theme === "dark" ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
@@ -219,8 +214,8 @@ function AdminNavbar({
                       : "bg-secondary border-border/50"
                   }`}
                 >
-                  <span aria-hidden className="absolute left-1 text-[8px]">🌙</span>
-                  <span aria-hidden className="absolute right-1 text-[8px]">☀️</span>
+                  <Moon aria-hidden className="absolute left-1 h-2.5 w-2.5 text-muted-foreground" />
+                  <Sun aria-hidden className="absolute right-1 h-2.5 w-2.5 text-primary-foreground" />
                   <span
                     className={`relative z-10 inline-block h-4 w-4 transform rounded-full bg-card shadow-md transition-transform ${
                       theme === "light" ? "translate-x-5" : "translate-x-0.5"
@@ -228,7 +223,7 @@ function AdminNavbar({
                   />
                 </button>
               </div>
-            </div>
+            </MenuSection>
           </div>
         </SheetContent>
       </Sheet>
