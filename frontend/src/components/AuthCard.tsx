@@ -129,7 +129,12 @@ export function AuthField({ id, label, icon: Icon, value, onChange, type = "text
         )}
       </div>
       {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-[11px] compact:text-[12px] text-foreground/65 leading-snug">
+        <p
+          id={`${id}-hint`}
+          className={`mt-1.5 leading-snug ${
+            type === "email" ? "text-[11px] compact:text-[12px] text-foreground/65" : "text-[12px] compact:text-[14px] text-foreground/75"
+          }`}
+        >
           {hint}
         </p>
       )}
