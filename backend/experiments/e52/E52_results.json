@@ -1,0 +1,1135 @@
+{
+ "timing": "forecast quarter F uses data quarter F-2 (latest complete quarter before the origin)",
+ "q4_2026": {
+  "Cavite": {
+   "market": {
+    "score": 90.5,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA provincial CPI (food, rice; OpenStat)",
+    "flag": "",
+    "inputs": {
+     "D_pp": 0.867,
+     "rank_D": 80.952,
+     "rice_cpi_yoy": 18.567,
+     "rank_rice": 100.0
+    },
+    "n_history": 22
+   },
+   "climate": {
+    "score": 85.7,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "NASA POWER daily rainfall; NOAA IBTrACS storms",
+    "flag": "not Philippine-government data",
+    "inputs": {
+     "rain_anomaly_pct": -59.13,
+     "rank_abs_rain": 85.714,
+     "tc_max_signal": 0.0,
+     "rank_storm": 0.0
+    },
+    "n_history": 22
+   },
+   "fish_kill": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA OpenStat 0132E4GVFP1 fisheries production",
+    "flag": "PROXY (supply decline, not incidents)",
+    "inputs": {
+     "production_yoy": 0.083,
+     "decline_log": 0.0
+    },
+    "n_history": 22
+   },
+   "employment": {
+    "score": 75.1,
+    "data_quarter": "2026-Q2",
+    "level": "national",
+    "source": "PSA LFS national (OpenStat 0021B3FKEI2), quarter mean",
+    "flag": "national; provincial adjustment not verifiable (RSSO IV-A HTTP 403)",
+    "inputs": {
+     "unemployment_pct": 4.786,
+     "rank_u": 61.905,
+     "yoy_change_pp": 0.895,
+     "rank_change": 88.235
+    },
+    "n_history": 22
+   },
+   "ofw_remittance": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "national (varies only via food CPI)",
+    "source": "BSP cash remittances (curated / reported), ECB FX, PSA food CPI",
+    "flag": "PROVISIONAL (2026 BSP values from secondary reports)",
+    "inputs": {
+     "g_real_pct": 5.533,
+     "fall_pct": 0.0
+    },
+    "n_history": 18
+   }
+  },
+  "Laguna": {
+   "market": {
+    "score": 61.9,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA provincial CPI (food, rice; OpenStat)",
+    "flag": "",
+    "inputs": {
+     "D_pp": 0.1,
+     "rank_D": 52.381,
+     "rice_cpi_yoy": 4.1,
+     "rank_rice": 71.429
+    },
+    "n_history": 22
+   },
+   "climate": {
+    "score": 90.5,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "NASA POWER daily rainfall; NOAA IBTrACS storms",
+    "flag": "not Philippine-government data",
+    "inputs": {
+     "rain_anomaly_pct": -63.16,
+     "rank_abs_rain": 90.476,
+     "tc_max_signal": 0.0,
+     "rank_storm": 0.0
+    },
+    "n_history": 22
+   },
+   "fish_kill": {
+    "score": 47.6,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA OpenStat 0132E4GVFP1 fisheries production",
+    "flag": "PROXY (supply decline, not incidents)",
+    "inputs": {
+     "production_yoy": -0.077,
+     "decline_log": 0.081
+    },
+    "n_history": 22
+   },
+   "employment": {
+    "score": 75.1,
+    "data_quarter": "2026-Q2",
+    "level": "national",
+    "source": "PSA LFS national (OpenStat 0021B3FKEI2), quarter mean",
+    "flag": "national; provincial adjustment not verifiable (RSSO IV-A HTTP 403)",
+    "inputs": {
+     "unemployment_pct": 4.786,
+     "rank_u": 61.905,
+     "yoy_change_pp": 0.895,
+     "rank_change": 88.235
+    },
+    "n_history": 22
+   },
+   "ofw_remittance": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "national (varies only via food CPI)",
+    "source": "BSP cash remittances (curated / reported), ECB FX, PSA food CPI",
+    "flag": "PROVISIONAL (2026 BSP values from secondary reports)",
+    "inputs": {
+     "g_real_pct": 6.311,
+     "fall_pct": 0.0
+    },
+    "n_history": 18
+   }
+  },
+  "Quezon": {
+   "market": {
+    "score": 76.2,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA provincial CPI (food, rice; OpenStat)",
+    "flag": "",
+    "inputs": {
+     "D_pp": 1.0,
+     "rank_D": 61.905,
+     "rice_cpi_yoy": 15.133,
+     "rank_rice": 90.476
+    },
+    "n_history": 22
+   },
+   "climate": {
+    "score": 90.5,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "NASA POWER daily rainfall; NOAA IBTrACS storms",
+    "flag": "not Philippine-government data",
+    "inputs": {
+     "rain_anomaly_pct": -61.63,
+     "rank_abs_rain": 90.476,
+     "tc_max_signal": 0.0,
+     "rank_storm": 0.0
+    },
+    "n_history": 22
+   },
+   "fish_kill": {
+    "score": 42.9,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA OpenStat 0132E4GVFP1 fisheries production",
+    "flag": "PROXY (supply decline, not incidents)",
+    "inputs": {
+     "production_yoy": -0.012,
+     "decline_log": 0.012
+    },
+    "n_history": 22
+   },
+   "employment": {
+    "score": 75.1,
+    "data_quarter": "2026-Q2",
+    "level": "national",
+    "source": "PSA LFS national (OpenStat 0021B3FKEI2), quarter mean",
+    "flag": "national; provincial adjustment not verifiable (RSSO IV-A HTTP 403)",
+    "inputs": {
+     "unemployment_pct": 4.786,
+     "rank_u": 61.905,
+     "yoy_change_pp": 0.895,
+     "rank_change": 88.235
+    },
+    "n_history": 22
+   },
+   "ofw_remittance": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "national (varies only via food CPI)",
+    "source": "BSP cash remittances (curated / reported), ECB FX, PSA food CPI",
+    "flag": "PROVISIONAL (2026 BSP values from secondary reports)",
+    "inputs": {
+     "g_real_pct": 5.398,
+     "fall_pct": 0.0
+    },
+    "n_history": 18
+   }
+  },
+  "Rizal": {
+   "market": {
+    "score": 66.7,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA provincial CPI (food, rice; OpenStat)",
+    "flag": "",
+    "inputs": {
+     "D_pp": 0.467,
+     "rank_D": 47.619,
+     "rice_cpi_yoy": 14.767,
+     "rank_rice": 85.714
+    },
+    "n_history": 22
+   },
+   "climate": {
+    "score": 95.2,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "NASA POWER daily rainfall; NOAA IBTrACS storms",
+    "flag": "not Philippine-government data",
+    "inputs": {
+     "rain_anomaly_pct": -59.11,
+     "rank_abs_rain": 95.238,
+     "tc_max_signal": 0.0,
+     "rank_storm": 0.0
+    },
+    "n_history": 22
+   },
+   "fish_kill": {
+    "score": 57.1,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA OpenStat 0132E4GVFP1 fisheries production",
+    "flag": "PROXY (supply decline, not incidents)",
+    "inputs": {
+     "production_yoy": -0.181,
+     "decline_log": 0.2
+    },
+    "n_history": 22
+   },
+   "employment": {
+    "score": 75.1,
+    "data_quarter": "2026-Q2",
+    "level": "national",
+    "source": "PSA LFS national (OpenStat 0021B3FKEI2), quarter mean",
+    "flag": "national; provincial adjustment not verifiable (RSSO IV-A HTTP 403)",
+    "inputs": {
+     "unemployment_pct": 4.786,
+     "rank_u": 61.905,
+     "yoy_change_pp": 0.895,
+     "rank_change": 88.235
+    },
+    "n_history": 22
+   },
+   "ofw_remittance": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "national (varies only via food CPI)",
+    "source": "BSP cash remittances (curated / reported), ECB FX, PSA food CPI",
+    "flag": "PROVISIONAL (2026 BSP values from secondary reports)",
+    "inputs": {
+     "g_real_pct": 5.937,
+     "fall_pct": 0.0
+    },
+    "n_history": 18
+   }
+  },
+  "Batangas": {
+   "market": {
+    "score": 33.3,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA provincial CPI (food, rice; OpenStat)",
+    "flag": "",
+    "inputs": {
+     "D_pp": -2.433,
+     "rank_D": 0.0,
+     "rice_cpi_yoy": 6.6,
+     "rank_rice": 66.667
+    },
+    "n_history": 22
+   },
+   "climate": {
+    "score": 85.7,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "NASA POWER daily rainfall; NOAA IBTrACS storms",
+    "flag": "not Philippine-government data",
+    "inputs": {
+     "rain_anomaly_pct": -61.1,
+     "rank_abs_rain": 85.714,
+     "tc_max_signal": 0.0,
+     "rank_storm": 0.0
+    },
+    "n_history": 22
+   },
+   "fish_kill": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "province",
+    "source": "PSA OpenStat 0132E4GVFP1 fisheries production",
+    "flag": "PROXY (supply decline, not incidents)",
+    "inputs": {
+     "production_yoy": 0.043,
+     "decline_log": 0.0
+    },
+    "n_history": 22
+   },
+   "employment": {
+    "score": 75.1,
+    "data_quarter": "2026-Q2",
+    "level": "national",
+    "source": "PSA LFS national (OpenStat 0021B3FKEI2), quarter mean",
+    "flag": "national; provincial adjustment not verifiable (RSSO IV-A HTTP 403)",
+    "inputs": {
+     "unemployment_pct": 4.786,
+     "rank_u": 61.905,
+     "yoy_change_pp": 0.895,
+     "rank_change": 88.235
+    },
+    "n_history": 22
+   },
+   "ofw_remittance": {
+    "score": 0.0,
+    "data_quarter": "2026-Q2",
+    "level": "national (varies only via food CPI)",
+    "source": "BSP cash remittances (curated / reported), ECB FX, PSA food CPI",
+    "flag": "PROVISIONAL (2026 BSP values from secondary reports)",
+    "inputs": {
+     "g_real_pct": 8.966,
+     "fall_pct": 0.0
+    },
+    "n_history": 18
+   }
+  }
+ },
+ "calabarzon_mean": {
+  "2023-Q1": {
+   "market": 65.0,
+   "climate": 100.0,
+   "fish_kill": 46.7,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2": {
+   "market": 61.4,
+   "climate": 85.7,
+   "fish_kill": 31.4,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q3": {
+   "market": 66.2,
+   "climate": 72.5,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 80.0
+  },
+  "2023-Q4": {
+   "market": 67.8,
+   "climate": 20.0,
+   "fish_kill": 60.0,
+   "employment": 45.6,
+   "ofw_remittance": 68.0
+  },
+  "2024-Q1": {
+   "market": 78.0,
+   "climate": 48.0,
+   "fish_kill": 74.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q2": {
+   "market": 77.3,
+   "climate": 14.5,
+   "fish_kill": 60.0,
+   "employment": 42.9,
+   "ofw_remittance": 57.1
+  },
+  "2024-Q3": {
+   "market": 77.5,
+   "climate": 78.3,
+   "fish_kill": 50.0,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4": {
+   "market": 65.4,
+   "climate": 89.2,
+   "fish_kill": 38.5,
+   "employment": 48.3,
+   "ofw_remittance": 20.0
+  },
+  "2025-Q1": {
+   "market": 60.0,
+   "climate": 64.3,
+   "fish_kill": 12.9,
+   "employment": 60.7,
+   "ofw_remittance": 16.0
+  },
+  "2025-Q2": {
+   "market": 50.7,
+   "climate": 100.0,
+   "fish_kill": 53.3,
+   "employment": 50.0,
+   "ofw_remittance": 20.0
+  },
+  "2025-Q3": {
+   "market": 28.8,
+   "climate": 91.2,
+   "fish_kill": 28.8,
+   "employment": 59.4,
+   "ofw_remittance": 20.0
+  },
+  "2025-Q4": {
+   "market": 26.5,
+   "climate": 30.6,
+   "fish_kill": 50.6,
+   "employment": 58.8,
+   "ofw_remittance": 78.5
+  },
+  "2026-Q1": {
+   "market": 26.7,
+   "climate": 82.2,
+   "fish_kill": 34.4,
+   "employment": 69.4,
+   "ofw_remittance": 67.1
+  },
+  "2026-Q2": {
+   "market": 27.9,
+   "climate": 82.1,
+   "fish_kill": 34.7,
+   "employment": 76.3,
+   "ofw_remittance": 14.7
+  },
+  "2026-Q3": {
+   "market": 38.5,
+   "climate": 19.0,
+   "fish_kill": 54.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4": {
+   "market": 65.7,
+   "climate": 89.5,
+   "fish_kill": 29.5,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  }
+ },
+ "province_spread_max_minus_min": {
+  "2023-Q1": {
+   "market": 75.0,
+   "climate": 0.0,
+   "fish_kill": 83.3,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2": {
+   "market": 92.9,
+   "climate": 0.0,
+   "fish_kill": 71.4,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q3": {
+   "market": 62.5,
+   "climate": 12.5,
+   "fish_kill": 0.0,
+   "employment": 0.0,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q4": {
+   "market": 61.1,
+   "climate": 55.6,
+   "fish_kill": 100.0,
+   "employment": 0.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q1": {
+   "market": 30.0,
+   "climate": 80.0,
+   "fish_kill": 70.0,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q2": {
+   "market": 31.8,
+   "climate": 27.3,
+   "fish_kill": 90.9,
+   "employment": 0.0,
+   "ofw_remittance": 85.7
+  },
+  "2024-Q3": {
+   "market": 29.2,
+   "climate": 8.3,
+   "fish_kill": 100.0,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4": {
+   "market": 53.8,
+   "climate": 7.7,
+   "fish_kill": 61.5,
+   "employment": 0.0,
+   "ofw_remittance": 100.0
+  },
+  "2025-Q1": {
+   "market": 60.7,
+   "climate": 0.0,
+   "fish_kill": 64.3,
+   "employment": 0.0,
+   "ofw_remittance": 80.0
+  },
+  "2025-Q2": {
+   "market": 66.7,
+   "climate": 0.0,
+   "fish_kill": 66.7,
+   "employment": 0.0,
+   "ofw_remittance": 100.0
+  },
+  "2025-Q3": {
+   "market": 87.5,
+   "climate": 6.2,
+   "fish_kill": 93.8,
+   "employment": 0.0,
+   "ofw_remittance": 100.0
+  },
+  "2025-Q4": {
+   "market": 47.1,
+   "climate": 11.8,
+   "fish_kill": 70.6,
+   "employment": 0.0,
+   "ofw_remittance": 23.1
+  },
+  "2026-Q1": {
+   "market": 30.6,
+   "climate": 11.1,
+   "fish_kill": 66.7,
+   "employment": 0.0,
+   "ofw_remittance": 21.4
+  },
+  "2026-Q2": {
+   "market": 47.4,
+   "climate": 5.3,
+   "fish_kill": 78.9,
+   "employment": 0.0,
+   "ofw_remittance": 73.3
+  },
+  "2026-Q3": {
+   "market": 50.0,
+   "climate": 50.0,
+   "fish_kill": 85.0,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4": {
+   "market": 57.1,
+   "climate": 9.5,
+   "fish_kill": 57.1,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  }
+ },
+ "by_province": {
+  "2023-Q1 Batangas": {
+   "market": 91.7,
+   "climate": 100.0,
+   "fish_kill": 50.0,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q1 Cavite": {
+   "market": 100.0,
+   "climate": 100.0,
+   "fish_kill": 0.0,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q1 Laguna": {
+   "market": 50.0,
+   "climate": 100.0,
+   "fish_kill": 66.7,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q1 Quezon": {
+   "market": 25.0,
+   "climate": 100.0,
+   "fish_kill": 83.3,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q1 Rizal": {
+   "market": 58.3,
+   "climate": 100.0,
+   "fish_kill": 33.3,
+   "employment": 0.0,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2 Batangas": {
+   "market": 50.0,
+   "climate": 85.7,
+   "fish_kill": 57.1,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2 Cavite": {
+   "market": 100.0,
+   "climate": 85.7,
+   "fish_kill": 0.0,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2 Laguna": {
+   "market": 50.0,
+   "climate": 85.7,
+   "fish_kill": 71.4,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2 Quezon": {
+   "market": 7.1,
+   "climate": 85.7,
+   "fish_kill": 0.0,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q2 Rizal": {
+   "market": 100.0,
+   "climate": 85.7,
+   "fish_kill": 28.6,
+   "employment": 16.7,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q3 Batangas": {
+   "market": 75.0,
+   "climate": 75.0,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q3 Cavite": {
+   "market": 87.5,
+   "climate": 75.0,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q3 Laguna": {
+   "market": 56.2,
+   "climate": 75.0,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q3 Quezon": {
+   "market": 25.0,
+   "climate": 75.0,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q3 Rizal": {
+   "market": 87.5,
+   "climate": 62.5,
+   "fish_kill": 0.0,
+   "employment": 56.2,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q4 Batangas": {
+   "market": 83.3,
+   "climate": 33.3,
+   "fish_kill": 0.0,
+   "employment": 45.6,
+   "ofw_remittance": 80.0
+  },
+  "2023-Q4 Cavite": {
+   "market": 77.8,
+   "climate": 55.6,
+   "fish_kill": 88.9,
+   "employment": 45.6,
+   "ofw_remittance": 80.0
+  },
+  "2023-Q4 Laguna": {
+   "market": 72.2,
+   "climate": 11.1,
+   "fish_kill": 66.7,
+   "employment": 45.6,
+   "ofw_remittance": 100.0
+  },
+  "2023-Q4 Quezon": {
+   "market": 22.2,
+   "climate": 0.0,
+   "fish_kill": 100.0,
+   "employment": 45.6,
+   "ofw_remittance": 0.0
+  },
+  "2023-Q4 Rizal": {
+   "market": 83.3,
+   "climate": 0.0,
+   "fish_kill": 44.4,
+   "employment": 45.6,
+   "ofw_remittance": 80.0
+  },
+  "2024-Q1 Batangas": {
+   "market": 85.0,
+   "climate": 10.0,
+   "fish_kill": 80.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q1 Cavite": {
+   "market": 90.0,
+   "climate": 30.0,
+   "fish_kill": 90.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q1 Laguna": {
+   "market": 65.0,
+   "climate": 20.0,
+   "fish_kill": 100.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q1 Quezon": {
+   "market": 60.0,
+   "climate": 90.0,
+   "fish_kill": 70.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q1 Rizal": {
+   "market": 90.0,
+   "climate": 90.0,
+   "fish_kill": 30.0,
+   "employment": 60.0,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q2 Batangas": {
+   "market": 90.9,
+   "climate": 0.0,
+   "fish_kill": 90.9,
+   "employment": 42.9,
+   "ofw_remittance": 85.7
+  },
+  "2024-Q2 Cavite": {
+   "market": 77.3,
+   "climate": 9.1,
+   "fish_kill": 63.6,
+   "employment": 42.9,
+   "ofw_remittance": 57.1
+  },
+  "2024-Q2 Laguna": {
+   "market": 86.4,
+   "climate": 18.2,
+   "fish_kill": 54.5,
+   "employment": 42.9,
+   "ofw_remittance": 85.7
+  },
+  "2024-Q2 Quezon": {
+   "market": 72.7,
+   "climate": 18.2,
+   "fish_kill": 90.9,
+   "employment": 42.9,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q2 Rizal": {
+   "market": 59.1,
+   "climate": 27.3,
+   "fish_kill": 0.0,
+   "employment": 42.9,
+   "ofw_remittance": 57.1
+  },
+  "2024-Q3 Batangas": {
+   "market": 70.8,
+   "climate": 75.0,
+   "fish_kill": 58.3,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q3 Cavite": {
+   "market": 79.2,
+   "climate": 75.0,
+   "fish_kill": 58.3,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q3 Laguna": {
+   "market": 95.8,
+   "climate": 83.3,
+   "fish_kill": 33.3,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q3 Quezon": {
+   "market": 75.0,
+   "climate": 75.0,
+   "fish_kill": 100.0,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q3 Rizal": {
+   "market": 66.7,
+   "climate": 83.3,
+   "fish_kill": 0.0,
+   "employment": 41.7,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4 Batangas": {
+   "market": 53.8,
+   "climate": 92.3,
+   "fish_kill": 0.0,
+   "employment": 48.3,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4 Cavite": {
+   "market": 61.5,
+   "climate": 92.3,
+   "fish_kill": 53.8,
+   "employment": 48.3,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4 Laguna": {
+   "market": 65.4,
+   "climate": 92.3,
+   "fish_kill": 30.8,
+   "employment": 48.3,
+   "ofw_remittance": 0.0
+  },
+  "2024-Q4 Quezon": {
+   "market": 100.0,
+   "climate": 84.6,
+   "fish_kill": 46.2,
+   "employment": 48.3,
+   "ofw_remittance": 100.0
+  },
+  "2024-Q4 Rizal": {
+   "market": 46.2,
+   "climate": 84.6,
+   "fish_kill": 61.5,
+   "employment": 48.3,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q1 Batangas": {
+   "market": 35.7,
+   "climate": 64.3,
+   "fish_kill": 0.0,
+   "employment": 60.7,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q1 Cavite": {
+   "market": 50.0,
+   "climate": 64.3,
+   "fish_kill": 64.3,
+   "employment": 60.7,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q1 Laguna": {
+   "market": 82.1,
+   "climate": 64.3,
+   "fish_kill": 0.0,
+   "employment": 60.7,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q1 Quezon": {
+   "market": 96.4,
+   "climate": 64.3,
+   "fish_kill": 0.0,
+   "employment": 60.7,
+   "ofw_remittance": 80.0
+  },
+  "2025-Q1 Rizal": {
+   "market": 35.7,
+   "climate": 64.3,
+   "fish_kill": 0.0,
+   "employment": 60.7,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q2 Batangas": {
+   "market": 30.0,
+   "climate": 100.0,
+   "fish_kill": 53.3,
+   "employment": 50.0,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q2 Cavite": {
+   "market": 40.0,
+   "climate": 100.0,
+   "fish_kill": 40.0,
+   "employment": 50.0,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q2 Laguna": {
+   "market": 63.3,
+   "climate": 100.0,
+   "fish_kill": 26.7,
+   "employment": 50.0,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q2 Quezon": {
+   "market": 93.3,
+   "climate": 100.0,
+   "fish_kill": 53.3,
+   "employment": 50.0,
+   "ofw_remittance": 100.0
+  },
+  "2025-Q2 Rizal": {
+   "market": 26.7,
+   "climate": 100.0,
+   "fish_kill": 93.3,
+   "employment": 50.0,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q3 Batangas": {
+   "market": 0.0,
+   "climate": 93.8,
+   "fish_kill": 50.0,
+   "employment": 59.4,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q3 Cavite": {
+   "market": 25.0,
+   "climate": 93.8,
+   "fish_kill": 93.8,
+   "employment": 59.4,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q3 Laguna": {
+   "market": 31.2,
+   "climate": 87.5,
+   "fish_kill": 0.0,
+   "employment": 59.4,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q3 Quezon": {
+   "market": 87.5,
+   "climate": 93.8,
+   "fish_kill": 0.0,
+   "employment": 59.4,
+   "ofw_remittance": 100.0
+  },
+  "2025-Q3 Rizal": {
+   "market": 0.0,
+   "climate": 87.5,
+   "fish_kill": 0.0,
+   "employment": 59.4,
+   "ofw_remittance": 0.0
+  },
+  "2025-Q4 Batangas": {
+   "market": 20.6,
+   "climate": 29.4,
+   "fish_kill": 47.1,
+   "employment": 58.8,
+   "ofw_remittance": 69.2
+  },
+  "2025-Q4 Cavite": {
+   "market": 26.5,
+   "climate": 35.3,
+   "fish_kill": 70.6,
+   "employment": 58.8,
+   "ofw_remittance": 69.2
+  },
+  "2025-Q4 Laguna": {
+   "market": 50.0,
+   "climate": 35.3,
+   "fish_kill": 0.0,
+   "employment": 58.8,
+   "ofw_remittance": 92.3
+  },
+  "2025-Q4 Quezon": {
+   "market": 32.4,
+   "climate": 29.4,
+   "fish_kill": 70.6,
+   "employment": 58.8,
+   "ofw_remittance": 92.3
+  },
+  "2025-Q4 Rizal": {
+   "market": 2.9,
+   "climate": 23.5,
+   "fish_kill": 64.7,
+   "employment": 58.8,
+   "ofw_remittance": 69.2
+  },
+  "2026-Q1 Batangas": {
+   "market": 13.9,
+   "climate": 77.8,
+   "fish_kill": 66.7,
+   "employment": 69.4,
+   "ofw_remittance": 64.3
+  },
+  "2026-Q1 Cavite": {
+   "market": 38.9,
+   "climate": 77.8,
+   "fish_kill": 50.0,
+   "employment": 69.4,
+   "ofw_remittance": 64.3
+  },
+  "2026-Q1 Laguna": {
+   "market": 41.7,
+   "climate": 83.3,
+   "fish_kill": 0.0,
+   "employment": 69.4,
+   "ofw_remittance": 78.6
+  },
+  "2026-Q1 Quezon": {
+   "market": 27.8,
+   "climate": 83.3,
+   "fish_kill": 55.6,
+   "employment": 69.4,
+   "ofw_remittance": 57.1
+  },
+  "2026-Q1 Rizal": {
+   "market": 11.1,
+   "climate": 88.9,
+   "fish_kill": 0.0,
+   "employment": 69.4,
+   "ofw_remittance": 71.4
+  },
+  "2026-Q2 Batangas": {
+   "market": 2.6,
+   "climate": 84.2,
+   "fish_kill": 0.0,
+   "employment": 76.3,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q2 Cavite": {
+   "market": 39.5,
+   "climate": 84.2,
+   "fish_kill": 36.8,
+   "employment": 76.3,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q2 Laguna": {
+   "market": 50.0,
+   "climate": 84.2,
+   "fish_kill": 0.0,
+   "employment": 76.3,
+   "ofw_remittance": 73.3
+  },
+  "2026-Q2 Quezon": {
+   "market": 28.9,
+   "climate": 78.9,
+   "fish_kill": 57.9,
+   "employment": 76.3,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q2 Rizal": {
+   "market": 18.4,
+   "climate": 78.9,
+   "fish_kill": 78.9,
+   "employment": 76.3,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q3 Batangas": {
+   "market": 17.5,
+   "climate": 15.0,
+   "fish_kill": 75.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q3 Cavite": {
+   "market": 67.5,
+   "climate": 0.0,
+   "fish_kill": 35.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q3 Laguna": {
+   "market": 52.5,
+   "climate": 20.0,
+   "fish_kill": 75.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q3 Quezon": {
+   "market": 25.0,
+   "climate": 50.0,
+   "fish_kill": 0.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q3 Rizal": {
+   "market": 30.0,
+   "climate": 10.0,
+   "fish_kill": 85.0,
+   "employment": 85.0,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4 Batangas": {
+   "market": 33.3,
+   "climate": 85.7,
+   "fish_kill": 0.0,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4 Cavite": {
+   "market": 90.5,
+   "climate": 85.7,
+   "fish_kill": 0.0,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4 Laguna": {
+   "market": 61.9,
+   "climate": 90.5,
+   "fish_kill": 47.6,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4 Quezon": {
+   "market": 76.2,
+   "climate": 90.5,
+   "fish_kill": 42.9,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  },
+  "2026-Q4 Rizal": {
+   "market": 66.7,
+   "climate": 95.2,
+   "fish_kill": 57.1,
+   "employment": 75.1,
+   "ofw_remittance": 0.0
+  }
+ }
+}

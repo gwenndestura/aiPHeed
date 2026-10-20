@@ -27,15 +27,19 @@ notification.
 from __future__ import annotations
 
 import logging
+import os
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import AdminUser, AlertRecord, AuditRecord
 from app.db.repository.alert_repo import AlertRepository
 from app.dependencies import get_db
+from app.quarterly.alerts_e31 import REASON_TEXT
 from app.schemas.alerts import AlertResponse
+from app.services import mailer
+from app.services import reference as ref
 from app.services.review import ReviewError, ReviewNotFound
 from app.services.security import forbid_demo_writes, require_admin
 
@@ -63,6 +67,7 @@ def _row(record: AlertRecord) -> dict:
         "created_at": record.created_at,
         "dismissed": bool(record.dismissed),
         "alert_reason": record.alert_reason,
+        "reason_text": REASON_TEXT.get(record.alert_reason or ""),
         "prev_risk_probability": record.prev_risk_probability,
         "risk_delta": record.risk_delta,
     }
@@ -91,6 +96,36 @@ async def _audit(db: AsyncSession, user: AdminUser, action: str,
     await db.commit()
 
 
+def dswd_notify_email() -> str | None:
+    """Rule 7 (p.49): "Human confirmation will be required before DSWD 4A is notified." The recipient comes from
+    AIPHEED_DSWD_NOTIFY_EMAIL; unset (the default) means no notification is sent."""
+    return os.getenv("AIPHEED_DSWD_NOTIFY_EMAIL", "").strip() or None
+
+
+def _area_name(code: str) -> str:
+    from app.quarterly.alerts_e31 import REGION_CODE
+
+    if code == REGION_CODE:
+        return ref.REGION_NAME
+    return ref.province_name(ref.province_slug(code) or "") or code
+
+
+def dswd_message(row: AlertRecord) -> tuple[str, str]:
+    """(subject, body) of the notice sent after a DA administrator confirms an alert. Facts from the alert row only."""
+    area = _area_name(row.province_code)
+    subject = f"aiPHeed early warning confirmed: {area}, {row.quarter}"
+    lines = [f"A DA Region IV-A administrator confirmed an aiPHeed early-warning alert for {area}, {row.quarter}.", ""]
+    why = REASON_TEXT.get(row.alert_reason or "")
+    if why:
+        lines.append(f"Reason: {why}")
+    if row.risk_delta is not None and row.prev_risk_probability is not None:
+        lines.append(f"Change in the risk score from the previous quarter: {row.risk_delta:+.2f} "
+                     f"(previous {row.prev_risk_probability:.2f}).")
+    lines += ["", "aiPHeed gives risk indicators only. It is not an official food insecurity classification and "
+                  "does not replace field assessment.", f"Alert reference: {row.id}"]
+    return subject, "\n".join(lines)
+
+
 # ---------------------------------------------------------------------------
 # Admin
 # ---------------------------------------------------------------------------
@@ -117,12 +152,15 @@ async def list_alerts(
 @admin_router.post("/alerts/{alert_id}/confirm", response_model=AlertResponse)
 async def confirm_alert(
     alert_id: int,
+    background: BackgroundTasks,
     user: AdminUser = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ) -> AlertResponse:
     """
     STAGED → CONFIRMED. The alert becomes visible on the dashboard, and only
-    now may the partner agencies be notified (Rule 7).
+    now may the partner agencies be notified (Rule 7): with
+    AIPHEED_DSWD_NOTIFY_EMAIL set, one email goes to that address and the
+    notification is written to the audit log. Staging and dismissal never notify.
     """
     row = await _get(db, alert_id)
     if row.dismissed:
@@ -130,9 +168,16 @@ async def confirm_alert(
             f"Alert {alert_id} was dismissed; it cannot be confirmed.",
             code="alert_dismissed",
         )
+    first_confirmation = not row.confirmed
     updated = await AlertRepository(db).confirm(alert_id)
     await _audit(db, user, "confirm_alert", updated)
     logger.info("alert %s confirmed by %s", alert_id, user.email)
+    to = dswd_notify_email()
+    if to and first_confirmation:                       # a repeated confirm does not notify twice
+        subject, body = dswd_message(updated)
+        await _audit(db, user, "notify_dswd", updated, notes=f"to {to}: {subject}")
+        background.add_task(mailer.send_email, to, subject, body)
+        logger.info("alert %s: DSWD notification queued to %s", alert_id, to)
     return AlertResponse(data=[_row(updated)], total=1)
 
 

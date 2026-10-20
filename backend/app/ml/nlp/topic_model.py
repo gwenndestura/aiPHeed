@@ -89,6 +89,7 @@ class TopicModelPipeline:
         self,
         texts: list[str],
         min_topic_size: int = MIN_TOPIC_SIZE,
+        seed: int = 42,
     ) -> BERTopic:
         """
         Fit BERTopic on a list of texts.
@@ -97,6 +98,7 @@ class TopicModelPipeline:
         ----------
         texts          : list of article strings (title + summary combined)
         min_topic_size : minimum cluster size passed to HDBSCAN
+        seed           : UMAP random_state (42 by default)
 
         Returns
         -------
@@ -115,7 +117,7 @@ class TopicModelPipeline:
             n_components=5,
             min_dist=0.0,
             metric="cosine",
-            random_state=42,
+            random_state=seed,
         )
         hdbscan_model = HDBSCAN(
             min_cluster_size=min_topic_size,

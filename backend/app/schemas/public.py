@@ -16,7 +16,26 @@ the value so no screen can rename it in isolation.
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_serializer
+
+# AIPHEED_LEAD2_PREVIEW=1 (app/quarterly/preview.py): optional fields, omitted from the JSON when unset, so responses
+# are unchanged with the flag off and the current frontend ignores them.
+PREVIEW_KEYS = ("isPreview", "belowAccuracyTarget", "previewNote", "defaultQuarter")
+
+
+class _PreviewFields(BaseModel):
+    isPreview: bool | None = None
+    belowAccuracyTarget: bool | None = None
+    previewNote: str | None = None
+
+    @model_serializer(mode="wrap")
+    def _omit_unset_preview(self, handler):
+        data = handler(self)
+        if isinstance(data, dict):
+            for k in PREVIEW_KEYS:
+                if k in data and data[k] is None:
+                    data.pop(k)
+        return data
 
 
 # ---------------------------------------------------------------------------
@@ -79,7 +98,7 @@ class ConfigResponse(BaseModel):
     modelPerformance: dict
 
 
-class Quarter(BaseModel):
+class Quarter(_PreviewFields):
     id: str
     year: int
     q: int
@@ -90,7 +109,7 @@ class Quarter(BaseModel):
     reason: str | None = None
 
 
-class QuartersResponse(BaseModel):
+class QuartersResponse(_PreviewFields):
     """
     The quarters the model can score. `current` is the newest of those, not the
     calendar quarter — PSA's publication lag, not the clock, sets the edge.
@@ -107,6 +126,8 @@ class QuartersResponse(BaseModel):
     # The dynamic next-quarter target (app/quarterly/target.py) and whether its forecast exists.
     forecastTarget: dict | None = None
     quarters: list[Quarter]
+    # lead-2 preview on (the default; AIPHEED_LEAD2_PREVIEW=0 turns it off): the quarter the dashboard opens on (2027-Q1)
+    defaultQuarter: str | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -153,14 +174,14 @@ class ProvinceSummary(BaseModel):
     # 1.2: the system "will estimate and rank" potential risk). Null when
     # withheld, so a withheld score cannot be inferred from its position.
     rank: int | None = None
-    # E39: true when another published province has the same score (they share the rank)
+    # E39 (A. Melindo): true when another published province has the same score (they share the rank)
     rankTied: bool | None = None
     rankOf: int | None = None
     gapToNextLower: float | None = None
     tiedWithNextLower: bool | None = None
 
 
-class ProvincesResponse(BaseModel):
+class ProvincesResponse(_PreviewFields):
     quarter: str
     horizon: str = "nowcast"
     indicator: Indicator
@@ -196,9 +217,16 @@ class MunicipalitySummary(BaseModel):
     povertyValueUsed: float | None = None
     povertyLimitation: str | None = None
     noProvinceEstimate: bool = False
+    # E64 (Objective 3 traceability, review-branch port): the province estimate the index scales and where it came
+    # from, the LGU's vulnerability index, the ranking method and the hash of the ranked rows
+    provinceEstimate: float | None = None
+    provinceEstimateSource: dict | None = None
+    vulnerabilityIndex: float | None = None
+    rankingMethod: str | None = None
+    rankingRowsSha256: str | None = None
 
 
-class MunicipalitiesResponse(BaseModel):
+class MunicipalitiesResponse(_PreviewFields):
     provinceId: str
     quarter: str
     indicator: Indicator
@@ -221,7 +249,7 @@ class SearchResponse(BaseModel):
 # Forecast
 # ---------------------------------------------------------------------------
 
-class ForecastResponse(BaseModel):
+class ForecastResponse(_PreviewFields):
     scope: str  # "region" | "province" | "municipality"
     id: str
     name: str
@@ -255,7 +283,7 @@ class ForecastResponse(BaseModel):
 class TimeseriesPoint(BaseModel):
     quarter: str
     riskScore: float
-    riskLevel: str
+    riskLevel: str | None = None
     isForecast: bool = False
     scoreType: str | None = None
 
@@ -271,6 +299,16 @@ class TimeseriesResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Explainability
 # ---------------------------------------------------------------------------
+
+class MeasuredCondition(BaseModel):
+    """The measured condition behind a driver's condition input (served models with condition inputs only, E53):
+    a 0-100 rank of the measured indicator against earlier quarters. It describes the input, not its contribution."""
+    score: float | None = None
+    dataQuarter: str | None = None
+    summary: str | None = None
+    level: str | None = None          # "province" | "national"
+    source: str | None = None
+
 
 class Trigger(BaseModel):
     """
@@ -295,9 +333,10 @@ class Trigger(BaseModel):
     evidenceNote: str | None = None
     color: str
     newsSignalProportion: float | None = None
+    measuredCondition: MeasuredCondition | None = None
 
 
-class ExplainabilityResponse(BaseModel):
+class ExplainabilityResponse(_PreviewFields):
     scope: str
     id: str
     name: str
@@ -341,6 +380,27 @@ class Article(BaseModel):
     collectedRetrospectively: bool | None = None
 
 
+class NewsTopic(BaseModel):
+    topic: int
+    label: str
+    share: float
+    keywords: list[str] = []
+
+
+class TopicsResponse(BaseModel):
+    """Descriptive BERTopic patterns of the news for a subject-quarter (Objective 1). Never a forecast input; when the
+    topic model failed its publication gate, `status` says so, `topics` is empty and `note` gives the numbers."""
+    scope: str
+    id: str
+    quarter: str
+    status: str
+    note: str | None = None
+    use: str | None = None
+    nArticles: int = 0
+    topics: list[NewsTopic] = []
+    model: dict | None = None
+
+
 class NewsResponse(BaseModel):
     scope: str
     id: str
@@ -366,6 +426,11 @@ class NewsResponse(BaseModel):
     validatedCount: int = 0
     triggerMatchCount: int = 0
     feedNote: str | None = None
+    # view=published on a forecast quarter: the quarter's own news so far, NOT used by its forecast
+    usedByForecast: bool | None = None
+    forecastEvidenceQuarter: str | None = None   # the quarter whose news the quarter's forecast was built from
+    windowEnd: str | None = None                 # latest publication date covered for the articles shown
+    forecastOrigin: str | None = None            # the origin date of the quarter's forecast (its information cutoff)
 
 
 # ---------------------------------------------------------------------------
@@ -396,7 +461,7 @@ class RankingRow(BaseModel):
     limitedSignal: bool = False
 
 
-class RankingResponse(BaseModel):
+class RankingResponse(_PreviewFields):
     quarter: str
     indicator: Indicator
     method: str

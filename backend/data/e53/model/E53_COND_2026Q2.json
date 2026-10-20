@@ -1,0 +1,42 @@
+{
+ "data_quarter": "2026-Q2",
+ "history": "2021-Q1..2026-Q1 (strictly before the data quarter)",
+ "rule": "rank = 100 * #{earlier values < x} / n; market = mean(rank D, rank rice CPI YoY); climate = max(rank |rain anomaly|, rank storm signal); fish = rank of production decline YoY (proxy); employment = mean(rank u, rank YoY change) national; ofw = rank of fall in real peso remittances (national; 2026 provisional)",
+ "values": {
+  "Cavite": {
+   "cond_market": 90.47619047619048,
+   "cond_climate": 85.71428571428571,
+   "cond_fish": 0.0,
+   "cond_employment": 75.07002801120449,
+   "cond_ofw": 0.0
+  },
+  "Laguna": {
+   "cond_market": 61.904761904761905,
+   "cond_climate": 90.47619047619048,
+   "cond_fish": 47.61904761904762,
+   "cond_employment": 75.07002801120449,
+   "cond_ofw": 0.0
+  },
+  "Quezon": {
+   "cond_market": 76.19047619047619,
+   "cond_climate": 90.47619047619048,
+   "cond_fish": 42.857142857142854,
+   "cond_employment": 75.07002801120449,
+   "cond_ofw": 0.0
+  },
+  "Rizal": {
+   "cond_market": 66.66666666666666,
+   "cond_climate": 95.23809523809524,
+   "cond_fish": 57.142857142857146,
+   "cond_employment": 75.07002801120449,
+   "cond_ofw": 0.0
+  },
+  "Batangas": {
+   "cond_market": 33.333333333333336,
+   "cond_climate": 85.71428571428571,
+   "cond_fish": 0.0,
+   "cond_employment": 75.07002801120449,
+   "cond_ofw": 0.0
+  }
+ }
+}

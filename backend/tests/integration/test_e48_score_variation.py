@@ -18,6 +18,9 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
+# E53 port (tina-e53-port): this E41-E48 candidate test runs under Angel's original configuration (E36 record,
+# lead-2 target, no preview); the served default is now E53 (see tests/integration/test_e53_served_model.py).
+pytestmark = pytest.mark.usefixtures("angel_original_config")
 client = TestClient(app)
 E36 = json.loads(Path("data/e36/e36_record.json").read_text(encoding="utf-8"))
 NAMES = ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"]

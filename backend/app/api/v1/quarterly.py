@@ -186,8 +186,9 @@ def forecast_period():
 
 # ============================================================================================ E31
 # E36: the served record (same endpoints); see app/ml/inference/e31_engine.RECORD_PATH
-E31_RECORD = Path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
-E31_PDF = Path(os.getenv("AIPHEED_E31_PDF", "data/e36/aiPHeed_E36_assessment_report.pdf"))
+_RECORD = os.getenv("AIPHEED_RECORD", "e53")              # same setting as app/ml/inference/e31_engine.RECORD_NAME
+E31_RECORD = Path(os.getenv("AIPHEED_E31_RECORD", f"data/{_RECORD}/{_RECORD}_record.json"))
+E31_PDF = Path(os.getenv("AIPHEED_E31_PDF", f"data/{_RECORD}/aiPHeed_{_RECORD.upper()}_assessment_report.pdf"))
 E31_NEWS_STORE = Path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
 _E31_CACHE: dict = {}
 
@@ -219,7 +220,14 @@ def e31_summary():
     keep = ("schema", "title", "generated_at", "information_cutoff", "data_authorization", "served_engine",
             "target_definition", "regional_hunger", "quarters", "provinces_now", "limitations", "disclaimer",
             "content_sha256")
-    return {k: rec[k] for k in keep}
+    out = {k: rec[k] for k in keep}
+    from app.quarterly import self_description as SD
+
+    if SD.enabled():   # default (AIPHEED_COMPOSED_SELF_DESCRIPTION=0 serves the stored block): composed text naming
+        # the record actually served; the stored block is kept alongside
+        out["served_engine"] = SD.compose(rec, SD.active_record_key())
+        out["served_engine_as_stored"] = rec["served_engine"]
+    return out
 
 
 @router.get("/e31/news")

@@ -29,7 +29,7 @@ app = FastAPI(
     title="aiPHeed API",
     description=(
         "Interactive web-based geospatial food insecurity forecasting system "
-        "for Region IV-A (CALABARZON). Validated by the Department of "
+        "for Region IV-A (CALABARZON). Developed for the Department of "
         "Agriculture Region IV-A (DA IV-A)."
     ),
     version="1.0.0",

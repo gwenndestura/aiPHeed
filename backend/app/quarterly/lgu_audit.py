@@ -44,13 +44,13 @@ MEANING = (
     "Indicative, relative ordering of the 142 cities and municipalities for planning attention. It is the province "
     "estimate re-weighted by PSA 2021 poverty incidence (60%) and 2024 POPCEN population density (40%) inside each province. "
     "It is not a measured municipal food-insecurity rate, not an independent municipal forecast and not an official "
-    "classification (Chapter I, 1.7). The province estimate it starts from has NOT been validated against baselines "
-    "(E25-E28), so the ranking inherits that status: EXPERIMENTAL.")
+    "classification (Chapter I, 1.7). The province estimate is experimental (not validated against baselines), so "
+    "the ranking is EXPERIMENTAL.")
 DOES_NOT_MEAN = [
     "It does not say that any LGU is food insecure, or how many households are.",
     "Positions inside a province reflect the vulnerability weights only. Positions across provinces are not a "
     "measured comparison: the vulnerability index is scaled 0 to 1 inside each province, so the region-wide order "
-    "mixes five different scales and follows the within-province index more than the province estimate (E35-D4). "
+    "mixes five different scales and follows the within-province index more than the province estimate. "
     "Compare LGUs within their province.",
     "For an LGU without a PSA municipal poverty estimate (Lucena City, a highly urbanized city that the PSA no-HUC "
     "table excludes), the poverty term is a province substitute, so its position inside the province comes from "
@@ -137,11 +137,13 @@ def audit_inputs(vuln: pd.DataFrame, roster: pd.DataFrame) -> tuple[pd.DataFrame
 
 
 def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability: dict | None,
-                  probability_source: dict) -> dict:
+                  probability_source: dict, exact_ranks: bool = False) -> dict:
+    """exact_ranks (E66): rank on the unrounded index so 4-dp display rounding creates no ties (the served default
+    since the review-branch port; app.ml.inference.e31_engine.E31Disaggregator)."""
     both, checks = audit_inputs(vuln, roster)
     lg = vuln.copy()
     lg["lgu_code"] = lg["lgu_code"].map(_code9)
-    rk = lgu_table(lg, province_probability)
+    rk = lgu_table(lg, province_probability, exact_ranks=exact_ranks)
     rk["lgu_code"] = rk["lgu_code"].map(_code9)
     # drivers of the within-province order
     drivers = {}
@@ -154,7 +156,8 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
                 "lgus_with_municipal_poverty_estimate": int(g["poverty_lgu_estimate"].notna().sum()),
                 "lgus": int(len(g)),
             }
-    ties = rk[rk["risk_index"].notna()].groupby("risk_index").size()
+    tie_key = "risk_index_exact" if exact_ranks else "risk_index"
+    ties = rk[rk[tie_key].notna()].groupby(tie_key).size()
     rows = []
     for r in rk.itertuples():
         rows.append({
@@ -171,7 +174,7 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
             "rank_region": None if pd.isna(r.rank_region) else int(r.rank_region),
             "rank_in_province": None if pd.isna(r.rank_in_province) else int(r.rank_in_province),
             "vulnerability_rank_in_province": int(r.vulnerability_rank_in_province),
-            "tied": bool(pd.notna(r.risk_index) and ties.get(r.risk_index, 0) > 1),
+            "tied": bool(pd.notna(getattr(r, tie_key)) and ties.get(getattr(r, tie_key), 0) > 1),
             "limitation": r.limitation,
             "evidence_status": "EXPERIMENTAL",
         })
@@ -179,6 +182,7 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
     return {"meaning": MEANING, "does_not_mean": DOES_NOT_MEAN, "provenance": PROVENANCE,
             "method": "vulnerability = 0.6 x poverty_norm + 0.4 x density_norm (min-max within province); "
                       "risk_index = province probability x vulnerability, clamp [0,1], 4 dp; competition ranks, "
-                      "ties by PSGC; null probability -> null risk and ranks",
+                      + ("ranked on the unrounded index (E66), " if exact_ranks else "")
+                      + "ties by PSGC; null probability -> null risk and ranks",
             "probability_source": probability_source, "input_checks": checks, "within_province_drivers": drivers,
             "rows": rows, "rows_sha256": hashlib.sha256(blob).hexdigest()}

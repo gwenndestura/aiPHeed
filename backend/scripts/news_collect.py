@@ -61,6 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cutoff", default=None, help="forecast information cutoff (ISO); later articles are refused")
     ap.add_argument("--out", default=None)
     ap.add_argument("--policy", default=None, help="source policy version (config/source_policy.json); default: active")
+    ap.add_argument("--model-key", default=None,
+                    help="topics: scoring model key of the stored XLM-R scores (default: the current classifier's key)")
     a = ap.parse_args(argv)
     store = NewsStore(a.store)
     au = authorized_until()
@@ -110,10 +112,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if a.command == "topics":
         from app.news.scoring import current_model_key
-        from app.news.topics import build_topics
+        from app.news.topics import build_topic_files
 
-        out = build_topics(store, all_quarters(au), current_model_key())
-        print(json.dumps({k: v for k, v in out.items() if k != "top_topics_by_province_quarter"}, indent=1, default=str))
+        # descriptive BERTopic patterns -> <store>/topics/ (manifest always; proportions only if the gate passes)
+        out = build_topic_files(store, all_quarters(au), a.model_key or current_model_key(),
+                                out_dir=Path(a.out) if a.out else None)
+        print(json.dumps(out, indent=1, default=str))
         return 0
 
     if a.command == "audit":

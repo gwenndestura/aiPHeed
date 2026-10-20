@@ -1,0 +1,3204 @@
+{
+ "lead": 1,
+ "test_quarters": [
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "n_test_rows": 65,
+ "consistency_max_abs_diff": {
+  "R0": 0.0,
+  "R3": 6.938893903907228e-18
+ },
+ "arms": {
+  "R0": {
+   "metrics": {
+    "accuracy": 0.8461538461538461,
+    "accuracy_ci95": [
+     0.7692307692307693,
+     0.9230769230769231
+    ],
+    "balanced_accuracy": 0.8411949685534592,
+    "auc": 0.8545597484276729,
+    "brier": 0.15087483651594955,
+    "log_loss": 0.48906329004068716,
+    "ece_3bin": 0.1663433413948921,
+    "max_p": 0.9451890172300603,
+    "mean_p": 0.6490412739897232,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 11,
+      "mean_p": 0.06853973697521987,
+      "observed_HIGH": 0.45454545454545453
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 2,
+      "mean_p": 0.30440648435621687,
+      "observed_HIGH": 1.0
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 10,
+      "mean_p": 0.4538391479699889,
+      "observed_HIGH": 0.6
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 6,
+      "mean_p": 0.6880306701623469,
+      "observed_HIGH": 1.0
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 36,
+      "mean_p": 0.8932877009227275,
+      "observed_HIGH": 0.9444444444444444
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2025-Q4",
+       "Batangas",
+       0.906
+      ]
+     ],
+     "p<=0.1_but_HIGH": [
+      [
+       "2023-Q4",
+       "Laguna",
+       0.064
+      ],
+      [
+       "2024-Q1",
+       "Cavite",
+       0.028
+      ],
+      [
+       "2024-Q1",
+       "Laguna",
+       0.08
+      ]
+     ]
+    }
+   },
+   "metrics_raw": {
+    "accuracy": 0.8153846153846154,
+    "balanced_accuracy": 0.8223270440251573,
+    "auc": 0.8388364779874213,
+    "brier": 0.15399653418544004,
+    "log_loss": 0.5203847550169589,
+    "max_p": 0.9997480116495175
+   },
+   "n_test_p_ge_0.95": 0,
+   "n_test_p_le_0.05": 6,
+   "n_test_p_ge_0.99": 0,
+   "train_Q4_origin": {
+    "accuracy": 1.0,
+    "log_loss": 0.1525805284418817,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7314796026630184
+   },
+   "train_Q4_origin_raw": {
+    "accuracy": 1.0,
+    "log_loss": 0.029565592114799605,
+    "n_p_ge_0.99": 31,
+    "mean_p": 0.7332825492588572
+   },
+   "train_mean_over_origins": {
+    "accuracy": 0.9360561660561662,
+    "log_loss": 0.22538611110272827
+   },
+   "train_label_rate_Q4_origin": 0.7333333333333333,
+   "shap_expected_value_logodds": 2.665493302467255,
+   "shap_expected_value_p": 0.9349595147411053,
+   "configs": {
+    "2023-Q1": "COMB_T5xG1",
+    "2023-Q2": "COMB_T5xG1",
+    "2023-Q3": "COMB_T5xG1",
+    "2023-Q4": "COMB_T5xG1",
+    "2024-Q1": "COMPACT_T5xG1",
+    "2024-Q2": "COMPACT_T5xG1",
+    "2024-Q3": "COMPACT_T5xG1",
+    "2024-Q4": "COMPACT_T5xG1",
+    "2025-Q1": "COMB_T5xG2",
+    "2025-Q4": "COMB_T5xG2",
+    "2026-Q1": "COMB_T5xG2",
+    "2026-Q2": "COMB_T5xG2",
+    "2026-Q3": "COMB_T5xG2",
+    "2026-Q4": "COMB_T5xG2"
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 1.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.85,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.75,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.7,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.7,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.7,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.65,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.7,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.7,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "index": {
+    "2023-Q1": {
+     "CALABARZON": 0.4,
+     "Cavite": 0.4,
+     "Laguna": 0.4,
+     "Quezon": 0.4,
+     "Rizal": 0.4,
+     "Batangas": 0.4
+    },
+    "2023-Q2": {
+     "CALABARZON": 0.5859575280210798,
+     "Cavite": 0.9451890172300603,
+     "Laguna": 0.04711029420760905,
+     "Quezon": 0.04711029420760905,
+     "Rizal": 0.9451890172300603,
+     "Batangas": 0.9451890172300603
+    },
+    "2023-Q3": {
+     "CALABARZON": 0.35601778148719515,
+     "Cavite": 0.5067094138539665,
+     "Laguna": 0.030999619456465,
+     "Quezon": 0.030999619456465,
+     "Rizal": 0.7046708408151128,
+     "Batangas": 0.5067094138539665
+    },
+    "2023-Q4": {
+     "CALABARZON": 0.5342014047198707,
+     "Cavite": 0.8834489223918516,
+     "Laguna": 0.06378382492087316,
+     "Quezon": 0.08958628526873731,
+     "Rizal": 0.839949714469188,
+     "Batangas": 0.7942382765487028
+    },
+    "2024-Q1": {
+     "CALABARZON": 0.38875407454815036,
+     "Cavite": 0.028385810623906514,
+     "Laguna": 0.07957610113084723,
+     "Quezon": 0.028385810623906514,
+     "Rizal": 0.8893775163033726,
+     "Batangas": 0.918045134058719
+    },
+    "2024-Q2": {
+     "CALABARZON": 0.6038329872988666,
+     "Cavite": 0.18126650979222111,
+     "Laguna": 0.9236167763809859,
+     "Quezon": 0.1267329370387786,
+     "Rizal": 0.9236167763809859,
+     "Batangas": 0.8639319369013608
+    },
+    "2024-Q3": {
+     "CALABARZON": 0.5591963712719135,
+     "Cavite": 0.5184442416724915,
+     "Laguna": 0.22005790953696477,
+     "Quezon": 0.8466299931501639,
+     "Rizal": 0.6054248559999739,
+     "Batangas": 0.6054248559999739
+    },
+    "2024-Q4": {
+     "CALABARZON": 0.5991906765034754,
+     "Cavite": 0.38875505917546893,
+     "Laguna": 0.744145175663899,
+     "Quezon": 0.8565247373585442,
+     "Rizal": 0.5032642051597327,
+     "Batangas": 0.5032642051597327
+    },
+    "2025-Q1": {
+     "CALABARZON": 0.812269133477346,
+     "Cavite": 0.8058527529772374,
+     "Laguna": 0.8768060646028722,
+     "Quezon": 0.8862272312425732,
+     "Rizal": 0.6742800159464192,
+     "Batangas": 0.8181796026176277
+    },
+    "2025-Q4": {
+     "CALABARZON": 0.9068255454758856,
+     "Cavite": 0.9077031631292294,
+     "Laguna": 0.9070148582458158,
+     "Quezon": 0.907680851428617,
+     "Rizal": 0.905783899819727,
+     "Batangas": 0.9059449547560384
+    },
+    "2026-Q1": {
+     "CALABARZON": 0.9065839939968401,
+     "Cavite": 0.9075063788757247,
+     "Laguna": 0.9078881242836946,
+     "Quezon": 0.9069454749435519,
+     "Rizal": 0.907521042294625,
+     "Batangas": 0.9030589495866036
+    },
+    "2026-Q2": {
+     "CALABARZON": 0.8728347317175251,
+     "Cavite": 0.8937687883886254,
+     "Laguna": 0.8926263765657839,
+     "Quezon": 0.8833586195199596,
+     "Rizal": 0.8841404978814243,
+     "Batangas": 0.8102793762318319
+    },
+    "2026-Q3": {
+     "CALABARZON": 0.9118723333482551,
+     "Cavite": 0.9066372474489164,
+     "Laguna": 0.9159740869660056,
+     "Quezon": 0.9112379831444904,
+     "Rizal": 0.9118470875567483,
+     "Batangas": 0.9136652616251152
+    },
+    "2026-Q4": {
+     "CALABARZON": 0.7783915675512139,
+     "Cavite": 0.8883727924967322,
+     "Laguna": 0.8770984823823158,
+     "Quezon": 0.9140524207276196,
+     "Rizal": 0.8770993093897552,
+     "Batangas": 0.33533483275964604
+    }
+   },
+   "q4_2026": {
+    "CALABARZON": 0.7783915675512139,
+    "Cavite": 0.8883727924967322,
+    "Laguna": 0.8770984823823158,
+    "Quezon": 0.9140524207276196,
+    "Rizal": 0.8770993093897552,
+    "Batangas": 0.33533483275964604,
+    "raw": {
+     "Cavite": 0.9574156775927342,
+     "Laguna": 0.9413095202864251,
+     "Quezon": 0.9941008607797163,
+     "Rizal": 0.9413107017256244,
+     "Batangas": 0.16736144939689693
+    }
+   },
+   "R0_disagreements_fixed": [],
+   "R0_disagreements_kept": [
+    [
+     "2023-Q1",
+     "Rizal"
+    ],
+    [
+     "2023-Q4",
+     "Laguna"
+    ],
+    [
+     "2024-Q1",
+     "Cavite"
+    ],
+    [
+     "2024-Q1",
+     "Laguna"
+    ],
+    [
+     "2024-Q2",
+     "Cavite"
+    ],
+    [
+     "2024-Q2",
+     "Quezon"
+    ],
+    [
+     "2024-Q3",
+     "Laguna"
+    ],
+    [
+     "2024-Q4",
+     "Cavite"
+    ],
+    [
+     "2025-Q4",
+     "Batangas"
+    ],
+    [
+     "2026-Q2",
+     "Batangas"
+    ]
+   ],
+   "new_disagreements": [],
+   "n_wrong": 10,
+   "drivers_q4_2026": {
+    "Cavite": {
+     "a": {
+      "market": 53,
+      "climate": 44,
+      "fish_kill": 3,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 22,
+      "climate": 18,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 59
+     },
+     "direct": {
+      "market": 1.0103,
+      "climate": 0.8151,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0205,
+      "fish_kill": 0.0614,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 2.6951
+    },
+    "Laguna": {
+     "a": {
+      "market": 52,
+      "climate": 45,
+      "fish_kill": 3,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 30,
+      "climate": 26,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 42
+     },
+     "direct": {
+      "market": 1.9168,
+      "climate": 1.603,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0404,
+      "fish_kill": 0.0937,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 2.6568
+    },
+    "Quezon": {
+     "a": {
+      "market": 85,
+      "climate": 13,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 42,
+      "climate": 7,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 50
+     },
+     "direct": {
+      "market": 2.1466,
+      "climate": 0.3037,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0205,
+      "fish_kill": 0.0614,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 2.5312
+    },
+    "Rizal": {
+     "a": {
+      "market": 49,
+      "climate": 49,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 28,
+      "climate": 27,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 44
+     },
+     "direct": {
+      "market": 1.652,
+      "climate": 1.603,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0205,
+      "fish_kill": 0.073,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 2.5933
+    },
+    "Batangas": {
+     "a": {
+      "market": 91,
+      "climate": 9,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 41,
+      "climate": 4,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 55
+     },
+     "direct": {
+      "market": 2.5701,
+      "climate": 0.2342,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0032,
+      "fish_kill": 0.0096,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 3.5159
+    },
+    "CALABARZON": {
+     "a": {
+      "market": 65,
+      "climate": 33,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 33,
+      "climate": 16,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 50
+     }
+    }
+   },
+   "q4_shap_logodds": {
+    "Cavite": {
+     "trig_climate": -0.8151,
+     "H_last": 0.6503,
+     "H_trend": -0.5866,
+     "y_last": 0.5505,
+     "Dnow": 0.5342,
+     "H_margin": -0.4916,
+     "D_last": 0.3282,
+     "fssi_v2": 0.2266,
+     "news_reg": -0.1843,
+     "rice_rel": 0.1479,
+     "H_gap": 0.0459,
+     "news_n": 0.0232,
+     "fssi_missing": 0.018,
+     "news_direct_share": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Laguna": {
+     "trig_climate": -1.603,
+     "Dnow": 1.0772,
+     "H_trend": -0.6,
+     "H_margin": -0.5478,
+     "y_last": 0.5303,
+     "rice_rel": 0.5118,
+     "H_last": 0.5016,
+     "D_last": 0.3278,
+     "fssi_v2": 0.2172,
+     "news_n": -0.1928,
+     "news_reg": -0.1158,
+     "H_gap": 0.0442,
+     "fssi_missing": -0.0412,
+     "news_direct_share": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Quezon": {
+     "Dnow": 1.6378,
+     "H_trend": -0.5653,
+     "H_margin": -0.5513,
+     "H_last": 0.5233,
+     "y_last": 0.4806,
+     "D_last": 0.3528,
+     "trig_climate": 0.3037,
+     "fssi_v2": 0.2209,
+     "news_reg": -0.1843,
+     "rice_rel": 0.1559,
+     "H_gap": 0.0462,
+     "news_n": 0.0232,
+     "fssi_missing": 0.018,
+     "news_direct_share": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Rizal": {
+     "trig_climate": -1.603,
+     "Dnow": 1.1827,
+     "H_trend": -0.5796,
+     "y_last": 0.5505,
+     "H_margin": -0.5492,
+     "H_last": 0.5185,
+     "D_last": 0.3134,
+     "fssi_v2": 0.2172,
+     "news_reg": -0.1843,
+     "rice_rel": 0.1559,
+     "H_gap": 0.0462,
+     "news_n": 0.0232,
+     "fssi_missing": 0.018,
+     "news_direct_share": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Batangas": {
+     "Dnow": -2.7917,
+     "y_last": -1.4021,
+     "H_margin": -0.9332,
+     "rice_rel": 0.698,
+     "H_last": 0.5942,
+     "D_last": -0.4764,
+     "H_trend": -0.3673,
+     "trig_climate": 0.2342,
+     "fssi_v2": 0.1393,
+     "H_gap": 0.0428,
+     "news_reg": -0.0287,
+     "news_n": 0.0142,
+     "fssi_missing": 0.0068,
+     "news_direct_share": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "auc_ge_0.80": true,
+     "balanced_accuracy_ge_0.83": true,
+     "brier_le_0.151": true,
+     "log_loss_le_0.489": false,
+     "train_accuracy_le_0.95": false,
+     "no_test_p_ge_0.99": true
+    },
+    "acceptable": false
+   }
+  },
+  "R1": {
+   "metrics": {
+    "accuracy": 0.7538461538461538,
+    "accuracy_ci95": [
+     0.6153846153846154,
+     0.8923076923076924
+    ],
+    "balanced_accuracy": 0.7845911949685535,
+    "auc": 0.8018867924528302,
+    "brier": 0.18873133454778626,
+    "log_loss": 0.5671179233349465,
+    "ece_3bin": 0.23540591874173689,
+    "max_p": 0.8597577539703011,
+    "mean_p": 0.5799786966428786,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 3,
+      "mean_p": 0.11014306952254015,
+      "observed_HIGH": 0.6666666666666666
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 33,
+      "mean_p": 0.4670154051062095,
+      "observed_HIGH": 0.7272727272727273
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 22,
+      "mean_p": 0.7356010205257342,
+      "observed_HIGH": 0.9090909090909091
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 7,
+      "mean_p": 0.8247793218783458,
+      "observed_HIGH": 1.0
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [],
+     "p<=0.1_but_HIGH": [
+      [
+       "2024-Q1",
+       "Laguna",
+       0.085
+      ]
+     ]
+    }
+   },
+   "metrics_raw": {
+    "accuracy": 0.676923076923077,
+    "balanced_accuracy": 0.7374213836477987,
+    "auc": 0.7421383647798742,
+    "brier": 0.18908625445251992,
+    "log_loss": 0.5521467832545084,
+    "max_p": 0.9762140721108831
+   },
+   "n_test_p_ge_0.95": 0,
+   "n_test_p_le_0.05": 0,
+   "n_test_p_ge_0.99": 0,
+   "train_Q4_origin": {
+    "accuracy": 0.96,
+    "log_loss": 0.3301047538012229,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7286514549468667
+   },
+   "train_Q4_origin_raw": {
+    "accuracy": 0.9466666666666667,
+    "log_loss": 0.16290759983073635,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7300301826210058
+   },
+   "train_mean_over_origins": {
+    "accuracy": 0.7063914717760872,
+    "log_loss": 0.5306842538690426
+   },
+   "train_label_rate_Q4_origin": 0.7333333333333333,
+   "shap_expected_value_logodds": 1.6065111865463804,
+   "shap_expected_value_p": 0.8329264469688599,
+   "configs": {
+    "2023-Q1": "COMB_T5xR1n2m15l5",
+    "2023-Q2": "COMB_T5xR1n2m15l5",
+    "2023-Q3": "COMB_T5xR1n2m15l5",
+    "2023-Q4": "COMB_T5xR1n2m15l5",
+    "2024-Q1": "COMB_T5xR1n2m10l5",
+    "2024-Q2": "COMB_T5xR1n2m10l5",
+    "2024-Q3": "COMB_T5xR1n2m10l5",
+    "2024-Q4": "COMB_T5xR1n2m10l5",
+    "2025-Q1": "COMB_T5xR1n4m10l5",
+    "2025-Q4": "COMB_T5xR1n4m10l5",
+    "2026-Q1": "COMB_T5xR1n4m10l5",
+    "2026-Q2": "COMB_T5xR1n4m10l5",
+    "2026-Q3": "COMB_T5xR1n4m10l5",
+    "2026-Q4": "COMB_T5xR1n4m10l5"
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 0.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.35,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.3,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.25,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.3,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.3,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.3,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.4,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.5,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "index": {
+    "2023-Q1": {
+     "CALABARZON": 0.4,
+     "Cavite": 0.4,
+     "Laguna": 0.4,
+     "Quezon": 0.4,
+     "Rizal": 0.4,
+     "Batangas": 0.4
+    },
+    "2023-Q2": {
+     "CALABARZON": 0.4666666666666667,
+     "Cavite": 0.4666666666666667,
+     "Laguna": 0.4666666666666667,
+     "Quezon": 0.4666666666666667,
+     "Rizal": 0.4666666666666667,
+     "Batangas": 0.4666666666666667
+    },
+    "2023-Q3": {
+     "CALABARZON": 0.4,
+     "Cavite": 0.4,
+     "Laguna": 0.4,
+     "Quezon": 0.4,
+     "Rizal": 0.4,
+     "Batangas": 0.4
+    },
+    "2023-Q4": {
+     "CALABARZON": 0.44000000000000006,
+     "Cavite": 0.44000000000000006,
+     "Laguna": 0.44000000000000006,
+     "Quezon": 0.44000000000000006,
+     "Rizal": 0.44000000000000006,
+     "Batangas": 0.44000000000000006
+    },
+    "2024-Q1": {
+     "CALABARZON": 0.4096469330663705,
+     "Cavite": 0.16363958942862014,
+     "Laguna": 0.08544770409844361,
+     "Quezon": 0.08134191504055667,
+     "Rizal": 0.8597577539703011,
+     "Batangas": 0.858047702793931
+    },
+    "2024-Q2": {
+     "CALABARZON": 0.5135135135135135,
+     "Cavite": 0.5135135135135135,
+     "Laguna": 0.5135135135135135,
+     "Quezon": 0.5135135135135135,
+     "Rizal": 0.5135135135135135,
+     "Batangas": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "CALABARZON": 0.5427771325254268,
+     "Cavite": 0.5081513437145747,
+     "Laguna": 0.4395970782253378,
+     "Quezon": 0.654160497671818,
+     "Rizal": 0.5559883715077016,
+     "Batangas": 0.5559883715077016
+    },
+    "2024-Q4": {
+     "CALABARZON": 0.6030435106454514,
+     "Cavite": 0.5175717439682561,
+     "Laguna": 0.6585817918450263,
+     "Quezon": 0.6983752540221514,
+     "Rizal": 0.5703443816959115,
+     "Batangas": 0.5703443816959115
+    },
+    "2025-Q1": {
+     "CALABARZON": 0.6563909634511097,
+     "Cavite": 0.6122479635146297,
+     "Laguna": 0.7142054122254309,
+     "Quezon": 0.7125822851369403,
+     "Rizal": 0.5926217952886159,
+     "Batangas": 0.6502973610899316
+    },
+    "2025-Q4": {
+     "CALABARZON": 0.7753143060379224,
+     "Cavite": 0.7761366554839692,
+     "Laguna": 0.7767740470127256,
+     "Quezon": 0.7771084384619975,
+     "Rizal": 0.7725220893609077,
+     "Batangas": 0.7740302998700118
+    },
+    "2026-Q1": {
+     "CALABARZON": 0.7725804130415256,
+     "Cavite": 0.7783480926010069,
+     "Laguna": 0.7767740470127256,
+     "Quezon": 0.7749781448355175,
+     "Rizal": 0.7745271951696269,
+     "Batangas": 0.7582745855887507
+    },
+    "2026-Q2": {
+     "CALABARZON": 0.7486596581325968,
+     "Cavite": 0.7780840095537727,
+     "Laguna": 0.7712257509889464,
+     "Quezon": 0.7661870559703434,
+     "Rizal": 0.7683125583556403,
+     "Batangas": 0.6594889157942813
+    },
+    "2026-Q3": {
+     "CALABARZON": 0.8111299592768377,
+     "Cavite": 0.815022533436828,
+     "Laguna": 0.8130422942686146,
+     "Quezon": 0.8140203556103001,
+     "Rizal": 0.8131888174893085,
+     "Batangas": 0.8003757955791373
+    },
+    "2026-Q4": {
+     "CALABARZON": 0.7672292283396136,
+     "Cavite": 0.8243228487041654,
+     "Laguna": 0.8233453541193501,
+     "Quezon": 0.8489641521469539,
+     "Rizal": 0.839041734298539,
+     "Batangas": 0.5004720524290593
+    }
+   },
+   "q4_2026": {
+    "CALABARZON": 0.7672292283396136,
+    "Cavite": 0.8243228487041654,
+    "Laguna": 0.8233453541193501,
+    "Quezon": 0.8489641521469539,
+    "Rizal": 0.839041734298539,
+    "Batangas": 0.5004720524290593,
+    "raw": {
+     "Cavite": 0.9213729701356034,
+     "Laguna": 0.9194179809659728,
+     "Quezon": 0.9706555770211804,
+     "Rizal": 0.9508107413243507,
+     "Batangas": 0.2736713775853915
+    }
+   },
+   "R0_disagreements_fixed": [
+    [
+     "2024-Q2",
+     "Cavite"
+    ],
+    [
+     "2024-Q2",
+     "Quezon"
+    ],
+    [
+     "2024-Q4",
+     "Cavite"
+    ]
+   ],
+   "R0_disagreements_kept": [
+    [
+     "2023-Q1",
+     "Rizal"
+    ],
+    [
+     "2023-Q4",
+     "Laguna"
+    ],
+    [
+     "2024-Q1",
+     "Cavite"
+    ],
+    [
+     "2024-Q1",
+     "Laguna"
+    ],
+    [
+     "2024-Q3",
+     "Laguna"
+    ],
+    [
+     "2025-Q4",
+     "Batangas"
+    ],
+    [
+     "2026-Q2",
+     "Batangas"
+    ]
+   ],
+   "new_disagreements": [
+    [
+     "2023-Q2",
+     "Batangas"
+    ],
+    [
+     "2023-Q2",
+     "Cavite"
+    ],
+    [
+     "2023-Q2",
+     "Rizal"
+    ],
+    [
+     "2023-Q3",
+     "Batangas"
+    ],
+    [
+     "2023-Q3",
+     "Cavite"
+    ],
+    [
+     "2023-Q3",
+     "Rizal"
+    ],
+    [
+     "2023-Q4",
+     "Batangas"
+    ],
+    [
+     "2023-Q4",
+     "Cavite"
+    ],
+    [
+     "2023-Q4",
+     "Rizal"
+    ]
+   ],
+   "n_wrong": 16,
+   "drivers_q4_2026": {
+    "Cavite": {
+     "a": {
+      "market": 63,
+      "climate": 37,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 23,
+      "climate": 14,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 63
+     },
+     "direct": {
+      "market": 0.504,
+      "climate": 0.2952,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0001,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.3563
+    },
+    "Laguna": {
+     "a": {
+      "market": 75,
+      "climate": 25,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 39,
+      "climate": 13,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 48
+     },
+     "direct": {
+      "market": 1.0649,
+      "climate": 0.3441,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0018,
+      "fish_kill": 0.0044,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.333
+    },
+    "Quezon": {
+     "a": {
+      "market": 90,
+      "climate": 10,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 45,
+      "climate": 5,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 50
+     },
+     "direct": {
+      "market": 1.1615,
+      "climate": 0.1221,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0008,
+      "fish_kill": 0.0025,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.2828
+    },
+    "Rizal": {
+     "a": {
+      "market": 76,
+      "climate": 24,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 41,
+      "climate": 13,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 46
+     },
+     "direct": {
+      "market": 1.0976,
+      "climate": 0.3441,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0008,
+      "fish_kill": 0.0059,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.24
+    },
+    "Batangas": {
+     "a": {
+      "market": 94,
+      "climate": 6,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 41,
+      "climate": 3,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 56
+     },
+     "direct": {
+      "market": 1.4605,
+      "climate": 0.0834,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0018,
+      "fish_kill": 0.0055,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.9993
+    },
+    "CALABARZON": {
+     "a": {
+      "market": 81,
+      "climate": 19,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 38,
+      "climate": 9,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 53
+     }
+    }
+   },
+   "q4_shap_logodds": {
+    "Cavite": {
+     "y_last": 0.5328,
+     "Dnow": 0.4189,
+     "H_last": 0.3342,
+     "trig_climate": -0.2952,
+     "H_trend": -0.2632,
+     "fssi_v2": 0.1288,
+     "D_last": 0.1014,
+     "H_margin": -0.0918,
+     "rice_rel": -0.0163,
+     "news_n": 0.0054,
+     "news_reg": -0.0003,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Laguna": {
+     "Dnow": 0.9489,
+     "y_last": 0.4657,
+     "trig_climate": -0.3441,
+     "fssi_v2": -0.2954,
+     "H_last": 0.2575,
+     "H_trend": -0.2371,
+     "D_last": 0.1014,
+     "H_margin": -0.0692,
+     "rice_rel": 0.0145,
+     "news_n": -0.0071,
+     "news_reg": -0.0071,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Quezon": {
+     "Dnow": 1.0509,
+     "y_last": 0.5328,
+     "H_last": 0.273,
+     "H_trend": -0.2708,
+     "fssi_v2": 0.1288,
+     "trig_climate": 0.1221,
+     "D_last": 0.1074,
+     "H_margin": -0.0679,
+     "news_reg": 0.0074,
+     "news_n": 0.0054,
+     "rice_rel": 0.0032,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Rizal": {
+     "Dnow": 0.993,
+     "y_last": 0.5328,
+     "trig_climate": -0.3441,
+     "H_last": 0.2625,
+     "H_trend": -0.2404,
+     "fssi_v2": 0.1288,
+     "D_last": 0.1014,
+     "H_margin": -0.0679,
+     "news_n": -0.0071,
+     "news_reg": -0.0071,
+     "rice_rel": 0.0032,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    },
+    "Batangas": {
+     "Dnow": -1.3197,
+     "y_last": -1.1521,
+     "H_last": 0.3293,
+     "H_margin": -0.2779,
+     "H_trend": -0.1761,
+     "D_last": -0.176,
+     "trig_climate": 0.0834,
+     "fssi_v2": 0.0493,
+     "rice_rel": 0.0352,
+     "news_reg": 0.0166,
+     "news_n": 0.0054,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0,
+     "trig_fish_kill": 0.0
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "auc_ge_0.80": true,
+     "balanced_accuracy_ge_0.83": false,
+     "brier_le_0.151": false,
+     "log_loss_le_0.489": false,
+     "train_accuracy_le_0.95": false,
+     "no_test_p_ge_0.99": true
+    },
+    "acceptable": false
+   }
+  },
+  "R2": {
+   "metrics": {
+    "accuracy": 0.7538461538461538,
+    "accuracy_ci95": [
+     0.6153846153846154,
+     0.8923076923076924
+    ],
+    "balanced_accuracy": 0.7845911949685535,
+    "auc": 0.8018867924528302,
+    "brier": 0.18873133454778626,
+    "log_loss": 0.5671179233349465,
+    "ece_3bin": 0.23540591874173689,
+    "max_p": 0.8597577539703011,
+    "mean_p": 0.5799786966428786,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 3,
+      "mean_p": 0.11014306952254015,
+      "observed_HIGH": 0.6666666666666666
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 33,
+      "mean_p": 0.4670154051062095,
+      "observed_HIGH": 0.7272727272727273
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 22,
+      "mean_p": 0.7356010205257342,
+      "observed_HIGH": 0.9090909090909091
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 7,
+      "mean_p": 0.8247793218783458,
+      "observed_HIGH": 1.0
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [],
+     "p<=0.1_but_HIGH": [
+      [
+       "2024-Q1",
+       "Laguna",
+       0.085
+      ]
+     ]
+    }
+   },
+   "metrics_raw": {
+    "accuracy": 0.676923076923077,
+    "balanced_accuracy": 0.7374213836477987,
+    "auc": 0.7421383647798742,
+    "brier": 0.18908625445251992,
+    "log_loss": 0.5521467832545084,
+    "max_p": 0.9762140721108831
+   },
+   "n_test_p_ge_0.95": 0,
+   "n_test_p_le_0.05": 0,
+   "n_test_p_ge_0.99": 0,
+   "train_Q4_origin": {
+    "accuracy": 0.96,
+    "log_loss": 0.3301047538012229,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7286514549468667
+   },
+   "train_Q4_origin_raw": {
+    "accuracy": 0.9466666666666667,
+    "log_loss": 0.16290759983073635,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7300301826210058
+   },
+   "train_mean_over_origins": {
+    "accuracy": 0.7063914717760872,
+    "log_loss": 0.5306842538690426
+   },
+   "train_label_rate_Q4_origin": 0.7333333333333333,
+   "shap_expected_value_logodds": 1.6065111865463804,
+   "shap_expected_value_p": 0.8329264469688599,
+   "configs": {
+    "2023-Q1": "E50_R2xR2n2m15l5",
+    "2023-Q2": "E50_R2xR2n2m15l5",
+    "2023-Q3": "E50_R2xR2n2m15l5",
+    "2023-Q4": "E50_R2xR2n2m15l5",
+    "2024-Q1": "E50_R2xR2n2m10l5",
+    "2024-Q2": "E50_R2xR2n2m10l5",
+    "2024-Q3": "E50_R2xR2n2m10l5",
+    "2024-Q4": "E50_R2xR2n2m10l5",
+    "2025-Q1": "E50_R2xR2n4m10l5",
+    "2025-Q4": "E50_R2xR2n4m10l5",
+    "2026-Q1": "E50_R2xR2n4m10l5",
+    "2026-Q2": "E50_R2xR2n4m10l5",
+    "2026-Q3": "E50_R2xR2n4m10l5",
+    "2026-Q4": "E50_R2xR2n4m10l5"
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 0.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.35,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.3,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.25,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.3,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.3,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.3,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.4,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.5,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "index": {
+    "2023-Q1": {
+     "CALABARZON": 0.4,
+     "Cavite": 0.4,
+     "Laguna": 0.4,
+     "Quezon": 0.4,
+     "Rizal": 0.4,
+     "Batangas": 0.4
+    },
+    "2023-Q2": {
+     "CALABARZON": 0.4666666666666667,
+     "Cavite": 0.4666666666666667,
+     "Laguna": 0.4666666666666667,
+     "Quezon": 0.4666666666666667,
+     "Rizal": 0.4666666666666667,
+     "Batangas": 0.4666666666666667
+    },
+    "2023-Q3": {
+     "CALABARZON": 0.4,
+     "Cavite": 0.4,
+     "Laguna": 0.4,
+     "Quezon": 0.4,
+     "Rizal": 0.4,
+     "Batangas": 0.4
+    },
+    "2023-Q4": {
+     "CALABARZON": 0.44000000000000006,
+     "Cavite": 0.44000000000000006,
+     "Laguna": 0.44000000000000006,
+     "Quezon": 0.44000000000000006,
+     "Rizal": 0.44000000000000006,
+     "Batangas": 0.44000000000000006
+    },
+    "2024-Q1": {
+     "CALABARZON": 0.4096469330663705,
+     "Cavite": 0.16363958942862014,
+     "Laguna": 0.08544770409844361,
+     "Quezon": 0.08134191504055667,
+     "Rizal": 0.8597577539703011,
+     "Batangas": 0.858047702793931
+    },
+    "2024-Q2": {
+     "CALABARZON": 0.5135135135135135,
+     "Cavite": 0.5135135135135135,
+     "Laguna": 0.5135135135135135,
+     "Quezon": 0.5135135135135135,
+     "Rizal": 0.5135135135135135,
+     "Batangas": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "CALABARZON": 0.5427771325254268,
+     "Cavite": 0.5081513437145747,
+     "Laguna": 0.4395970782253378,
+     "Quezon": 0.654160497671818,
+     "Rizal": 0.5559883715077016,
+     "Batangas": 0.5559883715077016
+    },
+    "2024-Q4": {
+     "CALABARZON": 0.6030435106454514,
+     "Cavite": 0.5175717439682561,
+     "Laguna": 0.6585817918450263,
+     "Quezon": 0.6983752540221514,
+     "Rizal": 0.5703443816959115,
+     "Batangas": 0.5703443816959115
+    },
+    "2025-Q1": {
+     "CALABARZON": 0.6563909634511097,
+     "Cavite": 0.6122479635146297,
+     "Laguna": 0.7142054122254309,
+     "Quezon": 0.7125822851369403,
+     "Rizal": 0.5926217952886159,
+     "Batangas": 0.6502973610899316
+    },
+    "2025-Q4": {
+     "CALABARZON": 0.7753143060379224,
+     "Cavite": 0.7761366554839692,
+     "Laguna": 0.7767740470127256,
+     "Quezon": 0.7771084384619975,
+     "Rizal": 0.7725220893609077,
+     "Batangas": 0.7740302998700118
+    },
+    "2026-Q1": {
+     "CALABARZON": 0.7725804130415256,
+     "Cavite": 0.7783480926010069,
+     "Laguna": 0.7767740470127256,
+     "Quezon": 0.7749781448355175,
+     "Rizal": 0.7745271951696269,
+     "Batangas": 0.7582745855887507
+    },
+    "2026-Q2": {
+     "CALABARZON": 0.7486596581325968,
+     "Cavite": 0.7780840095537727,
+     "Laguna": 0.7712257509889464,
+     "Quezon": 0.7661870559703434,
+     "Rizal": 0.7683125583556403,
+     "Batangas": 0.6594889157942813
+    },
+    "2026-Q3": {
+     "CALABARZON": 0.8111299592768377,
+     "Cavite": 0.815022533436828,
+     "Laguna": 0.8130422942686146,
+     "Quezon": 0.8140203556103001,
+     "Rizal": 0.8131888174893085,
+     "Batangas": 0.8003757955791373
+    },
+    "2026-Q4": {
+     "CALABARZON": 0.7672292283396136,
+     "Cavite": 0.8243228487041654,
+     "Laguna": 0.8233453541193501,
+     "Quezon": 0.8489641521469539,
+     "Rizal": 0.839041734298539,
+     "Batangas": 0.5004720524290593
+    }
+   },
+   "q4_2026": {
+    "CALABARZON": 0.7672292283396136,
+    "Cavite": 0.8243228487041654,
+    "Laguna": 0.8233453541193501,
+    "Quezon": 0.8489641521469539,
+    "Rizal": 0.839041734298539,
+    "Batangas": 0.5004720524290593,
+    "raw": {
+     "Cavite": 0.9213729701356034,
+     "Laguna": 0.9194179809659728,
+     "Quezon": 0.9706555770211804,
+     "Rizal": 0.9508107413243507,
+     "Batangas": 0.2736713775853915
+    }
+   },
+   "R0_disagreements_fixed": [
+    [
+     "2024-Q2",
+     "Cavite"
+    ],
+    [
+     "2024-Q2",
+     "Quezon"
+    ],
+    [
+     "2024-Q4",
+     "Cavite"
+    ]
+   ],
+   "R0_disagreements_kept": [
+    [
+     "2023-Q1",
+     "Rizal"
+    ],
+    [
+     "2023-Q4",
+     "Laguna"
+    ],
+    [
+     "2024-Q1",
+     "Cavite"
+    ],
+    [
+     "2024-Q1",
+     "Laguna"
+    ],
+    [
+     "2024-Q3",
+     "Laguna"
+    ],
+    [
+     "2025-Q4",
+     "Batangas"
+    ],
+    [
+     "2026-Q2",
+     "Batangas"
+    ]
+   ],
+   "new_disagreements": [
+    [
+     "2023-Q2",
+     "Batangas"
+    ],
+    [
+     "2023-Q2",
+     "Cavite"
+    ],
+    [
+     "2023-Q2",
+     "Rizal"
+    ],
+    [
+     "2023-Q3",
+     "Batangas"
+    ],
+    [
+     "2023-Q3",
+     "Cavite"
+    ],
+    [
+     "2023-Q3",
+     "Rizal"
+    ],
+    [
+     "2023-Q4",
+     "Batangas"
+    ],
+    [
+     "2023-Q4",
+     "Cavite"
+    ],
+    [
+     "2023-Q4",
+     "Rizal"
+    ]
+   ],
+   "n_wrong": 16,
+   "drivers_q4_2026": {
+    "Cavite": {
+     "a": {
+      "market": 63,
+      "climate": 37,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 23,
+      "climate": 14,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 63
+     },
+     "direct": {
+      "market": 0.504,
+      "climate": 0.2952,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0001,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.3563
+    },
+    "Laguna": {
+     "a": {
+      "market": 75,
+      "climate": 25,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 39,
+      "climate": 13,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 48
+     },
+     "direct": {
+      "market": 1.0649,
+      "climate": 0.3441,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0018,
+      "fish_kill": 0.0044,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.333
+    },
+    "Quezon": {
+     "a": {
+      "market": 90,
+      "climate": 10,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 45,
+      "climate": 5,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 50
+     },
+     "direct": {
+      "market": 1.1615,
+      "climate": 0.1221,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0008,
+      "fish_kill": 0.0025,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.2828
+    },
+    "Rizal": {
+     "a": {
+      "market": 76,
+      "climate": 24,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 41,
+      "climate": 13,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 46
+     },
+     "direct": {
+      "market": 1.0976,
+      "climate": 0.3441,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0008,
+      "fish_kill": 0.0059,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.24
+    },
+    "Batangas": {
+     "a": {
+      "market": 94,
+      "climate": 6,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 41,
+      "climate": 3,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 56
+     },
+     "direct": {
+      "market": 1.4605,
+      "climate": 0.0834,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0018,
+      "fish_kill": 0.0055,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.9993
+    },
+    "CALABARZON": {
+     "a": {
+      "market": 81,
+      "climate": 19,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 38,
+      "climate": 9,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 53
+     }
+    }
+   },
+   "q4_shap_logodds": {
+    "Cavite": {
+     "y_last": 0.5328,
+     "Dnow": 0.4189,
+     "H_last": 0.3342,
+     "trig_climate": -0.2952,
+     "H_trend": -0.2632,
+     "fssi_v2": 0.1288,
+     "D_last": 0.1014,
+     "H_margin": -0.0918,
+     "rice_rel": -0.0163,
+     "news_n": 0.0054,
+     "news_reg": -0.0003,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0
+    },
+    "Laguna": {
+     "Dnow": 0.9489,
+     "y_last": 0.4657,
+     "trig_climate": -0.3441,
+     "fssi_v2": -0.2954,
+     "H_last": 0.2575,
+     "H_trend": -0.2371,
+     "D_last": 0.1014,
+     "H_margin": -0.0692,
+     "rice_rel": 0.0145,
+     "news_n": -0.0071,
+     "news_reg": -0.0071,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0
+    },
+    "Quezon": {
+     "Dnow": 1.0509,
+     "y_last": 0.5328,
+     "H_last": 0.273,
+     "H_trend": -0.2708,
+     "fssi_v2": 0.1288,
+     "trig_climate": 0.1221,
+     "D_last": 0.1074,
+     "H_margin": -0.0679,
+     "news_reg": 0.0074,
+     "news_n": 0.0054,
+     "rice_rel": 0.0032,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0
+    },
+    "Rizal": {
+     "Dnow": 0.993,
+     "y_last": 0.5328,
+     "trig_climate": -0.3441,
+     "H_last": 0.2625,
+     "H_trend": -0.2404,
+     "fssi_v2": 0.1288,
+     "D_last": 0.1014,
+     "H_margin": -0.0679,
+     "news_n": -0.0071,
+     "news_reg": -0.0071,
+     "rice_rel": 0.0032,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0
+    },
+    "Batangas": {
+     "Dnow": -1.3197,
+     "y_last": -1.1521,
+     "H_last": 0.3293,
+     "H_margin": -0.2779,
+     "H_trend": -0.1761,
+     "D_last": -0.176,
+     "trig_climate": 0.0834,
+     "fssi_v2": 0.0493,
+     "rice_rel": 0.0352,
+     "news_reg": 0.0166,
+     "news_n": 0.0054,
+     "H_gap": 0.0,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "auc_ge_0.80": true,
+     "balanced_accuracy_ge_0.83": false,
+     "brier_le_0.151": false,
+     "log_loss_le_0.489": false,
+     "train_accuracy_le_0.95": false,
+     "no_test_p_ge_0.99": true
+    },
+    "acceptable": false
+   }
+  },
+  "R3": {
+   "metrics": {
+    "accuracy": 0.8461538461538461,
+    "accuracy_ci95": [
+     0.7538461538461538,
+     0.9230769230769231
+    ],
+    "balanced_accuracy": 0.8089622641509434,
+    "auc": 0.8663522012578616,
+    "brier": 0.10189940104132675,
+    "log_loss": 0.4198411253818925,
+    "ece_3bin": 0.0774054820060622,
+    "max_p": 0.999997332719002,
+    "mean_p": 0.7379791333785533,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 10,
+      "mean_p": 0.03844300387775528,
+      "observed_HIGH": 0.1
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 4,
+      "mean_p": 0.30267492858058487,
+      "observed_HIGH": 1.0
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 2,
+      "mean_p": 0.4900497902526786,
+      "observed_HIGH": 1.0
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 9,
+      "mean_p": 0.7383435404994034,
+      "observed_HIGH": 0.8888888888888888
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 40,
+      "mean_p": 0.968708061787652,
+      "observed_HIGH": 0.95
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2023-Q1",
+       "Batangas",
+       0.959
+      ],
+      [
+       "2025-Q4",
+       "Batangas",
+       1.0
+      ]
+     ],
+     "p<=0.1_but_HIGH": [
+      [
+       "2024-Q2",
+       "Quezon",
+       0.058
+      ]
+     ]
+    }
+   },
+   "metrics_raw": {
+    "accuracy": 0.8461538461538461,
+    "balanced_accuracy": 0.8089622641509434,
+    "auc": 0.8663522012578616,
+    "brier": 0.10189940104132675,
+    "log_loss": 0.4198411253818925,
+    "max_p": 0.999997332719002
+   },
+   "n_test_p_ge_0.95": 31,
+   "n_test_p_le_0.05": 6,
+   "n_test_p_ge_0.99": 21,
+   "train_Q4_origin": {
+    "accuracy": 0.9066666666666666,
+    "log_loss": 0.2477105403473268,
+    "n_p_ge_0.99": 7,
+    "mean_p": 0.7332992207653068
+   },
+   "train_Q4_origin_raw": {
+    "accuracy": 0.9066666666666666,
+    "log_loss": 0.2477105403473268,
+    "n_p_ge_0.99": 7,
+    "mean_p": 0.7332992207653068
+   },
+   "train_mean_over_origins": {
+    "accuracy": 0.9214210575749038,
+    "log_loss": 0.23073012718099667
+   },
+   "train_label_rate_Q4_origin": 0.7333333333333333,
+   "shap_expected_value_logodds": 1.9206125175431132,
+   "shap_expected_value_p": 0.8722067217734245,
+   "configs": {
+    "2023-Q1": "B3_LR_GOV",
+    "2023-Q2": "B3_LR_GOV",
+    "2023-Q3": "B3_LR_GOV",
+    "2023-Q4": "B3_LR_GOV",
+    "2024-Q1": "B3_LR_GOV",
+    "2024-Q2": "B3_LR_GOV",
+    "2024-Q3": "B3_LR_GOV",
+    "2024-Q4": "B3_LR_GOV",
+    "2025-Q1": "B3_LR_GOV",
+    "2025-Q4": "B3_LR_GOV",
+    "2026-Q1": "B3_LR_GOV",
+    "2026-Q2": "B3_LR_GOV",
+    "2026-Q3": "B3_LR_GOV",
+    "2026-Q4": "B3_LR_GOV"
+   },
+   "shrink_params": {},
+   "index": {
+    "2023-Q1": {
+     "CALABARZON": 0.5437572105592151,
+     "Cavite": 0.7932866523386713,
+     "Laguna": 0.02263343305999883,
+     "Quezon": 0.003302968640065087,
+     "Rizal": 0.9401640359860436,
+     "Batangas": 0.9593989627712969
+    },
+    "2023-Q2": {
+     "CALABARZON": 0.5896392225563611,
+     "Cavite": 0.9533901630809503,
+     "Laguna": 0.07606482467770628,
+     "Quezon": 0.020157685104841287,
+     "Rizal": 0.9932585744979582,
+     "Batangas": 0.90532486542035
+    },
+    "2023-Q3": {
+     "CALABARZON": 0.30147805731658783,
+     "Cavite": 0.4845897177142786,
+     "Laguna": 0.05723742547625515,
+     "Quezon": 0.008145444961739932,
+     "Rizal": 0.6617693385062465,
+     "Batangas": 0.2956483599244191
+    },
+    "2023-Q4": {
+     "CALABARZON": 0.6189645320113808,
+     "Cavite": 0.9056053703848314,
+     "Laguna": 0.32452198052242603,
+     "Quezon": 0.036893876356110626,
+     "Rizal": 0.9747830726897688,
+     "Batangas": 0.853018360103767
+    },
+    "2024-Q1": {
+     "CALABARZON": 0.45497893095544717,
+     "Cavite": 0.3185995554325882,
+     "Laguna": 0.271929818442906,
+     "Quezon": 0.018378164120880208,
+     "Rizal": 0.7901600394601231,
+     "Batangas": 0.8758270773207382
+    },
+    "2024-Q2": {
+     "CALABARZON": 0.7480258025641044,
+     "Cavite": 0.7721341936042696,
+     "Laguna": 0.9717414406709327,
+     "Quezon": 0.05789851319416936,
+     "Rizal": 0.974951548093855,
+     "Batangas": 0.9634033172572956
+    },
+    "2024-Q3": {
+     "CALABARZON": 0.8480903838180465,
+     "Cavite": 0.7540701595494529,
+     "Laguna": 0.7386807897254132,
+     "Quezon": 0.9870199057692218,
+     "Rizal": 0.8899844659538508,
+     "Batangas": 0.8706965980922943
+    },
+    "2024-Q4": {
+     "CALABARZON": 0.9960021060923487,
+     "Cavite": 0.9926938065446604,
+     "Laguna": 0.9962942987499597,
+     "Quezon": 0.9999858556096237,
+     "Rizal": 0.9970580470267638,
+     "Batangas": 0.9939785225307363
+    },
+    "2025-Q1": {
+     "CALABARZON": 0.9636332097391419,
+     "Cavite": 0.916302914942506,
+     "Laguna": 0.9905015303966339,
+     "Quezon": 0.9999643309830998,
+     "Rizal": 0.9440473697711712,
+     "Batangas": 0.9673499026022985
+    },
+    "2025-Q4": {
+     "CALABARZON": 0.9999110410414737,
+     "Cavite": 0.999962692735564,
+     "Laguna": 0.9999677020494204,
+     "Quezon": 0.9999744984040957,
+     "Rizal": 0.9997398633140122,
+     "Batangas": 0.999910448704276
+    },
+    "2026-Q1": {
+     "CALABARZON": 0.9999889029675275,
+     "Cavite": 0.9999961171119927,
+     "Laguna": 0.999997332719002,
+     "Quezon": 0.9999926770114792,
+     "Rizal": 0.99999239986014,
+     "Batangas": 0.9999659881350244
+    },
+    "2026-Q2": {
+     "CALABARZON": 0.5428436514574637,
+     "Cavite": 0.4955098627910786,
+     "Laguna": 0.7737223976910304,
+     "Quezon": 0.6848410950023239,
+     "Rizal": 0.6764271986170999,
+     "Batangas": 0.08371770318578603
+    },
+    "2026-Q3": {
+     "CALABARZON": 0.9864156828420931,
+     "Cavite": 0.9842279520262378,
+     "Laguna": 0.996787922698217,
+     "Quezon": 0.9971017080023834,
+     "Rizal": 0.9922691361602817,
+     "Batangas": 0.9616916953233453
+    },
+    "2026-Q4": {
+     "CALABARZON": 0.7467992247601876,
+     "Cavite": 0.7564840567992505,
+     "Laguna": 0.9803297495033313,
+     "Quezon": 0.923392728447317,
+     "Rizal": 0.870022021130567,
+     "Batangas": 0.2037675679204721
+    }
+   },
+   "q4_2026": {
+    "CALABARZON": 0.7467992247601876,
+    "Cavite": 0.7564840567992505,
+    "Laguna": 0.9803297495033313,
+    "Quezon": 0.923392728447317,
+    "Rizal": 0.870022021130567,
+    "Batangas": 0.2037675679204721,
+    "raw": {
+     "Cavite": 0.7564840567992505,
+     "Laguna": 0.9803297495033313,
+     "Quezon": 0.923392728447317,
+     "Rizal": 0.870022021130567,
+     "Batangas": 0.2037675679204721
+    }
+   },
+   "R0_disagreements_fixed": [
+    [
+     "2023-Q1",
+     "Rizal"
+    ],
+    [
+     "2024-Q2",
+     "Cavite"
+    ],
+    [
+     "2024-Q3",
+     "Laguna"
+    ],
+    [
+     "2024-Q4",
+     "Cavite"
+    ],
+    [
+     "2026-Q2",
+     "Batangas"
+    ]
+   ],
+   "R0_disagreements_kept": [
+    [
+     "2023-Q4",
+     "Laguna"
+    ],
+    [
+     "2024-Q1",
+     "Cavite"
+    ],
+    [
+     "2024-Q1",
+     "Laguna"
+    ],
+    [
+     "2024-Q2",
+     "Quezon"
+    ],
+    [
+     "2025-Q4",
+     "Batangas"
+    ]
+   ],
+   "new_disagreements": [
+    [
+     "2023-Q1",
+     "Batangas"
+    ],
+    [
+     "2023-Q1",
+     "Cavite"
+    ],
+    [
+     "2023-Q3",
+     "Batangas"
+    ],
+    [
+     "2023-Q3",
+     "Cavite"
+    ],
+    [
+     "2026-Q2",
+     "Cavite"
+    ]
+   ],
+   "n_wrong": 10,
+   "drivers_q4_2026": {
+    "Cavite": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 32,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 68
+     },
+     "direct": {
+      "market": 0.8763,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.8576
+    },
+    "Laguna": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 51,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 49
+     },
+     "direct": {
+      "market": 1.899,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.8576
+    },
+    "Quezon": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 21,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 79
+     },
+     "direct": {
+      "market": 0.4796,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.8576
+    },
+    "Rizal": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 6,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 94
+     },
+     "direct": {
+      "market": 0.1086,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.8576
+    },
+    "Batangas": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 38,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 62
+     },
+     "direct": {
+      "market": 1.3937,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 2.3062
+    },
+    "CALABARZON": {
+     "a": {
+      "market": 100,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 33,
+      "climate": 0,
+      "fish_kill": 0,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 67
+     }
+    }
+   },
+   "q4_shap_logodds": {
+    "Cavite": {
+     "rice_rel": -1.0187,
+     "H_trend": -0.8469,
+     "y_last": 0.7652,
+     "H_last": 0.2082,
+     "D_last": 0.0861,
+     "Dnow": 0.0564,
+     "H_gap": -0.0264,
+     "H_margin": -0.0108
+    },
+    "Laguna": {
+     "rice_rel": 1.457,
+     "H_trend": -0.8469,
+     "y_last": 0.7652,
+     "Dnow": 0.432,
+     "H_last": 0.2082,
+     "H_gap": -0.0264,
+     "H_margin": -0.0108,
+     "D_last": 0.0099
+    },
+    "Quezon": {
+     "Dnow": 1.0895,
+     "H_trend": -0.8469,
+     "y_last": 0.7652,
+     "rice_rel": -0.7093,
+     "H_last": 0.2082,
+     "D_last": 0.0994,
+     "H_gap": -0.0264,
+     "H_margin": -0.0108
+    },
+    "Rizal": {
+     "H_trend": -0.8469,
+     "y_last": 0.7652,
+     "rice_rel": -0.634,
+     "Dnow": 0.479,
+     "H_last": 0.2082,
+     "D_last": 0.0464,
+     "H_gap": -0.0264,
+     "H_margin": -0.0108
+    },
+    "Batangas": {
+     "Dnow": -2.0569,
+     "y_last": -1.2138,
+     "rice_rel": 0.905,
+     "H_trend": -0.8469,
+     "D_last": -0.2418,
+     "H_last": 0.2082,
+     "H_gap": -0.0264,
+     "H_margin": -0.0108
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "auc_ge_0.80": true,
+     "balanced_accuracy_ge_0.83": false,
+     "brier_le_0.151": true,
+     "log_loss_le_0.489": true,
+     "train_accuracy_le_0.95": true,
+     "no_test_p_ge_0.99": false
+    },
+    "acceptable": false
+   }
+  },
+  "R4": {
+   "metrics": {
+    "accuracy": 0.8461538461538461,
+    "accuracy_ci95": [
+     0.7538461538461538,
+     0.9384615384615385
+    ],
+    "balanced_accuracy": 0.8089622641509434,
+    "auc": 0.8679245283018868,
+    "brier": 0.12481264878367948,
+    "log_loss": 0.410326086375367,
+    "ece_3bin": 0.16829965600408747,
+    "max_p": 0.9372556394133044,
+    "mean_p": 0.660929358313597,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 2,
+      "mean_p": 0.16011737136247917,
+      "observed_HIGH": 0.5
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 12,
+      "mean_p": 0.30620830622058,
+      "observed_HIGH": 0.3333333333333333
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 6,
+      "mean_p": 0.5140149043929384,
+      "observed_HIGH": 0.8333333333333334
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 23,
+      "mean_p": 0.6980104219330071,
+      "observed_HIGH": 0.9565217391304348
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 22,
+      "mean_p": 0.9012429428270498,
+      "observed_HIGH": 0.9545454545454546
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2025-Q4",
+       "Batangas",
+       0.922
+      ]
+     ],
+     "p<=0.1_but_HIGH": []
+    }
+   },
+   "metrics_raw": {
+    "accuracy": 0.8461538461538461,
+    "balanced_accuracy": 0.8089622641509434,
+    "auc": 0.8679245283018868,
+    "brier": 0.12481264878367948,
+    "log_loss": 0.410326086375367,
+    "max_p": 0.9372556394133044
+   },
+   "n_test_p_ge_0.95": 0,
+   "n_test_p_le_0.05": 0,
+   "n_test_p_ge_0.99": 0,
+   "train_Q4_origin": {
+    "accuracy": 0.9466666666666667,
+    "log_loss": 0.2477385338741333,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7319961078087391
+   },
+   "train_Q4_origin_raw": {
+    "accuracy": 0.9466666666666667,
+    "log_loss": 0.2477385338741333,
+    "n_p_ge_0.99": 0,
+    "mean_p": 0.7319961078087391
+   },
+   "train_mean_over_origins": {
+    "accuracy": 0.9323419742650513,
+    "log_loss": 0.3326987355098187
+   },
+   "train_label_rate_Q4_origin": 0.7333333333333333,
+   "shap_expected_value_logodds": 1.6215967416217036,
+   "shap_expected_value_p": 0.8350152222887972,
+   "configs": {
+    "2023-Q1": "0.4*COMB_T5xR1n2m15l5 + 0.4*B3 + 0.2*LR[]",
+    "2023-Q2": "0.4*COMB_T5xR1n2m15l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2023-Q3": "0.4*COMB_T5xR1n2m15l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2023-Q4": "0.4*COMB_T5xR1n2m15l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2024-Q1": "0.4*COMB_T5xR1n2m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2024-Q2": "0.4*COMB_T5xR1n2m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2024-Q3": "0.4*COMB_T5xR1n2m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2024-Q4": "0.4*COMB_T5xR1n2m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2025-Q1": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2025-Q4": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2026-Q1": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2026-Q2": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2026-Q3": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+    "2026-Q4": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']"
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 1.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 1.0,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 1.0,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 1.0,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 1.0,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 1.0,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 1.0,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 1.0,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 1.0,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "index": {
+    "2023-Q1": {
+     "CALABARZON": 0.4608362175570194,
+     "Cavite": 0.560647994268802,
+     "Laguna": 0.2523867065573329,
+     "Quezon": 0.2446545207893594,
+     "Rizal": 0.6193989477277508,
+     "Batangas": 0.6270929184418522
+    },
+    "2023-Q2": {
+     "CALABARZON": 0.512773152240508,
+     "Cavite": 0.6596985342469981,
+     "Laguna": 0.3016433699024281,
+     "Quezon": 0.2864055430565545,
+     "Rizal": 0.6756458988138012,
+     "Batangas": 0.6404724151827579
+    },
+    "2023-Q3": {
+     "CALABARZON": 0.3643555788494114,
+     "Cavite": 0.43760024300848765,
+     "Laguna": 0.2666593261132783,
+     "Quezon": 0.2470225339074722,
+     "Rizal": 0.5084720913252748,
+     "Batangas": 0.3620236998925439
+    },
+    "2023-Q4": {
+     "CALABARZON": 0.5231744797217365,
+     "Cavite": 0.63415818429199,
+     "Laguna": 0.39172709718879917,
+     "Quezon": 0.28667358668050175,
+     "Rizal": 0.6469257522236627,
+     "Batangas": 0.656387778223729
+    },
+    "2024-Q1": {
+     "CALABARZON": 0.4634635922373317,
+     "Cavite": 0.392687032404719,
+     "Laguna": 0.24426263559286193,
+     "Quezon": 0.12422801061839553,
+     "Rizal": 0.7612787439484918,
+     "Batangas": 0.7948615386221898
+    },
+    "2024-Q2": {
+     "CALABARZON": 0.6440739850183717,
+     "Cavite": 0.4747675274384231,
+     "Laguna": 0.849180464394414,
+     "Quezon": 0.19600673210656283,
+     "Rizal": 0.8583404598536553,
+     "Batangas": 0.8420747412988033
+    },
+    "2024-Q3": {
+     "CALABARZON": 0.6529352519376351,
+     "Cavite": 0.5935525251169792,
+     "Laguna": 0.5090490451996639,
+     "Quezon": 0.7711985416441545,
+     "Rizal": 0.7025891365851691,
+     "Batangas": 0.688287011142209
+    },
+    "2024-Q4": {
+     "CALABARZON": 0.7236787010626007,
+     "Cavite": 0.6444642084609766,
+     "Laguna": 0.7792652672509749,
+     "Quezon": 0.876666362054406,
+     "Rizal": 0.631086908931593,
+     "Batangas": 0.6869107586150527
+    },
+    "2025-Q1": {
+     "CALABARZON": 0.7829951820224132,
+     "Cavite": 0.7080359861554218,
+     "Laguna": 0.9002209679287771,
+     "Quezon": 0.8627901630583125,
+     "Rizal": 0.6824735903735797,
+     "Batangas": 0.761455202595975
+    },
+    "2025-Q4": {
+     "CALABARZON": 0.9230000174533053,
+     "Cavite": 0.9255687576129313,
+     "Laguna": 0.9216274766602753,
+     "Quezon": 0.928441459507316,
+     "Rizal": 0.9174900503728457,
+     "Batangas": 0.9218723431131581
+    },
+    "2026-Q1": {
+     "CALABARZON": 0.9205778687225956,
+     "Cavite": 0.9301029791758206,
+     "Laguna": 0.9241478322786973,
+     "Quezon": 0.923624779064047,
+     "Rizal": 0.9240196485738401,
+     "Batangas": 0.900994104520573
+    },
+    "2026-Q2": {
+     "CALABARZON": 0.7007039863240349,
+     "Cavite": 0.7211972780825472,
+     "Laguna": 0.8226139280782304,
+     "Quezon": 0.7810671661891398,
+     "Rizal": 0.7802879367091486,
+     "Batangas": 0.39835362256110834
+    },
+    "2026-Q3": {
+     "CALABARZON": 0.919513644929798,
+     "Cavite": 0.9199430344739392,
+     "Laguna": 0.9229867835745176,
+     "Quezon": 0.9372556394133044,
+     "Rizal": 0.9211009732521368,
+     "Batangas": 0.8962817939350916
+    },
+    "2026-Q4": {
+     "CALABARZON": 0.7743062697988133,
+     "Cavite": 0.8159497738985703,
+     "Laguna": 0.9274804138995016,
+     "Quezon": 0.9029816955616726,
+     "Rizal": 0.8887915020362063,
+     "Batangas": 0.33632796359811556
+    }
+   },
+   "q4_2026": {
+    "CALABARZON": 0.7743062697988133,
+    "Cavite": 0.8159497738985703,
+    "Laguna": 0.9274804138995016,
+    "Quezon": 0.9029816955616726,
+    "Rizal": 0.8887915020362063,
+    "Batangas": 0.33632796359811556,
+    "raw": {
+     "Cavite": 0.8159497738985703,
+     "Laguna": 0.9274804138995016,
+     "Quezon": 0.9029816955616726,
+     "Rizal": 0.8887915020362063,
+     "Batangas": 0.33632796359811556
+    }
+   },
+   "R0_disagreements_fixed": [
+    [
+     "2023-Q1",
+     "Rizal"
+    ],
+    [
+     "2024-Q3",
+     "Laguna"
+    ],
+    [
+     "2024-Q4",
+     "Cavite"
+    ],
+    [
+     "2026-Q2",
+     "Batangas"
+    ]
+   ],
+   "R0_disagreements_kept": [
+    [
+     "2023-Q4",
+     "Laguna"
+    ],
+    [
+     "2024-Q1",
+     "Cavite"
+    ],
+    [
+     "2024-Q1",
+     "Laguna"
+    ],
+    [
+     "2024-Q2",
+     "Cavite"
+    ],
+    [
+     "2024-Q2",
+     "Quezon"
+    ],
+    [
+     "2025-Q4",
+     "Batangas"
+    ]
+   ],
+   "new_disagreements": [
+    [
+     "2023-Q1",
+     "Batangas"
+    ],
+    [
+     "2023-Q1",
+     "Cavite"
+    ],
+    [
+     "2023-Q3",
+     "Batangas"
+    ],
+    [
+     "2023-Q3",
+     "Cavite"
+    ]
+   ],
+   "n_wrong": 10,
+   "drivers_q4_2026": {
+    "Cavite": {
+     "a": {
+      "market": 52,
+      "climate": 42,
+      "fish_kill": 6,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 9,
+      "climate": 8,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 82
+     },
+     "direct": {
+      "market": 0.1489,
+      "climate": 0.1201,
+      "fish_kill": 0.0158,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0,
+      "fish_kill": 0.0,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.2856
+    },
+    "Laguna": {
+     "a": {
+      "market": 82,
+      "climate": 10,
+      "fish_kill": 8,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 43,
+      "climate": 5,
+      "fish_kill": 5,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 47
+     },
+     "direct": {
+      "market": 1.1856,
+      "climate": 0.1412,
+      "fish_kill": 0.1214,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0007,
+      "fish_kill": 0.0018,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.2762
+    },
+    "Quezon": {
+     "a": {
+      "market": 91,
+      "climate": 7,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 33,
+      "climate": 3,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 63
+     },
+     "direct": {
+      "market": 0.6564,
+      "climate": 0.0496,
+      "fish_kill": 0.0158,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0003,
+      "fish_kill": 0.001,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.2561
+    },
+    "Rizal": {
+     "a": {
+      "market": 65,
+      "climate": 23,
+      "fish_kill": 12,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 21,
+      "climate": 8,
+      "fish_kill": 4,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 67
+     },
+     "direct": {
+      "market": 0.3956,
+      "climate": 0.1416,
+      "fish_kill": 0.0734,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0003,
+      "fish_kill": 0.0024,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.239
+    },
+    "Batangas": {
+     "a": {
+      "market": 96,
+      "climate": 3,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 39,
+      "climate": 1,
+      "fish_kill": 1,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 59
+     },
+     "direct": {
+      "market": 1.1417,
+      "climate": 0.0341,
+      "fish_kill": 0.0158,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "news_allocated": {
+      "market": 0.0,
+      "climate": 0.0007,
+      "fish_kill": 0.0022,
+      "employment": 0.0,
+      "ofw_remittance": 0.0
+     },
+     "other_abs": 1.7222
+    },
+    "CALABARZON": {
+     "a": {
+      "market": 83,
+      "climate": 11,
+      "fish_kill": 6,
+      "employment": 0,
+      "ofw_remittance": 0
+     },
+     "b": {
+      "market": 32,
+      "climate": 5,
+      "fish_kill": 2,
+      "employment": 0,
+      "ofw_remittance": 0,
+      "other": 61
+     }
+    }
+   },
+   "q4_shap_logodds": {
+    "Cavite": {
+     "y_last": 0.5192,
+     "H_trend": -0.444,
+     "rice_rel": -0.414,
+     "H_last": 0.2169,
+     "Dnow": 0.1901,
+     "trig_climate": -0.1201,
+     "D_last": 0.075,
+     "fssi_v2": 0.0515,
+     "H_margin": -0.0411,
+     "trig_fish_kill": -0.0158,
+     "H_gap": -0.0106,
+     "news_n": 0.0021,
+     "news_reg": -0.0001,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0
+    },
+    "Laguna": {
+     "rice_rel": 0.5886,
+     "Dnow": 0.5524,
+     "y_last": 0.4924,
+     "H_trend": -0.4336,
+     "H_last": 0.1863,
+     "trig_climate": -0.1412,
+     "trig_fish_kill": 0.1214,
+     "fssi_v2": -0.1181,
+     "D_last": 0.0445,
+     "H_margin": -0.032,
+     "H_gap": -0.0106,
+     "news_n": -0.0029,
+     "news_reg": -0.0029,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0
+    },
+    "Quezon": {
+     "Dnow": 0.8562,
+     "y_last": 0.5192,
+     "H_trend": -0.4471,
+     "rice_rel": -0.2824,
+     "H_last": 0.1925,
+     "D_last": 0.0827,
+     "fssi_v2": 0.0515,
+     "trig_climate": 0.0496,
+     "H_margin": -0.0315,
+     "trig_fish_kill": -0.0158,
+     "H_gap": -0.0106,
+     "news_reg": 0.003,
+     "news_n": 0.0021,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0
+    },
+    "Rizal": {
+     "Dnow": 0.5888,
+     "y_last": 0.5192,
+     "H_trend": -0.4349,
+     "rice_rel": -0.2523,
+     "H_last": 0.1883,
+     "trig_climate": -0.1416,
+     "trig_fish_kill": 0.0734,
+     "D_last": 0.0591,
+     "fssi_v2": 0.0515,
+     "H_margin": -0.0315,
+     "H_gap": -0.0106,
+     "news_n": -0.0029,
+     "news_reg": -0.0029,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0
+    },
+    "Batangas": {
+     "Dnow": -1.3506,
+     "y_last": -0.9464,
+     "H_trend": -0.4092,
+     "rice_rel": 0.3761,
+     "H_last": 0.215,
+     "D_last": -0.1671,
+     "H_margin": -0.1155,
+     "trig_climate": 0.0341,
+     "fssi_v2": 0.0197,
+     "trig_fish_kill": -0.0158,
+     "H_gap": -0.0106,
+     "news_reg": 0.0067,
+     "news_n": 0.0021,
+     "news_direct_share": 0.0,
+     "fssi_missing": 0.0,
+     "trig_market": 0.0,
+     "trig_employment": 0.0,
+     "trig_ofw_remittance": 0.0
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "auc_ge_0.80": true,
+     "balanced_accuracy_ge_0.83": false,
+     "brier_le_0.151": true,
+     "log_loss_le_0.489": true,
+     "train_accuracy_le_0.95": true,
+     "no_test_p_ge_0.99": true
+    },
+    "acceptable": false
+   }
+  }
+ },
+ "R0_disagreements": [
+  [
+   "2023-Q1",
+   "Rizal"
+  ],
+  [
+   "2023-Q4",
+   "Laguna"
+  ],
+  [
+   "2024-Q1",
+   "Cavite"
+  ],
+  [
+   "2024-Q1",
+   "Laguna"
+  ],
+  [
+   "2024-Q2",
+   "Cavite"
+  ],
+  [
+   "2024-Q2",
+   "Quezon"
+  ],
+  [
+   "2024-Q3",
+   "Laguna"
+  ],
+  [
+   "2024-Q4",
+   "Cavite"
+  ],
+  [
+   "2025-Q4",
+   "Batangas"
+  ],
+  [
+   "2026-Q2",
+   "Batangas"
+  ]
+ ],
+ "adoption": {
+  "acceptable": [],
+  "chosen": "keep E49-C2 (R0)",
+  "rule": {
+   "auc": 0.8,
+   "balanced_accuracy": 0.83,
+   "brier": 0.151,
+   "log_loss": 0.489,
+   "train_accuracy": 0.95,
+   "max_test_p": 0.99
+  },
+  "tie": 0.002
+ },
+ "observed_share_HIGH": {
+  "2023-Q1": 0.2,
+  "2023-Q2": 0.6,
+  "2023-Q3": 0.6,
+  "2023-Q4": 0.8,
+  "2024-Q1": 0.8,
+  "2024-Q2": 1.0,
+  "2024-Q3": 1.0,
+  "2024-Q4": 1.0,
+  "2025-Q1": 1.0,
+  "2025-Q4": 0.8,
+  "2026-Q1": 1.0,
+  "2026-Q2": 0.8,
+  "2026-Q3": 1.0
+ },
+ "run": "20261016T045812Z"
+}

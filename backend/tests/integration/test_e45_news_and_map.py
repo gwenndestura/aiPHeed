@@ -17,6 +17,9 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.services import dashboard as svc
 
+# E53 port (tina-e53-port): this E41-E48 candidate test runs under Angel's original configuration (E36 record,
+# lead-2 target, no preview); the served default is now E53 (see tests/integration/test_e53_served_model.py).
+pytestmark = pytest.mark.usefixtures("angel_original_config")
 client = TestClient(app)
 SUBJECTS = [("province", p) for p in ("cavite", "laguna", "batangas", "rizal", "quezon")] + [("region", "calabarzon")]
 GEO = Path("..") / "frontend" / "public" / "calabarzon-municities.json"
@@ -29,13 +32,17 @@ def _clock(monkeypatch):
 
 @pytest.mark.parametrize("scope,id_", SUBJECTS)
 def test_news_feed_returns_real_relevant_articles(scope, id_):
+    """E53 port: the card lists exactly the validated (R1.1) evidence-quarter articles the estimate used, with no
+    back-extension and no keyword-only matches, so a province can have 0 (Cavite, Batangas and Quezon in 2026-Q3:
+    a news-coverage gap, not low risk). The E45 extended feed (_e31_news_e45_feed) is kept but not served."""
     r = client.get(f"/api/v1/news?scope={scope}&id={id_}&quarter=2027-Q1&pageSize=100")
     assert r.status_code == 200
     body = r.json()
-    assert body["articleCount"] >= 1 and len(body["data"]) == body["articleCount"]
-    assert body["validatedCount"] + body["triggerMatchCount"] == body["articleCount"]
+    assert len(body["data"]) == body["articleCount"] == body["validatedCount"] and body["triggerMatchCount"] == 0
     ev = body["evidenceQuarter"]
-    assert all(q <= ev for q in body["windowQuarters"])                       # never news after the evidence quarter
+    assert ev == "2026-Q3" and body["windowQuarters"] == [ev]                # the evidence quarter only
+    if scope == "region":
+        assert body["articleCount"] >= 1
     for a in body["data"]:
         assert a["title"] and a["source"] and a["date"] and a["url"].startswith("http")
         assert a["relevanceStatus"] in ("validated", "trigger_match")

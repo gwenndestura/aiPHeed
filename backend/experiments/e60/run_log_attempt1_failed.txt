@@ -1,0 +1,32 @@
+(a) Eq. 4 label
+Traceback (most recent call last):
+  File "C:\Users\User\aiPHeed-final-integration\backend\experiments\e60\runner\e60_run.py", line 204, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\User\aiPHeed-final-integration\backend\experiments\e60\runner\e60_run.py", line 156, in main
+    ra, ga = S.run_lead(da, 1)
+             ~~~~~~~~~~^^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\backend\experiments\e59\runner\e59_run.py", line 55, in run_lead
+    Pr, info = L6.walk_forward(d)
+               ~~~~~~~~~~~~~~~^^^
+  File "C:\Users\User\aiPHeed-final-integration\aipheed-backend-aligned\experiments\E36_LightGBM_One_Quarter_Ahead\runner\e36_lib.py", line 193, in walk_forward
+    preds[t], labels[t] = fixed_arms(d, t), lab
+                          ~~~~~~~~~~^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\aipheed-backend-aligned\experiments\E36_LightGBM_One_Quarter_Ahead\runner\e36_lib.py", line 146, in fixed_arms
+    out[name] = lgbm_predict(tr, te, FEATURE_SETS[fs], g)
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\aipheed-backend-aligned\experiments\E36_LightGBM_One_Quarter_Ahead\runner\e36_lib.py", line 98, in lgbm_predict
+    m = fit_lgbm(tr, feats, g)
+  File "C:\Users\User\aiPHeed-final-integration\aipheed-backend-aligned\experiments\E36_LightGBM_One_Quarter_Ahead\runner\e36_lib.py", line 94, in fit_lgbm
+    return lgb.LGBMClassifier(**_BASE, **GRID[g]).fit(tr[feats].astype(float), y)
+                                                      ~~^^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\backend\venv\Lib\site-packages\pandas\core\frame.py", line 4119, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\aiPHeed-final-integration\backend\venv\Lib\site-packages\pandas\core\indexes\base.py", line 6264, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['fssi_lag1', 'fssi_lag2', 'fssi_accel'] not in index"
+EXIT 1

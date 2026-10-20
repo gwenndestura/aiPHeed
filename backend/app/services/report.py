@@ -297,7 +297,9 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
     rows = []
     for trigger in explain["triggers"]:
         color = RAISING if trigger["direction"] == "increases_risk" else LOWERING
-        arrow = "raises" if trigger["direction"] == "increases_risk" else "lowers"
+        # a 0% driver had no measurable effect: it neither raises nor lowers the risk
+        arrow = ("no measurable effect" if trigger["pct"] == 0 else
+                 "raises" if trigger["direction"] == "increases_risk" else "lowers")
         rows.append((trigger["label"], trigger["pct"],
                      f"{trigger['pct']}%  {arrow}", color))
 
@@ -307,26 +309,75 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
         _p(
             "<b>Red</b> bars raise the predicted shortfall, <b>green</b> lower it. "
             "A large bar is not automatically bad news -- share of the explanation "
-            "and direction of effect are separate things.", "small"),
+            "and direction of effect are separate things." + _calibration_sentence(), "small"),
         Spacer(1, 2.5 * mm),
         _p(svc.compose_narrative(subject, quarter, explain["triggers"]), "body"),
     ]
+
+
+def _calibration_sentence() -> str:
+    """For a shrinkage-calibrated record (E49, E53): the dashboard note's sentence that the bars explain the
+    estimate before calibration (the same text, app.api.v1.insights.CALIBRATION_SENTENCE)."""
+    try:
+        from app.api.v1.insights import CALIBRATION_SENTENCE
+        from app.quarterly import self_description as SD
+
+        return " " + CALIBRATION_SENTENCE if SD.is_calibrated(SD.active_record_key()) else ""
+    except Exception:                                      # noqa: BLE001 - a legacy engine has no record key
+        return ""
+
+
+def _pct_text(value, missing: str = "--") -> str:
+    return missing if value is None else f"{float(value):.1f}%"
+
+
+def _method_text(performance: dict) -> str:
+    """What the served model is, from its record (the thesis plan is not described as if it were served)."""
+    from app.ml.inference import e31_engine as E31
+
+    try:
+        rec = E31.record()
+    except Exception:                                      # noqa: BLE001 - legacy engines keep the generic text
+        rec = {}
+    if rec.get("schema") != "e36/1":
+        return ("The model predicts, for each CALABARZON province, the probability that the province falls in the HIGH "
+                "class of the composite food stress label.")
+    from app.quarterly import self_description as SD
+
+    # the served engine as the dashboard names it (composed from the record actually served)
+    td, eng = rec.get("target_definition") or {}, SD.served_engine(rec, SD.active_record_key())
+    feats = (eng.get("config") or {}).get("features") or []
+    groups = [("SWS hunger inputs", lambda f: f.startswith("H_")), ("the last published label", lambda f: f == "y_last"),
+              ("provincial food and rice price inputs (PSA CPI)", lambda f: f in ("D_last", "Dnow", "rice_rel")),
+              ("news inputs (validated titles and the food-stress score)", lambda f: f.startswith(("news_", "fssi"))),
+              ("the five trigger proportions", lambda f: f.startswith("trig_")),
+              ("measured driver conditions", lambda f: f.startswith("cond_"))]
+    used = [name for name, test in groups if any(test(f) for f in feats)]
+    listed = ", ".join(used[:-1]) + " and " + used[-1] if len(used) > 1 else "".join(used)
+    return (f"The served model ({eng.get('name', 'unnamed')}) predicts, for each CALABARZON province, the probability of "
+            f"the HIGH class of the label {td.get('label', 'S1 above its threshold')}. The threshold is the "
+            f"{td.get('tau', 'trailing median of published quarters')}. Its {len(feats)} inputs are {listed}. "
+            "All inputs use only information published before each forecast origin.")
 
 
 def _method_block(performance: dict) -> list:
     baselines = performance.get("baselines", {})
     targets = performance.get("targets", {})
     lead = performance.get("maxReliableLeadTime")
+    basis = performance.get("maxReliableLeadTimeBasis")
     rows = [
         # Specific Objective 2 names these five metrics plus the lead time.
         ["Maximum Reliable Lead Time",
-         f"{lead} quarter(s)" if lead is not None else "--"],
+         (f"{lead} quarter(s)" + (f" ({basis})" if basis else "")) if lead is not None
+         else (f"none ({basis})" if basis else "not evaluated")],
         ["Accuracy", _num(performance.get("accuracy"), 4)],
-        ["Precision (weighted)", _num(performance.get("precision"), 4)],
-        ["Recall (weighted)", _num(performance.get("recall"), 4)],
-        ["F1 score (weighted)", _num(performance.get("f1"), 4)],
+        ["Precision (HIGH class)", _num(performance.get("precision"), 4)],
+        ["Recall (HIGH class)", _num(performance.get("recall"), 4)],
+        ["F1 score (HIGH class)", _num(performance.get("f1"), 4)],
         ["AUC-ROC", _num(performance.get("rocAuc"), 4)],
-        *([["Accuracy requirement", str(targets["note"])[:180]]] if targets.get("note") else [
+        # the 75% verdict is a full sentence (interval and "demonstrated" or not); it is printed in full below the
+        # table, never cut to fit the narrow value column (a cut once ended at "but the 95% date-")
+        *([["Accuracy requirement (75%)", "see the note below the table"]] if targets.get("note") else [
             ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
             ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"]]),
         ["Features in the model", str(performance.get("nFeatures", "--"))],
@@ -341,17 +392,12 @@ def _method_block(performance: dict) -> list:
         rows.append([f"Baseline: {name.replace('_', ' ')}", _num(acc, 4)])
 
     return [
-        _p(
-            "The model predicts, for each CALABARZON province, the probability that "
-            "the province falls in the HIGH class of the composite food stress label "
-            "-- SWS quarterly hunger prevalence combined with the province's food CPI "
-            "deviation from the regional mean, thresholded at the global median. "
-            "Inputs are the bias-corrected Food Stress Sentiment Index and its lags "
-            "and acceleration, the five bilingual trigger proportions, and government "
-            "indicators from PSA, BSP, DOE, PAGASA and PhilRice.", "body"),
+        _p(_escape(_method_text(performance)), "body"),
         Spacer(1, 3 * mm),
         _data_table(["Measure", "Value"], rows, [78 * mm, 30 * mm], {1: "RIGHT"}),
         Spacer(1, 3 * mm),
+        *([_p("<b>Accuracy requirement (75%).</b> " + _escape(str(targets["note"])), "small"), Spacer(1, 2 * mm)]
+          if targets.get("note") else []),
         _p(
             "<b>Accuracy must be read against its baselines.</b> The comparison "
             "models above are evaluated on the same walk-forward folds at the same "
@@ -401,6 +447,23 @@ def _limitations_block(limited_signal: bool, article_count: int,
     return flow
 
 
+def _topics_block(topics: dict, width: float) -> list:
+    """Objective 1: descriptive BERTopic patterns (svc.news_topics). Shows the topic shares only when the topic model
+    passed its publication gate; otherwise the reason, with its numbers."""
+    flow = []
+    if topics.get("topics"):
+        flow.append(_p(f"Topics of the {topics['nArticles']} relevant articles in this quarter.", "body"))
+        flow.append(Spacer(1, 2 * mm))
+        flow.append(_bar_table([(t["label"], round(t["share"] * 100), f"{round(t['share'] * 100)}%", ACCENT)
+                                for t in topics["topics"][:6]], width))
+        flow.append(Spacer(1, 2 * mm))
+    else:
+        flow.append(_p(_escape(topics.get("note") or "Topic patterns are not available."), "body"))
+    if topics.get("use"):
+        flow.append(_p(_escape(topics["use"]), "small"))
+    return flow
+
+
 def _news_block(news: dict, width: float) -> list:
     if not news["articleCount"]:
         return [_p("No relevant articles were geocoded to this subject for the quarter.",
@@ -421,7 +484,21 @@ def _news_block(news: dict, width: float) -> list:
              for t in news["topics"][:6]], width))
         flow.append(Spacer(1, 4 * mm))
 
-    if news["data"]:
+    if news["data"] and not any(a.get("relevanceScore") is not None for a in news["data"]):
+        # The served (E31-family) news has no per-article score: newest first, no empty Score column.
+        recent = sorted(news["data"], key=lambda a: a.get("date") or "", reverse=True)[:6]
+        flow.append(_p("Recent headlines", "h3"))
+        flow.append(Spacer(1, 1.5 * mm))
+        rows = [[_p(a["date"] or "--", "cell"),
+                 _p(f"<b>{_escape(a['title'])}</b><br/>"
+                    f"<font color='#6A7269'>{_escape(a['source'])} · {_escape(a['topicLabel'])}</font>", "cell")]
+                for a in recent]
+        flow.append(_data_table(["Date", "Headline"], rows, [20 * mm, width - 20 * mm]))
+        flow.append(Spacer(1, 2 * mm))
+        flow.append(_p(
+            "Titles from the validated article set (relevance rule R1.1) for this quarter, newest first. No per-article "
+            "score is stored for this set; treat individual headlines as leads rather than findings.", "small"))
+    elif news["data"]:
         # By classifier confidence, not recency. The corpus carries false
         # positives, and the most recent article is often a weak match -- which
         # in a DA-facing document reads as the system not knowing what food
@@ -502,8 +579,8 @@ def build_province_report(province_id: str, quarter: str,
     news = svc.news(code, quarter, 1, 60)
 
     published = [p for p in provinces if not p["withheld"]]
-    rank = sorted(published, key=lambda p: p["riskScore"], reverse=True)
-    position = next((i + 1 for i, p in enumerate(rank) if p["id"] == slug), None)
+    # the same competition rank as /provinces and /ranking: tied scores share a rank
+    position = province.get("rank")
 
     buf = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -522,10 +599,12 @@ def build_province_report(province_id: str, quarter: str,
         province["name"], province["riskScore"], province["riskLevel"],
         province["qoqChange"],
         [
-            ("Risk class", (province["riskLabel"] or "--").upper()),
-            ("Rank in CALABARZON", f"{position} of {len(published)}" if position else "--"),
+            ("Risk class" if province["riskLabel"] else "Risk level (p >= 0.50)",
+             (province["riskLabel"] or province["riskLevel"] or "--").upper()),
+            ("Rank in CALABARZON", (f"{position} of {len(published)}" + (" (tied)" if province.get("rankTied") else ""))
+             if position else "--"),
             ("Population (2020 CPH)", f"{province['population']:,}"),
-            ("Poverty incidence (PSA 2021)", f"{province['povertyRate']}%"),
+            ("Poverty incidence (PSA 2021)", _pct_text(province["povertyRate"])),
             ("Articles analysed", str(province["articleCount"])),
         ],
         width)
@@ -557,7 +636,7 @@ def build_province_report(province_id: str, quarter: str,
     muni_rows = [[_p(f"{i + 1}", "cell"), _p(_escape(m["name"]), "cellb"),
                   _p(m["classification"], "cell"),
                   _p(f"{m['population']:,}", "cell"),
-                  _p("--" if m["povertyRate"] is None else f"{m['povertyRate']}%", "cell"),
+                  _p(_pct_text(m["povertyRate"], "n/a (no PSA estimate)"), "cell"),
                   _p(_num(m["riskIndex"], 4), "cell")]
                  for i, m in enumerate(municipalities)]
     flow.append(_data_table(
@@ -569,6 +648,9 @@ def build_province_report(province_id: str, quarter: str,
     flow.append(PageBreak())
     flow += _section("News evidence")
     flow += _news_block(news, width)
+
+    flow += _section("Topic patterns in the news (descriptive)")
+    flow += _topics_block(svc.news_topics(code, quarter), width)
 
     flow += _section("Method")
     flow += _method_block(svc.model_performance())
@@ -588,7 +670,7 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     region = svc.region_forecast(quarter, withheld)
     provinces = svc.province_summary(quarter, withheld)
     published = [p for p in provinces if not p["withheld"]]
-    explain = svc.explainability_region(quarter)
+    explain = svc.explainability_region(quarter, withheld)
     news = svc.news(None, quarter, 1, 60)
 
     buf = io.BytesIO()
@@ -638,19 +720,20 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         width))
     flow.append(Spacer(1, 4 * mm))
 
+    with_class = any(p["riskLabel"] for p in published)  # the E31-family records carry no class label
     rows = [[_p(_escape(p["name"]), "cellb"),
              _p(_num(p["riskScore"], 4), "cell"),
              _p((p["riskLevel"] or "--").upper(), "cell"),
-             _p((p["riskLabel"] or "--").upper(), "cell"),
+             *([_p((p["riskLabel"] or "--").upper(), "cell")] if with_class else []),
              _p(_signed(p["qoqChange"]), "cell"),
-             _p(f"{p['povertyRate']}%", "cell"),
+             _p(_pct_text(p["povertyRate"]), "cell"),
              _p(str(p["articleCount"]), "cell")]
             for p in sorted(published, key=lambda x: x["riskScore"], reverse=True)]
-    flow.append(_data_table(
-        ["Province", "Probability", "Level", "Class", "QoQ", "Poverty", "Articles"],
-        rows,
-        [width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm],
-        {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT", 6: "RIGHT"}))
+    head = ["Province", "Probability", "Level", *(["Class"] if with_class else []), "QoQ", "Poverty", "Articles"]
+    widths = ([width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm] if with_class else
+              [width - 98 * mm, 20 * mm, 18 * mm, 22 * mm, 20 * mm, 18 * mm])
+    flow.append(_data_table(head, rows, widths,
+                            {i: "RIGHT" for i in range(1, len(head)) if head[i] not in ("Level", "Class")}))
 
     flow += [Spacer(1, 4 * mm), _p(
         "Poverty incidence and availability shock are different signals and do not "
@@ -664,6 +747,9 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
 
     flow += _section("News evidence")
     flow += _news_block(news, width)
+
+    flow += _section("Topic patterns in the news (descriptive)")
+    flow += _topics_block(svc.news_topics(None, quarter), width)
 
     flow += _section("Method")
     flow += _method_block(svc.model_performance())

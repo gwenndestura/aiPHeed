@@ -1,0 +1,788 @@
+{
+ "artifact_sha256": "0ee6ff54877e0ff1cf151cccb824a05faab393ed60a057f594f5398c283c8f8f",
+ "baselines": {
+  "ALWAYS_HIGH": {
+   "p_high": {
+    "PH040100000": 1.0,
+    "PH040200000": 1.0,
+    "PH040300000": 1.0,
+    "PH040400000": 1.0,
+    "PH040500000": 1.0
+   }
+  },
+  "B1_PERSISTENCE": {
+   "p_high": {
+    "PH040100000": 1.0,
+    "PH040200000": 1.0,
+    "PH040300000": 1.0,
+    "PH040400000": 1.0,
+    "PH040500000": 0.0
+   }
+  },
+  "B1p_CAL_PERSISTENCE": {
+   "p_high": {
+    "PH040100000": 0.9375,
+    "PH040200000": 0.9375,
+    "PH040300000": 0.9375,
+    "PH040400000": 0.9375,
+    "PH040500000": 0.3870967741935484
+   }
+  },
+  "B2_LR_COMB": {
+   "p_high": {
+    "PH040100000": 0.8956412300603213,
+    "PH040200000": 0.9396944822280561,
+    "PH040300000": 0.9689822545109161,
+    "PH040400000": 0.8973140085572052,
+    "PH040500000": 0.25392818511508175
+   }
+  },
+  "B3_LR_GOV": {
+   "p_high": {
+    "PH040100000": 0.7564840567992505,
+    "PH040200000": 0.9803297495033313,
+    "PH040300000": 0.923392728447317,
+    "PH040400000": 0.870022021130567,
+    "PH040500000": 0.2037675679204721
+   }
+  },
+  "B4_LR_NLP": {
+   "p_high": {
+    "PH040100000": 0.8491847997218139,
+    "PH040200000": 0.8347450960716054,
+    "PH040300000": 0.8491847997218139,
+    "PH040400000": 0.7907420785994219,
+    "PH040500000": 0.8491847997218139
+   }
+  },
+  "B5_LGBM_GOV": {
+   "config": "GOVxG1",
+   "p_high": {
+    "PH040100000": 0.9336027053922372,
+    "PH040200000": 0.965010146375293,
+    "PH040300000": 0.965010146375293,
+    "PH040400000": 0.965010146375293,
+    "PH040500000": 0.3413114272205934
+   }
+  },
+  "B6_LGBM_NLP": {
+   "config": "NLPxG3",
+   "p_high": {
+    "PH040100000": 0.7844045269295,
+    "PH040200000": 0.7893347511750033,
+    "PH040300000": 0.7844045269295,
+    "PH040400000": 0.8093140030966821,
+    "PH040500000": 0.7844045269295
+   }
+  },
+  "CLIMATOLOGY": {
+   "p_high": {
+    "PH040100000": 0.7272727272727273,
+    "PH040200000": 0.7272727272727273,
+    "PH040300000": 0.7272727272727273,
+    "PH040400000": 0.7272727272727273,
+    "PH040500000": 0.7272727272727273
+   }
+  },
+  "PCF21": {
+   "p_high": {
+    "PH040100000": 0.781501266382163,
+    "PH040200000": 0.7309156845456716,
+    "PH040300000": 0.7897035939312584,
+    "PH040400000": 0.7558182726616252,
+    "PH040500000": 0.5324019040177551
+   }
+  }
+ },
+ "config": "COMB_T5xG2",
+ "feature_availability": {
+  "D_last": "PSA food CPI of 2026-Q2",
+  "Dnow/rice_rel": "PSA food and rice CPI, months 1-2 of 2026-Q3",
+  "H_last/H_trend/H_margin": "SWS rounds posted before the origin; latest quarter 2026-Q2",
+  "news": "validated (R1.1) articles published in 2026-Q3 (FORECAST rule: evidence quarter = target - 1)",
+  "trig_*": "news titles published in 2026-Q3 (trigger classifier shares)",
+  "y_last": "label of 2026-Q2 (latest quarter whose SWS rounds were posted before the origin)"
+ },
+ "frozen_at_utc": "2026-10-15T21:39:03Z",
+ "information_cutoff": "2026-10-01T00:00:00+08:00 (exclusive)",
+ "lead": 1,
+ "mode": "FORECAST",
+ "model_id": "aiPHeed-E48-A1-LGBM",
+ "origin": "2026-10-01",
+ "provinces": {
+  "PH040100000": {
+   "drivers": [
+    {
+     "contribution": -0.8151477646652122,
+     "factor": "Share of the province's news titles about climate and weather",
+     "key": "trig_climate",
+     "source": "news",
+     "value": 0.15789473684210525
+    },
+    {
+     "contribution": 0.6503398270045608,
+     "factor": "Latest regional hunger rate (SWS Balance Luzon)",
+     "key": "H_last",
+     "source": "government",
+     "value": 17.3
+    },
+    {
+     "contribution": -0.5866094012250358,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.5505219414422307,
+     "factor": "Latest published risk label for the province",
+     "key": "y_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.5341869965051727,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.0599999999999999
+    },
+    {
+     "contribution": -0.49157355221075605,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.3282045177858127,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.8666666666666671
+    },
+    {
+     "contribution": 0.22655862017292505,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": -0.1843132454558517,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.1479459820391787,
+     "factor": "Province rice-price inflation relative to the regional mean",
+     "key": "rice_rel",
+     "source": "government",
+     "value": 6.09
+    },
+    {
+     "contribution": 0.04593457599956954,
+     "factor": "Quarters between the latest hunger survey and the forecast quarter",
+     "key": "H_gap",
+     "source": "government",
+     "value": 2.0
+    },
+    {
+     "contribution": 0.0232048493197488,
+     "factor": "Relevant food-insecurity news about the province (count)",
+     "key": "news_n",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.01800483588886294,
+     "factor": "No FSSI evidence for the province this quarter",
+     "key": "fssi_missing",
+     "source": "news",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news directly about food",
+     "key": "news_direct_share",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about market and food prices",
+     "key": "trig_market",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about employment",
+     "key": "trig_employment",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about OFW remittances",
+     "key": "trig_ofw_remittance",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about fish kills",
+     "key": "trig_fish_kill",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 2.665493302467255,
+   "p_high": 0.9574156775927342,
+   "persistence_p": 1.0,
+   "province": "Cavite"
+  },
+  "PH040200000": {
+   "drivers": [
+    {
+     "contribution": -1.6030279114224955,
+     "factor": "Share of the province's news titles about climate and weather",
+     "key": "trig_climate",
+     "source": "news",
+     "value": 0.23076923076923078
+    },
+    {
+     "contribution": 1.077203651963586,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.4600000000000001
+    },
+    {
+     "contribution": -0.6000008519130643,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": -0.5478288475011904,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.5302785815570168,
+     "factor": "Latest published risk label for the province",
+     "key": "y_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.5117909410766707,
+     "factor": "Province rice-price inflation relative to the regional mean",
+     "key": "rice_rel",
+     "source": "government",
+     "value": -8.71
+    },
+    {
+     "contribution": 0.5015864412671293,
+     "factor": "Latest regional hunger rate (SWS Balance Luzon)",
+     "key": "H_last",
+     "source": "government",
+     "value": 17.3
+    },
+    {
+     "contribution": 0.3277991175408683,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.1000000000000005
+    },
+    {
+     "contribution": 0.21718483721734472,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.505386
+    },
+    {
+     "contribution": -0.19275925684377854,
+     "factor": "Relevant food-insecurity news about the province (count)",
+     "key": "news_n",
+     "source": "news",
+     "value": 2.0794415416798357
+    },
+    {
+     "contribution": -0.11580944359716945,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.04423783304796627,
+     "factor": "Quarters between the latest hunger survey and the forecast quarter",
+     "key": "H_gap",
+     "source": "government",
+     "value": 2.0
+    },
+    {
+     "contribution": -0.04115391060311529,
+     "factor": "No FSSI evidence for the province this quarter",
+     "key": "fssi_missing",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news directly about food",
+     "key": "news_direct_share",
+     "source": "news",
+     "value": 0.5714285714285714
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about market and food prices",
+     "key": "trig_market",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about employment",
+     "key": "trig_employment",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about OFW remittances",
+     "key": "trig_ofw_remittance",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about fish kills",
+     "key": "trig_fish_kill",
+     "source": "news",
+     "value": 0.038461538461538464
+    }
+   ],
+   "expected_value_logodds": 2.665493302467255,
+   "p_high": 0.9413095202864251,
+   "persistence_p": 1.0,
+   "province": "Laguna"
+  },
+  "PH040300000": {
+   "drivers": [
+    {
+     "contribution": 1.6377961284463682,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 1.16
+    },
+    {
+     "contribution": -0.5652604844171686,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": -0.5513303851444816,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.5233126220824083,
+     "factor": "Latest regional hunger rate (SWS Balance Luzon)",
+     "key": "H_last",
+     "source": "government",
+     "value": 17.3
+    },
+    {
+     "contribution": 0.4805545067810932,
+     "factor": "Latest published risk label for the province",
+     "key": "y_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.35284946870217215,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.3036538229277622,
+     "factor": "Share of the province's news titles about climate and weather",
+     "key": "trig_climate",
+     "source": "news",
+     "value": 0.025
+    },
+    {
+     "contribution": 0.22090401559345613,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": -0.1843132454558517,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.15593020085923204,
+     "factor": "Province rice-price inflation relative to the regional mean",
+     "key": "rice_rel",
+     "source": "government",
+     "value": 4.24
+    },
+    {
+     "contribution": 0.04623258765451467,
+     "factor": "Quarters between the latest hunger survey and the forecast quarter",
+     "key": "H_gap",
+     "source": "government",
+     "value": 2.0
+    },
+    {
+     "contribution": 0.0232048493197488,
+     "factor": "Relevant food-insecurity news about the province (count)",
+     "key": "news_n",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.01800483588886294,
+     "factor": "No FSSI evidence for the province this quarter",
+     "key": "fssi_missing",
+     "source": "news",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news directly about food",
+     "key": "news_direct_share",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about market and food prices",
+     "key": "trig_market",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about employment",
+     "key": "trig_employment",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about OFW remittances",
+     "key": "trig_ofw_remittance",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about fish kills",
+     "key": "trig_fish_kill",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 2.665493302467255,
+   "p_high": 0.9941008607797163,
+   "persistence_p": 1.0,
+   "province": "Quezon"
+  },
+  "PH040400000": {
+   "drivers": [
+    {
+     "contribution": -1.6030279114224955,
+     "factor": "Share of the province's news titles about climate and weather",
+     "key": "trig_climate",
+     "source": "news",
+     "value": 0.25
+    },
+    {
+     "contribution": 1.1827240211243082,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": 0.5099999999999999
+    },
+    {
+     "contribution": -0.5795958896967441,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.5505219414422307,
+     "factor": "Latest published risk label for the province",
+     "key": "y_last",
+     "source": "government",
+     "value": 1.0
+    },
+    {
+     "contribution": -0.5492245140980817,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.5185174627394298,
+     "factor": "Latest regional hunger rate (SWS Balance Luzon)",
+     "key": "H_last",
+     "source": "government",
+     "value": 17.3
+    },
+    {
+     "contribution": 0.31336339151813436,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": 0.4666666666666668
+    },
+    {
+     "contribution": 0.21718483721734472,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": -0.1843132454558517,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.15593020085923204,
+     "factor": "Province rice-price inflation relative to the regional mean",
+     "key": "rice_rel",
+     "source": "government",
+     "value": 3.790000000000001
+    },
+    {
+     "contribution": 0.04623258765451467,
+     "factor": "Quarters between the latest hunger survey and the forecast quarter",
+     "key": "H_gap",
+     "source": "government",
+     "value": 2.0
+    },
+    {
+     "contribution": 0.0232048493197488,
+     "factor": "Relevant food-insecurity news about the province (count)",
+     "key": "news_n",
+     "source": "news",
+     "value": 1.0986122886681098
+    },
+    {
+     "contribution": 0.01800483588886294,
+     "factor": "No FSSI evidence for the province this quarter",
+     "key": "fssi_missing",
+     "source": "news",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news directly about food",
+     "key": "news_direct_share",
+     "source": "news",
+     "value": 0.5
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about market and food prices",
+     "key": "trig_market",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about employment",
+     "key": "trig_employment",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about OFW remittances",
+     "key": "trig_ofw_remittance",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about fish kills",
+     "key": "trig_fish_kill",
+     "source": "news",
+     "value": 0.025
+    }
+   ],
+   "expected_value_logodds": 2.665493302467255,
+   "p_high": 0.9413107017256244,
+   "persistence_p": 1.0,
+   "province": "Rizal"
+  },
+  "PH040500000": {
+   "drivers": [
+    {
+     "contribution": -2.7917398007563476,
+     "factor": "Province food-price pressure in the first two months of this quarter",
+     "key": "Dnow",
+     "source": "government",
+     "value": -2.19
+    },
+    {
+     "contribution": -1.4021178929680145,
+     "factor": "Latest published risk label for the province",
+     "key": "y_last",
+     "source": "government",
+     "value": 0.0
+    },
+    {
+     "contribution": -0.9332188676758637,
+     "factor": "Latest regional hunger relative to the HIGH threshold",
+     "key": "H_margin",
+     "source": "government",
+     "value": 2.3066666666666666
+    },
+    {
+     "contribution": 0.6980253583235017,
+     "factor": "Province rice-price inflation relative to the regional mean",
+     "key": "rice_rel",
+     "source": "government",
+     "value": -5.409999999999999
+    },
+    {
+     "contribution": 0.5941875500396717,
+     "factor": "Latest regional hunger rate (SWS Balance Luzon)",
+     "key": "H_last",
+     "source": "government",
+     "value": 17.3
+    },
+    {
+     "contribution": -0.47638630355530726,
+     "factor": "Province food-price pressure last quarter (PSA food CPI)",
+     "key": "D_last",
+     "source": "government",
+     "value": -2.4333333333333327
+    },
+    {
+     "contribution": -0.3673303301403086,
+     "factor": "Change in regional hunger between the two latest surveys",
+     "key": "H_trend",
+     "source": "government",
+     "value": -5.099999999999998
+    },
+    {
+     "contribution": 0.2342261570683557,
+     "factor": "Share of the province's news titles about climate and weather",
+     "key": "trig_climate",
+     "source": "news",
+     "value": 0.0273972602739726
+    },
+    {
+     "contribution": 0.13933807980816929,
+     "factor": "Food Stress Sentiment Index (FSSI-v2)",
+     "key": "fssi_v2",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.04276136155857958,
+     "factor": "Quarters between the latest hunger survey and the forecast quarter",
+     "key": "H_gap",
+     "source": "government",
+     "value": 2.0
+    },
+    {
+     "contribution": -0.028686356998053136,
+     "factor": "Relevant food-insecurity news in the region (count)",
+     "key": "news_reg",
+     "source": "news",
+     "value": 2.302585092994046
+    },
+    {
+     "contribution": 0.014159135220015356,
+     "factor": "Relevant food-insecurity news about the province (count)",
+     "key": "news_n",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.00684481364369996,
+     "factor": "No FSSI evidence for the province this quarter",
+     "key": "fssi_missing",
+     "source": "news",
+     "value": 1.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news directly about food",
+     "key": "news_direct_share",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about market and food prices",
+     "key": "trig_market",
+     "source": "news",
+     "value": 0.0136986301369863
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about employment",
+     "key": "trig_employment",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about OFW remittances",
+     "key": "trig_ofw_remittance",
+     "source": "news",
+     "value": 0.0
+    },
+    {
+     "contribution": 0.0,
+     "factor": "Share of the province's news titles about fish kills",
+     "key": "trig_fish_kill",
+     "source": "news",
+     "value": 0.0
+    }
+   ],
+   "expected_value_logodds": 2.665493302467255,
+   "p_high": 0.16736144939689693,
+   "persistence_p": 0.0,
+   "province": "Batangas"
+  }
+ },
+ "quarter": "2026-Q4",
+ "scoring": "preview only; not a served forecast",
+ "tau": 14.993333333333334,
+ "version": "E48.A1"
+}

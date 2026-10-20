@@ -1,0 +1,39 @@
+{
+ "created_utc": "2026-10-17T13:37:05Z",
+ "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+ "algorithm": "BERTopic (UMAP 5d cosine, HDBSCAN eom, KeyBERT-inspired representation, CountVectorizer 1-2 grams, English stop words)",
+ "seed": 42,
+ "stability_seeds": [
+  43,
+  44
+ ],
+ "min_topic_size": 10,
+ "articles": "authorized, title-geocoded to a CALABARZON province, XLM-R score >= 0.3",
+ "scoring_model_key": "joeddav/xlm-roberta-large-xnli@b227ee8435ce|clf:35119d382e163448",
+ "quarters": [
+  "2021-Q1",
+  "2026-Q4"
+ ],
+ "n_articles": 55,
+ "use": "Descriptive only: what the news talked about, per province-quarter. Not a forecast feature: the topic model is fitted once on all authorized quarters, so later articles shape the topics of earlier quarters.",
+ "gate": {
+  "min_articles": 30,
+  "min_topics": 2,
+  "max_outlier_share": 0.5,
+  "min_stability_ari": 0.5
+ },
+ "n_topics": 2,
+ "outlier_share": 0.4,
+ "stability_ari": [
+  0.31126562070791314,
+  0.4489819692713929
+ ],
+ "stability_ari_mean": 0.380123794989653,
+ "topic_sizes": {
+  "-1": 22,
+  "0": 17,
+  "1": 16
+ },
+ "status": "UNSTABLE",
+ "reason": "publication gate failed: stability"
+}

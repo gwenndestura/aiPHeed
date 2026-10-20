@@ -33,6 +33,7 @@ actually acted on even if the model is later retrained.
 from __future__ import annotations
 
 import logging
+import os
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -297,6 +298,50 @@ async def list_rejections(db: AsyncSession, quarter: str | None = None) -> list[
 async def rejected_pairs(db: AsyncSession, quarter: str | None = None) -> set[tuple[str, str]]:
     """(province_id, quarter) pairs currently withheld."""
     return {(r.province_id, r.quarter) for r in await list_rejections(db, quarter)}
+
+
+# ---------------------------------------------------------------------------
+# Approval gate (p.67): "no forecasts or warnings appear on the public dashboard without human decision-making"
+# ---------------------------------------------------------------------------
+
+AWAITING_APPROVAL = "Awaiting DA approval"
+
+
+def approval_required() -> bool:
+    """AIPHEED_REQUIRE_APPROVAL=1: a province forecast is public only once a DA administrator approved it. Default 0:
+    forecasts are public unless rejected (pp.60, 66), the behaviour before this flag existed."""
+    return os.getenv("AIPHEED_REQUIRE_APPROVAL", "0").strip() == "1"
+
+
+def _gate_quarters(quarter: str | None) -> list[str]:
+    if quarter:
+        return [quarter]
+    qs = set()
+    for h in (svc.NOWCAST, svc.FORECAST):
+        try:
+            qs.update(svc.available_quarters(h))
+        except Exception:                                  # noqa: BLE001 - an engine without that horizon
+            pass
+    return sorted(qs, key=ref.quarter_index)
+
+
+async def unapproved_pairs(db: AsyncSession, quarter: str | None = None) -> set[tuple[str, str]]:
+    """(province_id, quarter) pairs without an approval (Published, or Archived after one) -- every province of the
+    quarter(s) when no review row exists yet. Empty unless approval_required()."""
+    if not approval_required():
+        return set()
+    query = select(ReviewRecord.province_id, ReviewRecord.quarter).where(
+        ReviewRecord.status.in_((PUBLISHED, ARCHIVED)))
+    if quarter:
+        query = query.where(ReviewRecord.quarter == quarter)
+    approved = {(p, q) for p, q in (await db.execute(query)).all()}
+    return {(slug, q) for q in _gate_quarters(quarter) for slug in ref.PROVINCES if (slug, q) not in approved}
+
+
+async def withheld_pairs(db: AsyncSession, quarter: str | None = None) -> set[tuple[str, str]]:
+    """What the public surfaces hold back: rejected pairs, plus (with AIPHEED_REQUIRE_APPROVAL=1) unapproved ones.
+    With the flag off this is exactly rejected_pairs."""
+    return await rejected_pairs(db, quarter) | await unapproved_pairs(db, quarter)
 
 
 async def is_rejected(db: AsyncSession, province_id: str, quarter: str) -> ReviewRecord | None:

@@ -1,0 +1,329 @@
+{
+ "reproduction_max_abs_p_vs_stored_E53": 0.0,
+ "coverage_vs_served_E53_mismatching_cells": 0,
+ "arms": {
+  "E53-A1": {
+   "correct": 51,
+   "n": 65,
+   "acc": 0.7846153846153846,
+   "acc_ci95_bootstrap": [
+    0.6307692307692307,
+    0.9076923076923077
+   ],
+   "bal": 0.8356918238993711,
+   "f1": 0.851063829787234,
+   "auc": 0.8797169811320755,
+   "brier": 0.15013447067360264,
+   "ece": 0.18820726443938457,
+   "TP": 40,
+   "FN": 13,
+   "FP": 1,
+   "TN": 11,
+   "coverage_cells_below_1pct": 109,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "additivity_max": 6.217248937900877e-15
+  },
+  "E68-FS05": {
+   "correct": 52,
+   "n": 65,
+   "acc": 0.8,
+   "acc_ci95_bootstrap": [
+    0.6923076923076923,
+    0.8923076923076924
+   ],
+   "bal": 0.8128930817610063,
+   "f1": 0.865979381443299,
+   "auc": 0.8443396226415095,
+   "brier": 0.1663329344478104,
+   "ece": 0.21913380457233844,
+   "TP": 42,
+   "FN": 11,
+   "FP": 2,
+   "TN": 10,
+   "coverage_cells_below_1pct": 99,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2025-Q1",
+    "2026-Q2",
+    "2026-Q3",
+    "2026-Q4"
+   ],
+   "additivity_max": 7.993605777301127e-15,
+   "rule": {
+    "1_no_leakage": true,
+    "2_accuracy_gt_E53": true,
+    "3_brier_le_E53": false,
+    "4_all_five_ge_1pct": false,
+    "5_shap_checks": true
+   },
+   "passes": false
+  },
+  "E68-TRIM": {
+   "correct": 48,
+   "n": 65,
+   "acc": 0.7384615384615385,
+   "acc_ci95_bootstrap": [
+    0.6,
+    0.8615384615384616
+   ],
+   "bal": 0.7751572327044025,
+   "f1": 0.8172043010752688,
+   "auc": 0.8734276729559749,
+   "brier": 0.16233781229817576,
+   "ece": 0.20779437716246163,
+   "TP": 38,
+   "FN": 15,
+   "FP": 2,
+   "TN": 10,
+   "coverage_cells_below_1pct": 176,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "additivity_max": 4.440892098500626e-15,
+   "rule": {
+    "1_no_leakage": true,
+    "2_accuracy_gt_E53": false,
+    "3_brier_le_E53": false,
+    "4_all_five_ge_1pct": false,
+    "5_shap_checks": true
+   },
+   "passes": false
+  },
+  "E68-MONO": {
+   "correct": 52,
+   "n": 65,
+   "acc": 0.8,
+   "acc_ci95_bootstrap": [
+    0.6615384615384615,
+    0.9230769230769231
+   ],
+   "bal": 0.845125786163522,
+   "f1": 0.863157894736842,
+   "auc": 0.8828616352201258,
+   "brier": 0.15166782857262828,
+   "ece": 0.19134715385953846,
+   "TP": 41,
+   "FN": 12,
+   "FP": 1,
+   "TN": 11,
+   "coverage_cells_below_1pct": 106,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2026-Q1",
+    "2026-Q2"
+   ],
+   "additivity_max": 3.9968028886505635e-15,
+   "rule": {
+    "1_no_leakage": true,
+    "2_accuracy_gt_E53": true,
+    "3_brier_le_E53": false,
+    "4_all_five_ge_1pct": false,
+    "5_shap_checks": true
+   },
+   "passes": false
+  },
+  "E68-SLOW": {
+   "correct": 51,
+   "n": 65,
+   "acc": 0.7846153846153846,
+   "acc_ci95_bootstrap": [
+    0.6307692307692307,
+    0.9076923076923077
+   ],
+   "bal": 0.8356918238993711,
+   "f1": 0.851063829787234,
+   "auc": 0.8797169811320754,
+   "brier": 0.15136428572767258,
+   "ece": 0.1901245671552308,
+   "TP": 40,
+   "FN": 13,
+   "FP": 1,
+   "TN": 11,
+   "coverage_cells_below_1pct": 116,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2025-Q1",
+    "2026-Q2",
+    "2026-Q3",
+    "2026-Q4"
+   ],
+   "additivity_max": 8.715250743307479e-15,
+   "rule": {
+    "1_no_leakage": true,
+    "2_accuracy_gt_E53": false,
+    "3_brier_le_E53": false,
+    "4_all_five_ge_1pct": false,
+    "5_shap_checks": true
+   },
+   "passes": false
+  },
+  "E68-COMBO": {
+   "correct": 56,
+   "n": 65,
+   "acc": 0.8615384615384616,
+   "acc_ci95_bootstrap": [
+    0.7692307692307693,
+    0.9538461538461539
+   ],
+   "bal": 0.8828616352201257,
+   "f1": 0.9090909090909092,
+   "auc": 0.8789308176100629,
+   "brier": 0.13988291239636147,
+   "ece": 0.2010389466496923,
+   "TP": 45,
+   "FN": 8,
+   "FP": 1,
+   "TN": 11,
+   "coverage_cells_below_1pct": 81,
+   "coverage_quarters_failing": [
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2026-Q3",
+    "2026-Q4"
+   ],
+   "additivity_max": 4.440892098500626e-15,
+   "rule": {
+    "1_no_leakage": true,
+    "2_accuracy_gt_E53": true,
+    "3_brier_le_E53": true,
+    "4_all_five_ge_1pct": false,
+    "5_shap_checks": true
+   },
+   "passes": false
+  }
+ },
+ "tests": [
+  {
+   "arm": "E68-FS05",
+   "vs": "E53",
+   "dBrier": 0.01619846377420775,
+   "p": 0.30105,
+   "quarter_wins": 4,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-FS05",
+   "vs": "PERSIST",
+   "dBrier": 0.0432560113708873,
+   "p": 0.30245,
+   "quarter_wins": 4,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-TRIM",
+   "vs": "E53",
+   "dBrier": 0.012203341624573134,
+   "p": 0.1822,
+   "quarter_wins": 1,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-TRIM",
+   "vs": "PERSIST",
+   "dBrier": 0.03926088922125269,
+   "p": 0.28015,
+   "quarter_wins": 3,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-MONO",
+   "vs": "E53",
+   "dBrier": 0.001533357899025689,
+   "p": 0.53165,
+   "quarter_wins": 3,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-MONO",
+   "vs": "PERSIST",
+   "dBrier": 0.028590905495705237,
+   "p": 0.4017,
+   "quarter_wins": 3,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-SLOW",
+   "vs": "E53",
+   "dBrier": 0.0012298150540699321,
+   "p": 0.79005,
+   "quarter_wins": 5,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-SLOW",
+   "vs": "PERSIST",
+   "dBrier": 0.02828736265074949,
+   "p": 0.41685,
+   "quarter_wins": 3,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-COMBO",
+   "vs": "E53",
+   "dBrier": -0.010251558277241156,
+   "p": 0.40945,
+   "quarter_wins": 7,
+   "quarters": 13,
+   "p_holm": 1.0
+  },
+  {
+   "arm": "E68-COMBO",
+   "vs": "PERSIST",
+   "dBrier": 0.016805989319438393,
+   "p": 0.5964,
+   "quarter_wins": 3,
+   "quarters": 13,
+   "p_holm": 1.0
+  }
+ ],
+ "passing": []
+}

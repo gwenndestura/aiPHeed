@@ -13,6 +13,7 @@ class AlertRecord(BaseModel):
     # E31: why the candidate exists and what it is (and is not)
     dismissed: bool = False
     alert_reason: str | None = None
+    reason_text: str | None = None       # what the reason code means (incl. Rule 7 rolling threshold definition)
     prev_risk_probability: float | None = None
     risk_delta: float | None = None
     statement: str = ("Model-generated early-warning candidate for review by DA Region IV-A. Not an official "

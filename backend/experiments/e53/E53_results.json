@@ -1,0 +1,1179 @@
+{
+ "lead": 1,
+ "test_quarters": [
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "n_test_rows": 65,
+ "training_rows_Q4_origin": 75,
+ "feature_stats_training_Q4_origin": {
+  "cond_market": {
+   "variance": 792.2161063375274,
+   "distinct": 51,
+   "missing": 0
+  },
+  "cond_climate": {
+   "variance": 1123.7670782398716,
+   "distinct": 29,
+   "missing": 0
+  },
+  "cond_fish": {
+   "variance": 1253.77689604019,
+   "distinct": 33,
+   "missing": 0
+  },
+  "cond_employment": {
+   "variance": 719.7103482477203,
+   "distinct": 12,
+   "missing": 0
+  },
+  "cond_ofw": {
+   "variance": 1892.743654633206,
+   "distinct": 11,
+   "missing": 15
+  },
+  "trig_market": {
+   "variance": 5.1114968699378056e-05,
+   "distinct": 5,
+   "missing": 0
+  },
+  "trig_climate": {
+   "variance": 0.007682482835947234,
+   "distinct": 32,
+   "missing": 0
+  },
+  "trig_employment": {
+   "variance": 1.4814814814814818e-05,
+   "distinct": 2,
+   "missing": 0
+  },
+  "trig_ofw_remittance": {
+   "variance": 0.0,
+   "distinct": 1,
+   "missing": 0
+  },
+  "trig_fish_kill": {
+   "variance": 0.0007608089289290968,
+   "distinct": 4,
+   "missing": 0
+  }
+ },
+ "cond_q4_2026_test_rows": {
+  "Cavite": {
+   "cond_market": 90.5,
+   "cond_climate": 85.7,
+   "cond_fish": 0.0,
+   "cond_employment": 75.1,
+   "cond_ofw": 0.0
+  },
+  "Laguna": {
+   "cond_market": 61.9,
+   "cond_climate": 90.5,
+   "cond_fish": 47.6,
+   "cond_employment": 75.1,
+   "cond_ofw": 0.0
+  },
+  "Quezon": {
+   "cond_market": 76.2,
+   "cond_climate": 90.5,
+   "cond_fish": 42.9,
+   "cond_employment": 75.1,
+   "cond_ofw": 0.0
+  },
+  "Rizal": {
+   "cond_market": 66.7,
+   "cond_climate": 95.2,
+   "cond_fish": 57.1,
+   "cond_employment": 75.1,
+   "cond_ofw": 0.0
+  },
+  "Batangas": {
+   "cond_market": 33.3,
+   "cond_climate": 85.7,
+   "cond_fish": 0.0,
+   "cond_employment": 75.1,
+   "cond_ofw": 0.0
+  }
+ },
+ "arms": {
+  "A0": {
+   "pool_configs": {
+    "2023-Q1": "COMB_T5xG1",
+    "2023-Q2": "COMB_T5xG1",
+    "2023-Q3": "COMB_T5xG1",
+    "2023-Q4": "COMB_T5xG1",
+    "2024-Q1": "COMPACT_T5xG1",
+    "2024-Q2": "COMPACT_T5xG1",
+    "2024-Q3": "COMPACT_T5xG1",
+    "2024-Q4": "COMPACT_T5xG1",
+    "2025-Q1": "COMB_T5xG2",
+    "2025-Q4": "COMB_T5xG2",
+    "2026-Q1": "COMB_T5xG2",
+    "2026-Q2": "COMB_T5xG2",
+    "2026-Q3": "COMB_T5xG2",
+    "2026-Q4": "COMB_T5xG2"
+   },
+   "metrics": {
+    "accuracy": 0.8461538461538461,
+    "accuracy_ci95": [
+     0.7692307692307693,
+     0.9230769230769231
+    ],
+    "balanced_accuracy": 0.8411949685534592,
+    "auc": 0.8545597484276729,
+    "brier": 0.15087483651594955,
+    "log_loss": 0.48906329004068716,
+    "precision": 0.9574468085106383,
+    "LOW_caught": 10,
+    "LOW_rows": 12,
+    "TP": 45,
+    "FP": 2,
+    "max_p": 0.9451890172300603
+   },
+   "train_Q4_origin": {
+    "raw": {
+     "accuracy": 1.0,
+     "log_loss": 0.029565592114799605,
+     "n_p_ge_0.99": 31,
+     "mean_p": 0.7332825492588572
+    },
+    "calibrated": {
+     "accuracy": 1.0,
+     "log_loss": 0.1525805284418817,
+     "n_p_ge_0.99": 0,
+     "mean_p": 0.7314796026630184
+    }
+   },
+   "mean_five_driver_pct_65_rows": {
+    "market": 78.66708062283801,
+    "climate": 13.589961967815158,
+    "fish_kill": 0.05064971703913768,
+    "employment": 0.0,
+    "ofw_remittance": 0.0
+   },
+   "mean_pct_with_other_65_rows": {
+    "market": 48.82976212935912,
+    "climate": 5.135486459644051,
+    "fish_kill": 0.009318875227095316,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 38.333124843462045
+   },
+   "drivers_nonzero": [
+    "market",
+    "climate",
+    "fish_kill"
+   ],
+   "splits_cond_Q4_model": {
+    "cond_market": 0,
+    "cond_climate": 0,
+    "cond_fish": 0,
+    "cond_employment": 0,
+    "cond_ofw": 0,
+    "trig_market": 0,
+    "trig_climate": 36,
+    "trig_employment": 0,
+    "trig_ofw_remittance": 0,
+    "trig_fish_kill": 0
+   },
+   "splits_cond_sum_13_test_models": {
+    "cond_market": 0,
+    "cond_climate": 0,
+    "cond_fish": 0,
+    "cond_employment": 0,
+    "cond_ofw": 0
+   },
+   "q4_2026": {
+    "index": {
+     "CALABARZON": 0.7783915675512139,
+     "Cavite": 0.8883727924967322,
+     "Laguna": 0.8770984823823158,
+     "Quezon": 0.9140524207276196,
+     "Rizal": 0.8770993093897552,
+     "Batangas": 0.33533483275964604
+    },
+    "drivers": {
+     "CALABARZON": {
+      "a": {
+       "market": 65,
+       "climate": 33,
+       "fish_kill": 2,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 33,
+       "climate": 16,
+       "fish_kill": 1,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 50
+      }
+     },
+     "Cavite": {
+      "a": {
+       "market": 53,
+       "climate": 44,
+       "fish_kill": 3,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 22,
+       "climate": 18,
+       "fish_kill": 1,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 59
+      },
+      "direct": {
+       "market": 1.0103,
+       "climate": 0.8151,
+       "fish_kill": 0.0,
+       "employment": 0.0,
+       "ofw_remittance": 0.0
+      },
+      "top_shap": {
+       "trig_climate": -0.815,
+       "H_last": 0.65,
+       "H_trend": -0.587,
+       "y_last": 0.551,
+       "Dnow": 0.534
+      }
+     },
+     "Laguna": {
+      "a": {
+       "market": 52,
+       "climate": 45,
+       "fish_kill": 3,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 30,
+       "climate": 26,
+       "fish_kill": 2,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 42
+      },
+      "direct": {
+       "market": 1.9168,
+       "climate": 1.603,
+       "fish_kill": 0.0,
+       "employment": 0.0,
+       "ofw_remittance": 0.0
+      },
+      "top_shap": {
+       "trig_climate": -1.603,
+       "Dnow": 1.077,
+       "H_trend": -0.6,
+       "H_margin": -0.548,
+       "y_last": 0.53
+      }
+     },
+     "Quezon": {
+      "a": {
+       "market": 85,
+       "climate": 13,
+       "fish_kill": 2,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 42,
+       "climate": 7,
+       "fish_kill": 1,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 50
+      },
+      "direct": {
+       "market": 2.1466,
+       "climate": 0.3037,
+       "fish_kill": 0.0,
+       "employment": 0.0,
+       "ofw_remittance": 0.0
+      },
+      "top_shap": {
+       "Dnow": 1.638,
+       "H_trend": -0.565,
+       "H_margin": -0.551,
+       "H_last": 0.523,
+       "y_last": 0.481
+      }
+     },
+     "Rizal": {
+      "a": {
+       "market": 49,
+       "climate": 49,
+       "fish_kill": 2,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 28,
+       "climate": 27,
+       "fish_kill": 1,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 44
+      },
+      "direct": {
+       "market": 1.652,
+       "climate": 1.603,
+       "fish_kill": 0.0,
+       "employment": 0.0,
+       "ofw_remittance": 0.0
+      },
+      "top_shap": {
+       "trig_climate": -1.603,
+       "Dnow": 1.183,
+       "H_trend": -0.58,
+       "y_last": 0.551,
+       "H_margin": -0.549
+      }
+     },
+     "Batangas": {
+      "a": {
+       "market": 91,
+       "climate": 9,
+       "fish_kill": 0,
+       "employment": 0,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 41,
+       "climate": 4,
+       "fish_kill": 0,
+       "employment": 0,
+       "ofw_remittance": 0,
+       "other": 55
+      },
+      "direct": {
+       "market": 2.5701,
+       "climate": 0.2342,
+       "fish_kill": 0.0,
+       "employment": 0.0,
+       "ofw_remittance": 0.0
+      },
+      "top_shap": {
+       "Dnow": -2.792,
+       "y_last": -1.402,
+       "H_margin": -0.933,
+       "rice_rel": 0.698,
+       "H_last": 0.594
+      }
+     },
+     "shap_expected_value_logodds": 2.665493302467255
+    }
+   },
+   "index": {
+    "2023-Q1": 0.4,
+    "2023-Q2": 0.5859575280210798,
+    "2023-Q3": 0.35601778148719515,
+    "2023-Q4": 0.5342014047198707,
+    "2024-Q1": 0.38875407454815036,
+    "2024-Q2": 0.6038329872988666,
+    "2024-Q3": 0.5591963712719135,
+    "2024-Q4": 0.5991906765034754,
+    "2025-Q1": 0.812269133477346,
+    "2025-Q4": 0.9068255454758856,
+    "2026-Q1": 0.9065839939968401,
+    "2026-Q2": 0.8728347317175251,
+    "2026-Q3": 0.9118723333482551,
+    "2026-Q4": 0.7783915675512139
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 1.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.85,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.75,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.7,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.7,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.7,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.65,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.7,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.7,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "adoption": {
+    "criteria": {
+     "balanced_accuracy_ge_0.83": true,
+     "auc_ge_0.84": true,
+     "brier_le_0.16": true,
+     "LOW_caught_ge_10": true
+    },
+    "eligible": true
+   }
+  },
+  "A1": {
+   "pool_configs": {
+    "2023-Q1": "COMB_T5_CxG1",
+    "2023-Q2": "COMB_T5_CxG1",
+    "2023-Q3": "COMB_T5_CxG1",
+    "2023-Q4": "COMB_T5_CxG1",
+    "2024-Q1": "COMPACT_T5_CxG1",
+    "2024-Q2": "COMPACT_T5_CxG1",
+    "2024-Q3": "COMPACT_T5_CxG1",
+    "2024-Q4": "COMPACT_T5_CxG1",
+    "2025-Q1": "COMB_T5_CxG2",
+    "2025-Q4": "COMB_T5_CxG2",
+    "2026-Q1": "COMB_T5_CxG2",
+    "2026-Q2": "COMB_T5_CxG2",
+    "2026-Q3": "COMB_T5_CxG2",
+    "2026-Q4": "COMB_T5_CxG2"
+   },
+   "metrics": {
+    "accuracy": 0.7846153846153846,
+    "accuracy_ci95": [
+     0.6461538461538462,
+     0.9076923076923077
+    ],
+    "balanced_accuracy": 0.8356918238993711,
+    "auc": 0.8797169811320755,
+    "brier": 0.15013447067116673,
+    "log_loss": 0.48201292169211973,
+    "precision": 0.975609756097561,
+    "LOW_caught": 11,
+    "LOW_rows": 12,
+    "TP": 40,
+    "FP": 1,
+    "max_p": 0.9559085493226369
+   },
+   "train_Q4_origin": {
+    "raw": {
+     "accuracy": 1.0,
+     "log_loss": 0.01713910622558801,
+     "n_p_ge_0.99": 33,
+     "mean_p": 0.7332765287020044
+    },
+    "calibrated": {
+     "accuracy": 1.0,
+     "log_loss": 0.14239341585086734,
+     "n_p_ge_0.99": 0,
+     "mean_p": 0.7314753882732212
+    }
+   },
+   "mean_five_driver_pct_65_rows": {
+    "market": 67.24491161554415,
+    "climate": 4.425080081745649,
+    "fish_kill": 3.3548209270335785,
+    "employment": 11.851701161487226,
+    "ofw_remittance": 5.431178521881699
+   },
+   "mean_pct_with_other_65_rows": {
+    "market": 52.33504409227751,
+    "climate": 3.1751461068668334,
+    "fish_kill": 1.8884249199805474,
+    "employment": 6.5020523435373,
+    "ofw_remittance": 4.417176727080427,
+    "other": 23.989848117949688
+   },
+   "drivers_nonzero": [
+    "market",
+    "climate",
+    "fish_kill",
+    "employment",
+    "ofw_remittance"
+   ],
+   "splits_cond_Q4_model": {
+    "cond_market": 44,
+    "cond_climate": 42,
+    "cond_fish": 26,
+    "cond_employment": 43,
+    "cond_ofw": 3,
+    "trig_market": 0,
+    "trig_climate": 6,
+    "trig_employment": 0,
+    "trig_ofw_remittance": 0,
+    "trig_fish_kill": 0
+   },
+   "splits_cond_sum_13_test_models": {
+    "cond_market": 229,
+    "cond_climate": 202,
+    "cond_fish": 106,
+    "cond_employment": 232,
+    "cond_ofw": 68
+   },
+   "q4_2026": {
+    "index": {
+     "CALABARZON": 0.789347091942138,
+     "Cavite": 0.9164628171966144,
+     "Laguna": 0.9121569221735282,
+     "Quezon": 0.916858688671192,
+     "Rizal": 0.9173344123423309,
+     "Batangas": 0.2839226193270249
+    },
+    "drivers": {
+     "CALABARZON": {
+      "a": {
+       "market": 60,
+       "climate": 5,
+       "fish_kill": 14,
+       "employment": 19,
+       "ofw_remittance": 2
+      },
+      "b": {
+       "market": 39,
+       "climate": 3,
+       "fish_kill": 9,
+       "employment": 12,
+       "ofw_remittance": 1,
+       "other": 36
+      }
+     },
+     "Cavite": {
+      "a": {
+       "market": 58,
+       "climate": 3,
+       "fish_kill": 14,
+       "employment": 23,
+       "ofw_remittance": 2
+      },
+      "b": {
+       "market": 38,
+       "climate": 2,
+       "fish_kill": 9,
+       "employment": 15,
+       "ofw_remittance": 2,
+       "other": 34
+      },
+      "direct": {
+       "market": 1.8955,
+       "climate": 0.0935,
+       "fish_kill": 0.4339,
+       "employment": 0.7514,
+       "ofw_remittance": 0.0854
+      },
+      "top_shap": {
+       "Dnow": 1.002,
+       "y_last": 0.871,
+       "cond_employment": 0.751,
+       "cond_market": 0.5,
+       "cond_fish": -0.434
+      }
+     },
+     "Laguna": {
+      "a": {
+       "market": 51,
+       "climate": 9,
+       "fish_kill": 18,
+       "employment": 19,
+       "ofw_remittance": 3
+      },
+      "b": {
+       "market": 32,
+       "climate": 6,
+       "fish_kill": 11,
+       "employment": 12,
+       "ofw_remittance": 2,
+       "other": 37
+      },
+      "direct": {
+       "market": 1.6148,
+       "climate": 0.2737,
+       "fish_kill": 0.5571,
+       "employment": 0.6213,
+       "ofw_remittance": 0.0854
+      },
+      "top_shap": {
+       "Dnow": 1.427,
+       "y_last": 0.876,
+       "cond_employment": 0.621,
+       "cond_fish": -0.557,
+       "fssi_v2": 0.245
+      }
+     },
+     "Quezon": {
+      "a": {
+       "market": 67,
+       "climate": 1,
+       "fish_kill": 12,
+       "employment": 18,
+       "ofw_remittance": 2
+      },
+      "b": {
+       "market": 45,
+       "climate": 0,
+       "fish_kill": 8,
+       "employment": 13,
+       "ofw_remittance": 2,
+       "other": 32
+      },
+      "direct": {
+       "market": 2.393,
+       "climate": 0.0187,
+       "fish_kill": 0.3985,
+       "employment": 0.6633,
+       "ofw_remittance": 0.0854
+      },
+      "top_shap": {
+       "Dnow": 1.51,
+       "y_last": 0.871,
+       "cond_employment": 0.663,
+       "cond_market": 0.49,
+       "D_last": 0.402
+      }
+     },
+     "Rizal": {
+      "a": {
+       "market": 57,
+       "climate": 7,
+       "fish_kill": 15,
+       "employment": 19,
+       "ofw_remittance": 2
+      },
+      "b": {
+       "market": 39,
+       "climate": 5,
+       "fish_kill": 10,
+       "employment": 13,
+       "ofw_remittance": 2,
+       "other": 31
+      },
+      "direct": {
+       "market": 2.0873,
+       "climate": 0.2699,
+       "fish_kill": 0.538,
+       "employment": 0.6954,
+       "ofw_remittance": 0.0854
+      },
+      "top_shap": {
+       "Dnow": 1.458,
+       "y_last": 0.851,
+       "cond_employment": 0.695,
+       "cond_fish": 0.538,
+       "cond_market": 0.49
+      }
+     },
+     "Batangas": {
+      "a": {
+       "market": 66,
+       "climate": 5,
+       "fish_kill": 11,
+       "employment": 17,
+       "ofw_remittance": 1
+      },
+      "b": {
+       "market": 38,
+       "climate": 3,
+       "fish_kill": 6,
+       "employment": 10,
+       "ofw_remittance": 1,
+       "other": 42
+      },
+      "direct": {
+       "market": 2.7905,
+       "climate": 0.2043,
+       "fish_kill": 0.4482,
+       "employment": 0.7423,
+       "ofw_remittance": 0.0349
+      },
+      "top_shap": {
+       "y_last": -2.18,
+       "Dnow": -2.158,
+       "cond_employment": 0.742,
+       "D_last": -0.491,
+       "cond_fish": -0.448
+      }
+     },
+     "shap_expected_value_logodds": 2.7950423362649746
+    }
+   },
+   "index": {
+    "2023-Q1": 0.4,
+    "2023-Q2": 0.5859575280210798,
+    "2023-Q3": 0.35601778148719515,
+    "2023-Q4": 0.5342014047198707,
+    "2024-Q1": 0.39273701036243136,
+    "2024-Q2": 0.6461632430885491,
+    "2024-Q3": 0.468516892077692,
+    "2024-Q4": 0.5784773863651395,
+    "2025-Q1": 0.7599554978026295,
+    "2025-Q4": 0.8901547670602656,
+    "2026-Q1": 0.8913213384059959,
+    "2026-Q2": 0.7538333406413492,
+    "2026-Q3": 0.8959693722985046,
+    "2026-Q4": 0.789347091942138
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 1.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.85,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.75,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.65,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.65,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.65,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.6,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.65,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.7,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "brier_diff_vs_A0": -0.0007403658447827609,
+   "test_vs_A0": {
+    "mcnemar": {
+     "arm_only_correct": 1,
+     "ref_only_correct": 5,
+     "p_two_sided": 0.21875
+    },
+    "mcnemar_p_holm": 0.4375,
+    "signflip_brier_p": 0.8984375,
+    "signflip_brier_p_holm": 1.0
+   },
+   "adoption": {
+    "criteria": {
+     "balanced_accuracy_ge_0.83": true,
+     "auc_ge_0.84": true,
+     "brier_le_0.16": true,
+     "LOW_caught_ge_10": true
+    },
+    "eligible": true
+   }
+  },
+  "A2": {
+   "pool_configs": {
+    "2023-Q1": "COMB_CxG1",
+    "2023-Q2": "COMB_CxG1",
+    "2023-Q3": "COMB_CxG1",
+    "2023-Q4": "COMB_CxG1",
+    "2024-Q1": "COMPACT_CxG1",
+    "2024-Q2": "COMPACT_CxG1",
+    "2024-Q3": "COMPACT_CxG1",
+    "2024-Q4": "COMPACT_CxG1",
+    "2025-Q1": "COMB_CxG2",
+    "2025-Q4": "COMB_CxG2",
+    "2026-Q1": "COMB_CxG2",
+    "2026-Q2": "COMB_CxG2",
+    "2026-Q3": "COMB_CxG2",
+    "2026-Q4": "COMB_CxG2"
+   },
+   "metrics": {
+    "accuracy": 0.7846153846153846,
+    "accuracy_ci95": [
+     0.6461538461538462,
+     0.9076923076923077
+    ],
+    "balanced_accuracy": 0.8356918238993711,
+    "auc": 0.8844339622641509,
+    "brier": 0.15041696457160678,
+    "log_loss": 0.4741668891664606,
+    "precision": 0.975609756097561,
+    "LOW_caught": 11,
+    "LOW_rows": 12,
+    "TP": 40,
+    "FP": 1,
+    "max_p": 0.9559085493226369
+   },
+   "train_Q4_origin": {
+    "raw": {
+     "accuracy": 1.0,
+     "log_loss": 0.017103120010904013,
+     "n_p_ge_0.99": 34,
+     "mean_p": 0.7332761573094839
+    },
+    "calibrated": {
+     "accuracy": 1.0,
+     "log_loss": 0.14236593907513037,
+     "n_p_ge_0.99": 0,
+     "mean_p": 0.731475128298457
+    }
+   },
+   "mean_five_driver_pct_65_rows": {
+    "market": 68.73790602808926,
+    "climate": 4.196360809084327,
+    "fish_kill": 3.065710335136625,
+    "employment": 10.640867896489604,
+    "ofw_remittance": 5.666847238892499
+   },
+   "mean_pct_with_other_65_rows": {
+    "market": 53.16198166612274,
+    "climate": 2.573187316115691,
+    "fish_kill": 1.7290874615044465,
+    "employment": 5.914954747196467,
+    "ofw_remittance": 4.6050663783999655,
+    "other": 24.323414738353
+   },
+   "drivers_nonzero": [
+    "market",
+    "climate",
+    "fish_kill",
+    "employment",
+    "ofw_remittance"
+   ],
+   "splits_cond_Q4_model": {
+    "cond_market": 49,
+    "cond_climate": 39,
+    "cond_fish": 25,
+    "cond_employment": 44,
+    "cond_ofw": 3,
+    "trig_market": 0,
+    "trig_climate": 0,
+    "trig_employment": 0,
+    "trig_ofw_remittance": 0,
+    "trig_fish_kill": 0
+   },
+   "splits_cond_sum_13_test_models": {
+    "cond_market": 216,
+    "cond_climate": 261,
+    "cond_fish": 95,
+    "cond_employment": 239,
+    "cond_ofw": 74
+   },
+   "q4_2026": {
+    "index": {
+     "CALABARZON": 0.788101531063522,
+     "Cavite": 0.9167442737018758,
+     "Laguna": 0.9143703119769779,
+     "Quezon": 0.9168246669569063,
+     "Rizal": 0.9176243453531914,
+     "Batangas": 0.27494405732865895
+    },
+    "drivers": {
+     "CALABARZON": {
+      "a": {
+       "market": 62,
+       "climate": 2,
+       "fish_kill": 15,
+       "employment": 20,
+       "ofw_remittance": 1
+      },
+      "b": {
+       "market": 38,
+       "climate": 1,
+       "fish_kill": 10,
+       "employment": 13,
+       "ofw_remittance": 0,
+       "other": 38
+      }
+     },
+     "Cavite": {
+      "a": {
+       "market": 59,
+       "climate": 2,
+       "fish_kill": 14,
+       "employment": 24,
+       "ofw_remittance": 1
+      },
+      "b": {
+       "market": 38,
+       "climate": 2,
+       "fish_kill": 9,
+       "employment": 15,
+       "ofw_remittance": 0,
+       "other": 36
+      },
+      "direct": {
+       "market": 1.982,
+       "climate": 0.0648,
+       "fish_kill": 0.4251,
+       "employment": 0.7945,
+       "ofw_remittance": 0.0188
+      },
+      "top_shap": {
+       "Dnow": 1.046,
+       "y_last": 0.933,
+       "cond_employment": 0.795,
+       "cond_market": 0.58,
+       "cond_fish": -0.425
+      }
+     },
+     "Laguna": {
+      "a": {
+       "market": 53,
+       "climate": 1,
+       "fish_kill": 24,
+       "employment": 22,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 32,
+       "climate": 0,
+       "fish_kill": 15,
+       "employment": 13,
+       "ofw_remittance": 0,
+       "other": 40
+      },
+      "direct": {
+       "market": 1.5479,
+       "climate": 0.0086,
+       "fish_kill": 0.6731,
+       "employment": 0.6376,
+       "ofw_remittance": 0.0188
+      },
+      "top_shap": {
+       "Dnow": 1.564,
+       "y_last": 1.023,
+       "cond_fish": -0.673,
+       "cond_employment": 0.638,
+       "H_trend": -0.281
+      }
+     },
+     "Quezon": {
+      "a": {
+       "market": 67,
+       "climate": 1,
+       "fish_kill": 13,
+       "employment": 18,
+       "ofw_remittance": 1
+      },
+      "b": {
+       "market": 44,
+       "climate": 1,
+       "fish_kill": 9,
+       "employment": 12,
+       "ofw_remittance": 0,
+       "other": 34
+      },
+      "direct": {
+       "market": 2.3233,
+       "climate": 0.0048,
+       "fish_kill": 0.4169,
+       "employment": 0.6386,
+       "ofw_remittance": 0.0188
+      },
+      "top_shap": {
+       "Dnow": 1.465,
+       "y_last": 0.933,
+       "cond_employment": 0.639,
+       "cond_market": 0.503,
+       "cond_fish": -0.417
+      }
+     },
+     "Rizal": {
+      "a": {
+       "market": 62,
+       "climate": 0,
+       "fish_kill": 17,
+       "employment": 20,
+       "ofw_remittance": 1
+      },
+      "b": {
+       "market": 41,
+       "climate": 0,
+       "fish_kill": 11,
+       "employment": 13,
+       "ofw_remittance": 1,
+       "other": 34
+      },
+      "direct": {
+       "market": 2.0983,
+       "climate": 0.0007,
+       "fish_kill": 0.5586,
+       "employment": 0.6753,
+       "ofw_remittance": 0.0188
+      },
+      "top_shap": {
+       "Dnow": 1.545,
+       "y_last": 0.914,
+       "cond_employment": 0.675,
+       "cond_fish": 0.559,
+       "cond_market": 0.503
+      }
+     },
+     "Batangas": {
+      "a": {
+       "market": 66,
+       "climate": 6,
+       "fish_kill": 11,
+       "employment": 17,
+       "ofw_remittance": 0
+      },
+      "b": {
+       "market": 36,
+       "climate": 3,
+       "fish_kill": 6,
+       "employment": 10,
+       "ofw_remittance": 0,
+       "other": 45
+      },
+      "direct": {
+       "market": 2.7687,
+       "climate": 0.2352,
+       "fish_kill": 0.4254,
+       "employment": 0.7409,
+       "ofw_remittance": 0.0158
+      },
+      "top_shap": {
+       "y_last": -2.486,
+       "Dnow": -2.036,
+       "cond_employment": 0.741,
+       "cond_market": -0.432,
+       "cond_fish": -0.425
+      }
+     },
+     "shap_expected_value_logodds": 2.8005353844831267
+    }
+   },
+   "index": {
+    "2023-Q1": 0.4,
+    "2023-Q2": 0.5859575280210798,
+    "2023-Q3": 0.35601778148719515,
+    "2023-Q4": 0.5386980484385829,
+    "2024-Q1": 0.4021946188162982,
+    "2024-Q2": 0.6461632430885491,
+    "2024-Q3": 0.468516892077692,
+    "2024-Q4": 0.5784773863651395,
+    "2025-Q1": 0.7307808521489119,
+    "2025-Q4": 0.8905771654252186,
+    "2026-Q1": 0.8915035687886643,
+    "2026-Q2": 0.7558372031187173,
+    "2026-Q3": 0.8918200011582027,
+    "2026-Q4": 0.788101531063522
+   },
+   "shrink_params": {
+    "2023-Q1": null,
+    "2023-Q2": null,
+    "2023-Q3": null,
+    "2023-Q4": null,
+    "2024-Q1": {
+     "a": 1.0,
+     "base_rate": 0.46875
+    },
+    "2024-Q2": {
+     "a": 1.0,
+     "base_rate": 0.5135135135135135
+    },
+    "2024-Q3": {
+     "a": 0.85,
+     "base_rate": 0.5476190476190477
+    },
+    "2024-Q4": {
+     "a": 0.75,
+     "base_rate": 0.5957446808510638
+    },
+    "2025-Q1": {
+     "a": 0.65,
+     "base_rate": 0.6346153846153846
+    },
+    "2025-Q4": {
+     "a": 0.65,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q1": {
+     "a": 0.65,
+     "base_rate": 0.6935483870967742
+    },
+    "2026-Q2": {
+     "a": 0.6,
+     "base_rate": 0.7014925373134329
+    },
+    "2026-Q3": {
+     "a": 0.65,
+     "base_rate": 0.7222222222222222
+    },
+    "2026-Q4": {
+     "a": 0.7,
+     "base_rate": 0.7272727272727273
+    }
+   },
+   "brier_diff_vs_A0": -0.0004578719443427711,
+   "test_vs_A0": {
+    "mcnemar": {
+     "arm_only_correct": 1,
+     "ref_only_correct": 5,
+     "p_two_sided": 0.21875
+    },
+    "mcnemar_p_holm": 0.4375,
+    "signflip_brier_p": 0.96875,
+    "signflip_brier_p_holm": 1.0
+   },
+   "adoption": {
+    "criteria": {
+     "balanced_accuracy_ge_0.83": true,
+     "auc_ge_0.84": true,
+     "brier_le_0.16": true,
+     "LOW_caught_ge_10": true
+    },
+    "eligible": true
+   }
+  }
+ },
+ "A0_max_abs_diff_vs_walk_forward": 0.0,
+ "adoption": {
+  "eligible": [
+   "A0",
+   "A1",
+   "A2"
+  ],
+  "preferred": "A1"
+ },
+ "run": "20261016T104745Z"
+}

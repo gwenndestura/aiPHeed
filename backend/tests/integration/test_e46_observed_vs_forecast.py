@@ -15,6 +15,9 @@ from app.main import app
 from app.ml.inference import e41_lead2 as LEAD2
 from app.services import reference as ref
 
+# E53 port (tina-e53-port): this E41-E48 candidate test runs under Angel's original configuration (E36 record,
+# lead-2 target, no preview); the served default is now E53 (see tests/integration/test_e53_served_model.py).
+pytestmark = pytest.mark.usefixtures("angel_original_config")
 client = TestClient(app)
 WINDOW = ["2026-Q1", "2026-Q2", "2026-Q3", "2026-Q4", "2027-Q1"]
 CAND = "food_stress_risk_probability"

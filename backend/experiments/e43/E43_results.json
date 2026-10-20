@@ -1,0 +1,960 @@
+{
+ "lead": 1,
+ "test_quarters": [
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "reproduction": {
+  "arms_compared": 28,
+  "rows_compared": 1805,
+  "max_abs_p_diff_all_arms": 4.995970304122466e-11,
+  "E36_max_abs_p_diff": 4.9350523667612833e-11,
+  "labels_equal": true,
+  "E36_selection_path_equal": true
+ },
+ "leakage": {
+  "rows_checked": 670,
+  "problems": [],
+  "rule": "every composite uses data of quarter t-1 (news: quarter t) and references over 2021-Q1..t-1",
+  "nan_rows_test_65": {
+   "CLIM": 0,
+   "FISH": 0,
+   "EMP": 0,
+   "OFW": 0
+  },
+  "nan_rows_training_at_Q4_2026_origin": {
+   "CLIM": 0,
+   "FISH": 5,
+   "EMP": 10,
+   "OFW": 5,
+   "of": 75
+  },
+  "nan_rows_Q4_2026_test": {
+   "CLIM": 0,
+   "FISH": 0,
+   "EMP": 0,
+   "OFW": 0
+  },
+  "q4_2026_values": {
+   "Cavite": {
+    "CLIM": 0.8624,
+    "FISH": 0.0,
+    "EMP": 0.5344,
+    "OFW": 0.0
+   },
+   "Laguna": {
+    "CLIM": 0.9083,
+    "FISH": 1.0,
+    "EMP": 0.5344,
+    "OFW": 0.0
+   },
+   "Quezon": {
+    "CLIM": 0.8899,
+    "FISH": 0.3596,
+    "EMP": 0.5344,
+    "OFW": 0.0
+   },
+   "Rizal": {
+    "CLIM": 0.844,
+    "FISH": 1.0,
+    "EMP": 0.5344,
+    "OFW": 0.0
+   },
+   "Batangas": {
+    "CLIM": 0.8807,
+    "FISH": 0.0,
+    "EMP": 0.5344,
+    "OFW": 0.0
+   }
+  }
+ },
+ "metrics": {
+  "E36-LGBM": {
+   "n": 65,
+   "correct": 53,
+   "accuracy": 0.8153846153846154,
+   "accuracy_ci95": [
+    0.7384615384615385,
+    0.8923076923076924
+   ],
+   "brier": 0.15425449892485038,
+   "log_loss": 0.5080425925922669,
+   "auc": 0.8498427672955975,
+   "balanced_accuracy": 0.8223270440251573,
+   "high_recall": 0.8113207547169812,
+   "low_recall": 0.8333333333333334
+  },
+  "E43-all4": {
+   "n": 65,
+   "correct": 46,
+   "accuracy": 0.7076923076923077,
+   "accuracy_ci95": [
+    0.6,
+    0.8307692307692308
+   ],
+   "brier": 0.17390149458293228,
+   "log_loss": 0.5499364783444309,
+   "auc": 0.8105345911949685,
+   "balanced_accuracy": 0.7562893081761006,
+   "high_recall": 0.6792452830188679,
+   "low_recall": 0.8333333333333334
+  },
+  "E43-noOFW": {
+   "n": 65,
+   "correct": 48,
+   "accuracy": 0.7384615384615385,
+   "accuracy_ci95": [
+    0.6307692307692307,
+    0.8615384615384616
+   ],
+   "brier": 0.15571103333716105,
+   "log_loss": 0.5033683412572572,
+   "auc": 0.8435534591194969,
+   "balanced_accuracy": 0.8073899371069182,
+   "high_recall": 0.6981132075471698,
+   "low_recall": 0.9166666666666666
+  },
+  "E43-all4-fixed": {
+   "n": 65,
+   "correct": 54,
+   "accuracy": 0.8307692307692308,
+   "accuracy_ci95": [
+    0.7230769230769231,
+    0.9230769230769231
+   ],
+   "brier": 0.15265946158026367,
+   "log_loss": 0.6559466883596416,
+   "auc": 0.8757861635220126,
+   "balanced_accuracy": 0.8639937106918238,
+   "high_recall": 0.8113207547169812,
+   "low_recall": 0.9166666666666666
+  },
+  "E43-CLIM": {
+   "n": 65,
+   "correct": 53,
+   "accuracy": 0.8153846153846154,
+   "accuracy_ci95": [
+    0.7384615384615385,
+    0.8923076923076924
+   ],
+   "brier": 0.15646461223364985,
+   "log_loss": 0.515975604740124,
+   "auc": 0.8498427672955975,
+   "balanced_accuracy": 0.8223270440251573,
+   "high_recall": 0.8113207547169812,
+   "low_recall": 0.8333333333333334
+  },
+  "E43-FISH": {
+   "n": 65,
+   "correct": 47,
+   "accuracy": 0.7230769230769231,
+   "accuracy_ci95": [
+    0.6153846153846154,
+    0.8307692307692308
+   ],
+   "brier": 0.1668020003278527,
+   "log_loss": 0.4970997313277061,
+   "auc": 0.8419811320754716,
+   "balanced_accuracy": 0.7657232704402516,
+   "high_recall": 0.6981132075471698,
+   "low_recall": 0.8333333333333334
+  },
+  "E43-EMP": {
+   "n": 65,
+   "correct": 56,
+   "accuracy": 0.8615384615384616,
+   "accuracy_ci95": [
+    0.7846153846153846,
+    0.9384615384615385
+   ],
+   "brier": 0.1239686834654362,
+   "log_loss": 0.5408273329911504,
+   "auc": 0.8545597484276729,
+   "balanced_accuracy": 0.85062893081761,
+   "high_recall": 0.8679245283018868,
+   "low_recall": 0.8333333333333334
+  },
+  "E43-OFW": {
+   "n": 65,
+   "correct": 51,
+   "accuracy": 0.7846153846153846,
+   "accuracy_ci95": [
+    0.676923076923077,
+    0.8923076923076924
+   ],
+   "brier": 0.16114050934994464,
+   "log_loss": 0.5312054025795983,
+   "auc": 0.8482704402515723,
+   "balanced_accuracy": 0.8356918238993711,
+   "high_recall": 0.7547169811320755,
+   "low_recall": 0.9166666666666666
+  },
+  "B1_PERSISTENCE": {
+   "n": 65,
+   "correct": 57,
+   "accuracy": 0.8769230769230769,
+   "accuracy_ci95": [
+    0.8,
+    0.9384615384615385
+   ],
+   "brier": 0.12307667692407691,
+   "log_loss": 1.700371407133618,
+   "auc": 0.860062893081761,
+   "balanced_accuracy": 0.8600628930817611,
+   "high_recall": 0.8867924528301887,
+   "low_recall": 0.8333333333333334
+  },
+  "B2_LR_COMB": {
+   "n": 65,
+   "correct": 56,
+   "accuracy": 0.8615384615384616,
+   "accuracy_ci95": [
+    0.7846153846153846,
+    0.9384615384615385
+   ],
+   "brier": 0.11983822028251423,
+   "log_loss": 0.5306123660313805,
+   "auc": 0.839622641509434,
+   "balanced_accuracy": 0.8183962264150944,
+   "high_recall": 0.8867924528301887,
+   "low_recall": 0.75
+  },
+  "B3_LR_GOV": {
+   "n": 65,
+   "correct": 55,
+   "accuracy": 0.8461538461538461,
+   "accuracy_ci95": [
+    0.7538461538461538,
+    0.9230769230769231
+   ],
+   "brier": 0.10189940104132675,
+   "log_loss": 0.4198411253818925,
+   "auc": 0.8663522012578616,
+   "balanced_accuracy": 0.8089622641509434,
+   "high_recall": 0.8679245283018868,
+   "low_recall": 0.75
+  },
+  "B4_LR_NLP": {
+   "n": 65,
+   "correct": 46,
+   "accuracy": 0.7076923076923077,
+   "accuracy_ci95": [
+    0.5538461538461539,
+    0.8461538461538461
+   ],
+   "brier": 0.1975297931126147,
+   "log_loss": 0.5808850660871105,
+   "auc": 0.6580188679245284,
+   "balanced_accuracy": 0.6918238993710691,
+   "high_recall": 0.7169811320754716,
+   "low_recall": 0.6666666666666666
+  },
+  "B5_LGBM_GOV": {
+   "n": 65,
+   "correct": 55,
+   "accuracy": 0.8461538461538461,
+   "accuracy_ci95": [
+    0.7692307692307693,
+    0.9230769230769231
+   ],
+   "brier": 0.14489768361788533,
+   "log_loss": 0.45165749306842784,
+   "auc": 0.8702830188679245,
+   "balanced_accuracy": 0.8411949685534592,
+   "high_recall": 0.8490566037735849,
+   "low_recall": 0.8333333333333334
+  },
+  "B6_LGBM_NLP": {
+   "n": 65,
+   "correct": 44,
+   "accuracy": 0.676923076923077,
+   "accuracy_ci95": [
+    0.49230769230769234,
+    0.8461538461538461
+   ],
+   "brier": 0.19530353261953265,
+   "log_loss": 0.5755738298350548,
+   "auc": 0.7358490566037735,
+   "balanced_accuracy": 0.6729559748427673,
+   "high_recall": 0.6792452830188679,
+   "low_recall": 0.6666666666666666
+  },
+  "ALWAYS_HIGH": {
+   "n": 65,
+   "correct": 53,
+   "accuracy": 0.8153846153846154,
+   "accuracy_ci95": [
+    0.676923076923077,
+    0.9230769230769231
+   ],
+   "brier": 0.18461501538561537,
+   "log_loss": 2.5505566106961957,
+   "auc": 0.5,
+   "balanced_accuracy": 0.5,
+   "high_recall": 1.0,
+   "low_recall": 0.0
+  }
+ },
+ "paired_vs_E36": {
+  "E43-all4": {
+   "brier_diff_arm_minus_E36": 0.0196469956580819,
+   "brier_diff_ci95": [
+    -0.0065500321070890944,
+    0.046883036895282046
+   ],
+   "mcnemar_p": 0.015625,
+   "mcnemar": {
+    "arm_only_correct": 0,
+    "ref_only_correct": 7,
+    "p_two_sided": 0.015625
+   },
+   "signflip_p_one_sided_improvement": 0.89794921875,
+   "accuracy_diff": -0.10769230769230764,
+   "dates_better": 5,
+   "dates_worse": 6,
+   "holm_signflip_p": 1.0
+  },
+  "E43-noOFW": {
+   "brier_diff_arm_minus_E36": 0.0014565344123107177,
+   "brier_diff_ci95": [
+    -0.02157042820823831,
+    0.026539439626085702
+   ],
+   "mcnemar_p": 0.125,
+   "mcnemar": {
+    "arm_only_correct": 1,
+    "ref_only_correct": 6,
+    "p_two_sided": 0.125
+   },
+   "signflip_p_one_sided_improvement": 0.5361328125,
+   "accuracy_diff": -0.07692307692307687,
+   "dates_better": 7,
+   "dates_worse": 4,
+   "holm_signflip_p": 1.0
+  },
+  "E43-all4-fixed": {
+   "brier_diff_arm_minus_E36": -0.0015950373445866824,
+   "brier_diff_ci95": [
+    -0.06086669481510758,
+    0.07334234841384063
+   ],
+   "mcnemar_p": 1.0,
+   "mcnemar": {
+    "arm_only_correct": 5,
+    "ref_only_correct": 4,
+    "p_two_sided": 1.0
+   },
+   "signflip_p_one_sided_improvement": 0.481689453125,
+   "accuracy_diff": 0.015384615384615441,
+   "dates_better": 7,
+   "dates_worse": 6,
+   "holm_signflip_p": 1.0
+  },
+  "E43-CLIM": {
+   "brier_diff_arm_minus_E36": 0.002210113308799492,
+   "brier_diff_ci95": [
+    -2.581462084832291e-06,
+    0.006608805245018149
+   ],
+   "mcnemar_p": 1.0,
+   "mcnemar": {
+    "arm_only_correct": 0,
+    "ref_only_correct": 0,
+    "p_two_sided": 1.0
+   },
+   "signflip_p_one_sided_improvement": 0.875,
+   "accuracy_diff": 0.0,
+   "dates_better": 1,
+   "dates_worse": 3,
+   "holm_signflip_p": 1.0
+  },
+  "E43-FISH": {
+   "brier_diff_arm_minus_E36": 0.012547501403002339,
+   "brier_diff_ci95": [
+    -0.0065053402219347545,
+    0.034469503089090775
+   ],
+   "mcnemar_p": 0.03125,
+   "mcnemar": {
+    "arm_only_correct": 0,
+    "ref_only_correct": 6,
+    "p_two_sided": 0.03125
+   },
+   "signflip_p_one_sided_improvement": 0.8544921875,
+   "accuracy_diff": -0.09230769230769231,
+   "dates_better": 5,
+   "dates_worse": 6,
+   "holm_signflip_p": 1.0
+  },
+  "E43-EMP": {
+   "brier_diff_arm_minus_E36": -0.03028581545941415,
+   "brier_diff_ci95": [
+    -0.0685121943704895,
+    0.006923714899135694
+   ],
+   "mcnemar_p": 0.375,
+   "mcnemar": {
+    "arm_only_correct": 4,
+    "ref_only_correct": 1,
+    "p_two_sided": 0.375
+   },
+   "signflip_p_one_sided_improvement": 0.099609375,
+   "accuracy_diff": 0.04615384615384621,
+   "dates_better": 6,
+   "dates_worse": 4,
+   "holm_signflip_p": 0.697265625
+  },
+  "E43-OFW": {
+   "brier_diff_arm_minus_E36": 0.006886010425094288,
+   "brier_diff_ci95": [
+    -0.01263215757225303,
+    0.029954960842374517
+   ],
+   "mcnemar_p": 0.625,
+   "mcnemar": {
+    "arm_only_correct": 1,
+    "ref_only_correct": 3,
+    "p_two_sided": 0.625
+   },
+   "signflip_p_one_sided_improvement": 0.74609375,
+   "accuracy_diff": -0.03076923076923077,
+   "dates_better": 3,
+   "dates_worse": 5,
+   "holm_signflip_p": 1.0
+  }
+ },
+ "selection_path": {
+  "E36-LGBM": {
+   "2023-Q1": "COMBxG1",
+   "2023-Q2": "COMBxG1",
+   "2023-Q3": "COMBxG1",
+   "2023-Q4": "COMBxG1",
+   "2024-Q1": "COMPACTxG1",
+   "2024-Q2": "COMPACTxG1",
+   "2024-Q3": "COMPACTxG1",
+   "2024-Q4": "COMPACTxG1",
+   "2025-Q1": "COMPACTxG1",
+   "2025-Q4": "COMBxG2",
+   "2026-Q1": "COMBxG2",
+   "2026-Q2": "COMBxG2",
+   "2026-Q3": "COMBxG2"
+  },
+  "E43-all4": {
+   "2023-Q1": "COMB_all4xG1",
+   "2023-Q2": "COMB_all4xG1",
+   "2023-Q3": "COMB_all4xG1",
+   "2023-Q4": "COMB_all4xG1",
+   "2024-Q1": "COMPACT_all4xG4",
+   "2024-Q2": "COMPACT_all4xG4",
+   "2024-Q3": "COMPACT_all4xG4",
+   "2024-Q4": "COMPACT_all4xG4",
+   "2025-Q1": "COMPACT_all4xG1",
+   "2025-Q4": "COMB_all4xG2",
+   "2026-Q1": "COMB_all4xG2",
+   "2026-Q2": "COMB_all4xG1",
+   "2026-Q3": "COMB_all4xG1"
+  },
+  "E43-noOFW": {
+   "2023-Q1": "COMB_noOFWxG1",
+   "2023-Q2": "COMB_noOFWxG1",
+   "2023-Q3": "COMB_noOFWxG1",
+   "2023-Q4": "COMB_noOFWxG1",
+   "2024-Q1": "COMPACT_noOFWxG4",
+   "2024-Q2": "COMPACT_noOFWxG4",
+   "2024-Q3": "COMPACT_noOFWxG4",
+   "2024-Q4": "COMPACT_noOFWxG1",
+   "2025-Q1": "COMPACT_noOFWxG1",
+   "2025-Q4": "COMB_noOFWxG2",
+   "2026-Q1": "COMB_noOFWxG2",
+   "2026-Q2": "COMB_noOFWxG2",
+   "2026-Q3": "COMB_noOFWxG2"
+  },
+  "E43-all4-fixed": {
+   "2023-Q1": "COMB_all4xG2",
+   "2023-Q2": "COMB_all4xG2",
+   "2023-Q3": "COMB_all4xG2",
+   "2023-Q4": "COMB_all4xG2",
+   "2024-Q1": "COMB_all4xG2",
+   "2024-Q2": "COMB_all4xG2",
+   "2024-Q3": "COMB_all4xG2",
+   "2024-Q4": "COMB_all4xG2",
+   "2025-Q1": "COMB_all4xG2",
+   "2025-Q4": "COMB_all4xG2",
+   "2026-Q1": "COMB_all4xG2",
+   "2026-Q2": "COMB_all4xG2",
+   "2026-Q3": "COMB_all4xG2"
+  },
+  "E43-CLIM": {
+   "2023-Q1": "COMB_CLIMxG1",
+   "2023-Q2": "COMB_CLIMxG1",
+   "2023-Q3": "COMB_CLIMxG1",
+   "2023-Q4": "COMB_CLIMxG1",
+   "2024-Q1": "COMPACT_CLIMxG1",
+   "2024-Q2": "COMPACT_CLIMxG1",
+   "2024-Q3": "COMPACT_CLIMxG1",
+   "2024-Q4": "COMPACT_CLIMxG1",
+   "2025-Q1": "COMPACT_CLIMxG1",
+   "2025-Q4": "COMB_CLIMxG2",
+   "2026-Q1": "COMB_CLIMxG2",
+   "2026-Q2": "COMB_CLIMxG2",
+   "2026-Q3": "COMB_CLIMxG2"
+  },
+  "E43-FISH": {
+   "2023-Q1": "COMB_FISHxG1",
+   "2023-Q2": "COMB_FISHxG1",
+   "2023-Q3": "COMB_FISHxG1",
+   "2023-Q4": "COMB_FISHxG1",
+   "2024-Q1": "COMPACT_FISHxG4",
+   "2024-Q2": "COMPACT_FISHxG4",
+   "2024-Q3": "COMPACT_FISHxG4",
+   "2024-Q4": "COMPACT_FISHxG1",
+   "2025-Q1": "COMPACT_FISHxG1",
+   "2025-Q4": "COMB_FISHxG1",
+   "2026-Q1": "COMB_FISHxG1",
+   "2026-Q2": "COMB_FISHxG1",
+   "2026-Q3": "COMB_FISHxG1"
+  },
+  "E43-EMP": {
+   "2023-Q1": "COMB_EMPxG1",
+   "2023-Q2": "COMB_EMPxG1",
+   "2023-Q3": "COMB_EMPxG1",
+   "2023-Q4": "COMB_EMPxG1",
+   "2024-Q1": "COMPACT_EMPxG2",
+   "2024-Q2": "COMPACT_EMPxG2",
+   "2024-Q3": "COMPACT_EMPxG1",
+   "2024-Q4": "COMPACT_EMPxG2",
+   "2025-Q1": "COMPACT_EMPxG2",
+   "2025-Q4": "COMPACT_EMPxG2",
+   "2026-Q1": "COMPACT_EMPxG2",
+   "2026-Q2": "COMPACT_EMPxG2",
+   "2026-Q3": "COMPACT_EMPxG2"
+  },
+  "E43-OFW": {
+   "2023-Q1": "COMB_OFWxG1",
+   "2023-Q2": "COMB_OFWxG1",
+   "2023-Q3": "COMB_OFWxG1",
+   "2023-Q4": "COMB_OFWxG1",
+   "2024-Q1": "COMPACT_OFWxG1",
+   "2024-Q2": "COMPACT_OFWxG1",
+   "2024-Q3": "COMPACT_OFWxG1",
+   "2024-Q4": "COMPACT_OFWxG1",
+   "2025-Q1": "COMPACT_OFWxG1",
+   "2025-Q4": "COMB_OFWxG2",
+   "2026-Q1": "COMB_OFWxG2",
+   "2026-Q2": "COMB_OFWxG2",
+   "2026-Q3": "COMB_OFWxG2"
+  }
+ },
+ "provisional_arms": [
+  "E43-OFW",
+  "E43-all4",
+  "E43-all4-fixed"
+ ],
+ "mean_abs_shap_eval": {
+  "E36-LGBM": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.7317351909074503,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 1.7254882592157252
+   },
+   "share_pct": {
+    "market": 50.09034607947459,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 49.90965392052541
+   },
+   "drivers_with_nonzero_shap": [
+    "market"
+   ]
+  },
+  "E43-all4": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.5835541015370478,
+    "climate": 0.0,
+    "fish_kill": 0.38970856210288485,
+    "employment": 0.2868192892054204,
+    "ofw_remittance": 0.08255070295488283,
+    "other": 0.6720817631492446
+   },
+   "share_pct": {
+    "market": 52.52749950653235,
+    "climate": 0.0,
+    "fish_kill": 12.926881553135116,
+    "employment": 9.513978750443853,
+    "ofw_remittance": 2.738259466170225,
+    "other": 22.293380723718464
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "fish_kill",
+    "employment",
+    "ofw_remittance"
+   ]
+  },
+  "E43-noOFW": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.706117388960994,
+    "climate": 0.0020647865800765258,
+    "fish_kill": 0.4954603348429464,
+    "employment": 0.4212990187780135,
+    "ofw_remittance": 0.0,
+    "other": 1.006027060192284
+   },
+   "share_pct": {
+    "market": 46.98794128826073,
+    "climate": 0.056865999505760025,
+    "fish_kill": 13.645404047162323,
+    "employment": 11.602937574652278,
+    "ofw_remittance": 0.0,
+    "other": 27.706851090418912
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "climate",
+    "fish_kill",
+    "employment"
+   ]
+  },
+  "E43-all4-fixed": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 3.6113978352837006,
+    "climate": 0.004877855790888436,
+    "fish_kill": 0.9913527842155248,
+    "employment": 0.7288843404867706,
+    "ofw_remittance": 0.2060533617917942,
+    "other": 1.5964239562848201
+   },
+   "share_pct": {
+    "market": 50.58695652426029,
+    "climate": 0.06832697201467425,
+    "fish_kill": 13.886456846528942,
+    "employment": 10.209908219796517,
+    "ofw_remittance": 2.886309659046556,
+    "other": 22.362041778353028
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "climate",
+    "fish_kill",
+    "employment",
+    "ofw_remittance"
+   ]
+  },
+  "E43-CLIM": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.7170632810512871,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 1.7068469924923673
+   },
+   "share_pct": {
+    "market": 50.149190366316844,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 49.850809633683156
+   },
+   "drivers_with_nonzero_shap": [
+    "market"
+   ]
+  },
+  "E43-FISH": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.469589267296941,
+    "climate": 0.0,
+    "fish_kill": 0.3305138429964617,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 0.7213780810156156
+   },
+   "share_pct": {
+    "market": 58.28277729622916,
+    "climate": 0.0,
+    "fish_kill": 13.107924188991335,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 28.609298514779507
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "fish_kill"
+   ]
+  },
+  "E43-EMP": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 2.7005721814911814,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.850256641851481,
+    "ofw_remittance": 0.0,
+    "other": 1.5202747108338757
+   },
+   "share_pct": {
+    "market": 53.25413222764558,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 16.766698532601513,
+    "ofw_remittance": 0.0,
+    "other": 29.979169239752917
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "employment"
+   ]
+  },
+  "E43-OFW": {
+   "rows": 65,
+   "mean_abs": {
+    "market": 1.6176375914328756,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.28337095042658034,
+    "other": 1.6269879423106426
+   },
+   "share_pct": {
+    "market": 45.85145134614264,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 8.032064422344188,
+    "other": 46.11648423151317
+   },
+   "drivers_with_nonzero_shap": [
+    "market",
+    "ofw_remittance"
+   ]
+  }
+ },
+ "adoption": {
+  "by_arm": {
+   "E43-all4": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": false,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": false,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 4,
+    "provisional": true
+   },
+   "E43-noOFW": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": false,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": false,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 4,
+    "provisional": false
+   },
+   "E43-all4-fixed": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": true,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": true,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 5,
+    "provisional": true
+   },
+   "E43-CLIM": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": true,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": true,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 1,
+    "provisional": false
+   },
+   "E43-FISH": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": false,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": false,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 2,
+    "provisional": false
+   },
+   "E43-EMP": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": true,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": true,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 2,
+    "provisional": false
+   },
+   "E43-OFW": {
+    "criteria": {
+     "a_brier_ci_includes_0_or_below": true,
+     "b_accuracy_ge_E36_minus_0.01": false,
+     "c_no_leakage": true
+    },
+    "pass_non_inferior": false,
+    "improves_on_E36": false,
+    "drivers_with_nonzero_shap": 2,
+    "provisional": true
+   }
+  },
+  "passing_in_preference_order": [
+   "E43-all4-fixed",
+   "E43-EMP",
+   "E43-CLIM"
+  ],
+  "selected": "E43-all4-fixed"
+ },
+ "q4_2026": {
+  "E36-LGBM": {
+   "chosen": "COMBxG2",
+   "p": {
+    "CALABARZON": 0.8214934242317995,
+    "Cavite": 0.9830176087556541,
+    "Laguna": 0.9885597793171201,
+    "Quezon": 0.9861771465575628,
+    "Rizal": 0.9806822419119754,
+    "Batangas": 0.1690303446166852
+   },
+   "shap_share_pct_CALABARZON": {
+    "market": 38.67960501363662,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 61.32039498636337
+   },
+   "shap_share_sum": 99.99999999999999,
+   "provisional": false
+  },
+  "E43-all4-fixed": {
+   "chosen": "COMB_all4xG2",
+   "p": {
+    "CALABARZON": 0.8095088528650161,
+    "Cavite": 0.9949138393808672,
+    "Laguna": 0.9983645023400117,
+    "Quezon": 0.9965372932178083,
+    "Rizal": 0.9994015321299673,
+    "Batangas": 0.058327097256426146
+   },
+   "shap_share_pct_CALABARZON": {
+    "market": 37.66795565135656,
+    "climate": 0.2242666326369634,
+    "fish_kill": 13.985927363012982,
+    "employment": 11.02641632064749,
+    "ofw_remittance": 0.5379618758129454,
+    "other": 36.55747215653305
+   },
+   "shap_share_sum": 99.99999999999999,
+   "provisional": true
+  },
+  "E43-EMP": {
+   "chosen": "COMPACT_EMPxG2",
+   "p": {
+    "CALABARZON": 0.8105434605795964,
+    "Cavite": 0.9972221592154287,
+    "Laguna": 0.9967898274628032,
+    "Quezon": 0.9972221592154287,
+    "Rizal": 0.9967898274628032,
+    "Batangas": 0.06469332954151748
+   },
+   "shap_share_pct_CALABARZON": {
+    "market": 56.65694963872722,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 15.611732230832038,
+    "ofw_remittance": 0.0,
+    "other": 27.731318130440734
+   },
+   "shap_share_sum": 99.99999999999999,
+   "provisional": false
+  },
+  "E43-CLIM": {
+   "chosen": "COMB_CLIMxG2",
+   "p": {
+    "CALABARZON": 0.8200517589835018,
+    "Cavite": 0.987838556627774,
+    "Laguna": 0.986647698811814,
+    "Quezon": 0.989956438320369,
+    "Rizal": 0.9852786656525769,
+    "Batangas": 0.15053743550497542
+   },
+   "shap_share_pct_CALABARZON": {
+    "market": 41.967743159548576,
+    "climate": 0.0,
+    "fish_kill": 0.0,
+    "employment": 0.0,
+    "ofw_remittance": 0.0,
+    "other": 58.032256840451424
+   },
+   "shap_share_sum": 100.0,
+   "provisional": false
+  },
+  "E43-all4": {
+   "chosen": "COMB_all4xG2",
+   "p": {
+    "CALABARZON": 0.8095088528650161,
+    "Cavite": 0.9949138393808672,
+    "Laguna": 0.9983645023400117,
+    "Quezon": 0.9965372932178083,
+    "Rizal": 0.9994015321299673,
+    "Batangas": 0.058327097256426146
+   },
+   "shap_share_pct_CALABARZON": {
+    "market": 37.66795565135656,
+    "climate": 0.2242666326369634,
+    "fish_kill": 13.985927363012982,
+    "employment": 11.02641632064749,
+    "ofw_remittance": 0.5379618758129454,
+    "other": 36.55747215653305
+   },
+   "shap_share_sum": 99.99999999999999,
+   "provisional": true
+  }
+ },
+ "run": {
+  "stamp": "20261015T154200Z",
+  "predictions_sha256": "70f1e8f33280c253d22ecf055066dae45038fdee8dfc9accc48564cb5b434e14",
+  "inputs_sha256": {
+   "rain": "858e9a2f28e907f2a63186e30a49d3a89db116314f56bf6e2db629221283a21f",
+   "fish": "0fd1fc145ac4e6cd4be5a41344028c884d7bc6c440df49c9606d952bbc3779bb",
+   "unemp": "e78853d84676b092955b5e0cae9c6e01cf1d8a33ff01c2185c40bd0232b31586",
+   "ofw": "ec746d81803a602a7bedd5d6e34e6f97f23eb123ee91eca9f25c14dc3e3fb7b4",
+   "tc": "4e198c7304f8a9c25ec18e785ea5a8b1d01f6c19f131588bb9b75fc601fd29a3"
+  }
+ }
+}

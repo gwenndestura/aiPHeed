@@ -1,0 +1,3158 @@
+{
+ "variants": {
+  "P50": {
+   "tau_by_target": {
+    "2023-Q1": 10.866666666666667,
+    "2023-Q2": 11.0,
+    "2023-Q3": 10.82,
+    "2023-Q4": 10.843333333333334,
+    "2024-Q1": 10.866666666666667,
+    "2024-Q2": 11.366666666666665,
+    "2024-Q3": 11.779999999999998,
+    "2024-Q4": 12.506666666666668,
+    "2025-Q1": 13.22,
+    "2025-Q4": 14.11333333333333,
+    "2026-Q1": 14.11333333333333,
+    "2026-Q2": 14.344999999999999,
+    "2026-Q3": 14.78,
+    "2026-Q4": 14.993333333333334
+   },
+   "test_quarters": [
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "n_test_rows": 65,
+   "arms": {
+    "A": {
+     "metrics": {
+      "accuracy": 0.8461538461538461,
+      "accuracy_ci95": [
+       0.7692307692307693,
+       0.9230769230769231
+      ],
+      "balanced_accuracy": 0.8411949685534592,
+      "auc": 0.8545597484276729,
+      "brier": 0.15087483651594955,
+      "log_loss": 0.48906329004068716,
+      "max_p": 0.9451890172300603,
+      "mean_p": 0.6490412739897232,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 11,
+        "mean_p": 0.06853973697521987,
+        "observed_HIGH": 0.45454545454545453
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 2,
+        "mean_p": 0.30440648435621687,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 10,
+        "mean_p": 0.4538391479699889,
+        "observed_HIGH": 0.6
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 6,
+        "mean_p": 0.6880306701623469,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 36,
+        "mean_p": 0.8932877009227275,
+        "observed_HIGH": 0.9444444444444444
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [
+        [
+         "2025-Q4",
+         "Batangas",
+         0.906
+        ]
+       ],
+       "p<=0.1_but_HIGH": [
+        [
+         "2023-Q4",
+         "Laguna",
+         0.064
+        ],
+        [
+         "2024-Q1",
+         "Cavite",
+         0.028
+        ],
+        [
+         "2024-Q1",
+         "Laguna",
+         0.08
+        ]
+       ]
+      }
+     },
+     "brier_skill_vs_climatology": 0.22981906972603772,
+     "n_test_p_ge_0.99": 0,
+     "n_test_p_ge_0.95": 0,
+     "train_Q4_origin": {
+      "accuracy": 1.0,
+      "log_loss": 0.1525805284418817,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.7314796026630184
+     },
+     "shap_expected_value_logodds": 2.665493302467255,
+     "train_label_rate_Q4_origin": 0.7333333333333333,
+     "q4_config": "COMB_T5xG2",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 1.0,
+       "base_rate": 0.46875
+      },
+      "2024-Q2": {
+       "a": 1.0,
+       "base_rate": 0.5135135135135135
+      },
+      "2024-Q3": {
+       "a": 0.85,
+       "base_rate": 0.5476190476190477
+      },
+      "2024-Q4": {
+       "a": 0.75,
+       "base_rate": 0.5957446808510638
+      },
+      "2025-Q1": {
+       "a": 0.7,
+       "base_rate": 0.6346153846153846
+      },
+      "2025-Q4": {
+       "a": 0.7,
+       "base_rate": 0.6935483870967742
+      },
+      "2026-Q1": {
+       "a": 0.7,
+       "base_rate": 0.6935483870967742
+      },
+      "2026-Q2": {
+       "a": 0.65,
+       "base_rate": 0.7014925373134329
+      },
+      "2026-Q3": {
+       "a": 0.7,
+       "base_rate": 0.7222222222222222
+      },
+      "2026-Q4": {
+       "a": 0.7,
+       "base_rate": 0.7272727272727273
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.4,
+       "Cavite": 0.4,
+       "Laguna": 0.4,
+       "Quezon": 0.4,
+       "Rizal": 0.4,
+       "Batangas": 0.4
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.5859575280210798,
+       "Cavite": 0.9451890172300603,
+       "Laguna": 0.04711029420760905,
+       "Quezon": 0.04711029420760905,
+       "Rizal": 0.9451890172300603,
+       "Batangas": 0.9451890172300603
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.35601778148719515,
+       "Cavite": 0.5067094138539665,
+       "Laguna": 0.030999619456465,
+       "Quezon": 0.030999619456465,
+       "Rizal": 0.7046708408151128,
+       "Batangas": 0.5067094138539665
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.5342014047198707,
+       "Cavite": 0.8834489223918516,
+       "Laguna": 0.06378382492087316,
+       "Quezon": 0.08958628526873731,
+       "Rizal": 0.839949714469188,
+       "Batangas": 0.7942382765487028
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.38875407454815036,
+       "Cavite": 0.028385810623906514,
+       "Laguna": 0.07957610113084723,
+       "Quezon": 0.028385810623906514,
+       "Rizal": 0.8893775163033726,
+       "Batangas": 0.918045134058719
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.6038329872988666,
+       "Cavite": 0.18126650979222111,
+       "Laguna": 0.9236167763809859,
+       "Quezon": 0.1267329370387786,
+       "Rizal": 0.9236167763809859,
+       "Batangas": 0.8639319369013608
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.5591963712719135,
+       "Cavite": 0.5184442416724915,
+       "Laguna": 0.22005790953696477,
+       "Quezon": 0.8466299931501639,
+       "Rizal": 0.6054248559999739,
+       "Batangas": 0.6054248559999739
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.5991906765034754,
+       "Cavite": 0.38875505917546893,
+       "Laguna": 0.744145175663899,
+       "Quezon": 0.8565247373585442,
+       "Rizal": 0.5032642051597327,
+       "Batangas": 0.5032642051597327
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.812269133477346,
+       "Cavite": 0.8058527529772374,
+       "Laguna": 0.8768060646028722,
+       "Quezon": 0.8862272312425732,
+       "Rizal": 0.6742800159464192,
+       "Batangas": 0.8181796026176277
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.9068255454758856,
+       "Cavite": 0.9077031631292294,
+       "Laguna": 0.9070148582458158,
+       "Quezon": 0.907680851428617,
+       "Rizal": 0.905783899819727,
+       "Batangas": 0.9059449547560384
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.9065839939968401,
+       "Cavite": 0.9075063788757247,
+       "Laguna": 0.9078881242836946,
+       "Quezon": 0.9069454749435519,
+       "Rizal": 0.907521042294625,
+       "Batangas": 0.9030589495866036
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.8728347317175251,
+       "Cavite": 0.8937687883886254,
+       "Laguna": 0.8926263765657839,
+       "Quezon": 0.8833586195199596,
+       "Rizal": 0.8841404978814243,
+       "Batangas": 0.8102793762318319
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.9118723333482551,
+       "Cavite": 0.9066372474489164,
+       "Laguna": 0.9159740869660056,
+       "Quezon": 0.9112379831444904,
+       "Rizal": 0.9118470875567483,
+       "Batangas": 0.9136652616251152
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7783915675512139,
+       "Cavite": 0.8883727924967322,
+       "Laguna": 0.8770984823823158,
+       "Quezon": 0.9140524207276196,
+       "Rizal": 0.8770993093897552,
+       "Batangas": 0.33533483275964604
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.2,
+      "2023-Q2": 0.6,
+      "2023-Q3": 0.6,
+      "2023-Q4": 0.8,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 1.0,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.8,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 53,
+        "climate": 44,
+        "fish_kill": 3,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 22,
+        "climate": 18,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 59
+       },
+       "direct": {
+        "market": 1.0103,
+        "climate": 0.8151,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0205,
+        "fish_kill": 0.0614,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 2.6951
+      },
+      "Laguna": {
+       "a": {
+        "market": 52,
+        "climate": 45,
+        "fish_kill": 3,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 30,
+        "climate": 26,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 42
+       },
+       "direct": {
+        "market": 1.9168,
+        "climate": 1.603,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0404,
+        "fish_kill": 0.0937,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 2.6568
+      },
+      "Quezon": {
+       "a": {
+        "market": 85,
+        "climate": 13,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 42,
+        "climate": 7,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 50
+       },
+       "direct": {
+        "market": 2.1466,
+        "climate": 0.3037,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0205,
+        "fish_kill": 0.0614,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 2.5312
+      },
+      "Rizal": {
+       "a": {
+        "market": 49,
+        "climate": 49,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 28,
+        "climate": 27,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 44
+       },
+       "direct": {
+        "market": 1.652,
+        "climate": 1.603,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0205,
+        "fish_kill": 0.073,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 2.5933
+      },
+      "Batangas": {
+       "a": {
+        "market": 91,
+        "climate": 9,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 41,
+        "climate": 4,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 55
+       },
+       "direct": {
+        "market": 2.5701,
+        "climate": 0.2342,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0032,
+        "fish_kill": 0.0096,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 3.5159
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 65,
+        "climate": 33,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 33,
+        "climate": 16,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 50
+       }
+      }
+     }
+    },
+    "B": {
+     "metrics": {
+      "accuracy": 0.8461538461538461,
+      "accuracy_ci95": [
+       0.7538461538461538,
+       0.9384615384615385
+      ],
+      "balanced_accuracy": 0.8089622641509434,
+      "auc": 0.8679245283018868,
+      "brier": 0.12481264878367948,
+      "log_loss": 0.410326086375367,
+      "max_p": 0.9372556394133044,
+      "mean_p": 0.660929358313597,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 2,
+        "mean_p": 0.16011737136247917,
+        "observed_HIGH": 0.5
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 12,
+        "mean_p": 0.30620830622058,
+        "observed_HIGH": 0.3333333333333333
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 6,
+        "mean_p": 0.5140149043929384,
+        "observed_HIGH": 0.8333333333333334
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 23,
+        "mean_p": 0.6980104219330071,
+        "observed_HIGH": 0.9565217391304348
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 22,
+        "mean_p": 0.9012429428270498,
+        "observed_HIGH": 0.9545454545454546
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [
+        [
+         "2025-Q4",
+         "Batangas",
+         0.922
+        ]
+       ],
+       "p<=0.1_but_HIGH": []
+      }
+     },
+     "brier_skill_vs_climatology": 0.3628604731577655,
+     "n_test_p_ge_0.99": 0,
+     "n_test_p_ge_0.95": 0,
+     "train_Q4_origin": {
+      "accuracy": 0.9466666666666667,
+      "log_loss": 0.2477385338741333,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.7319961078087391
+     },
+     "shap_expected_value_logodds": 1.6215967416217036,
+     "train_label_rate_Q4_origin": 0.7333333333333333,
+     "q4_config": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 1.0,
+       "base_rate": 0.46875
+      },
+      "2024-Q2": {
+       "a": 1.0,
+       "base_rate": 0.5135135135135135
+      },
+      "2024-Q3": {
+       "a": 1.0,
+       "base_rate": 0.5476190476190477
+      },
+      "2024-Q4": {
+       "a": 1.0,
+       "base_rate": 0.5957446808510638
+      },
+      "2025-Q1": {
+       "a": 1.0,
+       "base_rate": 0.6346153846153846
+      },
+      "2025-Q4": {
+       "a": 1.0,
+       "base_rate": 0.6935483870967742
+      },
+      "2026-Q1": {
+       "a": 1.0,
+       "base_rate": 0.6935483870967742
+      },
+      "2026-Q2": {
+       "a": 1.0,
+       "base_rate": 0.7014925373134329
+      },
+      "2026-Q3": {
+       "a": 1.0,
+       "base_rate": 0.7222222222222222
+      },
+      "2026-Q4": {
+       "a": 1.0,
+       "base_rate": 0.7272727272727273
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.4608362175570194,
+       "Cavite": 0.560647994268802,
+       "Laguna": 0.2523867065573329,
+       "Quezon": 0.2446545207893594,
+       "Rizal": 0.6193989477277508,
+       "Batangas": 0.6270929184418522
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.512773152240508,
+       "Cavite": 0.6596985342469981,
+       "Laguna": 0.3016433699024281,
+       "Quezon": 0.2864055430565545,
+       "Rizal": 0.6756458988138012,
+       "Batangas": 0.6404724151827579
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.3643555788494114,
+       "Cavite": 0.43760024300848765,
+       "Laguna": 0.2666593261132783,
+       "Quezon": 0.2470225339074722,
+       "Rizal": 0.5084720913252748,
+       "Batangas": 0.3620236998925439
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.5231744797217365,
+       "Cavite": 0.63415818429199,
+       "Laguna": 0.39172709718879917,
+       "Quezon": 0.28667358668050175,
+       "Rizal": 0.6469257522236627,
+       "Batangas": 0.656387778223729
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.4634635922373317,
+       "Cavite": 0.392687032404719,
+       "Laguna": 0.24426263559286193,
+       "Quezon": 0.12422801061839553,
+       "Rizal": 0.7612787439484918,
+       "Batangas": 0.7948615386221898
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.6440739850183717,
+       "Cavite": 0.4747675274384231,
+       "Laguna": 0.849180464394414,
+       "Quezon": 0.19600673210656283,
+       "Rizal": 0.8583404598536553,
+       "Batangas": 0.8420747412988033
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.6529352519376351,
+       "Cavite": 0.5935525251169792,
+       "Laguna": 0.5090490451996639,
+       "Quezon": 0.7711985416441545,
+       "Rizal": 0.7025891365851691,
+       "Batangas": 0.688287011142209
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.7236787010626007,
+       "Cavite": 0.6444642084609766,
+       "Laguna": 0.7792652672509749,
+       "Quezon": 0.876666362054406,
+       "Rizal": 0.631086908931593,
+       "Batangas": 0.6869107586150527
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.7829951820224132,
+       "Cavite": 0.7080359861554218,
+       "Laguna": 0.9002209679287771,
+       "Quezon": 0.8627901630583125,
+       "Rizal": 0.6824735903735797,
+       "Batangas": 0.761455202595975
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.9230000174533053,
+       "Cavite": 0.9255687576129313,
+       "Laguna": 0.9216274766602753,
+       "Quezon": 0.928441459507316,
+       "Rizal": 0.9174900503728457,
+       "Batangas": 0.9218723431131581
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.9205778687225956,
+       "Cavite": 0.9301029791758206,
+       "Laguna": 0.9241478322786973,
+       "Quezon": 0.923624779064047,
+       "Rizal": 0.9240196485738401,
+       "Batangas": 0.900994104520573
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.7007039863240349,
+       "Cavite": 0.7211972780825472,
+       "Laguna": 0.8226139280782304,
+       "Quezon": 0.7810671661891398,
+       "Rizal": 0.7802879367091486,
+       "Batangas": 0.39835362256110834
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.919513644929798,
+       "Cavite": 0.9199430344739392,
+       "Laguna": 0.9229867835745176,
+       "Quezon": 0.9372556394133044,
+       "Rizal": 0.9211009732521368,
+       "Batangas": 0.8962817939350916
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7743062697988133,
+       "Cavite": 0.8159497738985703,
+       "Laguna": 0.9274804138995016,
+       "Quezon": 0.9029816955616726,
+       "Rizal": 0.8887915020362063,
+       "Batangas": 0.33632796359811556
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.2,
+      "2023-Q2": 0.6,
+      "2023-Q3": 0.6,
+      "2023-Q4": 0.8,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 1.0,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.8,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 52,
+        "climate": 42,
+        "fish_kill": 6,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 9,
+        "climate": 8,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 82
+       },
+       "direct": {
+        "market": 0.1489,
+        "climate": 0.1201,
+        "fish_kill": 0.0158,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.2856
+      },
+      "Laguna": {
+       "a": {
+        "market": 82,
+        "climate": 10,
+        "fish_kill": 8,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 43,
+        "climate": 5,
+        "fish_kill": 5,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 47
+       },
+       "direct": {
+        "market": 1.1856,
+        "climate": 0.1412,
+        "fish_kill": 0.1214,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0007,
+        "fish_kill": 0.0018,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.2762
+      },
+      "Quezon": {
+       "a": {
+        "market": 91,
+        "climate": 7,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 33,
+        "climate": 3,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 63
+       },
+       "direct": {
+        "market": 0.6564,
+        "climate": 0.0496,
+        "fish_kill": 0.0158,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0003,
+        "fish_kill": 0.001,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.2561
+      },
+      "Rizal": {
+       "a": {
+        "market": 65,
+        "climate": 23,
+        "fish_kill": 12,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 21,
+        "climate": 8,
+        "fish_kill": 4,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 67
+       },
+       "direct": {
+        "market": 0.3956,
+        "climate": 0.1416,
+        "fish_kill": 0.0734,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0003,
+        "fish_kill": 0.0024,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.239
+      },
+      "Batangas": {
+       "a": {
+        "market": 96,
+        "climate": 3,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 39,
+        "climate": 1,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 59
+       },
+       "direct": {
+        "market": 1.1417,
+        "climate": 0.0341,
+        "fish_kill": 0.0158,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0007,
+        "fish_kill": 0.0022,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.7222
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 83,
+        "climate": 11,
+        "fish_kill": 6,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 32,
+        "climate": 5,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 61
+       }
+      }
+     }
+    }
+   },
+   "base_rate": {
+    "all": 0.7058823529411765,
+    "n": 85,
+    "2024_2026": 0.9333333333333333,
+    "per_year": {
+     "2021": 0.0,
+     "2022": 0.4666666666666667,
+     "2023": 0.55,
+     "2024": 0.95,
+     "2025": 0.9,
+     "2026": 0.9333333333333333
+    }
+   },
+   "persistence": {
+    "accuracy": 0.8769230769230769,
+    "accuracy_ci95": [
+     0.8,
+     0.9384615384615385
+    ],
+    "balanced_accuracy": 0.8600628930817611,
+    "auc": 0.860062893081761,
+    "brier": 0.12307667692407691,
+    "log_loss": 1.700371407133618,
+    "ece_3bin": 0.12307592307692318,
+    "max_p": 1.0,
+    "mean_p": 0.7538461538461538,
+    "n_p_ge_0.99": 49,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 16,
+      "mean_p": 0.0,
+      "observed_HIGH": 0.375
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 49,
+      "mean_p": 1.0,
+      "observed_HIGH": 0.9591836734693877
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2023-Q1",
+       "Batangas",
+       1.0
+      ],
+      [
+       "2025-Q4",
+       "Batangas",
+       1.0
+      ]
+     ],
+     "p<=0.1_but_HIGH": [
+      [
+       "2023-Q3",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2023-Q3",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2023-Q4",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2024-Q2",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2024-Q3",
+       "Quezon",
+       0.0
+      ]
+     ]
+    }
+   },
+   "climatology_brier": 0.1958953157439014,
+   "pct_labels_differ_from_P50": 0.0
+  },
+  "P67": {
+   "tau_by_target": {
+    "2023-Q1": 12.820000000000002,
+    "2023-Q2": 13.25111111111111,
+    "2023-Q3": 12.681111111111111,
+    "2023-Q4": 13.22,
+    "2024-Q1": 12.953333333333335,
+    "2024-Q2": 13.406666666666668,
+    "2024-Q3": 14.11333333333333,
+    "2024-Q4": 14.748888888888889,
+    "2025-Q1": 15.011111111111113,
+    "2025-Q4": 16.157777777777778,
+    "2026-Q1": 16.157777777777778,
+    "2026-Q2": 16.506666666666668,
+    "2026-Q3": 16.813333333333336,
+    "2026-Q4": 17.29111111111111
+   },
+   "test_quarters": [
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "n_test_rows": 65,
+   "arms": {
+    "A": {
+     "metrics": {
+      "accuracy": 0.7846153846153846,
+      "accuracy_ci95": [
+       0.676923076923077,
+       0.8769230769230769
+      ],
+      "balanced_accuracy": 0.79,
+      "auc": 0.828,
+      "brier": 0.1852364565086116,
+      "log_loss": 0.706058652343366,
+      "max_p": 0.9905617232437945,
+      "mean_p": 0.56463928302847,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 14,
+        "mean_p": 0.06658879468312846,
+        "observed_HIGH": 0.5
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 6,
+        "mean_p": 0.3544166595280626,
+        "observed_HIGH": 0.16666666666666666
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 5,
+        "mean_p": 0.5108144559651826,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 23,
+        "mean_p": 0.7111270766756025,
+        "observed_HIGH": 0.8695652173913043
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 17,
+        "mean_p": 0.8666361923972711,
+        "observed_HIGH": 1.0
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [],
+       "p<=0.1_but_HIGH": [
+        [
+         "2023-Q4",
+         "Laguna",
+         0.082
+        ],
+        [
+         "2024-Q1",
+         "Cavite",
+         0.001
+        ],
+        [
+         "2024-Q1",
+         "Laguna",
+         0.014
+        ],
+        [
+         "2024-Q2",
+         "Cavite",
+         0.081
+        ],
+        [
+         "2024-Q2",
+         "Quezon",
+         0.005
+        ],
+        [
+         "2024-Q3",
+         "Laguna",
+         0.092
+        ]
+       ]
+      }
+     },
+     "brier_skill_vs_climatology": 0.22514925829829824,
+     "n_test_p_ge_0.99": 1,
+     "n_test_p_ge_0.95": 2,
+     "train_Q4_origin": {
+      "accuracy": 0.8666666666666667,
+      "log_loss": 0.3903502748487886,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.6673120504464539
+     },
+     "shap_expected_value_logodds": 0.9578731216023544,
+     "train_label_rate_Q4_origin": 0.6666666666666666,
+     "q4_config": "COMPACT_T5xG1",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 1.0,
+       "base_rate": 0.34375
+      },
+      "2024-Q2": {
+       "a": 1.0,
+       "base_rate": 0.40540540540540543
+      },
+      "2024-Q3": {
+       "a": 0.9,
+       "base_rate": 0.4523809523809524
+      },
+      "2024-Q4": {
+       "a": 0.75,
+       "base_rate": 0.5106382978723404
+      },
+      "2025-Q1": {
+       "a": 0.6,
+       "base_rate": 0.5384615384615384
+      },
+      "2025-Q4": {
+       "a": 0.7,
+       "base_rate": 0.6129032258064516
+      },
+      "2026-Q1": {
+       "a": 0.7,
+       "base_rate": 0.6129032258064516
+      },
+      "2026-Q2": {
+       "a": 0.7,
+       "base_rate": 0.6268656716417911
+      },
+      "2026-Q3": {
+       "a": 0.75,
+       "base_rate": 0.6527777777777778
+      },
+      "2026-Q4": {
+       "a": 0.8,
+       "base_rate": 0.6623376623376623
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.35377534991914944,
+       "Cavite": 0.35377534991914944,
+       "Laguna": 0.35377534991914944,
+       "Quezon": 0.35377534991914944,
+       "Rizal": 0.35377534991914944,
+       "Batangas": 0.35377534991914944
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.4141414420497032,
+       "Cavite": 0.6301953168064407,
+       "Laguna": 0.09006062991459697,
+       "Quezon": 0.09006062991459697,
+       "Rizal": 0.6301953168064407,
+       "Batangas": 0.6301953168064407
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.3708563067812189,
+       "Cavite": 0.6372477077547588,
+       "Laguna": 0.10525935987705984,
+       "Quezon": 0.09753488447443413,
+       "Rizal": 0.6566163742272135,
+       "Batangas": 0.3576232075726283
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.415462198828987,
+       "Cavite": 0.6645063960379307,
+       "Laguna": 0.0821174386148141,
+       "Quezon": 0.06399112460110415,
+       "Rizal": 0.6679207799576491,
+       "Batangas": 0.598775254933437
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.36100923222128384,
+       "Cavite": 0.0010278536136305166,
+       "Laguna": 0.013911254980845828,
+       "Quezon": 0.0006175690223928068,
+       "Rizal": 0.9905617232437945,
+       "Batangas": 0.7989277602457556
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.549322252703149,
+       "Cavite": 0.08130468824691031,
+       "Laguna": 0.7528669767647426,
+       "Quezon": 0.005237786125761685,
+       "Rizal": 0.9607858272492105,
+       "Batangas": 0.9464159851291204
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.2870942087312616,
+       "Cavite": 0.07744101158490713,
+       "Laguna": 0.09173827941849924,
+       "Quezon": 0.4883556510404604,
+       "Rizal": 0.13194061517424482,
+       "Batangas": 0.6459954864381965
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.7875276844994344,
+       "Cavite": 0.6708968200787426,
+       "Laguna": 0.8168628383390564,
+       "Quezon": 0.8159430835794871,
+       "Rizal": 0.835202495673886,
+       "Batangas": 0.7987331848259998
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.5936894273831002,
+       "Cavite": 0.4620653173052162,
+       "Laguna": 0.7443508723321933,
+       "Quezon": 0.7571548907312915,
+       "Rizal": 0.4620653173052162,
+       "Batangas": 0.5428107392415834
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.8194590718489361,
+       "Cavite": 0.8523959097450176,
+       "Laguna": 0.8523959097450176,
+       "Quezon": 0.8523959097450176,
+       "Rizal": 0.7541664061675335,
+       "Batangas": 0.7859412238420938
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.8162162905765801,
+       "Cavite": 0.8523959097450176,
+       "Laguna": 0.8523959097450176,
+       "Quezon": 0.7859412238420938,
+       "Rizal": 0.8523959097450176,
+       "Batangas": 0.7379524998057543
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.7505618030006395,
+       "Cavite": 0.8226026020401637,
+       "Laguna": 0.8226026020401637,
+       "Quezon": 0.6564031696428648,
+       "Rizal": 0.7947974716371407,
+       "Batangas": 0.6564031696428648
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.8211954108266672,
+       "Cavite": 0.86608320671277,
+       "Laguna": 0.7751014548863954,
+       "Quezon": 0.86608320671277,
+       "Rizal": 0.8752962415630805,
+       "Batangas": 0.7234129442583208
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7903463056551687,
+       "Cavite": 0.8506315645699171,
+       "Laguna": 0.8506315645699171,
+       "Quezon": 0.8506315645699171,
+       "Rizal": 0.8506315645699171,
+       "Batangas": 0.5492052699961754
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.2,
+      "2023-Q2": 0.6,
+      "2023-Q3": 0.2,
+      "2023-Q4": 0.8,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.8,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 97,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 58,
+        "climate": 0,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 41
+       },
+       "direct": {
+        "market": 0.8378,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0069,
+        "fish_kill": 0.0208,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.5915
+      },
+      "Laguna": {
+       "a": {
+        "market": 97,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 58,
+        "climate": 0,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 41
+       },
+       "direct": {
+        "market": 0.8378,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0069,
+        "fish_kill": 0.0208,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.5915
+      },
+      "Quezon": {
+       "a": {
+        "market": 97,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 58,
+        "climate": 0,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 41
+       },
+       "direct": {
+        "market": 0.8378,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0069,
+        "fish_kill": 0.0208,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.5915
+      },
+      "Rizal": {
+       "a": {
+        "market": 97,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 58,
+        "climate": 0,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 41
+       },
+       "direct": {
+        "market": 0.8378,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0069,
+        "fish_kill": 0.0208,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.5915
+      },
+      "Batangas": {
+       "a": {
+        "market": 98,
+        "climate": 0,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 67,
+        "climate": 0,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 32
+       },
+       "direct": {
+        "market": 1.2504,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0069,
+        "fish_kill": 0.0208,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.5915
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 97,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 60,
+        "climate": 1,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 38
+       }
+      }
+     },
+     "adoption": {
+      "criteria": {
+       "base_rate_25_60": false,
+       "base_rate_2024_2026_le_75": false,
+       "auc_ge_0.80": true,
+       "balanced_accuracy_ge_0.75": true,
+       "brier_le_persistence": true,
+       "brier_skill_gt_0": true,
+       "no_test_p_ge_0.99": false
+      },
+      "acceptable": false
+     }
+    },
+    "B": {
+     "metrics": {
+      "accuracy": 0.7230769230769231,
+      "accuracy_ci95": [
+       0.6,
+       0.8307692307692308
+      ],
+      "balanced_accuracy": 0.7266666666666666,
+      "auc": 0.832,
+      "brier": 0.16419136323961644,
+      "log_loss": 0.5004371246621455,
+      "max_p": 0.9327901811550934,
+      "mean_p": 0.5879237194629642,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 4,
+        "mean_p": 0.16833610356126777,
+        "observed_HIGH": 0.5
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 13,
+        "mean_p": 0.28597253221398783,
+        "observed_HIGH": 0.3076923076923077
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 15,
+        "mean_p": 0.4901929233565599,
+        "observed_HIGH": 0.8
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 15,
+        "mean_p": 0.6960955507467786,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 18,
+        "mean_p": 0.8905404066953155,
+        "observed_HIGH": 0.9444444444444444
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [
+        [
+         "2025-Q4",
+         "Batangas",
+         0.906
+        ]
+       ],
+       "p<=0.1_but_HIGH": []
+      }
+     },
+     "brier_skill_vs_climatology": 0.3131816382952902,
+     "n_test_p_ge_0.99": 0,
+     "n_test_p_ge_0.95": 0,
+     "train_Q4_origin": {
+      "accuracy": 0.92,
+      "log_loss": 0.3069503594535607,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.6668686514460296
+     },
+     "shap_expected_value_logodds": 1.173209141700369,
+     "train_label_rate_Q4_origin": 0.6666666666666666,
+     "q4_config": "0.4*COMB_T5xR1n4m10l1 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 1.0,
+       "base_rate": 0.34375
+      },
+      "2024-Q2": {
+       "a": 1.0,
+       "base_rate": 0.40540540540540543
+      },
+      "2024-Q3": {
+       "a": 1.0,
+       "base_rate": 0.4523809523809524
+      },
+      "2024-Q4": {
+       "a": 1.0,
+       "base_rate": 0.5106382978723404
+      },
+      "2025-Q1": {
+       "a": 1.0,
+       "base_rate": 0.5384615384615384
+      },
+      "2025-Q4": {
+       "a": 1.0,
+       "base_rate": 0.6129032258064516
+      },
+      "2026-Q1": {
+       "a": 1.0,
+       "base_rate": 0.6129032258064516
+      },
+      "2026-Q2": {
+       "a": 1.0,
+       "base_rate": 0.6268656716417911
+      },
+      "2026-Q3": {
+       "a": 1.0,
+       "base_rate": 0.6527777777777778
+      },
+      "2026-Q4": {
+       "a": 1.0,
+       "base_rate": 0.6623376623376623
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.39307127859241875,
+       "Cavite": 0.5096056359757646,
+       "Laguna": 0.20143757908510496,
+       "Quezon": 0.18946099628083715,
+       "Rizal": 0.5145125788205922,
+       "Batangas": 0.550339602799795
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.3515990861084495,
+       "Cavite": 0.37116337412953676,
+       "Laguna": 0.2597157310630126,
+       "Quezon": 0.23209382998894462,
+       "Rizal": 0.4708819696634448,
+       "Batangas": 0.42414052569730865
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.29070465271322316,
+       "Cavite": 0.3675871426138538,
+       "Laguna": 0.23473848121689106,
+       "Quezon": 0.20157527097949496,
+       "Rizal": 0.31527146478762463,
+       "Batangas": 0.33435090396825135
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.3936535409475973,
+       "Cavite": 0.4434710781633328,
+       "Laguna": 0.33887835740848543,
+       "Quezon": 0.25068744578955177,
+       "Rizal": 0.5345414754411135,
+       "Batangas": 0.40068934793550304
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.33620309919595914,
+       "Cavite": 0.16982154549266382,
+       "Laguna": 0.2311905179896291,
+       "Quezon": 0.1245798786789575,
+       "Rizal": 0.5513871600783141,
+       "Batangas": 0.6040363937402314
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.5722203600446333,
+       "Cavite": 0.4168327210486734,
+       "Laguna": 0.7461189723260396,
+       "Quezon": 0.1894819937926126,
+       "Rizal": 0.7541176705069316,
+       "Batangas": 0.7545504425489092
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.6185435899347015,
+       "Cavite": 0.5700305174750459,
+       "Laguna": 0.49808298278494323,
+       "Quezon": 0.7241090155040593,
+       "Rizal": 0.6577867918820626,
+       "Batangas": 0.6427086420273964
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.7393121201771877,
+       "Cavite": 0.6387369279711704,
+       "Laguna": 0.7966651118449919,
+       "Quezon": 0.8561847883744821,
+       "Rizal": 0.6943442700243879,
+       "Batangas": 0.7106295026709067
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.6534275875143968,
+       "Cavite": 0.4814334734728085,
+       "Laguna": 0.8437770478540164,
+       "Quezon": 0.8822251849619005,
+       "Rizal": 0.459079771711447,
+       "Batangas": 0.6006224595718116
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.9084832542280121,
+       "Cavite": 0.9046168808242058,
+       "Laguna": 0.9327901811550934,
+       "Quezon": 0.8847338743703543,
+       "Rizal": 0.9144613280138384,
+       "Batangas": 0.9058140067765692
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.9050654125375409,
+       "Cavite": 0.9114622747070702,
+       "Laguna": 0.9227758766643612,
+       "Quezon": 0.8928149066641363,
+       "Rizal": 0.9143087948058455,
+       "Batangas": 0.883965209846291
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.6047649779249105,
+       "Cavite": 0.6817066575479681,
+       "Laguna": 0.7549477702314795,
+       "Quezon": 0.5278650092803115,
+       "Rizal": 0.6803526328033327,
+       "Batangas": 0.3789528197614608
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.8759593930995028,
+       "Cavite": 0.8542261158833051,
+       "Laguna": 0.8973645968717334,
+       "Quezon": 0.8555866134357765,
+       "Rizal": 0.8985243273690158,
+       "Batangas": 0.8740953119376837
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7826404146579566,
+       "Cavite": 0.836987437766087,
+       "Laguna": 0.8740505728575284,
+       "Quezon": 0.8680533372882764,
+       "Rizal": 0.8666462829141701,
+       "Batangas": 0.4674644424637213
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.2,
+      "2023-Q2": 0.6,
+      "2023-Q3": 0.2,
+      "2023-Q4": 0.8,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.8,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 89,
+        "climate": 7,
+        "fish_kill": 4,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 26,
+        "climate": 2,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 71
+       },
+       "direct": {
+        "market": 0.4923,
+        "climate": 0.03,
+        "fish_kill": 0.0027,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0065,
+        "fish_kill": 0.0195,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.3415
+      },
+      "Laguna": {
+       "a": {
+        "market": 91,
+        "climate": 3,
+        "fish_kill": 6,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 32,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 65
+       },
+       "direct": {
+        "market": 0.6058,
+        "climate": 0.0148,
+        "fish_kill": 0.0209,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0071,
+        "fish_kill": 0.0199,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.2302
+      },
+      "Quezon": {
+       "a": {
+        "market": 95,
+        "climate": 2,
+        "fish_kill": 3,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 38,
+        "climate": 1,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 60
+       },
+       "direct": {
+        "market": 0.8225,
+        "climate": 0.015,
+        "fish_kill": 0.0027,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.007,
+        "fish_kill": 0.0211,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.3216
+      },
+      "Rizal": {
+       "a": {
+        "market": 91,
+        "climate": 3,
+        "fish_kill": 6,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 29,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 68
+       },
+       "direct": {
+        "market": 0.5738,
+        "climate": 0.0105,
+        "fish_kill": 0.0126,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0065,
+        "fish_kill": 0.0243,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.344
+      },
+      "Batangas": {
+       "a": {
+        "market": 95,
+        "climate": 4,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 46,
+        "climate": 2,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 51
+       },
+       "direct": {
+        "market": 1.1615,
+        "climate": 0.0378,
+        "fish_kill": 0.0027,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0052,
+        "fish_kill": 0.0157,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.2759
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 93,
+        "climate": 3,
+        "fish_kill": 4,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 35,
+        "climate": 1,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 62
+       }
+      }
+     },
+     "adoption": {
+      "criteria": {
+       "base_rate_25_60": false,
+       "base_rate_2024_2026_le_75": false,
+       "auc_ge_0.80": true,
+       "balanced_accuracy_ge_0.75": false,
+       "brier_le_persistence": true,
+       "brier_skill_gt_0": true,
+       "no_test_p_ge_0.99": true
+      },
+      "acceptable": false
+     }
+    }
+   },
+   "base_rate": {
+    "all": 0.6470588235294118,
+    "n": 85,
+    "2024_2026": 0.9111111111111111,
+    "per_year": {
+     "2021": 0.0,
+     "2022": 0.3333333333333333,
+     "2023": 0.45,
+     "2024": 0.9,
+     "2025": 0.9,
+     "2026": 0.9333333333333333
+    }
+   },
+   "persistence": {
+    "accuracy": 0.8,
+    "accuracy_ci95": [
+     0.6923076923076923,
+     0.8923076923076924
+    ],
+    "balanced_accuracy": 0.8,
+    "auc": 0.8,
+    "brier": 0.199999600001,
+    "log_loss": 2.763102911591928,
+    "ece_3bin": 0.19999900000000015,
+    "max_p": 1.0,
+    "mean_p": 0.6615384615384615,
+    "n_p_ge_0.99": 43,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 22,
+      "mean_p": 0.0,
+      "observed_HIGH": 0.45454545454545453
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 43,
+      "mean_p": 1.0,
+      "observed_HIGH": 0.9302325581395349
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2023-Q1",
+       "Batangas",
+       1.0
+      ],
+      [
+       "2024-Q3",
+       "Cavite",
+       1.0
+      ],
+      [
+       "2025-Q4",
+       "Batangas",
+       1.0
+      ]
+     ],
+     "p<=0.1_but_HIGH": [
+      [
+       "2023-Q1",
+       "Rizal",
+       0.0
+      ],
+      [
+       "2023-Q2",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2023-Q4",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2024-Q2",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2024-Q3",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2025-Q1",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2026-Q2",
+       "Quezon",
+       0.0
+      ]
+     ]
+    }
+   },
+   "climatology_brier": 0.23906082363914546,
+   "pct_labels_differ_from_P50": 0.058823529411764705
+  },
+  "P75": {
+   "tau_by_target": {
+    "2023-Q1": 14.353333333333332,
+    "2023-Q2": 14.349166666666665,
+    "2023-Q3": 14.224999999999998,
+    "2023-Q4": 14.169166666666664,
+    "2024-Q1": 14.11333333333333,
+    "2024-Q2": 14.349166666666665,
+    "2024-Q3": 14.86,
+    "2024-Q4": 15.483333333333334,
+    "2025-Q1": 15.900000000000002,
+    "2025-Q4": 17.296666666666667,
+    "2026-Q1": 17.296666666666667,
+    "2026-Q2": 17.43,
+    "2026-Q3": 18.28,
+    "2026-Q4": 18.5725
+   },
+   "test_quarters": [
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "n_test_rows": 65,
+   "arms": {
+    "A": {
+     "metrics": {
+      "accuracy": 0.6,
+      "accuracy_ci95": [
+       0.4307692307692308,
+       0.7692307692307693
+      ],
+      "balanced_accuracy": 0.6298701298701299,
+      "auc": 0.6498917748917749,
+      "brier": 0.2714602348886158,
+      "log_loss": 0.7731206623996272,
+      "max_p": 0.893639628898207,
+      "mean_p": 0.45817564570079383,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 14,
+        "mean_p": 0.10835045582911393,
+        "observed_HIGH": 0.5
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 13,
+        "mean_p": 0.31485744903017393,
+        "observed_HIGH": 0.5384615384615384
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 22,
+        "mean_p": 0.5260701202435802,
+        "observed_HIGH": 0.7727272727272727
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 8,
+        "mean_p": 0.723829381294381,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 8,
+        "mean_p": 0.8508982569797405,
+        "observed_HIGH": 0.625
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [],
+       "p<=0.1_but_HIGH": [
+        [
+         "2023-Q4",
+         "Laguna",
+         0.086
+        ],
+        [
+         "2024-Q1",
+         "Laguna",
+         0.056
+        ]
+       ]
+      }
+     },
+     "brier_skill_vs_climatology": 0.07336136929605663,
+     "n_test_p_ge_0.99": 0,
+     "n_test_p_ge_0.95": 0,
+     "train_Q4_origin": {
+      "accuracy": 0.8133333333333334,
+      "log_loss": 0.4953098134289041,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.5397478586978312
+     },
+     "shap_expected_value_logodds": 0.14118320669582887,
+     "train_label_rate_Q4_origin": 0.5733333333333334,
+     "q4_config": "COMPACT_T5xG4",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 0.8,
+       "base_rate": 0.21875
+      },
+      "2024-Q2": {
+       "a": 0.6,
+       "base_rate": 0.2702702702702703
+      },
+      "2024-Q3": {
+       "a": 0.5,
+       "base_rate": 0.3333333333333333
+      },
+      "2024-Q4": {
+       "a": 0.35,
+       "base_rate": 0.40425531914893614
+      },
+      "2025-Q1": {
+       "a": 0.2,
+       "base_rate": 0.4423076923076923
+      },
+      "2025-Q4": {
+       "a": 0.85,
+       "base_rate": 0.532258064516129
+      },
+      "2026-Q1": {
+       "a": 0.85,
+       "base_rate": 0.532258064516129
+      },
+      "2026-Q2": {
+       "a": 0.6,
+       "base_rate": 0.5223880597014925
+      },
+      "2026-Q3": {
+       "a": 0.7,
+       "base_rate": 0.5555555555555556
+      },
+      "2026-Q4": {
+       "a": 0.7,
+       "base_rate": 0.5714285714285714
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.35377534991914944,
+       "Cavite": 0.35377534991914944,
+       "Laguna": 0.35377534991914944,
+       "Quezon": 0.35377534991914944,
+       "Rizal": 0.35377534991914944,
+       "Batangas": 0.35377534991914944
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.3279938272737348,
+       "Cavite": 0.5397840310580572,
+       "Laguna": 0.04342260522876396,
+       "Quezon": 0.04342260522876396,
+       "Rizal": 0.5397840310580572,
+       "Batangas": 0.47355586379503156
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.3030980749884421,
+       "Cavite": 0.5585773533477582,
+       "Laguna": 0.09676443823088707,
+       "Quezon": 0.08748189796781025,
+       "Rizal": 0.5857594851299058,
+       "Batangas": 0.18690720026584895
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.29577210760313255,
+       "Cavite": 0.5408292013773545,
+       "Laguna": 0.08567289007429182,
+       "Quezon": 0.08567289007429182,
+       "Rizal": 0.6223269114987946,
+       "Batangas": 0.1443586449909299
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.1850992064402536,
+       "Cavite": 0.10173524719443963,
+       "Laguna": 0.056322561952623286,
+       "Quezon": 0.0509088980636147,
+       "Rizal": 0.5331637344495216,
+       "Batangas": 0.18336559054106866
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.2426671053470165,
+       "Cavite": 0.1754354558971306,
+       "Laguna": 0.2742756940178351,
+       "Quezon": 0.1754354558971306,
+       "Rizal": 0.2742756940178351,
+       "Batangas": 0.31391322690515133
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.29236109457113846,
+       "Cavite": 0.28120071390366874,
+       "Laguna": 0.24129734926647828,
+       "Quezon": 0.34281975657684216,
+       "Rizal": 0.2982438265543516,
+       "Batangas": 0.2982438265543516
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.5441981517758456,
+       "Cavite": 0.47300024684367226,
+       "Laguna": 0.5551745469675664,
+       "Quezon": 0.5869982112584028,
+       "Rizal": 0.5529088769047933,
+       "Batangas": 0.5529088769047933
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.49485600251253936,
+       "Cavite": 0.4697577298440038,
+       "Laguna": 0.5208455128715672,
+       "Quezon": 0.5318386535134486,
+       "Rizal": 0.4697577298440038,
+       "Batangas": 0.48208038648967344
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.8585855628328097,
+       "Cavite": 0.8514370792396676,
+       "Laguna": 0.893639628898207,
+       "Quezon": 0.893639628898207,
+       "Rizal": 0.8261169605463671,
+       "Batangas": 0.8280945165816002
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.8063012639002638,
+       "Cavite": 0.8407841169489856,
+       "Laguna": 0.8407841169489856,
+       "Quezon": 0.8326900077759039,
+       "Rizal": 0.7799474539491855,
+       "Batangas": 0.7373006238782586
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.521363634740231,
+       "Cavite": 0.5891831132818763,
+       "Laguna": 0.5891831132818763,
+       "Quezon": 0.47615064904580084,
+       "Rizal": 0.47615064904580084,
+       "Batangas": 0.47615064904580084
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.7302120122057618,
+       "Cavite": 0.7504914969363465,
+       "Laguna": 0.7444617662148223,
+       "Quezon": 0.7102332696902114,
+       "Rizal": 0.7533689989727104,
+       "Batangas": 0.6925045292147187
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7065086548668533,
+       "Cavite": 0.724930099197199,
+       "Laguna": 0.7498924717243048,
+       "Quezon": 0.7498924717243048,
+       "Rizal": 0.7498924717243048,
+       "Batangas": 0.5579357599641532
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.0,
+      "2023-Q2": 0.2,
+      "2023-Q3": 0.2,
+      "2023-Q4": 0.6,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.4,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 90,
+        "climate": 10,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 20,
+        "climate": 2,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 78
+       },
+       "direct": {
+        "market": 0.292,
+        "climate": 0.0307,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.1667
+      },
+      "Laguna": {
+       "a": {
+        "market": 94,
+        "climate": 6,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 30,
+        "climate": 2,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 68
+       },
+       "direct": {
+        "market": 0.5229,
+        "climate": 0.0307,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.1667
+      },
+      "Quezon": {
+       "a": {
+        "market": 94,
+        "climate": 6,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 30,
+        "climate": 2,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 68
+       },
+       "direct": {
+        "market": 0.5229,
+        "climate": 0.0307,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.1667
+      },
+      "Rizal": {
+       "a": {
+        "market": 94,
+        "climate": 6,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 30,
+        "climate": 2,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 68
+       },
+       "direct": {
+        "market": 0.5229,
+        "climate": 0.0307,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.1667
+      },
+      "Batangas": {
+       "a": {
+        "market": 96,
+        "climate": 4,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 41,
+        "climate": 1,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 58
+       },
+       "direct": {
+        "market": 0.8279,
+        "climate": 0.0307,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0,
+        "fish_kill": 0.0,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 1.1667
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 95,
+        "climate": 5,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 31,
+        "climate": 2,
+        "fish_kill": 0,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 67
+       }
+      }
+     },
+     "adoption": {
+      "criteria": {
+       "base_rate_25_60": true,
+       "base_rate_2024_2026_le_75": false,
+       "auc_ge_0.80": false,
+       "balanced_accuracy_ge_0.75": false,
+       "brier_le_persistence": true,
+       "brier_skill_gt_0": true,
+       "no_test_p_ge_0.99": true
+      },
+      "acceptable": false
+     }
+    },
+    "B": {
+     "metrics": {
+      "accuracy": 0.6,
+      "accuracy_ci95": [
+       0.41500000000000004,
+       0.7846153846153846
+      ],
+      "balanced_accuracy": 0.6298701298701299,
+      "auc": 0.7142857142857143,
+      "brier": 0.2467626054439985,
+      "log_loss": 0.709037747144305,
+      "max_p": 0.9095299648526162,
+      "mean_p": 0.4721320300352175,
+      "reliability_5bin": [
+       {
+        "bin": "0.0-0.2",
+        "n": 12,
+        "mean_p": 0.1379209779574615,
+        "observed_HIGH": 0.4166666666666667
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 19,
+        "mean_p": 0.30768015028688867,
+        "observed_HIGH": 0.5789473684210527
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 14,
+        "mean_p": 0.5227387189511231,
+        "observed_HIGH": 0.7857142857142857
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 10,
+        "mean_p": 0.7178473355648396,
+        "observed_HIGH": 1.0
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 10,
+        "mean_p": 0.8690791940384596,
+        "observed_HIGH": 0.7
+       }
+      ],
+      "confident_mistakes": {
+       "p>=0.9_but_LOW": [],
+       "p<=0.1_but_HIGH": [
+        [
+         "2024-Q1",
+         "Laguna",
+         0.097
+        ],
+        [
+         "2024-Q2",
+         "Quezon",
+         0.098
+        ]
+       ]
+      }
+     },
+     "brier_skill_vs_climatology": 0.15766755704979507,
+     "n_test_p_ge_0.99": 0,
+     "n_test_p_ge_0.95": 0,
+     "train_Q4_origin": {
+      "accuracy": 0.8666666666666667,
+      "log_loss": 0.4320048146804916,
+      "n_p_ge_0.99": 0,
+      "mean_p": 0.5770445054094205
+     },
+     "shap_expected_value_logodds": 0.4295637015669887,
+     "train_label_rate_Q4_origin": 0.5733333333333334,
+     "q4_config": "0.4*COMB_T5xR1n4m10l5 + 0.4*B3 + 0.2*LR['trig_climate', 'trig_fish_kill']",
+     "shrink_params": {
+      "2023-Q1": null,
+      "2023-Q2": null,
+      "2023-Q3": null,
+      "2023-Q4": null,
+      "2024-Q1": {
+       "a": 0.85,
+       "base_rate": 0.21875
+      },
+      "2024-Q2": {
+       "a": 0.9,
+       "base_rate": 0.2702702702702703
+      },
+      "2024-Q3": {
+       "a": 0.8,
+       "base_rate": 0.3333333333333333
+      },
+      "2024-Q4": {
+       "a": 0.75,
+       "base_rate": 0.40425531914893614
+      },
+      "2025-Q1": {
+       "a": 0.95,
+       "base_rate": 0.4423076923076923
+      },
+      "2025-Q4": {
+       "a": 1.0,
+       "base_rate": 0.532258064516129
+      },
+      "2026-Q1": {
+       "a": 1.0,
+       "base_rate": 0.532258064516129
+      },
+      "2026-Q2": {
+       "a": 0.95,
+       "base_rate": 0.5223880597014925
+      },
+      "2026-Q3": {
+       "a": 1.0,
+       "base_rate": 0.5555555555555556
+      },
+      "2026-Q4": {
+       "a": 1.0,
+       "base_rate": 0.5714285714285714
+      }
+     },
+     "index": {
+      "2023-Q1": {
+       "CALABARZON": 0.3960602593697857,
+       "Cavite": 0.5150034121519842,
+       "Laguna": 0.20276018559800085,
+       "Quezon": 0.18971970317815862,
+       "Rizal": 0.5196379855747569,
+       "Batangas": 0.553180010346028
+      },
+      "2023-Q2": {
+       "CALABARZON": 0.27391141699818516,
+       "Cavite": 0.3149241069440687,
+       "Laguna": 0.17729299878184657,
+       "Quezon": 0.16425779313153993,
+       "Rizal": 0.4558291982631202,
+       "Batangas": 0.25725298787035045
+      },
+      "2023-Q3": {
+       "CALABARZON": 0.22670293810274017,
+       "Cavite": 0.22884744968556886,
+       "Laguna": 0.15502464750562536,
+       "Quezon": 0.1399009279953646,
+       "Rizal": 0.3487180050243328,
+       "Batangas": 0.26102366030280927
+      },
+      "2023-Q4": {
+       "CALABARZON": 0.2035349831086573,
+       "Cavite": 0.20532259407621836,
+       "Laguna": 0.1478211601623441,
+       "Quezon": 0.13126844037384527,
+       "Rizal": 0.327076888508998,
+       "Batangas": 0.2061858324218806
+      },
+      "2024-Q1": {
+       "CALABARZON": 0.1960589519636935,
+       "Cavite": 0.11336954786015493,
+       "Laguna": 0.09742738375536503,
+       "Quezon": 0.08111992976693577,
+       "Rizal": 0.39162602752211667,
+       "Batangas": 0.29675187091389504
+      },
+      "2024-Q2": {
+       "CALABARZON": 0.2902642599236667,
+       "Cavite": 0.15935373363150962,
+       "Laguna": 0.323677681465518,
+       "Quezon": 0.09849546934684839,
+       "Rizal": 0.430194055588863,
+       "Batangas": 0.4396003595855946
+      },
+      "2024-Q3": {
+       "CALABARZON": 0.3436066456193547,
+       "Cavite": 0.29601515171588555,
+       "Laguna": 0.341800551110256,
+       "Quezon": 0.3553494165140386,
+       "Rizal": 0.3617739312136114,
+       "Batangas": 0.36309417754298223
+      },
+      "2024-Q4": {
+       "CALABARZON": 0.5937762706860348,
+       "Cavite": 0.5298610245493022,
+       "Laguna": 0.6341633621398021,
+       "Quezon": 0.7037961044679787,
+       "Rizal": 0.5061812168752194,
+       "Batangas": 0.5948796453978719
+      },
+      "2025-Q1": {
+       "CALABARZON": 0.6501595496093617,
+       "Cavite": 0.5573605163261285,
+       "Laguna": 0.7587268566997141,
+       "Quezon": 0.7894676765370184,
+       "Rizal": 0.5687219506217271,
+       "Batangas": 0.5765207478622203
+      },
+      "2025-Q4": {
+       "CALABARZON": 0.8705297257729454,
+       "Cavite": 0.8600728057604679,
+       "Laguna": 0.9095299648526162,
+       "Quezon": 0.8315357447817484,
+       "Rizal": 0.8865870182567366,
+       "Batangas": 0.8649230952131581
+      },
+      "2026-Q1": {
+       "CALABARZON": 0.8676286623039738,
+       "Cavite": 0.8619883723758095,
+       "Laguna": 0.8953258194107316,
+       "Quezon": 0.8539258861887953,
+       "Rizal": 0.8765029973134357,
+       "Batangas": 0.850400236231097
+      },
+      "2026-Q2": {
+       "CALABARZON": 0.48797333956444194,
+       "Cavite": 0.5917649376378807,
+       "Laguna": 0.6047724186289498,
+       "Quezon": 0.3928283432272409,
+       "Rizal": 0.4796070045350254,
+       "Batangas": 0.37089399379311294
+      },
+      "2026-Q3": {
+       "CALABARZON": 0.7375093874349868,
+       "Cavite": 0.7726408539792378,
+       "Laguna": 0.7027486835319141,
+       "Quezon": 0.7668846363394145,
+       "Rizal": 0.7591970165857715,
+       "Batangas": 0.6860757467385958
+      },
+      "2026-Q4": {
+       "CALABARZON": 0.7127589574652408,
+       "Cavite": 0.7978199064303406,
+       "Laguna": 0.6783021117120942,
+       "Quezon": 0.7849210687650712,
+       "Rizal": 0.7896510838495674,
+       "Batangas": 0.5131006165691303
+      }
+     },
+     "observed_share_HIGH": {
+      "2023-Q1": 0.0,
+      "2023-Q2": 0.2,
+      "2023-Q3": 0.2,
+      "2023-Q4": 0.6,
+      "2024-Q1": 0.8,
+      "2024-Q2": 1.0,
+      "2024-Q3": 0.8,
+      "2024-Q4": 1.0,
+      "2025-Q1": 1.0,
+      "2025-Q4": 0.4,
+      "2026-Q1": 1.0,
+      "2026-Q2": 0.8,
+      "2026-Q3": 1.0
+     },
+     "drivers_q4_2026": {
+      "Cavite": {
+       "a": {
+        "market": 86,
+        "climate": 12,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 42,
+        "climate": 6,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 51
+       },
+       "direct": {
+        "market": 0.6747,
+        "climate": 0.0939,
+        "fish_kill": 0.0049,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.003,
+        "fish_kill": 0.0089,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.827
+      },
+      "Laguna": {
+       "a": {
+        "market": 47,
+        "climate": 41,
+        "fish_kill": 12,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 14,
+        "climate": 13,
+        "fish_kill": 4,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 69
+       },
+       "direct": {
+        "market": 0.1884,
+        "climate": 0.1614,
+        "fish_kill": 0.0373,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.0034,
+        "fish_kill": 0.0098,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.9001
+      },
+      "Quezon": {
+       "a": {
+        "market": 90,
+        "climate": 8,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 42,
+        "climate": 4,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 53
+       },
+       "direct": {
+        "market": 0.6651,
+        "climate": 0.0603,
+        "fish_kill": 0.0049,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.003,
+        "fish_kill": 0.0089,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.8272
+      },
+      "Rizal": {
+       "a": {
+        "market": 75,
+        "climate": 20,
+        "fish_kill": 5,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 33,
+        "climate": 9,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 56
+       },
+       "direct": {
+        "market": 0.5214,
+        "climate": 0.1401,
+        "fish_kill": 0.0225,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.003,
+        "fish_kill": 0.0115,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.8778
+      },
+      "Batangas": {
+       "a": {
+        "market": 87,
+        "climate": 12,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 47,
+        "climate": 7,
+        "fish_kill": 1,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 45
+       },
+       "direct": {
+        "market": 0.8834,
+        "climate": 0.1216,
+        "fish_kill": 0.0049,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "news_allocated": {
+        "market": 0.0,
+        "climate": 0.003,
+        "fish_kill": 0.0089,
+        "employment": 0.0,
+        "ofw_remittance": 0.0
+       },
+       "other_abs": 0.8336
+      },
+      "CALABARZON": {
+       "a": {
+        "market": 81,
+        "climate": 16,
+        "fish_kill": 3,
+        "employment": 0,
+        "ofw_remittance": 0
+       },
+       "b": {
+        "market": 37,
+        "climate": 7,
+        "fish_kill": 2,
+        "employment": 0,
+        "ofw_remittance": 0,
+        "other": 54
+       }
+      }
+     },
+     "adoption": {
+      "criteria": {
+       "base_rate_25_60": true,
+       "base_rate_2024_2026_le_75": false,
+       "auc_ge_0.80": false,
+       "balanced_accuracy_ge_0.75": false,
+       "brier_le_persistence": true,
+       "brier_skill_gt_0": true,
+       "no_test_p_ge_0.99": true
+      },
+      "acceptable": false
+     }
+    }
+   },
+   "base_rate": {
+    "all": 0.5647058823529412,
+    "n": 85,
+    "2024_2026": 0.8666666666666667,
+    "per_year": {
+     "2021": 0.0,
+     "2022": 0.26666666666666666,
+     "2023": 0.25,
+     "2024": 0.9,
+     "2025": 0.7,
+     "2026": 0.9333333333333333
+    }
+   },
+   "persistence": {
+    "accuracy": 0.7076923076923077,
+    "accuracy_ci95": [
+     0.5846153846153846,
+     0.8307692307692308
+    ],
+    "balanced_accuracy": 0.7218614718614718,
+    "auc": 0.7218614718614719,
+    "brier": 0.29230710769330764,
+    "log_loss": 4.038380716941544,
+    "ece_3bin": 0.2923066923076924,
+    "max_p": 1.0,
+    "mean_p": 0.5384615384615384,
+    "n_p_ge_0.99": 35,
+    "reliability_5bin": [
+     {
+      "bin": "0.0-0.2",
+      "n": 30,
+      "mean_p": 0.0,
+      "observed_HIGH": 0.4666666666666667
+     },
+     {
+      "bin": "0.2-0.4",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.4-0.6",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.6-0.8",
+      "n": 0,
+      "mean_p": null,
+      "observed_HIGH": null
+     },
+     {
+      "bin": "0.8-1.0",
+      "n": 35,
+      "mean_p": 1.0,
+      "observed_HIGH": 0.8571428571428571
+     }
+    ],
+    "confident_mistakes": {
+     "p>=0.9_but_LOW": [
+      [
+       "2023-Q1",
+       "Batangas",
+       1.0
+      ],
+      [
+       "2024-Q3",
+       "Cavite",
+       1.0
+      ],
+      [
+       "2025-Q4",
+       "Quezon",
+       1.0
+      ],
+      [
+       "2025-Q4",
+       "Rizal",
+       1.0
+      ],
+      [
+       "2025-Q4",
+       "Batangas",
+       1.0
+      ]
+     ],
+     "p<=0.1_but_HIGH": [
+      [
+       "2023-Q3",
+       "Rizal",
+       0.0
+      ],
+      [
+       "2023-Q4",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2023-Q4",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Laguna",
+       0.0
+      ],
+      [
+       "2024-Q1",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2024-Q2",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2024-Q2",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2024-Q3",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2025-Q1",
+       "Cavite",
+       0.0
+      ],
+      [
+       "2025-Q1",
+       "Rizal",
+       0.0
+      ],
+      [
+       "2025-Q1",
+       "Batangas",
+       0.0
+      ],
+      [
+       "2026-Q2",
+       "Quezon",
+       0.0
+      ],
+      [
+       "2026-Q2",
+       "Rizal",
+       0.0
+      ]
+     ]
+    }
+   },
+   "climatology_brier": 0.2929515626629925,
+   "pct_labels_differ_from_P50": 0.1411764705882353
+  }
+ },
+ "adoption": {
+  "acceptable": [],
+  "chosen": "keep E49-C2 (median)"
+ },
+ "run": "20261016T053009Z"
+}

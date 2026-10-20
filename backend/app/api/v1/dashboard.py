@@ -30,6 +30,7 @@ from app.schemas.public import (
 from app.services import dashboard as svc
 from app.services import reference as ref
 from app.services import review as rv
+from app.quarterly import preview as PV
 
 router = APIRouter()
 
@@ -54,7 +55,7 @@ async def get_config() -> ConfigResponse:
     for h in svc.HORIZONS:
         hq = svc.available_quarters(h)
         horizons[h] = {
-            **(svc.E31_HORIZON_INFO if svc.e31_active() else svc.HORIZON_INFO)[h],
+            **(svc.e31_horizon_info() if svc.e31_active() else svc.HORIZON_INFO)[h],
             "earliest": hq[0] if hq else None,
             "latest": hq[-1] if hq else None,
             "count": len(hq),
@@ -81,6 +82,8 @@ async def get_config() -> ConfigResponse:
                                   if svc.E31.quarter_row(q, svc.NOWCAST)["mode"] in ("FORECAST", "NOWCAST")]
                                  if svc.e31_active() else []),
             "forecastTarget": svc.forecast_target(),
+            # lead-2 preview on (the default): the dashboard opens on the lead-2 quarter (2027-Q1)
+            **({"defaultQuarter": PV.default_quarter() or svc.latest_quarter()} if PV.lead2_preview() else {}),
             "note": (
                 "Backtests are observed quarters. The current quarter and the next calendar quarter (the dashboard's "
                 "target) are forecasts issued at the start of the current quarter with information published before "
@@ -118,8 +121,12 @@ async def get_quarters(
         serverTime=now.isoformat(),
         calendarQuarter=calendar_quarter,
         lagQuarters=max(lag, 0),
-        forecastTarget={**target, "available": current == target["target_quarter"]},
-        quarters=svc.timeline(h),
+        # available = the target quarter has a served forecast (with lead 2 it is served but not the current quarter)
+        forecastTarget={**target, "available": target["target_quarter"] in (
+            set(svc.available_quarters(svc.FORECAST)) | set(svc.available_quarters(svc.NOWCAST)))},
+        quarters=[{**q, **PV.fields(q["id"])} for q in svc.timeline(h)],
+        # lead-2 preview on (the default): the dashboard opens on the lead-2 quarter (2027-Q1); `current` stays lead 1
+        defaultQuarter=(PV.default_quarter() or current) if PV.lead2_preview() else None,
     )
 
 
@@ -137,12 +144,13 @@ async def get_provinces(
     """
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
-    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    withheld = frozenset(pid for pid, rq in await rv.withheld_pairs(db, q))
     return ProvincesResponse(
         quarter=q,
         horizon=h,
         indicator=svc.indicator_for(q),
         data=svc.province_summary(q, withheld, h),
+        **PV.fields(q),
     )
 
 
@@ -158,8 +166,8 @@ async def get_ranking(
     """
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
-    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
-    return RankingResponse(**svc.ranking(q, withheld, h))
+    withheld = frozenset(pid for pid, rq in await rv.withheld_pairs(db, q))
+    return RankingResponse(**svc.ranking(q, withheld, h), **PV.fields(q))
 
 
 @router.get(
@@ -169,6 +177,7 @@ async def get_ranking(
 async def get_municipalities(
     province_id: str,
     quarter: str | None = Query(None),
+    db: AsyncSession = Depends(get_db),
 ) -> MunicipalitiesResponse:
     """
     The province's cities and municipalities, ranked by risk index.
@@ -180,11 +189,19 @@ async def get_municipalities(
     if slug not in ref.PROVINCES:
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
     q = svc.resolve_quarter(quarter)
+    withheld = frozenset(pid for pid, rq in await rv.withheld_pairs(db, q))
+    data = svc.municipality_summary(q, province_id=slug, withheld=withheld)
+    if slug in withheld:
+        # The LGU indices of a withheld (rejected, or unapproved with AIPHEED_REQUIRE_APPROVAL=1) province are derived
+        # from its withheld forecast, so they are held back too (thesis p. 60).
+        data = [{**m, "riskIndex": None, "riskLevel": None, "rankRegion": None, "rankInProvince": None,
+                 "noProvinceEstimate": True} for m in data]
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,
         indicator=svc.indicator_for(q),
-        data=svc.municipality_summary(q, province_id=slug),
+        data=data,
+        **PV.fields(q),
     )
 
 

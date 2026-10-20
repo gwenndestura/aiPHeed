@@ -17,6 +17,9 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.ml.inference import e41_lead2 as E41
 
+# E53 port (tina-e53-port): this E41-E48 candidate test runs under Angel's original configuration (E36 record,
+# lead-2 target, no preview); the served default is now E53 (see tests/integration/test_e53_served_model.py).
+pytestmark = pytest.mark.usefixtures("angel_original_config")
 client = TestClient(app)
 EXP = Path("..") / "aipheed-backend-aligned" / "experiments"
 STATUSES = {"contributes", "no_effect", "no_model_input", "no_data"}

@@ -24,6 +24,7 @@ from __future__ import annotations
 import functools
 import json
 import logging
+import math
 import unicodedata
 from pathlib import Path
 
@@ -34,6 +35,7 @@ from app.ml.inference.explainer import Explainer
 from app.ml.inference.predictor import Predictor
 from app.ml.inference import e31_engine as E31
 from app.ml.inference import e41_lead2 as E41L2
+from app.quarterly.verdicts import max_reliable_lead, verdict_from_record
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
@@ -55,10 +57,10 @@ INDICATOR = {
     ),
     "unit": "probability (0-1)",
     "horizon": "One quarter ahead (lead 1), issued at the start of the quarter with information published before it; "
-               "not validated against the baselines (E36)",
+               "not validated: no baseline is beaten significantly.",
     "source": (
         "SWS Balance Luzon hunger rounds, PSA provincial food and rice CPI, and "
-        "validated Google News titles (FSSI-v2), CALABARZON, 2021 to 14 October 2026"
+        "relevance-screened Google News titles (CALABARZON, 2021 to 14 October 2026)."
     ),
     "caveat": (
         "Risk rankings are indicative, not absolute. They are relative ordinal "
@@ -67,13 +69,41 @@ INDICATOR = {
     ),
 }
 
+# A served model with the measured driver-condition inputs (E53) also draws on these sources.
+CONDITION_SOURCES = (
+    "; measured driver conditions from NASA POWER rainfall (reanalysis), NOAA IBTrACS storms, PSA fisheries "
+    "production (proxy), PSA LFS unemployment (national) and BSP remittances (national; 2026 provisional)."
+)
+
+
+def _uses_condition_inputs() -> bool:
+    try:
+        return E31.uses_condition_inputs()
+    except Exception:                              # no served record (legacy data layer)
+        return False
+
+
+def indicator() -> dict:
+    """INDICATOR for the served record: its source list names the measured-condition sources when the model uses
+    them (E53); otherwise INDICATOR unchanged."""
+    if _uses_condition_inputs():
+        return {**INDICATOR, "source": INDICATOR["source"].rstrip(".") + CONDITION_SOURCES}
+    return INDICATOR
+
 
 
 def indicator_for(quarter: str) -> dict:
     """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
     target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
     if not (E41L2.serves(quarter) or E41L2.governs()):
-        return INDICATOR
+        ind = indicator()                                         # the served record's own definition (E53 port)
+        if e31_active():
+            from app.quarterly import preview as PV
+
+            row = PV.preview_row(quarter)                         # the lead-2 preview quarter states its own horizon
+            if row is not None:
+                ind = {**ind, "horizon": E31.E31Engine().horizon_label(row)}
+        return ind
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
         return rec["indicator"]
@@ -185,7 +215,8 @@ HORIZON_INFO = {
 # The alias resolves to the same entry; see the Rule 2 note above.
 HORIZON_INFO[NOWCAST] = {**HORIZON_INFO[FORECAST], "id": NOWCAST, "alias_of": FORECAST}
 
-# E36: the served estimates come from the E36 record (aiPHeed-E36-LGBM). Every row is lead 1, so both ids show the
+# The served estimates come from the served record (default E53-A1; AIPHEED_RECORD selects e49 / e36 / e48 instead).
+# The forecast definition below is E49's text; e31_horizon_info() swaps in E53's. Every row is lead 1, so both ids show the
 # same rows; "nowcast" is kept for contract compatibility. The E31 (PCF21) record stays available via
 # AIPHEED_E31_RECORD.
 E31_HORIZON_INFO = {
@@ -193,18 +224,34 @@ E31_HORIZON_INFO = {
         "id": FORECAST, "name": "One-quarter-ahead forecasts (lead 1)",
         "question": "What did the served LightGBM estimate one quarter ahead, using only information released before "
                     "the quarter began?",
-        "definition": ("aiPHeed-E36-LGBM estimates of P(S1 = H + 2D above its trailing-median threshold) one quarter "
+        "definition": ("LightGBM (five trigger proportions, shrinkage-calibrated) estimates of P(S1 = H + 2D above its "
+                       "trailing-median threshold) one quarter "
                        "ahead: development backtests 2023-Q1..2026-Q3 (refitted at each origin, nested selection) and "
                        "the 2026-Q4 forecast frozen at origin 2026-10-01. News evidence is the previous quarter's. "
-                       "Not validated: no baseline is beaten significantly (E36)."),
-        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
+                       "Not validated: no baseline is beaten significantly."),
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": f"data/{E31.RECORD_NAME}/{E31.RECORD_NAME}_record.json"},
     NOWCAST: {
         "id": NOWCAST, "name": "Latest estimate per quarter",
         "question": "What is the best available estimate for each quarter, including the one under way?",
-        "definition": ("The E36 model issues no same-quarter nowcast: every quarter, including 2026-Q4, shows its "
+        "definition": ("The served model issues no same-quarter nowcast: every quarter, including 2026-Q4, shows its "
                        "one-quarter-ahead (lead 1) estimate, labelled with its mode."),
-        "evidenceStatus": "EXPERIMENTAL", "resultsFile": "data/e36/e36_record.json"},
+        "evidenceStatus": "EXPERIMENTAL", "resultsFile": f"data/{E31.RECORD_NAME}/{E31.RECORD_NAME}_record.json"},
 }
+
+# The forecast definition for a served model with the measured driver-condition inputs (E53); E49's text above is kept.
+E53_FORECAST_DEFINITION = (
+    "LightGBM (trigger proportions and measured driver conditions; fixed grid with nested walk-forward selection; "
+    "shrinkage-calibrated) estimates of P(S1 = H + 2D above its trailing-median threshold) one quarter ahead: "
+    "development backtests 2023-Q1..2026-Q3 (refitted at each origin) and the 2026-Q4 forecast frozen at origin "
+    "2026-10-01. News evidence is the previous quarter's. Not validated: no baseline is beaten significantly."
+)
+
+
+def e31_horizon_info() -> dict:
+    """E31_HORIZON_INFO for the served record (the forecast definition names the E53 inputs when they are served)."""
+    if _uses_condition_inputs():
+        return {**E31_HORIZON_INFO, FORECAST: {**E31_HORIZON_INFO[FORECAST], "definition": E53_FORECAST_DEFINITION}}
+    return E31_HORIZON_INFO
 
 
 def e31_active() -> bool:
@@ -252,8 +299,12 @@ def forecast_target() -> dict:
 
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
     if e31_active():
-        target = forecast_target()["target_quarter"]
+        ft = forecast_target()
+        target = ft["target_quarter"]
         served = set(available_quarters(FORECAST)) | set(available_quarters(NOWCAST))
+        if ft["calendar_quarter"] in served:
+            # the quarter under way stays the current one; a further-ahead target (lead 2) is listed as a forecast
+            return ft["calendar_quarter"]
         if target in served:
             return target                 # the dynamic next-quarter target, when its forecast exists
         older = [q for q in available_quarters(horizon) if ref.quarter_index(q) <= ref.quarter_index(target)]
@@ -537,7 +588,7 @@ def province_summary(
             "confidenceStatement": record.get("confidence_statement"),
             "verificationDate": record.get("verification_date"),
             "articleCount": article_count(code, quarter),
-            "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
+            "limitedSignal": limited_signal(code, quarter, record.get("data_sufficiency_flag")),
             "horizon": horizon,
             "withheld": False,
         })
@@ -551,8 +602,8 @@ def province_summary(
     )
     for i, row in enumerate(published):
         nxt = published[i + 1] if i + 1 < len(published) else None
-        # E39: equal scores share one rank (competition ranking: 1, 1, 3, ...) instead of consecutive ranks that
-        # pretended an order (five 0.40 scores were ranked 1-5). The API rank stays an integer.
+        # E39 (A. Melindo): equal scores share one rank (competition ranking: 1, 1, 3, ...) instead of consecutive
+        # ranks that pretended an order (five 0.40 scores were ranked 1-5). The API rank stays an integer.
         row["rank"] = 1 + sum(1 for o in published if o["riskScore"] > row["riskScore"])
         row["rankTied"] = sum(1 for o in published if o["riskScore"] == row["riskScore"]) > 1
         row["rankOf"] = len(published)
@@ -698,16 +749,21 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 # Municipal disaggregation
 # ---------------------------------------------------------------------------
 
-def _municipal_frame(quarter: str) -> pd.DataFrame:
-    return _municipal_frame_cached(quarter, _lead2_key())
+def _municipal_frame(quarter: str, withheld: frozenset[str] = frozenset()) -> pd.DataFrame:
+    return _municipal_frame_cached(quarter, _lead2_key(), tuple(sorted(withheld)))
 
 
 @functools.lru_cache(maxsize=32)
-def _municipal_frame_cached(quarter: str, lead2_mode: str) -> pd.DataFrame:
+def _municipal_frame_cached(quarter: str, lead2_mode: str, withheld: tuple[str, ...] = ()) -> pd.DataFrame:
     forecasts = _province_forecasts(quarter)
     if e31_active():
         if not forecasts:                      # a quarter that exists only as a nowcast (2026-Q4)
             forecasts = _province_forecasts(quarter, NOWCAST)
+    # a withheld province is left out of the disaggregation (thesis p. 60): its LGUs get a null index and null ranks,
+    # and the region-wide ranks are those of the published provinces only
+    held = {ref.province_code(s) for s in withheld}
+    forecasts = [f for f in forecasts if f.get("province_code") not in held]
+    if e31_active():
         return E31.E31Disaggregator().disaggregate(forecasts, quarter=quarter)
     return Disaggregator().disaggregate(forecasts, quarter=quarter)
 
@@ -762,14 +818,19 @@ def _poverty_provenance(code: str, own: float | None) -> dict:
                                   "repository, so it is unverified.")}
 
 
-def municipality_summary(quarter: str, province_id: str | None = None) -> list[dict]:
+def municipality_summary(quarter: str, province_id: str | None = None,
+                         withheld: frozenset[str] = frozenset()) -> list[dict]:
     """
     The 142 LGU indices for a quarter, optionally filtered to one province.
 
     These are reweighted province numbers, not independent municipal
     forecasts; disaggregationLabel travels with every row and says so.
+    Each LGU's riskLevel is the display band of its own index (E45, A. Melindo:
+    the map colours every LGU with the province risk palette, cutoff 0.50); it is
+    a relative position, not a municipal forecast. An LGU without an index, or
+    in a withheld province, has None.
     """
-    frame = _municipal_frame(quarter)
+    frame = _municipal_frame(quarter, withheld)
     roster = ref.lgu_roster().set_index("lgu_psgc")
     poverty = _lgu_poverty_map()
 
@@ -801,17 +862,27 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             # LGU index gets the same display band as a province (ref.risk_level, cutoff 0.50). It stays a relative
             # position from the province forecast and PSA poverty/density (riskLevelBasis), not a municipal forecast.
             # A null index keeps a null band, which the approved map shows as "No data available".
-            "riskLevel": None if score is None else ref.risk_level(score),
+            # E53 port: a withheld province's LGUs get no band either (Tina's rule), as its forecast is withheld
+            "riskLevel": None if score is None or meta["provinceId"] in withheld else ref.risk_level(score),
             "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": LGU_POSITION_BASIS,
             "disaggregationLabel": r["disaggregation_label"],
-            "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
+            "limitedSignal": limited_signal(ref.province_code(meta["provinceId"]), quarter,
+                                            r.get("data_sufficiency_flag")),
             "noProvinceEstimate": score is None,
+            # E64 (Objective 3 traceability, review-branch port): what this relative index is built from
+            "provinceEstimate": None if score is None or pd.isna(r.get("province_probability")) else r.get("province_probability"),
+            "provinceEstimateSource": None if score is None else r.get("estimate_source"),
+            "vulnerabilityIndex": None if pd.isna(r.get("vulnerability_index")) else r.get("vulnerability_index"),
+            "rankingMethod": r.get("ranking_method"),
+            "rankingRowsSha256": r.get("rows_sha256"),
         })
-    rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
+    # listed in rank order (ranks use the unrounded index, so equal display values keep their exact order)
+    rows.sort(key=lambda x: (x["riskIndex"] is None, x["rankRegion"] if x["rankRegion"] is not None else 10**9,
+                             x["lguCode"]))
     return rows
 
 
@@ -854,6 +925,48 @@ def _integer_shares(values: list[float]) -> list[int]:
     return floors
 
 
+@functools.lru_cache(maxsize=4)
+def _condition_components(path: str, mtime: float) -> dict:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def measured_condition(province_code: str, quarter: str, key: str) -> dict | None:
+    """The measured condition behind a driver, for a served model with condition inputs (E53): the 0-100 score the
+    model used (the record's cond_* value: rank of the measured indicator against earlier quarters), its data
+    quarter, a one-line summary of the measured values, its level and source (the record folder's
+    model/condition_components.json). None when the model has no condition inputs (E49). Shares and directions are
+    unaffected: this describes the input, not its contribution."""
+    if not _uses_condition_inputs() or key not in E31.COND_GROUP_FEATURES:
+        return None
+    feat = E31.COND_GROUP_FEATURES[key][0]
+    rows = _explainer().explain_province_quarter(province_code, quarter)
+    if not any(r["feature_name"] == feat for r in rows):
+        return None                                        # this row's model has no condition inputs
+    score = next((r["feature_value"] for r in rows if r["feature_name"] == feat), None)
+    path = Path(E31.RECORD_PATH).parent / "model" / "condition_components.json"
+    comp = {}
+    if path.exists():
+        comp = (_condition_components(str(path), path.stat().st_mtime).get("rows", {})
+                .get(quarter, {}).get(province_code, {}).get(key, {}))
+    row = E31.quarter_row(quarter, FORECAST) or E31.quarter_row(quarter, NOWCAST) or {}
+    k = ref.quarter_index(quarter) - 1 - int(row.get("lead", 1))   # data quarter: the quarter before the origin
+    return {"score": None if score is None else round(float(score), 1),
+            "dataQuarter": comp.get("dataQuarter") or f"{k // 4}-Q{k % 4 + 1}",
+            "summary": comp.get("summary"), "level": comp.get("level"), "source": comp.get("source")}
+
+
+def _regional_condition(conds: list[dict]) -> dict | None:
+    """CALABARZON: the mean of the five provinces' condition scores; a national indicator keeps its own summary."""
+    if not conds:
+        return None
+    scores = [c["score"] for c in conds if c.get("score") is not None]
+    first = conds[0]
+    national = first.get("level") == "national"
+    return {"score": round(sum(scores) / len(scores), 1) if scores else None, "dataQuarter": first.get("dataQuarter"),
+            "summary": first.get("summary") if national else "mean of the five provinces' condition scores",
+            "level": first.get("level"), "source": first.get("source")}
+
+
 def _drivers(province_code: str, quarter: str) -> dict:
     return _drivers_cached(province_code, quarter, _lead2_key())
 
@@ -873,8 +986,9 @@ def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
     return explainer.build_drivers(province_code, quarter, records)
 
 
-# E42: what each of the five trigger groups is in the served forecast, so the dashboard never states a direction for a
-# group that has no model input or no official data (the "0% Weather is hurting food supply" defect).
+# E42 (A. Melindo): what each of the five trigger groups is in the served forecast, so the dashboard never
+# states a direction for a group that did not move it or has no model input (the "0% Weather is hurting food
+# supply" defect). The lead-2 candidate statuses (E43-E46) are kept for AIPHEED_LEAD2_MODEL candidates.
 TRIGGER_STATUS_NOTES = {
     "contributes": "This factor is a model input and moved this forecast in the direction shown.",
     "no_effect": "This factor is a model input but did not measurably move this forecast.",
@@ -900,7 +1014,11 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
     if E41L2.serves(quarter):
         return frozenset({"market"})
     if e31_active():
-        return frozenset(g for g, fs in E31.TRIGGER_GROUP_FEATURES.items() if fs)
+        # E53 port: a group is a model input when the served model has one of its own features (price inputs,
+        # trigger proportion, or E53's measured condition cond_*). Under E53 and E49 that is all five groups (each is
+        # "contributes" or "no_effect"); under E36 only Market / Prices (as before).
+        feats = set((((E31.record().get("served_engine") or {}).get("config") or {}).get("features")) or [])
+        return frozenset(g for g, fs in E31.trigger_group_features().items() if set(fs) & feats)
     return frozenset(E31.TRIGGER_GROUP_FEATURES)
 
 
@@ -953,11 +1071,12 @@ def explainability(province_code: str, quarter: str) -> dict:
             "pct": pct,
             "signedContribution": d["group_shap"],
             "direction": d["direction"],
-            "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
+            "color": trigger_color(pct, d["direction"]),
             "evidenceNote": E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
             "newsSignalProportion": d["trigger_proportion"],
+            "measuredCondition": measured_condition(province_code, quarter, d["driver_group"]),
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
     return {
@@ -970,10 +1089,41 @@ def explainability(province_code: str, quarter: str) -> dict:
         "triggerMatchedArticles": built["article_count"],
         # E36/E38: share of the model's attribution outside the five trigger groups (E20 convention)
         "otherPct": built.get("other_pct"),
+        # |SHAP| (log-odds) inside the five drivers and outside them, by source; None for an engine without them
+        "attribution": ({"five": built["five_abs"], **built["outside_abs"]} if "outside_abs" in built else None),
     }
 
 
-def explainability_region(quarter: str) -> dict:
+def _prob_scale(province_code: str, quarter: str) -> float | None:
+    """Factor that turns a province's log-odds SHAP into its effect on the province's (uncalibrated) probability:
+    (sigmoid(z) - sigmoid(base)) / (z - base), z = base + sum of the record's contributions. The scaled
+    contributions add up exactly to sigmoid(z) - sigmoid(base). None when the row has no base value."""
+    q = E31.quarter_row(quarter, FORECAST) or E31.quarter_row(quarter, NOWCAST) or {}
+    v = (q.get("provinces") or {}).get(province_code) or {}
+    if v.get("shap_expected_value_logodds") is None or not v.get("drivers"):
+        return None
+    sig = lambda x: 1.0 / (1.0 + math.exp(-x))
+    base = float(v["shap_expected_value_logodds"])
+    z = base + sum(float(d["contribution"] or 0.0) for d in v["drivers"])
+    if abs(z - base) < 1e-9:
+        return sig(z) * (1.0 - sig(z))
+    return (sig(z) - sig(base)) / (z - base)
+
+
+def attribution_sentence(attr: dict | None) -> str | None:
+    """The note's opening sentence: how much of this forecast comes from the regional hunger survey inputs, from
+    news tone and unmatched news, and from the five drivers (shares of the attributed |SHAP|, summing to 100)."""
+    if not attr:
+        return None
+    survey, news, five = _integer_shares([attr["survey"], attr["news_other"] + attr.get("rest", 0.0), attr["five"]])
+    if survey + news + five == 0:
+        return None
+    news_part = f"news tone and news that matches no driver: {news}%; " if news else ""
+    return (f"Regional hunger survey (SWS) inputs and the latest published label: {survey}% of this forecast; "
+            f"{news_part}the five drivers below explain the remaining {five}%.")
+
+
+def explainability_region(quarter: str, withheld: frozenset[str] = frozenset()) -> dict:
     """
     Regional breakdown: the five province explanations pooled.
 
@@ -981,22 +1131,44 @@ def explainability_region(quarter: str) -> dict:
     `signedContribution` averages so the direction still reads correctly -- a
     group that raises risk in one province and lowers it in another should not
     disappear from the ranking just because the two cancel.
+
+    The regional index is the mean of the five province probabilities, so each
+    province's contributions are first put on that scale (_prob_scale: its
+    log-odds SHAP times (sigmoid(z) - sigmoid(base)) / (z - base)). They then
+    add up to the province's probability minus its base, and their mean over
+    the five provinces adds up to the mean raw probability minus the mean base;
+    the shrinkage calibration is linear, so it scales every contribution alike
+    and the shares and directions are those of the regional index. Pooling raw
+    log-odds instead lets a province whose probability is already near 1 (large
+    log-odds that barely move it) dominate the regional panel. A record without
+    a base value keeps the plain log-odds pooling.
     """
-    per_province = [
-        explainability(ref.province_code(slug), quarter) for slug in ref.PROVINCES
-    ]
+    # a province a reviewer has withheld is left out of the pooling, as it is left out of the regional index
+    codes = [ref.province_code(slug) for slug in ref.PROVINCES if slug not in withheld]
+    per_province = [explainability(code, quarter) for code in codes]
+    scales = [_prob_scale(code, quarter) for code in codes]
+    if any(s is None for s in scales):
+        scales = [1.0] * len(codes)
 
     totals: dict[str, dict] = {}
-    for result in per_province:
+    attribution: dict[str, float] | None = {}
+    for result, scale in zip(per_province, scales):
+        if attribution is not None and result.get("attribution"):
+            for k, v in result["attribution"].items():
+                attribution[k] = attribution.get(k, 0.0) + v * scale
+        else:
+            attribution = None
         for t in result["triggers"]:
             acc = totals.setdefault(t["key"], {
                 "key": t["key"], "label": t["label"],
                 "signed": 0.0, "raw": 0.0, "news": [],
             })
-            acc["raw"] += abs(t["signedContribution"])
-            acc["signed"] += t["signedContribution"]
+            acc["raw"] += abs(t["signedContribution"]) * scale
+            acc["signed"] += t["signedContribution"] * scale
             if t["newsSignalProportion"] is not None:
                 acc["news"].append(t["newsSignalProportion"])
+            if t.get("measuredCondition"):
+                acc.setdefault("conditions", []).append(t["measuredCondition"])
 
     keys = list(totals)
     pcts = _integer_shares([totals[k]["raw"] for k in keys])
@@ -1012,9 +1184,9 @@ def explainability_region(quarter: str) -> dict:
             "pct": pct,
             "signedContribution": round(acc["signed"] / len(per_province), 4),
             "direction": direction,
-            "color": trigger_color(pct, direction),
             "status": (st := trigger_status(key, quarter, pct)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
+            "color": trigger_color(pct, direction),
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
             "evidenceNote": (REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
@@ -1022,15 +1194,23 @@ def explainability_region(quarter: str) -> dict:
             "newsSignalProportion": (
                 round(sum(acc["news"]) / len(acc["news"]), 4) if acc["news"] else None
             ),
+            "measuredCondition": _regional_condition(acc.get("conditions") or []),
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
 
     return {
         "quarter": quarter,
         "triggers": triggers,
-        "articleCount": sum(r["articleCount"] for r in per_province),
+        "articleCount": article_count(None, quarter),            # the five provinces' articles, de-duplicated
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+        "attribution": attribution or None,
     }
+
+
+def nonzero_triggers(triggers: list[dict]) -> list[dict]:
+    """The drivers a reader is shown: those whose share rounds to at least 1%. The omitted ones round to 0%, so the
+    shares of the rest are unchanged and still add up to 100."""
+    return [t for t in triggers if t["pct"] > 0]
 
 
 def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:
@@ -1073,8 +1253,8 @@ def compose_narrative(name: str, quarter: str, triggers: list[dict]) -> str:
     return (
         f"For {name} in {quarter}, the model's prediction breaks down as: {ranked}. "
         f"{top['label']} is the largest single contributor, {direction}. {flagged} "
-        f"Shares are SHAP contributions to the province's food insecurity risk "
-        f"probability, recomputed every quarter."
+        f"Shares are each driver group's contribution to the estimate (news inputs split by the topic of the news "
+        f"titles); they are not causes and not measured conditions."
     )
 
 
@@ -1336,10 +1516,66 @@ def _e31_articles() -> list[dict]:
     return E31.record()["news"]["articles"]
 
 
-def article_count(province_code: str | None, quarter: str) -> int:
+def _quarter_not_started(quarter: str) -> bool:
+    from app.quarterly.target import now_ph, quarter_start
+
+    return quarter_start(quarter) > now_ph()
+
+
+def _e31_quarter_articles(province_code: str | None, quarter: str) -> list[dict]:
+    """The validated articles published (Philippine date) inside `quarter` itself, for one province or, with None,
+    the five provinces; the same article (key, link or title) is counted once; newest first. A quarter that has not
+    started has none. Display only: the record's articles are not changed, nor what the model used."""
+    if _quarter_not_started(quarter):
+        return []
+    y, n = int(quarter[:4]), int(quarter[-1])
+    start, end = f"{y}-{3 * n - 2:02d}-01", (f"{y + 1}-01-01" if n == 4 else f"{y}-{3 * n + 1:02d}-01")
+    rows, seen = [], set()
+    for a in sorted(_e31_articles(), key=lambda a: a["published_ph"], reverse=True):
+        if not (start <= a["published_ph"][:10] < end):
+            continue
+        if province_code is not None and a["province_code"] != province_code:
+            continue
+        keys = {("k", a["article_key"]), ("u", a.get("link") or ""), ("t", (a.get("title") or "").strip().lower())}
+        if keys & seen:
+            continue
+        seen |= {k for k in keys if k[1]}
+        rows.append(a)
+    return rows
+
+
+def limited_signal(province_code: str, quarter: str, flag: str | None = None) -> bool:
+    """Fewer than LIMITED_SIGNAL_MIN_ARTICLES (5) validated articles in the estimate's evidence quarter for the province
+    (article_count, the one count every surface quotes). Engines without the E31 news layer keep their stored flag."""
     if e31_active():
-        # E45: the same restored feed window the news panel lists, so every surface quotes one count
-        return len(_feed_window(province_code, e31_news_evidence(quarter)[0])[0])
+        return article_count(province_code, quarter) < ref.LIMITED_SIGNAL_MIN_ARTICLES
+    return flag == "LIMITED_SIGNAL"
+
+
+def _e31_evidence_articles(province_code: str | None, quarter: str) -> list[dict]:
+    """The validated (rule R1.1) articles of the estimate's EVIDENCE quarter (e31_news_evidence: a forecast quarter,
+    the quarter before it, published before the forecast origin; an observed quarter, the quarter itself) for one
+    province or, with None, the five provinces; the same article (key, link or title) is counted once; newest first.
+    The one set behind article_count and the news card (view=used), so the count and the list cannot differ."""
+    ev_q = e31_news_evidence(quarter)[0]
+    rows, seen = [], set()
+    for a in sorted(_e31_articles(), key=lambda a: a["published_ph"], reverse=True):
+        if a["quarter"] != ev_q or (province_code is not None and a["province_code"] != province_code):
+            continue
+        keys = {("k", a["article_key"]), ("u", a.get("link") or ""), ("t", (a.get("title") or "").strip().lower())}
+        if keys & seen:                             # the same article (key, link or title) is counted once
+            continue
+        seen |= {k for k in keys if k[1]}
+        rows.append(a)
+    return rows
+
+
+def article_count(province_code: str | None, quarter: str) -> int:
+    """The validated (rule R1.1) articles of the estimate's EVIDENCE quarter for the province, de-duplicated by key,
+    link or title (_e31_evidence_articles). No back-extension and no unvalidated titles. Every surface that quotes an
+    article count, LIMITED_SIGNAL and the news card (view=used: the articles the forecast used) use this one set."""
+    if e31_active():
+        return len(_e31_evidence_articles(province_code, quarter))
     df = _corpus()
     if df.empty:
         return 0
@@ -1349,7 +1585,7 @@ def article_count(province_code: str | None, quarter: str) -> int:
     return int(mask.sum())
 
 
-def news(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
+def news(province_code: str | None, quarter: str, page: int, page_size: int, view: str = "used") -> dict:
     """
     Analysed articles for a subject-quarter, with the topic mix.
 
@@ -1359,7 +1595,7 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
     province counts that are supposed to add up to it.
     """
     if e31_active():
-        return _e31_news(province_code, quarter, page, page_size)
+        return _e31_news(province_code, quarter, page, page_size, view)
     df = _corpus()
     if df.empty:
         return {"articleCount": 0, "provinceAttributed": 0,
@@ -1423,7 +1659,10 @@ E31_TOPICS = {"DIRECT": ("direct", "Direct food-insecurity report"),
 
 
 def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
-    """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy)."""
+    """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy): the record
+    row's own provenance.news_evidence_window.evidence_quarter, i.e. the news the estimate was built from. For a
+    backtest that is the previous quarter (its articles were published before the row's origin), the same quarter
+    five_trigger_drivers uses to split the news SHAP by topic. A quarter without a record row keeps itself."""
     r = E31.quarter_row(quarter, NOWCAST)
     if r is not None and r["mode"] == "FORECAST":
         w = r["provenance"]["news_evidence_window"]
@@ -1435,6 +1674,11 @@ def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
         w = r["provenance"]["news_evidence_window"]
         return (quarter, "NOWCAST", f"Same-quarter news published by {w['information_cutoff_ph'][:10]} "
                                     f"({w['days_covered']} of {w['days_in_quarter']} days).")
+    w = ((r or {}).get("provenance") or {}).get("news_evidence_window") or {}
+    if r is not None and w.get("evidence_quarter"):
+        return (w["evidence_quarter"], r["mode"],
+                f"Supporting news for the {quarter} estimate: {w['evidence_quarter']} articles published before its "
+                f"origin {str(r.get('origin') or '')[:10]}. An estimate never uses news of its own target quarter.")
     return (quarter, "OBSERVED", f"News published in {quarter} (describes the quarter; its one-quarter-ahead "
                                  f"estimate was made with the previous quarter's news).")
 
@@ -1505,8 +1749,10 @@ def _shift_q(q: str, k: int) -> str:
     return f"{i // 4}-Q{i % 4 + 1}"
 
 
-def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
-    """E45: the restored feed (validated + trigger-matched titles) for the estimate's evidence window, newest first."""
+def _e31_news_e45_feed(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
+    """NOT SERVED since the E53 port (tina-e53-port): the news card lists the validated evidence-quarter
+    articles the estimate used (_e31_news, _e31_evidence_articles). Kept for reference and its E45 tests.
+    E45: the restored feed (validated + trigger-matched titles) for the estimate's evidence window, newest first."""
     ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
     rows, window = _feed_window(province_code, ev_q)
     counts: dict[str, int] = {}
@@ -1540,13 +1786,62 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
             "triggerMatchCount": len(rows) - n_val, "feedNote": note}
 
 
-def _e31_news_validated_only(province_code: str | None, quarter: str, page: int, page_size: int) -> dict:
+
+def _news_window(quarter: str) -> tuple[str | None, str | None]:
+    """(first, last) publication date the record's news windows cover for articles of `quarter`, from the record's
+    news windows and the quarters' evidence windows; the latest-ending window wins. (None, None) when unknown."""
+    rec = E31.record()
+    wins = list((rec.get("news") or {}).get("windows", {}).values())
+    wins += [(q.get("provenance") or {}).get("news_evidence_window") or {} for q in rec.get("quarters", [])]
+    wins = [w for w in wins if w.get("evidence_quarter") == quarter and w.get("window_end_excl_ph")]
+    if not wins:
+        return None, None
+    w = max(wins, key=lambda x: x["window_end_excl_ph"])
+    last = (pd.Timestamp(w["window_end_excl_ph"][:10]) - pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+    return w["window_start_ph"][:10], last
+
+
+def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int, view: str = "used") -> dict:
     """Validated articles (relevance rule R1.1) behind a subject-quarter's estimate, newest first. Titles only: the
-    source gives no lead text, so the excerpt is empty rather than invented."""
-    ev_q, ev_mode, ev_note = e31_news_evidence(quarter)
-    quarter = ev_q
-    rows = [a for a in _e31_articles() if a["quarter"] == quarter
-            and (province_code is None or a["province_code"] == province_code)]
+    source gives no lead text, so the excerpt is empty rather than invented.
+
+    view="used" (default, the news card): the articles the quarter's estimate was built from (e31_news_evidence: the
+    row's evidence quarter, for every quarter the previous one). view="published": the articles published in the
+    quarter itself so far; these were NOT used by its estimate, and the response says so."""
+    target = quarter
+    ev_q, ev_mode, ev_note = e31_news_evidence(target)
+    row = E31.quarter_row(target, NOWCAST) or {}
+    fc_ev_q = ((row.get("provenance") or {}).get("news_evidence_window") or {}).get("evidence_quarter")
+    is_forecast = ev_mode == "FORECAST"
+    origin = str(row.get("origin") or "")[:10] or None
+    not_started = False
+    if view == "published" and is_forecast:
+        from app.quarterly.target import now_ph, quarter_start
+
+        start, end = _news_window(target)
+        if quarter_start(target) > now_ph():               # a quarter that has not begun (a lead-2 target)
+            not_started = True
+            ev_note = (f"This quarter has not started; no news yet. The {target} forecast was built on {origin} from "
+                       f"{ev_q} news.")
+        elif start and end:
+            ev_note = (f"News published {start} to {end} (collected so far). Not used by the {target} forecast, "
+                       f"which was built from {ev_q} news published by {origin}.")
+        else:
+            ev_note = (f"News published in {target} so far (collection window not recorded). Not used by the {target} "
+                       f"forecast, which was built from {ev_q} news published by {origin}.")
+        quarter, ev_mode, used = target, "PUBLISHED_SO_FAR", False
+    elif view == "published":
+        # an observed quarter's own news: not used by its estimate, which was built from the previous quarter's news
+        quarter, used = target, False
+    else:
+        quarter, used = ev_q, True
+    window_end = None if not_started else _news_window(quarter)[1]
+    # view=used (the news card): the evidence-quarter articles article_count counts, the same set; view=published:
+    # the articles published in the quarter itself, de-duplicated, newest first
+    if view == "used":
+        rows = _e31_evidence_articles(province_code, target)
+    else:
+        rows = [] if not_started else _e31_quarter_articles(province_code, quarter)
     counts: dict[str, int] = {}
     for a in rows:
         counts[a["relevance"]] = counts.get(a["relevance"], 0) + 1
@@ -1555,14 +1850,103 @@ def _e31_news_validated_only(province_code: str | None, quarter: str, page: int,
     topics = [{"key": E31_TOPICS[k][0], "label": E31_TOPICS[k][1], "count": counts[k], "pct": p}
               for k, p in zip(labels, pcts)]
     start = (page - 1) * page_size
+    from app.ml.nlp.trigger_classifier import classify_triggers
+
+    names = {meta["code"]: meta["name"] for meta in ref.PROVINCES.values()}
+    first_seen = _first_seen()
     data = [{"id": a["article_key"], "title": a["title"], "source": a["outlet"], "date": a["published_ph"][:10],
              "url": a["link"], "excerpt": "", "topicKey": E31_TOPICS[a["relevance"]][0],
-             "topicLabel": E31_TOPICS[a["relevance"]][1], "relevanceScore": None}
+             "topicLabel": E31_TOPICS[a["relevance"]][1], "relevanceScore": None,
+             # Angel's card fields: every listed article is validated by rule R1.1 (no keyword-only matches)
+             "relevanceStatus": "validated", "relevanceLabel": "Validated food-stress article (rule R1.1)",
+             "province": names.get(a["province_code"]), "provinceCode": a["province_code"],
+             "triggers": [TRIGGER_LABELS[g] for g in classify_triggers(a["title"] or "") if g in TRIGGER_LABELS],
+             "quarter": a["quarter"],
+             "collectedRetrospectively": (first_seen.get(a["article_key"], "") > a["published_ph"][:10]
+                                          if a["article_key"] in first_seen else None)}
             for a in rows[start:start + page_size]]
     # every validated article is province-attributed (R1.1 runs on attributed titles), so the two counts agree
     return {"articleCount": len(rows), "provinceAttributed": len(rows),
-            "topics": topics, "data": data, "total": len(rows), "evidenceQuarter": ev_q, "sourceQuarter": ev_q,
-            "evidenceMode": ev_mode, "evidenceNote": ev_note}
+            "topics": topics, "data": data, "total": len(rows), "evidenceQuarter": quarter, "sourceQuarter": quarter,
+            "evidenceMode": ev_mode, "evidenceNote": ev_note, "usedByForecast": used,
+            "forecastEvidenceQuarter": fc_ev_q, "windowEnd": window_end, "forecastOrigin": origin,
+            # Angel's card fields: one quarter (no back-extension), all validated, and the card's sentence
+            "windowQuarters": [quarter], "validatedCount": len(rows), "triggerMatchCount": 0,
+            "feedNote": used_sentence(len(rows), quarter, origin) if view == "used" else None}
+
+
+def _fmt_day(iso: str | None) -> str:
+    """'2026-07-01' -> '1 Jul 2026'."""
+    if not iso:
+        return ""
+    y, m, d = (int(x) for x in iso[:10].split("-"))
+    return f"{d} {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1]} {y}"
+
+
+def used_sentence(n: int, evidence_quarter: str, origin: str | None) -> str | None:
+    """The news card's line: the validated evidence-quarter articles this estimate used, before its origin."""
+    if not origin:
+        return None
+    ev = " ".join(reversed(evidence_quarter.split("-")))           # 2026-Q2 -> Q2 2026
+    if n > 0:
+        return (f"These are the {n} validated {ev} news articles this estimate used (published before "
+                f"{_fmt_day(origin)}).")
+    return f"This estimate used no validated {ev} news articles (published before {_fmt_day(origin)})."
+
+
+@functools.lru_cache(maxsize=1)
+def _first_seen() -> dict:
+    """article_key -> first collection date (the E31 news store), for the 'collected retrospectively' tag."""
+    out = {}
+    path = E31.NEWS_STORE / "articles.jsonl"
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            a = json.loads(line)
+            if a.get("first_seen_at"):
+                out.setdefault(a["article_key"], str(a["first_seen_at"])[:10])
+    return out
+
+
+def news_topics(province_code: str | None, quarter: str) -> dict:
+    """Descriptive BERTopic patterns of the news (app.news.topics.build_topic_files, <news store>/topics/), read only.
+    A province's topic shares in the quarter, or for the region the five provinces' shares weighted by their article
+    counts. When the run failed its publication gate (too few articles or unstable topics), no topics are returned and
+    the note gives the numbers. Never a forecast input."""
+    from app.news.collector import PROVINCES as NAME_TO_CODE
+
+    root = Path(E31.NEWS_STORE) / "topics"
+    path = root / "manifest.json"
+    if not path.exists():
+        return {"status": "NOT_RUN", "note": "Topic patterns have not been computed.", "topics": [], "nArticles": 0}
+    m = json.loads(path.read_text(encoding="utf-8"))
+    out = {"status": m["status"], "use": m.get("use"), "model": {
+        k: m.get(k) for k in ("embedding_model", "seed", "min_topic_size", "n_articles", "n_topics", "outlier_share",
+                              "stability_ari_mean", "created_utc", "quarters")}, "topics": [], "nArticles": 0}
+    if m["status"] != "OK":
+        out["note"] = (f"No stable topic patterns: {m.get('n_articles', 0)} relevant articles "
+                       + (f"gave {m['n_topics']} topics with {m['outlier_share']:.0%} of articles unassigned and a "
+                          f"seed-stability index (adjusted Rand) of {m['stability_ari_mean']:.2f}, below the "
+                          f"{m['gate']['min_stability_ari']} required"
+                          if m.get("n_topics") is not None else f"are fewer than the {m['gate']['min_articles']} needed")
+                       + ". Topics are not shown.")
+        return out
+    prop = pd.read_csv(root / "topic_proportions.csv")
+    keywords = json.loads((root / "topics.json").read_text(encoding="utf-8"))["topics"]
+    names = [n for n, c in NAME_TO_CODE.items() if province_code is None or c == province_code]
+    cell = prop[(prop["quarter"] == quarter) & prop["province"].isin(names)]
+    if cell.empty:
+        out["note"] = f"No relevant articles for {quarter} in the topic model."
+        return out
+    counts = cell.drop_duplicates("province").set_index("province")["n_articles"]
+    total = int(counts.sum())
+    cell = cell.assign(w=cell["share"] * cell["province"].map(counts))
+    agg = cell.groupby(["topic", "topic_label"])["w"].sum().reset_index().sort_values("w", ascending=False)
+    out["nArticles"] = total
+    out["topics"] = [{"topic": int(r.topic), "label": r.topic_label, "share": round(float(r.w) / total, 4),
+                      "keywords": [k["word"] for k in keywords.get(str(int(r.topic)), [])[:10]]}
+                     for r in agg.itertuples()]
+    out["note"] = "Descriptive only; not used by the forecast."
+    return out
 
 
 def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
@@ -1580,14 +1964,17 @@ def e31_model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
         rows = {x["key"]: x for x in ev["rows"]}
         m = rows["E36-LGBM"]
         return {
-            "horizon": horizon, "evaluation": ev["basis"], "maxReliableLeadTime": None, "accuracyThreshold": None,
+            "horizon": horizon, "evaluation": ev["basis"],
+            "maxReliableLeadTime": max_reliable_lead(v)["lead"], "maxReliableLeadTimeBasis": max_reliable_lead(v)["basis"],
+            "accuracyThreshold": None,
             "nFeatures": len(rec["served_engine"]["config"]["features"]),
             "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]), "recall": r(m["recall"]),
             "f1": r(m["f1"]), "rocAuc": r(m["roc_auc"]), "cvF1": None,
             "correct": m["correct"], "n": m["n"], "accuracyCi95": m["accuracy_ci95"],
             "balancedAccuracy": r(m["balanced_accuracy"]), "brier": r(m["brier"]),
+            # the 75% verdict is composed from the stored numbers (the stored sentence can disagree with them)
             "targets": {"f1": None, "rocAuc": None, "meetsF1": None, "meetsRocAuc": None,
-                        "note": v["threshold_75pct"]["verdict"]},
+                        "note": (verdict_from_record(v) or {}).get("verdict") or v["threshold_75pct"]["verdict"]},
             "leadTimeScan": [{"lead": 1, "accuracy": r(m["accuracy_lead1"]), "precision": r(m["precision"]),
                               "recall": r(m["recall"]), "f1": r(m["f1"]), "roc_auc": r(m["roc_auc"]),
                               "brier": r(m["brier"])}],

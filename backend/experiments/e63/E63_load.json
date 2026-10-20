@@ -1,0 +1,408 @@
+{
+ "server": "uvicorn 1 worker, 127.0.0.1, AIPHEED_RECORD=e49, AIPHEED_MAX_LEAD=1, throwaway SQLite, rate limiter off",
+ "duration_s": 60.0,
+ "warmup_s": 5.0,
+ "endpoints": {
+  "provinces": "/api/v1/provinces?quarter=2026-Q4",
+  "forecast_region": "/api/v1/forecast?scope=region&id=calabarzon&quarter=2026-Q4",
+  "forecast_province": "/api/v1/forecast?scope=province&id=quezon&quarter=2026-Q4",
+  "ranking": "/api/v1/ranking?quarter=2026-Q4",
+  "explainability": "/api/v1/explainability?scope=province&id=quezon&quarter=2026-Q4",
+  "municipalities": "/api/v1/provinces/quezon/municipalities?quarter=2026-Q4",
+  "report_data": "/api/v1/report/data?type=trend&scope=region&from=2023-Q1"
+ },
+ "levels": {
+  "10": {
+   "provinces": {
+    "requests": 427,
+    "ok": 427,
+    "error_rate": 0.0,
+    "throughput_rps": 7.116666666666666,
+    "p50_ms": 183.55869996594265,
+    "p95_ms": 413.13670999952586,
+    "p99_ms": 520.6699760083576,
+    "mean_ms": 202.2111344251256,
+    "errors": []
+   },
+   "forecast_region": {
+    "requests": 428,
+    "ok": 428,
+    "error_rate": 0.0,
+    "throughput_rps": 7.133333333333334,
+    "p50_ms": 289.3210999900475,
+    "p95_ms": 607.8311149613,
+    "p99_ms": 709.2665839759868,
+    "mean_ms": 304.4905313089377,
+    "errors": []
+   },
+   "forecast_province": {
+    "requests": 427,
+    "ok": 427,
+    "error_rate": 0.0,
+    "throughput_rps": 7.116666666666666,
+    "p50_ms": 267.305200046394,
+    "p95_ms": 509.6679000067524,
+    "p99_ms": 631.8556739785708,
+    "mean_ms": 269.8104175645204,
+    "errors": []
+   },
+   "ranking": {
+    "requests": 427,
+    "ok": 427,
+    "error_rate": 0.0,
+    "throughput_rps": 7.116666666666666,
+    "p50_ms": 177.58790001971647,
+    "p95_ms": 394.3918500095606,
+    "p99_ms": 475.69922000868246,
+    "mean_ms": 194.12009859543764,
+    "errors": []
+   },
+   "explainability": {
+    "requests": 424,
+    "ok": 424,
+    "error_rate": 0.0,
+    "throughput_rps": 7.066666666666666,
+    "p50_ms": 59.2762999876868,
+    "p95_ms": 161.85555499396278,
+    "p99_ms": 248.37985098129064,
+    "mean_ms": 70.12215872552743,
+    "errors": []
+   },
+   "municipalities": {
+    "requests": 426,
+    "ok": 426,
+    "error_rate": 0.0,
+    "throughput_rps": 7.1,
+    "p50_ms": 209.1124000144191,
+    "p95_ms": 393.0824749841122,
+    "p99_ms": 476.18100002000574,
+    "mean_ms": 225.1823063383148,
+    "errors": []
+   },
+   "report_data": {
+    "requests": 426,
+    "ok": 426,
+    "error_rate": 0.0,
+    "throughput_rps": 7.1,
+    "p50_ms": 118.42889999388717,
+    "p95_ms": 268.5981249815086,
+    "p99_ms": 341.34879999328405,
+    "mean_ms": 137.49827089090394,
+    "errors": []
+   },
+   "ALL": {
+    "requests": 2985,
+    "ok": 2985,
+    "error_rate": 0.0,
+    "throughput_rps": 49.75,
+    "p50_ms": 171.69859999557957,
+    "p95_ms": 462.26555998437055,
+    "p99_ms": 609.2833159654396,
+    "mean_ms": 200.66939812372758,
+    "errors": []
+   }
+  },
+  "50": {
+   "provinces": {
+    "requests": 421,
+    "ok": 421,
+    "error_rate": 0.0,
+    "throughput_rps": 7.016666666666667,
+    "p50_ms": 1237.8238999517635,
+    "p95_ms": 3625.4429999971762,
+    "p99_ms": 5473.469760012817,
+    "mean_ms": 1410.8672779124793,
+    "errors": []
+   },
+   "forecast_region": {
+    "requests": 424,
+    "ok": 424,
+    "error_rate": 0.0,
+    "throughput_rps": 7.066666666666666,
+    "p50_ms": 876.0480000055395,
+    "p95_ms": 3626.870225020681,
+    "p99_ms": 4376.989549004934,
+    "mean_ms": 1273.7603301888294,
+    "errors": []
+   },
+   "forecast_province": {
+    "requests": 431,
+    "ok": 431,
+    "error_rate": 0.0,
+    "throughput_rps": 7.183333333333334,
+    "p50_ms": 1085.2567999972962,
+    "p95_ms": 3819.512050016783,
+    "p99_ms": 5686.792089999652,
+    "mean_ms": 1411.6175076560974,
+    "errors": []
+   },
+   "ranking": {
+    "requests": 433,
+    "ok": 433,
+    "error_rate": 0.0,
+    "throughput_rps": 7.216666666666667,
+    "p50_ms": 569.1010999726132,
+    "p95_ms": 3435.7179000042374,
+    "p99_ms": 5059.247935975436,
+    "mean_ms": 1100.526461200025,
+    "errors": []
+   },
+   "explainability": {
+    "requests": 429,
+    "ok": 429,
+    "error_rate": 0.0,
+    "throughput_rps": 7.15,
+    "p50_ms": 96.75939998123795,
+    "p95_ms": 223.5394199960865,
+    "p99_ms": 314.33223598636687,
+    "mean_ms": 107.44388228255738,
+    "errors": []
+   },
+   "municipalities": {
+    "requests": 427,
+    "ok": 427,
+    "error_rate": 0.0,
+    "throughput_rps": 7.116666666666666,
+    "p50_ms": 1156.54659998836,
+    "p95_ms": 3640.6414799916092,
+    "p99_ms": 6938.95062799915,
+    "mean_ms": 1421.124566979739,
+    "errors": []
+   },
+   "report_data": {
+    "requests": 422,
+    "ok": 422,
+    "error_rate": 0.0,
+    "throughput_rps": 7.033333333333333,
+    "p50_ms": 164.1906000149902,
+    "p95_ms": 321.46694500406727,
+    "p99_ms": 500.84033603430737,
+    "mean_ms": 178.54323601932265,
+    "errors": []
+   },
+   "ALL": {
+    "requests": 2987,
+    "ok": 2987,
+    "error_rate": 0.0,
+    "throughput_rps": 49.78333333333333,
+    "p50_ms": 488.4231999749318,
+    "p95_ms": 3272.4540599796433,
+    "p99_ms": 5038.195927978954,
+    "mean_ms": 986.6901468698782,
+    "errors": []
+   }
+  },
+  "100": {
+   "provinces": {
+    "requests": 429,
+    "ok": 429,
+    "error_rate": 0.0,
+    "throughput_rps": 7.15,
+    "p50_ms": 2544.3580000428483,
+    "p95_ms": 7627.291319996583,
+    "p99_ms": 12199.33930798432,
+    "mean_ms": 2795.997890675932,
+    "errors": []
+   },
+   "forecast_region": {
+    "requests": 438,
+    "ok": 438,
+    "error_rate": 0.0,
+    "throughput_rps": 7.3,
+    "p50_ms": 815.4925499984529,
+    "p95_ms": 8246.030375006374,
+    "p99_ms": 11771.100829981733,
+    "mean_ms": 2434.0975984026513,
+    "errors": []
+   },
+   "forecast_province": {
+    "requests": 437,
+    "ok": 437,
+    "error_rate": 0.0,
+    "throughput_rps": 7.283333333333333,
+    "p50_ms": 2177.9142000013962,
+    "p95_ms": 7636.782680021133,
+    "p99_ms": 10420.400103980208,
+    "mean_ms": 2597.034626316308,
+    "errors": []
+   },
+   "ranking": {
+    "requests": 433,
+    "ok": 433,
+    "error_rate": 0.0,
+    "throughput_rps": 7.216666666666667,
+    "p50_ms": 1420.458399981726,
+    "p95_ms": 7712.601499992888,
+    "p99_ms": 10578.421055993533,
+    "mean_ms": 2238.248298152895,
+    "errors": []
+   },
+   "explainability": {
+    "requests": 431,
+    "ok": 431,
+    "error_rate": 0.0,
+    "throughput_rps": 7.183333333333334,
+    "p50_ms": 116.02360004326329,
+    "p95_ms": 243.79529998986982,
+    "p99_ms": 325.99038000917056,
+    "mean_ms": 122.32360951283735,
+    "errors": []
+   },
+   "municipalities": {
+    "requests": 431,
+    "ok": 431,
+    "error_rate": 0.0,
+    "throughput_rps": 7.183333333333334,
+    "p50_ms": 2644.647199951578,
+    "p95_ms": 9089.095650007948,
+    "p99_ms": 13283.604380022727,
+    "mean_ms": 3046.974393965492,
+    "errors": []
+   },
+   "report_data": {
+    "requests": 429,
+    "ok": 429,
+    "error_rate": 0.0,
+    "throughput_rps": 7.15,
+    "p50_ms": 163.78180001629516,
+    "p95_ms": 309.6909799962304,
+    "p99_ms": 364.70503599382914,
+    "mean_ms": 175.88896410065402,
+    "errors": []
+   },
+   "ALL": {
+    "requests": 3028,
+    "ok": 3028,
+    "error_rate": 0.0,
+    "throughput_rps": 50.46666666666667,
+    "p50_ms": 504.2406999855302,
+    "p95_ms": 7441.063934992419,
+    "p99_ms": 11053.117179977713,
+    "mean_ms": 1919.1239409178029,
+    "errors": []
+   }
+  }
+ },
+ "startup_s": 4.935663299984299,
+ "reliability": {
+  "users": 50,
+  "kill_at_s": 20.00218379998114,
+  "recovery_s": 5.269425000005867,
+  "requests_failed_during_outage": 72,
+  "summary": {
+   "provinces": {
+    "requests": 387,
+    "ok": 368,
+    "error_rate": 0.04909560723514217,
+    "throughput_rps": 6.133333333333334,
+    "p50_ms": 1210.2525999944191,
+    "p95_ms": 3643.39902997599,
+    "p99_ms": 5193.703823036047,
+    "mean_ms": 1382.6186660347878,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "forecast_region": {
+    "requests": 391,
+    "ok": 370,
+    "error_rate": 0.053708439897698246,
+    "throughput_rps": 6.166666666666667,
+    "p50_ms": 875.3850999928545,
+    "p95_ms": 4345.493579999311,
+    "p99_ms": 6129.3390230310615,
+    "mean_ms": 1514.906652161625,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "forecast_province": {
+    "requests": 392,
+    "ok": 371,
+    "error_rate": 0.0535714285714286,
+    "throughput_rps": 6.183333333333334,
+    "p50_ms": 750.0341999693774,
+    "p95_ms": 4668.782149994513,
+    "p99_ms": 7104.993630026009,
+    "mean_ms": 1428.940260915884,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "ranking": {
+    "requests": 391,
+    "ok": 375,
+    "error_rate": 0.04092071611253201,
+    "throughput_rps": 6.25,
+    "p50_ms": 576.9434000249021,
+    "p95_ms": 3365.5121299671014,
+    "p99_ms": 5610.142637959214,
+    "mean_ms": 1169.2363229325663,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "explainability": {
+    "requests": 392,
+    "ok": 382,
+    "error_rate": 0.025510204081632626,
+    "throughput_rps": 6.366666666666666,
+    "p50_ms": 104.10260001663119,
+    "p95_ms": 259.649609986809,
+    "p99_ms": 2132.2524560190477,
+    "mean_ms": 155.25425052488495,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "municipalities": {
+    "requests": 391,
+    "ok": 374,
+    "error_rate": 0.04347826086956519,
+    "throughput_rps": 6.233333333333333,
+    "p50_ms": 1252.3450000153389,
+    "p95_ms": 4223.502220018417,
+    "p99_ms": 6066.0511400084915,
+    "mean_ms": 1615.3326368972255,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   },
+   "report_data": {
+    "requests": 387,
+    "ok": 371,
+    "error_rate": 0.04134366925064603,
+    "throughput_rps": 6.183333333333334,
+    "p50_ms": 163.7269000057131,
+    "p95_ms": 314.51125000603497,
+    "p99_ms": 389.0571200230627,
+    "mean_ms": 178.99956307239012,
+    "errors": [
+     "ConnectError"
+    ]
+   },
+   "ALL": {
+    "requests": 2731,
+    "ok": 2611,
+    "error_rate": 0.043939948736726464,
+    "throughput_rps": 43.516666666666666,
+    "p50_ms": 502.22090003080666,
+    "p95_ms": 3642.582449974725,
+    "p99_ms": 5628.65819000872,
+    "mean_ms": 1060.0421126388485,
+    "errors": [
+     "ConnectError",
+     "ReadError"
+    ]
+   }
+  },
+  "errors_before_kill": 48,
+  "errors_after_recovery": 0
+ }
+}

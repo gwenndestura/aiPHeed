@@ -1,0 +1,69 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 123/199 [00:00<00:00, 1228.98it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 1308.64it/s]
+2026-10-17 21:37:54,691 - BERTopic - Embedding - Transforming documents to embeddings.
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:01<00:01,  1.34s/it]Batches: 100%|██████████| 2/2 [00:01<00:00,  1.38it/s]Batches: 100%|██████████| 2/2 [00:01<00:00,  1.22it/s]
+2026-10-17 21:37:56,356 - BERTopic - Embedding - Completed ✓
+2026-10-17 21:37:56,357 - BERTopic - Dimensionality - Fitting the dimensionality reduction algorithm
+2026-10-17 21:38:19,939 - BERTopic - Dimensionality - Completed ✓
+2026-10-17 21:38:19,940 - BERTopic - Cluster - Start clustering the reduced embeddings
+2026-10-17 21:38:19,968 - BERTopic - Cluster - Completed ✓
+2026-10-17 21:38:19,986 - BERTopic - Representation - Fine-tuning topics using representation models.
+2026-10-17 21:38:20,570 - BERTopic - Representation - Completed ✓
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2614.18it/s]
+2026-10-17 21:38:27,029 - BERTopic - Embedding - Transforming documents to embeddings.
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  1.34it/s]Batches: 100%|██████████| 2/2 [00:01<00:00,  2.00it/s]Batches: 100%|██████████| 2/2 [00:01<00:00,  1.86it/s]
+2026-10-17 21:38:28,121 - BERTopic - Embedding - Completed ✓
+2026-10-17 21:38:28,121 - BERTopic - Dimensionality - Fitting the dimensionality reduction algorithm
+2026-10-17 21:38:28,332 - BERTopic - Dimensionality - Completed ✓
+2026-10-17 21:38:28,333 - BERTopic - Cluster - Start clustering the reduced embeddings
+2026-10-17 21:38:28,342 - BERTopic - Cluster - Completed ✓
+2026-10-17 21:38:28,348 - BERTopic - Representation - Fine-tuning topics using representation models.
+2026-10-17 21:38:28,529 - BERTopic - Representation - Completed ✓
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3729.15it/s]
+2026-10-17 21:38:32,317 - BERTopic - Embedding - Transforming documents to embeddings.
+Batches:   0%|          | 0/2 [00:00<?, ?it/s]Batches:  50%|█████     | 1/2 [00:00<00:00,  1.76it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  2.47it/s]Batches: 100%|██████████| 2/2 [00:00<00:00,  2.32it/s]
+2026-10-17 21:38:33,188 - BERTopic - Embedding - Completed ✓
+2026-10-17 21:38:33,189 - BERTopic - Dimensionality - Fitting the dimensionality reduction algorithm
+2026-10-17 21:38:33,353 - BERTopic - Dimensionality - Completed ✓
+2026-10-17 21:38:33,353 - BERTopic - Cluster - Start clustering the reduced embeddings
+2026-10-17 21:38:33,362 - BERTopic - Cluster - Completed ✓
+2026-10-17 21:38:33,367 - BERTopic - Representation - Fine-tuning topics using representation models.
+2026-10-17 21:38:33,769 - BERTopic - Representation - Completed ✓
+{
+ "created_utc": "2026-10-17T13:37:05Z",
+ "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+ "algorithm": "BERTopic (UMAP 5d cosine, HDBSCAN eom, KeyBERT-inspired representation, CountVectorizer 1-2 grams, English stop words)",
+ "seed": 42,
+ "stability_seeds": [
+  43,
+  44
+ ],
+ "min_topic_size": 10,
+ "articles": "authorized, title-geocoded to a CALABARZON province, XLM-R score >= 0.3",
+ "scoring_model_key": "joeddav/xlm-roberta-large-xnli@b227ee8435ce|clf:35119d382e163448",
+ "quarters": [
+  "2021-Q1",
+  "2026-Q4"
+ ],
+ "n_articles": 55,
+ "use": "Descriptive only: what the news talked about, per province-quarter. Not a forecast feature: the topic model is fitted once on all authorized quarters, so later articles shape the topics of earlier quarters.",
+ "gate": {
+  "min_articles": 30,
+  "min_topics": 2,
+  "max_outlier_share": 0.5,
+  "min_stability_ari": 0.5
+ },
+ "n_topics": 2,
+ "outlier_share": 0.4,
+ "stability_ari": [
+  0.31126562070791314,
+  0.4489819692713929
+ ],
+ "stability_ari_mean": 0.380123794989653,
+ "topic_sizes": {
+  "-1": 22,
+  "0": 17,
+  "1": 16
+ },
+ "status": "UNSTABLE",
+ "reason": "publication gate failed: stability"
+}

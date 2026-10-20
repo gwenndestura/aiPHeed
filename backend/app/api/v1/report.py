@@ -26,7 +26,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import get_db
 from app.services import dashboard as svc
 from app.services import report as rpt
+from app.services import reference as ref
 from app.services import review as rv
+from app.quarterly import preview as PV
 from app.services.ratelimit import report_guard
 
 logger = logging.getLogger(__name__)
@@ -56,7 +58,7 @@ async def get_report(
     an admin has just withheld.
     """
     q = svc.resolve_quarter(quarter)
-    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    withheld = frozenset(pid for pid, rq in await rv.withheld_pairs(db, q))
 
     if scope == "region":
         pdf = rpt.build_region_report(q, withheld)
@@ -84,6 +86,7 @@ async def get_report_data(
     from_: str | None = Query(None, alias="from"),
     to: str | None = Query(None),
     municipality: str | None = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
     """E31: the Visualization page's report payload, built from the E31 record (same numbers as the map)."""
     from fastapi import HTTPException
@@ -92,11 +95,22 @@ async def get_report_data(
 
     if not svc.e31_active():
         raise HTTPException(status_code=404, detail="report data is served from the E31 record only")
+    # Thesis p. 60: a report never shows a withheld forecast (rejected, or unapproved with AIPHEED_REQUIRE_APPROVAL=1)
+    slugs = [id.lower()] if scope == "province" and id else list(ref.PROVINCES)
+    quarters = [to] if type == "shap" and to else R._window(from_, to)
+    held = await rv.withheld_pairs(db)
+    if any((s, q) in held for s in slugs for q in quarters if R._row(q) is not None):
+        raise svc.ForecastWithheld("This report includes a forecast that is withheld from publication "
+                                   "(not yet approved, or rejected, by a DA administrator).")
     try:
         if type == "trend":
-            return R.trend(scope, id, from_, to)
-        if not id or not to:
-            raise HTTPException(status_code=422, detail="a driver report needs a province id and a quarter (to)")
-        return R.drivers(id, to)
+            out = R.trend(scope, id, from_, to)
+        else:
+            if not id or not to:
+                raise HTTPException(status_code=422, detail="a driver report needs a province id and a quarter (to)")
+            out = R.drivers(id, to)
+        # lead-2 preview on (the default): a report that ends on the preview quarter says so (optional fields)
+        last = (out.get("metadata") and dict(out["metadata"]).get("Data", "")[:7].replace(" ", "-")) or None
+        return {**out, **PV.fields(last)}
     except KeyError as ex:
         raise HTTPException(status_code=404, detail=str(ex))

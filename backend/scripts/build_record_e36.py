@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from app.news.alignment import evidence_window  # noqa: E402
 from app.quarterly.lgu_audit import build_ranking  # noqa: E402
+from app.quarterly.verdicts import compose_75pct_verdict  # noqa: E402
 
 E36 = ROOT.parent / "aipheed-backend-aligned" / "experiments" / "E36_LightGBM_One_Quarter_Ahead"
 BUNDLE = E36 / "frozen" / "E36_SERVING_BUNDLE.json"
@@ -207,19 +208,17 @@ def validation(b: dict, base: dict) -> dict:
     pv = {k: {"mean_brier_gain_vs_ref": r4(v["mean_brier_gain_vs_ref"]), "p_two_sided": r4(v["p_two_sided"]),
               "holm": r4(v.get("holm_two_sided_over_six_baselines")), "accuracy_diff": r4(v["accuracy_diff"])}
           for k, v in ev["paired_vs_baselines"].items()}
-    verdict = (f"One-quarter-ahead accuracy of the proposed LightGBM on {t['n']} development estimates "
-               f"({len(ev['dates'])} quarters, 2023-Q1 to 2026-Q3): {t['correct']}/{t['n']} = {t['accuracy']:.3f}. "
-               f"The point estimate is above 75%, but the 95% date-bootstrap interval "
-               f"({t['date_bootstrap_ci95'][0]:.3f} to {t['date_bootstrap_ci95'][1]:.3f}) reaches below 75%, so the "
-               f"target is not demonstrated. Always-HIGH reaches the same accuracy ({t['always_high_accuracy']:.3f}) "
-               f"and persistence a higher one ({t['persistence_accuracy']:.3f}). Unlike always-HIGH, the model does "
-               f"identify LOW quarters (balanced accuracy {t['balanced_accuracy']:.3f}). No paired difference with any "
-               f"of the six baselines is significant. These are development dates; the 2026-Q4 forecast is the first "
-               f"untouched test.")
+    # composed from the numbers (E57 audit: the fixed sentence said "not demonstrated" even when the interval cleared 75%)
+    composed = compose_75pct_verdict(
+        correct=t["correct"], n=t["n"], accuracy=t["accuracy"], ci95=t["date_bootstrap_ci95"], n_dates=len(ev["dates"]),
+        first_quarter=ev["dates"][0], last_quarter=ev["dates"][-1], balanced_accuracy=t["balanced_accuracy"],
+        always_high_accuracy=t["always_high_accuracy"], persistence_accuracy=t["persistence_accuracy"],
+        holm_p={k: v["holm"] for k, v in pv.items() if k != "ALWAYS_HIGH"})
+    verdict = composed["verdict"]
     return {
         "news_relevance": base["validation"]["news_relevance"],
-        "model_evaluation": {"basis": f"E36 frozen protocol {b['model']['protocol_sha256'][:12]}; lead 1; nested "
-                                      f"rolling-origin; run {ev['run']}", "dates": ev["dates"], "rows": rows,
+        "model_evaluation": {"basis": f"Nested walk-forward, lead 1, {len(ev['dates'])} development quarters; "
+                                      f"run {ev['run']}", "dates": ev["dates"], "rows": rows,
                              "paired_vs_baselines": pv},
         "threshold_75pct": {"source": "the researcher's brief; Chapter I states no numeric threshold",
                             "rows": [{"arm": r["arm"], "accuracy_lead1": r["accuracy_lead1"],
@@ -393,7 +392,7 @@ def write_pdf(rec: dict, path: Path):
                      f"{f3(r['accuracy_ci95'][0])}-{f3(r['accuracy_ci95'][1])}", f3(r["balanced_accuracy"]),
                      f3(r["precision"]), f3(r["recall"]), f3(r["f1"]), f3(r["roc_auc"]), f3(r["brier"])])
     els += [Table(rows), P(v["threshold_75pct"]["verdict"]),
-            P("Model evaluation: next quarter (the dashboard target), development quarters", "Heading2"),
+            P("Appendix: lead-2 experiment (not served)", "Heading2"),
             P(v["next_quarter_evaluation"]["basis"]),
             Table([["Approach", "Correct/n", "Acc", "Acc 95% CI", "Bal.acc", "LOW recall", "Brier"]] +
                   [[r["arm"][:52], f"{r['correct']}/{r['n']}", f3(r["accuracy"]),

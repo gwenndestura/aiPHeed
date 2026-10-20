@@ -22,6 +22,7 @@ from app.schemas.public import ForecastResponse, TimeseriesResponse
 from app.services import dashboard as svc
 from app.services import reference as ref
 from app.services import review as rv
+from app.quarterly import preview as PV
 
 router = APIRouter()
 
@@ -29,8 +30,8 @@ SCOPES = ("region", "province", "municipality")
 
 
 async def _withheld_for(db: AsyncSession, quarter: str) -> frozenset[str]:
-    """Province slugs an admin has withheld for this quarter."""
-    return frozenset(pid for pid, q in await rv.rejected_pairs(db, quarter))
+    """Province slugs withheld for this quarter (rejected, or unapproved with AIPHEED_REQUIRE_APPROVAL=1)."""
+    return frozenset(pid for pid, q in await rv.withheld_pairs(db, quarter))
 
 
 async def _confirmed_alert(db: AsyncSession, scope: str, subject_id: str, quarter: str, body: dict) -> bool:
@@ -95,6 +96,9 @@ def _score_for(
             "provincesIncluded": region["provincesIncluded"],
             "horizon": horizon,
             "derivation": region["derivation"],
+            # the quarter's own horizon and confidence (the provinces share them), so the region view states its lead
+            "horizonLabel": region.get("horizonLabel"),
+            "confidenceStatement": region.get("confidenceStatement"),
         }
 
     if scope == "province":
@@ -149,9 +153,9 @@ async def get_forecast(
     quarter: str | None = Query(None, description="Defaults to the latest scorable quarter"),
     horizon: str = Query(svc.DEFAULT_HORIZON, pattern="^(nowcast|forecast)$",
                          description=("One operational horizon (Rule 2). Both ids "
-                                      "resolve to the same model; no forward lead "
-                                      "time has been validated (E27), so the output "
-                                      "is an experimental same-quarter estimate.")),
+                                      "resolve to the same served model, one quarter "
+                                      "ahead (lead 1, the Maximum Reliable Lead Time "
+                                      "of Algorithm 3).")),
     db: AsyncSession = Depends(get_db),
 ) -> ForecastResponse:
     """
@@ -177,6 +181,7 @@ async def get_forecast(
         # E34 (D3): only an alert a DA administrator has CONFIRMED is public; never a score threshold alone.
         alert=await _confirmed_alert(db, scope, id, q, body),
         **body,
+        **PV.fields(q),
     )
 
 
@@ -213,7 +218,7 @@ async def get_timeseries(
 
     # Withheld quarters drop out of the line rather than plotting a gap at
     # zero, which would read as a real fall to no risk.
-    rejected = await rv.rejected_pairs(db)
+    rejected = await rv.withheld_pairs(db)
 
     series = []
     for q in window:
@@ -246,7 +251,7 @@ async def get_timeseries(
         series = [p | {"isForecast": p["quarter"] not in bt} for p in series if p["scoreType"] == cand["id"]]
         indicator = cand
     else:
-        indicator = svc.INDICATOR
+        indicator = svc.indicator()                     # the served record's own definition (E53 port)
 
     return TimeseriesResponse(
         scope=scope,

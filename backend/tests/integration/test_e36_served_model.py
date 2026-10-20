@@ -1,7 +1,8 @@
 """
 tests/integration/test_e36_served_model.py
 ------------------------------------------
-The served E36 LightGBM (aiPHeed-E36-LGBM) and the PSA 2021 / POPCEN 2024 LGU inputs, end to end: the record is
+The E36 LightGBM (aiPHeed-E36-LGBM), still selectable with AIPHEED_RECORD=e36 (the default is now E49-C2, see
+test_e49_served_model.py), and the PSA 2021 / POPCEN 2024 LGU inputs, end to end: the record is
 intact and matches the frozen E36 artifacts, the model artifact reproduces every served 2026-Q4 probability, the SHAP
 drivers add up exactly to each estimate, and the API, map rows, LGU ranking and PDF all carry the same numbers.
 Every request runs against an in-memory database (conftest), never backend/aipheed.db.
@@ -75,7 +76,7 @@ def test_shap_drivers_add_up_exactly_to_each_estimate():
             assert 1 / (1 + math.exp(-z)) == pytest.approx(v["p_high"], abs=2e-3), (q["quarter"], code)
 
 
-def test_api_provinces_serve_the_record_with_basis_and_horizon():
+def test_api_provinces_serve_the_record_with_basis_and_horizon(serve_e36):
     body = client.get("/api/v1/provinces?quarter=2026-Q4&horizon=forecast").json()
     got = {r["provinceCode"]: r for r in body["data"]}
     for code, v in FC["provinces"].items():
@@ -86,7 +87,7 @@ def test_api_provinces_serve_the_record_with_basis_and_horizon():
         assert "lead 1" in r["horizonLabel"] and "2026-10-01" in r["confidenceStatement"]
 
 
-def test_D3_qoq_only_between_consecutive_comparable_quarters():
+def test_D3_qoq_only_between_consecutive_comparable_quarters(serve_e36):
     body = client.get("/api/v1/provinces?quarter=2025-Q4&horizon=forecast").json()
     assert all(r["qoqChange"] is None for r in body["data"])          # 2025-Q1 -> 2025-Q4 crosses a gap
     body = client.get("/api/v1/provinces?quarter=2026-Q4&horizon=forecast").json()
@@ -119,7 +120,8 @@ def test_psa_2021_sae_reaches_all_142_lgus_with_lucena_flagged():
     assert "population_2020" not in v.columns
 
 
-def test_lgu_ranking_in_record_api_and_recompute_agree():
+def test_lgu_ranking_in_record_api_and_recompute_agree(serve_e36, lead2):
+    # the record's stored ranking is built from the E38 2027-Q1 (lead-2) row; serve that row to compare with it
     vul = pd.read_csv("data/inputs/lgu_vulnerability.csv", dtype={"lgu_code": str})
     ros = pd.read_csv("data/reference/calabarzon_lgus.csv", dtype={"lgu_psgc": str})
     NQ = next(q for q in REC["quarters"] if q.get("role") == "next_quarter")      # the dashboard target
@@ -148,7 +150,7 @@ def test_D4_cross_province_claim_is_not_made():
     assert "Compare LGUs within their province" in text
 
 
-def test_pdf_is_the_record_and_names_the_model():
+def test_pdf_is_the_record_and_names_the_model(serve_e36):
     r = client.get("/api/v1/quarterly/e31/report.pdf")
     assert r.status_code == 200 and r.headers["X-Record-SHA256"] == REC["content_sha256"]
     assert re.search(rb"/Subject \(([0-9a-f]{64})\)", r.content).group(1).decode() == REC["content_sha256"]

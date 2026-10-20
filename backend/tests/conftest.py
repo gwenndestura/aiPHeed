@@ -139,6 +139,101 @@ E34_SUPERSEDED = {
 }
 
 
+def _clear_dashboard_caches():
+    """The dashboard service caches per process; AIPHEED_MAX_LEAD is normally fixed when the server starts."""
+    from app.services import dashboard as svc
+
+    for f in vars(svc).values():
+        if hasattr(f, "cache_clear"):
+            f.cache_clear()
+
+
+@pytest.fixture
+def serve_e36(monkeypatch):
+    """Serve the E36 record (as AIPHEED_RECORD=e36 does at startup); the default is E53-A1."""
+    from pathlib import Path
+
+    from app.api.v1 import quarterly
+    from app.ml.inference import e31_engine as E31
+
+    monkeypatch.setattr(E31, "RECORD_PATH", Path("data/e36/e36_record.json"))
+    monkeypatch.setattr(quarterly, "E31_RECORD", Path("data/e36/e36_record.json"))
+    monkeypatch.setattr(quarterly, "E31_PDF", Path("data/e36/aiPHeed_E36_assessment_report.pdf"))
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+    yield
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+
+
+@pytest.fixture
+def serve_e49(monkeypatch):
+    """Serve the E49-C2 record (as AIPHEED_RECORD=e49 does at startup); the default is E53-A1."""
+    from pathlib import Path
+
+    from app.api.v1 import quarterly
+    from app.ml.inference import e31_engine as E31
+
+    monkeypatch.setattr(E31, "RECORD_PATH", Path("data/e49/e49_record.json"))
+    monkeypatch.setattr(quarterly, "E31_RECORD", Path("data/e49/e49_record.json"))
+    monkeypatch.setattr(quarterly, "E31_PDF", Path("data/e49/aiPHeed_E49_assessment_report.pdf"))
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+    yield
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+
+
+@pytest.fixture
+def serve_e53(monkeypatch):
+    """Serve the E53-A1 record (the default since the final integration; as AIPHEED_RECORD=e53 does at startup)."""
+    from pathlib import Path
+
+    from app.api.v1 import quarterly
+    from app.ml.inference import e31_engine as E31
+
+    monkeypatch.setattr(E31, "RECORD_PATH", Path("data/e53/e53_record.json"))
+    monkeypatch.setattr(quarterly, "E31_RECORD", Path("data/e53/e53_record.json"))
+    monkeypatch.setattr(quarterly, "E31_PDF", Path("data/e53/aiPHeed_E53_assessment_report.pdf"))
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+    yield
+    quarterly._E31_CACHE.clear()
+    E31.news_topic_shares.cache_clear()
+    _clear_dashboard_caches()
+
+
+@pytest.fixture
+def angel_original_config(serve_e36, monkeypatch):
+    """Angel Melindo's configuration before the E53 port (tina-e53-port): the E36 record (E36 lead 1 + the E38
+    2027-Q1 lead-2 row), the next calendar quarter as the dashboard target (AIPHEED_MAX_LEAD=2) and no lead-2
+    preview. The lead-2 candidate tests (E41-E48) were written and frozen against it, so they run under it."""
+    monkeypatch.setenv("AIPHEED_MAX_LEAD", "2")
+    monkeypatch.setenv("AIPHEED_LEAD2_PREVIEW", "0")
+    _clear_dashboard_caches()
+    yield
+    _clear_dashboard_caches()
+
+
+@pytest.fixture
+def lead2(monkeypatch):
+    """Serve lead 2 again (AIPHEED_MAX_LEAD=2): the previous configuration with the E38 2027-Q1 forecast, in which
+    lead 2 governs every default. The lead-2 preview (on by default since the final integration) keeps the defaults
+    on lead 1, so this configuration runs with it off, as it always did."""
+    monkeypatch.setenv("AIPHEED_MAX_LEAD", "2")
+    monkeypatch.setenv("AIPHEED_LEAD2_PREVIEW", "0")
+    _clear_dashboard_caches()
+    yield
+    monkeypatch.delenv("AIPHEED_MAX_LEAD")
+    monkeypatch.delenv("AIPHEED_LEAD2_PREVIEW")
+    _clear_dashboard_caches()
+
+
 def pytest_collection_modifyitems(config, items):
     import os
 

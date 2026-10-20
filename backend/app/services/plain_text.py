@@ -212,6 +212,17 @@ def compose_key_points(rows: list[dict], end: str, compare_from: str | None,
                 [r["name"] for r in with_factor])
             out.append(f"{factor(key)} are the main factor behind the risk in {where}, and they "
                        f"{effect_verb(direction)} the risk.")
+        elif len({k for k, _ in keys}) == 1:
+            # one main factor everywhere, pushing the risk in different directions
+            key = next(iter(keys))[0]
+            where = "every province" if len(with_factor) == len(shown) else _join_series(
+                [r["name"] for r in with_factor])
+            by_dir: dict[str, list[str]] = {}
+            for r in with_factor:
+                by_dir.setdefault(r["mainDirection"], []).append(r["name"])
+            parts = [f"{'raise' if d == 'increases_risk' else 'lower'} it in {_join_series(names)}"
+                     for d, names in by_dir.items()]
+            out.append(f"{factor(key)} are the main factor behind the risk in {where}; they {_join_series(parts)}.")
         else:
             groups: dict[str, list[str]] = {}
             for r in with_factor:

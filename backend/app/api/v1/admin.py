@@ -62,6 +62,7 @@ from app.services import dashboard as svc
 from app.services import feedback as fb
 from app.services import mailer
 from app.services import pipeline_runs as runs
+from app.services import reference as ref
 from app.services import review as rv
 from app.services import security
 from app.services.ratelimit import feedback_guard
@@ -435,7 +436,14 @@ async def rejections(
     back, which is why they carry a reason and an actor.
     """
     rows = await rv.list_rejections(db, quarter)
-    return RejectionsResponse(quarter=quarter, data=[_rejection(r) for r in rows])
+    data = [_rejection(r) for r in rows]
+    # AIPHEED_REQUIRE_APPROVAL=1 (default off): province-quarters not yet approved are withheld like rejections.
+    rejected = {(r.province_id, r.quarter) for r in rows}
+    for slug, q in sorted(await rv.unapproved_pairs(db, quarter) - rejected,
+                          key=lambda x: (ref.quarter_index(x[1]), x[0]), reverse=True):
+        data.append(RejectionRow(provinceId=slug, province=ref.province_name(slug) or slug, quarter=q,
+                                 reason=rv.AWAITING_APPROVAL))
+    return RejectionsResponse(quarter=quarter, data=data)
 
 
 @public_router.post("/feedback", response_model=FeedbackCreated, status_code=201,

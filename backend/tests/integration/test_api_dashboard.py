@@ -240,9 +240,13 @@ def test_narrative_is_plain_ascii_for_pdf_export():
 
 
 def test_explainability_note_is_plain_language():
+    from app.api.v1.insights import REGION_NET_SENTENCE
+
     note = client.get("/api/v1/explainability?scope=region&id=calabarzon").json()["note"]
     # Shown to the public under the bars and exported to PDF verbatim.
     note.encode("ascii")
+    assert REGION_NET_SENTENCE in note
+    note = note.replace(REGION_NET_SENTENCE, "")    # its plain "net direction" is not the `direction` field
     for term in ("`", "direction", "color", "otherPct", "newsSignalProportion", "SHAP", "--"):
         assert term not in note, term
 
@@ -299,9 +303,11 @@ def test_news_count_agrees_with_the_province_summary():
     provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
-        assert news["articleCount"] == province["articleCount"]
         # E31 alignment (promoted in E34): a forecast's news is the previous quarter's; a nowcast's is its own.
         assert news["sourceQuarter"] == _evidence_quarter(quarter)
+        # merge D2: the province's articleCount is the validated articles of the estimate's evidence quarter, the
+        # count of the news behind the estimate (view=used); the published-news card keeps its own list count
+        assert news["articleCount"] == province["articleCount"]
 
 
 def test_forecast_quarter_news_comes_from_the_information_cutoff():
@@ -317,7 +323,7 @@ def test_forecast_quarter_news_comes_from_the_information_cutoff():
         assert news["quarter"] == quarter
         # E31 (promoted in E34): the evidence quarter is the one before the forecast target (no originQuarter field).
         assert news["sourceQuarter"] == _evidence_quarter(quarter) != quarter
-        assert news["articleCount"] == province["articleCount"]
+        assert news["articleCount"] == province["articleCount"]       # merge D2: the evidence quarter's count
 
 
 # ---------------------------------------------------------------------------
