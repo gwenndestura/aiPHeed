@@ -58,7 +58,13 @@ def test_quarters_timeline_has_no_gaps_and_explains_missing_ones():
         if q["state"] == "unavailable":
             assert q["reason"], q["id"]
             r = client.get(f"/api/v1/provinces?quarter={q['id']}")
-            assert r.status_code == 404, q["id"]
+            if "nowcast view" in q["reason"]:
+                # E31 (promoted in E34): the quarter under way is listed in the forecast view only to explain the gap;
+                # its value is the same-quarter nowcast, always labelled as such.
+                assert r.status_code == 200, q["id"]
+                assert all("nowcast" in d["horizonLabel"] for d in r.json()["data"]), q["id"]
+            else:
+                assert r.status_code == 404, q["id"]
         else:
             assert q["reason"] is None, q["id"]
 
@@ -190,7 +196,9 @@ def test_every_municipal_row_declares_it_is_disaggregated():
         # Rule 8: the label is never null. These are reweighted province
         # numbers and a reader must not mistake one for a municipal model run.
         assert row["disaggregationLabel"]
-        assert "disaggregated" in row["disaggregationLabel"].lower()
+        label = row["disaggregationLabel"].lower()
+        # E31 wording (promoted in E34): "re-weighted ... not an independent municipal forecast".
+        assert "disaggregated" in label or "not an independent municipal forecast" in label
 
 
 # ---------------------------------------------------------------------------
@@ -267,13 +275,33 @@ def test_article_dates_are_iso_or_absent():
             assert article["date"][4] == article["date"][7] == "-"
 
 
+def _prev(q: str) -> str:
+    y, n = int(q[:4]), int(q[-1])
+    return f"{y - 1}-Q4" if n == 1 else f"{y}-Q{n - 1}"
+
+
+def _is_forecast(q: str) -> bool:
+    return q in client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"] and         any(x["id"] == q and x["state"] == "forecast" for x in client.get("/api/v1/quarters").json()["quarters"])
+
+
+def _evidence_quarter(quarter: str) -> str:
+    """News evidence quarter of the served row: target minus its lead (E31 alignment; lead 2 for the next quarter)."""
+    import json as _json
+    from pathlib import Path as _Path
+
+    rec = _json.loads(_Path("data/e36/e36_record.json").read_text(encoding="utf-8"))
+    row = next(q for q in rec["quarters"] if q["quarter"] == quarter)
+    return row["provenance"]["news_evidence_window"]["evidence_quarter"] if row.get("provenance") else _prev(quarter)
+
+
 def test_news_count_agrees_with_the_province_summary():
     quarter = client.get("/api/v1/quarters").json()["current"]
     provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
         assert news["articleCount"] == province["articleCount"]
-        assert news["sourceQuarter"] == quarter
+        # E31 alignment (promoted in E34): a forecast's news is the previous quarter's; a nowcast's is its own.
+        assert news["sourceQuarter"] == _evidence_quarter(quarter)
 
 
 def test_forecast_quarter_news_comes_from_the_information_cutoff():
@@ -287,7 +315,8 @@ def test_forecast_quarter_news_comes_from_the_information_cutoff():
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
         assert news["quarter"] == quarter
-        assert news["sourceQuarter"] == province["originQuarter"] != quarter
+        # E31 (promoted in E34): the evidence quarter is the one before the forecast target (no originQuarter field).
+        assert news["sourceQuarter"] == _evidence_quarter(quarter) != quarter
         assert news["articleCount"] == province["articleCount"]
 
 
@@ -390,8 +419,12 @@ def test_responses_declare_which_horizon_produced_them():
 def test_forecast_timeline_marks_its_edge_as_forecast():
     quarters = [q for q in client.get("/api/v1/quarters?horizon=forecast").json()["quarters"]
                 if q["state"] != "unavailable"]
-    assert quarters[-1]["state"] == "forecast"
-    assert {q["state"] for q in quarters[:-1]} == {"actual"}
+    # E36/E38: the current quarter (lead 1) and the next-quarter target (lead 2) are both forecasts; every
+    # earlier quarter is an observed backtest.
+    states = [q["state"] for q in quarters]
+    assert states[-1] == "forecast"
+    k = len(states) - states.index("forecast")
+    assert set(states[-k:]) == {"forecast"} and set(states[:-k]) == {"actual"} and k <= 2
 
 
 def test_unknown_horizon_is_rejected():

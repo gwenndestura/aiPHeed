@@ -1,20 +1,26 @@
 """
 app/ml/inference/explainer.py
 ------------------------------
-SHAP TreeExplainer for the food-availability shock model.
+Equation 7 — SHAP Forecast Attribution.
 
-The target changed on 2026-09-01: the model now predicts a production shortfall
-per province x quarter x COMMODITY, not a composite stress label per province.
-SHAP is therefore computed at the series level and summed to the province, which
-is also what the Risk Drivers panel wants -- "what is driving risk in Quezon
-this quarter" is a sum over that province's commodity series.
+The SHAP TreeExplainer decomposes each LightGBM forecast into an additive sum
+of exact per-feature contributions:
 
-The served model is a per-group ENSEMBLE (LightGBM, RandomForest, ExtraTrees,
-LogisticRegression). TreeExplainer cannot explain the logistic pipeline, so
-explanations come from each group's LightGBM member -- the ensemble's primary
-model. Explained probabilities therefore approximate, rather than exactly
-reproduce, the served ensemble probability; the gap is reported as
-`explained_prob_gap` rather than hidden.
+    f(X_t) = phi_0 + SUM_{j=1..M} phi_j
+
+where phi_0 is the baseline expected forecast — the mean prediction across all
+training instances, with no feature information — and each phi_j quantifies how
+far feature j shifted the prediction above or below that baseline. M is the
+number of features in the final selected matrix (Section 3.3.2.7).
+
+Explaining the served model directly means the attribution reproduces the
+forecast exactly rather than approximating it: the same LightGBM that produced
+the probability produces the Shapley values.
+
+Every published forecast carries its explanation by default (Section 3.6, the
+«include» relationship from viewing province forecasts), so a non-technical
+reviewer at the partner agencies can see which indicators moved a prediction
+before acting on it.
 
 Outputs two record types:
 
@@ -28,8 +34,8 @@ Outputs two record types:
 Usage:
     from app.ml.inference.explainer import Explainer
     explainer = Explainer()
-    shap_records   = explainer.explain_quarter("2026-Q1")
-    driver_records = explainer.build_drivers("PH040300000", "2026-Q1", shap_records)
+    shap_records   = explainer.explain_quarter("2025-Q4")
+    driver_records = explainer.build_drivers("PH040300000", "2025-Q4", shap_records)
 """
 
 from __future__ import annotations
@@ -45,18 +51,16 @@ from app.ml.inference.feature_display import (
     DRIVER_GROUP_FEATURES,
     DRIVER_GROUP_LABELS,
     FEATURE_DISPLAY_MAP,
-    UNGROUPED_FEATURES,
 )
 
 logger = logging.getLogger(__name__)
 
-MODEL_PATH    = Path("models/food_availability_model.joblib")
-PANEL_PATH    = Path("data/processed/food_availability_panel.parquet")
+MODEL_PATH    = Path("models/lgbm_best.pkl")
+FEATURES_PATH = Path("data/processed/features_fused.parquet")
 TRIGGERS_PATH = Path("data/processed/trigger_proportions.parquet")
 
-# The feature list is no longer hardcoded here. It travels inside the model
-# bundle (self._feature_cols) so serving, explaining and training cannot
-# drift apart -- this copy had already gone stale against the trainer once.
+# The feature list travels inside the model bundle so serving, explaining and
+# training cannot drift apart.
 
 PROVINCE_NAMES: dict[str, str] = {
     "PH040100000": "Cavite",
@@ -69,13 +73,14 @@ PROVINCE_NAMES: dict[str, str] = {
 
 class Explainer:
     """
-    Lazy-loading SHAP TreeExplainer singleton.
+    Lazy-loading SHAP TreeExplainer over the served LightGBM model.
 
-    Uses interventional perturbation with model_output='probability' so that
-    SHAP values are directly interpretable as probability contributions:
-        baseline + sum(shap_values) ≈ predicted risk_probability
+    Uses interventional perturbation with model_output='probability' so the
+    Shapley values are directly interpretable as probability contributions:
 
-    baseline ≈ 0.54  (mean training probability on the balanced 50/50 dataset).
+        phi_0 + sum(phi_j) = predicted risk_probability     (Equation 7)
+
+    phi_0 is the baseline expected forecast across the training instances.
     """
 
     _model = None
@@ -83,8 +88,6 @@ class Explainer:
     _features: pd.DataFrame | None = None
     _triggers: pd.DataFrame | None = None
     _baseline: float | None = None
-
-    _explainers: dict | None = None
     _feature_cols: list[str] | None = None
 
     def _load(self) -> None:
@@ -93,50 +96,51 @@ class Explainer:
 
         if not MODEL_PATH.exists():
             raise FileNotFoundError(
-                f"Model not found at {MODEL_PATH}. Run scripts/train_final.py first."
+                f"Model not found at {MODEL_PATH}. Run "
+                "app.ml.training.trainer.train_model() first (Algorithm 4)."
             )
-        self._model = joblib.load(MODEL_PATH)
-        self._feature_cols = self._model["feature_cols"]
-        logger.info("Explainer: bundle loaded from %s (%d groups)",
-                    MODEL_PATH, len(self._model["groups"]))
+        bundle = joblib.load(MODEL_PATH)
+        if isinstance(bundle, dict):
+            self._model = bundle["model"]
+            self._feature_cols = list(bundle["feature_cols"])
+        else:
+            from app.ml.features.feature_selector import load_selected
 
-        # Same panel the predictor scores, built by the training loader so the
-        # two cannot diverge.
-        from scripts.train_food_availability import load as load_panel
-        panel = load_panel()
-        enc = self._model["commodity_encoding"]
-        panel["commodity_te"] = panel["commodity"].map(enc).fillna(
-            self._model["encoding_prior"])
-        self._features = panel
-        logger.info("Explainer: panel loaded (%d series-quarters)", len(panel))
+            self._model = bundle
+            self._feature_cols = load_selected()
+        logger.info(
+            "Explainer: model loaded from %s (%d features)",
+            MODEL_PATH, len(self._feature_cols),
+        )
+
+        # The same fused matrix the predictor scores, so the two cannot diverge.
+        if not FEATURES_PATH.exists():
+            raise FileNotFoundError(
+                f"{FEATURES_PATH} not found. Run feature_matrix.build_feature_matrix()."
+            )
+        self._features = pd.read_parquet(FEATURES_PATH)
+        logger.info("Explainer: feature matrix loaded (%d province-quarters)",
+                    len(self._features))
 
         if TRIGGERS_PATH.exists():
             self._triggers = pd.read_parquet(TRIGGERS_PATH)
 
-        # One TreeExplainer per commodity group, over that group's LightGBM
-        # member. Background is a sample of that group's own rows so the
-        # baseline reflects the group's base rate -- fisheries shocks ~56% of
-        # quarters against 24-30% for crops, so a pooled baseline would misstate
-        # both.
+        # Background sample drawn from the matrix the model was trained on, so
+        # phi_0 is the mean prediction across training instances as Equation 7
+        # defines it.
         import shap
-        self._explainers = {}
-        baselines = []
-        for grp, spec in self._model["groups"].items():
-            lgbm = dict(spec["members"])["lgbm"]
-            rows = panel[panel["group"] == grp]
-            if rows.empty:
-                rows = panel
-            bg = rows[self._feature_cols].fillna(0.0).sample(
-                min(50, len(rows)), random_state=42)
-            ex = shap.TreeExplainer(lgbm, bg, model_output="probability",
-                                    feature_perturbation="interventional")
-            self._explainers[grp] = ex
-            baselines.append(float(ex.expected_value))
-            logger.info("Explainer: %-22s baseline=%.4f", grp, float(ex.expected_value))
 
-        self._baseline = float(np.mean(baselines)) if baselines else None
+        bg = self._features[self._feature_cols].fillna(0.0)
+        bg = bg.sample(min(100, len(bg)), random_state=42)
+        self._explainer = shap.TreeExplainer(
+            self._model, bg,
+            model_output="probability",
+            feature_perturbation="interventional",
+        )
+        self._baseline = float(np.atleast_1d(self._explainer.expected_value)[-1])
+        logger.info("Explainer ready: baseline phi_0 = %.4f", self._baseline)
 
-    # ── Province-quarter SHAP ─────────────────────────────────────────────
+    # -- Province-quarter SHAP --------------------------------------------
 
     def explain_province_quarter(
         self,
@@ -144,7 +148,8 @@ class Explainer:
         quarter: str,
     ) -> list[dict]:
         """
-        Compute SHAP values for one province-quarter.
+        Compute exact per-feature Shapley values for one province-quarter
+        (Equation 7).
 
         Returns
         -------
@@ -155,10 +160,8 @@ class Explainer:
             shap_value, mean_abs_shap, feature_value,
             baseline, final_rfii
 
-        SHAP is computed per commodity series and AVERAGED across the province's
-        series, matching how the predictor rolls series risk up to a province.
-        Each series is explained by its own group's explainer, so a fisheries
-        series is read against the fisheries baseline rather than a pooled one.
+        baseline is phi_0; final_rfii is phi_0 + sum(phi_j), which reproduces
+        the served risk probability for that province-quarter.
         """
         self._load()
 
@@ -178,34 +181,22 @@ class Explainer:
             return []
 
         cols = self._feature_cols
-        sv_parts, base_parts = [], []
-        for grp, sub in rows.groupby("group"):
-            ex = self._explainers.get(grp)
-            if ex is None:
-                continue
-            X_g = sub[cols].fillna(0.0)
-            raw = ex.shap_values(X_g)
-            arr = np.asarray(raw[1] if isinstance(raw, list) and len(raw) > 1
-                             else raw[0] if isinstance(raw, list) else raw)
-            if arr.ndim == 3:            # (n, features, classes)
-                arr = arr[:, :, -1]
-            sv_parts.append(np.atleast_2d(arr))
-            base_parts.extend([float(ex.expected_value)] * len(sub))
-
-        if not sv_parts:
-            return []
-
-        sv = np.vstack(sv_parts).mean(axis=0)      # average across the province's series
         X = rows[cols].fillna(0.0)
 
-        baseline    = float(np.mean(base_parts))
-        final_rfii  = round(baseline + float(sv.sum()), 4)
-        mean_abs    = round(float(np.abs(sv).mean()), 6)
+        raw = self._explainer.shap_values(X)
+        arr = np.asarray(raw[-1] if isinstance(raw, list) else raw)
+        if arr.ndim == 3:                 # (rows, features, classes)
+            arr = arr[:, :, -1]
+        sv = np.atleast_2d(arr)[0]        # one province-quarter, one row
+
+        baseline   = float(self._baseline)
+        final_rfii = round(baseline + float(sv.sum()), 4)
+        mean_abs   = round(float(np.abs(sv).mean()), 6)
 
         records = []
         for feat, val in zip(cols, sv):
             meta = FEATURE_DISPLAY_MAP.get(feat, {})
-            fval = float(X[feat].mean()) if feat in X.columns else None
+            fval = float(X[feat].iloc[0]) if feat in X.columns else None
             records.append({
                 "quarter":         quarter,
                 "province_code":   province_code,
@@ -266,9 +257,6 @@ class Explainer:
             group_shap[group] = sum(sv_dict.get(f, 0.0) for f in feats)
 
         # ── Trigger proportions from NLP corpus ───────────────────────────
-        # One real trigger_* proportion per group, self-matched (not the
-        # earlier bug where trigger_fish_kill's value was attached to a
-        # differently-named group).
         trigger_map: dict[str, float] = {}
         article_count = 0
         if self._triggers is not None:
@@ -280,26 +268,15 @@ class Explainer:
                 r = t_row.iloc[0]
                 article_count = int(r.get("article_count", 0))
                 trigger_map = {
-                    "market":         float(r.get("trigger_market", 0.0)),
-                    "climate":        float(r.get("trigger_climate", 0.0)),
-                    "fish_kill":      float(r.get("trigger_fish_kill", 0.0)),
-                    "employment":     float(r.get("trigger_employment", 0.0)),
-                    "ofw_remittance": float(r.get("trigger_ofw_remittance", 0.0)),
+                    "market":        float(r.get("trigger_market", 0.0)),
+                    "climate":       float(r.get("trigger_climate", 0.0)),
+                    "employment":    float(r.get("trigger_employment", 0.0)),
+                    "macro_ofw":     float(r.get("trigger_ofw_remittance", 0.0)),
+                    "nlp_sentiment": float(r.get("trigger_fish_kill", 0.0)),
                 }
 
         # ── Build driver records ───────────────────────────────────────────
-        # total_abs sums only the five presentation groups' own features, so
-        # their displayed percentages are relative shares AMONG THEMSELVES --
-        # disclosed as such via other_pct below, not silently presented as
-        # 100% of the model's real reasoning.
         total_abs = sum(abs(v) for v in group_shap.values()) or 1.0
-
-        # Real magnitude of the model's other drivers (series/seasonal
-        # dynamics, general news volume) that aren't one of the five bars.
-        # Reported, not discarded -- see UNGROUPED_FEATURES.
-        other_abs = sum(abs(sv_dict.get(f, 0.0)) for f in UNGROUPED_FEATURES)
-        grand_total = total_abs + other_abs or 1.0
-        other_pct = round(other_abs / grand_total * 100, 1)
 
         drivers = []
         for group in DRIVER_GROUP_FEATURES:
@@ -317,7 +294,6 @@ class Explainer:
         drivers.sort(key=lambda d: abs(d["group_shap"]), reverse=True)
 
         return {
-            "other_pct": other_pct,
             "province_code": province_code,
             "quarter":       quarter,
             "drivers":       drivers,

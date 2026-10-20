@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.v1 import admin, auth, dashboard, forecast, health, insights, report
+from app.api.v1 import (
+    admin, alerts, assessments, auth, dashboard, forecast, fpp, health, insights, lead2, quarterly, report,
+)
 
 router = APIRouter()
 
@@ -14,13 +16,25 @@ router.include_router(dashboard.router, prefix=API_V1, tags=["Dashboard"])
 router.include_router(forecast.router, prefix=API_V1, tags=["Forecast"])
 router.include_router(insights.router, prefix=API_V1, tags=["Insights"])
 router.include_router(report.router, prefix=API_V1, tags=["Report"])
+# Revised, time-valid province assessments (fixed 0.50 rule, INSUFFICIENT_DATA, regional/provincial evidence).
+router.include_router(assessments.router, prefix=API_V1, tags=["Assessments"])
+# Current forecast period + status from the single quarterly forecast record (E23).
+router.include_router(quarterly.router, prefix=API_V1, tags=["Quarterly"])
+# Label v2: Food Price Pressure (exploratory), served only when LABEL_VERSION=v2 (E39); v1 stays the default.
+router.include_router(fpp.router, prefix=API_V1, tags=["Food Price Pressure (exploratory)"])
+# E41 Lead-2 two-layer candidate, served only when AIPHEED_LEAD2_MODEL=e41; E38 stays the default.
+router.include_router(lead2.router, prefix=API_V1, tags=["Lead-2 candidate (E41)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.
 router.include_router(auth.router, prefix=f"{API_V1}/auth", tags=["Auth"])
 router.include_router(admin.public_router, prefix=API_V1, tags=["Publication"])
+# Confirmed early warning alerts. Staged and dismissed alerts are never served
+# here -- Rule 7 requires human confirmation before an alert is shown.
+router.include_router(alerts.public_router, prefix=API_V1, tags=["Alerts"])
 
 # Everything that changes publication state. The router carries the admin
 # dependency, so a new route added here is gated by default rather than by
 # remembering to add it.
 router.include_router(admin.admin_router, prefix=f"{API_V1}/admin", tags=["Admin"])
+router.include_router(alerts.admin_router, prefix=f"{API_V1}/admin", tags=["Admin"])

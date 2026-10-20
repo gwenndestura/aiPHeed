@@ -259,8 +259,9 @@ class _Canvas:
         canvas.setFillColor(MUTED)
         canvas.drawString(
             18 * mm, 11 * mm,
-            "Food availability shock share -- production shortfall against seasonal "
-            "baseline. Not a household food-insecurity probability.")
+            (THESIS_FOOTER if _thesis() else
+             "Food insecurity risk probability -- indicative relative risk only. "
+             "Not an official food insecurity classification."))
         canvas.drawRightString(width - 18 * mm, 11 * mm, f"Page {doc.page}")
         canvas.restoreState()
 
@@ -274,12 +275,22 @@ def _quarter_label(quarter: str) -> str:
     return f"Q{qn} {year} ({ref.QUARTER_MONTHS[qn]})"
 
 
+def _score_text(score: float | None) -> str:
+    """THESIS: FIRI with three decimals, or four when three would round a LOW index up to the 0.5 threshold."""
+    if score is None:
+        return "--"
+    if _thesis():
+        from app.ml.inference import thesis_system as THESIS
+        return THESIS.fmt_index(score) if score < 0.5 and round(score, 3) >= 0.5 else _num(score, 3)
+    return _num(score, 3)
+
+
 def _headline(name: str, score: float | None, level: str | None,
               qoq: float | None, extra: list[tuple[str, str]], width: float) -> list:
     left = [
-        _p("FOOD AVAILABILITY SHOCK SHARE", "eyebrow"),
+        _p("ESTIMATED FOOD-INSECURITY RISK INDEX (FIRI, LEAD-2)" if _thesis() else "FOOD INSECURITY RISK PROBABILITY", "eyebrow"),
         Spacer(1, 1.5 * mm),
-        _p(_num(score, 3) if score is not None else "--", "figure"),
+        _p(_score_text(score), "figure"),
         _p(f"{(level or 'n/a').upper()}  ·  quarter-on-quarter {_signed(qoq)}", "small"),
     ]
     right_rows = [[_p(k, "small"), _p(f"<b>{v}</b>", "cell")] for k, v in extra]
@@ -298,6 +309,9 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
     for trigger in explain["triggers"]:
         color = RAISING if trigger["direction"] == "increases_risk" else LOWERING
         arrow = "raises" if trigger["direction"] == "increases_risk" else "lowers"
+        if _thesis():                                  # THESIS: the status of the group in the served index
+            arrow = {"contributes": arrow, "insufficient_data": "no data at issue (not counted)",
+                     "no_effect": "no effect"}.get(trigger.get("status"), arrow)
         rows.append((trigger["label"], trigger["pct"],
                      f"{trigger['pct']}%  {arrow}", color))
 
@@ -305,68 +319,103 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
         _bar_table(rows, width),
         Spacer(1, 3 * mm),
         _p(
-            "<b>Red</b> bars raise the predicted shortfall, <b>green</b> lower it. "
-            "A large bar is not automatically bad news -- share of the explanation "
-            "and direction of effect are separate things.", "small"),
+            ("<b>Red</b> bars are factor groups above their usual level that raise the risk index, <b>green</b> bars are "
+             "below it and lower the index. A group with no published data at the issue date is not counted; missing "
+             "data is not a sign of low risk." if _thesis() else
+             "<b>Red</b> bars raise the predicted shortfall, <b>green</b> lower it. "
+             "A large bar is not automatically bad news -- share of the explanation "
+             "and direction of effect are separate things."), "small"),
         Spacer(1, 2.5 * mm),
-        _p(svc.compose_narrative(subject, quarter, explain["triggers"]), "body"),
+        _p(_thesis_driver_text(explain) if _thesis() else svc.compose_narrative(subject, quarter, explain["triggers"]),
+           "body"),
     ]
+
+
+def _thesis_driver_text(explain: dict) -> str:
+    up = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0 and t["direction"] == "increases_risk"]
+    down = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0 and t["direction"] == "protective"]
+    other = explain.get("otherPct")
+    return _escape(
+        "Each bar is the factor group's exact share of how far the risk index (FIRI v2) moved from its neutral 0.5. "
+        + ("Raising it: " + ", ".join(up) + ". " if up else "")
+        + ("Lowering it: " + ", ".join(down) + ". " if down else "")
+        + (f"Household vulnerability, regional hunger and news, which are not among the five groups, account for "
+           f"{other:.0f}% of that movement. " if other is not None else "")
+        + "Shares describe how the estimate is built from the evidence; they are not causes.")
 
 
 def _method_block(performance: dict) -> list:
+    if "leads" in performance:                       # thesis system: Objective 2 leads and Objective 4 baselines
+        from app.ml.inference import thesis_system as THESIS
+        tb = THESIS.performance_tables(performance)
+        flow = [_p(svc._ascii(s), "body") for s in tb["sentences"][:1]]
+        flow += [Spacer(1, 2 * mm), _data_table(tb["leadHeader"], tb["leadRows"],
+                                                [52 * mm] + [16 * mm] * 6 + [14 * mm], {i: "RIGHT" for i in range(1, 8)})]
+        flow += [Spacer(1, 3 * mm), _data_table(tb["baselineHeader"], tb["baselineRows"],
+                                                [80 * mm] + [20 * mm] * 4, {i: "RIGHT" for i in range(1, 5)})]
+        flow += [Spacer(1, 2 * mm)] + [_p(svc._ascii(s), "small") for s in tb["sentences"][1:]]
+        return flow
     baselines = performance.get("baselines", {})
-    skill = performance.get("skill", {})
-    weighted = performance.get("weightedAvg", {})
+    targets = performance.get("targets", {})
+    lead = performance.get("maxReliableLeadTime")
     rows = [
-        ["Model accuracy", _num(performance.get("accuracy"), 4)],
-        # Shock class: of the series flagged, how many were shocked, and of the
-        # shocked series, how many were caught. These describe alert quality;
-        # accuracy on its own does not.
-        ["Precision (shock class)", _num(performance.get("precision"), 4)],
-        ["Recall (shock class)", _num(performance.get("recall"), 4)],
-        ["F1 score (shock class)", _num(performance.get("f1"), 4)],
-        ["F1 score (weighted avg)", _num(weighted.get("f1"), 4)],
-        ["ROC AUC", _num(performance.get("rocAuc"), 4)],
-        ["Majority-class baseline", _num(baselines.get("majorityClass"), 4)],
-        ["Seasonal-persistence baseline", _num(baselines.get("seasonalPersistence"), 4)],
-        ["Skill over majority class", _signed(skill.get("vsMajority"))],
-        ["Skill over seasonal persistence", _signed(skill.get("vsSeasonal"))],
-        ["Evaluation set size", str(performance.get("n", "--"))],
-        ["Referred to analyst review", f"{performance.get('abstainPct', '--')}%"],
+        # Specific Objective 2 names these five metrics plus the lead time.
+        ["Maximum Reliable Lead Time",
+         f"{lead} quarter(s)" if lead is not None else "--"],
+        ["Accuracy", _num(performance.get("accuracy"), 4)],
+        ["Precision (weighted)", _num(performance.get("precision"), 4)],
+        ["Recall (weighted)", _num(performance.get("recall"), 4)],
+        ["F1 score (weighted)", _num(performance.get("f1"), 4)],
+        ["AUC-ROC", _num(performance.get("rocAuc"), 4)],
+        *([["Accuracy requirement", str(targets["note"])[:180]]] if targets.get("note") else [
+            ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
+            ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"]]),
+        ["Features in the model", str(performance.get("nFeatures", "--"))],
     ]
+    same = performance.get("sameFoldsAsBaselines") or {}
+    if same:
+        rows.append(["--- on the baselines' own folds ---", ""])
+        rows.append(["Model accuracy (same folds)", _num(same.get("accuracy"), 4)])
+        rows.append(["Model F1 (same folds)", _num(same.get("weighted_f1"), 4)])
+        rows.append(["Model AUC-ROC (same folds)", _num(same.get("roc_auc"), 4)])
+    for name, acc in sorted(baselines.items()):
+        rows.append([f"Baseline: {name.replace('_', ' ')}", _num(acc, 4)])
+
     return [
         _p(
-            "The model predicts, for each monitored commodity series in a province, "
-            "whether that quarter's production falls more than 10% below the series' "
-            "own expanding seasonal baseline. The province figure is the share of its "
-            "series flagged. Inputs are PSA OpenStat production volumes and prices, "
-            "PSA consumer price indices, NOAA ENSO and tropical-cyclone records, "
-            "NASA POWER rainfall, exchange-rate and fuel benchmarks, and a geocoded "
-            "news corpus.", "body"),
+            "The model predicts, for each CALABARZON province, the probability that "
+            "the province falls in the HIGH class of the composite food stress label "
+            "-- SWS quarterly hunger prevalence combined with the province's food CPI "
+            "deviation from the regional mean, thresholded at the global median. "
+            "Inputs are the bias-corrected Food Stress Sentiment Index and its lags "
+            "and acceleration, the five bilingual trigger proportions, and government "
+            "indicators from PSA, BSP, DOE, PAGASA and PhilRice.", "body"),
         Spacer(1, 3 * mm),
         _data_table(["Measure", "Value"], rows, [78 * mm, 30 * mm], {1: "RIGHT"}),
         Spacer(1, 3 * mm),
         _p(
-            "<b>Accuracy must be read against its baselines.</b> Always predicting the "
-            "majority class already scores "
-            f"{_num(baselines.get('majorityClass'), 3)}, and repeating what the same "
-            "quarter did last year scores "
-            f"{_num(baselines.get('seasonalPersistence'), 3)}. The model's advantage "
-            "over seasonal persistence is small; its value is in flagging which "
-            "series and which province, not in beating the calendar by a wide "
-            "margin.", "small"),
+            "<b>Accuracy must be read against its baselines.</b> The comparison "
+            "models above are evaluated on the same walk-forward folds at the same "
+            "forecast gap, so the figures are directly comparable. Naive persistence "
+            "in particular is a demanding baseline on an autocorrelated label: a "
+            "model that does not clearly beat it is not earning its complexity.",
+            "small"),
     ]
 
 
 def _limitations_block(limited_signal: bool, article_count: int,
                        includes_municipal: bool) -> list:
     items = [
-        ("Same-quarter nowcast, not a forecast",
-         "Figures cover a quarter whose production volumes PSA has already published. "
-         "The system does not currently project forward: there is no forecast quarter."),
-        ("Availability, not household hunger",
-         "A production shortfall is a supply-side signal. It does not measure whether "
-         "households went hungry, and it should not be read as a hunger estimate."),
+        ("Indicative risk, not official classification",
+         "Outputs are relative ordinal estimates of potential risk. They are not "
+         "definitive determinations of food insecurity status and must not be read as "
+         "official government assessments or policy recommendations."),
+        ("Proxy label, not a direct measurement",
+         "No publicly accessible province-quarter food insecurity label exists in the "
+         "Philippines. The training target is a composite of SWS hunger prevalence, "
+         "which has no province-level resolution, and PSA food CPI deviation, which "
+         "reflects supply-side price conditions rather than household hunger "
+         "experience directly."),
     ]
     if limited_signal:
         items.append((
@@ -453,7 +502,7 @@ def _escape(text: str) -> str:
 def _cover(title: str, subject: str, quarter: str, width: float) -> list:
     generated = datetime.now(timezone.utc).astimezone().strftime("%d %B %Y")
     return [
-        _p("DEPARTMENT OF AGRICULTURE · CALABARZON", "eyebrow"),
+        _p("DEPARTMENT OF AGRICULTURE REGION IV-A", "eyebrow"),
         Spacer(1, 2 * mm),
         _p(title, "title"),
         _p(f"{subject} · {_quarter_label(quarter)}", "subtitle"),
@@ -461,14 +510,57 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
         _rule(1.2, INK, 0, 4),
         _p(f"Generated {generated} from aiPHeed model output.", "small"),
         Spacer(1, 5 * mm),
-        _callout(
+        _callout("What these outputs are", THESIS_COVER) if _thesis() else _callout(
             "What this number is",
-            "The share of this area's monitored PSA commodity series predicted to fall "
-            "more than 10% below that series' own expanding seasonal baseline. "
-            "<b>It is a food availability signal, not a household food-insecurity "
-            "probability</b>, and it describes a quarter that has already occurred "
-            "rather than one ahead."),
+            "The modelled probability that this area falls in the HIGH class of the "
+            "composite food stress label. "
+            "<b>It is an indicative relative risk estimate, not an official food "
+            "insecurity classification</b>, and it is published at the Maximum "
+            "Reliable Lead Time the model established empirically."),
     ]
+
+
+# ---------------------------------------------------------------------------
+# Thesis system (AIPHEED_LEAD2_MODEL=thesis): the outlook block and honest labels
+# ---------------------------------------------------------------------------
+THESIS_FOOTER = ("Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food "
+                 "insecurity classification.")
+THESIS_COVER = ("<b>The number below is the estimated food-insecurity risk index (FIRI v2)</b>, 0 to 1, HIGH at 0.5: a "
+                "composite of affordability (including the LightGBM food-price-pressure forecast), household "
+                "vulnerability (poverty and density), climate and food production, household economy (national), news "
+                "and regional hunger (Balance Luzon, the same for every province). Each indicator is compared with its "
+                "own earlier values, and domains are weighted by how closely they tracked observed regional hunger. No "
+                "direct provincial food-insecurity outcome exists, so it is <b>a proxy estimate for planning, not a "
+                "probability and not a measured food-insecurity rate</b>.")
+THESIS_SECTIONS = ("REGIONAL HUNGER", "CLIMATE:", "NEWS (", "DATA AT THE ISSUE DATE", "MODEL:", "Back-test estimate")
+
+
+def _thesis() -> bool:
+    from app.ml.inference import thesis_system as THESIS
+    return THESIS.active()
+
+
+def _thesis_outlook_block(code: str | None, quarter: str, name: str, triggers: list[dict]) -> list:
+    summary = svc.plain_summary(code, quarter, name, triggers)
+    if not summary or not summary.get("riskOutlook"):
+        return [_p("No risk outlook is available for this quarter.", "body")]
+    text = summary["sentence"]
+    cuts = sorted({text.find(k) for k in THESIS_SECTIONS if text.find(k) > 0})
+    pieces, start = [], 0
+    for c in cuts:
+        pieces.append(text[start:c].strip())
+        start = c
+    pieces.append(text[start:].strip())
+    lead, rest = pieces[0], pieces[1:]
+    i = lead.find(" The exploratory food-price-pressure score")
+    if i < 0:
+        i = lead.find(" The earlier Lead-2 forecast of the exploratory")
+    head, score_text = (lead[:i], lead[i + 1:]) if i > 0 else (lead, "")
+    flow = [_callout("Estimated food-insecurity risk", _escape(head))]
+    flow += [Spacer(1, 2 * mm)] + [_p(_escape(x), "body") for x in rest]
+    if score_text:
+        flow += [Spacer(1, 2 * mm), _p("<b>About the score:</b> " + _escape(score_text), "small")]
+    return flow
 
 
 def build_province_report(province_id: str, quarter: str,
@@ -503,19 +595,18 @@ def build_province_report(province_id: str, quarter: str,
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed {province['name']} {quarter}",
-        author="aiPHeed", subject="Food availability shock assessment",
+        author="aiPHeed", subject="Food insecurity risk forecast",
     )
     width = doc.width
 
-    flow = _cover("Food Availability Shock Assessment", province["name"], quarter, width)
+    flow = _cover("Food Insecurity Risk Forecast", province["name"], quarter, width)
 
     flow += _section("Headline")
     flow += _headline(
-        province["name"], province["riskScore"], province["riskLevel"],
+        province["name"], province.get("riskScoreExact", province["riskScore"]), province["riskLevel"],
         province["qoqChange"],
         [
-            ("Series flagged at risk",
-             f"{province['seriesAtRisk']} of {province['seriesMonitored']}"),
+            ("Risk class", (province["riskLabel"] or (province["riskLevel"] if _thesis() else None) or "--").upper()),
             ("Rank in CALABARZON", f"{position} of {len(published)}" if position else "--"),
             ("Population (2020 CPH)", f"{province['population']:,}"),
             ("Poverty incidence (PSA 2021)", f"{province['povertyRate']}%"),
@@ -530,27 +621,19 @@ def build_province_report(province_id: str, quarter: str,
             "this province for the quarter. News-derived drivers should be treated as "
             "weak evidence.", WARN_BG)]
 
-    if province["topAtRiskCommodities"]:
-        flow += _section("Commodity series at risk")
-        commodities = [
-            c for c in Predictor().forecast_commodities(quarter)
-            if c["province_code"] == code and c["at_risk"]
-        ]
-        flow += [_p(
-            f"{len(commodities)} of {province['seriesMonitored']} monitored series are "
-            "predicted to fall below their seasonal baseline. The highest-probability "
-            "series are listed first.", "body"), Spacer(1, 3 * mm)]
-        rows = [[_p(_escape(c["commodity"]), "cellb"),
-                 _p(c["commodity_group"].replace("_", " "), "cell"),
-                 _p(_num(c["shock_probability"], 3), "cell")]
-                for c in commodities[:18]]
-        flow.append(_data_table(
-            ["Commodity series", "Group", "Shock probability"],
-            rows, [width - 62 * mm, 32 * mm, 30 * mm], {2: "RIGHT"}))
+    flow += _section("Forecast horizon")
+    flow += [_p(
+        f"{_escape(str(province.get('horizonLabel') or 'Not published'))}. "
+        f"{_escape(str(province.get('confidenceStatement') or ''))}", "body"),
+        Spacer(1, 3 * mm)]
+    if _thesis():
+        flow += _section("Why this risk estimate: indicators and evidence")
+        flow += _thesis_outlook_block(code, quarter, province["name"], explain["triggers"])
 
     flow.append(PageBreak())
 
-    flow += _section("What is driving the figure")
+    flow += _section("What drives the risk index (exact shares by factor group)" if _thesis()
+                     else "What is driving the figure")
     flow += _drivers_block(explain, province["name"], quarter, width)
 
     flow += _section("Municipal distribution")
@@ -602,21 +685,19 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed CALABARZON {quarter}",
-        author="aiPHeed", subject="Food availability shock assessment",
+        author="aiPHeed", subject="Food insecurity risk forecast",
     )
     width = doc.width
 
-    flow = _cover("Regional Food Availability Assessment", ref.REGION_NAME, quarter, width)
-
-    total_monitored = sum(p["seriesMonitored"] or 0 for p in published)
-    total_at_risk = sum(p["seriesAtRisk"] or 0 for p in published)
+    flow = _cover("Regional Food Insecurity Risk Forecast", ref.REGION_NAME, quarter, width)
 
     flow += _section("Headline")
     flow += _headline(
-        ref.REGION_NAME, region["riskScore"], region["riskLevel"], region["qoqChange"],
+        ref.REGION_NAME, region.get("riskScoreExact", region["riskScore"]), region["riskLevel"], region["qoqChange"],
         [
             ("Provinces covered", f"{region['provincesIncluded']} of {len(provinces)}"),
-            ("Series flagged at risk", f"{total_at_risk} of {total_monitored}"),
+            ("Forecast horizon",
+             str(region.get("horizonLabel") or "Not published")),
             ("Provinces above cutoff", str(region["provinceCounts"]["high"])),
             ("Provinces withheld", str(region["provinceCounts"]["withheld"])),
             ("Articles analysed",
@@ -648,25 +729,30 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     rows = [[_p(_escape(p["name"]), "cellb"),
              _p(_num(p["riskScore"], 4), "cell"),
              _p((p["riskLevel"] or "--").upper(), "cell"),
-             _p(f"{p['seriesAtRisk']}/{p['seriesMonitored']}", "cell"),
+             _p((p["riskLabel"] or "--").upper(), "cell"),
              _p(_signed(p["qoqChange"]), "cell"),
              _p(f"{p['povertyRate']}%", "cell"),
              _p(str(p["articleCount"]), "cell")]
             for p in sorted(published, key=lambda x: x["riskScore"], reverse=True)]
     flow.append(_data_table(
-        ["Province", "Index", "Level", "At risk", "QoQ", "Poverty", "Articles"],
+        ["Province", "Probability", "Level", "Class", "QoQ", "Poverty", "Articles"],
         rows,
         [width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm],
         {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT", 6: "RIGHT"}))
 
+    if _thesis():
+        flow += _section("Why this risk estimate: indicators and evidence")
+        flow += _thesis_outlook_block(None, quarter, ref.REGION_NAME, explain["triggers"])
+
     flow += [Spacer(1, 4 * mm), _p(
         "Poverty incidence and availability shock are different signals and do not "
         "track together. A province may hold the region's highest poverty rate and its "
-        "lowest production shortfall in the same quarter.", "small")]
+        "lowest modelled risk in the same quarter.", "small")]
 
     flow.append(PageBreak())
 
-    flow += _section("What is driving the regional figure")
+    flow += _section("What drives the regional risk index (exact shares by factor group)" if _thesis()
+                     else "What is driving the regional figure")
     flow += _drivers_block(explain, ref.REGION_NAME, quarter, width)
 
     flow += _section("News evidence")

@@ -102,7 +102,16 @@ and **Carmona** (city since RA 11938, 2023). Without the override both would be
 demoted back to municipality. Conversely **Candelaria, Quezon** was mislabelled
 a city in the old 137-LGU table and is correctly a municipality here.
 
-## Population and land area — full PSA 2020 CPH table
+## Population — 2024 POPCEN (2026-10-15)
+
+`population_2024` replaces `population_2020` (`pop_source == "popcen2024"`). It comes from PSA 2024 POPCEN
+Table B, sheet R04A, column 01-Jul-24, matched by name within province (the table has no PSGC) and checked
+against the province and region totals. Built by `scripts/build_lgu_psa_2021_2024.py`, which also loads the
+PSA 2021 municipal SAE (141 LGUs; Lucena City is a highly urbanized city and is not in the no-HUC table).
+Provenance: `data/reference/psa_lgu_2021_2024_provenance.json`. Land area is unchanged.
+`build_lgu_reference.py` now refuses to run, because it would restore the 2020 figures.
+
+## Population and land area — full PSA 2020 CPH table (superseded for population)
 
 All **142 of 142** rows now carry exact PSA 2020 Census of Population and
 Housing figures (`population_source == "cph2020"`). The municipal table lives

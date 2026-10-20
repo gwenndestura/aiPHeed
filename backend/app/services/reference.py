@@ -86,7 +86,7 @@ def lgu_roster() -> pd.DataFrame:
     df["id"] = df["provinceId"] + "-" + df["muniSlug"]
     df["classification"] = df["lgu_type"].str.title()
     df["densityPerKm2"] = (
-        df["population_2020"] / df["land_area_km2"].replace(0, pd.NA)
+        df["population_2024"] / df["land_area_km2"].replace(0, pd.NA)
     ).round(1)
     return df
 
@@ -117,6 +117,7 @@ def risk_level(score: float) -> str:
     """
     HIGH at or above the display cutoff, judged on the score as shown (two
     decimals): a 0.4982 reads "0.50" everywhere, so it is HIGH, not LOW.
+    (Main-backend rule from 1658d31, kept when E31 was promoted in E34.)
     """
     return "high" if round(score, 2) >= RISK_DISPLAY_CUTOFF else "low"
 

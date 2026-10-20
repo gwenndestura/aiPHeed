@@ -50,7 +50,10 @@ def run_corpus_ingestion(
     Returns the merged DataFrame.
     """
     from app.ml.corpus.rss_fetcher import fetch_rss_articles, FEED_URLS
-    from app.ml.corpus.gnews_fetcher import fetch_gnews_articles
+    # E28 fix: app.ml.corpus.gnews_fetcher does not exist in the repository, so this unconditional import made
+    # run_corpus_ingestion() fail on every call. The GNews API (gnews.io, key required) is imported only when a key
+    # is configured, and a missing module is then reported as such. The supported keyless historical source is
+    # Google News RSS (app.news / gnews_rss_fetcher).
     from app.ml.corpus.wayback_fetcher import fetch_wayback_articles
 
     all_records: list[dict] = []
@@ -65,6 +68,10 @@ def run_corpus_ingestion(
     api_key = gnews_api_key or os.getenv("GNEWS_API_KEY", "")
     if api_key:
         logger.info("Starting GNews ingestion…")
+        try:
+            from app.ml.corpus.gnews_fetcher import fetch_gnews_articles
+        except ImportError as exc:
+            raise RuntimeError("GNEWS_API_KEY is set but app.ml.corpus.gnews_fetcher is not in the repository") from exc
         gnews_records = fetch_gnews_articles(start_date, end_date, api_key)
         all_records.extend(gnews_records)
         logger.info("GNews: %d articles", len(gnews_records))

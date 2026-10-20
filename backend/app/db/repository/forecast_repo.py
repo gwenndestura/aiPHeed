@@ -15,7 +15,7 @@ CALABARZON_PROVINCES = frozenset({
 
 DISAGGREGATION_LABEL = (
     "Spatially disaggregated estimate derived from province-level forecast "
-    "using PSA 2021 SAE poverty incidence and PSA 2020 CPH population density. "
+    "using PSA 2021 SAE poverty incidence and 2024 POPCEN population density. "
     "Municipal uncertainty is higher than province-level uncertainty."
 )
 

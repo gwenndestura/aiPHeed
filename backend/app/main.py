@@ -10,21 +10,47 @@ from app.services.review import ReviewError, ReviewNotFound
 from app.services.ratelimit import RateLimited
 from app.services.security import AuthError, ForbiddenError, ServerMisconfigured
 from app.services.accounts import AccountError, AccountNotFound
+from app.tasks.scheduler import shutdown_scheduler, start_scheduler
+
+
+def strict_model_check() -> None:
+    """Thesis-demo configuration (AIPHEED_STRICT_MODEL=1): the API must serve the final thesis system and refuses to
+    start when the mode is different or a required artifact is missing (no silent fallback to an older model)."""
+    import os
+
+    if os.getenv("AIPHEED_STRICT_MODEL", "").strip() not in ("1", "true", "True"):
+        return
+    from app.ml.inference import thesis_system as THESIS
+
+    if not THESIS.active():
+        raise RuntimeError(f"AIPHEED_STRICT_MODEL=1 requires AIPHEED_LEAD2_MODEL=thesis (got "
+                           f"{os.getenv('AIPHEED_LEAD2_MODEL', 'unset (e38)')})")
+    problems = THESIS.validate()
+    if problems:
+        raise RuntimeError("thesis system not ready: " + "; ".join(problems))
+    print(f"Serving {THESIS.MODEL_NAME} (strict)")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    # Startup — Rule 1, Quarter Self-Update. The scheduler stages outputs for
+    # review; it never publishes.
     print("Starting up aiPHeed backend...")
-    # Scheduler and model loading will be added in Week 14
+    strict_model_check()
+    start_scheduler()
     yield
     # Shutdown
+    shutdown_scheduler()
     print("Shutting down aiPHeed backend...")
 
 
 app = FastAPI(
     title="aiPHeed API",
-    description="Food Insecurity Forecasting System for DA Region IV-A (CALABARZON)",
+    description=(
+        "Interactive web-based geospatial food insecurity forecasting system "
+        "for Region IV-A (CALABARZON). Validated by the Department of "
+        "Agriculture Region IV-A (DA IV-A)."
+    ),
     version="1.0.0",
     lifespan=lifespan,
     # Interactive docs and the schema are opt-in (ENABLE_API_DOCS=true): they

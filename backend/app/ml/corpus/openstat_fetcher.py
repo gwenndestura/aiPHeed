@@ -422,10 +422,9 @@ def _fetch_unemployment(start_year: int, end_year: int) -> pd.DataFrame:
     LFS is national-level only in this table. Applied uniformly to all
     CALABARZON provinces. Returns DataFrame with: year, month, unemployment_rate.
     """
-    # PSA reissued this table under a new PXWeb id (G -> F) at some point
-    # before 2026-09; the old id now 404s. Same dimension codes (Year/Month/
-    # Rates/Sex), verified against the new table's own metadata before
-    # switching -- confirmed via /LFS/ folder listing, not guessed.
+    # PSA renamed this table (the old 0021B3GKEI2 now 404s). The replacement
+    # carries the same four dimensions and reproduces the stored series exactly
+    # in 23 of 24 quarters, the twenty-fourth differing by 0.001 on revision.
     dataset = "DB/1B/LFS/0021B3FKEI2.px"
     logger.info("Fetching LFS Unemployment Rate from OpenStat...")
 
@@ -484,15 +483,25 @@ def _fetch_poverty(start_year: int, end_year: int) -> pd.DataFrame:
     Available years: 2018, 2021, 2023 only (PSA full-year release cadence).
     Returns DataFrame with: province_code, year, poverty_incidence.
     """
-    dataset = "DB/1E/FY/0011E3DF010.px"
+    # PSA moved this table out of 1E (Income and Consumption) into 1F
+    # (Poverty); the old path now 404s.
+    dataset = "DB/1F/FY/0011F3DF010.px"
     logger.info("Fetching Poverty Incidence from OpenStat...")
 
     geo_codes = list(PROVINCE_CODES_OPENSTAT.keys())
 
+    # The item dimension MUST be pinned. It carries six measures -- threshold in
+    # pesos, incidence in per cent, coefficient of variation, standard error and
+    # both confidence limits -- and this function ends by averaging whatever
+    # comes back per province-year. Left unpinned, that average mixes a ~33,000
+    # peso threshold with an 8.6 per cent incidence and returns a meaningless
+    # number. Item 1 is "Poverty Incidence Among Families (%)".
     query = {
         "query": [
             {"code": "Geolocation",
              "selection": {"filter": "item", "values": geo_codes}},
+            {"code": "Threshold/Incidence/Measures of Precision",
+             "selection": {"filter": "item", "values": ["1"]}},
         ],
         "response": {"format": "json"},
     }
@@ -511,14 +520,14 @@ def _fetch_poverty(start_year: int, end_year: int) -> pd.DataFrame:
         geo = row.get("Geolocation")
         # The poverty table structure has Year as one of the keys
         year_code = row.get("Year") or row.get("year")
-        item = row.get("Item") or row.get("item", "")
         val = row.get("value")
 
         if geo not in PROVINCE_CODES_OPENSTAT:
             continue
-        if "Poverty Incidence" not in str(item) and "incidence" not in str(item).lower():
-            # Keep only poverty incidence rows, not thresholds
-            pass  # allow all; will filter after
+        # No item filter is needed here, and the one that used to sit here never
+        # ran: _parse_pxweb_response keys rows by each column's *text*, so
+        # row.get("Item") was always None and the branch fell through to `pass`.
+        # The query above pins the item instead.
 
         try:
             year = year_map.get(str(year_code), None)

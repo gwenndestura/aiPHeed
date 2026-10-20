@@ -10,7 +10,6 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 from __future__ import annotations
 
 from fastapi import APIRouter, Query
-from starlette.concurrency import run_in_threadpool
 
 from app.schemas.public import ExplainabilityResponse, NewsResponse
 from app.services import dashboard as svc
@@ -51,6 +50,162 @@ EXPLAINABILITY_NOTE = (
 )
 
 
+E36_EXPLAINABILITY_NOTE = (
+    "The bars show how much each of five factor groups (Market / Prices, Climate Stress, Fish Kill, Employment and "
+    "OFW Remittance) contributed to this forecast. The five shares add up to 100 percent. A long bar does not by "
+    "itself mean that a factor raised the risk: the colour of each bar shows whether that factor raised or lowered "
+    "the forecast. In the current model only Market / Prices (provincial food and rice price movements) is an "
+    "input; Climate Stress, Fish Kill, Employment and OFW Remittance have no input in it, so they show 0 percent, "
+    "and the news reports linked to them are listed separately. Part of the forecast also depends on the regional "
+    "hunger survey, the latest published risk level and the overall volume of news; that part is not shown in the "
+    "five groups. These figures are model estimates, not official government statistics."
+)
+
+
+CANDIDATE_EXPLAINABILITY_NOTE = (
+    "The bars show how much each of five factor groups (Market / Prices, Climate Stress, Fish Kill, Employment and "
+    "OFW Remittance) moved this experimental forecast; the five shares add up to 100 percent. Each card states "
+    "whether the group raised or lowered the forecast and the official observation behind it. Every group has inputs "
+    "in this model; a 0 percent bar means no measurable effect this quarter, not missing data. Employment and OFW "
+    "figures are national, so they shift every province equally. Contributions are model attributions, not proof "
+    "that an event causes food insecurity. These figures are model estimates, not official government statistics."
+)
+
+
+E46_EXPLAINABILITY_NOTE = (
+    "The bars show how much each of five factor groups moved this experimental forecast, measured as the change in "
+    "the forecast's log-odds when that group's inputs are set to their historical average (all else fixed). Market / "
+    "Prices includes the projected food inflation and food-minus-headline gap built from PSA CPI, which is the "
+    "model's main price input. The latest regional hunger level (SWS) is not one of the five groups and is left out "
+    "of the bars. The five shares add up to 100 percent of the five groups' combined effect; each card states whether "
+    "the group raised or lowered the forecast and the official observation behind it. Employment and OFW figures are "
+    "national. These are model attributions, not causes and not shares of food insecurity."
+)
+
+
+E52_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of food-price pressure (PSA food inflation, or food minus headline "
+    "inflation, above the province's usual 2021-2022 level), not of hunger or household food insecurity. The bars "
+    "show how much each of five factor groups moved it, measured as the change in the forecast's log-odds when that "
+    "group's inputs are set to their historical average (all else fixed). Market / Prices includes the projected food "
+    "inflation and food-minus-headline gap built from PSA CPI. The five shares add up to 100 percent of the five "
+    "groups' combined effect; each card states whether the group raised or lowered the forecast and the official "
+    "observation behind it. Employment and OFW figures are national. These are model attributions, not causes."
+)
+
+
+E53_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of food-price pressure (PSA food inflation, or food minus headline "
+    "inflation, above the province's usual 2021-2022 level), not of hunger or household food insecurity. The bars "
+    "show how much each of five factor groups moved it, measured as the change in the forecast's log-odds when that "
+    "group's inputs are set to their historical average (all else fixed). Market / Prices includes the projected food "
+    "inflation and food-minus-headline gap built from PSA CPI and the rice-policy orders; each group includes its own "
+    "news share; the total volume of news is not one of the five groups and is left out of the bars. Each card states "
+    "whether the group raised or lowered the forecast and the official observation behind it. Employment and OFW "
+    "figures are national. These are model attributions, not causes."
+)
+
+
+E55_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is the probability of HIGH food-insecurity risk: the regional SWS hunger rate staying "
+    "above 11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above "
+    "the province's usual 2021-2022 level). Hunger is measured for the whole region only, so differences between "
+    "provinces come from food prices. The bars are exact SHAP values (TreeSHAP) of the LightGBM model's food-price "
+    "part, in log-odds, grouped into the five factor groups: Market / Prices also includes the projected food "
+    "inflation built from PSA CPI (the model's starting point) and the rice-policy orders; each group includes its own "
+    "news share; the total volume of news is left out of the bars. A group with no observed input at the issue date is "
+    "shown as insufficient data. Employment and OFW figures are national. These are model attributions, not causes."
+)
+
+
+E56_EXPLAINABILITY_NOTE = E55_EXPLAINABILITY_NOTE.replace(
+    "the total volume of news is left out of the bars",
+    "the total volume of news and, at origins where the model selected it, PSA 2021 poverty are left out of the bars")
+
+
+E58_EXPLAINABILITY_NOTE = E56_EXPLAINABILITY_NOTE + (
+    " Early warning (E58): ALERT when HIGH food-insecurity risk is forecast; EMERGING when food-price pressure is likely "
+    "but the hunger condition is not confirmed by the latest (older) hunger reading. Warnings support DA review and "
+    "planning; they are not official classifications."
+)
+
+
+# THESIS: the bars show the exact push of each of the five approved factor groups on the served FIRI v2 index away
+# from its neutral 0.5 (thesis_system.firi_drivers); vulnerability, regional hunger and news are named in the summary
+# text (no new UI element)
+THESIS_EXPLAINABILITY_NOTE = (
+    "The risk score shown is the estimated food-insecurity risk index (FIRI v2), a proxy composite on a 0-1 scale in "
+    "which 0.5 means every indicator is at its historical middle. Each bar is a factor group's exact share of how far "
+    "the index moved from 0.5: red groups are above their usual level and raise the estimate, green groups are below it "
+    "and lower it. Market / Prices = the LightGBM food-price-pressure forecast, headline inflation and rice prices; "
+    "Climate Stress = PAGASA El Nino status, typhoons, palay and corn production; Fish Kill = fisheries production (not "
+    "fish-kill events); Employment and OFW Remittance = national figures. Household vulnerability, regional hunger (SWS, "
+    "Balance Luzon) and news are also in the index but not among the five bars; their share and every domain score and "
+    "weight are in the summary text. Shares describe how the estimate is built from the evidence; they are not causes."
+)
+
+
+# E64: the Objectives 1-3 candidate (improved news pipeline v3); the product of the two parts is a model score
+E64_EXPLAINABILITY_NOTE = (
+    "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above "
+    "11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above the "
+    "province's usual 2021-2022 level). The two parts are estimated separately and multiplied; because they are not "
+    "independent, the product is a score, not a tested probability. Hunger is measured for the whole region only, so "
+    "differences between provinces come from food prices. The bars are exact SHAP values (TreeSHAP) of the food-price "
+    "part, in log-odds, grouped into the five factor groups; Market / Prices also includes the projected food "
+    "inflation built from PSA CPI. Each group includes its own news signals from the improved news pipeline (E60 "
+    "classifier v2, articles published before the issue date, syndicated copies removed) when the model uses them; "
+    "news coverage, outlet count and FSSI-v3 are left out of the bars. Employment and OFW figures are national. These "
+    "are model attributions, not causes. Early warning: ALERT when HIGH risk is forecast; EMERGING when food-price "
+    "pressure is likely but the hunger condition is not confirmed; model warnings for DA review, not official "
+    "classifications."
+)
+
+
+NOT_RECORDED_EXPLAINABILITY_NOTE = (
+    "This quarter shows the experimental model's backtest or an earlier forecast. Factor contributions were not "
+    "recorded for it, so no factor is described as raising or lowering the score."
+)
+
+
+def _served_note(quarter: str | None = None) -> str:
+    from app.ml.inference import e31_engine as E31
+    from app.ml.inference import e41_lead2 as LEAD2
+
+    # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
+    # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
+    if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E64_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "thesis" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return THESIS_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() in ("e58", "e66", "e67", "e68", "e69", "thesis") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E58_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "e56" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E56_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "e55" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E55_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "e53" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E53_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "e52" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E52_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "e46" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return E46_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() in ("e44", "e46", "e52", "e53") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return CANDIDATE_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.governs():
+        return NOT_RECORDED_EXPLAINABILITY_NOTE
+    return E36_EXPLAINABILITY_NOTE if E31.record().get("schema") == "e36/1" else E31_EXPLAINABILITY_NOTE
+
+
+E31_EXPLAINABILITY_NOTE = (
+    "Exact breakdown of the served estimate (PCF21), not a SHAP approximation: the estimate's margin over the "
+    "threshold equals (regional hunger - threshold) + 2 x provincial relative food-price pressure. Regional hunger "
+    "is one SWS Balance Luzon value shared by all five provinces; only the price term differs between provinces. "
+    "These are the model's inputs, not causes. Shares are rescaled to 100%; read `direction`, not bar size alone. "
+    "`color`: yellow below the 20% line, red above it while raising the estimate, green while lowering it."
+)
+
+
 def _resolve_province(scope: str, subject_id: str) -> tuple[str | None, str]:
     """Return (province PSGC code or None for region, display name)."""
     if scope == "region":
@@ -83,19 +238,14 @@ async def get_explainability(
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
 
-    # SHAP is CPU-bound and, on a quarter not yet cached this process, blocks
-    # for several seconds per province. Run it off the event loop so it
-    # doesn't stall every other request on the server while it computes --
-    # confirmed by measurement that a concurrent /config call queued behind
-    # an in-flight SHAP call the way it would if this ran inline.
     if code is None:
-        result = await run_in_threadpool(svc.explainability_region, q)
+        result = svc.explainability_region(q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
         risk_score = svc.region_forecast(q)["riskScore"]
     else:
-        result = await run_in_threadpool(svc.explainability, code, q)
+        result = svc.explainability(code, q)
         triggers = result["triggers"]
         article_count = result["articleCount"]
         matched = result["triggerMatchedArticles"]
@@ -103,7 +253,10 @@ async def get_explainability(
         match = [p for p in svc.province_summary(q) if p["id"] == slug]
         risk_score = match[0]["riskScore"] if match else 0.0
 
-    other_pct = result["otherPct"]
+    # E52: plain-language summary of an experimental candidate's estimate. A municipality has no forecast of its own,
+    # so its summary is the parent province's, named as such.
+    subject = name if scope != "municipality" else f"{ref.province_name(ref.province_slug(code))} (province of {name})"
+    summary = svc.plain_summary(code, q, subject, triggers) if svc.e31_active() else None
     return ExplainabilityResponse(
         scope=scope,
         id=id.lower(),
@@ -111,12 +264,12 @@ async def get_explainability(
         quarter=q,
         riskScore=risk_score,
         triggers=triggers,
-        otherPct=other_pct,
         articleCount=article_count,
         triggerMatchedArticles=matched,
-        narrative=svc.compose_narrative(name, q, triggers, other_pct),
-        formalInterpretation=svc.compose_formal_interpretation(name, q, triggers, other_pct),
-        note=EXPLAINABILITY_NOTE,
+        narrative=(f"{summary['sentence']} These are model attributions, not causes." if summary
+                   else svc.compose_narrative(name, q, triggers)),
+        note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,
+        summary=summary,
     )
 
 
@@ -132,18 +285,15 @@ async def get_news(
     The analysed article corpus for a subject-quarter, with its topic mix.
 
     Articles are geocoded to province, so municipality scope returns the parent
-    province's corpus. A forecast quarter returns its information-cutoff
-    quarter's articles (`sourceQuarter`), the news the forecast was built from.
+    province's corpus.
     """
     q = svc.resolve_quarter(quarter)
     code, _ = _resolve_province(scope, id)
-    source_q = svc.news_quarter(q)
-    body = svc.news(code, source_q, page, pageSize)
+    body = svc.news(code, q, page, pageSize)
     return NewsResponse(
         scope=scope,
         id=id.lower(),
         quarter=q,
-        sourceQuarter=source_q,
         page=page,
         pageSize=pageSize,
         **body,

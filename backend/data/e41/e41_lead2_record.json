@@ -1,0 +1,1065 @@
+{
+ "schema": "e41/1",
+ "name": "aiPHeed Lead-2 two-layer forecast (E41 candidate)",
+ "status": "EXPERIMENTAL CANDIDATE: not the served dashboard model; enabled only with AIPHEED_LEAD2_MODEL=e41",
+ "generated_at": "2026-10-15T10:18:20Z",
+ "origin": "2026-10-01",
+ "targetQuarter": "2027-Q1",
+ "lead": 2,
+ "information": {
+  "cpiMonthsThrough": "2026-08",
+  "swsLatestQuarter": "2026-Q2",
+  "rule": "only data published before the origin (E41 PROTOCOL section 3)"
+ },
+ "scoreTypes": {
+  "price_pressure_probability": "Probability that the province's food inflation (PSA food CPI, year on year, quarter mean of the three monthly rates) in the target quarter is above 4.0%, the ceiling of the BSP 3 +/- 1% headline target. This is FOOD PRICE PRESSURE. It is not the probability that households are hungry or food insecure.",
+  "exploratory_food_stress_probability": "Probability that the researcher's exploratory E40 label is HIGH in the target quarter: regional SWS hunger above 11.3% AND provincial food inflation (or food minus headline) above its 2021-2022 60th percentile, in both the target quarter and the one before. Component simulation; exploratory and not validated.",
+  "observed": "values reported by PSA/SWS for past periods, with their level and age"
+ },
+ "operationalRules": {
+  "band": "Low if P < 0.33; Watch if 0.33 <= P < 0.67; High if P >= 0.67 (PROTOCOL section 8; not tuned).",
+  "alert": "Early-warning alert candidate when the price-pressure band is High AND the latest approved SWS hunger (regional) is above 11.3%. Two independent official signals; staged for administrator confirmation.",
+  "municipal": "No municipal probability is produced; LGU rankings are relative prioritization from PSA poverty and population density."
+ },
+ "provinces": {
+  "PH040100000": {
+   "provinceCode": "PH040100000",
+   "name": "Cavite",
+   "observed": {
+    "foodInflationLatestMonths": {
+     "value": 2.5,
+     "unit": "% YoY",
+     "months": [
+      "2026-07",
+      "2026-08"
+     ],
+     "source": "PSA CPI (OpenStat 0012M4ACP23)",
+     "level": "province",
+     "kind": "observed price condition (not hunger)"
+    },
+    "foodInflationLastQuarter": {
+     "value": 4.73,
+     "quarter": "2026-Q2"
+    },
+    "headlineInflationLatestMonths": {
+     "value": 4.6
+    },
+    "foodMinusHeadline": {
+     "value": -2.1
+    },
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1.0,
+     "aboveE40Threshold11_3": true,
+     "source": "SWS self-rated involuntary hunger, Balance Luzon (approved rounds)",
+     "level": "region",
+     "kind": "observed hunger outcome, regional only"
+    },
+    "climateSupply_palayProductionYoY": {
+     "value": -18.2,
+     "quarter": "2026-Q2",
+     "source": "PSA palay production (OpenStat 0012E4EVCP0)",
+     "level": "province",
+     "kind": "supply proxy"
+    },
+    "climateSupply_cornProductionYoY": {
+     "value": 29.5,
+     "quarter": "2026-Q2"
+    },
+    "fishSupply_fisheriesProductionYoY": {
+     "value": 8.3,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (OpenStat 0132E4GVFP1)",
+     "level": "province",
+     "kind": "supply proxy (no fish-kill event series)"
+    },
+    "fishSupply_aquacultureProductionYoY": {
+     "value": 55.2,
+     "quarter": "2026-Q2"
+    },
+    "employment_unemploymentRate": {
+     "value": 4.79,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS (OpenStat 0021B3FKEI2)",
+     "level": "national",
+     "kind": "contributing condition, no provincial differentiation"
+    },
+    "ofwRemittance": {
+     "value": null,
+     "status": "no official in-window series obtained"
+    },
+    "news": {
+     "articles": 57,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "climate": 0.158,
+      "employment": 0.0,
+      "ofw_remittance": 0.0,
+      "fish_kill": 0.0,
+      "market": 0.0
+     }
+    }
+   },
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "price_pressure_probability",
+    "probabilityAbove4pct": 0.271,
+    "band": "Low",
+    "foodInflationPoint": 1.78,
+    "interval80": [
+     -2.9,
+     6.45
+    ],
+    "components": {
+     "baseEffect": 1.03,
+     "recentMomentum": 0.74
+    },
+    "explanation": "Food inflation in Cavite is projected at 1.8% for 2027-Q1 (80% range -2.9% to 6.5%). Prices a year earlier alone imply 1.0%; the recent monthly price trend adds 0.7 points. Probability of exceeding 4%: 27% (Low)."
+   },
+   "lead1": {
+    "targetQuarter": "2026-Q4",
+    "foodInflationPoint": 2.7,
+    "probabilityAbove4pct": 0.286
+   },
+   "exploratory": {
+    "e40Probability": 0.083,
+    "scoreType": "exploratory_food_stress_probability",
+    "status": "exploratory, not validated"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "warnings": [
+    "SWS hunger is a regional (Balance Luzon) measurement shared by all five provinces; it is not a provincial observation.",
+    "Wide uncertainty: the 80% range for food inflation is -2.9% to 6.5%.",
+    "Lead-2 accuracy on development quarters is 0.63 (below 75%); use as decision support, not as a determination.",
+    "OFW remittance: no official in-window series was obtained; this trigger has no data (not zero)."
+   ]
+  },
+  "PH040200000": {
+   "provinceCode": "PH040200000",
+   "name": "Laguna",
+   "observed": {
+    "foodInflationLatestMonths": {
+     "value": 2.9,
+     "unit": "% YoY",
+     "months": [
+      "2026-07",
+      "2026-08"
+     ],
+     "source": "PSA CPI (OpenStat 0012M4ACP23)",
+     "level": "province",
+     "kind": "observed price condition (not hunger)"
+    },
+    "foodInflationLastQuarter": {
+     "value": 3.97,
+     "quarter": "2026-Q2"
+    },
+    "headlineInflationLatestMonths": {
+     "value": 6.9
+    },
+    "foodMinusHeadline": {
+     "value": -4.0
+    },
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1.0,
+     "aboveE40Threshold11_3": true,
+     "source": "SWS self-rated involuntary hunger, Balance Luzon (approved rounds)",
+     "level": "region",
+     "kind": "observed hunger outcome, regional only"
+    },
+    "climateSupply_palayProductionYoY": {
+     "value": -32.2,
+     "quarter": "2026-Q2",
+     "source": "PSA palay production (OpenStat 0012E4EVCP0)",
+     "level": "province",
+     "kind": "supply proxy"
+    },
+    "climateSupply_cornProductionYoY": {
+     "value": -83.9,
+     "quarter": "2026-Q2"
+    },
+    "fishSupply_fisheriesProductionYoY": {
+     "value": -7.7,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (OpenStat 0132E4GVFP1)",
+     "level": "province",
+     "kind": "supply proxy (no fish-kill event series)"
+    },
+    "fishSupply_aquacultureProductionYoY": {
+     "value": -11.5,
+     "quarter": "2026-Q2"
+    },
+    "employment_unemploymentRate": {
+     "value": 4.79,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS (OpenStat 0021B3FKEI2)",
+     "level": "national",
+     "kind": "contributing condition, no provincial differentiation"
+    },
+    "ofwRemittance": {
+     "value": null,
+     "status": "no official in-window series obtained"
+    },
+    "news": {
+     "articles": 52,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "climate": 0.231,
+      "employment": 0.0,
+      "ofw_remittance": 0.0,
+      "fish_kill": 0.038,
+      "market": 0.0
+     }
+    }
+   },
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "price_pressure_probability",
+    "probabilityAbove4pct": 0.288,
+    "band": "Low",
+    "foodInflationPoint": 1.95,
+    "interval80": [
+     -2.72,
+     6.63
+    ],
+    "components": {
+     "baseEffect": 0.86,
+     "recentMomentum": 1.09
+    },
+    "explanation": "Food inflation in Laguna is projected at 2.0% for 2027-Q1 (80% range -2.7% to 6.6%). Prices a year earlier alone imply 0.9%; the recent monthly price trend adds 1.1 points. Probability of exceeding 4%: 29% (Low)."
+   },
+   "lead1": {
+    "targetQuarter": "2026-Q4",
+    "foodInflationPoint": 2.11,
+    "probabilityAbove4pct": 0.205
+   },
+   "exploratory": {
+    "e40Probability": 0.0,
+    "scoreType": "exploratory_food_stress_probability",
+    "status": "exploratory, not validated"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "warnings": [
+    "SWS hunger is a regional (Balance Luzon) measurement shared by all five provinces; it is not a provincial observation.",
+    "Wide uncertainty: the 80% range for food inflation is -2.7% to 6.6%.",
+    "Lead-2 accuracy on development quarters is 0.63 (below 75%); use as decision support, not as a determination.",
+    "OFW remittance: no official in-window series was obtained; this trigger has no data (not zero)."
+   ]
+  },
+  "PH040300000": {
+   "provinceCode": "PH040300000",
+   "name": "Quezon",
+   "observed": {
+    "foodInflationLatestMonths": {
+     "value": 3.6,
+     "unit": "% YoY",
+     "months": [
+      "2026-07",
+      "2026-08"
+     ],
+     "source": "PSA CPI (OpenStat 0012M4ACP23)",
+     "level": "province",
+     "kind": "observed price condition (not hunger)"
+    },
+    "foodInflationLastQuarter": {
+     "value": 4.87,
+     "quarter": "2026-Q2"
+    },
+    "headlineInflationLatestMonths": {
+     "value": 6.1
+    },
+    "foodMinusHeadline": {
+     "value": -2.5
+    },
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1.0,
+     "aboveE40Threshold11_3": true,
+     "source": "SWS self-rated involuntary hunger, Balance Luzon (approved rounds)",
+     "level": "region",
+     "kind": "observed hunger outcome, regional only"
+    },
+    "climateSupply_palayProductionYoY": {
+     "value": 51.3,
+     "quarter": "2026-Q2",
+     "source": "PSA palay production (OpenStat 0012E4EVCP0)",
+     "level": "province",
+     "kind": "supply proxy"
+    },
+    "climateSupply_cornProductionYoY": {
+     "value": -7.2,
+     "quarter": "2026-Q2"
+    },
+    "fishSupply_fisheriesProductionYoY": {
+     "value": -1.2,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (OpenStat 0132E4GVFP1)",
+     "level": "province",
+     "kind": "supply proxy (no fish-kill event series)"
+    },
+    "fishSupply_aquacultureProductionYoY": {
+     "value": 10.1,
+     "quarter": "2026-Q2"
+    },
+    "employment_unemploymentRate": {
+     "value": 4.79,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS (OpenStat 0021B3FKEI2)",
+     "level": "national",
+     "kind": "contributing condition, no provincial differentiation"
+    },
+    "ofwRemittance": {
+     "value": null,
+     "status": "no official in-window series obtained"
+    },
+    "news": {
+     "articles": 40,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "climate": 0.025,
+      "employment": 0.0,
+      "ofw_remittance": 0.0,
+      "fish_kill": 0.0,
+      "market": 0.0
+     }
+    }
+   },
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "price_pressure_probability",
+    "probabilityAbove4pct": 0.487,
+    "band": "Watch",
+    "foodInflationPoint": 3.82,
+    "interval80": [
+     -3.32,
+     10.97
+    ],
+    "components": {
+     "baseEffect": 2.08,
+     "recentMomentum": 1.75
+    },
+    "explanation": "Food inflation in Quezon is projected at 3.8% for 2027-Q1 (80% range -3.3% to 11.0%). Prices a year earlier alone imply 2.1%; the recent monthly price trend adds 1.7 points. Probability of exceeding 4%: 49% (Watch)."
+   },
+   "lead1": {
+    "targetQuarter": "2026-Q4",
+    "foodInflationPoint": 4.83,
+    "probabilityAbove4pct": 0.587
+   },
+   "exploratory": {
+    "e40Probability": 0.217,
+    "scoreType": "exploratory_food_stress_probability",
+    "status": "exploratory, not validated"
+   },
+   "operational": {
+    "category": "Watch",
+    "alertCandidate": false
+   },
+   "warnings": [
+    "SWS hunger is a regional (Balance Luzon) measurement shared by all five provinces; it is not a provincial observation.",
+    "Wide uncertainty: the 80% range for food inflation is -3.3% to 11.0%.",
+    "Lead-2 accuracy on development quarters is 0.63 (below 75%); use as decision support, not as a determination.",
+    "OFW remittance: no official in-window series was obtained; this trigger has no data (not zero)."
+   ]
+  },
+  "PH040400000": {
+   "provinceCode": "PH040400000",
+   "name": "Rizal",
+   "observed": {
+    "foodInflationLatestMonths": {
+     "value": 2.95,
+     "unit": "% YoY",
+     "months": [
+      "2026-07",
+      "2026-08"
+     ],
+     "source": "PSA CPI (OpenStat 0012M4ACP23)",
+     "level": "province",
+     "kind": "observed price condition (not hunger)"
+    },
+    "foodInflationLastQuarter": {
+     "value": 4.33,
+     "quarter": "2026-Q2"
+    },
+    "headlineInflationLatestMonths": {
+     "value": 6.6
+    },
+    "foodMinusHeadline": {
+     "value": -3.65
+    },
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1.0,
+     "aboveE40Threshold11_3": true,
+     "source": "SWS self-rated involuntary hunger, Balance Luzon (approved rounds)",
+     "level": "region",
+     "kind": "observed hunger outcome, regional only"
+    },
+    "climateSupply_palayProductionYoY": {
+     "value": 24.3,
+     "quarter": "2026-Q2",
+     "source": "PSA palay production (OpenStat 0012E4EVCP0)",
+     "level": "province",
+     "kind": "supply proxy"
+    },
+    "climateSupply_cornProductionYoY": {
+     "value": 233.0,
+     "quarter": "2026-Q2"
+    },
+    "fishSupply_fisheriesProductionYoY": {
+     "value": -18.1,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (OpenStat 0132E4GVFP1)",
+     "level": "province",
+     "kind": "supply proxy (no fish-kill event series)"
+    },
+    "fishSupply_aquacultureProductionYoY": {
+     "value": -20.8,
+     "quarter": "2026-Q2"
+    },
+    "employment_unemploymentRate": {
+     "value": 4.79,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS (OpenStat 0021B3FKEI2)",
+     "level": "national",
+     "kind": "contributing condition, no provincial differentiation"
+    },
+    "ofwRemittance": {
+     "value": null,
+     "status": "no official in-window series obtained"
+    },
+    "news": {
+     "articles": 40,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "climate": 0.25,
+      "employment": 0.0,
+      "ofw_remittance": 0.0,
+      "fish_kill": 0.025,
+      "market": 0.0
+     }
+    }
+   },
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "price_pressure_probability",
+    "probabilityAbove4pct": 0.358,
+    "band": "Watch",
+    "foodInflationPoint": 2.67,
+    "interval80": [
+     -2.0,
+     7.35
+    ],
+    "components": {
+     "baseEffect": 1.67,
+     "recentMomentum": 1.0
+    },
+    "explanation": "Food inflation in Rizal is projected at 2.7% for 2027-Q1 (80% range -2.0% to 7.4%). Prices a year earlier alone imply 1.7%; the recent monthly price trend adds 1.0 points. Probability of exceeding 4%: 36% (Watch)."
+   },
+   "lead1": {
+    "targetQuarter": "2026-Q4",
+    "foodInflationPoint": 2.67,
+    "probabilityAbove4pct": 0.281
+   },
+   "exploratory": {
+    "e40Probability": 0.01,
+    "scoreType": "exploratory_food_stress_probability",
+    "status": "exploratory, not validated"
+   },
+   "operational": {
+    "category": "Watch",
+    "alertCandidate": false
+   },
+   "warnings": [
+    "SWS hunger is a regional (Balance Luzon) measurement shared by all five provinces; it is not a provincial observation.",
+    "Wide uncertainty: the 80% range for food inflation is -2.0% to 7.4%.",
+    "Lead-2 accuracy on development quarters is 0.63 (below 75%); use as decision support, not as a determination.",
+    "OFW remittance: no official in-window series was obtained; this trigger has no data (not zero)."
+   ]
+  },
+  "PH040500000": {
+   "provinceCode": "PH040500000",
+   "name": "Batangas",
+   "observed": {
+    "foodInflationLatestMonths": {
+     "value": 0.25,
+     "unit": "% YoY",
+     "months": [
+      "2026-07",
+      "2026-08"
+     ],
+     "source": "PSA CPI (OpenStat 0012M4ACP23)",
+     "level": "province",
+     "kind": "observed price condition (not hunger)"
+    },
+    "foodInflationLastQuarter": {
+     "value": 1.43,
+     "quarter": "2026-Q2"
+    },
+    "headlineInflationLatestMonths": {
+     "value": 4.4
+    },
+    "foodMinusHeadline": {
+     "value": -4.15
+    },
+    "hungerRegional": {
+     "value": 17.3,
+     "quarter": "2026-Q2",
+     "ageQuarters": 1.0,
+     "aboveE40Threshold11_3": true,
+     "source": "SWS self-rated involuntary hunger, Balance Luzon (approved rounds)",
+     "level": "region",
+     "kind": "observed hunger outcome, regional only"
+    },
+    "climateSupply_palayProductionYoY": {
+     "value": -30.6,
+     "quarter": "2026-Q2",
+     "source": "PSA palay production (OpenStat 0012E4EVCP0)",
+     "level": "province",
+     "kind": "supply proxy"
+    },
+    "climateSupply_cornProductionYoY": {
+     "value": 10.7,
+     "quarter": "2026-Q2"
+    },
+    "fishSupply_fisheriesProductionYoY": {
+     "value": 4.3,
+     "quarter": "2026-Q2",
+     "source": "PSA fisheries production (OpenStat 0132E4GVFP1)",
+     "level": "province",
+     "kind": "supply proxy (no fish-kill event series)"
+    },
+    "fishSupply_aquacultureProductionYoY": {
+     "value": -12.8,
+     "quarter": "2026-Q2"
+    },
+    "employment_unemploymentRate": {
+     "value": 4.79,
+     "quarter": "2026-Q2",
+     "source": "PSA LFS (OpenStat 0021B3FKEI2)",
+     "level": "national",
+     "kind": "contributing condition, no provincial differentiation"
+    },
+    "ofwRemittance": {
+     "value": null,
+     "status": "no official in-window series obtained"
+    },
+    "news": {
+     "articles": 73,
+     "quarter": "2026-Q3",
+     "sufficient": true,
+     "triggerShares": {
+      "climate": 0.027,
+      "employment": 0.0,
+      "ofw_remittance": 0.0,
+      "fish_kill": 0.0,
+      "market": 0.014
+     }
+    }
+   },
+   "forecast": {
+    "targetQuarter": "2027-Q1",
+    "lead": 2,
+    "scoreType": "price_pressure_probability",
+    "probabilityAbove4pct": 0.192,
+    "band": "Low",
+    "foodInflationPoint": 0.83,
+    "interval80": [
+     -3.85,
+     5.5
+    ],
+    "components": {
+     "baseEffect": 0.75,
+     "recentMomentum": 0.08
+    },
+    "explanation": "Food inflation in Batangas is projected at 0.8% for 2027-Q1 (80% range -3.9% to 5.5%). Prices a year earlier alone imply 0.8%; the recent monthly price trend adds 0.1 points. Probability of exceeding 4%: 19% (Low)."
+   },
+   "lead1": {
+    "targetQuarter": "2026-Q4",
+    "foodInflationPoint": 1.82,
+    "probabilityAbove4pct": 0.171
+   },
+   "exploratory": {
+    "e40Probability": 0.001,
+    "scoreType": "exploratory_food_stress_probability",
+    "status": "exploratory, not validated"
+   },
+   "operational": {
+    "category": "Low",
+    "alertCandidate": false
+   },
+   "warnings": [
+    "SWS hunger is a regional (Balance Luzon) measurement shared by all five provinces; it is not a provincial observation.",
+    "Wide uncertainty: the 80% range for food inflation is -3.9% to 5.5%.",
+    "Lead-2 accuracy on development quarters is 0.63 (below 75%); use as decision support, not as a determination.",
+    "OFW remittance: no official in-window series was obtained; this trigger has no data (not zero)."
+   ]
+  }
+ },
+ "evaluation": {
+  "lead2": {
+   "dates": 19,
+   "rows": 95,
+   "period": [
+    "2022-Q1",
+    "2026-Q3"
+   ],
+   "arms": {
+    "M1": {
+     "accuracy": 0.632,
+     "accuracy_ci95": [
+      0.505,
+      0.768
+     ],
+     "balanced_accuracy": 0.617,
+     "recall_HIGH": 0.525,
+     "recall_LOW": 0.709,
+     "brier": 0.203,
+     "roc_auc": 0.744,
+     "MAE_F": 2.882,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "M1z": {
+     "accuracy": 0.716,
+     "accuracy_ci95": [
+      0.589,
+      0.842
+     ],
+     "balanced_accuracy": 0.673,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.945,
+     "brier": 0.189,
+     "roc_auc": 0.79,
+     "MAE_F": 2.534,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B0_majority": {
+     "accuracy": 0.432,
+     "accuracy_ci95": [
+      0.274,
+      0.611
+     ],
+     "balanced_accuracy": 0.502,
+     "recall_HIGH": 0.95,
+     "recall_LOW": 0.055,
+     "brier": 0.311,
+     "roc_auc": 0.386,
+     "MAE_F": null,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B1_persistence": {
+     "accuracy": 0.516,
+     "accuracy_ci95": [
+      0.389,
+      0.642
+     ],
+     "balanced_accuracy": 0.51,
+     "recall_HIGH": 0.475,
+     "recall_LOW": 0.545,
+     "brier": 0.484,
+     "roc_auc": 0.51,
+     "MAE_F": 3.501,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B2_latest_month": {
+     "accuracy": 0.6,
+     "accuracy_ci95": [
+      0.484,
+      0.716
+     ],
+     "balanced_accuracy": 0.597,
+     "recall_HIGH": 0.575,
+     "recall_LOW": 0.618,
+     "brier": 0.4,
+     "roc_auc": 0.597,
+     "MAE_F": 3.214,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B3_seasonal": {
+     "accuracy": 0.4,
+     "accuracy_ci95": [
+      0.284,
+      0.516
+     ],
+     "balanced_accuracy": 0.4,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.4,
+     "brier": 0.6,
+     "roc_auc": 0.4,
+     "MAE_F": null,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    }
+   },
+   "gates": {
+    "G0_validity": true,
+    "G1_accuracy_ge_0.75": false,
+    "G2_not_degenerate": false,
+    "G3a_point_better_than_all_baselines": true,
+    "G3b_brier_gain_vs_persistence_holm_p_lt_0.05": true,
+    "G4_citl_ci_contains_0": true,
+    "G3_beats_baselines": true,
+    "verdict": "experimental (failed: G1_accuracy_ge_0.75, G2_not_degenerate)"
+   },
+   "calibration": {
+    "slope": 0.5976680287489048,
+    "bands": [
+     {
+      "band": "Low",
+      "n": 38,
+      "mean_p": 0.192308652064202,
+      "observed_HIGH_rate": 0.23684210526315788
+     },
+     {
+      "band": "Watch",
+      "n": 34,
+      "mean_p": 0.48332460040301006,
+      "observed_HIGH_rate": 0.4117647058823529
+     },
+     {
+      "band": "High",
+      "n": 23,
+      "mean_p": 0.8835873872149835,
+      "observed_HIGH_rate": 0.7391304347826086
+     }
+    ]
+   },
+   "paired_brier_holm_p": {
+    "B0_majority": 0.0061,
+    "B1_persistence": 0.0011,
+    "B2_latest_month": 0.0011,
+    "B3_seasonal": 0.0
+   }
+  },
+  "lead1": {
+   "dates": 19,
+   "arms": {
+    "M1": {
+     "accuracy": 0.842,
+     "accuracy_ci95": [
+      0.758,
+      0.916
+     ],
+     "balanced_accuracy": 0.836,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.873,
+     "brier": 0.128,
+     "roc_auc": 0.913,
+     "MAE_F": 1.712,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "M1z": {
+     "accuracy": 0.789,
+     "accuracy_ci95": [
+      0.694,
+      0.884
+     ],
+     "balanced_accuracy": 0.77,
+     "recall_HIGH": 0.65,
+     "recall_LOW": 0.891,
+     "brier": 0.129,
+     "roc_auc": 0.914,
+     "MAE_F": 1.772,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B0_majority": {
+     "accuracy": 0.421,
+     "accuracy_ci95": [
+      0.263,
+      0.6
+     ],
+     "balanced_accuracy": 0.483,
+     "recall_HIGH": 0.875,
+     "recall_LOW": 0.091,
+     "brier": 0.3,
+     "roc_auc": 0.43,
+     "MAE_F": null,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B1_persistence": {
+     "accuracy": 0.6,
+     "accuracy_ci95": [
+      0.474,
+      0.726
+     ],
+     "balanced_accuracy": 0.59,
+     "recall_HIGH": 0.525,
+     "recall_LOW": 0.655,
+     "brier": 0.4,
+     "roc_auc": 0.59,
+     "MAE_F": 3.108,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B2_latest_month": {
+     "accuracy": 0.705,
+     "accuracy_ci95": [
+      0.6,
+      0.811
+     ],
+     "balanced_accuracy": 0.701,
+     "recall_HIGH": 0.675,
+     "recall_LOW": 0.727,
+     "brier": 0.295,
+     "roc_auc": 0.701,
+     "MAE_F": 2.35,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    },
+    "B3_seasonal": {
+     "accuracy": 0.4,
+     "accuracy_ci95": [
+      0.284,
+      0.516
+     ],
+     "balanced_accuracy": 0.4,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.4,
+     "brier": 0.6,
+     "roc_auc": 0.4,
+     "MAE_F": null,
+     "n": 95.0,
+     "positives": 40.0,
+     "dates": 19.0
+    }
+   }
+  },
+  "lead2_ml_subset": {
+   "dates": 9,
+   "arms": {
+    "M1": {
+     "accuracy": 0.622,
+     "accuracy_ci95": [
+      0.4,
+      0.822
+     ],
+     "balanced_accuracy": 0.471,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 0.743,
+     "brier": 0.219,
+     "roc_auc": 0.571,
+     "MAE_F": 1.826,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "M2": {
+     "accuracy": 0.733,
+     "accuracy_ci95": [
+      0.533,
+      0.933
+     ],
+     "balanced_accuracy": 0.543,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 0.886,
+     "brier": 0.178,
+     "roc_auc": 0.646,
+     "MAE_F": null,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "M3": {
+     "accuracy": 0.556,
+     "accuracy_ci95": [
+      0.4,
+      0.733
+     ],
+     "balanced_accuracy": 0.429,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 0.657,
+     "brier": 0.294,
+     "roc_auc": 0.374,
+     "MAE_F": null,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "B0_majority": {
+     "accuracy": 0.244,
+     "accuracy_ci95": [
+      0.089,
+      0.422
+     ],
+     "balanced_accuracy": 0.443,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.086,
+     "brier": 0.309,
+     "roc_auc": 0.443,
+     "MAE_F": null,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "B1_persistence": {
+     "accuracy": 0.578,
+     "accuracy_ci95": [
+      0.4,
+      0.756
+     ],
+     "balanced_accuracy": 0.407,
+     "recall_HIGH": 0.1,
+     "recall_LOW": 0.714,
+     "brier": 0.422,
+     "roc_auc": 0.407,
+     "MAE_F": 2.087,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "B2_latest_month": {
+     "accuracy": 0.689,
+     "accuracy_ci95": [
+      0.556,
+      0.8
+     ],
+     "balanced_accuracy": 0.55,
+     "recall_HIGH": 0.3,
+     "recall_LOW": 0.8,
+     "brier": 0.311,
+     "roc_auc": 0.55,
+     "MAE_F": 1.918,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    },
+    "B3_seasonal": {
+     "accuracy": 0.467,
+     "accuracy_ci95": [
+      0.333,
+      0.6
+     ],
+     "balanced_accuracy": 0.336,
+     "recall_HIGH": 0.1,
+     "recall_LOW": 0.571,
+     "brier": 0.533,
+     "roc_auc": 0.336,
+     "MAE_F": null,
+     "n": 45.0,
+     "positives": 10.0,
+     "dates": 9.0
+    }
+   }
+  },
+  "e40_label_dev": {
+   "SIM": {
+    "n": 40,
+    "positives": 5,
+    "prevalence": 0.125,
+    "TP": 2,
+    "TN": 35,
+    "FP": 0,
+    "FN": 3,
+    "accuracy": 0.925,
+    "precision": 1.0,
+    "recall_HIGH": 0.4,
+    "recall_LOW": 1.0,
+    "f1": 0.5714285714285715,
+    "balanced_accuracy": 0.7,
+    "brier": 0.07100687274999999,
+    "log_loss": 0.2631433384027497,
+    "mean_p": 0.22466,
+    "citl": -0.09966,
+    "roc_auc": 0.937142857142857,
+    "pr_auc": 0.711111111111111
+   },
+   "PERSIST": {
+    "n": 40,
+    "positives": 5,
+    "prevalence": 0.125,
+    "TP": 0,
+    "TN": 35,
+    "FP": 0,
+    "FN": 5,
+    "accuracy": 0.875,
+    "precision": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1": 0.0,
+    "balanced_accuracy": 0.5,
+    "brier": 0.125,
+    "log_loss": 0.8643448476646526,
+    "mean_p": 0.0,
+    "citl": 0.125
+   },
+   "LOW": {
+    "n": 40,
+    "positives": 5,
+    "prevalence": 0.125,
+    "TP": 0,
+    "TN": 35,
+    "FP": 0,
+    "FN": 5,
+    "accuracy": 0.875,
+    "precision": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1": 0.0,
+    "balanced_accuracy": 0.5,
+    "brier": 0.12137142708368301,
+    "log_loss": 0.5317287155387163,
+    "mean_p": 0.02416298059452816,
+    "citl": 0.10083701940547184,
+    "roc_auc": 0.08571428571428572,
+    "pr_auc": 0.09309523809523809
+   },
+   "dates": 8
+  },
+  "hunger_layer": {
+   "dates": 16,
+   "MAE_persist": 4.23125,
+   "MAE_mean": 4.928047833243146
+  },
+  "status": "development evidence; the first blind outcomes are 2026-Q4 (lead 1) and 2027-Q1 (lead 2)"
+ },
+ "sources": {
+  "frozen_forecast": "E41_PROSPECTIVE_2027Q1.json",
+  "frozen_sha256": "37a3db25b37a7e3f2c647acd1cc774cc202ab4747d99ee58447fe8f63dd373bd",
+  "evaluation_run": "20261015T101016Z",
+  "protocol_sha256": "2d415a413911235c13903571a4a483ef29855df0c8dd0f4e5e2ed37ad65b57ef"
+ },
+ "limitations": [
+  "Food price pressure is not food insecurity; high prices do not prove hunger and low inflation does not prove access.",
+  "SWS hunger is regional; no provincial or municipal hunger series exists in-window.",
+  "Lead-2 accuracy 0.632 on 95 development estimates (19 quarters); the 75% target is not met at lead 2.",
+  "OFW remittance has no official in-window data; climate and fish triggers use PSA production as proxies.",
+  "All development quarters were seen by earlier experiments; prospective outcomes are pending."
+ ],
+ "content_sha256": "4b78d2275655d08e60de6085f2fa9a9a4d425210d1dbf6106499e264fffba27d"
+}

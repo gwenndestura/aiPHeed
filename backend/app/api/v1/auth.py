@@ -275,7 +275,7 @@ async def signup(
     db: AsyncSession = Depends(get_db),
 ) -> MessageResponse:
     """
-    Request an admin account. Only ADMIN_EMAIL_DOMAIN addresses, and the
+    Request an admin account. Only ADMIN_EMAIL_DOMAINS addresses, and the
     shared password policy. The account starts "pending_verification" with no
     access; the verification link is emailed.
 
@@ -285,7 +285,8 @@ async def signup(
     email = body.email.strip().lower()
     if not security.email_domain_allowed(email):
         raise accounts.AccountError(
-            f"Only @{settings.ADMIN_EMAIL_DOMAIN} addresses can create an account.", "domain_not_allowed")
+            f"Only {' or '.join('@' + d for d in settings.admin_email_domains)} addresses can create an account.",
+            "domain_not_allowed")
     problem = password_problem(body.password)
     if problem:
         raise accounts.AccountError(problem, "weak_password")

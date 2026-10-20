@@ -1,12 +1,28 @@
 """
 app/services/review.py
 -----------------------
-The publication pipeline: staged forecasts, approvals, rejections, audit.
+The publication pipeline, implementing the forecast state diagram of
+Figure 3.6.3.
 
-A province-quarter starts Staged, and an admin moves it to Approved or
-Rejected. Rejected has a public effect -- that province greys out on the map
-and its forecast stops resolving -- so the transition is recorded with an
-actor, a reason and a timestamp.
+    PENDING  --forecast complete-->  STAGED  --admin accepts-->  PUBLISHED
+       ^                                |                            |
+       +--------- admin rejects --------+         next quarter       v
+                                                              ARCHIVED
+
+A record enters PENDING when the pipeline starts and moves to STAGED once its
+forecast exists. An administrator's acceptance moves it to PUBLISHED, making it
+visible on the dashboard; a rejection returns it to PENDING. A PUBLISHED record
+becomes ARCHIVED when a later quarter publishes, and stays reachable through the
+historical forecasts endpoint.
+
+A rejection has a public effect -- that province greys out on the map and its
+forecast stops resolving -- so the transition is recorded with an actor, a
+reason and a timestamp, and the reason stays on the PENDING row. A pending row
+carrying a rejection reason is what "withheld" means publicly; a pending row
+without one is simply awaiting its forecast.
+
+This two-step review is what guarantees no forecast reaches the public
+dashboard without human decision-making (Section 3.6).
 
 Rows are seeded lazily from real model output the first time a quarter is
 opened, rather than generated from a seed like the mock console did. The score
@@ -27,7 +43,22 @@ from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
 
-STATUSES = ("Staged", "Approved", "Rejected")
+PENDING, STAGED, PUBLISHED, ARCHIVED = "Pending", "Staged", "Published", "Archived"
+STATUSES = (PENDING, STAGED, PUBLISHED, ARCHIVED)
+
+# Public API vocabulary of the panel-approved Admin page (branch 10-15-updated-flexible-ui): Staged / Approved /
+# Rejected. The stored workflow keeps Figure 3.6.3 (a rejection returns the row to PENDING with its reason; an
+# acceptance makes it PUBLISHED); the translation happens only at the API boundary.
+API_APPROVED, API_REJECTED = "Approved", "Rejected"
+API_STATUSES = (STAGED, API_APPROVED, API_REJECTED, PENDING, ARCHIVED)
+
+
+def api_status(row) -> str:
+    if row.status == PUBLISHED:
+        return API_APPROVED
+    if row.status == PENDING and row.rejection_reason:
+        return API_REJECTED
+    return row.status
 
 REJECTION_REASONS = (
     "Data quality issue",
@@ -58,10 +89,14 @@ def review_id(province_id: str, quarter: str) -> str:
 
 async def ensure_rows(db: AsyncSession, quarter: str) -> None:
     """
-    Create Staged rows for any province in `quarter` that has none yet.
+    Seed the quarter's records and advance them to STAGED once scored.
+
+    A row is created PENDING -- the state Figure 3.6.3 enters on the pipeline
+    start command -- and moves to STAGED as soon as a forecast exists for it,
+    which for a lazily seeded quarter is immediately.
 
     Existing rows are left alone: re-seeding must never reset a decision an
-    admin already made.
+    admin already made, nor lift a rejection.
     """
     quarter = svc.resolve_quarter(quarter)
     existing = set(
@@ -82,7 +117,8 @@ async def ensure_rows(db: AsyncSession, quarter: str) -> None:
             quarter=quarter,
             risk_score=province["riskScore"],
             risk_level=province["riskLevel"],
-            status="Staged",
+            # PENDING on creation, STAGED once the forecast is attached.
+            status=STAGED if province["riskScore"] is not None else PENDING,
         ))
     await db.commit()
     logger.info("review: seeded %d rows for %s", len(missing), quarter)
@@ -101,12 +137,17 @@ async def list_items(
     if quarter:
         query = query.where(ReviewRecord.quarter == quarter)
     if status:
-        if status not in STATUSES:
+        if status not in STATUSES and status not in API_STATUSES:
             raise ReviewError(
-                f"Unknown status '{status}'. Expected one of {', '.join(STATUSES)}.",
+                f"Unknown status '{status}'. Expected one of {', '.join(API_STATUSES)}.",
                 code="unknown_status",
             )
-        query = query.where(ReviewRecord.status == status)
+        if status == API_APPROVED:
+            query = query.where(ReviewRecord.status == PUBLISHED)
+        elif status == API_REJECTED:
+            query = query.where(ReviewRecord.status == PENDING, ReviewRecord.rejection_reason.is_not(None))
+        else:
+            query = query.where(ReviewRecord.status == status)
 
     rows = list((await db.scalars(query)).all())
     rows.sort(key=lambda r: (ref.quarter_index(r.quarter), r.risk_score), reverse=True)
@@ -143,20 +184,41 @@ async def _audit(
 
 
 async def approve(db: AsyncSession, item_id: str, user: AdminUser) -> ReviewRecord:
+    """Accept a staged forecast: STAGED -> PUBLISHED, and archive what it supersedes."""
     row = await get_item(db, item_id)
-    if row.status == "Approved":
+    if row.status == PUBLISHED:
         # Already published (a double click, a retried request): nothing
         # changes, so nothing is written -- not even an audit row.
         return row
-    row.status = "Approved"
+    row.status = PUBLISHED
     row.rejection_reason = None
     row.rejection_notes = None
     row.updated_by = user.id
     row.updated_by_name = user.full_name
     await _audit(db, user, "approve", row)
+    await _archive_superseded(db, row)
     await db.commit()
     await db.refresh(row)
     return row
+
+
+async def _archive_superseded(db: AsyncSession, row: ReviewRecord) -> None:
+    """
+    A PUBLISHED record moves to ARCHIVED when a later quarter publishes for the
+    same province. Archived rows stay in the table and stay reachable through
+    the historical forecasts endpoint -- the previous version is replaced on the
+    dashboard, not deleted.
+    """
+    published = list((await db.scalars(
+        select(ReviewRecord).where(
+            ReviewRecord.province_id == row.province_id,
+            ReviewRecord.status == PUBLISHED,
+        )
+    )).all())
+    now = ref.quarter_index(row.quarter)
+    for other in published:
+        if other.id != row.id and ref.quarter_index(other.quarter) < now:
+            other.status = ARCHIVED
 
 
 async def reject(
@@ -178,7 +240,9 @@ async def reject(
             code="unknown_reason",
         )
     row = await get_item(db, item_id)
-    row.status = "Rejected"
+    # Figure 3.6.3: rejection returns the record to PENDING. The reason stays on
+    # the row, which is what marks it withheld rather than merely unscored.
+    row.status = PENDING
     row.rejection_reason = reason
     row.rejection_notes = notes
     row.updated_by = user.id
@@ -190,15 +254,15 @@ async def reject(
 
 
 async def undo(db: AsyncSession, item_id: str, user: AdminUser) -> ReviewRecord:
-    """Return an Approved or Rejected item to Staged, clearing any rejection."""
+    """Return a published or rejected record to STAGED, clearing any rejection."""
     row = await get_item(db, item_id)
-    if row.status == "Staged":
+    if row.status == STAGED:
         raise ReviewError(
             f"{row.province_name} {row.quarter} is already Staged; nothing to undo.",
             code="already_staged",
         )
-    previous = row.status
-    row.status = "Staged"
+    previous = f"{row.status} (rejected)" if row.rejection_reason else row.status
+    row.status = STAGED
     row.rejection_reason = None
     row.rejection_notes = None
     row.updated_by = user.id
@@ -214,7 +278,15 @@ async def undo(db: AsyncSession, item_id: str, user: AdminUser) -> ReviewRecord:
 # ---------------------------------------------------------------------------
 
 async def list_rejections(db: AsyncSession, quarter: str | None = None) -> list[ReviewRecord]:
-    query = select(ReviewRecord).where(ReviewRecord.status == "Rejected")
+    """
+    Records an administrator has withheld: PENDING rows carrying a rejection
+    reason. A PENDING row without one is merely awaiting its forecast and is
+    not a rejection.
+    """
+    query = select(ReviewRecord).where(
+        ReviewRecord.status == PENDING,
+        ReviewRecord.rejection_reason.is_not(None),
+    )
     if quarter:
         query = query.where(ReviewRecord.quarter == quarter)
     rows = list((await db.scalars(query)).all())
@@ -232,7 +304,8 @@ async def is_rejected(db: AsyncSession, province_id: str, quarter: str) -> Revie
         select(ReviewRecord).where(
             ReviewRecord.province_id == province_id,
             ReviewRecord.quarter == quarter,
-            ReviewRecord.status == "Rejected",
+            ReviewRecord.status == PENDING,
+            ReviewRecord.rejection_reason.is_not(None),
         )
     )
 
@@ -249,7 +322,7 @@ async def restore(
         raise ReviewNotFound(
             f"No active rejection for {province_id} in {quarter}."
         )
-    row.status = "Staged"
+    row.status = STAGED
     row.rejection_reason = None
     row.rejection_notes = None
     row.updated_by = user.id

@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.concurrency import run_in_threadpool
 
 from app.dependencies import get_db
 from app.schemas.public import ForecastResponse, TimeseriesResponse
@@ -32,6 +31,24 @@ SCOPES = ("region", "province", "municipality")
 async def _withheld_for(db: AsyncSession, quarter: str) -> frozenset[str]:
     """Province slugs an admin has withheld for this quarter."""
     return frozenset(pid for pid, q in await rv.rejected_pairs(db, quarter))
+
+
+async def _confirmed_alert(db: AsyncSession, scope: str, subject_id: str, quarter: str, body: dict) -> bool:
+    """True when a DA administrator has confirmed an alert for this area and quarter (E34, D3). The region view uses
+    the regional alert; a province its own; a municipality its province's."""
+    from app.db.repository.alert_repo import AlertRepository
+    from app.quarterly.alerts_e31 import REGION_CODE
+
+    if scope == "region":
+        code = REGION_CODE
+    elif scope == "province":
+        code = ref.province_code(subject_id.lower())
+    else:
+        code = ref.province_code(body.get("provinceId") or "")
+    if code is None:
+        return False
+    return any(a.quarter == quarter and a.province_code == code and not a.dismissed
+               for a in await AlertRepository(db).get_confirmed())
 
 
 def _quarter_label(quarter: str) -> str:
@@ -87,7 +104,10 @@ def _score_for(
                 f"The {quarter} forecast for this province has been withheld from "
                 "publication by a reviewer."
             )
-        match = [p for p in svc.province_summary(quarter, horizon=horizon) if p["id"] == slug]
+        rows = svc.province_summary(quarter, horizon=horizon)
+        if not rows:
+            raise svc.QuarterNotAvailable(f"No province scores exist for {quarter}.")
+        match = [p for p in rows if p["id"] == slug]
         if not match:
             raise svc.SubjectNotFound(f"Unknown province id '{subject_id}'.")
         p = match[0]
@@ -96,10 +116,13 @@ def _score_for(
             "riskLevel": p["riskLevel"],
             "qoqChange": p["qoqChange"],
             "limitedSignal": p["limitedSignal"],
-            "seriesMonitored": p["seriesMonitored"],
-            "seriesAtRisk": p["seriesAtRisk"],
-            "seriesNeedingReview": p.get("seriesNeedingReview"),
-            "topAtRiskCommodities": p["topAtRiskCommodities"],
+            "riskLabel": p["riskLabel"],
+            "forecastHorizonQuarters": p["forecastHorizonQuarters"],
+            "horizonLabel": p["horizonLabel"],
+            "confidenceStatement": p["confidenceStatement"],
+            "verificationDate": p["verificationDate"],
+            "estimateKind": p.get("estimateKind"),
+            "observedOutcome": p.get("observedOutcome"),
             "horizon": horizon,
         }
 
@@ -125,35 +148,43 @@ async def get_forecast(
     id: str = Query("calabarzon", description="calabarzon | quezon | quezon-infanta"),
     quarter: str | None = Query(None, description="Defaults to the latest scorable quarter"),
     horizon: str = Query(svc.DEFAULT_HORIZON, pattern="^(nowcast|forecast)$",
-                         description="nowcast = what happened; forecast = one quarter ahead"),
+                         description=("One operational horizon (Rule 2). Both ids "
+                                      "resolve to the same model; no forward lead "
+                                      "time has been validated (E27), so the output "
+                                      "is an experimental same-quarter estimate.")),
     db: AsyncSession = Depends(get_db),
 ) -> ForecastResponse:
     """
     The single most-used endpoint: one subject's score for one quarter.
 
-    `horizon=forecast` reaches one quarter further than the nowcast, because
-    its inputs are all taken from before the quarter being scored.
+    Rule 2 fixes a single operational horizon, so `nowcast` is an accepted
+    alias of `forecast` and both resolve to the same model, published at the
+    Maximum Reliable Lead Time discovered by Algorithm 3.
     """
     h = svc.check_horizon(horizon)
     q = svc.resolve_quarter(quarter, h)
-    # _score_for runs the model's LightGBM/RF/ET/LogReg ensemble synchronously
-    # -- CPU-bound, so off the event loop it goes, same reasoning as
-    # insights.py's explainability route.
-    body = await run_in_threadpool(_score_for, scope, id, q, await _withheld_for(db, q), h)
+    body = _score_for(scope, id, q, await _withheld_for(db, q), h)
     return ForecastResponse(
         scope=scope,
         id=id.lower(),
         name=_subject_name(scope, id),
         quarter=q,
         quarterLabel=_quarter_label(q),
-        indicator=svc.INDICATOR,
-        # Only the appended E20 quarter (2027-Q1) is a forecast; every nowcast
-        # quarter scores production volumes PSA has already published.
-        isForecast=svc.is_forecast_quarter(q, h),
+        indicator=svc.indicator_for(q),
+        # E34: true for a quarter whose outcome is not yet known (E31 nowcast/forecast); backtests are false.
+        isForecast=svc.is_estimate_quarter(q),
         isCurrent=(q == svc.latest_quarter(h)),
-        alert=(body["riskScore"] or 0) >= ref.ALERT_THRESHOLD,
+        # E34 (D3): only an alert a DA administrator has CONFIRMED is public; never a score threshold alone.
+        alert=await _confirmed_alert(db, scope, id, q, body),
         **body,
     )
+
+
+def _backtest_quarters() -> set[str]:
+    rec = svc.E41L2.record()
+    return {q for q in svc.E41L2.candidate_quarters()
+            if q != rec["targetQuarter"] and all(any(x["targetQuarter"] == q for x in v.get("pastForecasts", []))
+                                                 for v in rec["provinces"].values())}
 
 
 @router.get("/forecast/timeseries", response_model=TimeseriesResponse)
@@ -175,6 +206,8 @@ async def get_timeseries(
     """
     h = svc.check_horizon(horizon)
     quarters = svc.available_quarters(h)
+    if svc.E41L2.governs():              # E52: the candidate's own quarters (a CPI-only target covers 2025-Q2/Q3)
+        quarters = sorted(set(quarters) | set(svc.E41L2.candidate_quarters()), key=ref.quarter_index)
     start = from_ or (quarters[0] if quarters else None)
     end = to or (quarters[-1] if quarters else None)
     lo, hi = ref.quarter_index(start), ref.quarter_index(end)
@@ -184,38 +217,43 @@ async def get_timeseries(
     # zero, which would read as a real fall to no risk.
     rejected = await rv.rejected_pairs(db)
 
-    def _build_series() -> list[dict]:
-        # One _score_for (model ensemble pass) per quarter in the window --
-        # CPU-bound and, for an unscored range, the biggest cost on this
-        # endpoint, so the whole loop runs off the event loop as one unit
-        # rather than blocking it query by query.
-        out = []
-        for q in window:
-            withheld = frozenset(pid for pid, rq in rejected if rq == q)
-            try:
-                body = _score_for(scope, id, q, withheld, h)
-            except svc.SubjectNotFound:
-                raise  # bad id: every quarter would fail, so say so once
-            except svc.ForecastWithheld:
-                continue
-            except Exception:  # a quarter the subject has no rows for
-                continue
-            if body["riskScore"] is None:
-                continue
-            out.append({
-                "quarter": q,
-                "riskScore": body["riskScore"],
-                "riskLevel": body["riskLevel"],
-                "isForecast": svc.is_forecast_quarter(q, h),
-            })
-        return out
+    series = []
+    for q in window:
+        withheld = frozenset(pid for pid, rq in rejected if rq == q)
+        try:
+            body = _score_for(scope, id, q, withheld, h)
+        except svc.SubjectNotFound:
+            raise  # bad id: every quarter would fail, so say so once
+        except svc.ForecastWithheld:
+            continue
+        except Exception:  # a quarter the subject has no rows for
+            continue
+        if body["riskScore"] is None:
+            continue
+        series.append({
+            "quarter": q,
+            "riskScore": body["riskScore"],
+            "riskLevel": body["riskLevel"],
+            "isForecast": svc.is_estimate_quarter(q),
+            # E42: a series can mix score types when the Lead-2 candidate is enabled; each point says which it is
+            "scoreType": svc.indicator_for(q)["id"],
+        })
 
-    series = await run_in_threadpool(_build_series)
+    # E46: with a Lead-2 candidate governing the dashboard, every quarter is the candidate's own estimate of its own
+    # event (as-of backtest, earlier Lead-2 forecast, issued forecast); quarters it has no estimate for drop out, so
+    # the line never joins the v1 label probability (about 0.98) to the candidate's probability (about 0.2).
+    if svc.E41L2.governs():
+        cand = svc.indicator_for(svc.forecast_target()["target_quarter"])
+        bt = _backtest_quarters()
+        series = [p | {"isForecast": p["quarter"] not in bt} for p in series if p["scoreType"] == cand["id"]]
+        indicator = cand
+    else:
+        indicator = svc.INDICATOR
 
     return TimeseriesResponse(
         scope=scope,
         id=id.lower(),
         name=_subject_name(scope, id),
-        indicator=svc.INDICATOR,
+        indicator=indicator,
         series=series,
     )

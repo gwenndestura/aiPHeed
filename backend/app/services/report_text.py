@@ -383,6 +383,9 @@ def _m(value: float | None) -> str | None:
 
 def compose_reliability(perf: dict) -> list[str]:
     """Headline metrics quoted against the baselines the backend reports."""
+    if perf and "leads" in perf:                      # thesis system
+        from app.ml.inference import thesis_system as THESIS
+        return THESIS.performance_tables(perf)["sentences"]
     if not perf or perf.get("accuracy") is None:
         return ["Model performance figures are not available from the results file."]
     base = perf.get("baselines", {})

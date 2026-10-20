@@ -13,21 +13,43 @@ For every (province, quarter) cell in the 2020-Q1 → 2025-Q4 window:
 
 Sources:
   - SWS quarterly hunger (Social Weather Stations) — temporal signal, regional resolution.
-    Continuous quarterly series since 1998; cited by NEDA, DSWD, BSP, PIDS, ADB.
+    Continuous quarterly series since 1998; cited by the national planning agency (formerly NEDA), BSP,
+    PIDS and ADB.
   - PSA OpenStat food CPI YoY — spatial signal, province-quarter resolution.
 
 The composite combines a household-experience indicator (SWS hunger) with an
 economic-access indicator (food CPI deviation), giving both temporal AND spatial
-variation that any single source alone cannot provide. Threshold = global median
-across the 120 (province, quarter) pairs guarantees a balanced 50/50 class split
-across the full window.
+variation that any single source alone cannot provide. The threshold is the
+global median of the stress score, which guarantees a balanced class split by
+construction.
+
+Section 3.3.2.6 defines the window as the 120 (province, quarter) pairs of
+2020-Q1 through 2025-Q4. A pair is labelled only where SWS actually published a
+hunger figure: a quarter with no survey has no label and is dropped, never
+imputed. The median is taken over the surviving rows, so the split stays
+balanced whatever that count turns out to be. See docs/DATA_AVAILABILITY.md for
+how many rows the current SWS coverage yields.
 
 CONTEXT (NOT used in label generation):
-  DOST-FNRI ENNS FIES (NNS 2021: 50.9%, NNS 2023: 51.6% moderate-or-severe)
-  is the FAO SDG 2.1.2 regional anchor that confirms CALABARZON has elevated
-  food insecurity prevalence. It is biennial and regional-only, so it cannot
-  produce province-quarter labels at the resolution this model operates at.
-  See get_fies_regional_baseline() for citation in thesis intro / README.
+  DOST-FNRI ENNS FIES is the FAO SDG 2.1.2 regional anchor. The verified
+  CALABARZON value is 22.6% moderate-or-severe (NNS 2025) against 32.6%
+  nationally, so the region sits among the LOWEST in the country, not among
+  the worst. It is biennial and regional-only, so it cannot produce
+  province-quarter labels at the resolution this model operates at.
+
+  The 2021 and 2023 entries that previously appeared here (50.9% and 51.6%)
+  were removed on 2026-09-01 as unverifiable: they contradict the published
+  record in magnitude and direction, placing CALABARZON at roughly twice the
+  correct level and above the national rate. See enns_fetcher.REMOVED_UNVERIFIED.
+  They are not cited anywhere, and the claim they were used to support --
+  that the region has elevated prevalence -- does not hold.
+
+  What motivates the forecasting work is what Section 1.2 actually states:
+  a large absolute population unable to meet basic food needs, poverty
+  incidence that varies substantially between the five provinces, and
+  monitoring instruments that report every two to three years at a geography
+  coarser than the province. Low regional prevalence does not remove any of
+  those. See get_fies_regional_baseline() for citation in thesis intro / README.
 
 ROBUSTNESS LABEL (CPI-deviation — sanity check)
 -----------------------------------------------
@@ -197,8 +219,8 @@ def _build_stress_labels(
             "labels. Populate sws_hunger_fetcher.SWS_BAL_LUZON_VERIFIED first."
         )
 
-    # Global median threshold over all 120 (province, quarter) pairs.
-    # Guarantees ~50/50 class split across the full window.
+    # Global median threshold over the labelled (province, quarter) pairs.
+    # Guarantees a balanced class split by construction (Equation 3).
     global_threshold = float(df["stress_score"].median())
     df["global_threshold"] = round(global_threshold, 4)
     df["label_stress"] = (df["stress_score"] > global_threshold).astype(int)
@@ -285,8 +307,11 @@ def get_fies_regional_baseline(
     NOT used in label generation. FIES is biennial and published only at the
     regional level (Region IV-A / CALABARZON), so it cannot produce
     province-quarter labels at the resolution this model operates at. It is
-    retained as the FAO SDG 2.1.2 regional anchor that confirms CALABARZON
-    has elevated food insecurity prevalence (motivating the forecasting work).
+    retained as the FAO SDG 2.1.2 regional anchor. It does NOT show CALABARZON
+    as elevated: the verified 2025 value is 22.6% against 32.6% nationally,
+    which places the region among the lowest in the country. The forecasting
+    work is motivated by absolute numbers, between-province variation and
+    reporting latency, not by high regional prevalence.
 
     Returns a dict like:
         {"NNS_2025": {"moderate_or_severe_pct": 22.6, "severe_pct": None}}
@@ -326,8 +351,8 @@ def generate_labels(
     dist_path: Path = LABEL_DIST_PATH,
 ) -> pd.DataFrame:
     """
-    Generate composite-stress labels for all province-quarter cells in the
-    2020-Q1 → 2025-Q4 model window.
+    Generate composite-stress labels for every province-quarter cell in the
+    2020-Q1 → 2025-Q4 model window that SWS actually measured.
 
     Parameters
     ----------
@@ -347,6 +372,11 @@ def generate_labels(
                  label_cpi  (ROBUSTNESS CPI-deviation cross-check),
                  label_agreement
     """
+    # E29 (D9): this function labels with a WHOLE-PERIOD median (leaky). Refused unless legacy reproduction is
+    # explicitly requested; see app/ml/features/label_guard.py.
+    from app.ml.features.label_guard import require_legacy_opt_in
+
+    require_legacy_opt_in("label_generator.generate_labels")
     stress_labels = _build_stress_labels(sws_path=sws_path, psa_path=psa_path)
     cpi_labels    = _build_cpi_labels(psa_path)
 

@@ -167,7 +167,7 @@ class AlertRecord(Base):
 
 class AdminUser(Base):
     """
-    A DA CALABARZON account.
+    A validating-agency account — DA Region IV-A.
 
     Replaces both client-side login checks. There is no seeded default
     account: passwords are Argon2 hashes created through
@@ -264,11 +264,12 @@ class ReviewRecord(Base):
     """
     One province-quarter forecast moving through review.
 
-    This is the ONLY source of publication status. A rejection is this row at
-    status="Rejected" carrying its reason and actor, not a second table -- two
+    States follow Figure 3.6.3: Pending -> Staged -> Published -> Archived, with
+    a rejection returning the record to Pending. A rejection is this row back at
+    status="Pending" carrying its reason and actor, not a second table -- two
     tables would be free to disagree about whether a forecast is published,
     which is the exact failure the frontend already has with its two province
-    datasets.
+    datasets. This is the ONLY source of publication status.
 
     id is deterministic ("rv_2025Q4_quezon") so seeding a quarter twice is a
     no-op rather than a duplicate.
@@ -286,9 +287,11 @@ class ReviewRecord(Base):
     risk_score = Column(Float, nullable=False)
     risk_level = Column(String, nullable=False)
 
-    status = Column(String, nullable=False, default="Staged")  # Staged|Approved|Rejected
+    # Pending|Staged|Published|Archived -- see app/services/review.py
+    status = Column(String, nullable=False, default="Pending")
 
-    # Populated only while status == "Rejected".
+    # Set when an administrator rejects. A Pending row carrying a reason is
+    # withheld; a Pending row without one is merely awaiting its forecast.
     rejection_reason = Column(String, nullable=True)
     rejection_notes = Column(Text, nullable=True)
 

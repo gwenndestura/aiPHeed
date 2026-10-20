@@ -49,14 +49,18 @@ def _month_to_quarter(month: int) -> str:
 
 def _parse_quarter(published: str) -> str | None:
     """
-    Extract 'YYYY-QN' string from an ISO datetime string.
-    Returns None if parsing fails.
+    Extract 'YYYY-QN' from a publication date, or None when it cannot be read.
+
+    Reads ISO and RFC 822, the latter because feeds publish it and a fetcher may
+    still hand it through. An article returning None here carries no quarter and
+    so reaches no province-quarter cell; `compute_bias_weights` counts those and
+    warns, because a silent drop is indistinguishable from thin coverage.
     """
-    try:
-        dt = pd.Timestamp(published)
-        return f"{dt.year}-{_month_to_quarter(dt.month)}"
-    except Exception:
-        return None
+    # Philippine-time quarter (E23 fix): a UTC timestamp just after midnight PHT
+    # on a quarter's first day belongs to that quarter, not the previous one.
+    from app.ml.corpus._dates import quarter_of_publication
+
+    return quarter_of_publication(published)
 
 
 # ---------------------------------------------------------------------------
@@ -104,6 +108,15 @@ def compute_bias_weights(
 
     # Derive quarter from published timestamp
     df["quarter"] = df["published"].apply(_parse_quarter)
+    unreadable = int(df["quarter"].isna().sum())
+    if unreadable:
+        logger.warning(
+            "compute_bias_weights: %d of %d articles carry a publication date "
+            "that cannot be read, so they belong to no quarter and reach no "
+            "province-quarter cell. Sample: %s",
+            unreadable, len(df),
+            df.loc[df["quarter"].isna(), "published"].head(3).tolist(),
+        )
     df = df[df["quarter"].notna()]
 
     # Count articles per province-quarter

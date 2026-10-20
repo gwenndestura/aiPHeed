@@ -243,6 +243,8 @@ class TestReviewPipeline:
 
         again = api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers).json()["data"]
         quezon = next(i for i in again if i["provinceId"] == "quezon")
+        # Stored workflow: Figure 3.6.3 (approving makes the row PUBLISHED). The API speaks the panel-approved
+        # Admin page's vocabulary (Staged / Approved / Rejected), so a published row is served as "Approved".
         assert quezon["status"] == "Approved"
         assert len(again) == 5
 
@@ -263,6 +265,8 @@ class TestReviewPipeline:
                      json={"reason": "Data quality issue", "notes": "PSA revision pending."})
         assert r.status_code == 200
         item = r.json()
+        # Figure 3.6.3: a rejection returns the stored record to Pending and keeps its reason; the API serves that
+        # row as "Rejected" (approved Admin page vocabulary). A Pending row with a reason is what "withheld" means.
         assert item["status"] == "Rejected"
         assert item["rejectionReason"] == "Data quality issue"
         assert item["updatedByName"] == "J. Dela Cruz"
@@ -380,7 +384,8 @@ class TestRejectionIsEnforced:
         quarters = [p["quarter"] for p in series]
         # A zero here would read as a real fall to no risk.
         assert "2025-Q4" not in quarters
-        assert "2025-Q3" in quarters
+        # Neighbouring quarters stay. (E31 has no released label for 2025-Q2/Q3, so 2026-Q1 is the neighbour.)
+        assert "2026-Q1" in quarters
 
     def test_undo_republishes(self, api, rejected):
         api.post("/api/v1/admin/review/rv_2025Q4_laguna/undo", headers=rejected)

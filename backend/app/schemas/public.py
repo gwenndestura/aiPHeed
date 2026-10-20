@@ -8,9 +8,10 @@ These models are camelCase and address subjects by slug ("quezon",
 internal schemas in forecasts.py / shap.py stay snake_case and PSGC-keyed for
 the DB and ML layers; app/services/reference.py is the only translation point.
 
-Every forecast response carries `indicator`. The number is a food AVAILABILITY
-shock share, not a household food-insecurity probability, and the label
-travels with the value so no screen can rename it in isolation.
+Every forecast response carries `indicator`. The number is the province's food
+insecurity RISK PROBABILITY — an indicative, relative ordinal estimate, not a
+definitive determination of food insecurity status — and the label travels with
+the value so no screen can rename it in isolation.
 """
 
 from __future__ import annotations
@@ -76,9 +77,8 @@ class ConfigResponse(BaseModel):
     # reaches, and its metrics with baselines.
     horizons: dict
     modelPerformance: dict
-    # The E20 headline forecast (2027-Q1) for the dashboard banner; None when
-    # it is not served.
-    forecast: dict | None = None
+    # thesis mode: the explicitly configured serving model (no silent fallback; see thesis_system.validate)
+    servingModel: dict | None = None
 
 
 class Quarter(BaseModel):
@@ -88,7 +88,7 @@ class Quarter(BaseModel):
     label: str
     monthsLabel: str
     state: str  # "actual" | "current" | "forecast" | "unavailable"
-    # Why an "unavailable" quarter has no score; None on every other state.
+    # Why an "unavailable" quarter has no score; None on every other state (main backend 1658d31, restored in E34).
     reason: str | None = None
 
 
@@ -106,6 +106,8 @@ class QuartersResponse(BaseModel):
     serverTime: str
     calendarQuarter: str
     lagQuarters: int
+    # The dynamic next-quarter target (app/quarterly/target.py) and whether its forecast exists.
+    forecastTarget: dict | None = None
     quarters: list[Quarter]
 
 
@@ -120,6 +122,8 @@ class ProvinceSummary(BaseModel):
     centroid: Centroid
     population: int | None = None
     povertyRate: float | None = None
+    # E35-D7: how povertyRate was derived (population-weighted PSA 2021 municipal SAE; not a PSA province figure)
+    povertyRateBasis: str | None = None
     currentQuarter: str
     # Null when withheld. The province still appears so the map can draw it,
     # but the number an admin held back is not served alongside a flag.
@@ -127,26 +131,35 @@ class ProvinceSummary(BaseModel):
     riskLevel: str | None = None
     qoqChange: float | None = None
     qoqChangePct: float | None = None
-    seriesMonitored: int | None = None
-    seriesAtRisk: int | None = None
-    # Of seriesMonitored, how many scored below the confidence cutoff the
-    # reported accuracy/precision are actually measured at. Real per-
-    # commodity uncertainty disclosed alongside the score, not a hidden
-    # exclusion -- riskScore above still counts every monitored series.
-    seriesNeedingReview: int | None = None
-    topAtRiskCommodities: list[str] = Field(default_factory=list)
+    riskLabel: str | None = None
+    # E41 (only with AIPHEED_LEAD2_MODEL=e41, for its target quarter): what riskScore is, and the documented band
+    scoreType: str | None = None
+    scoreDefinition: str | None = None
+    riskBand: str | None = None
+    # E46: "forecast" | "earlier_forecast" | "backtest" (candidate mode) and, for a backtest, the observed outcome of
+    # the same event ("HIGH" | "LOW"): an estimate and an observation are never presented as one number
+    estimateKind: str | None = None
+    observedOutcome: str | None = None
+    # E35-D1: what the riskLevel band is (a model estimate at the display cutoff, never a validated class)
+    riskLevelBasis: str | None = None
+    evidenceStatus: str | None = None
+    forecastHorizonQuarters: int | None = None
+    horizonLabel: str | None = None
+    confidenceStatement: str | None = None
+    verificationDate: str | None = None
     articleCount: int = 0
     limitedSignal: bool = False
     horizon: str = "nowcast"
     withheld: bool = False
-    # Set on an E20 forecast quarter (2027-Q1): a different target and model
-    # from the nowcast, served from data/e20/serving.json.
-    isForecast: bool = False
-    lead: int | None = None
-    originQuarter: str | None = None
-    modelId: str | None = None
-    confidenceNote: str | None = None
-    uncertainty: dict | None = None
+    # Ranking of the published provinces by the model's probability (Section
+    # 1.2: the system "will estimate and rank" potential risk). Null when
+    # withheld, so a withheld score cannot be inferred from its position.
+    rank: int | None = None
+    # E39: true when another published province has the same score (they share the rank)
+    rankTied: bool | None = None
+    rankOf: int | None = None
+    gapToNextLower: float | None = None
+    tiedWithNextLower: bool | None = None
 
 
 class ProvincesResponse(BaseModel):
@@ -166,12 +179,31 @@ class MunicipalitySummary(BaseModel):
     densityPerKm2: float | None = None
     povertyRate: float | None = None
     quarter: str
-    riskIndex: float
-    riskLevel: str
+    # E31 fix: null when the province has no estimate (E28 removed the zero fill but not this type).
+    riskIndex: float | None = None
+    # E28/E31: LGUs are never banded (the province estimate is not validated), so this is null. The schema still
+    # required a string, which made the endpoint return 500 for every quarter.
+    riskLevel: str | None = None
     # Never null. These are reweighted province numbers, not independent
     # municipal forecasts, and the label says so on every row.
     disaggregationLabel: str
     limitedSignal: bool = False
+    # E31: the ranking and provenance fields the service returns were silently dropped by the schema
+    rankRegion: int | None = None
+    # E64 (Objective 3 traceability): the province estimate the index scales, its source run, the vulnerability index
+    provinceEstimate: float | None = None
+    provinceEstimateSource: dict | None = None
+    vulnerabilityIndex: float | None = None
+    rankingMethod: str | None = None
+    rankingRowsSha256: str | None = None
+    rankInProvince: int | None = None
+    tied: bool = False
+    evidenceStatus: str | None = None
+    riskLevelBasis: str | None = None
+    povertyEstimateKind: str | None = None
+    povertyValueUsed: float | None = None
+    povertyLimitation: str | None = None
+    noProvinceEstimate: bool = False
 
 
 class MunicipalitiesResponse(BaseModel):
@@ -220,12 +252,15 @@ class ForecastResponse(BaseModel):
     provinceCounts: dict | None = None
     provincesIncluded: int | None = None
     horizon: str = "nowcast"
-    seriesMonitored: int | None = None
-    seriesAtRisk: int | None = None
-    seriesNeedingReview: int | None = None
-    topAtRiskCommodities: list[str] | None = None
+    riskLabel: str | None = None
+    forecastHorizonQuarters: int | None = None
+    horizonLabel: str | None = None
+    confidenceStatement: str | None = None
+    verificationDate: str | None = None
     disaggregationLabel: str | None = None
     derivation: str | None = None
+    estimateKind: str | None = None
+    observedOutcome: str | None = None
 
 
 class TimeseriesPoint(BaseModel):
@@ -233,6 +268,7 @@ class TimeseriesPoint(BaseModel):
     riskScore: float
     riskLevel: str
     isForecast: bool = False
+    scoreType: str | None = None
 
 
 class TimeseriesResponse(BaseModel):
@@ -246,19 +282,6 @@ class TimeseriesResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Explainability
 # ---------------------------------------------------------------------------
-
-class RealDataContext(BaseModel):
-    """
-    Real government-source numbers shown as informational context on a
-    driver -- NOT a model input. Currently only populated on ofw_remittance
-    (BSP data), since that driver's only trained feature is a purely
-    news-derived proportion that reads 0 in most quarters. Does not affect
-    signedContribution, pct, or any reported accuracy/F1/AUC figure.
-    """
-    source: str
-    ofw_remit_yoy_pct: float | None = None
-    fx_usd_php_avg: float | None = None
-
 
 class Trigger(BaseModel):
     """
@@ -275,9 +298,136 @@ class Trigger(BaseModel):
     pct: int
     signedContribution: float
     direction: str
+    # E42: contributes | no_effect | no_model_input | no_data, and the plain note for it (the dashboard builds its
+    # card text from the status, never a fixed direction, for a group that has no model input or no data)
+    status: str | None = None
+    statusNote: str | None = None
+    # E44: the observed evidence behind a model-attributed trigger (province scope, candidate records only)
+    evidenceNote: str | None = None
     color: str
     newsSignalProportion: float | None = None
-    realDataContext: RealDataContext | None = None
+
+
+class SummaryReason(BaseModel):
+    key: str
+    label: str
+    direction: str                    # increases_risk | protective
+    pct: int
+    evidence: str | None = None       # observed indicator, its period and source (province scope)
+
+
+class EarlyWarning(BaseModel):
+    """E58: two-signal early warning of one province for one quarter (a model warning, not an official classification)."""
+    provinceCode: str
+    province: str
+    level: str                        # ALERT | EMERGING | NONE
+    warn: bool
+    probabilityHigh: float
+    probabilityPricePressure: float
+    direction: str                    # rising | steady | easing | unknown (vs the latest known label)
+    latestKnownLabel: str | None = None
+    latestKnownLabelQuarter: str | None = None
+    latestHunger: float | None = None
+    latestHungerQuarter: str | None = None
+    text: str
+
+
+class ClimateWatch(BaseModel):
+    """E66: Climate Food-Stress Watch, a rule-based El Nino hazard layer beside the Lead-2 forecast (opt-in e66 mode).
+    Not a model input and not a food-insecurity probability; it changes no number."""
+    layer: str
+    level: str | None = None          # CLIMATE WATCH + LOCAL EXPOSURE | CLIMATE WATCH | NO CLIMATE WATCH | INSUFFICIENT DATA
+    hazard: bool | None = None
+    hazardStatus: str
+    householdStress: bool | None = None
+    latestHunger: float | None = None
+    localExposure: bool | None = None   # None = production data unknown (never read as "no exposure")
+    exposureNote: str | None = None
+    issueDate: str
+    provinces: dict[str, str] | None = None   # region scope: level per province code
+    sentence: str
+
+
+class ModelIdentity(BaseModel):
+    """E67: which model produced the served Lead-2 number, under which serving mode and with what evidence status."""
+    servingMode: str                  # e.g. "e67"
+    modelVersion: str                 # record modelVersion
+    servedModel: str                  # e.g. "E56 LightGBM food-insecurity model (E56-TUNED, configuration 23)"
+    lead: int                         # quarters ahead of the issue quarter's predecessor (2 = Lead-2)
+    issued: str
+    targetQuarter: str
+    evidenceStatus: str               # development evidence only; not validated
+    lead2Accuracy: str                # the measured E67 development figure, with its limits
+
+
+class TriggerCoverage(BaseModel):
+    """E67: one trigger group's data coverage and measured Lead-2 effect (R1/R2), so missing or thin data is never read
+    as absence of risk."""
+    key: str
+    label: str
+    dataUsed: str                     # what the model actually receives for this group
+    geography: str
+    latestAtIssue: str
+    missingAtIssue: bool              # some inputs of the group are missing (NaN) at the issue date
+    measuredEffect: str               # helps | hurts | not distinguishable from zero (E67 R1, Lead-2, 50 rows)
+    note: str
+
+
+class InputStatus(BaseModel):
+    """E68: one model input at the issue date. status: observed | observed_zero | missing | stale | substituted |
+    too_few_articles | not_collected (a missing or uncollected input is never read as no risk)."""
+    key: str
+    label: str
+    group: str
+    value: float | None = None
+    period: str
+    status: str
+    ageQuarters: int | None = None
+    note: str
+
+
+class Affordability(BaseModel):
+    """E68: observed inflation at the issue date against the province's usual 2021-2022 level (P60)."""
+    headline: float
+    headlineUsual: float
+    food: float
+    foodUsual: float
+    headlineAbove: bool
+
+
+class PlainSummary(BaseModel):
+    """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
+    event: str                        # what the probability is of, e.g. "food-price pressure"
+    targetQuarter: str
+    estimateKind: str                 # forecast | earlier_forecast | backtest
+    issued: str | None = None         # issue (origin) date
+    probability: float
+    result: str                       # HIGH | LOW at the fixed 0.5 decision
+    observedOutcome: str | None = None
+    reasons: list[SummaryReason]      # top 2-3 contributing groups
+    dataStatus: str                   # sufficient | limited | unavailable
+    dataStatusNote: str
+    sentence: str                     # one plain-language sentence
+    earlyWarning: list[EarlyWarning] | None = None   # E58: model early warnings for DA review (not official)
+    # E61: the two parts of an issued two-part forecast (E55+ records) and what a low/high value does and does not mean
+    components: SummaryComponents | None = None
+    caveat: str | None = None
+    climateWatch: ClimateWatch | None = None   # E66 (e66 and e67 modes)
+    modelIdentity: ModelIdentity | None = None            # E67 (e67 mode only)
+    triggerCoverage: list[TriggerCoverage] | None = None  # E67 (e67 and e68 modes)
+    inputStatus: list[InputStatus] | None = None          # E68 (e68 mode only, province scope)
+    affordability: Affordability | None = None            # E68 (e68 and e69 modes, province scope)
+    # E69 (e69 mode only): evidence-fusion risk outlook (not a probability), regional hunger outlook, vulnerability
+    riskOutlook: dict | None = None
+    regionalHungerOutlook: dict | None = None
+    vulnerabilityProfile: dict | None = None
+    newsEvidence: dict | None = None                      # thesis mode: Objective 1 news evidence (FSSI-v3, topics)
+
+
+class SummaryComponents(BaseModel):
+    probabilityHungerElevated: float  # P(regional SWS hunger > 11.3% in the target quarter)
+    probabilityPricePressure: float   # P(provincial food-price pressure in the target quarter)
+    combination: str
 
 
 class ExplainabilityResponse(BaseModel):
@@ -287,18 +437,11 @@ class ExplainabilityResponse(BaseModel):
     quarter: str
     riskScore: float
     triggers: list[Trigger]
-    # Share (0-100) of the model's real SHAP-explained reasoning that comes
-    # from drivers not itemized among the five `triggers` (the commodity
-    # series' own recent/seasonal dynamics, general news volume). Disclosed
-    # rather than folded into one of the five or omitted.
-    otherPct: float
     articleCount: int
     triggerMatchedArticles: int
     narrative: str
-    # Third-person, academic counterpart of `narrative`, printed under
-    # "Interpretation" in the exported PDF report. Plain ASCII.
-    formalInterpretation: str
     note: str
+    summary: PlainSummary | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -322,15 +465,20 @@ class Article(BaseModel):
     topicKey: str
     topicLabel: str
     relevanceScore: float | None = None
+    # E45: why the article is in the feed, where it is attributed, which triggers its title matches
+    relevanceStatus: str | None = None          # validated | trigger_match
+    relevanceLabel: str | None = None
+    province: str | None = None
+    provinceCode: str | None = None
+    triggers: list[str] = []
+    quarter: str | None = None
+    collectedRetrospectively: bool | None = None
 
 
 class NewsResponse(BaseModel):
     scope: str
     id: str
     quarter: str
-    # The quarter the articles were published in. Equal to `quarter` except on
-    # a forecast quarter, which shows its information-cutoff quarter's news.
-    sourceQuarter: str
     articleCount: int
     # How many of those are geocoded to a CALABARZON province. Most of the
     # corpus is not: at region scope this is far below articleCount, which is
@@ -341,3 +489,50 @@ class NewsResponse(BaseModel):
     page: int
     pageSize: int
     total: int
+    # E31: which quarter's articles these are and why (a forecast is supported by the PREVIOUS quarter's news;
+    # a nowcast by the same quarter up to its cutoff; an observed quarter by its own news)
+    evidenceQuarter: str | None = None
+    sourceQuarter: str | None = None      # the frontend contract's name for evidenceQuarter
+    evidenceMode: str | None = None
+    evidenceNote: str | None = None
+    # E45: the quarters the feed covers (the evidence quarter, extended back when it holds fewer than 5 articles)
+    windowQuarters: list[str] = []
+    validatedCount: int = 0
+    triggerMatchCount: int = 0
+    feedNote: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Province ranking (Section 1.2, Equation 7)
+# ---------------------------------------------------------------------------
+
+class ShapDifference(BaseModel):
+    feature: str
+    label: str
+    difference: float
+    value: float | None = None
+    valueNextLower: float | None = None
+
+
+class RankingRow(BaseModel):
+    id: str
+    name: str
+    provinceCode: str
+    riskScore: float
+    riskLevel: str
+    rank: int
+    rankOf: int
+    qoqChange: float | None = None
+    gapToNextLower: float | None = None
+    tiedWithNextLower: bool | None = None
+    nextLowerId: str | None = None
+    whyAboveNextLower: list[ShapDifference] = Field(default_factory=list)
+    limitedSignal: bool = False
+
+
+class RankingResponse(BaseModel):
+    quarter: str
+    indicator: Indicator
+    method: str
+    horizonLabel: str
+    data: list[RankingRow]

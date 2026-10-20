@@ -157,7 +157,7 @@ def _sources() -> list[str]:
             + ": scored into the Food Stress Sentiment Index and the five driver-group "
             "trigger proportions."
         )
-    out.append("PSA 2020 Census of Population and Housing: provincial population.")
+    out.append("PSA 2024 Census of Population (POPCEN): provincial population.")
     out.append("PSA 2021 poverty incidence, averaged over each province's LGU estimates: "
                "provincial poverty incidence.")
     return out
@@ -600,10 +600,10 @@ def build_report(kind: str, scope: str, province_id: str | None,
                 f"decision threshold ({_model_meta()['decisionThreshold']:.3f}) and 0 otherwise.")
     blocks.append(_table(
         tab_n,
-        f"Table {tab_n}. Provincial context, {txt.qlabel(last_q)}. Population: PSA 2020 Census "
-        f"of Population and Housing. Poverty incidence: PSA 2021, mean of the province's LGU "
+        f"Table {tab_n}. Provincial context, {txt.qlabel(last_q)}. Population: PSA 2024 Census "
+        f"of Population (POPCEN). Poverty incidence: PSA 2021, mean of the province's LGU "
         f"estimates. Series at risk: model output (province_summary).",
-        [("Province", "left", 0.25), ("Population (2020 CPH)", "right", 0.25),
+        [("Province", "left", 0.25), ("Population (2024 POPCEN)", "right", 0.25),
          ("Poverty incidence (PSA 2021)", "right", 0.25), ("Series at risk / monitored", "center", 0.25)],
         ctx_rows, note=note,
     ))
@@ -614,7 +614,18 @@ def build_report(kind: str, scope: str, province_id: str | None,
     perf = svc.model_performance()
     for sentence in txt.compose_reliability(perf):
         blocks.append(_p(sentence))
-    if perf:
+    if perf and "leads" in perf:                      # thesis system: Objective 2 leads and Objective 4 baselines
+        from app.ml.inference import thesis_system as THESIS
+        tb = THESIS.performance_tables(perf)
+        tab_n += 1
+        blocks.append(_table(tab_n, f"Table {tab_n}. Walk-forward evaluation by lead (E56-TUNED LightGBM, sealed predictions).",
+                             [(h, "left" if i == 0 else "right", 0.3 if i == 0 else 0.1) for i, h in enumerate(tb["leadHeader"])],
+                             tb["leadRows"]))
+        tab_n += 1
+        blocks.append(_table(tab_n, f"Table {tab_n}. LightGBM against the four Chapter I baselines and the majority class.",
+                             [(h, "left" if i == 0 else "right", 0.4 if i == 0 else 0.15) for i, h in enumerate(tb["baselineHeader"])],
+                             tb["baselineRows"]))
+    elif perf:
         tab_n += 1
         base, skill = perf.get("baselines", {}), perf.get("skill", {})
 

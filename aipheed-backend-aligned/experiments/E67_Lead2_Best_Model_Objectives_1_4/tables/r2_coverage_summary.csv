@@ -1,0 +1,31 @@
+feature,group,source,geography,period_at_issue,eval_test_nan_share,eval_test_zero_share,train_nan_share_at_2027Q1_origin,test_nan_at_2027Q1_origin,test_zero_at_2027Q1_origin,absent_value_encoding
+F_hat_M1,market,PSA CPI food index (OpenSTAT 0012M4ACP22),province,months through m0 (published before O(t)),0,0,0,0,0,NaN when unobserved (LightGBM missing branch)
+F_now,market,PSA CPI food YoY,province,latest two published months,0,0,0,0,0,NaN when unobserved (LightGBM missing branch)
+D_now,market,PSA CPI food YoY,province,latest two published months,0,0,0,0,0,NaN when unobserved (LightGBM missing branch)
+gap_now,market,PSA CPI food and all-items YoY,province,latest two published months,0,0.02,0,0,0,NaN when unobserved (LightGBM missing branch)
+rice_whsl_yoy,market,PSA wholesale rice prices,province,quarter t-1,0.1,0,0.233333,0,0,NaN when unobserved (LightGBM missing branch)
+tc_count,climate,IBTrACS typhoon tracks,province (300 km),quarter t,0,0.48,0,0,0.8,"0 = no storm within 300 km; an incomplete quarter (2026-Q3, fetched 2026-09-09) is also 0 (D-E66-5)"
+tc_count_l1,climate,IBTrACS typhoon tracks,province (300 km),quarter t-1,0,0.4,0,0,1,0 = no storm in t-1
+enso,climate,NOAA ONI,national,quarter t-1,0,0.6,0,0,0,NaN when unobserved (LightGBM missing branch)
+enso_l2,climate,NOAA ONI,national,quarter t-2,0,0.7,0,0,1,NaN when unobserved (LightGBM missing branch)
+palay_yoy,climate,PSA palay production (OpenSTAT 0012E4EVCP0),province,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+corn_yoy,climate,PSA corn production,province,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+enso_x_mom,climate,ONI x CPI momentum,province,t-1 / latest months,0,0.6,0,0,0,NaN when unobserved (LightGBM missing branch)
+tcl1_x_palay,climate,typhoons x palay,province,t-1,0,0.4,0.166667,0,1,NaN when unobserved (LightGBM missing branch)
+fish_yoy,fish_kill,PSA fisheries production (0132E4GVFP1),province,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+aqua_yoy,fish_kill,PSA aquaculture production,province,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+ur_yoy,employment,PSA LFS unemployment rate,national,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+under_yoy,employment,PSA LFS underemployment rate,national,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+remit_usd_yoy,ofw_remittance,BSP OF cash remittances,national,quarter t-1 (dataset ends 2025-Q4),0,0,0.166667,1,0,"NaN after the BSP file ends (2025-Q4); LightGBM learned missing branch, never 0"
+remit_php_yoy,ofw_remittance,BSP remittances x USD/PHP,national,quarter t-1 (dataset ends 2025-Q4),0,0,0.166667,1,0,as remit_usd_yoy
+fx_yoy,ofw_remittance,ECB USD/PHP reference rate,national,quarter t-1,0,0,0.166667,0,0,NaN when unobserved (LightGBM missing branch)
+news_market,news,"news corpus, trigger classifier",province,quarter t,0,0.96,0,0,0.8,"share of the quarter's titles; 0 = no matching title among news_n > 0 titles (measured, thin)"
+news_climate,news,"news corpus, trigger classifier",province,quarter t,0,0.46,0,0,0,as news_market
+news_fish_kill,news,"news corpus, trigger classifier",province,quarter t,0,0.98,0,0,0.6,as news_market
+news_employment,news,"news corpus, trigger classifier",province,quarter t,0,0.98,0,0,1,as news_market
+news_ofw_remittance,news,"news corpus, trigger classifier",province,quarter t,0,1,0,0,1,as news_market
+news_n,news,news corpus,province,quarter t,0,0,0,0,0,NaN when unobserved (LightGBM missing branch)
+tariff_yoy_regime,market,EO 62 (2024) rice tariff cut,national,orders announced before O(t),0,0.7,0,0,1,"0 = no order in force (policy calendar, not an observation)"
+import_suspension_share,market,DA rice import suspension orders,national,announced before O(t),0,1,0,0,1,0 = no order in force
+price_ceiling_share,market,rice price ceiling / MSRP orders,national,announced before O(t),0,1,0,0,1,0 = no order in force
+food_emergency_share,market,food security emergency declaration,national,announced before O(t),0,0.9,0,0,1,0 = no declaration in force

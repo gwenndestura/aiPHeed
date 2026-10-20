@@ -17,9 +17,13 @@ class Settings(BaseSettings):
     DATA_RAW_PATH: str = "data/raw"
 
     # ── Auth ──────────────────────────────────────────────────────────────
-    # Only addresses in this domain may hold an account. The frontend checked
+    # Only addresses in these domains may hold an account. The frontend checked
     # this client-side, where anyone could edit it; it is enforced here now.
-    ADMIN_EMAIL_DOMAIN: str = "calabarzon.da.gov.ph"
+    #
+    # Both validating agencies appear: the Department of Agriculture Region IV-A
+    # and the Department of Economy, Planning, and Development Region IV-A are
+    # the system's evaluators, so staff of either must be able to sign in.
+    ADMIN_EMAIL_DOMAINS: str = "calabarzon.da.gov.ph"  # DA Region IV-A only (2026-10-10)
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_TTL_SECONDS: int = 3600
 
@@ -110,6 +114,11 @@ class Settings(BaseSettings):
         "https://aipheed-frontend.vercel.app"
     )
     CORS_PREVIEW_REGEX: str = r"https://aipheed-frontend-[a-z0-9-]+\.vercel\.app"
+
+    @property
+    def admin_email_domains(self) -> list[str]:
+        return [d.strip().lower()
+                for d in self.ADMIN_EMAIL_DOMAINS.split(",") if d.strip()]
 
     @property
     def cors_origins(self) -> list[str]:
