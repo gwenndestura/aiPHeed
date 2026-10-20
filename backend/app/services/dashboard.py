@@ -41,6 +41,7 @@ from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import thesis_system as THESIS
+from app.ml.inference import lgu_robustness as LGUR  # noqa: E402
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -871,13 +872,14 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             # LGU index gets the same display band as a province (ref.risk_level, cutoff 0.50). It stays a relative
             # position from the province forecast and PSA poverty/density (riskLevelBasis), not a municipal forecast.
             # A null index keeps a null band, which the approved map shows as "No data available".
-            "riskLevel": None if score is None else _level(score),
+            "riskLevel": None if score is None else (_province_band(r) if _lgu_band_province() else _level(score)),
             "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": LGU_POSITION_BASIS,
-            "disaggregationLabel": r["disaggregation_label"],
+            "disaggregationLabel": (r["disaggregation_label"] + (" " + LGUR.sentence(code) if THESIS.active() and LGUR.sentence(code)
+                                                                 else "")),
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
             # E64 (Objective 3): what this relative index is built from, so every ranking traces to its model run
@@ -889,6 +891,17 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
         })
     rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
+
+
+def _lgu_band_province() -> bool:
+    """E73 opt-in (AIPHEED_LGU_BAND=province): every LGU shows its province's estimated class, because the estimate is
+    provincial and the LGU value is only a within-province priority. Default (unset) keeps the E45 user decision."""
+    return os.getenv("AIPHEED_LGU_BAND", "").lower() == "province"
+
+
+def _province_band(r) -> str | None:
+    pe = r.get("province_probability")
+    return None if pe is None or pd.isna(pe) else _level(float(pe))
 
 
 LGU_POSITION_BASIS = (
@@ -1676,7 +1689,18 @@ def serving_model() -> dict | None:
     return {"mode": E41L2.mode(), "model": THESIS.MODEL_NAME if THESIS.active() else rec.get("modelFamily"),
             "issued": rec.get("origin"), "targetQuarter": rec.get("targetQuarter"), "lead": rec.get("lead"),
             "servesTargetNow": E41L2.serves(forecast_target()["target_quarter"]),
-            "strict": os.getenv("AIPHEED_STRICT_MODEL", "") in ("1", "true", "True")}
+            "strict": os.getenv("AIPHEED_STRICT_MODEL", "") in ("1", "true", "True"),
+            "explanationMethod": EXPLANATION_THESIS if THESIS.active() else EXPLANATION_TREESHAP}
+
+
+# E73: what the driver bars are, so the frontend headings and the PDF name the method truthfully
+EXPLANATION_TREESHAP = {"label": "SHAP", "isShap": True,
+                        "detail": "TreeSHAP contributions of the fitted model; they add up to the model output."}
+EXPLANATION_THESIS = {"label": "Index contribution", "isShap": False,
+                      "detail": ("Exact additive breakdown of the FIRI v2 risk index (each indicator's weight x its "
+                                 "distance from its historical middle); FIRI v2 is an index, not a fitted model, so these "
+                                 "are not SHAP values. The LightGBM price-pressure forecast inside it has TreeSHAP values. "
+                                 "Contributions show how the estimate was formed, not what causes food insecurity.")}
 
 
 def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:

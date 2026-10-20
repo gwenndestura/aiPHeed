@@ -44,6 +44,17 @@ PREPARED_FOR = "DA Region IV-A"
 TREND, SHAP = "trend", "shap"
 SUBTITLES = {TREND: "Risk Level Trend", SHAP: "SHAP Explainability of Driver Groups"}
 
+
+def _m() -> str:
+    """E73: the explanation method named in the PDF. Thesis mode serves FIRI v2, an index, whose driver bars are an
+    exact additive breakdown of the index, not TreeSHAP values; every other mode keeps "SHAP"."""
+    from app.ml.inference import thesis_system as THESIS
+    return "Index-contribution" if THESIS.active() else "SHAP"
+
+
+def _subtitle(kind: str) -> str:
+    return "Index Contribution Breakdown of Driver Groups" if (kind == SHAP and _m() != "SHAP") else SUBTITLES[kind]
+
 # The training label, as implemented in
 # app/ml/features/label_generator.py::_build_cpi_labels (thesis Eq. 4).
 LABEL_RULE = (
@@ -396,7 +407,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
                 txt.status(end_v, high, alert) if end_v is not None else "--",
                 f"{r['alerts']} of {r['published']}",
                 f"{r['top']['label']} ({r['top']['pct']}%, {txt.direction_word(r['top']['direction'])})"
-                if r["top"] else "No SHAP breakdown",
+                if r["top"] else f"No {_m()} breakdown",
             ])
         if municipal:
             mp = [p for p in municipal["points"] if p["value"] is not None]
@@ -413,7 +424,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
             f"rank and status refer to {txt.qlabel(last_q)}.",
             [("Province", "left", 0.14), ("Start", "right", 0.08), ("End", "right", 0.08),
              ("Change", "right", 0.09), ("Rank", "center", 0.08), ("Status", "left", 0.16),
-             ("Quarters at or above alert", "center", 0.13), ("Top SHAP driver", "left", 0.24)],
+             ("Quarters at or above alert", "center", 0.13), (f"Top {_m()} driver", "left", 0.24)],
             rows,
             note=(f"Status uses the unrounded score against the high-risk line ({high:.2f}) and "
                   f"the alert threshold ({alert:.2f})."),
@@ -421,32 +432,32 @@ def build_report(kind: str, scope: str, province_id: str | None,
 
     # ---- Drivers
     sec += 1
-    blocks.append(_h(f"{sec}. Drivers of the {'Latest ' if kind == TREND else ''}Forecast (SHAP)"))
+    blocks.append(_h(f"{sec}. Drivers of the {'Latest ' if kind == TREND else ''}Forecast ({_m()})"))
     fig_n += 1
     if kind == TREND and scope == "region":
         if region and region["triggers"]:
             excluded = [names[s] for s in slugs if s in withheld[last_q]]
-            cap = (f"Figure {fig_n}. SHAP contribution of driver groups to the Risk Level score, pooled "
+            cap = (f"Figure {fig_n}. {_m()} contribution of driver groups to the Risk Level score, pooled "
                    f"across {region['provincesIncluded']} published provinces, {txt.qlabel(last_q)}.")
             if excluded:
                 cap += f" {txt._join_series(excluded)} {'is' if len(excluded) == 1 else 'are'} withheld from publication and excluded."
             blocks.append({"kind": "figure", "number": fig_n, "caption": _ascii(cap + _bar_key()),
                            "chart": _bars(region["triggers"])})
         else:
-            blocks.append(_p(f"No regional SHAP breakdown is available for {txt.qlabel(last_q)}."))
+            blocks.append(_p(f"No regional {_m()} breakdown is available for {txt.qlabel(last_q)}."))
     else:
         s0 = slugs[0]
         e = latest_explain[s0]
         if e and e["triggers"]:
             blocks.append({"kind": "figure", "number": fig_n,
-                           "caption": _ascii(f"Figure {fig_n}. SHAP contribution of driver groups to the "
+                           "caption": _ascii(f"Figure {fig_n}. {_m()} contribution of driver groups to the "
                                              f"Risk Level score for {names[s0]}, {txt.qlabel(last_q)}."
                                              + _bar_key()),
                            "chart": _bars(e["triggers"])})
         elif s0 in withheld[last_q]:
-            blocks.append(_p(f"The SHAP breakdown for {names[s0]} in {txt.qlabel(last_q)} is withheld from publication."))
+            blocks.append(_p(f"The {_m()} breakdown for {names[s0]} in {txt.qlabel(last_q)} is withheld from publication."))
         else:
-            blocks.append(_p(f"No SHAP breakdown is available for {names[s0]} in {txt.qlabel(last_q)}."))
+            blocks.append(_p(f"No {_m()} breakdown is available for {names[s0]} in {txt.qlabel(last_q)}."))
 
     # Table 2: per-province shares and directions.
     labels: list[str] = []
@@ -471,7 +482,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
         width = 0.76 / (len(labels) + 1)
         blocks.append(_table(
             tab_n,
-            f"Table {tab_n}. Driver-group shares of the attributed SHAP output, {txt.qlabel(last_q)}. "
+            f"Table {tab_n}. Driver-group shares of the attributed {_m()} output, {txt.qlabel(last_q)}. "
             f"'+' marks a group that increases the predicted Risk Level score and '-' one that "
             f"decreases it. Group shares sum to 100%; 'Other' is the share of the total explained "
             f"output from the Food Stress Sentiment Index features, outside the five groups.",
@@ -480,7 +491,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
             rows,
         ))
     else:
-        blocks.append(_p(f"No SHAP breakdown is available for any covered province in {txt.qlabel(last_q)}."))
+        blocks.append(_p(f"No {_m()} breakdown is available for any covered province in {txt.qlabel(last_q)}."))
 
     blocks.append(_h("Interpretation by province" if len(slugs) > 1 else "Interpretation", 2))
     for s in slugs:
@@ -538,7 +549,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
         else:
             news_rows.append([
                 names[s], str(count), str(e["triggerMatchedArticles"]) if e else "n/a",
-                top["label"] if top else "No SHAP breakdown",
+                top["label"] if top else f"No {_m()} breakdown",
                 str(len(matched)) if top else "--",
                 "Yes" if row.get("limitedSignal") else "No",
             ])
@@ -678,7 +689,7 @@ def build_report(kind: str, scope: str, province_id: str | None,
         "type": kind,
         "scope": scope,
         "title": REPORT_TITLE,
-        "subtitle": SUBTITLES[kind],
+        "subtitle": _subtitle(kind),
         "generated": _ascii(f"{generated.day} {generated:%B %Y}, {generated:%H:%M} (UTC+08:00)"),
         "generatedDate": _ascii(f"{generated.day} {generated:%B %Y}"),
         "metadata": [

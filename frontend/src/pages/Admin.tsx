@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { explanationMethod } from "@/lib/explanationMethod";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MessageSquareText,
@@ -547,6 +548,7 @@ function ReviewDetailModal({
   /** The demo account: actions disabled, with the note shown. */
   readOnly?: boolean;
 }) {
+  const { data: adminConfig } = useConfig();
   const [rejectOpen, setRejectOpen] = useState(false);
   // Chart text: 12px on phones (Recharts draws it; CSS cannot reach it).
   const compact = useMediaQuery(COMPACT_QUERY);
@@ -615,7 +617,7 @@ function ReviewDetailModal({
           </div>
 
           <div className="col-span-2 inner-box p-3">
-            <h4 className="text-[11px] font-bold mb-2">SHAP driver contributions</h4>
+            <h4 className="text-[11px] font-bold mb-2">{explanationMethod(adminConfig).short} driver contributions</h4>
             {triggers.length > 0 ? (
               <ResponsiveContainer width="100%" height={Math.max(180, triggers.length * 28)}>
                 <BarChart
@@ -640,7 +642,7 @@ function ReviewDetailModal({
 
           {/* SHAP explanations — narrative */}
           <div className="col-span-2 inner-box p-3">
-            <h4 className="text-[11px] font-bold mb-1">SHAP explanations</h4>
+            <h4 className="text-[11px] font-bold mb-1">{explanationMethod(adminConfig).short} explanations</h4>
             <p className="text-[10px] compact:text-[14px] text-muted-foreground mb-3">
               {explain?.narrative ?? "Grouped driver reasons behind this quarter's Risk Level forecast."}
             </p>

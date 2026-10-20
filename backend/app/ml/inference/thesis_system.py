@@ -48,9 +48,11 @@ FEATURES_DIR = Path("data/e56/model")
 E70_SUMMARY = Path(os.getenv("AIPHEED_E70_SUMMARY", "data/thesis/e70_summary.json"))
 # E72 (2026-10-20): dimensional audit of FIRI v2 and the regional-outcome result, disclosed in the existing text fields
 E72_SUMMARY = Path(os.getenv("AIPHEED_E72_SUMMARY", "data/thesis/e72_summary.json"))
+# E73 (2026-10-20): independent OCTA hunger outcome, news-layer validation, LGU weighting robustness
+E73_SUMMARY = Path(os.getenv("AIPHEED_E73_SUMMARY", "data/thesis/e73_summary.json"))
 REQUIRED = (LEAD2.RECORD_E58, SWS, EVALUATION, TOPIC_PROPS, TOPIC_INFO, E69_DISCLOSURE, CW.INPUTS,
             Path("data/inputs/lgu_vulnerability.csv"), FIRI_HISTORY, FIRI_EVALUATION, FIRI2_REFERENCE, FIRI_V1_EVALUATION,
-            Path("data/thesis/firi_anchors.json"), E70_SUMMARY, E72_SUMMARY)
+            Path("data/thesis/firi_anchors.json"), E70_SUMMARY, E72_SUMMARY, E73_SUMMARY)
 HUNGER_LINE, SIGMA_DEFAULT = 11.3, 4.0
 # E68 T-AFF headline P60 (2021-Q1..2022-Q4, numpy.percentile), the province's usual headline inflation
 HEADLINE_USUAL = {"PH040100000": 5.013333, "PH040200000": 4.653333, "PH040300000": 5.06,
@@ -407,6 +409,11 @@ def _score_words(k: str, s: float) -> str:
     return f"score {s:.2f} of 1; {side} the estimate"
 
 
+def _dim(k: str) -> str:
+    """E73: the food-security dimension (or role) of a FIRI v2 indicator, for the factor-card text."""
+    return DIM.LABEL[DIM.ROLE_OF[k]].split(" (")[0].lower() + (" dimension" if DIM.KIND[DIM.ROLE_OF[k]] == "dimension" else "")
+
+
 def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
     """THESIS: the card text of a factor group: each FIRI indicator in the group with its value, its score, whether it
     raises or lowers the estimate, and its status (replaces the price-model attribution text)."""
@@ -417,9 +424,9 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
     for k in FIVE_GROUPS[key]:
         i = res["indicators"][k]
         if i["score"] is None:
-            parts.append(f"{i['label']}: {_WHY.get(i['status'], i['status'])}")
+            parts.append(f"{i['label']} [{_dim(k)}]: {_WHY.get(i['status'], i['status'])}")
         else:
-            parts.append(f"{i['label']}: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
+            parts.append(f"{i['label']} [{_dim(k)}]: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
             "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index (an additive breakdown of "
             "the FIRI v2 index, which is not a fitted model, so these are not TreeSHAP values; only the LightGBM "
@@ -634,6 +641,35 @@ def e72_sentence() -> str:
             f"(E71: rank correlation {e['e71_rho']:+.2f}, 95% interval {e['e71_ci'][0]:+.2f} to {e['e71_ci'][1]:+.2f}).")
 
 
+@functools.lru_cache(maxsize=1)
+def _e73(mtime: int) -> dict:
+    return json.loads(E73_SUMMARY.read_text(encoding="utf-8"))
+
+
+def e73_summary() -> dict:
+    return _e73(E73_SUMMARY.stat().st_mtime_ns)
+
+
+def e73_sentence() -> str:
+    e = e73_summary()
+    o = e["octa"]
+    return (f"E73 ({e['date']}): against a second, independent hunger survey never used to build or tune the system "
+            f"(OCTA Research Tugon ng Masa, Balance Luzon, {o['quarters']} quarters, 'elevated' above {o['threshold']:.0f}% "
+            f"by a rule fixed beforehand), the FIRI v2 regional Lead-2 class agreed in {o['firi_correct']} of {o['quarters']} "
+            f"quarters (always 'elevated': {o['always_correct']}; latest SWS reading: {o['sws_correct']}); its level ranked the "
+            f"quarters with rank correlation {o['rho_firi']:+.2f} (95% interval {o['rho_firi_ci'][0]:+.2f} to "
+            f"{o['rho_firi_ci'][1]:+.2f}), and without its regional-hunger input {o['rho_firi_noH']:+.2f}. The 80% Lead-2 "
+            f"goal is {'supported' if o['goal80_supported'] else 'not supported'} by independent evidence.")
+
+
+def news_validation_sentence() -> str:
+    n = e73_summary()["news"]
+    return (f"Checked against official records, climate news tracked PAGASA typhoon counts (rank correlation "
+            f"{n['climate_rho']:+.2f}), while market and fish-kill news did not track PSA food prices or fisheries "
+            f"production ({n['market_rho']:+.2f}, {n['fish_rho']:+.2f}); the FSSI bias correction is "
+            f"{'validated' if n['bias_correction_validated'] else 'not validated'}.")
+
+
 def e70_sentence() -> str:
     e = e70_summary()
     g = e["goal_80"]
@@ -738,7 +774,8 @@ def performance_tables(perf: dict | None = None) -> dict:
          f"HIGH at 0.5). Its rows are scored against observed regional hunger (SWS Balance Luzon above 11.3%), the only "
          f"direct food-insecurity observation: {fi['goal75']} Its agreement with the T43 price label is reported "
          "separately and is not food-insecurity accuracy." if fi else
-         "The province score is an exploratory food-price-pressure score."), e70_sentence(), e72_sentence()]
+         "The province score is an exploratory food-price-pressure score."), e70_sentence(), e72_sentence(),
+        e73_sentence()]
     return {"leadHeader": ["Lead", "Accuracy", "Precision", "Recall", "F1", "AUC-ROC", "Brier", "Reliable"],
             "leadRows": leads, "baselineHeader": ["Model (45 identical rows)", "Accuracy", "Recall HIGH", "AUC-ROC", "Brier"],
             "baselineRows": base, "sentences": sentences}
@@ -819,7 +856,7 @@ def for_summary(rec: dict, quarter: str, code: str | None, kind: str, result: st
                      f"article{'s' if news['articles'] != 1 else ''} from {news['outlets']} outlet{'s' if news['outlets'] != 1 else ''}; "
                      f"{fs}; main BERTopic topics: {tp}. The news list can include earlier quarters when a quarter has "
                      "few articles. News is a warning signal, not proof of food insecurity; it is not part of the risk index because the "
-                     "2021-2023 reference period has too few sufficient FSSI values.")
+                     "2021-2023 reference period has too few sufficient FSSI values. " + news_validation_sentence())
     if items:
         miss = sorted({i["label"].split(" (")[0] for i in items if i["status"] == "missing"})
         nc = sorted({i["label"].split(" (")[0] for i in items if i["status"] == "not_collected"})

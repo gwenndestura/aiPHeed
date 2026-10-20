@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { explanationMethod } from "@/lib/explanationMethod";
 import { TopNavbar } from "@/components/TopNavbar";
 import { VizTour } from "@/components/PageTours";
 import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
@@ -513,7 +514,7 @@ function ShapView() {
   return (
     <div>
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
-        <h1 className="text-base sm:text-lg font-bold tracking-tight">SHAP Explainability — Driver Groups</h1>
+        <h1 className="text-base sm:text-lg font-bold tracking-tight">{explanationMethod(config).title} — Driver Groups</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
           Per-group contribution to the risk forecast, by province and quarter
         </p>
@@ -572,7 +573,7 @@ function ShapView() {
               <h2 className="text-[13px] font-bold tracking-tight">
                 {generated.province} · {generated.quarter.replace("-", " ")} — trigger contributions
               </h2>
-              <span className="text-[10px] text-muted-foreground">SHAP explainability</span>
+              <span className="text-[10px] text-muted-foreground">{explanationMethod(config).isShap ? "SHAP explainability" : "Index contribution breakdown (not SHAP)"}</span>
             </div>
             <div ref={pngRef}>
             <ResponsiveContainer width="100%" height={320}>

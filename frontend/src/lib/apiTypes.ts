@@ -91,6 +91,8 @@ export interface ConfigResponse {
   modelPerformance: HorizonPerformance;
   // The E20 headline forecast (2027-Q1); null when the backend does not serve it.
   forecast?: ForecastMeta | null;
+  // E73: the configured Lead-2 serving model (null under the default); explanationMethod names what the driver bars are.
+  servingModel?: { explanationMethod?: { label: string; isShap: boolean; detail?: string } } | null;
 }
 
 export interface ForecastMeta {
