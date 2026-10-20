@@ -556,7 +556,7 @@ function Footer() {
   return (
     <footer className="mt-6 border-t edge-faint bg-card px-4 sm:px-8 pt-14 pb-8">
       <div className="mx-auto max-w-[1200px]">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1.2fr_1.1fr] lg:gap-12">
+        <div className="grid gap-10 sm:grid-cols-2 xl:grid-cols-[1.5fr_0.8fr_1.2fr_1.1fr] xl:gap-12">
           <div>
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
