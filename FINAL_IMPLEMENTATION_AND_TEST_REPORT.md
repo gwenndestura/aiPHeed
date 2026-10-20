@@ -15,6 +15,29 @@ The original implementation is preserved:
 - `final-thesis-system` @ 089bdf2 (model library);
 - production default E38.
 
+**E74 branch `e74-employment-driver-audit`** (from `final-aipheed-thesis-e72` @ de4d362, local only): commits 04d0059 and f496411, plus the report commit given in the delivering reply.
+
+**E74 changes:**
+- `thesis_system.py`: `weight_basis`, scope note, direction-conflict note, largest-push sentence.
+- `dashboard.py`: thesis PDF interpretation, thesis ranking reasons, panel wording in `explanationMethod`.
+- `report.py`: PDF bar text.
+- `frontend/src/components/LeftPanel.tsx` and `lib/explanationMethod.ts`: panel title and order label from the API.
+- Tests: `backend/tests/integration/test_e74_employment_audit.py` (11), 2 new vitest tests.
+- `aipheed-backend-aligned/experiments/E74_Employment_Driver_Audit/`: trace, compare, sensitivity, metrics.
+
+**E74 test results:**
+
+| Suite | Result |
+|---|---|
+| Backend | 574 passed, 18 skipped, 0 failed |
+| Experiment tests (E70/E71/E73) | 26 passed |
+| Frontend vitest | 53 passed |
+| `vite build` | passed |
+| `tsc` | 6 pre-existing `mockData.ts` errors |
+| 142-LGU check | served values unchanged |
+
+**Fixed during E74:** a test-isolation defect (importing the trace script switched the test process to thesis mode, causing 20 failures).
+
 ## 2. Components changed on the final branch (relative to `final-system-v2`)
 
 | Area | Files | Change |

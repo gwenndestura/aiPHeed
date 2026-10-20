@@ -35,6 +35,39 @@
 
 **Production default (E38) unchanged.** Nothing merged, pushed or deployed.
 
+## Thesis readiness update (E74, branch `e74-employment-driver-audit`)
+
+**Driver audit.** Employment is not the top driver. The calculation is correct, but the prominence is structural.
+- **Where it is first:** it is the largest of the five *displayed* groups for 2027-Q1 in Cavite, Quezon and Rizal and in the region.
+- **Never the largest single push:** in none of the 95 served province-quarters. Observed regional hunger pushes more in every 2027-Q1 province.
+- **Reproduced exactly:** raw LFS value, percentile, weight, push, five-bar percentages (100/100 API checks), reconstruction error 5e-7.
+- **Why it looks prominent:**
+  - it is a national value;
+  - it carries the whole household-economy weight because remittances are missing for 2026;
+  - that weight is an untested equal default;
+  - the five bars exclude the regional-hunger push.
+- **Normalisation distortion:** the own-history percentile scored a *still-falling* unemployment rate as risk in 25 province-quarters (2024-Q4 … 2025-Q4). Without employment, 9 province-quarters would change from HIGH to LOW, none of them in 2027-Q1. This is disclosed on the cards. Changing the served index awaits your and your adviser's decision.
+- **Opposite sign in the LightGBM:** its employment TreeSHAP is negative (−0.25 log-odds).
+
+Details: `E74_EMPLOYMENT_DRIVER_AND_CALCULATION_AUDIT.md`.
+
+**Wording fixed in thesis mode:**
+- "Contributing indicators · Index contribution, not causes" replaces "Why is this province at risk? · Ranked";
+- the PDF interpretation and bar text no longer call the index breakdown SHAP or a ranking;
+- the ranking API no longer explains FIRI ranks with another model's SHAP;
+- cards state national scope, weight basis and direction conflicts.
+
+**Metrics.** All 13 headline confusion matrices reproduce from the sealed artifacts (`E74/out/metrics_reproduction.json`).
+
+**Readiness:**
+
+| Component | Status |
+|---|---|
+| Software | Ready: backend 574 passed / 0 failed; frontend 53; build passes; 142 LGUs consistent |
+| Food-insecurity validation | **Not achieved:** independent OCTA test 4/8 |
+| 80% Lead-2 | **Not demonstrated** |
+| Objectives 1–4 | All feasible work completed, each with a named external dependency (`E74_OBJECTIVES_1_TO_4_REMEDIATION_REPORT.md`) |
+
 ---
 
 ## 1. Project audit (verified in code and artifacts)
