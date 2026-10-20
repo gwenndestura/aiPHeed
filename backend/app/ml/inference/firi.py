@@ -145,3 +145,49 @@ def score(raw: dict[str, dict], anc: dict | None = None) -> dict:
     shares = ({d: (v / len(avail)) / firi if firi else 0.0 for d, v in avail.items()} if firi else {})
     return {"firi": firi, "class": None if firi is None else ("HIGH" if firi >= THRESHOLD else "LOW"),
             "domains": dom, "domainsAvailable": len(avail), "shares": shares, "indicators": ind}
+
+
+# ------------------------------------------------------------------------------------------------ FIRI v2 (FIRI2_PROTOCOL.md)
+# Expanding-window mid-rank percentile normalization against the indicator's own values at strictly earlier origins
+# (>= 8, else missing: insufficient_history), optional domain weights (redundancy or walk-forward evidence weights).
+V2_MIN_PRIOR = 8
+NATIONAL = ("C1", "C2", "E1", "E2", "H1")       # one value per origin (identical for the five provinces)
+
+
+def percentile(x: float, prior: list[float]) -> float:
+    """Mid-rank percentile of x among earlier values: (#below + 0.5 x #equal) / n."""
+    below = sum(1 for v in prior if v < x)
+    equal = sum(1 for v in prior if v == x)
+    return (below + 0.5 * equal) / len(prior)
+
+
+def score_v2(raw: dict[str, dict], prior: dict[str, list[float]], weights: dict[str, float] | None = None) -> dict:
+    """FIRI v2: indicator scores (percentile for continuous indicators, 0-1 indicators as they are), domain scores,
+    the weighted index over the available domains (>= 4), class and exact shares."""
+    ind = {}
+    for k, r in raw.items():
+        x, s, status = r["x"], None, r["status"]
+        if x is not None:
+            if k in CONTINUOUS:
+                pv = prior.get(k) or []
+                if len(pv) >= V2_MIN_PRIOR:
+                    s = percentile(float(x), pv)
+                else:
+                    status = "insufficient_history"
+            else:
+                s = min(1.0, max(0.0, float(x)))
+        ind[k] = {**r, "status": status, "score": s, "label": LABELS[k], "domain": DOMAIN_OF[k],
+                  "priorValues": len(prior.get(k) or []) if k in CONTINUOUS else None}
+    dom = {}
+    for d in DOMAINS:
+        ss = [v["score"] for v in ind.values() if v["domain"] == d and v["score"] is not None]
+        dom[d] = sum(ss) / len(ss) if ss else None
+    avail = {d: v for d, v in dom.items() if v is not None}
+    w = {d: (weights or {}).get(d, 1.0) if weights else 1.0 for d in avail}
+    tot = sum(w.values())
+    wn = {d: w[d] / tot for d in avail} if tot > 0 else {d: 1.0 / len(avail) for d in avail} if avail else {}
+    firi = sum(wn[d] * avail[d] for d in avail) if len(avail) >= MIN_DOMAINS else None
+    shares = {d: wn[d] * avail[d] / firi for d in avail} if firi else {}
+    return {"firi": firi, "class": None if firi is None else ("HIGH" if firi >= THRESHOLD else "LOW"),
+            "domains": dom, "domainsAvailable": len(avail), "shares": shares, "weights": wn, "indicators": ind,
+            "version": "v2"}
