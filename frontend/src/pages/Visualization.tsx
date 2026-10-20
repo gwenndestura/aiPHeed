@@ -159,7 +159,7 @@ function SubTab({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center px-3 py-2 compact:min-h-11 seg-option text-[11px] font-bold uppercase tracking-wider transition-colors ${
+      className={`flex items-center px-3 py-2 compact:min-h-11 seg-option text-[11px] font-bold transition-colors ${
         active ? "seg-on" : "border text-muted-foreground hover:text-foreground"
       }`}
     >
@@ -317,7 +317,7 @@ function TrendView() {
     <div>
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality Risk Level Trend</h1>
-        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
+        <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
           Risk Level time series across selected province, municipality, and quarters
         </p>
       </div>
@@ -343,13 +343,13 @@ function TrendView() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-tour="viz-generate">
           <button
             onClick={handleGenerate}
-            className="h-12 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
+            className="h-12 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold hover:opacity-90 transition-opacity"
           >
             Generate Chart
           </button>
           <button
             onClick={handleClear}
-            className="h-12 rounded-lg border border-primary/40 text-primary text-[12px] font-bold uppercase tracking-wider hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
+            className="h-12 rounded-lg border border-primary/40 text-primary text-[12px] font-bold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
           >
             <X className="h-3.5 w-3.5" /> Clear Filters
           </button>
@@ -359,14 +359,14 @@ function TrendView() {
           <button
             onClick={handleDownloadPng}
             disabled={!hasChart}
-            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <ImageIcon className="h-4 w-4" /> Download PNG
           </button>
           <button
             onClick={handleDownloadPdf}
             disabled={!hasChart || pdfBusy}
-            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
@@ -514,7 +514,7 @@ function ShapView() {
     <div>
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">SHAP Explainability — Driver Groups</h1>
-        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-widest compact:text-[14px] compact:normal-case compact:tracking-normal">
+        <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
           Per-group contribution to the risk forecast, by province and quarter
         </p>
       </div>
@@ -527,13 +527,13 @@ function ShapView() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
             onClick={handleGenerate}
-            className="h-12 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
+            className="h-12 rounded-lg bg-primary text-primary-foreground text-[12px] font-bold hover:opacity-90 transition-opacity"
           >
             Generate Chart
           </button>
           <button
             onClick={handleClear}
-            className="h-12 rounded-lg border border-primary/40 text-primary text-[12px] font-bold uppercase tracking-wider hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
+            className="h-12 rounded-lg border border-primary/40 text-primary text-[12px] font-bold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
           >
             <X className="h-3.5 w-3.5" /> Clear Filters
           </button>
@@ -543,14 +543,14 @@ function ShapView() {
           <button
             onClick={handleDownloadPng}
             disabled={!hasChart}
-            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold text-risk-low hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <ImageIcon className="h-4 w-4" /> Download PNG
           </button>
           <button
             onClick={handleDownloadPdf}
             disabled={!hasChart || pdfBusy}
-            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold uppercase tracking-wider text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
+            className="flex items-center gap-2 compact:min-h-11 text-[12px] font-bold text-risk-high hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:opacity-40"
           >
             <FileText className="h-4 w-4" /> {pdfBusy ? "Preparing PDF..." : "Download PDF"}
           </button>
@@ -572,7 +572,7 @@ function ShapView() {
               <h2 className="text-[13px] font-bold tracking-tight">
                 {generated.province} · {generated.quarter.replace("-", " ")} — trigger contributions
               </h2>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest">SHAP explainability</span>
+              <span className="text-[10px] text-muted-foreground">SHAP explainability</span>
             </div>
             <div ref={pngRef}>
             <ResponsiveContainer width="100%" height={320}>
@@ -615,7 +615,7 @@ function ShapView() {
             </ResponsiveContainer>
 
             {/* Colour key only. The written SHAP interpretation is in the PDF report. */}
-            <div className="mt-3 flex flex-wrap justify-center gap-4 text-[9px] uppercase tracking-wider text-muted-foreground">
+            <div className="mt-3 flex flex-wrap justify-center gap-4 text-[9px] text-muted-foreground">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-high))" }} /> Above {redCutoff}% even share</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-moderate))" }} /> At or below {redCutoff}%</span>
             </div>
@@ -639,8 +639,8 @@ function FloatingSelect({
   options: string[];
 }) {
   return (
-    <label className="relative block">
-      <span className="absolute -top-2 left-3 px-1 bg-background text-[10px] uppercase tracking-wider text-muted-foreground/80">
+    <label className="block">
+      <span className="block mb-1.5 text-[11px] font-medium text-muted-foreground">
         {label}
       </span>
       <select
