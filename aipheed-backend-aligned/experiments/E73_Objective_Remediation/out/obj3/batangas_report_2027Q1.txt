@@ -1,0 +1,954 @@
+aiPHeed
+
+Batangas  |  2027-Q1
+
+DEPARTMENT OF AGRICULTURE REGION IV-A
+
+Food Insecurity Risk Forecast
+Batangas · Q1 2027 (Jan-Mar)
+
+Generated 20 October 2026 from aiPHeed model output.
+
+What these outputs are
+
+The number below is the estimated food-insecurity risk index (FIRI v2), 0 to 1, HIGH at 0.5: a composite of affordability
+(including the LightGBM food-price-pressure forecast), household vulnerability (poverty and density), climate and food production,
+household economy (national), news and regional hunger (Balance Luzon, the same for every province). Each indicator is
+compared with its own earlier values, and domains are weighted by how closely they tracked observed regional hunger. No direct
+provincial food-insecurity outcome exists, so it is a proxy estimate for planning, not a probability and not a measured
+food-insecurity rate.
+
+Headline
+
+ESTIMATED FOOD-INSECURITY RISK INDEX (FIRI, LEAD-2)
+
+0.712
+
+HIGH · quarter-on-quarter -0.0800
+
+Risk class
+
+Rank in CALABARZON
+
+HIGH
+
+5 of 5
+
+Population (2020 CPH)
+
+2,994,795
+
+Poverty incidence (PSA
+2021)
+
+Articles analysed
+
+8.8%
+
+13
+
+Forecast horizon
+
+Lead 2 (2027-Q1), issued 2026-10-01. Batangas, 2027-Q1: estimated food-insecurity risk index 0.71 (HIGH; Lead-2
+estimate issued 2026-10-01), from 6 of 6 indicator domains. The LightGBM food-price-pressure forecast is 4%.
+
+Why this risk estimate: indicators and evidence
+
+Estimated food-insecurity risk
+
+ESTIMATED FOOD-INSECURITY RISK for Batangas, 2027-Q1: HIGH (exploratory proxy risk index 0.71 on a 0-1 scale; HIGH at
+0.50). Domain scores (0.5 = the historical middle): Regional hunger (Balance Luzon) 0.88 (weight 24%); Household economy
+(national) 0.88 (weight 17%); Climate and food production 0.65 (weight 31%); News warning signals 0.69 (weight 17%);
+Affordability 0.42 (weight 6%); Household vulnerability 0.18 (weight 6%). Raised mainly by Regional hunger (Balance Luzon),
+Household economy (national), Climate and food production. Lowered by Household vulnerability, Affordability. BY
+FOOD-SECURITY DIMENSION (exact split of the index minus 0.5; contributing factors, not measured outcomes): Access
+(affordability, jobs, remittances) raises the index (+0.059); Availability (crop and fish production) lowers the index (-0.004); Stability
+(typhoon and El Nino shocks) raises the index (+0.051); Utilization (nutrition, water, health): not observed (no data; not counted);
+Vulnerability (poverty and density) lowers the index (-0.019); Observed regional hunger (SWS) raises the index (+0.093); News
+warning signals raises the index (+0.031). Without the regional hunger reading, the provincial evidence alone would give 0.66.
+Regional hunger is the same for every province; employment and remittances are national. It is an estimate for planning, not a
+probability and not a measured food-insecurity rate. The LightGBM food-price-pressure forecast (one indicator of the affordability
+domain) is LOW; a LOW price score does not mean low food-insecurity risk.
+
+REGIONAL HUNGER (SWS, Balance Luzon; no provincial figure exists): latest 17.3% (2026-Q2); outlook about
+17.3% (80% range 10.8-23.8%), 88% chance above 11.3%. No tested method has forecast hunger two quarters
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 1
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+ahead better than the latest reading.
+CLIMATE: PAGASA 2026-09-23: Climate Advisory: a strong El Nino intensifying to very strong in
+September-December 2026 and persisting through the first half of 2027, with risk of agricultural dry spells. Local
+production at the issue date: palay -30.6%, corn +10.7% year on year. No dated rainfall or drought record exists for
+2021-2026, and the one El Nino in the data (2023-24) came with falling inflation, so the score cannot include an El
+Nino price effect.
+NEWS (2026-Q3, published before 2026-10-01): 13 relevant articles from 3 outlets; FSSI-v3 0.19; main BERTopic
+topics: tayabas, lucena, marinduque; batangas town, mindoro town, mindoro; batangas city, cavite laguna,
+convenience store. The news list can include earlier quarters when a quarter has few articles. News is a warning
+signal, not proof of food insecurity; it is not part of the risk index because the 2021-2023 reference period has too few
+sufficient FSSI values. Checked against official records, climate news tracked PAGASA typhoon counts (rank
+correlation +0.35), while market and fish-kill news did not track PSA food prices or fisheries production (-0.25, -0.01);
+the FSSI bias correction is not validated.
+DATA AT THE ISSUE DATE: 15 of 20 inputs observed; missing: OFW cash remittances in US dollars; incomplete or
+thin: Typhoons within 300 km; not collected: Fish-kill events, PAGASA El Nino outlook, Rainfall, dry spell and drought.
+Missing values are treated as unknown, not as no risk.
+MODEL: aiPHeed thesis system v3: estimated Food-Insecurity Risk Index FIRI v2 (evidence-weighted proxy
+composite of affordability, vulnerability, climate/production, household economy, news and regional hunger; Lead-2)
+with the E56-TUNED LightGBM food-price-pressure forecast as one affordability indicator; Lead-2 score issued
+2026-10-01. Back-test (examined rows, not unseen): Lead-2 accuracy 0.72, AUC 0.65; no lead meets the reliability
+criterion; neither the 75% nor the 80% Lead-2 accuracy goal is demonstrated (E70).
+
+About the score: The exploratory food-price-pressure score (high regional hunger together with provincial food-price pressure; not a
+measure of household food insecurity) in Batangas for 2027-Q1 is forecast LOW (model score 4%: the two parts that follow, multiplied
+together; not a tested probability): the model's own hunger part gives 96% for regional hunger above 11.3% (the risk index uses the
+separate regional hunger outlook) and provincial food-price pressure is unlikely (4%); the target needs both. No price-score early
+warning: food-price pressure 4%, HIGH-risk score 4%. Food prices in Batangas were 0.2% higher than a year earlier (latest months to
+2026-08); the price condition needs more than 7.15% (this province's usual 2021-2022 level) or food prices rising faster than prices
+overall. Prices overall rose faster (4.4%), which this target counts as less food-price pressure, although it also means a peso buys less.
+Regional hunger (SWS, Balance Luzon) was 17.3% in 2026-Q2, above the 11.3% line. Slower food inflation does not mean food has
+become affordable; it means prices are rising more slowly. Some OFW Remittance figures were not yet published when the forecast
+was issued; the model's effect for that group partly or wholly reflects how it handles a missing figure, not an observed value. In
+back-tests, 3 of 11 price-pressure probabilities below 20% were followed by HIGH, so a low value can miss emerging stress; treat it as
+uncertain. This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA food prices), not a measure
+of household food insecurity.
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 2
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+What drives the risk index (exact shares by factor group)
+
+Climate Stress
+
+Employment
+
+Fish Kill
+
+Market / Prices
+
+OFW Remittance
+
+44% raises
+
+39% raises
+
+14% lowers
+
+3% lowers
+
+0% no data at
+issue (not counted)
+
+Red bars are factor groups above their usual level that raise the risk index, green bars are below it and lower the index. A group with
+no published data at the issue date is not counted; missing data is not a sign of low risk.
+
+Each bar is the factor group's exact share of how far the risk index (FIRI v2) moved from its neutral 0.5. Raising it:
+Climate Stress 44%, Employment 39%. Lowering it: Fish Kill 14%, Market / Prices 3%. Household vulnerability,
+regional hunger and news, which are not among the five groups, account for 46% of that movement. Shares describe
+how the estimate is built from the evidence; they are not causes.
+
+Municipal distribution
+
+Municipal values reweight the province figure by poverty incidence (60%) and population density (40%). They are not
+independent municipal forecasts -- every municipality in a province rises and falls with it.
+
+Population
+
+Poverty
+
+Index
+
+#
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+21
+
+City / Municipality
+
+Lipa
+
+Bauan
+
+San Pascual
+
+Taal
+
+San Jose
+
+Sto. Tomas
+
+Calaca
+
+Cuenca
+
+Malvar
+
+Alitagtag
+
+Tanauan
+
+Lemery
+
+Padre Garcia
+
+Balayan
+
+Ibaan
+
+Lian
+
+Mataasnakahoy
+
+Calatagan
+
+San Juan
+
+Tingloy
+
+San Nicolas
+
+Class
+
+City
+
+387,392
+
+Municipality
+
+94,016
+
+Municipality
+
+69,419
+
+Municipality
+
+61,559
+
+Municipality
+
+81,170
+
+City
+
+City
+
+226,772
+
+92,281
+
+Municipality
+
+36,453
+
+Municipality
+
+74,565
+
+Municipality
+
+28,033
+
+City
+
+209,697
+
+Municipality
+
+94,736
+
+Municipality
+
+53,526
+
+Municipality
+
+96,939
+
+Municipality
+
+58,673
+
+Municipality
+
+56,788
+
+Municipality
+
+31,912
+
+Municipality
+
+60,420
+
+Municipality
+
+115,118
+
+Municipality
+
+15,866
+
+Municipality
+
+24,392
+
+12.0%
+
+10.7%
+
+11.4%
+
+9.5%
+
+9.9%
+
+7.8%
+
+10.7%
+
+11.0%
+
+7.8%
+
+10.0%
+
+8.2%
+
+9.9%
+
+9.0%
+
+9.3%
+
+9.3%
+
+9.4%
+
+7.7%
+
+9.6%
+
+9.6%
+
+9.3%
+
+8.0%
+
+0.6424
+
+0.5343
+
+0.5323
+
+0.4904
+
+0.4466
+
+0.4161
+
+0.4099
+
+0.4090
+
+0.4014
+
+0.4008
+
+0.3866
+
+0.3585
+
+0.3572
+
+0.3207
+
+0.3203
+
+0.3099
+
+0.3060
+
+0.3036
+
+0.2793
+
+0.2717
+
+0.2565
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 3
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+#
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+31
+
+32
+
+33
+
+34
+
+City / Municipality
+
+Class
+
+Population
+
+Poverty
+
+Index
+
+Agoncillo
+
+Rosario
+
+Balete
+
+Talisay
+
+Mabini
+
+Batangas City
+
+Lobo
+
+Santa Teresita
+
+Nasugbu
+
+Laurel
+
+San Luis
+
+Taysan
+
+Tuy
+
+Municipality
+
+40,662
+
+Municipality
+
+131,365
+
+Municipality
+
+24,202
+
+Municipality
+
+46,477
+
+Municipality
+
+49,876
+
+City
+
+358,267
+
+Municipality
+
+41,251
+
+Municipality
+
+21,742
+
+Municipality
+
+141,063
+
+Municipality
+
+44,791
+
+Municipality
+
+36,841
+
+Municipality
+
+41,332
+
+Municipality
+
+47,199
+
+8.3%
+
+8.5%
+
+7.7%
+
+6.4%
+
+7.2%
+
+6.2%
+
+8.1%
+
+5.9%
+
+7.1%
+
+6.9%
+
+6.0%
+
+6.4%
+
+6.1%
+
+0.2414
+
+0.2261
+
+0.2201
+
+0.2187
+
+0.2089
+
+0.1573
+
+0.1537
+
+0.1462
+
+0.1175
+
+0.1161
+
+0.0881
+
+0.0574
+
+0.0469
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 4
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+News evidence
+
+13 relevant articles were analysed for this quarter.
+
+Market / Prices
+
+Climate Stress
+
+Recent headlines
+
+Date
+
+Headline
+
+1 (8%)
+
+12 (92%)
+
+2026-09-27
+
+Calapan–Batangas ferry fares rise, operators cite fuel price surge
+newsinfo.inquirer.net · Market / Prices
+
+2026-09-09
+
+RAINFALL ALERT: Yellow in parts of Zambales, Bataan, Batangas (Wednesday, 2 a.m.)
+gmanetwork.com · Climate Stress
+
+2026-09-08
+
+RAINFALL ALERT: Yellow in parts of Zambales, Batangas (Tuesday, 5 a.m.)
+gmanetwork.com · Climate Stress
+
+2026-09-06
+
+RAINFALL ALERT: Yellow alert in parts of Batangas, Cavite, Zambales (Sunday, 11 a.m.)
+gmanetwork.com · Climate Stress
+
+2026-09-06
+
+RAINFALL ALERT: Yellow warning in parts of Nueva Ecija, Batangas, Cavite, Zambales
+gmanetwork.com · Climate Stress
+
+2026-09-05
+
+RAINFALL ALERT: Yellow in portions of Zambales, Bataan, Batangas (Saturday, 11 p.m.)
+gmanetwork.com · Climate Stress
+
+This quarter's relevant articles, newest first. No per-article relevance score is stored for them; treat individual headlines as leads rather
+than findings.
+
+Method
+
+Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND
+provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of
+household food insecurity.
+
+Lead
+
+Accurac
+y
+
+Precisio
+n
+
+Recall
+
+F1
+
+AUC-RO
+C
+
+Lead 1 (12 quarters, 60 rows)
+
+Lead 2 (10 quarters, 50 rows)
+
+Lead 3 (9 quarters, 45 rows)
+
+Lead 4 (not computable under the
+information cutoffs)
+
+FIRI v2 lead 1 vs regional hunger (18
+quarters)
+
+FIRI v2 lead 2 vs regional hunger (17
+quarters)
+
+FIRI v2 lead 3 vs regional hunger (16
+quarters)
+
+0.83
+
+0.62
+
+0.40
+
+0.71
+
+0.56
+
+0.43
+
+0.77
+
+0.59
+
+0.41
+
+0.90
+
+0.65
+
+0.62
+
+0.85
+
+0.72
+
+0.62
+
+n/a
+
+0.89
+
+1.00
+
+0.85
+
+0.92
+
+0.91
+
+0.180
+
+0.94
+
+1.00
+
+0.92
+
+0.96
+
+0.93
+
+0.189
+
+0.81
+
+1.00
+
+0.75
+
+0.86
+
+0.94
+
+0.200
+
+Brier
+
+0.130
+
+0.214
+
+0.251
+
+Reliabl
+e
+
+no
+
+no
+
+no
+
+no
+
+no
+
+no
+
+no
+
+Model (45 identical rows)
+
+Accuracy
+
+LightGBM E56-TUNED (proposed)
+
+I. Naive persistence
+
+0.78
+
+0.60
+
+Recall
+HIGH
+
+0.71
+
+0.57
+
+AUC-ROC
+
+Brier
+
+0.76
+
+0.59
+
+0.178
+
+0.400
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 5
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+Model (45 identical rows)
+
+Accuracy
+
+II. PSA-only indicator (logistic regression on government
+indicators)
+
+III. NLP-only sentiment (logistic regression on news
+features)
+
+IV. Logistic regression (combined government + news)
+
+Majority class (always LOW)
+
+0.38
+
+0.67
+
+0.33
+
+0.69
+
+Recall
+HIGH
+
+0.21
+
+0.14
+
+0.21
+
+0.00
+
+AUC-ROC
+
+Brier
+
+0.29
+
+0.49
+
+0.25
+
+0.50
+
+0.598
+
+0.235
+
+0.646
+
+0.311
+
+Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than
+naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no
+lead meets the reliability criterion.
+Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always
+predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.
+Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has
+been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose.
+The province score is the estimated food-insecurity risk index FIRI v2 (selected by a pre-registered rule; HIGH at 0.5). Its rows are
+scored against observed regional hunger (SWS Balance Luzon above 11.3%), the only direct food-insecurity observation: Lead-2
+accuracy against observed regional hunger (SWS Balance Luzon above 11.3%): 0.94 over 17 quarters (always elevated 0.71; regional
+hunger outlook alone 0.71). Above 0.75 on this regional outcome; no paired Brier test establishes an advantage over the baselines (17
+quarters); every quarter was examined during development, and no provincial food-insecurity outcome exists. Its agreement with the
+T43 price label is reported separately and is not food-insecurity accuracy.
+E70 (2026-10-20): 3 pre-registered changes to the Lead-2 model (plus 13 ablation and single-group checks) were tested on the same
+50 development rows; none passed the improvement rule, so the served model is unchanged. Lead-2 accuracy 36/50 = 0.72 (HIGH
+recall 0.56, balanced accuracy 0.68); the 80% Lead-2 goal is NOT met. The label is food-price pressure in practice (regional hunger
+was above 11.3% in every evaluated quarter), so this is not food-insecurity accuracy.
+E72 (2026-10-20): on the only direct food-insecurity outcome, regional SWS hunger above 11.3%, the FIRI v2 Lead-2 class was right
+in 16 of 17 quarters (0.94; 95% interval 0.73-0.99), on development quarters, and not credibly better than always-elevated (12/17,
+McNemar p 0.22) or the latest hunger reading (McNemar p 0.12); it is regional, so it says nothing about provincial accuracy. Of the
+index's movement, access carries 26%, observed regional hunger 27%, stability 22%, availability 11%, vulnerability 12% and news
+1%; utilization is not observed. The contributing factors alone did not track regional hunger (E71: rank correlation -0.21, 95% interval
+-0.68 to +0.35).
+E73 (2026-10-20): against a second, independent hunger survey never used to build or tune the system (OCTA Research Tugon ng
+Masa, Balance Luzon, 8 quarters, 'elevated' above 11% by a rule fixed beforehand), the FIRI v2 regional Lead-2 class agreed in 4 of 8
+quarters (always 'elevated': 3; latest SWS reading: 6); its level ranked the quarters with rank correlation +0.73 (95% interval -0.20 to
++1.00), and without its regional-hunger input +0.06. The 80% Lead-2 goal is not supported by independent evidence.
+
+Limitations
+
+Indicative risk, not official classification
+
+Outputs are relative ordinal estimates of potential risk. They are not definitive determinations of food insecurity status and must not be
+read as official government assessments or policy recommendations.
+
+Proxy label, not a direct measurement
+
+No publicly accessible province-quarter food insecurity label exists in the Philippines. The training target is a composite of SWS hunger
+prevalence, which has no province-level resolution, and PSA food CPI deviation, which reflects supply-side price conditions rather than
+household hunger experience directly.
+
+Municipal figures are disaggregated, not modelled
+
+Municipal values reweight the province figure by poverty incidence (60%) and population density (40%). Poverty values are largely
+province means rather than municipal Small Area Estimates, so within-province ordering is indicative only.
+
+Reviewed before publication
+
+Province-quarter figures pass through analyst review. A withheld figure is excluded from this report and from the regional average.
+
+Scope of this assessment
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 6
+
+aiPHeed
+
+Batangas  |  2027-Q1
+
+This assessment reports findings only. It does not recommend interventions: no validated mapping exists between this indicator
+and a response protocol. Pair it with the Department's own standing guidance.
+
+Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food insecurity classification.
+
+Page 7
+
+

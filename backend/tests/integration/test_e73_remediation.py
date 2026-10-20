@@ -49,7 +49,7 @@ def test_lgu_robustness_covers_all_142_and_is_shown(thesis):
     tab = LGUR.table()
     assert len(tab) == 142 and all(0 <= r["same"] <= r["of"] == 7 for r in tab.values())
     rows = client.get("/api/v1/provinces/batangas/municipalities", params={"quarter": "2027-Q1"}).json()["data"]
-    assert len(rows) == 34 and all("alternative poverty/density weightings" in r["disaggregationLabel"] for r in rows)
+    assert len(rows) == 34 and all(r["disaggregationLabel"].startswith("Priority: ") and "alternative poverty/density weightings" in r["disaggregationLabel"] for r in rows)
 
 
 def test_province_band_flag_is_opt_in(thesis):

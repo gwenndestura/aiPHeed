@@ -878,8 +878,9 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": LGU_POSITION_BASIS,
-            "disaggregationLabel": (r["disaggregation_label"] + (" " + LGUR.sentence(code) if THESIS.active() and LGUR.sentence(code)
-                                                                 else "")),
+            # E73: the priority-robustness sentence leads, because the approved panel clamps this text to four lines
+            "disaggregationLabel": ((LGUR.sentence(code) + " " if THESIS.active() and LGUR.sentence(code) else "")
+                                    + r["disaggregation_label"]),
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
             # E64 (Objective 3): what this relative index is built from, so every ranking traces to its model run
