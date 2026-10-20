@@ -71,7 +71,7 @@ def _rows(rel, filt):
         return [r for r in csv.DictReader(f) if all(str(r.get(k)) == v for k, v in filt.items())]
 
 
-def score(outcomes_csv: Path, reg: dict | None = None) -> dict:
+def score(outcomes_csv: Path, reg: dict | None = None, out_dir: Path | None = None) -> dict:
     reg = reg or register()
     spec = json.loads((EXP / "E40_SWS_CPI_Tiers" / "label_spec.json").read_text())["thresholds"]
     oc = list(csv.DictReader(Path(outcomes_csv).open(encoding="utf-8")))
@@ -121,8 +121,9 @@ def score(outcomes_csv: Path, reg: dict | None = None) -> dict:
         res[name] = {"scored": n, "correct": correct, "accuracy": (correct / n) if n else None,
                      "brier": (sum((x["p"] - x["y"]) ** 2 for x in scored) / n) if n else None, "rows": scored,
                      "status": "SCORED" if n else "NO ELIGIBLE OUTCOME YET"}
-    OUT.mkdir(exist_ok=True)
-    (OUT / f"scores_{date.today()}.json").write_text(json.dumps(res, indent=1))
+    od = OUT if out_dir is None else Path(out_dir)
+    od.mkdir(parents=True, exist_ok=True)
+    (od / f"scores_{date.today()}.json").write_text(json.dumps(res, indent=1))
     return res
 
 

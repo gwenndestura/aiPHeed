@@ -94,7 +94,7 @@ def test_prospective_register_and_no_outcome_yet(tmp_path):
     assert reg and all(v["verified"] for v in reg.values())
     empty = tmp_path / "outcomes.csv"
     empty.write_text("quarter,kind,province_code,value,published,source_url\n")
-    res = PR.score(empty, reg)
+    res = PR.score(empty, reg, out_dir=tmp_path)
     assert all(v["status"] == "NO ELIGIBLE OUTCOME YET" for v in res.values())
 
 
@@ -106,6 +106,6 @@ def test_prospective_scoring_ignores_outcomes_published_before_the_seal(tmp_path
         w.writerow(["quarter", "kind", "province_code", "value", "published", "source_url"])
         w.writerow(["2027-Q1", "SWS_H", "", "20.0", "2027-05-01", "synthetic"])
         w.writerow(["2027-Q1", "OCTA_BL", "", "5.0", "2020-01-01", "synthetic (published before the seal: must be ignored)"])
-    res = PR.score(f, reg)
+    res = PR.score(f, reg, out_dir=tmp_path)
     firi = res["FIRI2_C3"]
     assert {r["unit"] for r in firi["rows"]} == {"region:SWS"}             # the pre-seal OCTA row was ignored
