@@ -142,7 +142,7 @@ function AdminNavbar({
   useAccounts(!user.isDemo);
 
   return (
-    <header className="relative h-16 shrink-0 bg-card/95 backdrop-blur-sm border-b edge-faint z-[1002] flex items-center px-4 gap-3">
+    <header className="relative h-16 shrink-0 surface-header z-[1002] flex items-center px-4 gap-3">
       {/* Brand → landing page, as on public pages. In-app navigation, so the
           admin stays signed in (the public header then shows the admin nav). */}
       <Link

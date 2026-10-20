@@ -90,6 +90,9 @@
     --shadow-float: 0 8px 24px rgb(0 0 0 / 0.35);
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.5);
     --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.35);
+    /* The header: a soft shadow cast down onto the page, no bottom line. */
+    --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.6);
+    --surface-alpha-header: 0.82;
 
     /* Map labels: the page's text colour on a soft halo of its background
        colour, readable over any fill (both follow dark / light mode). */
@@ -148,6 +151,7 @@
     --shadow-float: 0 8px 24px rgb(0 0 0 / 0.12);
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.18);
     --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.08);
+    --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.16);
 
     --primary-ink: var(--foreground);
   }
@@ -451,6 +455,24 @@
     border-radius: var(--radius-sheet);
     box-shadow: var(--shadow-dialog);
   }
+
+  /* The page header: the card colour, translucent and blurred, with a
+     soft shadow in place of a bottom line. */
+  .surface-header {
+    background-color: hsl(var(--card) / var(--surface-alpha-header));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    box-shadow: var(--shadow-header);
+  }
+
+  /* Header links: plain text; the current page a filled pill in the amber
+     tint (its text amber in dark mode, the page text in light mode, AA on
+     the tint either way). */
+  .nav-active {
+    background-color: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+  }
+  .light .nav-active { color: hsl(var(--primary-ink)); }
 
   /* Segmented choices: a pill track, the chosen option a filled amber pill,
      the others plain text. */

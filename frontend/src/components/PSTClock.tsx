@@ -40,7 +40,7 @@ export function PSTClock({ from = "lg" }: { from?: ShowFrom }) {
   const now = useNow();
   return (
     <div
-      className={`hidden ${from === "xl" ? "xl:flex" : "lg:flex"} flex-col items-end leading-tight px-2.5 py-1 rounded-md bg-secondary/30 border border-border/30`}
+      className={`hidden ${from === "xl" ? "xl:flex" : "lg:flex"} flex-col items-end leading-tight px-3.5 py-1 rounded-full bg-secondary/60`}
       title="Philippine Standard Time (UTC+8)"
     >
       <span className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/70 font-semibold">
