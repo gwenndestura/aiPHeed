@@ -8,14 +8,16 @@ import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import { readStorage } from "@/lib/storage";
+import { useConfig } from "@/lib/queries";
 
 const THEME_KEY = "aipheed_theme";
 
-/* The hero keeps a dark scrim over the photo in both themes, so its text
-   uses the dark theme's own --background and --foreground values. */
-const HERO_SCRIM = "hsl(240 7% 5% / 0.7)";
-const HERO_TEXT = "hsl(36 22% 92%)";
-const HERO_MUTED = "hsl(36 22% 92% / 0.78)";
+/* The hero photo sits under a warm tint in both themes (CLAUDE.local.md allows this gradient): the dark
+   theme's --background, then a low-opacity primary amber and risk red toward the right. Its text is in a
+   floating card, so only the small photo credit sits on the photo, in the dark theme's --foreground. */
+const HERO_TINT =
+  "bg-[linear-gradient(115deg,hsl(240_7%_5%/0.84)_0%,hsl(240_7%_5%/0.66)_45%,hsl(var(--primary)/0.30)_80%,hsl(var(--risk-high)/0.34)_100%)]";
+const HERO_MUTED = "hsl(36 22% 92% / 0.82)";
 
 const GMA_URL = "https://www.gmanetwork.com/news/specials/content/193/the-hunger-pandemic/";
 
@@ -45,14 +47,15 @@ export default function Landing() {
 }
 
 /* ---------------- SHARED ---------------- */
-/** A section below the hero: a centred heading in spaced capitals, then its content. */
+/** A section below the hero: a left-aligned heading with the map panels' amber dot, then its content. */
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 px-4 sm:px-8 py-14 sm:py-20">
       <h2
         id={`${id}-title`}
-        className="mb-8 sm:mb-10 text-center text-[20px] sm:text-[24px] font-bold uppercase tracking-[0.14em] text-foreground"
+        className="mx-auto mb-6 sm:mb-8 flex max-w-[1200px] items-center gap-3 text-[22px] sm:text-[28px] font-bold leading-tight text-foreground"
       >
+        <span aria-hidden className="heading-dot h-2.5 w-2.5" />
         {title}
       </h2>
       {children}
@@ -87,45 +90,63 @@ function Point({ n, title, children }: { n?: number; title: string; children: Re
 }
 
 /* ---------------- HERO ---------------- */
+type ConfigWithTarget = { quarterRange?: { forecastTarget?: { target_quarter?: string } } };
+
+/** "Forecast for Q1 2027" from the quarter the backend serves as the map's forecast; null when unknown. */
+function forecastPill(config: unknown): string | null {
+  const id = (config as ConfigWithTarget | undefined)?.quarterRange?.forecastTarget?.target_quarter;
+  const m = id?.match(/^(\d{4})-Q([1-4])$/);
+  return m ? `Forecast for Q${m[2]} ${m[1]}` : null;
+}
+
 function Hero() {
   // Server-confirmed session only (see lib/auth.tsx).
   const isAdmin = useAuth().status === "authenticated";
+  const { data: config, isError } = useConfig();
+  const forecast = isError ? null : forecastPill(config);
   const outline =
-    "group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border font-semibold text-[15px] transition-colors hover:bg-[hsl(36_22%_92%/0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+    "group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border edge-control font-semibold text-[15px] text-foreground transition-colors hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const pills = ["5 provinces", "142 cities and municipalities", ...(forecast ? [forecast] : [])];
   return (
-    <section className="relative isolate flex min-h-[calc(100svh-64px)] items-center overflow-hidden px-4 sm:px-8 lg:px-16 py-16 sm:py-20">
+    <section className="relative isolate flex min-h-[calc(100svh-64px)] items-center overflow-hidden px-4 sm:px-8 lg:px-16 py-12 sm:py-16">
       <img src={heroBg} alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover" />
-      <div aria-hidden className="absolute inset-0 -z-10" style={{ background: HERO_SCRIM }} />
+      <div aria-hidden data-hero-tint className={`absolute inset-0 -z-10 ${HERO_TINT}`} />
 
       <div className="mx-auto w-full max-w-[1200px]">
-        <div className="max-w-4xl text-left">
-          <h1
-            className="font-bold leading-[1.1] text-[clamp(2.1rem,5vw,3.75rem)]"
-            style={{ color: HERO_TEXT }}
-          >
-            Estimated <span className="whitespace-nowrap">food-insecurity</span> risk for CALABARZON
+        <div data-hero-card className="surface-float border w-full max-w-[640px] p-6 sm:p-9 text-left">
+          <h1 className="font-bold leading-[1.15] text-foreground text-[clamp(1.75rem,3.4vw,2.6rem)]">
+            Food Insecurity Risk Forecasting System for CALABARZON
           </h1>
-          <p className="mt-5 max-w-3xl italic text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
-            Forecast two quarters ahead to help planners identify food stress before it peaks.
+          <p className="mt-4 text-[16px] sm:text-[17px] leading-relaxed text-ink-secondary">
+            A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces two quarters
+            ahead, using public statistics and Filipino-English news.
           </p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap gap-3">
             <Link
               to="/dashboard"
               className="group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full bg-primary text-[hsl(var(--primary-ink))] font-semibold text-[15px] shadow-control transition-[filter] hover:brightness-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Explore the map
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight aria-hidden className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <a href="#methodology" className={outline} style={{ color: HERO_TEXT, borderColor: HERO_MUTED }}>
-              Read the methodology
+            <a href="#methodology" className={outline}>
+              How it works
             </a>
             {isAdmin && (
-              <Link to="/admin" className={outline} style={{ color: HERO_TEXT, borderColor: HERO_MUTED }}>
+              <Link to="/admin" className={outline}>
                 Go to admin dashboard
               </Link>
             )}
           </div>
+
+          <ul aria-label="Coverage" className="mt-6 flex flex-wrap gap-2">
+            {pills.map((t) => (
+              <li key={t} className="qt-pill text-[12px] font-medium leading-5 text-foreground">
+                {t}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
@@ -293,13 +314,25 @@ function Methodology() {
 
         <div className="mt-10">
           <SubHeading>How the index is built</SubHeading>
-          <div className="space-y-5">
+          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {STEPS.map((s, i) => (
-              <Point key={s.t} n={i + 1} title={s.t}>
-                {s.d}
-              </Point>
+              <li key={s.t} className="inner-card p-5">
+                <h4 className="flex items-center gap-2.5 font-bold leading-snug text-foreground">
+                  <span
+                    aria-hidden
+                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[13px] font-bold text-[hsl(var(--primary-ink))]"
+                  >
+                    {i + 1}
+                  </span>
+                  <span>
+                    <span className="sr-only">{i + 1}. </span>
+                    {s.t}
+                  </span>
+                </h4>
+                <p className="mt-2 text-[14px] leading-[1.7]">{s.d}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
 
         <div className="mt-10">

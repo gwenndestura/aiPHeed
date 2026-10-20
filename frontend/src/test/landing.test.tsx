@@ -7,6 +7,16 @@ vi.mock("@/components/TopNavbar", () => ({ TopNavbar: () => <header>header</head
 vi.mock("@/lib/auth", () => ({ useAuth: () => ({ status: "anonymous" }) }));
 vi.mock("@/lib/tour", () => ({ requestTour: vi.fn() }));
 
+// The hero reads the forecast quarter from /api/v1/config; each test sets what the API returns.
+const config = vi.hoisted(() => ({
+  state: { data: undefined as unknown, isError: false },
+}));
+vi.mock("@/lib/queries", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/queries")>()),
+  useConfig: () => config.state,
+}));
+const SERVED = { quarterRange: { forecastTarget: { target_quarter: "2027-Q1" } } };
+
 import Landing from "@/pages/Landing";
 import { AboutModal } from "@/components/AboutModal";
 
@@ -31,12 +41,80 @@ const openAbout = () => {
 };
 
 describe("Landing page", () => {
-  it("has the DOST-style sections in order, each with a heading", () => {
+  it("has the sections in order, each with a left-aligned sentence-case heading and the amber dot", () => {
     const { container } = renderLanding();
-    const ids = [...container.querySelectorAll("main section")].map((s) => s.id);
-    expect(ids).toEqual(["about", "methodology", "accuracy", "disclaimer", "faq"]);
-    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Estimated food-insecurity risk for CALABARZON");
-    expect(screen.getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
+    const sections = [...container.querySelectorAll("main section")];
+    expect(sections.map((s) => s.id)).toEqual(["about", "methodology", "accuracy", "disclaimer", "faq"]);
+    for (const sec of sections) {
+      const h2 = sec.querySelector("h2") as HTMLElement;
+      expect(h2.querySelector(".heading-dot")).not.toBeNull();
+      expect(h2.className).not.toMatch(/text-center|uppercase/);
+    }
+    expect(sections.map((s) => s.querySelector("h2")?.textContent)).toEqual([
+      "About aiPHeed",
+      "Methodology",
+      "How accurate it is",
+      "Data disclaimer and limitations",
+      "Frequently asked questions",
+    ]);
+  });
+
+  it("hero: the title, subtitle, two buttons and the coverage pills in a floating card", () => {
+    config.state = { data: SERVED, isError: false };
+    const { container } = renderLanding();
+    const card = container.querySelector("[data-hero-card]") as HTMLElement;
+    expect(card.className).toContain("surface-float");
+    expect(within(card).getByRole("heading", { level: 1 }).textContent).toBe(
+      "Food Insecurity Risk Forecasting System for CALABARZON",
+    );
+    const sub = within(card).getByText(/^A geospatial system/);
+    expect(sub.textContent).toBe(
+      "A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces two quarters ahead, using public statistics and Filipino-English news.",
+    );
+    expect(sub.className).not.toContain("italic");
+    expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
+    expect(within(card).getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("#methodology");
+    const pills = within(card).getAllByRole("listitem").map((li) => li.textContent);
+    expect(pills).toEqual(["5 provinces", "142 cities and municipalities", "Forecast for Q1 2027"]);
+    // Nothing else in the card: no label above the title, no other text.
+    expect(card.textContent).toBe(
+      "Food Insecurity Risk Forecasting System for CALABARZON" + sub.textContent +
+        "Explore the mapHow it works5 provinces142 cities and municipalitiesForecast for Q1 2027",
+    );
+    // The tint over the photo: the dark background into amber and risk red.
+    const tint = container.querySelector("[data-hero-tint]") as HTMLElement;
+    expect(tint.className).toMatch(/linear-gradient.*--primary.*--risk-high/);
+    expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
+  });
+
+  it("hero: hides the forecast pill when the API fails or has no forecast quarter", () => {
+    config.state = { data: undefined, isError: true };
+    const { container, unmount } = renderLanding();
+    let pills = [...(container.querySelector("[data-hero-card]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
+    expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
+    unmount();
+    config.state = { data: { quarterRange: {} }, isError: false };
+    const second = renderLanding();
+    pills = [...(second.container.querySelector("[data-hero-card]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
+    expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
+    config.state = { data: SERVED, isError: false };
+  });
+
+  it("shows the five methodology steps as numbered cards in a grid", () => {
+    const { container } = renderLanding();
+    const steps = container.querySelector("#methodology ol") as HTMLElement;
+    expect(steps.className).toMatch(/grid/);
+    expect(steps.className).toMatch(/lg:grid-cols-3/);
+    const cards = [...steps.querySelectorAll(":scope > li")];
+    expect(cards).toHaveLength(5);
+    expect(cards.every((c) => c.className.includes("inner-card") && (c.textContent ?? "").trim().length > 40)).toBe(true);
+    expect(cards.map((c) => c.querySelector("h4")?.textContent)).toEqual([
+      "11. Indicator scores",
+      "22. Six domains",
+      "33. Combining the domains",
+      "44. Classification",
+      "55. City and municipal ranking",
+    ]);
   });
 
   it("drops the tagline, stats row, live estimate card and capability grid", () => {
