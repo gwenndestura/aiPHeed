@@ -157,3 +157,14 @@ def test_ranking_reasons_use_the_index_breakdown(thesis):
 def test_panel_wording_from_config(thesis):
     m = client.get("/api/v1/config").json()["servingModel"]["explanationMethod"]
     assert m["panelTitle"] == "Contributing indicators" and "not causes" in m["orderLabel"]
+
+
+def test_improving_labour_market_scored_as_risk_is_disclosed(thesis):
+    rec = LEAD2.record()
+    f = T.firi_for(rec, "2025-Q2", "PH040300000")
+    e1 = f["indicators"]["E1"]
+    assert float(e1["x"]) < 0 and float(e1["score"]) > 0.5                    # unemployment fell, yet it raised the index
+    txt = T.group_evidence(rec, "2025-Q2", "PH040300000", "employment")
+    assert "unemployment fell year on year" in txt and "does not mean conditions worsened" in txt
+    txt27 = T.group_evidence(rec, rec["targetQuarter"], "PH040300000", "employment")
+    assert "unemployment fell" not in txt27                                     # 2027-Q1: a genuine rise (+0.895 points)

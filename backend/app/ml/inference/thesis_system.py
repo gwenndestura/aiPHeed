@@ -421,6 +421,23 @@ SCOPE_NOTE = {"employment": "National figure (PSA LFS, Philippines): the same va
               "climate": "El Nino status is national; typhoon counts and crop production are provincial."}
 
 
+CONFLICT = {"E1": ("unemployment fell year on year", "earlier falls (the 2022-24 post-pandemic recovery) were larger"),
+            "E2": ("remittances rose year on year", "earlier rises were larger")}
+
+
+def direction_conflict_note(res: dict, keys) -> str:
+    """E74: an own-history percentile can rank an improvement as risk when the earlier values were even better (E1 after
+    the post-pandemic recovery: 25 province-quarters, 2024-Q4 to 2025-Q4). Say so wherever it happens."""
+    out = []
+    for k in keys:
+        i = res["indicators"].get(k) or {}
+        if k in CONFLICT and i.get("x") is not None and i.get("score") is not None and float(i["x"]) < 0 < float(i["score"]) - 0.5:
+            what, why = CONFLICT[k]
+            out.append(f"Note: {what}, yet this indicator scores above its historical middle and raises the index, because "
+                       f"{why}; it does not mean conditions worsened.")
+    return (" ".join(out) + " ") if out else ""
+
+
 def _dim(k: str) -> str:
     """E73: the food-security dimension (or role) of a FIRI v2 indicator, for the factor-card text."""
     return DIM.LABEL[DIM.ROLE_OF[k]].split(" (")[0].lower() + (" dimension" if DIM.KIND[DIM.ROLE_OF[k]] == "dimension" else "")
@@ -446,6 +463,7 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
                   "against hunger")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
             "middle): " + "; ".join(parts) + ". " + (SCOPE_NOTE[key] + " " if key in SCOPE_NOTE else "")
+            + direction_conflict_note(res, FIVE_GROUPS[key])
             + f"In this domain {basis}. The bar is this group's exact push on the index (an additive breakdown of "
             "the FIRI v2 index, which is not a fitted model, so these are not TreeSHAP values; only the LightGBM "
             "price-pressure forecast inside it has TreeSHAP values). It shows how the index was formed, not what causes "
