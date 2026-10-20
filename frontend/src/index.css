@@ -528,6 +528,20 @@
       var(--shadow-inset);
   }
 
+  /* A control narrower than 44px: on touch screens its tap area reaches
+     44px across, centred on it, without changing its size or position. */
+  @media (pointer: coarse) {
+    .touch-target-x::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 44px;
+      transform: translateX(-50%);
+    }
+  }
+
   /* Section heading mark: a small amber dot before the label. */
   .heading-dot {
     width: 8px;

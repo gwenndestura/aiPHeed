@@ -38,19 +38,15 @@ function PanelCard({ children, className = "", tour }: { children: React.ReactNo
   );
 }
 
-/** The arrow on a closed panel's edge: it points the way the panel opens. */
-const EdgeChevron = ({ side }: { side: "left" | "right" }) => {
-  const Icon = side === "left" ? ChevronRight : ChevronLeft;
-  return <Icon aria-hidden className="h-5 w-5" />;
-};
-
 /**
- * Tablets: the closed side panel as a tab at the screen edge, with an arrow
- * pointing the way it opens; its name is in the label and, on hover, a tooltip.
- * Opening it closes the other panel.
+ * A closed side panel: a small floating tab, inset from the screen edge and
+ * centred on the map, its arrow pointing the way the panel opens; its name
+ * is in the label and, on hover, a tooltip. On tablets opening it closes the
+ * other panel. 32px wide; its tap area reaches 44px on touch screens.
  */
-function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: string; onClick: () => void }) {
+function PanelTab({ side, label, onClick }: { side: "left" | "right"; label: string; onClick: () => void }) {
   const name = `Show the ${label} panel`;
+  const Icon = side === "left" ? ChevronRight : ChevronLeft;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -58,9 +54,10 @@ function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: stri
           type="button"
           onClick={onClick}
           aria-label={name}
-          className={`absolute z-[1001] top-1/2 -translate-y-1/2 ${side === "left" ? "left-0 border-l-0 rounded-l-none" : "right-0 border-r-0 rounded-r-none"} w-11 h-16 flex items-center justify-center surface-float border text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+          className="absolute z-[1001] top-1/2 -translate-y-1/2 flex items-center justify-center surface-float rounded-md border text-foreground hover:bg-secondary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring touch-target-x"
+          style={{ [side]: EDGE, width: TAB_W, height: TAB_H }}
         >
-          <EdgeChevron side={side} />
+          <Icon aria-hidden className="h-5 w-5" />
         </button>
       </TooltipTrigger>
       <TooltipContent side={side === "left" ? "right" : "left"}>{name}</TooltipContent>
@@ -84,9 +81,11 @@ function NoDataCardBody({ reason }: { reason?: string }) {
 
 // Side panels: inset EDGE (below) from the screen edges and the header.
 const COL_W = 320;
-const PEEK_W = 24;
 const COL_TOP = 12;
 const COL_BOTTOM = 64;
+// A closed panel's tab.
+const TAB_W = 32;
+const TAB_H = 64;
 
 // Phone layout: the search box across the top, the legend under it, the
 // sheet at the bottom with the quarter strip and zoom buttons just above it.
@@ -105,8 +104,9 @@ const SEARCH_MAX_W = 420;
 // Room kept for the compact legend beside the search box (about 285px with
 // Low / High / No forecast, plus a gap).
 const LEGEND_BESIDE_W = 300;
-// Tablets: width of the closed panel's edge tab.
-const EDGE_TAB_W = 44;
+// Tablets and desktops: the search box's height and the map buttons' width.
+const DESKTOP_SEARCH_H = 28;
+const CONTROLS_W = 32;
 
 interface Props {
   showAboutFeedback?: boolean;
@@ -484,6 +484,10 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
   const wideCompact = compact && rootW >= WIDE_COMPACT_W;
 
+  // Tablets and desktops: what a side panel covers from its screen edge,
+  // open or closed (its tab).
+  const sideW = (collapsed: boolean) => EDGE + (collapsed ? TAB_W : COL_W);
+
   const map = (
     <div className="absolute inset-0" data-tour="map">
       <PhilippineMap
@@ -496,9 +500,15 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         onMunicipalityClick={handleMunicipalityClick}
         onBackgroundClick={clearSelection}
         rejectedProvinceIds={rejectedIds}
-        // Phones: fit CALABARZON (or the chosen place) into the part of the map
-        // left uncovered, above the sheet at its current height.
-        fitInsets={compact ? { top: wideCompact ? EDGE + SEARCH_H : SHEET_TOP_RESERVE + LEGEND_STACK_H, right: 0, bottom: sheetH + 8 + ROW_H, left: 0 } : undefined}
+        // Fit CALABARZON (or the chosen place) into the part of the map left
+        // uncovered: phones, above the sheet at its current height; larger
+        // screens, between the panels (or their tabs), below the search box,
+        // left of the map buttons and above the timeline.
+        fitInsets={
+          compact
+            ? { top: wideCompact ? EDGE + SEARCH_H : SHEET_TOP_RESERVE + LEGEND_STACK_H, right: 0, bottom: sheetH + 8 + ROW_H, left: 0 }
+            : { top: EDGE + DESKTOP_SEARCH_H, right: sideW(rightCollapsed) + EDGE + CONTROLS_W, bottom: EDGE + timelineRowH, left: sideW(leftCollapsed) }
+        }
         minZoom={compact ? 6.5 : 8}
         zoomSnap={compact ? 0.25 : 1}
       />
@@ -625,20 +635,15 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   }
 
   // ─── Tablets and desktops: side columns ───
-  // Closed panel: a 24px strip of it (desktop) or an edge tab (tablets).
-  const closedW = medium ? EDGE_TAB_W : PEEK_W;
-  // What a side panel covers from its screen edge, open or closed.
-  const sideW = (collapsed: boolean) => (collapsed ? closedW : EDGE + COL_W);
   return (
     <div ref={rootRef} className="h-full w-full relative overflow-hidden">
       {map}
 
       {/* LEFT floating column */}
       <div
-        className={`absolute z-[1001] flex flex-col gap-2 transition-[left] duration-300 ${leftCollapsed ? "cursor-pointer" : "animate-slide-in-left"} ${medium && leftCollapsed ? "invisible" : ""}`}
-        style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W - PEEK_W) : EDGE, width: COL_W }}
-        onClick={() => leftCollapsed && showLeft()}
-        aria-label={leftCollapsed ? "Show left sidebar" : undefined}
+        className={`absolute z-[1001] flex flex-col gap-2 transition-[left,visibility] duration-300 ${leftCollapsed ? "invisible" : "animate-slide-in-left"}`}
+        style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W + EDGE) : EDGE, width: COL_W }}
+        aria-hidden={leftCollapsed || undefined}
         data-tour="summary"
       >
           {/* One floating panel, as tall as its cards (at most the column);
@@ -659,10 +664,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
       {/* RIGHT floating column */}
       <div
-        className={`absolute z-[1001] flex flex-col transition-[right] duration-300 ${rightCollapsed ? "cursor-pointer" : "animate-slide-in-right"} ${medium && rightCollapsed ? "invisible" : ""}`}
-        style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W - PEEK_W) : EDGE, width: COL_W }}
-        onClick={() => rightCollapsed && showRight()}
-        aria-label={rightCollapsed ? "Show right sidebar" : undefined}
+        className={`absolute z-[1001] flex flex-col transition-[right,visibility] duration-300 ${rightCollapsed ? "invisible" : "animate-slide-in-right"}`}
+        style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W + EDGE) : EDGE, width: COL_W }}
+        aria-hidden={rightCollapsed || undefined}
         data-tour="why"
       >
           {rightCards && (
@@ -674,21 +678,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           )}
       </div>
 
-      {medium && leftCollapsed && <EdgeTab side="left" label="Summary" onClick={showLeft} />}
-      {medium && rightCollapsed && <EdgeTab side="right" label="Why" onClick={showRight} />}
-
-      {/* Wide desktops: the same arrow, centred on a closed panel's 24px strip.
-          It lets clicks through, so the strip works exactly as before. */}
-      {!medium && leftCollapsed && (
-        <div aria-hidden className="absolute z-[1002] left-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
-          <EdgeChevron side="left" />
-        </div>
-      )}
-      {!medium && rightCollapsed && (
-        <div aria-hidden className="absolute z-[1002] right-0 flex items-center justify-center pointer-events-none text-foreground" style={{ top: COL_TOP, bottom: COL_BOTTOM, width: PEEK_W }}>
-          <EdgeChevron side="right" />
-        </div>
-      )}
+      {leftCollapsed && <PanelTab side="left" label="Summary" onClick={showLeft} />}
+      {rightCollapsed && <PanelTab side="right" label="Why" onClick={showRight} />}
 
       {/* Map search — top, beside left sidebar */}
       <div
