@@ -184,7 +184,6 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <StatusDot color={band.color} />
             <MetricLabel className="uppercase tracking-[0.28em]">Forecast index</MetricLabel>
           </div>
 
@@ -209,7 +208,7 @@ export function RfiiScoreCardBody({
           {/* Risk band pill -- only for a real score */}
           {hasScore && (
             <div className="mt-2.5">
-              <StatusBadge level={isHigh ? "high" : "low"} swatch="circle" />
+              <StatusBadge level={isHigh ? "high" : "low"} />
             </div>
           )}
 
