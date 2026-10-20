@@ -585,17 +585,22 @@
       0 0 4px hsl(var(--qt-halo)),
       0 1px 3px hsl(var(--qt-halo) / 0.9);
   }
-  /* Quarter timeline: a rounded floating bar behind its text. The padding
-     is cancelled by an equal negative margin, so nothing in the timeline
-     moves and the row keeps its measured height. */
-  .qt-float-bar {
+  /* Quarter timeline: a rounded floating bar drawn behind its text, a
+     little larger than it. The bar is a layer of its own, so the timeline
+     keeps its exact box: nothing in it moves, the row keeps its measured
+     height and the legend stays aligned with its right end. */
+  .qt-float-bar { position: relative; isolation: isolate; }
+  .qt-float-bar::before {
+    content: "";
+    position: absolute;
+    inset: -4px -8px;
+    z-index: -1;
+    pointer-events: none;
     background: hsl(var(--qt-panel) / var(--surface-alpha));
     -webkit-backdrop-filter: blur(var(--surface-blur));
     backdrop-filter: blur(var(--surface-blur));
     border-radius: var(--radius-panel);
     box-shadow: var(--shadow-float);
-    padding: 4px 8px;
-    margin: -4px -8px;
   }
   .qt-float .qt-link { font-size: 11px; font-weight: 600; }
   .qt-float .qt-line-observed,
