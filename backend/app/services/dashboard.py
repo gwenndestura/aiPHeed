@@ -37,6 +37,7 @@ from app.ml.inference import e41_lead2 as E41L2
 from app.ml.inference import climate_watch as CW
 from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
+from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -1074,6 +1075,7 @@ CANDIDATE_EVENTS = {
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
     # E68: what the score is, in the words the E68 target-validity review supports
     "e68": D68.event(),
+    "e69": D68.event(),
     # E67: same wording as E66 (same record, same target)
     "e67": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
@@ -1202,6 +1204,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     # E68: the E67 additions reworded with the E68 findings, plus the input status of every input at the issue date
     if E41L2.mode() == "e68":
         e67 = D68.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw)
+    # E69: the two-scale food-insecurity risk outlook (regional hunger outlook + provincial evidence-fusion tier)
+    if E41L2.mode() == "e69":
+        e67 = D69.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw)
     if e67 and e67["sentence"]:
         sentence = f"{sentence} {e67['sentence']}"
     return {
@@ -1220,6 +1225,7 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
         **({"inputStatus": e67["inputStatus"]} if e67 and e67.get("inputStatus") else {}),
         **({"affordability": e67["affordability"]} if e67 and e67.get("affordability") else {}),
+        **({k: e67[k] for k in ("riskOutlook", "regionalHungerOutlook", "vulnerabilityProfile") if e67 and e67.get(k)}),
     }
 
 

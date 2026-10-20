@@ -411,7 +411,11 @@ class PlainSummary(BaseModel):
     modelIdentity: ModelIdentity | None = None            # E67 (e67 mode only)
     triggerCoverage: list[TriggerCoverage] | None = None  # E67 (e67 and e68 modes)
     inputStatus: list[InputStatus] | None = None          # E68 (e68 mode only, province scope)
-    affordability: Affordability | None = None            # E68 (e68 mode only, province scope)
+    affordability: Affordability | None = None            # E68 (e68 and e69 modes, province scope)
+    # E69 (e69 mode only): evidence-fusion risk outlook (not a probability), regional hunger outlook, vulnerability
+    riskOutlook: dict | None = None
+    regionalHungerOutlook: dict | None = None
+    vulnerabilityProfile: dict | None = None
 
 
 class SummaryComponents(BaseModel):

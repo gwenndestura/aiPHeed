@@ -1,0 +1,41 @@
+2021-Q4 2022-Q2 11.8 10.3 {'R0_RW': 10.3, 'R1_MEAN4': 12.8, 'R2_EXPMEAN': 12.8}
+2022-Q1 2022-Q3 9.6 9.2 {'R0_RW': 9.2, 'R1_MEAN4': 11.6, 'R2_EXPMEAN': 11.6}
+2022-Q2 2022-Q4 11.3 11.7 {'R0_RW': 11.7, 'R1_MEAN4': 11.6, 'R2_EXPMEAN': 11.6}
+2022-Q3 2023-Q1 8.7 11.8 {'R0_RW': 11.8, 'R1_MEAN4': 11.7, 'R2_EXPMEAN': 11.7}
+2022-Q4 2023-Q2 11.3 9.6 {'R0_RW': 9.6, 'R1_MEAN4': 10.2, 'R2_EXPMEAN': 11.2}
+2023-Q1 2023-Q3 10.3 11.3 {'R0_RW': 11.3, 'R1_MEAN4': 10.5, 'R2_EXPMEAN': 11.3}
+2023-Q2 2023-Q4 14.3 8.7 {'R0_RW': 8.7, 'R1_MEAN4': 10.4, 'R2_EXPMEAN': 10.9}
+2023-Q3 2024-Q1 15.3 11.3 {'R0_RW': 11.3, 'R1_MEAN4': 10.2, 'R2_EXPMEAN': 10.9}
+2023-Q4 2024-Q2 19.6 10.3 {'R0_RW': 10.3, 'R1_MEAN4': 10.4, 'R2_EXPMEAN': 10.9, 'R3_AR1': 10.6, 'R4_RIDGE': 9.7}
+2024-Q1 2024-Q3 18.1 14.3 {'R0_RW': 14.3, 'R1_MEAN4': 11.2, 'R2_EXPMEAN': 11.2, 'R3_AR1': 7.8, 'R4_RIDGE': 19.3}
+2024-Q2 2024-Q4 25.3 15.3 {'R0_RW': 15.3, 'R1_MEAN4': 12.8, 'R2_EXPMEAN': 11.6, 'R3_AR1': 9.6, 'R4_RIDGE': 16.3, 'R5_PRICE': 9.0}
+2024-Q3 2025-Q1 24.0 19.6 {'R0_RW': 19.6, 'R1_MEAN4': 14.9, 'R2_EXPMEAN': 12.3, 'R3_AR1': 7.5, 'R4_RIDGE': 23.0, 'R5_PRICE': 7.0}
+2024-Q4 2025-Q2 16.15 18.1 {'R0_RW': 18.1, 'R1_MEAN4': 16.8, 'R2_EXPMEAN': 12.7, 'R3_AR1': 17.3, 'R4_RIDGE': 22.7, 'R5_PRICE': 17.1}
+2025-Q1 2025-Q3 23.8 24.0 {'R0_RW': 24.0, 'R1_MEAN4': 21.8, 'R2_EXPMEAN': 14.3, 'R3_AR1': 30.9, 'R4_RIDGE': 31.9, 'R5_PRICE': 30.7}
+2025-Q2 2025-Q4 16.7 24.0 {'R0_RW': 24.0, 'R1_MEAN4': 21.8, 'R2_EXPMEAN': 14.3, 'R3_AR1': 30.9, 'R4_RIDGE': 28.5, 'R5_PRICE': 30.9}
+2025-Q3 2026-Q1 22.4 24.0 {'R0_RW': 24.0, 'R1_MEAN4': 21.8, 'R2_EXPMEAN': 14.3, 'R3_AR1': 30.9, 'R4_RIDGE': 29.4, 'R5_PRICE': 30.9}
+2025-Q4 2026-Q2 17.3 24.0 {'R0_RW': 24.0, 'R1_MEAN4': 21.8, 'R2_EXPMEAN': 14.3, 'R3_AR1': 30.9, 'R4_RIDGE': 30.8, 'R5_PRICE': 31.0}
+2026-Q1 2026-Q3 23.6 16.7 {'R0_RW': 16.7, 'R1_MEAN4': 21.0, 'R2_EXPMEAN': 14.4, 'R3_AR1': 17.6, 'R4_RIDGE': 19.3, 'R5_PRICE': 17.7}
+2026-Q2 2026-Q4 nan 22.4 {'R0_RW': 22.4, 'R1_MEAN4': 22.1, 'R2_EXPMEAN': 14.9, 'R3_AR1': 21.4, 'R4_RIDGE': 24.6, 'R5_PRICE': 21.3}
+2026-Q3 2027-Q1 nan 17.3 {'R0_RW': 17.3, 'R1_MEAN4': 20.1, 'R2_EXPMEAN': 15.0, 'R3_AR1': 17.4, 'R4_RIDGE': 20.6, 'R5_PRICE': 17.3}
+        model  quarters     MAE    RMSE  E1_events  E1_accuracy  E1_correct  E1_recall_elevated  E1_recall_not  E1_balanced  E1_brier  E2_events  E2_hits  E2_false_alarms  noise_floor_MAE
+0       R0_RW        18   3.881   4.921         13        0.667          12               0.769            0.4        0.585     0.172          4        0                0            1.805
+1    R1_MEAN4        18   3.880   5.196         13        0.611          11               0.692            0.4        0.546     0.181          4        0                0            1.805
+2  R2_EXPMEAN        18   5.100   6.504         13        0.611          11               0.692            0.4        0.546     0.211          4        0                0            1.805
+3      R3_AR1        10  10.192  11.180         10        0.600           6               0.600            0.0          NaN     0.281          3        0                4            1.805
+4    R4_RIDGE        10   7.239   8.239         10        0.900           9               0.900            0.0          NaN     0.062          3        0                3            1.805
+5    R5_PRICE         8  10.443  11.729          8        0.750           6               0.750            0.0          NaN     0.182          2        0                4            1.805
+        model  quarters     MAE    RMSE  E1_events  E1_accuracy  E1_correct  E1_recall_elevated  E1_recall_not  E1_balanced  E1_brier  E2_events  E2_hits  E2_false_alarms  noise_floor_MAE
+0       R0_RW         8   4.881   5.826          8         1.00           8                1.00            0.0          NaN     0.004          2        0                0            1.805
+1    R1_MEAN4         8   4.634   6.088          8         1.00           8                1.00            0.0          NaN     0.017          2        0                0            1.805
+2  R2_EXPMEAN         8   7.634   8.606          8         1.00           8                1.00            0.0          NaN     0.125          2        0                0            1.805
+3      R3_AR1         8  10.329  11.528          8         0.75           6                0.75            0.0          NaN     0.167          2        0                4            1.805
+4    R4_RIDGE         8   7.667   8.513          8         1.00           8                1.00            0.0          NaN     0.000          2        0                3            1.805
+5    R5_PRICE         8  10.443  11.729          8         0.75           6                0.75            0.0          NaN     0.182          2        0                4            1.805
+        model reference  quarters  mean_abs_err_diff  ci95_lo  ci95_hi  wins  losses  sign_p  better_than_RW
+0    R1_MEAN4     R0_RW         8             -0.247   -2.182    1.753     5       3   0.363           False
+1  R2_EXPMEAN     R0_RW         8              2.753   -0.585    6.050     2       6   0.965           False
+2      R3_AR1     R0_RW         8              5.448    2.686    8.038     2       6   0.965           False
+3    R4_RIDGE     R0_RW         8              2.786   -0.014    5.514     3       5   0.855           False
+4    R5_PRICE     R0_RW         8              5.561    2.691    8.275     2       6   0.965           False
+selected R0_RW common 8 eligible 18 excluded []
