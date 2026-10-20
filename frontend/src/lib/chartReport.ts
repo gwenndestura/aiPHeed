@@ -204,16 +204,35 @@ export function renderReportPdf(report: ReportPayload): jsPDF {
     pdf.line(MARGIN_X, y, pageW - MARGIN_X, y);
   };
 
-  /** Wrapped lines, breaking pages between lines. */
+  /** One wrapped line stretched to `width` by widening the spaces between words (justified text). */
+  const justifyLine = (ln: string, x: number, baseline: number, width: number) => {
+    const words = ln.trim().split(/\s+/);
+    const used = words.reduce((s, w) => s + pdf.getTextWidth(w), 0);
+    const gap = words.length > 1 ? (width - used) / (words.length - 1) : 0;
+    // a line far shorter than the width (e.g. before a long unbreakable word) stays left-aligned
+    if (words.length < 2 || gap > pdf.getTextWidth(" ") * 4) {
+      pdf.text(ln, x, baseline);
+      return;
+    }
+    let cx = x;
+    for (const w of words) {
+      pdf.text(w, cx, baseline);
+      cx += pdf.getTextWidth(w) + gap;
+    }
+  };
+
+  /** Wrapped lines, breaking pages between lines; `justify` spreads every line but the last to the full width. */
   const lines = (text: string, size: number, style: "normal" | "bold" | "italic" = "normal",
-                 color = INK, indent = 0, after = 6) => {
+                 color = INK, indent = 0, after = 6, justify = false) => {
     font(size, style, color);
     const lh = size * LH;
-    for (const ln of wrap(text, contentW - indent)) {
+    const ls = wrap(text, contentW - indent);
+    ls.forEach((ln, k) => {
       ensure(lh);
-      pdf.text(ln, MARGIN_X + indent, y + size);
+      if (justify && k < ls.length - 1) justifyLine(ln, MARGIN_X + indent, y + size, contentW - indent);
+      else pdf.text(ln, MARGIN_X + indent, y + size);
       y += lh;
-    }
+    });
     y += after;
   };
 
@@ -328,7 +347,7 @@ export function renderReportPdf(report: ReportPayload): jsPDF {
         if (next && (next.kind === "table" || next.kind === "figure") && paraLines <= 2) {
           ensure(paraLines * BODY * LH + 7 + leadHeight(i + 1));
         }
-        lines(b.text, BODY, "normal", INK, 0, 7);
+        lines(b.text, BODY, "normal", INK, 0, 7, true);
         break;
       }
       case "bullets":
@@ -341,7 +360,8 @@ export function renderReportPdf(report: ReportPayload): jsPDF {
             ensure(lh);
             font(BODY);
             if (k === 0) pdf.text("-", MARGIN_X + 3, y + BODY);
-            pdf.text(ln, MARGIN_X + 14, y + BODY);
+            if (k < ls.length - 1) justifyLine(ln, MARGIN_X + 14, y + BODY, contentW - 14);
+            else pdf.text(ln, MARGIN_X + 14, y + BODY);
             y += lh;
           });
           y += 3;

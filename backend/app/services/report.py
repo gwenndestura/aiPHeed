@@ -137,6 +137,11 @@ def _num(value: float | None, digits: int = 4) -> str:
     return "--" if value is None else f"{value:.{digits}f}"
 
 
+def _pct_text(value, missing: str = "--") -> str:
+    """A rate already in percent (PSA poverty incidence); a missing value never prints "None%"."""
+    return missing if value is None else f"{float(value):.1f}%"
+
+
 def _signed(value: float | None) -> str:
     if value is None:
         return "--"
@@ -309,6 +314,8 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
     for trigger in explain["triggers"]:
         color = RAISING if trigger["direction"] == "increases_risk" else LOWERING
         arrow = "raises" if trigger["direction"] == "increases_risk" else "lowers"
+        if not _thesis() and trigger["pct"] == 0:
+            arrow = "no measurable effect"             # a 0% driver neither raises nor lowers the risk
         if _thesis():                                  # THESIS: the status of the group in the served index
             arrow = {"contributes": arrow, "insufficient_data": "no data at issue (not counted)",
                      "no_effect": "no effect"}.get(trigger.get("status"), arrow)
@@ -358,16 +365,19 @@ def _method_block(performance: dict) -> list:
     baselines = performance.get("baselines", {})
     targets = performance.get("targets", {})
     lead = performance.get("maxReliableLeadTime")
+    basis = performance.get("maxReliableLeadTimeBasis")
     rows = [
         # Specific Objective 2 names these five metrics plus the lead time.
         ["Maximum Reliable Lead Time",
-         f"{lead} quarter(s)" if lead is not None else "--"],
+         (f"{lead} quarter(s)" + (f" ({basis})" if basis else "")) if lead is not None
+         else (f"none ({basis})" if basis else "--")],
         ["Accuracy", _num(performance.get("accuracy"), 4)],
         ["Precision (weighted)", _num(performance.get("precision"), 4)],
         ["Recall (weighted)", _num(performance.get("recall"), 4)],
         ["F1 score (weighted)", _num(performance.get("f1"), 4)],
         ["AUC-ROC", _num(performance.get("rocAuc"), 4)],
-        *([["Accuracy requirement", str(targets["note"])[:180]]] if targets.get("note") else [
+        # the requirement note is a full sentence: printed in full below the table, never cut to fit the value column
+        *([["Accuracy requirement", "see the note below the table"]] if targets.get("note") else [
             ["F1 target (>= 0.75)", "PASS" if targets.get("meetsF1") else "FAIL"],
             ["AUC-ROC target (>= 0.80)", "PASS" if targets.get("meetsRocAuc") else "FAIL"]]),
         ["Features in the model", str(performance.get("nFeatures", "--"))],
@@ -393,6 +403,8 @@ def _method_block(performance: dict) -> list:
         Spacer(1, 3 * mm),
         _data_table(["Measure", "Value"], rows, [78 * mm, 30 * mm], {1: "RIGHT"}),
         Spacer(1, 3 * mm),
+        *([_p("<b>Accuracy requirement.</b> " + _escape(str(targets["note"])), "small"), Spacer(1, 2 * mm)]
+          if targets.get("note") else []),
         _p(
             "<b>Accuracy must be read against its baselines.</b> The comparison "
             "models above are evaluated on the same walk-forward folds at the same "
@@ -462,7 +474,21 @@ def _news_block(news: dict, width: float) -> list:
              for t in news["topics"][:6]], width))
         flow.append(Spacer(1, 4 * mm))
 
-    if news["data"]:
+    if news["data"] and not any(a.get("relevanceScore") is not None for a in news["data"]):
+        # No per-article score is stored for these articles: newest first, no empty Score column.
+        recent = sorted(news["data"], key=lambda a: a.get("date") or "", reverse=True)[:6]
+        flow.append(_p("Recent headlines", "h3"))
+        flow.append(Spacer(1, 1.5 * mm))
+        rows = [[_p(a["date"] or "--", "cell"),
+                 _p(f"<b>{_escape(a['title'])}</b><br/>"
+                    f"<font color='#6A7269'>{_escape(a['source'])} · {_escape(a['topicLabel'])}</font>", "cell")]
+                for a in recent]
+        flow.append(_data_table(["Date", "Headline"], rows, [20 * mm, width - 20 * mm]))
+        flow.append(Spacer(1, 2 * mm))
+        flow.append(_p(
+            "This quarter's relevant articles, newest first. No per-article relevance score is stored for them; "
+            "treat individual headlines as leads rather than findings.", "small"))
+    elif news["data"]:
         # By classifier confidence, not recency. The corpus carries false
         # positives, and the most recent article is often a weak match -- which
         # in a DA-facing document reads as the system not knowing what food
@@ -586,8 +612,8 @@ def build_province_report(province_id: str, quarter: str,
     news = svc.news(code, quarter, 1, 60)
 
     published = [p for p in provinces if not p["withheld"]]
-    rank = sorted(published, key=lambda p: p["riskScore"], reverse=True)
-    position = next((i + 1 for i, p in enumerate(rank) if p["id"] == slug), None)
+    # the same competition rank as /provinces and /ranking: tied scores share a rank
+    position = province.get("rank")
 
     buf = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -607,9 +633,10 @@ def build_province_report(province_id: str, quarter: str,
         province["qoqChange"],
         [
             ("Risk class", (province["riskLabel"] or (province["riskLevel"] if _thesis() else None) or "--").upper()),
-            ("Rank in CALABARZON", f"{position} of {len(published)}" if position else "--"),
+            ("Rank in CALABARZON", (f"{position} of {len(published)}" + (" (tied)" if province.get("rankTied") else ""))
+             if position else "--"),
             ("Population (2020 CPH)", f"{province['population']:,}"),
-            ("Poverty incidence (PSA 2021)", f"{province['povertyRate']}%"),
+            ("Poverty incidence (PSA 2021)", _pct_text(province["povertyRate"])),
             ("Articles analysed", str(province["articleCount"])),
         ],
         width)
@@ -645,7 +672,7 @@ def build_province_report(province_id: str, quarter: str,
     muni_rows = [[_p(f"{i + 1}", "cell"), _p(_escape(m["name"]), "cellb"),
                   _p(m["classification"], "cell"),
                   _p(f"{m['population']:,}", "cell"),
-                  _p("--" if m["povertyRate"] is None else f"{m['povertyRate']}%", "cell"),
+                  _p(_pct_text(m["povertyRate"], "n/a (no PSA estimate)"), "cell"),
                   _p(_num(m["riskIndex"], 4), "cell")]
                  for i, m in enumerate(municipalities)]
     flow.append(_data_table(
@@ -726,19 +753,20 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         width))
     flow.append(Spacer(1, 4 * mm))
 
+    with_class = any(p["riskLabel"] for p in published)  # the Class column only when a province has a class label
     rows = [[_p(_escape(p["name"]), "cellb"),
              _p(_num(p["riskScore"], 4), "cell"),
              _p((p["riskLevel"] or "--").upper(), "cell"),
-             _p((p["riskLabel"] or "--").upper(), "cell"),
+             *([_p((p["riskLabel"] or "--").upper(), "cell")] if with_class else []),
              _p(_signed(p["qoqChange"]), "cell"),
-             _p(f"{p['povertyRate']}%", "cell"),
+             _p(_pct_text(p["povertyRate"]), "cell"),
              _p(str(p["articleCount"]), "cell")]
             for p in sorted(published, key=lambda x: x["riskScore"], reverse=True)]
-    flow.append(_data_table(
-        ["Province", "Probability", "Level", "Class", "QoQ", "Poverty", "Articles"],
-        rows,
-        [width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm],
-        {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT", 6: "RIGHT"}))
+    head = ["Province", "Probability", "Level", *(["Class"] if with_class else []), "QoQ", "Poverty", "Articles"]
+    widths = ([width - 118 * mm, 20 * mm, 18 * mm, 20 * mm, 22 * mm, 20 * mm, 18 * mm] if with_class else
+              [width - 98 * mm, 20 * mm, 18 * mm, 22 * mm, 20 * mm, 18 * mm])
+    flow.append(_data_table(head, rows, widths,
+                            {i: "RIGHT" for i in range(1, len(head)) if head[i] not in ("Level", "Class")}))
 
     if _thesis():
         flow += _section("Why this risk estimate: indicators and evidence")

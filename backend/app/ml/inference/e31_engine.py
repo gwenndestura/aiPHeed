@@ -69,6 +69,14 @@ def available() -> bool:
         return False
 
 
+def served_rows() -> list[dict]:
+    """The record's quarter rows the system serves: lead <= AIPHEED_MAX_LEAD (default 1, so the E38 lead-2 row stays in
+    the record but is not shown; app/quarterly/target.py)."""
+    from app.quarterly.target import max_lead
+
+    return [q for q in record()["quarters"] if q.get("lead", 1) <= max_lead()]
+
+
 def quarter_row(quarter: str, horizon: str = "forecast") -> dict | None:
     """horizon 'nowcast' prefers the NOWCAST row and falls back to the lead-1 row; 'forecast' never uses a nowcast."""
     order = (NOWCAST_MODES + FORECAST_MODES) if horizon == "nowcast" else FORECAST_MODES

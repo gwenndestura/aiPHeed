@@ -63,3 +63,18 @@ def forecast_target(now: datetime | str | None = None) -> dict:
         "rule": "next calendar quarter after the one in which the dashboard is viewed (Asia/Manila); forecasts are "
                 "issued at the start of the current quarter with information published before it",
     }
+
+
+# ---- from backend-e53-final (used by app.quarterly.preview and app.services.report_data_e31)
+def lead2_preview() -> bool:
+    """The lead-2 row is served as a labelled experimental preview, and the dashboard opens on it (defaultQuarter,
+    app.quarterly.preview.default_quarter), while the other defaults (current quarter, forecast target, quarter
+    resolution, PDF, LGU ranking, alerts) stay on lead 1. On by default (researchers' decision, final integration);
+    AIPHEED_LEAD2_PREVIEW=0 turns it off."""
+    return os.getenv("AIPHEED_LEAD2_PREVIEW", "1").strip() != "0"
+
+
+def max_lead() -> int:
+    """Longest served lead (1 = one quarter ahead of the latest complete data quarter)."""
+    lead = int(os.getenv("AIPHEED_MAX_LEAD", "1"))
+    return max(lead, 2) if lead2_preview() else lead

@@ -106,6 +106,13 @@ E53_EXPLAINABILITY_NOTE = (
 )
 
 
+# from backend-e53-final (used by app.services.report_data_e31 for a calibrated record)
+CALIBRATION_SENTENCE = (
+    "The bars explain the model's estimate before calibration. Calibration pulls every estimate toward the long-run "
+    "rate, so it lowers or raises the index but does not change the shares."
+)
+
+
 E55_EXPLAINABILITY_NOTE = (
     "This experimental forecast is the probability of HIGH food-insecurity risk: the regional SWS hunger rate staying "
     "above 11.3% AND food-price pressure in the province (PSA food inflation, or food minus headline inflation, above "
