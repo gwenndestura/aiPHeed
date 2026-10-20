@@ -820,10 +820,6 @@ function Footer() {
         >
           <p className="flex items-center gap-x-3 flex-wrap">
             <span>© 2026 aiPHeed. All rights reserved.</span>
-            {/* The only public way in for administrators; the header menu has no sign-in. */}
-            <Link to="/login" className="underline underline-offset-2 hover:text-[var(--lp-fg)] transition-colors compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11">
-              Admin sign in
-            </Link>
           </p>
           <p className="flex items-center gap-1.5 flex-wrap">
             <span>Developed by</span>
