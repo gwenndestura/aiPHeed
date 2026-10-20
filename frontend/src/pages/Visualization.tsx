@@ -5,6 +5,7 @@ import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { toast } from "@/hooks/use-toast";
 import { useConfig, useQuarters, useTimeseries, useMunicipalities, useExplainability } from "@/lib/queries";
 import { selectableQuarters } from "@/lib/quarters";
+import type { QuartersResponse } from "@/lib/apiTypes";
 import { api, ApiError } from "@/lib/api";
 import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
 import { X, ImageIcon, FileText } from "lucide-react";
@@ -47,6 +48,71 @@ type Tab = "trend" | "shap";
 
 // Room right of the trend plot for "Alert Threshold (0.60)" at 9px.
 const THRESHOLD_LABEL_W = 124;
+
+type QuarterOption = { value: string; label: string };
+
+/** "2027-Q1" -> "Q1 2027 (forecast)". */
+function forecastQuarterLabel(id: string): string {
+  const m = id.match(/^(\d{4})-Q([1-4])$/);
+  return m ? `Q${m[2]} ${m[1]} (forecast)` : `${id} (forecast)`;
+}
+
+/**
+ * The quarters the report selectors offer: the map's selectable quarters that
+ * have a score (observed, current or forecast), so the lists end at the same
+ * quarter as the map. Quarters with no score ("unavailable") are left out.
+ * Forecast quarters are labelled "Q1 2027 (forecast)".
+ */
+function reportQuarterOptions(res?: Pick<QuartersResponse, "quarters" | "calendarQuarter">): QuarterOption[] {
+  return selectableQuarters(res?.quarters ?? [], res?.calendarQuarter)
+    .filter((q) => q.state === "actual" || q.state === "current" || q.state === "forecast")
+    .map((q) => ({ value: q.id, label: q.state === "forecast" ? forecastQuarterLabel(q.id) : q.id }));
+}
+
+/** The dataKey of a series' dashed forecast segment, and of its forecast-only value labels. */
+const forecastKey = (k: string) => `${k}__forecast`;
+const forecastLabelKey = (k: string) => `${k}__forecastLabel`;
+type TrendRow = Record<string, number | string | boolean>;
+
+/**
+ * Splits each series into an observed part (solid) and a forecast part
+ * (dashed). The forecast part starts at the last observed point so the two
+ * segments join; the forecast value labels skip that shared point.
+ */
+function splitForecast(rows: TrendRow[], keys: string[]): TrendRow[] {
+  const firstForecast = rows.findIndex((r) => r.forecast === true);
+  return rows.map((r, i) => {
+    const out: TrendRow = { ...r };
+    for (const k of keys) {
+      const v = r[k];
+      if (typeof v !== "number") continue;
+      if (r.forecast === true) {
+        delete out[k];
+        out[forecastKey(k)] = v;
+        out[forecastLabelKey(k)] = v;
+      } else if (firstForecast > 0 && i === firstForecast - 1) {
+        out[forecastKey(k)] = v;
+      }
+    }
+    return out;
+  });
+}
+
+/** The map timeline's key: a solid line for observed quarters, a dashed one for forecast quarters. */
+function ObservedForecastKey() {
+  return (
+    <div data-testid="trend-key" className="qt-muted mt-2 flex items-center justify-center gap-4 text-[10px] leading-[14px]">
+      <span className="flex items-center gap-1.5">
+        <span aria-hidden className="qt-key qt-line-observed" />
+        Observed
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span aria-hidden className="qt-key qt-line-forecast" />
+        Forecast
+      </span>
+    </div>
+  );
+}
 
 /**
  * Chart text size: the desktop size, and at least 12px on phones (the chart
@@ -173,16 +239,9 @@ function TrendView() {
   const { data: config } = useConfig();
   const { compact, fs } = useChartFont();
   const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
-  const QUARTERS = useMemo(
-    // Reports describe the nowcast indicator; the E20 forecast quarter is a
-    // different target and is left out of the report ranges, as are quarters
-    // with no score.
-    () =>
-      selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
-        .filter((q) => q.state === "actual" || q.state === "current")
-        .map((q) => q.id),
-    [quartersRes]
-  );
+  // The same quarters as the map, forecast ones included (see reportQuarterOptions).
+  const quarterOptions = useMemo(() => reportQuarterOptions(quartersRes), [quartersRes]);
+  const QUARTERS = useMemo(() => quarterOptions.map((q) => q.value), [quarterOptions]);
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
 
@@ -235,27 +294,30 @@ function TrendView() {
 
   const data = useMemo(() => {
     if (!generated) return [];
+    // A point is a forecast when the series says so (isForecast) or the quarter list marks it "forecast".
+    const forecastIds = new Set((quartersRes?.quarters ?? []).filter((q) => q.state === "forecast").map((q) => q.id));
+    const isForecast = (pt: { quarter: string; isForecast?: boolean }) => pt.isForecast === true || forecastIds.has(pt.quarter);
+    let rows: TrendRow[] = [];
     if (isMuni) {
-      return (muniTs?.data?.series ?? []).map((p) => ({ quarter: p.quarter.replace("-", " "), [generated.municipality]: p.riskScore }));
-    }
-    if (isSingleProvince) {
-      return (singleProvinceTs?.data?.series ?? []).map((p) => ({ quarter: p.quarter.replace("-", " "), [generated.province]: p.riskScore }));
-    }
-    if (isAllProvinces) {
-      const merged = new Map<string, Record<string, number | string>>();
+      rows = (muniTs?.data?.series ?? []).map((p) => ({ quarter: p.quarter.replace("-", " "), forecast: isForecast(p), [generated.municipality]: p.riskScore }));
+    } else if (isSingleProvince) {
+      rows = (singleProvinceTs?.data?.series ?? []).map((p) => ({ quarter: p.quarter.replace("-", " "), forecast: isForecast(p), [generated.province]: p.riskScore }));
+    } else if (isAllProvinces) {
+      const merged = new Map<string, TrendRow>();
       PROVINCES.forEach((p) => {
         (allSeries[p]?.series ?? []).forEach((pt) => {
           const key = pt.quarter.replace("-", " ");
-          const row = merged.get(key) ?? { quarter: key };
+          const row = merged.get(key) ?? { quarter: key, forecast: false };
           row[p] = pt.riskScore;
+          if (isForecast(pt)) row.forecast = true;
           merged.set(key, row);
         });
       });
-      return Array.from(merged.values());
+      rows = Array.from(merged.values());
     }
-    return [];
+    return splitForecast(rows, seriesKeys);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [generated, isMuni, isSingleProvince, isAllProvinces, muniTs, singleProvinceTs, caviteTs, lagunaTs, batangasTs, rizalTs, quezonTs]);
+  }, [generated, isMuni, isSingleProvince, isAllProvinces, muniTs, singleProvinceTs, caviteTs, lagunaTs, batangasTs, rizalTs, quezonTs, quartersRes]);
 
   const handleGenerate = () => setGenerated({ province, municipality, from, to });
 
@@ -336,8 +398,8 @@ function TrendView() {
             onChange={setMunicipality}
             options={["All", ...munisForProvince]}
           />
-          <FloatingSelect label="From" value={from} onChange={setFrom} options={QUARTERS} />
-          <FloatingSelect label="To" value={to} onChange={setTo} options={QUARTERS} />
+          <FloatingSelect label="From" value={from} onChange={setFrom} options={quarterOptions} />
+          <FloatingSelect label="To" value={to} onChange={setTo} options={quarterOptions} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-tour="viz-generate">
@@ -403,6 +465,8 @@ function TrendView() {
                   background: "hsl(var(--card))",
                   border: "1px solid hsl(var(--border))",
                 }}
+                payloadUniqBy={(entry) => String(entry.name)}
+                labelFormatter={(label: string) => (data.find((r) => r.quarter === label)?.forecast === true ? `${label} (forecast)` : label)}
               />
               <Legend wrapperStyle={{ fontSize: fs(11) }} />
               <ReferenceLine
@@ -417,25 +481,49 @@ function TrendView() {
                 strokeDasharray="5 4"
                 label={{ value: `High Risk (${displayCutoff.toFixed(2)})`, position: compact ? "insideBottomRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-moderate))" }}
               />
+              {/* Observed quarters: a solid line. Phones: value labels only for a
+                  single line; with five they overlap. Every value is in the
+                  tooltip (tap a point). */}
               {seriesKeys.map((p) => (
                 <Line
                   key={p}
+                  name={p}
                   type="monotone"
                   dataKey={p}
                   stroke={PROVINCE_COLORS[p] ?? "hsl(var(--primary))"}
                   strokeWidth={2.5}
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
+                  connectNulls={false}
                 >
-                  {/* Phones: value labels only for a single line; with five they
-                      overlap. Every value is in the tooltip (tap a point). */}
                   {(!compact || seriesKeys.length === 1) && (
                     <LabelList dataKey={p} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" />
                   )}
                 </Line>
               ))}
+              {/* Forecast quarters: the same colour, dashed, as on the map timeline. */}
+              {seriesKeys.map((p) => (
+                <Line
+                  key={forecastKey(p)}
+                  name={p}
+                  legendType="none"
+                  type="monotone"
+                  dataKey={forecastKey(p)}
+                  stroke={PROVINCE_COLORS[p] ?? "hsl(var(--primary))"}
+                  strokeWidth={2.5}
+                  strokeDasharray="6 5"
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                  connectNulls={false}
+                >
+                  {(!compact || seriesKeys.length === 1) && (
+                    <LabelList dataKey={forecastLabelKey(p)} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" />
+                  )}
+                </Line>
+              ))}
             </LineChart>
           </ResponsiveContainer>
+          <ObservedForecastKey />
           </div>
         )}
       </div>
@@ -448,22 +536,15 @@ function ShapView() {
   const { fs } = useChartFont();
   const { data: config } = useConfig();
   const { data: quartersRes, error: quartersError } = useQuarters("nowcast");
-  const QUARTERS = useMemo(
-    // Reports describe the nowcast indicator; the E20 forecast quarter is a
-    // different target and is left out of the report ranges, as are quarters
-    // with no score.
-    () =>
-      selectableQuarters(quartersRes?.quarters ?? [], quartersRes?.calendarQuarter)
-        .filter((q) => q.state === "actual" || q.state === "current")
-        .map((q) => q.id),
-    [quartersRes]
-  );
+  // The same quarters as the map, forecast ones included (see reportQuarterOptions).
+  const quarterOptions = useMemo(() => reportQuarterOptions(quartersRes), [quartersRes]);
   const redCutoff = config?.thresholds.triggerRedCutoff ?? 20;
 
   const [province, setProvince] = useState<string>("Quezon");
   const [quarter, setQuarter] = useState<string>("");
   const [generated, setGenerated] = useState<{ province: string; quarter: string } | null>(null);
 
+  // Default: the quarter the map opens on (quartersRes.current).
   useMemo(() => {
     if (!quarter && quartersRes?.current) setQuarter(quartersRes.current);
   }, [quarter, quartersRes]);
@@ -522,7 +603,7 @@ function ShapView() {
       <div className="rounded-b-xl bg-secondary/20 border border-t-0 edge-faint px-5 sm:px-6 py-5 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FloatingSelect label="Province" value={province} onChange={setProvince} options={PROVINCES} />
-          <FloatingSelect label="Quarter" value={quarter} onChange={setQuarter} options={QUARTERS} />
+          <FloatingSelect label="Quarter" value={quarter} onChange={setQuarter} options={quarterOptions} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
@@ -570,7 +651,9 @@ function ShapView() {
           <>
             <div className="mb-3 flex items-baseline justify-between gap-3 flex-wrap">
               <h2 className="text-[13px] font-bold tracking-tight">
-                {generated.province} · {generated.quarter.replace("-", " ")} — trigger contributions
+                {generated.province} · {quarterOptions.find((q) => q.value === generated.quarter)?.label.includes("(forecast)")
+                  ? forecastQuarterLabel(generated.quarter)
+                  : generated.quarter.replace("-", " ")} — trigger contributions
               </h2>
               <span className="text-[10px] text-muted-foreground">SHAP explainability</span>
             </div>
@@ -636,7 +719,8 @@ function FloatingSelect({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  /** Plain values, or { value, label } when the shown text differs (e.g. "Q1 2027 (forecast)"). */
+  options: (string | QuarterOption)[];
 }) {
   return (
     <label className="block">
@@ -648,11 +732,14 @@ function FloatingSelect({
         onChange={(e) => onChange(e.target.value)}
         className="w-full h-12 rounded-lg bg-card border border-border/50 px-3 text-[12px] font-medium focus:outline-none focus:border-primary/60 transition-colors"
       >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
+        {options.map((o) => {
+          const { value: v, label: l } = typeof o === "string" ? { value: o, label: o } : o;
+          return (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          );
+        })}
       </select>
     </label>
   );
