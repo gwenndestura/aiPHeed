@@ -1,0 +1,5 @@
+Frontend checks, 2026-10-20 (final-thesis-system, FIRI integration; no frontend source changed in this run)
+vitest run:                      11 files, 46 passed (46)
+vite build:                      built (chunk-size warning only)
+tsc --noEmit -p tsconfig.app.json: 6 errors, all in src/data/mockData.ts (pre-existing; mock data is not rendered)
+tsc --noEmit -p . (solution file): no output

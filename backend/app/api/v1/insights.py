@@ -130,6 +130,19 @@ E58_EXPLAINABILITY_NOTE = E56_EXPLAINABILITY_NOTE + (
 )
 
 
+# THESIS: the bars show the exact additive shares of the served FIRI v1 index by the five approved factor groups
+# (thesis_system.firi_drivers); regional hunger and vulnerability are named in the summary text (no new UI element)
+THESIS_EXPLAINABILITY_NOTE = (
+    "The risk score shown is the estimated food-insecurity risk index (FIRI v1), a proxy composite on a 0-1 scale. The "
+    "bars show each factor group's exact share of that index: Market / Prices (the LightGBM food-price-pressure "
+    "forecast, headline inflation, rice prices), Climate Stress (PAGASA El Nino status, typhoons, palay and corn "
+    "production), Fish Kill (fisheries production, not fish-kill events), Employment and OFW Remittance (national "
+    "figures). Regional hunger (SWS, Balance Luzon) and household vulnerability (poverty and density) are also in the "
+    "index but are not among the five bars; their share and every domain score are in the summary text. Shares describe "
+    "how the index is built from the evidence; they are not causes."
+)
+
+
 # E64: the Objectives 1-3 candidate (improved news pipeline v3); the product of the two parts is a model score
 E64_EXPLAINABILITY_NOTE = (
     "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above "
@@ -161,6 +174,8 @@ def _served_note(quarter: str | None = None) -> str:
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
     if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E64_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "thesis" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+        return THESIS_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() in ("e58", "e66", "e67", "e68", "e69", "thesis") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E58_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "e56" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):

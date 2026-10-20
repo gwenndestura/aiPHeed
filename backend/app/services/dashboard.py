@@ -24,6 +24,7 @@ from __future__ import annotations
 import functools
 import json
 import logging
+import math
 import os
 import unicodedata
 from pathlib import Path
@@ -76,11 +77,32 @@ INDICATOR = {
 
 
 
+THESIS_INDICATOR = {
+    "id": "food_insecurity_risk_index",
+    "name": "Estimated food-insecurity risk index (FIRI v1)",
+    "definition": ("A 0-1 proxy composite estimating the relative risk of food insecurity two quarters ahead: affordability "
+                   "(LightGBM food-price-pressure forecast, headline inflation, rice prices), household vulnerability "
+                   "(poverty and population density), climate and food production (PAGASA El Nino status, typhoons, palay, "
+                   "corn and fisheries production), household economy (national unemployment and remittances) and regional "
+                   "hunger (SWS Balance Luzon), equally weighted; HIGH at 0.5. Not a probability and not a measured "
+                   "food-insecurity rate."),
+    "unit": "index 0-1 (HIGH at 0.5)",
+    "horizon": "two quarters ahead (Lead-2), from information published before the issue date",
+    "source": ("PSA CPI, rice prices, poverty (SAE 2021), POPCEN 2024, palay/corn and fisheries production, LFS; BSP "
+               "remittances; PAGASA ENSO advisories; IBTrACS typhoons; SWS hunger (Balance Luzon); E56-TUNED LightGBM"),
+    "caveat": ("No direct provincial food-insecurity outcome exists for CALABARZON, so the index cannot be validated as a "
+               "food-insecurity rate; regional hunger is the same for all five provinces; employment and remittances are "
+               "national."),
+}
+
+
 def indicator_for(quarter: str) -> dict:
     """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
     target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
     if not (E41L2.serves(quarter) or E41L2.governs()):
         return INDICATOR
+    if THESIS.active():
+        return THESIS_INDICATOR
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
         ind = rec["indicator"]
@@ -430,6 +452,8 @@ def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[di
 def _province_forecasts_cached(quarter: str, horizon: str, lead2_mode: str) -> list[dict]:
     # E41: with AIPHEED_LEAD2_MODEL=e41, the candidate's frozen Lead-2 forecast replaces the E38 row for exactly its
     # target quarter; every other quarter, and the default mode, are unchanged.
+    if lead2_mode.startswith("thesis"):               # THESIS: the FIRI estimate is the province score on every quarter
+        return THESIS.index_rows(E41L2.rows_for(quarter), quarter) if lead2_mode.endswith(":governs") else []
     if lead2_mode.endswith(":governs"):              # E46: one score on every quarter (candidate's own estimates)
         return E41L2.rows_for(quarter)
     if E41L2.serves(quarter):
@@ -503,6 +527,27 @@ def _province_population() -> dict[str, int]:
     return roster.groupby("province_code")["population_2024"].sum().astype(int).to_dict()
 
 
+def _thesis_scale() -> bool:
+    return THESIS.active() and E41L2.governs()
+
+
+def _level(score: float) -> str:
+    """THESIS: FIRI v1 classifies the unrounded index (HIGH at >= 0.5, FIRI_PROTOCOL section 4), as the evaluation did;
+    other modes keep the approved rule (judged on the two-decimal score as shown)."""
+    if _thesis_scale():
+        return "high" if score >= THESIS.FIRI_THRESHOLD else "low"
+    return ref.risk_level(score)
+
+
+def _shown(score: float | None) -> float | None:
+    """THESIS: the score the approved UI prints with two decimals. An index in [0.495, 0.5) is LOW but would print
+    "0.50", which the UI reads as HIGH; such a value is served truncated (0.49), so the number shown never contradicts
+    the class. The exact value stays in riskScoreExact (internal), the summary text, the LGU index and the evaluation."""
+    if score is not None and _thesis_scale() and score < THESIS.FIRI_THRESHOLD and round(score, 2) >= THESIS.FIRI_THRESHOLD:
+        return math.floor(score * 100) / 100
+    return score
+
+
 def province_summary(
     quarter: str,
     withheld: frozenset[str] = frozenset(),
@@ -537,8 +582,9 @@ def province_summary(
             "povertyRate": poverty.get(code),
             "povertyRateBasis": POVERTY_RATE_BASIS,
             "currentQuarter": quarter,
-            "riskScore": score,
-            "riskLevel": ref.risk_level(score),
+            "riskScore": _shown(score),
+            "riskScoreExact": score,
+            "riskLevel": _level(score),
             "qoqChange": delta,
             "qoqChangePct": pct,
             "riskLabel": record.get("risk_label"),
@@ -673,7 +719,7 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
     """
     provinces = province_summary(quarter, withheld, horizon)
     published = [p for p in provinces if not p["withheld"]]
-    scores = [p["riskScore"] for p in published]
+    scores = [p.get("riskScoreExact", p["riskScore"]) for p in published]
     score = round(sum(scores) / len(scores), 4) if scores else None
 
     delta = None
@@ -681,7 +727,7 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
     if prev_q and score is not None:
         # Compare like with like: the same provinces, one quarter earlier.
         prev_scores = [
-            p["riskScore"] for p in province_summary(prev_q, withheld, horizon)
+            p.get("riskScoreExact", p["riskScore"]) for p in province_summary(prev_q, withheld, horizon)
             if not p["withheld"]
         ]
         if prev_scores:
@@ -691,8 +737,9 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
         "scope": "region",
         "id": ref.REGION_ID,
         "name": ref.REGION_NAME,
-        "riskScore": score,
-        "riskLevel": ref.risk_level(score) if score is not None else None,
+        "riskScore": _shown(score),
+        "riskScoreExact": score,
+        "riskLevel": _level(score) if score is not None else None,
         "qoqChange": delta,
         "horizonLabel": next(
             (p.get("horizonLabel") for p in published if p.get("horizonLabel")), None),
@@ -817,12 +864,12 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "povertyRate": poverty.get(code),
             **_poverty_provenance(code, poverty.get(code)),
             "quarter": quarter,
-            "riskIndex": score,
+            "riskIndex": _shown(score),
             # E45 (user decision 2026-10-17): the approved map colours every LGU with the approved risk palette, so the
             # LGU index gets the same display band as a province (ref.risk_level, cutoff 0.50). It stays a relative
             # position from the province forecast and PSA poverty/density (riskLevelBasis), not a municipal forecast.
             # A null index keeps a null band, which the approved map shows as "No data available".
-            "riskLevel": None if score is None else ref.risk_level(score),
+            "riskLevel": None if score is None else _level(score),
             "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
@@ -921,6 +968,8 @@ TRIGGER_STATUS_NOTES = {
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
                         "the official figures behind this factor.")
+THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v1): the average of the five provinces' contributions of this "
+                               "factor group. Open a province to see each indicator's value, its 0-1 score and its status.")
 
 
 def _model_trigger_groups(quarter: str) -> frozenset[str]:
@@ -932,6 +981,8 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
 
 
 def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
+    if THESIS.active() and E41L2.governs():           # THESIS: the status of the group in the served FIRI
+        return THESIS.group_status(E41L2.record(), quarter, code, key, pct)
     if E41L2.governs() and not E41L2.serves(quarter) and not E41L2.has_past_drivers(quarter):
         return "not_recorded"
     own = E41L2.trigger_statuses(quarter, code)                  # E43 records state their own statuses
@@ -977,6 +1028,8 @@ def explainability(province_code: str, quarter: str) -> dict:
     without anything being dropped.
     """
     built = _drivers(province_code, quarter)
+    if THESIS.active() and E41L2.governs():            # THESIS: the bars explain the served FIRI, not the price part
+        built = THESIS.firi_drivers(E41L2.record(), quarter, province_code, built)
     drivers = built["drivers"]
     pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
 
@@ -992,8 +1045,10 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
-                                       d["driver_group"], quarter),
+            "evidenceNote": (THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
+                             if THESIS.active() and E41L2.governs() else
+                             _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
+                                        d["driver_group"], quarter)),
             "newsSignalProportion": d["trigger_proportion"],
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
@@ -1054,7 +1109,8 @@ def explainability_region(quarter: str) -> dict:
             "statusNote": TRIGGER_STATUS_NOTES[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
-            "evidenceNote": (REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
+            "evidenceNote": (THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
+                             REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
                              else None),
             "newsSignalProportion": (
                 round(sum(acc["news"]) / len(acc["news"]), 4) if acc["news"] else None
@@ -1164,9 +1220,16 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         why = parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]
         if comp:
             # E61: say which of the two required conditions makes the estimate low or high before naming factors
-            sentence = (f"{head}: regional hunger is {_likely(comp['hunger'])} to stay above 11.3% "
+            sentence = ((f"{head}: the model's own hunger part gives {comp['hunger']:.0%} for regional hunger above "
+                         f"11.3% (the risk index uses the separate regional hunger outlook) and provincial food-price "
+                         f"pressure is {_likely(comp['price'])} ({comp['price_text']}); the target needs both.")
+                        if THESIS.active() else
+                        f"{head}: regional hunger is {_likely(comp['hunger'])} to stay above 11.3% "
                         f"({comp['hunger']:.0%}) and provincial food-price pressure is {_likely(comp['price'])} "
-                        f"({comp['price_text']}); the target needs both. Within the price part, {why}.")
+                        f"({comp['price_text']}); the target needs both."
+                        + ("" if THESIS.active() else f" Within the price part, {why}."))
+        elif THESIS.active():
+            sentence = f"{head}."                        # the bars and reasons explain FIRI, not this price score
         else:
             sentence = f"{head}, mainly because {why}."
     else:
@@ -1177,6 +1240,10 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         text = warnings[0]["text"]
         if comp:                                         # same wording rule as the head (record text kept as stored)
             text = text.replace("HIGH-risk probability", "HIGH-risk score")
+        if THESIS.active():                              # the E58 rule watches the price score, not FIRI
+            text = (text.replace("No early warning:", "No price-score early warning:")
+                        .replace("Early warning ", "Price-score early warning ")
+                        .replace("HIGH-risk probability", "price-score HIGH-risk probability"))
         sentence = f"{sentence} {text}"
     elif warnings:
         active = [w for w in warnings if w["warn"]]
@@ -1221,7 +1288,7 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             sentence = f"{e67['lead']} {sentence}"
     if e67 and e67["sentence"]:
         sentence = f"{sentence} {e67['sentence']}"
-    return {
+    out = {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
         "reasons": [{"key": t["key"], "label": t["label"], "direction": t["direction"], "pct": t["pct"],
@@ -1240,6 +1307,17 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         **({k: e67[k] for k in ("riskOutlook", "regionalHungerOutlook", "vulnerabilityProfile", "newsEvidence")
             if e67 and e67.get(k)}),
     }
+    # THESIS: the summary's value and class are the FIRI estimate (the number the map and the LGU index use); the
+    # LightGBM price score stays in components.probabilityPricePressure and in the sentence
+    if THESIS.active() and e67 and (e67.get("riskOutlook") or {}).get("index") is not None:
+        out["probability"] = e67["riskOutlook"]["index"]
+        out["result"] = e67["riskOutlook"].get("class") or ("HIGH" if out["probability"] >= 0.5 else "LOW")
+        out["event"] = THESIS_EVENT
+    return out
+
+
+THESIS_EVENT = ("estimated food-insecurity risk (FIRI v1: a proxy composite of affordability, vulnerability, climate and "
+                "production, household economy and regional hunger; not a probability)")
 
 
 def _thesis_summary(quarter: str, province_code: str | None, kind: str, result: str, cfsw: dict | None) -> dict | None:
