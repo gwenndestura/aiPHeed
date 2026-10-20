@@ -80,16 +80,17 @@ export function AboutModal() {
               <a href="mailto:ored@calabarzon.da.gov.ph" className={CONTACT_CHIP}>
                 <Mail aria-hidden className="h-3.5 w-3.5" /> ored@calabarzon.da.gov.ph
               </a>
-              <a href="mailto:aipheed.research@dlsud.edu.ph" className={CONTACT_CHIP}>
-                <Mail aria-hidden className="h-3.5 w-3.5" /> aipheed.research@dlsud.edu.ph
-              </a>
+              {/* Not yet confirmed by the research team: plain text, not a link. */}
+              <span className="inline-flex items-center gap-1.5 h-8 compact:h-11 px-3 rounded-full border border-dashed edge-control text-[11px] font-medium text-muted-foreground">
+                Research team: [CONFIRM: research team email]
+              </span>
             </div>
           </Section>
 
-          <div className="grid grid-cols-2 gap-2 pt-1">
+          <div className="grid gap-2 pt-1">
             <Row k="Model" v="Risk index FIRI v2 · LightGBM price input" />
-            <Row k="Performance" v="LightGBM Lead-2: acc 0.72 · F1 0.59 · AUC 0.65" />
-            <Row k="Lead time" v="2 quarters · no reliable horizon established" />
+            <Row k="Price input (LightGBM, Lead-2)" v="accuracy 0.72 · F1 0.59 · AUC 0.65" />
+            <Row k="Lead time" v="Two quarters ahead. No forecast horizon has yet met the reliability test." />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
@@ -129,9 +130,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex items-center justify-between text-[11px] inner-box px-2 py-1.5">
-      <span className="text-muted-foreground">{k}</span>
-      <span className="font-semibold text-right">{v}</span>
+    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3 text-[11px] inner-box px-2.5 py-1.5">
+      <span className="shrink-0 text-muted-foreground">{k}</span>
+      <span className="font-semibold sm:text-right text-balance">{v}</span>
     </div>
   );
 }
