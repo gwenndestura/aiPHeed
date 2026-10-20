@@ -310,7 +310,7 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
         color = RAISING if trigger["direction"] == "increases_risk" else LOWERING
         arrow = "raises" if trigger["direction"] == "increases_risk" else "lowers"
         if _thesis():                                  # THESIS: the status of the group in the served index
-            arrow = {"contributes": "raises", "insufficient_data": "no data at issue (not counted)",
+            arrow = {"contributes": arrow, "insufficient_data": "no data at issue (not counted)",
                      "no_effect": "no effect"}.get(trigger.get("status"), arrow)
         rows.append((trigger["label"], trigger["pct"],
                      f"{trigger['pct']}%  {arrow}", color))
@@ -319,8 +319,9 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
         _bar_table(rows, width),
         Spacer(1, 3 * mm),
         _p(
-            ("<b>Red</b> bars are factor groups that raise the risk index. A group with no published data at the issue "
-             "date is not counted; missing data is not a sign of low risk." if _thesis() else
+            ("<b>Red</b> bars are factor groups above their usual level that raise the risk index, <b>green</b> bars are "
+             "below it and lower the index. A group with no published data at the issue date is not counted; missing "
+             "data is not a sign of low risk." if _thesis() else
              "<b>Red</b> bars raise the predicted shortfall, <b>green</b> lower it. "
              "A large bar is not automatically bad news -- share of the explanation "
              "and direction of effect are separate things."), "small"),
@@ -331,14 +332,16 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
 
 
 def _thesis_driver_text(explain: dict) -> str:
-    top = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0]
+    up = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0 and t["direction"] == "increases_risk"]
+    down = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0 and t["direction"] == "protective"]
     other = explain.get("otherPct")
     return _escape(
-        "Each bar is the factor group's exact share of the five groups' part of the risk index (FIRI v1): "
-        + (", ".join(top) or "none") + ". "
-        + (f"Regional hunger and household vulnerability, which are not among the five groups, make up {other:.0f}% of "
-           "the index itself. " if other is not None else "")
-        + "Shares describe how the index is built from the evidence; they are not causes.")
+        "Each bar is the factor group's exact share of how far the risk index (FIRI v2) moved from its neutral 0.5. "
+        + ("Raising it: " + ", ".join(up) + ". " if up else "")
+        + ("Lowering it: " + ", ".join(down) + ". " if down else "")
+        + (f"Household vulnerability, regional hunger and news, which are not among the five groups, account for "
+           f"{other:.0f}% of that movement. " if other is not None else "")
+        + "Shares describe how the estimate is built from the evidence; they are not causes.")
 
 
 def _method_block(performance: dict) -> list:
@@ -522,12 +525,13 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
 # ---------------------------------------------------------------------------
 THESIS_FOOTER = ("Estimated food-insecurity risk index (proxy composite, not a probability) -- not an official food "
                  "insecurity classification.")
-THESIS_COVER = ("<b>The number below is the estimated food-insecurity risk index (FIRI v1)</b>, 0 to 1, HIGH at 0.5: an "
-                "equally weighted composite of affordability (including the LightGBM food-price-pressure forecast), "
-                "household vulnerability (poverty and density), climate and food production, household economy "
-                "(national) and regional hunger (Balance Luzon, the same for every province). No direct provincial "
-                "food-insecurity outcome exists, so it is <b>a proxy estimate for planning, not a probability and not a "
-                "measured food-insecurity rate</b>; no forecast lead met the pre-registered reliability criterion.")
+THESIS_COVER = ("<b>The number below is the estimated food-insecurity risk index (FIRI v2)</b>, 0 to 1, HIGH at 0.5: a "
+                "composite of affordability (including the LightGBM food-price-pressure forecast), household "
+                "vulnerability (poverty and density), climate and food production, household economy (national), news "
+                "and regional hunger (Balance Luzon, the same for every province). Each indicator is compared with its "
+                "own earlier values, and domains are weighted by how closely they tracked observed regional hunger. No "
+                "direct provincial food-insecurity outcome exists, so it is <b>a proxy estimate for planning, not a "
+                "probability and not a measured food-insecurity rate</b>.")
 THESIS_SECTIONS = ("REGIONAL HUNGER", "CLIMATE:", "NEWS (", "DATA AT THE ISSUE DATE", "MODEL:", "Back-test estimate")
 
 

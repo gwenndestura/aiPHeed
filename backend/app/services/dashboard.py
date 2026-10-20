@@ -79,13 +79,15 @@ INDICATOR = {
 
 THESIS_INDICATOR = {
     "id": "food_insecurity_risk_index",
-    "name": "Estimated food-insecurity risk index (FIRI v1)",
+    "name": "Estimated food-insecurity risk index (FIRI v2)",
     "definition": ("A 0-1 proxy composite estimating the relative risk of food insecurity two quarters ahead: affordability "
                    "(LightGBM food-price-pressure forecast, headline inflation, rice prices), household vulnerability "
                    "(poverty and population density), climate and food production (PAGASA El Nino status, typhoons, palay, "
-                   "corn and fisheries production), household economy (national unemployment and remittances) and regional "
-                   "hunger (SWS Balance Luzon), equally weighted; HIGH at 0.5. Not a probability and not a measured "
-                   "food-insecurity rate."),
+                   "corn and fisheries production), household economy (national unemployment and remittances), news "
+                   "(FSSI-v3, when at least 5 articles) and regional hunger (SWS Balance Luzon). Each indicator is "
+                   "compared with its own earlier values (0.5 = its historical middle); domains are weighted by how "
+                   "closely they tracked observed regional hunger in earlier quarters; HIGH at 0.5. Not a probability "
+                   "and not a measured food-insecurity rate."),
     "unit": "index 0-1 (HIGH at 0.5)",
     "horizon": "two quarters ahead (Lead-2), from information published before the issue date",
     "source": ("PSA CPI, rice prices, poverty (SAE 2021), POPCEN 2024, palay/corn and fisheries production, LFS; BSP "
@@ -532,7 +534,7 @@ def _thesis_scale() -> bool:
 
 
 def _level(score: float) -> str:
-    """THESIS: FIRI v1 classifies the unrounded index (HIGH at >= 0.5, FIRI_PROTOCOL section 4), as the evaluation did;
+    """THESIS: FIRI classifies the unrounded index (HIGH at >= 0.5, FIRI2_PROTOCOL section 2), as the evaluation did;
     other modes keep the approved rule (judged on the two-decimal score as shown)."""
     if _thesis_scale():
         return "high" if score >= THESIS.FIRI_THRESHOLD else "low"
@@ -968,8 +970,9 @@ TRIGGER_STATUS_NOTES = {
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
                         "the official figures behind this factor.")
-THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v1): the average of the five provinces' contributions of this "
-                               "factor group. Open a province to see each indicator's value, its 0-1 score and its status.")
+THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v2): the five provinces' combined push of this factor group "
+                               "(above or below its historical middle). Open a province to see each indicator's value, "
+                               "score and status.")
 
 
 def _model_trigger_groups(quarter: str) -> frozenset[str]:
@@ -1097,6 +1100,8 @@ def explainability_region(quarter: str) -> dict:
     for key, pct in zip(keys, pcts):
         acc = totals[key]
         direction = "increases_risk" if acc["signed"] >= 0 else "protective"
+        if THESIS.active() and E41L2.governs() and acc["signed"] == 0:
+            direction = "no_effect"                       # THESIS: a group with no push (or no data) neither raises nor lowers
         triggers.append({
             "key": key,
             "label": acc["label"],
@@ -1316,8 +1321,8 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     return out
 
 
-THESIS_EVENT = ("estimated food-insecurity risk (FIRI v1: a proxy composite of affordability, vulnerability, climate and "
-                "production, household economy and regional hunger; not a probability)")
+THESIS_EVENT = ("estimated food-insecurity risk (FIRI v2: an evidence-weighted proxy composite of affordability, "
+                "vulnerability, climate and production, household economy, news and regional hunger; not a probability)")
 
 
 def _thesis_summary(quarter: str, province_code: str | None, kind: str, result: str, cfsw: dict | None) -> dict | None:

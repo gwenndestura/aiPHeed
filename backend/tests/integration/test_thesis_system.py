@@ -186,7 +186,7 @@ def test_142_lgus_finite_mapped_and_coloured(thesis):
         code = next(c for c, s in SLUG.items() if s == r["provinceId"])
         f = T.firi_for(rec, "2027-Q1", code)["firi"]
         assert r["provinceEstimate"] == pytest.approx(f, abs=1e-6)
-        assert r["riskIndex"] == pytest.approx(f * r["vulnerabilityIndex"], abs=6e-5)
+        assert r["riskIndex"] == pytest.approx(_shown(f * r["vulnerabilityIndex"]), abs=6e-5)
 
 
 def test_runtime_input_status_matches_the_e68_classification(thesis):
@@ -211,7 +211,7 @@ def test_pdf_reports_render_with_the_final_evaluation(thesis):
         assert r.status_code == 200 and r.headers["content-type"].startswith("application/pdf") and len(r.content) > 10_000
     tb = T.performance_tables()
     assert [row[0][:6] for row in tb["leadRows"][:4]] == ["Lead 1", "Lead 2", "Lead 3", "Lead 4"]
-    assert [row[0][:10] for row in tb["leadRows"][4:]] == ["FIRI lead ", "FIRI lead ", "FIRI lead "]
+    assert [row[0][:14] for row in tb["leadRows"][4:]] == ["FIRI v2 lead 1", "FIRI v2 lead 2", "FIRI v2 lead 3"]
     assert len(tb["baselineRows"]) == 6 and all(row[-1] == "no" for row in tb["leadRows"])
     assert T.relabel("Quezon: estimated probability of HIGH food-insecurity risk 15%") == "Quezon: exploratory food-price-pressure score 15%"
 
@@ -253,12 +253,18 @@ def test_firi_scoring_rules():
     assert r["class"] == ("HIGH" if r["firi"] >= 0.5 else "LOW")
 
 
+def _shown(v):
+    """The display rule of the thesis mode (dashboard._shown): a LOW index that would print as 0.50 is truncated."""
+    return math.floor(v * 100) / 100 if v < 0.5 and round(v, 2) >= 0.5 else v
+
+
 def test_runtime_firi_equals_the_evaluated_history(thesis):
     import csv
     rec = LEAD2.record()
     hist = {(r["target"], r["province_code"]): r for r in csv.DictReader(open(T.FIRI_HISTORY, encoding="utf-8"))}
-    assert {q for q, _ in hist} == set(LEAD2.candidate_quarters())
-    assert all(r["FIRI"] and 0 <= float(r["FIRI"]) <= 1 for r in hist.values())
+    assert {q for q, _ in hist} >= set(LEAD2.candidate_quarters())
+    assert all(0 <= float(r["FIRI"]) <= 1 for r in hist.values() if r["FIRI"])
+    assert {q for (q, _), r in hist.items() if not r["FIRI"]} == {"2022-Q2"}       # first origin: too little history
     for c in SLUG:
         run = T.firi_for(rec, rec["targetQuarter"], c)
         h = hist[(rec["targetQuarter"], c)]
@@ -269,47 +275,106 @@ def test_runtime_firi_equals_the_evaluated_history(thesis):
             else:
                 assert run["indicators"][k]["x"] == v["x"] and run["indicators"][k]["status"] == v["status"]
         assert run["firi"] == pytest.approx(float(h["FIRI"]), abs=1e-5)
+        assert run["version"] == "v2" and run["weights"] == pytest.approx(json.loads(h["weights_json"]), abs=1e-9)
         st = {k: v["status"] for k, v in run["indicators"].items()}
         assert st["C2"] == "incomplete" and st["E2"] == "missing" and st["C1"] == "observed"
-        assert run["indicators"]["C2"]["score"] is None and run["domains"]["N"] is None
+        assert run["indicators"]["C2"]["score"] is None
+    news = {c: T.firi_for(rec, rec["targetQuarter"], c)["domains"]["N"] for c in SLUG}
+    assert news["PH040300000"] is None and all(v is not None for c, v in news.items() if c != "PH040300000")
 
 
 def test_province_api_scores_are_firi_and_map_levels_follow(thesis):
     rec = LEAD2.record()
-    for q in ("2027-Q1", "2026-Q4", "2025-Q2"):
+    for q in ("2027-Q1", "2026-Q4", "2025-Q2", "2024-Q3", "2024-Q2"):
         data = _get("/api/v1/provinces", quarter=q)["data"]
         assert len(data) == 5
         for p in data:
             code = next(c for c, s in SLUG.items() if s == p["id"])
-            f = T.firi_for(rec, q, code)["firi"]
-            assert p["riskScore"] == pytest.approx(f, abs=1e-6)
-            assert p["riskLevel"] == ("high" if round(f, 2) >= 0.5 else "low")
+            res = T.firi_for(rec, q, code)
+            assert p["riskScore"] == pytest.approx(_shown(res["firi"]), abs=1e-6)
+            assert p["riskLevel"] == res["class"].lower() == ("high" if res["firi"] >= 0.5 else "low")
+            assert (round(p["riskScore"], 2) >= 0.5) == (res["class"] == "HIGH")      # the shown number never contradicts
 
 
-def test_firi_evaluation_reported_honestly():
+def test_firi2_protocol_frozen_and_rule_applied():
+    import hashlib
+    proto = FIRI_DIR / "FIRI2_PROTOCOL.md"
+    assert _sha_lf(proto) == (FIRI_DIR / "runner" / "FIRI2_PROTOCOL_SHA256.txt").read_text().split()[0]
     e = json.loads(T.FIRI_EVALUATION.read_text())
-    L2 = next(x for x in e["leads"] if x["lead"] == 2)
-    assert L2["rows"] == 50 and not any(x["reliable"] for x in e["leads"])
-    assert L2["FIRI"]["confusion"] == {"TP": 17, "FP": 27, "FN": 1, "TN": 5}
-    assert e["domainsUsed"] == ["A", "C", "E", "H", "V"]
-    assert e["objective4"]["comparisons"]["LightGBM E56-TUNED"]["brier_diff_firi_minus_baseline"] > 0   # FIRI worse on T43
-    assert e["regionalOutcome"]["quarters"] == 18 and "shares its source" in e["regionalOutcome"]["note"]
-    assert "no result validates" in e["evidenceStatus"].lower()
+    assert e["protocolSha256"] == _sha_lf(proto) and e["selected"] == "C3"
+    el = e["eligibility"]
+    assert el["C0"]["eligible"] is False and el["C0"]["max_single_bound_indicator"] == "E1"   # v1: E1 saturated
+    assert all(el[c]["eligible"] for c in ("C1", "C2", "C3"))
+    l2 = e["regional"]["2"]["candidates"]
+    best = max(l2[c]["accuracy"] for c in ("C1", "C2", "C3"))
+    assert l2["C3"]["accuracy"] == best and l2["C3"]["accuracy"] >= l2["C0"]["accuracy"]
+    assert e["lgbm_checks"]["L1"]["passes"] is False and e["lgbm_checks"]["L2"]["passes"] is False
+    ref = json.loads(T.FIRI2_REFERENCE.read_text())
+    body = {k: v for k, v in ref.items() if k != "content_sha256"}
+    assert hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest() == ref["content_sha256"]
+    seal = FIRI_DIR / "out" / "firi2_sealed_prospective.csv"
+    assert _sha_lf(seal) == (FIRI_DIR / "out" / "firi2_sealed_prospective.sha256").read_text().split()[0]
+
+
+def test_firi2_scoring_rules():
+    from app.ml.inference import firi as FI
+    assert FI.percentile(3, [1, 2, 3, 4]) == 0.625 and FI.percentile(0, [1, 2]) == 0 and FI.percentile(9, [1, 2]) == 1
+    raw = {k: {"x": None, "status": "missing", "note": ""} for k in FI.LABELS}
+    raw["A1"]["x"], raw["H1"]["x"], raw["C1"]["x"], raw["V1"]["x"] = 0.2, 0.9, 1.0, 0.5
+    raw["A2"]["x"] = 3.0
+    prior = {k: [] for k in FI.CONTINUOUS}
+    r = FI.score_v2(raw, {**prior, "A2": [1.0] * 7})
+    assert r["indicators"]["A2"]["status"] == "insufficient_history" and r["indicators"]["A2"]["score"] is None
+    r = FI.score_v2(raw, {**prior, "A2": [1.0] * 4 + [5.0] * 4})
+    assert r["indicators"]["A2"]["score"] == 0.5 and r["domainsAvailable"] == 4      # missing dropped, never 0
+    assert r["firi"] == pytest.approx(((0.2 + 0.5) / 2 + 0.5 + 1.0 + 0.9) / 4)
+    w = FI.score_v2(raw, {**prior, "A2": [1.0] * 4 + [5.0] * 4}, {"A": 2.0, "C": 1.0, "H": 1.0})   # V: prior weight 1
+    assert w["weights"] == pytest.approx({"A": 0.4, "V": 0.2, "C": 0.2, "H": 0.2})
+    assert w["firi"] == pytest.approx(0.4 * 0.35 + 0.2 * 0.5 + 0.2 * 1.0 + 0.2 * 0.9)
+    assert sum(T.pushes(w).values()) + 0.5 == pytest.approx(w["firi"], abs=1e-12)
+    assert sum(T.contributions(w).values()) == pytest.approx(w["firi"], abs=1e-12)
+
+
+def test_firi2_no_leakage_in_reference_and_weights():
+    ref = T.reference()
+    for q in ("2023-Q4", "2025-Q2", "2026-Q3"):
+        pv = T.prior_for(q)
+        for k, vals in ref["values"].items():
+            assert len(pv[k]) == sum(1 for qq, _ in vals if T.qi(qq) < T.qi(q))
+    e = json.loads(T.FIRI_EVALUATION.read_text())
+    for q, w in e["weights_lead2"].items():          # evidence weights use only outcome rounds posted before the issue
+        assert w["C3_pairs"] <= len(T._posted(T.issue_of(T.qi(q))))
+        if w["C3"] is not None:
+            assert w["C3_pairs"] >= 6
+
+
+def test_firi_evaluation_reported_honestly(thesis):
+    perf = _get("/api/v1/config")["modelPerformance"]["firi"]
+    l2 = next(x for x in perf["regional"] if x["lead"] == 2)
+    assert perf["selected"] == "C3" and l2["quarters"] == 17
+    assert l2["FIRI"]["confusion"] == {"TP": 11, "FP": 0, "FN": 1, "TN": 5}
+    assert l2["before_FIRI_v1"]["accuracy"] == pytest.approx(16 / 17)
+    assert "no paired Brier test establishes" in perf["goal75"] and "regional" in perf["goal75"]
+    assert all(t["FIRI"]["accuracy"] < t["LightGBM"]["accuracy"] for t in perf["t43Agreement"])   # not a price model
+    assert perf["lgbmChecks"] == {"plattRecalibration": False, "walkForwardThreshold": False}
 
 
 def test_driver_bars_explain_the_served_index(thesis):
     rec = LEAD2.record()
     for c, slug in SLUG.items():
         ex = _get("/api/v1/explainability", scope="province", id=slug, quarter="2027-Q1")
-        assert "exact share of that index" in ex["note"] and "FIRI" in ex["note"]
+        assert "moved from 0.5" in ex["note"] and "FIRI v2" in ex["note"]
         assert sum(t["pct"] for t in ex["triggers"]) == 100
-        assert all(t["direction"] in ("increases_risk", "no_effect") for t in ex["triggers"])
+        assert all(t["direction"] in ("increases_risk", "protective", "no_effect") for t in ex["triggers"])
         res = T.firi_for(rec, "2027-Q1", c)
-        con = T.contributions(res)
-        assert sum(con.values()) == pytest.approx(res["firi"], abs=1e-9)          # additive and exact
+        pu = T.pushes(res)
+        assert sum(pu.values()) + 0.5 == pytest.approx(res["firi"], abs=1e-9)          # exact split around 0.5
         d = T.firi_drivers(rec, "2027-Q1", c, {"drivers": []})
-        five = sum(x["group_shap"] for x in d["drivers"])
-        assert five + d["other_pct"] / 100 * res["firi"] == pytest.approx(res["firi"], abs=1e-3)   # other_pct: 1 dp
+        for x in d["drivers"]:
+            assert x["group_shap"] == pytest.approx(sum(pu.get(k, 0) for k in T.FIVE_GROUPS[x["driver_group"]]), abs=1e-6)
+            assert x["direction"] == ("increases_risk" if x["group_shap"] > 0 else "protective" if x["group_shap"] < 0 else "no_effect")
+        tot = sum(abs(v) for v in pu.values())
+        assert d["other_pct"] == pytest.approx(100 * sum(abs(pu.get(k, 0)) for k in T.OTHER_INDICATORS) / tot, abs=0.06)
 
 
 def test_factor_cards_follow_the_served_index(thesis):
@@ -321,22 +386,19 @@ def test_factor_cards_follow_the_served_index(thesis):
                 assert t["status"] == "contributes", (i, q, t)
             else:
                 assert t["status"] in ("no_effect", "insufficient_data"), (i, q, t)
-            assert t["evidenceNote"].startswith("In the risk index (FIRI v1"), (i, q, t)
+            assert t["evidenceNote"].startswith("In the risk index (FIRI v2"), (i, q, t)
             if t["status"] == "insufficient_data" and sc == "province":
                 assert "missing is not zero" in t["evidenceNote"]
 
 
 def test_class_follows_the_frozen_rule_near_the_threshold(thesis):
-    """FIRI classifies the unrounded index (protocol section 4), as the evaluation did. Laguna 2026-Q1 (FIRI 0.49975,
-    evaluated LOW) is served LOW with a shown score that cannot print as "0.50"; every served level agrees with the
-    evaluated class in the history table."""
-    for q in ("2024-Q3", "2025-Q2", "2026-Q1", "2026-Q2", "2026-Q4", "2027-Q1"):
-        rows = _get("/api/v1/provinces", quarter=q)["data"]
-        for p in rows:
+    """FIRI classifies the unrounded index, as the evaluation did; a LOW index that would print as 0.50 is shown as
+    0.49 and written with four decimals."""
+    from app.services import dashboard as D
+    for q in ("2024-Q2", "2024-Q3", "2025-Q2", "2026-Q1", "2026-Q2", "2026-Q4", "2027-Q1"):
+        for p in _get("/api/v1/provinces", quarter=q)["data"]:
             res = T.firi_for(LEAD2.record(), q, p["provinceCode"])
             assert p["riskLevel"] == res["class"].lower(), (q, p["id"])
             assert (round(p["riskScore"], 2) >= 0.5) == (res["class"] == "HIGH"), (q, p["id"], p["riskScore"])
-    lag = next(p for p in _get("/api/v1/provinces", quarter="2026-Q1")["data"] if p["id"] == "laguna")
-    assert lag["riskLevel"] == "low" and lag["riskScore"] == 0.49
-    res = T.firi_for(LEAD2.record(), "2026-Q1", "PH040200000")
-    assert T.fmt_index(res["firi"]) == "0.4998" and "LOW (risk index 0.4998" in T.firi_text(res, "Laguna", "2026-Q1")
+    assert D._shown(0.49975) == 0.49 and D._level(0.49975) == "low" and D._level(0.5) == "high"
+    assert T.fmt_index(0.49975) == "0.4998" and T.fmt_index(0.736) == "0.74"

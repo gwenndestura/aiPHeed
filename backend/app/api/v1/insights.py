@@ -130,16 +130,18 @@ E58_EXPLAINABILITY_NOTE = E56_EXPLAINABILITY_NOTE + (
 )
 
 
-# THESIS: the bars show the exact additive shares of the served FIRI v1 index by the five approved factor groups
-# (thesis_system.firi_drivers); regional hunger and vulnerability are named in the summary text (no new UI element)
+# THESIS: the bars show the exact push of each of the five approved factor groups on the served FIRI v2 index away
+# from its neutral 0.5 (thesis_system.firi_drivers); vulnerability, regional hunger and news are named in the summary
+# text (no new UI element)
 THESIS_EXPLAINABILITY_NOTE = (
-    "The risk score shown is the estimated food-insecurity risk index (FIRI v1), a proxy composite on a 0-1 scale. The "
-    "bars show each factor group's exact share of that index: Market / Prices (the LightGBM food-price-pressure "
-    "forecast, headline inflation, rice prices), Climate Stress (PAGASA El Nino status, typhoons, palay and corn "
-    "production), Fish Kill (fisheries production, not fish-kill events), Employment and OFW Remittance (national "
-    "figures). Regional hunger (SWS, Balance Luzon) and household vulnerability (poverty and density) are also in the "
-    "index but are not among the five bars; their share and every domain score are in the summary text. Shares describe "
-    "how the index is built from the evidence; they are not causes."
+    "The risk score shown is the estimated food-insecurity risk index (FIRI v2), a proxy composite on a 0-1 scale in "
+    "which 0.5 means every indicator is at its historical middle. Each bar is a factor group's exact share of how far "
+    "the index moved from 0.5: red groups are above their usual level and raise the estimate, green groups are below it "
+    "and lower it. Market / Prices = the LightGBM food-price-pressure forecast, headline inflation and rice prices; "
+    "Climate Stress = PAGASA El Nino status, typhoons, palay and corn production; Fish Kill = fisheries production (not "
+    "fish-kill events); Employment and OFW Remittance = national figures. Household vulnerability, regional hunger (SWS, "
+    "Balance Luzon) and news are also in the index but not among the five bars; their share and every domain score and "
+    "weight are in the summary text. Shares describe how the estimate is built from the evidence; they are not causes."
 )
 
 
