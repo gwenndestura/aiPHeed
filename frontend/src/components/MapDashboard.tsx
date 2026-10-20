@@ -559,7 +559,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
             style={wideCompact ? { right: EDGE, top: EDGE } : { left: EDGE, top: SHEET_TOP_RESERVE }}
           >
             <div data-tour="legend"><MapLegend compact /></div>
-            <span className="qt-float text-[12px]">© OpenStreetMap · Protomaps</span>
+            <span className="qt-float text-[12px] leading-4 font-normal text-[hsl(var(--text-muted))]">© OpenStreetMap · Protomaps</span>
           </div>
         )}
 
