@@ -262,11 +262,16 @@ export function NavBtn({ label, active, to }: { label: string; active?: boolean;
     <Link
       to={to}
       aria-current={active ? "page" : undefined}
-      className={`relative px-4 py-2 max-lg:min-h-11 max-lg:inline-flex max-lg:items-center rounded-full text-[13px] font-medium transition-colors ${
-        active ? "tint-primary" : "text-foreground/80 hover:text-foreground hover:bg-secondary/60"
+      className={`group relative px-4 py-2 max-lg:min-h-11 max-lg:inline-flex max-lg:items-center text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+        active ? "text-primary" : "text-foreground/80 hover:text-primary"
       }`}
     >
       <span>{label}</span>
+      <span
+        className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-1 h-[2px] rounded-full bg-primary transition-all duration-300 ${
+          active ? "w-6 opacity-100" : "w-0 opacity-0 group-hover:w-6 group-hover:opacity-100"
+        }`}
+      />
     </Link>
   );
 }
