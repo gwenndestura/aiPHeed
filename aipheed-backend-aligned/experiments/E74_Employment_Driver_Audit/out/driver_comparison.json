@@ -1,0 +1,406 @@
+{
+ "rows": 95,
+ "table": [
+  {
+   "indicator": "A1",
+   "source": "E56 LightGBM P(food-price pressure), Lead 2",
+   "level": "province",
+   "type": "model output used as an index indicator",
+   "role": "ACCESS",
+   "usable_rows": 60,
+   "rows": 95,
+   "missing_or_untestable": 35,
+   "mean_abs_push_when_usable": 0.0102,
+   "raises_rows": 21,
+   "lowers_rows": 39,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": -0.0075,
+    "laguna": -0.0083,
+    "quezon": -0.0081,
+    "rizal": -0.0087,
+    "batangas": -0.0088
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "Price model 0.72 Lead-2 on its own price label (E70); the CPI projection alone is as good"
+  },
+  {
+   "indicator": "A2",
+   "source": "PSA headline CPI vs usual level",
+   "level": "province",
+   "type": "index indicator",
+   "role": "ACCESS",
+   "usable_rows": 95,
+   "rows": 95,
+   "missing_or_untestable": 0,
+   "mean_abs_push_when_usable": 0.0314,
+   "raises_rows": 40,
+   "lowers_rows": 54,
+   "largest_single_push_rows": 14,
+   "push_2027Q1": {
+    "cavite": 0.0031,
+    "laguna": 0.0079,
+    "quezon": 0.0077,
+    "rizal": 0.0054,
+    "batangas": 0.0004
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "-"
+  },
+  {
+   "indicator": "A3",
+   "source": "PSA wholesale rice price change",
+   "level": "province",
+   "type": "index indicator",
+   "role": "ACCESS",
+   "usable_rows": 74,
+   "rows": 95,
+   "missing_or_untestable": 21,
+   "mean_abs_push_when_usable": 0.0199,
+   "raises_rows": 37,
+   "lowers_rows": 37,
+   "largest_single_push_rows": 4,
+   "push_2027Q1": {
+    "cavite": 0.0079,
+    "laguna": 0.0072,
+    "quezon": 0.0072,
+    "rizal": 0.0072,
+    "batangas": 0.004
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "-"
+  },
+  {
+   "indicator": "V1",
+   "source": "PSA SAE 2021 poverty + POPCEN 2024 density",
+   "level": "province (static)",
+   "type": "index indicator (vulnerability)",
+   "role": "VULNERABILITY",
+   "usable_rows": 95,
+   "rows": 95,
+   "missing_or_untestable": 0,
+   "mean_abs_push_when_usable": 0.025,
+   "raises_rows": 38,
+   "lowers_rows": 57,
+   "largest_single_push_rows": 5,
+   "push_2027Q1": {
+    "cavite": 0.0052,
+    "laguna": -0.0124,
+    "quezon": 0.007,
+    "rizal": -0.0067,
+    "batangas": -0.0187
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "Static; contributing factors did not reproduce the subsistence ordering (E71)"
+  },
+  {
+   "indicator": "C1",
+   "source": "PAGASA El Nino alert/advisory",
+   "level": "national",
+   "type": "index indicator",
+   "role": "STABILITY",
+   "usable_rows": 95,
+   "rows": 95,
+   "missing_or_untestable": 0,
+   "mean_abs_push_when_usable": 0.0633,
+   "raises_rows": 30,
+   "lowers_rows": 65,
+   "largest_single_push_rows": 32,
+   "push_2027Q1": {
+    "cavite": 0.0512,
+    "laguna": 0.0512,
+    "quezon": 0.0615,
+    "rizal": 0.0512,
+    "batangas": 0.0512
+   },
+   "same_value_all_provinces_2027Q1": true,
+   "independent_evidence": "The one El Nino in the data (2023-24) came with disinflation (E65)"
+  },
+  {
+   "indicator": "C2",
+   "source": "PAGASA typhoons within 300 km",
+   "level": "province",
+   "type": "index indicator",
+   "role": "STABILITY",
+   "usable_rows": 60,
+   "rows": 95,
+   "missing_or_untestable": 35,
+   "mean_abs_push_when_usable": 0.0338,
+   "raises_rows": 31,
+   "lowers_rows": 29,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": null,
+    "laguna": null,
+    "quezon": null,
+    "rizal": null,
+    "batangas": null
+   },
+   "same_value_all_provinces_2027Q1": null,
+   "independent_evidence": "Climate news tracks PAGASA typhoons (E73, rho 0.35 [0.06, 0.60])"
+  },
+  {
+   "indicator": "C3",
+   "source": "PSA palay/corn production drop",
+   "level": "province",
+   "type": "index indicator",
+   "role": "AVAILABILITY",
+   "usable_rows": 80,
+   "rows": 95,
+   "missing_or_untestable": 15,
+   "mean_abs_push_when_usable": 0.0268,
+   "raises_rows": 43,
+   "lowers_rows": 35,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": -0.0042,
+    "laguna": 0.0512,
+    "quezon": -0.0224,
+    "rizal": -0.0452,
+    "batangas": 0.0199
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "-"
+  },
+  {
+   "indicator": "C4",
+   "source": "PSA fisheries production drop",
+   "level": "province",
+   "type": "index indicator",
+   "role": "AVAILABILITY",
+   "usable_rows": 80,
+   "rows": 95,
+   "missing_or_untestable": 15,
+   "mean_abs_push_when_usable": 0.0237,
+   "raises_rows": 25,
+   "lowers_rows": 53,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": -0.0283,
+    "laguna": -0.003,
+    "quezon": -0.0181,
+    "rizal": 0.0127,
+    "batangas": -0.0235
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "Fish-kill news does not track fisheries production (E73)"
+  },
+  {
+   "indicator": "E1",
+   "source": "PSA LFS unemployment-rate change",
+   "level": "national",
+   "type": "index indicator",
+   "role": "ACCESS",
+   "usable_rows": 50,
+   "rows": 95,
+   "missing_or_untestable": 45,
+   "mean_abs_push_when_usable": 0.0517,
+   "raises_rows": 50,
+   "lowers_rows": 0,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": 0.0637,
+    "laguna": 0.0637,
+    "quezon": 0.0765,
+    "rizal": 0.0637,
+    "batangas": 0.0637
+   },
+   "same_value_all_provinces_2027Q1": true,
+   "independent_evidence": "No provincial employment series exists; employment news does not track LFS (E73, rho -0.17); weight = equal default (untested); inside the LightGBM the same input has a negative TreeSHAP"
+  },
+  {
+   "indicator": "E2",
+   "source": "BSP OFW remittance decline",
+   "level": "national",
+   "type": "index indicator",
+   "role": "ACCESS",
+   "usable_rows": 40,
+   "rows": 95,
+   "missing_or_untestable": 55,
+   "mean_abs_push_when_usable": 0.0255,
+   "raises_rows": 35,
+   "lowers_rows": 0,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": null,
+    "laguna": null,
+    "quezon": null,
+    "rizal": null,
+    "batangas": null
+   },
+   "same_value_all_provinces_2027Q1": null,
+   "independent_evidence": "Missing for every 2026 issue; remittance news does not track BSP (E73)"
+  },
+  {
+   "indicator": "N1",
+   "source": "FSSI-v3 news index",
+   "level": "province",
+   "type": "index indicator (signal)",
+   "role": "NEWS",
+   "usable_rows": 10,
+   "rows": 95,
+   "missing_or_untestable": 85,
+   "mean_abs_push_when_usable": 0.0363,
+   "raises_rows": 6,
+   "lowers_rows": 2,
+   "largest_single_push_rows": 0,
+   "push_2027Q1": {
+    "cavite": 0.0729,
+    "laguna": 0.0521,
+    "quezon": null,
+    "rizal": 0.0521,
+    "batangas": 0.0312
+   },
+   "same_value_all_provinces_2027Q1": false,
+   "independent_evidence": "News adds no forecast value; bias correction not validated (E73)"
+  },
+  {
+   "indicator": "H1",
+   "source": "SWS regional hunger outlook",
+   "level": "regional (Balance Luzon)",
+   "type": "observed outcome evidence",
+   "role": "OUTCOME",
+   "usable_rows": 95,
+   "rows": 95,
+   "missing_or_untestable": 0,
+   "mean_abs_push_when_usable": 0.0625,
+   "raises_rows": 65,
+   "lowers_rows": 20,
+   "largest_single_push_rows": 40,
+   "push_2027Q1": {
+    "cavite": 0.093,
+    "laguna": 0.093,
+    "quezon": 0.1116,
+    "rizal": 0.093,
+    "batangas": 0.093
+   },
+   "same_value_all_provinces_2027Q1": true,
+   "independent_evidence": "Direct outcome, regional only; against OCTA the index tracks hunger only through H1 (rho 0.73 with, 0.06 without)"
+  }
+ ],
+ "largest_push_by_quarter": {
+  "2022-Q3": {
+   "A2": 5
+  },
+  "2022-Q4": {
+   "C1": 4,
+   "A2": 1
+  },
+  "2023-Q1": {
+   "C1": 3,
+   "A2": 2
+  },
+  "2023-Q2": {
+   "A2": 3,
+   "A3": 1,
+   "V1": 1
+  },
+  "2023-Q3": {
+   "A2": 2,
+   "V1": 2,
+   "A3": 1
+  },
+  "2023-Q4": {
+   "H1": 5
+  },
+  "2024-Q1": {
+   "A3": 2,
+   "V1": 2,
+   "A2": 1
+  },
+  "2024-Q2": {
+   "C1": 5
+  },
+  "2024-Q3": {
+   "C1": 5
+  },
+  "2024-Q4": {
+   "C1": 5
+  },
+  "2025-Q1": {
+   "C1": 5
+  },
+  "2025-Q2": {
+   "C1": 5
+  },
+  "2025-Q3": {
+   "H1": 5
+  },
+  "2025-Q4": {
+   "H1": 5
+  },
+  "2026-Q1": {
+   "H1": 5
+  },
+  "2026-Q2": {
+   "H1": 5
+  },
+  "2026-Q3": {
+   "H1": 5
+  },
+  "2026-Q4": {
+   "H1": 5
+  },
+  "2027-Q1": {
+   "H1": 5
+  }
+ },
+ "e56_treeshap_2027Q1": {
+  "PH040100000": {
+   "market": 0.0,
+   "climate": -0.0459,
+   "fish_kill": 0.0,
+   "employment": -0.2455,
+   "ofw_remittance": -0.0967,
+   "other": 0.0,
+   "employment_share_of_tree_abs": 0.633,
+   "ur_yoy": 0.8950000000000009,
+   "under_yoy": 0.0936666666666656
+  },
+  "PH040200000": {
+   "market": 0.0,
+   "climate": 0.0459,
+   "fish_kill": 0.0,
+   "employment": -0.2455,
+   "ofw_remittance": -0.0967,
+   "other": 0.0,
+   "employment_share_of_tree_abs": 0.633,
+   "ur_yoy": 0.8950000000000009,
+   "under_yoy": 0.0936666666666656
+  },
+  "PH040300000": {
+   "market": 0.0,
+   "climate": 0.0459,
+   "fish_kill": 0.0,
+   "employment": -0.2455,
+   "ofw_remittance": -0.0967,
+   "other": 0.0,
+   "employment_share_of_tree_abs": 0.633,
+   "ur_yoy": 0.8950000000000009,
+   "under_yoy": 0.0936666666666656
+  },
+  "PH040400000": {
+   "market": 0.0,
+   "climate": -0.0459,
+   "fish_kill": 0.0,
+   "employment": -0.2455,
+   "ofw_remittance": -0.0967,
+   "other": 0.0,
+   "employment_share_of_tree_abs": 0.633,
+   "ur_yoy": 0.8950000000000009,
+   "under_yoy": 0.0936666666666656
+  },
+  "PH040500000": {
+   "market": 0.0,
+   "climate": -0.0459,
+   "fish_kill": 0.0,
+   "employment": -0.2455,
+   "ofw_remittance": -0.0967,
+   "other": 0.0,
+   "employment_share_of_tree_abs": 0.633,
+   "ur_yoy": 0.8950000000000009,
+   "under_yoy": 0.0936666666666656
+  }
+ },
+ "verdict": "No defensible overall ranking: the indicators are on one scale only as pushes on this index, but they differ in geography (national, regional, provincial), in weight basis (evidence vs default) and in missingness, and none except climate news and the regional hunger outcome has independent support. Present them as contributing evidence, not ranked causes."
+}

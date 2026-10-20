@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { explanationMethod } from "@/lib/explanationMethod";
 import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS } from "@/data/types";
 import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish } from "lucide-react";
 import { AboutModal } from "./AboutModal";
@@ -287,6 +288,8 @@ export function RiskDriversCardBody({
   const scope = provinceId ? "province" : "region";
   const id = provinceId ?? "calabarzon";
   const { data, isLoading, error } = useExplainability(scope, id, quarterId || undefined);
+  const { data: config } = useConfig();
+  const method = explanationMethod(config);
   const drivers: Trigger[] = data?.triggers ?? [];
   const failed = isLoadFailure(error);
 
@@ -294,9 +297,9 @@ export function RiskDriversCardBody({
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
         <div aria-hidden className="heading-dot -mr-1" />
-        <h3 className="text-[13px] font-semibold leading-tight">Why is this province at risk?</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">{method.panelTitle}</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
-          {isLoading ? "Computing…" : failed ? "" : "Ranked"}
+          {isLoading ? "Computing…" : failed ? "" : method.orderLabel}
         </span>
       </div>
       {isLoading ? (

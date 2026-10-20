@@ -316,6 +316,7 @@ def fmt_index(v: float) -> str:
     return f"{v:.4f}" if v < FIRI_THRESHOLD and round(v, 2) >= FIRI_THRESHOLD else f"{v:.2f}"
 
 
+DOMAIN_OF_GROUP = {"market": "A", "climate": "C", "fish_kill": "C", "employment": "E", "ofw_remittance": "E"}
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",), "employment": ("E1",),
                "ofw_remittance": ("E2",)}
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
@@ -409,6 +410,17 @@ def _score_words(k: str, s: float) -> str:
     return f"score {s:.2f} of 1; {side} the estimate"
 
 
+def weight_basis(origin_quarter: str, domain: str) -> str:
+    """E74: where a domain's FIRI v2 weight comes from at an origin: the walk-forward evidence weight (fitted to earlier
+    regional SWS hunger rounds) or the equal-weight prior (1.0) given to a domain with too few earlier pairs to test."""
+    return "evidence" if domain in (reference()["weightsLead2"].get(origin_quarter) or {}) else "default"
+
+
+SCOPE_NOTE = {"employment": "National figure (PSA LFS, Philippines): the same value for all five provinces, not local evidence.",
+              "ofw_remittance": "National figure (BSP): the same value for all five provinces, not local evidence.",
+              "climate": "El Nino status is national; typhoon counts and crop production are provincial."}
+
+
 def _dim(k: str) -> str:
     """E73: the food-security dimension (or role) of a FIRI v2 indicator, for the factor-card text."""
     return DIM.LABEL[DIM.ROLE_OF[k]].split(" (")[0].lower() + (" dimension" if DIM.KIND[DIM.ROLE_OF[k]] == "dimension" else "")
@@ -427,8 +439,14 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
             parts.append(f"{i['label']} [{_dim(k)}]: {_WHY.get(i['status'], i['status'])}")
         else:
             parts.append(f"{i['label']} [{_dim(k)}]: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
+    origin = qs(qi(quarter) - 2)
+    dom = DOMAIN_OF_GROUP[key]
+    basis = ("its weight was set by how well this domain tracked earlier regional hunger" if weight_basis(origin, dom) == "evidence"
+             else "its weight is the equal-weight default, because this domain has too few earlier values to be tested "
+                  "against hunger")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
-            "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index (an additive breakdown of "
+            "middle): " + "; ".join(parts) + ". " + (SCOPE_NOTE[key] + " " if key in SCOPE_NOTE else "")
+            + f"In this domain {basis}. The bar is this group's exact push on the index (an additive breakdown of "
             "the FIRI v2 index, which is not a fitted model, so these are not TreeSHAP values; only the LightGBM "
             "price-pressure forecast inside it has TreeSHAP values). It shows how the index was formed, not what causes "
             "food insecurity.")
@@ -475,6 +493,17 @@ def _why_missing(res: dict, d: str) -> str:
     return f"{FI.DOMAINS[d].lower()}: no value published by the issue date"
 
 
+def largest_push_sentence(res: dict) -> str:
+    """E74: the five factor bars exclude observed regional hunger, vulnerability and news, so the largest bar is not
+    necessarily the largest push. State the largest single indicator push and that the evidence is not ranked as causes."""
+    pu = pushes(res)
+    if not pu:
+        return ""
+    k = max(pu, key=lambda x: abs(pu[x]))
+    return (f"The largest single push on the index is {res['indicators'][k]['label']} ({pu[k]:+.3f}); the five factor bars "
+            "show only the five evidence groups, so their order is not an overall ranking of causes.")
+
+
 def firi_text(res: dict, name: str, quarter: str) -> str:
     from app.ml.inference import firi as FI
     w = _norm_weights(res)
@@ -488,7 +517,7 @@ def firi_text(res: dict, name: str, quarter: str) -> str:
             + (f" Raised mainly by {', '.join(up)}." if up else "")
             + (f" Lowered by {', '.join(down)}." if down else "")
             + (f" Not in the index: {'; '.join(_why_missing(res, d) for d in missing)}." if missing else "")
-            + " " + DIM.text(res)
+            + " " + DIM.text(res) + " " + largest_push_sentence(res)
             + " Regional hunger is the same for every province; employment and remittances are national. It is an "
               "estimate for planning, not a probability and not a measured food-insecurity rate.")
 

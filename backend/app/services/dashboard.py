@@ -657,6 +657,41 @@ RANKING_METHOD = (
 )
 
 
+THESIS_RANKING_METHOD = (
+    "Provinces are ordered by the estimated food-insecurity risk index (FIRI v2). The reasons listed for each province "
+    "are the food-security dimensions whose exact contribution to the index differs most from the next province down "
+    "(an index contribution breakdown, not SHAP); together the differences equal the gap. Employment, remittances and "
+    "regional hunger are the same for all provinces, so they separate provinces only through weights. The ranking is "
+    "relative and indicative, not an official classification or a validated forecast.")
+
+
+def _thesis_ranking(quarter: str, rows: list[dict]) -> dict:
+    from app.ml.inference import dimensions as DIM
+    rec = E41L2.record()
+    br = {}
+    for r in rows:
+        f = THESIS.firi_for(rec, quarter, r["provinceCode"])
+        br[r["provinceCode"]] = {d["key"]: (d["push"] or 0.0, d["label"]) for d in DIM.breakdown(f)} if f else {}
+    data = []
+    for i, r in enumerate(rows):
+        nxt = rows[i + 1] if i + 1 < len(rows) else None
+        why = []
+        if nxt is not None:
+            a, b = br[r["provinceCode"]], br[nxt["provinceCode"]]
+            for k in a:
+                if k in b:
+                    why.append({"feature": k, "label": a[k][1], "difference": round(a[k][0] - b[k][0], 4),
+                                "value": round(a[k][0], 4), "valueNextLower": round(b[k][0], 4)})
+            why.sort(key=lambda x: abs(x["difference"]), reverse=True)
+        data.append({"id": r["id"], "name": r["name"], "provinceCode": r["provinceCode"], "riskScore": r["riskScore"],
+                     "riskLevel": r["riskLevel"], "rank": r["rank"], "rankOf": r["rankOf"], "qoqChange": r["qoqChange"],
+                     "gapToNextLower": r["gapToNextLower"], "tiedWithNextLower": r["tiedWithNextLower"],
+                     "nextLowerId": nxt["id"] if nxt else None, "whyAboveNextLower": why[:3],
+                     "limitedSignal": r["limitedSignal"]})
+    return {"quarter": quarter, "indicator": indicator_for(quarter), "method": THESIS_RANKING_METHOD,
+            "horizonLabel": rows[0]["horizonLabel"] if rows else "", "data": data}
+
+
 def ranking(quarter: str, withheld: frozenset[str] = frozenset(),
             horizon: str = DEFAULT_HORIZON) -> dict:
     """
@@ -666,6 +701,8 @@ def ranking(quarter: str, withheld: frozenset[str] = frozenset(),
     rows = [r for r in province_summary(quarter, withheld, horizon)
             if not r["withheld"] and r["riskScore"] is not None]
     rows.sort(key=lambda r: r["rank"])
+    if THESIS.active() and E41L2.governs():
+        return _thesis_ranking(quarter, rows)
     explainer = _explainer()
     shap_by = {r["provinceCode"]: explainer.explain_province_quarter(r["provinceCode"], quarter)
                for r in rows}
@@ -1556,6 +1593,26 @@ def _join_series(items: list[str]) -> str:
     return f"{', '.join(items[:-1])}, and {items[-1]}"
 
 
+def _thesis_interpretation(name: str, period: str, triggers: list[dict], other_pct: float) -> str:
+    """E74: the thesis-mode PDF interpretation. The bars are an exact contribution breakdown of the FIRI v2 index over
+    five evidence groups (not SHAP of a model); they are shares of the five groups' combined absolute push, so they are
+    presented as contributing evidence, not ranked causes, and the excluded share is named correctly."""
+    up = [f"{t['label']} ({t['pct']}%)" for t in triggers if t["pct"] > 0 and t["direction"] == "increases_risk"]
+    down = [f"{t['label']} ({t['pct']}%)" for t in triggers if t["pct"] > 0 and t["direction"] != "increases_risk"]
+    s = [f"For {name} in {period}, the bars show how five evidence groups pushed the estimated food-insecurity risk index "
+         f"(FIRI v2) away from its neutral 0.5, as shares of those five groups' combined push."]
+    if up:
+        s.append(f"Groups raising the index: {_join_series(up)}.")
+    if down:
+        s.append(f"Groups lowering it: {_join_series(down)}.")
+    s.append("Observed regional hunger, household vulnerability and news are outside the five groups"
+             + (f" and account for {other_pct:.0f}% of the index's total push" if other_pct else "")
+             + ", so the order of the bars is not an overall ranking.")
+    s.append("Employment and remittances are national figures, the same for every province. The shares describe how the "
+             "index was formed from the evidence; they do not show what causes food insecurity.")
+    return " ".join(s)
+
+
 def compose_formal_interpretation(
     name: str, quarter: str, triggers: list[dict], other_pct: float = 0.0,
     withheld: bool = False, brief: bool = False,
@@ -1574,6 +1631,8 @@ def compose_formal_interpretation(
     multi-province reports, where the table caption already defines it.
     """
     period = quarter.replace("-", " ")
+    if THESIS.active() and not withheld and triggers:
+        return _ascii(_thesis_interpretation(name, period, triggers, other_pct))
     if withheld:
         return _ascii(
             f"The SHAP breakdown for {name} in {period} is withheld from publication."
@@ -1701,7 +1760,10 @@ EXPLANATION_THESIS = {"label": "Index contribution", "isShap": False,
                       "detail": ("Exact additive breakdown of the FIRI v2 risk index (each indicator's weight x its "
                                  "distance from its historical middle); FIRI v2 is an index, not a fitted model, so these "
                                  "are not SHAP values. The LightGBM price-pressure forecast inside it has TreeSHAP values. "
-                                 "Contributions show how the estimate was formed, not what causes food insecurity.")}
+                                 "Contributions show how the estimate was formed, not what causes food insecurity. The "
+                                 "five bars cover only the five evidence groups: observed regional hunger, vulnerability "
+                                 "and news are outside them (otherPct), so the bar order is not an overall ranking."),
+                      "panelTitle": "Contributing indicators", "orderLabel": "Index contribution, not causes"}
 
 
 def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:

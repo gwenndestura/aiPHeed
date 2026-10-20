@@ -15,3 +15,16 @@ describe("explanationMethod (E73)", () => {
     expect(m.title).not.toMatch(/SHAP/);
   });
 });
+
+describe("driver panel wording (E74)", () => {
+  it("keeps the ranked wording only for SHAP", () => {
+    expect(explanationMethod(undefined).panelTitle).toBe("Why is this province at risk?");
+    expect(explanationMethod(undefined).orderLabel).toBe("Ranked");
+  });
+  it("uses neutral wording for the index breakdown", () => {
+    const c = { servingModel: { explanationMethod: { label: "Index contribution", isShap: false, panelTitle: "Contributing indicators", orderLabel: "Index contribution, not causes" } } } as unknown as ConfigResponse;
+    const m = explanationMethod(c);
+    expect(m.panelTitle).toBe("Contributing indicators");
+    expect(m.orderLabel).not.toMatch(/Ranked/);
+  });
+});

@@ -343,7 +343,8 @@ def _thesis_driver_text(explain: dict) -> str:
     down = [f"{t['label']} {t['pct']}%" for t in explain["triggers"] if t["pct"] > 0 and t["direction"] == "protective"]
     other = explain.get("otherPct")
     return _escape(
-        "Each bar is the factor group's exact share of how far the risk index (FIRI v2) moved from its neutral 0.5. "
+        "Each bar is the factor group's share of the five groups' combined push (absolute size) on the risk index "
+        "(FIRI v2) away from its neutral 0.5; it is an index contribution breakdown, not SHAP and not a ranking of causes. "
         + ("Raising it: " + ", ".join(up) + ". " if up else "")
         + ("Lowering it: " + ", ".join(down) + ". " if down else "")
         + (f"Household vulnerability, regional hunger and news, which are not among the five groups, account for "
