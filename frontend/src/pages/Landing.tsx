@@ -8,7 +8,6 @@ import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import { readStorage } from "@/lib/storage";
-import { useConfig } from "@/lib/queries";
 
 const THEME_KEY = "aipheed_theme";
 
@@ -90,21 +89,9 @@ function Point({ n, title, children }: { n?: number; title: string; children: Re
 }
 
 /* ---------------- HERO ---------------- */
-type ConfigWithTarget = { quarterRange?: { forecastTarget?: { target_quarter?: string } } };
-
-/** "Forecast for Q1 2027" from the quarter the backend serves as the map's forecast; null when unknown. */
-function forecastPill(config: unknown): string | null {
-  const id = (config as ConfigWithTarget | undefined)?.quarterRange?.forecastTarget?.target_quarter;
-  const m = id?.match(/^(\d{4})-Q([1-4])$/);
-  return m ? `Forecast for Q${m[2]} ${m[1]}` : null;
-}
-
 function Hero() {
   // Server-confirmed session only (see lib/auth.tsx).
   const isAdmin = useAuth().status === "authenticated";
-  const { data: config, isError } = useConfig();
-  const forecast = isError ? null : forecastPill(config);
-  const pills = ["5 provinces", "142 cities and municipalities", ...(forecast ? [forecast] : [])];
   const outline =
     "group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border font-semibold text-[15px] transition-colors hover:bg-[hsl(36_22%_92%/0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
   return (
@@ -118,11 +105,10 @@ function Hero() {
             className="font-bold leading-[1.1] text-[clamp(2.1rem,5vw,3.75rem)]"
             style={{ color: HERO_TEXT }}
           >
-            Food Insecurity Risk Forecasting System for CALABARZON
+            Food Insecurity Risk Forecasting System for Region IV-A
           </h1>
           <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
-            A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces two quarters
-            ahead, using public statistics and Filipino-English news.
+            A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -142,14 +128,6 @@ function Hero() {
               </Link>
             )}
           </div>
-
-          <ul aria-label="Coverage" className="mt-6 flex flex-wrap gap-2">
-            {pills.map((t) => (
-              <li key={t} className="qt-pill text-[12px] font-medium leading-5 text-foreground">
-                {t}
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
 

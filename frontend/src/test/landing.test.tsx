@@ -7,16 +7,6 @@ vi.mock("@/components/TopNavbar", () => ({ TopNavbar: () => <header>header</head
 vi.mock("@/lib/auth", () => ({ useAuth: () => ({ status: "anonymous" }) }));
 vi.mock("@/lib/tour", () => ({ requestTour: vi.fn() }));
 
-// The hero reads the forecast quarter from /api/v1/config; each test sets what the API returns.
-const config = vi.hoisted(() => ({
-  state: { data: undefined as unknown, isError: false },
-}));
-vi.mock("@/lib/queries", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/queries")>()),
-  useConfig: () => config.state,
-}));
-const SERVED = { quarterRange: { forecastTarget: { target_quarter: "2027-Q1" } } };
-
 import Landing from "@/pages/Landing";
 import { AboutModal } from "@/components/AboutModal";
 
@@ -62,8 +52,7 @@ describe("Landing page", () => {
     ]);
   });
 
-  it("hero: the title, subtitle, two buttons and the coverage pills, directly on the photo", () => {
-    config.state = { data: SERVED, isError: false };
+  it("hero: the title, subtitle and two buttons, directly on the photo, with no pills", () => {
     const { container } = renderLanding();
     expect(container.querySelector("[data-hero-card]")).toBeNull();
     const hero = container.querySelector("section") as HTMLElement;
@@ -71,39 +60,24 @@ describe("Landing page", () => {
     const card = container.querySelector("[data-hero-text]") as HTMLElement;
     expect(card.className).toContain("text-left");
     expect(within(card).getByRole("heading", { level: 1 }).textContent).toBe(
-      "Food Insecurity Risk Forecasting System for CALABARZON",
+      "Food Insecurity Risk Forecasting System for Region IV-A",
     );
     const sub = within(card).getByText(/^A geospatial system/);
     expect(sub.textContent).toBe(
-      "A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces two quarters ahead, using public statistics and Filipino-English news.",
+      "A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces.",
     );
     expect(sub.className).not.toContain("italic");
     expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
     expect(within(card).getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("#methodology");
-    const pills = within(card).getAllByRole("listitem").map((li) => li.textContent);
-    expect(pills).toEqual(["5 provinces", "142 cities and municipalities", "Forecast for Q1 2027"]);
-    // Nothing else in the hero text: no label above the title, no other text.
+    // No pills, no label above the title, no other text.
+    expect(card.querySelector("ul, li, .qt-pill")).toBeNull();
     expect(card.textContent).toBe(
-      "Food Insecurity Risk Forecasting System for CALABARZON" + sub.textContent +
-        "Explore the mapHow it works5 provinces142 cities and municipalitiesForecast for Q1 2027",
+      "Food Insecurity Risk Forecasting System for Region IV-A" + sub.textContent + "Explore the mapHow it works",
     );
     // The tint over the photo: the dark background into amber and risk red.
     const tint = container.querySelector("[data-hero-tint]") as HTMLElement;
     expect(tint.className).toMatch(/linear-gradient.*--primary.*--risk-high/);
     expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
-  });
-
-  it("hero: hides the forecast pill when the API fails or has no forecast quarter", () => {
-    config.state = { data: undefined, isError: true };
-    const { container, unmount } = renderLanding();
-    let pills = [...(container.querySelector("[data-hero-text]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
-    expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
-    unmount();
-    config.state = { data: { quarterRange: {} }, isError: false };
-    const second = renderLanding();
-    pills = [...(second.container.querySelector("[data-hero-text]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
-    expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
-    config.state = { data: SERVED, isError: false };
   });
 
   it("shows the five methodology steps as numbered paragraphs, not cards", () => {
