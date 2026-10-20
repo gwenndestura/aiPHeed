@@ -1,0 +1,196 @@
+{
+ "schema": "aipheed.e68.disclosure/1",
+ "experiment": "E68_Resolve_E67_Critical_Failures",
+ "protocolSha256": "a32690a4008fe568ce678205da552e5962fb97bf31dcf0751b841a393288dfc7",
+ "prospectiveSealSha256": "79aa6f2ac057c1762d28747e3b4dda70b094e8e5e28ca07ede5f312e0c0e0e76",
+ "targetWording": "an exploratory food-stress score: high regional hunger (SWS) together with provincial food-price pressure (PSA); on every evaluated quarter it reduced to food-price pressure; it is not a measure of household food insecurity",
+ "evaluation": "Lead-2 back-test, 50 province-quarters in 10 quarters (2024-Q2 to 2026-Q3), all examined before E68: accuracy 0.72 (36/50), balanced 0.68. No E68 correction beats it by the pre-registered rule; the 75% goal is not met on valid evidence. The forecasts of every E68 variant for 2026-Q4 and 2027-Q1 are sealed for scoring when the outcomes are published.",
+ "elNinoFinding": "The only El Nino in 2021-2026 (2023-24) came while inflation was falling: food inflation ended 4.2 to 6.5 percentage points below the projections made during it. The data therefore cannot estimate how much an El Nino raises CALABARZON food prices, and the score cannot include it (E68).",
+ "faceValidity": "PSA subsistence incidence (2021, 2023) is the only independent provincial measure in the system; with five provinces per year and sampling errors up to 62% it cannot confirm or reject the province ordering.",
+ "nationalInputsNote": "Removing the national employment and OFW inputs improved the back-test probability score (Brier -0.022, 95% CI -0.041 to -0.004) but not by the pre-registered rule; it is a candidate for the next model build.",
+ "affordability": {
+  "2026-Q4": {
+   "Cavite": {
+    "headline": 6.95,
+    "headlineUsual": 5.01,
+    "food": 4.9,
+    "foodUsual": 4.71,
+    "headlineAbove": true
+   },
+   "Laguna": {
+    "headline": 8.05,
+    "headlineUsual": 4.65,
+    "food": 3.75,
+    "foodUsual": 6.05,
+    "headlineAbove": true
+   },
+   "Quezon": {
+    "headline": 8.05,
+    "headlineUsual": 5.06,
+    "food": 6.5,
+    "foodUsual": 6.24,
+    "headlineAbove": true
+   },
+   "Rizal": {
+    "headline": 7.85,
+    "headlineUsual": 6.07,
+    "food": 4.6,
+    "foodUsual": 7.1,
+    "headlineAbove": true
+   },
+   "Batangas": {
+    "headline": 5.0,
+    "headlineUsual": 5.55,
+    "food": 2.15,
+    "foodUsual": 7.15,
+    "headlineAbove": false
+   }
+  },
+  "2027-Q1": {
+   "Cavite": {
+    "headline": 4.6,
+    "headlineUsual": 5.01,
+    "food": 2.5,
+    "foodUsual": 4.71,
+    "headlineAbove": false
+   },
+   "Laguna": {
+    "headline": 6.9,
+    "headlineUsual": 4.65,
+    "food": 2.9,
+    "foodUsual": 6.05,
+    "headlineAbove": true
+   },
+   "Quezon": {
+    "headline": 6.1,
+    "headlineUsual": 5.06,
+    "food": 3.6,
+    "foodUsual": 6.24,
+    "headlineAbove": true
+   },
+   "Rizal": {
+    "headline": 6.6,
+    "headlineUsual": 6.07,
+    "food": 2.95,
+    "foodUsual": 7.1,
+    "headlineAbove": true
+   },
+   "Batangas": {
+    "headline": 4.4,
+    "headlineUsual": 5.55,
+    "food": 0.25,
+    "foodUsual": 7.15,
+    "headlineAbove": false
+   }
+  }
+ },
+ "content_sha256": "178d9dff860f5db3a0ffdc1ad61b2641deb542938bca8b35206636f39fe12f77"
+}
+{
+ "issueDate": "2026-10-01",
+ "inputs": [
+  {
+   "key": "food_cpi",
+   "label": "Food inflation (PSA CPI, province)",
+   "group": "market",
+   "value": 3.6,
+   "period": "latest two months to 2026-08",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "Months published after the issue date are not used."
+  },
+  {
+   "key": "headline_cpi",
+   "label": "Headline inflation (PSA CPI, province)",
+   "group": "market",
+   "value": 6.1,
+   "period": "latest two months to 2026-08",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "Used through the food-minus-headline gap."
+  },
+  {
+   "key": "rice_wholesale",
+   "label": "Wholesale rice price (PSA, province)",
+   "group": "market",
+   "value": 18.1,
+   "period": "2026-Q2",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "Year-on-year change."
+  },
+  {
+   "key": "sws_hunger",
+   "label": "Hunger (SWS, Balance Luzon region)",
+   "group": "hunger",
+   "value": 17.3,
+   "period": "2026-Q2",
+   "status": "observed",
+   "ageQuarters": 1,
+   "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date."
+  },
+  {
+   "key": "typhoons",
+   "label": "Typhoons within 300 km (IBTrACS)",
+   "group": "climate",
+   "value": 0.0,
+   "period": "2026-Q3",
+   "status": "substituted",
+   "ageQuarters": null,
+   "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points."
+  },
+  {
+   "key": "enso",
+   "label": "ENSO phase (NOAA ONI, observed)",
+   "group": "climate",
+   "value": 1.0,
+   "period": "2026-Q2",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength."
+  },
+  {
+   "key": "enso_outlook",
+   "label": "PAGASA El Nino outlook",
+   "group": "climate",
+   "value": null,
+   "period": "issue date",
+   "status": "not_collected",
+   "ageQuarters": null,
+   "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect."
+  },
+  {
+   "key": "rainfall_drought",
+   "label": "Rainfall, dry spell and drought",
+   "group": "climate",
+   "value": null,
+   "period": "-",
+   "status": "not_collected",
+   "ageQuarters": null,
+   "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model."
+  },
+  {
+   "key": "palay_yoy",
+   "label": "Palay production (PSA, province)",
+   "group": "climate",
+   "value": 51.35,
+   "period": "2026-Q2",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "Year-on-year change."
+  },
+  {
+   "key": "corn_yoy",
+   "label": "Corn production (PSA, province)",
+   "group": "climate",
+   "value": -7.24,
+   "period": "2026-Q2",
+   "status": "observed",
+   "ageQuarters": null,
+   "note": "Year-on-year change."
+  },
+  {
+   "key": "fish_yoy",
+   "label": "Fisheries production (PSA, province)",
+   "group": "fish_kill",
+   "value": -1

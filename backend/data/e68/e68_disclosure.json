@@ -1,0 +1,2444 @@
+{
+ "affordability": {
+  "2026-Q4": {
+   "Batangas": {
+    "food": 2.15,
+    "foodUsual": 7.15,
+    "headline": 5.0,
+    "headlineAbove": false,
+    "headlineUsual": 5.55
+   },
+   "Cavite": {
+    "food": 4.9,
+    "foodUsual": 4.71,
+    "headline": 6.95,
+    "headlineAbove": true,
+    "headlineUsual": 5.01
+   },
+   "Laguna": {
+    "food": 3.75,
+    "foodUsual": 6.05,
+    "headline": 8.05,
+    "headlineAbove": true,
+    "headlineUsual": 4.65
+   },
+   "Quezon": {
+    "food": 6.5,
+    "foodUsual": 6.24,
+    "headline": 8.05,
+    "headlineAbove": true,
+    "headlineUsual": 5.06
+   },
+   "Rizal": {
+    "food": 4.6,
+    "foodUsual": 7.1,
+    "headline": 7.85,
+    "headlineAbove": true,
+    "headlineUsual": 6.07
+   }
+  },
+  "2027-Q1": {
+   "Batangas": {
+    "food": 0.25,
+    "foodUsual": 7.15,
+    "headline": 4.4,
+    "headlineAbove": false,
+    "headlineUsual": 5.55
+   },
+   "Cavite": {
+    "food": 2.5,
+    "foodUsual": 4.71,
+    "headline": 4.6,
+    "headlineAbove": false,
+    "headlineUsual": 5.01
+   },
+   "Laguna": {
+    "food": 2.9,
+    "foodUsual": 6.05,
+    "headline": 6.9,
+    "headlineAbove": true,
+    "headlineUsual": 4.65
+   },
+   "Quezon": {
+    "food": 3.6,
+    "foodUsual": 6.24,
+    "headline": 6.1,
+    "headlineAbove": true,
+    "headlineUsual": 5.06
+   },
+   "Rizal": {
+    "food": 2.95,
+    "foodUsual": 7.1,
+    "headline": 6.6,
+    "headlineAbove": true,
+    "headlineUsual": 6.07
+   }
+  }
+ },
+ "content_sha256": "178d9dff860f5db3a0ffdc1ad61b2641deb542938bca8b35206636f39fe12f77",
+ "elNinoFinding": "The only El Nino in 2021-2026 (2023-24) came while inflation was falling: food inflation ended 4.2 to 6.5 percentage points below the projections made during it. The data therefore cannot estimate how much an El Nino raises CALABARZON food prices, and the score cannot include it (E68).",
+ "evaluation": "Lead-2 back-test, 50 province-quarters in 10 quarters (2024-Q2 to 2026-Q3), all examined before E68: accuracy 0.72 (36/50), balanced 0.68. No E68 correction beats it by the pre-registered rule; the 75% goal is not met on valid evidence. The forecasts of every E68 variant for 2026-Q4 and 2027-Q1 are sealed for scoring when the outcomes are published.",
+ "experiment": "E68_Resolve_E67_Critical_Failures",
+ "faceValidity": "PSA subsistence incidence (2021, 2023) is the only independent provincial measure in the system; with five provinces per year and sampling errors up to 62% it cannot confirm or reject the province ordering.",
+ "inputStatus": {
+  "2026-Q4": {
+   "Batangas": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 2.15
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 5.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -0.6
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 22.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "0 means no storm passed within 300 km.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -58.99
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 27.72
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -22.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -30.15
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.32
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.17
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 32 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.03
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 32 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 32 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 32 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 32 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-07-01"
+   },
+   "Cavite": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 4.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 6.95
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 16.02
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 22.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "0 means no storm passed within 300 km.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -36.2
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 11.21
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -2.93
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -68.56
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.32
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.17
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 53 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 53 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 53 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 53 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 53 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-07-01"
+   },
+   "Laguna": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 3.75
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 8.05
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.38
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 22.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "0 means no storm passed within 300 km.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -12.7
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -33.46
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -33.93
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -47.39
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.32
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.17
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 27 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 27 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 27 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 27 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 27 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-07-01"
+   },
+   "Quezon": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 6.5
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 8.05
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -1.42
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 22.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "0 means no storm passed within 300 km.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -20.1
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -13.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 6.54
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -17.45
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.32
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.17
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 49 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.02
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 49 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 49 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.02
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 49 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 49 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-07-01"
+   },
+   "Rizal": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 4.6
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-05",
+      "status": "observed",
+      "value": 7.85
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -11.12
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 22.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "0 means no storm passed within 300 km.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.75
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 65.13
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -26.59
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": -22.69
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.32
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 0.17
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q1",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q1",
+      "status": "observed",
+      "value": 1.82
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 29 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.07
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 29 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.03
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 29 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 29 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 29 titles about the province this quarter.",
+      "period": "2026-Q2",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-07-01"
+   }
+  },
+  "2027-Q1": {
+   "Batangas": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 0.25
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 4.4
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 10.82
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 17.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points.",
+      "period": "2026-Q3",
+      "status": "substituted",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -30.63
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 10.7
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 4.29
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -12.81
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 73 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.01
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 73 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.03
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 73 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 73 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 73 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-10-01"
+   },
+   "Cavite": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 2.5
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 4.6
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 29.11
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 17.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points.",
+      "period": "2026-Q3",
+      "status": "substituted",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -18.16
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 29.46
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.31
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 55.23
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 57 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 57 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.16
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 57 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 57 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 57 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-10-01"
+   },
+   "Laguna": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 2.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 6.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 26.19
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 17.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points.",
+      "period": "2026-Q3",
+      "status": "substituted",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -32.21
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -83.92
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -7.75
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -11.54
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 52 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 52 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.23
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 52 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.04
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 52 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 52 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-10-01"
+   },
+   "Quezon": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 3.6
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 6.1
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 18.1
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 17.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points.",
+      "period": "2026-Q3",
+      "status": "substituted",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 51.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -7.24
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -1.18
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 10.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.03
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-10-01"
+   },
+   "Rizal": {
+    "inputs": [
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "food_cpi",
+      "label": "Food inflation (PSA CPI, province)",
+      "note": "Months published after the issue date are not used.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 2.95
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "headline_cpi",
+      "label": "Headline inflation (PSA CPI, province)",
+      "note": "Used through the food-minus-headline gap.",
+      "period": "latest two months to 2026-08",
+      "status": "observed",
+      "value": 6.6
+     },
+     {
+      "ageQuarters": null,
+      "group": "market",
+      "key": "rice_wholesale",
+      "label": "Wholesale rice price (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 25.82
+     },
+     {
+      "ageQuarters": 1,
+      "group": "hunger",
+      "key": "sws_hunger",
+      "label": "Hunger (SWS, Balance Luzon region)",
+      "note": "Regional figure, the same for all five provinces; the next round was posted after the issue date.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 17.3
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "typhoons",
+      "label": "Typhoons within 300 km (IBTrACS)",
+      "note": "The quarter was still in progress when the data were fetched (2026-09-09); the served model stores the count so far as a number. E67 showed this changes the score by less than 0.2 percentage points.",
+      "period": "2026-Q3",
+      "status": "substituted",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso",
+      "label": "ENSO phase (NOAA ONI, observed)",
+      "note": "+1 El Nino, 0 neutral, -1 La Nina; observed only, without its strength.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 1.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "enso_outlook",
+      "label": "PAGASA El Nino outlook",
+      "note": "Shown in the climate watch, not a model input: one El Nino episode in 2021-2026 cannot teach its effect.",
+      "period": "issue date",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "rainfall_drought",
+      "label": "Rainfall, dry spell and drought",
+      "note": "No dated 2021-2026 PAGASA dry-spell/drought archive is available; not in the model.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "palay_yoy",
+      "label": "Palay production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 24.26
+     },
+     {
+      "ageQuarters": null,
+      "group": "climate",
+      "key": "corn_yoy",
+      "label": "Corn production (PSA, province)",
+      "note": "Year-on-year change.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 233.04
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_yoy",
+      "label": "Fisheries production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -18.11
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "aqua_yoy",
+      "label": "Aquaculture production (PSA, province)",
+      "note": "Production, not fish-kill events.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": -20.76
+     },
+     {
+      "ageQuarters": null,
+      "group": "fish_kill",
+      "key": "fish_kill_events",
+      "label": "Fish-kill events",
+      "note": "No official fish-kill event series exists for 2021-2026.",
+      "period": "-",
+      "status": "not_collected",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "ur_yoy",
+      "label": "Unemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.9
+     },
+     {
+      "ageQuarters": null,
+      "group": "employment",
+      "key": "under_yoy",
+      "label": "Underemployment rate (PSA LFS)",
+      "note": "National figure, the same for all five provinces.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 0.09
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_usd_yoy",
+      "label": "OFW cash remittances in US dollars (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "remit_php_yoy",
+      "label": "OFW cash remittances in pesos (BSP)",
+      "note": "National. The BSP file in the system ends at 2025-Q4; missing values are treated as unknown, not as no change.",
+      "period": "2026-Q2",
+      "status": "missing",
+      "value": null
+     },
+     {
+      "ageQuarters": null,
+      "group": "ofw_remittance",
+      "key": "fx_yoy",
+      "label": "USD/PHP exchange rate",
+      "note": "National.",
+      "period": "2026-Q2",
+      "status": "observed",
+      "value": 8.35
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_market",
+      "label": "News titles on market",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_climate",
+      "label": "News titles on climate",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.25
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_fish_kill",
+      "label": "News titles on fish kill",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed",
+      "value": 0.03
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_employment",
+      "label": "News titles on employment",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     },
+     {
+      "ageQuarters": null,
+      "group": "news",
+      "key": "news_ofw_remittance",
+      "label": "News titles on ofw remittance",
+      "note": "Share of 40 titles about the province this quarter.",
+      "period": "2026-Q3",
+      "status": "observed_zero",
+      "value": 0.0
+     }
+    ],
+    "issueDate": "2026-10-01"
+   }
+  }
+ },
+ "nationalInputsNote": "Removing the national employment and OFW inputs improved the back-test probability score (Brier -0.022, 95% CI -0.041 to -0.004) but not by the pre-registered rule; it is a candidate for the next model build.",
+ "prospectiveSealSha256": "79aa6f2ac057c1762d28747e3b4dda70b094e8e5e28ca07ede5f312e0c0e0e76",
+ "protocolSha256": "a32690a4008fe568ce678205da552e5962fb97bf31dcf0751b841a393288dfc7",
+ "schema": "aipheed.e68.disclosure/1",
+ "targetWording": "an exploratory food-stress score: high regional hunger (SWS) together with provincial food-price pressure (PSA); on every evaluated quarter it reduced to food-price pressure; it is not a measure of household food insecurity"
+}

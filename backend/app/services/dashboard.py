@@ -36,6 +36,7 @@ from app.ml.inference import e31_engine as E31
 from app.ml.inference import e41_lead2 as E41L2
 from app.ml.inference import climate_watch as CW
 from app.ml.inference import e67_disclosure as D67
+from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -1071,6 +1072,8 @@ CANDIDATE_EVENTS = {
     # provincial food-price-pressure condition (E66 r1/r7); the wording says what was actually evaluated
     "e66": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
+    # E68: what the score is, in the words the E68 target-validity review supports
+    "e68": D68.event(),
     # E67: same wording as E66 (same record, same target)
     "e67": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
@@ -1196,6 +1199,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     # E67: why the score is LOW under a climate watch, what each trigger group's data can and cannot show, and the
     # model identity; text into the same sentence field, values into optional API fields (no new UI element)
     e67 = D67.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw) if E41L2.mode() == "e67" else None
+    # E68: the E67 additions reworded with the E68 findings, plus the input status of every input at the issue date
+    if E41L2.mode() == "e68":
+        e67 = D68.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw)
     if e67 and e67["sentence"]:
         sentence = f"{sentence} {e67['sentence']}"
     return {
@@ -1212,6 +1218,8 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             "caveat": _ascii(caveat)} if comp else {}),
         **({"climateWatch": cfsw} if cfsw else {}),
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
+        **({"inputStatus": e67["inputStatus"]} if e67 and e67.get("inputStatus") else {}),
+        **({"affordability": e67["affordability"]} if e67 and e67.get("affordability") else {}),
     }
 
 

@@ -368,6 +368,28 @@ class TriggerCoverage(BaseModel):
     note: str
 
 
+class InputStatus(BaseModel):
+    """E68: one model input at the issue date. status: observed | observed_zero | missing | stale | substituted |
+    too_few_articles | not_collected (a missing or uncollected input is never read as no risk)."""
+    key: str
+    label: str
+    group: str
+    value: float | None = None
+    period: str
+    status: str
+    ageQuarters: int | None = None
+    note: str
+
+
+class Affordability(BaseModel):
+    """E68: observed inflation at the issue date against the province's usual 2021-2022 level (P60)."""
+    headline: float
+    headlineUsual: float
+    food: float
+    foodUsual: float
+    headlineAbove: bool
+
+
 class PlainSummary(BaseModel):
     """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
     event: str                        # what the probability is of, e.g. "food-price pressure"
@@ -387,7 +409,9 @@ class PlainSummary(BaseModel):
     caveat: str | None = None
     climateWatch: ClimateWatch | None = None   # E66 (e66 and e67 modes)
     modelIdentity: ModelIdentity | None = None            # E67 (e67 mode only)
-    triggerCoverage: list[TriggerCoverage] | None = None  # E67 (e67 mode only)
+    triggerCoverage: list[TriggerCoverage] | None = None  # E67 (e67 and e68 modes)
+    inputStatus: list[InputStatus] | None = None          # E68 (e68 mode only, province scope)
+    affordability: Affordability | None = None            # E68 (e68 mode only, province scope)
 
 
 class SummaryComponents(BaseModel):

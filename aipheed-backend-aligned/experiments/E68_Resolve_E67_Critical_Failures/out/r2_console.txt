@@ -1,0 +1,58 @@
+   year    T43     PS  PS_AFF   TAFF  hunger_above
+0  2021  0.133  0.400   0.400  0.200         0.333
+1  2022  0.000  0.400   0.667  0.133         0.333
+2  2023  0.150  0.850   0.650  0.000         0.250
+3  2024  0.400  0.400   0.150  0.150         1.000
+4  2025  0.450  0.450   0.050  0.050         1.000
+5  2026  0.067  0.067   0.533  0.533         1.000
+   province    T43     PS  PS_AFF   TAFF
+0  Batangas  0.238  0.524   0.286  0.048
+1    Cavite  0.190  0.429   0.381  0.143
+2    Laguna  0.286  0.524   0.381  0.143
+3    Quezon  0.381  0.524   0.524  0.333
+4     Rizal  0.000  0.238   0.381  0.143
+TAFF   0  1
+T43        
+0     25  7
+1     13  5
+{'rows': 105, 'quarters': 21, 'eval_rows': 50, 'eval_quarters': 10, 'eval_T43_eq_PS': 50, 'eval_TAFF_eq_PS_AFF': 50, 'eval_T43_HIGH': 18, 'eval_TAFF_HIGH': 12, 'quarters_hunger_above_line': 14, 'quarters_one_label_T43': 12, 'quarters_one_label_TAFF': 13, 'rows_hunger_above_but_T43_LOW': 47, 'rows_hunger_above_but_TAFF_LOW': 53, 'crosstab_eval_T43_vs_TAFF': {0: {0: 25, 1: 13}, 1: {0: 7, 1: 5}}}
+   year        measure  spearman_vs_subsistence
+0  2021            T43                     0.30
+1  2021             PS                     0.14
+2  2021           TAFF                     0.89
+3  2021  mean food YoY                     0.21
+4  2023            T43                     0.00
+5  2023             PS                     0.29
+6  2023           TAFF                      NaN
+7  2023  mean food YoY                     0.70
+                    feature           group  total_var  within_quarter_share  national_or_regional
+0                  F_hat_M1          market     17.040                 0.220                 False
+1                     F_now          market     11.826                 0.256                 False
+2                     D_now          market      3.027                 1.000                 False
+3                   gap_now          market      5.204                 0.314                 False
+4             rice_whsl_yoy          market    302.569                 0.158                 False
+5                  tc_count         climate      1.341                 0.077                 False
+6               tc_count_l1         climate      1.305                 0.073                 False
+7                      enso         climate      0.467                 0.000                  True
+8                   enso_l2         climate      0.440                 0.000                  True
+9                 palay_yoy         climate   1078.139                 0.613                 False
+10                 corn_yoy         climate  12120.161                 0.520                 False
+11               enso_x_mom         climate      2.038                 0.220                 False
+12             tcl1_x_palay         climate   1911.789                 0.543                 False
+13                 fish_yoy       fish_kill    950.546                 0.679                 False
+14                 aqua_yoy       fish_kill  34316.089                 0.850                 False
+15                   ur_yoy      employment      1.406                 0.000                  True
+16                under_yoy      employment      0.956                 0.000                  True
+17            remit_usd_yoy  ofw_remittance      3.170                 0.000                  True
+18            remit_php_yoy  ofw_remittance     36.629                 0.000                  True
+19                   fx_yoy  ofw_remittance     20.659                 0.000                  True
+20              news_market            news      0.000                 0.621                 False
+21             news_climate            news      0.007                 0.516                 False
+22           news_fish_kill            news      0.001                 0.819                 False
+23          news_employment            news      0.000                 0.808                 False
+24      news_ofw_remittance            news      0.000                   NaN                 False
+25                   news_n            news    199.391                 0.456                 False
+26        tariff_yoy_regime          market      0.122                 0.000                  True
+27  import_suspension_share          market      0.000                   NaN                 False
+28      price_ceiling_share          market      0.000                   NaN                 False
+29     food_emergency_share          market      0.005                 0.000                  True
