@@ -320,14 +320,20 @@ function Methodology() {
 }
 
 /* ---------------- ACCURACY ---------------- */
-/* Figures copied exactly from FINAL_THESIS_SYSTEM_REPORT.md sections 1-2 and /api/v1/config (FIRI v2); never rounded here. */
-const LGBM = [
-  ["Accuracy", "0.72"],
-  ["Precision", "0.63"],
-  ["Recall", "0.56"],
-  ["F1-score", "0.59"],
-  ["AUC-ROC", "0.65"],
+/* Figures copied exactly from FINAL_THESIS_SYSTEM_REPORT.md sections 1-2 and 11 and /api/v1/config (FIRI v2); never rounded here. */
+/* LightGBM food-price-pressure lead-time table: report section 11 (sealed walk-forward predictions) = /api/v1/config modelPerformance.leads. */
+const LEADS = [
+  { label: "One quarter ahead (Lead 1)", acc: "0.85", prec: "0.83", rec: "0.71", f1: "0.77", auc: "0.90", tested: "60 province-quarters, 12 quarters" },
+  { label: "Two quarters ahead (Lead 2)", onMap: true, acc: "0.72", prec: "0.63", rec: "0.56", f1: "0.59", auc: "0.65", tested: "50 province-quarters, 10 quarters" },
+  { label: "Three quarters ahead (Lead 3)", acc: "0.62", prec: "0.40", rec: "0.43", f1: "0.41", auc: "0.62", tested: "45 province-quarters, 9 quarters" },
 ];
+const LEAD_METRICS = [
+  ["acc", "Accuracy"],
+  ["prec", "Precision"],
+  ["rec", "Recall"],
+  ["f1", "F1"],
+  ["auc", "AUC"],
+] as const;
 const BRIER = [
   ["LightGBM (proposed)", "0.178"],
   ["I. Naive persistence", "0.400"],
@@ -353,6 +359,89 @@ const RESULTS = [
     d: "No provincial or municipal food-insecurity measure exists for CALABARZON, so the index cannot be validated as a measure of food insecurity in a province or city. The estimates for 2026-Q4 and 2027-Q1 were sealed before their outcomes were known and will be scored once PSA price data for October 2026 to March 2027 and the SWS rounds for those quarters are published.",
   },
 ];
+
+function OnMapTag() {
+  return (
+    <span className="tint-primary inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold leading-5">
+      The forecast shown on the map
+    </span>
+  );
+}
+
+function LeadTimeTable() {
+  const th = "px-3 py-3 text-left text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted";
+  const num = "px-3 py-3 text-right font-mono text-[14px] font-semibold text-foreground";
+  const onMap = "bg-[hsl(var(--primary)/0.08)]";
+  return (
+    <div>
+      <p className="mb-2 font-bold text-foreground leading-snug">
+        Food-price-pressure forecast (LightGBM) by lead time: sealed walk-forward predictions
+      </p>
+
+      {/* Desktop: one table. */}
+      <div className="hidden lg:block overflow-hidden rounded-[var(--radius-inner)] border edge-faint">
+        <table className="w-full border-collapse">
+          <thead className="bg-[hsl(var(--secondary)/0.55)]">
+            <tr>
+              <th className={th}>Forecast</th>
+              {LEAD_METRICS.map(([, l]) => (
+                <th key={l} className={`${th} text-right`}>
+                  {l}
+                </th>
+              ))}
+              <th className={th}>Tested on</th>
+            </tr>
+          </thead>
+          <tbody>
+            {LEADS.map((r) => (
+              <tr key={r.label} className={`border-t edge-faint ${r.onMap ? onMap : ""}`}>
+                <th scope="row" className="px-3 py-3 text-left align-middle text-[14px] font-semibold text-foreground">
+                  <span className="block">{r.label}</span>
+                  {r.onMap && (
+                    <span className="mt-1 block">
+                      <OnMapTag />
+                    </span>
+                  )}
+                </th>
+                {LEAD_METRICS.map(([k]) => (
+                  <td key={k} className={num}>
+                    {r[k]}
+                  </td>
+                ))}
+                <td className="px-3 py-3 text-[14px] leading-snug">{r.tested}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Phones and tablets: one block per lead time. */}
+      <ul className="lg:hidden overflow-hidden rounded-[var(--radius-inner)] border edge-faint">
+        {LEADS.map((r, i) => (
+          <li key={r.label} className={`px-4 py-4 ${i ? "border-t edge-faint" : ""} ${r.onMap ? onMap : ""}`}>
+            <p className="font-semibold text-foreground leading-snug">{r.label}</p>
+            {r.onMap && (
+              <p className="mt-1">
+                <OnMapTag />
+              </p>
+            )}
+            <dl className="mt-3 grid grid-cols-3 sm:grid-cols-5 gap-x-4 gap-y-2">
+              {LEAD_METRICS.map(([k, l]) => (
+                <div key={k}>
+                  <dt className="text-[12px] text-ink-muted">{l}</dt>
+                  <dd className="font-mono text-[14px] font-semibold text-foreground">{r[k]}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-2 text-[14px] text-ink-muted">Tested on {r.tested}</p>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-3">Accuracy falls the further ahead the forecast looks; the map forecasts two quarters ahead.</p>
+    </div>
+  );
+}
 
 function MetricTable({ title, note, rows }: { title: string; note: string; rows: string[][] }) {
   return (
@@ -385,12 +474,8 @@ function Accuracy() {
           All results below are development evidence: every evaluated quarter was examined while the system was being
           built, and no unseen quarter has been scored yet.
         </p>
-        <div className="grid gap-8 lg:grid-cols-2">
-          <MetricTable
-            title="Food-price-pressure forecast (LightGBM, two quarters ahead)"
-            note="Tested on 50 province-quarters (10 quarters)."
-            rows={LGBM}
-          />
+        <LeadTimeTable />
+        <div className="mt-10 lg:max-w-[50%]">
           <MetricTable
             title="Brier score against the four baselines (lower is better)"
             note="Same 45 province-quarters. The advantage is statistically established only against the PSA-only and logistic-regression baselines."

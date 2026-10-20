@@ -86,6 +86,30 @@ describe("Landing page", () => {
     expect(team).toEqual(["Destura", "Esico", "Melindo"]);
   });
 
+  it("shows the LightGBM lead-time table exactly as in the report, with Lead 2 marked as the map's", () => {
+    const { container } = renderLanding();
+    const table = container.querySelector("#accuracy table") as HTMLTableElement;
+    const rows = [...table.querySelectorAll("tbody tr")].map((tr) =>
+      [...tr.querySelectorAll("td")].slice(0, 5).map((td) => td.textContent),
+    );
+    expect(rows).toEqual([
+      ["0.85", "0.83", "0.71", "0.77", "0.90"],
+      ["0.72", "0.63", "0.56", "0.59", "0.65"],
+      ["0.62", "0.40", "0.43", "0.41", "0.62"],
+    ]);
+    const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
+    expect(heads[0]).toBe("One quarter ahead (Lead 1)");
+    expect(heads[1]).toBe("Two quarters ahead (Lead 2)The forecast shown on the map");
+    expect(heads[2]).toBe("Three quarters ahead (Lead 3)");
+    expect(table.textContent).toContain("60 province-quarters, 12 quarters");
+    expect(table.textContent).toContain("50 province-quarters, 10 quarters");
+    expect(table.textContent).toContain("45 province-quarters, 9 quarters");
+    const acc = container.querySelector("#accuracy")?.textContent ?? "";
+    expect(acc).toContain("Accuracy falls the further ahead the forecast looks; the map forecasts two quarters ahead.");
+    expect(acc).toContain("All results below are development evidence");
+    expect(acc).toContain("The 75% accuracy goal");
+  });
+
   it("states both quarter counts in the small-sample limitation", () => {
     renderLanding();
     expect(screen.getByText(/9 to 12 quarters of evidence for each lead time/).textContent).toContain("17 quarters");
