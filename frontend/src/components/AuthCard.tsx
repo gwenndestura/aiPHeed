@@ -4,14 +4,16 @@
 // request access, verify email and forgot / reset password, so they all
 // look the same.
 //
-// Flat on purpose: a solid card with a 1px border, no glows or blurs.
-// Secondary text uses the foreground colour at reduced opacity rather than
-// the muted grey, which falls short of WCAG AA contrast on the dark card.
+// A solid, borderless card with the soft float shadow, over the landing
+// page's photo (darkened and softly blurred). Secondary text uses the
+// foreground colour at reduced opacity rather than the muted grey, which
+// falls short of WCAG AA contrast on the dark card.
 
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, type LucideIcon } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
+import heroBg from "@/assets/hero-bg.jpg";
 
 export const PASSWORD_RULES =
   "At least 12 characters, and not a commonly used password. A few unrelated words make a strong passphrase that is easy to remember.";
@@ -49,8 +51,15 @@ export function AuthCard({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen w-full bg-background flex items-center justify-center px-4 py-8 sm:p-6">
-      <div className="w-full max-w-sm bg-card border edge-faint rounded-xl shadow-lg p-6 sm:p-7">
+    <div className="relative isolate overflow-hidden min-h-screen w-full bg-background flex items-center justify-center px-4 py-8 sm:p-6">
+      {/* The landing page's photo, darkened and softly blurred (scaled up a
+          little so the blur leaves no light rim at the edges). */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 scale-105 pointer-events-none bg-cover bg-center"
+        style={{ backgroundImage: `url(${heroBg})`, filter: "blur(6px) brightness(0.4)" }}
+      />
+      <div className="w-full max-w-sm bg-card rounded-sheet shadow-float p-6 sm:p-7">
         <Link to="/dashboard" className={authLinkClass + " no-underline hover:underline"}>
           ← Back to map
         </Link>
@@ -120,7 +129,7 @@ export function AuthField({ id, label, icon: Icon, value, onChange, type = "text
         )}
       </div>
       {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-[12px] compact:text-[14px] text-foreground/75 leading-snug">
+        <p id={`${id}-hint`} className="mt-1.5 text-[11px] compact:text-[12px] text-foreground/65 leading-snug">
           {hint}
         </p>
       )}
