@@ -13,7 +13,6 @@ import { summaryHeadline } from "@/lib/summaryHeadline";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
-import { StatusDot } from "@/components/ui/status-dot";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 
 interface Props {
@@ -166,25 +165,22 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
   return (
     <section className="mb-2 space-y-3">
       {risky.length > 0 && (
-        <DriverGroup heading="Factors pushing risk up" headingColor="hsl(var(--risk-high))" items={risky} />
+        <DriverGroup heading="Factors pushing risk up" items={risky} />
       )}
       {protective.length > 0 && (
-        <DriverGroup heading="Factors pulling risk down" headingColor="hsl(var(--risk-moderate))" items={protective} />
+        <DriverGroup heading="Factors pulling risk down" items={protective} />
       )}
       {inactive.length > 0 && (
-        <DriverGroup heading="Not part of this forecast" headingColor="hsl(var(--muted-foreground))" items={inactive} />
+        <DriverGroup heading="Not part of this forecast" items={inactive} />
       )}
     </section>
   );
 }
 
-function DriverGroup({ heading, headingColor, items }: { heading: string; headingColor: string; items: Trigger[] }) {
+function DriverGroup({ heading, items }: { heading: string; items: Trigger[] }) {
   return (
     <div className="space-y-1.5">
-      <p className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground/90">
-        <StatusDot color={headingColor} />
-        {heading}
-      </p>
+      <p className="text-[12px] font-semibold text-foreground/90">{heading}</p>
       <div className="space-y-1">
         {items.map((s) => {
           const color = s.color === "red" ? "hsl(var(--risk-high))" : s.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))";

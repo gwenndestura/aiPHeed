@@ -41,12 +41,12 @@ export function AboutModal() {
           </Section>
 
           <Section title="Data sources">
-            <ul className="text-[11px] leading-relaxed text-muted-foreground list-disc pl-4 space-y-0.5">
-              <li>Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force</li>
-              <li>Bangko Sentral ng Pilipinas (BSP): cash remittances</li>
-              <li>PAGASA: El Niño advisories · IBTrACS: typhoons</li>
-              <li>Social Weather Stations (SWS): hunger, Balance Luzon (regional)</li>
-              <li>Google News headlines in Filipino and English</li>
+            <ul className="text-[11px] leading-relaxed text-muted-foreground divide-y">
+              {DATA_SOURCES.map((s) => (
+                <li key={s} className="py-1 first:pt-0 last:pb-0">
+                  {s}
+                </li>
+              ))}
             </ul>
             <p className="text-[10px] text-muted-foreground/70 mt-1.5">
               Only data from 2021 onward is used. Estimates are issued quarterly, two quarters ahead.
@@ -111,6 +111,15 @@ export function AboutModal() {
   );
 }
 
+/** The data sources, one row each with a thin divider between rows. */
+const DATA_SOURCES = [
+  "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
+  "Bangko Sentral ng Pilipinas (BSP): cash remittances",
+  "PAGASA: El Niño advisories · IBTrACS: typhoons",
+  "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
+  "Google News headlines in Filipino and English",
+];
+
 /** The phone number and email: outlined pills. */
 const CONTACT_CHIP =
   "inline-flex items-center gap-1.5 h-8 compact:h-11 px-3 rounded-full border edge-control text-[11px] font-medium text-foreground hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -119,10 +128,7 @@ const CONTACT_CHIP =
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="inner-card px-3.5 py-3">
-      <h4 className="flex items-center gap-2 text-[12px] font-semibold mb-1.5">
-        <span aria-hidden className="heading-dot" />
-        {title}
-      </h4>
+      <h4 className="text-[12px] font-semibold mb-1.5">{title}</h4>
       {children}
     </section>
   );

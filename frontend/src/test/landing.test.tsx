@@ -232,6 +232,23 @@ describe("Landing page", () => {
 });
 
 describe("About dialog", () => {
+  it("shows the data sources as rows with a thin divider, not bullets, and no heading dots", () => {
+    const dlg = openAbout();
+    expect(dlg.querySelector(".heading-dot")).toBeNull();
+    expect(dlg.querySelector(".list-disc")).toBeNull();
+    const rows = within(dlg).getByText(/^Philippine Statistics Authority/).closest("ul") as HTMLElement;
+    expect(rows.className).toContain("divide-y");
+    expect([...rows.querySelectorAll("li")].map((li) => li.textContent)).toEqual([
+      "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
+      "Bangko Sentral ng Pilipinas (BSP): cash remittances",
+      "PAGASA: El Niño advisories · IBTrACS: typhoons",
+      "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
+      "Google News headlines in Filipino and English",
+    ]);
+    const titles = [...dlg.querySelectorAll("h4")].map((h) => h.textContent);
+    expect(titles).toEqual(["How to read the map", "Data sources", "Missing and limited data", "Disclaimer", "Contact"]);
+  });
+
   it("labels the performance row as the price input and words the lead time plainly", () => {
     const dlg = openAbout();
     expect(dlg.textContent).toContain("Price input (LightGBM, Lead-2)");

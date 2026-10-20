@@ -293,7 +293,6 @@ export function RiskDriversCardBody({
   return (
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
-        <div aria-hidden className="heading-dot -mr-1" />
         <h3 className="text-[13px] font-semibold leading-tight">Why is this province at risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
           {isLoading ? "Computing…" : failed ? "" : "Ranked"}
@@ -374,7 +373,6 @@ export function ProvinceRankingCardBody({
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <div aria-hidden className="heading-dot -mr-1" />
         <h3 className="text-[13px] font-semibold leading-tight">Province ranking</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">High → Low</span>
       </div>
@@ -578,7 +576,6 @@ function RegionDetail({
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div aria-hidden className="heading-dot -mr-1" />
             <h3 className="text-[13px] font-semibold leading-tight">Cities and municipalities</h3>
           </div>
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
@@ -757,7 +754,6 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
-        <div aria-hidden className="heading-dot -mr-1" />
         <h3 className="text-[13px] font-semibold leading-tight">Trigger composition</h3>
       </div>
       {isLoading ? (
