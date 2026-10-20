@@ -37,7 +37,7 @@ def test_summary_file_matches_score_and_is_required():
 
 
 def test_performance_sentences_disclose_e70():
-    s = T.performance_tables()["sentences"][-1]
+    s = next(x for x in T.performance_tables()["sentences"] if x.startswith("E70"))
     assert s.startswith("E70 (2026-10-20)") and "36/50 = 0.72" in s and "80% Lead-2 goal is NOT met" in s
     assert "not food-insecurity accuracy" in s
 

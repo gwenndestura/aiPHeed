@@ -971,8 +971,8 @@ NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
                         "the official figures behind this factor.")
 THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v2): the five provinces' combined push of this factor group "
-                               "(above or below its historical middle). Open a province to see each indicator's value, "
-                               "score and status.")
+                               "(above or below its historical middle), an additive breakdown of the index, not TreeSHAP "
+                               "values. Open a province to see each indicator's value, score and status.")
 
 
 def _model_trigger_groups(quarter: str) -> frozenset[str]:

@@ -46,9 +46,11 @@ FIRI_V1_EVALUATION = Path("data/thesis/firi_evaluation.json")       # the method
 FEATURES_DIR = Path("data/e56/model")
 # E70 (2026-10-20): the pre-registered Lead-2 improvement attempt; its outcome is disclosed in the existing text fields
 E70_SUMMARY = Path(os.getenv("AIPHEED_E70_SUMMARY", "data/thesis/e70_summary.json"))
+# E72 (2026-10-20): dimensional audit of FIRI v2 and the regional-outcome result, disclosed in the existing text fields
+E72_SUMMARY = Path(os.getenv("AIPHEED_E72_SUMMARY", "data/thesis/e72_summary.json"))
 REQUIRED = (LEAD2.RECORD_E58, SWS, EVALUATION, TOPIC_PROPS, TOPIC_INFO, E69_DISCLOSURE, CW.INPUTS,
             Path("data/inputs/lgu_vulnerability.csv"), FIRI_HISTORY, FIRI_EVALUATION, FIRI2_REFERENCE, FIRI_V1_EVALUATION,
-            Path("data/thesis/firi_anchors.json"), E70_SUMMARY)
+            Path("data/thesis/firi_anchors.json"), E70_SUMMARY, E72_SUMMARY)
 HUNGER_LINE, SIGMA_DEFAULT = 11.3, 4.0
 # E68 T-AFF headline P60 (2021-Q1..2022-Q4, numpy.percentile), the province's usual headline inflation
 HEADLINE_USUAL = {"PH040100000": 5.013333, "PH040200000": 4.653333, "PH040300000": 5.06,
@@ -419,7 +421,10 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
         else:
             parts.append(f"{i['label']}: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
-            "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index.")
+            "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index (an additive breakdown of "
+            "the FIRI v2 index, which is not a fitted model, so these are not TreeSHAP values; only the LightGBM "
+            "price-pressure forecast inside it has TreeSHAP values). It shows how the index was formed, not what causes "
+            "food insecurity.")
 
 
 FIRI_METHOD = ("FIRI v2: six indicator domains (affordability, household vulnerability, climate and food production, "
@@ -428,6 +433,9 @@ FIRI_METHOD = ("FIRI v2: six indicator domains (affordability, household vulnera
                "hunger in earlier quarters (only rounds published before the issue date; shrunk toward equal weights); "
                "HIGH at 0.5. A proxy composite, not a probability; its regional agreement with SWS hunger is "
                "development evidence and no provincial food-insecurity outcome exists to validate it.")
+
+
+from app.ml.inference import dimensions as DIM  # noqa: E402
 
 
 def firi_public(res: dict) -> dict:
@@ -444,7 +452,9 @@ def firi_public(res: dict) -> dict:
     return {"index": None if res["firi"] is None else round(res["firi"], 4), "class": res["class"],
             "tier": res["class"], "issueDate": res.get("issueDate"), "targetQuarter": res.get("targetQuarter"),
             "domainsAvailable": res["domainsAvailable"], "domains": doms, "threshold": FI.THRESHOLD,
-            "method": FIRI_METHOD, "source": res.get("source")}
+            "method": FIRI_METHOD, "source": res.get("source"),
+            "estimateType": "exploratory proxy risk index (not a probability, not a validated food-insecurity rate)",
+            "dimensions": DIM.breakdown(res), "indexWithoutRegionalHunger": DIM.without_outcome(res)}
 
 
 def _why_missing(res: dict, d: str) -> str:
@@ -466,11 +476,12 @@ def firi_text(res: dict, name: str, quarter: str) -> str:
     up = [FI.DOMAINS[d] for d, v in order if v > NEUTRAL][:3]
     down = [FI.DOMAINS[d] for d, v in order[::-1] if v < NEUTRAL][:2]
     missing = [d for d, v in res["domains"].items() if v is None]
-    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (risk index {fmt_index(res['firi'])} on a "
-            f"0-1 scale; HIGH at 0.50). Domain scores (0.5 = the historical middle): {'; '.join(parts)}."
+    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (exploratory proxy risk index "
+            f"{fmt_index(res['firi'])} on a 0-1 scale; HIGH at 0.50). Domain scores (0.5 = the historical middle): {'; '.join(parts)}."
             + (f" Raised mainly by {', '.join(up)}." if up else "")
             + (f" Lowered by {', '.join(down)}." if down else "")
             + (f" Not in the index: {'; '.join(_why_missing(res, d) for d in missing)}." if missing else "")
+            + " " + DIM.text(res)
             + " Regional hunger is the same for every province; employment and remittances are national. It is an "
               "estimate for planning, not a probability and not a measured food-insecurity rate.")
 
@@ -600,6 +611,29 @@ def e70_summary() -> dict:
     return _e70(E70_SUMMARY.stat().st_mtime_ns)
 
 
+@functools.lru_cache(maxsize=1)
+def _e72(mtime: int) -> dict:
+    return json.loads(E72_SUMMARY.read_text(encoding="utf-8"))
+
+
+def e72_summary() -> dict:
+    return _e72(E72_SUMMARY.stat().st_mtime_ns)
+
+
+def e72_sentence() -> str:
+    e = e72_summary()
+    r, d = e["regional_lead2"], e["firi_dimensions"]
+    return (f"E72 ({e['date']}): on the only direct food-insecurity outcome, regional SWS hunger above 11.3%, the FIRI v2 "
+            f"Lead-2 class was right in {r['correct']} of {r['n']} quarters ({r['accuracy']:.2f}; 95% interval "
+            f"{r['wilson'][0]:.2f}-{r['wilson'][1]:.2f}), on development quarters, and not credibly better than always-"
+            f"elevated ({r['always_correct']}/{r['n']}, McNemar p {r['mcnemar_p_always']:.2f}) or the latest hunger reading "
+            f"(McNemar p {r['mcnemar_p_h1']:.2f}); it is regional, so it says nothing about provincial accuracy. Of the "
+            f"index's movement, access carries {d['ACCESS']:.0%}, observed regional hunger {d['OUTCOME']:.0%}, stability "
+            f"{d['STABILITY']:.0%}, availability {d['AVAILABILITY']:.0%}, vulnerability {d['VULNERABILITY']:.0%} and news "
+            f"{d['NEWS']:.0%}; utilization is not observed. The contributing factors alone did not track regional hunger "
+            f"(E71: rank correlation {e['e71_rho']:+.2f}, 95% interval {e['e71_ci'][0]:+.2f} to {e['e71_ci'][1]:+.2f}).")
+
+
 def e70_sentence() -> str:
     e = e70_summary()
     g = e["goal_80"]
@@ -704,7 +738,7 @@ def performance_tables(perf: dict | None = None) -> dict:
          f"HIGH at 0.5). Its rows are scored against observed regional hunger (SWS Balance Luzon above 11.3%), the only "
          f"direct food-insecurity observation: {fi['goal75']} Its agreement with the T43 price label is reported "
          "separately and is not food-insecurity accuracy." if fi else
-         "The province score is an exploratory food-price-pressure score."), e70_sentence()]
+         "The province score is an exploratory food-price-pressure score."), e70_sentence(), e72_sentence()]
     return {"leadHeader": ["Lead", "Accuracy", "Precision", "Recall", "F1", "AUC-ROC", "Brier", "Reliable"],
             "leadRows": leads, "baselineHeader": ["Model (45 identical rows)", "Accuracy", "Recall HIGH", "AUC-ROC", "Brier"],
             "baselineRows": base, "sentences": sentences}
