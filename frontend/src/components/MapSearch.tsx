@@ -112,8 +112,10 @@ export function MapSearch({ fill = false }: { fill?: boolean }) {
 
   return (
     <div className={`relative ${fill ? "w-full" : "w-[240px]"}`}>
-      <div className="relative surface-float border rounded-full">
-        <Search className={`absolute left-2.5 top-1/2 -translate-y-1/2 ${fill ? "h-4 w-4" : "h-3 w-3"} text-muted-foreground/70 pointer-events-none`} />
+      {/* Solid card colour (not see-through) with the side panels' soft shadow and a visible edge;
+          amber edge and ring while the field has focus, as on the other fields. */}
+      <div className="relative rounded-full border edge-control bg-card shadow-[shadow:var(--shadow-card)] transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-ring">
+        <Search className={`absolute left-2.5 top-1/2 -translate-y-1/2 ${fill ? "h-4 w-4" : "h-3 w-3"} text-foreground/80 pointer-events-none`} />
         <input
           ref={inputRef}
           type="search"
@@ -134,7 +136,7 @@ export function MapSearch({ fill = false }: { fill?: boolean }) {
           onKeyDown={onKeyDown}
           onBlur={() => setTimeout(() => setOpen(false), 200)}
           placeholder="Search provinces, municipalities…"
-          className={`w-full ${fill ? "h-11 pl-9 text-[16px]" : "h-7 pl-7 text-[11px]"} pr-2.5 field-inset rounded-full focus:outline-none placeholder:text-muted-foreground/60`}
+          className={`w-full ${fill ? "h-11 pl-9 text-[16px]" : "h-7 pl-7 text-[11px]"} pr-2.5 bg-transparent rounded-full focus:outline-none placeholder:text-muted-foreground`}
         />
       </div>
 
