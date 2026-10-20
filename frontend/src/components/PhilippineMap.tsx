@@ -385,10 +385,10 @@ export function PhilippineMap({
       icon: L.divIcon({
         className: "",
         html: `<div class="map-label" data-selected-label="true" style="
-          color: white;
+          color: hsl(var(--foreground));
           font-size: 11px;
           font-weight: 700;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+          text-shadow: var(--map-label-halo);
           white-space: nowrap;
           pointer-events: none;
           transform: translate(-50%, -50%);
@@ -465,12 +465,12 @@ export function PhilippineMap({
             icon: L.divIcon({
               className: "",
               html: `<div class="map-label" style="
-                color: rgba(255,255,255,0.85);
+                color: hsl(var(--foreground) / 0.85);
                 font-size: 11px;
                 font-style: italic;
                 font-weight: 600;
                 letter-spacing: 0.06em;
-                text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+                text-shadow: var(--map-label-halo);
                 white-space: nowrap;
                 pointer-events: none;
                 transform: translate(-50%, -50%);
@@ -563,10 +563,10 @@ export function PhilippineMap({
           icon: L.divIcon({
             className: "",
             html: `<div class="map-label" style="
-              color: white;
+              color: hsl(var(--foreground));
               font-size: 9px;
               font-weight: 600;
-              text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+              text-shadow: var(--map-label-halo);
               white-space: nowrap;
               pointer-events: none;
               transform: translate(-50%, -50%);
@@ -635,11 +635,11 @@ export function PhilippineMap({
         icon: L.divIcon({
           className: "",
           html: `<div class="map-label" style="
-            color: white;
+            color: hsl(var(--foreground));
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.04em;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8);
+            text-shadow: var(--map-label-halo);
             white-space: nowrap;
             pointer-events: none;
             transform: translate(-50%, 14px);
@@ -1087,7 +1087,7 @@ export function PhilippineMap({
       {isZoomed && (
         <button
           onClick={() => onClick(selectedRegion!)}
-          className="absolute top-14 left-1/2 -translate-x-1/2 z-[1000] bg-card/90 backdrop-blur border rounded-lg px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors shadow-lg"
+          className="absolute top-14 left-1/2 -translate-x-1/2 z-[1000] surface-float border rounded-full px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
         >
           ← Back to CALABARZON
         </button>

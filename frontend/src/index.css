@@ -91,6 +91,13 @@
     --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.5);
     --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.35);
 
+    /* Map labels: the page's text colour on a soft halo of its background
+       colour, readable over any fill (both follow dark / light mode). */
+    --map-label-halo:
+      0 0 2px hsl(var(--background)),
+      0 0 4px hsl(var(--background)),
+      0 1px 3px hsl(var(--background) / 0.9);
+
     /* Text on a filled amber control: the existing --primary-foreground
        here, the existing --foreground in light mode (AA on the amber). */
     --primary-ink: var(--primary-foreground);
