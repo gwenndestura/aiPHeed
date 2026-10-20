@@ -44,9 +44,11 @@ FIRI2_REFERENCE = Path(os.getenv("AIPHEED_FIRI2_REFERENCE", "data/thesis/firi2_r
 FIRI_EVALUATION = Path(os.getenv("AIPHEED_FIRI2_EVALUATION", "data/thesis/firi2_evaluation.json"))
 FIRI_V1_EVALUATION = Path("data/thesis/firi_evaluation.json")       # the method served before the optimization
 FEATURES_DIR = Path("data/e56/model")
+# E70 (2026-10-20): the pre-registered Lead-2 improvement attempt; its outcome is disclosed in the existing text fields
+E70_SUMMARY = Path(os.getenv("AIPHEED_E70_SUMMARY", "data/thesis/e70_summary.json"))
 REQUIRED = (LEAD2.RECORD_E58, SWS, EVALUATION, TOPIC_PROPS, TOPIC_INFO, E69_DISCLOSURE, CW.INPUTS,
             Path("data/inputs/lgu_vulnerability.csv"), FIRI_HISTORY, FIRI_EVALUATION, FIRI2_REFERENCE, FIRI_V1_EVALUATION,
-            Path("data/thesis/firi_anchors.json"))
+            Path("data/thesis/firi_anchors.json"), E70_SUMMARY)
 HUNGER_LINE, SIGMA_DEFAULT = 11.3, 4.0
 # E68 T-AFF headline P60 (2021-Q1..2022-Q4, numpy.percentile), the province's usual headline inflation
 HEADLINE_USUAL = {"PH040100000": 5.013333, "PH040200000": 4.653333, "PH040300000": 5.06,
@@ -589,6 +591,28 @@ def evaluation() -> dict:
 
 
 @functools.lru_cache(maxsize=1)
+def _e70(mtime: int) -> dict:
+    return json.loads(E70_SUMMARY.read_text(encoding="utf-8"))
+
+
+def e70_summary() -> dict:
+    """E70 outcome (E70_Objectives_Completion/out/score.json, condensed by e70_export.py)."""
+    return _e70(E70_SUMMARY.stat().st_mtime_ns)
+
+
+def e70_sentence() -> str:
+    e = e70_summary()
+    g = e["goal_80"]
+    return (f"E70 ({e['date']}): {e['arms_tried']} pre-registered changes to the Lead-2 model (plus {e['checks']} ablation and "
+            f"single-group checks) were tested on the same "
+            f"{g['n']} development rows; " + ("none passed the improvement rule, so the served model is unchanged. " if not e["candidates_passing_rule"] else "passing: " + ", ".join(e["candidates_passing_rule"]) + ". ") + f"Lead-2 "
+            f"accuracy {g['correct']}/{g['n']} = {g['accuracy']:.2f} (HIGH recall {g['recall_HIGH']:.2f}, balanced "
+            f"accuracy {g['balanced_accuracy']:.2f}); the 80% Lead-2 goal is {'met on development rows' if g['met'] else 'NOT met'}. The label is food-price pressure in "
+            "practice (regional hunger was above 11.3% in every evaluated quarter), so this is not food-insecurity "
+            "accuracy.")
+
+
+@functools.lru_cache(maxsize=1)
 def _firi_eval(mtime: int) -> dict:
     return json.loads(FIRI_EVALUATION.read_text(encoding="utf-8"))
 
@@ -680,7 +704,7 @@ def performance_tables(perf: dict | None = None) -> dict:
          f"HIGH at 0.5). Its rows are scored against observed regional hunger (SWS Balance Luzon above 11.3%), the only "
          f"direct food-insecurity observation: {fi['goal75']} Its agreement with the T43 price label is reported "
          "separately and is not food-insecurity accuracy." if fi else
-         "The province score is an exploratory food-price-pressure score.")]
+         "The province score is an exploratory food-price-pressure score."), e70_sentence()]
     return {"leadHeader": ["Lead", "Accuracy", "Precision", "Recall", "F1", "AUC-ROC", "Brier", "Reliable"],
             "leadRows": leads, "baselineHeader": ["Model (45 identical rows)", "Accuracy", "Recall HIGH", "AUC-ROC", "Brier"],
             "baselineRows": base, "sentences": sentences}
@@ -728,7 +752,10 @@ def for_summary(rec: dict, quarter: str, code: str | None, kind: str, result: st
                        "production, national jobs and remittances, news (where at least 5 articles) and regional hunger, "
                        "each compared with its own earlier values; an estimate for planning, not a probability. Province "
                        "estimates are shown here; the city and municipal values are a relative prioritization within each "
-                       "province, not municipal estimates.")
+                       "province, not municipal estimates."
+                     + (f" All {len(ok)} provinces are HIGH; FIRI v2 rates most past province-quarters HIGH, so the "
+                        "class alone does not separate them: compare the index values and ranks." if ok and
+                        all(f["class"] == "HIGH" for f in ok.values()) else ""))
         risk = {"tiers": {n: f["class"] for n, f in ok.items()}, "index": None if mean is None else round(mean, 4),
                 "provinces": {n: round(f["firi"], 4) for n, f in ok.items()}}
         news, o = None, None
@@ -770,7 +797,7 @@ def for_summary(rec: dict, quarter: str, code: str | None, kind: str, result: st
     if lead2:
         parts.append(f"MODEL: {MODEL_NAME}; Lead-2 score issued {rec['origin'] if quarter == rec.get('targetQuarter') else issue_of(t)}. "
                      f"Back-test (examined rows, not unseen): Lead-2 accuracy {lead2['accuracy']:.2f}, AUC {lead2['auc_roc']:.2f}; "
-                     f"{perf['verdict']}; the >75% goal is not demonstrated.")
+                     f"{perf['verdict']}; neither the 75% nor the 80% Lead-2 accuracy goal is demonstrated (E70).")
     ident = {"servingMode": MODE, "modelVersion": MODEL_NAME, "servedModel": (rec["provinces"][next(iter(rec["provinces"]))]
              ["forecast"].get("servedModel") if quarter == rec.get("targetQuarter") else "E56-TUNED LightGBM (earlier issue)"),
              "lead": 2, "issued": rec["origin"] if quarter == rec.get("targetQuarter") else issue_of(t),
