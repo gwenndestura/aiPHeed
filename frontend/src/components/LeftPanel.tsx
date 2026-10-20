@@ -487,6 +487,12 @@ function RegionDetail({
   const isHigh = isHighRisk(region.riskScore, displayCutoff);
   const isActiveAlert = region.riskScore >= alertThreshold;
   const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
+  // A past quarter is a backtest or an earlier forecast, not the issued
+  // forecast that config.indicator.horizon describes (same request as the
+  // Why panel's, shared cache).
+  const { data: explain } = useExplainability("province", region.id, quarterId || undefined);
+  const est = explain?.summary;
+  const quarterText = quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter";
 
   return (
     <div className="px-5 py-4 space-y-4">
@@ -528,8 +534,11 @@ function RegionDetail({
 
       {/* Confidence statement */}
       <Note>
-        This is a {horizonLabel} for {quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter"},
-        based on PSA production data already published for that quarter.
+        {est && est.estimateKind === "backtest"
+          ? `This is a backtest estimate for ${quarterText}, made as of ${est.issued} with only information published before that date (development evidence, not a forecast issued live). Observed outcome: ${est.observedOutcome ?? "not available"}.`
+          : est && est.estimateKind === "earlier_forecast"
+            ? `This is the Lead-2 forecast for ${quarterText} issued ${est.issued}, based only on information published before that date; its outcome is not yet published.`
+            : `This is a ${horizonLabel} for ${quarterText}, based only on information published before the forecast was issued.`}
       </Note>
 
       {/* Key Metrics */}
@@ -575,7 +584,7 @@ function RegionDetail({
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
         </div>
         <p className="text-[9px] text-muted-foreground/70 italic mb-2 leading-snug">
-          Spatially disaggregated estimates derived from the validated province forecast.
+          Relative prioritization derived from the province forecast with PSA poverty and population density; not validated municipal forecasts.
         </p>
         <div className="space-y-1 max-h-[260px] overflow-y-auto thin-scrollbar pr-1">
           {munis.map((m) => (

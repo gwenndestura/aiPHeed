@@ -8,7 +8,8 @@ import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
 import { quarterPeriodLabel } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
-import { driverCopy, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
+import { driverCopy, isContributing, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
+import { summaryHeadline } from "@/lib/summaryHeadline";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
@@ -110,6 +111,21 @@ export function ShapNarrativeCardBody({
         <ShapDriverList items={triggers} />
       )}
 
+      {/* The backend's plain-language summary as one line: the data status and
+          the summary's first sentence; the full text of both on hover. */}
+      {!explainLoading && !explainFailed && explain?.summary && (
+        <p
+          data-testid="plain-summary"
+          className="mt-2 px-1 text-[11px] text-foreground/80 leading-snug truncate"
+          title={`Data: ${explain.summary.dataStatus} (${explain.summary.dataStatusNote}). ${summaryHeadline(explain.summary.sentence)}`}
+        >
+          <span className="font-semibold">Data: {explain.summary.dataStatus}</span>
+          <span className="sr-only"> ({explain.summary.dataStatusNote})</span>
+          {" · "}
+          {summaryHeadline(explain.summary.sentence)}
+        </p>
+      )}
+
       <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
     </div>
   );
@@ -141,8 +157,12 @@ function ShapDriverListSkeleton() {
 
 function ShapDriverList({ items }: { items: Trigger[] }) {
   if (!items.length) return null;
-  const risky = items.filter((t) => t.direction !== "protective");
-  const protective = items.filter((t) => t.direction === "protective");
+  // Only groups that moved the forecast are listed as pushing risk up or
+  // down; the rest (no data, no effect, not in the model) are listed apart.
+  const moving = items.filter((t) => isContributing(t));
+  const risky = moving.filter((t) => t.direction !== "protective");
+  const protective = moving.filter((t) => t.direction === "protective");
+  const inactive = items.filter((t) => !isContributing(t));
   return (
     <section className="mb-2 space-y-3">
       {risky.length > 0 && (
@@ -150,6 +170,9 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
       )}
       {protective.length > 0 && (
         <DriverGroup heading="Factors pulling risk down" headingColor="hsl(var(--risk-moderate))" items={protective} />
+      )}
+      {inactive.length > 0 && (
+        <DriverGroup heading="Not part of this forecast" headingColor="hsl(var(--muted-foreground))" items={inactive} />
       )}
     </section>
   );
@@ -184,6 +207,13 @@ function DriverGroup({ heading, headingColor, items }: { heading: string; headin
   );
 }
 
+/** Why an article is in the feed, as a short chip: the backend's own label, without its explanation. */
+function relevanceChip(a: NewsArticle): string {
+  if (a.relevanceStatus === "validated") return "Validated";
+  if (a.relevanceStatus === "trigger_match") return "Keyword match";
+  return a.relevanceLabel?.split(" (")[0] || "Food-stress article";
+}
+
 export function NewsArticlesCardBody({
   selectedRegion,
   quarterId,
@@ -215,7 +245,7 @@ export function NewsArticlesCardBody({
   // scope there is no selectedRegion to fall back on, so deferring the call
   // until the drawer opened left CALABARZON reading 0. The corpus is cached
   // server-side (lru_cache), so this is a cheap read.
-  const { data: news } = useNews(scope, id, quarterId);
+  const { data: news, isLoading: newsLoading, isError: newsError, refetch: refetchNews } = useNews(scope, id, quarterId);
 
   const articleCount = news?.articleCount ?? selectedRegion?.articleCount ?? 0;
   // Region-wide articles (province = null in the corpus) count toward
@@ -223,7 +253,7 @@ export function NewsArticlesCardBody({
   // less than the regional one.
   const regionWide = !selectedRegion && news ? news.articleCount - news.provinceAttributed : 0;
 
-  const notes = news && (news.sourceQuarter !== news.quarter || regionWide > 0);
+  const notes = news && (news.sourceQuarter !== news.quarter || regionWide > 0 || !!news.feedNote);
   const topics = news && news.topics.length > 0;
 
   return (
@@ -242,13 +272,25 @@ export function NewsArticlesCardBody({
           </div>
           {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
         </button>
+        {open && (newsLoading || newsError) && (
+          <div className="mt-3 px-1">
+            {newsLoading && <p className="text-[10px] text-muted-foreground italic">Loading articles…</p>}
+            {newsError && (
+              <p className="text-[10px] text-destructive">
+                The news feed could not be loaded.{" "}
+                <button className="underline compact:min-h-11" onClick={() => refetchNews()}>Try again</button>
+              </p>
+            )}
+          </div>
+        )}
         {open && (notes || topics) && (
           <div className="mt-3 space-y-3 px-1">
             {news && news.sourceQuarter !== news.quarter && (
               <p className="text-[9px] italic text-muted-foreground leading-snug">
-                Forecast quarter — showing {news.sourceQuarter.split("-").reverse().join(" ")} articles, the latest news the forecast was built from.
+                Forecast quarter — showing articles up to {news.sourceQuarter.split("-").reverse().join(" ")}, the latest news available when the forecast was made.
               </p>
             )}
+            {news?.feedNote && <p className="text-[9px] text-muted-foreground leading-snug">{news.feedNote}</p>}
             {regionWide > 0 && news && (
               <p className="text-[9px] italic text-muted-foreground leading-snug">
                 {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
@@ -279,8 +321,12 @@ export function NewsArticlesCardBody({
         <div className="mt-3 px-1">
           {/* Clickable articles */}
           <div className="space-y-1 border-t border-border/30 pt-2">
-            {!news?.data.length && (
-              <p className="text-[10px] text-muted-foreground/70 italic px-2 py-1.5">No articles for this quarter.</p>
+            {news && !news.data.length && (
+              <p className="text-[10px] text-muted-foreground/70 italic px-2 py-1.5">
+                No validated or trigger-matched food-stress articles were found for this area in the news window
+                {news.windowQuarters?.length ? ` (${news.windowQuarters.join(", ")})` : ""}. This reflects news coverage,
+                not low risk.
+              </p>
             )}
             {news?.data.map((a) => (
               <button
@@ -289,7 +335,21 @@ export function NewsArticlesCardBody({
                 className="w-full text-left text-[10px] py-1.5 px-2 compact:min-h-11 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <p className="truncate font-semibold text-foreground/90">{a.title}</p>
-                <p className="text-[9px]">{a.source}{a.date ? ` · ${a.date}` : ""}</p>
+                <p className="text-[9px]">
+                  {a.source}{a.date ? ` · ${a.date}` : ""}{a.province ? ` · ${a.province}` : ""}
+                </p>
+                {(a.relevanceStatus || (a.triggers && a.triggers.length > 0)) && (
+                  <p className="text-[9px] flex flex-wrap gap-1 mt-0.5">
+                    {a.relevanceStatus && (
+                      <span className={`rounded-full px-1.5 ${a.relevanceStatus === "validated" ? "tint-primary" : "bg-secondary text-muted-foreground"}`}>
+                        {relevanceChip(a)}
+                      </span>
+                    )}
+                    {a.triggers?.map((t) => (
+                      <span key={t} className="rounded-full px-1.5 bg-secondary text-foreground/70">{t}</span>
+                    ))}
+                  </p>
+                )}
               </button>
             ))}
           </div>
@@ -304,7 +364,17 @@ export function NewsArticlesCardBody({
               {activeArticle?.source}{activeArticle?.date ? ` · ${activeArticle.date}` : ""}
             </DialogDescription>
           </DialogHeader>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">{activeArticle?.excerpt}</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">
+            {activeArticle?.excerpt || "Headline only: the news source supplies no lead text."}
+          </p>
+          {activeArticle?.relevanceLabel && (
+            <p className="text-[11px] text-muted-foreground">
+              {activeArticle.relevanceLabel}
+              {activeArticle.province ? ` · ${activeArticle.province}` : ""}
+              {activeArticle.triggers?.length ? ` · ${activeArticle.triggers.join(", ")}` : ""}
+              {activeArticle.collectedRetrospectively ? " · collected retrospectively (Oct 2026)" : ""}
+            </p>
+          )}
           {activeArticle?.url && (
             <a
               href={activeArticle.url}
