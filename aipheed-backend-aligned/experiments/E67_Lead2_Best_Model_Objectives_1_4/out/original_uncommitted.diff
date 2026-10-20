@@ -1,0 +1,63 @@
+diff --git a/backend/app/api/v1/insights.py b/backend/app/api/v1/insights.py
+index c0334af..83a1eec 100644
+--- a/backend/app/api/v1/insights.py
++++ b/backend/app/api/v1/insights.py
+@@ -83,6 +83,19 @@ E46_EXPLAINABILITY_NOTE = (
+ )
+ 
+ 
++# E46 with the E53 D-1 corrected attribution (AIPHEED_E46_ATTRIBUTION=d1): every model input is attributed
++E46_D1_EXPLAINABILITY_NOTE = (
++    "The bars show how much each of five factor groups moved this experimental forecast, measured as the change in "
++    "the forecast's log-odds when that group's inputs are set to their historical average (all else fixed). Market / "
++    "Prices includes the projected food inflation and food-minus-headline gap built from PSA CPI, which is the "
++    "model's main price input, and the rice-policy orders; each group includes its own news share. The latest "
++    "regional hunger level (SWS) and the total volume of news are not one of the five groups and are left out of the "
++    "bars. The five shares add up to 100 percent of the five groups' combined effect; each card states whether the "
++    "group raised or lowered the forecast and the official observation behind it. Employment and OFW figures are "
++    "national. These are model attributions, not causes and not shares of food insecurity."
++)
++
++
+ E52_EXPLAINABILITY_NOTE = (
+     "This experimental forecast is the probability of food-price pressure (PSA food inflation, or food minus headline "
+     "inflation, above the province's usual 2021-2022 level), not of hunger or household food insecurity. The bars "
+@@ -172,7 +185,7 @@ def _served_note(quarter: str | None = None) -> str:
+     if quarter and LEAD2.mode() == "e52" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+         return E52_EXPLAINABILITY_NOTE
+     if quarter and LEAD2.mode() == "e46" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+-        return E46_EXPLAINABILITY_NOTE
++        return E46_D1_EXPLAINABILITY_NOTE if LEAD2.e46_d1() else E46_EXPLAINABILITY_NOTE
+     if quarter and LEAD2.mode() in ("e44", "e46", "e52", "e53") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
+         return CANDIDATE_EXPLAINABILITY_NOTE
+     if quarter and LEAD2.governs():
+diff --git a/backend/app/ml/inference/e41_lead2.py b/backend/app/ml/inference/e41_lead2.py
+index daa815f..0b18785 100644
+--- a/backend/app/ml/inference/e41_lead2.py
++++ b/backend/app/ml/inference/e41_lead2.py
+@@ -27,6 +27,9 @@ RECORD_E43 = Path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
+ RECORD_E44 = Path(os.getenv("AIPHEED_E44_RECORD", "data/e44/e44_record.json"))
+ # E46: defect-corrected five-trigger component model (I7, forecasting acceptance not met)
+ RECORD_E46 = Path(os.getenv("AIPHEED_E46_RECORD", "data/e46/e46_record.json"))
++# E46 with the E53 D-1 corrected attribution (rice policy -> Market, news_<group> -> its group, news_n -> other); same
++# probabilities. Served only when AIPHEED_LEAD2_MODEL=e46 AND AIPHEED_E46_ATTRIBUTION=d1; the E46 record is unchanged.
++RECORD_E46_D1 = Path(os.getenv("AIPHEED_E46_D1_RECORD", "data/e46/e46_record_d1.json"))
+ # E52: provincial food-price pressure (target PS) from the E46 I7 price component; development criteria met, not
+ # independently validated
+ RECORD_E52 = Path(os.getenv("AIPHEED_E52_RECORD", "data/e52/e52_record.json"))
+@@ -60,9 +63,13 @@ def active() -> bool:
+     return mode() in ("e41", "e42", "e43", "e44", "e46", "e52", "e53", "e55", "e56", "e58", "e64", "e66")
+ 
+ 
++def e46_d1() -> bool:
++    return mode() == "e46" and os.getenv("AIPHEED_E46_ATTRIBUTION", "").lower() == "d1"
++
++
+ def record() -> dict:
+-    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46, "e52": RECORD_E52, "e53": RECORD_E53,
+-            "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58,
++    path = {"e42": RECORD_E42, "e43": RECORD_E43, "e44": RECORD_E44, "e46": RECORD_E46_D1 if e46_d1() else RECORD_E46,
++            "e52": RECORD_E52, "e53": RECORD_E53, "e55": RECORD_E55, "e56": RECORD_E56, "e58": RECORD_E58,
+             "e64": RECORD_E64, "e66": RECORD_E58}.get(mode(), RECORD)
+     if not path.exists():
+         raise RecordError(f"no {mode().upper()} record has been generated (scripts/build_record_{mode()}.py)")

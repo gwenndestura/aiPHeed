@@ -35,6 +35,7 @@ from app.ml.inference.predictor import Predictor
 from app.ml.inference import e31_engine as E31
 from app.ml.inference import e41_lead2 as E41L2
 from app.ml.inference import climate_watch as CW
+from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import enso_context as ENSO
 from app.services import reference as ref
 
@@ -1070,6 +1071,9 @@ CANDIDATE_EVENTS = {
     # provincial food-price-pressure condition (E66 r1/r7); the wording says what was actually evaluated
     "e66": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
             "pressure; on every evaluated quarter this reduced to food-price pressure)"),
+    # E67: same wording as E66 (same record, same target)
+    "e67": ("food-insecurity risk as defined by T43 (regional hunger above 11.3% together with provincial food-price "
+            "pressure; on every evaluated quarter this reduced to food-price pressure)"),
     "e64": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e58": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
     "e56": "food-insecurity risk (high regional hunger together with provincial food-price pressure)",
@@ -1189,6 +1193,11 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     cfsw = _climate_watch(quarter, province_code) if kind in ("forecast", "earlier_forecast") else None
     if cfsw and cfsw["sentence"]:
         sentence = f"{sentence} {cfsw['sentence']}"
+    # E67: why the score is LOW under a climate watch, what each trigger group's data can and cannot show, and the
+    # model identity; text into the same sentence field, values into optional API fields (no new UI element)
+    e67 = D67.for_summary(E41L2.record(), quarter, province_code, kind, result, cfsw) if E41L2.mode() == "e67" else None
+    if e67 and e67["sentence"]:
+        sentence = f"{sentence} {e67['sentence']}"
     return {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
@@ -1202,13 +1211,14 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                                           "independent; the joint probability cannot exceed the smaller part)"},
             "caveat": _ascii(caveat)} if comp else {}),
         **({"climateWatch": cfsw} if cfsw else {}),
+        **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
     }
 
 
 def _climate_watch(quarter: str, province_code: str | None) -> dict | None:
     """E66 (AIPHEED_LEAD2_MODEL=e66 only): Climate Food-Stress Watch for an issued or earlier Lead-2 forecast.
     Province scope: the province's watch. Region scope: the provinces under a watch. None outside e66 mode."""
-    if E41L2.mode() != "e66":
+    if not E41L2.layered():
         return None
     rec = E41L2.record()
     codes = [province_code] if province_code else list(rec.get("provinces", {}))

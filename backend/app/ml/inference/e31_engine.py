@@ -179,7 +179,7 @@ class E31Disaggregator:
         ros = pd.read_csv(Path("data/reference/calabarzon_lgus.csv"), dtype={"lgu_psgc": str})
         prob = {f["province_code"]: f["risk_probability"] for f in forecasts} or None
         # E66 (opt-in mode only): exact ranks, so 4-dp display rounding of small probabilities creates no ties
-        rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"}, exact_ranks=LEAD2.mode() == "e66")
+        rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"}, exact_ranks=LEAD2.layered())
         suff = {f["province_code"]: f.get("data_sufficiency_flag") for f in forecasts}
         # E64 (Objective 3 traceability): the province estimate each LGU index scales, where it came from, and the index
         src = {f["province_code"]: {"mode": f.get("mode"), "origin": f.get("origin"), "quarter": f.get("quarter"),

@@ -343,6 +343,31 @@ class ClimateWatch(BaseModel):
     sentence: str
 
 
+class ModelIdentity(BaseModel):
+    """E67: which model produced the served Lead-2 number, under which serving mode and with what evidence status."""
+    servingMode: str                  # e.g. "e67"
+    modelVersion: str                 # record modelVersion
+    servedModel: str                  # e.g. "E56 LightGBM food-insecurity model (E56-TUNED, configuration 23)"
+    lead: int                         # quarters ahead of the issue quarter's predecessor (2 = Lead-2)
+    issued: str
+    targetQuarter: str
+    evidenceStatus: str               # development evidence only; not validated
+    lead2Accuracy: str                # the measured E67 development figure, with its limits
+
+
+class TriggerCoverage(BaseModel):
+    """E67: one trigger group's data coverage and measured Lead-2 effect (R1/R2), so missing or thin data is never read
+    as absence of risk."""
+    key: str
+    label: str
+    dataUsed: str                     # what the model actually receives for this group
+    geography: str
+    latestAtIssue: str
+    missingAtIssue: bool              # some inputs of the group are missing (NaN) at the issue date
+    measuredEffect: str               # helps | hurts | not distinguishable from zero (E67 R1, Lead-2, 50 rows)
+    note: str
+
+
 class PlainSummary(BaseModel):
     """E52: plain-language reading of one served estimate (experimental Lead-2 candidates only)."""
     event: str                        # what the probability is of, e.g. "food-price pressure"
@@ -360,7 +385,9 @@ class PlainSummary(BaseModel):
     # E61: the two parts of an issued two-part forecast (E55+ records) and what a low/high value does and does not mean
     components: SummaryComponents | None = None
     caveat: str | None = None
-    climateWatch: ClimateWatch | None = None   # E66 (e66 mode only)
+    climateWatch: ClimateWatch | None = None   # E66 (e66 and e67 modes)
+    modelIdentity: ModelIdentity | None = None            # E67 (e67 mode only)
+    triggerCoverage: list[TriggerCoverage] | None = None  # E67 (e67 mode only)
 
 
 class SummaryComponents(BaseModel):
