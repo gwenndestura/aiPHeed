@@ -18,14 +18,14 @@ export function MapControls({ layout = "column", rightOffset = 0, toggleLabel, t
   const zoomOut = () => window.dispatchEvent(new CustomEvent("aipheed:zoom-out"));
 
   if (layout === "row") {
-    // Border on each button; -ml-px collapses the shared edge.
-    const cell = "w-11 h-11 flex items-center justify-center border border-border/60 bg-card/95 backdrop-blur-sm hover:bg-secondary/70 text-foreground";
+    // Two round floating buttons.
+    const cell = "w-11 h-11 flex items-center justify-center surface-float rounded-full border hover:bg-secondary/70 text-foreground";
     return (
-      <div className="flex shrink-0 rounded-md shadow-lg">
-        <button onClick={zoomIn} aria-label="Zoom in" className={`${cell} rounded-l-md`}>
+      <div className="flex shrink-0 gap-1.5">
+        <button onClick={zoomIn} aria-label="Zoom in" className={cell}>
           <Plus className="h-5 w-5" />
         </button>
-        <button onClick={zoomOut} aria-label="Zoom out" className={`${cell} -ml-px rounded-r-md`}>
+        <button onClick={zoomOut} aria-label="Zoom out" className={cell}>
           <Minus className="h-5 w-5" />
         </button>
       </div>
@@ -38,19 +38,20 @@ export function MapControls({ layout = "column", rightOffset = 0, toggleLabel, t
       style={{ right: rightOffset + 12 }}
     >
       {/* Border sits on each button (not the wrapper) so every cell is the same
-          32x32 box as the panel toggle below; -mt-px collapses the shared edge. */}
-      <div className="flex flex-col rounded-md shadow-lg">
+          32x32 box as the panel toggle below; -mt-px collapses the shared edge.
+          The wrapper is the rounded floating surface. */}
+      <div className="flex flex-col surface-float rounded-md overflow-hidden">
         <button
           onClick={zoomIn}
           aria-label="Zoom in"
-          className="w-8 h-8 rounded-t-md flex items-center justify-center border border-border/60 bg-card/95 backdrop-blur-sm hover:bg-secondary/70 text-foreground"
+          className="w-8 h-8 flex items-center justify-center border edge-faint hover:bg-secondary/70 text-foreground"
         >
           <Plus className="h-4 w-4" />
         </button>
         <button
           onClick={zoomOut}
           aria-label="Zoom out"
-          className="w-8 h-8 -mt-px rounded-b-md flex items-center justify-center border border-border/60 bg-card/95 backdrop-blur-sm hover:bg-secondary/70 text-foreground"
+          className="w-8 h-8 -mt-px flex items-center justify-center border edge-faint hover:bg-secondary/70 text-foreground"
         >
           <Minus className="h-4 w-4" />
         </button>
@@ -60,7 +61,7 @@ export function MapControls({ layout = "column", rightOffset = 0, toggleLabel, t
           onClick={onToggle}
           aria-label={toggleLabel}
           title={toggleLabel}
-          className="w-8 h-8 rounded-md flex items-center justify-center border border-border/60 bg-card/95 backdrop-blur-sm shadow-lg hover:bg-secondary/70 hover:border-primary/50 text-foreground"
+          className="w-8 h-8 surface-float rounded-md flex items-center justify-center border hover:bg-secondary/70 hover:border-primary/50 text-foreground"
         >
           <ToggleIcon className="h-4 w-4" />
         </button>

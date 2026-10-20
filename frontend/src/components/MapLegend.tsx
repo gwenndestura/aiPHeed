@@ -56,7 +56,7 @@ export function MapLegend({ compact = false }: { compact?: boolean }) {
     <div
       role="group"
       aria-label={label}
-      className="w-8 flex flex-col items-stretch rounded-md overflow-hidden border border-border/60 bg-card/95 backdrop-blur-sm shadow-lg"
+      className="w-8 flex flex-col items-stretch surface-float rounded-md overflow-hidden border"
     >
       <span aria-hidden className="text-[10px] leading-4 py-0.5 text-center text-muted-foreground">Risk</span>
       {/* Plain-text tooltips: nothing to hover inside them, so moving off a

@@ -488,10 +488,10 @@
 }
 
 /* ------------------------------------------------------------------
-   Map quarter timeline and risk-level legend: two slim matching bars.
+   Map quarter timeline and risk-level legend: rounded floating bars.
    Neutral chrome only: the orange/red theme colours belong to the risk
-   data on the map, not to these controls. Radii are set here because
-   the site-wide rule above flattens every rounded-* utility.
+   data on the map, not to these controls. Corners, shadows and surface
+   opacity come from the shape tokens at the top of this file.
    ------------------------------------------------------------------ */
 @layer base {
   :root {
@@ -535,9 +535,12 @@
 
 @layer components {
   .qt-panel {
-    background: hsl(var(--qt-panel) / 0.85);
-    border: 1px solid hsl(var(--qt-border));
-    border-radius: 6px;
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border: 1px solid hsl(var(--border) / var(--edge-alpha));
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-control);
     color: hsl(var(--qt-text));
     font-size: 12px;
     line-height: 16px;
@@ -555,7 +558,7 @@
   }
   .qt-muted { color: hsl(var(--qt-text-muted)); }
 
-  /* Quarter timeline: no box, high-contrast text with a halo. */
+  /* Text floating on the map: high contrast, with a halo. */
   .qt-float {
     --qt-text: var(--qt-float-text);
     --qt-text-muted: var(--qt-float-muted);
@@ -575,6 +578,18 @@
       0 0 4px hsl(var(--qt-halo)),
       0 1px 3px hsl(var(--qt-halo) / 0.9);
   }
+  /* Quarter timeline: a rounded floating bar behind its text. The padding
+     is cancelled by an equal negative margin, so nothing in the timeline
+     moves and the row keeps its measured height. */
+  .qt-float-bar {
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-float);
+    padding: 4px 8px;
+    margin: -4px -8px;
+  }
   .qt-float .qt-link { font-size: 11px; font-weight: 600; }
   .qt-float .qt-line-observed,
   .qt-float .qt-line-forecast,
@@ -585,7 +600,7 @@
     line-height: 14px;
     padding: 0 5px;
     border: 1px solid hsl(var(--qt-text) / 0.7);
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
     box-shadow: 0 0 3px hsl(var(--qt-halo) / 0.8), inset 0 0 3px hsl(var(--qt-halo) / 0.8);
   }
   .qt-key { display: inline-block; width: 20px; }
@@ -627,6 +642,13 @@
     border: 0;
     background: hsl(var(--qt-selected));
   }
+  .qt-label { border-radius: var(--radius-pill); padding: 0 6px; }
+  .qt-point[aria-checked="true"] .qt-label {
+    background: hsl(var(--qt-selected));
+    color: hsl(var(--qt-panel));
+    text-shadow: none;
+  }
+  .qt-point.qt-point-nodata[aria-checked="true"] .qt-label { background: hsl(var(--qt-nodata)); }
   .qt-point:not(:disabled):hover { color: hsl(var(--qt-text)); }
   .qt-point:not(:disabled):hover .qt-dot { border-color: hsl(var(--qt-text)); }
   /* A quarter with no score: still selectable, drawn gray. */
@@ -653,9 +675,12 @@
     min-height: 44px;
     min-width: 44px;
     padding: 4px 10px;
-    background: hsl(var(--qt-panel) / 0.92);
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
     border: 1px solid hsl(var(--qt-border));
-    border-radius: 6px;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-control);
     color: hsl(var(--qt-text));
     font-size: 12px;
     line-height: 16px;

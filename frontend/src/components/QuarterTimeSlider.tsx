@@ -214,7 +214,7 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
   }
 
   return (
-    <div className="qt-float select-none">
+    <div className="qt-float qt-float-bar select-none">
       {/* Selected quarter, centred over the track, with View history at the
           right end. The two side boxes share the leftover width equally and
           never shrink below the history link (the left one holds an invisible
@@ -287,7 +287,7 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
               <span className="h-[14px] flex items-center justify-center">
                 <span className="qt-dot" />
               </span>
-              <span className="text-[10px] leading-[14px] mt-0.5">{fullName(q)}</span>
+              <span className="qt-label text-[10px] leading-[14px] mt-0.5">{fullName(q)}</span>
             </button>
           ))}
         </div>
