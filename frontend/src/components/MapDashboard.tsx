@@ -734,7 +734,10 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         <MapLegend />
       </div>
 
-      <div className="absolute bottom-2 right-3 z-[1000] text-[9px] text-muted-foreground/70 px-2 py-1">
+      {/* Map credit: in a bottom corner below an open panel, clear of the
+          timeline (which has no box behind it). Both panels closed: the
+          timeline is capped and centred, so the right corner is free. */}
+      <div className={`absolute bottom-2 ${rightCollapsed && !leftCollapsed ? "left-3" : "right-3"} z-[1000] text-[9px] text-muted-foreground/70 px-2 py-1`}>
         © OpenStreetMap · Protomaps
       </div>
 

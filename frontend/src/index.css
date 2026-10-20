@@ -575,7 +575,7 @@
        keeps its text and lines legible over any tile colour. */
     --qt-float-text: 0 0% 100%;
     --qt-float-muted: 0 0% 88%;
-    --qt-halo: 0 0% 0%;
+    --qt-halo: var(--background);
     /* A quarter with no score: gray, the map's own no-data colour family. */
     --qt-nodata: 220 9% 62%;
   }
@@ -593,7 +593,7 @@
     --qt-focus: 240 6% 10%;
     --qt-float-text: 240 6% 6%;
     --qt-float-muted: 240 5% 22%;
-    --qt-halo: 0 0% 100%;
+    --qt-halo: var(--background);
     --qt-nodata: 220 9% 42%;
   }
 }
@@ -638,28 +638,20 @@
     font-variant-numeric: tabular-nums;
     letter-spacing: normal;
     text-transform: none;
-    text-shadow:
-      0 0 2px hsl(var(--qt-halo)),
-      0 0 4px hsl(var(--qt-halo)),
-      0 1px 3px hsl(var(--qt-halo) / 0.9);
+    text-shadow: var(--map-label-halo);
   }
-  /* Quarter timeline: a rounded floating bar drawn behind its text, a
-     little larger than it. The bar is a layer of its own, so the timeline
-     keeps its exact box: nothing in it moves, the row keeps its measured
-     height and the legend stays aligned with its right end. */
-  .qt-float-bar { position: relative; isolation: isolate; }
-  .qt-float-bar::before {
-    content: "";
-    position: absolute;
-    inset: -4px -8px;
-    z-index: -1;
-    pointer-events: none;
+  /* On the timeline, the selected quarter and View history: small floating
+     pills (their text sits on the surface, so no halo). */
+  .qt-pill {
     background: hsl(var(--qt-panel) / var(--surface-alpha));
     -webkit-backdrop-filter: blur(var(--surface-blur));
     backdrop-filter: blur(var(--surface-blur));
-    border-radius: var(--radius-panel);
+    border-radius: var(--radius-pill);
     box-shadow: var(--shadow-float);
+    padding: 4px 14px;
+    text-shadow: none;
   }
+  .qt-pill .qt-tag { box-shadow: none; }
   .qt-float .qt-link { font-size: 11px; font-weight: 600; }
   .qt-float .qt-line-observed,
   .qt-float .qt-line-forecast,
@@ -684,6 +676,12 @@
     padding: 0;
   }
   .qt-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+  /* View history as a pill: the pill's surface, shape and padding. */
+  .qt-link.qt-pill {
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    border-radius: var(--radius-pill);
+    padding: 4px 12px;
+  }
 
   /* The track spans the whole bar, squeezing down to --qt-track-min
      before it scrolls. */
@@ -784,6 +782,9 @@
   gap: 8px;
   flex: 1;
   min-width: 0;
+  /* At most 900px wide, centred between the panels or their tabs. */
+  max-width: 900px;
+  margin-inline: auto;
 }
 .qt-row-bar { align-self: stretch; min-width: 0; }
 .qt-history-short { display: none; }

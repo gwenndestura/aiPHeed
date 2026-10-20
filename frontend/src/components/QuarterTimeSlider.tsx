@@ -214,7 +214,7 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
   }
 
   return (
-    <div className="qt-float qt-float-bar select-none">
+    <div className="qt-float select-none">
       {/* Selected quarter, centred over the track, with View history at the
           right end. The two side boxes share the leftover width equally and
           never shrink below the history link (the left one holds an invisible
@@ -223,20 +223,20 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
       <div className="flex items-center gap-x-3">
         <div className="flex-1 basis-0 flex justify-start">
           {onOpenHistory && (
-            <span aria-hidden className="qt-link invisible whitespace-nowrap">
+            <span aria-hidden className="qt-link qt-pill invisible whitespace-nowrap">
               <span className="qt-history-full">View history</span>
               <span className="qt-history-short">History</span>
             </span>
           )}
         </div>
-        <div className="min-w-0 flex items-center justify-center gap-x-3 gap-y-1 flex-wrap">
+        <div className="qt-pill min-w-0 flex items-center justify-center gap-x-3 gap-y-1 flex-wrap">
           <span className="text-[13px] leading-5 font-semibold">{fullName(shown)}</span>
           <span className="qt-muted qt-status text-[11px]">{quarterMonthRange(shown)}</span>
           <span className="qt-tag">{STATUS_TAG[statusOf(shown)]}</span>
         </div>
         <div className="flex-1 basis-0 flex justify-end">
           {onOpenHistory && (
-            <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link whitespace-nowrap">
+            <button type="button" onClick={onOpenHistory} aria-label="View history" className="qt-link qt-pill whitespace-nowrap">
               <span className="qt-history-full">View history</span>
               <span className="qt-history-short">History</span>
             </button>
