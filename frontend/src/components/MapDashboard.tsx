@@ -198,7 +198,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     });
   }, [regionsData, filters]);
 
-  const handleRegionClick = useCallback((r: RegionData) => {
+  const handleRegionClick = useCallback((r: RegionData | null) => {
+    if (!r) return; // never toggle on a missing region (double-click on "Back to CALABARZON")
     setSelectedRegion((prev) => (prev?.id === r.id ? null : r));
     setSelectedMunicipality(null);
   }, []);
@@ -213,6 +214,15 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   }, []);
 
   const handleHover = useCallback((r: RegionData | null) => setPreviewRegion(r), []);
+
+  // A selection follows the selected quarter: the panels show that quarter's
+  // score, not the one the province or municipality had when it was clicked.
+  useEffect(() => {
+    setSelectedRegion((prev) => (prev ? regionsData.find((r) => r.id === prev.id) ?? prev : prev));
+  }, [regionsData]);
+  useEffect(() => {
+    setSelectedMunicipality((prev) => (prev ? municipalitiesData.find((m) => m.id === prev.id) ?? prev : prev));
+  }, [municipalitiesData]);
 
   useEffect(() => {
     if (!noData) return;

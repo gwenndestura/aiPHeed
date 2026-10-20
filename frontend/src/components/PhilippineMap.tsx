@@ -1086,7 +1086,9 @@ export function PhilippineMap({
     <div className="absolute inset-0 w-full h-full">
       {isZoomed && (
         <button
-          onClick={() => onClick(selectedRegion!)}
+          // A second click can arrive after the first has cleared the selection
+          // (double-click): ignore it instead of passing null on.
+          onClick={() => { if (selectedRegion) onClick(selectedRegion); }}
           className="absolute top-14 left-1/2 -translate-x-1/2 z-[1000] surface-float border rounded-full px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
         >
           ← Back to CALABARZON
