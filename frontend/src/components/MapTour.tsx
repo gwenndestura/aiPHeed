@@ -17,8 +17,9 @@ function provincesArea(): Area | null {
   const clip = { top: m.top, left: m.left, right: m.right, bottom: m.bottom };
   const panel = (n: string) => [...document.querySelectorAll(`[data-tour="${n}"]`)].find(visible)?.getBoundingClientRect();
   const left = panel("summary"), right = panel("why"), sheet = panel("sheet");
-  if (left && left.left <= clip.left + 1) clip.left = Math.max(clip.left, left.right);
-  if (right && right.right >= clip.right - 1) clip.right = Math.min(clip.right, right.left);
+  // The side panels float 12px in from the map's edges.
+  if (left && left.left <= clip.left + 16) clip.left = Math.max(clip.left, left.right);
+  if (right && right.right >= clip.right - 16) clip.right = Math.min(clip.right, right.left);
   if (sheet) clip.bottom = Math.min(clip.bottom, sheet.top);
   const r = shapes.length
     ? shapes.reduce((a, b) => ({ top: Math.min(a.top, b.top), left: Math.min(a.left, b.left), right: Math.max(a.right, b.right), bottom: Math.max(a.bottom, b.bottom) }), { top: Infinity, left: Infinity, right: -Infinity, bottom: -Infinity })

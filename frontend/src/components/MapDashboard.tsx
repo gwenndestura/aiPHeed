@@ -29,13 +29,10 @@ import { isHighRisk } from "@/lib/risk";
 import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { readStorage, removeStorage } from "@/lib/storage";
 
-function FloatingCard({ children, className = "", style, tour }: { children: React.ReactNode; className?: string; style?: React.CSSProperties; tour?: string }) {
+/** A card inside a side panel: flat; the panel around it floats. */
+function PanelCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
   return (
-    <div
-      data-tour={tour}
-      className={`px-4 py-3.5 surface-float text-card-foreground border ${className}`}
-      style={style}
-    >
+    <div data-tour={tour} className={`px-4 py-3.5 inner-card text-card-foreground ${className}`}>
       {children}
     </div>
   );
@@ -73,7 +70,7 @@ function EdgeTab({ side, label, onClick }: { side: "left" | "right"; label: stri
 
 /** A card inside the phone sheet, which already has the blur and shadow. */
 function SheetCard({ children, className = "", tour }: { children: React.ReactNode; className?: string; tour?: string }) {
-  return <div data-tour={tour} className={`px-4 py-3.5 border edge-faint bg-card/60 rounded-panel ${className}`}>{children}</div>;
+  return <div data-tour={tour} className={`px-4 py-3.5 inner-card ${className}`}>{children}</div>;
 }
 
 function NoDataCardBody({ reason }: { reason?: string }) {
@@ -85,9 +82,10 @@ function NoDataCardBody({ reason }: { reason?: string }) {
   );
 }
 
+// Side panels: inset EDGE (below) from the screen edges and the header.
 const COL_W = 320;
 const PEEK_W = 24;
-const COL_TOP = 0;
+const COL_TOP = 12;
 const COL_BOTTOM = 64;
 
 // Phone layout: the search box across the top, the legend under it, the
@@ -389,17 +387,23 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       };
 
   // ─── Panel contents, shared by the side columns and the phone sheet ───
-  const Card = compact ? SheetCard : FloatingCard;
+  const Card = compact ? SheetCard : PanelCard;
 
-  const aboutFeedback = showAboutFeedback && (
-    <Card className={compact ? "" : "!py-2 shrink-0"} tour="about">
-      <div className="flex items-center justify-between gap-2">
-        <AboutModal />
-        <span className="text-[10px] text-muted-foreground/30">·</span>
-        <FeedbackModal />
-      </div>
-    </Card>
+  const aboutFeedbackRow = (
+    <div className="flex items-center justify-between gap-2">
+      <AboutModal />
+      <span className="text-[10px] text-muted-foreground/30">·</span>
+      <FeedbackModal />
+    </div>
   );
+  // Desktop: a floating bar of its own at the foot of the left column.
+  const aboutFeedback = showAboutFeedback && (compact ? (
+    <SheetCard tour="about">{aboutFeedbackRow}</SheetCard>
+  ) : (
+    <div data-tour="about" className="surface-panel mt-auto shrink-0 px-4 py-2 text-card-foreground">
+      {aboutFeedbackRow}
+    </div>
+  ));
 
   const leftCards = noData ? (
     <Card>
@@ -623,6 +627,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   // ─── Tablets and desktops: side columns ───
   // Closed panel: a 24px strip of it (desktop) or an edge tab (tablets).
   const closedW = medium ? EDGE_TAB_W : PEEK_W;
+  // What a side panel covers from its screen edge, open or closed.
+  const sideW = (collapsed: boolean) => (collapsed ? closedW : EDGE + COL_W);
   return (
     <div ref={rootRef} className="h-full w-full relative overflow-hidden">
       {map}
@@ -630,34 +636,42 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       {/* LEFT floating column */}
       <div
         className={`absolute z-[1001] flex flex-col gap-2 transition-[left] duration-300 ${leftCollapsed ? "cursor-pointer" : "animate-slide-in-left"} ${medium && leftCollapsed ? "invisible" : ""}`}
-        style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
+        style={{ top: COL_TOP, bottom: COL_BOTTOM, left: leftCollapsed ? -(COL_W - PEEK_W) : EDGE, width: COL_W }}
         onClick={() => leftCollapsed && showLeft()}
         aria-label={leftCollapsed ? "Show left sidebar" : undefined}
         data-tour="summary"
       >
-          {hasSelection && !noData ? (
-            <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
-              <FloatingCard className="p-0 overflow-hidden">{selectionPanel}</FloatingCard>
-            </div>
-          ) : (
-            <>
-              <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2">
+          {/* One floating panel, as tall as its cards (at most the column);
+              the cards scroll inside it. */}
+          <div className="surface-panel min-h-0 flex flex-col">
+            {hasSelection && !noData ? (
+              <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar">
+                {selectionPanel}
+              </div>
+            ) : (
+              <div className="left-sidebar-scrollbar-left flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2 p-2">
                 {leftCards}
               </div>
-              {aboutFeedback}
-            </>
-          )}
+            )}
+          </div>
+          {!(hasSelection && !noData) && aboutFeedback}
       </div>
 
       {/* RIGHT floating column */}
       <div
-        className={`absolute z-[1001] flex flex-col gap-2 overflow-y-auto thin-scrollbar transition-[right] duration-300 ${rightCollapsed ? "cursor-pointer" : "animate-slide-in-right"} ${medium && rightCollapsed ? "invisible" : ""}`}
-        style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W - PEEK_W) : 0, width: COL_W }}
+        className={`absolute z-[1001] flex flex-col transition-[right] duration-300 ${rightCollapsed ? "cursor-pointer" : "animate-slide-in-right"} ${medium && rightCollapsed ? "invisible" : ""}`}
+        style={{ top: COL_TOP, bottom: COL_BOTTOM, right: rightCollapsed ? -(COL_W - PEEK_W) : EDGE, width: COL_W }}
         onClick={() => rightCollapsed && showRight()}
         aria-label={rightCollapsed ? "Show right sidebar" : undefined}
         data-tour="why"
       >
-          {rightCards}
+          {rightCards && (
+            <div className="surface-panel min-h-0 flex flex-col">
+              <div className="flex-1 min-h-0 overflow-y-auto thin-scrollbar flex flex-col gap-2 p-2">
+                {rightCards}
+              </div>
+            </div>
+          )}
       </div>
 
       {medium && leftCollapsed && <EdgeTab side="left" label="Summary" onClick={showLeft} />}
@@ -679,14 +693,14 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       {/* Map search — top, beside left sidebar */}
       <div
         className="absolute z-[1001] animate-fade-in transition-[left] duration-300"
-        style={{ left: (leftCollapsed ? closedW : COL_W) + 12, top: 12 }}
+        style={{ left: sideW(leftCollapsed) + 12, top: 12 }}
         data-tour="search"
       >
         <MapSearch />
       </div>
 
       <MapControls
-        rightOffset={rightCollapsed ? closedW : COL_W}
+        rightOffset={sideW(rightCollapsed)}
         toggleLabel={toggle.label}
         toggleIcon={toggle.icon}
         onToggle={toggle.run}
@@ -698,8 +712,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
         ref={timelineRowRef}
         className="qt-row absolute z-[1001] pointer-events-none transition-[left,right] duration-300"
         style={{
-          left: (leftCollapsed ? closedW : COL_W) + 12,
-          right: (rightCollapsed ? closedW : COL_W) + 12,
+          left: sideW(leftCollapsed) + 12,
+          right: sideW(rightCollapsed) + 12,
           bottom: 12,
         }}
       >
@@ -723,7 +737,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
           panel like the buttons. */}
       <div
         className="absolute z-[1001] transition-[right] duration-300 animate-fade-in"
-        style={{ right: (rightCollapsed ? closedW : COL_W) + 12, bottom: 12 + timelineRowH + 8 }}
+        style={{ right: sideW(rightCollapsed) + 12, bottom: 12 + timelineRowH + 8 }}
         data-tour="legend"
       >
         <MapLegend />
