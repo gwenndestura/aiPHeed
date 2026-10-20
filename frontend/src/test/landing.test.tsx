@@ -41,15 +41,18 @@ const openAbout = () => {
 };
 
 describe("Landing page", () => {
-  it("has the sections in order, each with a left-aligned sentence-case heading and the amber dot", () => {
+  it("has the sections in order, each with a centred heading in bold spaced capitals and no dot", () => {
     const { container } = renderLanding();
     const sections = [...container.querySelectorAll("main section")];
     expect(sections.map((s) => s.id)).toEqual(["about", "methodology", "accuracy", "disclaimer", "faq"]);
     for (const sec of sections) {
       const h2 = sec.querySelector("h2") as HTMLElement;
-      expect(h2.querySelector(".heading-dot")).not.toBeNull();
-      expect(h2.className).not.toMatch(/text-center|uppercase/);
+      expect(h2.className).toMatch(/text-center/);
+      expect(h2.className).toMatch(/font-bold/);
+      expect(h2.className).toMatch(/uppercase/);
+      expect(h2.className).toMatch(/tracking-\[0\.14em\]/);
     }
+    expect(container.querySelector(".heading-dot")).toBeNull();
     expect(sections.map((s) => s.querySelector("h2")?.textContent)).toEqual([
       "About aiPHeed",
       "Methodology",
@@ -59,11 +62,14 @@ describe("Landing page", () => {
     ]);
   });
 
-  it("hero: the title, subtitle, two buttons and the coverage pills in a floating card", () => {
+  it("hero: the title, subtitle, two buttons and the coverage pills, directly on the photo", () => {
     config.state = { data: SERVED, isError: false };
     const { container } = renderLanding();
-    const card = container.querySelector("[data-hero-card]") as HTMLElement;
-    expect(card.className).toContain("surface-float");
+    expect(container.querySelector("[data-hero-card]")).toBeNull();
+    const hero = container.querySelector("section") as HTMLElement;
+    expect(hero.querySelector(".surface-float, .surface-card")).toBeNull();
+    const card = container.querySelector("[data-hero-text]") as HTMLElement;
+    expect(card.className).toContain("text-left");
     expect(within(card).getByRole("heading", { level: 1 }).textContent).toBe(
       "Food Insecurity Risk Forecasting System for CALABARZON",
     );
@@ -76,7 +82,7 @@ describe("Landing page", () => {
     expect(within(card).getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("#methodology");
     const pills = within(card).getAllByRole("listitem").map((li) => li.textContent);
     expect(pills).toEqual(["5 provinces", "142 cities and municipalities", "Forecast for Q1 2027"]);
-    // Nothing else in the card: no label above the title, no other text.
+    // Nothing else in the hero text: no label above the title, no other text.
     expect(card.textContent).toBe(
       "Food Insecurity Risk Forecasting System for CALABARZON" + sub.textContent +
         "Explore the mapHow it works5 provinces142 cities and municipalitiesForecast for Q1 2027",
@@ -90,30 +96,27 @@ describe("Landing page", () => {
   it("hero: hides the forecast pill when the API fails or has no forecast quarter", () => {
     config.state = { data: undefined, isError: true };
     const { container, unmount } = renderLanding();
-    let pills = [...(container.querySelector("[data-hero-card]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
+    let pills = [...(container.querySelector("[data-hero-text]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
     expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
     unmount();
     config.state = { data: { quarterRange: {} }, isError: false };
     const second = renderLanding();
-    pills = [...(second.container.querySelector("[data-hero-card]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
+    pills = [...(second.container.querySelector("[data-hero-text]") as HTMLElement).querySelectorAll("li")].map((li) => li.textContent);
     expect(pills).toEqual(["5 provinces", "142 cities and municipalities"]);
     config.state = { data: SERVED, isError: false };
   });
 
-  it("shows the five methodology steps as numbered cards in a grid", () => {
+  it("shows the five methodology steps as numbered paragraphs, not cards", () => {
     const { container } = renderLanding();
-    const steps = container.querySelector("#methodology ol") as HTMLElement;
-    expect(steps.className).toMatch(/grid/);
-    expect(steps.className).toMatch(/lg:grid-cols-3/);
-    const cards = [...steps.querySelectorAll(":scope > li")];
-    expect(cards).toHaveLength(5);
-    expect(cards.every((c) => c.className.includes("inner-card") && (c.textContent ?? "").trim().length > 40)).toBe(true);
-    expect(cards.map((c) => c.querySelector("h4")?.textContent)).toEqual([
-      "11. Indicator scores",
-      "22. Six domains",
-      "33. Combining the domains",
-      "44. Classification",
-      "55. City and municipal ranking",
+    expect(container.querySelector("#methodology ol")).toBeNull();
+    expect(container.querySelector("#methodology .inner-card")).toBeNull();
+    const titles = [...container.querySelectorAll("#methodology h4")].map((h) => h.textContent);
+    expect(titles.slice(0, 5)).toEqual([
+      "1.Indicator scores",
+      "2.Six domains",
+      "3.Combining the domains",
+      "4.Classification",
+      "5.City and municipal ranking",
     ]);
   });
 

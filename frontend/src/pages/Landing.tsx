@@ -13,11 +13,12 @@ import { useConfig } from "@/lib/queries";
 const THEME_KEY = "aipheed_theme";
 
 /* The hero photo sits under a warm tint in both themes (CLAUDE.local.md allows this gradient): the dark
-   theme's --background, then a low-opacity primary amber and risk red toward the right. Its text is in a
-   floating card, so only the small photo credit sits on the photo, in the dark theme's --foreground. */
+   theme's --background, then a low-opacity primary amber and risk red toward the right. The text sits on
+   the photo, so it uses the dark theme's own --foreground values. */
 const HERO_TINT =
   "bg-[linear-gradient(115deg,hsl(240_7%_5%/0.84)_0%,hsl(240_7%_5%/0.66)_45%,hsl(var(--primary)/0.30)_80%,hsl(var(--risk-high)/0.34)_100%)]";
-const HERO_MUTED = "hsl(36 22% 92% / 0.82)";
+const HERO_TEXT = "hsl(36 22% 92%)";
+const HERO_MUTED = "hsl(36 22% 92% / 0.78)";
 
 const GMA_URL = "https://www.gmanetwork.com/news/specials/content/193/the-hunger-pandemic/";
 
@@ -47,15 +48,14 @@ export default function Landing() {
 }
 
 /* ---------------- SHARED ---------------- */
-/** A section below the hero: a left-aligned heading with the map panels' amber dot, then its content. */
+/** A section below the hero: a centred heading in spaced capitals, then its content. */
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 px-4 sm:px-8 py-14 sm:py-20">
       <h2
         id={`${id}-title`}
-        className="mx-auto mb-6 sm:mb-8 flex max-w-[1200px] items-center gap-3 text-[22px] sm:text-[28px] font-bold leading-tight text-foreground"
+        className="mb-8 sm:mb-10 text-center text-[20px] sm:text-[24px] font-bold uppercase tracking-[0.14em] text-foreground"
       >
-        <span aria-hidden className="heading-dot h-2.5 w-2.5" />
         {title}
       </h2>
       {children}
@@ -104,25 +104,28 @@ function Hero() {
   const isAdmin = useAuth().status === "authenticated";
   const { data: config, isError } = useConfig();
   const forecast = isError ? null : forecastPill(config);
-  const outline =
-    "group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border edge-control font-semibold text-[15px] text-foreground transition-colors hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
   const pills = ["5 provinces", "142 cities and municipalities", ...(forecast ? [forecast] : [])];
+  const outline =
+    "group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border font-semibold text-[15px] transition-colors hover:bg-[hsl(36_22%_92%/0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
   return (
-    <section className="relative isolate flex min-h-[calc(100svh-64px)] items-center overflow-hidden px-4 sm:px-8 lg:px-16 py-12 sm:py-16">
+    <section className="relative isolate flex min-h-[calc(100svh-64px)] items-center overflow-hidden px-4 sm:px-8 lg:px-16 py-16 sm:py-20">
       <img src={heroBg} alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover" />
       <div aria-hidden data-hero-tint className={`absolute inset-0 -z-10 ${HERO_TINT}`} />
 
       <div className="mx-auto w-full max-w-[1200px]">
-        <div data-hero-card className="surface-float border w-full max-w-[640px] p-6 sm:p-9 text-left">
-          <h1 className="font-bold leading-[1.15] text-foreground text-[clamp(1.75rem,3.4vw,2.6rem)]">
+        <div data-hero-text className="max-w-4xl text-left">
+          <h1
+            className="font-bold leading-[1.1] text-[clamp(2.1rem,5vw,3.75rem)]"
+            style={{ color: HERO_TEXT }}
+          >
             Food Insecurity Risk Forecasting System for CALABARZON
           </h1>
-          <p className="mt-4 text-[16px] sm:text-[17px] leading-relaxed text-ink-secondary">
+          <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
             A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces two quarters
             ahead, using public statistics and Filipino-English news.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             <Link
               to="/dashboard"
               className="group inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full bg-primary text-[hsl(var(--primary-ink))] font-semibold text-[15px] shadow-control transition-[filter] hover:brightness-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -130,11 +133,11 @@ function Hero() {
               Explore the map
               <ArrowRight aria-hidden className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <a href="#methodology" className={outline}>
+            <a href="#methodology" className={outline} style={{ color: HERO_TEXT, borderColor: HERO_MUTED }}>
               How it works
             </a>
             {isAdmin && (
-              <Link to="/admin" className={outline}>
+              <Link to="/admin" className={outline} style={{ color: HERO_TEXT, borderColor: HERO_MUTED }}>
                 Go to admin dashboard
               </Link>
             )}
@@ -314,25 +317,13 @@ function Methodology() {
 
         <div className="mt-10">
           <SubHeading>How the index is built</SubHeading>
-          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="space-y-5">
             {STEPS.map((s, i) => (
-              <li key={s.t} className="inner-card p-5">
-                <h4 className="flex items-center gap-2.5 font-bold leading-snug text-foreground">
-                  <span
-                    aria-hidden
-                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[13px] font-bold text-[hsl(var(--primary-ink))]"
-                  >
-                    {i + 1}
-                  </span>
-                  <span>
-                    <span className="sr-only">{i + 1}. </span>
-                    {s.t}
-                  </span>
-                </h4>
-                <p className="mt-2 text-[14px] leading-[1.7]">{s.d}</p>
-              </li>
+              <Point key={s.t} n={i + 1} title={s.t}>
+                {s.d}
+              </Point>
             ))}
-          </ol>
+          </div>
         </div>
 
         <div className="mt-10">
