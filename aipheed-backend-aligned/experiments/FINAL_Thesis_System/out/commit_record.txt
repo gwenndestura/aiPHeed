@@ -1,0 +1,11 @@
+Final thesis system: commit and push record (written after the push; arrives in the follow-up commit)
+
+start: e69-food-insecurity-risk-framework @ feb9d4d232a01a295992701ad9b992130a2d850b (= origin after git fetch, 2026-10-20)
+branch: final-thesis-system (git switch -c, from feb9d4d)
+commits: e5af6028c7112100d04688f5260da0dc0959ed2c (implementation, tests, report)
+         8439fdc371a278f4d5d77164665346df21d9a0c4 (fresh-checkout evidence, long-path instruction)
+push: git push -u origin final-thesis-system -> https://github.com/gwenndestura/aiPHeed.git, [new branch]
+verify: git ls-remote --heads origin final-thesis-system = 8439fdc371a278f4d5d77164665346df21d9a0c4 = local HEAD; key artifacts present in origin/final-thesis-system
+thesis-demo configuration: AIPHEED_LEAD2_MODEL=thesis, AIPHEED_STRICT_MODEL=1 (backend/config/thesis_demo.env; scripts/start_thesis_demo.py)
+not committed (preserved in the working tree): E46 D-1 hunks of another session in backend/app/api/v1/insights.py and backend/app/ml/inference/e41_lead2.py, plus untracked d1 files and other sessions' untracked folders
+not done: merge, public deployment, production default switch (E38 stays the default)
