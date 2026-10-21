@@ -78,8 +78,12 @@ def validate() -> list[str]:
             f = FEATURES_DIR / f"features_{rec['targetQuarter'].replace('-', '')}.csv"
             if not f.exists():
                 probs.append(f"missing {f} (the model's inference features for the served target)")
-            if firi_for(rec, rec["targetQuarter"], next(iter(rec["provinces"]))) is None:
+            res0 = firi_for(rec, rec["targetQuarter"], next(iter(rec["provinces"])))
+            if res0 is None:
                 probs.append("FIRI not computable for the served target")
+            elif res0["firi"] is not None and abs(sum(shap_values(res0).values()) - (res0["firi"] - NEUTRAL)) > 1e-9:
+                # also loads SHAP at start-up, so the first dashboard request is not slowed by the import
+                probs.append("SHAP values of FIRI do not add up to the served index")
         except Exception as e:  # integrity / format
             probs.append(f"record: {e}")
         try:
@@ -346,6 +350,55 @@ def pushes(res: dict) -> dict[str, float]:
     return {k: w[d] * (res["indicators"][k]["score"] - NEUTRAL) / len(ks) for d, ks in _per_domain(res, w).items() for k in ks}
 
 
+def firi_value(res: dict, scores) -> "list[float]":
+    """The served FIRI aggregation as a function of the observed indicator scores (rows of `scores`, columns in
+    the order of `shap_keys(res)`): each domain is the mean of its observed indicators, and FIRI is the weighted sum
+    of the domains with the served weights. Used as the model that SHAP explains."""
+    import numpy as np
+    w = _norm_weights(res)
+    keys = shap_keys(res)
+    X = np.atleast_2d(np.asarray(scores, dtype=float))
+    out = np.zeros(X.shape[0])
+    for d, ks in _per_domain(res, w).items():
+        cols = [keys.index(k) for k in ks]
+        out += w[d] * X[:, cols].mean(axis=1)
+    return out
+
+
+def shap_keys(res: dict) -> list[str]:
+    w = _norm_weights(res)
+    return [k for ks in _per_domain(res, w).values() for k in ks]
+
+
+@functools.lru_cache(maxsize=256)
+def _shap_cached(sig: tuple) -> tuple:
+    """SHAP (exact Shapley values, shap.explainers.Exact) of FIRI for one province-quarter. The background is every
+    indicator at its historical middle (score 0.5), so a value is the indicator's push away from 0.5."""
+    import numpy as np
+    import shap
+    keys, scores, weights, domains = sig
+    res = {"indicators": {k: {"score": s, "domain": d} for k, s, d in zip(keys, scores, domains)},
+           "domains": {d: 1.0 for d in set(domains)}, "weights": dict(weights)}
+    f = lambda X: firi_value(res, X)  # noqa: E731
+    bg = np.full((1, len(keys)), NEUTRAL)
+    ex = shap.explainers.Exact(f, shap.maskers.Independent(bg, max_samples=1))
+    e = ex(np.asarray([scores], dtype=float))
+    return tuple(float(v) for v in e.values[0]), float(np.ravel(e.base_values)[0])
+
+
+def shap_values(res: dict) -> dict[str, float]:
+    """SHAP value of every observed FIRI indicator (they sum to FIRI - 0.5, the SHAP base value)."""
+    keys = shap_keys(res)
+    if not keys:
+        return {}
+    w = _norm_weights(res)
+    ind = res["indicators"]
+    sig = (tuple(keys), tuple(float(ind[k]["score"]) for k in keys),
+           tuple(sorted((d, float(v)) for d, v in w.items())), tuple(ind[k]["domain"] for k in keys))
+    vals, _ = _shap_cached(sig)
+    return dict(zip(keys, vals))
+
+
 def firi_drivers(rec: dict, quarter: str, code: str, base: dict) -> dict:
     """The five approved driver bars, explaining the served number (FIRI v2): each group's exact push away from the
     neutral 0.5 (raises or lowers). Vulnerability, regional hunger and news are not among the five groups: their share
@@ -353,7 +406,7 @@ def firi_drivers(rec: dict, quarter: str, code: str, base: dict) -> dict:
     res = firi_for(rec, quarter, code)
     if res is None or res["firi"] is None:
         return base
-    pu = pushes(res)
+    pu = shap_values(res)
     news = {d["driver_group"]: d.get("trigger_proportion") for d in base.get("drivers", [])}
     drivers = []
     for g, ks in FIVE_GROUPS.items():
@@ -417,7 +470,7 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
         else:
             parts.append(f"{i['label']}: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
-            "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index.")
+            "middle): " + "; ".join(parts) + ". The bar is this group's SHAP value (its push on the index).")
 
 
 def _an(pct: str) -> str:
@@ -479,7 +532,7 @@ def plain_evidence(rec: dict, quarter: str, code: str, key: str, n: int = 2) -> 
     res = firi_for(rec, quarter, code)
     if not res or key not in FIVE_GROUPS:
         return None
-    pu = pushes(res)
+    pu = shap_values(res)
     ind = res["indicators"]
     seen = [k for k in FIVE_GROUPS[key] if ind[k]["score"] is not None and ind[k]["x"] is not None]
     seen.sort(key=lambda k: -abs(pu.get(k, 0.0)))

@@ -52,3 +52,22 @@ def test_factor_card_sentences_name_the_quarters_used(rec):
             text = T.plain_evidence(rec, q, code, key)
             if text:
                 assert f"in {used}" in text and f"in {before}" in text, (code, key, text)
+
+
+def test_firi_explanations_are_shap_values(rec):
+    """The served FIRI explanation uses the SHAP library (exact Shapley values, background = every indicator at its
+    historical middle): the explained function reproduces the served index, the values add up to index - 0.5, they
+    equal the exact weight x (score - 0.5) split, and each dashboard bar is the SHAP sum of its group."""
+    q = rec["targetQuarter"]
+    for code in rec["provinces"]:
+        res = T.firi_for(rec, q, code)
+        keys = T.shap_keys(res)
+        x = [res["indicators"][k]["score"] for k in keys]
+        assert abs(T.firi_value(res, [x])[0] - res["firi"]) < 1e-12
+        sv = T.shap_values(res)
+        assert abs(sum(sv.values()) - (res["firi"] - 0.5)) < 1e-9
+        pu = T.pushes(res)
+        assert all(abs(sv[k] - pu[k]) < 1e-9 for k in keys)
+        bars = {d["driver_group"]: d["group_shap"] for d in T.firi_drivers(rec, q, code, {"drivers": []})["drivers"]}
+        for g, ks in T.FIVE_GROUPS.items():
+            assert abs(bars[g] - round(sum(sv.get(k, 0.0) for k in ks), 6)) < 1e-6, (code, g)
