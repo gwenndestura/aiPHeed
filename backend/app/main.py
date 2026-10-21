@@ -13,6 +13,23 @@ from app.services.accounts import AccountError, AccountNotFound
 from app.tasks.scheduler import shutdown_scheduler, start_scheduler
 
 
+def load_model_settings() -> None:
+    """The model settings (AIPHEED_*) from backend/.env, so the server serves the model chosen there however it is
+    started: uvicorn without --env-file used to fall back to the old E36 model. A value already in the environment is
+    kept. Not under pytest, where each test chooses its own model."""
+    import os
+    from pathlib import Path
+
+    from dotenv import dotenv_values
+
+    if os.getenv("PYTEST_CURRENT_TEST"):
+        return
+    env_file = Path(__file__).resolve().parents[1] / ".env"
+    for key, value in dotenv_values(env_file).items():
+        if key.startswith("AIPHEED_") and value is not None:
+            os.environ.setdefault(key, value)
+
+
 def strict_model_check() -> None:
     """Thesis-demo configuration (AIPHEED_STRICT_MODEL=1): the API must serve the final thesis system and refuses to
     start when the mode is different or a required artifact is missing (no silent fallback to an older model)."""
@@ -36,6 +53,7 @@ async def lifespan(app: FastAPI):
     # Startup — Rule 1, Quarter Self-Update. The scheduler stages outputs for
     # review; it never publishes.
     print("Starting up aiPHeed backend...")
+    load_model_settings()
     strict_model_check()
     start_scheduler()
     yield
