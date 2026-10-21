@@ -258,6 +258,8 @@ bullet("**Cities and municipalities** lists every city and municipality in the p
        "separate forecasts for each city or municipality.")
 bullet("The right panel lists the **Factors pushing risk up**, the **Factors pulling risk down**, and "
        "data **Not part of this forecast** (data that was not yet published).")
+bullet("Each factor card states the measured value behind it and the quarters compared, for example "
+       "how much unemployment or harvests changed from the same quarter a year earlier.")
 bullet("Click **Back to CALABARZON** to return to the whole region.")
 image(IMG / "04-province.png")
 
@@ -266,7 +268,7 @@ bullet("Click **News articles analyzed** in the right panel to open it.")
 bullet("It shows how many news articles were analyzed for the province and the share of each topic, "
        "such as climate stress or fish kill.")
 bullet("The list below shows the news headlines the forecast was built from. Click a headline to open it.")
-image(crop("06-news.png", (1655, 905, 2160, 1205), "06-news-panel.png"), 9.0)
+image(crop("06-news.png", (1655, 375, 2160, 1200), "06-news-panel.png"), 7.5)
 
 h("4.1.4 Search", 3)
 bullet("Type the name of a province, city or municipality in the search box at the top of the map.")
