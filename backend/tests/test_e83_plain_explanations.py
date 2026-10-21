@@ -51,3 +51,29 @@ def test_pushes_are_an_exact_split_of_the_index(rec):
     for code in rec["provinces"]:
         res = T.firi_for(rec, q, code)
         assert abs(sum(T.pushes(res).values()) - (res["firi"] - 0.5)) < 1e-9
+
+
+def test_factor_card_sentences_state_the_model_inputs(rec):
+    """Each factor card's sentence states the served FIRI input values of its group (numbers taken from the index the
+    forecast was computed from), names national figures as national, and is absent only when no input was observed."""
+    import re as _re
+    q = rec["targetQuarter"]
+    for code in rec["provinces"]:
+        res = T.firi_for(rec, q, code)
+        for key, ks in T.FIVE_GROUPS.items():
+            text = T.plain_evidence(rec, q, code, key)
+            observed = [k for k in ks if res["indicators"][k]["score"] is not None and res["indicators"][k]["x"] is not None]
+            assert (text is None) == (not observed), (code, key)
+            if text is None:
+                continue
+            assert "FIRI" not in text and "score" not in text
+            if key in ("employment", "ofw_remittance"):
+                assert "(national figure)" in text
+            nums = [float(n) for n in _re.findall(r"(\d+(?:\.\d+)?)%", text)]
+            xs = [abs(float(res["indicators"][k]["x"])) for k in observed]
+            for k in observed:
+                x = float(res["indicators"][k]["x"])
+                if k == "A1":
+                    assert f"{x:.0%}" in text or k not in observed[:2]
+                elif k in ("A3", "C3", "C4", "E2") and k in sorted(observed, key=lambda kk: -abs(T.pushes(res).get(kk, 0)))[:2]:
+                    assert any(abs(n - abs(x)) < 0.6 for n in nums), (code, key, k, x, text)

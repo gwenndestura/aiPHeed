@@ -420,6 +420,63 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
             "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index.")
 
 
+def _an(pct: str) -> str:
+    return "an" if pct.startswith("8") or pct.split("%")[0] in ("11", "18") else "a"
+
+
+def _vs_usual(s: float, what: str) -> str:
+    """How the change compares with this indicator's own earlier values (its score is that percentile)."""
+    return f", a {'larger' if s > 0.5 else 'smaller'} {what} than usual"
+
+
+def _plain_fact(k: str, x: float, s: float) -> str | None:
+    """One measured fact in everyday words, with its value and, for changes, how it compares with usual (which is
+    what moves the index); no index scores, no model terms."""
+    if k == "A1":
+        pct = f"{x:.0%}"
+        return f"The price model gives {_an(pct)} {pct} chance that food prices rise faster than usual in this province."
+    if k == "A2":
+        return (f"Overall prices are rising {abs(x):.1f} points {'faster' if x >= 0 else 'slower'} than this "
+                f"province's usual rate.")
+    if k == "A3":
+        return (f"Wholesale rice is {abs(x):.0f}% {'higher' if x >= 0 else 'lower'} than a year earlier"
+                + (_vs_usual(s, "rise") if x > 0 else "") + ".")
+    if k == "C1":
+        return "A PAGASA El Nino advisory is in force." if x >= 0.5 else "No PAGASA El Nino advisory is in force."
+    if k == "C2":
+        n = int(round(x))
+        return f"{n} typhoon{'s' if n != 1 else ''} passed within 300 km in the latest quarter."
+    if k == "C3":
+        return (f"Rice or corn harvest was {x:.0f}% lower than a year earlier{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Rice and corn harvests were not lower than a year earlier (smallest change {-x:+.0f}%).")
+    if k == "C4":
+        return (f"Fish production was {x:.1f}% lower than a year earlier{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Fish production was {abs(x):.1f}% higher than a year earlier.")
+    if k == "E1":
+        return (f"Unemployment rose {x:.1f} points over the year{_vs_usual(s, 'rise')} (national figure)." if x > 0 else
+                f"Unemployment fell {abs(x):.1f} points over the year (national figure).")
+    if k == "E2":
+        return (f"Money sent home by OFWs was {x:.0f}% lower than a year earlier{_vs_usual(s, 'fall')} (national figure)."
+                if x > 0 else f"Money sent home by OFWs was {abs(x):.0f}% higher than a year earlier (national figure).")
+    return None
+
+
+def plain_evidence(rec: dict, quarter: str, code: str, key: str, n: int = 2) -> str | None:
+    """THESIS: the factor card's sentence with real values. The group's observed indicators, the largest exact
+    pushes first; missing values are said to be missing, never shown as zero. None when nothing is available."""
+    res = firi_for(rec, quarter, code)
+    if not res or key not in FIVE_GROUPS:
+        return None
+    pu = pushes(res)
+    seen = [k for k in FIVE_GROUPS[key] if res["indicators"][k]["score"] is not None and res["indicators"][k]["x"] is not None]
+    seen.sort(key=lambda k: -abs(pu.get(k, 0.0)))
+    ind = res["indicators"]
+    facts = [f for f in (_plain_fact(k, float(ind[k]["x"]), float(ind[k]["score"])) for k in seen[:n]) if f]
+    if not facts:
+        return None
+    return " ".join(facts)
+
+
 FIRI_METHOD = ("FIRI v2: six indicator domains (affordability, household vulnerability, climate and food production, "
                "household economy, news, regional hunger). Each indicator is compared with its own earlier values "
                "(0.5 = its historical middle); domains are weighted by how closely each tracked observed regional "

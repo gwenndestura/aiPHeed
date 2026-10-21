@@ -1062,6 +1062,9 @@ def explainability(province_code: str, quarter: str) -> dict:
                              if THESIS.active() and E41L2.governs() else
                              _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
                                         d["driver_group"], quarter)),
+            # the card's sentence with the measured values behind this group (province scope, thesis mode)
+            "plainEvidence": (THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
+                              if THESIS.active() and E41L2.governs() else None),
             "newsSignalProportion": d["trigger_proportion"],
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
