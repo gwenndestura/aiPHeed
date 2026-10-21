@@ -254,7 +254,7 @@ export function NewsArticlesCardBody({
   // less than the regional one.
   const regionWide = !selectedRegion && news ? news.articleCount - news.provinceAttributed : 0;
 
-  const notes = news && (news.sourceQuarter !== news.quarter || regionWide > 0 || !!news.feedNote);
+  const notes = news && regionWide > 0;
   const topics = news && news.topics.length > 0;
 
   return (
@@ -286,12 +286,6 @@ export function NewsArticlesCardBody({
         )}
         {open && (notes || topics) && (
           <div className="mt-3 space-y-3 px-1">
-            {news && news.sourceQuarter !== news.quarter && (
-              <p className="text-[9px] italic text-muted-foreground leading-snug">
-                Forecast quarter — showing articles up to {news.sourceQuarter.split("-").reverse().join(" ")}, the latest news available when the forecast was made.
-              </p>
-            )}
-            {news?.feedNote && <p className="text-[9px] text-muted-foreground leading-snug">{news.feedNote}</p>}
             {regionWide > 0 && news && (
               <p className="text-[9px] italic text-muted-foreground leading-snug">
                 {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
@@ -365,16 +359,8 @@ export function NewsArticlesCardBody({
               {activeArticle?.source}{activeArticle?.date ? ` · ${activeArticle.date}` : ""}
             </DialogDescription>
           </DialogHeader>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">
-            {activeArticle?.excerpt || "Headline only: the news source supplies no lead text."}
-          </p>
-          {activeArticle?.relevanceLabel && (
-            <p className="text-[11px] text-muted-foreground">
-              {activeArticle.relevanceLabel}
-              {activeArticle.province ? ` · ${activeArticle.province}` : ""}
-              {activeArticle.triggers?.length ? ` · ${activeArticle.triggers.join(", ")}` : ""}
-              {activeArticle.collectedRetrospectively ? " · collected retrospectively (Oct 2026)" : ""}
-            </p>
+          {activeArticle?.excerpt && (
+            <p className="text-[12px] text-muted-foreground leading-relaxed">{activeArticle.excerpt}</p>
           )}
           {activeArticle?.url && (
             <a
