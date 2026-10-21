@@ -69,7 +69,9 @@ export class ApiError extends Error {
 // ---------------------------------------------------------------------------
 
 export function buildUrl(path: string, params?: Record<string, unknown>): string {
-  const url = new URL(path, API_BASE_URL);
+  // An empty base (production on Vercel: /api is rewritten to the API) means this site's own origin; new URL(path, "")
+  // throws, so every request failed before it was sent.
+  const url = new URL(path, API_BASE_URL || window.location.origin);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       if (value === undefined || value === null || value === "") continue;
