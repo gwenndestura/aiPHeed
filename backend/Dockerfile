@@ -23,6 +23,13 @@ RUN pip install --index-url https://download.pytorch.org/whl/cpu torch==2.11.0 \
 
 COPY . .
 
+# The stored news intensity scores (data/news_*/scores.jsonl) are keyed by the XLM-RoBERTa revision that produced them,
+# which app/news/scoring.py reads from the Hugging Face cache folder name. Serving does not load the model, so the image
+# only records that revision as an empty cache folder; without it the revision reads "unknown", no stored score
+# matches, and strict mode refuses to start.
+ENV HF_HOME=/app/.hf-cache
+RUN mkdir -p /app/.hf-cache/hub/models--joeddav--xlm-roberta-large-xnli/snapshots/b227ee8435ceadfa86dc1368a34254e2838bf242
+
 ENV AIPHEED_LEAD2_MODEL=thesis \
     AIPHEED_STRICT_MODEL=1 \
     PORT=8000
