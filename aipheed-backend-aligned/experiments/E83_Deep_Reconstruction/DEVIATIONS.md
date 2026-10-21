@@ -52,3 +52,21 @@ The price paths use the mean of the last 12 monthly changes, so they ignore the 
   on their issued rows only (Leads 1–2), as within-quarter permutations across the five provinces. National drivers
   are constant within a quarter, so their within-quarter importance is zero by construction. Their contribution is
   measured by the drop/only ablation instead.
+
+## D4 — hybrid arm, post-hoc (after the final run `20261021T084802Z`)
+
+- **Observation.** At Lead 1 the constrained LightGBM without news (NA-GB) was strong on the 30 rows where it could
+  be fitted: accuracy 0.867, balanced accuracy 0.909. It cannot be fitted before enough HIGH labels exist.
+- **Arms added:**
+  - HYB-GBA-SIM: NA-GB where eligible, S-SIM elsewhere;
+  - HYB-GB-SIM: M-GB-ALL where eligible, S-SIM elsewhere.
+- **Results:**
+
+  | Arm | Lead | Accuracy (all 65 rows) | Balanced accuracy | Recall (HIGH) | Brier vs persistence and climatology | Passes the rule |
+  |---|---|---|---|---|---|---|
+  | HYB-GBA-SIM | 1 | 0.877 | 0.834 | 0.75 | Holm p = 0.098 | yes |
+  | HYB-GBA-SIM | 2 | 0.554 | — | — | — | no |
+  | HYB-GBA-SIM | 3 | 0.400 | — | — | — | no |
+
+- **Status.** Selected after the results were seen and with a borderline p, this is **exploratory, not validated**.
+  Its 2026-Q4, 2027-Q1 and 2027-Q2 forecasts are in the seal (`sealed/e83_prospective.csv`, sha256 1331d498…).

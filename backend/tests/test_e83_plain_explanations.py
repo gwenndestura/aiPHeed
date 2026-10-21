@@ -1,22 +1,23 @@
 """E83: the plain-language headline names the right place, quarter and class, is one sentence (the approved panel shows
 only the first), and every reason it gives matches the sign of that indicator's exact push on the served index."""
-import os
 import re
 
 import pytest
 
-os.environ.setdefault("AIPHEED_LEAD2_MODEL", "thesis")
-from app.ml.inference import e41_lead2 as LD  # noqa: E402
-from app.ml.inference import thesis_system as T  # noqa: E402
+from app.ml.inference import e41_lead2 as LD
+from app.ml.inference import thesis_system as T
 
 SPLIT = re.compile(r"(?<=\.)\s+(?=[A-Z])")          # frontend/src/lib/summaryHeadline.ts
 
 
 @pytest.fixture(scope="module")
 def rec():
-    if LD.mode() != "thesis":
-        pytest.skip("thesis mode not active in this process")
-    return LD.record()
+    # thesis mode only for this module: the environment is restored afterwards so other tests keep their default mode
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+        if LD.mode() != "thesis":
+            pytest.skip("thesis mode not selectable")
+        yield LD.record()
 
 
 def test_headline_is_one_sentence_with_place_quarter_class_and_action(rec):
