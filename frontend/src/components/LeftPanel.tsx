@@ -483,13 +483,6 @@ function RegionDetail({
   const limited = region.limitedSignal;
   const isHigh = isHighRisk(region.riskScore, displayCutoff);
   const isActiveAlert = region.riskScore >= alertThreshold;
-  const horizonLabel = config?.indicator.horizon ?? "same-quarter nowcast";
-  // A past quarter is a backtest or an earlier forecast, not the issued
-  // forecast that config.indicator.horizon describes (same request as the
-  // Why panel's, shared cache).
-  const { data: explain } = useExplainability("province", region.id, quarterId || undefined);
-  const est = explain?.summary;
-  const quarterText = quarterId ? quarterId.split("-").reverse().join(" ") : "the selected quarter";
 
   return (
     <div className="px-5 py-4 space-y-4">
@@ -498,7 +491,7 @@ function RegionDetail({
         <div className="flex items-start gap-3">
           <div>
             <p className="text-[11px] text-muted-foreground">Province of</p>
-            <h2 className="text-base font-bold leading-tight">{region.name}</h2>
+            <h2 className="text-lg font-bold leading-tight">{region.name}</h2>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <StatusBadge
                 level={isHigh ? "high" : "low"}
@@ -528,15 +521,6 @@ function RegionDetail({
           </button>
         )}
       </div>
-
-      {/* Confidence statement */}
-      <Note>
-        {est && est.estimateKind === "backtest"
-          ? `This is a backtest estimate for ${quarterText}, made as of ${est.issued} with only information published before that date (development evidence, not a forecast issued live). Observed outcome: ${est.observedOutcome ?? "not available"}.`
-          : est && est.estimateKind === "earlier_forecast"
-            ? `This is the three-months-ahead forecast for ${quarterText} issued ${est.issued}, based only on information published before that date; its outcome is not yet published.`
-            : `This is a ${horizonLabel} for ${quarterText}, based only on information published before the forecast was issued.`}
-      </Note>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
