@@ -456,6 +456,46 @@ def _why_missing(res: dict, d: str) -> str:
     return f"{FI.DOMAINS[d].lower()}: no value published by the issue date"
 
 
+# E83: plain-language reasons, one phrase per indicator and direction, used only when the indicator was observed at the
+# issue date and moved the index in that direction (its exact push). Measured facts, not causes.
+PLAIN_UP = {"A1": "food prices are expected to rise faster than usual", "A2": "overall prices are rising faster than usual",
+            "A3": "wholesale rice prices are higher than a year ago", "V1": "many households are poor or crowded",
+            "C1": "a PAGASA El Nino advisory is in force", "C2": "typhoons passed close to the province",
+            "C3": "rice or corn harvests fell compared with a year ago", "C4": "fish production fell compared with a year ago",
+            "E1": "national unemployment rose over the year", "E2": "money sent home by OFWs fell",
+            "N1": "news reports point to food-related stress", "H1": "regional hunger has stayed high in recent SWS surveys"}
+PLAIN_DOWN = {"A1": "food-price pressure is expected to stay low", "A2": "overall price increases are below the usual level",
+              "A3": "wholesale rice prices are not unusually high", "V1": "fewer households are poor than in other provinces",
+              "C1": "no El Nino advisory is in force", "C2": "few typhoons passed nearby",
+              "C3": "rice and corn harvests held up", "C4": "fish production held up",
+              "E1": "national unemployment did not rise much", "E2": "OFW remittances held up",
+              "N1": "news shows little food-related stress", "H1": "regional hunger is lower than usual"}
+
+
+def plain_reasons(res: dict, n_up: int = 3, n_down: int = 2) -> tuple[list[str], list[str]]:
+    """The indicators with the largest exact pushes up and down, in plain words (observed indicators only)."""
+    pu = pushes(res)
+    up = [PLAIN_UP[k] for k, v in sorted(pu.items(), key=lambda kv: -kv[1]) if v > 0.005 and k in PLAIN_UP][:n_up]
+    down = [PLAIN_DOWN[k] for k, v in sorted(pu.items(), key=lambda kv: kv[1]) if v < -0.005 and k in PLAIN_DOWN][:n_down]
+    return up, down
+
+
+def _join(xs: list[str]) -> str:
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+def plain_headline(res: dict, name: str, quarter: str) -> str:
+    """ONE sentence (the approved panel shows only the first sentence): class, index, the main measured reasons and the
+    suggested DA IV-A use. The fixed lead is kept for the panel's sentence-case rule."""
+    up, down = plain_reasons(res)
+    high = res["class"] == "HIGH"
+    why = (f", mainly because {_join(up)}" if high and up else f", mainly because {_join(down)}" if not high and down else "")
+    act = (f"; keep {name} on the DA IV-A watch list and check food prices, rice supply and assistance needs in its "
+           f"highest-ranked towns" if high else "; no extra action is indicated, continue routine monitoring")
+    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (risk index {fmt_index(res['firi'])} on a "
+            f"0-1 scale; HIGH at 0.50){why}{act}.")
+
+
 def firi_text(res: dict, name: str, quarter: str) -> str:
     from app.ml.inference import firi as FI
     w = _norm_weights(res)
@@ -464,8 +504,14 @@ def firi_text(res: dict, name: str, quarter: str) -> str:
     up = [FI.DOMAINS[d] for d, v in order if v > NEUTRAL][:3]
     down = [FI.DOMAINS[d] for d, v in order[::-1] if v < NEUTRAL][:2]
     missing = [d for d, v in res["domains"].items() if v is None]
-    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (risk index {fmt_index(res['firi'])} on a "
-            f"0-1 scale; HIGH at 0.50). Domain scores (0.5 = the historical middle): {'; '.join(parts)}."
+    pu, pd_ = plain_reasons(res)
+    # the headline already names the reasons on the side of the class; this sentence gives the other side
+    other = (f" What lowers it: {_join(pd_)}." if pd_ else "") if res["class"] == "HIGH" else         (f" What raises it: {_join(pu)}." if pu else "")
+    plain = (other
+             + " These are measured indicators published before the forecast was issued; they show where to look, "
+               "not proof that families are going hungry.")
+    return (plain_headline(res, name, quarter) + plain +
+            f" Technical detail: domain scores (0.5 = the historical middle): {'; '.join(parts)}."
             + (f" Raised mainly by {', '.join(up)}." if up else "")
             + (f" Lowered by {', '.join(down)}." if down else "")
             + (f" Not in the index: {'; '.join(_why_missing(res, d) for d in missing)}." if missing else "")

@@ -814,16 +814,26 @@ def _lgu_provenance() -> dict[str, dict]:
     if not LGU_PROVENANCE_PATH.exists():
         return {}
     df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
-    return {r.lgu_code: {"value_used": float(r.poverty_value_used), "has_own": bool(pd.notna(r.poverty_lgu_estimate))}
+    return {r.lgu_code: {"value_used": float(r.poverty_value_used), "has_own": bool(pd.notna(r.poverty_lgu_estimate)),
+                         "cv": float(r.poverty_cv) if pd.notna(r.poverty_cv) else None}
             for r in df.itertuples()}
+
+
+# E83: PSA flags small-area estimates whose coefficient of variation exceeds 20% as of low precision; the LGU's rank
+# then rests on an imprecise poverty input, which is said in the existing limitation field (no new UI element).
+LOW_PRECISION_CV = 20.0
 
 
 def _poverty_provenance(code: str, own: float | None) -> dict:
     """E27 fix: say what the ranking used for an LGU's poverty term and why, instead of returning a bare null."""
     p = _lgu_provenance().get(code)
     if own is not None or (p and p["has_own"]):
+        cv = p.get("cv") if p else None
+        lim = (f"Low-confidence poverty input: PSA's 2021 estimate for this LGU has a coefficient of variation of "
+               f"{cv:.0f}% (above 20%), so its rank among the province's towns is uncertain."
+               if cv is not None and cv > LOW_PRECISION_CV else None)
         return {"povertyEstimateKind": "PSA municipal SAE estimate (2021)",
-                "povertyValueUsed": own if own is not None else p["value_used"], "povertyLimitation": None}
+                "povertyValueUsed": own if own is not None else p["value_used"], "povertyLimitation": lim}
     return {"povertyEstimateKind": "province substitute (no municipal estimate)",
             "povertyValueUsed": p["value_used"] if p else None,
             "povertyLimitation": ("No PSA 2021 municipal poverty estimate exists for this LGU (a highly urbanized "

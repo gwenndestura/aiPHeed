@@ -91,6 +91,54 @@ def run_news_incremental() -> dict:
     return out
 
 
+MONTHLY_JOB_ID = "aipheed_monthly_refresh"
+# E83: 04:00 PHT on the 10th of every month, after PSA's monthly CPI release (first week of the month). Monthly runs do
+# not make quarterly outcomes appear monthly: the cycle seals and advances only when a quarter's inputs are complete.
+MONTHLY_DAY, MONTHLY_HOUR = "10", "4"
+REFRESH_LOG = "data/refresh_log.jsonl"
+
+
+def run_monthly_refresh() -> dict:
+    """E83 monthly refresh, every step idempotent and independently recorded:
+      1. lead text for articles collected since the last run (robots-compliant, app.news.lead_extractor);
+      2. the E27 cycle (inbox validation, update, seal-before-outcome, outcomes, advance only when READY).
+    A failed step is logged with its error and never replaces an earlier forecast: the ledger refuses re-seals and
+    the served records are only rewritten by an explicit, authorized promotion."""
+    import json
+    from datetime import datetime, timezone
+    from pathlib import Path
+
+    out: dict = {"started": datetime.now(timezone.utc).isoformat(timespec="seconds"), "steps": {}}
+    try:
+        from app.news import lead_extractor as LX
+        root = Path("data")
+        arts, seen = [], set()
+        for store in (root / "news_e31" / "articles.jsonl", root / "news_e60" / "articles.jsonl"):
+            if store.exists():
+                for line in store.read_text(encoding="utf-8").splitlines():
+                    a = json.loads(line)
+                    if a["article_key"] not in seen:
+                        seen.add(a["article_key"])
+                        arts.append({k: a[k] for k in ("article_key", "title", "source_domain", "ph_date")})
+        out["steps"]["lead_text"] = {"ok": True, "counts": LX.extract(arts, root / "news_e83" / "leads.jsonl")}
+    except Exception as e:  # record, continue
+        out["steps"]["lead_text"] = {"ok": False, "error": f"{type(e).__name__}: {e}"[:300]}
+        logger.exception("Monthly lead-text step failed")
+    try:
+        out["steps"]["cycle"] = {"ok": True, **run_quarterly_cycle()}
+    except Exception as e:
+        out["steps"]["cycle"] = {"ok": False, "error": f"{type(e).__name__}: {e}"[:300]}
+        logger.exception("Monthly cycle step failed")
+    out["finished"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    out["ok"] = all(v.get("ok") for v in out["steps"].values())
+    if not out["ok"]:
+        logger.error("Monthly refresh incomplete; administrators must review %s", REFRESH_LOG)
+    Path(REFRESH_LOG).parent.mkdir(parents=True, exist_ok=True)
+    with open(REFRESH_LOG, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(out, default=str) + "\n")
+    return out
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -136,6 +184,15 @@ def start_scheduler():
         trigger=CronTrigger(hour=NEWS_CRON_HOUR, minute=0),
         id=NEWS_JOB_ID,
         name="aiPHeed daily news collection",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+    )
+    _scheduler.add_job(
+        run_monthly_refresh,
+        trigger=CronTrigger(day=MONTHLY_DAY, hour=MONTHLY_HOUR),
+        id=MONTHLY_JOB_ID,
+        name="aiPHeed monthly refresh (lead text + idempotent cycle)",
         replace_existing=True,
         max_instances=1,
         coalesce=True,
