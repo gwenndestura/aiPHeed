@@ -137,7 +137,7 @@ def per_date_brier(P, arm, ref):
 
 def evaluate(P):
     res = {}
-    arms = [c for c in P.columns if c.startswith(("B-", "S-", "ST-", "M-", "N", "DROP-", "ONLY-", "HYB-"))]
+    arms = [c for c in P.columns if c.startswith(("B-", "S-", "ST-", "M-", "N", "DROP-", "ONLY-", "HYB-", "F5"))]
     for a in arms:
         r = {"all_rows_unissued_wrong": score(P, a), "issued_rows": score(P, a, fill_wrong=False)}
         rising = P["B-PERSIST"].eq(0) & P["y"].eq(1)
