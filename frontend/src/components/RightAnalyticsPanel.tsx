@@ -182,22 +182,27 @@ function DriverGroup({ heading, items }: { heading: string; items: Trigger[] }) 
     <div className="space-y-1.5">
       <p className="text-[12px] font-semibold text-foreground/90">{heading}</p>
       <div className="space-y-1">
-        {items.map((s) => {
-          const color = s.color === "red" ? "hsl(var(--risk-high))" : s.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))";
-          const copy = driverCopy(s);
-          return (
-            <div key={s.key} className="inner-box px-2 py-1.5">
-              <div className="flex items-center justify-between mb-0.5">
-                <span className="truncate text-[10px] font-bold text-foreground/90">{copy.title}</span>
-                <span className="text-[10px] font-mono-num font-bold ml-2 shrink-0" style={{ color }}>{s.pct}%</span>
-              </div>
-              <p className="text-[10px] leading-snug text-muted-foreground">{copy.description}</p>
-              <div className="mt-1 h-[3px] rounded-full bg-border/30 overflow-hidden">
-                <div className="h-full rounded-full opacity-70" style={{ width: `${s.pct}%`, backgroundColor: color }} />
-              </div>
-            </div>
-          );
-        })}
+        {items.map((s) => (
+          <FactorCard key={s.key} trigger={s} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** One factor group: its plain name and share, one plain sentence, and the bar. */
+function FactorCard({ trigger: s }: { trigger: Trigger }) {
+  const color = s.color === "red" ? "hsl(var(--risk-high))" : s.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))";
+  const copy = driverCopy(s);
+  return (
+    <div className="inner-box px-2 py-1.5">
+      <div className="flex items-center justify-between mb-0.5">
+        <span className="truncate text-[10px] font-bold text-foreground/90">{copy.title}</span>
+        <span className="text-[10px] font-mono-num font-bold ml-2 shrink-0" style={{ color }}>{s.pct}%</span>
+      </div>
+      <p className="text-[10px] leading-snug text-muted-foreground">{copy.description}</p>
+      <div className="mt-1 h-[3px] rounded-full bg-border/30 overflow-hidden">
+        <div className="h-full rounded-full opacity-70" style={{ width: `${s.pct}%`, backgroundColor: color }} />
       </div>
     </div>
   );

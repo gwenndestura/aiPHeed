@@ -14,56 +14,30 @@ interface Copy {
   description: string;
 }
 
-const DRIVER_COPY: Record<string, { risk: Copy; protective: Copy }> = {
-  market: {
-    risk: {
-      title: "Food and rice prices are too high",
-      description: "Rice, vegetables, and meat cost more than usual this quarter.",
-    },
-    protective: {
-      title: "Food and rice prices are stable",
-      description: "Rice, vegetables, and meat are priced close to normal this quarter.",
-    },
+/**
+ * One plain sentence per group and direction: what the group's data did, in
+ * everyday words. The same for the region and a province.
+ */
+const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
+  employment: {
+    raises: "Unemployment rose more than usual compared with a year earlier.",
+    lowers: "Unemployment changed less than usual compared with a year earlier.",
   },
   climate: {
-    risk: {
-      title: "Weather is hurting food supply",
-      description: "Typhoons or heavy rain damaged farms and disrupted food supply.",
-    },
-    protective: {
-      title: "Weather has been calm",
-      description: "No major storms or flooding disrupted farms this quarter.",
-    },
+    raises: "Weather and farm-supply conditions were worse than usual.",
+    lowers: "Weather and farm-supply conditions were better than usual.",
+  },
+  market: {
+    raises: "Food prices were higher than usual.",
+    lowers: "Food prices were lower than usual.",
   },
   fish_kill: {
-    risk: {
-      title: "Fish kills are being reported",
-      description: "News reports point to fish die-offs affecting local fisheries.",
-    },
-    protective: {
-      title: "No major fish kill reports",
-      description: "Local news has few or no reports of fish die-offs this quarter.",
-    },
-  },
-  employment: {
-    risk: {
-      title: "Fewer people have jobs",
-      description: "Job rates dropped this quarter, making it harder for families to afford food.",
-    },
-    protective: {
-      title: "More people are employed",
-      description: "Job rates are stable this quarter, helping families afford food.",
-    },
+    raises: "Fisheries production fell more than usual.",
+    lowers: "Fisheries production held up better than usual.",
   },
   ofw_remittance: {
-    risk: {
-      title: "OFW money sent home is dropping",
-      description: "Families are receiving less money from relatives working abroad.",
-    },
-    protective: {
-      title: "OFW money sent home is steady",
-      description: "Money from relatives working abroad is holding steady or rising.",
-    },
+    raises: "Money sent home by OFWs grew less than usual.",
+    lowers: "Money sent home by OFWs grew more than usual.",
   },
 };
 
@@ -97,15 +71,15 @@ const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string)
   }),
   no_data: (name) => ({
     title: `${name}: no official data`,
-    description: "No official data series is available for this factor. Missing data is not a sign of low risk.",
+    description: "No official data series is available for this factor; this is not a sign of low risk.",
   }),
   insufficient_data: (name) => ({
     title: `${name}: insufficient data`,
-    description: "None of this factor's inputs had a published value when this forecast was issued, so no effect is reported. Missing data is not a sign of low risk.",
+    description: "No published data were available when this forecast was issued; this is not a sign of low risk.",
   }),
   not_recorded: (name) => ({
     title: `${name}: not recorded for this quarter`,
-    description: "This quarter shows the model's backtest or an earlier forecast; factor contributions are recorded only for the issued forecast.",
+    description: "Factor contributions are recorded only for the issued forecast, not for past quarters.",
   }),
 };
 
@@ -114,24 +88,23 @@ export function isContributing(t: Pick<Trigger, "status" | "pct">): boolean {
   return t.status ? t.status === "contributes" : t.pct > 0;
 }
 
-export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct" | "evidenceNote">): Copy {
-  const entry = DRIVER_COPY[t.key];
-  // E44: when the backend states the evidence behind a model-attributed group, say what the model did with it and
-  // show the actual observation, instead of asserting an event ("Typhoons damaged farms") that may not have happened.
-  if (isContributing(t) && t.evidenceNote) {
-    const name = FRIENDLY_NAME[t.key] ?? t.key;
-    return {
-      title: `${name}: ${t.direction === "protective" ? "lowers" : "raises"} the forecast`,
-      description: t.evidenceNote,
-    };
-  }
+/**
+ * A factor card's copy: the group's plain name and one plain sentence. The
+ * section heading (pushing up / pulling down) already gives the direction, so
+ * the title does not repeat it. The backend's evidence note is not shown.
+ */
+export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct">): Copy {
+  const name = FRIENDLY_NAME[t.key] ?? t.key;
   if (!isContributing(t)) {
     const status: Exclude<TriggerStatus, "contributes"> =
       t.status && t.status !== "contributes" ? t.status : "no_effect";
-    return NEUTRAL_COPY[status](FRIENDLY_NAME[t.key] ?? t.key);
+    return NEUTRAL_COPY[status](name);
   }
-  if (!entry) return { title: t.key, description: "" };
-  return t.direction === "protective" ? entry.protective : entry.risk;
+  const sentence = PLAIN_SENTENCE[t.key];
+  return {
+    title: name,
+    description: sentence ? (t.direction === "protective" ? sentence.lowers : sentence.raises) : "",
+  };
 }
 
 // Plain labels for the news-topic breakdown (NewsArticlesCardBody). Same real
