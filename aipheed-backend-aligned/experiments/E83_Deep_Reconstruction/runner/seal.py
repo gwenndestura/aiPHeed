@@ -31,6 +31,11 @@ if __name__ == "__main__":
         tss = R2.threshold(tr[tr["seas_p"].notna()], "seas_p")
         te = X[X["t"] == T0].set_index("province_code").loc[L.PROVS].reset_index()
         st, fitted = R2.stack(tr, te, [])
+        # D4 hybrid (post-hoc): LightGBM on the non-news drivers when eligible at this origin, else S-SIM
+        import run_e83 as R1
+        base = R1.cols_of(R1.BASE_GROUPS)
+        gb = R1.fit_predict("GB", base, tr, te)
+        hyb = gb if gb is not None else te["sim_p"].to_numpy()
         for i, p in enumerate(L.PROVS):
             r = te.iloc[i]
             rows.append({"origin": "2026-10-01", "data_published_by": "2026-10-14", "lead": k, "target_q": L.qs(T0 + k),
@@ -40,6 +45,8 @@ if __name__ == "__main__":
                          "S-SIM-THR_threshold": ts, "S-SIM-THR_decision": int(r["sim_p"] >= ts),
                          "S-SIM-SEAS_p": r["seas_p"], "S-SIM-SEAS-THR_threshold": tss,
                          "S-SIM-SEAS-THR_decision": int(r["seas_p"] >= tss), "ST-LR_p": st[i], "ST-LR_fitted": fitted,
+                         "HYB-GBA-SIM_p": float(hyb[i]), "HYB-GBA-SIM_source": "LightGBM" if gb is not None else "S-SIM",
+                         "HYB-GBA-SIM_decision": int(hyb[i] >= 0.5),
                          "B-STATE_inputs_F_now": r["F_now"], "B-STATE_inputs_gap_now": r["gap_now"],
                          "H_last": r["H_last"]})
     out = E.E83 / "sealed"
@@ -53,4 +60,4 @@ if __name__ == "__main__":
                                                     f"sealed_at_utc {datetime.now(timezone.utc).isoformat(timespec='seconds')}\n")
     print(sha)
     print(pd.DataFrame(rows)[["lead", "target_q", "province", "S-SIM_p", "S-SIM-THR_threshold", "S-SIM-THR_decision",
-                              "S-SIM-SEAS_p"]].round(3).to_string())
+                              "S-SIM-SEAS_p", "HYB-GBA-SIM_p", "HYB-GBA-SIM_source"]].round(3).to_string())
