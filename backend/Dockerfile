@@ -15,9 +15,11 @@ RUN apt-get update \
 WORKDIR /app
 
 # CPU-only torch first, so requirements.txt does not pull the multi-GB CUDA build.
+# pywin32 is Windows-only (no Linux wheel), so it is left out of the install here.
 COPY requirements.txt .
 RUN pip install --index-url https://download.pytorch.org/whl/cpu torch==2.11.0 \
-    && pip install -r requirements.txt
+    && grep -v '^pywin32' requirements.txt > /tmp/requirements-linux.txt \
+    && pip install -r /tmp/requirements-linux.txt
 
 COPY . .
 
