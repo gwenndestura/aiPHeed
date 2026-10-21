@@ -1,0 +1,36 @@
+# Render Blueprint for the aiPHeed API (backend/). The frontend is on Vercel and reaches this service through the
+# /api rewrite in frontend/vercel.json, so the browser sees one origin and the refresh cookie stays SameSite=Strict.
+services:
+  - type: web
+    name: aipheed-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter            # a persistent disk needs a paid plan; the free plan sleeps and loses the database
+    region: singapore
+    branch: final-system-v2
+    healthCheckPath: /api/v1/config
+    disk:
+      name: aipheed-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:////var/data/aipheed.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: AIPHEED_LEAD2_MODEL
+        value: thesis
+      - key: AIPHEED_STRICT_MODEL
+        value: "1"
+      - key: FRONTEND_BASE_URL
+        sync: false          # set to the Vercel URL, e.g. https://aipheed-frontend.vercel.app
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
