@@ -77,3 +77,16 @@ def test_factor_card_sentences_state_the_model_inputs(rec):
                     assert f"{x:.0%}" in text or k not in observed[:2]
                 elif k in ("A3", "C3", "C4", "E2") and k in sorted(observed, key=lambda kk: -abs(T.pushes(res).get(kk, 0)))[:2]:
                     assert any(abs(n - abs(x)) < 0.6 for n in nums), (code, key, k, x, text)
+
+
+def test_factor_card_sentences_name_the_quarters_used(rec):
+    """Year-on-year facts name the quarter the model used (t-1) and the same quarter a year before (t-5)."""
+    q = rec["targetQuarter"]
+    t = T.qi(q) - 2
+    assert rec["originQuarter"] == T.qs(t)
+    used, before = T._ql(t - 1), T._ql(t - 5)
+    for code in rec["provinces"]:
+        for key in ("employment", "fish_kill"):
+            text = T.plain_evidence(rec, q, code, key)
+            if text:
+                assert f"in {used}" in text and f"in {before}" in text, (code, key, text)
