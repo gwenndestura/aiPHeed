@@ -299,6 +299,8 @@ export interface Trigger {
   statusNote?: string;
   /** E44: the observed evidence behind a model-attributed trigger (province scope, candidate models only). */
   evidenceNote?: string | null;
+  /** E87: the card's plain sentence with the measured values behind the group (province scope). */
+  plainEvidence?: string | null;
 }
 
 export type TriggerStatus =
