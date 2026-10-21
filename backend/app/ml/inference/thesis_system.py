@@ -429,52 +429,63 @@ def _vs_usual(s: float, what: str) -> str:
     return f", a {'larger' if s > 0.5 else 'smaller'} {what} than usual"
 
 
-def _plain_fact(k: str, x: float, s: float) -> str | None:
-    """One measured fact in everyday words, with its value and, for changes, how it compares with usual (which is
-    what moves the index); no index scores, no model terms."""
+_MONTHS = ("Jan-Mar", "Apr-Jun", "Jul-Sep", "Oct-Dec")
+_FIRST_TWO = ("Jan-Feb", "Apr-May", "Jul-Aug", "Oct-Nov")
+
+
+def _ql(i: int) -> str:
+    return f"{_MONTHS[i % 4]} {i // 4}"
+
+
+def _plain_fact(k: str, x: float, s: float, t: int, target: str) -> str | None:
+    """One measured fact in everyday words: the period the model used, its value, the same period a year before, and
+    for changes how it compares with usual (which is what moves the index). Periods follow the feature definitions
+    for a forecast issued at the start of quarter t+1: CPI months 1-2 of quarter t, typhoons quarter t, wholesale
+    rice, production, unemployment and remittances quarter t-1 against t-5. No index scores, no model terms."""
+    p, p0 = _ql(t - 1), _ql(t - 5)
     if k == "A1":
         pct = f"{x:.0%}"
-        return f"The price model gives {_an(pct)} {pct} chance that food prices rise faster than usual in this province."
+        return (f"The price model gives {_an(pct)} {pct} chance that food prices in {_ql(qi(target))} rise faster than "
+                f"usual in this province.")
     if k == "A2":
-        return (f"Overall prices are rising {abs(x):.1f} points {'faster' if x >= 0 else 'slower'} than this "
-                f"province's usual rate.")
+        return (f"Overall prices in {_FIRST_TWO[t % 4]} {t // 4} rose {abs(x):.1f} points "
+                f"{'faster' if x >= 0 else 'slower'} than this province's usual rate.")
     if k == "A3":
-        return (f"Wholesale rice is {abs(x):.0f}% {'higher' if x >= 0 else 'lower'} than a year earlier"
+        return (f"Wholesale rice in {p} was {abs(x):.0f}% {'higher' if x >= 0 else 'lower'} than in {p0}"
                 + (_vs_usual(s, "rise") if x > 0 else "") + ".")
     if k == "C1":
         return "A PAGASA El Nino advisory is in force." if x >= 0.5 else "No PAGASA El Nino advisory is in force."
     if k == "C2":
         n = int(round(x))
-        return f"{n} typhoon{'s' if n != 1 else ''} passed within 300 km in the latest quarter."
+        return f"{n} typhoon{'s' if n != 1 else ''} passed within 300 km in {_ql(t)}."
     if k == "C3":
-        return (f"Rice or corn harvest was {x:.0f}% lower than a year earlier{_vs_usual(s, 'drop')}." if x > 0 else
-                f"Rice and corn harvests were not lower than a year earlier (smallest change {-x:+.0f}%).")
+        return (f"Rice or corn harvest in {p} was {x:.0f}% lower than in {p0}{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Rice and corn harvests in {p} were not lower than in {p0} (smallest change {-x:+.0f}%).")
     if k == "C4":
-        return (f"Fish production was {x:.1f}% lower than a year earlier{_vs_usual(s, 'drop')}." if x > 0 else
-                f"Fish production was {abs(x):.1f}% higher than a year earlier.")
+        return (f"Fish production in {p} was {x:.1f}% lower than in {p0}{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Fish production in {p} was {abs(x):.1f}% higher than in {p0}.")
     if k == "E1":
-        return (f"Unemployment rose {x:.1f} points over the year{_vs_usual(s, 'rise')} (national figure)." if x > 0 else
-                f"Unemployment fell {abs(x):.1f} points over the year (national figure).")
+        return (f"Unemployment in {p} was {abs(x):.1f} points {'higher' if x > 0 else 'lower'} than in {p0}"
+                + (_vs_usual(s, "rise") if x > 0 else "") + " (national figure).")
     if k == "E2":
-        return (f"Money sent home by OFWs was {x:.0f}% lower than a year earlier{_vs_usual(s, 'fall')} (national figure)."
-                if x > 0 else f"Money sent home by OFWs was {abs(x):.0f}% higher than a year earlier (national figure).")
+        return (f"Money sent home by OFWs in {p} was {abs(x):.0f}% {'lower' if x > 0 else 'higher'} than in {p0}"
+                + (_vs_usual(s, "fall") if x > 0 else "") + " (national figure).")
     return None
 
 
 def plain_evidence(rec: dict, quarter: str, code: str, key: str, n: int = 2) -> str | None:
-    """THESIS: the factor card's sentence with real values. The group's observed indicators, the largest exact
-    pushes first; missing values are said to be missing, never shown as zero. None when nothing is available."""
+    """THESIS: the factor card's sentence with real values and their periods. The group's observed indicators, the
+    largest exact pushes first; missing values are left out (the card's status says so), never shown as zero."""
     res = firi_for(rec, quarter, code)
     if not res or key not in FIVE_GROUPS:
         return None
     pu = pushes(res)
-    seen = [k for k in FIVE_GROUPS[key] if res["indicators"][k]["score"] is not None and res["indicators"][k]["x"] is not None]
-    seen.sort(key=lambda k: -abs(pu.get(k, 0.0)))
     ind = res["indicators"]
-    facts = [f for f in (_plain_fact(k, float(ind[k]["x"]), float(ind[k]["score"])) for k in seen[:n]) if f]
-    if not facts:
-        return None
-    return " ".join(facts)
+    seen = [k for k in FIVE_GROUPS[key] if ind[k]["score"] is not None and ind[k]["x"] is not None]
+    seen.sort(key=lambda k: -abs(pu.get(k, 0.0)))
+    t = qi(quarter) - 2                                   # Lead 2: origin quarter of this target
+    facts = [f for f in (_plain_fact(k, float(ind[k]["x"]), float(ind[k]["score"]), t, quarter) for k in seen[:n]) if f]
+    return " ".join(facts) if facts else None
 
 
 FIRI_METHOD = ("FIRI v2: six indicator domains (affordability, household vulnerability, climate and food production, "
