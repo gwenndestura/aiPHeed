@@ -80,6 +80,8 @@ def components(d, T, news: bool, extra: list[str] | None = None) -> pd.DataFrame
     rows = []
     for t in sorted(T[1]["t"].unique()):
         t = int(t)
+        if len(L.h_quarters(d.cut(t))) < 3:                 # D1: no hunger history yet (earliest origins only)
+            continue
         ptr = B.price_training(T, d, t)
         htr = B.hunger_rows(T, d, t, hc)
         for k in KS:
