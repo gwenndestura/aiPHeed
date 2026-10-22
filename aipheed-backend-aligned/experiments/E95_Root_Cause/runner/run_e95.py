@@ -137,7 +137,7 @@ if __name__ == "__main__":
                   f"{m['recall_HIGH'] or 0:.2f}/{m['f1']:.2f} TP/FP/FN/TN={m['TP']}/{m['FP']}/{m['FN']}/{m['TN']} "
                   f"brier={m['brier']:.3f} PASS={ps['PASS']} {[c for c, v in ps.items() if not v and c not in ('PASS', 'TARGET_80')]} "
                   f"holm={th} W/L={g['wins']}/{g['losses']} e/l={g['early_acc']:.2f}/{g['late_acc']:.2f} "
-                  f"conf={r['confirmation_block']['accuracy']:.2f}/{r['confirmation_block']['brier']:.3f} chg={g['changing_acc']:.2f}", flush=True)
+                  f"conf={r.get('confirmation_block', {}).get('accuracy', float('nan')):.2f}/{r.get('confirmation_block', {}).get('brier', float('nan')):.3f} chg={g['changing_acc']:.2f}", flush=True)
         h = summ["research_hunger_target"][k]
         print(f"  [research: SWS hunger>11.3, n={h['n']}, high={h['high']}] model acc={h['p']['accuracy']:.3f} brier={h['p']['brier']:.3f} | "
               f"persist {h['persist']['accuracy']:.3f}/{h['persist']['brier']:.3f} clim {h['clim']['accuracy']:.3f}/{h['clim']['brier']:.3f} "
