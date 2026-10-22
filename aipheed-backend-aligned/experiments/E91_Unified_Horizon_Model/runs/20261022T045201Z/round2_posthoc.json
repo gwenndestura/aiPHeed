@@ -1,0 +1,3966 @@
+{
+ "per_k": {
+  "1": {
+   "U-GB": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 8,
+     "TN": 43,
+     "FP": 6,
+     "FN": 8,
+     "accuracy": 0.7846153846153846,
+     "precision": 0.5714285714285714,
+     "recall_HIGH": 0.5,
+     "recall_LOW": 0.8775510204081632,
+     "f1": 0.5333333333333333,
+     "balanced_accuracy": 0.6887755102040816,
+     "brier": 0.1403871976676098,
+     "log_loss": 0.4292664781169445,
+     "mean_p": 0.33457551123526424,
+     "citl": -0.08842166508141808,
+     "roc_auc": 0.8341836734693878,
+     "pr_auc": 0.6658959501147002,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": true,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.7692307692307693,
+     "early_acc": 0.8,
+     "late_acc": 0.76,
+     "wins": 3,
+     "losses": 3,
+     "ties": 7,
+     "sign_p": 0.65625,
+     "recall_pooled": 0.5,
+     "recall_early": 0.36363636363636365,
+     "recall_late": 0.8,
+     "changing_acc": 0.4444444444444444,
+     "changing_n": 18,
+     "acc_ci95_quarter_block": [
+      0.6461538461538462,
+      0.9076923076923077
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 2,
+      "2024-Q3": 4,
+      "2024-Q4": 4,
+      "2025-Q1": 5,
+      "2025-Q4": 2,
+      "2026-Q1": 5,
+      "2026-Q2": 3,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": false,
+      "b": true,
+      "c": false,
+      "d": true,
+      "e": false
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.13653587925546715,
+      "p_one_sided": 0.072998046875,
+      "p_two_sided": 0.14599609375,
+      "p_holm": 0.14599609375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.06756760880239895,
+      "p_one_sided": 0.1644287109375,
+      "p_two_sided": 0.328857421875,
+      "p_holm": 0.1644287109375
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6134589561785442,
+      "p_one_sided": 0.000244140625,
+      "p_two_sided": 0.00048828125,
+      "p_holm": 0.000732421875
+     }
+    },
+    "selection_block_brier": 0.14071936708142835,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 15,
+     "FP": 5,
+     "FN": 1,
+     "accuracy": 0.76,
+     "precision": 0.4444444444444444,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.75,
+     "f1": 0.5714285714285714,
+     "balanced_accuracy": 0.775,
+     "brier": 0.13985572660550008,
+     "log_loss": 0.41044474139775544,
+     "mean_p": 0.32749314481774194,
+     "citl": -0.12749314481774193,
+     "roc_auc": 0.87,
+     "pr_auc": 0.7247619047619047
+    },
+    "quarter_accuracy_sd": 0.2511511956509924,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 2,
+      "persist": 4,
+      "high": 4,
+      "caught": 1
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 4,
+      "persist": 4,
+      "high": 3,
+      "caught": 3
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 2,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 2,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 3,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.8461538461538461,
+      "high": 4,
+      "caught": 2
+     },
+     "Quezon": {
+      "accuracy": 0.6153846153846154,
+      "high": 5,
+      "caught": 3
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.6923076923076923,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.14796449278208726,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 25,
+      "mean_p": 0.09525560063118357,
+      "observed": 0.04
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 16,
+      "mean_p": 0.2959936715222259,
+      "observed": 0.1875
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 12,
+      "mean_p": 0.46840295634374146,
+      "observed": 0.3333333333333333
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 9,
+      "mean_p": 0.6968102322533846,
+      "observed": 0.5555555555555556
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 3,
+      "mean_p": 0.912663967917204,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": 0.6153846153846154
+   },
+   "U-GB-NOPRICE": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 10,
+     "TN": 44,
+     "FP": 5,
+     "FN": 6,
+     "accuracy": 0.8307692307692308,
+     "precision": 0.6666666666666666,
+     "recall_HIGH": 0.625,
+     "recall_LOW": 0.8979591836734694,
+     "f1": 0.6451612903225806,
+     "balanced_accuracy": 0.7614795918367347,
+     "brier": 0.1336852833241989,
+     "log_loss": 0.41268870335487845,
+     "mean_p": 0.3387386213149135,
+     "citl": -0.09258477516106733,
+     "roc_auc": 0.8596938775510203,
+     "pr_auc": 0.7086674112024511,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": true,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.9230769230769231,
+     "early_acc": 0.85,
+     "late_acc": 0.8,
+     "wins": 4,
+     "losses": 3,
+     "ties": 6,
+     "sign_p": 0.5,
+     "recall_pooled": 0.625,
+     "recall_early": 0.5454545454545454,
+     "recall_late": 0.8,
+     "changing_acc": 0.5555555555555556,
+     "changing_n": 18,
+     "acc_ci95_quarter_block": [
+      0.7076923076923077,
+      0.9384615384615385
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 3,
+      "2024-Q3": 5,
+      "2024-Q4": 4,
+      "2025-Q1": 5,
+      "2025-Q4": 3,
+      "2026-Q1": 5,
+      "2026-Q2": 3,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": false,
+      "d": true,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.14323779359887798,
+      "p_one_sided": 0.068359375,
+      "p_two_sided": 0.13671875,
+      "p_holm": 0.13671875
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.0742695231458098,
+      "p_one_sided": 0.1318359375,
+      "p_two_sided": 0.263671875,
+      "p_holm": 0.13671875
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.620160870521955,
+      "p_one_sided": 0.000244140625,
+      "p_two_sided": 0.00048828125,
+      "p_holm": 0.000732421875
+     }
+    },
+    "selection_block_brier": 0.1340211152058357,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 16,
+     "FP": 4,
+     "FN": 1,
+     "accuracy": 0.8,
+     "precision": 0.5,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.8,
+     "f1": 0.6153846153846154,
+     "balanced_accuracy": 0.8,
+     "brier": 0.1331479523135801,
+     "log_loss": 0.3865371835168227,
+     "mean_p": 0.3089701382781219,
+     "citl": -0.10897013827812191,
+     "roc_auc": 0.87,
+     "pr_auc": 0.7112087912087912
+    },
+    "quarter_accuracy_sd": 0.2136376035276225,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 3,
+      "persist": 4,
+      "high": 4,
+      "caught": 2
+     },
+     "2024-Q3": {
+      "correct": 5,
+      "persist": 4,
+      "high": 1,
+      "caught": 1
+     },
+     "2024-Q4": {
+      "correct": 4,
+      "persist": 4,
+      "high": 3,
+      "caught": 3
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 2,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 3,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.9230769230769231,
+      "high": 4,
+      "caught": 3
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 4
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.12639751327042295,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 27,
+      "mean_p": 0.10398993063693529,
+      "observed": 0.07407407407407407
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 12,
+      "mean_p": 0.29577358366801926,
+      "observed": 0.0
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 14,
+      "mean_p": 0.4699964499690796,
+      "observed": 0.42857142857142855
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 10,
+      "mean_p": 0.714981142986897,
+      "observed": 0.6
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 2,
+      "mean_p": 0.9656187624099049,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": 0.6153846153846154
+   },
+   "U-HR": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 9,
+     "TN": 43,
+     "FP": 6,
+     "FN": 7,
+     "accuracy": 0.8,
+     "precision": 0.6,
+     "recall_HIGH": 0.5625,
+     "recall_LOW": 0.8775510204081632,
+     "f1": 0.5806451612903225,
+     "balanced_accuracy": 0.7200255102040816,
+     "brier": 0.13736319432859384,
+     "log_loss": 0.4250261426657221,
+     "mean_p": 0.33378363306001,
+     "citl": -0.08762978690616385,
+     "roc_auc": 0.8418367346938775,
+     "pr_auc": 0.7006160701613487,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": true,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.8461538461538461,
+     "early_acc": 0.775,
+     "late_acc": 0.84,
+     "wins": 4,
+     "losses": 4,
+     "ties": 5,
+     "sign_p": 0.63671875,
+     "recall_pooled": 0.5625,
+     "recall_early": 0.45454545454545453,
+     "recall_late": 0.8,
+     "changing_acc": 0.6111111111111112,
+     "changing_n": 18,
+     "acc_ci95_quarter_block": [
+      0.676923076923077,
+      0.9076923076923077
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 3,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 2,
+      "2024-Q3": 5,
+      "2024-Q4": 4,
+      "2025-Q1": 5,
+      "2025-Q4": 4,
+      "2026-Q1": 5,
+      "2026-Q2": 3,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": false,
+      "d": true,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.13955988259448307,
+      "p_one_sided": 0.0791015625,
+      "p_two_sided": 0.158203125,
+      "p_holm": 0.158203125
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.07059161214141489,
+      "p_one_sided": 0.1326904296875,
+      "p_two_sided": 0.265380859375,
+      "p_holm": 0.158203125
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6164829595175599,
+      "p_one_sided": 0.0003662109375,
+      "p_two_sided": 0.000732421875,
+      "p_holm": 0.0010986328125
+     }
+    },
+    "selection_block_brier": 0.1457559948522755,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 17,
+     "FP": 3,
+     "FN": 1,
+     "accuracy": 0.84,
+     "precision": 0.5714285714285714,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.85,
+     "f1": 0.6666666666666666,
+     "balanced_accuracy": 0.825,
+     "brier": 0.12393471349070319,
+     "log_loss": 0.3711950460188409,
+     "mean_p": 0.30749454403846693,
+     "citl": -0.10749454403846692,
+     "roc_auc": 0.89,
+     "pr_auc": 0.7366666666666666
+    },
+    "quarter_accuracy_sd": 0.23094010767585033,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 3,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 2,
+      "persist": 4,
+      "high": 4,
+      "caught": 1
+     },
+     "2024-Q3": {
+      "correct": 5,
+      "persist": 4,
+      "high": 1,
+      "caught": 1
+     },
+     "2024-Q4": {
+      "correct": 4,
+      "persist": 4,
+      "high": 3,
+      "caught": 3
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 2,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 4,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 3,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 4
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.11665962221617769,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 24,
+      "mean_p": 0.1055171125192622,
+      "observed": 0.041666666666666664
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 14,
+      "mean_p": 0.2847905612099585,
+      "observed": 0.14285714285714285
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 19,
+      "mean_p": 0.46800291641197483,
+      "observed": 0.3684210526315789
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 4,
+      "mean_p": 0.6549963848433786,
+      "observed": 0.5
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 4,
+      "mean_p": 0.9161041600744743,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   },
+   "U-STRUCT": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 8,
+     "TN": 45,
+     "FP": 4,
+     "FN": 8,
+     "accuracy": 0.8153846153846154,
+     "precision": 0.6666666666666666,
+     "recall_HIGH": 0.5,
+     "recall_LOW": 0.9183673469387755,
+     "f1": 0.5714285714285715,
+     "balanced_accuracy": 0.7091836734693877,
+     "brier": 0.14113577130769236,
+     "log_loss": 0.43537826361779863,
+     "mean_p": 0.3189461538461539,
+     "citl": -0.07279230769230771,
+     "roc_auc": 0.8201530612244898,
+     "pr_auc": 0.6455931452806453,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": true,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.8461538461538461,
+     "early_acc": 0.8,
+     "late_acc": 0.84,
+     "wins": 4,
+     "losses": 3,
+     "ties": 6,
+     "sign_p": 0.5,
+     "recall_pooled": 0.5,
+     "recall_early": 0.36363636363636365,
+     "recall_late": 0.8,
+     "changing_acc": 0.6111111111111112,
+     "changing_n": 18,
+     "acc_ci95_quarter_block": [
+      0.676923076923077,
+      0.9384615384615385
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 5,
+      "2024-Q4": 4,
+      "2025-Q1": 5,
+      "2025-Q4": 4,
+      "2026-Q1": 5,
+      "2026-Q2": 3,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": false,
+      "d": true,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.13578730561538463,
+      "p_one_sided": 0.085693359375,
+      "p_two_sided": 0.17138671875,
+      "p_holm": 0.17138671875
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.06681903516231645,
+      "p_one_sided": 0.1348876953125,
+      "p_two_sided": 0.269775390625,
+      "p_holm": 0.17138671875
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6127103825384614,
+      "p_one_sided": 0.00048828125,
+      "p_two_sided": 0.0009765625,
+      "p_holm": 0.00146484375
+     }
+    },
+    "selection_block_brier": 0.15140452375,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 17,
+     "FP": 3,
+     "FN": 1,
+     "accuracy": 0.84,
+     "precision": 0.5714285714285714,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.85,
+     "f1": 0.6666666666666666,
+     "balanced_accuracy": 0.825,
+     "brier": 0.1247057674,
+     "log_loss": 0.3734212917181904,
+     "mean_p": 0.303396,
+     "citl": -0.10339599999999999,
+     "roc_auc": 0.88,
+     "pr_auc": 0.6699999999999999
+    },
+    "quarter_accuracy_sd": 0.2640901167094099,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 4,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 5,
+      "persist": 4,
+      "high": 1,
+      "caught": 1
+     },
+     "2024-Q4": {
+      "correct": 4,
+      "persist": 4,
+      "high": 3,
+      "caught": 3
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 2,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 4,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 3,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.8461538461538461,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.8461538461538461,
+      "high": 4,
+      "caught": 2
+     },
+     "Quezon": {
+      "accuracy": 0.6153846153846154,
+      "high": 5,
+      "caught": 3
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.13973770865065344,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 24,
+      "mean_p": 0.0975875,
+      "observed": 0.041666666666666664
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 16,
+      "mean_p": 0.28175625,
+      "observed": 0.1875
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 19,
+      "mean_p": 0.47391578947368423,
+      "observed": 0.42105263157894735
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 4,
+      "mean_p": 0.7421625000000001,
+      "observed": 0.5
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 2,
+      "mean_p": 0.954125,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   }
+  },
+  "2": {
+   "U-GB": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 4,
+     "TN": 44,
+     "FP": 5,
+     "FN": 12,
+     "accuracy": 0.7384615384615385,
+     "precision": 0.4444444444444444,
+     "recall_HIGH": 0.25,
+     "recall_LOW": 0.8979591836734694,
+     "f1": 0.32,
+     "balanced_accuracy": 0.5739795918367347,
+     "brier": 0.1899609159732916,
+     "log_loss": 0.5697649706222381,
+     "mean_p": 0.31403963227725384,
+     "citl": -0.06788578612340768,
+     "roc_auc": 0.5752551020408162,
+     "pr_auc": 0.46761772604282115,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.7692307692307693,
+     "early_acc": 0.725,
+     "late_acc": 0.76,
+     "wins": 4,
+     "losses": 1,
+     "ties": 8,
+     "sign_p": 0.1875,
+     "recall_pooled": 0.25,
+     "recall_early": 0.0,
+     "recall_late": 0.8,
+     "changing_acc": 0.391304347826087,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.6,
+      0.8769230769230769
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 2,
+      "2025-Q1": 5,
+      "2025-Q4": 3,
+      "2026-Q1": 3,
+      "2026-Q2": 4,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.1638852378728623,
+      "p_one_sided": 0.029541015625,
+      "p_two_sided": 0.05908203125,
+      "p_holm": 0.05908203125
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.0292082370968626,
+      "p_one_sided": 0.3111572265625,
+      "p_two_sided": 0.622314453125,
+      "p_holm": 0.3111572265625
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.5638852378728623,
+      "p_one_sided": 0.001220703125,
+      "p_two_sided": 0.00244140625,
+      "p_holm": 0.003662109375
+     }
+    },
+    "selection_block_brier": 0.21065312784844106,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 15,
+     "FP": 5,
+     "FN": 1,
+     "accuracy": 0.76,
+     "precision": 0.4444444444444444,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.75,
+     "f1": 0.5714285714285714,
+     "balanced_accuracy": 0.775,
+     "brier": 0.15685337697305238,
+     "log_loss": 0.5048066147863338,
+     "mean_p": 0.38396530218414154,
+     "citl": -0.18396530218414153,
+     "roc_auc": 0.8200000000000001,
+     "pr_auc": 0.8434782608695652
+    },
+    "quarter_accuracy_sd": 0.27549489268847777,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 3,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 3,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Laguna": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Quezon": {
+      "accuracy": 0.5384615384615384,
+      "high": 5,
+      "caught": 1
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.16853001769389728,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 21,
+      "mean_p": 0.12269727176516958,
+      "observed": 0.19047619047619047
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 29,
+      "mean_p": 0.31387063784842906,
+      "observed": 0.2413793103448276
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 9,
+      "mean_p": 0.4849556789389175,
+      "observed": 0.1111111111111111
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 5,
+      "mean_p": 0.7114745112179534,
+      "observed": 0.6
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 1,
+      "mean_p": 0.8117112268084714,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Cavite"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2024-Q4",
+      "Quezon"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": 0.5384615384615384
+   },
+   "U-GB-NOPRICE": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 5,
+     "TN": 44,
+     "FP": 5,
+     "FN": 11,
+     "accuracy": 0.7538461538461538,
+     "precision": 0.5,
+     "recall_HIGH": 0.3125,
+     "recall_LOW": 0.8979591836734694,
+     "f1": 0.38461538461538464,
+     "balanced_accuracy": 0.6052295918367347,
+     "brier": 0.18948088975020957,
+     "log_loss": 0.5711292449266022,
+     "mean_p": 0.3242202659698957,
+     "citl": -0.07806641981604956,
+     "roc_auc": 0.5982142857142857,
+     "pr_auc": 0.48500795253726553,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.8461538461538461,
+     "early_acc": 0.75,
+     "late_acc": 0.76,
+     "wins": 5,
+     "losses": 2,
+     "ties": 6,
+     "sign_p": 0.2265625,
+     "recall_pooled": 0.3125,
+     "recall_early": 0.09090909090909091,
+     "recall_late": 0.8,
+     "changing_acc": 0.5217391304347826,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.6153846153846154,
+      0.8769230769230769
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 3,
+      "2025-Q1": 4,
+      "2025-Q4": 3,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 3
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": false,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.16436526409594426,
+      "p_one_sided": 0.0379638671875,
+      "p_two_sided": 0.075927734375,
+      "p_holm": 0.075927734375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.029688263319944556,
+      "p_one_sided": 0.310302734375,
+      "p_two_sided": 0.62060546875,
+      "p_holm": 0.310302734375
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.5643652640959442,
+      "p_one_sided": 0.0010986328125,
+      "p_two_sided": 0.002197265625,
+      "p_holm": 0.0032958984375
+     }
+    },
+    "selection_block_brier": 0.20825331708566713,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 15,
+     "FP": 5,
+     "FN": 1,
+     "accuracy": 0.76,
+     "precision": 0.4444444444444444,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.75,
+     "f1": 0.5714285714285714,
+     "balanced_accuracy": 0.775,
+     "brier": 0.15944500601347752,
+     "log_loss": 0.5144156940581998,
+     "mean_p": 0.39230411517401803,
+     "citl": -0.19230411517401802,
+     "roc_auc": 0.81,
+     "pr_auc": 0.8416666666666668
+    },
+    "quarter_accuracy_sd": 0.2601774542351964,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 3,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 3,
+      "caught": 1
+     },
+     "2025-Q1": {
+      "correct": 4,
+      "persist": 5,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 3,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.6153846153846154,
+      "high": 4,
+      "caught": 1
+     },
+     "Laguna": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 2
+     },
+     "Rizal": {
+      "accuracy": 0.9230769230769231,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.8461538461538461,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.12639751327042295,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 20,
+      "mean_p": 0.12151381233253822,
+      "observed": 0.2
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 27,
+      "mean_p": 0.2983743929549857,
+      "observed": 0.2222222222222222
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 12,
+      "mean_p": 0.48529062509885934,
+      "observed": 0.16666666666666666
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 3,
+      "mean_p": 0.728083136288883,
+      "observed": 0.3333333333333333
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 3,
+      "mean_p": 0.8600651738516283,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Cavite"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": 0.5384615384615384
+   },
+   "U-HR": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 7,
+     "TN": 46,
+     "FP": 3,
+     "FN": 9,
+     "accuracy": 0.8153846153846154,
+     "precision": 0.7,
+     "recall_HIGH": 0.4375,
+     "recall_LOW": 0.9387755102040817,
+     "f1": 0.5384615384615384,
+     "balanced_accuracy": 0.6881377551020409,
+     "brier": 0.16530637525310637,
+     "log_loss": 0.5192192952693196,
+     "mean_p": 0.3221625930366003,
+     "citl": -0.07600874688275411,
+     "roc_auc": 0.6964285714285715,
+     "pr_auc": 0.5784855448413551,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.8461538461538461,
+     "early_acc": 0.775,
+     "late_acc": 0.88,
+     "wins": 6,
+     "losses": 1,
+     "ties": 6,
+     "sign_p": 0.0625,
+     "recall_pooled": 0.4375,
+     "recall_early": 0.2727272727272727,
+     "recall_late": 0.8,
+     "changing_acc": 0.6521739130434783,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.6923076923076923,
+      0.9230769230769231
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 2,
+      "2024-Q3": 4,
+      "2024-Q4": 3,
+      "2025-Q1": 5,
+      "2025-Q4": 4,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": true,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.1885397785930475,
+      "p_one_sided": 0.0286865234375,
+      "p_two_sided": 0.057373046875,
+      "p_holm": 0.057373046875
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.05386277781704778,
+      "p_one_sided": 0.1925048828125,
+      "p_two_sided": 0.385009765625,
+      "p_holm": 0.1925048828125
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.5885397785930475,
+      "p_one_sided": 0.0006103515625,
+      "p_two_sided": 0.001220703125,
+      "p_holm": 0.0018310546875
+     }
+    },
+    "selection_block_brier": 0.18342976702354638,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 18,
+     "FP": 2,
+     "FN": 1,
+     "accuracy": 0.88,
+     "precision": 0.6666666666666666,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.9,
+     "f1": 0.7272727272727272,
+     "balanced_accuracy": 0.8500000000000001,
+     "brier": 0.13630894842040234,
+     "log_loss": 0.4684710012571485,
+     "mean_p": 0.3421002370208579,
+     "citl": -0.1421002370208579,
+     "roc_auc": 0.78,
+     "pr_auc": 0.685
+    },
+    "quarter_accuracy_sd": 0.22303271003059114,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 2,
+      "persist": 1,
+      "high": 4,
+      "caught": 1
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 3,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 3,
+      "caught": 2
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 4,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.8461538461538461,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 2
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.11665962221617769,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 18,
+      "mean_p": 0.11009348638066012,
+      "observed": 0.2222222222222222
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 28,
+      "mean_p": 0.30122084672060917,
+      "observed": 0.10714285714285714
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 12,
+      "mean_p": 0.4601349251872127,
+      "observed": 0.25
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 5,
+      "mean_p": 0.6403175965945076,
+      "observed": 0.8
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 2,
+      "mean_p": 0.9007474995654965,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   },
+   "U-STRUCT": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 5,
+     "TN": 47,
+     "FP": 2,
+     "FN": 11,
+     "accuracy": 0.8,
+     "precision": 0.7142857142857143,
+     "recall_HIGH": 0.3125,
+     "recall_LOW": 0.9591836734693877,
+     "f1": 0.43478260869565216,
+     "balanced_accuracy": 0.6358418367346939,
+     "brier": 0.17716265646153845,
+     "log_loss": 0.5443036728923694,
+     "mean_p": 0.29905846153846155,
+     "citl": -0.05290461538461538,
+     "roc_auc": 0.6160714285714286,
+     "pr_auc": 0.4993788997398749,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.8461538461538461,
+     "early_acc": 0.75,
+     "late_acc": 0.88,
+     "wins": 5,
+     "losses": 1,
+     "ties": 7,
+     "sign_p": 0.109375,
+     "recall_pooled": 0.3125,
+     "recall_early": 0.09090909090909091,
+     "recall_late": 0.8,
+     "changing_acc": 0.5652173913043478,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.6615384615384615,
+      0.9230769230769231
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 3,
+      "2025-Q1": 5,
+      "2025-Q4": 4,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 4
+     },
+     "criteria": {
+      "a": true,
+      "b": true,
+      "c": false,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.1766834973846154,
+      "p_one_sided": 0.032958984375,
+      "p_two_sided": 0.06591796875,
+      "p_holm": 0.06591796875
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.0420064966086157,
+      "p_one_sided": 0.231689453125,
+      "p_two_sided": 0.46337890625,
+      "p_holm": 0.231689453125
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.5766834973846154,
+      "p_one_sided": 0.0009765625,
+      "p_two_sided": 0.001953125,
+      "p_holm": 0.0029296875
+     }
+    },
+    "selection_block_brier": 0.200949170375,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 18,
+     "FP": 2,
+     "FN": 1,
+     "accuracy": 0.88,
+     "precision": 0.6666666666666666,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.9,
+     "f1": 0.7272727272727272,
+     "balanced_accuracy": 0.8500000000000001,
+     "brier": 0.1391042342,
+     "log_loss": 0.47549263533970076,
+     "mean_p": 0.33617600000000003,
+     "citl": -0.13617600000000002,
+     "roc_auc": 0.78,
+     "pr_auc": 0.685
+    },
+    "quarter_accuracy_sd": 0.2581988897471611,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 3,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 3,
+      "caught": 1
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 4,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 4,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 1
+     },
+     "Laguna": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 2
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.8461538461538461,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.12871692715908856,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 20,
+      "mean_p": 0.1194075,
+      "observed": 0.2
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 30,
+      "mean_p": 0.294605,
+      "observed": 0.2
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 10,
+      "mean_p": 0.47087,
+      "observed": 0.2
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 4,
+      "mean_p": 0.6610875,
+      "observed": 0.75
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 1,
+      "mean_p": 0.85945,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Cavite"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   }
+  },
+  "3": {
+   "U-GB": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 3,
+     "TN": 44,
+     "FP": 5,
+     "FN": 13,
+     "accuracy": 0.7230769230769231,
+     "precision": 0.375,
+     "recall_HIGH": 0.1875,
+     "recall_LOW": 0.8979591836734694,
+     "f1": 0.25,
+     "balanced_accuracy": 0.5427295918367347,
+     "brier": 0.16857241526400915,
+     "log_loss": 0.49755886966824964,
+     "mean_p": 0.2915605357082347,
+     "citl": -0.045406689554388535,
+     "roc_auc": 0.7602040816326531,
+     "pr_auc": 0.4139388714972155,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.6923076923076923,
+     "early_acc": 0.775,
+     "late_acc": 0.64,
+     "wins": 4,
+     "losses": 1,
+     "ties": 8,
+     "sign_p": 0.1875,
+     "recall_pooled": 0.1875,
+     "recall_early": 0.18181818181818182,
+     "recall_late": 0.2,
+     "changing_acc": 0.42857142857142855,
+     "changing_n": 28,
+     "acc_ci95_quarter_block": [
+      0.5384615384615384,
+      0.8923076923076924
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 4,
+      "2025-Q1": 1,
+      "2025-Q4": 1,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 5
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.2621968155052216,
+      "p_one_sided": 0.00341796875,
+      "p_two_sided": 0.0068359375,
+      "p_holm": 0.0068359375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.055993080055165796,
+      "p_one_sided": 0.165283203125,
+      "p_two_sided": 0.33056640625,
+      "p_holm": 0.165283203125
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.5852737385821446,
+      "p_one_sided": 0.0010986328125,
+      "p_two_sided": 0.002197265625,
+      "p_holm": 0.0032958984375
+     }
+    },
+    "selection_block_brier": 0.1446300439098883,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 1,
+     "TN": 15,
+     "FP": 5,
+     "FN": 4,
+     "accuracy": 0.64,
+     "precision": 0.16666666666666666,
+     "recall_HIGH": 0.2,
+     "recall_LOW": 0.75,
+     "f1": 0.1818181818181818,
+     "balanced_accuracy": 0.475,
+     "brier": 0.2068802094306026,
+     "log_loss": 0.5879897560811768,
+     "mean_p": 0.3643332423177022,
+     "citl": -0.1643332423177022,
+     "roc_auc": 0.59,
+     "pr_auc": 0.2616883116883117
+    },
+    "quarter_accuracy_sd": 0.3419401657060441,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 4,
+      "persist": 3,
+      "high": 3,
+      "caught": 2
+     },
+     "2025-Q1": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2025-Q4": {
+      "correct": 1,
+      "persist": 2,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 1
+     },
+     "2026-Q3": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.6153846153846154,
+      "high": 4,
+      "caught": 0
+     },
+     "Quezon": {
+      "accuracy": 0.5384615384615384,
+      "high": 5,
+      "caught": 1
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.6923076923076923,
+      "high": 3,
+      "caught": 0
+     }
+    },
+    "province_accuracy_sd": 0.17709022204955907,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 21,
+      "mean_p": 0.11696198391806559,
+      "observed": 0.0
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 30,
+      "mean_p": 0.2993632556710944,
+      "observed": 0.36666666666666664
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 8,
+      "mean_p": 0.4572765321457436,
+      "observed": 0.25
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 6,
+      "mean_p": 0.6426872052428495,
+      "observed": 0.5
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2025-Q1",
+      "Cavite"
+     ],
+     [
+      "2025-Q1",
+      "Laguna"
+     ],
+     [
+      "2025-Q1",
+      "Quezon"
+     ],
+     [
+      "2025-Q1",
+      "Batangas"
+     ]
+    ],
+    "fitted_share": 0.46153846153846156
+   },
+   "U-GB-NOPRICE": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 5,
+     "TN": 47,
+     "FP": 2,
+     "FN": 11,
+     "accuracy": 0.8,
+     "precision": 0.7142857142857143,
+     "recall_HIGH": 0.3125,
+     "recall_LOW": 0.9591836734693877,
+     "f1": 0.43478260869565216,
+     "balanced_accuracy": 0.6358418367346939,
+     "brier": 0.14004418171602903,
+     "log_loss": 0.43480491103490015,
+     "mean_p": 0.27325433745644095,
+     "citl": -0.027100491302594787,
+     "roc_auc": 0.8596938775510203,
+     "pr_auc": 0.5855456544869444,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": true,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.7692307692307693,
+     "early_acc": 0.8,
+     "late_acc": 0.8,
+     "wins": 6,
+     "losses": 0,
+     "ties": 7,
+     "sign_p": 0.015625,
+     "recall_pooled": 0.3125,
+     "recall_early": 0.2727272727272727,
+     "recall_late": 0.4,
+     "changing_acc": 0.5357142857142857,
+     "changing_n": 28,
+     "acc_ci95_quarter_block": [
+      0.6461538461538462,
+      0.9384615384615385
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 5,
+      "2025-Q1": 2,
+      "2025-Q4": 3,
+      "2026-Q1": 5,
+      "2026-Q2": 5,
+      "2026-Q3": 5
+     },
+     "criteria": {
+      "a": false,
+      "b": true,
+      "c": true,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.2907250490532017,
+      "p_one_sided": 0.00341796875,
+      "p_two_sided": 0.0068359375,
+      "p_holm": 0.0068359375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.08452131360314595,
+      "p_one_sided": 0.05419921875,
+      "p_two_sided": 0.1083984375,
+      "p_holm": 0.05419921875
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6138019721301249,
+      "p_one_sided": 0.0008544921875,
+      "p_two_sided": 0.001708984375,
+      "p_holm": 0.0025634765625
+     }
+    },
+    "selection_block_brier": 0.14345559247639633,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 2,
+     "TN": 18,
+     "FP": 2,
+     "FN": 3,
+     "accuracy": 0.8,
+     "precision": 0.5,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.9,
+     "f1": 0.4444444444444445,
+     "balanced_accuracy": 0.65,
+     "brier": 0.1345859244994413,
+     "log_loss": 0.4283874970167252,
+     "mean_p": 0.3065819925401078,
+     "citl": -0.1065819925401078,
+     "roc_auc": 0.8600000000000001,
+     "pr_auc": 0.4920634920634921
+    },
+    "quarter_accuracy_sd": 0.2943920288775949,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 5,
+      "persist": 3,
+      "high": 3,
+      "caught": 3
+     },
+     "2025-Q1": {
+      "correct": 2,
+      "persist": 1,
+      "high": 4,
+      "caught": 1
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 5,
+      "persist": 2,
+      "high": 1,
+      "caught": 1
+     },
+     "2026-Q3": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 2
+     },
+     "Laguna": {
+      "accuracy": 0.7692307692307693,
+      "high": 4,
+      "caught": 1
+     },
+     "Quezon": {
+      "accuracy": 0.6923076923076923,
+      "high": 5,
+      "caught": 2
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 0
+     }
+    },
+    "province_accuracy_sd": 0.11665962221617769,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 24,
+      "mean_p": 0.12432497301248184,
+      "observed": 0.0
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 29,
+      "mean_p": 0.2995242156623727,
+      "observed": 0.27586206896551724
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 12,
+      "mean_p": 0.5076275273466907,
+      "observed": 0.6666666666666666
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2025-Q1",
+      "Cavite"
+     ],
+     [
+      "2025-Q1",
+      "Laguna"
+     ],
+     [
+      "2025-Q1",
+      "Batangas"
+     ]
+    ],
+    "fitted_share": 0.46153846153846156
+   },
+   "U-HR": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 4,
+     "TN": 46,
+     "FP": 3,
+     "FN": 12,
+     "accuracy": 0.7692307692307693,
+     "precision": 0.5714285714285714,
+     "recall_HIGH": 0.25,
+     "recall_LOW": 0.9387755102040817,
+     "f1": 0.34782608695652173,
+     "balanced_accuracy": 0.5943877551020409,
+     "brier": 0.13747173503339183,
+     "log_loss": 0.42920643704772454,
+     "mean_p": 0.29123101920075173,
+     "citl": -0.04507717304690556,
+     "roc_auc": 0.8801020408163266,
+     "pr_auc": 0.6639150983820101,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": true,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.7692307692307693,
+     "early_acc": 0.7,
+     "late_acc": 0.88,
+     "wins": 5,
+     "losses": 2,
+     "ties": 6,
+     "sign_p": 0.2265625,
+     "recall_pooled": 0.25,
+     "recall_early": 0.0,
+     "recall_late": 0.8,
+     "changing_acc": 0.6071428571428571,
+     "changing_n": 28,
+     "acc_ci95_quarter_block": [
+      0.6153846153846154,
+      0.9076923076923077
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 3,
+      "2024-Q4": 2,
+      "2025-Q1": 5,
+      "2025-Q4": 3,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 5
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.2932974957358389,
+      "p_one_sided": 0.0037841796875,
+      "p_two_sided": 0.007568359375,
+      "p_holm": 0.007568359375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.0870937602857831,
+      "p_one_sided": 0.0670166015625,
+      "p_two_sided": 0.134033203125,
+      "p_holm": 0.0670166015625
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6163744188127621,
+      "p_one_sided": 0.0006103515625,
+      "p_two_sided": 0.001220703125,
+      "p_holm": 0.0018310546875
+     }
+    },
+    "selection_block_brier": 0.1492037780560813,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 4,
+     "TN": 18,
+     "FP": 2,
+     "FN": 1,
+     "accuracy": 0.88,
+     "precision": 0.6666666666666666,
+     "recall_HIGH": 0.8,
+     "recall_LOW": 0.9,
+     "f1": 0.7272727272727272,
+     "balanced_accuracy": 0.8500000000000001,
+     "brier": 0.11870046619708871,
+     "log_loss": 0.3977535399606178,
+     "mean_p": 0.35110475781584477,
+     "citl": -0.15110475781584476,
+     "roc_auc": 0.94,
+     "pr_auc": 0.8083333333333333
+    },
+    "quarter_accuracy_sd": 0.29264487974510267,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 3,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 2,
+      "persist": 3,
+      "high": 3,
+      "caught": 0
+     },
+     "2025-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 4,
+      "caught": 4
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Laguna": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Quezon": {
+      "accuracy": 0.6153846153846154,
+      "high": 5,
+      "caught": 1
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.8461538461538461,
+      "high": 3,
+      "caught": 1
+     }
+    },
+    "province_accuracy_sd": 0.15384615384615385,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 21,
+      "mean_p": 0.11506423777430207,
+      "observed": 0.0
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 33,
+      "mean_p": 0.3106400763800026,
+      "observed": 0.2727272727272727
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 7,
+      "mean_p": 0.5033154223577416,
+      "observed": 0.5714285714285714
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 3,
+      "mean_p": 0.6296622592651723,
+      "observed": 0.6666666666666666
+     },
+     {
+      "bin": "[0.8, 1.0)",
+      "n": 1,
+      "mean_p": 0.850349999948726,
+      "observed": 1.0
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Cavite"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2024-Q4",
+      "Quezon"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   },
+   "U-STRUCT": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 2,
+     "TN": 47,
+     "FP": 2,
+     "FN": 14,
+     "accuracy": 0.7538461538461538,
+     "precision": 0.5,
+     "recall_HIGH": 0.125,
+     "recall_LOW": 0.9591836734693877,
+     "f1": 0.2,
+     "balanced_accuracy": 0.5420918367346939,
+     "brier": 0.14689390757692308,
+     "log_loss": 0.44954356159326386,
+     "mean_p": 0.26221000000000005,
+     "citl": -0.016056153846153887,
+     "roc_auc": 0.8622448979591837,
+     "pr_auc": 0.6091120812666866,
+     "issued": 65
+    },
+    "pass": {
+     "acc_gt_75": true,
+     "bal_beats_baselines": true,
+     "brier_beats_sig": true,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.7692307692307693,
+     "early_acc": 0.725,
+     "late_acc": 0.8,
+     "wins": 5,
+     "losses": 1,
+     "ties": 7,
+     "sign_p": 0.109375,
+     "recall_pooled": 0.125,
+     "recall_early": 0.0,
+     "recall_late": 0.4,
+     "changing_acc": 0.5357142857142857,
+     "changing_n": 28,
+     "acc_ci95_quarter_block": [
+      0.6,
+      0.8923076923076924
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 5,
+      "2023-Q2": 5,
+      "2023-Q3": 5,
+      "2023-Q4": 2,
+      "2024-Q1": 5,
+      "2024-Q2": 1,
+      "2024-Q3": 4,
+      "2024-Q4": 2,
+      "2025-Q1": 3,
+      "2025-Q4": 3,
+      "2026-Q1": 5,
+      "2026-Q2": 4,
+      "2026-Q3": 5
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": true
+     },
+     "verdict": "Partially generalized"
+    },
+    "tests": {
+     "B-PERSIST": {
+      "dates": 13,
+      "mean_gain": 0.2838753231923076,
+      "p_one_sided": 0.0037841796875,
+      "p_two_sided": 0.007568359375,
+      "p_holm": 0.007568359375
+     },
+     "B-CLIM": {
+      "dates": 13,
+      "mean_gain": 0.07767158774225187,
+      "p_one_sided": 0.0745849609375,
+      "p_two_sided": 0.149169921875,
+      "p_holm": 0.0745849609375
+     },
+     "B-AH": {
+      "dates": 13,
+      "mean_gain": 0.6069522462692307,
+      "p_one_sided": 0.0009765625,
+      "p_two_sided": 0.001953125,
+      "p_holm": 0.0029296875
+     }
+    },
+    "selection_block_brier": 0.15595524887499998,
+    "confirmation_block": {
+     "n": 25,
+     "positives": 5,
+     "prevalence": 0.2,
+     "TP": 2,
+     "TN": 18,
+     "FP": 2,
+     "FN": 3,
+     "accuracy": 0.8,
+     "precision": 0.5,
+     "recall_HIGH": 0.4,
+     "recall_LOW": 0.9,
+     "f1": 0.4444444444444445,
+     "balanced_accuracy": 0.65,
+     "brier": 0.1323957615,
+     "log_loss": 0.4275328279237744,
+     "mean_p": 0.32030200000000003,
+     "citl": -0.12030200000000002,
+     "roc_auc": 0.9099999999999999,
+     "pr_auc": 0.6783333333333332
+    },
+    "quarter_accuracy_sd": 0.28465003254108545,
+    "per_quarter": {
+     "2023-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q2": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q3": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2023-Q4": {
+      "correct": 2,
+      "persist": 2,
+      "high": 3,
+      "caught": 0
+     },
+     "2024-Q1": {
+      "correct": 5,
+      "persist": 5,
+      "high": 0,
+      "caught": 0
+     },
+     "2024-Q2": {
+      "correct": 1,
+      "persist": 1,
+      "high": 4,
+      "caught": 0
+     },
+     "2024-Q3": {
+      "correct": 4,
+      "persist": 4,
+      "high": 1,
+      "caught": 0
+     },
+     "2024-Q4": {
+      "correct": 2,
+      "persist": 3,
+      "high": 3,
+      "caught": 0
+     },
+     "2025-Q1": {
+      "correct": 3,
+      "persist": 1,
+      "high": 4,
+      "caught": 2
+     },
+     "2025-Q4": {
+      "correct": 3,
+      "persist": 2,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q1": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     },
+     "2026-Q2": {
+      "correct": 4,
+      "persist": 2,
+      "high": 1,
+      "caught": 0
+     },
+     "2026-Q3": {
+      "correct": 5,
+      "persist": 1,
+      "high": 0,
+      "caught": 0
+     }
+    },
+    "by_province": {
+     "Cavite": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 1
+     },
+     "Laguna": {
+      "accuracy": 0.6923076923076923,
+      "high": 4,
+      "caught": 0
+     },
+     "Quezon": {
+      "accuracy": 0.6153846153846154,
+      "high": 5,
+      "caught": 1
+     },
+     "Rizal": {
+      "accuracy": 1.0,
+      "high": 0,
+      "caught": 0
+     },
+     "Batangas": {
+      "accuracy": 0.7692307692307693,
+      "high": 3,
+      "caught": 0
+     }
+    },
+    "province_accuracy_sd": 0.14796449278208726,
+    "calibration": [
+     {
+      "bin": "[0.0, 0.2)",
+      "n": 24,
+      "mean_p": 0.1287,
+      "observed": 0.0
+     },
+     {
+      "bin": "[0.2, 0.4)",
+      "n": 34,
+      "mean_p": 0.3024588235294118,
+      "observed": 0.3235294117647059
+     },
+     {
+      "bin": "[0.4, 0.6)",
+      "n": 5,
+      "mean_p": 0.47931,
+      "observed": 0.8
+     },
+     {
+      "bin": "[0.6, 0.8)",
+      "n": 2,
+      "mean_p": 0.6373500000000001,
+      "observed": 0.5
+     }
+    ],
+    "missed_high": [
+     [
+      "2023-Q4",
+      "Laguna"
+     ],
+     [
+      "2023-Q4",
+      "Quezon"
+     ],
+     [
+      "2023-Q4",
+      "Batangas"
+     ],
+     [
+      "2024-Q2",
+      "Cavite"
+     ],
+     [
+      "2024-Q2",
+      "Laguna"
+     ],
+     [
+      "2024-Q2",
+      "Quezon"
+     ],
+     [
+      "2024-Q2",
+      "Batangas"
+     ],
+     [
+      "2024-Q3",
+      "Quezon"
+     ],
+     [
+      "2024-Q4",
+      "Cavite"
+     ],
+     [
+      "2024-Q4",
+      "Laguna"
+     ],
+     [
+      "2024-Q4",
+      "Quezon"
+     ],
+     [
+      "2025-Q1",
+      "Laguna"
+     ],
+     [
+      "2025-Q1",
+      "Batangas"
+     ],
+     [
+      "2026-Q2",
+      "Cavite"
+     ]
+    ],
+    "fitted_share": null
+   }
+  },
+  "4": {
+   "U-GB": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 0,
+     "TN": 0,
+     "FP": 49,
+     "FN": 16,
+     "accuracy": 0.0,
+     "precision": 0.0,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 0.0,
+     "f1": 0.0,
+     "balanced_accuracy": 0.0,
+     "brier": 1.0,
+     "log_loss": 6.907755278982137,
+     "mean_p": 0.7538461538461538,
+     "citl": -0.5076923076923077,
+     "roc_auc": 0.0,
+     "pr_auc": 0.24615384615384617,
+     "issued": 0
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.0,
+     "early_acc": 0.0,
+     "late_acc": 0.0,
+     "wins": 0,
+     "losses": 13,
+     "ties": 0,
+     "sign_p": 1.0,
+     "recall_pooled": 0.0,
+     "recall_early": 0.0,
+     "recall_late": 0.0,
+     "changing_acc": 0.0,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.0,
+      0.0
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 0,
+      "2023-Q2": 0,
+      "2023-Q3": 0,
+      "2023-Q4": 0,
+      "2024-Q1": 0,
+      "2024-Q2": 0,
+      "2024-Q3": 0,
+      "2024-Q4": 0,
+      "2025-Q1": 0,
+      "2025-Q4": 0,
+      "2026-Q1": 0,
+      "2026-Q2": 0,
+      "2026-Q3": 0
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Not demonstrated to generalize"
+    },
+    "tests": {},
+    "issued": 0,
+    "not_issued_reason": "structural core not computable at this horizon"
+   },
+   "U-GB-NOPRICE": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 0,
+     "TN": 0,
+     "FP": 49,
+     "FN": 16,
+     "accuracy": 0.0,
+     "precision": 0.0,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 0.0,
+     "f1": 0.0,
+     "balanced_accuracy": 0.0,
+     "brier": 1.0,
+     "log_loss": 6.907755278982137,
+     "mean_p": 0.7538461538461538,
+     "citl": -0.5076923076923077,
+     "roc_auc": 0.0,
+     "pr_auc": 0.24615384615384617,
+     "issued": 0
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.0,
+     "early_acc": 0.0,
+     "late_acc": 0.0,
+     "wins": 0,
+     "losses": 13,
+     "ties": 0,
+     "sign_p": 1.0,
+     "recall_pooled": 0.0,
+     "recall_early": 0.0,
+     "recall_late": 0.0,
+     "changing_acc": 0.0,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.0,
+      0.0
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 0,
+      "2023-Q2": 0,
+      "2023-Q3": 0,
+      "2023-Q4": 0,
+      "2024-Q1": 0,
+      "2024-Q2": 0,
+      "2024-Q3": 0,
+      "2024-Q4": 0,
+      "2025-Q1": 0,
+      "2025-Q4": 0,
+      "2026-Q1": 0,
+      "2026-Q2": 0,
+      "2026-Q3": 0
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Not demonstrated to generalize"
+    },
+    "tests": {},
+    "issued": 0,
+    "not_issued_reason": "structural core not computable at this horizon"
+   },
+   "U-HR": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 0,
+     "TN": 0,
+     "FP": 49,
+     "FN": 16,
+     "accuracy": 0.0,
+     "precision": 0.0,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 0.0,
+     "f1": 0.0,
+     "balanced_accuracy": 0.0,
+     "brier": 1.0,
+     "log_loss": 6.907755278982137,
+     "mean_p": 0.7538461538461538,
+     "citl": -0.5076923076923077,
+     "roc_auc": 0.0,
+     "pr_auc": 0.24615384615384617,
+     "issued": 0
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.0,
+     "early_acc": 0.0,
+     "late_acc": 0.0,
+     "wins": 0,
+     "losses": 13,
+     "ties": 0,
+     "sign_p": 1.0,
+     "recall_pooled": 0.0,
+     "recall_early": 0.0,
+     "recall_late": 0.0,
+     "changing_acc": 0.0,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.0,
+      0.0
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 0,
+      "2023-Q2": 0,
+      "2023-Q3": 0,
+      "2023-Q4": 0,
+      "2024-Q1": 0,
+      "2024-Q2": 0,
+      "2024-Q3": 0,
+      "2024-Q4": 0,
+      "2025-Q1": 0,
+      "2025-Q4": 0,
+      "2026-Q1": 0,
+      "2026-Q2": 0,
+      "2026-Q3": 0
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Not demonstrated to generalize"
+    },
+    "tests": {},
+    "issued": 0,
+    "not_issued_reason": "structural core not computable at this horizon"
+   },
+   "U-STRUCT": {
+    "metrics": {
+     "n": 65,
+     "positives": 16,
+     "prevalence": 0.24615384615384617,
+     "TP": 0,
+     "TN": 0,
+     "FP": 49,
+     "FN": 16,
+     "accuracy": 0.0,
+     "precision": 0.0,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 0.0,
+     "f1": 0.0,
+     "balanced_accuracy": 0.0,
+     "brier": 1.0,
+     "log_loss": 6.907755278982137,
+     "mean_p": 0.7538461538461538,
+     "citl": -0.5076923076923077,
+     "roc_auc": 0.0,
+     "pr_auc": 0.24615384615384617,
+     "issued": 0
+    },
+    "pass": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "generalization": {
+     "majority_quarters": 0.0,
+     "early_acc": 0.0,
+     "late_acc": 0.0,
+     "wins": 0,
+     "losses": 13,
+     "ties": 0,
+     "sign_p": 1.0,
+     "recall_pooled": 0.0,
+     "recall_early": 0.0,
+     "recall_late": 0.0,
+     "changing_acc": 0.0,
+     "changing_n": 23,
+     "acc_ci95_quarter_block": [
+      0.0,
+      0.0
+     ],
+     "per_quarter_correct": {
+      "2023-Q1": 0,
+      "2023-Q2": 0,
+      "2023-Q3": 0,
+      "2023-Q4": 0,
+      "2024-Q1": 0,
+      "2024-Q2": 0,
+      "2024-Q3": 0,
+      "2024-Q4": 0,
+      "2025-Q1": 0,
+      "2025-Q4": 0,
+      "2026-Q1": 0,
+      "2026-Q2": 0,
+      "2026-Q3": 0
+     },
+     "criteria": {
+      "a": false,
+      "b": false,
+      "c": false,
+      "d": false,
+      "e": false
+     },
+     "verdict": "Not demonstrated to generalize"
+    },
+    "tests": {},
+    "issued": 0,
+    "not_issued_reason": "structural core not computable at this horizon"
+   }
+  }
+ },
+ "K_posthoc": {
+  "U-GB": {
+   "per_k_ok": {
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false
+   },
+   "K": 0,
+   "K_e83_reading": 0
+  },
+  "U-GB-NOPRICE": {
+   "per_k_ok": {
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false
+   },
+   "K": 0,
+   "K_e83_reading": 0
+  },
+  "U-HR": {
+   "per_k_ok": {
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false
+   },
+   "K": 0,
+   "K_e83_reading": 0
+  },
+  "U-STRUCT": {
+   "per_k_ok": {
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false
+   },
+   "K": 0,
+   "K_e83_reading": 0
+  }
+ }
+}
