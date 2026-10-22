@@ -230,6 +230,20 @@ def calib_bins(P, arm, edges=(0, 0.2, 0.4, 0.6, 0.8, 1.0001)):
 
 
 def evaluate_k(P, arms):
+    # an arm that issues no row at this horizon (structural core at K = 4) is recorded as unissued, all rows wrong (D3)
+    none = [a for a in arms if P[a].notna().sum() == 0]
+    arms = [a for a in arms if a not in none]
+    out, base = _evaluate_k(P, arms)
+    for a in none:
+        m = R.score(P, a)
+        out[a] = {"metrics": m, "pass": {"acc_gt_75": False, "bal_beats_baselines": False, "brier_beats_sig": False,
+                                         "recall_ge_50": False, "PASS": False, "TARGET_80": False},
+                  "generalization": R9.quarter_generalization(P, a), "tests": {}, "issued": 0,
+                  "not_issued_reason": "structural core not computable at this horizon"}
+    return out, base
+
+
+def _evaluate_k(P, arms):
     # run_e83.evaluate scores columns by prefix; give the U- arms a recognised prefix and map the results back (D2)
     ren = {a: "HYB-" + a for a in arms if a.startswith("U-")}
     R.PRIMARY[:] = [ren.get(a, a) for a in arms]
@@ -334,10 +348,12 @@ if __name__ == "__main__":
     for k in KS:
         U[k].to_csv(o / f"predictions_k{k}.csv", index=False)
         per_k[k], base[k] = evaluate_k(U[k], arms)
-    sel = {a: float(np.mean([per_k[k][a]["selection_block_brier"] for k in KS])) for a in SELECTABLE}
+    # D3: selection averages the horizons that every selectable candidate issues (the core cannot issue K = 4)
+    KSEL = [k for k in KS if all("selection_block_brier" in per_k[k][a] for a in SELECTABLE)]
+    sel = {a: float(np.mean([per_k[k][a]["selection_block_brier"] for k in KSEL])) for a in SELECTABLE}
     chosen = min(sel, key=sel.get)
     summ = {"stamp": stamp, "protocol_sha256": (E91 / "PROTOCOL.sha256").read_text().split()[0],
-            "selection_mean_brier": sel, "selected": chosen,
+            "selection_horizons": KSEL, "selection_mean_brier": sel, "selected": chosen,
             "K": {a: k_validated(per_k, a) for a in arms}, "per_k": per_k, "baselines": base}
     learned = chosen if chosen in SPECS else "U-LR"
     summ["ablation_on"] = learned
@@ -359,7 +375,7 @@ if __name__ == "__main__":
                   f"{m['recall_HIGH'] or 0:.2f}/{m['f1']:.2f} TP/FP/FN/TN={m['TP']}/{m['FP']}/{m['FN']}/{m['TN']} "
                   f"brier={m['brier']:.3f} PASS={ps['PASS']} {[c for c, v in ps.items() if not v and c not in ('PASS', 'TARGET_80')]} "
                   f"holm={th} W/L={g['wins']}/{g['losses']} early/late={g['early_acc']:.2f}/{g['late_acc']:.2f} "
-                  f"fitted={r['fitted_share']}", flush=True)
+                  f"fitted={r.get('fitted_share')} issued={int(U[k][a].notna().sum())}", flush=True)
     print("K:", {a: (v["K"], v["K_e83_reading"]) for a, v in summ["K"].items()})
     print("ablation", learned, {n: [round(x, 4) for x in v["brier_by_k"]] for n, v in summ["ablation"].items()})
     print(o)
