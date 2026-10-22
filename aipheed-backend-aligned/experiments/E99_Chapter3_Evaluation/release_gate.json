@@ -1,0 +1,23 @@
+{
+ "schema": "aipheed.release_gate/1",
+ "protocol": "E98 PROTOCOL.md section 6, applied unchanged by E99 (a partial or unverifiable criterion counts as failed)",
+ "candidate": "e99-chapter3-evaluation dev candidate (release_candidate_manifest.json): FIRI v2 served model unchanged + E97 rollover fix + E99 wording fixes; no E99 model is served",
+ "date": "2026-10-22",
+ "criteria": [
+  {"id": "G1", "status": "FAIL", "evidence": "Chapter I claims province-level food-insecurity classification. The approved label (Eq. 3) is a proxy (regional SWS hunger + provincial food-CPI deviation); the only measured outcome is regional. No provincial outcome is held (PROVINCIAL_OUTCOME_FEASIBILITY.md)."},
+  {"id": "G2", "status": "FAIL", "evidence": "Chapter III pipeline on Eq. 3: Algorithm 3 k* = 0 (k=1 mean fold accuracy 0.30); Algorithm 4 at k=2 holdout accuracy 0.45, weighted F1 0.531, AUC 0.611, not accepted. FIRI v2 on Eq. 3 k=2: 0.85 holdout but balanced 0.47, below persistence 0.90, development evidence."},
+  {"id": "G3", "status": "PASS", "evidence": "E99 fold audit (labels posted before the 15th-of-month issue date, targets <= origin, >= 8 training quarters); E97 FIRI parity checks."},
+  {"id": "G4", "status": "FAIL", "evidence": "Seals S-FIRI2 (2026-Q4, 2027-Q1) and S-E99 (2026-Q4) verified but PENDING: no 2026-Q4 SWS round or PSA 2026-Q4 food CPI published (prospective/status_20261022.json)."},
+  {"id": "G5", "status": "PASS", "evidence": "Six Chapter I comparators + prevalence + FIRI v2 + blend on identical folds and rows (E99 sections 4-5)."},
+  {"id": "G6", "status": "PASS (development branch only)", "evidence": "Price-pressure output reworded as a 0-1 score, not a calibrated probability; LGU method no longer says 'province probability'; API audit finds no '% chance'. Production still carries the old wording until authorized."},
+  {"id": "G7", "status": "PASS", "evidence": "E99 SHAP and single-source arms (NLP weakest; 4 of 5 triggers zero importance); E96/E97 ablations."},
+  {"id": "G8", "status": "PASS", "evidence": "test_every_lgu_joins_a_map_shape 142/142; Lucena substitute disclosed; served top 5 recorded for H4."},
+  {"id": "G9", "status": "FAIL", "evidence": "ISO/IEC 25010 0/50 eligible DA responses; H4 rankings 0; DOST-FNRI descriptive only (NNS 2019 regional figure does not exist). Objective 5 classified incomplete."},
+  {"id": "G10", "status": "PASS", "evidence": "backend 603 passed / 18 skipped / 0 failed; frontend vitest 75/75; vite build OK (backend_test_log.txt, frontend_test_log.txt). Software tests are not evidence of forecasting validity."},
+  {"id": "G11", "status": "PASS", "evidence": "release_candidate_manifest.json (SHA-256 of served artifacts, serving code and E99 inputs; files changed vs E98: thesis_system.py, lgu_audit.py)."},
+  {"id": "G12", "status": "PASS", "evidence": "Full E99 rerun identical; seal hash 5a9e24c8... reproduced; E97 reproduction (E98)."}
+ ],
+ "failed": ["G1", "G2", "G4", "G9"],
+ "deploy": false,
+ "production": "unchanged: final-system-v2 at 053a95d on origin; no merge; no Render/Vercel deployment"
+}

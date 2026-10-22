@@ -55,8 +55,13 @@ def test_reproduction_and_version_identity(repro):
     r = repro["R"]
     assert r["firi"]["identical_excluding_stamp"] and r["obj4"]["identical_excluding_stamp"]
     assert r["version_identity"] and r["changed_since_e97"] == []
+    # E99: checked against the E98 commit's blobs (later branches change serving files on purpose; E99 keeps its own
+    # manifest). The blob is normalised to the working-copy line endings the hash was taken on.
+    import subprocess
     for p, h in r["served_artifacts"].items():
-        assert hashlib.sha256(Path(p).read_bytes()).hexdigest() == h, p
+        blob = subprocess.run(["git", "show", f"a42de8c:backend/{p}"], capture_output=True, check=True).stdout
+        cands = {hashlib.sha256(blob).hexdigest(), hashlib.sha256(blob.replace(b"\n", b"\r\n")).hexdigest()}
+        assert h in cands, p
 
 
 def test_psa_diagnostic(repro):

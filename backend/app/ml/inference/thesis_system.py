@@ -299,7 +299,8 @@ def index_rows(rows: list[dict], quarter: str) -> list[dict]:
                     "confidence_statement": (f"{r['province_name']}, {quarter}: estimated food-insecurity risk index "
                                              f"{fmt_index(fr['firi'])} ({fr['class']}; {what} issued {r.get('origin')}), from "
                                              f"{fr['domainsAvailable']} of 6 indicator domains. The LightGBM "
-                                             f"food-price-pressure forecast is {r['risk_probability']:.0%}.")})
+                                             f"food-price-pressure score is {r['risk_probability']:.2f} (0-1; not a "
+                                             f"calibrated probability).")})
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
     return out
 
@@ -435,7 +436,7 @@ def group_status(rec: dict, quarter: str, code: str | None, key: str, pct: int) 
     return "contributes" if pct > 0 else "no_effect"
 
 
-_FMT = {"A1": lambda x: f"{x:.0%} chance of food-price pressure", "A2": lambda x: f"{x:+.1f} points vs the province's usual level",
+_FMT = {"A1": lambda x: f"food-price-pressure score {x:.2f} (0-1, not a calibrated probability)", "A2": lambda x: f"{x:+.1f} points vs the province's usual level",
         "A3": lambda x: f"{x:+.1f}% year on year", "C1": lambda x: "in force" if x >= 0.5 else "not in force",
         "C2": lambda x: f"{x:.0f} in the quarter", "C3": lambda x: f"production {-x:+.1f}% year on year (the lower of palay and corn)",
         "C4": lambda x: f"production {-x:+.1f}% year on year", "E1": lambda x: f"unemployment rate {x:+.2f} points year on year",
@@ -497,9 +498,10 @@ def _plain_fact(k: str, x: float, s: float, t: int, target: str) -> str | None:
     rice, production, unemployment and remittances quarter t-1 against t-5. No index scores, no model terms."""
     p, p0 = _ql(t - 1), _ql(t - 5)
     if k == "A1":
-        pct = f"{x:.0%}"
-        return (f"The price model gives {_an(pct)} {pct} chance that food prices in {_ql(qi(target))} rise faster than "
-                f"usual in this province.")
+        # E99 (G6): the price model's output has no demonstrated probability calibration, so it is a score, not a chance
+        return (f"The price model rates food-price pressure for {_ql(qi(target))} at {x:.2f} on a 0-1 scale (higher "
+                f"means food prices are more likely to rise faster than usual in this province; a rating, not a "
+                f"calibrated probability).")
     if k == "A2":
         return (f"Overall prices in {_FIRST_TWO[t % 4]} {t // 4} rose {abs(x):.1f} points "
                 f"{'faster' if x >= 0 else 'slower'} than this province's usual rate.")

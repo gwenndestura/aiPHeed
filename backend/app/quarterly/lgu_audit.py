@@ -180,8 +180,11 @@ def build_ranking(vuln: pd.DataFrame, roster: pd.DataFrame, province_probability
     blob = json.dumps(rows, sort_keys=True).encode()
     return {"meaning": MEANING, "does_not_mean": DOES_NOT_MEAN, "provenance": PROVENANCE,
             "method": "vulnerability = 0.6 x poverty_norm + 0.4 x density_norm (min-max within province); "
-                      "risk_index = province probability x vulnerability, clamp [0,1], 4 dp; competition ranks, "
+                      # E99: "province estimate", not "probability": in thesis mode the province score is the FIRI
+                      # index, which is not a probability
+                      "risk_index = province estimate (the served province score) x vulnerability, clamp [0,1], 4 dp; "
+                      "competition ranks, "
                       + ("ranked on the unrounded index (E66), " if exact_ranks else "")
-                      + "ties by PSGC; null probability -> null risk and ranks",
+                      + "ties by PSGC; null estimate -> null risk and ranks",
             "probability_source": probability_source, "input_checks": checks, "within_province_drivers": drivers,
             "rows": rows, "rows_sha256": hashlib.sha256(blob).hexdigest()}

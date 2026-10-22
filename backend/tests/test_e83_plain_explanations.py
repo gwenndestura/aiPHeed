@@ -74,7 +74,8 @@ def test_factor_card_sentences_state_the_model_inputs(rec):
             for k in observed:
                 x = float(res["indicators"][k]["x"])
                 if k == "A1":
-                    assert f"{x:.0%}" in text or k not in observed[:2]
+                    # E99 (G6): the price model's output is stated on its 0-1 scale, never as a "% chance"
+                    assert (f"{x:.2f}" in text and "% chance" not in text) or k not in observed[:2]
                 elif k in ("A3", "C3", "C4", "E2") and k in sorted(observed, key=lambda kk: -abs(T.pushes(res).get(kk, 0)))[:2]:
                     assert any(abs(n - abs(x)) < 0.6 for n in nums), (code, key, k, x, text)
 
