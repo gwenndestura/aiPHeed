@@ -230,8 +230,13 @@ def calib_bins(P, arm, edges=(0, 0.2, 0.4, 0.6, 0.8, 1.0001)):
 
 
 def evaluate_k(P, arms):
-    R.PRIMARY[:] = arms
-    res, tests = R.evaluate(P)
+    # run_e83.evaluate scores columns by prefix; give the U- arms a recognised prefix and map the results back (D2)
+    ren = {a: "HYB-" + a for a in arms if a.startswith("U-")}
+    R.PRIMARY[:] = [ren.get(a, a) for a in arms]
+    res, tests = R.evaluate(P.rename(columns=ren))
+    back = {v: k for k, v in ren.items()}
+    res = {back.get(a, a): v for a, v in res.items()}
+    tests = {" vs ".join(back.get(s, s) for s in n.split(" vs ")): v for n, v in tests.items()}
     out = {}
     for a in arms:
         m = res[a]["all_rows_unissued_wrong"]
