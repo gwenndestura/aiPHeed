@@ -286,7 +286,9 @@ def forecast_target() -> dict:
     """The dashboard's dynamic forecast target (app/quarterly/target.py; Asia/Manila; next calendar quarter)."""
     from app.quarterly.target import forecast_target as _ft
 
-    return _ft()
+    t = _ft()
+    st = E41L2.forecast_target_status() if THESIS.active() else None
+    return {**t, "issuedForecast": st} if st else t
 
 
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:

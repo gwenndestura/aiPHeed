@@ -1,0 +1,321 @@
+{
+ "stamp": "20261022T081328Z",
+ "protocol_sha256": "dfda2052a189a8918d3437640c7441e8cfae5c9b0da5507aa338a4fbb7206782",
+ "weights_status": "approved heuristic weights (Chapter I / Backend Guide v3), not learned from data",
+ "audit": {
+  "rows": 142,
+  "unique_codes": 142,
+  "by_province": {
+   "Quezon": 41,
+   "Batangas": 34,
+   "Laguna": 30,
+   "Cavite": 23,
+   "Rizal": 14
+  },
+  "lgu_specific_poverty": 141,
+  "substituted": [
+   {
+    "lgu_code": "045624000",
+    "lgu_name": "Lucena",
+    "province": "Quezon",
+    "poverty_value_used": 16.8,
+    "poverty_source": "province value stored in the aiPHeed inputs (labelled PSA 2021 province poverty incidence; source workbook not in the repository, unverified), used because this highly urbanized city is excluded from the PSA no-HUC table"
+   }
+  ],
+  "missing_population_or_area": 0,
+  "map_features": 142,
+  "psgc_province_prefix_consistent": true,
+  "map_name_join_unmatched_in_input_table": [
+   "Batangas/City of Calaca",
+   "Batangas/City of Lipa",
+   "Batangas/City of Sto. Tomas",
+   "Batangas/City of Tanauan",
+   "Cavite/City of Bacoor",
+   "Cavite/City of Carmona",
+   "Cavite/City of Cavite",
+   "Cavite/City of Dasmari\u00f1as",
+   "Cavite/City of General Trias",
+   "Cavite/City of Imus",
+   "Cavite/City of Tagaytay",
+   "Cavite/City of Trece Martires",
+   "Laguna/City of Bi\u00f1an",
+   "Laguna/City of Cabuyao",
+   "Laguna/City of Calamba",
+   "Laguna/City of San Pablo",
+   "Laguna/City of San Pedro",
+   "Laguna/City of Santa Rosa",
+   "Quezon/City of Lucena",
+   "Quezon/City of Tayabas",
+   "Rizal/City of Antipolo"
+  ]
+ },
+ "dominance": {
+  "Batangas": {
+   "poverty_term_var_share": 0.6836379325930036,
+   "density_term_var_share": 0.31636206740699646,
+   "density_skew": 0.6348139106656098,
+   "poverty_density_spearman": 0.06462948815889992,
+   "n": 34
+  },
+  "Cavite": {
+   "poverty_term_var_share": 0.8035524619123244,
+   "density_term_var_share": 0.1964475380876755,
+   "density_skew": 1.5701038450579232,
+   "poverty_density_spearman": -0.4466403162055336,
+   "n": 23
+  },
+  "Laguna": {
+   "poverty_term_var_share": 0.4916800318842459,
+   "density_term_var_share": 0.5083199681157545,
+   "density_skew": 2.464359585105802,
+   "poverty_density_spearman": -0.5506117908787541,
+   "n": 30
+  },
+  "Quezon": {
+   "poverty_term_var_share": 0.8427893190238817,
+   "density_term_var_share": 0.15721068097611826,
+   "density_skew": 5.276212511931619,
+   "poverty_density_spearman": -0.05034843205574915,
+   "n": 41
+  },
+  "Rizal": {
+   "poverty_term_var_share": 0.689049171563635,
+   "density_term_var_share": 0.31095082843636496,
+   "density_skew": 1.1919707337938474,
+   "poverty_density_spearman": -0.04615384615384615,
+   "n": 14
+  }
+ },
+ "sensitivity": {
+  "w_0.5_0.5": {
+   "Batangas": {
+    "spearman_with_served": 0.9819709702062642,
+    "top3_overlap": 2,
+    "top5_overlap": 4,
+    "max_rank_shift": 6
+   },
+   "Cavite": {
+    "spearman_with_served": 0.9288537549407114,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 7
+   },
+   "Laguna": {
+    "spearman_with_served": 0.9661846496106785,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 7
+   },
+   "Quezon": {
+    "spearman_with_served": 0.9879790940766552,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 9
+   },
+   "Rizal": {
+    "spearman_with_served": 0.9208791208791209,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 5
+   }
+  },
+  "w_0.7_0.3": {
+   "Batangas": {
+    "spearman_with_served": 0.9859434682964094,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 4
+   },
+   "Cavite": {
+    "spearman_with_served": 0.9594861660079053,
+    "top3_overlap": 1,
+    "top5_overlap": 4,
+    "max_rank_shift": 5
+   },
+   "Laguna": {
+    "spearman_with_served": 0.9595105672969966,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 9
+   },
+   "Quezon": {
+    "spearman_with_served": 0.9975609756097562,
+    "top3_overlap": 2,
+    "top5_overlap": 5,
+    "max_rank_shift": 3
+   },
+   "Rizal": {
+    "spearman_with_served": 0.9648351648351648,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 2
+   }
+  },
+  "w_0.8_0.2": {
+   "Batangas": {
+    "spearman_with_served": 0.9208556149732621,
+    "top3_overlap": 3,
+    "top5_overlap": 3,
+    "max_rank_shift": 12
+   },
+   "Cavite": {
+    "spearman_with_served": 0.8685770750988143,
+    "top3_overlap": 1,
+    "top5_overlap": 4,
+    "max_rank_shift": 10
+   },
+   "Laguna": {
+    "spearman_with_served": 0.8238042269187986,
+    "top3_overlap": 2,
+    "top5_overlap": 4,
+    "max_rank_shift": 19
+   },
+   "Quezon": {
+    "spearman_with_served": 0.9770034843205577,
+    "top3_overlap": 2,
+    "top5_overlap": 4,
+    "max_rank_shift": 13
+   },
+   "Rizal": {
+    "spearman_with_served": 0.8989010989010989,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 4
+   }
+  },
+  "poverty_only": {
+   "Batangas": {
+    "spearman_with_served": 0.8230710466004584,
+    "top3_overlap": 2,
+    "top5_overlap": 3,
+    "max_rank_shift": 17
+   },
+   "Cavite": {
+    "spearman_with_served": 0.698616600790514,
+    "top3_overlap": 1,
+    "top5_overlap": 3,
+    "max_rank_shift": 17
+   },
+   "Laguna": {
+    "spearman_with_served": 0.385539488320356,
+    "top3_overlap": 1,
+    "top5_overlap": 2,
+    "max_rank_shift": 24
+   },
+   "Quezon": {
+    "spearman_with_served": 0.9057491289198607,
+    "top3_overlap": 2,
+    "top5_overlap": 4,
+    "max_rank_shift": 29
+   },
+   "Rizal": {
+    "spearman_with_served": 0.8637362637362638,
+    "top3_overlap": 3,
+    "top5_overlap": 4,
+    "max_rank_shift": 4
+   }
+  },
+  "density_only": {
+   "Batangas": {
+    "spearman_with_served": 0.5721925133689839,
+    "top3_overlap": 0,
+    "top5_overlap": 2,
+    "max_rank_shift": 18
+   },
+   "Cavite": {
+    "spearman_with_served": 0.1373517786561265,
+    "top3_overlap": 1,
+    "top5_overlap": 2,
+    "max_rank_shift": 18
+   },
+   "Laguna": {
+    "spearman_with_served": 0.3450500556173526,
+    "top3_overlap": 2,
+    "top5_overlap": 3,
+    "max_rank_shift": 19
+   },
+   "Quezon": {
+    "spearman_with_served": 0.1928571428571429,
+    "top3_overlap": 1,
+    "top5_overlap": 1,
+    "max_rank_shift": 33
+   },
+   "Rizal": {
+    "spearman_with_served": 0.3450549450549451,
+    "top3_overlap": 1,
+    "top5_overlap": 2,
+    "max_rank_shift": 9
+   }
+  },
+  "log_density": {
+   "Batangas": {
+    "spearman_with_served": 0.9825821237585942,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 6
+   },
+   "Cavite": {
+    "spearman_with_served": 0.8685770750988143,
+    "top3_overlap": 2,
+    "top5_overlap": 4,
+    "max_rank_shift": 9
+   },
+   "Laguna": {
+    "spearman_with_served": 0.8224694104560623,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 16
+   },
+   "Quezon": {
+    "spearman_with_served": 0.9524390243902442,
+    "top3_overlap": 2,
+    "top5_overlap": 3,
+    "max_rank_shift": 9
+   },
+   "Rizal": {
+    "spearman_with_served": 0.9692307692307693,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 2
+   }
+  },
+  "percentile_norm": {
+   "Batangas": {
+    "spearman_with_served": 0.982960215327692,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 6
+   },
+   "Cavite": {
+    "spearman_with_served": 0.8533994930516392,
+    "top3_overlap": 2,
+    "top5_overlap": 3,
+    "max_rank_shift": 11
+   },
+   "Laguna": {
+    "spearman_with_served": 0.7556199279666844,
+    "top3_overlap": 1,
+    "top5_overlap": 2,
+    "max_rank_shift": 18
+   },
+   "Quezon": {
+    "spearman_with_served": 0.8902152434471715,
+    "top3_overlap": 0,
+    "top5_overlap": 1,
+    "max_rank_shift": 16
+   },
+   "Rizal": {
+    "spearman_with_served": 0.9735706436468409,
+    "top3_overlap": 3,
+    "top5_overlap": 5,
+    "max_rank_shift": 2
+   }
+  },
+  "lucena_excluded": {
+   "Quezon": {
+    "spearman_with_served": 0.8472795497185742,
+    "max_rank_shift": 25
+   }
+  }
+ }
+}

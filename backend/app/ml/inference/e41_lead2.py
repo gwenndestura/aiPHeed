@@ -199,15 +199,41 @@ def governs() -> bool:
     """E46: True when a candidate is enabled AND its record is for the dashboard's current target quarter. Every quarter
     the dashboard shows then carries the candidate's own score of its own target event (as-of backtest, an earlier
     Lead-2 forecast, or the issued forecast), or nothing: never the v1 label probability of another model next to it
-    (the "observed about 0.98, forecast about 0.2" discrepancy)."""
+    (the "observed about 0.98, forecast about 0.2" discrepancy).
+
+    E97 (thesis mode): the record also governs while its target is the CURRENT calendar quarter, i.e. after the
+    calendar has advanced but before the next quarterly record is issued. Without this, every thesis output went blank
+    on the first day of the record's target quarter. The record is still served under its own target quarter (never
+    relabelled as the new target), and forecast_target_status() says that the new target has not been issued."""
     if not active():
         return False
     from app.quarterly.target import forecast_target
 
     try:
-        return record()["targetQuarter"] == forecast_target()["target_quarter"]
+        tq, ft = record()["targetQuarter"], forecast_target()
     except RecordError:
         return False
+    return tq == ft["target_quarter"] or (mode() == "thesis" and tq == ft["calendar_quarter"])
+
+
+def forecast_target_status() -> dict | None:
+    """E97: whether the served record is the forecast for the dashboard's dynamic target (None when no candidate)."""
+    if not active():
+        return None
+    from app.quarterly.target import forecast_target
+
+    ft = forecast_target()
+    try:
+        rec = record()
+    except RecordError:
+        return {"available": False, "issuedForecastTarget": None,
+                "statement": f"No issued forecast record is available for {ft['target_quarter']}."}
+    ok = rec["targetQuarter"] == ft["target_quarter"]
+    return {"available": ok, "issuedForecastTarget": rec["targetQuarter"], "issuedOn": rec.get("origin"),
+            "statement": (f"The {ft['target_quarter']} forecast is the one shown (issued {rec.get('origin')})." if ok else
+                          f"The {ft['target_quarter']} forecast has not been issued yet: it needs the quarterly run with "
+                          f"data published before {ft['origin']}. The latest issued forecast is for "
+                          f"{rec['targetQuarter']} (issued {rec.get('origin')}) and is shown under that quarter.")}
 
 
 def _origin_for_target(quarter: str) -> str:
