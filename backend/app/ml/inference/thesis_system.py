@@ -78,8 +78,12 @@ def validate() -> list[str]:
             f = FEATURES_DIR / f"features_{rec['targetQuarter'].replace('-', '')}.csv"
             if not f.exists():
                 probs.append(f"missing {f} (the model's inference features for the served target)")
-            if firi_for(rec, rec["targetQuarter"], next(iter(rec["provinces"]))) is None:
+            res0 = firi_for(rec, rec["targetQuarter"], next(iter(rec["provinces"])))
+            if res0 is None:
                 probs.append("FIRI not computable for the served target")
+            elif res0["firi"] is not None and abs(sum(shap_values(res0).values()) - (res0["firi"] - NEUTRAL)) > 1e-9:
+                # also loads SHAP at start-up, so the first dashboard request is not slowed by the import
+                probs.append("SHAP values of FIRI do not add up to the served index")
         except Exception as e:  # integrity / format
             probs.append(f"record: {e}")
         try:
@@ -346,6 +350,55 @@ def pushes(res: dict) -> dict[str, float]:
     return {k: w[d] * (res["indicators"][k]["score"] - NEUTRAL) / len(ks) for d, ks in _per_domain(res, w).items() for k in ks}
 
 
+def firi_value(res: dict, scores) -> "list[float]":
+    """The served FIRI aggregation as a function of the observed indicator scores (rows of `scores`, columns in
+    the order of `shap_keys(res)`): each domain is the mean of its observed indicators, and FIRI is the weighted sum
+    of the domains with the served weights. Used as the model that SHAP explains."""
+    import numpy as np
+    w = _norm_weights(res)
+    keys = shap_keys(res)
+    X = np.atleast_2d(np.asarray(scores, dtype=float))
+    out = np.zeros(X.shape[0])
+    for d, ks in _per_domain(res, w).items():
+        cols = [keys.index(k) for k in ks]
+        out += w[d] * X[:, cols].mean(axis=1)
+    return out
+
+
+def shap_keys(res: dict) -> list[str]:
+    w = _norm_weights(res)
+    return [k for ks in _per_domain(res, w).values() for k in ks]
+
+
+@functools.lru_cache(maxsize=256)
+def _shap_cached(sig: tuple) -> tuple:
+    """SHAP (exact Shapley values, shap.explainers.Exact) of FIRI for one province-quarter. The background is every
+    indicator at its historical middle (score 0.5), so a value is the indicator's push away from 0.5."""
+    import numpy as np
+    import shap
+    keys, scores, weights, domains = sig
+    res = {"indicators": {k: {"score": s, "domain": d} for k, s, d in zip(keys, scores, domains)},
+           "domains": {d: 1.0 for d in set(domains)}, "weights": dict(weights)}
+    f = lambda X: firi_value(res, X)  # noqa: E731
+    bg = np.full((1, len(keys)), NEUTRAL)
+    ex = shap.explainers.Exact(f, shap.maskers.Independent(bg, max_samples=1))
+    e = ex(np.asarray([scores], dtype=float))
+    return tuple(float(v) for v in e.values[0]), float(np.ravel(e.base_values)[0])
+
+
+def shap_values(res: dict) -> dict[str, float]:
+    """SHAP value of every observed FIRI indicator (they sum to FIRI - 0.5, the SHAP base value)."""
+    keys = shap_keys(res)
+    if not keys:
+        return {}
+    w = _norm_weights(res)
+    ind = res["indicators"]
+    sig = (tuple(keys), tuple(float(ind[k]["score"]) for k in keys),
+           tuple(sorted((d, float(v)) for d, v in w.items())), tuple(ind[k]["domain"] for k in keys))
+    vals, _ = _shap_cached(sig)
+    return dict(zip(keys, vals))
+
+
 def firi_drivers(rec: dict, quarter: str, code: str, base: dict) -> dict:
     """The five approved driver bars, explaining the served number (FIRI v2): each group's exact push away from the
     neutral 0.5 (raises or lowers). Vulnerability, regional hunger and news are not among the five groups: their share
@@ -353,7 +406,7 @@ def firi_drivers(rec: dict, quarter: str, code: str, base: dict) -> dict:
     res = firi_for(rec, quarter, code)
     if res is None or res["firi"] is None:
         return base
-    pu = pushes(res)
+    pu = shap_values(res)
     news = {d["driver_group"]: d.get("trigger_proportion") for d in base.get("drivers", [])}
     drivers = []
     for g, ks in FIVE_GROUPS.items():
@@ -417,7 +470,75 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
         else:
             parts.append(f"{i['label']}: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
-            "middle): " + "; ".join(parts) + ". The bar is this group's exact push on the index.")
+            "middle): " + "; ".join(parts) + ". The bar is this group's SHAP value (its push on the index).")
+
+
+def _an(pct: str) -> str:
+    return "an" if pct.startswith("8") or pct.split("%")[0] in ("11", "18") else "a"
+
+
+def _vs_usual(s: float, what: str) -> str:
+    """How the change compares with this indicator's own earlier values (its score is that percentile)."""
+    return f", a {'larger' if s > 0.5 else 'smaller'} {what} than usual"
+
+
+_MONTHS = ("Jan-Mar", "Apr-Jun", "Jul-Sep", "Oct-Dec")
+_FIRST_TWO = ("Jan-Feb", "Apr-May", "Jul-Aug", "Oct-Nov")
+
+
+def _ql(i: int) -> str:
+    return f"{_MONTHS[i % 4]} {i // 4}"
+
+
+def _plain_fact(k: str, x: float, s: float, t: int, target: str) -> str | None:
+    """One measured fact in everyday words: the period the model used, its value, the same period a year before, and
+    for changes how it compares with usual (which is what moves the index). Periods follow the feature definitions
+    for a forecast issued at the start of quarter t+1: CPI months 1-2 of quarter t, typhoons quarter t, wholesale
+    rice, production, unemployment and remittances quarter t-1 against t-5. No index scores, no model terms."""
+    p, p0 = _ql(t - 1), _ql(t - 5)
+    if k == "A1":
+        pct = f"{x:.0%}"
+        return (f"The price model gives {_an(pct)} {pct} chance that food prices in {_ql(qi(target))} rise faster than "
+                f"usual in this province.")
+    if k == "A2":
+        return (f"Overall prices in {_FIRST_TWO[t % 4]} {t // 4} rose {abs(x):.1f} points "
+                f"{'faster' if x >= 0 else 'slower'} than this province's usual rate.")
+    if k == "A3":
+        return (f"Wholesale rice in {p} was {abs(x):.0f}% {'higher' if x >= 0 else 'lower'} than in {p0}"
+                + (_vs_usual(s, "rise") if x > 0 else "") + ".")
+    if k == "C1":
+        return "A PAGASA El Nino advisory is in force." if x >= 0.5 else "No PAGASA El Nino advisory is in force."
+    if k == "C2":
+        n = int(round(x))
+        return f"{n} typhoon{'s' if n != 1 else ''} passed within 300 km in {_ql(t)}."
+    if k == "C3":
+        return (f"Rice or corn harvest in {p} was {x:.0f}% lower than in {p0}{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Rice and corn harvests in {p} were not lower than in {p0} (smallest change {-x:+.0f}%).")
+    if k == "C4":
+        return (f"Fish production in {p} was {x:.1f}% lower than in {p0}{_vs_usual(s, 'drop')}." if x > 0 else
+                f"Fish production in {p} was {abs(x):.1f}% higher than in {p0}.")
+    if k == "E1":
+        return (f"Unemployment in {p} was {abs(x):.1f} points {'higher' if x > 0 else 'lower'} than in {p0}"
+                + (_vs_usual(s, "rise") if x > 0 else "") + " (national figure).")
+    if k == "E2":
+        return (f"Money sent home by OFWs in {p} was {abs(x):.0f}% {'lower' if x > 0 else 'higher'} than in {p0}"
+                + (_vs_usual(s, "fall") if x > 0 else "") + " (national figure).")
+    return None
+
+
+def plain_evidence(rec: dict, quarter: str, code: str, key: str, n: int = 2) -> str | None:
+    """THESIS: the factor card's sentence with real values and their periods. The group's observed indicators, the
+    largest exact pushes first; missing values are left out (the card's status says so), never shown as zero."""
+    res = firi_for(rec, quarter, code)
+    if not res or key not in FIVE_GROUPS:
+        return None
+    pu = shap_values(res)
+    ind = res["indicators"]
+    seen = [k for k in FIVE_GROUPS[key] if ind[k]["score"] is not None and ind[k]["x"] is not None]
+    seen.sort(key=lambda k: -abs(pu.get(k, 0.0)))
+    t = qi(quarter) - 2                                   # Lead 2: origin quarter of this target
+    facts = [f for f in (_plain_fact(k, float(ind[k]["x"]), float(ind[k]["score"]), t, quarter) for k in seen[:n]) if f]
+    return " ".join(facts) if facts else None
 
 
 FIRI_METHOD = ("FIRI v2: six indicator domains (affordability, household vulnerability, climate and food production, "
@@ -456,6 +577,46 @@ def _why_missing(res: dict, d: str) -> str:
     return f"{FI.DOMAINS[d].lower()}: no value published by the issue date"
 
 
+# E83: plain-language reasons, one phrase per indicator and direction, used only when the indicator was observed at the
+# issue date and moved the index in that direction (its exact push). Measured facts, not causes.
+PLAIN_UP = {"A1": "food prices are expected to rise faster than usual", "A2": "overall prices are rising faster than usual",
+            "A3": "wholesale rice prices are higher than a year ago", "V1": "many households are poor or crowded",
+            "C1": "a PAGASA El Nino advisory is in force", "C2": "typhoons passed close to the province",
+            "C3": "rice or corn harvests fell compared with a year ago", "C4": "fish production fell compared with a year ago",
+            "E1": "national unemployment rose over the year", "E2": "money sent home by OFWs fell",
+            "N1": "news reports point to food-related stress", "H1": "regional hunger has stayed high in recent SWS surveys"}
+PLAIN_DOWN = {"A1": "food-price pressure is expected to stay low", "A2": "overall price increases are below the usual level",
+              "A3": "wholesale rice prices are not unusually high", "V1": "fewer households are poor than in other provinces",
+              "C1": "no El Nino advisory is in force", "C2": "few typhoons passed nearby",
+              "C3": "rice and corn harvests held up", "C4": "fish production held up",
+              "E1": "national unemployment did not rise much", "E2": "OFW remittances held up",
+              "N1": "news shows little food-related stress", "H1": "regional hunger is lower than usual"}
+
+
+def plain_reasons(res: dict, n_up: int = 3, n_down: int = 2) -> tuple[list[str], list[str]]:
+    """The indicators with the largest exact pushes up and down, in plain words (observed indicators only)."""
+    pu = shap_values(res)
+    up = [PLAIN_UP[k] for k, v in sorted(pu.items(), key=lambda kv: -kv[1]) if v > 0.005 and k in PLAIN_UP][:n_up]
+    down = [PLAIN_DOWN[k] for k, v in sorted(pu.items(), key=lambda kv: kv[1]) if v < -0.005 and k in PLAIN_DOWN][:n_down]
+    return up, down
+
+
+def _join(xs: list[str]) -> str:
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+def plain_headline(res: dict, name: str, quarter: str) -> str:
+    """ONE sentence (the approved panel shows only the first sentence): class, index, the main measured reasons and the
+    suggested DA IV-A use. The fixed lead is kept for the panel's sentence-case rule."""
+    up, down = plain_reasons(res)
+    high = res["class"] == "HIGH"
+    why = (f", mainly because {_join(up)}" if high and up else f", mainly because {_join(down)}" if not high and down else "")
+    act = (f"; keep {name} on the DA IV-A watch list and check food prices, rice supply and assistance needs in its "
+           f"highest-ranked towns" if high else "; no extra action is indicated, continue routine monitoring")
+    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (risk index {fmt_index(res['firi'])} on a "
+            f"0-1 scale; HIGH at 0.50){why}{act}.")
+
+
 def firi_text(res: dict, name: str, quarter: str) -> str:
     from app.ml.inference import firi as FI
     w = _norm_weights(res)
@@ -464,8 +625,14 @@ def firi_text(res: dict, name: str, quarter: str) -> str:
     up = [FI.DOMAINS[d] for d, v in order if v > NEUTRAL][:3]
     down = [FI.DOMAINS[d] for d, v in order[::-1] if v < NEUTRAL][:2]
     missing = [d for d, v in res["domains"].items() if v is None]
-    return (f"ESTIMATED FOOD-INSECURITY RISK for {name}, {quarter}: {res['class']} (risk index {fmt_index(res['firi'])} on a "
-            f"0-1 scale; HIGH at 0.50). Domain scores (0.5 = the historical middle): {'; '.join(parts)}."
+    pu, pd_ = plain_reasons(res)
+    # the headline already names the reasons on the side of the class; this sentence gives the other side
+    other = (f" What lowers it: {_join(pd_)}." if pd_ else "") if res["class"] == "HIGH" else         (f" What raises it: {_join(pu)}." if pu else "")
+    plain = (other
+             + " These are measured indicators published before the forecast was issued; they show where to look, "
+               "not proof that families are going hungry.")
+    return (plain_headline(res, name, quarter) + plain +
+            f" Technical detail: domain scores (0.5 = the historical middle): {'; '.join(parts)}."
             + (f" Raised mainly by {', '.join(up)}." if up else "")
             + (f" Lowered by {', '.join(down)}." if down else "")
             + (f" Not in the index: {'; '.join(_why_missing(res, d) for d in missing)}." if missing else "")

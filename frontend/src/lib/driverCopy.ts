@@ -93,13 +93,15 @@ export function isContributing(t: Pick<Trigger, "status" | "pct">): boolean {
  * section heading (pushing up / pulling down) already gives the direction, so
  * the title does not repeat it. The backend's evidence note is not shown.
  */
-export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct">): Copy {
+export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pct" | "plainEvidence">): Copy {
   const name = FRIENDLY_NAME[t.key] ?? t.key;
   if (!isContributing(t)) {
     const status: Exclude<TriggerStatus, "contributes"> =
       t.status && t.status !== "contributes" ? t.status : "no_effect";
     return NEUTRAL_COPY[status](name);
   }
+  // E87: when the backend sends the measured values behind the group, say them; otherwise the generic sentence
+  if (t.plainEvidence) return { title: name, description: t.plainEvidence };
   const sentence = PLAIN_SENTENCE[t.key];
   return {
     title: name,

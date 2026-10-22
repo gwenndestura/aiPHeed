@@ -84,3 +84,16 @@ describe("factor card copy: groups that did not move the forecast (E42/E47)", ()
     }
   });
 });
+
+describe("driverCopy with measured values (E87)", () => {
+  it("uses the backend's plain sentence with values when present, else the generic sentence", () => {
+    const withValues = driverCopy({ key: "market", direction: "increases_risk", status: "contributes", pct: 20,
+      plainEvidence: "Wholesale rice is 29% higher than a year earlier, a larger rise than usual." });
+    expect(withValues.description).toBe("Wholesale rice is 29% higher than a year earlier, a larger rise than usual.");
+    const generic = driverCopy({ key: "market", direction: "increases_risk", status: "contributes", pct: 20 });
+    expect(generic.description).toBe("Food prices were higher than usual.");
+    const missing = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "insufficient_data", pct: 0,
+      plainEvidence: "ignored" });
+    expect(missing.description).toBe("No published data were available when this forecast was issued; this is not a sign of low risk.");
+  });
+});

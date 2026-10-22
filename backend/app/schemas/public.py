@@ -304,6 +304,8 @@ class Trigger(BaseModel):
     statusNote: str | None = None
     # E44: the observed evidence behind a model-attributed trigger (province scope, candidate records only)
     evidenceNote: str | None = None
+    # E87: the factor card's plain sentence with the measured values behind the group (province scope)
+    plainEvidence: str | None = None
     color: str
     newsSignalProportion: float | None = None
 
