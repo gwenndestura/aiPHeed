@@ -250,6 +250,52 @@ B-PSA, B-NLP, M-LR-ALL, B-CLIM), `runner/run_e83.py` (`specs`, `evaluate`), `run
 
 ---
 
+## Cross-quarter generalization of Lead-1 accuracy (bears on Objectives 2 and 4)
+
+**Full analysis:** `LEAD1_GENERALIZATION_REPORT.md`.
+
+**Verification.**
+- The criteria were fixed in `GENERALIZATION_CRITERIA.md` (commit fbd29b7) before any quarter-level number was
+  computed.
+- The committed analysis (`runner/quarter_generalization.py`) was re-run on 2026-10-22 and reproduced its saved outputs
+  exactly.
+- An independent recomputation from `E84_Objective_Continuation/runs/20261021T093234Z/predictions_k1.csv` gave the same
+  counts.
+
+**Findings.**
+- **Unit of analysis.** The target quarter: 13 quarters, with 5 provinces sharing one regional hunger reading. The
+  effective sample is 13, not 65.
+- **Leakage.** No leakage was found:
+  - every row targets origin + 1;
+  - every training label quarter is at most t−1 and was published before the origin;
+  - all inputs are cut at the origin;
+  - preprocessing is fitted inside each origin.
+
+  Two design weaknesses are disclosed:
+  - the T43 percentile and gates were chosen on development quarters that overlap the evaluation;
+  - the 13 quarters were re-examined in E83–E88. S-SIM was pre-registered; the hybrid and ensemble arms are post-hoc.
+- **S-SIM (the 84.6%):**
+  - early 2023–24: 0.85; late 2025–26: 0.84;
+  - at least 3 of 5 provinces correct in 12 of 13 quarters; it fails 2023-Q4 (2/5), missing the hunger surge;
+  - quarter-block 95% CI [0.738, 0.938];
+  - quarter by quarter against persistence: 4 wins, 3 losses, 6 ties (sign test p = 0.50);
+  - on changing-risk rows: 13/18 correct, against persistence 0/18 by construction;
+  - 7 of 13 quarters contain no HIGH row.
+- **LightGBM (30 rows):** quarter-block CI [0.733, 0.967]; 3 wins, 1 loss and 2 ties against persistence over 6
+  quarters (p = 0.31).
+
+**Verdict (pre-set rules): Partially generalized.**
+- Accuracy is stable across periods.
+- It is **not** shown to beat naive persistence quarter by quarter.
+- The stability is on the proxy target (hunger-gated food-price pressure), not on independently measured provincial
+  food insecurity.
+
+**Effect on the statuses above.** It confirms Objective 2 and Objective 4 as **Partially Achieved**:
+- Objective 2: aggregate accuracy is stable, but reliability over persistence is not established.
+- Objective 4: the advantage over persistence is not significant at the quarter level either.
+
+---
+
 ## Overall assessment of Objectives 1–4 for Lead 1
 
 | Objective | Status | What is demonstrated | What remains unproven |
