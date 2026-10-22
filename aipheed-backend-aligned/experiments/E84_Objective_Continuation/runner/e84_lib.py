@@ -100,11 +100,11 @@ def rice_beta(sub: pd.DataFrame, W: dict, m0: int, wphp: pd.Series) -> tuple[flo
 
 
 def simulate_comp(d_cut, sub, W, wc, fx, t: int, k: int, passthrough: bool = True, n: int = 20000,
-                  seed: int = 84) -> dict:
+                  seed: int = 84, min_h: int = 5) -> dict:
     th = L.e40_spec()
     rng = np.random.default_rng(seed + 10 * t + k)
     hq = L.h_quarters(d_cut).sort_values("q")
-    if len(hq) < 5:
+    if len(hq) < min_h:                                  # E89 COV uses min_h = 3; the E84 default stays 5
         return {}
     qq, hh = hq["q"].to_numpy(), hq["H"].to_numpy()
     sig = float(np.sqrt(np.mean((np.diff(hh) / np.sqrt(np.diff(qq))) ** 2)))
