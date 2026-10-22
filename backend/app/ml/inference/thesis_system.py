@@ -27,6 +27,7 @@ import functools
 import json
 import math
 import os
+import re
 from datetime import date
 from pathlib import Path
 
@@ -67,6 +68,17 @@ def relabel(text: str | None) -> str | None:
         return text
     return (text.replace("estimated probability of HIGH food-insecurity risk", "exploratory food-price-pressure score")
             .replace("probability of HIGH food-insecurity risk", "exploratory food-price-pressure score"))
+
+
+_PCT_SCORE = re.compile(r"(food-price pressure|HIGH-risk probability|HIGH-risk score)\s+(\d{1,3})%")
+
+
+def score_text(text: str | None) -> str | None:
+    """E99: stored record texts print the price model's outputs as percentages ('food-price pressure 4%, HIGH-risk
+    probability 4%'); their calibration is not demonstrated (E98 G6), so they are shown as 0-1 scores."""
+    if not text:
+        return text
+    return _PCT_SCORE.sub(lambda m: f"{m.group(1).replace('probability', 'score')} {int(m.group(2)) / 100:.2f}", text)
 
 
 def validate() -> list[str]:
@@ -299,7 +311,8 @@ def index_rows(rows: list[dict], quarter: str) -> list[dict]:
                     "confidence_statement": (f"{r['province_name']}, {quarter}: estimated food-insecurity risk index "
                                              f"{fmt_index(fr['firi'])} ({fr['class']}; {what} issued {r.get('origin')}), from "
                                              f"{fr['domainsAvailable']} of 6 indicator domains. The LightGBM "
-                                             f"food-price-pressure forecast is {r['risk_probability']:.0%}.")})
+                                             f"food-price-pressure score is {r['risk_probability']:.2f} (0-1; not a "
+                                             f"calibrated probability).")})
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
     return out
 
@@ -435,7 +448,7 @@ def group_status(rec: dict, quarter: str, code: str | None, key: str, pct: int) 
     return "contributes" if pct > 0 else "no_effect"
 
 
-_FMT = {"A1": lambda x: f"{x:.0%} chance of food-price pressure", "A2": lambda x: f"{x:+.1f} points vs the province's usual level",
+_FMT = {"A1": lambda x: f"food-price-pressure score {x:.2f} (0-1, not a calibrated probability)","A2": lambda x: f"{x:+.1f} points vs the province's usual level",
         "A3": lambda x: f"{x:+.1f}% year on year", "C1": lambda x: "in force" if x >= 0.5 else "not in force",
         "C2": lambda x: f"{x:.0f} in the quarter", "C3": lambda x: f"production {-x:+.1f}% year on year (the lower of palay and corn)",
         "C4": lambda x: f"production {-x:+.1f}% year on year", "E1": lambda x: f"unemployment rate {x:+.2f} points year on year",
@@ -473,10 +486,6 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
             "middle): " + "; ".join(parts) + ". The bar is this group's SHAP value (its push on the index).")
 
 
-def _an(pct: str) -> str:
-    return "an" if pct.startswith("8") or pct.split("%")[0] in ("11", "18") else "a"
-
-
 def _vs_usual(s: float, what: str) -> str:
     """How the change compares with this indicator's own earlier values (its score is that percentile)."""
     return f", a {'larger' if s > 0.5 else 'smaller'} {what} than usual"
@@ -497,9 +506,9 @@ def _plain_fact(k: str, x: float, s: float, t: int, target: str) -> str | None:
     rice, production, unemployment and remittances quarter t-1 against t-5. No index scores, no model terms."""
     p, p0 = _ql(t - 1), _ql(t - 5)
     if k == "A1":
-        pct = f"{x:.0%}"
-        return (f"The price model gives {_an(pct)} {pct} chance that food prices in {_ql(qi(target))} rise faster than "
-                f"usual in this province.")
+        # E99: the price model's output is a rating whose calibration is not demonstrated (E98 G6), not a chance
+        return (f"The price model rates the pressure of food prices in {_ql(qi(target))} rising faster than usual in "
+                f"this province at {x:.2f} on a 0-1 scale (a rating, not a calibrated probability).")
     if k == "A2":
         return (f"Overall prices in {_FIRST_TWO[t % 4]} {t // 4} rose {abs(x):.1f} points "
                 f"{'faster' if x >= 0 else 'slower'} than this province's usual rate.")
@@ -854,8 +863,6 @@ def performance_tables(perf: dict | None = None) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------ summary text
-def _pct(x):
-    return f"{x:.0%}"
 
 
 def for_summary(rec: dict, quarter: str, code: str | None, kind: str, result: str, cfsw: dict | None,
@@ -907,8 +914,9 @@ def for_summary(rec: dict, quarter: str, code: str | None, kind: str, result: st
     if rh["status"] == "OK":
         parts.append(f"REGIONAL HUNGER (SWS, Balance Luzon; no provincial figure exists): latest {rh['latestReading']:.1f}% "
                      f"({rh['latestReadingQuarter']}); outlook about {rh['expectedHunger']:.1f}% (80% range "
-                     f"{rh['interval80'][0]:.1f}-{rh['interval80'][1]:.1f}%), {_pct(rh['probabilityAbove11_3'])} chance above "
-                     "11.3%. No tested method has forecast hunger two quarters ahead better than the latest reading.")
+                     f"{rh['interval80'][0]:.1f}-{rh['interval80'][1]:.1f}%), outlook score "
+                     f"{rh['probabilityAbove11_3']:.2f} for hunger above 11.3% (0-1, from the latest reading and its own "
+                     "past errors; not a calibrated probability). No tested method has forecast hunger two quarters ahead better than the latest reading.")
     if code and o and o.get("components", {}).get("climateHazard") is not None:
         c = o["components"]
         palay = "n/a" if c["palayYoY"] is None else format(c["palayYoY"], "+.1f") + "%"

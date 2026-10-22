@@ -1222,25 +1222,27 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     def verb(t: dict) -> str:
         return "raised" if t["direction"] == "increases_risk" else "lowered"
 
+    what = "score 0-1, not a calibrated probability" if THESIS.active() else "probability"
     if kind == "forecast":
-        head = f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} ({p:.0%} probability)"
+        head = f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} ({_pp(p)} {what})"
     elif kind == "earlier_forecast":
-        head = (f"The earlier Lead-2 forecast of {event} in {name} for {quarter} was {result} ({p:.0%} probability; "
+        head = (f"The earlier Lead-2 forecast of {event} in {name} for {quarter} was {result} ({_pp(p)} {what}; "
                 f"outcome not yet published)")
     else:
-        head = (f"The backtest estimate of {event} in {name} for {quarter} was {result} ({p:.0%} probability"
+        head = (f"The backtest estimate of {event} in {name} for {quarter} was {result} ({_pp(p)} {what}"
                 + (f"; observed {obs})" if obs else ")"))
     comp = _forecast_components(province_code, quarter) if kind == "forecast" else None
     if comp:
         # E61: the two parts are not independent, so their product is a score, not a tested probability (same value)
-        head = (f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} (model score {p:.0%}: the "
-                f"two parts that follow, multiplied together; not a tested probability)")
+        head = (f"{event[0].upper()}{event[1:]} in {name} for {quarter} is forecast {result} (model score {_pp(p)}"
+                f"{' on a 0-1 scale' if THESIS.active() else ''}: the two parts that follow, multiplied together; not a "
+                f"tested probability)")
     if reasons:
         parts = [f"{t['label']} {verb(t)} it" for t in reasons]
         why = parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]
         if comp:
             # E61: say which of the two required conditions makes the estimate low or high before naming factors
-            sentence = ((f"{head}: the model's own hunger part gives {comp['hunger']:.0%} for regional hunger above "
+            sentence = ((f"{head}: the model's own hunger part gives {_pp(comp['hunger'])} for regional hunger above "
                          f"11.3% (the risk index uses the separate regional hunger outlook) and provincial food-price "
                          f"pressure is {_likely(comp['price'])} ({comp['price_text']}); the target needs both.")
                         if THESIS.active() else
@@ -1261,9 +1263,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         if comp:                                         # same wording rule as the head (record text kept as stored)
             text = text.replace("HIGH-risk probability", "HIGH-risk score")
         if THESIS.active():                              # the E58 rule watches the price score, not FIRI
-            text = (text.replace("No early warning:", "No price-score early warning:")
-                        .replace("Early warning ", "Price-score early warning ")
-                        .replace("HIGH-risk probability", "price-score HIGH-risk probability"))
+            text = THESIS.score_text(text.replace("No early warning:", "No price-score early warning:")
+                                     .replace("Early warning ", "Price-score early warning ")
+                                     .replace("HIGH-risk probability", "price-score HIGH-risk probability"))
         sentence = f"{sentence} {text}"
     elif warnings:
         active = [w for w in warnings if w["warn"]]
@@ -1314,7 +1316,8 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         "reasons": [{"key": t["key"], "label": t["label"], "direction": t["direction"], "pct": t["pct"],
                      "evidence": t.get("evidenceNote")} for t in reasons],
         "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),
-        **({"earlyWarning": warnings} if warnings else {}),
+        **({"earlyWarning": ([{**w, "text": THESIS.score_text(w.get("text"))} for w in warnings]
+                             if THESIS.active() else warnings)} if warnings else {}),
         **({"components": {"probabilityHungerElevated": round(comp["hunger"], 4),
                            "probabilityPricePressure": round(comp["price"], 4),
                            "combination": "product of the two parts (an approximation: the two conditions are not "
@@ -1413,6 +1416,12 @@ def _climate_watch(quarter: str, province_code: str | None) -> dict | None:
 E61_LOW_PRICE_BACKTEST = {"n": 11, "high": 3, "cutoff": 0.2}
 
 
+def _pp(p: float) -> str:
+    """E99 (E98 G6): in thesis mode the price model's outputs are 0-1 scores, since their calibration is not
+    demonstrated; the other modes keep their stored percentage wording."""
+    return f"{p:.2f}" if THESIS.active() else f"{p:.0%}"
+
+
 def _likely(p: float) -> str:
     return "likely" if p >= 0.5 else "unlikely"
 
@@ -1429,12 +1438,12 @@ def _forecast_components(province_code: str | None, quarter: str) -> dict | None
     if province_code:
         c = comps[province_code]
         return {"hunger": c["probabilityHungerElevated"], "price": c["probabilityPricePressure"],
-                "price_text": f"{c['probabilityPricePressure']:.0%}", "entry": provs[province_code]}
+                "price_text": _pp(c["probabilityPricePressure"]), "entry": provs[province_code]}
     prices = [c["probabilityPricePressure"] for c in comps.values()]
     lo, hi = min(prices), max(prices)
     return {"hunger": sum(c["probabilityHungerElevated"] for c in comps.values()) / len(comps),
             "price": sum(prices) / len(prices),
-            "price_text": f"{lo:.0%} to {hi:.0%} across the five provinces" if round(lo, 2) != round(hi, 2) else f"{lo:.0%}",
+            "price_text": f"{_pp(lo)} to {_pp(hi)} across the five provinces" if round(lo, 2) != round(hi, 2) else _pp(lo),
             "entry": None}
 
 
@@ -1479,9 +1488,9 @@ def _forecast_caveat(province_code: str | None, comp: dict, shown: list[dict], p
     # E64: a record may carry its own back-test count for low price-part values (the served candidate's, not E56's)
     b = (E41L2.record().get("assessment") or {}).get("lowPriceBacktest") or E61_LOW_PRICE_BACKTEST
     if comp["price"] < b["cutoff"]:
-        out.append(f"In back-tests, {b['high']} of {b['n']} price-pressure probabilities below "
-                   f"{b['cutoff']:.0%} were followed by HIGH, so a low value can miss emerging stress; treat it "
-                   f"as uncertain.")
+        out.append(f"In back-tests, {b['high']} of {b['n']} price-pressure "
+                   f"{'scores' if THESIS.active() else 'probabilities'} below {_pp(b['cutoff'])} were followed by HIGH, "
+                   f"so a low value can miss emerging stress; treat it as uncertain.")
     out.append("This is an experimental forecast of a food-stress risk indicator (SWS regional hunger and PSA "
                "food prices), not a measure of household food insecurity.")
     return " ".join(out)
