@@ -63,3 +63,19 @@ same model.
 3. HIGH recall at least as high.
 
 **Disclosure.** All 13 target quarters were scored in earlier experiments; only the sealed quarters are unseen.
+
+## A1. Amendment before any result (2026-10-22, user requirement)
+
+The first run crashed before printing any metric: the E89 run has no Lead-3 file. Before re-running, the user stated
+that news is a required input.
+
+**News as a required input.** The ten news-pipeline indicators (`N3_COLS`) are added to every LightGBM part of every
+selectable arm. In the hunger part they enter as regional means.
+- Coverage share and the market, climate, fish-kill, employment and national news signals.
+- The source count and FSSI-v3. FSSI is missing at about 45% of origins and is median-imputed in training.
+
+**News ablation.** The same three arms without news (suffix `-NONEWS`) are reported only to measure what news
+contributes. They are never selected.
+
+**Crash fix.** The Lead-3 HYB-GBA-SIM comparison is rebuilt from the E84 Lead-3 predictions with the E83 definition
+(NA-GB, else S-SIM). At Leads 1 and 2 this is identical to the E89 column.
