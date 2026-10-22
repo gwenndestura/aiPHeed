@@ -233,7 +233,7 @@ def evaluate_k(P, arms):
     # an arm that issues no row at this horizon (structural core at K = 4) is recorded as unissued, all rows wrong (D3)
     none = [a for a in arms if P[a].notna().sum() == 0]
     arms = [a for a in arms if a not in none]
-    out, base = _evaluate_k(P, arms)
+    out, base = _evaluate_k(P.drop(columns=none), arms)
     for a in none:
         m = R.score(P, a)
         out[a] = {"metrics": m, "pass": {"acc_gt_75": False, "bal_beats_baselines": False, "brier_beats_sig": False,
