@@ -1,0 +1,133 @@
+{
+ "stamp": "20261022T084328Z",
+ "protocol_sha256": "5f07f879402c874128b88b361ff70f9e93c029a4d21db9457119660fdd7e18f2",
+ "P": {
+  "eligible_quarters": [
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "ineligible_quarters": [
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3"
+  ],
+  "per_quarter": [
+   {
+    "target_q": "2024-Q4",
+    "rows": 5,
+    "HIGH": 3,
+    "acc_PSA": 0.6,
+    "acc_LGBM": 0.8,
+    "brier_PSA": 0.3229,
+    "brier_LGBM": 0.1633,
+    "mean_ph_hunger_part": 0.9996,
+    "mean_pp_price_part": 0.5676,
+    "acc_gap_PSA_minus_LGBM": -0.2
+   },
+   {
+    "target_q": "2025-Q1",
+    "rows": 5,
+    "HIGH": 4,
+    "acc_PSA": 0.8,
+    "acc_LGBM": 1.0,
+    "brier_PSA": 0.1246,
+    "brier_LGBM": 0.1118,
+    "mean_ph_hunger_part": 0.9945,
+    "mean_pp_price_part": 0.6966,
+    "acc_gap_PSA_minus_LGBM": -0.2
+   },
+   {
+    "target_q": "2025-Q4",
+    "rows": 5,
+    "HIGH": 0,
+    "acc_PSA": 1.0,
+    "acc_LGBM": 0.4,
+    "brier_PSA": 0.0475,
+    "brier_LGBM": 0.4045,
+    "mean_ph_hunger_part": 0.9991,
+    "mean_pp_price_part": 0.5972,
+    "acc_gap_PSA_minus_LGBM": 0.6
+   },
+   {
+    "target_q": "2026-Q1",
+    "rows": 5,
+    "HIGH": 0,
+    "acc_PSA": 1.0,
+    "acc_LGBM": 1.0,
+    "brier_PSA": 0.0026,
+    "brier_LGBM": 0.0479,
+    "mean_ph_hunger_part": 0.9975,
+    "mean_pp_price_part": 0.2148,
+    "acc_gap_PSA_minus_LGBM": 0.0
+   },
+   {
+    "target_q": "2026-Q2",
+    "rows": 5,
+    "HIGH": 1,
+    "acc_PSA": 0.8,
+    "acc_LGBM": 0.6,
+    "brier_PSA": 0.1317,
+    "brier_LGBM": 0.1344,
+    "mean_ph_hunger_part": 0.8001,
+    "mean_pp_price_part": 0.341,
+    "acc_gap_PSA_minus_LGBM": 0.2
+   },
+   {
+    "target_q": "2026-Q3",
+    "rows": 5,
+    "HIGH": 0,
+    "acc_PSA": 1.0,
+    "acc_LGBM": 0.8,
+    "brier_PSA": 0.0004,
+    "brier_LGBM": 0.1434,
+    "mean_ph_hunger_part": 1.0,
+    "mean_pp_price_part": 0.3313,
+    "acc_gap_PSA_minus_LGBM": 0.2
+   }
+  ],
+  "gap_quarters": [
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "reading": "PSA-only is a logistic regression on the price drivers, trained on the T43 label directly. It needs complete price-driver history, so it issues only the later quarters. The LightGBM framework multiplies a hunger part by a price part; where T43 equals price pressure (every evaluated row), the hunger factor can only shrink the probability."
+ },
+ "R": {
+  "firi": {
+   "fresh_run": "20261022T084204Z",
+   "identical_excluding_stamp": true
+  },
+  "obj4": {
+   "fresh_run": "20261022T084216Z_objective4",
+   "identical_excluding_stamp": true
+  },
+  "served_artifacts": {
+   "data/thesis/firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+   "data/thesis/firi2_evaluation.json": "c92dfe8ab327c0ef47060af81f79898edb7650a174f1e540838fda985dc8c0bd",
+   "data/thesis/firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189",
+   "data/thesis/firi_anchors.json": "705b54b3a3932fe4d8f41ee0de8e1b34984185cf05d73f86a39922992f233af0",
+   "data/thesis/final_evaluation.json": "3b3326e68eb6e2451628a532f66cbd3c2eebd048877a9031ae61dec9b792fe36",
+   "data/e58/e58_record.json": "6705804d20dc768536caf651518facb9b0d6bd5584e15c5292c96d815cd397ce",
+   "data/inputs/sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+   "data/inputs/lgu_vulnerability.csv": "82f21a9f08c0e9073303ad93e8e6460a5b575092245f07862715e88dce6b59a1",
+   "app/ml/inference/thesis_system.py": "f0f787bfbb9985b6a1fc1bc05d6ee5f911988f1ef794ddb4d84578e972ec388a",
+   "app/ml/inference/firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+   "app/ml/inference/e41_lead2.py": "100bc3090ae4d88152b0e5270613e17526be48544a21f1e028c188156e7b1ce9",
+   "app/services/dashboard.py": "a6c0272773dc941a4d005e36139502e2e5159ad47c022c2b5f4447418cefc516",
+   "app/quarterly/target.py": "e5af71f8ebccaf45e20f875a52984a081325d526d41958e03e61eed1f5c675e2",
+   "app/quarterly/lgu_poverty.py": "af3178deb12023af766432fac0d3f10d162ab0a800943f9e3485b540c26fe9c5"
+  },
+  "changed_since_e97": [],
+  "version_identity": true
+ }
+}
