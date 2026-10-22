@@ -57,6 +57,8 @@ def run(d, Ps, T) -> dict:
         htr = B.hunger_rows(T, d, t, hc)
         for k in KS:
             m = out[k]["t"] == t
+            if not m.any():                                   # D1: origin without rows at this K
+                continue
             te = T[k][T[k]["t"] == t].set_index("province_code").loc[L.PROVS].reset_index().assign(k=k)
             te_row = te[[c for c in hc if c != "k"]].mean().to_frame().T.assign(k=k)
             ph, _, _ = B.hunger_lin(htr, te_row, hc, d, t, k, recency=False)
