@@ -1,0 +1,63 @@
+0029bca39e0f7028f2a893d3eb14955fca725b27 Tue Oct 20 23:15:52 2026 +0800 E73 remediation: OCTA independent outcome, news-layer validation vs official records, LGU weighting robustness, sub-period stability, truthful explanation-method labels (API, UI headings, PDF), dimension on factor cards, opt-in province band, prospective register/scorer, FIES survey and expert-review toolkits
+
+ .../expert_review/EXPERT_REVIEW_FORM.csv           |  24 ++
+"""E73 WS2b (PROTOCOL section 2b): the OCTA Research Tugon ng Masa Balance Luzon involuntary-hunger series (O2), never used
+before in this project, as an independent outcome for the served FIRI v2 Lead-2 estimates, FIRI v2 without its
+regional-hunger domain, the latest SWS reading, the E56 price model and always-elevated. Run with cwd = backend.
+
+O2 rounds come only from inputs/provenance.csv (each value traced to its source text). Quarter = the quarter holding
+the majority of fieldwork days (DEVIATIONS 1); rounds in one quarter are averaged; a round known only as a later
+article's "from X" uses the month named there.
+"""
+import csv
+import json
+import math
+import os
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+os.environ.setdefault("AIPHEED_LEAD2_MODEL", "thesis")
+sys.path.insert(0, ".")
+HERE = Path(__file__).resolve().parent
+E73 = HERE.parent
+sys.path.insert(0, str(E73.parent / "E70_Objectives_Completion" / "runner"))
+import e70_metrics as MT  # noqa: E402
+from scipy.stats import spearmanr  # noqa: E402
+
+from app.ml.inference import dimensions as D  # noqa: E402
+from app.ml.inference import e41_lead2 as LEAD2  # noqa: E402
+from app.ml.inference import thesis_system as T  # noqa: E402
+
+np, pd = MT.np, MT.pd
+RNG = np.random.default_rng(73)
+# fieldwork -> quarter, fixed from the provenance text (majority of fieldwork days)
+ROUND_QUARTER = {"2023-09-30/2023-10-04": "2023-Q4", "2023-12-10/2023-12-14": "2023-Q4", "2024-03-11/2024-03-14": "2024-Q1",
+                 "2024-06 (previous round, June)": "2024-Q2", "2024-08-28/2024-09-02": "2024-Q3",
+                 "2024-11-10/2024-11-16": "2024-Q4", "2025-04-10/2025-04-16": "2025-Q2",
+                 "2026-03 (previous round, March)": "2026-Q1", "2026-07-04/2026-07-11": "2026-Q3"}
+DERIVED_SENSITIVITY = {"2025-Q3": 13.0}      # 2025-04 value 7 + "increased by six percentage points" (GMA 2025-08-12)
+
+
+def o2_series():
+    rounds = {}
+    for r in csv.DictReader((E73 / "inputs" / "provenance.csv").open(encoding="utf-8")):
+        fw = r["fieldwork"].split(" (previous round, November 2024")[0] if "November 2024" in r["fieldwork"] else r["fieldwork"]
+        if fw.startswith("2024-11-10/2024-11-16"):
+            fw = "2024-11-10/2024-11-16"
+        rounds[fw] = float(r["value"])          # a round confirmed twice keeps one value (they agree)
+    q = defaultdict(list)
+    for fw, v in rounds.items():
+        q[ROUND_QUARTER[fw]].append(v)
+    series = {k: sum(v) / len(v) for k, v in sorted(q.items())}
+    order = sorted(rounds, key=lambda fw: fw[:10])
+    early = [rounds[fw] for fw in order if fw[:4] <= "2023"]
+    base = early if len(early) >= 3 else [rounds[fw] for fw in order[:4]]
+    return series, rounds, float(np.median(base)), ("2021-2023 rounds" if len(early) >= 3 else "first 4 rounds")
+
+
+def boot_rho(a, b, B=4000):
+    a, b = np.asarray(a, float), np.asarray(b, float)
+    out = []
+    for _ in range(B):
+        i = RNG.integers(0, len(a), len(a))
