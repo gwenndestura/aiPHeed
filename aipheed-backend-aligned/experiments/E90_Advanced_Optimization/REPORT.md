@@ -177,7 +177,27 @@ the quarter's PSA provincial CPI. Dates below are expected from the usual releas
 | 2027-Q1 | SWS Q1 2027 survey; PSA CPI through March 2027 | about May 2027 |
 | 2027-Q2 | SWS Q2 2027 survey; PSA CPI through June 2027 | about August 2027 |
 
-**HUN-RICE is not covered by those seals.** It needs its own seal at the 2026-Q3 origin to be validated prospectively.
+**E90 seal (added 2026-10-22).** HUN-RICE and its WARN level are sealed in `sealed/e90_prospective.csv`.
+- SHA-256: `cef43f6a80967bbc5cb929b58c2fbd8a6507af2d5977346b170edc94467aa952`.
+- Script: `runner/seal_e90.py`. Origin 2026-Q3 (issued 2026-10-01); data published by 2026-10-14; frozen code.
+- The E83 and E84 seals were re-hashed afterwards and are unchanged.
+
+| Target | Province | HUN-RICE p | S-COV p (E84 seal) | Decision | WARN |
+|---|---|---|---|---|---|
+| 2026-Q4 (Lead 1) | Cavite | 0.366 | 0.331 | LOW | WATCH |
+| | Laguna | 0.010 | 0.010 | LOW | LOW |
+| | Quezon | 0.576 | 0.521 | HIGH | HIGH |
+| | Rizal | 0.034 | 0.031 | LOW | LOW |
+| | Batangas | 0.094 | 0.086 | LOW | LOW |
+| 2027-Q1 (Lead 2) | Cavite | 0.537 | 0.465 | **HIGH** (S-COV: LOW) | HIGH |
+| | Laguna | 0.333 | 0.285 | LOW | WATCH |
+| | Quezon | 0.730 | 0.633 | HIGH | HIGH |
+| | Rizal | 0.258 | 0.223 | LOW | WATCH |
+| | Batangas | 0.389 | 0.337 | LOW | WATCH |
+
+The forecast hunger is 21.0% (Lead 1) and 22.2% (Lead 2), above the 11.3% line, so the price condition decides each
+province. HUN-RICE and S-COV disagree on one row: Cavite in 2027-Q1. That row decides between them once 2027-Q1 is
+published.
 
 ## 7. Target and data strategy
 
