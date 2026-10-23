@@ -1,0 +1,4 @@
+# E102 run notes
+
+- **Naming overlap (runner deviation, disclosed).** `e102_run.py` defines the pre-registered arm `FB2-noH` (FB2 without domain H, the general 4-domain minimum) and later the drop-one ablation arms `FB2-no{d}` with a 3-domain minimum. For d = H the ablation arm has the same name and overwrote the first one. Every reported and sealed `FB2-noH` value is therefore **FB2 without H with a 3-domain minimum**. Under the 4-domain minimum, dropping H leaves fewer than 4 domains in the early quarters, so that version would cover fewer quarters (as E100 NO-H covered 8). The results were not re-run to change this; the deviation is reported as found.
+- `e102_explain.py` was written and run after scoring. It explains weights, SHAP shares and coefficients and was not used to choose any arm.
