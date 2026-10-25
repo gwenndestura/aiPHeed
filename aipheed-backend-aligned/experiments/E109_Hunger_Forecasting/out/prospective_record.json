@@ -1,0 +1,45 @@
+{
+ "git": {
+  "commit": "d220ad7b5fb755e1eac022620ae162c7e7082999",
+  "branch": "aiPHeed/e109-hunger-forecasting",
+  "runner_dirty": false,
+  "protocol_sha256": "3d794793f0501ec58adfceaa773c4b5c4f0a8e4452cb2ba8e63e13d9c3d91915",
+  "utc": "2026-10-25T04:13:58+00:00"
+ },
+ "sealed_sha256": "61bcc3535d802b58c540a42b958533f8e171bbc8e3ae67e183a1c319df141840",
+ "origin": "2026-Q3",
+ "issue_date": "2026-10-01",
+ "data_cutoff": "data published before 2026-10-01 (SWS 2026-Q3 round published 2026-10-14 is NOT used)",
+ "target": "SWS Balance Luzon Total Hunger, non-commissioned rounds, quarter mean (PROTOCOL section 1)",
+ "thresholds": {
+  "B1": 11.3,
+  "B2": 15.0,
+  "B3": 20.0,
+  "B4": "rise > 4.0 points over h_last"
+ },
+ "feature_columns": [
+  "A1_food",
+  "A1_gap",
+  "A2",
+  "A3",
+  "V1",
+  "C1",
+  "C2",
+  "C3",
+  "C4",
+  "E1",
+  "E2",
+  "N1",
+  "H1"
+ ],
+ "source_hashes": {
+  "outcome_rounds.csv": "a041e382ddf3c1dc0882b6ae4d8e0114cf8684647768086b32bb3250e210ee9b",
+  "sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+  "bsp_macro.parquet": "233476fd8ccb3416af92a7bd5b2ce47b9cf0835b786ce1ef4aa78e8c5b111600",
+  "pagasa_climate.parquet": "4e198c7304f8a9c25ec18e785ea5a8b1d01f6c19f131588bb9b75fc601fd29a3",
+  "psa_rice_prices.parquet": "c1e3cecd253caae2c716486513746c77974e881aae899a50bd37118f9fed93ed"
+ },
+ "scoring": "runner/score_prospective.py once SWS publishes each target quarter",
+ "e107_seal": "246700a8d3c4fe76daf43adbfd5ea3c9d622dd124fb4d7137bde9f84a90c75fb",
+ "e108_seal": "fbc8bf911b1342e7f839cd4c27d35b037bbcd92953281067cffe7747650c325f"
+}

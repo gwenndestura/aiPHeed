@@ -190,6 +190,7 @@ def phase_export() -> None:
                                            "note": "Regional forecast; identical for the five provinces. Not validated.",
                                            "forecasts": rows.to_dict("records")})
     vul = pd.read_csv(E.BACKEND / "data/inputs/lgu_vulnerability.csv", dtype=str)
+    vul = vul.astype(object).where(vul.notna(), None)                    # missing context stays null, never NaN
     lgus = [{"lgu_code": r.lgu_code, "lgu": r.lgu_name, "lgu_type": r.lgu_type, "province": r.province,
              "status": "INSUFFICIENT LOCAL EVIDENCE",
              "explanation": "No LGU or provincial hunger observation exists. The regional SWS Balance Luzon forecast "
