@@ -38,7 +38,8 @@ def train_rows(X: pd.DataFrame, t: int, k: int, target: str, labels=None) -> pd.
     if target == "R":
         lab = lab.drop_duplicates("q").assign(province_code="REGION")
     tr = X[(X["t"] < t) & (X["target_q"] <= t - 1)].rename(columns={"target_q": "q"})
-    return tr.merge(lab[["province_code", "q", "y"]], on=["province_code", "q"], how="inner")
+    keep = ["province_code", "q", "y"] + [c for c in ("F", "HL") if c in lab]      # F, HL: SP's sigma (ADDENDUM_2)
+    return tr.merge(lab[keep], on=["province_code", "q"], how="inner")
 
 
 # ================================================================================================ LightGBM
@@ -49,23 +50,28 @@ def _lgbm(cfg: dict, target: str):
 
 
 class Model:
-    """A fitted LightGBM, or the training HIGH share when the fit set has one class."""
+    """A fitted LightGBM, or the training HIGH share when the fit set has one class. With `init` (log-odds per row) the
+    booster starts from that structural prior in fit and prediction (ADDENDUM_2 arm SP)."""
 
     def __init__(self, cfg, target, cols):
         self.cfg, self.target, self.cols, self.m, self.const = cfg, target, list(cols), None, None
 
-    def fit(self, tr: pd.DataFrame):
+    def fit(self, tr: pd.DataFrame, init=None):
         y = tr["y"].to_numpy(int)
         if len(set(y)) < 2:
             self.const = float(y.mean()) if len(y) else 0.5
             return self
-        self.m = _lgbm(self.cfg, self.target).fit(tr[self.cols].astype(float), y)
+        kw = {} if init is None else {"init_score": np.asarray(init, float)}
+        self.m = _lgbm(self.cfg, self.target).fit(tr[self.cols].astype(float), y, **kw)
         return self
 
-    def predict(self, te: pd.DataFrame) -> np.ndarray:
+    def predict(self, te: pd.DataFrame, init=None) -> np.ndarray:
         if self.m is None:
             return np.full(len(te), self.const)
-        return self.m.predict_proba(te[self.cols].astype(float))[:, 1]
+        if init is None:
+            return self.m.predict_proba(te[self.cols].astype(float))[:, 1]
+        raw = self.m.predict(te[self.cols].astype(float), raw_score=True) + np.asarray(init, float)
+        return 1.0 / (1.0 + np.exp(-raw))
 
     def shap(self, te: pd.DataFrame) -> np.ndarray | None:
         if self.m is None:
@@ -84,8 +90,44 @@ def logloss(y, p) -> float:
     return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
-def select(tr: pd.DataFrame, k: int, target: str, cols) -> tuple[dict, dict, pd.DataFrame]:
-    """Nested selection on training rows only (PROTOCOL 5). Returns (config, inner scores, inner OOF of the winner)."""
+# ================================================================================================ SP prior (ADDENDUM_2)
+SIGMA_FALLBACK, SIGMA_MIN_Q, PRIOR_CLIP = 2.0, 4, 0.01
+
+
+def sigmas(fit: pd.DataFrame) -> tuple[float, float]:
+    """RMSE of the projection's own errors (realised minus projected distance to the threshold) on the fit rows."""
+    if fit["q"].nunique() < SIGMA_MIN_Q or "F" not in fit:
+        return SIGMA_FALLBACK, SIGMA_FALLBACK
+    th = E.L.e40_spec()
+    ef = (fit["F"] - fit["province_code"].map(th["food"])) - fit["A1_food"]
+    eg = (fit["F"] - fit["HL"] - fit["province_code"].map(th["gap"])) - fit["A1_gap"]
+
+    def rm(e):
+        e = e.dropna()
+        return float(np.sqrt(np.mean(e ** 2))) if len(e) else SIGMA_FALLBACK
+    return rm(ef), rm(eg)
+
+
+def prior(rows: pd.DataFrame, target: str, sig: tuple[float, float], fill: float) -> np.ndarray:
+    """p0: T43 = H1 x P(food or gap above threshold) with normal projection errors; R = H1. Missing -> `fill`."""
+    from scipy.stats import norm
+    if target == "R":
+        p0 = rows["H1"].to_numpy(float)
+    else:
+        pf = norm.cdf(rows["A1_food"].to_numpy(float) / sig[0])
+        pg = norm.cdf(rows["A1_gap"].to_numpy(float) / sig[1])
+        p0 = rows["H1"].to_numpy(float) * (1 - (1 - pf) * (1 - pg))
+    return np.where(np.isfinite(p0), p0, fill)
+
+
+def init_of(p0) -> np.ndarray:
+    p = np.clip(np.asarray(p0, float), PRIOR_CLIP, 1 - PRIOR_CLIP)
+    return np.log(p / (1 - p))
+
+
+def select(tr: pd.DataFrame, k: int, target: str, cols, sp: bool = False) -> tuple[dict, dict, pd.DataFrame]:
+    """Nested selection on training rows only (PROTOCOL 5). Returns (config, inner scores, inner OOF of the winner).
+    With sp=True every inner fit uses the SP prior with sigma from that inner fit set (ADDENDUM_2)."""
     qv = sorted(tr["q"].unique())[-INNER_FOLDS:]
     folds = []
     for q in qv:
@@ -98,7 +140,12 @@ def select(tr: pd.DataFrame, k: int, target: str, cols) -> tuple[dict, dict, pd.
     for c in GRID:
         ys, ps = [], []
         for fit, hold in folds:
-            ps.append(Model(c, target, cols).fit(fit).predict(hold))
+            if sp:
+                s, fl = sigmas(fit), float(fit["y"].mean())
+                ps.append(Model(c, target, cols).fit(fit, init_of(prior(fit, target, s, fl)))
+                          .predict(hold, init_of(prior(hold, target, s, fl))))
+            else:
+                ps.append(Model(c, target, cols).fit(fit).predict(hold))
             ys.append(hold["y"].to_numpy(int))
         scores[c["id"]] = logloss(np.concatenate(ys), np.concatenate(ps))
         oof[c["id"]] = pd.DataFrame({"y": np.concatenate(ys), "p": np.concatenate(ps)})
@@ -160,7 +207,7 @@ def firi() -> pd.DataFrame:
 
 # ================================================================================================ one lead
 def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outcome=None, arms=True,
-        explain=False, rule: str = "primary") -> tuple[pd.DataFrame, list[dict]]:
+        explain=False, rule: str = "primary", sp: bool = False) -> tuple[pd.DataFrame, list[dict]]:
     """Rolling-origin predictions of lead k for the labelled target quarters in `quarters` (default: all eligible).
 
     Returns (one row per evaluated (target quarter, province or REGION) with every arm, per-origin model records).
@@ -212,6 +259,13 @@ def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outc
             else:
                 out["H1_p"] = te["H1"].fillna(clim).to_numpy()
         out["eligible_original_rule"] = E.eligible_original(tr)
+        if sp:                                                    # ADDENDUM_2 arm SP and the STRUCT baseline
+            s, fl = sigmas(tr), float(tr["y"].mean())
+            p0_tr, p0_te = prior(tr, target, s, fl), prior(te, target, s, fl)
+            cfg_sp, _, _ = select(tr, k, target, cols, sp=True)
+            msp = Model(cfg_sp, target, cols).fit(tr, init_of(p0_tr))
+            out["SP_p"], out["STRUCT_p"], out["SP_cfg"] = msp.predict(te, init_of(p0_te)), p0_te, cfg_sp["id"]
+            out["SP_sigma_food"], out["SP_sigma_gap"] = s
         rec = {"lead": k, "target": target, "t": t, "q": q, "cfg": cfg["id"], "inner_logloss": scores,
                "n_train": len(tr), "n_train_q": int(tr["q"].nunique()), "n_train_high": int(tr["y"].sum()),
                "train_quarters": [E.qs(int(x)) for x in sorted(tr["q"].unique())]}
@@ -220,6 +274,13 @@ def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outc
             rec["shap"] = None if sv is None else {pp: dict(zip(cols + ["_base"], map(float, row)))
                                                    for pp, row in zip(te["province_code"], sv)}
             rec["gain"] = mdl.gain()
+            if sp:
+                sv = msp.shap(te)
+                rec["sp_cfg"] = cfg_sp["id"]
+                rec["sp_prior_logodds"] = dict(zip(te["province_code"], map(float, init_of(p0_te))))
+                rec["sp_shap"] = None if sv is None else {pp: dict(zip(cols + ["_base"], map(float, row)))
+                                                          for pp, row in zip(te["province_code"], sv)}
+                rec["sp_gain"] = msp.gain()
         rows.append(out)
         recs.append(rec)
     df = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()

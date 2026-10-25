@@ -20,8 +20,8 @@ import e107_model as M
 np, pd = E.np, E.pd
 OUT = E.E107 / "out"
 TARGETS = ("T43", "R")
-ARMS = {"T43": ["PERSIST_p", "CLIM_p", "PSA_LR_p", "NLP_LR_p", "LR12_p", "RULE_p", "E56_p", "FIRI_score"],
-        "R": ["PERSIST_p", "CLIM_p", "H1_p", "E56_p", "FIRI_score"]}
+ARMS = {"T43": ["PERSIST_p", "CLIM_p", "PSA_LR_p", "NLP_LR_p", "LR12_p", "RULE_p", "STRUCT_p", "E56_p", "FIRI_score"],
+        "R": ["PERSIST_p", "CLIM_p", "H1_p", "STRUCT_p", "E56_p", "FIRI_score"]}
 GATE = {"T43": ["PERSIST_p", "CLIM_p"], "R": ["PERSIST_p", "CLIM_p", "H1_p"]}
 
 
@@ -42,59 +42,62 @@ def check_inputs() -> None:
         assert E.sha256(E.DATA_IN / name.split("/")[-1]) == h, f"{name} changed"
     st = git_state()
     assert st["protocol_sha256"] == st["protocol_frozen_sha256"], "PROTOCOL.md changed after freezing"
-    assert E.sha256(E.E107 / "ADDENDUM_1.md") == (E.E107 / "runner" / "ADDENDUM_1_SHA256.txt").read_text().strip()
+    for n in ("ADDENDUM_1", "ADDENDUM_2"):
+        f = E.E107 / f"{n}.md"
+        if f.exists():
+            assert E.sha256(f) == (E.E107 / "runner" / f"{n}_SHA256.txt").read_text().strip(), f"{n} changed"
 
 
 # ================================================================================================ summaries
-def summarize(df: pd.DataFrame, target: str) -> dict:
+def summarize(df: pd.DataFrame, target: str, col: str = "p") -> dict:
     if not len(df):
         return {"n": 0}
-    out = {"primary": M.metrics(df["y"], df["p"], quarters=df["q"]),
+    out = {"primary": M.metrics(df["y"], df[col], quarters=df["q"]),
            "quarters": [E.qs(int(q)) for q in sorted(df["q"].unique())]}
-    out["primary"]["accuracy_cluster95"] = M.cluster_ci(df, "p")
-    out["primary"]["reliability_table"] = M.reliability_table(df["y"], df["p"])
+    out["primary"]["accuracy_cluster95"] = M.cluster_ci(df, col)
+    out["primary"]["reliability_table"] = M.reliability_table(df["y"], df[col])
     thr = df.assign(c=(df["p"] >= df["thr_inner"]).astype(int))
     out["primary_thr_inner"] = {"accuracy": float((thr["c"] == thr["y"]).mean()),
                                 "recall_high": float(thr.loc[thr["y"] == 1, "c"].mean()) if thr["y"].sum() else None,
                                 "recall_low": float(1 - thr.loc[thr["y"] == 0, "c"].mean()) if (1 - thr["y"]).sum() else None,
                                 "median_threshold": float(df["thr_inner"].median())}
     out["arms"], out["paired_vs_primary"] = {}, {}
-    for a in ARMS[target]:
-        if a not in df:
+    for a in ARMS[target] + (["p"] if col != "p" else ["SP_p"]):
+        if a not in df or a == col:
             continue
         d = df.dropna(subset=[a])
         if not len(d):
             continue
         rec = M.metrics(d["y"], d[a], quarters=d["q"])
         rec["rows_compared"] = len(d)
-        rec["primary_on_same_rows"] = M.metrics(d["y"], d["p"])
+        rec["primary_on_same_rows"] = M.metrics(d["y"], d[col])
         if a == "FIRI_score":
             rec["note"] = "FIRI is an index, not a probability; Brier/logloss shown for reference only"
         out["arms"][a] = rec
-        out["paired_vs_primary"][a] = M.paired(d, "p", a)
+        out["paired_vs_primary"][a] = M.paired(d, col, a)
     out["always_high_accuracy"] = float(df["y"].mean())
     out["always_low_accuracy"] = float(1 - df["y"].mean())
-    pq = M.per_quarter(df, "p")
+    pq = M.per_quarter(df, col)
     pp = M.per_quarter(df, "PERSIST_p")
     out["per_quarter"] = [{"quarter": E.qs(int(q)), "block": "final" if q in E.FINAL_BLOCK else "dev",
                            **{k: (float(v) if k not in ("n", "n_high") else int(v)) for k, v in r.items()},
                            "persistence_accuracy": float(pp.loc[q, "accuracy"]),
                            "persistence_brier_sum": float(pp.loc[q, "brier_sum"])} for q, r in pq.iterrows()]
-    out["configs_selected"] = {str(int(c)): int(n) for c, n in df.drop_duplicates("q")["cfg"].value_counts().items()}
+    out["configs_selected"] = {str(int(c)): int(n) for c, n in df.drop_duplicates("q")["cfg" if col == "p" else "SP_cfg"].value_counts().items()}
     return out
 
 
-def decide(df: pd.DataFrame, target: str) -> dict:
+def decide(df: pd.DataFrame, target: str, col: str = "p") -> dict:
     """PROTOCOL section 8 for one lead on combined rows (G3 on final-block rows)."""
     if not len(df):
         return {"reliable": False, "assessable": False, "reason": "no evaluable rows"}
-    m = M.metrics(df["y"], df["p"])
+    m = M.metrics(df["y"], df[col])
     nq = int(df["q"].nunique())
     acc = m["accuracy"]
     gate = GATE[target]
     base = {a: M.metrics(df["y"], df[a]) for a in gate}
     best = min(gate, key=lambda a: base[a]["brier"])
-    pt = M.paired(df, "p", best)
+    pt = M.paired(df, col, best)
     both = 0 < df["y"].sum() < len(df)
     c = {}
     c["R1_quarters>=6"] = nq >= 6
@@ -107,7 +110,7 @@ def decide(df: pd.DataFrame, target: str) -> dict:
     c["R6_auc>=0.65"] = bool(both and m["auc"] is not None and m["auc"] >= 0.65)
     c["R7_share_high_in_[0.1,0.9]"] = 0.1 <= m["share_pred_high"] <= 0.9
     if target == "T43":
-        pq = M.per_quarter(df, "p")
+        pq = M.per_quarter(df, col)
         c["G1_quarter_acc>=0.6_in_2/3"] = float((pq["accuracy"] >= 0.6).mean()) >= 2 / 3
     qs_ = sorted(df["q"].unique())
     h = (len(qs_) + 1) // 2
@@ -118,11 +121,11 @@ def decide(df: pd.DataFrame, target: str) -> dict:
             halves.append(False)
             continue
         bb = min(M.metrics(d["y"], d[a])["brier"] for a in gate)
-        halves.append(M.metrics(d["y"], d["p"])["brier"] < bb)
+        halves.append(M.metrics(d["y"], d[col])["brier"] < bb)
     c["G2_brier_better_both_halves"] = all(halves)
     fb = df[df["block"] == "final"]
     if len(fb):
-        fm = M.metrics(fb["y"], fb["p"])
+        fm = M.metrics(fb["y"], fb[col])
         g3a = fm["accuracy"] >= max(M.metrics(fb["y"], fb["PERSIST_p"])["accuracy"],
                                     M.metrics(fb["y"], fb["CLIM_p"])["accuracy"])
         g3b = fm["brier"] <= min(M.metrics(fb["y"], fb[a])["brier"] for a in gate)
@@ -162,7 +165,7 @@ def phase_predict(block: str) -> None:
     for target in TARGETS:
         qs_ = [q for q in labelled_quarters(target) if (q in E.FINAL_BLOCK) == (block == "final")]
         for k in E.LEADS:
-            df, recs = M.run(k, target, quarters=qs_, explain=True)
+            df, recs = M.run(k, target, quarters=qs_, explain=True, sp=block == "final")
             M.write_csv(d / f"predictions_{target}_lead{k}.csv", df)
             allrec[f"{target}_lead{k}"] = recs
             print(f"{block} {target} lead {k}: {len(df)} rows, {df['q'].nunique() if len(df) else 0} quarters")
@@ -183,6 +186,27 @@ def load_block(block: str, target: str, k: int) -> pd.DataFrame:
     return pd.read_csv(f, dtype={"province_code": str})
 
 
+def phase_sp_dev() -> None:
+    """ADDENDUM_2: SP and STRUCT on the development rows (seen), with a check that the primary p is unchanged."""
+    d = OUT / "dev_sp"
+    d.mkdir(parents=True, exist_ok=True)
+    recs = {}
+    for name, target, rule in (("T43", "T43", "primary"), ("R", "R", "primary"), ("T43ext", "T43", "extended")):
+        qs_ = [q for q in labelled_quarters(target) if q not in E.FINAL_BLOCK]
+        for k in E.LEADS:
+            df, rr = M.run(k, target, quarters=qs_, rule=rule, sp=True, explain=name != "T43ext")
+            old = load_block("dev", name, k)
+            if len(old) or len(df):
+                j = old.merge(df, on=["q", "province_code"], suffixes=("_old", ""))
+                assert len(j) == len(old) == len(df) and np.allclose(j["p_old"], j["p"], atol=1e-12), (name, k)
+            M.write_csv(d / f"predictions_{name}_lead{k}.csv", df)
+            if name != "T43ext":
+                recs[f"{target}_lead{k}"] = rr
+    E.write_json(d / "origin_records.json", recs)
+    E.write_json(d / "run.json", {"phase": "sp_dev", "utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                  "git": git_state()})
+
+
 def load_combined(target: str, k: int) -> pd.DataFrame:
     f = OUT / f"predictions_{target}_lead{k}.csv"
     return pd.read_csv(f, dtype={"province_code": str}) if f.exists() and f.stat().st_size > 5 else pd.DataFrame()
@@ -200,16 +224,21 @@ def phase_combined() -> None:
     assert (OUT / "dev" / "metrics.json").exists(), "development results must be recorded first"
     res = {"protocol_sha256": E.sha256(E.E107 / "PROTOCOL.md"),
            "dev_run": json.loads((OUT / "dev" / "run.json").read_text()),
-           "final_run": json.loads((OUT / "final" / "run.json").read_text()), "targets": {}}
+           "final_run": json.loads((OUT / "final" / "run.json").read_text()),
+           "sp_dev_run": json.loads((OUT / "dev_sp" / "run.json").read_text()), "targets": {}}
     for target in TARGETS:
         T = {"blocks": {}, "decision": {}}
         for k in E.LEADS:
-            dv, fn = load_block("dev", target, k), load_block("final", target, k)
+            dv, fn = load_block("dev_sp", target, k), load_block("final", target, k)
             cb = pd.concat([x for x in (dv, fn) if len(x)], ignore_index=True) if len(dv) or len(fn) else pd.DataFrame()
             M.write_csv(OUT / f"predictions_{target}_lead{k}.csv", cb)
             T["blocks"][str(k)] = {"dev": summarize(dv, target), "final": summarize(fn, target),
                                    "combined": summarize(cb, target)}
             T["decision"][str(k)] = decide(cb, target)
+            T.setdefault("SP", {"blocks": {}, "decision": {}, "status": "exploratory (ADDENDUM_2; development rows seen)"})
+            T["SP"]["blocks"][str(k)] = {"dev": summarize(dv, target, "SP_p"), "final": summarize(fn, target, "SP_p"),
+                                         "combined": summarize(cb, target, "SP_p")}
+            T["SP"]["decision"][str(k)] = decide(cb, target, "SP_p")
         T["max_reliable_lead"] = max_reliable(T["decision"])
         T["leads_passing"] = [k for k in E.LEADS if T["decision"][str(k)]["reliable"]]
         if target == "R":                                         # disclosure: the frozen row rule before ADDENDUM_1
@@ -222,11 +251,14 @@ def phase_combined() -> None:
         res["targets"][target] = T
     X = {"blocks": {}, "decision": {}}                            # ADDENDUM_1 A1-2: T43 extended (secondary)
     for k in E.LEADS:
-        dv, fn = load_block("dev", "T43ext", k), load_block("final", "T43", k)
+        dv, fn = load_block("dev_sp", "T43ext", k), load_block("final", "T43", k)
         cb = pd.concat([x for x in (dv, fn) if len(x)], ignore_index=True) if len(dv) or len(fn) else pd.DataFrame()
         M.write_csv(OUT / f"predictions_T43ext_lead{k}.csv", cb)
         X["blocks"][str(k)] = {"dev": summarize(dv, "T43"), "final": summarize(fn, "T43"), "combined": summarize(cb, "T43")}
         X["decision"][str(k)] = decide(cb, "T43")
+        X.setdefault("SP", {"decision": {}, "combined": {}})
+        X["SP"]["combined"][str(k)] = summarize(cb, "T43", "SP_p")
+        X["SP"]["decision"][str(k)] = decide(cb, "T43", "SP_p")
     X["max_reliable_lead"] = max_reliable(X["decision"])
     X["leads_passing"] = [k for k in E.LEADS if X["decision"][str(k)]["reliable"]]
     res["targets"]["T43_extended"] = X
@@ -404,8 +436,11 @@ if __name__ == "__main__":
         phase_predict("dev")
         phase_dev_metrics()
     elif ph == "final":
-        assert (OUT / "dev" / "metrics.json").exists()
+        assert (OUT / "dev" / "metrics.json").exists() and not (OUT / "final").exists(), "final block is scored once"
         phase_predict("final")
+        phase_sp_dev()
+        phase_combined()
+    elif ph == "combine":
         phase_combined()
     elif ph == "diag":
         phase_diag()
