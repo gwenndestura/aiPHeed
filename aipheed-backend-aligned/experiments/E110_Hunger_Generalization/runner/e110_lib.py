@@ -333,7 +333,7 @@ def cont(df: pd.DataFrame, m: str, k: int) -> dict:
     dq = (e.abs()).groupby(df["q"]).mean()
     return {"rows": len(df), "quarters": int(df["q"].nunique()), "mae": float(e.abs().mean()),
             "rmse": float(np.sqrt((e ** 2).mean())), "bias": float(e.mean()),
-            "mae_block95": H9.block_ci(dq.to_numpy(), k)}
+            "mae_block95": H9.block_ci(dq.to_numpy(), min(k, len(dq)))}       # block length capped at the series length
 
 
 def binary(df: pd.DataFrame, m: str, b: str) -> dict:
