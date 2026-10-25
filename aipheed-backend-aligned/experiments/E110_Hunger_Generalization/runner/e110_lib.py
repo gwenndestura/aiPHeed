@@ -340,8 +340,19 @@ def binary(df: pd.DataFrame, m: str, b: str) -> dict:
     return H9.bin_metrics(df, f"{m}_p{b}", f"y{b}")
 
 
+def _plain(o):
+    """Convert numpy scalars (incl. numpy.bool_) inside nested results to plain Python before writing JSON."""
+    if isinstance(o, dict):
+        return {str(k): _plain(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_plain(v) for v in o]
+    if isinstance(o, np.bool_):
+        return bool(o)
+    return o
+
+
 def write_json(p, o):
-    E.write_json(p, o)
+    E.write_json(p, _plain(o))
 
 
 def sha256(p):
