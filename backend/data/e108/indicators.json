@@ -1,0 +1,191 @@
+{
+ "schema": "aipheed.e108.indicators/1",
+ "families": [
+  {
+   "code": "A1",
+   "name": "Food-price-pressure forecast",
+   "domain": "A Affordability",
+   "source": "PSA CPI food and all-items index, monthly (OpenSTAT 0012M4ACP22)",
+   "frequency": "monthly",
+   "level": "province",
+   "availability": "months through month 2 of quarter t (published before O(t))",
+   "transformation": "latest index held flat to the target months of t+k, YoY against the same months a year earlier; minus the province's frozen 2021-22 P60 food and gap thresholds (lead-specific)",
+   "missing": "NaN if fewer than 2 base months are published or before 2021",
+   "columns": [
+    "A1_food",
+    "A1_gap"
+   ]
+  },
+  {
+   "code": "A2",
+   "name": "Headline inflation above the usual level",
+   "domain": "A Affordability",
+   "source": "PSA CPI all-items YoY",
+   "frequency": "monthly",
+   "level": "province",
+   "availability": "latest two published months (months 1-2 of t)",
+   "transformation": "headline YoY minus the province's 2021-22 headline P60 (firi.HEADLINE_P60)",
+   "missing": "NaN if either month is missing",
+   "columns": [
+    "A2"
+   ]
+  },
+  {
+   "code": "A3",
+   "name": "Wholesale rice price change",
+   "domain": "A Affordability",
+   "source": "PSA wholesale rice prices",
+   "frequency": "quarterly",
+   "level": "province",
+   "availability": "quarter t-1",
+   "transformation": "YoY % change t-1 vs t-5",
+   "missing": "NaN before 2022-Q2 (no pre-2021 base)",
+   "columns": [
+    "A3"
+   ]
+  },
+  {
+   "code": "V1",
+   "name": "Poverty and population density",
+   "domain": "V Vulnerability",
+   "source": "PSA SAE 2021 poverty, POPCEN 2024 population, land area",
+   "frequency": "static",
+   "level": "province",
+   "availability": "treated as a static structural profile at every origin (served FIRI Amendment 1; strictly published 2025)",
+   "transformation": "0.6 x min-max poverty + 0.4 x min-max density",
+   "missing": "none",
+   "columns": [
+    "V1"
+   ]
+  },
+  {
+   "code": "C1",
+   "name": "PAGASA El Nino alert/advisory in force",
+   "domain": "C Climate and food production",
+   "source": "PAGASA ENSO alert system items",
+   "frequency": "event",
+   "level": "national",
+   "availability": "items issued strictly before O(t)",
+   "transformation": "1 if an El Nino Alert/Advisory is in force, else 0",
+   "missing": "0 before the first item (2023-03-24; La Nina/none in 2021-22)",
+   "columns": [
+    "C1"
+   ]
+  },
+  {
+   "code": "C2",
+   "name": "Typhoons within 300 km",
+   "domain": "C Climate and food production",
+   "source": "IBTrACS tracks",
+   "frequency": "quarterly",
+   "level": "province",
+   "availability": "quarter t (complete at O(t))",
+   "transformation": "count",
+   "missing": "NaN for 2026-Q3 (fetched mid-quarter)",
+   "columns": [
+    "C2"
+   ]
+  },
+  {
+   "code": "C3",
+   "name": "Palay/corn production drop",
+   "domain": "C Climate and food production",
+   "source": "PSA palay and corn production (OpenSTAT)",
+   "frequency": "quarterly",
+   "level": "province",
+   "availability": "quarter t-1",
+   "transformation": "-(lower of palay and corn YoY %, t-1 vs t-5)",
+   "missing": "NaN before 2022-Q2",
+   "columns": [
+    "C3"
+   ]
+  },
+  {
+   "code": "C4",
+   "name": "Fisheries production drop",
+   "domain": "C Climate and food production",
+   "source": "PSA fisheries production",
+   "frequency": "quarterly",
+   "level": "province",
+   "availability": "quarter t-1",
+   "transformation": "-(fisheries YoY %, t-1 vs t-5)",
+   "missing": "NaN before 2022-Q2",
+   "columns": [
+    "C4"
+   ]
+  },
+  {
+   "code": "E1",
+   "name": "Unemployment change (national)",
+   "domain": "E Household economy",
+   "source": "PSA LFS",
+   "frequency": "monthly",
+   "level": "national",
+   "availability": "months of quarter t-1",
+   "transformation": "quarter-mean unemployment rate t-1 minus t-5 (points)",
+   "missing": "NaN before 2022-Q2",
+   "columns": [
+    "E1"
+   ]
+  },
+  {
+   "code": "E2",
+   "name": "Remittance decline (national)",
+   "domain": "E Household economy",
+   "source": "BSP OFW cash remittances (USD)",
+   "frequency": "quarterly",
+   "level": "national",
+   "availability": "quarter t-1",
+   "transformation": "-(YoY %, t-1 vs t-5)",
+   "missing": "NaN before 2022-Q2 and after 2025-Q4 (series not acquired beyond)",
+   "columns": [
+    "E2"
+   ]
+  },
+  {
+   "code": "N1",
+   "name": "Food Stress Sentiment Index (FSSI-v3)",
+   "domain": "N News warning signals",
+   "source": "news headlines (RSS), XLM-RoBERTa zero-shot intensity",
+   "frequency": "quarterly",
+   "level": "province",
+   "availability": "admitted headlines of quarter t published before O(t)",
+   "transformation": "bias-weighted mean intensity (app.news.pipeline_v3.fssi_v3)",
+   "missing": "NaN when fewer than 5 admitted headlines (status not SUFFICIENT); never zero",
+   "columns": [
+    "N1"
+   ]
+  },
+  {
+   "code": "H1",
+   "name": "Regional hunger outlook above 11.3%",
+   "domain": "H Regional hunger",
+   "source": "SWS Balance Luzon involuntary hunger, approved rounds",
+   "frequency": "quarterly",
+   "level": "region",
+   "availability": "rounds posted before O(t)",
+   "transformation": "P(hunger at t+k > 11.3) = 1 - Phi((11.3 - latest reading) / sigma_k), sigma_k = RMSE of the same rule's earlier lead-k errors (thesis_system.regional_hunger)",
+   "missing": "none from 2021-Q3",
+   "columns": [
+    "H1"
+   ]
+  }
+ ],
+ "columns": [
+  "A1_food",
+  "A1_gap",
+  "A2",
+  "A3",
+  "V1",
+  "C1",
+  "C2",
+  "C3",
+  "C4",
+  "E1",
+  "E2",
+  "N1",
+  "H1"
+ ],
+ "n_families": 12,
+ "n_columns": 13
+}
