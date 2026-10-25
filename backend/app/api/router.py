@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, forecast, fpp, health, insights, lead2, quarterly, report, simple,
+    admin, alerts, assessments, auth, dashboard, e107, forecast, fpp, health, insights, lead2, quarterly, report,
+    simple,
 )
 
 router = APIRouter()
@@ -26,6 +27,8 @@ router.include_router(fpp.router, prefix=API_V1, tags=["Food Price Pressure (exp
 router.include_router(lead2.router, prefix=API_V1, tags=["Lead-2 candidate (E41)"])
 # Simple methodology (E106, branch aipheed/simple-methodology): read-only record and evaluation files.
 router.include_router(simple.router, prefix=API_V1, tags=["Simple methodology (E106)"])
+# E107 twelve-indicator LightGBM (branch aipheed/e107-twelve-indicator-lightgbm): read-only exported files.
+router.include_router(e107.router, prefix=API_V1, tags=["Twelve-indicator LightGBM (E107)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.

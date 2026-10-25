@@ -185,3 +185,34 @@ def test_results_were_scored_under_the_frozen_protocol():
 @pytest.mark.skipif(not (OUT / "sealed_prospective.csv").exists(), reason="run runner/run_e107.py prospective first")
 def test_seal_hash_matches():
     assert E.sha256(OUT / "sealed_prospective.csv") == (OUT / "sealed_prospective.csv.sha256").read_text().strip()
+
+
+# ------------------------------------------------------------------------------------------------ read-only API
+SERVE = E.BACKEND / "data" / "e107"
+
+
+@pytest.mark.skipif(not (SERVE / "evaluation_summary.json").exists(), reason="run runner/run_e107.py export first")
+def test_api_serves_the_exported_files_unchanged():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    c = TestClient(app)
+    for route, name in (("evaluation", "evaluation_summary.json"), ("forecast", "forecast.json"),
+                        ("indicators", "indicators.json")):
+        r = c.get(f"/api/v1/e107/{route}")
+        assert r.status_code == 200
+        assert r.json() == json.loads((SERVE / name).read_text(encoding="utf-8"))
+    ind = c.get("/api/v1/e107/indicators").json()
+    assert ind["n_families"] == 12 and sorted(f["code"] for f in ind["families"]) == E.EXPECTED_FAMILIES
+    fc = c.get("/api/v1/e107/forecast").json()
+    assert fc["sealed_sha256"] == (OUT / "sealed_prospective.csv.sha256").read_text().strip()
+
+
+@pytest.mark.skipif(not (SERVE / "evaluation_summary.json").exists(), reason="run runner/run_e107.py export first")
+def test_exported_decisions_match_results():
+    ev = json.loads((SERVE / "evaluation_summary.json").read_text(encoding="utf-8"))
+    r = json.loads((OUT / "results.json").read_text())
+    for tg, T in r["targets"].items():
+        assert ev["results"][tg]["max_reliable_lead"] == T["max_reliable_lead"]
+        for k in map(str, E.LEADS):
+            if T["blocks"][k]["combined"].get("primary"):
+                assert ev["results"][tg]["leads"][k]["reliable"] == T["decision"][k]["reliable"]

@@ -349,9 +349,7 @@ def sensitivities() -> dict:
     out = {"S1_all_rounds": {}, "S2_v1_strict": {}, "S3_a1_served": {}}
     d_all = all_rounds_data()
     for target in TARGETS:
-        obs = E.t43_frame(d_all) if target == "T43" else pd.DataFrame(
-            [{"province_code": p, "q": q, "y": y, "H": h} for q, y, h in zip(*[E.r_frame(d_all)[c] for c in
-                                                                                ("q", "y", "H")]) for p in E.PROVS])
+        obs = E.t43_frame(d_all) if target == "T43" else E._per_province(E.r_frame(d_all))
         lab = lambda t, target=target: _known_all(d_all, t, target)  # noqa: E731
         for k in E.LEADS:
             df, _ = M.run(k, target, labels=lab, outcome=obs)
@@ -386,9 +384,7 @@ def _known_all(d_all, t, target):
         lab = E.t43_frame(c)
         return lab[lab["q"].isin(complete)]
     r = E.r_frame(c)
-    r = r[r["q"].isin(complete)]
-    return pd.DataFrame([{"province_code": p, "q": q, "y": y, "H": h}
-                         for q, y, h in zip(r["q"], r["y"], r["H"]) for p in E.PROVS])
+    return E._per_province(r[r["q"].isin(complete)])
 
 
 # ================================================================================================ prospective
@@ -409,11 +405,17 @@ def phase_prospective() -> None:
             te = Xr[Xr["t"] == t]
             p = mdl.predict(te)
             sv = mdl.shap(te)
-            for i, (pp, pr) in enumerate(zip(te["province_code"], p)):
+            s, fl = M.sigmas(tr), float(tr["y"].mean())                # ADDENDUM_2: SP and STRUCT sealed as well
+            p0_tr, p0_te = M.prior(tr, target, s, fl), M.prior(te, target, s, fl)
+            cfg_sp, _, _ = M.select(tr, k, target, E.COLUMNS, sp=True)
+            psp = M.Model(cfg_sp, target, E.COLUMNS).fit(tr, M.init_of(p0_tr)).predict(te, M.init_of(p0_te))
+            for pp, pr, ps, p0 in zip(te["province_code"], p, psp, p0_te):
                 rows.append({"target": target, "lead": k, "origin": E.qs(t), "issue_date": E.issue(t),
                              "target_quarter": E.qs(t + k), "province_code": pp,
                              "province": E.NAMES.get(pp, "Balance Luzon (region)"), "p_high": round(float(pr), 6),
-                             "class": "HIGH" if pr >= 0.5 else "LOW", "config": cfg["id"], "n_train": len(tr),
+                             "class": "HIGH" if pr >= 0.5 else "LOW", "p_high_sp": round(float(ps), 6),
+                             "class_sp": "HIGH" if ps >= 0.5 else "LOW", "p_struct": round(float(p0), 6),
+                             "config": cfg["id"], "config_sp": cfg_sp["id"], "n_train": len(tr),
                              "n_train_quarters": int(tr["q"].nunique())})
             rec["forecasts"][f"{target}_lead{k}"] = {
                 "config": cfg, "n_train": len(tr), "train_quarters": [E.qs(int(q)) for q in sorted(tr["q"].unique())],
@@ -428,6 +430,67 @@ def phase_prospective() -> None:
     rec["sealed_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     E.write_json(OUT / "prospective_record.json", rec)
     print(df.to_string())
+
+
+# ================================================================================================ export (read-only API)
+SERVE = E.BACKEND / "data" / "e107"
+SHOW = {"T43": ["p", "SP_p", "STRUCT_p", "RULE_p", "E56_p", "PERSIST_p", "CLIM_p", "PSA_LR_p", "NLP_LR_p", "LR12_p",
+                "FIRI_score"],
+        "R": ["p", "SP_p", "H1_p", "STRUCT_p", "E56_p", "PERSIST_p", "CLIM_p", "FIRI_score"]}
+NAMES_ARM = {"p": "E107-LGBM (primary, all 12 indicators)", "SP_p": "E107-SP (exploratory, structural prior)",
+             "STRUCT_p": "Structural probability (no learning)", "RULE_p": "Structural rule (no learning)",
+             "E56_p": "E56 (existing LightGBM)", "PERSIST_p": "Naive persistence", "CLIM_p": "Climatology",
+             "H1_p": "H1 hunger outlook alone", "PSA_LR_p": "PSA-only logistic", "NLP_LR_p": "NLP-only logistic",
+             "LR12_p": "Logistic, all 12", "FIRI_score": "FIRI v2 (index, not a probability)"}
+
+
+def _brief(m: dict) -> dict:
+    keys = ("n", "n_quarters", "n_high", "accuracy", "balanced_accuracy", "recall_high", "recall_low", "auc", "brier",
+            "share_pred_high")
+    return {k: m.get(k) for k in keys}
+
+
+def phase_export() -> None:
+    res = json.loads((OUT / "results.json").read_text())
+    pro = json.loads((OUT / "prospective_record.json").read_text())
+    SERVE.mkdir(parents=True, exist_ok=True)
+    ev = {"schema": "aipheed.e107.evaluation/1", "status": "Development evidence. Every evaluated quarter had been "
+          "examined by earlier experiments; the final block (2025-Q4..2026-Q3) was untouched within E107 only. "
+          "Not served on the dashboard.", "protocol_sha256": res["protocol_sha256"],
+          "targets": {"T43": "Chapter I section 1.7 food-insecurity risk (composite proxy: SWS Balance Luzon hunger "
+                             "> 11.3% AND provincial food-price pressure); not a measured prevalence",
+                      "R": "observed food-insecurity outcome: SWS Balance Luzon involuntary hunger > 11.3% (regional)",
+                      "T43_extended": "T43 with ADDENDUM_1 extended eligibility (secondary)"},
+          "arms": NAMES_ARM, "results": {}}
+    for tg, T in res["targets"].items():
+        base = "T43" if tg.startswith("T43") else "R"
+        out = {"max_reliable_lead": T["max_reliable_lead"], "leads": {}}
+        for k in map(str, E.LEADS):
+            c = T["blocks"][k]["combined"]
+            if not c.get("primary"):
+                out["leads"][k] = {"assessable": False, "reason": "no eligible origin"}
+                continue
+            arms = {"p": _brief(c["primary"])}
+            arms.update({a: _brief(m) for a, m in c["arms"].items() if a in SHOW[base]})
+            d = T["decision"][k]
+            sp = T["SP"]["decision"][k] if "SP" in T else None
+            out["leads"][k] = {"assessable": d["assessable"], "reliable": d["reliable"], "meets_75": d["meets_75"],
+                               "failed_criteria": d["failed"], "arms": arms,
+                               "sp_exploratory": None if sp is None else {"meets_75": sp.get("meets_75"),
+                                                                          "failed_criteria": sp.get("failed")}}
+        ev["results"][tg] = out
+    E.write_json(SERVE / "evaluation_summary.json", ev)
+    rows = pd.read_csv(OUT / "sealed_prospective.csv", dtype={"province_code": str})
+    E.write_json(SERVE / "forecast.json", {
+        "schema": "aipheed.e107.forecast/1", "origin": pro["origin"], "issue_date": pro["issue_date"],
+        "sealed_sha256": pro["sealed_sha256"], "sealed_utc": pro["sealed_utc"],
+        "status": "Sealed research forecasts of E107-LGBM; no reliable horizon was established (results), so these "
+                  "are for prospective scoring only, not for decisions.",
+        "forecasts": rows.to_dict("records")})
+    E.write_json(SERVE / "indicators.json", {"schema": "aipheed.e107.indicators/1", "families": E.INVENTORY,
+                                             "columns": E.COLUMNS, "n_families": len(E.FAMILIES),
+                                             "n_columns": len(E.COLUMNS)})
+    print("exported to", SERVE)
 
 
 if __name__ == "__main__":
@@ -446,5 +509,7 @@ if __name__ == "__main__":
         phase_diag()
     elif ph == "prospective":
         phase_prospective()
+    elif ph == "export":
+        phase_export()
     else:
         raise SystemExit(__doc__)
