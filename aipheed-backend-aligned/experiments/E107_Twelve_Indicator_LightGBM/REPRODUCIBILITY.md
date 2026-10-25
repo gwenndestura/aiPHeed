@@ -75,4 +75,6 @@ Environment: Python 3.13, LightGBM 4.6.0, SHAP 0.51.0, pandas 2.3.3, scikit-lear
 - **Local only.** Nothing is merged into `main`, the branch Render deploys from.
 - The production dashboard and API still serve FIRI v2 / E56, unchanged.
 - The new `/api/v1/e107/*` routes exist only on this branch and were verified through FastAPI's TestClient, not on a deployed server.
-- Pushing this branch to `origin` does not deploy it.
+- The branch was pushed to `origin` on 2026-10-25 as **`aiPHeed/e107-twelve-indicator-lightgbm`** (head `cf649d5`, then this note).
+  - Windows case-folding stored the local ref under the existing `aiPHeed/` folder, so this is the same branch that the documents call `aipheed/e107-twelve-indicator-lightgbm`.
+  - Pushing does not deploy.
