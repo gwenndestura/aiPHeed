@@ -133,14 +133,18 @@ def issue(t: int) -> str:
     return L.origin(t).date().isoformat()
 
 
+def projection_bases(t: int, k: int) -> list[int]:
+    """Base months (a year before each target month of t+k) that can be published at O(t): 2021-01 <= b <= m0."""
+    return [m - 12 for m in L.target_months(t, k) if L.FIRST_YM <= m - 12 <= L.m0_of(t)]
+
+
 def projection(d_cut: L.Data, t: int, k: int, p: str, commodity: str) -> float:
     """Mean YoY of the target months of t+k with the latest published index (month m0) held flat."""
     s = L._series(d_cut, p, commodity)
     m0 = L.m0_of(t)
     if m0 not in s.index:
         return float("nan")
-    base = [m - 12 for m in L.target_months(t, k)]
-    vals = [100 * (s[m0] / s[b] - 1) for b in base if b in s.index and L.FIRST_YM <= b <= m0]
+    vals = [100 * (s[m0] / s[b] - 1) for b in projection_bases(t, k) if b in s.index]
     return float(np.mean(vals)) if len(vals) >= 2 else float("nan")
 
 
@@ -218,8 +222,7 @@ def known_labels(t: int, target: str, d_full=None) -> pd.DataFrame:
         return lab[lab["q"].isin(complete)]
     lab = r_frame(c)
     lab = lab[lab["q"].isin(complete)]
-    return pd.DataFrame([{"province_code": p, "q": q, "y": y, "H": h}
-                         for q, y, h in zip(lab["q"], lab["y"], lab["H"]) for p in PROVS])
+    return _per_province(lab)
 
 
 def outcomes(target: str, d_full=None) -> pd.DataFrame:
@@ -227,9 +230,14 @@ def outcomes(target: str, d_full=None) -> pd.DataFrame:
     d_full = d_full or data()[0]
     if target == "T43":
         return t43_frame(d_full)
-    r = r_frame(d_full)
+    return _per_province(r_frame(d_full))
+
+
+def _per_province(r: pd.DataFrame) -> pd.DataFrame:
+    """A regional label frame repeated for the five provinces (columns kept when empty)."""
     return pd.DataFrame([{"province_code": p, "q": q, "y": y, "H": h}
-                         for q, y, h in zip(r["q"], r["y"], r["H"]) for p in PROVS])
+                         for q, y, h in zip(r["q"], r["y"], r["H"]) for p in PROVS],
+                        columns=["province_code", "q", "y", "H"])
 
 
 def training_rows(X: pd.DataFrame, t: int, k: int, target: str) -> pd.DataFrame:
