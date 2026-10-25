@@ -1,0 +1,47 @@
+{
+ "future_data": [
+  {
+   "origin": "2023-Q2",
+   "forecasts_compared": 112,
+   "max_abs_change": 0.0,
+   "same_eligibility": true,
+   "passed": true
+  },
+  {
+   "origin": "2024-Q1",
+   "forecasts_compared": 112,
+   "max_abs_change": 0.0,
+   "same_eligibility": true,
+   "passed": true
+  },
+  {
+   "origin": "2024-Q4",
+   "forecasts_compared": 112,
+   "max_abs_change": 0.0,
+   "same_eligibility": true,
+   "passed": true
+  },
+  {
+   "origin": "2025-Q3",
+   "forecasts_compared": 112,
+   "max_abs_change": 0.0,
+   "same_eligibility": true,
+   "passed": true
+  },
+  {
+   "origin": "2026-Q1",
+   "forecasts_compared": 112,
+   "max_abs_change": 0.0,
+   "same_eligibility": true,
+   "passed": true
+  }
+ ],
+ "date_rules": {
+  "SWS": "rounds with published < O(t) (string compare on ISO dates)",
+  "news": "quarter q used only if its last headline was published before O(t); L=0 -> quarter t, L=1 -> t-1",
+  "CPI": "month m used only from day 10 of month m+1",
+  "rice": "quarter t-1 wholesale YoY (E107 A3)",
+  "fits": "alpha, news lag, phi, rho, Q, scales from training pairs / vintages known at O(t) only"
+ },
+ "passed": true
+}

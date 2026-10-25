@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, forecast, fpp, health, insights,
+    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, forecast, fpp, health, insights,
     lead2, quarterly, report, simple,
 )
 
@@ -39,6 +39,8 @@ router.include_router(e110.router, prefix=API_V1, tags=["Hunger forecast general
 router.include_router(e111.router, prefix=API_V1, tags=["Audited hunger forecasting (E111)"])
 # E112 food-insecurity forecasting with issue-date news indicators (branch aiPHeed/e112-food-insecurity-forecasting).
 router.include_router(e112.router, prefix=API_V1, tags=["Food-insecurity forecasting with news (E112)"])
+# E113 final hunger forecast model (branch aiPHeed/e113-final-model): read-only exported files.
+router.include_router(e113.router, prefix=API_V1, tags=["Final hunger forecast model (E113)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.
