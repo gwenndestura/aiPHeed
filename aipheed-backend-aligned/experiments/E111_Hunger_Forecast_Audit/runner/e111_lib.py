@@ -22,6 +22,27 @@ LEADS_PANEL = (1, 2, 3, 4, 5, 6)
 LEADS_BL = (1, 2, 3, 4)
 INFERRED = {("NCR", "2021-07-28"), ("VIS", "2021-07-28"), ("MIN", "2021-07-28")}
 _ORIG_ROUNDS = F.rounds
+_E110_DM = F._dm_signed
+
+
+def dm_nw(d, h: int) -> dict:
+    """ADDENDUM_1: one-sided HLN-corrected Diebold-Mariano test with Bartlett-weighted (Newey-West) variance, lag h-1."""
+    from scipy.stats import t as tdist
+    d = np.asarray(d, float)
+    n = len(d)
+    if n < 3:
+        return {"n": n, "p": None}
+    dbar = float(d.mean())
+    dc = d - dbar
+    lag = min(max(h - 1, 0), n - 1)
+    v = float(np.dot(dc, dc) / n) + 2 * sum((1 - j / (lag + 1)) * float(np.dot(dc[j:], dc[:-j]) / n) for j in range(1, lag + 1))
+    if v <= 0:
+        return {"n": n, "mean": dbar, "p": None, "note": "zero variance"}
+    stat = dbar / math.sqrt(v / n) * math.sqrt(max((n + 1 - 2 * h + h * (h - 1) / n) / n, 1e-9))
+    return {"n": n, "mean": dbar, "stat": stat, "p": float(tdist.cdf(stat, df=n - 1))}
+
+
+F._dm_signed = dm_nw            # E110's decide() resolves this name at call time; E110 files are not modified
 
 
 def set_sensitivity(noinf: bool = False, voters: bool = False) -> None:

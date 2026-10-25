@@ -23,6 +23,7 @@ def git_state() -> dict:
 def check() -> dict:
     st = git_state()
     assert st["protocol_sha256"] == (G.HERE / "PROTOCOL_SHA256.txt").read_text().strip(), "PROTOCOL.md changed"
+    assert G.sha256(G.E111 / "ADDENDUM_1.md") == (G.HERE / "ADDENDUM_1_SHA256.txt").read_text().strip(), "ADDENDUM_1 changed"
     return st
 
 
