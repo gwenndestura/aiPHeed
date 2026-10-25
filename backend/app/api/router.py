@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, e107, e108, e109, forecast, fpp, health, insights, lead2, quarterly,
-    report, simple,
+    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, forecast, fpp, health, insights, lead2,
+    quarterly, report, simple,
 )
 
 router = APIRouter()
@@ -33,6 +33,8 @@ router.include_router(e107.router, prefix=API_V1, tags=["Twelve-indicator LightG
 router.include_router(e108.router, prefix=API_V1, tags=["Factored twelve-indicator LightGBM (E108)"])
 # E109 SWS Balance Luzon hunger forecasting (branch aiPHeed/e109-hunger-forecasting): read-only exported files.
 router.include_router(e109.router, prefix=API_V1, tags=["Regional hunger forecasting (E109)"])
+# E110 SWS hunger generalization (branch aiPHeed/e110-hunger-generalization): read-only exported files.
+router.include_router(e110.router, prefix=API_V1, tags=["Hunger forecast generalization (E110)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.
