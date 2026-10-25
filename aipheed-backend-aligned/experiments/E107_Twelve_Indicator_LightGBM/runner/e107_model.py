@@ -160,7 +160,7 @@ def firi() -> pd.DataFrame:
 
 # ================================================================================================ one lead
 def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outcome=None, arms=True,
-        explain=False) -> tuple[pd.DataFrame, list[dict]]:
+        explain=False, rule: str = "primary") -> tuple[pd.DataFrame, list[dict]]:
     """Rolling-origin predictions of lead k for the labelled target quarters in `quarters` (default: all eligible).
 
     Returns (one row per evaluated (target quarter, province or REGION) with every arm, per-origin model records).
@@ -180,7 +180,7 @@ def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outc
         if t < E.FIRST_ORIGIN or t > E.LAST_ORIGIN:
             continue
         tr = train_rows(X, t, k, target, labels)
-        if not E.eligible(tr):
+        if not E.eligible(tr, target, rule):
             continue
         te = X[X["t"] == t].merge(obs[obs["q"] == q][["province_code", "y"]], on="province_code", how="inner")
         if not len(te):
@@ -211,6 +211,7 @@ def run(k: int, target: str, cols=None, quarters=None, X=None, labels=None, outc
                 out["RULE_p"] = (te["H1"] * price).fillna(clim).to_numpy()
             else:
                 out["H1_p"] = te["H1"].fillna(clim).to_numpy()
+        out["eligible_original_rule"] = E.eligible_original(tr)
         rec = {"lead": k, "target": target, "t": t, "q": q, "cfg": cfg["id"], "inner_logloss": scores,
                "n_train": len(tr), "n_train_q": int(tr["q"].nunique()), "n_train_high": int(tr["y"].sum()),
                "train_quarters": [E.qs(int(x)) for x in sorted(tr["q"].unique())]}

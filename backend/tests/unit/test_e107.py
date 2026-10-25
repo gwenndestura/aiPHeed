@@ -34,7 +34,7 @@ def test_fitted_booster_uses_every_column_as_an_input():
     X = E.feature_table(1)
     t = E.qi("2025-Q4")
     tr = M.train_rows(X, t, 1, "T43")
-    assert E.eligible(tr)
+    assert E.eligible(tr, "T43")
     m = M.Model(M.GRID[3], "T43", E.COLUMNS).fit(tr)
     assert m.m.booster_.feature_name() == E.COLUMNS
 

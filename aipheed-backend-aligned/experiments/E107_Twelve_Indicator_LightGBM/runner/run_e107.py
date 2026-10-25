@@ -31,7 +31,8 @@ def git_state() -> dict:
     return {"commit": g("rev-parse", "HEAD"), "branch": g("branch", "--show-current"),
             "runner_dirty": bool(g("status", "--porcelain", "--", str(E.E107 / "runner"))),
             "protocol_sha256": E.sha256(E.E107 / "PROTOCOL.md"),
-            "protocol_frozen_sha256": (E.E107 / "runner" / "PROTOCOL_SHA256.txt").read_text().strip()}
+            "protocol_frozen_sha256": (E.E107 / "runner" / "PROTOCOL_SHA256.txt").read_text().strip(),
+            "addendum_1_sha256": E.sha256(E.E107 / "ADDENDUM_1.md")}
 
 
 def check_inputs() -> None:
@@ -41,6 +42,7 @@ def check_inputs() -> None:
         assert E.sha256(E.DATA_IN / name.split("/")[-1]) == h, f"{name} changed"
     st = git_state()
     assert st["protocol_sha256"] == st["protocol_frozen_sha256"], "PROTOCOL.md changed after freezing"
+    assert E.sha256(E.E107 / "ADDENDUM_1.md") == (E.E107 / "runner" / "ADDENDUM_1_SHA256.txt").read_text().strip()
 
 
 # ================================================================================================ summaries
@@ -164,6 +166,11 @@ def phase_predict(block: str) -> None:
             M.write_csv(d / f"predictions_{target}_lead{k}.csv", df)
             allrec[f"{target}_lead{k}"] = recs
             print(f"{block} {target} lead {k}: {len(df)} rows, {df['q'].nunique() if len(df) else 0} quarters")
+        if target == "T43" and block == "dev":                    # ADDENDUM_1 A1-2: extended eligibility, dev rows
+            for k in E.LEADS:
+                df, _ = M.run(k, target, quarters=qs_, rule="extended")
+                M.write_csv(d / f"predictions_T43ext_lead{k}.csv", df)
+                print(f"{block} T43 extended lead {k}: {len(df)} rows, {df['q'].nunique() if len(df) else 0} quarters")
     E.write_json(d / "origin_records.json", allrec)
     E.write_json(d / "run.json", {"phase": block, "utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                   "git": st, "python": sys.version})
@@ -176,10 +183,16 @@ def load_block(block: str, target: str, k: int) -> pd.DataFrame:
     return pd.read_csv(f, dtype={"province_code": str})
 
 
+def load_combined(target: str, k: int) -> pd.DataFrame:
+    f = OUT / f"predictions_{target}_lead{k}.csv"
+    return pd.read_csv(f, dtype={"province_code": str}) if f.exists() and f.stat().st_size > 5 else pd.DataFrame()
+
+
 def phase_dev_metrics() -> None:
     res = {}
     for target in TARGETS:
         res[target] = {str(k): summarize(load_block("dev", target, k), target) for k in E.LEADS}
+    res["T43_extended"] = {str(k): summarize(load_block("dev", "T43ext", k), "T43") for k in E.LEADS}
     E.write_json(OUT / "dev" / "metrics.json", res)
 
 
@@ -199,7 +212,24 @@ def phase_combined() -> None:
             T["decision"][str(k)] = decide(cb, target)
         T["max_reliable_lead"] = max_reliable(T["decision"])
         T["leads_passing"] = [k for k in E.LEADS if T["decision"][str(k)]["reliable"]]
+        if target == "R":                                         # disclosure: the frozen row rule before ADDENDUM_1
+            T["original_rule"] = {}
+            for k in E.LEADS:
+                cb = load_combined(target, k)
+                sub = cb[cb["eligible_original_rule"].astype(bool)] if len(cb) else cb
+                T["original_rule"][str(k)] = {"n_quarters": int(sub["q"].nunique()) if len(sub) else 0,
+                                              "decision": decide(sub, target)}
         res["targets"][target] = T
+    X = {"blocks": {}, "decision": {}}                            # ADDENDUM_1 A1-2: T43 extended (secondary)
+    for k in E.LEADS:
+        dv, fn = load_block("dev", "T43ext", k), load_block("final", "T43", k)
+        cb = pd.concat([x for x in (dv, fn) if len(x)], ignore_index=True) if len(dv) or len(fn) else pd.DataFrame()
+        M.write_csv(OUT / f"predictions_T43ext_lead{k}.csv", cb)
+        X["blocks"][str(k)] = {"dev": summarize(dv, "T43"), "final": summarize(fn, "T43"), "combined": summarize(cb, "T43")}
+        X["decision"][str(k)] = decide(cb, "T43")
+    X["max_reliable_lead"] = max_reliable(X["decision"])
+    X["leads_passing"] = [k for k in E.LEADS if X["decision"][str(k)]["reliable"]]
+    res["targets"]["T43_extended"] = X
     E.write_json(OUT / "results.json", res)
 
 
@@ -339,7 +369,7 @@ def phase_prospective() -> None:
             X = E.feature_table(k)
             Xr = M.regional(X) if target == "R" else X
             tr = M.train_rows(Xr, t, k, target)
-            if not E.eligible(tr):
+            if not E.eligible(tr, target):
                 rec["forecasts"][f"{target}_lead{k}"] = {"status": "not eligible"}
                 continue
             cfg, _, _ = M.select(tr, k, target, E.COLUMNS)

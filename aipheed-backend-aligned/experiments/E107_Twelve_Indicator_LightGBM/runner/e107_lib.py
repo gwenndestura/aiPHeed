@@ -247,7 +247,23 @@ def training_rows(X: pd.DataFrame, t: int, k: int, target: str) -> pd.DataFrame:
     return tr.merge(lab[["province_code", "q", "y"]], on=["province_code", "q"], how="inner")
 
 
-def eligible(tr: pd.DataFrame) -> bool:
+EXTENDED_MIN_HIGH = EXTENDED_MIN_LOW = 3            # ADDENDUM_1 A1-2 (T43 secondary analysis)
+R_MIN_HIGH_Q = R_MIN_LOW_Q = 2                      # ADDENDUM_1 A1-1 (R counts quarters)
+
+
+def eligible(tr: pd.DataFrame, target: str = "T43", rule: str = "primary") -> bool:
+    """PROTOCOL section 3 with ADDENDUM_1: T43 counts rows (primary 5/5, extended 3/3); R counts quarters (2/2)."""
+    if tr["q"].nunique() < MIN_TRAIN_Q:
+        return False
+    if target == "R":
+        by_q = tr.groupby("q")["y"].max()
+        return int(by_q.sum()) >= R_MIN_HIGH_Q and int((1 - by_q).sum()) >= R_MIN_LOW_Q
+    hi, lo = (MIN_TRAIN_HIGH, MIN_TRAIN_LOW) if rule == "primary" else (EXTENDED_MIN_HIGH, EXTENDED_MIN_LOW)
+    return int(tr["y"].sum()) >= hi and int((1 - tr["y"]).sum()) >= lo
+
+
+def eligible_original(tr: pd.DataFrame) -> bool:
+    """The frozen section 3 row rule before ADDENDUM_1 (reported for R as a disclosure)."""
     return (tr["q"].nunique() >= MIN_TRAIN_Q and int(tr["y"].sum()) >= MIN_TRAIN_HIGH
             and int((1 - tr["y"]).sum()) >= MIN_TRAIN_LOW)
 
