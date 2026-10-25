@@ -1,0 +1,771 @@
+{
+ "ablation": {
+  "FIL vs FIL-NONEWS": {
+   "1": {
+    "n": 44,
+    "acc_with": 0.3181818181818182,
+    "acc_without": 0.4090909090909091,
+    "brier_diff": {
+     "diff": 0.005097395393653409,
+     "p_less": 0.7595,
+     "p_two": 0.481,
+     "ci90": [
+      -0.007717303134706814,
+      0.016996114612936073
+     ]
+    },
+    "mcnemar_p": 0.125,
+    "holm_p": 1.0
+   },
+   "2": {
+    "n": 40,
+    "acc_with": 0.4,
+    "acc_without": 0.425,
+    "brier_diff": {
+     "diff": 0.00034579754079999204,
+     "p_less": 0.5545,
+     "p_two": 0.891,
+     "ci90": [
+      -0.011776960097328766,
+      0.011344496313894998
+     ]
+    },
+    "mcnemar_p": 1.0,
+    "holm_p": 1.0
+   },
+   "3": {
+    "n": 36,
+    "acc_with": 0.4444444444444444,
+    "acc_without": 0.4444444444444444,
+    "brier_diff": {
+     "diff": -0.0058319361041222284,
+     "p_less": 0.269,
+     "p_two": 0.538,
+     "ci90": [
+      -0.020049909861094447,
+      0.0030934376041386272
+     ]
+    },
+    "mcnemar_p": 1.0,
+    "holm_p": 1.0
+   },
+   "4": {
+    "n": 32,
+    "acc_with": 0.5,
+    "acc_without": 0.53125,
+    "brier_diff": {
+     "diff": 0.00010534014351467474,
+     "p_less": 0.5425,
+     "p_two": 0.915,
+     "ci90": [
+      -0.0049233808730157445,
+      0.0048514151622816295
+     ]
+    },
+    "mcnemar_p": 1.0,
+    "holm_p": 1.0
+   }
+  },
+  "FIL-HN vs FIL-H": {
+   "1": {
+    "n": 44,
+    "acc_with": 0.5681818181818182,
+    "acc_without": 0.5,
+    "brier_diff": {
+     "diff": -0.03429529744061363,
+     "p_less": 0.1155,
+     "p_two": 0.231,
+     "ci90": [
+      -0.07981994924433636,
+      0.013194919684264755
+     ]
+    },
+    "mcnemar_p": 0.5810546875,
+    "holm_p": 0.924
+   },
+   "2": {
+    "n": 40,
+    "acc_with": 0.45,
+    "acc_without": 0.45,
+    "brier_diff": {
+     "diff": 0.021824554307643986,
+     "p_less": 0.857,
+     "p_two": 0.286,
+     "ci90": [
+      -0.010537745966751014,
+      0.054169729643142886
+     ]
+    },
+    "mcnemar_p": 1.0,
+    "holm_p": 0.924
+   },
+   "3": {
+    "n": 36,
+    "acc_with": 0.3888888888888889,
+    "acc_without": 0.5,
+    "brier_diff": {
+     "diff": 0.019319158972479163,
+     "p_less": 0.6455,
+     "p_two": 0.709,
+     "ci90": [
+      -0.045489630265666894,
+      0.1002453789461781
+     ]
+    },
+    "mcnemar_p": 0.21875,
+    "holm_p": 1.0
+   },
+   "4": {
+    "n": 32,
+    "acc_with": 0.53125,
+    "acc_without": 0.53125,
+    "brier_diff": {
+     "diff": 0.004748236235221879,
+     "p_less": 0.738,
+     "p_two": 0.524,
+     "ci90": [
+      -0.007840844477721862,
+      0.016995142258730004
+     ]
+    },
+    "mcnemar_p": 1.0,
+    "holm_p": 1.0
+   }
+  }
+ },
+ "placebo": {
+  "1": {
+   "real_brier": 0.2981550301702272,
+   "perm_mean": 0.2906590744156113,
+   "p_perm_le_real": 0.93,
+   "n": 100
+  },
+  "2": {
+   "real_brier": 0.31250975516147494,
+   "perm_mean": 0.3115137112864147,
+   "p_perm_le_real": 0.53,
+   "n": 100
+  },
+  "3": {
+   "real_brier": 0.30657793500340447,
+   "perm_mean": 0.30727874054061505,
+   "p_perm_le_real": 0.48,
+   "n": 100
+  },
+  "4": {
+   "real_brier": 0.2972212996118925,
+   "perm_mean": 0.30047201939844725,
+   "p_perm_le_real": 0.3,
+   "n": 100
+  }
+ },
+ "leading_association": {
+  "corpus|N1|lead1": {
+   "rho_panel_mean": -0.39285714285714296,
+   "p": 0.3833168704269727,
+   "n_origins": 7,
+   "rho_BL": -0.1785714285714286
+  },
+  "corpus|NC_gap_price|lead1": {
+   "rho_panel_mean": -0.3823529411764707,
+   "p": 0.1298634258225738,
+   "n_origins": 17,
+   "rho_BL": -0.6568627450980393,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_shortage|lead1": {
+   "rho_panel_mean": -0.5490196078431373,
+   "p": 0.02246115176818258,
+   "n_origins": 17,
+   "rho_BL": -0.12990196078431374,
+   "holm_p_7x4": 0.5615287942045645
+  },
+  "corpus|NC_gap_disaster|lead1": {
+   "rho_panel_mean": 0.5171568627450981,
+   "p": 0.03351135213888932,
+   "n_origins": 17,
+   "rho_BL": 0.31127450980392163,
+   "holm_p_7x4": 0.8042724513333437
+  },
+  "corpus|NC_gap_agri_supply|lead1": {
+   "rho_panel_mean": 0.7426470588235294,
+   "p": 0.0006382466911610891,
+   "n_origins": 17,
+   "rho_BL": 0.7745098039215688,
+   "holm_p_7x4": 0.017870907352510495
+  },
+  "corpus|NC_gap_jobs_income|lead1": {
+   "rho_panel_mean": -0.04901960784313726,
+   "p": 0.8517943990009383,
+   "n_origins": 17,
+   "rho_BL": 0.02450980392156863,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_assistance|lead1": {
+   "rho_panel_mean": 0.19607843137254904,
+   "p": 0.4507049808818775,
+   "n_origins": 17,
+   "rho_BL": 0.232843137254902,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_ant|lead1": {
+   "rho_panel_mean": -0.5000000000000001,
+   "p": 0.04096895595583607,
+   "n_origins": 17,
+   "rho_BL": -0.22794117647058826,
+   "holm_p_7x4": 0.9422859869842296
+  },
+  "corpus|ANT_share|lead1": {
+   "rho_panel_mean": -0.20833333333333337,
+   "p": 0.4223129818009652,
+   "n_origins": 17,
+   "rho_BL": -0.04656862745098039
+  },
+  "corpus|REP_share|lead1": {
+   "rho_panel_mean": 0.5392156862745099,
+   "p": 0.025503680315881874,
+   "n_origins": 17,
+   "rho_BL": 0.36764705882352944
+  },
+  "corpus|N1|lead2": {
+   "rho_panel_mean": -0.7142857142857143,
+   "p": 0.11078717201166179,
+   "n_origins": 6,
+   "rho_BL": -0.7142857142857143
+  },
+  "corpus|NC_gap_price|lead2": {
+   "rho_panel_mean": -0.4764705882352941,
+   "p": 0.06205917418922616,
+   "n_origins": 16,
+   "rho_BL": -0.12058823529411765,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_shortage|lead2": {
+   "rho_panel_mean": -0.3941176470588235,
+   "p": 0.13091285429899086,
+   "n_origins": 16,
+   "rho_BL": -0.3852941176470588,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_disaster|lead2": {
+   "rho_panel_mean": 0.37941176470588234,
+   "p": 0.1472271338628926,
+   "n_origins": 16,
+   "rho_BL": 0.39999999999999997,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_agri_supply|lead2": {
+   "rho_panel_mean": 0.6352941176470589,
+   "p": 0.008182064616334002,
+   "n_origins": 16,
+   "rho_BL": 0.3323529411764706,
+   "holm_p_7x4": 0.21273368002468407
+  },
+  "corpus|NC_gap_jobs_income|lead2": {
+   "rho_panel_mean": 0.0,
+   "p": 1.0,
+   "n_origins": 16,
+   "rho_BL": -0.14411764705882352,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_assistance|lead2": {
+   "rho_panel_mean": 0.2911764705882353,
+   "p": 0.27388704841914857,
+   "n_origins": 16,
+   "rho_BL": 0.38235294117647056,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_ant|lead2": {
+   "rho_panel_mean": -0.488235294117647,
+   "p": 0.05501502977813754,
+   "n_origins": 16,
+   "rho_BL": -0.3588235294117647,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|ANT_share|lead2": {
+   "rho_panel_mean": -0.36764705882352944,
+   "p": 0.1612323576755898,
+   "n_origins": 16,
+   "rho_BL": -0.25588235294117645
+  },
+  "corpus|REP_share|lead2": {
+   "rho_panel_mean": 0.5411764705882353,
+   "p": 0.030400218888170155,
+   "n_origins": 16,
+   "rho_BL": 0.6
+  },
+  "corpus|N1|lead3": {
+   "rho_panel_mean": -0.14285714285714288,
+   "p": 0.7871720116618076,
+   "n_origins": 6,
+   "rho_BL": -0.4285714285714286
+  },
+  "corpus|NC_gap_price|lead3": {
+   "rho_panel_mean": -0.7321428571428571,
+   "p": 0.0019129636009785618,
+   "n_origins": 15,
+   "rho_BL": -0.5642857142857142,
+   "holm_p_7x4": 0.051650017226421166
+  },
+  "corpus|NC_gap_shortage|lead3": {
+   "rho_panel_mean": -0.0857142857142857,
+   "p": 0.7613341261907666,
+   "n_origins": 15,
+   "rho_BL": -0.23928571428571427,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_disaster|lead3": {
+   "rho_panel_mean": 0.049999999999999996,
+   "p": 0.859540943467457,
+   "n_origins": 15,
+   "rho_BL": 0.13214285714285715,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_agri_supply|lead3": {
+   "rho_panel_mean": 0.5107142857142856,
+   "p": 0.051725498368269354,
+   "n_origins": 15,
+   "rho_BL": 0.15714285714285714,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_jobs_income|lead3": {
+   "rho_panel_mean": 0.22499999999999998,
+   "p": 0.42010468690763486,
+   "n_origins": 15,
+   "rho_BL": 0.028571428571428564,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_assistance|lead3": {
+   "rho_panel_mean": 0.20357142857142854,
+   "p": 0.4667950724891123,
+   "n_origins": 15,
+   "rho_BL": 0.1964285714285714,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_ant|lead3": {
+   "rho_panel_mean": -0.17857142857142855,
+   "p": 0.5242843600465524,
+   "n_origins": 15,
+   "rho_BL": -0.021428571428571425,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|ANT_share|lead3": {
+   "rho_panel_mean": -0.09999999999999999,
+   "p": 0.7228973252791182,
+   "n_origins": 15,
+   "rho_BL": -0.035714285714285705
+  },
+  "corpus|REP_share|lead3": {
+   "rho_panel_mean": 0.18214285714285713,
+   "p": 0.5158816817070392,
+   "n_origins": 15,
+   "rho_BL": 0.2714285714285714
+  },
+  "corpus|N1|lead4": {
+   "rho_panel_mean": -0.21428571428571433,
+   "p": 0.6445115810207203,
+   "n_origins": 7,
+   "rho_BL": -0.07142857142857144
+  },
+  "corpus|NC_gap_price|lead4": {
+   "rho_panel_mean": -0.5472527472527472,
+   "p": 0.04282204937819731,
+   "n_origins": 14,
+   "rho_BL": -0.49890109890109896,
+   "holm_p_7x4": 0.9422859869842296
+  },
+  "corpus|NC_gap_shortage|lead4": {
+   "rho_panel_mean": 0.01978021978021978,
+   "p": 0.9464892274080116,
+   "n_origins": 14,
+   "rho_BL": -0.02857142857142857,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_disaster|lead4": {
+   "rho_panel_mean": -0.03736263736263736,
+   "p": 0.8990930969739669,
+   "n_origins": 14,
+   "rho_BL": 0.054945054945054944,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_agri_supply|lead4": {
+   "rho_panel_mean": 0.4065934065934066,
+   "p": 0.14910193900151347,
+   "n_origins": 14,
+   "rho_BL": 0.178021978021978,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_jobs_income|lead4": {
+   "rho_panel_mean": 0.3538461538461538,
+   "p": 0.2145398708812465,
+   "n_origins": 14,
+   "rho_BL": 0.389010989010989,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_gap_assistance|lead4": {
+   "rho_panel_mean": 0.15604395604395604,
+   "p": 0.5942347005808511,
+   "n_origins": 14,
+   "rho_BL": 0.24835164835164836,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|NC_ant|lead4": {
+   "rho_panel_mean": -0.16043956043956045,
+   "p": 0.583752752641341,
+   "n_origins": 14,
+   "rho_BL": -0.05054945054945055,
+   "holm_p_7x4": 1.0
+  },
+  "corpus|ANT_share|lead4": {
+   "rho_panel_mean": -0.08131868131868132,
+   "p": 0.7822747512440957,
+   "n_origins": 14,
+   "rho_BL": 0.01098901098901099
+  },
+  "corpus|REP_share|lead4": {
+   "rho_panel_mean": 0.13406593406593406,
+   "p": 0.6477195279851133,
+   "n_origins": 14,
+   "rho_BL": 0.2923076923076923
+  },
+  "gdelt_gkg|NG_gap_price|lead1": {
+   "rho_panel_mean": -0.29901960784313725,
+   "p": 0.24365533759455596,
+   "n_origins": 17,
+   "rho_BL": -0.44117647058823534
+  },
+  "gdelt_gkg|NG_gap_shortage|lead1": {
+   "rho_panel_mean": 0.07352941176470588,
+   "p": 0.779127287251723,
+   "n_origins": 17,
+   "rho_BL": 0.09558823529411767
+  },
+  "gdelt_gkg|NG_gap_disaster|lead1": {
+   "rho_panel_mean": 0.26470588235294124,
+   "p": 0.3045422200057607,
+   "n_origins": 17,
+   "rho_BL": -0.07843137254901962
+  },
+  "gdelt_gkg|NG_gap_agri_supply|lead1": {
+   "rho_panel_mean": 0.16421568627450983,
+   "p": 0.5288225629141268,
+   "n_origins": 17,
+   "rho_BL": 0.19117647058823534
+  },
+  "gdelt_gkg|NG_gap_jobs_income|lead1": {
+   "rho_panel_mean": -0.022058823529411766,
+   "p": 0.9330304490530753,
+   "n_origins": 17,
+   "rho_BL": 0.007352941176470588
+  },
+  "gdelt_gkg|NG_gap_assistance|lead1": {
+   "rho_panel_mean": 0.2524509803921569,
+   "p": 0.32829422956501814,
+   "n_origins": 17,
+   "rho_BL": 0.502450980392157
+  },
+  "gdelt_gkg|NG_ant|lead1": {
+   "rho_panel_mean": 0.2034313725490196,
+   "p": 0.4335552308263205,
+   "n_origins": 17,
+   "rho_BL": 0.3186274509803922
+  },
+  "gdelt_gkg|NG_gap_price|lead2": {
+   "rho_panel_mean": -0.34411764705882353,
+   "p": 0.19185563142554293,
+   "n_origins": 16,
+   "rho_BL": -0.25
+  },
+  "gdelt_gkg|NG_gap_shortage|lead2": {
+   "rho_panel_mean": 0.044117647058823525,
+   "p": 0.8711220048065985,
+   "n_origins": 16,
+   "rho_BL": 0.12941176470588234
+  },
+  "gdelt_gkg|NG_gap_disaster|lead2": {
+   "rho_panel_mean": 0.15,
+   "p": 0.5792486306642535,
+   "n_origins": 16,
+   "rho_BL": 0.047058823529411764
+  },
+  "gdelt_gkg|NG_gap_agri_supply|lead2": {
+   "rho_panel_mean": 0.1411764705882353,
+   "p": 0.6020026838819792,
+   "n_origins": 16,
+   "rho_BL": 0.10294117647058824
+  },
+  "gdelt_gkg|NG_gap_jobs_income|lead2": {
+   "rho_panel_mean": -0.37058823529411766,
+   "p": 0.1576504647378207,
+   "n_origins": 16,
+   "rho_BL": -0.4264705882352941
+  },
+  "gdelt_gkg|NG_gap_assistance|lead2": {
+   "rho_panel_mean": 0.07647058823529412,
+   "p": 0.778340980960703,
+   "n_origins": 16,
+   "rho_BL": 0.011764705882352941
+  },
+  "gdelt_gkg|NG_ant|lead2": {
+   "rho_panel_mean": 0.15,
+   "p": 0.5792486306642535,
+   "n_origins": 16,
+   "rho_BL": -0.0411764705882353
+  },
+  "gdelt_gkg|NG_gap_price|lead3": {
+   "rho_panel_mean": -0.5428571428571428,
+   "p": 0.03652182255483734,
+   "n_origins": 15,
+   "rho_BL": -0.5928571428571427
+  },
+  "gdelt_gkg|NG_gap_shortage|lead3": {
+   "rho_panel_mean": 0.05357142857142857,
+   "p": 0.8496099367776072,
+   "n_origins": 15,
+   "rho_BL": -0.017857142857142853
+  },
+  "gdelt_gkg|NG_gap_disaster|lead3": {
+   "rho_panel_mean": -0.08928571428571427,
+   "p": 0.7516725173502768,
+   "n_origins": 15,
+   "rho_BL": 0.12142857142857141
+  },
+  "gdelt_gkg|NG_gap_agri_supply|lead3": {
+   "rho_panel_mean": 0.18214285714285713,
+   "p": 0.5158816817070392,
+   "n_origins": 15,
+   "rho_BL": 0.28928571428571426
+  },
+  "gdelt_gkg|NG_gap_jobs_income|lead3": {
+   "rho_panel_mean": -0.15,
+   "p": 0.5936302027425882,
+   "n_origins": 15,
+   "rho_BL": -0.4392857142857142
+  },
+  "gdelt_gkg|NG_gap_assistance|lead3": {
+   "rho_panel_mean": 0.028571428571428564,
+   "p": 0.9194899083821858,
+   "n_origins": 15,
+   "rho_BL": -0.049999999999999996
+  },
+  "gdelt_gkg|NG_ant|lead3": {
+   "rho_panel_mean": 0.16428571428571426,
+   "p": 0.5584973732486012,
+   "n_origins": 15,
+   "rho_BL": 0.21071428571428572
+  },
+  "gdelt_gkg|NG_gap_price|lead4": {
+   "rho_panel_mean": -0.4945054945054946,
+   "p": 0.07224967403413256,
+   "n_origins": 14,
+   "rho_BL": -0.4197802197802198
+  },
+  "gdelt_gkg|NG_gap_shortage|lead4": {
+   "rho_panel_mean": 0.12087912087912088,
+   "p": 0.6806070200628929,
+   "n_origins": 14,
+   "rho_BL": -0.0857142857142857
+  },
+  "gdelt_gkg|NG_gap_disaster|lead4": {
+   "rho_panel_mean": -0.3230769230769231,
+   "p": 0.2598736195087899,
+   "n_origins": 14,
+   "rho_BL": -0.06373626373626373
+  },
+  "gdelt_gkg|NG_gap_agri_supply|lead4": {
+   "rho_panel_mean": 0.14285714285714285,
+   "p": 0.6261174762253241,
+   "n_origins": 14,
+   "rho_BL": 0.01978021978021978
+  },
+  "gdelt_gkg|NG_gap_jobs_income|lead4": {
+   "rho_panel_mean": -0.1384615384615385,
+   "p": 0.6368849912650185,
+   "n_origins": 14,
+   "rho_BL": -0.3450549450549451
+  },
+  "gdelt_gkg|NG_gap_assistance|lead4": {
+   "rho_panel_mean": -0.08131868131868132,
+   "p": 0.7822747512440957,
+   "n_origins": 14,
+   "rho_BL": -0.2835164835164835
+  },
+  "gdelt_gkg|NG_ant|lead4": {
+   "rho_panel_mean": -0.0989010989010989,
+   "p": 0.7365853699253173,
+   "n_origins": 14,
+   "rho_BL": 0.01098901098901099
+  }
+ },
+ "concurrent_association": {
+  "price": {
+   "rho": 0.05392156862745098,
+   "p": 0.8371514461082936,
+   "n_quarters": 17
+  },
+  "shortage": {
+   "rho": -0.286764705882353,
+   "p": 0.2644463470710112,
+   "n_quarters": 17
+  },
+  "disaster": {
+   "rho": 0.661764705882353,
+   "p": 0.0038091599277271576,
+   "n_quarters": 17
+  },
+  "agri_supply": {
+   "rho": 0.5490196078431373,
+   "p": 0.02246115176818258,
+   "n_quarters": 17
+  },
+  "jobs_income": {
+   "rho": -0.34803921568627455,
+   "p": 0.17101314886910307,
+   "n_quarters": 17
+  },
+  "assistance": {
+   "rho": 0.411764705882353,
+   "p": 0.10054017943009598,
+   "n_quarters": 17
+  }
+ },
+ "anticipatory_vs_reporting": {
+  "ant_yoy|concurrent": {
+   "rho": 0.012254901960784315,
+   "p": 0.9627675753886974,
+   "n_quarters": 17
+  },
+  "ant_yoy|news_one_quarter_earlier": {
+   "rho": -0.28921568627450983,
+   "p": 0.2602032490665049,
+   "n_quarters": 17
+  },
+  "ant_yoy|news_two_quarters_earlier": {
+   "rho": -0.5735294117647058,
+   "p": 0.0201910380465231,
+   "n_quarters": 16
+  },
+  "rep_yoy|concurrent": {
+   "rho": 0.661764705882353,
+   "p": 0.0038091599277271576,
+   "n_quarters": 17
+  },
+  "rep_yoy|news_one_quarter_earlier": {
+   "rho": 0.41666666666666674,
+   "p": 0.09615710991420606,
+   "n_quarters": 17
+  },
+  "rep_yoy|news_two_quarters_earlier": {
+   "rho": 0.538235294117647,
+   "p": 0.03149322820583828,
+   "n_quarters": 16
+  }
+ },
+ "corpus_counts": {
+  "headlines": 9659,
+  "food_event": 3069,
+  "anticipatory": 212,
+  "event_duplicates_removed": 138,
+  "gkg_docs": 58576,
+  "gkg_event_dups": 8601,
+  "by_quarter": {
+   "2021-Q1": 193,
+   "2021-Q2": 152,
+   "2021-Q3": 189,
+   "2021-Q4": 147,
+   "2022-Q1": 191,
+   "2022-Q2": 228,
+   "2022-Q3": 322,
+   "2022-Q4": 288,
+   "2023-Q1": 315,
+   "2023-Q2": 304,
+   "2023-Q3": 391,
+   "2023-Q4": 337,
+   "2024-Q1": 415,
+   "2024-Q2": 430,
+   "2024-Q3": 519,
+   "2024-Q4": 478,
+   "2025-Q1": 406,
+   "2025-Q2": 449,
+   "2025-Q3": 742,
+   "2025-Q4": 695,
+   "2026-Q1": 667,
+   "2026-Q2": 746,
+   "2026-Q3": 881,
+   "2026-Q4": 174
+  },
+  "with_province_code": 0.3293301584014908
+ },
+ "surge_window_examples": [
+  {
+   "issue_date": "2023-10-01",
+   "target_quarter": "2023-Q4",
+   "h_last": 11.3,
+   "y": 14.3,
+   "N1": null,
+   "NC_gap_price": -0.002947519769949676,
+   "NC_gap_shortage": -0.01155044332614426,
+   "NC_gap_disaster": -0.021687035705727276,
+   "NC_gap_agri_supply": -0.012317277737838486,
+   "NC_gap_jobs_income": 0.020321111909896952,
+   "NC_gap_assistance": -0.012652767792954708,
+   "NC_ant": -0.027175057931325047
+  },
+  {
+   "issue_date": "2024-01-01",
+   "target_quarter": "2024-Q1",
+   "h_last": 10.3,
+   "y": 15.3,
+   "N1": 0.069936,
+   "NC_gap_price": -0.011399730235391377,
+   "NC_gap_shortage": 0.004220510812339557,
+   "NC_gap_disaster": -0.05758604185702475,
+   "NC_gap_agri_supply": 0.05580211460644825,
+   "NC_gap_jobs_income": 0.01860070486881608,
+   "NC_gap_assistance": -0.014271418004612103,
+   "NC_ant": 0.050451807228915665
+  },
+  {
+   "issue_date": "2024-04-01",
+   "target_quarter": "2024-Q2",
+   "h_last": 14.3,
+   "y": 19.6,
+   "N1": null,
+   "NC_gap_price": -0.0014061321078263286,
+   "NC_gap_shortage": -0.0019205706838603476,
+   "NC_gap_disaster": 0.08001234652582481,
+   "NC_gap_agri_supply": 0.025539017308000095,
+   "NC_gap_jobs_income": -0.017799574730777146,
+   "NC_gap_assistance": 0.00760225895694721,
+   "NC_ant": -0.04049019607843138
+  },
+  {
+   "issue_date": "2024-07-01",
+   "target_quarter": "2024-Q3",
+   "h_last": 15.3,
+   "y": 18.1,
+   "N1": 0.021708,
+   "NC_gap_price": 0.017145270270270272,
+   "NC_gap_shortage": -0.015118243243243241,
+   "NC_gap_disaster": 0.07525337837837837,
+   "NC_gap_agri_supply": 0.059628378378378366,
+   "NC_gap_jobs_income": -0.033361486486486486,
+   "NC_gap_assistance": -0.0005912162162162171,
+   "NC_ant": -0.08564705882352941
+  },
+  {
+   "issue_date": "2024-10-01",
+   "target_quarter": "2024-Q4",
+   "h_last": 19.6,
+   "y": 25.3,
+   "N1": 0.28079633333333337,
+   "NC_gap_price": -0.007411178999773702,
+   "NC_gap_shortage": 0.002118949165792342,
+   "NC_gap_disaster": 0.08701577897097244,
+   "NC_gap_agri_supply": 0.03927256269415129,
+   "NC_gap_jobs_income": 0.0008177497994198563,
+   "NC_gap_assistance": 0.04187496142689626,
+   "NC_ant": -0.01376518218623482
+  }
+ ]
+}
