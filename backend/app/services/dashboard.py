@@ -42,6 +42,7 @@ from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import thesis_system as THESIS
 from app.ml.inference import enso_context as ENSO
+from app.services import final_engine as FE
 from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
@@ -2043,12 +2044,14 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
                        "classifier_v2": "Food-stress article (E60 classifier v2: a food-stress mechanism phrase, not a "
                                         "bare topic word)"}
     data = [{"id": r["key"], "title": r["title"], "source": r["outlet"], "date": r["date"], "url": r["link"],
-             "excerpt": "", "topicKey": names[r["relevance"] or "TRIGGER"][0],
+             "excerpt": FE.news_context_note(r["title"]), "topicKey": names[r["relevance"] or "TRIGGER"][0],
              "topicLabel": names[r["relevance"] or "TRIGGER"][1], "relevanceScore": None,
              "relevanceStatus": r["status"],
              "relevanceLabel": relevance_label[r["status"]],
              "province": r["province"], "provinceCode": r["province_code"],
-             "triggers": [TRIGGER_LABELS[t] for t in r["triggers"]], "quarter": r["quarter"],
+             # final system: whether the headline reports an event or warns of a possible one (existing chip row)
+             "triggers": [FE.news_kind(r["title"])] + [TRIGGER_LABELS[t] for t in r["triggers"]],
+             "quarter": r["quarter"],
              "collectedRetrospectively": r["retrospective"]}
             for r in rows[start:start + page_size]]
     n_val = sum(r["status"] in ("validated", "classifier_v2") for r in rows)

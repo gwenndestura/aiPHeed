@@ -20,11 +20,14 @@ const renderLanding = () =>
     </QueryClientProvider>,
   );
 
+// The dialog reads the final engine (latest SWS survey, model evaluation) through react-query.
 const openAbout = () => {
   render(
-    <MemoryRouter>
-      <AboutModal />
-    </MemoryRouter>,
+    <QueryClientProvider client={new QueryClient()}>
+      <MemoryRouter>
+        <AboutModal />
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
   fireEvent.click(screen.getByText("About & Methodology"));
   return screen.getByRole("dialog");
@@ -229,7 +232,15 @@ describe("About dialog", () => {
       "Google News headlines in Filipino and English",
     ]);
     const titles = [...dlg.querySelectorAll("h4")].map((h) => h.textContent);
-    expect(titles).toEqual(["How to read the map", "Data sources", "Missing and limited data", "Disclaimer", "Contact"]);
+    expect(titles).toEqual([
+      "How to read the map",
+      "Measured regional hunger (SWS)",
+      "Forecast model and its tested accuracy",
+      "Data sources",
+      "Missing and limited data",
+      "Disclaimer",
+      "Contact",
+    ]);
   });
 
   it("labels the performance row as the price input and gives the lead time as three months ahead", () => {
@@ -237,7 +248,8 @@ describe("About dialog", () => {
     expect(dlg.textContent).toContain("Price input (LightGBM, three months ahead)");
     expect(dlg.textContent).toContain("accuracy 0.72 · F1 0.59 · AUC 0.65");
     const lead = within(dlg).getByText("Lead time").parentElement as HTMLElement;
-    expect(lead.textContent).toBe("Lead timeThree months ahead (next quarter)");
+    expect(lead.textContent).toBe("Lead timeMap score: next quarter · hunger forecast: no reliable horizon established");
+    expect(dlg.textContent).toContain("not a probability and not a measured hunger rate");
     expect(dlg.textContent).not.toContain("reliability test");
   });
 

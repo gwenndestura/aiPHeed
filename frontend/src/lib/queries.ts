@@ -16,6 +16,9 @@ import type {
   AuditResponse,
   ConfigResponse,
   ExplainabilityResponse,
+  FinalArchive,
+  FinalEvaluation,
+  FinalOverview,
   FeedbackCreated,
   FeedbackListResponse,
   FeedbackSubmitBody,
@@ -46,6 +49,34 @@ export function useConfig() {
     queryKey: ["config"],
     queryFn: () => api.get<ConfigResponse>("/api/v1/config", undefined, { auth: false }),
     staleTime: HOUR,
+  });
+}
+
+// The final forecasting engine: exported files, fixed until the next export, so a long staleTime is safe.
+export function useFinalOverview(enabled = true) {
+  return useQuery({
+    queryKey: ["final", "overview"],
+    queryFn: () => api.get<FinalOverview>("/api/v1/final/overview", undefined, { auth: false }),
+    staleTime: HOUR,
+    enabled,
+  });
+}
+
+export function useFinalEvaluation(enabled = true) {
+  return useQuery({
+    queryKey: ["final", "evaluation"],
+    queryFn: () => api.get<FinalEvaluation>("/api/v1/final/evaluation", undefined, { auth: false }),
+    staleTime: HOUR,
+    enabled,
+  });
+}
+
+export function useFinalArchive(area = "BL", enabled = true) {
+  return useQuery({
+    queryKey: ["final", "archive", area],
+    queryFn: () => api.get<FinalArchive>("/api/v1/final/archive", { area }, { auth: false }),
+    staleTime: HOUR,
+    enabled,
   });
 }
 

@@ -577,3 +577,77 @@ export interface AccountsResponse {
   active: AccountRow[];
   pendingCount: number;
 }
+
+// ---------------------------------------------------------------------------
+// Final forecasting engine (/api/v1/final/*): regional SWS hunger, the LightGBM evaluation and the forecast archive.
+// ---------------------------------------------------------------------------
+
+export interface SwsRound {
+  quarter: string;
+  fieldwork: string;
+  fieldworkEnd?: string;
+  published: string;
+  respondentBase: string;
+  national: number | null;
+  ncr: number | null;
+  balanceLuzon: number | null;
+  visayas: number | null;
+  mindanao: number | null;
+  balanceLuzonMarginPts: number | null;
+  ageDaysAtAsOf?: number;
+}
+
+export interface FinalOverview {
+  asOf: string;
+  regionalHunger: { measure: string; geography: string; latest: SwsRound; notes: string[] };
+  outlook: {
+    target: string;
+    latestReadingOutlook: { area: string; targetQuarter: string; trueHorizon: number; level: number; range80: [number, number] }[];
+    lightgbmForecast: { area: string; issueDate: string; lead: number; targetQuarter: string; newestSwsQuarterUsed: string; forecastLevel: number }[];
+    status: string;
+    reliableHorizon: number | null;
+    accuracyTarget: number;
+    accuracyTargetReached: boolean;
+  };
+  foodPrices: { definition: string; latestMonth: string; linkToHunger: string; latest: { province: string; fpd: number; squeeze: boolean }[] };
+  localEvidence: string;
+}
+
+export interface FinalLeadEvaluation {
+  lead: number;
+  rows: number;
+  metrics: { accuracy: number; balanced_accuracy: number; precision: number; recall: number; f1: number; auc: number };
+  baselineAccuracy: Record<string, number>;
+  maePts: number;
+  persistenceMaePts: number;
+  reliable: boolean;
+}
+
+export interface FinalEvaluation {
+  model: string;
+  target: string;
+  accuracyTarget: number;
+  accuracyTargetReached: boolean;
+  maxReliableLead: number | null;
+  leads: FinalLeadEvaluation[];
+  evidenceStatus: string;
+}
+
+export interface FinalArchiveRow {
+  kind: string;
+  model: string;
+  area: string;
+  issue_date: string;
+  lead: number;
+  target_quarter: string;
+  forecast_level: number | null;
+  persistence_level: number | null;
+  actual_level: number | null;
+  forecast_elevated: number | null;
+  actual_elevated: number | null;
+}
+
+export interface FinalArchive {
+  rows: FinalArchiveRow[];
+  note: string;
+}

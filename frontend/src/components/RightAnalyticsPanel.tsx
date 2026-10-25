@@ -93,7 +93,7 @@ export function ShapNarrativeCardBody({
           />
         )}
         {hasScore && finalScore >= alertThreshold && (
-          <StatusBadge tone="high" title={`Active alert: risk level at or above ${alertThreshold}`}>
+          <StatusBadge tone="high" title={`Active alert: priority score at or above ${alertThreshold}`}>
             Active alert
           </StatusBadge>
         )}
@@ -165,10 +165,10 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
   return (
     <section className="mb-2 space-y-3">
       {risky.length > 0 && (
-        <DriverGroup heading="Factors pushing risk up" items={risky} />
+        <DriverGroup heading="Factors pushing the score up" items={risky} />
       )}
       {protective.length > 0 && (
-        <DriverGroup heading="Factors pulling risk down" items={protective} />
+        <DriverGroup heading="Factors pulling the score down" items={protective} />
       )}
       {inactive.length > 0 && (
         <DriverGroup heading="Not part of this forecast" items={inactive} />

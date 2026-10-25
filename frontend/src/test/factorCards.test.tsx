@@ -43,8 +43,8 @@ describe("factor cards", () => {
     render(<ShapNarrativeCardBody quarter={QUARTER} selectedRegion={QUEZON} />);
 
     // Sections, order, titles and percentages.
-    const headings = screen.getAllByText(/^(Factors pushing risk up|Factors pulling risk down|Not part of this forecast)$/).map((e) => e.textContent);
-    expect(headings).toEqual(["Factors pushing risk up", "Factors pulling risk down", "Not part of this forecast"]);
+    const headings = screen.getAllByText(/^(Factors pushing the score up|Factors pulling the score down|Not part of this forecast)$/).map((e) => e.textContent);
+    expect(headings).toEqual(["Factors pushing the score up", "Factors pulling the score down", "Not part of this forecast"]);
     const tops = cards().map((c) => c.firstElementChild?.textContent);
     expect(tops).toEqual([
       "Jobs and livelihoods54%",

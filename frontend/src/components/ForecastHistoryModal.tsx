@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { History, ArrowRight } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
-import { useConfig, useTimeseries, useExplainability } from "@/lib/queries";
+import { useConfig, useTimeseries, useExplainability, useFinalArchive } from "@/lib/queries";
 import { quarterOrdinal } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -40,7 +40,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <DialogTitle className="text-sm">Forecast history</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
-            Past quarterly forecasts and their verified regional risk. The current quarter
+            Past quarterly priority scores for the region (indicator-based; not measured hunger). The current quarter
             {cur ? ` (${cur.label} ${cur.year})` : ""} is the newest PSA has published data for.
             Select a row to load that quarter on the map.
           </DialogDescription>
@@ -96,11 +96,72 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
         </div>
 
         <p className="mt-3 text-[9px] italic text-muted-foreground leading-snug">
-          Regional index = mean of the 5 provincial forecasts. Quarter-over-quarter change is versus the
-          preceding quarter. AI-generated estimates; not official food-insecurity classifications.
+          Regional priority score = mean of the 5 provincial scores. Quarter-over-quarter change is versus the
+          preceding quarter. Indicator-based estimates; not measured hunger rates or official classifications.
         </p>
+
+        <HungerArchive enabled={open} />
       </DialogContent>
     </Dialog>
+  );
+}
+
+/**
+ * The LightGBM hunger forecasts for Balance Luzon (one quarter ahead), each against the SWS reading that later came
+ * out. Retrospective rows were made walk-forward with data published before their issue date; prospective rows are
+ * sealed and not yet scored.
+ */
+function HungerArchive({ enabled }: { enabled: boolean }) {
+  const { data } = useFinalArchive("BL", enabled);
+  const rows = (data?.rows ?? [])
+    .filter((r) => r.lead === 1 && (r.kind.startsWith("retrospective") || r.model === "FIL-OA"))
+    .sort((a, b) => b.target_quarter.localeCompare(a.target_quarter));
+  if (!rows.length) return null;
+  return (
+    <div className="mt-4">
+      <p className="text-[11px] font-semibold">Hunger forecasts, Balance Luzon (SWS), one quarter ahead</p>
+      <p className="text-[10px] text-muted-foreground leading-snug pt-0.5">
+        LightGBM forecast vs the latest SWS reading at the time and the reading SWS later published (% of families).
+        "Above avg." is the call that hunger will be above its past-year average.
+      </p>
+      <div className="mt-2 overflow-x-auto">
+        <table className="w-full text-[11px] border-collapse">
+          <thead>
+            <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
+              <th className="text-left py-1.5 pr-3">Target</th>
+              <th className="text-left px-2">Issued</th>
+              <th className="text-right px-2">LightGBM</th>
+              <th className="text-right px-2">Latest</th>
+              <th className="text-right px-2">Actual</th>
+              <th className="text-left px-2">Above avg.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => {
+              const pending = r.actual_level === null;
+              const call = r.forecast_elevated === 1 ? "Yes" : "No";
+              const result = pending ? "pending" : r.forecast_elevated === r.actual_elevated ? "correct" : "wrong";
+              return (
+                <tr key={`${r.kind}-${r.target_quarter}`} className="border-b border-border/25">
+                  <td className="py-2 pr-3 font-semibold whitespace-nowrap">
+                    {r.target_quarter}
+                    {pending && <span className="ml-1.5 text-label font-normal text-ink-secondary">Sealed</span>}
+                  </td>
+                  <td className="px-2 whitespace-nowrap text-muted-foreground">{r.issue_date}</td>
+                  <td className="text-right px-2 font-mono-num tabular-nums">{r.forecast_level?.toFixed(1) ?? "—"}</td>
+                  <td className="text-right px-2 font-mono-num tabular-nums">{r.persistence_level?.toFixed(1) ?? "—"}</td>
+                  <td className="text-right px-2 font-mono-num tabular-nums">{pending ? "—" : r.actual_level?.toFixed(1)}</td>
+                  <td className="px-2 whitespace-nowrap">
+                    {call} <span className="text-muted-foreground">({result})</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 text-[9px] italic text-muted-foreground leading-snug">{data?.note}</p>
+    </div>
   );
 }
 

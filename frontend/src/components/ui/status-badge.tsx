@@ -5,10 +5,10 @@ export type StatusTone = "low" | "moderate" | "high" | "positive" | "neutral";
 
 /** The words a risk badge shows. "Severe" has no band of its own: it reads as high. */
 export const RISK_BADGE_TEXT: Record<RiskLevelKey, string> = {
-  low: "Low risk",
-  moderate: "Moderate risk",
-  high: "High risk",
-  severe: "High risk",
+  low: "Low priority",
+  moderate: "Moderate priority",
+  high: "High priority",
+  severe: "High priority",
 };
 
 const TONE_CLASS: Record<StatusTone, string> = {

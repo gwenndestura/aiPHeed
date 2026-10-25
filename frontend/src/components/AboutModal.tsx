@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Compass, Info, Mail } from "lucide-react";
 import { requestTour } from "@/lib/tour";
+import { useFinalEvaluation, useFinalOverview } from "@/lib/queries";
+import type { FinalOverview } from "@/lib/apiTypes";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 
@@ -10,6 +12,8 @@ export function AboutModal() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { data: overview } = useFinalOverview(open);
+  const { data: evaluation } = useFinalEvaluation(open);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
@@ -22,8 +26,9 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed is an estimated food-insecurity risk index for the five CALABARZON provinces,
-            forecast three months ahead (for the next quarter) to support planning. It was developed by a student research
+            aiPHeed shows DA Region IV-A three things for the five CALABARZON provinces and their 142 cities and
+            municipalities: an indicator-based priority score for the next quarter, the latest measured regional
+            hunger (SWS), and a LightGBM hunger forecast with its tested accuracy. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
           </DialogDescription>
@@ -32,12 +37,61 @@ export function AboutModal() {
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              Each province shows a <b className="text-foreground">risk index from 0 to 1</b>. A score of{" "}
-              <b>0.50</b> or higher is <b className="text-foreground">High risk</b>; below 0.50 is Low risk.
-              The index is not a probability. An <b className="text-foreground">active alert</b> appears
-              when the regional index is <b>0.60</b> or higher. City and municipal values are a relative
-              prioritization within each province, not forecasts.
+              Each province shows a <b className="text-foreground">priority score from 0 to 1</b>, built from
+              published indicators (prices, rice, poverty, climate, production, jobs, remittances, news and
+              regional hunger). A score of <b>0.50</b> or higher is <b className="text-foreground">High priority</b>;
+              below 0.50 is Low priority. The score is not a probability and not a measured hunger rate. An{" "}
+              <b className="text-foreground">active alert</b> appears when the regional score is <b>0.60</b> or
+              higher. City and municipal values rank towns within each province by poverty and density; no
+              measured hunger figure exists for any province, city or municipality.
             </p>
+          </Section>
+
+          <Section title="Measured regional hunger (SWS)">
+            {overview ? (
+              <div className="space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                <p>
+                  Latest survey: <b className="text-foreground">{overview.regionalHunger.latest.quarter}</b>{" "}
+                  (fieldwork {overview.regionalHunger.latest.fieldwork.replace("/", " to ")}, published{" "}
+                  {overview.regionalHunger.latest.published}; {overview.regionalHunger.latest.ageDaysAtAsOf} days
+                  old on {overview.asOf}). In Balance Luzon, which includes CALABARZON,{" "}
+                  <b className="text-foreground">{overview.regionalHunger.latest.balanceLuzon}%</b> of families
+                  experienced hunger (survey margin ±{overview.regionalHunger.latest.balanceLuzonMarginPts} points);
+                  nationally {overview.regionalHunger.latest.national}%.
+                </p>
+                <OutlookSentence overview={overview} />
+                <p>{overview.localEvidence}</p>
+              </div>
+            ) : (
+              <p className="text-[11px] text-muted-foreground">Loading the latest survey…</p>
+            )}
+          </Section>
+
+          <Section title="Forecast model and its tested accuracy">
+            {evaluation ? (
+              <div className="grid gap-1.5">
+                <p className="text-[11px] leading-relaxed text-muted-foreground">
+                  One LightGBM model using all 12 indicator families forecasts SWS regional hunger. It was tested
+                  quarter by quarter on 2023–2026, using only data published before each forecast. Accuracy is the
+                  share of correct calls of whether hunger will be above its past-year average.
+                </p>
+                {evaluation.leads.map((l) => (
+                  <Row
+                    key={l.lead}
+                    k={l.lead === 0 ? "Quarter just ended (survey not yet out)" : `${l.lead} quarter${l.lead > 1 ? "s" : ""} ahead`}
+                    v={`accuracy ${l.metrics.accuracy.toFixed(2)} · latest reading ${(l.baselineAccuracy.PERSIST ?? 0).toFixed(2)} · error ${l.maePts.toFixed(1)} vs ${l.persistenceMaePts.toFixed(1)} pts`}
+                  />
+                ))}
+                <Row k="75% accuracy target" v={evaluation.accuracyTargetReached ? "Reached" : "Not reached"} />
+                <Row
+                  k="Reliable forecast horizon"
+                  v={evaluation.maxReliableLead === null ? "Not established" : `${evaluation.maxReliableLead} quarter(s)`}
+                />
+                <Row k="News" v="Context only: it did not improve the forecasts" />
+              </div>
+            ) : (
+              <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>
+            )}
           </Section>
 
           <Section title="Data sources">
@@ -85,9 +139,10 @@ export function AboutModal() {
           </Section>
 
           <div className="grid gap-2 pt-1">
-            <Row k="Model" v="Risk index FIRI v2 · LightGBM price input" />
+            <Row k="Map score" v="Priority score FIRI v2 (indicator-based) · LightGBM price input" />
+            <Row k="Hunger forecast" v="LightGBM, 12 indicator families (regional SWS hunger)" />
             <Row k="Price input (LightGBM, three months ahead)" v="accuracy 0.72 · F1 0.59 · AUC 0.65" />
-            <Row k="Lead time" v="Three months ahead (next quarter)" />
+            <Row k="Lead time" v="Map score: next quarter · hunger forecast: no reliable horizon established" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
@@ -120,6 +175,23 @@ const DATA_SOURCES = [
 /** The phone number and email: outlined pills. */
 const CONTACT_CHIP =
   "inline-flex items-center gap-1.5 h-8 compact:h-11 px-3 rounded-full border edge-control text-[11px] font-medium text-foreground hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
+/** Next quarter for Balance Luzon: the latest-reading outlook with its past range, and the LightGBM forecast. */
+function OutlookSentence({ overview }: { overview: FinalOverview }) {
+  const o = overview.outlook.latestReadingOutlook.find((x) => x.area === "BL" && x.trueHorizon === 1);
+  const f = overview.outlook.lightgbmForecast.find((x) => x.area === "BL" && x.lead === 1);
+  if (!o && !f) return null;
+  return (
+    <p>
+      {o &&
+        `Next quarter (${o.targetQuarter}): if hunger stays at the latest reading, ${o.level}%; in past quarters the ` +
+          `next reading fell within ${o.range80[0]}–${o.range80[1]}% four times in five. `}
+      {f &&
+        `The LightGBM forecast for ${f.targetQuarter}, issued ${f.issueDate} before this survey was published, ` +
+          `was ${f.forecastLevel.toFixed(1)}%.`}
+    </p>
+  );
+}
 
 /** A section: a flat rounded card with a small title. */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

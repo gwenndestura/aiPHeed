@@ -16,16 +16,16 @@ type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCou
 
 /** Phones: the table's sortable headings as one menu. */
 const SORT_OPTIONS: { value: `${SortKey}:${"asc" | "desc"}`; label: string }[] = [
-  { value: "riskScore:desc", label: "Sort: risk score, high to low" },
-  { value: "riskScore:asc", label: "Sort: risk score, low to high" },
+  { value: "riskScore:desc", label: "Sort: priority score, high to low" },
+  { value: "riskScore:asc", label: "Sort: priority score, low to high" },
   { value: "name:asc", label: "Sort: province, A to Z" },
   { value: "name:desc", label: "Sort: province, Z to A" },
   { value: "qoqChangePct:desc", label: "Sort: quarter-on-quarter change, largest first" },
   { value: "qoqChangePct:asc", label: "Sort: quarter-on-quarter change, smallest first" },
   { value: "articleCount:desc", label: "Sort: articles, most first" },
   { value: "articleCount:asc", label: "Sort: articles, fewest first" },
-  { value: "riskLevel:desc", label: "Sort: risk level, high first" },
-  { value: "riskLevel:asc", label: "Sort: risk level, low first" },
+  { value: "riskLevel:desc", label: "Sort: priority level, high first" },
+  { value: "riskLevel:asc", label: "Sort: priority level, low first" },
 ];
 
 export default function DataPage() {
@@ -68,7 +68,7 @@ export default function DataPage() {
   };
 
   const exportCsv = () => {
-    const header = ["Province", "Quarter", "Risk Level Score", "Risk Level", "QoQ Change %", "Articles", "Status"];
+    const header = ["Province", "Quarter", "Priority Score", "Priority Level", "QoQ Change %", "Articles", "Status"];
     const csv = [
       header.join(","),
       ...filtered.map((r) =>

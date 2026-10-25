@@ -7,8 +7,8 @@ function useMeanings() {
   const { data: config } = useConfig();
   const cutoff = (config?.thresholds.riskDisplayCutoff ?? 0.5).toFixed(2);
   return {
-    high: `High risk: a score of ${cutoff} or more, on a scale from 0 to 1`,
-    low: `Low risk: a score below ${cutoff}`,
+    high: `High priority: a priority score of ${cutoff} or more, on a scale from 0 to 1 (indicator-based; not a measured hunger rate)`,
+    low: `Low priority: a priority score below ${cutoff}`,
     none: "No forecast: withheld by DA or not enough data this quarter",
   };
 }
@@ -22,7 +22,7 @@ function useMeanings() {
  */
 export function MapLegend({ compact = false }: { compact?: boolean }) {
   const meanings = useMeanings();
-  const label = `Risk level legend. Red: ${meanings.high}. Yellow: ${meanings.low}. Grey: ${meanings.none}.`;
+  const label = `Priority score legend. Red: ${meanings.high}. Yellow: ${meanings.low}. Grey: ${meanings.none}.`;
 
   if (compact) {
     const items = [
@@ -32,7 +32,7 @@ export function MapLegend({ compact = false }: { compact?: boolean }) {
     ];
     return (
       <div role="group" aria-label={label} className="qt-panel qt-bar-compact gap-3 whitespace-nowrap">
-        <span aria-hidden className="font-medium">Risk level</span>
+        <span aria-hidden className="font-medium">Priority</span>
         <ul aria-hidden className="flex items-center gap-3">
           {items.map((l) => (
             <li key={l.text} className="flex items-center gap-1.5">
@@ -58,7 +58,7 @@ export function MapLegend({ compact = false }: { compact?: boolean }) {
       aria-label={label}
       className="w-8 flex flex-col items-stretch surface-float rounded-md overflow-hidden border"
     >
-      <span aria-hidden className="text-[10px] leading-4 py-0.5 text-center text-muted-foreground">Risk</span>
+      <span aria-hidden className="text-[10px] leading-4 py-0.5 text-center text-muted-foreground">Priority</span>
       {/* Plain-text tooltips: nothing to hover inside them, so moving off a
           block (even towards its tooltip) closes it and the next one opens. */}
       {blocks.map((b) => (
