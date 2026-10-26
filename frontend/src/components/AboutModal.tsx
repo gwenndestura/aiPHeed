@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Compass, Info, Mail } from "lucide-react";
 import { requestTour } from "@/lib/tour";
-import { useFinalEvaluation, useFinalOverview } from "@/lib/queries";
+import { useFinalEvaluation, useFinalOverview, useFinalRiskEvaluation } from "@/lib/queries";
 import type { FinalOverview } from "@/lib/apiTypes";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -14,6 +14,7 @@ export function AboutModal() {
   const { pathname } = useLocation();
   const { data: overview } = useFinalOverview(open);
   const { data: evaluation } = useFinalEvaluation(open);
+  const { data: risk } = useFinalRiskEvaluation(open);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
@@ -37,13 +38,13 @@ export function AboutModal() {
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              Each province shows a <b className="text-foreground">priority score from 0 to 1</b>, built from
-              published indicators (prices, rice, poverty, climate, production, jobs, remittances, news and
-              regional hunger). A score of <b>0.50</b> or higher is <b className="text-foreground">High priority</b>;
-              below 0.50 is Low priority. The score is not a probability and not a measured hunger rate. An{" "}
-              <b className="text-foreground">active alert</b> appears when the regional score is <b>0.60</b> or
-              higher. City and municipal values rank towns within each province by poverty and density; no
-              measured hunger figure exists for any province, city or municipality.
+              A province is at <b className="text-foreground">high food-insecurity risk</b> in a quarter when
+              regional hunger (SWS, Balance Luzon) is above 11.3% <i>and</i> the province's food prices are rising
+              unusually fast (PSA), as the study defines risk. Each province shows the forecast{" "}
+              <b className="text-foreground">probability of high risk</b>; <b>0.50</b> or more is High risk. An{" "}
+              <b className="text-foreground">active alert</b> appears when the regional value is <b>0.60</b> or
+              higher. City and municipal values rank towns within each province by poverty and density; they are a
+              priority ranking, and no measured hunger figure exists for any province, city or municipality.
             </p>
           </Section>
 
@@ -68,26 +69,39 @@ export function AboutModal() {
           </Section>
 
           <Section title="Forecast model and its tested accuracy">
-            {evaluation ? (
+            {risk ? (
               <div className="grid gap-1.5">
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  One LightGBM model using all 12 indicator families forecasts SWS regional hunger. It was tested
-                  quarter by quarter on 2023–2026, using only data published before each forecast. Accuracy is the
-                  share of correct calls of whether hunger will be above its past-year average.
+                  One LightGBM model using all 12 indicator families forecasts each province's high/low risk. It was
+                  tested quarter by quarter on 2023–2026, using only data published before each forecast was issued
+                  (issued on the first day of a quarter). Accuracy is the share of correct high/low calls.
                 </p>
-                {evaluation.leads.map((l) => (
-                  <Row
-                    key={l.lead}
-                    k={l.lead === 0 ? "Quarter just ended (survey not yet out)" : `${l.lead} quarter${l.lead > 1 ? "s" : ""} ahead`}
-                    v={`accuracy ${l.metrics.accuracy.toFixed(2)} · latest reading ${(l.baselineAccuracy.PERSIST ?? 0).toFixed(2)} · error ${l.maePts.toFixed(1)} vs ${l.persistenceMaePts.toFixed(1)} pts`}
-                  />
-                ))}
-                <Row k="75% accuracy target" v={evaluation.accuracyTargetReached ? "Reached" : "Not reached"} />
+                {[1, 2, 3, 4].map((k) => {
+                  const l = risk.leads[String(k)];
+                  if (!l) return null;
+                  return (
+                    <Row
+                      key={k}
+                      k={k === 1 ? "Quarter starting on the issue date" : `${k} quarters ahead`}
+                      v={`accuracy ${l.metrics.accuracy.toFixed(2)} (${l.n} cases; always-low ${(l.baseline_accuracy["ALWAYS-LOW"] ?? 0).toFixed(2)}) · ${l.reliable ? "reliable" : "not reliable"}`}
+                    />
+                  );
+                })}
+                <Row
+                  k="75% accuracy target"
+                  v={risk.max_reliable_lead ? `Reached for the quarter starting on the issue date (${risk.leads["1"].metrics.accuracy.toFixed(2)})` : "Not reached"}
+                />
                 <Row
                   k="Reliable forecast horizon"
-                  v={evaluation.maxReliableLead === null ? "Not established" : `${evaluation.maxReliableLead} quarter(s)`}
+                  v={risk.max_reliable_lead ? "One quarter (up to 3 months ahead)" : "Not established"}
                 />
                 <Row k="News" v="Context only: it did not improve the forecasts" />
+                {evaluation && (
+                  <Row
+                    k="Regional hunger level (separate model)"
+                    v={`no reliable horizon; error ${evaluation.leads.find((l) => l.lead === 1)?.maePts.toFixed(1) ?? "?"} pts next quarter`}
+                  />
+                )}
               </div>
             ) : (
               <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>
@@ -139,10 +153,9 @@ export function AboutModal() {
           </Section>
 
           <div className="grid gap-2 pt-1">
-            <Row k="Map score" v="Priority score FIRI v2 (indicator-based) · LightGBM price input" />
-            <Row k="Hunger forecast" v="LightGBM, 12 indicator families (regional SWS hunger)" />
-            <Row k="Price input (LightGBM, three months ahead)" v="accuracy 0.72 · F1 0.59 · AUC 0.65" />
-            <Row k="Lead time" v="Map score: next quarter · hunger forecast: no reliable horizon established" />
+            <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
+            <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
+            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · further ahead: indicative only" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 

@@ -41,6 +41,7 @@ from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import thesis_system as THESIS
+from app.ml.inference import ch1_system as CH1
 from app.ml.inference import enso_context as ENSO
 from app.services import final_engine as FE
 from app.services import reference as ref
@@ -105,7 +106,7 @@ def indicator_for(quarter: str) -> dict:
     if not (E41L2.serves(quarter) or E41L2.governs()):
         return INDICATOR
     if THESIS.active():
-        return THESIS_INDICATOR
+        return CH1.INDICATOR if CH1.active() and CH1.covers(quarter) else THESIS_INDICATOR
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
         ind = rec["indicator"]
@@ -394,7 +395,9 @@ def candidate_unavailable_reason(quarter: str) -> str:
 
 def _lead2_key() -> str:
     """Cache key part: the Lead-2 mode and whether it governs every quarter at this moment (it depends on the clock)."""
-    return E41L2.mode() + (":governs" if E41L2.governs() else "")
+    # "+ch1": thesis mode serving the Chapter I risk forecast (ch1_system) instead of the FIRI index
+    ch1 = "+ch1" if THESIS.active() and CH1.active() else ""
+    return E41L2.mode() + ch1 + (":governs" if E41L2.governs() else "")
 
 
 def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
@@ -456,7 +459,11 @@ def _province_forecasts_cached(quarter: str, horizon: str, lead2_mode: str) -> l
     # E41: with AIPHEED_LEAD2_MODEL=e41, the candidate's frozen Lead-2 forecast replaces the E38 row for exactly its
     # target quarter; every other quarter, and the default mode, are unchanged.
     if lead2_mode.startswith("thesis"):               # THESIS: the FIRI estimate is the province score on every quarter
-        return THESIS.index_rows(E41L2.rows_for(quarter), quarter) if lead2_mode.endswith(":governs") else []
+        base = THESIS.index_rows(E41L2.rows_for(quarter), quarter) if lead2_mode.endswith(":governs") else []
+        if "+ch1" in lead2_mode:                     # Chapter I risk forecast where it exists; never mixed with FIRI
+            names = {c: r["province"] for (c, _), r in CH1.rows().items()}
+            return CH1.province_rows(base, quarter, names) if CH1.covers(quarter) else []
+        return base
     if lead2_mode.endswith(":governs"):              # E46: one score on every quarter (candidate's own estimates)
         return E41L2.rows_for(quarter)
     if E41L2.serves(quarter):
@@ -598,7 +605,7 @@ def province_summary(
             **({"estimateKind": record["estimate_kind"], "observedOutcome": record.get("observed_label")}
                if record.get("estimate_kind") else {}),
             "evidenceStatus": "EXPERIMENTAL",
-            "riskLevelBasis": RISK_LEVEL_BASIS,
+            "riskLevelBasis": CH1_RISK_LEVEL_BASIS if THESIS.active() and CH1.active() else RISK_LEVEL_BASIS,
             # Rule 6: every forecast carries an explicit horizon label, a
             # confidence statement and a verification date.
             "forecastHorizonQuarters": record.get("forecast_horizon_quarters"),
@@ -807,6 +814,9 @@ RISK_LEVEL_BASIS = (
     "Band of an unvalidated relative score (>= 0.50 shown as high); not a validated classification and not a "
     "measured local food-insecurity rate."
 )
+CH1_RISK_LEVEL_BASIS = (
+    "Band of the Chapter I risk probability (>= 0.50 is HIGH): HIGH means regional SWS hunger above 11.3% and unusually "
+    "fast food-price rises in the province. A risk class, not a measured provincial hunger rate.")
 LGU_PROVENANCE_PATH = Path("data/inputs/lgu_vulnerability.csv")
 
 
@@ -887,8 +897,8 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
-            "riskLevelBasis": LGU_POSITION_BASIS,
-            "disaggregationLabel": r["disaggregation_label"],
+            "riskLevelBasis": CH1.LGU_BASIS if THESIS.active() and CH1.active() else LGU_POSITION_BASIS,
+            "disaggregationLabel": (CH1.LGU_BASIS if THESIS.active() and CH1.active() else r["disaggregation_label"]),
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
             # E64 (Objective 3): what this relative index is built from, so every ranking traces to its model run
@@ -981,6 +991,9 @@ TRIGGER_STATUS_NOTES = {
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
                         "the official figures behind this factor.")
+CH1_EVIDENCE_NOTE = ("In the Chapter I risk forecast: this group's push (SHAP, log-odds) on the LightGBM's estimate "
+                     "that the province's food prices will rise unusually fast. Regional hunger, poverty and news are "
+                     "counted in the remaining share.")
 THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v2): the five provinces' combined push of this factor group "
                                "(above or below its historical middle). Open a province to see each indicator's value, "
                                "score and status.")
@@ -1044,6 +1057,9 @@ def explainability(province_code: str, quarter: str) -> dict:
     built = _drivers(province_code, quarter)
     if THESIS.active() and E41L2.governs():            # THESIS: the bars explain the served FIRI, not the price part
         built = THESIS.firi_drivers(E41L2.record(), quarter, province_code, built)
+    ch1 = THESIS.active() and CH1.active() and CH1.covers(quarter)
+    if ch1:                                           # the Chapter I forecast: SHAP of its LightGBM price part
+        built = CH1.drivers(province_code, quarter, built)
     drivers = built["drivers"]
     pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
 
@@ -1059,12 +1075,15 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": (THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
+            "evidenceNote": (CH1_EVIDENCE_NOTE if ch1 else
+                             THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                              if THESIS.active() and E41L2.governs() else
                              _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
                                         d["driver_group"], quarter)),
             # the card's sentence with the measured values behind this group (province scope, thesis mode)
-            "plainEvidence": (THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
+            "plainEvidence": (CH1.market_evidence(province_code, quarter)
+                              if ch1 and d["driver_group"] == "market" else
+                              THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                               if THESIS.active() and E41L2.governs() else None),
             "newsSignalProportion": d["trigger_proportion"],
         })
@@ -1307,9 +1326,25 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             sentence = f"{e67['lead']} {sentence}"
     if e67 and e67["sentence"]:
         sentence = f"{sentence} {e67['sentence']}"
+    ch1_issued = None
+    if THESIS.active() and CH1.active() and CH1.covers(quarter):     # the Chapter I forecast is the served number
+        rs = ([CH1.row(province_code, quarter)] if province_code else
+              [r for (_, q), r in CH1.rows().items() if q == quarter])
+        rs = [r for r in rs if r]
+        if rs:
+            p = sum(float(r["probability"]) for r in rs) / len(rs)
+            result = "HIGH" if p >= 0.5 else "LOW"
+            obs = (rs[0]["observed"] or None) if province_code else None
+            kind = "forecast" if CH1.kind(rs[0]) == "forecast" else "backtest"
+            ch1_issued = rs[0]["issue_date"]
+            comp = {"hunger": sum(float(r["pi_hunger"]) for r in rs) / len(rs),
+                    "price": sum(float(r["pi_price"]) for r in rs) / len(rs)}
+            caveat = CH1.INDICATOR["caveat"]
+            sentence = CH1.sentence(province_code, name, quarter, p) or sentence
     out = {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
-        "issued": rows[0]["origin"], "probability": round(p, 4), "result": result, "observedOutcome": obs,
+        "issued": ch1_issued or rows[0]["origin"], "probability": round(p, 4), "result": result,
+        "observedOutcome": obs,
         "reasons": [{"key": t["key"], "label": t["label"], "direction": t["direction"], "pct": t["pct"],
                      "evidence": t.get("evidenceNote")} for t in reasons],
         "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),

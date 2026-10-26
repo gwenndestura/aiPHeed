@@ -42,34 +42,34 @@ const MAP_TOUR: TourDef = {
     {
       title: "Welcome to aiPHeed",
       body: () =>
-        "aiPHeed shows a quarterly food-insecurity priority score for the five provinces of CALABARZON, built from published indicators. The scores are estimates, not measured hunger rates, reviewed by Department of Agriculture staff before they are published.",
+        "aiPHeed forecasts each quarter whether each CALABARZON province is at high or low food-insecurity risk: regional hunger above 11.3% together with unusually fast food-price rises. Forecasts are reviewed by Department of Agriculture staff before they are published.",
       layout: { panel: "summary", sheet: "collapsed" },
     },
     {
       title: "The map",
       body: ({ layout }) =>
-        `Each province is coloured by its priority score. ${layout === "phone" ? "Tap" : "Click"} a province to see its details.`,
+        `Each province is coloured by its forecast risk level. ${layout === "phone" ? "Tap" : "Click"} a province to see its details.`,
       area: provincesArea,
       layout: { sheet: "collapsed" },
     },
     {
       title: "Reading the colours",
       body: ({ cutoff }) =>
-        `Red means high priority: a priority score of ${cutoff} or more, on a scale from 0 to 1. Yellow means low priority. Grey means there is no forecast for that province this quarter.`,
+        `Red means high risk: a forecast probability of ${cutoff} or more. Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
       target: () => "legend",
       layout: { sheet: "collapsed" },
     },
     {
       title: "Province summary",
       body: ({ layout }) =>
-        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its priority score, its change from the previous quarter and its population.`,
+        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its risk probability, its change from the previous quarter and its population.`,
       target: (l) => (l === "phone" ? "sheet" : "summary"),
       layout: { panel: "summary", sheet: "half" },
     },
     {
-      title: "Why this score",
+      title: "Why this risk",
       body: ({ layout }) =>
-        `${layout === "phone" ? "The Why tab" : "This panel"} lists the factors pushing the score up or down, such as food prices or the weather.`,
+        `${layout === "phone" ? "The Why tab" : "This panel"} lists the factors pushing the risk up or down, such as food prices or the weather.`,
       target: (l) => (l === "phone" ? "sheet" : "why"),
       layout: { panel: "why", sheet: "half" },
     },

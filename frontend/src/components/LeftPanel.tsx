@@ -151,7 +151,7 @@ export function RfiiScoreCardBody({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-        <h3 className="text-[13px] font-semibold leading-tight">Regional average priority score</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Regional average risk probability</h3>
         {quarterLabel && (
           <p className="text-[11px] text-muted-foreground tabular-nums">{quarterLabel}</p>
         )}
@@ -184,7 +184,7 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <MetricLabel className="uppercase tracking-[0.28em]">Priority index</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">Risk probability</MetricLabel>
           </div>
 
           {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
@@ -256,8 +256,8 @@ export function RfiiScoreCardBody({
 
       {/* Columns share the width but never get narrower than their label. */}
       <div className="grid grid-cols-[repeat(3,minmax(max-content,1fr))] gap-2">
-        <SummaryChip label="High priority" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
-        <SummaryChip label="Low priority" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
+        <SummaryChip label="High risk" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
+        <SummaryChip label="Low risk" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
         <SummaryChip
           label="Limited data"
           value={failed ? "—" : limited}
@@ -292,7 +292,7 @@ export function RiskDriversCardBody({
   return (
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
-        <h3 className="text-[13px] font-semibold leading-tight">What drives this priority score?</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">What drives this forecast?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
           {isLoading ? "Computing…" : failed ? "" : "Ranked"}
         </span>
@@ -495,10 +495,10 @@ function RegionDetail({
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <StatusBadge
                 level={isHigh ? "high" : "low"}
-                title={`Priority level (${displayCutoff.toFixed(2)} display cutoff)`}
+                title={`Forecast risk level (${displayCutoff.toFixed(2)} display cutoff)`}
               />
               {isActiveAlert && (
-                <StatusBadge tone="high" title={`Active alert: priority score at or above ${alertThreshold}`}>
+                <StatusBadge tone="high" title={`Active alert: risk probability at or above ${alertThreshold}`}>
                   Active alert
                 </StatusBadge>
               )}
@@ -507,7 +507,7 @@ function RegionDetail({
               )}
               {!!region.seriesNeedingReview && (
                 <ConfidenceTag
-                  explanation={`${region.seriesNeedingReview} of ${region.seriesMonitored ?? "?"} monitored commodity series scored below the model's confidence cutoff this quarter. They still count fully in the priority score; this flags them for analyst review and does not exclude them.`}
+                  explanation={`${region.seriesNeedingReview} of ${region.seriesMonitored ?? "?"} monitored commodity series scored below the model's confidence cutoff this quarter. They still count fully in the risk probability; this flags them for analyst review and does not exclude them.`}
                 >
                   {region.seriesNeedingReview} series need review
                 </ConfidenceTag>
@@ -525,7 +525,7 @@ function RegionDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Priority score</MetricLabel>
+          <MetricLabel>Risk probability</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
@@ -637,7 +637,7 @@ function MunicipalityDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Priority score</MetricLabel>
+          <MetricLabel>Risk probability</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div

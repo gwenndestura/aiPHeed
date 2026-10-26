@@ -16,14 +16,14 @@ const DATA_TOUR: TourDef = {
     {
       title: "Filter the list",
       body: () =>
-        "Show one province or one priority level, or choose another quarter. The search box finds a province by name.",
+        "Show one province or one risk level, or choose another quarter. The search box finds a province by name.",
       target: () => "data-filters",
     },
     {
       title: "Sort",
       body: ({ layout }) =>
         layout === "phone"
-          ? "Choose the order of the provinces, for example by priority score from high to low."
+          ? "Choose the order of the provinces, for example by risk probability from high to low."
           : "Click a column heading to sort the table by it. Click it again to reverse the order.",
       target: () => "data-sort",
     },
@@ -31,8 +31,8 @@ const DATA_TOUR: TourDef = {
       title: "The provinces",
       body: ({ layout }) =>
         layout === "phone"
-          ? "Each card is one province: its priority score, its change from the previous quarter and the number of news articles analyzed. Tap a card to open that province on the map."
-          : "Each row is one province: its priority score and level, its change from the previous quarter and the number of news articles analyzed. Click a row to open that province on the map.",
+          ? "Each card is one province: its risk probability, its change from the previous quarter and the number of news articles analyzed. Tap a card to open that province on the map."
+          : "Each row is one province: its risk probability and level, its change from the previous quarter and the number of news articles analyzed. Click a row to open that province on the map.",
       // Phones: the first card (the whole list is taller than the screen).
       target: (l) => (l === "phone" ? "data-row" : "data-table"),
     },
@@ -63,7 +63,7 @@ const VIZ_TOUR: TourDef = {
     {
       title: "Two kinds of chart",
       body: () =>
-        "Province Priority Score Trend draws priority scores quarter by quarter. Feature Contribution Breakdown shows how much each group of factors, such as food prices or the weather, added to one province's score in a quarter.",
+        "Province Risk Level Trend draws risk probabilities quarter by quarter. Feature Contribution Breakdown shows how much each group of factors, such as food prices or the weather, added to one province's risk in a quarter.",
       target: () => "viz-tabs",
       layout: { vizTab: "trend" },
     },
@@ -83,7 +83,7 @@ const VIZ_TOUR: TourDef = {
     {
       title: "Reading the chart",
       body: ({ cutoff, alert }) =>
-        `Each line is a priority score from 0 to 1 (not a measured hunger rate). At or above the High priority line (${cutoff}) a province is high priority; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
+        `Each line is a forecast probability of HIGH risk. At or above the High risk line (${cutoff}) a province is high risk; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
       target: () => "viz-chart",
       // Phones: just the two lines, so the card has room beside them.
       area: (l) => (l === "phone" ? thresholdLinesArea() : null),

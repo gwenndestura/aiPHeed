@@ -19,6 +19,8 @@ import type {
   FinalArchive,
   FinalEvaluation,
   FinalOverview,
+  FinalRiskEvaluation,
+  FinalRiskRows,
   FeedbackCreated,
   FeedbackListResponse,
   FeedbackSubmitBody,
@@ -66,6 +68,24 @@ export function useFinalEvaluation(enabled = true) {
   return useQuery({
     queryKey: ["final", "evaluation"],
     queryFn: () => api.get<FinalEvaluation>("/api/v1/final/evaluation", undefined, { auth: false }),
+    staleTime: HOUR,
+    enabled,
+  });
+}
+
+export function useFinalRiskEvaluation(enabled = true) {
+  return useQuery({
+    queryKey: ["final", "risk", "evaluation"],
+    queryFn: () => api.get<FinalRiskEvaluation>("/api/v1/final/risk/evaluation", undefined, { auth: false }),
+    staleTime: HOUR,
+    enabled,
+  });
+}
+
+export function useFinalRiskRows(enabled = true) {
+  return useQuery({
+    queryKey: ["final", "risk", "rows"],
+    queryFn: () => api.get<FinalRiskRows>("/api/v1/final/risk/rows", undefined, { auth: false }),
     staleTime: HOUR,
     enabled,
   });

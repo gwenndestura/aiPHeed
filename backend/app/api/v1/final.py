@@ -71,3 +71,28 @@ def final_lgus() -> dict:
     """All 142 cities and municipalities with their indicator-based priority score and local-evidence status."""
     q = D.latest_quarter()
     return _guard(FE.lgus, D.municipality_summary(q))
+
+
+# ------------------------------------------------------------------------------------------------ Chapter I risk
+@router.get("/final/risk/evaluation")
+def final_risk_evaluation() -> dict:
+    """Walk-forward evaluation of the Chapter I province risk forecast (CH1-LGBM): per-lead metrics, baselines,
+    reliability verdicts, Objective-4 comparisons, news tests and calibration."""
+    from app.ml.inference import ch1_system as CH1
+    if not CH1.active():
+        raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
+    return CH1.evaluation()
+
+
+@router.get("/final/risk/rows")
+def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
+                    quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$")) -> dict:
+    """Province rows: walk-forward Lead-1 forecasts with observed outcomes, and the forecasts issued 2026-10-01."""
+    from app.ml.inference import ch1_system as CH1
+    if not CH1.active():
+        raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
+    rows = [dict(r, kind=CH1.kind(r), reliable_horizon=(CH1.reliable_lead() or 0) >= int(r["lead"]))
+            for r in CH1.rows().values()
+            if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)]
+    return {"count": len(rows), "maxReliableLead": CH1.reliable_lead(), "rows": rows,
+            "definition": CH1.INDICATOR["definition"], "caveat": CH1.INDICATOR["caveat"]}

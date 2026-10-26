@@ -651,3 +651,37 @@ export interface FinalArchive {
   rows: FinalArchiveRow[];
   note: string;
 }
+
+/** /api/v1/final/risk/evaluation: the Chapter I province risk forecast (CH1-LGBM), per lead. */
+export interface FinalRiskLead {
+  n: number;
+  n_quarters: number;
+  high_share: number;
+  metrics: { accuracy: number; balanced_accuracy: number; precision: number; recall: number; f1: number; auc: number };
+  accuracy_ci90: [number, number];
+  baseline_accuracy: Record<string, number>;
+  reliable: boolean;
+}
+
+export interface FinalRiskEvaluation {
+  max_reliable_lead: number | null;
+  leads: Record<string, FinalRiskLead>;
+}
+
+export interface FinalRiskRow {
+  province: string;
+  quarter: string;
+  issue_date: string;
+  lead: string;
+  probability: string;
+  class: "HIGH" | "LOW";
+  observed: string;
+  kind: "forecast" | "retrospective";
+  reliable_horizon: boolean;
+}
+
+export interface FinalRiskRows {
+  count: number;
+  maxReliableLead: number | null;
+  rows: FinalRiskRow[];
+}
