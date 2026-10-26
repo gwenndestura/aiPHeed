@@ -40,6 +40,9 @@ COUNTS = {"batangas": 34, "cavite": 23, "laguna": 30, "quezon": 41, "rizal": 14}
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
+    # these tests check the FIRI v2 pipeline as the served score; since aiPHeed/final-thesis-objectives the default
+    # map score in thesis mode is the Chapter I risk forecast (ch1_system), so FIRI is selected explicitly here
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "firi")
     return monkeypatch
 
 

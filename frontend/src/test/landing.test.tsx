@@ -243,13 +243,14 @@ describe("About dialog", () => {
     ]);
   });
 
-  it("labels the performance row as the price input and gives the lead time as three months ahead", () => {
+  it("states the model, the map value and the tested lead time", () => {
     const dlg = openAbout();
-    expect(dlg.textContent).toContain("Price input (LightGBM, three months ahead)");
-    expect(dlg.textContent).toContain("accuracy 0.72 · F1 0.59 · AUC 0.65");
+    expect(dlg.textContent).toContain("LightGBM, 12 indicator families · risk = hunger condition × food-price condition");
     const lead = within(dlg).getByText("Lead time").parentElement as HTMLElement;
-    expect(lead.textContent).toBe("Lead timeMap score: next quarter · hunger forecast: no reliable horizon established");
-    expect(dlg.textContent).toContain("not a probability and not a measured hunger rate");
+    expect(lead.textContent).toBe(
+      "Lead timeReliable: the quarter starting on the issue date · further ahead: indicative only",
+    );
+    expect(dlg.textContent).toContain("no measured hunger figure exists for any province, city or municipality");
     expect(dlg.textContent).not.toContain("reliability test");
   });
 

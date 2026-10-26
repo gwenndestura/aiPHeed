@@ -27,9 +27,9 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed shows DA Region IV-A three things for the five CALABARZON provinces and their 142 cities and
-            municipalities: an indicator-based priority score for the next quarter, the latest measured regional
-            hunger (SWS), and a LightGBM hunger forecast with its tested accuracy. It was developed by a student research
+            aiPHeed forecasts, each quarter, whether each of the five CALABARZON provinces is at high or low
+            food-insecurity risk, ranks their 142 cities and municipalities for planning attention, and shows the latest
+            measured regional hunger (SWS) with the forecast's tested accuracy. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
           </DialogDescription>
