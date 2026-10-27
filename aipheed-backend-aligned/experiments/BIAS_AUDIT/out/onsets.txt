@@ -1,0 +1,80 @@
+Lead-2 HIGH rows of the served P0H4 (65 rows, 13 target quarters 2023-Q2..2026-Q3; 17 HIGH)
+            event                       switched_on  origin issue_date  target province sws_newest_q sws_newest_published  h_last  hunger_obs_target    pi_H4  P0_price  P0H4_p3  A1_food  A1_gap        missed_by                                                                                      pattern
+no previous label none (previous LOW without label) 2024-Q4 2025-01-01 2025-Q2 Batangas      2024-Q3           2024-10-17    18.1              16.15 0.864713  0.602185 0.520717  -4.8980  0.6878           caught                                                                                          NaN
+no previous label none (previous LOW without label) 2024-Q4 2025-01-01 2025-Q2   Laguna      2024-Q3           2024-10-17    18.1              16.15 0.864713  0.646898 0.559381  -2.5450  1.0090           caught                                                                                          NaN
+no previous label none (previous LOW without label) 2024-Q4 2025-01-01 2025-Q2   Quezon      2024-Q3           2024-10-17    18.1              16.15 0.864713  0.624896 0.540356  -2.9370  2.9660           caught                                                                                          NaN
+            onset                            hunger 2023-Q2 2023-07-01 2023-Q4 Batangas      2023-Q1           2023-05-11     8.7              14.30 0.220672  0.494700 0.109166  -5.1260 -1.5320  both components           sudden hunger increase and price rise both after issue (no credible early warning)
+            onset                            hunger 2023-Q2 2023-07-01 2023-Q4   Laguna      2023-Q1           2023-05-11     8.7              14.30 0.220672  0.494700 0.109166  -5.3040 -0.8676  both components           sudden hunger increase and price rise both after issue (no credible early warning)
+            onset                            hunger 2023-Q2 2023-07-01 2023-Q4   Quezon      2023-Q1           2023-05-11     8.7              14.30 0.220672  0.494700 0.109166  -7.7190 -0.8921  both components           sudden hunger increase and price rise both after issue (no credible early warning)
+            onset                             price 2023-Q4 2024-01-01 2024-Q2 Batangas      2023-Q3           2023-11-20    10.3              19.60 0.401719  0.795269 0.319475  -3.9980  0.5613 hunger component sudden hunger increase; price risk flagged before hunger (food-price surge preceding hunger)
+            onset                             price 2023-Q4 2024-01-01 2024-Q2   Cavite      2023-Q3           2023-11-20    10.3              19.60 0.401719  0.800435 0.321550  -0.3296  1.1240 hunger component sudden hunger increase; price risk flagged before hunger (food-price surge preceding hunger)
+            onset                             price 2023-Q4 2024-01-01 2024-Q2   Laguna      2023-Q3           2023-11-20    10.3              19.60 0.401719  0.795269 0.319475  -3.0200  0.7140 hunger component sudden hunger increase; price risk flagged before hunger (food-price surge preceding hunger)
+            onset                             price 2023-Q4 2024-01-01 2024-Q2   Quezon      2023-Q3           2023-11-20    10.3              19.60 0.401719  0.679958 0.273152  -3.0390  1.6840 hunger component sudden hunger increase; price risk flagged before hunger (food-price surge preceding hunger)
+            onset                             price 2024-Q2 2024-07-01 2024-Q4   Cavite      2024-Q1           2024-04-30    15.3              25.30 0.848123  0.166021 0.140806  -5.8280 -2.1230  price component                persistent high hunger; price shock after issue (no issue-time price warning)
+            onset                             price 2024-Q2 2024-07-01 2024-Q4   Laguna      2024-Q1           2024-04-30    15.3              25.30 0.848123  0.172688 0.146461  -6.1060 -1.8110  price component                persistent high hunger; price shock after issue (no issue-time price warning)
+            onset                             price 2025-Q4 2026-01-01 2026-Q2   Cavite      2025-Q3           2025-11-05    23.8              17.30 0.961389  0.345168 0.331841  -2.8680 -1.0390  price component                persistent high hunger; price shock after issue (no issue-time price warning)
+   sustained HIGH none (previous LOW without label) 2024-Q1 2024-04-01 2024-Q3   Quezon      2023-Q4           2024-01-22    14.3              18.10 0.781207  0.431666 0.337220  -3.5760  0.5840  price component      persistent high hunger; structural price projection pointed HIGH but the model said LOW
+   sustained HIGH none (previous LOW without label) 2024-Q2 2024-07-01 2024-Q4   Quezon      2024-Q1           2024-04-30    15.3              25.30 0.848123  0.650912 0.552053  -1.8040  2.3090           caught                                                                                          NaN
+   sustained HIGH none (previous LOW without label) 2025-Q1 2025-04-01 2025-Q3   Laguna      2024-Q4           2025-01-14    25.3              23.80 0.975122  0.651160 0.634960  -3.4160  0.6291           caught                                                                                          NaN
+   sustained HIGH none (previous LOW without label) 2025-Q1 2025-04-01 2025-Q3   Quezon      2024-Q4           2025-01-14    25.3              23.80 0.975122  0.713761 0.696004  -1.3670  3.1620           caught                                                                                          NaN
+
+onsets by what switched on x component that missed:
+missed_by    both components  hunger component  price component
+switched_on                                                    
+hunger                     3                 0                0
+price                      0                 4                3
+
+sustained HIGH by component:
+missed_by
+caught             3
+price component    1
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'l2_lib'
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ~~~~~~~~~~^
+        f,
+        ^^
+    ...<6 lines>...
+        storage_options=self.options.get("storage_options", None),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+        handle,
+    ...<3 lines>...
+        newline="",
+    )
+FileNotFoundError: [Errno 2] No such file or directory: '../../BIAS_AUDIT/out/onsets.csv'
+
+Target-definition check: observed margins of the HIGH rows (points above the threshold that made them HIGH)
+            event  target province        missed_by  hunger_margin  food_margin  gap_margin  decided_by
+no previous label 2025-Q2 Batangas           caught           4.85        -5.25        0.01        0.01
+no previous label 2025-Q2   Laguna           caught           4.85        -2.39        0.76        0.76
+no previous label 2025-Q2   Quezon           caught           4.85        -2.87        1.83        1.83
+            onset 2023-Q4 Batangas  both components           3.00        -1.62        0.11        0.11
+            onset 2023-Q4   Laguna  both components           3.00        -2.02        0.86        0.86
+            onset 2023-Q4   Quezon  both components           3.00        -4.84        0.19        0.19
+            onset 2024-Q2 Batangas hunger component           8.30        -2.75        0.07        0.07
+            onset 2024-Q2   Cavite hunger component           8.30        -0.81        0.69        0.69
+            onset 2024-Q2   Laguna hunger component           8.30        -2.39        0.49        0.49
+            onset 2024-Q2   Quezon hunger component           8.30         2.39        4.39        4.39
+            onset 2024-Q4   Cavite  price component          14.00        -2.25        0.69        0.69
+            onset 2024-Q4   Laguna  price component          14.00        -2.32        0.29        0.29
+            onset 2026-Q2   Cavite  price component           6.00         0.02       -2.64        0.02
+   sustained HIGH 2024-Q3   Quezon  price component           6.80         1.26        3.36        3.36
+   sustained HIGH 2024-Q4   Quezon           caught          14.00         2.49        5.19        5.19
+   sustained HIGH 2025-Q3   Laguna           caught          12.50        -3.22        0.19        0.19
+   sustained HIGH 2025-Q3   Quezon           caught          12.50        -3.94        0.76        0.76
+HIGH rows whose price condition was decided within 0.5 points: 8 of 17 | missed among them: 6
