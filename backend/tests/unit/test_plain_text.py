@@ -72,8 +72,9 @@ def test_change_wording_adds_up_and_handles_no_change():
 def test_plain_factor_names_in_one_place():
     assert pt.PLAIN_FACTORS == {
         "market": "Food prices", "employment": "Jobs and employment",
-        "climate": "Weather and climate", "fish_kill": "Fish kills",
-        "ofw_remittance": "Remittances from OFWs",
+        "climate": "Weather and climate", "fish_kill": "Fisheries production",
+        "ofw_remittance": "Remittances from OFWs", "poverty": "Poverty and vulnerability",
+        "news": "News signals", "hunger_indicator": "Regional hunger (indicator)",
     }
     assert pt.lower_first("Remittances from OFWs") == "remittances from OFWs"
 
@@ -158,7 +159,7 @@ def test_factors_province_plain_wording():
     assert text == (
         "As shown in Figure 2, food prices account for about 97% of the factors behind Cavite's "
         "risk score in 2026 Q3 and raise the risk. Jobs and employment account for about 2% and also raise the risk. Weather "
-        "and climate account for about 1% and lower the risk. Fish kills and remittances from "
+        "and climate account for about 1% and lower the risk. Fisheries production and remittances from "
         "OFWs had no noticeable effect this quarter. Compared with 2026 Q2, the share of food "
         "prices rose from 94% to 97%."
     )
@@ -178,7 +179,7 @@ def test_factors_region_said_once_when_provinces_agree():
     assert joined.count("food prices are the main factor") == 1
     assert "Jobs and employment come second everywhere, at about 2%, and raise the risk." in out
     assert "Weather and climate had a small effect (1%) and lowered the risk in Cavite." in out
-    assert "Fish kills and remittances from OFWs had no noticeable effect this quarter in any province." in out
+    assert "Fisheries production and remittances from OFWs had no noticeable effect this quarter in any province." in out
     assert "withheld by the reviewing team" in joined
     for s in out:
         clean(s)
@@ -243,7 +244,7 @@ def test_counts_at_the_start_of_a_sentence_are_spelled_out():
 def test_news_only_factors_are_not_called_ineffective_when_news_is_incomplete():
     text = pt.compose_factors_province("Laguna", "2026-Q3", QUEZON, news_incomplete=True)
     assert "had no noticeable effect" not in text
-    assert ("Weather and climate, fish kills, and remittances from OFWs are measured only from "
+    assert ("Weather and climate, fisheries production, and remittances from OFWs are measured only from "
             "news reports, which are not yet complete for this quarter, so their effect cannot "
             "yet be judged.") in text
     complete = pt.compose_factors_province("Laguna", "2026-Q3", QUEZON)

@@ -30,8 +30,11 @@ PLAIN_FACTORS: dict[str, str] = {
     "market": "Food prices",
     "employment": "Jobs and employment",
     "climate": "Weather and climate",
-    "fish_kill": "Fish kills",
+    "fish_kill": "Fisheries production",
     "ofw_remittance": "Remittances from OFWs",
+    "poverty": "Poverty and vulnerability",
+    "news": "News signals",
+    "hunger_indicator": "Regional hunger (indicator)",
 }
 
 LEVEL_ALERT, LEVEL_HIGH, LEVEL_NONE = "Alert", "High", "Not elevated"

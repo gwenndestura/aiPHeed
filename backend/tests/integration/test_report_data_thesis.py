@@ -22,7 +22,8 @@ from app.ml.inference import thesis_system as T
 client = TestClient(app)
 PROVINCES = ("batangas", "cavite", "laguna", "quezon", "rizal")
 FACTOR = {"market": "Food prices", "employment": "Jobs and employment", "climate": "Weather and climate",
-          "fish_kill": "Fish kills", "ofw_remittance": "Remittances from OFWs"}
+          "fish_kill": "Fisheries production", "ofw_remittance": "Remittances from OFWs",
+          "poverty": "Poverty and vulnerability", "news": "News signals", "hunger_indicator": "Regional hunger (indicator)"}
 
 
 @pytest.fixture
