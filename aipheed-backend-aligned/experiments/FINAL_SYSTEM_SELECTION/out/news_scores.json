@@ -1,0 +1,65 @@
+{
+ "counts": {
+  "relevant_by_trigger": {
+   "market": 253,
+   "climate": 189,
+   "fish_kill": 169,
+   "employment": 50,
+   "ofw_remittance": 36
+  },
+  "not_relevant": 8970,
+  "corpus": 9667
+ },
+ "self_consistency_single_ai": {
+  "kappa_relevant": 0.9524049357844371,
+  "kappa_type": 0.9891771173337914,
+  "note": "two passes by one AI reviewer; consistency, not inter-annotator agreement"
+ },
+ "v3_reference": {
+  "precision": 0.6340028694404591,
+  "recall": 0.219670419804638,
+  "f1": 0.3262880032488509,
+  "precision_by_trigger": {
+   "climate": 0.5,
+   "employment": 0.8,
+   "fish_kill": 0.9,
+   "market": 0.5,
+   "ofw_remittance": 0.8
+  },
+  "relevant_share_in_rejected": 0.175,
+  "sample": {
+   "relevant": 50,
+   "not_relevant": 40
+  },
+  "precision_ci90": [
+   0.5131922525107604,
+   0.7640243902439023
+  ],
+  "recall_ci90": [
+   0.1466332126392509,
+   0.3788131655478538
+  ]
+ },
+ "dashboard_displayed_subset": {
+  "sampled": 18,
+  "relevant": 11,
+  "false_positive_types": [
+   "RAINFALL ALERT: Red in Zambales, Bataan, Pampanga, Bulacan, Batangas, orange in NCR (Saturday, 8 a.m.)",
+   "Batangas City offers free e-trike rides amid fuel price hike",
+   "Over 200 mm of rain expected in Quezon, Northern Samar, parts of Bicol until Sunday night",
+   "Traumatized residents recall previous floods as Pililla River water level rises",
+   "Jobless man from QC, father from Laguna claim Lotto prizes",
+   "RAINFALL ALERT: Yellow warning in parts of Nueva Ecija, Batangas, Cavite, Zambales",
+   "RAINFALL ALERT: Yellow in Zambales; heavy rains expected in Rizal, 4 areas (Thursday, 8 a.m.)"
+  ],
+  "note": "v3-relevant sampled headlines that the dashboard news panel shows (province-attributed); stratified by trigger, so not a population estimate"
+ },
+ "direct_food_insecurity_headlines": [
+  {
+   "id": "N111",
+   "source": "feed",
+   "title": "Fishers slam 3-month ban in Visayan Sea, warn of hunger"
+  }
+ ],
+ "human": "no human annotation yet (annotation/news_review_human.csv absent): results are preliminary"
+}

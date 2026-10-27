@@ -193,6 +193,10 @@ Verified from raw data (100 labels, 20 hunger quarters). It is a **combined prox
 
 **If the one-model requirement is binding for the thesis now,** S3 is the defensible choice (equivalent at Lead 1, the only reliable horizon).
 
+> **Erratum (2026-10-27, FINAL_SYSTEM_SELECTION §14).** The "feed (current)" in §5 is `data/final_engine/news_events.csv`, served at `/api/v1/final/news`. The frontend never calls that route. In thesis mode the dashboard news panel shows the v3 pipeline's province-attributed articles (`dashboard._news_pool_v3`); about 0.61 of the sampled displayed headlines are relevant.
+>
+> A matched test of the served P0H4 also refines §5's forecasting finding. News improves Lead 1 (Brier −0.011, p .024, post hoc). The gain comes entirely from the GDELT price-news columns; FSSI-v3 has no effect.
+
 ## 9. Limitations and next steps
 
 - **Data:** 13–14 independent hunger outcomes; 2 hunger onsets; a shared regional outcome; no provincial or municipal food-insecurity outcome; utilization not measured.
