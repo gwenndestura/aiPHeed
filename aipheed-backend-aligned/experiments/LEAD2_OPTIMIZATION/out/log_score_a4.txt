@@ -1,0 +1,29 @@
+origin 2022-Q4 80 s
+origin 2023-Q1 80 s
+origin 2023-Q2 81 s
+origin 2023-Q3 81 s
+origin 2023-Q4 81 s
+origin 2024-Q1 86 s
+origin 2024-Q2 90 s
+origin 2024-Q3 95 s
+origin 2024-Q4 100 s
+origin 2025-Q1 105 s
+origin 2025-Q2 110 s
+origin 2025-Q3 116 s
+origin 2025-Q4 122 s
+origin 2026-Q1 129 s
+origin 2026-Q2 137 s
+origin 2026-Q3 144 s
+U-ONE-P   L1: acc 0.843 bal 0.736 P 0.75 R 0.53 AUC 0.89 Brier 0.125 FN 8 onsets 2/10 surge 4/11 later 0.87 fail ['R6'] | vsUNI -0.0058 p 0.369
+U-ONE-P   L2: acc 0.769 bal 0.635 P 0.60 R 0.35 AUC 0.61 Brier 0.200 FN 11 onsets 0/10 surge 1/11 later 0.83 fail ['R3', 'R5', 'R6'] | vsUNI -0.0055 p 0.374
+U-ONE-P   L3: acc 0.683 bal 0.566 P 0.42 R 0.29 AUC 0.77 Brier 0.174 FN 12 onsets 0/10 surge 0/11 later 0.73 fail ['R2', 'R3', 'R4', 'R6', 'R7'] | vsUNI -0.0096 p 0.296
+   U-ONE-P: max promising None, max R1-R7 0
+U-ONE-0   L1: acc 0.814 bal 0.738 P 0.62 R 0.59 AUC 0.80 Brier 0.158 FN 7 onsets 4/10 surge 5/11 later 0.77 fail ['R5', 'R6'] | vsUNI +0.0271 p 0.914
+U-ONE-0   L2: acc 0.692 bal 0.602 P 0.41 R 0.41 AUC 0.55 Brier 0.233 FN 10 onsets 0/10 surge 2/11 later 0.70 fail ['R2', 'R3', 'R4', 'R5', 'R6', 'R7'] | vsUNI +0.0273 p 0.885
+U-ONE-0   L3: acc 0.617 bal 0.537 P 0.33 R 0.35 AUC 0.64 Brier 0.215 FN 11 onsets 1/10 surge 2/11 later 0.57 fail ['R2', 'R3', 'R4', 'R5', 'R6', 'R7'] | vsUNI +0.0320 p 0.894
+   U-ONE-0: max promising None, max R1-R7 0
+UNI-FINAL L1: acc 0.829 bal 0.767 P 0.65 R 0.65 AUC 0.88 Brier 0.131 FN 6 onsets 4/10 surge 5/11 later 0.83 fail [] | vsUNI +0.0000 p 1.000
+UNI-FINAL L2: acc 0.769 bal 0.635 P 0.60 R 0.35 AUC 0.59 Brier 0.206 FN 11 onsets 0/10 surge 1/11 later 0.87 fail ['R3', 'R5', 'R6'] | vsUNI +0.0000 p 1.000
+UNI-FINAL L3: acc 0.750 bal 0.648 P 0.58 R 0.41 AUC 0.72 Brier 0.183 FN 10 onsets 2/10 surge 1/11 later 0.87 fail ['R3', 'R6'] | vsUNI +0.0000 p 1.000
+   UNI-FINAL: max promising 1, max R1-R7 1
+chosen U-ONE-P {'U-ONE-P': 0.21952237708815614, 'U-ONE-0': 0.22143678538624997} | serve {'reliable_lead1': False, 'max_reliable_ge_1': False, 'lead1_not_worse_than_uni': True, 'serve': False}

@@ -26,39 +26,44 @@ def _D():
     return pd.read_csv(OUT / "predictions.csv", dtype={"province_code": str})
 
 
-def phase_cases():
-    D, best = _D(), _res()["selection"]["adopted"]
+def phase_cases(fname="predictions.csv", best=None, out="lead2_cases.csv"):
+    D = pd.read_csv(OUT / fname, dtype={"province_code": str})
+    best = best or _res()["selection"]["adopted"]
     U.setup()
     S = X.add_fe(U.stack(2))
-    S = S[S["lead"] == 2][["t", "province_code"] + X.fe_cols(True)]
+    S = S[S["lead"] == 2][["t", "province_code", "issue_date", "sws_newest_q", "sws_newest_published",
+                            "psa_newest_month", "news_latest_published", "true_horizon"] +
+                           [c for c in X.fe_cols(True) if c not in ("H1",)]]
     g = D[D["lead"] == 2].merge(S, on=["t", "province_code"], how="left")
     rows = []
     for _, r in g.sort_values(["q", "province_code"]).iterrows():
         def kind(p):
             yh = int(r[p] >= .5)
             return {(1, 1): "TP", (0, 1): "FN", (1, 0): "FP", (0, 0): "TN"}[(yh, int(r["y"]))]
-        rows.append({"origin": L.qs(int(r["t"])), "target": L.qs(int(r["q"])), "province": L.NAMES[r["province_code"]],
+        rows.append({"origin": L.qs(int(r["t"])), "issue_date": r["issue_date"], "target": L.qs(int(r["q"])),
+                     "province": L.NAMES[r["province_code"]], "sws_newest_q": r["sws_newest_q"],
+                     "sws_newest_published": r["sws_newest_published"], "true_horizon_q": r["true_horizon"],
+                     "psa_newest_month": r["psa_newest_month"], "news_latest_published": r["news_latest_published"],
                      "y": int(r["y"]), "hunger_obs": int(r["hunger"]), "price_obs": int(r["price"]), "H_obs": r["H"],
                      "h_last": r["h_last"], "pi_H0": r["H1"], "pi_H1": r["pi_H1"], "pi_H2_sampleb": r["pi_H2"],
                      "P0_price": r["P0_price"], f"{best[:2]}_price": r[f"{best[:2]}_price"],
                      "P0H0_p": r["P0H0_p"], f"{best}_p": r[f"{best}_p"], "P0H0_type": kind("P0H0_p"),
                      f"{best}_type": kind(f"{best}_p"),
-                     **{c: r[c] for c in ("A1_food", "A1_gap", "A1_food_d", "A1_gap_d", "F_ex", "G_ex", "A3",
-                                          "R_rice_yoy", "W_rice_yoy", "N1")}})
-    pd.DataFrame(rows).to_csv(OUT / "lead2_cases.csv", index=False, lineterminator="\n", float_format="%.4g")
-    print(pd.DataFrame(rows)[[f"{best}_type", "P0H0_type"]].value_counts())
+                     "threshold": 0.5,
+                     **{c: r[c] for c in X.fe_cols(True) if c not in ("H1", "lead")}})
+    pd.DataFrame(rows).to_csv(OUT / out, index=False, lineterminator="\n", float_format="%.4g")
+    print(pd.DataFrame(rows)[list(dict.fromkeys([f"{best}_type", "P0H0_type"]))].value_counts())
 
 
-def phase_ablation():
-    res = _res()
-    best = res["selection"]["adopted"]
+def phase_ablation(best: str | None = None):
+    best = best or _res()["selection"]["adopted"]
     arm, hcol = best[:2], {"H0": "H1", "H1": "pi_H1"}[best[2:]]
     U.setup()
     K = RL._K()
     S = X.add_fe(U.stack(K))
-    D = _D()
+    D = pd.read_csv(OUT / "predictions_addendum1.csv", dtype={"province_code": str})
     D = D[D["lead"] <= 3]
-    full = X.fe_cols(True) if arm != "P0" else X.base_cols(True)
+    full = X.fe_cols(True) if arm in ("P1", "P2", "P3", "P6") else X.base_cols(True)
     fams = sorted({X.FAMILY_OF[c] for c in full} - {"lead"})
     out = {}
     variants = {"no_news": list(U.NEWS_COLS)}
@@ -87,7 +92,7 @@ def phase_ablation():
     hp = FM.holm({(n, k): out[n][k]["p_two"] for n in out for k in out[n]})
     for (n, k), p in hp.items():
         out[n][k]["holm_p"] = p
-    FM.write_json(OUT / "ablation.json", {"arm": best, "variants": out})
+    FM.write_json(OUT / f"ablation_{best}.json", {"arm": best, "variants": out})
 
 
 def _price_cols(arm, tr, te, keep):
@@ -95,6 +100,12 @@ def _price_cols(arm, tr, te, keep):
     if arm == "P0":
         cfg, _ = U.select(tr, keep, True)
         return U.UniPrice(cfg, keep, True).fit(tr).predict(te)
+    if arm in ("P4", "P6", "P7"):
+        cfg = X.select_prior(tr, keep, X.reg_grid() if arm == "P7" else None)
+        return X.PriorModel(cfg, keep).fit(tr, tr["y"].to_numpy(int)).predict(te)
+    if arm == "P8":
+        cfg = X.select_clf(tr, keep, X.reg_grid())
+        return X.Model(cfg, keep).fit(tr, tr["y"].to_numpy(int)).predict(te)
     if arm in ("P1", "P2"):
         cfg = X.select_clf(tr, keep, X.uni_grid() if arm == "P1" else X.wide_grid())
         return X.Model(cfg, keep).fit(tr, tr["y"].to_numpy(int)).predict(te)
@@ -164,5 +175,63 @@ def phase_control():
                                                            "origins": out})
 
 
+def phase_placebo(arm: str = "P0", hcol: str = "H1", n: int = 20):
+    """Shuffled-news control: the news columns permuted across issue dates (seed 2029), the arm refitted; permutation
+    p = share of shuffles whose Lead-k Brier is <= the real one."""
+    U.setup()
+    K = RL._K()
+    S0 = X.add_fe(U.stack(K))
+    D = pd.read_csv(OUT / "predictions_addendum1.csv", dtype={"province_code": str})
+    origins = RL._origins()
+    rng = np.random.default_rng(2029)
+    news = list(U.NEWS_COLS)
+
+    def run(S):
+        fr = [f for f in (X.forecast_origin(S, t, (arm,), True) for t in origins) if f is not None]
+        A = pd.concat(fr).drop(columns=["H1", "h_last"]).merge(D[["t", "lead", "province_code", "y", hcol]],
+                                                               on=["t", "lead", "province_code"])
+        return {k: float(np.mean((g[hcol] * g[f"{arm}_price"] - g["y"]) ** 2)) for k, g in A.groupby("lead") if k <= 3}
+    real = {k: float(np.mean((g[f"{arm}H0_p"] - g["y"]) ** 2)) for k, g in D.groupby("lead") if k <= 3}
+    ts = sorted(S0["t"].unique())
+    perms = []
+    for i in range(n):
+        mp = dict(zip(ts, rng.permutation(ts)))
+        src = S0.set_index(["province_code", "t", "lead"])[news]
+        S = S0.copy()
+        S[news] = src.reindex(list(zip(S["province_code"], S["t"].map(mp), S["lead"]))).to_numpy()
+        perms.append(run(S))
+        print(i, {k: round(v, 4) for k, v in perms[-1].items()}, flush=True)
+    out = {"arm": arm, "real_brier": real, "shuffles": perms,
+           "perm_p": {k: float(np.mean([p[k] <= real[k] for p in perms])) for k in real},
+           "shuffle_mean": {k: float(np.mean([p[k] for p in perms])) for k in real}}
+    FM.write_json(OUT / f"news_placebo_{arm}.json", out)
+    print(out["perm_p"], out["shuffle_mean"], real)
+
+
+def phase_replay(arms=("P0", "P4"), fname="predictions_addendum2.csv"):
+    """Historical replay: rebuild the forecast at an origin from a table that contains no later origin, and compare
+    it with the scored predictions (same arm, same rows)."""
+    U.setup()
+    K = RL._K()
+    d, x = E.data()
+    D = pd.read_csv(OUT / fname, dtype={"province_code": str})
+    out = []
+    for q in ("2023-Q4", "2024-Q4", "2026-Q1"):
+        t = L.qi(q)
+        S = X.add_fe(U.stack(K, d, x, t), d)
+        assert S["t"].max() == t
+        f = X.forecast_origin(S, t, arms, True, d)
+        m = f.rename(columns={"target_q": "q"}).merge(D[D["t"] == t], on=["t", "lead", "province_code"],
+                                                      suffixes=("_replay", ""))
+        diff = {a: float((m[f"{a}_price_replay"] - m[f"{a}_price"]).abs().max()) for a in arms}
+        out.append({"origin": q, "rows_compared": int(len(m)), "max_abs_diff": diff})
+        print(out[-1], flush=True)
+    ok = all(v < 1e-5 for o in out for v in o["max_abs_diff"].values()) and all(o["rows_compared"] for o in out)
+    FM.write_json(OUT / "historical_replay.json", {"identical": ok, "arms": list(arms), "origins": out})
+
+
 if __name__ == "__main__":
-    {"cases": phase_cases, "ablation": phase_ablation, "checks": phase_checks, "control": phase_control}[sys.argv[1]]()
+    {"cases": phase_cases,
+     "ablation": lambda: phase_ablation(sys.argv[2] if len(sys.argv) > 2 else None), "checks": phase_checks, "control": phase_control,
+     "placebo": lambda: phase_placebo(sys.argv[2] if len(sys.argv) > 2 else "P0"),
+     "replay": lambda: phase_replay(tuple(sys.argv[2].split(",")) if len(sys.argv) > 2 else ("P0", "P4"))}[sys.argv[1]]()

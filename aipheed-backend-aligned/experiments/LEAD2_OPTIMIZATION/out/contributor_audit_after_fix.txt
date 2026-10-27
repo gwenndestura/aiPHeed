@@ -1,0 +1,9 @@
+[after_fix] served rows: 95 | group rows: 475
+'insufficient_data' although the served model had a published input: 0 of 0; by group {}
+'contributes'/'no_effect' although every input was missing: 0
+status counts: {'no_effect': 261, 'contributes': 214}
+otherPct (share of |SHAP| in V1, N1, H1, outside the five bars that are rescaled to 100 percent): mean 22.8, min 0.0, max 88.9
+top group per served row: {'market': 73, 'employment': 11, 'fish_kill': 6, 'climate': 5} | bars at 100 percent: 28
+variance share of log P(HIGH) over served rows: hunger term 0.05, price term 0.95
+mean |SHAP| share by family: {'shap_A1': 0.423, 'shap_A2': 0.008, 'shap_A3': 0.12, 'shap_V1': 0.138, 'shap_C1': 0.0, 'shap_C2': 0.001, 'shap_C3': 0.028, 'shap_C4': 0.039, 'shap_E1': 0.176, 'shap_E2': 0.0, 'shap_N1': 0.042, 'shap_H1': 0.025}
+evidence note (market, first row): The bars show each group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's estimate that food prices rise unusually fast. They are model influence, not shares of hunger caused by each factor, and they leave out the regional hunger condition (here 37%), which multiplies that estimate into the risk probability. Poverty and density, news and the hunger indicator inside the price model account for another 18% of its attribution, not shown in the bars.

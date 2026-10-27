@@ -1,0 +1,71 @@
+raw file: FINAL_FOOD_INSECURITY_LIGHTGBM/data/sws_area_rounds_2021.csv rows 23
+quarter             fieldwork  published  commissioned  balance_luzon   bl_n respondent_base                                               source_type
+2021-Q2 2021-04-28/2021-05-02 2021-07-12         False           15.7    NaN household heads                                news report of SWS release
+2021-Q2 2021-06-23/2021-06-26 2021-07-28         False           15.0    NaN household heads          news report of SWS release (Sep-2021 comparison)
+2021-Q3 2021-09-12/2021-09-16 2021-12-06         False           10.3  300.0 household heads                                news report of SWS release
+2021-Q4 2021-12-12/2021-12-16 2022-03-25         False            9.2    NaN household heads search summary of SWS release ART-20220325064813 and news
+2022-Q2 2022-04-19/2022-04-27 2022-06-06         False           11.7    NaN household heads                                news report of SWS release
+2022-Q2 2022-06-26/2022-06-29 2022-09-10         False           11.9    NaN household heads          search summary of SWS release ART-20220910153623
+2022-Q3 2022-09-29/2022-10-02 2022-10-29         False            9.6    NaN household heads          search summary of SWS release ART-20221029123738
+2022-Q4 2022-12-10/2022-12-14 2023-01-19         False           11.3    NaN household heads          search summary of SWS release ART-20230119062833
+2023-Q1 2023-03-26/2023-03-29 2023-05-11         False            8.7    NaN household heads                        SWS release (June 2023 comparison)
+2023-Q2 2023-06-28/2023-07-01 2023-08-02         False           11.3  600.0 household heads                                               SWS release
+2023-Q3 2023-09-28/2023-10-01 2023-11-20         False           10.3  300.0 household heads                                               SWS release
+2023-Q4 2023-12-08/2023-12-11 2024-01-22         False           14.3  300.0 household heads                                               SWS release
+2024-Q1 2024-03-21/2024-03-25 2024-04-30         False           15.3  600.0 household heads                                               SWS release
+2024-Q2 2024-06-23/2024-07-01 2024-07-23         False           19.6  600.0 household heads                                               SWS release
+2024-Q3 2024-09-14/2024-09-23 2024-10-17         False           18.1  600.0 household heads                                               SWS release
+2024-Q4 2024-12-12/2024-12-18 2025-01-14         False           25.3 1080.0 household heads                                               SWS release
+2025-Q2 2025-04-23/2025-04-28 2025-06-27         False           17.0  600.0          adults                                               SWS release
+2025-Q2 2025-06-25/2025-06-29 2025-08-15         False           15.3  300.0          adults                                               SWS release
+2025-Q3 2025-09-24/2025-09-30 2025-11-05         False           23.8  600.0          adults                                               SWS release
+2025-Q4 2025-11-24/2025-11-30 2026-01-14         False           16.7  300.0          adults                                               SWS release
+2026-Q1 2026-03-24/2026-03-31 2026-05-12         False           22.4  600.0          adults                                               SWS release
+2026-Q2 2026-06-20/2026-06-29 2026-08-24         False           17.3  300.0          adults                                               SWS release
+2026-Q3 2026-09-21/2026-09-27 2026-10-14         False           23.6  600.0          adults                                               SWS release
+         reconstructed  used_by_model  hunger_condition  match
+2021-Q2          15.35          15.35                 1   True
+2021-Q3          10.30          10.30                 0   True
+2021-Q4           9.20           9.20                 0   True
+2022-Q2          11.80          11.80                 1   True
+2022-Q3           9.60           9.60                 0   True
+2022-Q4          11.30          11.30                 0   True
+2023-Q1           8.70           8.70                 0   True
+2023-Q2          11.30          11.30                 0   True
+2023-Q3          10.30          10.30                 0   True
+2023-Q4          14.30          14.30                 1   True
+2024-Q1          15.30          15.30                 1   True
+2024-Q2          19.60          19.60                 1   True
+2024-Q3          18.10          18.10                 1   True
+2024-Q4          25.30          25.30                 1   True
+2025-Q2          16.15          16.15                 1   True
+2025-Q3          23.80          23.80                 1   True
+2025-Q4          16.70          16.70                 1   True
+2026-Q1          22.40          22.40                 1   True
+2026-Q2          17.30          17.30                 1   True
+2026-Q3          23.60          23.60                 1   True
+ALL MATCH: True | quarters 20 | HIGH quarters 13
+province rows share the regional hunger label in every quarter: True
+T43c rows 100 = independent hunger quarters 20 x 5 provinces
+cross-check vs independent E114 table extraction (2021+):
+         reconstructed  E114_extraction    d
+2021-Q2          15.35            15.35  0.0
+2021-Q3          10.30            10.30  0.0
+2021-Q4           9.20             9.20  0.0
+2022-Q2          11.80            11.80  0.0
+2022-Q3           9.60             9.60  0.0
+2022-Q4          11.30            11.30  0.0
+2023-Q1           8.70             8.70  0.0
+2023-Q2          11.30            11.30  0.0
+2023-Q3          10.30            10.30  0.0
+2023-Q4          14.30            14.30  0.0
+2024-Q1          15.30            15.30  0.0
+2024-Q2          19.60            19.60  0.0
+2024-Q3          18.10            18.10  0.0
+2024-Q4          25.30            25.30  0.0
+2025-Q2          16.15            16.15  0.0
+2025-Q3          23.80            23.80  0.0
+2025-Q4          16.70            16.70  0.0
+2026-Q1          22.40            22.40  0.0
+2026-Q2          17.30            17.30  0.0
+2026-Q3          23.60            23.60  0.0

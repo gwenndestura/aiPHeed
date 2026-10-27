@@ -1,0 +1,42 @@
+Calendar-time confound screen (post-hoc), Lead-2 rows with a price label, all 2021+ CPI quarters; n = 105
+feature | level | distinct values | Spearman with origin | AUC(price) | within-year AUCs 2023/2024/2025
+E1           national/regional  16 rho +0.95 AUC 0.21 within [0.35, 0.76, 0.17]
+E2           national/regional  16 rho -0.09 AUC 0.56 within [0.16, 0.86, 0.22]
+C1           national/regional   2 rho +0.04 AUC 0.49 within [0.25, 0.4, None]
+C2           province            5 rho +0.13 AUC 0.46 within [0.29, 0.35, 0.73]
+W_rice_yoy   national/regional  21 rho -0.33 AUC 0.68 within [0.55, 0.34, 0.83]
+W_cereal_yoy national/regional  21 rho -0.78 AUC 0.52 within [0.65, 0.4, 0.63]
+W_crude_yoy  national/regional  21 rho -0.73 AUC 0.52 within [0.75, 0.66, 0.78]
+W_urea_yoy   national/regional  21 rho -0.38 AUC 0.34 within [0.75, 0.55, 0.17]
+H1           national/regional  18 rho +0.66 AUC 0.41 within [0.84, 0.45, 0.68]
+N1           province           14 rho -0.08 AUC 0.50 within [None, None, 0.62]
+V1           province            5 rho +0.00 AUC 0.48 within [0.26, 0.67, 0.5]
+A2           province          101 rho -0.59 AUC 0.71 within [0.41, 0.41, 0.83]
+A3           province           74 rho -0.37 AUC 0.64 within [0.48, 0.56, 0.72]
+C3           province           80 rho +0.04 AUC 0.59 within [0.33, 0.65, 0.75]
+C4           province           80 rho -0.22 AUC 0.56 within [0.65, 0.67, 0.36]
+A1_food      province           95 rho -0.14 AUC 0.82 within [0.75, 0.72, 0.79]
+R_rice_yoy   national/regional  18 rho -0.28 AUC 0.68 within [0.25, 0.66, 0.83]
+
+AUC of origin time itself: 0.41
+
+CONCLUSION:
+
+**A1_food (projected food YoY minus threshold) is the only input with a stable price signal.**
+- Within-year AUC is 0.72–0.79 in every year; Spearman correlation with time is -0.14; overall AUC 0.82.
+
+**Strong calendar-time trends with no stable within-year direction (likely spurious in a 2021-26 sample):**
+
+| Input | Spearman with time | Within-year AUC (2023 / 2024 / 2025) |
+|---|---|---|
+| E1 | +0.95 | 0.35 / 0.76 / 0.17 |
+| W_cereal_yoy | -0.78 | 0.65 / 0.40 / 0.63 |
+| W_crude_yoy | -0.73 | 0.75 / 0.66 / 0.78 |
+| A2 | -0.59 | 0.41 / 0.41 / 0.83 |
+| H1 (as a price input) | +0.66 | 0.84 / 0.45 / 0.68 |
+
+**Unstable or uninformative for the price condition:** E2, C1, C2, V1, W_urea, N1.
+
+These are shared national values (16–21 distinct values), so their effective sample is the number of quarters, not rows.
+
+**Implication.** Without a structural anchor, a flexible model can fit time trends. This is the evidence for the A1 structural prior (P4) and for strong regularisation (P7/P8). Signs are not reversed; the families stay in the pipeline.

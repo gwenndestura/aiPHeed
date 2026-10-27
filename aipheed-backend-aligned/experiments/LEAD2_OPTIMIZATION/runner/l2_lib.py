@@ -222,7 +222,101 @@ def price_prob(arm: str, tr: pd.DataFrame, te: pd.DataFrame, news: bool = True) 
         pf = norm.cdf(Model(cf, cc, reg=True).fit(tr, yf).predict(te) / sf)
         pg = norm.cdf(Model(cg, cc, reg=True).fit(tr, yg).predict(te) / sg)
         return 1 - (1 - pf) * (1 - pg), f"{cf['id']}/{cg['id']}|{sf:.2f}/{sg:.2f}"
+    if arm in ("P4", "P6"):
+        cc = base_cols(news) if arm == "P4" else fe_cols(news)
+        cfg = select_prior(tr, cc)
+        return PriorModel(cfg, cc).fit(tr, tr["y"].to_numpy(int)).predict(te), cfg["id"]
+    if arm == "P5":
+        return struct_prior(te, tr), "struct"
+    if arm.endswith("c"):
+        return calibrated(arm[:-1], tr, te, news)
+    if arm == "P7":
+        cc = base_cols(news)
+        cfg = select_prior(tr, cc, reg_grid())
+        return PriorModel(cfg, cc).fit(tr, tr["y"].to_numpy(int)).predict(te), cfg["id"]
+    if arm == "P8":
+        cc = base_cols(news)
+        cfg = select_clf(tr, cc, reg_grid())
+        return Model(cfg, cc).fit(tr, tr["y"].to_numpy(int)).predict(te), cfg["id"]
     raise ValueError(arm)
+
+
+def calibrated(arm: str, tr: pd.DataFrame, te: pd.DataFrame, news: bool = True) -> tuple[np.ndarray, str]:
+    """Addendum 2 F1: Platt scaling of an arm's pi_P, fitted on inner-fold out-of-sample predictions of the
+    training window only (each fold re-runs the arm's own selection on the fold's training rows)."""
+    from sklearn.linear_model import LogisticRegression
+    p_te, cfg = price_prob(arm, tr, te, news)
+    folds = _folds(tr)
+    if not folds:
+        return p_te, f"{cfg}|nocal"
+    ys = np.concatenate([h["y"].to_numpy(int) for _, h in folds])
+    ps = np.concatenate([price_prob(arm, f, h, news)[0] for f, h in folds])
+    if len(set(ys.tolist())) < 2:
+        return p_te, f"{cfg}|nocal"
+    lr = LogisticRegression(C=1e6).fit(B.logit(ps).reshape(-1, 1), ys)
+    return lr.predict_proba(B.logit(p_te).reshape(-1, 1))[:, 1], f"{cfg}|platt{lr.coef_[0][0]:.2f}"
+
+
+# ================================================================================================ Addendum 1: prior
+def struct_prior(rows: pd.DataFrame, fit: pd.DataFrame) -> np.ndarray:
+    """STRUCT_k per row: sigma per lead from `fit` (training rows of that lead), base rate where A1 is missing."""
+    fill = float(fit["y"].mean()) if len(fit) else 0.5
+    out = np.full(len(rows), fill)
+    for k in rows["lead"].unique():
+        m = (rows["lead"] == k).to_numpy()
+        fk = fit[fit["lead"] == k]
+        sig = B.sigmas(fk) if len(fk) else (B.SIGMA_FALLBACK, B.SIGMA_FALLBACK)
+        out[m] = B.struct_price(rows[m], sig, fill)
+    return out
+
+
+class PriorModel(Model):
+    """LightGBM boosted from the structural prior (init_score); corrections from the given columns."""
+
+    def fit(self, X: pd.DataFrame, y: np.ndarray):
+        import lightgbm as lgb
+        self.fit_rows = X
+        init = B.logit(struct_prior(X, X))
+        if len(set(y.tolist())) < 2:
+            return self
+        c = self.cfg
+        self.m = lgb.LGBMClassifier(objective="binary", class_weight=c["cw"], learning_rate=c["lr"],
+                                    n_estimators=c["trees"], num_leaves=c["leaves"], max_depth=c["depth"],
+                                    min_child_samples=c["min_child"], reg_lambda=c["l2"], reg_alpha=c["l1"],
+                                    colsample_bytree=c["col"], subsample=c["sub"],
+                                    subsample_freq=1 if c["sub"] < 1 else 0, deterministic=True, force_row_wise=True, feature_pre_filter=False,
+                                    random_state=SEED, n_jobs=1, verbose=-1,
+                                    monotone_constraints=[1 if x in MONO_UP else 0 for x in self.cols],
+                                    monotone_constraints_method="basic")
+        self.m.fit(X[self.cols].astype(float), y, init_score=init)
+        return self
+
+    def predict(self, X: pd.DataFrame) -> np.ndarray:
+        init = B.logit(struct_prior(X, self.fit_rows))
+        if self.m is None:
+            return 1 / (1 + np.exp(-init))
+        raw = self.m.predict(X[self.cols].astype(float), raw_score=True) + init
+        return 1 / (1 + np.exp(-raw))
+
+
+def reg_grid() -> list[dict]:
+    """Addendum 2 (D, E): strongly regularised depth-1 grid."""
+    return [dict(id=f"r{n}", leaves=2, depth=1, lr=0.05, trees=n, min_child=25, sub=1.0, col=0.7, l1=1.0, l2=10.0,
+                 cw=None) for n in (10, 25, 50, 100)]
+
+
+def select_prior(tr: pd.DataFrame, cols: list[str], grid: list[dict] | None = None) -> dict:
+    folds = _folds(tr)
+    grid = uni_grid() if grid is None else grid
+    if not folds:
+        return grid[0]
+    ys = np.concatenate([h["y"].to_numpy(int) for _, h in folds])
+    sc = {}
+    for c in grid:
+        ps = np.concatenate([PriorModel(c, cols).fit(f, f["y"].to_numpy(int)).predict(h) for f, h in folds])
+        p = np.clip(ps, 1e-6, 1 - 1e-6)
+        sc[c["id"]] = float(-np.mean(ys * np.log(p) + (1 - ys) * np.log(1 - p)))
+    return min(grid, key=lambda c: (round(sc[c["id"]], 9), grid.index(c)))
 
 
 # ================================================================================================ hunger terms

@@ -2,6 +2,8 @@
 
     python run_l2.py audit    # leakage audit at 6 origins; must pass before scoring
     python run_l2.py score    # every arm, every lead; frozen selection; R1-R7 per lead; sample b separately
+    python run_l2.py audit_a1 # Addendum 1: leakage audit of P4-P6
+    python run_l2.py score_a1 # Addendum 1: P4-P6 scored, frozen selection among P0H0, P4H0, P6H0
 """
 from __future__ import annotations
 
@@ -33,7 +35,7 @@ def _origins() -> list[int]:
 
 
 # ================================================================================================ leakage audit
-def phase_audit():
+def phase_audit(arms=PRICE, fname="leakage_audit.json"):
     _check()
     U.setup()
     sys.path.insert(0, str(C.HERE))
@@ -46,9 +48,9 @@ def phase_audit():
 
     def forecast(t, dd, w, rice):
         S = X.add_fe(U.stack(K, dd, x, t, w), dd, rice)
-        f = X.forecast_origin(S, t, PRICE, True, dd)
+        f = X.forecast_origin(S, t, arms, True, dd)
         a = {} if f is None else {(r["province_code"], int(r["lead"]), c): round(float(r[c]), 10)
-                                  for _, r in f.iterrows() for c in [f"{p}_price" for p in PRICE] + ["H1"]}
+                                  for _, r in f.iterrows() for c in [f"{p}_price" for p in arms] + ["H1"]}
         h = {(k, s): round(X.ar_hunger(t, k, s)[0], 10) for k in range(1, K + 1) for s in ("a", "b")}
         return a, h
 
@@ -107,7 +109,7 @@ def phase_audit():
                     "first_differences": [str(k) for k in diff]})
         print(res[-1], flush=True)
     ok = all(r["identical"] and r["n_price_values"] for r in res)
-    FM.write_json(OUT / "leakage_audit.json", {"passed": ok, "origins": res})
+    FM.write_json(OUT / fname, {"passed": ok, "arms": list(arms), "origins": res})
     assert ok, "leakage audit failed"
 
 
@@ -226,5 +228,79 @@ def phase_score():
     print("adopted", best, "| serve", res["serve_rule"]["serve"], "| max reliable", A["max_reliable_lead"])
 
 
+# ================================================================================================ Addendum 1
+A1_PRICE = ("P4", "P5", "P6")
+A1_PRIMARY = ["P0H0", "P4H0", "P6H0"]
+
+
+def _check_a1():
+    want = (X.HERE / "ADDENDUM_1_SHA256.txt").read_text().strip()
+    assert FM.sha256(X.L2 / "ADDENDUM_1_STRUCTURAL_PRIOR.md") == want, "addendum changed after freezing"
+
+
+def phase_audit_a1():
+    _check_a1()
+    phase_audit(A1_PRICE, "leakage_audit_addendum1.json")
+
+
+def phase_score_a1():
+    _check()
+    _check_a1()
+    assert json.loads((OUT / "leakage_audit_addendum1.json").read_text())["passed"], "run audit_a1 first"
+    U.setup()
+    K = _K()
+    S = X.add_fe(U.stack(K))
+    fr = [f for f in (X.forecast_origin(S, t, A1_PRICE, True) for t in _origins()) if f is not None]
+    P = pd.concat(fr, ignore_index=True)[["t", "lead", "province_code"] + [f"{a}_{s}" for a in A1_PRICE
+                                                                           for s in ("price", "cfg")]]
+    D = pd.read_csv(OUT / "predictions.csv", dtype={"province_code": str}).merge(P, on=["t", "lead", "province_code"])
+    for a in A1_PRICE:
+        D[f"{a}H0_p"] = D["H1"] * D[f"{a}_price"]
+        D[f"{a}H2_p"] = D["pi_H2"] * D[f"{a}_price"]
+    D.to_csv(OUT / "predictions_addendum1.csv", index=False, lineterminator="\n", float_format="%.6g")
+    dev = D[(D["q"] <= U.DEV_LAST) & (D["lead"] == 2)]
+    sel = {a: _brier(dev[f"{a}_p"], dev["y"]) for a in A1_PRIMARY}
+    best = A1_PRIMARY[0]
+    for a in A1_PRIMARY[1:]:
+        if sel[a] < sel[best] - 0.0005:
+            best = a
+    res = {"addendum_sha256": FM.sha256(X.L2 / "ADDENDUM_1_STRUCTURAL_PRIOR.md"),
+           "selection": {"dev_lead2_brier": sel, "adopted": best}, "arms": {}}
+    for a in ["P0H0", "P4H0", "P6H0", "P5H0", "P4H2", "P6H2", "P5H2"]:
+        leads = {int(k): lead_report(g, f"{a}_p") for k, g in D.groupby("lead")}
+        mrl = None
+        for k in sorted(leads):
+            if leads[k]["reliable"]:
+                mrl = k
+            else:
+                break
+        res["arms"][a] = {"sample": "b (sensitivity only)" if a.endswith("H2") else "a",
+                          "adoptable": a in A1_PRIMARY, "max_reliable_lead": mrl,
+                          "testable_horizon_R1": max(k for k, v in leads.items() if v["criteria"]["R1"]),
+                          "leads": leads}
+        for k in (1, 2, 3):
+            m = leads[k]["metrics"]
+            print(f"{a} L{k}: acc {m['accuracy']:.3f} bal {m['balanced_accuracy']:.3f} P {m['precision']:.2f} "
+                  f"R {m['recall']:.2f} AUC {m['auc']:.2f} Brier {m['brier']:.3f} "
+                  f"fail {[c for c, v in leads[k]['criteria'].items() if not v]}", flush=True)
+        print(f"   {a} max reliable {mrl} | dev L2 Brier {sel.get(a, float('nan')):.4f}", flush=True)
+    g1 = D[D["lead"] == 1]
+    y1 = g1["y"].astype(int).to_numpy()
+    t1 = FM.boot_diff(g1, (g1["UNI_p"] - y1) ** 2, (g1[f"{best}_p"] - y1) ** 2)
+    A = res["arms"][best]
+    res["serve_rule"] = {"reliable_lead1": A["leads"][1]["reliable"],
+                         "max_reliable_ge_1": (A["max_reliable_lead"] or 0) >= 1,
+                         "lead1_not_worse_than_uni": not (t1["diff"] < 0 and t1["p_less"] < 0.10),
+                         "uni_minus_adopted_lead1_brier": t1}
+    res["serve_rule"]["serve"] = all(v for k, v in res["serve_rule"].items() if isinstance(v, bool))
+    g2 = D[D["lead"] == 2]
+    y2 = g2["y"].astype(int).to_numpy()
+    res["lead2_vs_P0H0"] = {a: FM.boot_diff(g2, (g2[f"{a}_p"] - y2) ** 2, (g2["P0H0_p"] - y2) ** 2)
+                            for a in ["P4H0", "P6H0", "P5H0"]}
+    FM.write_json(OUT / "results_addendum1.json", res)
+    print("adopted", best, "| serve", res["serve_rule"]["serve"], "| max reliable", A["max_reliable_lead"])
+
+
 if __name__ == "__main__":
-    {"audit": phase_audit, "score": phase_score}[sys.argv[1]]()
+    {"audit": phase_audit, "score": phase_score, "audit_a1": phase_audit_a1,
+     "score_a1": phase_score_a1}[sys.argv[1]]()
