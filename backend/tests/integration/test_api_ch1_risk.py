@@ -110,6 +110,23 @@ def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
         assert "not shares of hunger" in note and "FIRI" not in note
 
 
+def test_every_model_family_has_a_row_and_nothing_is_hidden(thesis):
+    """FINAL_ARCHITECTURE section 4: poverty, news and the regional hunger indicator are shown as their own rows from
+    the same SHAP measure instead of an undisplayed share; C4 is labelled as fisheries production."""
+    d = _get("/api/v1/explainability", scope="province", id="batangas", quarter="2024-Q2")
+    keys = {t["key"] for t in d["triggers"]}
+    assert keys == {"market", "climate", "fish_kill", "employment", "ofw_remittance", "poverty", "news",
+                    "hunger_indicator"}
+    assert sum(t["pct"] for t in d["triggers"]) == 100
+    from app.services import dashboard as D
+    assert D.explainability("PH040500000", "2024-Q2")["otherPct"] == 0
+    labels = {t["key"]: t["label"] for t in d["triggers"]}
+    assert labels["fish_kill"] == "Fisheries production" and "Fish Kill" not in labels.values()
+    r = CH1.row("PH040500000", "2024-Q2")
+    pov = next(t for t in d["triggers"] if t["key"] == "poverty")
+    assert pov["signedContribution"] == pytest.approx(float(r["shap_V1"]), abs=1e-6)
+
+
 def test_lgus_remain_a_priority_ranking_without_hunger_figures(thesis):
     d = _get("/api/v1/final/lgus")
     assert d["count"] == 142

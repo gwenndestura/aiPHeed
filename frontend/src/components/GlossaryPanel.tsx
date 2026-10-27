@@ -12,7 +12,7 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "SHAP", def: "SHapley Additive exPlanations. A method that splits one model prediction into the contributions of its inputs. The dashboard sums these into five driver groups and shows each group's share of the model's push, rescaled to 100%. A driver either pushes the estimate up or pulls it down. The shares describe what the model relied on, not the percentage of food insecurity caused by each factor; in the Chapter I forecast they explain the food-price part, and each driver's note gives the regional hunger condition that is not among them." },
   { term: "Market / Prices", def: "Food retail prices, including rice, and how fast they are rising. Higher prices make it harder for households to afford enough food." },
   { term: "Climate Stress", def: "Typhoons, heavy rain, flooding and other weather that damage farms and disrupt food supply." },
-  { term: "Fish Kill", def: "Mass mortality of fish in inland or coastal waters due to pollution, algal blooms, or oxygen depletion. Disrupts local protein supply and livelihoods, directly elevating food insecurity risk in affected communities." },
+  { term: "Fisheries production", def: "The province's fisheries production compared with a year earlier (PSA). A drop can reduce local fish supply and fishers' incomes. This driver was earlier labelled \"Fish Kill\", but the data measure production, not fish-kill events." },
   { term: "Employment", def: "How many people have jobs. Rising unemployment leaves households with less income for food." },
   { term: "OFW Remittance", def: "Money sent home by relatives working abroad (Overseas Filipino Workers). A drop leaves families with less to spend on food." },
 ];

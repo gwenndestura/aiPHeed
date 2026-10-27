@@ -28,9 +28,13 @@ from pathlib import Path
 DATA = Path(__file__).resolve().parents[3] / "data" / "ch1_engine"
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",),
                "employment": ("E1",), "ofw_remittance": ("E2",)}
-OTHER = ("V1", "N1", "H1")
-GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
-                "employment": "Employment", "ofw_remittance": "OFW Remittance"}
+# FINAL_ARCHITECTURE section 4: the families that used to sit in an undisplayed "other" share are shown as their own rows
+# from the same SHAP measure, so nothing the price model uses is hidden.
+SHOWN_GROUPS = {**FIVE_GROUPS, "poverty": ("V1",), "news": ("N1",), "hunger_indicator": ("H1",)}
+OTHER = ()
+GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fisheries production",
+                "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty & vulnerability",
+                "news": "News signals", "hunger_indicator": "Regional hunger (indicator)"}
 INDICATOR = {
     "id": "chapter1_food_insecurity_risk",
     "name": "Food-insecurity risk (Chapter I definition): probability that the province is HIGH risk",
@@ -163,7 +167,7 @@ def province_rows(base_rows: list[dict], quarter: str, names: dict[str, str]) ->
     return out
 
 
-GROUP_KEYS = tuple(FIVE_GROUPS)
+GROUP_KEYS = tuple(SHOWN_GROUPS)
 
 
 def group_status(code: str | None, quarter: str, key: str, pct: int) -> str | None:
@@ -183,17 +187,16 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
     h = float(rs[0]["pi_hunger"]) if rs else None
     hunger = f" (here {h:.0%})" if h is not None else ""
-    other = (f" Poverty and density, news and the hunger indicator inside the price model account for another "
-             f"{other_pct:.0f}% of its attribution, not shown in the bars." if other_pct else "")
-    return ("The bars show each group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's estimate that "
-            "food prices rise unusually fast. They are model influence, not shares of hunger caused by each factor, and "
-            f"they leave out the regional hunger condition{hunger}, which multiplies that estimate into the risk "
-            f"probability.{other}")
+    return ("The bars show each indicator group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's "
+            "estimate that food prices rise unusually fast; every indicator family the model uses has a row. They are "
+            f"model influence, not shares of hunger caused by each factor, and they leave out the regional hunger "
+            f"condition{hunger}, which multiplies that estimate into the risk probability, and the forecast horizon "
+            "itself.")
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:
-    """The five approved driver bars from the LightGBM price part's SHAP values (log-odds), plus the share of the other
-    families (poverty, news, regional hunger) as otherPct."""
+    """The driver bars from the LightGBM price part's SHAP values (log-odds): the five approved groups plus poverty, news
+    and the regional hunger indicator (FINAL_ARCHITECTURE section 4); otherPct is 0 because nothing is left out."""
     r = row(code, quarter)
     if r is None:
         return base
@@ -201,7 +204,7 @@ def drivers(code: str, quarter: str, base: dict) -> dict:
                                                        "N1", "H1")}
     news = {d["driver_group"]: d.get("trigger_proportion") for d in base.get("drivers", [])}
     ds = []
-    for g, fams in FIVE_GROUPS.items():
+    for g, fams in SHOWN_GROUPS.items():
         c = sum(sh[f] for f in fams)
         ds.append({"driver_group": g, "driver_label": GROUP_LABELS[g], "group_shap": round(c, 6),
                    "direction": "increases_risk" if c > 0 else "protective" if c < 0 else "no_effect",

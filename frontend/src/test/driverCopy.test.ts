@@ -9,7 +9,7 @@ describe("factor card copy: contributing groups", () => {
     expect(contributing("employment", "increases_risk").title).toBe("Jobs and livelihoods");
     expect(contributing("climate", "increases_risk").title).toBe("Weather and farm supply");
     expect(contributing("market", "protective").title).toBe("Food prices");
-    expect(contributing("fish_kill", "protective").title).toBe("Fish kills and fisheries");
+    expect(contributing("fish_kill", "protective").title).toBe("Fisheries production");
     expect(contributing("ofw_remittance", "increases_risk").title).toBe("OFW remittances");
     for (const k of ["employment", "climate", "market", "fish_kill", "ofw_remittance"]) {
       for (const d of ["increases_risk", "protective"] as const) {
@@ -53,7 +53,7 @@ describe("factor card copy: groups that did not move the forecast (E42/E47)", ()
   it("falls back to neutral copy at 0% when an older backend sends no status", () => {
     expect(isContributing({ pct: 0 })).toBe(false);
     expect(driverCopy({ key: "fish_kill", direction: "increases_risk", pct: 0 }).title)
-      .toBe("Fish kills and fisheries: no measurable effect");
+      .toBe("Fisheries production: no measurable effect");
     expect(isContributing({ pct: 12 })).toBe(true);
   });
 

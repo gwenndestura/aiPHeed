@@ -2,7 +2,8 @@
 // -----------------------
 // Plain-language copy for the five real driver categories the backend
 // computes. The technical thesis terms (Market/Prices, Climate Stress,
-// Fish Kill, Employment, OFW Remittance) stay exactly as-is in
+// Fisheries production, Employment, OFW Remittance, plus poverty, news and the
+// regional hunger indicator) stay exactly as-is in
 // DRIVER_GROUP_LABELS on the backend and in the glossary -- this is a
 // friendlier presentation of the same key + direction for the general
 // public dashboard, not a different value or a different computation.
@@ -39,6 +40,18 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
     raises: "Money sent home by OFWs grew less than usual.",
     lowers: "Money sent home by OFWs grew more than usual.",
   },
+  poverty: {
+    raises: "The province's poverty and density profile pushed the estimate up.",
+    lowers: "The province's poverty and density profile pulled the estimate down.",
+  },
+  news: {
+    raises: "Food-stress news signals pushed the estimate up.",
+    lowers: "Food-stress news signals pulled the estimate down.",
+  },
+  hunger_indicator: {
+    raises: "The regional hunger outlook pushed the food-price estimate up.",
+    lowers: "The regional hunger outlook pulled the food-price estimate down.",
+  },
 };
 
 // E42: a direction is only stated for a group that actually moved the forecast. A group with no model input, no
@@ -47,9 +60,12 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
 const FRIENDLY_NAME: Record<string, string> = {
   market: "Food prices",
   climate: "Weather and farm supply",
-  fish_kill: "Fish kills and fisheries",
+  fish_kill: "Fisheries production",
   employment: "Jobs and livelihoods",
   ofw_remittance: "OFW remittances",
+  poverty: "Poverty and vulnerability",
+  news: "News signals",
+  hunger_indicator: "Regional hunger (indicator)",
 };
 
 const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string) => Copy> = {

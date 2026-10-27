@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS } from "@/data/types";
-import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish, Home, Newspaper, Utensils } from "lucide-react";
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -275,6 +275,9 @@ const TRIGGER_ICONS: Record<string, typeof Briefcase> = {
   fish_kill: Fish,
   employment: Briefcase,
   ofw_remittance: Plane,
+  poverty: Home,
+  news: Newspaper,
+  hunger_indicator: Utensils,
 };
 
 export function RiskDriversCardBody({

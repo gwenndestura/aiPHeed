@@ -31,7 +31,7 @@ const triggers = (note: (k: string) => string | undefined) => [
   t("employment", "Employment", 54, "increases_risk", "red", "contributes", note("employment")),
   t("climate", "Climate Stress", 28, "increases_risk", "red", "contributes", note("climate")),
   t("market", "Market / Prices", 5, "increases_risk", "yellow", "contributes", note("market")),
-  t("fish_kill", "Fish Kill", 13, "protective", "yellow", "contributes", note("fish_kill")),
+  t("fish_kill", "Fisheries production", 13, "protective", "yellow", "contributes", note("fish_kill")),
   t("ofw_remittance", "OFW Remittance", 0, "increases_risk", "yellow", "insufficient_data"),
 ];
 
@@ -50,7 +50,7 @@ describe("factor cards", () => {
       "Jobs and livelihoods54%",
       "Weather and farm supply28%",
       "Food prices5%",
-      "Fish kills and fisheries13%",
+      "Fisheries production13%",
       "OFW remittances: insufficient data0%",
     ]);
     // Bars keep their widths.

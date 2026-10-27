@@ -27,6 +27,9 @@ DEST = X.EXP.parents[1] / "backend" / "data" / "ch1_engine"
 GROUPS = {"market": ["A1_food", "A1_gap", "A_mom", "A2", "A3", "W_rice_yoy", "W_rice_mom", "W_cereal_yoy", "W_crude_yoy"],
           "climate": ["C1", "C2", "C3", "W_urea_yoy"], "fish_kill": ["C4"], "employment": ["E1"],
           "ofw_remittance": ["E2"]}
+# FINAL_ARCHITECTURE section 4: availability of the groups now shown as their own rows. These flags go to rows.csv
+# only; the frozen seal keeps its original columns and must stay byte-identical.
+EXTRA_GROUPS = {"poverty": ["V1"], "news": ["N1", "G_pri_yoy", "NG_gap_price"], "hunger_indicator": ["H1"]}
 LEAD_KEYS = ("n", "n_quarters", "quarters", "high_share", "metrics", "accuracy_ci90", "baseline_accuracy",
              "baseline_balanced_accuracy", "criteria", "reliable", "reliable_strict", "loqo_min", "acc_thirds", "onsets",
              "onset_recall", "brier_vs_persist_si", "brier_vs_clim", "confusion", "average_precision",
@@ -55,7 +58,7 @@ def main():
     R["probability"] = R["pi_hunger"] * R["pi_price"]
     R["class"] = np.where(R["probability"] >= 0.5, "HIGH", "LOW")
     Si = S.set_index(["t", "lead", "province_code"])
-    for g, cs in GROUPS.items():
+    for g, cs in {**GROUPS, **EXTRA_GROUPS}.items():
         R[f"avail_{g}"] = [int(bool(Si.loc[(int(t), int(k), p), cs].notna().any()))
                            for t, k, p in zip(R["t"], R["lead"], R["province_code"])]
     # the export must reproduce the evaluated P0H4 probabilities exactly
@@ -67,10 +70,19 @@ def main():
     assert np.allclose(chk["pi_price"], chk["P0_price"], atol=1e-5), "served price part != evaluated P0"
     assert np.allclose(chk["probability"], chk["P0H4_p3"], atol=1e-5), "export != evaluated P0H4"
     R = R.drop(columns=["t"])
-    seal = R[R["issue_date"] >= "2026-10-01"].copy()
-    seal.to_csv(OUT / "sealed_prospective_P0H4.csv", index=False, lineterminator="\n", float_format="%.6g")
-    sha = FM.sha256(OUT / "sealed_prospective_P0H4.csv")
-    (OUT / "sealed_prospective_P0H4.csv.sha256").write_text(sha + "\n", encoding="utf-8", newline="\n")
+    seal = R[R["issue_date"] >= "2026-10-01"].drop(columns=[f"avail_{g}" for g in EXTRA_GROUPS]).copy()
+    seal_path = OUT / "sealed_prospective_P0H4.csv"
+    if seal_path.exists():           # a frozen seal is never rewritten: the export must reproduce it byte for byte
+        tmp = OUT / "_seal_check.csv"
+        seal.to_csv(tmp, index=False, lineterminator="\n", float_format="%.6g")
+        same = FM.sha256(tmp) == FM.sha256(seal_path)
+        tmp.unlink()
+        assert same, "export would change the frozen seal"
+    else:
+        seal.to_csv(seal_path, index=False, lineterminator="\n", float_format="%.6g")
+        (OUT / "sealed_prospective_P0H4.csv.sha256").write_text(FM.sha256(seal_path) + "\n", encoding="utf-8",
+                                                                  newline="\n")
+    sha = FM.sha256(seal_path)
     served = R[(R["issue_date"] < "2026-10-01") | (R["lead"] <= 4)]
     served.to_csv(DEST / "rows.csv", index=False, lineterminator="\n", float_format="%.6g")
     write_evaluation(S, K, sha)
