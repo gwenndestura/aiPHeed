@@ -292,7 +292,7 @@ export function RiskDriversCardBody({
   return (
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
-        <h3 className="text-[13px] font-semibold leading-tight">What drives this forecast?</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Relative model influence</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
           {isLoading ? "Computing…" : failed ? "" : "Ranked"}
         </span>
@@ -737,7 +737,7 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
-        <h3 className="text-[13px] font-semibold leading-tight">Trigger composition</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Relative influence by trigger</h3>
       </div>
       {isLoading ? (
         <div className="animate-pulse">
