@@ -212,5 +212,109 @@ def phase_placebo(n: int = 20):
     print(out)
 
 
+# ================================================================================================ Addendum 2 (U6)
+def _seasonal_proj(s: pd.Series, t: int, k: int) -> float:
+    """Mean YoY over the target months of t+k with index(m) = index(m0) * exp(mean past log change m0->m, same calendar
+    months, both months published at O(t) and >= 2021-01); fallback = flat (Addendum 2)."""
+    m0 = L.m0_of(t)
+    if m0 not in s.index:
+        return float("nan")
+    ls = np.log(s)
+    vals = []
+    for b in E.projection_bases(t, k):
+        m = b + 12
+        n = m - m0
+        ch = [ls[a + n] - ls[a] for a in (m0 - 12 * j for j in range(1, 8))
+              if a >= L.FIRST_YM and a + n <= m0 and a in ls.index and a + n in ls.index]
+        proj = s[m0] * float(np.exp(np.mean(ch))) if ch else s[m0]
+        if b in s.index:
+            vals.append(100 * (proj / s[b] - 1))
+    return float(np.mean(vals)) if len(vals) >= 2 else float("nan")
+
+
+def add_seasonal(S: pd.DataFrame) -> pd.DataFrame:
+    d, _ = E.data()
+    cache = {}
+    adj_f, adj_g = [], []
+    for t, k, p in zip(S["t"], S["lead"], S["province_code"]):
+        t, k = int(t), int(k)
+        if t not in cache:
+            cache[t] = d.cut(t)
+        dc = cache[t]
+        sf, sh = L._series(dc, p, "food"), L._series(dc, p, "all_items")
+        f, h = E.projection(dc, t, k, p, "food"), E.projection(dc, t, k, p, "all_items")
+        fs, hs = _seasonal_proj(sf, t, k), _seasonal_proj(sh, t, k)
+        adj_f.append(fs - f if np.isfinite(fs) and np.isfinite(f) else 0.0)
+        adj_g.append((fs - hs) - (f - h) if all(np.isfinite(v) for v in (fs, hs, f, h)) else 0.0)
+    return S.assign(A1_food_s=S["A1_food"] + np.array(adj_f), A1_gap_s=S["A1_gap"] + np.array(adj_g))
+
+
+def _u6_cols(news: bool) -> list[str]:
+    return [{"A1_food": "A1_food_s", "A1_gap": "A1_gap_s"}.get(c, c) for c in U.cols("U2", news)]
+
+
+def fit_predict_u6(S, t, news):
+    tr = U.train_rows(S, t)
+    te = S[S["t"] == t]
+    if not B.eligible(tr) or not len(te):
+        return None
+    cc = _u6_cols(news)
+    cfg, _ = U.select(tr, cc, True)
+    mdl = U.UniPrice(cfg, cc, True).fit(tr)
+    return te[["t", "lead", "province_code"]].assign(pi_price=mdl.predict(te))
+
+
+def phase_seasonal():
+    _check()
+    assert FM.sha256(U.UNI / "ADDENDUM_2_LEAD2_SEASONAL.md") == (U.HERE / "ADDENDUM_2_SHA256.txt").read_text().strip()
+    U.setup()
+    for c in ("A1_food_s", "A1_gap_s"):
+        if c not in U.MONO_UP:
+            U.MONO_UP.append(c)
+    K = int(json.loads((OUT / "testability_unified.json").read_text())["K"])
+    S = add_seasonal(U.stack(K))
+    print("seasonal adjustment |A1_food_s - A1_food| mean by lead:",
+          S.assign(a=(S["A1_food_s"] - S["A1_food"]).abs()).groupby("lead")["a"].mean().round(2).to_dict(), flush=True)
+    origins = [L.qi(q) for q in json.loads((OUT / "testability_unified.json").read_text())["eligible_origins"]]
+    D = pd.read_csv(OUT / "predictions.csv", dtype={"province_code": str})
+    for news in (True, False):
+        P = pd.concat([p for p in (fit_predict_u6(S, t, news) for t in origins) if p is not None])
+        tag = "U6" + ("" if news else "-GOV")
+        D = D.merge(P.rename(columns={"pi_price": f"{tag}_price"}), on=["t", "lead", "province_code"], how="left")
+        D[f"{tag}_p"] = D["pi_h_used"] * D[f"{tag}_price"]
+        print("scored", tag, flush=True)
+    dev = D[(D["q"] <= U.DEV_LAST) & (D["lead"] <= 4)]
+    br = {c: float(np.mean([np.mean((g[c] - g["y"]) ** 2) for _, g in dev.groupby("lead")])) for c in ("UNI_p", "U6_p")}
+    adopt = br["U6_p"] < br["UNI_p"]
+    res = {"addendum2_sha256": FM.sha256(U.UNI / "ADDENDUM_2_LEAD2_SEASONAL.md"), "status": "post-hoc",
+           "dev_brier": br, "adopted": bool(adopt), "leads": {}}
+    for k, g in D.groupby("lead"):
+        dec = C.decide(g.assign(CH1_p=g["U6_p"]))
+        y = g["y"].astype(int).to_numpy()
+        dec["news_ablation"] = {"brier_diff": FM.boot_diff(g, (g["U6_p"] - y) ** 2, (g["U6-GOV_p"] - y) ** 2)}
+        dec["vs_uni_final"] = {"acc_uni_final": float(((g["UNI_p"] >= .5).astype(int) == y).mean()),
+                               "brier": FM.boot_diff(g, (g["U6_p"] - y) ** 2, (g["UNI_p"] - y) ** 2)}
+        from sklearn.metrics import roc_auc_score
+        dec["price_auc"] = {"U6": float(roc_auc_score(g["price"], g["U6_price"])) if g["price"].nunique() > 1 else None,
+                            "U2": float(roc_auc_score(g["price"], g["U2_price"])) if g["price"].nunique() > 1 else None}
+        res["leads"][int(k)] = dec
+        m = dec["metrics"]
+        print(f"lead {k}: acc {m['accuracy']:.3f} bal {m['balanced_accuracy']:.3f} P {m['precision']:.2f} R {m['recall']:.2f} "
+              f"price AUC U6 {dec['price_auc']['U6']} vs U2 {dec['price_auc']['U2']} fail "
+              f"{[c for c, v in dec['criteria'].items() if not v]}", flush=True)
+    mrl = None
+    for k in sorted(res["leads"]):
+        if res["leads"][k]["reliable"]:
+            mrl = k
+        else:
+            break
+    res["max_reliable_lead"] = mrl
+    res["individually_passing_leads"] = [k for k in sorted(res["leads"]) if res["leads"][k]["reliable"]]
+    D.to_csv(OUT / "seasonal_predictions.csv", index=False, lineterminator="\n", float_format="%.6g")
+    FM.write_json(OUT / "seasonal_results.json", res)
+    print("dev Brier", {a: round(b, 4) for a, b in br.items()}, "adopted", adopt, "| max reliable", mrl,
+          "passing", res["individually_passing_leads"])
+
+
 if __name__ == "__main__":
-    {"score": phase_score, "placebo": phase_placebo}[sys.argv[1]]()
+    {"score": phase_score, "placebo": phase_placebo, "seasonal": phase_seasonal}[sys.argv[1]]()

@@ -127,6 +127,30 @@ The maximum reliable lead is unchanged at 1.
 
 **Why no further arms were tried.** At Lead 2 the model's AUC is 0.59. No cutoff can then reach balanced accuracy 0.70; discrimination itself is the limit. Earlier experiments E41–E113 also tried CPI, rice, climate, employment, news and lags against the same problem.
 
+## 5b. Attempt to make Lead 2 reliable (Addendum 2, post-hoc; sha `7716c9fb…`)
+
+**Diagnosis before the attempt.** Two causes block Lead 2:
+
+1. **The hunger term.** In 2023-Q4 and 2024-Q2 the price model flagged pressure (mean π_P 0.77 for 2024-Q2). But π_H was 0.26–0.29, because the newest SWS reading at issue was 10.3% and the 2024 surge had not started. This loses 7 of 17 HIGH rows. It is not forecastable from 2021+ hunger history.
+2. **The price term.** Even with the hunger condition known exactly (a diagnostic oracle), Lead 2 would reach only accuracy 0.677, balanced accuracy 0.648 and precision 0.42.
+
+**The arm (U6).** The food-price projection follows each province's past calendar-month pattern instead of holding the latest CPI flat.
+
+| | U6 | UNI-FINAL |
+|---|---|---|
+| Development Brier | 0.236 | 0.229 |
+| Price AUC, Leads 1 / 2 / 3 | 0.59 / 0.61 / 0.48 | 0.67 / 0.67 / 0.62 |
+| Lead 1 | 0.757, fails | 0.829 |
+| Lead 2 | 0.692, fails | 0.769 |
+
+**Result.** The arm was **not adopted** by the pre-set rule.
+
+**Conclusion.** Lead 2 cannot be made reliable honestly with 2021–2026 data. It needs both:
+- a forecast of the hunger-surge onset, which earlier data did not contain;
+- sharper two-quarter provincial price forecasts.
+
+No further arms were run; more tries on the same quarters would only fish for a chance pass. Lead 2 stays **experimental** on the dashboard. Its sealed forecasts will be scored as SWS publishes 2027-Q1.
+
 ## 6. News contribution
 
 | Test | Result |

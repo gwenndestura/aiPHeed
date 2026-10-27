@@ -80,3 +80,10 @@ def test_seal_unchanged_and_served_forecasts_match_it():
     rows = pd.read_csv(SERVED / "rows.csv", dtype={"province_code": str})
     fwd = rows[rows["issue_date"] >= "2026-10-01"].merge(s, on=["province_code", "quarter", "lead"], suffixes=("", "_s"))
     assert len(fwd) == 20 and (fwd["probability"] - fwd["probability_s"]).abs().max() < 1e-9
+
+
+def test_lead2_seasonal_arm_was_frozen_and_not_adopted():
+    assert _sha(UNI / "ADDENDUM_2_LEAD2_SEASONAL.md") == (UNI / "runner" / "ADDENDUM_2_SHA256.txt").read_text().strip()
+    r = _j(OUT / "seasonal_results.json")
+    assert r["adopted"] is (r["dev_brier"]["U6_p"] < r["dev_brier"]["UNI_p"]) and r["adopted"] is False
+    assert _j(SERVED / "evaluation.json")["max_reliable_lead"] == 1
