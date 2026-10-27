@@ -1,20 +1,21 @@
 """
 app/ml/inference/ch1_system.py
 ------------------------------
-The served Chapter I food-insecurity risk forecast (branch aiPHeed/unified-lgbm-objectives).
+The served Chapter I food-insecurity risk forecast (branch aiPHeed/lead2-optimization).
 
 Chapter I §1.4 defines the dependent variable as "the binary food insecurity risk classification, either high or low,
 of a CALABARZON province in a given quarter", and §1.7 says SWS hunger and PSA food prices determine it. The label
 (T43c) is HIGH when Balance Luzon hunger is above 11.3% AND the province's food inflation (or food minus headline) is
-above its 2021-22 60th percentile. The model (UNI-FINAL) gives P(HIGH) = P(hunger condition) x P(price condition), the
-price part from ONE LightGBM trained on the rows of every lead (all 12 indicator families, the lead, and World Bank world
-rice/cereal/oil/urea prices), refitted at each issue date.
+above its 2021-22 60th percentile. The model (P0H4, LEAD2_OPTIMIZATION) gives P(HIGH) = P(hunger condition) x P(price
+condition): the price part from ONE LightGBM trained on the rows of every lead (all 12 indicator families, the lead, and
+World Bank world rice/cereal/oil/urea prices), refitted at each issue date (unchanged from UNI-FINAL); the hunger part
+from the latest Balance Luzon SWS reading, its uncertainty taken from the 2021+ latest-reading errors of all four SWS
+areas.
 
-Evaluated walk-forward (FINAL_UNIFIED_LGBM, protocol 889e55e8): Lead 1 passed every frozen reliability criterion
-(accuracy 0.829 on 70 province-quarters); Leads 2-15 did not (Leads 1-5 had enough quarters to test). It replaced the
-per-lead CH1-LGBM (0.914 at Lead 1) because the methodology requires one unified LightGBM. This module serves the
-exported rows (backend/data/ch1_engine/, written by FINAL_UNIFIED_LGBM/runner/export_uni.py) and is active in thesis
-mode unless AIPHEED_MAP_MODEL=firi.
+Evaluated walk-forward (LEAD2_OPTIMIZATION, protocol 88ee80bc + Addenda 1-4): Lead 1 passed every frozen reliability
+criterion (accuracy 0.843 on 70 province-quarters); Leads 2-15 did not. This module serves the exported rows
+(backend/data/ch1_engine/, written by LEAD2_OPTIMIZATION/runner/export_l2.py) and is active in thesis mode unless
+AIPHEED_MAP_MODEL=firi.
 """
 from __future__ import annotations
 
@@ -38,15 +39,16 @@ INDICATOR = {
                    "headline inflation, above the province's 2021-22 60th percentile), as Chapter I (1.4, 1.7) "
                    "defines the risk from SWS hunger and PSA food prices. The number is the forecast probability of "
                    "HIGH: P(hunger condition) x P(price condition), the price part from one LightGBM, trained on every "
-                   "forecast horizon together, on all 12 indicator families and world food prices. HIGH at 0.50."),
+                   "forecast horizon together, on all 12 indicator families and world food prices; the hunger part from "
+                   "the latest SWS reading and how much SWS hunger readings have moved over the same span. HIGH at 0.50."),
     "unit": "probability 0-1 (HIGH at 0.50)",
     "horizon": ("issued on the first day of a quarter; Lead 1 = that quarter (passed the reliability test), "
                 "Lead 2 = the next quarter (not established as reliable)"),
     "source": ("SWS hunger (Balance Luzon, non-commissioned rounds); PSA provincial CPI; PSA rice, production, LFS, "
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
     "caveat": ("A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
-               "for all five provinces, so provinces differ only through food prices. Probabilities run slightly high "
-               "(mean 0.33 vs an observed HIGH rate of 0.24 in testing)."),
+               "for all five provinces, so provinces differ only through food prices. The hunger part follows the newest "
+               "SWS reading and cannot anticipate a new hunger surge before SWS publishes it."),
 }
 LGU_BASIS = ("Relative position within the province: the province's Chapter I risk probability re-weighted by PSA "
              "poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official "
@@ -159,6 +161,34 @@ def province_rows(base_rows: list[dict], quarter: str, names: dict[str, str]) ->
             out.append(r)
     out.sort(key=lambda r: r["risk_probability"], reverse=True)
     return out
+
+
+GROUP_KEYS = tuple(FIVE_GROUPS)
+
+
+def group_status(code: str | None, quarter: str, key: str, pct: int) -> str | None:
+    """Status of a trigger group for THIS model (LEAD2_OPTIMIZATION contributor audit: the FIRI record's statuses said
+    "no published value" for 135 groups whose inputs the served model had). insufficient_data only when none of the
+    group's inputs had a published value at the issue date; region scope: when no province had one."""
+    rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
+    if not rs or f"avail_{key}" not in rs[0]:
+        return None
+    if not any(str(r[f"avail_{key}"]) == "1" for r in rs):
+        return "insufficient_data"
+    return "contributes" if pct > 0 else "no_effect"
+
+
+def evidence_note(code: str | None, quarter: str, other_pct: float | None = None) -> str:
+    """What the bars measure, in this forecast's own numbers: the push of each group on the price part only."""
+    rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
+    h = float(rs[0]["pi_hunger"]) if rs else None
+    hunger = f" (here {h:.0%})" if h is not None else ""
+    other = (f" Poverty and density, news and the hunger indicator inside the price model account for another "
+             f"{other_pct:.0f}% of its attribution, not shown in the bars." if other_pct else "")
+    return ("The bars show each group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's estimate that "
+            "food prices rise unusually fast. They are model influence, not shares of hunger caused by each factor, and "
+            f"they leave out the regional hunger condition{hunger}, which multiplies that estimate into the risk "
+            f"probability.{other}")
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:

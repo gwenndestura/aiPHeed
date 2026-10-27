@@ -1,5 +1,6 @@
 """Tests for FINAL_UNIFIED_LGBM (one LightGBM across leads): frozen protocol and addendum, leakage audit, development-only
-selection, the horizon verdicts, the seal, and agreement between the served evaluation and the scored results."""
+selection, the horizon verdicts, the seal, and agreement between its export (served until LEAD2_OPTIMIZATION replaced it;
+kept in LEAD2_OPTIMIZATION/out/previous_served) and the scored results."""
 import hashlib
 import json
 from pathlib import Path
@@ -10,7 +11,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 UNI = ROOT / "aipheed-backend-aligned" / "experiments" / "FINAL_UNIFIED_LGBM"
 OUT = UNI / "out"
-SERVED = ROOT / "backend" / "data" / "ch1_engine"
+SERVED = ROOT / "aipheed-backend-aligned" / "experiments" / "LEAD2_OPTIMIZATION" / "out" / "previous_served"
 
 
 def _sha(p: Path) -> str:
@@ -64,7 +65,7 @@ def test_post_hoc_arms_were_selected_on_development_quarters_only():
 
 
 def test_served_evaluation_matches_the_scored_results():
-    r, ev = _j(OUT / "results.json"), _j(SERVED / "evaluation.json")
+    r, ev = _j(OUT / "results.json"), _j(SERVED / "served_evaluation_UNI_FINAL.json")
     assert ev["protocol_sha256"] == r["protocol_sha256"] and ev["max_reliable_lead"] == r["max_reliable_lead"]
     for k in ("1", "2", "3", "4", "5"):
         assert ev["leads"][k]["metrics"]["accuracy"] == pytest.approx(r["leads"][k]["metrics"]["accuracy"])
@@ -74,10 +75,11 @@ def test_served_evaluation_matches_the_scored_results():
 
 def test_seal_unchanged_and_served_forecasts_match_it():
     seal = OUT / "sealed_prospective.csv"
-    assert _sha(seal) == (OUT / "sealed_prospective.csv.sha256").read_text().strip() == _j(SERVED / "evaluation.json")["seal_sha256"]
+    assert _sha(seal) == (OUT / "sealed_prospective.csv.sha256").read_text().strip() == \
+        _j(SERVED / "served_evaluation_UNI_FINAL.json")["seal_sha256"]
     s = pd.read_csv(seal, dtype={"province_code": str})
     assert sorted(s["lead"].unique()) == list(range(1, 16)) and (s["issue_date"] == "2026-10-01").all()
-    rows = pd.read_csv(SERVED / "rows.csv", dtype={"province_code": str})
+    rows = pd.read_csv(SERVED / "served_rows_UNI_FINAL.csv", dtype={"province_code": str})
     fwd = rows[rows["issue_date"] >= "2026-10-01"].merge(s, on=["province_code", "quarter", "lead"], suffixes=("", "_s"))
     assert len(fwd) == 20 and (fwd["probability"] - fwd["probability_s"]).abs().max() < 1e-9
 
@@ -86,4 +88,4 @@ def test_lead2_seasonal_arm_was_frozen_and_not_adopted():
     assert _sha(UNI / "ADDENDUM_2_LEAD2_SEASONAL.md") == (UNI / "runner" / "ADDENDUM_2_SHA256.txt").read_text().strip()
     r = _j(OUT / "seasonal_results.json")
     assert r["adopted"] is (r["dev_brier"]["U6_p"] < r["dev_brier"]["UNI_p"]) and r["adopted"] is False
-    assert _j(SERVED / "evaluation.json")["max_reliable_lead"] == 1
+    assert _j(SERVED / "served_evaluation_UNI_FINAL.json")["max_reliable_lead"] == 1

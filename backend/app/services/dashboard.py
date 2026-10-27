@@ -991,9 +991,6 @@ TRIGGER_STATUS_NOTES = {
 NO_OFFICIAL_DATA_GROUPS = frozenset({"ofw_remittance"})
 REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for this quarter. Open a province to see "
                         "the official figures behind this factor.")
-CH1_EVIDENCE_NOTE = ("In the Chapter I risk forecast: this group's push (SHAP, log-odds) on the LightGBM's estimate "
-                     "that the province's food prices will rise unusually fast. Regional hunger, poverty and news are "
-                     "counted in the remaining share.")
 THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v2): the five provinces' combined push of this factor group "
                                "(above or below its historical middle). Open a province to see each indicator's value, "
                                "score and status.")
@@ -1008,6 +1005,10 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
 
 
 def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
+    if THESIS.active() and CH1.active() and CH1.covers(quarter):   # the served Chapter I model's own inputs
+        own = CH1.group_status(code, quarter, key, pct)
+        if own:
+            return own
     if THESIS.active() and E41L2.governs():           # THESIS: the status of the group in the served FIRI
         return THESIS.group_status(E41L2.record(), quarter, code, key, pct)
     if E41L2.governs() and not E41L2.serves(quarter) and not E41L2.has_past_drivers(quarter):
@@ -1075,7 +1076,7 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": (CH1_EVIDENCE_NOTE if ch1 else
+            "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct")) if ch1 else
                              THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                              if THESIS.active() and E41L2.governs() else
                              _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
@@ -1147,7 +1148,8 @@ def explainability_region(quarter: str) -> dict:
             "statusNote": TRIGGER_STATUS_NOTES[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
-            "evidenceNote": (THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
+            "evidenceNote": (CH1.evidence_note(None, quarter) if THESIS.active() and CH1.active() and CH1.covers(quarter)
+                             else THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
                              REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
                              else None),
             "newsSignalProportion": (

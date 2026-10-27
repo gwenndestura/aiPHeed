@@ -1,9 +1,9 @@
 """
 tests/integration/test_api_ch1_risk.py
 ---------------------------------------
-The served Chapter I risk forecast (app.ml.inference.ch1_system; FINAL_UNIFIED_LGBM on the FIRI_V2_DATA_AUDIT inputs):
-province scores are the exported UNI-FINAL probabilities (one LightGBM across leads), the Lead-1 rows equal the
-evaluated predictions, the reliability verdict and the 75% statement follow from the evaluation, horizons beyond Lead 1 are
+The served Chapter I risk forecast (app.ml.inference.ch1_system; LEAD2_OPTIMIZATION P0H4 on the FIRI_V2_DATA_AUDIT
+inputs): province scores are the exported P0H4 probabilities (UNI-FINAL's one LightGBM across leads x the pooled-area
+hunger term), the Lead-1 rows equal the evaluated predictions, the trigger statuses and notes describe the served model, the reliability verdict and the 75% statement follow from the evaluation, horizons beyond Lead 1 are
 flagged, the LGU layer stays a priority ranking, and AIPHEED_MAP_MODEL=firi restores FIRI v2.
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from app.ml.inference import ch1_system as CH1
 
 client = TestClient(app)
 ROOT = Path(__file__).resolve().parents[3]
-UNIFIED = ROOT / "aipheed-backend-aligned" / "experiments" / "FINAL_UNIFIED_LGBM" / "out"
+LEAD2 = ROOT / "aipheed-backend-aligned" / "experiments" / "LEAD2_OPTIMIZATION" / "out"
 
 
 @pytest.fixture
@@ -47,13 +47,14 @@ def test_province_scores_are_the_exported_ch1_probabilities(thesis):
 
 
 def test_served_lead1_rows_equal_the_evaluated_predictions():
-    P = pd.read_csv(UNIFIED / "predictions.csv", dtype={"province_code": str})
+    P = pd.read_csv(LEAD2 / "predictions_addendum3.csv", dtype={"province_code": str})
     P = P[P["lead"] == 1]
     assert len(P) == 70
     for p in P.itertuples():
         q = f"{p.q // 4}-Q{p.q % 4 + 1}"
         r = CH1.row(p.province_code, q)
-        assert r is not None and float(r["probability"]) == pytest.approx(p.UNI_p, abs=1e-5)
+        assert r is not None and float(r["probability"]) == pytest.approx(p.P0H4_p3, abs=1e-5)
+        assert float(r["pi_price"]) == pytest.approx(p.P0_price, abs=1e-5)
         assert (r["observed"] == "HIGH") == bool(p.y)
 
 
@@ -83,6 +84,30 @@ def test_summary_and_driver_bars_explain_the_served_model(thesis):
     market = next(t for t in d["triggers"] if t["key"] == "market")
     assert "chance that food prices" in market["plainEvidence"]
     assert sum(t["pct"] for t in d["triggers"]) == 100
+
+
+def test_trigger_statuses_follow_the_served_models_own_inputs(thesis):
+    """Contributor audit defect: statuses came from the FIRI record and said "no published value" for groups whose
+    inputs the served model had (135 of 135 such statuses). They must now follow the exported availability flags."""
+    for q in ("2024-Q3", "2025-Q2", "2026-Q4"):
+        for code, slug in (("PH040100000", "cavite"), ("PH040300000", "quezon")):
+            d = _get("/api/v1/explainability", scope="province", id=slug, quarter=q)
+            r = CH1.row(code, q)
+            for t in d["triggers"]:
+                avail = str(r[f"avail_{t['key']}"]) == "1"
+                assert (t["status"] == "insufficient_data") is (not avail)
+                if avail:
+                    assert t["status"] == ("contributes" if t["pct"] > 0 else "no_effect")
+
+
+def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
+    for scope, slug in (("province", "quezon"), ("region", "calabarzon")):
+        d = _get("/api/v1/explainability", scope=scope, id=slug, quarter="2024-Q3")
+        notes = {t["evidenceNote"] for t in d["triggers"]}
+        assert len(notes) == 1
+        note = notes.pop()
+        assert "food prices rise unusually fast" in note and "leave out the regional hunger condition" in note
+        assert "not shares of hunger" in note and "FIRI" not in note
 
 
 def test_lgus_remain_a_priority_ranking_without_hunger_figures(thesis):
