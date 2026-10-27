@@ -7,8 +7,19 @@ vi.mock("@/components/TopNavbar", () => ({ TopNavbar: () => <header>header</head
 vi.mock("@/lib/auth", () => ({ useAuth: () => ({ status: "anonymous" }) }));
 vi.mock("@/lib/tour", () => ({ requestTour: vi.fn() }));
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import Landing from "@/pages/Landing";
 import { AboutModal } from "@/components/AboutModal";
+
+// Every figure the page states about the served forecast (FINAL_SYSTEM_SELECTION/runner/landing_figures.py).
+const FIGURES = JSON.parse(
+  readFileSync(
+    resolve(__dirname, "../../../aipheed-backend-aligned/experiments/FINAL_SYSTEM_SELECTION/out/landing_figures.json"),
+    "utf-8",
+  ),
+);
 
 // The footer's feedback form submits through react-query.
 const renderLanding = () =>
@@ -89,9 +100,9 @@ describe("Landing page", () => {
     expect(container.querySelector("#methodology .inner-card")).toBeNull();
     const titles = [...container.querySelectorAll("#methodology h4")].map((h) => h.textContent);
     expect(titles.slice(0, 5)).toEqual([
-      "1.Indicator scores",
-      "2.Six domains",
-      "3.Combining the domains",
+      "1.What High risk means",
+      "2.Hunger condition",
+      "3.Food-price condition",
       "4.Classification",
       "5.City and municipal ranking",
     ]);
@@ -130,16 +141,20 @@ describe("Landing page", () => {
   it("describes the system without 'ensemble machine learning'", () => {
     const { container } = renderLanding();
     expect(container.textContent).not.toMatch(/ensemble/i);
-    expect(container.textContent).toContain("It uses the FIRI v2 risk index, with a LightGBM food-price-pressure forecast as one input");
+    expect(container.textContent).toContain(
+      "It combines a regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families",
+    );
   });
 
   it("words the lead time one way: three months ahead, never two quarters or Lead-2", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/two quarters|two-quarter|Lead-2|\(Lead 2\)/i);
-    expect(text).toContain("Estimates are issued at the start of each quarter for the next quarter, three months ahead");
+    expect(text).toContain("one for the quarter just starting and one for the next quarter, three months ahead");
     fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
-    expect(screen.getByText(/^Three months ahead\. Each estimate is issued at the start of a quarter for the next quarter/)).toBeTruthy();
+    expect(
+      screen.getByText(/^Forecasts are issued on the first day of each quarter.*the forecast three months ahead, for the next quarter, is experimental\.$/),
+    ).toBeTruthy();
   });
 
   it("has no research email and no [CONFIRM] placeholder", () => {
@@ -177,33 +192,92 @@ describe("Landing page", () => {
     expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
   });
 
-  it("shows the LightGBM lead-time table exactly as in the report, with Lead 2 marked as the map's", () => {
+  it("shows the served forecast's lead-time table exactly as in landing_figures.json, with Lead 1 marked reliable", () => {
     const { container } = renderLanding();
     const table = container.querySelector("#accuracy table") as HTMLTableElement;
     const rows = [...table.querySelectorAll("tbody tr")].map((tr) =>
       [...tr.querySelectorAll("td")].slice(0, 5).map((td) => td.textContent),
     );
-    expect(rows).toEqual([
-      ["0.85", "0.83", "0.71", "0.77", "0.90"],
-      ["0.72", "0.63", "0.56", "0.59", "0.65"],
-      ["0.62", "0.40", "0.43", "0.41", "0.62"],
-    ]);
+    const f2 = (v: number) => v.toFixed(2);
+    expect(rows).toEqual(
+      ["1", "2", "3"].map((k) => {
+        const l = FIGURES.leads[k];
+        return [f2(l.accuracy), f2(l.precision), f2(l.recall), f2(l.f1), f2(l.auc)];
+      }),
+    );
     const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
-    expect(heads[0]).toBe("Lead 1: current quarter");
-    expect(heads[1]).toBe("Lead 2: three months ahead (used by the map)The forecast shown on the map");
+    expect(heads[0]).toBe("Lead 1: current quarterPassed the reliability test");
+    expect(heads[1]).toBe("Lead 2: three months ahead (experimental)");
     expect(heads[2]).toBe("Lead 3: six months ahead");
-    expect(table.textContent).toContain("60 province-quarters, 12 quarters");
-    expect(table.textContent).toContain("50 province-quarters, 10 quarters");
-    expect(table.textContent).toContain("45 province-quarters, 9 quarters");
+    for (const k of ["1", "2", "3"]) {
+      const l = FIGURES.leads[k];
+      expect(table.textContent).toContain(`${l.rows} province-quarters, ${l.quarters} quarters`);
+    }
+    expect(FIGURES.leads["1"].reliable).toBe(true);
+    expect(FIGURES.leads["2"].reliable).toBe(false);
     const acc = container.querySelector("#accuracy")?.textContent ?? "";
-    expect(acc).toContain("Accuracy falls the further ahead the forecast looks; the map forecasts three months ahead.");
+    expect(acc).toContain("the next quarter is labelled experimental");
     expect(acc).toContain("All results below are development evidence");
     expect(acc).toContain("The 75% accuracy goal");
+    expect(acc).toContain("SHA-256 " + FIGURES.seal);
   });
 
-  it("states both quarter counts in the small-sample limitation", () => {
+  it("shows the Lead-1 Brier comparison exactly as in landing_figures.json", () => {
+    const { container } = renderLanding();
+    const tables = [...container.querySelectorAll("#accuracy table")];
+    const brier = tables[tables.length - 1];
+    const cells = [...brier.querySelectorAll("tr")].map((tr) => [
+      tr.querySelector("th")?.textContent,
+      tr.querySelector("td")?.textContent,
+    ]);
+    const m = FIGURES.lead1_brier.models;
+    expect(cells).toEqual([
+      ["LightGBM (served forecast)", m["LightGBM (served, P0H4)"].brier.toFixed(3)],
+      ["Naive persistence", m["I. Naive persistence"].brier.toFixed(3)],
+      ["Logistic regression, combined", m["Logistic regression, combined"].brier.toFixed(3)],
+      ["Logistic regression, government data only", m["Logistic regression, government data only"].brier.toFixed(3)],
+      ["Logistic regression, news only", m["Logistic regression, news only"].brier.toFixed(3)],
+      ["LightGBM, government data only", m["LightGBM, government data only"].brier.toFixed(3)],
+      ["LightGBM, news only", m["LightGBM, news only"].brier.toFixed(3)],
+    ]);
+    // the note's claims follow the Holm-corrected tests
+    expect(m["I. Naive persistence"].established).toBe(false);
+    expect(m["LightGBM, government data only"].p0h4_minus).toBeGreaterThan(0);
+    for (const k of [
+      "Logistic regression, combined",
+      "Logistic regression, government data only",
+      "Logistic regression, news only",
+      "LightGBM, news only",
+    ])
+      expect(m[k].established).toBe(true);
+    expect(container.querySelector("#accuracy")?.textContent).toContain(
+      `Same ${FIGURES.lead1_brier.rows} province-quarters. The advantage is statistically established against the three logistic regressions and the news-only LightGBM, but not against naive persistence`,
+    );
+  });
+
+  it("states the quarter counts in the small-sample limitation", () => {
     renderLanding();
-    expect(screen.getByText(/9 to 12 quarters of evidence for each lead time/).textContent).toContain("17 quarters");
+    expect(screen.getByText(/12 to 14 quarters of evidence for each lead time/)).toBeTruthy();
+  });
+
+  it("describes the served forecast (P0H4), never the FIRI v2 index", () => {
+    const { container } = renderLanding();
+    const text = container.textContent ?? "";
+    expect(text).not.toMatch(/FIRI|risk index|six domains|proxy index|not a probability|Combining the domains/i);
+    expect(text).toContain("The number shown is the forecast probability of High risk, from 0 to 1");
+    expect(text).toContain("regional hunger measured by SWS (Balance Luzon) is above 11.3%");
+    expect(text).toContain("The forecast probability is the hunger chance multiplied by the food-price chance.");
+    expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
+    // the sources the served forecast uses, with the periods available at the 1 October 2026 issue date
+    const src = container.querySelector("#methodology table")?.textContent ?? "";
+    expect(src).toContain("World Bank Commodity Price Data (Pink Sheet)");
+    expect(src).toContain("GDELT news event database");
+    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*2021 to 2026-Q2/);
+    expect(FIGURES.issue_2026_10_01.available_at_issue.E2).toBe(true);
+    expect(FIGURES.issue_2026_10_01.psa_cpi_through).toBe("2026-08");
+    // the two influence cautions the dashboard shows
+    expect(text).toContain("The unemployment input mostly follows the calendar trend");
+    expect(text).toContain("The Food Stress Sentiment Index has no measured effect on the forecast");
   });
 
   it("opens one FAQ row at a time, with aria-expanded", () => {

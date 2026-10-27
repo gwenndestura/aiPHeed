@@ -148,10 +148,12 @@ function About() {
       <Card>
         <div className="space-y-5">
           <p>
-            aiPHeed estimates the relative risk of food insecurity in each of the five CALABARZON provinces three
-            months ahead (for the next quarter). It combines public data on prices, poverty, climate, food production, jobs, remittances,
-            news and hunger into one index from 0 to 1. A score of 0.50 or higher is shown as High risk. The index is
-            not an official statistic.
+            aiPHeed forecasts the risk of food insecurity in each of the five CALABARZON provinces for the current
+            quarter and, as an experimental forecast, the next quarter. Following the study's definition, a province is
+            at High risk in a quarter when regional hunger measured by SWS (Balance Luzon) is above 11.3% and the
+            province's food prices are rising unusually fast. The number shown is the forecast probability of High
+            risk, from 0 to 1; a probability of 0.50 or higher is shown as High risk. It is not an official statistic
+            or a measured food-insecurity rate.
           </p>
           <p>
             aiPHeed was developed as a thesis for the Bachelor of Science in Computer Science with Intelligent Systems
@@ -163,24 +165,28 @@ function About() {
             (CALABARZON). It is published through a publicly accessible geospatial dashboard, which shows:
           </p>
           <ul className="list-disc pl-6 space-y-2 marker:text-primary">
-            <li>a map of the provinces, each coloured Low or High for the forecast quarter;</li>
             <li>
-              each province's domain scores, each indicator's value, score and status, and which data were available
-              at the issue date;
+              a map of the provinces, each coloured Low or High for the selected quarter; the current quarter is the
+              tested forecast and the next quarter is labelled experimental;
             </li>
             <li>
-              a food-price-pressure forecast from a LightGBM model, three months ahead. It is one input to the index
-              and is also shown on its own;
+              each province's forecast in its two parts, the chance that regional hunger is above 11.3% and the chance
+              of an unusual food-price rise, and which inputs had published values at the issue date;
+            </li>
+            <li>
+              the relative influence of each indicator group on the LightGBM food-price forecast, from its SHAP
+              values. Influence is not a cause;
             </li>
             <li>
               news evidence in Filipino and English: XLM-RoBERTa scores news headlines against ten bilingual
               food-insecurity hypotheses without labelled training data, and the resulting Food Stress Sentiment Index
-              is used only when a province has at least 5 articles;
+              is computed only when a province has at least 5 articles. The headlines are shown as context;
             </li>
             <li>
-              a priority ranking of all 142 cities and municipalities, from the province estimate weighted by PSA
-              poverty incidence (60 percent) and population density (40 percent). These values are a relative
-              prioritization within each province, not forecasts for each city or municipality;
+              a priority ranking of all 142 cities and municipalities, from the province forecast weighted by PSA
+              poverty incidence (60 percent) and population density (40 percent), shown in the province's risk colour.
+              These values are a relative prioritization within each province, not forecasts for each city or
+              municipality;
             </li>
             <li>downloadable PDF reports, and back-test estimates for past quarters, labelled as development evidence.</li>
           </ul>
@@ -198,33 +204,36 @@ const SOURCES = [
   { s: "PSA 2024 Census of Population (POPCEN)", m: "Population and land area, for density", p: "2024 (fixed)", l: "Municipal, combined to provincial" },
   { s: "PSA palay, corn and fisheries production", m: "Drops in local food production", p: "2021 to 2026-Q2", l: "Provincial" },
   { s: "PSA Labor Force Survey", m: "Change in the unemployment rate", p: "2021 to 2026-Q2", l: "National" },
-  { s: "Bangko Sentral ng Pilipinas cash remittances", m: "Change in money sent home by overseas Filipinos", p: "2021 to 2025-Q4", l: "National" },
+  { s: "Bangko Sentral ng Pilipinas cash remittances", m: "Change in money sent home by overseas Filipinos", p: "2021 to 2026-Q2", l: "National" },
+  { s: "World Bank Commodity Price Data (Pink Sheet)", m: "World rice, cereal, oil and fertilizer prices", p: "2021 to August 2026", l: "World" },
   { s: "PAGASA El Niño Alert, Advisory and Climate Advisory", m: "Whether an official El Niño advisory was in force", p: "Dated advisories, 2021 to 23 September 2026", l: "National" },
   { s: "IBTrACS (NOAA) tropical cyclone tracks", m: "Typhoons passing within 300 km", p: "2021 to 2026-Q2 (2026-Q3 incomplete)", l: "Provincial" },
   { s: "Social Weather Stations (SWS) involuntary hunger", m: "Share of families that experienced hunger", p: "Survey rounds 2021 to 2026-Q2 (latest 17.3%)", l: "Regional (Balance Luzon)" },
-  { s: "Google News headlines (Filipino and English)", m: "Food-stress content of local news", p: "1 January 2021 to 14 October 2026 (9,667 headlines)", l: "Provincial" },
+  { s: "Google News headlines (Filipino and English)", m: "Food-stress content of local news", p: "1 January 2021 to 14 October 2026 (9,667 headlines); a forecast uses only those published before its issue date", l: "Provincial" },
+  { s: "GDELT news event database", m: "Share of Philippine food-security news about prices", p: "2021 to 2026-Q3", l: "National" },
 ];
 
+/* The served Chapter I forecast (P0H4): backend/app/ml/inference/ch1_system.py INDICATOR and LEAD2_OPTIMIZATION. */
 const STEPS = [
   {
-    t: "Indicator scores",
-    d: "Each indicator is scored from 0 to 1 by comparing it with its own earlier values. A score of 0.50 means the indicator is at its usual level; higher scores mean more risk.",
+    t: "What High risk means",
+    d: "Following the study's definition, a province is High risk in a quarter when SWS hunger in Balance Luzon is above 11.3% (its 2021-2022 60th percentile) and the province's food inflation, or food inflation minus headline inflation, is above the province's own 2021-2022 60th percentile. No hunger survey covers a single province, so the provinces differ only through food prices.",
   },
   {
-    t: "Six domains",
-    d: "Indicators are grouped into six domains, each scored as the average of its available indicators: affordability (the LightGBM food-price-pressure forecast, headline inflation, rice prices); household vulnerability (poverty and density); climate and food production; household economy (national unemployment and remittances); news (only with at least 5 articles); and regional hunger (SWS, Balance Luzon).",
+    t: "Hunger condition",
+    d: "The chance that Balance Luzon hunger is above 11.3% in the target quarter, from the latest SWS reading published before the issue date and from how much SWS readings in all four SWS areas have moved over the same span since 2021.",
   },
   {
-    t: "Combining the domains",
-    d: "Domains are weighted by how closely each followed observed regional hunger in earlier quarters, using only survey rounds published before the issue date, with the weights pulled toward equal weights. At least 4 of the 6 domains are required; otherwise the province shows Insufficient data.",
+    t: "Food-price condition",
+    d: "One LightGBM model, trained on all forecast leads together, gives the chance that the province's food prices rise unusually fast. Its inputs are 12 indicator families (food-price projection, headline inflation, rice prices, poverty and density, El Niño status, typhoons, rice and corn harvests, fisheries production, unemployment, remittances, news, and the regional hunger outlook) and world food and fertilizer prices. It is refitted at each issue date using only data published before it.",
   },
   {
     t: "Classification",
-    d: "The index is classed High risk at 0.50 or above and Low risk below 0.50. The 0.50 threshold was fixed in advance and not tuned.",
+    d: "The forecast probability is the hunger chance multiplied by the food-price chance. It is classed High risk at 0.50 or above and Low risk below 0.50. The 0.50 threshold was fixed in advance and not tuned.",
   },
   {
     t: "City and municipal ranking",
-    d: "Each city or municipality's value is the province index multiplied by a vulnerability weight of 60% poverty incidence (PSA 2021) and 40% population density (POPCEN 2024), ranked within the province and the region.",
+    d: "Each city or municipality's value is the province probability multiplied by a vulnerability weight of 60% poverty incidence (PSA 2021) and 40% population density (POPCEN 2024), ranked within the province and the region. On the map it takes its province's risk colour.",
   },
 ];
 
@@ -233,11 +242,11 @@ const STEPS = [
 const NOTES = [
   {
     t: "Forecast lead",
-    d: "Estimates are issued at the start of each quarter for the next quarter, three months ahead, using only information published before the issue date.",
+    d: "Forecasts are issued on the first day of each quarter, using only information published before the issue date: one for the quarter just starting and one for the next quarter, three months ahead. Only the forecast for the quarter just starting passed the reliability test; the three-months-ahead forecast is shown as experimental.",
   },
   {
     t: "Missing data",
-    d: "A missing value is never counted as zero or as low risk. An indicator with no published value at the issue date is left out of its domain and marked missing; a domain with no indicators is left out, and the number of domains used is shown.",
+    d: "A missing value is never counted as zero or as low risk. An input with no published value at the issue date is left blank, and the dashboard lists which inputs were missing.",
   },
   {
     t: "Rejected forecasts are withheld",
@@ -294,7 +303,7 @@ function Methodology() {
         </ul>
 
         <div className="mt-10">
-          <SubHeading>How the index is built</SubHeading>
+          <SubHeading>How the forecast is built</SubHeading>
           <div className="space-y-5">
             {STEPS.map((s, i) => (
               <Point key={s.t} n={i + 1} title={s.t}>
@@ -320,12 +329,13 @@ function Methodology() {
 }
 
 /* ---------------- ACCURACY ---------------- */
-/* Figures copied exactly from FINAL_THESIS_SYSTEM_REPORT.md sections 1-2 and 11 and /api/v1/config (FIRI v2); never rounded here. */
-/* LightGBM food-price-pressure lead-time table: report section 11 (sealed walk-forward predictions) = /api/v1/config modelPerformance.leads. */
+/* Figures copied exactly from aipheed-backend-aligned/experiments/FINAL_SYSTEM_SELECTION/out/landing_figures.json
+   (runner/landing_figures.py): the served P0H4 forecast's walk-forward evaluation (backend/data/ch1_engine/
+   evaluation.json) and its Lead-1 Brier comparison; never rounded here. */
 const LEADS = [
-  { label: "Lead 1: current quarter", acc: "0.85", prec: "0.83", rec: "0.71", f1: "0.77", auc: "0.90", tested: "60 province-quarters, 12 quarters" },
-  { label: "Lead 2: three months ahead (used by the map)", onMap: true, acc: "0.72", prec: "0.63", rec: "0.56", f1: "0.59", auc: "0.65", tested: "50 province-quarters, 10 quarters" },
-  { label: "Lead 3: six months ahead", acc: "0.62", prec: "0.40", rec: "0.43", f1: "0.41", auc: "0.62", tested: "45 province-quarters, 9 quarters" },
+  { label: "Lead 1: current quarter", reliable: true, acc: "0.84", prec: "0.69", rec: "0.65", f1: "0.67", auc: "0.87", tested: "70 province-quarters, 14 quarters" },
+  { label: "Lead 2: three months ahead (experimental)", acc: "0.77", prec: "0.60", rec: "0.35", f1: "0.44", auc: "0.62", tested: "65 province-quarters, 13 quarters" },
+  { label: "Lead 3: six months ahead", acc: "0.72", prec: "0.50", rec: "0.24", f1: "0.32", auc: "0.69", tested: "60 province-quarters, 12 quarters" },
 ];
 const LEAD_METRICS = [
   ["acc", "Accuracy"],
@@ -335,35 +345,37 @@ const LEAD_METRICS = [
   ["auc", "AUC"],
 ] as const;
 const BRIER = [
-  ["LightGBM (proposed)", "0.178"],
-  ["I. Naive persistence", "0.400"],
-  ["II. PSA-only indicators", "0.598"],
-  ["III. News-only sentiment", "0.235"],
-  ["IV. Logistic regression", "0.646"],
+  ["LightGBM (served forecast)", "0.132"],
+  ["Naive persistence", "0.257"],
+  ["Logistic regression, combined", "0.192"],
+  ["Logistic regression, government data only", "0.179"],
+  ["Logistic regression, news only", "0.212"],
+  ["LightGBM, government data only", "0.086"],
+  ["LightGBM, news only", "0.214"],
 ];
 const RESULTS = [
   {
     t: "Lead time",
-    d: "Leads 1, 2 and 3 (the current quarter, three months ahead and six months ahead) were tested. No lead met the pre-registered reliability criterion, so no reliable forecast horizon has been established.",
+    d: "Every lead was tested walk-forward against criteria fixed before scoring. Lead 1, the current quarter, passed; Lead 2 and later did not. The furthest reliable lead is therefore the current quarter, and the three-months-ahead forecast is experimental.",
   },
   {
     t: "The 75% accuracy goal",
-    d: "Not demonstrated for the LightGBM: accuracy was 0.72 on 50 province-quarters and 0.78 on the 45 comparison rows. Neither can be told apart from always predicting Low, and neither was measured on unseen quarters.",
+    d: "Met for the current quarter: accuracy 0.84 (59 of 70 province-quarters), against 0.76 for always predicting Low. Not met three months ahead: accuracy 0.77 is close to always predicting Low (0.74), and only 6 of 17 High cases were found.",
   },
   {
-    t: "Risk index against observed regional hunger",
-    d: "Three months ahead, the regional average index matched whether SWS hunger in Balance Luzon was above 11.3% with accuracy 0.94 over 17 quarters; always predicting elevated and the regional hunger outlook alone each scored 0.71. No paired test establishes an advantage over these baselines. The outcome is regional, the index also uses SWS hunger as an input, and every quarter was examined during development.",
+    t: "Why longer leads fail",
+    d: "The hunger part follows the newest SWS reading, so it cannot foresee a new hunger surge before SWS publishes it. The 2023-Q4 and 2024-Q2 surges were not visible in any reading published before those forecasts, which caps how many High cases can be found three months ahead.",
   },
   {
     t: "What could not be tested, and the next test",
-    d: "No provincial or municipal food-insecurity measure exists for CALABARZON, so the index cannot be validated as a measure of food insecurity in a province or city. The estimates for 2026-Q4 and 2027-Q1 were sealed before their outcomes were known and will be scored once PSA price data for October 2026 to March 2027 and the SWS rounds for those quarters are published.",
+    d: "No provincial or municipal food-insecurity measure exists for CALABARZON, so the forecast cannot be validated as a measure of food insecurity in a province or city. The forecasts issued on 1 October 2026 were sealed before their outcomes were known (SHA-256 a498b5ef) and will be scored once PSA price data and the SWS rounds for those quarters are published.",
   },
 ];
 
-function OnMapTag() {
+function ReliableTag() {
   return (
     <span className="tint-primary inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold leading-5">
-      The forecast shown on the map
+      Passed the reliability test
     </span>
   );
 }
@@ -371,11 +383,11 @@ function OnMapTag() {
 function LeadTimeTable() {
   const th = "px-3 py-3 text-left text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted";
   const num = "px-3 py-3 text-right font-mono text-[14px] font-semibold text-foreground";
-  const onMap = "bg-[hsl(var(--primary)/0.08)]";
+  const highlight = "bg-[hsl(var(--primary)/0.08)]";
   return (
     <div>
       <p className="mb-2 font-bold text-foreground leading-snug">
-        Food-price-pressure forecast (LightGBM) by lead time: sealed walk-forward predictions
+        Food-insecurity risk forecast by lead time: walk-forward predictions
       </p>
 
       {/* Desktop: one table. */}
@@ -394,12 +406,12 @@ function LeadTimeTable() {
           </thead>
           <tbody>
             {LEADS.map((r) => (
-              <tr key={r.label} className={`border-t edge-faint ${r.onMap ? onMap : ""}`}>
+              <tr key={r.label} className={`border-t edge-faint ${r.reliable ? highlight : ""}`}>
                 <th scope="row" className="px-3 py-3 text-left align-middle text-[14px] font-semibold text-foreground">
                   <span className="block">{r.label}</span>
-                  {r.onMap && (
+                  {r.reliable && (
                     <span className="mt-1 block">
-                      <OnMapTag />
+                      <ReliableTag />
                     </span>
                   )}
                 </th>
@@ -418,11 +430,11 @@ function LeadTimeTable() {
       {/* Phones and tablets: one block per lead time. */}
       <ul className="lg:hidden overflow-hidden rounded-[var(--radius-inner)] border edge-faint">
         {LEADS.map((r, i) => (
-          <li key={r.label} className={`px-4 py-4 ${i ? "border-t edge-faint" : ""} ${r.onMap ? onMap : ""}`}>
+          <li key={r.label} className={`px-4 py-4 ${i ? "border-t edge-faint" : ""} ${r.reliable ? highlight : ""}`}>
             <p className="font-semibold text-foreground leading-snug">{r.label}</p>
-            {r.onMap && (
+            {r.reliable && (
               <p className="mt-1">
-                <OnMapTag />
+                <ReliableTag />
               </p>
             )}
             <dl className="mt-3 grid grid-cols-3 sm:grid-cols-5 gap-x-4 gap-y-2">
@@ -438,7 +450,10 @@ function LeadTimeTable() {
         ))}
       </ul>
 
-      <p className="mt-3">Accuracy falls the further ahead the forecast looks; the map forecasts three months ahead.</p>
+      <p className="mt-3">
+        Accuracy falls the further ahead the forecast looks. The map shows the current quarter and the next quarter,
+        three months ahead; the next quarter is labelled experimental.
+      </p>
     </div>
   );
 }
@@ -477,8 +492,8 @@ function Accuracy() {
         <LeadTimeTable />
         <div className="mt-10 lg:max-w-[50%]">
           <MetricTable
-            title="Brier score against the four baselines (lower is better)"
-            note="Same 45 province-quarters. The advantage is statistically established only against the PSA-only and logistic-regression baselines."
+            title="Brier score against the baselines, current quarter (lower is better)"
+            note="Same 70 province-quarters. The advantage is statistically established against the three logistic regressions and the news-only LightGBM, but not against naive persistence; the LightGBM on government data only scored better."
             rows={BRIER}
           />
         </div>
@@ -496,16 +511,16 @@ function Accuracy() {
 
 /* ---------------- DISCLAIMER ---------------- */
 const DISCLAIMER = [
-  "A proxy index, not a probability. The risk index is an estimate built from related indicators. It is not a probability, not a measured food-insecurity rate, and not an official statistic or classification.",
-  "Not validated as a measure of food insecurity. No provincial or municipal food-insecurity measure exists for CALABARZON to check the index against.",
-  "Regional hunger is not provincial. The hunger figure comes from SWS surveys of Balance Luzon. The same value is used for all five provinces, with a sampling error of about 4 to 6 percentage points.",
-  "Some inputs are national. Unemployment and remittances are national figures, the same for every province, and remittance data ends in 2025-Q4.",
-  "City and municipal values are a relative prioritization within each province, based on the province estimate, poverty and population density. They are not forecasts for each city or municipality. The poverty value for Lucena City is a substitute that has not been verified.",
-  "News has limits. Only headlines are used, collected after the fact, and the news classifier was checked against AI-labelled headlines, not a human-reviewed set. Many province-quarters have fewer than 5 articles, so news often does not enter the index. News, topics and El Niño information have no measured effect on forecast accuracy.",
-  "Missing data is not low risk. When a source has not yet published, the indicator is left out and the estimate is based on fewer domains. The dashboard says which inputs are missing.",
-  "Back-test results are not live results. Past-quarter results were computed after the fact on quarters examined during development. Only the sealed 2026-Q4 and 2027-Q1 estimates will be a true test.",
-  // Quarter counts from /api/v1/config modelPerformance: LightGBM leads 1-3 use 12, 10 and 9 quarters; the FIRI v2 regional result at Lead 2 uses 17.
-  "Small sample. The food-price-pressure forecast has only 9 to 12 quarters of evidence for each lead time, and the risk index's regional result three months ahead rests on 17 quarters. There was one El Niño episode in 2021 to 2026.",
+  "A probability under a study definition. The number is the forecast probability that a province is High risk as the study defines it: regional SWS hunger above 11.3% and unusually fast food-price rises in the province. It is not a measured food-insecurity rate, and not an official statistic or classification.",
+  "Not validated as a measure of food insecurity. No provincial or municipal food-insecurity measure exists for CALABARZON to check the forecast against.",
+  "Regional hunger is not provincial. The hunger figure comes from SWS surveys of Balance Luzon. The same value is used for all five provinces, with a sampling error of about 4 to 6 percentage points, so the provinces differ only through food prices.",
+  "Some inputs are national. Unemployment, remittances, El Niño status and the GDELT news measure are national figures, the same for every province. The unemployment input mostly follows the calendar trend, so the direction of its influence bar is not a reliable reading of job conditions.",
+  "City and municipal values are a relative prioritization within each province, based on the province forecast, poverty and population density. They are not forecasts for each city or municipality. The poverty value for Lucena City is a substitute that has not been verified.",
+  "News has limits. Only headlines are used, collected after the fact, and the news classifier was checked against AI-labelled headlines, not a human-reviewed set. The Food Stress Sentiment Index has no measured effect on the forecast; GDELT's national price-news measure improved current-quarter forecasts in one test chosen after earlier results, so that gain is suggestive only.",
+  "Missing data is not low risk. When a source has not yet published, the input is left blank. The dashboard says which inputs are missing.",
+  "Back-test results are not live results. Past-quarter results were computed after the fact on quarters examined during development. Only the sealed forecasts issued on 1 October 2026 will be a true test.",
+  // Quarter counts from FINAL_SYSTEM_SELECTION/out/landing_figures.json: leads 1-3 use 14, 13 and 12 quarters.
+  "Small sample. The forecasts have only 12 to 14 quarters of evidence for each lead time, all sharing one regional hunger series. There was one El Niño episode in 2021 to 2026.",
   "aiPHeed outputs must not replace official assessment procedures or be used as official food-insecurity classifications or policy recommendations.",
 ];
 
@@ -527,11 +542,11 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "An estimated food-insecurity risk index for the five CALABARZON provinces, forecast three months ahead (for the next quarter) to support planning. It is a student research system, not an official statistic.",
+    a: "A forecast of food-insecurity risk for the five CALABARZON provinces, for the current quarter and, experimentally, the next quarter, to support planning. It is a student research system, not an official statistic.",
   },
   {
     q: "Is the score the probability that people will go hungry?",
-    a: "No. It is an index from 0 to 1 built from related indicators, not a probability or a measured food-insecurity rate. Provinces at 0.50 or above are shown as High risk.",
+    a: "No. It is the forecast probability that a province is High risk as the study defines it: regional hunger above 11.3% and unusually fast food-price rises in the province. It is not the share of people who will go hungry. Provinces at 0.50 or above are shown as High risk.",
   },
   {
     q: "Did the Department of Agriculture develop or endorse aiPHeed?",
@@ -539,23 +554,23 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "Three months ahead. Each estimate is issued at the start of a quarter for the next quarter, using only information published before that date.",
+    a: "Forecasts are issued on the first day of each quarter, using only information published before that date. The forecast for the quarter just starting passed the reliability test; the forecast three months ahead, for the next quarter, is experimental.",
   },
   {
     q: "How accurate is it?",
-    a: "Three months ahead, the food-price-pressure model reached 0.72 accuracy on past data, below the 75% goal. The risk index matched observed regional hunger with accuracy 0.94 over 17 past quarters, but that outcome is regional. All results come from quarters examined during development; see \"How accurate it is\".",
+    a: "For the current quarter, accuracy was 0.84 on 70 past province-quarters (always predicting Low: 0.76). Three months ahead it was 0.77, close to always predicting Low, and most High cases were missed. All results come from quarters examined during development; see \"How accurate it is\".",
   },
   {
     q: "Are the city and municipal values forecasts?",
-    a: "No. They are a relative priority ranking: the province estimate multiplied by a weight of 60% poverty incidence and 40% population density. Within a province they follow the poverty and density order.",
+    a: "No. They are a relative priority ranking: the province forecast multiplied by a weight of 60% poverty incidence and 40% population density, shown in the province's risk colour. Within a province they follow the poverty and density order.",
   },
   {
     q: "Why is the same hunger figure used for every province?",
-    a: "SWS publishes hunger for Balance Luzon, not for each province. aiPHeed uses that regional figure as one domain and labels it as regional.",
+    a: "SWS publishes hunger for Balance Luzon, not for each province. aiPHeed uses that regional figure for every province and labels it as regional.",
   },
   {
     q: "What happens when data is missing?",
-    a: "The missing indicator is left out, never counted as zero, and the dashboard says which inputs were missing. If fewer than 4 of the 6 domains are available, no estimate is shown.",
+    a: "The missing input is left blank, never counted as zero, and the dashboard says which inputs were missing.",
   },
   {
     q: "How often is it updated?",
@@ -655,8 +670,8 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed estimates food-insecurity risk for the five CALABARZON provinces each quarter, three months
-              ahead. It uses the FIRI v2 risk index, with a LightGBM food-price-pressure forecast as one input, and
+              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces each quarter. It combines a
+              regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families, and
               Filipino-English news analysis. It is not an official statistic.
             </p>
           </div>
