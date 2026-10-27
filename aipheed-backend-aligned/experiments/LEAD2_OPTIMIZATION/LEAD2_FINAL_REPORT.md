@@ -22,7 +22,8 @@ Each was frozen and committed **before** its arms were scored. Addenda 2–4 wer
 
 | Question | Verdict | Evidence (§) |
 |---|---|---|
-| Is Lead 2 reliable? | **No: not reliable.** It fails R3 (balanced accuracy 0.635), R5 and R6 (HIGH recall 0.35) in every adoptable configuration. | 4, 5 |
+| Is Lead 2 reliable? | **No: not reliable.** It fails R3 (balanced accuracy 0.635), R5 and R6 (HIGH recall 0.35) in every adoptable configuration. **Lead 2 stays experimental** on the dashboard. | 4, 5 |
+| Study window (your decision, 2026-10-27) | **2021+ is kept.** The sample-b result (1998+ SWS hunger history; Lead 2 0.800, fails R5, breaks Lead-1 recall) is reported **only as a sensitivity finding**. It is not adopted, not served and not a thesis result. | 4, 11 |
 | Maximum reliable lead | **1 quarter**, the quarter that starts on the issue date. Its verdict is *promising, not yet verified*: R1–R7 and the later-block check pass, but no untouched outcome exists. | 4 |
 | What was served | **P0H4**, replacing UNI-FINAL under the frozen serve rule. It is the same unified LightGBM, with a hunger term whose uncertainty comes from all four SWS areas. Lead 1: 0.843 (UNI-FINAL 0.829). Lead-2 Brier: 0.194 (0.206). New seal `a498b5ef`. | 4, 9 |
 | Is aiPHeed a food-insecurity forecaster? | **Partially validated, for the combined Chapter I proxy.** The target and its implementation are correct, leakage-free and reproducible. The hunger part adds real value: without it, Lead 1 falls to 0.686. But the hunger information is a regional "latest SWS reading" term that cannot anticipate surges, and provinces differ only through food prices. | 7 |
@@ -299,7 +300,7 @@ Five-contributor findings that are documented but **not** changed (no UI design 
 1. **No untouched outcome.** Score seal `a498b5ef` (P0H4, issued 2026-10-01, Leads 1–15) when SWS publishes 2026-Q4 (about Jan 2027), 2027-Q1, and so on. The UNI-FINAL seal `fcc4130d` is kept for comparison.
 2. **Lead 2 needs a hunger-onset signal.**
    - The only one found is pre-2021 SWS hunger history with rice CPI (sample b). It lifts Lead 2 to 0.800 / bal 0.751 / recall 0.65 (fails only R5), but breaks Lead-1 recall.
-   - Using it requires **your formal scope revision** (2021+ is the study window) and a new frozen protocol tested on untouched outcomes.
+   - **Decision 2026-10-27: the study window stays 2021+.** Sample b remains a sensitivity finding. Within 2021+ data, Lead 2 stays experimental until the sealed forecasts are scored on untouched outcomes.
 3. **No provincial or municipal hunger outcome.**
    - FNRI FIES by province, CBMS 2024 LGU tables, or a PSA data request.
    - The PSA FIES 2023 (income and expenditure) file supports only an indirect check of the province ordering.
