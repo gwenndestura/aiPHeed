@@ -1,0 +1,386 @@
+{
+ "T1_rebuild": {
+  "rows_labels_file": 100,
+  "rows_rebuilt": 100,
+  "matched_rows": 100,
+  "y_mismatch": 0,
+  "price_mismatch": 0,
+  "hunger_mismatch": 0,
+  "max_abs_F_diff": 3.333333342681044e-07,
+  "only_in_labels": 0,
+  "only_rebuilt": 0,
+  "anatomy_by_year": {
+   "2021": {
+    "rows": 15,
+    "quarters": 3,
+    "HIGH": 2,
+    "HIGH_by_reason": {
+     "food": 0,
+     "gap": 1,
+     "both": 1
+    },
+    "price_met_but_hunger_blocked": 4,
+    "hunger_met_but_price_blocked": 3,
+    "hunger_quarters_above": 1
+   },
+   "2022": {
+    "rows": 15,
+    "quarters": 3,
+    "HIGH": 0,
+    "HIGH_by_reason": {
+     "food": 0,
+     "gap": 0,
+     "both": 0
+    },
+    "price_met_but_hunger_blocked": 6,
+    "hunger_met_but_price_blocked": 5,
+    "hunger_quarters_above": 1
+   },
+   "2023": {
+    "rows": 20,
+    "quarters": 4,
+    "HIGH": 3,
+    "HIGH_by_reason": {
+     "food": 0,
+     "gap": 3,
+     "both": 0
+    },
+    "price_met_but_hunger_blocked": 14,
+    "hunger_met_but_price_blocked": 2,
+    "hunger_quarters_above": 1
+   },
+   "2024": {
+    "rows": 20,
+    "quarters": 4,
+    "HIGH": 8,
+    "HIGH_by_reason": {
+     "food": 0,
+     "gap": 5,
+     "both": 3
+    },
+    "price_met_but_hunger_blocked": 0,
+    "hunger_met_but_price_blocked": 12,
+    "hunger_quarters_above": 4
+   },
+   "2025": {
+    "rows": 15,
+    "quarters": 3,
+    "HIGH": 5,
+    "HIGH_by_reason": {
+     "food": 0,
+     "gap": 5,
+     "both": 0
+    },
+    "price_met_but_hunger_blocked": 0,
+    "hunger_met_but_price_blocked": 10,
+    "hunger_quarters_above": 3
+   },
+   "2026": {
+    "rows": 15,
+    "quarters": 3,
+    "HIGH": 1,
+    "HIGH_by_reason": {
+     "food": 1,
+     "gap": 0,
+     "both": 0
+    },
+    "price_met_but_hunger_blocked": 0,
+    "hunger_met_but_price_blocked": 14,
+    "hunger_quarters_above": 3
+   }
+  },
+  "since_2023Q4": {
+   "rows": 55,
+   "hunger_always_above": true,
+   "label_equals_price_share": 1.0
+  },
+  "overall": {
+   "rows": 100,
+   "HIGH": 19,
+   "label_equals_price_share": 0.76,
+   "label_equals_hunger_share": 0.54
+  },
+  "thresholds": {
+   "H": 11.3,
+   "food": {
+    "PH040100000": 4.713333333333334,
+    "PH040200000": 6.053333333333334,
+    "PH040300000": 6.240000000000001,
+    "PH040400000": 7.1000000000000005,
+    "PH040500000": 7.153333333333333
+   },
+   "gap": {
+    "PH040100000": 0.7399999999999994,
+    "PH040200000": 0.6066666666666671,
+    "PH040300000": -0.5599999999999993,
+    "PH040400000": 0.9199999999999998,
+    "PH040500000": 0.6599999999999998
+   },
+   "definition": "P60 of 2021-Q1..2022-Q4 (relative to each province's own 2021-22 level)"
+  }
+ },
+ "T2_noise": {
+  "by_lead": {
+   "1": {
+    "rows": 70,
+    "accuracy_ceiling": 0.9546756093776592,
+    "rows_price_met_hunger_wrong_side_ge_0.20": 9,
+    "price_borderline_share(|margin|<0.5)": 0.21428571428571427
+   },
+   "2": {
+    "rows": 65,
+    "accuracy_ceiling": 0.9606263998396336,
+    "rows_price_met_hunger_wrong_side_ge_0.20": 9,
+    "price_borderline_share(|margin|<0.5)": 0.23076923076923078
+   },
+   "3": {
+    "rows": 60,
+    "accuracy_ceiling": 0.974060142901731,
+    "rows_price_met_hunger_wrong_side_ge_0.20": 5,
+    "price_borderline_share(|margin|<0.5)": 0.25
+   },
+   "4": {
+    "rows": 55,
+    "accuracy_ceiling": 0.9921811345778256,
+    "rows_price_met_hunger_wrong_side_ge_0.20": 0,
+    "price_borderline_share(|margin|<0.5)": 0.2727272727272727
+   }
+  },
+  "eval_quarters_wrong_side_ge_0.20": [
+   "2023-Q2",
+   "2023-Q3"
+  ],
+  "T2_supported": true,
+  "se_range_pp": [
+   1.292215503681572,
+   2.3157996344003684
+  ]
+ },
+ "T3_validity": {
+  "price_hunger_level": {
+   "0": {
+    "rho": -0.3792326129992075,
+    "n": 20,
+    "p_one_sided": 0.8695652173913043,
+    "n_shifts": 22
+   },
+   "1": {
+    "rho": -0.36945081940994223,
+    "n": 20,
+    "p_one_sided": 0.8695652173913043,
+    "n_shifts": 22
+   },
+   "2": {
+    "rho": -0.07199300404179765,
+    "n": 19,
+    "p_one_sided": 0.5652173913043478,
+    "n_shifts": 22
+   }
+  },
+  "price_hunger_change": {
+   "0": {
+    "rho": -0.06862745098039216,
+    "n": 17,
+    "p_one_sided": 0.6086956521739131,
+    "n_shifts": 22
+   },
+   "1": {
+    "rho": -0.09558823529411767,
+    "n": 17,
+    "p_one_sided": 0.6956521739130435,
+    "n_shifts": 22
+   },
+   "2": {
+    "rho": 0.10539215686274511,
+    "n": 17,
+    "p_one_sided": 0.2608695652173913,
+    "n_shifts": 22
+   }
+  },
+  "T3_supported": false,
+  "fnri_annual": {
+   "2021": {
+    "BL_SWS_mean": 11.616666666666665,
+    "SWS_quarters": 3,
+    "T43c_HIGH_share": 0.13333333333333333,
+    "price_condition_share": 0.55,
+    "FNRI": [
+     {
+      "geography": "Batangas",
+      "basis": "households",
+      "value_pct": 29.7,
+      "ci_low": 27.3,
+      "ci_high": 32.2
+     },
+     {
+      "geography": "Cavite",
+      "basis": "households",
+      "value_pct": 31.7,
+      "ci_low": 27.0,
+      "ci_high": 36.4
+     },
+     {
+      "geography": "City of Lucena",
+      "basis": "households",
+      "value_pct": 26.2,
+      "ci_low": 23.6,
+      "ci_high": 28.9
+     }
+    ]
+   },
+   "2023": {
+    "BL_SWS_mean": 11.15,
+    "SWS_quarters": 4,
+    "T43c_HIGH_share": 0.15,
+    "price_condition_share": 0.85,
+    "FNRI": [
+     {
+      "geography": "CALABARZON",
+      "basis": "households",
+      "value_pct": 19.1,
+      "ci_low": 16.9,
+      "ci_high": 21.3
+     }
+    ]
+   },
+   "2025": {
+    "BL_SWS_mean": 18.883333333333336,
+    "SWS_quarters": 3,
+    "T43c_HIGH_share": 0.3333333333333333,
+    "price_condition_share": 0.45,
+    "FNRI": [
+     {
+      "geography": "CALABARZON",
+      "basis": "population",
+      "value_pct": 22.6,
+      "ci_low": NaN,
+      "ci_high": NaN
+     }
+    ]
+   }
+  },
+  "sha_fnri": "5dfaebfad70f8d205361cd695f95a350eb2450c8f40b325d2015eb284a0138f0",
+  "octa": {
+   "pairs": [
+    {
+     "octa_fw_end": "2023-12-14",
+     "octa": 11.0,
+     "octa_published": "2024-01-26",
+     "sws_q": "2023-Q4",
+     "sws_round": 14.3,
+     "sws_published": "2024-01-22",
+     "same_side_11.3": false,
+     "octa_minus_sws_publication_days": 4
+    },
+    {
+     "octa_fw_end": "2026-07-11",
+     "octa": 27.0,
+     "octa_published": "2026-08-21",
+     "sws_q": "2026-Q2",
+     "sws_round": 17.3,
+     "sws_published": "2026-08-24",
+     "same_side_11.3": true,
+     "octa_minus_sws_publication_days": -3
+    },
+    {
+     "octa_fw_end": "2023-10-04",
+     "octa": 11.0,
+     "octa_published": "2023-11-21",
+     "sws_q": "2023-Q3",
+     "sws_round": 10.3,
+     "sws_published": "2023-11-20",
+     "same_side_11.3": true,
+     "octa_minus_sws_publication_days": 1
+    },
+    {
+     "octa_fw_end": "2024-03-14",
+     "octa": 9.0,
+     "octa_published": "2024-04-23",
+     "sws_q": "2024-Q1",
+     "sws_round": 15.3,
+     "sws_published": "2024-04-30",
+     "same_side_11.3": false,
+     "octa_minus_sws_publication_days": -7
+    },
+    {
+     "octa_fw_end": "2024-09-02",
+     "octa": 7.0,
+     "octa_published": "2024-10-23",
+     "sws_q": "2024-Q3",
+     "sws_round": 18.1,
+     "sws_published": "2024-10-17",
+     "same_side_11.3": false,
+     "octa_minus_sws_publication_days": 6
+    },
+    {
+     "octa_fw_end": "2025-04-16",
+     "octa": 7.0,
+     "octa_published": "2025-05-10",
+     "sws_q": "2025-Q2",
+     "sws_round": 17.0,
+     "sws_published": "2025-06-27",
+     "same_side_11.3": false,
+     "octa_minus_sws_publication_days": -48
+    },
+    {
+     "octa_fw_end": "2024-11-16",
+     "octa": 23.0,
+     "octa_published": "2025-01-25",
+     "sws_q": "2024-Q4",
+     "sws_round": 25.3,
+     "sws_published": "2025-01-14",
+     "same_side_11.3": true,
+     "octa_minus_sws_publication_days": 11
+    }
+   ],
+   "agree": 3,
+   "n": 7,
+   "octa_earlier": 3,
+   "sha_octa": "fee7d4004e506f5c517801a360f9d750770efd446bb398c0be251d7427bdafc8"
+  },
+  "fies2023": {
+   "by_province": {
+    "Batangas": {
+     "food_share": 0.3552645459777469,
+     "bottom30_people": 0.23675688134178002,
+     "records": 1482,
+     "T43c_HIGH_share": 0.2,
+     "mean_price_excess": -0.2849275536231882
+    },
+    "Cavite": {
+     "food_share": 0.37987578504836833,
+     "bottom30_people": 0.13984164109380018,
+     "records": 1335,
+     "T43c_HIGH_share": 0.15,
+     "mean_price_excess": 0.45246377231884066
+    },
+    "Laguna": {
+     "food_share": 0.3969181738575825,
+     "bottom30_people": 0.17638831404415478,
+     "records": 1479,
+     "T43c_HIGH_share": 0.25,
+     "mean_price_excess": 0.1020289753623184
+    },
+    "Quezon": {
+     "food_share": 0.46725689363598494,
+     "bottom30_people": 0.5208333004479003,
+     "records": 2413,
+     "T43c_HIGH_share": 0.35,
+     "mean_price_excess": 1.0208695650869557
+    },
+    "Rizal": {
+     "food_share": 0.38694534707476697,
+     "bottom30_people": 0.1825884008676535,
+     "records": 1447,
+     "T43c_HIGH_share": 0.0,
+     "mean_price_excess": -0.657391257826087
+    }
+   },
+   "spearman_foodshare_vs_HIGH": 0.6,
+   "spearman_bottom30_vs_HIGH": 0.49999999999999994,
+   "spearman_foodshare_vs_price_excess": 0.49999999999999994,
+   "sha_csv": "44f660c8abaa69e8cb3ad208f0cab0074e85e6035565847210ea2eb4b08c87e8",
+   "note": "FIES = Family Income and Expenditure Survey; no food-insecurity items"
+  }
+ }
+}

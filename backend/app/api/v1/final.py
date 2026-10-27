@@ -95,4 +95,4 @@ def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospec
             for r in CH1.rows().values()
             if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)]
     return {"count": len(rows), "maxReliableLead": CH1.reliable_lead(), "horizon": CH1.horizon(), "rows": rows,
-            "definition": CH1.INDICATOR["definition"], "caveat": CH1.INDICATOR["caveat"]}
+            "definition": CH1.indicator()["definition"], "caveat": CH1.INDICATOR["caveat"]}

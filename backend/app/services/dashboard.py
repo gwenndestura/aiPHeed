@@ -106,7 +106,7 @@ def indicator_for(quarter: str) -> dict:
     if not (E41L2.serves(quarter) or E41L2.governs()):
         return INDICATOR
     if THESIS.active():
-        return CH1.INDICATOR if CH1.active() and CH1.covers(quarter) else THESIS_INDICATOR
+        return CH1.indicator() if CH1.active() and CH1.covers(quarter) else THESIS_INDICATOR
     rec = E41L2.record()
     if "indicator" in rec:                                        # E43 states the definition of its own score
         ind = rec["indicator"]

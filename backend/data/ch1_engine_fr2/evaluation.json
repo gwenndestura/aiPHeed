@@ -1,0 +1,536 @@
+{
+ "model": "Z0-U",
+ "protocol_sha256": "9b963b1800d2fdff69ed36640477e171976f651a6c1b579bfe98ee685df2fd45",
+ "addenda_sha256": {
+  "1": "38da518a437c98658b056cf64511043f2e39274b07999f57cacfd9ac06b4f000",
+  "2": "9ee1cf87b181c3d8ea259cdde61ad39bdd226007f1b5b0d7e27eed58b565fa49",
+  "3": "4d85aa6d8902ac83d171e760b372cf2d37e1d960cf465f233d8c47a47ae3e964",
+  "4": "b6c2dd63f601cff458acf05c55e562cfbaeeef9f5c428d718196d34ac5fe6ff8"
+ },
+ "price_model_protocol_sha256": "889e55e85753e02a960a69136ba715a15ce1ca858670a2e142c958223540d9d1",
+ "selection": {
+  "dev_lead2_brier": {
+   "P0H0": 0.24666293872532857,
+   "P4H0": 0.2686612916835821,
+   "P0H4": 0.23461473565950852,
+   "P4H4": 0.25273560064554507,
+   "P0H3a": 0.24975039664162288,
+   "P4H3a": 0.2720350585069041
+  },
+  "adopted": "P0H4"
+ },
+ "serve_rule": {
+  "adopted": "P0H4",
+  "reliable_lead1": true,
+  "max_reliable_ge_1": true,
+  "lead1_not_worse_than_uni": true,
+  "uni_minus_adopted_lead1_brier": {
+   "diff": -0.0015249105181957187,
+   "p_less": 0.3695,
+   "p_two": 0.739,
+   "ci90": [
+    -0.008685461833625356,
+    0.0056444301273191125
+   ]
+  },
+  "serve": true
+ },
+ "max_reliable_lead": 1,
+ "max_reliable_lead_strict": 1,
+ "leads": {
+  "1": {
+   "n": 70,
+   "n_quarters": 14,
+   "metrics": {
+    "n": 70,
+    "high": 17,
+    "accuracy": 0.9,
+    "balanced_accuracy": 0.8540510543840177,
+    "precision": 0.8125,
+    "recall": 0.7647058823529411,
+    "specificity": 0.9433962264150944,
+    "tp": 13,
+    "fp": 3,
+    "fn": 4,
+    "tn": 50,
+    "brier": 0.11601567187225835,
+    "log_loss": 0.39016333453950514,
+    "auc": 0.9245283018867925,
+    "mean_p": 0.33374716661576603,
+    "base_rate": 0.24285714285714285,
+    "f1": 0.787878787878788
+   },
+   "accuracy_ci90": [
+    0.8285714285714286,
+    0.9714285714285714
+   ],
+   "baseline_accuracy": {
+    "ALWAYS-LOW": 0.7571428571428571,
+    "PERSIST": 0.7428571428571429
+   },
+   "criteria": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": true,
+    "R5": true,
+    "R6": true,
+    "R7": true
+   },
+   "failed": [],
+   "reliable": true,
+   "loqo_min": 0.8923076923076924,
+   "acc_thirds": [
+    0.88,
+    0.92,
+    0.9
+   ],
+   "brier_vs_persist_si": {
+    "diff": -0.14112718527059875,
+    "ci90": [
+     -0.26183824018739177,
+     -0.021530819299080718
+    ],
+    "p_less": 0.028,
+    "p_two": 0.056
+   },
+   "brier_vs_clim": {
+    "diff": -0.08518516046841808,
+    "ci90": [
+     -0.17052662825890147,
+     -0.0017109577478901527
+    ],
+    "p_less": 0.04625,
+    "p_two": 0.0925
+   },
+   "confusion": {
+    "tp": 13,
+    "fp": 3,
+    "fn": 4,
+    "tn": 50
+   }
+  },
+  "2": {
+   "n": 65,
+   "n_quarters": 13,
+   "metrics": {
+    "n": 65,
+    "high": 17,
+    "accuracy": 0.8,
+    "balanced_accuracy": 0.7506127450980392,
+    "precision": 0.6111111111111112,
+    "recall": 0.6470588235294118,
+    "specificity": 0.8541666666666666,
+    "tp": 11,
+    "fp": 7,
+    "fn": 6,
+    "tn": 41,
+    "brier": 0.18351122880473683,
+    "log_loss": 0.5494866779307516,
+    "auc": 0.7230392156862745,
+    "mean_p": 0.3875840912334108,
+    "base_rate": 0.26153846153846155,
+    "f1": 0.6285714285714287
+   },
+   "accuracy_ci90": [
+    0.7076923076923077,
+    0.8923076923076924
+   ],
+   "baseline_accuracy": {
+    "ALWAYS-LOW": 0.7384615384615385,
+    "PERSIST": 0.7230769230769231
+   },
+   "criteria": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": true,
+    "R5": false,
+    "R6": true,
+    "R7": true
+   },
+   "failed": [
+    "R5"
+   ],
+   "reliable": false,
+   "loqo_min": 0.7833333333333333,
+   "acc_thirds": [
+    0.84,
+    0.7,
+    0.85
+   ],
+   "brier_vs_persist_si": {
+    "diff": -0.0934118481183401,
+    "ci90": [
+     -0.21837499310996508,
+     0.02192471352235768
+    ],
+    "p_less": 0.09925,
+    "p_two": 0.1985
+   },
+   "brier_vs_clim": {
+    "diff": -0.04406708230953008,
+    "ci90": [
+     -0.13303102258138022,
+     0.036218051085829955
+    ],
+    "p_less": 0.20375,
+    "p_two": 0.4075
+   },
+   "confusion": {
+    "tp": 11,
+    "fp": 7,
+    "fn": 6,
+    "tn": 41
+   }
+  },
+  "3": {
+   "n": 60,
+   "n_quarters": 12,
+   "metrics": {
+    "n": 60,
+    "high": 17,
+    "accuracy": 0.6333333333333333,
+    "balanced_accuracy": 0.5485636114911081,
+    "precision": 0.35294117647058826,
+    "recall": 0.35294117647058826,
+    "specificity": 0.7441860465116279,
+    "tp": 6,
+    "fp": 11,
+    "fn": 11,
+    "tn": 32,
+    "brier": 0.2216771573897836,
+    "log_loss": 0.6277554768357299,
+    "auc": 0.625170998632011,
+    "mean_p": 0.39148412629789664,
+    "base_rate": 0.2833333333333333,
+    "f1": 0.35294117647058826
+   },
+   "accuracy_ci90": [
+    0.48333333333333334,
+    0.7833333333333333
+   ],
+   "baseline_accuracy": {
+    "ALWAYS-LOW": 0.7166666666666667,
+    "PERSIST": 0.5166666666666667
+   },
+   "criteria": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+   ],
+   "reliable": false,
+   "loqo_min": 0.6,
+   "acc_thirds": [
+    0.65,
+    0.6,
+    0.65
+   ],
+   "brier_vs_persist_si": {
+    "diff": -0.26165617594354973,
+    "ci90": [
+     -0.4031529250131782,
+     -0.11567155411150024
+    ],
+    "p_less": 0.00125,
+    "p_two": 0.0025
+   },
+   "brier_vs_clim": {
+    "diff": -0.02446294301002144,
+    "ci90": [
+     -0.11584119404234969,
+     0.07087358725166688
+    ],
+    "p_less": 0.34325,
+    "p_two": 0.6865
+   },
+   "confusion": {
+    "tp": 6,
+    "fp": 11,
+    "fn": 11,
+    "tn": 32
+   }
+  },
+  "4": {
+   "n": 55,
+   "n_quarters": 11,
+   "metrics": {
+    "n": 55,
+    "high": 17,
+    "accuracy": 0.5636363636363636,
+    "balanced_accuracy": 0.456656346749226,
+    "precision": 0.23076923076923078,
+    "recall": 0.17647058823529413,
+    "specificity": 0.7368421052631579,
+    "tp": 3,
+    "fp": 10,
+    "fn": 14,
+    "tn": 28,
+    "brier": 0.2413359013334562,
+    "log_loss": 0.6699707864707394,
+    "auc": 0.48297213622291024,
+    "mean_p": 0.3776053053694546,
+    "base_rate": 0.3090909090909091,
+    "f1": 0.20000000000000004
+   },
+   "accuracy_ci90": [
+    0.4,
+    0.7090909090909091
+   ],
+   "baseline_accuracy": {
+    "ALWAYS-LOW": 0.6909090909090909,
+    "PERSIST": 0.5636363636363636
+   },
+   "criteria": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+   ],
+   "reliable": false,
+   "loqo_min": 0.52,
+   "acc_thirds": [
+    0.6,
+    0.55,
+    0.5333333333333333
+   ],
+   "brier_vs_persist_si": {
+    "diff": -0.19502773503018017,
+    "ci90": [
+     -0.29779976975037864,
+     -0.10153671901024351
+    ],
+    "p_less": 0.0,
+    "p_two": 0.0
+   },
+   "brier_vs_clim": {
+    "diff": -0.033515919508404705,
+    "ci90": [
+     -0.13268849694547966,
+     0.0692447955230326
+    ],
+    "p_less": 0.29925,
+    "p_two": 0.5985
+   },
+   "confusion": {
+    "tp": 3,
+    "fp": 10,
+    "fn": 14,
+    "tn": 28
+   }
+  }
+ },
+ "horizon": {
+  "leads_evaluated": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "testable_horizon_R1": 4,
+  "max_reliable_lead": 1,
+  "individually_passing_leads": [
+   1
+  ],
+  "generated_up_to": 4,
+  "why_not_longer": "Lead 2 (re-issued after the SWS release) fails only R5: its Brier score is not significantly better than climatology. Leads 3-4 fail most criteria: the food-price condition two or more quarters ahead is not predictable from 2021-2026 data, and the hunger reading is older.",
+  "leads": {
+   "1": {
+    "quarters_after_issue": 1,
+    "quarters_after_newest_sws": [
+     1,
+     2
+    ],
+    "n": 70,
+    "accuracy": 0.9,
+    "reliable": true,
+    "criteria": {
+     "R1": true,
+     "R2": true,
+     "R3": true,
+     "R4": true,
+     "R5": true,
+     "R6": true,
+     "R7": true
+    }
+   },
+   "2": {
+    "quarters_after_issue": 2,
+    "quarters_after_newest_sws": [
+     2,
+     3
+    ],
+    "n": 65,
+    "accuracy": 0.8,
+    "reliable": false,
+    "criteria": {
+     "R1": true,
+     "R2": true,
+     "R3": true,
+     "R4": true,
+     "R5": false,
+     "R6": true,
+     "R7": true
+    }
+   },
+   "3": {
+    "quarters_after_issue": 3,
+    "quarters_after_newest_sws": [
+     3,
+     4
+    ],
+    "n": 60,
+    "accuracy": 0.6333333333333333,
+    "reliable": false,
+    "criteria": {
+     "R1": true,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    }
+   },
+   "4": {
+    "quarters_after_issue": 4,
+    "quarters_after_newest_sws": [
+     4,
+     5
+    ],
+    "n": 55,
+    "accuracy": 0.5636363636363636,
+    "reliable": false,
+    "criteria": {
+     "R1": true,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    }
+   }
+  }
+ },
+ "seal_sha256": "b7162a63530efd176d0f84da4bdb1f59272dba27447955de2fdca67219e16042",
+ "seal_issue_date": "2026-10-01",
+ "previous_seal_sha256": "bd6572e1906be1f9bf81325468af91d9a067485f8709def44b0a98d2ec9e81c0",
+ "serve_note": "Research candidate Z0-U (AIPHEED_CH1_ENGINE=fr2), chosen by the frozen FORECAST_RESEARCH_II DEV rule: the price part is the flat CPI projection (no LightGBM; LightGBM added no development value). Not significantly different from P0H4 or P0H4-U at any lead. Lead 2 still not reliable (fails R5).",
+ "sws_update": {
+  "definition": "Leads 2 and beyond are re-issued the day after SWS publishes the newest Balance Luzon hunger reading (no later than day 1 of the quarter's third month). Only the hunger part changes; every other input keeps its quarter-start cut-off. Lead 1 keeps the quarter-start issue.",
+  "issue_date": "2026-10-15",
+  "sws_quarter_used": "2026-Q3",
+  "lead2": {
+   "n": 65,
+   "metrics": {
+    "n": 65,
+    "high": 17,
+    "accuracy": 0.8,
+    "balanced_accuracy": 0.7506127450980392,
+    "precision": 0.6111111111111112,
+    "recall": 0.6470588235294118,
+    "specificity": 0.8541666666666666,
+    "tp": 11,
+    "fp": 7,
+    "fn": 6,
+    "tn": 41,
+    "brier": 0.18351122880473683,
+    "log_loss": 0.5494866779307516,
+    "auc": 0.7230392156862745,
+    "mean_p": 0.3875840912334108,
+    "base_rate": 0.26153846153846155,
+    "f1": 0.6285714285714287
+   },
+   "failed": [
+    "R5"
+   ],
+   "reliable": false,
+   "acc_ci90": [
+    0.7076923076923077,
+    0.8923076923076924
+   ],
+   "warning_days_median": 59.0,
+   "quarter_start_issue": {
+    "metrics": {
+     "accuracy": 0.7538461538461538,
+     "recall": 0.4117647058823529
+    }
+   }
+  },
+  "lead2_brier_vs_quarter_start": {
+   "diff": -0.027378981602154934,
+   "ci90": [
+    -0.0591741083967402,
+    -0.00039779639910598335
+   ],
+   "p_less": 0.047,
+   "p_two": 0.094
+  },
+  "structural_benchmark": {
+   "Z1A": {
+    "lead1_accuracy": 0.9,
+    "lead2_accuracy": 0.7076923076923077,
+    "max_reliable_lead": 1
+   },
+   "Z0B": {
+    "lead1_accuracy": 0.8714285714285714,
+    "lead2_accuracy": 0.8,
+    "max_reliable_lead": 1
+   }
+  },
+  "research": "aipheed-backend-aligned/experiments/FORECAST_RESEARCH_II/FORECAST_RESEARCH_II_REPORT.md",
+  "protocol_sha256": "9b963b1800d2fdff69ed36640477e171976f651a6c1b579bfe98ee685df2fd45",
+  "seal_sha256": "b7162a63530efd176d0f84da4bdb1f59272dba27447955de2fdca67219e16042",
+  "seal_issue_date": "2026-10-15"
+ },
+ "protocol_name": "FORECAST_RESEARCH_II",
+ "price_part": {
+  "kind": "structural",
+  "name": "Z0",
+  "description": "the flat base-effect projection of PSA food and headline CPI (the latest index held flat to the target quarter), with its uncertainty from past projection errors at the same lead; no learned model",
+  "selection": {
+   "dev_brier": {
+    "Z0": 0.176682273496755,
+    "P0": 0.19189806117684202,
+    "J0": 0.18015651173674185,
+    "J1": 0.18783120490917457,
+    "J2": 0.18150752782985613,
+    "J3": 0.18381386956683474,
+    "J3T": 0.18492243823597843,
+    "JB3": 0.18364179267730743,
+    "CMB": 0.1802123495008715,
+    "LJ": 0.18030935990263067
+   },
+   "best": "Z0",
+   "best_lightgbm": "LJ",
+   "chosen_FINAL": "Z0",
+   "lightgbm_adds_no_dev_value": true,
+   "P0H4U_dev": 0.1918980593081033,
+   "FINAL_replaces_P0H4U": true
+  }
+ }
+}

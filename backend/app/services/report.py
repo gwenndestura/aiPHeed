@@ -588,7 +588,7 @@ def _ch1_text(name: str) -> str | None:
     if not _ch1():
         return None
     from app.ml.inference import ch1_system as CH1
-    return getattr(CH1, name)
+    return CH1.text(name)
 
 
 def _ch1_driver_text(explain: dict, subject: str, quarter: str) -> str:

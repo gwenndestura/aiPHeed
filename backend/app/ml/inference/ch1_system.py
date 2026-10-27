@@ -29,11 +29,16 @@ DATA = Path(__file__).resolve().parents[3] / "data" / "ch1_engine"
 # FORECAST_RESEARCH candidate P0H4-U (not the default): the same rows, with Lead-2+ forecasts re-issued after the SWS
 # release. Served only when AIPHEED_CH1_ENGINE=fr and its export exists.
 DATA_FR = DATA.parent / "ch1_engine_fr"
+# FORECAST_RESEARCH_II candidate Z0-U (not the default): the P0H4-U rows and schedule with the structural price part
+# chosen by that study's frozen DEV rule (the flat CPI projection). Served only when AIPHEED_CH1_ENGINE=fr2.
+DATA_FR2 = DATA.parent / "ch1_engine_fr2"
+ENGINES = {"fr": DATA_FR, "fr2": DATA_FR2}
 
 
 def data_dir() -> Path:
-    if os.getenv("AIPHEED_CH1_ENGINE", "").lower() == "fr" and (DATA_FR / "rows.csv").exists():
-        return DATA_FR
+    d = ENGINES.get(os.getenv("AIPHEED_CH1_ENGINE", "").lower())
+    if d is not None and (d / "rows.csv").exists():
+        return d
     return DATA
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",),
                "employment": ("E1",), "ofw_remittance": ("E2",)}
@@ -98,6 +103,26 @@ def _evaluation(path: str) -> dict:
 
 def evaluation() -> dict:
     return _evaluation(str(data_dir() / "evaluation.json"))
+
+
+def structural() -> bool:
+    """True when the served price part is the structural CPI projection (FORECAST_RESEARCH_II Z0-U), not a LightGBM."""
+    return (evaluation().get("price_part") or {}).get("kind") == "structural"
+
+
+STRUCT_PRICE = ("the flat base-effect projection of PSA food and headline CPI (the latest index held flat to the target "
+                "quarter), with its uncertainty from past projection errors at the same lead; no learned model")
+
+
+def indicator() -> dict:
+    """INDICATOR with the price-part clause of the model actually served."""
+    if not structural():
+        return INDICATOR
+    d = dict(INDICATOR)
+    d["definition"] = d["definition"].replace(
+        "the price part from one LightGBM, trained on every forecast horizon together, on all 12 indicator families and "
+        "world food prices;", f"the price part from {STRUCT_PRICE};")
+    return d
 
 
 def sws_update_text(r: dict) -> str:
@@ -186,7 +211,7 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
         "mode": f"{r.get('model') or 'P0H4'}_LEAD{int(r['lead'])}_{'FORECAST' if k == 'forecast' else 'BACKTEST'}",
         "estimate_kind": "forecast" if k == "forecast" else "backtest",
         "price_pressure_score": float(r["pi_price"]), "hunger_condition_probability": float(r["pi_hunger"]),
-        "score_type": "chapter1_risk_probability", "score_definition": INDICATOR["definition"],
+        "score_type": "chapter1_risk_probability", "score_definition": indicator()["definition"],
         "band": "High" if p >= 0.5 else "Low",
         "confidence_statement": (f"{name}, {quarter}: {'HIGH' if p >= 0.5 else 'LOW'} food-insecurity risk "
                                  f"(probability {p:.2f}). {what}")})
@@ -240,6 +265,11 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
              f"the News panel's articles has no measured effect) and the regional hunger indicator inside the price "
              f"model account for another {other_pct:.0f}% of its attribution, not shown in the bars."
              if other_pct else "")
+    if structural():
+        return ("The food-price part of this forecast has no learned model: it is the projection of PSA food and headline "
+                "CPI, so its whole push away from the usual rate is Market / Prices and the other groups have no effect "
+                f"on it. The bar leaves out the regional hunger condition{hunger}, which multiplies that estimate into the "
+                "risk probability. It is model influence, not a cause.")
     note = ("The bars show each of the five trigger groups' relative push (SHAP, log-odds, rescaled to 100%) on the "
             "LightGBM's estimate that food prices rise unusually fast. They are model influence, not shares of hunger "
             f"caused by each factor, and they leave out the regional hunger condition{hunger}, which multiplies that "
@@ -395,11 +425,25 @@ REPORT_BARS_NOTE = ("Red bars pushed the model's estimate that food prices rise 
                     "down; groups with no effect are not shown. Relative model influence, not causes.")
 
 
+def text(name: str) -> str:
+    """A report constant (REPORT_COVER, REPORT_FOOTER, REPORT_BARS_NOTE) worded for the price part actually served."""
+    t = globals()[name]
+    if name == "REPORT_COVER" and structural():
+        t = t.replace("(one LightGBM "
+                      "on all 12 indicator families, trained on every forecast horizon)", f"({STRUCT_PRICE})")
+    return t
+
+
 def model_line() -> str:
     """The served model in one line, with its reliability verdict (report metadata)."""
     ev = evaluation()
     m = ev["leads"]["1"]["metrics"]
     rl = reliable_lead()
+    if structural():
+        return (f"{ev.get('model')}: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x "
+                f"P(food-price condition, {STRUCT_PRICE}). Lead {rl or 0} reliable (development accuracy "
+                f"{m['accuracy']:.3f}, {m['tp'] + m['tn']}/{m['n']} province-quarters); longer leads experimental. Lead-2+ "
+                "forecasts are re-issued the day after each SWS release (hunger part only).")
     name = "P0H4-U" if ev.get("sws_update") else "P0H4"
     upd = (" Lead-2+ forecasts are re-issued the day after each SWS release (hunger part only)."
            if ev.get("sws_update") else "")
@@ -415,6 +459,11 @@ def driver_text(triggers: list[dict], hunger: float | None = None, other_pct: fl
     down = [f"{t['label']} {t['pct']}%" for t in triggers if t["pct"] > 0 and t["direction"] == "protective"]
     shown = {t["key"] for t in triggers if t["pct"] > 0}
     h = f" ({hunger:.0%})" if hunger is not None else ""
+    if structural():
+        return ("The food-price part has no learned model (it is the projection of PSA food and headline CPI), so its "
+                "whole influence is Market / Prices; the other groups have no effect on this forecast. "
+                f"The regional hunger condition{h}, which multiplies that estimate into the probability, is not part of "
+                "the bar. It shows what moved the estimate, not causes.")
     other = (f" Poverty and density, news and the regional hunger indicator, which are not among the five trigger "
              f"groups, account for another {other_pct:.0f}% of that influence." if other_pct else "")
     return ("Each bar is a trigger group's relative influence (SHAP, rescaled to 100%) on the model's estimate that "
@@ -432,7 +481,7 @@ def reliability_sentences() -> list[str]:
     rl = reliable_lead()
     l1, l2 = ev["leads"]["1"], ev["leads"].get("2")
     m1 = l1["metrics"]
-    out = [f"Reliability rule (fixed before scoring, LEAD2_OPTIMIZATION protocol): criteria R1-R7 on walk-forward "
+    out = [f"Reliability rule (fixed before scoring, {ev.get('protocol_name', 'LEAD2_OPTIMIZATION')} protocol): criteria R1-R7 on walk-forward "
            f"forecasts. Lead {rl or 0} passed: accuracy {m1['accuracy']:.3f} ({m1['tp'] + m1['tn']}/{m1['n']} "
            f"province-quarters over {l1['n_quarters']} quarters; always-LOW {l1['baseline_accuracy']['ALWAYS-LOW']:.3f}), "
            f"precision {m1['precision']:.2f}, recall {m1['recall']:.2f}, AUC {m1['auc']:.2f}, Brier {m1['brier']:.3f}."]

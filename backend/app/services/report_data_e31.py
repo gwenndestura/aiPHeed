@@ -327,7 +327,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
     if ch1:
         from app.ml.inference import ch1_system as CH1
 
-        blocks: list[dict] = [_p(_strip_tags(CH1.REPORT_COVER))]
+        blocks: list[dict] = [_p(_strip_tags(CH1.text("REPORT_COVER")))]
     elif thesis:
         from app.services.report import THESIS_COVER
 
@@ -574,8 +574,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                 [("Group", "left", 0.22), ("Influence", "center", 0.16), ("What the forecast used", "left", 0.62)],
                 [[t["label"], (f"{t['pct']}% {'raises' if t['direction'] == 'increases_risk' else 'lowers'}"
                                if t["pct"] > 0 else "No effect"), t.get("plainEvidence") or "-"] for t in trig],
-                "Influence is relative SHAP on the food-price part of the forecast, rescaled to 100%; it is model "
-                "influence, not a cause."))
+                ("Influence is the CPI projection's push on the food-price part (no learned model), rescaled to 100%; "
+                 "it is model influence, not a cause." if CH1.structural() else
+                 "Influence is relative SHAP on the food-price part of the forecast, rescaled to 100%; it is model "
+                 "influence, not a cause.")))
         sentence = CH1.sentence(codes[slugs[0]], names[slugs[0]], last_q)
         if sentence:
             blocks.append(_p(sentence))
