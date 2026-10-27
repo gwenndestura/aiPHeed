@@ -122,7 +122,9 @@ async def get_quarters(
         serverTime=now.isoformat(),
         calendarQuarter=calendar_quarter,
         lagQuarters=max(lag, 0),
-        forecastTarget={**target, "available": current == target["target_quarter"]},
+        # the target quarter's forecast exists even when the default view opens on the reliable Lead-1 quarter
+        forecastTarget={**target, "available": (target["target_quarter"] in svc.ch1_quarters() if svc._ch1_mode()
+                                                else current == target["target_quarter"])},
         quarters=svc.timeline(h),
     )
 

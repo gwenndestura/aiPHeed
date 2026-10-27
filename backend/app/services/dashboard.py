@@ -292,6 +292,8 @@ def forecast_target() -> dict:
 
 
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
+    if _ch1_mode():
+        return ch1_default_quarter()
     if e31_active():
         target = forecast_target()["target_quarter"]
         served = set(available_quarters(FORECAST)) | set(available_quarters(NOWCAST))
@@ -344,6 +346,17 @@ def ch1_quarters() -> list[str]:
     (Leads 3-4 stay off the map), oldest first."""
     last = ref.quarter_index(forecast_target()["target_quarter"])
     return sorted({q for _, q in CH1.rows() if ref.quarter_index(q) <= last}, key=ref.quarter_index)
+
+
+def ch1_default_quarter() -> str:
+    """SYSTEM_FIXES item 7 (approved 2026-10-27): the dashboard opens on the newest forecast at a reliable lead (the
+    Lead-1 quarter starting on the issue date), not on the experimental Lead-2 quarter, which stays selectable and
+    labelled experimental. Falls back to the newest covered quarter."""
+    qs = ch1_quarters()
+    rl = CH1.reliable_lead() or 1
+    ok = [q for q in qs if any(CH1.kind(r) == "forecast" and int(r["lead"]) <= rl
+                               for (_, q2), r in CH1.rows().items() if q2 == q)]
+    return ok[-1] if ok else qs[-1]
 
 
 def _ch1_timeline() -> list[dict]:

@@ -185,3 +185,22 @@ def test_rows_carry_model_seal_and_input_values(thesis):
                                              "NG_gap_price", "H1"))
     status, note = CH1.data_status("PH040300000", "2026-Q4")
     assert status == "limited" and "FSSI-v3" in note       # FSSI missing at that issue date is now visible
+
+
+# ---------------------------------------------------------------------------------------------- item 7: default view
+def test_default_view_is_the_reliable_lead1_forecast(thesis):
+    """Approved 2026-10-27: the API's default quarter is the newest forecast at a reliable lead (2026-Q4, Lead 1,
+    issued 2026-10-01); the experimental Lead-2 quarter stays in the timeline, labelled experimental."""
+    q = _get("/api/v1/quarters")
+    assert q["current"] == "2026-Q4"
+    assert q["forecastTarget"]["target_quarter"] == "2027-Q1" and q["forecastTarget"]["available"] is True
+    states = {x["id"]: x["state"] for x in q["quarters"]}
+    assert states["2026-Q4"] == "forecast" and states["2027-Q1"] == "forecast"
+    p = _get("/api/v1/provinces")                           # no quarter: the default view
+    assert p["quarter"] == "2026-Q4"
+    assert all(x["forecastHorizonQuarters"] == 1 and "passed the reliability test" in x["horizonLabel"]
+               for x in p["data"])
+    nxt = _get("/api/v1/provinces", quarter="2027-Q1")["data"]
+    assert all(x["forecastHorizonQuarters"] == 2 and "experimental" in x["horizonLabel"] for x in nxt)
+    f = _get("/api/v1/forecast", scope="region", id="calabarzon")
+    assert f["quarter"] == "2026-Q4" and f["isCurrent"] is True
