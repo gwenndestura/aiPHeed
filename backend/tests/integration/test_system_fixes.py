@@ -160,12 +160,12 @@ def test_employment_and_news_bars_state_what_they_are(thesis):
     emp = e["employment"]["plainEvidence"]
     assert "calendar trend" in emp and "Apr-Jun 2026" in emp and f"{abs(float(r['val_E1'])):.1f} points" in emp
     assert "Jan-Mar 2026" not in emp                         # FIRI's 2026-07-01 data window, not this forecast's
-    assert "GDELT" in e["news"]["plainEvidence"] and "does not change the forecast" in e["news"]["plainEvidence"]
+    assert "news" not in e                                   # five trigger groups only (user decision 10-27)
+    assert "GDELT" in e["market"]["evidenceNote"] and "FSSI-v3" in e["market"]["evidenceNote"]
     assert e["market"]["plainEvidence"] == CH1.market_evidence("PH040300000", "2026-Q4")
     region = {t["key"]: t for t in _get("/api/v1/explainability", scope="region", id="calabarzon",
                                          quarter="2026-Q4")["triggers"]}
     assert region["employment"]["plainEvidence"] == CH1.EMPLOYMENT_CAUTION
-    assert region["news"]["plainEvidence"] == CH1.NEWS_BASIS
 
 
 def test_bar_periods_follow_the_issue_date():

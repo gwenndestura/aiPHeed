@@ -107,27 +107,33 @@ def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
         base = by["market"]
         assert "food prices rise unusually fast" in base and "leave out the regional hunger condition" in base
         assert "not shares of hunger" in base and "FIRI" not in base
-        # SYSTEM_FIXES item 5: Employment and News add what those bars really are; the other groups keep the base note
+        # five trigger groups; the other families' share and the GDELT basis of news are stated in the note
+        assert "five trigger groups" in base and "GDELT" in base and "not shown in the bars" in base
         assert all(n.startswith(base) for n in by.values())
-        assert "calendar trend" in by["employment"] and "GDELT" in by["news"]
-        assert {by[k] for k in by if k not in ("employment", "news")} == {base}
+        assert "calendar trend" in by["employment"]
+        assert {by[k] for k in by if k != "employment"} == {base}
 
 
-def test_every_model_family_has_a_row_and_nothing_is_hidden(thesis):
-    """FINAL_ARCHITECTURE section 4: poverty, news and the regional hunger indicator are shown as their own rows from
-    the same SHAP measure instead of an undisplayed share; C4 is labelled as fisheries production."""
-    d = _get("/api/v1/explainability", scope="province", id="batangas", quarter="2024-Q2")
-    keys = {t["key"] for t in d["triggers"]}
-    assert keys == {"market", "climate", "fish_kill", "employment", "ofw_remittance", "poverty", "news",
-                    "hunger_indicator"}
-    assert sum(t["pct"] for t in d["triggers"]) == 100
+def test_only_the_five_trigger_groups_are_drawn_and_the_rest_is_stated(thesis):
+    """User decision 2026-10-27: the dashboard shows the five trigger groups of the thesis proposal. Poverty and density,
+    news and the regional hunger indicator stay model inputs; their share is otherPct and is named in the note."""
+    for quarter in ("2024-Q2", "2026-Q4", "2027-Q1"):
+        for scope, slug in (("province", "batangas"), ("region", "calabarzon")):
+            d = _get("/api/v1/explainability", scope=scope, id=slug, quarter=quarter)
+            assert [t["key"] for t in d["triggers"]] and {t["key"] for t in d["triggers"]} == {
+                "market", "climate", "fish_kill", "employment", "ofw_remittance"}
+            assert sum(t["pct"] for t in d["triggers"]) in (0, 100)
     from app.services import dashboard as D
-    assert D.explainability("PH040500000", "2024-Q2")["otherPct"] == 0
-    labels = {t["key"]: t["label"] for t in d["triggers"]}
-    assert labels["fish_kill"] == "Fisheries production" and "Fish Kill" not in labels.values()
+    e = D.explainability("PH040500000", "2024-Q2")
     r = CH1.row("PH040500000", "2024-Q2")
-    pov = next(t for t in d["triggers"] if t["key"] == "poverty")
-    assert pov["signedContribution"] == pytest.approx(float(r["shap_V1"]), abs=1e-6)
+    sh = {f: abs(float(r[f"shap_{f}"])) for f in ("A1", "A2", "A3", "V1", "C1", "C2", "C3", "C4", "E1", "E2", "N1", "H1")}
+    expect = 100 * (sh["V1"] + sh["N1"] + sh["H1"]) / sum(sh.values())
+    assert e["otherPct"] == pytest.approx(expect, abs=0.1)
+    if round(expect):
+        assert f"another {expect:.0f}% of its attribution" in e["triggers"][0]["evidenceNote"]
+    market = next(t for t in e["triggers"] if t["key"] == "market")
+    assert market["signedContribution"] == pytest.approx(sum(float(r[f"shap_{f}"]) for f in ("A1", "A2", "A3")),
+                                                         abs=1e-6)
 
 
 def test_lgus_remain_a_priority_ranking_without_hunger_figures(thesis):

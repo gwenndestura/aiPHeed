@@ -500,7 +500,8 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
             pe = prev_expl[slugs[0]]
             if ch1:
                 hr = CH1.row(codes[slugs[0]], last_q)
-                blocks.append(_p(CH1.driver_text(e["shown"], float(hr["pi_hunger"]) if hr else None)))
+                blocks.append(_p(CH1.driver_text(e["shown"], float(hr["pi_hunger"]) if hr else None,
+                                                 e.get("otherPct"))))
             elif thesis:
                 from app.services.report import _thesis_driver_text
 

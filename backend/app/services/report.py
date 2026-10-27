@@ -595,7 +595,7 @@ def _ch1_driver_text(explain: dict, subject: str, quarter: str) -> str:
     from app.ml.inference import ch1_system as CH1
     code = next((m["code"] for m in ref.PROVINCES.values() if m["name"] == subject), None)
     r = CH1.row(code, quarter) if code else None
-    return CH1.driver_text(explain["triggers"], float(r["pi_hunger"]) if r else None)
+    return CH1.driver_text(explain["triggers"], float(r["pi_hunger"]) if r else None, explain.get("otherPct"))
 
 
 def _ch1_outlook_block(code: str | None, quarter: str, name: str) -> list:

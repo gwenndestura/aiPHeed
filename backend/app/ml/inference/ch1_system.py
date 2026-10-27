@@ -28,10 +28,11 @@ from pathlib import Path
 DATA = Path(__file__).resolve().parents[3] / "data" / "ch1_engine"
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",),
                "employment": ("E1",), "ofw_remittance": ("E2",)}
-# FINAL_ARCHITECTURE section 4: the families that used to sit in an undisplayed "other" share are shown as their own rows
-# from the same SHAP measure, so nothing the price model uses is hidden.
-SHOWN_GROUPS = {**FIVE_GROUPS, "poverty": ("V1",), "news": ("N1",), "hunger_indicator": ("H1",)}
-OTHER = ()
+# The dashboard shows the five trigger groups the thesis proposal presented (user decision 2026-10-27, reverting the
+# eight-row display of FINAL_ARCHITECTURE section 4). Poverty and density, news and the regional hunger indicator stay
+# model inputs; their share of the attribution is stated in the evidence note and in otherPct, never drawn as a bar.
+SHOWN_GROUPS = dict(FIVE_GROUPS)
+OTHER = ("V1", "N1", "H1")
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fisheries production",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty & vulnerability",
                 "news": "News signals", "hunger_indicator": "Regional hunger (indicator)"}
@@ -206,12 +207,26 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
     h = float(rs[0]["pi_hunger"]) if rs else None
     hunger = f" (here {h:.0%})" if h is not None else ""
-    note = ("The bars show each indicator group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's "
-            "estimate that food prices rise unusually fast; every indicator family the model uses has a row. They are "
-            f"model influence, not shares of hunger caused by each factor, and they leave out the regional hunger "
-            f"condition{hunger}, which multiplies that estimate into the risk probability, and the forecast horizon "
-            "itself.")
+    if other_pct is None:
+        other_pct = other_share(rs)
+    other = (f" Poverty and density, news (GDELT's national count of price-related food news; the FSSI-v3 index from "
+             f"the News panel's articles has no measured effect) and the regional hunger indicator inside the price "
+             f"model account for another {other_pct:.0f}% of its attribution, not shown in the bars."
+             if other_pct else "")
+    note = ("The bars show each of the five trigger groups' relative push (SHAP, log-odds, rescaled to 100%) on the "
+            "LightGBM's estimate that food prices rise unusually fast. They are model influence, not shares of hunger "
+            f"caused by each factor, and they leave out the regional hunger condition{hunger}, which multiplies that "
+            f"estimate into the risk probability, and the forecast horizon itself.{other}")
     return f"{note} {GROUP_NOTES[group]}" if group in GROUP_NOTES else note
+
+
+def other_share(rs: list[dict]) -> float:
+    """Percent of the absolute SHAP attribution of the given rows that falls on the families not drawn as bars."""
+    def shap(r, f):
+        return abs(_f(r.get(f"shap_{f}")) or 0.0)
+    fams = [f for g in FIVE_GROUPS.values() for f in g] + list(OTHER)
+    total = sum(shap(r, f) for r in rs for f in fams)
+    return 100 * sum(shap(r, f) for r in rs for f in OTHER) / total if total else 0.0
 
 
 QUARTER_MONTHS = {1: "Jan-Mar", 2: "Apr-Jun", 3: "Jul-Sep", 4: "Oct-Dec"}
@@ -279,8 +294,8 @@ def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:
-    """The driver bars from the LightGBM price part's SHAP values (log-odds): the five approved groups plus poverty, news
-    and the regional hunger indicator (FINAL_ARCHITECTURE section 4); otherPct is 0 because nothing is left out."""
+    """The driver bars from the LightGBM price part's SHAP values (log-odds): the five approved trigger groups, plus the
+    share of the other families (poverty, news, regional hunger indicator) as otherPct."""
     r = row(code, quarter)
     if r is None:
         return base
@@ -364,18 +379,20 @@ def model_line() -> str:
             f"experimental.")
 
 
-def driver_text(triggers: list[dict], hunger: float | None = None) -> str:
+def driver_text(triggers: list[dict], hunger: float | None = None, other_pct: float | None = None) -> str:
     """The report paragraph beside the driver bars (plain text; the caller escapes it)."""
     up = [f"{t['label']} {t['pct']}%" for t in triggers if t["pct"] > 0 and t["direction"] == "increases_risk"]
     down = [f"{t['label']} {t['pct']}%" for t in triggers if t["pct"] > 0 and t["direction"] == "protective"]
     shown = {t["key"] for t in triggers if t["pct"] > 0}
     h = f" ({hunger:.0%})" if hunger is not None else ""
-    return ("Each bar is the indicator group's relative influence (SHAP, rescaled to 100%) on the model's estimate that "
+    other = (f" Poverty and density, news and the regional hunger indicator, which are not among the five trigger "
+             f"groups, account for another {other_pct:.0f}% of that influence." if other_pct else "")
+    return ("Each bar is a trigger group's relative influence (SHAP, rescaled to 100%) on the model's estimate that "
             "food prices rise unusually fast. "
             + ("Pushing it up: " + ", ".join(up) + ". " if up else "")
             + ("Pulling it down: " + ", ".join(down) + ". " if down else "")
             + f"The regional hunger condition{h}, which multiplies that estimate into the probability, is not part of "
-              "the bars. They show what moved the model, not causes."
+              "the bars. They show what moved the model, not causes." + other
             + "".join(f" {GROUP_NOTES[g]}" for g in ("employment", "news") if g in shown))
 
 
