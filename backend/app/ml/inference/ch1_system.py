@@ -26,6 +26,15 @@ import os
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parents[3] / "data" / "ch1_engine"
+# FORECAST_RESEARCH candidate P0H4-U (not the default): the same rows, with Lead-2+ forecasts re-issued after the SWS
+# release. Served only when AIPHEED_CH1_ENGINE=fr and its export exists.
+DATA_FR = DATA.parent / "ch1_engine_fr"
+
+
+def data_dir() -> Path:
+    if os.getenv("AIPHEED_CH1_ENGINE", "").lower() == "fr" and (DATA_FR / "rows.csv").exists():
+        return DATA_FR
+    return DATA
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",),
                "employment": ("E1",), "ofw_remittance": ("E2",)}
 # The dashboard shows the five trigger groups the thesis proposal presented (user decision 2026-10-27, reverting the
@@ -68,7 +77,7 @@ LGU_LEVEL_BASIS = ("Colour = the province's Chapter I risk class (HIGH when the 
 
 
 def active() -> bool:
-    return os.getenv("AIPHEED_MAP_MODEL", "ch1").lower() == "ch1" and (DATA / "rows.csv").exists()
+    return os.getenv("AIPHEED_MAP_MODEL", "ch1").lower() == "ch1" and (data_dir() / "rows.csv").exists()
 
 
 @functools.lru_cache(maxsize=2)
@@ -78,13 +87,29 @@ def _rows(path: str, mtime: int) -> dict[tuple[str, str], dict]:
 
 
 def rows() -> dict[tuple[str, str], dict]:
-    p = DATA / "rows.csv"
+    p = data_dir() / "rows.csv"
     return _rows(str(p), p.stat().st_mtime_ns)
 
 
-@functools.lru_cache(maxsize=1)
+@functools.lru_cache(maxsize=2)
+def _evaluation(path: str) -> dict:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
 def evaluation() -> dict:
-    return json.loads((DATA / "evaluation.json").read_text(encoding="utf-8"))
+    return _evaluation(str(data_dir() / "evaluation.json"))
+
+
+def sws_update_text(r: dict) -> str:
+    """The candidate's note for a row re-issued after the SWS release (empty for quarter-start rows)."""
+    u = evaluation().get("sws_update")
+    if not u or r.get("issue_schedule") != "B":
+        return ""
+    m, a = u["lead2"]["metrics"], u["lead2"]["quarter_start_issue"]["metrics"]
+    return (f" Re-issued {r['issue_date']}, the day after SWS published its {r.get('sws_newest_q')} hunger reading. At "
+            f"Lead 2 this update scored accuracy {m['accuracy']:.2f} with HIGH recall {m['recall']:.2f} (quarter-start "
+            f"issue: {a['accuracy']:.2f}, recall {a['recall']:.2f}), but it still fails "
+            f"{', '.join(u['lead2']['failed'])}, so it remains experimental.")
 
 
 def reliable_lead() -> int | None:
@@ -133,8 +158,10 @@ def reliability_text(r: dict) -> str:
     if rl is not None and lead <= rl:
         return (f"Lead-{lead} forecast: this horizon passed the reliability test (accuracy {ev['metrics']['accuracy']:.2f}"
                 f" on {ev['n']} past province-quarters)")
-    return (f"Lead-{lead} forecast: experimental. Only Lead {rl or 0} passed the reliability test; this horizon was "
+    text = (f"Lead-{lead} forecast: experimental. Only Lead {rl or 0} passed the reliability test; this horizon was "
             f"tested and failed, so it is not a validated forecast")
+    upd = sws_update_text(r)
+    return text + ("." + upd).rstrip(".") if upd else text
 
 
 def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict | None:
@@ -373,10 +400,13 @@ def model_line() -> str:
     ev = evaluation()
     m = ev["leads"]["1"]["metrics"]
     rl = reliable_lead()
-    return (f"P0H4: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x P(food-price "
+    name = "P0H4-U" if ev.get("sws_update") else "P0H4"
+    upd = (" Lead-2+ forecasts are re-issued the day after each SWS release (hunger part only)."
+           if ev.get("sws_update") else "")
+    return (f"{name}: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x P(food-price "
             f"condition, one LightGBM across forecast horizons on 12 indicator families). Lead {rl or 0} reliable "
             f"(development accuracy {m['accuracy']:.3f}, {m['tp'] + m['tn']}/{m['n']} province-quarters); longer leads "
-            f"experimental.")
+            f"experimental.{upd}")
 
 
 def driver_text(triggers: list[dict], hunger: float | None = None, other_pct: float | None = None) -> str:
@@ -410,6 +440,14 @@ def reliability_sentences() -> list[str]:
         m2 = l2["metrics"]
         out.append(f"Lead 2 failed the rule (accuracy {m2['accuracy']:.3f}, {m2['tp'] + m2['tn']}/{m2['n']}; HIGH recall "
                    f"{m2['recall']:.2f}): a Lead-2 value is an experimental forecast, not a validated one.")
+    u = ev.get("sws_update")
+    if u:
+        mu = u["lead2"]["metrics"]
+        out.append(f"SWS-update issue (candidate {ev.get('model')}): Lead-2 forecasts re-issued the day after SWS publishes "
+                   f"the newest hunger reading (median {u['lead2']['warning_days_median']:.0f} days before the target "
+                   f"quarter starts) scored accuracy {mu['accuracy']:.3f} ({mu['tp'] + mu['tn']}/{mu['n']}), HIGH recall "
+                   f"{mu['recall']:.2f}, Brier {mu['brier']:.3f}; still failing {', '.join(u['lead2']['failed'])}. "
+                   f"These re-issued forecasts are sealed separately (SHA-256 {u['seal_sha256'][:8]}).")
     out.append(f"Development evidence: every scored quarter was examined while the model was built. The forecasts issued "
                f"{ev['seal_issue_date']} are sealed (SHA-256 {ev['seal_sha256'][:8]}) and will be scored when SWS "
                "publishes those quarters.")
