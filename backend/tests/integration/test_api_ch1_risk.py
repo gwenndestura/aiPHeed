@@ -103,11 +103,14 @@ def test_trigger_statuses_follow_the_served_models_own_inputs(thesis):
 def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
     for scope, slug in (("province", "quezon"), ("region", "calabarzon")):
         d = _get("/api/v1/explainability", scope=scope, id=slug, quarter="2024-Q3")
-        notes = {t["evidenceNote"] for t in d["triggers"]}
-        assert len(notes) == 1
-        note = notes.pop()
-        assert "food prices rise unusually fast" in note and "leave out the regional hunger condition" in note
-        assert "not shares of hunger" in note and "FIRI" not in note
+        by = {t["key"]: t["evidenceNote"] for t in d["triggers"]}
+        base = by["market"]
+        assert "food prices rise unusually fast" in base and "leave out the regional hunger condition" in base
+        assert "not shares of hunger" in base and "FIRI" not in base
+        # SYSTEM_FIXES item 5: Employment and News add what those bars really are; the other groups keep the base note
+        assert all(n.startswith(base) for n in by.values())
+        assert "calendar trend" in by["employment"] and "GDELT" in by["news"]
+        assert {by[k] for k in by if k not in ("employment", "news")} == {base}
 
 
 def test_every_model_family_has_a_row_and_nothing_is_hidden(thesis):

@@ -359,6 +359,24 @@ At Lead 1 the class changes on 3 of 70 rows.
 
 **Suggested order after approval:** 1 → 2 → 3 → 4 → 5 → 6. Then decide on 7 and 8. Run the full backend and frontend test suites after each fix.
 
+**Implementation status (2026-10-27).** Items 1–6 were approved and are implemented on the local branch `aiPHeed/system-fixes`. Tests: `backend/tests/integration/test_system_fixes.py` (19 tests). Backend suite 883 passed, 18 skipped; frontend 81/81; no frontend file changed.
+
+Item 1 also covers places found while implementing it:
+- the server PDF (`/report`);
+- the explainability `summary`, which had replaced P0H4's probability with FIRI's (Quezon 2026-Q4: 0.65 HIGH vs the served 0.26 LOW) and took its data-status note from FIRI's inputs.
+
+Item 6 re-ran `export_l2.py`:
+- the frozen seal `a498b5ef` is byte-identical;
+- `evaluation.json` is unchanged;
+- the 41 original `rows.csv` columns are identical;
+- 14 columns were added (`model`, `seal_sha256`, `val_<column>`).
+
+Item 5 also replaced, for every group, the FIRI record's evidence sentences, which described FIRI's 2026-07-01 data window, with P0H4's own input values at its own issue date.
+
+**Not changed (outside the approved items):**
+- the Landing page's About/Methodology text still describes FIRI v2 (`frontend/src/pages/Landing.tsx`; frontend text needs separate approval);
+- items 7–15 are still pending.
+
 ## 14. Correction to `DASHBOARD_SELECTION_REPORT.md`
 
 **What was wrong.** That report called `data/final_engine/news_events.csv` "the current branch's dashboard feed". It is served at `/api/v1/final/news`, which the frontend does not call. In thesis mode the dashboard news panel shows the v3 pipeline's province-attributed articles (`dashboard._news_pool_v3`).

@@ -9,7 +9,8 @@ errors -> the previous pi_H).
     python export_l2.py
 
 rows.csv           the served rows (walk-forward Lead 1 + Leads 1-4 issued 2026-10-01), same columns as before, with
-                   pi_hunger = H4, probability = H4 x pi_P, and per-group input availability (avail_<group>)
+                   pi_hunger = H4, probability = H4 x pi_P, per-group input availability (avail_<group>), the model's
+                   input values at the issue date (val_<column>), the model name and the seal hash of sealed rows
 evaluation.json    P0H4 verdicts per lead, horizon block, Lead-2 optimisation summary, new seal hash
 out/sealed_prospective_P0H4.csv  P0H4 forecasts issued 2026-10-01 for every lead 1..K (+ .sha256)
 """
@@ -30,6 +31,11 @@ GROUPS = {"market": ["A1_food", "A1_gap", "A_mom", "A2", "A3", "W_rice_yoy", "W_
 # FINAL_ARCHITECTURE section 4: availability of the groups now shown as their own rows. These flags go to rows.csv
 # only; the frozen seal keeps its original columns and must stay byte-identical.
 EXTRA_GROUPS = {"poverty": ["V1"], "news": ["N1", "G_pri_yoy", "NG_gap_price"], "hunger_indicator": ["H1"]}
+# SYSTEM_FIXES item 6: traceability (model name, the seal a row belongs to) and the model's own input values at each
+# issue date (val_<column>; empty = no published value), so the dashboard explains a forecast with the numbers that
+# forecast used, never another model's. rows.csv only; the frozen seal keeps its original columns.
+MODEL_NAME = "P0H4"
+VALUE_COLS = ["A3", "V1", "C1", "C2", "C3", "C4", "E1", "E2", "N1", "G_pri_yoy", "NG_gap_price", "H1"]
 LEAD_KEYS = ("n", "n_quarters", "quarters", "high_share", "metrics", "accuracy_ci90", "baseline_accuracy",
              "baseline_balanced_accuracy", "criteria", "reliable", "reliable_strict", "loqo_min", "acc_thirds", "onsets",
              "onset_recall", "brier_vs_persist_si", "brier_vs_clim", "confusion", "average_precision",
@@ -61,6 +67,8 @@ def main():
     for g, cs in {**GROUPS, **EXTRA_GROUPS}.items():
         R[f"avail_{g}"] = [int(bool(Si.loc[(int(t), int(k), p), cs].notna().any()))
                            for t, k, p in zip(R["t"], R["lead"], R["province_code"])]
+    for c in VALUE_COLS:
+        R[f"val_{c}"] = [Si.loc[(int(t), int(k), p), c] for t, k, p in zip(R["t"], R["lead"], R["province_code"])]
     # the export must reproduce the evaluated P0H4 probabilities exactly
     P = pd.read_csv(OUT / "predictions_addendum3.csv", dtype={"province_code": str})
     chk = R.assign(q=R["quarter"].map(L.qi)).merge(P[["province_code", "q", "lead", "P0H4_p3", "P0_price"]],
@@ -70,7 +78,8 @@ def main():
     assert np.allclose(chk["pi_price"], chk["P0_price"], atol=1e-5), "served price part != evaluated P0"
     assert np.allclose(chk["probability"], chk["P0H4_p3"], atol=1e-5), "export != evaluated P0H4"
     R = R.drop(columns=["t"])
-    seal = R[R["issue_date"] >= "2026-10-01"].drop(columns=[f"avail_{g}" for g in EXTRA_GROUPS]).copy()
+    seal = R[R["issue_date"] >= "2026-10-01"].drop(columns=[f"avail_{g}" for g in EXTRA_GROUPS]
+                                                  + [f"val_{c}" for c in VALUE_COLS]).copy()
     seal_path = OUT / "sealed_prospective_P0H4.csv"
     if seal_path.exists():           # a frozen seal is never rewritten: the export must reproduce it byte for byte
         tmp = OUT / "_seal_check.csv"
@@ -83,6 +92,8 @@ def main():
         (OUT / "sealed_prospective_P0H4.csv.sha256").write_text(FM.sha256(seal_path) + "\n", encoding="utf-8",
                                                                   newline="\n")
     sha = FM.sha256(seal_path)
+    R["model"] = MODEL_NAME
+    R["seal_sha256"] = np.where(R["issue_date"] >= "2026-10-01", sha, "")
     served = R[(R["issue_date"] < "2026-10-01") | (R["lead"] <= 4)]
     served.to_csv(DEST / "rows.csv", index=False, lineterminator="\n", float_format="%.6g")
     write_evaluation(S, K, sha)

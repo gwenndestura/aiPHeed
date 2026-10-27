@@ -264,7 +264,7 @@ class _Canvas:
         canvas.setFillColor(MUTED)
         canvas.drawString(
             18 * mm, 11 * mm,
-            (THESIS_FOOTER if _thesis() else
+            (_ch1_text("REPORT_FOOTER") or (THESIS_FOOTER if _thesis() else None) or
              "Food insecurity risk probability -- indicative relative risk only. "
              "Not an official food insecurity classification."))
         canvas.drawRightString(width - 18 * mm, 11 * mm, f"Page {doc.page}")
@@ -293,7 +293,9 @@ def _score_text(score: float | None) -> str:
 def _headline(name: str, score: float | None, level: str | None,
               qoq: float | None, extra: list[tuple[str, str]], width: float) -> list:
     left = [
-        _p("ESTIMATED FOOD-INSECURITY RISK INDEX (FIRI, LEAD-2)" if _thesis() else "FOOD INSECURITY RISK PROBABILITY", "eyebrow"),
+        _p("FORECAST PROBABILITY OF HIGH FOOD-INSECURITY RISK" if _ch1() else
+           "ESTIMATED FOOD-INSECURITY RISK INDEX (FIRI, LEAD-2)" if _thesis() else "FOOD INSECURITY RISK PROBABILITY",
+           "eyebrow"),
         Spacer(1, 1.5 * mm),
         _p(_score_text(score), "figure"),
         _p(f"{(level or 'n/a').upper()}  ·  quarter-on-quarter {_signed(qoq)}", "small"),
@@ -326,14 +328,16 @@ def _drivers_block(explain: dict, subject: str, quarter: str, width: float) -> l
         _bar_table(rows, width),
         Spacer(1, 3 * mm),
         _p(
-            ("<b>Red</b> bars are factor groups above their usual level that raise the risk index, <b>green</b> bars are "
+            (_escape(_ch1_text("REPORT_BARS_NOTE")) if _ch1() else
+             "<b>Red</b> bars are factor groups above their usual level that raise the risk index, <b>green</b> bars are "
              "below it and lower the index. A group with no published data at the issue date is not counted; missing "
              "data is not a sign of low risk." if _thesis() else
              "<b>Red</b> bars raise the predicted shortfall, <b>green</b> lower it. "
              "A large bar is not automatically bad news -- share of the explanation "
              "and direction of effect are separate things."), "small"),
         Spacer(1, 2.5 * mm),
-        _p(_thesis_driver_text(explain) if _thesis() else svc.compose_narrative(subject, quarter, explain["triggers"]),
+        _p(_escape(_ch1_driver_text(explain, subject, quarter)) if _ch1() else
+           _thesis_driver_text(explain) if _thesis() else svc.compose_narrative(subject, quarter, explain["triggers"]),
            "body"),
     ]
 
@@ -352,6 +356,14 @@ def _thesis_driver_text(explain: dict) -> str:
 
 
 def _method_block(performance: dict) -> list:
+    if _ch1():                                       # SYSTEM_FIXES item 1: the served Chapter I forecast's own evidence
+        from app.ml.inference import ch1_system as CH1
+        head, rows = CH1.method_rows()
+        sent = CH1.reliability_sentences()
+        return ([_p(svc._ascii(CH1.model_line()), "body"), Spacer(1, 2 * mm),
+                 _data_table(head, rows, [12 * mm, 14 * mm] + [18 * mm] * 6 + [18 * mm],
+                             {i: "RIGHT" for i in range(1, 8)}), Spacer(1, 2 * mm)]
+                + [_p(svc._ascii(x), "small") for x in sent])
     if "leads" in performance:                       # thesis system: Objective 2 leads and Objective 4 baselines
         from app.ml.inference import thesis_system as THESIS
         tb = THESIS.performance_tables(performance)
@@ -536,6 +548,7 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
         _rule(1.2, INK, 0, 4),
         _p(f"Generated {generated} from aiPHeed model output.", "small"),
         Spacer(1, 5 * mm),
+        _callout("What these outputs are", _ch1_text("REPORT_COVER")) if _ch1() else
         _callout("What these outputs are", THESIS_COVER) if _thesis() else _callout(
             "What this number is",
             "The modelled probability that this area falls in the HIGH class of the "
@@ -566,7 +579,39 @@ def _thesis() -> bool:
     return THESIS.active()
 
 
+def _ch1() -> bool:
+    """SYSTEM_FIXES item 1: the Chapter I forecast (P0H4) is served, so the PDF describes it, not FIRI v2."""
+    return svc._ch1_mode()
+
+
+def _ch1_text(name: str) -> str | None:
+    if not _ch1():
+        return None
+    from app.ml.inference import ch1_system as CH1
+    return getattr(CH1, name)
+
+
+def _ch1_driver_text(explain: dict, subject: str, quarter: str) -> str:
+    from app.ml.inference import ch1_system as CH1
+    code = next((m["code"] for m in ref.PROVINCES.values() if m["name"] == subject), None)
+    r = CH1.row(code, quarter) if code else None
+    return CH1.driver_text(explain["triggers"], float(r["pi_hunger"]) if r else None)
+
+
+def _ch1_outlook_block(code: str | None, quarter: str, name: str) -> list:
+    from app.ml.inference import ch1_system as CH1
+    rs = [r for (c, q), r in CH1.rows().items() if q == quarter]
+    mean_p = sum(float(r["probability"]) for r in rs) / len(rs) if rs else None
+    sentence = CH1.sentence(code, name, quarter, mean_p)
+    if not sentence:
+        return [_p("No forecast is available for this quarter.", "body")]
+    return [_callout("Food-insecurity risk forecast", _escape(sentence)), Spacer(1, 2 * mm),
+            _p(_escape(CH1.INDICATOR["caveat"]), "small")]
+
+
 def _thesis_outlook_block(code: str | None, quarter: str, name: str, triggers: list[dict]) -> list:
+    if _ch1():
+        return _ch1_outlook_block(code, quarter, name)
     summary = svc.plain_summary(code, quarter, name, triggers)
     if not summary or not summary.get("riskOutlook"):
         return [_p("No risk outlook is available for this quarter.", "body")]
@@ -654,12 +699,13 @@ def build_province_report(province_id: str, quarter: str,
         f"{_escape(str(province.get('confidenceStatement') or ''))}", "body"),
         Spacer(1, 3 * mm)]
     if _thesis():
-        flow += _section("Why this risk estimate: indicators and evidence")
+        flow += _section("The forecast in words" if _ch1() else "Why this risk estimate: indicators and evidence")
         flow += _thesis_outlook_block(code, quarter, province["name"], explain["triggers"])
 
     flow.append(PageBreak())
 
-    flow += _section("What drives the risk index (exact shares by factor group)" if _thesis()
+    flow += _section("What moved the forecast (relative model influence by indicator group)" if _ch1() else
+                     "What drives the risk index (exact shares by factor group)" if _thesis()
                      else "What is driving the figure")
     flow += _drivers_block(explain, province["name"], quarter, width)
 
@@ -769,7 +815,7 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
                             {i: "RIGHT" for i in range(1, len(head)) if head[i] not in ("Level", "Class")}))
 
     if _thesis():
-        flow += _section("Why this risk estimate: indicators and evidence")
+        flow += _section("The forecast in words" if _ch1() else "Why this risk estimate: indicators and evidence")
         flow += _thesis_outlook_block(None, quarter, ref.REGION_NAME, explain["triggers"])
 
     flow += [Spacer(1, 4 * mm), _p(
@@ -779,7 +825,8 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
 
     flow.append(PageBreak())
 
-    flow += _section("What drives the regional risk index (exact shares by factor group)" if _thesis()
+    flow += _section("What moved the regional forecast (relative model influence by indicator group)" if _ch1() else
+                     "What drives the regional risk index (exact shares by factor group)" if _thesis()
                      else "What is driving the regional figure")
     flow += _drivers_block(explain, ref.REGION_NAME, quarter, width)
 

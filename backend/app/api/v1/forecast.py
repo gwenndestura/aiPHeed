@@ -206,7 +206,9 @@ async def get_timeseries(
     """
     h = svc.check_horizon(horizon)
     quarters = svc.available_quarters(h)
-    if svc.E41L2.governs():              # E52: the candidate's own quarters (a CPI-only target covers 2025-Q2/Q3)
+    if svc._ch1_mode():                  # SYSTEM_FIXES item 4: the served Chapter I forecast's own quarters
+        quarters = svc.ch1_quarters()
+    elif svc.E41L2.governs():            # E52: the candidate's own quarters (a CPI-only target covers 2025-Q2/Q3)
         quarters = sorted(set(quarters) | set(svc.E41L2.candidate_quarters()), key=ref.quarter_index)
     start = from_ or (quarters[0] if quarters else None)
     end = to or (quarters[-1] if quarters else None)
@@ -242,7 +244,9 @@ async def get_timeseries(
     # E46: with a Lead-2 candidate governing the dashboard, every quarter is the candidate's own estimate of its own
     # event (as-of backtest, earlier Lead-2 forecast, issued forecast); quarters it has no estimate for drop out, so
     # the line never joins the v1 label probability (about 0.98) to the candidate's probability (about 0.2).
-    if svc.E41L2.governs():
+    if svc._ch1_mode():                  # one score type; isForecast already from the Chapter I rows
+        indicator = svc.indicator_for(svc.forecast_target()["target_quarter"])
+    elif svc.E41L2.governs():
         cand = svc.indicator_for(svc.forecast_target()["target_quarter"])
         bt = _backtest_quarters()
         series = [p | {"isForecast": p["quarter"] not in bt} for p in series if p["scoreType"] == cand["id"]]

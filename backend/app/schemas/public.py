@@ -360,6 +360,7 @@ class ModelIdentity(BaseModel):
     targetQuarter: str
     evidenceStatus: str               # development evidence only; not validated
     lead2Accuracy: str                # the measured E67 development figure, with its limits
+    seal: str | None = None           # SYSTEM_FIXES item 6: SHA-256 of the sealed forecast set this row belongs to
 
 
 class TriggerCoverage(BaseModel):

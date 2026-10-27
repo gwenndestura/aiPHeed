@@ -57,6 +57,13 @@ INDICATOR = {
 LGU_BASIS = ("Relative position within the province: the province's Chapter I risk probability re-weighted by PSA "
              "poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official "
              "municipal food-insecurity rate; the ranking itself has not been checked against municipal outcomes.")
+# SYSTEM_FIXES item 2: an LGU's colour is its province's class; the index only orders LGUs within the province (it is
+# the province probability scaled down by vulnerability, so a 0.50 cut-off on it showed HIGH provinces as all-LOW towns).
+LGU_LEVEL_BASIS = ("Colour = the province's Chapter I risk class (HIGH when the province probability is 0.50 or more). "
+                   "The number and rank are this city's or municipality's priority within the province: the province "
+                   "probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 "
+                   "specifies. Not a measured or official municipal food-insecurity rate; the ranking has not been "
+                   "checked against municipal outcomes.")
 
 
 def active() -> bool:
@@ -146,7 +153,9 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
         "province_code": code, "province_name": name, "quarter": quarter,
         "risk_probability": round(p, 6), "risk_label": None, "observed_label": obs, "observed_S1": None,
         "data_sufficiency_flag": "SUFFICIENT", "forecast_horizon_quarters": int(r["lead"]),
-        "horizon_label": what, "origin": r["issue_date"],
+        "horizon_label": what, "origin": r["issue_date"], "verification_date": r["issue_date"],
+        # SYSTEM_FIXES: this row's own source label (the copied FIRI base row said "THESIS_LEAD2_...")
+        "mode": f"{r.get('model') or 'P0H4'}_LEAD{int(r['lead'])}_{'FORECAST' if k == 'forecast' else 'BACKTEST'}",
         "estimate_kind": "forecast" if k == "forecast" else "backtest",
         "price_pressure_score": float(r["pi_price"]), "hunger_condition_probability": float(r["pi_hunger"]),
         "score_type": "chapter1_risk_probability", "score_definition": INDICATOR["definition"],
@@ -182,16 +191,91 @@ def group_status(code: str | None, quarter: str, key: str, pct: int) -> str | No
     return "contributes" if pct > 0 else "no_effect"
 
 
-def evidence_note(code: str | None, quarter: str, other_pct: float | None = None) -> str:
+# SYSTEM_FIXES item 5: what two of the bars really are (BIAS_AUDIT; FINAL_SYSTEM_SELECTION section 6).
+EMPLOYMENT_CAUTION = ("Caution: the employment input is a national figure that mostly follows the calendar trend "
+                      "(correlation +0.95 with time), so the direction of this bar is not a reliable reading of job "
+                      "conditions.")
+NEWS_BASIS = ("This bar reflects GDELT's national count of price-related food news; the Food Stress Sentiment Index "
+              "(FSSI-v3) built from the articles in the News panel is also an input, but tests found it does not change "
+              "the forecast.")
+GROUP_NOTES = {"employment": EMPLOYMENT_CAUTION, "news": NEWS_BASIS}
+
+
+def evidence_note(code: str | None, quarter: str, other_pct: float | None = None, group: str | None = None) -> str:
     """What the bars measure, in this forecast's own numbers: the push of each group on the price part only."""
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
     h = float(rs[0]["pi_hunger"]) if rs else None
     hunger = f" (here {h:.0%})" if h is not None else ""
-    return ("The bars show each indicator group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's "
+    note = ("The bars show each indicator group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's "
             "estimate that food prices rise unusually fast; every indicator family the model uses has a row. They are "
             f"model influence, not shares of hunger caused by each factor, and they leave out the regional hunger "
             f"condition{hunger}, which multiplies that estimate into the risk probability, and the forecast horizon "
             "itself.")
+    return f"{note} {GROUP_NOTES[group]}" if group in GROUP_NOTES else note
+
+
+QUARTER_MONTHS = {1: "Jan-Mar", 2: "Apr-Jun", 3: "Jul-Sep", 4: "Oct-Dec"}
+
+
+def _period(issue_date: str, back: int) -> str:
+    """Months of the quarter `back` quarters before the issue date's quarter ('Apr-Jun 2026' for 2026-10-01, back=2):
+    the origin quarter t is the quarter before the issue date (back=1); t-1 is back=2."""
+    i = int(issue_date[:4]) * 4 + (int(issue_date[5:7]) - 1) // 3 - back
+    return f"{QUARTER_MONTHS[i % 4 + 1]} {i // 4}"
+
+
+def _change(v: float, unit: str) -> str:
+    return f"{abs(v):.1f}{unit} {'higher' if v > 0 else 'lower'}" if round(v, 1) else "about the same"
+
+
+def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
+    """The card sentence for a group, from the values THIS forecast used at its issue date (rows.csv val_<column>,
+    LEAD2_OPTIMIZATION family_inventory: periods and signs), never another model's record. None at region scope."""
+    if group == "market":
+        return market_evidence(code, quarter)
+    if code is None:                      # region: no single value, but the two cautions still apply
+        return GROUP_NOTES.get(group)
+    r = row(code, quarter)
+    if r is None:
+        return None
+    d = r["issue_date"]
+    v = {c: _f(r.get(f"val_{c}")) for c in ("A3", "C1", "C2", "C3", "C4", "E1", "E2", "N1", "G_pri_yoy", "H1")}
+    none = "No published value was available at this forecast's issue date; missing data is not a sign of low risk."
+    if group == "employment":
+        fact = (none if v["E1"] is None else
+                f"National unemployment in {_period(d, 2)} was {_change(v['E1'], ' points')} than a year earlier.")
+        return f"{fact} {EMPLOYMENT_CAUTION}"
+    if group == "news":
+        g = ("" if v["G_pri_yoy"] is None else
+             f" In {_period(d, 1)}, the share of the country's food-security news about prices was "
+             f"{_change(100 * v['G_pri_yoy'], ' points')} than a year earlier.")
+        fssi = ("" if v["N1"] is not None else
+                " This quarter the province had too few articles for an FSSI-v3 value, so it is left blank, not zero.")
+        return f"{NEWS_BASIS}{g}{fssi}"
+    if group == "climate":
+        parts = [("A PAGASA El Nino alert or advisory was in force at the issue date." if v["C1"] else
+                  "No PAGASA El Nino alert or advisory was in force at the issue date.") if v["C1"] is not None else None,
+                 None if v["C2"] is None else f"{int(v['C2'])} typhoon(s) passed within 300 km in {_period(d, 1)}.",
+                 None if v["C3"] is None else
+                 f"The weaker of the rice and corn harvests in {_period(d, 2)} was {_change(-v['C3'], '%')} than a "
+                 "year earlier."]
+        return " ".join(p for p in parts if p) or none
+    if group == "fish_kill":
+        return none if v["C4"] is None else (f"Fisheries production in {_period(d, 2)} was "
+                                             f"{_change(-v['C4'], '%')} than a year earlier.")
+    if group == "ofw_remittance":
+        return none if v["E2"] is None else (f"OFW cash remittances (national) in {_period(d, 2)} were "
+                                             f"{_change(-v['E2'], '%')} than a year earlier.")
+    if group == "poverty":
+        return ("The province's poverty and population-density profile (PSA 2021 poverty estimates, 2024 census) is "
+                "fixed; it shifts this province's estimate relative to the other provinces.")
+    if group == "hunger_indicator":
+        return None if v["H1"] is None else (
+            f"Inside the price model, the regional hunger outlook is an input: {v['H1']:.0%} chance that Balance Luzon "
+            f"hunger is above 11.3% (latest SWS reading {float(r['h_last']):.1f}%, {r['sws_newest_q']}). The hunger "
+            f"condition that multiplies the forecast ({float(r['pi_hunger']):.0%}) is computed separately, with a wider "
+            "uncertainty.")
+    return None
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:
@@ -251,3 +335,112 @@ def market_evidence(code: str | None, quarter: str) -> str | None:
             f"usual level (PSA CPI through {r['psa_newest_month']}).")
     return (f"The model gives a {pp:.0%} chance that food prices in {quarter} rise faster than usual in this "
             f"province.{fact}")
+
+
+# ---------------------------------------------------------------------------------------------- reports (SYSTEM_FIXES 1)
+# The downloadable reports (report_data_e31.py for /report/data, report.py for /report) describe THIS forecast; with the
+# Chapter I engine served they used to describe FIRI v2 ("a proxy composite, not a probability") beside its numbers.
+REPORT_COVER = ("<b>The number below is the forecast probability that the province is HIGH food-insecurity risk</b> "
+                "under the study's Chapter I definition, from 0 to 1, HIGH at 0.50: regional SWS hunger (Balance Luzon) "
+                "above 11.3% AND the province's food prices rising unusually fast. It multiplies the chance of the "
+                "hunger condition (from the latest SWS reading) by the chance of the food-price condition (one LightGBM "
+                "on all 12 indicator families, trained on every forecast horizon). SWS reports hunger only for Balance "
+                "Luzon, so the provinces differ only through food prices. <b>It is a risk class under a proxy "
+                "definition, not a measured food-insecurity rate</b>.")
+REPORT_FOOTER = ("Forecast probability of HIGH food-insecurity risk (Chapter I proxy definition) -- not an official food "
+                 "insecurity classification.")
+REPORT_BARS_NOTE = ("Red bars pushed the model's estimate that food prices rise unusually fast up, green bars pulled it "
+                    "down; groups with no effect are not shown. Relative model influence, not causes.")
+
+
+def model_line() -> str:
+    """The served model in one line, with its reliability verdict (report metadata)."""
+    ev = evaluation()
+    m = ev["leads"]["1"]["metrics"]
+    rl = reliable_lead()
+    return (f"P0H4: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x P(food-price "
+            f"condition, one LightGBM across forecast horizons on 12 indicator families). Lead {rl or 0} reliable "
+            f"(development accuracy {m['accuracy']:.3f}, {m['tp'] + m['tn']}/{m['n']} province-quarters); longer leads "
+            f"experimental.")
+
+
+def driver_text(triggers: list[dict], hunger: float | None = None) -> str:
+    """The report paragraph beside the driver bars (plain text; the caller escapes it)."""
+    up = [f"{t['label']} {t['pct']}%" for t in triggers if t["pct"] > 0 and t["direction"] == "increases_risk"]
+    down = [f"{t['label']} {t['pct']}%" for t in triggers if t["pct"] > 0 and t["direction"] == "protective"]
+    shown = {t["key"] for t in triggers if t["pct"] > 0}
+    h = f" ({hunger:.0%})" if hunger is not None else ""
+    return ("Each bar is the indicator group's relative influence (SHAP, rescaled to 100%) on the model's estimate that "
+            "food prices rise unusually fast. "
+            + ("Pushing it up: " + ", ".join(up) + ". " if up else "")
+            + ("Pulling it down: " + ", ".join(down) + ". " if down else "")
+            + f"The regional hunger condition{h}, which multiplies that estimate into the probability, is not part of "
+              "the bars. They show what moved the model, not causes."
+            + "".join(f" {GROUP_NOTES[g]}" for g in ("employment", "news") if g in shown))
+
+
+def reliability_sentences() -> list[str]:
+    """The evidence behind the forecast, for the reports' notes and method sections."""
+    ev = evaluation()
+    rl = reliable_lead()
+    l1, l2 = ev["leads"]["1"], ev["leads"].get("2")
+    m1 = l1["metrics"]
+    out = [f"Reliability rule (fixed before scoring, LEAD2_OPTIMIZATION protocol): criteria R1-R7 on walk-forward "
+           f"forecasts. Lead {rl or 0} passed: accuracy {m1['accuracy']:.3f} ({m1['tp'] + m1['tn']}/{m1['n']} "
+           f"province-quarters over {l1['n_quarters']} quarters; always-LOW {l1['baseline_accuracy']['ALWAYS-LOW']:.3f}), "
+           f"precision {m1['precision']:.2f}, recall {m1['recall']:.2f}, AUC {m1['auc']:.2f}, Brier {m1['brier']:.3f}."]
+    if l2:
+        m2 = l2["metrics"]
+        out.append(f"Lead 2 failed the rule (accuracy {m2['accuracy']:.3f}, {m2['tp'] + m2['tn']}/{m2['n']}; HIGH recall "
+                   f"{m2['recall']:.2f}): a Lead-2 value is an experimental forecast, not a validated one.")
+    out.append(f"Development evidence: every scored quarter was examined while the model was built. The forecasts issued "
+               f"{ev['seal_issue_date']} are sealed (SHA-256 {ev['seal_sha256'][:8]}) and will be scored when SWS "
+               "publishes those quarters.")
+    return out
+
+
+def method_rows() -> tuple[list[str], list[list[str]]]:
+    """Per-lead evaluation table for the server PDF's method section (Objective 2 metrics)."""
+    head = ["Lead", "Rows", "Accuracy", "Precision", "Recall", "F1", "AUC", "Brier", "Reliable"]
+    rows = []
+    for k, v in sorted(evaluation()["leads"].items(), key=lambda kv: int(kv[0])):
+        if int(k) > 4:
+            continue
+        m = v["metrics"]
+        rows.append([k, str(m["n"]), f"{m['accuracy']:.3f}", f"{m['precision']:.2f}", f"{m['recall']:.2f}",
+                     f"{m['f1']:.2f}", f"{m['auc']:.2f}", f"{m['brier']:.3f}", "yes" if v["reliable"] else "no"])
+    return head, rows
+
+
+# ---------------------------------------------------------------------------------------------- summary (SYSTEM_FIXES 1, 6)
+EVENT = "food-insecurity risk under the Chapter I definition (probability of HIGH)"
+VALUE_LABELS = {"A3": "wholesale rice price change", "C1": "PAGASA El Nino status", "C2": "typhoon count",
+                "C3": "rice and corn harvest change", "C4": "fisheries production change", "E1": "unemployment change",
+                "E2": "OFW remittance change", "N1": "FSSI-v3 news index (too few articles)",
+                "G_pri_yoy": "GDELT price-news share", "H1": "regional hunger outlook"}
+
+
+def data_status(code: str | None, quarter: str) -> tuple[str, str]:
+    """(status, note) from the forecast's own input values at the issue date (rows.csv val_<column>): which inputs had
+    no published value. Region scope: an input missing in any province."""
+    rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
+    if not rs or not any(k.startswith("val_") for k in rs[0]):
+        return "unavailable", "The input values of this forecast were not recorded."
+    missing = [lab for col, lab in VALUE_LABELS.items() if any(_f(r.get(f"val_{col}")) is None for r in rs)]
+    if not missing:
+        return "sufficient", "Every input had a published value at the issue date."
+    return "limited", ("No published value at the issue date for: " + ", ".join(missing) + ". Missing data is left "
+                       "blank, never counted as low risk.")
+
+
+def identity(code: str | None, quarter: str) -> dict | None:
+    """The served model's identity for the summary's modelIdentity field."""
+    r = next((r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)), None)
+    if r is None:
+        return None
+    return {"servingMode": "thesis", "servedModel": r.get("model") or "P0H4", "modelVersion": model_line(),
+            "lead": int(r["lead"]), "issued": r["issue_date"], "targetQuarter": quarter,
+            "evidenceStatus": ("reliable horizon (development evidence)" if status(r) == "reliable" else
+                               "experimental horizon (failed the reliability test)"),
+            "lead2Accuracy": next((s for s in reliability_sentences() if s.startswith("Lead 2")), ""),
+            "seal": r.get("seal_sha256") or None}

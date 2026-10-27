@@ -314,6 +314,11 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
         return latest_quarter(horizon)
     if not ref.is_valid_quarter(quarter):
         raise QuarterNotAvailable(f"'{quarter}' is not a quarter id (expected YYYY-Qn).")
+    if _ch1_mode():                       # SYSTEM_FIXES item 4: the served forecast's own quarters
+        if quarter not in ch1_quarters():
+            raise QuarterNotAvailable(f"No Chapter I forecast exists for {quarter}. This is missing data, not a low "
+                                      "score.")
+        return quarter
     if E41L2.governs():
         if quarter not in E41L2.candidate_quarters():
             raise QuarterNotAvailable(candidate_unavailable_reason(quarter))
@@ -330,6 +335,37 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
     return quarter
 
 
+def _ch1_mode() -> bool:
+    return THESIS.active() and CH1.active()
+
+
+def ch1_quarters() -> list[str]:
+    """SYSTEM_FIXES item 4: the quarters the served Chapter I forecast covers, up to the dashboard's forecast target
+    (Leads 3-4 stay off the map), oldest first."""
+    last = ref.quarter_index(forecast_target()["target_quarter"])
+    return sorted({q for _, q in CH1.rows() if ref.quarter_index(q) <= last}, key=ref.quarter_index)
+
+
+def _ch1_timeline() -> list[dict]:
+    """Every quarter from the first Chapter I backtest to the forecast target, in the forecast's own states: a
+    walk-forward backtest is "actual", a forecast issued 2026-10-01 or later is "forecast" (it was the FIRI Lead-2
+    record's quarter list, which hid the 2023-Q1..2024-Q1 backtests)."""
+    qs = ch1_quarters()
+    kinds = {q: CH1.kind(r) for (_, q), r in CH1.rows().items()}
+    out = []
+    for i in range(ref.quarter_index(qs[0]), ref.quarter_index(forecast_target()["target_quarter"]) + 1):
+        q = f"{i // 4}-Q{i % 4 + 1}"
+        year, qn = ref.quarter_parts(q)
+        r = {"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn]}
+        if q in kinds:
+            r["state"] = "forecast" if kinds[q] == "forecast" else "actual"
+        else:
+            r["state"], r["reason"] = "unavailable", (f"No Chapter I forecast exists for {q}. This is missing data, "
+                                                       "not a low score.")
+        out.append(r)
+    return out
+
+
 def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """
     Every scorable quarter for this horizon, oldest first.
@@ -338,6 +374,8 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
     `forecast` because it is the one the model projects forward to at the
     Maximum Reliable Lead Time.
     """
+    if _ch1_mode():
+        return _ch1_timeline()
     quarters = available_quarters(horizon)
     latest = quarters[-1] if quarters else None
     # E27 fix: with a Maximum Reliable Lead Time of 0 the newest quarter is a same-quarter estimate of an
@@ -439,6 +477,8 @@ def _e31_fill_gaps(rows: list[dict], horizon: str) -> list[dict]:
 def is_estimate_quarter(quarter: str) -> bool:
     """E31: True for the quarters whose outcome is not yet known (the 2026-Q4 nowcast, the 2027-Q1 forecast); False for
     backtests and the scored 2026-Q3. Same rule as /config quarterRange.forecastQuarters (E34, D2)."""
+    if _ch1_mode() and CH1.covers(quarter):   # SYSTEM_FIXES item 4: a backtest is never an estimate quarter
+        return any(CH1.kind(r) == "forecast" for (_, q), r in CH1.rows().items() if q == quarter)
     if not e31_active():
         return False
     row = E31.quarter_row(quarter, NOWCAST)
@@ -863,6 +903,7 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
     frame = _municipal_frame(quarter)
     roster = ref.lgu_roster().set_index("lgu_psgc")
     poverty = _lgu_poverty_map()
+    ch1_lgu = THESIS.active() and CH1.active() and CH1.covers(quarter)
 
     rows = []
     for _, r in frame.iterrows():
@@ -874,6 +915,7 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             continue
         # E28 fix: a province without an estimate gives risk_index = null; float(None) used to crash the endpoint.
         score = None if r["risk_index"] is None or pd.isna(r["risk_index"]) else round(float(r["risk_index"]), 4)
+        prov_p = None if pd.isna(r.get("province_probability")) else float(r.get("province_probability"))
         rank_r = r.get("rank_region")
         rank_p = r.get("rank_in_province")
         rows.append({
@@ -892,12 +934,17 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             # LGU index gets the same display band as a province (ref.risk_level, cutoff 0.50). It stays a relative
             # position from the province forecast and PSA poverty/density (riskLevelBasis), not a municipal forecast.
             # A null index keeps a null band, which the approved map shows as "No data available".
-            "riskLevel": None if score is None else _level(score),
+            # SYSTEM_FIXES item 2: with the Chapter I forecast the band is the province's class (the index is the
+            # province probability scaled down by vulnerability, so 0.50 on it hid HIGH provinces); the index still
+            # orders the LGUs.
+            "riskLevel": (None if score is None else
+                          ("high" if prov_p is not None and prov_p >= 0.5 else "low") if ch1_lgu else _level(score)),
             "rankRegion": None if rank_r is None or pd.isna(rank_r) else int(rank_r),
             "rankInProvince": None if rank_p is None or pd.isna(rank_p) else int(rank_p),
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
-            "riskLevelBasis": CH1.LGU_BASIS if THESIS.active() and CH1.active() else LGU_POSITION_BASIS,
+            "riskLevelBasis": (CH1.LGU_LEVEL_BASIS if ch1_lgu else CH1.LGU_BASIS if THESIS.active() and CH1.active()
+                               else LGU_POSITION_BASIS),
             "disaggregationLabel": (CH1.LGU_BASIS if THESIS.active() and CH1.active() else r["disaggregation_label"]),
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
@@ -1076,14 +1123,15 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct")) if ch1 else
+            "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct"), d["driver_group"])
+                             if ch1 else
                              THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                              if THESIS.active() and E41L2.governs() else
                              _with_enso(E41L2.trigger_evidence(quarter, province_code).get(d["driver_group"]),
                                         d["driver_group"], quarter)),
-            # the card's sentence with the measured values behind this group (province scope, thesis mode)
-            "plainEvidence": (CH1.market_evidence(province_code, quarter)
-                              if ch1 and d["driver_group"] == "market" else
+            # the card's sentence with the measured values behind this group (province scope, thesis mode); the
+            # Chapter I forecast states only its own inputs at its own issue date (SYSTEM_FIXES item 5)
+            "plainEvidence": (CH1.plain_evidence(province_code, quarter, d["driver_group"]) if ch1 else
                               THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                               if THESIS.active() and E41L2.governs() else None),
             "newsSignalProportion": d["trigger_proportion"],
@@ -1148,10 +1196,14 @@ def explainability_region(quarter: str) -> dict:
             "statusNote": TRIGGER_STATUS_NOTES[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
-            "evidenceNote": (CH1.evidence_note(None, quarter) if THESIS.active() and CH1.active() and CH1.covers(quarter)
+            "evidenceNote": (CH1.evidence_note(None, quarter, group=key)
+                             if THESIS.active() and CH1.active() and CH1.covers(quarter)
                              else THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
                              REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
                              else None),
+            # SYSTEM_FIXES item 5: the Employment and News cautions replace the generic direction sentence
+            "plainEvidence": (CH1.plain_evidence(None, quarter, key)
+                              if THESIS.active() and CH1.active() and CH1.covers(quarter) else None),
             "newsSignalProportion": (
                 round(sum(acc["news"]) / len(acc["news"]), 4) if acc["news"] else None
             ),
@@ -1343,6 +1395,11 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                     "price": sum(float(r["pi_price"]) for r in rs) / len(rs)}
             caveat = CH1.INDICATOR["caveat"]
             sentence = CH1.sentence(province_code, name, quarter, p) or sentence
+            # SYSTEM_FIXES item 1: the summary describes the served forecast; FIRI's passage fields, data status and
+            # identity belonged to another model's number (its probability replaced this one below)
+            data_status, data_note = CH1.data_status(province_code, quarter)
+            event = CH1.EVENT
+            e67 = None
     out = {
         "event": event, "targetQuarter": quarter, "estimateKind": kind,
         "issued": ch1_issued or rows[0]["origin"], "probability": round(p, 4), "result": result,
@@ -1358,6 +1415,7 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             "caveat": _ascii(caveat)} if comp else {}),
         **({"climateWatch": cfsw} if cfsw else {}),
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
+        **({"modelIdentity": CH1.identity(province_code, quarter)} if ch1_issued else {}),
         **({"inputStatus": e67["inputStatus"]} if e67 and e67.get("inputStatus") else {}),
         **({"affordability": e67["affordability"]} if e67 and e67.get("affordability") else {}),
         **({k: e67[k] for k in ("riskOutlook", "regionalHungerOutlook", "vulnerabilityProfile", "newsEvidence")
@@ -1365,6 +1423,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     }
     # THESIS: the summary's value and class are the FIRI estimate (the number the map and the LGU index use); the
     # LightGBM price score stays in components.probabilityPricePressure and in the sentence
+    if ch1_issued:                                    # E58 warning and E66 watch are other models' layers
+        out.pop("earlyWarning", None)
+        out.pop("climateWatch", None)
     if THESIS.active() and e67 and (e67.get("riskOutlook") or {}).get("index") is not None:
         out["probability"] = e67["riskOutlook"]["index"]
         out["result"] = e67["riskOutlook"].get("class") or ("HIGH" if out["probability"] >= 0.5 else "LOW")
@@ -1955,8 +2016,30 @@ def _lead2_news_evidence(quarter: str) -> tuple[str, str, str] | None:
             f"{origin} with {news_q} news).")
 
 
+def _ch1_news_evidence(quarter: str) -> tuple[str, str, str] | None:
+    """SYSTEM_FIXES item 3: with the Chapter I forecast served, the news beside an estimate follows ITS timing (issued
+    on the first day of a quarter with news of the quarter before; Lead 1 = the issue quarter itself), not the FIRI
+    Lead-2 rule (news of q-2, issued day 1 of q-1), which described a different forecast."""
+    if not (THESIS.active() and CH1.active() and CH1.covers(quarter)):
+        return None
+    r = next(r for (_, q), r in CH1.rows().items() if q == quarter)
+    issue, lead = r["issue_date"], int(r["lead"])
+    news_q = _shift_q(f"{issue[:4]}-Q{(int(issue[5:7]) - 1) // 3 + 1}", -1)
+    if CH1.kind(r) == "forecast":
+        return (news_q, "FORECAST",
+                f"Supporting news for the {quarter} forecast: {news_q} articles, all published before {issue}, its "
+                f"issue date. This Lead-{lead} forecast uses only news published before its issue date, never news of "
+                f"its own target quarter.")
+    return (quarter, "OBSERVED",
+            f"News published in {quarter} (describes the quarter; its Lead-{lead} forecast was made as of {issue} with "
+            f"{news_q} news published before that date).")
+
+
 def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
     """(evidence quarter, mode, note) for the news shown beside an estimate (app.news.alignment policy)."""
+    ch1 = _ch1_news_evidence(quarter)
+    if ch1 is not None:
+        return ch1
     lead2 = _lead2_news_evidence(quarter)
     if lead2 is not None:
         return lead2
@@ -2092,8 +2175,11 @@ def _e31_news(province_code: str | None, quarter: str, page: int, page_size: int
              "collectedRetrospectively": r["retrospective"]}
             for r in rows[start:start + page_size]]
     n_val = sum(r["status"] in ("validated", "classifier_v2") for r in rows)
-    how = (f"{n_val} classified relevant by the E60 classifier v2 (syndicated copies removed)"
-           if E41L2.mode() == "e64" else
+    # SYSTEM_FIXES item 3: the thesis-mode pool is the v3 pipeline (_feed_pool), so its articles were chosen by
+    # classifier v2, not validated by rule R1.1
+    how = (f"{n_val} classified relevant by the E60 classifier v2 (AI-evaluated, not human-validated; syndicated "
+           "copies removed)"
+           if E41L2.mode() in ("e64", "thesis") else
            f"{n_val} validated by rule R1.1 and {len(rows) - n_val} matched by food-stress trigger keywords")
     note = (f"{len(rows)} article(s) from {', '.join(sorted(window))}: {how}. Headlines only (the source gives no lead "
             f"text). Collected retrospectively in October 2026 by publication date"

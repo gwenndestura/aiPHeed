@@ -4,9 +4,9 @@ tests/integration/test_report_data_thesis.py
 The Visualization-page report payload (GET /api/v1/report/data, app/services/report_data_e31.py, ported from
 backend-e53-final) states what the dashboard states:
 
-  * thesis mode (FIRI v2): every index, level and rank in the "Risk at a Glance" table equals /provinces and
-    /ranking, the CALABARZON row equals the region forecast, and the driver bars equal the right-panel explainability;
-    the score is named as the FIRI v2 index, never as a probability;
+  * thesis mode with the Chapter I forecast (P0H4) served: every probability, level and rank in the "Risk at a Glance"
+    table equals /provinces and /ranking, the CALABARZON row equals the region forecast, and the driver bars equal the
+    right-panel explainability; the report names the served model and never describes FIRI v2 (SYSTEM_FIXES item 1);
   * legacy mode (AIPHEED_LEAD2_MODEL unset): the same requests still return a report.
 """
 from __future__ import annotations
@@ -17,6 +17,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.ml.inference import ch1_system as CH1
 from app.ml.inference import thesis_system as T
 
 client = TestClient(app)
@@ -64,9 +65,10 @@ def test_thesis_region_report_equals_the_dashboard(thesis, quarter):
         assert rank[row[0]] == p["rank"]
     ex = _get("/api/v1/explainability", scope="region", id="calabarzon", quarter=quarter)
     assert _bars(pl) == [(FACTOR[t["key"]], t["pct"], t["direction"]) for t in ex["triggers"] if t["pct"] > 0]
-    assert dict(pl["metadata"])["Model"] == T.MODEL_NAME
+    assert dict(pl["metadata"])["Model"] == CH1.model_line()
     text = json.dumps(pl)
     assert "estimated chance" not in text and "E53" not in text and "E48" not in text
+    assert "FIRI" not in text and "not a probability" not in text and "exact share" not in text
 
 
 @pytest.mark.parametrize("slug", PROVINCES)
@@ -78,10 +80,11 @@ def test_thesis_driver_report_equals_the_right_panel(thesis, slug):
     assert row[1:3] == [T.fmt_index(p["riskScore"]), p["riskLevel"].upper()]
     ex = _get("/api/v1/explainability", scope="province", id=slug, quarter=quarter)
     assert _bars(pl) == [(FACTOR[t["key"]], t["pct"], t["direction"]) for t in ex["triggers"] if t["pct"] > 0]
-    # the record's E36 model inputs (log-odds) are not the served index: the FIRI v2 domains are listed instead
+    # the served forecast's own indicator groups and input values, never the FIRI v2 domains or the E36 inputs
     titles = [b.get("title") or "" for b in pl["blocks"] if b["kind"] == "table"]
-    assert any(t.startswith("FIRI v2 Domains") for t in titles)
-    assert not any(t.startswith("Model Inputs") for t in titles)
+    assert any(t.startswith("Indicator Groups Behind the Forecast") for t in titles)
+    assert not any(t.startswith(("Model Inputs", "FIRI v2 Domains")) for t in titles)
+    assert "FIRI" not in json.dumps(pl)
 
 
 def test_legacy_report_data_still_served(monkeypatch):

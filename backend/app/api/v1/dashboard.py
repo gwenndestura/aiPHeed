@@ -50,7 +50,8 @@ async def get_config() -> ConfigResponse:
     side -- what each answers, the quarters it reaches, and its metrics with
     their baselines -- so the UI can offer the choice without hardcoding either.
     """
-    quarters = svc.available_quarters()
+    # SYSTEM_FIXES item 4: with the Chapter I forecast served, the range is that forecast's own quarters
+    quarters = svc.ch1_quarters() if svc._ch1_mode() else svc.available_quarters()
     horizons = {}
     for h in svc.HORIZONS:
         hq = svc.available_quarters(h)
@@ -78,7 +79,8 @@ async def get_config() -> ConfigResponse:
             "earliest": quarters[0] if quarters else None,
             "latest": quarters[-1] if quarters else None,
             "count": len(quarters),
-            "forecastQuarters": ([q for q in svc.available_quarters(svc.NOWCAST)
+            "forecastQuarters": ([q for q in quarters if svc.is_estimate_quarter(q)] if svc._ch1_mode() else
+                                 [q for q in svc.available_quarters(svc.NOWCAST)
                                   if svc.E31.quarter_row(q, svc.NOWCAST)["mode"] in ("FORECAST", "NOWCAST")]
                                  if svc.e31_active() else []),
             "forecastTarget": svc.forecast_target(),

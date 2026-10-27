@@ -49,11 +49,30 @@ def _qstr(k: int) -> str:
     return f"{k // 4}-Q{k % 4 + 1}"
 
 
+def _ch1() -> bool:
+    """SYSTEM_FIXES item 1: the Chapter I forecast (P0H4) is served, so the report describes it, not FIRI v2."""
+    from app.services import dashboard as svc
+
+    return svc._ch1_mode()
+
+
 def _served_quarters() -> list[str]:
+    if _ch1():
+        from app.services import dashboard as svc
+
+        return svc.ch1_quarters()
     return sorted({r["quarter"] for r in E31.served_rows()}, key=_qkey)
 
 
 def _row(quarter: str) -> dict | None:
+    if _ch1():                            # the forecast's own kind, lead and issue date (one row per quarter)
+        from app.ml.inference import ch1_system as CH1
+
+        if quarter not in _served_quarters():
+            return None
+        r = next(r for (_, q), r in CH1.rows().items() if q == quarter)
+        return {"quarter": quarter, "lead": int(r["lead"]), "origin": r["issue_date"],
+                "mode": "FORECAST" if CH1.kind(r) == "forecast" else "BACKTEST"}
     return E31.quarter_row(quarter, "nowcast")
 
 
@@ -70,6 +89,8 @@ def mode_label(r: dict) -> str:
 def _gap_reason(quarter: str) -> str:
     from app.services import dashboard as svc
 
+    if _ch1():
+        return f"No Chapter I forecast exists for {quarter}. This is missing data, not a low score."
     try:
         return svc._e31_unavailable_reason(quarter, "nowcast")
     except Exception:                                      # noqa: BLE001 - a reason is optional text
@@ -302,10 +323,15 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
 
     tables = figures = 0
     thesis = _thesis()
-    if thesis:
+    ch1 = _ch1()
+    if ch1:
+        from app.ml.inference import ch1_system as CH1
+
+        blocks: list[dict] = [_p(_strip_tags(CH1.REPORT_COVER))]
+    elif thesis:
         from app.services.report import THESIS_COVER
 
-        blocks: list[dict] = [_p(_strip_tags(THESIS_COVER))]
+        blocks = [_p(_strip_tags(THESIS_COVER))]
     else:
         blocks = [_p(_score_explainer(rec) + " " + pt.level_scale(high, alert))]
 
@@ -315,29 +341,40 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         # FIRI v2: the level and rank are the dashboard's (HIGH at 0.5, competition rank), as on the map
         lv = {s: (summ[last_q].get(s) or {}).get("riskLevel") for s in slugs}
         shown = [r for r in rows if r["value"] is not None]
+        # SYSTEM_FIXES item 1: the Chapter I forecast is a probability, not the FIRI index
+        noun = "forecast probability of HIGH food-insecurity risk" if ch1 else "estimated food-insecurity risk index"
+        short = "probability" if ch1 else "risk index"
         if single and shown:
             r = shown[0]
-            kp = [f"In {pt.qlabel(last_q)}, the estimated food-insecurity risk index for {r['name']} is {_sc(r['value'])} "
+            kp = [f"In {pt.qlabel(last_q)}, the {noun} for {r['name']} is {_sc(r['value'])} "
                   f"({(lv[r['id']] or '').upper()}), rank {(summ[last_q].get(r['id']) or {}).get('rank')} of 5."]
         elif shown:
             hi_n = [r["name"] for r in shown if lv[r["id"]] == "high"]
-            kp = [f"In {pt.qlabel(last_q)}, {len(hi_n)} of the {len(shown)} provinces are HIGH (index at or above 0.50)"
+            kp = [f"In {pt.qlabel(last_q)}, {len(hi_n)} of the {len(shown)} provinces are HIGH "
+                  f"({'probability' if ch1 else 'index'} at or above 0.50)"
                   + (f": {_join_series(hi_n)}." if hi_n and len(hi_n) < len(shown) else ".")]
             top = max(shown, key=lambda r: r["value"])
             low = min(shown, key=lambda r: r["value"])
             if top is not low:
-                kp.append(f"{top['name']} has the highest risk index ({_sc(top['value'])}) and {low['name']} the lowest "
+                kp.append(f"{top['name']} has the highest {short} ({_sc(top['value'])}) and {low['name']} the lowest "
                           f"({_sc(low['value'])}).")
         else:
-            kp = [f"No risk index is available for {pt.qlabel(last_q)}."]
+            kp = [f"No {short} is available for {pt.qlabel(last_q)}."]
     else:
         kp = pt.compose_key_points(rows, last_q, compare_from, high, alert)
     if not single:
         reg = svc.region_forecast(last_q)
-        kp.insert(1, f"The CALABARZON index, the mean of the five provinces, is {_sc(reg['riskScore'])} "
+        kp.insert(1, (f"The CALABARZON value, the mean of the five provinces' probabilities, is " if ch1 else
+                      f"The CALABARZON index, the mean of the five provinces, is ") + f"{_sc(reg['riskScore'])} "
                      f"({(reg.get('riskLevel') or '').upper() if thesis else pt.risk_level(reg['riskScore'], high, alert)}).")
     row_last = rows_by_q[last_q]
-    if row_last["mode"] == "FORECAST" and thesis:
+    if row_last["mode"] == "FORECAST" and ch1:
+        reliable = row_last["lead"] <= (CH1.reliable_lead() or 0)
+        kp.append(f"The {pt.qlabel(last_q)} value is a Lead-{row_last['lead']} forecast issued {row_last['origin']} "
+                  + ("(the horizon that passed the reliability test)" if reliable else
+                     "(experimental: this horizon failed the reliability test)")
+                  + "; its outcome is not yet known.")
+    elif row_last["mode"] == "FORECAST" and thesis:
         kp.append(f"The {pt.qlabel(last_q)} value is a forecast; its outcome is not yet known.")
     elif row_last["mode"] == "FORECAST":
         kp.append(f"The {pt.qlabel(last_q)} value is a {'two-quarter-ahead experimental preview' if row_last.get('lead', 1) >= 2 else 'forecast'} "
@@ -348,7 +385,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
     blocks.append(_h("Risk at a Glance"))
     tables += 1
     t1 = f"Table {tables}"
-    if thesis:
+    if ch1:
+        blocks.append(_p(f"{t1} shows the forecast probability of HIGH food-insecurity risk, its level and rank on the "
+                         f"map, and the main factor for {pt.qlabel(last_q)}, from the highest probability to the lowest."))
+    elif thesis:
         blocks.append(_p(f"{t1} shows the estimated food-insecurity risk index (FIRI v2), its level and rank on the map, "
                          f"and the main factor for {pt.qlabel(last_q)}, from the highest index to the lowest."))
     else:
@@ -383,16 +423,22 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                        pt.change_cell(reg_prev, reg_now),
                        f"{pt.factor(rmain['key'])} ({rmain['pct']}%)" if rmain else "Not available"])
     change_head = f"Change from {pt.qlabel(prev_q)}" if prev_q else "Change from previous quarter"
+    score_title = "Risk Probability" if ch1 else "Risk Index"
     blocks.append(_table(
-        t1, (f"{'Risk Index' if thesis else 'Risk Score'} and Risk Level for {names[slugs[0]]}, {pt.qlabel(last_q)}"
+        t1, (f"{score_title if thesis else 'Risk Score'} and Risk Level for {names[slugs[0]]}, {pt.qlabel(last_q)}"
              if single else
-             f"{'Risk Index (FIRI v2), Level and Rank' if thesis else 'Risk Scores and Risk Levels'} by Province, "
+             f"{'Risk Probability, Level and Rank' if ch1 else 'Risk Index (FIRI v2), Level and Rank' if thesis else 'Risk Scores and Risk Levels'} by Province, "
              f"{pt.qlabel(last_q)}"),
-        ([("Province", "center", 0.18), ("Risk index", "center", 0.13), ("Risk level", "center", 0.12),
+        ([("Province", "center", 0.18), ("Probability" if ch1 else "Risk index", "center", 0.13),
+          ("Risk level", "center", 0.12),
           ("Rank", "center", 0.12), (change_head, "center", 0.20), ("Main factor", "center", 0.25)] if thesis else
          [("Province", "center", 0.20), ("Risk score", "center", 0.15), ("Risk level", "center", 0.17),
           (change_head, "center", 0.22), ("Main factor", "center", 0.26)]), glance,
-        ("Risk level: HIGH at 0.50 and above, LOW below (FIRI v2, as on the map); the rank is the map's ranking (tied "
+        ("Risk level: HIGH at a probability of 0.50 and above, LOW below, as on the map; the rank is the map's ranking "
+         "(tied values share a rank). The main factor is the indicator group with the largest relative influence on "
+         "the food-price part of the forecast."
+         if ch1 else
+         "Risk level: HIGH at 0.50 and above, LOW below (FIRI v2, as on the map); the rank is the map's ranking (tied "
          "indices share a rank). The main factor is the largest of the five factor groups behind each index."
          if thesis else
          f"Risk levels: {pt.LEVEL_ALERT} is {alert:.2f} and above, {pt.LEVEL_HIGH} is {high:.2f} to below {alert:.2f}, "
@@ -426,12 +472,16 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         if back:
             note.append(f"{pt.qlabel(back[0])} to {pt.qlabel(back[-1])} are backtests on past quarters.")
         for q in estimated:
-            if rows_by_q[q]["mode"] == "FORECAST":
+            if rows_by_q[q]["mode"] == "FORECAST" and ch1:
+                rq = rows_by_q[q]
+                note.append(f"{pt.qlabel(q)} is a Lead-{rq['lead']} forecast issued {rq['origin']}"
+                            + ("" if rq["lead"] <= (CH1.reliable_lead() or 0) else " (experimental)") + ".")
+            elif rows_by_q[q]["mode"] == "FORECAST":
                 note.append(f"{pt.qlabel(q)} is a forecast." if thesis else f"{pt.qlabel(q)} is a {mode_label(rows_by_q[q])}.")
         if gaps:
             note.append("A gap in a line marks a quarter without a result. " + _gap_sentence(gaps))
         blocks.append(_figure(
-            f1, f"{'Risk Index (FIRI v2)' if thesis else 'Risk Scores'} for {'All Provinces' if not single else names[slugs[0]]}, {pt.qlabel(first_q)} to "
+            f1, f"{'Risk Probability' if ch1 else 'Risk Index (FIRI v2)' if thesis else 'Risk Scores'} for {'All Provinces' if not single else names[slugs[0]]}, {pt.qlabel(first_q)} to "
                 f"{pt.qlabel(last_q)}",
             {"type": "line", "quarters": [pt.qlabel(q) for q in window],
              "series": [{"name": _ascii(s["name"]), "values": [p["value"] for p in s["points"]]} for s in series],
@@ -448,7 +498,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
             blocks.append(_p(f"No breakdown of the factors is available for {r['name']} in {pt.qlabel(last_q)}."))
         else:
             pe = prev_expl[slugs[0]]
-            if thesis:
+            if ch1:
+                hr = CH1.row(codes[slugs[0]], last_q)
+                blocks.append(_p(CH1.driver_text(e["shown"], float(hr["pi_hunger"]) if hr else None)))
+            elif thesis:
                 from app.services.report import _thesis_driver_text
 
                 blocks.append(_p(_thesis_driver_text(e)))
@@ -456,9 +509,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                 blocks.append(_p(pt.compose_factors_province(r["name"], last_q, e["shown"], pe["shown"] if pe else None,
                                                               prev_q, figure_label=fN)
                                  + " " + _split_sentence(_split(e.get("attribution")), f"{r['name']}'s score")))
-            blocks.append(_figure(fN, f"Factors Behind the {'Risk Index' if thesis else 'Risk Score'} in {r['name']}, "
+            blocks.append(_figure(fN, f"Factors Behind the {score_title if thesis else 'Risk Score'} in {r['name']}, "
                                       f"{pt.qlabel(last_q)}",
                                   _bars(e["shown"]),
+                                  CH1.REPORT_BARS_NOTE if ch1 else
                                   ("Red bars are factor groups above their usual level that raise the risk index, green "
                                    "bars are below it and lower the index. A group with no published data at the issue "
                                    "date is not counted; missing data is not a sign of low risk." if thesis else
@@ -473,9 +527,12 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                     f"Table {tables} shows them province by province. ")
             blocks.append(_p(lead + " ".join(pt.compose_factors_region(
                 [{"name": r["name"], "triggers": r["triggers"], "withheld": False} for r in rows], last_q))
-                + " " + _split_sentence(_split(rx.get("attribution")), "the CALABARZON index")))
+                + " " + _split_sentence(_split(rx.get("attribution")), "the CALABARZON index")
+                + ("".join(f" {CH1.GROUP_NOTES[g]}" for g in ("employment", "news")
+                           if any(t["key"] == g and t["pct"] > 0 for t in rx["shown"])) if ch1 else "")))
             blocks.append(_figure(fN, f"Factors Behind the Risk Across the Provinces, {pt.qlabel(last_q)}",
                                   _bars(rx["shown"]),
+                                  CH1.REPORT_BARS_NOTE if ch1 else
                                   ("Red bars are factor groups above their usual level that raise the risk index, "
                                    "green bars are below it and lower the index. A group with no published data at the "
                                    "issue date is not counted; missing data is not a sign of low risk." if thesis else
@@ -494,14 +551,34 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
             width = round(0.80 / len(keys), 4)
             blocks.append(_table(f"Table {tables}", f"Share of Each Factor by Province, {pt.qlabel(last_q)}",
                                  [("Province", "center", 0.20)] + [(pt.factor(k), "center", width) for k in keys],
-                                 cells, "Each row adds up to about 100% of the five factors. 'Raises' and 'lowers' "
-                                        "show whether the factor pushes the province's risk score up or down."))
+                                 cells,
+                                 ("Each row adds up to about 100% of the indicator groups' relative influence. 'Raises' "
+                                  "and 'lowers' show whether the group pushed the province's food-price estimate up or "
+                                  "down." if ch1 else
+                                  "Each row adds up to about 100% of the five factors. 'Raises' and 'lowers' "
+                                  "show whether the factor pushes the province's risk score up or down.")))
         else:
             figures -= 1
             blocks.append(_p(f"No breakdown of the factors is available for {pt.qlabel(last_q)}."))
 
     # ---- Driver report: the model's inputs behind the score
-    if kind == "shap" and thesis:
+    if kind == "shap" and ch1:                     # each group's influence and the values the forecast used
+        trig = (expl[slugs[0]] or {}).get("triggers") or []
+        if trig:
+            tables += 1
+            blocks.append(_p(f"Table {tables} lists each indicator group's relative influence and the values this "
+                             f"forecast used at its issue date."))
+            blocks.append(_table(
+                f"Table {tables}", f"Indicator Groups Behind the Forecast in {names[slugs[0]]}, {pt.qlabel(last_q)}",
+                [("Group", "left", 0.22), ("Influence", "center", 0.16), ("What the forecast used", "left", 0.62)],
+                [[t["label"], (f"{t['pct']}% {'raises' if t['direction'] == 'increases_risk' else 'lowers'}"
+                               if t["pct"] > 0 else "No effect"), t.get("plainEvidence") or "-"] for t in trig],
+                "Influence is relative SHAP on the food-price part of the forecast, rescaled to 100%; it is model "
+                "influence, not a cause."))
+        sentence = CH1.sentence(codes[slugs[0]], names[slugs[0]], last_q)
+        if sentence:
+            blocks.append(_p(sentence))
+    elif kind == "shap" and thesis:
         e0 = expl[slugs[0]] or {}
         summary = svc.plain_summary(codes[slugs[0]], last_q, names[slugs[0]], e0.get("triggers") or []) or {}
         ro = summary.get("riskOutlook") or {}
@@ -587,7 +664,9 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
 
     # ---- Important notes
     blocks.append(_h("Important Notes"))
-    if thesis:
+    if ch1:
+        notes = [CH1.REPORT_FOOTER, CH1.INDICATOR["caveat"], *CH1.reliability_sentences()]
+    elif thesis:
         from app.ml.inference import thesis_system as THESIS
         from app.services.report import THESIS_FOOTER
 
@@ -604,8 +683,11 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                      f"used while the model was being developed.")
     if gaps:
         notes.append(_gap_sentence(gaps))
-    notes += ["City and municipal figures follow their province's score. They are not separate estimates for each "
-              "city or municipality.",
+    notes += [("City and municipal values are priority rankings within the province: the province probability "
+               "re-weighted by poverty and population density, shown in the province's risk colour. They are not "
+               "separate estimates for each city or municipality." if ch1 else
+               "City and municipal figures follow their province's score. They are not separate estimates for each "
+               "city or municipality."),
               "This is not an official food insecurity classification. The report presents findings only; it does "
               "not recommend actions and should be used alongside DA Region IV-A's own guidance."]
     blocks.append(_bullets(notes))
@@ -619,9 +701,13 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         "metadata": [["Area", _ascii(area)], ["Period", period],
                      ["Date prepared", _ascii(f"{generated.day} {generated:%B %Y}")],
                      ["Prepared for", PREPARED_FOR],
-                     ["Data", _ascii(f"{pt.qlabel(last_q)} " + ("estimated food-insecurity risk index (FIRI v2)"
-                                                                 if thesis else mode_label(row_last)))],
-                     *(_thesis_metadata() if thesis else _model_metadata(rec, row_last))],
+                     ["Data", _ascii(f"{pt.qlabel(last_q)} " + (
+                         (f"Lead-{row_last['lead']} forecast issued {row_last['origin']}" if row_last["mode"] == "FORECAST"
+                          else f"walk-forward Lead-{row_last['lead']} backtest made as of {row_last['origin']}")
+                         + " (forecast probability of HIGH food-insecurity risk)" if ch1 else
+                         "estimated food-insecurity risk index (FIRI v2)" if thesis else mode_label(row_last)))],
+                     *([["Model", _ascii(CH1.model_line())]] if ch1 else
+                       _thesis_metadata() if thesis else _model_metadata(rec, row_last))],
         "blocks": blocks,
     }
 
@@ -667,7 +753,9 @@ def _window(q_from: str | None, q_to: str | None) -> list[str]:
     served = _served_quarters()
     lo = max(_qkey(served[0]), _qkey(q_from)) if q_from else _qkey(served[0])
     hi = min(_qkey(served[-1]), _qkey(q_to)) if q_to else _qkey(served[-1])
-    if lead2_preview() and not q_to:               # the default report ends on the lead-1 quarter, not the preview
+    if _ch1() and not q_to:                        # the default report ends on the reliable Lead-1 quarter
+        hi = min(hi, max(_qkey(q) for q in served if _row(q)["lead"] == 1))
+    elif lead2_preview() and not q_to:             # the default report ends on the lead-1 quarter, not the preview
         lead1 = [q for q in E31.served_rows() if q.get("lead", 1) == 1]
         hi = min(hi, max(_qkey(q["quarter"]) for q in lead1))
     return [_qstr(k) for k in range(lo, hi + 1)]
