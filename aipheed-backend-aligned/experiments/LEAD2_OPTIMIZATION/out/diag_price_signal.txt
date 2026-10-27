@@ -1,0 +1,36 @@
+DIAGNOSTIC (post-hoc): single-input AUC for the PRICE condition, all CPI quarters 2021+ (not only SWS quarters)
+lead 1 {'n': 110, 'base': np.float64(0.43), 'A1_food': 0.87, 'A1_gap': 0.92, 'A1_food_d': 0.85, 'A1_gap_d': 0.89, 'F_ex': 0.73, 'G_ex': 0.73, 'A_mom': 0.59, 'mom6': 0.67, 'accel': 0.53, 'A3': 0.6, 'R_rice_yoy': 0.62, 'W_rice_yoy': 0.66, 'W_cereal_yoy': 0.48, 'N1': 0.46, 'E1': 0.21, 'C3': 0.51, 'persist_t-1_acc': np.float64(0.62)}
+lead 2 {'n': 105, 'base': np.float64(0.43), 'A1_food': 0.82, 'A1_gap': 0.77, 'A1_food_d': 0.82, 'A1_gap_d': 0.77, 'F_ex': 0.69, 'G_ex': 0.6, 'A_mom': 0.63, 'mom6': 0.8, 'accel': 0.63, 'A3': 0.64, 'R_rice_yoy': 0.68, 'W_rice_yoy': 0.68, 'W_cereal_yoy': 0.52, 'N1': 0.5, 'E1': 0.21, 'C3': 0.59, 'persist_t-1_acc': np.float64(0.5)}
+lead 3 {'n': 100, 'base': np.float64(0.41), 'A1_food': 0.75, 'A1_gap': 0.74, 'A1_food_d': 0.71, 'A1_gap_d': 0.67, 'F_ex': 0.52, 'G_ex': 0.44, 'A_mom': 0.75, 'mom6': 0.67, 'accel': 0.72, 'A3': 0.6, 'R_rice_yoy': 0.65, 'W_rice_yoy': 0.66, 'W_cereal_yoy': 0.56, 'N1': 0.44, 'E1': 0.17, 'C3': 0.42, 'persist_t-1_acc': np.float64(0.35)}
+lead 4 {'n': 95, 'base': np.float64(0.43), 'A1_food': 0.58, 'A1_gap': 0.55, 'A1_food_d': 0.49, 'A1_gap_d': 0.41, 'F_ex': 0.4, 'G_ex': 0.3, 'A_mom': 0.49, 'mom6': 0.49, 'accel': 0.44, 'A3': 0.59, 'R_rice_yoy': 0.57, 'W_rice_yoy': 0.56, 'W_cereal_yoy': 0.5, 'N1': 0.12, 'E1': 0.3, 'C3': 0.4, 'persist_t-1_acc': np.float64(0.4)}
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ~~~~~~~~~~^
+        f,
+        ^^
+    ...<6 lines>...
+        storage_options=self.options.get("storage_options", None),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+        handle,
+    ...<3 lines>...
+        newline="",
+    )
+FileNotFoundError: [Errno 2] No such file or directory: '../out/predictions.csv'
+
+DIAGNOSTIC (post-hoc) on the T43c evaluation rows
+lead 1 price AUC: model P0 0.67 P1 0.77 | A1_food 0.86 A1_gap 0.92 max(A1) 0.93 E1 0.17 | rule max(A1)>0 acc 0.84 NaN A1 0
+lead 2 price AUC: model P0 0.67 P1 0.74 | A1_food 0.81 A1_gap 0.81 max(A1) 0.81 E1 0.24 | rule max(A1)>0 acc 0.74 NaN A1 0
+lead 3 price AUC: model P0 0.62 P1 0.72 | A1_food 0.84 A1_gap 0.87 max(A1) 0.87 E1 0.18 | rule max(A1)>0 acc 0.75 NaN A1 0
