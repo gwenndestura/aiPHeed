@@ -1025,5 +1025,663 @@
   ],
   "mean_p": 0.3029565942857143,
   "observed_rate": 0.24285714285714285
+ },
+ "horizon": {
+  "addendum3_sha256": "b264b76b384ef8e3b2dd2968859439f5ac0f8f85c1a8838c7d8f13571c08cf7f",
+  "leads_evaluated": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "testable_horizon_R1": 3,
+  "max_reliable_lead": 1,
+  "individually_passing_leads": [
+   1
+  ],
+  "max_reliable_lead_strict": null,
+  "why_not_longer": "Leads 4-8 have fewer than the 10 target quarters the frozen rule R1 requires (8, 6, 5, 3, 1), because the study window starts in 2021 and the last outcome is 2026-Q3; Lead 9 and beyond have none. From Lead 5 on, the food-price projection (A1, the model's main input) has no published base month at the issue date, so it is missing for every forecast.",
+  "leads": {
+   "1": {
+    "n": 70,
+    "n_quarters": 14,
+    "high_share": 0.24285714285714285,
+    "accuracy": 0.9142857142857143,
+    "accuracy_ci90": [
+     0.8428571428571429,
+     0.9714285714285714
+    ],
+    "balanced_accuracy": 0.8834628190899001,
+    "brier": 0.08680606664750912,
+    "confusion": {
+     "tp": 14,
+     "fp": 3,
+     "tn": 50,
+     "fn": 3
+    },
+    "always_low_accuracy": 0.7571428571428571,
+    "persist_si_accuracy": 0.7428571428571429,
+    "criteria": {
+     "R1": true,
+     "R2": true,
+     "R3": true,
+     "R4": true,
+     "R5": true,
+     "R6": true,
+     "R7": true
+    },
+    "reliable": true,
+    "quarters_after_issue": 1,
+    "target_quarter_ends_days_after_issue": [
+     90,
+     91,
+     92
+    ],
+    "quarters_after_newest_sws": [
+     1,
+     2
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.9,
+     "persist_si": 0.75,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2024-Q4",
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 1.0,
+     "persist_si": 0.85,
+     "high": 5
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 5,
+     "ch1_worse_quarters": 1,
+     "ties": 8,
+     "sign_test_p_one_sided": 0.109375
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 5,
+     "ch1_worse_quarters": 0,
+     "ties": 9,
+     "sign_test_p_one_sided": 0.03125
+    }
+   },
+   "2": {
+    "n": 60,
+    "n_quarters": 12,
+    "high_share": 0.2833333333333333,
+    "accuracy": 0.5833333333333334,
+    "accuracy_ci90": [
+     0.45,
+     0.7166666666666667
+    ],
+    "balanced_accuracy": 0.49589603283173733,
+    "brier": 0.2710056703289403,
+    "confusion": {
+     "tp": 5,
+     "fp": 13,
+     "tn": 30,
+     "fn": 12
+    },
+    "always_low_accuracy": 0.7166666666666667,
+    "persist_si_accuracy": 0.65,
+    "criteria": {
+     "R1": true,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 2,
+    "target_quarter_ends_days_after_issue": [
+     181,
+     182,
+     183,
+     184
+    ],
+    "quarters_after_newest_sws": [
+     2,
+     3
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.6,
+     "persist_si": 0.55,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2024-Q4",
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.6,
+     "persist_si": 0.7,
+     "high": 5
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 1,
+     "ch1_worse_quarters": 4,
+     "ties": 7,
+     "sign_test_p_one_sided": 0.96875
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 2,
+     "ch1_worse_quarters": 5,
+     "ties": 5,
+     "sign_test_p_one_sided": 0.9375
+    }
+   },
+   "3": {
+    "n": 50,
+    "n_quarters": 10,
+    "high_share": 0.28,
+    "accuracy": 0.52,
+    "accuracy_ci90": [
+     0.36,
+     0.68
+    ],
+    "balanced_accuracy": 0.42658730158730157,
+    "brier": 0.2811845898605847,
+    "confusion": {
+     "tp": 3,
+     "fp": 13,
+     "tn": 23,
+     "fn": 11
+    },
+    "always_low_accuracy": 0.72,
+    "persist_si_accuracy": 0.54,
+    "criteria": {
+     "R1": true,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 3,
+    "target_quarter_ends_days_after_issue": [
+     273,
+     274,
+     275
+    ],
+    "quarters_after_newest_sws": [
+     3,
+     4
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.45,
+     "persist_si": 0.35,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2024-Q4",
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.5,
+     "persist_si": 0.6,
+     "high": 5
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 3,
+     "ties": 7,
+     "sign_test_p_one_sided": 1.0
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 3,
+     "ch1_worse_quarters": 3,
+     "ties": 4,
+     "sign_test_p_one_sided": 0.65625
+    }
+   },
+   "4": {
+    "n": 40,
+    "n_quarters": 8,
+    "high_share": 0.25,
+    "accuracy": 0.575,
+    "accuracy_ci90": [
+     0.4,
+     0.75
+    ],
+    "balanced_accuracy": 0.38333333333333336,
+    "brier": 0.24881298395802362,
+    "confusion": {
+     "tp": 0,
+     "fp": 7,
+     "tn": 23,
+     "fn": 10
+    },
+    "always_low_accuracy": 0.75,
+    "persist_si_accuracy": 0.55,
+    "criteria": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 4,
+    "target_quarter_ends_days_after_issue": [
+     365,
+     366
+    ],
+    "quarters_after_newest_sws": [
+     4,
+     5
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.6,
+     "persist_si": 0.4,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2024-Q4",
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.4,
+     "persist_si": 0.45,
+     "high": 5
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 2,
+     "ties": 6,
+     "sign_test_p_one_sided": 1.0
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 3,
+     "ch1_worse_quarters": 3,
+     "ties": 2,
+     "sign_test_p_one_sided": 0.65625
+    }
+   },
+   "5": {
+    "n": 30,
+    "n_quarters": 6,
+    "high_share": 0.2,
+    "accuracy": 0.36666666666666664,
+    "accuracy_ci90": [
+     0.13333333333333333,
+     0.6333333333333333
+    ],
+    "balanced_accuracy": 0.6041666666666666,
+    "brier": 0.3152341966798994,
+    "confusion": {
+     "tp": 6,
+     "fp": 19,
+     "tn": 5,
+     "fn": 0
+    },
+    "always_low_accuracy": 0.8,
+    "persist_si_accuracy": 0.43333333333333335,
+    "criteria": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 5,
+    "target_quarter_ends_days_after_issue": [
+     455,
+     456,
+     457
+    ],
+    "quarters_after_newest_sws": [
+     5,
+     6
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.3,
+     "persist_si": 0.4,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 15,
+     "accuracy": 0.4666666666666667,
+     "persist_si": 0.4666666666666667,
+     "high": 2
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 1,
+     "ch1_worse_quarters": 4,
+     "ties": 1,
+     "sign_test_p_one_sided": 0.96875
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 2,
+     "ch1_worse_quarters": 4,
+     "ties": 0,
+     "sign_test_p_one_sided": 0.890625
+    }
+   },
+   "6": {
+    "n": 25,
+    "n_quarters": 5,
+    "high_share": 0.12,
+    "accuracy": 0.36,
+    "accuracy_ci90": [
+     0.2,
+     0.56
+    ],
+    "balanced_accuracy": 0.49242424242424243,
+    "brier": 0.2906612706590312,
+    "confusion": {
+     "tp": 2,
+     "fp": 15,
+     "tn": 7,
+     "fn": 1
+    },
+    "always_low_accuracy": 0.88,
+    "persist_si_accuracy": 0.36,
+    "criteria": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 6,
+    "target_quarter_ends_days_after_issue": [
+     546,
+     547,
+     548,
+     549
+    ],
+    "quarters_after_newest_sws": [
+     7
+    ],
+    "latest_block": {
+     "quarters": [
+      "2025-Q4",
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 20,
+     "accuracy": 0.35,
+     "persist_si": 0.3,
+     "always_low": 0.95,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2025-Q3",
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 15,
+     "accuracy": 0.26666666666666666,
+     "persist_si": 0.4,
+     "high": 2
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 4,
+     "ties": 1,
+     "sign_test_p_one_sided": 1.0
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 1,
+     "ch1_worse_quarters": 2,
+     "ties": 2,
+     "sign_test_p_one_sided": 0.875
+    }
+   },
+   "7": {
+    "n": 15,
+    "n_quarters": 3,
+    "high_share": 0.06666666666666667,
+    "accuracy": 0.4,
+    "accuracy_ci90": [
+     0.06666666666666667,
+     0.7333333333333333
+    ],
+    "balanced_accuracy": 0.6785714285714286,
+    "brier": 0.31596539624646425,
+    "confusion": {
+     "tp": 1,
+     "fp": 9,
+     "tn": 5,
+     "fn": 0
+    },
+    "always_low_accuracy": 0.9333333333333333,
+    "persist_si_accuracy": 0.4666666666666667,
+    "criteria": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 7,
+    "target_quarter_ends_days_after_issue": [
+     638,
+     639
+    ],
+    "quarters_after_newest_sws": [
+     8
+    ],
+    "latest_block": {
+     "quarters": [
+      "2026-Q1",
+      "2026-Q2",
+      "2026-Q3"
+     ],
+     "rows": 15,
+     "accuracy": 0.4,
+     "persist_si": 0.4666666666666667,
+     "always_low": 0.9333333333333333,
+     "high": 1
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2026-Q1",
+      "2026-Q3"
+     ],
+     "rows": 10,
+     "accuracy": 0.5,
+     "persist_si": 0.4,
+     "high": 0
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 2,
+     "ties": 1,
+     "sign_test_p_one_sided": 1.0
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 1,
+     "ch1_worse_quarters": 2,
+     "ties": 0,
+     "sign_test_p_one_sided": 0.875
+    }
+   },
+   "8": {
+    "n": 5,
+    "n_quarters": 1,
+    "high_share": 0.0,
+    "accuracy": 0.0,
+    "accuracy_ci90": [
+     0.0,
+     0.0
+    ],
+    "balanced_accuracy": 0.0,
+    "brier": 0.5072748679095166,
+    "confusion": {
+     "tp": 0,
+     "fp": 5,
+     "tn": 0,
+     "fn": 0
+    },
+    "always_low_accuracy": 1.0,
+    "persist_si_accuracy": 0.4,
+    "criteria": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false,
+     "R7": false
+    },
+    "reliable": false,
+    "quarters_after_issue": 8,
+    "target_quarter_ends_days_after_issue": [
+     730
+    ],
+    "quarters_after_newest_sws": [
+     9
+    ],
+    "latest_block": {
+     "quarters": [
+      "2026-Q3"
+     ],
+     "rows": 5,
+     "accuracy": 0.0,
+     "persist_si": 0.4,
+     "always_low": 1.0,
+     "high": 0
+    },
+    "hunger_surge_quarters": {
+     "rule": "Balance Luzon hunger up >= 5 points on the previous quarter",
+     "quarters": [
+      "2026-Q3"
+     ],
+     "rows": 5,
+     "accuracy": 0.0,
+     "persist_si": 0.4,
+     "high": 0
+    },
+    "quarter_level_vs_always_low": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 1,
+     "ties": 0,
+     "sign_test_p_one_sided": 1.0
+    },
+    "quarter_level_vs_persist_si": {
+     "ch1_better_quarters": 0,
+     "ch1_worse_quarters": 1,
+     "ties": 0,
+     "sign_test_p_one_sided": 1.0
+    }
+   }
+  },
+  "lead1_quarter_level": {
+   "quarters": 14,
+   "hunger_condition_correct_quarters": 12,
+   "price_condition_accuracy_rows": 0.7714285714285715,
+   "quarters_all_five_correct": 10,
+   "quarters_hunger_condition_false": 3,
+   "accuracy_rows_where_hunger_condition_true": 0.8909090909090909
+  },
+  "lead1_sensitivity": {
+   "reported": {
+    "correct": 64,
+    "n": 70,
+    "accuracy": 0.9142857142857143
+   },
+   "index_recomputed_label": {
+    "flipped_rows": [
+     "PH040500000 2025-Q2"
+    ],
+    "correct": 63,
+    "accuracy": 0.9
+   },
+   "issue_after_threshold_window_published": {
+    "rule": "issue date >= 2023-04-01 (2022-Q4 SWS published 2023-01-19; December 2022 CPI early January 2023)",
+    "n": 65,
+    "correct": 59,
+    "accuracy": 0.9076923076923077
+   }
+  }
  }
 }

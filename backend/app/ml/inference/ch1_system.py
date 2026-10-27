@@ -74,6 +74,24 @@ def reliable_lead() -> int | None:
     return evaluation().get("max_reliable_lead")
 
 
+def horizon() -> dict:
+    """Addendum 3 (FINAL_VERIFICATION): the three horizons the dashboard must keep apart - the longest lead the model
+    generates, the longest lead with enough evidence to test (rule R1) and the longest that passes R1-R7."""
+    h = evaluation().get("horizon") or {}
+    generated = max((int(r["lead"]) for r in rows().values()), default=None)
+    return {"generated_max_lead": generated, "evaluated_leads": h.get("leads_evaluated", []),
+            "testable_max_lead": h.get("testable_horizon_R1"), "reliable_max_lead": reliable_lead(),
+            "individually_passing_leads": h.get("individually_passing_leads", []),
+            "why_not_longer": h.get("why_not_longer"),
+            "reliable_quarters_after_newest_sws": (h.get("leads", {}).get(str(reliable_lead()), {})
+                                                   .get("quarters_after_newest_sws") if reliable_lead() else None)}
+
+
+def status(r: dict) -> str:
+    """reliable when the row's lead is within the maximum reliable lead, else experimental (generated, not validated)."""
+    return "reliable" if (reliable_lead() or 0) >= int(r["lead"]) else "experimental"
+
+
 def covers(quarter: str) -> bool:
     return any(q == quarter for _, q in rows())
 
@@ -98,7 +116,8 @@ def reliability_text(r: dict) -> str:
     if rl is not None and lead <= rl:
         return (f"Lead-{lead} forecast: this horizon passed the reliability test (accuracy {ev['metrics']['accuracy']:.2f}"
                 f" on {ev['n']} past province-quarters)")
-    return f"Lead-{lead} forecast: no horizon beyond Lead {rl or 0} passed the reliability test, so treat it as indicative"
+    return (f"Lead-{lead} forecast: experimental. Only Lead {rl or 0} passed the reliability test; this horizon was "
+            f"tested and failed, so it is not a validated forecast")
 
 
 def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict | None:

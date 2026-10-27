@@ -663,9 +663,31 @@ export interface FinalRiskLead {
   reliable: boolean;
 }
 
+/** Addendum 3: every lead the data can evaluate, with the operational meaning of each. */
+export interface FinalRiskHorizonLead {
+  n: number;
+  n_quarters: number;
+  accuracy: number;
+  always_low_accuracy: number;
+  reliable: boolean;
+  criteria: Record<string, boolean>;
+  quarters_after_issue: number;
+  quarters_after_newest_sws: number[];
+}
+
+export interface FinalRiskHorizon {
+  leads_evaluated: number[];
+  testable_horizon_R1: number | null;
+  max_reliable_lead: number | null;
+  individually_passing_leads: number[];
+  why_not_longer: string;
+  leads: Record<string, FinalRiskHorizonLead>;
+}
+
 export interface FinalRiskEvaluation {
   max_reliable_lead: number | null;
   leads: Record<string, FinalRiskLead>;
+  horizon?: FinalRiskHorizon;
 }
 
 export interface FinalRiskRow {

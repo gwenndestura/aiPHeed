@@ -153,7 +153,7 @@ function RiskArchive({ enabled }: { enabled: boolean }) {
                     {sealed && (
                       <span className="ml-1.5 text-label font-normal text-ink-secondary">
                         Sealed · lead {rs[0].lead}
-                        {rs[0].reliable_horizon ? "" : " (indicative)"}
+                        {rs[0].reliable_horizon ? " (reliable)" : " (experimental)"}
                       </span>
                     )}
                   </td>

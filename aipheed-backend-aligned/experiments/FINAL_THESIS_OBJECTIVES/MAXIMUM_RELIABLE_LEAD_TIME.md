@@ -23,4 +23,11 @@ Leads 1…K all passing.
 Under the stricter variant (balanced accuracy above every comparator, including LGBM-GOV which ties at 0.883) no lead
 qualifies; both verdicts are reported.
 
-The dashboard labels Lead 1 forecasts as reliable and Leads 2–4 as "indicative, outside the tested horizon".
+The dashboard labels Lead 1 forecasts as reliable and Leads 2–4 as experimental (generated, tested, failed).
+
+## Update: Addendum 3 (horizon not capped at Lead 4)
+
+Leads 5–8, the last leads with any evaluable quarter, were scored under the same rule (Addendum 3, frozen before
+scoring). They fail (accuracy 0.36–0.40, Lead 8 0.0 on 5 rows), and none of Leads 4–8 has the 10 quarters R1 requires.
+The longest credibly testable lead is 3; the maximum reliable lead stays **1**, which is 1–2 quarters after the newest
+published SWS survey. Details: `../FINAL_VERIFICATION/MAXIMUM_RELIABLE_LEAD_TIME_VERIFIED.md`.

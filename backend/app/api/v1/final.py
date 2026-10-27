@@ -91,8 +91,8 @@ def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospec
     from app.ml.inference import ch1_system as CH1
     if not CH1.active():
         raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
-    rows = [dict(r, kind=CH1.kind(r), reliable_horizon=(CH1.reliable_lead() or 0) >= int(r["lead"]))
+    rows = [dict(r, kind=CH1.kind(r), reliable_horizon=CH1.status(r) == "reliable", status=CH1.status(r))
             for r in CH1.rows().values()
             if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)]
-    return {"count": len(rows), "maxReliableLead": CH1.reliable_lead(), "rows": rows,
+    return {"count": len(rows), "maxReliableLead": CH1.reliable_lead(), "horizon": CH1.horizon(), "rows": rows,
             "definition": CH1.INDICATOR["definition"], "caveat": CH1.INDICATOR["caveat"]}

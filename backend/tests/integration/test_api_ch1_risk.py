@@ -71,7 +71,7 @@ def test_forecasts_beyond_the_reliable_horizon_are_flagged(thesis):
     for r in rows:
         assert r["reliable_horizon"] is (int(r["lead"]) <= 1)
     s = _get("/api/v1/explainability", scope="province", id="cavite", quarter="2027-Q1")["summary"]["sentence"]
-    assert "indicative" in s and "Lead-2" in s
+    assert "experimental" in s and "Lead-2" in s
 
 
 def test_summary_and_driver_bars_explain_the_served_model(thesis):

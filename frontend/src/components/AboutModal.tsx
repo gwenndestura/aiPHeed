@@ -91,10 +91,32 @@ export function AboutModal() {
                   k="75% accuracy target"
                   v={risk.max_reliable_lead ? `Reached for the quarter starting on the issue date (${risk.leads["1"].metrics.accuracy.toFixed(2)})` : "Not reached"}
                 />
+                {risk.horizon && (
+                  <>
+                    <Row
+                      k="Further horizons tested"
+                      v={risk.horizon.leads_evaluated
+                        .filter((k) => k > 4)
+                        .map((k) => `${k} quarters ahead ${risk.horizon!.leads[String(k)].accuracy.toFixed(2)} (${risk.horizon!.leads[String(k)].n} cases)`)
+                        .join(" · ")}
+                    />
+                    <Row
+                      k="Longest horizon with enough data to test"
+                      v={risk.horizon.testable_horizon_R1 ? `${risk.horizon.testable_horizon_R1} quarters ahead (at least 10 past quarters)` : "None"}
+                    />
+                  </>
+                )}
                 <Row
                   k="Reliable forecast horizon"
-                  v={risk.max_reliable_lead ? "One quarter (up to 3 months ahead)" : "Not established"}
+                  v={
+                    risk.max_reliable_lead
+                      ? `One quarter: the quarter starting on the issue date, ${
+                          risk.horizon?.leads["1"]?.quarters_after_newest_sws.join("–") ?? "1–2"
+                        } quarters after the newest published SWS survey`
+                      : "Not established"
+                  }
                 />
+                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test" />
                 <Row k="News" v="Context only: it did not improve the forecasts" />
                 {evaluation && (
                   <Row
@@ -155,7 +177,7 @@ export function AboutModal() {
           <div className="grid gap-2 pt-1">
             <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
             <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
-            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · further ahead: indicative only" />
+            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · further ahead: experimental" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
