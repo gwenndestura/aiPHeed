@@ -1,0 +1,71 @@
+{'code': 'E1', 'name': 'Unemployment change (national)', 'domain': 'E Household economy', 'source': 'PSA LFS', 'frequency': 'monthly', 'level': 'national', 'availability': 'months of quarter t-1', 'transformation': 'quarter-mean unemployment rate t-1 minus t-5 (points)', 'missing': 'NaN before 2022-Q2', 'columns': ['E1']}
+ origin    E1    A1  price_share
+2021-Q1   NaN   NaN          0.8
+2021-Q2   NaN   NaN          0.0
+2021-Q3   NaN -7.44          0.0
+2021-Q4   NaN -3.83          0.0
+2022-Q1   NaN -4.98          0.4
+2022-Q2 -2.03 -4.28          0.8
+2022-Q3 -2.15 -2.66          1.0
+2022-Q4 -2.90  1.17          0.8
+2023-Q1 -2.49  0.75          1.0
+2023-Q2 -1.41 -6.16          0.6
+2023-Q3 -1.46 -5.35          0.0
+2023-Q4 -0.56 -2.56          0.8
+2024-Q1 -0.75 -4.58          0.2
+2024-Q2 -0.80 -5.48          0.6
+2024-Q3 -0.68 -4.05          0.8
+2024-Q4 -0.46 -3.29          0.6
+2025-Q1 -0.17 -3.36          0.4
+2025-Q2 -0.00 -6.84          0.0
+2025-Q3  0.12 -5.96          0.0
+2025-Q4  0.19 -5.35          0.2
+2026-Q1  1.13 -4.89          0.0
+corr E1 vs origin index: nan  corr price_share vs origin: -0.21
+E1 unique values per origin (national => identical across provinces): 1
+2021 within-year AUC not computable (n 10 )
+2022 within-year AUC not computable (n 20 )
+2023 within-year AUC E1 0.35 n 20
+2024 within-year AUC E1 0.76 n 20
+2025 within-year AUC E1 0.17 n 20
+2026 within-year AUC E1 0.5 n 15
+Traceback (most recent call last):
+  File "<stdin>", line 21, in <module>
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\metrics\_ranking.py", line 683, in roc_auc_score
+    y_score = check_array(y_score, ensure_2d=False)
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\utils\validation.py", line 1074, in check_array
+    _assert_all_finite(
+    ~~~~~~~~~~~~~~~~~~^
+        array,
+        ^^^^^^
+    ...<2 lines>...
+        allow_nan=ensure_all_finite == "allow-nan",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\utils\validation.py", line 133, in _assert_all_finite
+    _assert_all_finite_element_wise(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<4 lines>...
+        input_name=input_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\utils\validation.py", line 182, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.
+
+CONCLUSION (written after the run above):
+
+| Check | Finding |
+|---|---|
+| Coding | No sign or coding error. E1 = national quarter-mean unemployment rate at t-1 minus t-5, in points (PSA LFS). Positive means unemployment is rising. |
+| Effective sample | One national value per issue date, shared by all 5 provinces: 17 distinct values (2022-Q2..2026-Q1), not 85. |
+| Cause of AUC 0.21 | A calendar-time confound. E1 rises steadily from -2.9 (2022, post-COVID recovery) to +1.1 (2026), while the price condition was frequent in 2022-23 and rare in 2025-26. |
+| Within-year AUC | 0.35 (2023), 0.76 (2024), 0.17 (2025): no consistent direction |
+
+**Decision:** E1 is not reversed or removed. It stays in the pipeline (12 families). Its large inverse association is treated as spurious. It is a reason for regularisation and for the structural prior (which E1 cannot override without evidence), not for a sign change.
