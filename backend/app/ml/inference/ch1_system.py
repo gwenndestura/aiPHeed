@@ -1,17 +1,20 @@
 """
 app/ml/inference/ch1_system.py
 ------------------------------
-The served Chapter I food-insecurity risk forecast (branch aiPHeed/final-thesis-objectives).
+The served Chapter I food-insecurity risk forecast (branch aiPHeed/unified-lgbm-objectives).
 
 Chapter I §1.4 defines the dependent variable as "the binary food insecurity risk classification, either high or low,
 of a CALABARZON province in a given quarter", and §1.7 says SWS hunger and PSA food prices determine it. The label
 (T43c) is HIGH when Balance Luzon hunger is above 11.3% AND the province's food inflation (or food minus headline) is
-above its 2021-22 60th percentile. The model (CH1-LGBM) gives P(HIGH) = P(hunger condition) x P(price condition), the
-price part from one LightGBM on all 12 indicator families.
+above its 2021-22 60th percentile. The model (UNI-FINAL) gives P(HIGH) = P(hunger condition) x P(price condition), the
+price part from ONE LightGBM trained on the rows of every lead (all 12 indicator families, the lead, and World Bank world
+rice/cereal/oil/urea prices), refitted at each issue date.
 
-Evaluated walk-forward (FINAL_THESIS_OBJECTIVES, protocol dd9ab815): Lead 1 passed every frozen reliability
-criterion (accuracy 0.914 on 70 province-quarters); Leads 2-4 did not. This module serves the exported rows
-(backend/data/ch1_engine/, written by export_ch1.py) and is active in thesis mode unless AIPHEED_MAP_MODEL=firi.
+Evaluated walk-forward (FINAL_UNIFIED_LGBM, protocol 889e55e8): Lead 1 passed every frozen reliability criterion
+(accuracy 0.829 on 70 province-quarters); Leads 2-15 did not (Leads 1-5 had enough quarters to test). It replaced the
+per-lead CH1-LGBM (0.914 at Lead 1) because the methodology requires one unified LightGBM. This module serves the
+exported rows (backend/data/ch1_engine/, written by FINAL_UNIFIED_LGBM/runner/export_uni.py) and is active in thesis
+mode unless AIPHEED_MAP_MODEL=firi.
 """
 from __future__ import annotations
 
@@ -34,8 +37,8 @@ INDICATOR = {
                    "province's food prices are rising unusually fast (PSA food inflation, or food inflation minus "
                    "headline inflation, above the province's 2021-22 60th percentile), as Chapter I (1.4, 1.7) "
                    "defines the risk from SWS hunger and PSA food prices. The number is the forecast probability of "
-                   "HIGH: P(hunger condition) x P(price condition), the price part from one LightGBM on all 12 "
-                   "indicator families. HIGH at 0.50."),
+                   "HIGH: P(hunger condition) x P(price condition), the price part from one LightGBM, trained on every "
+                   "forecast horizon together, on all 12 indicator families and world food prices. HIGH at 0.50."),
     "unit": "probability 0-1 (HIGH at 0.50)",
     "horizon": ("issued on the first day of a quarter; Lead 1 = that quarter (passed the reliability test), "
                 "Lead 2 = the next quarter (not established as reliable)"),
@@ -43,7 +46,7 @@ INDICATOR = {
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
     "caveat": ("A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
                "for all five provinces, so provinces differ only through food prices. Probabilities run slightly high "
-               "(mean 0.30 vs an observed HIGH rate of 0.24 in testing)."),
+               "(mean 0.33 vs an observed HIGH rate of 0.24 in testing)."),
 }
 LGU_BASIS = ("Relative position within the province: the province's Chapter I risk probability re-weighted by PSA "
              "poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official "

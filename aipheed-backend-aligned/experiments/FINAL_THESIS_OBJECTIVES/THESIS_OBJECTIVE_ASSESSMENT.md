@@ -1,5 +1,10 @@
 # Thesis objective assessment (Chapter I, audited inputs)
 
+> **Superseded for the served model (2026-10-27).** This document describes the per-lead CH1-LGBM. The served
+> methodology is now one unified LightGBM across all leads (UNI-FINAL), as the user's directive requires: see
+> `../FINAL_UNIFIED_LGBM/UNIFIED_RESULTS_AND_OBJECTIVES.md`. CH1-LGBM's results below remain valid as a comparison.
+
+
 Judged against Chapter I of `THESIS 2 (11).pdf` only (extract: `sources/chapter1_THESIS2_11_extract.txt`). Numbers come
 from the audited-input run (`../FIRI_V2_DATA_AUDIT/out/rerun_results.json`), which governs under Addendum 1. The same
 text is kept as `../FIRI_V2_DATA_AUDIT/FINAL_THESIS_OBJECTIVE_ASSESSMENT.md`.

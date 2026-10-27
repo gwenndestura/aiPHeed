@@ -1,5 +1,10 @@
 # Final simple methodology
 
+> **Superseded for the served model (2026-10-27).** This document describes the per-lead CH1-LGBM. The served
+> methodology is now one unified LightGBM across all leads (UNI-FINAL), as the user's directive requires: see
+> `../FINAL_UNIFIED_LGBM/UNIFIED_RESULTS_AND_OBJECTIVES.md`. CH1-LGBM's results below remain valid as a comparison.
+
+
 ## In one paragraph
 
 Each quarter, on its first day, aiPHeed forecasts whether each CALABARZON province will be at **high or low

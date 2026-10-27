@@ -1,9 +1,9 @@
 """
 tests/integration/test_api_ch1_risk.py
 ---------------------------------------
-The served Chapter I risk forecast (app.ml.inference.ch1_system; FINAL_THESIS_OBJECTIVES + FIRI_V2_DATA_AUDIT):
-province scores are the exported CH1-LGBM probabilities, the Lead-1 rows equal the evaluated (audited-input)
-predictions, the reliability verdict and the 75% statement follow from the evaluation, horizons beyond Lead 1 are
+The served Chapter I risk forecast (app.ml.inference.ch1_system; FINAL_UNIFIED_LGBM on the FIRI_V2_DATA_AUDIT inputs):
+province scores are the exported UNI-FINAL probabilities (one LightGBM across leads), the Lead-1 rows equal the
+evaluated predictions, the reliability verdict and the 75% statement follow from the evaluation, horizons beyond Lead 1 are
 flagged, the LGU layer stays a priority ranking, and AIPHEED_MAP_MODEL=firi restores FIRI v2.
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from app.ml.inference import ch1_system as CH1
 
 client = TestClient(app)
 ROOT = Path(__file__).resolve().parents[3]
-AUDITED = ROOT / "aipheed-backend-aligned" / "experiments" / "FIRI_V2_DATA_AUDIT" / "out" / "ch1_audited"
+UNIFIED = ROOT / "aipheed-backend-aligned" / "experiments" / "FINAL_UNIFIED_LGBM" / "out"
 
 
 @pytest.fixture
@@ -47,11 +47,13 @@ def test_province_scores_are_the_exported_ch1_probabilities(thesis):
 
 
 def test_served_lead1_rows_equal_the_evaluated_predictions():
-    P = pd.read_csv(AUDITED / "predictions_lead1.csv", dtype={"province_code": str})
+    P = pd.read_csv(UNIFIED / "predictions.csv", dtype={"province_code": str})
+    P = P[P["lead"] == 1]
+    assert len(P) == 70
     for p in P.itertuples():
         q = f"{p.q // 4}-Q{p.q % 4 + 1}"
         r = CH1.row(p.province_code, q)
-        assert r is not None and float(r["probability"]) == pytest.approx(p.CH1_p, abs=1e-5)
+        assert r is not None and float(r["probability"]) == pytest.approx(p.UNI_p, abs=1e-5)
         assert (r["observed"] == "HIGH") == bool(p.y)
 
 

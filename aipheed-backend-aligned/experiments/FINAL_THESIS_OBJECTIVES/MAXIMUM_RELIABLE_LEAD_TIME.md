@@ -1,5 +1,10 @@
 # Maximum reliable lead time (Objective 2 V)
 
+> **Superseded for the served model (2026-10-27).** This document describes the per-lead CH1-LGBM. The served
+> methodology is now one unified LightGBM across all leads (UNI-FINAL), as the user's directive requires: see
+> `../FINAL_UNIFIED_LGBM/UNIFIED_RESULTS_AND_OBJECTIVES.md`. CH1-LGBM's results below remain valid as a comparison.
+
+
 **Time convention.** Forecasts are issued on O(t), the first day of quarter t+1, using only data published before it.
 Lead k targets quarter t+k. Lead 1 is the quarter that starts on the issue date: a real forecast, made before any of
 its data exist, and up to 3 months ahead of its end. Lead 0 (quarter t, already ended, survey not yet published) is a

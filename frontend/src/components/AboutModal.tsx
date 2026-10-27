@@ -97,7 +97,7 @@ export function AboutModal() {
                       k="Further horizons tested"
                       v={risk.horizon.leads_evaluated
                         .filter((k) => k > 4)
-                        .map((k) => `${k} quarters ahead ${risk.horizon!.leads[String(k)].accuracy.toFixed(2)} (${risk.horizon!.leads[String(k)].n} cases)`)
+                        .map((k) => `${k} quarters ahead ${risk.horizon!.leads[String(k)].accuracy.toFixed(2)} (${risk.horizon!.leads[String(k)].n} cases; always-low ${risk.horizon!.leads[String(k)].always_low_accuracy.toFixed(2)})`)
                         .join(" · ")}
                     />
                     <Row
@@ -203,6 +203,7 @@ const DATA_SOURCES = [
   "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
   "Bangko Sentral ng Pilipinas (BSP): cash remittances",
   "PAGASA: El Niño advisories · IBTrACS: typhoons",
+  "World Bank Commodity Price Data (Pink Sheet): world rice, cereal, oil and fertilizer prices",
   "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
   "Google News headlines in Filipino and English",
 ];

@@ -76,7 +76,7 @@ def final_lgus() -> dict:
 # ------------------------------------------------------------------------------------------------ Chapter I risk
 @router.get("/final/risk/evaluation")
 def final_risk_evaluation() -> dict:
-    """Walk-forward evaluation of the Chapter I province risk forecast (CH1-LGBM): per-lead metrics, baselines,
+    """Walk-forward evaluation of the Chapter I province risk forecast (UNI-FINAL, one LightGBM across leads): per-lead metrics, baselines,
     reliability verdicts, Objective-4 comparisons, news tests and calibration."""
     from app.ml.inference import ch1_system as CH1
     if not CH1.active():

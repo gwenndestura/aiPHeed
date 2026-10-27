@@ -228,6 +228,7 @@ describe("About dialog", () => {
       "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
       "Bangko Sentral ng Pilipinas (BSP): cash remittances",
       "PAGASA: El Niño advisories · IBTrACS: typhoons",
+      "World Bank Commodity Price Data (Pink Sheet): world rice, cereal, oil and fertilizer prices",
       "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
       "Google News headlines in Filipino and English",
     ]);
