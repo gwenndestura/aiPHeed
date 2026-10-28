@@ -795,3 +795,146 @@ The CONF block (targets 2025-Q2..2026-Q3) was used by no selection.
 - `data/stack_v5.csv`;
 - `out/tune*.{json,csv}`, `out/features_v5_audit.json`;
 - `backend/tests/integration/test_lead2_tuning.py` (6 tests).
+
+---
+
+## 17. Architecture verification and final decision (LEAD2_ARCH; `runner/arch_audit.py`, `out/arch_audit.json`)
+
+### 17.1 The verified prediction equation
+
+For province p, origin quarter t and lead k (target quarter t + k):
+
+1. **Issue date.** Lead 1: the first day of quarter t + 1 (schedule A). Leads ≥ 2: the day after SWS publishes quarter t's Balance Luzon reading, at the latest day 1 of month 3 of quarter t + 1 (schedule B). Together these are S-AB.
+2. **Hunger part.**
+   - π_H = Φ((h_last − 11.3) / max(σ_h, 0.5)).
+   - h_last is the newest Balance Luzon reading published before the issue date.
+   - σ_h is the RMS of the h-step changes in the four SWS areas (h = target − reading quarter) published before the issue date.
+   - When fewer than 8 changes exist, the served H1 is used instead (0 of the 250 evaluation rows).
+3. **Price part.**
+   - π_P = sigmoid(LightGBM raw score), a single unified LightGBM over leads 1-15.
+   - Inputs: all 12 indicator families (21 columns, the five trigger groups among them).
+   - Monotone in A1_food, A1_gap and A_mom.
+   - Refitted at each origin on rows whose price labels were known; configuration chosen on inner chronological folds.
+4. **Forecast.** P = π_H × π_P; **HIGH if P ≥ 0.50.** No clipping or intermediate threshold exists anywhere on the path.
+
+**Reproduction check:**
+- π_H recomputes to within 4.7e-7 on all 250 rows;
+- P = π_H × π_P to within 7.8e-7;
+- π_P ranges from 0.016 to 0.800 over all evaluation rows.
+
+### 17.2 Does the hunger part impose a real upper bound on recall? Yes, for three cases, and only for classification.
+
+| Lead-2 HIGH case | Newest reading at the issue | π_H | π_P needed for P ≥ 0.50 | Model π_P | Hit |
+|---|---|---|---|---|---|
+| Batangas, Laguna, Quezon 2023-Q4 | 2023-Q2 = **11.3** | **0.500** | **1.000 (impossible)** | 0.495 | no |
+| Batangas, Cavite, Laguna, Quezon 2024-Q2 | 2023-Q4 = 14.3 | 0.760 | 0.658 | 0.68-0.80 | yes |
+| Quezon 2024-Q3 | 2024-Q1 = 15.3 | 0.821 | 0.609 | 0.432 | no |
+| Cavite, Laguna 2024-Q4 | 2024-Q2 = 19.6 | 0.968 | 0.516 | 0.166 / 0.173 | no |
+| Quezon 2024-Q4 | 19.6 | 0.968 | 0.516 | 0.651 | yes |
+| Batangas, Laguna, Quezon 2025-Q2 | 2024-Q4 = 25.3 | 0.988 | 0.506 | 0.60-0.65 | yes |
+| Laguna, Quezon 2025-Q3 | 25.3 | 0.975 | 0.513 | 0.65 / 0.71 | yes |
+| Cavite 2026-Q2 | 2025-Q4 = 16.7 | 0.806 | 0.620 | 0.345 | no |
+
+**Controlled test** (`backend/tests/integration/test_lead2_arch.py`):
+- For the 2023-Q4 issue (2023-08-03), `fr_lib.pi_h` returns exactly 0.5.
+- A LightGBM fitted with the production recipe, given extreme price inputs (10⁶), still returns π_P < 1.
+- With π_P = 1 − 10⁻¹², P = 0.4999999999995 < 0.50.
+- With the largest π_P the model ever produced (0.80), P = 0.40.
+
+**Conclusions:**
+- **The statement in §3 and §15 is correct.** The mathematical recall ceiling at the 0.50 cut is **14/17 = 0.82**. The 13/17 in §13.1 is the *practical* ceiling, which also excludes the rounding-level label Cavite 2026-Q2.
+- The cap applies to classification only. The three capped cases can still rank above LOW rows, but never cross 0.50.
+- Every other missed case needed π_P between 0.52 and 0.62 and received 0.17-0.43.
+
+### 17.3 The precise reason the model misses HIGH cases
+
+| Misses | Mechanism in the equation |
+|---|---|
+| 3 (2023-Q4) | **π_H = 0.5 exactly** because the newest reading equals the 11.3 line. The next reading (10.3, published 2023-11-20) was lower still, so no timelier hunger reading would have helped. |
+| 3 (Quezon 2024-Q3; Cavite and Laguna 2024-Q4) | **π_P too low.** The flat CPI projection was below threshold (−1.5 to −2.1 points for 2024-Q4; Quezon's was above at +0.58, but the province profile pulled it down). Prices then rose after the issue date. |
+| 1 (Cavite 2026-Q2) | **Label at the rounding limit:** realised margin +0.02 point, projection −1.04 |
+
+### 17.4 Target and class learning (`C_target_learning`)
+
+| Question | Finding |
+|---|---|
+| Is the target defined the same at every lead? | **Yes.** The price label of every (province, quarter) is identical across all leads and origins (nunique = 1). The hunger condition is the same Balance Luzon reading for all provinces. |
+| Temporal representation | The unified model stacks leads 1-15, so each label appears 3.5 (2022-Q4) to 9.8 (2026-Q2) times, with different lead-specific inputs. Recent targets have at least as many rows as older ones, so old quarters are not over-weighted. |
+| Are the classes learned consistently over time? | The price-condition base rate in training moves from 0.21 (2022-Q4) to 0.64 (2023-Q4) and back to 0.47 (2026-Q2). This is a genuine regime shift (the 2023-24 inflation episode), and it is why above-threshold pressure in 2025-26 often reverted (the false alarms). Recency weighting to follow it was tested (B2/B3) and made Lead 2 worse. |
+| Is the loss aligned with the evaluation? | Partly. The price model minimises price-label log loss (a proper score), while the evaluation scores P = π_H × π_P. A decision-weighted loss (rows weighted by π_H) would align them, but before 2024 almost every training row has π_H < 0.5. The weights would only switch on in the 2023-24 inflation regime: in effect recency weighting, which was already rejected. |
+| Probability use | Ranking and classification both use P. No cut on P0H4-U's Lead-2 P meets R6 (§16.1), so recalibration cannot help. |
+| Could one LightGBM rank T43c directly? | **Not with the development data.** Distinct T43c HIGH labels known in training are **2 at every origin through 2023-Q4**, and 5 at 2024-Q1/Q2. Under the existing eligibility rule (≥ 5 HIGH rows), a direct model is **ineligible at 5 of the 7 development origins**. The earlier direct single-model study (LEAD2_ONE_MODEL S0-S3, quarter-start timing) reached only 0.68-0.75 at Lead 2. The factorisation exists precisely because the price label has 30-100 distinct training labels and the joint label has 2-19. |
+
+### 17.5 Evaluation design and the P0H4 / P0H4-U difference
+
+- **Uncertainty.** Lead 2 has 17 HIGH cases in 7 of 13 quarters, so one case moves recall by 0.059. If the true recall were:
+  - 0.65, the observed recall would reach 11/17 only 62% of the time;
+  - 0.70, 78% of the time;
+  - 0.59, 41% of the time.
+- Separating a 0.70 recall from 0.60 with a 90% bound needs about **57 HIGH cases**.
+- **Why P0H4 and P0H4-U differ.** They share the price part exactly. P0H4 issues Lead 2 at the quarter start; P0H4-U re-issues it after the SWS release (median 33 days later), with one newer hunger reading. This changes 8 Lead-2 calls (`out/arch_p0h4_vs_u.csv`):
+  - **+4 hits:** all of 2024-Q2, using the 2023-Q4 reading of 14.3 published 2024-01-22 instead of 2023-Q3's 10.3;
+  - **+3 false alarms:** Rizal 2024-Q2, Rizal 2025-Q2, Quezon 2026-Q3;
+  - **−1 false alarm:** Laguna 2026-Q2.
+- **Which is the real deployment behaviour?**
+  - Today, **P0H4**: the served default issues every lead at quarter start, SWS readings are entered by hand, and the scheduler runs quarterly.
+  - P0H4-U reflects deployment only if the operator re-issues Lead 2 after each SWS release. The `AIPHEED_CH1_ENGINE=fr` export does this; its 2027-Q1 forecast was re-issued 2026-10-15 and sealed (bd6572e1).
+- No threshold or configuration was selected on the evaluation period in this round.
+
+### 17.6 Candidates considered and why none was scored
+
+| Candidate | Rationale | Development data check | Decision |
+|---|---|---|---|
+| Direct T43c LightGBM under S-AB timing | Avoid the product cap; learn the joint label | Ineligible at 5 of 7 DEV origins (2 HIGH labels); 10 Lead-2 DEV rows would decide it | **Not run.** It cannot be evaluated fairly, and the closest tested form (S0-S3) failed. |
+| Hybrid: direct where eligible, product otherwise | Same | Only 2 DEV origins (5 HIGH targets) would use the direct part | Not run: too little development data |
+| Decision-weighted price loss (weights ∝ π_H) | Align the loss with P | Weights are near-uniform before 2024, then equivalent to recency weighting | Not run: an equivalent of rejected B2 |
+| Hunger-dependence (copula) correction to the product | The price and hunger conditions are negatively correlated (ρ = −0.38) | Needs joint labels: 2-19 distinct | Not identifiable |
+| Recalibration or threshold | — | No cut meets R6 for P0H4-U | Excluded mathematically |
+
+No candidate met the stopping rule set before this round, so **no new experiment was scored**.
+
+### 17.7 Final comparison and decision
+
+| Criterion | P0H4 (served), Lead 1 | P0H4, Lead 2 | P0H4-U, Lead 1 | **P0H4-U, Lead 2** | Strongest tuned (G0, §16), Lead 2 |
+|---|---|---|---|---|---|
+| Accuracy | 0.843 | 0.769 | 0.843 | **0.800** | 0.738 |
+| Balanced accuracy | 0.776 | 0.635 | 0.776 | 0.732 | 0.709 |
+| HIGH precision / recall | 0.69 / 0.65 | 0.60 / 0.35 | 0.69 / 0.65 | 0.63 / **0.59** | 0.50 / 0.65 |
+| TP FP FN TN | 11 5 6 48 | 6 4 11 44 | 11 5 6 48 | 10 6 7 42 | 11 11 6 37 |
+| Brier | 0.132 | 0.194 | 0.132 | 0.167 | 0.186 |
+| Later quarters (2025-Q2..2026-Q3), accuracy / Brier | 0.867 / 0.123 | 0.867 / 0.148 | 0.867 / 0.123 | 0.833 / 0.156 | 0.733 / 0.209 |
+| R1 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| R2 | ✓ | ✓ | ✓ | ✓ | ✗ |
+| R3 | ✓ | ✗ | ✓ | ✓ | ✓ |
+| R4 | ✓ | ✓ | ✓ | ✓ | ✗ |
+| R5 | ✓ | ✗ | ✓ | ✓ | ✗ |
+| R6 | ✓ | ✗ | ✓ | **✗** | ✗ |
+| R7 | ✓ | ✓ | ✓ | ✓ | ✗ |
+| **Decision** | **reliable** | not reliable | **reliable** | **not reliable (R6)** | not reliable |
+
+Lead-1 rows are identical for P0H4 and P0H4-U: they differ only from Lead 2 on.
+
+**Decision**
+- Reliability has **not** improved in this round.
+- P0H4 stays the served default (seal a498b5ef). P0H4-U stays the research baseline (bd6572e1).
+- The maximum reliable horizon is **Lead 1**.
+- 80% accuracy with all seven criteria at Lead 2 is not achieved with the available data.
+
+### 17.8 The additional observations required, and how each would enable a better model
+
+1. **A second hunger observation between SWS rounds.** A monthly DSWD/WFP food-access monitor, or SWS microdata for CALABARZON, for Balance Luzon or CALABARZON.
+   - It would replace the single reading in π_H with a fresher, less tied estimate. This addresses the 3 capped cases and the timing gap behind P0H4 vs P0H4-U.
+2. **More target quarters with HIGH cases.**
+   - About 57 HIGH cases (≈ 44 quarters) are needed to bound recall.
+   - At least 5 distinct T43c HIGH labels at every development origin would make a direct-ranking LightGBM evaluable.
+   - The sealed prospective forecasts from 2027-Q1 accumulate these.
+3. **Forward-looking price information published before the issue date** (BSP inflation path, DA price and supply outlooks, rice import schedules).
+   - It gives π_P information about post-issue price moves, the cause of 3 misses and 3 false alarms.
+4. **A provincial, repeated food-insecurity outcome** (CBMS 2024 FIES; FNRI provincial FIES).
+   - It would validate the target itself and allow a province-level hunger part instead of one regional reading for all five provinces.
+5. **Operational:** automate the SWS release re-issue (the P0H4-U schedule) if the researchers choose to deploy it. That makes deployment match the better-scoring evaluation design, but it does not by itself pass R6.
+
+**Files:**
+- `runner/arch_audit.py`;
+- `out/arch_audit.json`, `out/arch_cap_cases.csv`, `out/arch_p0h4_vs_u.csv`;
+- `backend/tests/integration/test_lead2_arch.py` (6 tests).
