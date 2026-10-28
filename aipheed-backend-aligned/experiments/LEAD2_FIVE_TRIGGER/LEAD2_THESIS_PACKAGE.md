@@ -938,3 +938,152 @@ Lead-1 rows are identical for P0H4 and P0H4-U: they differ only from Lead 2 on.
 - `runner/arch_audit.py`;
 - `out/arch_audit.json`, `out/arch_cap_cases.csv`, `out/arch_p0h4_vs_u.csv`;
 - `backend/tests/integration/test_lead2_arch.py` (6 tests).
+
+---
+
+## 18. Deployment timing (SWS-release re-issue) and the hunger × price formula
+
+### 18.1 How Lead-2 forecasts reach the dashboard today
+
+| Step | Current behaviour |
+|---|---|
+| Forecast generation | The dashboard serves a **static export**, `backend/data/ch1_engine/rows.csv` (P0H4, seal a498b5ef), written by the research export scripts. Every lead is issued on the first day of the quarter (latest: 2026-10-01). |
+| SWS readings | Entered **by hand** into the research rounds file. No fetcher runs; SWS publishes about 2-7 weeks into each quarter (2026-Q3: 2026-10-14). |
+| Scheduler (`app/tasks/scheduler.py`) | The quarterly E27 cycle (15 Jan / Apr / Jul / Oct), daily news collection and a monthly refresh. **None re-issues the CH1 forecasts after an SWS release.** |
+| History | The export keeps one row per province-quarter, so an earlier issue is overwritten, not kept |
+| Consequence | Deployed Lead-2 forecasts use a hunger reading that is often two quarters old. The better-scoring P0H4-U rows exist only as a second research export (`ch1_engine_fr`, served only with `AIPHEED_CH1_ENGINE=fr`). |
+
+### 18.2 What was built (off by default)
+
+`backend/app/ml/inference/sws_reissue.py`:
+
+- **Manual SWS entry.** `enter_sws_reading()` and `scripts/sws_reissue.py enter`. Each entry is validated: area, 0-100 range, fieldwork end not after publication and not before the quarter. **A publication after today is refused.** An identical re-entry returns `duplicate`; a conflicting value is refused. The store is `backend/data/ch1_reissue/sws_rounds.csv`, seeded from the verified research rounds file.
+- **Release-triggered re-issue.** `reissue(now)` re-issues each open origin's Lead-2+ forecasts:
+  - **When:** the day after SWS publishes that origin quarter's Balance Luzon reading. If the reading arrives after the window cap (day 1 of month 3), the re-issue happens at the cap instead.
+  - **How:** π_H is recomputed with the same formula as P0H4-U, using only rounds published before the issue date. π_P is the quarter-start LightGBM output, unchanged; **the model is not refitted.**
+  - **Lead 1** is not re-issued.
+- **History.** `forecast_history.csv` is **append-only**. Each row records:
+  - `forecast_id`, `issue_date`, `data_cutoff`, `trigger` (`quarter_start` / `sws_release` / `window_cap`);
+  - the SWS quarter and publication date used, `h_last`, `sigma_h`, both parts and the probability;
+  - `supersedes` (the forecast it replaces) and `recorded_at`.
+
+  `current(now)` returns the forecast in force at any date.
+- **No duplicates.** One re-issue per schedule-B date. A second SWS round for the same quarter before the cap (it happened once, in 2025-Q2) moves the date, and the forecasts are re-issued again; the earlier rows are kept.
+- **Scheduler.** A daily 05:00 job, `run_sws_reissue`, is registered **only when `AIPHEED_SWS_REISSUE=1`**. Every run is idempotent.
+- **Served default unchanged.** `ch1_system` still serves `ch1_engine`. The history is not read by the dashboard until the researchers authorise that switch.
+
+### 18.3 Verification
+
+**Day-by-day replay** (`runner/deploy_replay.py`, `out/deploy_replay.json`):
+- 1,343 days, 2022-12 to 2026-12, running the job twice a day.
+- Each origin's quarter-start P0H4 forecasts are recorded on their own issue date.
+
+| Check | Result |
+|---|---|
+| Re-issued Lead-2..4 probabilities vs P0H4-U | **max \|Δ\| 1.0e-6** (180 rows) |
+| Issue dates vs the evaluated S-AB schedule | all equal: 13 SWS releases, 1 window cap |
+| Repeated runs (second run each day, plus 3 extra runs) | 0 rows added; file byte-identical |
+| Duplicate forecast IDs | 0 |
+| Quarter-start rows | all 250 kept unchanged; 15 re-issues superseded by the 2025-Q2 second round, all kept |
+| Every SWS reading used was published before its issue date | yes |
+
+**Backend tests** (`tests/integration/test_sws_reissue.py`, 8 tests):
+- manual-entry validation and duplicates;
+- a release-triggered update that reproduces the deployed `ch1_engine_fr` 2026-10-15 rows within 1e-5;
+- the window cap without a release;
+- repeated runs and append-only history (earlier bytes unchanged);
+- an extreme future round in the store leaves earlier forecasts unchanged;
+- the replay result;
+- the scheduler registers the job only when enabled;
+- the served default and seal are unchanged.
+
+### 18.4 The deployment-timing effect, evaluated alone (Lead 2, same model, same 65 rows)
+
+| | Deployed today: P0H4 quarter-start | Deployable: P0H4 + SWS re-issue (= P0H4-U) |
+|---|---|---|
+| Accuracy | 0.769 | **0.800** |
+| Balanced accuracy | 0.635 | 0.732 |
+| HIGH precision / recall | 0.60 / 0.35 | 0.63 / **0.59** |
+| TP FP FN TN | 6 4 11 44 | 10 6 7 42 |
+| Brier | 0.194 | **0.168** (Δ −0.027 [−0.059, −0.000], p = .047) |
+| Later quarters (2025-Q2..2026-Q3): accuracy / Brier | 0.867 / 0.148 | 0.833 / 0.158 |
+| Thirds; LOQO min | 0.72, 0.70, 0.90; 0.750 | 0.84, 0.65, 0.90; 0.783 |
+| Brier vs persistence / climatology (p) | .112 / .157 | .029 / .085 |
+| Failed criteria | R3, R5, R6 | **R6 only** |
+
+- **The re-issue fixes the deployed system's R3 and R5 failures and lifts Lead-2 accuracy to the 0.80 goal.**
+- **It does not solve R6:** recall stays at 0.59.
+- On the later quarters alone it is slightly worse: one more false alarm, accuracy 0.833 vs 0.867.
+- It is a deployment change, not a model change: the price model is identical.
+
+### 18.5 Does the hunger × price formula restrict the ranking? No (protocol f3c05aa, development data only)
+
+| Check (targets 2021-Q1..2024-Q4) | Result |
+|---|---|
+| Dependence between the hunger and price conditions (70 labels, 14 quarters) | **φ = −0.31**, 90% CI [−0.59, −0.03]. Negative: high hunger came with *lower* price pressure in 2021-24. |
+| Lead-2 DEV, product (P0H4-U) | AUC 0.775, Brier 0.177, recall 0.45, precision 0.71 |
+| Upper bound min(π_H, π_P) (maximal positive dependence) | AUC 0.754, Brier 0.184, recall 0.45, precision 0.56 |
+| Lower bound max(0, π_H + π_P − 1) | AUC 0.742, Brier 0.202, recall 0.36, precision 0.80 |
+
+**What this shows**
+- With negative dependence, the true joint probability lies **below** the product. So the product does not understate HIGH risk; if anything it overstates it.
+- The only alternative that would raise HIGH probabilities (towards min) is contradicted by the data, and it ranks worse on development rows.
+- The frozen rule built no candidate.
+
+### 18.6 Why no new model experiment is warranted
+
+Every evidence-supported hypothesis has now been tested or ruled out on development data:
+- price-side information: K1/K2 (§13-14), rainfall (§15);
+- tuning: 360 configurations, class weights, two feature forms (§16);
+- a direct joint-label model: ineligible at 5 of 7 DEV origins (§17);
+- the combination formula (§18.5);
+- thresholds and calibration: no cut meets R6.
+
+The remaining misses are:
+- 3 hunger ties (π_H = 0.5);
+- 3 post-issue price moves the inputs did not anticipate;
+- 1 rounding-level label.
+
+None has an unused, cut-off-safe signal in the repository. A further model variant would be a search on the same 17 HIGH cases, so no experiment was run.
+
+### 18.7 Comparison
+
+| | Deployed baseline: P0H4 (served) | Research baseline: P0H4-U = P0H4 + re-issue | Candidate |
+|---|---|---|---|
+| Lead 1: accuracy, precision / recall, Brier | 0.843, 0.69 / 0.65, 0.132 | identical (Lead 1 is not re-issued) | none justified |
+| Lead 2: accuracy | 0.769 | 0.800 | — |
+| Lead 2: balanced, precision / recall | 0.635, 0.60 / 0.35 | 0.732, 0.63 / 0.59 | — |
+| Lead 2: TP FP FN TN, Brier | 6 4 11 44, 0.194 | 10 6 7 42, 0.167 | — |
+| Lead 2: later quarters (accuracy) | 0.867 | 0.833 | — |
+| Lead 1 R1-R7 | all pass | all pass | — |
+| Lead 2 R1-R7 | fails R3, R5, R6 | **fails R6** | — |
+
+### 18.8 Thesis-ready explanation
+
+> **Model performance and deployment timing are separate.**
+> - The forecasting model, one LightGBM price model combined with the SWS hunger outlook, is unchanged. It is reliable for the current quarter (Lead 1: accuracy 0.84, HIGH precision 0.69, recall 0.65, all seven criteria met).
+> - For the next quarter (Lead 2), the deployed system issued every forecast on the first day of the quarter. The latest published hunger survey was then often two quarters old. Issued that way, Lead 2 scored 0.77 accuracy with HIGH recall 0.35.
+> - A re-issue step now updates the Lead-2 forecasts the day after each SWS release, without retraining the model. Its release-triggered updates, repeated runs, append-only history and data cut-off are tested.
+> - With it, the same model reaches 0.80 accuracy at Lead 2, a significantly better Brier score (−0.027, p = .047) and HIGH recall 0.59. That clears every criterion except HIGH recall ≥ 0.60, which it misses by one case.
+> - The improvement comes from **timelier information, not a better model**.
+> - The probability formula (hunger probability × price probability) was checked against the evidence: hunger and price pressure moved in opposite directions in 2021-24 (φ = −0.31), so the formula does not understate risk.
+> - Lead 2 remains experimental until more quarters, a between-round hunger observation, forward price information or a provincial food-insecurity outcome (§17.8) allow it to be validated.
+
+### 18.9 Changed files and commits (branch `aiPHeed/lead2-lgbm-tuning`; local, not pushed)
+
+| File | Change |
+|---|---|
+| `backend/app/ml/inference/sws_reissue.py` | **new**: SWS entry, release-triggered re-issue, append-only history, `current()`, `run_daily()` |
+| `backend/app/tasks/scheduler.py` | daily `run_sws_reissue` job, registered only when `AIPHEED_SWS_REISSUE=1` |
+| `backend/scripts/sws_reissue.py` | **new** CLI: `enter`, `run`, `status` |
+| `backend/data/ch1_reissue/sws_rounds.csv` | **new** SWS store, seeded from `FORECAST_RESEARCH/data/sws_rounds_primary.csv` |
+| `backend/tests/integration/test_sws_reissue.py` | **new**, 8 tests |
+| `backend/tests/integration/test_lead2_arch.py` | + combination-screen test |
+| `experiments/LEAD2_FIVE_TRIGGER/runner/deploy_replay.py`, `out/deploy_replay*.{json,csv}` | **new** replay |
+| `PROTOCOL_LEAD2_COMBINATION_SCREEN.md`, `runner/comb_screen.py`, `runner/COMBINATION_SHA256.txt`, `out/comb_screen.json` | formula screen (protocol committed in f3c05aa before running) |
+| `ch1_engine/`, `ch1_engine_fr/`, seals, frontend | **unchanged** |
+
+**To activate in deployment (needs your authorisation):**
+1. Set `AIPHEED_SWS_REISSUE=1` and `AIPHEED_ENABLE_SCHEDULER=1`.
+2. Enter each SWS release with `scripts/sws_reissue.py enter`.
+3. Point the dashboard at `sws_reissue.current()`. This last step is not built: the frontend and served export are unchanged.

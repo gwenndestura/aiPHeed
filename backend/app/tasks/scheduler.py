@@ -139,6 +139,20 @@ def run_monthly_refresh() -> dict:
     return out
 
 
+SWS_REISSUE_JOB_ID = "aipheed_sws_reissue"
+# Daily at 05:00 PHT: re-issue Lead-2+ forecasts after a newly entered SWS release (app.ml.inference.sws_reissue).
+# Registered only when AIPHEED_SWS_REISSUE=1; every run is idempotent and append-only.
+SWS_REISSUE_HOUR = "5"
+
+
+def run_sws_reissue() -> dict:
+    from app.ml.inference import sws_reissue as RI
+
+    out = RI.run_daily()
+    logger.info("SWS re-issue run: %s", out)
+    return out
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -197,6 +211,17 @@ def start_scheduler():
         max_instances=1,
         coalesce=True,
     )
+    from app.ml.inference import sws_reissue as RI
+    if RI.enabled():
+        _scheduler.add_job(
+            run_sws_reissue,
+            trigger=CronTrigger(hour=SWS_REISSUE_HOUR, minute=0),
+            id=SWS_REISSUE_JOB_ID,
+            name="aiPHeed SWS-release re-issue of Lead-2+ forecasts",
+            replace_existing=True,
+            max_instances=1,
+            coalesce=True,
+        )
     _scheduler.start()
     logger.info(
         "Scheduler started: quarterly cycle at %s:00 on day %s of months %s "

@@ -71,6 +71,16 @@ def test_direct_target_lacks_development_labels(res):
     assert c["dev_origins_direct_ineligible"] == 5 and c["dev_origins"] == 7
 
 
+def test_combination_screen_frozen_dev_only_and_no_candidate():
+    import hashlib
+    want = (LT / "runner" / "COMBINATION_SHA256.txt").read_text().strip()
+    assert hashlib.sha256((LT / "PROTOCOL_LEAD2_COMBINATION_SCREEN.md").read_bytes()).hexdigest() == want
+    c = json.loads((LT / "out" / "comb_screen.json").read_text())
+    assert c["protocol_sha256"] == want and c["phi"] < 0 and c["phi_ci90"][1] < 0
+    d = c["lead2_dev"]
+    assert d["upper_min"]["brier"] > d["product"]["brier"] and c["build_candidate"] is False
+
+
 def test_served_model_and_seal_unchanged(monkeypatch):
     from app.ml.inference import ch1_system as CH1
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)
