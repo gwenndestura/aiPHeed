@@ -460,3 +460,74 @@ For every Lead-2 target, the table records:
 - `data/stack_v4.csv`;
 - `out/limits.json`, `out/limits_errors.csv`, `out/features_v4_audit.json`, `out/final.json`, `out/final_rows.csv`;
 - `backend/tests/integration/test_lead2_final.py` (6 tests).
+
+---
+
+## 14. Subgroup signals and the missed HIGH cases (LEAD2_SUBGROUP; protocol committed in 6bc46e3 before scoring)
+
+### 14.1 Probabilities of every Lead-2 HIGH case and false alarm (`out/subgroup_cases.csv`)
+
+| Group | Cases | B0 → K1 probability | Rank among LOW rows, B0 → K1 |
+|---|---|---|---|
+| Hits | 10 | 0.52-0.70 → 0.52-0.70 | 0.95 → 0.94 |
+| **Missed HIGH** | 7 | 0.16-0.36 → 0.21-0.37 | **0.49 → 0.59** |
+| False alarms | 6 (B0) / 6 (K1) | 0.52-0.70 | — |
+
+The 7 misses, B0 → K1:
+- Laguna 2023-Q4: 0.247 → 0.237
+- Quezon 2023-Q4: 0.247 → 0.309
+- Batangas 2023-Q4: 0.247 → 0.309
+- Quezon 2024-Q3: 0.355 → 0.370
+- Cavite 2024-Q4: 0.161 → 0.209
+- Laguna 2024-Q4: 0.167 → 0.250
+- Cavite 2026-Q2: 0.278 → 0.262
+
+### 14.2 Findings
+
+| Question | Answer |
+|---|---|
+| Do the subgroup features improve the ordering even where the calls do not change? | **Yes, modestly.** Lead-2 T43c AUC 0.760 → 0.797; price AUC on hunger-HIGH rows 0.731 → 0.753. Five of the 7 misses rise; Laguna 2023-Q4 and Cavite 2026-Q2 fall slightly. |
+| Can the better ordering be turned into hits by a threshold or calibration? | **No.** 15 LOW rows still score above the best miss (0.370). Recall ≥ 0.60 needs a cut ≤ 0.309, where precision is 0.39 (TP 11, FP 17). Any threshold or monotone calibration keeps the order, so none can meet R6, however chronologically it is selected. |
+| Independent information, or duplicates? | K_core and K_fresh_gap are **mostly duplicates**: R² 0.79 and 0.74 on the 12 aggregate price columns. **K_diff (breadth) is mostly independent** (R² 0.34). The residual HIGH-LOW separation of all three is small (0.27, −0.23, 0.24). |
+| Did a missed case have a strong early warning that the model ignored? | **No.** The subgroup-space analog vote flags all 7 misses (0.7-1.0), but it is almost as high on LOW rows (0.66 vs 0.76) and separates the price condition worse than the model (AUC 0.64 vs 0.75). At the 2023-Q4 origins only 5-30 training rows had subgroup values. |
+| Structural cap | 3 of the 7 misses (2023-Q4) have π_H = 0.50, so P < 0.50 whatever the price term |
+
+### 14.3 The one candidate supported by the findings
+
+**K2 = P0H4-U + K_diff only.**
+
+**Hypothesis:** the breadth signal carries K1's gain, and the redundant columns caused its regressions.
+
+| | B0 = P0H4-U | K1 | K2 |
+|---|---|---|---|
+| Lead-1 accuracy / balanced | 0.843 / 0.776 | 0.843 / 0.756 | 0.829 / 0.747 |
+| Lead-1 precision / recall | 0.69 / 0.65 | 0.71 / 0.59 | 0.67 / 0.59 |
+| Lead-1 Brier (Δ vs B0) | 0.132 | 0.130 (−0.002, n.s.) | 0.139 (**+0.007**, CI [+0.002, +0.013]) |
+| **Lead-2 accuracy [90% CI]** | **0.800** [0.71, 0.89] | 0.800 [0.69, 0.89] | 0.769 [0.66, 0.88] |
+| Lead-2 balanced | 0.732 | 0.732 | 0.673 |
+| Lead-2 precision / recall | 0.63 / 0.59 | 0.63 / 0.59 | 0.57 / **0.47** |
+| Lead-2 TP FP FN TN | 10 6 7 42 | 10 6 7 42 | 8 6 9 42 |
+| Lead-2 false alarms / missed HIGH | 6 / 7 | 6 / 7 | 6 / 9 |
+| Lead-2 Brier (Δ vs B0, p) | 0.167 | 0.160 (−0.007, p .049) | 0.166 (−0.001, p .41) |
+| Lead-2 thirds; LOQO min | 0.84, 0.65, 0.90; 0.783 | 0.84, 0.60, 0.95; 0.783 | 0.76, 0.65, 0.90; 0.750 |
+| Failed criteria, Lead 1 / Lead 2 | — / R6 | R6 / R6 | R6 / R3, R6 |
+
+**Hypothesis refuted.**
+- Without the redundant columns, K2 loses 2 Lead-2 hits (Cavite and Batangas 2024-Q2), and Lead-1 Brier is significantly worse.
+- K1's gain therefore came from the columns acting together, not from breadth alone.
+
+**Frozen adoption rule (unchanged):** 8 of 10 conditions fail (1b, 1c, all four "within 0.02" conditions, new false alarms, Lead-1 R1-R7). **K2 is not adopted.**
+
+### 14.4 Conclusion
+
+- **P0H4-U is retained.** Lead 1 is reliable (development evidence). **Lead 2 is not reliable: it fails R6 (0.63 / 0.59).**
+- The PSA food-subgroup data hold a small amount of independent information: better ordering and a Brier gain in K1. It is not enough to lift any missed HIGH case above the LOW cases that outrank it, and no threshold or calibration can change that.
+- **The subgroup line of work is closed, as the protocol required.** The requirements in §13.5 (more prospective quarters, inter-round hunger data, a provincial FIES outcome, forward price outlooks) are unchanged.
+
+**Files:**
+- `runner/subgroup_diag.py`, `runner/subgroup_k2.py`;
+- `out/subgroup_diag.json`, `out/subgroup_cases.csv`, `out/subgroup_k2.json`, `out/subgroup_k2_rows.csv`;
+- `runner/final.py`: scoring factored into `lead_eval` / `adoption_rule`; outputs byte-identical;
+- tests in `backend/tests/integration/test_lead2_final.py`.
+
+The served model is unchanged.

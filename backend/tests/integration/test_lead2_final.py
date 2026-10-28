@@ -78,6 +78,27 @@ def test_frozen_rule_applied_as_written(res):
     assert res["cands"]["B0"]["max_reliable_lead"] == 1
 
 
+def test_subgroup_protocol_frozen_and_k2_not_adopted():
+    want = (LT / "runner" / "SUBGROUP_SHA256.txt").read_text().strip()
+    assert hashlib.sha256((LT / "PROTOCOL_LEAD2_SUBGROUP.md").read_bytes()).hexdigest() == want
+    r = json.loads((LT / "out" / "subgroup_k2.json").read_text())
+    assert r["protocol_sha256"] == want and r["cols"][-1] == "K_diff"
+    assert r["adoption"]["adopted"] is all(r["adoption"]["rule"].values()) is False
+    assert r["adoption"]["FINAL"] == "B0" and r["adoption"]["lead2_failed"] == ["R6"]
+
+
+def test_no_order_preserving_cut_meets_r6_for_k1():
+    d = json.loads((LT / "out" / "subgroup_diag.json").read_text())
+    assert d["lead2_low_rows_scored_above_best_missed_K1"] > 0
+    assert not any(h["recall"] >= .6 and h["precision"] >= .6 for h in d["headroom_K1"])
+    rows = pd.read_csv(LT / "out" / "final_rows.csv")
+    g = rows[rows["lead"] == 2]
+    for cut in sorted(set(g["K1_p"].round(6))):
+        tp = int(((g["K1_p"] >= cut) & (g["y"] == 1)).sum())
+        fp = int(((g["K1_p"] >= cut) & (g["y"] == 0)).sum())
+        assert not (tp / g["y"].sum() >= .6 and tp / max(1, tp + fp) >= .6), cut
+
+
 def test_served_model_unchanged(monkeypatch):
     from app.ml.inference import ch1_system as CH1
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)
