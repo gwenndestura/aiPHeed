@@ -7,7 +7,7 @@
 
 # NOT EVALUABLE — REQUIRED OUTCOME DATA UNAVAILABLE
 
-Lead 2 forecasts a province's risk class for the quarter after next. No measured food-insecurity outcome exists at that unit (province × quarter) for 2021-2026, in the repository or at any agency source found:
+Lead 2 forecasts a province's risk class for the next quarter (issued on the first day of the current quarter, e.g. 2027-Q1 from 2026-10-01). No measured food-insecurity outcome exists at that unit (province × quarter) for 2021-2026, in the repository or at any agency source found:
 - CBMS 2024 is one 12-month window (July 2023 - June 2024), and has not been obtained.
 - FNRI FIES is one-off provincial cross-sections (2021: Batangas, Cavite, Lucena) plus regional values for 2023 and 2025.
 - APIS is annual and regional.

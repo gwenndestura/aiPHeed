@@ -137,7 +137,7 @@ No defect was found that kept a group out of the model. Each group's columns cha
 - **The five trigger cards are the approved ones:** Market / Prices, Climate, Employment, Fish production, OFW remittances.
 - **Each card's text now adds:**
   - the group's inputs;
-  - a sentence generated from the held-out test, for example "leaving this group out made the forecasts worse one quarter ahead and made the forecasts worse two quarters ahead. Its contribution is measurable."
+  - a sentence generated from the held-out test, for example "leaving this group out made the forecasts worse for the current quarter (Lead 1) and made the forecasts worse for the next quarter (Lead 2). Its contribution is measurable."
 - **No direction is stated where the evidence does not support one.**
 - Lead-2 rows keep "experimental: failed the reliability test".
 - **Files:** `backend/data/ch1_trigger_evidence.json` (from `runner/export_evidence.py`); `ch1_system.trigger_evidence()` and `plain_evidence()`.
@@ -154,7 +154,7 @@ No defect was found that kept a group out of the model. Each group's columns cha
 **Methodology.**
 - aiPHeed forecasts the Chapter I risk class of each CALABARZON province: HIGH when Balance Luzon SWS hunger exceeds 11.3% and the province's food inflation, or food minus headline inflation, exceeds its 2021-22 60th percentile.
 - **Price part:** one LightGBM trained on all forecast horizons together. It uses 12 indicator families grouped into the five proposal triggers (Market/Prices, Climate, Employment, Fish production, OFW remittances), plus news, poverty and the regional hunger outlook. It is refitted at every quarterly issue date on data published before that date.
-- **Hunger part:** the probability that hunger stays above 11.3%, from the newest SWS reading and its past movements. Forecasts two or more quarters ahead are re-issued the day after each SWS release.
+- **Hunger part:** the probability that hunger stays above 11.3%, from the newest SWS reading and its past movements. Forecasts for the next quarter and later (Leads 2-4) are re-issued the day after each SWS release.
 - **Risk probability:** the product of the two parts.
 
 **Evaluation.**

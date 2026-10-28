@@ -31,8 +31,8 @@ def sentence(b: str, r: dict) -> str:
     s1, s2 = state(l1), state(l2)
     words = {"worse": "made the forecasts worse", "better": "made the forecasts slightly better",
              "unchanged": "made no meaningful difference", "uncertain": "made a difference too small to confirm"}
-    txt = (f"Tested on past quarters: leaving this group out {words[s1]} one quarter ahead and {words[s2]} two quarters "
-           "ahead.")
+    txt = (f"Tested on past quarters: leaving this group out {words[s1]} for the current quarter (Lead 1) and {words[s2]} "
+           "for the next quarter (Lead 2).")
     if s1 == "worse" or s2 == "worse":
         txt += " Its contribution is measurable."
     elif s1 == "better" or s2 == "better":
