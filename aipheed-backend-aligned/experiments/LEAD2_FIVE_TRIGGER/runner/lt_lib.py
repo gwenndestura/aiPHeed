@@ -30,25 +30,31 @@ MONO_UP = ["A1_food", "A1_gap", "A_mom"]
 GRID = [dict(id=i, depth=d, leaves=2 ** d, trees=n, cw=w)
         for i, (d, n, w) in enumerate(itertools.product((1, 2), (50, 150), (None, "balanced")))]
 MIN_Q, MIN_HIGH, MIN_LOW = 6, 5, 5
-# the user's five trigger groups (2026-10-28); H1 (regional SWS hunger outlook) is the hunger condition of the
-# Chapter I target, kept in the model but not a trigger; `lead` is the horizon
+# the five trigger groups (user, 2026-10-27/28; ADDENDUM_1): dashboard keys; news, poverty and the regional hunger
+# outlook are required indicators in the model but not triggers
 GROUPS = {"market": ["A1_food", "A1_gap", "A_mom", "A2", "A3", "W_rice_yoy", "W_rice_mom", "W_cereal_yoy", "W_crude_yoy"],
-          "climate": ["C1", "C2", "C3", "C4", "W_urea_yoy"],
-          "employment_remittances": ["E1", "E2"],
-          "news_nlp": ["N1", "G_pri_yoy", "NG_gap_price"],
-          "poverty_vulnerability": ["V1"]}
+          "climate": ["C1", "C2", "C3", "W_urea_yoy"],
+          "employment": ["E1"],
+          "fish_kill": ["C4"],
+          "ofw_remittance": ["E2"]}
+OTHER_INPUTS = {"news": ["N1", "G_pri_yoy", "NG_gap_price"], "poverty": ["V1"], "hunger_indicator": ["H1"]}
+GROUP_LABEL = {"market": "Market / Prices", "climate": "Climate", "employment": "Employment",
+               "fish_kill": "Fish production", "ofw_remittance": "OFW remittances", "news": "News / NLP (other input)",
+               "poverty": "Poverty and vulnerability (other input)", "hunger_indicator": "Regional hunger outlook (target component)"}
 INDICATOR_GROUP = {"A1": "market", "A2": "market", "A3": "market", "C1": "climate", "C2": "climate", "C3": "climate",
-                   "C4": "climate", "E1": "employment_remittances", "E2": "employment_remittances", "N1": "news_nlp",
-                   "V1": "poverty_vulnerability", "H1": "hunger_condition (target component, not a trigger)"}
+                   "C4": "fish_kill", "E1": "employment", "E2": "ofw_remittance", "N1": "news (other input)",
+                   "V1": "poverty (other input)", "H1": "hunger_indicator (target component)"}
 
 
 def sha256(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
-def check_protocol():
+def check_protocol(addendum: bool = False):
     want = (HERE / "PROTOCOL_SHA256.txt").read_text().strip()
     assert sha256(LT / "PROTOCOL_LEAD2_FIVE_TRIGGER.md") == want, "protocol changed after freezing"
+    if addendum:
+        assert sha256(LT / "ADDENDUM_1_TRIGGER_GROUPS.md") == (HERE / "ADDENDUM_1_SHA256.txt").read_text().strip()
 
 
 @functools.lru_cache(maxsize=1)
