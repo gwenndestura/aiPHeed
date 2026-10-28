@@ -1,0 +1,291 @@
+{
+ "source": "aipheed-backend-aligned/experiments/LEAD2_FIVE_TRIGGER (Addendum 1 groups; protocol a80e927f)",
+ "method": "leave-one-group-out walk-forward refits of the served unified LightGBM; Brier change of the risk probability (P0H4-U schedule); development evidence",
+ "floor": 0.001,
+ "all_triggers_removed": {
+  "1": {
+   "diff": 0.06715078778168858,
+   "ci90": [
+    0.03349506283302033,
+    0.10391731623867749
+   ],
+   "p_hurts": 0.00025
+  },
+  "2": {
+   "diff": 0.04615457167252114,
+   "ci90": [
+    0.011670243443976448,
+    0.08061492829269308
+   ],
+   "p_hurts": 0.0145
+  }
+ },
+ "groups": {
+  "market": {
+   "label": "Market / Prices",
+   "indicators": "PSA food CPI projection and momentum, headline inflation, rice prices, world rice, cereal and oil prices",
+   "columns": [
+    "A1_food",
+    "A1_gap",
+    "A_mom",
+    "A2",
+    "A3",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy"
+   ],
+   "class": "predictive",
+   "brier_change_without": {
+    "1": {
+     "diff": 0.052409384614539825,
+     "ci90": [
+      0.022297452534730113,
+      0.08835478468405719
+     ],
+     "p_hurts": 0.0,
+     "holm_p_hurts": 0.0
+    },
+    "2": {
+     "diff": 0.03674234932782701,
+     "ci90": [
+      0.00926036260448144,
+      0.06317315417402128
+     ],
+     "p_hurts": 0.01375,
+     "holm_p_hurts": 0.0625
+    },
+    "3": {
+     "diff": 0.0280131670783988,
+     "ci90": [
+      0.0053779448209334375,
+      0.052927390442542195
+     ],
+     "p_hurts": 0.00625,
+     "holm_p_hurts": 0.025
+    },
+    "4": {
+     "diff": 0.01192684148654076,
+     "ci90": [
+      -0.004394317607793612,
+      0.02724863683292049
+     ],
+     "p_hurts": 0.109,
+     "holm_p_hurts": 0.436
+    }
+   },
+   "shap_share": {
+    "1": 0.6189565094734127,
+    "2": 0.6194792508885066
+   },
+   "sentence": "Tested on past quarters: leaving this group out made the forecasts worse one quarter ahead and made the forecasts worse two quarters ahead. Its contribution is measurable."
+  },
+  "climate": {
+   "label": "Climate",
+   "indicators": "PAGASA El Nino status, typhoons within 300 km, rice and corn harvest change, world fertilizer price",
+   "columns": [
+    "C1",
+    "C2",
+    "C3",
+    "W_urea_yoy"
+   ],
+   "class": "weak",
+   "brier_change_without": {
+    "1": {
+     "diff": -0.00711640397885858,
+     "ci90": [
+      -0.016682439922171742,
+      0.0001559271347179582
+     ],
+     "p_hurts": 0.9395,
+     "holm_p_hurts": 0.9395
+    },
+    "2": {
+     "diff": -0.004649347999319538,
+     "ci90": [
+      -0.009677914861808542,
+      -0.0009132012861601266
+     ],
+     "p_hurts": 0.9965,
+     "holm_p_hurts": 1.0
+    },
+    "3": {
+     "diff": -0.003746270239616461,
+     "ci90": [
+      -0.006495445049834733,
+      -0.0014508060841933784
+     ],
+     "p_hurts": 0.99975,
+     "holm_p_hurts": 0.99975
+    },
+    "4": {
+     "diff": 0.002204476148380073,
+     "ci90": [
+      -0.0013079404264145814,
+      0.007057735239937611
+     ],
+     "p_hurts": 0.22575,
+     "holm_p_hurts": 0.67725
+    }
+   },
+   "shap_share": {
+    "1": 0.036353505414817466,
+    "2": 0.037513196105318024
+   },
+   "sentence": "Tested on past quarters: leaving this group out made a difference too small to confirm one quarter ahead and made the forecasts slightly better two quarters ahead. Its contribution is not established; at that horizon it adds more noise than information."
+  },
+  "employment": {
+   "label": "Employment",
+   "indicators": "PSA Labor Force Survey unemployment change (national)",
+   "columns": [
+    "E1"
+   ],
+   "class": "predictive",
+   "brier_change_without": {
+    "1": {
+     "diff": 0.0053880210442080025,
+     "ci90": [
+      0.0005550383893142698,
+      0.013037055988517314
+     ],
+     "p_hurts": 0.02625,
+     "holm_p_hurts": 0.105
+    },
+    "2": {
+     "diff": 0.0028756149468324565,
+     "ci90": [
+      -0.0005633768894862533,
+      0.009180843329804443
+     ],
+     "p_hurts": 0.23725,
+     "holm_p_hurts": 0.71175
+    },
+    "3": {
+     "diff": 5.235553774643426e-05,
+     "ci90": [
+      -0.00022133592448176422,
+      0.0003783035061844482
+     ],
+     "p_hurts": 0.3605,
+     "holm_p_hurts": 0.721
+    },
+    "4": {
+     "diff": 1.2064787356981457e-08,
+     "ci90": [
+      -3.240524887264214e-08,
+      5.4535555903834374e-08
+     ],
+     "p_hurts": 0.32725,
+     "holm_p_hurts": 0.67725
+    }
+   },
+   "shap_share": {
+    "1": 0.06627313643012772,
+    "2": 0.06827304739604802
+   },
+   "sentence": "Tested on past quarters: leaving this group out made the forecasts worse one quarter ahead and made a difference too small to confirm two quarters ahead. Its contribution is measurable."
+  },
+  "fish_kill": {
+   "label": "Fish production",
+   "indicators": "PSA fisheries production change",
+   "columns": [
+    "C4"
+   ],
+   "class": "predictive",
+   "brier_change_without": {
+    "1": {
+     "diff": 0.0033041413280978007,
+     "ci90": [
+      -0.0002953988908335298,
+      0.007509323417055907
+     ],
+     "p_hurts": 0.068,
+     "holm_p_hurts": 0.14625
+    },
+    "2": {
+     "diff": -0.0006297327727453295,
+     "ci90": [
+      -0.007637115995440945,
+      0.00665485031167849
+     ],
+     "p_hurts": 0.5685,
+     "holm_p_hurts": 1.0
+    },
+    "3": {
+     "diff": 0.005787833342698108,
+     "ci90": [
+      0.0023189016736823984,
+      0.009570747981573731
+     ],
+     "p_hurts": 0.0,
+     "holm_p_hurts": 0.0
+    },
+    "4": {
+     "diff": 0.001976012341363936,
+     "ci90": [
+      -0.0075548979293283336,
+      0.011818827008764136
+     ],
+     "p_hurts": 0.35575,
+     "holm_p_hurts": 0.67725
+    }
+   },
+   "shap_share": {
+    "1": 0.049843294711129436,
+    "2": 0.050009377477402965
+   },
+   "sentence": "Tested on past quarters: leaving this group out made a difference too small to confirm one quarter ahead and made no meaningful difference two quarters ahead. Its contribution could not be established with the data available."
+  },
+  "ofw_remittance": {
+   "label": "OFW remittances",
+   "indicators": "BSP OFW cash remittance change (national)",
+   "columns": [
+    "E2"
+   ],
+   "class": "predictive",
+   "brier_change_without": {
+    "1": {
+     "diff": 5.230144866246777e-05,
+     "ci90": [
+      3.542211300012283e-10,
+      0.00015682593081061376
+     ],
+     "p_hurts": 0.04875,
+     "holm_p_hurts": 0.14625
+    },
+    "2": {
+     "diff": 6.9101743113846055e-06,
+     "ci90": [
+      1.8729167694727545e-08,
+      2.062458121544083e-05
+     ],
+     "p_hurts": 0.0125,
+     "holm_p_hurts": 0.0625
+    },
+    "3": {
+     "diff": 5.335055893465468e-08,
+     "ci90": [
+      6.851123953289537e-09,
+      9.900483489309792e-08
+     ],
+     "p_hurts": 0.02975,
+     "holm_p_hurts": 0.08925
+    },
+    "4": {
+     "diff": 8.163386833778157e-05,
+     "ci90": [
+      5.611636997024006e-09,
+      0.00024482941389674523
+     ],
+     "p_hurts": 0.03325,
+     "holm_p_hurts": 0.16625
+    }
+   },
+   "shap_share": {
+    "1": 0.00011600796244425671,
+    "2": 0.00011520237763507375
+   },
+   "sentence": "Tested on past quarters: leaving this group out made no meaningful difference one quarter ahead and made no meaningful difference two quarters ahead. Its contribution could not be established with the data available."
+  }
+ }
+}

@@ -162,10 +162,13 @@ def test_employment_and_news_bars_state_what_they_are(thesis):
     assert "Jan-Mar 2026" not in emp                         # FIRI's 2026-07-01 data window, not this forecast's
     assert "news" not in e                                   # five trigger groups only (user decision 10-27)
     assert "GDELT" in e["market"]["evidenceNote"] and "FSSI-v3" in e["market"]["evidenceNote"]
-    assert e["market"]["plainEvidence"] == CH1.market_evidence("PH040300000", "2026-Q4")
+    # LEAD2_FIVE_TRIGGER: the card keeps this forecast's own facts first, then the group's tested contribution
+    ev = CH1.trigger_evidence()
+    assert e["market"]["plainEvidence"].startswith(CH1.market_evidence("PH040300000", "2026-Q4"))
+    assert e["market"]["plainEvidence"].endswith(ev["market"]["sentence"]) if ev else True
     region = {t["key"]: t for t in _get("/api/v1/explainability", scope="region", id="calabarzon",
                                          quarter="2026-Q4")["triggers"]}
-    assert region["employment"]["plainEvidence"] == CH1.EMPLOYMENT_CAUTION
+    assert region["employment"]["plainEvidence"].startswith(CH1.EMPLOYMENT_CAUTION)
 
 
 def test_bar_periods_follow_the_issue_date():

@@ -300,9 +300,32 @@ def _change(v: float, unit: str) -> str:
     return f"{abs(v):.1f}{unit} {'higher' if v > 0 else 'lower'}" if round(v, 1) else "about the same"
 
 
+TRIGGER_EVIDENCE = DATA.parent / "ch1_trigger_evidence.json"
+
+
+@functools.lru_cache(maxsize=1)
+def trigger_evidence() -> dict:
+    """LEAD2_FIVE_TRIGGER: the measured held-out contribution of each of the five trigger groups (leave-one-group-out
+    walk-forward refits of the served LightGBM). Empty when the export is missing."""
+    if not TRIGGER_EVIDENCE.exists():
+        return {}
+    return json.loads(TRIGGER_EVIDENCE.read_text(encoding="utf-8")).get("groups", {})
+
+
 def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
-    """The card sentence for a group, from the values THIS forecast used at its issue date (rows.csv val_<column>,
-    LEAD2_OPTIMIZATION family_inventory: periods and signs), never another model's record. None at region scope."""
+    """The card sentence for a group: what THIS forecast used at its issue date, followed by what the held-out test of
+    the group showed (LEAD2_FIVE_TRIGGER), so a group's card never implies more than the evidence supports."""
+    text = _plain_evidence(code, quarter, group)
+    ev = trigger_evidence().get(group)
+    if not ev:
+        return text
+    tested = f"Inputs: {ev['indicators']}. {ev['sentence']}"
+    return f"{text} {tested}" if text else tested
+
+
+def _plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
+    """The values THIS forecast used at its issue date (rows.csv val_<column>, LEAD2_OPTIMIZATION family_inventory:
+    periods and signs), never another model's record. None at region scope."""
     if group == "market":
         return market_evidence(code, quarter)
     if code is None:                      # region: no single value, but the two cautions still apply

@@ -27,7 +27,7 @@ def main():
     for c in T.U2:
         if c == "lead":
             continue
-        grp = next((g for g, cs in T.GROUPS.items() if c in cs), "hunger_condition" if c == "H1" else "?")
+        grp = next((g for g, cs in {**T.GROUPS, **T.OTHER_INPUTS}.items() if c in cs), "?")
         o = S[S["lead"] == 1].drop_duplicates(["t", "province_code"])
         o = o[o["t"] >= 8085]
         within = o.groupby("t")[c].var(ddof=0).mean()
@@ -41,7 +41,7 @@ def main():
                      "rho_with_time": float(o[[c, "t"]].corr(method="spearman").iloc[0, 1]) if o[c].std() > 0 else float("nan")})
     A = pd.DataFrame(rows)
     A.to_csv(T.OUT / "input_audit.csv", index=False, lineterminator="\n", float_format="%.4g")
-    res = {"columns_in_model": T.U2, "groups": T.GROUPS, "indicator_group": T.INDICATOR_GROUP,
+    res = {"columns_in_model": T.U2, "groups": T.GROUPS, "other_inputs": T.OTHER_INPUTS, "indicator_group": T.INDICATOR_GROUP,
            "duplicate_rows": int(S.duplicated(["t", "lead", "province_code"]).sum()),
            "provinces": sorted(S["province_code"].unique()), "origins": [F.qs(int(t)) for t in sorted(S["t"].unique())]}
     # time alignment of the dated inputs (every value must be published before the issue date)
