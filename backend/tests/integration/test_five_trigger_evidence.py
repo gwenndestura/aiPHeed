@@ -72,6 +72,39 @@ def test_employment_card_does_not_claim_a_measurable_contribution():
     assert CH1.plain_evidence("PH040300000", "2026-Q4", "employment").endswith(EMPLOYMENT_WORDING)
 
 
+NOT_CONFIRMED = "a difference not confirmed after correcting for multiple tests"
+CARDS = {
+    "market": "Tested on past quarters: leaving this group out made the forecasts worse for the current quarter (Lead 1) "
+              f"and made the forecasts worse for the next quarter (Lead 2), {NOT_CONFIRMED}. Its contribution is "
+              "measurable for the current quarter (Lead 1).",
+    "climate": "Tested on past quarters: leaving this group out made a difference too small to confirm for the current "
+               f"quarter (Lead 1) and made the forecasts slightly better for the next quarter (Lead 2), {NOT_CONFIRMED}. "
+               "Its contribution is not established after correcting for multiple tests.",
+    "employment": EMPLOYMENT_WORDING,
+    "fish_kill": "Tested on past quarters: leaving this group out made a difference too small to confirm for the current "
+                 "quarter (Lead 1) and made a difference too small to confirm for the next quarter (Lead 2). Its "
+                 "contribution could not be established with the data available.",
+    "ofw_remittance": "Tested on past quarters: leaving this group out made no meaningful difference for the current "
+                      "quarter (Lead 1) and made no meaningful difference for the next quarter (Lead 2). Its contribution "
+                      "could not be established with the data available.",
+}
+
+
+def test_every_card_states_only_what_the_corrected_tests_support():
+    ev = CH1.trigger_evidence()
+    assert {g: ev[g]["sentence"] for g in FIVE} == CARDS
+    # climate: removal helped at Lead 2 only on an uncorrected interval (the registered test is one-sided, "hurts")
+    assert ev["climate"]["brier_change_without"]["2"]["ci90"][1] < 0 and "noise" not in ev["climate"]["sentence"]
+    for g in FIVE:
+        for k in ("1", "2"):
+            x = ev[g]["brier_change_without"][k]
+            if max(abs(x["diff"]), *map(abs, x["ci90"])) >= .001:              # interval not inside the floor
+                assert f"no meaningful difference for {X_PERIOD[k]}" not in ev[g]["sentence"], (g, k)
+
+
+X_PERIOD = {"1": "the current quarter (Lead 1)", "2": "the next quarter (Lead 2)"}
+
+
 def test_regenerating_the_evidence_keeps_the_approved_wording():
     import sys
     sys.path.insert(0, str(ABL.parents[1] / "runner"))

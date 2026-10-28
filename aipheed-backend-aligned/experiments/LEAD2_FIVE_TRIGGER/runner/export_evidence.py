@@ -2,7 +2,10 @@
 leave-one-group-out change in Brier score at Leads 1-2, its SHAP share, and one plain sentence generated from those
 numbers. A practical floor of 0.001 Brier separates "measurable" from "negligible". A group is called measurable at a
 lead only when the Holm-corrected p (over the five groups) is below ALPHA; a 90% interval above zero that does not
-survive the correction is stated as not confirmed. Employment's card is the approved sentence (CR_REVIEW 20.8).
+survive the correction is stated as not confirmed. The pre-registered test is one-sided (removal hurts, PROTOCOL
+section 6), so an interval below zero (removal helped) has no corrected test and is also stated as not confirmed. "No
+meaningful difference" needs the whole interval inside the floor; otherwise the difference is "too small to confirm".
+Employment's card is the approved sentence (CR_REVIEW 20.8).
 
     python export_evidence.py   # backend/data/ch1_trigger_evidence.json
 """
@@ -35,27 +38,27 @@ def state(x: dict) -> str:
     if x["ci90"][0] > 0 and x["diff"] >= FLOOR:
         return "worse" if x.get("holm_p_hurts", 1.0) < ALPHA else "unconfirmed"
     if x["ci90"][1] < 0 and -x["diff"] >= FLOOR:
-        return "better"
-    return "unchanged" if abs(x["diff"]) < FLOOR else "uncertain"
+        return "better_unconfirmed"                    # no corrected test exists for this direction
+    return "unchanged" if max(abs(x["diff"]), *map(abs, x["ci90"])) < FLOOR else "uncertain"
 
 
 def sentence(b: str, r: dict) -> str:
     st = {k: state(r[k][b]["loo_t43c"]) for k in ("1", "2")}
-    words = {"worse": "made the forecasts worse for {}", "better": "made the forecasts slightly better for {}",
+    words = {"worse": "made the forecasts worse for {}",
+             "better_unconfirmed": "made the forecasts slightly better for {}, a difference not confirmed after "
+                                   "correcting for multiple tests",
              "unconfirmed": "made the forecasts worse for {}, a difference not confirmed after correcting for multiple tests",
              "unchanged": "made no meaningful difference for {}", "uncertain": "made a difference too small to confirm for {}"}
     c1, c2 = (words[st[k]].format(PERIOD[k]) for k in ("1", "2"))
-    txt = f"Tested on past quarters: leaving this group out {c1}{',' if st['1'] == 'unconfirmed' else ''} and {c2}."
+    txt = f"Tested on past quarters: leaving this group out {c1}{',' if 'unconfirmed' in st['1'] else ''} and {c2}."
     confirmed = [k for k in ("1", "2") if st[k] == "worse"]
     if confirmed:
         where = "the current and next quarters" if len(confirmed) == 2 else PERIOD[confirmed[0]]
         txt += f" Its contribution is measurable for {where}."
     elif b in APPROVED:
         return APPROVED[b]
-    elif "unconfirmed" in st.values():
+    elif any("unconfirmed" in v for v in st.values()):
         txt += " Its contribution is not established after correcting for multiple tests."
-    elif "better" in st.values():
-        txt += " Its contribution is not established; at that horizon it adds more noise than information."
     else:
         txt += " Its contribution could not be established with the data available."
     return txt
