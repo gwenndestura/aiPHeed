@@ -269,3 +269,83 @@ Each check lists the indicators beyond the 75th percentile, at the cut-off, in t
 **Five-trigger contribution:** see §6.
 - Adding change and duration features (B4) did not help climate, employment, fish production or remittances. Their limit is the data (national, coincident, sparse), not the representation.
 - Market's dominance is real. It carries the only signal that separates HIGH from LOW at Leads 1-2.
+
+---
+
+## 12. Round 3: target timing, borderline labels, poverty input (protocol v3, committed in bfa6b9b before scoring)
+
+### 12.1 Is the target temporally consistent? (`out/target_timing.csv`)
+
+For every Lead-2 target, the table records:
+- the SWS fieldwork end and its 3-month recall window;
+- the SWS publication date;
+- the price months and their approximate release;
+- the Lead-1 and Lead-2 issue dates;
+- when the label became complete.
+
+| Finding | Evidence | Decision |
+|---|---|---|
+| The SWS recall window overlaps the price quarter by **90% on average** (lowest: 2025-Q2 64%, 2025-Q4 66%, 2023-Q4 78%) | fieldwork-end dates | Hunger and price refer to largely the same period |
+| A recall-aligned price label (the price months set to the SWS recall months) | — | It would flip 4 of 65 Lead-2 labels and fix 1 of 13 errors. **No target correction is justified.** |
+| Every training label is used only after both its SWS round and its last CPI month were published | label-complete dates vs origins (input audit) | No leakage |
+
+### 12.2 Borderline errors
+
+- 6 of the 13 Lead-2 errors had a realised price margin within 0.5 point. Two are within CPI rounding (≤ 0.1 point), so they are effectively coin-flip labels: Cavite 2025-Q2 (−0.07) and Cavite 2026-Q2 (+0.02).
+- No error label is in doubt on the hunger side: every error quarter's hunger reading is more than 1.5 standard errors from 11.3.
+- The threshold is frozen and was not changed.
+
+### 12.3 How informative is the Lead-2 evaluation?
+
+| Metric | Point estimate | 95% Clopper-Pearson | 90% quarter-block bootstrap |
+|---|---|---|---|
+| HIGH recall | 10/17 = 0.59 | 0.33 - 0.82 | 0.25 - 0.86 |
+| HIGH precision | 10/16 = 0.63 | 0.35 - 0.85 | 0.42 - 0.75 |
+
+- The chance that the true recall is at least 0.60 is **0.49**: the R6 failure is statistically a coin flip.
+- 17 HIGH cases fall in only 7 of 13 quarters. The provinces share one regional hunger reading, so the independent evidence is about 7 quarters.
+- **No longer valid evaluation exists.** Origins before 2022-Q4 lack the training history the frozen rule requires, and pre-2021 data are outside the study window.
+
+### 12.4 Poverty input (V1)
+
+| Check | Finding |
+|---|---|
+| Source and year | PSA small-area poverty estimates 2021 (142 LGUs), POPCEN 2024 population, land area |
+| Construction | 0.6 × min-max(**unweighted** mean of LGU poverty rates) + 0.4 × min-max(density) |
+| Problem 1 | **Two opposite gradients mixed:** Cavite (densest) V1 0.590 ≈ Quezon (poorest) 0.600 |
+| Problem 2 | Unweighted LGU mean, not a provincial rate. Population-weighted: Quezon 19.7, Cavite 9.9, Batangas 8.8, Rizal 7.1, Laguna 6.0 |
+| Availability | Static profile; POPCEN 2024 published 2025 (disclosed FIRI Amendment 1 deviation) |
+| Municipal substitutes | LGU ranking only; one Quezon LGU (Lucena) has no own estimate |
+| Quezon 2024-Q3 | V1 pushed the price probability down (SHAP −0.72) |
+
+**Correction tested** (pre-registered). D1 replaces V1 with population-weighted poverty (monotone increasing) plus density. D2 is the same without the constraint.
+
+| | B0 (P0H4-U) | D1 | D2 |
+|---|---|---|---|
+| Lead 1: accuracy, recall, Brier | 0.843, 0.65, 0.132 | 0.814, **0.53**, 0.133 | 0.814, 0.53, 0.131 |
+| Lead 2: accuracy, precision / recall, Brier | 0.800, 0.62 / 0.59, 0.167 | 0.769, 0.56 / 0.59, **0.181** (+0.014, CI excludes 0) | 0.785, 0.59 / 0.59, 0.176 |
+| Quezon 2024-Q3, Lead-2 probability | 0.355 | 0.330 | 0.328 |
+| Criteria lost vs B0 | — | Lead-1 R6, Lead-2 R5 | Lead-1 R6, Lead-2 R5 |
+
+**Not adopted.**
+- With poverty forced to raise risk, Quezon 2024-Q3 is still missed. The old V1 was not the sole cause.
+- The composite V1 helps the model as a **province profile**: it absorbs province-specific differences in how often the price thresholds are crossed. That is predictive, but it is not a poverty effect.
+- The dashboard therefore keeps calling its influence "relative model influence", and no causal reading is given.
+
+### 12.5 Final seven-criteria table: every model tested, before (B0) and after
+
+| Model (reason for change) | Lead | R1 | R2 accuracy | R3 balanced | R4 | R5 | R6 precision / recall | R7 | Passes |
+|---|---|---|---|---|---|---|---|---|---|
+| Served P0H4 (original) | 2 | ✓ | ✓ 0.769 | ✗ 0.635 | ✓ | ✗ | ✗ 0.60 / 0.35 | ✓ | No |
+| **P0H4-U (SWS-update re-issue) = FINAL** | 1 | ✓ | ✓ 0.843 | ✓ 0.776 | ✓ | ✓ | ✓ 0.69 / 0.65 | ✓ | **Yes** |
+| **P0H4-U = FINAL** | 2 | ✓ | ✓ 0.800 | ✓ 0.732 | ✓ | ✓ | **✗ 0.62 / 0.59** | ✓ | **No (R6, one case)** |
+| B1 anchored projections | 2 | ✓ | ✓ 0.785 | ✓ 0.702 | ✓ | ✓ | ✗ 0.60 / 0.53 | ✓ | No |
+| B4 trigger dynamics | 2 | ✓ | ✓ 0.785 | ✓ 0.721 | ✓ | ✓ | ✗ 0.59 / 0.59 | ✓ | No |
+| C0-T validation threshold | 2 | ✓ | ✗ 0.615 | ✗ 0.607 | ✗ | ✓ | ✗ 0.36 / 0.59 | ✗ | No |
+| D1 poverty correction | 2 | ✓ | ✓ 0.769 | ✓ 0.711 | ✓ | ✗ | ✗ 0.56 / 0.59 | ✓ | No |
+
+**Final decision.**
+- **Retain P0H4-U as the research candidate.** P0H4 stays the served default until it is reviewed.
+- **Lead 1:** reliable (development evidence).
+- **Lead 2:** meets 6 of 7 criteria and the 80% accuracy goal. It fails R6 by one HIGH case, and the evaluation cannot tell whether the true recall is above or below 0.60 (P = 0.49).
+- **Lead 2 is reported as promising, not validated.** The sealed forecasts, scored from January 2027, are the next real evidence.
