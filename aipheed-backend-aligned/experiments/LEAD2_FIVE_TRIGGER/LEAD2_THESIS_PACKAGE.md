@@ -1243,3 +1243,138 @@ This builds the dashboard step that §18.9 listed as not built.
 | `experiments/LEAD2_FIVE_TRIGGER/PROTOCOL_LEAD2_CPI_REFRESH.md`, `runner/cpi_refresh_features.py`, `runner/cpi_refresh.py`, `runner/cpi_refresh_seal.py`, `data/cpi_refresh.csv`, `out/cpi_refresh*.json`, `out/cpi_refresh_rows.csv`, `sealed/cr_prospective.*` | CR experiment and seal |
 | `out/deploy_replay*.{json,csv}` | replay re-run after the integration |
 | Served `ch1_engine/`, `ch1_engine_fr/`, seals, frontend | **unchanged** |
+
+## 20. Validation and adoption review of CR (CR_REVIEW; `runner/cr_review.py`, `runner/cr_release_sensitivity.py`)
+
+This review refits nothing for selection. It reads the committed scored rows (`out/cpi_refresh_rows.csv`, 80bbe98), applies the unchanged 0.50 cut, R1-R7 and `final.adoption_rule`, and adds paired diagnostics. The threshold sweep and the release-day sensitivity are reported only; they were never used to choose anything. No later-quarter outcome was used to change a model.
+
+### 20.1 Implementation check (committed code: 03e075b, 389d32f, 80bbe98)
+
+| Check | Result |
+|---|---|
+| Every dashboard view reads `ch1_system.rows()` | Yes. Map, cards, timeline, default quarter, summaries, drivers, explainability, reports (`report.py`, `report_data_e31.py`), `/api/v1/final/*` and `/api/v1/forecast-history` all read `CH1.rows()` or `CH1.row()` (which calls `rows()`). The only dashboard caches of rows-derived output (`_province_forecasts_cached`, `_municipal_frame_cached`, `_drivers_cached`) are keyed by `_lead2_key()`, which carries `state_token()`. |
+| Re-issues use only information published before the issue date | Yes. Overlay guard (c): SWS reading published before the issue date. Replay: every reading used was published before its issue date. |
+| CPI refresh cut-off | The day-10 rule is implemented as stated (`newest_month`). The future-perturbation test (later months set to 999) leaves every refreshed value unchanged. **The day-10 rule is an assumption, not PSA's recorded calendar for provincial CPI** (E113_CPI_VALIDATION §1). See 20.4. |
+| History append-only, supersession, audit | Yes: atomic append, `supersedes`, byte-identical earlier history in tests, refusal log, `/forecast-history/status`. |
+| Re-issue off by default | Yes. `AIPHEED_SWS_REISSUE` and `AIPHEED_ENABLE_SCHEDULER` are not set in any deployment file, the store holds no history file, and `state_token()` is empty. |
+| Served P0H4 and seal unchanged | Yes. `backend/data/ch1_engine/rows.csv` and `evaluation.json` are byte-identical to the branch base a6d6614; seal a498b5ef…; max reliable lead 1. |
+| CR is not deployable through the current integration | Correct and intended. Overlay guard (d) refuses any history row whose price part differs from the served export, so a CR price part could never be shown. |
+| Tests | Full backend suite on the committed code: **943 passed, 18 skipped, 0 failed**. With this review's 6 tests (`test_cr_review.py`): **949 passed, 18 skipped**. |
+
+### 20.2 The adoption condition CR fails: definition and origin
+
+- **Definition.** `final.adoption_rule`, condition `2_new_FA_le_new_hits`: on all 65 Lead-2 rows, the rows the candidate newly calls HIGH that are LOW (new false alarms) must not outnumber the rows it newly calls HIGH that are HIGH (new hits).
+- **Origin.** PROTOCOL_LEAD2_FINAL §5.2, "No concealed regression", written and frozen on 2026-10-28 (6febd22) before K1 was scored. It was reused unchanged for K2, the tuning campaign and CR.
+- **Recorded justification.** The section title states the purpose: a candidate must not be adopted on a pooled Brier or accuracy gain while making new wrong HIGH calls. In an early-warning system each false alarm can trigger a response, so the condition is an operational safety guard.
+- **Classification.** A **development decision with a safety purpose**.
+  - It is not a statistical test: it compares two counts (3 vs 2) with no sampling model.
+  - It was not taken from an external standard.
+  - It is not a mistake, and it was applied identically to every candidate.
+- **Can CR be adopted under the existing rule?** **No.**
+  - The rule fails.
+  - CR's own protocol (§3) made CR the last candidate.
+  - Every protocol in this package prohibits editing the rule after scoring.
+
+### 20.3 Which rows change (Lead 2, identical rows, `out/cr_review_changes.csv`)
+
+| Province | Target | Change | Observed | P0H4-U p | CR p | Price part: P0H4-U → CR |
+|---|---|---|---|---|---|---|
+| Quezon | 2024-Q3 | new hit | HIGH | 0.355 | 0.565 | 0.43 → 0.69 |
+| Batangas | 2024-Q3 | new false alarm | LOW | 0.458 | 0.504 | 0.56 → 0.61 |
+| Cavite | 2025-Q3 | removed false alarm | LOW | 0.696 | 0.418 | 0.71 → 0.43 |
+| Laguna | 2025-Q3 | lost hit | HIGH | 0.635 | 0.482 | 0.65 → 0.49 |
+| Cavite | 2026-Q2 | new hit | HIGH | 0.278 | 0.635 | 0.35 → 0.79 |
+| Laguna | 2026-Q2 | new false alarm | LOW | 0.467 | 0.664 | 0.58 → 0.82 |
+| Quezon | 2026-Q2 | new false alarm | LOW | 0.313 | 0.667 | 0.39 → 0.83 |
+| Quezon | 2026-Q3 | removed false alarm | LOW | 0.532 | 0.432 | 0.55 → 0.45 |
+
+- 8 calls change, in 4 of 13 target quarters. Net: **+1 hit, +1 false alarm, accuracy identical (52/65)**.
+- In each quarter the refreshed CPI moves every province the same way. The extra months raise or lower the whole region's price part, so hits and false alarms arrive together.
+- The rule counts gross changes. Counted net (+1 hit vs +1 false alarm), there is still no classification gain.
+
+### 20.4 Robustness of the improvement
+
+| Question | Finding |
+|---|---|
+| Brier gain vs P0H4-U | −0.020; quarter-block bootstrap 90% CI [−0.046, +0.006], p .11; **exact paired sign-flip test over the 13 quarters p .13**. CR is better in 7 quarters and worse in 6 (sign test p .50). |
+| Concentration | **59% of the gain comes from one quarter (2024-Q4)**; without it the gain is −0.009. DEV block −0.030, later block −0.007. By thirds −0.004, −0.058, −0.000. |
+| Multiplicity | CR is the 11th candidate scored against P0H4-U on these Lead-2 rows (B1-B4, K1, K2, N0-N2, G0, CR). Bonferroni on p .11 gives 1.0. |
+| vs the served P0H4 | −0.047, p .013. Most of this is the re-issue timing (P0H4-U vs P0H4: −0.027). |
+| Cut | In a diagnostic sweep of cuts 0.40-0.60, CR passes R6 only at 0.475-0.50. At 0.525 it has P0H4-U's precision and recall. |
+| One row | **One lost hit or one extra false alarm makes CR fail R6.** Today precision is 11/18 = 0.611; one lost hit gives 10/17 = 0.588, one extra false alarm 11/19 = 0.579. |
+| One quarter | Leaving out each target quarter in turn, CR passes R1-R7 in 9 of 13 subsets. Without 2024-Q2, 2024-Q4, 2025-Q2 or 2025-Q3 it fails R6. |
+| CPI availability margin | Issue dates fall as little as **2 days** after the assumed day-10 release (30 of 65 Lead-2 rows are within 10 days). PSA's actual release dates for the **provincial** CPI table were never recorded. |
+| Release-day sensitivity (refit, report only) | Day 10 reproduces every CR Lead-2 call. **At day 15, R6 fails** (TP 10, FP 6, FN 7, TN 42, the same counts as P0H4-U; 2 calls differ from CR). At day 20, R6 fails and the later-block accuracy condition also fails. **The Brier gain is stable or larger** (−0.027, p .027 at day 15; −0.025, p .042 at day 20; uncorrected). |
+| Numerical stability | Rebuilding the inputs at day 10 reproduces them to 5e-9 (the CSV keeps 10 significant digits). That alone moves Lead-1 Brier by 0.0007 and Lead-3 accuracy by 0.017; Lead-2 calls are unchanged. Small LightGBM split shifts matter on 65-70 rows. |
+| Longer leads | Lead 3 gets worse (0.633 → 0.533; Brier +0.017), and Lead-4 accuracy falls 0.673 → 0.600. |
+
+### 20.5 Is the evidence sufficient for an adoption decision?
+
+- 65 Lead-2 rows, but only **13 target quarters, 7 of them with any HIGH case, and 17 HIGH rows**.
+- The hunger part is identical within a quarter, and the price part moves together across provinces. Calls therefore change in province blocks, and the independent unit is the quarter.
+- Within-quarter correlation of the Brier difference is 0.05 (row-level effective n ≈ 54). The quarter-to-quarter spread is large: SD 0.060 against a mean of −0.020.
+- **About 58 target quarters (≈14 years) would be needed** for 80% power to confirm a Brier gain of this size at one-sided α = 0.05.
+- **Conclusion: the retrospective evidence cannot distinguish CR from P0H4-U.** Neither result is robust:
+  - the classification pass rests on one row, one window of cuts and one release-day assumption;
+  - the Brier gain comes mostly from one quarter, is not significant, and faces multiplicity.
+
+### 20.6 Decision
+
+- **CR is not eligible for adoption under the existing rules.** It fails `2_new_FA_le_new_hits`, and its own protocol made it the final candidate.
+- **The full CR re-issue pathway was not built.** Building it is justified only for an adoptable candidate. It would need:
+  - the CPI refresh in `sws_reissue` at each re-issue date;
+  - a price model trained on refreshed rows;
+  - a new history `model` version;
+  - relaxing overlay guard (d), which today refuses any changed price part.
+
+  P0H4 would stay as the rollback.
+- **Evidence still missing:**
+  1. the sealed prospective outcomes (`sealed/cr_prospective.csv`, dd293e2e; targets 2026-Q4..2027-Q3; none observed yet);
+  2. PSA's recorded release dates for the provincial CPI table, 2022-2026, to confirm or replace the day-10 rule;
+  3. enough further quarters for a decisive paired comparison.
+- **Retained:** P0H4-U as the research baseline (fails R6 at Lead 2) and P0H4 as the served model.
+
+### 20.7 Deployed behaviour and the maximum reliable horizon
+
+| Configuration | What it is | Lead 1 | Lead 2 | Max lead passing R1-R7 |
+|---|---|---|---|---|
+| **Deployed today: P0H4, re-issue flag off** | Every lead issued at quarter start | 0.843, passes | 0.769, balanced 0.635, P 0.60 / R 0.35, Brier 0.194; fails R3, R5, R6 | **Lead 1** |
+| P0H4 with the re-issue enabled (= P0H4-U; built, not enabled) | Lead-2+ hunger part refreshed after the SWS release | same | 0.800, balanced 0.732, P 0.63 / R 0.59, Brier 0.167; fails R6 | Lead 1 |
+| CR (research only; not built into serving) | P0H4-U + CPI refreshed at the re-issue | 0.871, passes | 0.800, balanced 0.751, P 0.61 / R 0.65, Brier 0.147; passes, but not robustly (20.4) | Lead 2 retrospectively; not adopted |
+
+**For the actual serving configuration, the maximum forecast horizon that passes all frozen criteria is Lead 1 (the current quarter).**
+
+### 20.8 Five trigger groups (unchanged evidence; `out/ablation.json`, P0H4-U price model)
+
+All 12 indicator families are columns of the one unified LightGBM:
+- A1 (food and food-minus-headline projections);
+- A2, A3, V1, C1, C2, C3, C4, E1, E2, N1, H1.
+
+All are read at or before the issue date (`out/input_audit.json` time alignment: all true). CR changes only the three A1/momentum columns.
+
+| Group | Leave-group-out ΔBrier, Lead 1 | Lead 2 | Lead 3 | Holm-adjusted p (Lead 1 / 2 / 3) | SHAP share | Honest reading |
+|---|---|---|---|---|---|---|
+| Market / Prices | +0.052 | +0.037 | +0.028 | <.001 / .06 / .03 | 0.62 | Carries the forecast |
+| Climate | −0.007 | −0.005 | −0.004 | .94 / 1.0 / 1.0 | 0.04 | No measured gain; removing it helps slightly at Leads 2-3 |
+| Employment | +0.005 | +0.003 | +0.000 | .11 / .71 / .72 | 0.07 | Not established after correction; the national series tracks the calendar |
+| Fish production | +0.003 | −0.001 | +0.006 | .15 / 1.0 / <.001 | 0.05 | Established only at Lead 3, and small |
+| OFW remittances | +0.0001 | +0.0000 | +0.0000 | .15 / .06 / .09 | 0.000 | Negligible: the model barely uses it |
+
+- Positive ΔBrier means removing the group made the forecasts worse.
+- Leave-group-out refits, permutation and SHAP are kept separate. None of them shows that a group *independently causes* better forecasts; SHAP measures influence only.
+
+**Wording issue found (not changed; needs approval).** `backend/data/ch1_trigger_evidence.json` sets `class: "predictive"` for employment, fish production and OFW remittances on unadjusted p < .05.
+- The card sentences shown to users are mostly cautious.
+- Employment's, however, says "Its contribution is measurable". After Holm correction that is not established (p .11), and the effect is +0.005.
+
+### 20.9 Thesis-ready wording
+
+> **Retrospective evaluation.** The walk-forward evaluation covers 2023-2026: 13 target quarters, or 65 province-quarters at Lead 2. In it, the deployed configuration forecasts the current quarter reliably (Lead 1: accuracy 0.84, all seven criteria met) but not the next quarter (Lead 2: accuracy 0.77, HIGH recall 0.35).
+>
+> Re-issuing the next-quarter forecast after each SWS release is a timing change with the same model. It raises Lead-2 accuracy to 0.80 and recall to 0.59, which still misses the 0.60 recall criterion.
+>
+> Refreshing the food-price inputs as well, with the CPI months published by the re-issue date, met all seven criteria retrospectively (accuracy 0.80, precision 0.61, recall 0.65). That result is not robust. It rests on a single province-quarter, on cuts between 0.475 and 0.50, and on an assumed CPI release day. Its Brier improvement over the re-issued model (−0.020) is not statistically significant and comes mostly from one quarter. It failed the pre-registered adoption rule (three new false alarms against two new hits) and was not adopted.
+>
+> **Prospective validation.** The refreshed-price forecasts for 2026-Q4 to 2027-Q3 were sealed (SHA-256 dd293e2e…) before any of their outcomes existed. No prospective result is reported, because none of those outcomes has been observed yet.
+>
+> With 13 evaluation quarters, the study cannot statistically separate the candidate models; about 58 quarters would be needed. The sealed record is therefore the independent test of whether the next-quarter forecast can be made reliable.
