@@ -1,0 +1,144 @@
+{
+ "columns_in_model": [
+  "A1_food",
+  "A1_gap",
+  "A2",
+  "A3",
+  "V1",
+  "C1",
+  "C2",
+  "C3",
+  "C4",
+  "E1",
+  "E2",
+  "N1",
+  "H1",
+  "A_mom",
+  "G_pri_yoy",
+  "NG_gap_price",
+  "lead",
+  "W_rice_yoy",
+  "W_rice_mom",
+  "W_cereal_yoy",
+  "W_crude_yoy",
+  "W_urea_yoy"
+ ],
+ "groups": {
+  "market": [
+   "A1_food",
+   "A1_gap",
+   "A_mom",
+   "A2",
+   "A3",
+   "W_rice_yoy",
+   "W_rice_mom",
+   "W_cereal_yoy",
+   "W_crude_yoy"
+  ],
+  "climate": [
+   "C1",
+   "C2",
+   "C3",
+   "C4",
+   "W_urea_yoy"
+  ],
+  "employment_remittances": [
+   "E1",
+   "E2"
+  ],
+  "news_nlp": [
+   "N1",
+   "G_pri_yoy",
+   "NG_gap_price"
+  ],
+  "poverty_vulnerability": [
+   "V1"
+  ]
+ },
+ "indicator_group": {
+  "A1": "market",
+  "A2": "market",
+  "A3": "market",
+  "C1": "climate",
+  "C2": "climate",
+  "C3": "climate",
+  "C4": "climate",
+  "E1": "employment_remittances",
+  "E2": "employment_remittances",
+  "N1": "news_nlp",
+  "V1": "poverty_vulnerability",
+  "H1": "hunger_condition (target component, not a trigger)"
+ },
+ "duplicate_rows": 0,
+ "provinces": [
+  "PH040100000",
+  "PH040200000",
+  "PH040300000",
+  "PH040400000",
+  "PH040500000"
+ ],
+ "origins": [
+  "2021-Q1",
+  "2021-Q2",
+  "2021-Q3",
+  "2021-Q4",
+  "2022-Q1",
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1",
+  "2025-Q2",
+  "2025-Q3",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "time_alignment": {
+  "psa_month_before_issue_quarter": true,
+  "sws_published_before_issue": true,
+  "news_published_before_issue": true,
+  "news_rows_dated": 1575,
+  "target_after_origin": true
+ },
+ "class_balance": {
+  "1": {
+   "LOW": 53,
+   "HIGH": 17,
+   "quarters": 14,
+   "HIGH_quarters": 7
+  },
+  "2": {
+   "LOW": 48,
+   "HIGH": 17,
+   "quarters": 13,
+   "HIGH_quarters": 7
+  },
+  "3": {
+   "LOW": 43,
+   "HIGH": 17,
+   "quarters": 12,
+   "HIGH_quarters": 7
+  },
+  "4": {
+   "LOW": 38,
+   "HIGH": 17,
+   "quarters": 11,
+   "HIGH_quarters": 7
+  }
+ },
+ "dashboard_vs_refit": {
+  "rows": 95,
+  "refit_missing": 0,
+  "max_abs_diff_pi_price": 4.876605824294389e-07,
+  "probability_equals_hunger_x_price": 7.792580000165472e-07
+ }
+}
