@@ -78,6 +78,40 @@ def smd(x, y) -> float:
     return float((a.mean() - b.mean()) / s) if len(a) > 1 and len(b) > 1 and s > 0 else float("nan")
 
 
+def lead_eval(E: pd.DataFrame, c: str) -> dict:
+    """R1-R7 and the before/after quantities of candidate c vs B0, by lead."""
+    dec = {}
+    for k, g in E.groupby("lead"):
+        d = F.evaluate(g, f"{c}_p", "PERS_AB")
+        dv = g["q"] <= F.DEV_LAST
+        d["dev"], d["conf"] = M.cls(g.loc[dv, "y"], g.loc[dv, f"{c}_p"]), M.cls(g.loc[~dv, "y"], g.loc[~dv, f"{c}_p"])
+        d["vs_B0"] = M.boot_diff(g["q"], (g[f"{c}_p"] - g["y"]) ** 2, (g["B0_p"] - g["y"]) ** 2)
+        d["price_term"] = M.cls(g["price"], g[f"{c}_price"])
+        d["new_hits_vs_B0"] = int(((g[f"{c}_p"] >= .5) & (g["B0_p"] < .5) & (g["y"] == 1)).sum())
+        d["new_false_alarms_vs_B0"] = int(((g[f"{c}_p"] >= .5) & (g["B0_p"] < .5) & (g["y"] == 0)).sum())
+        d["lost_hits_vs_B0"] = int(((g[f"{c}_p"] < .5) & (g["B0_p"] >= .5) & (g["y"] == 1)).sum())
+        d["removed_false_alarms_vs_B0"] = int(((g[f"{c}_p"] < .5) & (g["B0_p"] >= .5) & (g["y"] == 0)).sum())
+        yr = g["q"] // 4
+        d["acc_by_year"] = {int(a): float(((h[f"{c}_p"] >= .5).astype(int) == h["y"]).mean()) for a, h in g.groupby(yr)}
+        dec[int(k)] = d
+    return {"leads": dec, "max_reliable_lead": F.max_reliable(dec)}
+
+
+def adoption_rule(b: dict, k1: dict) -> dict:
+    """PROTOCOL_LEAD2_FINAL §5, candidate k1 vs B0 b (per-lead results of lead_eval)."""
+    m_b, m_k = b[2]["metrics"], k1[2]["metrics"]
+    return {
+        "1a_L2_dev_brier_gain_ge_0.005": b[2]["dev"]["brier"] - k1[2]["dev"]["brier"] >= 0.005,
+        "1b_L1_dev_brier_not_worse_by_0.005": k1[1]["dev"]["brier"] <= b[1]["dev"]["brier"] + 0.005,
+        "1c_L2_dev_balanced_not_lower": k1[2]["dev"]["balanced_accuracy"] >= b[2]["dev"]["balanced_accuracy"] - 1e-12,
+        **{f"2_L2_{m}_within_0.02": m_k[m] >= m_b[m] - 0.02 - 1e-12
+           for m in ("accuracy", "balanced_accuracy", "precision", "recall")},
+        "2_new_FA_le_new_hits": k1[2]["new_false_alarms_vs_B0"] <= k1[2]["new_hits_vs_B0"],
+        "2_L2_conf_accuracy_not_lower": k1[2]["conf"]["accuracy"] >= b[2]["conf"]["accuracy"] - 1e-12,
+        "3_L1_passes_R1_R7": k1[1]["reliable"],
+    }
+
+
 def main():
     assert T.sha256(T.LT / "PROTOCOL_LEAD2_FINAL.md") == (T.HERE / "FINAL_SHA256.txt").read_text().strip(), \
         "protocol changed after freezing"
@@ -97,34 +131,9 @@ def main():
     assert repro < 1e-5, f"B0 must reproduce P0H4-U ({repro})"
     res = {"protocol_sha256": T.sha256(T.LT / "PROTOCOL_LEAD2_FINAL.md"), "b0_reproduction_max_abs": repro, "cands": {}}
     for c in CANDS:
-        dec = {}
-        for k, g in E.groupby("lead"):
-            d = F.evaluate(g, f"{c}_p", "PERS_AB")
-            dv = g["q"] <= F.DEV_LAST
-            d["dev"], d["conf"] = M.cls(g.loc[dv, "y"], g.loc[dv, f"{c}_p"]), M.cls(g.loc[~dv, "y"], g.loc[~dv, f"{c}_p"])
-            d["vs_B0"] = M.boot_diff(g["q"], (g[f"{c}_p"] - g["y"]) ** 2, (g["B0_p"] - g["y"]) ** 2)
-            d["price_term"] = M.cls(g["price"], g[f"{c}_price"])
-            d["new_hits_vs_B0"] = int(((g[f"{c}_p"] >= .5) & (g["B0_p"] < .5) & (g["y"] == 1)).sum())
-            d["new_false_alarms_vs_B0"] = int(((g[f"{c}_p"] >= .5) & (g["B0_p"] < .5) & (g["y"] == 0)).sum())
-            d["lost_hits_vs_B0"] = int(((g[f"{c}_p"] < .5) & (g["B0_p"] >= .5) & (g["y"] == 1)).sum())
-            d["removed_false_alarms_vs_B0"] = int(((g[f"{c}_p"] < .5) & (g["B0_p"] >= .5) & (g["y"] == 0)).sum())
-            yr = g["q"] // 4
-            d["acc_by_year"] = {int(a): float(((h[f"{c}_p"] >= .5).astype(int) == h["y"]).mean()) for a, h in g.groupby(yr)}
-            dec[int(k)] = d
-        res["cands"][c] = {"leads": dec, "max_reliable_lead": F.max_reliable(dec)}
+        res["cands"][c] = lead_eval(E, c)
     # ---------------------------------------------------------------- frozen adoption rule (protocol §5)
-    b, k1 = res["cands"]["B0"]["leads"], res["cands"]["K1"]["leads"]
-    m_b, m_k = b[2]["metrics"], k1[2]["metrics"]
-    rule = {
-        "1a_L2_dev_brier_gain_ge_0.005": b[2]["dev"]["brier"] - k1[2]["dev"]["brier"] >= 0.005,
-        "1b_L1_dev_brier_not_worse_by_0.005": k1[1]["dev"]["brier"] <= b[1]["dev"]["brier"] + 0.005,
-        "1c_L2_dev_balanced_not_lower": k1[2]["dev"]["balanced_accuracy"] >= b[2]["dev"]["balanced_accuracy"] - 1e-12,
-        **{f"2_L2_{m}_within_0.02": m_k[m] >= m_b[m] - 0.02 - 1e-12
-           for m in ("accuracy", "balanced_accuracy", "precision", "recall")},
-        "2_new_FA_le_new_hits": k1[2]["new_false_alarms_vs_B0"] <= k1[2]["new_hits_vs_B0"],
-        "2_L2_conf_accuracy_not_lower": k1[2]["conf"]["accuracy"] >= b[2]["conf"]["accuracy"] - 1e-12,
-        "3_L1_passes_R1_R7": k1[1]["reliable"],
-    }
+    rule = adoption_rule(res["cands"]["B0"]["leads"], res["cands"]["K1"]["leads"])
     adopt = all(rule.values())
     final = "K1" if adopt else "B0"
     res["adoption"] = {"rule": rule, "adopted": adopt, "FINAL": final,

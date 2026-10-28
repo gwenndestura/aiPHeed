@@ -1,0 +1,217 @@
+{
+ "auc": {
+  "1": {
+   "t43c_B0": 0.8668146503884573,
+   "t43c_K1": 0.8745837957824639,
+   "price_on_hunger_rows_B0": 0.7430340557275542,
+   "price_on_hunger_rows_K1": 0.7445820433436533
+  },
+  "2": {
+   "t43c_B0": 0.7598039215686274,
+   "t43c_K1": 0.7971813725490197,
+   "price_on_hunger_rows_B0": 0.7306501547987616,
+   "price_on_hunger_rows_K1": 0.7530959752321982
+  }
+ },
+ "lead2_mean_rank_among_low": {
+  "missed_B0": 0.4851190476190476,
+  "missed_K1": 0.5863095238095238,
+  "hits_B0": 0.95,
+  "hits_K1": 0.9416666666666667
+ },
+ "lead2_missed_K1_minus_B0_p": {
+  "Laguna 2023-Q4": -0.010437999999999975,
+  "Quezon 2023-Q4": 0.06152900000000003,
+  "Batangas 2023-Q4": 0.06152900000000003,
+  "Quezon 2024-Q3": 0.015151999999999999,
+  "Cavite 2024-Q4": 0.04850399999999999,
+  "Laguna 2024-Q4": 0.08246600000000001,
+  "Cavite 2026-Q2": -0.016305000000000014
+ },
+ "lead2_low_rows_scored_above_best_missed_K1": 15,
+ "lead2_low_rows_scored_above_best_missed_B0": 17,
+ "lead2_misses_capped_by_hunger_term": 3,
+ "redundancy": {
+  "K_core": {
+   "r2_on_aggregates": 0.7938379002189202,
+   "n": 249,
+   "smd_raw": 0.4472804434645277,
+   "smd_residual": 0.27238371660701055,
+   "max_abs_corr": [
+    0.5526199028143146,
+    "F_ex"
+   ]
+  },
+  "K_fresh_gap": {
+   "r2_on_aggregates": 0.7412736173128089,
+   "n": 249,
+   "smd_raw": -0.09377721444816164,
+   "smd_residual": -0.2272369817413598,
+   "max_abs_corr": [
+    0.5826672174240428,
+    "F_ex"
+   ]
+  },
+  "K_diff": {
+   "r2_on_aggregates": 0.34360787709531115,
+   "n": 249,
+   "smd_raw": 0.5022997570857495,
+   "smd_residual": 0.23721703801499514,
+   "max_abs_corr": [
+    0.5298480020957316,
+    "accel"
+   ]
+  }
+ },
+ "early_warning_misses": [
+  {
+   "case": "Laguna 2023-Q4",
+   "B0_p": 0.24735,
+   "K1_p": 0.236912,
+   "pi_H": 0.5,
+   "pct_K_core": 0.6333333333333333,
+   "pct_K_fresh_gap": 0.8666666666666667,
+   "pct_K_diff": 0.0,
+   "pct_A1_food": 0.46,
+   "pct_A1_gap": 0.56,
+   "K_space_10nn_price_rate": 0.9,
+   "train_price_rate": 0.5,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Quezon 2023-Q4",
+   "B0_p": 0.24735,
+   "K1_p": 0.308879,
+   "pi_H": 0.5,
+   "pct_K_core": 0.4,
+   "pct_K_fresh_gap": 0.8666666666666667,
+   "pct_K_diff": 0.1,
+   "pct_A1_food": 0.13,
+   "pct_A1_gap": 0.56,
+   "K_space_10nn_price_rate": 0.9,
+   "train_price_rate": 0.5,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Batangas 2023-Q4",
+   "B0_p": 0.24735,
+   "K1_p": 0.308879,
+   "pi_H": 0.5,
+   "pct_K_core": 0.9333333333333333,
+   "pct_K_fresh_gap": 0.4,
+   "pct_K_diff": 0.26666666666666666,
+   "pct_A1_food": 0.53,
+   "pct_A1_gap": 0.33,
+   "K_space_10nn_price_rate": 1.0,
+   "train_price_rate": 0.5,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Quezon 2024-Q3",
+   "B0_p": 0.354559,
+   "K1_p": 0.369711,
+   "pi_H": 0.821373,
+   "pct_K_core": 0.24761904761904763,
+   "pct_K_fresh_gap": 1.0,
+   "pct_K_diff": 0.42857142857142855,
+   "pct_A1_food": 0.61875,
+   "pct_A1_gap": 0.7625,
+   "K_space_10nn_price_rate": 0.8,
+   "train_price_rate": 0.6333333333333333,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Cavite 2024-Q4",
+   "B0_p": 0.160776,
+   "K1_p": 0.20928,
+   "pi_H": 0.968403,
+   "pct_K_core": 0.9357142857142857,
+   "pct_K_fresh_gap": 0.9071428571428571,
+   "pct_K_diff": 0.5857142857142857,
+   "pct_A1_food": 0.3333333333333333,
+   "pct_A1_gap": 0.12777777777777777,
+   "K_space_10nn_price_rate": 0.8,
+   "train_price_rate": 0.5358974358974359,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Laguna 2024-Q4",
+   "B0_p": 0.167232,
+   "K1_p": 0.249698,
+   "pi_H": 0.968403,
+   "pct_K_core": 0.9357142857142857,
+   "pct_K_fresh_gap": 1.0,
+   "pct_K_diff": 0.8,
+   "pct_A1_food": 0.28888888888888886,
+   "pct_A1_gap": 0.18888888888888888,
+   "K_space_10nn_price_rate": 0.9,
+   "train_price_rate": 0.5358974358974359,
+   "strong_K_signal": true
+  },
+  {
+   "case": "Cavite 2026-Q2",
+   "B0_p": 0.278293,
+   "K1_p": 0.261988,
+   "pi_H": 0.806254,
+   "pct_K_core": 0.0,
+   "pct_K_fresh_gap": 0.04395604395604396,
+   "pct_K_diff": 0.1010989010989011,
+   "pct_A1_food": 0.7666666666666667,
+   "pct_A1_gap": 0.31666666666666665,
+   "K_space_10nn_price_rate": 0.7,
+   "train_price_rate": 0.5515151515151515,
+   "strong_K_signal": true
+  }
+ ],
+ "headroom_K1": [
+  {
+   "cut": 0.209,
+   "tp": 17,
+   "fp": 24,
+   "recall": 1.0,
+   "precision": 0.4146341463414634
+  },
+  {
+   "cut": 0.237,
+   "tp": 15,
+   "fp": 22,
+   "recall": 0.8823529411764706,
+   "precision": 0.40540540540540543
+  },
+  {
+   "cut": 0.25,
+   "tp": 14,
+   "fp": 22,
+   "recall": 0.8235294117647058,
+   "precision": 0.3888888888888889
+  },
+  {
+   "cut": 0.262,
+   "tp": 13,
+   "fp": 22,
+   "recall": 0.7647058823529411,
+   "precision": 0.37142857142857144
+  },
+  {
+   "cut": 0.309,
+   "tp": 11,
+   "fp": 17,
+   "recall": 0.6470588235294118,
+   "precision": 0.39285714285714285
+  },
+  {
+   "cut": 0.37,
+   "tp": 10,
+   "fp": 15,
+   "recall": 0.5882352941176471,
+   "precision": 0.4
+  },
+  {
+   "cut": 0.5,
+   "tp": 10,
+   "fp": 6,
+   "recall": 0.5882352941176471,
+   "precision": 0.625
+  }
+ ]
+}
