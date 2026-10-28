@@ -655,3 +655,143 @@ The rule (|ρ| ≥ 0.30 and the CI excluding 0) fails for all three. **No candid
 - `out/case_audit.csv`, `out/case_audit.json`, `out/rain_screen.json`;
 - `PROTOCOL_LEAD2_CAUSES_SCREEN.md`;
 - tests in `backend/tests/integration/test_lead2_final.py`.
+
+---
+
+## 16. Structured LightGBM tuning campaign (LEAD2_TUNING; branch `aiPHeed/lead2-lgbm-tuning`; protocol committed in e5fdf72 before scoring)
+
+### 16.1 Pipeline audit: what can be tuned and what cannot
+
+| Part | Status |
+|---|---|
+| Served P0H4 vs research P0H4-U | The same unified LightGBM price model, × π_H. P0H4-U only re-issues Leads ≥ 2 after the SWS release. Lead 2: P0H4 0.769 (TP 6, FP 4), P0H4-U 0.800 (TP 10, FP 6). |
+| LightGBM settings before this campaign | 8 configurations: depth 1/2, 50/150 rounds, class weight none/balanced; fixed min_child 15, L2 5, learning rate 0.05; no feature or row sampling, L1 or split-gain penalty; chosen per origin on inner chronological folds |
+| **Tunable** | Every LightGBM hyperparameter, class weighting, the round count (early stopping), feature form |
+| **Not tunable without changing the task** | π_H (SWS-based, not LightGBM), the product rule, the T43c labels, the S-AB timing, the 0.50 cut and R1-R7 |
+| **Ranking headroom** | No cut on P0H4-U's Lead-2 probabilities meets R6. A threshold or calibration rule therefore cannot produce a Lead-2 pass; only a better HIGH-vs-LOW ordering can. |
+| Structural cap | 3 of the 7 Lead-2 misses have π_H = 0.50, so recall ≤ 14/17 for any price model |
+
+### 16.2 Target and horizon check (unchanged; reported, not altered)
+
+- **Target.** T43c is the operational Chapter I proxy: Balance Luzon SWS hunger > 11.3% AND the provincial food-price condition. It is **not** a direct measurement of provincial food insecurity (§2, §15).
+- **Class balance.** HIGH share by lead: 0.24 / 0.26 / 0.28 / 0.31 (17 HIGH at every lead).
+- **Labels near the price threshold.** 5 rows within ±0.10 point (rounding) and 15 within ±0.50 at every lead.
+- **Timing.** Every training label is used only after both its SWS round and its last CPI month were published (§12.1). The SWS recall window overlaps the price quarter by 90% on average.
+- **Decision.** No label change; horizons and cut-off rules are unchanged.
+
+### 16.3 Search procedure
+
+- **72 structures × 5 round checkpoints = 360 configurations:**
+  - (depth, leaves) ∈ {(1, 2), (2, 4), (3, 8)};
+  - min_data_in_leaf ∈ {15, 5, 40};
+  - (feature_fraction, bagging_fraction) ∈ {(1, 1), (0.7, 0.8)}, bagging_freq 1;
+  - (L1, L2, min_split_gain) ∈ {(0, 5, 0), (1, 20, 0.05)};
+  - class weight ∈ {none, balanced};
+  - learning rate 0.05; rounds read at 25 / 50 / 100 / 150 / 300 (early stopping on chronological validation).
+- The seed (2027), deterministic mode and the monotone price constraints are those of P0H4-U.
+- **The search contains the P0H4-U grid.** Restricted to it, the code reproduces P0H4-U to 4.9e-7.
+
+| Candidate | Features | How hyperparameters were chosen |
+|---|---|---|
+| N0 | P0H4-U columns | **Nested:** per origin, on that origin's own inner chronological folds (no evaluation row used) |
+| N1 | + A1 × V1 (market pressure × vulnerability) | nested |
+| N2 | + deviation of current food / gap inflation from the province's own earlier history | nested |
+| G0 | P0H4-U columns | **One configuration chosen on DEV** Lead-2 Brier (targets ≤ 2024-Q4), with the Lead-1 constraint. Chosen: depth 1, min_child 15, feature 0.7 / bagging 0.8, L2 5, no class weight, 25 rounds. |
+
+The CONF block (targets 2025-Q2..2026-Q3) was used by no selection.
+
+### 16.4 Results (identical rows; "Δ vs P0H4-U" is the Brier difference with 90% quarter-block CI; negative = better)
+
+| | P0H4 (served) | **P0H4-U (baseline)** | N0 | N1 | N2 | G0 |
+|---|---|---|---|---|---|---|
+| **Lead 1** accuracy | 0.843 | 0.843 | 0.857 | 0.800 | 0.829 | 0.886 |
+| L1 balanced | 0.776 | 0.776 | 0.826 | 0.748 | 0.787 | 0.825 |
+| L1 precision / recall | 0.69 / 0.65 | 0.69 / 0.65 | 0.68 / 0.76 | 0.58 / 0.65 | 0.63 / 0.71 | 0.80 / 0.71 |
+| L1 Brier (Δ vs P0H4-U) | 0.132 | 0.132 | 0.131 (−0.002 [−0.014, +0.011]) | 0.141 (+0.008) | 0.129 (−0.004 [−0.016, +0.010]) | 0.158 (+0.026 [+0.004, +0.049]) |
+| L1 failed | — | — | — | R6 | — | R5 |
+| **Lead 2** accuracy [90% CI] | 0.769 [0.65, 0.88] | **0.800** [0.71, 0.89] | 0.723 [0.63, 0.82] | 0.723 [0.62, 0.83] | 0.754 [0.65, 0.85] | 0.738 [0.65, 0.83] |
+| L2 balanced | 0.635 | 0.732 | 0.661 | 0.661 | 0.681 | 0.709 |
+| L2 HIGH precision / recall | 0.60 / 0.35 | **0.63 / 0.59** | 0.47 / 0.53 | 0.47 / 0.53 | 0.53 / 0.53 | 0.50 / **0.65** |
+| L2 TP FP FN TN | 6 4 11 44 | 10 6 7 42 | 9 10 8 38 | 9 10 8 38 | 9 8 8 40 | 11 11 6 37 |
+| L2 Brier (Δ vs P0H4-U) | 0.194 (+0.027) | **0.167** | 0.187 (+0.019 [+0.002, +0.039]) | 0.182 (+0.015 [+0.001, +0.031]) | 0.184 (+0.017 [+0.003, +0.036]) | 0.186 (+0.019 [−0.002, +0.041]) |
+| L2 Δ vs served P0H4 | — | −0.027 | −0.008 | −0.012 | −0.010 | −0.008 |
+| L2 DEV Brier | 0.235 | 0.177 | 0.193 | 0.190 | 0.199 | **0.167** (selected on it) |
+| L2 CONF Brier / accuracy | 0.148 / 0.867 | 0.156 / 0.833 | 0.179 / 0.733 | 0.173 / 0.767 | 0.167 / 0.800 | **0.209 / 0.733** |
+| L2 thirds; LOQO min | 0.72, 0.70, 0.90; 0.750 | 0.84, 0.65, 0.90; 0.783 | 0.80, 0.55, 0.80; 0.700 | 0.80, 0.55, 0.80; 0.700 | 0.80, 0.60, 0.85; 0.733 | 0.84, 0.55, 0.80; 0.717 |
+| L2 AUC (T43c) | 0.625 | 0.760 | 0.694 | 0.710 | 0.684 | 0.741 |
+| L2 failed criteria | R3, R5, R6 | **R6** | R2-R7 | R2-R7 | R3, R5, R6 | R2, R4, R5, R6, R7 |
+
+**Lead 2 by province (P0H4-U → G0, accuracy and TP/FP out of HIGH cases; 13 rows each, descriptive):**
+- Cavite: 0.69 (1/2 of 3) → 0.62 (1/3)
+- Laguna: 0.77 (3/1 of 5) → 0.69 (3/2)
+- Quezon: 0.77 (4/1 of 6) → 0.85 (5/1)
+- Rizal: 0.85 (0/2 of 0) → 0.85 (0/2)
+- Batangas: 0.92 (2/0 of 3) → 0.69 (2/3)
+
+**Development-only diagnostics.**
+- **Class weighting.** In all 180 matched configuration pairs, `balanced` gave a worse Lead-2 DEV Brier (mean 0.191 vs 0.180) and a *lower* recall (0.34 vs 0.53). The price condition is the majority class in most training windows, so balancing down-weights it.
+- **No configuration reaches the R6 recall.** Across all 360 configurations, the highest Lead-2 DEV recall at 0.50 is 0.545. DEV Brier ranges from 0.167 to 0.245 (median 0.183; P0H4-U 0.177).
+
+### 16.5 Frozen adoption rule
+
+- Strongest eligible candidate by Lead-2 DEV Brier: **G0** (0.167 vs 0.177).
+
+| Condition | G0 |
+|---|---|
+| Lead-2 DEV Brier ≥ 0.005 better | pass |
+| Lead-1 DEV Brier not > +0.005 | pass |
+| Lead-2 DEV balanced accuracy not lower | pass |
+| Lead-2 accuracy / balanced / precision within 0.02 | **fail / fail / fail** |
+| Lead-2 recall within 0.02 | pass (0.65) |
+| New false alarms ≤ new hits | **fail** |
+| Lead-2 CONF accuracy not lower | **fail** (0.733 vs 0.833) |
+| Lead 1 passes R1-R7 | **fail** (R5) |
+| G0 extra guard: CONF Brier not worse / CONF accuracy not lower | **fail** (0.209 vs 0.156) / **fail** |
+
+**Not adopted. P0H4-U is retained.**
+
+### 16.6 What the campaign shows
+
+1. **Wider tuning makes Lead 2 worse, not better.**
+   - Nested selection over 360 configurations picks deeper, longer models on inner folds of 5-20 rows. Every nested candidate is significantly worse than P0H4-U at Lead 2 (Brier +0.015 to +0.019, CIs exclude 0).
+   - The small P0H4-U grid is the better-regularised choice for 13 quarters of data.
+2. **Choosing one configuration on the development quarters overfits them.**
+   - G0 improves DEV Lead-2 Brier (0.177 → 0.167) and raises recall to 0.65.
+   - On the untouched CONF quarters it is the worst candidate (Brier 0.209, accuracy 0.733), with 11 false alarms.
+   - G0's ordering would meet R6 at one cut (0.533), but that cut can only be found on the evaluation rows, so it is not admissible.
+3. **Feature-form arms add nothing.** Market pressure × vulnerability (N1) and own-history deviation (N2) correlate 0.86-0.94 with the existing price columns, and both are worse than P0H4-U at Lead 2.
+4. **Class weighting does not help.** It lowers recall and worsens calibration in every matched pair.
+5. **Lead 1.** N0 and N2 are slightly better than P0H4-U at Lead 1 (accuracy 0.857 / 0.829, Brier −0.002 / −0.004), but not significantly, and worse on the CONF quarters (0.800 / 0.767 vs 0.867). No Lead-1 change is warranted.
+6. **The Lead-2 limit is the information, not the settings.** No cut on P0H4-U meets R6. The best development-period recall over 360 configurations is 0.545. The remaining misses are hunger ties, rounding-level labels and price changes after the cut-off (§15).
+
+### 16.7 Final outcome
+
+| Criterion | Lead 1 (P0H4-U) | Lead 2 (P0H4-U) | Lead 2, strongest tuned candidate (G0) |
+|---|---|---|---|
+| R1 | pass | pass | pass |
+| R2 accuracy ≥ 0.75 | pass 0.843 | pass 0.800 | **fail** 0.738 |
+| R3 balanced ≥ 0.70 | pass 0.776 | pass 0.732 | pass 0.709 |
+| R4 > always-LOW, persistence | pass | pass | **fail** |
+| R5 Brier vs persistence / climatology | pass | pass | **fail** (p .057 / .224) |
+| R6 precision / recall ≥ 0.60 | pass 0.69 / 0.65 | **fail 0.63 / 0.59** | **fail 0.50 / 0.65** |
+| R7 stability | pass | pass | **fail** (third 0.55) |
+
+- **The 80% accuracy goal with all seven criteria is not achieved.**
+- **The maximum reliable horizon remains Lead 1.**
+- P0H4-U stays the research baseline. P0H4 stays the served default (seal a498b5ef).
+- The campaign's configuration, every candidate's rows and the 360-configuration DEV table are saved in `out/tune.json`, `out/tune_rows.csv`, `out/tune_configs.csv` and `out/tune_dev_configs.csv`.
+
+**Thesis-ready paragraph.**
+
+> A structured LightGBM tuning campaign tested 360 configurations of tree structure, minimum leaf size, feature and row sampling, L1/L2 and split-gain regularisation, class weighting and early-stopped boosting rounds. Two cut-off-safe feature forms were also tested (market pressure × vulnerability; deviation from the province's own inflation history). Hyperparameters were chosen either inside each forecast origin on earlier quarters only, or once on the 2023-24 development quarters. Neither improved the two-quarter-ahead forecast:
+> - the nested choices were significantly worse than the original eight-configuration model;
+> - the configuration chosen on the development quarters improved them but deteriorated on the later, untouched quarters (accuracy 0.73 vs 0.83).
+>
+> Class weighting reduced HIGH recall and worsened calibration. No configuration reached a development-period HIGH recall of 0.60 at the 0.50 cut. The original model's ranking admits no cut meeting the precision-and-recall criterion, so the remaining Lead-2 shortfall reflects missing information (delayed hunger surveys, price changes after the forecast date, labels at the rounding limit), not untuned settings. The final model is unchanged: reliable at Lead 1 (accuracy 0.84, HIGH recall 0.65), 0.80 accuracy at Lead 2 with HIGH recall 0.59, which is short of the 0.60 criterion.
+
+**Files:**
+- `PROTOCOL_LEAD2_TUNING.md`;
+- `runner/tune_lib.py`, `runner/tune.py`, `runner/features_v5.py`;
+- `data/stack_v5.csv`;
+- `out/tune*.{json,csv}`, `out/features_v5_audit.json`;
+- `backend/tests/integration/test_lead2_tuning.py` (6 tests).
