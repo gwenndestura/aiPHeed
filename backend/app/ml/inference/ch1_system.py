@@ -92,8 +92,68 @@ def _rows(path: str, mtime: int) -> dict[tuple[str, str], dict]:
 
 
 def rows() -> dict[tuple[str, str], dict]:
+    """The served rows. With AIPHEED_SWS_REISSUE=1 and a forecast history (app.ml.inference.sws_reissue), a row whose
+    Lead-2+ forecast was re-issued after an SWS release shows the re-issue in force at today's date instead."""
     p = data_dir() / "rows.csv"
-    return _rows(str(p), p.stat().st_mtime_ns)
+    from app.ml.inference import sws_reissue as RI
+    h = RI.history_path()
+    if not RI.enabled() or not h.exists():
+        return _rows(str(p), p.stat().st_mtime_ns)
+    return _overlaid(str(p), p.stat().st_mtime_ns, str(h), h.stat().st_mtime_ns, RI.today().isoformat())[0]
+
+
+def state_token() -> str:
+    """Cache-key part for callers that cache rows-derived output: changes when the re-issue history or the date
+    changes, so a cached dashboard never shows a superseded or not-yet-issued forecast. Empty when the overlay is off."""
+    from app.ml.inference import sws_reissue as RI
+    h = RI.history_path()
+    if not RI.enabled() or not h.exists():
+        return ""
+    return f"+reissue:{h.stat().st_mtime_ns}@{RI.today().isoformat()}"
+
+
+def overlay_report() -> list[str]:
+    """History rows the overlay refused (empty when the overlay is off or everything applied)."""
+    p = data_dir() / "rows.csv"
+    from app.ml.inference import sws_reissue as RI
+    h = RI.history_path()
+    if not RI.enabled() or not h.exists():
+        return []
+    return _overlaid(str(p), p.stat().st_mtime_ns, str(h), h.stat().st_mtime_ns, RI.today().isoformat())[1]
+
+
+@functools.lru_cache(maxsize=4)
+def _overlaid(path: str, mtime: int, hpath: str, hmtime: int, now: str) -> tuple[dict, list[str]]:
+    """Export rows with the re-issue in force at `now` applied. A history row replaces an export row only when it is
+    newer than it, issued on or before `now`, built on an SWS reading published before its issue date, and the same
+    lead and price part as the export row it supersedes; otherwise the export row stays and the refusal is reported."""
+    from datetime import date
+
+    from app.ml.inference import sws_reissue as RI
+    base = _rows(path, mtime)
+    out, refused = dict(base), []
+    for x in RI.current(now, path=Path(hpath)).to_dict("records"):
+        key = (x["province_code"], x["target_quarter"])
+        b = base.get(key)
+        if b is None or x["issue_schedule"] != "B" or x["issue_date"] <= b["issue_date"]:
+            continue
+        why = ("issued after today" if x["issue_date"] > now else
+               "its SWS reading was not published before the issue date" if not str(x["sws_published_used"]) < x["issue_date"] else
+               "lead or price part differs from the served quarter-start forecast"
+               if int(x["lead"]) != int(b["lead"]) or abs(float(x["pi_price"]) - float(b["pi_price"])) > 1e-6 else None)
+        if why:
+            refused.append(f"{key[0]} {key[1]} re-issue {x['issue_date']}: {why}")
+            continue
+        t = RI.qindex(key[1])
+        r = dict(b)
+        r.update({"issue_date": x["issue_date"], "issue_schedule": "B", "pi_hunger": repr(float(x["pi_hunger"])),
+                  "probability": repr(float(x["probability"])), "class": x["class"], "sws_newest_q": x["sws_q_used"],
+                  "sws_newest_published": x["sws_published_used"], "h_last": repr(float(x["h_last"])),
+                  "lead_days": str((date(t // 4, (t % 4) * 3 + 1, 1) - date.fromisoformat(x["issue_date"])).days),
+                  "data_cutoff": x["data_cutoff"], "issue_trigger": x["trigger"], "forecast_id": x["forecast_id"],
+                  "quarter_start_issue_date": b["issue_date"]})
+        out[key] = r
+    return out, refused
 
 
 @functools.lru_cache(maxsize=2)
@@ -127,6 +187,12 @@ def indicator() -> dict:
 
 def sws_update_text(r: dict) -> str:
     """The candidate's note for a row re-issued after the SWS release (empty for quarter-start rows)."""
+    if r.get("issue_trigger") in ("sws_release", "window_cap"):
+        how = ("the day after SWS published its" if r["issue_trigger"] == "sws_release" else
+               "at the end of the re-issue window (no newer SWS release), with SWS's")
+        return (f" Re-issued {r['issue_date']} {how} {r['sws_newest_q']} hunger reading (published "
+                f"{r['sws_newest_published']}); it uses only information published before {r['data_cutoff']}, and "
+                f"its food-price part is unchanged from the {r['quarter_start_issue_date']} issue.")
     u = evaluation().get("sws_update")
     if not u or r.get("issue_schedule") != "B":
         return ""
@@ -570,4 +636,6 @@ def identity(code: str | None, quarter: str) -> dict | None:
             "evidenceStatus": ("reliable horizon (development evidence)" if status(r) == "reliable" else
                                "experimental horizon (failed the reliability test)"),
             "lead2Accuracy": next((s for s in reliability_sentences() if s.startswith("Lead 2")), ""),
-            "seal": r.get("seal_sha256") or None}
+            "seal": r.get("seal_sha256") or None,
+            "dataCutoff": r.get("data_cutoff") or r["issue_date"], "swsReadingUsed": r.get("sws_newest_q") or None,
+            "issueTrigger": r.get("issue_trigger") or "quarter_start"}

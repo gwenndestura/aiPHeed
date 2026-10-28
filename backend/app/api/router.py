@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, forecast, fpp, health, insights,
-    final, lead2, quarterly, report, simple,
+    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, forecast, forecast_history,
+    fpp, health, insights, final, lead2, quarterly, report, simple,
 )
 
 router = APIRouter()
@@ -44,6 +44,8 @@ router.include_router(e113.router, prefix=API_V1, tags=["Final hunger forecast m
 # Final forecasting engine (branch aiPHeed/final-system-completion): regional SWS hunger, LightGBM evaluation,
 # archive, news context, CPI and the 142-LGU priority records. Read-only.
 router.include_router(final.router, prefix=API_V1, tags=["Final forecasting engine"])
+# SWS-release re-issue audit trail (app.ml.inference.sws_reissue): every recorded issue and the forecast in force.
+router.include_router(forecast_history.router, prefix=API_V1, tags=["Forecast history (SWS re-issue)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.

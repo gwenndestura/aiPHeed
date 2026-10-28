@@ -447,7 +447,7 @@ def candidate_unavailable_reason(quarter: str) -> str:
 def _lead2_key() -> str:
     """Cache key part: the Lead-2 mode and whether it governs every quarter at this moment (it depends on the clock)."""
     # "+ch1": thesis mode serving the Chapter I risk forecast (ch1_system) instead of the FIRI index
-    ch1 = "+ch1" if THESIS.active() and CH1.active() else ""
+    ch1 = "+ch1" + CH1.state_token() if THESIS.active() and CH1.active() else ""
     return E41L2.mode() + ch1 + (":governs" if E41L2.governs() else "")
 
 

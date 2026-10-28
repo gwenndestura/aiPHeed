@@ -57,6 +57,33 @@ def enabled() -> bool:
     return os.getenv("AIPHEED_SWS_REISSUE", "0").strip() == "1"
 
 
+def store_dir() -> Path:
+    """The re-issue store (AIPHEED_SWS_REISSUE_DIR overrides backend/data/ch1_reissue, e.g. for tests)."""
+    d = os.getenv("AIPHEED_SWS_REISSUE_DIR")
+    return Path(d) if d else DATA
+
+
+def sws_path() -> Path:
+    return store_dir() / SWS_STORE.name
+
+
+def history_path() -> Path:
+    return store_dir() / HISTORY.name
+
+
+def log_path() -> Path:
+    return store_dir() / RUN_LOG.name
+
+
+_sws_path, _log_path = sws_path, log_path                  # reissue()'s parameters keep these names
+
+
+def today() -> date:
+    """The serving clock: AIPHEED_NOW (as app.quarterly.target) when set, else today's date."""
+    n = os.getenv("AIPHEED_NOW")
+    return pd.Timestamp(n).date() if n else date.today()
+
+
 # ---------------------------------------------------------------------------------------------------- quarters, dates
 def qindex(label: str) -> int:
     y, q = label.split("-Q")
@@ -83,7 +110,8 @@ def _d(x) -> date:
 
 
 # ---------------------------------------------------------------------------------------------------- SWS store
-def load_sws(path: Path = SWS_STORE) -> pd.DataFrame:
+def load_sws(path: Path | None = None) -> pd.DataFrame:
+    path = path or sws_path()
     if not Path(path).exists():
         return pd.DataFrame(columns=SWS_COLS)
     r = pd.read_csv(path)
@@ -92,11 +120,11 @@ def load_sws(path: Path = SWS_STORE) -> pd.DataFrame:
 
 
 def enter_sws_reading(area: str, quarter: str, H: float, published: str, fw_end: str, moe: float,
-                      now: date | None = None, path: Path = SWS_STORE) -> str:
+                      now: date | None = None, path: Path | None = None) -> str:
     """Manual entry of one SWS round. Returns 'added' or 'duplicate' (identical row already present).
     Refuses an unknown area, a hunger rate outside 0-100, a publication after `now`, fieldwork ending after
     publication, a fieldwork end before the quarter starts, and a different value for an existing (area, q, published)."""
-    now = _d(now or date.today())
+    now, path = _d(now or today()), path or sws_path()
     if area not in AREAS:
         raise ValueError(f"unknown SWS area {area!r}")
     q = qindex(quarter)
@@ -158,7 +186,8 @@ def reissue_date(r: pd.DataFrame, t: int, now: date) -> tuple[date, str] | None:
 
 
 # ---------------------------------------------------------------------------------------------------- history
-def load_history(path: Path = HISTORY) -> pd.DataFrame:
+def load_history(path: Path | None = None) -> pd.DataFrame:
+    path = path or history_path()
     if not Path(path).exists():
         return pd.DataFrame(columns=HIST_COLS)
     return pd.read_csv(path, dtype={"province_code": str, "issue_date": str, "supersedes": str})
@@ -187,7 +216,7 @@ def _append(rows: list[dict], path: Path) -> int:
     return len(new)
 
 
-def record_quarter_start(rows: pd.DataFrame, path: Path = HISTORY, recorded_at: str | None = None) -> int:
+def record_quarter_start(rows: pd.DataFrame, path: Path | None = None, recorded_at: str | None = None) -> int:
     """Import quarter-start (schedule A) forecasts, e.g. the served export rows of one issue, into the history.
     Needs: province_code, province, quarter, issue_date, lead, pi_hunger, pi_price, probability, sws_newest_q,
     sws_newest_published, h_last, psa_newest_month, model."""
@@ -204,13 +233,16 @@ def record_quarter_start(rows: pd.DataFrame, path: Path = HISTORY, recorded_at: 
                     "pi_hunger": x.pi_hunger, "pi_price": x.pi_price, "probability": x.probability,
                     "class": "HIGH" if x.probability >= .5 else "LOW", "psa_newest_month": x.psa_newest_month,
                     "model": x.model, "supersedes": "", "recorded_at": stamp})
-    return _append(out, path)
+    return _append(out, path or history_path())
 
 
-def reissue(now: date | None = None, sws_path: Path = SWS_STORE, path: Path = HISTORY,
-            log_path: Path | None = RUN_LOG, recorded_at: str | None = None) -> dict:
-    """Re-issue every due origin's Lead-2+ quarter-start forecasts once. Safe to call any number of times."""
-    now = _d(now or date.today())
+def reissue(now: date | None = None, sws_path: Path | None = None, path: Path | None = None,
+            log_path: Path | None | bool = True, recorded_at: str | None = None) -> dict:
+    """Re-issue every due origin's Lead-2+ quarter-start forecasts once. Safe to call any number of times.
+    log_path=True writes the store's run log, None writes none."""
+    now = _d(now or today())
+    sws_path, path = sws_path or _sws_path(), path or history_path()
+    log_path = _log_path() if log_path is True else log_path
     stamp = recorded_at or datetime.now(timezone.utc).isoformat(timespec="seconds")
     r, h = load_sws(sws_path), load_history(path)
     summary = {"now": now.isoformat(), "reissued_origins": [], "rows_added": 0, "skipped": []}
@@ -254,9 +286,9 @@ def reissue(now: date | None = None, sws_path: Path = SWS_STORE, path: Path = HI
     return summary
 
 
-def current(now: date | None = None, path: Path = HISTORY) -> pd.DataFrame:
+def current(now: date | None = None, path: Path | None = None) -> pd.DataFrame:
     """The forecast in force at `now` for each (province, target quarter): the latest issue on or before `now`."""
-    now = _d(now or date.today()).isoformat()
+    now = _d(now or today()).isoformat()
     h = load_history(path)
     h = h[h["issue_date"] <= now]
     return h.sort_values(["issue_date", "lead"], ascending=[True, False]).groupby(
@@ -268,6 +300,17 @@ def run_daily(now: date | None = None, export_rows: Path | None = None) -> dict:
     from app.ml.inference import ch1_system as CH1
     src = Path(export_rows) if export_rows else CH1.DATA / "rows.csv"
     rows = pd.read_csv(src, dtype={"province_code": str})
-    rows = rows[rows["issue_schedule"].fillna("A") == "A"]
+    if "issue_schedule" in rows:                                # the default export has quarter-start rows only
+        rows = rows[rows["issue_schedule"].fillna("A") == "A"]
     added = record_quarter_start(rows)
     return {"quarter_start_rows_recorded": added, **reissue(now)}
+
+
+def history_for(province_code: str | None = None, quarter: str | None = None, path: Path | None = None) -> pd.DataFrame:
+    """Every recorded issue (audit trail), oldest first."""
+    h = load_history(path)
+    if province_code:
+        h = h[h["province_code"] == province_code]
+    if quarter:
+        h = h[h["target_quarter"] == quarter]
+    return h.sort_values(["target_quarter", "province_code", "issue_date"]).reset_index(drop=True)
