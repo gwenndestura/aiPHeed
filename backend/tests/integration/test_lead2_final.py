@@ -99,6 +99,32 @@ def test_no_order_preserving_cut_meets_r6_for_k1():
         assert not (tp / g["y"].sum() >= .6 and tp / max(1, tp + fp) >= .6), cut
 
 
+def test_case_audit_covers_every_lead2_error_with_one_cause():
+    a = pd.read_csv(LT / "out" / "case_audit.csv")
+    rows = pd.read_csv(LT / "out" / "final_rows.csv")
+    g = rows[rows["lead"] == 2]
+    assert len(a) == int(((g["B0_p"] >= .5).astype(int) != g["y"]).sum()) == 13
+    assert set(a["cause"]) <= set("HLRVP") and a["cause"].notna().all()
+    assert a["type"].str.startswith("FN").sum() == 7
+    # every cut-off falls after the SWS reading it used was published (no later reading enters the audit)
+    assert (pd.to_datetime(a["cutoff_issue_date"]) > pd.to_datetime(a["sws_used"].str.extract(r"published (\S+)\)")[0])).all()
+
+
+def test_rain_screen_frozen_dev_only_and_stops():
+    want = (LT / "runner" / "CAUSES_SHA256.txt").read_text().strip()
+    assert hashlib.sha256((LT / "PROTOCOL_LEAD2_CAUSES_SCREEN.md").read_bytes()).hexdigest() == want
+    r = json.loads((LT / "out" / "rain_screen.json").read_text())
+    assert r["protocol_sha256"] == want and r["targets"][1] <= "2024-Q4"
+    assert r["proceed_to_candidate"] is False and not any(s["passes"] for s in r["signals"].values())
+
+
+def test_baseline_p0h4u_unchanged():
+    c = pd.read_csv(LT / "out" / "candidates.csv")
+    f = pd.read_csv(LT / "out" / "final_rows.csv")
+    m = c.merge(f[["t", "lead", "province_code", "B0_p"]], on=["t", "lead", "province_code"])
+    assert len(m) == 250 and (m["C0_p"] - m["B0_p"]).abs().max() < 1e-5
+
+
 def test_served_model_unchanged(monkeypatch):
     from app.ml.inference import ch1_system as CH1
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)

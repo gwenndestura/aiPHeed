@@ -531,3 +531,127 @@ The 7 misses, B0 → K1:
 - tests in `backend/tests/integration/test_lead2_final.py`.
 
 The served model is unchanged.
+
+---
+
+## 15. Why Lead 2 misses HIGH cases, and whether any new information exists (LEAD2_CAUSES; screen protocol committed in 603f5cd before running)
+
+### 15.1 Case audit of all 13 Lead-2 errors at their cut-offs (`runner/case_audit.py`, `out/case_audit.csv`)
+
+Only information published before each Lead-2 issue date is used.
+
+**One primary cause per case, by fixed precedence:**
+1. **H**: missing or delayed hunger observation.
+2. **L**: uncertain label (realised price margin within ±0.10, or the target SWS reading within 1 SE of 11.3).
+3. **R**: incorrect model ranking although the flat projection or the analog vote was on the realised side.
+4. **V**: insufficient provincial variation (another province in the same quarter had the opposite label with province-varying inputs within 0.5 SD).
+5. **P**: a price change that could not be anticipated.
+
+| Province, target | Type | Cut-off (CPI to) | SWS used → next → target | Price margin now / projected / realised | π_H, π_P → P | Cause | Improvable then? |
+|---|---|---|---|---|---|---|---|
+| Batangas 2023-Q4 | missed | 2023-08-03 (May) | 11.3 → 10.3 (pub. 11-20) → 14.3 | +1.28 / −1.53 / +0.11 | 0.50, 0.50 → 0.25 | H | No |
+| Laguna 2023-Q4 | missed | 2023-08-03 (May) | same | +2.26 / −0.87 / +0.86 | 0.50, 0.50 → 0.25 | H | No |
+| Quezon 2023-Q4 | missed | 2023-08-03 (May) | same | −0.21 / −0.89 / +0.19 | 0.50, 0.50 → 0.25 | H | No |
+| Quezon 2024-Q3 | missed | 2024-05-01 (Feb) | 15.3 → 19.6 → 18.1 | −1.54 / +0.58 / +3.36 | 0.82, 0.43 → 0.36 | R | Possibly |
+| Cavite 2024-Q4 | missed | 2024-07-24 (May) | 19.6 → 18.1 → 25.3 | +0.46 / −2.12 / +0.69 | 0.97, 0.17 → 0.16 | R (analog 0.6) | Weakly |
+| Laguna 2024-Q4 | missed | 2024-07-24 (May) | same | +0.06 / −1.81 / +0.29 | 0.97, 0.17 → 0.17 | R (analog 0.7) | Weakly |
+| Cavite 2026-Q2 | missed | 2026-01-15 (Nov) | 16.7 → 22.4 → 17.3 | −1.11 / −1.04 / **+0.02** | 0.81, 0.34 → 0.28 | L | No |
+| Rizal 2024-Q2 | false alarm | 2024-01-23 (Nov) | 14.3 → 15.3 → 19.6 | +0.07 / +1.39 / −1.25 | 0.76, 0.79 → 0.60 | P | No |
+| Laguna 2024-Q3 | false alarm | 2024-05-01 (Feb) | 15.3 → 19.6 → 18.1 | −0.04 / −0.18 / −0.17 | 0.82, 0.64 → 0.53 | R | Possibly |
+| Cavite 2025-Q2 | false alarm | 2025-01-15 (Nov) | 25.3 → 16.1 → 16.2 | −0.54 / +1.32 / **−0.07** | 0.99, 0.68 → 0.67 | L | No |
+| Rizal 2025-Q2 | false alarm | 2025-01-15 (Nov) | same | −3.59 / +0.04 / −3.02 | 0.99, 0.53 → 0.52 | R (analog 0.2) | Possibly |
+| Cavite 2025-Q3 | false alarm | 2025-06-01 (Feb) | 25.3 (no 2025-Q1 round) → 16.1 → 23.8 | +1.83 / +1.58 / −0.57 | 0.98, 0.71 → 0.70 | P | No |
+| Quezon 2026-Q3 | false alarm | 2026-05-13 (Feb) | 22.4 → 17.3 → 23.6 | −0.67 / +1.97 / −1.41 | 0.96, 0.55 → 0.53 | P | No |
+
+| Cause | Missed | False alarms | Realistic improvement at the time |
+|---|---|---|---|
+| Missing or delayed hunger observation | 3 | 0 | **None.** The reading at the cut-off was exactly 11.3, so P ≤ 0.5 × π_P. **Even the next SWS round (2023-Q3, published 2023-11-20) fell to 10.3.** The rise to 14.3 happened between 2023-Q3 and 2023-Q4, so no timelier hunger reading would have flagged it. |
+| Uncertain target label | 1 | 1 | None. The realised margins are +0.02 and −0.07 points, within CPI rounding. |
+| Price change that could not be anticipated | 0 | 3 | None in the data. The flat projection was above threshold, the analogs agreed, and prices fell after the cut-off. |
+| Incorrect model ranking despite useful inputs | 3 | 2 | Possible in principle, but the supporting evidence is weak: analog votes of 0.6-0.7, an overall analog AUC of 0.64, and a model already about as good as the projection at Lead 2 (§13.1). Every targeted fix (B1, B4, C1-C5, D1/D2, K1, K2, validation threshold) left these cases on the same side. |
+| Insufficient provincial variation | 0 | 0 | Not a primary cause in any case: no case had an opposite-label province with near-identical inputs. **Structurally**, though, 11 of the 21 inputs take one value across all five provinces at every origin: Employment (E1), OFW remittances (E2), El Niño (C1), the hunger outlook (H1), the two GDELT columns and the five world prices. Only the Market group, production (A2, C3), fish production (C4) and poverty (V1) vary by province. **7 of the 13 Lead-2 quarters have mixed labels**, and those national inputs cannot separate the provinces within them. |
+
+### 15.2 New information: what exists, its coverage and timing
+
+| Source (location) | Level | Coverage held | Release timing | In the Lead-2 model? | Finding |
+|---|---|---|---|---|---|
+| **NASA POWER rainfall anomaly** (`backend/data/processed/province_rainfall.parquet`) | Province (6 points each), but r = 0.95 across provinces | 1991-Q1..2026-Q2 (2021+ used) | Monthly, posted after month end; 2026-09 vintage | **Never** | Screened (§15.3): no link to the projection error |
+| NASA POWER soil moisture / temperature (`province_agroclimate.parquet`) | Province, r = 0.94 | to **2025-Q4** | Monthly | Never | Not usable: it misses the last 3 evaluation origins. It is the same source and regional pattern as rainfall. |
+| Fish-kill events (`E87_Outcome_Gap/data_derived/fishkill_events.csv`) | Province (news-reported; not checked against BFAR) | 132 events, 2021-2026 | First-report date | Tested in E87 | Worse (Brier +0.036 at Lead 2) |
+| GDELT DOC news volume: shortage, agri_supply, jobs_income, assistance (`E114_Final_Run/data`) | National | Daily 2017+ | Month m usable from day 1 of m+1 | Tested in FINAL_FOOD_INSECURITY_LIGHTGBM | No gain |
+| Rice policy events (`E46_Rice_Policy/data`) | National | 5 events, 2023-2025 | Announcement dates | Tested in E46 | Its direction contradicts the 2024-Q4 misses: the July 2024 tariff cut implies falling prices, but prices rose |
+| RTWPB IV-A wage orders 19-23 (`E87_Outcome_Gap/data_acquired/wage_orders`, PDF) | Region | About one order a year | Order dates | Never | Regional step changes, with no province-quarter variation to separate HIGH from LOW. No testable Lead-2 hypothesis. |
+| PSA retail prices (`commodity_prices.parquet`) | Province | 2020-Q1..**2025-Q4** | Monthly | No | Ends before the last evaluation origins; the same price information as the CPI subgroups (closed in §14) |
+| PSA production volumes (`food_availability_panel.parquet`) | Province | 2021-Q1..2026-Q2 | About 1-2 months after the quarter | Partly (A2, C3, C4) | Already represented |
+| Domestic fuel prices (`oil_prices.parquet`) | National (one value per quarter) | 2021-2026-Q3 | Weekly / monthly | Crude is in (W_crude_yoy) | National-only duplicate |
+| Outcomes: CBMS 2024 FIES, FNRI ENNS provincial FIES, PSA subsistence 2021/2023, NNS 2025 regional | Province / region | One-off cross-sections | — | — | No repeated provincial outcome (OUTCOME_GAP_RESOLUTION); CBMS/FNRI requests drafted, never sent |
+| **Not in the repository:** BSP Monetary Policy Report inflation path, DA price outlooks, PAGASA seasonal climate outlooks, DSWD/WFP monitoring, OCTA rounds after 2025 | National / regional | — | Published before the cut-offs | — | Would need collection and an availability audit. None is provincial. |
+
+### 15.3 Development-only rainfall screen (protocol 22e57d20…, committed before running)
+
+Rows: Lead 2, targets 2023-Q2..2024-Q4 (35 rows, 7 quarters). No evaluation row was read. The outcome is realised minus projected price margin.
+
+| Signal | Spearman ρ | 90% CI |
+|---|---|---|
+| Rainfall anomaly, origin quarter | −0.07 | [−0.35, +0.33] |
+| Provincial deviation from the five-province mean | +0.05 | [−0.13, +0.29] |
+| Absolute anomaly | −0.02 | [−0.31, +0.27] |
+
+The rule (|ρ| ≥ 0.30 and the CI excluding 0) fails for all three. **No candidate was built.**
+
+### 15.4 Pass/fail with the unchanged criteria (P0H4-U; no candidate qualified)
+
+| Criterion | Lead 1 | Lead 2 |
+|---|---|---|
+| R1 ≥ 10 quarters, ≥ 40 rows | pass (14, 70) | pass (13, 65) |
+| R2 accuracy ≥ 0.75 | pass (0.843) | pass (0.800) |
+| R3 balanced accuracy ≥ 0.70 | pass (0.776) | pass (0.732) |
+| R4 > always-LOW and persistence | pass | pass |
+| R5 Brier better than persistence and climatology | pass (.021 / .030) | pass (.029 / .078) |
+| R6 HIGH precision and recall ≥ 0.60 | pass (0.69 / 0.65) | **fail (0.63 / 0.59)** |
+| R7 thirds ≥ 0.60, LOQO ≥ 0.70 | pass | pass (0.65; 0.783) |
+| **Decision** | **reliable (development evidence)** | **not reliable** |
+
+**Five trigger groups** (unchanged evidence, §6; no new candidate, so nothing is re-measured):
+- **Market/Prices** carries the forecast: removing it worsens Lead-2 Brier by +0.037 [+0.009, +0.063].
+- **Climate** adds noise at Lead 2 (−0.005).
+- **Employment** +0.003 (n.s.); **Fish production** ≈ 0; **OFW remittances** ≈ 0.
+- Employment, OFW remittances and El Niño have no provincial variation (§15.1). This is the structural reason they cannot separate HIGH from LOW provinces.
+
+### 15.5 Thesis-ready explanation
+
+> **Why Lead 2 misses HIGH cases.**
+> - Of the 13 Lead-2 errors, 8 (3 missed, 5 false alarms) could not have been avoided with the information published at the forecast date:
+>   - three missed cases in 2023-Q4, where the latest hunger survey sat exactly at the threshold and the next survey actually fell before hunger surged;
+>   - two cases whose price label lay within CPI rounding of the threshold;
+>   - three false alarms in which food prices fell after the forecast date, against both the price projection and comparable past cases.
+> - The other five errors are cases where the inputs pointed weakly in the right direction, but none of nine targeted model revisions moved them across the decision threshold.
+> - Eleven of the twenty-one inputs (employment, remittances, El Niño, the hunger outlook, news counts and world prices) are national or regional, so they cannot distinguish provinces within a quarter, and seven of the thirteen quarters had mixed provincial outcomes.
+>
+> **New data.** The repository holds no unused, timely, province-level source that predicts the remaining errors:
+> - provincial rainfall was screened on development data and showed no relationship (|ρ| ≤ 0.07);
+> - other sources were already tested, are national, or end before the evaluation period.
+>
+> **Result.** The final model (P0H4-U) is reliable at Lead 1 (the current quarter: accuracy 0.84, HIGH recall 0.65) and reaches 0.80 accuracy at Lead 2. It fails the HIGH-recall criterion at Lead 2 by one case (10 of 17), so Lead 2 is reported as experimental.
+>
+> **Limitations.**
+> - Every 2021-2026 quarter has been examined during development.
+> - The target is a regional-hunger × provincial-price proxy, not measured provincial food insecurity.
+> - The Lead-2 evaluation rests on 17 HIGH cases in 7 quarters.
+>
+> **Next validation steps.**
+> 1. Score the sealed forecasts prospectively from 2027-Q1. At about 1.3 HIGH cases per quarter, roughly 44 quarters are needed to bound recall above 0.60.
+> 2. Send the drafted CBMS 2024 and FNRI provincial FIES requests, to validate the target beyond the regional proxy.
+> 3. Obtain a hunger or food-access observation between SWS rounds (DSWD/WFP monitoring).
+> 4. Add forward-looking price information issued before the quarter (BSP/DA outlooks), after an availability audit.
+
+**Served state (unchanged):**
+- P0H4 is the served default (seal a498b5ef).
+- P0H4-U, the research baseline used throughout, is served only with `AIPHEED_CH1_ENGINE=fr` (seal bd6572e1).
+- K1 and K2 are not adopted.
+
+**Files:**
+- `runner/case_audit.py`, `runner/rain_screen.py`;
+- `out/case_audit.csv`, `out/case_audit.json`, `out/rain_screen.json`;
+- `PROTOCOL_LEAD2_CAUSES_SCREEN.md`;
+- tests in `backend/tests/integration/test_lead2_final.py`.
