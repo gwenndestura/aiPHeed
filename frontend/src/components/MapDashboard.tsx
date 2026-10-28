@@ -149,11 +149,13 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
 
   const [quarterId, setQuarterId] = useState<string>("");
   useEffect(() => {
-    // Default to the newest forecast quarter once the timeline loads, falling
-    // back to the newest scorable quarter when no forecast is served.
+    // Open on the backend's default quarter (the Lead-1 quarter, e.g. 2026-Q4)
+    // once the timeline loads; fall back to the newest forecast quarter only
+    // when that quarter is not on the timeline or has no score.
     if (quarterId || !quartersRes?.current) return;
+    const preferred = quarters.find((q) => q.id === quartersRes.current && !q.noData);
     const forecast = [...quarters].reverse().find((q) => q.forecast && !q.noData);
-    setQuarterId(forecast?.id ?? quartersRes.current);
+    setQuarterId(preferred?.id ?? forecast?.id ?? quartersRes.current);
   }, [quartersRes, quarters, quarterId]);
 
   // The timeline shows only the newest quarters; History lists all of them.
