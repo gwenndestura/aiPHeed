@@ -1,6 +1,8 @@
 """Exports the measured five-trigger evidence (ablation.json) for the dashboard: per group its indicators, the held-out
 leave-one-group-out change in Brier score at Leads 1-2, its SHAP share, and one plain sentence generated from those
-numbers. A practical floor of 0.001 Brier separates "measurable" from "negligible".
+numbers. A practical floor of 0.001 Brier separates "measurable" from "negligible". A group is called measurable at a
+lead only when the Holm-corrected p (over the five groups) is below ALPHA; a 90% interval above zero that does not
+survive the correction is stated as not confirmed. Employment's card keeps the approved wording (CR_REVIEW 20.8).
 
     python export_evidence.py   # backend/data/ch1_trigger_evidence.json
 """
@@ -19,31 +21,44 @@ INDICATORS = {"market": "PSA food CPI projection and momentum, headline inflatio
               "ofw_remittance": "BSP OFW cash remittance change (national)"}
 
 
-def sentence(b: str, r: dict) -> str:
-    l1, l2 = r["1"][b]["loo_t43c"], r["2"][b]["loo_t43c"]
+ALPHA = 0.05
+PERIOD = {"1": "the current quarter (Lead 1)", "2": "the next quarter (Lead 2)"}
+# approved card wording (2026-10-29) for a group whose contribution no corrected test establishes
+APPROVED = {"employment": "Employment-related indicators are included in the LightGBM model. However, their independent "
+                          "contribution to forecasting has not been established by the current evaluation."}
 
-    def state(x):
-        if x["ci90"][0] > 0 and x["diff"] >= FLOOR:
-            return "worse"
-        if x["ci90"][1] < 0 and -x["diff"] >= FLOOR:
-            return "better"
-        return "unchanged" if abs(x["diff"]) < FLOOR else "uncertain"
-    s1, s2 = state(l1), state(l2)
-    words = {"worse": "made the forecasts worse", "better": "made the forecasts slightly better",
-             "unchanged": "made no meaningful difference", "uncertain": "made a difference too small to confirm"}
-    txt = (f"Tested on past quarters: leaving this group out {words[s1]} for the current quarter (Lead 1) and {words[s2]} "
-           "for the next quarter (Lead 2).")
-    if s1 == "worse" or s2 == "worse":
-        txt += " Its contribution is measurable."
-    elif s1 == "better" or s2 == "better":
+
+def state(x: dict) -> str:
+    if x["ci90"][0] > 0 and x["diff"] >= FLOOR:
+        return "worse" if x.get("holm_p_hurts", 1.0) < ALPHA else "unconfirmed"
+    if x["ci90"][1] < 0 and -x["diff"] >= FLOOR:
+        return "better"
+    return "unchanged" if abs(x["diff"]) < FLOOR else "uncertain"
+
+
+def sentence(b: str, r: dict) -> str:
+    st = {k: state(r[k][b]["loo_t43c"]) for k in ("1", "2")}
+    words = {"worse": "made the forecasts worse for {}", "better": "made the forecasts slightly better for {}",
+             "unconfirmed": "made the forecasts worse for {}, a difference not confirmed after correcting for multiple tests",
+             "unchanged": "made no meaningful difference for {}", "uncertain": "made a difference too small to confirm for {}"}
+    c1, c2 = (words[st[k]].format(PERIOD[k]) for k in ("1", "2"))
+    txt = f"Tested on past quarters: leaving this group out {c1}{',' if st['1'] == 'unconfirmed' else ''} and {c2}."
+    confirmed = [k for k in ("1", "2") if st[k] == "worse"]
+    if confirmed:
+        where = "the current and next quarters" if len(confirmed) == 2 else PERIOD[confirmed[0]]
+        txt += f" Its contribution is measurable for {where}."
+    elif b in APPROVED:
+        txt += " " + APPROVED[b]
+    elif "unconfirmed" in st.values():
+        txt += " Its contribution is not established after correcting for multiple tests."
+    elif "better" in st.values():
         txt += " Its contribution is not established; at that horizon it adds more noise than information."
     else:
         txt += " Its contribution could not be established with the data available."
     return txt
 
 
-def main():
-    T.check_protocol(addendum=True)
+def build() -> dict:
     a = json.loads((T.OUT / "ablation.json").read_text())
     r = a["leads"]
     out = {"source": "aipheed-backend-aligned/experiments/LEAD2_FIVE_TRIGGER (Addendum 1 groups; protocol a80e927f)",
@@ -56,7 +71,14 @@ def main():
                             "brier_change_without": {k: r[k][b]["loo_t43c"] for k in ("1", "2", "3", "4")},
                             "shap_share": {k: r[k][b]["shap_share"] for k in ("1", "2")},
                             "sentence": sentence(b, r)}
-        print(b, out["groups"][b]["sentence"])
+    return out
+
+
+def main():
+    T.check_protocol(addendum=True)
+    out = build()
+    for b, g in out["groups"].items():
+        print(b, g["sentence"])
     DEST.write_text(json.dumps(out, indent=1, default=float), encoding="utf-8")
 
 

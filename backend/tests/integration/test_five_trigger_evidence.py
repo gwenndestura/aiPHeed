@@ -45,10 +45,44 @@ def test_the_five_groups_are_the_dashboard_groups_and_match_the_ablation():
 
 def test_market_is_measurable_and_no_group_is_given_an_unsupported_effect():
     ev = CH1.trigger_evidence()
-    assert "measurable" in ev["market"]["sentence"]
+    # Market: confirmed at Lead 1 (Holm p < .001), not at Lead 2 (Holm p .06)
+    assert ev["market"]["sentence"].endswith("Its contribution is measurable for the current quarter (Lead 1).")
+    assert "the next quarter (Lead 2), a difference not confirmed after correcting for multiple tests" in ev["market"]["sentence"]
     for g in ("fish_kill", "ofw_remittance"):
         assert "could not be established" in ev[g]["sentence"]
     assert "not established" in ev["climate"]["sentence"]
+    for g in FIVE:
+        if "measurable" in ev[g]["sentence"]:                                       # only with a Holm-confirmed lead
+            assert any(ev[g]["brier_change_without"][k].get("holm_p_hurts", 1) < .05 for k in ("1", "2")), g
+
+
+EMPLOYMENT_WORDING = ("Employment-related indicators are included in the LightGBM model. However, their independent "
+                      "contribution to forecasting has not been established by the current evaluation.")
+
+
+def test_employment_card_does_not_claim_a_measurable_contribution():
+    # CR_REVIEW 20.8: employment's leave-group-out gain is not established after Holm correction (Lead 1 p .11)
+    s = CH1.trigger_evidence()["employment"]["sentence"]
+    assert "measurable" not in s and s.endswith(EMPLOYMENT_WORDING)
+    assert "(Lead 1), a difference not confirmed after correcting for multiple tests" in s
+    assert "E1" in CH1.trigger_evidence()["employment"]["columns"]                 # still a model input
+    assert CH1.plain_evidence("PH040300000", "2026-Q4", "employment").endswith(EMPLOYMENT_WORDING)
+
+
+def test_regenerating_the_evidence_keeps_the_approved_wording():
+    import sys
+    sys.path.insert(0, str(ABL.parents[1] / "runner"))
+    import export_evidence as X
+    assert X.APPROVED["employment"] == EMPLOYMENT_WORDING
+    new, cur = X.build(), json.loads(CH1.TRIGGER_EVIDENCE.read_text(encoding="utf-8"))
+    assert json.loads(json.dumps(new, default=float)) == cur                       # the served file is the generator's output
+    for g in FIVE:
+        assert "Its contribution is measurable." not in new["groups"][g]["sentence"], g
+    # employment never regains the old claim, even if its Lead-1 interval were confirmed only before correction
+    r = json.loads(ABL.read_text())["leads"]
+    r = json.loads(json.dumps(r))
+    r["1"]["employment"]["loo_t43c"]["holm_p_hurts"] = 0.06
+    assert X.sentence("employment", r).endswith(EMPLOYMENT_WORDING)
 
 
 def test_api_cards_carry_the_tested_contribution_at_both_scopes(thesis):
