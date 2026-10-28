@@ -1087,3 +1087,159 @@ None has an unused, cut-off-safe signal in the repository. A further model varia
 1. Set `AIPHEED_SWS_REISSUE=1` and `AIPHEED_ENABLE_SCHEDULER=1`.
 2. Enter each SWS release with `scripts/sws_reissue.py enter`.
 3. Point the dashboard at `sws_reissue.current()`. This last step is not built: the frontend and served export are unchanged.
+
+---
+
+## 19. Dashboard integration of the SWS re-issue, and the CPI-refresh candidate
+
+### 19.1 Integration: SWS entry → scheduled re-issue → history → API → dashboard (off by default)
+
+This builds the dashboard step that §18.9 listed as not built.
+
+| Stage | Implementation |
+|---|---|
+| SWS entry | `scripts/sws_reissue.py enter` → `sws_reissue.enter_sws_reading()`. It refuses a publication after today, fieldwork ending after publication or before the quarter, a rate outside 0-100, an unknown area, or a value conflicting with an existing round. An identical re-entry is a no-op. |
+| Re-issue | The daily 05:00 job `run_sws_reissue` → `sws_reissue.run_daily()`. It records the served quarter-start rows (idempotent), then re-issues each due origin's Lead-2+ forecasts with the P0H4-U hunger formula, using only rounds published before the issue date. |
+| History | `backend/data/ch1_reissue/forecast_history.csv`, append-only. Each row has issue date, data cut-off, trigger, SWS reading used and its publication date, both parts, probability, and `supersedes`. A later round for the same quarter re-issues again; nothing is edited. |
+| Serving | `ch1_system.rows()` overlays the **forecast in force at today's date** on the served export when `AIPHEED_SWS_REISSUE=1`. Every map, card, summary and report reads through it. |
+| Guards (a row that fails any guard is refused and listed) | A history row replaces an export row only when it is (a) newer than the export row, (b) issued on or before today, (c) built on an SWS reading published before its issue date, and (d) the same lead and price part as the export row it supersedes. A newer quarter-start export always wins over an older re-issue. |
+| Stale-cache fix | The dashboard's `lru_cache` key (`_lead2_key`) now includes `ch1_system.state_token()`: the history version plus today's date. A running server can no longer keep showing a superseded or not-yet-issued forecast. The key is unchanged when the flag is off. |
+| Display | `summary.issued` shows the re-issue date. The summary sentence and horizon text say: "Re-issued 2026-10-15 the day after SWS published its 2026-Q3 hunger reading (published 2026-10-14); it uses only information published before 2026-10-15, and its food-price part is unchanged from the 2026-10-01 issue." `modelIdentity` gains `dataCutoff`, `swsReadingUsed` and `issueTrigger`. No frontend file changed. |
+| Audit API | `GET /api/v1/forecast-history?province=&quarter=`: every recorded issue plus what the dashboard shows. `GET /api/v1/forecast-history/status`: enabled flag, store, last run, refused rows, enabling steps. |
+
+**Enable (needs your authorisation; nothing is enabled now).**
+1. Set `AIPHEED_SWS_REISSUE=1` and `AIPHEED_ENABLE_SCHEDULER=1` in the deployed environment.
+2. Enter each SWS release with `python scripts/sws_reissue.py enter --area BL --quarter … --H … --published … --fw-end … --moe …`, and likewise for NCR, VIS and MIN.
+3. The daily job then re-issues and the dashboard shows the forecast in force. `python scripts/sws_reissue.py run` does the same by hand.
+
+**Verification**
+- **Historical replay** (`runner/deploy_replay.py`, re-run after the integration):
+  - 1,343 days, 2,686 runs;
+  - re-issued probabilities vs P0H4-U max |Δ| 1.0e-6; issue dates equal the evaluated schedule (13 SWS releases, 1 window cap);
+  - 0 rows from repeated runs; 0 duplicate IDs;
+  - 15 re-issues superseded by the 2025-Q2 second round, all kept;
+  - every SWS reading used was published before its issue date.
+- **New tests:**
+  - `test_sws_reissue_dashboard.py` (6 tests):
+    - the full path: CLI entry → scheduler job → history → audit API → `/explainability` summary;
+    - the clock never shows a forecast before its issue date;
+    - supersession with byte-identical earlier history;
+    - mismatched or future-informed history refused;
+    - a newer export wins;
+    - disabled by default.
+  - `test_sws_reissue.py` (8 tests).
+  - The currently in-force forecast for 2027-Q1 equals the evaluated P0H4-U re-issue of 2026-10-15 (`ch1_engine_fr`) within 1e-5.
+- **Full backend suite: 937 passed, 18 skipped, 0 failed** (after the integration).
+
+### 19.2 Model improvement: CPI refresh at the re-issue (candidate CR; protocol committed in 389d32f before scoring)
+
+**Hypothesis.**
+- Under the re-issue schedule, the binding Lead-2 limit is the price part (FR1 oracle: 0.938 with the true price).
+- The re-issue refreshes only the hunger part, although PSA has published **one or two more CPI months** by every re-issue date (840 Lead-2+ stack rows +1 month, 770 rows +2 months; conservative day-10 release rule).
+- Observing them shortens the flat projection's horizon, so the price-condition error should fall.
+- No earlier experiment refreshed the price inputs.
+
+**Candidate CR.**
+- The same unified LightGBM, columns, grid, seed and target.
+- For every Lead-2+ row (training and forecast), `A1_food`, `A1_gap` and `A_mom` are computed at that row's own re-issue date.
+- The builder reproduces the stack to 3.2e-9 at the original cut-off, and a future-perturbation test (later CPI months set to 999) leaves every refreshed value unchanged.
+
+| | P0H4-U, Lead 1 | **CR, Lead 1** | P0H4-U, Lead 2 | **CR, Lead 2** | P0H4-U, Lead 3 | CR, Lead 3 |
+|---|---|---|---|---|---|---|
+| Accuracy | 0.843 | **0.871** | 0.800 | **0.800** | 0.633 | 0.533 |
+| Balanced accuracy | 0.776 | 0.835 | 0.732 | 0.751 | 0.549 | 0.461 |
+| HIGH precision / recall | 0.69 / 0.65 | 0.72 / 0.76 | 0.63 / 0.59 | **0.61 / 0.65** | 0.35 / 0.35 | 0.24 / 0.29 |
+| TP FP FN TN | 11 5 6 48 | 13 5 4 48 | 10 6 7 42 | 11 7 6 41 | 6 11 11 32 | 5 16 12 27 |
+| Brier (Δ vs P0H4-U, 90% CI) | 0.132 | 0.123 (−0.010 [−0.030, +0.011]) | 0.167 | 0.147 (−0.020 [−0.046, +0.006], p .11) | 0.218 | 0.235 (+0.017) |
+| Δ Brier vs served P0H4 | — | −0.010 | −0.027 (p .047) | **−0.047 [−0.083, −0.012], p .013** | — | +0.053 |
+| T43c AUC | 0.867 | 0.893 | 0.760 | **0.851** | 0.611 | 0.582 |
+| Price-part AUC (hunger-HIGH rows) | 0.743 | 0.857 | 0.731 | 0.810 | 0.729 | 0.626 |
+| Later quarters (2025-Q2..2026-Q3): accuracy / Brier | 0.867 / 0.123 | 0.833 / 0.124 | 0.833 / 0.156 | 0.833 / 0.149 | 0.700 / 0.176 | 0.567 / 0.206 |
+| Thirds; LOQO min | 0.88, 0.76, 0.90; 0.831 | 0.88, 0.88, 0.85; 0.862 | 0.84, 0.65, 0.90; 0.783 | 0.84, 0.65, 0.90; 0.783 | — | — |
+| Brier vs persistence / climatology (p) | .021 / .030 | .013 / .032 | .029 / .078 | .013 / .035 | — | — |
+| **Failed criteria** | none | **none** | R6 | **none** | 6 | 6 |
+
+**Lead-2 cases CR changes vs P0H4-U.**
+- **Fixed:** Quezon 2024-Q3 (miss, 0.355 → 0.565), Cavite 2026-Q2 (miss, 0.278 → 0.635), and the false alarms Cavite 2025-Q3 and Quezon 2026-Q3.
+- **New errors:** false alarms Batangas 2024-Q3, Laguna 2026-Q2 and Quezon 2026-Q2; the miss Laguna 2025-Q3.
+- The three hunger-capped 2023-Q4 misses stay capped. Cavite and Laguna 2024-Q4 rise from 0.16-0.17 to 0.33-0.46 but stay below 0.50.
+
+**Frozen adoption rule (`final.adoption_rule`, unchanged).** Nine of ten conditions pass. The one that fails:
+
+| Condition | Result |
+|---|---|
+| New false alarms ≤ new hits (vs P0H4-U) | **fail: 3 new false alarms, 2 new hits** |
+
+**CR is not adopted.** P0H4-U remains the research baseline, and P0H4 remains served.
+
+**Assessment**
+- **What CR achieves.** CR is the first candidate in this series to pass **all seven criteria at both Lead 1 and Lead 2**, with Lead-2 accuracy 0.800 (the goal) and HIGH precision 0.61 / recall 0.65. Its gain comes from information published before each re-issue, not from tuning.
+- **Why it is still not reliable evidence:**
+  - the frozen rule fails (net +1 hit, +1 false alarm at Lead 2);
+  - the Brier gain over P0H4-U is not significant (p = .11);
+  - R6 rests on 11 of 17 HIGH cases, and one case moves recall by 0.06;
+  - **Leads 3-4 deteriorate** (Lead-3 accuracy 0.633 → 0.533, 7 more false alarms; Lead 4 0.673 → 0.600), a regression the Lead-1/2 rule does not see;
+  - all 2021-2026 quarters were examined during development.
+- **Prospective test.** CR's forecasts from origin 2026-Q3 (Lead 1 issued 2026-10-01; Leads 2-4 re-issued 2026-10-15, with CPI through 2026-09 and the 2026-Q3 SWS reading) are sealed in `sealed/cr_prospective.csv` (**SHA-256 dd293e2e…**) before any outcome exists.
+  - Lead 2 (2027-Q1): all five provinces LOW (0.14-0.39).
+  - Lead 3 (2027-Q2): Cavite, Laguna and Rizal HIGH.
+- **Decision for the researchers.** Adopting CR despite the false-alarm condition would be a departure from the frozen rule, so it needs your explicit decision. If adopted, the deployed re-issue would also need its price inputs refreshed and the model trained on refreshed rows; this is not built.
+
+### 19.3 End-to-end comparison (identical evaluation rows)
+
+**Deployment timing (same LightGBM, same price part)**
+
+| | 1. Deployed P0H4 | 2. Research P0H4-U | 3. Integrated re-issue system (replay) |
+|---|---|---|---|
+| Lead 1: accuracy, balanced | 0.843, 0.776 | 0.843, 0.776 | 0.843, 0.776 (Lead 1 not re-issued) |
+| Lead 1: precision / recall; TP FP FN TN; Brier | 0.69 / 0.65; 11 5 6 48; 0.132 | same | same |
+| Lead 1: later quarters accuracy / Brier | 0.867 / 0.123 | same | same |
+| Lead 1: R1-R7 | all pass | all pass | all pass |
+| Lead 2: accuracy, balanced | 0.769, 0.635 | 0.800, 0.732 | 0.800, 0.732 |
+| Lead 2: precision / recall | 0.60 / 0.35 | 0.63 / 0.59 | 0.63 / 0.59 |
+| Lead 2: TP FP FN TN; Brier | 6 4 11 44; 0.194 | 10 6 7 42; 0.167 | 10 6 7 42; 0.167 (max \|Δ\| vs P0H4-U 1e-6) |
+| Lead 2: later quarters accuracy / Brier | 0.867 / 0.148 | 0.833 / 0.156 | 0.833 / 0.156 |
+| Lead 2: failed | R3, R5, R6 | R6 | R6 |
+
+**Model change (separately): CR vs the same timing.** At Lead 2, CR scores 0.800, 0.751, 0.61 / 0.65, TP11 FP7 FN6 TN41, Brier 0.147, and passes all seven criteria. It is not adopted under the frozen rule (§19.2).
+
+**Pass / fail with the unchanged criteria**
+
+| | R1 | R2 | R3 | R4 | R5 | R6 | R7 | Reliable |
+|---|---|---|---|---|---|---|---|---|
+| P0H4, Lead 1 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | yes |
+| P0H4, Lead 2 | ✓ | ✓ | ✗ | ✓ | ✗ | ✗ | ✓ | no |
+| P0H4-U / integrated re-issue, Lead 2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ (0.63 / 0.59) | ✓ | no |
+| CR (not adopted), Lead 1 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | criteria met; rule not met |
+| CR (not adopted), Lead 2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ (0.61 / 0.65) | ✓ | criteria met; rule not met |
+
+**Served system:** maximum reliable horizon Lead 1. The 80% Lead-2 accuracy with all seven criteria is reached only by the not-adopted CR, on development evidence.
+
+### 19.4 Thesis-ready text
+
+> **Deployment.** The aiPHeed dashboard now supports re-issuing next-quarter forecasts the day after each SWS hunger release, from an append-only forecast history. Each forecast shows its issue date, the SWS reading it used and its data cut-off, and earlier issues are kept for audit. A historical replay over 2022-2026 reproduced the evaluated re-issue schedule exactly. With it, the same model's next-quarter accuracy rises from 0.77 to 0.80 and HIGH recall from 0.35 to 0.59, still one case short of the 0.60 criterion. The feature is disabled until authorised.
+>
+> **Model.** Refreshing the food-price inputs with the CPI months published by the re-issue date (one or two more months) produced the first configuration meeting all seven reliability criteria at both the current and the next quarter: Lead-2 accuracy 0.80, HIGH precision 0.61, recall 0.65, Brier 0.147. It was not adopted. Under the pre-registered rule it added three new false alarms against two new hits, its Brier gain over the research baseline was not significant, and three- and four-quarter-ahead forecasts became worse. Its forecasts for 2026-Q4 to 2027-Q3 were sealed before their outcomes, for prospective validation.
+
+### 19.5 Remaining blockers and the observations that would resolve them
+
+| Blocker | Observation needed |
+|---|---|
+| CR fails the adoption rule by one false alarm, and its Lead-2 gain over P0H4-U is not significant | Prospective quarters: score the sealed CR and P0H4-U forecasts from 2027-Q1 (about 57 HIGH cases are needed to bound recall) |
+| 3 hunger-capped misses (SWS reading exactly 11.3) | A hunger or food-access observation between SWS rounds (DSWD/WFP monitoring, SWS CALABARZON microdata) |
+| Price moves after even the refreshed cut-off | Forward price information published before the issue (BSP inflation path, DA supply outlooks, rice import schedules) |
+| The target is a regional-hunger × provincial-price proxy | A repeated provincial food-insecurity outcome (CBMS 2024 FIES, FNRI provincial FIES) |
+| Leads 3-4 are not reliable, and worse under CR | More quarters; a Lead-3/4 rule would be needed before any CR adoption |
+
+### 19.6 Files and commits (branch `aiPHeed/lead2-lgbm-tuning`, local)
+
+| File | Change |
+|---|---|
+| `backend/app/ml/inference/sws_reissue.py` | configurable store and clock (`AIPHEED_SWS_REISSUE_DIR`, `AIPHEED_NOW`), `history_for()`, default-export handling |
+| `backend/app/ml/inference/ch1_system.py` | guarded overlay of the forecast in force, `overlay_report()`, `state_token()`, re-issue text, `modelIdentity` cut-off fields |
+| `backend/app/services/dashboard.py` | cache key includes the re-issue state (stale-display fix) |
+| `backend/app/api/v1/forecast_history.py`, `backend/app/api/router.py` | **new** audit routes |
+| `backend/tests/integration/test_sws_reissue_dashboard.py` (6), `test_lead2_cpi_refresh.py` (6) | **new** tests |
+| `experiments/LEAD2_FIVE_TRIGGER/PROTOCOL_LEAD2_CPI_REFRESH.md`, `runner/cpi_refresh_features.py`, `runner/cpi_refresh.py`, `runner/cpi_refresh_seal.py`, `data/cpi_refresh.csv`, `out/cpi_refresh*.json`, `out/cpi_refresh_rows.csv`, `sealed/cr_prospective.*` | CR experiment and seal |
+| `out/deploy_replay*.{json,csv}` | replay re-run after the integration |
+| Served `ch1_engine/`, `ch1_engine_fr/`, seals, frontend | **unchanged** |
