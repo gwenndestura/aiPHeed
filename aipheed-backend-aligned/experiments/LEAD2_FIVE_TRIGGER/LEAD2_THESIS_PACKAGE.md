@@ -349,3 +349,114 @@ For every Lead-2 target, the table records:
 - **Lead 1:** reliable (development evidence).
 - **Lead 2:** meets 6 of 7 criteria and the 80% accuracy goal. It fails R6 by one HIGH case, and the evaluation cannot tell whether the true recall is above or below 0.60 (P = 0.49).
 - **Lead 2 is reported as promising, not validated.** The sealed forecasts, scored from January 2027, are the next real evidence.
+
+---
+
+## 13. Final round: limits of the data and one new early-warning signal (LEAD2_FINAL; protocol committed in 6febd22 before scoring)
+
+### 13.1 What the available indicators can and cannot anticipate (`runner/limits.py`, `out/limits.json`)
+
+| Check, Lead 2, P0H4-U | Result |
+|---|---|
+| Perfect price knowledge × model hunger term | accuracy 0.938, recall 1.00 |
+| Perfect hunger knowledge × model price term | accuracy 0.677, recall 0.59 |
+| Price-term AUC on the 55 rows where hunger is HIGH (price decides the label) | model 0.731; flat projection 0.741 |
+| Same at Lead 1 | model 0.743; flat projection **0.949** |
+
+- At Lead 2 the LightGBM already uses the aggregate price information about as well as it can be used. **The limit is the information, not the model.**
+- At Lead 1 the model under-uses the projection. This matches B1's Lead-1 gain (§11). Lead 1 already passes, so it is not pursued here.
+
+**The 13 Lead-2 errors, one primary category each** (`out/limits_errors.csv`; the analog vote is the 10 nearest training rows whose outcome was known at the origin):
+
+| Category | Cases | Recoverable? |
+|---|---|---|
+| Sudden: hunger information absent at the cut-off (SWS tied at 11.3, surge published later) | 3 FN (2023-Q4) | No |
+| Uncertain label (realised margin within ±0.10, CPI rounding) | 1 FN, 1 FP (Cavite 2026-Q2, 2025-Q2) | No, not honestly |
+| Model behaviour (projection on the realised side) | 1 FN, 1 FP (2024-Q3) | Possibly |
+| Price surprise the analogs voted for (indicators could plausibly anticipate it) | 2 FN (2024-Q4), 1 FP | Possibly |
+| Price surprise the analogs voted against (sudden) | 3 FP | No |
+
+**The only realistic opportunity is the price part:** 5 errors, all about whether current price pressure persists or reverts. The R6 ceiling is 13/17 = 0.76 even if every recoverable miss were fixed. R6 needs 11/17, i.e. one more hit.
+
+### 13.2 Candidate signal (documented in the protocol before scoring)
+
+| Item | |
+|---|---|
+| Signal | **Composition and breadth of food inflation at the cut-off.** `K_core`: non-fresh food y/y minus the province threshold. `K_fresh_gap`: fresh minus non-fresh y/y. `K_diff`: weight share of the 8 subgroups accelerating. |
+| Theory | Fresh-food shocks (fish, fruits, vegetables) reverse with the next harvest or catch; storable and processed food pressure persists ("core excluding fresh food"). Broad acceleration (a diffusion index) signals pressure that continues. |
+| Data | PSA OpenStat 0012M4ACP22 provincial CPI by subgroup, 2021-01..2026-09, complete. Its food index equals the model's food CPI exactly. |
+| Availability | The same PSA release as the food CPI. Each row reads only months ≤ its cut-off month; this is asserted in code and tested. |
+| Coverage | From origin 2022-Q2; 100% of evaluation origins |
+| Why new | Every earlier price feature used the aggregate index. E84 S-COMP used subgroups only to simulate prices forward, outside the LightGBM. |
+| Leakage control | One candidate, monotone directions fixed in advance, the same origins, rows, grid, seed and S-AB hunger term; nothing fitted on evaluation outcomes |
+
+### 13.3 Before and after (identical rows; B0 reproduces P0H4-U to 5e-7)
+
+| | B0 = P0H4-U, Lead 1 | K1, Lead 1 | **B0 = P0H4-U, Lead 2** | **K1, Lead 2** |
+|---|---|---|---|---|
+| Accuracy [90% CI] | 0.843 [0.76, 0.91] | 0.843 [0.74, 0.93] | **0.800** [0.71, 0.89] | **0.800** [0.69, 0.89] |
+| Balanced accuracy | 0.776 | 0.756 | 0.732 | 0.732 |
+| HIGH precision / recall | 0.69 / 0.65 | 0.71 / **0.59** | 0.63 / 0.59 | 0.63 / 0.59 |
+| TP FP FN TN | 11 5 6 48 | 10 4 7 49 | 10 6 7 42 | 10 6 7 42 |
+| False alarms / missed HIGH | 5 / 6 | 4 / 7 | 6 / 7 | 6 / 7 |
+| Brier (Δ vs B0, 90% CI, p) | 0.132 | 0.130 (−0.002 [−0.013, +0.006], p .41) | 0.167 | **0.160 (−0.007 [−0.014, −0.000], p .049)** |
+| DEV Brier / DEV balanced | 0.139 / 0.710 | 0.145 / 0.710 | 0.177 / 0.686 | 0.171 / 0.665 |
+| CONF accuracy | 0.867 | 0.867 | 0.833 | 0.867 |
+| Accuracy by thirds; LOQO min | 0.88, 0.76, 0.90; 0.831 | 0.88, 0.72, 0.95; 0.831 | 0.84, 0.65, 0.90; 0.783 | 0.84, **0.60**, 0.95; 0.783 |
+| Price-term accuracy / Brier | 0.614 / 0.223 | 0.643 / 0.216 | 0.600 / 0.227 | **0.692 / 0.212** |
+| Brier vs persistence / climatology (p) | .021 / .030 | .015 / .022 | .029 / .078 | .024 / .045 |
+| Failed criteria | none | **R6** | R6 | R6 |
+
+**Lead-2 errors.** K1 fixes 2 false alarms (Laguna 2024-Q3, Quezon 2026-Q3) and makes 2 new ones (Batangas 2024-Q3, 2024-Q4). It catches none of the 7 misses: Quezon 2024-Q3 0.355 → 0.370, Cavite 2024-Q4 0.161 → 0.209, Laguna 2024-Q4 0.167 → 0.250.
+
+**Mechanism (training rows at the final origin).**
+- Among the 122 rows whose flat projection was already above threshold, K_core separates pressure that held from pressure that reverted: standardised difference **0.64**, close to A1_food's 0.70; K_diff 0.33.
+- Overall, K_core and K_diff are not inflated in both classes (0.10 and 0.15). The signal is real and works as theory predicts.
+- Its effect is mostly to sharpen probabilities (Brier) rather than move cases across 0.5. Lead-2 SHAP share: K_diff 0.094, K_core 0.017, K_fresh_gap 0.014.
+
+### 13.4 Frozen adoption rule
+
+| Condition | Result |
+|---|---|
+| Lead-2 DEV Brier ≥ 0.005 better | pass (0.177 → 0.171) |
+| Lead-1 DEV Brier not > +0.005 | **fail** (+0.0057) |
+| Lead-2 DEV balanced accuracy not lower | **fail** (0.686 → 0.665) |
+| Lead-2 accuracy, balanced accuracy, precision, recall within 0.02 | pass |
+| New false alarms ≤ new hits | **fail** (2 vs 0) |
+| Lead-2 CONF accuracy not lower | pass |
+| Lead 1 still passes R1-R7 | **fail** (R6: recall 0.59) |
+
+**K1 is not adopted. P0H4-U is retained.**
+- K1's Lead-2 Brier gain is the first statistically supported Lead-2 probability improvement in this series (p = .049).
+- It does not change a single Lead-2 HIGH/LOW call, does not catch a missed HIGH case, and costs Lead 1 one HIGH case.
+
+### 13.5 Final status
+
+| Criterion | Lead 1 (P0H4-U) | Lead 2 (P0H4-U) |
+|---|---|---|
+| R1 | pass | pass |
+| R2 | pass 0.843 | pass 0.800 |
+| R3 | pass 0.776 | pass 0.732 |
+| R4 | pass | pass |
+| R5 | pass (.021 / .030) | pass (.029 / .078) |
+| R6 | pass 0.69 / 0.65 | **fail 0.63 / 0.59** |
+| R7 | pass | pass |
+| **Decision** | **reliable (development evidence)** | **not reliable** |
+
+**Maximum reliable horizon: Lead 1.**
+
+**Why Lead 2 cannot be validated from the available data.**
+- The approved data now have no untested, theoretically motivated signal left that addresses the recoverable errors. Composition and breadth were the last price-side information not yet used, and they improve probabilities without moving the decisive cases.
+- The non-recoverable misses (3 hunger ties, 1 rounding-level label) already cap recall at 13/17.
+
+**What validating Lead 2 would need**
+- **More independent quarters.** With about 1.3 HIGH cases per quarter, keeping the lower end of a 90% interval for recall above 0.60 needs about 57 HIGH cases if the true recall is about 0.70 (normal approximation). That is about 44 quarters; the sealed prospective forecasts (from 2027-Q1) are the start.
+- **A hunger observation between SWS rounds**, or closer to the target quarter, for Balance Luzon or CALABARZON (DSWD/WFP monitoring, OCTA rounds), to resolve threshold ties such as 2023-Q4.
+- **A provincial food-insecurity outcome** (CBMS 2024 FIES, FNRI provincial FIES) to validate the target beyond the regional proxy.
+- **Forward-looking price information** issued before the quarter (DA/BSP price outlooks, rice import and tariff schedules) for the price rises that began after the issue date.
+
+**Implementation.** No served artifact changed: P0H4 seal a498b5ef; P0H4-U behind `AIPHEED_CH1_ENGINE=fr`. New files:
+- `runner/limits.py`, `runner/features_v4.py`, `runner/final.py`;
+- `data/stack_v4.csv`;
+- `out/limits.json`, `out/limits_errors.csv`, `out/features_v4_audit.json`, `out/final.json`, `out/final_rows.csv`;
+- `backend/tests/integration/test_lead2_final.py` (6 tests).
