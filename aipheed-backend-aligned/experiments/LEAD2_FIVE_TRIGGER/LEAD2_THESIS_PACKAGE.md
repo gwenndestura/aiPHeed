@@ -1378,3 +1378,77 @@ All are read at or before the issue date (`out/input_audit.json` time alignment:
 > **Prospective validation.** The refreshed-price forecasts for 2026-Q4 to 2027-Q3 were sealed (SHA-256 dd293e2e…) before any of their outcomes existed. No prospective result is reported, because none of those outcomes has been observed yet.
 >
 > With 13 evaluation quarters, the study cannot statistically separate the candidate models; about 58 quarters would be needed. The sealed record is therefore the independent test of whether the next-quarter forecast can be made reliable.
+
+## 21. Does Lead 2 meet the thesis objectives? (LEAD2_OBJECTIVES_AUDIT; `runner/lead2_objectives_audit.py`, `out/lead2_objectives_audit.json`)
+
+Diagnostic only. No candidate was trained, selected, adopted or served. The 0.50 cut, R1-R7 and `final.adoption_rule` are unchanged. Metrics were recomputed independently with scikit-learn on the committed rows.
+
+### 21.1 Verdict
+
+**Lead 2: DOES NOT MEET OBJECTIVES.**
+- The served configuration (P0H4) reaches 0.769 accuracy, nominally above the 75% minimum and below the 80% target. It fails three mandatory reliability criteria: R3 (balanced accuracy 0.635), R5 (Brier not better than persistence, p .11) and R6 (HIGH recall 0.35).
+- The only configuration meeting R1-R7 (CR, research only) fails the frozen adoption rule and is not robust (§20).
+- The target measures food-insecurity risk only partly (21.3).
+
+**Maximum reliable horizon: Lead 1 (the current quarter).**
+
+### 21.2 Results (Lead 2, the same 65 province-quarters, 13 target quarters, 17 HIGH)
+
+| Configuration | Accuracy (90% CI) | Balanced | Precision | HIGH recall | F1 (HIGH) | TP FP FN TN | Brier | AUC | Calibration slope | 2023-24 / 2025-26 accuracy | Failed | Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **P0H4 (served)** | 0.769 (0.65-0.88) | 0.635 | 0.60 | **0.35** | 0.44 | 6 4 11 44 | 0.194 | 0.63 | 0.47 | 0.686 / 0.867 | R3, R5, R6 | served |
+| P0H4-U (re-issue timing; built, off) | 0.800 (0.71-0.89) | 0.732 | 0.63 | 0.59 | 0.61 | 10 6 7 42 | 0.167 | 0.76 | 1.04 | 0.771 / 0.833 | R6 | research baseline |
+| CR (P0H4-U + CPI refresh) | 0.800 (0.71-0.89) | 0.751 | 0.61 | 0.65 | 0.63 | 11 7 6 41 | 0.147 | 0.85 | 1.50 | 0.771 / 0.833 | none | not adopted (§20) |
+| B1 / B4 (LEAD2_IMPROVE) | 0.785 / 0.785 | 0.702 / 0.721 | 0.60 / 0.59 | 0.53 / 0.59 | — | — | 0.168 / 0.169 | — | — | — / 0.833 | R6 | not adopted |
+| B2 / B3 | 0.723 / 0.754 | 0.661 / 0.681 | 0.47 / 0.53 | 0.53 / 0.53 | — | — | 0.193 / 0.187 | — | — | — | 5 / 3 criteria | not adopted |
+| K1 (LEAD2_FINAL) | 0.800 | 0.732 | 0.63 | 0.59 | — | 10 6 7 42 | 0.160 | — | — | — / 0.867 | R6 | not adopted |
+| K2 (LEAD2_SUBGROUP) | 0.769 | 0.673 | 0.57 | 0.47 | — | — | 0.166 | — | — | — | R3, R6 | not adopted |
+| N0 / N1 / N2 / G0 (LEAD2_TUNING) | 0.723-0.754 | 0.661-0.709 | 0.47-0.53 | 0.53-0.65 | — | — | 0.182-0.187 | — | — | — | 3-6 criteria | not adopted |
+| Always LOW | 0.738 | 0.500 | — | 0 | 0 | 0 0 17 48 | — | — | — | — | — | baseline |
+| Persistence | 0.723 | — | — | — | — | — | 0.277 | — | — | — | — | baseline |
+
+Lead 1 reference: P0H4 accuracy 0.843, balanced 0.776, precision 0.69, recall 0.65, F1 0.67, Brier 0.132. It passes R1-R7.
+
+### 21.3 Objective by objective
+
+| Requirement | Finding | Met at Lead 2? |
+|---|---|---|
+| 1. Target validity | T43c = 1[Balance Luzon SWS hunger > 11.3%] × 1[province food-price pressure]. The hunger part is a measured food-insecurity experience indicator (self-rated involuntary hunger), but it is **regional**: identical for all five provinces in every quarter, and met in 11 of 13 quarters. In those 11 quarters the label equals the province price condition. All provincial variation (57% of label variance is within quarters) comes from price pressure. No provincial measured food-insecurity outcome exists in the data. | **Partly**: risk is defined with a real hunger measure, but its provincial content is price pressure |
+| 2. Accuracy ≥ 75% (target 80%) | Served 0.769. The 90% CI (0.65-0.88) includes values below 75%. It beats always-LOW (0.738) by two rows. 80% is reached only by unserved research configurations, also with lower bounds below 75%. | **No**: 75% only as a point estimate, 80% not served |
+| 3. HIGH-class performance | Served recall 0.35 (6 of 17), F1 0.44. In 2023-24 it caught 1 of 11 HIGH cases. No cut from 0.30 to 0.70 gives precision and recall both ≥ 0.60. | **No** |
+| 4. Probability quality | Served Brier 0.194, not significantly better than persistence (p .11) or climatology (p .16). Calibration slope 0.47 (too extreme for its discrimination), ECE 0.14. P0H4-U and CR are better calibrated overall (slopes 1.0 and 1.5) but over-forecast in 2025-26 (calibration-in-the-large +0.18 / +0.20). | **No** |
+| 5. Generalisation | Walk-forward, chronological, out-of-sample. The served accuracy differs strongly by period: 2023-24 0.686 and 2025-26 0.867. By province it ranges from 0.62 (Cavite, Laguna) to 1.00 (Rizal, no HIGH case). | **No**: not stable across periods |
+| 6. Overfitting and leakage | Price part: mean in-sample Brier 0.188 vs out-of-sample 0.222, a moderate gap. No training target after the origin (asserted). Inputs are read before the issue date (input audit). CPI refresh passes the future-perturbation test. Model selection uses inner chronological folds on training data only. **However:** every 2021-2026 quarter has been examined across 12+ experiments, so all results are development evidence. The sealed prospective forecasts are the only untouched test. | No leakage found; the evaluation set is not held out |
+| 7. Bias and robustness | Errors are systematic toward missing HIGH: 11 of 15 served errors are misses. The three 2023-Q4 misses are capped by the hunger part (π_H = 0.5). Threshold: no served cut meets R6. Missing indicators (models fixed, B0): blanking Market changes 15 of 65 calls (accuracy 0.80 → 0.72); Climate 5; Fish 2; Employment and OFW 0. Release timing: SWS timing moves Lead 2 from 0.769 to 0.800. CR's R6 pass is lost if provincial CPI is released after day 15. | **No** |
+| 8. Statistical uncertainty | 13 independent quarters (7 with HIGH). Accuracy CIs span about 0.23. 12 candidates were compared on these rows (Bonferroni makes CR's p .11 vs P0H4-U equal 1.0). About 58 quarters would be needed to confirm a Brier gain of CR's size. | The evidence cannot separate candidates |
+| 9. Trigger contribution | See 21.4. Only Market / Prices has a contribution confirmed after correction, at Lead 1 (not Lead 2). | Market only |
+| 10. Reproducibility | P0H4-U and CR refitted from the committed stack: max |Δ| 4.9e-7 on 250 rows. The served export's 70 retrospective rows equal P0H4 exactly, and its observed classes equal the labels. | **Yes** |
+
+**Why Lead 2 fails, in one sentence:** the provincial part of the label is next-quarter food-price pressure, which the inputs available at the issue date anticipate weakly, while the regional hunger part changes between SWS rounds the forecast cannot yet see.
+
+**Smallest defensible next steps**
+- Score the sealed prospective forecasts as their outcomes are published.
+- Record PSA's provincial CPI release dates.
+- Obtain a repeated provincial food-insecurity outcome (CBMS or FNRI FIES) to replace the price proxy as the provincial component.
+
+No new candidate is justified on the existing rows.
+
+### 21.4 Trigger cards: evidence status and final wording (committed in 7a7d34a, 18b433f and bed4e1d; unchanged here)
+
+The pre-registered test is a one-sided leave-group-out test ("removal hurts"), Holm-corrected across the five groups. SHAP shares and permutation scores are model influence only, not evidence.
+
+| Trigger | Evidence (ΔBrier when removed, Lead 1 / Lead 2; Holm p) | Status | Card wording |
+|---|---|---|---|
+| Market / Prices | +0.052 (p < .001) / +0.037 (p .06) | **Supported at Lead 1**; observed but not confirmed at Lead 2 | "…made the forecasts worse for the current quarter (Lead 1) and made the forecasts worse for the next quarter (Lead 2), a difference not confirmed after correcting for multiple tests. Its contribution is measurable for the current quarter (Lead 1)." |
+| Climate | −0.007 (interval includes 0) / −0.005, interval [−0.010, −0.001], uncorrected; no corrected test exists for "removal helps" | Observed difference, not confirmed | "…made a difference too small to confirm for the current quarter (Lead 1) and made the forecasts slightly better for the next quarter (Lead 2), a difference not confirmed after correcting for multiple tests. Its contribution is not established after correcting for multiple tests." |
+| Employment | +0.005 (p .11) / +0.003 (p .71) | Insufficient evidence | "Tests on past quarters did not establish an independent contribution from employment-related indicators at Lead 1 or Lead 2 after correcting for multiple comparisons. Employment-related indicators are included in the LightGBM model. However, their independent contribution to forecasting has not been established by the current evaluation." |
+| Fish production | +0.003 (p .15) / −0.001 (p 1.0) | Insufficient evidence | "…made a difference too small to confirm for the current quarter (Lead 1) and made a difference too small to confirm for the next quarter (Lead 2). Its contribution could not be established with the data available." |
+| OFW remittances | +0.0001 / ≈ 0 (whole interval inside the 0.001 floor) | Insufficient evidence; negligible effect | "…made no meaningful difference for the current quarter (Lead 1) and made no meaningful difference for the next quarter (Lead 2). Its contribution could not be established with the data available." |
+
+`export_evidence.py` regenerates `backend/data/ch1_trigger_evidence.json` byte-identically: two runs, same SHA-256 as the committed file.
+
+### 21.5 Thesis-ready wording
+
+> At the next-quarter horizon (Lead 2), the deployed configuration reached 76.9% accuracy on the 2023-2026 walk-forward evaluation (13 quarters, 65 province-quarters). That is above the 75% minimum as a point estimate, but its 90% interval (65%-88%) includes lower values, and it is only two cases better than always forecasting LOW. It identified 6 of 17 HIGH-risk cases and failed three of the seven pre-registered reliability criteria. Research configurations reached 80% accuracy but were either below the HIGH-recall criterion or, in one case, failed the adoption rule and proved sensitive to a single case, the decision threshold and the assumed CPI release date. Lead 2 therefore does not meet the study's objectives. The maximum reliable horizon is the current quarter (Lead 1: 84.3% accuracy, all criteria met).
+>
+> These results describe food-insecurity risk as the study defines it: regional SWS hunger above 11.3% combined with provincial food-price pressure. Provincial differences in the forecast reflect food-price pressure, because no repeated provincial measure of food insecurity was available.
