@@ -196,3 +196,76 @@ Correlated inputs share importance, so SHAP shares (Market 0.62) are shown as mo
 | `frontend/src/components/MapDashboard.tsx` | The map opens on the backend's default quarter (Lead 1, Q4 2026). This is a logic change only. Frontend 83/83. |
 | `backend/data/ch1_trigger_evidence.json`, `ch1_system.plain_evidence` | The trigger cards state each group's tested contribution |
 | Production model | **Unchanged** (P0H4, seal a498b5ef). P0H4-U stays behind `AIPHEED_CH1_ENGINE=fr` until you approve it. |
+
+---
+
+## 11. Improvement round (LEAD2_IMPROVE; protocol committed in a7455aa before scoring)
+
+### Experiments
+
+**B0** is the reference: P0H4-U. B1-B4 are each the same unified LightGBM with all 12 indicator families, plus the change listed.
+
+| ID | Defect addressed | Code / feature change | Rationale |
+|---|---|---|---|
+| B1 | 3 of 7 misses are price rises after the issue; the flat projection's bias depends on the regime | `features_v2.py`: `A1_food_anc` and `A1_gap_anc`, projections with the index grown at the BSP 3% target midpoint (monotone) | This projection cut the Lead-2 food-inflation RMSE from 2.37 to 1.93 in FR-II |
+| B2 | Training spans different inflation regimes | `improve.py`: recency weights 0.5^(age/HL), with HL ∈ {none, 8, 4} chosen on inner folds | Follow the current regime |
+| B3 | B1 + B2 | both | — |
+| B4 | The four non-market triggers enter as levels only | `dC3`, `dC4`, `dE1`, `dE2`, `C2_2q`, `C1_run` (changes, 2-quarter typhoons, El Niño duration) | Delayed or changing effects of climate, employment, fish production and remittances |
+
+### Before and after
+
+Same 65 Lead-2 / 70 Lead-1 rows, the same target and the same S-AB hunger term. "+hits / +FA" counts the extra HIGH cases caught and the extra false alarms compared with B0. **CONF** = targets 2025-Q2 to 2026-Q3, held out from this selection.
+
+| Model | Lead-1 accuracy | Lead-1 Brier (Δ vs B0, 90% CI) | Lead-2 accuracy | Lead-2 HIGH precision / recall | Lead-2 TP FP FN TN | Lead-2 Brier (Δ vs B0) | +hits / +FA | Lead-2 CONF accuracy | Lead-2 fails |
+|---|---|---|---|---|---|---|---|---|---|
+| **B0 = P0H4-U** | 0.843 | 0.132 | **0.800** | 0.62 / **0.59** | 10 6 7 42 | **0.167** | — | 0.833 | R6 |
+| **B1 anchored projections** | **0.886** | **0.122 (−0.011 [−0.021, −0.001])** | 0.785 | 0.60 / 0.53 | 9 6 8 42 | 0.168 (+0.000, n.s.) | 0 / +1 | 0.833 | R6 |
+| B2 recency weighting | 0.786 | 0.141 | 0.723 | 0.47 / 0.53 | 9 10 8 38 | 0.193 (**+0.026**, worse) | 0 / +4 | 0.700 | R2-R6 |
+| B3 = B1 + B2 | 0.871 | 0.132 | 0.754 | 0.53 / 0.53 | 9 8 8 40 | 0.187 (+0.020) | 0 / +2 | 0.767 | R3, R5, R6 |
+| B4 trigger dynamics | 0.843 | 0.133 | 0.785 | 0.59 / 0.59 | 10 7 7 41 | 0.169 (+0.002) | 0 / +1 | 0.833 | R6 |
+
+**Selection (frozen rule: Lead-2 DEV Brier ≥ 0.005 better):** none qualifies, so **B0 stays**. None of B1-B4 caught any of the 7 earlier misses.
+
+**B1 is a genuine Lead-1 improvement.**
+- The Brier gain is significant, and accuracy improves in both blocks: DEV 0.825 → 0.875, CONF 0.867 → 0.900.
+- At Lead 2 it is not significantly different from B0 (one fewer hit).
+- It was not adopted, because the pre-set rule targeted Lead 2. Adopting it is the researchers' decision: it is one unified model, so adopting it changes all leads.
+
+### All Lead-2 errors of B0 (13), by pattern (`out/error_patterns.csv`)
+
+| Pattern | Misses (FN) | False alarms (FP) |
+|---|---|---|
+| Hunger part ≤ 0.5 (SWS reading tied at 11.3) | 3 | — |
+| Price rose after the issue date | 3 | — |
+| Price fell after the issue date | — | 5 |
+| Model behaviour | 1 | 1 |
+
+- **Price surprises in both directions** account for 8 of the 13 errors.
+- **6 of the 13 errors are borderline labels** (|realised margin| < 0.5 point).
+- The same pattern runs through every quarter with errors, so it is not specific to the seven misses.
+
+### Early-warning check for the 7 misses
+
+Each check lists the indicators beyond the 75th percentile, at the cut-off, in the direction training HIGH rows took.
+- **World prices:** cereal, crude oil and urea were high before 6 of the 7 misses.
+- **The same indicators were also high before many LOW quarters in 2022-23**, when hunger stayed below 11.3. They are in the model, but they do not separate HIGH from LOW. That is why the LightGBM does not lean on them.
+- For Quezon 2024-Q3, both projections were already above threshold (A1_gap 76th percentile, anchored projection 87th), yet the model gave 0.43. This is the one case of model under-use. The poverty input (a static province profile) pulled it down.
+
+### Pass/fail of the final model (B0 = P0H4-U) against every frozen criterion
+
+| Criterion | Lead 1 | Lead 2 |
+|---|---|---|
+| R1 ≥ 10 quarters, ≥ 40 rows | pass (14, 70) | pass (13, 65) |
+| R2 accuracy ≥ 0.75 | pass (0.843) | pass (0.800) |
+| R3 balanced accuracy ≥ 0.70 | pass (0.776) | pass (0.732) |
+| R4 > always-LOW and > persistence | pass (vs 0.757 / 0.743) | pass (vs 0.738 / 0.723) |
+| R5 Brier better than persistence and climatology (p < .10) | pass (.021 / .030) | pass (.029 / .078) |
+| R6 HIGH precision and recall ≥ 0.60 | pass (0.69 / 0.65) | **FAIL (0.62 / 0.59)** |
+| R7 thirds ≥ 0.60, leave-one-quarter-out ≥ 0.70 | pass | pass (0.65 lowest third; 0.783) |
+| **Decision** | **Reliable (development evidence)** | **Not reliable: fails R6 by one HIGH case** |
+
+**All 12 indicators reach the unified LightGBM** (input audit: 21/21 columns, exact reproduction).
+
+**Five-trigger contribution:** see §6.
+- Adding change and duration features (B4) did not help climate, employment, fish production or remittances. Their limit is the data (national, coincident, sparse), not the representation.
+- Market's dominance is real. It carries the only signal that separates HIGH from LOW at Leads 1-2.
