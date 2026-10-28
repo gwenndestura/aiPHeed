@@ -2,7 +2,7 @@
 leave-one-group-out change in Brier score at Leads 1-2, its SHAP share, and one plain sentence generated from those
 numbers. A practical floor of 0.001 Brier separates "measurable" from "negligible". A group is called measurable at a
 lead only when the Holm-corrected p (over the five groups) is below ALPHA; a 90% interval above zero that does not
-survive the correction is stated as not confirmed. Employment's card keeps the approved wording (CR_REVIEW 20.8).
+survive the correction is stated as not confirmed. Employment's card is the approved sentence (CR_REVIEW 20.8).
 
     python export_evidence.py   # backend/data/ch1_trigger_evidence.json
 """
@@ -23,9 +23,12 @@ INDICATORS = {"market": "PSA food CPI projection and momentum, headline inflatio
 
 ALPHA = 0.05
 PERIOD = {"1": "the current quarter (Lead 1)", "2": "the next quarter (Lead 2)"}
-# approved card wording (2026-10-29) for a group whose contribution no corrected test establishes
-APPROVED = {"employment": "Employment-related indicators are included in the LightGBM model. However, their independent "
-                          "contribution to forecasting has not been established by the current evaluation."}
+# approved card wording (2026-10-29) for a group whose contribution no corrected test establishes: the whole sentence
+# replaces the generated one, so an unconfirmed lead is never described as a change in the forecasts
+APPROVED = {"employment": "Tests on past quarters did not establish an independent contribution from employment-related "
+                          "indicators at Lead 1 or Lead 2 after correcting for multiple comparisons. Employment-related "
+                          "indicators are included in the LightGBM model. However, their independent contribution to "
+                          "forecasting has not been established by the current evaluation."}
 
 
 def state(x: dict) -> str:
@@ -48,7 +51,7 @@ def sentence(b: str, r: dict) -> str:
         where = "the current and next quarters" if len(confirmed) == 2 else PERIOD[confirmed[0]]
         txt += f" Its contribution is measurable for {where}."
     elif b in APPROVED:
-        txt += " " + APPROVED[b]
+        return APPROVED[b]
     elif "unconfirmed" in st.values():
         txt += " Its contribution is not established after correcting for multiple tests."
     elif "better" in st.values():

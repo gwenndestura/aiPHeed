@@ -40,7 +40,7 @@ def test_the_five_groups_are_the_dashboard_groups_and_match_the_ablation():
         assert ev[g]["class"] == a["classification"][g]["class"]
         for k in ("1", "2"):
             assert ev[g]["brier_change_without"][k] == a["leads"][k][g]["loo_t43c"]
-        assert ev[g]["sentence"].startswith("Tested on past quarters")
+        assert ev[g]["sentence"].startswith(("Tested on past quarters", "Tests on past quarters"))
 
 
 def test_market_is_measurable_and_no_group_is_given_an_unsupported_effect():
@@ -56,15 +56,18 @@ def test_market_is_measurable_and_no_group_is_given_an_unsupported_effect():
             assert any(ev[g]["brier_change_without"][k].get("holm_p_hurts", 1) < .05 for k in ("1", "2")), g
 
 
-EMPLOYMENT_WORDING = ("Employment-related indicators are included in the LightGBM model. However, their independent "
-                      "contribution to forecasting has not been established by the current evaluation.")
+EMPLOYMENT_WORDING = ("Tests on past quarters did not establish an independent contribution from employment-related "
+                      "indicators at Lead 1 or Lead 2 after correcting for multiple comparisons. Employment-related "
+                      "indicators are included in the LightGBM model. However, their independent contribution to "
+                      "forecasting has not been established by the current evaluation.")
 
 
 def test_employment_card_does_not_claim_a_measurable_contribution():
     # CR_REVIEW 20.8: employment's leave-group-out gain is not established after Holm correction (Lead 1 p .11)
     s = CH1.trigger_evidence()["employment"]["sentence"]
-    assert "measurable" not in s and s.endswith(EMPLOYMENT_WORDING)
-    assert "(Lead 1), a difference not confirmed after correcting for multiple tests" in s
+    assert s == EMPLOYMENT_WORDING
+    assert "measurable" not in s and "made the forecasts" not in s                # no unconfirmed change stated as a result
+    assert "no predictive value" not in s
     assert "E1" in CH1.trigger_evidence()["employment"]["columns"]                 # still a model input
     assert CH1.plain_evidence("PH040300000", "2026-Q4", "employment").endswith(EMPLOYMENT_WORDING)
 
@@ -82,7 +85,7 @@ def test_regenerating_the_evidence_keeps_the_approved_wording():
     r = json.loads(ABL.read_text())["leads"]
     r = json.loads(json.dumps(r))
     r["1"]["employment"]["loo_t43c"]["holm_p_hurts"] = 0.06
-    assert X.sentence("employment", r).endswith(EMPLOYMENT_WORDING)
+    assert X.sentence("employment", r) == EMPLOYMENT_WORDING
 
 
 def test_api_cards_carry_the_tested_contribution_at_both_scopes(thesis):
