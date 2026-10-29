@@ -1,0 +1,13 @@
+indicator,columns,rule,evidence,revision_or_vintage,status
+A1 food-price projection,"A1_food, A1_gap, A_mom",CPI months <= m0 (month 2 of t) at O(t); Lead 2+ refresh only under the verified ledger,"35 of 36 archived m0 releases precede O(t); refresh months: 32 verified, 61 owner-reported, 79 unresolved",final-vintage index; 3 of 29 archived headline rates differ (<= 0.4 pp); 375 training rows predate the 2018=100 series,verified for m0 with one exception (Batangas 2025-02 unverified); refresh partly unresolved
+A2 headline above usual,A2,all-items YoY months 1-2 of t,same CPI release as A1,as A1,as A1
+A3 wholesale rice,A3,quarter t-1 at O(t),rule only; no dated releases saved,PSA wholesale price revisions not checked,unresolved (assumed lag)
+V1 poverty and density,V1,static profile at every origin,SAE 2021 and POPCEN 2024 were published 2024-2025,uses values published after every origin before 2025 (time-invariant),"point-in-time violation, disclosed; constant over time so it cannot carry temporal signal"
+C1 El Nino advisory,C1,PAGASA items issued strictly before O(t),dated items,none,verified by construction
+C2 typhoons within 300 km,C2,"quarter t, complete at O(t)",IBTrACS track dates,best-track revisions after real time not checked,rule plausible; vintage unverified
+C3 palay / corn drop,C3,quarter t-1 at O(t),rule only,PSA production revisions not checked,unresolved (assumed lag)
+C4 fisheries drop,C4,quarter t-1 at O(t),rule only,PSA production revisions not checked,unresolved (assumed lag)
+E1 unemployment change,E1,LFS months of t-1 at O(t),rule only,LFS revisions not checked,unresolved (assumed lag)
+E2 remittance decline,E2,BSP quarter t-1 at O(t),rule only,BSP revisions not checked,unresolved (assumed lag)
+N1 FSSI-v3 news,"N1, G_pri_yoy, NG_gap_price",headlines published before O(t),"1,575 dated rows, all before issue",none (fixed scoring model),verified
+H1 regional hunger outlook,H1 (and pi_H),SWS rounds posted before the issue,published dates in sws_rounds_primary.csv,none,verified
