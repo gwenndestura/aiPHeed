@@ -179,3 +179,24 @@ These ablations are of a research candidate on development rows. The served dash
 ## K. Full test suite
 
 Full backend suite: **973 passed, 18 skipped, 0 failed** (2026-10-29).
+
+## L. PSA release dates collected by the project owner (2026-10-29; `runner/release_dates_review.py`, `out/release_dates_review.json`)
+
+- **Input.** The owner's collection: `data/psa_cpi_release_dates_owner_research_20261029.csv`, kept verbatim (SHA-256 5cb33206…). It covers the 9 priority months: 45 province-month rows, 27 of them with a date.
+- **Check.** Every reported date falls **before** its forecast issue date (1-15 days earlier). No refreshed CPI month has been shown unavailable.
+- **Later than day 10, but still before the issue:**
+  - June 2024, Batangas: 2024-07-22, for the 2024-07-24 issue;
+  - April 2026, Laguna and Batangas: 2026-05-11 / 2026-05-12, for the 2026-05-13 issue.
+
+  So the day-10 rule is not a reliable stand-in for the actual dates, although it caused no violation in these rows.
+- **Status: reported, not confirmed.**
+  - No saved copy was named.
+  - It is not yet confirmed that each date is the release date printed on the document rather than a page posting date (some Region IV-A page dates are re-postings).
+  - The pages could not be opened from this session (bot verification).
+  - Four months (2023-04, 2024-12, 2025-07, 2025-12) rely on a regional report; it still has to be confirmed that it carries the provincial figures of the same CPI series.
+- **Erratum to the addendum.**
+  - Its rule 2 applies to every Lead-2+ row, training rows included. It therefore needs **36 reference months (180 province-months)**, not the 18 it states.
+  - That is 34 months counted by the day-10 rule, plus 2 it excluded that may have been released in time: July 2023 for the 2023-08-03 issue, and October 2025 for the 2025-11-06 issue.
+  - The list is in `data/psa_cpi_release_months_needed.csv`. Verified dates can therefore change CR-ANC's inputs in either direction.
+- **Decision.** The pre-registered re-score does **not** run yet. 0 of 180 are confirmed and 153 are unknown. The CR-ANC result (day-10 rule: not eligible) and every conclusion above are unchanged.
+- **Next step.** Complete and confirm `data/psa_cpi_release_dates_TO_FILL_v2.csv`, which is prefilled with the 27 reported dates.
