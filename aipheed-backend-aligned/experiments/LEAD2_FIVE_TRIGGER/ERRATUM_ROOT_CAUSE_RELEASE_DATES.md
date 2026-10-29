@@ -54,3 +54,19 @@ This erratum corrects two counts and states how the release-date evidence is gra
    - The regional September 2025 release came out on 2025-10-15.
    - If the September 2026 provincial CPI was released on or after 2026-10-15, both sealed files used data not yet public at their stated issue date. The owner must establish this date.
    - The September 2026 releases are allowed under the blind rule (reference month 2026-09).
+
+## E5. The Rizal 2027-Q1 companion record is not the counted forecast (2026-10-29)
+
+- The companion manifest (`sealed/rizal_2027q1_companion.sha256`) contains a `scoring_rule` saying the companion counts unless the issue-day timing is resolved. **That rule is withdrawn.**
+- No frozen document authorizes it. Addendum rule 5 scores the sealed originals as published.
+- The manifest and the companion CSV (b1edb799…) are left exactly as sealed, as a labelled diagnostic record.
+- Its construction pairs September food CPI with August all-items CPI in one gap feature. That violates rule 1 of `ASOF_RULE_SEPT2026.md`.
+
+## E6. The September 2026 timing impact (LEAD2_SEPT2026_VINTAGE_AND_CAUSES_REPORT section 1)
+
+- **What section 1 says:** "28 of 30 rows valid; only Rizal Lead 2 depends on the timing". That came from the split construction of E5.
+- **What the consistent cut-off shows:** one cut-off month per province-month (addendum rule 2), applied to all provinces and Leads 2-4. September 2026 is not verified for any province.
+  - 9 of the 30 sealed Lead 2-4 rows change class with the cut-off. If the owner-reported provincial dates are verified, 3 still depend on it.
+  - Rizal 2027-Q1 Lead 2 is LOW under every consistent cut-off.
+- Details are in section 4 of that report and in `out/sept2026_asof_variants.csv`.
+- No rule, criterion, seal or score is changed.

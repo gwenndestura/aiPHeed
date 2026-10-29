@@ -3,8 +3,9 @@ tests/integration/test_sept2026_vintage_audit.py
 ------------------------------------------------
 September 2026 CPI vintage audit of the sealed CR and CR-ANC forecasts: the seals are untouched and reproduced; every
 input is classified; food inputs are value-matched to the pre-issue OpenSTAT snapshot; Rizal and Quezon all-items
-inputs are same-day unresolved and no input is classified as available without evidence; the Rizal Lead-2 call is the
-only one that depends on the unresolved timing; served model unchanged.
+inputs are same-day unresolved and no input is classified as available without evidence; under the food/all-items
+split construction only the Rizal Lead-2 call changes (superseded as a timing verdict by test_sept2026_asof_rule.py);
+served model unchanged.
 """
 from __future__ import annotations
 
@@ -51,7 +52,7 @@ def test_provenance_records_and_pre_issue_food_snapshot(res):
     assert "2026-10-15T09:18:32Z" in res["all_items_first_seen"]
 
 
-def test_only_rizal_lead2_depends_on_unresolved_timing(res):
+def test_split_construction_changes_only_rizal_lead2(res):
     for s in res["seals"].values():
         changed = [(r["province"], r["lead"]) for r in s["sensitivity"] if r["changed_class"]]
         assert changed == [("Rizal", 2)]
