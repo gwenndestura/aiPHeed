@@ -1473,3 +1473,22 @@ The pre-registered test is a one-sided leave-group-out test ("removal hurts"), H
   - CR stays research-only; P0H4 stays served.
   - The maximum reliable horizon is Lead 1.
   - These are retrospective development results. Prospective validation awaits the sealed 2026-Q4..2027-Q3 outcomes.
+
+## 23. Lead-2 evidence gaps (LEAD2_EVIDENCE_GAPS; `LEAD2_CR_RESOLVE_REPORT.md` section 13)
+
+- **CPI release timing: UNRESOLVED.**
+  - 0 of the 18 provincial CPI months refreshed by CR have a verified PSA release date. Nine are within 14 days of their issue.
+  - psa.gov.ph and the Region IV-A site sit behind bot verification (not bypassed), and regional page dates are re-postings.
+  - The day-10 rule remains an assumption, and no recalculation was triggered. All attempts are logged in `data/psa_cpi_release_evidence.csv`.
+- **Target.**
+  - The label is regional observed hunger (SWS Balance Luzon > 11.3%) × provincial food-price pressure (CPI relative to the province's own 2021-22 level).
+  - Hunger is identical across provinces and met in 11 of 13 Lead-2 quarters, so the label equals the price proxy in 100% of rows since 2023-Q4.
+  - Price pressure does not track hunger (ρ ≈ −0.38, n.s.).
+  - It supports provincial *food-price-pressure* claims under high regional hunger, **not province-specific food-insecurity claims**.
+- **Prospective test.**
+  - The sealed CR file is intact (dd293e2e) and reproduces from the committed snapshot (4.8e-7).
+  - No sealed outcome exists in the data (labels and SWS end at 2026-Q3, CPI at 2026-09).
+  - Scoring starts when the 2026-Q4 SWS round and the October-December 2026 provincial CPI are published.
+- **Conclusion unchanged.** Lead 2 is not reliable. CR stays research-only, P0H4 stays served, and the maximum reliable horizon is Lead 1.
+
+> **Thesis-ready wording.** Each forecast's food-insecurity risk label combines an observed regional measure of hunger (SWS involuntary hunger in Balance Luzon above 11.3%) with an observed provincial measure of food-price pressure. The provincial component is a proxy for affordability, not a measure of food insecurity, and because the regional hunger condition was met in most evaluation quarters, provincial differences in the forecast reflect food-price pressure. The study therefore reports provincial food-price pressure under high regional hunger, not province-specific food insecurity. The release dates of the provincial CPI months used by the research candidate could not be verified from official sources; its next-quarter result is reported as conditional on a publication-timing assumption, and it awaits prospective validation on forecasts sealed before their outcomes.
