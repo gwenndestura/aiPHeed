@@ -1492,3 +1492,21 @@ The pre-registered test is a one-sided leave-group-out test ("removal hurts"), H
 - **Conclusion unchanged.** Lead 2 is not reliable. CR stays research-only, P0H4 stays served, and the maximum reliable horizon is Lead 1.
 
 > **Thesis-ready wording.** Each forecast's food-insecurity risk label combines an observed regional measure of hunger (SWS involuntary hunger in Balance Luzon above 11.3%) with an observed provincial measure of food-price pressure. The provincial component is a proxy for affordability, not a measure of food insecurity, and because the regional hunger condition was met in most evaluation quarters, provincial differences in the forecast reflect food-price pressure. The study therefore reports provincial food-price pressure under high regional hunger, not province-specific food insecurity. The release dates of the provincial CPI months used by the research candidate could not be verified from official sources; its next-quarter result is reported as conditional on a publication-timing assumption, and it awaits prospective validation on forecasts sealed before their outcomes.
+
+## 24. Root-cause corrections of CR (LEAD2_ROOT_CAUSE; protocol committed in 634ea54 before scoring; full report `LEAD2_ROOT_CAUSE_REPORT.md`)
+
+- **Errors, row by row.**
+  - The three 2023-Q4 misses are a data-confirmed hunger cap: SWS 2023-Q2 = 11.3 exactly, so π_H = 0.5.
+  - Of CR's other errors, 5 are price reversals after the issue, 3 are small price rises after the issue, and 2 are model behaviour (rice inputs, 2024-Q3).
+  - The price part is the binding limit (oracle 0.938).
+- **Three pre-registered corrections:**
+  - **CR-ANC** (anchored projections at the refreshed cut-off): Lead 2 0.800, balanced 0.770, precision 0.60, recall 0.71, Brier 0.132 (−0.036 vs P0H4-U, p .039); R1-R7 pass at Leads 1 and 2; stable across all 8 model settings. **It fails the adoption rule** (precision −0.025; 4 new false alarms vs 3 new hits).
+  - **CR-T** (threshold from earlier outcomes): fails, 18 false alarms.
+  - **CR-WCAL** (calibration from earlier forecasts): fails, degenerate maps.
+- **Release timing.** CR-ANC passes every criterion and the rule if provincial CPI is released after day 20, but fails R6 at day 15. That variant was seen after scoring and is not adopted.
+  - An addendum, committed before any date is known, re-scores CR-ANC once under verified PSA release dates.
+  - CR-ANC's forecasts for 2026-Q4..2027-Q3 are sealed (07c99e56).
+- **Verdict.**
+  - No candidate meets every frozen requirement. P0H4 stays served.
+  - CR-ANC is the strongest research candidate. Its standing depends on the verified release dates and the prospective record.
+  - The maximum reliable horizon is Lead 1.
