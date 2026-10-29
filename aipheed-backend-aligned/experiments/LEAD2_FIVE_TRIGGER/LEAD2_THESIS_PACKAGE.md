@@ -1452,3 +1452,24 @@ The pre-registered test is a one-sided leave-group-out test ("removal hurts"), H
 > At the next-quarter horizon (Lead 2), the deployed configuration reached 76.9% accuracy on the 2023-2026 walk-forward evaluation (13 quarters, 65 province-quarters). That is above the 75% minimum as a point estimate, but its 90% interval (65%-88%) includes lower values, and it is only two cases better than always forecasting LOW. It identified 6 of 17 HIGH-risk cases and failed three of the seven pre-registered reliability criteria. Research configurations reached 80% accuracy but were either below the HIGH-recall criterion or, in one case, failed the adoption rule and proved sensitive to a single case, the decision threshold and the assumed CPI release date. Lead 2 therefore does not meet the study's objectives. The maximum reliable horizon is the current quarter (Lead 1: 84.3% accuracy, all criteria met).
 >
 > These results describe food-insecurity risk as the study defines it: regional SWS hunger above 11.3% combined with provincial food-price pressure. Provincial differences in the forecast reflect food-price pressure, because no repeated provincial measure of food insecurity was available.
+
+## 22. Resolving Lead 2 with CR (LEAD2_CR_RESOLVE; protocol committed in 9a64352 before scoring; full report `LEAD2_CR_RESOLVE_REPORT.md`)
+
+- **Reproduced from committed inputs** (max |Δ| 4.9e-7), all as reported:
+  - P0H4: Lead 2 0.769, fails R3, R5, R6;
+  - P0H4-U: 0.800, fails R6;
+  - CR: 0.800, balanced 0.751, recall 0.65, Brier 0.147, 11/7/6/41, 3 new false alarms vs 2 new hits, sign-flip p .13.
+- **One pre-registered correction, CR-CAL** (training-only Platt recalibration of the price part):
+  - Lead-2 Brier 0.144, but accuracy 0.769, precision 0.56, recall 0.59;
+  - fails R6 and five adoption conditions. **Not adopted.**
+  - The training-fold calibration maps are unstable (slope −1.2 to 2.9).
+- **Diagnostics:**
+  - Lead-2 accuracy ranges 0.769-0.831 over the 8 fixed grid settings, and 2 of 8 fail R1-R7 (reported, not used).
+  - The A1 food-price family dominates the attribution.
+  - Market and prices is the only trigger group with a corrected-significant contribution (Leads 1 and 2).
+  - Poverty and news removal helped at Lead 2 on uncorrected intervals; both are kept, as the 12 indicators are required.
+  - All timing, leakage and serving checks pass. PSA's provincial CPI release dates remain unrecorded.
+- **Verdict: UNRESOLVED — DATA OR TARGET LIMITATION.**
+  - CR stays research-only; P0H4 stays served.
+  - The maximum reliable horizon is Lead 1.
+  - These are retrospective development results. Prospective validation awaits the sealed 2026-Q4..2027-Q3 outcomes.
