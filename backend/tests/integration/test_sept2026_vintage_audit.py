@@ -61,3 +61,18 @@ def test_served_model_unchanged(monkeypatch):
     from app.ml.inference import ch1_system as CH1
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)
     assert CH1.evaluation()["seal_sha256"] == "a498b5ef3fd9143348737a3a4464ba71c3c728fff48efa5f11d4c544644fbee1"
+
+
+def test_rizal_companion_sealed_alongside_untouched_originals(res):
+    comp = LT / "sealed" / "rizal_2027q1_companion.csv"
+    man = json.loads((LT / "sealed" / "rizal_2027q1_companion.sha256").read_text())
+    assert hashlib.sha256(comp.read_bytes()).hexdigest() == man["sha256"]
+    assert man["originals_unchanged"] == SEALS and man["latest_outcome_quarter_at_seal"] < "2027-Q1"
+    C = pd.read_csv(comp, dtype={"province_code": str})
+    assert len(C) == 2 and set(C["companion_of"]) == {"CR", "CR-ANC"}
+    assert (C["province"] == "Rizal").all() and (C["target_quarter"] == "2027-Q1").all() and (C["lead"] == 2).all()
+    assert (C["cpi_through"] == "food 2026-09, all items 2026-08").all()
+    assert (C["class"] == "HIGH").all() and (C["original_class"] == "LOW").all()
+    for r in C.itertuples():                                            # matches the audit's diagnostic re-prediction
+        sens = [s for s in res["seals"][r.companion_of]["sensitivity"] if s["province"] == "Rizal" and s["lead"] == 2][0]
+        assert abs(r.probability - sens["probability_all_items_aug"]) < 1e-5 and r.original_class == sens["sealed_class"]

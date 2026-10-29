@@ -50,7 +50,18 @@ The sealed files, served model, frozen protocol, criteria and owner dates were n
 - The sealed forecasts **remain valid for prospective evaluation in 28 of 30 rows.** That is every row except Rizal Lead 2 in each seal; Rizal and Quezon Leads 3-4 and Quezon Lead 2 do not depend on the unresolved timing.
 - **Rizal 2027-Q1 (Lead 2) in both seals is temporally unresolved, and its call depends on it.** It must be scored and reported separately as `timing-unresolved` until the issue-day posting time of Rizal's September 2026 all-items CPI is established. Quezon's unresolved inputs do not change any Quezon call.
 
-**Proposed correction, for approval (not done).** Keep both sealed files untouched. Seal one labelled companion record for **Rizal 2027-Q1 only**, in both seals, with all-items CPI cut at 2026-08. Its outcome does not exist yet, so the companion is still prospective. Both versions are scored, and the companion is the one counted if the posting time is never established.
+**Correction (approved by the owner 2026-10-29, sealed).** Both sealed files are untouched (hashes checked before and after). One labelled companion record for **Rizal 2027-Q1, Lead 2 only**, in both seals, is sealed separately:
+
+| Item | Value |
+|---|---|
+| Script | `runner/rizal_companion_seal.py` |
+| File | `sealed/rizal_2027q1_companion.csv`, SHA-256 `b1edb799f6f08158161164e8fab96c8ec3954cba91d8af36fe6392866753094a` (manifest `sealed/rizal_2027q1_companion.sha256`) |
+| Sealed | 2026-10-29 11:09 UTC; latest existing outcome 2026-Q3, so the 2027-Q1 outcome did not exist |
+| Inputs | Same fitted models and inputs as the originals (original row reproduced to 1e-5), except all-items CPI through 2026-08 in `A1_gap` / `A1_gap_anc`. Food CPI stays at 2026-09 |
+| CR | LOW 0.327 → companion **HIGH 0.543** |
+| CR-ANC | LOW 0.381 → companion **HIGH 0.669** |
+
+**Scoring rule:** both the original and the companion are scored and reported. The companion is the one counted unless Rizal's September 2026 all-items CPI is shown to have been public before 2026-10-15.
 
 ## 2. Causes of weak Lead 2, ranked by impact (CR's 13 Lead-2 errors; development rows)
 
@@ -82,7 +93,7 @@ The model adds value beyond price-only rules and the baselines, retrospectively.
 ## 3. What should run next
 
 1. **The pre-registered addendum re-score of CR-ANC** (one run, frozen rule), once all 180 province-months are confirmed. This is the only remaining experiment that can turn CR-ANC's retrospective result into an eligible one. Running any other release rule now would be selection on known results: day 15 and day 20 were already seen.
-2. **Prospective scoring** of both seals as outcomes arrive (2026-Q4 first), with Rizal 2027-Q1 reported as timing-unresolved, plus the companion record if approved.
+2. **Prospective scoring** of both seals as outcomes arrive (2026-Q4 first), with Rizal 2027-Q1 reported as timing-unresolved, plus the sealed companion record (section 1).
 3. **Owner decision on the 2021 vintage** (2012=100 releases), before the addendum re-score.
 
 No new model candidate is justified on the existing 13 quarters. Every correctable cause with available data has been tested (sections 20-24 of the thesis package and `LEAD2_ROOT_CAUSE_REPORT.md`).
