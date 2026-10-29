@@ -32,3 +32,25 @@ This erratum corrects two counts and states how the release-date evidence is gra
 3. When several qualifying releases exist for a province-month, the province's own release is used.
 4. **A row is `confirmed` only** when the owner marks `confirmed_by_owner = yes` and `is_release_date_printed_on_document = yes` with a saved copy. Document evidence alone makes it `awaiting_owner_review`. A missing date stays blank and `unresolved`.
 5. Releases for reference months from 2026-10 onward are neither collected nor kept (blind boundary).
+
+## E4. Corrections after the owner's web-research ledger (2026-10-29)
+
+1. **A page's subject decides whose release it is, not its title.**
+   - Many Region IV-A pages have generic titles. The pages titled "Summary Inflation Report Consumer Price Index (2018=100) <month> 2025" (January-July 2025, plus April 2024) open with "The Batangas Province headline ... inflation", so they are **Batangas releases**. They mention other provinces only as rankings.
+   - Pages titled "Special Release on Summary Inflation Report: <month> 2024" are Laguna's.
+   - The matching now uses each page's subject (`release_pages_fetch.subject`). It no longer uses those Batangas pages for Cavite, Laguna, Quezon or Rizal, which the first pass (f0786a0) did for 9 rows: Cavite and Rizal 2025-03; Rizal 2025-04; Cavite, Laguna and Rizal 2025-06; Cavite, Laguna and Rizal 2025-07.
+   - The owner's priority file used the Batangas July 2025 release (2025-08-07) for the other four provinces too. Those 4 rows are kept, with the flag `owner_date_from_batangas_release`.
+2. **The ledger is recorded as owner research, not as confirmation.**
+   - `data/psa_cpi_release_date_web_research_ledger_20261029.csv` is kept verbatim.
+   - Its dates fill the `ledger_*` columns. Regional ledger entries carry `regional_coverage_unverified`.
+   - Most of its URLs have no archived copy, so they await the owner's check.
+   - Its claim that the Cavite December 2024 archive date came from a Batangas page is not borne out: the saved page is titled "Cavite Summary Inflation: December 2024".
+3. **2021 sources are the 2012=100 series.**
+   - The model uses the 2018=100 series (OpenSTAT 0012M4ACP22). PSA published 2018-based provincial CPIs only after the rebasing, so for issue dates in 2021 the 2018-based values used by training rows did not yet exist; only the 2012-based figures did.
+   - This affects training rows only, not any evaluation forecast: evaluation origins start in 2022-Q4.
+   - It is a vintage choice for the owner: either the 2012-based release dates stand for when the information was public, or 2021 rows are treated as not real-time. Flagged as `ledger_source_2012_base`. No result is changed by this note.
+4. **September 2026 decides whether the sealed forecasts used only published data.**
+   - The sealed CR and CR-ANC Lead 2-4 forecasts were re-issued on 2026-10-15 with CPI through 2026-09.
+   - The regional September 2025 release came out on 2025-10-15.
+   - If the September 2026 provincial CPI was released on or after 2026-10-15, both sealed files used data not yet public at their stated issue date. The owner must establish this date.
+   - The September 2026 releases are allowed under the blind rule (reference month 2026-09).

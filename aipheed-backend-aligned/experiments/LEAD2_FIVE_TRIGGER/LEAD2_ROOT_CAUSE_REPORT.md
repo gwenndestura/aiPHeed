@@ -245,3 +245,27 @@ Full backend suite: **973 passed, 18 skipped, 0 failed** (2026-10-29).
 - For the unresolved rows, the live Region IV-A release pages or a PSA RSSO IV-A release log are the remaining sources.
 
 **Tests:** `test_release_dates_evidence.py` (6 tests) with the release-date and root-cause tests: 18 passed. Full backend suite: **981 passed, 18 skipped, 0 failed**.
+
+## N. Owner ledger merged; matching corrected (2026-10-29)
+
+- **Inputs.**
+  - `psa_cpi_release_date_web_research_ledger_20261029.csv`: 44 entries, kept verbatim.
+  - `psa_cpi_release_dates_priority_research.csv`: identical to the file already archived (SHA-256 5cb33206…).
+  - 33 ledger URLs have no archived copy, so they could not be documented here.
+- **Correction.** Page subject now decides whose release a page is (erratum E4.1). Archived evidence now covers 33 rows: 28 province releases and 5 regional releases.
+- **Status of the 180 rows:**
+
+  | Status | Rows | Basis |
+  |---|---|---|
+  | confirmed | **0** | Owner confirmation required |
+  | awaiting owner review | **96** | 33 archived, 20 priority file only, 43 ledger only |
+  | unresolved | **84** | No source |
+
+- **Timing:**
+  - No CPI month the model used has any source dated on or after its re-issue date.
+  - **October 2025** (could be added for the 2025-11-06 issue): ledger dates 2025-11-10 (Cavite) and 2025-11-13 (regional), so it was rightly not used. Same for Rizal, July 2023 (2023-08-06).
+- **Rizal, December 2023:** still unresolved. The ledger has only Quezon's release, which is not evidence for Rizal.
+- **Open questions for the owner:**
+  - the 2012=100 vintage of the 2021 training rows (E4.3);
+  - **the September 2026 release date for the sealed forecasts' 2026-10-15 issue (E4.4)**.
+- **Re-score:** still blocked.

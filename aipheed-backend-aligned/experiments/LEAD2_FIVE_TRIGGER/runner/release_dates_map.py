@@ -33,13 +33,31 @@ def province_in_title(t: str) -> list[str]:
 
 
 def candidates(C: pd.DataFrame, m: str, p: str) -> tuple[pd.DataFrame, str]:
+    """p's own release (by its subject: generic titles hide many provincial releases), else a regional release that
+    states p's figures. Another province's release is never used, even when it ranks p."""
     c = C[(C["reference_month"] == m) & (C["series"] == "all_income") & C["release_date_iso"].notna()]
-    own = c.loc[c["title"].map(lambda t: province_in_title(t) == [p]).astype(bool).to_numpy()]
+    own = c.loc[(c["subject"] == p).to_numpy()]
     if len(own):
         return own, "province_release_page"
-    reg = c.loc[c["title"].map(lambda t: not province_in_title(t) and "lucena" not in t.lower()).astype(bool).to_numpy()]
+    reg = c.loc[(c["subject"] == "regional").to_numpy()]
     reg = reg.loc[reg["provinces_with_figures"].fillna("").str.split(";").map(lambda s: p in s).astype(bool).to_numpy()]
     return reg, "regional_page_states_province"
+
+
+LEDGER = T.DATA / "psa_cpi_release_date_web_research_ledger_20261029.csv"
+LEDGER_COLS = ["ledger_release_date", "ledger_scope", "ledger_source_title", "ledger_source_url", "ledger_status", "ledger_notes"]
+
+
+def ledger_for(Lg: pd.DataFrame, m: str, p: str) -> dict:
+    """The owner's web-research ledger: a province-specific entry for p, else a regional entry (content unverified)."""
+    g = Lg[Lg["reference_month"] == m]
+    own = g[g["province_or_coverage"] == p]
+    reg = g[g["source_scope"].str.startswith("regional")]
+    e = own.iloc[0] if len(own) else reg.iloc[0] if len(reg) else None
+    if e is None:
+        return {}
+    return dict(zip(LEDGER_COLS, [e["release_date_from_official_page"], e["source_scope"] if len(own) else "regional (province coverage unverified)",
+                                  e["source_title"], e["source_url"], e["status"], e["series_and_review_notes"]]))
 
 
 def main():
@@ -47,9 +65,12 @@ def main():
     C = pd.read_csv(T.DATA / "psa_release_evidence" / "wayback_catalog.csv", dtype=str)
     C = C[C["error"].isna() & C["reference_month"].notna()]
     assert not (C["reference_month"] >= "2026-10").any()                       # blind boundary
-    for c in ARCH:
+    Lg = pd.read_csv(LEDGER, dtype=str).fillna("")
+    for c in ARCH + LEDGER_COLS + ["evidence_flags"]:
         V[c] = ""
     for i, r in V.iterrows():
+        for k, v in ledger_for(Lg, r["reference_month"], r["province"]).items():
+            V.loc[i, k] = v
         cand, level = candidates(C, r["reference_month"], r["province"])
         if not len(cand):
             continue
@@ -60,13 +81,29 @@ def main():
         own = r["release_date_YYYY-MM-DD"]
         if isinstance(own, str) and own:
             V.loc[i, "owner_vs_archive"] = "same" if own == b["release_date_iso"] else f"differs (owner {own})"
+    # flags: any source dated on/after the issue date; 2012-based series; regional coverage unverified; owner date from another province's release
+    bad_owner = {("2025-07", p) for p in PROV if p != "Batangas"}                # priority file used the Batangas July 2025 release for all five
+    for i, r in V.iterrows():
+        f = []
+        for col in ("release_date_YYYY-MM-DD", "archive_release_date", "ledger_release_date"):
+            d = r[col] if isinstance(r[col], str) else ""
+            if d and d >= r["must_be_released_before"]:
+                f.append(f"{col}_not_before_issue")
+        if "2012" in r["ledger_notes"] or r["ledger_status"].startswith("series_mismatch"):
+            f.append("ledger_source_2012_base")
+        if r["ledger_scope"].startswith("regional") or r["archive_evidence_level"] == "regional_page_states_province":
+            f.append("regional_coverage_unverified")
+        if (r["reference_month"], r["province"]) in bad_owner and isinstance(r["release_date_YYYY-MM-DD"], str) and r["release_date_YYYY-MM-DD"]:
+            f.append("owner_date_from_batangas_release")
+        V.loc[i, "evidence_flags"] = ";".join(f)
     has_doc = V["archive_release_date"] != ""
     owner_yes = (V["confirmed_by_owner"].fillna("").str.lower().eq("yes")
                  & V["is_release_date_printed_on_document"].fillna("").str.lower().eq("yes")
                  & (V["saved_evidence_filename"].fillna("").ne("") | V["archive_evidence_file"].fillna("").ne("")))
     V["status"] = "unresolved"
-    V.loc[has_doc | V["release_date_YYYY-MM-DD"].notna(), "status"] = "awaiting_owner_review"
-    V.loc[owner_yes & (has_doc | V["release_date_YYYY-MM-DD"].notna()), "status"] = "confirmed"
+    any_date = has_doc | V["release_date_YYYY-MM-DD"].notna() | (V["ledger_release_date"] != "")
+    V.loc[any_date, "status"] = "awaiting_owner_review"
+    V.loc[owner_yes & any_date, "status"] = "confirmed"
     V.to_csv(V2, index=False, lineterminator="\n")
     un = V[V["status"] == "unresolved"]
     res = {"rows": int(len(V)), "status": V["status"].value_counts().to_dict(),
@@ -79,6 +116,10 @@ def main():
            "unresolved_by_month": un.groupby("reference_month")["province"].apply(list).to_dict(),
            "cutoff_rows": V[V["role"] == "could_be_added"][["reference_month", "province", "must_be_released_before", "archive_release_date",
                                                               "archive_evidence_level", "archive_available_by_issue", "status"]].to_dict("records"),
+           "flags": V["evidence_flags"].str.split(";").explode().replace("", pd.NA).dropna().value_counts().to_dict(),
+           "not_before_issue_rows": V.loc[V["evidence_flags"].str.contains("not_before_issue"),
+                                          ["reference_month", "province", "role", "must_be_released_before", "release_date_YYYY-MM-DD",
+                                           "archive_release_date", "ledger_release_date"]].to_dict("records"),
            "rescore_can_run": bool((V["status"] == "confirmed").all())}
     T.OUT.joinpath("release_dates_map.json").write_text(json.dumps(res, indent=1, default=str))
     print(json.dumps({k: v for k, v in res.items() if k not in ("unresolved_by_month",)}, indent=1, default=str))

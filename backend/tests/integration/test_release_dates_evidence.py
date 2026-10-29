@@ -44,7 +44,7 @@ def test_unreviewed_or_missing_dates_are_never_confirmed(v2):
     assert (conf["confirmed_by_owner"].str.lower() == "yes").all()
     assert (conf["is_release_date_printed_on_document"].str.lower() == "yes").all()
     assert ((conf["saved_evidence_filename"] != "") | (conf["archive_evidence_file"] != "")).all()
-    nodate = (v2["release_date_YYYY-MM-DD"] == "") & (v2["archive_release_date"] == "")
+    nodate = (v2["release_date_YYYY-MM-DD"] == "") & (v2["archive_release_date"] == "") & (v2["ledger_release_date"] == "")
     assert (v2.loc[nodate, "status"] == "unresolved").all()
     assert set(v2["status"]) <= {"confirmed", "awaiting_owner_review", "unresolved"} and len(v2) == 180
 
@@ -68,6 +68,13 @@ def test_cpi_months_used_were_released_by_issue(v2):
     assert (used["archive_available_by_issue"] == "yes").all()          # a "no" here would be a timing violation to report
     owner = v2[(v2["role"] == "included_by_day10") & (v2["release_date_YYYY-MM-DD"] != "")]
     assert (owner["release_date_YYYY-MM-DD"] < owner["must_be_released_before"]).all()
+    led = v2[(v2["role"] == "included_by_day10") & (v2["ledger_release_date"] != "")]
+    assert (led["ledger_release_date"] < led["must_be_released_before"]).all()
+    # October 2025: every source dates the release after the 2025-11-06 issue, so it was rightly not used
+    octo = v2[v2["reference_month"] == "2025-10"]
+    assert (octo["role"] == "could_be_added").all() and (octo["ledger_release_date"] >= "2025-11-07").all()
+    # 2021 ledger sources are the 2012=100 series: flagged, never silently accepted for the 2018=100 model
+    assert v2.loc[v2["ledger_notes"].str.contains("2012"), "evidence_flags"].str.contains("ledger_source_2012_base").all()
     # cut-off row: Rizal July 2023 was released 2023-08-06, after the 2023-08-03 issue, so the day-10 rule rightly left it out
     rz = v2[(v2["reference_month"] == "2023-07") & (v2["province"] == "Rizal")].iloc[0]
     assert rz["role"] == "could_be_added" and rz["archive_release_date"] == "2023-08-06" and rz["archive_available_by_issue"] == "no"
@@ -76,13 +83,20 @@ def test_cpi_months_used_were_released_by_issue(v2):
 def test_regional_sources_only_when_they_state_the_province(v2, cat):
     for r in v2[v2["archive_evidence_level"] != ""].itertuples():
         c = cat[cat["url"] == r.archive_source_url].iloc[0]
-        named = [p for p in PROV if p.lower() in c["title"].lower()]
         assert c["series"] == "all_income" and "lucena" not in c["title"].lower()
         if r.archive_evidence_level == "province_release_page":
-            assert named == [r.province], (r.province, c["title"])
+            assert c["subject"] == r.province, (r.province, c["title"])     # generic titles: the subject decides
         else:
-            assert r.archive_evidence_level == "regional_page_states_province" and not named
+            assert r.archive_evidence_level == "regional_page_states_province" and c["subject"] == "regional"
             assert r.province in c["provinces_with_figures"].split(";")
+            assert "regional_coverage_unverified" in r.evidence_flags
+    # the generic-titled 2025 pages that open "The Batangas Province headline..." are Batangas releases, never another province's evidence
+    base = "https://rsso04a.psa.gov.ph/content/summary-inflation-report-consumer-price-index-2018100-"
+    bat = cat[cat["url"].isin([base + m for m in ("july-2025", "june-2025", "march-2025", "april-2025-0")])]
+    assert len(bat) == 4 and (bat["subject"] == "Batangas").all()
+    assert not v2["archive_source_url"].isin(bat["url"]).loc[v2["province"] != "Batangas"].any()
+    jul = v2[(v2["reference_month"] == "2025-07") & (v2["province"] != "Batangas") & (v2["release_date_YYYY-MM-DD"] != "")]
+    assert len(jul) == 4 and jul["evidence_flags"].str.contains("owner_date_from_batangas_release").all()
 
 
 def test_no_reference_month_from_2026_10(v2, cat):

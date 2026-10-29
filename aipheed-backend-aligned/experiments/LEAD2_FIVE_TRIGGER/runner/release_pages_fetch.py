@@ -55,7 +55,27 @@ def parse(s: str) -> dict:
     series = ("bottom_30" if "bottom 30" in low or "bottom-30" in low else "lucena_city" if "lucena" in title.lower() else "all_income")
     stated = [p for p in PROV if re.search(rf"{p}[^.]{{0,120}}\d+(\.\d+)?\s*percent", body)]
     return {"title": title, "release_date_label": label, "release_date_field": rel, "release_date_iso": iso, "reference_no": ref, "reference_month": refm,
-            "series": series, "provinces_with_figures": ";".join(stated)}
+            "series": series, "provinces_with_figures": ";".join(stated), "subject": subject(L, title)}
+
+
+def subject(L: list[str], title: str) -> str:
+    """Whose release this is: the province named in the title, else the one named in the first substantive sentence
+    after the release-date field (e.g. "The Batangas Province headline inflation..."), else "regional" when that
+    sentence is about CALABARZON / Region IV-A; "unknown" otherwise. Generic titles hide many provincial releases."""
+    named = [p for p in PROV if p.lower() in title.lower()]
+    if len(named) == 1:
+        return named[0]
+    i = next((j for j, x in enumerate(L) if x.lower().replace(" ", "").rstrip(":") in ("release-date", "releasedate")), 0)
+    for x in L[i + 1:i + 40]:
+        if len(x) < 60:
+            continue
+        reg = min([x.find(k) for k in ("CALABARZON", "Region IV-A") if k in x], default=10 ** 6)
+        prov = min([(x.find(p), p) for p in PROV if p in x], default=(10 ** 6, ""))
+        if prov[0] < reg:
+            return prov[1]
+        if reg < 10 ** 6:
+            return "regional"
+    return "unknown"
 
 
 def main():
@@ -93,7 +113,7 @@ def main():
             continue
         cat.append({"capture": ts, "url": url, "file": f"wayback/{dst.name}", "sha256": T.sha256(dst), **p,
                     "wayback_url": f"https://web.archive.org/web/{ts}/{url}", "error": ""})
-    cols = ["reference_month", "title", "release_date_label", "release_date_field", "release_date_iso", "reference_no", "series", "provinces_with_figures",
+    cols = ["reference_month", "title", "release_date_label", "release_date_field", "release_date_iso", "reference_no", "series", "subject", "provinces_with_figures",
             "url", "capture", "wayback_url", "file", "sha256", "error"]
     with open(OUT / "wayback_catalog.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols, lineterminator="\n", extrasaction="ignore")
