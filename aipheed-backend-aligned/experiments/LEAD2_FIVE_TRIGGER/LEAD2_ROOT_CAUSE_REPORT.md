@@ -200,3 +200,48 @@ Full backend suite: **973 passed, 18 skipped, 0 failed** (2026-10-29).
   - The list is in `data/psa_cpi_release_months_needed.csv`. Verified dates can therefore change CR-ANC's inputs in either direction.
 - **Decision.** The pre-registered re-score does **not** run yet. 0 of 180 are confirmed and 153 are unknown. The CR-ANC result (day-10 rule: not eligible) and every conclusion above are unchanged.
 - **Next step.** Complete and confirm `data/psa_cpi_release_dates_TO_FILL_v2.csv`, which is prefilled with the 27 reported dates.
+
+## M. Release-date verification, second pass (2026-10-29)
+
+**Method.**
+- **Live sites unreachable:** rsso04a.psa.gov.ph and psa.gov.ph sit behind bot verification, which was not bypassed.
+- **Archived copies used instead:** the Internet Archive's copies of the Region IV-A release pages (`runner/release_pages_fetch.py`).
+  - 127 CPI release pages were listed from the archive's index; 124 are saved under `data/psa_release_evidence/wayback/`, catalogued in `wayback_catalog.csv` with SHA-256 for each file.
+  - Each page's own **Release-Date** field is read and kept apart from the capture time.
+  - The release PDFs were not archived, so no date is read from a PDF.
+- **Matching** (`runner/release_dates_map.py`), under the grading rules of `ERRATUM_ROOT_CAUSE_RELEASE_DATES.md` (E3): province release first; a regional release only when it states the province's figures; never another province's release; all-income series only.
+- **Scope:** nothing from 2026-10 onward was collected, and pre-2021 pages were discarded.
+
+**Status of the 180 province-months:**
+
+| Status | Rows | Basis |
+|---|---|---|
+| confirmed | **0** | Requires the owner's `confirmed_by_owner = yes`, `is_release_date_printed_on_document = yes` and a saved copy |
+| awaiting owner review | **56** | 39 with an archived release page (22 province releases, 17 regional releases stating the province), 17 with the owner's reported date only |
+| unresolved | **124** | No release found. All of 2021-03..2022-09 except 4 rows, all of 2023-09, 2025-09, 2025-10, 2026-03, 2026-06, 2026-07 and 2026-09, and scattered rows elsewhere (`out/release_dates_map.json`) |
+
+**Findings:**
+- **No timing violation found.** Every dated release of a CPI month the model used (39 archived, 27 owner-reported) precedes its re-issue date.
+- **Cut-off months:**
+  - July 2023 for the 2023-08-03 issue: Rizal released it on 2023-08-06, after the issue, so the day-10 rule rightly excluded it. The other four provinces are unresolved.
+  - October 2025 for the 2025-11-06 issue: unresolved for all five provinces.
+- **Rizal, December 2023: no provincial release exists.** Three archived captures of PSA Rizal's release listings (2024-05-22, 2024-06-22, 2025-02-11; saved as `rizal_listing_*.html`) end with "Rizal CPI Special Release August 2023" (released 2023-09-06). PSA Rizal issued no provincial CPI release after August 2023.
+  - No regional December 2023 release stating Rizal's figures was found in the archive or the search index. The PSA IV-A 2023 release calendar exists but is not archived, and would be supporting evidence only.
+  - The row stays blank and `unresolved`.
+- **Owner dates vs archived province releases:** 6 agree and 4 differ.
+  - Laguna and Quezon, April 2023: 2023-05-08, not 05-09.
+  - Cavite, December 2024: 2025-01-07, not 01-09.
+  - Quezon, July 2025: its own release is 2025-08-13; the owner's 08-07 is the regional release.
+  - All of them are before the issue date.
+- **Provinces release on different days for the same month.** June 2024: Quezon 2024-07-08, Batangas 2024-07-22. Early 2023 provincial releases could be very late (Quezon, January 2023: 2023-02-27).
+  - The PSA OpenSTAT provincial table may have been posted earlier than these releases, but its posting dates are not recorded. Using the provincial releases is the conservative choice.
+- **The re-score remains blocked:** 0 of 180 confirmed.
+
+**Owner review needed:**
+- Check each `awaiting_owner_review` row in `data/psa_cpi_release_dates_TO_FILL_v2.csv`:
+  - archived rows: the date and the link in `archive_wayback_url`;
+  - regional rows: that the tables carry the province's food and all-items CPI.
+- Mark both yes columns, and add `saved_evidence_filename` for the owner-only rows.
+- For the unresolved rows, the live Region IV-A release pages or a PSA RSSO IV-A release log are the remaining sources.
+
+**Tests:** `test_release_dates_evidence.py` (6 tests) with the release-date and root-cause tests: 18 passed. Full backend suite: **981 passed, 18 skipped, 0 failed**.

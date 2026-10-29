@@ -50,16 +50,24 @@ def main():
            "why_not": "the addendum needs every needed province-month confirmed; 0 are confirmed (no saved copies, and the release-date "
                       "vs page-date check is pending), 153 of 180 are unknown, and the two 'could_be_added' months are not collected",
            "erratum": "ADDENDUM_ROOT_CAUSE_RELEASE_DATES says 18 months; its rule 2 (every Lead-2+ row) needs the 36 months listed here"}
+    v2 = T.DATA / "psa_cpi_release_dates_TO_FILL_v2.csv"
+    if not v2.exists():                                   # create once; never overwrite the owner's working file
+        tf = full.rename(columns={"issue_date": "must_be_released_before", "release_date_YYYY_MM_DD": "release_date_YYYY-MM-DD"})
+        tf["priority"] = tf["in_first_list_of_18"].map({"True": "HIGH", "False": "needed"})
+        tf.loc[tf["role"] == "could_be_added", "priority"] = "check: released before this date?"
+        tf["is_release_date_printed_on_document"] = ""
+        tf["confirmed_by_owner"] = ""
+        cols = ["reference_month", "province", "must_be_released_before", "role", "priority", "release_date_YYYY-MM-DD", "source_type",
+                "document_title", "source_url", "date_checked", "saved_evidence_filename", "is_release_date_printed_on_document",
+                "confirmed_by_owner", "status"]
+        tf[cols].to_csv(v2, index=False, lineterminator="\n")
+    V = pd.read_csv(v2, dtype=str)
+    res["v2_status"] = V["status"].value_counts().to_dict()
+    res["confirmed"] = int((V["status"] == "confirmed").sum())
+    res["rescore_can_run"] = bool(len(V) == 180 and (V["status"] == "confirmed").all())
+    res["why_not"] = ("" if res["rescore_can_run"] else
+                      f"the addendum needs all 180 province-months confirmed by the owner; v2 status now: {res['v2_status']}")
     T.OUT.joinpath("release_dates_review.json").write_text(json.dumps(res, indent=1, default=str))
-    tf = full.rename(columns={"issue_date": "must_be_released_before", "release_date_YYYY_MM_DD": "release_date_YYYY-MM-DD"})
-    tf["priority"] = tf["in_first_list_of_18"].map({"True": "HIGH", "False": "needed"})
-    tf.loc[tf["role"] == "could_be_added", "priority"] = "check: released before this date?"
-    tf["is_release_date_printed_on_document"] = ""
-    tf["confirmed_by_owner"] = ""
-    cols = ["reference_month", "province", "must_be_released_before", "role", "priority", "release_date_YYYY-MM-DD", "source_type",
-            "document_title", "source_url", "date_checked", "saved_evidence_filename", "is_release_date_printed_on_document",
-            "confirmed_by_owner", "status"]
-    tf[cols].to_csv(T.DATA / "psa_cpi_release_dates_TO_FILL_v2.csv", index=False, lineterminator="\n")
     print(json.dumps(res, indent=1, default=str))
 
 
