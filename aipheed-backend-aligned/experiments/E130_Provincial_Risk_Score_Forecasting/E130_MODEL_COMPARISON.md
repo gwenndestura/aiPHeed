@@ -23,7 +23,7 @@ The five-model comparison (protocol §5) needs a valid quarterly provincial targ
 | S3 EB-shrunk 2023 | 2023 value shrunk toward the 2023 cross-province mean, weight τ² / (τ² + SE²) | Weights from the 2023 cross-section only |
 | LightGBM, PSA-only, NLP-only, linear | — | **Not fitted:** 5 training rows < 20 |
 
-- All five provinces are scored on identical rows when the owner supplies the PSA 2025 table (`runner/score_e130.py`).
+- All five provinces are scored on identical rows when PSA publishes the next provincial subsistence round (none after 2023 as of 2026-10-31; `runner/score_e130.py`).
 - Five rows in one fold: descriptive only.
 
 ## Most recent comparison evidence on record (not re-run)

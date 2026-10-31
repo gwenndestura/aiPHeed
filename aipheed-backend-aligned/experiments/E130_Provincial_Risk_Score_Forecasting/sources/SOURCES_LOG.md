@@ -118,3 +118,14 @@ E129 recorded NNC 403 to automated access. The measure is child undernutrition, 
 - No external links and no macros.
 
 **No subsistence-incidence or food-threshold table is in the workbook.** The seal's target is not here, so the seal is **not scored**. No numeric value was extracted.
+
+## S7 · Owner verification (2026-10-31)
+
+**Owner statement:** "There is currently no published 2025 provincial subsistence-incidence table that I can verify. The latest official provincial subsistence dataset is 2023."
+
+**This corrects S1b and S3.**
+- Their inference that a 2025 provincial subsistence round "is published but not obtainable automatically" came from a search-engine summary, not from a PSA table.
+- PSA's 2025 full-year release has poverty tables only (S6: Tables 1, 2, 5, 6 and 15).
+- **The latest official provincial subsistence data are 2021 and 2023** (vintage 2024-08-15), which E130 already holds.
+
+**Effect.** The survey-year seal (target: the next PSA provincial subsistence round after 2023) stays frozen and unscored until PSA publishes that round. The gate decision is unchanged.

@@ -15,7 +15,7 @@ E130 delivers four things:
 | # | Question | Answer |
 |---|---|---|
 | 1 | Which provincial score is the model learning? | None: no model was trained. The defined reference is **PFDR v1**, PSA provincial subsistence incidence among the population (% below the provincial food threshold), per FIES survey year. |
-| 2 | Which official measurements support it? | PSA FIES-based poverty statistics: 2021 and 2023 held (vintage 2024-08-15); 2025 published 2026-08-21, not held. FNRI ENNS 2021 FIES (Batangas, Cavite) as a cross-check. |
+| 2 | Which official measurements support it? | PSA FIES-based official poverty statistics for 2021 and 2023 (vintage 2024-08-15), the latest official provincial subsistence data. PSA's 2025 release has no provincial subsistence table. FNRI ENNS 2021 FIES (Batangas, Cavite) serves as a cross-check. |
 | 3 | Food insecurity or a proxy? | **Measured food deprivation** (income below a food threshold), an official measurement. Not experienced food insecurity (FIES) and not a constructed index. |
 | 4 | Independent provincial target observations? | **10** values (5 provinces × 2 rounds); **5** changes; **0** quarterly |
 | 5 | Meaningful variation across provinces and quarters? | Across rounds, yes: the order reversed (Spearman −0.82; stability p = 0.022), with real changes in Quezon (−5.7) and Rizal (+1.7). Across provinces: significant in 2021 (Q p < 0.0001), not in 2023 (p = 0.17). Across quarters: not observed. |
@@ -47,8 +47,8 @@ E130 delivers four things:
    - verified provincial CPI release dates (148 are still rule-based);
    - sub-annual provincial labour data;
    - province-tagged news with enough volume.
-3. **The data that exist but are not held:**
-   - **PSA 2025 provincial subsistence table.** The owner should download it manually, because the PSA site's bot check blocks automated access. It scores the E130 seal and raises PFDR to 15 values.
+3. **Data that are not held or not yet published:**
+   - **The next PSA provincial subsistence round.** None after 2023 is published (owner-verified 2026-10-31), and PSA's 2025 release has poverty tables only. When PSA publishes it, it scores the E130 seal and raises PFDR to 15 values.
    - **CBMS 2024 LGU FIES** (142 LGUs; requests A–C from E87 are unsent).
    - **FNRI 2022 ENNS provincial FIES.**
 4. **No pre-2021 data, no SWS copies, no CPI or FIRI target.** None of these would make the provincial objective valid.
@@ -60,15 +60,14 @@ None of these claims a validated quarterly provincial forecast.
 | Option | What it delivers | What it validates | Effort and timing |
 |---|---|---|---|
 | **A. Regional forecast plus provincial priorities (recommended for the thesis)** | Keep quarterly forecasting at the regional level (SWS Balance Luzon; label its leads by information horizon). Present provinces as *priorities* (FIRI3, declared as an index) checked against PFDR rounds. | Regional forecasting (E128 rules); provincial ranking against measured deprivation (V-S1/V-S2) | Now; no new data |
-| **B. Survey-year provincial forecasting** | One-round-ahead PFDR forecasts, sealed before each PSA release (E130 pattern) | Provincial numerical forecasts, round by round (5 rows per round) | Next score: 2025 round, as soon as the owner supplies the table. Then 2027. |
+| **B. Survey-year provincial forecasting** | One-round-ahead PFDR forecasts, sealed before each PSA release (E130 pattern) | Provincial numerical forecasts, round by round (5 rows per round) | Next score: whenever PSA publishes provincial subsistence for a survey year after 2023 (none as of 2026-10-31) |
 | **C. LGU cross-section with CBMS 2024** | A numerical model of LGU FIES prevalence (142 LGUs), province-held-out | Whether the system's LGU risk matches measured food insecurity (cross-sectional, not temporal) | Needs the CBMS request |
 | **D. Prospective quarterly provincial monitoring** | DA IV-A or LGU FIES-8 rounds each quarter | Quarterly provincial forecasting, Lead 2 | 5–10 years. A recommendation, not a thesis deliverable. |
 
 ## 4. Immediate next steps
 
-1. **Owner: supply the 2025 provincial subsistence table.** The workbook supplied on 2026-10-31 (`2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx`) has poverty Tables 1, 2, 5, 6 and 15 but **no subsistence table**, so the seal is still unscored.
-   - **What is needed:** PSA's 2025 "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4). It may be in the regional and provincial press release, or in a later table set or OpenSTAT update.
-   - **What happens next:** `runner/extract_psa_2025.py` reads it and `runner/score_e130.py` scores the seal.
-   - **Rule:** no new 2025 forecast is allowed (exposures X1–X3).
+1. **Seal scoring waits on PSA.** The owner confirmed on 2026-10-31 that no 2025 provincial subsistence table is published; the latest official provincial subsistence data are 2023. PSA's 2025 workbook (`2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx`) has poverty Tables 1, 2, 5, 6 and 15 only.
+   - **What happens next:** the seal stays frozen. When PSA publishes the next provincial subsistence round, `runner/extract_psa_2025.py` reads it and `runner/score_e130.py` scores the seal.
+   - **Rule:** no new forecast of 2025 provincial values is allowed (exposures X1–X3).
 2. **Owner decision:** choose among options A–D, and decide whether to approve PFDR category thresholds (needed for any classification claim).
 3. **Thesis wording:** state the minimum operational objective (Lead 2) as **not met at provincial level, because no provincial quarterly measurement exists**. Describe the operational lead and the information horizon separately.

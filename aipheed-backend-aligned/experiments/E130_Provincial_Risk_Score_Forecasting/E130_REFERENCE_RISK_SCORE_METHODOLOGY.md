@@ -11,8 +11,8 @@
 | Direction | Higher means more food deprivation |
 | Geography | Province, as published by PSA; Quezon excludes Lucena City |
 | Observation period | Calendar year *y* (FIES income reference period) |
-| Frequency | Every two years: 2021, 2023, 2025 |
-| Publication | 2021 and 2023: vintage of 2024-08-15 (held). 2025: first released 2026-08-21 (not held). |
+| Frequency | FIES survey years. Provincial values are published for 2021 and 2023; PSA's 2025 full-year release (August 2026) has no provincial subsistence table. |
+| Publication | 2021 and 2023: vintage of 2024-08-15 (held), the latest official provincial subsistence data (owner, 2026-10-31) |
 | Uncertainty | Published CV; SE = value × CV / 100; 90 % interval = value ± 1.645 SE |
 | Code | `runner/e130_lib.py: load_reference()`. It asserts no pre-2021 rows, no duplicated province-year and all five provinces. |
 | Data | `E130_REFERENCE_SCORE_DATA.csv` |
@@ -84,6 +84,6 @@ The dashboard's quarterly targets have **no provincial reference** (`target_quar
 | Version | Status |
 |---|---|
 | PFDR v1 | 2021 and 2023 held |
-| v1 + 2025 | Adds the 2025 round, unchanged in definition, once the owner supplies the PSA table |
+| v1 + next round | Adds the next provincial round PSA publishes after 2023, unchanged in definition |
 
 Any change to the definition requires a new version and a new protocol.

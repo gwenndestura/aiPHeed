@@ -63,7 +63,7 @@ def score(seal: pd.DataFrame, nxt: pd.DataFrame) -> dict:
 if __name__ == "__main__":
     assert L.sha256(SEAL) == SEAL_SHA, "seal changed since the freeze"
     if not NEXT.exists():
-        sys.exit(f"not scored: {NEXT.relative_to(L.ROOT)} not supplied yet (PSA PDF behind a bot check; OpenSTAT not updated)")
+        sys.exit(f"not scored: {NEXT.relative_to(L.ROOT)} not supplied: no provincial subsistence round after 2023 is published (latest official: 2023)")
     nxt, digest = load_next()
     res = score(pd.read_csv(SEAL), nxt)
     res["input_sha256"] = digest

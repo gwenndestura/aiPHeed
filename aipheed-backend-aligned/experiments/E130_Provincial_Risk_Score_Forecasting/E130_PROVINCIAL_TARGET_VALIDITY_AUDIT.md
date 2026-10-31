@@ -15,7 +15,7 @@ PFDR v1 supports cross-sectional and round-to-round checks and the E130 survey-y
 - at the freeze (`out/gate.json`);
 - after the new-data search (`out/gate_recheck.json`).
 
-The search found that PSA has published a 2025 provincial round (candidate C12). It is not obtainable automatically, and with it there are still only 3 rounds, so **the result is unchanged**.
+The search found PSA's 2025 full-year poverty release (August 2026), but it has poverty tables only. On 2026-10-31 the owner confirmed that no 2025 provincial subsistence table is published and that **the latest official provincial subsistence data are 2023**. The next round (candidate C12) is not published, so **the result is unchanged**.
 
 ## Gate results
 
@@ -34,7 +34,7 @@ Each cell shows whether the candidate passes that criterion.
 | C9 | Composite C1 + C2 (+ C8) | no (mixed) | no | no | yes | yes | yes | no | no | G1, G2, G3, G7, G8 |
 | C10 | Provincial food CPI YoY | no (price) | yes | yes (23) | yes | yes | **no** (it is a predictor) | no | yes | G1, G6, G7 |
 | C11 | FIRI3 / FIRI v2 scores | no (index) | yes | yes | yes | yes | **no** (built from predictors) | no | yes | G1, G6, G7 |
-| C12 | PSA subsistence 2025 round (search) | yes | yes | no (3 rounds) | yes | **no** (bot check) | yes | yes | no | G3, G5, G8 |
+| C12 | PSA provincial subsistence, next round after 2023 | yes | yes | no (2 published rounds) | no (not published) | **no** (not published as of 2026-10-31) | yes | yes | no | G3, G4, G5, G8 |
 
 ## The eight validity questions (brief §2.4)
 
@@ -42,9 +42,9 @@ Each cell shows whether the candidate passes that criterion.
 |---|---|
 | What does the score measure? | The share of the population whose per-capita income is below the provincial food threshold (the cost of a basket meeting minimum food needs) |
 | Household food insecurity, food deprivation, or a constructed estimate? | **Measured food deprivation (income-based).** It is an official PSA measurement. It is not *experienced* food insecurity (FIES) and not an index built from predictors. |
-| What official observations support it? | PSA FIES-based poverty statistics. **2021 and 2023 are held** (published 2024-08-15). **2025 is published** (released 2026-08-21, updated 2026-10) **but not held.** |
+| What official observations support it? | PSA FIES-based official poverty statistics for **2021 and 2023** (vintage 2024-08-15, held). These are the latest official provincial subsistence data. PSA's 2025 full-year release has poverty tables only; no 2025 provincial subsistence table is published (owner, 2026-10-31). |
 | How often is it observed? | Every two years (FIES survey years) |
-| How many genuinely independent observations? | **10 held** (5 provinces × 2 rounds), giving **5 independent changes**. 15 values once the 2025 round is obtained. 0 quarterly. |
+| How many genuinely independent observations? | **10** (5 provinces × 2 rounds), giving **5 independent changes**; 0 quarterly. A third round will exist only when PSA publishes provincial subsistence for a survey year after 2023. |
 | Can it be evaluated at provincial level? | Yes, across provinces in a round and across rounds per province, with published CVs |
 | Can it support quarterly forecasting? | **No.** One value per province every two years cannot label quarters, and spreading annual values over quarters would manufacture observations. |
 | How can its values be independently validated? | Against FNRI FIES (Batangas, Cavite 2021; CIs overlap) and against CBMS 2024 LGU FIES (not held). The PSA food share of expenditure (2023) does **not** order provinces the same way (Spearman −0.20). |

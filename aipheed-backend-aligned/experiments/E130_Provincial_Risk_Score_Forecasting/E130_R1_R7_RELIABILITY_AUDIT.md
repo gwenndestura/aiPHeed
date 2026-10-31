@@ -31,7 +31,7 @@ The brief's 75 %-within-tolerance requirement (N2) **replaces** the A-R2c skill 
 | R4, R5, R7 | Beat the majority class and persistence; Brier test; stability | Only with approved thresholds | No approved thresholds | Not valid |
 
 **Survey-year reading.** Read at survey-year resolution, R1 and N1 fail as well:
-- one held change per province, and two once the 2025 round is obtained;
+- one change per province; a second only when PSA publishes provincial subsistence for a survey year after 2023 (none as of 2026-10-31);
 - 10 survey rounds per province would first exist with survey year 2039 (`out/gate_recheck.json`).
 
 ## Can R1–R7 / N1–N7 ever be satisfied on these sources?

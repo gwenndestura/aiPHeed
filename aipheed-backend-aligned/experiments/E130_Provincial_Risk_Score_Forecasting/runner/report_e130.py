@@ -27,6 +27,18 @@ GROUPS = ["1 Market and food prices", "2 Climate and environmental stress", "3 E
           "4 News and NLP", "5 Poverty and social vulnerability"]
 
 
+def _save(df: pd.DataFrame, path: Path) -> None:
+    """Write only when the content changes, so a deliverable that is open elsewhere (Windows locks files open in
+    Excel) is left alone when nothing in it would change."""
+    new = df.to_csv(index=False, lineterminator="\n").encode("utf-8")
+    if path.exists() and path.read_bytes().replace(b"\r\n", b"\n") == new:
+        return
+    try:
+        path.write_bytes(new)
+    except PermissionError as e:
+        raise SystemExit(f"{path.name} must change but is locked (close it, e.g. in Excel, and re-run)") from e
+
+
 def splits() -> pd.DataFrame:
     rows = []
     for k in L.LEADS:
@@ -35,12 +47,12 @@ def splits() -> pd.DataFrame:
         s["status"] = BLOCKED
         rows.append(s)
     sy = pd.DataFrame([{"design": "survey-year seal (protocol section 7)", "origin": "2023 round (published 2024-08-15)",
-                        "issue_date": "2026-10-31 (seal)", "lead": "next survey round", "target_quarter": "2025 round (published 2026-08-21)",
+                        "issue_date": "2026-10-31 (seal)", "lead": "next survey round", "target_quarter": "next provincial round after 2023 (none published as of 2026-10-31)",
                         "n_train_targets": 1, "train_last_target": "2023 round (5 province changes 2021->2023)",
                         "target_has_reference": True, "executable": False,
-                        "status": "sealed; scoring awaits the owner-supplied 2025 provincial table (PSA PDF behind a bot check)"}])
+                        "status": "sealed; scoring waits for PSA to publish provincial subsistence after 2023"}])
     df = pd.concat(rows + [sy], ignore_index=True)
-    df.to_csv(ROOT / "E130_WALK_FORWARD_SPLITS.csv", index=False)
+    _save(df, ROOT / "E130_WALK_FORWARD_SPLITS.csv")
     return df
 
 
@@ -59,7 +71,7 @@ def training_results() -> pd.DataFrame:
                      "n_train_rows": 5, "n_eval_rows": 5, "train_mae": np.nan, "oos_mae": np.nan,
                      "status": "not trainable: 5 training rows (one change per province) < protocol minimum 20"})
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "E130_MODEL_TRAINING_RESULTS.csv", index=False)
+    _save(df, ROOT / "E130_MODEL_TRAINING_RESULTS.csv")
     return df
 
 
@@ -68,9 +80,9 @@ def predictions() -> pd.DataFrame:
     scored = (OUT / "seal_scores.json").exists()
     s["task"] = "survey-year provincial PFDR (% of population below the food threshold)"
     s["reference_value"] = np.nan
-    s["status"] = "scored (see out/seal_scores.json)" if scored else "sealed; target published 2026-08-21 but not held; unscored"
+    s["status"] = "scored (see out/seal_scores.json)" if scored else "sealed; no provincial subsistence round after 2023 is published (owner-verified 2026-10-31); unscored"
     s["seal_sha256"] = L.sha256(L.SEALED / "E130_SURVEY_YEAR_SEAL.csv")
-    s.to_csv(ROOT / "E130_NUMERICAL_RISK_SCORE_PREDICTIONS.csv", index=False)
+    _save(s, ROOT / "E130_NUMERICAL_RISK_SCORE_PREDICTIONS.csv")
     return s
 
 
@@ -93,7 +105,7 @@ def lead_comparison(mp: pd.DataFrame) -> pd.DataFrame:
                          "pfdr_info_horizon_median_q": float(hp.median()) if hp.notna().any() else np.nan,
                          "status": BLOCKED})
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "E130_LEAD_1_TO_4_NUMERICAL_COMPARISON.csv", index=False)
+    _save(df, ROOT / "E130_LEAD_1_TO_4_NUMERICAL_COMPARISON.csv")
     return df
 
 
@@ -108,7 +120,7 @@ def baseline_comparison() -> pd.DataFrame:
     scores = json.load(open(OUT / "seal_scores.json")) if (OUT / "seal_scores.json").exists() else None
     for b in ("S2_two_round_mean", "S3_eb_shrunk_2023"):
         rec = {"task": "survey-year provincial PFDR", "lead": "next round", "model": b, "baseline": "S1_persistence",
-               "identical_rows": 5, "status": "unscored (2025 provincial table not held)"}
+               "identical_rows": 5, "status": "unscored (no provincial subsistence round after 2023 published)"}
         if scores:
             a, p = scores["models"][b], scores["models"]["S1_persistence"]
             rec.update(mae_model=a["mae"], mae_baseline=p["mae"], rmse_model=a["rmse"], rmse_baseline=p["rmse"],
@@ -116,7 +128,7 @@ def baseline_comparison() -> pd.DataFrame:
                        status="scored; five provinces, descriptive only")
         rows.append(rec)
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "E130_BASELINE_COMPARISON.csv", index=False)
+    _save(df, ROOT / "E130_BASELINE_COMPARISON.csv")
     return df
 
 
@@ -134,7 +146,7 @@ def ablation(fa: pd.DataFrame) -> pd.DataFrame:
                          round(float(1 - pd.to_numeric(prov.share_common_quarter_effect, errors="coerce").median()), 3)
                          if len(prov) else ""})
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "E130_FEATURE_GROUP_ABLATION.csv", index=False)
+    _save(df, ROOT / "E130_FEATURE_GROUP_ABLATION.csv")
     return df
 
 
@@ -143,7 +155,7 @@ def horizon_comparison() -> pd.DataFrame:
              "lead3": "not evaluable", "lead4": "not evaluable", "exceeds_every_baseline": "not established",
              "lead2_operational_status": "failed (not evaluable: no provincial quarterly reference)"} for m in MODELS]
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "E130_RELIABLE_HORIZON_COMPARISON.csv", index=False)
+    _save(df, ROOT / "E130_RELIABLE_HORIZON_COMPARISON.csv")
     return df
 
 

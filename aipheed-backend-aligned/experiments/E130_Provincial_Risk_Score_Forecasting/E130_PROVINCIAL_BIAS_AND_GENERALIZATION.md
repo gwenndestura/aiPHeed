@@ -4,13 +4,13 @@ No model was trained, so no model's bias could be measured. This file records th
 
 ## 1. Reference observations per province
 
-| Province | PFDR values held | Real change 2021→2023 (90 %) | 2025 round |
+| Province | PFDR values held | Real change 2021→2023 (90 %) | Next round |
 |---|---|---|---|
-| Batangas | 2 (2021, 2023) | no (+0.4) | published, not held |
-| Cavite | 2 | yes, marginal (−1.6, z −1.88) | published, not held |
-| Laguna | 2 | no (−1.1) | published, not held |
-| Quezon (excl. Lucena) | 2 | yes (−5.7, z −4.74) | published, not held |
-| Rizal | 2 | yes (+1.7, z +2.40) | published, not held |
+| Batangas | 2 (2021, 2023) | no (+0.4) | not published (latest is 2023) |
+| Cavite | 2 | yes, marginal (−1.6, z −1.88) | not published (latest is 2023) |
+| Laguna | 2 | no (−1.1) | not published (latest is 2023) |
+| Quezon (excl. Lucena) | 2 | yes (−5.7, z −4.74) | not published (latest is 2023) |
+| Rizal | 2 | yes (+1.7, z +2.40) | not published (latest is 2023) |
 
 **Generalization across provinces cannot be assessed.** Each province has one change, and pooled metrics would mostly reflect Quezon's, which carries 83 % of the squared change.
 

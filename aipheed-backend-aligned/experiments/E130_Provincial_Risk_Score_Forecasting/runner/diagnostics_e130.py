@@ -26,23 +26,27 @@ def _load(name):
 
 
 def gate_recheck() -> dict:
-    """Section 6 re-check: the 2025 PSA provincial round was found published but not obtainable (bot check, OpenSTAT
-    not updated). It is added as candidate C12 under the same G1-G8; the frozen gate.json is not modified."""
+    """Section 6 re-check after the search and the owner's verification (2026-10-31): PSA's 2025 full-year release has
+    poverty tables only and no provincial subsistence round after 2023 is published. The next round is candidate C12
+    under the same G1-G8; the frozen gate.json is not modified."""
     c = pd.read_csv(OUT / "gate_candidates.csv")
-    new = {"id": "C12", "candidate": "PSA provincial subsistence 2025 round (published 2026-08-21; PDF behind a bot check; not on OpenSTAT)",
+    new = {"id": "C12", "candidate": "PSA provincial subsistence, next round after 2023 (not published as of 2026-10-31; "
+                                     "the 2025 release has poverty tables only)",
            "owner_role": "provincial food-deprivation reference", "construct": "food deprivation (income below the food threshold)",
-           "g1_fi_or_deprivation": True, "provinces_with_values": 5, "periods_in_window": 3, "quarterly": False, "dated": True,
+           "g1_fi_or_deprivation": True, "provinces_with_values": 5, "periods_in_window": 2, "quarterly": False, "dated": False,
            "held": False, "independent_of_predictors": True, "numeric_with_uncertainty": True}
-    new.update({"G1_construct": True, "G2_all_five_provinces": True, "G3_repeated_10_periods": False, "G4_dated_publication": True,
+    new.update({"G1_construct": True, "G2_all_five_provinces": True, "G3_repeated_10_periods": False, "G4_dated_publication": False,
                 "G5_held": False, "G6_not_built_from_predictors": True, "G7_numeric_with_uncertainty": True,
-                "G8_quarterly_lead2_evaluable": False, "passes_all": False, "failed_criteria": "G3, G5, G8"})
+                "G8_quarterly_lead2_evaluable": False, "passes_all": False, "failed_criteria": "G3, G4, G5, G8"})
     c = pd.concat([c, pd.DataFrame([new])], ignore_index=True)
     c.to_csv(OUT / "gate_recheck_candidates.csv", index=False)
     res = {"any_candidate_passes": bool(c["passes_all"].any()), "decision_unchanged": not bool(c["passes_all"].any()),
            "new_candidates": ["C12"],
-           "pfdr_rounds_per_province": {"held": 2, "published_not_held": 1, "survey_frequency_years": 2},
+           "pfdr_rounds_per_province": {"published": 2, "survey_years": [2021, 2023], "latest_official": 2023,
+                                        "next_round": "not published as of 2026-10-31 (owner-verified)"},
            "first_survey_year_with_10_rounds": 2021 + 2 * 9,
-           "note": "biennial rounds never give a quarterly label; 10 rounds per province would be reached with survey year 2039"}
+           "note": "survey rounds never give a quarterly label; even if PSA published provincial subsistence every two years "
+                   "from 2021, 10 rounds per province would first exist with survey year 2039"}
     L.dump(res, OUT / "gate_recheck.json")
     return res
 

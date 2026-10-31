@@ -62,8 +62,8 @@ What does exist:
 
 ## Scoring the seal
 
-1. Download manually PSA's 2025 table "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4).
-   - The 2026-10-31 workbook `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx` does **not** contain it: it has poverty Tables 1, 2, 5, 6 and 15 only.
+1. When PSA publishes provincial subsistence for a survey year after 2023, download its "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" table (Table 4). None is published as of 2026-10-31 (owner-verified; the latest is 2023).
+   - PSA's 2025 workbook `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx` does **not** contain it: it has poverty Tables 1, 2, 5, 6 and 15 only.
 2. Run `python -I runner/extract_psa_2025.py <workbook.xlsx>`.
    - It hashes the workbook, reads only the header rows and the five provinces' 2023/2025 estimate and CV cells, and writes `data/owner_supplied/psa_subsistence_population_2025.csv`.
    - Alternatively, write that CSV by hand with the columns `province, survey_year, subsistence_incidence_pct, cv_pct, source, publication_date` (subsistence among the **population**).

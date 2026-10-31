@@ -80,7 +80,7 @@ At h = 3 (the quarter-start issue) the picture is the same; see the CSV.
 |---|---|
 | Seal file | `sealed/E130_SURVEY_YEAR_SEAL.csv`, sha256 `94a08cd1…` |
 | Frozen | Before any search (commit `b58c48e`) |
-| Target | The PSA 2025 provincial round |
+| Target | The next PSA provincial subsistence round after 2023 (2025 was expected at the freeze; none is published as of 2026-10-31) |
 
 | Province | S1 persistence | S2 two-round mean | S3 EB-shrunk | 90 % PI (S1) |
 |---|---|---|---|---|
@@ -91,7 +91,7 @@ At h = 3 (the quarter-start issue) the picture is the same; see the CSV.
 | Rizal | 2.60 | 1.75 | 1.88 | 0.0–7.12 |
 
 **Scoring status.**
-- The 2025 round was released on 2026-08-21, but the PSA file sits behind a bot check (not bypassed) and OpenSTAT still stops at 2023.
+- **No provincial subsistence round after 2023 is published.** The owner verified this on 2026-10-31: the latest official provincial subsistence data are 2023. PSA's 2025 full-year release (August 2026) has poverty tables only, and OpenSTAT stops at 2023.
 - On 2026-10-31 the owner supplied PSA's `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx` (sha256 `ea80fe8d…`). It contains only:
   - Tables 1 and 2: poverty incidence among families and among the population;
   - Tables 5 and 6: magnitudes;
@@ -101,7 +101,7 @@ At h = 3 (the quarter-start issue) the picture is the same; see the CSV.
 - **The seal therefore stays unscored.** Scoring it against poverty incidence would swap in a different measure after the fact.
 
 **To score it:**
-1. Supply PSA's 2025 table "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4 in PSA's numbering).
+1. When PSA publishes provincial subsistence for a survey year after 2023, supply its "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" table (Table 4 in PSA's numbering).
 2. Run `runner/extract_psa_2025.py <workbook>`, which writes `data/owner_supplied/psa_subsistence_population_2025.csv`.
 3. Run `runner/score_e130.py`.
 
