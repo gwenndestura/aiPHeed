@@ -1,0 +1,48 @@
+level,scope,indicator,name,component,unit_origins_possible,available,available_pct,first_available,provinces_with_any,statuses
+indicator,provincial,AFP,Agricultural and Fisheries Production,,115,75,65.2,2023-Q1,5.0,
+indicator,provincial,CEC,Climate and Environmental Conditions,,115,80,69.6,2022-Q4,5.0,
+indicator,provincial,EHS,Employment and Household Economic Stability,,115,80,69.6,2022-Q2,5.0,
+indicator,provincial,FIS,Food Insecurity Early-Warning Signals,,115,14,12.2,2025-Q4,5.0,
+indicator,provincial,FMA,Food Market Accessibility and Affordability,,115,100,87.0,2021-Q4,5.0,
+indicator,provincial,PSV,Household Poverty and Social Vulnerability,,115,25,21.7,2025-Q3,5.0,
+indicator,regional,AFP,Agricultural and Fisheries Production,,23,9,39.1,2024-Q3,,
+indicator,regional,CEC,Climate and Environmental Conditions,,23,10,43.5,2024-Q2,,
+indicator,regional,EHS,Employment and Household Economic Stability,,23,10,43.5,2024-Q2,,
+indicator,regional,FIS,Food Insecurity Early-Warning Signals,,23,14,60.9,2023-Q2,,
+indicator,regional,FMA,Food Market Accessibility and Affordability,,23,10,43.5,2024-Q2,,
+indicator,provincial,FIRI,"overall (equal weights, >= 2/3 of indicators)",,115,75,65.2,2023-Q1,,
+indicator,regional,FIRI,"overall (equal weights, >= 2/3 of indicators)",,23,10,43.5,2024-Q2,,
+feature,provincial,AFP,AFP_chicken,poultry and livestock,115,35,30.4,,,missing: 70; rule_unverified: 35; insufficient_history: 10
+feature,provincial,AFP,AFP_corn,cereals,115,75,65.2,,,rule_unverified: 75; missing: 30; insufficient_history: 10
+feature,provincial,AFP,AFP_fisheries,fisheries,115,75,65.2,,,rule_unverified: 75; missing: 30; insufficient_history: 10
+feature,provincial,AFP,AFP_livestock,poultry and livestock,115,35,30.4,,,missing: 70; rule_unverified: 35; insufficient_history: 10
+feature,provincial,AFP,AFP_palay,cereals,115,75,65.2,,,rule_unverified: 75; missing: 30; insufficient_history: 10
+feature,provincial,AFP,AFP_rootcrops,root crops,115,75,65.2,,,rule_unverified: 75; missing: 30; insufficient_history: 10
+feature,provincial,AFP,AFP_vegetables,vegetables,115,75,65.2,,,rule_unverified: 75; missing: 30; insufficient_history: 10
+feature,provincial,CEC,CEC_cyclones_100km,cyclones,115,100,87.0,,,verified: 100; insufficient_history: 10; missing: 5
+feature,provincial,CEC,CEC_heat,temperature,115,80,69.6,,,rule_unverified: 80; missing: 25; insufficient_history: 10
+feature,provincial,CEC,CEC_rain_departure,rainfall,115,80,69.6,,,rule_unverified: 80; missing: 25; insufficient_history: 10
+feature,provincial,EHS,EHS_underemployment_prov,employment,115,80,69.6,,,rule_unverified: 80; unavailable_at_issue: 25; incomplete_year: 10
+feature,provincial,EHS,EHS_unemployment_prov,employment,115,80,69.6,,,rule_unverified: 80; unavailable_at_issue: 25; incomplete_year: 10
+feature,provincial,FIS,FIS_fssi,local news,115,14,12.2,,,missing: 65; insufficient_history: 25; verified: 14; stale: 11
+feature,provincial,FMA,FMA_chicken,protein prices,115,80,69.6,,,rule_unverified: 80; missing: 25; insufficient_history: 10
+feature,provincial,FMA,FMA_food_cpi,food inflation,115,100,87.0,,,rule_unverified: 100; insufficient_history: 10; missing: 5
+feature,provincial,FMA,FMA_headline_cpi,cost of living,115,100,87.0,,,rule_unverified: 100; insufficient_history: 10; missing: 5
+feature,provincial,FMA,FMA_pork,protein prices,115,80,69.6,,,rule_unverified: 80; missing: 25; insufficient_history: 10
+feature,provincial,FMA,FMA_rice_wholesale,rice price,115,72,62.6,,,rule_unverified: 72; missing: 30; insufficient_history: 11; stale: 2
+feature,provincial,FMA,FMA_tilapia,protein prices,115,80,69.6,,,rule_unverified: 80; missing: 25; insufficient_history: 10
+feature,provincial,PSV,PSV_poverty,poverty,115,25,21.7,,,unavailable_at_issue: 90; verified: 25
+feature,regional,AFP,AFP_corn_R,cereals,23,9,39.1,,,rule_unverified: 9; insufficient_history: 8; missing: 6
+feature,regional,AFP,AFP_fisheries_R,fisheries,23,9,39.1,,,rule_unverified: 9; insufficient_history: 8; missing: 6
+feature,regional,AFP,AFP_palay_R,cereals,23,9,39.1,,,rule_unverified: 9; insufficient_history: 8; missing: 6
+feature,regional,AFP,AFP_rootcrops_R,root crops,23,9,39.1,,,rule_unverified: 9; insufficient_history: 8; missing: 6
+feature,regional,AFP,AFP_vegetables_R,vegetables,23,9,39.1,,,rule_unverified: 9; insufficient_history: 8; missing: 6
+feature,regional,CEC,CEC_cyclones_R,cyclones,23,13,56.5,,,verified: 13; insufficient_history: 9; missing: 1
+feature,regional,CEC,CEC_heat_R,temperature,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5
+feature,regional,CEC,CEC_rain_departure_R,rainfall,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5
+feature,regional,EHS,EHS_remittance_decline_R,remittances,23,8,34.8,,,insufficient_history: 10; rule_unverified: 6; missing: 5; verified: 2
+feature,regional,EHS,EHS_unemployment_change_R,employment,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5
+feature,regional,FIS,FIS_shortage_news_R,national news,23,14,60.9,,,verified: 14; insufficient_history: 8; missing: 1
+feature,regional,FMA,FMA_food_cpi_R,food inflation,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5
+feature,regional,FMA,FMA_headline_cpi_R,cost of living,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5
+feature,regional,FMA,FMA_rice_R,rice price,23,10,43.5,,,rule_unverified: 10; insufficient_history: 8; missing: 5

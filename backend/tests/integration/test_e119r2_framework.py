@@ -7,6 +7,7 @@ Runs the same checks as runner/validate.py.
 """
 from __future__ import annotations
 
+import importlib.util
 import sys
 from pathlib import Path
 
@@ -20,7 +21,9 @@ pytestmark = pytest.mark.skipif(not (E / "out" / "manifest.json").exists(), reas
 @pytest.fixture(scope="module")
 def results():
     sys.path.insert(0, str(E / "runner"))
-    import validate
+    spec = importlib.util.spec_from_file_location("e119r2_validate", E / "runner" / "validate.py")
+    validate = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(validate)
     return {r["check"]: r for r in validate.checks()}
 
 

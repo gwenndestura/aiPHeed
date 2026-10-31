@@ -1,0 +1,205 @@
+         scope indicator                                           name  unit_origins_possible  available  available_pct first_available  provinces_with_any
+0   provincial       AFP          Agricultural and Fisheries Production                    115         75           65.2         2023-Q1                 5.0
+1   provincial       CEC           Climate and Environmental Conditions                    115         80           69.6         2022-Q4                 5.0
+2   provincial       EHS    Employment and Household Economic Stability                    115         80           69.6         2022-Q2                 5.0
+3   provincial       FIS          Food Insecurity Early-Warning Signals                    115         14           12.2         2025-Q4                 5.0
+4   provincial       FMA    Food Market Accessibility and Affordability                    115        100           87.0         2021-Q4                 5.0
+5   provincial       PSV     Household Poverty and Social Vulnerability                    115         25           21.7         2025-Q3                 5.0
+6     regional       AFP          Agricultural and Fisheries Production                     23          9           39.1         2024-Q3                 NaN
+7     regional       CEC           Climate and Environmental Conditions                     23         10           43.5         2024-Q2                 NaN
+8     regional       EHS    Employment and Household Economic Stability                     23         10           43.5         2024-Q2                 NaN
+9     regional       FIS          Food Insecurity Early-Warning Signals                     23         14           60.9         2023-Q2                 NaN
+10    regional       FMA    Food Market Accessibility and Affordability                     23         10           43.5         2024-Q2                 NaN
+11  provincial      FIRI  overall (equal weights, >= 2/3 of indicators)                    115         75           65.2         2023-Q1                 NaN
+12    regional      FIRI  overall (equal weights, >= 2/3 of indicators)                     23         10           43.5         2024-Q2                 NaN
+         scope                    feature  rows  scored                                                               statuses  scored_pct
+0   provincial                AFP_chicken   115      35             missing: 70; rule_unverified: 35; insufficient_history: 10        30.4
+1   provincial                   AFP_corn   115      75             rule_unverified: 75; missing: 30; insufficient_history: 10        65.2
+2   provincial              AFP_fisheries   115      75             rule_unverified: 75; missing: 30; insufficient_history: 10        65.2
+3   provincial              AFP_livestock   115      35             missing: 70; rule_unverified: 35; insufficient_history: 10        30.4
+4   provincial                  AFP_palay   115      75             rule_unverified: 75; missing: 30; insufficient_history: 10        65.2
+5   provincial              AFP_rootcrops   115      75             rule_unverified: 75; missing: 30; insufficient_history: 10        65.2
+6   provincial             AFP_vegetables   115      75             rule_unverified: 75; missing: 30; insufficient_history: 10        65.2
+7   provincial         CEC_cyclones_100km   115     100                    verified: 100; insufficient_history: 10; missing: 5        87.0
+8   provincial                   CEC_heat   115      80             rule_unverified: 80; missing: 25; insufficient_history: 10        69.6
+9   provincial         CEC_rain_departure   115      80             rule_unverified: 80; missing: 25; insufficient_history: 10        69.6
+10  provincial   EHS_underemployment_prov   115      80     rule_unverified: 80; unavailable_at_issue: 25; incomplete_year: 10        69.6
+11  provincial      EHS_unemployment_prov   115      80     rule_unverified: 80; unavailable_at_issue: 25; incomplete_year: 10        69.6
+12  provincial                   FIS_fssi   115      14         missing: 65; insufficient_history: 25; verified: 14; stale: 11        12.2
+13  provincial                FMA_chicken   115      80             rule_unverified: 80; missing: 25; insufficient_history: 10        69.6
+14  provincial               FMA_food_cpi   115     100             rule_unverified: 100; insufficient_history: 10; missing: 5        87.0
+15  provincial           FMA_headline_cpi   115     100             rule_unverified: 100; insufficient_history: 10; missing: 5        87.0
+16  provincial                   FMA_pork   115      80             rule_unverified: 80; missing: 25; insufficient_history: 10        69.6
+17  provincial         FMA_rice_wholesale   115      72   rule_unverified: 72; missing: 30; insufficient_history: 11; stale: 2        62.6
+18  provincial                FMA_tilapia   115      80             rule_unverified: 80; missing: 25; insufficient_history: 10        69.6
+19  provincial                PSV_poverty   115      25                                 unavailable_at_issue: 90; verified: 25        21.7
+20    regional                 AFP_corn_R    23       9                rule_unverified: 9; insufficient_history: 8; missing: 6        39.1
+21    regional            AFP_fisheries_R    23       9                rule_unverified: 9; insufficient_history: 8; missing: 6        39.1
+22    regional                AFP_palay_R    23       9                rule_unverified: 9; insufficient_history: 8; missing: 6        39.1
+23    regional            AFP_rootcrops_R    23       9                rule_unverified: 9; insufficient_history: 8; missing: 6        39.1
+24    regional           AFP_vegetables_R    23       9                rule_unverified: 9; insufficient_history: 8; missing: 6        39.1
+25    regional             CEC_cyclones_R    23      13                      verified: 13; insufficient_history: 9; missing: 1        56.5
+26    regional                 CEC_heat_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+27    regional       CEC_rain_departure_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+28    regional   EHS_remittance_decline_R    23       8  insufficient_history: 10; rule_unverified: 6; missing: 5; verified: 2        34.8
+29    regional  EHS_unemployment_change_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+30    regional        FIS_shortage_news_R    23      14                      verified: 14; insufficient_history: 8; missing: 1        60.9
+31    regional             FMA_food_cpi_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+32    regional         FMA_headline_cpi_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+33    regional                 FMA_rice_R    23      10               rule_unverified: 10; insufficient_history: 8; missing: 5        43.5
+                                               variant  rows  mean_abs_change  max_abs_change  class_flip_pct  province_rank_spearman_mean
+0                                   W2 component-count    85           0.0418          0.1460            17.6                        0.753
+1                                     W3 feature-count    85           0.0411          0.1353            15.3                        0.760
+2                               W4 redundancy-adjusted    85           0.0118          0.0400             1.2                        0.933
+3                               W5 PCA first component    85           0.0471          0.1866            21.2                        0.860
+4   W6 random Dirichlet(1) weights, 200 draws (median)    85           0.0562          0.1842            18.8                        0.740
+5                                without indicator FMA    31           0.0414          0.0904            16.1                        0.967
+6                                without indicator AFP    31           0.0189          0.0782             6.5                        1.000
+7                                without indicator CEC    31           0.0248          0.0621            12.9                        0.933
+8                                without indicator EHS    35           0.0388          0.1415            14.3                        0.900
+9                                without indicator PSV    81           0.0127          0.1053             1.2                        0.769
+10                               without indicator FIS    85           0.0112          0.1065             2.4                        0.973
+                                     variant  rows  mean_abs_change  max_abs_change  class_flip_pct  province_rank_spearman_mean indicator
+28  without feature EHS_underemployment_prov    85           0.0232          0.0750             8.2                        0.800       EHS
+27     without feature EHS_unemployment_prov    85           0.0232          0.0750            11.8                        0.907       EHS
+21        without feature CEC_rain_departure    85           0.0195          0.0744             4.7                        0.953       CEC
+2         without feature FMA_rice_wholesale    85           0.0185          0.0563             7.1                        0.947       FMA
+22                  without feature CEC_heat    85           0.0180          0.0597            10.6                        0.953       CEC
+23        without feature CEC_cyclones_100km    85           0.0159          0.0425             8.2                        0.980       CEC
+1           without feature FMA_headline_cpi    85           0.0145          0.0383             2.4                        0.973       FMA
+12             without feature AFP_rootcrops    85           0.0140          0.0422             5.9                        0.933       AFP
+13             without feature AFP_fisheries    85           0.0138          0.0458             2.4                        0.960       AFP
+11            without feature AFP_vegetables    85           0.0130          0.0545             1.2                        0.953       AFP
+                      feature indicator       scope  rows  indicator_becomes_unavailable_pct  mean_abs_indicator_change
+0                FMA_food_cpi       FMA  provincial   100                               20.0                     0.0488
+1            FMA_headline_cpi       FMA  provincial   100                               20.0                     0.0702
+2          FMA_rice_wholesale       FMA  provincial   100                                0.0                     0.0661
+3                 FMA_chicken       FMA  provincial   100                                0.0                     0.0162
+4                    FMA_pork       FMA  provincial   100                                0.0                     0.0211
+5                 FMA_tilapia       FMA  provincial   100                                0.0                     0.0162
+6              FMA_food_cpi_R       FMA    regional    10                                0.0                     0.0879
+7          FMA_headline_cpi_R       FMA    regional    10                                0.0                     0.0596
+8                  FMA_rice_R       FMA    regional    10                                0.0                     0.1090
+9                   AFP_palay       AFP  provincial    75                                0.0                     0.0325
+10                   AFP_corn       AFP  provincial    75                                0.0                     0.0325
+11             AFP_vegetables       AFP  provincial    75                                0.0                     0.0622
+12              AFP_rootcrops       AFP  provincial    75                                0.0                     0.0670
+13              AFP_fisheries       AFP  provincial    75                                0.0                     0.0660
+14                AFP_chicken       AFP  provincial    75                                0.0                     0.0201
+15              AFP_livestock       AFP  provincial    75                                0.0                     0.0201
+16                AFP_palay_R       AFP    regional     9                                0.0                     0.0358
+17                 AFP_corn_R       AFP    regional     9                                0.0                     0.0358
+18           AFP_vegetables_R       AFP    regional     9                                0.0                     0.0419
+19            AFP_rootcrops_R       AFP    regional     9                                0.0                     0.0793
+20            AFP_fisheries_R       AFP    regional     9                                0.0                     0.0955
+21         CEC_rain_departure       CEC  provincial    80                                0.0                     0.0956
+22                   CEC_heat       CEC  provincial    80                                0.0                     0.0885
+23         CEC_cyclones_100km       CEC  provincial    80                                0.0                     0.0742
+24       CEC_rain_departure_R       CEC    regional    10                                0.0                     0.0770
+25                 CEC_heat_R       CEC    regional    10                                0.0                     0.1048
+26             CEC_cyclones_R       CEC    regional    10                                0.0                     0.0976
+27      EHS_unemployment_prov       EHS  provincial    80                                0.0                     0.1250
+28   EHS_underemployment_prov       EHS  provincial    80                                0.0                     0.1250
+29  EHS_unemployment_change_R       EHS    regional    10                               20.0                     0.2761
+30   EHS_remittance_decline_R       EHS    regional    10                                0.0                     0.2208
+31                PSV_poverty       PSV  provincial    25                              100.0                        NaN
+32                   FIS_fssi       FIS  provincial    14                              100.0                        NaN
+33        FIS_shortage_news_R       FIS    regional    14                              100.0                        NaN
+provincial
+indicator    AFP    CEC    EHS    FIS    FMA    PSV
+indicator                                          
+AFP        1.000  0.034 -0.118 -0.212  0.286  0.255
+CEC        0.034  1.000 -0.001 -0.044  0.038 -0.100
+EHS       -0.118 -0.001  1.000 -0.316  0.081 -0.500
+FIS       -0.212 -0.044 -0.316  1.000  0.018 -0.535
+FMA        0.286  0.038  0.081  0.018  1.000 -0.039
+PSV        0.255 -0.100 -0.500 -0.535 -0.039  1.000
+regional
+indicator    AFP    CEC    EHS    FIS    FMA  PSV
+indicator                                        
+AFP        1.000  0.167  0.167 -0.250  0.533  NaN
+CEC        0.167  1.000 -0.250 -0.261 -0.243  NaN
+EHS        0.167 -0.250  1.000  0.287  0.061  NaN
+FIS       -0.250 -0.261  0.287  1.000  0.280  NaN
+FMA        0.533 -0.243  0.061  0.280  1.000  NaN
+PSV          NaN    NaN    NaN    NaN    NaN  NaN
+        scope                   unit  quarters   mean     sd  mean_abs_quarter_change  lag1_autocorrelation  share_ge_0_5
+0  provincial               Batangas        15  0.548  0.078                    0.066                 0.423         0.733
+1  provincial                 Cavite        15  0.482  0.100                    0.069                 0.386         0.400
+2  provincial                 Laguna        15  0.412  0.094                    0.063                 0.277         0.067
+3  provincial                 Quezon        15  0.495  0.055                    0.052                 0.322         0.400
+4  provincial                  Rizal        15  0.496  0.091                    0.066                 0.569         0.600
+5    regional  CALABARZON (regional)        10  0.465  0.106                    0.080                 0.383         0.400
+            count   mean    std    min    10%    25%    50%    75%    90%    max
+scope                                                                           
+provincial   75.0  0.487  0.094  0.268  0.382  0.409  0.479  0.552  0.597  0.756
+regional     10.0  0.465  0.106  0.331  0.342  0.361  0.475  0.543  0.578  0.627
+band        above usual  elevated  high  not computable  usual or below
+scope                                                                  
+provincial           30         2     1              40              42
+regional              4         0     0              13               6
+indicator    AFP    CEC    EHS    FIS    FMA  PSV   FIRI
+unit                                                    
+Batangas   0.537  0.475  0.688  0.500  0.445  0.5  0.548
+Cavite     0.495  0.469  0.450  0.500  0.425  0.7  0.482
+Laguna     0.490  0.475  0.362  0.700  0.354  0.1  0.412
+Quezon     0.535  0.467  0.350  0.143  0.427  0.9  0.495
+Rizal      0.429  0.494  0.650  0.293  0.472  0.3  0.496
+{
+ "rows": 75,
+ "spearman": -0.298,
+ "class_agreement_pct": 38.7,
+ "share_high_v2": 0.813,
+ "share_ge_0_5_new": 0.44,
+ "v2_history_rows_total": 95,
+ "v2_kinds": {
+  "backtest": 85,
+  "forecast": 10
+ },
+ "province_rank_spearman_mean": -0.067,
+ "quarters_compared": 15
+}
+{
+ "rows": 65,
+ "explained_share_pc1": 0.317,
+ "loadings": {
+  "AFP": 0.671,
+  "CEC": -0.089,
+  "EHS": 0.169,
+  "FMA": 0.717
+ }
+}
+{
+ "W2 component-count": {
+  "AFP": 5.0,
+  "CEC": 3.0,
+  "EHS": 1.0,
+  "FIS": 1.0,
+  "FMA": 4.0,
+  "PSV": 1.0
+ },
+ "W3 feature-count": {
+  "AFP": 7.0,
+  "CEC": 3.0,
+  "EHS": 2.0,
+  "FIS": 1.0,
+  "FMA": 6.0,
+  "PSV": 1.0
+ },
+ "W4 redundancy-adjusted": {
+  "AFP": 0.6351,
+  "CEC": 0.9327,
+  "EHS": 0.9255,
+  "FIS": 0.9819,
+  "FMA": 0.7028,
+  "PSV": 0.7968
+ },
+ "W5 PCA first component": {
+  "AFP": 0.4077,
+  "CEC": 0.0539,
+  "EHS": 0.1026,
+  "FMA": 0.4358,
+  "FIS": 0.25,
+  "PSV": 0.25
+ }
+}
