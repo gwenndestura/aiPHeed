@@ -7,7 +7,8 @@ aipheed-backend-aligned/experiments/E121_FIRI3_Implementation/E121_FIRI3_PROTOCO
 A relative composite on a 0-1 scale (not a probability, not a validated provincial food-insecurity prediction) of
 six indicators: FMA market affordability, AFP agricultural and fisheries production, CEC climate, EHS employment and
 household economy, PSV poverty, FIS early-warning news. Level 1: each feature's as-of value at the issue date
-(2021+ observations, availability date before the issue, at most 3 quarters old), direction-aligned, scored by its
+(2021+ observations, availability date before the issue, at most 3 quarters old; change-type series only from
+2022-Q1, so that every comparison base is 2021+: Amendment 1, E122), direction-aligned, scored by its
 mid-rank percentile among earlier available observations (>= 8) or, for annual / structural features, by its mid-rank
 among the five provinces. Level 2: features -> components (each counts once) -> indicator (>= half of components).
 Level 3: equal-weighted mean of available indicators (provincial >= 4 of 6, regional >= 4 of 5); 0.5 = usual level;
@@ -25,7 +26,8 @@ import numpy as np
 import pandas as pd
 
 PROTOCOL_SHA256 = "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717"
-VERSION = "FIRI3-candidate-1"
+AMENDMENT_1_SHA256 = "4fd05309c3dee0800693e9a12b92ed112aebef35f9a219a8a620c88860050549"   # E122: change-type series need a 2021+ base
+VERSION = "FIRI3-candidate-1.1"
 START_Q = 2021 * 4                      # 2021-Q1 as a quarter index (year * 4 + quarter - 1)
 MIN_PRIOR = 8
 MAX_STALE = 3
@@ -96,6 +98,11 @@ FEATURES = (
     Feature("FIS_fssi", "FIS", "local news", "P", "N1_fssi_v3", None, 1, "none", "pct", "D60"),
     Feature("FIS_shortage_news_R", "FIS", "national news", "R", "news_gdelt_shortage_share", _PH, 1, "none", "pct", "D62"),
 )
+LEVEL_SERIES = frozenset({"typhoons_local_100km", "typhoons_PAR", "N1_fssi_v3", "news_gdelt_shortage_share"})
+# Amendment 1: every other scored dynamic series is a change against an earlier period (YoY, drop, pp change, anomaly
+# vs earlier same-quarter years) and is admitted only when its base is inside the window: period >= 2022-Q1
+BASE_REQUIRED = frozenset(f.series for f in FEATURES if f.normalization == "pct" and f.series not in LEVEL_SERIES)
+FIRST_CHANGE_Q = START_Q + 4
 EXCLUDED = {
     "cpi_bottom30_food_yoy_pct": "alternative: r 0.94 with CPI food",
     "retail_rice_regular_yoy_pct": "alternative: r 0.86 with wholesale rice",
@@ -169,16 +176,20 @@ def validate_inputs(obs: pd.DataFrame, ann: pd.DataFrame) -> tuple[pd.DataFrame,
         bad = [s for s in d["feature"].astype(str).unique() if any(k in s.lower() for k in FORBIDDEN)]
         if bad:
             raise ValueError(f"{name}: target or index series refused as FIRI3 input: {bad}")
+    prov_series = {f.series for f in FEATURES if f.scope == "P"}
+    po = obs[obs["feature"].isin(prov_series) & ~obs["unit"].isin(REGIONAL_UNITS)]       # geography first: a wrong unit always stops the run
+    if not set(po["unit"]) <= set(PROVINCES):
+        raise ValueError(f"unknown provincial units: {sorted(set(po['unit']) - set(PROVINCES))}")
     log = {"pre2021_rows_rejected": int((obs["period"] < START_Q).sum())}
     obs = obs[obs["period"] >= START_Q]
+    base = obs["feature"].isin(BASE_REQUIRED) & (obs["period"] < FIRST_CHANGE_Q)            # Amendment 1: pre-2021 comparison base
+    log["pre2021_base_rows_rejected"] = int(base.sum())
+    log["pre2021_base_rows_by_series"] = {k: int(v) for k, v in obs.loc[base, "feature"].value_counts().items()}
+    obs = obs[~base]
     ref = pd.to_numeric(ann["ref"].astype(str).str[:4], errors="coerce")
     log["pre2021_annual_rows_rejected"] = int((ref < 2021).sum())
     ann = ann[ref >= 2021]
     used = {f.series for f in FEATURES}
-    prov_series = {f.series for f in FEATURES if f.scope == "P"}
-    po = obs[obs["feature"].isin(prov_series) & ~obs["unit"].isin(REGIONAL_UNITS)]
-    if not set(po["unit"]) <= set(PROVINCES):
-        raise ValueError(f"unknown provincial units: {sorted(set(po['unit']) - set(PROVINCES))}")
     if not set(ann["unit"]) <= set(PROVINCES):
         raise ValueError("annual inputs must be provincial")
     log["series_used"] = sorted(used & set(obs["feature"]) | used & set(ann["feature"]))

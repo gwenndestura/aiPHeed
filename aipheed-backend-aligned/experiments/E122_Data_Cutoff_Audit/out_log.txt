@@ -1,0 +1,410 @@
+{
+ "checks": {
+  "protocol_and_amendment_hash": true,
+  "deterministic": true,
+  "no_scored_period_before_2021": true,
+  "no_change_series_before_2022": true,
+  "no_underlying_period_before_2021": true,
+  "no_period_after_2026": true,
+  "all_available_before_issue": true,
+  "no_future_reference_values": true,
+  "independent_rederivation_agrees": true,
+  "geography_pass": true,
+  "every_score_reproduces": true,
+  "firi_v2_unchanged": true,
+  "sws_absent_from_inputs": true
+ },
+ "log": {
+  "pre2021_rows_rejected": 0,
+  "pre2021_base_rows_rejected": 40,
+  "pre2021_base_rows_by_series": {
+   "cpi_food_yoy_pct": 20,
+   "cpi_headline_yoy_pct": 20
+  },
+  "pre2021_annual_rows_rejected": 0,
+  "series_used": [
+   "E1_unemployment_change_pp",
+   "E2_remittance_decline_pct",
+   "N1_fssi_v3",
+   "chicken_production_yoy_pct",
+   "corn_production_yoy_pct",
+   "cpi_food_yoy_pct",
+   "cpi_headline_yoy_pct",
+   "farmgate_palay_yoy_pct",
+   "fisheries_production_yoy_pct",
+   "livestock_production_yoy_pct",
+   "news_gdelt_shortage_share",
+   "palay_production_yoy_pct",
+   "poverty_incidence_popweighted_pct",
+   "provincial_underemployment_rate_pct_annual",
+   "provincial_unemployment_rate_pct_annual",
+   "rainfall_anomaly_mm",
+   "region_cpi_food_yoy_pct",
+   "region_cpi_headline_yoy_pct",
+   "retail_chicken_yoy_pct",
+   "retail_pork_yoy_pct",
+   "retail_tilapia_yoy_pct",
+   "rice_wholesale_yoy_pct",
+   "rootcrops_only_production_yoy_pct",
+   "temperature_anomaly_c",
+   "typhoons_PAR",
+   "typhoons_local_100km",
+   "vegetables_only_production_yoy_pct"
+  ]
+ },
+ "effect_vs_e121": {
+  "rows": 138,
+  "changed": 73,
+  "computable_e121": 85,
+  "computable_amended": 85,
+  "lost": 0,
+  "gained": 0,
+  "mean_abs_change_where_both": 0.0032,
+  "max_abs_change_where_both": 0.0125,
+  "band_changes_where_both": 0,
+  "by_scope": {
+   "provincial": {
+    "changed": 73,
+    "computable_e121": 75,
+    "computable_amended": 75
+   },
+   "regional": {
+    "changed": 0,
+    "computable_e121": 10,
+    "computable_amended": 10
+   }
+  }
+ },
+ "first_scored_by_year": {
+  "2021": [
+   "CEC_cyclones_100km"
+  ],
+  "2022": [
+   "FMA_food_cpi",
+   "FMA_headline_cpi",
+   "FMA_chicken",
+   "FMA_pork",
+   "FMA_tilapia",
+   "CEC_rain_departure",
+   "CEC_heat",
+   "EHS_unemployment_prov",
+   "EHS_underemployment_prov"
+  ],
+  "2023": [
+   "FMA_rice_wholesale",
+   "AFP_palay",
+   "AFP_corn",
+   "AFP_vegetables",
+   "AFP_rootcrops",
+   "AFP_fisheries",
+   "CEC_cyclones_R",
+   "FIS_shortage_news_R"
+  ],
+  "2024": [
+   "FMA_food_cpi_R",
+   "FMA_headline_cpi_R",
+   "FMA_rice_R",
+   "AFP_palay_R",
+   "AFP_corn_R",
+   "AFP_vegetables_R",
+   "AFP_rootcrops_R",
+   "AFP_fisheries_R",
+   "CEC_rain_departure_R",
+   "CEC_heat_R",
+   "EHS_unemployment_change_R",
+   "EHS_remittance_decline_R"
+  ],
+  "2025": [
+   "AFP_chicken",
+   "AFP_livestock",
+   "PSV_poverty",
+   "FIS_fssi"
+  ]
+ },
+ "snapshots": {
+  "verified unchanged": 23
+ },
+ "scores": {
+  "provincial": {
+   "computable": 75,
+   "possible": 115,
+   "first": "2023-Q1",
+   "k": {
+    "4": 54,
+    "5": 13,
+    "6": 8
+   },
+   "bands": {
+    "usual or below": 42,
+    "not_computable": 40,
+    "above usual": 30,
+    "elevated": 2,
+    "high": 1
+   }
+  },
+  "regional": {
+   "computable": 10,
+   "possible": 23,
+   "first": "2024-Q2",
+   "k": {
+    "4": 1,
+    "5": 9
+   },
+   "bands": {
+    "not_computable": 13,
+    "usual or below": 6,
+    "above usual": 4
+   }
+  }
+ },
+ "datasets_with_pre2021": [
+  [
+   "S02",
+   "CPI index (2018=100) by region incl. Region IV-A",
+   1944
+  ],
+  [
+   "S05",
+   "E118 retail_poultry",
+   576
+  ],
+  [
+   "S06",
+   "E118 retail_livestock",
+   1080
+  ],
+  [
+   "S07",
+   "E118 retail_fish",
+   2052
+  ],
+  [
+   "S08",
+   "E118 farmgate_cereals",
+   1716
+  ],
+  [
+   "S09",
+   "E118 prod_palay_corn",
+   4896
+  ],
+  [
+   "S10",
+   "E118 prod_vegetables_rootcrops",
+   37488
+  ],
+  [
+   "S11",
+   "E118 prod_fisheries",
+   3560
+  ],
+  [
+   "S14",
+   "E118 nasa_power_monthly",
+   9600
+  ],
+  [
+   "C01",
+   "E118 cpi_bottom30_yoy",
+   25248
+  ],
+  [
+   "C02",
+   "E118 retail_cereals",
+   1080
+  ],
+  [
+   "C03",
+   "E118 wholesale_cereals",
+   3571
+  ],
+  [
+   "C04",
+   "E118 wholesale_fish",
+   5751
+  ],
+  [
+   "C05",
+   "E118 prod_aquaculture",
+   7801
+  ],
+  [
+   "C06",
+   "E118 retail_fruit_veg",
+   972
+  ],
+  [
+   "C07",
+   "E118 retail_leafy_veg",
+   108
+  ],
+  [
+   "C08",
+   "E118 retail_rootcrops",
+   900
+  ],
+  [
+   "C09",
+   "E118 farmgate_livestock_household",
+   3720
+  ],
+  [
+   "C10",
+   "E118 cpi_bottom30_index",
+   37872
+  ],
+  [
+   "S16",
+   "Tropical cyclones in PAR",
+   87
+  ],
+  [
+   "S17",
+   "LFS unemployment rate, national, monthly",
+   63
+  ],
+  [
+   "S22",
+   "GDELT DOC daily volume intensity by food category",
+   5832
+  ],
+  [
+   "C11",
+   "NOAA ONI (context)",
+   851
+  ],
+  [
+   "T01",
+   "SWS hunger by area (TARGET; never a FIRI3 input)",
+   92
+  ]
+ ]
+}
+                                series                                                                            units  pipeline_rows  independent_rows  matched  only_in_pipeline  only_independent  max_abs_diff pipeline_first_period only_in_pipeline_periods  agrees
+0              region_cpi_food_yoy_pct                                                                      Region IV-A             19                19       19                 0                 0  3.354932e-09               2022-Q1                             True
+1          region_cpi_headline_yoy_pct                                                                      Region IV-A             19                19       19                 0                 0  4.369460e-10               2022-Q1                             True
+2               rice_wholesale_yoy_pct                                          Batangas; Cavite; Laguna; Quezon; Rizal             89                89       89                 0                 0  4.936446e-09               2022-Q1                             True
+3               retail_chicken_yoy_pct                                          Batangas; Cavite; Laguna; Quezon; Rizal             95                95       95                 0                 0  4.915240e-09               2022-Q1                             True
+4                  retail_pork_yoy_pct                                          Batangas; Cavite; Laguna; Quezon; Rizal             95                95       95                 0                 0  4.867255e-09               2022-Q1                             True
+5               retail_tilapia_yoy_pct                                          Batangas; Cavite; Laguna; Quezon; Rizal             95                95       95                 0                 0  4.561386e-09               2022-Q1                             True
+6               farmgate_palay_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            113               113      113                 0                 0  4.880071e-09               2022-Q1                             True
+7             palay_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            114               114      114                 0                 0  3.317939e-08               2022-Q1                             True
+8              corn_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            114               114      114                 0                 0  4.902131e-08               2022-Q1                             True
+9   vegetables_only_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            108               108      108                 0                 0  0.000000e+00               2022-Q1                             True
+10   rootcrops_only_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            108               108      108                 0                 0  0.000000e+00               2022-Q1                             True
+11        fisheries_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal            108               108      108                 0                 0  6.136048e-09               2022-Q1                             True
+12          chicken_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal             60                60       60                 0                 0  4.987903e-09               2024-Q1                             True
+13        livestock_production_yoy_pct                             Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal             60                60       60                 0                 0  4.831037e-09               2024-Q1                             True
+14                 rainfall_anomaly_mm  Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal             96                96       96                 0                 0  3.333352e-08               2022-Q1                             True
+15               temperature_anomaly_c  Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal             96                96       96                 0                 0  2.222196e-10               2022-Q1                             True
+16           E1_unemployment_change_pp                                                                      PHILIPPINES             19                19       19                 0                 0  3.333342e-10               2022-Q1                             True
+17           E2_remittance_decline_pct                                                                      PHILIPPINES             18                18       18                 0                 0  4.883445e-10               2022-Q1                             True
+                      feature earliest_observation_used earliest_underlying_period  n_observations_used  n_observations_excluded first_scored_origin  pre2021_influence  future_influence          independent_rederivation audit_status
+0                FMA_food_cpi                   2022-Q1                    2021-Q1                   90                       20             2022-Q4              False             False  PSA-published (not re-derivable)         PASS
+1            FMA_headline_cpi                   2022-Q1                    2021-Q1                   90                       20             2022-Q4              False             False  PSA-published (not re-derivable)         PASS
+2          FMA_rice_wholesale                   2022-Q1                    2021-Q1                   79                        0             2023-Q1              False             False                            agrees         PASS
+3                 FMA_chicken                   2022-Q1                    2021-Q1                   90                        0             2022-Q4              False             False                            agrees         PASS
+4                    FMA_pork                   2022-Q1                    2021-Q1                   90                        0             2022-Q4              False             False                            agrees         PASS
+5                 FMA_tilapia                   2022-Q1                    2021-Q1                   90                        0             2022-Q4              False             False                            agrees         PASS
+6              FMA_food_cpi_R                   2022-Q1                    2021-Q1                   27                        0             2024-Q2              False             False                            agrees         PASS
+7          FMA_headline_cpi_R                   2022-Q1                    2021-Q1                   27                        0             2024-Q2              False             False                            agrees         PASS
+8                  FMA_rice_R                   2022-Q1                    2021-Q1                   27                        0             2024-Q2              False             False                            agrees         PASS
+9                   AFP_palay                   2022-Q1                    2021-Q1                   85                        0             2023-Q1              False             False                            agrees         PASS
+10                   AFP_corn                   2022-Q1                    2021-Q1                   85                        0             2023-Q1              False             False                            agrees         PASS
+11             AFP_vegetables                   2022-Q1                    2021-Q1                   85                        0             2023-Q1              False             False                            agrees         PASS
+12              AFP_rootcrops                   2022-Q1                    2021-Q1                   85                        0             2023-Q1              False             False                            agrees         PASS
+13              AFP_fisheries                   2022-Q1                    2021-Q1                   85                        0             2023-Q1              False             False                            agrees         PASS
+14                AFP_chicken                   2024-Q1                    2023-Q1                   45                        0             2025-Q1              False             False                            agrees         PASS
+15              AFP_livestock                   2024-Q1                    2023-Q1                   45                        0             2025-Q1              False             False                            agrees         PASS
+16                AFP_palay_R                   2022-Q1                    2021-Q1                   25                        0             2024-Q3              False             False                            agrees         PASS
+17                 AFP_corn_R                   2022-Q1                    2021-Q1                   25                        0             2024-Q3              False             False                            agrees         PASS
+18           AFP_vegetables_R                   2022-Q1                    2021-Q1                   25                        0             2024-Q3              False             False                            agrees         PASS
+19            AFP_rootcrops_R                   2022-Q1                    2021-Q1                   25                        0             2024-Q3              False             False                            agrees         PASS
+20            AFP_fisheries_R                   2022-Q1                    2021-Q1                   25                        0             2024-Q3              False             False                            agrees         PASS
+21         CEC_rain_departure                   2022-Q1                    2021-Q1                   80                        0             2022-Q4              False             False                            agrees         PASS
+22                   CEC_heat                   2022-Q1                    2021-Q1                   80                        0             2022-Q4              False             False                            agrees         PASS
+23         CEC_cyclones_100km                   2021-Q1                    2021-Q1                  110                        0             2021-Q4              False             False                      level series         PASS
+24       CEC_rain_departure_R                   2022-Q1                    2021-Q1                   23                        0             2024-Q2              False             False                            agrees         PASS
+25                 CEC_heat_R                   2022-Q1                    2021-Q1                   23                        0             2024-Q2              False             False                            agrees         PASS
+26             CEC_cyclones_R                   2021-Q1                    2021-Q1                   29                        0             2023-Q3              False             False                      level series         PASS
+27      EHS_unemployment_prov                      2021                       2021                   20                        0             2022-Q2              False             False                               NaN         PASS
+28   EHS_underemployment_prov                      2021                       2021                   20                        0             2022-Q2              False             False                               NaN         PASS
+29  EHS_unemployment_change_R                   2022-Q1                    2021-Q1                   27                        0             2024-Q2              False             False                            agrees         PASS
+30   EHS_remittance_decline_R                   2022-Q1                    2021-Q1                   22                        0             2024-Q4              False             False                            agrees         PASS
+31                PSV_poverty                      2021                       2021                    5                        0             2025-Q3              False             False                               NaN         PASS
+32                   FIS_fssi                   2022-Q4                    2022-Q4                   16                        0             2025-Q4              False             False                      level series         PASS
+33        FIS_shortage_news_R                   2021-Q1                    2021-Q1                   35                        0             2023-Q2              False             False                      level series         PASS
+                      feature  duplicates  identical_across_5_share  equals_regional_or_national_share audit_status
+0                FMA_food_cpi           0                     0.000                                NaN         PASS
+1            FMA_headline_cpi           0                     0.000                                NaN         PASS
+2          FMA_rice_wholesale           0                     0.000                                NaN         PASS
+3                 FMA_chicken           0                     0.000                                NaN         PASS
+4                    FMA_pork           0                     0.000                                NaN         PASS
+5                 FMA_tilapia           0                     0.000                                NaN         PASS
+6              FMA_food_cpi_R           0                       NaN                                NaN         PASS
+7          FMA_headline_cpi_R           0                       NaN                                NaN         PASS
+8                  FMA_rice_R           0                       NaN                                NaN         PASS
+9                   AFP_palay           0                     0.000                                0.0         PASS
+10                   AFP_corn           0                     0.000                                0.0         PASS
+11             AFP_vegetables           0                     0.000                                0.0         PASS
+12              AFP_rootcrops           0                     0.000                                0.0         PASS
+13              AFP_fisheries           0                     0.000                                0.0         PASS
+14                AFP_chicken           0                     0.000                                0.0         PASS
+15              AFP_livestock           0                     0.000                                0.0         PASS
+16                AFP_palay_R           0                       NaN                                NaN         PASS
+17                 AFP_corn_R           0                       NaN                                NaN         PASS
+18           AFP_vegetables_R           0                       NaN                                NaN         PASS
+19            AFP_rootcrops_R           0                       NaN                                NaN         PASS
+20            AFP_fisheries_R           0                       NaN                                NaN         PASS
+21         CEC_rain_departure           0                     0.000                                NaN         PASS
+22                   CEC_heat           0                     0.000                                NaN         PASS
+23         CEC_cyclones_100km           0                     0.818                                NaN         PASS
+24       CEC_rain_departure_R           0                       NaN                                NaN         PASS
+25                 CEC_heat_R           0                       NaN                                NaN         PASS
+26             CEC_cyclones_R           0                       NaN                                NaN         PASS
+27      EHS_unemployment_prov           0                     0.000                                NaN         PASS
+28   EHS_underemployment_prov           0                     0.000                                NaN         PASS
+29  EHS_unemployment_change_R           0                       NaN                                NaN         PASS
+30   EHS_remittance_decline_R           0                       NaN                                NaN         PASS
+31                PSV_poverty           0                     0.000                                NaN         PASS
+32                   FIS_fssi           0                       NaN                                NaN         PASS
+33        FIS_shortage_news_R           0                       NaN                                NaN         PASS
+   dataset_id earliest_raw_observation latest_raw_observation  pre2021_observations  eligible_2021_2026_observations                                    missing_periods_in_window
+0         S01               2021-01-01             2026-09-01                     0                              690                                                         none
+1         S02               1994-01-01             2026-09-01                  1944                              414                                                         none
+2         S03               2021-03-01             2026-09-01                     0                              180  Batangas: 31; Cavite: 31; Laguna: 31; Quezon: 31; Rizal: 31
+3         S04               2021-01-01             2026-07-01                     0                              112                                         Laguna: 1; Quezon: 2
+4         S05               2018-01-01             2026-09-01                   576                             1150                                                         none
+5         S06               2018-01-01             2026-09-01                  1080                             2116                                                         none
+6         S07               2018-01-01             2026-09-01                  2052                             3933                                                         none
+7         S08               2010-01-01             2026-09-01                  1716                             1068                                                         none
+8         S09               1987-01-01             2026-07-01                  4896                              828                                                         none
+9         S10               2010-01-01             2026-04-01                 37488                            18744                                                         none
+10        S11               1993-01-01             2026-04-01                  3560                              704                                                         none
+11        S12               2023-01-01             2026-04-01                     0                              420                                                         none
+12        S13               2023-01-01             2026-04-01                     0                              336                                                         none
+13        S14               1981-01-01             2025-12-01                  9600                             1200                                                         none
+14        C01               2019-01-01             2026-09-01                 25248                            72588                                                         none
+15        C02               2018-01-01             2026-09-01                  1080                             2070                                                         none
+16        C03               2010-01-01             2026-09-01                  3571                             1844                                                    Laguna: 5
+17        C04               2010-01-01             2026-08-01                  5751                             3187                                                     Rizal: 3
+18        C05               1996-01-01             2026-04-01                  7801                             2259                                                         none
+19        C06               2018-01-01             2026-09-01                   972                             2047                                                         none
+20        C07               2018-01-01             2026-09-01                   108                              529                                                         none
+21        C08               2018-01-01             2026-09-01                   900                             1863                                                         none
+22        C09               2010-01-01             2026-06-01                  3720                             3442                                                         none
+23        C10               2018-01-01             2026-09-01                 37872                            72588                                                         none
+24        S15               2021-01-01             2026-04-01                     0                              110                                                         none
+25        S16               1996-01-01             2026-10-01                    87                               21                                               PHILIPPINES: 3
+26        S17               2005-04-01             2026-08-01                    63                               68                                                         none
+27        S18               2021-01-01             2026-04-01                     0                               22                                                         none
+28        S19               2021-01-01             2025-01-01                     0                               19                                                         none
+29        S20               2021-01-01             2021-01-01                     0                              141                                                         none
+30        S21               2022-10-01             2026-07-01                     0                               20     Batangas: 10; Cavite: 10; Laguna: 3; Quezon: 6; Rizal: 5
+31        S22               2017-01-01             2026-10-01                  5832                             8284                                                         none
+32        C11               1950-02-01             2026-09-01                   851                               69                                                         none
+33        C12               2021-01-01             2026-07-01                     0                              115                                                         none
+34        C13               2021-01-01             2023-01-01                     0                               10                                                         none
+35        C14               2023-01-01             2023-01-01                     0                                5                                                         none
+36        T01               1998-07-01             2026-07-01                    92                               23                                             Balance Luzon: 2
+37        S23               2021-01-01             2026-10-14                     0                            10452                                                         none
