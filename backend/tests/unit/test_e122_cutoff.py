@@ -108,7 +108,8 @@ def test_percentile_reference_excludes_current_and_unpublished():
     assert r["prior_n"] == 10                                                       # periods T0..T0+9; current T0+10 excluded
 
 
-# 10 annual: latest published year; an incomplete latest year is not used (frozen rule; fallback is DI-3, not applied)
+# 10 annual: latest published year; an incomplete latest year is never used. Since Amendment 2 (E123, DI-3) the latest
+# COMPLETE published year is used instead (before it: unavailable); the incomplete year is skipped and named
 def test_annual_latest_year_and_incomplete():
     def ann(year, units, avail):
         return pd.DataFrame([{"feature": "provincial_unemployment_rate_pct_annual", "unit": u, "ref": str(year), "value": float(i), "avail": avail, "status": "r", "source": "t"}
@@ -119,7 +120,9 @@ def test_annual_latest_year_and_incomplete():
     assert {r["period"] for r in F3._rank5(a, f, F3.qindex("2025-Q3"))} == {"2024"}
     a2 = pd.concat([a, ann(2025, PROVS[:4], "2026-06-30")])
     r = F3._rank5(a2, f, F3.qindex("2026-Q3"))
-    assert all(x["status"] == "incomplete_year" and x["score"] is None for x in r)
+    assert {x["period"] for x in r} == {"2024"} and all(x["score"] is not None and "2025" in x["note"] for x in r)
+    only_incomplete = F3._rank5(ann(2025, PROVS[:4], "2026-06-30"), f, F3.qindex("2026-Q3"))
+    assert all(x["status"] == "incomplete_year" and x["score"] is None for x in only_incomplete)
     fs = F3.feature_scores(pd.DataFrame(columns=["feature", "unit", "period", "value", "avail", "status", "source"]), a, [F3.qindex("2025-Q3")])
     assert fs.loc[fs["feature"] == "EHS_unemployment_prov", "period"].str.fullmatch(r"\d{4}").all()   # a year, never a quarter
 

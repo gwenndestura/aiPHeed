@@ -27,7 +27,8 @@ import pandas as pd
 
 PROTOCOL_SHA256 = "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717"
 AMENDMENT_1_SHA256 = "4fd05309c3dee0800693e9a12b92ed112aebef35f9a219a8a620c88860050549"   # E122: change-type series need a 2021+ base
-VERSION = "FIRI3-candidate-1.1"
+AMENDMENT_2_SHA256 = "8b5f729cc34790e00dbadbc5ce02bfd050ca31dc665fd049bff9e38675f7711b"   # E123: latest complete annual year; CCS / SVS / common core
+VERSION = "FIRI3-candidate-1.2"
 START_Q = 2021 * 4                      # 2021-Q1 as a quarter index (year * 4 + quarter - 1)
 MIN_PRIOR = 8
 MAX_STALE = 3
@@ -229,14 +230,18 @@ def _rank5(ann: pd.DataFrame, f: Feature, t: int) -> list[dict]:
     base = {"aligned_value": None, "raw_value": None, "period": None, "avail_date": None, "prior_n": None, "score": None, "source": None}
     if a.empty:
         return [{**base, "unit": u, "status": "unavailable_at_issue"} for u in PROVINCES]
-    ref = a["ref"].astype(str).max()
+    years = a.groupby(a["ref"].astype(str))["unit"].agg(lambda s: set(s.dropna()) >= set(PROVINCES))
+    complete = sorted(y for y, ok in years.items() if ok)
+    if not complete:                                    # Amendment 2: no complete published year at the issue
+        return [{**base, "unit": u, "period": max(years.index), "status": "incomplete_year"} for u in PROVINCES]
+    ref = complete[-1]                                  # latest COMPLETE published year; newer incomplete years skipped
+    skipped = sorted(y for y in years.index if y > ref)
     a = a[a["ref"].astype(str) == ref].set_index("unit")
-    if set(a.index) != set(PROVINCES):
-        return [{**base, "unit": u, "period": ref, "status": "incomplete_year"} for u in PROVINCES]
     x = f.direction * a["value"]
     rk = x.rank(method="average")
     return [{"unit": u, "raw_value": float(a.loc[u, "value"]), "aligned_value": float(x[u]), "period": ref, "avail_date": str(a.loc[u, "avail"]),
-             "status": str(a.loc[u, "status"]), "prior_n": None, "score": float((rk[u] - 0.5) / 5), "source": a.loc[u].get("source")} for u in PROVINCES]
+             "status": str(a.loc[u, "status"]), "prior_n": None, "score": float((rk[u] - 0.5) / 5), "source": a.loc[u].get("source"),
+             "note": f"newer incomplete year(s) skipped: {', '.join(skipped)}" if skipped else ""} for u in PROVINCES]
 
 
 def feature_scores(obs: pd.DataFrame, ann: pd.DataFrame, origins, drop_features=()) -> pd.DataFrame:
@@ -305,3 +310,56 @@ def compute(obs: pd.DataFrame, ann: pd.DataFrame, origins) -> dict:
     fs = feature_scores(obs, ann, origins)
     ind = indicator_scores(fs)
     return {"features": fs, "indicators": ind, "overall": overall(ind, fs), "log": log}
+
+
+# ------------------------------------------------------------------------------------------------ Amendment 2: supplementary scores
+CONDITIONS = ("FMA", "AFP", "CEC", "FIS")
+STRUCTURAL = ("EHS", "PSV")
+CORE = ("FMA", "AFP", "CEC", "EHS")
+
+
+def subscore(ind: pd.DataFrame, members: tuple, name: str, scopes=("provincial", "regional")) -> pd.DataFrame:
+    """Equal mean of the available member indicators; needs ceil(2/3 x defined members). Defined members per scope:
+    CCS = FMA AFP CEC FIS in both scopes; SVS = EHS PSV, provincial only (regional EHS is national shocks, not structure)."""
+    rows = []
+    for (sc, u, t), g in ind.groupby(["scope", "unit", "t"], sort=True):
+        defined = [i for i in members if i in indicators("P" if sc == "provincial" else "R")]
+        if name == "SVS" and sc == "regional":
+            defined = []
+        rec = {"scope": sc, "unit": u, "t": t, "origin": qlabel(t), "issue_date": issue_date(t), "score_name": name, "members_defined": " ".join(defined)}
+        if sc not in scopes or not defined:
+            rows.append({**rec, "score": None, "members_available": 0, "members_used": "", "members_missing": "", "status": "not_defined", "band": None})
+            continue
+        a = g[g["indicator"].isin(defined) & g["available"]]
+        need = math.ceil(MIN_SHARE * len(defined))
+        ok = len(a) >= need
+        val = float(a["score"].mean()) if ok else None
+        rows.append({**rec, "score": val, "members_available": int(len(a)), "members_used": " ".join(a["indicator"]),
+                     "members_missing": " ".join(i for i in defined if i not in set(a["indicator"])),
+                     "status": "computed" if ok else "not_computable",
+                     "band": (band(val, len(a)) if name == "CCS" else ("above provincial middle" if val > 0.5 else "at or below provincial middle")) if ok else None})
+    return pd.DataFrame(rows)
+
+
+def common_core(ind: pd.DataFrame, overall_df: pd.DataFrame) -> pd.DataFrame:
+    """Fixed core (FMA AFP CEC EHS, all four required) and the per-origin cross-province core (indicators available for
+    all five provinces; >= 3), beside the overall FIRI3. Missing indicators are never filled."""
+    rows = []
+    av = ind[ind["available"]]
+    for (sc, u, t), g in ind.groupby(["scope", "unit", "t"], sort=True):
+        s = g[g["available"]].set_index("indicator")["score"]
+        fixed = float(s[list(CORE)].mean()) if set(CORE) <= set(s.index) else None
+        rec = {"scope": sc, "unit": u, "t": t, "origin": qlabel(t), "fixed_core": fixed, "fixed_core_status": "computed" if fixed is not None else "core_incomplete",
+               "fixed_core_missing": " ".join(i for i in CORE if i not in set(s.index))}
+        if sc == "provincial":
+            sets = [set(av[(av["scope"] == sc) & (av["t"] == t) & (av["unit"] == p)]["indicator"]) for p in PROVINCES]
+            inter = sorted(set.intersection(*sets)) if all(sets) else []
+            ok = len(inter) >= 3
+            rec.update(cross_core_indicators=" ".join(inter), cross_core=float(s[inter].mean()) if ok else None,
+                       cross_core_status="computed" if ok else "comparison_not_possible")
+        else:
+            rec.update(cross_core_indicators="", cross_core=None, cross_core_status="not_applicable (one regional unit)")
+        rows.append(rec)
+    cc = pd.DataFrame(rows)
+    o = overall_df[["scope", "unit", "t", "firi3", "indicators_available", "indicators_used"]]
+    return o.merge(cc, on=["scope", "unit", "t"], how="right")
