@@ -255,6 +255,11 @@ INVENTORY = [
      "reference: provincial food deprivation (owner), third round", "5 Poverty and social vulnerability",
      "food deprivation (income below the food threshold)", "province", "FIES survey year", "2025", None,
      "not held: PSA PDF behind a bot check (not bypassed), OpenSTAT not updated; scores the E130 seal once the owner supplies it"),
+    ("D30", "2025 Full Year Official Poverty Statistics workbook (Tables 1, 2, 5, 6, 15: poverty incidence, magnitudes, groupings; 2021, 2023, 2025)",
+     "PSA (owner-supplied 2026-10-31)", "provenance only", "5 Poverty and social vulnerability", "poverty (food and non-food needs), not PFDR",
+     "region, province", "FIES survey year", "2021, 2023, 2025",
+     "aipheed-backend-aligned/experiments/E130_Provincial_Risk_Score_Forecasting/data/owner_supplied/psa_2025_fy_workbook/2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx",
+     "no subsistence table, so the seal stays unscored; no value extracted (poverty is not the PFDR target)"),
 ]
 
 

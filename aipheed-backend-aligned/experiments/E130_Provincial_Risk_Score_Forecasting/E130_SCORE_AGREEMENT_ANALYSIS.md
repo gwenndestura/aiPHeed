@@ -90,6 +90,19 @@ At h = 3 (the quarter-start issue) the picture is the same; see the CSV.
 | Quezon | 0.90 | 3.75 | 1.06 | 0.0–5.34 |
 | Rizal | 2.60 | 1.75 | 1.88 | 0.0–7.12 |
 
-**Scoring status.** The 2025 round was released on 2026-08-21, but the PSA file sits behind a bot check (not bypassed) and OpenSTAT still stops at 2023. Scoring (`runner/score_e130.py`) runs as soon as the owner places the 2025 provincial table in `data/owner_supplied/psa_subsistence_population_2025.csv`.
+**Scoring status.**
+- The 2025 round was released on 2026-08-21, but the PSA file sits behind a bot check (not bypassed) and OpenSTAT still stops at 2023.
+- On 2026-10-31 the owner supplied PSA's `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx` (sha256 `ea80fe8d…`). It contains only:
+  - Tables 1 and 2: poverty incidence among families and among the population;
+  - Tables 5 and 6: magnitudes;
+  - Table 15: province groupings.
+
+  It has **no subsistence-incidence table** (`out/owner_workbook_check.json`).
+- **The seal therefore stays unscored.** Scoring it against poverty incidence would swap in a different measure after the fact.
+
+**To score it:**
+1. Supply PSA's 2025 table "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4 in PSA's numbering).
+2. Run `runner/extract_psa_2025.py <workbook>`, which writes `data/owner_supplied/psa_subsistence_population_2025.csv`.
+3. Run `runner/score_e130.py`.
 
 Five provinces in one fold are descriptive only. The intervals are wide (up to 7 pp) because the 2021→2023 change variance is dominated by Quezon's 5.7 pp fall.

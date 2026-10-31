@@ -254,6 +254,36 @@ def test_seal_intervals(L):
     assert (p.seal_sha256 == SEAL_SHA).all() and p.reference_value.isna().all()
 
 
+def test_extractor_column_map():
+    sys.path.insert(0, str(E / "runner"))
+    spec = importlib.util.spec_from_file_location("extract_psa_2025", E / "runner" / "extract_psa_2025.py")
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    head = {(3, 1): "Region/Province", (3, 2): "Annual Per Capita Food Threshold (in PhP)",
+            (3, 5): "Subsistence Incidence among Population", (4, 5): "Estimates (%)", (4, 8): "Coefficient of Variation a",
+            (4, 11): "Standard Error a"}
+    head.update({(5, c): float(y) for c, y in zip(range(2, 14), [2021, 2023, 2025] * 4)})
+    cmap = m.column_map(head)
+    assert m.pick(cmap, r"estimate|incidence", 2025) == 7 and m.pick(cmap, r"estimate|incidence", 2023) == 6
+    assert m.pick(cmap, r"coefficient of variation", 2025) == 10
+    assert m.pick(cmap, r"coefficient of variation", 2018) is None
+
+
+def test_owner_workbook_recorded_and_seal_state():
+    chk = json.load(open(E / "out" / "owner_workbook_check.json"))
+    wb = E / "data" / "owner_supplied" / "psa_2025_fy_workbook" / chk["workbook"]
+    assert _sha(wb) == chk["sha256"] and chk["pre_2021_years_present"] == []
+    target = E / "data" / "owner_supplied" / "psa_subsistence_population_2025.csv"
+    scores = E / "out" / "seal_scores.json"
+    p = pd.read_csv(E / "E130_NUMERICAL_RISK_SCORE_PREDICTIONS.csv")
+    if not target.exists():                         # the 2026-10-31 workbook has poverty tables only
+        assert chk["subsistence_population_table"] is False
+        assert not scores.exists() and p.status.str.startswith("sealed").all()
+    else:                                           # once the subsistence table arrives, the seal is scored from it
+        assert json.load(open(scores))["input_sha256"] == _sha(target)
+        assert (pd.read_csv(target).survey_year >= 2021).all()
+
+
 def test_reproducibility(L):
     a = L.simulate_panel(10, 1.0, 0.9, 0.5, 2, n_sims=40, n_boot=50, seed=7)
     b = L.simulate_panel(10, 1.0, 0.9, 0.5, 2, n_sims=40, n_boot=50, seed=7)

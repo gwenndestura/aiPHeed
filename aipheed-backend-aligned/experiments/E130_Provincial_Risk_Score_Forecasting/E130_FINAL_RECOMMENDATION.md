@@ -66,6 +66,9 @@ None of these claims a validated quarterly provincial forecast.
 
 ## 4. Immediate next steps
 
-1. **Owner:** download the PSA "Regional and Provincial Press Release – 2025 Full Year Poverty Statistics" (or the 2025 statistical tables) and place it in `data/owner_supplied/`. E130 then extracts the five provincial values and CVs and runs `runner/score_e130.py`. No new 2025 forecast is allowed (exposures X1 and X2).
+1. **Owner: supply the 2025 provincial subsistence table.** The workbook supplied on 2026-10-31 (`2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx`) has poverty Tables 1, 2, 5, 6 and 15 but **no subsistence table**, so the seal is still unscored.
+   - **What is needed:** PSA's 2025 "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4). It may be in the regional and provincial press release, or in a later table set or OpenSTAT update.
+   - **What happens next:** `runner/extract_psa_2025.py` reads it and `runner/score_e130.py` scores the seal.
+   - **Rule:** no new 2025 forecast is allowed (exposures X1–X3).
 2. **Owner decision:** choose among options A–D, and decide whether to approve PFDR category thresholds (needed for any classification claim).
 3. **Thesis wording:** state the minimum operational objective (Lead 2) as **not met at provincial level, because no provincial quarterly measurement exists**. Describe the operational lead and the information horizon separately.

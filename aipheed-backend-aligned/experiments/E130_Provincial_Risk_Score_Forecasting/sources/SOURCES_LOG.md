@@ -102,3 +102,19 @@ Searches made under protocol section 6, after the freeze. The protocol was commi
 ## S5 · NNC OPT Plus (not searched again)
 
 E129 recorded NNC 403 to automated access. The measure is child undernutrition, which the E130 gate rejects at G1 as a food-insecurity target. Not searched again.
+
+## S6 · Owner-supplied PSA 2025 workbook (2026-10-31)
+
+**File.** `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx`, downloaded by the owner. It is copied unchanged to `data/owner_supplied/psa_2025_fy_workbook/` (411,840 bytes; sha256 `ea80fe8d488bd082056d14bbfde5c39e744e11e5fc615a6dece2ed696eb8b4f8`). It was hashed before any value was read.
+
+**Contents** (titles and headers only were read):
+- Five sheets, `tab1`, `tab2`, `tab5`, `tab6` and `tab15`:
+  - Table 1: poverty incidence among families;
+  - Table 2: poverty incidence among population;
+  - Table 5: magnitude of poor families;
+  - Table 6: magnitude of poor population;
+  - Table 15: grouping of provinces.
+- All by region and province, for **2021, 2023 and 2025** (no pre-2021 column).
+- No external links and no macros.
+
+**No subsistence-incidence or food-threshold table is in the workbook.** The seal's target is not here, so the seal is **not scored**. No numeric value was extracted.

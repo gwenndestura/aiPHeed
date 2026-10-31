@@ -62,8 +62,11 @@ What does exist:
 
 ## Scoring the seal
 
-1. Download PSA's 2025 Full Year Poverty Statistics provincial tables (the regional and provincial press release) manually.
-2. Write `data/owner_supplied/psa_subsistence_population_2025.csv` with the columns `province, survey_year, subsistence_incidence_pct, cv_pct, source, publication_date`. Use subsistence incidence **among the population** for Batangas, Cavite, Laguna, Quezon and Rizal.
+1. Download manually PSA's 2025 table "Annual Per Capita Food Threshold and Subsistence Incidence Among Population … by Region and Province" (Table 4).
+   - The 2026-10-31 workbook `2025 Full Year Official Poverty Statistics_24Aug2026_0.xlsx` does **not** contain it: it has poverty Tables 1, 2, 5, 6 and 15 only.
+2. Run `python -I runner/extract_psa_2025.py <workbook.xlsx>`.
+   - It hashes the workbook, reads only the header rows and the five provinces' 2023/2025 estimate and CV cells, and writes `data/owner_supplied/psa_subsistence_population_2025.csv`.
+   - Alternatively, write that CSV by hand with the columns `province, survey_year, subsistence_incidence_pct, cv_pct, source, publication_date` (subsistence among the **population**).
 3. Run `python runner/score_e130.py`.
 
 The result is five provinces in one fold: descriptive only.
