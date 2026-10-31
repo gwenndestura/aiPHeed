@@ -1,0 +1,83 @@
+{
+  "any_candidate_passes": false,
+  "candidates": [
+    {
+      "candidate": "PSA provincial subsistence incidence (PFDR v1)",
+      "failed_criteria": "G3, G8",
+      "id": "C1",
+      "passes_all": false
+    },
+    {
+      "candidate": "FNRI ENNS 2021 household FIES",
+      "failed_criteria": "G2, G3, G8",
+      "id": "C2",
+      "passes_all": false
+    },
+    {
+      "candidate": "FNRI 2022 ENNS household FIES",
+      "failed_criteria": "G2, G3, G5, G8",
+      "id": "C3",
+      "passes_all": false
+    },
+    {
+      "candidate": "PSA CBMS 2024 FIES (142 LGUs)",
+      "failed_criteria": "G3, G5, G8",
+      "id": "C4",
+      "passes_all": false
+    },
+    {
+      "candidate": "SWS Balance Luzon involuntary hunger",
+      "failed_criteria": "G2, G8",
+      "id": "C5",
+      "passes_all": false
+    },
+    {
+      "candidate": "SWS microdata with province codes",
+      "failed_criteria": "G4, G5, G7",
+      "id": "C6",
+      "passes_all": false
+    },
+    {
+      "candidate": "NNC Operation Timbang Plus",
+      "failed_criteria": "G1, G3, G5, G7, G8",
+      "id": "C7",
+      "passes_all": false
+    },
+    {
+      "candidate": "PSA FIES 2023 food share of expenditure",
+      "failed_criteria": "G1, G3, G4, G7, G8",
+      "id": "C8",
+      "passes_all": false
+    },
+    {
+      "candidate": "Composite of C1 + C2 (+ C8)",
+      "failed_criteria": "G1, G2, G3, G7, G8",
+      "id": "C9",
+      "passes_all": false
+    },
+    {
+      "candidate": "Provincial food CPI YoY",
+      "failed_criteria": "G1, G6, G7",
+      "id": "C10",
+      "passes_all": false
+    },
+    {
+      "candidate": "FIRI3 / FIRI v2 provincial scores",
+      "failed_criteria": "G1, G6, G7",
+      "id": "C11",
+      "passes_all": false
+    }
+  ],
+  "criteria": [
+    "G1_construct",
+    "G2_all_five_provinces",
+    "G3_repeated_10_periods",
+    "G4_dated_publication",
+    "G5_held",
+    "G6_not_built_from_predictors",
+    "G7_numeric_with_uncertainty",
+    "G8_quarterly_lead2_evaluable"
+  ],
+  "decision": "BLOCKED: no quarterly provincial reference passes G1-G8; provincial model training is not authorized",
+  "pfdr_valid_survey_year_reference": true
+}
