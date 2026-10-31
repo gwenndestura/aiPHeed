@@ -209,7 +209,7 @@ def _dynamic(obs: pd.DataFrame, f: Feature, t: int) -> list[dict]:
         rec = {"unit": u, "raw_value": None, "aligned_value": None, "period": None, "avail_date": None, "status": "missing",
                "prior_n": 0, "score": None, "source": None}
         if not su.empty:
-            cur = su.loc[su["period"].idxmax()]
+            cur = su.iloc[int(np.argmax(su["period"].to_numpy()))]               # first latest row by position (index labels may repeat)
             rec.update(raw_value=float(cur["value"]), aligned_value=float(cur["x"]), period=qlabel(int(cur["period"])), avail_date=str(cur["avail"]),
                        source=cur.get("source"))
             prior = s.loc[s["period"] < cur["period"], "x"].dropna().to_numpy()
