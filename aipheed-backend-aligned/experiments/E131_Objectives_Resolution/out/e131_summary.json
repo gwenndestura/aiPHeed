@@ -1,0 +1,378 @@
+{
+  "any_rule_set_passed": [],
+  "best_within_any": [
+    {
+      "lead": 3,
+      "model": "NLP-ONLY",
+      "n": 24,
+      "policy": "P-DASH",
+      "within_tolerance": 0.6666666666666666
+    },
+    {
+      "lead": 4,
+      "model": "PERSIST",
+      "n": 20,
+      "policy": "P-REL",
+      "within_tolerance": 0.6
+    },
+    {
+      "lead": 2,
+      "model": "RIDGE-ALL",
+      "n": 28,
+      "policy": "P-REL",
+      "within_tolerance": 0.5714285714285714
+    }
+  ],
+  "llm_lead2_by_level": {
+    "high": {
+      "bias": -7.053048740083137,
+      "mae": 7.268156574677202,
+      "rows": 9
+    },
+    "low": {
+      "bias": 3.7685785421680125,
+      "mae": 3.7685785421680125,
+      "rows": 10
+    },
+    "middle": {
+      "bias": -2.1928152737625948,
+      "mae": 3.1585452984811093,
+      "rows": 9
+    }
+  },
+  "llm_lead2_per_area": {
+    "balance_luzon": {
+      "bias": -1.8044900608204781,
+      "mae": 4.410101574085846,
+      "rows": 7,
+      "within": 0.42857142857142855
+    },
+    "metro_manila": {
+      "bias": -1.7054841820794593,
+      "mae": 2.766471511695952,
+      "rows": 7,
+      "within": 0.7142857142857143
+    },
+    "mindanao": {
+      "bias": -1.4800002814128561,
+      "mae": 6.679563509289019,
+      "rows": 7,
+      "within": 0.42857142857142855
+    },
+    "visayas": {
+      "bias": -1.5138812903917012,
+      "mae": 4.933306587801313,
+      "rows": 7,
+      "within": 0.42857142857142855
+    }
+  },
+  "llm_lead2_rules_common": {
+    "N1_data": false,
+    "N2_within_tolerance_75": false,
+    "N3_beats_every_baseline_mae_rmse": true,
+    "N4_squared_error_vs_persistence_and_climatology": true,
+    "N5_stability": false,
+    "N6_no_province_below_persistence": true,
+    "N7_interval_coverage_80": true
+  },
+  "llm_lead2_rules_univariate": {
+    "N1_data": true,
+    "N2_within_tolerance_75": false,
+    "N3_beats_every_baseline_mae_rmse": true,
+    "N4_squared_error_vs_persistence_and_climatology": false,
+    "N5_stability": false,
+    "N6_no_province_below_persistence": false,
+    "N7_interval_coverage_80": true
+  },
+  "max_reliable_lead_P_DASH": {
+    "DLLM": null,
+    "LGBM-ALL": null,
+    "LGBM-H": null,
+    "LLM": null,
+    "NLP-ONLY": null,
+    "PSA-ONLY": null,
+    "RIDGE-ALL": null,
+    "RIDGE-H": null
+  },
+  "overfitting_lgbm_all_lead2": {
+    "oos_mae": 6.127134273633771,
+    "train_mae": 2.119847023292196,
+    "trees_with_splits": 100.0
+  },
+  "rows_common": [
+    {
+      "lead": 1,
+      "n": 36,
+      "n_target_quarters": 9,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 2,
+      "n": 28,
+      "n_target_quarters": 7,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 3,
+      "n": 24,
+      "n_target_quarters": 6,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 4,
+      "n": 20,
+      "n_target_quarters": 5,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 1,
+      "n": 36,
+      "n_target_quarters": 9,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 2,
+      "n": 28,
+      "n_target_quarters": 7,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 3,
+      "n": 20,
+      "n_target_quarters": 5,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 4,
+      "n": 20,
+      "n_target_quarters": 5,
+      "policy": "P-REL"
+    }
+  ],
+  "rows_univariate": [
+    {
+      "lead": 1,
+      "n": 44,
+      "n_target_quarters": 11,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 2,
+      "n": 40,
+      "n_target_quarters": 10,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 3,
+      "n": 36,
+      "n_target_quarters": 9,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 4,
+      "n": 32,
+      "n_target_quarters": 8,
+      "policy": "P-DASH"
+    },
+    {
+      "lead": 1,
+      "n": 44,
+      "n_target_quarters": 11,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 2,
+      "n": 40,
+      "n_target_quarters": 10,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 3,
+      "n": 36,
+      "n_target_quarters": 9,
+      "policy": "P-REL"
+    },
+    {
+      "lead": 4,
+      "n": 32,
+      "n_target_quarters": 8,
+      "policy": "P-REL"
+    }
+  ],
+  "seeds_lgbm_all": {
+    "1": {
+      "max": 6.121101496650513,
+      "min": 5.837056749938324
+    },
+    "2": {
+      "max": 6.206592919041604,
+      "min": 6.025009981927967
+    }
+  },
+  "selection": {
+    "candidate": "LLM",
+    "lead2_mae": 4.6973607957180326,
+    "lead2_within": 0.5,
+    "ranking": [
+      {
+        "mae": 4.6974,
+        "model": "LLM",
+        "within_tolerance": 0.5
+      },
+      {
+        "mae": 5.9335,
+        "model": "LGBM-H",
+        "within_tolerance": 0.4643
+      },
+      {
+        "mae": 5.4615,
+        "model": "NLP-ONLY",
+        "within_tolerance": 0.3929
+      },
+      {
+        "mae": 6.1271,
+        "model": "LGBM-ALL",
+        "within_tolerance": 0.3929
+      },
+      {
+        "mae": 5.6423,
+        "model": "DLLM",
+        "within_tolerance": 0.3571
+      },
+      {
+        "mae": 7.2607,
+        "model": "PSA-ONLY",
+        "within_tolerance": 0.3571
+      },
+      {
+        "mae": 5.9542,
+        "model": "RIDGE-H",
+        "within_tolerance": 0.3214
+      },
+      {
+        "mae": 6.5106,
+        "model": "RIDGE-ALL",
+        "within_tolerance": 0.3214
+      }
+    ]
+  },
+  "sharp_increases_lead2": {
+    "llm_mean_error": -9.63530062536652,
+    "llm_within": 0.0,
+    "persist_mean_error": -9.735714285714286,
+    "rows": 7
+  },
+  "target": {
+    "area_quarters": 80,
+    "median_se_pp": 1.9531012775800236,
+    "median_tolerance_pp": 3.212565720231056,
+    "quarters": 20,
+    "required_forecast_sd_pp": 1.996120208360595
+  },
+  "x3a": [
+    {
+      "cpi_threshold_error_pct": -0.9085,
+      "food_cpi_growth_pct": 15.2926,
+      "income_effect_pp": -0.2877,
+      "official_change_pp": 0.4,
+      "price_effect_pp": 0.6877,
+      "province": "Batangas",
+      "replication_gap_pp": 0.152,
+      "threshold_growth_pct": 16.3496
+    },
+    {
+      "cpi_threshold_error_pct": -3.596,
+      "food_cpi_growth_pct": 13.0937,
+      "income_effect_pp": -1.7233,
+      "official_change_pp": -1.6,
+      "price_effect_pp": 0.1233,
+      "province": "Cavite",
+      "replication_gap_pp": 0.0004,
+      "threshold_growth_pct": 17.3123
+    },
+    {
+      "cpi_threshold_error_pct": -16.2062,
+      "food_cpi_growth_pct": 9.8251,
+      "income_effect_pp": -2.4255,
+      "official_change_pp": -1.1,
+      "price_effect_pp": 1.3255,
+      "province": "Laguna",
+      "replication_gap_pp": 0.2525,
+      "threshold_growth_pct": 31.0658
+    },
+    {
+      "cpi_threshold_error_pct": 0.0631,
+      "food_cpi_growth_pct": 6.998,
+      "income_effect_pp": -6.0051,
+      "official_change_pp": -5.7,
+      "price_effect_pp": 0.3051,
+      "province": "Quezon",
+      "replication_gap_pp": 0.1618,
+      "threshold_growth_pct": 6.9306
+    },
+    {
+      "cpi_threshold_error_pct": -6.372,
+      "food_cpi_growth_pct": 16.319,
+      "income_effect_pp": -0.0275,
+      "official_change_pp": 1.7,
+      "price_effect_pp": 1.7275,
+      "province": "Rizal",
+      "replication_gap_pp": 0.0185,
+      "threshold_growth_pct": 24.2352
+    }
+  ],
+  "x3b": {
+    "note": "descriptive: 2025 family poverty was seen in E130 (exposure X2); poverty is a predictor, never a target",
+    "pfdr_2021_2023": {
+      "spearman": -0.8207826816681234,
+      "stability_p": 0.0216
+    },
+    "poverty_2021_2023": {
+      "highest": [
+        "Quezon",
+        "Quezon"
+      ],
+      "spearman": 0.3,
+      "stability_p": 0.2549
+    },
+    "poverty_2021_2025": {
+      "highest": [
+        "Quezon",
+        "Quezon"
+      ],
+      "spearman": 0.7,
+      "stability_p": 0.10155
+    },
+    "poverty_2023_2025": {
+      "highest": [
+        "Quezon",
+        "Quezon"
+      ],
+      "spearman": 0.7999999999999999,
+      "stability_p": 0.1923
+    },
+    "poverty_values": {
+      "pov_2021": {
+        "Batangas": 6.3,
+        "Cavite": 10.1,
+        "Laguna": 9.5,
+        "Quezon": 21.6,
+        "Rizal": 6.9
+      },
+      "pov_2023": {
+        "Batangas": 7.6,
+        "Cavite": 6.7,
+        "Laguna": 7.9,
+        "Quezon": 10.2,
+        "Rizal": 8.5
+      },
+      "pov_2025": {
+        "Batangas": 1.4,
+        "Cavite": 2.0,
+        "Laguna": 5.0,
+        "Quezon": 12.0,
+        "Rizal": 4.0
+      }
+    }
+  }
+}
