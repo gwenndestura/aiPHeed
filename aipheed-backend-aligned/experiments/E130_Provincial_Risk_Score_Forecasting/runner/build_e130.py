@@ -43,10 +43,13 @@ INPUTS = {
 
 
 def manifest() -> dict:
+    """The starting state is recorded once (first build); a rebuild keeps it and adds its own stamp."""
     import lightgbm
     import shap
     import sklearn
     import scipy
+    prev = L.json.load(open(OUT / "e130_manifest.json", encoding="utf-8")) if (OUT / "e130_manifest.json").exists() else {}
+    start = {k: prev[k] for k in ("built_utc", "starting_commit", "branch", "untracked_from_other_sessions_preserved") if k in prev}
     m = {
         "experiment": "E130 Provincial Risk-Score Forecasting",
         "built_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -62,6 +65,10 @@ def manifest() -> dict:
                                 "FIRI3": "v1.3 (configuration 64a7d7df, frozen; not used as a target)",
                                 "FIRI_v2": "served index (not used as a target)"},
     }
+    if start:
+        m.update(start)
+        m["rebuilt_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        m["head_at_rebuild"] = _git("rev-parse", "HEAD")
     L.dump(m, OUT / "e130_manifest.json")
     return m
 
@@ -240,9 +247,14 @@ INVENTORY = [
     ("D26", "BERTopic topics on the news corpus (E64)", "aiPHeed news pipeline", "predictor", "4 News and NLP", "news topics",
      "mostly national / regional", "quarterly", "2021+", None, "E64: no forecast gain"),
     ("D27", "Provincial food CPI YoY as a target", "PSA", "rejected target", "1 Market and food prices", "food-price condition", "province",
-     "quarterly", "23 quarters", None, "rejected as target (owner: predictor; not food insecurity)"),
+     "quarterly", "23 quarters", "aipheed-backend-aligned/experiments/E119_Preprocessing/E119_PROVINCIAL_VULNERABILITY_DATASET.csv",
+     "same data as D11; rejected as target (owner: predictor; not food insecurity)"),
     ("D28", "FIRI v2 and FIRI3 provincial scores", "aiPHeed", "rejected target", "constructed index", "index built from the predictors",
      "province", "quarterly", "2021+", "backend/app/ml/inference/firi3.py", "rejected as supervised ground truth (circular)"),
+    ("D29", "Subsistence incidence 2025 round (2025 Full Year Poverty Statistics, released 2026-08-21)", "PSA",
+     "reference: provincial food deprivation (owner), third round", "5 Poverty and social vulnerability",
+     "food deprivation (income below the food threshold)", "province", "FIES survey year", "2025", None,
+     "not held: PSA PDF behind a bot check (not bypassed), OpenSTAT not updated; scores the E130 seal once the owner supplies it"),
 ]
 
 

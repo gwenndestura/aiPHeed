@@ -1,0 +1,312 @@
+{
+  "diagnostics": {
+    "D10_period_markers": {
+      "e128_shap": "ONI acted as a period marker on the regional target (E128_SHAP_EXPLANATIONS.md)",
+      "median_common_quarter_share": 0.708,
+      "predictors_with_common_share_above_0_7": 14,
+      "provincial_predictors": 27
+    },
+    "D11_noise": {
+      "cv_range_pct": [
+        17.4,
+        62.3
+      ],
+      "signal_to_noise": {
+        "2021": 1.7867822412641552,
+        "2023": 0.7268106065399882
+      }
+    },
+    "D12_province_differences": {
+      "2021": {
+        "Q": 29.597580497750847,
+        "p": 5.910046383313069e-06
+      },
+      "2023": {
+        "Q": 6.348261812467721,
+        "p": 0.17460574440035626
+      }
+    },
+    "D13_lead2_support": {
+      "evaluable_lead2_rows": 0,
+      "lead2_rows_in_mapping": 115
+    },
+    "D14_rules": {
+      "N1": "fails (0 quarterly target observations)",
+      "N2-N7": "not evaluable without a target",
+      "R1-R7": "not evaluable (no target; no approved category thresholds)"
+    },
+    "D15_capacity": {
+      "candidate_predictors": 39,
+      "independent_changes": 5,
+      "predictors_per_change": 7.8,
+      "provincial_reference_values": 10
+    },
+    "D2_variation": {
+      "changes_beyond_90pct_sampling_error": 3,
+      "changes_beyond_95pct_sampling_error": 2,
+      "rank_reversal_spearman": -0.8207826816681234,
+      "rank_stability_p_if_no_true_change": 0.0216
+    },
+    "D3_observations": {
+      "N1_needs": {
+        "rows": 40,
+        "target_quarters": 10
+      },
+      "independent_changes": 5,
+      "provincial_reference_values": 10,
+      "quarterly_provincial_reference_values": 0
+    },
+    "D4_cpi": {
+      "effective_rows_of_115": 28.836509528585758,
+      "province_deviation_autocorr_lag2": 0.538,
+      "share_common_quarter_effect": 0.747,
+      "share_persistent_province_effect": 0.009,
+      "share_province_quarter_specific": 0.244
+    },
+    "D5_prices_vs_deprivation": {
+      "food_price_rise_range_pct": [
+        6.998027777861204,
+        16.31898958523099
+      ],
+      "note": "N = 5 provinces, one change each: descriptive only, no inference",
+      "provinces_where_pfdr_fell": 3,
+      "provinces_with_food_inflation_positive": 5,
+      "spearman_food_price_rise_vs_pfdr_change": 0.8999999999999998,
+      "spearman_unemployment_change_vs_pfdr_change": 0.0,
+      "sws_balance_luzon_annual_mean": {
+        "2021": 11.6167,
+        "2022": 10.9,
+        "2023": 11.15,
+        "2024": 19.575,
+        "2025": 18.8833,
+        "2026": 21.1
+      }
+    },
+    "D6_staleness_lead2_quarters": {
+      "pfdr_survey_year": {
+        "dashboard_quarters_with_any_pfdr": 9,
+        "max": 13,
+        "median": 9.0,
+        "min": 5,
+        "of": 23
+      },
+      "provincial_lfs_annual": {
+        "max": 7,
+        "median": 5.0,
+        "min": 4,
+        "n_quarters": 18
+      },
+      "v1_static_2021": {
+        "max": 21,
+        "median": 10.0,
+        "min": -1
+      }
+    },
+    "D7_climate": {
+      "oni_par_provincial_variation": "none (national/global)",
+      "rainfall_common_quarter_share": 0.808,
+      "rainfall_quarters_behind_issue": 2.0,
+      "typhoon_local_identical_across_provinces_share": 0.818,
+      "typhoon_local_zero_share": 0.7304347826086957
+    },
+    "D8_remittances": {
+      "geography": "national",
+      "identical_across_provinces_share": 1.0
+    },
+    "D9_news": {
+      "articles_by_province_mean": {
+        "Batangas": 2.6363636363636362,
+        "Cavite": 4.045454545454546,
+        "Laguna": 1.5454545454545454,
+        "Quezon": 1.6818181818181819,
+        "Rizal": 1.0909090909090908
+      },
+      "articles_per_province_quarter_median": 1.0,
+      "fssi_v3_missing_pct": 56.5,
+      "fssi_v3_persistent_province_share": 0.899,
+      "province_quarters_with_zero_articles_share": 0.4608695652173913
+    }
+  },
+  "gate_recheck": {
+    "any_candidate_passes": false,
+    "decision_unchanged": true,
+    "first_survey_year_with_10_rounds": 2039,
+    "new_candidates": [
+      "C12"
+    ],
+    "note": "biennial rounds never give a quarterly label; 10 rounds per province would be reached with survey year 2039",
+    "pfdr_rounds_per_province": {
+      "held": 2,
+      "published_not_held": 1,
+      "survey_frequency_years": 2
+    }
+  },
+  "simulation_summary": {
+    "cells": 192,
+    "cells_with_pass_prob_ge_0_8": 13,
+    "conditions_for_pass_prob_ge_0_8": [
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 20,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.8066666666666666,
+        "r2": 0.5,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 20,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9333333333333333,
+        "r2": 0.75,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 20,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9466666666666667,
+        "r2": 0.75,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9633333333333334,
+        "r2": 0.5,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9633333333333334,
+        "r2": 0.5,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9966666666666667,
+        "r2": 0.75,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 1.0,
+        "r2": 0.75,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.8266666666666667,
+        "r2": 0.5,
+        "rho": 0.9
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.8266666666666667,
+        "r2": 0.5,
+        "rho": 0.9
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.9333333333333333,
+        "r2": 0.75,
+        "rho": 0.9
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 40,
+        "noise_ratio_r": 1.0,
+        "p_pass_N2_and_N4": 0.94,
+        "r2": 0.75,
+        "rho": 0.9
+      },
+      {
+        "info_horizon_h": 2,
+        "n_quarters": 40,
+        "noise_ratio_r": 2.0,
+        "p_pass_N2_and_N4": 0.88,
+        "r2": 0.75,
+        "rho": 0.6
+      },
+      {
+        "info_horizon_h": 3,
+        "n_quarters": 40,
+        "noise_ratio_r": 2.0,
+        "p_pass_N2_and_N4": 0.8666666666666667,
+        "r2": 0.75,
+        "rho": 0.6
+      }
+    ],
+    "informed_within75_prob_by_r2_noise": {
+      "0.25": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.001,
+        "0.75": 0.015
+      },
+      "0.5": {
+        "0.0": 0.038,
+        "0.25": 0.078,
+        "0.5": 0.204,
+        "0.75": 0.645
+      },
+      "1.0": {
+        "0.0": 0.724,
+        "0.25": 0.861,
+        "0.5": 0.946,
+        "0.75": 0.981
+      },
+      "2.0": {
+        "0.0": 0.988,
+        "0.25": 0.995,
+        "0.5": 0.995,
+        "0.75": 0.999
+      }
+    },
+    "min_quarters_for_pass_prob_ge_0_8": {
+      "h2": 20,
+      "h3": 20
+    },
+    "pass_prob_by_r2_n_h2_rho09": {
+      "10": {
+        "0.0": 0.237,
+        "0.25": 0.323,
+        "0.5": 0.467,
+        "0.75": 0.52
+      },
+      "20": {
+        "0.0": 0.38,
+        "0.25": 0.487,
+        "0.5": 0.64,
+        "0.75": 0.757
+      },
+      "40": {
+        "0.0": 0.61,
+        "0.25": 0.76,
+        "0.5": 0.827,
+        "0.75": 0.933
+      }
+    },
+    "persistence_within75_prob_by_noise": {
+      "0.25": 0.0,
+      "0.5": 0.007,
+      "1.0": 0.118,
+      "2.0": 0.374
+    },
+    "required_forecast_sd_over_se": 1.0220259600842991,
+    "sims_per_cell": 300
+  }
+}

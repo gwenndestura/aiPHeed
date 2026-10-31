@@ -340,15 +340,20 @@ def simulate_panel(n_quarters: int, r: float, rho: float, r2: float, h: int, sha
     w_per = (np.abs(f_per - yt) <= tol).mean(axis=(1, 2))
     mae_i, mae_p = np.abs(f_inf - yt).mean(axis=(1, 2)), np.abs(f_per - yt).mean(axis=(1, 2))
     rmse_i, rmse_p = np.sqrt(((f_inf - yt) ** 2).mean(axis=(1, 2))), np.sqrt(((f_per - yt) ** 2).mean(axis=(1, 2)))
-    d_q = (((f_per - yt) ** 2) - ((f_inf - yt) ** 2)).mean(axis=2)                       # (sims, quarters)
     idx = rng.integers(0, n_quarters, size=(n_boot, n_quarters))
-    boot = d_q[:, idx].mean(axis=2)                                                     # (sims, n_boot)
-    p = (boot <= 0).mean(axis=1)
-    beats = (mae_i < mae_p) & (rmse_i < rmse_p) & (p < 0.10)
+
+    def boot_p(f_base):                    # one-sided cluster (target-quarter) bootstrap p, informed better than base
+        d_q = (((f_base - yt) ** 2) - ((f_inf - yt) ** 2)).mean(axis=2)                # (sims, quarters)
+        return (d_q[:, idx].mean(axis=2) <= 0).mean(axis=1)
+
+    p_per = boot_p(f_per)
+    p_clim = boot_p(np.zeros_like(yt))     # climatology = the true province mean (0): the strongest climatology
+    beats_per = (mae_i < mae_p) & (rmse_i < rmse_p) & (p_per < 0.10)
+    n4 = beats_per & (p_clim < 0.10)       # protocol N4: below persistence AND below climatology
     return {"n_quarters": n_quarters, "rows": n_quarters * n_prov, "noise_ratio_r": r, "rho": rho, "r2": r2,
             "info_horizon_h": h, "common_share": share,
             "p_within75_informed": float((w_inf >= 0.75).mean()), "p_within75_persistence": float((w_per >= 0.75).mean()),
             "mean_within_informed": float(w_inf.mean()), "mean_within_persistence": float(w_per.mean()),
-            "p_beats_persistence_sig": float(beats.mean()),
-            "p_pass_N2_and_N4": float(((w_inf >= 0.75) & beats).mean()),
+            "p_beats_persistence_sig": float(beats_per.mean()), "p_beats_climatology_sig": float((p_clim < 0.10).mean()),
+            "p_pass_N2_and_N4": float(((w_inf >= 0.75) & n4).mean()),
             "mean_skill_mae_vs_persistence": float(np.mean(1 - mae_i / mae_p))}
