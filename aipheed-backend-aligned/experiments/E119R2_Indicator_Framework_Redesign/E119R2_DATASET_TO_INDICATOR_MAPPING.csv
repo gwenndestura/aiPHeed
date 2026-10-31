@@ -1,0 +1,55 @@
+dataset_id,dataset,proposed_indicator,component,original_firi,relationship_or_role,reason
+D01,"CPI food, provincial YoY (PSA-published)",FP,general food inflation,A1,provincial_profiling,Complete provincial monthly series (0% missing); r 0.72 with headline CPI; the regional model uses the Region IV-A series (D03) instead of averaging provinces.
+D02,"CPI headline, provincial YoY",FP,cost of living,A2,provincial_profiling,Headline includes food; keep for the provincial profile; regional model uses D03.
+D03,"CPI food and headline, Region IV-A (index, YoY from 2021+)",FP,general food inflation,A1/A2,forecasting_predictor,Regional resolution matches the regional target; YoY computable from 2022.
+D04,"CPI bottom 30% income households, food YoY",FP,general food inflation,A1 support,supporting_variable,"r = 0.94 with CPI food: the same phenomenon; kept as a poor-household sensitivity, not a separate predictor."
+D05,Wholesale rice prices (well-milled),FP,rice price,A3,provincial_profiling,Served A3 source; provincial only (no Region IV-A row in E107 file).
+D06,"Retail rice, regular-milled",FP,rice price,A3 support,supporting_variable,"r = 0.86 with wholesale rice (same quarter): the same commodity at consumer level; an alternative to D05, not additional evidence."
+D07,Farmgate palay price,FP,producer prices,A3 support,forecasting_predictor,r = 0.79 with wholesale rice (same rice component); used as the regional rice-price predictor because it has a Region IV-A row and wholesale rice does not.
+D08,"Retail chicken (broiler, dressed)",FP,protein prices,A1 support,provincial_profiling,Provincial; r = 0.44 with CPI food (partly independent).
+D09,Retail pork (kasim),FP,protein prices,A1 support,provincial_profiling,Provincial; African swine fever period makes it an informative protein-price shock.
+D10,Retail tilapia,FP,protein prices,A1 support,provincial_profiling,Provincial fish price; complements fisheries production.
+D11,"Retail vegetables (tomato, cabbage, eggplant, others)",FP,vegetable prices,new,supporting_variable,"Very volatile and seasonal; 64-96% monthly coverage by item; kept as a component, not used as a predictor until a stable basket is defined."
+D12,"Retail root crops (cassava, carrot, potato, camote)",FP,vegetable prices,new,supporting_variable,Cassava and carrot well covered; sweet potato and gabi 19-38%; supporting only.
+D13,"Farmgate livestock and poultry (hog, cattle, chicken, eggs)",FP,producer prices,new,supporting_variable,Hog 90% covered; producer-side protein price; kept as supporting.
+D14,Wholesale corngrits and other cereals,FP,producer prices,none,excluded,Not a staple food for CALABARZON households; 62% coverage.
+D15,Wholesale fish prices,FP,protein prices,none,excluded,Only two provinces and the region; Batangas and Laguna empty: cannot support a five-province comparison.
+D16,A1 LightGBM food-price-pressure forecast,FP,derived forecast,A1,excluded,"A model output, not a dataset; in the new framework it is a possible forecast of FP, not an input indicator."
+D17,"PSA CPI 2012 base by province, annual 1994-2018",FP,general food inflation,none,excluded,Ends 2018: entirely pre-2021.
+D18,PSA retail prices 1990-2021 series; World Bank RTFP; WFP prices,FP,-,none,excluded,Pre-2021 or model-estimated (RTFP) or not acquired (class E).
+D20,Palay production,PS,cereals,C3,forecasting_predictor,Complete; C3 palay was the only domain with a provisional Lead-1 gain (E117).
+D21,Corn production,PS,cereals,C3,forecasting_predictor,Complete; small bases in Laguna/Cavite give extreme YoY (robust transform needed).
+D22,Vegetable production (non-root crops),PS,vegetables,new,forecasting_predictor,Complete provincial quarterly; new supply component.
+D23,"Root crop production (camote, cassava, gabi, potato, ubi and others)",PS,root crops,new,provincial_profiling,Separated from vegetables by crop; staple substitute in Quezon and Batangas.
+D24,Fisheries production (total),PS,fisheries,C4,forecasting_predictor,"Served C4 source; fish was the only E116 domain adding information (Lead 1, small)."
+D25,Aquaculture production,PS,fisheries,C4 support,supporting_variable,A part of the fisheries total (30-65%); not independent evidence.
+D26,Chicken production,PS,poultry and livestock,new,provincial_profiling,"Starts 2023-Q1, so YoY only from 2024: too short for forecasting (60.9% missing)."
+D27,"Livestock production (hog, cattle, carabao, goat)",PS,poultry and livestock,new,provincial_profiling,Starts 2023-Q1 (as chicken).
+D28,"Fruit crops, livestock inventory, domestic trade, cereals stocks, DA damage reports",PS,-,none,excluded,Listed in E118 but not acquired; candidates for a later phase (damage reports are event-based).
+D30,PAGASA El Nino advisory in force,CH,ENSO,C1,regional_context,Identical for all provinces; little variation in 2021-26; national context only.
+D31,NOAA ONI,CH,ENSO,C1 support,forecasting_predictor,Continuous ENSO state for the regional model (the advisory is its thresholded version).
+D32,Tropical cyclones within 300 km,CH,cyclones,C2,supporting_variable,"Identical for all five provinces in 64% of quarters; the 100 km count (D33) is the province-specific measure, PAR count (D34) the regional one."
+D33,Tropical cyclones within 100 km,CH,cyclones,C2 support,provincial_profiling,Province-specific exposure (verified real-time observation).
+D34,Tropical cyclones in PAR,CH,cyclones,C2 support,forecasting_predictor,Verified; regional-resolution hazard for the regional model.
+D35,Rainfall total,CH,rainfall,new,forecasting_predictor,"Fills the empty rainfall column; ends 2025-12 (the monthly endpoint), values may be revised."
+D36,Rainfall anomaly,CH,rainfall,new,supporting_variable,"Derived from D35; use either the total with season terms or the anomaly, not both as independent evidence."
+D37,Temperature mean and anomaly,CH,temperature,new,provincial_profiling,Strong seasonality; anomaly from only 2021+ years is short.
+D38,"CHIRPS rainfall, PAGASA stations, NDVI",CH,-,none,excluded,Not acquired; CHIRPS would give area-average rainfall instead of a centroid point (a later improvement).
+D40,"Unemployment rate, national (LFS monthly)",HI,employment,E1,forecasting_predictor,Only sub-annual labour series; national.
+D41,"Provincial unemployment, underemployment, employment and participation rates (annual)",HI,employment,E1 support,provincial_profiling,Annual 2021-2025 (2023-25 preliminary; 2024 unemployment derived 100 - employment rate); no publication dates.
+D42,"OFW cash remittances, national",HI,remittances,E2,regional_context,"National, by source country; 21.7% missing; only 10% verified; context rather than predictor."
+D43,NWPC Region IV-A wage orders; DSWD 4Ps coverage,HI,-,none,excluded,Not acquired; wage orders are a good future addition (wage vs food prices).
+D50,"Poverty incidence (PSA SAE 2021, LGU estimates)",SV,poverty,V1,provincial_profiling,Served V1 component; one reference year.
+D51,Population density (POPCEN 2024),SV,density,V1,supporting_variable,"Density measures market dependence and urbanization, not deprivation; keep only as context, not a weighted component."
+D52,Subsistence incidence (food poverty),SV,food poverty,V1 support,provincial_profiling,"Closest provincial measure to food insecurity, but CV 14-88% (Cavite imprecise)."
+D53,FIES 2023 food share of family expenditure (all and bottom 30%),SV,food expenditure,new,provincial_profiling,Engel share; bottom-30% share computed from deciles 1-3; 2021 round exists but not acquired.
+D54,V1 composite (served),SV,derived index,V1,supporting_variable,Derived 0.6/0.4 composite; the new framework keeps its parts instead of the fixed weights.
+D60,FSSI-v3 provincial news index,NS,local news,N1,provincial_profiling,Only 20 of 115 province-quarters have >= 5 articles (82.6% missing); the E119 as-of dataset fills 50 rows only by carrying the latest older quarter (period recorded); not a forecasting predictor until coverage improves.
+D61,Admitted article counts,NS,local news,N1 support,supporting_variable,Coverage measure; explains FSSI gaps.
+D62,GDELT food-related news shares (4 categories),NS,national news,N1 support,forecasting_predictor,"Complete, verified, national; agri-supply and shortage shares r 0.93 (one signal); jobs-income share r -0.88 with the unemployment change; E117 found it possibly noise, so it stays a candidate to be tested, not an assumed signal."
+D70,"SWS hunger, Balance Luzon (non-commissioned)",EH,experienced hunger,H1,forecasting_predictor,The regional target; its lagged values are the strongest predictor (latest reading unbeaten at Lead 2).
+D71,"SWS hunger, NCR / Visayas / Mindanao",EH,experienced hunger,none,regional_context,"Not CALABARZON; usable only for pooled-panel methods (E110), never as a CALABARZON value."
+D72,SWS commissioned round (Stratbase 2025-Q1),EH,experienced hunger,H1,excluded,"Commissioned survey, different methodology (excluded since E109)."
+D73,"FNRI ENNS FIES 2021 (Batangas, Cavite, Lucena)",EH,survey FIES,none,validation_only,"Two provinces, one round: validation of the profile, not training."
+D74,CBMS 2024 FIES items,EH,survey FIES,none,validation_only,Not acquired; needs a signed request; one window only.
+D75,NNC Operation Timbang Plus; NDHS 2022; FAOSTAT,EH,nutrition (utilization),none,excluded,OPT Plus needs FOI (403); NDHS regional one-off; FAOSTAT national 3-year averages. These are the main utilization gap.
