@@ -62,7 +62,8 @@ def test_frozen_configuration_matches_module():
         pytest.skip("configuration not generated")
     cfg = json.loads(cfg_p.read_text())
     assert hashlib.sha256(S.canonical(cfg)).hexdigest() == (E / "E124_FROZEN_VALIDATION_CONFIGURATION.sha256").read_text().strip()
-    assert cfg["firi3_version"] == F3.VERSION and cfg["protocol"]["sha256"] == F3.PROTOCOL_SHA256
+    # the E124 file is the frozen v1.2 record; the active configuration since E127 is E127_FROZEN_VALIDATION_CONFIGURATION_v1_3.json
+    assert cfg["firi3_version"] == "FIRI3-candidate-1.2" and cfg["protocol"]["sha256"] == F3.PROTOCOL_SHA256
     assert cfg["amendment_1"]["sha256"] == F3.AMENDMENT_1_SHA256 and cfg["amendment_2"]["sha256"] == F3.AMENDMENT_2_SHA256
     assert [f["code"] for f in cfg["features"]] == [f.code for f in F3.FEATURES]
     assert cfg["weights"] == {i: 1.0 for i in F3.INDICATORS} and cfg["issue"]["first_issue_date"] == "2027-01-01"

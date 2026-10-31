@@ -70,8 +70,15 @@ def test_zero_versus_missing_and_dedup():
     assert bool(R.in_poly([125.0], [15.0])[0]) and not bool(R.in_poly([116.0], [24.0])[0])   # official outline: 24N 116E is outside
 
 
-def test_amendment_3_not_applied(s):
-    assert F3.VERSION == "FIRI3-candidate-1.2" and not hasattr(F3, "AMENDMENT_3_SHA256")
+def test_amendment_3_proposal_record_kept(s):
+    """E126 proposed Amendment 3 without applying it; the owner approved it and E127 implemented it (v1.3). The E126
+    proposal outputs stay as they were (PROPOSED labels, proposal hash) and match what v1.3 now computes."""
+    prop = E / "E126_AMENDMENT_3_PROPOSAL.md"
+    assert hashlib.sha256(prop.read_bytes()).hexdigest() == "a359c6cfbf1e0c35612458c699823c9e3af79c8f4f49075737e03cf3c5d88c8b"
+    if hasattr(F3, "AMENDMENT_3_SHA256"):
+        e127 = REPO / "aipheed-backend-aligned" / "experiments" / "E127_FIRI3_Amendment_3_Implementation" / "out" / "summary.json"
+        if e127.exists():
+            assert json.loads(e127.read_text())["v13_reproduces_e126_proposal"]
     imp = s["impact"]["E125 refreshed inputs"]
     assert imp["provincial_changed"] == 0 and imp["scopes"] == ["regional"] and set(imp["features_changed"]) == {"CEC_cyclones_R"}
     h = pd.read_csv(E / "E126_HISTORICAL_SCORE_RECONCILIATION.csv")

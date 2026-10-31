@@ -15,6 +15,8 @@ Level 3: equal-weighted mean of available indicators (provincial >= 4 of 6, regi
 chance bands. SWS hunger and FIRI v2 are never inputs; provincial scores use provincial observations only.
 
 Independent of firi.py (FIRI v2, the served index). Pure computation: callers pass the observation tables.
+Version 1.3 (Amendment 3) changes no scoring code: event counts are built by the data layer, which records a covered
+quarter without storms as 0 and leaves an uncovered quarter missing.
 """
 from __future__ import annotations
 
@@ -28,7 +30,8 @@ import pandas as pd
 PROTOCOL_SHA256 = "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717"
 AMENDMENT_1_SHA256 = "4fd05309c3dee0800693e9a12b92ed112aebef35f9a219a8a620c88860050549"   # E122: change-type series need a 2021+ base
 AMENDMENT_2_SHA256 = "8b5f729cc34790e00dbadbc5ce02bfd050ca31dc665fd049bff9e38675f7711b"   # E123: latest complete annual year; CCS / SVS / common core
-VERSION = "FIRI3-candidate-1.2"
+AMENDMENT_3_SHA256 = "4095ad4c2788a9203a7d6ee37dab92560c9705e14e7f6db621228183d7d5bcbb"   # E127: verified zero-storm PAR quarters recorded as 0 (data layer)
+VERSION = "FIRI3-candidate-1.3"
 START_Q = 2021 * 4                      # 2021-Q1 as a quarter index (year * 4 + quarter - 1)
 MIN_PRIOR = 8
 MAX_STALE = 3

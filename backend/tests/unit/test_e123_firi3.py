@@ -47,7 +47,7 @@ def test_amendment_2_hash():
     if not p.exists():
         pytest.skip("amendment file not present")
     assert hashlib.sha256(p.read_bytes()).hexdigest() == F3.AMENDMENT_2_SHA256
-    assert F3.VERSION.endswith("1.2")
+    assert tuple(int(x) for x in F3.VERSION.split("-")[-1].split(".")) >= (1, 2)       # Amendment 2 is part of every version from 1.2 (1.3 adds Amendment 3)
 
 
 def test_current_conditions_score():

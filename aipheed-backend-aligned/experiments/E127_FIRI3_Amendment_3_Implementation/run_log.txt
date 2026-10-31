@@ -1,0 +1,187 @@
+{
+ "today": "2026-10-31",
+ "head": "fd2794a029a4c7bcbd3a9fd3ae6ec2a646092970",
+ "firi3_version": "FIRI3-candidate-1.3",
+ "hashes": {
+  "protocol": "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717",
+  "amendment_1": "4fd05309c3dee0800693e9a12b92ed112aebef35f9a219a8a620c88860050549",
+  "amendment_2": "8b5f729cc34790e00dbadbc5ce02bfd050ca31dc665fd049bff9e38675f7711b",
+  "amendment_3": "4095ad4c2788a9203a7d6ee37dab92560c9705e14e7f6db621228183d7d5bcbb"
+ },
+ "hashes_ok": true,
+ "config_v13_sha256": "64a7d7df1a20530737e075b053bfcb6358ea7e78dcc4170261d605d235110b71",
+ "config_v12_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+ "provenance": {
+  "ibtracs_wp_sha256": "b624f948218e3accd3a4d6c20731ead065d08c000228e6366d0b6f3ef30ae4c6",
+  "ibtracs_last3years_sha256": "f4b8eb58f5f4ac853f907d123d93215ea709e99c57142454cc67f9114c30143a",
+  "amendment_3": true
+ },
+ "explicit_zeros_added": [
+  "2023-Q1",
+  "2024-Q1",
+  "2025-Q1"
+ ],
+ "only_zero_quarters_changed": true,
+ "other_par_quarters_equal": true,
+ "other_inputs_identical": true,
+ "v12_reproduces_e125": true,
+ "v13_reproduces_e126_proposal": true,
+ "deterministic": true,
+ "impact": {
+  "changed": 9,
+  "scopes": [
+   "regional"
+  ],
+  "origins": [
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q2",
+   "2025-Q3",
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "provincial_changed": 0,
+  "max_abs_change": 0.041987,
+  "band_changes": [
+   {
+    "origin": "2025-Q2",
+    "band_v12": "above usual",
+    "band_v13": "usual or below"
+   }
+  ],
+  "other_feature_score_changes": 0,
+  "other_indicator_changes": 0,
+  "ccs_changed": 9,
+  "computable_v12": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "computable_v13": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "firi_v2_comparison_rows_changed": 0
+ },
+ "leakage": {
+  "scored_values_available_before_issue": true,
+  "par_rows_only_covered_quarters": true,
+  "par_zero_avail_after_quarter": true,
+  "no_pre2021": true,
+  "amendment_1_rows": 40,
+  "amendment_1_by_series": {
+   "cpi_food_yoy_pct": 20,
+   "cpi_headline_yoy_pct": 20
+  },
+  "amendment_2_year_2026_origins": [
+   "2024"
+  ],
+  "amendment_2_note": [
+   "newer incomplete year(s) skipped: 2025"
+  ]
+ },
+ "q4_2026": {
+  "v1.2": {
+   "period_used": "2026-Q3",
+   "count": 7.0,
+   "avail": "2026-10-01",
+   "score": 0.710526,
+   "prior_n": 19,
+   "prior_values_sorted": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    4.0,
+    4.0,
+    4.0,
+    6.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    10.0,
+    15.0
+   ],
+   "below": 13,
+   "equal": 1,
+   "independent_midrank": 0.710526,
+   "reproduces": true,
+   "future_values_in_reference": 0
+  },
+  "v1.3": {
+   "period_used": "2026-Q3",
+   "count": 7.0,
+   "avail": "2026-10-01",
+   "score": 0.75,
+   "prior_n": 22,
+   "prior_values_sorted": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    2.0,
+    2.0,
+    3.0,
+    4.0,
+    4.0,
+    4.0,
+    4.0,
+    6.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    10.0,
+    15.0
+   ],
+   "below": 16,
+   "equal": 1,
+   "independent_midrank": 0.75,
+   "reproduces": true,
+   "future_values_in_reference": 0
+  },
+  "other_features_changed_at_2026q4": [],
+  "provincial_features_changed_at_2026q4": 0
+ },
+ "store": {
+  "forecasts": [],
+  "events": [
+   [
+    "attempt_blocked",
+    "2026-10-31",
+    "FIRI3-1.2-2026-Q4"
+   ]
+  ],
+  "next_forecast_id": "FIRI3-1.3-2026-Q4"
+ },
+ "firi_v2": {
+  "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+  "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+  "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+ },
+ "e126_outputs_sha256": {
+  "E126_2026Q4_DATA_READINESS.csv": "41fc5d6ca57453a648596b0be4c789721dc0d999192540a3e2b2bbc74fd9a44d",
+  "E126_AMENDMENT_3_PROPOSAL.md": "a359c6cfbf1e0c35612458c699823c9e3af79c8f4f49075737e03cf3c5d88c8b",
+  "E126_AUTOMATED_TEST_REPORT.md": "3b6ef37e5fb3ef31a8908345d50ea432edefdbd7f567dfc607e41e6dbe422c30",
+  "E126_BASELINE_VERIFICATION.md": "d19081981b82d14e05e7886ec776bc1c7aa2837efc3463bfc95cd0cb1a3d5132",
+  "E126_D_E125_2_IMPACT_ANALYSIS.md": "cf76c7fee575c00c7e569f86b943b4001b6feb0975afa1196a60e1691fae3304",
+  "E126_FINAL_RECOMMENDATION.md": "615f20075f6998f50195e4c573f448c92ca62a6a2b0bcaa78e316315dadf0f45",
+  "E126_HISTORICAL_SCORE_RECONCILIATION.csv": "25a9b4f33b53df63f296fac60944d07d8eb0517e36d556ceb5c0aeb67740ffa9",
+  "E126_LFS_REFRESH_READINESS.md": "c3840e012485a4ad6988fd48abf51fe7dc1c145666ac7c365aa8308d6e9eec0c",
+  "E126_PAR_ZERO_STORM_VERIFICATION.csv": "8246da140c35a6dbaf0db70f699e1d443fa96b5c2dbcdaa387708faa868d2ca7",
+  "E126_SNAPSHOT_STORE_TEST_REPORT.md": "a52e334f5736d24f17d3abef9099d73f6a0c2e7c11eeffae39b33e677e978b1e",
+  "E126_SOURCE_RELEASE_STATUS.csv": "4022f603da7a422a9829c0cdbe073de4ac2804a66951be4cbb3210f331b09d0a"
+ }
+}
