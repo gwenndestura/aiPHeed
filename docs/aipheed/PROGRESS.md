@@ -225,3 +225,10 @@ Start: protocol lock verified (`8bae6962…dd0d3`); `test_protocol_lock.py` + `t
 - **Development results:** V4 Lead 2 40.0 % [block CI 22.5, 62.5]; amended (proposed) 50.0 %; beats all = NO; every lead NOT_RELIABLE. Sealed: NOT_YET_TESTABLE (0 scorable).
 - Seal `v4/sealed/V4_PROSPECTIVE_SEAL.csv` `7ac72fec…`. Artifact `v4_2026-10-01.json` `29c9fd36…`.
 - E2E: two runs identical. Coverage 89.4 % (v4 package measured).
+
+## v4 WP3 · Reports and acceptance: DONE
+- Full suite: 1331 passed, 0 failed, 18 skipped. Coverage 89.4 % (v4 package 91.5 %). E2E identical. All hashes unchanged at the end.
+- **Verdicts:**
+  - A software: YES.
+  - B research: development NO on frozen (40 %), amended (50 %) and beats-all; sealed NOT_YET_TESTABLE.
+  - C data: 10 sealed quarters (about 2029-05; ±10 pp about 2032-05); a RIDGE-ALL prospective forecast before about 2027-01; adviser sign-off for the amendment; SWS round documentation.
