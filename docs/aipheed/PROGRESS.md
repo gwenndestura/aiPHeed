@@ -133,3 +133,23 @@
 - `docs/aipheed/API.md` and `results/api_audit.csv`: 106 routes; 85 GETs smoke-tested.
 - **Fixed D10 (High):** two unhandled 500s on the legacy assessments routes, caused by a missing artifact, now return 503 with a JSON message.
 - No secrets in bodies. All admin routes are guarded; the only unguarded writes are the public auth and feedback routes.
+
+## Phases 9–12 · Tests, security and performance, E2E, documentation: DONE
+
+**Phase 9:** 1280 passed, 0 failed, 18 skipped (pre-existing skips; VERIFIED, `final_tests.txt`). 22 new tests. Coverage **not measured** (no coverage tool in the virtual environment).
+
+**Phase 10:** D2 and D10 fixed; secrets, timeouts and caching reviewed (`ARCHITECTURE.md`).
+
+**Phase 11:** two E2E runs are byte-identical (VERIFIED, `results/e2e_run.json`).
+
+**Phase 12:** METHODOLOGY, ARCHITECTURE, DATA_INVENTORY, MODEL_REPORT, API, TEST_REPORT and FINAL_REPORT written.
+
+**Verdicts:**
+- **A software:** YES.
+- **B research:** NO. 75 % not met (best 50 %); Lead 2 not reliable; maximum reliable lead none.
+- **C data:** unseen SWS quarters, a leading indicator of hunger change, and a provincial measurement.
+
+**Awaiting the owner:**
+1. PERSIST (rule-selected) or SEAS-LLM (Addendum 2) on the new endpoint.
+2. D1, the served dashboard target.
+3. D3, rebuilding the thesis pickle under the pinned scikit-learn.

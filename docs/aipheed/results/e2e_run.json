@@ -1,0 +1,53 @@
+{
+ "issue": "2026-10-01",
+ "identical": true,
+ "tolerance": "exact (byte-identical stored JSON and API bodies)",
+ "run1": {
+  "rows_validated": 23,
+  "quarters_known": 19,
+  "latest_known_quarter": "2026-Q2",
+  "artifact_sha256": "09ee23b09a0207c857263c892bf4c9aaecd6fcfd40c4b55c12d450028f6f6514",
+  "records": 16,
+  "explanations": 16,
+  "lgus_per_lead": {
+   "1": 142,
+   "2": 142,
+   "3": 142,
+   "4": 142
+  },
+  "stored_sha256": "ea8c63c24cdff8a37fcb68beccf28427989ceee203f4db84c37f6f539f41ec79",
+  "api_sha256": {
+   "/api/v1/hunger-forecast": "606d66cdf941e64ab474d5ff6f38000ba3350858dc96ac9c3a2ba0dcb49c56e7",
+   "/api/v1/hunger-forecast/explanation": "cdee4992b06200b0dae84bad85fe309cfee13a0170c6e29567c12555c74fd636",
+   "/api/v1/hunger-forecast/geography": "b636bc0cc573e86510b5419b1cd676de61d276a28af4aa658acf934da33e4d19"
+  },
+  "api_records": 16,
+  "balance_luzon_lead2": {
+   "issue_date": "2026-10-01",
+   "feature_cutoff": "2026-10-01T00:00:00+08:00 (exclusive)",
+   "dashboard_quarter": "2026-Q4",
+   "target_quarter": "2027-Q1",
+   "lead": 2,
+   "area": "balance_luzon",
+   "score": 22.047,
+   "lo80": 14.0181,
+   "hi80": 30.0759,
+   "unit": "% of families, SWS involuntary hunger",
+   "components": {
+    "level": 20.3326,
+    "design_effect": 1.7143
+   },
+   "horizon_quarters_from_latest_data": 3,
+   "latest_data_quarter": "2026-Q2",
+   "data_vintage_published": "2026-08-24",
+   "model": "SEAS-LLM",
+   "model_version": "2026-10-01",
+   "artifact_sha256": "09ee23b09a0207c857263c892bf4c9aaecd6fcfd40c4b55c12d450028f6f6514",
+   "preprocessing_version": "sws-quarter-mean+binomial-se/1",
+   "evidence_status": "AWAITING_GROUND_TRUTH",
+   "geography_note": "SWS area value; CALABARZON lies in this area",
+   "reliability_status": "NOT_RELIABLE"
+  }
+ },
+ "run2_equals_run1": true
+}
