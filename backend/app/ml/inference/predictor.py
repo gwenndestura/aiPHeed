@@ -43,6 +43,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpickling (AUDIT D2)
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +122,7 @@ class Predictor:
                 "to produce the production model (Algorithm 4)."
             )
 
-        bundle = joblib.load(MODEL_PATH)
+        bundle = verified_joblib_load(MODEL_PATH)
         if isinstance(bundle, dict):
             self._model = bundle["model"]
             self._feature_cols = list(bundle["feature_cols"])

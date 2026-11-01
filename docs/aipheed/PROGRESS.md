@@ -32,3 +32,30 @@
 - `docs/aipheed/.gitattributes` is `* -text`, so a CRLF conversion cannot change the hash.
 
 **Nothing was missing**: every requested value was found in the repository.
+
+## Phase 1 · Audit: DONE
+
+**Output: `docs/aipheed/AUDIT.md`**, with a data-flow diagram and 9 defects.
+
+**Served model.**
+- Deployment serves `AIPHEED_LEAD2_MODEL=thesis` with `AIPHEED_STRICT_MODEL=1`; the map shows the P0H4 Chapter I risk probability (`data/ch1_engine/rows.csv`).
+- Its Lead-1 metrics reproduce exactly from the export: 70 rows, 14 quarters, Brier 0.1322, accuracy 0.8429 (VERIFIED, `docs/aipheed/served_model_reproduction.txt`).
+- Its Leads 2–4 metrics cannot be reproduced from served artifacts (NOT VERIFIED).
+
+**Fixed.**
+- **D2 (High):** the 6 `joblib.load` sites now go through `app/forecasting/safe_load.py`, which checks a SHA-256 manifest and refuses files outside `models/`.
+- `models/MODEL_MANIFEST.json` records the 3 existing artifacts; no artifact was modified. `backend/models/` is gitignored, so only the manifest is force-added; the artifacts stay local.
+- Tests: `tests/unit/test_safe_load.py` (3, VERIFIED).
+
+**Logged, not fixed** (they need owner approval or carry risk to the served system):
+- D1: the served target is a composite probability;
+- D3: the scikit-learn version of the artifact differs from the pinned version;
+- D4: cwd-relative paths;
+- D5: no single as-of selector in legacy paths;
+- D6: API surface;
+- D9: missing legacy artifact.
+
+**Full suite after phase 1 edits (VERIFIED, `docs/aipheed/phase1_tests.txt`):** 1263 passed, 2 failed, 18 skipped.
+- The 2 failures are `test_e119r2_framework::test_all_validation_checks_pass` and `test_e120_firi_design::test_e120_checks_pass`.
+- Both are experiment self-checks that require `git status` to show no uncommitted changes under `backend/app`.
+- **Classification: intended change** (the edits were uncommitted at run time). Re-checked after commit (phase 2 entry).

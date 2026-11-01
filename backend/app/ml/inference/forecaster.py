@@ -38,6 +38,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpickling (AUDIT D2)
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +80,7 @@ class Forecaster:
                     f"Forecast model not found at {MODEL_PATH}. "
                     "Run scripts/train_forecast_model.py first."
                 )
-            self._model = joblib.load(MODEL_PATH)
+            self._model = verified_joblib_load(MODEL_PATH)
             logger.info(
                 "Forecaster: bundle loaded (%s horizon, trained through %s)",
                 self._model.get("horizon", "?"), self._model.get("trained_through", "?"),

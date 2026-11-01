@@ -35,6 +35,7 @@ from app.services import reference as ref
 from app.services import report_text as txt
 from app.services.dashboard import _ascii
 from app.services.report import ACTIONS_PLACEHOLDER
+from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpickling (AUDIT D2)
 
 PST = timezone(timedelta(hours=8))
 RICE_PATH = Path("data/processed/psa_rice_prices.parquet")
@@ -119,7 +120,7 @@ def _unemployment_note(quarter: str) -> str | None:
 
 @functools.lru_cache(maxsize=1)
 def _model_meta() -> dict:
-    bundle = joblib.load(MODEL_PATH)
+    bundle = verified_joblib_load(MODEL_PATH)
     tp = ThesisPredictor()
     tp.load()
     return {

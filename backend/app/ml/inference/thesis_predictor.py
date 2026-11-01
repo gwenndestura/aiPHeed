@@ -37,6 +37,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpickling (AUDIT D2)
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +102,7 @@ class ThesisPredictor:
                     f"Thesis model not found at {MODEL_PATH}. "
                     "Run scripts/build_thesis_panel.py then the blended training script."
                 )
-            bundle = joblib.load(MODEL_PATH)
+            bundle = verified_joblib_load(MODEL_PATH)
             self._lgbm_model = bundle["lgbm_model"]
             self._lr_model = bundle["lr_model"]
             self._lr_scaler = bundle["lr_scaler"]
