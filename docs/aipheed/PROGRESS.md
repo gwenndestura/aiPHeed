@@ -170,3 +170,9 @@
 ## WP2 · Steps 2–3 design and pre-registration: DONE
 - `docs/aipheed/v2/PREREGISTRATION.md` committed **before any v2 fit**; SHA-256 (LF-normalised) `90ad51a9…a691b` frozen in `backend/tests/unit/test_v2_preregistration.py`.
 - Candidates: PERSIST, LL (pooled local level, 1 parameter), LL-K (+ noise multiplier κ, 2 parameters). Nested inner-fold selection with the paired block-bootstrap CI rule; split-conformal 80 % intervals; sealed set = future data only (0 unseen historical quarters).
+
+## WP3 · Step 4 implementation and validation: DONE
+- `backend/app/forecasting/v2/` (models, select, verdict, artifact, inference, explain, store); `backend/scripts/v2_validate.py`, `v2_seal.py`, `v2_score_sealed.py`, `v2_context.py`.
+- **Nested selection chose PERSIST at all 22 issues** (no challenger's inner CI above 0). V2 Lead 2: 16/40 = 40.0 % [25.0, 57.5]; every lead NOT_RELIABLE (development). LL equals the independent E131 local level on 272/272 rows (< 1e-9).
+- Prospective seal `docs/aipheed/v2/sealed/V2_PROSPECTIVE_SEAL.csv` (issues 2026-07-01 and 2026-10-01; 112 rows; targets 2026-Q4 … 2027-Q3), SHA-256 `e88f7bb2…25d7`. The scorer ran once: 0 rows scorable (NOT_YET_TESTABLE).
+- Served artifact `backend/data/forecasting/artifacts/v2_2026-10-01.json` (PERSIST) and stored forecasts under `forecasts_v2/`. Deviations: `docs/aipheed/v2/DEVIATIONS.md` (2, both non-substantive).
