@@ -1,0 +1,42 @@
+reproduction: {"artifact": {"n": 17, "positives": 12, "accuracy": 0.9411764705882353, "brier": 0.18870930494857624, "auc_roc": 0.9333333333333333, "confusion": {"TP": 11, "FP": 0, "FN": 1, "TN": 5}}, "recomputed": {"n": 17, "positives": 12, "accuracy": 0.9411764705882353, "brier": 0.18870927665837411, "auc": 0.9333333333333333, "TP": 11, "FP": 0, "FN": 1, "TN": 5}, "matches": true}
+ target issue_date    F2  prov_min  prov_max    H1  PERSIST PERSIST_from  CLIM  H_obs  y
+2022-Q3 2022-04-01 0.177     0.119     0.225 0.300      0.0      2021-Q4 0.333   9.60  0
+2022-Q4 2022-07-01 0.430     0.390     0.464 0.540      1.0      2022-Q2 0.500  11.30  0
+2023-Q1 2022-10-01 0.454     0.365     0.538 0.550      1.0      2022-Q2 0.500   8.70  0
+2023-Q2 2023-01-01 0.449     0.307     0.539 0.335      0.0      2022-Q3 0.400  11.30  0
+2023-Q3 2023-04-01 0.470     0.392     0.595 0.500      0.0      2022-Q4 0.333  10.30  0
+2023-Q4 2023-07-01 0.403     0.275     0.544 0.068      0.0      2023-Q1 0.286  14.30  1
+2024-Q1 2023-10-01 0.519     0.453     0.630 0.500      0.0      2023-Q2 0.250  15.30  1
+2024-Q2 2024-01-01 0.566     0.522     0.610 0.271      0.0      2023-Q3 0.222  19.60  1
+2024-Q3 2024-04-01 0.540     0.480     0.596 0.875      1.0      2023-Q4 0.300  18.10  1
+2024-Q4 2024-07-01 0.582     0.525     0.672 0.922      1.0      2024-Q1 0.364  25.30  1
+2025-Q1 2024-10-01 0.612     0.572     0.657 0.979      1.0      2024-Q2 0.417  24.00  1
+2025-Q2 2025-01-01 0.542     0.479     0.589 0.953      1.0      2024-Q3 0.462  16.15  1
+2025-Q3 2025-04-01 0.622     0.585     0.661 0.995      1.0      2025-Q1 0.533  23.80  1
+2025-Q4 2025-07-01 0.531     0.487     0.572 0.995      1.0      2025-Q2 0.562  16.70  1
+2026-Q1 2025-10-01 0.579     0.543     0.626 0.995      1.0      2025-Q2 0.562  22.40  1
+2026-Q2 2026-01-01 0.641     0.612     0.658 0.995      1.0      2025-Q3 0.588  17.30  1
+2026-Q3 2026-04-01 0.587     0.527     0.626 0.856      1.0      2025-Q4 0.611  23.60  1
+{'n': 17, 'positives': 12, 'TP': 11, 'FP': 0, 'FN': 1, 'TN': 5, 'accuracy': 0.9412, 'accuracyWilson95': [0.7302, 0.9895], 'balanced': 0.9583, 'precision': 1.0, 'recall': 0.9167, 'specificity': 1.0, 'specificityWilson95': [0.5655, 1.0], 'f1': 0.9565, 'auc': 0.9333, 'brier': 0.1887}
+  ALWAYS-HIGH  acc 0.706 bal 0.5 brier 0.2941 CM 12/5/0/0
+  ALWAYS-LOW   acc 0.294 bal 0.5 brier 0.7059 CM 0/0/12/5
+  PERSIST      acc 0.706 bal 0.675 brier 0.2941 CM 9/2/3/3
+  H1           acc 0.706 bal 0.6166666666666667 brier 0.1613 CM 10/3/2/2
+  CLIM         acc 0.471 bal 0.5083333333333333 brier 0.2945 CM 5/2/7/3
+  FAIL  R1 >=10 quarters and >=40 rows (as written): 17 q, 17 rows
+  PASS  R2 accuracy >= 0.75: 0.9412
+  PASS  R3 balanced accuracy >= 0.70: 0.9583333333333333
+  PASS  R4 accuracy > always-LOW and > PERSIST (as written): 0.9412 vs 0.2941 / 0.7059
+  FAIL  R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10: {'H1': {'brierDiff': 0.0274, 'p_one_sided': 0.7282}, 'CLIM': {'brierDiff': -0.1058, 'p_one_sided': 0.001}}
+  PASS  R6 precision >= 0.60 and recall >= 0.60: P 1.0, R 0.9166666666666666
+  PASS  R7 each third >= 0.60 and LOQO min >= 0.70: thirds [0.833, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.938
+  PASS  R1-q >=10 independent quarters (adaptation): 17 q
+  PASS  R4-maj accuracy > ALWAYS-HIGH and > PERSIST (adaptation): 0.9412 vs 0.7059 / 0.7059
+  thirds: {'2022-Q3..2023-Q4': 0.8333, '2024-Q1..2025-Q2': 1.0, '2025-Q3..2026-Q3': 1.0}
+  S1 >=3 class changes in the outcome: {'pass': False, 'value': 1}
+  S2 >=5 quarters of each class: {'pass': True, 'value': 'HIGH 12, LOW 5'}
+  S3 beats PERSIST, McNemar exact one-sided p < 0.10: {'pass': True, 'value': 'F2 right & PERSIST wrong 4, reverse 0, p 0.0625'}
+  onsets (LOW->HIGH): [{'quarter': '2023-Q4', 'F2': 0, 'PERSIST': 0}]
+  offsets (HIGH->LOW): []
+provincial spread: {'note': 'descriptive only: no provincial outcome exists', 'meanRange': 0.1275, 'quartersWhereProvincesSplitAcross0.5': 8}
+Outcome C: insufficient evidence for a defensible Lead-2 forecast of overall food insecurity

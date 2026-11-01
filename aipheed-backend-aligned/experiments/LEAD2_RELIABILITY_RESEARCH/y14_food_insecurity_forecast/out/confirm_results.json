@@ -1,0 +1,596 @@
+{
+ "status": "DESCRIPTIVE ONLY: no candidate passed the development gate; nothing is selected from these rows",
+ "served_FIRI_v2": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 11,
+   "FP": 0,
+   "FN": 1,
+   "TN": 5,
+   "accuracy": 0.9411764705882353,
+   "balanced": 0.9583333333333333,
+   "precision": 1.0,
+   "recall": 0.9166666666666666,
+   "specificity": 1.0,
+   "f1": 0.9565217391304348,
+   "auc": 0.9333333333333333,
+   "brier": 0.1887086782352941
+  },
+  "failed": [
+   "R1",
+   "R5"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": true,
+    "value": 0.9412
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": true,
+    "value": 0.9583333333333333
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": true,
+    "value": "0.9412 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0274,
+      "p_one_sided": 0.7282
+     },
+     "CLIM": {
+      "brierDiff": -0.1058,
+      "p_one_sided": 0.001
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 1.0, R 0.9166666666666666"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": true,
+    "value": "thirds [0.833, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.938"
+   }
+  }
+ },
+ "H1_firi_rows": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 10,
+   "FP": 3,
+   "FN": 2,
+   "TN": 2,
+   "accuracy": 0.7058823529411765,
+   "balanced": 0.6166666666666667,
+   "precision": 0.7692307692307693,
+   "recall": 0.8333333333333334,
+   "specificity": 0.4,
+   "f1": 0.8,
+   "auc": 0.7916666666666667,
+   "brier": 0.16126970588235295
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.7059
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.6166666666666667
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.7059 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0,
+      "p_one_sided": 1.0
+     },
+     "CLIM": {
+      "brierDiff": -0.1332,
+      "p_one_sided": 0.0034
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.7692307692307693, R 0.8333333333333334"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.333, 0.833, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.688"
+   }
+  }
+ },
+ "Y14_F1": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 5,
+   "FP": 0,
+   "FN": 7,
+   "TN": 5,
+   "accuracy": 0.5882352941176471,
+   "balanced": 0.7083333333333334,
+   "precision": 1.0,
+   "recall": 0.4166666666666667,
+   "specificity": 1.0,
+   "f1": 0.5882352941176471,
+   "auc": 0.8833333333333333,
+   "brier": 0.2307283115530739
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R4",
+   "R5",
+   "R6",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.5882
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": true,
+    "value": 0.7083333333333334
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.5882 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0695,
+      "p_one_sided": 0.8944
+     },
+     "CLIM": {
+      "brierDiff": -0.0638,
+      "p_one_sided": 0.0324
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": false,
+    "value": "P 1.0, R 0.4166666666666667"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.833, 0.333, 0.6] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.562"
+   }
+  }
+ },
+ "Y14_F2": {
+  "undefinedRows": 1
+ },
+ "Y14_M1": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 10,
+   "FP": 5,
+   "FN": 2,
+   "TN": 0,
+   "accuracy": 0.5882352941176471,
+   "balanced": 0.4166666666666667,
+   "precision": 0.6666666666666666,
+   "recall": 0.8333333333333334,
+   "specificity": 0.0,
+   "f1": 0.7407407407407408,
+   "auc": 0.7166666666666666,
+   "brier": 0.17901916460296108
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.5882
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.4166666666666667
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.5882 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0177,
+      "p_one_sided": 0.6868
+     },
+     "CLIM": {
+      "brierDiff": -0.1155,
+      "p_one_sided": 0.0054
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.6666666666666666, R 0.8333333333333334"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.167, 0.667, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.562"
+   }
+  }
+ },
+ "Y14_M2": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 11,
+   "FP": 5,
+   "FN": 1,
+   "TN": 0,
+   "accuracy": 0.6470588235294118,
+   "balanced": 0.4583333333333333,
+   "precision": 0.6875,
+   "recall": 0.9166666666666666,
+   "specificity": 0.0,
+   "f1": 0.7857142857142857,
+   "auc": 0.6666666666666666,
+   "brier": 0.21635446012223458
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.6471
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.4583333333333333
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.6471 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0551,
+      "p_one_sided": 0.792
+     },
+     "CLIM": {
+      "brierDiff": -0.0781,
+      "p_one_sided": 0.1656
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.6875, R 0.9166666666666666"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.167, 0.833, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.625"
+   }
+  }
+ },
+ "Y14_H1": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 10,
+   "FP": 3,
+   "FN": 2,
+   "TN": 2,
+   "accuracy": 0.7058823529411765,
+   "balanced": 0.6166666666666667,
+   "precision": 0.7692307692307693,
+   "recall": 0.8333333333333334,
+   "specificity": 0.4,
+   "f1": 0.8,
+   "auc": 0.8250000000000001,
+   "brier": 0.1420269327764706
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.7059
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.6166666666666667
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.7059 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": -0.0192,
+      "p_one_sided": 0.2782
+     },
+     "CLIM": {
+      "brierDiff": -0.1525,
+      "p_one_sided": 0.0
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.7692307692307693, R 0.8333333333333334"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.333, 0.833, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.688"
+   }
+  }
+ },
+ "Y14_M1_0": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 12,
+   "FP": 5,
+   "FN": 0,
+   "TN": 0,
+   "accuracy": 0.7058823529411765,
+   "balanced": 0.5,
+   "precision": 0.7058823529411765,
+   "recall": 1.0,
+   "specificity": 0.0,
+   "f1": 0.8275862068965517,
+   "auc": 0.7833333333333333,
+   "brier": 0.1750469993889556
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.7059
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.5
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.7059 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0138,
+      "p_one_sided": 0.6338
+     },
+     "CLIM": {
+      "brierDiff": -0.1195,
+      "p_one_sided": 0.018
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.7058823529411765, R 1.0"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.167, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.688"
+   }
+  }
+ },
+ "Y14_M2_0": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 12,
+   "FP": 5,
+   "FN": 0,
+   "TN": 0,
+   "accuracy": 0.7058823529411765,
+   "balanced": 0.5,
+   "precision": 0.7058823529411765,
+   "recall": 1.0,
+   "specificity": 0.0,
+   "f1": 0.8275862068965517,
+   "auc": 0.7833333333333333,
+   "brier": 0.1858704539012886
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.7059
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.5
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.7059 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0246,
+      "p_one_sided": 0.6586
+     },
+     "CLIM": {
+      "brierDiff": -0.1086,
+      "p_one_sided": 0.0868
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.7058823529411765, R 1.0"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.167, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.688"
+   }
+  }
+ },
+ "Y14_KAL": {
+  "metrics": {
+   "n": 17,
+   "pos": 12,
+   "TP": 12,
+   "FP": 5,
+   "FN": 0,
+   "TN": 0,
+   "accuracy": 0.7058823529411765,
+   "balanced": 0.5,
+   "precision": 0.7058823529411765,
+   "recall": 1.0,
+   "specificity": 0.0,
+   "f1": 0.8275862068965517,
+   "auc": 0.7833333333333333,
+   "brier": 0.1548049574675756
+  },
+  "failed": [
+   "R1",
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R7"
+  ],
+  "passesAll": false,
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.7059
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.5
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": false,
+    "value": "0.7059 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": -0.0065,
+      "p_one_sided": 0.483
+     },
+     "CLIM": {
+      "brierDiff": -0.1397,
+      "p_one_sided": 0.0034
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 0.7058823529411765, R 1.0"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.167, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.688"
+   }
+  }
+ }
+}

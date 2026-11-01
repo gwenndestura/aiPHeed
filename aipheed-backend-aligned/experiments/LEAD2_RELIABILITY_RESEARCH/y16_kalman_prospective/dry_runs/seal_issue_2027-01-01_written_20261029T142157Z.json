@@ -1,0 +1,56 @@
+{
+ "study": "Y16 Kalman vs persistence, prospective",
+ "planSha256": "208b575464d21e41dd78447c39e4586fb7101bdb0b263f298b210b7701bd9699",
+ "issueDate": "2027-01-01",
+ "origin": "2026-Q4",
+ "target": "2027-Q2",
+ "targetDefinition": "TFI-2: Balance Luzon involuntary hunger > 11.3% (mean of the target quarter's SWS rounds)",
+ "writtenUtc": "2026-10-29T14:21:57Z",
+ "writtenManila": "2026-10-29T22:21:57+0800",
+ "window": {
+  "localDateManila": "2026-10-29",
+  "daysAfterIssue": -64,
+  "inWindow": false
+ },
+ "validProspective": false,
+ "dryRun": true,
+ "informationCutoff": "SWS rounds published before 2027-01-01",
+ "newestSwsUsed": {
+  "quarter": "2026-Q3",
+  "value": 23.6,
+  "rounds": 1,
+  "lastPublished": "2026-10-14"
+ },
+ "trueHorizon": 3,
+ "overlayRoundsAdded": 0,
+ "forecasts": {
+  "PERS": {
+   "model": "hunger persistence H1 (rlib.forecast RW)",
+   "probability": 0.9736243677057712
+  },
+  "KAL": {
+   "model": "Kalman SWS-sampling-error state space (hmodels.kalman)",
+   "probability": 0.9299398839920084
+  }
+ },
+ "classAt050": {
+  "PERS": "HIGH",
+  "KAL": "HIGH"
+ },
+ "auxiliaryBaselines": {
+  "PERSIST_binary": 1.0,
+  "CLIM": 0.6635514018691588
+ },
+ "modelVersion": {
+  "hmodels.py": "15f30ca9ddd61dc3d4cd4257194d57c0c381a0252430a76ef893d17d3cdb366d",
+  "rlib.py": "f6886ba313ec3e74f8a2ca8207e32b871f5cbdfbc6b72d20f579cf844164f132",
+  "kprospect.py": "fc996d3ba75adb658250c5914da07967d1d87236abecd5920bd0cf2a86b98367",
+  "issue.py": "b24190d5272bfb493a1b3383a11e73175e80f00b0d13b5e05126fc1e4bdf1ba3"
+ },
+ "gitHead": "0da2f7a9b820845fd62cadf775e02fc0df3b81a4",
+ "inputs": {
+  "C:/aiPHeed-final1/aipheed-backend-aligned/experiments/FINAL_FOOD_INSECURITY_LIGHTGBM/data/long/sws_area_rounds_full.csv": "d251966aacf403a293a6ad06eb29d8c639d4e2fcbd67cbcf066fd6fa6f596505",
+  "C:/aiPHeed-final1/backend/data/inputs/sws_rounds.csv": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3",
+  "C:/aiPHeed-final1/aipheed-backend-aligned/experiments/LEAD2_RELIABILITY_RESEARCH/y16_kalman_prospective/data/sws_rounds_overlay.csv": "9ee07ccef1952d8fc34c127d62106df811f9fa8725cdb3cc9a3d57a921c73873"
+ }
+}

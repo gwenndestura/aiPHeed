@@ -1,0 +1,305 @@
+{
+ "protocolSha256": "96fe1275ea678ebef2bb3c59f8662f281af7383b90c94533f1812b6a677263a3",
+ "trials": 2,
+ "lead1": {
+  "current": {
+   "n": 70,
+   "pos": 17,
+   "neg": 53,
+   "TP": 11,
+   "FP": 5,
+   "FN": 6,
+   "TN": 48,
+   "accuracy": 0.8428571428571429,
+   "balanced": 0.7763596004439512,
+   "precision": 0.6875,
+   "recall": 0.6470588235294118,
+   "specificity": 0.9056603773584906,
+   "f1": 0.6666666666666667,
+   "quarters": 14,
+   "period": "2023-Q1..2026-Q3",
+   "auc": 0.8668146503884573,
+   "prAuc": 0.6455699849905696,
+   "brier": 0.13222184175251184,
+   "meanP": 0.31591628428571433,
+   "baseRate": 0.24285714285714285
+  },
+  "candidate": {
+   "n": 70,
+   "pos": 17,
+   "neg": 53,
+   "TP": 14,
+   "FP": 11,
+   "FN": 3,
+   "TN": 42,
+   "accuracy": 0.8,
+   "balanced": 0.8079911209766926,
+   "precision": 0.56,
+   "recall": 0.8235294117647058,
+   "specificity": 0.7924528301886793,
+   "f1": 0.6666666666666666,
+   "quarters": 14,
+   "period": "2023-Q1..2026-Q3",
+   "auc": null,
+   "prAuc": null,
+   "brier": null,
+   "meanP": 0.3574285714285715,
+   "baseRate": 0.24285714285714285
+  },
+  "candidateRules": {
+   "R1 >=10 quarters and >=40 rows": {
+    "pass": true,
+    "value": "14 q, 70 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": true,
+    "value": 0.8
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": true,
+    "value": 0.808
+   },
+   "R4 accuracy > always-LOW and > PERSIST-SI": {
+    "pass": true,
+    "value": "0.8000 vs 0.7571 / 0.7429"
+   },
+   "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+    "pass": true,
+    "value": {
+     "PERSIST-SI": "diff -0.1249, p 0.018",
+     "CLIM": "diff -0.0690, p 0.029"
+    },
+    "note": "probabilities unchanged"
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": false,
+    "value": "P 0.560, R 0.824"
+   },
+   "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+    "pass": true,
+    "value": "thirds [0.88, 0.72, 0.8] (sizes [5, 5, 4]), LOQO min 0.785; other split [0.85, 0.76, 0.8] (sizes [4, 5, 5])"
+   }
+  },
+  "thresholdByOrigin": {
+   "2022-Q4": {
+    "threshold": 0.5,
+    "trainRows": 0,
+    "trainHigh": 0
+   },
+   "2023-Q1": {
+    "threshold": 0.5,
+    "trainRows": 0,
+    "trainHigh": 0
+   },
+   "2023-Q2": {
+    "threshold": 0.5,
+    "trainRows": 5,
+    "trainHigh": 0
+   },
+   "2023-Q3": {
+    "threshold": 0.5,
+    "trainRows": 10,
+    "trainHigh": 0
+   },
+   "2023-Q4": {
+    "threshold": 0.5,
+    "trainRows": 15,
+    "trainHigh": 0
+   },
+   "2024-Q1": {
+    "threshold": 0.2,
+    "trainRows": 20,
+    "trainHigh": 3
+   },
+   "2024-Q2": {
+    "threshold": 0.2,
+    "trainRows": 25,
+    "trainHigh": 3
+   },
+   "2024-Q3": {
+    "threshold": 0.4,
+    "trainRows": 30,
+    "trainHigh": 7
+   },
+   "2025-Q1": {
+    "threshold": 0.4,
+    "trainRows": 40,
+    "trainHigh": 11
+   },
+   "2025-Q2": {
+    "threshold": 0.4,
+    "trainRows": 40,
+    "trainHigh": 11
+   },
+   "2025-Q3": {
+    "threshold": 0.4,
+    "trainRows": 45,
+    "trainHigh": 14
+   },
+   "2025-Q4": {
+    "threshold": 0.4,
+    "trainRows": 50,
+    "trainHigh": 16
+   },
+   "2026-Q1": {
+    "threshold": 0.4,
+    "trainRows": 55,
+    "trainHigh": 16
+   },
+   "2026-Q2": {
+    "threshold": 0.4,
+    "trainRows": 60,
+    "trainHigh": 16
+   }
+  },
+  "decision": "negative result: not recommended"
+ },
+ "lead2": {
+  "current": {
+   "n": 65,
+   "pos": 17,
+   "neg": 48,
+   "TP": 6,
+   "FP": 4,
+   "FN": 11,
+   "TN": 44,
+   "accuracy": 0.7692307692307693,
+   "balanced": 0.6348039215686274,
+   "precision": 0.6,
+   "recall": 0.35294117647058826,
+   "specificity": 0.9166666666666666,
+   "f1": 0.4444444444444445,
+   "quarters": 13,
+   "period": "2023-Q2..2026-Q3",
+   "auc": 0.625,
+   "prAuc": 0.41759904630748623,
+   "brier": 0.19441544699065658,
+   "meanP": 0.2949754215384615,
+   "baseRate": 0.26153846153846155
+  },
+  "candidate": {
+   "n": 65,
+   "pos": 17,
+   "neg": 48,
+   "TP": 8,
+   "FP": 18,
+   "FN": 9,
+   "TN": 30,
+   "accuracy": 0.5846153846153846,
+   "balanced": 0.5477941176470589,
+   "precision": 0.3076923076923077,
+   "recall": 0.47058823529411764,
+   "specificity": 0.625,
+   "f1": 0.372093023255814,
+   "quarters": 13,
+   "period": "2023-Q2..2026-Q3",
+   "auc": null,
+   "prAuc": null,
+   "brier": null,
+   "meanP": 0.4002,
+   "baseRate": 0.26153846153846155
+  },
+  "candidateRules": {
+   "R1 >=10 quarters and >=40 rows": {
+    "pass": true,
+    "value": "13 q, 65 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": false,
+    "value": 0.5846
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": false,
+    "value": 0.5478
+   },
+   "R4 accuracy > always-LOW and > PERSIST-SI": {
+    "pass": false,
+    "value": "0.5846 vs 0.7385 / 0.6769"
+   },
+   "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "PERSIST-SI": "diff -0.1287, p 0.027",
+     "CLIM": "diff -0.0332, p 0.146"
+    },
+    "note": "probabilities unchanged"
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": false,
+    "value": "P 0.308, R 0.471"
+   },
+   "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+    "pass": false,
+    "value": "thirds [0.72, 0.55, 0.45] (sizes [5, 4, 4]), LOQO min 0.550; other split [0.85, 0.5, 0.44] (sizes [4, 4, 5])"
+   }
+  },
+  "thresholdByOrigin": {
+   "2022-Q4": {
+    "threshold": 0.5,
+    "trainRows": 0,
+    "trainHigh": 0
+   },
+   "2023-Q1": {
+    "threshold": 0.5,
+    "trainRows": 0,
+    "trainHigh": 0
+   },
+   "2023-Q2": {
+    "threshold": 0.5,
+    "trainRows": 0,
+    "trainHigh": 0
+   },
+   "2023-Q3": {
+    "threshold": 0.5,
+    "trainRows": 5,
+    "trainHigh": 0
+   },
+   "2023-Q4": {
+    "threshold": 0.5,
+    "trainRows": 10,
+    "trainHigh": 0
+   },
+   "2024-Q1": {
+    "threshold": 0.5,
+    "trainRows": 15,
+    "trainHigh": 3
+   },
+   "2024-Q2": {
+    "threshold": 0.1,
+    "trainRows": 20,
+    "trainHigh": 3
+   },
+   "2024-Q4": {
+    "threshold": 0.1,
+    "trainRows": 30,
+    "trainHigh": 8
+   },
+   "2025-Q1": {
+    "threshold": 0.1,
+    "trainRows": 35,
+    "trainHigh": 11
+   },
+   "2025-Q2": {
+    "threshold": 0.1,
+    "trainRows": 35,
+    "trainHigh": 11
+   },
+   "2025-Q3": {
+    "threshold": 0.1,
+    "trainRows": 40,
+    "trainHigh": 14
+   },
+   "2025-Q4": {
+    "threshold": 0.5,
+    "trainRows": 45,
+    "trainHigh": 16
+   },
+   "2026-Q1": {
+    "threshold": 0.5,
+    "trainRows": 50,
+    "trainHigh": 16
+   }
+  },
+  "decision": "negative result: not recommended"
+ }
+}

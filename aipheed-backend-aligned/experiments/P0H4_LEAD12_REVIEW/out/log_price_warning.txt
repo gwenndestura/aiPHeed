@@ -1,0 +1,18 @@
+LEAD 1: n 70 q 14 priceHIGH 31 base 0.44 | acc 0.6143 bal 0.6141 P 0.559 R 0.613 spec 0.615 F1 0.585 AUC 0.672 Brier 0.2232 TP/FP/FN/TN 19/15/12/24
+   PASS R1: 14 q, 70 rows
+   FAIL R2: 0.6143
+   FAIL R3: 0.6141
+   FAIL R4: {'always-LOW': 0.5571, 'always-HIGH': 0.4429, 'price persistence': 0.6571}
+   PASS R5: {'price persistence': 'diff -0.1196 p 0.012', 'price climatology': 'diff -0.0580 p 0.046'}
+   FAIL R6: P 0.559 R 0.613
+   FAIL R7: thirds [0.28, 0.84, 0.75], LOQO 0.585
+   -> not reliable
+LEAD 2: n 65 q 13 priceHIGH 26 base 0.40 | acc 0.6000 bal 0.5897 P 0.500 R 0.538 spec 0.641 F1 0.519 AUC 0.674 Brier 0.2269 TP/FP/FN/TN 14/14/12/25
+   PASS R1: 13 q, 65 rows
+   FAIL R2: 0.6
+   FAIL R3: 0.5897
+   FAIL R4: {'always-LOW': 0.6, 'always-HIGH': 0.4, 'price persistence': 0.5692}
+   PASS R5: {'price persistence': 'diff -0.2039 p 0.000', 'price climatology': 'diff -0.0561 p 0.014'}
+   FAIL R6: P 0.500 R 0.538
+   FAIL R7: thirds [0.48, 0.55, 0.8], LOQO 0.567
+   -> not reliable

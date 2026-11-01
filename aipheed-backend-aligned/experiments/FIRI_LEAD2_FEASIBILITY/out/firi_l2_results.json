@@ -1,0 +1,283 @@
+{
+ "protocolSha256": "3d6e6d0acb82bae60856ad061e79471bc0afde3db2684f23401b054a199154b9",
+ "protocolFrozenAt": "2026-10-29T09:35:07Z",
+ "evidence": "development: these R outcomes were examined before this protocol (PROTOCOL.md section 3)",
+ "outcome": {
+  "series": "backend/data/inputs/sws_rounds.csv, mean of rounds per quarter, > 11.3",
+  "singleRoundChoiceChangesLabel": []
+ },
+ "rows": {
+  "quarters": 17,
+  "period": "2022-Q3..2026-Q3",
+  "droppedFewerThan5Provinces": [
+   "2022-Q2"
+  ],
+  "noOutcome": [],
+  "classBalance": {
+   "HIGH": 12,
+   "LOW": 5
+  }
+ },
+ "baselineReproduction": {
+  "artifact": {
+   "n": 17,
+   "positives": 12,
+   "accuracy": 0.9411764705882353,
+   "brier": 0.18870930494857624,
+   "auc_roc": 0.9333333333333333,
+   "confusion": {
+    "TP": 11,
+    "FP": 0,
+    "FN": 1,
+    "TN": 5
+   }
+  },
+  "recomputed": {
+   "n": 17,
+   "positives": 12,
+   "accuracy": 0.9411764705882353,
+   "brier": 0.18870927665837411,
+   "auc": 0.9333333333333333,
+   "TP": 11,
+   "FP": 0,
+   "FN": 1,
+   "TN": 5
+  },
+  "matches": true
+ },
+ "F2": {
+  "scores": {
+   "n": 17,
+   "positives": 12,
+   "TP": 11,
+   "FP": 0,
+   "FN": 1,
+   "TN": 5,
+   "accuracy": 0.9411764705882353,
+   "accuracyWilson95": [
+    0.7302,
+    0.9895
+   ],
+   "balanced": 0.9583333333333333,
+   "precision": 1.0,
+   "recall": 0.9166666666666666,
+   "specificity": 1.0,
+   "specificityWilson95": [
+    0.5655,
+    1.0
+   ],
+   "f1": 0.9565217391304348,
+   "auc": 0.9333333333333333,
+   "brier": 0.18870927665837411
+  },
+  "baselineAccuracy": {
+   "ALWAYS-LOW": 0.29411764705882354,
+   "ALWAYS-HIGH": 0.7058823529411765,
+   "PERSIST": 0.7058823529411765
+  },
+  "rules": {
+   "R1 >=10 quarters and >=40 rows (as written)": {
+    "pass": false,
+    "value": "17 q, 17 rows"
+   },
+   "R2 accuracy >= 0.75": {
+    "pass": true,
+    "value": 0.9412
+   },
+   "R3 balanced accuracy >= 0.70": {
+    "pass": true,
+    "value": 0.9583333333333333
+   },
+   "R4 accuracy > always-LOW and > PERSIST (as written)": {
+    "pass": true,
+    "value": "0.9412 vs 0.2941 / 0.7059"
+   },
+   "R5 Brier < H1 and < CLIM, one-sided cluster p < 0.10": {
+    "pass": false,
+    "value": {
+     "H1": {
+      "brierDiff": 0.0274,
+      "p_one_sided": 0.7282
+     },
+     "CLIM": {
+      "brierDiff": -0.1058,
+      "p_one_sided": 0.001
+     }
+    }
+   },
+   "R6 precision >= 0.60 and recall >= 0.60": {
+    "pass": true,
+    "value": "P 1.0, R 0.9166666666666666"
+   },
+   "R7 each third >= 0.60 and LOQO min >= 0.70": {
+    "pass": true,
+    "value": "thirds [0.833, 1.0, 1.0] (['2022-Q3..2023-Q4', '2024-Q1..2025-Q2', '2025-Q3..2026-Q3']), LOQO min 0.938"
+   }
+  },
+  "adapted": {
+   "R1-q >=10 independent quarters (adaptation)": {
+    "pass": true,
+    "value": "17 q"
+   },
+   "R4-maj accuracy > ALWAYS-HIGH and > PERSIST (adaptation)": {
+    "pass": true,
+    "value": "0.9412 vs 0.7059 / 0.7059"
+   }
+  },
+  "thirds": {
+   "2022-Q3..2023-Q4": 0.8333,
+   "2024-Q1..2025-Q2": 1.0,
+   "2025-Q3..2026-Q3": 1.0
+  }
+ },
+ "baselines": {
+  "ALWAYS-HIGH": {
+   "n": 17,
+   "positives": 12,
+   "TP": 12,
+   "FP": 5,
+   "FN": 0,
+   "TN": 0,
+   "accuracy": 0.7058823529411765,
+   "accuracyWilson95": [
+    0.4687,
+    0.8672
+   ],
+   "balanced": 0.5,
+   "precision": 0.7058823529411765,
+   "recall": 1.0,
+   "specificity": 0.0,
+   "specificityWilson95": [
+    0.0,
+    0.4345
+   ],
+   "f1": 0.8275862068965517,
+   "auc": null,
+   "brier": 0.29411764705882354
+  },
+  "ALWAYS-LOW": {
+   "n": 17,
+   "positives": 12,
+   "TP": 0,
+   "FP": 0,
+   "FN": 12,
+   "TN": 5,
+   "accuracy": 0.29411764705882354,
+   "accuracyWilson95": [
+    0.1328,
+    0.5313
+   ],
+   "balanced": 0.5,
+   "precision": null,
+   "recall": 0.0,
+   "specificity": 1.0,
+   "specificityWilson95": [
+    0.5655,
+    1.0
+   ],
+   "f1": 0.0,
+   "auc": null,
+   "brier": 0.7058823529411765
+  },
+  "PERSIST": {
+   "n": 17,
+   "positives": 12,
+   "TP": 9,
+   "FP": 2,
+   "FN": 3,
+   "TN": 3,
+   "accuracy": 0.7058823529411765,
+   "accuracyWilson95": [
+    0.4687,
+    0.8672
+   ],
+   "balanced": 0.675,
+   "precision": 0.8181818181818182,
+   "recall": 0.75,
+   "specificity": 0.6,
+   "specificityWilson95": [
+    0.2307,
+    0.8824
+   ],
+   "f1": 0.7826086956521738,
+   "auc": 0.675,
+   "brier": 0.29411764705882354
+  },
+  "H1": {
+   "n": 17,
+   "positives": 12,
+   "TP": 10,
+   "FP": 3,
+   "FN": 2,
+   "TN": 2,
+   "accuracy": 0.7058823529411765,
+   "accuracyWilson95": [
+    0.4687,
+    0.8672
+   ],
+   "balanced": 0.6166666666666667,
+   "precision": 0.7692307692307693,
+   "recall": 0.8333333333333334,
+   "specificity": 0.4,
+   "specificityWilson95": [
+    0.1176,
+    0.7693
+   ],
+   "f1": 0.8,
+   "auc": 0.7916666666666667,
+   "brier": 0.16126970588235295
+  },
+  "CLIM": {
+   "n": 17,
+   "positives": 12,
+   "TP": 5,
+   "FP": 2,
+   "FN": 7,
+   "TN": 3,
+   "accuracy": 0.47058823529411764,
+   "accuracyWilson95": [
+    0.2617,
+    0.6904
+   ],
+   "balanced": 0.5083333333333333,
+   "precision": 0.7142857142857143,
+   "recall": 0.4166666666666667,
+   "specificity": 0.6,
+   "specificityWilson95": [
+    0.2307,
+    0.8824
+   ],
+   "f1": 0.5263157894736842,
+   "auc": 0.55,
+   "brier": 0.2944951104714883
+  }
+ },
+ "sufficiency": {
+  "S1 >=3 class changes in the outcome": {
+   "pass": false,
+   "value": 1
+  },
+  "S2 >=5 quarters of each class": {
+   "pass": true,
+   "value": "HIGH 12, LOW 5"
+  },
+  "S3 beats PERSIST, McNemar exact one-sided p < 0.10": {
+   "pass": true,
+   "value": "F2 right & PERSIST wrong 4, reverse 0, p 0.0625"
+  },
+  "onsets (LOW->HIGH)": [
+   {
+    "quarter": "2023-Q4",
+    "F2": 0,
+    "PERSIST": 0
+   }
+  ],
+  "offsets (HIGH->LOW)": []
+ },
+ "provincialSpread": {
+  "note": "descriptive only: no provincial outcome exists",
+  "meanRange": 0.1275,
+  "quartersWhereProvincesSplitAcross0.5": 8
+ },
+ "decision": "Outcome C: insufficient evidence for a defensible Lead-2 forecast of overall food insecurity"
+}

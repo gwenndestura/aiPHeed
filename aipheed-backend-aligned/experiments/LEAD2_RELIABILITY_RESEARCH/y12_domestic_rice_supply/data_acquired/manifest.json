@@ -1,0 +1,598 @@
+[
+ {
+  "file": "stocks_national_monthly.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2E/CS/0032E4ECNV0.px",
+  "title": "Rice and Corn: Monthly Total Stocks Inventory by Sector",
+  "query": {
+   "query": [
+    {
+     "code": "Sector",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:48:53Z",
+  "sha256": "aaa6073c2e975f13a8530f29d5ced606cb1b2bef49523cec9110fd9428f07c68",
+  "bytes": 28952
+ },
+ {
+  "file": "stocks_regional_monthly.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2E/CS/0048E4ECNV1.px",
+  "title": "Rice and Corn: Monthly Total Stocks Inventory by Sector and by Region",
+  "query": {
+   "query": [
+    {
+     "code": "Sector",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ]
+     }
+    },
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "6"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:48:54Z",
+  "sha256": "f887eb3cdcb914ec7d5c901215aae580c5c61d7388c165381e0ab1bee5aa76e0",
+  "bytes": 1319
+ },
+ {
+  "file": "farmgate_palay_old.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/FG/0032M4AFP01.px",
+  "title": "Cereals: Farmgate Prices by Region and by Province",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "28",
+       "29",
+       "30",
+       "31",
+       "32",
+       "33"
+      ]
+     }
+    },
+    {
+     "code": "Commodity",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "1"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:48:55Z",
+  "sha256": "d4bda7b277da58605f9bb105a787dd15a59028aab6ca121161cb417579d5b8dc",
+  "bytes": 31230
+ },
+ {
+  "file": "farmgate_palay_new.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/NFG/0032M4AFN01.px",
+  "title": "Cereals Farmgate Prices by Geolocation, Commodity, Year and Period",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "000000000",
+       "040000000",
+       "041000000",
+       "042100000",
+       "043400000",
+       "045600000",
+       "045800000"
+      ]
+     }
+    },
+    {
+     "code": "Commodity",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "1"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:48:56Z",
+  "sha256": "db8642d6a2ec39c7a29612e53f69fbdbda58fc2b4e7f0bd4a53c036c6b6f3516",
+  "bytes": 18436
+ },
+ {
+  "file": "cpi2012_yoy_2012_2021.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2012/0012M4ACPI2.px",
+  "title": "Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2012=100): January 2012 - December 2021",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "29",
+       "30",
+       "31",
+       "32",
+       "33",
+       "34"
+      ]
+     }
+    },
+    {
+     "code": "Commodity Description",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "01.1",
+       "01.1.11"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:48:58Z",
+  "sha256": "fca48969fef3c122753565ed5fa7f56de68baa5d813010b897db367dae8ee3df",
+  "bytes": 13397
+ },
+ {
+  "file": "cpi2012_yoy_1995_2011.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2012/0012M4ACPI6.px",
+  "title": "Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Groups (2012=100): January 1995 - December 2011",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "29",
+       "30",
+       "31",
+       "32",
+       "33",
+       "34"
+      ]
+     }
+    },
+    {
+     "code": "Commodity Description",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "01.1",
+       "01.1.11"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:49:00Z",
+  "sha256": "f06a943ab287826b1ba252fdcbd808053da03db5c1fa608325e2abcb1292df42",
+  "bytes": 87474
+ },
+ {
+  "file": "cpi2012_idx_2012_2021.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2012/0012M4ACPI1.px",
+  "title": "Consumer Price Index for All Income Households by Commodity Group (2012=100): January 2012 - December 2021",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "29",
+       "30",
+       "31",
+       "32",
+       "33",
+       "34"
+      ]
+     }
+    },
+    {
+     "code": "Commodity Description",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "01.1",
+       "01.1.11"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:49:03Z",
+  "sha256": "3e3bf56476e579df39792befc05d6325c7bf6b02206914ba4cd63e949991af54",
+  "bytes": 48273
+ },
+ {
+  "file": "cpi2012_idx_1994_2011.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2012/0012M4ACPI4.px",
+  "title": "Consumer Price Index for All Income Households by Commodity Group (2012=100): January 1994 - December 2011",
+  "query": {
+   "query": [
+    {
+     "code": "Geolocation",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "29",
+       "30",
+       "31",
+       "32",
+       "33",
+       "34"
+      ]
+     }
+    },
+    {
+     "code": "Commodity Description",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0",
+       "01.1",
+       "01.1.11"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:49:05Z",
+  "sha256": "22e0b79f365e0e8623bad3b3a6475c115faa03058909a12911f067351669a3f3",
+  "bytes": 86709
+ },
+ {
+  "file": "imports_rice_monthly_2015_2026.csv",
+  "apiPath": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2L/IMT/PMG/0022L4DNDM0.px",
+  "title": "Philippine Imports by Major Type of Goods, 2015-2026",
+  "query": {
+   "query": [
+    {
+     "code": "GROUP",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "4213"
+      ]
+     }
+    },
+    {
+     "code": "COUNTRY",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "004",
+       "008",
+       "012",
+       "016",
+       "020",
+       "024",
+       "025",
+       "028",
+       "032",
+       "033",
+       "034",
+       "036",
+       "040",
+       "042",
+       "048",
+       "052",
+       "056",
+       "060",
+       "064",
+       "070",
+       "076",
+       "084",
+       "086",
+       "088",
+       "090",
+       "092",
+       "096",
+       "108",
+       "112",
+       "116",
+       "120",
+       "124",
+       "128",
+       "140",
+       "144",
+       "148",
+       "152",
+       "160",
+       "164",
+       "168",
+       "172",
+       "176",
+       "180",
+       "188",
+       "192",
+       "196",
+       "198",
+       "202",
+       "204",
+       "208",
+       "212",
+       "220",
+       "224",
+       "226",
+       "228",
+       "232",
+       "236",
+       "240",
+       "242",
+       "244",
+       "248",
+       "252",
+       "256",
+       "260",
+       "264",
+       "268",
+       "272",
+       "284",
+       "292",
+       "296",
+       "299",
+       "309",
+       "312",
+       "316",
+       "324",
+       "328",
+       "332",
+       "336",
+       "340",
+       "344",
+       "348",
+       "352",
+       "356",
+       "358",
+       "360",
+       "364",
+       "368",
+       "372",
+       "376",
+       "380",
+       "384",
+       "388",
+       "392",
+       "396",
+       "400",
+       "404",
+       "408",
+       "412",
+       "424",
+       "428",
+       "430",
+       "432",
+       "433",
+       "434",
+       "436",
+       "440",
+       "444",
+       "448",
+       "452",
+       "472",
+       "476",
+       "480",
+       "484",
+       "486",
+       "488",
+       "496",
+       "500",
+       "512",
+       "516",
+       "520",
+       "522",
+       "528",
+       "532",
+       "536",
+       "538",
+       "542",
+       "544",
+       "548",
+       "550",
+       "552",
+       "556",
+       "568",
+       "572",
+       "576",
+       "580",
+       "584",
+       "588",
+       "592",
+       "596",
+       "600",
+       "604",
+       "605",
+       "607",
+       "608",
+       "609",
+       "624",
+       "626",
+       "628",
+       "632",
+       "636",
+       "640",
+       "646",
+       "648",
+       "652",
+       "660",
+       "664",
+       "668",
+       "672",
+       "680",
+       "684",
+       "688",
+       "696",
+       "698",
+       "700",
+       "704",
+       "708",
+       "710",
+       "712",
+       "716",
+       "720",
+       "721",
+       "722",
+       "724",
+       "728",
+       "732",
+       "740",
+       "748",
+       "752",
+       "756",
+       "760",
+       "764",
+       "768",
+       "772",
+       "774",
+       "776",
+       "780",
+       "784",
+       "788",
+       "792",
+       "796",
+       "804",
+       "808",
+       "810",
+       "812",
+       "814",
+       "816",
+       "820",
+       "828",
+       "832",
+       "836",
+       "840",
+       "844",
+       "853",
+       "856",
+       "860",
+       "864",
+       "866",
+       "868",
+       "870",
+       "872",
+       "874",
+       "876",
+       "880",
+       "884",
+       "888",
+       "892",
+       "896",
+       "902",
+       "908",
+       "912",
+       "924",
+       "080",
+       "184",
+       "460",
+       "560",
+       "676",
+       "166",
+       "200",
+       "216",
+       "286",
+       "420",
+       "464",
+       "758",
+       "824",
+       "692",
+       "468",
+       "900",
+       "068",
+       "504",
+       "026",
+       "508",
+       "524",
+       "072",
+       "136",
+       "564",
+       "800",
+       "920"
+      ]
+     }
+    },
+    {
+     "code": "Item",
+     "selection": {
+      "filter": "item",
+      "values": [
+       "0"
+      ]
+     }
+    }
+   ],
+   "response": {
+    "format": "csv"
+   }
+  },
+  "fetchedUtc": "2026-10-29T12:49:09Z",
+  "sha256": "3b1465d2277ffc55c36fea0308d1ce0ae960955c7d9fd50fb29d09d7916839db",
+  "bytes": 123148
+ }
+]

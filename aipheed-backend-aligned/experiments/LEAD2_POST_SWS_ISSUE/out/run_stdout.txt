@@ -1,0 +1,52 @@
+reproduction {1: '11/5/6/48', 2: '6/4/11/44'}
+parity at O(t), max |diff|: {'H4': np.float64(4.6944780174307255e-07), 'KAL': 0.0, 'CLIM': np.float64(3.333333333521704e-07), 'PERSIST': np.float64(0.0)}
+
+issue dates and information used (all inputs published before O'):
+  2022-Q4->2023-Q2  O 2023-01-01  O' 2023-01-20  newest SWS 2022-Q4 (pub 2023-01-19, H 11.3)  h 2  CPI to 2022-11  lead 161d (was 180d)
+  2023-Q1->2023-Q3  O 2023-04-01  O' 2023-05-12  newest SWS 2023-Q1 (pub 2023-05-11, H 8.7)  h 2  CPI to 2023-03  lead 141d (was 182d)
+  2023-Q2->2023-Q4  O 2023-07-01  O' 2023-08-03  newest SWS 2023-Q2 (pub 2023-08-02, H 11.3)  h 2  CPI to 2023-06  lead 150d (was 183d)
+  2023-Q3->2024-Q1  O 2023-10-01  O' 2023-11-21  newest SWS 2023-Q3 (pub 2023-11-20, H 10.3)  h 2  CPI to 2023-09  lead 131d (was 182d)
+  2023-Q4->2024-Q2  O 2024-01-01  O' 2024-01-23  newest SWS 2023-Q4 (pub 2024-01-22, H 14.3)  h 2  CPI to 2023-11  lead 159d (was 181d)
+  2024-Q1->2024-Q3  O 2024-04-01  O' 2024-05-01  newest SWS 2024-Q1 (pub 2024-04-30, H 15.3)  h 2  CPI to 2024-03  lead 152d (was 182d)
+  2024-Q2->2024-Q4  O 2024-07-01  O' 2024-07-24  newest SWS 2024-Q2 (pub 2024-07-23, H 19.6)  h 2  CPI to 2024-05  lead 160d (was 183d)
+  2024-Q4->2025-Q2  O 2025-01-01  O' 2025-01-15  newest SWS 2024-Q4 (pub 2025-01-14, H 25.3)  h 2  CPI to 2024-11  lead 166d (was 180d)
+  2025-Q1->2025-Q3  O 2025-04-01  O' 2025-04-01  newest SWS 2024-Q4 (pub 2025-01-14, H 25.3)  h 3  CPI to 2025-02  lead 182d (was 182d)
+  2025-Q2->2025-Q4  O 2025-07-01  O' 2025-08-16  newest SWS 2025-Q2 (pub 2025-08-15, H 16.15)  h 2  CPI to 2025-06  lead 137d (was 183d)
+  2025-Q3->2026-Q1  O 2025-10-01  O' 2025-11-06  newest SWS 2025-Q3 (pub 2025-11-05, H 23.8)  h 2  CPI to 2025-09  lead 145d (was 181d)
+  2025-Q4->2026-Q2  O 2026-01-01  O' 2026-01-15  newest SWS 2025-Q4 (pub 2026-01-14, H 16.7)  h 2  CPI to 2025-11  lead 166d (was 180d)
+  2026-Q1->2026-Q3  O 2026-04-01  O' 2026-05-13  newest SWS 2026-Q1 (pub 2026-05-12, H 22.4)  h 2  CPI to 2026-03  lead 140d (was 182d)
+lead days {'post': {'median': 152.0, 'min': 131, 'max': 182}, 'original': {'median': 182.0}}
+
+Evaluation A (65 official Lead-2 rows, T43c):
+  P0H4_original_issue    acc 0.769 [0.6308, 0.8923] bal 0.635 [0.4821, 0.8138] P 0.60 R 0.35 spec 0.92 AUC 0.625 Brier 0.1944 [0.124, 0.2723] CM 6/4/11/44 onsets 0/10 | fails ['R3', 'R5', 'R6']
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.72, 'recall': 0.0, 'brier': 0.2126}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.7, 'recall': 0.667, 'brier': 0.2585}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.9, 'recall': 0.0, 'brier': 0.1077}]
+  M0_post_SWS            acc 0.800 [0.6923, 0.8923] bal 0.732 [0.5537, 0.8696] P 0.62 R 0.59 spec 0.88 AUC 0.760 Brier 0.1670 [0.1118, 0.2273] CM 10/6/7/42 onsets 4/10 | fails ['R6']
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.84, 'recall': 0.571, 'brier': 0.1327}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.65, 'recall': 0.667, 'brier': 0.2554}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.9, 'recall': 0.0, 'brier': 0.1215}]
+  M1_post_SWS_Kalman     acc 0.800 [0.6923, 0.8923] bal 0.713 [0.5667, 0.8284] P 0.64 R 0.53 spec 0.90 AUC 0.711 Brier 0.1779 [0.1269, 0.2308] CM 9/5/8/43 onsets 3/10 | fails ['R5', 'R6']
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.8, 'recall': 0.429, 'brier': 0.1578}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.7, 'recall': 0.667, 'brier': 0.2547}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.9, 'recall': 0.0, 'brier': 0.1261}]
+  PERSIST-SI_post        acc 0.754 [0.6308, 0.8769] bal 0.719 [0.5273, 0.8558] P 0.52 R 0.65 spec 0.79 AUC 0.719 Brier 0.2462 [0.1231, 0.3692] CM 11/10/6/38 onsets 6/10
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.84, 'recall': 0.571, 'brier': 0.16}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.75, 'recall': 0.778, 'brier': 0.25}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.65, 'recall': 0.0, 'brier': 0.35}]
+  CLIM_post              acc 0.738 [0.5846, 0.8769] bal 0.500 [0.5, 0.5] P 0.00 R 0.00 spec 1.00 AUC 0.356 Brier 0.2291 [0.1126, 0.3597] CM 0/0/17/48 onsets 0/10
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.72, 'recall': 0.0, 'brier': 0.257}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.55, 'recall': 0.0, 'brier': 0.349}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.95, 'recall': 0.0, 'brier': 0.0742}]
+  ALWAYS-LOW             acc 0.738 [0.5846, 0.8769] bal 0.500 [0.5, 0.5] P 0.00 R 0.00 spec 1.00 AUC 0.500 Brier 0.2615 [0.1231, 0.4154] CM 0/0/17/48 onsets 0/10
+      by third [{'quarters': '2023-Q2..2024-Q2', 'accuracy': 0.72, 'recall': 0.0, 'brier': 0.28}, {'quarters': '2024-Q3..2025-Q3', 'accuracy': 0.55, 'recall': 0.0, 'brier': 0.45}, {'quarters': '2025-Q4..2026-Q3', 'accuracy': 0.95, 'recall': 0.0, 'brier': 0.05}]
+
+Evaluation B [main] 74 quarters 2002-Q1..2020-Q4 prevalence 0.72 horizons {2: 72, 3: 2} lead median 122.0d
+  KAL        acc 0.703 bal 0.634 P 0.79 R 0.79 AUC 0.721 Brier 0.1856 CM 42/11/11/10
+  H1         acc 0.689 bal 0.625 P 0.79 R 0.77 AUC 0.696 Brier 0.2067 CM 41/11/12/10
+  PERSIST    acc 0.662 bal 0.606 P 0.78 R 0.74 AUC 0.606 Brier 0.3378 CM 39/11/14/10
+  CLIM       acc 0.649 bal 0.582 P 0.76 R 0.74 AUC 0.466 Brier 0.2359 CM 39/12/14/9
+  ALWAYS_LOW acc 0.284 bal 0.500 P 0.00 R 0.00 AUC 0.500 Brier 0.7162 CM 0/0/53/21
+  KAL vs H1 {'diff': -0.02105627188854771, 'p_iid': 0.0864, 'p_block4': 0.1056} gate {'brier': True, 'balanced': True} -> True
+
+Evaluation B [sensitivity_plus30d] 74 quarters 2002-Q1..2020-Q4 prevalence 0.72 horizons {2: 17, 3: 57} lead median 116.0d
+  KAL        acc 0.676 bal 0.601 P 0.77 R 0.77 AUC 0.704 Brier 0.1882 CM 41/12/12/9
+  H1         acc 0.703 bal 0.620 P 0.78 R 0.81 AUC 0.700 Brier 0.2008 CM 43/12/10/9
+  PERSIST    acc 0.662 bal 0.592 P 0.77 R 0.75 AUC 0.592 Brier 0.3378 CM 40/12/13/9
+  CLIM       acc 0.635 bal 0.573 P 0.76 R 0.72 AUC 0.464 Brier 0.2388 CM 38/12/15/9
+  ALWAYS_LOW acc 0.284 bal 0.500 P 0.00 R 0.00 AUC 0.500 Brier 0.7162 CM 0/0/53/21
+  KAL vs H1 {'diff': -0.01250760418820717, 'p_iid': 0.212, 'p_block4': 0.275} gate {'brier': False, 'balanced': False} -> False
+
+label noise: {"borderlineQuarters": [["2023-Q2", 11.3], ["2023-Q3", 10.3]], "M0": {"observed": {"R2": true, "R3": true, "R4": true, "R6": false, "R7": true}, "flips": {"2023-Q2": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": true}, "2023-Q3": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": true}, "all": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": false}}, "monteCarloPassRate": {"R2": 0.412, "R3": 0.38, "R4": 0.999, "R6": 0.059, "R7": 0.82}, "monteCarloAllPass": 0.059}, "M1": {"observed": {"R2": true, "R3": true, "R4": true, "R6": false, "R7": true}, "flips": {"2023-Q2": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": true}, "2023-Q3": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": true}, "all": {"R2": false, "R3": false, "R4": true, "R6": false, "R7": false}}, "monteCarloPassRate": {"R2": 0.412, "R3": 0.329, "R4": 0.999, "R6": 0.054, "R7": 0.819}, "monteCarloAllPass": 0.054}}
+
+DECISION {"perModel": {"M0": {"officialR1R7": false, "independentGate": "not passable: its hunger component is persistence (protocol \u00a77)", "A": false}, "M1": {"officialR1R7": false, "independentGate": false, "A": false}}, "overall": "C"}

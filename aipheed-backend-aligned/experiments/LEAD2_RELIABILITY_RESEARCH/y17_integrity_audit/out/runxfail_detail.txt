@@ -1,0 +1,139 @@
+FFFFFFFFFFFFFFFFFFFF                                                     [100%]
+================================== FAILURES ===================================
+____________________ test_A4_plan_check_survives_python_O _____________________
+tests\test_adversarial.py:85: in test_A4_plan_check_survives_python_O
+    assert r.returncode != 0, "a changed plan was accepted under python -O"
+E   AssertionError: a changed plan was accepted under python -O
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe', '-O', '-c', "import...st-of-User\\pytest-144\\test_A4_plan_check_survives_py0\\y16copy'); K.plan_sha()"], returncode=0, stdout='', stderr='').returncode
+_____________ test_A6_primary_analysis_is_locked_after_first_run ______________
+tests\test_adversarial.py:100: in test_A6_primary_analysis_is_locked_after_first_run
+    assert "primary" in src.lower() and ("lock" in src.lower() or "already" in src.lower())
+E   assert ('primary' in '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n' and ('lock' in '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n' or 'already' in '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n'))
+E    +  where '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n' = <built-in method lower of str object at 0x0000024ECB2279E0>()
+E    +    where <built-in method lower of str object at 0x0000024ECB2279E0> = '"""Y16 evaluation (EXPERIMENT_PLAN.md section 5). Reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n'.lower
+E    +  and   '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n' = <built-in method lower of str object at 0x0000024ECB2279E0>()
+E    +    where <built-in method lower of str object at 0x0000024ECB2279E0> = '"""Y16 evaluation (EXPERIMENT_PLAN.md section 5). Reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n'.lower
+E    +  and   '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n' = <built-in method lower of str object at 0x0000024ECB2279E0>()
+E    +    where <built-in method lower of str object at 0x0000024ECB2279E0> = '"""Y16 evaluation (EXPERIMENT_PLAN.md section 5). Reads valid seals from prospective/ and resolved outcomes only.\n\n...dent=1, default=str))\n    print(json.dumps(res, indent=1, default=str))\n\n\nif __name__ == "__main__":\n    main()\n'.lower
+_____________ test_B4_invalid_issue_date_rejected_under_python_O ______________
+tests\test_adversarial.py:132: in test_B4_invalid_issue_date_rejected_under_python_O
+    assert r.returncode != 0
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe', '-O', '-c', "import...6_kalman_prospective\\runner'); import kprospect as K; K.origin_of('2027-01-02')"], returncode=0, stdout='', stderr='').returncode
+__________________ test_B7_non_iso_publication_date_rejected __________________
+tests\test_adversarial.py:151: in test_B7_non_iso_publication_date_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+________ test_C4_duplicate_rows_within_overlay_are_not_double_counted _________
+tests\test_adversarial.py:199: in test_C4_duplicate_rows_within_overlay_are_not_double_counted
+    assert a == b
+E   assert 0.9953936873834263 == 0.9983564333934437
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,150,2026-12-20,4.0,u,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,-3,2026-12-20,4.0,u,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,-4.0,u,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q9,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+___ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,] ____
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2027-Q2,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_ test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,2026-12-01T00:00:00Z] _
+tests\test_adversarial.py:222: in test_D1_invalid_overlay_rows_rejected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+_______________ test_D3_conflict_with_project_round_is_reported _______________
+tests\test_adversarial.py:238: in test_D3_conflict_with_project_round_is_reported
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+__________________ test_D5_seal_preserves_overlay_provenance __________________
+tests\test_adversarial.py:250: in test_D5_seal_preserves_overlay_provenance
+    assert "https://www.sws.org.ph/example" in f.read_text(encoding="utf-8")
+E   assert 'https://www.sws.org.ph/example' in '{\n "study": "Y16 Kalman vs persistence, prospective",\n "planSha256": "208b575464d21e41dd78447c39e4586fb7101bdb0b263...144/test_D5_seal_preserves_overlay0/ov.csv": "e7331c1e18f5530add6f2c22da1fe0f2241e45ca7553aee20a8f98a609e2cbb4"\n }\n}'
+E    +  where '{\n "study": "Y16 Kalman vs persistence, prospective",\n "planSha256": "208b575464d21e41dd78447c39e4586fb7101bdb0b263...144/test_D5_seal_preserves_overlay0/ov.csv": "e7331c1e18f5530add6f2c22da1fe0f2241e45ca7553aee20a8f98a609e2cbb4"\n }\n}' = read_text(encoding='utf-8')
+E    +    where read_text = WindowsPath('C:/Users/User/AppData/Local/Temp/pytest-of-User/pytest-144/test_D5_seal_preserves_overlay0/s/seal_issue_2027-01-01_written_20270101T030000Z.json').read_text
+______________________ test_D8_deleted_seal_is_detected _______________________
+tests\test_adversarial.py:277: in test_D8_deleted_seal_is_detected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+__________________ test_D9_reissue_for_same_date_is_reported __________________
+tests\test_adversarial.py:288: in test_D9_reissue_for_same_date_is_reported
+    assert "reissued" in json.dumps(res).lower() or "duplicate" in json.dumps(res).lower()
+E   assert ('reissued' in '{"today": "2027-01-03", "validseals": 1, "unresolved": ["2027-q2"], "missingoutcome": [], "noforecast": [], "resolvedpaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' or 'duplicate' in '{"today": "2027-01-03", "validseals": 1, "unresolved": ["2027-q2"], "missingoutcome": [], "noforecast": [], "resolvedpaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}')
+E    +  where '{"today": "2027-01-03", "validseals": 1, "unresolved": ["2027-q2"], "missingoutcome": [], "noforecast": [], "resolvedpaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' = <built-in method lower of str object at 0x0000024ECC509E30>()
+E    +    where <built-in method lower of str object at 0x0000024ECC509E30> = '{"today": "2027-01-03", "validSeals": 1, "unresolved": ["2027-Q2"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}'.lower
+E    +      where '{"today": "2027-01-03", "validSeals": 1, "unresolved": ["2027-Q2"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' = <function dumps at 0x0000024EA8214FE0>({'missingOutcome': [], 'noForecast': [], 'resolvedPaired': 0, 'stage': 'integrity only (0 < 8 resolved quarters): no metrics reported', ...})
+E    +        where <function dumps at 0x0000024EA8214FE0> = json.dumps
+E    +  and   '{"today": "2027-01-03", "validseals": 1, "unresolved": ["2027-q2"], "missingoutcome": [], "noforecast": [], "resolvedpaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' = <built-in method lower of str object at 0x0000024ECC509C30>()
+E    +    where <built-in method lower of str object at 0x0000024ECC509C30> = '{"today": "2027-01-03", "validSeals": 1, "unresolved": ["2027-Q2"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}'.lower
+E    +      where '{"today": "2027-01-03", "validSeals": 1, "unresolved": ["2027-Q2"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' = <function dumps at 0x0000024EA8214FE0>({'missingOutcome': [], 'noForecast': [], 'resolvedPaired': 0, 'stage': 'integrity only (0 < 8 resolved quarters): no metrics reported', ...})
+E    +        where <function dumps at 0x0000024EA8214FE0> = json.dumps
+________________________ test_E4_calibration_reported _________________________
+tests\test_adversarial.py:318: in test_E4_calibration_reported
+    assert "calib" in src.lower()
+E   assert 'calib' in '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...alue": "undefined: pers is itself the h1 comparator (plan section 5)"}\n    return {"estimable": true, "rules": out}\n'
+E    +  where '"""y16 evaluation (experiment_plan.md section 5). reads valid seals from prospective/ and resolved outcomes only.\n\n...alue": "undefined: pers is itself the h1 comparator (plan section 5)"}\n    return {"estimable": true, "rules": out}\n' = <built-in method lower of str object at 0x0000024ECC653020>()
+E    +    where <built-in method lower of str object at 0x0000024ECC653020> = '"""Y16 evaluation (EXPERIMENT_PLAN.md section 5). Reads valid seals from prospective/ and resolved outcomes only.\n\n...alue": "undefined: PERS is itself the H1 comparator (plan section 5)"}\n    return {"estimable": True, "rules": out}\n'.lower
+___________________ test_E5_missed_issue_dates_are_counted ____________________
+tests\test_adversarial.py:326: in test_E5_missed_issue_dates_are_counted
+    assert "2027-01-01" in json.dumps(res)
+E   assert '2027-01-01' in '{"today": "2027-04-02", "validSeals": 1, "unresolved": ["2027-Q3"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}'
+E    +  where '{"today": "2027-04-02", "validSeals": 1, "unresolved": ["2027-Q3"], "missingOutcome": [], "noForecast": [], "resolvedPaired": 0, "stage": "integrity only (0 < 8 resolved quarters): no metrics reported"}' = <function dumps at 0x0000024EA8214FE0>({'missingOutcome': [], 'noForecast': [], 'resolvedPaired': 0, 'stage': 'integrity only (0 < 8 resolved quarters): no metrics reported', ...})
+E    +    where <function dumps at 0x0000024EA8214FE0> = json.dumps
+____________ test_E6_edited_overlay_row_after_sealing_is_detected _____________
+tests\test_adversarial.py:334: in test_E6_edited_overlay_row_after_sealing_is_detected
+    with pytest.raises(Exception):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'Exception'>
+=========================== short test summary info ===========================
+FAILED tests/test_adversarial.py::test_A4_plan_check_survives_python_O - Asse...
+FAILED tests/test_adversarial.py::test_A6_primary_analysis_is_locked_after_first_run
+FAILED tests/test_adversarial.py::test_B4_invalid_issue_date_rejected_under_python_O
+FAILED tests/test_adversarial.py::test_B7_non_iso_publication_date_rejected
+FAILED tests/test_adversarial.py::test_C4_duplicate_rows_within_overlay_are_not_double_counted
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,150,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,-3,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,-4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q9,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2027-Q2,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,2026-12-01T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D3_conflict_with_project_round_is_reported
+FAILED tests/test_adversarial.py::test_D5_seal_preserves_overlay_provenance
+FAILED tests/test_adversarial.py::test_D8_deleted_seal_is_detected - Failed: ...
+FAILED tests/test_adversarial.py::test_D9_reissue_for_same_date_is_reported
+FAILED tests/test_adversarial.py::test_E4_calibration_reported - assert 'cali...
+FAILED tests/test_adversarial.py::test_E5_missed_issue_dates_are_counted - as...
+FAILED tests/test_adversarial.py::test_E6_edited_overlay_row_after_sealing_is_detected
+20 failed, 36 deselected in 18.63s

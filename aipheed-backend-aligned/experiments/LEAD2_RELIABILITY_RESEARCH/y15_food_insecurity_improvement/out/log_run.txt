@@ -1,0 +1,22 @@
+{'rows': 77, 'period': '2001-Q1..2020-Q4', 'prevalence': 0.7012987012987013, 'fallbackRows': 29, 'FIRIR_issued': 77, 'FIRIR_domainCounts': {5: 70, 4: 7}, 'C2_keptFrequency': {'(none)': 38, 'C3': 23, 'E2': 22, 'A2': 12, 'C4': 11}}
+PERSIST n 77 acc 0.636 bal 0.566 P 0.74 R 0.74 spec 0.39 F1 0.741 AUC 0.566 Brier 0.3636 CM 40/14/14/9 slope 0.033 | n 77 vsH1 +0.1477 p 1.000 (blk 1.000) H1bal 0.585
+CLIM    n 77 acc 0.636 bal 0.591 P 0.76 R 0.70 spec 0.48 F1 0.731 AUC 0.494 Brier 0.2397 CM 38/12/16/11 slope 0.182 | n 77 vsH1 +0.0238 p 0.828 (blk 0.886) H1bal 0.585
+H1      n 77 acc 0.662 bal 0.585 P 0.75 R 0.78 spec 0.39 F1 0.764 AUC 0.682 Brier 0.2159 CM 42/14/12/9 slope 0.424
+FIRIR   n 77 acc 0.506 bal 0.573 P 0.79 R 0.41 spec 0.74 F1 0.537 AUC 0.630 Brier 0.2475 CM 22/6/32/17 slope 1.22 | n 77 vsH1 +0.0316 p 0.927 (blk 0.929) H1bal 0.585
+SCREEN  n 77 acc 0.662 bal 0.535 P 0.72 R 0.85 spec 0.22 F1 0.780 AUC 0.618 Brier 0.2202 CM 46/18/8/5 slope 0.384 | n 77 vsH1 +0.0043 p 0.622 (blk 0.811) H1bal 0.585
+KAL     n 76 acc 0.658 bal 0.607 P 0.76 R 0.74 spec 0.48 F1 0.750 AUC 0.715 Brier 0.1924 CM 39/12/14/11 slope 0.771 | n 76 vsH1 -0.0248 p 0.091 (blk 0.248) H1bal 0.582
+CONT    n 77 acc 0.662 bal 0.522 P 0.71 R 0.87 spec 0.17 F1 0.783 AUC 0.614 Brier 0.2355 CM 47/19/7/4 slope 0.28 | n 77 vsH1 +0.0196 p 0.784 (blk 0.864) H1bal 0.585
+REMIT   n 77 acc 0.636 bal 0.504 P 0.70 R 0.83 spec 0.17 F1 0.763 AUC 0.633 Brier 0.2226 CM 45/19/9/4 slope 0.366 | n 77 vsH1 +0.0066 p 0.658 (blk 0.783) H1bal 0.585
+holm {'KAL': 0.45499999999999996, 'SCREEN': 1.0, 'REMIT': 1.0, 'CONT': 1.0, 'FIRIR': 1.0}
+gate {'FIRIR': {'G1': False, 'G2': False, 'passes': False}, 'SCREEN': {'G1': False, 'G2': False, 'passes': False}, 'KAL': {'G1': False, 'G2': True, 'passes': False}, 'CONT': {'G1': False, 'G2': False, 'passes': False}, 'REMIT': {'G1': False, 'G2': False, 'passes': False}} passed: []
+continuous {'CONT': {'MAE': 4.609275829108042, 'CRPS': 3.211868678516141}, 'RW': {'MAE': 4.874025974025974, 'CRPS': 3.4010199667470036}, 'CLIM': {'MAE': 4.228650516139433, 'CRPS': 3.0872409531202254}, 'CONT_minus_RW_CRPS': {'diff': -0.18915128823086183, 'p_one_sided': 0.2144}}
+E2 lead test {'lead': {'r': 0.171, 'n': 77, 'CI90': [0.029, 0.312]}, 'conc': {'r': -0.172, 'n': 75, 'CI90': [-0.317, -0.033]}}
+CONFIRM: DESCRIPTIVE ONLY: no candidate passed the development gate; nothing is selected from these rows
+  served_FIRI_v2  rows 17 abst 0 acc 0.941 bal 0.958 P 1.00 R 0.92 AUC 0.933 Brier 0.1887 CM 11/0/1/5 rules FPPPFPP fails ['R1', 'R5']
+  H1_firi_rows    rows 17 abst 0 acc 0.706 bal 0.617 P 0.77 R 0.83 AUC 0.792 Brier 0.1613 CM 10/3/2/2 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y15_H1          rows 17 abst 0 acc 0.706 bal 0.617 P 0.77 R 0.83 AUC 0.825 Brier 0.1420 CM 10/3/2/2 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y15_FIRIR       rows 17 abst 0 acc 0.706 bal 0.675 P 0.82 R 0.75 AUC 0.783 Brier 0.2276 CM 9/2/3/3 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y15_SCREEN      rows 17 abst 0 acc 0.706 bal 0.733 P 0.89 R 0.67 AUC 0.667 Brier 0.2172 CM 8/1/4/4 rules FFPFFPF fails ['R1', 'R2', 'R4', 'R5', 'R7']
+  Y15_KAL         rows 17 abst 0 acc 0.706 bal 0.500 P 0.71 R 1.00 AUC 0.783 Brier 0.1548 CM 12/5/0/0 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y15_CONT        rows 17 abst 0 acc 0.588 bal 0.417 P 0.67 R 0.83 AUC 0.683 Brier 0.2147 CM 10/5/2/0 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y15_REMIT       rows 17 abst 0 acc 0.706 bal 0.500 P 0.71 R 1.00 AUC 0.783 Brier 0.1795 CM 12/5/0/0 rules FFFFFPF fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']

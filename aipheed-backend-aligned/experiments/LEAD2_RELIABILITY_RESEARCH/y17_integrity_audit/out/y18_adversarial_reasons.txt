@@ -1,0 +1,68 @@
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:84: kprospect.IntegrityError: EXPERIMENT_PLAN.md changed after freezing (sha 1fb9f4097256 != registered 208b575464d2)
+[XPASS(strict)] F1 confirmed defect: integrity checks are `assert` statements, removed by python -O
+[XPASS(strict)] F1 confirmed defect: integrity che
+[XPASS(strict)] F6 confirmed defect: the primary analysis is recomputed and re-written on every run; nothing locks it
+[XPASS(strict)] F6 confirmed defect: the primary a
+[XPASS(strict)] F1 confirmed defect: origin_of validates with assert; python -O lets a non-quarter-start date through
+[XPASS(strict)] F1 confirmed defect: origin_of val
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'published': is after the entry time 2026-10-29T00:00:00Z; a round cannot be entered before it is published (value '2027-01-01')
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'published': must be an ISO date YYYY-MM-DD (no time, no timezone; other formats are ambiguous) (value '2027-01-01T00:00:00')
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'published': is after the entry time 2026-10-29T00:00:00Z; a round cannot be entered before it is published (value '2027-01-05')
+[XPASS(strict)] F3 confirmed defect: ambiguous non-ISO dates are parsed silently (12/01/2026 -> Dec 1)
+[XPASS(strict)] F3 confirmed defect: ambiguous non
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'published': is after the entry time 2026-10-29T00:00:00Z; a round cannot be entered before it is published (value '2026-12-20')
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+[XPASS(strict)] F2 confirmed defect: overlay values are not range-checked
+[XPASS(strict)] F2 confirmed defect: overlay value
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'area': must be one of NCR, BL, VIS, MIN (value 'XX')
+[XPASS(strict)] F5 confirmed defect: a conflicting value for an existing project round is silently ignored
+[XPASS(strict)] F5 confirmed defect: a conflicting
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:122: kprospect.OverlayError: overlay row 1 (file line 2) field 'source_url': must be an https:// URL of the publication (value 'u')
+[XPASS(strict)] F7 confirmed defect: the seal keeps only the overlay hash, not the rows/source URLs used
+[XPASS(strict)] F7 confirmed defect: the seal keep
+C:\aiPHeed-final1\aipheed-backend-aligned\experiments\LEAD2_RELIABILITY_RESEARCH\y16_kalman_prospective\runner\kprospect.py:435: kprospect.IntegrityError: seal seal_issue_2027-01-01_written_20270101T030000Z.json was not written with the system clock (clockSource=caller-supplied); refused
+[XPASS(strict)] F8 confirmed defect: a registered seal whose file was deleted is not detected
+[XPASS(strict)] F8 confirmed defect: a registered 
+[XPASS(strict)] F10 confirmed defect: calibration (registered in plan section 5) is not computed by evaluate.py
+[XPASS(strict)] F10 confirmed defect: calibration 
+XFAIL tests/test_adversarial.py::test_C4_duplicate_rows_within_overlay_are_not_double_counted - F4 confirmed defect: identical rows inside the overlay are each added (double-counted)
+XFAIL tests/test_adversarial.py::test_D9_reissue_for_same_date_is_reported - F8 confirmed defect: an unregistered seal file (not in SEALS.txt) fails only via assert; a second valid seal for the same issue is silently dropped, not reported
+XFAIL tests/test_adversarial.py::test_E5_missed_issue_dates_are_counted - F11 confirmed defect: missed issue windows are not enumerated or counted (plan section 5)
+XFAIL tests/test_adversarial.py::test_E6_edited_overlay_row_after_sealing_is_detected - F12 confirmed defect: evaluate.py does not verify the overlay is append-only against the seals (plan section 5)
+FAILED tests/test_adversarial.py::test_A3_changed_plan_is_rejected - kprospec...
+FAILED tests/test_adversarial.py::test_A4_plan_check_survives_python_O - [XPA...
+FAILED tests/test_adversarial.py::test_A6_primary_analysis_is_locked_after_first_run
+FAILED tests/test_adversarial.py::test_B4_invalid_issue_date_rejected_under_python_O
+FAILED tests/test_adversarial.py::test_B6_rounds_on_or_after_issue_are_excluded[2027-01-01]
+FAILED tests/test_adversarial.py::test_B6_rounds_on_or_after_issue_are_excluded[2027-01-01T00:00:00]
+FAILED tests/test_adversarial.py::test_B6_rounds_on_or_after_issue_are_excluded[2027-01-05]
+FAILED tests/test_adversarial.py::test_B7_non_iso_publication_date_rejected
+FAILED tests/test_adversarial.py::test_C3_persistence_uses_only_latest_eligible_reading
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,150,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,-3,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,-4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q9,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2027-Q2,15,2026-12-20,4.0,u,2026-10-29T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D1_invalid_overlay_rows_rejected[BL,2026-Q4,15,2026-12-20,4.0,u,2026-12-01T00:00:00Z]
+FAILED tests/test_adversarial.py::test_D2_valid_area_and_date_presence_enforced
+FAILED tests/test_adversarial.py::test_D3_conflict_with_project_round_is_reported
+FAILED tests/test_adversarial.py::test_D4_exact_duplicate_of_project_round_is_ignored
+FAILED tests/test_adversarial.py::test_D5_seal_preserves_overlay_provenance
+FAILED tests/test_adversarial.py::test_D7_risk_seal_and_registry_edited_together_go_undetected
+FAILED tests/test_adversarial.py::test_D8_deleted_seal_is_detected - [XPASS(s...
+FAILED tests/test_adversarial.py::test_E4_calibration_reported - [XPASS(stric...

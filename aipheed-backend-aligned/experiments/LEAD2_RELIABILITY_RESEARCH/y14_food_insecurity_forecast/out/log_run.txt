@@ -1,0 +1,37 @@
+{'rows': 46, 'period': '2009-Q1..2020-Q4', 'prevalence': 0.7391304347826086, 'fallbackRows': {'M1': 0, 'M2': 0}, 'domainsAvailable_F1': {5: 46}}
+PERSIST  acc 0.717 bal 0.620 P 0.80 R 0.82 spec 0.42 F1 0.812 AUC 0.620 Brier 0.2826 MAE 5.30 vsH1 +0.1016 p 0.996 (blk 0.995)
+CLIM     acc 0.739 bal 0.500 P 0.74 R 1.00 spec 0.00 F1 0.850 AUC 0.277 Brier 0.2139 vsH1 +0.0329 p 0.862 (blk 0.942)
+H1       acc 0.739 bal 0.635 P 0.81 R 0.85 spec 0.42 F1 0.829 AUC 0.740 Brier 0.1810 MAE 5.30
+F1       acc 0.543 bal 0.583 P 0.81 R 0.50 spec 0.67 F1 0.618 AUC 0.647 Brier 0.2440 vsH1 +0.0629 p 0.980 (blk 0.992)
+F2       acc 0.457 bal 0.551 P 0.80 R 0.35 spec 0.75 F1 0.490 AUC 0.569 Brier 0.2834 vsH1 +0.1024 p 0.995 (blk 0.998)
+M1       acc 0.696 bal 0.471 P 0.73 R 0.94 spec 0.00 F1 0.821 AUC 0.642 Brier 0.1957 vsH1 +0.0147 p 0.746 (blk 0.858)
+M1_0     acc 0.696 bal 0.471 P 0.73 R 0.94 spec 0.00 F1 0.821 AUC 0.672 Brier 0.1880 vsH1 +0.0070 p 0.628 (blk 0.793)
+M2       acc 0.717 bal 0.485 P 0.73 R 0.97 spec 0.00 F1 0.835 AUC 0.525 Brier 0.2291 MAE 4.98 vsH1 +0.0481 p 0.890 (blk 0.923)
+M2_0     acc 0.739 bal 0.500 P 0.74 R 1.00 spec 0.00 F1 0.850 AUC 0.659 Brier 0.2079 MAE 4.86 vsH1 +0.0269 p 0.753 (blk 0.856)
+KAL      acc 0.674 bal 0.456 P 0.72 R 0.91 spec 0.00 F1 0.805 AUC 0.745 Brier 0.1717 vsH1 -0.0093 p 0.292 (blk 0.485)
+holm {'M1': 1.0, 'M2': 1.0, 'F1': 1.0, 'F2': 1.0}
+G3 tests {'F2': {'diff': 0.06948814834483204, 'p_one_sided': 0.9706}, 'M1': {'diff': 0.007692915934125513, 'p_one_sided': 0.8186}, 'M2': {'diff': 0.021200686791506374, 'p_one_sided': 0.96}}
+gate {'F1': {'G1': False, 'G2': False, 'G3': False, 'passes': False}, 'F2': {'G1': False, 'G2': False, 'G3': False, 'passes': False}, 'M1': {'G1': False, 'G2': False, 'G3': False, 'passes': False}, 'M2': {'G1': False, 'G2': False, 'G3': False, 'passes': False}} passed: []
+calibration {'H1': {'slope': 0.514, 'intercept': 0.545}, 'M1': {'slope': 0.475, 'intercept': 0.546}, 'M2': {'slope': 0.095, 'intercept': 0.828}, 'KAL': {'slope': 0.874, 'intercept': 0.015}}
+lead A2     leading r +0.039 [-0.12, 0.21] n 77 | concurrent r +0.164 [-0.007, 0.322]
+lead A3     leading r -0.119 [-0.279, 0.038] n 77 | concurrent r +0.059 [-0.156, 0.238]
+lead C1     leading r +0.005 [-0.18, 0.173] n 77 | concurrent r +0.009 [-0.152, 0.193]
+lead C2     leading r -0.154 [-0.347, 0.025] n 77 | concurrent r +0.119 [-0.041, 0.289]
+lead C3     leading r -0.289 [-0.481, -0.072] n 77 | concurrent r +0.007 [-0.182, 0.222]
+lead C4     leading r -0.157 [-0.343, 0.011] n 77 | concurrent r -0.068 [-0.23, 0.105]
+lead E1     leading r -0.036 [-0.241, 0.173] n 54 | concurrent r +0.085 [-0.138, 0.323]
+lead dom_A  leading r -0.030 [-0.206, 0.14] n 77 | concurrent r +0.092 [-0.121, 0.279]
+lead dom_C  leading r -0.254 [-0.412, -0.087] n 77 | concurrent r +0.088 [-0.098, 0.269]
+lead dom_E  leading r -0.010 [-0.252, 0.248] n 46 | concurrent r +0.080 [-0.153, 0.356]
+CONFIRM: DESCRIPTIVE ONLY: no candidate passed the development gate; nothing is selected from these rows
+  served_FIRI_v2   acc 0.941 bal 0.958 P 1.00 R 0.92 AUC 0.933 Brier 0.1887 CM 11/0/1/5 fails ['R1', 'R5']
+  H1_firi_rows     acc 0.706 bal 0.617 P 0.77 R 0.83 AUC 0.792 Brier 0.1613 CM 10/3/2/2 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_F1           acc 0.588 bal 0.708 P 1.00 R 0.42 AUC 0.883 Brier 0.2307 CM 5/0/7/5 fails ['R1', 'R2', 'R4', 'R5', 'R6', 'R7']
+  Y14_F2 {'undefinedRows': 1}
+  Y14_M1           acc 0.588 bal 0.417 P 0.67 R 0.83 AUC 0.717 Brier 0.1790 CM 10/5/2/0 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_M2           acc 0.647 bal 0.458 P 0.69 R 0.92 AUC 0.667 Brier 0.2164 CM 11/5/1/0 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_H1           acc 0.706 bal 0.617 P 0.77 R 0.83 AUC 0.825 Brier 0.1420 CM 10/3/2/2 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_M1_0         acc 0.706 bal 0.500 P 0.71 R 1.00 AUC 0.783 Brier 0.1750 CM 12/5/0/0 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_M2_0         acc 0.706 bal 0.500 P 0.71 R 1.00 AUC 0.783 Brier 0.1859 CM 12/5/0/0 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+  Y14_KAL          acc 0.706 bal 0.500 P 0.71 R 1.00 AUC 0.783 Brier 0.1548 CM 12/5/0/0 fails ['R1', 'R2', 'R3', 'R4', 'R5', 'R7']
+served FIRI v2 domains (2021+, descriptive): {"dom_A": {"rows": 17, "auc": 0.2, "meanWhenHIGH": 0.396, "meanWhenLOW": 0.605}, "dom_V": {"rows": 17, "auc": 0.5, "meanWhenHIGH": 0.407, "meanWhenLOW": 0.407}, "dom_C": {"rows": 17, "auc": 0.95, "meanWhenHIGH": 0.465, "meanWhenLOW": 0.126}, "dom_E": {"rows": 8, "auc": null, "meanWhenHIGH": 0.855, "meanWhenLOW": NaN}, "dom_N": {"rows": 1, "auc": null, "meanWhenHIGH": 0.475, "meanWhenLOW": NaN}, "dom_H": {"rows": 17, "auc": 0.792, "meanWhenHIGH": 0.784, "meanWhenLOW": 0.445}, "FIRI": {"rows": 17, "auc": 0.933, "meanWhenHIGH": 0.56, "meanWhenLOW": 0.396}}

@@ -1,0 +1,34 @@
+== main: rows 380 quarters 76 prevalence 0.518 2002-Q1..2020-Q4 missing supply cells 26
+  pers_bin  acc 0.658 bal 0.659 P 0.68 R 0.64 spec 0.68 F1 0.660 AUC 0.659 Brier 0.3421
+  CLIM      acc 0.532 bal 0.543 P 0.63 R 0.23 spec 0.85 F1 0.341 AUC 0.503 Brier 0.2590  vsPP +0.0290 p 0.996 (block4 p 0.967)
+  PERS_PROB acc 0.624 bal 0.629 P 0.69 R 0.49 spec 0.77 F1 0.576 AUC 0.669 Brier 0.2299
+  M1        acc 0.634 bal 0.639 P 0.71 R 0.50 spec 0.78 F1 0.585 AUC 0.652 Brier 0.2391  vsPP +0.0091 p 0.862 (block4 p 0.811)
+  M2        acc 0.629 bal 0.635 P 0.72 R 0.47 spec 0.80 F1 0.566 AUC 0.664 Brier 0.2381  vsPP +0.0082 p 0.701 (block4 p 0.689)
+  M3        acc 0.613 bal 0.608 P 0.60 R 0.76 spec 0.46 F1 0.670 AUC 0.700 Brier 0.2248  vsPP -0.0051 p 0.356 (block4 p 0.387)
+  M2_0      acc 0.653 bal 0.660 P 0.77 R 0.47 spec 0.85 F1 0.585 AUC 0.670 Brier 0.2366  vsPP +0.0066 p 0.655 (block4 p 0.608)
+  M3_0      acc 0.605 bal 0.600 P 0.59 R 0.75 spec 0.45 F1 0.664 AUC 0.699 Brier 0.2251  vsPP -0.0048 p 0.363 (block4 p 0.396)
+  WAR_P     acc 0.605 bal 0.601 P 0.60 R 0.71 spec 0.50 F1 0.650 AUC 0.636 Brier 0.2509  vsPP +0.0209 p 0.878 (block4 p 0.743)
+== sensitivity: rows 380 quarters 76 prevalence 0.518 2002-Q1..2020-Q4 missing supply cells 28
+  pers_bin  acc 0.658 bal 0.659 P 0.68 R 0.64 spec 0.68 F1 0.660 AUC 0.659 Brier 0.3421
+  CLIM      acc 0.532 bal 0.543 P 0.63 R 0.23 spec 0.85 F1 0.341 AUC 0.503 Brier 0.2590  vsPP +0.0290 p 0.996 (block4 p 0.967)
+  PERS_PROB acc 0.624 bal 0.629 P 0.69 R 0.49 spec 0.77 F1 0.576 AUC 0.669 Brier 0.2299
+  M1        acc 0.600 bal 0.605 P 0.66 R 0.47 spec 0.74 F1 0.548 AUC 0.651 Brier 0.2358  vsPP +0.0058 p 0.992 (block4 p 0.938)
+  M2        acc 0.629 bal 0.633 P 0.69 R 0.52 spec 0.75 F1 0.591 AUC 0.656 Brier 0.2399  vsPP +0.0100 p 0.739 (block4 p 0.666)
+  M3        acc 0.616 bal 0.610 P 0.60 R 0.76 spec 0.46 F1 0.671 AUC 0.693 Brier 0.2273  vsPP -0.0026 p 0.432 (block4 p 0.446)
+  M2_0      acc 0.653 bal 0.660 P 0.77 R 0.47 spec 0.85 F1 0.585 AUC 0.670 Brier 0.2366  vsPP +0.0066 p 0.655 (block4 p 0.608)
+  M3_0      acc 0.605 bal 0.600 P 0.59 R 0.75 spec 0.45 F1 0.664 AUC 0.699 Brier 0.2251  vsPP -0.0048 p 0.363 (block4 p 0.396)
+vs ablation: {'M1': {'diff': 0.009142242916123483, 'p_one_sided': 0.8616, 'clusters': 76}, 'M2': {'diff': 0.001536380866582077, 'p_one_sided': 0.5842, 'clusters': 76}, 'M3': {'diff': -0.0003051915606647418, 'p_one_sided': 0.4288, 'clusters': 76}}
+holm: {'M3': 1.0, 'M2': 1.0, 'M1': 1.0}
+acceptance: {'M1': {'A1': False, 'A2': True, 'A3': False, 'A4': False, 'credible': False}, 'M2': {'A1': False, 'A2': True, 'A3': False, 'A4': False, 'credible': False}, 'M3': {'A1': False, 'A2': False, 'A3': False, 'A4': True, 'credible': False}}
+credible: [] step-4 candidate: None
+calibration PERS_PROB 0.859 0.213
+calibration M1 0.611 0.25
+calibration M2 0.584 0.239
+calibration M3 0.756 -0.245
+lead test S1_stocks_yoy      leading r -0.191 [-0.373, -0.004]  concurrent r -0.094 [-0.329, 0.13]
+lead test S2_stocks_d3       leading r -0.028 [-0.216, 0.16]  concurrent r +0.019 [-0.099, 0.147]
+lead test S3_nfa_share       leading r -0.111 [-0.263, 0.049]  concurrent r -0.207 [-0.362, -0.047]
+lead test S4_commercial_yoy  leading r -0.121 [-0.306, 0.059]  concurrent r -0.012 [-0.219, 0.183]
+lead test S5_farmgate_yoy    leading r -0.010 [-0.156, 0.138]  concurrent r +0.462 [0.321, 0.589]
+lead test S6_farmgate_d3     leading r +0.194 [0.027, 0.351]  concurrent r +0.095 [-0.15, 0.342]
+per-province Brier: {'PERS_PROB': {'PH040100000': 0.2273, 'PH040200000': 0.1977, 'PH040300000': 0.2671, 'PH040400000': 0.2047, 'PH040500000': 0.2529}, 'M1': {'PH040100000': 0.2121, 'PH040200000': 0.2267, 'PH040300000': 0.2768, 'PH040400000': 0.2117, 'PH040500000': 0.2681}, 'M2': {'PH040100000': 0.2251, 'PH040200000': 0.2304, 'PH040300000': 0.2723, 'PH040400000': 0.2126, 'PH040500000': 0.2503}, 'M3': {'PH040100000': 0.2775, 'PH040200000': 0.2302, 'PH040300000': 0.1915, 'PH040400000': 0.2008, 'PH040500000': 0.224}}

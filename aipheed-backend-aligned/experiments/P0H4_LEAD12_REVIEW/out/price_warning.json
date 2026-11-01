@@ -1,0 +1,127 @@
+{
+ "addendumSha256": "89e620cd322b6c1ccf78a527b3303cc88f9837baf5d18cf1cf553cf4c54f7213",
+ "lead1": {
+  "n": 70,
+  "pos": 31,
+  "neg": 39,
+  "TP": 19,
+  "FP": 15,
+  "FN": 12,
+  "TN": 24,
+  "accuracy": 0.6142857142857143,
+  "balanced": 0.6141439205955335,
+  "precision": 0.5588235294117647,
+  "recall": 0.6129032258064516,
+  "specificity": 0.6153846153846154,
+  "f1": 0.5846153846153845,
+  "quarters": 14,
+  "auc": 0.6716294458229942,
+  "brier": 0.2232231173913294,
+  "baseRate": 0.44285714285714284,
+  "baselines": {
+   "always-LOW": 0.5571428571428572,
+   "always-HIGH": 0.44285714285714284,
+   "price persistence": 0.6571428571428571
+  },
+  "rules": {
+   "R1": [
+    true,
+    "14 q, 70 rows"
+   ],
+   "R2": [
+    false,
+    0.6143
+   ],
+   "R3": [
+    false,
+    0.6141
+   ],
+   "R4": [
+    false,
+    {
+     "always-LOW": 0.5571,
+     "always-HIGH": 0.4429,
+     "price persistence": 0.6571
+    }
+   ],
+   "R5": [
+    true,
+    {
+     "price persistence": "diff -0.1196 p 0.012",
+     "price climatology": "diff -0.0580 p 0.046"
+    }
+   ],
+   "R6": [
+    false,
+    "P 0.559 R 0.613"
+   ],
+   "R7": [
+    false,
+    "thirds [0.28, 0.84, 0.75], LOQO 0.585"
+   ]
+  },
+  "verdict": "not reliable"
+ },
+ "lead2": {
+  "n": 65,
+  "pos": 26,
+  "neg": 39,
+  "TP": 14,
+  "FP": 14,
+  "FN": 12,
+  "TN": 25,
+  "accuracy": 0.6,
+  "balanced": 0.5897435897435898,
+  "precision": 0.5,
+  "recall": 0.5384615384615384,
+  "specificity": 0.6410256410256411,
+  "f1": 0.5185185185185186,
+  "quarters": 13,
+  "auc": 0.6740631163708086,
+  "brier": 0.22690457972965478,
+  "baseRate": 0.4,
+  "baselines": {
+   "always-LOW": 0.6,
+   "always-HIGH": 0.4,
+   "price persistence": 0.5692307692307692
+  },
+  "rules": {
+   "R1": [
+    true,
+    "13 q, 65 rows"
+   ],
+   "R2": [
+    false,
+    0.6
+   ],
+   "R3": [
+    false,
+    0.5897
+   ],
+   "R4": [
+    false,
+    {
+     "always-LOW": 0.6,
+     "always-HIGH": 0.4,
+     "price persistence": 0.5692
+    }
+   ],
+   "R5": [
+    true,
+    {
+     "price persistence": "diff -0.2039 p 0.000",
+     "price climatology": "diff -0.0561 p 0.014"
+    }
+   ],
+   "R6": [
+    false,
+    "P 0.500 R 0.538"
+   ],
+   "R7": [
+    false,
+    "thirds [0.48, 0.55, 0.8], LOQO 0.567"
+   ]
+  },
+  "verdict": "not reliable"
+ }
+}
