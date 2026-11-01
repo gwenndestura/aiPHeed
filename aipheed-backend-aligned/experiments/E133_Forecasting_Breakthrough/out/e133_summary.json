@@ -1,0 +1,330 @@
+{
+  "any_model_any_lead_75": false,
+  "any_rule_set_passed": [],
+  "best_within_any": [
+    {
+      "lead": 4,
+      "model": "ENS133",
+      "n": 20,
+      "policy": "P-REL",
+      "set": "S-E132",
+      "within_tolerance": 0.7
+    },
+    {
+      "lead": 3,
+      "model": "ENS133",
+      "n": 24,
+      "policy": "P-DASH",
+      "set": "S-E132",
+      "within_tolerance": 0.6666666666666666
+    },
+    {
+      "lead": 3,
+      "model": "HFM-NS",
+      "n": 24,
+      "policy": "P-DASH",
+      "set": "S-E132",
+      "within_tolerance": 0.6666666666666666
+    },
+    {
+      "lead": 3,
+      "model": "NLP-ONLY",
+      "n": 24,
+      "policy": "P-DASH",
+      "set": "S-E132",
+      "within_tolerance": 0.6666666666666666
+    },
+    {
+      "lead": 3,
+      "model": "HFM",
+      "n": 24,
+      "policy": "P-DASH",
+      "set": "S-E132",
+      "within_tolerance": 0.6666666666666666
+    }
+  ],
+  "beta_by_issue": {
+    "2023-Q4": {
+      "beta_A": 0.408,
+      "beta_C": 0.148,
+      "beta_E": 0.468,
+      "beta_N": 0.0,
+      "beta_V": 0.0
+    },
+    "2024-Q1": {
+      "beta_A": 0.508,
+      "beta_C": 0.471,
+      "beta_E": 0.41,
+      "beta_N": 0.036,
+      "beta_V": 0.0
+    },
+    "2024-Q2": {
+      "beta_A": 0.497,
+      "beta_C": 0.33,
+      "beta_E": 0.35,
+      "beta_N": 0.043,
+      "beta_V": 0.0
+    },
+    "2024-Q3": {
+      "beta_A": 0.52,
+      "beta_C": 0.393,
+      "beta_E": 0.46,
+      "beta_N": 0.181,
+      "beta_V": 0.0
+    },
+    "2024-Q4": {
+      "beta_A": 0.732,
+      "beta_C": 0.407,
+      "beta_E": 0.418,
+      "beta_N": 0.131,
+      "beta_V": 0.241
+    },
+    "2025-Q1": {
+      "beta_A": 0.626,
+      "beta_C": 0.007,
+      "beta_E": 0.632,
+      "beta_N": 0.142,
+      "beta_V": 0.184
+    },
+    "2025-Q2": {
+      "beta_A": 0.568,
+      "beta_C": 0.248,
+      "beta_E": 0.727,
+      "beta_N": 0.054,
+      "beta_V": 0.126
+    },
+    "2025-Q3": {
+      "beta_A": 0.908,
+      "beta_C": 0.182,
+      "beta_E": 0.409,
+      "beta_N": 0.017,
+      "beta_V": 0.0
+    },
+    "2025-Q4": {
+      "beta_A": 1.038,
+      "beta_C": 0.18,
+      "beta_E": 0.319,
+      "beta_N": 0.019,
+      "beta_V": 0.0
+    },
+    "2026-Q1": {
+      "beta_A": 0.875,
+      "beta_C": 0.0,
+      "beta_E": 0.449,
+      "beta_N": 0.069,
+      "beta_V": 0.15
+    },
+    "2026-Q2": {
+      "beta_A": 0.876,
+      "beta_C": 0.0,
+      "beta_E": 0.403,
+      "beta_N": 0.047,
+      "beta_V": 0.0
+    },
+    "2026-Q3": {
+      "beta_A": 0.828,
+      "beta_C": 0.027,
+      "beta_E": 0.415,
+      "beta_N": 0.08,
+      "beta_V": 0.0
+    }
+  },
+  "candidate_rules": {
+    "1": {
+      "S-E132_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N5_stability",
+        "N6_no_province_below_persistence",
+        "N7_interval_coverage_80"
+      ],
+      "S-U_failed": [
+        "N2_within_tolerance_75",
+        "N5_stability",
+        "N6_no_province_below_persistence"
+      ],
+      "S-U_mae": 4.697529321690627,
+      "S-U_quarters": 11,
+      "S-U_rows": 44,
+      "S-U_within": 0.5454545454545454,
+      "coverage80": 0.7045454545454546,
+      "p_vs_persistence": 0.0345,
+      "validated": false,
+      "within_thirds": [
+        0.6666666666666666,
+        0.4666666666666667,
+        0.5
+      ]
+    },
+    "2": {
+      "S-E132_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N4_squared_error_vs_persistence_and_climatology",
+        "N5_stability",
+        "N6_no_province_below_persistence"
+      ],
+      "S-U_failed": [
+        "N2_within_tolerance_75",
+        "N5_stability"
+      ],
+      "S-U_mae": 4.865838717929185,
+      "S-U_quarters": 10,
+      "S-U_rows": 40,
+      "S-U_within": 0.5,
+      "coverage80": 0.75,
+      "p_vs_persistence": 0.0885,
+      "validated": false,
+      "within_thirds": [
+        0.6428571428571429,
+        0.46153846153846156,
+        0.38461538461538464
+      ]
+    },
+    "3": {
+      "S-E132_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N3_beats_every_baseline_mae_rmse",
+        "N4_squared_error_vs_persistence_and_climatology",
+        "N5_stability",
+        "N6_no_province_below_persistence"
+      ],
+      "S-U_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N4_squared_error_vs_persistence_and_climatology",
+        "N5_stability",
+        "N6_no_province_below_persistence",
+        "N7_interval_coverage_80"
+      ],
+      "S-U_mae": 5.099625715949312,
+      "S-U_quarters": 9,
+      "S-U_rows": 36,
+      "S-U_within": 0.5,
+      "coverage80": 0.6944444444444444,
+      "p_vs_persistence": 0.1405,
+      "validated": false,
+      "within_thirds": [
+        0.5,
+        0.75,
+        0.25
+      ]
+    },
+    "4": {
+      "S-E132_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N3_beats_every_baseline_mae_rmse",
+        "N4_squared_error_vs_persistence_and_climatology",
+        "N5_stability",
+        "N6_no_province_below_persistence"
+      ],
+      "S-U_failed": [
+        "N1_data",
+        "N2_within_tolerance_75",
+        "N4_squared_error_vs_persistence_and_climatology",
+        "N5_stability",
+        "N6_no_province_below_persistence"
+      ],
+      "S-U_mae": 5.513014042048527,
+      "S-U_quarters": 8,
+      "S-U_rows": 32,
+      "S-U_within": 0.3125,
+      "coverage80": 0.75,
+      "p_vs_persistence": 0.176,
+      "validated": false,
+      "within_thirds": [
+        0.36363636363636365,
+        0.2727272727272727,
+        0.3
+      ]
+    }
+  },
+  "maximum_reliable_lead": null,
+  "overfitting": {
+    "beta_at_seal": {
+      "A": 0.5778979544205906,
+      "C": 0.030546692615388987,
+      "E": 0.1483498114576947,
+      "N": 0.08195410260095018,
+      "V": 0.0
+    },
+    "in_sample_one_step_mae": 3.0991666786005503,
+    "observations": 80,
+    "out_of_sample_lead1_mae": 4.697529321690626,
+    "parameters": 10
+  },
+  "selection": {
+    "candidate": "HFM-X",
+    "rule": "highest Lead-2 within, S-U, P-DASH; ties lower MAE",
+    "table": [
+      {
+        "mae": 4.8658,
+        "model": "HFM-X",
+        "n": 40,
+        "rmse": 6.4217,
+        "within_tolerance": 0.5
+      },
+      {
+        "mae": 5.7229,
+        "model": "SEAS-LLM",
+        "n": 40,
+        "rmse": 7.5794,
+        "within_tolerance": 0.45
+      },
+      {
+        "mae": 4.9022,
+        "model": "HFM-X-B30",
+        "n": 40,
+        "rmse": 6.3871,
+        "within_tolerance": 0.425
+      },
+      {
+        "mae": 5.3776,
+        "model": "ENS133",
+        "n": 40,
+        "rmse": 7.3291,
+        "within_tolerance": 0.4
+      },
+      {
+        "mae": 5.515,
+        "model": "HFM-NS-DES",
+        "n": 40,
+        "rmse": 7.3107,
+        "within_tolerance": 0.4
+      },
+      {
+        "mae": 5.647,
+        "model": "HFM-NS",
+        "n": 40,
+        "rmse": 7.384,
+        "within_tolerance": 0.4
+      },
+      {
+        "mae": 5.6471,
+        "model": "HFM",
+        "n": 40,
+        "rmse": 7.384,
+        "within_tolerance": 0.4
+      },
+      {
+        "mae": 6.965,
+        "model": "HFM-TREND",
+        "n": 40,
+        "rmse": 8.4983,
+        "within_tolerance": 0.325
+      }
+    ]
+  },
+  "trigger_demonstrated_by_lead": {
+    "1": [],
+    "2": [],
+    "3": [
+      "E"
+    ],
+    "4": [
+      "N"
+    ]
+  }
+}
