@@ -21,9 +21,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import seal_lead2 as SL  # noqa: E402
 
 SCORES = SL.SEALS / "scores"
+ADDENDUM = SL.SEALS / "PREREG_LEAD2_ADDENDUM_1.md"
 MIN_CLAIM_QUARTERS = 8                                                # PREREG section 7
 CANDIDATES = ("C0_P0H4", "C1_M0", "C2_M2")
 PRIMARY = ("C1_M0", "D0")
+
+
+def addendum_rules(c1: dict, c2: dict) -> dict:
+    """PREREG_LEAD2_ADDENDUM_1 section 2, from a province's sealed C1_M0 and C2_M2 parts: (probability, HIGH/LOW)."""
+    h, p2 = c2["hunger"], c2["price"]
+    pbar = (c1["price"] + p2) / 2
+    return {"A1": (h * p2, "HIGH" if (h >= 0.5 and p2 >= 0.45) else "LOW"),
+            "A2": (h * pbar, "HIGH" if h * pbar >= 0.5 else "LOW")}
 
 
 def outcome_published(target_q: int, rounds, today: dt.date) -> bool:
@@ -69,6 +78,8 @@ def score_one(seal_path: Path, today: dt.date) -> dict:
             r[f"{c}_min"] = min(v["hunger"], v["price"])
             for d in ("D0", "D1"):
                 r[f"{c}_{d}_correct"] = int((v[d] == "HIGH") == bool(y))
+        for a, (prob, cls) in addendum_rules(seal["candidates"]["C1_M0"][p], seal["candidates"]["C2_M2"][p]).items():
+            r[f"{a}_prob"], r[f"{a}_high"] = prob, int(cls == "HIGH")
         for k, b in (("post", "atPostIssue"), ("served", "atServedIssue")):
             base = seal["baselines"][b]
             r[f"PERSIST-SI_{k}"], r[f"CLIM_{k}"] = base["PERSIST-SI"][p], base["CLIM"]
@@ -111,6 +122,15 @@ def summary() -> dict:
         res[c] = {"D0": {"failed": d0["failed"], "passesAll": d0["passesAll"]},
                   "D1": {"failed": [k2.split()[0] for k2, v in r1.items() if not v["pass"]],
                          "passesAll": all(v["pass"] for v in r1.values())}}
+    SL.prereg_sha(ADDENDUM)
+    base = g.assign(**{"PERSIST-SI_p": g["PERSIST-SI_post"], "CLIM_p": g["CLIM_post"], "ALWAYS-LOW_p": 0.0})
+    for a in ("A1", "A2"):                                            # addendum 1: decisions + product probability
+        dc, pc = P.official_rules(base, f"{a}_high"), P.official_rules(base, f"{a}_prob")
+        ra = {**{k2: v for k2, v in dc["rules"].items() if not k2.startswith("R5")},
+              **{k2: v for k2, v in pc["rules"].items() if k2.startswith("R5")}}
+        res[a] = {"failed": [k2.split()[0] for k2, v in ra.items() if not v["pass"]],
+                  "passesAll": all(v["pass"] for v in ra.values()), "origin": "addendum 1 (chosen by exploration)"}
+    out["hypothesesTested"] = 3
     out["results"] = res
     out["status"] = ("interim (R1 needs 10 quarters)" if nq < 10 else
                      "primary passes all seven rules" if res[PRIMARY[0]][PRIMARY[1]]["passesAll"] else

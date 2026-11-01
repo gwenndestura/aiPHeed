@@ -117,6 +117,19 @@ def test_the_hash_line_is_found_at_the_end_not_where_the_text_mentions_it(tmp_pa
         SL.prereg_sha(p)
 
 
+def test_the_committed_addendum_matches_its_hash():
+    assert SL.prereg_sha(SC.ADDENDUM) == "662fc2d77a6c2be2834e3a8703302a3d553bfe5669fa9ed433fafd4df92787f9"
+
+
+def test_addendum_rules_follow_the_registered_definitions():
+    c1, c2 = {"hunger": 0.98, "price": 0.40}, {"hunger": 0.98, "price": 0.46}
+    r = SC.addendum_rules(c1, c2)
+    assert r["A1"] == (pytest.approx(0.98 * 0.46), "HIGH")              # h >= 0.50 and p2 >= 0.45
+    assert r["A2"] == (pytest.approx(0.98 * 0.43), "LOW")               # h x mean(0.40, 0.46) = 0.42 < 0.50
+    assert SC.addendum_rules(c1, {"hunger": 0.49, "price": 0.9})["A1"][1] == "LOW"
+    assert SC.addendum_rules({"price": 0.6}, {"hunger": 0.9, "price": 0.6})["A2"][1] == "HIGH"
+
+
 def test_a_changed_preregistration_is_refused(tmp_path):
     p = tmp_path / "PREREG_LEAD2.md"
     b = SL.PREREG.read_bytes()
