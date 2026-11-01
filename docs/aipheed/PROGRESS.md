@@ -232,3 +232,5 @@ Start: protocol lock verified (`8bae6962…dd0d3`); `test_protocol_lock.py` + `t
   - A software: YES.
   - B research: development NO on frozen (40 %), amended (50 %) and beats-all; sealed NOT_YET_TESTABLE.
   - C data: 10 sealed quarters (about 2029-05; ±10 pp about 2032-05); a RIDGE-ALL prospective forecast before about 2027-01; adviser sign-off for the amendment; SWS round documentation.
+
+**v4 final commit:** `38486b4` on `impl/backend-completion`. `git status` after it: only the 15 pre-existing untracked paths.
