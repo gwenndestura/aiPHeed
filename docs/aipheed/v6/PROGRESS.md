@@ -8,3 +8,4 @@
 |---|---|---|
 | 0 Construct | DONE: Gate 0 PASSED with restricted claim (SWS area hunger; not provincial) | (this commit) |
 | 1 Data audit | DONE: Gate 1 PASSED (SWS 88/88 = release tables; CPI, FIRI, FSSI, XLM-R reproduced; 3 limitations need external data) | (this commit) |
+| 2 Feasibility | DONE: Gate 2 no route passes 0.85 at Lead 2 (best R3 0.59/0.78); closest overall R4 nowcast 0.81/0.93; v2 and v4 re-verified by re-execution | (this commit) |
