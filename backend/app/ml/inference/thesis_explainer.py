@@ -28,6 +28,7 @@ All 12 features are accounted for; none are invented to fill a slot.
 paper-exact version, reverted back to on request.)
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from pathlib import Path
@@ -41,13 +42,15 @@ from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpic
 
 logger = logging.getLogger(__name__)
 
-MODEL_PATH = Path("models/thesis_food_insecurity_model.joblib")
-PANEL_PATH = Path("data/thesis/panel.parquet")
-TRIGGERS_PATH = Path("data/processed/trigger_proportions.parquet")
+# AUDIT D3: the same fitted objects re-exported under the pinned scikit-learn 1.8.0 (scripts/reexport_thesis_model.py;
+# identical scores on all 135 panel rows); the 1.7.2 original is kept unchanged beside it.
+MODEL_PATH = backend_path("models/thesis_food_insecurity_model_skl180.joblib")
+PANEL_PATH = backend_path("data/thesis/panel.parquet")
+TRIGGERS_PATH = backend_path("data/processed/trigger_proportions.parquet")
 # Real BSP OFW/FX data, shown as informational context on the ofw_remittance
 # driver only -- NOT a model input here (this is the strict 12-feature
 # model). Does not affect group_shap, display_pct, or any reported metric.
-BSP_MACRO_PATH = Path("data/processed/bsp_macro.parquet")
+BSP_MACRO_PATH = backend_path("data/processed/bsp_macro.parquet")
 
 THESIS_DISPLAY_MAP: dict[str, dict[str, str]] = {
     "FSSI":                    {"display_name": "Food Stress Sentiment Index", "unit": "score 0-1"},

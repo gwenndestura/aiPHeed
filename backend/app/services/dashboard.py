@@ -20,6 +20,7 @@ both are memoised per quarter for the life of the process.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import json
@@ -48,9 +49,9 @@ from app.services import reference as ref
 
 logger = logging.getLogger(__name__)
 
-CORPUS_PATH = Path("data/processed/corpus_geocoded.parquet")
-LGU_POVERTY_PATH = Path("data/processed/lgu_poverty.parquet")
-RESULTS_PATH = Path("data/processed/final_results.json")
+CORPUS_PATH = backend_path("data/processed/corpus_geocoded.parquet")
+LGU_POVERTY_PATH = backend_path("data/processed/lgu_poverty.parquet")
+RESULTS_PATH = backend_path("data/processed/final_results.json")
 
 # What the number on screen actually is. Carried on every forecast response so
 # no surface can relabel it on its own.
@@ -457,7 +458,7 @@ def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
     if quarter in available_quarters(other):
         return (f"{quarter} is the quarter under way; its estimate is a same-quarter nowcast, shown in the nowcast "
                 "view. A forecast view never shows a nowcast.")
-    p = Path("data/inputs/sws_rounds.csv")
+    p = backend_path("data/inputs/sws_rounds.csv")
     if p.exists():
         r = pd.read_csv(p)
         r = r[r["quarter"] == quarter]
@@ -870,7 +871,7 @@ RISK_LEVEL_BASIS = (
 CH1_RISK_LEVEL_BASIS = (
     "Band of the Chapter I risk probability (>= 0.50 is HIGH): HIGH means regional SWS hunger above 11.3% and unusually "
     "fast food-price rises in the province. A risk class, not a measured provincial hunger rate.")
-LGU_PROVENANCE_PATH = Path("data/inputs/lgu_vulnerability.csv")
+LGU_PROVENANCE_PATH = backend_path("data/inputs/lgu_vulnerability.csv")
 
 
 @functools.lru_cache(maxsize=1)
@@ -1830,7 +1831,7 @@ def _model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
     """
     if e31_active():
         return e31_model_performance(horizon)
-    path = Path("data/processed/training_results.json")
+    path = backend_path("data/processed/training_results.json")
     if not path.exists():
         return {}
     results = json.loads(path.read_text())
@@ -1840,7 +1841,7 @@ def _model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
         return round(v, 4) if isinstance(v, (int, float)) else None
 
     baselines: dict[str, float | None] = {}
-    eval_path = Path("data/processed/eval_results.json")
+    eval_path = backend_path("data/processed/eval_results.json")
     if eval_path.exists():
         rows = json.loads(eval_path.read_text()).get("baselines", {})
         for name, block in rows.items():

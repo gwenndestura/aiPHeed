@@ -19,6 +19,7 @@ Optional context files:
     data/e22/nns_fies_verified.json            -- NNS FIES context figure
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -26,9 +27,9 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-SERVING_PATH = Path("data/e20/serving.json")
-UNCERTAINTY_PATH = Path("data/e21/forecast_uncertainty_2027Q1.json")
-NNS_VERIFIED_PATH = Path("data/e22/nns_fies_verified.json")
+SERVING_PATH = backend_path("data/e20/serving.json")
+UNCERTAINTY_PATH = backend_path("data/e21/forecast_uncertainty_2027Q1.json")
+NNS_VERIFIED_PATH = backend_path("data/e22/nns_fies_verified.json")
 
 DRIVER_GROUP_FEATURES: dict[str, list[str]] = {
     "market": ["F_t", "F_tm1", "D_t", "D_tm1", "dF_t", "rice_qoq_t", "trigger_market"],

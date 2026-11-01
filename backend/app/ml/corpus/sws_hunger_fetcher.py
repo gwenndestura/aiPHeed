@@ -63,6 +63,7 @@ TRAINING WINDOW: 2020Q1–2025Q4 strict.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import datetime, timezone
@@ -74,7 +75,7 @@ from app.ml.corpus._coverage import CuratedCoverageError, check_coverage  # noqa
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/sws_hunger.parquet")
+OUTPUT_PATH = backend_path("data/processed/sws_hunger.parquet")
 
 # Region IV-A is reported under "Balance of Luzon" (rest of Luzon outside NCR)
 REGION_CODE = "PH040000000"

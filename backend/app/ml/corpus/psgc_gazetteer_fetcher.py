@@ -46,6 +46,7 @@ existing corpus.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import re
@@ -57,7 +58,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/psgc_gazetteer.parquet")
+OUTPUT_PATH = backend_path("data/processed/psgc_gazetteer.parquet")
 API_BASE = "https://psgc.gitlab.io/api"
 REGION_CODE = "040000000"  # Region IV-A (CALABARZON)
 REGION_NAME = "Region IV-A (CALABARZON)"

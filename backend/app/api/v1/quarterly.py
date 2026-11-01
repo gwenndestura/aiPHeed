@@ -6,6 +6,7 @@ dashboard and the PDF report read (app.quarterly.update.load_latest), so the tar
 window and cutoff are identical everywhere. No database access.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import hashlib
 import json
@@ -19,10 +20,10 @@ from fastapi.responses import Response
 
 from app.quarterly.update import load_latest
 
-RECORDS_DIR = Path(os.getenv("AIPHEED_QUARTERLY_RECORDS", "data/quarterly_runs"))
-E25_RECORD = Path(os.getenv("AIPHEED_E25_RECORD", "data/e25/e25_forecast_record.json"))
-E27_RECORD = Path(os.getenv("AIPHEED_E27_RECORD", "data/e27/timeline_record.json"))
-E27_PDF = Path(os.getenv("AIPHEED_E27_PDF", "data/e27/aiPHeed_E27_forecast_report.pdf"))
+RECORDS_DIR = backend_path(os.getenv("AIPHEED_QUARTERLY_RECORDS", "data/quarterly_runs"))
+E25_RECORD = backend_path(os.getenv("AIPHEED_E25_RECORD", "data/e25/e25_forecast_record.json"))
+E27_RECORD = backend_path(os.getenv("AIPHEED_E27_RECORD", "data/e27/timeline_record.json"))
+E27_PDF = backend_path(os.getenv("AIPHEED_E27_PDF", "data/e27/aiPHeed_E27_forecast_report.pdf"))
 router = APIRouter(prefix="/quarterly", tags=["quarterly"])
 
 
@@ -58,9 +59,9 @@ def timeline_pdf():
                              "X-Record-SHA256": rec["content_sha256"], "Cache-Control": "no-store"})
 
 
-E28_RECORD = Path(os.getenv("AIPHEED_E28_RECORD", "data/e28/da_brief_record.json"))
-E28_PDF = Path(os.getenv("AIPHEED_E28_PDF", "data/e28/aiPHeed_E28_DA_brief.pdf"))
-NEWS_STORE = Path(os.getenv("AIPHEED_NEWS_STORE", "data/news_e28"))
+E28_RECORD = backend_path(os.getenv("AIPHEED_E28_RECORD", "data/e28/da_brief_record.json"))
+E28_PDF = backend_path(os.getenv("AIPHEED_E28_PDF", "data/e28/aiPHeed_E28_DA_brief.pdf"))
+NEWS_STORE = backend_path(os.getenv("AIPHEED_NEWS_STORE", "data/news_e28"))
 
 
 def _verified_e28() -> dict:
@@ -107,8 +108,8 @@ def e28_news_coverage():
     return _verified_e28()["news_coverage"]
 
 
-E29_RECORD = Path(os.getenv("AIPHEED_E29_RECORD", "data/e29/da_brief_record.json"))
-E29_PDF = Path(os.getenv("AIPHEED_E29_PDF", "data/e29/aiPHeed_E29_DA_brief.pdf"))
+E29_RECORD = backend_path(os.getenv("AIPHEED_E29_RECORD", "data/e29/da_brief_record.json"))
+E29_PDF = backend_path(os.getenv("AIPHEED_E29_PDF", "data/e29/aiPHeed_E29_DA_brief.pdf"))
 
 
 def _verified_e29() -> dict:
@@ -157,7 +158,7 @@ def news_status():
 
     if not NEWS_STORE.exists():
         raise HTTPException(status_code=404, detail="no news store")
-    au = json.loads(Path("config/authorization.json").read_text(encoding="utf-8"))["authorized_until"]
+    au = json.loads(backend_path("config/authorization.json").read_text(encoding="utf-8"))["authorized_until"]
     return status_view(NewsStore(NEWS_STORE), au)
 
 
@@ -186,9 +187,9 @@ def forecast_period():
 
 # ============================================================================================ E31
 # E36: the served record (same endpoints); see app/ml/inference/e31_engine.RECORD_PATH
-E31_RECORD = Path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
-E31_PDF = Path(os.getenv("AIPHEED_E31_PDF", "data/e36/aiPHeed_E36_assessment_report.pdf"))
-E31_NEWS_STORE = Path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
+E31_RECORD = backend_path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
+E31_PDF = backend_path(os.getenv("AIPHEED_E31_PDF", "data/e36/aiPHeed_E36_assessment_report.pdf"))
+E31_NEWS_STORE = backend_path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
 _E31_CACHE: dict = {}
 
 

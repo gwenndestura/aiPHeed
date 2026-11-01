@@ -39,6 +39,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from pathlib import Path
@@ -56,9 +57,9 @@ from app.ml.inference.feature_display import (
 
 logger = logging.getLogger(__name__)
 
-MODEL_PATH    = Path("models/lgbm_best.pkl")
-FEATURES_PATH = Path("data/processed/features_fused.parquet")
-TRIGGERS_PATH = Path("data/processed/trigger_proportions.parquet")
+MODEL_PATH    = backend_path("models/lgbm_best.pkl")
+FEATURES_PATH = backend_path("data/processed/features_fused.parquet")
+TRIGGERS_PATH = backend_path("data/processed/trigger_proportions.parquet")
 
 # The feature list travels inside the model bundle so serving, explaining and
 # training cannot drift apart.

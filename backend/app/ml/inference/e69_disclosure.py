@@ -12,6 +12,7 @@ built only from the E69 outputs (runner/r3_build_disclosure.py):
 The tier is not a probability and not a validated provincial forecast; a LOW price score cannot hide it.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import hashlib
@@ -21,7 +22,7 @@ from pathlib import Path
 
 from app.ml.inference import e68_disclosure as D68
 
-DISCLOSURE = Path(os.getenv("AIPHEED_E69_DISCLOSURE", "data/e69/e69_disclosure.json"))
+DISCLOSURE = backend_path(os.getenv("AIPHEED_E69_DISCLOSURE", "data/e69/e69_disclosure.json"))
 TIERS = ("ELEVATED", "WATCH", "NO ELEVATED SIGNAL", "INSUFFICIENT DATA")
 
 

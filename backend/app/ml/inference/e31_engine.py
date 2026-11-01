@@ -19,6 +19,7 @@ The E31 data layer for the main dashboard. It serves the ONE E31 record (data/e3
 Nothing here fits a model: the record is the single source, so the map, ranking, explanation, news and PDF agree.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import hashlib
 import json
@@ -30,7 +31,7 @@ import pandas as pd
 
 # E36: the served record is the E36 LightGBM record (scripts/build_record_e36.py); the E31 PCF21 record stays in
 # data/e31/ as history and can be served again with AIPHEED_E31_RECORD=data/e31/e31_record.json.
-RECORD_PATH = Path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
+RECORD_PATH = backend_path(os.getenv("AIPHEED_E31_RECORD", "data/e36/e36_record.json"))
 FORECAST_MODES = ("BACKTEST", "RETROSPECTIVE_BLIND", "FORECAST")
 NOWCAST_MODES = ("NOWCAST",)
 MODE_LABEL = {
@@ -183,8 +184,8 @@ class E31Disaggregator:
         from app.ml.inference import e41_lead2 as LEAD2
         from app.quarterly.lgu_audit import build_ranking
 
-        vul = pd.read_csv(Path("data/inputs/lgu_vulnerability.csv"), dtype={"lgu_code": str})
-        ros = pd.read_csv(Path("data/reference/calabarzon_lgus.csv"), dtype={"lgu_psgc": str})
+        vul = pd.read_csv(backend_path("data/inputs/lgu_vulnerability.csv"), dtype={"lgu_code": str})
+        ros = pd.read_csv(backend_path("data/reference/calabarzon_lgus.csv"), dtype={"lgu_psgc": str})
         prob = {f["province_code"]: f["risk_probability"] for f in forecasts} or None
         # E66 (opt-in mode only): exact ranks, so 4-dp display rounding of small probabilities creates no ties
         rk = build_ranking(vul, ros, prob, {"source": f"E31 record, {quarter}"}, exact_ranks=LEAD2.layered())
@@ -214,7 +215,7 @@ class E31Disaggregator:
 # the forecast's evidence quarter that the existing classifier (app/ml/nlp/trigger_classifier.py) assigns to the group.
 TRIGGER_GROUP_FEATURES = {"market": ["D_last", "Dnow", "rice_rel"], "climate": [], "fish_kill": [], "employment": [],
                           "ofw_remittance": []}
-NEWS_STORE = Path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
+NEWS_STORE = backend_path(os.getenv("AIPHEED_E31_NEWS_STORE", "data/news_e31"))
 
 
 @lru_cache(maxsize=1)

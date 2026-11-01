@@ -17,6 +17,7 @@ regional hunger is above 11.3%, so a LOW score cannot show El Nino risk. Only on
 2021-2026 window, so this watch is unvalidated; E66 r5 reports its history descriptively.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import csv
 import functools
@@ -91,7 +92,7 @@ def sentence(w: dict, issue_date: str) -> str | None:
 # ---------------------------------------------------------------------------------------------- serving lookup
 # Inputs known at each issue date (latest posted SWS hunger, provincial palay/corn YoY), exported by E66 r5 from the
 # E56 feature table (the same values the model saw); the current record's own observations are used first.
-INPUTS = Path(os.getenv("AIPHEED_E66_CFSW_INPUTS", "data/e66/cfsw_inputs.csv"))
+INPUTS = backend_path(os.getenv("AIPHEED_E66_CFSW_INPUTS", "data/e66/cfsw_inputs.csv"))
 
 
 @functools.lru_cache(maxsize=2)

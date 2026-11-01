@@ -37,3 +37,17 @@
 | Unhandled errors | **Fixed (D10):** a missing artifact gives 503, not 500 |
 | Repeated loading | Served engines use `functools.lru_cache` keyed by path and mtime (`ch1_system._rows`). The new core reads one small JSON per request. |
 | Unsafe paths | Artifact loader refuses paths outside `backend/models/` |
+
+---
+
+## v2 additions (docs/aipheed/v2)
+
+| Layer | Location | Responsibility |
+|---|---|---|
+| Base directory | `backend/app/paths.py` | `BACKEND_DIR` and `backend_path()`. All 144 `data/`, `models/` and `config/` literals in `app/` (50 modules) resolve against the backend directory, not the cwd (AUDIT D4). Tested from two working directories (`tests/unit/test_v2_paths.py`). |
+| v2 forecasting | `backend/app/forecasting/v2/` | `models` (PERSIST / LL / LL-K), `select` (walk-forward, inner-fold rule, conformal), `verdict` (frozen N1–N7 via `e130_lib`, decision table), `artifact` (hashed JSON, write-once), `inference` (no refit), `explain` (exact decomposition), `store` (write-once `data/forecasting/forecasts_v2/`) |
+| v2 API | `app/api/v1/hunger_forecast.py` (`/hunger-forecast/v2/*`) | Read-only, additive |
+| v2 offline scripts | `backend/scripts/v2_{diagnosis,validate,seal,score_sealed,context,e2e,coverage,mutation_check}.py`, `reexport_thesis_model.py` | Evidence; every output is under `docs/aipheed/v2/results/` |
+| Thesis model (D3) | `models/thesis_food_insecurity_model_skl180.joblib` | The same fitted objects re-exported under scikit-learn 1.8.0. Scores are identical on all 135 panel rows, and there is no version warning. The original file is kept. |
+
+**Dependencies run one way:** `as_of` ← `sws` ← `v2.models` ← `v2.select` ← `v2.artifact` ← `v2.inference` ← `v2.explain` / `geography` / `v2.store` ← API. `v2.verdict` is offline only: it loads the frozen `e130_lib` read-only.

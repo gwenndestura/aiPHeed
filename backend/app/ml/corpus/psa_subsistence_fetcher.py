@@ -37,6 +37,7 @@ this fetcher picks it up with no code change.
 Nothing here is interpolated, projected, or carried forward.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -50,7 +51,7 @@ logger = logging.getLogger(__name__)
 
 OPENSTAT_BASE = "https://openstat.psa.gov.ph/PXWeb/api/v1/en"
 TABLE = "DB/1F/FY/0051F3DF030.px"
-OUTPUT_PATH = Path("data/processed/psa_subsistence.parquet")
+OUTPUT_PATH = backend_path("data/processed/psa_subsistence.parquet")
 TIMEOUT = 60
 
 # CV above this is not fit for inference (standard small-domain convention).

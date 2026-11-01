@@ -1,12 +1,17 @@
+from pathlib import Path
+
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from app.paths import BACKEND_DIR
 
 
 class Settings(BaseSettings):
     # extra="ignore": the .env carries fetcher API keys that individual scripts
     # read directly. Forbidding them made `alembic` and anything importing
     # settings fail on a file that was otherwise valid.
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    # AUDIT D4: the .env and a relative SQLite file resolve against backend/, not the process working directory.
+    model_config = SettingsConfigDict(env_file=str(BACKEND_DIR / ".env"), extra="ignore")
 
     DATABASE_URL: str = "sqlite+aiosqlite:///./aipheed.db"
     DB_ECHO: bool = False
@@ -69,6 +74,14 @@ class Settings(BaseSettings):
     ENABLE_DEMO_ACCOUNT: bool = False
     DEMO_ADMIN_EMAIL: str = ""
     DEMO_ADMIN_PASSWORD: str = ""
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def _sqlite_relative_to_backend(cls, v: str) -> str:
+        head, sep, path = v.partition(":///")
+        if sep and head.startswith("sqlite") and path and not path.startswith(":memory:") and not Path(path).is_absolute():
+            return f"{head}:///{(BACKEND_DIR / path).resolve().as_posix()}"
+        return v
 
     @field_validator("REFRESH_COOKIE_SAMESITE")
     @classmethod

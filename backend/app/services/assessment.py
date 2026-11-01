@@ -15,6 +15,7 @@ Kept separate in every payload:
   supportingStressScore     last published Equation 3 stress, split into regional and provincial parts
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 from functools import lru_cache
@@ -25,12 +26,12 @@ import pandas as pd
 
 from app.ml.features import risk_score_v2 as R
 
-ARTIFACT = Path("data/revised/datadriven_forecasts_retrospective.parquet")   # E7 M6 (protocol-fixed); E6 artifact kept
+ARTIFACT = backend_path("data/revised/datadriven_forecasts_retrospective.parquet")   # E7 M6 (protocol-fixed); E6 artifact kept
 GROUP_LABELS = {"R": "regional hunger and persistence (shared regional signal + last published stress)",
                 "GP": "provincial government indicators (food CPI, inflation, rice prices, poverty)",
                 "GN": "national/regional government indicators (identical for all provinces)",
                 "N": "news-derived indicators (FSSI, article counts, trigger shares)"}
-LABELS = Path("data/processed/labels.parquet")
+LABELS = backend_path("data/processed/labels.parquet")
 NAMES = {"PH040100000": "Cavite", "PH040200000": "Laguna", "PH040300000": "Quezon",
          "PH040400000": "Rizal", "PH040500000": "Batangas"}
 REGIONAL_SCOPE = ("SWS Balance Luzon stratum: all of Luzon outside Metro Manila. It is a regional signal, "

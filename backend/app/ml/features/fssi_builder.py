@@ -24,6 +24,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from pathlib import Path
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-OUTPUT_PATH = Path("data/processed/fssi_quarterly.parquet")
+OUTPUT_PATH = backend_path("data/processed/fssi_quarterly.parquet")
 
 # Quarters in chronological order for proper lag computation
 _QUARTER_SORT_KEY: dict[str, int] = {}
@@ -180,8 +181,8 @@ def _empty_fssi_df() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def build_fssi_from_parquets(
-    corpus_path: Path = Path("data/processed/corpus_geocoded.parquet"),
-    weights_path: Path = Path("data/processed/bias_weights.parquet"),
+    corpus_path: Path = backend_path("data/processed/corpus_geocoded.parquet"),
+    weights_path: Path = backend_path("data/processed/bias_weights.parquet"),
     save_path: Path = OUTPUT_PATH,
     use_keyword_fallback: bool = True,
 ) -> pd.DataFrame:

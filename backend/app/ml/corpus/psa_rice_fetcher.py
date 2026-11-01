@@ -41,6 +41,7 @@ data/processed/psa_rice_prices.parquet:
     rice_class, source_url, source_note, fetched_at
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -213,7 +214,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
     frame = fetch_psa_rice_prices(2021)
-    dest = Path("data/processed/psa_rice_prices.parquet")
+    dest = backend_path("data/processed/psa_rice_prices.parquet")
     dest.parent.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(dest, index=False)
     print(frame.pivot_table(index="quarter", columns="province_name",

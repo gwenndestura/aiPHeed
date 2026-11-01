@@ -68,6 +68,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -100,8 +101,8 @@ MODEL_QUARTERS: list[str] = [
 # Stress-score formula coefficient: alpha amplifies province deviation from regional mean
 ALPHA: float = 2.0
 
-LABELS_PATH = Path("data/processed/labels.parquet")
-LABEL_DIST_PATH = Path("data/processed/label_distribution.json")
+LABELS_PATH = backend_path("data/processed/labels.parquet")
+LABEL_DIST_PATH = backend_path("data/processed/label_distribution.json")
 
 
 # ---------------------------------------------------------------------------
@@ -299,7 +300,7 @@ def _opt_float(v) -> float | None:
 
 
 def get_fies_regional_baseline(
-    nns_fies_path: Path = Path("data/processed/nns_fies.parquet"),
+    nns_fies_path: Path = backend_path("data/processed/nns_fies.parquet"),
 ) -> dict:
     """
     Read DOST-FNRI ENNS FIES values for thesis intro / README citation.
@@ -344,9 +345,9 @@ def get_fies_regional_baseline(
 # ---------------------------------------------------------------------------
 
 def generate_labels(
-    psa_path: Path = Path("data/processed/psa_indicators.parquet"),
-    sws_path: Path = Path("data/processed/sws_hunger.parquet"),
-    nns_fies_path: Path = Path("data/processed/nns_fies.parquet"),
+    psa_path: Path = backend_path("data/processed/psa_indicators.parquet"),
+    sws_path: Path = backend_path("data/processed/sws_hunger.parquet"),
+    nns_fies_path: Path = backend_path("data/processed/nns_fies.parquet"),
     labels_path: Path = LABELS_PATH,
     dist_path: Path = LABEL_DIST_PATH,
 ) -> pd.DataFrame:

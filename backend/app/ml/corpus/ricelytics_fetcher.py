@@ -75,6 +75,7 @@ TRAINING WINDOW: 2022–2025 (complements OpenStat NRP 2020–2021).
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -87,7 +88,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/ricelytics_prices.parquet")
+OUTPUT_PATH = backend_path("data/processed/ricelytics_prices.parquet")
 RICELYTICS_BASE = "https://ricelytics.philrice.gov.ph"
 
 PROVINCES = [

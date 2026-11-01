@@ -45,6 +45,7 @@ TRAINING WINDOW: 2020-2025. SAE 2021 anchors the entire window
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import datetime, timezone
@@ -54,9 +55,9 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/lgu_poverty.parquet")
-LGU_CENSUS_PATH = Path("data/processed/lgu_census.parquet")
-SAE_REFERENCE_CSV = Path("data/reference/sae_2021_calabarzon.csv")
+OUTPUT_PATH = backend_path("data/processed/lgu_poverty.parquet")
+LGU_CENSUS_PATH = backend_path("data/processed/lgu_census.parquet")
+SAE_REFERENCE_CSV = backend_path("data/reference/sae_2021_calabarzon.csv")
 
 SOURCE_URL = "https://psa.gov.ph/statistics/poverty/sae-municipal-2021"
 SOURCE_NOTE = "PSA 2021 Small Area Estimates of Poverty in the Philippines (released 2024)"

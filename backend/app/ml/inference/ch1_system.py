@@ -51,9 +51,16 @@ GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_
                 "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty & vulnerability",
                 "news": "News signals", "hunger_indicator": "Regional hunger (indicator)"}
 INDICATOR = {
-    "id": "chapter1_food_insecurity_risk",
-    "name": "Food-insecurity risk (Chapter I definition): probability that the province is HIGH risk",
-    "definition": ("A province is HIGH risk in a quarter when SWS Balance Luzon hunger is above 11.3% AND the "
+    "id": "chapter1_food_insecurity_risk",                      # id kept: clients key on it (computation unchanged)
+    # v2 (docs/aipheed/v2): relabelled. The number is driven by provincial food-price pressure (provinces differ only
+    # through prices), so it is not presented as food insecurity; the numerical hunger forecast is a separate route.
+    "name": "Price-pressure risk index (P0H4 Chapter I composite): probability that the province is HIGH risk",
+    "legacy_name": "Food-insecurity risk (Chapter I definition): probability that the province is HIGH risk",
+    "is_food_insecurity_measurement": False,
+    "hunger_forecast": {"endpoint": "/api/v1/hunger-forecast/v2",
+                        "what": "numerical forecast of SWS involuntary hunger (% of families), SWS area level; "
+                                "CALABARZON lies in Balance Luzon"},
+    "definition": ("Price-pressure risk index (label changed in v2; computation unchanged). A province is HIGH risk in a quarter when SWS Balance Luzon hunger is above 11.3% AND the "
                    "province's food prices are rising unusually fast (PSA food inflation, or food inflation minus "
                    "headline inflation, above the province's 2021-22 60th percentile), as Chapter I (1.4, 1.7) "
                    "defines the risk from SWS hunger and PSA food prices. The number is the forecast probability of "
@@ -65,7 +72,8 @@ INDICATOR = {
                 "Lead 2 = the next quarter (not established as reliable)"),
     "source": ("SWS hunger (Balance Luzon, non-commissioned rounds); PSA provincial CPI; PSA rice, production, LFS, "
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
-    "caveat": ("A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
+    "caveat": ("Price pressure is not food insecurity: for the hunger forecast see /api/v1/hunger-forecast/v2. "
+               "A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
                "for all five provinces, so provinces differ only through food prices. The hunger part follows the newest "
                "SWS reading and cannot anticipate a new hunger surge before SWS publishes it."),
 }

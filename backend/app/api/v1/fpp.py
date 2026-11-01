@@ -6,6 +6,7 @@ changed. Every response carries the note that the index measures food price pres
 that its rule is a tool-adopted default, not adviser-endorsed or validated.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import hashlib
 import json
@@ -16,8 +17,8 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, Response
 
 router = APIRouter()
-RECORD = Path(os.getenv("AIPHEED_FPP_RECORD", "data/fpp/fpp_record.json"))
-PDF = Path(os.getenv("AIPHEED_FPP_PDF", "data/fpp/aiPHeed_Food_Price_Pressure_exploratory.pdf"))
+RECORD = backend_path(os.getenv("AIPHEED_FPP_RECORD", "data/fpp/fpp_record.json"))
+PDF = backend_path(os.getenv("AIPHEED_FPP_PDF", "data/fpp/aiPHeed_Food_Price_Pressure_exploratory.pdf"))
 
 
 def label_version() -> str:

@@ -17,6 +17,7 @@ publication" instead.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import math
@@ -38,7 +39,7 @@ from app.services.report import ACTIONS_PLACEHOLDER
 from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpickling (AUDIT D2)
 
 PST = timezone(timedelta(hours=8))
-RICE_PATH = Path("data/processed/psa_rice_prices.parquet")
+RICE_PATH = backend_path("data/processed/psa_rice_prices.parquet")
 
 REPORT_TITLE = "aiPHeed Food Insecurity Forecast Report"
 PREPARED_FOR = "DA Region IV-A"

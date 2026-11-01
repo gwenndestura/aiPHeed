@@ -20,6 +20,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import re
@@ -255,7 +256,7 @@ def classify_triggers_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def compute_trigger_proportions(
     articles_df: pd.DataFrame,
-    save_path: Path | None = Path("data/processed/trigger_proportions.parquet"),
+    save_path: Path | None = backend_path("data/processed/trigger_proportions.parquet"),
 ) -> pd.DataFrame:
     """
     Compute proportion of articles per trigger category for each province-quarter.

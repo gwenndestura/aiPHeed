@@ -176,3 +176,18 @@
 - **Nested selection chose PERSIST at all 22 issues** (no challenger's inner CI above 0). V2 Lead 2: 16/40 = 40.0 % [25.0, 57.5]; every lead NOT_RELIABLE (development). LL equals the independent E131 local level on 272/272 rows (< 1e-9).
 - Prospective seal `docs/aipheed/v2/sealed/V2_PROSPECTIVE_SEAL.csv` (issues 2026-07-01 and 2026-10-01; 112 rows; targets 2026-Q4 … 2027-Q3), SHA-256 `e88f7bb2…25d7`. The scorer ran once: 0 rows scorable (NOT_YET_TESTABLE).
 - Served artifact `backend/data/forecasting/artifacts/v2_2026-10-01.json` (PERSIST) and stored forecasts under `forecasts_v2/`. Deviations: `docs/aipheed/v2/DEVIATIONS.md` (2, both non-substantive).
+
+## WP4 · Step 5 integration and defect fixes: DONE
+- **API (additive):** `/api/v1/hunger-forecast/v2`, `/v2/explanation`, `/v2/geography`. The legacy SEAS-LLM routes are kept, with their status marked superseded.
+- **P0H4 relabelled** "Price-pressure risk index" in `ch1_system.INDICATOR`: computation and `id` unchanged; pointer to the v2 hunger forecast added. Frontend copy is not changed (owner decision).
+- **D3:** the thesis pickle was re-exported under scikit-learn 1.8.0 to `models/thesis_food_insecurity_model_skl180.joblib` (new manifest entry; original kept). Scores are identical on all 135 panel rows and there is no version warning. The loaders point at the re-export.
+- **D4:** `app/paths.py`. Rewritten: 142 literals in 48 modules, plus `config.py` (`.env` and relative SQLite resolve against `backend/`). The API is identical from `backend/` and from the repo root (test).
+  - **Two exceptions, reverted and documented:**
+    - `app/ml/inference/firi.py` is hash-frozen by 7 experiment guard tests;
+    - `app/tasks/scheduler.py` monthly refresh: its test sandboxes by `chdir`.
+- **D9:** `models/lgbm_best.pkl` exists in history (`c06cbf1d`, `b299ea8d`) but was deliberately removed in `8725531e` (abandoned pipeline). It was **not** restored; it still fails loudly (test). Restoring it is the owner's call.
+- **Leak tests for legacy paths:** FIRI v2 normalisation history, news `asof`, dashboard cutoff (`tests/unit/test_v2_legacy_leakage.py`).
+- **Full suite before the reverts:** 10 failed / 1294 passed / 18 skipped (`v2/results/tests_after_d4.txt`):
+  - 2 were the git-clean self-checks (pass after commit);
+  - 7 were the `firi.py` hash guards (fixed by reverting `firi.py`);
+  - 1 was the scheduler sandbox (fixed by reverting `scheduler.py`).

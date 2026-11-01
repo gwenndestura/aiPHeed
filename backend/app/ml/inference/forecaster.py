@@ -31,6 +31,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from pathlib import Path
@@ -42,8 +43,8 @@ from app.forecasting.safe_load import verified_joblib_load  # hash-checked unpic
 
 logger = logging.getLogger(__name__)
 
-MODEL_PATH = Path("models/food_availability_forecast_model.joblib")
-RESULTS_PATH = Path("data/processed/forecast_results.json")
+MODEL_PATH = backend_path("models/food_availability_forecast_model.joblib")
+RESULTS_PATH = backend_path("data/processed/forecast_results.json")
 
 PROVINCE_NAMES: dict[str, str] = {
     "PH040100000": "Cavite",

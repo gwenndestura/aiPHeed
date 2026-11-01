@@ -29,6 +29,7 @@ What changed relative to the served model (models/lgbm_best.pkl, app/ml/inferenc
 Depends on the experimental timing modules in scripts/supplementary/ (Rule L dates, development frame).
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -40,8 +41,8 @@ import scripts.supplementary.devprotocol_rule_l as D
 import scripts.supplementary.timing_audit as T
 from app.ml.features import risk_score_v2 as R
 
-LABELS_PATH = Path("data/processed/labels.parquet")
-PSA_PATH = Path("data/processed/psa_indicators.parquet")
+LABELS_PATH = backend_path("data/processed/labels.parquet")
+PSA_PATH = backend_path("data/processed/psa_indicators.parquet")
 WINDOW = ("2021-Q1", "2025-Q4")                 # approved window; no 2026 label is ever loaded
 
 INPUTS = ["last_published_stress", "sws_hunger", "sws_change", "cpi_rel", "food_cpi_yoy",

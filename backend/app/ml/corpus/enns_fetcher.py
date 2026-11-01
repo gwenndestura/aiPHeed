@@ -47,6 +47,7 @@ NNS 2021 and NNS 2023 both fall inside this window.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import datetime, timezone
@@ -57,7 +58,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/nns_fies.parquet")
+OUTPUT_PATH = backend_path("data/processed/nns_fies.parquet")
 TIMEOUT = 30
 
 SESSION = requests.Session()

@@ -47,6 +47,7 @@ data/processed/oil_prices.parquet:
     brent_yoy_pct, source_url, source_note, fetched_at
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import io
 import logging
@@ -215,7 +216,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
     frame = fetch_oil_prices(2021, strict=False)
-    dest = Path("data/processed/oil_prices.parquet")
+    dest = backend_path("data/processed/oil_prices.parquet")
     dest.parent.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(dest, index=False)
     print(frame[frame["province_name"] == "Cavite"]

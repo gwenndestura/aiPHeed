@@ -48,6 +48,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -66,9 +67,9 @@ CORRELATION_THRESHOLD = 0.85   # Stage 1: drop one of any pair with |r| > 0.85
 MIN_FEATURES = 10              # Stage 2 floor
 MAX_FEATURES = 15              # Stage 2 ceiling
 
-FEATURES_PATH = Path("data/processed/features_fused.parquet")
-LABELS_PATH   = Path("data/processed/labels.parquet")
-OUTPUT_PATH   = Path("data/processed/selected_features.json")
+FEATURES_PATH = backend_path("data/processed/features_fused.parquet")
+LABELS_PATH   = backend_path("data/processed/labels.parquet")
+OUTPUT_PATH   = backend_path("data/processed/selected_features.json")
 
 LABEL_COL    = "label_stress"
 PROVINCE_COL = "province_code"

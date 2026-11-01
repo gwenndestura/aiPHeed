@@ -19,6 +19,7 @@ exactly as the scheduled path does.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -28,7 +29,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-SUMMARY_PATH = Path("data/processed/pipeline_run.json")
+SUMMARY_PATH = backend_path("data/processed/pipeline_run.json")
 
 _lock = threading.Lock()
 _thread: threading.Thread | None = None

@@ -43,6 +43,7 @@ PUBLIC API
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import re
@@ -59,7 +60,7 @@ from app.ml.corpus.geocoder import (
 
 logger = logging.getLogger(__name__)
 
-GAZETTEER_PATH = Path("data/processed/psgc_gazetteer.parquet")
+GAZETTEER_PATH = backend_path("data/processed/psgc_gazetteer.parquet")
 
 _INTERNAL_TO_NAME = {v: k for k, v in PROVINCE_PSGC.items()}
 

@@ -21,6 +21,7 @@ No silent fallback: with AIPHEED_STRICT_MODEL=1 (the thesis-demo configuration) 
 required artifact is missing or fails its integrity check (validate()).
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import csv
 import functools
@@ -34,19 +35,19 @@ from app.ml.inference import climate_watch as CW
 from app.ml.inference import e41_lead2 as LEAD2
 
 MODE = "thesis"
-SWS = Path(os.getenv("AIPHEED_SWS_ROUNDS", "data/inputs/sws_rounds.csv"))
-EVALUATION = Path(os.getenv("AIPHEED_FINAL_EVALUATION", "data/thesis/final_evaluation.json"))
-TOPIC_PROPS = Path("data/news_v3/topic_proportions.csv")
-TOPIC_INFO = Path("data/news_v3/topic_info.csv")
-E69_DISCLOSURE = Path(os.getenv("AIPHEED_E69_DISCLOSURE", "data/e69/e69_disclosure.json"))
-FIRI_HISTORY = Path(os.getenv("AIPHEED_FIRI_HISTORY", "data/thesis/firi2_history.csv"))
-FIRI2_REFERENCE = Path(os.getenv("AIPHEED_FIRI2_REFERENCE", "data/thesis/firi2_reference.json"))
-FIRI_EVALUATION = Path(os.getenv("AIPHEED_FIRI2_EVALUATION", "data/thesis/firi2_evaluation.json"))
-FIRI_V1_EVALUATION = Path("data/thesis/firi_evaluation.json")       # the method served before the optimization
-FEATURES_DIR = Path("data/e56/model")
+SWS = backend_path(os.getenv("AIPHEED_SWS_ROUNDS", "data/inputs/sws_rounds.csv"))
+EVALUATION = backend_path(os.getenv("AIPHEED_FINAL_EVALUATION", "data/thesis/final_evaluation.json"))
+TOPIC_PROPS = backend_path("data/news_v3/topic_proportions.csv")
+TOPIC_INFO = backend_path("data/news_v3/topic_info.csv")
+E69_DISCLOSURE = backend_path(os.getenv("AIPHEED_E69_DISCLOSURE", "data/e69/e69_disclosure.json"))
+FIRI_HISTORY = backend_path(os.getenv("AIPHEED_FIRI_HISTORY", "data/thesis/firi2_history.csv"))
+FIRI2_REFERENCE = backend_path(os.getenv("AIPHEED_FIRI2_REFERENCE", "data/thesis/firi2_reference.json"))
+FIRI_EVALUATION = backend_path(os.getenv("AIPHEED_FIRI2_EVALUATION", "data/thesis/firi2_evaluation.json"))
+FIRI_V1_EVALUATION = backend_path("data/thesis/firi_evaluation.json")       # the method served before the optimization
+FEATURES_DIR = backend_path("data/e56/model")
 REQUIRED = (LEAD2.RECORD_E58, SWS, EVALUATION, TOPIC_PROPS, TOPIC_INFO, E69_DISCLOSURE, CW.INPUTS,
-            Path("data/inputs/lgu_vulnerability.csv"), FIRI_HISTORY, FIRI_EVALUATION, FIRI2_REFERENCE, FIRI_V1_EVALUATION,
-            Path("data/thesis/firi_anchors.json"))
+            backend_path("data/inputs/lgu_vulnerability.csv"), FIRI_HISTORY, FIRI_EVALUATION, FIRI2_REFERENCE, FIRI_V1_EVALUATION,
+            backend_path("data/thesis/firi_anchors.json"))
 HUNGER_LINE, SIGMA_DEFAULT = 11.3, 4.0
 # E68 T-AFF headline P60 (2021-Q1..2022-Q4, numpy.percentile), the province's usual headline inflation
 HEADLINE_USUAL = {"PH040100000": 5.013333, "PH040200000": 4.653333, "PH040300000": 5.06,

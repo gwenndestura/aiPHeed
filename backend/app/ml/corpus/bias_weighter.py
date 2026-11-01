@@ -19,6 +19,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import math
@@ -35,7 +36,7 @@ logger = logging.getLogger(__name__)
 # Minimum article count below which a province-quarter gets data_sufficiency_flag
 DATA_SUFFICIENCY_MIN_ARTICLES = 5
 
-OUTPUT_PATH = Path("data/processed/bias_weights.parquet")
+OUTPUT_PATH = backend_path("data/processed/bias_weights.parquet")
 
 
 # ---------------------------------------------------------------------------

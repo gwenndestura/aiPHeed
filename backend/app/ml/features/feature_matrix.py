@@ -38,6 +38,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -53,7 +54,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-OUTPUT_PATH = Path("data/processed/features_fused.parquet")
+OUTPUT_PATH = backend_path("data/processed/features_fused.parquet")
 
 CALABARZON_PROVINCES = [
     "PH040100000", "PH040200000", "PH040300000", "PH040400000", "PH040500000",
@@ -211,7 +212,7 @@ def _load_oil(path: Path) -> pd.DataFrame:
     return df[[c for c in keep if c in df.columns]].copy()
 
 
-MEASURED_RAINFALL_PATH = Path("data/processed/province_rainfall.parquet")
+MEASURED_RAINFALL_PATH = backend_path("data/processed/province_rainfall.parquet")
 
 
 def _load_pagasa(path: Path) -> pd.DataFrame:
@@ -349,16 +350,16 @@ def _load_topic_proportions(path: Path) -> pd.DataFrame | None:
 # ---------------------------------------------------------------------------
 
 def build_feature_matrix(
-    fssi_path:       Path = Path("data/processed/fssi_quarterly.parquet"),
-    triggers_path:   Path = Path("data/processed/trigger_proportions.parquet"),
-    psa_path:        Path = Path("data/processed/psa_indicators.parquet"),
-    cpi_full_path:   Path = Path("data/processed/cpi_full.parquet"),
-    bsp_path:        Path = Path("data/processed/bsp_macro.parquet"),
-    oil_path:        Path = Path("data/processed/oil_prices.parquet"),
-    pagasa_path:     Path = Path("data/processed/pagasa_climate.parquet"),
-    commodity_path:  Path = Path("data/processed/commodity_prices.parquet"),
-    sws_path:        Path = Path("data/processed/sws_hunger.parquet"),
-    ricelytics_path: Path = Path("data/processed/psa_rice_prices.parquet"),
+    fssi_path:       Path = backend_path("data/processed/fssi_quarterly.parquet"),
+    triggers_path:   Path = backend_path("data/processed/trigger_proportions.parquet"),
+    psa_path:        Path = backend_path("data/processed/psa_indicators.parquet"),
+    cpi_full_path:   Path = backend_path("data/processed/cpi_full.parquet"),
+    bsp_path:        Path = backend_path("data/processed/bsp_macro.parquet"),
+    oil_path:        Path = backend_path("data/processed/oil_prices.parquet"),
+    pagasa_path:     Path = backend_path("data/processed/pagasa_climate.parquet"),
+    commodity_path:  Path = backend_path("data/processed/commodity_prices.parquet"),
+    sws_path:        Path = backend_path("data/processed/sws_hunger.parquet"),
+    ricelytics_path: Path = backend_path("data/processed/psa_rice_prices.parquet"),
     # Section 3.3.2.6 fuses ten sources into a 120 x 45 matrix and does not list
     # BERTopic among them. Topic proportions are Objective 1's latent risk
     # patterns, reported on their own; they enter the matrix only if a path is
@@ -549,7 +550,7 @@ def build_feature_matrix(
                 ", ".join(sorted(df.loc[ff_mask, "quarter"].unique())),
             )
 
-    prov_path = Path("data/processed/feature_provenance.json")
+    prov_path = backend_path("data/processed/feature_provenance.json")
     prov_path.parent.mkdir(parents=True, exist_ok=True)
     prov_path.write_text(json.dumps(
         {"window": [MODEL_QUARTERS[0], MODEL_QUARTERS[-1]],

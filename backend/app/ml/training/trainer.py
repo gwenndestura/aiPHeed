@@ -46,6 +46,7 @@ Usage:
     print(result["max_reliable_lead_time"])
 """
 
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 import json
 import logging
 import joblib
@@ -64,13 +65,13 @@ from app.ml.training.cross_validation import WalkForwardSplitter
 logger = logging.getLogger(__name__)
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-FEATURES_PATH = Path("data/processed/features_fused.parquet")
-LABELS_PATH   = Path("data/processed/labels.parquet")
-MODEL_PATH    = Path("models/lgbm_best.pkl")
-STUDY_PATH    = Path("models/optuna_study.pkl")
+FEATURES_PATH = backend_path("data/processed/features_fused.parquet")
+LABELS_PATH   = backend_path("data/processed/labels.parquet")
+MODEL_PATH    = backend_path("models/lgbm_best.pkl")
+STUDY_PATH    = backend_path("models/optuna_study.pkl")
 # The dashboard and the PDF read this file. It is written here, beside the
 # model bundle, so the served metrics always describe the model on disk.
-RESULTS_PATH  = Path("data/processed/training_results.json")
+RESULTS_PATH  = backend_path("data/processed/training_results.json")
 
 LABEL_COL    = "label_stress"
 PROVINCE_COL = "province_code"

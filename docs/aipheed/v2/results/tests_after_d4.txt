@@ -1,0 +1,214 @@
+........................................................................ [  5%]
+...........................................................s...s.....s.. [ 10%]
+s.........s......sss.........................................ss.s.s..... [ 16%]
+........................................................................ [ 21%]
+............................................F.F......................... [ 27%]
+........................................................................ [ 32%]
+........................................................................ [ 38%]
+........................................................................ [ 43%]
+..............................................................ss.s...... [ 49%]
+..sss................................................................... [ 54%]
+..................F..................................................... [ 59%]
+........................................................................ [ 65%]
+........................................................................ [ 70%]
+.....................................................................F.. [ 76%]
+........F........F.....F...F..........................F................. [ 81%]
+................................................................F....... [ 87%]
+........................................................................ [ 92%]
+........................................................................ [ 98%]
+..........................                                               [100%]
+================================== FAILURES ===================================
+_______________________ test_all_validation_checks_pass _______________________
+
+results = {'Quezon City and Lucena never appear as province units': {'check': 'Quezon City and Lucena never appear as province u...{'check': 'computed changes start 2022-Q1 or later (2021+ base only)', 'detail': 'min 2022-Q1', 'result': 'PASS'}, ...}
+
+    def test_all_validation_checks_pass(results):
+        failed = {k: v["detail"] for k, v in results.items() if v["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/api/v1/fpp.py
+E          M backend/app/api/v1/hung...i/v1/quarterly.py
+E          M backend/app/ml/corpus/__init__.py
+E          M backend/app/ml/corpus/bias_weighter.py
+E          M backend/app/ml'}
+E       assert not {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/api/v1/fpp.py\n M backend/app/api/v1/hung...i/v1/quarterly.py\n M backend/app/ml/corpus/__init__.py\n M backend/app/ml/corpus/bias_weighter.py\n M backend/app/ml'}
+
+tests\integration\test_e119r2_framework.py:32: AssertionError
+____________________________ test_e120_checks_pass ____________________________
+
+    def test_e120_checks_pass():
+        sys.path.insert(0, str(E / "runner"))
+        spec = importlib.util.spec_from_file_location("e120_validate", E / "runner" / "validate.py")
+        validate = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validate)
+        r = validate.checks()
+        failed = {x["check"]: x["detail"] for x in r if x["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/api/v1/fpp.py
+E          M backe...i/v1/quarterly.py
+E          M backend/app/ml/corpus/__init__.py
+E          M backend/app/ml/corpus/bias_weighter.py
+E          M backend/app/ml'}
+E       assert not {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/api/v1/fpp.py\n M backe...i/v1/quarterly.py\n M backend/app/ml/corpus/__init__.py\n M backend/app/ml/corpus/bias_weighter.py\n M backend/app/ml'}
+
+tests\integration\test_e120_firi_design.py:28: AssertionError
+______________________ test_monthly_refresh_logs_success ______________________
+
+tmp_path = WindowsPath('C:/Users/admin/AppData/Local/Temp/pytest-of-velvetvhea/pytest-643/test_monthly_refresh_logs_succ0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001E1DC567C40>
+
+    def test_monthly_refresh_logs_success(tmp_path, monkeypatch):
+        _setup(tmp_path, monkeypatch)
+        from app.news import lead_extractor as LX
+        monkeypatch.setattr(LX, "extract", lambda arts, out: {"no_method": len(arts)})
+        monkeypatch.setattr(S, "run_quarterly_cycle", lambda: {"exit_code": 0})
+        out = S.run_monthly_refresh()
+>       assert out["ok"] and out["steps"]["lead_text"]["counts"] == {"no_method": 1}
+E       AssertionError: assert (True and {'no_method': 9667} == {'no_method': 1}
+E         
+E         Differing items:
+E         {'no_method': 9667} != {'no_method': 1}
+E         Use -v to get more diff)
+
+C:\Users\admin\aipheed_final\backend\tests\test_e83_monthly_refresh.py:21: AssertionError
+___________________________ test_firi_v2_untouched ____________________________
+
+    def test_firi_v2_untouched():
+        from app.ml.inference import firi as FI
+        raw = {k: {"x": v, "status": "observed" if v is not None else "missing", "note": ""} for k, v in
+               {"A1": .7, "A2": 1.2, "A3": 3.0, "V1": .4, "C1": 0.0, "C2": 2.0, "C3": -5.0, "C4": 1.0, "E1": .3, "E2": -2.0, "N1": None, "H1": .6}.items()}
+        r = FI.score_v2(raw, {k: [float(i) for i in range(-5, 10)] for k in FI.CONTINUOUS}, {"A": .5, "C": 1.5, "H": 1.0, "V": .5})
+        assert r["firi"] == pytest.approx(0.3929012345679012, abs=1e-15)
+        p = REPO / "backend" / "app" / "ml" / "inference" / "firi.py"
+>       assert hashlib.sha256(p.read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e126_maintenance.py:198: AssertionError
+___________________________ test_firi_v2_untouched ____________________________
+
+s = {'config_v12_sha256': '8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0', 'config_v13_sha256': '64a7d7...22c30', 'E126_BASELINE_VERIFICATION.md': 'd19081981b82d14e05e7886ec776bc1c7aa2837efc3463bfc95cd0cb1a3d5132', ...}, ...}
+
+    def test_firi_v2_untouched(s):
+        from app.ml.inference import firi as FI
+        raw = {k: {"x": v, "status": "observed" if v is not None else "missing", "note": ""} for k, v in
+               {"A1": .7, "A2": 1.2, "A3": 3.0, "V1": .4, "C1": 0.0, "C2": 2.0, "C3": -5.0, "C4": 1.0, "E1": .3, "E2": -2.0, "N1": None, "H1": .6}.items()}
+        r = FI.score_v2(raw, {k: [float(i) for i in range(-5, 10)] for k in FI.CONTINUOUS}, {"A": .5, "C": 1.5, "H": 1.0, "V": .5})
+        assert r["firi"] == pytest.approx(0.3929012345679012, abs=1e-15)
+        assert s["firi_v2"]["backend\\app\\ml\\inference\\firi.py"] if "backend\\app\\ml\\inference\\firi.py" in s["firi_v2"] else True
+>       assert hashlib.sha256((REPO / "backend" / "app" / "ml" / "inference" / "firi.py").read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e127_amendment3.py:165: AssertionError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        firi = REPO / "backend" / "app" / "ml" / "inference" / "firi.py"
+        firi3 = REPO / "backend" / "app" / "ml" / "inference" / "firi3.py"
+>       assert hashlib.sha256(firi.read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e128_ml.py:114: AssertionError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+>       assert hashlib.sha256((inf / "firi.py").read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e129_feasibility.py:73: AssertionError
+________________ test_e128_e129_firi_and_production_untouched _________________
+
+    def test_e128_e129_firi_and_production_untouched():
+        assert _sha(E128 / "E128_FROZEN_EXPERIMENT_PROTOCOL.md") == "c7a92670d65da9ddf04233739341f6765b719cf8338be2642bda2a9f3e8618f3"
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+>       assert _sha(inf / "firi.py") == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e130_provincial.py:82: AssertionError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+>       assert _sha(inf / "firi.py") == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+E       AssertionError: assert 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E         
+E         - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E         + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c
+
+tests\unit\test_e131_resolution.py:169: AssertionError
+________________________ test_firi_v2_files_unchanged _________________________
+
+    def test_firi_v2_files_unchanged():
+        root = Path(__file__).resolve().parents[2]
+        expect = {"app/ml/inference/firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+                  "data/thesis/firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+                  "data/thesis/firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"}
+        for p, h in expect.items():
+            f = root / p
+            if not f.exists():
+                pytest.skip(f"{p} not present")
+            data = f.read_bytes().replace(b"\r\n", b"\n") if p.endswith(".py") else f.read_bytes()
+>           assert hashlib.sha256(data).hexdigest() == h or hashlib.sha256(f.read_bytes()).hexdigest() == h, p
+E           AssertionError: app/ml/inference/firi.py
+E           assert ('89e5a4fc07ac...f8bf4f59b97e2' == '0e583131a7de...3973436d0f8e3'
+E             
+E             - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E             + 89e5a4fc07ac200d2fe7cda36409396eb0f5c03ee68b7ac6957f8bf4f59b97e2 or 'd964707f5a7d...8810bd6b4431c' == '0e583131a7de...3973436d0f8e3'
+E             
+E             - 0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3
+E             + d964707f5a7d64433f0379f89c4d318b7b87fad53bbb8d7985e8810bd6b4431c)
+
+tests\unit\test_firi3.py:243: AssertionError
+============================== warnings summary ===============================
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_e126_maintenance.py::test_zero_versus_missing_and_dedup
+  C:\Users\admin\aipheed_final\aipheed-backend-aligned\experiments\E126_FIRI3_Pre_Issuance_Maintenance\runner\run_e126.py:127: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    return pd.concat([df, z], ignore_index=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/integration/test_e119r2_framework.py::test_all_validation_checks_pass
+FAILED tests/integration/test_e120_firi_design.py::test_e120_checks_pass - As...
+FAILED tests/test_e83_monthly_refresh.py::test_monthly_refresh_logs_success
+FAILED tests/unit/test_e126_maintenance.py::test_firi_v2_untouched - Assertio...
+FAILED tests/unit/test_e127_amendment3.py::test_firi_v2_untouched - Assertion...
+FAILED tests/unit/test_e128_ml.py::test_production_untouched - AssertionError...
+FAILED tests/unit/test_e129_feasibility.py::test_production_untouched - Asser...
+FAILED tests/unit/test_e130_provincial.py::test_e128_e129_firi_and_production_untouched
+FAILED tests/unit/test_e131_resolution.py::test_production_untouched - Assert...
+FAILED tests/unit/test_firi3.py::test_firi_v2_files_unchanged - AssertionErro...
+SKIPPED [5] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [3] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [3] tests\integration\test_plain_report.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+SKIPPED [3] tests\integration\test_report_data.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+10 failed, 1294 passed, 18 skipped, 4 warnings in 244.80s (0:04:04)

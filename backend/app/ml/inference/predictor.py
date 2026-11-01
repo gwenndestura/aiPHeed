@@ -35,6 +35,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import date, datetime, timezone
@@ -51,9 +52,9 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-MODEL_PATH        = Path("models/lgbm_best.pkl")
-FEATURES_PATH     = Path("data/processed/features_fused.parquet")
-BIAS_WEIGHTS_PATH = Path("data/processed/bias_weights.parquet")
+MODEL_PATH        = backend_path("models/lgbm_best.pkl")
+FEATURES_PATH     = backend_path("data/processed/features_fused.parquet")
+BIAS_WEIGHTS_PATH = backend_path("data/processed/bias_weights.parquet")
 
 PROVINCE_NAMES: dict[str, str] = {
     "PH040100000": "Cavite",

@@ -25,6 +25,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import os
@@ -43,7 +44,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-MODEL_DIR = Path("models/bertopic_model")
+MODEL_DIR = backend_path("models/bertopic_model")
 EMBEDDING_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 MIN_TOPIC_SIZE = 10          # minimum articles per topic cluster
 N_GRAM_RANGE = (1, 2)        # unigrams + bigrams for topic representation
@@ -191,7 +192,7 @@ class TopicModelPipeline:
     def compute_proportions(
         self,
         articles_df: pd.DataFrame,
-        save_path: Path | None = Path("data/processed/topic_proportions.parquet"),
+        save_path: Path | None = backend_path("data/processed/topic_proportions.parquet"),
         max_topics: int = 20,
     ) -> pd.DataFrame:
         """
@@ -270,9 +271,9 @@ class TopicModelPipeline:
 # ---------------------------------------------------------------------------
 
 def fit_topic_model(
-    corpus_path: Path = Path("data/processed/corpus_geocoded.parquet"),
+    corpus_path: Path = backend_path("data/processed/corpus_geocoded.parquet"),
     model_dir: Path = MODEL_DIR,
-    proportions_path: Path = Path("data/processed/topic_proportions.parquet"),
+    proportions_path: Path = backend_path("data/processed/topic_proportions.parquet"),
     sample_size: int | None = None,
 ) -> pd.DataFrame:
     """

@@ -18,6 +18,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import hashlib
 import logging
@@ -45,7 +46,7 @@ PSA_DOMAINS = {
 }
 
 # Local storage root — gitignored
-RAW_DIR = Path("data/raw/psa_reports")
+RAW_DIR = backend_path("data/raw/psa_reports")
 
 # Target listing pages per report series
 LISTING_PAGES: list[dict] = [

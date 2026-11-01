@@ -50,6 +50,7 @@ practice in food-security disaggregation models).
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import datetime, timezone
@@ -59,8 +60,8 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_PATH = Path("data/processed/lgu_census.parquet")
-REFERENCE_DIR = Path("data/reference")
+OUTPUT_PATH = backend_path("data/processed/lgu_census.parquet")
+REFERENCE_DIR = backend_path("data/reference")
 
 # Region IV-A has exactly 142 cities/municipalities:
 #   Batangas 34 · Cavite 23 · Laguna 30 · Quezon 41 · Rizal 14

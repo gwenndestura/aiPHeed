@@ -57,6 +57,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import time
@@ -79,7 +80,7 @@ TIMEOUT = 30        # request timeout
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "aiPHeed/1.0 (+research; DLSU-D thesis)"})
 
-OUTPUT_PATH = Path("data/processed/psa_indicators.parquet")
+OUTPUT_PATH = backend_path("data/processed/psa_indicators.parquet")
 
 # ---------------------------------------------------------------------------
 # CALABARZON province mapping

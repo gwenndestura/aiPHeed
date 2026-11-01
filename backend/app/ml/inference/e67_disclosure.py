@@ -13,6 +13,7 @@ runner/r5_build_disclosure.py):
 No probability, decision, colour or rank is changed.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import hashlib
@@ -20,7 +21,7 @@ import json
 import os
 from pathlib import Path
 
-DISCLOSURE = Path(os.getenv("AIPHEED_E67_DISCLOSURE", "data/e67/e67_disclosure.json"))
+DISCLOSURE = backend_path(os.getenv("AIPHEED_E67_DISCLOSURE", "data/e67/e67_disclosure.json"))
 
 
 class DisclosureError(RuntimeError):

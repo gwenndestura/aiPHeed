@@ -10,6 +10,7 @@ probability (P(provincial food inflation > 4%) in the target quarter: price pres
 operational band and alert candidate derived from a documented rule.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import hashlib
@@ -18,35 +19,35 @@ import math
 import os
 from pathlib import Path
 
-RECORD = Path(os.getenv("AIPHEED_E41_RECORD", "data/e41/e41_lead2_record.json"))
+RECORD = backend_path(os.getenv("AIPHEED_E41_RECORD", "data/e41/e41_lead2_record.json"))
 # E42: same E41 forecast, enriched with the E42 evidence (variants, signal count, trigger status, backtest)
-RECORD_E42 = Path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.json"))
+RECORD_E42 = backend_path(os.getenv("AIPHEED_E42_RECORD", "data/e42/e42_lead2_record.json"))
 # E43: five-trigger food-stress risk forecast (Chapter I section 1.7 target); own score type, drivers and statuses
-RECORD_E43 = Path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
+RECORD_E43 = backend_path(os.getenv("AIPHEED_E43_RECORD", "data/e43/e43_record.json"))
 # E44: final five-trigger candidate (I2, forecasting acceptance not met)
-RECORD_E44 = Path(os.getenv("AIPHEED_E44_RECORD", "data/e44/e44_record.json"))
+RECORD_E44 = backend_path(os.getenv("AIPHEED_E44_RECORD", "data/e44/e44_record.json"))
 # E46: defect-corrected five-trigger component model (I7, forecasting acceptance not met)
-RECORD_E46 = Path(os.getenv("AIPHEED_E46_RECORD", "data/e46/e46_record.json"))
+RECORD_E46 = backend_path(os.getenv("AIPHEED_E46_RECORD", "data/e46/e46_record.json"))
 # E52: provincial food-price pressure (target PS) from the E46 I7 price component; development criteria met, not
 # independently validated
-RECORD_E52 = Path(os.getenv("AIPHEED_E52_RECORD", "data/e52/e52_record.json"))
+RECORD_E52 = backend_path(os.getenv("AIPHEED_E52_RECORD", "data/e52/e52_record.json"))
 # E53: E52 price model with the arm adopted in E53 (calibration audit) and the corrected D-1 attribution
-RECORD_E53 = Path(os.getenv("AIPHEED_E53_RECORD", "data/e53/e53_record.json"))
+RECORD_E53 = backend_path(os.getenv("AIPHEED_E53_RECORD", "data/e53/e53_record.json"))
 # E55: food-insecurity risk (target T43: regional SWS hunger > 11.3 AND provincial food-price pressure) from the E55
 # LightGBM model, exact TreeSHAP explanations
-RECORD_E55 = Path(os.getenv("AIPHEED_E55_RECORD", "data/e55/e55_record.json"))
+RECORD_E55 = backend_path(os.getenv("AIPHEED_E55_RECORD", "data/e55/e55_record.json"))
 # E56: final model of the E56 LightGBM optimization cycle (two-quarter food-insecurity risk, T43), saved artifacts in
 # data/e56/model/, data-freshness disclosure
-RECORD_E56 = Path(os.getenv("AIPHEED_E56_RECORD", "data/e56/e56_record.json"))
+RECORD_E56 = backend_path(os.getenv("AIPHEED_E56_RECORD", "data/e56/e56_record.json"))
 # E58: E56 record + two-signal early warning (ALERT / EMERGING / NONE, direction) per province and quarter
-RECORD_E58 = Path(os.getenv("AIPHEED_E58_RECORD", "data/e58/e58_record.json"))
+RECORD_E58 = backend_path(os.getenv("AIPHEED_E58_RECORD", "data/e58/e58_record.json"))
 # E64: Objectives 1-3 completion candidate (improved news pipeline v3 + E56 procedure family, same Lead-2 target T43)
-RECORD_E64 = Path(os.getenv("AIPHEED_E64_RECORD", "data/e64/e64_record.json"))
+RECORD_E64 = backend_path(os.getenv("AIPHEED_E64_RECORD", "data/e64/e64_record.json"))
 # E66: the selected methodology serves the E58 record unchanged (same probabilities, E58-EW warning) plus the
 # separate layers of app.ml.inference.climate_watch (El Nino hazard watch) and exact LGU ranks; opt-in only
 # E67: the E66 layered system (same E58 record numbers) plus the E67 model identity, trigger-group coverage and
 # measured Lead-2 effects, and the LOW-under-climate-watch explanation (data/e67/e67_disclosure.json); opt-in only
-DISCLOSURE_E67 = Path(os.getenv("AIPHEED_E67_DISCLOSURE", "data/e67/e67_disclosure.json"))
+DISCLOSURE_E67 = backend_path(os.getenv("AIPHEED_E67_DISCLOSURE", "data/e67/e67_disclosure.json"))
 # E68: the same numbers again, with the E68 input-status, affordability, target-wording and El Nino findings
 # (app.ml.inference.e68_disclosure, data/e68/e68_disclosure.json); opt-in only
 # E69: the same numbers again, with the two-scale food-insecurity risk outlook (regional hunger outlook + provincial

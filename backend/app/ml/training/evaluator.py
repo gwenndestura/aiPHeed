@@ -33,6 +33,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -111,9 +112,9 @@ LABEL_COL: str = "label_stress"
 # Paths
 # ---------------------------------------------------------------------------
 
-FEATURES_PATH = Path("data/processed/features_fused.parquet")
-LABELS_PATH   = Path("data/processed/labels.parquet")
-OUTPUT_PATH   = Path("data/processed/eval_results.json")
+FEATURES_PATH = backend_path("data/processed/features_fused.parquet")
+LABELS_PATH   = backend_path("data/processed/labels.parquet")
+OUTPUT_PATH   = backend_path("data/processed/eval_results.json")
 
 
 # ---------------------------------------------------------------------------

@@ -43,6 +43,7 @@ data/processed/pagasa_climate.parquet, schema unchanged:
     source_note, fetched_at
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import math
@@ -61,7 +62,7 @@ IBTRACS_URL = ("https://www.ncei.noaa.gov/data/"
 
 # The WP best-track file is ~115 MB, so it is cached on disk and refreshed only
 # when the cache is older than this. A same-week re-run costs nothing.
-CACHE = Path("data/raw/ibtracs_wp.csv")
+CACHE = backend_path("data/raw/ibtracs_wp.csv")
 CACHE_MAX_AGE_DAYS = 7
 
 # Province centroids (WGS84). Geographic constants, not statistics -- there is
@@ -303,7 +304,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
     frame = fetch_pagasa_climate(2021)
-    dest = Path("data/processed/pagasa_climate.parquet")
+    dest = backend_path("data/processed/pagasa_climate.parquet")
     dest.parent.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(dest, index=False)
     print(frame.groupby(["year", "quarter"])[["tc_count", "tc_severe_flag"]]

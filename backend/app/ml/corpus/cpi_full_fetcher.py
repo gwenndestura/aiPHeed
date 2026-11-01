@@ -39,6 +39,7 @@ data/processed/cpi_full.parquet -- columns:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -53,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 OPENSTAT_BASE = "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW"
 TABLE = "0012M4ACP22.px"
-OUTPUT_PATH = Path("data/processed/cpi_full.parquet")
+OUTPUT_PATH = backend_path("data/processed/cpi_full.parquet")
 
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "aiPHeed/1.0 (+research; DLSU-D thesis)"})

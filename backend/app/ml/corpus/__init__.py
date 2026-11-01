@@ -11,6 +11,7 @@ The parquet file is GITIGNORED — never commit raw corpus data.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 import os
@@ -20,7 +21,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-RAW_CORPUS_PATH = Path("data/raw/corpus_raw.parquet")
+RAW_CORPUS_PATH = backend_path("data/raw/corpus_raw.parquet")
 
 # Common schema fields shared across all news fetchers
 CORPUS_COLUMNS = [

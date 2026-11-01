@@ -54,6 +54,7 @@ allow extension. Strict 2020-2025 boundary respected.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import json
 import logging
@@ -67,7 +68,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 OPENSTAT_BASE = "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/NRP"
-OUTPUT_PATH = Path("data/processed/commodity_prices.parquet")
+OUTPUT_PATH = backend_path("data/processed/commodity_prices.parquet")
 
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "aiPHeed/1.0 (+research; DLSU-D thesis)"})

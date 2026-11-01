@@ -39,6 +39,7 @@ Usage:
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from pathlib import Path
@@ -52,9 +53,9 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-E28_VULNERABILITY_PATH = Path("data/inputs/lgu_vulnerability.csv")   # authorized E25 export (142 LGUs)
-LGU_CENSUS_PATH  = Path("data/processed/lgu_census.parquet")
-LGU_POVERTY_PATH = Path("data/processed/lgu_poverty.parquet")
+E28_VULNERABILITY_PATH = backend_path("data/inputs/lgu_vulnerability.csv")   # authorized E25 export (142 LGUs)
+LGU_CENSUS_PATH  = backend_path("data/processed/lgu_census.parquet")
+LGU_POVERTY_PATH = backend_path("data/processed/lgu_poverty.parquet")
 
 DISAGGREGATION_LABEL = (
     "Spatially disaggregated estimate derived from the province-level "

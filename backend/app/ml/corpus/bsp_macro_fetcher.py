@@ -47,6 +47,7 @@ data/processed/bsp_macro.parquet:
     source_note, fetched_at
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import logging
 from datetime import datetime, timezone
@@ -200,7 +201,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
     frame = fetch_bsp_macro(2021, strict=False)
-    dest = Path("data/processed/bsp_macro.parquet")
+    dest = backend_path("data/processed/bsp_macro.parquet")
     dest.parent.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(dest, index=False)
     print(frame[frame["province_name"] == "Cavite"]

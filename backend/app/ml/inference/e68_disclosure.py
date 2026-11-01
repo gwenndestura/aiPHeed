@@ -13,6 +13,7 @@ score. data/e68/e68_disclosure.json, built only from the E68 outputs (runner/r4_
     be estimated) and the national-input finding.
 """
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import hashlib
@@ -22,7 +23,7 @@ from pathlib import Path
 
 from app.ml.inference import e67_disclosure as D67
 
-DISCLOSURE = Path(os.getenv("AIPHEED_E68_DISCLOSURE", "data/e68/e68_disclosure.json"))
+DISCLOSURE = backend_path(os.getenv("AIPHEED_E68_DISCLOSURE", "data/e68/e68_disclosure.json"))
 PROBLEM = ("missing", "stale", "substituted", "too_few_articles", "not_collected")
 WORDS = {"missing": "missing", "stale": "out of date", "substituted": "stored as a placeholder",
          "too_few_articles": "too few news articles", "not_collected": "not collected"}

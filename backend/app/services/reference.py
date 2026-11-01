@@ -11,6 +11,7 @@ This module is the only place that translation lives.
 """
 
 from __future__ import annotations
+from app.paths import backend_path  # noqa: E402  (AUDIT D4)
 
 import functools
 import re
@@ -19,7 +20,7 @@ from pathlib import Path
 
 import pandas as pd
 
-LGU_REFERENCE_PATH = Path("data/reference/calabarzon_lgus.csv")
+LGU_REFERENCE_PATH = backend_path("data/reference/calabarzon_lgus.csv")
 
 REGION_ID = "calabarzon"
 REGION_NAME = "CALABARZON"
