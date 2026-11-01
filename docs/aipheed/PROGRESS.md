@@ -201,3 +201,9 @@
 - **Verdicts:** A software YES. B research NO (Gate 1 not achievable; 40.0 % at Lead 2, development; future NOT_YET_TESTABLE; maximum reliable lead none). C data: ≥ 10 unseen quarters (about 2029-05), a leading indicator, provincial measurement.
 
 **Final commit:** `808544c` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work.
+
+## v3 · Protocol validity study (no model or protocol change): DONE
+- `backend/scripts/v3_protocol_validity.py` → `docs/aipheed/v3/results/`; `docs/aipheed/v3/PROTOCOL_VALIDITY.md`; `PROTOCOL_AMENDMENT_DRAFT.md` (draft, not active).
+- The frozen tolerance is 0.68 × the published margin and narrower than the 95 % least significant difference on 40/40 Lead-2 rows. If hunger never changed, persistence would still score only 76.7 %.
+- **Lead-2 oracle (all-data q / pre-surge q):** frozen 0.43/0.60; b1 0.51/0.70; b2 (published margin) 0.59/0.78. Bands and direction pass only through base rates. A one-quarter nowcast against the published margin has oracle 0.83 and persistence 0.74.
+- 8 early-round margins (2021-Q2 … 2023-Q1) are assumed (NOT VERIFIED). Lock, pre-registration and seal hashes unchanged.
