@@ -199,3 +199,5 @@
 - **Hashes at the end:** protocol lock, pre-registration and seal all unchanged.
 - **Docs:** `v2/{METHODOLOGY_V2, MODEL_REPORT_V2, TEST_REPORT, FINAL_REPORT}.md`; API, ARCHITECTURE and DATA_INVENTORY updated; the old FINAL_REPORT points to v2.
 - **Verdicts:** A software YES. B research NO (Gate 1 not achievable; 40.0 % at Lead 2, development; future NOT_YET_TESTABLE; maximum reliable lead none). C data: ≥ 10 unseen quarters (about 2029-05), a leading indicator, provincial measurement.
+
+**Final commit:** `808544c` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work.
