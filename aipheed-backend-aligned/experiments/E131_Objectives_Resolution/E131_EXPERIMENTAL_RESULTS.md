@@ -57,7 +57,7 @@
 
 **Reliability rules.** **No model passes N1–N7 at any lead under either policy** (`out/x1_rules.json`, `out/x1_univariate_rules.json`). The maximum reliable lead is none for every model.
 
-**Information only** (not pass/fail): with 2× the tolerance, LLM at Lead 2 reaches 0.79 and PERSIST 0.75. R² is negative everywhere because of the level shift.
+**Information only** (not pass/fail): with 2× the tolerance, LLM at Lead 2 reaches 0.79 and PERSIST 0.75, but 3 of the 7 missed surges would then count as "agreement". Addendum 1 therefore applies no secondary band. R² is negative everywhere because of the level shift.
 
 ## X3 · Provincial layer
 

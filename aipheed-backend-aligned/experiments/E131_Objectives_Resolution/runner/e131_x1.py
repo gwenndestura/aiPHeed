@@ -47,8 +47,8 @@ MODELS = ["PERSIST", "CLIM", "LLM", "DLLM", *LEARNED]
 
 
 # ------------------------------------------------------------------ target and sampling error
-def rounds() -> pd.DataFrame:
-    r = pd.read_csv(SWS)
+def rounds(path: Path = SWS) -> pd.DataFrame:
+    r = pd.read_csv(path)
     r = r[~r["commissioned"].astype(bool)].copy()
     r["published"] = pd.to_datetime(r["published"]).dt.date
     assert (r["quarter"].map(L.qi) >= L.qi("2021-Q1")).all()

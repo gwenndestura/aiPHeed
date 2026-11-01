@@ -13,4 +13,4 @@
 | A9 | CBMS 2024 LGU cross-section | CBMS FIES | 142 measured LGUs | One window, so no lead; not held | No (data) | Recommended data request |
 | A10 | Pre-2021 SWS (E114) | SWS | Long series (E114: LightGBM beats persistence on 2013–2020, damped smoothing better) | Conflicts with the owner's 2021+ rule | Not used | Owner decision only |
 | A11 | Combine SWS with OCTA | Hunger | Two independent measurements | About 10 OCTA values. Combining lowers SE, which *tightens* the tolerance. | Reviewed | Cross-check only |
-| A12 | A practical (decision-based) tolerance in place of the measurement one | — | Matches how DA would read the numbers | Changing it now would be post hoc. 2× the tolerance gives 0.79 for LLM at Lead 2, information only. | Sensitivity only | **Owner may set one now, for prospective scoring only** |
+| A12 | A practical (decision-based) tolerance in place of the measurement one | — | Matches how DA would read the numbers | Changing it now would be post hoc. 2× the tolerance gives 0.79 for LLM at Lead 2 but counts 3 of 7 missed surges as "agreement", information only. | **Yes (Addendum 1)** | **No DA tolerance exists. Primary only.** |

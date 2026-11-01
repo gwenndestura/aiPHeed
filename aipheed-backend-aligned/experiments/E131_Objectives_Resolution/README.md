@@ -60,6 +60,11 @@ Tests: `backend/tests/unit/test_e131_resolution.py`.
 
 ## Scoring the seal (after SWS publishes 2026-Q4 and later)
 
-1. Add the new rounds to the area-rounds file.
-2. Score each sealed forecast against the §1 tolerance (1.645 × SE).
-3. Never re-seal.
+**Primary criterion only.** Addendum 1 (`E131_ADDENDUM_1_DA_OPERATIONAL_TOLERANCE.md`, frozen 2026-11-01) found no independently justifiable DA Region IV-A operational tolerance, so no secondary tolerance is applied.
+
+1. Put the new non-commissioned SWS rounds (quarters after 2026-Q3) in `data/sws_rounds_after_2026Q3.csv`, with the same columns as E110 `data/sws_area_rounds.csv`.
+2. Run `python -I runner/score_e131.py`.
+   - It verifies the seal hash and scores every sealed forecast with |forecast − SWS| ≤ 1.645 × SE.
+   - It also reports surge capture and 80 % interval coverage.
+   - Output goes to `out/seal_scores/` (append-only).
+3. Never re-seal, and never describe any other band as meeting the 75 % objective.

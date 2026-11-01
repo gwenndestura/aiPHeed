@@ -18,4 +18,8 @@
 
 ## C2 · Searches
 
-No web searches were made in E131. Data came from the OpenSTAT API (2021+ only) and from files already held.
+**Main experiment.** No web searches. Data came from the OpenSTAT API (2021+ only) and from files already held.
+
+**Addendum 1 (2026-11-01).** Three policy searches (DA IV-A monitoring, the DA rice emergency, IPC), logged in `sources/SOURCES_LOG.md`.
+- No PSA, BSP or SWS series values were sought.
+- No sealed target can have been exposed, because SWS has not published any quarter after 2026-Q3.

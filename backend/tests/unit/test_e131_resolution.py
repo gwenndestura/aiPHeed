@@ -133,6 +133,37 @@ def test_seal_content():
     assert len(p) == 20 and p.label.str.startswith("model-based").all()
 
 
+def test_addendum_1_frozen_primary_only():
+    add = E / "E131_ADDENDUM_1_DA_OPERATIONAL_TOLERANCE.md"
+    assert (E / "runner" / "ADDENDUM_1_SHA256.txt").read_text().split()[0] == _sha(add)
+    text = add.read_text(encoding="utf-8")
+    assert "No independently justifiable DA Region IV-A operational tolerance exists" in text
+    assert not (E / "data" / "sws_rounds_after_2026Q3.csv").exists()      # nothing after 2026-Q3 held or scored yet
+    assert not (E / "out" / "seal_scores").exists()
+
+
+def test_scorer_applies_primary_criterion_only(tmp_path):
+    sys.path.insert(0, str(E / "runner"))
+    spec = importlib.util.spec_from_file_location("score_e131", E / "runner" / "score_e131.py")
+    S = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(S)
+    assert _sha(S.SEAL) == S.SEAL_SHA
+    hdr = pd.read_csv(S.X.SWS, nrows=0).columns
+    row = {c: "" for c in hdr}
+    row.update(quarter="2026-Q4", published="2027-01-15", commissioned=False, metro_manila=25.0, balance_luzon=21.0,
+               visayas=18.0, mindanao=24.0, area_moe_bl=4.0, area_moe_other=6.0)
+    pd.DataFrame([row]).to_csv(tmp_path / "rounds.csv", index=False)
+    D, summ = S.score(pd.read_csv(S.SEAL), tmp_path / "rounds.csv")
+    assert len(D) == 4 and set(D["target"]) == {"2026-Q4"}                   # only the published quarter is scored
+    assert np.allclose(D["tolerance_primary"], 1.6448536269514722 * D["se"])
+    assert not [c for c in D.columns if "secondary" in c or "da_tol" in c.lower()]
+    assert summ["criterion"].startswith("primary only")
+    old = dict(row, quarter="2026-Q3")
+    pd.DataFrame([old]).to_csv(tmp_path / "bad.csv", index=False)
+    with pytest.raises(AssertionError):                                     # earlier quarters can never be re-scored
+        S.score(pd.read_csv(S.SEAL), tmp_path / "bad.csv")
+
+
 def test_production_untouched():
     inf = REPO / "backend" / "app" / "ml" / "inference"
     assert _sha(inf / "firi.py") == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
