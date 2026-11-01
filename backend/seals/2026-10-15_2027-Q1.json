@@ -1,0 +1,3290 @@
+{
+ "baselines": {
+  "atPostIssue": {
+   "ALWAYS-LOW": 0.0,
+   "CLIM": 0.2,
+   "PERSIST-SI": {
+    "PH040100000": 0.0,
+    "PH040200000": 0.0,
+    "PH040300000": 0.0,
+    "PH040400000": 0.0,
+    "PH040500000": 0.0
+   }
+  },
+  "atServedIssue": {
+   "ALWAYS-LOW": 0.0,
+   "CLIM": 0.2,
+   "PERSIST-SI": {
+    "PH040100000": 0.0,
+    "PH040200000": 0.0,
+    "PH040300000": 0.0,
+    "PH040400000": 0.0,
+    "PH040500000": 0.0
+   }
+  }
+ },
+ "c0ParityWithServedExport": {
+  "PH040100000": {
+   "pi_hunger": 4.585746480323394e-07,
+   "pi_price": 1.9157754838072805e-07,
+   "probability": 2.0992686172727204e-07
+  },
+  "PH040200000": {
+   "pi_hunger": 4.585746480323394e-07,
+   "pi_price": 4.586166002518155e-08,
+   "probability": 8.236883121404137e-08
+  },
+  "PH040300000": {
+   "pi_hunger": 4.585746480323394e-07,
+   "pi_price": 1.9157754838072805e-07,
+   "probability": 2.0992686172727204e-07
+  },
+  "PH040400000": {
+   "pi_hunger": 4.585746480323394e-07,
+   "pi_price": 2.264581909494634e-08,
+   "probability": 6.399950415111877e-08
+  },
+  "PH040500000": {
+   "pi_hunger": 4.585746480323394e-07,
+   "pi_price": 1.233607114375923e-08,
+   "probability": 2.9660640617212852e-08
+  }
+ },
+ "candidates": {
+  "C0_P0H4": {
+   "PH040100000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.810127,
+    "price": 0.125337,
+    "probability": 0.101539
+   },
+   "PH040200000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.810127,
+    "price": 0.065408,
+    "probability": 0.052989
+   },
+   "PH040300000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.810127,
+    "price": 0.125337,
+    "probability": 0.101539
+   },
+   "PH040400000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.810127,
+    "price": 0.031684,
+    "probability": 0.025668
+   },
+   "PH040500000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.810127,
+    "price": 0.051227,
+    "probability": 0.0415
+   }
+  },
+  "C1_M0": {
+   "PH040100000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.125337,
+    "probability": 0.122701
+   },
+   "PH040200000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.065408,
+    "probability": 0.064032
+   },
+   "PH040300000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.125337,
+    "probability": 0.122701
+   },
+   "PH040400000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.031684,
+    "probability": 0.031017
+   },
+   "PH040500000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.051227,
+    "probability": 0.05015
+   }
+  },
+  "C2_M2": {
+   "PH040100000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.174985,
+    "probability": 0.171306
+   },
+   "PH040200000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.119985,
+    "probability": 0.117462
+   },
+   "PH040300000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.174985,
+    "probability": 0.171306
+   },
+   "PH040400000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.103078,
+    "probability": 0.100911
+   },
+   "PH040500000": {
+    "D0": "LOW",
+    "D1": "LOW",
+    "hunger": 0.978972,
+    "price": 0.119985,
+    "probability": 0.117462
+   }
+  }
+ },
+ "code": {
+  "gitCommit": "91b77ded333f",
+  "sha256": {
+   "aipheed-backend-aligned/experiments/LEAD2_POST_SWS_ISSUE/runner/score.py": "af14c52085214fb74d665664ff0633884680d866c73257e8aa470f92fb15b2d1",
+   "aipheed-backend-aligned/experiments/LEAD2_POST_SWS_PRICE/runner/price_refit.py": "fc538136299ef41253fb5b1938cce4dfa0d8b753378b0b3d5e633c4fee5dc185",
+   "backend/scripts/seal_lead2.py": "ce4d6e0a01cb8e1703cbf746334ddd0a2b9e20abdce53f04df5750d6b2ad4e2f"
+  }
+ },
+ "inputs": {
+  "cpi": {
+   "post": {
+    "availableFrom": "2026-10-01",
+    "cutoff": "2026-08",
+    "issue": "2026-10-15",
+    "newestInCut": "2026-08"
+   },
+   "rule": "month M available from the first day of M+2 (PSA releases about the first week of M+1)",
+   "served": {
+    "availableFrom": "2026-10-01",
+    "cutoff": "2026-08",
+    "issue": "2026-10-01",
+    "newestInCut": "2026-08"
+   }
+  },
+  "filesRead": {
+   "post": [
+    {
+     "bytes": 10496,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/bsp_macro.parquet",
+     "sha256": "233476fd8ccb3416af92a7bd5b2ce47b9cf0835b786ce1ef4aa78e8c5b111600"
+    },
+    {
+     "bytes": 13297,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/pagasa_climate.parquet",
+     "sha256": "4e198c7304f8a9c25ec18e785ea5a8b1d01f6c19f131588bb9b75fc601fd29a3"
+    },
+    {
+     "bytes": 8779,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/psa_rice_prices.parquet",
+     "sha256": "c1e3cecd253caae2c716486513746c77974e881aae899a50bd37118f9fed93ed"
+    },
+    {
+     "bytes": 4171,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E113_Final_Model/out/news_composites_G.csv",
+     "sha256": "ea658f38e24b37bd1c3ccaa5326c1feae47007e2963265b55d9ad02f0cd1018c"
+    },
+    {
+     "bytes": 21835,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E40_SWS_CPI_Tiers/data_acquired/psa_cpi_yoy_headline_food_2021_2026.csv",
+     "sha256": "3b382d27811e7efe2d4ea607c403d39550aed90770e26a74299a46e541a04008"
+    },
+    {
+     "bytes": 8326,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E40_SWS_CPI_Tiers/runs/triggers/composition.csv",
+     "sha256": "d796b2754b24747811e02841eb5f103a93f9738decabc6454f42d0411c3a6774"
+    },
+    {
+     "bytes": 28464,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/cpi_index_ACP22.csv",
+     "sha256": "69004dd7518379aafecc2b0b55f7b32c57bc0c584f153ff3d807d9ad2ee3d8ed"
+    },
+    {
+     "bytes": 45161,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/fisheries_production.csv",
+     "sha256": "f03ab898d617f89d8e4d65d2ef2878c531384d71fab220e2bc4e012cf0a83830"
+    },
+    {
+     "bytes": 7786,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/lfs_rates_national.csv",
+     "sha256": "81aee01aa65f2e05a354eafbd62e0f983c1a7d551f01ce63c7340891a8eb93be"
+    },
+    {
+     "bytes": 11240,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/palay_corn_production.csv",
+     "sha256": "405370cac363bd5c809e284b2dc5dc9260ef5b0effc841cef8f87c33f48b29f5"
+    },
+    {
+     "bytes": 33502,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/FINAL_FOOD_INSECURITY_LIGHTGBM/data/long/sws_area_rounds_full.csv",
+     "sha256": "d251966aacf403a293a6ad06eb29d8c639d4e2fcbd67cbcf066fd6fa6f596505"
+    },
+    {
+     "bytes": 5045,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/FINAL_FOOD_INSECURITY_LIGHTGBM/data/sws_area_rounds_2021.csv",
+     "sha256": "936d0c26c02c784d9db4521ecd30f2d5c632efaa1d2d388c4dd9278e09f19ec2"
+    },
+    {
+     "bytes": 7234,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FINAL_UNIFIED_LGBM/data/pinksheet_monthly.csv",
+     "sha256": "82963ef12fb3779c618626742888a209c395488170e13a48bf4ebe05c2c89565"
+    },
+    {
+     "bytes": 3221,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/data/bsp_cash_remittances_cumulative.csv",
+     "sha256": "472b49a9e7fae7cf2938bedbbddb09af8cde91650115a4d0fdb5f21a4ef78373"
+    },
+    {
+     "bytes": 27346,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/data/raw/psa_rice_wholesale_AWB01.csv",
+     "sha256": "a733c9ca0ac35093b763e0a790deda35bcd9f611a21c9538acac8462b612ece4"
+    },
+    {
+     "bytes": 3525,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/out/typhoons_recomputed.csv",
+     "sha256": "2fbd01947d360d5db43db9f2cde71f137999441ba29f765662acbe3d0af9d9cf"
+    },
+    {
+     "bytes": 31800837,
+     "modified": "2026-10-27T12:30:57+00:00",
+     "path": "backend/data/gdelt_e85/gkg_calabarzon_2021_2026.parquet",
+     "sha256": "f2c8ece2a9f44b8d2c85c455bd631b8876c95d505ecb0e237144c0cd62046d0d"
+    },
+    {
+     "bytes": 25342,
+     "modified": "2026-10-27T00:43:59+00:00",
+     "path": "backend/data/inputs/lgu_vulnerability.csv",
+     "sha256": "82f21a9f08c0e9073303ad93e8e6460a5b575092245f07862715e88dce6b59a1"
+    },
+    {
+     "bytes": 2969,
+     "modified": "2026-10-27T00:43:59+00:00",
+     "path": "backend/data/inputs/sws_rounds.csv",
+     "sha256": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3"
+    },
+    {
+     "bytes": 7530,
+     "modified": "2026-10-27T00:44:00+00:00",
+     "path": "backend/data/news_e31/fssi_v2_panel.csv",
+     "sha256": "2a0a10499d2f2eb382f78cd914a27fcf083b86e542be498455f3c7330b742b1b"
+    }
+   ],
+   "served": [
+    {
+     "bytes": 10496,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/bsp_macro.parquet",
+     "sha256": "233476fd8ccb3416af92a7bd5b2ce47b9cf0835b786ce1ef4aa78e8c5b111600"
+    },
+    {
+     "bytes": 13297,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/pagasa_climate.parquet",
+     "sha256": "4e198c7304f8a9c25ec18e785ea5a8b1d01f6c19f131588bb9b75fc601fd29a3"
+    },
+    {
+     "bytes": 8779,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/data_inputs/psa_rice_prices.parquet",
+     "sha256": "c1e3cecd253caae2c716486513746c77974e881aae899a50bd37118f9fed93ed"
+    },
+    {
+     "bytes": 4171,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/E113_Final_Model/out/news_composites_G.csv",
+     "sha256": "ea658f38e24b37bd1c3ccaa5326c1feae47007e2963265b55d9ad02f0cd1018c"
+    },
+    {
+     "bytes": 21835,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E40_SWS_CPI_Tiers/data_acquired/psa_cpi_yoy_headline_food_2021_2026.csv",
+     "sha256": "3b382d27811e7efe2d4ea607c403d39550aed90770e26a74299a46e541a04008"
+    },
+    {
+     "bytes": 8326,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E40_SWS_CPI_Tiers/runs/triggers/composition.csv",
+     "sha256": "d796b2754b24747811e02841eb5f103a93f9738decabc6454f42d0411c3a6774"
+    },
+    {
+     "bytes": 28464,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/cpi_index_ACP22.csv",
+     "sha256": "69004dd7518379aafecc2b0b55f7b32c57bc0c584f153ff3d807d9ad2ee3d8ed"
+    },
+    {
+     "bytes": 45161,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/fisheries_production.csv",
+     "sha256": "f03ab898d617f89d8e4d65d2ef2878c531384d71fab220e2bc4e012cf0a83830"
+    },
+    {
+     "bytes": 7786,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/lfs_rates_national.csv",
+     "sha256": "81aee01aa65f2e05a354eafbd62e0f983c1a7d551f01ce63c7340891a8eb93be"
+    },
+    {
+     "bytes": 11240,
+     "modified": "2026-10-27T00:43:57+00:00",
+     "path": "aipheed-backend-aligned/experiments/E41_Lead2_Audit/data_acquired/palay_corn_production.csv",
+     "sha256": "405370cac363bd5c809e284b2dc5dc9260ef5b0effc841cef8f87c33f48b29f5"
+    },
+    {
+     "bytes": 5045,
+     "modified": "2026-10-27T08:50:30+00:00",
+     "path": "aipheed-backend-aligned/experiments/FINAL_FOOD_INSECURITY_LIGHTGBM/data/sws_area_rounds_2021.csv",
+     "sha256": "936d0c26c02c784d9db4521ecd30f2d5c632efaa1d2d388c4dd9278e09f19ec2"
+    },
+    {
+     "bytes": 7234,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FINAL_UNIFIED_LGBM/data/pinksheet_monthly.csv",
+     "sha256": "82963ef12fb3779c618626742888a209c395488170e13a48bf4ebe05c2c89565"
+    },
+    {
+     "bytes": 3221,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/data/bsp_cash_remittances_cumulative.csv",
+     "sha256": "472b49a9e7fae7cf2938bedbbddb09af8cde91650115a4d0fdb5f21a4ef78373"
+    },
+    {
+     "bytes": 27346,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/data/raw/psa_rice_wholesale_AWB01.csv",
+     "sha256": "a733c9ca0ac35093b763e0a790deda35bcd9f611a21c9538acac8462b612ece4"
+    },
+    {
+     "bytes": 3525,
+     "modified": "2026-10-27T08:50:31+00:00",
+     "path": "aipheed-backend-aligned/experiments/FIRI_V2_DATA_AUDIT/out/typhoons_recomputed.csv",
+     "sha256": "2fbd01947d360d5db43db9f2cde71f137999441ba29f765662acbe3d0af9d9cf"
+    },
+    {
+     "bytes": 31800837,
+     "modified": "2026-10-27T12:30:57+00:00",
+     "path": "backend/data/gdelt_e85/gkg_calabarzon_2021_2026.parquet",
+     "sha256": "f2c8ece2a9f44b8d2c85c455bd631b8876c95d505ecb0e237144c0cd62046d0d"
+    },
+    {
+     "bytes": 25342,
+     "modified": "2026-10-27T00:43:59+00:00",
+     "path": "backend/data/inputs/lgu_vulnerability.csv",
+     "sha256": "82f21a9f08c0e9073303ad93e8e6460a5b575092245f07862715e88dce6b59a1"
+    },
+    {
+     "bytes": 2969,
+     "modified": "2026-10-27T00:43:59+00:00",
+     "path": "backend/data/inputs/sws_rounds.csv",
+     "sha256": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3"
+    },
+    {
+     "bytes": 7530,
+     "modified": "2026-10-27T00:44:00+00:00",
+     "path": "backend/data/news_e31/fssi_v2_panel.csv",
+     "sha256": "2a0a10499d2f2eb382f78cd914a27fcf083b86e542be498455f3c7330b742b1b"
+    }
+   ]
+  },
+  "hunger": {
+   "C0": {
+    "fallback": false,
+    "h_last": 17.3,
+    "newestSwsPublished": "2026-08-24",
+    "newestSwsQ": "2026-Q2",
+    "trueHorizon": 3
+   },
+   "C1_C2": {
+    "fallback": false,
+    "h_last": 23.6,
+    "newestSwsPublished": "2026-10-14",
+    "newestSwsQ": "2026-Q3",
+    "trueHorizon": 2
+   },
+   "swsRoundsUsedForC1C2": [
+    {
+     "H": 6.1,
+     "area": "NCR",
+     "published": "1998-09-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 5.1,
+     "area": "BL",
+     "published": "1998-09-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 11.3,
+     "area": "VIS",
+     "published": "1998-09-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 15.3,
+     "area": "MIN",
+     "published": "1998-09-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 9.0,
+     "area": "NCR",
+     "published": "1998-11-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 7.3,
+     "area": "BL",
+     "published": "1998-11-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 11.1,
+     "area": "VIS",
+     "published": "1998-11-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 13.1,
+     "area": "MIN",
+     "published": "1998-11-29",
+     "quarter": "1998-Q3"
+    },
+    {
+     "H": 9.3,
+     "area": "NCR",
+     "published": "1999-01-29",
+     "quarter": "1998-Q4"
+    },
+    {
+     "H": 17.3,
+     "area": "BL",
+     "published": "1999-01-29",
+     "quarter": "1998-Q4"
+    },
+    {
+     "H": 11.6,
+     "area": "VIS",
+     "published": "1999-01-29",
+     "quarter": "1998-Q4"
+    },
+    {
+     "H": 15.1,
+     "area": "MIN",
+     "published": "1999-01-29",
+     "quarter": "1998-Q4"
+    },
+    {
+     "H": 6.0,
+     "area": "NCR",
+     "published": "1999-05-30",
+     "quarter": "1999-Q1"
+    },
+    {
+     "H": 5.7,
+     "area": "BL",
+     "published": "1999-05-30",
+     "quarter": "1999-Q1"
+    },
+    {
+     "H": 7.7,
+     "area": "VIS",
+     "published": "1999-05-30",
+     "quarter": "1999-Q1"
+    },
+    {
+     "H": 12.7,
+     "area": "MIN",
+     "published": "1999-05-30",
+     "quarter": "1999-Q1"
+    },
+    {
+     "H": 7.3,
+     "area": "NCR",
+     "published": "1999-08-29",
+     "quarter": "1999-Q2"
+    },
+    {
+     "H": 7.0,
+     "area": "BL",
+     "published": "1999-08-29",
+     "quarter": "1999-Q2"
+    },
+    {
+     "H": 7.0,
+     "area": "VIS",
+     "published": "1999-08-29",
+     "quarter": "1999-Q2"
+    },
+    {
+     "H": 11.3,
+     "area": "MIN",
+     "published": "1999-08-29",
+     "quarter": "1999-Q2"
+    },
+    {
+     "H": 6.7,
+     "area": "NCR",
+     "published": "1999-12-30",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 8.7,
+     "area": "BL",
+     "published": "1999-12-30",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 5.3,
+     "area": "VIS",
+     "published": "1999-12-30",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 3.3,
+     "area": "MIN",
+     "published": "1999-12-30",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 11.7,
+     "area": "NCR",
+     "published": "2000-02-29",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 11.7,
+     "area": "BL",
+     "published": "2000-02-29",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 10.3,
+     "area": "VIS",
+     "published": "2000-02-29",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 10.0,
+     "area": "MIN",
+     "published": "2000-02-29",
+     "quarter": "1999-Q4"
+    },
+    {
+     "H": 10.0,
+     "area": "NCR",
+     "published": "2000-05-30",
+     "quarter": "2000-Q1"
+    },
+    {
+     "H": 7.7,
+     "area": "BL",
+     "published": "2000-05-30",
+     "quarter": "2000-Q1"
+    },
+    {
+     "H": 7.7,
+     "area": "VIS",
+     "published": "2000-05-30",
+     "quarter": "2000-Q1"
+    },
+    {
+     "H": 18.3,
+     "area": "MIN",
+     "published": "2000-05-30",
+     "quarter": "2000-Q1"
+    },
+    {
+     "H": 5.7,
+     "area": "NCR",
+     "published": "2000-08-29",
+     "quarter": "2000-Q2"
+    },
+    {
+     "H": 12.7,
+     "area": "BL",
+     "published": "2000-08-29",
+     "quarter": "2000-Q2"
+    },
+    {
+     "H": 13.3,
+     "area": "VIS",
+     "published": "2000-08-29",
+     "quarter": "2000-Q2"
+    },
+    {
+     "H": 10.3,
+     "area": "MIN",
+     "published": "2000-08-29",
+     "quarter": "2000-Q2"
+    },
+    {
+     "H": 4.3,
+     "area": "NCR",
+     "published": "2000-11-29",
+     "quarter": "2000-Q3"
+    },
+    {
+     "H": 8.3,
+     "area": "BL",
+     "published": "2000-11-29",
+     "quarter": "2000-Q3"
+    },
+    {
+     "H": 5.3,
+     "area": "VIS",
+     "published": "2000-11-29",
+     "quarter": "2000-Q3"
+    },
+    {
+     "H": 15.3,
+     "area": "MIN",
+     "published": "2000-11-29",
+     "quarter": "2000-Q3"
+    },
+    {
+     "H": 10.7,
+     "area": "NCR",
+     "published": "2001-03-01",
+     "quarter": "2000-Q4"
+    },
+    {
+     "H": 12.3,
+     "area": "BL",
+     "published": "2001-03-01",
+     "quarter": "2000-Q4"
+    },
+    {
+     "H": 12.3,
+     "area": "VIS",
+     "published": "2001-03-01",
+     "quarter": "2000-Q4"
+    },
+    {
+     "H": 15.0,
+     "area": "MIN",
+     "published": "2001-03-01",
+     "quarter": "2000-Q4"
+    },
+    {
+     "H": 10.0,
+     "area": "NCR",
+     "published": "2001-05-30",
+     "quarter": "2001-Q1"
+    },
+    {
+     "H": 15.3,
+     "area": "BL",
+     "published": "2001-05-30",
+     "quarter": "2001-Q1"
+    },
+    {
+     "H": 20.0,
+     "area": "VIS",
+     "published": "2001-05-30",
+     "quarter": "2001-Q1"
+    },
+    {
+     "H": 18.0,
+     "area": "MIN",
+     "published": "2001-05-30",
+     "quarter": "2001-Q1"
+    },
+    {
+     "H": 9.7,
+     "area": "NCR",
+     "published": "2001-09-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 8.0,
+     "area": "BL",
+     "published": "2001-09-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 12.0,
+     "area": "VIS",
+     "published": "2001-09-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 11.3,
+     "area": "MIN",
+     "published": "2001-09-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 11.3,
+     "area": "NCR",
+     "published": "2001-11-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 7.0,
+     "area": "BL",
+     "published": "2001-11-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 12.7,
+     "area": "VIS",
+     "published": "2001-11-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 9.3,
+     "area": "MIN",
+     "published": "2001-11-29",
+     "quarter": "2001-Q3"
+    },
+    {
+     "H": 5.7,
+     "area": "NCR",
+     "published": "2002-01-29",
+     "quarter": "2001-Q4"
+    },
+    {
+     "H": 8.7,
+     "area": "BL",
+     "published": "2002-01-29",
+     "quarter": "2001-Q4"
+    },
+    {
+     "H": 12.3,
+     "area": "VIS",
+     "published": "2002-01-29",
+     "quarter": "2001-Q4"
+    },
+    {
+     "H": 14.7,
+     "area": "MIN",
+     "published": "2002-01-29",
+     "quarter": "2001-Q4"
+    },
+    {
+     "H": 8.7,
+     "area": "NCR",
+     "published": "2002-05-30",
+     "quarter": "2002-Q1"
+    },
+    {
+     "H": 12.0,
+     "area": "BL",
+     "published": "2002-05-30",
+     "quarter": "2002-Q1"
+    },
+    {
+     "H": 13.0,
+     "area": "VIS",
+     "published": "2002-05-30",
+     "quarter": "2002-Q1"
+    },
+    {
+     "H": 9.3,
+     "area": "MIN",
+     "published": "2002-05-30",
+     "quarter": "2002-Q1"
+    },
+    {
+     "H": 7.7,
+     "area": "NCR",
+     "published": "2002-07-30",
+     "quarter": "2002-Q2"
+    },
+    {
+     "H": 12.3,
+     "area": "BL",
+     "published": "2002-07-30",
+     "quarter": "2002-Q2"
+    },
+    {
+     "H": 10.7,
+     "area": "VIS",
+     "published": "2002-07-30",
+     "quarter": "2002-Q2"
+    },
+    {
+     "H": 13.0,
+     "area": "MIN",
+     "published": "2002-07-30",
+     "quarter": "2002-Q2"
+    },
+    {
+     "H": 8.3,
+     "area": "NCR",
+     "published": "2002-11-29",
+     "quarter": "2002-Q3"
+    },
+    {
+     "H": 13.7,
+     "area": "BL",
+     "published": "2002-11-29",
+     "quarter": "2002-Q3"
+    },
+    {
+     "H": 2.0,
+     "area": "VIS",
+     "published": "2002-11-29",
+     "quarter": "2002-Q3"
+    },
+    {
+     "H": 6.3,
+     "area": "MIN",
+     "published": "2002-11-29",
+     "quarter": "2002-Q3"
+    },
+    {
+     "H": 5.3,
+     "area": "NCR",
+     "published": "2003-01-29",
+     "quarter": "2002-Q4"
+    },
+    {
+     "H": 9.3,
+     "area": "BL",
+     "published": "2003-01-29",
+     "quarter": "2002-Q4"
+    },
+    {
+     "H": 10.0,
+     "area": "VIS",
+     "published": "2003-01-29",
+     "quarter": "2002-Q4"
+    },
+    {
+     "H": 9.7,
+     "area": "MIN",
+     "published": "2003-01-29",
+     "quarter": "2002-Q4"
+    },
+    {
+     "H": 7.3,
+     "area": "NCR",
+     "published": "2003-05-30",
+     "quarter": "2003-Q1"
+    },
+    {
+     "H": 8.0,
+     "area": "BL",
+     "published": "2003-05-30",
+     "quarter": "2003-Q1"
+    },
+    {
+     "H": 4.3,
+     "area": "VIS",
+     "published": "2003-05-30",
+     "quarter": "2003-Q1"
+    },
+    {
+     "H": 6.0,
+     "area": "MIN",
+     "published": "2003-05-30",
+     "quarter": "2003-Q1"
+    },
+    {
+     "H": 8.0,
+     "area": "NCR",
+     "published": "2003-08-29",
+     "quarter": "2003-Q2"
+    },
+    {
+     "H": 7.3,
+     "area": "BL",
+     "published": "2003-08-29",
+     "quarter": "2003-Q2"
+    },
+    {
+     "H": 3.3,
+     "area": "VIS",
+     "published": "2003-08-29",
+     "quarter": "2003-Q2"
+    },
+    {
+     "H": 7.3,
+     "area": "MIN",
+     "published": "2003-08-29",
+     "quarter": "2003-Q2"
+    },
+    {
+     "H": 7.3,
+     "area": "NCR",
+     "published": "2003-11-29",
+     "quarter": "2003-Q3"
+    },
+    {
+     "H": 4.7,
+     "area": "BL",
+     "published": "2003-11-29",
+     "quarter": "2003-Q3"
+    },
+    {
+     "H": 4.3,
+     "area": "VIS",
+     "published": "2003-11-29",
+     "quarter": "2003-Q3"
+    },
+    {
+     "H": 5.3,
+     "area": "MIN",
+     "published": "2003-11-29",
+     "quarter": "2003-Q3"
+    },
+    {
+     "H": 7.7,
+     "area": "NCR",
+     "published": "2004-01-29",
+     "quarter": "2003-Q4"
+    },
+    {
+     "H": 12.7,
+     "area": "BL",
+     "published": "2004-01-29",
+     "quarter": "2003-Q4"
+    },
+    {
+     "H": 6.0,
+     "area": "VIS",
+     "published": "2004-01-29",
+     "quarter": "2003-Q4"
+    },
+    {
+     "H": 7.7,
+     "area": "MIN",
+     "published": "2004-01-29",
+     "quarter": "2003-Q4"
+    },
+    {
+     "H": 3.4,
+     "area": "NCR",
+     "published": "2004-05-30",
+     "quarter": "2004-Q1"
+    },
+    {
+     "H": 8.1,
+     "area": "BL",
+     "published": "2004-05-30",
+     "quarter": "2004-Q1"
+    },
+    {
+     "H": 5.6,
+     "area": "VIS",
+     "published": "2004-05-30",
+     "quarter": "2004-Q1"
+    },
+    {
+     "H": 9.2,
+     "area": "MIN",
+     "published": "2004-05-30",
+     "quarter": "2004-Q1"
+    },
+    {
+     "H": 7.3,
+     "area": "NCR",
+     "published": "2004-08-29",
+     "quarter": "2004-Q2"
+    },
+    {
+     "H": 9.3,
+     "area": "BL",
+     "published": "2004-08-29",
+     "quarter": "2004-Q2"
+    },
+    {
+     "H": 14.3,
+     "area": "VIS",
+     "published": "2004-08-29",
+     "quarter": "2004-Q2"
+    },
+    {
+     "H": 22.0,
+     "area": "MIN",
+     "published": "2004-08-29",
+     "quarter": "2004-Q2"
+    },
+    {
+     "H": 15.7,
+     "area": "NCR",
+     "published": "2004-10-30",
+     "quarter": "2004-Q3"
+    },
+    {
+     "H": 11.3,
+     "area": "BL",
+     "published": "2004-10-30",
+     "quarter": "2004-Q3"
+    },
+    {
+     "H": 13.3,
+     "area": "VIS",
+     "published": "2004-10-30",
+     "quarter": "2004-Q3"
+    },
+    {
+     "H": 23.0,
+     "area": "MIN",
+     "published": "2004-10-30",
+     "quarter": "2004-Q3"
+    },
+    {
+     "H": 8.7,
+     "area": "NCR",
+     "published": "2005-03-01",
+     "quarter": "2004-Q4"
+    },
+    {
+     "H": 9.0,
+     "area": "BL",
+     "published": "2005-03-01",
+     "quarter": "2004-Q4"
+    },
+    {
+     "H": 13.0,
+     "area": "VIS",
+     "published": "2005-03-01",
+     "quarter": "2004-Q4"
+    },
+    {
+     "H": 16.3,
+     "area": "MIN",
+     "published": "2005-03-01",
+     "quarter": "2004-Q4"
+    },
+    {
+     "H": 7.7,
+     "area": "NCR",
+     "published": "2005-05-30",
+     "quarter": "2005-Q1"
+    },
+    {
+     "H": 13.7,
+     "area": "BL",
+     "published": "2005-05-30",
+     "quarter": "2005-Q1"
+    },
+    {
+     "H": 13.7,
+     "area": "VIS",
+     "published": "2005-05-30",
+     "quarter": "2005-Q1"
+    },
+    {
+     "H": 14.3,
+     "area": "MIN",
+     "published": "2005-05-30",
+     "quarter": "2005-Q1"
+    },
+    {
+     "H": 12.0,
+     "area": "NCR",
+     "published": "2005-07-30",
+     "quarter": "2005-Q2"
+    },
+    {
+     "H": 15.0,
+     "area": "BL",
+     "published": "2005-07-30",
+     "quarter": "2005-Q2"
+    },
+    {
+     "H": 13.7,
+     "area": "VIS",
+     "published": "2005-07-30",
+     "quarter": "2005-Q2"
+    },
+    {
+     "H": 5.3,
+     "area": "MIN",
+     "published": "2005-07-30",
+     "quarter": "2005-Q2"
+    },
+    {
+     "H": 16.7,
+     "area": "NCR",
+     "published": "2005-10-30",
+     "quarter": "2005-Q3"
+    },
+    {
+     "H": 18.0,
+     "area": "BL",
+     "published": "2005-10-30",
+     "quarter": "2005-Q3"
+    },
+    {
+     "H": 13.3,
+     "area": "VIS",
+     "published": "2005-10-30",
+     "quarter": "2005-Q3"
+    },
+    {
+     "H": 12.0,
+     "area": "MIN",
+     "published": "2005-10-30",
+     "quarter": "2005-Q3"
+    },
+    {
+     "H": 21.0,
+     "area": "NCR",
+     "published": "2006-03-01",
+     "quarter": "2005-Q4"
+    },
+    {
+     "H": 13.7,
+     "area": "BL",
+     "published": "2006-03-01",
+     "quarter": "2005-Q4"
+    },
+    {
+     "H": 14.3,
+     "area": "VIS",
+     "published": "2006-03-01",
+     "quarter": "2005-Q4"
+    },
+    {
+     "H": 21.7,
+     "area": "MIN",
+     "published": "2006-03-01",
+     "quarter": "2005-Q4"
+    },
+    {
+     "H": 18.3,
+     "area": "NCR",
+     "published": "2006-05-30",
+     "quarter": "2006-Q1"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2006-05-30",
+     "quarter": "2006-Q1"
+    },
+    {
+     "H": 16.0,
+     "area": "VIS",
+     "published": "2006-05-30",
+     "quarter": "2006-Q1"
+    },
+    {
+     "H": 21.0,
+     "area": "MIN",
+     "published": "2006-05-30",
+     "quarter": "2006-Q1"
+    },
+    {
+     "H": 15.0,
+     "area": "NCR",
+     "published": "2006-08-29",
+     "quarter": "2006-Q2"
+    },
+    {
+     "H": 10.0,
+     "area": "BL",
+     "published": "2006-08-29",
+     "quarter": "2006-Q2"
+    },
+    {
+     "H": 17.7,
+     "area": "VIS",
+     "published": "2006-08-29",
+     "quarter": "2006-Q2"
+    },
+    {
+     "H": 17.3,
+     "area": "MIN",
+     "published": "2006-08-29",
+     "quarter": "2006-Q2"
+    },
+    {
+     "H": 12.8,
+     "area": "NCR",
+     "published": "2006-11-29",
+     "quarter": "2006-Q3"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2006-11-29",
+     "quarter": "2006-Q3"
+    },
+    {
+     "H": 19.7,
+     "area": "VIS",
+     "published": "2006-11-29",
+     "quarter": "2006-Q3"
+    },
+    {
+     "H": 21.3,
+     "area": "MIN",
+     "published": "2006-11-29",
+     "quarter": "2006-Q3"
+    },
+    {
+     "H": 17.7,
+     "area": "NCR",
+     "published": "2007-01-29",
+     "quarter": "2006-Q4"
+    },
+    {
+     "H": 17.7,
+     "area": "BL",
+     "published": "2007-01-29",
+     "quarter": "2006-Q4"
+    },
+    {
+     "H": 19.0,
+     "area": "VIS",
+     "published": "2007-01-29",
+     "quarter": "2006-Q4"
+    },
+    {
+     "H": 22.3,
+     "area": "MIN",
+     "published": "2007-01-29",
+     "quarter": "2006-Q4"
+    },
+    {
+     "H": 20.7,
+     "area": "NCR",
+     "published": "2007-04-29",
+     "quarter": "2007-Q1"
+    },
+    {
+     "H": 18.3,
+     "area": "BL",
+     "published": "2007-04-29",
+     "quarter": "2007-Q1"
+    },
+    {
+     "H": 15.3,
+     "area": "VIS",
+     "published": "2007-04-29",
+     "quarter": "2007-Q1"
+    },
+    {
+     "H": 22.7,
+     "area": "MIN",
+     "published": "2007-04-29",
+     "quarter": "2007-Q1"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2007-08-29",
+     "quarter": "2007-Q2"
+    },
+    {
+     "H": 12.0,
+     "area": "BL",
+     "published": "2007-08-29",
+     "quarter": "2007-Q2"
+    },
+    {
+     "H": 12.3,
+     "area": "VIS",
+     "published": "2007-08-29",
+     "quarter": "2007-Q2"
+    },
+    {
+     "H": 17.7,
+     "area": "MIN",
+     "published": "2007-08-29",
+     "quarter": "2007-Q2"
+    },
+    {
+     "H": 17.7,
+     "area": "NCR",
+     "published": "2007-11-29",
+     "quarter": "2007-Q3"
+    },
+    {
+     "H": 22.3,
+     "area": "BL",
+     "published": "2007-11-29",
+     "quarter": "2007-Q3"
+    },
+    {
+     "H": 21.7,
+     "area": "VIS",
+     "published": "2007-11-29",
+     "quarter": "2007-Q3"
+    },
+    {
+     "H": 22.0,
+     "area": "MIN",
+     "published": "2007-11-29",
+     "quarter": "2007-Q3"
+    },
+    {
+     "H": 19.0,
+     "area": "NCR",
+     "published": "2008-02-29",
+     "quarter": "2007-Q4"
+    },
+    {
+     "H": 14.0,
+     "area": "BL",
+     "published": "2008-02-29",
+     "quarter": "2007-Q4"
+    },
+    {
+     "H": 14.3,
+     "area": "VIS",
+     "published": "2008-02-29",
+     "quarter": "2007-Q4"
+    },
+    {
+     "H": 20.3,
+     "area": "MIN",
+     "published": "2008-02-29",
+     "quarter": "2007-Q4"
+    },
+    {
+     "H": 15.7,
+     "area": "NCR",
+     "published": "2008-05-30",
+     "quarter": "2008-Q1"
+    },
+    {
+     "H": 16.0,
+     "area": "BL",
+     "published": "2008-05-30",
+     "quarter": "2008-Q1"
+    },
+    {
+     "H": 12.3,
+     "area": "VIS",
+     "published": "2008-05-30",
+     "quarter": "2008-Q1"
+    },
+    {
+     "H": 18.0,
+     "area": "MIN",
+     "published": "2008-05-30",
+     "quarter": "2008-Q1"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2008-08-29",
+     "quarter": "2008-Q2"
+    },
+    {
+     "H": 12.3,
+     "area": "BL",
+     "published": "2008-08-29",
+     "quarter": "2008-Q2"
+    },
+    {
+     "H": 19.7,
+     "area": "VIS",
+     "published": "2008-08-29",
+     "quarter": "2008-Q2"
+    },
+    {
+     "H": 17.7,
+     "area": "MIN",
+     "published": "2008-08-29",
+     "quarter": "2008-Q2"
+    },
+    {
+     "H": 23.0,
+     "area": "NCR",
+     "published": "2008-11-29",
+     "quarter": "2008-Q3"
+    },
+    {
+     "H": 20.0,
+     "area": "BL",
+     "published": "2008-11-29",
+     "quarter": "2008-Q3"
+    },
+    {
+     "H": 11.7,
+     "area": "VIS",
+     "published": "2008-11-29",
+     "quarter": "2008-Q3"
+    },
+    {
+     "H": 18.3,
+     "area": "MIN",
+     "published": "2008-11-29",
+     "quarter": "2008-Q3"
+    },
+    {
+     "H": 23.3,
+     "area": "NCR",
+     "published": "2009-03-01",
+     "quarter": "2008-Q4"
+    },
+    {
+     "H": 20.0,
+     "area": "BL",
+     "published": "2009-03-01",
+     "quarter": "2008-Q4"
+    },
+    {
+     "H": 20.7,
+     "area": "VIS",
+     "published": "2009-03-01",
+     "quarter": "2008-Q4"
+    },
+    {
+     "H": 33.7,
+     "area": "MIN",
+     "published": "2009-03-01",
+     "quarter": "2008-Q4"
+    },
+    {
+     "H": 17.3,
+     "area": "NCR",
+     "published": "2009-04-29",
+     "quarter": "2009-Q1"
+    },
+    {
+     "H": 15.0,
+     "area": "BL",
+     "published": "2009-04-29",
+     "quarter": "2009-Q1"
+    },
+    {
+     "H": 19.7,
+     "area": "VIS",
+     "published": "2009-04-29",
+     "quarter": "2009-Q1"
+    },
+    {
+     "H": 11.7,
+     "area": "MIN",
+     "published": "2009-04-29",
+     "quarter": "2009-Q1"
+    },
+    {
+     "H": 22.3,
+     "area": "NCR",
+     "published": "2009-08-29",
+     "quarter": "2009-Q2"
+    },
+    {
+     "H": 14.3,
+     "area": "BL",
+     "published": "2009-08-29",
+     "quarter": "2009-Q2"
+    },
+    {
+     "H": 21.0,
+     "area": "VIS",
+     "published": "2009-08-29",
+     "quarter": "2009-Q2"
+    },
+    {
+     "H": 30.0,
+     "area": "MIN",
+     "published": "2009-08-29",
+     "quarter": "2009-Q2"
+    },
+    {
+     "H": 24.7,
+     "area": "NCR",
+     "published": "2009-11-29",
+     "quarter": "2009-Q3"
+    },
+    {
+     "H": 13.5,
+     "area": "BL",
+     "published": "2009-11-29",
+     "quarter": "2009-Q3"
+    },
+    {
+     "H": 19.0,
+     "area": "VIS",
+     "published": "2009-11-29",
+     "quarter": "2009-Q3"
+    },
+    {
+     "H": 19.7,
+     "area": "MIN",
+     "published": "2009-11-29",
+     "quarter": "2009-Q3"
+    },
+    {
+     "H": 16.0,
+     "area": "NCR",
+     "published": "2009-12-30",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 19.3,
+     "area": "BL",
+     "published": "2009-12-30",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 20.3,
+     "area": "VIS",
+     "published": "2009-12-30",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 18.0,
+     "area": "MIN",
+     "published": "2009-12-30",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 27.0,
+     "area": "NCR",
+     "published": "2010-03-01",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 21.2,
+     "area": "BL",
+     "published": "2010-03-01",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 27.9,
+     "area": "VIS",
+     "published": "2010-03-01",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 24.5,
+     "area": "MIN",
+     "published": "2010-03-01",
+     "quarter": "2009-Q4"
+    },
+    {
+     "H": 17.3,
+     "area": "NCR",
+     "published": "2010-05-30",
+     "quarter": "2010-Q1"
+    },
+    {
+     "H": 20.9,
+     "area": "BL",
+     "published": "2010-05-30",
+     "quarter": "2010-Q1"
+    },
+    {
+     "H": 21.2,
+     "area": "VIS",
+     "published": "2010-05-30",
+     "quarter": "2010-Q1"
+    },
+    {
+     "H": 24.0,
+     "area": "MIN",
+     "published": "2010-05-30",
+     "quarter": "2010-Q1"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2010-08-29",
+     "quarter": "2010-Q2"
+    },
+    {
+     "H": 18.3,
+     "area": "BL",
+     "published": "2010-08-29",
+     "quarter": "2010-Q2"
+    },
+    {
+     "H": 21.0,
+     "area": "VIS",
+     "published": "2010-08-29",
+     "quarter": "2010-Q2"
+    },
+    {
+     "H": 26.0,
+     "area": "MIN",
+     "published": "2010-08-29",
+     "quarter": "2010-Q2"
+    },
+    {
+     "H": 20.3,
+     "area": "NCR",
+     "published": "2010-11-29",
+     "quarter": "2010-Q3"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2010-11-29",
+     "quarter": "2010-Q3"
+    },
+    {
+     "H": 15.3,
+     "area": "VIS",
+     "published": "2010-11-29",
+     "quarter": "2010-Q3"
+    },
+    {
+     "H": 16.3,
+     "area": "MIN",
+     "published": "2010-11-29",
+     "quarter": "2010-Q3"
+    },
+    {
+     "H": 21.7,
+     "area": "NCR",
+     "published": "2011-01-29",
+     "quarter": "2010-Q4"
+    },
+    {
+     "H": 18.3,
+     "area": "BL",
+     "published": "2011-01-29",
+     "quarter": "2010-Q4"
+    },
+    {
+     "H": 15.3,
+     "area": "VIS",
+     "published": "2011-01-29",
+     "quarter": "2010-Q4"
+    },
+    {
+     "H": 18.0,
+     "area": "MIN",
+     "published": "2011-01-29",
+     "quarter": "2010-Q4"
+    },
+    {
+     "H": 20.7,
+     "area": "NCR",
+     "published": "2011-05-30",
+     "quarter": "2011-Q1"
+    },
+    {
+     "H": 25.0,
+     "area": "BL",
+     "published": "2011-05-30",
+     "quarter": "2011-Q1"
+    },
+    {
+     "H": 14.7,
+     "area": "VIS",
+     "published": "2011-05-30",
+     "quarter": "2011-Q1"
+    },
+    {
+     "H": 16.7,
+     "area": "MIN",
+     "published": "2011-05-30",
+     "quarter": "2011-Q1"
+    },
+    {
+     "H": 13.0,
+     "area": "NCR",
+     "published": "2011-08-29",
+     "quarter": "2011-Q2"
+    },
+    {
+     "H": 9.7,
+     "area": "BL",
+     "published": "2011-08-29",
+     "quarter": "2011-Q2"
+    },
+    {
+     "H": 21.0,
+     "area": "VIS",
+     "published": "2011-08-29",
+     "quarter": "2011-Q2"
+    },
+    {
+     "H": 21.7,
+     "area": "MIN",
+     "published": "2011-08-29",
+     "quarter": "2011-Q2"
+    },
+    {
+     "H": 23.0,
+     "area": "NCR",
+     "published": "2011-11-29",
+     "quarter": "2011-Q3"
+    },
+    {
+     "H": 28.3,
+     "area": "BL",
+     "published": "2011-11-29",
+     "quarter": "2011-Q3"
+    },
+    {
+     "H": 15.3,
+     "area": "VIS",
+     "published": "2011-11-29",
+     "quarter": "2011-Q3"
+    },
+    {
+     "H": 13.0,
+     "area": "MIN",
+     "published": "2011-11-29",
+     "quarter": "2011-Q3"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2012-02-29",
+     "quarter": "2011-Q4"
+    },
+    {
+     "H": 23.0,
+     "area": "BL",
+     "published": "2012-02-29",
+     "quarter": "2011-Q4"
+    },
+    {
+     "H": 25.0,
+     "area": "VIS",
+     "published": "2012-02-29",
+     "quarter": "2011-Q4"
+    },
+    {
+     "H": 19.7,
+     "area": "MIN",
+     "published": "2012-02-29",
+     "quarter": "2011-Q4"
+    },
+    {
+     "H": 24.3,
+     "area": "NCR",
+     "published": "2012-05-30",
+     "quarter": "2012-Q1"
+    },
+    {
+     "H": 28.0,
+     "area": "BL",
+     "published": "2012-05-30",
+     "quarter": "2012-Q1"
+    },
+    {
+     "H": 10.3,
+     "area": "VIS",
+     "published": "2012-05-30",
+     "quarter": "2012-Q1"
+    },
+    {
+     "H": 26.7,
+     "area": "MIN",
+     "published": "2012-05-30",
+     "quarter": "2012-Q1"
+    },
+    {
+     "H": 16.0,
+     "area": "NCR",
+     "published": "2012-07-30",
+     "quarter": "2012-Q2"
+    },
+    {
+     "H": 14.3,
+     "area": "BL",
+     "published": "2012-07-30",
+     "quarter": "2012-Q2"
+    },
+    {
+     "H": 17.3,
+     "area": "VIS",
+     "published": "2012-07-30",
+     "quarter": "2012-Q2"
+    },
+    {
+     "H": 28.3,
+     "area": "MIN",
+     "published": "2012-07-30",
+     "quarter": "2012-Q2"
+    },
+    {
+     "H": 26.0,
+     "area": "NCR",
+     "published": "2012-10-30",
+     "quarter": "2012-Q3"
+    },
+    {
+     "H": 16.0,
+     "area": "BL",
+     "published": "2012-10-30",
+     "quarter": "2012-Q3"
+    },
+    {
+     "H": 17.3,
+     "area": "VIS",
+     "published": "2012-10-30",
+     "quarter": "2012-Q3"
+    },
+    {
+     "H": 30.3,
+     "area": "MIN",
+     "published": "2012-10-30",
+     "quarter": "2012-Q3"
+    },
+    {
+     "H": 25.3,
+     "area": "NCR",
+     "published": "2013-03-01",
+     "quarter": "2012-Q4"
+    },
+    {
+     "H": 12.7,
+     "area": "BL",
+     "published": "2013-03-01",
+     "quarter": "2012-Q4"
+    },
+    {
+     "H": 13.3,
+     "area": "VIS",
+     "published": "2013-03-01",
+     "quarter": "2012-Q4"
+    },
+    {
+     "H": 20.0,
+     "area": "MIN",
+     "published": "2013-03-01",
+     "quarter": "2012-Q4"
+    },
+    {
+     "H": 21.7,
+     "area": "NCR",
+     "published": "2013-05-30",
+     "quarter": "2013-Q1"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2013-05-30",
+     "quarter": "2013-Q1"
+    },
+    {
+     "H": 15.0,
+     "area": "VIS",
+     "published": "2013-05-30",
+     "quarter": "2013-Q1"
+    },
+    {
+     "H": 29.2,
+     "area": "MIN",
+     "published": "2013-05-30",
+     "quarter": "2013-Q1"
+    },
+    {
+     "H": 23.7,
+     "area": "NCR",
+     "published": "2013-08-29",
+     "quarter": "2013-Q2"
+    },
+    {
+     "H": 26.0,
+     "area": "BL",
+     "published": "2013-08-29",
+     "quarter": "2013-Q2"
+    },
+    {
+     "H": 21.0,
+     "area": "VIS",
+     "published": "2013-08-29",
+     "quarter": "2013-Q2"
+    },
+    {
+     "H": 17.0,
+     "area": "MIN",
+     "published": "2013-08-29",
+     "quarter": "2013-Q2"
+    },
+    {
+     "H": 24.3,
+     "area": "NCR",
+     "published": "2013-11-29",
+     "quarter": "2013-Q3"
+    },
+    {
+     "H": 16.7,
+     "area": "BL",
+     "published": "2013-11-29",
+     "quarter": "2013-Q3"
+    },
+    {
+     "H": 11.0,
+     "area": "VIS",
+     "published": "2013-11-29",
+     "quarter": "2013-Q3"
+    },
+    {
+     "H": 22.3,
+     "area": "MIN",
+     "published": "2013-11-29",
+     "quarter": "2013-Q3"
+    },
+    {
+     "H": 24.3,
+     "area": "NCR",
+     "published": "2014-03-01",
+     "quarter": "2013-Q4"
+    },
+    {
+     "H": 15.7,
+     "area": "BL",
+     "published": "2014-03-01",
+     "quarter": "2013-Q4"
+    },
+    {
+     "H": 17.5,
+     "area": "VIS",
+     "published": "2014-03-01",
+     "quarter": "2013-Q4"
+    },
+    {
+     "H": 19.7,
+     "area": "MIN",
+     "published": "2014-03-01",
+     "quarter": "2013-Q4"
+    },
+    {
+     "H": 12.0,
+     "area": "NCR",
+     "published": "2014-05-30",
+     "quarter": "2014-Q1"
+    },
+    {
+     "H": 20.0,
+     "area": "BL",
+     "published": "2014-05-30",
+     "quarter": "2014-Q1"
+    },
+    {
+     "H": 16.7,
+     "area": "VIS",
+     "published": "2014-05-30",
+     "quarter": "2014-Q1"
+    },
+    {
+     "H": 18.0,
+     "area": "MIN",
+     "published": "2014-05-30",
+     "quarter": "2014-Q1"
+    },
+    {
+     "H": 15.3,
+     "area": "NCR",
+     "published": "2014-08-29",
+     "quarter": "2014-Q2"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2014-08-29",
+     "quarter": "2014-Q2"
+    },
+    {
+     "H": 14.7,
+     "area": "VIS",
+     "published": "2014-08-29",
+     "quarter": "2014-Q2"
+    },
+    {
+     "H": 21.3,
+     "area": "MIN",
+     "published": "2014-08-29",
+     "quarter": "2014-Q2"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2014-11-29",
+     "quarter": "2014-Q3"
+    },
+    {
+     "H": 24.3,
+     "area": "BL",
+     "published": "2014-11-29",
+     "quarter": "2014-Q3"
+    },
+    {
+     "H": 18.7,
+     "area": "VIS",
+     "published": "2014-11-29",
+     "quarter": "2014-Q3"
+    },
+    {
+     "H": 20.3,
+     "area": "MIN",
+     "published": "2014-11-29",
+     "quarter": "2014-Q3"
+    },
+    {
+     "H": 14.7,
+     "area": "NCR",
+     "published": "2015-03-01",
+     "quarter": "2014-Q4"
+    },
+    {
+     "H": 18.3,
+     "area": "BL",
+     "published": "2015-03-01",
+     "quarter": "2014-Q4"
+    },
+    {
+     "H": 16.4,
+     "area": "VIS",
+     "published": "2015-03-01",
+     "quarter": "2014-Q4"
+    },
+    {
+     "H": 17.3,
+     "area": "MIN",
+     "published": "2015-03-01",
+     "quarter": "2014-Q4"
+    },
+    {
+     "H": 12.7,
+     "area": "NCR",
+     "published": "2015-05-30",
+     "quarter": "2015-Q1"
+    },
+    {
+     "H": 14.3,
+     "area": "BL",
+     "published": "2015-05-30",
+     "quarter": "2015-Q1"
+    },
+    {
+     "H": 11.0,
+     "area": "VIS",
+     "published": "2015-05-30",
+     "quarter": "2015-Q1"
+    },
+    {
+     "H": 14.3,
+     "area": "MIN",
+     "published": "2015-05-30",
+     "quarter": "2015-Q1"
+    },
+    {
+     "H": 18.3,
+     "area": "NCR",
+     "published": "2015-08-29",
+     "quarter": "2015-Q2"
+    },
+    {
+     "H": 10.7,
+     "area": "BL",
+     "published": "2015-08-29",
+     "quarter": "2015-Q2"
+    },
+    {
+     "H": 11.7,
+     "area": "VIS",
+     "published": "2015-08-29",
+     "quarter": "2015-Q2"
+    },
+    {
+     "H": 14.3,
+     "area": "MIN",
+     "published": "2015-08-29",
+     "quarter": "2015-Q2"
+    },
+    {
+     "H": 18.3,
+     "area": "NCR",
+     "published": "2015-11-29",
+     "quarter": "2015-Q3"
+    },
+    {
+     "H": 14.7,
+     "area": "BL",
+     "published": "2015-11-29",
+     "quarter": "2015-Q3"
+    },
+    {
+     "H": 9.3,
+     "area": "VIS",
+     "published": "2015-11-29",
+     "quarter": "2015-Q3"
+    },
+    {
+     "H": 21.7,
+     "area": "MIN",
+     "published": "2015-11-29",
+     "quarter": "2015-Q3"
+    },
+    {
+     "H": 17.0,
+     "area": "NCR",
+     "published": "2016-02-29",
+     "quarter": "2015-Q4"
+    },
+    {
+     "H": 9.7,
+     "area": "BL",
+     "published": "2016-02-29",
+     "quarter": "2015-Q4"
+    },
+    {
+     "H": 11.3,
+     "area": "VIS",
+     "published": "2016-02-29",
+     "quarter": "2015-Q4"
+    },
+    {
+     "H": 13.0,
+     "area": "MIN",
+     "published": "2016-02-29",
+     "quarter": "2015-Q4"
+    },
+    {
+     "H": 14.0,
+     "area": "NCR",
+     "published": "2016-06-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 12.3,
+     "area": "BL",
+     "published": "2016-06-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 10.3,
+     "area": "VIS",
+     "published": "2016-06-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 19.0,
+     "area": "MIN",
+     "published": "2016-06-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 17.0,
+     "area": "NCR",
+     "published": "2016-08-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 15.3,
+     "area": "BL",
+     "published": "2016-08-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 15.7,
+     "area": "VIS",
+     "published": "2016-08-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 13.3,
+     "area": "MIN",
+     "published": "2016-08-29",
+     "quarter": "2016-Q2"
+    },
+    {
+     "H": 7.3,
+     "area": "NCR",
+     "published": "2016-11-29",
+     "quarter": "2016-Q3"
+    },
+    {
+     "H": 11.7,
+     "area": "BL",
+     "published": "2016-11-29",
+     "quarter": "2016-Q3"
+    },
+    {
+     "H": 13.0,
+     "area": "VIS",
+     "published": "2016-11-29",
+     "quarter": "2016-Q3"
+    },
+    {
+     "H": 8.3,
+     "area": "MIN",
+     "published": "2016-11-29",
+     "quarter": "2016-Q3"
+    },
+    {
+     "H": 13.0,
+     "area": "NCR",
+     "published": "2017-03-01",
+     "quarter": "2016-Q4"
+    },
+    {
+     "H": 15.0,
+     "area": "BL",
+     "published": "2017-03-01",
+     "quarter": "2016-Q4"
+    },
+    {
+     "H": 16.7,
+     "area": "VIS",
+     "published": "2017-03-01",
+     "quarter": "2016-Q4"
+    },
+    {
+     "H": 10.0,
+     "area": "MIN",
+     "published": "2017-03-01",
+     "quarter": "2016-Q4"
+    },
+    {
+     "H": 12.0,
+     "area": "NCR",
+     "published": "2017-05-30",
+     "quarter": "2017-Q1"
+    },
+    {
+     "H": 11.3,
+     "area": "BL",
+     "published": "2017-05-30",
+     "quarter": "2017-Q1"
+    },
+    {
+     "H": 13.7,
+     "area": "VIS",
+     "published": "2017-05-30",
+     "quarter": "2017-Q1"
+    },
+    {
+     "H": 11.7,
+     "area": "MIN",
+     "published": "2017-05-30",
+     "quarter": "2017-Q1"
+    },
+    {
+     "H": 11.3,
+     "area": "NCR",
+     "published": "2017-08-29",
+     "quarter": "2017-Q2"
+    },
+    {
+     "H": 8.3,
+     "area": "BL",
+     "published": "2017-08-29",
+     "quarter": "2017-Q2"
+    },
+    {
+     "H": 8.7,
+     "area": "VIS",
+     "published": "2017-08-29",
+     "quarter": "2017-Q2"
+    },
+    {
+     "H": 11.3,
+     "area": "MIN",
+     "published": "2017-08-29",
+     "quarter": "2017-Q2"
+    },
+    {
+     "H": 11.7,
+     "area": "NCR",
+     "published": "2017-11-29",
+     "quarter": "2017-Q3"
+    },
+    {
+     "H": 13.8,
+     "area": "BL",
+     "published": "2017-11-29",
+     "quarter": "2017-Q3"
+    },
+    {
+     "H": 9.7,
+     "area": "VIS",
+     "published": "2017-11-29",
+     "quarter": "2017-Q3"
+    },
+    {
+     "H": 9.7,
+     "area": "MIN",
+     "published": "2017-11-29",
+     "quarter": "2017-Q3"
+    },
+    {
+     "H": 14.7,
+     "area": "NCR",
+     "published": "2018-03-01",
+     "quarter": "2017-Q4"
+    },
+    {
+     "H": 17.7,
+     "area": "BL",
+     "published": "2018-03-01",
+     "quarter": "2017-Q4"
+    },
+    {
+     "H": 13.3,
+     "area": "VIS",
+     "published": "2018-03-01",
+     "quarter": "2017-Q4"
+    },
+    {
+     "H": 15.3,
+     "area": "MIN",
+     "published": "2018-03-01",
+     "quarter": "2017-Q4"
+    },
+    {
+     "H": 6.0,
+     "area": "NCR",
+     "published": "2018-05-30",
+     "quarter": "2018-Q1"
+    },
+    {
+     "H": 11.0,
+     "area": "BL",
+     "published": "2018-05-30",
+     "quarter": "2018-Q1"
+    },
+    {
+     "H": 13.0,
+     "area": "VIS",
+     "published": "2018-05-30",
+     "quarter": "2018-Q1"
+    },
+    {
+     "H": 7.3,
+     "area": "MIN",
+     "published": "2018-05-30",
+     "quarter": "2018-Q1"
+    },
+    {
+     "H": 13.0,
+     "area": "NCR",
+     "published": "2018-08-29",
+     "quarter": "2018-Q2"
+    },
+    {
+     "H": 7.3,
+     "area": "BL",
+     "published": "2018-08-29",
+     "quarter": "2018-Q2"
+    },
+    {
+     "H": 9.3,
+     "area": "VIS",
+     "published": "2018-08-29",
+     "quarter": "2018-Q2"
+    },
+    {
+     "H": 11.3,
+     "area": "MIN",
+     "published": "2018-08-29",
+     "quarter": "2018-Q2"
+    },
+    {
+     "H": 17.3,
+     "area": "NCR",
+     "published": "2018-11-29",
+     "quarter": "2018-Q3"
+    },
+    {
+     "H": 12.7,
+     "area": "BL",
+     "published": "2018-11-29",
+     "quarter": "2018-Q3"
+    },
+    {
+     "H": 6.0,
+     "area": "VIS",
+     "published": "2018-11-29",
+     "quarter": "2018-Q3"
+    },
+    {
+     "H": 18.3,
+     "area": "MIN",
+     "published": "2018-11-29",
+     "quarter": "2018-Q3"
+    },
+    {
+     "H": 18.3,
+     "area": "NCR",
+     "published": "2019-03-01",
+     "quarter": "2018-Q4"
+    },
+    {
+     "H": 9.7,
+     "area": "BL",
+     "published": "2019-03-01",
+     "quarter": "2018-Q4"
+    },
+    {
+     "H": 9.2,
+     "area": "VIS",
+     "published": "2019-03-01",
+     "quarter": "2018-Q4"
+    },
+    {
+     "H": 8.3,
+     "area": "MIN",
+     "published": "2019-03-01",
+     "quarter": "2018-Q4"
+    },
+    {
+     "H": 11.7,
+     "area": "NCR",
+     "published": "2019-05-30",
+     "quarter": "2019-Q1"
+    },
+    {
+     "H": 10.3,
+     "area": "BL",
+     "published": "2019-05-30",
+     "quarter": "2019-Q1"
+    },
+    {
+     "H": 10.0,
+     "area": "VIS",
+     "published": "2019-05-30",
+     "quarter": "2019-Q1"
+    },
+    {
+     "H": 6.1,
+     "area": "MIN",
+     "published": "2019-05-30",
+     "quarter": "2019-Q1"
+    },
+    {
+     "H": 15.7,
+     "area": "NCR",
+     "published": "2019-08-29",
+     "quarter": "2019-Q2"
+    },
+    {
+     "H": 9.3,
+     "area": "BL",
+     "published": "2019-08-29",
+     "quarter": "2019-Q2"
+    },
+    {
+     "H": 8.7,
+     "area": "VIS",
+     "published": "2019-08-29",
+     "quarter": "2019-Q2"
+    },
+    {
+     "H": 9.0,
+     "area": "MIN",
+     "published": "2019-08-29",
+     "quarter": "2019-Q2"
+    },
+    {
+     "H": 8.3,
+     "area": "NCR",
+     "published": "2019-11-29",
+     "quarter": "2019-Q3"
+    },
+    {
+     "H": 8.1,
+     "area": "BL",
+     "published": "2019-11-29",
+     "quarter": "2019-Q3"
+    },
+    {
+     "H": 8.7,
+     "area": "VIS",
+     "published": "2019-11-29",
+     "quarter": "2019-Q3"
+    },
+    {
+     "H": 11.9,
+     "area": "MIN",
+     "published": "2019-11-29",
+     "quarter": "2019-Q3"
+    },
+    {
+     "H": 9.3,
+     "area": "NCR",
+     "published": "2020-02-29",
+     "quarter": "2019-Q4"
+    },
+    {
+     "H": 6.3,
+     "area": "BL",
+     "published": "2020-02-29",
+     "quarter": "2019-Q4"
+    },
+    {
+     "H": 9.3,
+     "area": "VIS",
+     "published": "2020-02-29",
+     "quarter": "2019-Q4"
+    },
+    {
+     "H": 12.7,
+     "area": "MIN",
+     "published": "2020-02-29",
+     "quarter": "2019-Q4"
+    },
+    {
+     "H": 20.8,
+     "area": "NCR",
+     "published": "2020-07-30",
+     "quarter": "2020-Q2"
+    },
+    {
+     "H": 12.6,
+     "area": "BL",
+     "published": "2020-07-30",
+     "quarter": "2020-Q2"
+    },
+    {
+     "H": 14.6,
+     "area": "VIS",
+     "published": "2020-07-30",
+     "quarter": "2020-Q2"
+    },
+    {
+     "H": 24.2,
+     "area": "MIN",
+     "published": "2020-07-30",
+     "quarter": "2020-Q2"
+    },
+    {
+     "H": 16.3,
+     "area": "NCR",
+     "published": "2020-09-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 17.8,
+     "area": "BL",
+     "published": "2020-09-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 27.2,
+     "area": "VIS",
+     "published": "2020-09-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 24.2,
+     "area": "MIN",
+     "published": "2020-09-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 28.2,
+     "area": "NCR",
+     "published": "2020-11-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 23.8,
+     "area": "BL",
+     "published": "2020-11-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 40.7,
+     "area": "VIS",
+     "published": "2020-11-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 37.5,
+     "area": "MIN",
+     "published": "2020-11-29",
+     "quarter": "2020-Q3"
+    },
+    {
+     "H": 23.3,
+     "area": "NCR",
+     "published": "2021-01-29",
+     "quarter": "2020-Q4"
+    },
+    {
+     "H": 14.4,
+     "area": "BL",
+     "published": "2021-01-29",
+     "quarter": "2020-Q4"
+    },
+    {
+     "H": 14.3,
+     "area": "VIS",
+     "published": "2021-01-29",
+     "quarter": "2020-Q4"
+    },
+    {
+     "H": 16.0,
+     "area": "MIN",
+     "published": "2021-01-29",
+     "quarter": "2020-Q4"
+    },
+    {
+     "H": 14.7,
+     "area": "NCR",
+     "published": "2021-07-12",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 16.3,
+     "area": "VIS",
+     "published": "2021-07-12",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 20.7,
+     "area": "MIN",
+     "published": "2021-07-12",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 14.0,
+     "area": "NCR",
+     "published": "2021-07-28",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 8.3,
+     "area": "VIS",
+     "published": "2021-07-28",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 15.0,
+     "area": "MIN",
+     "published": "2021-07-28",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 14.0,
+     "area": "NCR",
+     "published": "2021-12-06",
+     "quarter": "2021-Q3"
+    },
+    {
+     "H": 6.0,
+     "area": "VIS",
+     "published": "2021-12-06",
+     "quarter": "2021-Q3"
+    },
+    {
+     "H": 10.3,
+     "area": "MIN",
+     "published": "2021-12-06",
+     "quarter": "2021-Q3"
+    },
+    {
+     "H": 22.8,
+     "area": "NCR",
+     "published": "2022-03-25",
+     "quarter": "2021-Q4"
+    },
+    {
+     "H": 9.7,
+     "area": "VIS",
+     "published": "2022-03-25",
+     "quarter": "2021-Q4"
+    },
+    {
+     "H": 12.2,
+     "area": "MIN",
+     "published": "2022-03-25",
+     "quarter": "2021-Q4"
+    },
+    {
+     "H": 18.6,
+     "area": "NCR",
+     "published": "2022-06-06",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 7.8,
+     "area": "VIS",
+     "published": "2022-06-06",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 13.1,
+     "area": "MIN",
+     "published": "2022-06-06",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 14.7,
+     "area": "NCR",
+     "published": "2022-09-10",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 5.7,
+     "area": "VIS",
+     "published": "2022-09-10",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 14.0,
+     "area": "MIN",
+     "published": "2022-09-10",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 16.3,
+     "area": "NCR",
+     "published": "2022-10-29",
+     "quarter": "2022-Q3"
+    },
+    {
+     "H": 7.0,
+     "area": "VIS",
+     "published": "2022-10-29",
+     "quarter": "2022-Q3"
+    },
+    {
+     "H": 15.3,
+     "area": "MIN",
+     "published": "2022-10-29",
+     "quarter": "2022-Q3"
+    },
+    {
+     "H": 11.7,
+     "area": "NCR",
+     "published": "2023-01-19",
+     "quarter": "2022-Q4"
+    },
+    {
+     "H": 12.0,
+     "area": "VIS",
+     "published": "2023-01-19",
+     "quarter": "2022-Q4"
+    },
+    {
+     "H": 12.7,
+     "area": "MIN",
+     "published": "2023-01-19",
+     "quarter": "2022-Q4"
+    },
+    {
+     "H": 10.7,
+     "area": "NCR",
+     "published": "2023-05-11",
+     "quarter": "2023-Q1"
+    },
+    {
+     "H": 9.7,
+     "area": "VIS",
+     "published": "2023-05-11",
+     "quarter": "2023-Q1"
+    },
+    {
+     "H": 11.7,
+     "area": "MIN",
+     "published": "2023-05-11",
+     "quarter": "2023-Q1"
+    },
+    {
+     "H": 15.7,
+     "area": "NCR",
+     "published": "2023-08-02",
+     "quarter": "2023-Q2"
+    },
+    {
+     "H": 9.3,
+     "area": "VIS",
+     "published": "2023-08-02",
+     "quarter": "2023-Q2"
+    },
+    {
+     "H": 6.3,
+     "area": "MIN",
+     "published": "2023-08-02",
+     "quarter": "2023-Q2"
+    },
+    {
+     "H": 17.3,
+     "area": "NCR",
+     "published": "2023-11-20",
+     "quarter": "2023-Q3"
+    },
+    {
+     "H": 6.7,
+     "area": "VIS",
+     "published": "2023-11-20",
+     "quarter": "2023-Q3"
+    },
+    {
+     "H": 6.7,
+     "area": "MIN",
+     "published": "2023-11-20",
+     "quarter": "2023-Q3"
+    },
+    {
+     "H": 12.7,
+     "area": "NCR",
+     "published": "2024-01-22",
+     "quarter": "2023-Q4"
+    },
+    {
+     "H": 9.3,
+     "area": "VIS",
+     "published": "2024-01-22",
+     "quarter": "2023-Q4"
+    },
+    {
+     "H": 12.0,
+     "area": "MIN",
+     "published": "2024-01-22",
+     "quarter": "2023-Q4"
+    },
+    {
+     "H": 19.0,
+     "area": "NCR",
+     "published": "2024-04-30",
+     "quarter": "2024-Q1"
+    },
+    {
+     "H": 15.0,
+     "area": "VIS",
+     "published": "2024-04-30",
+     "quarter": "2024-Q1"
+    },
+    {
+     "H": 8.7,
+     "area": "MIN",
+     "published": "2024-04-30",
+     "quarter": "2024-Q1"
+    },
+    {
+     "H": 20.0,
+     "area": "NCR",
+     "published": "2024-07-23",
+     "quarter": "2024-Q2"
+    },
+    {
+     "H": 13.7,
+     "area": "VIS",
+     "published": "2024-07-23",
+     "quarter": "2024-Q2"
+    },
+    {
+     "H": 15.7,
+     "area": "MIN",
+     "published": "2024-07-23",
+     "quarter": "2024-Q2"
+    },
+    {
+     "H": 21.7,
+     "area": "NCR",
+     "published": "2024-10-17",
+     "quarter": "2024-Q3"
+    },
+    {
+     "H": 26.0,
+     "area": "VIS",
+     "published": "2024-10-17",
+     "quarter": "2024-Q3"
+    },
+    {
+     "H": 30.7,
+     "area": "MIN",
+     "published": "2024-10-17",
+     "quarter": "2024-Q3"
+    },
+    {
+     "H": 22.2,
+     "area": "NCR",
+     "published": "2025-01-14",
+     "quarter": "2024-Q4"
+    },
+    {
+     "H": 24.4,
+     "area": "VIS",
+     "published": "2025-01-14",
+     "quarter": "2024-Q4"
+    },
+    {
+     "H": 30.3,
+     "area": "MIN",
+     "published": "2025-01-14",
+     "quarter": "2024-Q4"
+    },
+    {
+     "H": 20.3,
+     "area": "NCR",
+     "published": "2025-06-27",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 19.7,
+     "area": "VIS",
+     "published": "2025-06-27",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 26.3,
+     "area": "MIN",
+     "published": "2025-06-27",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 21.7,
+     "area": "NCR",
+     "published": "2025-08-15",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 21.7,
+     "area": "VIS",
+     "published": "2025-08-15",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 9.7,
+     "area": "MIN",
+     "published": "2025-08-15",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 25.7,
+     "area": "NCR",
+     "published": "2025-11-05",
+     "quarter": "2025-Q3"
+    },
+    {
+     "H": 17.7,
+     "area": "VIS",
+     "published": "2025-11-05",
+     "quarter": "2025-Q3"
+    },
+    {
+     "H": 19.7,
+     "area": "MIN",
+     "published": "2025-11-05",
+     "quarter": "2025-Q3"
+    },
+    {
+     "H": 20.3,
+     "area": "NCR",
+     "published": "2026-01-14",
+     "quarter": "2025-Q4"
+    },
+    {
+     "H": 20.3,
+     "area": "VIS",
+     "published": "2026-01-14",
+     "quarter": "2025-Q4"
+    },
+    {
+     "H": 26.7,
+     "area": "MIN",
+     "published": "2026-01-14",
+     "quarter": "2025-Q4"
+    },
+    {
+     "H": 22.0,
+     "area": "NCR",
+     "published": "2026-05-12",
+     "quarter": "2026-Q1"
+    },
+    {
+     "H": 28.0,
+     "area": "VIS",
+     "published": "2026-05-12",
+     "quarter": "2026-Q1"
+    },
+    {
+     "H": 21.7,
+     "area": "MIN",
+     "published": "2026-05-12",
+     "quarter": "2026-Q1"
+    },
+    {
+     "H": 21.0,
+     "area": "NCR",
+     "published": "2026-08-24",
+     "quarter": "2026-Q2"
+    },
+    {
+     "H": 22.3,
+     "area": "VIS",
+     "published": "2026-08-24",
+     "quarter": "2026-Q2"
+    },
+    {
+     "H": 24.0,
+     "area": "MIN",
+     "published": "2026-08-24",
+     "quarter": "2026-Q2"
+    },
+    {
+     "H": 27.0,
+     "area": "NCR",
+     "published": "2026-10-14",
+     "quarter": "2026-Q3"
+    },
+    {
+     "H": 16.0,
+     "area": "VIS",
+     "published": "2026-10-14",
+     "quarter": "2026-Q3"
+    },
+    {
+     "H": 23.7,
+     "area": "MIN",
+     "published": "2026-10-14",
+     "quarter": "2026-Q3"
+    },
+    {
+     "H": 15.7,
+     "area": "BL",
+     "published": "2021-07-12",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 15.0,
+     "area": "BL",
+     "published": "2021-07-28",
+     "quarter": "2021-Q2"
+    },
+    {
+     "H": 10.3,
+     "area": "BL",
+     "published": "2021-12-06",
+     "quarter": "2021-Q3"
+    },
+    {
+     "H": 9.2,
+     "area": "BL",
+     "published": "2022-03-25",
+     "quarter": "2021-Q4"
+    },
+    {
+     "H": 11.7,
+     "area": "BL",
+     "published": "2022-06-06",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 11.9,
+     "area": "BL",
+     "published": "2022-09-10",
+     "quarter": "2022-Q2"
+    },
+    {
+     "H": 9.6,
+     "area": "BL",
+     "published": "2022-10-29",
+     "quarter": "2022-Q3"
+    },
+    {
+     "H": 11.3,
+     "area": "BL",
+     "published": "2023-01-19",
+     "quarter": "2022-Q4"
+    },
+    {
+     "H": 8.7,
+     "area": "BL",
+     "published": "2023-05-11",
+     "quarter": "2023-Q1"
+    },
+    {
+     "H": 11.3,
+     "area": "BL",
+     "published": "2023-08-02",
+     "quarter": "2023-Q2"
+    },
+    {
+     "H": 10.3,
+     "area": "BL",
+     "published": "2023-11-20",
+     "quarter": "2023-Q3"
+    },
+    {
+     "H": 14.3,
+     "area": "BL",
+     "published": "2024-01-22",
+     "quarter": "2023-Q4"
+    },
+    {
+     "H": 15.3,
+     "area": "BL",
+     "published": "2024-04-30",
+     "quarter": "2024-Q1"
+    },
+    {
+     "H": 19.6,
+     "area": "BL",
+     "published": "2024-07-23",
+     "quarter": "2024-Q2"
+    },
+    {
+     "H": 18.1,
+     "area": "BL",
+     "published": "2024-10-17",
+     "quarter": "2024-Q3"
+    },
+    {
+     "H": 25.3,
+     "area": "BL",
+     "published": "2025-01-14",
+     "quarter": "2024-Q4"
+    },
+    {
+     "H": 24.0,
+     "area": "BL",
+     "published": "2025-03-29",
+     "quarter": "2025-Q1"
+    },
+    {
+     "H": 17.0,
+     "area": "BL",
+     "published": "2025-06-27",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 15.3,
+     "area": "BL",
+     "published": "2025-08-15",
+     "quarter": "2025-Q2"
+    },
+    {
+     "H": 23.8,
+     "area": "BL",
+     "published": "2025-11-05",
+     "quarter": "2025-Q3"
+    },
+    {
+     "H": 16.7,
+     "area": "BL",
+     "published": "2026-01-14",
+     "quarter": "2025-Q4"
+    },
+    {
+     "H": 22.4,
+     "area": "BL",
+     "published": "2026-05-12",
+     "quarter": "2026-Q1"
+    },
+    {
+     "H": 17.3,
+     "area": "BL",
+     "published": "2026-08-24",
+     "quarter": "2026-Q2"
+    },
+    {
+     "H": 23.6,
+     "area": "BL",
+     "published": "2026-10-14",
+     "quarter": "2026-Q3"
+    }
+   ]
+  },
+  "priceFeatures": {
+   "served": {
+    "PH040100000": {
+     "issue_date": "2026-10-01",
+     "news_latest_published": "2026-09-30 20:15:00",
+     "psa_newest_month": "2026-08",
+     "sws_newest_published": "2026-08-24",
+     "sws_newest_q": "2026-Q2"
+    },
+    "PH040200000": {
+     "issue_date": "2026-10-01",
+     "news_latest_published": "2026-09-30 20:15:00",
+     "psa_newest_month": "2026-08",
+     "sws_newest_published": "2026-08-24",
+     "sws_newest_q": "2026-Q2"
+    },
+    "PH040300000": {
+     "issue_date": "2026-10-01",
+     "news_latest_published": "2026-09-30 20:15:00",
+     "psa_newest_month": "2026-08",
+     "sws_newest_published": "2026-08-24",
+     "sws_newest_q": "2026-Q2"
+    },
+    "PH040400000": {
+     "issue_date": "2026-10-01",
+     "news_latest_published": "2026-09-30 20:15:00",
+     "psa_newest_month": "2026-08",
+     "sws_newest_published": "2026-08-24",
+     "sws_newest_q": "2026-Q2"
+    },
+    "PH040500000": {
+     "issue_date": "2026-10-01",
+     "news_latest_published": "2026-09-30 20:15:00",
+     "psa_newest_month": "2026-08",
+     "sws_newest_published": "2026-08-24",
+     "sws_newest_q": "2026-Q2"
+    }
+   }
+  },
+  "priceFits": {
+   "post": {
+    "cfg": "u3",
+    "nTrain": 1050,
+    "origin": "2026-Q3",
+    "trainOrigins": [
+     "2021-Q1",
+     "2026-Q1"
+    ],
+    "trainTargetMax": "2026-Q2"
+   },
+   "served": {
+    "cfg": "u7",
+    "nTrain": 1050,
+    "origin": "2026-Q3",
+    "trainOrigins": [
+     "2021-Q1",
+     "2026-Q1"
+    ],
+    "trainTargetMax": "2026-Q2"
+   }
+  },
+  "vintageNote": "Data files are hashed as they stood when sealed. Each value's publication is checked against its date or availability rule; later revisions of already-published values cannot be excluded from the project files."
+ },
+ "issueDate": {
+  "C0": "2026-10-01",
+  "C1": "2026-10-15",
+  "C2": "2026-10-15"
+ },
+ "lateNote": "Sealed 2026-11-01, after its issue date 2026-10-15, using only inputs published before 2026-10-15; reported separately and excluded from the PREREG section 6-7 evaluation.",
+ "lead": 2,
+ "origin": "2026-Q3",
+ "preregSha256": "91fe94e0de1ec697b1fcc8e9b385512bf344d2920c386b5bb6f494e22cb2e47b",
+ "schema": "aipheed-lead2-seal/1",
+ "sealedAtUTC": "2026-11-01T10:08:47+00:00",
+ "target": "2027-Q1",
+ "timing": "late"
+}
