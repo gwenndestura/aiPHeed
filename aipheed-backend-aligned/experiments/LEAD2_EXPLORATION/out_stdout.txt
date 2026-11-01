@@ -1,0 +1,11 @@
+S0xF1   nested: pass 1/6 fails ['R2', 'R3', 'R4', 'R5', 'R6'] CM 4/4/13/44 acc 0.738 bal 0.576 P 0.500 R 0.235 | in-sample 0.5: pass 3/6 fails ['R3', 'R5', 'R6'] bal 0.635 R 0.353
+S0xF2   nested: pass 3/6 fails ['R3', 'R5', 'R6'] CM 6/4/11/44 acc 0.769 bal 0.635 P 0.600 R 0.353 | in-sample (0.8, 0.6): pass 3/6 fails ['R3', 'R5', 'R6'] bal 0.656 R 0.353
+S1xF1   nested: pass 5/6 fails ['R6'] CM 9/6/8/42 acc 0.785 bal 0.702 P 0.600 R 0.529 | in-sample 0.55: pass 5/6 fails ['R6'] bal 0.733 R 0.529
+S1xF2   nested: pass 4/6 fails ['R3', 'R6'] CM 6/3/11/45 acc 0.785 bal 0.645 P 0.667 R 0.353 | in-sample (0.5, 0.6): pass 5/6 fails ['R6'] bal 0.752 R 0.588
+S2xF1   nested: pass 1/6 fails ['R2', 'R3', 'R4', 'R6', 'R7'] CM 12/16/5/32 acc 0.677 bal 0.686 P 0.429 R 0.706 | in-sample 0.45: pass 5/6 fails ['R6'] bal 0.759 R 0.706
+S2xF2   nested: pass 5/6 fails ['R6'] CM 16/14/1/34 acc 0.769 bal 0.825 P 0.533 R 0.941 | in-sample (0.5, 0.45): pass 5/6 fails ['R6'] bal 0.835 R 0.941
+S3xF1   nested: pass 5/6 fails ['R6'] CM 9/5/8/43 acc 0.800 bal 0.713 P 0.643 R 0.529 | in-sample 0.5: pass 5/6 fails ['R6'] bal 0.742 R 0.588
+S3xF2   nested: pass 1/6 fails ['R2', 'R3', 'R4', 'R6', 'R7'] CM 11/16/6/32 acc 0.662 bal 0.657 P 0.407 R 0.647 | in-sample (0.5, 0.45): pass 3/6 fails ['R4', 'R6', 'R7'] bal 0.776 R 0.824
+reference M0 D0 (in-sample): pass 5/6 fails ['R6'] CM 10/6/7/42
+ranking ['S2xF2', 'S3xF1', 'S1xF1', 'S1xF2', 'S0xF2', 'S2xF1', 'S3xF2', 'S0xF1']
+SELECTED [{"combo": "S2xF2", "gridPoint": [0.5, 0.45], "nestedPassedR2toR7": 5}, {"combo": "S3xF1", "gridPoint": 0.5, "nestedPassedR2toR7": 5}] improves on M0/D0 after CV: False
