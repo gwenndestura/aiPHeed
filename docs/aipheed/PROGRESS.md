@@ -166,3 +166,7 @@
 - `backend/scripts/v2_diagnosis.py` → `docs/aipheed/v2/results/` (VERIFIED); `docs/aipheed/v2/DIAGNOSIS.md`.
 - Alignment re-verified (272/272 rows identical to E136; planted shift detected).
 - **Gate 1: 75 % at Lead 2 NOT ACHIEVABLE with existing measurements.** Known-current-true-level bound 42.5 %; a predictor must explain ≈ 85 % of the true 3-quarter change variance; no repeatable leading signal (ONI = one 2023–24 episode); 10 quarters give a ±14.5 pp CI.
+
+## WP2 · Steps 2–3 design and pre-registration: DONE
+- `docs/aipheed/v2/PREREGISTRATION.md` committed **before any v2 fit**; SHA-256 (LF-normalised) `90ad51a9…a691b` frozen in `backend/tests/unit/test_v2_preregistration.py`.
+- Candidates: PERSIST, LL (pooled local level, 1 parameter), LL-K (+ noise multiplier κ, 2 parameters). Nested inner-fold selection with the paired block-bootstrap CI rule; split-conformal 80 % intervals; sealed set = future data only (0 unseen historical quarters).
