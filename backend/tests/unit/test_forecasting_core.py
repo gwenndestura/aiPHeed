@@ -197,3 +197,13 @@ def test_api_routes_read_only_and_errors():
     g = c.get("/api/v1/hunger-forecast/geography", params={"lead": 2}).json()
     assert len(g["lgus"]) == 142
     assert c.post("/api/v1/hunger-forecast").status_code == 405
+
+
+def test_served_reliability_status_matches_mechanical_verdict():
+    r = pd.read_csv(REPO / "docs" / "aipheed" / "results" / "reliability.csv")
+    seas = r[(r.set == "S-U") & (r.model == "SEAS-LLM")].set_index("lead")["all_pass"]
+    for k in I.LEADS:
+        expected = "RELIABLE" if bool(seas.loc[k]) else "NOT_RELIABLE"
+        assert I.RELIABILITY[k].value == expected
+    cfg = json.loads((REPO / "docs" / "aipheed" / "results" / "run_config.json").read_text())
+    assert cfg["maximum_reliable_lead"] is None and cfg["selected"] == "PERSIST"

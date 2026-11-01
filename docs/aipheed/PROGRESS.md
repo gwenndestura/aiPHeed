@@ -98,3 +98,24 @@
 **Open issues:**
 - Legacy feature paths are not rerouted through `as_of` (AUDIT D5).
 - The NLP pipeline was not re-executed (NOT VERIFIED).
+
+## Phases 5–6 · Model selection and reliability: DONE
+
+**Inputs and outputs:**
+- Rule `SELECTION_RULE.md`, committed before the first run (`c07324e`).
+- Report `MODEL_REPORT.md` and `results/*.csv` (VERIFIED, `python -I backend/scripts/model_report.py`; seed 2026; SHA-256s in `run_config.json`).
+
+**Selected by the rule: PERSIST.** No candidate beats it with a paired 95 % CI above 0:
+
+| Candidate | Δ within vs PERSIST | 95 % CI |
+|---|---|---|
+| SEAS-LLM | +0.05 | [−0.10, +0.20] |
+| HFM-X | +0.10 | [−0.125, +0.325] |
+
+**Reliability:**
+- **Maximum reliable lead: none.** No model passes N1–N7 at any lead.
+- **Lead-2 blockers:** signal absent (best 20/40 within, 30 needed; correlation ≤ 0.25), target lag (h = 3), N5 instability, N1 too few quarters at Leads 3–4.
+
+**Conflict for the owner.** The pre-declared backend rule selects PERSIST, while E134 Addendum 2 (owner-approved) makes SEAS-LLM the prospective primary. The new endpoint serves SEAS-LLM under that approval and shows the latest SWS value (= persistence) in every record. Not changed without approval.
+
+**Test:** the served `reliability_status` is pinned to the mechanical verdict (`test_served_reliability_status_matches_mechanical_verdict`).
