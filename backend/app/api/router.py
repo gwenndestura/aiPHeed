@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v1 import (
     admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, forecast, forecast_history,
-    fpp, health, insights, final, lead2, quarterly, report, simple,
+    fpp, health, hunger_forecast, insights, final, lead2, quarterly, report, simple,
 )
 
 router = APIRouter()
@@ -46,6 +46,9 @@ router.include_router(e113.router, prefix=API_V1, tags=["Final hunger forecast m
 router.include_router(final.router, prefix=API_V1, tags=["Final forecasting engine"])
 # SWS-release re-issue audit trail (app.ml.inference.sws_reissue): every recorded issue and the forecast in force.
 router.include_router(forecast_history.router, prefix=API_V1, tags=["Forecast history (SWS re-issue)"])
+
+# Numerical SWS hunger forecast (app.forecasting; E134 Addendum 2 prospective primary): read-only stored records.
+router.include_router(hunger_forecast.router, prefix=API_V1, tags=["Hunger forecast (numerical, SWS areas)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.

@@ -1,0 +1,9 @@
+# Leak-injection demonstration: AIPHEED_LEAK_DEMO=1 swaps app.forecasting.as_of.as_of for a selector that admits rows published up to one day after the issue date.
+# Command: AIPHEED_LEAK_DEMO=1 python -m pytest -q tests/unit/test_forecasting_core.py -k leak -p no:cacheprovider
+
+FAILED tests/unit/test_forecasting_core.py::test_leak_row_published_on_issue_day_is_excluded
+FAILED tests/unit/test_forecasting_core.py::test_leak_real_sws_round_published_after_issue_never_used
+2 failed, 11 deselected in 0.42s
+
+# Same tests without the injected leak:
+2 passed, 11 deselected in 0.06s

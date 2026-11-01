@@ -59,3 +59,42 @@
 - The 2 failures are `test_e119r2_framework::test_all_validation_checks_pass` and `test_e120_firi_design::test_e120_checks_pass`.
 - Both are experiment self-checks that require `git status` to show no uncommitted changes under `backend/app`.
 - **Classification: intended change** (the edits were uncommitted at run time). Re-checked after commit (phase 2 entry).
+
+## Phases 2–4 · Data, as-of control, target gate, FIRI: DONE
+
+**Output: `docs/aipheed/DATA_INVENTORY.md`.**
+
+**New package: `backend/app/forecasting/`.**
+
+| Module | Purpose |
+|---|---|
+| `evidence.py` | EvidenceStatus, DataState and ReliabilityStatus enums |
+| `as_of.py` | The one selector, strictly before 00:00 PHT on the issue day |
+| `validation.py` | Checks on SWS rounds and LGUs |
+| `sws.py` | Target with binomial SE and the frozen tolerance |
+| `models.py` | PERSIST, TREND-D, SEAS-LLM |
+| `artifact.py` | Hashed JSON artifacts, write-once |
+| `inference.py` | Forecasts from an artifact; never refits; fails loudly |
+| `explain.py` | Exact additive explanation; trigger groups as context |
+| `geography.py` | 142 LGUs and 5 provinces with explicit status |
+| `store.py` | Write-once store keyed by (artifact hash, data vintage, issue date) |
+
+**Supporting files:**
+- Data copy `backend/data/forecasting/sws_area_rounds.csv` (identical to the E110 source).
+- Artifact `backend/data/forecasting/artifacts/seas_llm_2026-10-01.json`.
+- Stored forecast `backend/data/forecasting/forecasts/09ee23b09a0207c8_2026-08-24_2026-10-01.json`.
+- Read-only router `app/api/v1/hunger_forecast.py`, registered additively.
+
+**Exactness (VERIFIED by tests):**
+- The target equals the E131 implementation.
+- SEAS-LLM equals the E132 seal (to 1e-9) and the walk-forward. An ad-hoc run over all 272 P-DASH rows gave a maximum difference of 7e-15.
+
+**Target gate decision.**
+- Balance Luzon / SWS-area claims only. Provincial and LGU estimates are `null` / `AWAITING_GROUND_TRUTH`.
+- The evidence-status enum existed before any model work.
+
+**Tests:** `tests/unit/test_forecasting_core.py` (13). Leak injection demonstrated in `docs/aipheed/leak_injection_demo.txt`.
+
+**Open issues:**
+- Legacy feature paths are not rerouted through `as_of` (AUDIT D5).
+- The NLP pipeline was not re-executed (NOT VERIFIED).
