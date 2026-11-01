@@ -155,3 +155,14 @@
 3. D3, rebuilding the thesis pickle under the pinned scikit-learn.
 
 **Final commit:** `9171949` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work (verified below).
+
+---
+
+# v2: final methodology redesign (started 2026-11-01)
+
+**Start state:** branch `impl/backend-completion` @ `9f975ec`; only the 15 pre-existing untracked paths. Protocol lock verified at start: `tests/unit/test_protocol_lock.py` 4 passed, `PROTOCOL_LOCK.md` SHA-256 `8bae6962…dd0d3` (VERIFIED).
+
+## WP1 · Step 1 diagnosis and Gate 1: DONE
+- `backend/scripts/v2_diagnosis.py` → `docs/aipheed/v2/results/` (VERIFIED); `docs/aipheed/v2/DIAGNOSIS.md`.
+- Alignment re-verified (272/272 rows identical to E136; planted shift detected).
+- **Gate 1: 75 % at Lead 2 NOT ACHIEVABLE with existing measurements.** Known-current-true-level bound 42.5 %; a predictor must explain ≈ 85 % of the true 3-quarter change variance; no repeatable leading signal (ONI = one 2023–24 episode); 10 quarters give a ±14.5 pp CI.
