@@ -47,7 +47,8 @@ INDICATOR = {
                    "the latest SWS reading and how much SWS hunger readings have moved over the same span. HIGH at 0.50."),
     "unit": "probability 0-1 (HIGH at 0.50)",
     "horizon": ("issued on the first day of a quarter; Lead 1 = that quarter (passed the reliability test), "
-                "Lead 2 = the next quarter (not established as reliable)"),
+                "Lead 2 = the next quarter (experimental: a ranking of which provinces to watch; it does not pass the seven "
+                "reliability rules and is being validated prospectively from 2027)"),
     "source": ("SWS hunger (Balance Luzon, non-commissioned rounds); PSA provincial CPI; PSA rice, production, LFS, "
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
     "caveat": ("A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
@@ -132,6 +133,11 @@ def reliability_text(r: dict) -> str:
     if rl is not None and lead <= rl:
         return (f"Lead-{lead} forecast: this horizon passed the reliability test (accuracy {ev['metrics']['accuracy']:.2f}"
                 f" on {ev['n']} past province-quarters)")
+    if lead == 2:
+        m2 = evaluation()["leads"]["2"]["metrics"]
+        return (f"Lead-2 forecast: experimental, a ranking of which provinces to watch (AUC {m2['auc']:.2f}, Brier "
+                f"{m2['brier']:.3f}). It does not pass the seven reliability rules and is being validated prospectively "
+                "on forecasts sealed from 2027")
     return (f"Lead-{lead} forecast: experimental. Only Lead {rl or 0} passed the reliability test; this horizon was "
             f"tested and failed, so it is not a validated forecast")
 
@@ -361,7 +367,7 @@ def model_line() -> str:
     return (f"P0H4: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x P(food-price "
             f"condition, one LightGBM across forecast horizons on 12 indicator families). Lead {rl or 0} reliable "
             f"(development accuracy {m['accuracy']:.3f}, {m['tp'] + m['tn']}/{m['n']} province-quarters); longer leads "
-            f"experimental.")
+            f"experimental (Lead 2: a ranking of which provinces to watch, validated prospectively from 2027).")
 
 
 def driver_text(triggers: list[dict], hunger: float | None = None) -> str:
@@ -392,7 +398,9 @@ def reliability_sentences() -> list[str]:
     if l2:
         m2 = l2["metrics"]
         out.append(f"Lead 2 failed the rule (accuracy {m2['accuracy']:.3f}, {m2['tp'] + m2['tn']}/{m2['n']}; HIGH recall "
-                   f"{m2['recall']:.2f}): a Lead-2 value is an experimental forecast, not a validated one.")
+                   f"{m2['recall']:.2f}; AUC {m2['auc']:.2f}, Brier {m2['brier']:.3f}): a Lead-2 value is an experimental "
+                   "ranking of which provinces to watch, not a validated HIGH/LOW call; it is being validated "
+                   "prospectively on forecasts sealed from 2027.")
     out.append(f"Development evidence: every scored quarter was examined while the model was built. The forecasts issued "
                f"{ev['seal_issue_date']} are sealed (SHA-256 {ev['seal_sha256'][:8]}) and will be scored when SWS "
                "publishes those quarters.")

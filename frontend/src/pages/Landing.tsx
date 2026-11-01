@@ -149,7 +149,7 @@ function About() {
         <div className="space-y-5">
           <p>
             aiPHeed forecasts the risk of food insecurity in each of the five CALABARZON provinces for the current
-            quarter and, as an experimental forecast, the next quarter. Following the study's definition, a province is
+            quarter and, as an experimental ranking of which provinces to watch, the next quarter. Following the study's definition, a province is
             at High risk in a quarter when regional hunger measured by SWS (Balance Luzon) is above 11.3% and the
             province's food prices are rising unusually fast. The number shown is the forecast probability of High
             risk, from 0 to 1; a probability of 0.50 or higher is shown as High risk. It is not an official statistic
@@ -167,7 +167,7 @@ function About() {
           <ul className="list-disc pl-6 space-y-2 marker:text-primary">
             <li>
               a map of the provinces, each coloured Low or High for the selected quarter; the current quarter is the
-              tested forecast and the next quarter is labelled experimental;
+              tested forecast and the next quarter is labelled experimental, a ranking of which provinces to watch;
             </li>
             <li>
               each province's forecast in its two parts, the chance that regional hunger is above 11.3% and the chance
@@ -242,7 +242,7 @@ const STEPS = [
 const NOTES = [
   {
     t: "Forecast lead",
-    d: "Forecasts are issued on the first day of each quarter, using only information published before the issue date: one for the quarter just starting and one for the next quarter, three months ahead. Only the forecast for the quarter just starting passed the reliability test; the three-months-ahead forecast is shown as experimental.",
+    d: "Forecasts are issued on the first day of each quarter, using only information published before the issue date: one for the quarter just starting and one for the next quarter, three months ahead. Only the forecast for the quarter just starting passed the reliability test. The three-months-ahead forecast is shown as experimental: a ranking of which provinces to watch (AUC 0.62, Brier score 0.194), not a validated High/Low call. It does not pass the seven reliability rules and is being validated on forecasts sealed from 2027.",
   },
   {
     t: "Missing data",
@@ -356,7 +356,7 @@ const BRIER = [
 const RESULTS = [
   {
     t: "Lead time",
-    d: "Every lead was tested walk-forward against criteria fixed before scoring. Lead 1, the current quarter, passed; Lead 2 and later did not. The furthest reliable lead is therefore the current quarter, and the three-months-ahead forecast is experimental.",
+    d: "Every lead was tested walk-forward against criteria fixed before scoring. Lead 1, the current quarter, passed; Lead 2 and later did not. The furthest reliable lead is therefore the current quarter. The three-months-ahead forecast is experimental: it ranks which provinces to watch (AUC 0.62, Brier score 0.194) but does not pass the seven reliability rules, and it is being validated prospectively on forecasts sealed from 2027.",
   },
   {
     t: "The 75% accuracy goal",
@@ -452,7 +452,9 @@ function LeadTimeTable() {
 
       <p className="mt-3">
         Accuracy falls the further ahead the forecast looks. The map shows the current quarter and the next quarter,
-        three months ahead; the next quarter is labelled experimental.
+        three months ahead; the next quarter is labelled experimental. Read it as a ranking of which provinces to
+        watch (AUC 0.62, Brier score 0.194), not as a High/Low decision: it does not pass the seven reliability rules
+        and is being validated prospectively from 2027.
       </p>
     </div>
   );
@@ -542,7 +544,7 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "A forecast of food-insecurity risk for the five CALABARZON provinces, for the current quarter and, experimentally, the next quarter, to support planning. It is a student research system, not an official statistic.",
+    a: "A forecast of food-insecurity risk for the five CALABARZON provinces, for the current quarter and, as an experimental ranking of which provinces to watch, the next quarter, to support planning. It is a student research system, not an official statistic.",
   },
   {
     q: "Is the score the probability that people will go hungry?",
@@ -554,7 +556,7 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "Forecasts are issued on the first day of each quarter, using only information published before that date. The forecast for the quarter just starting passed the reliability test; the forecast three months ahead, for the next quarter, is experimental.",
+    a: "Forecasts are issued on the first day of each quarter, using only information published before that date. The forecast for the quarter just starting passed the reliability test. The forecast three months ahead, for the next quarter, is experimental: a ranking of which provinces to watch (AUC 0.62, Brier score 0.194). It does not pass the seven reliability rules and is being validated on forecasts sealed from 2027.",
   },
   {
     q: "How accurate is it?",

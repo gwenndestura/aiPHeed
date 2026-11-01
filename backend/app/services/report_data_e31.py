@@ -372,7 +372,8 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         reliable = row_last["lead"] <= (CH1.reliable_lead() or 0)
         kp.append(f"The {pt.qlabel(last_q)} value is a Lead-{row_last['lead']} forecast issued {row_last['origin']} "
                   + ("(the horizon that passed the reliability test)" if reliable else
-                     "(experimental: this horizon failed the reliability test)")
+                     "(experimental: this horizon failed the reliability test; read it as a ranking of which "
+                     "provinces to watch, being validated prospectively from 2027)")
                   + "; its outcome is not yet known.")
     elif row_last["mode"] == "FORECAST" and thesis:
         kp.append(f"The {pt.qlabel(last_q)} value is a forecast; its outcome is not yet known.")
@@ -475,7 +476,9 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
             if rows_by_q[q]["mode"] == "FORECAST" and ch1:
                 rq = rows_by_q[q]
                 note.append(f"{pt.qlabel(q)} is a Lead-{rq['lead']} forecast issued {rq['origin']}"
-                            + ("" if rq["lead"] <= (CH1.reliable_lead() or 0) else " (experimental)") + ".")
+                            + ("" if rq["lead"] <= (CH1.reliable_lead() or 0) else
+                               " (experimental: a ranking of which provinces to watch, not a validated HIGH/LOW call)")
+                            + ".")
             elif rows_by_q[q]["mode"] == "FORECAST":
                 note.append(f"{pt.qlabel(q)} is a forecast." if thesis else f"{pt.qlabel(q)} is a {mode_label(rows_by_q[q])}.")
         if gaps:

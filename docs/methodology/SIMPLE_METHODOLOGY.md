@@ -1,6 +1,8 @@
 # aiPHeed simple methodology (branch `aipheed/simple-methodology`)
 
 > **Correction (2026-10-25, E107).** The "furthest reliable lead = Lead 2" statement below is not supported. E107 is on branch `aipheed/e107-twelve-indicator-lightgbm`, in `aipheed-backend-aligned/experiments/E107_Twelve_Indicator_LightGBM/`.
+>
+> **Note (2026-11-01).** The served system describes Lead 2 as an experimental ranking of which provinces to watch (AUC 0.62, Brier 0.194 on 65 province-quarters). It does not pass the seven reliability rules, and it is being validated prospectively on forecasts sealed from 2027 (`backend/seals/PREREG_LEAD2.md`).
 > - E107 re-tested Leads 1–4 with all 12 indicators, a rule fixed before scoring, significance tests and a quarter-generalization check.
 > - It found **no reliable lead**. Lead 1 is the only horizon with supporting evidence.
 > - The served `final_evaluation.json` (E63) had already reached the same "no lead" verdict.

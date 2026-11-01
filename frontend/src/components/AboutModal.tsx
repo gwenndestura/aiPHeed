@@ -116,7 +116,7 @@ export function AboutModal() {
                       : "Not established"
                   }
                 />
-                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test" />
+                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test. The next quarter (Lead 2) is a ranking of which provinces to watch (AUC 0.62, Brier 0.194), being validated on forecasts sealed from 2027" />
                 <Row k="News" v="Context only: it did not improve the forecasts" />
                 {evaluation && (
                   <Row
@@ -177,7 +177,7 @@ export function AboutModal() {
           <div className="grid gap-2 pt-1">
             <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
             <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
-            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · further ahead: experimental" />
+            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · next quarter: experimental ranking of which provinces to watch, validated prospectively from 2027" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
