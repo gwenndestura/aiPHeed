@@ -245,7 +245,7 @@ SIMPLE's coefficients are steady across origins: A 0.15 → 0.46, E 0.14–0.33,
 3. Request CBMS 2024 FIES (owner decision).
 
 **Model development**
-4. If approved, amend the E134 prospective protocol to make SEAS-LLM primary, with SIMPLE and HFM-X as challengers. Freeze before 2027-01-01.
+4. **Done 2026-11-01 (owner approved):** E134 Addendum 2 makes SEAS-LLM primary, with SIMPLE and HFM-X as challengers. Re-issue `runner/e136_reissue.py`; score `runner/score_e136.py`.
 5. Test regional LFS as a driver in a new frozen protocol: development first, then prospective.
 
 **Validation**

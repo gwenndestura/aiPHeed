@@ -54,3 +54,41 @@ def test_recommendation_rule_as_frozen():
     assert best == s["recommended"] == "SEAS-LLM"
     assert s["maximum_reliable_lead_any"] == [] and not s["any_within_75"]
     assert "RIDGE-ALL" not in el.index and "LGBM-ALL" not in el.index
+
+
+def _load(name: str):
+    import importlib.util
+    sys.path.insert(0, str(E / "runner"))
+    spec = importlib.util.spec_from_file_location(name, E / "runner" / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_addendum2_scorer_covers_primary_and_challengers(tmp_path):
+    assert (E.parent / "E134_Information_Bottleneck" / "E134_ADDENDUM_2_AMENDED_PRIMARY.md").exists()
+    sc = _load("score_e136")
+    F = sc.forecasts()
+    assert set(F["model"]) == {"SEAS-LLM", "SIMPLE", "HFM-X"} and (F["issue"] == "2026-11-01").all()
+    rounds = tmp_path / "r.csv"
+    pd.DataFrame([{"quarter": "2026-Q4", "fieldwork": "2026-12-01/2026-12-05", "published": "2027-01-20",
+                   "respondent_base": "adults", "commissioned": False, "national": 22.0, "metro_manila": 25.0,
+                   "balance_luzon": 22.0, "visayas": 20.0, "mindanao": 23.0, "bl_n": 600, "area_moe_bl": 4,
+                   "area_moe_other": 6, "source_type": "test", "source": "test"}]).to_csv(rounds, index=False)
+    S, summ = sc.score(F, rounds)
+    assert len(S) == 12 and "primary only" in summ["criterion"]
+    assert ((S["f"] - S["y"]).abs() <= S["tolerance_primary"]).equals(S["within_primary"])
+
+
+def test_reissue_reproduces_seals_without_new_data():
+    from datetime import date
+    Q = _load("e136_reissue")
+    d = Q.reissue(date(2027, 1, 1))
+    s = pd.read_csv(E / "sealed" / "E136_PROSPECTIVE_SEAL.csv")
+    e = pd.read_csv(E.parent / "E132_Final_Methodology" / "sealed" / "E132_PROSPECTIVE_SEAL.csv")
+    m = d.merge(s[["area", "target", "SIMPLE"]], on=["area", "target"], suffixes=("", "_s")) \
+         .merge(e[["area", "target", "SEAS-LLM"]], on=["area", "target"], suffixes=("", "_e"))
+    assert len(m) == 12
+    assert np.allclose(m["SIMPLE"], m["SIMPLE_s"]) and np.allclose(m["SEAS-LLM"], m["SEAS-LLM_e"])
+    assert not (E / "sealed" / "E136_REISSUE_2027-Q1.csv").exists()
