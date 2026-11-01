@@ -153,3 +153,5 @@
 1. PERSIST (rule-selected) or SEAS-LLM (Addendum 2) on the new endpoint.
 2. D1, the served dashboard target.
 3. D3, rebuilding the thesis pickle under the pinned scikit-learn.
+
+**Final commit:** `9171949` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work (verified below).
