@@ -5,8 +5,8 @@ Read-only routes for the numerical SWS hunger forecast (app.forecasting; backend
 write-once stored forecasts (data/forecasting/forecasts) and never compute or retrain. /hunger-forecast/v2/* is the
 approved v2 path (docs/aipheed/v2, data/forecasting/forecasts_v2); the routes without /v2 keep serving the legacy
 SEAS-LLM candidate. Neither is the number on the dashboard map (P0H4 price-pressure risk index,
-app.ml.inference.ch1_system); every response says so. Errors: 404 when no forecast is stored for the requested issue, 422 for an invalid request, 503 when
-no forecast or artifact is available at all.
+app.ml.inference.ch1_system); every response says so. Errors: 404 when no forecast is stored for the requested
+issue, 422 for an invalid request, 503 when no forecast or artifact is available at all.
 """
 from __future__ import annotations
 

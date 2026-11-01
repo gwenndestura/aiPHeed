@@ -143,3 +143,9 @@ Notes:
 **`git status`:** the 15 untracked paths that predate this work remain untracked and untouched.
 
 **Commit hash:** recorded in `PROGRESS.md` (final entry), written right after the commit.
+
+---
+
+## Superseded by v2 (2026-11-01)
+
+The v2 methodology redesign (diagnosis, pre-registration, nested validation, integration) is reported in **`docs/aipheed/v2/FINAL_REPORT.md`**. That report holds the current three verdicts, files, metrics and reproduction commands. The sections above remain the record of the backend-completion run and are not repeated there.

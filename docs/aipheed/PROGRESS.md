@@ -191,3 +191,11 @@
   - 2 were the git-clean self-checks (pass after commit);
   - 7 were the `firi.py` hash guards (fixed by reverting `firi.py`);
   - 1 was the scheduler sandbox (fixed by reverting `scheduler.py`).
+
+## WP5 · Step 6 tests, coverage, acceptance and documentation: DONE
+- **Full suite:** 1317 passed, 0 failed, 18 skipped (pre-existing) (`v2/results/final_tests_v2.txt`, VERIFIED); 37 new v2 tests.
+- **Coverage (stdlib tracer, measured):** 88.4 % (918/1038) of `app/forecasting/**`, the hunger-forecast router and `app/paths.py`; v2 90.9 %.
+- **Mutation check:** 5/5 planted bugs killed. **E2E:** 4 runs identical; artifact, store, API and seal reproduced. Validation rerun gives byte-identical results.
+- **Hashes at the end:** protocol lock, pre-registration and seal all unchanged.
+- **Docs:** `v2/{METHODOLOGY_V2, MODEL_REPORT_V2, TEST_REPORT, FINAL_REPORT}.md`; API, ARCHITECTURE and DATA_INVENTORY updated; the old FINAL_REPORT points to v2.
+- **Verdicts:** A software YES. B research NO (Gate 1 not achievable; 40.0 % at Lead 2, development; future NOT_YET_TESTABLE; maximum reliable lead none). C data: ≥ 10 unseen quarters (about 2029-05), a leading indicator, provincial measurement.

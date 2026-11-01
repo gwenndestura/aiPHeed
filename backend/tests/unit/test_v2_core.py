@@ -253,3 +253,17 @@ def test_seal_unchanged_and_reproducible(rr):
     fresh = pd.concat([m.seal_rows(rr, date(2026, 7, 1)), m.seal_rows(rr, ISSUE)], ignore_index=True)
     assert np.allclose(sealed.f, fresh.f) and (sealed.target == fresh.target).all()
     assert not sealed.target.isin(set(rr.quarter)).any()                  # only unpublished targets were sealed
+
+
+def test_frozen_n1_n7_reapplied_reproduces_committed_labels():
+    """The served labels come from the frozen e130_lib rules applied to the stored outer predictions, not by hand."""
+    SU = pd.read_csv(RESULTS / "v2_outer_predictions.csv")
+    rel = pd.read_csv(RESULTS / "v2_reliability.csv")
+    for k in S.LEADS:
+        g = SU[SU.lead == k].reset_index(drop=True).assign(f_persistence=lambda d: d.f_PERSIST, f_climatology=lambda d: d.f_CLIM)
+        for m in ("V2", "LL", "LL-K"):
+            r = VD.reliability(g, m)
+            row = rel[(rel.lead == k) & (rel.model == m)].iloc[0]
+            assert VD.label(bool(r["passed"]), r["n_target_quarters"], r["n_rows"], future=False) == row["label"]
+            assert bool(r["rules"]["N2_within_tolerance_75"]) == bool(row["N2_within_tolerance_75"])
+            assert r["n_rows"] == row["n_rows"]

@@ -110,3 +110,18 @@ CPI, poverty incidence and FIRI are **never** ground truth.
   - evidence states are kept distinct (manifest: 67 NO_USABLE_EVIDENCE, 46 LIMITED_SIGNAL, 7 SUFFICIENT province-quarters; 140 admitted articles);
   - language handling is via the XLM-R multilingual model plus `app/ml/corpus/language_filter.py`.
   - This pipeline was not re-executed in this session (NOT VERIFIED end to end; it needs the article store and model weights).
+
+---
+
+## v2 data roles (docs/aipheed/v2)
+
+| Source | v2 role | Point-in-time rule | Notes |
+|---|---|---|---|
+| SWS involuntary hunger (`backend/data/forecasting/sws_area_rounds.csv`, sha256 `936d0c26…`) | **Target** and the **only model input** (its own history) | `as_of`: rounds published strictly before 00:00 PHT on the issue day | 23 rounds, 2021-Q2 … 2026-Q3. All of it was seen before v2, so it is DEVELOPMENT only (`v2/DIAGNOSIS.md`). |
+| SWS published margins | Observation variance of the local-level candidates; frozen tolerance | With the round | The binomial SE understates same-quarter round-to-round differences: RMS z 1.84 (DIAGNOSIS Q1) |
+| Area rice CPI YoY (E131 regional CPI) | **Context only** (market group) | Quarter end + 10 days, available < issue (`assert_point_in_time`) | Not a v2 input: no repeatable leading signal (DIAGNOSIS Q3) |
+| Typhoons PAR, unemployment change, GDELT shortage share (E119 point-in-time dataset) | **Context only** (climate, employment/OFW, news) | E119 period rule (one quarter back) | Unemployment is national; news is national GDELT |
+| Area poverty incidence (PSA) | **Context only** (poverty/vulnerability) | PSA release date < issue | 2021, 2023, 2025 rounds |
+| `backend/data/forecasting/context/context_<issue>.json` | Context values served in the v2 explanation | Built by `backend/scripts/v2_context.py`, with a leak guard on each value | Never weighted, never a contribution |
+| Regional quarterly LFS | **Not held** | — | Would need an external download: not done (outside this session's authority) |
+| Future SWS rounds (2026-Q4 onward) | **Sealed confirmation set** | Scored by `v2_score_sealed.py` only after publication plus 120 days | Seal `v2/sealed/V2_PROSPECTIVE_SEAL.csv` |

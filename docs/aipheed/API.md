@@ -51,7 +51,7 @@
 
 ## v2 (approved path, docs/aipheed/v2): `/api/v1/hunger-forecast/v2` (read-only)
 
-**Additive.** The routes without `/v2` keep serving the legacy SEAS-LLM candidate; their `status` now says they are superseded by v2. VERIFIED by `tests/unit/test_v2_core.py::test_v2_api_read_only_and_errors`.
+**Additive:** the route count goes from 106 to **109** (3 new GETs; VERIFIED by enumerating `app.routes`). The routes without `/v2` keep serving the legacy SEAS-LLM candidate; their `status` now says they are superseded by v2. VERIFIED by `tests/unit/test_v2_core.py::test_v2_api_read_only_and_errors`.
 
 | Route | Parameters | 200 | Errors |
 |---|---|---|---|
