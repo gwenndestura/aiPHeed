@@ -4,7 +4,7 @@ library only (sys.settrace + threading.settrace; coverage.py / pytest-cov are no
 was downloaded). Executable lines = the line table of every code object compiled from the file (co_lines), the same
 notion of a statement line that coverage.py uses, minus nothing. Runs the given test files in-process with pytest.
 
-    cd backend && python -I scripts/v2_coverage.py      -> docs/aipheed/v2/results/coverage.json / coverage.txt
+    cd backend && python -I scripts/v2_coverage.py [v4]   -> docs/aipheed/<v2|v4>/results/coverage.json / coverage.txt
 """
 from __future__ import annotations
 
@@ -17,12 +17,13 @@ from pathlib import Path
 
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
-OUT = BACKEND.parent / "docs" / "aipheed" / "v2" / "results"
+OUT = BACKEND.parent / "docs" / "aipheed" / (sys.argv[1] if len(sys.argv) > 1 else "v2") / "results"   # e.g. v4
 TARGETS = sorted([*(BACKEND / "app" / "forecasting").rglob("*.py"), BACKEND / "app" / "api" / "v1" / "hunger_forecast.py",
                   BACKEND / "app" / "paths.py"])
 TESTS = ["tests/unit/test_v2_core.py", "tests/unit/test_forecasting_core.py", "tests/unit/test_safe_load.py",
          "tests/unit/test_protocol_lock.py", "tests/unit/test_v2_preregistration.py", "tests/unit/test_v2_paths.py",
-         "tests/unit/test_v2_legacy_leakage.py"]
+         "tests/unit/test_v2_legacy_leakage.py", "tests/unit/test_v4_core.py",
+         "tests/unit/test_v4_preregistration.py"]
 
 WANT = {str(p.resolve()).lower() for p in TARGETS}
 hits: dict[str, set[int]] = defaultdict(set)

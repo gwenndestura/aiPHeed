@@ -23,11 +23,15 @@ from app.forecasting import store as S
 from app.forecasting.evidence import AREAS
 from app.forecasting.v2 import explain as X2
 from app.forecasting.v2 import store as V2S
+from app.forecasting.v4 import features as F4
+from app.forecasting.v4 import serving as V4S
 
 router = APIRouter()
 CONTEXT = Path(__file__).resolve().parents[3] / "data" / "forecasting" / "context"
 STATUS = ("legacy prospective candidate (E134 Addendum 2 SEAS-LLM), superseded by the approved v2 path "
           "/api/v1/hunger-forecast/v2; not the dashboard's served model; no lead has passed the frozen reliability rules N1-N7")
+V4_STATUS = ("v4 credible-test build (docs/aipheed/v4): pre-registered rule chose persistence; the 75 % and 'beats every "
+             "model' claims are hypotheses NOT YET TESTABLE on unseen SWS quarters; development evidence only")
 V2_STATUS = ("approved v2 forecasting path (docs/aipheed/v2): pre-registered nested selection chose persistence; every "
              "number is an SWS area value; development evidence only, no lead has passed the frozen rules N1-N7")
 
@@ -120,6 +124,44 @@ def hunger_forecast_v2_geography(lead: int = Query(2, ge=1, le=4), issue_date: s
     """All 5 provinces and 142 LGUs with explicit status (Balance Luzon value as a broader-area reference)."""
     b = _v2_body(_issue(issue_date))
     return {"status": V2_STATUS, **G.geography_view(b["records"], lead)}
+
+
+# ------------------------------------------------------------------ v4 (docs/aipheed/v4)
+def _v4_body(issue: date | None) -> dict:
+    if not V4S.STORE.exists() or not any(V4S.STORE.glob("*.json")):
+        raise HTTPException(status_code=503, detail="no v4 hunger forecast has been generated (run app.forecasting.v4.serving)")
+    b = V4S.latest(issue)
+    if b is None:
+        raise HTTPException(status_code=404, detail=f"no stored v4 hunger forecast for issue date {issue}")
+    return b
+
+
+@router.get("/hunger-forecast/v4")
+def hunger_forecast_v4(issue_date: str | None = Query(None, description="quarter-start issue date; default latest")) -> dict:
+    """v4 forecasts (Leads 1-4, 4 SWS areas) with interval, provenance, reliability status and claim statuses."""
+    b = _v4_body(_issue(issue_date))
+    return {"status": V4_STATUS, "key": b["key"], "records": b["records"]}
+
+
+@router.get("/hunger-forecast/v4/explanation")
+def hunger_forecast_v4_explanation(lead: int = Query(2, ge=1, le=4),
+                                   area: Literal["metro_manila", "balance_luzon", "visayas", "mindanao"] = "balance_luzon",
+                                   issue_date: str | None = None) -> dict:
+    """Exact decomposition of one v4 forecast with the five-group summary (point-in-time snapshot values)."""
+    b = _v4_body(_issue(issue_date))
+    rec = [r for r in b["records"] if r["lead"] == lead and r["area"] == area]
+    if len(rec) != 1:
+        raise HTTPException(status_code=404, detail=f"no record for lead {lead}, area {area}")
+    snap = F4.snapshot(F4.table(), rec[0]["issue_date"], used_at=rec[0]["issue_date"])
+    row = snap.loc[area].to_dict() if area in snap.index else None
+    return {"status": V4_STATUS, "record": rec[0], "explanation": V4S.explain(rec[0], row)}
+
+
+@router.get("/hunger-forecast/v4/geography")
+def hunger_forecast_v4_geography(lead: int = Query(2, ge=1, le=4), issue_date: str | None = None) -> dict:
+    """All 5 provinces and 142 LGUs with explicit status (Balance Luzon value as a broader-area reference)."""
+    b = _v4_body(_issue(issue_date))
+    return {"status": V4_STATUS, **G.geography_view(b["records"], lead)}
 
 
 assert set(AREAS) == {"metro_manila", "balance_luzon", "visayas", "mindanao"}

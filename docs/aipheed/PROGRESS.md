@@ -218,3 +218,10 @@ Start: protocol lock verified (`8bae6962…dd0d3`); `test_protocol_lock.py` + `t
 - `v4/TARGET_OPTIONS.md`: SWS is the only quarterly food-insecurity series. No held or obtainable source adds Lead-2 test observations faster than about 4 area rows per quarter.
 - `v4/EVALUATION_DESIGN.md`: the ±15 pp test needs 10 future quarters (about 2029-05); ±10 pp needs 22 (about 2032-05). Unseen today: 0.
 - `v4/PREREGISTRATION.md`, committed before any v4 fit; hash in `test_v4_preregistration.py`.
+
+## v4 WP2 · Steps D–F build: DONE (development)
+- `app/forecasting/v4/` (`features`, `models` DELTA-X, `select`, `verdict`, `serving`); scripts `v4_features.py`, `v4_validate.py`, `v4_seal.py`, `v4_score_sealed.py`, `v4_e2e.py`. Routes `/api/v1/hunger-forecast/v4{,/explanation,/geography}`.
+- **Rule chose PERSIST at all 22 issues.** DELTA-X features entered at 34 of 84 issue × lead fits (mostly ONI) but did not help: Lead-2 0.375 vs 0.40.
+- **Development results:** V4 Lead 2 40.0 % [block CI 22.5, 62.5]; amended (proposed) 50.0 %; beats all = NO; every lead NOT_RELIABLE. Sealed: NOT_YET_TESTABLE (0 scorable).
+- Seal `v4/sealed/V4_PROSPECTIVE_SEAL.csv` `7ac72fec…`. Artifact `v4_2026-10-01.json` `29c9fd36…`.
+- E2E: two runs identical. Coverage 89.4 % (v4 package measured).
