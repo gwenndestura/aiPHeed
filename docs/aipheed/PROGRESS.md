@@ -207,3 +207,14 @@
 - The frozen tolerance is 0.68 × the published margin and narrower than the 95 % least significant difference on 40/40 Lead-2 rows. If hunger never changed, persistence would still score only 76.7 %.
 - **Lead-2 oracle (all-data q / pre-surge q):** frozen 0.43/0.60; b1 0.51/0.70; b2 (published margin) 0.59/0.78. Bands and direction pass only through base rates. A one-quarter nowcast against the published margin has oracle 0.83 and persistence 0.74.
 - 8 early-round margins (2021-Q2 … 2023-Q1) are assumed (NOT VERIFIED). Lock, pre-registration and seal hashes unchanged.
+
+---
+
+# v4: final build on a legitimate footing (started 2026-11-01)
+
+Start: protocol lock verified (`8bae6962…dd0d3`); `test_protocol_lock.py` + `test_v2_preregistration.py` 6 passed.
+
+## v4 WP1 · Steps A–C: DONE
+- `v4/TARGET_OPTIONS.md`: SWS is the only quarterly food-insecurity series. No held or obtainable source adds Lead-2 test observations faster than about 4 area rows per quarter.
+- `v4/EVALUATION_DESIGN.md`: the ±15 pp test needs 10 future quarters (about 2029-05); ±10 pp needs 22 (about 2032-05). Unseen today: 0.
+- `v4/PREREGISTRATION.md`, committed before any v4 fit; hash in `test_v4_preregistration.py`.
