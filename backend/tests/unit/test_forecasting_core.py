@@ -207,3 +207,15 @@ def test_served_reliability_status_matches_mechanical_verdict():
         assert I.RELIABILITY[k].value == expected
     cfg = json.loads((REPO / "docs" / "aipheed" / "results" / "run_config.json").read_text())
     assert cfg["maximum_reliable_lead"] is None and cfg["selected"] == "PERSIST"
+
+
+def test_assessments_missing_artifact_is_503_not_500(monkeypatch, tmp_path):
+    from app.main import app
+    from app.services import assessment as svc
+    monkeypatch.setattr(svc, "ARTIFACT", tmp_path / "absent.parquet")
+    svc._artifact.cache_clear()
+    c = TestClient(app, raise_server_exceptions=False)
+    for path in ("/api/v1/assessments/quarters", "/api/v1/assessments/methodology", "/api/v1/assessments?quarter=2024-Q1"):
+        r = c.get(path)
+        assert r.status_code == 503 and "unavailable" in r.json()["detail"], path
+    svc._artifact.cache_clear()

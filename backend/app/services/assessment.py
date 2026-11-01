@@ -56,8 +56,14 @@ class AssessmentQuarterNotFound(LookupError):
     pass
 
 
+class AssessmentArtifactMissing(RuntimeError):
+    """The revised-assessment artifact is not present: a missing artifact, never an empty result (AUDIT D10)."""
+
+
 @lru_cache(maxsize=1)
 def _artifact() -> tuple[pd.DataFrame, dict]:
+    if not ARTIFACT.exists():
+        raise AssessmentArtifactMissing(f"{ARTIFACT} is not present in this deployment (run the E7 revised trainer)")
     a = pd.read_parquet(ARTIFACT)
     meta = json.loads(ARTIFACT.with_name(ARTIFACT.stem + "_meta.json").read_text(encoding="utf-8"))
     return a, meta

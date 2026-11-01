@@ -119,3 +119,17 @@
 **Conflict for the owner.** The pre-declared backend rule selects PERSIST, while E134 Addendum 2 (owner-approved) makes SEAS-LLM the prospective primary. The new endpoint serves SEAS-LLM under that approval and shows the latest SWS value (= persistence) in every record. Not changed without approval.
 
 **Test:** the served `reliability_status` is pinned to the mechanical verdict (`test_served_reliability_status_matches_mechanical_verdict`).
+
+## Phases 7–8 · Inference, geography, explanations and API: DONE
+
+**Phase 7** (built in phases 2–4; VERIFIED by `tests/unit/test_forecasting_core.py`).
+- **Inference** loads only the hashed JSON artifact and checks its schema, hash, feature config and preprocessing version. It never refits (a test fails if `fit_seas` is called), validates ranges and fails loudly.
+- **Each record** stores the provenance fields listed in API.md.
+- **Geography:** 142 LGUs and 5 provinces with explicit status. Province codes equal the served dashboard's.
+- **Explanations** are exact and additive (level + design effect). The trigger groups are listed separately as context.
+- **Uncertainty:** Kalman 80 % interval. Development coverage at Lead 2 is 0.725 on 40 rows (MODEL_REPORT).
+
+**Phase 8.**
+- `docs/aipheed/API.md` and `results/api_audit.csv`: 106 routes; 85 GETs smoke-tested.
+- **Fixed D10 (High):** two unhandled 500s on the legacy assessments routes, caused by a missing artifact, now return 503 with a JSON message.
+- No secrets in bodies. All admin routes are guarded; the only unguarded writes are the public auth and feedback routes.
