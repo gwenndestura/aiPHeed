@@ -7,3 +7,4 @@
 | Stage | Status | Commit |
 |---|---|---|
 | 0 Construct | DONE: Gate 0 PASSED with restricted claim (SWS area hunger; not provincial) | (this commit) |
+| 1 Data audit | DONE: Gate 1 PASSED (SWS 88/88 = release tables; CPI, FIRI, FSSI, XLM-R reproduced; 3 limitations need external data) | (this commit) |
