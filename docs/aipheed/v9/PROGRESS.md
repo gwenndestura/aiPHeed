@@ -8,3 +8,10 @@
 
 | Stage | Status | Commit |
 |---|---|---|
+| 1 Spec reconciliation | DONE: Gate 1 passed; label rule awaits owner; 12 ledger trials | this commit |
+| 2 Agency methods | DONE: Gate 2 passed with restriction (unverified items excluded) | this commit |
+| 3 Data audit | PARTIAL: news audited in v10; non-news sources not yet re-audited under v9 | |
+| 4 Method design | NOT STARTED | |
+| 5 Pre-registration | **BLOCKED** on the owner's label rule | |
+| 6 Run | NOT STARTED | |
+| 7 Face validity, ISO, API, tests | NOT STARTED; face validity needs FNRI regional values | |

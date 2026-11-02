@@ -141,6 +141,8 @@ def main() -> int:
     if got != expected:
         print("protocol hash mismatch", got, expected)
         return 2
+    # The working tree is shared with another session whose mutation checks edit v6/lgbm.py in place; refuse those params.
+    assert PARAMS["num_leaves"] == 4 and PARAMS["max_depth"] == 2 and PARAMS["min_data_in_leaf"] == 10, PARAMS
     t, prices, news, rounds = L.label_table(), L.price_table(), L.news_table(), load_rounds()
     assert t.quarter.nunique() == 17 and len(t) == 85, (t.quarter.nunique(), len(t))
     mech = mechanical(t, prices, got)
