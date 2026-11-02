@@ -5,6 +5,42 @@ otherwise. Sources: `E99_REPRODUCTION.md`, `../IMPROVE_V2/RESULTS.md`, `../OBJEC
 `DECISIONS.md`, `../P0H4_LEAD12_REVIEW/out/price_warning.json` (province food-price pressure),
 `../IMPROVE_V2/out/lgu_rankings.csv` (vulnerability inputs).
 
+## Team decision: P0H4 as the main model (pending adviser confirmation)
+
+**Decision (2026-11-03), made by the team and pending adviser confirmation.** The main model is the served **P0H4**
+forecast (the Chapter I model), not the IMPROVE_V2 hunger-only model. The IMPROVE_V2 design in sections 2–9 below is
+kept unchanged as the **documented alternative**.
+
+**What P0H4 is** (`backend/data/ch1_engine/`, `../LEAD2_OPTIMIZATION/`; unchanged, not retrained):
+- **Target.** A province-quarter is HIGH when SWS Balance Luzon hunger is above 11.3% **and** the province's food-price
+  condition holds: food CPI year-on-year above the province's 2021–22 60th percentile, or food minus headline inflation
+  above its 2021–22 60th-percentile gap.
+- **Model.**
+  - The price part is one LightGBM trained on the rows of every lead (12 indicator families and world prices).
+  - The hunger part is computed from the latest SWS Balance Luzon reading.
+  - P(HIGH) = P(hunger) × P(price), and HIGH when P(HIGH) ≥ 0.50.
+- **Evidence** (walk-forward 2023-Q1..2026-Q3, development evidence):
+
+  | Lead | Accuracy | Recall (HIGH caught) | R1–R7 |
+  |---|---|---|---|
+  | 1 | 0.843 on 70 province-quarters | 0.647 (11 of 17) | all pass |
+  | 2 | 0.769 on 65 | 0.353 (6 of 17) | fails R3, R5, R6 |
+
+- **Maximum Reliable Lead Time:**
+  - **2 quarters** under the paper's Algorithm 3 (75% mean fold accuracy). Lead 3 is the first failure, at 0.717.
+  - **1 quarter** under R1–R7.
+
+  Details are in `P0H4_EVIDENCE.md`. Objective status is in `P0H4_OBJECTIVES_STATUS.md`.
+
+**Where P0H4 differs from the paper:**
+- The target is not Equation 3. It uses fixed 2021–22 thresholds, not the global median.
+- There is no Optuna search.
+- Reliability is reported under both Algorithm 3 and R1–R7.
+- Provinces differ only through the food-price part, because SWS hunger is regional.
+
+The section 9.1 "Option A" decision below concerns the IMPROVE_V2 alternative. It does not apply while P0H4 is the
+main model.
+
 ## 1. Why the Chapter III pipeline is replaced
 
 Chapter III defines the forecast target by Equation 3: a composite stress score equal to SWS hunger plus twice the
@@ -253,7 +289,12 @@ evidence**, not an independent test.
 
 Two wordings are given for the adviser to choose between.
 
-#### Option A (proposed): regional food-insecurity forecast, with provincial food-price pressure and vulnerability
+**Decision (2026-11-03): Option A, chosen by the team, pending adviser confirmation.** Every province shows the regional
+food-insecurity forecast as its headline. The province food-price pressure band and the vulnerability rank are shown
+beside it and are never multiplied with it. Option B is kept below in case the adviser prefers it. This decision applies
+to the IMPROVE_V2 alternative only. The main model is now P0H4 (see "Team decision" at the top).
+
+#### Option A (chosen by the team, pending adviser confirmation): regional food-insecurity forecast, with provincial food-price pressure and vulnerability
 
 This matches the design of §2.1.
 
