@@ -152,6 +152,17 @@ THESIS_EXPLAINABILITY_NOTE = (
 )
 
 
+# THESIS with AIPHEED_MAP_MODEL=ch1: the score is the Chapter I forecast (P0H4); the bars explain only its price part
+CH1_EXPLAINABILITY_NOTE = (
+    "The risk score shown is the forecast probability that the province is at HIGH food-insecurity risk under the "
+    "study's (Chapter I) definition: SWS Balance Luzon hunger above 11.3% AND the province's food prices rising "
+    "unusually fast. It is the hunger part (the chance that regional hunger is above 11.3%, from the latest SWS reading, "
+    "the same for all five provinces) multiplied by the food-price part (a LightGBM forecast for the province). The bars "
+    "explain only the food-price part (SHAP); the hunger part multiplies it and is not a bar. A province is HIGH only "
+    "when both parts are high. Shares describe the model's inputs, not causes."
+)
+
+
 # E64: the Objectives 1-3 candidate (improved news pipeline v3); the product of the two parts is a model score
 E64_EXPLAINABILITY_NOTE = (
     "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above "
@@ -183,6 +194,10 @@ def _served_note(quarter: str | None = None) -> str:
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note
     if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E64_EXPLAINABILITY_NOTE
+    if quarter and LEAD2.mode() == "thesis":
+        from app.ml.inference import ch1_system as CH1
+        if CH1.active() and CH1.covers(quarter):                     # the map serves the Chapter I forecast
+            return CH1_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "thesis" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return THESIS_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() in ("e58", "e66", "e67", "e68", "e69", "thesis") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
