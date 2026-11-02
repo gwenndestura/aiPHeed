@@ -1,0 +1,1083 @@
+{
+ "inputs": {
+  "plan": "2973784ae15ba8ce45500789b3f777e78c9e2ca082386cb6fe70295dd6b046ad",
+  "hr_data": {
+   "cpi_ACP22.csv": {
+    "sha256": "0dc2e79f24d93fc3fe8dc554c2cc90477a3ed73bdc6aa0c85c5a07e88f987438",
+    "recorded": "0dc2e79f24d93fc3fe8dc554c2cc90477a3ed73bdc6aa0c85c5a07e88f987438",
+    "equal": true
+   },
+   "cpi_backcast_ACP28.csv": {
+    "sha256": "88f5726fcbbf3663d10ca685925a3d223422f3fb1372a25745b417249999d73a",
+    "recorded": "88f5726fcbbf3663d10ca685925a3d223422f3fb1372a25745b417249999d73a",
+    "equal": true
+   },
+   "fisheries_GVFP1.csv": {
+    "sha256": "d659f61a0235dfc3b2d8722510d977bd06e6f5be5dfc0e05eab821a20378e4d1",
+    "recorded": "d659f61a0235dfc3b2d8722510d977bd06e6f5be5dfc0e05eab821a20378e4d1",
+    "equal": true
+   },
+   "palay_corn_EVCP0.csv": {
+    "sha256": "baba74a173e29eeb219da177cf1d69eae53b29469cc9814b6c1251adf0d0c394",
+    "recorded": "baba74a173e29eeb219da177cf1d69eae53b29469cc9814b6c1251adf0d0c394",
+    "equal": true
+   },
+   "pinksheet_monthly_1960.csv": {
+    "sha256": "cb6daa8811d2af95a43c603679eb1c85dacd27b54bdb15bde5b33c12d7fb8aea",
+    "recorded": "cb6daa8811d2af95a43c603679eb1c85dacd27b54bdb15bde5b33c12d7fb8aea",
+    "equal": true
+   },
+   "rice_wholesale_AWB01.csv": {
+    "sha256": "513e81adc97b02c70f24d95ad3c5dbeecb603e8dc2bb692df4168abda47ec4e5",
+    "recorded": "513e81adc97b02c70f24d95ad3c5dbeecb603e8dc2bb692df4168abda47ec4e5",
+    "equal": true
+   },
+   "typhoons_province_quarter.csv": {
+    "sha256": "2f91b30f6335397b79d3ec1aa1623afd321f02d501c5e1488b2fcfe82abcb550",
+    "recorded": "2f91b30f6335397b79d3ec1aa1623afd321f02d501c5e1488b2fcfe82abcb550",
+    "equal": true
+   }
+  },
+  "table_pooled_sha256": "12ba4a10092dc43ae62daf1b418de984864e1f4e6dbea34743d2452d3bdc002c",
+  "iv2_forecasts_sha256": "c9098949ff4a73f7c07fcd582f4b40f21fd2abed315492ec7785aad3a8538405"
+ },
+ "rule": "Algorithm 3: mean walk-forward accuracy >= 0.75, from Lead 1, stop at the first failing lead; one fold per origin, so mean fold accuracy = accuracy over target quarters",
+ "leads": {
+  "L1": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.7903225806451613,
+   "alg3_pass": true,
+   "persistence_accuracy": 0.6612903225806451,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 39,
+    "FP": 9,
+    "FN": 4,
+    "TN": 10,
+    "accuracy": 0.7903225806451613,
+    "balanced": 0.7166462668298653,
+    "precision": 0.8125,
+    "recall": 0.9069767441860465,
+    "specificity": 0.5263157894736842,
+    "f1": 0.8571428571428572,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.7019583843329253,
+    "prAuc": 0.7973312931794101,
+    "brier": 0.18751441857843637,
+    "meanP": 0.6962427958500638,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": true,
+     "value": 0.7903
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": true,
+     "value": 0.7166
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.7903 vs 0.3065 / 0.6613"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": true,
+     "value": {
+      "PERSIST-SI": "diff -0.1512, p 0.000",
+      "CLIM": "diff -0.0331, p 0.096"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.812, R 0.907"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R7"
+   ]
+  },
+  "L2": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.7903225806451613,
+   "alg3_pass": true,
+   "persistence_accuracy": 0.6612903225806451,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 39,
+    "FP": 9,
+    "FN": 4,
+    "TN": 10,
+    "accuracy": 0.7903225806451613,
+    "balanced": 0.7166462668298653,
+    "precision": 0.8125,
+    "recall": 0.9069767441860465,
+    "specificity": 0.5263157894736842,
+    "f1": 0.8571428571428572,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.7037943696450428,
+    "prAuc": 0.7928672772794857,
+    "brier": 0.18378601443479917,
+    "meanP": 0.6924284048715956,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": true,
+     "value": 0.7903
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": true,
+     "value": 0.7166
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.7903 vs 0.3065 / 0.6613"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": true,
+     "value": {
+      "PERSIST-SI": "diff -0.1549, p 0.000",
+      "CLIM": "diff -0.0385, p 0.070"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.812, R 0.907"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R7"
+   ]
+  },
+  "L3": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.7258064516129032,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6612903225806451,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 37,
+    "FP": 11,
+    "FN": 6,
+    "TN": 8,
+    "accuracy": 0.7258064516129032,
+    "balanced": 0.6407588739290085,
+    "precision": 0.7708333333333334,
+    "recall": 0.8604651162790697,
+    "specificity": 0.42105263157894735,
+    "f1": 0.8131868131868132,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6854345165238679,
+    "prAuc": 0.8128562477087886,
+    "brier": 0.19647665460810138,
+    "meanP": 0.6916994102875385,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.7258
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.6408
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.7258 vs 0.3065 / 0.6613"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1422, p 0.000",
+      "CLIM": "diff -0.0275, p 0.138"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.771, R 0.860"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.75] (sizes [21, 21, 20]), LOQO min 0.721; other split [0.95, 0.524, 0.714] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L4": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6774193548387096,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.5967741935483871,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 36,
+    "FP": 13,
+    "FN": 7,
+    "TN": 6,
+    "accuracy": 0.6774193548387096,
+    "balanced": 0.576499388004896,
+    "precision": 0.7346938775510204,
+    "recall": 0.8372093023255814,
+    "specificity": 0.3157894736842105,
+    "f1": 0.782608695652174,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6548347613219094,
+    "prAuc": 0.8148095527677123,
+    "brier": 0.21130005752532258,
+    "meanP": 0.7022783363417701,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6774
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5765
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6774 vs 0.3065 / 0.5968"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1919, p 0.000",
+      "CLIM": "diff -0.0144, p 0.284"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.735, R 0.837"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.65] (sizes [21, 21, 20]), LOQO min 0.672; other split [0.95, 0.476, 0.619] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L5": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6129032258064516,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6290322580645161,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 34,
+    "FP": 15,
+    "FN": 9,
+    "TN": 4,
+    "accuracy": 0.6129032258064516,
+    "balanced": 0.5006119951040391,
+    "precision": 0.6938775510204082,
+    "recall": 0.7906976744186046,
+    "specificity": 0.21052631578947367,
+    "f1": 0.7391304347826086,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6095471236230111,
+    "prAuc": 0.8007947102509106,
+    "brier": 0.23525813622115138,
+    "meanP": 0.7144743359045819,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6129
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5006
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": false,
+     "value": "0.6129 vs 0.3065 / 0.6290"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1357, p 0.001",
+      "CLIM": "diff +0.0083, p 0.623"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.694, R 0.791"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.381, 0.5] (sizes [21, 21, 20]), LOQO min 0.607; other split [0.95, 0.429, 0.476] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ]
+  },
+  "L6": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.5967741935483871,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6774193548387096,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 33,
+    "FP": 15,
+    "FN": 10,
+    "TN": 4,
+    "accuracy": 0.5967741935483871,
+    "balanced": 0.488984088127295,
+    "precision": 0.6875,
+    "recall": 0.7674418604651163,
+    "specificity": 0.21052631578947367,
+    "f1": 0.7252747252747254,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6248470012239902,
+    "prAuc": 0.8327744490632317,
+    "brier": 0.24079438449098267,
+    "meanP": 0.7254722418126802,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.5968
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.489
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": false,
+     "value": "0.5968 vs 0.3065 / 0.6774"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0818, p 0.031",
+      "CLIM": "diff +0.0125, p 0.683"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.688, R 0.767"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.381, 0.45] (sizes [21, 21, 20]), LOQO min 0.590; other split [0.95, 0.429, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ]
+  },
+  "L7": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6451612903225806,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6290322580645161,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 14,
+    "FN": 8,
+    "TN": 5,
+    "accuracy": 0.6451612903225806,
+    "balanced": 0.5385556915544676,
+    "precision": 0.7142857142857143,
+    "recall": 0.813953488372093,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7608695652173914,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6132190942472461,
+    "prAuc": 0.7929750951239565,
+    "brier": 0.23339430641230724,
+    "meanP": 0.7297424649356642,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6452
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5386
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6452 vs 0.3065 / 0.6290"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1376, p 0.001",
+      "CLIM": "diff +0.0031, p 0.543"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.714, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.524, 0.45] (sizes [21, 21, 20]), LOQO min 0.639; other split [0.95, 0.571, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L8": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6612903225806451,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.5806451612903226,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 36,
+    "FP": 14,
+    "FN": 7,
+    "TN": 5,
+    "accuracy": 0.6612903225806451,
+    "balanced": 0.5501835985312118,
+    "precision": 0.72,
+    "recall": 0.8372093023255814,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7741935483870969,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5973072215422277,
+    "prAuc": 0.7687580256090403,
+    "brier": 0.23394311063183526,
+    "meanP": 0.74312082364553,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6613
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5502
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6613 vs 0.3065 / 0.5806"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1854, p 0.000",
+      "CLIM": "diff +0.0020, p 0.528"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.720, R 0.837"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.45] (sizes [21, 21, 20]), LOQO min 0.656; other split [0.95, 0.619, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L9": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6129032258064516,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.5967741935483871,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 16,
+    "FN": 8,
+    "TN": 3,
+    "accuracy": 0.6129032258064516,
+    "balanced": 0.4859241126070991,
+    "precision": 0.6862745098039216,
+    "recall": 0.813953488372093,
+    "specificity": 0.15789473684210525,
+    "f1": 0.7446808510638299,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5642594859241126,
+    "prAuc": 0.7601816674808999,
+    "brier": 0.24726331018639475,
+    "meanP": 0.7454484799139421,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6129
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.4859
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6129 vs 0.3065 / 0.5968"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1560, p 0.000",
+      "CLIM": "diff +0.0139, p 0.697"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.686, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.4] (sizes [21, 21, 20]), LOQO min 0.607; other split [0.95, 0.476, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L10": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6290322580645161,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6129032258064516,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 15,
+    "FN": 8,
+    "TN": 4,
+    "accuracy": 0.6290322580645161,
+    "balanced": 0.5122399020807833,
+    "precision": 0.7,
+    "recall": 0.813953488372093,
+    "specificity": 0.21052631578947367,
+    "f1": 0.7526881720430109,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5887392900856794,
+    "prAuc": 0.7882442670208714,
+    "brier": 0.23754877439531719,
+    "meanP": 0.744829429629738,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.629
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5122
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6290 vs 0.3065 / 0.6129"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1495, p 0.000",
+      "CLIM": "diff +0.0027, p 0.538"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.700, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.45] (sizes [21, 21, 20]), LOQO min 0.623; other split [0.95, 0.476, 0.476] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L11": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6451612903225806,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6129032258064516,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 14,
+    "FN": 8,
+    "TN": 5,
+    "accuracy": 0.6451612903225806,
+    "balanced": 0.5385556915544676,
+    "precision": 0.7142857142857143,
+    "recall": 0.813953488372093,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7608695652173914,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5777233782129744,
+    "prAuc": 0.7617354011911315,
+    "brier": 0.23852013320000212,
+    "meanP": 0.7392081569911558,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6452
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5386
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6452 vs 0.3065 / 0.6129"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1486, p 0.000",
+      "CLIM": "diff +0.0020, p 0.515"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.714, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.55] (sizes [21, 21, 20]), LOQO min 0.639; other split [0.95, 0.429, 0.571] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L12": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6451612903225806,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6129032258064516,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 14,
+    "FN": 8,
+    "TN": 5,
+    "accuracy": 0.6451612903225806,
+    "balanced": 0.5385556915544676,
+    "precision": 0.7142857142857143,
+    "recall": 0.813953488372093,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7608695652173914,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5520195838433293,
+    "prAuc": 0.7422768365375747,
+    "brier": 0.2440248973729489,
+    "meanP": 0.7344598516389479,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6452
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5386
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": true,
+     "value": "0.6452 vs 0.3065 / 0.6129"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1431, p 0.001",
+      "CLIM": "diff +0.0056, p 0.576"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.714, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.55] (sizes [21, 21, 20]), LOQO min 0.639; other split [0.95, 0.476, 0.524] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ]
+  },
+  "L13": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6290322580645161,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.7096774193548387,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 35,
+    "FP": 15,
+    "FN": 8,
+    "TN": 4,
+    "accuracy": 0.6290322580645161,
+    "balanced": 0.5122399020807833,
+    "precision": 0.7,
+    "recall": 0.813953488372093,
+    "specificity": 0.21052631578947367,
+    "f1": 0.7526881720430109,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.5960832313341493,
+    "prAuc": 0.7804049342473858,
+    "brier": 0.23211304606241584,
+    "meanP": 0.7360129981149226,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.629
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5122
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": false,
+     "value": "0.6290 vs 0.3065 / 0.7097"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0582, p 0.078",
+      "CLIM": "diff -0.0083, p 0.380"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.700, R 0.814"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.45] (sizes [21, 21, 20]), LOQO min 0.623; other split [0.95, 0.524, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ]
+  },
+  "L14": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6612903225806451,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6935483870967742,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 36,
+    "FP": 14,
+    "FN": 7,
+    "TN": 5,
+    "accuracy": 0.6612903225806451,
+    "balanced": 0.5501835985312118,
+    "precision": 0.72,
+    "recall": 0.8372093023255814,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7741935483870969,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.6144430844553244,
+    "prAuc": 0.7784717046763656,
+    "brier": 0.2258991231463038,
+    "meanP": 0.7365698549647857,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6613
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5502
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": false,
+     "value": "0.6613 vs 0.3065 / 0.6935"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0806, p 0.026",
+      "CLIM": "diff -0.0180, p 0.242"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.720, R 0.837"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.905, 0.524, 0.55] (sizes [21, 21, 20]), LOQO min 0.656; other split [0.9, 0.524, 0.571] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ]
+  },
+  "L15": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "accuracy": 0.6774193548387096,
+   "alg3_pass": false,
+   "persistence_accuracy": 0.6774193548387096,
+   "metrics": {
+    "n": 62,
+    "pos": 43,
+    "neg": 19,
+    "TP": 37,
+    "FP": 14,
+    "FN": 6,
+    "TN": 5,
+    "accuracy": 0.6774193548387096,
+    "balanced": 0.5618115055079559,
+    "precision": 0.7254901960784313,
+    "recall": 0.8604651162790697,
+    "specificity": 0.2631578947368421,
+    "f1": 0.7872340425531916,
+    "quarters": 62,
+    "period": "2010-Q1..2026-Q3",
+    "auc": 0.587515299877601,
+    "prAuc": 0.7572629541410721,
+    "brier": 0.22965159967011559,
+    "meanP": 0.7400764650606251,
+    "baseRate": 0.6935483870967742
+   },
+   "rules": {
+    "R1 >=10 quarters and >=40 rows": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2 accuracy >= 0.75": {
+     "pass": false,
+     "value": 0.6774
+    },
+    "R3 balanced accuracy >= 0.70": {
+     "pass": false,
+     "value": 0.5618
+    },
+    "R4 accuracy > always-LOW and > PERSIST-SI": {
+     "pass": false,
+     "value": "0.6774 vs 0.3065 / 0.6774"
+    },
+    "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0929, p 0.015",
+      "CLIM": "diff -0.0175, p 0.256"
+     }
+    },
+    "R6 precision >= 0.60 and recall >= 0.60": {
+     "pass": true,
+     "value": "P 0.725, R 0.860"
+    },
+    "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+     "pass": false,
+     "value": "thirds [0.905, 0.476, 0.65] (sizes [21, 21, 20]), LOQO min 0.672; other split [0.9, 0.476, 0.667] (sizes [20, 21, 21])"
+    }
+   },
+   "allR1R7": false,
+   "fails": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ]
+  }
+ },
+ "max_reliable_lead_alg3": 2,
+ "first_failing_lead": 3
+}

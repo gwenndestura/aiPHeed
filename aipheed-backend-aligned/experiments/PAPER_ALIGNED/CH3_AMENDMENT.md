@@ -169,18 +169,29 @@ walk-forward forecasts (`../IMPROVE_V2/out/forecasts.csv`, arm REF, P ≥ 0.50) 
 
 ## 6. Reliability, stated both ways
 
-**Under the thesis criterion** (Algorithm 3: mean walk-forward accuracy ≥ 75%):
-- The model **passes at Lead 1 and at Lead 2** (0.790 each).
-- Leads beyond 2 were not evaluated for this model, so the Maximum Reliable Lead Time is **at least 2 quarters** on
-  development evidence.
-- **Pending.** Applying Algorithm 3 at Lead 3, 4, … needs walk-forward forecasts beyond Lead 2. The model is trained
-  on stacked rows for Leads 1–15, but the runner stored forecasts for Leads 1 and 2 only (`run_iv2.py`,
-  `LEADS = (1, 2)`). The decision on how to obtain them is with the researcher.
+**Under the thesis criterion** (Algorithm 3: mean walk-forward accuracy ≥ 75%, advancing from Lead 1 until the first
+failing lead):
+- The walk-forward was re-run exactly as specified, storing Leads 1–15 (`../IMPROVE_V2_LEADS/RESULTS.md`). There was no
+  tuning and no change to the model. It reproduces every stored Lead-1 and Lead-2 forecast bit for bit.
+- Each origin is one fold with one forecast per lead, so mean fold accuracy equals accuracy over the 62 target
+  quarters.
+- **Maximum Reliable Lead Time = 2 quarters** on development evidence. Lead 3 is the first lead below 0.75.
+
+| Lead | Accuracy | Algorithm 3 | Persistence | R7 thirds (2010–15, 2015–20, 2020–26) | R1–R7 failed |
+|---|---|---|---|---|---|
+| 1 | 0.790 | pass | 0.661 | 0.95, **0.57**, 0.85 | R7 |
+| 2 | 0.790 | pass | 0.661 | 0.95, **0.57**, 0.85 | R7 |
+| 3 | **0.726** | **fail (stop)** | 0.661 | 0.95, **0.48**, 0.75 | R2, R3, R5, R7 |
+
+- At Lead 3 the model still beats persistence (R4 pass; Brier −0.142, p < 0.001), but balanced accuracy is 0.64 and
+  it is not significantly better than climatology (p = 0.14).
+- Leads 4–15, beyond the stopping point, are recorded for completeness: accuracy 0.60–0.68, and all fail R2, R3, R5
+  and R7.
 
 **Under a stricter, pre-registered stability rule (R7):**
-- R7 requires at least 60% accuracy in each third of the evaluation period. The model **fails**: 0.95 for 2010 to about
-  2015, **0.57** for about 2015–2020, and 0.85 for about 2020–2026.
-- It passes the other six rules: sample size, accuracy, balanced accuracy, beating always-LOW and persistence, Brier
+- R7 requires at least 60% accuracy in each third of the evaluation period. The model **fails at every lead**. At
+  Leads 1 and 2 it scores 0.95 for 2010 to about 2015, **0.57** for about 2015–2020, and 0.85 for about 2020–2026.
+- At Leads 1 and 2 it passes the other six rules: sample size, accuracy, balanced accuracy, beating always-LOW and persistence, Brier
   score below persistence and climatology, and precision and recall ≥ 0.60.
 - Without the two 2020 mobile-phone survey quarters it would pass all seven. This is reported as a sensitivity check
   only.
@@ -207,6 +218,10 @@ evidence**, not an independent test.
      every province, this does not change the order. The product is not shown as a risk level, since it would fall
      below 0.50 in towns of a HIGH region.
    - The outputs are labelled "priority ranking, not a measured rate".
+   - **Correction:** the `note` column of `../IMPROVE_V2/out/lgu_rankings.csv` says that "most LGUs carry a
+     province-mean poverty substitute". This is wrong. **141 of the 142 LGUs use their own PSA 2021 municipal
+     estimate.** Only Lucena (a highly urbanized city, excluded from the PSA no-HUC table) uses the Quezon province
+     value. The note appears on all 142 rows. The file is left unchanged, and this correction applies to it.
 3. **Province food-price pressure is not a validated forecast.** π_price does not meet R1–R7 at Lead 1 or Lead 2
    (§2.1), so it is shown as a Low/Medium/High band for context only.
 4. **News adds no measurable gain.**
@@ -228,7 +243,7 @@ evidence**, not an independent test.
 | Hypothesis | Under the amended model |
 |---|---|
 | H1 (FSSI and food CPI deviation not among the strongest predictors) | **Not rejected.** Past hunger and world prices dominate; food prices carry about 6% of influence and news about 3%. |
-| H2 (not reliable across lead times) | **Rejected under the thesis's 75% criterion** (Leads 1 and 2). **Not rejected under the stricter stability rule.** Both are reported; prospective confirmation is pending. |
+| H2 (not reliable across lead times) | **Rejected under the thesis's 75% criterion up to Lead 2** (Maximum Reliable Lead Time = 2; Lead 3 fails at 0.726). **Not rejected under the stricter stability rule** (R7 fails at every lead). Both are reported; prospective confirmation is pending. |
 | H3 (the combined model will not outperform the six comparators) | **Not rejected.** The model beats persistence, the news-only models and the government-only LightGBM, but not the PSA-only or combined logistic regressions significantly. |
 | H4, H5 | Data collection in progress |
 
