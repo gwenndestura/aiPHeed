@@ -556,7 +556,7 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "Forecasts are issued on the first day of each quarter, using only information published before that date. The forecast for the quarter just starting passed the reliability test. The forecast three months ahead, for the next quarter, is experimental: a ranking of which provinces to watch (AUC 0.62, Brier score 0.194). It does not pass the seven reliability rules and is being validated on forecasts sealed from 2027.",
+    a: "Forecasts are issued on the first day of each quarter, using only information published before that date. The forecast for the quarter just starting passed the reliability test; the forecast three months ahead, for the next quarter, is experimental: a ranking of which provinces to watch (AUC 0.62, Brier score 0.194). It does not pass the seven reliability rules and is being validated on forecasts sealed from 2027.",
   },
   {
     q: "How accurate is it?",

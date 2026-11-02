@@ -153,7 +153,7 @@ describe("Landing page", () => {
     expect(text).toContain("one for the quarter just starting and one for the next quarter, three months ahead");
     fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
     expect(
-      screen.getByText(/^Forecasts are issued on the first day of each quarter.*the forecast three months ahead, for the next quarter, is experimental\.$/),
+      screen.getByText(/^Forecasts are issued on the first day of each quarter.*the forecast three months ahead, for the next quarter, is experimental: a ranking of which provinces to watch.*sealed from 2027\.$/),
     ).toBeTruthy();
   });
 
@@ -323,7 +323,7 @@ describe("About dialog", () => {
     expect(dlg.textContent).toContain("LightGBM, 12 indicator families · risk = hunger condition × food-price condition");
     const lead = within(dlg).getByText("Lead time").parentElement as HTMLElement;
     expect(lead.textContent).toBe(
-      "Lead timeReliable: the quarter starting on the issue date · further ahead: experimental",
+      "Lead timeReliable: the quarter starting on the issue date · next quarter: experimental ranking of which provinces to watch, validated prospectively from 2027",
     );
     expect(dlg.textContent).toContain("no measured hunger figure exists for any province, city or municipality");
     expect(dlg.textContent).not.toContain("reliability test");

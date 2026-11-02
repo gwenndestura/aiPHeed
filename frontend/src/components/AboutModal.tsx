@@ -116,7 +116,7 @@ export function AboutModal() {
                       : "Not established"
                   }
                 />
-                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test. The next quarter (Lead 2) is a ranking of which provinces to watch (AUC 0.62, Brier 0.194), being validated on forecasts sealed from 2027" />
+                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test. The next-quarter forecast is a ranking of which provinces to watch (AUC 0.62, Brier 0.194), being validated on forecasts sealed from 2027" />
                 <Row k="News" v="Context only: it did not improve the forecasts" />
                 {evaluation && (
                   <Row
