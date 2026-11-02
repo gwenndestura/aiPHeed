@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import json
 from datetime import date
-from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -33,6 +32,8 @@ def rows_at(rr, feats, wf, issue: str, lead: int, hist_cache: dict) -> pd.DataFr
     base = wf[(wf.issue == issue) & (wf.model == "PERSIST") & (wf.lead == lead)][["issue", "area", "lead", "tqi", "h", "f", "sd",
                                                                                      "latest", "latest_qi", "n_obs", "q", "kappa",
                                                                                      "noise_adjustment"]]
+    if base.empty:                      # no round published yet at this issue
+        return base
     if issue not in hist_cache:
         hist_cache[issue] = history(rr, issue)
     snap = F.snapshot(feats, issue, used_at=issue).reset_index()[["area", *F.FEATURES]]
@@ -62,6 +63,8 @@ def lgbm_at(rr, feats, wf, I: date, hist_cache: dict, exclude_area: str | None =
         if keep_fits is not None:
             keep_fits[k] = fit
         X = rows_at(rr, feats, wf, I.isoformat(), k, hist_cache)
+        if X.empty:
+            continue
         chg, contrib = LG.predict(fit, X)
         for (_, r), c, ex in zip(X.iterrows(), chg, contrib):
             for name, w in (("LGBM-D", 1.0), ("LGBM-D-S", fit.w)):
@@ -69,7 +72,8 @@ def lgbm_at(rr, feats, wf, I: date, hist_cache: dict, exclude_area: str | None =
                             "kappa": r.kappa, "latest": r.latest, "sd": r.sd, "h": r.h, "latest_qi": r.latest_qi,
                             "noise_adjustment": 0.0, "model": name, "anchor": r.f, "predicted_change": w * c,
                             "f": r.f + w * c, "w": w, "features": json.dumps(fit.features), "exog": json.dumps(fit.exog),
-                            "best_iter": fit.best_iter, "n_train": fit.n_train, "train_mae": fit.train_mae,
+                            "best_iter": fit.best_iter, "n_train": fit.n_train,
+                            "train_mae": fit.train_mae if name == "LGBM-D" else fit.train_mae_s,
                             "contributions": json.dumps({g: round(w * v, 8) for g, v in ex.items()})})
     return pd.DataFrame(out)
 

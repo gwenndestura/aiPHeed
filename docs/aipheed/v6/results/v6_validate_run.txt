@@ -1,0 +1,1130 @@
+selected
+PERSIST    22
+         issue challenger incumbent  inner_quarters  replaces  diff_within  ci_lo  ci_hi
+36  2024-07-01       LL-K   PERSIST               6     False        0.125 -0.083  0.333
+37  2024-07-01     LGBM-D   PERSIST               6     False        0.000  0.000  0.000
+38  2024-07-01   LGBM-D-S   PERSIST               6     False        0.000  0.000  0.000
+39  2024-10-01       LL-K   PERSIST               7     False        0.071 -0.107  0.250
+40  2024-10-01     LGBM-D   PERSIST               7     False        0.000  0.000  0.000
+41  2024-10-01   LGBM-D-S   PERSIST               7     False        0.000  0.000  0.000
+42  2025-01-01       LL-K   PERSIST               8     False        0.062 -0.094  0.219
+43  2025-01-01     LGBM-D   PERSIST               8     False        0.000  0.000  0.000
+44  2025-01-01   LGBM-D-S   PERSIST               8     False        0.000  0.000  0.000
+45  2025-04-01       LL-K   PERSIST               9     False        0.028 -0.111  0.194
+46  2025-04-01     LGBM-D   PERSIST               9     False        0.000  0.000  0.000
+47  2025-04-01   LGBM-D-S   PERSIST               9     False        0.000  0.000  0.000
+48  2025-07-01       LL-K   PERSIST              10     False        0.025 -0.100  0.175
+49  2025-07-01     LGBM-D   PERSIST              10     False       -0.075 -0.225  0.000
+50  2025-07-01   LGBM-D-S   PERSIST              10     False       -0.075 -0.225  0.000
+51  2025-10-01       LL-K   PERSIST              10     False        0.050 -0.100  0.200
+52  2025-10-01     LGBM-D   PERSIST              10     False       -0.050 -0.150  0.000
+53  2025-10-01   LGBM-D-S   PERSIST              10     False       -0.050 -0.150  0.000
+54  2026-01-01       LL-K   PERSIST              11     False        0.045 -0.091  0.182
+55  2026-01-01     LGBM-D   PERSIST              11     False       -0.068 -0.182  0.000
+56  2026-01-01   LGBM-D-S   PERSIST              11     False       -0.068 -0.182  0.000
+57  2026-04-01       LL-K   PERSIST              12     False        0.042 -0.083  0.167
+58  2026-04-01     LGBM-D   PERSIST              12     False       -0.062 -0.167  0.000
+59  2026-04-01   LGBM-D-S   PERSIST              12     False       -0.062 -0.167  0.000
+60  2026-07-01       LL-K   PERSIST              13     False        0.038 -0.077  0.173
+61  2026-07-01     LGBM-D   PERSIST              13     False       -0.096 -0.212  0.000
+62  2026-07-01   LGBM-D-S   PERSIST              13     False       -0.096 -0.212  0.000
+63  2026-10-01       LL-K   PERSIST              14     False        0.054 -0.054  0.179
+64  2026-10-01     LGBM-D   PERSIST              14     False       -0.071 -0.179  0.018
+65  2026-10-01   LGBM-D-S   PERSIST              14     False       -0.089 -0.196  0.000
+    lead      model   n  within_frozen  block_ci_lo_frozen  block_ci_hi_frozen  within_amended_proposed    mae    rmse   bias  high_tercile_bias  sharp_within  sharp_increases  var_ratio   corr  coverage80
+0      1         V6  44          0.477               0.227               0.682                    0.614  5.050   6.764 -2.375             -6.753             0               15      1.369  0.350       0.636
+1      1    PERSIST  44          0.477               0.227               0.682                    0.614  5.050   6.764 -2.375             -6.753             0               15      1.369  0.350       0.636
+2      1       LL-K  44          0.409               0.091               0.659                    0.568  5.253   7.103 -3.021             -7.786             1               15      1.249  0.291       0.614
+3      1     LGBM-D  44          0.364               0.205               0.455                    0.591  5.610   7.251 -2.193             -7.357             0               15      1.605  0.299       0.659
+4      1   LGBM-D-S  44          0.386               0.205               0.477                    0.591  5.775   7.478 -2.281             -7.581             0               15      1.647  0.267       0.636
+5      1    TREND-D  44          0.409               0.318               0.455                    0.568  5.698   7.622 -2.297             -6.535             1               15      1.852  0.298         NaN
+6      1       CLIM  44          0.205               0.023               0.273                    0.455  6.899   8.258 -6.617            -11.852             1               15      0.238  0.301         NaN
+7      1  RIDGE-ALL  36          0.389               0.194               0.500                    0.417  6.788   8.548 -6.434            -11.845             3               12      0.661 -0.170         NaN
+8      1   SEAS-LLM  44          0.386               0.159               0.568                    0.659  5.488   6.962 -2.556             -7.197             2               15      1.411  0.332         NaN
+9      1      HFM-X  44          0.545               0.386               0.659                    0.682  4.698   6.130 -1.683             -6.355             6               15      0.852  0.275         NaN
+10     1         V2  44          0.477               0.227               0.682                    0.614  5.050   6.764 -2.375             -6.753             0               15      1.369  0.350         NaN
+11     1         V4  44          0.477               0.227               0.682                    0.614  5.050   6.764 -2.375             -6.753             0               15      1.369  0.350         NaN
+12     2         V6  40          0.400               0.225               0.625                    0.500  5.982   7.706 -3.070             -7.661             0               16      1.944  0.195       0.725
+13     2    PERSIST  40          0.400               0.225               0.625                    0.500  5.982   7.706 -3.070             -7.661             0               16      1.944  0.195       0.725
+14     2       LL-K  40          0.375               0.125               0.650                    0.550  5.604   7.632 -3.835             -8.271             0               16      1.541  0.181       0.675
+15     2     LGBM-D  40          0.300               0.150               0.425                    0.400  7.501   8.949 -2.827             -8.119             0               16      2.801  0.101       0.650
+16     2   LGBM-D-S  40          0.275               0.125               0.400                    0.425  7.501   8.928 -2.993             -8.254             0               16      2.733  0.101       0.650
+17     2    TREND-D  40          0.300               0.225               0.450                    0.425  7.168   8.866 -2.904             -7.720             1               16      2.907  0.158         NaN
+18     2       CLIM  40          0.150               0.000               0.250                    0.350  7.752   8.901 -7.562            -12.356             0               16      0.280  0.209         NaN
+19     2  RIDGE-ALL  28          0.393               0.250               0.607                    0.429  7.363   9.299 -5.205            -10.393             0                7      2.728 -0.251         NaN
+20     2   SEAS-LLM  40          0.450               0.125               0.775                    0.575  5.723   7.579 -3.190             -7.240             3               16      1.898  0.228         NaN
+21     2      HFM-X  40          0.500               0.325               0.575                    0.675  4.866   6.422 -2.528             -7.270             8               16      0.797  0.069         NaN
+22     2         V2  40          0.400               0.225               0.625                    0.500  5.982   7.706 -3.070             -7.661             0               16      1.944  0.195         NaN
+23     2         V4  40          0.400               0.225               0.625                    0.500  5.982   7.706 -3.070             -7.661             0               16      1.944  0.195         NaN
+24     3         V6  36          0.361               0.111               0.556                    0.528  6.464   8.488 -3.828             -9.450             0               15      2.477 -0.011       0.750
+25     3    PERSIST  36          0.361               0.111               0.556                    0.528  6.464   8.488 -3.828             -9.450             0               15      2.477 -0.011       0.750
+26     3       LL-K  36          0.389               0.083               0.611                    0.528  6.251   8.318 -4.707             -9.931             0               15      1.950  0.026       0.722
+27     3     LGBM-D  36          0.306               0.083               0.472                    0.472  7.377   9.212 -3.402             -9.885             0               15      3.225 -0.072       0.667
+28     3   LGBM-D-S  36          0.306               0.083               0.472                    0.472  7.377   9.212 -3.402             -9.885             0               15      3.225 -0.072       0.667
+29     3    TREND-D  36          0.417               0.222               0.556                    0.472  7.400   9.511 -3.585             -9.496             0               15      3.637 -0.029         NaN
+30     3       CLIM  36          0.167               0.028               0.278                    0.250  8.449   9.530 -8.449            -13.275             1               15      0.345  0.132         NaN
+31     3  RIDGE-ALL  24          0.333               0.333               0.417                    0.417  6.231   7.307 -3.996             -6.001             0                5      2.718  0.130         NaN
+32     3   SEAS-LLM  36          0.333               0.056               0.583                    0.583  6.226   8.331 -3.963             -9.401             1               15      2.348  0.020         NaN
+33     3      HFM-X  36          0.500               0.333               0.694                    0.556  5.100   6.557 -3.444             -7.653             5               15      1.227  0.145         NaN
+34     3         V2  36          0.361               0.111               0.556                    0.528  6.464   8.488 -3.828             -9.450             0               15      2.477 -0.011         NaN
+35     3         V4  36          0.361               0.111               0.556                    0.528  6.464   8.488 -3.828             -9.450             0               15      2.477 -0.011         NaN
+36     4         V6  32          0.375               0.219               0.656                    0.594  6.512   8.993 -4.562            -10.055             0               15      2.796 -0.091       0.812
+37     4    PERSIST  32          0.375               0.219               0.656                    0.594  6.512   8.993 -4.562            -10.055             0               15      2.796 -0.091       0.812
+38     4       LL-K  32          0.312               0.000               0.719                    0.500  6.842   8.934 -5.626            -10.828             0               15      2.171 -0.040       0.625
+39     4     LGBM-D  32          0.438               0.219               0.688                    0.594  6.311   8.902 -4.164             -9.753             2               15      2.940 -0.084       0.812
+40     4   LGBM-D-S  32          0.438               0.219               0.688                    0.594  6.311   8.902 -4.164             -9.753             2               15      2.940 -0.084       0.812
+41     4    TREND-D  32          0.406               0.344               0.562                    0.562  7.293  10.008 -4.424             -9.850             3               15      4.167 -0.082         NaN
+42     4       CLIM  32          0.125               0.000               0.219                    0.188  9.194  10.168 -9.194            -13.892             0               15      0.373  0.070         NaN
+43     4  RIDGE-ALL  20          0.150               0.150               0.300                    0.250  8.411   9.423 -5.725            -10.638             0                5      3.882 -0.016         NaN
+44     4   SEAS-LLM  32          0.438               0.094               0.844                    0.531  6.297   8.839 -4.724            -10.215             2               15      2.565 -0.077         NaN
+45     4      HFM-X  32          0.312               0.250               0.406                    0.625  5.513   6.803 -3.624             -7.421             3               15      1.738  0.180         NaN
+46     4         V2  32          0.375               0.219               0.656                    0.594  6.512   8.993 -4.562            -10.055             0               15      2.796 -0.091         NaN
+47     4         V4  32          0.375               0.219               0.656                    0.594  6.512   8.993 -4.562            -10.055             0               15      2.796 -0.091         NaN
+    lead     model  N1_data  N2_within_tolerance_75  N3_beats_every_baseline_mae_rmse  N4_squared_error_vs_persistence_and_climatology  N5_stability  N6_no_province_below_persistence  N7_interval_coverage_80         label
+0      1        V6     True                   False                              True                                            False         False                              True                    False  NOT_RELIABLE
+1      1   PERSIST     True                   False                              True                                            False         False                              True                    False  NOT_RELIABLE
+2      1      LL-K     True                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+3      1    LGBM-D     True                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+4      1  LGBM-D-S     True                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+5      2        V6     True                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+6      2   PERSIST     True                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+7      2      LL-K     True                   False                              True                                            False         False                             False                    False  NOT_RELIABLE
+8      2    LGBM-D     True                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+9      2  LGBM-D-S     True                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+10     3        V6    False                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+11     3   PERSIST    False                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+12     3      LL-K    False                   False                              True                                            False         False                             False                     True  NOT_RELIABLE
+13     3    LGBM-D    False                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+14     3  LGBM-D-S    False                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+15     4        V6    False                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+16     4   PERSIST    False                   False                              True                                            False         False                              True                     True  NOT_RELIABLE
+17     4      LL-K    False                   False                             False                                            False         False                             False                    False  NOT_RELIABLE
+18     4    LGBM-D    False                   False                              True                                            False         False                             False                     True  NOT_RELIABLE
+19     4  LGBM-D-S    False                   False                              True                                            False         False                             False                     True  NOT_RELIABLE
+      model  train_mae_change_lgbm_only  inner_lead2_mae  outer_lead2_mae
+0   PERSIST                         NaN            4.559            5.982
+1      LL-K                         NaN            4.097            5.604
+2    LGBM-D                       3.342            4.860            7.501
+3  LGBM-D-S                       3.628            4.860            7.501
+4        V6                         NaN            4.559            5.982
+        period     model   n  within_frozen    mae   bias
+0      2025-26        V6  24          0.500  4.312  0.542
+1      2025-26   PERSIST  24          0.500  4.312  0.542
+2      2025-26      LL-K  24          0.583  3.102 -0.221
+3      2025-26    LGBM-D  24          0.333  6.844  0.947
+4      2025-26  LGBM-D-S  24          0.292  6.844  0.670
+5      2025-26     HFM-X  24          0.458  4.220 -1.316
+6      2025-26  SEAS-LLM  24          0.708  3.540  0.682
+7   surge 2024        V6  16          0.250  8.488 -8.488
+8   surge 2024   PERSIST  16          0.250  8.488 -8.488
+9   surge 2024      LL-K  16          0.062  9.356 -9.255
+10  surge 2024    LGBM-D  16          0.250  8.488 -8.488
+11  surge 2024  LGBM-D-S  16          0.250  8.488 -8.488
+12  surge 2024     HFM-X  16          0.562  5.835 -4.346
+13  surge 2024  SEAS-LLM  16          0.062  8.997 -8.997
+      model     n  within_frozen    mae
+0    LGBM-D  40.0          0.425  5.864
+1  LGBM-D-S  40.0          0.400  5.982
+2      LL-K  40.0          0.375  5.646
+3   PERSIST  40.0          0.400  5.982
+4        V6  40.0          0.400  5.982
+    lead     model   baseline   T  h  mean_loss_diff  hln_t  p_one_sided                                          note
+8      2        V6    PERSIST  10  3           0.000    NaN          NaN  identical forecasts or non-positive variance
+9      2        V6    TREND-D  10  3         -19.219 -1.771        0.055                                           NaN
+10     2        V6       CLIM  10  3         -19.858 -1.507        0.083                                           NaN
+11     2        V6  RIDGE-ALL   7  3         -37.822 -0.663        0.266                                           NaN
+12     2        V6      HFM-X  10  3          18.141  0.833        0.787                                           NaN
+13     2        V6   SEAS-LLM  10  3           1.932  0.379        0.643                                           NaN
+14     2        V6         V2  10  3           0.000    NaN          NaN  identical forecasts or non-positive variance
+15     2        V6         V4  10  3           0.000    NaN          NaN  identical forecasts or non-positive variance
+40     2    LGBM-D    PERSIST  10  3          20.714  1.585        0.926                                           NaN
+41     2    LGBM-D    TREND-D  10  3           1.494  0.151        0.558                                           NaN
+42     2    LGBM-D       CLIM  10  3           0.856  0.054        0.521                                           NaN
+43     2    LGBM-D  RIDGE-ALL   7  3          -8.231 -0.117        0.455                                           NaN
+44     2    LGBM-D      HFM-X  10  3          38.855  1.601        0.928                                           NaN
+45     2    LGBM-D   SEAS-LLM  10  3          22.646  1.341        0.894                                           NaN
+46     2    LGBM-D         V2  10  3          20.714  1.585        0.926                                           NaN
+47     2    LGBM-D         V4  10  3          20.714  1.585        0.926                                           NaN
+72     2  LGBM-D-S    PERSIST  10  3          20.332  1.545        0.922                                           NaN
+73     2  LGBM-D-S    TREND-D  10  3           1.113  0.109        0.542                                           NaN
+74     2  LGBM-D-S       CLIM  10  3           0.475  0.030        0.511                                           NaN
+75     2  LGBM-D-S  RIDGE-ALL   7  3          -8.776 -0.124        0.453                                           NaN
+76     2  LGBM-D-S      HFM-X  10  3          38.473  1.567        0.924                                           NaN
+77     2  LGBM-D-S   SEAS-LLM  10  3          22.264  1.315        0.890                                           NaN
+78     2  LGBM-D-S         V2  10  3          20.332  1.545        0.922                                           NaN
+79     2  LGBM-D-S         V4  10  3          20.332  1.545        0.922                                           NaN
+{
+ "status": "DEVELOPMENT ONLY: every row was seen before v6; sealed tier (future quarters) has 0 scorable rows",
+ "preregistration_sha256_lf": "f82237d6558dd660db53b4754eac3bde8d428138e17b352ca68255226e961309",
+ "data_sha256": "936d0c26c02c784d9db4521ecd30f2d5c632efaa1d2d388c4dd9278e09f19ec2",
+ "features_sha256": "b3957bb82c37bb0000e3894a48cdb4a070290f1c69344e4dc511e666b5d98b6a",
+ "selected_by_issue_counts": {
+  "PERSIST": 22
+ },
+ "served_model": "PERSIST",
+ "served_selection_log": [
+  {
+   "issue": "2026-10-01",
+   "challenger": "LL-K",
+   "incumbent": "PERSIST",
+   "inner_quarters": 14,
+   "replaces": false,
+   "diff_within": 0.0535714285714286,
+   "ci_lo": -0.05357142857142857,
+   "ci_hi": 0.17857142857142858
+  },
+  {
+   "issue": "2026-10-01",
+   "challenger": "LGBM-D",
+   "incumbent": "PERSIST",
+   "inner_quarters": 14,
+   "replaces": false,
+   "diff_within": -0.07142857142857145,
+   "ci_lo": -0.17857142857142858,
+   "ci_hi": 0.017857142857142856
+  },
+  {
+   "issue": "2026-10-01",
+   "challenger": "LGBM-D-S",
+   "incumbent": "PERSIST",
+   "inner_quarters": 14,
+   "replaces": false,
+   "diff_within": -0.0892857142857143,
+   "ci_lo": -0.19642857142857142,
+   "ci_hi": 0.0
+  }
+ ],
+ "lgbm_fits": {
+  "total": 84,
+  "with_exogenous_feature": 34,
+  "no_model_fallback": 54,
+  "w_counts": {
+   "0.0": 65,
+   "1.0": 17,
+   "0.75": 1,
+   "0.5": 1
+  }
+ },
+ "claim_75_frozen_development": {
+  "verdict": "DEVELOPMENT_ONLY",
+  "share": 0.4,
+  "ci95_lo": 0.225,
+  "ci95_hi": 0.625,
+  "one_sided95_lo": 0.25,
+  "one_sided95_hi": 0.6,
+  "n": 40,
+  "n_quarters": 10
+ },
+ "claim_75_proposed_development": {
+  "verdict": "DEVELOPMENT_ONLY",
+  "share": 0.5,
+  "ci95_lo": 0.325,
+  "ci95_hi": 0.675,
+  "one_sided95_lo": 0.325,
+  "one_sided95_hi": 0.65,
+  "n": 40,
+  "n_quarters": 10
+ },
+ "claim_75_lgbm_d_frozen_development": {
+  "verdict": "DEVELOPMENT_ONLY",
+  "share": 0.3,
+  "ci95_lo": 0.15,
+  "ci95_hi": 0.425,
+  "one_sided95_lo": 0.15,
+  "one_sided95_hi": 0.425,
+  "n": 40,
+  "n_quarters": 10
+ },
+ "claim_75_lgbm_d_s_frozen_development": {
+  "verdict": "DEVELOPMENT_ONLY",
+  "share": 0.275,
+  "ci95_lo": 0.125,
+  "ci95_hi": 0.4,
+  "one_sided95_lo": 0.15,
+  "one_sided95_hi": 0.4,
+  "n": 40,
+  "n_quarters": 10
+ },
+ "beats_all_development": {
+  "lead1_frozen": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.3978,
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.2781,
+    "HFM-X": 0.8183,
+    "SEAS-LLM": 0.0003,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.0,
+    "SEAS-LLM": 0.0021,
+    "RIDGE-ALL": 1.0,
+    "TREND-D": 1.0,
+    "HFM-X": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.06818181818181818,
+    "CLIM": 0.2727272727272727,
+    "RIDGE-ALL": 0.055555555555555525,
+    "HFM-X": -0.06818181818181812,
+    "SEAS-LLM": 0.09090909090909094,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead1_amended_proposed": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.3135,
+    "CLIM": 0.0829,
+    "RIDGE-ALL": 0.0882,
+    "HFM-X": 0.9284,
+    "SEAS-LLM": 0.9263,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.6632,
+    "RIDGE-ALL": 0.6632,
+    "TREND-D": 1.0,
+    "SEAS-LLM": 1.0,
+    "HFM-X": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.045454545454545414,
+    "CLIM": 0.15909090909090912,
+    "RIDGE-ALL": 0.19444444444444448,
+    "HFM-X": -0.06818181818181812,
+    "SEAS-LLM": -0.045454545454545414,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead2_frozen": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.1352,
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.0638,
+    "HFM-X": 0.5865,
+    "SEAS-LLM": 0.7652,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.4466,
+    "TREND-D": 0.8111999999999999,
+    "HFM-X": 1.0,
+    "SEAS-LLM": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.10000000000000003,
+    "CLIM": 0.25,
+    "RIDGE-ALL": 0.07142857142857145,
+    "HFM-X": -0.09999999999999998,
+    "SEAS-LLM": -0.04999999999999999,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead2_amended_proposed": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.2894,
+    "CLIM": 0.0284,
+    "RIDGE-ALL": 0.2069,
+    "HFM-X": 0.9379,
+    "SEAS-LLM": 0.7938,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.2272,
+    "RIDGE-ALL": 1.0,
+    "TREND-D": 1.0,
+    "SEAS-LLM": 1.0,
+    "HFM-X": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.07500000000000001,
+    "CLIM": 0.15000000000000002,
+    "RIDGE-ALL": 0.14285714285714285,
+    "HFM-X": -0.17500000000000004,
+    "SEAS-LLM": -0.07499999999999996,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead3_frozen": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.9525,
+    "CLIM": 0.0281,
+    "RIDGE-ALL": 0.0615,
+    "HFM-X": 0.8405,
+    "SEAS-LLM": 0.5003,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.2248,
+    "RIDGE-ALL": 0.4305,
+    "SEAS-LLM": 1.0,
+    "HFM-X": 1.0,
+    "TREND-D": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": -0.05555555555555558,
+    "CLIM": 0.19444444444444445,
+    "RIDGE-ALL": 0.20833333333333331,
+    "HFM-X": -0.1388888888888889,
+    "SEAS-LLM": 0.02777777777777779,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead3_amended_proposed": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.0788,
+    "CLIM": 0.0037,
+    "RIDGE-ALL": 0.0615,
+    "HFM-X": 0.7963,
+    "SEAS-LLM": 0.9065,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.0296,
+    "RIDGE-ALL": 0.4305,
+    "TREND-D": 0.4728,
+    "HFM-X": 1.0,
+    "SEAS-LLM": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.05555555555555558,
+    "CLIM": 0.2777777777777778,
+    "RIDGE-ALL": 0.24999999999999994,
+    "HFM-X": -0.02777777777777779,
+    "SEAS-LLM": -0.05555555555555558,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead4_frozen": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.646,
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.0,
+    "HFM-X": 0.2505,
+    "SEAS-LLM": 0.6518,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.0,
+    "HFM-X": 1.0,
+    "TREND-D": 1.0,
+    "SEAS-LLM": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": -0.03125,
+    "CLIM": 0.25,
+    "RIDGE-ALL": 0.35,
+    "HFM-X": 0.0625,
+    "SEAS-LLM": -0.0625,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  },
+  "lead4_amended_proposed": {
+   "verdict": "NO",
+   "p": {
+    "PERSIST": 1.0,
+    "TREND-D": 0.395,
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.0,
+    "HFM-X": 0.643,
+    "SEAS-LLM": 0.0947,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "p_holm": {
+    "CLIM": 0.0,
+    "RIDGE-ALL": 0.0,
+    "SEAS-LLM": 0.5682,
+    "TREND-D": 1.0,
+    "HFM-X": 1.0,
+    "PERSIST": 1.0,
+    "V2": 1.0,
+    "V4": 1.0
+   },
+   "diff_within": {
+    "PERSIST": 0.0,
+    "TREND-D": 0.03125,
+    "CLIM": 0.40625,
+    "RIDGE-ALL": 0.55,
+    "HFM-X": -0.03125,
+    "SEAS-LLM": 0.0625,
+    "V2": 0.0,
+    "V4": 0.0
+   }
+  }
+ },
+ "beats_all_development_lgbm": {
+  "LGBM-D": {
+   "lead1_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.8491,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.5589,
+     "HFM-X": 1.0,
+     "SEAS-LLM": 0.7534,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 1.0,
+     "SEAS-LLM": 1.0,
+     "TREND-D": 1.0,
+     "PERSIST": 1.0,
+     "HFM-X": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.11363636363636365,
+     "TREND-D": -0.04545454545454547,
+     "CLIM": 0.1590909090909091,
+     "RIDGE-ALL": -0.08333333333333331,
+     "HFM-X": -0.18181818181818177,
+     "SEAS-LLM": -0.022727272727272707,
+     "V2": -0.11363636363636365,
+     "V4": -0.11363636363636365
+    }
+   },
+   "lead1_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 0.7837,
+     "TREND-D": 0.5298,
+     "CLIM": 0.2022,
+     "RIDGE-ALL": 0.1563,
+     "HFM-X": 0.9709,
+     "SEAS-LLM": 0.9156,
+     "V2": 0.7837,
+     "V4": 0.7837
+    },
+    "p_holm": {
+     "RIDGE-ALL": 1.0,
+     "CLIM": 1.0,
+     "TREND-D": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.022727272727272707,
+     "TREND-D": 0.022727272727272707,
+     "CLIM": 0.1363636363636364,
+     "RIDGE-ALL": 0.16666666666666669,
+     "HFM-X": -0.09090909090909083,
+     "SEAS-LLM": -0.06818181818181812,
+     "V2": -0.022727272727272707,
+     "V4": -0.022727272727272707
+    }
+   },
+   "lead2_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.8519,
+     "CLIM": 0.0009,
+     "RIDGE-ALL": 0.9317,
+     "HFM-X": 0.9854,
+     "SEAS-LLM": 0.9377,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0072,
+     "TREND-D": 1.0,
+     "RIDGE-ALL": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.10000000000000003,
+     "TREND-D": 0.0,
+     "CLIM": 0.15,
+     "RIDGE-ALL": -0.0714285714285714,
+     "HFM-X": -0.2,
+     "SEAS-LLM": -0.15000000000000002,
+     "V2": -0.10000000000000003,
+     "V4": -0.10000000000000003
+    }
+   },
+   "lead2_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.8145,
+     "CLIM": 0.1786,
+     "RIDGE-ALL": 0.6692,
+     "HFM-X": 1.0,
+     "SEAS-LLM": 0.9587,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 1.0,
+     "RIDGE-ALL": 1.0,
+     "TREND-D": 1.0,
+     "SEAS-LLM": 1.0,
+     "PERSIST": 1.0,
+     "HFM-X": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.09999999999999998,
+     "TREND-D": -0.024999999999999967,
+     "CLIM": 0.050000000000000044,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": -0.275,
+     "SEAS-LLM": -0.17499999999999993,
+     "V2": -0.09999999999999998,
+     "V4": -0.09999999999999998
+    }
+   },
+   "lead3_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 1.0,
+     "CLIM": 0.0373,
+     "RIDGE-ALL": 0.5621,
+     "HFM-X": 0.9125,
+     "SEAS-LLM": 0.7316,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.2984,
+     "RIDGE-ALL": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "TREND-D": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.055555555555555525,
+     "TREND-D": -0.1111111111111111,
+     "CLIM": 0.13888888888888892,
+     "RIDGE-ALL": 0.125,
+     "HFM-X": -0.19444444444444442,
+     "SEAS-LLM": -0.027777777777777735,
+     "V2": -0.055555555555555525,
+     "V4": -0.055555555555555525
+    }
+   },
+   "lead3_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.7354,
+     "CLIM": 0.0037,
+     "RIDGE-ALL": 0.5621,
+     "HFM-X": 0.8232,
+     "SEAS-LLM": 0.9415,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0296,
+     "RIDGE-ALL": 1.0,
+     "TREND-D": 1.0,
+     "HFM-X": 1.0,
+     "SEAS-LLM": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.05555555555555558,
+     "TREND-D": 0.0,
+     "CLIM": 0.2222222222222222,
+     "RIDGE-ALL": 0.16666666666666669,
+     "HFM-X": -0.08333333333333337,
+     "SEAS-LLM": -0.11111111111111116,
+     "V2": -0.05555555555555558,
+     "V4": -0.05555555555555558
+    }
+   },
+   "lead4_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 0.6912,
+     "TREND-D": 0.5477,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 0.2235,
+     "SEAS-LLM": 0.5858,
+     "V2": 0.6912,
+     "V4": 0.6912
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 1.0,
+     "TREND-D": 1.0,
+     "SEAS-LLM": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": 0.0625,
+     "TREND-D": 0.03125,
+     "CLIM": 0.3125,
+     "RIDGE-ALL": 0.44999999999999996,
+     "HFM-X": 0.125,
+     "SEAS-LLM": 0.0,
+     "V2": 0.0625,
+     "V4": 0.0625
+    }
+   },
+   "lead4_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.395,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 0.643,
+     "SEAS-LLM": 0.0947,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "SEAS-LLM": 0.5682,
+     "TREND-D": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": 0.0,
+     "TREND-D": 0.03125,
+     "CLIM": 0.40625,
+     "RIDGE-ALL": 0.55,
+     "HFM-X": -0.03125,
+     "SEAS-LLM": 0.0625,
+     "V2": 0.0,
+     "V4": 0.0
+    }
+   }
+  },
+  "LGBM-D-S": {
+   "lead1_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.8085,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.5408,
+     "HFM-X": 1.0,
+     "SEAS-LLM": 0.7247,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 1.0,
+     "SEAS-LLM": 1.0,
+     "TREND-D": 1.0,
+     "PERSIST": 1.0,
+     "HFM-X": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.09090909090909094,
+     "TREND-D": -0.022727272727272763,
+     "CLIM": 0.1818181818181818,
+     "RIDGE-ALL": -0.05555555555555558,
+     "HFM-X": -0.15909090909090906,
+     "SEAS-LLM": 0.0,
+     "V2": -0.09090909090909094,
+     "V4": -0.09090909090909094
+    }
+   },
+   "lead1_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 0.7837,
+     "TREND-D": 0.5298,
+     "CLIM": 0.2022,
+     "RIDGE-ALL": 0.1563,
+     "HFM-X": 0.9709,
+     "SEAS-LLM": 0.9156,
+     "V2": 0.7837,
+     "V4": 0.7837
+    },
+    "p_holm": {
+     "RIDGE-ALL": 1.0,
+     "CLIM": 1.0,
+     "TREND-D": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.022727272727272707,
+     "TREND-D": 0.022727272727272707,
+     "CLIM": 0.1363636363636364,
+     "RIDGE-ALL": 0.16666666666666669,
+     "HFM-X": -0.09090909090909083,
+     "SEAS-LLM": -0.06818181818181812,
+     "V2": -0.022727272727272707,
+     "V4": -0.022727272727272707
+    }
+   },
+   "lead2_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.9695,
+     "CLIM": 0.0184,
+     "RIDGE-ALL": 0.9923,
+     "HFM-X": 0.9984,
+     "SEAS-LLM": 0.9455,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.1472,
+     "SEAS-LLM": 1.0,
+     "TREND-D": 1.0,
+     "RIDGE-ALL": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.125,
+     "TREND-D": -0.024999999999999967,
+     "CLIM": 0.12500000000000003,
+     "RIDGE-ALL": -0.10714285714285715,
+     "HFM-X": -0.22499999999999998,
+     "SEAS-LLM": -0.175,
+     "V2": -0.125,
+     "V4": -0.125
+    }
+   },
+   "lead2_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.6986,
+     "CLIM": 0.1389,
+     "RIDGE-ALL": 0.5399,
+     "HFM-X": 0.9931,
+     "SEAS-LLM": 0.9548,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 1.0,
+     "RIDGE-ALL": 1.0,
+     "TREND-D": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.07500000000000001,
+     "TREND-D": 0.0,
+     "CLIM": 0.07500000000000001,
+     "RIDGE-ALL": 0.035714285714285754,
+     "HFM-X": -0.25000000000000006,
+     "SEAS-LLM": -0.14999999999999997,
+     "V2": -0.07500000000000001,
+     "V4": -0.07500000000000001
+    }
+   },
+   "lead3_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 1.0,
+     "CLIM": 0.0373,
+     "RIDGE-ALL": 0.5621,
+     "HFM-X": 0.9125,
+     "SEAS-LLM": 0.7316,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.2984,
+     "RIDGE-ALL": 1.0,
+     "SEAS-LLM": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "TREND-D": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.055555555555555525,
+     "TREND-D": -0.1111111111111111,
+     "CLIM": 0.13888888888888892,
+     "RIDGE-ALL": 0.125,
+     "HFM-X": -0.19444444444444442,
+     "SEAS-LLM": -0.027777777777777735,
+     "V2": -0.055555555555555525,
+     "V4": -0.055555555555555525
+    }
+   },
+   "lead3_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.7354,
+     "CLIM": 0.0037,
+     "RIDGE-ALL": 0.5621,
+     "HFM-X": 0.8232,
+     "SEAS-LLM": 0.9415,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0296,
+     "RIDGE-ALL": 1.0,
+     "TREND-D": 1.0,
+     "HFM-X": 1.0,
+     "SEAS-LLM": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": -0.05555555555555558,
+     "TREND-D": 0.0,
+     "CLIM": 0.2222222222222222,
+     "RIDGE-ALL": 0.16666666666666669,
+     "HFM-X": -0.08333333333333337,
+     "SEAS-LLM": -0.11111111111111116,
+     "V2": -0.05555555555555558,
+     "V4": -0.05555555555555558
+    }
+   },
+   "lead4_frozen": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 0.6912,
+     "TREND-D": 0.5477,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 0.2235,
+     "SEAS-LLM": 0.5858,
+     "V2": 0.6912,
+     "V4": 0.6912
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 1.0,
+     "TREND-D": 1.0,
+     "SEAS-LLM": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": 0.0625,
+     "TREND-D": 0.03125,
+     "CLIM": 0.3125,
+     "RIDGE-ALL": 0.44999999999999996,
+     "HFM-X": 0.125,
+     "SEAS-LLM": 0.0,
+     "V2": 0.0625,
+     "V4": 0.0625
+    }
+   },
+   "lead4_amended_proposed": {
+    "verdict": "NO",
+    "p": {
+     "PERSIST": 1.0,
+     "TREND-D": 0.395,
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "HFM-X": 0.643,
+     "SEAS-LLM": 0.0947,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "p_holm": {
+     "CLIM": 0.0,
+     "RIDGE-ALL": 0.0,
+     "SEAS-LLM": 0.5682,
+     "TREND-D": 1.0,
+     "HFM-X": 1.0,
+     "PERSIST": 1.0,
+     "V2": 1.0,
+     "V4": 1.0
+    },
+    "diff_within": {
+     "PERSIST": 0.0,
+     "TREND-D": 0.03125,
+     "CLIM": 0.40625,
+     "RIDGE-ALL": 0.55,
+     "HFM-X": -0.03125,
+     "SEAS-LLM": 0.0625,
+     "V2": 0.0,
+     "V4": 0.0
+    }
+   }
+  }
+ },
+ "claim_75_sealed": {
+  "frozen": {
+   "verdict": "NOT_YET_TESTABLE",
+   "n": 0,
+   "n_quarters": 0
+  },
+  "proposed": {
+   "verdict": "NOT_YET_TESTABLE",
+   "n": 0,
+   "n_quarters": 0
+  }
+ },
+ "beats_all_sealed": {
+  "verdict": "NOT_YET_TESTABLE",
+  "p": {}
+ },
+ "development_label_by_lead": {
+  "1": "NOT_RELIABLE",
+  "2": "NOT_RELIABLE",
+  "3": "NOT_RELIABLE",
+  "4": "NOT_RELIABLE"
+ },
+ "served_reliability_status_by_lead": {
+  "1": "NOT_RELIABLE",
+  "2": "NOT_RELIABLE",
+  "3": "NOT_RELIABLE",
+  "4": "NOT_RELIABLE"
+ },
+ "window_2022_selected": {
+  "PERSIST": 22
+ },
+ "loao_lead2": {
+  "LGBM-D_loao": 0.425,
+  "LGBM-D-S_loao": 0.4,
+  "LGBM-D_pooled": 0.3,
+  "LGBM-D-S_pooled": 0.275,
+  "PERSIST": 0.4,
+  "by_area": {
+   "balance_luzon": {
+    "LGBM-D_loao": 0.3,
+    "LGBM-D-S_loao": 0.3,
+    "LGBM-D_pooled": 0.1,
+    "LGBM-D-S_pooled": 0.1,
+    "PERSIST": 0.3
+   },
+   "metro_manila": {
+    "LGBM-D_loao": 0.8,
+    "LGBM-D-S_loao": 0.7,
+    "LGBM-D_pooled": 0.5,
+    "LGBM-D-S_pooled": 0.5,
+    "PERSIST": 0.7
+   },
+   "mindanao": {
+    "LGBM-D_loao": 0.4,
+    "LGBM-D-S_loao": 0.5,
+    "LGBM-D_pooled": 0.4,
+    "LGBM-D-S_pooled": 0.4,
+    "PERSIST": 0.5
+   },
+   "visayas": {
+    "LGBM-D_loao": 0.2,
+    "LGBM-D-S_loao": 0.1,
+    "LGBM-D_pooled": 0.2,
+    "LGBM-D-S_pooled": 0.1,
+    "PERSIST": 0.1
+   }
+  }
+ },
+ "leakage_controls": {
+  "shuffle_target_lead2_within": {
+   "LGBM-D": 0.4,
+   "LGBM-D-S": 0.4,
+   "LL-K": 0.35,
+   "PERSIST": 0.275,
+   "V6": 0.275
+  },
+  "shuffle_selected": {
+   "PERSIST": 21,
+   "LGBM-D": 1
+  },
+  "future_shift_persist_lead2_within": 1.0
+ }
+}

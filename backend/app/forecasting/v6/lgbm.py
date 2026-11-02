@@ -36,7 +36,8 @@ class LgbmFit:
     best_iter: int = 0
     w: float = 0.0
     n_train: int = 0
-    train_mae: float = float("nan")
+    train_mae: float = float("nan")      # in-sample MAE of the change, w = 1
+    train_mae_s: float = float("nan")    # in-sample MAE of the change, learned w
 
 
 def design(df: pd.DataFrame) -> pd.DataFrame:
@@ -76,7 +77,9 @@ def fit(train: pd.DataFrame) -> LgbmFit:
     out.w = min(maes)[1]                                   # ties -> smaller w (tuple order)
     full = lgb.train(PARAMS, lgb.Dataset(t[out.features].astype(float), t.change.astype(float)), num_boost_round=best)
     out.model, out.best_iter = full.model_to_string(), best
-    out.train_mae = float(np.mean(np.abs(full.predict(t[out.features].astype(float)) - t.change.to_numpy())))
+    ptr = full.predict(t[out.features].astype(float))
+    out.train_mae = float(np.mean(np.abs(ptr - t.change.to_numpy())))
+    out.train_mae_s = float(np.mean(np.abs(out.w * ptr - t.change.to_numpy())))
     return out
 
 
