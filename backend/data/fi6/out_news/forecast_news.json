@@ -1,0 +1,130 @@
+{
+ "issued_utc": "2026-11-02T16:09:35+00:00",
+ "forecasts": [
+  {
+   "lead": 1,
+   "issue_quarter": "2026-Q3",
+   "target_quarter": "2026-Q4",
+   "p_high": 0.1411,
+   "class": "LOW",
+   "forecast_hunger_pct": 16.15,
+   "threshold_pct": 21.36,
+   "news_helps_at_this_lead": true,
+   "explanation": "Food prices and household hardship pushed the hunger forecast for 2026-Q4 up, while the latest hunger survey reading and weather conditions pulled it down. These are the factors the model leaned on, not proven causes.",
+   "news_contributions_pp": {
+    "na_market": 0.0,
+    "na_climate": -0.071,
+    "na_employment": -0.055,
+    "na_remittance": -0.075,
+    "na_poverty": -0.049,
+    "na_climate_damage": 0.065,
+    "na_displaced": 1.05
+   },
+   "news_features_live": {
+    "na_market": -0.889,
+    "na_climate": 0.438,
+    "na_employment": -0.467,
+    "na_remittance": -1.059,
+    "na_poverty": 0.243,
+    "na_climate_damage": -0.507,
+    "na_displaced": -0.297
+   },
+   "n_train": 97,
+   "config": "small"
+  },
+  {
+   "lead": 2,
+   "issue_quarter": "2026-Q3",
+   "target_quarter": "2027-Q1",
+   "p_high": 0.3178,
+   "class": "LOW",
+   "forecast_hunger_pct": 19.19,
+   "threshold_pct": 21.75,
+   "news_helps_at_this_lead": false,
+   "explanation": "Unemployment and the latest hunger survey reading pushed the hunger forecast for 2027-Q1 up, while food prices pulled it down. These are the factors the model leaned on, not proven causes.",
+   "news_contributions_pp": {
+    "na_market": 0.0,
+    "na_climate": 0.098,
+    "na_employment": 0.0,
+    "na_remittance": 0.0,
+    "na_poverty": 0.0,
+    "na_climate_damage": 0.0,
+    "na_displaced": 0.305
+   },
+   "news_features_live": {
+    "na_market": -0.889,
+    "na_climate": 0.438,
+    "na_employment": -0.467,
+    "na_remittance": -1.059,
+    "na_poverty": 0.243,
+    "na_climate_damage": -0.507,
+    "na_displaced": -0.297
+   },
+   "n_train": 97,
+   "config": "stumps"
+  },
+  {
+   "lead": 3,
+   "issue_quarter": "2026-Q3",
+   "target_quarter": "2027-Q2",
+   "p_high": 0.3405,
+   "class": "LOW",
+   "forecast_hunger_pct": 19.37,
+   "threshold_pct": 21.75,
+   "news_helps_at_this_lead": false,
+   "explanation": "OFW remittances and unemployment pushed the hunger forecast for 2027-Q2 up, while weather conditions pulled it down. These are the factors the model leaned on, not proven causes.",
+   "news_contributions_pp": {
+    "na_market": 0.0,
+    "na_climate": -0.507,
+    "na_employment": 0.0,
+    "na_remittance": 0.0,
+    "na_poverty": -0.081,
+    "na_climate_damage": 0.061,
+    "na_displaced": 0.452
+   },
+   "news_features_live": {
+    "na_market": -0.889,
+    "na_climate": 0.438,
+    "na_employment": -0.467,
+    "na_remittance": -1.059,
+    "na_poverty": 0.243,
+    "na_climate_damage": -0.507,
+    "na_displaced": -0.297
+   },
+   "n_train": 97,
+   "config": "stumps"
+  },
+  {
+   "lead": 4,
+   "issue_quarter": "2026-Q3",
+   "target_quarter": "2027-Q3",
+   "p_high": 0.2101,
+   "class": "LOW",
+   "forecast_hunger_pct": 17.77,
+   "threshold_pct": 22.01,
+   "news_helps_at_this_lead": false,
+   "explanation": "Weather conditions and unemployment pushed the hunger forecast for 2027-Q3 up, while OFW remittances and the latest hunger survey reading pulled it down. These are the factors the model leaned on, not proven causes.",
+   "news_contributions_pp": {
+    "na_market": -0.093,
+    "na_climate": 0.223,
+    "na_employment": 0.005,
+    "na_remittance": -1.798,
+    "na_poverty": 0.0,
+    "na_climate_damage": 0.127,
+    "na_displaced": -0.114
+   },
+   "news_features_live": {
+    "na_market": -0.889,
+    "na_climate": 0.438,
+    "na_employment": -0.467,
+    "na_remittance": -1.059,
+    "na_poverty": 0.243,
+    "na_climate_damage": -0.507,
+    "na_displaced": -0.297
+   },
+   "n_train": 97,
+   "config": "small"
+  }
+ ],
+ "model": "LightGBM change model, government + archive news (FI6-N)"
+}
