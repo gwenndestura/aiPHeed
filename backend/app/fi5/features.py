@@ -123,8 +123,11 @@ class FeatureBuilder:
         return f.rename(columns=keep)[["period_end", "available_from", *keep.values()]].sort_values("period_end")
 
     # ------------------------------------------------------------------ one row
-    def row(self, issue_qi: int, target_qi: int) -> dict:
-        d = q_end(issue_qi)
+    def row(self, issue_qi: int, target_qi: int, issue_date: pd.Timestamp | None = None) -> dict:
+        """issue_date defaults to the last day of the issue quarter; FI7 passes an earlier date inside the quarter
+        (release-aware operational issue), in which case quarterly news/GDELT come from the last complete quarter."""
+        d = q_end(issue_qi) if issue_date is None else pd.Timestamp(issue_date)
+        q_ref = q_end(issue_qi) if d >= q_end(issue_qi) else q_end(issue_qi - 1)
         r: dict = {"issue_quarter": f"{issue_qi // 4}-Q{issue_qi % 4 + 1}", "issue_date": d.date().isoformat(),
                    "target_quarter": f"{target_qi // 4}-Q{target_qi % 4 + 1}", "lead": target_qi - issue_qi}
         # outcome block -------------------------------------------------------------
@@ -161,7 +164,7 @@ class FeatureBuilder:
                 r["rain_anom_3m"] = float((cur_p - np.mean(hist_p)) / np.std(hist_p, ddof=1))
                 r["tmax_anom_3m"] = float(cur_t - np.mean(hist_t))
         tc = self.tc[self.tc["t"] <= d]
-        r["tc_exposure_q"] = int((tc["period_end"] == d).sum())
+        r["tc_exposure_q"] = int((tc["period_end"] == q_end(issue_qi)).sum())
         r["tc_exposure_4q"] = int((tc["t"] > d - pd.DateOffset(years=1)).sum())
         o = _asof(self.oni, d)
         if len(o):
@@ -180,11 +183,11 @@ class FeatureBuilder:
             r["poverty_inc"] = v["poverty_inc"].iloc[-1]
         # news inside the domains (z vs the series' own earlier quarters) ---------------
         g = _asof(self.gdelt, d)
-        if len(g) and g["period_end"].iloc[-1] == d:
+        if len(g) and g["period_end"].iloc[-1] == q_ref:
             for k in ["gdelt_shortage", "gdelt_agri_supply", "gdelt_jobs_income", "gdelt_assistance"]:
                 r[k] = _z_last(g[k])
         f = _asof(self.fssi, d) if len(self.fssi) else self.fssi
-        if len(f) and f["period_end"].iloc[-1] == d:
+        if len(f) and f["period_end"].iloc[-1] == q_ref:
             for k in [f"fssi_{x}" for x in DOMAINS] + [f"topic_{x}" for x in DOMAINS] + ["hunger_news_share"]:
                 r[k] = _z_last(f[k])
         return r

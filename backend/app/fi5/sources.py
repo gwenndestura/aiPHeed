@@ -94,7 +94,7 @@ def acquire() -> pd.DataFrame:
         for p in IBTRACS:
             if not p.exists():
                 continue
-            d = pd.read_csv(p, skiprows=[1], usecols=["SID", "SEASON", "BASIN", "NAME", "ISO_TIME", "LAT", "LON"],
+            d = pd.read_csv(p, skiprows=[1], usecols=["SID", "SEASON", "BASIN", "NAME", "ISO_TIME", "LAT", "LON", "USA_WIND", "WMO_WIND"],
                             low_memory=False, keep_default_na=False)
             d = d[d["BASIN"].astype(str).str.strip() == "WP"].copy()
             d["LAT"], d["LON"] = pd.to_numeric(d["LAT"], errors="coerce"), pd.to_numeric(d["LON"], errors="coerce")

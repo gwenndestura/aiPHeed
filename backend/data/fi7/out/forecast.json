@@ -1,0 +1,204 @@
+{
+ "version": "fi7-1.0",
+ "issued_utc": "2026-11-02T16:42:51+00:00",
+ "as_of": "2026-11-03",
+ "current_quarter": "2026-Q4",
+ "forecasts": [
+  {
+   "h": 0,
+   "meaning": "current quarter (nowcast)",
+   "issue_date": "2026-11-03",
+   "current_quarter": "2026-Q4",
+   "target_quarter": "2026-Q4",
+   "served_model": "lightgbm",
+   "served_reliable": false,
+   "p_high": 0.3622,
+   "class": "HIGH",
+   "status": "indicative only: no method passed the reliability rules at this lead",
+   "robust_to_alternation_check": false,
+   "latest_hunger_pct": 23.6,
+   "latest_reading_quarter": "2026-Q3",
+   "significance_line_pct": 19.82,
+   "plain_reading": "The latest survey reading (23.6%) is above the significantly-above-normal line (19.8%).",
+   "drivers_explanation": "Household hardship and food prices pointed to more hunger in 2026-Q4, while the latest hunger survey reading pointed to less. These are the conditions the model weighed, not proven causes.",
+   "domain_contributions_pp": {
+    "outcome": -7.838,
+    "poverty": 1.201,
+    "market": 0.51,
+    "climate": 0.456,
+    "remittance": 0.104,
+    "employment": 0.009
+   },
+   "all_models": {
+    "damped": {
+     "p_high": 0.4105,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.14647086638289766
+    },
+    "persistence": {
+     "p_high": 0.7515,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.18673058754915664
+    },
+    "lightgbm": {
+     "p_high": 0.3622,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.1619197412146357
+    }
+   }
+  },
+  {
+   "h": 1,
+   "meaning": "NEXT QUARTER (operational outlook)",
+   "issue_date": "2026-11-03",
+   "current_quarter": "2026-Q4",
+   "target_quarter": "2027-Q1",
+   "served_model": "persistence",
+   "served_reliable": true,
+   "p_high": 0.7384,
+   "class": "HIGH",
+   "status": "provisional: passes the reliability rules on the full test set but not the survey-alternation sensitivity check",
+   "robust_to_alternation_check": false,
+   "latest_hunger_pct": 23.6,
+   "latest_reading_quarter": "2026-Q3",
+   "significance_line_pct": 20.21,
+   "plain_reading": "The latest survey reading (23.6%) is above the significantly-above-normal line (20.2%).",
+   "drivers_explanation": "Food prices and unemployment pointed to more hunger in 2027-Q1, while the latest hunger survey reading and weather conditions pointed to less. These are the conditions the model weighed, not proven causes.",
+   "domain_contributions_pp": {
+    "outcome": -4.48,
+    "market": 1.365,
+    "employment": 0.423,
+    "climate": -0.379,
+    "poverty": 0.216,
+    "remittance": 0.0
+   },
+   "all_models": {
+    "damped": {
+     "p_high": 0.4404,
+     "class": "HIGH",
+     "reliable": true,
+     "brier": 0.11787340670824138
+    },
+    "persistence": {
+     "p_high": 0.7384,
+     "class": "HIGH",
+     "reliable": true,
+     "brier": 0.11478688249331595
+    },
+    "lightgbm": {
+     "p_high": 0.5604,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.12257738362070078
+    }
+   }
+  },
+  {
+   "h": 2,
+   "meaning": "two quarters ahead",
+   "issue_date": "2026-11-03",
+   "current_quarter": "2026-Q4",
+   "target_quarter": "2027-Q2",
+   "served_model": "lightgbm",
+   "served_reliable": false,
+   "p_high": 0.2996,
+   "class": "HIGH",
+   "status": "indicative only: no method passed the reliability rules at this lead",
+   "robust_to_alternation_check": false,
+   "latest_hunger_pct": 23.6,
+   "latest_reading_quarter": "2026-Q3",
+   "significance_line_pct": 20.21,
+   "plain_reading": "The latest survey reading (23.6%) is above the significantly-above-normal line (20.2%).",
+   "drivers_explanation": "Household hardship and food prices pointed to more hunger in 2027-Q2, while the latest hunger survey reading and weather conditions pointed to less. These are the conditions the model weighed, not proven causes.",
+   "domain_contributions_pp": {
+    "outcome": -7.5,
+    "poverty": 0.863,
+    "climate": -0.668,
+    "market": 0.599,
+    "remittance": 0.128,
+    "employment": 0.067
+   },
+   "all_models": {
+    "damped": {
+     "p_high": 0.3507,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.15110482890897384
+    },
+    "persistence": {
+     "p_high": 0.7157,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.2001691449060873
+    },
+    "lightgbm": {
+     "p_high": 0.2996,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.1627325672006312
+    }
+   }
+  },
+  {
+   "h": 3,
+   "meaning": "three quarters ahead",
+   "issue_date": "2026-11-03",
+   "current_quarter": "2026-Q4",
+   "target_quarter": "2027-Q3",
+   "served_model": "lightgbm",
+   "served_reliable": false,
+   "p_high": 0.4042,
+   "class": "HIGH",
+   "status": "indicative only: no method passed the reliability rules at this lead",
+   "robust_to_alternation_check": false,
+   "latest_hunger_pct": 23.6,
+   "latest_reading_quarter": "2026-Q3",
+   "significance_line_pct": 20.48,
+   "plain_reading": "The latest survey reading (23.6%) is above the significantly-above-normal line (20.5%).",
+   "drivers_explanation": "Household hardship and food prices pointed to more hunger in 2027-Q3, while the latest hunger survey reading pointed to less. These are the conditions the model weighed, not proven causes.",
+   "domain_contributions_pp": {
+    "outcome": -6.415,
+    "poverty": 0.873,
+    "market": 0.734,
+    "remittance": -0.233,
+    "climate": 0.194,
+    "employment": 0.0
+   },
+   "all_models": {
+    "damped": {
+     "p_high": 0.3797,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.13811476799453093
+    },
+    "persistence": {
+     "p_high": 0.7046,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.16316524911685149
+    },
+    "lightgbm": {
+     "p_high": 0.4042,
+     "class": "HIGH",
+     "reliable": false,
+     "brier": 0.1568355280318335
+    }
+   }
+  }
+ ],
+ "furthest_reliable_lead_by_model": {
+  "LightGBM (proposed, FI7)": null,
+  "Damped persistence (statistical)": 1,
+  "Naive persistence (latest reading)": 1,
+  "Government + latest reading (no news)": null,
+  "PSA/government-only (no SWS, no news)": null,
+  "NLP/news-only (no SWS)": null,
+  "Logistic regression": null,
+  "Always LOW (reference)": null
+ },
+ "seal_sha256": "2df6c79a72fb070e08d28eeb3720ce9883d1458597a56db1237401a45095ce1c",
+ "what_is_forecast": "Probability that SWS involuntary hunger in Balance Luzon (the SWS area containing all of CALABARZON) is significantly above its five-year normal (beyond the survey margin of error)."
+}

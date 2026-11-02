@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, forecast,
+    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, forecast,
     forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, report, simple,
 )
 
@@ -53,6 +53,8 @@ router.include_router(hunger_forecast.router, prefix=API_V1, tags=["Hunger forec
 router.include_router(fi5.router, prefix=API_V1, tags=["FI5 five-domain food insecurity forecasting"])
 # FI6: uncertainty-aware target (significantly above normal), LightGBM change model (app.fi6): read-only files.
 router.include_router(fi6.router, prefix=API_V1, tags=["FI6 food insecurity forecasting (uncertainty-aware target)"])
+# FI7: release-aware next-quarter outlook, experiment registry, final baseline comparison (app.fi7): read-only files.
+router.include_router(fi7.router, prefix=API_V1, tags=["FI7 next-quarter food insecurity outlook"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.

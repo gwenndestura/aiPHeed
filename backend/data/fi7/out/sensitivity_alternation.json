@@ -1,0 +1,740 @@
+{
+ "alternating_target_quarters": [
+  "2024-Q4",
+  "2025-Q2",
+  "2025-Q3",
+  "2025-Q4"
+ ],
+ "by_lead": {
+  "0": {
+   "LightGBM (proposed, FI7)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.5952380952380952,
+    "precision": 0.3,
+    "recall": 0.3333333333333333,
+    "auc": 0.564625850340136,
+    "brier": 0.14688130555994497,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Damped persistence (statistical)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.6405895691609977,
+    "precision": 0.3333333333333333,
+    "recall": 0.4444444444444444,
+    "auc": 0.6031746031746033,
+    "brier": 0.1289046090285974,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Naive persistence (latest reading)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7586206896551724,
+    "balanced_accuracy": 0.49433106575963714,
+    "precision": 0.14285714285714285,
+    "recall": 0.1111111111111111,
+    "auc": 0.6485260770975056,
+    "brier": 0.15934814771724964,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Government + latest reading (no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.5952380952380952,
+    "precision": 0.3,
+    "recall": 0.3333333333333333,
+    "auc": 0.5215419501133787,
+    "brier": 0.15089637499548395,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "PSA/government-only (no SWS, no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7241379310344828,
+    "balanced_accuracy": 0.42857142857142855,
+    "precision": 0.0,
+    "recall": 0.0,
+    "auc": 0.5600907029478458,
+    "brier": 0.19271643351185833,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "NLP/news-only (no SWS)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7241379310344828,
+    "balanced_accuracy": 0.4739229024943311,
+    "precision": 0.1111111111111111,
+    "recall": 0.1111111111111111,
+    "auc": 0.4569160997732426,
+    "brier": 0.17086067411141176,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Logistic regression": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7068965517241379,
+    "balanced_accuracy": 0.46371882086167804,
+    "precision": 0.1,
+    "recall": 0.1111111111111111,
+    "auc": 0.6326530612244898,
+    "brier": 0.17070106369408697,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "Always LOW (reference)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.5,
+    "precision": null,
+    "recall": 0.0,
+    "auc": 0.4331065759637189,
+    "brier": 0.1326656491456351,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   }
+  },
+  "1": {
+   "LightGBM (proposed, FI7)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8103448275862069,
+    "balanced_accuracy": 0.6609977324263039,
+    "precision": 0.4,
+    "recall": 0.4444444444444444,
+    "auc": 0.7256235827664399,
+    "brier": 0.10858902066094099,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": true,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Damped persistence (statistical)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.68140589569161,
+    "precision": 0.5,
+    "recall": 0.4444444444444444,
+    "auc": 0.7437641723356008,
+    "brier": 0.10715936212286112,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": true,
+      "auc": true,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Naive persistence (latest reading)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8793103448275862,
+    "balanced_accuracy": 0.7018140589569161,
+    "precision": 0.6666666666666666,
+    "recall": 0.4444444444444444,
+    "auc": 0.7528344671201813,
+    "brier": 0.10495219008620303,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": true,
+      "auc": true,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Government + latest reading (no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8275862068965517,
+    "balanced_accuracy": 0.6712018140589568,
+    "precision": 0.4444444444444444,
+    "recall": 0.4444444444444444,
+    "auc": 0.7346938775510204,
+    "brier": 0.11018268366902005,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": true,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "PSA/government-only (no SWS, no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.5045351473922902,
+    "precision": 0.16666666666666666,
+    "recall": 0.1111111111111111,
+    "auc": 0.5170068027210885,
+    "brier": 0.17217355608131613,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "NLP/news-only (no SWS)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7586206896551724,
+    "balanced_accuracy": 0.5396825396825397,
+    "precision": 0.2222222222222222,
+    "recall": 0.2222222222222222,
+    "auc": 0.4478458049886621,
+    "brier": 0.1705869847059204,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Logistic regression": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.5498866213151927,
+    "precision": 0.25,
+    "recall": 0.2222222222222222,
+    "auc": 0.5487528344671202,
+    "brier": 0.18783653000815417,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Always LOW (reference)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.5,
+    "precision": null,
+    "recall": 0.0,
+    "auc": 0.45804988662131524,
+    "brier": 0.13223001322962571,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   }
+  },
+  "2": {
+   "LightGBM (proposed, FI7)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.6896551724137931,
+    "balanced_accuracy": 0.5442176870748299,
+    "precision": 0.2,
+    "recall": 0.3333333333333333,
+    "auc": 0.43537414965986393,
+    "brier": 0.1497075879302003,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "Damped persistence (statistical)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8103448275862069,
+    "balanced_accuracy": 0.5702947845804989,
+    "precision": 0.3333333333333333,
+    "recall": 0.2222222222222222,
+    "auc": 0.41723356009070295,
+    "brier": 0.14241422210431715,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Naive persistence (latest reading)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7413793103448276,
+    "balanced_accuracy": 0.4387755102040816,
+    "precision": 0.0,
+    "recall": 0.0,
+    "auc": 0.5306122448979591,
+    "brier": 0.1884598054011046,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Government + latest reading (no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.6724137931034483,
+    "balanced_accuracy": 0.48866213151927435,
+    "precision": 0.14285714285714285,
+    "recall": 0.2222222222222222,
+    "auc": 0.4172335600907029,
+    "brier": 0.15388018470289472,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "PSA/government-only (no SWS, no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7241379310344828,
+    "balanced_accuracy": 0.4739229024943311,
+    "precision": 0.1111111111111111,
+    "recall": 0.1111111111111111,
+    "auc": 0.5102040816326531,
+    "brier": 0.19237064566773676,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "NLP/news-only (no SWS)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7241379310344828,
+    "balanced_accuracy": 0.4739229024943311,
+    "precision": 0.1111111111111111,
+    "recall": 0.1111111111111111,
+    "auc": 0.2777777777777778,
+    "brier": 0.20141135049197406,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Logistic regression": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.5689655172413793,
+    "balanced_accuracy": 0.518140589569161,
+    "precision": 0.16666666666666666,
+    "recall": 0.4444444444444444,
+    "auc": 0.4739229024943311,
+    "brier": 0.255864077746143,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "Always LOW (reference)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.5,
+    "precision": null,
+    "recall": 0.0,
+    "auc": 0.34467120181405897,
+    "brier": 0.13416888938001084,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   }
+  },
+  "3": {
+   "LightGBM (proposed, FI7)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8275862068965517,
+    "balanced_accuracy": 0.6258503401360545,
+    "precision": 0.42857142857142855,
+    "recall": 0.3333333333333333,
+    "auc": 0.4943310657596372,
+    "brier": 0.1381335856585046,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Damped persistence (statistical)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7758620689655172,
+    "balanced_accuracy": 0.5952380952380952,
+    "precision": 0.3,
+    "recall": 0.3333333333333333,
+    "auc": 0.6417233560090703,
+    "brier": 0.1199849702825028,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": true,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Naive persistence (latest reading)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8275862068965517,
+    "balanced_accuracy": 0.6258503401360545,
+    "precision": 0.42857142857142855,
+    "recall": 0.3333333333333333,
+    "auc": 0.6303854875283447,
+    "brier": 0.13933071677401002,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "Government + latest reading (no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.68140589569161,
+    "precision": 0.5,
+    "recall": 0.4444444444444444,
+    "auc": 0.5691609977324262,
+    "brier": 0.13891533633577516,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": true,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   },
+   "PSA/government-only (no SWS, no news)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7068965517241379,
+    "balanced_accuracy": 0.41836734693877553,
+    "precision": 0.0,
+    "recall": 0.0,
+    "auc": 0.3287981859410431,
+    "brier": 0.20560910000719196,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "NLP/news-only (no SWS)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.6724137931034483,
+    "balanced_accuracy": 0.3979591836734694,
+    "precision": 0.0,
+    "recall": 0.0,
+    "auc": 0.2675736961451247,
+    "brier": 0.19368502910817983,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "Logistic regression": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.7241379310344828,
+    "balanced_accuracy": 0.564625850340136,
+    "precision": 0.23076923076923078,
+    "recall": 0.3333333333333333,
+    "auc": 0.6009070294784581,
+    "brier": 0.20104412018316442,
+    "reliability": {
+     "checks": {
+      "accuracy": false,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": false
+     },
+     "reliable": false
+    }
+   },
+   "Always LOW (reference)": {
+    "n": 58,
+    "n_high": 9,
+    "accuracy": 0.8448275862068966,
+    "balanced_accuracy": 0.5,
+    "precision": null,
+    "recall": 0.0,
+    "auc": 0.37528344671201813,
+    "brier": 0.1335418366916633,
+    "reliability": {
+     "checks": {
+      "accuracy": true,
+      "recall": false,
+      "precision": false,
+      "auc": false,
+      "brier_skill": false,
+      "era_accuracy": true
+     },
+     "reliable": false
+    }
+   }
+  }
+ },
+ "robust_reliable": {
+  "LightGBM (proposed, FI7)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "Damped persistence (statistical)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "Naive persistence (latest reading)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "Government + latest reading (no news)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "PSA/government-only (no SWS, no news)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "NLP/news-only (no SWS)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "Logistic regression": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  },
+  "Always LOW (reference)": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false
+  }
+ }
+}
