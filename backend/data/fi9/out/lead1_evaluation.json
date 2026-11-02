@@ -1,0 +1,5884 @@
+{
+ "periods": {
+  "full": {
+   "climatology_brier": 0.14865644463629166,
+   "target_quarters": [
+    "2010-Q1",
+    "2026-Q3"
+   ],
+   "models": {
+    "LightGBM (proposed, FI7)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 5,
+      "fp": 7,
+      "tn": 44,
+      "fn": 6
+     },
+     "accuracy": 0.7903225806451613,
+     "balanced_accuracy": 0.6586452762923352,
+     "precision": 0.4166666666666667,
+     "recall": 0.45454545454545453,
+     "specificity": 0.8627450980392157,
+     "f1": 0.43478260869565216,
+     "roc_auc": 0.7379679144385026,
+     "pr_auc": 0.45177124149456166,
+     "brier": 0.12257738362070078,
+     "log_loss": 0.40718338457929953,
+     "ece_5bin": 0.04160826861849936,
+     "calibration_line": {
+      "intercept": -0.048186826847712236,
+      "slope": 0.8139492994240601
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 48,
+       "mean_p": 0.08246381854584668,
+       "observed": 0.125
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 8,
+       "mean_p": 0.2637889077161103,
+       "observed": 0.25
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.4633121128620954,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.6540905519225225,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.076758570109775,
+     "rmse_level_pp": 5.019313536663039,
+     "expected_accuracy_under_label_uncertainty": 0.760656924006427,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8648511523984544,
+     "train_brier_mean": 0.09012093547429338,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.17543175527570887,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.007790501127384817,
+      "ci95": [
+       -0.02623599129045037,
+       0.04532223178608757
+      ],
+      "p_negative": 0.3778
+     }
+    },
+    "Damped persistence (statistical)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 6,
+      "tn": 45,
+      "fn": 5
+     },
+     "accuracy": 0.8225806451612904,
+     "balanced_accuracy": 0.713903743315508,
+     "precision": 0.5,
+     "recall": 0.5454545454545454,
+     "specificity": 0.8823529411764706,
+     "f1": 0.5217391304347826,
+     "roc_auc": 0.7736185383244206,
+     "pr_auc": 0.5606297203548789,
+     "brier": 0.11787340670824138,
+     "log_loss": 0.3875306564003695,
+     "ece_5bin": 0.07295866987822072,
+     "calibration_line": {
+      "intercept": 1.0908479146504162,
+      "slope": 1.3284590233112368
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 54,
+       "mean_p": 0.08339805312508472,
+       "observed": 0.09259259259259259
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 4,
+       "mean_p": 0.3007541467861289,
+       "observed": 0.75
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.45772160001172474,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6031137883839501,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.17165062914445,
+     "rmse_level_pp": 4.968546345876218,
+     "expected_accuracy_under_label_uncertainty": 0.7838502719355881,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8581200148158391,
+     "train_brier_mean": 0.1183380885159188,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.8333333333333334
+      }
+     },
+     "brier_skill_vs_climatology": 0.20707503131374616,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0030865242149254305,
+      "ci95": [
+       -0.03732350548971957,
+       0.04323038217268285
+      ],
+      "p_negative": 0.5276
+     }
+    },
+    "Naive persistence (latest reading)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 3,
+      "tn": 48,
+      "fn": 5
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.7433155080213903,
+     "precision": 0.6666666666666666,
+     "recall": 0.5454545454545454,
+     "specificity": 0.9411764705882353,
+     "f1": 0.6,
+     "roc_auc": 0.7789661319073083,
+     "pr_auc": 0.5507926757926758,
+     "brier": 0.11478688249331595,
+     "log_loss": 0.4009903084766125,
+     "ece_5bin": 0.07724685950666796,
+     "calibration_line": {
+      "intercept": -0.7063199482906218,
+      "slope": 0.6580509510239253
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 38,
+       "mean_p": 0.058613275521646725,
+       "observed": 0.07894736842105263
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 11,
+       "mean_p": 0.26339059921731567,
+       "observed": 0.09090909090909091
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 5,
+       "mean_p": 0.4813549085565768,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 4,
+       "mean_p": 0.707469740179163,
+       "observed": 0.75
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 4,
+       "mean_p": 0.8856043964448211,
+       "observed": 0.75
+      }
+     ],
+     "mae_level_pp": 4.229032258064516,
+     "rmse_level_pp": 5.651848113385054,
+     "expected_accuracy_under_label_uncertainty": 0.8297319675689475,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8305487721024479,
+     "train_brier_mean": 0.1460636762127477,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.22783783256650747,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": null
+    },
+    "Government + latest reading (no news)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 7,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.7040998217468806,
+     "precision": 0.46153846153846156,
+     "recall": 0.5454545454545454,
+     "specificity": 0.8627450980392157,
+     "f1": 0.5,
+     "roc_auc": 0.750445632798574,
+     "pr_auc": 0.46007544800990013,
+     "brier": 0.12252213982577385,
+     "log_loss": 0.40772155099727164,
+     "ece_5bin": 0.03186234261355382,
+     "calibration_line": {
+      "intercept": 0.12032066491179225,
+      "slope": 0.8959830641129771
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 47,
+       "mean_p": 0.08095326152358341,
+       "observed": 0.10638297872340426
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 9,
+       "mean_p": 0.26365770467813615,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 6,
+       "mean_p": 0.4744686873746696,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.059407317058335,
+     "rmse_level_pp": 5.051743761623614,
+     "expected_accuracy_under_label_uncertainty": 0.7767399673675847,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8647782772635962,
+     "train_brier_mean": 0.09017175797656392,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.175803375860757,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.007735257332457898,
+      "ci95": [
+       -0.026491987813841815,
+       0.04145579809832427
+      ],
+      "p_negative": 0.4086
+     }
+    },
+    "PSA/government-only (no SWS, no news)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 1,
+      "fp": 5,
+      "tn": 46,
+      "fn": 10
+     },
+     "accuracy": 0.7580645161290323,
+     "balanced_accuracy": 0.4964349376114082,
+     "precision": 0.16666666666666666,
+     "recall": 0.09090909090909091,
+     "specificity": 0.9019607843137255,
+     "f1": 0.11764705882352941,
+     "roc_auc": 0.5169340463458111,
+     "pr_auc": 0.20313009651655617,
+     "brier": 0.18558757456167532,
+     "log_loss": 0.5882094394557086,
+     "ece_5bin": 0.1683313222313132,
+     "calibration_line": {
+      "intercept": -1.5452518566812512,
+      "slope": -0.006875925145314112
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 37,
+       "mean_p": 0.08674601670546328,
+       "observed": 0.1891891891891892
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 12,
+       "mean_p": 0.2968847960358929,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 7,
+       "mean_p": 0.45339763709109226,
+       "observed": 0.2857142857142857
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 6,
+       "mean_p": 0.6516239307291997,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7263527093323209,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.9564808204968129,
+     "train_brier_mean": 0.050380411131813074,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": -0.24843275389600983,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.07080069206835937,
+      "ci95": [
+       0.004607575495342061,
+       0.12318045656984934
+      ],
+      "p_negative": 0.0174
+     }
+    },
+    "NLP/news-only (no SWS)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 2,
+      "fp": 7,
+      "tn": 44,
+      "fn": 9
+     },
+     "accuracy": 0.7419354838709677,
+     "balanced_accuracy": 0.5222816399286988,
+     "precision": 0.2222222222222222,
+     "recall": 0.18181818181818182,
+     "specificity": 0.8627450980392157,
+     "f1": 0.2,
+     "roc_auc": 0.48573975044563283,
+     "pr_auc": 0.32923295828065086,
+     "brier": 0.17998034053158213,
+     "log_loss": 0.5654281421829361,
+     "ece_5bin": 0.15215789225963605,
+     "calibration_line": {
+      "intercept": -1.6243270618307435,
+      "slope": -0.0631499717174953
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 42,
+       "mean_p": 0.1265207343399117,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.31103171523143297,
+       "observed": 0.4
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 13,
+       "mean_p": 0.5066663472438495,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6419218878195756,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7166866554912087,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.6115847908779762,
+     "train_brier_mean": 0.18683728048915094,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.7,
+       "recall": 0.3333333333333333
+      }
+     },
+     "brier_skill_vs_climatology": -0.2107133395523395,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.06519345803826615,
+      "ci95": [
+       0.001816944364219489,
+       0.13174147008761658
+      ],
+      "p_negative": 0.021
+     }
+    },
+    "Logistic regression": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 2,
+      "fp": 6,
+      "tn": 45,
+      "fn": 9
+     },
+     "accuracy": 0.7580645161290323,
+     "balanced_accuracy": 0.5320855614973262,
+     "precision": 0.25,
+     "recall": 0.18181818181818182,
+     "specificity": 0.8823529411764706,
+     "f1": 0.21052631578947367,
+     "roc_auc": 0.6007130124777185,
+     "pr_auc": 0.29308963778490105,
+     "brier": 0.19046880119279005,
+     "log_loss": 1.0634999831649647,
+     "ece_5bin": 0.18836469387714758,
+     "calibration_line": {
+      "intercept": -1.5943233519713438,
+      "slope": -0.02922580233484141
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 22,
+       "mean_p": 0.03522772939818203,
+       "observed": 0.13636363636363635
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 20,
+       "mean_p": 0.3364236876760517,
+       "observed": 0.1
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 15,
+       "mean_p": 0.4707707016729981,
+       "observed": 0.26666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 4,
+       "mean_p": 0.6658966971317879,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 1,
+       "mean_p": 0.9999999999999969,
+       "observed": 0.0
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7381094289155861,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.7919318167879028,
+     "train_brier_mean": 0.15966479800255703,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.16666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": -0.28126837459888177,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0756819186994741,
+      "ci95": [
+       0.02707430843236845,
+       0.12772151084899708
+      ],
+      "p_negative": 0.0004
+     }
+    },
+    "Always LOW (reference)": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 51,
+      "fn": 11
+     },
+     "accuracy": 0.8225806451612904,
+     "balanced_accuracy": 0.5,
+     "precision": null,
+     "recall": 0.0,
+     "specificity": 1.0,
+     "f1": 0.0,
+     "roc_auc": 0.4393939393939394,
+     "pr_auc": 0.17450198260843341,
+     "brier": 0.14865644463629166,
+     "log_loss": 0.47880243174014203,
+     "ece_5bin": 0.03605416484541715,
+     "calibration_line": {
+      "intercept": -4.000949840177939,
+      "slope": -1.3535188550093336
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 62,
+       "mean_p": 0.14136518999329253,
+       "observed": 0.1774193548387097
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7858221376164881,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8586348100067077,
+     "train_brier_mean": 0.12102298052761815,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": 0.0,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.03386956214297567,
+      "ci95": [
+       -0.029797656198636762,
+       0.08908483866443635
+      ],
+      "p_negative": 0.2188
+     }
+    },
+    "LightGBM without market": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 5,
+      "fp": 8,
+      "tn": 43,
+      "fn": 6
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.6488413547237076,
+     "precision": 0.38461538461538464,
+     "recall": 0.45454545454545453,
+     "specificity": 0.8431372549019608,
+     "f1": 0.4166666666666667,
+     "roc_auc": 0.7183600713012478,
+     "pr_auc": 0.5011355154772082,
+     "brier": 0.12562119801417782,
+     "log_loss": 0.4269672620747138,
+     "ece_5bin": 0.08795827610144959,
+     "calibration_line": {
+      "intercept": -0.3568660227644751,
+      "slope": 0.6724159204144835
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 44,
+       "mean_p": 0.07826595673357244,
+       "observed": 0.13636363636363635
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 12,
+       "mean_p": 0.2780059931216028,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.49905368223238816,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.6860681146016644,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.214091867370272,
+     "rmse_level_pp": 5.25734968643961,
+     "expected_accuracy_under_label_uncertainty": 0.7415274591724874,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8564530369184739,
+     "train_brier_mean": 0.10314791458167412,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.7777777777777778,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.1549562595720133,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.010834315520861847,
+      "ci95": [
+       -0.022887070621986437,
+       0.053965457052917123
+      ],
+      "p_negative": 0.319
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.003043814393477032,
+      "ci95": [
+       -0.004673163197814158,
+       0.014410153640710653
+      ],
+      "p_negative": 0.219
+     }
+    },
+    "LightGBM without climate": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 7,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.7040998217468806,
+     "precision": 0.46153846153846156,
+     "recall": 0.5454545454545454,
+     "specificity": 0.8627450980392157,
+     "f1": 0.5,
+     "roc_auc": 0.7201426024955437,
+     "pr_auc": 0.4229642048535911,
+     "brier": 0.12825706958898825,
+     "log_loss": 0.42515509308376204,
+     "ece_5bin": 0.05828055146742772,
+     "calibration_line": {
+      "intercept": -0.1157983982242204,
+      "slope": 0.7227387943357394
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 53,
+       "mean_p": 0.08473029868758422,
+       "observed": 0.11320754716981132
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.2992230918074471,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 6,
+       "mean_p": 0.49921267122730556,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.69782223240121,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.043724006156084,
+     "rmse_level_pp": 5.0276453695253895,
+     "expected_accuracy_under_label_uncertainty": 0.7826015964716041,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8540245741423549,
+     "train_brier_mean": 0.09428665184491347,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.65,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.13722496254510375,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.013470187095672267,
+      "ci95": [
+       -0.026493392463153048,
+       0.05482731201736403
+      ],
+      "p_negative": 0.3336
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.005679685968287449,
+      "ci95": [
+       -0.0034893347795409433,
+       0.012163489765646565
+      ],
+      "p_negative": 0.1968
+     }
+    },
+    "LightGBM without employment": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 15,
+      "tn": 36,
+      "fn": 5
+     },
+     "accuracy": 0.6774193548387096,
+     "balanced_accuracy": 0.625668449197861,
+     "precision": 0.2857142857142857,
+     "recall": 0.5454545454545454,
+     "specificity": 0.7058823529411765,
+     "f1": 0.375,
+     "roc_auc": 0.7540106951871657,
+     "pr_auc": 0.43396702743733423,
+     "brier": 0.1259911538183538,
+     "log_loss": 0.40662851377391823,
+     "ece_5bin": 0.0536094547992015,
+     "calibration_line": {
+      "intercept": -0.0626797960727219,
+      "slope": 0.9230954357236166
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 43,
+       "mean_p": 0.0982571733208269,
+       "observed": 0.06976744186046512
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 13,
+       "mean_p": 0.24699295035960914,
+       "observed": 0.38461538461538464
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4932473879827624,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6413128256804521,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.355957807187191,
+     "rmse_level_pp": 5.208494477420727,
+     "expected_accuracy_under_label_uncertainty": 0.6446938145734784,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8710938266067753,
+     "train_brier_mean": 0.09519063991446565,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.7222222222222222,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.6,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.15246759650004815,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.011204271325037832,
+      "ci95": [
+       -0.02513059878132285,
+       0.04624553508455656
+      ],
+      "p_negative": 0.3386
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0034137701976530137,
+      "ci95": [
+       -0.012593582587486782,
+       0.014306677669325174
+      ],
+      "p_negative": 0.4224
+     }
+    },
+    "LightGBM without remittance": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 6,
+      "tn": 45,
+      "fn": 5
+     },
+     "accuracy": 0.8225806451612904,
+     "balanced_accuracy": 0.713903743315508,
+     "precision": 0.5,
+     "recall": 0.5454545454545454,
+     "specificity": 0.8823529411764706,
+     "f1": 0.5217391304347826,
+     "roc_auc": 0.7486631016042781,
+     "pr_auc": 0.5548029955783966,
+     "brier": 0.12094619407926083,
+     "log_loss": 0.40473523660136407,
+     "ece_5bin": 0.05426827872115712,
+     "calibration_line": {
+      "intercept": 0.0910415100944317,
+      "slope": 0.8765081143126813
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 50,
+       "mean_p": 0.08551205719456012,
+       "observed": 0.12
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.2855545439213087,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 5,
+       "mean_p": 0.49382006731638983,
+       "observed": 0.6
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6039907865061551,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.032050350532661,
+     "rmse_level_pp": 5.02100873859303,
+     "expected_accuracy_under_label_uncertainty": 0.7880243791704408,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8631639120192259,
+     "train_brier_mean": 0.09029688368314888,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.18640463671001783,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.006159311585944873,
+      "ci95": [
+       -0.0283928823964542,
+       0.04473822264352572
+      ],
+      "p_negative": 0.4154
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.001631189541439946,
+      "ci95": [
+       -0.007933492875676327,
+       0.003490814618628728
+      ],
+      "p_negative": 0.7346
+     }
+    },
+    "LightGBM without poverty": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 5,
+      "tn": 46,
+      "fn": 5
+     },
+     "accuracy": 0.8387096774193549,
+     "balanced_accuracy": 0.7237076648841354,
+     "precision": 0.5454545454545454,
+     "recall": 0.5454545454545454,
+     "specificity": 0.9019607843137255,
+     "f1": 0.5454545454545454,
+     "roc_auc": 0.7575757575757576,
+     "pr_auc": 0.5458386384856974,
+     "brier": 0.1201016243149484,
+     "log_loss": 0.39984834712996975,
+     "ece_5bin": 0.05621367720306463,
+     "calibration_line": {
+      "intercept": 0.16620138698671602,
+      "slope": 0.9141403865573394
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 50,
+       "mean_p": 0.08369346937476635,
+       "observed": 0.12
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.2859645950807206,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 5,
+       "mean_p": 0.4874582586772254,
+       "observed": 0.6
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6085748217698712,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.04612957292038,
+     "rmse_level_pp": 5.008047776047915,
+     "expected_accuracy_under_label_uncertainty": 0.8002992044853668,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8632044713889965,
+     "train_brier_mean": 0.09002902609164634,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.19208598988901238,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.005314741821632435,
+      "ci95": [
+       -0.028179892926833355,
+       0.04306097484795792
+      ],
+      "p_negative": 0.427
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.002475759305752379,
+      "ci95": [
+       -0.008418029660859725,
+       0.002299045182087017
+      ],
+      "p_negative": 0.81
+     }
+    },
+    "LightGBM without news/NLP": {
+     "n": 62,
+     "n_high": 11,
+     "n_low": 51,
+     "confusion": {
+      "tp": 6,
+      "fp": 7,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.7040998217468806,
+     "precision": 0.46153846153846156,
+     "recall": 0.5454545454545454,
+     "specificity": 0.8627450980392157,
+     "f1": 0.5,
+     "roc_auc": 0.750445632798574,
+     "pr_auc": 0.46007544800990013,
+     "brier": 0.12252213982577385,
+     "log_loss": 0.40772155099727164,
+     "ece_5bin": 0.03186234261355382,
+     "calibration_line": {
+      "intercept": 0.12032066491179225,
+      "slope": 0.8959830641129771
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 47,
+       "mean_p": 0.08095326152358341,
+       "observed": 0.10638297872340426
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 9,
+       "mean_p": 0.26365770467813615,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 6,
+       "mean_p": 0.4744686873746696,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.059407317058335,
+     "rmse_level_pp": 5.051743761623614,
+     "expected_accuracy_under_label_uncertainty": 0.7767399673675847,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8647782772635962,
+     "train_brier_mean": 0.09017175797656392,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.175803375860757,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.007735257332457898,
+      "ci95": [
+       -0.026491987813841815,
+       0.04145579809832427
+      ],
+      "p_negative": 0.4086
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -5.524379492692454e-05,
+      "ci95": [
+       -0.009341956807521099,
+       0.003915949070608876
+      ],
+      "p_negative": 0.6916
+     }
+    }
+   }
+  },
+  "development": {
+   "climatology_brier": 0.11403733233207627,
+   "target_quarters": [
+    "2010-Q1",
+    "2017-Q4"
+   ],
+   "models": {
+    "LightGBM (proposed, FI7)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 23,
+      "fn": 2
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.6759259259259259,
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "specificity": 0.8518518518518519,
+     "f1": 0.4,
+     "roc_auc": 0.7222222222222222,
+     "pr_auc": 0.5178372352285396,
+     "brier": 0.096589869551221,
+     "log_loss": 0.33442036225561905,
+     "ece_5bin": 0.021684303274507002,
+     "calibration_line": {
+      "intercept": -0.13991166993225118,
+      "slope": 0.8783920236842518
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.06706296537284774,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.24997162424479935,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.4840667753829669,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.150551077357361,
+     "rmse_level_pp": 5.017802944016463,
+     "expected_accuracy_under_label_uncertainty": 0.7650673065574265,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8414181419132915,
+     "train_brier_mean": 0.10059063794716373,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.152997815926177,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.02393254454882767,
+      "ci95": [
+       -0.06478403792942626,
+       0.01804313291361635
+      ],
+      "p_negative": 0.881
+     }
+    },
+    "Damped persistence (statistical)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 1,
+      "fp": 3,
+      "tn": 24,
+      "fn": 3
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.5694444444444444,
+     "precision": 0.25,
+     "recall": 0.25,
+     "specificity": 0.8888888888888888,
+     "f1": 0.25,
+     "roc_auc": 0.6574074074074074,
+     "pr_auc": 0.4671750663129973,
+     "brier": 0.10444487936916644,
+     "log_loss": 0.3653039384694796,
+     "ece_5bin": 0.04126891712737929,
+     "calibration_line": {
+      "intercept": 0.3879158780055954,
+      "slope": 0.96621715292967
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 29,
+       "mean_p": 0.07327451012200023,
+       "observed": 0.10344827586206896
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.2978513877566177,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.702053885709411,
+     "rmse_level_pp": 5.376457240717122,
+     "expected_accuracy_under_label_uncertainty": 0.7621350631300234,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8451998544107543,
+     "train_brier_mean": 0.1313565395234671,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.08411677795984085,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.016077534730882255,
+      "ci95": [
+       -0.07489737817838465,
+       0.055286457768640204
+      ],
+      "p_negative": 0.707
+     }
+    },
+    "Naive persistence (latest reading)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 2,
+      "tn": 25,
+      "fn": 2
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.712962962962963,
+     "precision": 0.5,
+     "recall": 0.5,
+     "specificity": 0.9259259259259259,
+     "f1": 0.5,
+     "roc_auc": 0.7685185185185186,
+     "pr_auc": 0.5291666666666667,
+     "brier": 0.12052241410004867,
+     "log_loss": 0.3898214643073324,
+     "ece_5bin": 0.1392386103641848,
+     "calibration_line": {
+      "intercept": -1.0567669302874583,
+      "slope": 0.5119139362007721
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 21,
+       "mean_p": 0.04673390959294756,
+       "observed": 0.09523809523809523
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.26687775333420044,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4868637756431555,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6889650150642513,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 1,
+       "mean_p": 0.8282093699620986,
+       "observed": 1.0
+      }
+     ],
+     "mae_level_pp": 5.203225806451614,
+     "rmse_level_pp": 6.670179182194482,
+     "expected_accuracy_under_label_uncertainty": 0.8239328327245881,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8119781573089169,
+     "train_brier_mean": 0.16070942231093435,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": -0.056868059216677036,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": null
+    },
+    "Government + latest reading (no news)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 23,
+      "fn": 2
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.6759259259259259,
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "specificity": 0.8518518518518519,
+     "f1": 0.4,
+     "roc_auc": 0.7314814814814814,
+     "pr_auc": 0.5226449275362319,
+     "brier": 0.0965752099148699,
+     "log_loss": 0.33453783805966786,
+     "ece_5bin": 0.021557939644964337,
+     "calibration_line": {
+      "intercept": -0.13681309193999405,
+      "slope": 0.8811093625479033
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.06722618506100701,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.24997162424479935,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.4840667753829669,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.151636118440456,
+     "rmse_level_pp": 5.016878602106942,
+     "expected_accuracy_under_label_uncertainty": 0.7650673065574265,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8419546923815536,
+     "train_brier_mean": 0.10067333744298124,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.15312636712999161,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.023947204185178764,
+      "ci95": [
+       -0.06476397687186164,
+       0.01805552543371624
+      ],
+      "p_negative": 0.881
+     }
+    },
+    "PSA/government-only (no SWS, no news)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 1,
+      "fp": 4,
+      "tn": 23,
+      "fn": 3
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.5509259259259259,
+     "precision": 0.2,
+     "recall": 0.25,
+     "specificity": 0.8518518518518519,
+     "f1": 0.2222222222222222,
+     "roc_auc": 0.6018518518518519,
+     "pr_auc": 0.2056514634839443,
+     "brier": 0.16256465434023448,
+     "log_loss": 0.4847993329806631,
+     "ece_5bin": 0.18394302885362213,
+     "calibration_line": {
+      "intercept": -1.5564432128159877,
+      "slope": 0.30275901893064866
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 15,
+       "mean_p": 0.08902887072439522,
+       "observed": 0.13333333333333333
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 7,
+       "mean_p": 0.2868502314193364,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4582212935044363,
+       "observed": 0.25
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 5,
+       "mean_p": 0.639366032275023,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7368675934074636,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.9599688241140572,
+     "train_brier_mean": 0.052244780968494685,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": -0.4255389091955153,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.04204224024018583,
+      "ci95": [
+       -0.05218926490028763,
+       0.1168995601215326
+      ],
+      "p_negative": 0.2424
+     }
+    },
+    "NLP/news-only (no SWS)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 0,
+      "fp": 3,
+      "tn": 24,
+      "fn": 4
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.4444444444444444,
+     "precision": 0.0,
+     "recall": 0.0,
+     "specificity": 0.8888888888888888,
+     "f1": 0.0,
+     "roc_auc": 0.28240740740740744,
+     "pr_auc": 0.1074404761904762,
+     "brier": 0.16571930128682474,
+     "log_loss": 0.5120695377817179,
+     "ece_5bin": 0.119940179276187,
+     "calibration_line": {
+      "intercept": -7.119073549318491,
+      "slope": -3.2409492254918715
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.15757726710639017,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 7,
+       "mean_p": 0.49999999544502305,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7453978404787174,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.7759500171248249,
+     "train_brier_mean": 0.15901470664880063,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 0.5714285714285714,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": -0.45320219175463317,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": false
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.04519688718677607,
+      "ci95": [
+       -0.05709827314340034,
+       0.1401538387200796
+      ],
+      "p_negative": 0.2478
+     }
+    },
+    "Logistic regression": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 1,
+      "fp": 5,
+      "tn": 22,
+      "fn": 3
+     },
+     "accuracy": 0.7419354838709677,
+     "balanced_accuracy": 0.5324074074074074,
+     "precision": 0.16666666666666666,
+     "recall": 0.25,
+     "specificity": 0.8148148148148148,
+     "f1": 0.2,
+     "roc_auc": 0.6851851851851852,
+     "pr_auc": 0.2882478632478632,
+     "brier": 0.16313725159134673,
+     "log_loss": 0.47797763212770433,
+     "ece_5bin": 0.19994483121470402,
+     "calibration_line": {
+      "intercept": -1.4457181277651807,
+      "slope": 0.7167293891610121
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 8,
+       "mean_p": 0.04859234019917015,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 12,
+       "mean_p": 0.33544778737832326,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 8,
+       "mean_p": 0.4695928003694869,
+       "observed": 0.125
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.6758117315222297,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7279298171830881,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.7987380064079045,
+     "train_brier_mean": 0.1639132271091989,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": -0.43056004779462653,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.04261483749129799,
+      "ci95": [
+       -0.012588068786024736,
+       0.08689228958464065
+      ],
+      "p_negative": 0.0668
+     }
+    },
+    "Always LOW (reference)": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 27,
+      "fn": 4
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.5,
+     "precision": null,
+     "recall": 0.0,
+     "specificity": 1.0,
+     "f1": 0.0,
+     "roc_auc": 0.44907407407407407,
+     "pr_auc": 0.1450091575091575,
+     "brier": 0.11403733233207627,
+     "log_loss": 0.39100206115949604,
+     "ece_5bin": 0.02576788752472975,
+     "calibration_line": {
+      "intercept": -5.099352612311232,
+      "slope": -1.8630587619920953
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 31,
+       "mean_p": 0.15480014558924587,
+       "observed": 0.12903225806451613
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.8320469297709722,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8451998544107543,
+     "train_brier_mean": 0.13059829356351618,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.0,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.006485081767972403,
+      "ci95": [
+       -0.07465395535456962,
+       0.07381662595454762
+      ],
+      "p_negative": 0.615
+     }
+    },
+    "LightGBM without market": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 3,
+      "tn": 24,
+      "fn": 2
+     },
+     "accuracy": 0.8387096774193549,
+     "balanced_accuracy": 0.6944444444444444,
+     "precision": 0.4,
+     "recall": 0.5,
+     "specificity": 0.8888888888888888,
+     "f1": 0.4444444444444444,
+     "roc_auc": 0.7777777777777777,
+     "pr_auc": 0.37435897435897436,
+     "brier": 0.09901998983102557,
+     "log_loss": 0.32355518659035265,
+     "ece_5bin": 0.030413160971515668,
+     "calibration_line": {
+      "intercept": -0.16476985591095952,
+      "slope": 1.0183494818296233
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 23,
+       "mean_p": 0.07956170002149932,
+       "observed": 0.08695652173913043
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.28972553942533064,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.5171869270297431,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.545584457015894,
+     "rmse_level_pp": 5.291790550993442,
+     "expected_accuracy_under_label_uncertainty": 0.7988204565355075,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8362459450694125,
+     "train_brier_mean": 0.11431874662493785,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.13168794984891663,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.021502424269023098,
+      "ci95": [
+       -0.0575087056030818,
+       0.01516611173414337
+      ],
+      "p_negative": 0.886
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0024301202798045754,
+      "ci95": [
+       -0.006754861902261588,
+       0.013826379068617743
+      ],
+      "p_negative": 0.3238
+     }
+    },
+    "LightGBM without climate": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 2,
+      "tn": 25,
+      "fn": 2
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.712962962962963,
+     "precision": 0.5,
+     "recall": 0.5,
+     "specificity": 0.9259259259259259,
+     "f1": 0.5,
+     "roc_auc": 0.6944444444444444,
+     "pr_auc": 0.5102380952380952,
+     "brier": 0.09476522053616895,
+     "log_loss": 0.3395234636374836,
+     "ece_5bin": 0.01697849669166354,
+     "calibration_line": {
+      "intercept": -0.24015564966957553,
+      "slope": 0.7818045694965143
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 27,
+       "mean_p": 0.0722977818977146,
+       "observed": 0.07407407407407407
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.2992230918074471,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.5384098461473792,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.006247364118136,
+     "rmse_level_pp": 4.931123636247711,
+     "expected_accuracy_under_label_uncertainty": 0.8243673342379974,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8305253707462276,
+     "train_brier_mean": 0.10404766030170615,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 0.8571428571428571,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.16899826926665562,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.025757193563879708,
+      "ci95": [
+       -0.06625040593719836,
+       0.01483236085586436
+      ],
+      "p_negative": 0.9064
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.0018246490150520406,
+      "ci95": [
+       -0.008389575931236964,
+       0.0037237529881481183
+      ],
+      "p_negative": 0.7688
+     }
+    },
+    "LightGBM without employment": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 5,
+      "tn": 22,
+      "fn": 2
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.6574074074074074,
+     "precision": 0.2857142857142857,
+     "recall": 0.5,
+     "specificity": 0.8148148148148148,
+     "f1": 0.36363636363636365,
+     "roc_auc": 0.7592592592592593,
+     "pr_auc": 0.4875,
+     "brier": 0.09897468359078572,
+     "log_loss": 0.3291649388766895,
+     "ece_5bin": 0.042707834630560736,
+     "calibration_line": {
+      "intercept": -0.09904959804629015,
+      "slope": 1.0181545724352443
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 27,
+       "mean_p": 0.10162665518214535,
+       "observed": 0.07407407407407407
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.2684377585937104,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.5584493504084396,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.440626955242711,
+     "rmse_level_pp": 5.202833447608961,
+     "expected_accuracy_under_label_uncertainty": 0.7188909057743602,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8539207005849795,
+     "train_brier_mean": 0.10443564779535386,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.13208524290473733,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.02154773050926296,
+      "ci95": [
+       -0.06722295036940427,
+       0.028574525692217162
+      ],
+      "p_negative": 0.8264
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0023848140395647172,
+      "ci95": [
+       -0.011006934308763648,
+       0.014667384849011363
+      ],
+      "p_negative": 0.333
+     }
+    },
+    "LightGBM without remittance": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 23,
+      "fn": 2
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.6759259259259259,
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "specificity": 0.8518518518518519,
+     "f1": 0.4,
+     "roc_auc": 0.75,
+     "pr_auc": 0.5303030303030303,
+     "brier": 0.09564393798258981,
+     "log_loss": 0.3308038713170755,
+     "ece_5bin": 0.006532560320259911,
+     "calibration_line": {
+      "intercept": -0.09269106557222466,
+      "slope": 0.9019203061800436
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 26,
+       "mean_p": 0.07604106840531864,
+       "observed": 0.07692307692307693
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.2743794512619799,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.5013577511261408,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.072564997517877,
+     "rmse_level_pp": 4.972480878544949,
+     "expected_accuracy_under_label_uncertainty": 0.7650673065574265,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.839225293044131,
+     "train_brier_mean": 0.10090062085472436,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.16129274486994283,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.024878476117458855,
+      "ci95": [
+       -0.06630881984973458,
+       0.01735793874559283
+      ],
+      "p_negative": 0.8882
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.0009459315686311835,
+      "ci95": [
+       -0.0032719421323321434,
+       0.0015206949460716955
+      ],
+      "p_negative": 0.7952
+     }
+    },
+    "LightGBM without poverty": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 23,
+      "fn": 2
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.6759259259259259,
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "specificity": 0.8518518518518519,
+     "f1": 0.4,
+     "roc_auc": 0.7407407407407407,
+     "pr_auc": 0.52832674571805,
+     "brier": 0.09598893224191006,
+     "log_loss": 0.33091729263850106,
+     "ece_5bin": 0.00939745156952848,
+     "calibration_line": {
+      "intercept": -0.04724723237304451,
+      "slope": 0.911171949780323
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 26,
+       "mean_p": 0.07417733479175462,
+       "observed": 0.07692307692307693
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.27322152555437007,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.48020186004794346,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.066877725405157,
+     "rmse_level_pp": 4.970426103636637,
+     "expected_accuracy_under_label_uncertainty": 0.7650673065574265,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8400791950442212,
+     "train_brier_mean": 0.10083897029198825,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.1582674701439818,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.02453348185813862,
+      "ci95": [
+       -0.06547839096483128,
+       0.018054335787193763
+      ],
+      "p_negative": 0.8856
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.0006009373093109463,
+      "ci95": [
+       -0.002165403290561732,
+       0.000804217452460529
+      ],
+      "p_negative": 0.7928
+     }
+    },
+    "LightGBM without news/NLP": {
+     "n": 31,
+     "n_high": 4,
+     "n_low": 27,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 23,
+      "fn": 2
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.6759259259259259,
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "specificity": 0.8518518518518519,
+     "f1": 0.4,
+     "roc_auc": 0.7314814814814814,
+     "pr_auc": 0.5226449275362319,
+     "brier": 0.0965752099148699,
+     "log_loss": 0.33453783805966786,
+     "ece_5bin": 0.021557939644964337,
+     "calibration_line": {
+      "intercept": -0.13681309193999405,
+      "slope": 0.8811093625479033
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.06722618506100701,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.24997162424479935,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.4840667753829669,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.151636118440456,
+     "rmse_level_pp": 5.016878602106942,
+     "expected_accuracy_under_label_uncertainty": 0.7650673065574265,
+     "n_uncertain_labels_pflip_gt_0_25": 4,
+     "train_accuracy_mean": 0.8419546923815536,
+     "train_brier_mean": 0.10067333744298124,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 7,
+       "n_high": 0,
+       "accuracy": 1.0,
+       "recall": null
+      }
+     },
+     "brier_skill_vs_climatology": 0.15312636712999161,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": -0.023947204185178764,
+      "ci95": [
+       -0.06476397687186164,
+       0.01805552543371624
+      ],
+      "p_negative": 0.881
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -1.465963635109163e-05,
+      "ci95": [
+       -3.2916716861630144e-05,
+       4.677770479051897e-05
+      ],
+      "p_negative": 0.302
+     }
+    }
+   }
+  },
+  "test": {
+   "climatology_brier": 0.18327555694050696,
+   "target_quarters": [
+    "2018-Q1",
+    "2026-Q3"
+   ],
+   "models": {
+    "LightGBM (proposed, FI7)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 3,
+      "fp": 3,
+      "tn": 21,
+      "fn": 4
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.6517857142857143,
+     "precision": 0.5,
+     "recall": 0.42857142857142855,
+     "specificity": 0.875,
+     "f1": 0.46153846153846156,
+     "roc_auc": 0.7440476190476191,
+     "pr_auc": 0.48916141329934426,
+     "brier": 0.14856489769018055,
+     "log_loss": 0.4799464069029799,
+     "ece_5bin": 0.07259115710630978,
+     "calibration_line": {
+      "intercept": 0.006170836607668448,
+      "slope": 0.7452224696044604
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.09786467171884565,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.2868177135016285,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 1,
+       "mean_p": 0.4218027878203523,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.6540905519225225,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.002966062862189,
+     "rmse_level_pp": 5.020823674824416,
+     "expected_accuracy_under_label_uncertainty": 0.7562465414554277,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8882841628836173,
+     "train_brier_mean": 0.07965123300142306,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.8181818181818182,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.1893905539274603,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0395135468035973,
+      "ci95": [
+       -0.0008255356178253142,
+       0.09956619851830521
+      ],
+      "p_negative": 0.0332
+     }
+    },
+    "Damped persistence (statistical)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 5,
+      "fp": 3,
+      "tn": 21,
+      "fn": 2
+     },
+     "accuracy": 0.8387096774193549,
+     "balanced_accuracy": 0.7946428571428572,
+     "precision": 0.625,
+     "recall": 0.7142857142857143,
+     "specificity": 0.875,
+     "f1": 0.6666666666666666,
+     "roc_auc": 0.8273809523809523,
+     "pr_auc": 0.638095238095238,
+     "brier": 0.13130193404731638,
+     "log_loss": 0.4097573743312595,
+     "ece_5bin": 0.12906997586884078,
+     "calibration_line": {
+      "intercept": 1.4306911835088307,
+      "slope": 1.5797880942801277
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 25,
+       "mean_p": 0.09514136300866273,
+       "observed": 0.08
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.30365690581564003,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.45772160001172474,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6031137883839501,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.64124737257949,
+     "rmse_level_pp": 4.524004102670582,
+     "expected_accuracy_under_label_uncertainty": 0.805565480741153,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8710401752209234,
+     "train_brier_mean": 0.1053196375083705,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.8333333333333334
+      }
+     },
+     "brier_skill_vs_climatology": 0.28358185761815324,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.022250583160733126,
+      "ci95": [
+       -0.021012664256617974,
+       0.0640009771949225
+      ],
+      "p_negative": 0.255
+     }
+    },
+    "Naive persistence (latest reading)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 1,
+      "tn": 23,
+      "fn": 3
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.7648809523809523,
+     "precision": 0.8,
+     "recall": 0.5714285714285714,
+     "specificity": 0.9583333333333334,
+     "f1": 0.6666666666666666,
+     "roc_auc": 0.8214285714285714,
+     "pr_auc": 0.6476190476190475,
+     "brier": 0.10905135088658323,
+     "log_loss": 0.4121591526458924,
+     "ece_5bin": 0.1014675982186233,
+     "calibration_line": {
+      "intercept": -0.46207436872400337,
+      "slope": 0.7674632104405698
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 17,
+       "mean_p": 0.07328778637474573,
+       "observed": 0.058823529411764705
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 8,
+       "mean_p": 0.2620829164234838,
+       "observed": 0.125
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 1,
+       "mean_p": 0.45931944021026194,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.7259744652940746,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 3,
+       "mean_p": 0.9047360719390619,
+       "observed": 0.6666666666666666
+      }
+     ],
+     "mae_level_pp": 3.25483870967742,
+     "rmse_level_pp": 4.404030412130205,
+     "expected_accuracy_under_label_uncertainty": 0.8355311024133072,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8491193868959791,
+     "train_brier_mean": 0.1314179301145611,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.40498693493545146,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": null
+    },
+    "Government + latest reading (no news)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 3,
+      "tn": 21,
+      "fn": 3
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.7232142857142857,
+     "precision": 0.5714285714285714,
+     "recall": 0.5714285714285714,
+     "specificity": 0.875,
+     "f1": 0.5714285714285714,
+     "roc_auc": 0.7678571428571429,
+     "pr_auc": 0.5178470134135158,
+     "brier": 0.14846906973667784,
+     "log_loss": 0.4809052639348756,
+     "ece_5bin": 0.05828662437078824,
+     "calibration_line": {
+      "intercept": 0.24505568955647422,
+      "slope": 0.8643737914416599
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 23,
+       "mean_p": 0.09527716739757618,
+       "observed": 0.13043478260869565
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 4,
+       "mean_p": 0.2807653052198071,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.469669643370521,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.967178515676212,
+     "rmse_level_pp": 5.086369939153825,
+     "expected_accuracy_under_label_uncertainty": 0.7884126281777429,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8876018621456392,
+     "train_brier_mean": 0.07967017851014654,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.8181818181818182,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.1899134166326808,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.039417718850094555,
+      "ci95": [
+       -0.001379575004371446,
+       0.08923225380837624
+      ],
+      "p_negative": 0.0366
+     }
+    },
+    "PSA/government-only (no SWS, no news)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 0,
+      "fp": 1,
+      "tn": 23,
+      "fn": 7
+     },
+     "accuracy": 0.7419354838709677,
+     "balanced_accuracy": 0.4791666666666667,
+     "precision": 0.0,
+     "recall": 0.0,
+     "specificity": 0.9583333333333334,
+     "f1": 0.0,
+     "roc_auc": 0.4821428571428571,
+     "pr_auc": 0.2854369571816694,
+     "brier": 0.20861049478311613,
+     "log_loss": 0.6916195459307538,
+     "ece_5bin": 0.15271961560900424,
+     "calibration_line": {
+      "intercept": -1.515865473169453,
+      "slope": -0.1430698006225837
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 22,
+       "mean_p": 0.08518952532891876,
+       "observed": 0.22727272727272727
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.3109331864990718,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.4469660952066336,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.7129134230000833,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7158378252571779,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.9529928168795685,
+     "train_brier_mean": 0.048516041295131485,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": -0.13823413370301818,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0995591438965329,
+      "ci95": [
+       0.02369942417152198,
+       0.18402344654649586
+      ],
+      "p_negative": 0.001
+     }
+    },
+    "NLP/news-only (no SWS)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 2,
+      "fp": 4,
+      "tn": 20,
+      "fn": 5
+     },
+     "accuracy": 0.7096774193548387,
+     "balanced_accuracy": 0.5595238095238095,
+     "precision": 0.3333333333333333,
+     "recall": 0.2857142857142857,
+     "specificity": 0.8333333333333334,
+     "f1": 0.3076923076923077,
+     "roc_auc": 0.5416666666666666,
+     "pr_auc": 0.4676596194829014,
+     "brier": 0.19424137977633946,
+     "log_loss": 0.6187867465841542,
+     "ece_5bin": 0.18437560524308508,
+     "calibration_line": {
+      "intercept": -0.993891525854585,
+      "slope": 0.16330056084065891
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 18,
+       "mean_p": 0.08511202398460714,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 5,
+       "mean_p": 0.31103171523143297,
+       "observed": 0.4
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 6,
+       "mean_p": 0.5144437576758136,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6419218878195756,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.6879754705037,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.4472195646311274,
+     "train_brier_mean": 0.21465985432950138,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.7272727272727273,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.7,
+       "recall": 0.3333333333333333
+      }
+     },
+     "brier_skill_vs_climatology": -0.05983243493507495,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.08519002888975623,
+      "ci95": [
+       0.011874155856180896,
+       0.15172547228041317
+      ],
+      "p_negative": 0.0062
+     }
+    },
+    "Logistic regression": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 1,
+      "fp": 1,
+      "tn": 23,
+      "fn": 6
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.5505952380952381,
+     "precision": 0.5,
+     "recall": 0.14285714285714285,
+     "specificity": 0.9583333333333334,
+     "f1": 0.2222222222222222,
+     "roc_auc": 0.5773809523809523,
+     "pr_auc": 0.4402512617950406,
+     "brier": 0.2178003507942334,
+     "log_loss": 1.6490223342022248,
+     "ece_5bin": 0.22533856477397174,
+     "calibration_line": {
+      "intercept": -1.4248339111917787,
+      "slope": -0.06728160134040972
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 14,
+       "mean_p": 0.027590808940474536,
+       "observed": 0.21428571428571427
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 8,
+       "mean_p": 0.3378875381226444,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 7,
+       "mean_p": 0.4721168745912969,
+       "observed": 0.42857142857142855
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6361515939604623,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 1,
+       "mean_p": 0.9999999999999969,
+       "observed": 0.0
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7482890406480835,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.7851256271679008,
+     "train_brier_mean": 0.1554163688959152,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.8181818181818182,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.16666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": -0.1883764230760654,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.10874899990765023,
+      "ci95": [
+       0.038424011785662446,
+       0.1989215032170946
+      ],
+      "p_negative": 0.0004
+     }
+    },
+    "Always LOW (reference)": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 24,
+      "fn": 7
+     },
+     "accuracy": 0.7741935483870968,
+     "balanced_accuracy": 0.5,
+     "precision": null,
+     "recall": 0.0,
+     "specificity": 1.0,
+     "f1": 0.0,
+     "roc_auc": 0.49404761904761907,
+     "pr_auc": 0.48923085363177526,
+     "brier": 0.18327555694050696,
+     "log_loss": 0.5666028023207881,
+     "ece_5bin": 0.09787621721556403,
+     "calibration_line": {
+      "intercept": 4.137942530053426,
+      "slope": 2.8028188962487284
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 31,
+       "mean_p": 0.1279302343973392,
+       "observed": 0.22580645161290322
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7395973454620038,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8720697656026607,
+     "train_brier_mean": 0.11144766749172014,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": 0.0,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.07422420605392373,
+      "ci95": [
+       -0.017856981924175147,
+       0.15382269441206256
+      ],
+      "p_negative": 0.0882
+     }
+    },
+    "LightGBM without market": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 3,
+      "fp": 5,
+      "tn": 19,
+      "fn": 4
+     },
+     "accuracy": 0.7096774193548387,
+     "balanced_accuracy": 0.6101190476190476,
+     "precision": 0.375,
+     "recall": 0.42857142857142855,
+     "specificity": 0.7916666666666666,
+     "f1": 0.4,
+     "roc_auc": 0.6785714285714286,
+     "pr_auc": 0.5766233766233766,
+     "brier": 0.15222240619733005,
+     "log_loss": 0.5303793375590748,
+     "ece_5bin": 0.1477210592352213,
+     "calibration_line": {
+      "intercept": -0.34788410837392747,
+      "slope": 0.5127697221318824
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 21,
+       "mean_p": 0.07684680932298586,
+       "observed": 0.19047619047619047
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.2662864468178749,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 1,
+       "mean_p": 0.4627871926376783,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.6860681146016644,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.8825992777246507,
+     "rmse_level_pp": 5.222681707267814,
+     "expected_accuracy_under_label_uncertainty": 0.6842344618094676,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8766601287675351,
+     "train_brier_mean": 0.09197708253841032,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.6363636363636364,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.75,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.1694342184062061,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.04317105531074681,
+      "ci95": [
+       -0.0026082396932634467,
+       0.11759159439097938
+      ],
+      "p_negative": 0.0442
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0036575085071494885,
+      "ci95": [
+       -0.00849396807268868,
+       0.02523397055749919
+      ],
+      "p_negative": 0.2748
+     }
+    },
+    "LightGBM without climate": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 5,
+      "tn": 19,
+      "fn": 3
+     },
+     "accuracy": 0.7419354838709677,
+     "balanced_accuracy": 0.6815476190476191,
+     "precision": 0.4444444444444444,
+     "recall": 0.5714285714285714,
+     "specificity": 0.7916666666666666,
+     "f1": 0.5,
+     "roc_auc": 0.7142857142857143,
+     "pr_auc": 0.44868169490018217,
+     "brier": 0.1617489186418075,
+     "log_loss": 0.5107867225300406,
+     "ece_5bin": 0.1045387154234989,
+     "calibration_line": {
+      "intercept": -0.0600880523831944,
+      "slope": 0.6504233099073988
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 26,
+       "mean_p": 0.09764098920014111,
+       "observed": 0.15384615384615385
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.47961408376726883,
+       "observed": 0.75
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.69782223240121,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.081200648194029,
+     "rmse_level_pp": 5.122348641732552,
+     "expected_accuracy_under_label_uncertainty": 0.7408358587052111,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8775237775384823,
+     "train_brier_mean": 0.08452564338812082,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.65,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.11745504233107984,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.05269756775522425,
+      "ci95": [
+       -0.002857274220982408,
+       0.12094378319939052
+      ],
+      "p_negative": 0.0414
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.013184020951626938,
+      "ci95": [
+       -0.0030446821319782013,
+       0.025052324941821375
+      ],
+      "p_negative": 0.0962
+     }
+    },
+    "LightGBM without employment": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 10,
+      "tn": 14,
+      "fn": 3
+     },
+     "accuracy": 0.5806451612903226,
+     "balanced_accuracy": 0.5773809523809523,
+     "precision": 0.2857142857142857,
+     "recall": 0.5714285714285714,
+     "specificity": 0.5833333333333334,
+     "f1": 0.38095238095238093,
+     "roc_auc": 0.7142857142857143,
+     "pr_auc": 0.4664555477363359,
+     "brier": 0.1530076240459219,
+     "log_loss": 0.484092088671147,
+     "ece_5bin": 0.07205292663344735,
+     "calibration_line": {
+      "intercept": -0.0688903724572395,
+      "slope": 0.8135521971445752
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 16,
+       "mean_p": 0.09257117267985196,
+       "observed": 0.0625
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 11,
+       "mean_p": 0.24309389431704523,
+       "observed": 0.36363636363636365
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.4280454255570852,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6413128256804521,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.271288659131671,
+     "rmse_level_pp": 5.214149361025811,
+     "expected_accuracy_under_label_uncertainty": 0.5704967233725966,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.888266952628571,
+     "train_brier_mean": 0.08594563203357748,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.5454545454545454,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.6,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.1651498617702214,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": true,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": false
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.04395627315933862,
+      "ci95": [
+       -0.003116383490146863,
+       0.08825514301472309
+      ],
+      "p_negative": 0.0362
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.004442726355741311,
+      "ci95": [
+       -0.025106750865973294,
+       0.02247978478436773
+      ],
+      "p_negative": 0.5188
+     }
+    },
+    "LightGBM without remittance": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 2,
+      "tn": 22,
+      "fn": 3
+     },
+     "accuracy": 0.8387096774193549,
+     "balanced_accuracy": 0.7440476190476191,
+     "precision": 0.6666666666666666,
+     "recall": 0.5714285714285714,
+     "specificity": 0.9166666666666666,
+     "f1": 0.6153846153846154,
+     "roc_auc": 0.7499999999999999,
+     "pr_auc": 0.6111721611721612,
+     "brier": 0.14624845017593185,
+     "log_loss": 0.47866660188565247,
+     "ece_5bin": 0.1135896196037538,
+     "calibration_line": {
+      "intercept": 0.17954031667925865,
+      "slope": 0.8217072401710416
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.09577229504957174,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.2967296365806375,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.48879494477655583,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6039907865061551,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.9915357035474437,
+     "rmse_level_pp": 5.06907204708712,
+     "expected_accuracy_under_label_uncertainty": 0.810981451783455,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8871025309943207,
+     "train_brier_mean": 0.07969314651157337,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.2020297053392366,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.037197099289348605,
+      "ci95": [
+       -0.004515726700931685,
+       0.09855340183905323
+      ],
+      "p_negative": 0.0716
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.0023164475142487084,
+      "ci95": [
+       -0.014597176988667296,
+       0.00838201831802197
+      ],
+      "p_negative": 0.6876
+     }
+    },
+    "LightGBM without poverty": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 1,
+      "tn": 23,
+      "fn": 3
+     },
+     "accuracy": 0.8709677419354839,
+     "balanced_accuracy": 0.7648809523809523,
+     "precision": 0.8,
+     "recall": 0.5714285714285714,
+     "specificity": 0.9583333333333334,
+     "f1": 0.6666666666666666,
+     "roc_auc": 0.7738095238095238,
+     "pr_auc": 0.6349206349206349,
+     "brier": 0.14421431638798676,
+     "log_loss": 0.46877940162143844,
+     "ece_5bin": 0.11466444627769042,
+     "calibration_line": {
+      "intercept": 0.27073279483602325,
+      "slope": 0.879052890108422
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 24,
+       "mean_p": 0.09400261517302909,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.29870766460707104,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.4922958577634135,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6085748217698712,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.025381420435602,
+     "rmse_level_pp": 5.045388924814862,
+     "expected_accuracy_under_label_uncertainty": 0.8355311024133072,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8863297477337716,
+     "train_brier_mean": 0.07921908189130443,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.9090909090909091,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.21312847825746806,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.03516296550140349,
+      "ci95": [
+       -0.004533211391553911,
+       0.09495140835676989
+      ],
+      "p_negative": 0.0742
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -0.004350581302193812,
+      "ci95": [
+       -0.016420923321658152,
+       0.005638293729477864
+      ],
+      "p_negative": 0.7808
+     }
+    },
+    "LightGBM without news/NLP": {
+     "n": 31,
+     "n_high": 7,
+     "n_low": 24,
+     "confusion": {
+      "tp": 4,
+      "fp": 3,
+      "tn": 21,
+      "fn": 3
+     },
+     "accuracy": 0.8064516129032258,
+     "balanced_accuracy": 0.7232142857142857,
+     "precision": 0.5714285714285714,
+     "recall": 0.5714285714285714,
+     "specificity": 0.875,
+     "f1": 0.5714285714285714,
+     "roc_auc": 0.7678571428571429,
+     "pr_auc": 0.5178470134135158,
+     "brier": 0.14846906973667784,
+     "log_loss": 0.4809052639348756,
+     "ece_5bin": 0.05828662437078824,
+     "calibration_line": {
+      "intercept": 0.24505568955647422,
+      "slope": 0.8643737914416599
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 23,
+       "mean_p": 0.09527716739757618,
+       "observed": 0.13043478260869565
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 4,
+       "mean_p": 0.2807653052198071,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.469669643370521,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.967178515676212,
+     "rmse_level_pp": 5.086369939153825,
+     "expected_accuracy_under_label_uncertainty": 0.7884126281777429,
+     "n_uncertain_labels_pflip_gt_0_25": 1,
+     "train_accuracy_mean": 0.8876018621456392,
+     "train_brier_mean": 0.07967017851014654,
+     "eras": {
+      "2016-2020": {
+       "n": 11,
+       "n_high": 1,
+       "accuracy": 0.8181818181818182,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "n_high": 6,
+       "accuracy": 0.8,
+       "recall": 0.6666666666666666
+      }
+     },
+     "brier_skill_vs_climatology": 0.1899134166326808,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     },
+     "vs_persistence_brier": {
+      "mean": 0.039417718850094555,
+      "ci95": [
+       -0.001379575004371446,
+       0.08923225380837624
+      ],
+      "p_negative": 0.0366
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": -9.582795350275608e-05,
+      "ci95": [
+       -0.01923514450820587,
+       0.007939934335350169
+      ],
+      "p_negative": 0.7044
+     }
+    }
+   }
+  },
+  "full_without_sawtooth": {
+   "climatology_brier": 0.13223001322962571,
+   "target_quarters": [
+    "2010-Q1",
+    "2026-Q3"
+   ],
+   "models": {
+    "LightGBM (proposed, FI7)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 6,
+      "tn": 43,
+      "fn": 5
+     },
+     "accuracy": 0.8103448275862069,
+     "balanced_accuracy": 0.6609977324263039,
+     "precision": 0.4,
+     "recall": 0.4444444444444444,
+     "specificity": 0.8775510204081632,
+     "f1": 0.42105263157894735,
+     "roc_auc": 0.7256235827664399,
+     "pr_auc": 0.5145793861311103,
+     "brier": 0.10858902066094099,
+     "log_loss": 0.3746122679836473,
+     "ece_5bin": 0.03761548956996201,
+     "calibration_line": {
+      "intercept": 0.03937851760322939,
+      "slope": 0.9034009380750466
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 46,
+       "mean_p": 0.08057627547459476,
+       "observed": 0.10869565217391304
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 8,
+       "mean_p": 0.2637889077161103,
+       "observed": 0.25
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.4633121128620954,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6120405334260133,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.941741481360734,
+     "rmse_level_pp": 4.819961395554523,
+     "expected_accuracy_under_label_uncertainty": 0.7799993751141637,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8643540874356764,
+     "train_brier_mean": 0.09002213391389878,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.8125,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.1787868880239062,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0036368305747379506,
+      "ci95": [
+       -0.030845885903364696,
+       0.03932707739510002
+      ],
+      "p_negative": 0.471
+     }
+    },
+    "Damped persistence (statistical)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 4,
+      "tn": 45,
+      "fn": 5
+     },
+     "accuracy": 0.8448275862068966,
+     "balanced_accuracy": 0.68140589569161,
+     "precision": 0.5,
+     "recall": 0.4444444444444444,
+     "specificity": 0.9183673469387755,
+     "f1": 0.47058823529411764,
+     "roc_auc": 0.7437641723356008,
+     "pr_auc": 0.6164909164909165,
+     "brier": 0.10715936212286112,
+     "log_loss": 0.3645084182094774,
+     "ece_5bin": 0.049329895751089495,
+     "calibration_line": {
+      "intercept": 1.6428749873194437,
+      "slope": 1.5850833506733901
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 53,
+       "mean_p": 0.08252879442889344,
+       "observed": 0.09433962264150944
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.28395585330926304,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.45648619088883413,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.085039497936233,
+     "rmse_level_pp": 4.845585997190133,
+     "expected_accuracy_under_label_uncertainty": 0.8007214105062607,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8579105081183622,
+     "train_brier_mean": 0.11898401588996013,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.75
+      }
+     },
+     "brier_skill_vs_climatology": 0.18959879451292072,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0022071720366580823,
+      "ci95": [
+       -0.04070284053653612,
+       0.04398452494918347
+      ],
+      "p_negative": 0.5384
+     }
+    },
+    "Naive persistence (latest reading)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 2,
+      "tn": 47,
+      "fn": 5
+     },
+     "accuracy": 0.8793103448275862,
+     "balanced_accuracy": 0.7018140589569161,
+     "precision": 0.6666666666666666,
+     "recall": 0.4444444444444444,
+     "specificity": 0.9591836734693877,
+     "f1": 0.5333333333333333,
+     "roc_auc": 0.7528344671201813,
+     "pr_auc": 0.6190609585346427,
+     "brier": 0.10495219008620303,
+     "log_loss": 0.3687496083472805,
+     "ece_5bin": 0.07371088259657615,
+     "calibration_line": {
+      "intercept": -0.6249943476094107,
+      "slope": 0.7124727628498899
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 38,
+       "mean_p": 0.058613275521646725,
+       "observed": 0.07894736842105263
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 10,
+       "mean_p": 0.2646583970725014,
+       "observed": 0.1
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 5,
+       "mean_p": 0.4813549085565768,
+       "observed": 0.2
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.7059210174270995,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 2,
+       "mean_p": 0.834292952682602,
+       "observed": 1.0
+      }
+     ],
+     "mae_level_pp": 4.229310344827587,
+     "rmse_level_pp": 5.665572071428597,
+     "expected_accuracy_under_label_uncertainty": 0.8365968357463476,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8293811459217899,
+     "train_brier_mean": 0.14722883665556677,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.20629070872172595,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": null
+    },
+    "Government + latest reading (no news)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 5,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8275862068965517,
+     "balanced_accuracy": 0.6712018140589568,
+     "precision": 0.4444444444444444,
+     "recall": 0.4444444444444444,
+     "specificity": 0.8979591836734694,
+     "f1": 0.4444444444444444,
+     "roc_auc": 0.7346938775510204,
+     "pr_auc": 0.5004451089478636,
+     "brier": 0.11018268366902005,
+     "log_loss": 0.3791486867430759,
+     "ece_5bin": 0.021500707474589195,
+     "calibration_line": {
+      "intercept": 0.03737474306604695,
+      "slope": 0.8976630415011344
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 45,
+       "mean_p": 0.0786151547479034,
+       "observed": 0.08888888888888889
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 9,
+       "mean_p": 0.26365770467813615,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4605894151787371,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.934084560805684,
+     "rmse_level_pp": 4.843183874177219,
+     "expected_accuracy_under_label_uncertainty": 0.7931207401059813,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8642761864294487,
+     "train_brier_mean": 0.09053870920733095,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.16673468467645913,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.005230493582816995,
+      "ci95": [
+       -0.03052470564775805,
+       0.038769322333303595
+      ],
+      "p_negative": 0.4704
+     }
+    },
+    "PSA/government-only (no SWS, no news)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 1,
+      "fp": 5,
+      "tn": 44,
+      "fn": 8
+     },
+     "accuracy": 0.7758620689655172,
+     "balanced_accuracy": 0.5045351473922902,
+     "precision": 0.16666666666666666,
+     "recall": 0.1111111111111111,
+     "specificity": 0.8979591836734694,
+     "f1": 0.13333333333333333,
+     "roc_auc": 0.5170068027210885,
+     "pr_auc": 0.19058931602306142,
+     "brier": 0.17217355608131613,
+     "log_loss": 0.5561003133591637,
+     "ece_5bin": 0.15303186666972796,
+     "calibration_line": {
+      "intercept": -1.6902597052372907,
+      "slope": 0.002420187257441049
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 33,
+       "mean_p": 0.08394837362422237,
+       "observed": 0.15151515151515152
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 12,
+       "mean_p": 0.2968847960358929,
+       "observed": 0.08333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 7,
+       "mean_p": 0.45339763709109226,
+       "observed": 0.2857142857142857
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 6,
+       "mean_p": 0.6516239307291997,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7446679832628832,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.961730211125456,
+     "train_brier_mean": 0.04716026886582017,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.6875,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": -0.30207622215333174,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.06722136599511312,
+      "ci95": [
+       -0.0018029880199448417,
+       0.11909840335743475
+      ],
+      "p_negative": 0.0282
+     }
+    },
+    "NLP/news-only (no SWS)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 2,
+      "fp": 7,
+      "tn": 42,
+      "fn": 7
+     },
+     "accuracy": 0.7586206896551724,
+     "balanced_accuracy": 0.5396825396825397,
+     "precision": 0.2222222222222222,
+     "recall": 0.2222222222222222,
+     "specificity": 0.8571428571428571,
+     "f1": 0.2222222222222222,
+     "roc_auc": 0.4478458049886621,
+     "pr_auc": 0.33486680699184923,
+     "brier": 0.1705869847059204,
+     "log_loss": 0.5461156872651113,
+     "ece_5bin": 0.16131893069203446,
+     "calibration_line": {
+      "intercept": -1.898888187413568,
+      "slope": -0.1356700748879461
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 42,
+       "mean_p": 0.1265207343399117,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 1,
+       "mean_p": 0.3675500838833979,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 13,
+       "mean_p": 0.5066663472438495,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 2,
+       "mean_p": 0.6419218878195756,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7343353050189357,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.6201185842293002,
+     "train_brier_mean": 0.18628003483059377,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": -0.2900776498425164,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.06563479461971736,
+      "ci95": [
+       0.0004289900129745292,
+       0.13506485773235338
+      ],
+      "p_negative": 0.024
+     }
+    },
+    "Logistic regression": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 2,
+      "fp": 6,
+      "tn": 43,
+      "fn": 7
+     },
+     "accuracy": 0.7758620689655172,
+     "balanced_accuracy": 0.5498866213151927,
+     "precision": 0.25,
+     "recall": 0.2222222222222222,
+     "specificity": 0.8775510204081632,
+     "f1": 0.23529411764705882,
+     "roc_auc": 0.5487528344671202,
+     "pr_auc": 0.247424159493125,
+     "brier": 0.18783653000815417,
+     "log_loss": 1.0920377260056122,
+     "ece_5bin": 0.20374298054125298,
+     "calibration_line": {
+      "intercept": -1.8486656239383623,
+      "slope": -0.06583635238874223
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 22,
+       "mean_p": 0.03522772939818203,
+       "observed": 0.13636363636363635
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 19,
+       "mean_p": 0.33348527652403087,
+       "observed": 0.10526315789473684
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 12,
+       "mean_p": 0.46602465630574513,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 4,
+       "mean_p": 0.6658966971317879,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 1,
+       "mean_p": 0.9999999999999969,
+       "observed": 0.0
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.7572355110932703,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.7943190798050821,
+     "train_brier_mean": 0.15760634865931672,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.8125,
+       "recall": 0.25
+      }
+     },
+     "brier_skill_vs_climatology": -0.42052870918166096,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.08288433992195113,
+      "ci95": [
+       0.02783211906288334,
+       0.14096803877008823
+      ],
+      "p_negative": 0.0008
+     }
+    },
+    "Always LOW (reference)": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 49,
+      "fn": 9
+     },
+     "accuracy": 0.8448275862068966,
+     "balanced_accuracy": 0.5,
+     "precision": null,
+     "recall": 0.0,
+     "specificity": 1.0,
+     "f1": 0.0,
+     "roc_auc": 0.45804988662131524,
+     "pr_auc": 0.1645238063791808,
+     "brier": 0.13223001322962571,
+     "log_loss": 0.4366221304777244,
+     "ece_5bin": 0.013447829043565868,
+     "calibration_line": {
+      "intercept": -3.2149489176974644,
+      "slope": -0.8367772379778257
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 58,
+       "mean_p": 0.14172458474953759,
+       "observed": 0.15517241379310345
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": null,
+     "rmse_level_pp": null,
+     "expected_accuracy_under_label_uncertainty": 0.8082387514287173,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8582754152504626,
+     "train_brier_mean": 0.12126242877292719,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.0
+      }
+     },
+     "brier_skill_vs_climatology": 0.0,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.027277823143422676,
+      "ci95": [
+       -0.03765170544935509,
+       0.08415871314402673
+      ],
+      "p_negative": 0.3208
+     }
+    },
+    "LightGBM without market": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 7,
+      "tn": 42,
+      "fn": 5
+     },
+     "accuracy": 0.7931034482758621,
+     "balanced_accuracy": 0.6507936507936507,
+     "precision": 0.36363636363636365,
+     "recall": 0.4444444444444444,
+     "specificity": 0.8571428571428571,
+     "f1": 0.4,
+     "roc_auc": 0.7029478458049887,
+     "pr_auc": 0.4718898385565052,
+     "brier": 0.11258614066022528,
+     "log_loss": 0.39696043259095576,
+     "ece_5bin": 0.08023543078790728,
+     "calibration_line": {
+      "intercept": -0.3886693810308238,
+      "slope": 0.6933421256683346
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 43,
+       "mean_p": 0.07612930832749024,
+       "observed": 0.11627906976744186
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 11,
+       "mean_p": 0.28136651311692257,
+       "observed": 0.09090909090909091
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.49905368223238816,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6706553538082809,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.152558999741903,
+     "rmse_level_pp": 5.112704491050308,
+     "expected_accuracy_under_label_uncertainty": 0.7595506368434006,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8555683624589923,
+     "train_brier_mean": 0.1036101622910565,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.7777777777777778,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.8125,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.14855834987543726,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.007633950574022236,
+      "ci95": [
+       -0.026615443453037273,
+       0.04751732193393517
+      ],
+      "p_negative": 0.3826
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.003997119999284286,
+      "ci95": [
+       -0.0033428398509592976,
+       0.014991019094351713
+      ],
+      "p_negative": 0.1474
+     }
+    },
+    "LightGBM without climate": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 5,
+      "fp": 5,
+      "tn": 44,
+      "fn": 4
+     },
+     "accuracy": 0.8448275862068966,
+     "balanced_accuracy": 0.7267573696145124,
+     "precision": 0.5,
+     "recall": 0.5555555555555556,
+     "specificity": 0.8979591836734694,
+     "f1": 0.5263157894736842,
+     "roc_auc": 0.6870748299319728,
+     "pr_auc": 0.4304866036249015,
+     "brier": 0.11417381967922884,
+     "log_loss": 0.39376760681848993,
+     "ece_5bin": 0.030927354932948167,
+     "calibration_line": {
+      "intercept": -0.10835785244224631,
+      "slope": 0.7623886723907874
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 51,
+       "mean_p": 0.08241726183670081,
+       "observed": 0.09803921568627451
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.2992230918074471,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 5,
+       "mean_p": 0.4808973753204741,
+       "observed": 0.6
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.8988196536588795,
+     "rmse_level_pp": 4.834946305135884,
+     "expected_accuracy_under_label_uncertainty": 0.8166279985311331,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8527808486101908,
+     "train_brier_mean": 0.09440053850490279,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.75
+      }
+     },
+     "brier_skill_vs_climatology": 0.13655140092167406,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.009221629593025799,
+      "ci95": [
+       -0.0319660516248763,
+       0.04989996438974151
+      ],
+      "p_negative": 0.424
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.005584799018287845,
+      "ci95": [
+       -0.004372848097285456,
+       0.013442957589283697
+      ],
+      "p_negative": 0.2548
+     }
+    },
+    "LightGBM without employment": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 14,
+      "tn": 35,
+      "fn": 5
+     },
+     "accuracy": 0.6724137931034483,
+     "balanced_accuracy": 0.5793650793650793,
+     "precision": 0.2222222222222222,
+     "recall": 0.4444444444444444,
+     "specificity": 0.7142857142857143,
+     "f1": 0.2962962962962963,
+     "roc_auc": 0.7256235827664399,
+     "pr_auc": 0.4425930717676448,
+     "brier": 0.1152603716861953,
+     "log_loss": 0.3830431097913589,
+     "ece_5bin": 0.037704635658593985,
+     "calibration_line": {
+      "intercept": -0.07619120896898725,
+      "slope": 0.9533511891829344
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 42,
+       "mean_p": 0.0981517402683458,
+       "observed": 0.07142857142857142
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 12,
+       "mean_p": 0.24687622259508527,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4932473879827624,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 4.259814543796449,
+     "rmse_level_pp": 5.078182883752229,
+     "expected_accuracy_under_label_uncertainty": 0.6387974308201565,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8710272908997435,
+     "train_brier_mean": 0.09524141372373815,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.7222222222222222,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.5625,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.12833426488403632,
+     "reliability": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": false
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.01030818159999225,
+      "ci95": [
+       -0.03003000856216579,
+       0.04725789468930915
+      ],
+      "p_negative": 0.3806
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0066713510252542985,
+      "ci95": [
+       -0.007596848097160867,
+       0.016476736819981543
+      ],
+      "p_negative": 0.2234
+     }
+    },
+    "LightGBM without remittance": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 5,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8275862068965517,
+     "balanced_accuracy": 0.6712018140589568,
+     "precision": 0.4444444444444444,
+     "recall": 0.4444444444444444,
+     "specificity": 0.8979591836734694,
+     "f1": 0.4444444444444444,
+     "roc_auc": 0.72562358276644,
+     "pr_auc": 0.5199830549503752,
+     "brier": 0.1094392977632219,
+     "log_loss": 0.37864638642026827,
+     "ece_5bin": 0.04633701159509361,
+     "calibration_line": {
+      "intercept": -0.009252532740629373,
+      "slope": 0.8656165807552773
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 48,
+       "mean_p": 0.08364547362611562,
+       "observed": 0.10416666666666667
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.2855545439213087,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.468935690150906,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6039907865061551,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.902034355237531,
+     "rmse_level_pp": 4.818334149502194,
+     "expected_accuracy_under_label_uncertainty": 0.7920128619410473,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8621797033002238,
+     "train_brier_mean": 0.09089237176235113,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.8125,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.17235659975943818,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.004487107677018865,
+      "ci95": [
+       -0.03177521238598573,
+       0.04316465153384052
+      ],
+      "p_negative": 0.4578
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0008502771022809104,
+      "ci95": [
+       -0.0030042046403868272,
+       0.005438224685248835
+      ],
+      "p_negative": 0.381
+     }
+    },
+    "LightGBM without poverty": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 4,
+      "tn": 45,
+      "fn": 5
+     },
+     "accuracy": 0.8448275862068966,
+     "balanced_accuracy": 0.68140589569161,
+     "precision": 0.5,
+     "recall": 0.4444444444444444,
+     "specificity": 0.9183673469387755,
+     "f1": 0.47058823529411764,
+     "roc_auc": 0.7324263038548754,
+     "pr_auc": 0.528622499888242,
+     "brier": 0.1087173745677059,
+     "log_loss": 0.37418408718727103,
+     "ece_5bin": 0.04878218816992976,
+     "calibration_line": {
+      "intercept": 0.08548894205887068,
+      "slope": 0.9103772224948081
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 48,
+       "mean_p": 0.08153181640948952,
+       "observed": 0.10416666666666667
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 6,
+       "mean_p": 0.2859645950807206,
+       "observed": 0.16666666666666666
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 3,
+       "mean_p": 0.45477288240100977,
+       "observed": 0.6666666666666666
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 1,
+       "mean_p": 0.6085748217698712,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.918567366126478,
+     "rmse_level_pp": 4.812471116584007,
+     "expected_accuracy_under_label_uncertainty": 0.8051342269328647,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8622230598679095,
+     "train_brier_mean": 0.09062582991190678,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.17781620138756726,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.0037651844815028653,
+      "ci95": [
+       -0.031225812178773023,
+       0.04161425995221064
+      ],
+      "p_negative": 0.4676
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.00012835390676491505,
+      "ci95": [
+       -0.002796575876574468,
+       0.003688382903959246
+      ],
+      "p_negative": 0.4482
+     }
+    },
+    "LightGBM without news/NLP": {
+     "n": 58,
+     "n_high": 9,
+     "n_low": 49,
+     "confusion": {
+      "tp": 4,
+      "fp": 5,
+      "tn": 44,
+      "fn": 5
+     },
+     "accuracy": 0.8275862068965517,
+     "balanced_accuracy": 0.6712018140589568,
+     "precision": 0.4444444444444444,
+     "recall": 0.4444444444444444,
+     "specificity": 0.8979591836734694,
+     "f1": 0.4444444444444444,
+     "roc_auc": 0.7346938775510204,
+     "pr_auc": 0.5004451089478636,
+     "brier": 0.11018268366902005,
+     "log_loss": 0.3791486867430759,
+     "ece_5bin": 0.021500707474589195,
+     "calibration_line": {
+      "intercept": 0.03737474306604695,
+      "slope": 0.8976630415011344
+     },
+     "reliability_table": [
+      {
+       "bin": "0.0-0.2",
+       "n": 45,
+       "mean_p": 0.0786151547479034,
+       "observed": 0.08888888888888889
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 9,
+       "mean_p": 0.26365770467813615,
+       "observed": 0.3333333333333333
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.4605894151787371,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ],
+     "mae_level_pp": 3.934084560805684,
+     "rmse_level_pp": 4.843183874177219,
+     "expected_accuracy_under_label_uncertainty": 0.7931207401059813,
+     "n_uncertain_labels_pflip_gt_0_25": 5,
+     "train_accuracy_mean": 0.8642761864294487,
+     "train_brier_mean": 0.09053870920733095,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "n_high": 4,
+       "accuracy": 0.75,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "n_high": 1,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 16,
+       "n_high": 4,
+       "accuracy": 0.875,
+       "recall": 0.5
+      }
+     },
+     "brier_skill_vs_climatology": 0.16673468467645913,
+     "reliability": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     },
+     "vs_persistence_brier": {
+      "mean": 0.005230493582816995,
+      "ci95": [
+       -0.03052470564775805,
+       0.038769322333303595
+      ],
+      "p_negative": 0.4704
+     },
+     "vs_full_lightgbm_brier": {
+      "mean": 0.0015936630080790413,
+      "ci95": [
+       -0.0030680214080918977,
+       0.00264545035518102
+      ],
+      "p_negative": 0.5712
+     }
+    }
+   }
+  }
+ },
+ "sawtooth_quarters": [
+  "2024-Q4",
+  "2025-Q2",
+  "2025-Q3",
+  "2025-Q4"
+ ],
+ "selection": {
+  "selected": "Damped persistence (statistical)",
+  "reason": "no candidate passed on development; persistence-family member with the lower development Brier",
+  "eligible_on_development": [],
+  "validated_lead1_checks": {
+   "full_period_passes_with_ge_10_high": true,
+   "test_period_passes": true,
+   "without_sawtooth_passes": false,
+   "ece_full_le_0_10": true
+  },
+  "lead1_status": "provisional",
+  "probability_display": "calibrated probability shown"
+ },
+ "protocol_sha256": "adc90414fa63373d2cd596bf17fa3bd9878ea7178b62e773b56f5c4b9f95143e",
+ "reproduces_fi7_lead1": {
+  "n_compared": 496,
+  "max_abs_p_diff": 1.1102230246251565e-16
+ }
+}

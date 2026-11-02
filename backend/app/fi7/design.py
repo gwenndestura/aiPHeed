@@ -53,7 +53,8 @@ class Designer:
         self.lab = labels()
         self.q = quarterly()
         self.extra = X.load_cache()
-        last_qi = qindex("2026-Q4")
+        live = pd.Timestamp(as_of) if as_of is not None else pd.Timestamp.today()
+        last_qi = max(qindex("2026-Q4"), live.year * 4 + (live.month - 1) // 3)     # never a hardcoded final quarter
         self.issue_qis = list(range(qindex(FIRST_ISSUE), last_qi + 1))
         self.dates = {qi: issue_date(qi, timing) for qi in self.issue_qis}
         if as_of is not None:

@@ -1,0 +1,55 @@
+{
+ "checks": {
+  "protocol_lock_matches": true,
+  "metrics_recomputed_match": true,
+  "every_target_is_next_quarter": true,
+  "issue_date_inside_issue_quarter": true,
+  "training_targets_published_by_issue": true,
+  "target_published_after_issue": true,
+  "predictors_equal_vintage_values_known_at_issue": true,
+  "no_duplicate_forecasts": true,
+  "same_target_quarters_for_every_configuration": true,
+  "labels_are_sws_balance_luzon_only": true,
+  "selection_independent_of_test_outcomes": true,
+  "artifact_sha256_valid": true,
+  "served_model_is_selected_model": true,
+  "served_artifact_matches": true,
+  "served_forecast_reproduces": true,
+  "served_probability_bounded": true,
+  "served_target_is_next_quarter": true,
+  "served_training_cutoff_before_issue": true
+ },
+ "details": {
+  "max_metric_difference": 1.1102230246251565e-16,
+  "vintage_mismatches": {
+   "cpi_food_yoy": 0,
+   "unemp_rate": 0,
+   "remit_yoy": 0,
+   "poverty_inc": 0,
+   "oni": 0,
+   "hunger_last": 0
+  },
+  "independent_outcome_quarters_evaluated": 62,
+  "sws_quarters_with_label": 98,
+  "served": {
+   "issue_date": "2026-11-03",
+   "target_quarter": "2027-Q1",
+   "status": "provisional",
+   "forecast": {
+    "class": "HIGH",
+    "p_high": 0.44,
+    "probability_note": "In the walk-forward test, 3 past forecasts fell in the 0.4-0.6 range and 100% of them were followed by a HIGH quarter (mean forecast 46%). Few cases: read the probability as approximate.",
+    "projected_hunger_pct": 20,
+    "projected_hunger_interval95_pct": [
+     9,
+     30
+    ],
+    "interval_note": "Range method: errors of past out-of-sample forecasts (conformal). It contained the published result in 97% of 62 past quarters. The projected number is the latest reading drifting toward normal, not a model of causes.",
+    "significance_line_pct": 20.2,
+    "decision_threshold_tau": 0.12,
+    "class_rule": "HIGH is raised when the probability is at least 0.12, the threshold that best balanced missed HIGH quarters and false alarms in training (fixed in FI7)"
+   }
+  }
+ },
+ "all_passed": true
+}

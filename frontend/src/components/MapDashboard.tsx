@@ -11,6 +11,7 @@ import {
   NewsArticlesCardBody,
 } from "@/components/RightAnalyticsPanel";
 import { QuarterTimeSlider } from "@/components/QuarterTimeSlider";
+import { NextQuarterOutlookCardBody } from "@/components/NextQuarterOutlook";
 import { ForecastHistoryModal } from "@/components/ForecastHistoryModal";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { MapLegend } from "@/components/MapLegend";
@@ -468,6 +469,10 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     </Card>
   ) : currentQuarter ? (
     <>
+      {/* FI9 Lead-1 outlook (regional, Balance Luzon), shown as returned by /api/v1/fi9/outlook; additive. */}
+      <Card>
+        <NextQuarterOutlookCardBody />
+      </Card>
       <Card>
         <ShapNarrativeCardBody
           quarter={currentQuarter}

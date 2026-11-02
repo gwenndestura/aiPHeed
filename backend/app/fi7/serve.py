@@ -103,12 +103,13 @@ def issue(as_of: str | None = None) -> dict:
             "all_models": {k: {kk: vv for kk, vv in v.items() if kk != "model"} for k, v in per.items()},
         })
     nq = next(f for f in out if f["h"] == 1)
-    status = (f"{nq['served_model']} next-quarter forecast ({'validated' if nq['served_reliable'] else 'indicative'}); every LGU "
-              "shares the regional probability, so the order of LGUs comes from vulnerability")
+    status = (f"Balance Luzon next-quarter outlook ({nq['served_model']}, {'provisional' if not nq.get('robust_to_alternation_check') else 'validated'}) "
+              "used only as a common regional scale factor; the order of LGUs comes from PSA poverty and density; not measured hunger")
     lgus = R.rank_lgus(nq["p_high"], {"forecast_target_quarter": nq["target_quarter"], "forecast_status": status})
     lgus.to_csv(OUT / "lgu_rankings.csv", index=False, lineterminator="\n")
     prov = R.province_priority(lgus)
-    prov["forecast_basis"] = "Balance Luzon next-quarter forecast (covers all 5 provinces); province figures are vulnerability-adjusted priority"
+    prov["forecast_basis"] = ("Balance Luzon next-quarter outlook (regional context; CALABARZON is ~34% of Balance Luzon). Province "
+                              "figures are vulnerability-adjusted priority, not provincial food-insecurity measurements or forecasts")
     prov.to_csv(OUT / "province_priority.csv", index=False, lineterminator="\n")
     R.sensitivity(lgus).to_csv(OUT / "lgu_weight_sensitivity.csv", index=False, lineterminator="\n")
     seal = pd.DataFrame([{"issue_date": f["issue_date"], "target_quarter": f["target_quarter"], "h": f["h"], "served_model": f["served_model"],
@@ -118,8 +119,10 @@ def issue(as_of: str | None = None) -> dict:
     body = {"version": VERSION, "issued_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "as_of": as_of_ts.date().isoformat(), "current_quarter": qlabel(issue_qi), "forecasts": out,
             "furthest_reliable_lead_by_model": ev["furthest_reliable_lead"], "seal_sha256": hashlib.sha256(seal_csv.encode()).hexdigest(),
-            "what_is_forecast": "Probability that SWS involuntary hunger in Balance Luzon (the SWS area containing all of "
-                                "CALABARZON) is significantly above its five-year normal (beyond the survey margin of error)."}
+            "what_is_forecast": "Probability that SWS involuntary hunger in Balance Luzon is significantly above its five-year "
+                                "normal (beyond the survey margin of error).",
+            "geographic_scope": "Balance Luzon (SWS area = Luzon outside Metro Manila; CALABARZON is ~34% of its population). Not a CALABARZON, provincial or municipal measurement (docs/methodology/METHODOLOGY_DECISION_RECORD.md)",
+            "measurement_type": "model-generated forecast of a regional survey outcome (not observed prevalence)"}
     (OUT / "forecast.json").write_text(json.dumps(body, indent=1, default=str))
     return body
 

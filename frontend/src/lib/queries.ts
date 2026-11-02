@@ -14,6 +14,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 import type {
   AuditResponse,
+  Fi9Outlook,
+  Fi9ProvincialMeasurements,
   ConfigResponse,
   ExplainabilityResponse,
   FinalArchive,
@@ -60,6 +62,29 @@ export function useFinalOverview(enabled = true) {
     queryKey: ["final", "overview"],
     queryFn: () => api.get<FinalOverview>("/api/v1/final/overview", undefined, { auth: false }),
     staleTime: HOUR,
+    enabled,
+  });
+}
+
+// FI9 Lead-1 (next calendar quarter) outlook, issued once per quarter by app.fi9.serve. A stale forecast is a 503,
+// never shown as current, so no retry on failure.
+export function useNextQuarterOutlook(enabled = true) {
+  return useQuery({
+    queryKey: ["fi9", "outlook"],
+    queryFn: () => api.get<Fi9Outlook>("/api/v1/fi9/outlook", undefined, { auth: false }),
+    staleTime: HOUR,
+    retry: false,
+    enabled,
+  });
+}
+
+// Historical provincial survey measurements (FNRI 2015 HFIAS): fixed files, shown apart from the forecast.
+export function useProvincialMeasurements(enabled = true) {
+  return useQuery({
+    queryKey: ["fi9", "provincial-measurements"],
+    queryFn: () => api.get<Fi9ProvincialMeasurements>("/api/v1/fi9/provincial-measurements", undefined, { auth: false }),
+    staleTime: HOUR,
+    retry: false,
     enabled,
   });
 }

@@ -19,9 +19,11 @@ from app.fi7 import VERSION
 from app.fi7.paths import OUT
 
 router = APIRouter(prefix="/fi7")
-STATUS = (f"{VERSION}: probability that SWS Balance Luzon hunger is significantly above its five-year normal; issued "
-          "inside the current quarter after the latest SWS release; h=1 is the next quarter. Province and LGU figures are "
-          "vulnerability-adjusted priorities, not measurements. Development evidence; not the dashboard's served model.")
+STATUS = (f"{VERSION}: probability that SWS Balance Luzon hunger (Luzon outside Metro Manila; CALABARZON ~34%) is "
+          "significantly above its five-year normal; issued inside the current quarter after the latest SWS release; h=1 is "
+          "the next quarter; provisional. Balance Luzon is regional context for CALABARZON, never a provincial ground truth: "
+          "province and LGU figures are vulnerability-adjusted priorities, not measured or forecast provincial hunger. "
+          "Development evidence; not the dashboard's served model.")
 
 
 @lru_cache(maxsize=32)

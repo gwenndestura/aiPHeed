@@ -1,0 +1,125 @@
+{
+ "C1 local level": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C1b damped local level": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": false,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C2 recalibrated damped": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": false,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C3 market": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C3 climate": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": true
+  },
+  "adopt": false
+ },
+ "C3 employment": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C3 remittance": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "C3 poverty": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": true,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": true
+  },
+  "adopt": false
+ },
+ "C3 news": {
+  "checks": {
+   "reliability_full": false,
+   "reliability_B": true,
+   "reliability_without_sawtooth": false,
+   "ece_full_le_0_10": false,
+   "overfit_gap_le_0_10": true,
+   "brier_better_than_C0_P90": false,
+   "brier_better_than_naive_P90": false,
+   "not_worse_than_C0_on_B": false
+  },
+  "adopt": false
+ },
+ "interval": {
+  "gaussian_coverage": 0.8870967741935484,
+  "conformal_coverage": 0.967741935483871,
+  "replace_with_conformal": true
+ },
+ "decision": "retain C0 (FI9 damped persistence): no candidate passed every adoption check"
+}

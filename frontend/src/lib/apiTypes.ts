@@ -707,3 +707,72 @@ export interface FinalRiskRows {
   maxReliableLead: number | null;
   rows: FinalRiskRow[];
 }
+
+// ---------------------------------------------------------------- FI9 Lead-1 outlook (GET /api/v1/fi9/outlook)
+export interface Fi9ContextIndicator {
+  indicator: string;
+  value: number | null;
+  unit: string;
+  geographic_level: string;
+}
+
+export interface Fi9Outlook {
+  note: string;
+  status: "provisional" | "validated";
+  current_quarter: string;
+  issue_quarter: string;
+  issue_date: string;
+  target_quarter: string;
+  horizon: string;
+  model: string;
+  model_version: string;
+  artifact_sha256: string;
+  training_data_cutoff: string;
+  latest_observation_quarter: string;
+  latest_observation_published: string;
+  latest_data_publication_date: string | null;
+  what_is_forecast: string;
+  geographic_scope: string;
+  measurement_type: string;
+  validation_status: string;
+  validation_checks: Record<string, boolean>;
+  forecast: {
+    class: "HIGH" | "LOW";
+    p_high: number | null;
+    probability_note: string;
+    projected_hunger_pct: number;
+    projected_hunger_interval95_pct: [number, number];
+    significance_line_pct: number;
+    decision_threshold_tau: number;
+    class_rule: string;
+    interval_note: string | null;
+  };
+  baseline_comparison: {
+    statement: string;
+    naive_persistence_accuracy: number;
+    model_accuracy: number;
+    always_low_accuracy: number;
+    model_balanced_accuracy: number;
+  } | null;
+  limitations: string[];
+  survey_design_note: string | null;
+  latest_reading_pct: number;
+  normal_pct: number;
+  explanation: string;
+  domain_context: { note: string; domains: Record<string, Fi9ContextIndicator[]> };
+}
+
+// GET /api/v1/fi9/provincial-measurements (historical survey measurements; never forecasts)
+export interface Fi9HfiasRow {
+  geography: string;
+  category: string;
+  percent: number;
+  ci95_low: number;
+  ci95_high: number;
+  n_households: number;
+}
+
+export interface Fi9ProvincialMeasurements {
+  note: string;
+  fnri_2015_hfias: Fi9HfiasRow[];
+}

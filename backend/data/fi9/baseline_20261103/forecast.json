@@ -1,0 +1,133 @@
+{
+ "version": "fi9-1.0",
+ "issued_utc": "2026-11-02T17:59:49+00:00",
+ "as_of": "2026-11-03",
+ "current_quarter": "2026-Q4",
+ "issue_quarter": "2026-Q4",
+ "issue_date": "2026-11-03",
+ "scheduled_issue_date": "2026-11-30",
+ "target_quarter": "2027-Q1",
+ "horizon": "Lead 1 (next calendar quarter)",
+ "model": "Damped persistence (statistical)",
+ "model_version": "fi9-1.0",
+ "artifact_sha256": "f865614c214c2a43866a4e2c90347815724dfd64a0b79d2743f8e4fef58a2467",
+ "training_data_cutoff": "2026-10-14",
+ "protocol_sha256": "adc90414fa63373d2cd596bf17fa3bd9878ea7178b62e773b56f5c4b9f95143e",
+ "latest_observation_quarter": "2026-Q3",
+ "latest_observation_published": "2026-10-14",
+ "latest_data_publication_date": "2026-10-30",
+ "what_is_forecast": "Whether SWS involuntary hunger in Balance Luzon (Luzon outside Metro Manila) in the target quarter will be significantly above its five-year normal (beyond the survey margin of error).",
+ "geographic_scope": "Balance Luzon (regional). CALABARZON is ~34% of its population. Not a CALABARZON, provincial or municipal measurement or forecast.",
+ "measurement_type": "forecast of a directly measured regional survey outcome (experience-based hunger), not observed prevalence",
+ "validation_status": "provisional",
+ "validation_checks": {
+  "full_period_passes_with_ge_10_high": true,
+  "test_period_passes": true,
+  "without_sawtooth_passes": false,
+  "ece_full_le_0_10": true
+ },
+ "probability_display": "calibrated probability shown",
+ "status": "provisional",
+ "forecast": {
+  "class": "HIGH",
+  "p_high": 0.44,
+  "probability_note": "In the walk-forward test, 3 past forecasts fell in the 0.4-0.6 range and 100% of them were followed by a HIGH quarter (mean forecast 46%). Few cases: read the probability as approximate.",
+  "projected_hunger_pct": 20,
+  "projected_hunger_interval95_pct": [
+   11,
+   28
+  ],
+  "significance_line_pct": 20.2,
+  "decision_threshold_tau": 0.12,
+  "class_rule": "HIGH is raised when the probability is at least 0.12, the threshold that best balanced missed HIGH quarters and false alarms in training (fixed in FI7)"
+ },
+ "latest_reading_pct": 23.6,
+ "normal_pct": 16.2,
+ "inputs": {
+  "hunger_last": 23.6,
+  "baseline_known": 16.208823529411767,
+  "hunger_age_q": 2.0,
+  "threshold_known": 20.208823529411767,
+  "moe_last": 4.0
+ },
+ "explanation": "The outlook carries forward the latest SWS reading for Balance Luzon (23.6%, 2026-Q3) and lets it drift back toward the five-year normal (16.2%) by the fitted factor 0.67 per quarter. The significantly-above-normal line is 20.2%. No other indicator changes this number: in the locked evaluation no domain or news input improved the next-quarter forecast.",
+ "domain_context": {
+  "note": "Latest values known on the issue date, shown as context. They are not inputs of the served model, and the ablation found no measurable Lead-1 contribution from any of them.",
+  "domains": {
+   "market": [
+    {
+     "indicator": "Food CPI inflation",
+     "value": 5.44,
+     "unit": "% y/y",
+     "geographic_level": "Region IV-A"
+    },
+    {
+     "indicator": "Rice CPI inflation",
+     "value": 15.4,
+     "unit": "% y/y",
+     "geographic_level": "Region IV-A"
+    },
+    {
+     "indicator": "World rice price",
+     "value": 28.88,
+     "unit": "% y/y",
+     "geographic_level": "world"
+    }
+   ],
+   "climate": [
+    {
+     "indicator": "3-month rainfall anomaly",
+     "value": 1.17,
+     "unit": "SD",
+     "geographic_level": "CALABARZON"
+    },
+    {
+     "indicator": "Storm passages, last 4 quarters",
+     "value": 1.0,
+     "unit": "count",
+     "geographic_level": "CALABARZON (200 km)"
+    },
+    {
+     "indicator": "ENSO index (ONI)",
+     "value": 2.16,
+     "unit": "deg C",
+     "geographic_level": "global"
+    }
+   ],
+   "employment": [
+    {
+     "indicator": "Unemployment rate",
+     "value": 5.27,
+     "unit": "%",
+     "geographic_level": "national"
+    },
+    {
+     "indicator": "Unemployment change",
+     "value": 1.37,
+     "unit": "pp y/y",
+     "geographic_level": "national"
+    }
+   ],
+   "remittance": [
+    {
+     "indicator": "OFW remittances",
+     "value": 3.18,
+     "unit": "% y/y",
+     "geographic_level": "national"
+    }
+   ],
+   "poverty": [
+    {
+     "indicator": "Poverty incidence",
+     "value": 4.2,
+     "unit": "% of population",
+     "geographic_level": "Region IV-A"
+    }
+   ]
+  }
+ },
+ "data_coverage": {
+  "required_inputs_present": true,
+  "context_values_missing": 0
+ }
+}

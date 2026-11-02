@@ -1,0 +1,149 @@
+{
+ "version": "fi9-1.0",
+ "issued_utc": "2026-11-02T23:18:06+00:00",
+ "as_of": "2026-11-03",
+ "current_quarter": "2026-Q4",
+ "issue_quarter": "2026-Q4",
+ "issue_date": "2026-11-03",
+ "scheduled_issue_date": "2026-11-30",
+ "target_quarter": "2027-Q1",
+ "horizon": "Lead 1 (next calendar quarter)",
+ "model": "Damped persistence (statistical)",
+ "model_version": "fi9-1.0",
+ "artifact_sha256": "952ce49074290fa1b0a099f1d1eb9cca27ce983411c877fc13464c0d3db1c041",
+ "training_data_cutoff": "2026-10-14",
+ "protocol_sha256": "adc90414fa63373d2cd596bf17fa3bd9878ea7178b62e773b56f5c4b9f95143e",
+ "latest_observation_quarter": "2026-Q3",
+ "latest_observation_published": "2026-10-14",
+ "latest_data_publication_date": "2026-10-30",
+ "what_is_forecast": "Whether SWS involuntary hunger in Balance Luzon (Luzon outside Metro Manila) in the target quarter will be significantly above its five-year normal (beyond the survey margin of error).",
+ "geographic_scope": "Balance Luzon (regional). CALABARZON is ~34% of its population. Not a CALABARZON, provincial or municipal measurement or forecast.",
+ "measurement_type": "forecast of a directly measured regional survey outcome (experience-based hunger), not observed prevalence",
+ "validation_status": "provisional",
+ "validation_checks": {
+  "full_period_passes_with_ge_10_high": true,
+  "test_period_passes": true,
+  "without_sawtooth_passes": false,
+  "ece_full_le_0_10": true
+ },
+ "probability_display": "calibrated probability shown",
+ "status": "provisional",
+ "forecast": {
+  "class": "HIGH",
+  "p_high": 0.44,
+  "probability_note": "In the walk-forward test, 3 past forecasts fell in the 0.4-0.6 range and 100% of them were followed by a HIGH quarter (mean forecast 46%). Few cases: read the probability as approximate.",
+  "projected_hunger_pct": 20,
+  "projected_hunger_interval95_pct": [
+   9,
+   30
+  ],
+  "interval_note": "Range method: errors of past out-of-sample forecasts (conformal). It contained the published result in 97% of 62 past quarters. The projected number is the latest reading drifting toward normal, not a model of causes.",
+  "significance_line_pct": 20.2,
+  "decision_threshold_tau": 0.12,
+  "class_rule": "HIGH is raised when the probability is at least 0.12, the threshold that best balanced missed HIGH quarters and false alarms in training (fixed in FI7)"
+ },
+ "baseline_comparison": {
+  "statement": "Over 62 past quarters this outlook was no better than simply carrying the latest reading forward (Brier score 0.118 vs 0.115; lower is better). It is a structured persistence forecast, not a demonstrated gain in skill.",
+  "naive_persistence_accuracy": 0.871,
+  "model_accuracy": 0.823,
+  "always_low_accuracy": 0.823,
+  "model_balanced_accuracy": 0.714
+ },
+ "limitations": [
+  "Regional only: Balance Luzon, of which CALABARZON is about a third. Not a CALABARZON, provincial or LGU figure.",
+  "Provisional: not reliable once the alternating survey quarters are set aside, and not better than persistence.",
+  "Only 11 HIGH quarters since 2010; the recall estimate could plausibly be anywhere from 0 to 0.8.",
+  "SWS release dates before 2021 follow a rule, not the recorded release, which affects the historical scores.",
+  "The first untouched test is this forecast itself, scored when the target quarter's SWS result is published."
+ ],
+ "survey_design_note": "The latest reading came from a round with 600 Balance Luzon respondents. Since 2023, rounds with 300 respondents have read about 5 points lower than larger rounds, so part of the quarter-to-quarter swing is survey design, not hunger.",
+ "latest_reading_pct": 23.6,
+ "normal_pct": 16.2,
+ "inputs": {
+  "hunger_last": 23.6,
+  "baseline_known": 16.208823529411767,
+  "hunger_age_q": 2.0,
+  "threshold_known": 20.208823529411767,
+  "moe_last": 4.0
+ },
+ "explanation": "The outlook carries forward the latest SWS reading for Balance Luzon (23.6%, 2026-Q3) and lets it drift back toward the five-year normal (16.2%) by the fitted factor 0.67 per quarter. The significantly-above-normal line is 20.2%. No other indicator changes this number: at this issue date no domain or news input improved the forecast or beat the latest reading. News did improve a LightGBM model's probabilities when issued on the last day of the quarter, but that model was still not better than the latest reading (docs/fi9n).",
+ "domain_context": {
+  "note": "Latest values known on the issue date, shown as context. They are not inputs of the served model, and the ablation found no measurable Lead-1 contribution from any of them.",
+  "domains": {
+   "market": [
+    {
+     "indicator": "Food CPI inflation",
+     "value": 5.44,
+     "unit": "% y/y",
+     "geographic_level": "Region IV-A"
+    },
+    {
+     "indicator": "Rice CPI inflation",
+     "value": 15.4,
+     "unit": "% y/y",
+     "geographic_level": "Region IV-A"
+    },
+    {
+     "indicator": "World rice price",
+     "value": 28.88,
+     "unit": "% y/y",
+     "geographic_level": "world"
+    }
+   ],
+   "climate": [
+    {
+     "indicator": "3-month rainfall anomaly",
+     "value": 1.17,
+     "unit": "SD",
+     "geographic_level": "CALABARZON"
+    },
+    {
+     "indicator": "Storm passages, last 4 quarters",
+     "value": 1.0,
+     "unit": "count",
+     "geographic_level": "CALABARZON (200 km)"
+    },
+    {
+     "indicator": "ENSO index (ONI)",
+     "value": 2.16,
+     "unit": "deg C",
+     "geographic_level": "global"
+    }
+   ],
+   "employment": [
+    {
+     "indicator": "Unemployment rate",
+     "value": 5.27,
+     "unit": "%",
+     "geographic_level": "national"
+    },
+    {
+     "indicator": "Unemployment change",
+     "value": 1.37,
+     "unit": "pp y/y",
+     "geographic_level": "national"
+    }
+   ],
+   "remittance": [
+    {
+     "indicator": "OFW remittances",
+     "value": 3.18,
+     "unit": "% y/y",
+     "geographic_level": "national"
+    }
+   ],
+   "poverty": [
+    {
+     "indicator": "Poverty incidence",
+     "value": 4.2,
+     "unit": "% of population",
+     "geographic_level": "Region IV-A"
+    }
+   ]
+  }
+ },
+ "data_coverage": {
+  "required_inputs_present": true,
+  "context_values_missing": 0
+ }
+}
