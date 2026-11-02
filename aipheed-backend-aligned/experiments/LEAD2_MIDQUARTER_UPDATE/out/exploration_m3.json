@@ -1,0 +1,317 @@
+{
+ "label": "EXPLORATORY (closed 2023-2026 rows)",
+ "planSha256": "fde5fadbc7426829b2c84835924aaeaa9eedd59cf8ffb5b682b062379dafc976",
+ "families": {
+  "F1": {
+   "nested": {
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "13 q, 65 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7538
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7763
+     },
+     "R4": {
+      "pass": false,
+      "value": "0.7538 vs 0.7385 / 0.7538"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.0880, p 0.019",
+       "CLIM": "diff -0.0567, p 0.059"
+      }
+     },
+     "R6": {
+      "pass": false,
+      "value": "P 0.519, R 0.824"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.84, 0.65, 0.75] (sizes [5, 4, 4]), LOQO min 0.733; other split [0.85, 0.7, 0.72] (sizes [4, 4, 5])"
+     }
+    },
+    "passedR2toR7": 4,
+    "failed": [
+     "R4",
+     "R6"
+    ],
+    "cm": "14/13/3/35",
+    "accuracy": 0.7538461538461538,
+    "balanced": 0.7763480392156863,
+    "precision": 0.5185185185185185,
+    "recall": 0.8235294117647058,
+    "brier": 0.15816337281841833,
+    "picksByHeldOutQuarter": {
+     "2023-Q2": 0.45,
+     "2023-Q3": 0.45,
+     "2023-Q4": 0.45,
+     "2024-Q1": 0.45,
+     "2024-Q2": 0.45,
+     "2024-Q3": 0.45,
+     "2024-Q4": 0.45,
+     "2025-Q2": 0.45,
+     "2025-Q3": 0.45,
+     "2025-Q4": 0.35,
+     "2026-Q1": 0.45,
+     "2026-Q2": 0.45,
+     "2026-Q3": 0.45
+    }
+   },
+   "inSampleOptimistic": {
+    "gridPoint": 0.45,
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "13 q, 65 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7846
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7972
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7846 vs 0.7385 / 0.7538"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.0880, p 0.019",
+       "CLIM": "diff -0.0567, p 0.059"
+      }
+     },
+     "R6": {
+      "pass": false,
+      "value": "P 0.560, R 0.824"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.84, 0.65, 0.85] (sizes [5, 4, 4]), LOQO min 0.767; other split [0.85, 0.7, 0.8] (sizes [4, 4, 5])"
+     }
+    },
+    "passedR2toR7": 5,
+    "failed": [
+     "R6"
+    ],
+    "cm": "14/11/3/37",
+    "accuracy": 0.7846153846153846,
+    "balanced": 0.7971813725490196,
+    "precision": 0.56,
+    "recall": 0.8235294117647058,
+    "brier": 0.15816337281841833
+   }
+  },
+  "F2": {
+   "nested": {
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "13 q, 65 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7538
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7763
+     },
+     "R4": {
+      "pass": false,
+      "value": "0.7538 vs 0.7385 / 0.7538"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.0880, p 0.019",
+       "CLIM": "diff -0.0567, p 0.059"
+      }
+     },
+     "R6": {
+      "pass": false,
+      "value": "P 0.519, R 0.824"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.84, 0.65, 0.75] (sizes [5, 4, 4]), LOQO min 0.733; other split [0.85, 0.7, 0.72] (sizes [4, 4, 5])"
+     }
+    },
+    "passedR2toR7": 4,
+    "failed": [
+     "R4",
+     "R6"
+    ],
+    "cm": "14/13/3/35",
+    "accuracy": 0.7538461538461538,
+    "balanced": 0.7763480392156863,
+    "precision": 0.5185185185185185,
+    "recall": 0.8235294117647058,
+    "brier": 0.15816337281841833,
+    "picksByHeldOutQuarter": {
+     "2023-Q2": [
+      0.6,
+      0.5
+     ],
+     "2023-Q3": [
+      0.6,
+      0.5
+     ],
+     "2023-Q4": [
+      0.6,
+      0.5
+     ],
+     "2024-Q1": [
+      0.6,
+      0.5
+     ],
+     "2024-Q2": [
+      0.6,
+      0.5
+     ],
+     "2024-Q3": [
+      0.6,
+      0.5
+     ],
+     "2024-Q4": [
+      0.6,
+      0.5
+     ],
+     "2025-Q2": [
+      0.6,
+      0.5
+     ],
+     "2025-Q3": [
+      0.6,
+      0.5
+     ],
+     "2025-Q4": [
+      0.6,
+      0.4
+     ],
+     "2026-Q1": [
+      0.6,
+      0.5
+     ],
+     "2026-Q2": [
+      0.6,
+      0.5
+     ],
+     "2026-Q3": [
+      0.6,
+      0.5
+     ]
+    }
+   },
+   "inSampleOptimistic": {
+    "gridPoint": [
+     0.6,
+     0.5
+    ],
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "13 q, 65 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7692
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7868
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7692 vs 0.7385 / 0.7538"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.0880, p 0.019",
+       "CLIM": "diff -0.0567, p 0.059"
+      }
+     },
+     "R6": {
+      "pass": false,
+      "value": "P 0.538, R 0.824"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.84, 0.65, 0.8] (sizes [5, 4, 4]), LOQO min 0.750; other split [0.85, 0.7, 0.76] (sizes [4, 4, 5])"
+     }
+    },
+    "passedR2toR7": 5,
+    "failed": [
+     "R6"
+    ],
+    "cm": "14/12/3/36",
+    "accuracy": 0.7692307692307693,
+    "balanced": 0.7867647058823529,
+    "precision": 0.5384615384615384,
+    "recall": 0.8235294117647058,
+    "brier": 0.15816337281841833
+   }
+  }
+ },
+ "reference_M3_product_050": {
+  "rules": {
+   "R1": {
+    "pass": true,
+    "value": "13 q, 65 rows"
+   },
+   "R2": {
+    "pass": true,
+    "value": 0.7846
+   },
+   "R3": {
+    "pass": true,
+    "value": 0.7402
+   },
+   "R4": {
+    "pass": true,
+    "value": "0.7846 vs 0.7385 / 0.7538"
+   },
+   "R5": {
+    "pass": true,
+    "value": {
+     "PERSIST-SI": "diff -0.0880, p 0.019",
+     "CLIM": "diff -0.0567, p 0.059"
+    }
+   },
+   "R6": {
+    "pass": false,
+    "value": "P 0.579, R 0.647"
+   },
+   "R7": {
+    "pass": true,
+    "value": "thirds [0.76, 0.7, 0.9] (sizes [5, 4, 4]), LOQO min 0.767; other split [0.85, 0.65, 0.84] (sizes [4, 4, 5])"
+   }
+  },
+  "passedR2toR7": 5,
+  "failed": [
+   "R6"
+  ],
+  "cm": "11/8/6/40",
+  "accuracy": 0.7846153846153846,
+  "balanced": 0.7401960784313726,
+  "precision": 0.5789473684210527,
+  "recall": 0.6470588235294118,
+  "brier": 0.15816337281841833
+ },
+ "selected": {
+  "family": "F1",
+  "gridPoint": 0.45,
+  "nestedPassedR2toR7": 4
+ },
+ "improvesAfterCrossValidation": false
+}
