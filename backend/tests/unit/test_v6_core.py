@@ -110,9 +110,10 @@ def _inject(rr, published, value=95.0):
 def test_injected_round_on_or_after_issue_never_changes_lgbm(rr, wf2):
     feats = F.table()
     base = S6.lgbm_at(rr, feats, wf2, ISSUE, {})
-    leaky = _inject(rr, ISSUE + timedelta(days=3))
-    again = S6.lgbm_at(leaky, feats, S2.walk_forward(leaky, ISSUE), ISSUE, {})
-    assert np.allclose(base.f, again.f)
+    for pub in (ISSUE, ISSUE + timedelta(days=3)):         # on the issue day itself is the boundary case
+        leaky = _inject(rr, pub)
+        again = S6.lgbm_at(leaky, feats, S2.walk_forward(leaky, ISSUE), ISSUE, {})
+        assert np.allclose(base.f, again.f), f"a round published {pub} entered the forecast"
 
 
 def test_injected_round_before_issue_is_used_positive_control(rr, wf2):

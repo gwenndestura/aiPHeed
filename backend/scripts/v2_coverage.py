@@ -18,7 +18,7 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 OUT = BACKEND.parent / "docs" / "aipheed" / (sys.argv[1] if len(sys.argv) > 1 else "v2") / "results"   # e.g. v4
-TARGETS = sorted([*(BACKEND / "app" / "forecasting").rglob("*.py"), BACKEND / "app" / "api" / "v1" / "hunger_forecast.py",
+TARGETS = sorted([*(p for p in (BACKEND / "app" / "forecasting").rglob("*.py") if p.parent.name != "v9"), BACKEND / "app" / "api" / "v1" / "hunger_forecast.py",
                   BACKEND / "app" / "paths.py"])
 TESTS = ["tests/unit/test_v2_core.py", "tests/unit/test_forecasting_core.py", "tests/unit/test_safe_load.py",
          "tests/unit/test_protocol_lock.py", "tests/unit/test_v2_preregistration.py", "tests/unit/test_v2_paths.py",
