@@ -1,0 +1,63 @@
+{
+ "schema": "aipheed.release_candidate_manifest/1",
+ "candidate": "e99-chapter3-evaluation dev candidate: FIRI v2 thesis system (served model unchanged) + E97 rollover fix + E99 wording fixes",
+ "served_model": "FIRI v2 (C3) with E56-TUNED LightGBM price-pressure indicator; no E99 model is served",
+ "changed_vs_e98_a42de8c": [
+  "backend/app/ml/inference/thesis_system.py",
+  "backend/app/quarterly/lgu_audit.py"
+ ],
+ "production_branch": "final-system-v2 (053a95d on origin) - not modified",
+ "files": {
+  "backend/data/thesis/firi2_history.csv": {
+   "sha256_lf": "e15a1acf25b8c3f84bfcec79000b61ecc3bd0f49274af86ffc054ac6afb4c6da"
+  },
+  "backend/data/thesis/firi2_evaluation.json": {
+   "sha256_lf": "c92dfe8ab327c0ef47060af81f79898edb7650a174f1e540838fda985dc8c0bd"
+  },
+  "backend/data/thesis/firi2_reference.json": {
+   "sha256_lf": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+  },
+  "backend/data/thesis/firi_anchors.json": {
+   "sha256_lf": "705b54b3a3932fe4d8f41ee0de8e1b34984185cf05d73f86a39922992f233af0"
+  },
+  "backend/data/thesis/final_evaluation.json": {
+   "sha256_lf": "3b3326e68eb6e2451628a532f66cbd3c2eebd048877a9031ae61dec9b792fe36"
+  },
+  "backend/data/e58/e58_record.json": {
+   "sha256_lf": "52bf99898fdaeec7e75ebcbc4c201cc53059c06874a130eee084c5038a3c3af7"
+  },
+  "backend/data/inputs/sws_rounds.csv": {
+   "sha256_lf": "519416a175c4ee80b16f0b0e32aa67c6c452866b3ae6316bf1d03067fad56db3"
+  },
+  "backend/data/inputs/lgu_vulnerability.csv": {
+   "sha256_lf": "82f21a9f08c0e9073303ad93e8e6460a5b575092245f07862715e88dce6b59a1"
+  },
+  "backend/app/ml/inference/thesis_system.py": {
+   "sha256_lf": "5702253bb457de347f8923704757b2fa3dde2d0eb0ebbb71a5ad2c9965bbbbfe"
+  },
+  "backend/app/ml/inference/firi.py": {
+   "sha256_lf": "2344736461bd7da5d4976ef14a1b858cb2b9bd32a67dbdc4341636c56bf58261"
+  },
+  "backend/app/ml/inference/e41_lead2.py": {
+   "sha256_lf": "5f55c1b16abd13fe13dd2877f6bf24aa430130745f2ad63e0e5e2bec76cf9de2"
+  },
+  "backend/app/services/dashboard.py": {
+   "sha256_lf": "cd7304d07b8d6cdadb8e74e2f0fd4b28e3ae3334624b00f7ffe571b057564c44"
+  },
+  "backend/app/quarterly/target.py": {
+   "sha256_lf": "13250a6ddee40e8679ad40df9b12692ec3fc52332ffa76ed9bfa2b08d795ced2"
+  },
+  "backend/app/quarterly/lgu_poverty.py": {
+   "sha256_lf": "b9e14b4e48624d05c2923a961c56f8fef14262888cc7e7fdf90fe4bf9e380897"
+  },
+  "backend/app/quarterly/lgu_audit.py": {
+   "sha256_lf": "ce4e2b8bfb7c8cd4bbc8bb6a3dc5db2790f93b1f83d7592d59fe7cfbfccf67dd"
+  },
+  "backend/data/processed/features_fused.parquet": {
+   "sha256_lf": "f02ea3e2168f9d6924e281833ed7c5419280bd6b2c253a3b9c14ec12a159ff90"
+  },
+  "backend/data/processed/psa_indicators.parquet": {
+   "sha256_lf": "305ac1b34a0d1f2440b48d261d85469c4bce3f7c6f9d65b2cadf00cb5f2f7b9f"
+  }
+ }
+}
