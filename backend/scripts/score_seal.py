@@ -72,20 +72,24 @@ def score_one(seal_path: Path, today: dt.date) -> dict:
     for p in SL.PROVINCES:
         y = int(lab.loc[p, "y"])
         r = {"province_code": p, "y": y, "hunger": int(lab.loc[p, "hunger"]), "price": int(lab.loc[p, "price"])}
-        for c in CANDIDATES:
-            v = seal["candidates"][c][p]
+        for c, cand in seal["candidates"].items():                   # C0-C2 (PREREG) or C3_M3 (addendum 2)
+            v = cand[p]
             r[f"{c}_prob"] = v["probability"]
             r[f"{c}_min"] = min(v["hunger"], v["price"])
-            for d in ("D0", "D1"):
-                r[f"{c}_{d}_correct"] = int((v[d] == "HIGH") == bool(y))
-        for a, (prob, cls) in addendum_rules(seal["candidates"]["C1_M0"][p], seal["candidates"]["C2_M2"][p]).items():
-            r[f"{a}_prob"], r[f"{a}_high"] = prob, int(cls == "HIGH")
-        for k, b in (("post", "atPostIssue"), ("served", "atServedIssue")):
-            base = seal["baselines"][b]
-            r[f"PERSIST-SI_{k}"], r[f"CLIM_{k}"] = base["PERSIST-SI"][p], base["CLIM"]
+            for d in ("D0", "D1", "M3-D0", "M3-E1"):
+                if d in v:
+                    r[f"{c}_{d}_correct"] = int((v[d] == "HIGH") == bool(y))
+        if {"C1_M0", "C2_M2"} <= set(seal["candidates"]):
+            for a, (prob, cls) in addendum_rules(seal["candidates"]["C1_M0"][p], seal["candidates"]["C2_M2"][p]).items():
+                r[f"{a}_prob"], r[f"{a}_high"] = prob, int(cls == "HIGH")
+        for k, b in (("post", "atPostIssue"), ("served", "atServedIssue"), ("m3", "atIssue")):
+            if b in seal["baselines"]:
+                base = seal["baselines"][b]
+                r[f"PERSIST-SI_{k}"], r[f"CLIM_{k}"] = base["PERSIST-SI"][p], base["CLIM"]
         rows.append(r)
     res = {"seal": seal_path.name, "sealSha256": SL.sha256_file(seal_path), "target": seal["target"],
-           "timing": seal["timing"], "scoredOn": today.isoformat(), "rows": rows}
+           "method": seal.get("method", "P0H4 / M0 / M2"), "timing": seal["timing"], "scoredOn": today.isoformat(),
+           "rows": rows}
     SCORES.mkdir(exist_ok=True)
     with open(out, "x", encoding="utf-8", newline="\n") as f:
         json.dump(res, f, indent=1)
@@ -99,17 +103,36 @@ def summary() -> dict:
     scored = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(SCORES.glob("*.score.json"))] if SCORES.exists() else []
     for s in scored:
         SL.verify_seal(SL.SEALS / s["seal"])
-    on = [s for s in scored if s["timing"] == "on-time"]
-    late = [s["target"] for s in scored if s["timing"] != "on-time"]
-    nq = len({s["target"] for s in on})
-    out = {"onTimeQuarters": nq, "lateSeals": late, "minimumForAnyClaim": MIN_CLAIM_QUARTERS,
-           "primary": f"{PRIMARY[0]} under {PRIMARY[1]}"}
-    if nq < MIN_CLAIM_QUARTERS:
-        out["status"] = f"no claim: {nq} resolved on-time quarter(s), {MIN_CLAIM_QUARTERS} required (Lead 2 stays experimental)"
+    on_all = [s for s in scored if s["timing"] == "on-time"]
+    late = [f"{s['target']} ({s.get('method', 'P0H4 / M0 / M2')})" for s in scored if s["timing"] != "on-time"]
+    on = [s for s in on_all if not s["seal"].endswith("_M3.json")]
+    on3 = [s for s in on_all if s["seal"].endswith("_M3.json")]
+    nq, nq3 = len({s["target"] for s in on}), len({s["target"] for s in on3})
+    out = {"onTimeQuarters": nq, "onTimeQuartersM3": nq3, "lateSeals": late, "minimumForAnyClaim": MIN_CLAIM_QUARTERS,
+           "primary": f"{PRIMARY[0]} under {PRIMARY[1]}",
+           "hypothesesTested": ["M0 D0 (primary)", "D1", "A1", "A2", "M3-D0", "M3-E1"]}
+    if max(nq, nq3) < MIN_CLAIM_QUARTERS:
+        out["status"] = (f"no claim: {nq} (P0H4/M0/M2) and {nq3} (M3) resolved on-time quarter(s), {MIN_CLAIM_QUARTERS} "
+                         "required (Lead 2 stays experimental)")
         return out
     sys.path.insert(0, str(SL.PRICE_RUNNER))
     import price_refit as PR
     P = PR.SI.P
+    if nq3 >= MIN_CLAIM_QUARTERS:                                     # addendum 2: M3
+        SL.prereg_sha(SL.SEALS / "PREREG_LEAD2_ADDENDUM_2.md")
+        g3 = pd.DataFrame([{**r, "q": _qi(s["target"]), "target": s["target"]} for s in on3 for r in s["rows"]])
+        g3 = g3.assign(**{"PERSIST-SI_p": g3["PERSIST-SI_m3"], "CLIM_p": g3["CLIM_m3"], "ALWAYS-LOW_p": 0.0},
+                       _e1=(g3["C3_M3_prob"] >= 0.45).astype(int))
+        d0, e1 = P.official_rules(g3, "C3_M3_prob"), P.official_rules(g3, "_e1")
+        r_e1 = {**{k: v for k, v in e1["rules"].items() if not k.startswith("R5")},
+                **{k: v for k, v in d0["rules"].items() if k.startswith("R5")}}
+        out["M3"] = {"M3-D0": {"failed": d0["failed"], "passesAll": d0["passesAll"]},
+                     "M3-E1": {"failed": [k.split()[0] for k, v in r_e1.items() if not v["pass"]],
+                               "passesAll": all(v["pass"] for v in r_e1.values())},
+                     "status": "interim (R1 needs 10 quarters)" if nq3 < 10 else "final under addendum 2"}
+    if nq < MIN_CLAIM_QUARTERS:
+        out["status"] = f"P0H4/M0/M2: no claim ({nq} quarters); M3 reported separately"
+        return out
     g = pd.DataFrame([{**r, "q": _qi(s["target"]), "target": s["target"]} for s in on for r in s["rows"]])
     res = {}
     for c in CANDIDATES:

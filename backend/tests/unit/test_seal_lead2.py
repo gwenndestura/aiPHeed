@@ -130,6 +130,22 @@ def test_addendum_rules_follow_the_registered_definitions():
     assert SC.addendum_rules({"price": 0.6}, {"hunger": 0.9, "price": 0.6})["A2"][1] == "HIGH"
 
 
+def test_the_committed_addendum_2_matches_its_hash():
+    assert SL.prereg_sha(SL.SEALS / "PREREG_LEAD2_ADDENDUM_2.md") == \
+        "0b3bf735e2b32282baa95e1d498ee14244380d005d593e003ce51f00b5964ac4"
+
+
+def test_m3_issue_date_is_the_first_day_of_the_second_month_of_the_next_quarter():
+    import seal_lead2_m3 as M3
+    q3_2026 = 2026 * 4 + 2
+    assert M3.m3_issue_date(q3_2026) == dt.date(2026, 11, 1)
+    assert M3.m3_issue_date(q3_2026 + 1) == dt.date(2027, 2, 1)
+    assert M3.origin_of(dt.date(2026, 11, 1)) == q3_2026
+    for bad in (dt.date(2026, 11, 2), dt.date(2026, 10, 1), dt.date(2026, 12, 1)):
+        with pytest.raises(SL.SealError, match="not an M3 issue date"):
+            M3.origin_of(bad)
+
+
 def test_a_changed_preregistration_is_refused(tmp_path):
     p = tmp_path / "PREREG_LEAD2.md"
     b = SL.PREREG.read_bytes()
