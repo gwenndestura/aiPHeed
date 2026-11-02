@@ -1,0 +1,522 @@
+{
+ "note_sha256": "b700cb45782b0cbb86512f36a2b2ee798640f7bec23f34800836a82cc08b0ca5",
+ "ref_reproduced": {
+  "n": 136,
+  "max_abs_diff": 1.1102230246251565e-16,
+  "equal": true
+ },
+ "leads": {
+  "L1": {
+   "models": {
+    "LGBM-GOV": {
+     "metrics": {
+      "n": 62,
+      "pos": 43,
+      "neg": 19,
+      "TP": 37,
+      "FP": 14,
+      "FN": 6,
+      "TN": 5,
+      "accuracy": 0.6774193548387096,
+      "balanced": 0.5618115055079559,
+      "precision": 0.7254901960784313,
+      "recall": 0.8604651162790697,
+      "specificity": 0.2631578947368421,
+      "f1": 0.7872340425531916,
+      "quarters": 62,
+      "period": "2010-Q1..2026-Q3",
+      "auc": 0.5348837209302326,
+      "prAuc": 0.6980189045082342,
+      "brier": 0.23266480142153115,
+      "meanP": 0.6395446684188809,
+      "baseRate": 0.6935483870967742
+     },
+     "rules": {
+      "R1 >=10 quarters and >=40 rows": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2 accuracy >= 0.75": {
+       "pass": false,
+       "value": 0.6774
+      },
+      "R3 balanced accuracy >= 0.70": {
+       "pass": false,
+       "value": 0.5618
+      },
+      "R4 accuracy > always-LOW and > PERSIST-SI": {
+       "pass": true,
+       "value": "0.6774 vs 0.3065 / 0.6613"
+      },
+      "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.1060, p 0.018",
+        "CLIM": "diff +0.0120, p 0.713"
+       }
+      },
+      "R6 precision >= 0.60 and recall >= 0.60": {
+       "pass": true,
+       "value": "P 0.725, R 0.860"
+      },
+      "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+       "pass": false,
+       "value": "thirds [0.952, 0.524, 0.55] (sizes [21, 21, 20]), LOQO min 0.672; other split [0.95, 0.524, 0.571] (sizes [20, 21, 21])"
+      }
+     },
+     "brierVs": {
+      "ALWAYS-HIGH": {
+       "brierDiff": -0.07378681148169465,
+       "p_one_sided": 0.0588,
+       "lower": true
+      },
+      "persistence": {
+       "brierDiff": -0.10604487599782368,
+       "p_one_sided": 0.0182,
+       "lower": true
+      }
+     },
+     "allR1R7": false,
+     "reliable": false,
+     "n_quarters_scored": 62,
+     "period_scored": "2010-Q1..2026-Q3"
+    },
+    "LGBM-NLP": {
+     "metrics": {
+      "n": 20,
+      "pos": 13,
+      "neg": 7,
+      "TP": 8,
+      "FP": 3,
+      "FN": 5,
+      "TN": 4,
+      "accuracy": 0.6,
+      "balanced": 0.5934065934065934,
+      "precision": 0.7272727272727273,
+      "recall": 0.6153846153846154,
+      "specificity": 0.5714285714285714,
+      "f1": 0.6666666666666667,
+      "quarters": 20,
+      "period": "2021-Q2..2026-Q3",
+      "auc": 0.5274725274725275,
+      "prAuc": 0.6609983583667794,
+      "brier": 0.3068770543636089,
+      "meanP": 0.47115047550858263,
+      "baseRate": 0.65
+     },
+     "rules": {
+      "R1 >=10 quarters and >=40 rows": {
+       "pass": false,
+       "value": "20 q, 20 rows"
+      },
+      "R2 accuracy >= 0.75": {
+       "pass": false,
+       "value": 0.6
+      },
+      "R3 balanced accuracy >= 0.70": {
+       "pass": false,
+       "value": 0.5934
+      },
+      "R4 accuracy > always-LOW and > PERSIST-SI": {
+       "pass": false,
+       "value": "0.6000 vs 0.3500 / 0.6500"
+      },
+      "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.0431, p 0.299",
+        "CLIM": "diff +0.0741, p 0.851"
+       }
+      },
+      "R6 precision >= 0.60 and recall >= 0.60": {
+       "pass": true,
+       "value": "P 0.727, R 0.615"
+      },
+      "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+       "pass": false,
+       "value": "thirds [0.429, 0.714, 0.667] (sizes [7, 7, 6]), LOQO min 0.579; other split [0.333, 0.714, 0.714] (sizes [6, 7, 7])"
+      }
+     },
+     "brierVs": {
+      "ALWAYS-HIGH": {
+       "brierDiff": -0.043122945636391054,
+       "p_one_sided": 0.3838,
+       "lower": true
+      },
+      "persistence": {
+       "brierDiff": -0.043122945636391054,
+       "p_one_sided": 0.299,
+       "lower": true
+      }
+     },
+     "allR1R7": false,
+     "reliable": false,
+     "n_quarters_scored": 20,
+     "period_scored": "2021-Q2..2026-Q3"
+    }
+   },
+   "fallbacks": {
+    "LGBM-GOV": 0,
+    "LGBM-NLP": 7
+   },
+   "h3": {
+    "REF": {
+     "PERSIST": {
+      "n_quarters": 62,
+      "brier_a": 0.18751441857843637,
+      "brier_b": 0.3387096774193548,
+      "diff": -0.15119525884091847,
+      "p_one_sided": 0.0002,
+      "p_holm": 0.0012000000000000001
+     },
+     "NLP-only": {
+      "n_quarters": 20,
+      "brier_a": 0.19992533968819456,
+      "brier_b": 0.3530790065976166,
+      "diff": -0.1531536669094219,
+      "p_one_sided": 0.002,
+      "p_holm": 0.01
+     },
+     "PSA-only": {
+      "n_quarters": 62,
+      "brier_a": 0.18751441857843637,
+      "brier_b": 0.20823990893163352,
+      "diff": -0.020725490353197113,
+      "p_one_sided": 0.2556,
+      "p_holm": 0.5112
+     },
+     "LOGIT": {
+      "n_quarters": 62,
+      "brier_a": 0.18751441857843637,
+      "brier_b": 0.19283142455108157,
+      "diff": -0.005317005972645129,
+      "p_one_sided": 0.4402,
+      "p_holm": 0.5112
+     },
+     "LGBM-GOV": {
+      "n_quarters": 62,
+      "brier_a": 0.18751441857843637,
+      "brier_b": 0.23266480142153115,
+      "diff": -0.045150382843094757,
+      "p_one_sided": 0.004,
+      "p_holm": 0.0136
+     },
+     "LGBM-NLP": {
+      "n_quarters": 20,
+      "brier_a": 0.19992533968819456,
+      "brier_b": 0.3068770543636089,
+      "diff": -0.10695171467541438,
+      "p_one_sided": 0.0034,
+      "p_holm": 0.0136
+     }
+    },
+    "REF+news": {
+     "PERSIST": {
+      "n_quarters": 62,
+      "brier_a": 0.1952120546601762,
+      "brier_b": 0.3387096774193548,
+      "diff": -0.14349762275917866,
+      "p_one_sided": 0.0002,
+      "p_holm": 0.0012000000000000001
+     },
+     "NLP-only": {
+      "n_quarters": 20,
+      "brier_a": 0.22378801154158784,
+      "brier_b": 0.3530790065976166,
+      "diff": -0.12929099505602867,
+      "p_one_sided": 0.0038,
+      "p_holm": 0.0152
+     },
+     "PSA-only": {
+      "n_quarters": 62,
+      "brier_a": 0.1952120546601762,
+      "brier_b": 0.20823990893163352,
+      "diff": -0.01302785427145735,
+      "p_one_sided": 0.3448,
+      "p_holm": 0.6896
+     },
+     "LOGIT": {
+      "n_quarters": 62,
+      "brier_a": 0.1952120546601762,
+      "brier_b": 0.19283142455108157,
+      "diff": 0.002380630109094629,
+      "p_one_sided": 0.5206,
+      "p_holm": 0.6896
+     },
+     "LGBM-GOV": {
+      "n_quarters": 62,
+      "brier_a": 0.1952120546601762,
+      "brier_b": 0.23266480142153115,
+      "diff": -0.037452746761354995,
+      "p_one_sided": 0.027,
+      "p_holm": 0.081
+     },
+     "LGBM-NLP": {
+      "n_quarters": 20,
+      "brier_a": 0.22378801154158784,
+      "brier_b": 0.3068770543636089,
+      "diff": -0.08308904282202109,
+      "p_one_sided": 0.0028,
+      "p_holm": 0.014
+     }
+    }
+   }
+  },
+  "L2": {
+   "models": {
+    "LGBM-GOV": {
+     "metrics": {
+      "n": 62,
+      "pos": 43,
+      "neg": 19,
+      "TP": 34,
+      "FP": 16,
+      "FN": 9,
+      "TN": 3,
+      "accuracy": 0.5967741935483871,
+      "balanced": 0.4742962056303549,
+      "precision": 0.68,
+      "recall": 0.7906976744186046,
+      "specificity": 0.15789473684210525,
+      "f1": 0.7311827956989247,
+      "quarters": 62,
+      "period": "2010-Q1..2026-Q3",
+      "auc": 0.5055079559363524,
+      "prAuc": 0.7279398144359427,
+      "brier": 0.2400839034038984,
+      "meanP": 0.6342622315921822,
+      "baseRate": 0.6935483870967742
+     },
+     "rules": {
+      "R1 >=10 quarters and >=40 rows": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2 accuracy >= 0.75": {
+       "pass": false,
+       "value": 0.5968
+      },
+      "R3 balanced accuracy >= 0.70": {
+       "pass": false,
+       "value": 0.4743
+      },
+      "R4 accuracy > always-LOW and > PERSIST-SI": {
+       "pass": false,
+       "value": "0.5968 vs 0.3065 / 0.6613"
+      },
+      "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.0986, p 0.030",
+        "CLIM": "diff +0.0178, p 0.824"
+       }
+      },
+      "R6 precision >= 0.60 and recall >= 0.60": {
+       "pass": true,
+       "value": "P 0.680, R 0.791"
+      },
+      "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+       "pass": false,
+       "value": "thirds [0.952, 0.333, 0.5] (sizes [21, 21, 20]), LOQO min 0.590; other split [0.95, 0.333, 0.524] (sizes [20, 21, 21])"
+      }
+     },
+     "brierVs": {
+      "ALWAYS-HIGH": {
+       "brierDiff": -0.0663677094993274,
+       "p_one_sided": 0.0806,
+       "lower": true
+      },
+      "persistence": {
+       "brierDiff": -0.09862577401545644,
+       "p_one_sided": 0.0296,
+       "lower": true
+      }
+     },
+     "allR1R7": false,
+     "reliable": false,
+     "n_quarters_scored": 62,
+     "period_scored": "2010-Q1..2026-Q3"
+    },
+    "LGBM-NLP": {
+     "metrics": {
+      "n": 19,
+      "pos": 12,
+      "neg": 7,
+      "TP": 6,
+      "FP": 3,
+      "FN": 6,
+      "TN": 4,
+      "accuracy": 0.5263157894736842,
+      "balanced": 0.5357142857142857,
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "specificity": 0.5714285714285714,
+      "f1": 0.5714285714285715,
+      "quarters": 19,
+      "period": "2021-Q3..2026-Q3",
+      "auc": 0.4761904761904762,
+      "prAuc": 0.6133331458989354,
+      "brier": 0.3095709727086764,
+      "meanP": 0.411050186842798,
+      "baseRate": 0.631578947368421
+     },
+     "rules": {
+      "R1 >=10 quarters and >=40 rows": {
+       "pass": false,
+       "value": "19 q, 19 rows"
+      },
+      "R2 accuracy >= 0.75": {
+       "pass": false,
+       "value": 0.5263
+      },
+      "R3 balanced accuracy >= 0.70": {
+       "pass": false,
+       "value": 0.5357
+      },
+      "R4 accuracy > always-LOW and > PERSIST-SI": {
+       "pass": false,
+       "value": "0.5263 vs 0.3684 / 0.5789"
+      },
+      "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.1115, p 0.106",
+        "CLIM": "diff +0.0693, p 0.839"
+       }
+      },
+      "R6 precision >= 0.60 and recall >= 0.60": {
+       "pass": false,
+       "value": "P 0.667, R 0.500"
+      },
+      "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70": {
+       "pass": false,
+       "value": "thirds [0.429, 0.5, 0.667] (sizes [7, 6, 6]), LOQO min 0.500; other split [0.333, 0.5, 0.714] (sizes [6, 6, 7])"
+      }
+     },
+     "brierVs": {
+      "ALWAYS-HIGH": {
+       "brierDiff": -0.0588500799229025,
+       "p_one_sided": 0.3412,
+       "lower": true
+      },
+      "persistence": {
+       "brierDiff": -0.11148165887027091,
+       "p_one_sided": 0.106,
+       "lower": true
+      }
+     },
+     "allR1R7": false,
+     "reliable": false,
+     "n_quarters_scored": 19,
+     "period_scored": "2021-Q3..2026-Q3"
+    }
+   },
+   "fallbacks": {
+    "LGBM-GOV": 0,
+    "LGBM-NLP": 7
+   },
+   "h3": {
+    "REF": {
+     "PERSIST": {
+      "n_quarters": 62,
+      "brier_a": 0.18378601443479917,
+      "brier_b": 0.3387096774193548,
+      "diff": -0.15492366298455568,
+      "p_one_sided": 0.0002,
+      "p_holm": 0.0012000000000000001
+     },
+     "NLP-only": {
+      "n_quarters": 19,
+      "brier_a": 0.20677949370929355,
+      "brier_b": 0.43410244060064934,
+      "diff": -0.2273229468913559,
+      "p_one_sided": 0.0034,
+      "p_holm": 0.0136
+     },
+     "PSA-only": {
+      "n_quarters": 62,
+      "brier_a": 0.18378601443479917,
+      "brier_b": 0.23893559098857492,
+      "diff": -0.05514957655377582,
+      "p_one_sided": 0.0398,
+      "p_holm": 0.0796
+     },
+     "LOGIT": {
+      "n_quarters": 62,
+      "brier_a": 0.18378601443479917,
+      "brier_b": 0.23404211328517102,
+      "diff": -0.05025609885037188,
+      "p_one_sided": 0.0792,
+      "p_holm": 0.0796
+     },
+     "LGBM-GOV": {
+      "n_quarters": 62,
+      "brier_a": 0.18378601443479917,
+      "brier_b": 0.2400839034038984,
+      "diff": -0.056297888969099256,
+      "p_one_sided": 0.002,
+      "p_holm": 0.01
+     },
+     "LGBM-NLP": {
+      "n_quarters": 19,
+      "brier_a": 0.20677949370929355,
+      "brier_b": 0.3095709727086764,
+      "diff": -0.10279147899938292,
+      "p_one_sided": 0.0204,
+      "p_holm": 0.061200000000000004
+     }
+    },
+    "REF+news": {
+     "PERSIST": {
+      "n_quarters": 62,
+      "brier_a": 0.1988281512393125,
+      "brier_b": 0.3387096774193548,
+      "diff": -0.13988152618004235,
+      "p_one_sided": 0.0004,
+      "p_holm": 0.0024000000000000002
+     },
+     "NLP-only": {
+      "n_quarters": 19,
+      "brier_a": 0.25586436117665284,
+      "brier_b": 0.43410244060064934,
+      "diff": -0.1782380794239966,
+      "p_one_sided": 0.0136,
+      "p_holm": 0.06799999999999999
+     },
+     "PSA-only": {
+      "n_quarters": 62,
+      "brier_a": 0.1988281512393125,
+      "brier_b": 0.23893559098857492,
+      "diff": -0.04010743974926249,
+      "p_one_sided": 0.1064,
+      "p_holm": 0.258
+     },
+     "LOGIT": {
+      "n_quarters": 62,
+      "brier_a": 0.1988281512393125,
+      "brier_b": 0.23404211328517102,
+      "diff": -0.03521396204585855,
+      "p_one_sided": 0.1664,
+      "p_holm": 0.258
+     },
+     "LGBM-GOV": {
+      "n_quarters": 62,
+      "brier_a": 0.1988281512393125,
+      "brier_b": 0.2400839034038984,
+      "diff": -0.04125575216458592,
+      "p_one_sided": 0.0284,
+      "p_holm": 0.1136
+     },
+     "LGBM-NLP": {
+      "n_quarters": 19,
+      "brier_a": 0.25586436117665284,
+      "brier_b": 0.3095709727086764,
+      "diff": -0.0537066115320236,
+      "p_one_sided": 0.086,
+      "p_holm": 0.258
+     }
+    }
+   }
+  }
+ }
+}
