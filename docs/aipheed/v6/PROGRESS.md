@@ -16,3 +16,4 @@
 | 6 Validation | DONE (development): PERSIST selected at all 22 issues; LGBM-D Lead 2 30.0 %, MAE 7.50; V6 40.0 %; beats-all NO; shuffle control did not behave as stated (DEVIATIONS #3) | (this commit) |
 | 6b Seal | DONE: V6_PROSPECTIVE_SEAL.csv 1309a556 (issues 2026-07-01, 2026-10-01); scorer ran once: 0 of 336 scorable; 8 baselines covered | (this commit) |
 | 7a Serving | DONE: v6 artifact, inference, explanation (TreeSHAP path tested), store, /api/v1/hunger-forecast/v6 routes; E2E twice identical | (this commit) |
+| 7b Tests and reports | DONE: 1350 passed / 0 failed / 18 skipped; coverage 90.1 %; mutation 6/6 in-process; E2E identical; lock and pre-registration hashes unchanged at the end; FINAL_REPORT written | (this commit) |
