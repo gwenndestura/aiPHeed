@@ -14,3 +14,5 @@
 | 5 Pre-registration | DONE: committed and hashed before any v6 fit | (this commit) |
 | 4/6a LightGBM code | DONE (not yet evaluated): `app/forecasting/v6/{lgbm,select}.py` follow PREREGISTRATION §2 exactly. Smoke test at issue 2026-10-01: Lead 2, 56 training rows, best iteration 20, ONI admitted, predicted change about +4 pp. **No metric has been computed.** | (this commit) |
 | 6 Validation | DONE (development): PERSIST selected at all 22 issues; LGBM-D Lead 2 30.0 %, MAE 7.50; V6 40.0 %; beats-all NO; shuffle control did not behave as stated (DEVIATIONS #3) | (this commit) |
+| 6b Seal | DONE: V6_PROSPECTIVE_SEAL.csv 1309a556 (issues 2026-07-01, 2026-10-01); scorer ran once: 0 of 336 scorable; 8 baselines covered | (this commit) |
+| 7a Serving | DONE: v6 artifact, inference, explanation (TreeSHAP path tested), store, /api/v1/hunger-forecast/v6 routes; E2E twice identical | (this commit) |

@@ -23,7 +23,7 @@ TARGETS = sorted([*(BACKEND / "app" / "forecasting").rglob("*.py"), BACKEND / "a
 TESTS = ["tests/unit/test_v2_core.py", "tests/unit/test_forecasting_core.py", "tests/unit/test_safe_load.py",
          "tests/unit/test_protocol_lock.py", "tests/unit/test_v2_preregistration.py", "tests/unit/test_v2_paths.py",
          "tests/unit/test_v2_legacy_leakage.py", "tests/unit/test_v4_core.py",
-         "tests/unit/test_v4_preregistration.py"]
+         "tests/unit/test_v4_preregistration.py", "tests/unit/test_v6_core.py", "tests/unit/test_v6_preregistration.py"]
 
 WANT = {str(p.resolve()).lower() for p in TARGETS}
 hits: dict[str, set[int]] = defaultdict(set)
