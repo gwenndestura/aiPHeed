@@ -18,7 +18,7 @@
 | **2 V** Walk-forward expanding-window CV to find the furthest reliable horizon | **Achieved (determined); the answer is "none"** | Algorithm 3 stopped at the first horizon: one quarter ahead, mean fold accuracy was 0.30, below the paper's 0.75. The Maximum Reliable Lead Time is 0. | `E99_REPRODUCTION.md` |
 | **3** Municipal and city rankings from **validated** province forecasts (PSA poverty 60%, density 40%) | **Not achieved** | The 142 rankings can be computed, but no province forecast passed validation. Under Rule 4 and §3.4.4, the rankings must be marked "not validated" and not published as forecasts. | `E99_reference/REPORT.md` §11; `../OBJECTIVES_COMPLETION/OBJ3_LGU_RANKINGS.md` |
 | **4** Compare the proposed LightGBM with persistence, PSA-only, NLP-only and logistic regression | **Achieved (compared); the proposed model does not outperform them** | All comparators were run on the same folds. Persistence was significantly better than the proposed model (McNemar p = 0.0003). The proposed model was significantly better only than the NLP-only logistic regression (p = 0.039). | `E99_REPRODUCTION.md` |
-| **5** Public dashboard with forecast maps and early-warning alerts; ISO/IEC 25010 evaluation by DA Region IV-A; FNRI face validity | **Waiting for evaluators** | The dashboard is deployed with maps and alerts, but it serves a different model (P0H4), because the paper's model was not accepted. The ISO/IEC 25010 survey (50 DA evaluators) has 0 responses. FNRI face validity is below. | `E99_reference/evaluation_package/`; FNRI row below |
+| **5** Public dashboard with forecast maps and early-warning alerts; ISO/IEC 25010 evaluation by DA Region IV-A; FNRI face validity | **Waiting for evaluators** | The dashboard is deployed with maps and alerts, but it serves a different model (P0H4), because the paper's model was not accepted. The ISO/IEC 25010 survey of the 50 DA evaluators is in progress (data collection under way; not yet scored). FNRI face validity is below. | `E99_reference/evaluation_package/`; FNRI row below |
 
 ## Research questions (§1.3, pp. 10–11)
 
@@ -28,7 +28,7 @@
 | **RQ2** Furthest reliable lead time? | None. One quarter ahead already fails the paper's 75% rule (0.30). | Answered: no reliable lead |
 | **RQ3** Combined LightGBM vs the six baselines? | It loses to persistence (significantly) and to the government-only LightGBM on the holdout (0.45 vs 0.65). It beats only the NLP-only logistic regression significantly. | Answered |
 | **RQ4** Do LGU rankings reflect relative vulnerability? | Cannot be judged yet. It needs DA evaluators' rankings, and the province forecasts are not validated. | Waiting for evaluators |
-| **RQ5** How do DA (system) and DEPDev (usability) evaluators rate aiPHeed under ISO/IEC 25010? | DA: no responses yet. DEPDev: out of scope for now (decision 5); its questionnaire will be prepared as optional. | Waiting for evaluators |
+| **RQ5** How do DA (system) and DEPDev (usability) evaluators rate aiPHeed under ISO/IEC 25010? | DA: data collection in progress, not yet scored. DEPDev: out of scope for now (decision 5); its questionnaire will be prepared as optional. | Waiting for evaluators |
 
 ## Null hypotheses (§1.4, pp. 11–12)
 
@@ -37,8 +37,8 @@
 | **H1** FSSI and food CPI deviation not among the strongest predictors | **Not rejected** (borderline) | Food CPI deviation ranked 3rd, but FSSI ranked 4th, so both are not in the top three |
 | **H2** Not reliable across lead times | **Not rejected** | No lead passed (k\* = 0) |
 | **H3** Combined LightGBM will not outperform the six comparators | **Not rejected** | It did not beat persistence or the government-only models |
-| **H4** LGU rankings not consistent with DA evaluators | **Waiting for evaluators** | Ranking task ready; no responses |
-| **H5** No favourable ISO/IEC 25010 ratings from DA evaluators | **Waiting for evaluators** | Questionnaire ready; 0 of 50 responses |
+| **H4** LGU rankings not consistent with DA evaluators | **Data collection in progress** | DA evaluators' ranking responses are being collected; not yet scored |
+| **H5** No favourable ISO/IEC 25010 ratings from DA evaluators | **Data collection in progress** | ISO/IEC 25010 responses from the 50 DA evaluators are being collected; not yet scored |
 
 ## FNRI face validity (decision 8; never a label)
 
