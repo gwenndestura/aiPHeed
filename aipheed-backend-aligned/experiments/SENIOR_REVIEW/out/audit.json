@@ -1,0 +1,370 @@
+{
+ "A1 commissioned rounds excluded": {
+  "status": "PASS",
+  "evidence": {
+   "rounds_in_file": 115,
+   "commissioned": 0,
+   "BL_rounds_loaded": 115,
+   "BL_values_in_file": 115,
+   "note": "the file contains no commissioned round; load() drops any that are flagged"
+  }
+ },
+ "A2 label = quarter mean of rounds, y = H > 11.3 (strict)": {
+  "status": "PASS",
+  "evidence": {
+   "quarters": 106,
+   "max_abs_diff_H": 0.0,
+   "label_mismatches": 0,
+   "quarters_with_2+_rounds": {
+    "1998-Q3": 2,
+    "1999-Q4": 2,
+    "2001-Q3": 2,
+    "2009-Q4": 2,
+    "2016-Q2": 2,
+    "2020-Q3": 2,
+    "2021-Q2": 2,
+    "2022-Q2": 2,
+    "2025-Q2": 2
+   },
+   "exactly_11.3": [
+    "2004-Q3",
+    "2017-Q1",
+    "2022-Q4",
+    "2023-Q2"
+   ],
+   "note": "H = 11.3 exactly is LOW, as the protocol says '> 11.3'"
+  }
+ },
+ "A3 quarter assignment = quarter in which fieldwork starts (SWS's own survey label)": {
+  "status": "PASS",
+  "evidence": {
+   "rounds_checked": 115,
+   "mismatches": [],
+   "rounds_straddling_a_quarter_boundary": [
+    {
+     "quarter": "2022-Q3",
+     "fieldwork": "2022-09-29/2022-10-02",
+     "published": "2022-10-29",
+     "balance_luzon": 9.6
+    },
+    {
+     "quarter": "2023-Q2",
+     "fieldwork": "2023-06-28/2023-07-01",
+     "published": "2023-08-02",
+     "balance_luzon": 11.3
+    },
+    {
+     "quarter": "2023-Q3",
+     "fieldwork": "2023-09-28/2023-10-01",
+     "published": "2023-11-20",
+     "balance_luzon": 10.3
+    },
+    {
+     "quarter": "2024-Q2",
+     "fieldwork": "2024-06-23/2024-07-01",
+     "published": "2024-07-23",
+     "balance_luzon": 19.6
+    }
+   ],
+   "note": "an end-date rule would move these four 2022-2024 rounds to the next quarter; the first audit run used it by mistake and flagged them. They are outside 2015-2020, and SWS names each by its start quarter"
+  }
+ },
+ "A4 BL values agree with the E114 extraction of the SWS media-release tables": {
+  "status": "PASS",
+  "evidence": {
+   "rounds_compared": 112,
+   "max_abs_diff": 0.0,
+   "not_matched_by_label": 3
+  }
+ },
+ "A6 quarter of each round agrees with the E114 extraction of SWS's release table": {
+  "status": "NOTE (source ambiguity, not a code error)",
+  "evidence": {
+   "rounds_compared": 112,
+   "disagreements": [
+    {
+     "round": "2022-09-29/2022-10-02",
+     "served_quarter": "2022-Q3",
+     "e114_label": "Oct 22",
+     "e114_quarter": "2022-Q4",
+     "BL": 9.6
+    }
+   ],
+   "reading": "SWS's release table labels the 2022-09-29/10-02 round 'Oct 22' (2022-Q4); SWS's survey name and the press call it the Q3 2022 survey, which the served file follows. If moved: 2022-Q3 becomes unlabelled and 2022-Q4 = mean(9.6, 11.3) = 10.45, still LOW. At most one quarter of the 2021-2026 third changes; the failing 2015-2020 third is untouched"
+  }
+ },
+ "A5 verdict-window quarters without a label (no round: never filled)": {
+  "status": "NOTE",
+  "evidence": {
+   "missing": [
+    "2016-Q1",
+    "2020-Q1",
+    "2021-Q1",
+    "2022-Q1",
+    "2025-Q1"
+   ],
+   "any_round_in_file_for_them": [],
+   "note": "62 of 67 quarters are labelled; the five have no SWS round in the media-release tables (E114 collection), so they are skipped, not imputed"
+  }
+ },
+ "B1 SWS release dates: pre-2021 rounds use 'label month end + 60 days'": {
+  "status": "NOTE (conservative, documented)",
+  "evidence": {
+   "rounds_on_rule": 92,
+   "rounds_with_recorded_date": 23,
+   "evidence_lags_days": [
+    -8.0,
+    14.0,
+    33.0,
+    43.0,
+    26.0,
+    -2.0
+   ],
+   "evidence_max_lag": 43.0,
+   "origins_where_a_round_would_enter_if_lag_were_the_max_observed_43d": [],
+   "reading": "every documented release came 8 days before to 43 days after the label month end, so the 60-day rule is never earlier than the truth: it cannot leak; it can only delay a reading. The pairs listed are origins where a 43-day lag would have admitted that round; the true dates are unknown (E114_DATA_REQUEST.md)"
+  }
+ },
+ "B2 hunger inputs use only rounds published before O(t)": {
+  "status": "PASS",
+  "evidence": {
+   "origins_checked": 113,
+   "violations": []
+  }
+ },
+ "B3 CPI / ONI / Pink Sheet cut at month 2 of quarter t": {
+  "status": "PASS",
+  "evidence": {
+   "rule": "newest month = month 2 of quarter t; PSA CPI (~day 5 of m+1), NOAA ONI (~day 5-10 of m+1) and the World Bank Pink Sheet (~day 2-3 of m+1) for that month are all out before O(t) = day 1 of month 4. Month 3 is out after O(t), so including it would leak; excluding month 2 would be too strict",
+   "origins_checked": 113
+  }
+ },
+ "B4 production (palay, corn, fisheries) and typhoons": {
+  "status": "PASS",
+  "evidence": {
+   "production": "quarter t-1 year on year (_cut_q keeps q <= t-1): PSA quarterly releases come about 6-8 weeks after the quarter, so t-1 is out before O(t) and t is not",
+   "typhoons": "quarter t counts (ended at O(t)); a storm is known when it passes. IBTrACS best-track revisions after the fact are a vintage caveat, not a timing error"
+  }
+ },
+ "B5 news: usable only if published before O(t); NaN (not 0) before 2021": {
+  "status": "PASS",
+  "evidence": {
+   "e112_quarters_published_after_O": [],
+   "table_rows_using_them": 0,
+   "pre2021_non_nan_news_values": {
+    "N1R": 0,
+    "G_pri_yoy": 0,
+    "price_share": 0,
+    "shortage_share": 0,
+    "disaster_share": 0,
+    "agri_supply_share": 0,
+    "jobs_income_share": 0,
+    "assistance_share": 0
+   },
+   "pre2021_zero_news_values": {
+    "N1R": 0,
+    "G_pri_yoy": 0,
+    "price_share": 0,
+    "shortage_share": 0,
+    "disaster_share": 0,
+    "agri_supply_share": 0,
+    "jobs_income_share": 0,
+    "assistance_share": 0
+   },
+   "post2021_rows_with_any_news": 345,
+   "post2021_rows": 345
+  }
+ },
+ "C1 target quarter = origin + lead (table, forecasts, SHAP)": {
+  "status": "PASS",
+  "evidence": {
+   "table_rows": 1695,
+   "forecast_rows": 4155,
+   "shap_rows": 1695
+  }
+ },
+ "C2 the score frame pairs each forecast with the label of its target quarter": {
+  "status": "PASS",
+  "evidence": {
+   "rows": 62,
+   "mismatches": 0
+  }
+ },
+ "C3 hunger features recomputed (h_last, true horizon = target - newest known quarter)": {
+  "status": "PASS",
+  "evidence": {
+   "rows_checked": 226,
+   "violations": []
+  }
+ },
+ "C4 REF+news column list": {
+  "status": "PASS",
+  "evidence": {
+   "columns": [
+    "h_last",
+    "h_change",
+    "h_mean4",
+    "true_h",
+    "pi_H4L",
+    "R_food_yoy",
+    "R_head_yoy",
+    "R_rice_yoy",
+    "R_food_mom",
+    "ONI_last",
+    "ONI_max12",
+    "tc_mean",
+    "R_C3",
+    "R_C4",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy",
+    "W_urea_yoy",
+    "N1R",
+    "G_pri_yoy",
+    "price_share",
+    "shortage_share",
+    "disaster_share",
+    "agri_supply_share",
+    "jobs_income_share",
+    "assistance_share",
+    "lead"
+   ],
+   "news_columns": [
+    "N1R",
+    "G_pri_yoy",
+    "price_share",
+    "shortage_share",
+    "disaster_share",
+    "agri_supply_share",
+    "jobs_income_share",
+    "assistance_share"
+   ],
+   "note": "LightGBM treats NaN as missing (default); news is NaN before 2021, so pre-2021 rows are split on the other inputs only. That is the documented design (IMPROVE_V2 PLAN section 5), not a bug"
+  }
+ },
+ "D1 R1-R7 recomputed independently (sklearn balanced accuracy, chronological thirds, LOQO, original pd.concat cluster bootstrap seed 2036 x 5000)": {
+  "status": "PASS",
+  "evidence": {
+   "L1": {
+    "same_as_stored": true,
+    "mine": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": true,
+     "R5": false,
+     "R6": true,
+     "R7": false
+    },
+    "stored": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": true,
+     "R5": false,
+     "R6": true,
+     "R7": false
+    },
+    "accuracy": 0.7580645161290323,
+    "balanced": 0.693390452876377,
+    "thirds": [
+     0.9523809523809523,
+     0.5714285714285714,
+     0.75
+    ],
+    "third_sizes": [
+     21,
+     21,
+     20
+    ],
+    "third_spans": [
+     "2010-Q1..2015-Q1",
+     "2015-Q2..2020-Q4",
+     "2021-Q2..2026-Q3"
+    ],
+    "loqo_min": 0.7540983606557377,
+    "R5_original_concat_bootstrap": {
+     "PERSIST-SI": {
+      "diff": -0.14349762275917866,
+      "p": 0.0002
+     },
+     "CLIM": {
+      "diff": -0.02542944162254797,
+      "p": 0.171
+     }
+    },
+    "baselines": {
+     "ALWAYS-LOW": 0.3064516129032258,
+     "PERSIST-SI": 0.6612903225806451
+    }
+   },
+   "L2": {
+    "same_as_stored": true,
+    "mine": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": true,
+     "R5": false,
+     "R6": true,
+     "R7": false
+    },
+    "stored": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": true,
+     "R5": false,
+     "R6": true,
+     "R7": false
+    },
+    "accuracy": 0.7580645161290323,
+    "balanced": 0.693390452876377,
+    "thirds": [
+     0.9523809523809523,
+     0.5714285714285714,
+     0.75
+    ],
+    "third_sizes": [
+     21,
+     21,
+     20
+    ],
+    "third_spans": [
+     "2010-Q1..2015-Q1",
+     "2015-Q2..2020-Q4",
+     "2021-Q2..2026-Q3"
+    ],
+    "loqo_min": 0.7540983606557377,
+    "R5_original_concat_bootstrap": {
+     "PERSIST-SI": {
+      "diff": -0.13988152618004235,
+      "p": 0.0004
+     },
+     "CLIM": {
+      "diff": -0.02343209022134661,
+      "p": 0.2078
+     }
+    },
+    "baselines": {
+     "ALWAYS-LOW": 0.3064516129032258,
+     "PERSIST-SI": 0.6612903225806451
+    }
+   }
+  }
+ },
+ "D2 R1-R7 code matches FINAL_TARGET_AND_EVALUATION_PROTOCOL.md section 7": {
+  "status": "PASS",
+  "evidence": {
+   "R1": ">= 10 quarters and >= 40 rows",
+   "R2": "accuracy >= 0.75",
+   "R3": "balanced accuracy = (recall + specificity)/2 >= 0.70",
+   "R4": "accuracy > ALWAYS-LOW and > PERSIST-SI",
+   "R5": "Brier diff < 0 and one-sided paired cluster-bootstrap p = share of resampled mean differences >= 0, < 0.10, vs PERSIST-SI and CLIM",
+   "R6": "precision and recall >= 0.60",
+   "R7": "accuracy >= 0.60 in each chronological third of the sorted target quarters (np.array_split) and leave-one-quarter-out minimum >= 0.70",
+   "note": "one row per quarter here, so the cluster bootstrap is an ordinary bootstrap of quarters"
+  }
+ }
+}
