@@ -14,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 import type {
   AuditResponse,
+  Fi10Provinces,
   Fi9Outlook,
   Fi9ProvincialMeasurements,
   ConfigResponse,
@@ -83,6 +84,17 @@ export function useProvincialMeasurements(enabled = true) {
   return useQuery({
     queryKey: ["fi9", "provincial-measurements"],
     queryFn: () => api.get<Fi9ProvincialMeasurements>("/api/v1/fi9/provincial-measurements", undefined, { auth: false }),
+    staleTime: HOUR,
+    retry: false,
+    enabled,
+  });
+}
+
+// FI10 provincial food-price pressure outlooks (provisional); issued once per quarter, 503 when stale.
+export function useProvincialOutlook(enabled = true) {
+  return useQuery({
+    queryKey: ["fi10", "provinces"],
+    queryFn: () => api.get<Fi10Provinces>("/api/v1/fi10/provinces", undefined, { auth: false }),
     staleTime: HOUR,
     retry: false,
     enabled,

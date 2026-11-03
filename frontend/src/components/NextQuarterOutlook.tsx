@@ -8,6 +8,14 @@ import { isLoadFailure } from "@/lib/loadError";
  * The details keep four things apart: the regional outlook, historical provincial measurements (FNRI 2015),
  * the LGU priority on the map, and food-price indicators.
  */
+// The project's five trigger groups (News and NLP is listed from news_context, not from the domain indicators).
+const TRIGGER_GROUPS: [string, string[]][] = [
+  ["Market and prices", ["market"]],
+  ["Climate stress", ["climate"]],
+  ["Employment and remittances", ["employment", "remittance"]],
+  ["Poverty and social vulnerability", ["poverty"]],
+];
+
 export function NextQuarterOutlookCardBody() {
   const { data, isLoading, error } = useNextQuarterOutlook();
   const { data: prov } = useProvincialMeasurements(!!data);
@@ -81,6 +89,25 @@ export function NextQuarterOutlookCardBody() {
         </span>
       </div>
 
+      {data.p_low !== undefined && f.p_high !== null && (
+        <p className="text-[10px] text-muted-foreground leading-snug" data-testid="fi9-p-low">
+          Chance of LOW (not significantly above normal): <span className="font-mono-num text-foreground">{Math.round(data.p_low * 100)}%</span>
+        </p>
+      )}
+
+      {data.class_performance && (
+        <p className="text-[10px] leading-snug" data-testid="fi9-track-record">
+          <span className="font-semibold">Track record:</span>{" "}
+          <span className="text-muted-foreground">
+            caught {data.class_performance.high_caught} of {data.class_performance.n_high} HIGH quarters (
+            {Math.round(data.class_performance.high_recall * 100)}%), {data.class_performance.false_high} false alarms in{" "}
+            {data.class_performance.n_low} LOW quarters (LOW correctly identified {Math.round(data.class_performance.low_recall * 100)}%);
+            balanced accuracy {data.class_performance.balanced_accuracy.toFixed(2)}. It misses too many HIGH quarters to meet the
+            project's requirement.
+          </span>
+        </p>
+      )}
+
       <p className="text-[10px] leading-snug">
         Projected hunger <span className="font-mono-num font-semibold" data-testid="fi9-level">{f.projected_hunger_pct}%</span>{" "}
         <span className="text-muted-foreground">
@@ -113,13 +140,22 @@ export function NextQuarterOutlookCardBody() {
           </p>
           <p className="font-semibold pt-1">Food-price and other indicators (context, not inputs)</p>
           <p>{data.domain_context.note}</p>
-          <ul className="space-y-0.5">
-            {Object.entries(data.domain_context.domains).map(([dom, xs]) => (
-              <li key={dom}>
-                <span className="capitalize font-semibold">{dom}:</span>{" "}
-                {xs.map((x) => `${x.indicator} ${x.value ?? "n/a"} ${x.unit} (${x.geographic_level})`).join("; ")}
+          <ul className="space-y-0.5" data-testid="fi9-trigger-groups">
+            {TRIGGER_GROUPS.map(([label, keys]) => (
+              <li key={label}>
+                <span className="font-semibold">{label}:</span>{" "}
+                {keys
+                  .flatMap((k) => data.domain_context.domains[k] ?? [])
+                  .map((x) => `${x.indicator} ${x.value ?? "n/a"} ${x.unit} (${x.geographic_level})`)
+                  .join("; ")}
               </li>
             ))}
+            {data.news_context && (
+              <li>
+                <span className="font-semibold">News and NLP:</span> stress index{" "}
+                {data.news_context.news_stress_index_z ?? "n/a"} (z). {data.news_context.status}
+              </li>
+            )}
           </ul>
           {byProv.size > 0 && (
             <>

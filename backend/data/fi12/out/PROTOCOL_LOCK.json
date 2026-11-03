@@ -1,0 +1,85 @@
+{
+ "sha256": "2949208888f5a508f4bf19d47ac381be854006cd038b1b836dca03e21e5e2567",
+ "code_sha256": "9d79a6d1453f277908211f9b4cdd1b063df3ec7a6ce5b280660ddfa476430a17",
+ "locked_utc": "2026-11-03T02:31:10+00:00",
+ "protocol": {
+  "version": "fi12-1.0",
+  "outcomes": {
+   "FNRI15_SEV": "FNRI 2015 FSS: severely food-insecure households (HFIAS), %",
+   "FNRI15_INSEC": "FNRI 2015 FSS: not food secure (100 - food secure), % (derived complement)",
+   "ENNS_SEV": "ENNS severe food insecurity, % (secondary: DEPDev RDP matrix; one year per province)",
+   "ENNS_MODSEV": "ENNS moderate-to-severe food insecurity, % (secondary; one year per province)",
+   "PSA_SUB_FAM": "PSA subsistence incidence among families, % (food poverty)",
+   "PSA_SUB_POP": "PSA subsistence incidence among population, % (food poverty)"
+  },
+  "primary": {
+   "A": "FNRI15_SEV (only verified direct provincial outcome)",
+   "B": "PSA_SUB_FAM pooled over 2018, 2021, 2023"
+  },
+  "matching": "mean of out-of-sample quarterly scores with target quarter in the reference year, per lead 1-4; issue before target quarter; ENNS matched province by province to its own reference year",
+  "availability_rule": "a survey value is usable from 1 January of reference year + 2 (conservative)",
+  "rank_metrics": "Spearman (average ranks) with exact one-sided permutation p over 120 orders; pooled = mean within-year rho, exact p by convolution; top-1 hit; top-2 overlap",
+  "baselines_rank": [
+   "prior wave of the same PSA indicator",
+   "latest provincial poverty incidence available by 1 Jan of the reference year",
+   "FNRI 2015 severe food insecurity (for reference years >= 2017)"
+  ],
+  "level_candidates": {
+   "L0": "prior wave (persistence)",
+   "L1": "CALABARZON prior-wave value for every province",
+   "L2": "mean of the province's prior waves",
+   "L3": "prior wave shrunk to the regional prior wave by w = tau2/(tau2+se2), tau2 = max(0, var(prior) - mean(se2))",
+   "L4": "ridge alpha=1 on standardized [prior subsistence, prior poverty, FI10 Lead-2 mean price-pressure p] trained on the 2018->2021 transition; 2023 only"
+  },
+  "noise": {
+   "simulations": 10000,
+   "seed": 12
+  },
+  "classification": "HIGH only if province > CALABARZON with |z| > 1.96 (z uses both SEs); classification metrics only if at least 3 HIGH and 3 LOW exist",
+  "decision": {
+   "rank_skill": "exact p < 0.05 and rho above the best baseline on the same observations",
+   "level_skill": "MAE below L0 and L1 in every test wave",
+   "lead_reliable_provincial_fi": "rank skill on a track-A outcome in at least two independent reference years"
+  },
+  "features_fi10": {
+   "market": [
+    "f_m",
+    "z_food",
+    "gap_known",
+    "head_m",
+    "rice_m"
+   ],
+   "climate": [
+    "rain_anom_3m",
+    "tc_365d",
+    "oni",
+    "palay_yoy"
+   ],
+   "employment": [
+    "unemp_rate",
+    "remit_yoy"
+   ],
+   "poverty": [
+    "poverty_inc"
+   ],
+   "news": [
+    "news_prov_z"
+   ]
+  },
+  "features_firi_2023": [
+   "val_A3",
+   "val_V1",
+   "val_C1",
+   "val_C2",
+   "val_C3",
+   "val_C4",
+   "val_E1",
+   "val_E2",
+   "val_N1",
+   "val_H1",
+   "A1_food",
+   "A1_gap",
+   "pi_price"
+  ]
+ }
+}

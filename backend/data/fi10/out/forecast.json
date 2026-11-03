@@ -1,0 +1,822 @@
+{
+ "version": "fi10-1.0",
+ "issued_utc": "2026-11-03T00:53:26+00:00",
+ "as_of": "2026-11-03",
+ "issue_quarter": "2026-Q4",
+ "issue_date": "2026-11-03",
+ "what_is_forecast": "Food-price pressure in each province: whether the province's food CPI inflation in the target quarter will be unusually high (above its own 5-year normal plus one standard deviation). Measured by PSA for each province. It is a driver of food access, not a measure of food insecurity.",
+ "lead_status": {
+  "1": "provisional: did not meet every locked adoption requirement",
+  "2": "provisional: did not meet every locked adoption requirement",
+  "3": "not issued: no skill on the test period",
+  "4": "not issued: no skill on the test period"
+ },
+ "leads": {
+  "1": {
+   "model": "LightGBM regression (tuned)",
+   "params_at_this_issue": {
+    "LightGBM regression (tuned)": {
+     "num_leaves": 6,
+     "min_child_samples": 50,
+     "learning_rate": 0.0936,
+     "n_estimators": 126,
+     "reg_lambda": 9.329,
+     "colsample_bytree": 0.6069,
+     "sd": 3.183
+    }
+   },
+   "decision_threshold": 0.16,
+   "status": "provisional: did not meet every locked adoption requirement",
+   "failed_requirements": [
+    "high_precision_ok",
+    "low_recall_ok",
+    "low_precision_ok",
+    "macro_f1_ok",
+    "accuracy_ok",
+    "skill_vs_naive",
+    "every_province_ba_ge_065"
+   ],
+   "test_overall": {
+    "accuracy": 0.73,
+    "balanced_accuracy": 0.72,
+    "macro_f1": 0.68,
+    "high_recall": 0.71,
+    "high_precision": 0.44,
+    "low_recall": 0.73,
+    "low_precision": 0.9,
+    "brier": 0.17
+   },
+   "provinces": [
+    {
+     "province": "Batangas",
+     "target_quarter": "2027-Q1",
+     "class": "LOW",
+     "p_high": 0.04,
+     "p_low": 0.96,
+     "decision_threshold": 0.16,
+     "projected_food_inflation_pct": 1.9,
+     "province_high_line_pct": 7.6,
+     "latest_food_inflation_pct": 1.7,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Market and food prices",
+       "pp": 1.51
+      },
+      {
+       "group": "Employment and remittances",
+       "pp": -1.23
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": -0.18
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 8,
+      "n_high": 10,
+      "false_high": 6,
+      "n_low": 33,
+      "balanced_accuracy": 0.81
+     }
+    },
+    {
+     "province": "Cavite",
+     "target_quarter": "2027-Q1",
+     "class": "HIGH",
+     "p_high": 0.16,
+     "p_low": 0.84,
+     "decision_threshold": 0.16,
+     "projected_food_inflation_pct": 4.3,
+     "province_high_line_pct": 7.5,
+     "latest_food_inflation_pct": 6.5,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.55
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -0.58
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": -0.09
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 10,
+      "n_high": 13,
+      "false_high": 8,
+      "n_low": 30,
+      "balanced_accuracy": 0.75
+     }
+    },
+    {
+     "province": "Laguna",
+     "target_quarter": "2027-Q1",
+     "class": "HIGH",
+     "p_high": 0.19,
+     "p_low": 0.81,
+     "decision_threshold": 0.16,
+     "projected_food_inflation_pct": 3.2,
+     "province_high_line_pct": 6.0,
+     "latest_food_inflation_pct": 5.1,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.39
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -0.35
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": -0.16
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 7,
+      "n_high": 8,
+      "false_high": 11,
+      "n_low": 35,
+      "balanced_accuracy": 0.78
+     }
+    },
+    {
+     "province": "Quezon",
+     "target_quarter": "2027-Q1",
+     "class": "LOW",
+     "p_high": 0.16,
+     "p_low": 0.84,
+     "decision_threshold": 0.16,
+     "projected_food_inflation_pct": 4.1,
+     "province_high_line_pct": 7.3,
+     "latest_food_inflation_pct": 6.4,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.63
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -0.93
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.21
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 5,
+      "n_high": 10,
+      "false_high": 10,
+      "n_low": 33,
+      "balanced_accuracy": 0.6
+     }
+    },
+    {
+     "province": "Rizal",
+     "target_quarter": "2027-Q1",
+     "class": "LOW",
+     "p_high": 0.1,
+     "p_low": 0.9,
+     "decision_threshold": 0.16,
+     "projected_food_inflation_pct": 4.4,
+     "province_high_line_pct": 8.5,
+     "latest_food_inflation_pct": 6.3,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.58
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -0.48
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.22
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 5,
+      "n_high": 8,
+      "false_high": 9,
+      "n_low": 35,
+      "balanced_accuracy": 0.68
+     }
+    }
+   ]
+  },
+  "2": {
+   "model": "Ensemble: mean of ridge (partial pooling) and LightGBM regression",
+   "params_at_this_issue": {
+    "Ridge all groups + province effects (partial pooling)": {
+     "alpha": 100.0,
+     "sd": 5.0888
+    },
+    "LightGBM regression (tuned)": {
+     "num_leaves": 5,
+     "min_child_samples": 59,
+     "learning_rate": 0.1462,
+     "n_estimators": 60,
+     "reg_lambda": 8.4283,
+     "colsample_bytree": 0.509,
+     "sd": 2.9364
+    }
+   },
+   "decision_threshold": 0.175,
+   "status": "provisional: did not meet every locked adoption requirement",
+   "failed_requirements": [
+    "high_recall_ok",
+    "high_precision_ok",
+    "low_recall_ok",
+    "low_precision_ok",
+    "balanced_accuracy_ok",
+    "macro_f1_ok",
+    "accuracy_ok",
+    "every_province_ba_ge_065"
+   ],
+   "test_overall": {
+    "accuracy": 0.74,
+    "balanced_accuracy": 0.66,
+    "macro_f1": 0.65,
+    "high_recall": 0.51,
+    "high_precision": 0.44,
+    "low_recall": 0.81,
+    "low_precision": 0.85,
+    "brier": 0.14
+   },
+   "provinces": [
+    {
+     "province": "Batangas",
+     "target_quarter": "2027-Q2",
+     "class": "LOW",
+     "p_high": 0.15,
+     "p_low": 0.85,
+     "decision_threshold": 0.17,
+     "projected_food_inflation_pct": 3.6,
+     "province_high_line_pct": 7.6,
+     "latest_food_inflation_pct": 1.7,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Market and food prices",
+       "pp": 3.58
+      },
+      {
+       "group": "Employment and remittances",
+       "pp": -0.96
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.25
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 4,
+      "n_high": 10,
+      "false_high": 5,
+      "n_low": 33,
+      "balanced_accuracy": 0.62
+     }
+    },
+    {
+     "province": "Cavite",
+     "target_quarter": "2027-Q2",
+     "class": "HIGH",
+     "p_high": 0.23,
+     "p_low": 0.77,
+     "decision_threshold": 0.17,
+     "projected_food_inflation_pct": 4.7,
+     "province_high_line_pct": 7.5,
+     "latest_food_inflation_pct": 6.5,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.53
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -0.47
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.38
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 9,
+      "n_high": 13,
+      "false_high": 7,
+      "n_low": 30,
+      "balanced_accuracy": 0.73
+     }
+    },
+    {
+     "province": "Laguna",
+     "target_quarter": "2027-Q2",
+     "class": "HIGH",
+     "p_high": 0.3,
+     "p_low": 0.7,
+     "decision_threshold": 0.17,
+     "projected_food_inflation_pct": 4.0,
+     "province_high_line_pct": 6.0,
+     "latest_food_inflation_pct": 5.1,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.36
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.25
+      },
+      {
+       "group": "Poverty and social vulnerability",
+       "pp": -0.12
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 4,
+      "n_high": 8,
+      "false_high": 9,
+      "n_low": 35,
+      "balanced_accuracy": 0.62
+     }
+    },
+    {
+     "province": "Quezon",
+     "target_quarter": "2027-Q2",
+     "class": "HIGH",
+     "p_high": 0.21,
+     "p_low": 0.79,
+     "decision_threshold": 0.17,
+     "projected_food_inflation_pct": 4.3,
+     "province_high_line_pct": 7.3,
+     "latest_food_inflation_pct": 6.4,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.45
+      },
+      {
+       "group": "Market and food prices",
+       "pp": -1.06
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.17
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 4,
+      "n_high": 10,
+      "false_high": 5,
+      "n_low": 33,
+      "balanced_accuracy": 0.62
+     }
+    },
+    {
+     "province": "Rizal",
+     "target_quarter": "2027-Q2",
+     "class": "LOW",
+     "p_high": 0.17,
+     "p_low": 0.83,
+     "decision_threshold": 0.17,
+     "projected_food_inflation_pct": 4.8,
+     "province_high_line_pct": 8.5,
+     "latest_food_inflation_pct": 6.3,
+     "latest_cpi_month": "2026-09",
+     "drivers": [
+      {
+       "group": "Employment and remittances",
+       "pp": -1.43
+      },
+      {
+       "group": "Climate and agricultural supply",
+       "pp": 0.3
+      },
+      {
+       "group": "Market and food prices",
+       "pp": 0.18
+      }
+     ],
+     "track_record": {
+      "period": "test 2016-2026",
+      "high_caught": 4,
+      "n_high": 8,
+      "false_high": 6,
+      "n_low": 35,
+      "balanced_accuracy": 0.66
+     }
+    }
+   ]
+  }
+ },
+ "provinces": [
+  {
+   "province": "Batangas",
+   "lead1": {
+    "province": "Batangas",
+    "target_quarter": "2027-Q1",
+    "class": "LOW",
+    "p_high": 0.04,
+    "p_low": 0.96,
+    "decision_threshold": 0.16,
+    "projected_food_inflation_pct": 1.9,
+    "province_high_line_pct": 7.6,
+    "latest_food_inflation_pct": 1.7,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Market and food prices",
+      "pp": 1.51
+     },
+     {
+      "group": "Employment and remittances",
+      "pp": -1.23
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": -0.18
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 8,
+     "n_high": 10,
+     "false_high": 6,
+     "n_low": 33,
+     "balanced_accuracy": 0.81
+    }
+   },
+   "lead2": {
+    "province": "Batangas",
+    "target_quarter": "2027-Q2",
+    "class": "LOW",
+    "p_high": 0.15,
+    "p_low": 0.85,
+    "decision_threshold": 0.17,
+    "projected_food_inflation_pct": 3.6,
+    "province_high_line_pct": 7.6,
+    "latest_food_inflation_pct": 1.7,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Market and food prices",
+      "pp": 3.58
+     },
+     {
+      "group": "Employment and remittances",
+      "pp": -0.96
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.25
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 4,
+     "n_high": 10,
+     "false_high": 5,
+     "n_low": 33,
+     "balanced_accuracy": 0.62
+    }
+   },
+   "poverty_incidence_pct": 7.6,
+   "priority_score": 20.6,
+   "priority_rank": 4,
+   "food_access_pressure_view": "lower"
+  },
+  {
+   "province": "Cavite",
+   "lead1": {
+    "province": "Cavite",
+    "target_quarter": "2027-Q1",
+    "class": "HIGH",
+    "p_high": 0.16,
+    "p_low": 0.84,
+    "decision_threshold": 0.16,
+    "projected_food_inflation_pct": 4.3,
+    "province_high_line_pct": 7.5,
+    "latest_food_inflation_pct": 6.5,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.55
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -0.58
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": -0.09
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 10,
+     "n_high": 13,
+     "false_high": 8,
+     "n_low": 30,
+     "balanced_accuracy": 0.75
+    }
+   },
+   "lead2": {
+    "province": "Cavite",
+    "target_quarter": "2027-Q2",
+    "class": "HIGH",
+    "p_high": 0.23,
+    "p_low": 0.77,
+    "decision_threshold": 0.17,
+    "projected_food_inflation_pct": 4.7,
+    "province_high_line_pct": 7.5,
+    "latest_food_inflation_pct": 6.5,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.53
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -0.47
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.38
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 9,
+     "n_high": 13,
+     "false_high": 7,
+     "n_low": 30,
+     "balanced_accuracy": 0.73
+    }
+   },
+   "poverty_incidence_pct": 6.7,
+   "priority_score": 27.0,
+   "priority_rank": 2,
+   "food_access_pressure_view": "price shock, lower poverty"
+  },
+  {
+   "province": "Laguna",
+   "lead1": {
+    "province": "Laguna",
+    "target_quarter": "2027-Q1",
+    "class": "HIGH",
+    "p_high": 0.19,
+    "p_low": 0.81,
+    "decision_threshold": 0.16,
+    "projected_food_inflation_pct": 3.2,
+    "province_high_line_pct": 6.0,
+    "latest_food_inflation_pct": 5.1,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.39
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -0.35
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": -0.16
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 7,
+     "n_high": 8,
+     "false_high": 11,
+     "n_low": 35,
+     "balanced_accuracy": 0.78
+    }
+   },
+   "lead2": {
+    "province": "Laguna",
+    "target_quarter": "2027-Q2",
+    "class": "HIGH",
+    "p_high": 0.3,
+    "p_low": 0.7,
+    "decision_threshold": 0.17,
+    "projected_food_inflation_pct": 4.0,
+    "province_high_line_pct": 6.0,
+    "latest_food_inflation_pct": 5.1,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.36
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.25
+     },
+     {
+      "group": "Poverty and social vulnerability",
+      "pp": -0.12
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 4,
+     "n_high": 8,
+     "false_high": 9,
+     "n_low": 35,
+     "balanced_accuracy": 0.62
+    }
+   },
+   "poverty_incidence_pct": 7.9,
+   "priority_score": 16.7,
+   "priority_rank": 5,
+   "food_access_pressure_view": "price shock, lower poverty"
+  },
+  {
+   "province": "Quezon",
+   "lead1": {
+    "province": "Quezon",
+    "target_quarter": "2027-Q1",
+    "class": "LOW",
+    "p_high": 0.16,
+    "p_low": 0.84,
+    "decision_threshold": 0.16,
+    "projected_food_inflation_pct": 4.1,
+    "province_high_line_pct": 7.3,
+    "latest_food_inflation_pct": 6.4,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.63
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -0.93
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.21
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 5,
+     "n_high": 10,
+     "false_high": 10,
+     "n_low": 33,
+     "balanced_accuracy": 0.6
+    }
+   },
+   "lead2": {
+    "province": "Quezon",
+    "target_quarter": "2027-Q2",
+    "class": "HIGH",
+    "p_high": 0.21,
+    "p_low": 0.79,
+    "decision_threshold": 0.17,
+    "projected_food_inflation_pct": 4.3,
+    "province_high_line_pct": 7.3,
+    "latest_food_inflation_pct": 6.4,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.45
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -1.06
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.17
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 4,
+     "n_high": 10,
+     "false_high": 5,
+     "n_low": 33,
+     "balanced_accuracy": 0.62
+    }
+   },
+   "poverty_incidence_pct": 10.2,
+   "priority_score": 27.6,
+   "priority_rank": 1,
+   "food_access_pressure_view": "higher poverty, no price shock expected"
+  },
+  {
+   "province": "Rizal",
+   "lead1": {
+    "province": "Rizal",
+    "target_quarter": "2027-Q1",
+    "class": "LOW",
+    "p_high": 0.1,
+    "p_low": 0.9,
+    "decision_threshold": 0.16,
+    "projected_food_inflation_pct": 4.4,
+    "province_high_line_pct": 8.5,
+    "latest_food_inflation_pct": 6.3,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.58
+     },
+     {
+      "group": "Market and food prices",
+      "pp": -0.48
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.22
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 5,
+     "n_high": 8,
+     "false_high": 9,
+     "n_low": 35,
+     "balanced_accuracy": 0.68
+    }
+   },
+   "lead2": {
+    "province": "Rizal",
+    "target_quarter": "2027-Q2",
+    "class": "LOW",
+    "p_high": 0.17,
+    "p_low": 0.83,
+    "decision_threshold": 0.17,
+    "projected_food_inflation_pct": 4.8,
+    "province_high_line_pct": 8.5,
+    "latest_food_inflation_pct": 6.3,
+    "latest_cpi_month": "2026-09",
+    "drivers": [
+     {
+      "group": "Employment and remittances",
+      "pp": -1.43
+     },
+     {
+      "group": "Climate and agricultural supply",
+      "pp": 0.3
+     },
+     {
+      "group": "Market and food prices",
+      "pp": 0.18
+     }
+    ],
+    "track_record": {
+     "period": "test 2016-2026",
+     "high_caught": 4,
+     "n_high": 8,
+     "false_high": 6,
+     "n_low": 35,
+     "balanced_accuracy": 0.66
+    }
+   },
+   "poverty_incidence_pct": 8.5,
+   "priority_score": 20.8,
+   "priority_rank": 3,
+   "food_access_pressure_view": "higher poverty, no price shock expected"
+  }
+ ],
+ "regional_hunger_reference": {
+  "area": "Balance Luzon (regional, same for every province)",
+  "target_quarter": "2027-Q1",
+  "class": "HIGH",
+  "p_high": 0.44,
+  "status": "provisional"
+ },
+ "food_access_pressure_note": "Proxy view, not validated: combines the province's price-pressure outlook with whether its poverty incidence is above the CALABARZON median, following the vulnerability-plus-price-shock framework (PIDS 2025; FNRI 2024; FAO SOFI 2025). Poverty x price interactions did not improve the regional hunger forecast (FI10-A), so this view is descriptive.",
+ "poverty_median_pct": 7.9,
+ "sha256": "e611cd6f4be999bb2c7ef8d35397a0e9afa2f64c51d960fb44a52acdcbee54cf"
+}

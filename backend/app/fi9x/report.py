@@ -191,7 +191,7 @@ def build() -> list[str]:
           "month's earlier cutoff.\n"
           "* **[N] No fusion family helps reliably.** Intermediate (PCA), late (stacking, averaging), residual and nested "
           "timing-aware selection all fail to beat their no-news counterpart with P ≥ 0.90 at either origin.\n"
-          "* **[N] Lead 2 (OP2):** every model has ROC-AUC about 0.5. Naive persistence is very poor two quarters ahead "
+          "* **[N] Lead 2 (OP2):** ROC-AUC ranges from 0.33 to 0.66; the best (local level, 0.66) still has a worse Brier than climatology. Naive persistence is very poor two quarters ahead "
           "(the sawtooth), so 'beating persistence' there means nothing; nothing beats climatology meaningfully.\n")
     W_("GOVERNMENT_NEWS_FUSION_EXPERIMENTS.md", t)
     out.append("GOVERNMENT_NEWS_FUSION_EXPERIMENTS.md")
@@ -372,7 +372,7 @@ def build() -> list[str]:
         ("Overfitting?", "The production model does not overfit (3 parameters). LightGBM and logistic models with government features do."),
         ("Generalizes across periods?", f"Partly. Balanced accuracy before 2021 is {f(E['OP1']['pre_2021']['models'][C0]['balanced_accuracy'])} (production) / {f(E['OP1']['pre_2021']['models'][NV]['balanced_accuracy'])} (naive), and from 2021 {f(E['OP1']['post_2021']['models'][C0]['balanced_accuracy'])} / {f(E['OP1']['post_2021']['models'][NV]['balanced_accuracy'])}. Every model weakens without the sawtooth quarters."),
         ("Across provinces?", "Not testable: no provincial outcome series."),
-        ("Maximum reliable lead?", f"{A['max_reliable_lead'] or 'None'} (robust rule). Lead 1 passes on full data but not without the sawtooth quarters; Lead 2 has no skill (AUC ~0.5)."),
+        ("Maximum reliable lead?", f"{A['max_reliable_lead'] or 'None'} (robust rule). Lead 1 passes on full data but not without the sawtooth quarters; Lead 2 has no useful skill (AUC 0.33–0.66; no model beats climatology on Brier)."),
         ("Is Lead 1 reliable?", "Provisional. It passes the reliability rule on all and recent quarters, not across survey-design conditions."),
         ("Calibrated probabilities?", f"Reasonably (ECE {f(o[C0]['ece_5bin'])}); mid-range probabilities have been too low."),
         ("Intervals defensible?", f"Conformal: {ic['conformal']['covered']}/{ic['conformal']['n']} covered (exact CI {ic['conformal']['clopper_pearson_95'][0]:.2f}–{ic['conformal']['clopper_pearson_95'][1]:.2f}). Labelled a likely range."),

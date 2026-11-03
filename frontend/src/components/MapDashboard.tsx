@@ -12,6 +12,7 @@ import {
 } from "@/components/RightAnalyticsPanel";
 import { QuarterTimeSlider } from "@/components/QuarterTimeSlider";
 import { NextQuarterOutlookCardBody } from "@/components/NextQuarterOutlook";
+import { ProvincialOutlookCardBody } from "@/components/ProvincialOutlook";
 import { ForecastHistoryModal } from "@/components/ForecastHistoryModal";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { MapLegend } from "@/components/MapLegend";
@@ -472,6 +473,10 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       {/* FI9 Lead-1 outlook (regional, Balance Luzon), shown as returned by /api/v1/fi9/outlook; additive. */}
       <Card>
         <NextQuarterOutlookCardBody />
+      </Card>
+      {/* FI10 provincial food-price outlook (measured per province, provisional); additive. */}
+      <Card>
+        <ProvincialOutlookCardBody />
       </Card>
       <Card>
         <ShapNarrativeCardBody

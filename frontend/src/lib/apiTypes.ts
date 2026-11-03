@@ -756,6 +756,27 @@ export interface Fi9Outlook {
   } | null;
   limitations: string[];
   survey_design_note: string | null;
+  p_low?: number;
+  class_performance?: {
+    period: string;
+    n_quarters: number;
+    n_high: number;
+    n_low: number;
+    high_caught: number;
+    high_missed: number;
+    false_high: number;
+    low_correct: number;
+    high_recall: number;
+    high_precision: number;
+    low_recall: number;
+    low_precision: number;
+    balanced_accuracy: number;
+    macro_f1: number;
+    accuracy: number;
+    requirements_failed: string[];
+    plain: string;
+  };
+  news_context?: { news_stress_index_z: number | null; status: string; lightgbm_with_news_p_high?: number | null };
   latest_reading_pct: number;
   normal_pct: number;
   explanation: string;
@@ -775,4 +796,39 @@ export interface Fi9HfiasRow {
 export interface Fi9ProvincialMeasurements {
   note: string;
   fnri_2015_hfias: Fi9HfiasRow[];
+}
+
+// ---------------------------------------------------------------- FI10 provincial outlooks (GET /api/v1/fi10/provinces)
+export interface Fi10ProvinceLead {
+  province: string;
+  target_quarter: string;
+  class: "HIGH" | "LOW";
+  p_high: number;
+  p_low: number;
+  decision_threshold: number;
+  projected_food_inflation_pct: number;
+  province_high_line_pct: number;
+  latest_food_inflation_pct: number;
+  latest_cpi_month: string;
+  drivers: { group: string; pp: number }[];
+  track_record: { period: string; high_caught: number; n_high: number; false_high: number; n_low: number; balanced_accuracy: number };
+}
+
+export interface Fi10Provinces {
+  issue_quarter: string;
+  issue_date: string;
+  what_is_forecast: string;
+  lead_status: Record<string, string>;
+  provinces: {
+    province: string;
+    lead1: Fi10ProvinceLead;
+    lead2: Fi10ProvinceLead;
+    poverty_incidence_pct: number;
+    priority_score: number;
+    priority_rank: number;
+    food_access_pressure_view: string;
+  }[];
+  regional_hunger_reference: { area: string; target_quarter: string; class: string; p_high: number; status: string };
+  food_access_pressure_note: string;
+  poverty_median_pct: number;
 }

@@ -63,7 +63,7 @@ Partly. Balanced accuracy before 2021 is 0.559 (production) / 0.673 (naive), and
 Not testable: no provincial outcome series.
 
 **16. Maximum reliable lead?**  
-None (robust rule). Lead 1 passes on full data but not without the sawtooth quarters; Lead 2 has no skill (AUC ~0.5).
+None (robust rule). Lead 1 passes on full data but not without the sawtooth quarters; Lead 2 has no useful skill (AUC 0.33–0.66; no model beats climatology on Brier).
 
 **17. Is Lead 1 reliable?**  
 Provisional. It passes the reliability rule on all and recent quarters, not across survey-design conditions.

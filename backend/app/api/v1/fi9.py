@@ -65,7 +65,42 @@ def outlook():
         raise HTTPException(status_code=503, detail={
             "status": "stale", "reason": f"the stored forecast was issued in {f['issue_quarter']} for {f['target_quarter']}; "
                                          f"the current quarter is {now['current_quarter']}", "reissue": REISSUE})
-    return {"note": NOTE, "served_by": VERSION, **f}
+    return {"note": NOTE, "served_by": VERSION, **f, **_class_and_news(f)}
+
+
+def _class_and_news(f: dict) -> dict:
+    """Both-class track record of the served model (FI9-Z) and the news status at this issue timing (FI9-X).
+
+    Read from saved evaluations; nothing is computed from outcomes on request. Empty when the files are absent."""
+    out: dict = {}
+    if f.get("forecast", {}).get("p_high") is not None:
+        out["p_low"] = round(1 - f["forecast"]["p_high"], 2)
+    z = OUT.parent.parent / "fi9z" / "out" / "evaluation.json"
+    if z.exists():
+        e = _read(str(z), z.stat().st_mtime)
+        m = e["evaluation"]["OP1"]["C0 damped persistence (production)"]
+        c = m["full"]
+        req = e.get("class_requirements") or {}
+        out["class_performance"] = {
+            "period": "walk-forward, target quarters 2010-Q1 to 2026-Q3", "n_quarters": c["n"], "n_high": c["n_high"], "n_low": c["n_low"],
+            "high_caught": c["tp"], "high_missed": c["fn"], "false_high": c["fp"], "low_correct": c["tn"],
+            "high_recall": round(c["high_recall"], 2), "high_precision": round(c["high_precision"], 2),
+            "low_recall": round(c["low_recall"], 2), "low_precision": round(c["low_precision"], 2),
+            "balanced_accuracy": round(c["balanced_accuracy"], 2), "macro_f1": round(c["macro_f1"], 2), "accuracy": round(c["accuracy"], 2),
+            "requirements_failed": [k for k, ok in m["checks"].items() if not ok],
+            "plain": (f"In {c['n']} past quarters it caught {c['tp']} of {c['n_high']} HIGH quarters and raised {c['fp']} false alarms in "
+                      f"{c['n_low']} LOW quarters. It misses too many HIGH quarters to meet the project's HIGH-recall requirement (0.60), "
+                      "and it is not better than simply repeating the latest reading."), **req}
+    x = OUT.parent.parent / "fi9x" / "out" / "challenger_register.jsonl"
+    if x.exists():
+        from app.fi9 import prospective as PR
+        recs = [r for r in PR.read(x) if r["origin"] == "OP1" and r["target_quarter"] == f.get("target_quarter")]
+        if recs:
+            out["news_context"] = {"news_stress_index_z": recs[0].get("news_index_z"),
+                                   "status": "News is processed and shown as context. At this issue timing it has not improved the "
+                                             "forecast over the latest reading, so it is not used to set the outlook (FI9-X).",
+                                   "lightgbm_with_news_p_high": recs[0]["models"].get("LightGBM (government + news R1)", {}).get("p_high")}
+    return out
 
 
 @router.get("/evaluation")
