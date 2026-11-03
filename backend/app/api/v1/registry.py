@@ -23,8 +23,8 @@ public_router = APIRouter()
 admin_router = APIRouter(dependencies=[Depends(require_admin)])
 
 # Serving functions per approved model id; a model without an entry here cannot be served even if approved.
-PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook")}
-CANDIDATES = {"pfi-1.0": "app.pfi.serve"}
+PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": ("app.e139.serve", "outlook")}
+CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve"}
 
 
 @public_router.get("/final/model-registry")
@@ -80,10 +80,11 @@ def candidate_view(model_id: str, view: str) -> dict:
     fns = {"outlook": "outlook", "evaluation": "evaluation", "model": "model_card", "lgus": "lgus", "register": "register"}
     if view not in fns:
         raise HTTPException(status_code=404, detail=f"unknown view {view}")
+    from app.e139 import serve as E139S
     from app.pfi import engine as PE
     try:
         out = getattr(m, fns[view])()
-    except PE.ArtifactMissing as exc:
+    except (PE.ArtifactMissing, E139S.ArtifactMissing) as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     status = (R.load()["models"].get(model_id) or {}).get("status", "unregistered")
     return {"CANDIDATE_NOT_APPROVED": status != "approved", "registry_status": status, **out}

@@ -29,6 +29,22 @@ CATALOG = [
                "leakage": [f"{HFIAS_TESTS}::test_study_split_is_chronological_and_disjoint",
                            f"{HFIAS_TESTS}::test_protocol_lock_matches_code"],
                "all": [HFIAS_TESTS]}},
+    {"model_id": "e137-sarf-1.0", "status": "candidate", "version": "e137-sarf-1.0 (protocol E137-P1)",
+     "artifact_path": "data/e137/out/results.json",
+     "target": "Food-insecurity RISK: probability that a province's HFIAS moderate-or-severe food insecurity is above the "
+               "national level of the same survey (not a prevalence)",
+     "note": "Evaluated by its own pre-registered risk gate (app.e137.gate), not by the B-check gate."},
+    {"model_id": "e138-where-lrp-1.0", "status": "candidate", "version": "e138 LR-P (protocol E138-P1)",
+     "artifact_path": "data/e138/out/results.json",
+     "target": "Structural food-insecurity RISK (WHERE only): P(province HFIAS moderate-or-severe above national); "
+               "poverty, subsistence and poverty gap; no forecast lead",
+     "note": "Selected by E138's frozen one-SE rule; evaluated by its pre-registered gate (app.e138.gate)."},
+    {"model_id": "e139-lgbm-1.0", "status": "candidate", "version": "e139 linear-prior LightGBM (protocol E139-P1)",
+     "artifact_path": "data/e139/out/model_artifact.json",
+     "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above the national level of the same survey); "
+               "structural estimate, next-survey forecast only if a lead is validated",
+     "note": "Final-system candidate; evaluated by its pre-registered gate (app.e139.gate). Candidate outputs on admin "
+             "routes /api/v1/admin/candidates/e139-lgbm-1.0/*."},
 ]
 
 
