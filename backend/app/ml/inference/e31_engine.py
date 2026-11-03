@@ -179,11 +179,14 @@ class E31Explainer:
 
 
 class E31Disaggregator:
-    def disaggregate(self, forecasts: list[dict], quarter: str | None = None) -> pd.DataFrame:
+    def disaggregate(self, forecasts: list[dict], quarter: str | None = None,
+                     vul_path: Path | None = None) -> pd.DataFrame:
+        """vul_path: the served LGU inputs (the food-insecurity mode's copy with Lucena's own PSA value); default the
+        input file."""
         from app.ml.inference import e41_lead2 as LEAD2
         from app.quarterly.lgu_audit import build_ranking
 
-        vul = pd.read_csv(Path("data/inputs/lgu_vulnerability.csv"), dtype={"lgu_code": str})
+        vul = pd.read_csv(vul_path or Path("data/inputs/lgu_vulnerability.csv"), dtype={"lgu_code": str})
         ros = pd.read_csv(Path("data/reference/calabarzon_lgus.csv"), dtype={"lgu_psgc": str})
         prob = {f["province_code"]: f["risk_probability"] for f in forecasts} or None
         # E66 (opt-in mode only): exact ranks, so 4-dp display rounding of small probabilities creates no ties
