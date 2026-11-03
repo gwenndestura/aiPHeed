@@ -29,11 +29,19 @@ On the stored IMPROVE_V2 results, **news does not improve the forecast**: Brier 
 
 | Source | Role |
 |---|---|
-| SWS hunger | **when**: the regional food-insecurity forecast, the same for all five provinces |
-| PSA food poverty (subsistence incidence) | **where**: province and LGU priority |
-| PSA food prices | **province pressure**: the P0H4 price-part band, shown beside the forecast, never multiplied |
-| News | **explanation and early warning**, as well as a model input |
+| SWS hunger | **when**: the regional food-insecurity forecast and its class, the same for all five provinces |
+| PSA poverty incidence among families (2023, Table 1) | **where**: weights the province score (Option C, §2.1); never changes the class |
+| PSA 2021 city and municipal SAE poverty (60%) and 2024 density (40%) | **where**: LGU priority within the province (Objective 3); Lucena uses PSA's own 2021 value (Table 2a) |
+| PSA food poverty (subsistence incidence, 2023) | context text only, with its precision; not used for ranking |
+| PSA food prices | **province pressure**: the P0H4 price-part band, shown beside the score as context; changes nothing |
+| News | **explanation and early warning** (provincial GDELT flags are staged for human confirmation and never public), as well as a model input |
 | DOST-FNRI 2023 | **check**: face validity only |
+
+**Province design: Option C** (§2.1 and §9.1), the team's choice, pending adviser confirmation.
+- Each province's score is the regional food-insecurity forecast weighted by its PSA poverty incidence.
+- The class is always the regional class.
+- Options A and B are kept as alternatives.
+- It is served by `AIPHEED_MAP_MODEL=foodinsecurity` (`../FOOD_INSECURITY_SYSTEM/PLAN.md`, `STEP4_RESULTS.md`).
 
 **Alternatives kept, not deleted:**
 - **P0H4** (next section) is the documented alternative.
@@ -118,7 +126,41 @@ Three reasons explain the failure.
 **Food prices are inputs to the model, not part of the target.** Balance Luzon (Luzon outside Metro Manila) contains
 CALABARZON, but is not identical to it. SWS publishes no provincial figure, so the forecast is **regional**.
 
-### 2.1 What each province is shown (proposed design)
+### 2.1 What each province is shown
+
+#### Option C (the team's choice, 2026-11-03, pending adviser confirmation): regional food-insecurity forecast weighted by provincial poverty; class always regional
+
+**The food-insecurity classification is regional. The province score weights it by provincial poverty and never
+changes the class.**
+
+| Element | What it is | Same for every province? | Role |
+|---|---|---|---|
+| **Class (colour)** | HIGH when the regional REF+news probability P(Balance Luzon hunger > 11.3%) ≥ 0.50 | Yes | The risk classification |
+| **Province score** | score_p = P_reg × pov_p / max_k pov_k, where pov is the PSA 2023 poverty incidence among families (Table 1). The poorest province shows P_reg itself | No | Order of the provinces (a priority score, not a probability) |
+| Food-price pressure | The P0H4 price-part band (Low < 0.33 ≤ Medium < 0.67 ≤ High) | No | Context only |
+| Food poverty | PSA 2023 subsistence incidence among families, with "low precision (CV > 30%)" where true (all but Rizal) | No | Context only, not used for ranking |
+| News | Regional sentence (E112 categories) and provincial sentence (E85 GDELT categories). The provincial flag is staged for human confirmation and never shown in public text | No | Explanation, early warning |
+
+**Rules.**
+- The weighting never lowers the class. A province with score < 0.50 is still HIGH when the region is HIGH.
+- The order is fixed by poverty in every quarter. What changes over time is the regional probability, the price band
+  and the news.
+- **LGUs:** 0.6 × PSA 2021 poverty + 0.4 × density, min-max within the province, times the province score
+  (Objective 3). Lucena uses PSA's own 2021 value (Table 2a, 10%). Colour = the regional class.
+
+**Issued forecasts (2026-Q4, 2027-Q1; P_reg 0.869, HIGH):**
+
+| Province | Poverty 2023 | Score |
+|---|---|---|
+| Quezon | 6.9% | 0.869 |
+| Rizal | 5.6% | 0.705 |
+| Laguna | 5.4% | 0.680 |
+| Batangas | 4.9% | 0.617 |
+| Cavite | 4.3% | 0.542 |
+
+All five are HIGH.
+
+#### Option A (earlier team choice, now an alternative): regional headline, with food-price pressure and vulnerability rank beside it
 
 **The food-insecurity classification is regional. Province differences come from food prices and vulnerability.**
 
@@ -325,12 +367,34 @@ evidence**, not an independent test.
 
 Two wordings are given for the adviser to choose between.
 
-**Decision (2026-11-03): Option A, chosen by the team, pending adviser confirmation.** Every province shows the regional
-food-insecurity forecast as its headline. The province food-price pressure band and the vulnerability rank are shown
-beside it and are never multiplied with it. Option B is kept below in case the adviser prefers it. This decision applies
-to the IMPROVE_V2 alternative only. The main model is now P0H4 (see "Team decision" at the top).
+**Decision (2026-11-03, latest): Option C, chosen by the team, pending adviser confirmation.** It applies to the main
+model, REF+news (see "Team decision" at the top).
+- Every province's score is the regional food-insecurity forecast weighted by its PSA 2023 poverty incidence among
+  families.
+- The class is always the regional class.
+- Food-price pressure, food poverty and news are context.
 
-#### Option A (chosen by the team, pending adviser confirmation): regional food-insecurity forecast, with provincial food-price pressure and vulnerability
+Options A and B are kept below in case the adviser prefers them. The earlier Option A decision is superseded.
+
+#### Option C (chosen by the team, pending adviser confirmation): regional food-insecurity forecast weighted by provincial poverty; class always regional
+
+| Where | Current | Proposed |
+|---|---|---|
+| §1.3 RQ2 (p. 10) | "furthest lead time … reliably forecast **province-level** food insecurity risk" | "… reliably forecast **regional (Balance Luzon) food insecurity** for the CALABARZON provinces, with each province weighted by its PSA poverty incidence" |
+| §1.3 RQ3 (p. 10), §1.4 H3 (p. 11) | "classifying **provincial** food insecurity risk" | "classifying **regional** food insecurity risk" |
+| §1.4 (p. 11), dependent variable | "high or low, **of a CALABARZON province** in a given quarter" | "high or low **Balance Luzon hunger (> 11.3%)** in a given quarter, applied to every CALABARZON province" |
+| §1.4 H2 (p. 11) | "classify whether a CALABARZON **province** is at high or low…" | "classify whether **regional hunger**, and hence every CALABARZON province's food-insecurity class, will be high or low…" |
+| Obj 2 I, II, IV (pp. 12–13) | "**province-level** classifications", "high-risk **provinces**" | "**quarterly regional** classifications applied to each province", "high-risk **quarters**, with provinces ordered by a poverty-weighted priority score" |
+| Obj 3 (p. 13), Rule 4 (p. 48), Algorithm 5 (p. 46) | "from **validated province-level** forecasts" | "from the **regional food-insecurity forecast**, which passed Algorithm 3 at Leads 1–2. Provinces are weighted by PSA poverty incidence among families (2023), and LGUs are ranked within each province by PSA 2021 poverty (60%) and density (40%). These are priority rankings, not measured rates, and never change the class" |
+| §1.7 (p. 15) | "SWS quarterly hunger data and PSA food price data will be used to **determine** food insecurity risk" | "SWS quarterly hunger defines the food-insecurity classification, which is regional. PSA poverty weights the provinces. PSA food prices are model **inputs** and a context band" |
+| New sentence, §1.7 or §3.4.2 | — | "The food-insecurity classification is regional; each province's score weights it by PSA poverty incidence and never changes the class." |
+| §1.5.2 Obj 1 | FSSI per province-quarter as a model input | "regional news signals as model inputs; provincial GDELT categories as explanation and early-warning context, with flags staged for human confirmation" |
+| §3.4.2 Eq. 3 and Table 3.4.2.3 (pp. 51–52) | Composite stress score, global median | Replaced by y = 1 if Balance Luzon hunger > 11.3% (fixed threshold) |
+| Algorithm 3 (pp. 41–43), §3.4.4 (p. 57) | 75% mean fold accuracy only | "75% mean fold accuracy, reported with the stricter rules R1–R7, which REF+news fails (Maximum Reliable Lead Time 2 under the 75% rule, 0 under R1–R7); confirmation on sealed forecasts" |
+
+The Eq. 5 and Algorithm 4 rows are the same as in Option A.
+
+#### Option A (earlier team choice, now an alternative): regional food-insecurity forecast, with provincial food-price pressure and vulnerability
 
 This matches the design of §2.1.
 

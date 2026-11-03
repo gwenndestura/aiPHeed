@@ -72,6 +72,8 @@ FNRI = {"source": "DOST-FNRI 2023 National Nutrition Survey", "region": "CALABAR
 FLAG_FAMILIES = ("PRICE", "FOODSEC", "DISASTER", "AGRI", "LIVELIHOOD")
 ALL_FAMILIES = FLAG_FAMILIES + ("RESPONSE",)
 WINDOW, MIN_HISTORY, Z_MIN, RISE_MIN, MIN_ARTICLES = 8, 6, 1.5, 0.05, 20
+SERVED_RULE = {"z_min": Z_MIN, "rise_min": RISE_MIN, "min_articles": MIN_ARTICLES}
+STRICT_RULE = {"z_min": 2.0, "rise_min": 0.10, "min_articles": 30}      # PLAN section 8.2 (exploratory, report only)
 FAMILY_WORDS = {"PRICE": "food-price", "FOODSEC": "hunger and food-security", "DISASTER": "disaster",
                 "AGRI": "farm and fisheries", "LIVELIHOOD": "jobs and poverty", "RESPONSE": "relief and aid"}
 E112_WORDS = {"price": "food-price", "shortage": "food-shortage", "disaster": "disaster", "agri_supply": "farm-supply",
@@ -172,9 +174,11 @@ def regional_news(E: pd.DataFrame, t: int) -> dict:
     return {"regional_news_text": text, "regional_news_n": int(r["n"])}
 
 
-def province_news(G: pd.DataFrame, code: str, t: int) -> dict:
+def province_news(G: pd.DataFrame, code: str, t: int, rule: dict = SERVED_RULE) -> dict:
     """PLAN section 4: E85 province shares at quarter t against the 8 quarters before it (min 6); a family flags when it
-    is >= 1.5 sd and >= 5 points above its usual level and the province has >= 20 own articles. RESPONSE never flags."""
+    is >= 1.5 sd and >= 5 points above its usual level and the province has >= 20 own articles (rule = SERVED_RULE;
+    STRICT_RULE is section 8.2). RESPONSE never flags. The text describes coverage only: a flag is never named in it
+    (PLAN section 8.1); it lives in news_flag and in the staged alert candidates."""
     g = G[G["province_code"] == code].set_index("t")
     if t not in g.index:
         return {"news_flag": "", "news_flag_family": "", "province_news_n": "",
@@ -187,14 +191,14 @@ def province_news(G: pd.DataFrame, code: str, t: int) -> dict:
     if len(hist) < MIN_HISTORY:
         return {"news_flag": False, "news_flag_family": "", "province_news_n": n,
                 "province_news_text": f"{head}: not enough news history for an early-warning check."}
-    if n < MIN_ARTICLES:
+    if n < rule["min_articles"]:
         return {"news_flag": False, "news_flag_family": "", "province_news_n": n,
                 "province_news_text": f"{head}: too few province articles for an early-warning check."}
     hits = []
     for f in FLAG_FAMILIES:
         x, h = float(g.loc[t, f"gp_share_{f}"]), hist[f"gp_share_{f}"].astype(float)
         mu, sd = float(h.mean()), float(h.std(ddof=1))
-        if x - mu >= RISE_MIN and sd > 0 and x - mu >= Z_MIN * sd:
+        if x - mu >= rule["rise_min"] and sd > 0 and x - mu >= rule["z_min"] * sd:
             hits.append((x - mu, f, x, mu))
     if not hits:
         return {"news_flag": False, "news_flag_family": "", "province_news_n": n,
@@ -203,7 +207,7 @@ def province_news(G: pd.DataFrame, code: str, t: int) -> dict:
     return {"news_flag": True, "news_flag_family": ";".join(h[1] for h in sorted(hits, reverse=True)),
             "province_news_n": n,
             "province_news_text": (f"{head}: {FAMILY_WORDS[f]} coverage {100 * x:.0f}% against a usual "
-                                   f"{100 * mu:.0f}% ({len(hist)}-quarter mean): early-warning flag")}
+                                   f"{100 * mu:.0f}% ({len(hist)}-quarter mean)")}
 
 
 # ---------------------------------------------------------------------------------------------- main

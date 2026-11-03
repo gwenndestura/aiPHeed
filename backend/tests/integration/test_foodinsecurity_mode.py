@@ -226,6 +226,28 @@ def test_news_flag_rule_on_synthetic_inputs(fi):
     assert _flag_case(noisy, 0.45, 100)["news_flag"] is False                    # under 1.5 sd
 
 
+def test_news_flags_are_never_named_in_public_text(fi):
+    """PLAN section 8.1: the flag lives in rows.csv and the staged alert candidates only."""
+    assert any(FI.is_flagged(r) for r in FI.rows().values())
+    assert not any("flag" in r["province_news_text"] for r in FI.rows().values())
+    for q in ("2026-Q3", "2025-Q4"):
+        for s in ("quezon", "cavite"):
+            e = _get("/api/v1/explainability", scope="province", id=s, quarter=q)
+            f = _get("/api/v1/forecast", scope="province", id=s, quarter=q)
+            text = json.dumps([e, f])
+            assert "early-warning flag" not in text and "news flag" not in text
+        assert "news flag" not in json.dumps(_get("/api/v1/provinces", quarter=q))
+
+
+def test_strict_rule_is_report_only(fi):
+    out = RUNNER.parent / "out" / "strict_flag.json"
+    res = json.loads(out.read_text(encoding="utf-8"))
+    assert res["rule"] == {"z_min": 2.0, "rise_min": 0.1, "min_articles": 30}
+    assert res["plan_sha256"] == FI.evaluation()["plan_sha256"]
+    assert res["strict_subset_of_served"] is True
+    assert "strict" not in (FI.DATA / "rows.csv").read_text(encoding="utf-8").splitlines()[0]   # not served
+
+
 def test_news_never_changes_score_class_or_rank(fi):
     a = FI.row("PH040100000", "2026-Q3")
     b = {**a, "news_flag": "False" if FI.is_flagged(a) else "True", "province_news_text": "x"}

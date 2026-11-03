@@ -117,3 +117,33 @@ Neither feature is in the top three. **H1 is not rejected.**
 |---|---|---|---|
 | Before | 1004 | 18 | 0 |
 | After | 1012 | 18 | 0 |
+
+## 7. Revision 3 (EXPLORATORY): the stricter news-flag rule, and flags kept out of public text
+
+**Plan.** `PLAN.md` revision 3, SHA-256 `2c685b93…ad38` (commit `0d7e620`). It was written after the §4 counts were
+known, so this section is exploratory, not a test.
+
+**Served rule.** Unchanged (§4): 45 of 85 rows flagged. Its flags are staged alert candidates only. The public text
+fields now describe the province news coverage ("disaster coverage 72% against a usual 42% (8-quarter mean)") without
+naming a flag. A test checks that "early-warning flag" and "news flag" never appear in `/explainability`,
+`/forecast` or `/provinces`.
+
+**Stricter rule** (≥ 2.0 SD, ≥ 10 points, ≥ 30 province articles; `runner/strict_flag.py` → `out/strict_flag.json`;
+report only, not served, not staged):
+
+| | Served rule (§4) | Stricter rule (§8.2) |
+|---|---|---|
+| Rows flagged (of 85) | 45 (53%) | **20 (24%)** |
+| By province | Cavite 12, Laguna 10, Quezon 10, Rizal 7, Batangas 6 | Quezon 6, Rizal 5, Batangas 4, Laguna 4, Cavite 1 |
+| Quarters with any flag | 15 of 17 | 11 of 17 |
+| Families | DISASTER 18, PRICE 8, other 19 | DISASTER 8, AGRI 7, LIVELIHOOD 4, FOODSEC 3, PRICE 3 |
+| Issued forecasts (2026-Q4, 2027-Q1) | Cavite, Laguna, Quezon | **none** |
+
+**Reading.**
+- Every strict flag is also a served flag.
+- The 30-article floor removed nothing: every row has at least 30 province articles. The 2 SD and 10-point thresholds
+  did all the narrowing.
+- The 2026-Q3 disaster rises (Cavite +30 points, Quezon +30, Laguna +15) do not pass 2 SD, because these provinces'
+  disaster coverage swings widely from quarter to quarter.
+- Neither rule has been shown to anticipate hunger (E85 found no predictive news value). As planned, no third rule was
+  tried.

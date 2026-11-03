@@ -53,8 +53,8 @@ FNRI = ("Face validity: the DOST-FNRI 2023 National Nutrition Survey found 19.1%
         "or severely food insecure (95% CI 17.0-21.1), a different measure from SWS hunger, cited as context only.")
 REVIEW_FLAG = ("HIGH forecast: flagged for human confirmation by a DA Region IV-A administrator before any action; no "
                "notification is sent to DSWD or any agency automatically.")
-NEWS_FLAG_NOTE = ("news early-warning flag: descriptive context, not a validated predictor, staged for human "
-                  "confirmation; no notification is sent to DSWD or any agency automatically")
+NEWS_FLAG_NOTE = ("province news early-warning flag: descriptive context, not a validated predictor, staged for human "
+                  "confirmation and never public; no notification is sent to DSWD or any agency automatically")
 
 INDICATOR = {
     "id": "regional_food_insecurity_forecast",
@@ -295,8 +295,8 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
     else:
         what = (f"Walk-forward Lead-{r['lead']} forecast made as of {r['issue_date']} with information published before "
                 f"it (development evidence); {past_text(r)}. {REGIONAL}")
-    flags = ((f" {REVIEW_FLAG}" if is_high(r) and k == "forecast" else "")
-             + (f" Province {NEWS_FLAG_NOTE}." if is_flagged(r) and k == "forecast" else ""))
+    # PLAN section 8.1: a province news flag is never named in public text; it exists only as a staged alert candidate
+    flags = f" {REVIEW_FLAG}" if is_high(r) and k == "forecast" else ""
     out = dict(base or {})
     out.update({
         "province_code": code, "province_name": name, "quarter": quarter,
@@ -493,8 +493,7 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
     if code is None:
         order = sorted(rs, key=_priority)
         ctx = ("; provinces by poverty-weighted score: " + ", ".join(
-            f"{x['province']} {score(x):.2f} (food-price pressure {x['price_band'] or 'n/a'}"
-            f"{', news flag' if is_flagged(x) else ''})" for x in order)
+            f"{x['province']} {score(x):.2f} (food-price pressure {x['price_band'] or 'n/a'})" for x in order)
             + f"; {_clause(r.get('regional_news_text'))}")
     else:
         ctx = f"; {name}: {province_context(r)}"
