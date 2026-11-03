@@ -4,9 +4,10 @@ app/ml/inference/foodinsecurity_system.py
 The served food-insecurity forecast (AIPHEED_MAP_MODEL=foodinsecurity, with AIPHEED_LEAD2_MODEL=thesis).
 
 Target (CH3_AMENDMENT.md section 2): SWS involuntary hunger in Balance Luzon above 11.3% in the target quarter (the
-quarter mean of non-commissioned rounds). Model: the IMPROVE_V2 arm REF+news (the team's main model, OPTION_1, pending
-adviser confirmation), one LightGBM on the stacked rows of leads 1-15, refitted walk-forward at every origin from
-1998-Q3. Algorithm 3 (the paper's 75% rule) gives a Maximum Reliable Lead Time of 2 quarters, so only Leads 1 and 2
+quarter mean of non-commissioned rounds). Model: C-b (NEW_MODEL/NEWS_V2; FOOD_INSECURITY_SYSTEM/PLAN.md revision 4;
+the team's main model, pending adviser confirmation): the IMPROVE_V2 reference LightGBM with one NLP input, the
+FSSI-v3 anomaly against its own past 8 quarters, on the stacked rows of leads 1-15, refitted walk-forward at every
+origin from 1998-Q3. The NLP input is included and changes no classification; the texts say so. Algorithm 3 (the paper's 75% rule) gives a Maximum Reliable Lead Time of 2 quarters, so only Leads 1 and 2
 are served; it fails the stricter R1-R7 rules at every lead, and the text says so.
 
 Province design (FOOD_INSECURITY_SYSTEM/PLAN.md revision 2):
@@ -78,8 +79,8 @@ INDICATOR = {
     "caveat": ("A forecast of regional hunger, not a measured provincial rate: SWS reports hunger for Balance Luzon "
                "only, so every province has the same class. " + REGIONAL + " " + FNRI + " Development evidence: the "
                "scored quarters were examined while the model was built; the stricter rules R1-R7 fail at every lead "
-               "(balanced accuracy 0.69, Brier not significantly better than climatology, 2015-2020 accuracy 0.57). "
-               "News adds little: 2.8% of SHAP influence, and the same model without news scored 0.790."),
+               "on stability (R7: 2015-2020 accuracy 0.57). The NLP input (the FSSI anomaly) is included and changes "
+               "no classification against the same model without news."),
 }
 EVENT = "regional food insecurity (probability that Balance Luzon SWS hunger is above 11.3%)"
 COMBINATION = ("not combined into the class: the class is the regional hunger forecast alone; the province score "
@@ -272,10 +273,18 @@ def reliability_text(r: dict) -> str:
         failed = ", ".join(f"{x} ({RULE_NAMES.get(x, x)})" for x in L[str(lead)]["failed"])
         return (f"Lead-{lead} forecast: passes the paper's 75% accuracy rule (accuracy {m['accuracy']:.3f} on "
                 f"{L[str(lead)]['n']} past quarters; Maximum Reliable Lead Time {reliable_lead()}) but fails the "
-                f"stricter reliability rules R1-R7 ({failed}); news adds little "
-                f"({ev['news_shap_share_lead1']['N1 News']:.1f}% of SHAP influence; the same model without news "
-                f"scored {L[str(lead)]['vs_REF']['acc_b']:.3f})")
+                f"stricter reliability rules R1-R7 ({failed}); {news_effect_text(lead)}")
     return f"Lead-{lead} forecast: beyond the Maximum Reliable Lead Time ({reliable_lead()} quarters)"
+
+
+def news_effect_text(lead: int) -> str:
+    """What the NLP input does to the forecast, from the evaluation (C-b against the same model without news)."""
+    ev = evaluation()
+    e = (ev.get("news_effect") or {}).get(str(lead)) or {}
+    share = (ev.get("news_shap_share_lead1") or {}).get("N1 News", 0.0)
+    return (f"the NLP input (FSSI anomaly) is included and carries {share:.1f}% of SHAP influence; it changed "
+            f"{e.get('calls_differing', 0)} of {e.get('n_quarters', 0)} classifications against the same model without "
+            f"news (accuracy {e.get('acc_a', float('nan')):.3f} vs {e.get('acc_b', float('nan')):.3f})")
 
 
 def _class(r: dict) -> str:
@@ -517,7 +526,8 @@ def data_status(code: str | None, quarter: str) -> tuple[str, str]:
 def model_line() -> str:
     ev = evaluation()
     m1, m2 = ev["leads"]["1"]["metrics"], ev["leads"]["2"]["metrics"]
-    return (f"IMPROVE_V2 REF+news: one LightGBM (stacked leads, walk-forward from 1998, with news inputs) forecasting "
+    return (f"C-b: one LightGBM (stacked leads, walk-forward from 1998; IMPROVE_V2 reference inputs plus the FSSI "
+            f"anomaly as its NLP input) forecasting "
             f"P(Balance Luzon SWS hunger > {H_LINE}%). Maximum Reliable Lead Time {reliable_lead()} quarters under the "
             f"paper's 75% rule (Algorithm 3; development accuracy Lead 1 {m1['accuracy']:.3f}, Lead 2 "
             f"{m2['accuracy']:.3f}, Lead 3 {ev['leads']['3']['metrics']['accuracy']:.3f}); "
@@ -528,7 +538,7 @@ def identity(code: str | None, quarter: str) -> dict | None:
     r = next((r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)), None)
     if r is None:
         return None
-    return {"servingMode": "thesis", "servedModel": r.get("model") or "IMPROVE_V2-REFNEWS", "modelVersion": model_line(),
+    return {"servingMode": "thesis", "servedModel": r.get("model") or "NEWS_V2-CB", "modelVersion": model_line(),
             "lead": int(r["lead"]), "issued": r["issue_date"], "targetQuarter": quarter,
             "evidenceStatus": ("passes the paper's 75% rule, fails R1-R7 (development evidence)"
                                if status(r) == "reliable" else "beyond the reliable horizon"),
@@ -563,8 +573,8 @@ def reliability_sentences() -> list[str]:
     out.append(f"Lead 3 failed (accuracy {m3['accuracy']:.3f}), so the Maximum Reliable Lead Time is "
                f"{reliable_lead()} quarters and nothing beyond Lead 2 is shown; under R1-R7 it is "
                f"{ev['max_reliable_lead_r1_r7']}.")
-    out.append(f"News adds little: {ev['news_shap_share_lead1']['N1 News']:.1f}% of SHAP influence, and the same model "
-               f"without news scored {ev['leads']['1']['vs_REF']['acc_b']:.3f} at Lead 1.")
+    out.append(f"NLP: {news_effect_text(1)[0].upper()}{news_effect_text(1)[1:]}. With news available only from 2021, "
+               "it adds no measurable predictive value (Objective 1 evaluated).")
     out.append(f"Development evidence: every scored quarter was examined while the model was built. The Lead-2 "
                f"forecast issued {ev['seal_issue_date']} is sealed (SHA-256 {ev['seal_sha256'][:8]}, after the results "
                "were known) and will be scored when SWS publishes that quarter.")

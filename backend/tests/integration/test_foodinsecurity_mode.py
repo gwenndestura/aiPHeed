@@ -1,8 +1,9 @@
 """
 tests/integration/test_foodinsecurity_mode.py
 ---------------------------------------------
-AIPHEED_MAP_MODEL=foodinsecurity (app.ml.inference.foodinsecurity_system; FOOD_INSECURITY_SYSTEM/PLAN.md revision 2):
-the regional REF+news forecast of SWS hunger above 11.3% sets every province's class and colour; the province score
+AIPHEED_MAP_MODEL=foodinsecurity (app.ml.inference.foodinsecurity_system; FOOD_INSECURITY_SYSTEM/PLAN.md revision 4):
+the regional C-b forecast (IMPROVE_V2 reference inputs + the FSSI anomaly; NEW_MODEL/NEWS_V2) of SWS hunger above
+11.3% sets every province's class and colour; the texts state that its NLP input changes no classification; the province score
 weights it by PSA 2023 poverty among families and never changes the class; the P0H4 price band, PSA food poverty and the
 news sentences and flag are context only; LGUs are ranked 0.6 poverty + 0.4 density within the province (Lucena: its own
 PSA Table 2a value); only Leads 1-2 are served (Maximum Reliable Lead Time 2 under the paper's 75% rule; R1-R7 fail);
@@ -32,6 +33,7 @@ ROOT = Path(__file__).resolve().parents[3]
 EXP = ROOT / "aipheed-backend-aligned" / "experiments"
 SLUGS = ("cavite", "laguna", "quezon", "rizal", "batangas")
 RUNNER = EXP / "FOOD_INSECURITY_SYSTEM" / "runner"
+CB = EXP / "NEW_MODEL" / "NEWS_V2"
 
 
 @pytest.fixture
@@ -61,9 +63,9 @@ def _export_module():
 
 
 # ---------------------------------------------------------------------------------------------- the export
-def test_rows_are_the_refnews_forecasts_and_the_official_p0h4_price_part(fi):
-    F = pd.read_csv(EXP / "OPTION_1" / "out" / "forecasts_refnews.csv")
-    F = F[F["name"] == "REF+news"].set_index(["t", "lead"])["p"]
+def test_rows_are_the_cb_forecasts_and_the_official_p0h4_price_part(fi):
+    F = pd.read_csv(CB / "out" / "forecasts.csv")
+    F = F[F["name"] == "C-b"].set_index(["t", "lead"])["p"]
     lab = pd.read_csv(EXP / "IMPROVE_V2" / "out" / "labels_areas.csv")
     lab = lab[lab["area"] == "BL"].set_index("q")["y"]
     c = pd.read_csv(CH1.DATA / "rows.csv", dtype={"province_code": str})
@@ -75,7 +77,7 @@ def test_rows_are_the_refnews_forecasts_and_the_official_p0h4_price_part(fi):
         assert float(r["pi_price"]) == pytest.approx(float(price[(code, q, k, r["issue_date"])]), abs=1e-6)
         if r["observed"]:
             assert (r["observed"] == "HIGH") == bool(lab[qi])
-    assert {r["model"] for r in FI.rows().values()} == {"IMPROVE_V2-REFNEWS"}
+    assert {r["model"] for r in FI.rows().values()} == {"NEWS_V2-CB"}
 
 
 def test_one_regional_probability_per_quarter_and_nothing_beyond_lead_2(fi):
@@ -88,7 +90,7 @@ def test_one_regional_probability_per_quarter_and_nothing_beyond_lead_2(fi):
 
 def test_max_reliable_lead_is_two_under_the_75_rule_and_zero_under_r1_r7(fi):
     ev = FI.evaluation()
-    res = json.loads((EXP / "OPTION_1" / "out" / "results.json").read_text(encoding="utf-8"))
+    res = json.loads((CB / "out" / "results_cb.json").read_text(encoding="utf-8"))
     assert ev["max_reliable_lead"] == res["max_reliable_lead_alg3"] == 2
     assert ev["max_reliable_lead_r1_r7"] == res["max_reliable_lead_R1_R7"] == 0
     assert ev["leads"]["1"]["alg3_pass"] and ev["leads"]["2"]["alg3_pass"] and not ev["leads"]["3"]["alg3_pass"]
@@ -99,13 +101,15 @@ def test_max_reliable_lead_is_two_under_the_75_rule_and_zero_under_r1_r7(fi):
 
 
 def test_sealed_lead2_forecast_is_the_served_one(fi):
-    path = EXP / "OPTION_1" / "sealed_prospective_REFNEWS.csv"
+    path = CB / "sealed_prospective_CB.csv"
     seal = pd.read_csv(path)
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
-    assert digest.startswith("cc1ff11b")
+    assert digest.startswith("67baec66")
+    l2 = seal[seal["lead"] == 2].iloc[0]
+    assert l2["target_quarter"] == "2027-Q1"
     for code in CH1_CODES():
         r = FI.row(code, "2027-Q1")
-        assert float(r["probability"]) == pytest.approx(float(seal.iloc[0]["p_high"]), abs=1e-6)
+        assert float(r["probability"]) == pytest.approx(float(l2["p_high"]), abs=1e-6)
         assert r["seal_sha256"] == digest
 
 
@@ -263,11 +267,11 @@ def test_summary_and_note_carry_the_honest_context(fi):
     assert "classification is regional, the province score weights it by PSA poverty and never changes the class" in s
     assert "province score 0.80" in s and "food-price pressure: Medium" in s and "Province news (GDELT" in s
     assert "passes the paper's 75% accuracy rule" in s and "fails the stricter reliability rules R1-R7" in s
-    assert "2.8% of SHAP influence" in s and "without news scored 0.790" in s
+    assert "NLP input (FSSI anomaly) is included" in s and "changed 0 of 62 classifications" in s
     assert ". " not in s.rstrip(".").replace("0.", "0_")                          # one sentence: only the first is shown
     assert FI.REGIONAL in e["note"]
     assert "19.1% of CALABARZON households" in e["note"] and "95% CI 17.0-21.1" in e["note"]
-    assert "19.1%" in e["summary"]["caveat"] and "0.790" in e["summary"]["caveat"]
+    assert "19.1%" in e["summary"]["caveat"] and "changes no classification" in e["summary"]["caveat"]
     assert e["summary"]["components"]["combination"].startswith("not combined")
     assert e["summary"]["probability"] == pytest.approx(float(FI.row("PH040300000", "2026-Q3")["probability"]), abs=1e-4)
     t = {x["key"]: x for x in e["triggers"]}
@@ -280,8 +284,10 @@ def test_summary_and_note_carry_the_honest_context(fi):
 def test_reliability_text_names_both_rules(fi):
     r = FI.row("PH040300000", "2026-Q3")
     t = FI.reliability_text(r)
-    assert "75% accuracy rule" in t and "R1-R7" in t and "2.8%" in t and "0.790" in t
+    assert "75% accuracy rule" in t and "R1-R7" in t and "R7 (stability)" in t and "0.790" in t
+    assert "changed 0 of 62 classifications" in t                     # the NLP input's effect, stated, not hidden
     assert "Maximum Reliable Lead Time 2" in FI.model_line() and "0 under the stricter rules R1-R7" in FI.model_line()
+    assert FI.model_line().startswith("C-b:")
 
 
 def test_driver_bars_are_the_same_for_every_province(fi):

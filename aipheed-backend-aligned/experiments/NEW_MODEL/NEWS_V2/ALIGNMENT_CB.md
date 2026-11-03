@@ -71,7 +71,19 @@ comparators than REF+news did, which never beat the government-only LightGBM.
 | Blind holdout F1/AUC | No unseen quarters exist before 2027 | The sealed 2027 quarters (about 2028) |
 | ISO/IEC 25010, RQ4/H4 | Needs DA evaluators | Data collection |
 
-## 5. To finish the alignment, with your approval
+## 5. Done on 2026-11-03 (your instruction: "make C-b the main model")
+
+- **Adoption recorded.** `PAPER_ALIGNED/CH3_AMENDMENT.md` top section: the team decision, pending adviser confirmation.
+- **Backend (Objective 5).** The `foodinsecurity` mode now serves C-b (`FOOD_INSECURITY_SYSTEM/PLAN.md` revision 4,
+  SHA-256 `fba5236e…f090`): served texts state the NLP input's zero effect; mode tests 27/27; full suite 1014 passed,
+  18 skipped. The FIRI v2 default and the frontend are unchanged.
+- **Prospective scripts.** C-b is the main model, and REF+news and REF are sealed beside it. The C-b and OPTION_1 seals
+  are verified by reference. The sealing replay reproduces C-b exactly from the rebuilt inputs (Δp = 0.0); the dry-run
+  harness passes 11/11. New script hashes are appended to `SENIOR_REVIEW/prospective/SEAL_LEDGER.md`.
+- **Still open:** the adviser's confirmation; the 2027 blind holdout; the ISO/IEC 25010 respondents; provincial data
+  (does not exist).
+
+## 5a. Original to-do list (kept for the record)
 
 1. **Adoption.** The team and adviser adopt C-b as the main model. It did not pass the fixed "improvement" rule at
    Lead 1, so this is a recorded decision, not a test result.

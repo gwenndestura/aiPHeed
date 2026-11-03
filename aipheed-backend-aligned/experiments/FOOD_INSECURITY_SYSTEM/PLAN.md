@@ -15,6 +15,8 @@ row "City of Lucena"); its values were not.
 
 **Revision 3** (2026-11-03, after the Step-4 build, commit `b4489a8`; **EXPLORATORY**). It adds §8: one stricter news-flag rule, fixed before it was computed, and a change so that flags are never shown in public text. The served rule of §4 is kept unchanged. Revision 2 had SHA-256 `4d4e2a2c…0840` (commit `8cbe9ed`).
 
+**Revision 4** (2026-11-03): the served model changes from REF+news to **C-b** (`NEW_MODEL/NEWS_V2`), chosen by the team, pending adviser confirmation (§9). Revision 3 had SHA-256 `2c685b93…ad38`.
+
 **Status:** plan for approval. The team chose REF+news as the main model (OPTION_1, pending adviser confirmation).
 P0H4 stays the documented alternative (`ch1` mode, unchanged).
 
@@ -306,4 +308,30 @@ flags) and history window (the 8 quarters t−8..t−1, minimum 6) as §4. A fam
   beside the §4 counts, in `STEP4_RESULTS.md` §7.
 - It is **not served** and **not staged**, and it changes nothing in `backend/`.
 - **No further tuning.** Whatever it shows is reported as it comes out, and no third rule is tried.
-PLAN-SHA256: 2c685b93ab3a177138cf3bc3f7335880437ae493044baeb4cd546098f1d7ad38
+
+## 9. Revision 4: C-b as the served model
+
+**Decision.** The team chose C-b as the main model on 2026-11-03, pending adviser confirmation.
+- C-b is REF+news with its 8 raw news columns replaced by `z_N1R`, the FSSI-v3 anomaly against its own past 8
+  quarters.
+- Plan: `NEW_MODEL/NEWS_V2/PLAN.md`, SHA-256 `0705ab68…5b60`.
+- It did **not** pass that plan's fixed "improves REF+news" rule (the Lead-1 Brier gain is not significant), so this
+  is a recorded decision, not a test result.
+
+**What changes in the export** (`runner/export_fi.py`) — only the model source and its labels:
+- forecasts from `NEW_MODEL/NEWS_V2/out/forecasts.csv` (`name == "C-b"`, Leads 1–2);
+- SHAP from `out/shap_cb.csv` (the news group gains `z_N1R`);
+- the evaluation from `out/results_cb.json`;
+- the seal check against `NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv` (SHA-256 `67baec66…1015`, P 0.8595);
+- the model label `NEWS_V2-CB`;
+- `h_last` and the SWS publication date read from the IMPROVE_V2 table (the C-b forecast file does not carry them).
+
+**Unchanged:**
+- the target, the province design (§2), the LGU design (§3) and the news sentences and flags (§4, §8);
+- Rules 1 and 7, and every other plan section.
+
+**The served texts state:**
+- C-b's reliability (the 75% rule passes at Leads 1–2, MRLT 2; R1–R7 fail on R7);
+- that the news input (FSSI anomaly) is included and changes **no** classification (C-b equals the model without news
+  in 66 of 67 quarters).
+PLAN-SHA256: fba5236e16715db57e2b6d3b7eff373c06db7a38043efaa1a2a77bd312bef090

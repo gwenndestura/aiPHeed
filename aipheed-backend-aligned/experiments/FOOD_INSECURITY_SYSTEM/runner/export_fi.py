@@ -35,6 +35,7 @@ ROOT = EXP.parents[1]
 PLAN = HERE / "PLAN.md"
 IV2 = EXP / "IMPROVE_V2"
 OPT = EXP / "OPTION_1"
+CB = EXP / "NEW_MODEL" / "NEWS_V2"                  # PLAN section 9 (revision 4): the served model is C-b
 E85 = EXP / "E85_GDELT_Events" / "runs" / "20261021T101520Z" / "gdelt_features_k1.csv"
 E112 = EXP / "E112_Food_Insecurity_Forecasting" / "out" / "news_quarterly_corpus.csv"
 FOODPOV = (EXP / "LEAD2_RELIABILITY_RESEARCH" / "y14_food_insecurity_forecast" / "data_acquired"
@@ -48,8 +49,8 @@ sys.path.insert(0, str(EXP / "E41_Lead2_Audit" / "runner"))
 import hr_lib as H  # noqa: E402
 import e41_lib as E41  # noqa: E402   (E85's O(t), via e83_lib.L)
 
-NAME = "REF+news"
-MODEL = "IMPROVE_V2-REFNEWS"
+NAME = "C-b"
+MODEL = "NEWS_V2-CB"
 MAX_LEAD = 2
 FIRST_Q, LAST_RETRO_ORIGIN = H.qi("2023-Q1"), H.qi("2026-Q2")       # the span of the ch1 export (pi_price exists)
 FORECAST_ORIGIN = H.qi("2026-Q3")                                   # issued 2026-10-01: 2026-Q4 (L1), 2027-Q1 (L2)
@@ -62,7 +63,8 @@ NEWS_COLS = ["N1R", "G_pri_yoy", "price_share", "shortage_share", "disaster_shar
              "jobs_income_share", "assistance_share"]
 GROUPS = {"market": ["R_food_yoy", "R_head_yoy", "R_food_mom", "R_rice_yoy"] + H.WORLD,
           "climate": ["ONI_last", "ONI_max12", "tc_mean", "R_C3"], "fish_kill": ["R_C4"],
-          "hunger": ["h_last", "h_change", "h_mean4", "true_h", "pi_H4L"], "news": NEWS_COLS, "lead": ["lead"]}
+          "hunger": ["h_last", "h_change", "h_mean4", "true_h", "pi_H4L"], "news": NEWS_COLS + ["z_N1R"],
+          "lead": ["lead"]}
 VALUES = ["R_food_yoy", "R_head_yoy", "R_rice_yoy", "ONI_last", "tc_mean", "R_C3", "R_C4", "W_rice_yoy"]
 FNRI = {"source": "DOST-FNRI 2023 National Nutrition Survey", "region": "CALABARZON",
         "moderate_or_severe_food_insecure_pct": 19.1, "ci95": [17.0, 21.1], "national_pct": 31.4,
@@ -214,12 +216,12 @@ def province_news(G: pd.DataFrame, code: str, t: int, rule: dict = SERVED_RULE) 
 def main():
     plan_sha = check_plan()
     d = H.load()
-    F = pd.read_csv(OPT / "out" / "forecasts_refnews.csv")
+    F = pd.read_csv(CB / "out" / "forecasts.csv")
     F = F[(F["name"] == NAME) & (F["lead"] <= MAX_LEAD)]
-    S = pd.read_csv(OPT / "out" / "shap_refnews.csv")
+    S = pd.read_csv(CB / "out" / "shap_cb.csv")
     S = S[S["lead"] <= MAX_LEAD]
     T = pd.read_csv(IV2 / "out" / "table_pooled.csv", dtype={"area": str})
-    T = T[T["area"] == "BL"]
+    T = T[T["area"] == "BL"].merge(pd.read_csv(CB / "out" / "news_anomalies.csv")[["t", "z_N1R"]], on="t", how="left")
     lab = pd.read_csv(IV2 / "out" / "labels_areas.csv")
     lab = lab[lab["area"] == "BL"].set_index("q")
     ch1 = pd.read_csv(CH1_ROWS, dtype={"province_code": str})
@@ -228,7 +230,7 @@ def main():
     P = psa()
     PV = province_poverty(P).merge(food_poverty(), on="province_code")
     LU = lucena(P)
-    seal = OPT / "sealed_prospective_REFNEWS.csv"
+    seal = CB / "sealed_prospective_CB.csv"
     seal_sha = sha(seal)
     sealed = pd.read_csv(seal)
 
@@ -244,7 +246,7 @@ def main():
         q = t + k
         qs, issue = H.qs(q), H.issue(t)
         kn = H.known(d, t, "BL")
-        assert abs(kn[-1][1] - f["h_last"]) < 1e-9
+        assert abs(kn[-1][1] - x["h_last"]) < 1e-9          # C-b's forecast file carries no h_last: the table does
         p = float(f["p"])
         obs = ("HIGH" if lab.loc[q, "y"] == 1 else "LOW") if q in lab.index and q < H.qi("2026-Q4") else ""
         sh = {g: float(sum(s.get(f"shap_{c}", 0.0) or 0.0 for c in cs if pd.notna(s.get(f"shap_{c}"))))
@@ -266,8 +268,8 @@ def main():
                  "pov_weight": round(float(v.pov_weight), 6),
                  "food_pov_2023": v.food_pov_2023, "food_pov_2023_cv": v.food_pov_2023_cv,
                  "pi_price": "" if pp is None else round(pp, 6), "price_band": "" if pp is None else band(pp),
-                 "sws_newest_q": H.qs(kn[-1][0]), "sws_newest_published": f["sws_newest_published"],
-                 "h_last": round(float(f["h_last"]), 2),
+                 "sws_newest_q": H.qs(kn[-1][0]), "sws_newest_published": x["sws_newest_published"],
+                 "h_last": round(float(x["h_last"]), 2),
                  "psa_newest_month": "" if c is None else c["psa_newest_month"],
                  "cfg": f["cfg"], "fallback": bool(str(f["fallback"]).lower() == "true"),
                  **{f"shap_{g}": round(v_, 6) for g, v_ in sh.items()},
@@ -277,7 +279,8 @@ def main():
                  **rn, **province_news(G, v.province_code, t),
                  "model": MODEL, "seal_sha256": ""}
             if t == FORECAST_ORIGIN:
-                m = sealed[(sealed["target_quarter"] == qs) & (sealed["lead"] == k) & (sealed["arm"] == NAME)]
+                m = sealed[(sealed["target_quarter"] == qs) & (sealed["lead"] == k)
+                           & sealed["model"].str.startswith(NAME)]
                 if len(m):
                     assert abs(float(m.iloc[0]["p_high"]) - p) <= 5e-7, "sealed forecast differs from the export"
                     r["seal_sha256"] = seal_sha
@@ -288,8 +291,8 @@ def main():
     R.to_csv(OUT / "rows.csv", index=False)
     lgu_copy(LU).to_csv(OUT / "lgu_vulnerability.csv", index=False)
 
-    res = json.loads((OPT / "out" / "results.json").read_text(encoding="utf-8"))
-    chk = json.loads((OPT / "out" / "checks.json").read_text(encoding="utf-8"))
+    res = json.loads((CB / "out" / "results_cb.json").read_text(encoding="utf-8"))
+    chk = json.loads((CB / "out" / "checks.json").read_text(encoding="utf-8"))
     leads = {}
     for k in (1, 2, 3):                                  # Algorithm 3 advances to the first failing lead (Lead 3)
         L = res["leads"][f"L{k}"]
@@ -301,7 +304,7 @@ def main():
                          "persistence_accuracy": L["persistence_accuracy"], "alg3_pass": L["alg3_pass"],
                          "reliable": bool(L["alg3_pass"] and k <= res["max_reliable_lead_alg3"]),
                          "rules": {x: {"pass": v.get("pass")} for x, v in L["rules"].items()},
-                         "failed": L["failed"], "shap_shares": L["shap"]["shares"],
+                         "failed": L["failed"], "shap_shares": (L.get("shap") or {}).get("shares"),
                          "vs_REF": L.get("vs_REF")}
     o4 = {c: {"p_holm": v.get("p_holm"), "diff": v.get("diff")} for c, v in res["leads"]["L1"]["objective4"].items()}
     news_share = res["leads"]["L1"]["shap"]["shares"]
@@ -309,9 +312,10 @@ def main():
     ev = {"model": MODEL,
           "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
           "decision_rule": "HIGH when P >= 0.50 (the regional probability; the province score never sets the class)",
-          "design": ("FOOD_INSECURITY_SYSTEM/PLAN.md revision 2: regional REF+news forecast; province score = P x PSA "
-                     "2023 poverty among families / max; class and colour regional; P0H4 price band, PSA 2023 food "
-                     "poverty and news are context only"),
+          "design": ("FOOD_INSECURITY_SYSTEM/PLAN.md revision 4: regional C-b forecast (REF inputs + FSSI anomaly); "
+                     "province score = P x PSA 2023 poverty among families / max; class and colour regional; P0H4 "
+                     "price band, PSA 2023 food poverty and news are context only"),
+          "chosen": "C-b chosen by the team on 2026-11-03, pending adviser confirmation (not a test result)",
           "max_reliable_lead": res["max_reliable_lead_alg3"], "max_reliable_lead_r1_r7": res["max_reliable_lead_R1_R7"],
           "served_leads": list(range(1, MAX_LEAD + 1)), "algorithm3": res["rule"], "leads": leads,
           "objective4_lead1": o4, "news_shap_share_lead1": news_share,
@@ -327,10 +331,11 @@ def main():
           "news_flags": {"rows": int(len(flags)), "by_province": flags.groupby("province").size().to_dict(),
                          "quarters": sorted(flags["quarter"].unique().tolist())},
           "fnri_2023": FNRI,
-          "seal_sha256": seal_sha, "seal_issue_date": "2026-10-01", "seal_file": "OPTION_1/sealed_prospective_REFNEWS.csv",
+          "seal_sha256": seal_sha, "seal_issue_date": "2026-10-01", "seal_file": "NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv",
           "plan_sha256": plan_sha,
-          "sources": {"forecasts": sha(OPT / "out" / "forecasts_refnews.csv"), "shap": sha(OPT / "out" / "shap_refnews.csv"),
-                      "results": sha(OPT / "out" / "results.json"), "table_pooled": sha(IV2 / "out" / "table_pooled.csv"),
+          "news_effect": {k: res["leads"][f"L{k}"]["vs_REF"] for k in (1, 2)},
+          "sources": {"forecasts": sha(CB / "out" / "forecasts.csv"), "shap": sha(CB / "out" / "shap_cb.csv"),
+                      "results": sha(CB / "out" / "results_cb.json"), "table_pooled": sha(IV2 / "out" / "table_pooled.csv"),
                       "ch1_rows": sha(CH1_ROWS), "e85_features": sha(E85), "e112_corpus": sha(E112),
                       "food_poverty": sha(FOODPOV), "psa_poverty": sha(PSA), "lgu_vulnerability_input": sha(LGU_VUL),
                       "reproduced": chk["reproduced"]}}

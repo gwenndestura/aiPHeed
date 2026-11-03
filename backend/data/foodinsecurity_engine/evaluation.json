@@ -1,8 +1,9 @@
 {
- "model": "IMPROVE_V2-REFNEWS",
+ "model": "NEWS_V2-CB",
  "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
  "decision_rule": "HIGH when P >= 0.50 (the regional probability; the province score never sets the class)",
- "design": "FOOD_INSECURITY_SYSTEM/PLAN.md revision 2: regional REF+news forecast; province score = P x PSA 2023 poverty among families / max; class and colour regional; P0H4 price band, PSA 2023 food poverty and news are context only",
+ "design": "FOOD_INSECURITY_SYSTEM/PLAN.md revision 4: regional C-b forecast (REF inputs + FSSI anomaly); province score = P x PSA 2023 poverty among families / max; class and colour regional; P0H4 price band, PSA 2023 food poverty and news are context only",
+ "chosen": "C-b chosen by the team on 2026-11-03, pending adviser confirmation (not a test result)",
  "max_reliable_lead": 2,
  "max_reliable_lead_r1_r7": 0,
  "served_leads": [
@@ -16,16 +17,16 @@
    "n_quarters": 62,
    "period": "2010-Q1..2026-Q3",
    "metrics": {
-    "accuracy": 0.7580645161290323,
-    "balanced": 0.693390452876377,
-    "precision": 0.8043478260869565,
-    "recall": 0.8604651162790697,
-    "f1": 0.8314606741573034,
-    "auc": 0.6884944920440637,
-    "brier": 0.1952120546601762,
-    "TP": 37,
+    "accuracy": 0.7903225806451613,
+    "balanced": 0.7166462668298653,
+    "precision": 0.8125,
+    "recall": 0.9069767441860465,
+    "f1": 0.8571428571428572,
+    "auc": 0.7019583843329253,
+    "brier": 0.18744781437528338,
+    "TP": 39,
     "FP": 9,
-    "FN": 6,
+    "FN": 4,
     "TN": 10
    },
    "persistence_accuracy": 0.6612903225806451,
@@ -39,13 +40,13 @@
      "pass": true
     },
     "R3": {
-     "pass": false
+     "pass": true
     },
     "R4": {
      "pass": true
     },
     "R5": {
-     "pass": false
+     "pass": true
     },
     "R6": {
      "pass": true
@@ -55,29 +56,25 @@
     }
    },
    "failed": [
-    "R3",
-    "R5",
     "R7"
    ],
    "shap_shares": {
-    "H1 Hunger (SWS)": 64.3,
-    "A1-A2 Food and headline prices": 6.1,
-    "A3 Rice": 2.5,
-    "C1 Climate (ONI)": 1.9,
+    "H1 Hunger (SWS)": 64.7,
+    "A1-A2 Food and headline prices": 6.3,
+    "A3 Rice": 2.8,
+    "C1 Climate (ONI)": 2.0,
     "C2 Typhoons": 0.1,
-    "C3 Crops": 0.8,
-    "C4 Fisheries": 0.5,
-    "World prices": 21.2,
-    "N1 News": 2.8
+    "C3 Crops": 0.9,
+    "C4 Fisheries": 1.0,
+    "World prices": 22.4,
+    "N1 News": 0.0
    },
    "vs_REF": {
     "n_quarters": 62,
-    "brier_a": 0.1952120546601762,
-    "brier_b": 0.18751441857843637,
-    "diff": 0.007697636081739761,
-    "p_one_sided": 0.8204,
-    "acc_a": 0.7580645161290323,
-    "acc_b": 0.7903225806451613
+    "acc_a": 0.7903225806451613,
+    "acc_b": 0.7903225806451613,
+    "calls_differing": 0,
+    "identical_probabilities": 61
    }
   },
   "2": {
@@ -85,16 +82,16 @@
    "n_quarters": 62,
    "period": "2010-Q1..2026-Q3",
    "metrics": {
-    "accuracy": 0.7580645161290323,
-    "balanced": 0.693390452876377,
-    "precision": 0.8043478260869565,
-    "recall": 0.8604651162790697,
-    "f1": 0.8314606741573034,
-    "auc": 0.6744186046511628,
-    "brier": 0.1988281512393125,
-    "TP": 37,
+    "accuracy": 0.7903225806451613,
+    "balanced": 0.7166462668298653,
+    "precision": 0.8125,
+    "recall": 0.9069767441860465,
+    "f1": 0.8571428571428572,
+    "auc": 0.7037943696450428,
+    "brier": 0.18371941023164615,
+    "TP": 39,
     "FP": 9,
-    "FN": 6,
+    "FN": 4,
     "TN": 10
    },
    "persistence_accuracy": 0.6612903225806451,
@@ -108,13 +105,13 @@
      "pass": true
     },
     "R3": {
-     "pass": false
+     "pass": true
     },
     "R4": {
      "pass": true
     },
     "R5": {
-     "pass": false
+     "pass": true
     },
     "R6": {
      "pass": true
@@ -124,29 +121,25 @@
     }
    },
    "failed": [
-    "R3",
-    "R5",
     "R7"
    ],
    "shap_shares": {
-    "H1 Hunger (SWS)": 64.2,
-    "A1-A2 Food and headline prices": 6.0,
-    "A3 Rice": 2.4,
-    "C1 Climate (ONI)": 1.9,
+    "H1 Hunger (SWS)": 64.7,
+    "A1-A2 Food and headline prices": 6.3,
+    "A3 Rice": 2.7,
+    "C1 Climate (ONI)": 2.1,
     "C2 Typhoons": 0.1,
-    "C3 Crops": 0.8,
-    "C4 Fisheries": 0.4,
-    "World prices": 21.4,
-    "N1 News": 2.7
+    "C3 Crops": 0.9,
+    "C4 Fisheries": 0.9,
+    "World prices": 22.4,
+    "N1 News": 0.0
    },
    "vs_REF": {
     "n_quarters": 62,
-    "brier_a": 0.1988281512393125,
-    "brier_b": 0.18378601443479917,
-    "diff": 0.015042136804513336,
-    "p_one_sided": 0.9638,
-    "acc_a": 0.7580645161290323,
-    "acc_b": 0.7903225806451613
+    "acc_a": 0.7903225806451613,
+    "acc_b": 0.7903225806451613,
+    "calls_differing": 0,
+    "identical_probabilities": 61
    }
   },
   "3": {
@@ -154,16 +147,16 @@
    "n_quarters": 62,
    "period": "2010-Q1..2026-Q3",
    "metrics": {
-    "accuracy": 0.6935483870967742,
-    "balanced": 0.6175030599755202,
-    "precision": 0.7608695652173914,
-    "recall": 0.813953488372093,
-    "f1": 0.7865168539325844,
-    "auc": 0.6621787025703795,
-    "brier": 0.21233093386138333,
-    "TP": 35,
+    "accuracy": 0.7258064516129032,
+    "balanced": 0.6407588739290085,
+    "precision": 0.7708333333333334,
+    "recall": 0.8604651162790697,
+    "f1": 0.8131868131868132,
+    "auc": 0.6854345165238679,
+    "brier": 0.19640846342661653,
+    "TP": 37,
     "FP": 11,
-    "FN": 8,
+    "FN": 6,
     "TN": 8
    },
    "persistence_accuracy": 0.6612903225806451,
@@ -198,52 +191,42 @@
     "R5",
     "R7"
    ],
-   "shap_shares": {
-    "H1 Hunger (SWS)": 65.2,
-    "A1-A2 Food and headline prices": 6.1,
-    "A3 Rice": 2.1,
-    "C1 Climate (ONI)": 1.9,
-    "C2 Typhoons": 0.1,
-    "C3 Crops": 0.8,
-    "C4 Fisheries": 0.4,
-    "World prices": 21.1,
-    "N1 News": 2.5
-   },
+   "shap_shares": null,
    "vs_REF": null
   }
  },
  "objective4_lead1": {
   "PERSIST": {
    "p_holm": 0.001,
-   "diff": -0.14349762275917866
+   "diff": -0.15126186304407147
   },
   "PSA-only": {
-   "p_holm": 0.6896,
-   "diff": -0.01302785427145735
+   "p_holm": 0.51,
+   "diff": -0.020792094556350112
   },
   "NLP-only": {
-   "p_holm": 0.0152,
-   "diff": -0.12929099505602867
+   "p_holm": 0.008,
+   "diff": -0.1533601399391962
   },
   "LOGIT": {
-   "p_holm": 0.6896,
-   "diff": 0.002380630109094629
+   "p_holm": 0.51,
+   "diff": -0.00538361017579813
   },
   "ALWAYS-HIGH": {
-   "p_holm": 0.0486,
-   "diff": -0.11123955824304964
+   "p_holm": 0.028200000000000003,
+   "diff": -0.11900379852794243
   }
  },
  "news_shap_share_lead1": {
-  "H1 Hunger (SWS)": 64.3,
-  "A1-A2 Food and headline prices": 6.1,
-  "A3 Rice": 2.5,
-  "C1 Climate (ONI)": 1.9,
+  "H1 Hunger (SWS)": 64.7,
+  "A1-A2 Food and headline prices": 6.3,
+  "A3 Rice": 2.8,
+  "C1 Climate (ONI)": 2.0,
   "C2 Typhoons": 0.1,
-  "C3 Crops": 0.8,
-  "C4 Fisheries": 0.5,
-  "World prices": 21.2,
-  "N1 News": 2.8
+  "C3 Crops": 0.9,
+  "C4 Fisheries": 1.0,
+  "World prices": 22.4,
+  "N1 News": 0.0
  },
  "evidence_status": "development evidence (every scored quarter was examined during development)",
  "price_band_cuts": [
@@ -364,14 +347,30 @@
   "national_pct": 31.4,
   "use": "face validity only: a different measure from SWS hunger, never a label"
  },
- "seal_sha256": "cc1ff11b589256746a2503160c22d5a25ee1f0272b6fa5900b6d4b9ff9db5216",
+ "seal_sha256": "67baec6689cbbafc248caac722cc4daa28196c1958ab55ac1100983dd8691015",
  "seal_issue_date": "2026-10-01",
- "seal_file": "OPTION_1/sealed_prospective_REFNEWS.csv",
- "plan_sha256": "2c685b93ab3a177138cf3bc3f7335880437ae493044baeb4cd546098f1d7ad38",
+ "seal_file": "NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv",
+ "plan_sha256": "fba5236e16715db57e2b6d3b7eff373c06db7a38043efaa1a2a77bd312bef090",
+ "news_effect": {
+  "1": {
+   "n_quarters": 62,
+   "acc_a": 0.7903225806451613,
+   "acc_b": 0.7903225806451613,
+   "calls_differing": 0,
+   "identical_probabilities": 61
+  },
+  "2": {
+   "n_quarters": 62,
+   "acc_a": 0.7903225806451613,
+   "acc_b": 0.7903225806451613,
+   "calls_differing": 0,
+   "identical_probabilities": 61
+  }
+ },
  "sources": {
-  "forecasts": "2e670a691d287afd985a7a503de7d395ea89f69b9d75c2b31646ca3c15fdc49e",
-  "shap": "b0263e344dd376dbb20bb01a6e1604c9649314030d89782ee910e2d86c3c20f3",
-  "results": "d5119f5d67150c2a4b0027ec22518c610a3b5bfdc7a132bb547d99720e290e94",
+  "forecasts": "19dfcc301fa6b8634a7b2ef80b206a92165416c903301a2524a4b3f0c89ea857",
+  "shap": "7f964fb44966d593fba2fda594774fe5ad574f7ffe74b6500c293b98f1cac68d",
+  "results": "14bdc15f1fc6961d8b2943f6e44c155d5b50db50b851a6cb3fcea80728c37be6",
   "table_pooled": "12ba4a10092dc43ae62daf1b418de984864e1f4e6dbea34743d2452d3bdc002c",
   "ch1_rows": "86d05bb62b3449d25b4261097a6ad1db1303ed628e3ad8aeea1eb01da1410cb3",
   "e85_features": "9da8ee7d9cb8c526e13b9ba2797d6c54bbd3fb5e4dae66b3921a0e0f420761ad",
