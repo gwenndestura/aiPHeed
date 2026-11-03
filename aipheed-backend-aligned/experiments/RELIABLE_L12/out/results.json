@@ -1,0 +1,362 @@
+{
+ "plan_sha256": "666cec5bad74e289e29156bbaa991caaee303ada4b63d6086e63324a074ca8aa",
+ "inputs": {
+  "C1": "72637ac6ec932745f984142015584378d714ad943f387208287649cc136076de",
+  "C2": "2e670a691d287afd985a7a503de7d395ea89f69b9d75c2b31646ca3c15fdc49e",
+  "iv2_forecasts": "c9098949ff4a73f7c07fcd582f4b40f21fd2abed315492ec7785aad3a8538405"
+ },
+ "label": "EXPLORATORY; development evidence; 2 candidates tried",
+ "candidates": {
+  "C1": {
+   "model": "REF",
+   "leads": {
+    "1": {
+     "n_quarters": 62,
+     "period": "2010-Q1..2026-Q3",
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7019583843329253,
+      "brier": 0.18751441857843637,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows",
+       "rule": "R1 >=10 quarters and >=40 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903,
+       "rule": "R2 accuracy >= 0.75"
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166,
+       "rule": "R3 balanced accuracy >= 0.70"
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613",
+       "rule": "R4 accuracy > always-LOW and > PERSIST-SI"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1512, p 0.000",
+        "CLIM": "diff -0.0331, p 0.096"
+       },
+       "rule": "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10"
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907",
+       "rule": "R6 precision >= 0.60 and recall >= 0.60"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])",
+       "rule": "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "tau": {
+      "min": 0.46,
+      "median": 0.46,
+      "max": 0.46,
+      "share_default_050": 0.0
+     },
+     "at_050": {
+      "metrics": {
+       "accuracy": 0.7903225806451613,
+       "balanced": 0.7166462668298653,
+       "precision": 0.8125,
+       "recall": 0.9069767441860465,
+       "f1": 0.8571428571428572,
+       "auc": 0.7019583843329253,
+       "brier": 0.18751441857843637
+      },
+      "failed": [
+       "R7"
+      ]
+     }
+    },
+    "2": {
+     "n_quarters": 62,
+     "period": "2010-Q1..2026-Q3",
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7037943696450428,
+      "brier": 0.18378601443479917,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows",
+       "rule": "R1 >=10 quarters and >=40 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903,
+       "rule": "R2 accuracy >= 0.75"
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166,
+       "rule": "R3 balanced accuracy >= 0.70"
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613",
+       "rule": "R4 accuracy > always-LOW and > PERSIST-SI"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1549, p 0.000",
+        "CLIM": "diff -0.0385, p 0.070"
+       },
+       "rule": "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10"
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907",
+       "rule": "R6 precision >= 0.60 and recall >= 0.60"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])",
+       "rule": "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "tau": {
+      "min": 0.49,
+      "median": 0.52,
+      "max": 0.68,
+      "share_default_050": 0.0
+     },
+     "at_050": {
+      "metrics": {
+       "accuracy": 0.7903225806451613,
+       "balanced": 0.7166462668298653,
+       "precision": 0.8125,
+       "recall": 0.9069767441860465,
+       "f1": 0.8571428571428572,
+       "auc": 0.7037943696450428,
+       "brier": 0.18378601443479917
+      },
+      "failed": [
+       "R7"
+      ]
+     }
+    }
+   },
+   "passes_L1_and_L2": false,
+   "mean_brier": 0.18565021650661778
+  },
+  "C2": {
+   "model": "REF+news",
+   "leads": {
+    "1": {
+     "n_quarters": 62,
+     "period": "2010-Q1..2026-Q3",
+     "metrics": {
+      "accuracy": 0.7580645161290323,
+      "balanced": 0.693390452876377,
+      "precision": 0.8043478260869565,
+      "recall": 0.8604651162790697,
+      "f1": 0.8314606741573034,
+      "auc": 0.6884944920440637,
+      "brier": 0.1952120546601762,
+      "TP": 37,
+      "FP": 9,
+      "FN": 6,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows",
+       "rule": "R1 >=10 quarters and >=40 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7581,
+       "rule": "R2 accuracy >= 0.75"
+      },
+      "R3": {
+       "pass": false,
+       "value": 0.6934,
+       "rule": "R3 balanced accuracy >= 0.70"
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7581 vs 0.3065 / 0.6613",
+       "rule": "R4 accuracy > always-LOW and > PERSIST-SI"
+      },
+      "R5": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.1435, p 0.000",
+        "CLIM": "diff -0.0254, p 0.171"
+       },
+       "rule": "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10"
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.804, R 0.860",
+       "rule": "R6 precision >= 0.60 and recall >= 0.60"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.75] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.571, 0.762] (sizes [20, 21, 21])",
+       "rule": "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70"
+      }
+     },
+     "failed": [
+      "R3",
+      "R5",
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "tau": {
+      "min": 0.46,
+      "median": 0.46,
+      "max": 0.46,
+      "share_default_050": 0.0
+     },
+     "at_050": {
+      "metrics": {
+       "accuracy": 0.7580645161290323,
+       "balanced": 0.693390452876377,
+       "precision": 0.8043478260869565,
+       "recall": 0.8604651162790697,
+       "f1": 0.8314606741573034,
+       "auc": 0.6884944920440637,
+       "brier": 0.1952120546601762
+      },
+      "failed": [
+       "R3",
+       "R5",
+       "R7"
+      ]
+     }
+    },
+    "2": {
+     "n_quarters": 62,
+     "period": "2010-Q1..2026-Q3",
+     "metrics": {
+      "accuracy": 0.7580645161290323,
+      "balanced": 0.693390452876377,
+      "precision": 0.8043478260869565,
+      "recall": 0.8604651162790697,
+      "f1": 0.8314606741573034,
+      "auc": 0.6744186046511628,
+      "brier": 0.1988281512393125,
+      "TP": 37,
+      "FP": 9,
+      "FN": 6,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows",
+       "rule": "R1 >=10 quarters and >=40 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7581,
+       "rule": "R2 accuracy >= 0.75"
+      },
+      "R3": {
+       "pass": false,
+       "value": 0.6934,
+       "rule": "R3 balanced accuracy >= 0.70"
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7581 vs 0.3065 / 0.6613",
+       "rule": "R4 accuracy > always-LOW and > PERSIST-SI"
+      },
+      "R5": {
+       "pass": false,
+       "value": {
+        "PERSIST-SI": "diff -0.1399, p 0.000",
+        "CLIM": "diff -0.0234, p 0.208"
+       },
+       "rule": "R5 Brier < PERSIST-SI and < CLIM, one-sided cluster p < 0.10"
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.804, R 0.860",
+       "rule": "R6 precision >= 0.60 and recall >= 0.60"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.75] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.571, 0.762] (sizes [20, 21, 21])",
+       "rule": "R7 each third >= 0.60 and leave-one-quarter-out min >= 0.70"
+      }
+     },
+     "failed": [
+      "R3",
+      "R5",
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "tau": {
+      "min": 0.49,
+      "median": 0.52,
+      "max": 0.68,
+      "share_default_050": 0.0
+     },
+     "at_050": {
+      "metrics": {
+       "accuracy": 0.7580645161290323,
+       "balanced": 0.693390452876377,
+       "precision": 0.8043478260869565,
+       "recall": 0.8604651162790697,
+       "f1": 0.8314606741573034,
+       "auc": 0.6744186046511628,
+       "brier": 0.1988281512393125
+      },
+      "failed": [
+       "R3",
+       "R5",
+       "R7"
+      ]
+     }
+    }
+   },
+   "passes_L1_and_L2": false,
+   "mean_brier": 0.19702010294974434
+  }
+ },
+ "decision": {
+  "chosen": null,
+  "model": null,
+  "reason": "no candidate passes all of R1-R7 at both Lead 1 and Lead 2: REF+news stays the main model under the paper's 75% rule (Maximum Reliable Lead Time 2)"
+ }
+}
