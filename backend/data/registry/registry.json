@@ -1135,6 +1135,80 @@
      }
     ]
    }
+  },
+  "e140-lgbm-native-1.0": {
+   "version": "e140 LightGBM-native (protocol E140-P1)",
+   "artifact_path": "data/e140/out/results.json",
+   "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); LightGBM trees without a linear prior (linear-tree or constant-leaf, nested choice)",
+   "note": "Zero-tree resolution attempt; evaluated by its pre-registered gate (app.e140.gate).",
+   "artifact_sha256": "a286c7d3b0fc0b2a6dcc8bc8e15e55436f04c66ff3912b25da220c9a39b3d383",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T16:16:20+00:00",
+   "gate": {
+    "gate_version": "risk-gate E140-P1",
+    "decision": "C",
+    "evaluated_utc": "2026-11-03T16:16:20+00:00",
+    "artifact_file_sha256": "a286c7d3b0fc0b2a6dcc8bc8e15e55436f04c66ff3912b25da220c9a39b3d383",
+    "passed": false,
+    "checks": [
+     {
+      "id": "T1_trees_selected",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "T2_trees_beat_linear_prior",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G1_beats_national",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G2_beyond_region_history",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G3_noninferior_persistence",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G5_discrimination_classes",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G6_calibration",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G9_forward_in_time",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G4_not_worse_than_best_benchmark",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G7_overfitting",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G8_island_transfer",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     }
+    ]
+   }
   }
  },
  "history": [
@@ -1347,6 +1421,59 @@
     "G2_beyond_region_history",
     "G3_noninferior_persistence",
     "G12_confirmatory"
+   ]
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e140-lgbm-native-1.0",
+   "passed": false,
+   "failed_checks": [
+    "T2_trees_beat_linear_prior",
+    "G2_beyond_region_history",
+    "G8_island_transfer"
    ]
   }
  ]

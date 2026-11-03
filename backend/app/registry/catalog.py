@@ -45,6 +45,11 @@ CATALOG = [
                "structural estimate, next-survey forecast only if a lead is validated",
      "note": "Final-system candidate; evaluated by its pre-registered gate (app.e139.gate). Candidate outputs on admin "
              "routes /api/v1/admin/candidates/e139-lgbm-1.0/*."},
+    {"model_id": "e140-lgbm-native-1.0", "status": "candidate", "version": "e140 LightGBM-native (protocol E140-P1)",
+     "artifact_path": "data/e140/out/results.json",
+     "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); LightGBM trees without a "
+               "linear prior (linear-tree or constant-leaf, nested choice)",
+     "note": "Zero-tree resolution attempt; evaluated by its pre-registered gate (app.e140.gate)."},
 ]
 
 
