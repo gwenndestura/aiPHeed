@@ -1,0 +1,1400 @@
+{
+ "inputs": {
+  "plan": "2973784ae15ba8ce45500789b3f777e78c9e2ca082386cb6fe70295dd6b046ad",
+  "hr_data": {
+   "cpi_ACP22.csv": {
+    "sha256": "0dc2e79f24d93fc3fe8dc554c2cc90477a3ed73bdc6aa0c85c5a07e88f987438",
+    "recorded": "0dc2e79f24d93fc3fe8dc554c2cc90477a3ed73bdc6aa0c85c5a07e88f987438",
+    "equal": true
+   },
+   "cpi_backcast_ACP28.csv": {
+    "sha256": "88f5726fcbbf3663d10ca685925a3d223422f3fb1372a25745b417249999d73a",
+    "recorded": "88f5726fcbbf3663d10ca685925a3d223422f3fb1372a25745b417249999d73a",
+    "equal": true
+   },
+   "fisheries_GVFP1.csv": {
+    "sha256": "d659f61a0235dfc3b2d8722510d977bd06e6f5be5dfc0e05eab821a20378e4d1",
+    "recorded": "d659f61a0235dfc3b2d8722510d977bd06e6f5be5dfc0e05eab821a20378e4d1",
+    "equal": true
+   },
+   "palay_corn_EVCP0.csv": {
+    "sha256": "baba74a173e29eeb219da177cf1d69eae53b29469cc9814b6c1251adf0d0c394",
+    "recorded": "baba74a173e29eeb219da177cf1d69eae53b29469cc9814b6c1251adf0d0c394",
+    "equal": true
+   },
+   "pinksheet_monthly_1960.csv": {
+    "sha256": "cb6daa8811d2af95a43c603679eb1c85dacd27b54bdb15bde5b33c12d7fb8aea",
+    "recorded": "cb6daa8811d2af95a43c603679eb1c85dacd27b54bdb15bde5b33c12d7fb8aea",
+    "equal": true
+   },
+   "rice_wholesale_AWB01.csv": {
+    "sha256": "513e81adc97b02c70f24d95ad3c5dbeecb603e8dc2bb692df4168abda47ec4e5",
+    "recorded": "513e81adc97b02c70f24d95ad3c5dbeecb603e8dc2bb692df4168abda47ec4e5",
+    "equal": true
+   },
+   "typhoons_province_quarter.csv": {
+    "sha256": "2f91b30f6335397b79d3ec1aa1623afd321f02d501c5e1488b2fcfe82abcb550",
+    "recorded": "2f91b30f6335397b79d3ec1aa1623afd321f02d501c5e1488b2fcfe82abcb550",
+    "equal": true
+   }
+  },
+  "table_pooled_sha256": "12ba4a10092dc43ae62daf1b418de984864e1f4e6dbea34743d2452d3bdc002c",
+  "iv2_forecasts_sha256": "c9098949ff4a73f7c07fcd582f4b40f21fd2abed315492ec7785aad3a8538405",
+  "iv2_shap_sha256": "b61cf47dbb2e3425a9a711b377995ff8c5b67b3ec1c1fd8ae716ec7ff1f7cba1"
+ },
+ "model": "REF+news",
+ "rule": "Algorithm 3: mean fold accuracy >= 0.75 (one quarter per fold), k = 1..8, halt at the first failing lead",
+ "leads": {
+  "L1": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.7580645161290323,
+   "alg3_pass": true,
+   "metrics": {
+    "accuracy": 0.7580645161290323,
+    "balanced": 0.693390452876377,
+    "precision": 0.8043478260869565,
+    "recall": 0.8604651162790697,
+    "f1": 0.8314606741573034,
+    "auc": 0.6884944920440637,
+    "brier": 0.1952120546601762,
+    "TP": 37,
+    "FP": 9,
+    "FN": 6,
+    "TN": 10
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": true,
+     "value": 0.7581
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.6934
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.7581 vs 0.3065 / 0.6613"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1435, p 0.000",
+      "CLIM": "diff -0.0254, p 0.171"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.804, R 0.860"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.75] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.571, 0.762] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6612903225806451,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.3,
+     "A1-A2 Food and headline prices": 6.1,
+     "A3 Rice": 2.5,
+     "C1 Climate (ONI)": 1.9,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.5,
+     "World prices": 21.2,
+     "N1 News": 2.8
+    }
+   },
+   "objective4": {
+    "PERSIST": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.3387096774193548,
+     "diff": -0.14349762275917866,
+     "p_one_sided": 0.0002,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.001
+    },
+    "PSA-only": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.20823990893163352,
+     "diff": -0.01302785427145735,
+     "p_one_sided": 0.3448,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.7258064516129032,
+     "p_holm": 0.6896
+    },
+    "NLP-only": {
+     "n_quarters": 20,
+     "brier_a": 0.22378801154158784,
+     "brier_b": 0.3530790065976166,
+     "diff": -0.12929099505602867,
+     "p_one_sided": 0.0038,
+     "acc_a": 0.75,
+     "acc_b": 0.45,
+     "p_holm": 0.0152
+    },
+    "LOGIT": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.19283142455108157,
+     "diff": 0.002380630109094629,
+     "p_one_sided": 0.5206,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.7096774193548387,
+     "p_holm": 0.6896
+    },
+    "ALWAYS-HIGH": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.3064516129032258,
+     "diff": -0.11123955824304964,
+     "p_one_sided": 0.0162,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6935483870967742,
+     "p_holm": 0.0486
+    }
+   },
+   "h3": {
+    "PERSIST": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.3387096774193548,
+     "diff": -0.14349762275917866,
+     "p_one_sided": 0.0002,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.0012000000000000001
+    },
+    "NLP-only": {
+     "n_quarters": 20,
+     "brier_a": 0.22378801154158784,
+     "brier_b": 0.3530790065976166,
+     "diff": -0.12929099505602867,
+     "p_one_sided": 0.0038,
+     "acc_a": 0.75,
+     "acc_b": 0.45,
+     "p_holm": 0.0152
+    },
+    "PSA-only": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.20823990893163352,
+     "diff": -0.01302785427145735,
+     "p_one_sided": 0.3448,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.7258064516129032,
+     "p_holm": 0.6896
+    },
+    "LOGIT": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.19283142455108157,
+     "diff": 0.002380630109094629,
+     "p_one_sided": 0.5206,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.7096774193548387,
+     "p_holm": 0.6896
+    },
+    "LGBM-GOV": {
+     "n_quarters": 62,
+     "brier_a": 0.1952120546601762,
+     "brier_b": 0.23266480142153115,
+     "diff": -0.037452746761354995,
+     "p_one_sided": 0.027,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6774193548387096,
+     "p_holm": 0.081
+    },
+    "LGBM-NLP": {
+     "n_quarters": 20,
+     "brier_a": 0.22378801154158784,
+     "brier_b": 0.3068770543636089,
+     "diff": -0.08308904282202109,
+     "p_one_sided": 0.0028,
+     "acc_a": 0.75,
+     "acc_b": 0.6,
+     "p_holm": 0.014
+    }
+   },
+   "vs_REF": {
+    "n_quarters": 62,
+    "brier_a": 0.1952120546601762,
+    "brier_b": 0.18751441857843637,
+    "diff": 0.007697636081739761,
+    "p_one_sided": 0.8204,
+    "acc_a": 0.7580645161290323,
+    "acc_b": 0.7903225806451613
+   }
+  },
+  "L2": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.7580645161290323,
+   "alg3_pass": true,
+   "metrics": {
+    "accuracy": 0.7580645161290323,
+    "balanced": 0.693390452876377,
+    "precision": 0.8043478260869565,
+    "recall": 0.8604651162790697,
+    "f1": 0.8314606741573034,
+    "auc": 0.6744186046511628,
+    "brier": 0.1988281512393125,
+    "TP": 37,
+    "FP": 9,
+    "FN": 6,
+    "TN": 10
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": true,
+     "value": 0.7581
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.6934
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.7581 vs 0.3065 / 0.6613"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1399, p 0.000",
+      "CLIM": "diff -0.0234, p 0.208"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.804, R 0.860"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.75] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.571, 0.762] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6612903225806451,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.2,
+     "A1-A2 Food and headline prices": 6.0,
+     "A3 Rice": 2.4,
+     "C1 Climate (ONI)": 1.9,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.4,
+     "World prices": 21.4,
+     "N1 News": 2.7
+    }
+   },
+   "objective4": {
+    "PERSIST": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.3387096774193548,
+     "diff": -0.13988152618004235,
+     "p_one_sided": 0.0004,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.002
+    },
+    "PSA-only": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.23893559098857492,
+     "diff": -0.04010743974926249,
+     "p_one_sided": 0.1064,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6774193548387096,
+     "p_holm": 0.2128
+    },
+    "NLP-only": {
+     "n_quarters": 19,
+     "brier_a": 0.25586436117665284,
+     "brier_b": 0.43410244060064934,
+     "diff": -0.1782380794239966,
+     "p_one_sided": 0.0136,
+     "acc_a": 0.7368421052631579,
+     "acc_b": 0.42105263157894735,
+     "p_holm": 0.0544
+    },
+    "LOGIT": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.23404211328517102,
+     "diff": -0.03521396204585855,
+     "p_one_sided": 0.1664,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.2128
+    },
+    "ALWAYS-HIGH": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.3064516129032258,
+     "diff": -0.10762346166391336,
+     "p_one_sided": 0.0188,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6935483870967742,
+     "p_holm": 0.056400000000000006
+    }
+   },
+   "h3": {
+    "PERSIST": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.3387096774193548,
+     "diff": -0.13988152618004235,
+     "p_one_sided": 0.0004,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.0024000000000000002
+    },
+    "NLP-only": {
+     "n_quarters": 19,
+     "brier_a": 0.25586436117665284,
+     "brier_b": 0.43410244060064934,
+     "diff": -0.1782380794239966,
+     "p_one_sided": 0.0136,
+     "acc_a": 0.7368421052631579,
+     "acc_b": 0.42105263157894735,
+     "p_holm": 0.06799999999999999
+    },
+    "PSA-only": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.23893559098857492,
+     "diff": -0.04010743974926249,
+     "p_one_sided": 0.1064,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6774193548387096,
+     "p_holm": 0.258
+    },
+    "LOGIT": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.23404211328517102,
+     "diff": -0.03521396204585855,
+     "p_one_sided": 0.1664,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.6612903225806451,
+     "p_holm": 0.258
+    },
+    "LGBM-GOV": {
+     "n_quarters": 62,
+     "brier_a": 0.1988281512393125,
+     "brier_b": 0.2400839034038984,
+     "diff": -0.04125575216458591,
+     "p_one_sided": 0.0284,
+     "acc_a": 0.7580645161290323,
+     "acc_b": 0.5967741935483871,
+     "p_holm": 0.1136
+    },
+    "LGBM-NLP": {
+     "n_quarters": 19,
+     "brier_a": 0.25586436117665284,
+     "brier_b": 0.3095709727086764,
+     "diff": -0.053706611532023614,
+     "p_one_sided": 0.086,
+     "acc_a": 0.7368421052631579,
+     "acc_b": 0.5263157894736842,
+     "p_holm": 0.258
+    }
+   },
+   "vs_REF": {
+    "n_quarters": 62,
+    "brier_a": 0.1988281512393125,
+    "brier_b": 0.18378601443479917,
+    "diff": 0.015042136804513336,
+    "p_one_sided": 0.9638,
+    "acc_a": 0.7580645161290323,
+    "acc_b": 0.7903225806451613
+   }
+  },
+  "L3": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6935483870967742,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6935483870967742,
+    "balanced": 0.6175030599755202,
+    "precision": 0.7608695652173914,
+    "recall": 0.813953488372093,
+    "f1": 0.7865168539325844,
+    "auc": 0.6621787025703795,
+    "brier": 0.21233093386138333,
+    "TP": 35,
+    "FP": 11,
+    "FN": 8,
+    "TN": 8
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6935
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.6175
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.6935 vs 0.3065 / 0.6613"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1264, p 0.001",
+      "CLIM": "diff -0.0116, p 0.335"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.761, R 0.814"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.65] (sizes [21, 21, 20]), LOQO min 0.689; other split [0.95, 0.524, 0.619] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6612903225806451,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 65.2,
+     "A1-A2 Food and headline prices": 6.1,
+     "A3 Rice": 2.1,
+     "C1 Climate (ONI)": 1.9,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.4,
+     "World prices": 21.1,
+     "N1 News": 2.5
+    }
+   }
+  },
+  "L4": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6451612903225806,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6451612903225806,
+    "balanced": 0.5532435740514076,
+    "precision": 0.723404255319149,
+    "recall": 0.7906976744186046,
+    "f1": 0.7555555555555555,
+    "auc": 0.6376988984088128,
+    "brier": 0.2275100574639131,
+    "TP": 34,
+    "FP": 13,
+    "FN": 9,
+    "TN": 6
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6452
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5532
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.6452 vs 0.3065 / 0.5968"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1757, p 0.000",
+      "CLIM": "diff +0.0018, p 0.518"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.723, R 0.791"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.55] (sizes [21, 21, 20]), LOQO min 0.639; other split [0.95, 0.476, 0.524] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.5967741935483871,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.9,
+     "A1-A2 Food and headline prices": 6.3,
+     "A3 Rice": 1.8,
+     "C1 Climate (ONI)": 2.0,
+     "C2 Typhoons": 0.0,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.4,
+     "World prices": 21.4,
+     "N1 News": 2.5
+    }
+   }
+  },
+  "L5": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.5967741935483871,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.5967741935483871,
+    "balanced": 0.488984088127295,
+    "precision": 0.6875,
+    "recall": 0.7674418604651163,
+    "f1": 0.7252747252747254,
+    "auc": 0.5960832313341493,
+    "brier": 0.2470577928312712,
+    "TP": 33,
+    "FP": 15,
+    "FN": 10,
+    "TN": 4
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.5968
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.489
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.5968 vs 0.3065 / 0.6290"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1239, p 0.002",
+      "CLIM": "diff +0.0201, p 0.760"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.688, R 0.767"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.381, 0.45] (sizes [21, 21, 20]), LOQO min 0.590; other split [0.95, 0.429, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6290322580645161,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 65.2,
+     "A1-A2 Food and headline prices": 5.9,
+     "A3 Rice": 1.4,
+     "C1 Climate (ONI)": 2.1,
+     "C2 Typhoons": 0.0,
+     "C3 Crops": 0.9,
+     "C4 Fisheries": 0.4,
+     "World prices": 22.1,
+     "N1 News": 2.0
+    }
+   }
+  },
+  "L6": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.5806451612903226,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.5806451612903226,
+    "balanced": 0.4773561811505508,
+    "precision": 0.6808510638297872,
+    "recall": 0.7441860465116279,
+    "f1": 0.711111111111111,
+    "auc": 0.6077111383108935,
+    "brier": 0.2548911932139649,
+    "TP": 32,
+    "FP": 15,
+    "FN": 11,
+    "TN": 4
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.5806
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.4774
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.5806 vs 0.3065 / 0.6774"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0677, p 0.051",
+      "CLIM": "diff +0.0266, p 0.819"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.681, R 0.744"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.381, 0.4] (sizes [21, 21, 20]), LOQO min 0.574; other split [0.95, 0.429, 0.381] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6774193548387096,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.6,
+     "A1-A2 Food and headline prices": 5.7,
+     "A3 Rice": 1.1,
+     "C1 Climate (ONI)": 2.5,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 1.1,
+     "C4 Fisheries": 0.4,
+     "World prices": 22.5,
+     "N1 News": 2.0
+    }
+   }
+  },
+  "L7": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6129032258064516,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6129032258064516,
+    "balanced": 0.5152998776009792,
+    "precision": 0.7021276595744681,
+    "recall": 0.7674418604651163,
+    "f1": 0.7333333333333334,
+    "auc": 0.5973072215422277,
+    "brier": 0.24680622197127358,
+    "TP": 33,
+    "FP": 14,
+    "FN": 10,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6129
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5153
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6129 vs 0.3065 / 0.6290"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1242, p 0.001",
+      "CLIM": "diff +0.0165, p 0.719"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.702, R 0.767"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.524, 0.35] (sizes [21, 21, 20]), LOQO min 0.607; other split [0.95, 0.571, 0.333] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6290322580645161,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 65.1,
+     "A1-A2 Food and headline prices": 5.9,
+     "A3 Rice": 0.7,
+     "C1 Climate (ONI)": 2.8,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.9,
+     "C4 Fisheries": 0.4,
+     "World prices": 22.5,
+     "N1 News": 1.8
+    }
+   }
+  },
+  "L8": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6290322580645161,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6290322580645161,
+    "balanced": 0.5269277845777234,
+    "precision": 0.7083333333333334,
+    "recall": 0.7906976744186046,
+    "f1": 0.7472527472527473,
+    "auc": 0.5789473684210527,
+    "brier": 0.2511441502499213,
+    "TP": 34,
+    "FP": 14,
+    "FN": 9,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.629
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5269
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.6290 vs 0.3065 / 0.5806"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1682, p 0.000",
+      "CLIM": "diff +0.0192, p 0.744"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.708, R 0.791"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.571, 0.35] (sizes [21, 21, 20]), LOQO min 0.623; other split [0.95, 0.619, 0.333] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.5806451612903226,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 63.6,
+     "A1-A2 Food and headline prices": 6.1,
+     "A3 Rice": 0.5,
+     "C1 Climate (ONI)": 2.6,
+     "C2 Typhoons": 0.0,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.4,
+     "World prices": 23.7,
+     "N1 News": 2.2
+    }
+   }
+  },
+  "L9": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.5806451612903226,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.5806451612903226,
+    "balanced": 0.4626682986536108,
+    "precision": 0.673469387755102,
+    "recall": 0.7674418604651163,
+    "f1": 0.7173913043478259,
+    "auc": 0.5471236230110159,
+    "brier": 0.26543286572459657,
+    "TP": 33,
+    "FP": 16,
+    "FN": 10,
+    "TN": 3
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.5806
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.4627
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.5806 vs 0.3065 / 0.5968"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1378, p 0.000",
+      "CLIM": "diff +0.0320, p 0.867"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.673, R 0.767"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.3] (sizes [21, 21, 20]), LOQO min 0.574; other split [0.95, 0.476, 0.333] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.5967741935483871,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 62.8,
+     "A1-A2 Food and headline prices": 5.9,
+     "A3 Rice": 0.5,
+     "C1 Climate (ONI)": 3.0,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.8,
+     "C4 Fisheries": 0.5,
+     "World prices": 24.0,
+     "N1 News": 2.4
+    }
+   }
+  },
+  "L10": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.5967741935483871,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.5967741935483871,
+    "balanced": 0.488984088127295,
+    "precision": 0.6875,
+    "recall": 0.7674418604651163,
+    "f1": 0.7252747252747254,
+    "auc": 0.5716034271725826,
+    "brier": 0.25568166439909884,
+    "TP": 33,
+    "FP": 15,
+    "FN": 10,
+    "TN": 4
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.5968
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.489
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.5968 vs 0.3065 / 0.6129"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1314, p 0.002",
+      "CLIM": "diff +0.0209, p 0.764"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.688, R 0.767"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.35] (sizes [21, 21, 20]), LOQO min 0.590; other split [0.95, 0.476, 0.381] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6129032258064516,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 63.5,
+     "A1-A2 Food and headline prices": 5.7,
+     "A3 Rice": 0.5,
+     "C1 Climate (ONI)": 3.3,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.9,
+     "C4 Fisheries": 0.5,
+     "World prices": 23.4,
+     "N1 News": 2.3
+    }
+   }
+  },
+  "L11": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6129032258064516,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6129032258064516,
+    "balanced": 0.5152998776009792,
+    "precision": 0.7021276595744681,
+    "recall": 0.7674418604651163,
+    "f1": 0.7333333333333334,
+    "auc": 0.5605875152998776,
+    "brier": 0.2560805856466434,
+    "TP": 33,
+    "FP": 14,
+    "FN": 10,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6129
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5153
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6129 vs 0.3065 / 0.6129"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1310, p 0.001",
+      "CLIM": "diff +0.0196, p 0.736"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.702, R 0.767"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.45] (sizes [21, 21, 20]), LOQO min 0.607; other split [0.95, 0.429, 0.476] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6129032258064516,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.6,
+     "A1-A2 Food and headline prices": 6.0,
+     "A3 Rice": 0.4,
+     "C1 Climate (ONI)": 3.6,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.9,
+     "C4 Fisheries": 0.4,
+     "World prices": 21.9,
+     "N1 News": 2.1
+    }
+   }
+  },
+  "L12": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6290322580645161,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6290322580645161,
+    "balanced": 0.5269277845777234,
+    "precision": 0.7083333333333334,
+    "recall": 0.7906976744186046,
+    "f1": 0.7472527472527473,
+    "auc": 0.5385556915544676,
+    "brier": 0.2551303926638086,
+    "TP": 34,
+    "FP": 14,
+    "FN": 9,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.629
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5269
+    },
+    "R4": {
+     "pass": true,
+     "value": "0.6290 vs 0.3065 / 0.6129"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.1320, p 0.003",
+      "CLIM": "diff +0.0167, p 0.712"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.708, R 0.791"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.429, 0.5] (sizes [21, 21, 20]), LOQO min 0.623; other split [0.95, 0.476, 0.476] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6129032258064516,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 63.5,
+     "A1-A2 Food and headline prices": 6.0,
+     "A3 Rice": 0.4,
+     "C1 Climate (ONI)": 4.0,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 0.9,
+     "C4 Fisheries": 0.4,
+     "World prices": 23.2,
+     "N1 News": 1.5
+    }
+   }
+  },
+  "L13": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6290322580645161,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6290322580645161,
+    "balanced": 0.5122399020807833,
+    "precision": 0.7,
+    "recall": 0.813953488372093,
+    "f1": 0.7526881720430109,
+    "auc": 0.5887392900856793,
+    "brier": 0.23863390281789057,
+    "TP": 35,
+    "FP": 15,
+    "FN": 8,
+    "TN": 4
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.629
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5122
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6290 vs 0.3065 / 0.7097"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0517, p 0.102",
+      "CLIM": "diff -0.0018, p 0.471"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.700, R 0.814"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.952, 0.476, 0.45] (sizes [21, 21, 20]), LOQO min 0.623; other split [0.95, 0.524, 0.429] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.7096774193548387,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.2,
+     "A1-A2 Food and headline prices": 5.9,
+     "A3 Rice": 0.3,
+     "C1 Climate (ONI)": 4.7,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 1.0,
+     "C4 Fisheries": 0.3,
+     "World prices": 22.6,
+     "N1 News": 0.9
+    }
+   }
+  },
+  "L14": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6612903225806451,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6612903225806451,
+    "balanced": 0.5501835985312118,
+    "precision": 0.72,
+    "recall": 0.8372093023255814,
+    "f1": 0.7741935483870969,
+    "auc": 0.6107711138310894,
+    "brier": 0.22707468487542493,
+    "TP": 36,
+    "FP": 14,
+    "FN": 7,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6613
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5502
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6613 vs 0.3065 / 0.6935"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0794, p 0.027",
+      "CLIM": "diff -0.0168, p 0.257"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.720, R 0.837"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.905, 0.524, 0.55] (sizes [21, 21, 20]), LOQO min 0.656; other split [0.9, 0.524, 0.571] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6935483870967742,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 65.0,
+     "A1-A2 Food and headline prices": 5.6,
+     "A3 Rice": 0.3,
+     "C1 Climate (ONI)": 4.9,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 1.4,
+     "C4 Fisheries": 0.2,
+     "World prices": 22.3,
+     "N1 News": 0.2
+    }
+   }
+  },
+  "L15": {
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "mean_fold_accuracy": 0.6774193548387096,
+   "alg3_pass": false,
+   "metrics": {
+    "accuracy": 0.6774193548387096,
+    "balanced": 0.5618115055079559,
+    "precision": 0.7254901960784313,
+    "recall": 0.8604651162790697,
+    "f1": 0.7872340425531916,
+    "auc": 0.587515299877601,
+    "brier": 0.22965159967011559,
+    "TP": 37,
+    "FP": 14,
+    "FN": 6,
+    "TN": 5
+   },
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "62 q, 62 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": 0.6774
+    },
+    "R3": {
+     "pass": false,
+     "value": 0.5618
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6774 vs 0.3065 / 0.6774"
+    },
+    "R5": {
+     "pass": false,
+     "value": {
+      "PERSIST-SI": "diff -0.0929, p 0.015",
+      "CLIM": "diff -0.0175, p 0.256"
+     }
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.725, R 0.860"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.905, 0.476, 0.65] (sizes [21, 21, 20]), LOQO min 0.672; other split [0.9, 0.476, 0.667] (sizes [20, 21, 21])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R7"
+   ],
+   "persistence_accuracy": 0.6774193548387096,
+   "shap": {
+    "rows": 62,
+    "shares": {
+     "H1 Hunger (SWS)": 64.7,
+     "A1-A2 Food and headline prices": 5.6,
+     "A3 Rice": 0.3,
+     "C1 Climate (ONI)": 5.8,
+     "C2 Typhoons": 0.1,
+     "C3 Crops": 1.5,
+     "C4 Fisheries": 0.3,
+     "World prices": 21.8,
+     "N1 News": 0.0
+    }
+   }
+  }
+ },
+ "max_reliable_lead_alg3": 2,
+ "first_failing_lead": 3,
+ "max_reliable_lead_R1_R7": 0
+}

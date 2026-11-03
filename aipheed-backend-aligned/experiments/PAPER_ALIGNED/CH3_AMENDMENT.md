@@ -5,7 +5,43 @@ otherwise. Sources: `E99_REPRODUCTION.md`, `../IMPROVE_V2/RESULTS.md`, `../OBJEC
 `DECISIONS.md`, `../P0H4_LEAD12_REVIEW/out/price_warning.json` (province food-price pressure),
 `../IMPROVE_V2/out/lgu_rankings.csv` (vulnerability inputs).
 
-## Team decision: P0H4 as the main model (pending adviser confirmation)
+## Team decision: food-insecurity model with news (REF+news) as the main model; P0H4 kept as the documented alternative
+
+**Decision (2026-11-03, later than the P0H4 decision below; it supersedes it), made by the team and pending adviser
+confirmation.**
+
+**Main model.** The food-insecurity model **IMPROVE_V2 "REF+news"**: SWS Balance Luzon involuntary hunger > 11.3%,
+forecast by the IMPROVE_V2 reference LightGBM with the news columns inside the forecast, exactly as specified in
+IMPROVE_V2 (no tuning, no new settings). It is chosen because the thesis title ("Using NLP and Machine Learning")
+requires news inside the forecast.
+
+**Reported beside it.** REF, the same model without news.
+
+| Model | Lead 1 accuracy | Lead 2 accuracy | R1–R7 failed |
+|---|---|---|---|
+| REF+news | 0.758 | 0.758 | R3, R5, R7 |
+| REF | 0.790 | 0.790 | R7 |
+
+On the stored IMPROVE_V2 results, **news does not improve the forecast**: Brier is worse by +0.008 at Lead 1
+(p 0.82) and by +0.015 at Lead 2 (p 0.96). This is reported, not hidden.
+
+**Multi-source design around it:**
+
+| Source | Role |
+|---|---|
+| SWS hunger | **when**: the regional food-insecurity forecast, the same for all five provinces |
+| PSA food poverty (subsistence incidence) | **where**: province and LGU priority |
+| PSA food prices | **province pressure**: the P0H4 price-part band, shown beside the forecast, never multiplied |
+| News | **explanation and early warning**, as well as a model input |
+| DOST-FNRI 2023 | **check**: face validity only |
+
+**Alternatives kept, not deleted:**
+- **P0H4** (next section) is the documented alternative.
+- **REF** without news is reported beside the main model.
+
+Evidence for REF+news is in `../OPTION_1/`.
+
+## Earlier team decision (superseded 2026-11-03): P0H4 as the main model (pending adviser confirmation)
 
 **Decision (2026-11-03), made by the team and pending adviser confirmation.** The main model is the served **P0H4**
 forecast (the Chapter I model), not the IMPROVE_V2 hunger-only model. The IMPROVE_V2 design in sections 2–9 below is
