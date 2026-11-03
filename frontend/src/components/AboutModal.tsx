@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Compass, Info, Mail } from "lucide-react";
 import { requestTour } from "@/lib/tour";
-import { useFinalEvaluation, useFinalOverview, useFinalRiskEvaluation } from "@/lib/queries";
+import { useFinalOverview, useFinalRiskEvaluation } from "@/lib/queries";
 import type { FinalOverview } from "@/lib/apiTypes";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -13,7 +13,6 @@ export function AboutModal() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data: overview } = useFinalOverview(open);
-  const { data: evaluation } = useFinalEvaluation(open);
   const { data: risk } = useFinalRiskEvaluation(open);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -27,9 +26,10 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed forecasts, each quarter, whether each of the five CALABARZON provinces is at high or low
-            food-insecurity risk, ranks their 142 cities and municipalities for planning attention, and shows the latest
-            measured regional hunger (SWS) with the forecast's tested accuracy. It was developed by a student research
+            aiPHeed is being built to forecast food insecurity in the five CALABARZON provinces. No food-insecurity
+            forecasting model has passed its acceptance tests yet, so no food-insecurity forecast is shown (validation
+            pending). The map shows a price-pressure risk index for each province and a planning priority for its 142
+            cities and municipalities, with the latest measured regional hunger (SWS), as context. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
           </DialogDescription>
@@ -38,7 +38,8 @@ export function AboutModal() {
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              A province is at <b className="text-foreground">high food-insecurity risk</b> in a quarter when
+              The map shows a <b className="text-foreground">price-pressure risk index</b>, not a food-insecurity
+              forecast. A province is at <b className="text-foreground">high price-pressure risk</b> in a quarter when
               regional hunger (SWS, Balance Luzon) is above 11.3% <i>and</i> the province's food prices are rising
               unusually fast (PSA), as the study defines risk. Each province shows the forecast{" "}
               <b className="text-foreground">probability of high risk</b>; <b>0.50</b> or more is High risk. An{" "}
@@ -60,7 +61,6 @@ export function AboutModal() {
                   experienced hunger (survey margin ±{overview.regionalHunger.latest.balanceLuzonMarginPts} points);
                   nationally {overview.regionalHunger.latest.national}%.
                 </p>
-                <OutlookSentence overview={overview} />
                 <p>{overview.localEvidence}</p>
               </div>
             ) : (
@@ -68,11 +68,12 @@ export function AboutModal() {
             )}
           </Section>
 
-          <Section title="Forecast model and its tested accuracy">
+          <Section title="Price-pressure risk index and its tested accuracy">
             {risk ? (
               <div className="grid gap-1.5">
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  One LightGBM model using all 12 indicator families forecasts each province's high/low risk. It was
+                  One LightGBM model using all 12 indicator families forecasts each province's high/low price-pressure
+                  risk (a proxy definition, not food insecurity). It was
                   tested quarter by quarter on 2023–2026, using only data published before each forecast was issued
                   (issued on the first day of a quarter). Accuracy is the share of correct high/low calls.
                 </p>
@@ -88,8 +89,8 @@ export function AboutModal() {
                   );
                 })}
                 <Row
-                  k="75% accuracy target"
-                  v={risk.max_reliable_lead ? `Reached for the quarter starting on the issue date (${risk.leads["1"].metrics.accuracy.toFixed(2)})` : "Not reached"}
+                  k="75% accuracy on the price-pressure index"
+                  v={risk.max_reliable_lead ? `Reached for the quarter starting on the issue date (${risk.leads["1"].metrics.accuracy.toFixed(2)}); this is not food-insecurity accuracy` : "Not reached"}
                 />
                 {risk.horizon && (
                   <>
@@ -118,12 +119,7 @@ export function AboutModal() {
                 />
                 <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test" />
                 <Row k="News" v="Context only: it did not improve the forecasts" />
-                {evaluation && (
-                  <Row
-                    k="Regional hunger level (separate model)"
-                    v={`no reliable horizon; error ${evaluation.leads.find((l) => l.lead === 1)?.maePts.toFixed(1) ?? "?"} pts next quarter`}
-                  />
-                )}
+                <Row k="Food-insecurity forecast" v="Validation pending: no model has passed the acceptance tests" />
               </div>
             ) : (
               <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>
@@ -211,23 +207,6 @@ const DATA_SOURCES = [
 /** The phone number and email: outlined pills. */
 const CONTACT_CHIP =
   "inline-flex items-center gap-1.5 h-8 compact:h-11 px-3 rounded-full border edge-control text-[11px] font-medium text-foreground hover:bg-secondary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
-/** Next quarter for Balance Luzon: the latest-reading outlook with its past range, and the LightGBM forecast. */
-function OutlookSentence({ overview }: { overview: FinalOverview }) {
-  const o = overview.outlook.latestReadingOutlook.find((x) => x.area === "BL" && x.trueHorizon === 1);
-  const f = overview.outlook.lightgbmForecast.find((x) => x.area === "BL" && x.lead === 1);
-  if (!o && !f) return null;
-  return (
-    <p>
-      {o &&
-        `Next quarter (${o.targetQuarter}): if hunger stays at the latest reading, ${o.level}%; in past quarters the ` +
-          `next reading fell within ${o.range80[0]}–${o.range80[1]}% four times in five. `}
-      {f &&
-        `The LightGBM forecast for ${f.targetQuarter}, issued ${f.issueDate} before this survey was published, ` +
-          `was ${f.forecastLevel.toFixed(1)}%.`}
-    </p>
-  );
-}
 
 /** A section: a flat rounded card with a small title. */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

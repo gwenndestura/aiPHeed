@@ -60,8 +60,8 @@ export const RISK_COLORS: Record<RiskLevel, string> = {
 };
 
 export const RISK_LABELS: Record<RiskLevel, string> = {
-  low: "Low Risk",
-  moderate: "Moderate Risk",
-  high: "High Risk",
-  severe: "High Risk",
+  low: "Low Price Risk",
+  moderate: "Moderate Price Risk",
+  high: "High Price Risk",
+  severe: "High Price Risk",
 };

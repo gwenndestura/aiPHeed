@@ -40,7 +40,10 @@ def test_overview_shows_latest_sws_observation_with_dates_and_age():
 
 
 def test_latest_observation_is_kept_apart_from_forecasts():
-    o = _get("overview")["outlook"]
+    """The engine still keeps forecasts apart from the latest observation; the public overview carries no forecast."""
+    from app.services import final_engine as FE
+    assert "outlook" not in _get("overview")
+    o = FE.overview()["outlook"]
     last_q = _get("overview")["regionalHunger"]["latest"]["quarter"]
     assert all(r["targetQuarter"] > last_q for r in o["latestReadingOutlook"])
     assert all(r["issueDate"] == "2026-10-01" and r["newestSwsQuarterUsed"] < last_q for r in o["lightgbmForecast"])

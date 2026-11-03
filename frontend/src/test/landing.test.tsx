@@ -78,7 +78,7 @@ describe("Landing page", () => {
     );
     const sub = within(card).getByText(/^A geospatial system/);
     expect(sub.textContent).toBe(
-      "A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces.",
+      "A geospatial system being developed to forecast food insecurity in the five CALABARZON provinces. Its food-insecurity forecast is validation pending; the map currently shows a price-pressure risk index as context.",
     );
     expect(sub.className).not.toContain("italic");
     expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
@@ -142,7 +142,7 @@ describe("Landing page", () => {
     const { container } = renderLanding();
     expect(container.textContent).not.toMatch(/ensemble/i);
     expect(container.textContent).toContain(
-      "It combines a regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families",
+      "The map shows a price-pressure risk index that combines regional hunger from SWS with a LightGBM food-price forecast on 12 indicator families",
     );
   });
 
@@ -263,7 +263,7 @@ describe("Landing page", () => {
   it("describes the served forecast (P0H4), never the FIRI v2 index", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
-    expect(text).not.toMatch(/FIRI|risk index|six domains|proxy index|not a probability|Combining the domains/i);
+    expect(text).not.toMatch(/FIRI|(?<!price-pressure )risk index|six domains|proxy index|not a probability|Combining the domains/i);
     expect(text).toContain("The number shown is the forecast probability of High risk, from 0 to 1");
     expect(text).toContain("regional hunger measured by SWS (Balance Luzon) is above 11.3%");
     expect(text).toContain("The forecast probability is the hunger chance multiplied by the food-price chance.");
@@ -310,7 +310,7 @@ describe("About dialog", () => {
     expect(titles).toEqual([
       "How to read the map",
       "Measured regional hunger (SWS)",
-      "Forecast model and its tested accuracy",
+      "Price-pressure risk index and its tested accuracy",
       "Data sources",
       "Missing and limited data",
       "Disclaimer",

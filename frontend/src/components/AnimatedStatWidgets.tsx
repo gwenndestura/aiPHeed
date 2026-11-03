@@ -50,7 +50,7 @@ export function AnimatedStatWidgets() {
         </div>
       </div>
       <p className="text-[9px] text-center text-muted-foreground/70 leading-tight mt-2 max-w-[110px]">
-        CALABARZON provinces with high levels of food insecurity
+        CALABARZON provinces at high price-pressure risk (not a food-insecurity measure)
       </p>
     </div>
   );

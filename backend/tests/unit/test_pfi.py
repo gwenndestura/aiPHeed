@@ -207,7 +207,8 @@ def test_candidate_is_not_public(tmp_out, monkeypatch):
     monkeypatch.setattr(R, "REGISTRY", tmp_out / "registry.json")
     c = TestClient(app)
     r = c.get("/api/v1/final/food-insecurity/outlook")
-    assert r.status_code == 503 and r.json()["detail"]["status"] == "validation_pending"
+    assert r.status_code == 200 and r.json()["status"] == "validation_pending" and r.json()["forecast"] is None
+    assert "provinces" not in r.json()
     assert c.get("/api/v1/admin/candidates/pfi-1.0/outlook").status_code in (401, 403)
     app.dependency_overrides[require_admin] = lambda: object()
     try:

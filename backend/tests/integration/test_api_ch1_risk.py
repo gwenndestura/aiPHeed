@@ -79,7 +79,7 @@ def test_forecasts_beyond_the_reliable_horizon_are_flagged(thesis):
 
 def test_summary_and_driver_bars_explain_the_served_model(thesis):
     d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2026-Q4")
-    assert d["summary"]["sentence"].startswith("FOOD-INSECURITY RISK for Quezon, 2026-Q4")
+    assert d["summary"]["sentence"].startswith("PRICE-PRESSURE RISK INDEX for Quezon, 2026-Q4 (not a food-insecurity forecast)")
     assert "passed the reliability test" in d["summary"]["sentence"]
     market = next(t for t in d["triggers"] if t["key"] == "market")
     assert "chance that food prices" in market["plainEvidence"]

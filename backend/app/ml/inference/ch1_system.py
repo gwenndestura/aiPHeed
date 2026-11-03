@@ -57,9 +57,8 @@ INDICATOR = {
     "name": "Price-pressure risk index (P0H4 Chapter I composite): probability that the province is HIGH risk",
     "legacy_name": "Food-insecurity risk (Chapter I definition): probability that the province is HIGH risk",
     "is_food_insecurity_measurement": False,
-    "hunger_forecast": {"endpoint": "/api/v1/hunger-forecast/v2",
-                        "what": "numerical forecast of SWS involuntary hunger (% of families), SWS area level; "
-                                "CALABARZON lies in Balance Luzon"},
+    "food_insecurity_forecast": {"endpoint": "/api/v1/final/food-insecurity/outlook",
+                                 "status": "validation pending: no food-insecurity model has passed the release gate"},
     "definition": ("Price-pressure risk index (label changed in v2; computation unchanged). A province is HIGH risk in a quarter when SWS Balance Luzon hunger is above 11.3% AND the "
                    "province's food prices are rising unusually fast (PSA food inflation, or food inflation minus "
                    "headline inflation, above the province's 2021-22 60th percentile), as Chapter I (1.4, 1.7) "
@@ -72,14 +71,15 @@ INDICATOR = {
                 "Lead 2 = the next quarter (not established as reliable)"),
     "source": ("SWS hunger (Balance Luzon, non-commissioned rounds); PSA provincial CPI; PSA rice, production, LFS, "
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
-    "caveat": ("Price pressure is not food insecurity: for the hunger forecast see /api/v1/hunger-forecast/v2. "
+    "caveat": ("This is a price-pressure risk index, not a food-insecurity forecast: no food-insecurity model has passed "
+               "the release gate yet (/api/v1/final/food-insecurity/outlook). "
                "A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
                "for all five provinces, so provinces differ only through food prices. The hunger part follows the newest "
                "SWS reading and cannot anticipate a new hunger surge before SWS publishes it."),
 }
 LGU_BASIS = ("Relative position within the province: the province's Chapter I risk probability re-weighted by PSA "
              "poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official "
-             "municipal food-insecurity rate; the ranking itself has not been checked against municipal outcomes.")
+             "municipal food-insecurity rate or forecast; the ranking itself has not been checked against municipal outcomes.")
 # SYSTEM_FIXES item 2: an LGU's colour is its province's class; the index only orders LGUs within the province (it is
 # the province probability scaled down by vulnerability, so a 0.50 cut-off on it showed HIGH provinces as all-LOW towns).
 LGU_LEVEL_BASIS = ("Colour = the province's Chapter I risk class (HIGH when the province probability is 0.50 or more). "
@@ -287,7 +287,7 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
         "price_pressure_score": float(r["pi_price"]), "hunger_condition_probability": float(r["pi_hunger"]),
         "score_type": "chapter1_risk_probability", "score_definition": indicator()["definition"],
         "band": "High" if p >= 0.5 else "Low",
-        "confidence_statement": (f"{name}, {quarter}: {'HIGH' if p >= 0.5 else 'LOW'} food-insecurity risk "
+        "confidence_statement": (f"{name}, {quarter}: {'HIGH' if p >= 0.5 else 'LOW'} price-pressure risk "
                                  f"(probability {p:.2f}). {what}")})
     return out
 
@@ -476,7 +476,7 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
             return None
         high = sum(float(r["probability"]) >= 0.5 for r in rs)
         h = float(rs[0]["pi_hunger"])
-        return (f"FOOD-INSECURITY RISK for CALABARZON, {quarter}: {high} of {len(rs)} provinces HIGH (regional hunger "
+        return (f"PRICE-PRESSURE RISK INDEX for CALABARZON, {quarter} (not a food-insecurity forecast): {high} of {len(rs)} provinces HIGH (regional hunger "
                 f"above 11.3% with probability {h:.0%}; HIGH also needs unusually fast food-price rises); "
                 f"{reliability_text(rs[0])}.")
     r = row(code, quarter)
@@ -485,7 +485,7 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
     p, h, pp = float(r["probability"]), float(r["pi_hunger"]), float(r["pi_price"])
     why = ("regional hunger is likely above 11.3% and food prices are likely rising unusually fast" if p >= 0.5 else
            "food prices are not likely to rise unusually fast" if h >= 0.5 else "regional hunger is likely below 11.3%")
-    return (f"FOOD-INSECURITY RISK for {name}, {quarter}: {'HIGH' if p >= 0.5 else 'LOW'} (probability {p:.2f}; "
+    return (f"PRICE-PRESSURE RISK INDEX for {name}, {quarter} (not a food-insecurity forecast): {'HIGH' if p >= 0.5 else 'LOW'} (probability {p:.2f}; "
             f"hunger condition {h:.0%}, food-price condition {pp:.0%}), because {why}; {reliability_text(r)}.")
 
 
@@ -509,15 +509,17 @@ def market_evidence(code: str | None, quarter: str) -> str | None:
 # ---------------------------------------------------------------------------------------------- reports (SYSTEM_FIXES 1)
 # The downloadable reports (report_data_e31.py for /report/data, report.py for /report) describe THIS forecast; with the
 # Chapter I engine served they used to describe FIRI v2 ("a proxy composite, not a probability") beside its numbers.
-REPORT_COVER = ("<b>The number below is the forecast probability that the province is HIGH food-insecurity risk</b> "
+REPORT_COVER = ("<b>The number below is the price-pressure risk index: the forecast probability that the province is HIGH "
+                "risk</b> "
                 "under the study's Chapter I definition, from 0 to 1, HIGH at 0.50: regional SWS hunger (Balance Luzon) "
                 "above 11.3% AND the province's food prices rising unusually fast. It multiplies the chance of the "
                 "hunger condition (from the latest SWS reading) by the chance of the food-price condition (one LightGBM "
                 "on all 12 indicator families, trained on every forecast horizon). SWS reports hunger only for Balance "
                 "Luzon, so the provinces differ only through food prices. <b>It is a risk class under a proxy "
-                "definition, not a measured food-insecurity rate</b>.")
-REPORT_FOOTER = ("Forecast probability of HIGH food-insecurity risk (Chapter I proxy definition) -- not an official food "
-                 "insecurity classification.")
+                "definition, not a measured food-insecurity rate and not a food-insecurity forecast</b>. No food-insecurity model has "
+                "passed the release gate yet.")
+REPORT_FOOTER = ("Price-pressure risk index (Chapter I proxy definition: probability of HIGH) -- not a food-insecurity "
+                 "forecast and not an official food insecurity classification.")
 REPORT_BARS_NOTE = ("Red bars pushed the model's estimate that food prices rise unusually fast up, green bars pulled it "
                     "down; groups with no effect are not shown. Relative model influence, not causes.")
 
@@ -614,7 +616,7 @@ def method_rows() -> tuple[list[str], list[list[str]]]:
 
 
 # ---------------------------------------------------------------------------------------------- summary (SYSTEM_FIXES 1, 6)
-EVENT = "food-insecurity risk under the Chapter I definition (probability of HIGH)"
+EVENT = "price-pressure risk under the Chapter I proxy definition (probability of HIGH; not a food-insecurity forecast)"
 VALUE_LABELS = {"A3": "wholesale rice price change", "C1": "PAGASA El Nino status", "C2": "typhoon count",
                 "C3": "rice and corn harvest change", "C4": "fisheries production change", "E1": "unemployment change",
                 "E2": "OFW remittance change", "N1": "FSSI-v3 news index (too few articles)",

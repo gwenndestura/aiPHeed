@@ -15,6 +15,7 @@ import { api } from "./api";
 import type {
   AuditResponse,
   Fi10Provinces,
+  FoodInsecurityStatus,
   Fi9Outlook,
   Fi9ProvincialMeasurements,
   ConfigResponse,
@@ -84,6 +85,17 @@ export function useProvincialMeasurements(enabled = true) {
   return useQuery({
     queryKey: ["fi9", "provincial-measurements"],
     queryFn: () => api.get<Fi9ProvincialMeasurements>("/api/v1/fi9/provincial-measurements", undefined, { auth: false }),
+    staleTime: HOUR,
+    retry: false,
+    enabled,
+  });
+}
+
+// The official food-insecurity forecast status: an approved model's output, or validation_pending (release gate).
+export function useFoodInsecurityStatus(enabled = true) {
+  return useQuery({
+    queryKey: ["final", "food-insecurity", "outlook"],
+    queryFn: () => api.get<FoodInsecurityStatus>("/api/v1/final/food-insecurity/outlook", undefined, { auth: false }),
     staleTime: HOUR,
     retry: false,
     enabled,

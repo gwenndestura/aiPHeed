@@ -293,7 +293,7 @@ def _score_text(score: float | None) -> str:
 def _headline(name: str, score: float | None, level: str | None,
               qoq: float | None, extra: list[tuple[str, str]], width: float) -> list:
     left = [
-        _p("FORECAST PROBABILITY OF HIGH FOOD-INSECURITY RISK" if _ch1() else
+        _p("PRICE-PRESSURE RISK INDEX (PROBABILITY OF HIGH; NOT A FOOD-INSECURITY FORECAST)" if _ch1() else
            "ESTIMATED FOOD-INSECURITY RISK INDEX (FIRI, LEAD-2)" if _thesis() else "FOOD INSECURITY RISK PROBABILITY",
            "eyebrow"),
         Spacer(1, 1.5 * mm),
@@ -579,6 +579,11 @@ def _thesis() -> bool:
     return THESIS.active()
 
 
+def _subject() -> str:
+    """PDF subject: the CH1 engine is a price-pressure risk index, not a food-insecurity forecast (release gate)."""
+    return "Price-pressure risk index (not a food-insecurity forecast)" if _ch1() else "Food insecurity risk forecast"
+
+
 def _ch1() -> bool:
     """SYSTEM_FIXES item 1: the Chapter I forecast (P0H4) is served, so the PDF describes it, not FIRI v2."""
     return svc._ch1_mode()
@@ -605,7 +610,7 @@ def _ch1_outlook_block(code: str | None, quarter: str, name: str) -> list:
     sentence = CH1.sentence(code, name, quarter, mean_p)
     if not sentence:
         return [_p("No forecast is available for this quarter.", "body")]
-    return [_callout("Food-insecurity risk forecast", _escape(sentence)), Spacer(1, 2 * mm),
+    return [_callout("Price-pressure risk index (not a food-insecurity forecast)", _escape(sentence)), Spacer(1, 2 * mm),
             _p(_escape(CH1.INDICATOR["caveat"]), "small")]
 
 
@@ -666,11 +671,11 @@ def build_province_report(province_id: str, quarter: str,
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed {province['name']} {quarter}",
-        author="aiPHeed", subject="Food insecurity risk forecast",
+        author="aiPHeed", subject=_subject(),
     )
     width = doc.width
 
-    flow = _cover("Food Insecurity Risk Forecast", province["name"], quarter, width)
+    flow = _cover("Price-Pressure Risk Index" if _ch1() else "Food Insecurity Risk Forecast", province["name"], quarter, width)
 
     flow += _section("Headline")
     flow += _headline(
@@ -758,11 +763,11 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
         leftMargin=18 * mm, rightMargin=18 * mm,
         topMargin=20 * mm, bottomMargin=18 * mm,
         title=f"aiPHeed CALABARZON {quarter}",
-        author="aiPHeed", subject="Food insecurity risk forecast",
+        author="aiPHeed", subject=_subject(),
     )
     width = doc.width
 
-    flow = _cover("Regional Food Insecurity Risk Forecast", ref.REGION_NAME, quarter, width)
+    flow = _cover("Regional Price-Pressure Risk Index" if _ch1() else "Regional Food Insecurity Risk Forecast", ref.REGION_NAME, quarter, width)
 
     flow += _section("Headline")
     flow += _headline(

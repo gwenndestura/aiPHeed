@@ -15,8 +15,10 @@ from pathlib import Path
 from app.paths import BACKEND_DIR, backend_path
 
 BACKEND = Path(__file__).resolve().parents[2]
-ROUTES = ["/api/v1/config", "/api/v1/provinces", "/api/v1/ranking", "/api/v1/hunger-forecast/v2",
-          "/api/v1/hunger-forecast/v2/geography", "/api/v1/hunger-forecast"]
+# The hunger-forecast routes need an admin login since the release gate (2026-11-03); the public routes below keep
+# the same path-independence check.
+ROUTES = ["/api/v1/config", "/api/v1/provinces", "/api/v1/ranking", "/api/v1/quarters",
+          "/api/v1/final/food-insecurity/outlook", "/api/v1/final/lgus"]
 PROBE = f"""
 import hashlib, json, sys
 sys.path.insert(0, {str(BACKEND)!r})

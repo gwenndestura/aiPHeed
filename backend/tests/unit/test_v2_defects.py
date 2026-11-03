@@ -49,6 +49,6 @@ def test_p0h4_relabelled_as_price_pressure_not_food_insecurity():
     ind = CH1.INDICATOR
     assert ind["name"].startswith("Price-pressure risk index") and "food-insecurity" not in ind["name"].lower()
     assert ind["is_food_insecurity_measurement"] is False
-    assert ind["hunger_forecast"]["endpoint"] == "/api/v1/hunger-forecast/v2"
+    assert ind["food_insecurity_forecast"]["endpoint"] == "/api/v1/final/food-insecurity/outlook"     # release gate
     assert ind["id"] == "chapter1_food_insecurity_risk"   # clients key on the id; the computation is unchanged
-    assert ind["caveat"].startswith("Price pressure is not food insecurity")
+    assert ind["caveat"].startswith("This is a price-pressure risk index, not a food-insecurity forecast")

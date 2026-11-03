@@ -600,7 +600,8 @@ export interface SwsRound {
 export interface FinalOverview {
   asOf: string;
   regionalHunger: { measure: string; geography: string; latest: SwsRound; notes: string[] };
-  outlook: {
+  // Not public since the release gate (2026-11-03): research hunger forecasts need an admin login.
+  outlook?: {
     target: string;
     latestReadingOutlook: { area: string; targetQuarter: string; trueHorizon: number; level: number; range80: [number, number] }[];
     lightgbmForecast: { area: string; issueDate: string; lead: number; targetQuarter: string; newestSwsQuarterUsed: string; forecastLevel: number }[];
@@ -831,4 +832,15 @@ export interface Fi10Provinces {
   regional_hunger_reference: { area: string; target_quarter: string; class: string; p_high: number; status: string };
   food_access_pressure_note: string;
   poverty_median_pct: number;
+}
+
+// GET /api/v1/final/food-insecurity/outlook (release gate): an approved model, or validation_pending with no values.
+export interface FoodInsecurityStatus {
+  status: "validation_pending" | "approved";
+  forecast?: null;
+  reason?: string;
+  message?: string;
+  candidates: { model_id: string; status: string; failed_checks: string[] }[];
+  acceptance_checks_total?: number;
+  production?: { model_id: string; version: string; approved_utc: string };
 }

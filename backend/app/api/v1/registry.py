@@ -5,7 +5,7 @@ Release-gated routes.
 
 public_router (no auth, /api/v1/final/...)
     GET /final/model-registry          statuses of registered models and the production pointer (no forecasts)
-    GET /final/food-insecurity/outlook only the registry's approved production model; 503 validation_pending otherwise
+    GET /final/food-insecurity/outlook only the registry's approved production model; status validation_pending otherwise
 
 admin_router (admin auth, /api/v1/admin/candidates/...)
     Candidate outputs for review. They never appear on public routes or the dashboard.
@@ -34,21 +34,28 @@ def model_registry() -> dict:
 
 @public_router.get("/final/food-insecurity/outlook")
 def approved_outlook() -> dict:
+    """The official food-insecurity forecast. Only the registry's approved production model is served; until one exists
+    the answer is `validation_pending` with no forecast values (never a candidate's numbers)."""
     try:
         p = R.production()
     except R.NoApprovedModel as exc:
-        reg = R.summary()
-        raise HTTPException(status_code=503, detail={
-            "status": "validation_pending", "reason": str(exc),
-            "candidates": [{k: m[k] for k in ("model_id", "status", "failed_checks")} for m in reg["models"]
-                           if m["status"] != "legacy_incumbent"]}) from exc
+        return _pending(str(exc))
     if p["model_id"] not in PRODUCTION_SERVERS:
-        raise HTTPException(status_code=503, detail={"status": "validation_pending",
-                                                     "reason": f"no server registered for {p['model_id']}"})
+        return _pending(f"no server registered for the approved model {p['model_id']}")
     import importlib
     mod, fn = PRODUCTION_SERVERS[p["model_id"]]
     out = getattr(importlib.import_module(mod), fn)()
-    return {**out, "production": p}
+    return {"status": "approved", **out, "production": p}
+
+
+def _pending(reason: str) -> dict:
+    reg = R.summary()
+    return {"status": "validation_pending", "forecast": None, "reason": reason,
+            "message": ("No food-insecurity forecasting model has passed all acceptance tests yet, so no official "
+                        "food-insecurity forecast is shown. Indicators on this dashboard are context, not forecasts."),
+            "candidates": [{k: m[k] for k in ("model_id", "status", "failed_checks")} for m in reg["models"]
+                           if m["status"] != "legacy_incumbent"],
+            "acceptance_checks_total": 16}
 
 
 def _candidate(model_id: str):

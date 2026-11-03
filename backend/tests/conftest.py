@@ -34,6 +34,31 @@ def _never_open_production_db():
     app.dependency_overrides.setdefault(get_db, _memory_db)
 
 
+# Release gate (2026-11-03): research engines' routes need an admin login. These modules test those engines' own
+# outputs, so they run as an admin; every other module keeps real authentication (see tests/unit/test_public_api_gate.py).
+RESEARCH_ROUTE_TESTS = {
+    "test_dynamic_target", "test_e36_served_model", "test_e41_lead2", "test_e42_lead2", "test_e43_five_trigger",
+    "test_e44_final_candidate", "test_e46_corrected_candidate", "test_e56_final_model", "test_fpp_label_v2",
+    "test_sws_reissue_dashboard", "test_e107", "test_e108", "test_e109", "test_e110", "test_e111", "test_e112",
+    "test_e113", "test_fi10", "test_fi5", "test_fi6", "test_fi6_news", "test_fi7", "test_fi9", "test_fi9r", "test_fi9x",
+    "test_fi9z", "test_forecasting_core", "test_simple_method", "test_v2_core", "test_v2_defects", "test_v2_paths",
+    "test_v4_core", "test_v6_core", "test_api_final_system",
+}
+
+
+@pytest.fixture(autouse=True)
+def _research_routes_as_admin(request):
+    from app.services.security import require_admin
+    if request.module.__name__.rsplit(".", 1)[-1] not in RESEARCH_ROUTE_TESTS:
+        yield
+        return
+    app.dependency_overrides[require_admin] = lambda: object()
+    try:
+        yield
+    finally:
+        app.dependency_overrides.pop(require_admin, None)
+
+
 @pytest_asyncio.fixture(scope="function")
 async def test_db():
     """

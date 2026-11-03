@@ -6,6 +6,7 @@ from app import registry as R
 from app.paths import BACKEND_DIR
 
 PFI_TESTS = "tests/unit/test_pfi.py"
+HFIAS_TESTS = "tests/unit/test_hfias.py"
 CATALOG = [
     {"model_id": "ch1-p0h4", "status": "legacy_incumbent", "version": "ch1 (P0H4 Chapter I composite)",
      "artifact_path": "data/ch1_engine/rows.csv",
@@ -20,6 +21,14 @@ CATALOG = [
                "leakage": [f"{PFI_TESTS}::test_loo_prediction_ignores_held_out_outcome",
                            f"{PFI_TESTS}::test_issue_uses_only_released_inputs"],
                "all": [PFI_TESTS]}},
+    {"model_id": "hfias-1.0", "status": "candidate", "version": "hfias-1.0", "artifact_path": "data/hfias/out/study_insecure.json",
+     "target": "HFIAS household food insecurity (any level), province, FNRI ENNS round; locked protocol",
+     "evidence_builder": "app.hfias.evidence:build",
+     "tests": {"release": [f"{HFIAS_TESTS}::test_features_respect_release_dates",
+                           f"{HFIAS_TESTS}::test_quarterly_production_uses_published_quarters_only"],
+               "leakage": [f"{HFIAS_TESTS}::test_study_split_is_chronological_and_disjoint",
+                           f"{HFIAS_TESTS}::test_protocol_lock_matches_code"],
+               "all": [HFIAS_TESTS]}},
 ]
 
 

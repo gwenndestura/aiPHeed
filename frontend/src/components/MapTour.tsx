@@ -42,7 +42,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Welcome to aiPHeed",
       body: () =>
-        "aiPHeed forecasts each quarter whether each CALABARZON province is at high or low food-insecurity risk: regional hunger above 11.3% together with unusually fast food-price rises. Forecasts are reviewed by Department of Agriculture staff before they are published.",
+        "The map shows a price-pressure risk index for each CALABARZON province: the chance that regional hunger is above 11.3% together with unusually fast food-price rises. It is context, not a food-insecurity forecast; the food-insecurity forecast is validation pending. Forecasts are reviewed by Department of Agriculture staff before they are published.",
       layout: { panel: "summary", sheet: "collapsed" },
     },
     {

@@ -11,8 +11,7 @@ import {
   NewsArticlesCardBody,
 } from "@/components/RightAnalyticsPanel";
 import { QuarterTimeSlider } from "@/components/QuarterTimeSlider";
-import { NextQuarterOutlookCardBody } from "@/components/NextQuarterOutlook";
-import { ProvincialOutlookCardBody } from "@/components/ProvincialOutlook";
+import { FoodInsecurityStatusCardBody } from "@/components/FoodInsecurityStatus";
 import { ForecastHistoryModal } from "@/components/ForecastHistoryModal";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { MapLegend } from "@/components/MapLegend";
@@ -470,13 +469,11 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     </Card>
   ) : currentQuarter ? (
     <>
-      {/* FI9 Lead-1 outlook (regional, Balance Luzon), shown as returned by /api/v1/fi9/outlook; additive. */}
+      {/* Official food-insecurity forecast: the release-gated route only (validation pending until a model is
+          approved). The FI9 regional hunger and FI10 food-inflation cards were removed from the dashboard on
+          2026-11-03 (not approved by the release gate); their components and results are kept for research. */}
       <Card>
-        <NextQuarterOutlookCardBody />
-      </Card>
-      {/* FI10 provincial food-price outlook (measured per province, provisional); additive. */}
-      <Card>
-        <ProvincialOutlookCardBody />
+        <FoodInsecurityStatusCardBody />
       </Card>
       <Card>
         <ShapNarrativeCardBody

@@ -422,6 +422,414 @@
      ]
     }
    }
+  },
+  "hfias-1.0": {
+   "version": "hfias-1.0",
+   "artifact_path": "data/hfias/out/study_insecure.json",
+   "target": "HFIAS household food insecurity (any level), province, FNRI ENNS round; locked protocol",
+   "evidence_builder": "app.hfias.evidence:build",
+   "tests": {
+    "release": [
+     "tests/unit/test_hfias.py::test_features_respect_release_dates",
+     "tests/unit/test_hfias.py::test_quarterly_production_uses_published_quarters_only"
+    ],
+    "leakage": [
+     "tests/unit/test_hfias.py::test_study_split_is_chronological_and_disjoint",
+     "tests/unit/test_hfias.py::test_protocol_lock_matches_code"
+    ],
+    "all": [
+     "tests/unit/test_hfias.py"
+    ]
+   },
+   "artifact_sha256": "4f46ffd1d0240823f0f8834f7eefc2d7ea79ab85734a78a1b90ee519f82dddc1",
+   "model_id": "hfias-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T06:16:28+00:00",
+   "gate": {
+    "model_id": "hfias-1.0",
+    "evaluated_utc": "2026-11-03T06:17:40+00:00",
+    "thresholds": {
+     "accuracy_min": 0.75,
+     "balanced_accuracy_min": 0.7,
+     "high_recall_min": 0.6,
+     "high_precision_min": 0.5,
+     "ece_max": 0.1,
+     "interval_coverage_tolerance": 0.05,
+     "chronological_targets_min": 20,
+     "chronological_high_min": 10,
+     "required_groups": [
+      "market",
+      "climate",
+      "employment",
+      "poverty",
+      "news"
+     ],
+     "required_families": [
+      "A1",
+      "A2",
+      "A3",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "E1",
+      "E2",
+      "V1",
+      "N1",
+      "H1"
+     ],
+     "required_n1": "improved"
+    },
+    "thresholds_sha256": "e1e705ef4458324b6585c5888a3d97672213622fa626e83bd1b2bbdcb54e2489",
+    "artifact_file_sha256": "4f46ffd1d0240823f0f8834f7eefc2d7ea79ab85734a78a1b90ee519f82dddc1",
+    "passed": false,
+    "decision": "REJECTED: not eligible for the dashboard",
+    "checks": [
+     {
+      "id": "B1",
+      "name": "Model training completed (sealed artifact loads, hash verified)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "artifact": "data/hfias/out/study_insecure.json"
+      }
+     },
+     {
+      "id": "B2",
+      "name": "All required features verified (five groups, twelve families in the model)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "families_used": [
+        "A1",
+        "A2",
+        "A3",
+        "C3",
+        "C4",
+        "H1",
+        "V1",
+        "H1"
+       ],
+       "missing_families": [
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "N1"
+       ],
+       "missing_groups": [
+        "employment",
+        "news"
+       ]
+      }
+     },
+     {
+      "id": "B3",
+      "name": "Improved N1 integrated in the predictive pipeline",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "n1_version": null
+      }
+     },
+     {
+      "id": "B4",
+      "name": "Data and release-date audits",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py::test_features_respect_release_dates tests/unit/test_hfias.py::test_quarterly_production_uses_published_quarters_only",
+       "returncode": 0,
+       "summary": "5 passed in 1.21s",
+       "notes": null
+      }
+     },
+     {
+      "id": "B5",
+      "name": "Leakage checks",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py::test_study_split_is_chronological_and_disjoint tests/unit/test_hfias.py::test_protocol_lock_matches_code",
+       "returncode": 0,
+       "summary": "2 passed in 0.08s"
+      }
+     },
+     {
+      "id": "B6",
+      "name": "Chronological evaluation on the food-insecurity target",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "design": "train ENNS 2018 provinces, test ENNS 2019 provinces (later, different provinces)",
+       "n_targets": 30,
+       "n_high": 19,
+       "metrics": {
+        "accuracy": 0.6666666666666666,
+        "balanced_accuracy": 0.6220095693779905,
+        "high_recall": 0.7894736842105263,
+        "high_precision": 0.7142857142857143
+       },
+       "baselines": {
+        "model_brier": 0.2441728718531698,
+        "baseline_brier": {
+         "B0 no change": 0.20977370441617713,
+         "B1 mean change": 0.22100096326365923,
+         "B2 mean level": 0.2338662410582531
+        },
+        "model_mae_pp": 10.373877406475268,
+        "baseline_mae_pp": {
+         "B0 no change": 7.866666666666666,
+         "B1 mean change": 12.382545910996525,
+         "B2 mean level": 10.082636082523823
+        }
+       }
+      }
+     },
+     {
+      "id": "B7",
+      "name": "Independent validation where data permit",
+      "status": "fail",
+      "critical": false,
+      "evidence": {
+       "applicable": true,
+       "passed": false,
+       "what": "held-out ENNS 2019 provinces, FNRI-published HFIAS values",
+       "n": 30
+      }
+     },
+     {
+      "id": "B8",
+      "name": "Beats the best simple baseline on the target",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "model_brier": 0.2441728718531698,
+       "baseline_brier": {
+        "B0 no change": 0.20977370441617713,
+        "B1 mean change": 0.22100096326365923,
+        "B2 mean level": 0.2338662410582531
+       },
+       "model_mae_pp": 10.373877406475268,
+       "baseline_mae_pp": {
+        "B0 no change": 7.866666666666666,
+        "B1 mean change": 12.382545910996525,
+        "B2 mean level": 10.082636082523823
+       }
+      }
+     },
+     {
+      "id": "B9",
+      "name": "Accuracy and class-sensitive metrics on the target",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "accuracy": 0.6666666666666666,
+       "balanced_accuracy": 0.6220095693779905,
+       "high_recall": 0.7894736842105263,
+       "high_precision": 0.7142857142857143
+      }
+     },
+     {
+      "id": "B10",
+      "name": "Calibration and uncertainty",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "interval_nominal": 0.9,
+       "interval_coverage": 0.8666666666666667,
+       "ece": 0.2188962548433399
+      }
+     },
+     {
+      "id": "B11",
+      "name": "Geographic generalization at the served resolution",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "passed_at_served_resolution": false,
+       "island_cv_pooled_mae_pp": 13.688296698832547
+      }
+     },
+     {
+      "id": "B12",
+      "name": "Forecast horizon justified on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "validated_leads": [],
+       "note": "Lead k = issue k quarters before Q1 of the survey year; the outcome is a survey round, not a quarter."
+      }
+     },
+     {
+      "id": "B13",
+      "name": "Five-group contribution analysis (out-of-sample ablation)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "untested_groups": [
+        "employment",
+        "news"
+       ],
+       "groups": {
+        "market": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": -0.15400659840081232
+        },
+        "climate": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": -0.5616681812815774
+        },
+        "poverty": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": 0.506844204035799
+        },
+        "employment": {
+         "tested_out_of_sample": false,
+         "why": "no provincial employment series for 2015-2019 on file nationwide"
+        },
+        "news": {
+         "tested_out_of_sample": false,
+         "why": "news corpus covers CALABARZON only; no nationwide provincial news series"
+        }
+       }
+      }
+     },
+     {
+      "id": "B14",
+      "name": "All automated tests pass",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py",
+       "returncode": 0,
+       "summary": "12 passed in 1.28s"
+      }
+     },
+     {
+      "id": "B15",
+      "name": "Model card and methodology report",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "documents": [
+        "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+       ],
+       "found": [
+        "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+       ]
+      }
+     },
+     {
+      "id": "A1",
+      "name": "Valid food-insecurity target (not a proxy)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "construct": "HFIAS: share of households food insecure (any level), province, FNRI ENNS round",
+       "is_food_insecurity_measurement": true,
+       "served_resolution": "province",
+       "served_frequency": "survey round"
+      }
+     }
+    ],
+    "evidence": {
+     "model_id": "hfias-1.0",
+     "artifact_loads": true,
+     "artifact_path": "data/hfias/out/study_insecure.json",
+     "target": {
+      "construct": "HFIAS: share of households food insecure (any level), province, FNRI ENNS round",
+      "is_food_insecurity_measurement": true,
+      "served_resolution": "province",
+      "served_frequency": "survey round"
+     },
+     "families_used": [
+      "A1",
+      "A2",
+      "A3",
+      "C3",
+      "C4",
+      "H1",
+      "V1",
+      "H1"
+     ],
+     "groups_used": [
+      "climate",
+      "market",
+      "poverty"
+     ],
+     "n1_version": null,
+     "chronological": {
+      "design": "train ENNS 2018 provinces, test ENNS 2019 provinces (later, different provinces)",
+      "n_targets": 30,
+      "n_high": 19,
+      "metrics": {
+       "accuracy": 0.6666666666666666,
+       "balanced_accuracy": 0.6220095693779905,
+       "high_recall": 0.7894736842105263,
+       "high_precision": 0.7142857142857143
+      },
+      "baselines": {
+       "model_brier": 0.2441728718531698,
+       "baseline_brier": {
+        "B0 no change": 0.20977370441617713,
+        "B1 mean change": 0.22100096326365923,
+        "B2 mean level": 0.2338662410582531
+       },
+       "model_mae_pp": 10.373877406475268,
+       "baseline_mae_pp": {
+        "B0 no change": 7.866666666666666,
+        "B1 mean change": 12.382545910996525,
+        "B2 mean level": 10.082636082523823
+       }
+      }
+     },
+     "independent": {
+      "applicable": true,
+      "passed": false,
+      "what": "held-out ENNS 2019 provinces, FNRI-published HFIAS values",
+      "n": 30
+     },
+     "calibration": {
+      "interval_nominal": 0.9,
+      "interval_coverage": 0.8666666666666667,
+      "ece": 0.2188962548433399
+     },
+     "geographic": {
+      "passed_at_served_resolution": false,
+      "island_cv_pooled_mae_pp": 13.688296698832547
+     },
+     "horizon": {
+      "validated_leads": [],
+      "note": "Lead k = issue k quarters before Q1 of the survey year; the outcome is a survey round, not a quarter."
+     },
+     "group_contribution": {
+      "market": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": -0.15400659840081232
+      },
+      "climate": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": -0.5616681812815774
+      },
+      "poverty": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": 0.506844204035799
+      },
+      "employment": {
+       "tested_out_of_sample": false,
+       "why": "no provincial employment series for 2015-2019 on file nationwide"
+      },
+      "news": {
+       "tested_out_of_sample": false,
+       "why": "news corpus covers CALABARZON only; no nationwide provincial news series"
+      }
+     },
+     "documents": [
+      "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+     ]
+    }
+   }
   }
  },
  "history": [
@@ -446,6 +854,59 @@
     "B2",
     "B3",
     "B6",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ]
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T06:16:50+00:00",
+   "event": "gate_evaluated",
+   "model_id": "hfias-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B7",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B15"
+   ]
+  },
+  {
+   "utc": "2026-11-03T06:17:40+00:00",
+   "event": "gate_evaluated",
+   "model_id": "hfias-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B7",
     "B8",
     "B9",
     "B10",

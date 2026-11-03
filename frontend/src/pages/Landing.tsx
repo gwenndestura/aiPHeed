@@ -108,7 +108,8 @@ function Hero() {
             Food Insecurity Risk Forecasting System for Region IV-A
           </h1>
           <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
-            A geospatial system that estimates the food insecurity risk of the five CALABARZON provinces.
+            A geospatial system being developed to forecast food insecurity in the five CALABARZON provinces. Its
+            food-insecurity forecast is validation pending; the map currently shows a price-pressure risk index as context.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -148,8 +149,9 @@ function About() {
       <Card>
         <div className="space-y-5">
           <p>
-            aiPHeed forecasts the risk of food insecurity in each of the five CALABARZON provinces for the current
-            quarter and, as an experimental forecast, the next quarter. Following the study's definition, a province is
+            aiPHeed is being built to forecast food insecurity in the five CALABARZON provinces. No food-insecurity
+            model has passed its acceptance tests yet, so no food-insecurity forecast is shown. What the map shows now
+            is a price-pressure risk index: following the study's proxy definition, a province is
             at High risk in a quarter when regional hunger measured by SWS (Balance Luzon) is above 11.3% and the
             province's food prices are rising unusually fast. The number shown is the forecast probability of High
             risk, from 0 to 1; a probability of 0.50 or higher is shown as High risk. It is not an official statistic
@@ -387,7 +389,7 @@ function LeadTimeTable() {
   return (
     <div>
       <p className="mb-2 font-bold text-foreground leading-snug">
-        Food-insecurity risk forecast by lead time: walk-forward predictions
+        Price-pressure risk index by lead time: walk-forward predictions (not a food-insecurity forecast)
       </p>
 
       {/* Desktop: one table. */}
@@ -542,7 +544,7 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "A forecast of food-insecurity risk for the five CALABARZON provinces, for the current quarter and, experimentally, the next quarter, to support planning. It is a student research system, not an official statistic.",
+    a: "A student research system being built to forecast food insecurity in the five CALABARZON provinces. Its food-insecurity forecast is validation pending: no model has passed the acceptance tests yet. The map shows a price-pressure risk index as context. It is not an official statistic.",
   },
   {
     q: "Is the score the probability that people will go hungry?",
@@ -670,9 +672,9 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces each quarter. It combines a
-              regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families, and
-              Filipino-English news analysis. It is not an official statistic.
+              aiPHeed is being built to forecast food insecurity for the five CALABARZON provinces; that forecast is
+              validation pending. The map shows a price-pressure risk index that combines regional hunger from SWS
+              with a LightGBM food-price forecast on 12 indicator families. It is not an official statistic.
             </p>
           </div>
 

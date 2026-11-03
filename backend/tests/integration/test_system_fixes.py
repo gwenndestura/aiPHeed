@@ -85,7 +85,7 @@ def test_server_pdf_describes_the_served_forecast(thesis):
         assert r.status_code == 200, r.text[:300]
         text = " ".join(extract_text(io.BytesIO(r.content)).split())
         assert "FIRI" not in text and "not a probability" not in text and "exact shares" not in text
-        assert "FORECAST PROBABILITY OF HIGH FOOD-INSECURITY RISK" in text and "Reliability rule" in text
+        assert "PRICE-PRESSURE RISK INDEX" in text and "NOT A FOOD-INSECURITY FORECAST" in text and "Reliability rule" in text
 
 
 def test_summary_is_the_served_forecast(thesis):

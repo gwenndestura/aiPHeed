@@ -6,12 +6,17 @@ existing dashboard routes or the served FIRI v2 priority score.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.services import dashboard as D
 from app.services import final_engine as FE
+from app.services.security import require_admin
 
 router = APIRouter()
+# Release gate: hunger forecasts of the research engine (LightGBM and latest-reading outlooks, their evaluation, SHAP
+# shares and archive) have not passed app.registry's gate, so they need an admin login; measured data stay public.
+ADMIN = [Depends(require_admin)]
+UNAPPROVED_OVERVIEW_KEYS = ("outlook",)
 
 
 def _guard(fn, *a, **kw):
@@ -23,11 +28,15 @@ def _guard(fn, *a, **kw):
 
 @router.get("/final/overview")
 def final_overview() -> dict:
-    """Latest SWS hunger observation (dates, age), latest-reading outlook, LightGBM research forecast, CPI, freshness."""
-    return _guard(FE.overview)
+    """Latest measured SWS hunger observation (dates, age), CPI and data freshness. The research engine's hunger
+    forecasts are not public (release gate): they are in /api/v1/admin/... and /final/evaluation (admin)."""
+    out = {k: v for k, v in _guard(FE.overview).items() if k not in UNAPPROVED_OVERVIEW_KEYS}
+    out["forecastStatus"] = ("validation pending: no food-insecurity or hunger forecast has passed the release gate "
+                             "(see /api/v1/final/model-registry)")
+    return out
 
 
-@router.get("/final/evaluation")
+@router.get("/final/evaluation", dependencies=ADMIN)
 def final_evaluation() -> dict:
     """Walk-forward metrics of the LightGBM by lead against baselines, the 75% verdict and the reliable-lead result."""
     return _guard(FE.evaluation)
@@ -39,13 +48,13 @@ def final_families() -> dict:
     return _guard(FE.families)
 
 
-@router.get("/final/contributions")
+@router.get("/final/contributions", dependencies=ADMIN)
 def final_contributions() -> dict:
     """SHAP share of each driver group in the LightGBM hunger forecasts."""
     return _guard(FE.contributions)
 
 
-@router.get("/final/archive")
+@router.get("/final/archive", dependencies=ADMIN)
 def final_archive(kind: str | None = Query(None, pattern="^(retrospective|prospective)$"),
                   area: str | None = Query(None, pattern="^(NCR|BL|VIS|MIN)$")) -> dict:
     """Retrospective predictions with outcomes and sealed prospective forecasts (never overwritten)."""

@@ -1,0 +1,45 @@
+{
+ "protocol_sha256": "5503093907c6f89e50c477394928f91ac4e6ec73f7103a5e50c6c29a4720ef36",
+ "code_sha256": "8d4ea2fb9c337d3a8336abe49c04a829f1c751d02f24a1baf77581212b260ebb",
+ "locked_utc": "2026-11-03T06:11:42+00:00",
+ "target": "insecure",
+ "secondary_target": "mod_sev",
+ "accept": {
+  "mae_pp_max": 5.0,
+  "beats_best_baseline_mae": true,
+  "coverage90_range": [
+   0.8,
+   0.97
+  ],
+  "accuracy_min": 0.75,
+  "balanced_accuracy_min": 0.7,
+  "high_recall_min": 0.6,
+  "ece_max": 0.1,
+  "n_test_min": 20,
+  "n_high_min": 10
+ },
+ "candidates": [
+  "B0 no change",
+  "B1 mean change",
+  "B2 mean level",
+  "M1 ridge",
+  "M2 random forest",
+  "M3 gradient boosting",
+  "M4 LightGBM"
+ ],
+ "features": [
+  "y2015_logit",
+  "poverty_2015",
+  "subsistence_2015",
+  "rice_cpi_change",
+  "food_cpi_change",
+  "fish_cpi_change",
+  "palay_corn_change",
+  "fisheries_change",
+  "sws_change"
+ ],
+ "amendment": "Re-locked before any score: primary target changed from moderate-or-severe to any-level HFIAS food insecurity because 2019 image-only decks print only the any-level headline (38 vs 33 decks).",
+ "note": "Primary test = ENNS 2019 provinces (30); training = ENNS 2018 provinces (22).",
+ "amendment_2": "Code-only fix (2026-11-03): the first run crashed in the leave-one-out step before any score was computed; protocol unchanged.",
+ "relocked_utc": "2026-11-03T06:12:59+00:00"
+}

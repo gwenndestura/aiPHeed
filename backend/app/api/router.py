@@ -1,11 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from app.services.security import require_admin
 from app.api.v1 import (
     admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, fi9, fi10, forecast,
     forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, registry, report, simple,
 )
 
 router = APIRouter()
+
+# Release gate (2026-11-03): research engines whose hunger or food-insecurity forecasts have not passed the release gate
+# (app.registry) are not public. Their routes, code and results are unchanged; they require an admin login. The
+# dashboard's food-insecurity forecast comes only from /final/food-insecurity/outlook (approved model or
+# validation_pending).
+RESEARCH_ONLY = [Depends(require_admin)]
 
 # The dashboard contract lives under /api/v1, the base path the frontend spec
 # fixes. Health keeps its original /v1 mount so existing probes keep working.
@@ -18,47 +25,47 @@ router.include_router(forecast.router, prefix=API_V1, tags=["Forecast"])
 router.include_router(insights.router, prefix=API_V1, tags=["Insights"])
 router.include_router(report.router, prefix=API_V1, tags=["Report"])
 # Revised, time-valid province assessments (fixed 0.50 rule, INSUFFICIENT_DATA, regional/provincial evidence).
-router.include_router(assessments.router, prefix=API_V1, tags=["Assessments"])
+router.include_router(assessments.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Assessments"])
 # Current forecast period + status from the single quarterly forecast record (E23).
-router.include_router(quarterly.router, prefix=API_V1, tags=["Quarterly"])
+router.include_router(quarterly.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Quarterly"])
 # Label v2: Food Price Pressure (exploratory), served only when LABEL_VERSION=v2 (E39); v1 stays the default.
-router.include_router(fpp.router, prefix=API_V1, tags=["Food Price Pressure (exploratory)"])
+router.include_router(fpp.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Food Price Pressure (exploratory)"])
 # E41 Lead-2 two-layer candidate, served only when AIPHEED_LEAD2_MODEL=e41; E38 stays the default.
-router.include_router(lead2.router, prefix=API_V1, tags=["Lead-2 candidate (E41)"])
+router.include_router(lead2.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Lead-2 candidate (E41)"])
 # Simple methodology (E106, branch aipheed/simple-methodology): read-only record and evaluation files.
-router.include_router(simple.router, prefix=API_V1, tags=["Simple methodology (E106)"])
+router.include_router(simple.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Simple methodology (E106)"])
 # E107 twelve-indicator LightGBM (branch aipheed/e107-twelve-indicator-lightgbm): read-only exported files.
-router.include_router(e107.router, prefix=API_V1, tags=["Twelve-indicator LightGBM (E107)"])
+router.include_router(e107.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Twelve-indicator LightGBM (E107)"])
 # E108 factored LightGBM (branch aiPHeed/e108-best-defensible-forecasting): read-only exported files.
-router.include_router(e108.router, prefix=API_V1, tags=["Factored twelve-indicator LightGBM (E108)"])
+router.include_router(e108.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Factored twelve-indicator LightGBM (E108)"])
 # E109 SWS Balance Luzon hunger forecasting (branch aiPHeed/e109-hunger-forecasting): read-only exported files.
-router.include_router(e109.router, prefix=API_V1, tags=["Regional hunger forecasting (E109)"])
+router.include_router(e109.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Regional hunger forecasting (E109)"])
 # E110 SWS hunger generalization (branch aiPHeed/e110-hunger-generalization): read-only exported files.
-router.include_router(e110.router, prefix=API_V1, tags=["Hunger forecast generalization (E110)"])
+router.include_router(e110.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Hunger forecast generalization (E110)"])
 # E111 audited SWS hunger forecasting (branch aiPHeed/e111-hunger-forecast-audit): read-only exported files.
-router.include_router(e111.router, prefix=API_V1, tags=["Audited hunger forecasting (E111)"])
+router.include_router(e111.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Audited hunger forecasting (E111)"])
 # E112 food-insecurity forecasting with issue-date news indicators (branch aiPHeed/e112-food-insecurity-forecasting).
-router.include_router(e112.router, prefix=API_V1, tags=["Food-insecurity forecasting with news (E112)"])
+router.include_router(e112.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Food-insecurity forecasting with news (E112)"])
 # E113 final hunger forecast model (branch aiPHeed/e113-final-model): read-only exported files.
-router.include_router(e113.router, prefix=API_V1, tags=["Final hunger forecast model (E113)"])
+router.include_router(e113.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Final hunger forecast model (E113)"])
 # Final forecasting engine (branch aiPHeed/final-system-completion): regional SWS hunger, LightGBM evaluation,
 # archive, news context, CPI and the 142-LGU priority records. Read-only.
 router.include_router(final.router, prefix=API_V1, tags=["Final forecasting engine"])
 # SWS-release re-issue audit trail (app.ml.inference.sws_reissue): every recorded issue and the forecast in force.
-router.include_router(forecast_history.router, prefix=API_V1, tags=["Forecast history (SWS re-issue)"])
+router.include_router(forecast_history.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Forecast history (SWS re-issue)"])
 
 # Numerical SWS hunger forecast (app.forecasting; E134 Addendum 2 prospective primary): read-only stored records.
-router.include_router(hunger_forecast.router, prefix=API_V1, tags=["Hunger forecast (numerical, SWS areas)"])
+router.include_router(hunger_forecast.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Hunger forecast (numerical, SWS areas)"])
 # FI5 five-domain food insecurity system (app.fi5, Objectives 1-4, FIRI v2-independent): read-only files.
-router.include_router(fi5.router, prefix=API_V1, tags=["FI5 five-domain food insecurity forecasting"])
+router.include_router(fi5.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI5 five-domain food insecurity forecasting"])
 # FI6: uncertainty-aware target (significantly above normal), LightGBM change model (app.fi6): read-only files.
-router.include_router(fi6.router, prefix=API_V1, tags=["FI6 food insecurity forecasting (uncertainty-aware target)"])
+router.include_router(fi6.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI6 food insecurity forecasting (uncertainty-aware target)"])
 # FI7: release-aware next-quarter outlook, experiment registry, final baseline comparison (app.fi7): read-only files.
-router.include_router(fi7.router, prefix=API_V1, tags=["FI7 next-quarter food insecurity outlook"])
+router.include_router(fi7.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI7 next-quarter food insecurity outlook"])
 # FI9: locked Lead-1 outlook (selected by protocol), evaluation, model card, audit, LGU priority (app.fi9): read-only files.
-router.include_router(fi9.router, prefix=API_V1, tags=["FI9 Lead-1 food insecurity outlook"])
+router.include_router(fi9.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI9 Lead-1 food insecurity outlook"])
 # FI10: provincial food-price pressure outlooks (five provinces, provisional) + provincial context (app.fi10): read-only files.
-router.include_router(fi10.router, prefix=API_V1, tags=["FI10 provincial outlooks"])
+router.include_router(fi10.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI10 provincial outlooks"])
 # Release gate: the public food-insecurity route serves only the registry's approved model (503 otherwise).
 router.include_router(registry.public_router, prefix=API_V1, tags=["Model registry (release gate)"])
 
