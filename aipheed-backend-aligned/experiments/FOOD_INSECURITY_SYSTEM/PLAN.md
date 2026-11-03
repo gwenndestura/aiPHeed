@@ -13,6 +13,8 @@ you decided:
 Nothing was built between the two revisions. For revision 2, the geography list of PSA Table 2a was read (it has a
 row "City of Lucena"); its values were not.
 
+**Revision 3** (2026-11-03, after the Step-4 build, commit `b4489a8`; **EXPLORATORY**). It adds §8: one stricter news-flag rule, fixed before it was computed, and a change so that flags are never shown in public text. The served rule of §4 is kept unchanged. Revision 2 had SHA-256 `4d4e2a2c…0840` (commit `8cbe9ed`).
+
 **Status:** plan for approval. The team chose REF+news as the main model (OPTION_1, pending adviser confirmation).
 P0H4 stays the documented alternative (`ch1` mode, unchanged).
 
@@ -275,4 +277,33 @@ applied to the paper here):
 | Amendment §2.1 Option A | "ordered by food-price pressure and vulnerability rank; nothing multiplied" | "score weighted by provincial poverty; food-price pressure and food poverty shown as context" (this design is neither Option A nor Option B; the amendment needs a short Option C) |
 | Algorithm 3 / §3.4.4 (pp. 41–43, 57) | 75% rule only | "75% rule, reported with R1–R7, which this model fails" |
 | §1.5.2 Obj 1 | FSSI per province-quarter as model input | "regional news signals as model inputs; provincial GDELT categories as explanation and early-warning context" |
-PLAN-SHA256: 4d4e2a2c6fc931159f866a5c66ffb1492bdf4c63dcf15ae46aad367b4f490840
+
+## 8. Revision 3 (EXPLORATORY): a stricter news-flag rule, and flags never shown in public text
+
+**Why.** The §4 rule fired on 45 of 85 province-quarter rows (53%) and on 3 of 5 provinces for the issued forecasts
+(`STEP4_RESULTS.md` §4). **This section was written knowing those counts.** It is therefore exploratory, not a test.
+
+**8.1 The served rule stays as fixed in §4.** Its flags are staged alert candidates only
+(`PROVINCE_NEWS_EARLY_WARNING`, STAGED, confirmed or dismissed by a DA Region IV-A administrator), and they are
+**never public**:
+- **Public text.** The text fields (`summary.sentence`, `confidenceStatement`, `evidenceNote`, `plainEvidence`, the
+  reports) keep the descriptive province news sentence, e.g. "disaster coverage 72% against a usual 42% (8-quarter
+  mean)". They drop the words "early-warning flag", the ", news flag" marker in the regional sentence, and the
+  issued-forecast flag note.
+- **Where the flag remains.** The flag stays in `rows.csv` (`news_flag`, `news_flag_family`) and in the staged alert
+  candidates' statements.
+- **Notification.** Nothing notifies DSWD or any agency.
+
+**8.2 One stricter rule, fixed now, before it is computed.** The same E85 inputs, timing, families (RESPONSE never
+flags) and history window (the 8 quarters t−8..t−1, minimum 6) as §4. A family flags when **all three** hold:
+- x(t) − mean(H) ≥ **2.0** × sd(H), with ddof = 1;
+- x(t) − mean(H) ≥ **0.10** (10 percentage points);
+- the province's own article count expm1(`gp_logn`) ≥ **30**.
+
+**8.3 Use.**
+- It is computed by `runner/strict_flag.py` into `out/strict_flag.csv` and `out/strict_flag.json`.
+- It is **reported only**: how often it fires (rows, provinces, quarters, families) and on the issued forecasts,
+  beside the §4 counts, in `STEP4_RESULTS.md` §7.
+- It is **not served** and **not staged**, and it changes nothing in `backend/`.
+- **No further tuning.** Whatever it shows is reported as it comes out, and no third rule is tried.
+PLAN-SHA256: 2c685b93ab3a177138cf3bc3f7335880437ae493044baeb4cd546098f1d7ad38
