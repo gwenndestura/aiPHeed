@@ -78,8 +78,8 @@ def final_lgus() -> dict:
 def final_risk_evaluation() -> dict:
     """Walk-forward evaluation of the Chapter I province risk forecast (UNI-FINAL, one LightGBM across leads): per-lead metrics, baselines,
     reliability verdicts, Objective-4 comparisons, news tests and calibration."""
-    from app.ml.inference import ch1_system as CH1
-    if not CH1.active():
+    from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
+    if not CH1.exported():
         raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
     return CH1.evaluation()
 
@@ -88,8 +88,8 @@ def final_risk_evaluation() -> dict:
 def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
                     quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$")) -> dict:
     """Province rows: walk-forward Lead-1 forecasts with observed outcomes, and the forecasts issued 2026-10-01."""
-    from app.ml.inference import ch1_system as CH1
-    if not CH1.active():
+    from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
+    if not CH1.exported():
         raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
     rows = [dict(r, kind=CH1.kind(r), reliable_horizon=CH1.status(r) == "reliable", status=CH1.status(r))
             for r in CH1.rows().values()

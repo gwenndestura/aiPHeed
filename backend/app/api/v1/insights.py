@@ -9,9 +9,11 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.public import ExplainabilityResponse, NewsResponse
+from app.dependencies import get_db
+from app.schemas.public import ExplainabilityResponse, IndexResponse, NewsResponse
 from app.services import dashboard as svc
 from app.services import reference as ref
 
@@ -195,9 +197,9 @@ def _served_note(quarter: str | None = None) -> str:
     if quarter and LEAD2.mode() == "e64" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return E64_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() == "thesis":
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
         if CH1.active() and CH1.covers(quarter):                     # the map serves the Chapter I forecast
-            return CH1_EXPLAINABILITY_NOTE
+            return getattr(CH1, "EXPLAINABILITY_NOTE", CH1_EXPLAINABILITY_NOTE)   # foodinsecurity: its own note
     if quarter and LEAD2.mode() == "thesis" and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
         return THESIS_EXPLAINABILITY_NOTE
     if quarter and LEAD2.mode() in ("e58", "e66", "e67", "e68", "e69", "thesis") and (LEAD2.serves(quarter) or LEAD2.has_past_drivers(quarter)):
@@ -243,11 +245,48 @@ def _resolve_province(scope: str, subject_id: str) -> tuple[str | None, str]:
     return row["province_code"], row["lgu_name"]
 
 
+@router.get("/index", response_model=IndexResponse)
+async def get_index(
+    scope: str = Query("region", pattern="^(region|province)$"),
+    id: str = Query("calabarzon", description="calabarzon | quezon"),
+    quarter: str | None = Query(None),
+) -> IndexResponse:
+    """
+    Overall food-insecurity index (FIRI v2) and its five-driver composition.
+
+    A composite 0-1 index, not a probability, served beside the Chapter I HIGH-risk probability of /forecast and never
+    in its place: /forecast and /explainability are unchanged. 404 when the index is not available for the quarter
+    (never a filled value).
+    """
+    q = svc.resolve_quarter(quarter)
+    code, name = _resolve_province(scope, id)
+    out = svc.firi_index(code, q)
+    if out is None:
+        raise svc.QuarterNotAvailable(f"No FIRI v2 index is available for {name}, {q}. This is missing data, not a low "
+                                      "index.")
+    return IndexResponse(scope=scope, id=id.lower(), name=name, **out)
+
+
+async def _staged_gate(db: AsyncSession, code: str | None, quarter: str) -> None:
+    """Food-insecurity mode only (Rule 1): an issued forecast no administrator has approved is withheld here as on the
+    map; the region is withheld while every province is. Other modes are unchanged."""
+    from app.ml.inference import foodinsecurity_system as FI
+    from app.services import review as rv
+
+    if not FI.active():
+        return
+    held = {pid for pid, rq in await rv.rejected_pairs(db, quarter)}
+    if (code is None and held >= set(ref.PROVINCES)) or (code is not None and ref.province_slug(code) in held):
+        raise svc.ForecastWithheld(f"The {quarter} forecast is STAGED: it is not shown until an administrator approves "
+                                   "it.")
+
+
 @router.get("/explainability", response_model=ExplainabilityResponse)
 async def get_explainability(
     scope: str = Query("province", pattern="^(region|province|municipality)$"),
     id: str = Query(..., description="calabarzon | quezon | quezon-infanta"),
     quarter: str | None = Query(None),
+    db: AsyncSession = Depends(get_db),
 ) -> ExplainabilityResponse:
     """
     Grouped SHAP for one subject-quarter.
@@ -259,6 +298,7 @@ async def get_explainability(
     """
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
+    await _staged_gate(db, code, q)
 
     if code is None:
         result = svc.explainability_region(q)
@@ -288,6 +328,7 @@ async def get_explainability(
         triggers=triggers,
         articleCount=article_count,
         triggerMatchedArticles=matched,
+        otherPct=result.get("otherPct"),
         narrative=(f"{summary['sentence']} These are model attributions, not causes." if summary
                    else svc.compose_narrative(name, q, triggers)),
         note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,

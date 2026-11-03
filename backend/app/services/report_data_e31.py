@@ -66,7 +66,7 @@ def _served_quarters() -> list[str]:
 
 def _row(quarter: str) -> dict | None:
     if _ch1():                            # the forecast's own kind, lead and issue date (one row per quarter)
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
 
         if quarter not in _served_quarters():
             return None
@@ -325,7 +325,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
     thesis = _thesis()
     ch1 = _ch1()
     if ch1:
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
 
         blocks: list[dict] = [_p(_strip_tags(CH1.REPORT_COVER))]
     elif thesis:
@@ -435,9 +435,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
           ("Rank", "center", 0.12), (change_head, "center", 0.20), ("Main factor", "center", 0.25)] if thesis else
          [("Province", "center", 0.20), ("Risk score", "center", 0.15), ("Risk level", "center", 0.17),
           (change_head, "center", 0.22), ("Main factor", "center", 0.26)]), glance,
-        ("Risk level: HIGH at a probability of 0.50 and above, LOW below, as on the map; the rank is the map's ranking "
-         "(tied values share a rank). The main factor is the indicator group with the largest relative influence on "
-         "the food-price part of the forecast."
+        (getattr(CH1, "REPORT_TABLE_NOTE",
+                 "Risk level: HIGH at a probability of 0.50 and above, LOW below, as on the map; the rank is the map's "
+                 "ranking (tied values share a rank). The main factor is the indicator group with the largest relative "
+                 "influence on the food-price part of the forecast.")
          if ch1 else
          "Risk level: HIGH at 0.50 and above, LOW below (FIRI v2, as on the map); the rank is the map's ranking (tied "
          "indices share a rank). The main factor is the largest of the five factor groups behind each index."
@@ -576,8 +577,8 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                 [("Group", "left", 0.22), ("Influence", "center", 0.16), ("What the forecast used", "left", 0.62)],
                 [[t["label"], (f"{t['pct']}% {'raises' if t['direction'] == 'increases_risk' else 'lowers'}"
                                if t["pct"] > 0 else "No effect"), t.get("plainEvidence") or "-"] for t in trig],
-                "Influence is relative SHAP on the food-price part of the forecast, rescaled to 100%; it is model "
-                "influence, not a cause."))
+                getattr(CH1, "REPORT_SHAP_NOTE", "Influence is relative SHAP on the food-price part of the "
+                        "forecast, rescaled to 100%; it is model influence, not a cause.")))
         sentence = CH1.sentence(codes[slugs[0]], names[slugs[0]], last_q)
         if sentence:
             blocks.append(_p(sentence))

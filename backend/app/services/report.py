@@ -357,7 +357,7 @@ def _thesis_driver_text(explain: dict) -> str:
 
 def _method_block(performance: dict) -> list:
     if _ch1():                                       # SYSTEM_FIXES item 1: the served Chapter I forecast's own evidence
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
         head, rows = CH1.method_rows()
         sent = CH1.reliability_sentences()
         return ([_p(svc._ascii(CH1.model_line()), "body"), Spacer(1, 2 * mm),
@@ -587,19 +587,19 @@ def _ch1() -> bool:
 def _ch1_text(name: str) -> str | None:
     if not _ch1():
         return None
-    from app.ml.inference import ch1_system as CH1
+    from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
     return getattr(CH1, name)
 
 
 def _ch1_driver_text(explain: dict, subject: str, quarter: str) -> str:
-    from app.ml.inference import ch1_system as CH1
+    from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
     code = next((m["code"] for m in ref.PROVINCES.values() if m["name"] == subject), None)
     r = CH1.row(code, quarter) if code else None
     return CH1.driver_text(explain["triggers"], float(r["pi_hunger"]) if r else None)
 
 
 def _ch1_outlook_block(code: str | None, quarter: str, name: str) -> list:
-    from app.ml.inference import ch1_system as CH1
+    from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
     rs = [r for (c, q), r in CH1.rows().items() if q == quarter]
     mean_p = sum(float(r["probability"]) for r in rs) / len(rs) if rs else None
     sentence = CH1.sentence(code, name, quarter, mean_p)

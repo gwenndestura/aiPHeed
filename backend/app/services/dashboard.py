@@ -41,7 +41,8 @@ from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import thesis_system as THESIS
-from app.ml.inference import ch1_system as CH1
+from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
+from app.ml.inference import firi as FI
 from app.ml.inference import enso_context as ENSO
 from app.services import final_engine as FE
 from app.services import reference as ref
@@ -434,8 +435,10 @@ def candidate_unavailable_reason(quarter: str) -> str:
 def _lead2_key() -> str:
     """Cache key part: the Lead-2 mode and whether it governs every quarter at this moment (it depends on the clock)."""
     # "+ch1": thesis mode serving the Chapter I risk forecast (ch1_system) instead of the FIRI index
-    ch1 = "+ch1" if THESIS.active() and CH1.active() else ""
-    return E41L2.mode() + ch1 + (":governs" if E41L2.governs() else "")
+    ch1 = "+ch1" + CH1.key() if THESIS.active() and CH1.active() else ""   # +fi: the food-insecurity mode
+    # "+m3": the Lead-2 mid-quarter update is served (it depends on the switch and on the clock: from its issue date)
+    m3 = "+m3" if ch1 and CH1.m3_served() else ""
+    return E41L2.mode() + ch1 + m3 + (":governs" if E41L2.governs() else "")
 
 
 def _e31_unavailable_reason(quarter: str, horizon: str) -> str:
@@ -634,7 +637,8 @@ def province_summary(
             "currentQuarter": quarter,
             "riskScore": _shown(score),
             "riskScoreExact": score,
-            "riskLevel": _level(score),
+            # the food-insecurity mode's class is the regional one, never a band of its poverty-weighted score
+            "riskLevel": record.get("class_level") or _level(score),
             "qoqChange": delta,
             "qoqChangePct": pct,
             "riskLabel": record.get("risk_label"),
@@ -645,7 +649,8 @@ def province_summary(
             **({"estimateKind": record["estimate_kind"], "observedOutcome": record.get("observed_label")}
                if record.get("estimate_kind") else {}),
             "evidenceStatus": "EXPERIMENTAL",
-            "riskLevelBasis": CH1_RISK_LEVEL_BASIS if THESIS.active() and CH1.active() else RISK_LEVEL_BASIS,
+            "riskLevelBasis": (getattr(CH1, "RISK_LEVEL_BASIS", CH1_RISK_LEVEL_BASIS) if THESIS.active() and CH1.active()
+                               else RISK_LEVEL_BASIS),
             # Rule 6: every forecast carries an explicit horizon label, a
             # confidence statement and a verification date.
             "forecastHorizonQuarters": record.get("forecast_horizon_quarters"),
@@ -826,14 +831,27 @@ def _municipal_frame_cached(quarter: str, lead2_mode: str) -> pd.DataFrame:
     if e31_active():
         if not forecasts:                      # a quarter that exists only as a nowcast (2026-Q4)
             forecasts = _province_forecasts(quarter, NOWCAST)
-        return E31.E31Disaggregator().disaggregate(forecasts, quarter=quarter)
+        return E31.E31Disaggregator().disaggregate(forecasts, quarter=quarter, vul_path=_lgu_vulnerability_path())
     return Disaggregator().disaggregate(forecasts, quarter=quarter)
 
 
-@functools.lru_cache(maxsize=1)
+def _lgu_vulnerability_path() -> Path:
+    """The served LGU inputs: the food-insecurity mode's copy (Lucena's own PSA Table 2a value), else the input file."""
+    if THESIS.active() and CH1.active():
+        own = getattr(CH1, "lgu_vulnerability_path", None)
+        if own is not None and own().exists():
+            return own()
+    return LGU_PROVENANCE_PATH
+
+
 def _lgu_poverty_map() -> dict[str, float]:
-    if e31_active() and LGU_PROVENANCE_PATH.exists():     # measured municipal SAE only; substitutes stay null
-        df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+    return _lgu_poverty_map_at(str(_lgu_vulnerability_path()))
+
+
+@functools.lru_cache(maxsize=4)
+def _lgu_poverty_map_at(path: str) -> dict[str, float]:
+    if e31_active() and Path(path).exists():     # measured municipal SAE only; substitutes stay null
+        df = pd.read_csv(path, dtype={"lgu_code": str})
         return {str(r.lgu_code).zfill(9): float(r.poverty_lgu_estimate) for r in df.itertuples()
                 if pd.notna(r.poverty_lgu_estimate)}
     if not LGU_POVERTY_PATH.exists():
@@ -860,11 +878,15 @@ CH1_RISK_LEVEL_BASIS = (
 LGU_PROVENANCE_PATH = Path("data/inputs/lgu_vulnerability.csv")
 
 
-@functools.lru_cache(maxsize=1)
 def _lgu_provenance() -> dict[str, dict]:
-    if not LGU_PROVENANCE_PATH.exists():
+    return _lgu_provenance_at(str(_lgu_vulnerability_path()))
+
+
+@functools.lru_cache(maxsize=4)
+def _lgu_provenance_at(path: str) -> dict[str, dict]:
+    if not Path(path).exists():
         return {}
-    df = pd.read_csv(LGU_PROVENANCE_PATH, dtype={"lgu_code": str})
+    df = pd.read_csv(path, dtype={"lgu_code": str})
     return {r.lgu_code: {"value_used": float(r.poverty_value_used), "has_own": bool(pd.notna(r.poverty_lgu_estimate)),
                          "cv": float(r.poverty_cv) if pd.notna(r.poverty_cv) else None}
             for r in df.itertuples()}
@@ -877,6 +899,9 @@ LOW_PRECISION_CV = 20.0
 
 def _poverty_provenance(code: str, own: float | None) -> dict:
     """E27 fix: say what the ranking used for an LGU's poverty term and why, instead of returning a bare null."""
+    own_mode = getattr(CH1, "lgu_poverty_provenance", None) if THESIS.active() and CH1.active() else None
+    if own_mode is not None and (o := own_mode(code)) is not None:     # the food-insecurity mode's Lucena value
+        return o
     p = _lgu_provenance().get(code)
     if own is not None or (p and p["has_own"]):
         cv = p.get("cv") if p else None
@@ -904,6 +929,9 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
     roster = ref.lgu_roster().set_index("lgu_psgc")
     poverty = _lgu_poverty_map()
     ch1_lgu = THESIS.active() and CH1.active() and CH1.covers(quarter)
+    # the food-insecurity mode colours every LGU by the regional probability, not the poverty-weighted province score
+    class_p = getattr(CH1, "lgu_class_probability", None) if ch1_lgu else None
+    regional_p = class_p(quarter) if class_p is not None else None
 
     rows = []
     for _, r in frame.iterrows():
@@ -915,7 +943,8 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             continue
         # E28 fix: a province without an estimate gives risk_index = null; float(None) used to crash the endpoint.
         score = None if r["risk_index"] is None or pd.isna(r["risk_index"]) else round(float(r["risk_index"]), 4)
-        prov_p = None if pd.isna(r.get("province_probability")) else float(r.get("province_probability"))
+        prov_p = (regional_p if regional_p is not None else
+                  None if pd.isna(r.get("province_probability")) else float(r.get("province_probability")))
         rank_r = r.get("rank_region")
         rank_p = r.get("rank_in_province")
         rows.append({
@@ -1109,10 +1138,26 @@ def explainability(province_code: str, quarter: str) -> dict:
     if ch1:                                           # the Chapter I forecast: SHAP of its LightGBM price part
         built = CH1.drivers(province_code, quarter, built)
     drivers = built["drivers"]
-    pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
+    firi_res = None if ch1 else built.get("firi")
+    if firi_res is not None:
+        # FIRI v2 (origin/main's served score): a driver's size is the sum of the absolute Shapley values of its
+        # indicators (opposite pushes do not cancel it); shares among the five drivers only; the direction stays the
+        # sign of the net push (group_shap)
+        sv = THESIS.shap_values(firi_res)
+        mags = [sum(abs(sv.get(k, 0.0)) for k in THESIS.FIVE_GROUPS.get(d["driver_group"], ())) for d in drivers]
+        other_abs = 0.0
+        pcts = _integer_shares(mags)
+        other_pct = built.get("other_pct")
+    else:
+        mags = [abs(d["group_shap"]) for d in drivers]
+        # Chapter I: the five driver bars and the other model inputs share one 100%, so no bar is inflated by leaving
+        # "other" out of the denominator
+        other_abs = built.get("other_abs", 0.0) if ch1 else 0.0
+        pcts = _integer_shares(mags + ([other_abs] if ch1 else []))
+        other_pct = pcts.pop() if ch1 else built.get("other_pct")
 
     triggers = []
-    for d, pct in zip(drivers, pcts):
+    for d, pct, mag in zip(drivers, pcts, mags):
         triggers.append({
             "key": d["driver_group"],
             "label": d["driver_label"],
@@ -1123,7 +1168,7 @@ def explainability(province_code: str, quarter: str) -> dict:
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct"), d["driver_group"])
+            "evidenceNote": (CH1.evidence_note(province_code, quarter, other_pct, d["driver_group"])
                              if ch1 else
                              THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                              if THESIS.active() and E41L2.governs() else
@@ -1135,7 +1180,19 @@ def explainability(province_code: str, quarter: str) -> dict:
                               THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                               if THESIS.active() and E41L2.governs() else None),
             "newsSignalProportion": d["trigger_proportion"],
+            "magnitude": mag,                             # internal: the region pools these (not in the response model)
         })
+    if firi_res is not None and province_code:
+        # FIRI has no value for the driver, but the audited series published one before the issue date: say so (as
+        # /index's not_in_index) instead of "no published data", and show the audited figure as evidence
+        issue = firi_res.get("issueDate")
+        published = audited_published(province_code, issue)
+        for t in triggers:
+            if t["status"] == "insufficient_data" and t["key"] in published:
+                t["status"] = "data_not_in_model"
+                t["statusNote"] = TRIGGER_STATUS_NOTES["data_not_in_model"]
+                t["evidenceNote"] = " ".join(x for x in (t["evidenceNote"], audited_evidence(province_code, issue, t["key"]))
+                                             if x)
     triggers.sort(key=lambda t: t["pct"], reverse=True)
     return {
         "quarter": quarter,
@@ -1146,7 +1203,8 @@ def explainability(province_code: str, quarter: str) -> dict:
         "articleCount": article_count(province_code, quarter),
         "triggerMatchedArticles": built["article_count"],
         # E36/E38: share of the model's attribution outside the five trigger groups (E20 convention)
-        "otherPct": built.get("other_pct"),
+        "otherPct": other_pct,
+        "otherAbs": other_abs,
     }
 
 
@@ -1168,15 +1226,19 @@ def explainability_region(quarter: str) -> dict:
         for t in result["triggers"]:
             acc = totals.setdefault(t["key"], {
                 "key": t["key"], "label": t["label"],
-                "signed": 0.0, "raw": 0.0, "news": [],
+                "signed": 0.0, "raw": 0.0, "news": [], "statuses": set(),
             })
-            acc["raw"] += abs(t["signedContribution"])
+            acc["statuses"].add(t["status"])
+            acc["raw"] += t.get("magnitude", abs(t["signedContribution"]))
             acc["signed"] += t["signedContribution"]
             if t["newsSignalProportion"] is not None:
                 acc["news"].append(t["newsSignalProportion"])
 
     keys = list(totals)
-    pcts = _integer_shares([totals[k]["raw"] for k in keys])
+    ch1 = THESIS.active() and CH1.active() and CH1.covers(quarter)
+    other_abs = sum(r.get("otherAbs", 0.0) for r in per_province)
+    pcts = _integer_shares([totals[k]["raw"] for k in keys] + ([other_abs] if ch1 else []))
+    other_pct = pcts.pop() if ch1 else None                          # 0 when the other inputs did not move it
 
     triggers = []
     for key, pct in zip(keys, pcts):
@@ -1192,11 +1254,13 @@ def explainability_region(quarter: str) -> dict:
             "signedContribution": round(acc["signed"] / len(per_province), 4),
             "direction": direction,
             "color": trigger_color(pct, direction),
-            "status": (st := trigger_status(key, quarter, pct)),
+            # every province has the audited data outside the index: the region says the same (not "no data")
+            "status": (st := "data_not_in_model" if acc["statuses"] == {"data_not_in_model"}
+                       else trigger_status(key, quarter, pct)),
             "statusNote": TRIGGER_STATUS_NOTES[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
-            "evidenceNote": (CH1.evidence_note(None, quarter, group=key)
+            "evidenceNote": (CH1.evidence_note(None, quarter, other_pct, group=key)
                              if THESIS.active() and CH1.active() and CH1.covers(quarter)
                              else THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
                              REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
@@ -1215,7 +1279,157 @@ def explainability_region(quarter: str) -> dict:
         "triggers": triggers,
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+        "otherPct": other_pct,
     }
+
+
+# Option B: the overall food-insecurity index (FIRI v2) served beside the Chapter I probability, never in its place.
+# The index and its bars come only from THESIS.firi_for / THESIS.shap_values (the authoritative FIRI functions).
+FIRI_INDEX_DEFINITION = (
+    "Overall food-insecurity index (FIRI v2): an evidence-weighted composite of six domains (affordability, household "
+    "vulnerability, climate and food production, household economy, news warning signals, regional hunger) on a 0-1 "
+    "scale. It is an index, not a probability: 0.75 does not mean a 75% chance. HIGH at 0.50. Region value = mean of "
+    "the five provinces.")
+FIRI_INDEX_VALIDATION = (
+    "Validated against the regional hunger outcome (SWS Balance Luzon above 11.3%), on quarters already examined while "
+    "the index was built (development evidence). Its province-to-province differences are not validated: against the "
+    "provincial HIGH-risk label it ranks provinces about as well as chance. Its inputs predate the FIRI_V2_DATA_AUDIT "
+    "corrections (BSP remittances, typhoon counts, 2026-Q3 rice): the index has not been recomputed with the audited "
+    "data, which the provincial forecast uses.")
+FIRI_STATUS_NOTES = {
+    "contributes": "Its indicators moved the index away from its neutral 0.5 in the direction shown.",
+    "no_effect": "Its indicators were observed but sat at their historical middle, so they did not move the index.",
+    "insufficient_data": "No published value for its indicators at the issue date. Missing data is not evidence of "
+                         "low risk.",
+    "not_in_index": "Published data exist for this issue date (the audited series the provincial forecast uses), but "
+                    "the FIRI v2 index was computed from the earlier, uncorrected inputs and has not been recomputed "
+                    "with them, so the index leaves this driver out. This is not evidence of low risk.",
+}
+# the audited input columns (backend/data/ch1_engine/rows.csv, val_*) that show whether a driver's data were published
+AUDITED_COLUMNS = {"market": ("val_A3",), "climate": ("val_C1", "val_C2", "val_C3"), "fish_kill": ("val_C4",),
+                   "employment": ("val_E1",), "ofw_remittance": ("val_E2",)}
+
+
+def audited_published(code: str, issue_date: str | None) -> set[str]:
+    """Drivers with at least one audited input value published at this issue date (any lead's row of the served
+    Chapter I export carries the same issue-date inputs). Empty when the export has no row for the issue date. Read
+    whether or not the map serves the Chapter I probability: the audit is about the data, not the served score."""
+    if not issue_date or not (CH1.DATA / "rows.csv").exists():
+        return set()
+    rows = [r for (c, _), r in CH1.rows().items() if c == code and r.get("issue_date") == issue_date]
+    if not rows:
+        return set()
+    r = rows[0]
+    return {g for g, cols in AUDITED_COLUMNS.items()
+            if any(r.get(col) not in (None, "", "nan") for col in cols)}
+
+
+def audited_evidence(code: str, issue_date: str | None, group: str) -> str | None:
+    """The audited value(s) of a driver's inputs at the issue date, worded as evidence outside the index."""
+    rows = [r for (c, _), r in CH1.rows().items() if c == code and r.get("issue_date") == issue_date] \
+        if issue_date and (CH1.DATA / "rows.csv").exists() else []
+    if not rows:
+        return None
+    parts = []
+    for col in AUDITED_COLUMNS.get(group, ()):
+        v = rows[0].get(col)
+        try:
+            x = float(v)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(x) and (k := col.removeprefix("val_")) in THESIS._FMT:
+            parts.append(f"{FI.LABELS[k]}: {THESIS._FMT[k](x)}")
+    if not parts:
+        return None
+    return ("Audited official figure published before the issue date (FIRI_V2_DATA_AUDIT), shown as evidence only: "
+            + "; ".join(parts) + ". The index was computed from earlier inputs that did not include it.")
+
+
+def firi_composition(per: list[tuple[dict, dict]], groups: dict[str, tuple[str, ...]],
+                     labels: dict[str, str],
+                     published: list[set[str]] | None = None) -> tuple[list[dict], int | None] | None:
+    """The five-driver composition of the index from (FIRI result, indicator Shapley values) pairs.
+
+    FIRI is linear in its indicator scores, so each Shapley value is the indicator's own push w * (score - 0.5) / n
+    (THESIS.pushes) and the indicator is the index's unit. Magnitude of a driver M_d = sum of the absolute Shapley
+    values of its indicators (opposite pushes inside a driver do not cancel its size); share P_d = M_d / (M_1 + ... +
+    M_5) x 100, i.e. a share AMONG THE FIVE DRIVERS ONLY, never of the whole index. Direction is the sign of the
+    driver's net (signed) sum, reported apart from the size. `other_pct` is separate transparency: the share of the
+    whole index's absolute attribution that falls outside the five drivers (same per-indicator rule); it is not part
+    of the five shares. Region (several pairs): magnitudes are pooled over the provinces and the direction is the
+    mean net push. Shares are None when the five magnitudes sum to 0 (no share is defined, never a claimed 0%); None
+    (no composition at all) when a Shapley value is not finite. A driver with no input in the index is
+    `insufficient_data`, or `not_in_index` when `published` (one set per pair) shows that audited data existed at the
+    issue date but the index does not include them; such a driver has no share (pct None), and the observed drivers'
+    shares add to 100."""
+    in_driver = {k for ks in groups.values() for k in ks}
+    mag = dict.fromkeys(groups, 0.0)
+    net = dict.fromkeys(groups, 0.0)
+    observed = dict.fromkeys(groups, False)
+    pub = dict.fromkeys(groups, False)
+    other = 0.0
+    for i, (res, sv) in enumerate(per):
+        if any(not math.isfinite(float(v)) for v in sv.values()):
+            return None
+        for g, ks in groups.items():
+            mag[g] += sum(abs(float(sv.get(k, 0.0))) for k in ks)
+            net[g] += sum(float(sv.get(k, 0.0)) for k in ks)
+            observed[g] |= any(res["indicators"].get(k, {}).get("score") is not None for k in ks)
+            pub[g] |= bool(published) and g in published[i]
+        other += sum(abs(float(v)) for k, v in sv.items() if k not in in_driver)
+    keys = list(groups)
+    five = sum(mag.values())
+    pcts: list[int | None] = _integer_shares([mag[g] for g in keys]) if five > 0 else [None] * len(keys)
+    whole = five + other
+    other_pct = round(100 * other / whole) if whole > 0 else None
+    drivers = []
+    for g, pct in zip(keys, pcts):
+        st = (("not_in_index" if pub[g] else "insufficient_data") if not observed[g]
+              else "contributes" if mag[g] > 0 else "no_effect")
+        if not observed[g]:
+            pct = None                                     # unavailable is not a measured 0%; shares are among the rest
+        signed = net[g] / len(per)
+        if abs(signed) < THESIS.NET_ZERO:                  # floating-point residue of exactly cancelling pushes: no net push
+            signed = 0.0
+        drivers.append({"key": g, "label": labels[g], "pct": pct, "share": None if pct is None else round(pct / 100, 4),
+                        "signedContribution": round(signed, 6),
+                        "direction": ("raises_index" if signed > 0 else "lowers_index" if signed < 0 else "none"),
+                        "status": st, "statusNote": FIRI_STATUS_NOTES[st]})
+    drivers.sort(key=lambda d: -1 if d["pct"] is None else d["pct"], reverse=True)
+    return drivers, other_pct
+
+
+def firi_index(province_code: str | None, quarter: str) -> dict | None:
+    """FIRI v2 for a province, or the mean of the five provinces, with its five-driver composition (firi_composition,
+    from THESIS.shap_values: the values sum to FIRI - 0.5). None when the index cannot be computed for every province
+    asked for (never a partial region, never a filled value) or its attribution is not finite."""
+    if not (THESIS.active() and E41L2.governs()):
+        return None
+    rec = E41L2.record()
+    codes = [province_code] if province_code else sorted(rec["provinces"])
+    per, published = [], []
+    for code in codes:
+        res = THESIS.firi_for(rec, quarter, code)
+        if res is None or res["firi"] is None:
+            return None
+        per.append((res, THESIS.shap_values(res)))
+        published.append(audited_published(code, res.get("issueDate")))
+    comp = firi_composition(per, THESIS.FIVE_GROUPS, THESIS.GROUP_LABELS, published)
+    if comp is None:
+        return None
+    drivers, other_pct = comp
+    value = sum(res["firi"] for res, _ in per) / len(per)
+    return {"quarter": quarter, "index": round(value, 6), "level": "high" if value >= THESIS.FIRI_THRESHOLD else "low",
+            "threshold": THESIS.FIRI_THRESHOLD, "drivers": drivers, "otherPct": other_pct,
+            "otherLabel": ("Share of the whole index's attribution outside the five drivers (vulnerability, regional "
+                           "hunger, news); not part of the five driver shares"),
+            "provinces": [{"id": ref.province_slug(code), "name": ref.province_name(ref.province_slug(code)),
+                           "index": round(res["firi"], 6),
+                           "level": "high" if res["firi"] >= THESIS.FIRI_THRESHOLD else "low"}
+                          for code, (res, _) in zip(codes, per)],
+            "provincesIncluded": len(per), "issueDate": per[0][0].get("issueDate"),
+            "source": per[0][0].get("source"), "definition": FIRI_INDEX_DEFINITION,
+            "validation": FIRI_INDEX_VALIDATION}
 
 
 # E52: what each experimental candidate's probability is of, in plain words
@@ -1392,7 +1606,9 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             kind = "forecast" if CH1.kind(rs[0]) == "forecast" else "backtest"
             ch1_issued = rs[0]["issue_date"]
             comp = {"hunger": sum(float(r["pi_hunger"]) for r in rs) / len(rs),
-                    "price": sum(float(r["pi_price"]) for r in rs) / len(rs)}
+                    "price": (sum(prices) / len(prices)
+                              if (prices := [float(r["pi_price"]) for r in rs if r.get("pi_price") not in (None, "")])
+                              else None)}
             caveat = CH1.INDICATOR["caveat"]
             sentence = CH1.sentence(province_code, name, quarter, p) or sentence
             # SYSTEM_FIXES item 1: the summary describes the served forecast; FIRI's passage fields, data status and
@@ -1409,9 +1625,11 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
         "dataStatus": data_status, "dataStatusNote": data_note, "sentence": _ascii(sentence),
         **({"earlyWarning": warnings} if warnings else {}),
         **({"components": {"probabilityHungerElevated": round(comp["hunger"], 4),
-                           "probabilityPricePressure": round(comp["price"], 4),
-                           "combination": "product of the two parts (an approximation: the two conditions are not "
-                                          "independent; the joint probability cannot exceed the smaller part)"},
+                           "probabilityPricePressure": None if comp["price"] is None else round(comp["price"], 4),
+                           "combination": getattr(CH1, "COMBINATION",
+                                                  "product of the two parts (an approximation: the two conditions are "
+                                                  "not independent; the joint probability cannot exceed the smaller "
+                                                  "part)")},
             "caveat": _ascii(caveat)} if comp else {}),
         **({"climateWatch": cfsw} if cfsw else {}),
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),

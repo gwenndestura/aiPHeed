@@ -295,8 +295,16 @@ async def list_rejections(db: AsyncSession, quarter: str | None = None) -> list[
 
 
 async def rejected_pairs(db: AsyncSession, quarter: str | None = None) -> set[tuple[str, str]]:
-    """(province_id, quarter) pairs currently withheld."""
-    return {(r.province_id, r.quarter) for r in await list_rejections(db, quarter)}
+    """(province_id, quarter) pairs currently withheld. In the food-insecurity mode (AIPHEED_MAP_MODEL=foodinsecurity)
+    also every issued forecast no administrator has approved (Rule 1: STAGED until approved)."""
+    pairs = {(r.province_id, r.quarter) for r in await list_rejections(db, quarter)}
+    from app.ml.inference import foodinsecurity_system as FI
+
+    if FI.active():
+        q = select(ReviewRecord.province_id, ReviewRecord.quarter).where(ReviewRecord.status == PUBLISHED)
+        published = {(p, rq) for p, rq in (await db.execute(q)).all()}
+        pairs |= FI.unapproved_pairs(published, quarter)
+    return pairs
 
 
 async def is_rejected(db: AsyncSession, province_id: str, quarter: str) -> ReviewRecord | None:
