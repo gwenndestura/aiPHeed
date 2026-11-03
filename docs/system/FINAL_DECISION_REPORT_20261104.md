@@ -181,15 +181,21 @@ candidate pending provincial validation, not a municipal measurement.
 * `/api/v1/final/food-insecurity/outlook`: `validation_pending` with per-candidate `checks_total`.
 * `/api/v1/admin/candidates/e140-lgbm-native-1.0/{outlook,evaluation,model,lgus,register}`: admin only.
 
-**Tests executed.** See section D.1, filled in from the final run.
+**Tests executed.** See section D.1.
 
 **Unresolved inconsistency (owner decision).** The served LGU list (CH1, `app/quarterly/lgu_audit.py`) uses 60/40
 weights with min-max scaling inside each province. The candidate uses 50/50 region-wide percentiles. They are
 different products, and the served one is labelled EXPERIMENTAL.
 
-### D.1 Test results
+### D.1 Test results (final run, 2026-11-04)
 
-(Recorded below by the final verification step.)
+| Suite | Command | Result |
+|---|---|---|
+| Backend unit tests (all) | `python -m pytest tests/unit` (backend venv) | **860 passed**, 0 failed (3 min 52 s) |
+| Frontend typecheck | `npx tsc --noEmit` | clean |
+| Frontend unit tests (all) | `npx vitest run` | **88 passed** (18 files) |
+| Prospective register | `python -m app.registry.prospective_provincial verify` | ok (3 seals) |
+| Live API (TestClient) | `/api/v1/quarters`, `/api/v1/final/food-insecurity/outlook`, admin candidate routes | dynamic 2026-Q4 → 2027-Q1; `validation_pending`; 401 without admin; 142 LGUs with admin |
 
 ## E. Exact remaining external evidence
 
