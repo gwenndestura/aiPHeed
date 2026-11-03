@@ -1,0 +1,458 @@
+{
+ "production": null,
+ "models": {
+  "ch1-p0h4": {
+   "version": "ch1 (P0H4 Chapter I composite)",
+   "artifact_path": "data/ch1_engine/rows.csv",
+   "target": "Price-pressure risk index: probability that the province is HIGH risk (not a food-insecurity measurement)",
+   "note": "Served on the map and left panel before this release gate existed; never evaluated by it. Its own metadata marks it is_food_insecurity_measurement = False.",
+   "artifact_sha256": "86d05bb62b3449d25b4261097a6ad1db1303ed628e3ad8aeea1eb01da1410cb3",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent",
+   "registered_utc": "2026-11-03T04:54:48+00:00"
+  },
+  "pfi-1.0": {
+   "version": "pfi-1.0",
+   "artifact_path": "data/pfi/model/pfi_model.json",
+   "target": "FIES moderate-or-severe food insecurity, % of households, province, next calendar quarter",
+   "evidence_builder": "app.pfi.evidence:build",
+   "tests": {
+    "release": [
+     "tests/unit/test_pfi.py::test_sws_release_filter",
+     "tests/unit/test_pfi.py::test_issue_uses_only_released_inputs",
+     "tests/unit/test_pfi.py::test_build_refuses_unreleased_survey"
+    ],
+    "leakage": [
+     "tests/unit/test_pfi.py::test_loo_prediction_ignores_held_out_outcome",
+     "tests/unit/test_pfi.py::test_issue_uses_only_released_inputs"
+    ],
+    "all": [
+     "tests/unit/test_pfi.py"
+    ]
+   },
+   "artifact_sha256": "a771c263eac74ece421f04d4c759daecf5a2682459ce6076104dbb16955a7775",
+   "model_id": "pfi-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T04:54:48+00:00",
+   "gate": {
+    "model_id": "pfi-1.0",
+    "evaluated_utc": "2026-11-03T04:55:16+00:00",
+    "thresholds": {
+     "accuracy_min": 0.75,
+     "balanced_accuracy_min": 0.7,
+     "high_recall_min": 0.6,
+     "high_precision_min": 0.5,
+     "ece_max": 0.1,
+     "interval_coverage_tolerance": 0.05,
+     "chronological_targets_min": 20,
+     "chronological_high_min": 10,
+     "required_groups": [
+      "market",
+      "climate",
+      "employment",
+      "poverty",
+      "news"
+     ],
+     "required_families": [
+      "A1",
+      "A2",
+      "A3",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "E1",
+      "E2",
+      "V1",
+      "N1",
+      "H1"
+     ],
+     "required_n1": "improved"
+    },
+    "thresholds_sha256": "e1e705ef4458324b6585c5888a3d97672213622fa626e83bd1b2bbdcb54e2489",
+    "artifact_file_sha256": "a771c263eac74ece421f04d4c759daecf5a2682459ce6076104dbb16955a7775",
+    "passed": false,
+    "decision": "REJECTED: not eligible for the dashboard",
+    "checks": [
+     {
+      "id": "B1",
+      "name": "Model training completed (sealed artifact loads, hash verified)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "artifact": "data/pfi/model/pfi_model.json"
+      }
+     },
+     {
+      "id": "B2",
+      "name": "All required features verified (five groups, twelve families in the model)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "families_used": [
+        "H1",
+        "V1"
+       ],
+       "missing_families": [
+        "A1",
+        "A2",
+        "A3",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "E1",
+        "E2",
+        "N1"
+       ],
+       "missing_groups": [
+        "market",
+        "climate",
+        "employment",
+        "news"
+       ]
+      }
+     },
+     {
+      "id": "B3",
+      "name": "Improved N1 integrated in the predictive pipeline",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "n1_version": null
+      }
+     },
+     {
+      "id": "B4",
+      "name": "Data and release-date audits",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py::test_sws_release_filter tests/unit/test_pfi.py::test_issue_uses_only_released_inputs tests/unit/test_pfi.py::test_build_refuses_unreleased_survey",
+       "returncode": 0,
+       "summary": "3 passed in 0.35s",
+       "notes": "Survey release dates are approximate (conservative month-end); SWS uses published dates."
+      }
+     },
+     {
+      "id": "B5",
+      "name": "Leakage checks",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py::test_loo_prediction_ignores_held_out_outcome tests/unit/test_pfi.py::test_issue_uses_only_released_inputs",
+       "returncode": 0,
+       "summary": "2 passed in 0.45s"
+      }
+     },
+     {
+      "id": "B6",
+      "name": "Chronological evaluation on the food-insecurity target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": "No chronological series of the target exists: FIES is measured for provinces never, for CALABARZON in 2023 and 2025 (provisional) only. One held-out wave (n = 1) is not a chronological evaluation. Held-out wave: 24.9% predicted vs 22.6% reported."
+     },
+     {
+      "id": "B7",
+      "name": "Independent validation where data permit",
+      "status": "pass",
+      "critical": false,
+      "evidence": {
+       "applicable": true,
+       "passed": true,
+       "what": "independent observation-level validation (leave-one-region-out, one wave)",
+       "accuracy": 1.0,
+       "accuracy_ci95": [
+        0.815676,
+        1.0
+       ],
+       "n": 17,
+       "note": "Regional level only (one wave); provincial quarterly forecasts are not covered."
+      }
+     },
+     {
+      "id": "B8",
+      "name": "Beats the best simple baseline on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": null
+     },
+     {
+      "id": "B9",
+      "name": "Accuracy and class-sensitive metrics on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": null
+     },
+     {
+      "id": "B10",
+      "name": "Calibration and uncertainty",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "interval_nominal": 0.95,
+       "interval_coverage": 0.882353,
+       "ece": 0.18034052941176468,
+       "basis": "leave-one-region-out level model (17 regions)"
+      }
+     },
+     {
+      "id": "B11",
+      "name": "Geographic generalization at the served resolution",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "passed_at_served_resolution": null,
+       "regional_loo": {
+        "mae_pp": 5.296442,
+        "n": 17
+       },
+       "note": "No province has a FIES measurement, so leave-one-province-out cannot be run."
+      }
+     },
+     {
+      "id": "B12",
+      "name": "Forecast horizon justified on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "validated_leads": [],
+       "note": "No lead is validated on the food-insecurity target; the SWS input's Lead 1 record is regional hunger, not the target."
+      }
+     },
+     {
+      "id": "B13",
+      "name": "Five-group contribution analysis (out-of-sample ablation)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "untested_groups": [
+        "climate",
+        "news"
+       ],
+       "groups": {
+        "market": {
+         "tested_out_of_sample": true,
+         "how": "M4 rice inflation; M6 poverty + rice inflation",
+         "result": {
+          "model": "M4 rice inflation",
+          "loo_mae_pp": 6.117137,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 0.647059,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": false
+        },
+        "employment": {
+         "tested_out_of_sample": true,
+         "how": "M3 unemployment; M5 poverty + unemployment",
+         "result": {
+          "model": "M3 unemployment",
+          "loo_mae_pp": 7.285841,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 0.647059,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": false
+        },
+        "poverty": {
+         "tested_out_of_sample": true,
+         "how": "M1 poverty; M2 subsistence (food poverty)",
+         "result": {
+          "model": "M2 subsistence (food poverty)",
+          "loo_mae_pp": 5.296442,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 1.0,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": true
+        },
+        "climate": {
+         "tested_out_of_sample": false,
+         "how": "not testable for the level: no region-level 2023 series on file for all 17 FIES regions",
+         "in_model": false
+        },
+        "news": {
+         "tested_out_of_sample": false,
+         "how": "no region-level news series matched to the FIES regions",
+         "in_model": false
+        }
+       }
+      }
+     },
+     {
+      "id": "B14",
+      "name": "All automated tests pass",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py",
+       "returncode": 0,
+       "summary": "22 passed in 3.78s"
+      }
+     },
+     {
+      "id": "B15",
+      "name": "Model card and methodology report",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "documents": [
+        "docs/pfi/METHODOLOGY.md"
+       ],
+       "found": [
+        "docs/pfi/METHODOLOGY.md"
+       ]
+      }
+     },
+     {
+      "id": "A1",
+      "name": "Valid food-insecurity target (not a proxy)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "construct": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+       "is_food_insecurity_measurement": true,
+       "served_resolution": "province",
+       "served_frequency": "calendar quarter"
+      }
+     }
+    ],
+    "evidence": {
+     "model_id": "pfi-1.0",
+     "artifact_loads": true,
+     "artifact_path": "data/pfi/model/pfi_model.json",
+     "target": {
+      "construct": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+      "is_food_insecurity_measurement": true,
+      "served_resolution": "province",
+      "served_frequency": "calendar quarter"
+     },
+     "families_used": [
+      "H1",
+      "V1"
+     ],
+     "groups_used": [
+      "poverty"
+     ],
+     "n1_version": null,
+     "release_notes": "Survey release dates are approximate (conservative month-end); SWS uses published dates.",
+     "chronological": null,
+     "chronological_note": "No chronological series of the target exists: FIES is measured for provinces never, for CALABARZON in 2023 and 2025 (provisional) only. One held-out wave (n = 1) is not a chronological evaluation. Held-out wave: 24.9% predicted vs 22.6% reported.",
+     "independent": {
+      "applicable": true,
+      "passed": true,
+      "what": "independent observation-level validation (leave-one-region-out, one wave)",
+      "accuracy": 1.0,
+      "accuracy_ci95": [
+       0.815676,
+       1.0
+      ],
+      "n": 17,
+      "note": "Regional level only (one wave); provincial quarterly forecasts are not covered."
+     },
+     "calibration": {
+      "interval_nominal": 0.95,
+      "interval_coverage": 0.882353,
+      "ece": 0.18034052941176468,
+      "basis": "leave-one-region-out level model (17 regions)"
+     },
+     "geographic": {
+      "passed_at_served_resolution": null,
+      "regional_loo": {
+       "mae_pp": 5.296442,
+       "n": 17
+      },
+      "note": "No province has a FIES measurement, so leave-one-province-out cannot be run."
+     },
+     "horizon": {
+      "validated_leads": [],
+      "note": "No lead is validated on the food-insecurity target; the SWS input's Lead 1 record is regional hunger, not the target."
+     },
+     "group_contribution": {
+      "market": {
+       "tested_out_of_sample": true,
+       "how": "M4 rice inflation; M6 poverty + rice inflation",
+       "result": {
+        "model": "M4 rice inflation",
+        "loo_mae_pp": 6.117137,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 0.647059,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": false
+      },
+      "employment": {
+       "tested_out_of_sample": true,
+       "how": "M3 unemployment; M5 poverty + unemployment",
+       "result": {
+        "model": "M3 unemployment",
+        "loo_mae_pp": 7.285841,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 0.647059,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": false
+      },
+      "poverty": {
+       "tested_out_of_sample": true,
+       "how": "M1 poverty; M2 subsistence (food poverty)",
+       "result": {
+        "model": "M2 subsistence (food poverty)",
+        "loo_mae_pp": 5.296442,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 1.0,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": true
+      },
+      "climate": {
+       "tested_out_of_sample": false,
+       "how": "not testable for the level: no region-level 2023 series on file for all 17 FIES regions",
+       "in_model": false
+      },
+      "news": {
+       "tested_out_of_sample": false,
+       "how": "no region-level news series matched to the FIES regions",
+       "in_model": false
+      }
+     },
+     "documents": [
+      "docs/pfi/METHODOLOGY.md"
+     ]
+    }
+   }
+  }
+ },
+ "history": [
+  {
+   "utc": "2026-11-03T04:54:48+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T04:54:48+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T04:55:16+00:00",
+   "event": "gate_evaluated",
+   "model_id": "pfi-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B6",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ]
+  }
+ ]
+}

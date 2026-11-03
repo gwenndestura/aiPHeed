@@ -1,0 +1,2188 @@
+{
+ "version": "pfi-1.0",
+ "artifact_sha256": "d7c5849cf5763fd555df218b70fc48d0a4a6f5c193fd95d2410a9cbcae50327e",
+ "built_utc": "2026-11-03T04:30:56+00:00",
+ "level": {
+  "task": "Food-insecurity level (FIES moderate-or-severe), 17 regions, 2023, leave-one-region-out",
+  "selection_rule": "lowest LOO MAE (pp); fewer covariates within 0.25 pp",
+  "selected": "M2 subsistence (food poverty)",
+  "candidates": {
+   "M0 no covariate (mean of regions)": {
+    "covariates": [],
+    "n": 17,
+    "mae_pp": 7.263519,
+    "rmse_pp": 8.612882,
+    "bias_pp": -0.531203,
+    "max_abs_error_pp": 15.812004,
+    "spearman": -1.0,
+    "interval95_coverage": 0.941176,
+    "residual_sd_logit": 0.401413,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 11,
+     "tn": 0,
+     "fp": 6,
+     "fn": 0,
+     "accuracy": 0.647059,
+     "accuracy_ci95": [
+      0.413,
+      0.826905
+     ],
+     "balanced_accuracy": 0.5,
+     "precision": 0.647059,
+     "recall": 1.0,
+     "specificity": 0.0,
+     "f1": 0.785714,
+     "brier": 0.253243,
+     "roc_auc": 0.0,
+     "pr_auc": 0.460244,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 12,
+       "mean_p": 0.568387,
+       "observed": 0.916667
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 5,
+       "mean_p": 0.615687,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 33.771535,
+      "interval95_pct": [
+       18.837203,
+       52.837922
+      ],
+      "p_above_national": 0.604168,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 34.117377,
+      "interval95_pct": [
+       19.80341,
+       52.06111
+      ],
+      "p_above_national": 0.625774,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 33.838583,
+      "interval95_pct": [
+       18.991436,
+       52.736639
+      ],
+      "p_above_national": 0.607924,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 33.398865,
+      "interval95_pct": [
+       18.232134,
+       53.003859
+      ],
+      "p_above_national": 0.585869,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 33.713285,
+      "interval95_pct": [
+       18.715008,
+       52.907731
+      ],
+      "p_above_national": 0.601039,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 34.29266,
+      "interval95_pct": [
+       20.476687,
+       51.404746
+      ],
+      "p_above_national": 0.639532,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 33.296189,
+      "interval95_pct": [
+       18.13563,
+       52.935296
+      ],
+      "p_above_national": 0.581408,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 33.296189,
+      "interval95_pct": [
+       18.13563,
+       52.935296
+      ],
+      "p_above_national": 0.581408,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 33.147204,
+      "interval95_pct": [
+       18.047328,
+       52.749092
+      ],
+      "p_above_national": 0.575255,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 32.915338,
+      "interval95_pct": [
+       18.032164,
+       52.251888
+      ],
+      "p_above_national": 0.566259,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 33.10474,
+      "interval95_pct": [
+       18.033346,
+       52.677104
+      ],
+      "p_above_national": 0.573561,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 32.625481,
+      "interval95_pct": [
+       18.233699,
+       51.255914
+      ],
+      "p_above_national": 0.555646,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 32.892138,
+      "interval95_pct": [
+       18.039013,
+       52.187888
+      ],
+      "p_above_national": 0.565388,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 32.973767,
+      "interval95_pct": [
+       18.021752,
+       52.401424
+      ],
+      "p_above_national": 0.568471,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 32.732114,
+      "interval95_pct": [
+       18.129523,
+       51.672979
+      ],
+      "p_above_national": 0.559495,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 32.766086,
+      "interval95_pct": [
+       18.103857,
+       51.793215
+      ],
+      "p_above_national": 0.560732,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 32.387996,
+      "interval95_pct": [
+       18.605656,
+       50.096121
+      ],
+      "p_above_national": 0.547159,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M1 poverty": {
+    "covariates": [
+     "poverty"
+    ],
+    "n": 17,
+    "mae_pp": 5.394776,
+    "rmse_pp": 6.200979,
+    "bias_pp": -0.497387,
+    "max_abs_error_pp": 13.189362,
+    "spearman": 0.755365,
+    "interval95_coverage": 0.882353,
+    "residual_sd_logit": 0.331414,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 11,
+     "tn": 5,
+     "fp": 1,
+     "fn": 0,
+     "accuracy": 0.941176,
+     "accuracy_ci95": [
+      0.730175,
+      0.98954
+     ],
+     "balanced_accuracy": 0.916667,
+     "precision": 0.916667,
+     "recall": 1.0,
+     "specificity": 0.833333,
+     "f1": 0.956522,
+     "brier": 0.07891,
+     "roc_auc": 1.0,
+     "pr_auc": 1.0,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 1,
+       "mean_p": 0.001119,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 4,
+       "mean_p": 0.321212,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.522672,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 4,
+       "mean_p": 0.710341,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 6,
+       "mean_p": 0.875157,
+       "observed": 1.0
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 12.310638,
+      "interval95_pct": [
+       7.015515,
+       20.712139
+      ],
+      "p_above_national": 0.001119,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 27.712125,
+      "interval95_pct": [
+       18.224888,
+       39.738141
+      ],
+      "p_above_national": 0.266035,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 31.471679,
+      "interval95_pct": [
+       21.354378,
+       43.717801
+      ],
+      "p_above_national": 0.50486,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 29.778706,
+      "interval95_pct": [
+       19.538676,
+       42.547551
+      ],
+      "p_above_national": 0.396117,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 28.186907,
+      "interval95_pct": [
+       18.249802,
+       40.83225
+      ],
+      "p_above_national": 0.300882,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 28.902966,
+      "interval95_pct": [
+       19.91187,
+       39.929795
+      ],
+      "p_above_national": 0.321815,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 37.605259,
+      "interval95_pct": [
+       25.861455,
+       51.012557
+      ],
+      "p_above_national": 0.829609,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 39.970932,
+      "interval95_pct": [
+       27.927576,
+       53.362518
+      ],
+      "p_above_national": 0.901863,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 32.028102,
+      "interval95_pct": [
+       21.3876,
+       44.936339
+      ],
+      "p_above_national": 0.540484,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 34.052719,
+      "interval95_pct": [
+       23.079997,
+       47.051128
+      ],
+      "p_above_national": 0.664978,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 39.477936,
+      "interval95_pct": [
+       27.138975,
+       53.321372
+      ],
+      "p_above_national": 0.882153,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 40.357547,
+      "interval95_pct": [
+       27.635669,
+       54.523294
+      ],
+      "p_above_national": 0.899109,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 38.110004,
+      "interval95_pct": [
+       25.970251,
+       51.942818
+      ],
+      "p_above_national": 0.840497,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 33.344036,
+      "interval95_pct": [
+       22.510958,
+       46.27698
+      ],
+      "p_above_national": 0.623273,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 36.818466,
+      "interval95_pct": [
+       25.202881,
+       50.194896
+      ],
+      "p_above_national": 0.798915,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 35.752717,
+      "interval95_pct": [
+       24.447678,
+       48.901772
+      ],
+      "p_above_national": 0.754199,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 39.963678,
+      "interval95_pct": [
+       27.715445,
+       53.610284
+      ],
+      "p_above_national": 0.897711,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M2 subsistence (food poverty)": {
+    "covariates": [
+     "subsistence"
+    ],
+    "n": 17,
+    "mae_pp": 5.296442,
+    "rmse_pp": 6.231682,
+    "bias_pp": -0.491722,
+    "max_abs_error_pp": 13.300844,
+    "spearman": 0.690374,
+    "interval95_coverage": 0.882353,
+    "residual_sd_logit": 0.332929,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 11,
+     "tn": 6,
+     "fp": 0,
+     "fn": 0,
+     "accuracy": 1.0,
+     "accuracy_ci95": [
+      0.815676,
+      1.0
+     ],
+     "balanced_accuracy": 1.0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "specificity": 1.0,
+     "f1": 1.0,
+     "brier": 0.072433,
+     "roc_auc": 1.0,
+     "pr_auc": 1.0,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 1,
+       "mean_p": 0.001068,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 4,
+       "mean_p": 0.314515,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 2,
+       "mean_p": 0.50295,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.716662,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 7,
+       "mean_p": 0.864179,
+       "observed": 1.0
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 12.199156,
+      "interval95_pct": [
+       6.938777,
+       20.566172
+      ],
+      "p_above_national": 0.001068,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 27.836288,
+      "interval95_pct": [
+       18.329686,
+       39.866638
+      ],
+      "p_above_national": 0.272842,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 31.081172,
+      "interval95_pct": [
+       20.963738,
+       43.40019
+      ],
+      "p_above_national": 0.478533,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 29.661236,
+      "interval95_pct": [
+       19.42936,
+       42.442968
+      ],
+      "p_above_national": 0.388943,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 27.775986,
+      "interval95_pct": [
+       17.884627,
+       40.44354
+      ],
+      "p_above_national": 0.27898,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 28.819199,
+      "interval95_pct": [
+       19.794967,
+       39.910296
+      ],
+      "p_above_national": 0.317294,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 38.595248,
+      "interval95_pct": [
+       26.691198,
+       52.039635
+      ],
+      "p_above_national": 0.862975,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 38.901442,
+      "interval95_pct": [
+       26.958008,
+       52.344286
+      ],
+      "p_above_national": 0.872366,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 31.823972,
+      "interval95_pct": [
+       21.218559,
+       44.721119
+      ],
+      "p_above_national": 0.527368,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 35.149379,
+      "interval95_pct": [
+       23.824633,
+       48.434486
+      ],
+      "p_above_national": 0.721746,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 39.530782,
+      "interval95_pct": [
+       27.158292,
+       53.40713
+      ],
+      "p_above_national": 0.883047,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 40.696392,
+      "interval95_pct": [
+       27.830993,
+       54.978426
+      ],
+      "p_above_national": 0.904961,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 37.768309,
+      "interval95_pct": [
+       25.701444,
+       51.568392
+      ],
+      "p_above_national": 0.828983,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 34.594572,
+      "interval95_pct": [
+       23.377106,
+       47.8344
+      ],
+      "p_above_national": 0.692707,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 38.407606,
+      "interval95_pct": [
+       26.238945,
+       52.22404
+      ],
+      "p_above_national": 0.850736,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 35.354015,
+      "interval95_pct": [
+       24.162993,
+       48.41893
+      ],
+      "p_above_national": 0.735532,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 37.745969,
+      "interval95_pct": [
+       26.4875,
+       50.502317
+      ],
+      "p_above_national": 0.846189,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M3 unemployment": {
+    "covariates": [
+     "unemployment"
+    ],
+    "n": 17,
+    "mae_pp": 7.285841,
+    "rmse_pp": 8.827613,
+    "bias_pp": -0.151307,
+    "max_abs_error_pp": 19.313707,
+    "spearman": 0.206009,
+    "interval95_coverage": 0.941176,
+    "residual_sd_logit": 0.408922,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 9,
+     "tn": 2,
+     "fp": 4,
+     "fn": 2,
+     "accuracy": 0.647059,
+     "accuracy_ci95": [
+      0.413,
+      0.826905
+     ],
+     "balanced_accuracy": 0.575758,
+     "precision": 0.692308,
+     "recall": 0.818182,
+     "specificity": 0.333333,
+     "f1": 0.75,
+     "brier": 0.265022,
+     "roc_auc": 0.545455,
+     "pr_auc": 0.655072,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.36367,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 7,
+       "mean_p": 0.526659,
+       "observed": 0.571429
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 6,
+       "mean_p": 0.645467,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 2,
+       "mean_p": 0.858904,
+       "observed": 0.0
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 28.978128,
+      "interval95_pct": [
+       14.625891,
+       49.28396
+      ],
+      "p_above_national": 0.399456,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 40.413707,
+      "interval95_pct": [
+       25.873282,
+       56.857807
+      ],
+      "p_above_national": 0.867313,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 30.877869,
+      "interval95_pct": [
+       16.754218,
+       49.786923
+      ],
+      "p_above_national": 0.476557,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 42.161493,
+      "interval95_pct": [
+       23.834722,
+       62.935888
+      ],
+      "p_above_national": 0.850495,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 32.540802,
+      "interval95_pct": [
+       18.240228,
+       51.052331
+      ],
+      "p_above_national": 0.552085,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 31.597157,
+      "interval95_pct": [
+       17.781303,
+       49.663524
+      ],
+      "p_above_national": 0.509247,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 34.074387,
+      "interval95_pct": [
+       19.09239,
+       53.097428
+      ],
+      "p_above_national": 0.617105,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 30.265881,
+      "interval95_pct": [
+       16.27396,
+       49.216223
+      ],
+      "p_above_national": 0.4493,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 32.220272,
+      "interval95_pct": [
+       17.848207,
+       50.983147
+      ],
+      "p_above_national": 0.537038,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 33.666123,
+      "interval95_pct": [
+       18.932153,
+       52.448225
+      ],
+      "p_above_national": 0.60097,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 33.171021,
+      "interval95_pct": [
+       18.51294,
+       52.025239
+      ],
+      "p_above_national": 0.579051,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 34.982893,
+      "interval95_pct": [
+       19.83693,
+       53.915345
+      ],
+      "p_above_national": 0.655284,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 27.616976,
+      "interval95_pct": [
+       14.842487,
+       45.510288
+      ],
+      "p_above_national": 0.327884,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 35.62233,
+      "interval95_pct": [
+       19.918218,
+       55.177011
+      ],
+      "p_above_national": 0.675446,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 34.827692,
+      "interval95_pct": [
+       19.676696,
+       53.827029
+      ],
+      "p_above_national": 0.648487,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 35.610175,
+      "interval95_pct": [
+       19.950322,
+       55.101033
+      ],
+      "p_above_national": 0.675509,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 33.100877,
+      "interval95_pct": [
+       19.538263,
+       50.203871
+      ],
+      "p_above_national": 0.583335,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M4 rice inflation": {
+    "covariates": [
+     "rice_inflation"
+    ],
+    "n": 17,
+    "mae_pp": 6.117137,
+    "rmse_pp": 7.624883,
+    "bias_pp": -0.36609,
+    "max_abs_error_pp": 15.944155,
+    "spearman": 0.33599,
+    "interval95_coverage": 0.941176,
+    "residual_sd_logit": 0.35532,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 8,
+     "tn": 3,
+     "fp": 3,
+     "fn": 3,
+     "accuracy": 0.647059,
+     "accuracy_ci95": [
+      0.413,
+      0.826905
+     ],
+     "balanced_accuracy": 0.613636,
+     "precision": 0.727273,
+     "recall": 0.727273,
+     "specificity": 0.5,
+     "f1": 0.727273,
+     "brier": 0.240518,
+     "roc_auc": 0.545455,
+     "pr_auc": 0.717144,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 0,
+       "mean_p": null,
+       "observed": null
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.311671,
+       "observed": 0.666667
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 6,
+       "mean_p": 0.488871,
+       "observed": 0.666667
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 5,
+       "mean_p": 0.705668,
+       "observed": 0.6
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 3,
+       "mean_p": 0.817504,
+       "observed": 0.666667
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 25.206184,
+      "interval95_pct": [
+       12.932949,
+       43.330204
+      ],
+      "p_above_national": 0.237985,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 29.716686,
+      "interval95_pct": [
+       17.254027,
+       46.159538
+      ],
+      "p_above_national": 0.414529,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 35.88511,
+      "interval95_pct": [
+       22.411928,
+       52.026689
+      ],
+      "p_above_national": 0.719647,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 39.070754,
+      "interval95_pct": [
+       23.83857,
+       56.779789
+      ],
+      "p_above_national": 0.813765,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 33.840063,
+      "interval95_pct": [
+       20.409906,
+       50.500231
+      ],
+      "p_above_national": 0.621393,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 30.41082,
+      "interval95_pct": [
+       18.315663,
+       45.995705
+      ],
+      "p_above_national": 0.446852,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 31.818679,
+      "interval95_pct": [
+       18.543936,
+       48.892348
+      ],
+      "p_above_national": 0.520714,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 33.329738,
+      "interval95_pct": [
+       19.643072,
+       50.553369
+      ],
+      "p_above_national": 0.593689,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 29.290992,
+      "interval95_pct": [
+       16.80803,
+       45.926752
+      ],
+      "p_above_national": 0.394624,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 27.523517,
+      "interval95_pct": [
+       15.982148,
+       43.121745
+      ],
+      "p_above_national": 0.302406,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 29.590636,
+      "interval95_pct": [
+       17.0716,
+       46.178087
+      ],
+      "p_above_national": 0.409001,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 40.891547,
+      "interval95_pct": [
+       23.710259,
+       60.628657
+      ],
+      "p_above_national": 0.835577,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 39.125043,
+      "interval95_pct": [
+       23.183873,
+       57.782214
+      ],
+      "p_above_national": 0.803172,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 38.930729,
+      "interval95_pct": [
+       23.136875,
+       57.447888
+      ],
+      "p_above_national": 0.79926,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 35.623068,
+      "interval95_pct": [
+       21.364792,
+       52.985227
+      ],
+      "p_above_national": 0.695347,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 35.567066,
+      "interval95_pct": [
+       21.298638,
+       52.961722
+      ],
+      "p_above_national": 0.692692,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 32.255845,
+      "interval95_pct": [
+       20.329745,
+       47.046776
+      ],
+      "p_above_national": 0.54844,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M5 poverty + unemployment": {
+    "covariates": [
+     "poverty",
+     "unemployment"
+    ],
+    "n": 17,
+    "mae_pp": 5.66965,
+    "rmse_pp": 6.640074,
+    "bias_pp": -0.35585,
+    "max_abs_error_pp": 15.477051,
+    "spearman": 0.754139,
+    "interval95_coverage": 0.941176,
+    "residual_sd_logit": 0.377891,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 11,
+     "tn": 4,
+     "fp": 2,
+     "fn": 0,
+     "accuracy": 0.882353,
+     "accuracy_ci95": [
+      0.656632,
+      0.967121
+     ],
+     "balanced_accuracy": 0.833333,
+     "precision": 0.846154,
+     "recall": 1.0,
+     "specificity": 0.666667,
+     "f1": 0.916667,
+     "brier": 0.100845,
+     "roc_auc": 0.969697,
+     "pr_auc": 0.986014,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 1,
+       "mean_p": 0.000157,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 2,
+       "mean_p": 0.300898,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.522608,
+       "observed": 0.25
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 4,
+       "mean_p": 0.707794,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 6,
+       "mean_p": 0.86094,
+       "observed": 1.0
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 10.022949,
+      "interval95_pct": [
+       5.922734,
+       16.464897
+      ],
+      "p_above_national": 0.000157,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 31.958812,
+      "interval95_pct": [
+       21.048431,
+       45.281037
+      ],
+      "p_above_national": 0.534919,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 30.651548,
+      "interval95_pct": [
+       20.182374,
+       43.585872
+      ],
+      "p_above_national": 0.452091,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 32.995449,
+      "interval95_pct": [
+       20.170384,
+       48.97258
+      ],
+      "p_above_national": 0.583332,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 28.042364,
+      "interval95_pct": [
+       18.021617,
+       40.857998
+      ],
+      "p_above_national": 0.295571,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 28.438643,
+      "interval95_pct": [
+       18.900951,
+       40.392105
+      ],
+      "p_above_national": 0.306225,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 37.68118,
+      "interval95_pct": [
+       25.798594,
+       51.256179
+      ],
+      "p_above_national": 0.828942,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 38.876294,
+      "interval95_pct": [
+       26.09996,
+       53.388531
+      ],
+      "p_above_national": 0.853531,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 31.714962,
+      "interval95_pct": [
+       21.024316,
+       44.760706
+      ],
+      "p_above_national": 0.520088,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 34.290099,
+      "interval95_pct": [
+       23.112844,
+       47.531121
+      ],
+      "p_above_national": 0.675482,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 39.123011,
+      "interval95_pct": [
+       26.652628,
+       53.196386
+      ],
+      "p_above_national": 0.867816,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 41.064714,
+      "interval95_pct": [
+       27.927121,
+       55.613682
+      ],
+      "p_above_national": 0.908055,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 35.202598,
+      "interval95_pct": [
+       22.604421,
+       50.262319
+      ],
+      "p_above_national": 0.701204,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 34.27135,
+      "interval95_pct": [
+       22.811409,
+       47.914723
+      ],
+      "p_above_national": 0.669824,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 37.472665,
+      "interval95_pct": [
+       25.439253,
+       51.283133
+      ],
+      "p_above_national": 0.817241,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 36.682621,
+      "interval95_pct": [
+       24.718584,
+       50.549089
+      ],
+      "p_above_national": 0.784665,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 39.761291,
+      "interval95_pct": [
+       27.446772,
+       53.524876
+      ],
+      "p_above_national": 0.890057,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   },
+   "M6 poverty + rice inflation": {
+    "covariates": [
+     "poverty",
+     "rice_inflation"
+    ],
+    "n": 17,
+    "mae_pp": 5.343238,
+    "rmse_pp": 6.360786,
+    "bias_pp": -0.547048,
+    "max_abs_error_pp": 13.76553,
+    "spearman": 0.734519,
+    "interval95_coverage": 0.882353,
+    "residual_sd_logit": 0.343152,
+    "classification_above_national": {
+     "n": 17,
+     "tp": 10,
+     "tn": 4,
+     "fp": 2,
+     "fn": 1,
+     "accuracy": 0.823529,
+     "accuracy_ci95": [
+      0.589701,
+      0.93809
+     ],
+     "balanced_accuracy": 0.787879,
+     "precision": 0.833333,
+     "recall": 0.909091,
+     "specificity": 0.666667,
+     "f1": 0.869565,
+     "brier": 0.100542,
+     "roc_auc": 0.954545,
+     "pr_auc": 0.97775,
+     "calibration": [
+      {
+       "bin": "0.0-0.2",
+       "n": 1,
+       "mean_p": 0.000859,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.2-0.4",
+       "n": 3,
+       "mean_p": 0.30231,
+       "observed": 0.0
+      },
+      {
+       "bin": "0.4-0.6",
+       "n": 4,
+       "mean_p": 0.520098,
+       "observed": 0.5
+      },
+      {
+       "bin": "0.6-0.8",
+       "n": 3,
+       "mean_p": 0.74076,
+       "observed": 1.0
+      },
+      {
+       "bin": "0.8-1.0",
+       "n": 6,
+       "mean_p": 0.852785,
+       "observed": 1.0
+      }
+     ]
+    },
+    "rows": [
+     {
+      "region": "NCR",
+      "observed_pct": 25.5,
+      "predicted_pct": 11.73447,
+      "interval95_pct": [
+       6.697778,
+       19.756712
+      ],
+      "p_above_national": 0.000859,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "CAR",
+      "observed_pct": 21.1,
+      "predicted_pct": 27.28522,
+      "interval95_pct": [
+       17.562298,
+       39.792689
+      ],
+      "p_above_national": 0.251766,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "I",
+      "observed_pct": 24.6,
+      "predicted_pct": 32.507649,
+      "interval95_pct": [
+       21.952214,
+       45.199225
+      ],
+      "p_above_national": 0.572201,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "II",
+      "observed_pct": 30.9,
+      "predicted_pct": 31.508832,
+      "interval95_pct": [
+       19.689693,
+       46.329835
+      ],
+      "p_above_national": 0.506152,
+      "observed_above_national": false,
+      "predicted_above_national": true
+     },
+     {
+      "region": "III",
+      "observed_pct": 26.3,
+      "predicted_pct": 28.880025,
+      "interval95_pct": [
+       18.475618,
+       42.116667
+      ],
+      "p_above_national": 0.346973,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "IV-A",
+      "observed_pct": 19.1,
+      "predicted_pct": 28.575395,
+      "interval95_pct": [
+       19.307667,
+       40.081956
+      ],
+      "p_above_national": 0.30819,
+      "observed_above_national": false,
+      "predicted_above_national": false
+     },
+     {
+      "region": "MIMAROPA",
+      "observed_pct": 32.5,
+      "predicted_pct": 36.924045,
+      "interval95_pct": [
+       24.780534,
+       50.984829
+      ],
+      "p_above_national": 0.791617,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "V",
+      "observed_pct": 32.5,
+      "predicted_pct": 39.450831,
+      "interval95_pct": [
+       27.036769,
+       53.39369
+      ],
+      "p_above_national": 0.879074,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VI",
+      "observed_pct": 34.9,
+      "predicted_pct": 31.012022,
+      "interval95_pct": [
+       20.242155,
+       44.327357
+      ],
+      "p_above_national": 0.475767,
+      "observed_above_national": true,
+      "predicted_above_national": false
+     },
+     {
+      "region": "VII",
+      "observed_pct": 38.8,
+      "predicted_pct": 31.830576,
+      "interval95_pct": [
+       20.708697,
+       45.498152
+      ],
+      "p_above_national": 0.526272,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "VIII",
+      "observed_pct": 35.6,
+      "predicted_pct": 38.174782,
+      "interval95_pct": [
+       24.810095,
+       53.606076
+      ],
+      "p_above_national": 0.81691,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "IX",
+      "observed_pct": 43.9,
+      "predicted_pct": 41.734202,
+      "interval95_pct": [
+       27.558716,
+       57.42149
+      ],
+      "p_above_national": 0.905624,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "X",
+      "observed_pct": 39.2,
+      "predicted_pct": 39.26083,
+      "interval95_pct": [
+       26.239955,
+       54.011633
+      ],
+      "p_above_national": 0.861108,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XI",
+      "observed_pct": 37.8,
+      "predicted_pct": 34.356514,
+      "interval95_pct": [
+       22.304091,
+       48.82869
+      ],
+      "p_above_national": 0.665511,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XII",
+      "observed_pct": 42.0,
+      "predicted_pct": 37.159907,
+      "interval95_pct": [
+       25.176984,
+       50.96162
+      ],
+      "p_above_national": 0.805266,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "XIII",
+      "observed_pct": 41.4,
+      "predicted_pct": 36.151304,
+      "interval95_pct": [
+       24.442769,
+       49.773744
+      ],
+      "p_above_national": 0.765153,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     },
+     {
+      "region": "BARMM",
+      "observed_pct": 48.2,
+      "predicted_pct": 38.453572,
+      "interval95_pct": [
+       26.145869,
+       52.441065
+      ],
+      "p_above_national": 0.848727,
+      "observed_above_national": true,
+      "predicted_above_national": true
+     }
+    ]
+   }
+  },
+  "classification_target": "region above the national prevalence (31.4%)"
+ },
+ "bridge": {
+  "lambda": 0.550996,
+  "lambda_ci90": [
+   0.070806,
+   2.0
+  ],
+  "fit": "national FIES 2021 -> 2023 (verified) with national SWS annual means",
+  "sensitivity_pre_window": {
+   "interval": "national 2019 -> 2021 (pre-2021; sensitivity only, not used)",
+   "fies_change_logit": -0.4571,
+   "sws_change_logit": 0.310393,
+   "implied_lambda": -1.472646,
+   "note": "Opposite signs: SWS 3-month hunger rose during the 2020-21 lockdown quarters while 12-month FIES fell between the 2019 and 2021 waves. The bridge is not supported across that shock."
+  },
+  "holdout": {
+   "target": "CALABARZON FIES 2025 (FNRI 2025 Updating Survey via PIA; provisional secondary, no CI)",
+   "anchor_2023_pct": 19.1,
+   "sws_bl_annual_pct": {
+    "2023": 11.15,
+    "2025": 18.883333
+   },
+   "predicted_pct": 24.916616,
+   "predicted_ci90_pct": [
+    19.785191,
+    44.825521
+   ],
+   "observed_pct": 22.6,
+   "error_pp": 2.316616,
+   "no_change_baseline_error_pp": -3.5,
+   "lambda_1_error_pp": 7.857111,
+   "class_line_pct": 21.1,
+   "observed_class": "HIGH",
+   "predicted_class": "HIGH",
+   "class_rule": "HIGH = above the upper 95% limit of the 2023 survey estimate (significantly above the last measured level)"
+  }
+ },
+ "provincial_consistency": {
+  "hfias_2015": {
+   "what": "2015 FNRI HFIAS moderate+severe by province (verified; an input of the composite, so not independent)",
+   "spearman": 0.6,
+   "n": 5,
+   "rows": [
+    {
+     "province": "Batangas",
+     "model_2023_pct": 19.421086,
+     "hfias_2015_pct": 43.5
+    },
+    {
+     "province": "Cavite",
+     "model_2023_pct": 18.438917,
+     "hfias_2015_pct": 41.8
+    },
+    {
+     "province": "Laguna",
+     "model_2023_pct": 18.451966,
+     "hfias_2015_pct": 41.4
+    },
+    {
+     "province": "Quezon",
+     "model_2023_pct": 21.445171,
+     "hfias_2015_pct": 48.8
+    },
+    {
+     "province": "Rizal",
+     "model_2023_pct": 18.85121,
+     "hfias_2015_pct": 41.3
+    }
+   ]
+  },
+  "enns_secondary": {
+   "what": "ENNS moderate-to-severe by province (RDP results matrix; secondary, unverified, instrument not stated, years differ by province); not used by the model",
+   "spearman": 0.0,
+   "n": 5,
+   "rows": [
+    {
+     "province": "Batangas",
+     "model_2023_pct": 19.421086,
+     "enns_pct": 29.7,
+     "enns_year": 2021
+    },
+    {
+     "province": "Cavite",
+     "model_2023_pct": 18.438917,
+     "enns_pct": 31.7,
+     "enns_year": 2021
+    },
+    {
+     "province": "Laguna",
+     "model_2023_pct": 18.451966,
+     "enns_pct": 18.3,
+     "enns_year": 2018
+    },
+    {
+     "province": "Quezon",
+     "model_2023_pct": 21.445171,
+     "enns_pct": 30.3,
+     "enns_year": 2019
+    },
+    {
+     "province": "Rizal",
+     "model_2023_pct": 18.85121,
+     "enns_pct": 27.5,
+     "enns_year": 2019
+    }
+   ]
+  },
+  "sensitivity": {
+   "composite, drift 0.10 (served)": {
+    "by_province_pct": {
+     "Batangas": 19.421086,
+     "Cavite": 18.438917,
+     "Laguna": 18.451966,
+     "Quezon": 21.445171,
+     "Rizal": 18.85121
+    },
+    "spearman_vs_enns": 0.0,
+    "range_pp": 3.006254
+   },
+   "composite, drift 0": {
+    "by_province_pct": {
+     "Batangas": 19.460327,
+     "Cavite": 18.455657,
+     "Laguna": 18.377507,
+     "Quezon": 21.805834,
+     "Rizal": 18.636117
+    },
+    "spearman_vs_enns": 0.4,
+    "range_pp": 3.428327
+   },
+   "composite, drift 0.20": {
+    "by_province_pct": {
+     "Batangas": 19.340209,
+     "Cavite": 18.404725,
+     "Laguna": 18.60382,
+     "Quezon": 20.699627,
+     "Rizal": 19.297302
+    },
+    "spearman_vs_enns": 0.0,
+    "range_pp": 2.294902
+   },
+   "synthetic only (level model)": {
+    "by_province_pct": {
+     "Batangas": 19.075708,
+     "Cavite": 18.295338,
+     "Laguna": 19.083417,
+     "Quezon": 18.255592,
+     "Rizal": 20.775161
+    },
+    "spearman_vs_enns": -0.8,
+    "range_pp": 2.519569
+   }
+  }
+ },
+ "regional_quarterly_component": {
+  "task": "SWS hunger in Balance Luzon significantly above normal, next quarter (regional; walk-forward 2010-2026)",
+  "note": "Regional measured hunger, the input of the bridge; not a provincial food-insecurity result.",
+  "models": {
+   "C0 damped persistence (production)": {
+    "n": 62,
+    "accuracy": 0.822581,
+    "balanced_accuracy": 0.713904,
+    "high_recall": 0.545455,
+    "high_precision": 0.5,
+    "low_recall": 0.882353,
+    "brier": 0.117873
+   },
+   "Naive persistence": {
+    "n": 62,
+    "accuracy": 0.870968,
+    "balanced_accuracy": 0.743316,
+    "high_recall": 0.545455,
+    "high_precision": 0.666667,
+    "low_recall": 0.941176,
+    "brier": 0.114787
+   }
+  }
+ },
+ "information_groups": {
+  "Market and food prices": {
+   "families": [
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "tested_as": "M4 rice inflation; M6 poverty + rice inflation",
+   "result": {
+    "model": "M4 rice inflation",
+    "loo_mae_pp": 6.117137,
+    "baseline_loo_mae_pp": 7.263519,
+    "accuracy_above_national": 0.647059,
+    "selected_model_loo_mae_pp": 5.296442
+   },
+   "role": "Secondary task: provincial food-price pressure forecast (FI10). Not a level predictor."
+  },
+  "Climate and agricultural production": {
+   "families": [
+    "C1",
+    "C2",
+    "C3",
+    "C4"
+   ],
+   "tested_as": "not testable for the level: no region-level 2023 series on file for all 17 FIES regions",
+   "result": null,
+   "role": "Context and drivers of the price task; shown as supporting indicators."
+  },
+  "Employment and remittances": {
+   "families": [
+    "E1",
+    "E2"
+   ],
+   "tested_as": "M3 unemployment; M5 poverty + unemployment",
+   "result": {
+    "model": "M3 unemployment",
+    "loo_mae_pp": 7.285841,
+    "baseline_loo_mae_pp": 7.263519,
+    "accuracy_above_national": 0.647059,
+    "selected_model_loo_mae_pp": 5.296442
+   },
+   "role": "Supporting indicator. Remittances (E2) are national only and cannot be tested across regions."
+  },
+  "Poverty and social vulnerability": {
+   "families": [
+    "V1"
+   ],
+   "tested_as": "M1 poverty; M2 subsistence (food poverty)",
+   "result": {
+    "model": "M2 subsistence (food poverty)",
+    "loo_mae_pp": 5.296442,
+    "baseline_loo_mae_pp": 7.263519,
+    "accuracy_above_national": 1.0,
+    "selected_model_loo_mae_pp": 5.296442
+   },
+   "role": "Selected: sets the provincial level (structure)."
+  },
+  "News and NLP": {
+   "families": [
+    "N1"
+   ],
+   "tested_as": "no region-level news series matched to the FIES regions",
+   "result": null,
+   "role": "Food-stress intelligence shown beside the forecast; not a model input."
+  },
+  "Regional hunger (SWS)": {
+   "families": [
+    "H1"
+   ],
+   "tested_as": "bridge lambda (national 2021->2023) and held-out CALABARZON 2025",
+   "result": {
+    "holdout_error_pp": 2.316616,
+    "no_change_error_pp": -3.5
+   },
+   "role": "Selected: moves the level between survey waves and drives the next-quarter forecast."
+  }
+ },
+ "objective_75": {
+  "target": 0.75,
+  "level_classification": {
+   "accuracy": 1.0,
+   "accuracy_ci95": [
+    0.815676,
+    1.0
+   ],
+   "balanced_accuracy": 1.0,
+   "n": 17,
+   "met": true,
+   "type": "independent observation-level validation (leave-one-region-out, one wave)"
+  },
+  "bridge_holdout_class": {
+   "correct": true,
+   "n": 1,
+   "type": "one held-out survey wave (provisional value)"
+  },
+  "provincial_quarterly": {
+   "met": null,
+   "status": "NOT EVALUABLE: no quarterly or repeated provincial FIES measurement exists; scored prospectively from the register"
+  },
+  "statement": "The 75% target is met for classifying measured food-insecurity levels of held-out regions (17/17; 95% CI 0.82-1.00). It is not shown for provincial next-quarter forecasts, which no survey measures; those are registered and scored when the next FIES wave is published."
+ }
+}

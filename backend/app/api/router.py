@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v1 import (
     admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, fi9, fi10, forecast,
-    forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, report, simple,
+    forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, registry, report, simple,
 )
 
 router = APIRouter()
@@ -59,6 +59,8 @@ router.include_router(fi7.router, prefix=API_V1, tags=["FI7 next-quarter food in
 router.include_router(fi9.router, prefix=API_V1, tags=["FI9 Lead-1 food insecurity outlook"])
 # FI10: provincial food-price pressure outlooks (five provinces, provisional) + provincial context (app.fi10): read-only files.
 router.include_router(fi10.router, prefix=API_V1, tags=["FI10 provincial outlooks"])
+# Release gate: the public food-insecurity route serves only the registry's approved model (503 otherwise).
+router.include_router(registry.public_router, prefix=API_V1, tags=["Model registry (release gate)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.
@@ -73,3 +75,4 @@ router.include_router(alerts.public_router, prefix=API_V1, tags=["Alerts"])
 # remembering to add it.
 router.include_router(admin.admin_router, prefix=f"{API_V1}/admin", tags=["Admin"])
 router.include_router(alerts.admin_router, prefix=f"{API_V1}/admin", tags=["Admin"])
+router.include_router(registry.admin_router, prefix=f"{API_V1}/admin", tags=["Admin: model candidates (not approved)"])
