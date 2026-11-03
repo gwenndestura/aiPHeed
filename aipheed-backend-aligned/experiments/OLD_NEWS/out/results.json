@@ -1,0 +1,240 @@
+{
+ "plan_sha256": "0914a649b3c19158b08d36099a5092db14a9995eb9e67a0f35fa6521e0c97d61",
+ "label": "EXPLORATORY; development evidence; the last attempt; one candidate",
+ "models": {
+  "REF": {
+   "1": {
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.7019583843329253,
+     "brier": 0.18751441857843637,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1512, p 0.000",
+       "CLIM": "diff -0.0331, p 0.096"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ],
+    "all_R1_R7": false,
+    "n_quarters": 62,
+    "middle_third_accuracy": 0.5714285714285714,
+    "middle_third_correct": "12/21"
+   },
+   "2": {
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.7037943696450428,
+     "brier": 0.18378601443479917,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1549, p 0.000",
+       "CLIM": "diff -0.0385, p 0.070"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ],
+    "all_R1_R7": false,
+    "n_quarters": 62,
+    "middle_third_accuracy": 0.5714285714285714,
+    "middle_third_correct": "12/21"
+   }
+  },
+  "REF+G": {
+   "1": {
+    "metrics": {
+     "accuracy": 0.7741935483870968,
+     "balanced": 0.7050183598531212,
+     "precision": 0.8085106382978723,
+     "recall": 0.8837209302325582,
+     "f1": 0.8444444444444444,
+     "auc": 0.6921664626682987,
+     "brier": 0.1945584060178006,
+     "TP": 38,
+     "FP": 9,
+     "FN": 5,
+     "TN": 10
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7742
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.705
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7742 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1442, p 0.001",
+       "CLIM": "diff -0.0261, p 0.165"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.809, R 0.884"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.85] (sizes [21, 21, 20]), LOQO min 0.770; other split [0.95, 0.524, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R5",
+     "R7"
+    ],
+    "all_R1_R7": false,
+    "n_quarters": 62,
+    "middle_third_accuracy": 0.5238095238095238,
+    "middle_third_correct": "11/21",
+    "calls_differing_from_REF": 1,
+    "gdelt_shap_share_pct": 9.25683160091807
+   },
+   "2": {
+    "metrics": {
+     "accuracy": 0.7741935483870968,
+     "balanced": 0.7050183598531212,
+     "precision": 0.8085106382978723,
+     "recall": 0.8837209302325582,
+     "f1": 0.8444444444444444,
+     "auc": 0.6829865361077112,
+     "brier": 0.19735723862874738,
+     "TP": 38,
+     "FP": 9,
+     "FN": 5,
+     "TN": 10
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7742
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.705
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7742 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1414, p 0.000",
+       "CLIM": "diff -0.0249, p 0.200"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.809, R 0.884"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.85] (sizes [21, 21, 20]), LOQO min 0.770; other split [0.95, 0.571, 0.81] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R5",
+     "R7"
+    ],
+    "all_R1_R7": false,
+    "n_quarters": 62,
+    "middle_third_accuracy": 0.5238095238095238,
+    "middle_third_correct": "11/21",
+    "calls_differing_from_REF": 1,
+    "gdelt_shap_share_pct": 9.484177087438608
+   }
+  }
+ },
+ "decision": {
+  "passes_L1_and_L2": false,
+  "reason": "REF+G does not pass all of R1-R7 at both leads: REF+news stays the main model under the paper's 75% rule; the attempts to pass R1-R7 on development data are closed"
+ }
+}

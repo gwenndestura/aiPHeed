@@ -50,12 +50,21 @@ def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def check_plan() -> str:
-    b = PLAN.read_bytes()
+ADDENDUM = HERE / "ADDENDUM_1.md"
+
+
+def _sealed(path: Path, tag: bytes) -> str:
+    b = path.read_bytes()
     body, last = b.rstrip(b"\n").rsplit(b"\n", 1)
     h = hashlib.sha256(body + b"\n").hexdigest()
-    assert last.startswith(b"PLAN-SHA256: ") and last.split()[1].decode() == h, "PLAN.md changed after it was hashed"
+    assert last.startswith(tag + b": ") and last.split()[1].decode() == h, f"{path.name} changed after it was hashed"
     return h
+
+
+def check_plan() -> str:
+    """PLAN.md and ADDENDUM_1.md (the de-duplication rule) must both be intact."""
+    _sealed(ADDENDUM, b"ADDENDUM-SHA256")
+    return _sealed(PLAN, b"PLAN-SHA256")
 
 
 # ================================================================================================ features
@@ -87,8 +96,11 @@ def features():
     copy21 = load_copy(G.RAW)
     same_load = bool(orig.reset_index(drop=True).equals(copy21.reset_index(drop=True)))
     assert same_load, "load_copy differs from e85_features.load on the 2021+ file"
-    old = load_copy(RAW_OLD)
-    d = pd.concat([old, orig]).sort_values("ts").drop_duplicates("DocumentIdentifier", keep="first")
+    old_all = load_copy(RAW_OLD)
+    # ADDENDUM_1: de-duplication within each file only (as E85); old-file records dated on or after 2021-01-01 PHT
+    # belong to E85's window and are dropped; no de-duplication across the two files
+    old = old_all[old_all["ts"] < pd.Timestamp("2021-01-01")]
+    d = pd.concat([old, orig]).sort_values("ts", kind="stable")
     F = G.features(d, list(range(FIRST_G, LAST_G + 1)), E41.origin)
     reg = F.drop_duplicates("t")[["t"] + GCOLS].sort_values("t").reset_index(drop=True)
     reg.to_csv(OUT / "gdelt_features_2015_2026.csv", index=False)
@@ -118,14 +130,17 @@ def features():
            "origins_with_fewer_than_20_records": [q for q, n in per_q.items() if n < 20 and FIRST_G <= H.qi(q) <= LAST_G]}
     (OUT / "coverage.json").write_text(json.dumps(cov, indent=1, default=str), encoding="utf-8")
     c = json.loads((OUT / "checks_fetch.json").read_text(encoding="utf-8"))
-    c.update({"plan_sha256": plan, "load_copy_equals_e85_load_on_2021_file": same_load,
+    c.update({"plan_sha256": plan, "addendum_sha256": _sealed(ADDENDUM, b"ADDENDUM-SHA256"),
+              "dedup_rule": "within each file only (ADDENDUM_1)",
+              "load_copy_equals_e85_load_on_2021_file": same_load,
               "old_rows_after_dedupe": int(len(old)), "rows_2021plus": int(len(orig)),
-              "old_records_dated_2021_PHT": int((old["ts"] >= pd.Timestamp("2021-01-01")).sum()),
+              "old_records_dated_2021_PHT_dropped": int((old_all["ts"] >= pd.Timestamp("2021-01-01")).sum()),
+              "docs_in_both_files_kept_in_each": int(len(set(old["DocumentIdentifier"]) & set(orig["DocumentIdentifier"]))),
               "combined_rows": int(len(d)), "e85_2021plus_equality": {"required_2021Q2_2026Q3_ok": eq_ok, "by_quarter": diffs},
               "raw_2021_sha256": sha(G.RAW), "e85_features_sha256": sha(E85_FEAT)})
     (OUT / "checks.json").write_text(json.dumps(c, indent=1, default=str), encoding="utf-8")
-    print(json.dumps({"load_copy_ok": same_load, "old_rows": len(old), "old_records_dated_2021_PHT":
-                      c["old_records_dated_2021_PHT"], "equality_2021Q2+": eq_ok,
+    print(json.dumps({"load_copy_ok": same_load, "old_rows": len(old), "old_records_dated_2021_PHT_dropped":
+                      c["old_records_dated_2021_PHT_dropped"], "equality_2021Q2+": eq_ok,
                       "differing_quarters": {q: v for q, v in diffs.items() if v["max_abs_diff"] > 1e-9 or not v["nan_equal"]},
                       "records_per_quarter_2015_2020": {q: int(n) for q, n in per_q.items() if q < "2021"}}, indent=1))
     if not eq_ok:
