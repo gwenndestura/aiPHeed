@@ -126,6 +126,7 @@ def summary(path: Path | None = None) -> dict:
             "models": [{"model_id": k, "version": v.get("version"), "status": v["status"], "target": v.get("target"),
                         "gate_passed": (v.get("gate") or {}).get("passed"),
                         "failed_checks": [c["id"] for c in (v.get("gate") or {}).get("checks", []) if c["status"] != "pass"],
+                        "checks_total": len((v.get("gate") or {}).get("checks", [])) or None,
                         "gate_evaluated_utc": (v.get("gate") or {}).get("evaluated_utc")}
                        for k, v in reg["models"].items()],
             "history": reg["history"][-50:]}

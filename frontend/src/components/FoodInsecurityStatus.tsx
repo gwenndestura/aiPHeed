@@ -39,7 +39,7 @@ export function FoodInsecurityStatusCardBody() {
           <p className="text-[9px] text-muted-foreground leading-snug" data-testid="fi-status-candidates">
             Models under evaluation:{" "}
             {data.candidates
-              .map((c) => `${c.model_id} (${c.status}; ${c.failed_checks.length} of ${data.acceptance_checks_total} checks not yet passed)`)
+              .map((c) => `${c.model_id} (${c.status}; ${c.failed_checks.length} of ${c.checks_total ?? data.acceptance_checks_total} checks not yet passed)`)
               .join("; ")}
             .
           </p>

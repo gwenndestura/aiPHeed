@@ -23,8 +23,9 @@ public_router = APIRouter()
 admin_router = APIRouter(dependencies=[Depends(require_admin)])
 
 # Serving functions per approved model id; a model without an entry here cannot be served even if approved.
-PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": ("app.e139.serve", "outlook")}
-CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve"}
+PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": ("app.e139.serve", "outlook"),
+                      "e140-lgbm-native-1.0": ("app.e140.serve", "outlook")}
+CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve", "e140-lgbm-native-1.0": "app.e140.serve"}
 
 
 @public_router.get("/final/model-registry")
@@ -53,8 +54,8 @@ def _pending(reason: str) -> dict:
     return {"status": "validation_pending", "forecast": None, "reason": reason,
             "message": ("No food-insecurity forecasting model has passed all acceptance tests yet, so no official "
                         "food-insecurity forecast is shown. Indicators on this dashboard are context, not forecasts."),
-            "candidates": [{k: m[k] for k in ("model_id", "status", "failed_checks")} for m in reg["models"]
-                           if m["status"] != "legacy_incumbent"],
+            "candidates": [{**{k: m[k] for k in ("model_id", "status", "failed_checks")}, "checks_total": m.get("checks_total")}
+                           for m in reg["models"] if m["status"] != "legacy_incumbent"],
             "acceptance_checks_total": 16}
 
 

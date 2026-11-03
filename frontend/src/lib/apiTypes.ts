@@ -840,7 +840,7 @@ export interface FoodInsecurityStatus {
   forecast?: null;
   reason?: string;
   message?: string;
-  candidates: { model_id: string; status: string; failed_checks: string[] }[];
+  candidates: { model_id: string; status: string; failed_checks: string[]; checks_total?: number | null }[];
   acceptance_checks_total?: number;
   production?: { model_id: string; version: string; approved_utc: string };
 }
