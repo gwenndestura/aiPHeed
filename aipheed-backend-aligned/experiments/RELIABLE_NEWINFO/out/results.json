@@ -1,0 +1,667 @@
+{
+ "plan_sha256": "ffb69ae23899608e0697333a3551cc3adec5f2bc09eaa5005b3c8d1ba1c12cb3",
+ "label": "EXPLORATORY; development evidence; the last attempt; 2 candidates",
+ "phone_quarters_excluded_in_sensitivity": [
+  "2020-Q2",
+  "2020-Q3"
+ ],
+ "candidates": {
+  "REF (reference)": {
+   "model": "REF",
+   "leads": {
+    "1": {
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7019583843329253,
+      "brier": 0.18751441857843637,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1512, p 0.000",
+        "CLIM": "diff -0.0331, p 0.096"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.8,
+       "balanced": 0.7265725288831836,
+       "precision": 0.8085106382978723,
+       "recall": 0.926829268292683,
+       "f1": 0.8636363636363636,
+       "auc": 0.714377406931964,
+       "brier": 0.18549399871600333,
+       "TP": 38,
+       "FP": 9,
+       "FN": 3,
+       "TN": 10
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.8
+       },
+       "R3": {
+        "pass": true,
+        "value": 0.7266
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.8000 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1312, p 0.002",
+         "CLIM": "diff -0.0384, p 0.067"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.809, R 0.927"
+       },
+       "R7": {
+        "pass": true,
+        "value": "thirds [0.95, 0.6, 0.85] (sizes [20, 20, 20]), LOQO min 0.797; other split [0.95, 0.6, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [],
+      "all_R1_R7": true
+     }
+    },
+    "2": {
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7037943696450428,
+      "brier": 0.18378601443479917,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1549, p 0.000",
+        "CLIM": "diff -0.0385, p 0.070"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.8166666666666667,
+       "balanced": 0.738767650834403,
+       "precision": 0.8125,
+       "recall": 0.9512195121951219,
+       "f1": 0.8764044943820225,
+       "auc": 0.7317073170731707,
+       "brier": 0.17418680804345496,
+       "TP": 39,
+       "FP": 9,
+       "FN": 2,
+       "TN": 10
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.8167
+       },
+       "R3": {
+        "pass": true,
+        "value": 0.7388
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.8167 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1425, p 0.000",
+         "CLIM": "diff -0.0515, p 0.023"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.812, R 0.951"
+       },
+       "R7": {
+        "pass": true,
+        "value": "thirds [0.95, 0.65, 0.85] (sizes [20, 20, 20]), LOQO min 0.814; other split [0.95, 0.65, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [],
+      "all_R1_R7": true
+     }
+    }
+   }
+  },
+  "C1": {
+   "model": "BLEND",
+   "leads": {
+    "1": {
+     "metrics": {
+      "accuracy": 0.7419354838709677,
+      "balanced": 0.6670746634026927,
+      "precision": 0.7872340425531915,
+      "recall": 0.8604651162790697,
+      "f1": 0.8222222222222222,
+      "auc": 0.7270501835985312,
+      "brier": 0.18416850598625406,
+      "TP": 37,
+      "FP": 10,
+      "FN": 6,
+      "TN": 9
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": false,
+       "value": 0.7419
+      },
+      "R3": {
+       "pass": false,
+       "value": 0.6671
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7419 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1545, p 0.000",
+        "CLIM": "diff -0.0365, p 0.067"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.787, R 0.860"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.429, 0.85] (sizes [21, 21, 20]), LOQO min 0.738; other split [0.95, 0.429, 0.857] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R2",
+      "R3",
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.7666666666666667,
+       "balanced": 0.6880616174582799,
+       "precision": 0.7872340425531915,
+       "recall": 0.9024390243902439,
+       "f1": 0.8409090909090909,
+       "auc": 0.7522464698331193,
+       "brier": 0.17632242064887357,
+       "TP": 37,
+       "FP": 10,
+       "FN": 4,
+       "TN": 9
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.7667
+       },
+       "R3": {
+        "pass": false,
+        "value": 0.6881
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.7667 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1403, p 0.000",
+         "CLIM": "diff -0.0476, p 0.021"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.787, R 0.902"
+       },
+       "R7": {
+        "pass": false,
+        "value": "thirds [0.95, 0.5, 0.85] (sizes [20, 20, 20]), LOQO min 0.763; other split [0.95, 0.5, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [
+       "R3",
+       "R7"
+      ],
+      "all_R1_R7": false
+     }
+    },
+    "2": {
+     "metrics": {
+      "accuracy": 0.7580645161290323,
+      "balanced": 0.693390452876377,
+      "precision": 0.8043478260869565,
+      "recall": 0.8604651162790697,
+      "f1": 0.8314606741573034,
+      "auc": 0.751529987760098,
+      "brier": 0.17765379005646648,
+      "TP": 37,
+      "FP": 9,
+      "FN": 6,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7581
+      },
+      "R3": {
+       "pass": false,
+       "value": 0.6934
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7581 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1611, p 0.000",
+        "CLIM": "diff -0.0446, p 0.026"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.804, R 0.860"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.476, 0.85] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.524, 0.81] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R3",
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.7833333333333333,
+       "balanced": 0.714377406931964,
+       "precision": 0.8043478260869565,
+       "recall": 0.9024390243902439,
+       "f1": 0.8505747126436782,
+       "auc": 0.7881899871630296,
+       "brier": 0.16617621738617003,
+       "TP": 37,
+       "FP": 9,
+       "FN": 4,
+       "TN": 10
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.7833
+       },
+       "R3": {
+        "pass": true,
+        "value": 0.7144
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.7833 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1505, p 0.000",
+         "CLIM": "diff -0.0595, p 0.003"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.804, R 0.902"
+       },
+       "R7": {
+        "pass": false,
+        "value": "thirds [0.95, 0.55, 0.85] (sizes [20, 20, 20]), LOQO min 0.780; other split [0.95, 0.55, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [
+       "R7"
+      ],
+      "all_R1_R7": false
+     }
+    }
+   },
+   "passes_L1_and_L2": false,
+   "mean_brier": 0.18091114802136027
+  },
+  "C2": {
+   "model": "C2",
+   "leads": {
+    "1": {
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7129742962056304,
+      "brier": 0.1861778403915221,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1525, p 0.000",
+        "CLIM": "diff -0.0345, p 0.087"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.8,
+       "balanced": 0.7265725288831836,
+       "precision": 0.8085106382978723,
+       "recall": 0.926829268292683,
+       "f1": 0.8636363636363636,
+       "auc": 0.7259306803594352,
+       "brier": 0.18287650630107918,
+       "TP": 38,
+       "FP": 9,
+       "FN": 3,
+       "TN": 10
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.8
+       },
+       "R3": {
+        "pass": true,
+        "value": 0.7266
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.8000 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1338, p 0.001",
+         "CLIM": "diff -0.0411, p 0.051"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.809, R 0.927"
+       },
+       "R7": {
+        "pass": true,
+        "value": "thirds [0.95, 0.6, 0.85] (sizes [20, 20, 20]), LOQO min 0.797; other split [0.95, 0.6, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [],
+      "all_R1_R7": true
+     },
+     "rain_shap_share_pct": 2.0028895708183936
+    },
+    "2": {
+     "metrics": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "precision": 0.8125,
+      "recall": 0.9069767441860465,
+      "f1": 0.8571428571428572,
+      "auc": 0.7099143206854346,
+      "brier": 0.1829472364523187,
+      "TP": 39,
+      "FP": 9,
+      "FN": 4,
+      "TN": 10
+     },
+     "rules": {
+      "R1": {
+       "pass": true,
+       "value": "62 q, 62 rows"
+      },
+      "R2": {
+       "pass": true,
+       "value": 0.7903
+      },
+      "R3": {
+       "pass": true,
+       "value": 0.7166
+      },
+      "R4": {
+       "pass": true,
+       "value": "0.7903 vs 0.3065 / 0.6613"
+      },
+      "R5": {
+       "pass": true,
+       "value": {
+        "PERSIST-SI": "diff -0.1558, p 0.000",
+        "CLIM": "diff -0.0393, p 0.063"
+       }
+      },
+      "R6": {
+       "pass": true,
+       "value": "P 0.812, R 0.907"
+      },
+      "R7": {
+       "pass": false,
+       "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+      }
+     },
+     "failed": [
+      "R7"
+     ],
+     "all_R1_R7": false,
+     "n_quarters": 62,
+     "sensitivity_without_phone_quarters": {
+      "n_quarters": 60,
+      "metrics": {
+       "accuracy": 0.8166666666666667,
+       "balanced": 0.738767650834403,
+       "precision": 0.8125,
+       "recall": 0.9512195121951219,
+       "f1": 0.8764044943820225,
+       "auc": 0.730423620025674,
+       "brier": 0.17547650819046282,
+       "TP": 39,
+       "FP": 9,
+       "FN": 2,
+       "TN": 10
+      },
+      "rules": {
+       "R1": {
+        "pass": true,
+        "value": "60 q, 60 rows"
+       },
+       "R2": {
+        "pass": true,
+        "value": 0.8167
+       },
+       "R3": {
+        "pass": true,
+        "value": 0.7388
+       },
+       "R4": {
+        "pass": true,
+        "value": "0.8167 vs 0.3167 / 0.6833"
+       },
+       "R5": {
+        "pass": true,
+        "value": {
+         "PERSIST-SI": "diff -0.1412, p 0.000",
+         "CLIM": "diff -0.0502, p 0.028"
+        }
+       },
+       "R6": {
+        "pass": true,
+        "value": "P 0.812, R 0.951"
+       },
+       "R7": {
+        "pass": true,
+        "value": "thirds [0.95, 0.65, 0.85] (sizes [20, 20, 20]), LOQO min 0.814; other split [0.95, 0.65, 0.85] (sizes [20, 20, 20])"
+       }
+      },
+      "failed": [],
+      "all_R1_R7": true
+     },
+     "rain_shap_share_pct": 2.0447565830447556
+    }
+   },
+   "passes_L1_and_L2": false,
+   "mean_brier": 0.18456253842192039
+  }
+ },
+ "decision": {
+  "chosen": null,
+  "reason": "no candidate passes all of R1-R7 at both leads: REF+news stays the main model under the paper's 75% rule; the attempts to pass R1-R7 are closed"
+ }
+}
