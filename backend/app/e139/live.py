@@ -100,7 +100,8 @@ def history() -> tuple[dict, dict]:
     return own, {k: float(reg[r]) for k, r in region_of.items()}
 
 
-def build(issue: pd.Timestamp = ISSUE) -> pd.DataFrame:
+def build(issue: pd.Timestamp = ISSUE, write: bool = True) -> pd.DataFrame:
+    """Live features at `issue`. write=False returns them without touching E139's stored live_features.csv."""
     y23 = RAW137 / "y2023" / "psa"
     pov, gap = _fy(y23 / "poverty_pop_2018_2023.csv", "Poverty Incidence"), _fy(y23 / "poverty_gap_2018_2023.csv", "Estimate")
     sub = _fy(RAW138 / "psa" / "subsistence_families_2018_2023.csv", "Subsistence Incidence")
@@ -169,8 +170,9 @@ def build(issue: pd.Timestamp = ISSUE) -> pd.DataFrame:
         r["a_prev_y"], r["a_region_prev"] = own.get(k, np.nan), regprev.get(k, np.nan)
         rows.append({"k": k, "issue_date": issue.date().isoformat(), **r})
     X = pd.DataFrame(rows)
-    OUT.mkdir(parents=True, exist_ok=True)
-    X.to_csv(OUT / "live_features.csv", index=False)
+    if write:
+        OUT.mkdir(parents=True, exist_ok=True)
+        X.to_csv(OUT / "live_features.csv", index=False)
     return X
 
 

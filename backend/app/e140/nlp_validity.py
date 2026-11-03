@@ -9,6 +9,9 @@ Pre-specified tests (one-sided: the signal should be HIGHER when the event is pr
     V1 climate news (FI5 fssi_raw_climate, 2021+)   vs tropical cyclones within 150 km of the province that quarter (IBTrACS)
     V2 market news  (FI5 fssi_raw_market, 2021+)    vs the province's food CPI YoY at the latest annual value public that quarter
     V3 archive risk share (FI6-N, 2012+)            vs tropical cyclones that quarter
+    V4 bias correction (FI6-N): does shrinkage remove the dependence of the province signal on news volume?
+       Spearman(raw risk share, articles) vs Spearman(corrected risk share, articles); a successful volume correction
+       moves the second toward 0.
 Spearman correlation over CALABARZON province-quarters; quarters with no articles are excluded, not set to zero.
 """
 from __future__ import annotations
@@ -88,6 +91,8 @@ def run() -> dict:
     res = {"V1_climate_news_vs_cyclones": test(f5["tc"], f5["fssi_raw_climate"]),
            "V2_market_news_vs_food_cpi_yoy": test(f5["cpi"], f5["fssi_raw_market"]),
            "V3_archive_risk_share_vs_cyclones": test(a["tc"], a["risk_share_corrected"]),
+           "V4_volume_dependence": {"raw_vs_articles": test(a["articles"], a["risk_share_raw"]),
+                                    "corrected_vs_articles": test(a["articles"], a["risk_share_corrected"])},
            "coverage": {"fi5_province_quarters_with_articles": int(len(f5)), "fi5_quarters": [f5["quarter"].min(), f5["quarter"].max()],
                         "archive_province_quarters_with_articles": int(len(a)), "archive_quarters": [a["quarter"].min(), a["quarter"].max()]},
            "note": "Convergent validity only; sentiment accuracy needs a human-labelled set (excluded by owner rule)."}

@@ -29,6 +29,7 @@ from app.e137 import outcomes as O
 from app.e139 import live as LV
 from app.e140 import model as M
 from app.paths import BACKEND_DIR
+from app.quarterly.target import forecast_target
 from app.registry import prospective_provincial as PP
 
 OUT = BACKEND_DIR / "data" / "e140" / "out"
@@ -56,17 +57,39 @@ def _q(d: pd.Timestamp) -> str:
     return f"{d.year}-Q{(d.month - 1) // 3 + 1}"
 
 
-def run(issue: pd.Timestamp = LV.ISSUE) -> dict:
+CLAIM = ("Structural relative-risk estimate for the display quarter, issued with information public before the issue date. "
+         "Its only out-of-time evidence is survey-to-survey (train 2015 + 2018, predict the 2019 provincial round; development "
+         "data). No quarterly provincial food-insecurity measurement exists, so quarter-to-quarter change is NOT validated.")
+GROUP_OF = {f: g for g, fs in {"poverty": M.M9.POV + M.M9.DENS, "market": M.M9.MKT, "climate": M.M9.CLI,
+                                "history": M.M9.HIST, "geography": ["island_code"]}.items() for f in fs}
+
+
+def contributions(final, Z: pd.DataFrame) -> tuple[pd.DataFrame, str]:
+    """Group contributions to the predicted relative logit. Constant-leaf trees (GBC): exact TreeSHAP, which sums with
+    the base value to the model's prediction. Linear trees have no TreeSHAP, so they are not served with explanations."""
+    m = final.chosen_
+    if m.kind != "GBC":
+        raise NotImplementedError("linear-tree explanations would be approximate; not served")
+    c = pd.DataFrame(m.m_.booster_.predict(Z[m.cols], pred_contrib=True), columns=m.cols + ["base"], index=Z.index)
+    g = pd.DataFrame({grp: c[[f for f in m.cols if GROUP_OF[f] == grp]].sum(axis=1)
+                      for grp in dict.fromkeys(GROUP_OF[f] for f in m.cols)}, index=Z.index)
+    g["base"] = c["base"] + m.mu_
+    return g, "exact TreeSHAP (sums with the base value to the predicted relative logit)"
+
+
+def run(issue: pd.Timestamp | None = None) -> dict:
+    if issue is None:                                        # dashboard rule: issue at the start of the viewing quarter
+        issue = pd.Timestamp(forecast_target()["origin"])
     X = M.data(lead=1)
     final = M.make("LGBM-AUTO").fit(X)
-    Z = pd.read_csv(OUT.parent.parent / "e139" / "out" / "live_features.csv")
+    Z = LV.build(issue, write=False)
     isl = O.load().assign(k=lambda d: d["key"].str.replace(" ", "")).drop_duplicates("k").set_index("k")["island"]
     Z["island_code"] = Z["k"].map(isl).map(M.ISLAND).astype(float)
     Z["p_elevated"] = final.predict_proba(Z)
-    eff = final.chosen_.group_effects(Z, X)
-    Zi = Z.copy()
-    Zi["island_code"] = X["island_code"].median()
-    eff["geography"] = final.predict_y(Z) - final.predict_y(Zi)       # island-group effect (not one of the five groups)
+    Z["y_hat"] = final.predict_y(Z)
+    contrib, method = contributions(final, Z)
+    if not np.allclose(contrib.sum(axis=1), Z["y_hat"]):
+        raise RuntimeError("explanations do not add up to the prediction")
     rng = np.random.default_rng(M.SEED)
     regs = X["region"].unique()
     cal = Z[Z["k"].isin(CAL)].reset_index()
@@ -75,43 +98,48 @@ def run(issue: pd.Timestamp = LV.ISSUE) -> dict:
     target = issue + pd.DateOffset(months=3)
     provinces = []
     for i, r in cal.iterrows():
-        e = eff.loc[r["index"]]
+        e = contrib.loc[r["index"]].drop("base")
+        lo, hi = float(np.percentile(B[:, i], 5)), float(np.percentile(B[:, i], 95))
         provinces.append({
             "province": CAL[r["k"]], "target_quarter": _q(target), "p_elevated": round(float(r["p_elevated"]), 4),
-            "p_interval90": [round(float(np.percentile(B[:, i], 5)), 4), round(float(np.percentile(B[:, i], 95)), 4)],
-            "risk_class": "HIGH" if r["p_elevated"] >= 0.5 else "LOW",
-            "explanations": [{"group": g, "fao_dimension": FAO[g], "effect_logit": round(float(v), 3),
+            "p_interval90": [round(lo, 4), round(hi, 4)],
+            "risk_class": "HIGH" if lo >= 0.5 else "LOW" if hi < 0.5 else "UNCERTAIN",
+            "explanations": [{"group": g, "fao_dimension": FAO[g], "contribution_logit": round(float(v), 3),
                               "sentence": (SENTENCE[g][0 if v > 0 else 1] if abs(v) >= MIN_EFFECT
                                            else "This factor did not noticeably change the estimate.")}
                              for g, v in e.items()],
+            "base_logit": round(float(contrib.loc[r["index"], "base"]), 3),
             "not_model_inputs": {"employment_remittances": "no provincial series for the training years",
                                  "news_nlp": "CALABARZON-only archive; regional context",
                                  "utilization": "no nutrition, water or sanitation data held"}})
     rank_first = pd.Series([CAL[cal["k"][j]] for j in B.argmax(axis=1)]).value_counts(normalize=True).round(3).to_dict()
-    out = {"model": "e140-lgbm-native-1.0 (LGBM-AUTO)", "validation_status": "CANDIDATE - rejected by its gate (E140 decision C); not a validated forecast",
-           "issue_date": issue.date().isoformat(), "information_cutoff": f"{issue.date().isoformat()} (exclusive)",
-           "target_quarter": _q(target), "lead": 1,
+    out = {"model": "e140-lgbm-native-1.0 (LGBM-AUTO)",
+           "validation_status": "CANDIDATE - rejected by its gate (E140 decision C); validation pending; not a released forecast",
+           "claim": CLAIM, "issue_date": issue.date().isoformat(), "issue_quarter": _q(issue),
+           "information_cutoff": f"{issue.date().isoformat()} (exclusive)", "target_quarter": _q(target), "display_lead": 1,
            "final_model": {"kind": final.kind_, "n_trees": int(final.n_trees_), "sigma": float(final.chosen_.sigma_)},
+           "explanation_method": method,
+           "interval_note": "model-refit uncertainty (16-region bootstrap, 200 refits); excludes survey sampling error and "
+                            "temporal change, so it understates the total uncertainty",
+           "class_rule": "HIGH if the whole 90 % interval is >= 0.5, LOW if it is < 0.5, otherwise UNCERTAIN",
            "meaning": "Estimated probability that the province's household food insecurity (HFIAS moderate-or-severe) is above "
                       "the national level. A risk estimate: HIGH does not confirm food insecurity and LOW does not guarantee "
                       "food security. It is not the share of food-insecure households.",
            "provinces": provinces, "p_rank_first": rank_first}
-    (OUT / "forecast_next_quarter.json").write_text(json.dumps(out, indent=2))
-    # LGUs
     lg = pd.read_csv(BACKEND_DIR / "data" / "fi5" / "out" / "lgu_rankings.csv")
     lg = lg[["province_name", "lgu_psgc", "lgu_name", "lgu_type", "population_2024", "poverty_incidence_2021", "poverty_source",
              "density_2024", "pct_poverty", "pct_density", "vulnerability"]].copy()
     pm = {p["province"]: p for p in provinces}
     lg["province_p_elevated"] = lg["province_name"].map(lambda n: pm[n]["p_elevated"])
-    lg["risk_score"] = lg["province_p_elevated"] * lg["vulnerability"]
-    lg["risk_score_low"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][0]) * lg["vulnerability"]
-    lg["risk_score_high"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][1]) * lg["vulnerability"]
-    lg["rank_in_region"] = lg["risk_score"].rank(ascending=False, method="min").astype(int)
+    lg["priority_score"] = lg["province_p_elevated"] * lg["vulnerability"]
+    lg["priority_score_low"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][0]) * lg["vulnerability"]
+    lg["priority_score_high"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][1]) * lg["vulnerability"]
+    lg["priority_rank_in_region"] = lg["priority_score"].rank(ascending=False, method="min").astype(int)
     lg["target_quarter"] = _q(target)
-    lg["label"] = ("vulnerability-weighted risk ranking derived from the provincial candidate forecast; not a municipal "
+    lg["status"] = "candidate ranking pending provincial forecast validation"
+    lg["label"] = ("LGU vulnerability-weighted priority ranking derived from the provincial candidate estimate; not a municipal "
                    "food-insecurity measurement or classification")
-    lg.sort_values("rank_in_region").to_csv(OUT / "lgus_next_quarter.csv", index=False)
-    # seal all provinces for the next measured round, and register prospectively
+    lg.sort_values("priority_rank_in_region").to_csv(OUT / "lgus_next_quarter.csv", index=False)
     seal = {"model": out["model"], "issue_date": out["issue_date"], "target": "HFIAS/FIES moderate-or-severe above national, next provincial round",
             "predictions": Z[["k", "p_elevated"]].round(5).to_dict(orient="records"), "sealed_utc": datetime.now(timezone.utc).isoformat()}
     sp = OUT / f"sealed_prediction_{out['issue_date']}.json"
@@ -128,4 +156,4 @@ if __name__ == "__main__":
     o = run()
     print(o["target_quarter"], o["final_model"], o["p_rank_first"])
     for p in o["provinces"]:
-        print(p["province"], p["p_elevated"], p["p_interval90"], [(e["group"], e["effect_logit"]) for e in p["explanations"]])
+        print(p["province"], p["p_elevated"], p["p_interval90"], p["risk_class"], [(e["group"], e["contribution_logit"]) for e in p["explanations"]])

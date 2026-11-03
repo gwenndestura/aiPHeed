@@ -1,5 +1,14 @@
 # aiPHeed: integrated methodology, implementation and objective status (2026-11-04)
 
+> **Superseded in part by [FINAL_DECISION_REPORT_20261104.md](FINAL_DECISION_REPORT_20261104.md).** Corrections:
+> * The next-quarter output is a structural relative-risk estimate carried into the display quarter. Its evidence is
+>   survey-to-survey, not quarter-to-quarter.
+> * Explanations are exact TreeSHAP.
+> * HIGH, LOW and UNCERTAIN follow the 90 % interval.
+> * LGU columns are named `priority_score`.
+> * The FSSI correction does not remove volume bias.
+> * The prospective scorer now computes the NAT, PERS and REGPREV baselines.
+
 **Evidence base.**
 * Branch `pfi/survey-anchored-final`.
 * No result here comes from a new model search. The selected methodology rests on locked studies (FI5, FI6, FI9-Z,

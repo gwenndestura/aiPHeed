@@ -5,14 +5,17 @@ their scoring against the NEXT measured provincial food-insecurity round, which 
     python -m app.registry.prospective_provincial verify
     python -m app.registry.prospective_provincial score <round.csv>
 
-<round.csv> columns (one row per province, as published by FNRI/PSA): province, survey, year, p (moderate-or-severe %),
-se_p, ref (national value of the same round), instrument (HFIAS or FIES). Instruments are never pooled: a seal is scored
-only against the instrument it names (HFIAS by default; FIES rounds are scored separately and labelled).
+<round.csv> columns (template: data/registry/provincial_round_TEMPLATE.csv), one row per province as published by
+FNRI/PSA: province, survey, year, p (moderate-or-severe %), se_p (standard error of p, percentage points), ref (the
+national value of the same round, %), instrument (HFIAS or FIES). Instruments are never pooled: the seals were trained on
+HFIAS, so only HFIAS rows are scored as confirmation; FIES rows are scored separately and labelled as agreement.
 
 Scoring uses E137's target rules (relative logit, survey SE, soft label q, ELEVATED/LOWER/NOT_DISTINGUISHABLE status),
-so the result is directly comparable with the development evidence. Baselines: national base rate (0.5 prior of being
-above national is not assumed; the training base rate of the sealing model's rows is used), the province's previous
-measured position, and the region's previous measured level.
+so the result is directly comparable with the development evidence. Baselines on the same rows:
+    NAT      base rate of the HFIAS training rows (share of soft labels above national)
+    PERS     the province's latest measured relative position (E137 persistence, change variance from training rows)
+    REGPREV  the mean latest measured relative position of the province's region
+Each model's expected Brier is reported with the paired difference to every baseline.
 """
 from __future__ import annotations
 
@@ -90,26 +93,67 @@ def outcome_rows(df: pd.DataFrame) -> pd.DataFrame:
     return d
 
 
+def baselines(new: pd.DataFrame) -> pd.DataFrame:
+    """NAT, PERS and REGPREV probabilities for the new round's rows, from the measured HFIAS history only."""
+    from app.e137 import model as M137
+    from app.e137.outcomes import load
+    hist = load()
+    hist = hist[hist["has_value"]].sort_values("year")
+    latest = hist.groupby("key").last()
+    latest.index = latest.index.str.replace(" ", "")
+    reg_mean = latest.groupby("region")["y"].mean()
+    pers = M137.Persistence().fit(hist)
+    out = new[["k"]].copy()
+    out["NAT"] = float(hist["q"].mean())
+    prev = new["k"].map(latest["y"])
+    prev_se = new["k"].map(latest["se_y"])
+    out["PERS"] = pers.predict_proba(pd.DataFrame({"prev_y": prev, "prev_se_y": prev_se}))
+    rp = new["k"].map(latest["region"]).map(reg_mean)
+    out["REGPREV"] = norm.cdf(rp / np.sqrt(M137.tau2(hist)))
+    return out
+
+
+def _metrics(m: pd.DataFrame, col: str) -> dict:
+    d = m.dropna(subset=[col, "q"])
+    r = {"n": int(len(d)), "expected_brier": float(np.mean((d[col] - d["q"]) ** 2 + d["q"] * (1 - d["q"])))}
+    dec = d[d["status"].isin(["ELEVATED", "LOWER"])]
+    r["n_decisive"] = int(len(dec))
+    if dec["status"].nunique() == 2:
+        yt = (dec["status"] == "ELEVATED").astype(int)
+        yh = (dec[col] >= 0.5).astype(int)
+        r.update({"auc": float(roc_auc_score(yt, dec[col])), "accuracy": float((yh == yt).mean()),
+                  "recall_elevated": float(((yh == 1) & (yt == 1)).sum() / max(1, yt.sum())),
+                  "confusion": {"tp": int(((yh == 1) & (yt == 1)).sum()), "fp": int(((yh == 1) & (yt == 0)).sum()),
+                                "tn": int(((yh == 0) & (yt == 0)).sum()), "fn": int(((yh == 0) & (yt == 1)).sum())}})
+    return r
+
+
 def score(round_csv: str, path: Path = REGISTER) -> dict:
     if not verify(path):
         raise RuntimeError("register hash chain broken")
-    new = outcome_rows(pd.read_csv(round_csv))
-    res = {"round": round_csv, "scored_utc": datetime.now(timezone.utc).isoformat(), "models": {}}
-    for rec in read(path):
-        body = (BACKEND_DIR / rec["seal_path"]).read_text()
-        if hashlib.sha256(body.encode()).hexdigest() != rec["seal_sha256"]:
-            res["models"][rec["model_id"]] = {"error": "seal file changed after registration; not scored"}
-            continue
-        pr = pd.DataFrame(json.loads(body)["predictions"]).rename(columns={"p_elevated": "p"})
-        m = new.merge(pr[["k", "p"]], on="k", suffixes=("_obs", ""))
-        eb = float(np.mean((m["p"] - m["q"]) ** 2 + m["q"] * (1 - m["q"])))
-        dec = m[m["status"].isin(["ELEVATED", "LOWER"])]
-        r = {"n": int(len(m)), "n_decisive": int(len(dec)), "expected_brier": eb}
-        if dec["status"].nunique() == 2:
-            yt = (dec["status"] == "ELEVATED").astype(int)
-            r["auc"] = float(roc_auc_score(yt, dec["p"]))
-            r["accuracy"] = float(((dec["p"] >= 0.5).astype(int) == yt).mean())
-        res["models"][rec["model_id"]] = r
+    raw = pd.read_csv(round_csv)
+    missing = {"province", "p", "se_p", "ref", "instrument"} - set(raw.columns)
+    if missing:
+        raise ValueError(f"round file lacks columns {sorted(missing)}")
+    res = {"round": str(round_csv), "scored_utc": datetime.now(timezone.utc).isoformat(), "by_instrument": {}}
+    for inst, rows in raw.groupby(raw["instrument"].str.upper()):
+        new = outcome_rows(rows)
+        new = new.merge(baselines(new), on="k")
+        role = "confirmation (same instrument as training)" if inst == "HFIAS" else "agreement only (different instrument)"
+        block = {"role": role, "models": {b: _metrics(new, b) for b in ("NAT", "PERS", "REGPREV")}}
+        for rec in read(path):
+            body = (BACKEND_DIR / rec["seal_path"]).read_text()
+            if hashlib.sha256(body.encode()).hexdigest() != rec["seal_sha256"]:
+                block["models"][rec["model_id"]] = {"error": "seal file changed after registration; not scored"}
+                continue
+            pr = pd.DataFrame(json.loads(body)["predictions"]).rename(columns={"p_elevated": rec["model_id"]})
+            m = new.merge(pr[["k", rec["model_id"]]], on="k", how="left")
+            r = _metrics(m, rec["model_id"])
+            r["minus_baseline_expected_brier"] = {b: r["expected_brier"] - _metrics(m.dropna(subset=[rec["model_id"]]), b)["expected_brier"]
+                                                  for b in ("NAT", "PERS", "REGPREV")}
+            r["unmatched_provinces"] = sorted(m.loc[m[rec["model_id"]].isna(), "k"])
+            block["models"][rec["model_id"]] = r
+        res["by_instrument"][inst] = block
     return res
 
 

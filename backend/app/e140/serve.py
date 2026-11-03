@@ -19,7 +19,13 @@ def _j(name):
 
 
 def outlook() -> dict:
-    return _j("forecast_next_quarter.json")
+    """The stored candidate issue. `current` is False once the viewing quarter has moved past the issue quarter, so a
+    past issue is never shown as the forecast for the new next quarter (re-run app.e140.issue each quarter)."""
+    from app.quarterly.target import forecast_target
+    f = _j("forecast_next_quarter.json")
+    ft = forecast_target()
+    return {**f, "current": f["issue_quarter"] == ft["calendar_quarter"], "viewing_quarter": ft["calendar_quarter"],
+            "expected_target_quarter": ft["target_quarter"]}
 
 
 def evaluation() -> dict:
