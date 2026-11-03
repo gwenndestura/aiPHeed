@@ -68,6 +68,15 @@ def collect(ledger: Path, include_option1: bool, d, lab) -> tuple[pd.DataFrame, 
         rows.append({"model": s["arm"], "lead": int(s["lead"]), "q": H.qi(s["target_quarter"]), "p": float(s["p_high"]),
                      "persist": float(s["persist_p"]), "clim": b["clim"], "issue": s["issue_date"],
                      "file": "OPTION_1/sealed_prospective_REFNEWS.csv"})
+        # Addendum CB: C-b's forecasts issued 2026-10-01, sealed in NEWS_V2 (only targets from 2027-Q1 are scored)
+        ok = P.sha(P.CB_SEAL) == P.CB_SEAL_SHA
+        files.append({"file": "NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv", "sha256": P.CB_SEAL_SHA, "hash_ok": ok,
+                      "issue": "2026-10-01"})
+        assert ok, "the NEWS_V2 C-b seal does not match 67baec66...: nothing is scored"
+        for s in pd.read_csv(P.CB_SEAL).itertuples():
+            rows.append({"model": "C-b", "lead": int(s.lead), "q": H.qi(s.target_quarter), "p": float(s.p_high),
+                         "persist": float(s.persist_si), "clim": float(s.clim), "issue": s.issue_date,
+                         "file": "NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv"})
     R = pd.DataFrame(rows)
     if len(R):
         dup = R.duplicated(["model", "lead", "q"], keep=False)

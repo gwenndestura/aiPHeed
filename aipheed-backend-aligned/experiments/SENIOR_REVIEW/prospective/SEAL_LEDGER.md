@@ -17,3 +17,19 @@ Protocol: `PROSPECTIVE_PLAN.md`, SHA-256 `194ecb725113908eb58b26d5e37c7f96d9bd52
 
 | File | SHA-256 | Issue date | Targets | Sealed at | Code commit |
 |---|---|---|---|---|---|
+
+## Scripts revision 2 (2026-11-03): C-b as the main model (Addendum CB)
+
+Addendum CB: `NEW_MODEL/NEWS_V2/PROSPECTIVE_ADDENDUM_CB.md`, SHA-256 `fc110575d4c76224b350fbc85076399e76f1970dd0c23a43a1bffd2d3c60966c`. Revision-1 hashes above are superseded; no seal was made with them.
+
+| Script | SHA-256 |
+|---|---|
+| prospective_lib.py | c6d705b5612412a64b7cf9f1d1485cc6dfd85c92de529a22021014a831149d97 |
+| seal_next.py | 92c9f9474b6b4a4ce1eed085bdd648ebf7fc6c631545823f0a1de3503e92bdbe |
+| score_prospective.py | fae6dfc8d95e4206d2952e006dd5a87430cce6d87ddf4fb822c6840073d6c97d |
+| dryrun_test.py | 5794a5bf7d1b2c7dcf2d1f87b9fbd35b8597759eb618edb154669f551bade4f8 |
+
+## Sealed files (from 2027-01-01)
+
+| File | SHA-256 | Issue date | Targets | Sealed at | Code commit |
+|---|---|---|---|---|---|

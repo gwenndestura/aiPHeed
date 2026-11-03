@@ -36,10 +36,11 @@ def run(args: list[str]) -> subprocess.CompletedProcess:
 def build_replay(dirp: Path):
     opt = pd.read_csv(P.EXP / "OPTION_1" / "out" / "forecasts_refnews.csv")
     lds = pd.read_csv(P.EXP / "IMPROVE_V2_LEADS" / "out" / "forecasts_leads.csv")
+    cbf = pd.read_csv(P.CB_DIR / "out" / "forecasts.csv")
     dirp.mkdir(parents=True)
     for t in range(H.qi("2009-Q3"), H.qi("2026-Q3") + 1):
         rows = []
-        for m, src in (("REF+news", opt), ("REF", lds)):
+        for m, src in (("C-b", cbf), ("REF+news", opt), ("REF", lds)):
             for k in P.LEADS:
                 p = float(src[(src["name"] == m) & (src["t"] == t) & (src["lead"] == k)]["p"].iloc[0])
                 ps = float(lds[(lds["name"] == "PERSIST") & (lds["t"] == t) & (lds["lead"] == k)]["p"].iloc[0])
@@ -68,8 +69,15 @@ def main():
     rep = json.loads((S / "score_a" / "score_2027-03-01.json").read_text(encoding="utf-8")) if r.returncode == 0 else {}
     opt = json.loads((P.EXP / "OPTION_1" / "out" / "results.json").read_text(encoding="utf-8"))
     l12 = json.loads((P.EXP / "RELIABLE_L12" / "out" / "results.json").read_text(encoding="utf-8"))
+    cbr = json.loads((P.CB_DIR / "out" / "results_cb.json").read_text(encoding="utf-8"))
     chk = {}
     for k in ("1", "2"):
+        a = rep["models"]["C-b"][k]
+        b = cbr["leads"][f"L{k}"]
+        chk[f"C-b L{k}"] = (a["labelled_quarters"] == b["n_quarters"]
+                            and {x: v["pass"] for x, v in a["rules"].items()} == {x: v["pass"] for x, v in b["rules"].items()}
+                            and all(abs(a["metrics"][x] - b["metrics"][x]) < 1e-12 for x in ("accuracy", "balanced", "auc", "brier"))
+                            and a["independent_check"] == "agrees")
         a = rep["models"]["REF+news"][k]
         b = opt["leads"][f"L{k}"]
         chk[f"REF+news L{k}"] = (a["labelled_quarters"] == b["n_quarters"]
@@ -80,7 +88,7 @@ def main():
         e = l12["candidates"]["C1"]["leads"][k]["at_050"]
         chk[f"REF L{k}"] = ([x for x, v in c["rules"].items() if not v["pass"]] == e["failed"]
                             and all(abs(c["metrics"][x] - e["metrics"][x]) < 1e-12 for x in ("accuracy", "balanced", "auc", "brier")))
-    res["1 replay reproduces OPTION_1 (REF+news) and RELIABLE_L12 0.50 (REF)"] = {
+    res["1 replay reproduces NEWS_V2 (C-b, main), OPTION_1 (REF+news) and RELIABLE_L12 0.50 (REF)"] = {
         "ok": r.returncode == 0 and all(chk.values()), "by_lead": chk,
         "verdict": rep.get("verdict"), "missed_seals": rep.get("missed_seals")}
     res["2 single look: verdict taken at the first 1 March with >= 40 quarters"] = {
@@ -150,9 +158,13 @@ def main():
     # 6. the real configuration: the empty real ledger + the OPTION_1 2027-Q1 seal by reference
     r7 = run(["--date", "2027-03-01", "--dry-run", "--out", str(S / "score_real")])
     rep7 = json.loads((S / "score_real" / "score_2027-03-01.json").read_text(encoding="utf-8")) if r7.returncode == 0 else {}
-    res["8 real setup: OPTION_1 seal verified and included (Lead 2, 2027-Q1, unlabelled); 2027-01-01 counted missed"] = {
+    res["8 real setup: OPTION_1 and C-b seals verified and included (Lead 2, 2027-Q1, unlabelled); C-b is the main model; "
+        "2027-01-01 counted missed"] = {
         "ok": r7.returncode == 0 and any(f.get("sha256") == P.OPT_SEAL_SHA and f["hash_ok"] for f in rep7["sealed_files"])
-        and rep7["models"]["REF+news"]["2"]["sealed_rows"] == 1 and rep7["missed_seals"] == ["2027-01-01"],
+        and any(f.get("sha256") == P.CB_SEAL_SHA and f["hash_ok"] for f in rep7["sealed_files"])
+        and rep7["models"]["REF+news"]["2"]["sealed_rows"] == 1 and rep7["models"]["C-b"]["2"]["sealed_rows"] == 1
+        and rep7["models"]["C-b"]["1"].get("sealed_rows", 0) == 0 and rep7["main_model"] == "C-b"
+        and rep7["missed_seals"] == ["2027-01-01"],
         "sealed_files": rep7.get("sealed_files"), "missed": rep7.get("missed_seals")}
 
     # 7. real-mode refusals

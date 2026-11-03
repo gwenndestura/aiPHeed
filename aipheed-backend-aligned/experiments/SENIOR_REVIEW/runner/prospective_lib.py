@@ -39,8 +39,14 @@ E112_FILE = EXP / "E112_Food_Insecurity_Forecasting" / "out" / "news_quarterly_c
 FIRST_ISSUE = "2027-01-01"
 FIRST_TARGET = H.qi("2027-Q1")
 LEADS = (1, 2)
-MODELS = {"REF+news": V.cols(False, True), "REF": V.cols(False, False)}
-MAIN = "REF+news"
+CB_DIR = EXP / "NEW_MODEL" / "NEWS_V2"
+ADDENDUM_CB = CB_DIR / "PROSPECTIVE_ADDENDUM_CB.md"              # in force: C-b adopted by the team, 2026-11-03
+CB_SEAL = CB_DIR / "sealed_prospective_CB.csv"
+CB_SEAL_SHA = "67baec6689cbbafc248caac722cc4daa28196c1958ab55ac1100983dd8691015"
+_REF = V.cols(False, False)
+MODELS = {"C-b": _REF[:-1] + ["z_N1R"] + _REF[-1:], "REF+news": V.cols(False, True), "REF": _REF}
+MAIN = "C-b"
+NEWS_WIN, NEWS_MINP = 8, 4                                       # NEWS_V2 PLAN section 1: z over t-8..t-1, >= 4 values
 SEAL_WINDOW_DAYS = 14
 MIN_QUARTERS, REVIEW_MIN, REVIEW_P = 40, 20, 0.05
 SEED, B = 2036, 5000
@@ -57,7 +63,23 @@ def check_plan() -> str:
     assert last.startswith(b"PLAN-SHA256: "), "PROSPECTIVE_PLAN.md has no hash line"
     h = hashlib.sha256(body + b"\n").hexdigest()
     assert last.split()[1].decode() == h, "PROSPECTIVE_PLAN.md changed after it was hashed"
+    b = ADDENDUM_CB.read_bytes()
+    body, last = b.rstrip(b"\n").rsplit(b"\n", 1)
+    assert last.startswith(b"ADDENDUM-SHA256: ") and \
+        last.split()[1].decode() == hashlib.sha256(body + b"\n").hexdigest(), "Addendum CB changed after it was hashed"
     return h
+
+
+def add_news_anomaly(T: pd.DataFrame) -> pd.DataFrame:
+    """C-b's z_N1R (NEWS_V2 PLAN section 1): (N1R(t) - mean(N1R over origins t-8..t-1)) / sd (ddof 1), NaN if fewer than
+    4 past values or sd = 0. One value per origin, from the BL rows of the rebuilt table; past origins only."""
+    s = T[T["area"] == "BL"].drop_duplicates("t").set_index("t").sort_index()["N1R"]
+    z = {}
+    for t in s.index:
+        past = s.loc[[x for x in range(t - NEWS_WIN, t) if x in s.index]].dropna()
+        sd = float(past.std(ddof=1)) if len(past) >= 2 else float("nan")
+        z[t] = float((s[t] - past.mean()) / sd) if pd.notna(s[t]) and len(past) >= NEWS_MINP and sd > 0 else np.nan
+    return T.assign(z_N1R=T["t"].map(z))
 
 
 def origin_of_issue(issue: str) -> int:

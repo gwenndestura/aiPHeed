@@ -49,16 +49,22 @@ def replay_check(t: int, T: pd.DataFrame, out: pd.DataFrame) -> dict:
            "nan_pattern_equal": bool((r[num].isna().to_numpy() == s[num].isna().to_numpy()).all())}
     opt = pd.read_csv(P.EXP / "OPTION_1" / "out" / "forecasts_refnews.csv")
     lds = pd.read_csv(P.EXP / "IMPROVE_V2_LEADS" / "out" / "forecasts_leads.csv")
+    cbf = pd.read_csv(P.CB_DIR / "out" / "forecasts.csv")
+    cbz = pd.read_csv(P.CB_DIR / "out" / "news_anomalies.csv").set_index("t")["z_N1R"]
+    zt = T[T["t"] == t]["z_N1R"].iloc[0]
+    tab["z_N1R_equal"] = bool((np.isnan(zt) and np.isnan(cbz.get(t, np.nan))) or abs(zt - cbz.get(t, np.nan)) <= 1e-12)
     ref = {("REF+news", k): float(opt[(opt["name"] == "REF+news") & (opt["t"] == t) & (opt["lead"] == k)]["p"].iloc[0])
            for k in P.LEADS}
     ref.update({("REF", k): float(lds[(lds["name"] == "REF") & (lds["t"] == t) & (lds["lead"] == k)]["p"].iloc[0])
+                for k in P.LEADS})
+    ref.update({("C-b", k): float(cbf[(cbf["name"] == "C-b") & (cbf["t"] == t) & (cbf["lead"] == k)]["p"].iloc[0])
                 for k in P.LEADS})
     ps = float(lds[(lds["name"] == "PERSIST") & (lds["t"] == t) & (lds["lead"] == 1)]["p"].iloc[0])
     cl = float(lds[(lds["name"] == "CLIM") & (lds["t"] == t) & (lds["lead"] == 1)]["p"].iloc[0])
     fc = {f"{m} L{k}": abs(float(out[(out["model"] == m) & (out["lead"] == k)]["p_high"].iloc[0]) - v)
           for (m, k), v in ref.items()}
     base = {"persist_si": abs(float(out["persist_si"].iloc[0]) - ps), "clim": abs(float(out["clim"].iloc[0]) - cl)}
-    ok = tab["max_abs_diff"] <= 1e-9 and tab["nan_pattern_equal"] and max(fc.values()) <= 1e-12 \
+    ok = tab["max_abs_diff"] <= 1e-9 and tab["nan_pattern_equal"] and tab["z_N1R_equal"] and max(fc.values()) <= 1e-12 \
         and max(base.values()) <= 1e-12
     return {"table_rows": tab, "forecast_abs_diff": fc, "baseline_abs_diff": base, "replay_matches": bool(ok)}
 
@@ -103,7 +109,7 @@ def main():
         assert set(stale) <= allowed, f"inputs not refreshed for this issue date: {sorted(set(stale) - allowed)}"
 
     lab = V.area_labels(d)
-    T = P.build_table(list(range(H.FIRST_ORIGIN, t + 1)), a.workers)
+    T = P.add_news_anomaly(P.build_table(list(range(H.FIRST_ORIGIN, t + 1)), a.workers))   # C-b's z_N1R (Addendum CB)
     base = P.baselines(d, lab, t)
     kn = H.known(d, t, "BL")
     commit = P.code_commit()

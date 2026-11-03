@@ -5,7 +5,55 @@ otherwise. Sources: `E99_REPRODUCTION.md`, `../IMPROVE_V2/RESULTS.md`, `../OBJEC
 `DECISIONS.md`, `../P0H4_LEAD12_REVIEW/out/price_warning.json` (province food-price pressure),
 `../IMPROVE_V2/out/lgu_rankings.csv` (vulnerability inputs).
 
-## Team decision: food-insecurity model with news (REF+news) as the main model; P0H4 kept as the documented alternative
+## Team decision (latest): C-b as the main model; REF+news and REF reported beside it
+
+**Decision (2026-11-03, later than the REF+news decision below; it supersedes it), made by the team and pending adviser
+confirmation.**
+
+**The model.** C-b is the REF+news LightGBM with its 8 raw news columns replaced by **one NLP input, the bias-corrected
+FSSI-v3 as an anomaly against its own past 8 quarters** (`../NEW_MODEL/NEWS_V2/`). The target, inputs, settings, grid,
+seed, leads and window are otherwise IMPROVE_V2's.
+
+**This is a recorded decision, not a test result.** C-b did not pass its own fixed improvement rule over REF+news: the
+Lead-1 Brier gain is not significant (Holm p 0.348; Lead 2 p 0.060).
+
+**Evidence** (62 quarters 2010–2026; development evidence):
+
+| | Lead 1 | Lead 2 |
+|---|---|---|
+| Accuracy | 0.790 | 0.790 |
+| Balanced accuracy | 0.717 | 0.717 |
+| Precision / recall | 0.812 / 0.907 | 0.812 / 0.907 |
+| F1 | 0.857 | 0.857 |
+| AUC | 0.702 | 0.704 |
+| Brier | 0.187 | 0.184 |
+| R1–R7 | fails R7 only (2015–2020 third 12/21) | fails R7 only |
+
+- **Algorithm 3:** Maximum Reliable Lead Time **2** (Lead 3 0.726). **R1–R7:** 0.
+- **Objective 4 / H3** (Holm):
+  - better than persistence, NLP-only, always-HIGH and the government-only LightGBM at both leads, and the NLP-only
+    LightGBM at Lead 1;
+  - **not** better than the PSA-only or combined logistic regressions;
+  - so **H3 is not rejected**.
+- **NLP, stated plainly.** The FSSI input is included and **changes no classification**. C-b equals the same model
+  without news in 66 of 67 quarters, and its SHAP share is 0.0–0.1%. Objective 1's pipeline is built and evaluated;
+  its forecast value is nil with news available only from 2021.
+- **Seal and protocol.**
+  - C-b's forecasts issued 2026-10-01 are sealed in `../NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv` (SHA-256
+    `67baec66…`, P 0.8595, HIGH), after the results were known.
+  - The prospective protocol applies to C-b through `PROSPECTIVE_ADDENDUM_CB.md` (SHA-256 `fc110575…`). Its first
+    four 2027 quarters are the Algorithm 4 blind holdout.
+
+**Proposed thesis sentences (for the adviser):**
+- Ch. I §1.5.2 / Ch. III §3.4: "The proposed model is a LightGBM forecasting regional (Balance Luzon) SWS hunger above
+  11.3% from hunger history, food prices, world prices, climate, agricultural supply and an NLP-derived Food Stress
+  Sentiment Index."
+- Results, NLP: "The FSSI was integrated as a model input and evaluated by ablation; with news available only from
+  2021, it did not change any classification. NLP signals are additionally used for explanations and staged early
+  warnings."
+- Province and LGU wording: Option C (§2.1, §9.1), unchanged.
+
+## Earlier team decision (superseded 2026-11-03 by C-b): REF+news as the main model; P0H4 kept as the documented alternative
 
 **Decision (2026-11-03, later than the P0H4 decision below; it supersedes it), made by the team and pending adviser
 confirmation.**
