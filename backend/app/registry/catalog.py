@@ -50,6 +50,11 @@ CATALOG = [
      "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); LightGBM trees without a "
                "linear prior (linear-tree or constant-leaf, nested choice)",
      "note": "Zero-tree resolution attempt; evaluated by its pre-registered gate (app.e140.gate)."},
+    {"model_id": "e141-lgbm-3round-1.0", "status": "candidate", "version": "e141 LightGBM on three HFIAS rounds (protocol E141-P1)",
+     "artifact_path": "data/e141/out/results.json",
+     "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); trained on FNRI 2013, 2015 and "
+               "ENNS 2018/2019; untouched-round and rolling survey-round validation",
+     "note": "Evaluated by its pre-registered gate (app.e141.gate). Candidate outputs on admin routes only."},
 ]
 
 

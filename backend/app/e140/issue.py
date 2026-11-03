@@ -77,10 +77,15 @@ def contributions(final, Z: pd.DataFrame) -> tuple[pd.DataFrame, str]:
     return g, "exact TreeSHAP (sums with the base value to the predicted relative logit)"
 
 
-def run(issue: pd.Timestamp | None = None) -> dict:
+STATUS = "CANDIDATE - rejected by its gate (E140 decision C); validation pending; not a released forecast"
+
+
+def issue_candidate(X: pd.DataFrame, model_id: str, out_dir, claim: str, status: str,
+                    issue: pd.Timestamp | None = None) -> dict:
+    """Fit LGBM-AUTO on the measured rows X, issue the display-quarter estimate for every province, the 142 LGU
+    priority ranking, a write-once seal and its prospective-register record. Shared by E140 and E141."""
     if issue is None:                                        # dashboard rule: issue at the start of the viewing quarter
         issue = pd.Timestamp(forecast_target()["origin"])
-    X = M.data(lead=1)
     final = M.make("LGBM-AUTO").fit(X)
     Z = LV.build(issue, write=False)
     isl = O.load().assign(k=lambda d: d["key"].str.replace(" ", "")).drop_duplicates("k").set_index("k")["island"]
@@ -113,9 +118,9 @@ def run(issue: pd.Timestamp | None = None) -> dict:
                                  "news_nlp": "CALABARZON-only archive; regional context",
                                  "utilization": "no nutrition, water or sanitation data held"}})
     rank_first = pd.Series([CAL[cal["k"][j]] for j in B.argmax(axis=1)]).value_counts(normalize=True).round(3).to_dict()
-    out = {"model": "e140-lgbm-native-1.0 (LGBM-AUTO)",
-           "validation_status": "CANDIDATE - rejected by its gate (E140 decision C); validation pending; not a released forecast",
-           "claim": CLAIM, "issue_date": issue.date().isoformat(), "issue_quarter": _q(issue),
+    out = {"model": f"{model_id} (LGBM-AUTO, trained on {len(X)} measured HFIAS rows)",
+           "validation_status": status,
+           "claim": claim, "issue_date": issue.date().isoformat(), "issue_quarter": _q(issue),
            "information_cutoff": f"{issue.date().isoformat()} (exclusive)", "target_quarter": _q(target), "display_lead": 1,
            "final_model": {"kind": final.kind_, "n_trees": int(final.n_trees_), "sigma": float(final.chosen_.sigma_)},
            "explanation_method": method,
@@ -139,17 +144,21 @@ def run(issue: pd.Timestamp | None = None) -> dict:
     lg["status"] = "candidate ranking pending provincial forecast validation"
     lg["label"] = ("LGU vulnerability-weighted priority ranking derived from the provincial candidate estimate; not a municipal "
                    "food-insecurity measurement or classification")
-    lg.sort_values("priority_rank_in_region").to_csv(OUT / "lgus_next_quarter.csv", index=False)
+    lg.sort_values("priority_rank_in_region").to_csv(out_dir / "lgus_next_quarter.csv", index=False)
     seal = {"model": out["model"], "issue_date": out["issue_date"], "target": "HFIAS/FIES moderate-or-severe above national, next provincial round",
             "predictions": Z[["k", "p_elevated"]].round(5).to_dict(orient="records"), "sealed_utc": datetime.now(timezone.utc).isoformat()}
-    sp = OUT / f"sealed_prediction_{out['issue_date']}.json"
+    sp = out_dir / f"sealed_prediction_{out['issue_date']}.json"
     if not sp.exists():                       # one seal per issue date: the first issue is the prospective record
         sp.write_text(json.dumps(seal, indent=1, sort_keys=True))
     sha = hashlib.sha256(sp.read_text().encode()).hexdigest()      # LF-normalised text, as for the E138/E139 seals
-    PP.register("e140-lgbm-native-1.0", sp, sha, out["issue_date"])
+    PP.register(model_id, sp, sha, out["issue_date"])
     out["sealed_prediction_sha256"] = sha
-    (OUT / "forecast_next_quarter.json").write_text(json.dumps(out, indent=2))
+    (out_dir / "forecast_next_quarter.json").write_text(json.dumps(out, indent=2))
     return out
+
+
+def run(issue: pd.Timestamp | None = None) -> dict:
+    return issue_candidate(M.data(lead=1), "e140-lgbm-native-1.0", OUT, CLAIM, STATUS, issue)
 
 
 if __name__ == "__main__":
