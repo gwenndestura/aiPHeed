@@ -387,6 +387,12 @@ def test_factor_cards_follow_the_served_index(thesis):
         for t in ex["triggers"]:
             if t["pct"] > 0:
                 assert t["status"] == "contributes", (i, q, t)
+            elif t["status"] == "data_not_in_model":
+                # all-missing in FIRI, but the audited series published a value before the issue date (not "no data")
+                from app.services import dashboard as D
+                codes = [c for c, s in SLUG.items() if s == i] if sc == "province" else list(SLUG)
+                issue = T.firi_for(LEAD2.record(), q, codes[0])["issueDate"]
+                assert all(t["key"] in D.audited_published(c, issue) for c in codes), (i, q, t)
             else:
                 assert t["status"] in ("no_effect", "insufficient_data"), (i, q, t)
             assert t["evidenceNote"].startswith("In the risk index (FIRI v2"), (i, q, t)

@@ -34,6 +34,7 @@ SEAL = (Path(__file__).resolve().parents[3] / "aipheed-backend-aligned" / "exper
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")           # these tests cover the Chapter I map mode (opt-in)
     return monkeypatch
 
 
@@ -154,18 +155,18 @@ def test_verification_date_is_the_issue_date(thesis, quarter):
 
 
 # ---------------------------------------------------------------------------------------------- item 5: bar notes
-def test_employment_and_news_bars_state_what_they_are(thesis):
+def test_employment_bar_states_what_it_is(thesis):
+    # news is a model input, not one of the five driver bars; its share is in otherPct
     r = CH1.row("PH040300000", "2026-Q4")
     e = {t["key"]: t for t in _get("/api/v1/explainability", scope="province", id="quezon", quarter="2026-Q4")["triggers"]}
     emp = e["employment"]["plainEvidence"]
     assert "calendar trend" in emp and "Apr-Jun 2026" in emp and f"{abs(float(r['val_E1'])):.1f} points" in emp
     assert "Jan-Mar 2026" not in emp                         # FIRI's 2026-07-01 data window, not this forecast's
-    assert "GDELT" in e["news"]["plainEvidence"] and "does not change the forecast" in e["news"]["plainEvidence"]
+    assert "news" not in e
     assert e["market"]["plainEvidence"] == CH1.market_evidence("PH040300000", "2026-Q4")
     region = {t["key"]: t for t in _get("/api/v1/explainability", scope="region", id="calabarzon",
                                          quarter="2026-Q4")["triggers"]}
     assert region["employment"]["plainEvidence"] == CH1.EMPLOYMENT_CAUTION
-    assert region["news"]["plainEvidence"] == CH1.NEWS_BASIS
 
 
 def test_bar_periods_follow_the_issue_date():

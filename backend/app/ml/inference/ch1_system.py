@@ -14,8 +14,8 @@ areas.
 
 Evaluated walk-forward (LEAD2_OPTIMIZATION, protocol 88ee80bc + Addenda 1-4): Lead 1 passed every frozen reliability
 criterion (accuracy 0.843 on 70 province-quarters); Leads 2-15 did not. This module serves the exported rows
-(backend/data/ch1_engine/, written by LEAD2_OPTIMIZATION/runner/export_l2.py) and is active in thesis mode unless
-AIPHEED_MAP_MODEL=firi.
+(backend/data/ch1_engine/, written by LEAD2_OPTIMIZATION/runner/export_l2.py). It serves the map only with
+AIPHEED_MAP_MODEL=ch1; by default thesis mode serves the FIRI v2 index, as origin/main does.
 """
 from __future__ import annotations
 
@@ -28,11 +28,12 @@ from pathlib import Path
 DATA = Path(__file__).resolve().parents[3] / "data" / "ch1_engine"
 FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fish_kill": ("C4",),
                "employment": ("E1",), "ofw_remittance": ("E2",)}
-# FINAL_ARCHITECTURE section 4: the families that used to sit in an undisplayed "other" share are shown as their own rows
-# from the same SHAP measure, so nothing the price model uses is hidden.
-SHOWN_GROUPS = {**FIVE_GROUPS, "poverty": ("V1",), "news": ("N1",), "hunger_indicator": ("H1",)}
-OTHER = ()
-GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fisheries production",
+# The dashboard shows the five risk drivers. Poverty, news and the regional hunger indicator stay model inputs; their
+# share of the same SHAP measure is reported as otherPct (not reassigned to a driver), so the bars plus "other" are 100%.
+SHOWN_GROUPS = FIVE_GROUPS
+OTHER = ("V1", "N1", "H1")
+OTHER_LABEL = "poverty and vulnerability, news signals and the regional hunger indicator"
+GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty & vulnerability",
                 "news": "News signals", "hunger_indicator": "Regional hunger (indicator)"}
 INDICATOR = {
@@ -68,7 +69,14 @@ LGU_LEVEL_BASIS = ("Colour = the province's Chapter I risk class (HIGH when the 
 
 
 def active() -> bool:
-    return os.getenv("AIPHEED_MAP_MODEL", "ch1").lower() == "ch1" and (DATA / "rows.csv").exists()
+    """The Chapter I probability replaces the FIRI v2 index on the map only when asked for (AIPHEED_MAP_MODEL=ch1).
+    Default: the FIRI v2 index, the served score of origin/main (the rows and the seal stay as they are)."""
+    return os.getenv("AIPHEED_MAP_MODEL", "firi").lower() == "ch1" and exported()
+
+
+def exported() -> bool:
+    """The Chapter I export is on disk (its evaluation and rows can be read whatever the map serves)."""
+    return (DATA / "rows.csv").exists()
 
 
 @functools.lru_cache(maxsize=2)
@@ -77,9 +85,52 @@ def _rows(path: str, mtime: int) -> dict[tuple[str, str], dict]:
         return {(r["province_code"], r["quarter"]): r for r in csv.DictReader(f)}
 
 
+# The Lead-2 mid-quarter update (M3, PREREG_LEAD2 addendum 2): the same P0H4 issued on the first day of the second month
+# of the quarter, with the newest SWS reading and CPI (LEAD2_MIDQUARTER_UPDATE/runner/export_m3.py, which reproduces the
+# sealed backend/seals/2026-11-01_2027-Q1_M3.json). Its rows replace the official Lead-2 rows of the same quarter from
+# their issue date on; rows.csv, evaluation.json and the seals are not changed. AIPHEED_LEAD2_UPDATE=official turns it off.
+M3_DIR = DATA.parents[1] / "m3_update"
+
+
+def m3_enabled() -> bool:
+    return os.getenv("AIPHEED_LEAD2_UPDATE", "m3").lower() != "official" and (M3_DIR / "rows_m3.csv").exists()
+
+
+@functools.lru_cache(maxsize=4)
+def _with_m3(path: str, mtime: int, m3_path: str, m3_mtime: int, today: str) -> dict[tuple[str, str], dict]:
+    out = dict(_rows(path, mtime))
+    with open(m3_path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            key = (r["province_code"], r["quarter"])
+            if r["issue_date"] <= today and key in out and int(out[key]["lead"]) == int(r["lead"]):
+                out[key] = r
+    return out
+
+
 def rows() -> dict[tuple[str, str], dict]:
     p = DATA / "rows.csv"
-    return _rows(str(p), p.stat().st_mtime_ns)
+    if not m3_enabled():
+        return _rows(str(p), p.stat().st_mtime_ns)
+    from app.quarterly.target import now_ph
+    m = M3_DIR / "rows_m3.csv"
+    return _with_m3(str(p), p.stat().st_mtime_ns, str(m), m.stat().st_mtime_ns, now_ph().date().isoformat())
+
+
+RULE_NAMES = {"R1": "enough quarters", "R2": "accuracy", "R3": "balanced accuracy", "R4": "beating the baselines",
+              "R5": "Brier score", "R6": "precision and recall", "R7": "stability"}
+
+
+def is_m3(r: dict) -> bool:
+    return r.get("model") == "P0H4-M3"
+
+
+@functools.lru_cache(maxsize=1)
+def evaluation_m3() -> dict:
+    return json.loads((M3_DIR / "evaluation_m3.json").read_text(encoding="utf-8"))
+
+
+def m3_served() -> bool:
+    return any(is_m3(r) for r in rows().values())
 
 
 @functools.lru_cache(maxsize=1)
@@ -133,6 +184,13 @@ def reliability_text(r: dict) -> str:
     if rl is not None and lead <= rl:
         return (f"Lead-{lead} forecast: this horizon passed the reliability test (accuracy {ev['metrics']['accuracy']:.2f}"
                 f" on {ev['n']} past province-quarters)")
+    if is_m3(r):
+        d = evaluation_m3()["development"]
+        return (f"Lead-2 mid-quarter update (M3), issued {r['issue_date']} with the newest SWS reading and CPI: "
+                f"experimental, a ranking of which provinces to watch (accuracy {d['accuracy']:.2f}, AUC {d['auc']:.2f}, "
+                f"Brier {d['brier']:.3f} on {d['n']} past province-quarters; passes {7 - len(d['failed'])} of the seven "
+                f"reliability rules, not {', '.join(f'{x} ({RULE_NAMES.get(x, x)})' for x in d['failed'])}). It is being "
+                "validated prospectively on forecasts sealed from 2027")
     if lead == 2:
         m2 = evaluation()["leads"]["2"]["metrics"]
         return (f"Lead-2 forecast: experimental, a ranking of which provinces to watch (AUC {m2['auc']:.2f}, Brier "
@@ -212,8 +270,11 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
     h = float(rs[0]["pi_hunger"]) if rs else None
     hunger = f" (here {h:.0%})" if h is not None else ""
-    note = ("The bars show each indicator group's relative push (SHAP, log-odds, rescaled to 100%) on the LightGBM's "
-            "estimate that food prices rise unusually fast; every indicator family the model uses has a row. They are "
+    other = (f"; the model's other inputs ({OTHER_LABEL}) account for the remaining {other_pct:.0f}%"
+             if other_pct is not None else f"; the model's other inputs ({OTHER_LABEL}) account for the rest")
+    note = ("The bars show each risk driver's share of the total push (SHAP, log-odds) on the LightGBM's estimate "
+            f"that food prices rise unusually fast{other}. A 0% bar means the input had a value but did not move this "
+            "forecast. They are "
             f"model influence, not shares of hunger caused by each factor, and they leave out the regional hunger "
             f"condition{hunger}, which multiplies that estimate into the risk probability, and the forecast horizon "
             "itself.")
@@ -285,8 +346,8 @@ def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:
-    """The driver bars from the LightGBM price part's SHAP values (log-odds): the five approved groups plus poverty, news
-    and the regional hunger indicator (FINAL_ARCHITECTURE section 4); otherPct is 0 because nothing is left out."""
+    """The driver bars from the LightGBM price part's SHAP values (log-odds): the five risk drivers. Poverty, news and
+    the regional hunger indicator are summed (absolute, per family) into other_abs, reported as otherPct."""
     r = row(code, quarter)
     if r is None:
         return base
@@ -299,8 +360,9 @@ def drivers(code: str, quarter: str, base: dict) -> dict:
         ds.append({"driver_group": g, "driver_label": GROUP_LABELS[g], "group_shap": round(c, 6),
                    "direction": "increases_risk" if c > 0 else "protective" if c < 0 else "no_effect",
                    "trigger_proportion": news.get(g)})
-    total = sum(abs(v) for v in sh.values()) or 1.0
-    return {**base, "drivers": ds, "other_pct": round(100 * sum(abs(sh[f]) for f in OTHER) / total, 1), "ch1": r}
+    other = sum(abs(sh[f]) for f in OTHER)
+    total = sum(abs(d["group_shap"]) for d in ds) + other or 1.0
+    return {**base, "drivers": ds, "other_abs": other, "other_pct": round(100 * other / total, 1), "ch1": r}
 
 
 def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = None) -> str | None:
@@ -367,7 +429,9 @@ def model_line() -> str:
     return (f"P0H4: P(HIGH) = P(regional hunger above 11.3%, from the latest SWS Balance Luzon reading) x P(food-price "
             f"condition, one LightGBM across forecast horizons on 12 indicator families). Lead {rl or 0} reliable "
             f"(development accuracy {m['accuracy']:.3f}, {m['tp'] + m['tn']}/{m['n']} province-quarters); longer leads "
-            f"experimental (Lead 2: a ranking of which provinces to watch, validated prospectively from 2027).")
+            f"experimental (Lead 2: a ranking of which provinces to watch, validated prospectively from 2027)."
+            + (" Lead 2 is served as the mid-quarter update (M3): the same model issued one month later with the newest "
+               "SWS reading and CPI." if m3_served() else ""))
 
 
 def driver_text(triggers: list[dict], hunger: float | None = None) -> str:
@@ -401,6 +465,16 @@ def reliability_sentences() -> list[str]:
                    f"{m2['recall']:.2f}; AUC {m2['auc']:.2f}, Brier {m2['brier']:.3f}): a Lead-2 value is an experimental "
                    "ranking of which provinces to watch, not a validated HIGH/LOW call; it is being validated "
                    "prospectively on forecasts sealed from 2027.")
+    if m3_served():
+        e3 = evaluation_m3()
+        d = e3["development"]
+        out.append(f"The Lead-2 forecast shown is the mid-quarter update (M3, issued {e3['issue_date']}; PREREG_LEAD2 "
+                   f"addendum 2): the same model with the newest SWS reading and CPI. On the same {d['n']} past "
+                   f"province-quarters it reached accuracy {d['accuracy']:.3f}, AUC {d['auc']:.2f}, Brier "
+                   f"{d['brier']:.3f}, precision {d['precision']:.2f} and recall {d['recall']:.2f}, failing "
+                   f"{', '.join(f'{x} ({RULE_NAMES.get(x, x)})' for x in d['failed'])}. It was found after these "
+                   f"quarters were examined, so it stays experimental; its forecasts are sealed (SHA-256 "
+                   f"{e3['seal_sha256'][:8]}).")
     out.append(f"Development evidence: every scored quarter was examined while the model was built. The forecasts issued "
                f"{ev['seal_issue_date']} are sealed (SHA-256 {ev['seal_sha256'][:8]}) and will be scored when SWS "
                "publishes those quarters.")

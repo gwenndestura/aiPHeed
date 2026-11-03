@@ -26,7 +26,7 @@ LEAD2 = ROOT / "aipheed-backend-aligned" / "experiments" / "LEAD2_OPTIMIZATION" 
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-26T09:00:00")
-    monkeypatch.delenv("AIPHEED_MAP_MODEL", raising=False)
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")           # these tests cover the Chapter I map mode (opt-in)
     return monkeypatch
 
 
@@ -83,7 +83,7 @@ def test_summary_and_driver_bars_explain_the_served_model(thesis):
     assert "passed the reliability test" in d["summary"]["sentence"]
     market = next(t for t in d["triggers"] if t["key"] == "market")
     assert "chance that food prices" in market["plainEvidence"]
-    assert sum(t["pct"] for t in d["triggers"]) == 100
+    assert sum(t["pct"] for t in d["triggers"]) + d["otherPct"] == 100
 
 
 def test_trigger_statuses_follow_the_served_models_own_inputs(thesis):
@@ -107,27 +107,30 @@ def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
         base = by["market"]
         assert "food prices rise unusually fast" in base and "leave out the regional hunger condition" in base
         assert "not shares of hunger" in base and "FIRI" not in base
-        # SYSTEM_FIXES item 5: Employment and News add what those bars really are; the other groups keep the base note
+        # the note names the other inputs' share; Employment adds what that bar really is (news is no longer a bar)
+        assert f"remaining {d['otherPct']:.0f}%" in base and "news signals" in base
         assert all(n.startswith(base) for n in by.values())
-        assert "calendar trend" in by["employment"] and "GDELT" in by["news"]
-        assert {by[k] for k in by if k not in ("employment", "news")} == {base}
+        assert "calendar trend" in by["employment"] and "news" not in by
+        assert {by[k] for k in by if k != "employment"} == {base}
 
 
-def test_every_model_family_has_a_row_and_nothing_is_hidden(thesis):
-    """FINAL_ARCHITECTURE section 4: poverty, news and the regional hunger indicator are shown as their own rows from
-    the same SHAP measure instead of an undisplayed share; C4 is labelled as fisheries production."""
+def test_five_driver_bars_and_the_other_inputs_share(thesis):
+    """The five risk drivers are the bars (C4 titled Fish Kill, as on the reference dashboard). Poverty, news and the
+    regional hunger indicator stay model inputs; their SHAP share is reported as otherPct, not reassigned to a driver,
+    and bars plus other close at 100% at province and region scope."""
     d = _get("/api/v1/explainability", scope="province", id="batangas", quarter="2024-Q2")
-    keys = {t["key"] for t in d["triggers"]}
-    assert keys == {"market", "climate", "fish_kill", "employment", "ofw_remittance", "poverty", "news",
-                    "hunger_indicator"}
-    assert sum(t["pct"] for t in d["triggers"]) == 100
-    from app.services import dashboard as D
-    assert D.explainability("PH040500000", "2024-Q2")["otherPct"] == 0
+    assert {t["key"] for t in d["triggers"]} == {"market", "climate", "fish_kill", "employment", "ofw_remittance"}
+    assert sum(t["pct"] for t in d["triggers"]) + d["otherPct"] == 100
+    reg = _get("/api/v1/explainability", scope="region", id="calabarzon", quarter="2024-Q2")
+    assert len(reg["triggers"]) == 5 and sum(t["pct"] for t in reg["triggers"]) + reg["otherPct"] == 100
     labels = {t["key"]: t["label"] for t in d["triggers"]}
-    assert labels["fish_kill"] == "Fisheries production" and "Fish Kill" not in labels.values()
+    assert labels["fish_kill"] == "Fish Kill"
     r = CH1.row("PH040500000", "2024-Q2")
-    pov = next(t for t in d["triggers"] if t["key"] == "poverty")
-    assert pov["signedContribution"] == pytest.approx(float(r["shap_V1"]), abs=1e-6)
+    other = sum(abs(float(r[f"shap_{f}"])) for f in CH1.OTHER)
+    total = other + sum(abs(t["signedContribution"]) for t in d["triggers"])
+    assert d["otherPct"] == pytest.approx(100 * other / total, abs=1)
+    mk = next(t for t in d["triggers"] if t["key"] == "market")
+    assert mk["signedContribution"] == pytest.approx(sum(float(r[f"shap_{f}"]) for f in ("A1", "A2", "A3")), abs=1e-6)
 
 
 def test_lgus_remain_a_priority_ranking_without_hunger_figures(thesis):

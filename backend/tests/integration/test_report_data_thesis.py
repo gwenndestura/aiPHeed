@@ -31,6 +31,7 @@ FACTOR = {"market": "Food prices", "employment": "Jobs and employment", "climate
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")           # these tests cover the Chapter I map mode (opt-in)
     return monkeypatch
 
 
@@ -94,3 +95,16 @@ def test_legacy_report_data_still_served(monkeypatch):
                    {"type": "shap", "scope": "province", "id": "quezon", "to": "2026-Q4"}):
         pl = _get("/api/v1/report/data", **params)
         assert pl["blocks"] and "None" not in json.dumps(pl)
+
+
+@pytest.mark.parametrize("scope,id_", [("province", "cavite"), ("province", "batangas")])
+def test_firi_report_equals_the_dashboard(thesis, scope, id_):
+    """Default map model (FIRI v2, as origin/main): the report's index, level and driver bars equal the dashboard's."""
+    thesis.delenv("AIPHEED_MAP_MODEL", raising=False)
+    quarter = "2027-Q1"
+    pl = _get("/api/v1/report/data", type="shap", scope=scope, **({"id": id_} if scope == "province" else {}), to=quarter)
+    f = _get("/api/v1/forecast", scope=scope, id=id_, quarter=quarter, horizon="forecast")
+    ex = _get("/api/v1/explainability", scope=scope, id=id_, quarter=quarter)
+    if scope == "province":
+        assert _glance(pl)["rows"][0][1:3] == [T.fmt_index(f["riskScore"]), f["riskLevel"].upper()]
+    assert _bars(pl) == [(FACTOR[t["key"]], t["pct"], t["direction"]) for t in ex["triggers"] if t["pct"] > 0]

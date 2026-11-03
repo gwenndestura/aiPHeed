@@ -445,6 +445,56 @@ class ExplainabilityResponse(BaseModel):
     narrative: str
     note: str
     summary: PlainSummary | None = None
+    # share (%) of the model's push from inputs that are not one of the five risk drivers; None when not reported
+    otherPct: float | None = None
+
+
+class IndexDriver(BaseModel):
+    """One of the five drivers in the FIRI v2 index's composition: `pct` is the sum of its indicators' absolute
+    Shapley values as a share of the five drivers' combined magnitude (the five pct values close at 100; they are
+    not shares of the whole index); `direction` (raises_index | lowers_index | none) is the sign of their net sum,
+    reported apart from the size; `status` keeps missing data (insufficient_data) apart from a measured zero
+    (no_effect), and names published audited data the index does not yet include (not_in_index). `pct`/`share` are
+    null only when the five drivers did not move the index at all (no share is defined)."""
+    key: str
+    label: str
+    pct: int | None = None
+    share: float | None = None
+    signedContribution: float
+    direction: str
+    status: str
+    statusNote: str
+
+
+class IndexProvince(BaseModel):
+    """One province's FIRI v2 value and its level (HIGH at 0.50), the counts behind the index card's counters."""
+    id: str
+    name: str
+    index: float
+    level: str
+
+
+class IndexResponse(BaseModel):
+    """Overall food-insecurity index (FIRI v2): a composite 0-1 index, not a probability. Served beside, never instead
+    of, the Chapter I HIGH-risk probability of /forecast."""
+    scope: str
+    id: str
+    name: str
+    quarter: str
+    index: float
+    level: str
+    threshold: float
+    drivers: list[IndexDriver]
+    # transparency only, not shown on the five-driver panel: share of the whole index's absolute attribution that
+    # falls outside the five drivers (vulnerability, regional hunger, news); not part of the five shares
+    otherPct: int | None = None
+    otherLabel: str
+    provinces: list[IndexProvince] = []
+    provincesIncluded: int
+    issueDate: str | None = None
+    source: str | None = None
+    definition: str
+    validation: str
 
 
 # ---------------------------------------------------------------------------

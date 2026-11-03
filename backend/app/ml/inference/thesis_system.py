@@ -319,6 +319,7 @@ FIVE_GROUPS = {"market": ("A1", "A2", "A3"), "climate": ("C1", "C2", "C3"), "fis
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 OTHER_INDICATORS = ("V1", "H1", "N1")         # in the index but not among the five approved bars
+NET_ZERO = 1e-12                              # |net push| below this is no direction (dashboard.firi_composition)
 
 
 def _norm_weights(res: dict) -> dict[str, float]:
@@ -411,6 +412,7 @@ def firi_drivers(rec: dict, quarter: str, code: str, base: dict) -> dict:
     drivers = []
     for g, ks in FIVE_GROUPS.items():
         c = sum(pu.get(k, 0.0) for k in ks)
+        c = 0.0 if abs(c) < NET_ZERO else c          # floating-point residue of cancelling pushes: no net push (as /index)
         drivers.append({"driver_group": g, "driver_label": GROUP_LABELS[g], "group_shap": round(c, 6),
                         "direction": "increases_risk" if c > 0 else "protective" if c < 0 else "no_effect",
                         "trigger_proportion": news.get(g)})
@@ -441,7 +443,9 @@ _FMT = {"A1": lambda x: f"{x:.0%} chance of food-price pressure", "A2": lambda x
         "C4": lambda x: f"production {-x:+.1f}% year on year", "E1": lambda x: f"unemployment rate {x:+.2f} points year on year",
         "E2": lambda x: f"remittances {-x:+.1f}% year on year (USD)", "N1": lambda x: f"FSSI-v3 {x:.2f}"}
 _WHY = {"incomplete": "quarter still in progress when the data were fetched, not counted",
-        "missing": "no published value at the issue date, not counted (missing is not zero)",
+        # not "no published value": an official figure may exist that the index's inputs never took in (E2 2026,
+        # FIRI_V2_DATA_AUDIT); the note says only what the index had
+        "missing": "no value in the index's input data at the issue date, not counted (missing is not zero)",
         "too_few_articles": "too few articles, not counted", "unavailable_at_issue": "not yet published, not counted",
         "insufficient_history": "fewer than 8 earlier values to compare with, not counted (missing is not zero)"}
 
@@ -470,7 +474,8 @@ def group_evidence(rec: dict, quarter: str, code: str, key: str) -> str | None:
         else:
             parts.append(f"{i['label']}: {_FMT[k](float(i['x']))} ({_score_words(k, float(i['score']))})")
     return ("In the risk index (FIRI v2: each indicator compared with its own earlier values, 0.5 = its historical "
-            "middle): " + "; ".join(parts) + ". The bar is this group's SHAP value (its push on the index).")
+            "middle): " + "; ".join(parts) + ". The bar is this group's share of the five drivers' total absolute "
+            "SHAP (opposite pushes inside the group do not cancel); the direction is the sign of its net push.")
 
 
 def _an(pct: str) -> str:

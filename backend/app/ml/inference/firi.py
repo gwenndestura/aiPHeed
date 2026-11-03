@@ -33,7 +33,7 @@ DOMAINS = {"A": "Affordability", "V": "Household vulnerability", "C": "Climate a
 CONTINUOUS = ("A2", "A3", "C2", "C3", "C4", "E1", "E2", "N1")
 LABELS = {"A1": "Food-price-pressure forecast (LightGBM, Lead-2)", "A2": "Headline inflation above the usual level",
           "A3": "Wholesale rice price change", "V1": "Poverty and population density",
-          "C1": "PAGASA El Nino alert/advisory in force", "C2": "Typhoons within 300 km", "C3": "Palay/corn production drop",
+          "C1": "PAGASA El Nino alert/advisory in force (national)", "C2": "Typhoons within 300 km", "C3": "Palay/corn production drop",
           "C4": "Fisheries production drop", "E1": "Unemployment change (national)", "E2": "Remittance decline (national)",
           "N1": "Food Stress Sentiment Index (FSSI-v3)", "H1": "Regional hunger outlook above 11.3%"}
 DOMAIN_OF = {k: k[0] for k in LABELS}
@@ -151,7 +151,9 @@ def score(raw: dict[str, dict], anc: dict | None = None) -> dict:
 # Expanding-window mid-rank percentile normalization against the indicator's own values at strictly earlier origins
 # (>= 8, else missing: insufficient_history), optional domain weights (redundancy or walk-forward evidence weights).
 V2_MIN_PRIOR = 8
-NATIONAL = ("C1", "C2", "E1", "E2", "H1")       # one value per origin (identical for the five provinces)
+# one value per origin, identical for the five provinces (checked on firi2_history.csv; C2 typhoon counts differ by
+# province in 7 of 20 quarters, so C2 is not one of them)
+NATIONAL = ("C1", "E1", "E2", "H1")
 
 
 def percentile(x: float, prior: list[float]) -> float:
