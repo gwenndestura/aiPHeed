@@ -10,7 +10,8 @@ is trained on a request. A missing file returns 503.
 | `GET /fi9/evaluation?period=full\|development\|test\|full_without_sawtooth` | All Lead-1 metrics per model, the selection and its checks, the sawtooth quarters, the FI7 reproduction check | 422 for an unknown period |
 | `GET /fi9/model` | The served artifact (parameters, formula, training rows and cutoff, sha256) and the locked protocol | |
 | `GET /fi9/audit` | The independent audit (18 checks) | |
-| `GET /fi9/priority?province=&lgu_psgc=&limit=` | The 142-LGU vulnerability-adjusted priority and province summaries (a priority, not measured or forecast hunger) | 404 for an unknown province or LGU code |
+| `GET /fi9/priority?province=&lgu_psgc=&limit=` | The 142-LGU vulnerability-adjusted priority and province summaries (a priority, not measured or forecast hunger). Weights: provinces 0.65 poverty / 0.35 density (since 2026-11-03, owner-approved, FI9-X validation); LGUs 0.5 / 0.5. Each row has a `weights` column | 404 for an unknown province or LGU code |
+| `GET /fi9/priority/alternatives?province=` | Read-only comparison of weighting scenarios (current, moderate, strong, poverty-only, density-only), FNRI 2015 validation, LGU top-third probabilities under SAE uncertainty | 404 for an unknown province |
 
 Serving clock: the `AIPHEED_NOW` environment variable (ISO date) when set, else today's date.
 

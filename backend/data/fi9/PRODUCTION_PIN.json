@@ -13,6 +13,17 @@
   }
  ],
  "changes": [
-  "2026-11-03 FI9-R: interval method gaussian -> conformal (locked rule, data/fi9r/out/adoption.json); model, kind, parameters phi/sigma/tau, class and probability unchanged"
- ]
+  "2026-11-03 FI9-R: interval method gaussian -> conformal (locked rule, data/fi9r/out/adoption.json); model, kind, parameters phi/sigma/tau, class and probability unchanged",
+  "2026-11-03 FI9-X: province priority weights 0.5/0.5 -> 0.65 poverty / 0.35 density (owner-approved; docs/fi9x/FI9X_POVERTY_WEIGHTING_VALIDATION_REPORT.md); LGU weights unchanged; forecast model unchanged"
+ ],
+ "priority_weights": {
+  "province": {
+   "poverty": 0.65,
+   "density": 0.35
+  },
+  "lgu": {
+   "poverty": 0.5,
+   "density": 0.5
+  }
+ }
 }

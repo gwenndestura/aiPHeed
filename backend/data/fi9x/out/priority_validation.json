@@ -1,0 +1,563 @@
+{
+ "formula": {
+  "current": "V = 0.5 pct_rank(poverty 2021) + 0.5 pct_rank(density 2024); province = population-weighted mean of V",
+  "scenarios": {
+   "current (0.5 poverty / 0.5 density)": 0.5,
+   "moderate (0.65 / 0.35)": 0.65,
+   "strong (0.8 / 0.2)": 0.8,
+   "poverty only (benchmark)": 1.0,
+   "density only (reference)": 0.0
+  }
+ },
+ "provincial": {
+  "scenarios": {
+   "current (0.5 poverty / 0.5 density)": {
+    "mod_sev": {
+     "spearman": 0.3,
+     "kendall": 0.19999999999999998,
+     "exact_p_one_sided": 0.3416666666666667,
+     "mean_spearman_under_hfias_sampling": 0.17999999999999997,
+     "prob_better_than_current_under_sampling": null,
+     "leave_one_province_out_spearman": [
+      0.6,
+      0.4,
+      0.0,
+      0.0,
+      0.4
+     ],
+     "lopo_better_than_current": 0
+    },
+    "severe": {
+     "spearman": 0.0,
+     "kendall": 0.19999999999999998,
+     "exact_p_one_sided": 0.525,
+     "mean_spearman_under_hfias_sampling": 0.03484999999999999,
+     "prob_better_than_current_under_sampling": null,
+     "leave_one_province_out_spearman": [
+      -0.2,
+      1.0,
+      -0.2,
+      -0.2,
+      -0.2
+     ],
+     "lopo_better_than_current": 0
+    },
+    "not_food_secure": {
+     "spearman": 0.49999999999999994,
+     "kendall": 0.39999999999999997,
+     "exact_p_one_sided": 0.225,
+     "mean_spearman_under_hfias_sampling": 0.3359,
+     "prob_better_than_current_under_sampling": null,
+     "leave_one_province_out_spearman": [
+      0.8,
+      0.8,
+      0.0,
+      0.4,
+      0.4
+     ],
+     "lopo_better_than_current": 0
+    }
+   },
+   "moderate (0.65 / 0.35)": {
+    "mod_sev": {
+     "spearman": 0.49999999999999994,
+     "kendall": 0.39999999999999997,
+     "exact_p_one_sided": 0.225,
+     "mean_spearman_under_hfias_sampling": 0.40254999999999996,
+     "prob_better_than_current_under_sampling": 0.942,
+     "leave_one_province_out_spearman": [
+      0.8,
+      0.4,
+      0.4,
+      0.0,
+      0.8
+     ],
+     "lopo_better_than_current": 3
+    },
+    "severe": {
+     "spearman": 0.39999999999999997,
+     "kendall": 0.39999999999999997,
+     "exact_p_one_sided": 0.25833333333333336,
+     "mean_spearman_under_hfias_sampling": 0.25765,
+     "prob_better_than_current_under_sampling": 0.9015,
+     "leave_one_province_out_spearman": [
+      0.4,
+      1.0,
+      0.4,
+      -0.2,
+      0.4
+     ],
+     "lopo_better_than_current": 3
+    },
+    "not_food_secure": {
+     "spearman": 0.7,
+     "kendall": 0.6,
+     "exact_p_one_sided": 0.11666666666666667,
+     "mean_spearman_under_hfias_sampling": 0.46569999999999995,
+     "prob_better_than_current_under_sampling": 0.803,
+     "leave_one_province_out_spearman": [
+      1.0,
+      0.8,
+      0.4,
+      0.4,
+      0.8
+     ],
+     "lopo_better_than_current": 3
+    }
+   },
+   "strong (0.8 / 0.2)": {
+    "mod_sev": {
+     "spearman": 0.7999999999999999,
+     "kendall": 0.6,
+     "exact_p_one_sided": 0.06666666666666667,
+     "mean_spearman_under_hfias_sampling": 0.4910999999999999,
+     "prob_better_than_current_under_sampling": 0.821,
+     "leave_one_province_out_spearman": [
+      0.8,
+      0.8,
+      0.8,
+      0.6,
+      0.8
+     ],
+     "lopo_better_than_current": 5
+    },
+    "severe": {
+     "spearman": 0.3,
+     "kendall": 0.19999999999999998,
+     "exact_p_one_sided": 0.3416666666666667,
+     "mean_spearman_under_hfias_sampling": 0.143,
+     "prob_better_than_current_under_sampling": 0.5565,
+     "leave_one_province_out_spearman": [
+      0.4,
+      0.8,
+      0.2,
+      -0.4,
+      0.4
+     ],
+     "lopo_better_than_current": 3
+    },
+    "not_food_secure": {
+     "spearman": 0.8999999999999998,
+     "kendall": 0.7999999999999999,
+     "exact_p_one_sided": 0.041666666666666664,
+     "mean_spearman_under_hfias_sampling": 0.574,
+     "prob_better_than_current_under_sampling": 0.737,
+     "leave_one_province_out_spearman": [
+      1.0,
+      1.0,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "lopo_better_than_current": 5
+    }
+   },
+   "poverty only (benchmark)": {
+    "mod_sev": {
+     "spearman": 0.7999999999999999,
+     "kendall": 0.6,
+     "exact_p_one_sided": 0.06666666666666667,
+     "mean_spearman_under_hfias_sampling": 0.4910999999999999,
+     "prob_better_than_current_under_sampling": 0.821,
+     "leave_one_province_out_spearman": [
+      0.8,
+      0.8,
+      0.8,
+      0.6,
+      0.8
+     ],
+     "lopo_better_than_current": 5
+    },
+    "severe": {
+     "spearman": 0.3,
+     "kendall": 0.19999999999999998,
+     "exact_p_one_sided": 0.3416666666666667,
+     "mean_spearman_under_hfias_sampling": 0.143,
+     "prob_better_than_current_under_sampling": 0.5565,
+     "leave_one_province_out_spearman": [
+      0.4,
+      0.8,
+      0.2,
+      -0.4,
+      0.4
+     ],
+     "lopo_better_than_current": 3
+    },
+    "not_food_secure": {
+     "spearman": 0.8999999999999998,
+     "kendall": 0.7999999999999999,
+     "exact_p_one_sided": 0.041666666666666664,
+     "mean_spearman_under_hfias_sampling": 0.574,
+     "prob_better_than_current_under_sampling": 0.737,
+     "leave_one_province_out_spearman": [
+      1.0,
+      1.0,
+      0.8,
+      0.8,
+      0.8
+     ],
+     "lopo_better_than_current": 5
+    }
+   },
+   "density only (reference)": {
+    "mod_sev": {
+     "spearman": -0.7,
+     "kendall": -0.6,
+     "exact_p_one_sided": 0.9333333333333333,
+     "mean_spearman_under_hfias_sampling": -0.53365,
+     "prob_better_than_current_under_sampling": 0.0415,
+     "leave_one_province_out_spearman": [
+      -0.4,
+      -1.0,
+      -0.8,
+      -0.4,
+      -0.8
+     ],
+     "lopo_better_than_current": 0
+    },
+    "severe": {
+     "spearman": -0.7,
+     "kendall": -0.6,
+     "exact_p_one_sided": 0.9333333333333333,
+     "mean_spearman_under_hfias_sampling": -0.3309499999999999,
+     "prob_better_than_current_under_sampling": 0.1415,
+     "leave_one_province_out_spearman": [
+      -0.8,
+      -0.4,
+      -0.8,
+      -0.4,
+      -1.0
+     ],
+     "lopo_better_than_current": 0
+    },
+    "not_food_secure": {
+     "spearman": -0.6,
+     "kendall": -0.39999999999999997,
+     "exact_p_one_sided": 0.8833333333333333,
+     "mean_spearman_under_hfias_sampling": -0.3679,
+     "prob_better_than_current_under_sampling": 0.0555,
+     "leave_one_province_out_spearman": [
+      -0.2,
+      -0.8,
+      -0.8,
+      -0.2,
+      -0.8
+     ],
+     "lopo_better_than_current": 0
+    }
+   }
+  },
+  "sweep": [
+   {
+    "w_poverty": 0.0,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.05,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.1,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.15,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.2,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.25,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.3,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.35,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.4,
+    "spearman_mod_sev": -0.7,
+    "order": "Cavite > Rizal > Laguna > Batangas > Quezon"
+   },
+   {
+    "w_poverty": 0.45,
+    "spearman_mod_sev": -0.3,
+    "order": "Cavite > Rizal > Quezon > Laguna > Batangas"
+   },
+   {
+    "w_poverty": 0.5,
+    "spearman_mod_sev": 0.3,
+    "order": "Cavite > Quezon > Rizal > Batangas > Laguna"
+   },
+   {
+    "w_poverty": 0.55,
+    "spearman_mod_sev": 0.3,
+    "order": "Cavite > Quezon > Rizal > Batangas > Laguna"
+   },
+   {
+    "w_poverty": 0.6,
+    "spearman_mod_sev": 0.3,
+    "order": "Cavite > Quezon > Rizal > Batangas > Laguna"
+   },
+   {
+    "w_poverty": 0.65,
+    "spearman_mod_sev": 0.49999999999999994,
+    "order": "Quezon > Cavite > Rizal > Batangas > Laguna"
+   },
+   {
+    "w_poverty": 0.7,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 0.75,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 0.8,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 0.85,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 0.9,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 0.95,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   },
+   {
+    "w_poverty": 1.0,
+    "spearman_mod_sev": 0.7999999999999999,
+    "order": "Quezon > Cavite > Batangas > Rizal > Laguna"
+   }
+  ],
+  "province_table": [
+   {
+    "province": "Batangas",
+    "hfias2015_mod_sev": 43.5,
+    "hfias_rank": 2,
+    "poverty2021_popweighted": 8.789026943314317,
+    "density2024": 961.3954832185678,
+    "score | current (0.5 poverty / 0.5 density)": 0.499,
+    "rank | current (0.5 poverty / 0.5 density)": 4,
+    "score | moderate (0.65 / 0.35)": 0.468,
+    "rank | moderate (0.65 / 0.35)": 4,
+    "score | strong (0.8 / 0.2)": 0.437,
+    "rank | strong (0.8 / 0.2)": 3,
+    "score | poverty only (benchmark)": 0.396,
+    "rank | poverty only (benchmark)": 3,
+    "score | density only (reference)": 0.602,
+    "rank | density only (reference)": 4
+   },
+   {
+    "province": "Cavite",
+    "hfias2015_mod_sev": 41.8,
+    "hfias_rank": 3,
+    "poverty2021_popweighted": 9.912110439204842,
+    "density2024": 2996.752889378096,
+    "score | current (0.5 poverty / 0.5 density)": 0.67,
+    "rank | current (0.5 poverty / 0.5 density)": 1,
+    "score | moderate (0.65 / 0.35)": 0.612,
+    "rank | moderate (0.65 / 0.35)": 2,
+    "score | strong (0.8 / 0.2)": 0.555,
+    "rank | strong (0.8 / 0.2)": 2,
+    "score | poverty only (benchmark)": 0.479,
+    "rank | poverty only (benchmark)": 2,
+    "score | density only (reference)": 0.86,
+    "rank | density only (reference)": 1
+   },
+   {
+    "province": "Laguna",
+    "hfias2015_mod_sev": 41.4,
+    "hfias_rank": 4,
+    "poverty2021_popweighted": 6.038898136668254,
+    "density2024": 1912.2952137452482,
+    "score | current (0.5 poverty / 0.5 density)": 0.479,
+    "rank | current (0.5 poverty / 0.5 density)": 5,
+    "score | moderate (0.65 / 0.35)": 0.379,
+    "rank | moderate (0.65 / 0.35)": 5,
+    "score | strong (0.8 / 0.2)": 0.279,
+    "rank | strong (0.8 / 0.2)": 5,
+    "score | poverty only (benchmark)": 0.146,
+    "rank | poverty only (benchmark)": 5,
+    "score | density only (reference)": 0.812,
+    "rank | density only (reference)": 3
+   },
+   {
+    "province": "Quezon",
+    "hfias2015_mod_sev": 48.8,
+    "hfias_rank": 1,
+    "poverty2021_popweighted": 18.453871726291197,
+    "density2024": 256.4457159581142,
+    "score | current (0.5 poverty / 0.5 density)": 0.557,
+    "rank | current (0.5 poverty / 0.5 density)": 2,
+    "score | moderate (0.65 / 0.35)": 0.626,
+    "rank | moderate (0.65 / 0.35)": 1,
+    "score | strong (0.8 / 0.2)": 0.695,
+    "rank | strong (0.8 / 0.2)": 1,
+    "score | poverty only (benchmark)": 0.786,
+    "rank | poverty only (benchmark)": 1,
+    "score | density only (reference)": 0.328,
+    "rank | density only (reference)": 5
+   },
+   {
+    "province": "Rizal",
+    "hfias2015_mod_sev": 41.3,
+    "hfias_rank": 5,
+    "poverty2021_popweighted": 7.061359515517011,
+    "density2024": 2888.8859764089125,
+    "score | current (0.5 poverty / 0.5 density)": 0.556,
+    "rank | current (0.5 poverty / 0.5 density)": 3,
+    "score | moderate (0.65 / 0.35)": 0.471,
+    "rank | moderate (0.65 / 0.35)": 3,
+    "score | strong (0.8 / 0.2)": 0.387,
+    "rank | strong (0.8 / 0.2)": 4,
+    "score | poverty only (benchmark)": 0.274,
+    "rank | poverty only (benchmark)": 4,
+    "score | density only (reference)": 0.838,
+    "rank | density only (reference)": 2
+   }
+  ],
+  "poverty2021_vs_hfias2015_spearman": 0.7999999999999999,
+  "density_vs_hfias2015_spearman": -0.7,
+  "hfias_pairwise_distinguishable": {
+   "z_scores": {
+    "Batangas-Cavite": 0.42,
+    "Batangas-Laguna": 0.51,
+    "Batangas-Quezon": 1.09,
+    "Batangas-Rizal": 0.52,
+    "Cavite-Laguna": 0.11,
+    "Cavite-Quezon": 1.57,
+    "Cavite-Rizal": 0.13,
+    "Laguna-Quezon": 1.65,
+    "Laguna-Rizal": 0.03,
+    "Quezon-Rizal": 1.63
+   },
+   "n_pairs_significant_at_95": 0,
+   "n_pairs": 10
+  }
+ },
+ "lgu": {
+  "data": {
+   "n_lgus": 142,
+   "poverty_year": 2021,
+   "density_year": 2024,
+   "poverty_source": "PSA 2021 city/municipal small-area estimates (141) + Lucena HUC published estimate (1)",
+   "cv_bins": {
+    "<=10%": 13,
+    "10-20%": 103,
+    "20-30%": 21,
+    ">30%": 4,
+    "no CV (Lucena)": 1
+   },
+   "spearman_poverty_vs_density": -0.5264956799269056,
+   "lucena_sd_assumption": "Lucena has no published CV; its sd uses the median CV of the other 141 LGUs"
+  },
+  "scenarios": {
+   "current (0.5 poverty / 0.5 density)": {
+    "spearman_vs_current": 1.0,
+    "top_third_changed_vs_current": 0,
+    "top_third_by_province": {
+     "Cavite": 19,
+     "Quezon": 17,
+     "Batangas": 6,
+     "Rizal": 4,
+     "Laguna": 2
+    },
+    "share_lgus_with_stable_top_third_membership": 0.676056338028169,
+    "median_90pct_rank_interval_width": 34.5,
+    "median_rank_interval_width_lgus_cv_gt_20": 60.0,
+    "drop_lucena_spearman": 0.9996992120028729,
+    "drop_cv_gt_30_top_third_changed": 1
+   },
+   "moderate (0.65 / 0.35)": {
+    "spearman_vs_current": 0.8670500435420982,
+    "top_third_changed_vs_current": 9,
+    "top_third_by_province": {
+     "Quezon": 26,
+     "Cavite": 14,
+     "Batangas": 5,
+     "Laguna": 2,
+     "Rizal": 1
+    },
+    "share_lgus_with_stable_top_third_membership": 0.7323943661971831,
+    "median_90pct_rank_interval_width": 43.0,
+    "median_rank_interval_width_lgus_cv_gt_20": 71.0,
+    "drop_lucena_spearman": 0.9997752457847883,
+    "drop_cv_gt_30_top_third_changed": 0
+   },
+   "strong (0.8 / 0.2)": {
+    "spearman_vs_current": 0.6663449692702292,
+    "top_third_changed_vs_current": 16,
+    "top_third_by_province": {
+     "Quezon": 32,
+     "Cavite": 13,
+     "Batangas": 2,
+     "Laguna": 1
+    },
+    "share_lgus_with_stable_top_third_membership": 0.7676056338028169,
+    "median_90pct_rank_interval_width": 42.025,
+    "median_rank_interval_width_lgus_cv_gt_20": 69.0,
+    "drop_lucena_spearman": 0.9999090251370407,
+    "drop_cv_gt_30_top_third_changed": 0
+   },
+   "poverty only (benchmark)": {
+    "spearman_vs_current": 0.49330002624467445,
+    "top_third_changed_vs_current": 24,
+    "top_third_by_province": {
+     "Quezon": 38,
+     "Cavite": 8,
+     "Laguna": 2
+    },
+    "share_lgus_with_stable_top_third_membership": 0.8450704225352113,
+    "median_90pct_rank_interval_width": 37.5,
+    "median_rank_interval_width_lgus_cv_gt_20": 69.0,
+    "drop_lucena_spearman": 1.0,
+    "drop_cv_gt_30_top_third_changed": 0
+   },
+   "density only (reference)": {
+    "spearman_vs_current": 0.4509164531741762,
+    "top_third_changed_vs_current": 23,
+    "top_third_by_province": {
+     "Cavite": 15,
+     "Laguna": 12,
+     "Rizal": 10,
+     "Batangas": 10,
+     "Quezon": 1
+    },
+    "share_lgus_with_stable_top_third_membership": 1.0,
+    "median_90pct_rank_interval_width": 0.0,
+    "median_rank_interval_width_lgus_cv_gt_20": 0.0,
+    "drop_lucena_spearman": 1.0,
+    "drop_cv_gt_30_top_third_changed": 0
+   }
+  },
+  "scale_indicator_note": {
+   "spearman_poor_population_vs_density": 0.4133124891290909,
+   "spearman_poor_population_vs_poverty_rate": 0.21040421969400094
+  }
+ }
+}

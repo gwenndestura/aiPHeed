@@ -111,6 +111,25 @@ def register():
     return {"intact": PR.verify(), "n_records": len(recs), "records": recs, "scores": scores}
 
 
+@router.get("/priority/alternatives")
+def priority_alternatives(province: str | None = None):
+    """Read-only comparison of weighting scenarios (FI9-X validation). The served ranking stays /fi9/priority."""
+    base = OUT.parent.parent / "fi9x" / "out"
+    j = _load("priority_validation.json", base)
+    lg = _load("priority_alternatives_lgu.csv", base)
+    if province:
+        lg = lg[lg["province_name"].str.lower() == province.lower()]
+        if lg.empty:
+            raise HTTPException(status_code=404, detail=f"unknown province {province}")
+    return {"note": "Comparison only, not the served ranking. Provincial validation: FNRI 2015 HFIAS, one wave, five provinces; "
+                    "no LGU-level food-insecurity outcome exists. Served since 2026-11-03 (owner-approved): moderate poverty "
+                    "weighting (0.65/0.35) for provinces; equal weights kept for LGUs "
+                    "(docs/fi9x/FI9X_POVERTY_WEIGHTING_VALIDATION_REPORT.md).",
+            "formula": j["formula"], "provinces": _records(_load("priority_alternatives_province.csv", base)),
+            "provincial_validation": {k: v["mod_sev"] for k, v in j["provincial"]["scenarios"].items()},
+            "lgus": _records(lg)}
+
+
 @router.get("/priority")
 def priority(province: str | None = None, lgu_psgc: str | None = None, limit: int = Query(142, ge=1, le=142)):
     t = _load("lgu_priority.csv")

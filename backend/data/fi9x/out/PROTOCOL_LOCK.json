@@ -1,0 +1,145 @@
+{
+ "sha256": "e1b3d30051ceeb85a9d0c18e197ea1add2a6ee949d5dcfaabfc1bf39569636bc",
+ "code_sha256": "103a61cd148cec184ed9d64f2f5762c0394b23ce5c1a11ad9b30541e477306d1",
+ "configs": [
+  "Always HIGH",
+  "Always LOW",
+  "C0 damped persistence (production)",
+  "Climatology",
+  "Damped persistence",
+  "Elastic-net logistic (government + news R2)",
+  "Elastic-net logistic (government)",
+  "Intermediate PCA (government + news)",
+  "Intermediate PCA (government only)",
+  "LightGBM (government + news R0)",
+  "LightGBM (government + news R1)",
+  "LightGBM (government)",
+  "Local level",
+  "Logistic (government)",
+  "NLP-only logistic (news R2, no SWS)",
+  "Naive persistence",
+  "News-only ridge (latest + news R1)",
+  "News-only ridge (latest + news R2)",
+  "Ridge (government + news R0)",
+  "Ridge (government + news R1)",
+  "Ridge (government + news R2)",
+  "Ridge (government + news R3)",
+  "Ridge (government + news R4)",
+  "Ridge (government + news R5)",
+  "Ridge (government + news R6)",
+  "Ridge (government + news R7)",
+  "Ridge (government + news R8)",
+  "Ridge (government + news R9)",
+  "Ridge (government)",
+  "Ridge (latest reading only)",
+  "Seasonal damped persistence",
+  "Late fusion: average (damped, ridge gov + news R1)",
+  "Late fusion: stack (damped, LightGBM gov, news-only R1)",
+  "Late fusion: stack without news (damped, LightGBM gov)",
+  "Residual: LightGBM government + news R1",
+  "Residual: damped + news R0",
+  "Residual: damped + news R1",
+  "Residual: damped + news R2",
+  "Residual: damped + news R3",
+  "Residual: damped + news R4",
+  "Residual: damped + news R5",
+  "Residual: damped + news R6",
+  "Residual: damped + news R7",
+  "Residual: damped + news R8",
+  "Residual: damped + news R9",
+  "Residual: seasonal + news R1",
+  "Timing-aware nested: early ridge, representation chosen in training",
+  "Timing-aware nested: residual, representation chosen in training"
+ ],
+ "locked_utc": "2026-11-02T23:32:15+00:00",
+ "protocol": {
+  "version": "fi9x-1.0",
+  "target": "FI9 target unchanged: SWS Balance Luzon hunger > preceding-20-quarter normal + round MOE",
+  "origins": {
+   "OP1": "operational issue, lead 1",
+   "QE1": "quarter_end issue, lead 1",
+   "OP2": "operational issue, lead 2"
+  },
+  "representations": {
+   "R0": [
+    "na_market",
+    "na_climate",
+    "na_employment",
+    "na_remittance",
+    "na_poverty",
+    "na_climate_damage",
+    "na_displaced"
+   ],
+   "R1": [
+    "nidx_QTD"
+   ],
+   "R2": [
+    "z_dom_market_QTD",
+    "z_dom_climate_QTD",
+    "z_dom_employment_QTD",
+    "z_dom_remittance_QTD",
+    "z_dom_poverty_QTD",
+    "z_dmg_QTD",
+    "z_fam_QTD"
+   ],
+   "R3": [
+    "z_hard_QTD",
+    "z_warn_QTD",
+    "z_resp_QTD",
+    "z_disr_QTD",
+    "z_netdir_QTD"
+   ],
+   "R4": [
+    "z_dom_market_W30",
+    "z_dom_climate_W30",
+    "z_dom_employment_W30",
+    "z_dom_remittance_W30",
+    "z_dom_poverty_W30",
+    "z_hard_W30"
+   ],
+   "R5": [
+    "z_dom_market_RW",
+    "z_dom_climate_RW",
+    "z_dom_employment_RW",
+    "z_dom_remittance_RW",
+    "z_dom_poverty_RW",
+    "z_hard_RW"
+   ],
+   "R6": [
+    "z_mom_hard",
+    "z_mom_dom"
+   ],
+   "R7": [
+    "nidx_QTD",
+    "z_hard_QTD",
+    "z_resp_QTD",
+    "z_mom_dom"
+   ],
+   "R8": [
+    "nidx_W90"
+   ],
+   "R9": [
+    "nidx_LCQ"
+   ]
+  },
+  "configurations": "see CONFIGS / META in app/fi9x/study.py (frozen with this lock via code sha256)",
+  "threshold": "per origin, balanced-accuracy-optimal on earlier rows' out-of-fold predictions (FI7 inner region)",
+  "adoption_rule_lead1": [
+   "FI7 reliability rule passes on full, on 2018+ (B) and without the sawtooth quarters",
+   "accuracy >= 0.75, balanced accuracy >= 0.70 and recall >= 0.50 on full",
+   "Brier better than C0 (production model, same origin) with block-bootstrap P >= 0.90",
+   "Brier better than naive persistence with P >= 0.90",
+   "mean Brier difference vs naive persistence negative in both 2010-2017 and 2018+",
+   "the advantage over naive persistence stays negative when any single quarter is dropped",
+   "ECE <= 0.10 and train-minus-out-of-sample accuracy <= 0.10",
+   "news configurations: Brier better than their no-news counterpart with P >= 0.90"
+  ],
+  "max_reliable_lead": "the longest lead at the FI9 issue timing where some configuration passes the FI7 rule on full, B and without sawtooth AND is not worse than naive persistence",
+  "multiplicity": "about 40 configurations x 3 origins are compared; a pass must hold in both halves and survive drop-one-quarter, and is reported with the number of configurations tried",
+  "bootstrap": {
+   "block": 4,
+   "reps": 5000,
+   "seed": 7
+  }
+ }
+}

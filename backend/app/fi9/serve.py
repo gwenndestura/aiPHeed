@@ -237,9 +237,25 @@ def issue(as_of=None) -> dict:
     status = (f"Balance Luzon next-quarter outlook ({art['model']}, {body['status']}) used only as a common regional scale "
               "factor; the order of LGUs comes from PSA poverty and density; a priority, not measured or forecast hunger")
     lg = R.rank_lgus(f["p_high"], {"forecast_target_quarter": meta["target_quarter"], "forecast_status": status})
-    lg.to_csv(OUT / "lgu_priority.csv", index=False, lineterminator="\n")
-    R.province_priority(lg).assign(forecast_basis=status).to_csv(OUT / "province_priority.csv", index=False, lineterminator="\n")
+    lg.assign(weights=LGU_WEIGHTS).to_csv(OUT / "lgu_priority.csv", index=False, lineterminator="\n")
+    province_priority(lg).assign(forecast_basis=status).to_csv(OUT / "province_priority.csv", index=False, lineterminator="\n")
     return body
+
+
+# Province and LGU weights differ by design (docs/fi9x/FI9X_POVERTY_WEIGHTING_VALIDATION_REPORT.md):
+#   provinces: poverty weight raised to 0.65 (agreement with FNRI 2015 HFIAS rises from rho +0.30 to +0.50;
+#              one wave, five provinces); approved by the owner on 2026-11-03
+#   LGUs:      equal weights kept; no municipal food-insecurity outcome exists to justify a change
+PROVINCE_W_POVERTY = 0.65
+PROVINCE_WEIGHTS = "province: 0.65 poverty / 0.35 density (FI9-X validated, owner-approved 2026-11-03)"
+LGU_WEIGHTS = "LGU: 0.5 poverty / 0.5 density (unchanged; no LGU-level outcome to validate a change)"
+
+
+def province_priority(lg: pd.DataFrame) -> pd.DataFrame:
+    """Province priority from the LGUs' poverty-weighted vulnerability; LGU bands and ranks are left as served."""
+    t = lg.copy()
+    t["vulnerability"] = R.vulnerability(t, PROVINCE_W_POVERTY, 1 - PROVINCE_W_POVERTY)
+    return R.province_priority(t).assign(weights=PROVINCE_WEIGHTS)
 
 
 if __name__ == "__main__":
