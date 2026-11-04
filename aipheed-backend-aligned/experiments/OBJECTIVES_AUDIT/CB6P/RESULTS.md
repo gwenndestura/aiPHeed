@@ -56,3 +56,29 @@
 - **Against regional C-B6:** better Brier at both leads (Holm p 0.017 and 0.032).
 - **Against PERSIST and LOGIT:** not better.
 - **Employment and OFW stay in;** SHAP shares are 0.4% and 2.3%.
+
+## C-B6P3 (PREREGISTRATION_P3.md 18e01504…, owner directive): every driver forced into every forecast
+
+**Script:** `runner/cb6p3_model.py`. **Model:** an L2 logistic base on the 15 driver inputs, with C-B6P2's LightGBM
+boosting on top.
+
+| Lead 1 / Lead 2 | **C-B6P3** | C-B6P2 |
+|---|---|---|
+| Accuracy | **0.690 / 0.620** | 0.810 / 0.750 |
+| F1 | 0.760 / 0.716 | 0.869 / 0.828 |
+| AUC-ROC | 0.730 / 0.531 | 0.787 / 0.676 |
+| Brier | 0.212 / 0.264 | 0.158 / 0.187 |
+| Algorithm 3 | **0** | 2 |
+
+- **The directive is met:** all five drivers contribute to 100% of forecasts. SHAP shares:
+  - market 31%;
+  - fish kill 16%;
+  - employment 11–14%;
+  - climate 5%;
+  - OFW 4%.
+- **Forecast quality falls sharply:**
+  - accuracy −0.12 / −0.13;
+  - Brier +0.054 / +0.077 (Lead 2 CI excludes 0).
+- **Acceptance therefore fails** (criteria 2 and 3).
+- **Interpretation:** forcing employment, fish kill and the others into every forecast adds noise. In C-B6P2 they had
+  little or no weight because they do not predict the Eq. 3 label on this data.
