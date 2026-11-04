@@ -169,3 +169,47 @@ stays the main model. Per the plan, no other news variant is tried.
   5-year average.
 - Here the target is the 11.3% level. The latest SWS reading already carries most of the information, and seven extra
   inputs on 62 quarters let the trees fit noise.
+
+---
+
+## Fix 4 (requested): CALABARZON-only news shock signal (C-B6C)
+
+**Setup:**
+- **Plan:** `PLAN_CB6C.md`, SHA-256 1cb7de04…, committed (83b81480) before the signal was built.
+- **Signal:** one feature, CAL_SHOCK. It counts CALABARZON-located FI6-N events that raise risk and report actual
+  disruption or hardship, with the last 42 days of each quarter weighted double, per 100 CALABARZON articles. It is
+  z-scored as-of and attached to Balance Luzon rows only.
+- **Build:** 449 events (197 recent). Signal file SHA-256 f38c119c…; events.parquet SHA-256 2871fbdc….
+- **Checks:** the leakage check passed; C-B6 replication was exact (1e-16).
+- Run: `runner/cb6c_model.py` → `out/cb6c_fits.csv`, `out/cb6c_results.json`.
+
+**Results (62 quarters):**
+
+| Model | Lead | Accuracy | F1 | AUC | Brier | R1–R7 |
+|---|---|---|---|---|---|---|
+| C-B6 | 1 | **0.806** | **0.867** | **0.723** | **0.183** | all pass |
+| C-B6C | 1 | 0.758 | 0.831 | 0.721 | 0.191 | R3, R5, R7 fail |
+| C-B6 | 2 | **0.806** | **0.867** | **0.712** | **0.181** | all pass |
+| C-B6C | 2 | 0.758 | 0.831 | 0.693 | 0.192 | R3, R5, R7 fail |
+
+**Paired Brier, C-B6C minus C-B6:**
+
+| Lead 1 | Lead 2 |
+|---|---|
+| +0.008 (p 0.94) | +0.012, CI +0.003..+0.023: **significantly worse** |
+
+- 3 calls changed at each lead.
+- The signal carries 4% of SHAP.
+
+**Decision (pre-registered):** H9 fails. CALABARZON news did not improve C-B6. C-B6 stays, and no further news
+variant is tried.
+
+**Descriptive check (after the decision; not used for it):** CAL_SHOCK has no relation to the change in Balance Luzon
+hunger:
+- vs the unreleased quarter: Spearman ρ −0.05 (p 0.71, n 55);
+- vs the next quarter: ρ −0.07 (p 0.61).
+
+Likely reasons:
+1. Balance Luzon covers all of Luzon outside Metro Manila, of which CALABARZON is one part.
+2. About half the quarter-to-quarter change in SWS readings is sampling error (FI8).
+3. The archive is about 95% Rappler, so CALABARZON shock coverage is thin (1–22 events per quarter).
