@@ -1,0 +1,647 @@
+{
+ "inputs": "E142 locked results.json and oof_rolling.csv; E141 panel (Lead 1)",
+ "A_B_gate_decomposition_noise_power": {
+  "by_origin": {
+   "O1": {
+    "n": 78,
+    "noise_floor": 0.09417207903699022,
+    "eb": {
+     "STATE-LGBM": 0.2214921164569592,
+     "PERS": 0.21365214918595016,
+     "REGPREV": 0.21233623904008134,
+     "LGBM": 0.22402266918229594,
+     "NAT": 0.2581471900692815
+    },
+    "vs_PERS": {
+     "diff": 0.007839967271009052,
+     "ci95": [
+      -0.017018459321589227,
+      0.030404280568616455
+     ],
+     "contribution_to_pooled": 0.0048921395771096485
+    },
+    "vs_REGPREV": {
+     "diff": 0.009155877416877872,
+     "ci95": [
+      -0.012569014775391242,
+      0.0375507427402609
+     ],
+     "contribution_to_pooled": 0.005713267508131793
+    }
+   },
+   "O2": {
+    "n": 22,
+    "noise_floor": 0.03015746309401649,
+    "eb": {
+     "STATE-LGBM": 0.15080960112219868,
+     "PERS": 0.20657223153325519,
+     "REGPREV": 0.14031902889487613,
+     "LGBM": 0.1465383056883695,
+     "NAT": 0.24593037002597357
+    },
+    "vs_PERS": {
+     "diff": -0.0557626304110565,
+     "ci95": [
+      -0.12411090852580105,
+      0.008245203555309565
+     ],
+     "contribution_to_pooled": -0.009814222952345943
+    },
+    "vs_REGPREV": {
+     "diff": 0.010490572227322553,
+     "ci95": [
+      -0.07425481801849408,
+      0.0906407713597019
+     ],
+     "contribution_to_pooled": 0.0018463407120087694
+    }
+   },
+   "O3": {
+    "n": 25,
+    "noise_floor": 0.037795073594884016,
+    "eb": {
+     "STATE-LGBM": 0.1408648088583738,
+     "PERS": 0.18734171468837346,
+     "REGPREV": 0.16388182215588173,
+     "LGBM": 0.14141216964262976,
+     "NAT": 0.22765781303811872
+    },
+    "vs_PERS": {
+     "diff": -0.046476905829999665,
+     "ci95": [
+      -0.11509565664098616,
+      0.02161402846638922
+     ],
+     "contribution_to_pooled": -0.009295381165999933
+    },
+    "vs_REGPREV": {
+     "diff": -0.023017013297507938,
+     "ci95": [
+      -0.08970817836838,
+      0.051767199408001834
+     ],
+     "contribution_to_pooled": -0.004603402659501587
+    }
+   }
+  },
+  "pooled_noise_floor": 0.0716301055426056,
+  "pooled_reducible": {
+   "STATE-LGBM": 0.12129642669571866,
+   "PERS": 0.1355138912369549,
+   "REGPREV": 0.11834022113507969
+  },
+  "power": {
+   "PERS": {
+    "diff": -0.014217464541236235,
+    "se": 0.012214642688078746,
+    "mde80": 0.034200999526620486,
+    "evidence_multiple_needed_for_observed_diff": 5.7867309350250915
+   },
+   "REGPREV": {
+    "diff": 0.0029562055606389692,
+    "se": 0.017916231769849862,
+    "mde80": 0.05016544895557961,
+    "evidence_multiple_needed_for_observed_diff": null
+   }
+  },
+  "n_regions": 16
+ },
+ "C_transition_identification": {
+  "lgbm": {
+   "pairs": [
+    {
+     "from": "NNS2013",
+     "to": "FNRI2015",
+     "gap_quarters": 8,
+     "n": 78,
+     "corr": 0.608716360657147,
+     "ci95": [
+      0.28060908388023387,
+      0.7821388489043142
+     ]
+    },
+    {
+     "from": "FNRI2015",
+     "to": "ENNS2018",
+     "gap_quarters": 12,
+     "n": 22,
+     "corr": 0.6132350329152919,
+     "ci95": [
+      0.09021154405268106,
+      0.9535559679402924
+     ]
+    },
+    {
+     "from": "FNRI2015",
+     "to": "ENNS2019",
+     "gap_quarters": 16,
+     "n": 25,
+     "corr": 0.35283800166150164,
+     "ci95": [
+      -0.10384406411974152,
+      0.6616726185702416
+     ]
+    },
+    {
+     "from": "NNS2013",
+     "to": "ENNS2018",
+     "gap_quarters": 20,
+     "n": 22,
+     "corr": 0.6740601261417015,
+     "ci95": [
+      0.07342961991001469,
+      1.050566107788839
+     ]
+    },
+    {
+     "from": "NNS2013",
+     "to": "ENNS2019",
+     "gap_quarters": 24,
+     "n": 25,
+     "corr": 0.5253608962456463,
+     "ci95": [
+      -0.21012362511814459,
+      0.8404214149713659
+     ]
+    }
+   ],
+   "markov_test": {
+    "2013->2018": {
+     "measured": 0.6740601261417015,
+     "markov_prediction_c(2013,2015)xc(2015,2018)": 0.3732861974636622,
+     "excess_over_markov": 0.3007739286780393
+    },
+    "2013->2019": {
+     "measured": 0.5253608962456463,
+     "markov_prediction_c(2013,2015)xc(2015,2019)": 0.21477826427292965,
+     "excess_over_markov": 0.3105826319727166
+    }
+   },
+   "fits": {
+    "EXP (AR(1))": {
+     "phi": 0.9592411600052263,
+     "sse": 3.433817775125763
+    },
+    "PERM+AR (permanent share rho)": {
+     "rho": 0.5235524896044037,
+     "phi": 0.8023613734713868,
+     "sse": 1.383320840170247
+    },
+    "CONST (no decay)": {
+     "c": 0.5683450120825001,
+     "sse": 1.6245981999993961
+    }
+   },
+   "weight_on_last_survey_live": {
+    "Batangas (2015)": {
+     "EXP": 0.14746163930245745,
+     "PERM+AR": 0.5235715019484813,
+     "CONST": 0.5683450120825001,
+     "E142 final (phi 0.935)": 0.04542909655675313
+    },
+    "Laguna (2018)": {
+     "EXP": 0.24296593650678738,
+     "PERM+AR": 0.5238195414034122,
+     "CONST": 0.5683450120825001,
+     "E142 final (phi 0.935)": 0.1017641406796146
+    },
+    "Quezon (2019)": {
+     "EXP": 0.286968460568223,
+     "PERM+AR": 0.5241968301425655,
+     "CONST": 0.5683450120825001,
+     "E142 final (phi 0.935)": 0.13315219378664664
+    }
+   },
+   "max_observed_gap_quarters": 24
+  },
+  "ridge": {
+   "pairs": [
+    {
+     "from": "NNS2013",
+     "to": "FNRI2015",
+     "gap_quarters": 8,
+     "n": 78,
+     "corr": 0.554122941961294,
+     "ci95": [
+      0.18985116607663227,
+      0.7425489972677454
+     ]
+    },
+    {
+     "from": "FNRI2015",
+     "to": "ENNS2018",
+     "gap_quarters": 12,
+     "n": 22,
+     "corr": 0.4869293111566843,
+     "ci95": [
+      0.11696900331378048,
+      0.8840366348103808
+     ]
+    },
+    {
+     "from": "FNRI2015",
+     "to": "ENNS2019",
+     "gap_quarters": 16,
+     "n": 25,
+     "corr": 0.24481878786525724,
+     "ci95": [
+      -0.07027930568593513,
+      0.5883807379013943
+     ]
+    },
+    {
+     "from": "NNS2013",
+     "to": "ENNS2018",
+     "gap_quarters": 20,
+     "n": 22,
+     "corr": 0.5941595656839938,
+     "ci95": [
+      -0.054474234561480546,
+      1.1142734276905901
+     ]
+    },
+    {
+     "from": "NNS2013",
+     "to": "ENNS2019",
+     "gap_quarters": 24,
+     "n": 25,
+     "corr": 0.33861498194058604,
+     "ci95": [
+      -0.29712304356384966,
+      0.8902008334109734
+     ]
+    }
+   ],
+   "markov_test": {
+    "2013->2018": {
+     "measured": 0.5941595656839938,
+     "markov_prediction_c(2013,2015)xc(2015,2018)": 0.26981870242532824,
+     "excess_over_markov": 0.3243408632586655
+    },
+    "2013->2019": {
+     "measured": 0.33861498194058604,
+     "markov_prediction_c(2013,2015)xc(2015,2019)": 0.13565970697929428,
+     "excess_over_markov": 0.20295527496129176
+    }
+   },
+   "fits": {
+    "EXP (AR(1))": {
+     "phi": 0.9431820617638279,
+     "sse": 2.9385316733126885
+    },
+    "PERM+AR (permanent share rho)": {
+     "rho": 0.3699739024372651,
+     "phi": 0.8524396315593004,
+     "sse": 1.6925283975803025
+    },
+    "CONST (no decay)": {
+     "c": 0.47436854074780194,
+     "sse": 2.5933611538271224
+    }
+   },
+   "weight_on_last_survey_live": {
+    "Batangas (2015)": {
+     "EXP": 0.06782573202834731,
+     "PERM+AR": 0.3703811754598141,
+     "CONST": 0.47436854074780194,
+     "E142 final (phi 0.935)": 0.04542909655675313
+    },
+    "Laguna (2018)": {
+     "EXP": 0.1368510396548862,
+     "PERM+AR": 0.3727403475070311,
+     "CONST": 0.47436854074780194,
+     "E142 final (phi 0.935)": 0.1017641406796146
+    },
+    "Quezon (2019)": {
+     "EXP": 0.17292825996353986,
+     "PERM+AR": 0.3752131331167886,
+     "CONST": 0.47436854074780194,
+     "E142 final (phi 0.935)": 0.13315219378664664
+    }
+   },
+   "max_observed_gap_quarters": 24
+  }
+ },
+ "D_o1_counterfactual": {
+  "label": "DIAGNOSTIC ONLY: an O1 model cannot estimate persistence (no transition in 2013 alone)",
+  "phi 0 (E142, structural only)": {
+   "O1_eb": 0.22149211645695915,
+   "pooled_eb": 0.19292653223832426,
+   "pooled_vs_PERS": {
+    "diff": -0.014217464541236235,
+    "se": 0.012437008316944935,
+    "ci95": [
+     -0.03761434790597538,
+     0.010520885625455058
+    ],
+    "n": 125
+   },
+   "pooled_vs_REGPREV": {
+    "diff": 0.0029562055606389137,
+    "se": 0.018461051845673503,
+    "ci95": [
+     -0.0316906705537219,
+     0.039655159785934875
+    ],
+    "n": 125
+   }
+  },
+  "phi 0.935 (estimated from LATER rounds: leaky)": {
+   "O1_eb": 0.2227036849119041,
+   "pooled_eb": 0.19368255095420986,
+   "pooled_vs_PERS": {
+    "diff": -0.013461445825350637,
+    "se": 0.011671427111633739,
+    "ci95": [
+     -0.035587792195415975,
+     0.009630802819044637
+    ],
+    "n": 125
+   },
+   "pooled_vs_REGPREV": {
+    "diff": 0.0037122242765245117,
+    "se": 0.01720763692550499,
+    "ci95": [
+     -0.02790652829804822,
+     0.03719576739701875
+    ],
+    "n": 125
+   }
+  },
+  "phi 1 (assumed: deviation fully persists, shrunk for survey error)": {
+   "O1_eb": 0.2828294837173026,
+   "pooled_eb": 0.23120104940877861,
+   "pooled_vs_PERS": {
+    "diff": 0.024057052629218117,
+    "se": 0.014569830389386536,
+    "ci95": [
+     -0.002097860842699279,
+     0.054531890285424746
+    ],
+    "n": 125
+   },
+   "pooled_vs_REGPREV": {
+    "diff": 0.04123072273109327,
+    "se": 0.02098039490297958,
+    "ci95": [
+     8.332885503537232e-05,
+     0.08103326154865316
+    ],
+    "n": 125
+   }
+  }
+ },
+ "E_sensitivity": {
+  "O2": {
+   "fitted_phi": 0.939,
+   "tau2": 0.17942286381912836,
+   "target_gap": 12,
+   "eb_fitted": 0.15080960112219868,
+   "phi_grid": {
+    "0.0": 0.14365500514456017,
+    "0.85": 0.1447307485175509,
+    "0.9": 0.14663270298347736,
+    "0.935": 0.15015846853240233,
+    "0.95": 0.1530508120437142,
+    "0.97": 0.1600048065377672,
+    "0.99": 0.17756239880569316,
+    "1.0": 0.2125766864225093
+   },
+   "survey_error_scale": {
+    "0.5": 0.15470542573449453,
+    "0.75": 0.15235361980632225,
+    "1.25": 0.14965560188253646,
+    "1.5": 0.14872658496737653
+   },
+   "no_horizon_growth (weight phi^8 regardless of gap)": 0.15553915514273936
+  },
+  "O3": {
+   "fitted_phi": 0.932,
+   "tau2": 0.2132930500453953,
+   "target_gap": 16,
+   "eb_fitted": 0.14086480885837382,
+   "phi_grid": {
+    "0.0": 0.138048181973251,
+    "0.85": 0.1382790491472871,
+    "0.9": 0.13908067342610347,
+    "0.935": 0.14115008407018143,
+    "0.95": 0.14313005430785422,
+    "0.97": 0.14844633351480357,
+    "0.99": 0.1644065754094587,
+    "1.0": 0.19875929832272773
+   },
+   "survey_error_scale": {
+    "0.5": 0.1436046837278719,
+    "0.75": 0.14218716571741438,
+    "1.25": 0.13979193770680545,
+    "1.5": 0.13898790544043832
+   },
+   "no_horizon_growth (weight phi^8 regardless of gap)": 0.1467833639674497
+  },
+  "reference_quarter_shift_O3": {
+   "ENNS -2 q": {
+    "phi": 0.93,
+    "O3_eb": 0.14151950763480006
+   },
+   "ENNS -1 q": {
+    "phi": 0.931,
+    "O3_eb": 0.14116709180081644
+   },
+   "ENNS +1 q": {
+    "phi": 0.934,
+    "O3_eb": 0.14069208500427227
+   },
+   "ENNS +2 q": {
+    "phi": 0.935,
+    "O3_eb": 0.1404629099385082
+   }
+  }
+ },
+ "F_level_instability": {
+  "lgbm": {
+   "mean_sd_of_level_across_refits": 0.17771448979508458,
+   "max_sd": 0.4241783414579626
+  },
+  "ridge": {
+   "mean_sd_of_level_across_refits": 0.1853459286207124,
+   "max_sd": 0.3993133227466845
+  },
+  "deviation_sd_sqrt_tau2_O3": 0.46183660535452936
+ },
+ "G_feature_audit": {
+  "change_reliability": {
+   "var_measured_change": 0.23256899454600224,
+   "mean_survey_error_var_of_change": 0.09323467154402153,
+   "share_of_change_variance_that_is_real": 0.599109624539484,
+   "level_reliability_tau2_over_tau2_plus_se2": 0.8548286703807644
+  },
+  "features": {
+   "m_food_cpi_yoy": {
+    "group": "market",
+    "coverage": 0.9605911330049262,
+    "share_variance_within_province": 0.7214720508100075,
+    "share_variance_between_provinces_within_region_round": 0.410847878160263,
+    "transitions_where_feature_changed": 120,
+    "n_transitions": 120,
+    "rank_corr_change_vs_measured_change": -0.12914091256337246,
+    "ci95": [
+     -0.3732514788307977,
+     0.09546598451608554
+    ]
+   },
+   "m_rice_cpi_yoy": {
+    "group": "market",
+    "coverage": 0.9605911330049262,
+    "share_variance_within_province": 0.8418185268423548,
+    "share_variance_between_provinces_within_region_round": 0.2666743831561714,
+    "transitions_where_feature_changed": 120,
+    "n_transitions": 120,
+    "rank_corr_change_vs_measured_change": -0.2917702618237378,
+    "ci95": [
+     -0.5277114885626764,
+     -0.008821897099952583
+    ]
+   },
+   "m_food_threshold_rel": {
+    "group": "market",
+    "coverage": 0.9852216748768473,
+    "share_variance_within_province": 0.25105095605854144,
+    "share_variance_between_provinces_within_region_round": 0.6046568232872518,
+    "transitions_where_feature_changed": 123,
+    "n_transitions": 123,
+    "rank_corr_change_vs_measured_change": 0.016767486553765594,
+    "ci95": [
+     -0.1943826901718718,
+     0.21588633940470384
+    ]
+   },
+   "c_rain_anom_6m": {
+    "group": "climate",
+    "coverage": 1.0,
+    "share_variance_within_province": 0.6394338210923577,
+    "share_variance_between_provinces_within_region_round": 0.12706283045862632,
+    "transitions_where_feature_changed": 125,
+    "n_transitions": 125,
+    "rank_corr_change_vs_measured_change": 0.15069616832066687,
+    "ci95": [
+     -0.05094777179189232,
+     0.39782292949520964
+    ]
+   },
+   "c_tc_4q": {
+    "group": "climate",
+    "coverage": 1.0,
+    "share_variance_within_province": 0.6059901073105299,
+    "share_variance_between_provinces_within_region_round": 0.2683670475232347,
+    "transitions_where_feature_changed": 87,
+    "n_transitions": 125,
+    "rank_corr_change_vs_measured_change": 0.013119786851846185,
+    "ci95": [
+     -0.18694776549075268,
+     0.21672690917430054
+    ]
+   },
+   "c_tc_clim": {
+    "group": "climate",
+    "coverage": 1.0,
+    "share_variance_within_province": 1.1032321193903256e-32,
+    "share_variance_between_provinces_within_region_round": 0.06999020590206456,
+    "transitions_where_feature_changed": 0,
+    "n_transitions": 125,
+    "rank_corr_change_vs_measured_change": NaN,
+    "ci95": null
+   },
+   "c_agri_pc": {
+    "group": "climate",
+    "coverage": 0.9655172413793104,
+    "share_variance_within_province": 0.004369086944270835,
+    "share_variance_between_provinces_within_region_round": 0.3917438988702942,
+    "transitions_where_feature_changed": 121,
+    "n_transitions": 121,
+    "rank_corr_change_vs_measured_change": -0.18175721446958404,
+    "ci95": [
+     -0.386010751874597,
+     0.03087740746157211
+    ]
+   },
+   "c_agri_yoy": {
+    "group": "climate",
+    "coverage": 0.9655172413793104,
+    "share_variance_within_province": 0.5225225503292692,
+    "share_variance_between_provinces_within_region_round": 0.5130445842638603,
+    "transitions_where_feature_changed": 121,
+    "n_transitions": 121,
+    "rank_corr_change_vs_measured_change": -0.10873865329901095,
+    "ci95": [
+     -0.22095027397557232,
+     -0.007899632252038385
+    ]
+   },
+   "c_fish_yoy": {
+    "group": "climate",
+    "coverage": 0.9655172413793104,
+    "share_variance_within_province": 0.5847247760526283,
+    "share_variance_between_provinces_within_region_round": 0.5516904019921403,
+    "transitions_where_feature_changed": 121,
+    "n_transitions": 121,
+    "rank_corr_change_vs_measured_change": -0.03934426229508196,
+    "ci95": [
+     -0.20776715088016132,
+     0.11696308324973236
+    ]
+   },
+   "p_poverty": {
+    "group": "poverty",
+    "coverage": 0.9852216748768473,
+    "share_variance_within_province": 0.0932130427567967,
+    "share_variance_between_provinces_within_region_round": 0.3506521615769022,
+    "transitions_where_feature_changed": 123,
+    "n_transitions": 123,
+    "rank_corr_change_vs_measured_change": -0.10610594471888664,
+    "ci95": [
+     -0.2940293403138085,
+     0.13120792554850003
+    ]
+   },
+   "p_subsistence": {
+    "group": "poverty",
+    "coverage": 0.9852216748768473,
+    "share_variance_within_province": 0.2589601053432865,
+    "share_variance_between_provinces_within_region_round": 0.4318551653291456,
+    "transitions_where_feature_changed": 123,
+    "n_transitions": 123,
+    "rank_corr_change_vs_measured_change": -0.05166965471875765,
+    "ci95": [
+     -0.2249750492451872,
+     0.16159788269591768
+    ]
+   },
+   "p_poverty_gap": {
+    "group": "poverty",
+    "coverage": 0.9852216748768473,
+    "share_variance_within_province": 0.17473690539926437,
+    "share_variance_between_provinces_within_region_round": 0.3987646567236371,
+    "transitions_where_feature_changed": 120,
+    "n_transitions": 123,
+    "rank_corr_change_vs_measured_change": -0.023124537503346795,
+    "ci95": [
+     -0.2513795787429579,
+     0.23477822602198808
+    ]
+   },
+   "p_density": {
+    "group": "poverty",
+    "coverage": 0.9655172413793104,
+    "share_variance_within_province": 0.0014111651393766602,
+    "share_variance_between_provinces_within_region_round": 0.3605914806144323,
+    "transitions_where_feature_changed": 46,
+    "n_transitions": 121,
+    "rank_corr_change_vs_measured_change": 0.3347718424209178,
+    "ci95": [
+     0.06953159645355253,
+     0.5629351529142166
+    ]
+   }
+  }
+ }
+}

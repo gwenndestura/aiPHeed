@@ -32,6 +32,21 @@ approximates them with the 2015 design effect (3.17).
 **Priority 4: ENNS 2018 and 2019 fieldwork months per province.** The monographs do not print them; E137–E142 assume
 Q3.
 
+**Priority 5 (E143): confirm HFIAS continuity after 2021.**
+* The 2023 NNS food-security results are reported with FIES, not HFIAS (FNRI 2024 Nutrition Summit slides).
+* Request:
+  * whether any round after 2021 used HFIAS;
+  * if not, the 2023 NNS provincial FIES estimates with SEs. These are for agreement only; they are never confirmation of an HFIAS target.
+
+### Searched in E143 (2026-11-04), without success
+
+| Source | Outcome |
+|---|---|
+| eNutrition facts-and-figures and public-use-file pages | Unreachable from this network and from the fetch service. The PUF description lists HFIAS for 2018, 2019 and 2021 |
+| FOI portal pages for the 2021 ENNS | HTTP 403 |
+| Semeniano et al., *Phil. J. Dev.* 49(2b) 2025 (doi:10.62986/pjd2025.49.2b) | HFIAS 2018–2019 + 2021, regional determinants only. The PDF sits behind a captcha, which was not bypassed |
+| Cavite COVID-19 food-insecurity papers (*Phil. J. Sci.* 2025) | FIES, HTTP 403. Not used |
+
 ## 2. What happens when the data arrive
 
 1. Save as CSV in the format of `backend/data/registry/provincial_round_TEMPLATE.csv` (province, survey, year, p,

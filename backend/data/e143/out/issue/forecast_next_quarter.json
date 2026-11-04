@@ -1,0 +1,454 @@
+{
+  "model": "e143-re-lgbm-1.0 (C2 RE-LGBM-X; c 0.502, tau2 0.183)",
+  "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast",
+  "claim": "Estimated relative food-insecurity risk of the province in the target quarter: an indicator-based structural level (LightGBM, trained without the province's own region) plus the province's measured HFIAS history, weighted by how strongly measured deviations persisted between survey rounds (a permanent province component; no time decay is identified). Validated survey-to-survey only, on re-used development folds; the quarter-to-quarter change is NOT validated, because no quarterly provincial measurement exists.",
+  "issue_date": "2026-10-01",
+  "issue_quarter": "2026-Q4",
+  "information_cutoff": "2026-10-01 (exclusive)",
+  "target_quarter": "2027-Q1",
+  "display_lead": 1,
+  "final_model": {
+    "C1 STATE-LGBM-X": {
+      "tau2": 0.1831988895839641,
+      "c": 0.5015371161526944,
+      "sigma2_A": 0.09188104276431723,
+      "sigma2_G": 0.09188104276431723,
+      "phi": 0.935
+    },
+    "C2 RE-LGBM-X": {
+      "tau2": 0.1831988895839641,
+      "c": 0.5015371161526944,
+      "sigma2_A": 0.09188104276431723,
+      "sigma2_G": 0.09188104276431723,
+      "phi": 0.935
+    },
+    "C3 RE-RIDGE-X": {
+      "tau2": 0.17376137470185307,
+      "c": 0.424011020119154,
+      "sigma2_A": 0.07367673774463927,
+      "sigma2_G": 0.07367673774463927,
+      "phi": 0.922
+    },
+    "C4 HRE-LGBM-X": {
+      "tau2": 0.1831988895839641,
+      "c": 0.5015371161526944,
+      "sigma2_A": 0.09188104276431723,
+      "sigma2_G": 0.09188104276431723,
+      "phi": 0.935
+    }
+  },
+  "class_rule": "HIGH if P >= 0.8, the whole refit range >= 0.5 and every candidate model >= 0.5; LOW if P <= 0.2, the whole refit range < 0.5 and every candidate model < 0.5; otherwise UNCERTAIN",
+  "meaning": "Estimated probability that the province's household food insecurity (HFIAS moderate-or-severe) is above the national level in the target quarter. A risk estimate: HIGH does not confirm food insecurity and LOW does not guarantee food security. It is not the share of food-insecure households.",
+  "concepts": {
+    "directly_measured": "measured_rounds (FNRI HFIAS)",
+    "estimated_current_relative_risk": "relative_logit",
+    "latent_state": "structural_level_logit + survey_anchor_logit",
+    "next_quarter_forecast": "p_elevated for target_quarter (candidate; the quarterly change is assumed, not validated)",
+    "independently_validated_future_prediction": "none yet (prospective register, awaiting a provincial round after 2019)",
+    "lgu_priority": "lgus_next_quarter.csv (vulnerability-weighted priority, not a municipal measurement)"
+  },
+  "provinces": [
+    {
+      "province": "Batangas",
+      "issue_quarter": "2026-Q4",
+      "target_quarter": "2027-Q1",
+      "output_type": "candidate next-quarter estimate of relative risk (NOT a validated forecast)",
+      "p_elevated": 0.0642,
+      "p_refit_range90": [
+        0.0145,
+        0.3707
+      ],
+      "relative_logit": -0.538,
+      "relative_logit_interval90": [
+        -1.12,
+        0.044
+      ],
+      "risk_class": "LOW",
+      "measured_rounds": [
+        {
+          "survey": "NNS2013",
+          "relative_logit": -0.405,
+          "se": 0.137,
+          "status": "LOWER"
+        },
+        {
+          "survey": "FNRI2015",
+          "relative_logit": -0.414,
+          "se": 0.116,
+          "status": "LOWER"
+        }
+      ],
+      "last_direct_survey": "FNRI2015",
+      "quarters_since_last_survey": 46,
+      "structural_level_logit": -0.26,
+      "survey_anchor_logit": -0.278,
+      "weight_on_own_surveys": 0.631,
+      "explanation": {
+        "base_logit": 0.3119533144211204,
+        "groups": {
+          "poverty": -0.33515929649303955,
+          "geography": -0.18023672621107734,
+          "market": -0.006412364352335508,
+          "climate": -0.050366992444986845,
+          "history (measured HFIAS rounds)": -0.27777388881401693
+        }
+      },
+      "explanation_level_kind": "GBC",
+      "model_selection_spread": {
+        "C1 STATE-LGBM-X": 0.2572,
+        "C2 RE-LGBM-X": 0.0642,
+        "C3 RE-RIDGE-X": 0.2649,
+        "C4 HRE-LGBM-X": 0.0721,
+        "E142 STATE-LGBM": 0.0741
+      },
+      "hierarchical_C4_refit_range90": [
+        0.0229,
+        0.3174
+      ],
+      "transition_form": {
+        "C2 permanent component: weight on own surveys": 0.631,
+        "C1 AR(1): weight on last survey": 0.042
+      },
+      "variance_decomposition": {
+        "total_V": 0.12519805765513772,
+        "transitory_round_shock_sigma2_b": 0.09131784681964687,
+        "permanent_component_uncertainty": 0.03388021083549086,
+        "of_which_survey_error_of_anchoring_rounds": 0.0033786074754965506,
+        "of_which_finite_number_of_rounds": 0.030501603359994307,
+        "note": "tau2 is estimated from out-of-fold deviations, so the structural level's out-of-sample error is inside these components; parameter and model-selection uncertainty are reported separately"
+      },
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the survey years",
+        "news_nlp": "FSSI v2 exists for CALABARZON only (95 % one outlet); not testable as a provincial input",
+        "utilization": "no nutrition, water or sanitation data held"
+      },
+      "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast"
+    },
+    {
+      "province": "Cavite",
+      "issue_quarter": "2026-Q4",
+      "target_quarter": "2027-Q1",
+      "output_type": "candidate next-quarter estimate of relative risk (NOT a validated forecast)",
+      "p_elevated": 0.1243,
+      "p_refit_range90": [
+        0.0413,
+        0.5285
+      ],
+      "relative_logit": -0.407,
+      "relative_logit_interval90": [
+        -0.988,
+        0.174
+      ],
+      "risk_class": "UNCERTAIN",
+      "measured_rounds": [
+        {
+          "survey": "NNS2013",
+          "relative_logit": -0.489,
+          "se": 0.129,
+          "status": "LOWER"
+        },
+        {
+          "survey": "FNRI2015",
+          "relative_logit": -0.483,
+          "se": 0.105,
+          "status": "LOWER"
+        }
+      ],
+      "last_direct_survey": "FNRI2015",
+      "quarters_since_last_survey": 46,
+      "structural_level_logit": -0.26,
+      "survey_anchor_logit": -0.147,
+      "weight_on_own_surveys": 0.636,
+      "explanation": {
+        "base_logit": 0.3119533144211204,
+        "groups": {
+          "poverty": -0.33515929649303955,
+          "geography": -0.18023672621107734,
+          "market": -0.006412364352335508,
+          "climate": -0.050366992444986845,
+          "history (measured HFIAS rounds)": -0.14721024679649003
+        }
+      },
+      "explanation_level_kind": "GBC",
+      "model_selection_spread": {
+        "C1 STATE-LGBM-X": 0.264,
+        "C2 RE-LGBM-X": 0.1243,
+        "C3 RE-RIDGE-X": 0.3596,
+        "C4 HRE-LGBM-X": 0.0721,
+        "E142 STATE-LGBM": 0.0729
+      },
+      "hierarchical_C4_refit_range90": [
+        0.0225,
+        0.4087
+      ],
+      "transition_form": {
+        "C2 permanent component: weight on own surveys": 0.636,
+        "C1 AR(1): weight on last survey": 0.043
+      },
+      "variance_decomposition": {
+        "total_V": 0.12474693058286528,
+        "transitory_round_shock_sigma2_b": 0.09131784681964687,
+        "permanent_component_uncertainty": 0.0334290837632184,
+        "of_which_survey_error_of_anchoring_rounds": 0.002927480403224096,
+        "of_which_finite_number_of_rounds": 0.030501603359994307,
+        "note": "tau2 is estimated from out-of-fold deviations, so the structural level's out-of-sample error is inside these components; parameter and model-selection uncertainty are reported separately"
+      },
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the survey years",
+        "news_nlp": "FSSI v2 exists for CALABARZON only (95 % one outlet); not testable as a provincial input",
+        "utilization": "no nutrition, water or sanitation data held"
+      },
+      "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast"
+    },
+    {
+      "province": "Laguna",
+      "issue_quarter": "2026-Q4",
+      "target_quarter": "2027-Q1",
+      "output_type": "candidate next-quarter estimate of relative risk (NOT a validated forecast)",
+      "p_elevated": 0.0748,
+      "p_refit_range90": [
+        0.0262,
+        0.2244
+      ],
+      "relative_logit": -0.491,
+      "relative_logit_interval90": [
+        -1.052,
+        0.07
+      ],
+      "risk_class": "LOW",
+      "measured_rounds": [
+        {
+          "survey": "NNS2013",
+          "relative_logit": -0.439,
+          "se": 0.135,
+          "status": "LOWER"
+        },
+        {
+          "survey": "FNRI2015",
+          "relative_logit": -0.5,
+          "se": 0.107,
+          "status": "LOWER"
+        },
+        {
+          "survey": "ENNS2018",
+          "relative_logit": -0.746,
+          "se": 0.07,
+          "status": "LOWER"
+        }
+      ],
+      "last_direct_survey": "ENNS2018",
+      "quarters_since_last_survey": 34,
+      "structural_level_logit": -0.26,
+      "survey_anchor_logit": -0.231,
+      "weight_on_own_surveys": 0.729,
+      "explanation": {
+        "base_logit": 0.3119533144211204,
+        "groups": {
+          "poverty": -0.33515929649303955,
+          "geography": -0.18023672621107734,
+          "market": -0.006412364352335508,
+          "climate": -0.050366992444986845,
+          "history (measured HFIAS rounds)": -0.231126963860319
+        }
+      },
+      "explanation_level_kind": "GBC",
+      "model_selection_spread": {
+        "C1 STATE-LGBM-X": 0.2337,
+        "C2 RE-LGBM-X": 0.0748,
+        "C3 RE-RIDGE-X": 0.1764,
+        "C4 HRE-LGBM-X": 0.0721,
+        "E142 STATE-LGBM": 0.0703
+      },
+      "hierarchical_C4_refit_range90": [
+        0.028,
+        0.1849
+      ],
+      "transition_form": {
+        "C2 permanent component: weight on own surveys": 0.729,
+        "C1 AR(1): weight on last survey": 0.099
+      },
+      "variance_decomposition": {
+        "total_V": 0.1162425426861303,
+        "transitory_round_shock_sigma2_b": 0.09131784681964687,
+        "permanent_component_uncertainty": 0.024924695866483423,
+        "of_which_survey_error_of_anchoring_rounds": 0.002060196484207591,
+        "of_which_finite_number_of_rounds": 0.022864499382275832,
+        "note": "tau2 is estimated from out-of-fold deviations, so the structural level's out-of-sample error is inside these components; parameter and model-selection uncertainty are reported separately"
+      },
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the survey years",
+        "news_nlp": "FSSI v2 exists for CALABARZON only (95 % one outlet); not testable as a provincial input",
+        "utilization": "no nutrition, water or sanitation data held"
+      },
+      "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast"
+    },
+    {
+      "province": "Quezon",
+      "issue_quarter": "2026-Q4",
+      "target_quarter": "2027-Q1",
+      "output_type": "candidate next-quarter estimate of relative risk (NOT a validated forecast)",
+      "p_elevated": 0.1651,
+      "p_refit_range90": [
+        0.0819,
+        0.5792
+      ],
+      "relative_logit": -0.334,
+      "relative_logit_interval90": [
+        -0.897,
+        0.23
+      ],
+      "risk_class": "UNCERTAIN",
+      "measured_rounds": [
+        {
+          "survey": "NNS2013",
+          "relative_logit": -0.077,
+          "se": 0.148,
+          "status": "NOT_DISTINGUISHABLE"
+        },
+        {
+          "survey": "FNRI2015",
+          "relative_logit": -0.2,
+          "se": 0.136,
+          "status": "NOT_DISTINGUISHABLE"
+        },
+        {
+          "survey": "ENNS2019",
+          "relative_logit": 0.049,
+          "se": 0.116,
+          "status": "NOT_DISTINGUISHABLE"
+        }
+      ],
+      "last_direct_survey": "ENNS2019",
+      "quarters_since_last_survey": 30,
+      "structural_level_logit": -0.255,
+      "survey_anchor_logit": -0.078,
+      "weight_on_own_surveys": 0.716,
+      "explanation": {
+        "base_logit": 0.3119533144211204,
+        "groups": {
+          "poverty": -0.33413565012356483,
+          "geography": -0.18178492824927134,
+          "market": 0.004662029814396979,
+          "climate": -0.056155702852152725,
+          "history (measured HFIAS rounds)": -0.07818491074887444
+        }
+      },
+      "explanation_level_kind": "GBC",
+      "model_selection_spread": {
+        "C1 STATE-LGBM-X": 0.2755,
+        "C2 RE-LGBM-X": 0.1651,
+        "C3 RE-RIDGE-X": 0.5367,
+        "C4 HRE-LGBM-X": 0.0742,
+        "E142 STATE-LGBM": 0.2635
+      },
+      "hierarchical_C4_refit_range90": [
+        0.0617,
+        0.5357
+      ],
+      "transition_form": {
+        "C2 permanent component: weight on own surveys": 0.716,
+        "C1 AR(1): weight on last survey": 0.124
+      },
+      "variance_decomposition": {
+        "total_V": 0.11738472994065496,
+        "transitory_round_shock_sigma2_b": 0.09131784681964687,
+        "permanent_component_uncertainty": 0.02606688312100809,
+        "of_which_survey_error_of_anchoring_rounds": 0.003202383738732259,
+        "of_which_finite_number_of_rounds": 0.022864499382275832,
+        "note": "tau2 is estimated from out-of-fold deviations, so the structural level's out-of-sample error is inside these components; parameter and model-selection uncertainty are reported separately"
+      },
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the survey years",
+        "news_nlp": "FSSI v2 exists for CALABARZON only (95 % one outlet); not testable as a provincial input",
+        "utilization": "no nutrition, water or sanitation data held"
+      },
+      "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast"
+    },
+    {
+      "province": "Rizal",
+      "issue_quarter": "2026-Q4",
+      "target_quarter": "2027-Q1",
+      "output_type": "candidate next-quarter estimate of relative risk (NOT a validated forecast)",
+      "p_elevated": 0.1909,
+      "p_refit_range90": [
+        0.0868,
+        0.4268
+      ],
+      "relative_logit": -0.3,
+      "relative_logit_interval90": [
+        -0.863,
+        0.264
+      ],
+      "risk_class": "LOW",
+      "measured_rounds": [
+        {
+          "survey": "NNS2013",
+          "relative_logit": -0.281,
+          "se": 0.149,
+          "status": "NOT_DISTINGUISHABLE"
+        },
+        {
+          "survey": "FNRI2015",
+          "relative_logit": -0.504,
+          "se": 0.116,
+          "status": "LOWER"
+        },
+        {
+          "survey": "ENNS2019",
+          "relative_logit": -0.153,
+          "se": 0.137,
+          "status": "NOT_DISTINGUISHABLE"
+        }
+      ],
+      "last_direct_survey": "ENNS2019",
+      "quarters_since_last_survey": 30,
+      "structural_level_logit": -0.26,
+      "survey_anchor_logit": -0.04,
+      "weight_on_own_surveys": 0.716,
+      "explanation": {
+        "base_logit": 0.3119533144211204,
+        "groups": {
+          "poverty": -0.33515929649303955,
+          "geography": -0.18023672621107734,
+          "market": -0.006412364352335508,
+          "climate": -0.050366992444986845,
+          "history (measured HFIAS rounds)": -0.039521035133382676
+        }
+      },
+      "explanation_level_kind": "GBC",
+      "model_selection_spread": {
+        "C1 STATE-LGBM-X": 0.2804,
+        "C2 RE-LGBM-X": 0.1909,
+        "C3 RE-RIDGE-X": 0.4514,
+        "C4 HRE-LGBM-X": 0.0721,
+        "E142 STATE-LGBM": 0.2311
+      },
+      "hierarchical_C4_refit_range90": [
+        0.0331,
+        0.3281
+      ],
+      "transition_form": {
+        "C2 permanent component: weight on own surveys": 0.716,
+        "C1 AR(1): weight on last survey": 0.121
+      },
+      "variance_decomposition": {
+        "total_V": 0.11741656570459391,
+        "transitory_round_shock_sigma2_b": 0.09131784681964687,
+        "permanent_component_uncertainty": 0.02609871888494704,
+        "of_which_survey_error_of_anchoring_rounds": 0.0032342195026712067,
+        "of_which_finite_number_of_rounds": 0.022864499382275832,
+        "note": "tau2 is estimated from out-of-fold deviations, so the structural level's out-of-sample error is inside these components; parameter and model-selection uncertainty are reported separately"
+      },
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the survey years",
+        "news_nlp": "FSSI v2 exists for CALABARZON only (95 % one outlet); not testable as a provincial input",
+        "utilization": "no nutrition, water or sanitation data held"
+      },
+      "validation_status": "CANDIDATE - E143 gate not passed (S1, S2: not better than persistence or the region's previous level with Holm-adjusted confidence); validation pending; not a released forecast"
+    }
+  ],
+  "seals": {
+    "e143-re-lgbm-1.0": "4c61cc0ef5ca36fe9fd850807efeecbde71f69dffeffefa92b2d64f599343648",
+    "e143-hre-lgbm-1.0": "58a9daa716f78b44fe33e3588737a35b6d682fc9b89245b2b4b2c238837a8bd1"
+  }
+}

@@ -60,6 +60,16 @@ CATALOG = [
      "target": "Food-insecurity RISK in the target quarter: LightGBM structural level pulled toward the last measured HFIAS "
                "round with a weight that decays with quarters since that survey; P(above national)",
      "note": "Evaluated by its pre-registered gate (app.e142.gate). Candidate outputs on admin routes only."},
+    {"model_id": "e143-re-lgbm-1.0", "status": "candidate", "version": "e143 C2 RE-LGBM-X (protocol E143-P1)",
+     "artifact_path": "data/e143/out/results.json",
+     "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus a permanent "
+               "province component estimated from all measured HFIAS rounds; P(above national)",
+     "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only."},
+    {"model_id": "e143-hre-lgbm-1.0", "status": "candidate", "version": "e143 C4 HRE-LGBM-X (protocol E143-P1)",
+     "artifact_path": "data/e143/out/results.json",
+     "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus hierarchical "
+               "(region + province) permanent components from measured HFIAS rounds; P(above national)",
+     "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only."},
 ]
 
 

@@ -1330,6 +1330,122 @@
     "evaluated_utc": "2026-11-04T00:09:38+00:00",
     "artifact_file_sha256": "baa9190c21906add91b2fc95158d3aa4ff7af0b3ae1405666ccecf56c9ce1e1b"
    }
+  },
+  "e143-re-lgbm-1.0": {
+   "version": "e143 C2 RE-LGBM-X (protocol E143-P1)",
+   "artifact_path": "data/e143/out/results.json",
+   "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus a permanent province component estimated from all measured HFIAS rounds; P(above national)",
+   "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9",
+   "model_id": "e143-re-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-04T00:48:29+00:00",
+   "gate": {
+    "gate_version": "risk-gate E143-P1",
+    "checks": [
+     {
+      "id": "S1_beats_persistence_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S2_beats_region_previous_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S3_calibration",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S4_classes",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S5_predicts_change",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S6_beats_persistence_O2_O3",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S7_lightgbm_level_not_worse_than_ridge",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S8_interval_coverage",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     }
+    ],
+    "passed": false,
+    "evaluated_utc": "2026-11-04T00:48:29+00:00",
+    "artifact_file_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9"
+   }
+  },
+  "e143-hre-lgbm-1.0": {
+   "version": "e143 C4 HRE-LGBM-X (protocol E143-P1)",
+   "artifact_path": "data/e143/out/results.json",
+   "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus hierarchical (region + province) permanent components from measured HFIAS rounds; P(above national)",
+   "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9",
+   "model_id": "e143-hre-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-04T00:48:29+00:00",
+   "gate": {
+    "gate_version": "risk-gate E143-P1",
+    "checks": [
+     {
+      "id": "S1_beats_persistence_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S2_beats_region_previous_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S3_calibration",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S4_classes",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S5_predicts_change",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S6_beats_persistence_O2_O3",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S7_lightgbm_level_not_worse_than_ridge",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S8_interval_coverage",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     }
+    ],
+    "passed": false,
+    "evaluated_utc": "2026-11-04T00:48:29+00:00",
+    "artifact_file_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9"
+   }
   }
  },
  "history": [
@@ -1721,6 +1837,92 @@
     "S1_beats_persistence",
     "S2_beats_region_history",
     "S3_calibration"
+   ]
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e141-lgbm-3round-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e142-state-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e143-re-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e143-hre-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e143-re-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_persistence_holm",
+    "S2_beats_region_previous_holm"
+   ]
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e143-hre-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_persistence_holm",
+    "S2_beats_region_previous_holm"
    ]
   }
  ]
