@@ -250,3 +250,39 @@ Likely reasons:
 - Employment and remittances do not improve the forecast; it gets slightly worse.
 - Serving C-B6E is the owner's decision: all five driver groups would become model inputs, at the cost of failing the
   reliability rules and slightly lower accuracy (0.790 vs 0.806).
+
+---
+
+## Fix 6 (owner directive): nested optimisation of C-B6E (C-B6E-OPT)
+
+**Setup:**
+- **Plan:** `PLAN_CB6E_OPT.md`, SHA-256 0d0c3101…, committed (8c38b6c5) before the fit.
+- **Search:** at every origin, one of 32 settings is chosen on inner chronological folds (past quarters only): 8 tree
+  settings × direction constraints (E1 +, E2 +, ST1 −) on/off × min_child_samples 15/30.
+- **Check:** the restricted space reproduced C-B6E exactly (1e-16).
+- Run: `runner/cb6eopt_model.py` → `out/cb6eopt_fits.csv`, `out/cb6eopt_results.json`.
+
+**Results (62 quarters):**
+
+| Model | Lead | Accuracy | Balanced | F1 | AUC | Brier | R1–R7 |
+|---|---|---|---|---|---|---|---|
+| C-B6 | 1 | **0.806** | **0.743** | **0.867** | **0.723** | **0.183** | all pass |
+| C-B6E | 1 | 0.790 | 0.717 | 0.857 | 0.698 | 0.192 | R5, R7 fail |
+| C-B6E-OPT | 1 | 0.774 | 0.705 | 0.844 | 0.697 | 0.191 | R5, R7 fail |
+| C-B6 | 2 | **0.806** | **0.743** | **0.867** | 0.712 | **0.181** | all pass |
+| C-B6E | 2 | 0.790 | 0.717 | 0.857 | **0.720** | 0.184 | R7 fails |
+| C-B6E-OPT | 2 | 0.774 | 0.705 | 0.844 | 0.718 | 0.184 | R7 fails |
+
+**What the optimisation did:**
+- **Settings chosen:** constraints on at 30% of origins; min_child_samples 30 at 44%.
+- **Vs C-B6E:** Brier −0.001 (n.s.), and 1 more call wrong.
+- **Vs C-B6:** Brier +0.008 / +0.003, with 2 calls changed.
+- **SHAP share:** E1 4.0%, E2 1.4%.
+- **Reliable lead:** 2.
+
+**Decision (pre-registered):** C-B6E-OPT is not served automatically. It fails R5/R7, and its accuracy is below
+C-B6E's.
+
+**Conclusion across Fixes 5–6:** with the data available (national series only), employment and remittances cannot
+be made to help the forecast, either as plain inputs or with tuning. If the owner wants all five groups as inputs,
+**C-B6E** is the better of the two variants (higher accuracy).
