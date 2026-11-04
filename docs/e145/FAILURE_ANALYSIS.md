@@ -18,7 +18,9 @@
 
 ### RC1. There is no province-quarter food-insecurity measurement
 
-Across all years, CALABARZON has **13 measured HFIAS province-rounds** (NNS 2013: 5, FNRI 2015: 5, ENNS 2018: 1, ENNS 2019: 2) and **4 FIES province-rounds** (ENNS 2019: Quezon, Rizal; ENNS 2021: Batangas, Cavite), plus Lucena City 2021. HFIAS and FIES differ in items and recall (30 days against 12 months), so they are not one series. The 2021 and 2023 rounds use FIES, so the HFIAS series appears to end in 2019.
+Across all years, CALABARZON has **13 measured HFIAS province-rounds** (NNS 2013: 5, FNRI 2015: 5, ENNS 2018: 1, ENNS 2019: 2) and **4 FIES province-rounds** (ENNS 2019: Quezon, Rizal; ENNS 2021: Batangas, Cavite), plus Lucena City 2021. HFIAS and FIES differ in items and recall (30 days against 12 months), so they are not one series.
+
+**Correction:** an earlier version said the HFIAS series ends in 2019. FNRI's Heat Map shows HFIAS continued through ENNS 2021, so 2021 HFIAS rows exist for Batangas and Cavite. See `docs/e147/DATA_INVENTORY.md`.
 
 The quarterly target the objectives ask for has never been observed for any province, so a direct province-quarter accuracy cannot be computed.
 

@@ -94,7 +94,9 @@ The evidence database lists 36 sources, 22 of them directly on food-insecurity f
 | PSA Family Income and Expenditure Survey 2023 | Vulnerability context only | No food-insecurity item |
 | IPC, Food Consumption Score, rCSI, HHS | Not available for these provinces in the sources reviewed | |
 
-**Instrument facts verified from the decks.** The 2021 ENNS uses FIES (pages 51 to 53), which corrects earlier records. The HFIAS series appears to end in 2019, so a future HFIAS confirmation round may never come. The owner workbook's 2018 and 2019 "moderate-to-severe" column is HFIAS moderate only.
+**Correction, 2026-11-04, after this report.** This report said the 2021 ENNS uses FIES and that HFIAS appeared to end in 2019. That was wrong. FNRI's Heat Map methodology states HFIAS was used in 2013, 2015 and ENNS 2018, 2019 and 2021, and it publishes 2021 provincial HFIAS. The 2021 decks print FIES as well. See `docs/e147/DATA_INVENTORY.md`.
+
+**Owner workbook.** The 2018 and 2019 "moderate-to-severe" column is HFIAS moderate only.
 
 **Classes.** E145 uses above the same round's national reference (owner decision D-1). E146 uses above 42.8 %, the pooled national ENNS value, because a future national level is unknown.
 
