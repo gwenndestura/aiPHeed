@@ -48,12 +48,24 @@ def strict_model_check() -> None:
     print(f"Serving {THESIS.MODEL_NAME} (strict)")
 
 
+def prepare_auto_update() -> None:
+    """With the persistent folders configured (AIPHEED_FI_DATA_DIR, AIPHEED_CB6_STATE_DIR), set them up from the image on the
+    first start. Later starts keep every stored forecast."""
+    import os
+
+    if os.getenv("AIPHEED_CB6_STATE_DIR") and os.getenv("AIPHEED_FI_DATA_DIR"):
+        from app.cb6_auto.job import ensure_state
+
+        ensure_state()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup — Rule 1, Quarter Self-Update. The scheduler stages outputs for
     # review; it never publishes.
     print("Starting up aiPHeed backend...")
     load_model_settings()
+    prepare_auto_update()
     strict_model_check()
     start_scheduler()
     yield

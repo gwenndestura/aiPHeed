@@ -1,22 +1,26 @@
 """
 app/tasks/scheduler.py
 -----------------------
-Rule 1 — Quarter Self-Update.
+Rule 1 — Quarter Self-Update, as the project owner set it on 2026-11-04: every
+quarter the system collects its data and forecasts by itself, and never creates
+a new model. (Chapter III's Rule 1 text says LightGBM is retrained each quarter;
+the served C-B6 weights are frozen instead, see app/cb6_auto.)
 
-"The pipeline will automatically retrain LightGBM each quarter and will
-generate forecasts at the empirically validated lead time established during
-model evaluation, staging all outputs for mandatory review before publication."
-
-APScheduler triggers the quarterly cycle (Section 3.1, Deploy phase; Section
-3.5; the Automatic Scheduler actor in Figure 3.6.1). The scheduler runs the
-data collection step automatically on a pre-scheduled date and requires no
-human initialization.
+APScheduler runs app.cb6_auto.job.run_daily every morning (the Automatic
+Scheduler actor in Figure 3.6.1). It collects the news daily and, on and after
+each quarter's issue date, every other source; it scores the one frozen booster
+and requires no human initialization. Each step is idempotent, so a run missed
+by a restart is caught up at the next start or the next morning.
 
 What the job does NOT do is publish. Every forecast and every alert it produces
 enters the review queue as STAGED. An administrator at DA Region IV-A
 confirms or rejects each one before it reaches the dashboard — the two-step
 review of Figure 3.6.3, which guarantees no forecast or warning appears
 publicly without human decision-making.
+
+The older jobs below (the PCF21 quarterly cycle, the monthly refresh, the
+authorization-limited news backfill) are no longer scheduled: they do not
+produce the served C-B6 forecast. Their functions stay callable by hand.
 
 Usage:
     from app.tasks.scheduler import start_scheduler, shutdown_scheduler
@@ -40,15 +44,26 @@ CRON_DAY = "15"
 CRON_HOUR = "3"
 
 JOB_ID = "aipheed_quarterly_cycle"
+AUTO_JOB_ID = "aipheed_cb6_auto_update"
+AUTO_HOUR = "5"                       # 05:00 Asia/Manila, every day
+AUTO_MISFIRE_GRACE_SECONDS = 24 * 3600
+STARTUP_CATCH_UP_SECONDS = 120
 
 # Off by default so importing the app in a test or a script does not start a
 # background thread. Set AIPHEED_ENABLE_SCHEDULER=1 in the deployed environment.
 ENABLED = os.getenv("AIPHEED_ENABLE_SCHEDULER", "0").strip() == "1"
 
 
+def run_auto_update() -> dict:
+    """The automatic C-B6 update: news every day, the forecast when a quarter's issue date is due. Never trains."""
+    from app.cb6_auto.job import run_daily
+
+    return run_daily()
+
+
 def run_quarterly_cycle() -> dict:
     """
-    One quarterly cycle, in the order Figure 3.6.2 lays out.
+    The superseded PCF21 cycle (no longer scheduled). One quarterly cycle, in the order Figure 3.6.2 lays out.
 
     Both data tracks are collected, the NLP track is scored and aggregated, the
     two are fused, the model is retrained, forecasts are produced at the
@@ -151,8 +166,8 @@ def start_scheduler():
     if not ENABLED:
         logger.info(
             "Scheduler disabled (AIPHEED_ENABLE_SCHEDULER is not 1). The "
-            "quarterly cycle can still be run by hand with "
-            "scripts/run_quarterly_pipeline.py."
+            "quarterly update can still be run by hand with "
+            "python -m scripts.cb6_quarterly run."
         )
         return None
 
@@ -164,44 +179,28 @@ def start_scheduler():
         from apscheduler.triggers.cron import CronTrigger
     except ImportError:
         logger.warning(
-            "APScheduler is not installed — the quarterly cycle will not run "
-            "automatically. Install apscheduler or run the pipeline by hand."
+            "APScheduler is not installed — the quarterly update will not run "
+            "automatically. Install apscheduler or run it by hand."
         )
         return None
 
+    from datetime import datetime, timedelta, timezone
+
     _scheduler = BackgroundScheduler(timezone="Asia/Manila")
     _scheduler.add_job(
-        run_quarterly_cycle,
-        trigger=CronTrigger(month=CRON_MONTHS, day=CRON_DAY, hour=CRON_HOUR),
-        id=JOB_ID,
-        name="aiPHeed quarterly pipeline",
+        run_auto_update,
+        trigger=CronTrigger(hour=AUTO_HOUR, minute=0),
+        id=AUTO_JOB_ID,
+        name="aiPHeed automatic quarterly update (frozen C-B6, no retraining)",
         replace_existing=True,
         max_instances=1,
         coalesce=True,
-    )
-    _scheduler.add_job(
-        run_news_incremental,
-        trigger=CronTrigger(hour=NEWS_CRON_HOUR, minute=0),
-        id=NEWS_JOB_ID,
-        name="aiPHeed daily news collection",
-        replace_existing=True,
-        max_instances=1,
-        coalesce=True,
-    )
-    _scheduler.add_job(
-        run_monthly_refresh,
-        trigger=CronTrigger(day=MONTHLY_DAY, hour=MONTHLY_HOUR),
-        id=MONTHLY_JOB_ID,
-        name="aiPHeed monthly refresh (lead text + idempotent cycle)",
-        replace_existing=True,
-        max_instances=1,
-        coalesce=True,
+        misfire_grace_time=AUTO_MISFIRE_GRACE_SECONDS,
+        # also shortly after every start, so a restart can never lose a due quarter
+        next_run_time=datetime.now(timezone.utc) + timedelta(seconds=STARTUP_CATCH_UP_SECONDS),
     )
     _scheduler.start()
-    logger.info(
-        "Scheduler started: quarterly cycle at %s:00 on day %s of months %s "
-        "(Asia/Manila).", CRON_HOUR, CRON_DAY, CRON_MONTHS,
-    )
+    logger.info("Scheduler started: automatic C-B6 update daily at %s:00 Asia/Manila.", AUTO_HOUR)
     return _scheduler
 
 

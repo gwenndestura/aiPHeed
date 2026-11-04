@@ -152,12 +152,14 @@ def rows() -> dict[tuple[str, str], dict]:
 
 
 @functools.lru_cache(maxsize=1)
-def _evaluation(mtime: int) -> dict:
-    return json.loads((DATA / "evaluation.json").read_text(encoding="utf-8"))
+def _evaluation(path: str, mtime: int) -> dict:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 def evaluation() -> dict:
-    return _evaluation((DATA / "evaluation.json").stat().st_mtime_ns)
+    # keyed by path too: exports written in one checkout can share a timestamp, and would then read each other's metrics
+    p = DATA / "evaluation.json"
+    return _evaluation(str(p), p.stat().st_mtime_ns)
 
 
 def m3_served() -> bool:
@@ -359,9 +361,12 @@ def reliability_text(r: dict) -> str:
         failed = ", ".join(f"{x} ({RULE_NAMES.get(x, x)})" for x in L[str(lead)]["failed"])
         rules = (f"but fails the stricter reliability rules R1-R7 ({failed})" if failed else
                  "and passes the stricter reliability rules R1-R7 (development evidence)")
+        frozen = ("; issued by the automatic quarterly update with the C-B6 weights frozen at origin 2026-Q3, while those "
+                  "accuracy figures come from refitting at every past origin" if str(r.get("cfg", "")).startswith("frozen:")
+                  else "")
         return (f"Lead-{lead} forecast: passes the paper's 75% accuracy rule (accuracy {m['accuracy']:.3f} on "
                 f"{L[str(lead)]['n']} past quarters; Maximum Reliable Lead Time {reliable_lead()}) {rules}; "
-                f"{news_effect_text(lead)}")
+                f"{news_effect_text(lead)}{frozen}")
     return f"Lead-{lead} forecast: beyond the Maximum Reliable Lead Time ({reliable_lead()} quarters)"
 
 

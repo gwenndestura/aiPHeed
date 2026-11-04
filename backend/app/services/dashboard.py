@@ -104,7 +104,8 @@ THESIS_INDICATOR = {
 def indicator_for(quarter: str) -> dict:
     """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
     target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
-    if not (E41L2.serves(quarter) or E41L2.governs()):
+    # A later forecast added by the automatic update is not the E41 record's target, and is still the served model's quarter.
+    if not (E41L2.serves(quarter) or E41L2.governs() or (THESIS.active() and CH1.active() and CH1.covers(quarter))):
         return INDICATOR
     if THESIS.active():
         return CH1.INDICATOR if CH1.active() and CH1.covers(quarter) else THESIS_INDICATOR

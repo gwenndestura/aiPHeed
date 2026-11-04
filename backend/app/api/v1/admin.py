@@ -77,6 +77,15 @@ admin_router = APIRouter(dependencies=[Depends(require_admin), Depends(forbid_de
 public_router = APIRouter()
 
 
+@admin_router.get("/auto-update")
+async def auto_update_status() -> dict:
+    """Read-only state of the automatic quarterly update: issued forecasts, recent runs, stale sources, anything that needs
+    a person (for example an SWS release the parser refused)."""
+    from app.cb6_auto import job
+
+    return job.status()
+
+
 # ---------------------------------------------------------------------------
 # Serialisers
 # ---------------------------------------------------------------------------

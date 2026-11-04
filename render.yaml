@@ -24,6 +24,15 @@ services:
         value: thesis
       - key: AIPHEED_STRICT_MODEL
         value: "1"
+      # Serve C-B6 and let it update itself each quarter (frozen weights, no retraining; output stays STAGED for review).
+      - key: AIPHEED_MAP_MODEL
+        value: foodinsecurity
+      - key: AIPHEED_ENABLE_SCHEDULER
+        value: "1"
+      - key: AIPHEED_FI_DATA_DIR
+        value: /var/data/foodinsecurity_engine_cb6
+      - key: AIPHEED_CB6_STATE_DIR
+        value: /var/data/cb6_auto
       - key: FRONTEND_BASE_URL
         sync: false          # set to the Vercel URL, e.g. https://aipheed-frontend.vercel.app
       - key: SMTP_HOST
