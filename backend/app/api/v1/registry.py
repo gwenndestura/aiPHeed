@@ -25,9 +25,10 @@ admin_router = APIRouter(dependencies=[Depends(require_admin)])
 # Serving functions per approved model id; a model without an entry here cannot be served even if approved.
 PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": ("app.e139.serve", "outlook"),
                       "e140-lgbm-native-1.0": ("app.e140.serve", "outlook"),
-                      "e141-lgbm-3round-1.0": ("app.e141.serve", "outlook")}
+                      "e141-lgbm-3round-1.0": ("app.e141.serve", "outlook"),
+                      "e142-state-lgbm-1.0": ("app.e142.serve", "outlook")}
 CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve", "e140-lgbm-native-1.0": "app.e140.serve",
-              "e141-lgbm-3round-1.0": "app.e141.serve"}
+              "e141-lgbm-3round-1.0": "app.e141.serve", "e142-state-lgbm-1.0": "app.e142.serve"}
 
 
 @public_router.get("/final/model-registry")

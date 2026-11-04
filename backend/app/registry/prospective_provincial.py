@@ -110,7 +110,28 @@ def baselines(new: pd.DataFrame) -> pd.DataFrame:
     out["PERS"] = pers.predict_proba(pd.DataFrame({"prev_y": prev, "prev_se_y": prev_se}))
     rp = new["k"].map(latest["region"]).map(reg_mean)
     out["REGPREV"] = norm.cdf(rp / np.sqrt(M137.tau2(hist)))
+    out["region"] = new["k"].map(latest["region"])
     return out
+
+
+CONFIRM = {"min_n": 20, "auc": 0.75}            # stated in docs/system/DATA_REQUEST_FNRI_PROVINCIAL_HFIAS.md
+
+
+def diff_ci(m: pd.DataFrame, a: str, b: str, n_boot: int = 1000, seed: int = 20261105) -> dict:
+    """EB(a) - EB(b) on rows where both exist, with a cluster (region) bootstrap 95 % interval."""
+    d = m.dropna(subset=[a, b, "q"])
+    eb = lambda x, c: float(np.mean((x[c] - x["q"]) ** 2 + x["q"] * (1 - x["q"])))
+    est = eb(d, a) - eb(d, b)
+    regs = d["region"].dropna().unique()
+    if len(regs) < 3:
+        return {"diff": est, "ci95": None, "n": int(len(d))}
+    rng = np.random.default_rng(seed)
+    grp = {r: d[d["region"] == r] for r in regs}
+    v = []
+    for _ in range(n_boot):
+        x = pd.concat([grp[r] for r in rng.choice(regs, len(regs))])
+        v.append(eb(x, a) - eb(x, b))
+    return {"diff": est, "ci95": [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))], "n": int(len(d))}
 
 
 def _metrics(m: pd.DataFrame, col: str) -> dict:
@@ -151,6 +172,9 @@ def score(round_csv: str, path: Path = REGISTER) -> dict:
             r = _metrics(m, rec["model_id"])
             r["minus_baseline_expected_brier"] = {b: r["expected_brier"] - _metrics(m.dropna(subset=[rec["model_id"]]), b)["expected_brier"]
                                                   for b in ("NAT", "PERS", "REGPREV")}
+            r["vs_baseline_ci"] = {b: diff_ci(m, rec["model_id"], b) for b in ("PERS", "REGPREV")}
+            ok = [r["vs_baseline_ci"][b]["ci95"] is not None and r["vs_baseline_ci"][b]["ci95"][1] < 0 for b in ("PERS", "REGPREV")]
+            r["confirmed"] = bool(inst == "HFIAS" and r["n"] >= CONFIRM["min_n"] and all(ok) and r.get("auc", 0) >= CONFIRM["auc"])
             r["unmatched_provinces"] = sorted(m.loc[m[rec["model_id"]].isna(), "k"])
             block["models"][rec["model_id"]] = r
         res["by_instrument"][inst] = block

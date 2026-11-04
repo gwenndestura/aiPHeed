@@ -1034,9 +1034,10 @@ def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
 # E42: what each of the five trigger groups is in the served forecast, so the dashboard never states a direction for a
 # group that has no model input or no official data (the "0% Weather is hurting food supply" defect).
 TRIGGER_STATUS_NOTES = {
-    "contributes": "This factor is a model input and moved this forecast in the direction shown.",
-    "no_effect": "This factor is a model input but did not measurably move this forecast.",
-    "no_model_input": "The current model has no input for this factor, so it neither raised nor lowered the score. "
+    "contributes": "This factor is an input of the price-pressure risk index (CH1) and moved that index in the direction "
+                   "shown. It does not explain provincial food-insecurity risk, which is still validation-pending.",
+    "no_effect": "This factor is an input of the price-pressure risk index (CH1) but did not measurably move that index.",
+    "no_model_input": "The price-pressure risk index (CH1) has no input for this factor, so it neither raised nor lowered the score. "
                       "News shares and official indicators, where available, are shown as evidence only.",
     "no_data": "No official in-window data series exists for this factor (E41/E42 search), so it is not part of the "
                "forecast. Missing data is not evidence of low risk.",

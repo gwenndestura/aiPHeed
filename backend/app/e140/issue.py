@@ -77,6 +77,27 @@ def contributions(final, Z: pd.DataFrame) -> tuple[pd.DataFrame, str]:
     return g, "exact TreeSHAP (sums with the base value to the predicted relative logit)"
 
 
+def lgu_priority(provinces: list[dict], target: str, out_dir) -> pd.DataFrame:
+    """142 LGUs: province P x vulnerability (1/2 SAE 2021 poverty + 1/2 POPCEN 2024 density percentiles, region-wide),
+    with the province interval carried through; a priority ranking, never a municipal measurement."""
+    lg = pd.read_csv(BACKEND_DIR / "data" / "fi5" / "out" / "lgu_rankings.csv")
+    lg = lg[["province_name", "lgu_psgc", "lgu_name", "lgu_type", "population_2024", "poverty_incidence_2021", "poverty_source",
+             "density_2024", "pct_poverty", "pct_density", "vulnerability"]].copy()
+    pm = {p["province"]: p for p in provinces}
+    lg["province_p_elevated"] = lg["province_name"].map(lambda n: pm[n]["p_elevated"])
+    lg["priority_score"] = lg["province_p_elevated"] * lg["vulnerability"]
+    lg["priority_score_low"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][0]) * lg["vulnerability"]
+    lg["priority_score_high"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][1]) * lg["vulnerability"]
+    lg["priority_rank_in_region"] = lg["priority_score"].rank(ascending=False, method="min").astype(int)
+    lg["target_quarter"] = target
+    lg["status"] = "candidate ranking pending provincial forecast validation"
+    lg["label"] = ("LGU vulnerability-weighted priority ranking derived from the provincial candidate estimate; not a municipal "
+                   "food-insecurity measurement or classification")
+    lg = lg.sort_values("priority_rank_in_region")
+    lg.to_csv(out_dir / "lgus_next_quarter.csv", index=False)
+    return lg
+
+
 STATUS = "CANDIDATE - rejected by its gate (E140 decision C); validation pending; not a released forecast"
 
 
@@ -131,20 +152,7 @@ def issue_candidate(X: pd.DataFrame, model_id: str, out_dir, claim: str, status:
                       "the national level. A risk estimate: HIGH does not confirm food insecurity and LOW does not guarantee "
                       "food security. It is not the share of food-insecure households.",
            "provinces": provinces, "p_rank_first": rank_first}
-    lg = pd.read_csv(BACKEND_DIR / "data" / "fi5" / "out" / "lgu_rankings.csv")
-    lg = lg[["province_name", "lgu_psgc", "lgu_name", "lgu_type", "population_2024", "poverty_incidence_2021", "poverty_source",
-             "density_2024", "pct_poverty", "pct_density", "vulnerability"]].copy()
-    pm = {p["province"]: p for p in provinces}
-    lg["province_p_elevated"] = lg["province_name"].map(lambda n: pm[n]["p_elevated"])
-    lg["priority_score"] = lg["province_p_elevated"] * lg["vulnerability"]
-    lg["priority_score_low"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][0]) * lg["vulnerability"]
-    lg["priority_score_high"] = lg["province_name"].map(lambda n: pm[n]["p_interval90"][1]) * lg["vulnerability"]
-    lg["priority_rank_in_region"] = lg["priority_score"].rank(ascending=False, method="min").astype(int)
-    lg["target_quarter"] = _q(target)
-    lg["status"] = "candidate ranking pending provincial forecast validation"
-    lg["label"] = ("LGU vulnerability-weighted priority ranking derived from the provincial candidate estimate; not a municipal "
-                   "food-insecurity measurement or classification")
-    lg.sort_values("priority_rank_in_region").to_csv(out_dir / "lgus_next_quarter.csv", index=False)
+    lgu_priority(provinces, _q(target), out_dir)
     seal = {"model": out["model"], "issue_date": out["issue_date"], "target": "HFIAS/FIES moderate-or-severe above national, next provincial round",
             "predictions": Z[["k", "p_elevated"]].round(5).to_dict(orient="records"), "sealed_utc": datetime.now(timezone.utc).isoformat()}
     sp = out_dir / f"sealed_prediction_{out['issue_date']}.json"

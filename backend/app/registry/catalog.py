@@ -55,6 +55,11 @@ CATALOG = [
      "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); trained on FNRI 2013, 2015 and "
                "ENNS 2018/2019; untouched-round and rolling survey-round validation",
      "note": "Evaluated by its pre-registered gate (app.e141.gate). Candidate outputs on admin routes only."},
+    {"model_id": "e142-state-lgbm-1.0", "status": "candidate", "version": "e142 survey-anchored risk-state model (protocol E142-P1)",
+     "artifact_path": "data/e142/out/results.json",
+     "target": "Food-insecurity RISK in the target quarter: LightGBM structural level pulled toward the last measured HFIAS "
+               "round with a weight that decays with quarters since that survey; P(above national)",
+     "note": "Evaluated by its pre-registered gate (app.e142.gate). Candidate outputs on admin routes only."},
 ]
 
 
