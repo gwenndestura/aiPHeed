@@ -64,7 +64,7 @@ def _hashes():
 
 def lock():
     p = OUT / "PROTOCOL_LOCK.json"
-    if p.exists():
+    if p.exists() and "--deviation-d1" not in sys.argv:
         raise RuntimeError("E146 is already locked")
     OUT.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({"version": VERSION, "protocol_version": PROTOCOL_VERSION, "locked_utc": datetime.now(timezone.utc).isoformat(),
@@ -149,7 +149,7 @@ def origin_lead(oid, rounds, target, lead, news, Xa):
     out["origin"], out["lead"] = oid, lead
     z = lambda mu, v: norm.cdf((mu - LT) / np.sqrt(v))
     out["E2E-clean"], out["C4-link"] = z(mu1, v1), z(mu0, v0)
-    out["mu_E2E"], out["mu_C4"] = mu1, mu0
+    out["mu_E2E-clean"], out["mu_C4-link"] = mu1, mu0
     used = {}
     for arm, cols in (("QS", SHOCK), ("QS-nosoil", [c for c in SHOCK if c != "c_soil_anom_3m"]), ("QS-N", SHOCK + NEWS)):
         s = Shock(cols).fit(tr, res)
@@ -158,9 +158,8 @@ def origin_lead(oid, rounds, target, lead, news, Xa):
         out["mu_" + arm] = mu1 + s.predict(te)
     fill = {c: 0.0 for c in NEWS}                                # news columns are centred on 0 and can be all-missing in early rounds
     ltr, lte = tr.assign(q=tr["q_star"]).fillna(fill), te.fillna(fill)
-    out["LR-PSA"] = M137.SoftLogit(M137.PSA_ONLY).fit(ltr).predict_proba(lte)
-    out["LR-NLP"] = M137.SoftLogit(NEWS).fit(ltr).predict_proba(lte)
-    out["LR-ALL"] = M137.SoftLogit(GOV + NEWS).fit(ltr).predict_proba(lte)
+    lr = lambda cols: M137.SoftLogit([c for c in cols if ltr[c].notna().any()]).fit(ltr).predict_proba(lte)
+    out["LR-PSA"], out["LR-NLP"], out["LR-ALL"] = lr(M137.PSA_ONLY), lr(NEWS), lr(GOV + NEWS)
     all_ = L.rows().set_index(["key", "survey"])
     pv = pd.DataFrame([all_.loc[(k, s), ["y_abs", "se_abs"]] if (k, s) in all_.index else pd.Series({"y_abs": np.nan, "se_abs": np.nan})
                        for k, s in zip(te["key"], te["prev_survey"].fillna("NONE"))]).reset_index(drop=True)

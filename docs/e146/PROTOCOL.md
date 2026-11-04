@@ -90,3 +90,7 @@ Each row carries an interval.
 * The time signal rests on 12 area-round cells.
 * No CALABARZON row is above national, so high-risk recall cannot be tested there under this class.
 * Production and the dashboard are not changed by E146.
+
+## Deviation D1 (2026-11-04, fix-only)
+
+The first locked run crashed before writing results: the change check looked up a misnamed column. No metric had been printed, saved or read. Data, models, thresholds and decisions are unchanged. The earlier lock is kept as `PROTOCOL_LOCK_before_d1.json`.

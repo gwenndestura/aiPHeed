@@ -43,7 +43,9 @@ def articles() -> pd.DataFrame:
     a = pd.read_parquet(RAW / "articles_clean.parquet")
     s = pd.read_parquet(RAW / "xlmr_scores.parquet")
     a = a.merge(s, on="hash", how="left")
-    a["stress_score"] = a[["p_harder", "p_hardship"]].max(axis=1)
+    # Stage 2 runs only on articles the domain stage found relevant; a gated article that failed relevance carries no stress
+    a["stress_score"] = a[["p_harder", "p_hardship"]].max(axis=1).where(~a["gated"] | a["p_market"].notna())
+    a.loc[a["gated"], "stress_score"] = a.loc[a["gated"], "stress_score"].fillna(0.0)
     a["stress"] = (a["stress_score"] >= 0.5) & (a["p_response"].fillna(0) < 0.5)
     return a
 
@@ -51,14 +53,17 @@ def articles() -> pd.DataFrame:
 def window_stats(a: pd.DataFrame, keys: list[str], issue: pd.Timestamp) -> pd.DataFrame:
     w = a[(a["published"] < issue) & (a["published"] >= issue - pd.DateOffset(months=W_MONTHS))]
     g = w.groupby("key")
-    t = pd.DataFrame({"n": g["id"].nunique(), "r": g["stress"].sum(), "mean_score": g["stress_score"].mean()}).reindex(keys)
-    t[["n", "r"]] = t[["n", "r"]].fillna(0)
-    rho = t["r"].sum() / t["n"].sum() if t["n"].sum() > 0 else np.nan
+    t = pd.DataFrame({"n": g["id"].nunique()}).reindex(keys)
+    u = w[w["gated"]].drop_duplicates(["key", "id"]).groupby("key")
+    t["n_gated"], t["r"], t["s"] = u.size(), u["stress"].sum(), u["stress_score"].sum()
+    t[["n", "n_gated", "r", "s"]] = t[["n", "n_gated", "r", "s"]].fillna(0)
+    t["mean_score"] = t["s"] / t["n_gated"].where(t["n_gated"] > 0)
+    rho = t["s"].sum() / t["n_gated"].sum() if t["n_gated"].sum() > 0 else np.nan
     t["nr_volume"], t["nr_count"], t["nr_mean"] = np.log1p(t["n"]), np.log1p(t["r"]), t["mean_score"]
-    t["nb_fssi"] = _logit((t["r"] + K * rho) / (t["n"] + K)) - _logit(rho) if rho == rho and rho > 0 else np.nan
+    t["nb_fssi"] = _logit((t["s"] + K * rho) / (t["n_gated"] + K)) - _logit(rho) if rho == rho and rho > 0 else np.nan
     lv = np.log1p(t["n"])
     t["nb_attention"] = lv - lv.mean()
-    return t.drop(columns=["mean_score"]).reset_index()
+    return t.drop(columns=["mean_score", "s"]).reset_index()
 
 
 def _mask_places(text: str, rx) -> str:

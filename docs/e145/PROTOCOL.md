@@ -30,7 +30,9 @@ Survey reference quarters are taken as Q3 of the survey year (as in E141). This 
 
 **Gate.** Title or excerpt must match the food-security term list in `app/e145/news.py`, in English and Filipino. Only gated articles are scored.
 
-**Tier 1, sentiment.** Zero-shot XLM-RoBERTa (`joeddav/xlm-roberta-large-xnli`), with the FI6-N hypotheses unchanged. An article is a stress event if max(p_harder, p_hardship) ≥ 0.5 and p_response < 0.5. These cut-offs are fixed here and are not tuned.
+**Tier 1, sentiment.** Zero-shot XLM-RoBERTa (`joeddav/xlm-roberta-large-xnli`), with the FI6-N hypotheses unchanged. An article's stress score is max(p_harder, p_hardship). It is a stress event if that score is ≥ 0.5 and p_response < 0.5. These cut-offs are fixed here and are not tuned.
+
+**Revision before the lock (no outcome had been read).** The first index used events over all articles. The audit showed about one event per province-window, so high-coverage provinces with zero events received the same strongly negative value (Batangas, Cavite and Laguna −3.04 in 2018), which is a volume artefact. The index now uses the continuous score over gated articles. The volume correlation of the final index is reported in `news_audit.json`.
 
 **Tier 2, topics.** BERTopic with `paraphrase-multilingual-MiniLM-L12-v2` embeddings, place names masked, fitted once per test origin and lead, on a seeded sample of at most 8,000 gated articles published before that issue date, then reduced to 6 topics. Other articles published before that date are assigned with `transform`. Training and test rows of an origin therefore share one topic space, and that space never sees the future.
 
@@ -41,7 +43,7 @@ Survey reference quarters are taken as Q3 of the survey year (as in E141). This 
 | `nr_volume` | raw | log(1 + articles mentioning the province) |
 | `nr_count` | raw | log(1 + stress events) |
 | `nr_mean` | raw | mean of max(p_harder, p_hardship) over gated articles |
-| `nb_fssi` | corrected | logit((r + k·ρ)/(n + k)) − logit(ρ), with r stress events, n articles, ρ the national stress rate in the same window, k = 10 (the E142 value) |
+| `nb_fssi` | corrected | logit((S + k·ρ)/(g + k)) − logit(ρ), with S the sum of stress scores and g the gated articles of the province in the window, ρ = national S / national g in that window, k = 10 (the E142 value). A gated article that fails the domain relevance stage scores 0 |
 | `nb_attention` | corrected | log(1 + n) minus the cross-province mean of log(1 + n) in the same window |
 | `nb_fssi_delta` | corrected | `nb_fssi` minus its value at the same lead for the province's previous survey round (within-province variation, after Mueller and Rauh) |
 | `nb_topic_0..5` | corrected | topic share among the province's gated articles, shrunk to the national share with k = 10, minus the national share |
@@ -116,3 +118,7 @@ LightGBM settings are inherited from E140 and are not tuned. News columns are ad
 * **No regional 2019 figure.** The national 2018-2019 ENNS deck prints no CALABARZON figure. The 2019 evidence is provincial: HFIAS and FIES for Quezon and Rizal.
 * **No blind test from 2021.** The 2021 decks (Batangas, Cavite, Lucena) use FIES with 12-month recall, not HFIAS, and their values were seen on 2026-11-04 before this lock. They are agreement evidence only.
 * **Later rounds.** The 2021 and 2023 rounds reviewed use FIES. An HFIAS provincial round after 2019 has not been found, so a future confirmation test for an HFIAS-trained model may have to be a FIES agreement test unless FNRI publishes HFIAS again.
+
+## Deviation D1 (2026-11-04, fix-only)
+
+The first locked run crashed before writing results: a logistic baseline met an input that is entirely missing in training at a long lead. Such columns are now left out of that fit. No metric had been printed, saved or read. Data, models, thresholds and decisions are unchanged. The earlier lock is kept as `PROTOCOL_LOCK_before_d1.json`.

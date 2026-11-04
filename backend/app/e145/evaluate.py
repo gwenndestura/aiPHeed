@@ -58,7 +58,7 @@ def _hashes():
 
 def lock():
     p = OUT / "PROTOCOL_LOCK.json"
-    if p.exists():
+    if p.exists() and "--deviation-d1" not in sys.argv:
         raise RuntimeError("E145 is already locked")
     OUT.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({"version": VERSION, "protocol_version": PROTOCOL_VERSION, "locked_utc": datetime.now(timezone.utc).isoformat(),
@@ -116,6 +116,12 @@ def panel(lead: int, news: pd.DataFrame | None, origin: str) -> pd.DataFrame:
     return X
 
 
+def _logit(cols, tr, te) -> np.ndarray:
+    """SoftLogit, without columns that are entirely missing in training (at long leads some inputs do not exist yet)."""
+    use = [c for c in cols if tr[c].notna().any()]
+    return M137.SoftLogit(use).fit(tr).predict_proba(te)
+
+
 def fit_predict(arm: str, tr: pd.DataFrame, te: pd.DataFrame) -> np.ndarray:
     if arm == "G":
         return Auto().fit(tr).predict_proba(te)
@@ -130,12 +136,11 @@ def fit_predict(arm: str, tr: pd.DataFrame, te: pd.DataFrame) -> np.ndarray:
     if arm == "FULL":
         return M143.Anchored("hre", "lgbm").fit(tr, Level(BC_COLS).fit(tr)).predict_proba(te)
     if arm == "LR-PSA":
-        return M137.SoftLogit(M137.PSA_ONLY).fit(tr).predict_proba(te)
-    fill = {c: 0.0 for c in BC_COLS}                             # corrected news is centred on 0 and can be all-missing in early rounds
+        return _logit(M137.PSA_ONLY, tr, te)
     if arm == "LR-NLP":
-        return M137.SoftLogit(BC_COLS).fit(tr.fillna(fill)).predict_proba(te.fillna(fill))
+        return _logit(BC_COLS, tr, te)
     if arm == "LR-ALL":
-        return M137.SoftLogit([c for c in M140.LT_FEATURES if c not in HIST] + BC_COLS).fit(tr.fillna(fill)).predict_proba(te.fillna(fill))
+        return _logit([c for c in M140.LT_FEATURES if c not in HIST] + BC_COLS, tr, te)
     raise KeyError(arm)
 
 
@@ -182,6 +187,16 @@ def _rel(arm, R, res_vs, auc_ci, chg):
           "R4_beats_persistence": res_vs["ci95"][1] < 0, "R5_calibration": L["ece"] <= T["R5_ece"],
           "R6_predicts_change": chg["ci95"][0] > 0}
     return {"checks": {k: bool(v) for k, v in ck.items()}, "passes": bool(all(ck.values()))}
+
+
+def smoke():
+    """Every arm on one origin, to catch crashes before the lock. Prints and saves no metric."""
+    news = pd.read_parquet(OUT / "news_features.parquet")
+    for lead, (o, r, t) in ((1, E141.ORIGINS[0]), (8, E141.ORIGINS[2])):
+        for a in ARMS:
+            res = task(a, lead, o, r, t, news)
+            assert np.isfinite(res["p"]).all(), a
+    print("smoke ok")
 
 
 def run():
@@ -292,4 +307,4 @@ def run():
 
 
 if __name__ == "__main__":
-    {"lock": lock, "run": run, "check": check}[sys.argv[1]]()
+    {"lock": lock, "run": run, "check": check, "smoke": smoke}[sys.argv[1]]()

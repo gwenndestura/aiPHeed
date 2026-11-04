@@ -42,7 +42,16 @@ def clean(s: str) -> str:
 
 
 def prepare() -> pd.DataFrame:
-    rows = [json.loads(x) for x in (RAW / "articles.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    # Split on newlines only: article text can hold other Unicode line separators. A line cut when a collector run was
+    # stopped is skipped; its query was not marked done, so the resumed run fetched that page again.
+    rows, cut = [], 0
+    with open(RAW / "articles.jsonl", encoding="utf-8", newline="\n") as f:
+        for x in f:
+            try:
+                rows.append(json.loads(x))
+            except json.JSONDecodeError:
+                cut += 1
+    print("lines cut by a stopped run:", cut)
     d = pd.DataFrame(rows)
     d["title"], d["excerpt"] = d["title"].map(clean), d["excerpt"].map(clean)
     d["text"] = (d["title"] + ". " + d["excerpt"]).str.slice(0, 700)
