@@ -1,0 +1,356 @@
+{
+ "assumptions": "- the observed mean gain mu and SD sigma of d are the true values for future quarters;\n- serial dependence is AR(1) with the observed lag-1 autocorrelation rho (floored at 0), so the effective sample\n  size is n (1 - rho) / (1 + rho);\n- a one-sided z test at 80% power, at two Holm levels: the strictest step (alpha/14 = 0.0036) and the loosest\n  (alpha = 0.05). The real Holm level for one comparison lies between them.",
+ "power": 0.8,
+ "comparisons": [
+  {
+   "lead": 1,
+   "baseline": "PERSIST",
+   "n_quarters": 62,
+   "mean_gain": 0.1512,
+   "sd": 0.3997,
+   "effect_size_d": 0.378,
+   "lag1_rho": 0.162,
+   "p_holm_14": 0.0078,
+   "significant": true,
+   "ci95": [
+    -0.25437377887520446,
+    -0.05395000409019352
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 121,
+    "additional_quarters": 59,
+    "years_at_4_per_year": 14.7
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 60,
+    "additional_quarters": 0,
+    "years_at_4_per_year": 0.0
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "PSA-only",
+   "n_quarters": 62,
+   "mean_gain": 0.0207,
+   "sd": 0.2014,
+   "effect_size_d": 0.103,
+   "lag1_rho": 0.264,
+   "p_holm_14": 0.4156,
+   "significant": false,
+   "ci95": [
+    -0.07275761229113568,
+    0.028809540185811337
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 2026,
+    "additional_quarters": 1964,
+    "years_at_4_per_year": 491.0
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 1005,
+    "additional_quarters": 943,
+    "years_at_4_per_year": 235.5
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "LOGIT",
+   "n_quarters": 62,
+   "mean_gain": 0.0053,
+   "sd": 0.2596,
+   "effect_size_d": 0.02,
+   "lag1_rho": 0.121,
+   "p_holm_14": 0.4332,
+   "significant": false,
+   "ci95": [
+    -0.07011876075548261,
+    0.05787525928648818
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 38233,
+    "additional_quarters": 38171,
+    "years_at_4_per_year": 9542.7
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 18951,
+    "additional_quarters": 18889,
+    "years_at_4_per_year": 4722.2
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "NLP-only",
+   "n_quarters": 20,
+   "mean_gain": 0.1436,
+   "sd": 0.2686,
+   "effect_size_d": 0.535,
+   "lag1_rho": 0.0,
+   "p_holm_14": 0.05,
+   "significant": false,
+   "ci95": [
+    -0.2611408935744325,
+    -0.03342920810895896
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 44,
+    "additional_quarters": 24,
+    "years_at_4_per_year": 5.9
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 22,
+    "additional_quarters": 2,
+    "years_at_4_per_year": 0.4
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "LGBM-GOV",
+   "n_quarters": 62,
+   "mean_gain": 0.0451,
+   "sd": 0.1016,
+   "effect_size_d": 0.444,
+   "lag1_rho": 0.125,
+   "p_holm_14": 0.009600000000000001,
+   "significant": true,
+   "ci95": [
+    -0.06961519776218347,
+    -0.018207783452720717
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 82,
+    "additional_quarters": 20,
+    "years_at_4_per_year": 4.8
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 41,
+    "additional_quarters": 0,
+    "years_at_4_per_year": 0.0
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "LGBM-NLP",
+   "n_quarters": 20,
+   "mean_gain": 0.0974,
+   "sd": 0.2258,
+   "effect_size_d": 0.431,
+   "lag1_rho": 0.123,
+   "p_holm_14": 0.10200000000000001,
+   "significant": false,
+   "ci95": [
+    -0.19868354849593908,
+    -0.005532350844935321
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 86,
+    "additional_quarters": 66,
+    "years_at_4_per_year": 16.5
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 43,
+    "additional_quarters": 23,
+    "years_at_4_per_year": 5.6
+   }
+  },
+  {
+   "lead": 1,
+   "baseline": "ALWAYS-HIGH",
+   "n_quarters": 62,
+   "mean_gain": 0.1189,
+   "sd": 0.3596,
+   "effect_size_d": 0.331,
+   "lag1_rho": 0.481,
+   "p_holm_14": 0.05,
+   "significant": false,
+   "ci95": [
+    -0.21122180594082096,
+    -0.02993705858896142
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 326,
+    "additional_quarters": 264,
+    "years_at_4_per_year": 65.9
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 162,
+    "additional_quarters": 100,
+    "years_at_4_per_year": 24.9
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "PERSIST",
+   "n_quarters": 62,
+   "mean_gain": 0.1508,
+   "sd": 0.4009,
+   "effect_size_d": 0.376,
+   "lag1_rho": 0.026,
+   "p_holm_14": 0.0056,
+   "significant": true,
+   "ci95": [
+    -0.2521235069485889,
+    -0.05300546570797519
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 93,
+    "additional_quarters": 31,
+    "years_at_4_per_year": 7.7
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 47,
+    "additional_quarters": 0,
+    "years_at_4_per_year": 0.0
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "PSA-only",
+   "n_quarters": 62,
+   "mean_gain": 0.051,
+   "sd": 0.2186,
+   "effect_size_d": 0.233,
+   "lag1_rho": 0.308,
+   "p_holm_14": 0.154,
+   "significant": false,
+   "ci95": [
+    -0.10485729321574992,
+    0.002411758427899086
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 433,
+    "additional_quarters": 371,
+    "years_at_4_per_year": 92.6
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 215,
+    "additional_quarters": 153,
+    "years_at_4_per_year": 38.1
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "LOGIT",
+   "n_quarters": 62,
+   "mean_gain": 0.0461,
+   "sd": 0.2658,
+   "effect_size_d": 0.174,
+   "lag1_rho": 0.173,
+   "p_holm_14": 0.2634,
+   "significant": false,
+   "ci95": [
+    -0.11390602543889694,
+    0.01968155435707001
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 588,
+    "additional_quarters": 526,
+    "years_at_4_per_year": 131.5
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 292,
+    "additional_quarters": 230,
+    "years_at_4_per_year": 57.3
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "NLP-only",
+   "n_quarters": 19,
+   "mean_gain": 0.2145,
+   "sd": 0.4181,
+   "effect_size_d": 0.513,
+   "lag1_rho": 0.092,
+   "p_holm_14": 0.05,
+   "significant": false,
+   "ci95": [
+    -0.39853387738170976,
+    -0.03628401765371535
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 58,
+    "additional_quarters": 39,
+    "years_at_4_per_year": 9.5
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 29,
+    "additional_quarters": 10,
+    "years_at_4_per_year": 2.3
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "LGBM-GOV",
+   "n_quarters": 62,
+   "mean_gain": 0.0522,
+   "sd": 0.1209,
+   "effect_size_d": 0.431,
+   "lag1_rho": 0.351,
+   "p_holm_14": 0.009600000000000001,
+   "significant": true,
+   "ci95": [
+    -0.08176398404411478,
+    -0.02235234560051132
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 140,
+    "additional_quarters": 78,
+    "years_at_4_per_year": 19.4
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 70,
+    "additional_quarters": 8,
+    "years_at_4_per_year": 1.8
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "LGBM-NLP",
+   "n_quarters": 19,
+   "mean_gain": 0.0899,
+   "sd": 0.2503,
+   "effect_size_d": 0.359,
+   "lag1_rho": 0.34,
+   "p_holm_14": 0.1968,
+   "significant": false,
+   "ci95": [
+    -0.20515561987730818,
+    0.01474143140205352
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 197,
+    "additional_quarters": 178,
+    "years_at_4_per_year": 44.3
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 98,
+    "additional_quarters": 79,
+    "years_at_4_per_year": 19.6
+   }
+  },
+  {
+   "lead": 2,
+   "baseline": "ALWAYS-HIGH",
+   "n_quarters": 62,
+   "mean_gain": 0.1185,
+   "sd": 0.3617,
+   "effect_size_d": 0.328,
+   "lag1_rho": 0.546,
+   "p_holm_14": 0.05,
+   "significant": false,
+   "ci95": [
+    -0.21164760927269474,
+    -0.031190875533147495
+   ],
+   "strictest_alpha_0.0036": {
+    "required_n": 396,
+    "additional_quarters": 334,
+    "years_at_4_per_year": 83.3
+   },
+   "loosest_alpha_0.05": {
+    "required_n": 196,
+    "additional_quarters": 134,
+    "years_at_4_per_year": 33.5
+   }
+  }
+ ]
+}

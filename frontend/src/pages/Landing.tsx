@@ -8,6 +8,19 @@ import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import { readStorage } from "@/lib/storage";
+import { useConfig, useFinalRiskEvaluation } from "@/lib/queries";
+import { type CbEvaluation, cbComparatorRows, cbEvaluation, fmt, isCbIndicator, modelName } from "@/lib/servedModel";
+import {
+  CB_ABOUT,
+  CB_ABOUT_LIST,
+  CB_FOOTER,
+  cbSources,
+  cbSteps,
+  cbDisclaimer,
+  cbFaqs,
+  cbNotes,
+  cbResults,
+} from "@/pages/landingCb";
 
 const THEME_KEY = "aipheed_theme";
 
@@ -26,6 +39,12 @@ export default function Landing() {
     const t = (readStorage(THEME_KEY) as "light" | "dark" | null) ?? "dark";
     document.documentElement.classList.toggle("light", t === "light");
   }, []);
+  // The page describes the forecast the backend serves: C-b text and figures when /api/v1/config reports the
+  // food-insecurity indicator, otherwise the P0H4 description below (the deployed default, unchanged).
+  const { data: cfg } = useConfig();
+  const cbServed = isCbIndicator(cfg?.indicator?.id);
+  const { data: risk } = useFinalRiskEvaluation(cbServed);
+  const cb = cbServed ? cbEvaluation(risk) : null;
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
@@ -35,13 +54,13 @@ export default function Landing() {
 
       <Hero />
       <main>
-        <About />
-        <Methodology />
-        <Accuracy />
-        <Disclaimer />
-        <FAQ />
+        <About cbServed={cbServed} />
+        <Methodology cbServed={cbServed} cb={cb} />
+        <Accuracy cbServed={cbServed} cb={cb} />
+        <Disclaimer cbServed={cbServed} cb={cb} />
+        <FAQ cbServed={cbServed} cb={cb} />
       </main>
-      <Footer />
+      <Footer cbServed={cbServed} />
     </div>
   );
 }
@@ -142,10 +161,31 @@ function Hero() {
 }
 
 /* ---------------- ABOUT ---------------- */
-function About() {
+function About({ cbServed }: { cbServed: boolean }) {
   return (
     <Section id="about" title="About aiPHeed">
       <Card>
+        {cbServed ? (
+          <div className="space-y-5">
+            {CB_ABOUT.map((t) => (
+              <p key={t}>{t}</p>
+            ))}
+            <p>
+              aiPHeed was developed as a thesis for the Bachelor of Science in Computer Science with Intelligent Systems
+              Track at De La Salle University - Dasmariñas. Researchers: Destura, Princess Gwenn A.; Esico, Christina M.;
+              and Melindo, Angel Vhea P. The Department of Agriculture did not develop aiPHeed and has not endorsed it.
+            </p>
+            <p>
+              It is intended for planning staff of the Department of Agriculture Regional Field Office IV-A
+              (CALABARZON). It is published through a publicly accessible geospatial dashboard, which shows:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 marker:text-primary">
+              {CB_ABOUT_LIST.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
         <div className="space-y-5">
           <p>
             aiPHeed forecasts the risk of food insecurity in each of the five CALABARZON provinces for the current
@@ -191,6 +231,7 @@ function About() {
             <li>downloadable PDF reports, and back-test estimates for past quarters, labelled as development evidence.</li>
           </ul>
         </div>
+        )}
       </Card>
     </Section>
   );
@@ -254,7 +295,10 @@ const NOTES = [
   },
 ];
 
-function Methodology() {
+function Methodology({ cbServed, cb }: { cbServed: boolean; cb: CbEvaluation | null }) {
+  const sources = cbServed ? cbSources(cb) : SOURCES;
+  const steps = cbServed ? cbSteps(cb) : STEPS;
+  const notes = cbServed ? cbNotes(cb) : NOTES;
   const th = "px-4 py-3 text-left text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted";
   const td = "px-4 py-3 align-top text-[14px] leading-relaxed";
   return (
@@ -262,7 +306,9 @@ function Methodology() {
       <Card>
         <SubHeading>Data sources</SubHeading>
         <p className="mb-5">
-          Only data from 2021 onward is used. Periods are those available at the issue date of 1 October 2026.
+          {cbServed
+            ? "Every input is taken from data published before each issue date; the model is trained walk-forward from 1998."
+            : "Only data from 2021 onward is used. Periods are those available at the issue date of 1 October 2026."}
         </p>
 
         {/* Tablet and desktop: a light table. */}
@@ -277,7 +323,7 @@ function Methodology() {
               </tr>
             </thead>
             <tbody>
-              {SOURCES.map((r) => (
+              {sources.map((r) => (
                 <tr key={r.s} className="border-t edge-faint">
                   <td className={`${td} font-semibold text-foreground`}>{r.s}</td>
                   <td className={td}>{r.m}</td>
@@ -291,7 +337,7 @@ function Methodology() {
 
         {/* Phones: the same rows, stacked. */}
         <ul className="md:hidden overflow-hidden rounded-[var(--radius-inner)] border edge-faint">
-          {SOURCES.map((r, i) => (
+          {sources.map((r, i) => (
             <li key={r.s} className={`px-4 py-3 text-[14px] leading-relaxed ${i ? "border-t edge-faint" : ""}`}>
               <p className="font-semibold text-foreground">{r.s}</p>
               <p>{r.m}</p>
@@ -305,7 +351,7 @@ function Methodology() {
         <div className="mt-10">
           <SubHeading>How the forecast is built</SubHeading>
           <div className="space-y-5">
-            {STEPS.map((s, i) => (
+            {steps.map((s, i) => (
               <Point key={s.t} n={i + 1} title={s.t}>
                 {s.d}
               </Point>
@@ -316,7 +362,7 @@ function Methodology() {
         <div className="mt-10">
           <SubHeading>Issue date, missing data and review</SubHeading>
           <div className="space-y-5">
-            {NOTES.map((n) => (
+            {notes.map((n) => (
               <Point key={n.t} title={n.t}>
                 {n.d}
               </Point>
@@ -483,7 +529,111 @@ function MetricTable({ title, note, rows }: { title: string; note: string; rows:
   );
 }
 
-function Accuracy() {
+function CbLeadTable({ cb }: { cb: CbEvaluation | null }) {
+  const th = "px-3 py-3 text-left text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted";
+  const num = "px-3 py-3 text-right font-mono text-[14px] font-semibold text-foreground";
+  const cols = [
+    ["accuracy", "Accuracy"],
+    ["precision", "Precision"],
+    ["recall", "Recall"],
+    ["f1", "F1"],
+    ["auc", "AUC"],
+    ["brier", "Brier"],
+  ] as const;
+  if (!cb) return <p>The evaluation of the served forecast could not be loaded.</p>;
+  const leads = Object.keys(cb.leads).sort((a, b) => Number(a) - Number(b));
+  return (
+    <div>
+      <p className="mb-2 font-bold text-foreground leading-snug">
+        Food-insecurity forecast by lead time: walk-forward predictions
+      </p>
+      <div className="overflow-x-auto rounded-[var(--radius-inner)] border edge-faint">
+        <table className="w-full border-collapse">
+          <thead className="bg-[hsl(var(--secondary)/0.55)]">
+            <tr>
+              <th className={th}>Lead</th>
+              {cols.map(([, l]) => (
+                <th key={l} className={`${th} text-right`}>
+                  {l}
+                </th>
+              ))}
+              <th className={th}>Tested on</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.map((k) => {
+              const l = cb.leads[k];
+              return (
+                <tr key={k} className="border-t edge-faint">
+                  <th scope="row" className="px-3 py-3 text-left text-[14px] font-semibold text-foreground">
+                    <span className="block">Lead {k}</span>
+                    {l.alg3_pass && (
+                      <span className="mt-1 block">
+                        <ReliableTag />
+                      </span>
+                    )}
+                  </th>
+                  {cols.map(([c]) => (
+                    <td key={c} className={num}>
+                      {fmt(l.metrics[c])}
+                    </td>
+                  ))}
+                  <td className="px-3 py-3 text-[14px] leading-snug">
+                    {l.n_quarters} quarters, {l.period}
+                    {l.failed.length ? ` · fails ${l.failed.join(", ")}` : ""}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3">
+        "Passed the reliability test" marks the study's 75% accuracy rule (Algorithm 3). The project's stricter seven
+        rules (R1-R7) are listed where a lead fails them.
+      </p>
+    </div>
+  );
+}
+
+function Accuracy({ cbServed, cb }: { cbServed: boolean; cb: CbEvaluation | null }) {
+  if (cbServed) {
+    const b1 = cb?.leads["1"]?.metrics.brier;
+    const rows = cb
+      ? [
+          [`${modelName(cb)} (served forecast)`, fmt(b1)],
+          ...cbComparatorRows(cb).map((r) => [
+            r.name,
+            `${b1 != null ? fmt(b1 - r.diff) : "n/a"} (diff ${r.diff >= 0 ? "+" : ""}${fmt(r.diff)}, Holm p ${fmt(r.pHolm)})`,
+          ]),
+        ]
+      : [];
+    return (
+      <Section id="accuracy" title="How accurate it is">
+        <Card>
+          <p className="mb-8">
+            All results below are development evidence: every evaluated quarter was examined while the system was
+            being built, and no unseen quarter has been scored yet.
+          </p>
+          <CbLeadTable cb={cb} />
+          <div className="mt-10 lg:max-w-[70%]">
+            <MetricTable
+              title="Brier score against the baselines, Lead 1 (lower is better)"
+              note={`Paired on the same quarters (news-only: 2021 onward). Diff = ${modelName(cb)} minus the baseline; Holm-corrected one-sided bootstrap p. A difference is established only where the Holm p is below 0.05.`}
+              rows={rows}
+            />
+          </div>
+          <div className="mt-10 space-y-5">
+            {cbResults(cb).map((r) => (
+              <Point key={r.t} title={r.t}>
+                {r.d}
+              </Point>
+            ))}
+          </div>
+        </Card>
+      </Section>
+    );
+  }
   return (
     <Section id="accuracy" title="How accurate it is">
       <Card>
@@ -526,12 +676,13 @@ const DISCLAIMER = [
   "aiPHeed outputs must not replace official assessment procedures or be used as official food-insecurity classifications or policy recommendations.",
 ];
 
-function Disclaimer() {
+function Disclaimer({ cbServed, cb }: { cbServed: boolean; cb: CbEvaluation | null }) {
+  const items = cbServed ? cbDisclaimer(cb) : DISCLAIMER;
   return (
     <Section id="disclaimer" title="Data disclaimer and limitations">
       <Card>
         <div className="space-y-4">
-          {DISCLAIMER.map((p) => (
+          {items.map((p) => (
             <p key={p}>{p}</p>
           ))}
         </div>
@@ -584,12 +735,13 @@ const FAQS = [
   },
 ];
 
-function FAQ() {
+function FAQ({ cbServed, cb }: { cbServed: boolean; cb: CbEvaluation | null }) {
   const [open, setOpen] = useState<number | null>(null);
+  const faqs = cbServed ? cbFaqs(cb) : FAQS;
   return (
     <Section id="faq" title="Frequently asked questions">
       <ul className="mx-auto max-w-[1200px] space-y-3">
-        {FAQS.map((it, i) => {
+        {faqs.map((it, i) => {
           const isOpen = open === i;
           return (
             <li key={it.q} className="surface-card overflow-hidden">
@@ -662,7 +814,7 @@ const FOOTER_BG =
 const FEEDBACK_LINK =
   "[&>button[type]]:!text-[14px] [&>button]:text-ink-secondary [&>button]:underline [&>button]:rounded-sm [&>button:hover]:text-foreground [&>button:focus-visible]:outline-none [&>button:focus-visible]:ring-2 [&>button:focus-visible]:ring-ring [&_svg]:hidden";
 
-function Footer() {
+function Footer({ cbServed }: { cbServed: boolean }) {
   const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
   return (
     <footer className={`mt-6 border-t edge-faint px-4 sm:px-8 pt-14 pb-8 ${FOOTER_BG}`}>
@@ -672,9 +824,15 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces each quarter. It combines a
-              regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families, and
-              Filipino-English news analysis. It is not an official statistic.
+              {cbServed ? (
+                CB_FOOTER
+              ) : (
+                <>
+                  aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces each quarter. It combines a
+                  regional hunger outlook from SWS with a LightGBM food-price forecast on 12 indicator families, and
+                  Filipino-English news analysis. It is not an official statistic.
+                </>
+              )}
             </p>
           </div>
 

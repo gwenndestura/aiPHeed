@@ -1,0 +1,125 @@
+{
+ "regional_probability_2026Q4": 0.8595076763122089,
+ "province_poverty_from_source": {
+  "Batangas": 4.9,
+  "Cavite": 4.3,
+  "Laguna": 5.4,
+  "Quezon": 6.9,
+  "Rizal": 5.6
+ },
+ "province_recompute_max_abs_diff": 0.0,
+ "lgu_recompute_max_abs_diff": 9.71445146547012e-17,
+ "lgu_rows": 142,
+ "lgu_by_province": {
+  "Quezon": 41,
+  "Batangas": 34,
+  "Laguna": 30,
+  "Cavite": 23,
+  "Rizal": 14
+ },
+ "lgu_sources": {
+  "PSA 2021 City and Municipal Level Small Area Estimates of Po": 141,
+  "PSA 2021 Full-Year Official Poverty Statistics, Table 2a (Ci": 1
+ },
+ "lgu_cv_over_20": 25,
+ "poverty_density_spearman": {
+  "all": -0.5264956799269056,
+  "Cavite": -0.4466403162055336,
+  "Laguna": -0.5506117908787541,
+  "Quezon": -0.08432055749128921,
+  "Rizal": -0.04615384615384615,
+  "Batangas": 0.06462948815889992
+ },
+ "weight_sensitivity": {
+  "poverty_only (1, 0)": {
+   "kendall_tau_vs_served": 0.7118729651516768,
+   "top10_overlap_with_served": 6,
+   "top5": [
+    "San Francisco",
+    "Macalelon",
+    "San Andres",
+    "Infanta",
+    "Panukulan"
+   ],
+   "spearman_rank_vs_poverty": 0.8282454667867859
+  },
+  "(0.8, 0.2)": {
+   "kendall_tau_vs_served": 0.8181999800219758,
+   "top10_overlap_with_served": 7,
+   "top5": [
+    "Taytay",
+    "San Francisco",
+    "Macalelon",
+    "San Andres",
+    "Infanta"
+   ],
+   "spearman_rank_vs_poverty": 0.7836002774570352
+  },
+  "served (0.6, 0.4)": {
+   "kendall_tau_vs_served": 0.9999999999999999,
+   "top10_overlap_with_served": 10,
+   "top5": [
+    "Taytay",
+    "Lipa",
+    "San Francisco",
+    "Macalelon",
+    "San Andres"
+   ],
+   "spearman_rank_vs_poverty": 0.6466194877941958
+  },
+  "density_protective (0.6, -0.4)": {
+   "kendall_tau_vs_served": 0.46259114973529114,
+   "top10_overlap_with_served": 5,
+   "top5": [
+    "San Francisco",
+    "Macalelon",
+    "San Andres",
+    "Infanta",
+    "Panukulan"
+   ],
+   "spearman_rank_vs_poverty": 0.813818785350101
+  },
+  "density_only (0, 1)": {
+   "kendall_tau_vs_served": 0.1813911879475352,
+   "top10_overlap_with_served": 2,
+   "top5": [
+    "Lucena",
+    "Taytay",
+    "Bi\u00f1an",
+    "San Pedro",
+    "Sto. Tomas"
+   ],
+   "spearman_rank_vs_poverty": -0.2719198795184476
+  },
+  "paper_eq6 (0.6, 0.4), province score = P": {
+   "kendall_tau_vs_served": 0.7872340425531914,
+   "top10_overlap_with_served": 5,
+   "top5": [
+    "Taytay",
+    "Lipa",
+    "Bauan",
+    "San Pascual",
+    "Taal"
+   ],
+   "spearman_rank_vs_poverty": 0.4950407698384924
+  }
+ },
+ "rank_uncertainty": {
+  "draws": 1000,
+  "median_90pct_interval_width": 51.0,
+  "max_width": 98.05,
+  "mean_top10_overlap_with_served": 5.919,
+  "top10_in_top10_share": {
+   "Taytay": 0.891,
+   "Lipa": 0.865,
+   "San Francisco": 0.762,
+   "Macalelon": 0.767,
+   "San Andres": 0.51,
+   "Infanta": 0.496,
+   "Antipolo": 0.234,
+   "Lucena": 0.607,
+   "Bauan": 0.475,
+   "Agdangan": 0.312
+  }
+ }
+}

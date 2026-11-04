@@ -315,6 +315,9 @@ export function RiskDriversCardBody({
               <div>
                 <div className="flex items-center justify-between text-[10px] mb-1">
                   <span className="font-semibold">{d.label}</span>
+                  {d.pct === 0 && d.status !== "no_model_input" && (
+                    <span className="text-[9px] text-muted-foreground/70">not used in this forecast</span>
+                  )}
                 </div>
                 <div className="h-2 bg-secondary/40 rounded-full overflow-hidden">
                   <div
@@ -453,7 +456,7 @@ function RejectedForecastPlaceholder({
         <span className="text-3xl text-muted-foreground/30 select-none">—</span>
         <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
         <p className="text-[10px] text-muted-foreground/60 leading-snug max-w-[200px]">
-          This quarter's forecast has been rejected by the admin and is not available for display.
+          This quarter's forecast is not published: it is awaiting administrator approval or was rejected.
         </p>
       </div>
     </div>

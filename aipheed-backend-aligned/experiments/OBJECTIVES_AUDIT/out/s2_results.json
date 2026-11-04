@@ -1,0 +1,355 @@
+{
+ "addendum_sha256": "b18787f4a031dce3520538f719e5e44855337ef83a6fa8e70bfee3d02388f480",
+ "threshold_leakage_unchanged": true,
+ "label": "DESCRIPTIVE; adoption impossible (G2)",
+ "leads": {
+  "1": {
+   "C-b": {
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.7019583843329253,
+     "brier": 0.18744781437528338,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10,
+     "fpr": 0.47368421052631576,
+     "fnr": 0.09302325581395349,
+     "ece_10": 0.16944306006010265
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1513, p 0.000",
+       "CLIM": "diff -0.0332, p 0.095"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ]
+   },
+   "K1": {
+    "metrics": {
+     "accuracy": 0.7096774193548387,
+     "balanced": 0.5997552019583843,
+     "precision": 0.7450980392156863,
+     "recall": 0.8837209302325582,
+     "f1": 0.8085106382978724,
+     "auc": 0.7858017135862914,
+     "brier": 0.17183832448984007,
+     "TP": 38,
+     "FP": 13,
+     "FN": 5,
+     "TN": 6,
+     "fpr": 0.6842105263157895,
+     "fnr": 0.11627906976744186,
+     "ece_10": 0.13864748426437726
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.7097
+     },
+     "R3": {
+      "pass": false,
+      "value": 0.5998
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7097 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1669, p 0.000",
+       "CLIM": "diff -0.0488, p 0.018"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.745, R 0.884"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.476, 0.7] (sizes [21, 21, 20]), LOQO min 0.705; other split [0.95, 0.476, 0.714] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R3",
+     "R7"
+    ]
+   },
+   "S2": {
+    "metrics": {
+     "accuracy": 0.7741935483870968,
+     "balanced": 0.7784577723378213,
+     "precision": 0.8918918918918919,
+     "recall": 0.7674418604651163,
+     "f1": 0.825,
+     "auc": 0.7858017135862914,
+     "brier": 0.17365548915633763,
+     "TP": 33,
+     "FP": 4,
+     "FN": 10,
+     "TN": 15,
+     "fpr": 0.21052631578947367,
+     "fnr": 0.23255813953488372,
+     "ece_10": 0.13636993588440416,
+     "brier_of_K1_probability": 0.17183832448984007,
+     "auc_of_K1_probability": 0.7858017135862914
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7742
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7785
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7742 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1651, p 0.000",
+       "CLIM": "diff -0.0470, p 0.061"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.892, R 0.767"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [1.0, 0.476, 0.85] (sizes [21, 21, 20]), LOQO min 0.770; other split [1.0, 0.476, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ],
+    "note": "R5 and the Brier/AUC shown by the frozen code use the remapped probability; S2's true probability is K1's"
+   },
+   "tau": {
+    "min": 0.7,
+    "median": 0.7,
+    "max": 0.7
+   }
+  },
+  "2": {
+   "C-b": {
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.7037943696450428,
+     "brier": 0.18371941023164615,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10,
+     "fpr": 0.47368421052631576,
+     "fnr": 0.09302325581395349,
+     "ece_10": 0.1522929905806882
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1550, p 0.000",
+       "CLIM": "diff -0.0385, p 0.069"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ]
+   },
+   "K1": {
+    "metrics": {
+     "accuracy": 0.7741935483870968,
+     "balanced": 0.7343941248470012,
+     "precision": 0.8372093023255814,
+     "recall": 0.8372093023255814,
+     "f1": 0.8372093023255814,
+     "auc": 0.7099143206854345,
+     "brier": 0.1850791091886031,
+     "TP": 36,
+     "FP": 7,
+     "FN": 7,
+     "TN": 12,
+     "fpr": 0.3684210526315789,
+     "fnr": 0.16279069767441862,
+     "ece_10": 0.14777900116068213
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7742
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7344
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7742 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1536, p 0.001",
+       "CLIM": "diff -0.0372, p 0.087"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.837, R 0.837"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.85] (sizes [21, 21, 20]), LOQO min 0.770; other split [0.95, 0.571, 0.81] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ]
+   },
+   "S2": {
+    "metrics": {
+     "accuracy": 0.7096774193548387,
+     "balanced": 0.7319461444308446,
+     "precision": 0.8787878787878788,
+     "recall": 0.6744186046511628,
+     "f1": 0.7631578947368421,
+     "auc": 0.7233782129742962,
+     "brier": 0.1984220884913196,
+     "TP": 29,
+     "FP": 4,
+     "FN": 14,
+     "TN": 15,
+     "fpr": 0.21052631578947367,
+     "fnr": 0.32558139534883723,
+     "ece_10": 0.17366168017419187,
+     "brier_of_K1_probability": 0.1850791091886031,
+     "auc_of_K1_probability": 0.7099143206854345
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.7097
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7319
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7097 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1403, p 0.003",
+       "CLIM": "diff -0.0238, p 0.236"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.879, R 0.674"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.65] (sizes [21, 21, 20]), LOQO min 0.705; other split [0.95, 0.571, 0.619] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R5",
+     "R7"
+    ],
+    "note": "R5 and the Brier/AUC shown by the frozen code use the remapped probability; S2's true probability is K1's"
+   },
+   "tau": {
+    "min": 0.3,
+    "median": 0.65,
+    "max": 0.7
+   }
+  }
+ }
+}

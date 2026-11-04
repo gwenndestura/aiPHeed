@@ -301,7 +301,10 @@ async def rejected_pairs(db: AsyncSession, quarter: str | None = None) -> set[tu
     from app.ml.inference import foodinsecurity_system as FI
 
     if FI.active():
-        q = select(ReviewRecord.province_id, ReviewRecord.quarter).where(ReviewRecord.status == PUBLISHED)
+        # Approved = PUBLISHED or ARCHIVED: an archived forecast was approved and later superseded, not unapproved.
+        # (Both issued leads, e.g. 2026-Q4 and 2027-Q1, come from one issue date; approving the later one archives
+        # the earlier, which must stay public.)
+        q = select(ReviewRecord.province_id, ReviewRecord.quarter).where(ReviewRecord.status.in_((PUBLISHED, ARCHIVED)))
         published = {(p, rq) for p, rq in (await db.execute(q)).all()}
         pairs |= FI.unapproved_pairs(published, quarter)
     return pairs

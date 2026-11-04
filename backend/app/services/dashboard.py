@@ -1997,6 +1997,8 @@ def compose_formal_interpretation(
 
 def serving_model() -> dict | None:
     """The explicitly configured Lead-2 serving model (None under the E38 default)."""
+    if CH1.key() == "+fi":                       # food-insecurity mode: the served model's own identity, not FIRI's
+        return CH1.serving_model()
     if not E41L2.active():
         return None
     try:
@@ -2010,6 +2012,8 @@ def serving_model() -> dict | None:
 
 
 def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
+    if CH1.key() == "+fi":                       # food-insecurity mode: the served evaluation, not FIRI's
+        return CH1.model_performance()
     # THESIS: the final Objective 2/4 evaluation, read outside the per-horizon cache (the cache key has no mode)
     if THESIS.active():
         return THESIS.model_performance()

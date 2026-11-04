@@ -35,7 +35,14 @@ import os
 from pathlib import Path
 
 NAME = "foodinsecurity"
-DATA = Path(__file__).resolve().parents[3] / "data" / "foodinsecurity_engine"
+# MAIN MODEL: C-B6 (team decision 2026-11-04, OBJECTIVES_AUDIT/ADOPTION_DECISION_CB6.md; adviser approval pending; the
+# pre-registered rule H7 was not met). Its export is backend/data/foodinsecurity_engine_cb6. The previous main model C-b
+# keeps its export, unchanged, in backend/data/foodinsecurity_engine (CB_DATA). AIPHEED_FI_DATA_DIR points the mode at
+# another export of the same layout (C-b, or the C-E demos).
+_DATA_ROOT = Path(__file__).resolve().parents[3] / "data"
+MAIN_DATA = _DATA_ROOT / "foodinsecurity_engine_cb6"
+CB_DATA = _DATA_ROOT / "foodinsecurity_engine"
+DATA = Path(os.getenv("AIPHEED_FI_DATA_DIR") or MAIN_DATA)
 LGU_VULNERABILITY = DATA / "lgu_vulnerability.csv"
 FORECAST_FROM = "2026-10-01"                 # issue dates from here on are prospective forecasts
 H_LINE = 11.3
@@ -46,6 +53,10 @@ SHOWN_GROUPS = ("market", "climate", "fish_kill", "employment", "ofw_remittance"
 GROUP_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
                 "employment": "Employment", "ofw_remittance": "OFW Remittance", "hunger": "Past SWS hunger"}
 NOT_INPUT = ("employment", "ofw_remittance")  # not inputs of the model (BSP remittances not retrieved)
+try:                                            # an export may declare its own (C-E has every group as an input)
+    NOT_INPUT = tuple(json.loads((DATA / "evaluation.json").read_text(encoding="utf-8"))["not_input_groups"])
+except (OSError, KeyError, ValueError):
+    pass
 OTHER_GROUPS = ("hunger", "news", "lead")     # inputs outside the five bars: reported as the other share
 
 REGIONAL = ("The food-insecurity classification is regional; the province score weights it by PSA poverty incidence "
@@ -57,30 +68,19 @@ REVIEW_FLAG = ("HIGH forecast: flagged for human confirmation by a DA Region IV-
 NEWS_FLAG_NOTE = ("province news early-warning flag: descriptive context, not a validated predictor, staged for human "
                   "confirmation and never public; no notification is sent to DSWD or any agency automatically")
 
-INDICATOR = {
+MODEL_DEFAULT = ("one LightGBM trained walk-forward on SWS hunger since 1998 and on PSA prices, climate, production, "
+                 "world-price and news inputs")
+NEWS_DEFAULT = "The NLP input (the FSSI anomaly) is included and changes no classification against the same model without news."
+LEAD_NAMES = {1: "that quarter", 2: "the next quarter", 3: "two quarters later", 4: "three quarters later"}
+_INDICATOR_BASE = {
     "id": "regional_food_insecurity_forecast",
     "name": "Food-insecurity forecast: regional (Balance Luzon) SWS hunger above 11.3%, weighted by provincial poverty",
-    "definition": ("The forecast probability that SWS involuntary hunger in Balance Luzon (the share of families that "
-                   "went hungry at least once in the past three months) is above 11.3% in the target quarter, from one "
-                   "LightGBM trained walk-forward on SWS hunger since 1998 and on PSA prices, climate, production, "
-                   "world-price and news inputs. The class is regional: HIGH at a probability of 0.50, the same for "
-                   "every province. The province score is that probability times the province's PSA 2023 poverty "
-                   "incidence among families divided by the highest province's; it orders the provinces and never "
-                   "changes the class. Food-price pressure, food poverty and news are shown beside it as context."),
     "unit": ("priority score 0-1 (the regional probability weighted by provincial poverty); the class comes from the "
              "regional probability (HIGH at 0.50)"),
-    "horizon": ("issued on the first day of a quarter; Lead 1 = that quarter, Lead 2 = the next quarter. Both pass the "
-                "paper's 75% accuracy rule (Algorithm 3: Maximum Reliable Lead Time 2 quarters) but fail the stricter "
-                "reliability rules R1-R7; Lead 3 fails the 75% rule, so nothing beyond Lead 2 is shown"),
     "source": ("SWS hunger (four survey areas, non-commissioned rounds); PSA Region IV-A CPI (food, all items, rice); "
                "NOAA ONI; IBTrACS; PSA crop and fisheries production; World Bank Pink Sheet; news (regional FSSI, "
                "GDELT price news, project corpus categories); PSA 2023 poverty incidence among families (Table 1) for "
                "the province weight; PSA 2021 city and municipal SAE and 2024 population for the LGU ranking"),
-    "caveat": ("A forecast of regional hunger, not a measured provincial rate: SWS reports hunger for Balance Luzon "
-               "only, so every province has the same class. " + REGIONAL + " " + FNRI + " Development evidence: the "
-               "scored quarters were examined while the model was built; the stricter rules R1-R7 fail at every lead "
-               "on stability (R7: 2015-2020 accuracy 0.57). The NLP input (the FSSI anomaly) is included and changes "
-               "no classification against the same model without news."),
 }
 EVENT = "regional food insecurity (probability that Balance Luzon SWS hunger is above 11.3%)"
 COMBINATION = ("not combined into the class: the class is the regional hunger forecast alone; the province score "
@@ -172,14 +172,100 @@ def reliable_lead() -> int | None:
     return evaluation().get("max_reliable_lead")
 
 
+def _first_failing_lead(ev: dict) -> tuple[int, float] | None:
+    """The first evaluated lead that fails the 75% rule, with its accuracy (None when every evaluated lead passes)."""
+    for k in sorted(ev.get("leads", {}), key=int):
+        v = ev["leads"][k]
+        if not v.get("alg3_pass"):
+            return int(k), float(v["metrics"]["accuracy"])
+    return None
+
+
+def indicator() -> dict:
+    """The served indicator, its horizon, reliability and NLP statements derived from the served evaluation.json (no
+    metric is written here); an unreadable evaluation gives an explicit 'unavailable' statement instead."""
+    try:
+        ev = evaluation()
+        mrlt = int(ev["max_reliable_lead"])
+        leads = ev["leads"]
+        served = [int(k) for k in (ev.get("served_leads") or sorted(leads, key=int))]
+    except (OSError, ValueError, KeyError, TypeError):
+        return {**_INDICATOR_BASE, "definition": None, "evaluationAvailable": False,
+                "horizon": "reliability metadata unavailable: the served evaluation.json is missing or invalid",
+                "caveat": "Reliability metadata unavailable; no reliability statement is made."}
+    shown = " and ".join(f"Lead {k} = {LEAD_NAMES.get(k, f'{k - 1} quarters later')}" for k in served)
+    fail = _first_failing_lead(ev)
+    stop = (f"; Lead {fail[0]} fails the 75% rule ({fail[1]:.3f}), so nothing beyond Lead {fail[0] - 1} is reliable"
+            if fail else "")
+    rules = "; ".join(f"Lead {k}: {', '.join(leads[str(k)].get('failed') or []) or 'none'}" for k in served
+                      if str(k) in leads)
+    news = ev.get("news_effect_text")
+    news = (news[0].upper() + news[1:] + ".") if news else NEWS_DEFAULT
+    return {**_INDICATOR_BASE, "evaluationAvailable": True,
+            "definition": ("The forecast probability that SWS involuntary hunger in Balance Luzon (the share of families "
+                           "that went hungry at least once in the past three months) is above 11.3% in the target "
+                           f"quarter, from {ev.get('model_description') or MODEL_DEFAULT}. The class is regional: HIGH at "
+                           "a probability of 0.50, the same for every province. The province score is that probability "
+                           "times the province's PSA 2023 poverty incidence among families divided by the highest "
+                           "province's; it orders the provinces and never changes the class. Food-price pressure, food "
+                           "poverty and news are shown beside it as context."),
+            "source": _INDICATOR_BASE["source"] + ("; " + ev["sources_extra"] if ev.get("sources_extra") else ""),
+            "horizon": (f"issued on the first day of a quarter; served: {shown}. The paper's 75% accuracy rule "
+                        f"(Algorithm 3) gives a Maximum Reliable Lead Time of {mrlt} quarters{stop}. Stricter rules "
+                        f"R1-R7 failed: {rules}"),
+            "caveat": ("A forecast of regional hunger, not a measured provincial rate: SWS reports hunger for Balance "
+                       "Luzon only, so every province has the same class. " + REGIONAL + " " + FNRI + " Development "
+                       f"evidence: the scored quarters were examined while the model was built ({ev.get('model', '?')}); "
+                       f"the stricter rules R1-R7 fail ({rules}). " + news)}
+
+
+def model_performance() -> dict:
+    """/config modelPerformance in this mode: the served evaluation's own metrics per evaluated lead (not FIRI's)."""
+    ev = evaluation()
+    served = [int(k) for k in (ev.get("served_leads") or sorted(ev["leads"], key=int))]
+    perf = {}
+    for k, v in sorted(ev["leads"].items(), key=lambda x: int(x[0])):
+        m = v["metrics"]
+        perf[k] = {"n": v["n"], "period": v.get("period"), "accuracy": m["accuracy"], "balanced": m["balanced"],
+                   "precision": m["precision"], "recall": m["recall"], "f1": m["f1"], "rocAuc": m["auc"],
+                   "brier": m["brier"], "confusion": {"tp": m["TP"], "fp": m["FP"], "fn": m["FN"], "tn": m["TN"]},
+                   "alg3Pass": v["alg3_pass"], "failedRules": v.get("failed") or [], "served": int(k) in served}
+    return {"model": ev.get("model"), "modelVersion": model_line(), "planSha256": ev.get("plan_sha256") or None,
+            "seal": ev.get("seal_sha256") or None, "maxReliableLead": ev.get("max_reliable_lead"),
+            "servedLeads": served, "evidenceStatus": ev.get("evidence_status"), "leads": perf,
+            "evaluation": "walk-forward development evidence from the served evaluation.json"}
+
+
+def serving_model() -> dict:
+    """/config servingModel in this mode: the served model's identity, from the served rows and evaluation."""
+    ev = evaluation()
+    fut = sorted((r for r in rows().values() if kind(r) == "forecast"), key=lambda r: (r["quarter"], int(r["lead"])))
+    r = fut[-1] if fut else None
+    return {"mode": "foodinsecurity", "model": ev.get("model"), "modelVersion": model_line(),
+            "planSha256": ev.get("plan_sha256") or None, "seal": ev.get("seal_sha256") or None,
+            "maxReliableLead": ev.get("max_reliable_lead"), "servedLeads": ev.get("served_leads"),
+            "issued": r["issue_date"] if r else None, "targetQuarter": r["quarter"] if r else None,
+            "lead": int(r["lead"]) if r else None,
+            "strict": os.getenv("AIPHEED_STRICT_MODEL", "") in ("1", "true", "True")}
+
+
+def __getattr__(name: str):
+    """INDICATOR is derived from the served evaluation at every access (PEP 562)."""
+    if name == "INDICATOR":
+        return indicator()
+    raise AttributeError(name)
+
+
 def horizon() -> dict:
     ev = evaluation()
+    fail = _first_failing_lead(ev)
     return {"generated_max_lead": max((int(r["lead"]) for r in rows().values()), default=None),
             "evaluated_leads": sorted(int(k) for k in ev["leads"]), "testable_max_lead": None,
             "reliable_max_lead": reliable_lead(), "individually_passing_leads": [int(k) for k, v in ev["leads"].items()
                                                                                 if v["alg3_pass"]],
-            "why_not_longer": (f"Lead 3 is the first lead below 75% mean walk-forward accuracy "
-                               f"({ev['leads']['3']['metrics']['accuracy']:.3f}); Algorithm 3 stops there"),
+            "why_not_longer": (f"Lead {fail[0]} is the first lead below 75% mean walk-forward accuracy "
+                               f"({fail[1]:.3f}); Algorithm 3 stops there" if fail else
+                               "every evaluated lead passes the 75% rule; no longer lead was evaluated"),
             "reliable_quarters_after_newest_sws": None}
 
 
@@ -271,15 +357,19 @@ def reliability_text(r: dict) -> str:
     if lead <= (reliable_lead() or 0):
         m = L[str(lead)]["metrics"]
         failed = ", ".join(f"{x} ({RULE_NAMES.get(x, x)})" for x in L[str(lead)]["failed"])
+        rules = (f"but fails the stricter reliability rules R1-R7 ({failed})" if failed else
+                 "and passes the stricter reliability rules R1-R7 (development evidence)")
         return (f"Lead-{lead} forecast: passes the paper's 75% accuracy rule (accuracy {m['accuracy']:.3f} on "
-                f"{L[str(lead)]['n']} past quarters; Maximum Reliable Lead Time {reliable_lead()}) but fails the "
-                f"stricter reliability rules R1-R7 ({failed}); {news_effect_text(lead)}")
+                f"{L[str(lead)]['n']} past quarters; Maximum Reliable Lead Time {reliable_lead()}) {rules}; "
+                f"{news_effect_text(lead)}")
     return f"Lead-{lead} forecast: beyond the Maximum Reliable Lead Time ({reliable_lead()} quarters)"
 
 
 def news_effect_text(lead: int) -> str:
     """What the NLP input does to the forecast, from the evaluation (C-b against the same model without news)."""
     ev = evaluation()
+    if ev.get("news_effect_text"):
+        return ev["news_effect_text"]
     e = (ev.get("news_effect") or {}).get(str(lead)) or {}
     share = (ev.get("news_shap_share_lead1") or {}).get("N1 News", 0.0)
     return (f"the NLP input (FSSI anomaly) is included and carries {share:.1f}% of SHAP influence; it changed "
@@ -316,7 +406,7 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
         "estimate_kind": "forecast" if k == "forecast" else "backtest",
         "price_pressure_score": _f(r.get("pi_price")), "hunger_condition_probability": p,
         "regional_probability": p, "class_level": "high" if is_high(r) else "low",
-        "score_type": "poverty_weighted_regional_food_insecurity_score", "score_definition": INDICATOR["definition"],
+        "score_type": "poverty_weighted_regional_food_insecurity_score", "score_definition": indicator()["definition"],
         "band": "High" if is_high(r) else "Low",
         "confidence_statement": (f"{name}, {quarter}: {_class(r)} food-insecurity risk (regional probability {p:.2f}; "
                                  f"{province_context(r)}). {what}{flags}")})
@@ -389,6 +479,23 @@ def _other_abs(r: dict) -> float:
 
 def evidence_note(code: str | None, quarter: str, other_pct: float | None = None, group: str | None = None) -> str:
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
+    if evaluation().get("driver_view") == "relative":
+        note = ("The bars compare each driver's push on THIS quarter's forecast (SHAP, log-odds) with its own usual push "
+                "(its average over the forecasts issued up to this one), shared among these five groups. A larger bar "
+                "means the driver is pushing harder than usual; past SWS hunger, the strongest input, is not one of the "
+                "five. They are model influence, not shares of hunger caused by each factor.")
+        if rs and code:
+            note += f" Province context: {province_context(rs[0])}."
+        return note
+    if evaluation().get("driver_view") == "trailing8":
+        n = int(float(rs[0].get("avg8_n") or 0)) if rs else 0
+        note = (f"The bars show each driver's share of the model's push (mean |SHAP|, log-odds) among these five groups, "
+                f"averaged over the {n} forecasts issued up to this one (this quarter's and the 7 before it); past SWS "
+                "hunger, the strongest input, is not one of the five. Shares under 0.5% round to 0%. They are model "
+                "influence, not shares of hunger caused by each factor.")
+        if rs and code:
+            note += f" Province context: {province_context(rs[0])}."
+        return note
     other = (f"; past SWS hunger and the news inputs account for the remaining {other_pct:.0f}%"
              if other_pct is not None else "; past SWS hunger and the news inputs account for the rest")
     note = ("The bars show each driver's share of the total push (SHAP, log-odds) on the regional food-insecurity "
@@ -473,6 +580,13 @@ def drivers(code: str, quarter: str, base: dict) -> dict:
     if r is None:
         return base
     news = {d["driver_group"]: d.get("trigger_proportion") for d in base.get("drivers", [])}
+    avg = ({g: _f(r.get(f"avg8_shap_{g}")) or 0.0 for g in SHOWN_GROUPS}
+           if evaluation().get("driver_view") in ("trailing8", "relative") else None)
+    if avg:                                     # C-E demo: trailing-8 influence of this quarter's forecast
+        ds = [{"driver_group": g, "driver_label": GROUP_LABELS[g], "group_shap": float(avg.get(g, 0.0)),
+               "direction": "increases_risk" if avg.get(g, 0.0) > 0 else "protective" if avg.get(g, 0.0) < 0 else
+               "no_effect", "trigger_proportion": news.get(g)} for g in SHOWN_GROUPS]
+        return {**base, "drivers": ds, "other_abs": 0.0, "other_pct": 0.0, "ch1": r}
     ds = []
     for g in SHOWN_GROUPS:
         c = 0.0 if g in NOT_INPUT else (_f(r.get(f"shap_{g}")) or 0.0)
@@ -525,6 +639,8 @@ def data_status(code: str | None, quarter: str) -> tuple[str, str]:
 
 def model_line() -> str:
     ev = evaluation()
+    if ev.get("model_line"):
+        return f"{ev['model_line']} {REGIONAL}"
     m1, m2 = ev["leads"]["1"]["metrics"], ev["leads"]["2"]["metrics"]
     return (f"C-b: one LightGBM (stacked leads, walk-forward from 1998; IMPROVE_V2 reference inputs plus the FSSI "
             f"anomaly as its NLP input) forecasting "
@@ -540,7 +656,9 @@ def identity(code: str | None, quarter: str) -> dict | None:
         return None
     return {"servingMode": "thesis", "servedModel": r.get("model") or "NEWS_V2-CB", "modelVersion": model_line(),
             "lead": int(r["lead"]), "issued": r["issue_date"], "targetQuarter": quarter,
-            "evidenceStatus": ("passes the paper's 75% rule, fails R1-R7 (development evidence)"
+            "evidenceStatus": (("passes the paper's 75% rule, " +
+                                ("fails R1-R7" if (evaluation()["leads"].get(str(int(r["lead"]))) or {}).get("failed", ["?"])
+                                 else "passes R1-R7") + " (development evidence)")
                                if status(r) == "reliable" else "beyond the reliable horizon"),
             "lead2Accuracy": next((s for s in reliability_sentences() if s.startswith("Lead 2")), ""),
             "seal": r.get("seal_sha256") or None}
@@ -567,17 +685,23 @@ def reliability_sentences() -> list[str]:
         out.append(f"Lead {k} passed Algorithm 3, the paper's 75% rule (mean walk-forward accuracy >= 0.75): accuracy "
                    f"{m['accuracy']:.3f} ({m['TP'] + m['TN']}/{L['n']} quarters, {L['period']}; persistence "
                    f"{L['persistence_accuracy']:.3f}), precision {m['precision']:.2f}, recall {m['recall']:.2f}, AUC "
-                   f"{m['auc']:.2f}, Brier {m['brier']:.3f}; it fails the stricter rules "
-                   f"{', '.join(f'{x} ({RULE_NAMES.get(x, x)})' for x in L['failed'])}.")
-    m3 = ev["leads"]["3"]["metrics"]
-    out.append(f"Lead 3 failed (accuracy {m3['accuracy']:.3f}), so the Maximum Reliable Lead Time is "
-               f"{reliable_lead()} quarters and nothing beyond Lead 2 is shown; under R1-R7 it is "
+                   f"{m['auc']:.2f}, Brier {m['brier']:.3f}; " +
+                   (f"it fails the stricter rules {', '.join(f'{x} ({RULE_NAMES.get(x, x)})' for x in L['failed'])}."
+                    if L["failed"] else "it passes the stricter rules R1-R7 (development evidence)."))
+    fail = _first_failing_lead(ev)
+    shown = max(int(x) for x in (ev.get("served_leads") or [1, 2]))
+    out.append((f"Lead {fail[0]} failed (accuracy {fail[1]:.3f}), so the Maximum Reliable Lead Time is "
+                if fail else "Every evaluated lead passed, so the Maximum Reliable Lead Time is ") +
+               f"{reliable_lead()} quarters and nothing beyond Lead {shown} is shown; under R1-R7 it is "
                f"{ev['max_reliable_lead_r1_r7']}.")
     out.append(f"NLP: {news_effect_text(1)[0].upper()}{news_effect_text(1)[1:]}. With news available only from 2021, "
                "it adds no measurable predictive value (Objective 1 evaluated).")
-    out.append(f"Development evidence: every scored quarter was examined while the model was built. The Lead-2 "
-               f"forecast issued {ev['seal_issue_date']} is sealed (SHA-256 {ev['seal_sha256'][:8]}, after the results "
-               "were known) and will be scored when SWS publishes that quarter.")
+    out.append("Development evidence: every scored quarter was examined while the model was built. " +
+               (f"The Lead-2 forecast issued {ev['seal_issue_date']} is sealed (SHA-256 {ev['seal_sha256'][:8]}, after the "
+                "results were known) and will be scored when SWS publishes that quarter."
+                if ev.get("seal_sha256") else
+                "This model has no sealed forecast yet; its forecasts are to be sealed from the 2027-01-01 issue, before "
+                "their outcomes are known (OBJECTIVES_AUDIT/CE_PROSPECTIVE_PLAN.md, Addendum 1)."))
     out.append(FNRI)
     return out
 

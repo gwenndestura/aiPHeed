@@ -1,4 +1,6 @@
-"""Seal the prospective REF+news (and REF) forecasts of one issue date (PROSPECTIVE_PLAN.md section 1).
+"""Seal the prospective forecasts of one issue date (PROSPECTIVE_PLAN.md section 1; Addendum CB; ALLBASE registry
+spec): C-b (main), REF+news, REF, the seven established baselines (persistence, PSA-only and combined logistic,
+NLP-only logistic, government-only and NLP-only LightGBM, always-HIGH), CLIM, and the ALLBASE candidates K1-K3.
 
     python seal_next.py --issue 2027-01-01                      # real seal (only within 14 days after the issue date)
     python seal_next.py --issue 2026-10-01 --dry-run --out DIR  # dry run: nothing written outside DIR, ledger untouched
@@ -12,12 +14,15 @@ Real mode refuses unless all of these hold:
   source is recorded in the seal; its columns are whatever the refreshed files hold (NaN when missing).
 
 It rebuilds the whole BL input table from the current data files (iv2_lib.rows_origin, origins 1998-Q3..t), refits
-REF+news and REF at origin t exactly as OPTION_1 (IMPROVE_V2 grid, selection, settings, seed), and writes one file with
-4 rows (2 models x Leads 1-2) plus the baselines. In real mode it appends the file's SHA-256 to the ledger and prints the
+every LightGBM model at origin t exactly as OPTION_1 (IMPROVE_V2 grid, selection, settings, seed), the logistic
+baselines as IMPROVE_V2 (iv2_lib.logit_lead), K1/K2 from C-b and LOGIT (K2's weight from past pairs whose labels are
+known at O(t)), and writes one file with one row per model and lead. Each row carries model_version, feature_version,
+config_sha256, feature_cutoff and generation_record (registry spec section 2). In real mode it appends the file's SHA-256 to the ledger and prints the
 git commands to commit both; it never commits or pushes by itself.
 
-In a dry run for an origin that has stored development outputs (t <= 2026-Q3), the rebuilt table rows and the four
-forecasts are compared with the stored IMPROVE_V2 / OPTION_1 / IMPROVE_V2_LEADS values (replay check).
+In a dry run for an origin that has stored development outputs (t <= 2026-Q3), the rebuilt table rows and every
+forecast with a stored development value are compared with it (IMPROVE_V2 / OPTION_1 / IMPROVE_V2_LEADS / NEWS_V2 /
+OBJECTIVES_COMPLETION / ALLBASE; replay check). LGBM-GOV and LGBM-NLP are stored up to origin 2026-Q2 only.
 """
 from __future__ import annotations
 
@@ -59,14 +64,41 @@ def replay_check(t: int, T: pd.DataFrame, out: pd.DataFrame) -> dict:
                 for k in P.LEADS})
     ref.update({("C-b", k): float(cbf[(cbf["name"] == "C-b") & (cbf["t"] == t) & (cbf["lead"] == k)]["p"].iloc[0])
                 for k in P.LEADS})
+    iv = pd.read_csv(P.EXP / "IMPROVE_V2" / "out" / "forecasts.csv")
+    h3 = pd.read_csv(P.EXP / "OBJECTIVES_COMPLETION" / "out" / "h3_forecasts.csv")
+    fits = pd.read_csv(P.ALLBASE / "out" / "fits.csv")
+    bl = pd.read_csv(P.ALLBASE / "out" / "blends.csv")
+    rv = pd.read_csv(P.ALLBASE / "out" / "reversal_features.csv").set_index("t")
+    tab["reversal_features_equal"] = bool(all(
+        (np.isnan(T[T["t"] == t][c].iloc[0]) and np.isnan(rv.loc[t, c])) or abs(T[T["t"] == t][c].iloc[0] - rv.loc[t, c]) <= 1e-12
+        for c in P.PC.REV))
+    src = {"K3": fits[fits["name"] == "K3"], "LOGIT": iv[iv["name"] == "LOGIT"], "PSA-only": iv[iv["name"] == "PSA-only"],
+           "NLP-only": iv[iv["name"] == "NLP-only"], "LGBM-GOV": h3[h3["name"] == "LGBM-GOV"],
+           "LGBM-NLP": h3[h3["name"] == "LGBM-NLP"]}
+    not_stored = []
+    for m, f in src.items():
+        for k in P.LEADS:
+            x = f[(f["t"] == t) & (f["lead"] == k)]["p"]
+            if len(x):
+                ref[(m, k)] = float(x.iloc[0])
+            else:
+                not_stored.append(f"{m} L{k}")
+    for m in P.BLENDS:
+        for k in P.LEADS:
+            x = bl[(bl["t"] == t) & (bl["lead"] == k)][m]
+            if len(x):
+                ref[(m, k)] = float(x.iloc[0])
+    for k in P.LEADS:
+        ref[("ALWAYS-HIGH", k)] = 1.0
     ps = float(lds[(lds["name"] == "PERSIST") & (lds["t"] == t) & (lds["lead"] == 1)]["p"].iloc[0])
     cl = float(lds[(lds["name"] == "CLIM") & (lds["t"] == t) & (lds["lead"] == 1)]["p"].iloc[0])
     fc = {f"{m} L{k}": abs(float(out[(out["model"] == m) & (out["lead"] == k)]["p_high"].iloc[0]) - v)
           for (m, k), v in ref.items()}
     base = {"persist_si": abs(float(out["persist_si"].iloc[0]) - ps), "clim": abs(float(out["clim"].iloc[0]) - cl)}
-    ok = tab["max_abs_diff"] <= 1e-9 and tab["nan_pattern_equal"] and tab["z_N1R_equal"] and max(fc.values()) <= 1e-12 \
-        and max(base.values()) <= 1e-12
-    return {"table_rows": tab, "forecast_abs_diff": fc, "baseline_abs_diff": base, "replay_matches": bool(ok)}
+    ok = tab["max_abs_diff"] <= 1e-9 and tab["nan_pattern_equal"] and tab["z_N1R_equal"] and tab["reversal_features_equal"] \
+        and max(fc.values()) <= 1e-12 and max(base.values()) <= 1e-12
+    return {"table_rows": tab, "forecast_abs_diff": fc, "baseline_abs_diff": base, "not_stored_at_this_origin": not_stored,
+            "replay_matches": bool(ok)}
 
 
 def main():
@@ -80,6 +112,7 @@ def main():
     a = ap.parse_args()
 
     plan = P.check_plan()
+    allbase = P.check_allbase()
     t = P.origin_of_issue(a.issue)
     targets = [t + k for k in P.LEADS]
     now = a.today if (a.dry_run and a.today) else P.today()
@@ -110,6 +143,7 @@ def main():
 
     lab = V.area_labels(d)
     T = P.add_news_anomaly(P.build_table(list(range(H.FIRST_ORIGIN, t + 1)), a.workers))   # C-b's z_N1R (Addendum CB)
+    T = P.add_reversal(T, d)                                                                    # K3's features (ALLBASE)
     base = P.baselines(d, lab, t)
     kn = H.known(d, t, "BL")
     commit = P.code_commit()
@@ -117,17 +151,49 @@ def main():
         assert not commit["model_code_dirty"], "model code has uncommitted changes: commit it first"
     hashes = P.input_hashes()
     sealed_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    rows = []
+    # earlier sealed prospective rows (K2's history after 2026-Q3)
+    led = P.LEDGER if not a.dry_run else out_dir / "SEAL_LEDGER.md"
+    prev = [pd.read_csv(led.parent / e["file"]) for e in P.read_ledger(led) if (led.parent / e["file"]).exists()]
+    prev = pd.concat(prev, ignore_index=True) if prev else pd.DataFrame(columns=["origin", "lead", "target_quarter", "model",
+                                                                                  "p_high"])
+    prev = pd.DataFrame({"t": prev["origin"].map(H.qi), "q": prev["target_quarter"].map(H.qi), "lead": prev["lead"],
+                         "model": prev["model"], "p": prev["p_high"]}) if len(prev) else None
+    fits = {}
     for m, cols in P.MODELS.items():
-        f = P.fit_origin(T, d, lab, t, cols)
+        fits[m] = P.fit_origin(T, d, lab, t, cols)
+    for m, (cols, first) in P.LGBM_EXTRA.items():
+        fits[m] = P.fit_origin(T, d, lab, t, cols, first)
+    for m, (cols, first) in P.LOGIT_MODELS.items():
+        fits[m] = P.logit_origin(T, d, lab, t, cols, first)
+    cb, lg = fits["C-b"].set_index("lead"), fits["LOGIT"].set_index("lead")
+    wk = {k: P.k2_weight(d, t, k, prev) for k in P.LEADS}
+    for m in P.BLENDS:
+        f = cb.copy()
+        f["p"] = [(0.5 if m == "K1" else wk[k][0]) * cb.loc[k, "p"] + (1 - (0.5 if m == "K1" else wk[k][0])) * lg.loc[k, "p"]
+                  for k in f.index]
+        f["fallback"] = cb["fallback"] | lg["fallback"]
+        f["cfg"] = [f"w={0.5 if m == 'K1' else wk[k][0]}; pairs={wk[k][1]}" for k in f.index]
+        fits[m] = f.reset_index()
+    for m, pc in {**P.CONSTANT, "PERSIST": base["persist_si"], "CLIM": base["clim"]}.items():
+        f = cb.copy()
+        f["p"], f["fallback"], f["cfg"], f["n_train"] = pc, False, None, -1
+        fits[m] = f.reset_index()
+    cut = json.dumps(P.feature_cutoff(d, t), sort_keys=True)
+    gen = json.dumps(P.generation_record(a.dry_run), sort_keys=True)
+    rows = []
+    for m, f in fits.items():
+        mv = P.model_version(m)
         for r in f.itertuples():
             rows.append({"issue_date": a.issue, "origin": H.qs(t), "lead": int(r.lead), "target_quarter": H.qs(int(r.q)),
-                         "model": m, "p_high": float(r.p), "class": "HIGH" if r.p >= .5 else "LOW",
+                         "model": m, "model_id": m, "model_version": f"{mv['model_version']}@{commit['commit'][:12]}",
+                         "feature_version": mv["feature_version"], "config_sha256": mv["config_sha256"],
+                         "p_high": float(r.p), "class": "HIGH" if r.p >= .5 else "LOW",
                          "persist_si": base["persist_si"], "clim": base["clim"], "clim_quarters": base["clim_quarters"],
                          "newest_sws_q": H.qs(kn[-1][0]) if kn else "", "newest_sws_reading": kn[-1][1] if kn else "",
                          "newest_sws_published": kn[-1][2] if kn else "", "fallback": bool(r.fallback),
                          "cfg": r.cfg, "n_train": int(r.n_train), "code_commit": commit["commit"],
                          "model_code_dirty": commit["model_code_dirty"], "plan_sha256": plan,
+                         "allbase_prereg_sha256": allbase, "feature_cutoff": cut, "generation_record": gen,
                          "stale_sources": ";".join(stale), "input_hashes": json.dumps(hashes, sort_keys=True),
                          "sealed_at": sealed_at, "dry_run": bool(a.dry_run)})
     out = pd.DataFrame(rows)

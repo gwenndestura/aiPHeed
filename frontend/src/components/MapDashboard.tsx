@@ -169,15 +169,22 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   const { data: provincesRes, error: provincesError } = useProvinces(quarterId || undefined, "nowcast", !noData);
   // Fetch failure (not a 404): the panels say so instead of showing zeros.
   const loadFailed = isLoadFailure(quartersError) || isLoadFailure(provincesError);
+  // A withheld province (staged and awaiting approval, or rejected) has no score: it is left out of the scored
+  // list, so it is never counted, ranked or coloured as Low 0.00.
   const regionsData = useMemo(
-    () => (noData ? [] : (provincesRes?.data ?? []).map(provinceToRegion)),
+    () => (noData ? [] : (provincesRes?.data ?? []).filter((p) => !p.withheld).map(provinceToRegion)),
     [provincesRes, noData]
   );
 
   const { data: rejectionsRes } = useRejections(quarterId || undefined, !noData);
+  // Provinces with no published forecast this quarter: rejected ones and withheld (staged) ones.
   const rejectedIds = useMemo(
-    () => new Set((rejectionsRes?.data ?? []).map((r) => r.provinceId)),
-    [rejectionsRes]
+    () =>
+      new Set([
+        ...(rejectionsRes?.data ?? []).map((r) => r.provinceId),
+        ...(provincesRes?.data ?? []).filter((p) => p.withheld).map((p) => p.id),
+      ]),
+    [rejectionsRes, provincesRes]
   );
 
   const { data: municipalitiesRes } = useMunicipalities(selectedRegion?.id ?? null, quarterId || undefined);
@@ -460,7 +467,8 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
       <div className="py-8 text-center space-y-2">
         <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
         <p className="text-[10px] text-muted-foreground/60 leading-snug px-2">
-          This quarter's forecast for <span className="font-semibold">{effectiveRegion.name}</span> has been rejected by the admin.
+          This quarter's forecast for <span className="font-semibold">{effectiveRegion.name}</span> is not published: it
+          is awaiting administrator approval or was rejected.
         </p>
       </div>
     </Card>

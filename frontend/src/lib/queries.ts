@@ -159,6 +159,7 @@ export function useExplainability(scope: Scope, id: string, quarter?: string) {
     queryFn: () => api.get<ExplainabilityResponse>("/api/v1/explainability", { scope, id, quarter }, { auth: false }),
     enabled: !!id,
     staleTime: HOUR,
+    retry: false, // as useForecast: a 404 (forecast_withheld for a staged quarter) is an answer, not a blip
   });
 }
 

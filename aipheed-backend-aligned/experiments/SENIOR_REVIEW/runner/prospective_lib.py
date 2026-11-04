@@ -1,5 +1,7 @@
 """Shared code for the prospective protocol (../PROSPECTIVE_PLAN.md): plan check, table rebuild, the frozen REF+news /
 REF refit at one origin, baselines, input freshness, labels, the seal ledger and an independent R1-R7 recomputation.
+The ALLBASE registry (NEW_MODEL/ALLBASE/PHASE_B_PROSPECTIVE_REGISTRY_SPEC.md) adds the seven established baselines and
+the candidates K1-K3, each with the specification of its development run.
 
 The model code is IMPROVE_V2's / OPTION_1's, imported read only; nothing here changes a setting.
 """
@@ -46,6 +48,22 @@ CB_SEAL_SHA = "67baec6689cbbafc248caac722cc4daa28196c1958ab55ac1100983dd8691015"
 _REF = V.cols(False, False)
 MODELS = {"C-b": _REF[:-1] + ["z_N1R"] + _REF[-1:], "REF+news": V.cols(False, True), "REF": _REF}
 MAIN = "C-b"
+# ALLBASE registry: LightGBM (fit_origin, first origin), logistic (iv2_lib.logit_lead, first origin), blends of C-b + LOGIT
+ALLBASE = EXP / "NEW_MODEL" / "ALLBASE"
+sys.path.insert(0, str(ALLBASE / "runner"))
+import phase_c as PC  # noqa: E402      (reversal features and the K2 weight rule, as run in Phase C)
+
+GOV = ["R_food_yoy", "R_head_yoy", "R_rice_yoy", "R_food_mom", "R_C3", "R_C4", "ONI_last", "ONI_max12",
+       "tc_mean"] + H.WORLD                                      # OBJECTIVES_COMPLETION h3.GOV
+LGBM_EXTRA = {"K3": (PC.K3, H.FIRST_ORIGIN), "LGBM-GOV": (GOV + ["lead"], H.FIRST_ORIGIN),
+              "LGBM-NLP": (V.NEWS + ["lead"], V.NEWS_ERA)}
+LOGIT_MODELS = {"LOGIT": (H.T2_B, H.FIRST_ORIGIN), "PSA-only": (V.PSA, H.FIRST_ORIGIN), "NLP-only": (V.NEWS, V.NEWS_ERA)}
+BLENDS = ("K1", "K2")
+CONSTANT = {"ALWAYS-HIGH": 1.0}
+SCORED = list(MODELS) + list(LGBM_EXTRA) + list(LOGIT_MODELS) + list(BLENDS) + list(CONSTANT) + ["PERSIST", "CLIM"]
+CANDIDATES = ("K1", "K2", "K3")
+COMPARATORS = ("PERSIST", "PSA-only", "LOGIT", "NLP-only", "LGBM-GOV", "LGBM-NLP", "ALWAYS-HIGH")
+ALG4_N, FAMILY_MIN = 4, 20                    # Algorithm 4 holdout size; prospective 42-test family from 20 quarters
 NEWS_WIN, NEWS_MINP = 8, 4                                       # NEWS_V2 PLAN section 1: z over t-8..t-1, >= 4 values
 SEAL_WINDOW_DAYS = 14
 MIN_QUARTERS, REVIEW_MIN, REVIEW_P = 40, 20, 0.05
@@ -82,6 +100,114 @@ def add_news_anomaly(T: pd.DataFrame) -> pd.DataFrame:
     return T.assign(z_N1R=T["t"].map(z))
 
 
+def check_allbase() -> str:
+    """The ALLBASE pre-registration hash (the K1-K3 definitions and the registry revision are fixed there)."""
+    return PC.check_prereg()
+
+
+def add_reversal(T: pd.DataFrame, d) -> pd.DataFrame:
+    """K3's four reversal features (PHASE_B_EXPERIMENT_DESIGN section 2), one value per origin, from BL readings
+    published before O(t): the Phase C implementation A, unchanged."""
+    F = pd.DataFrame([{"t": t, **PC.reversal_a(d, t)} for t in sorted(T["t"].unique())])
+    return T.drop(columns=[c for c in PC.REV if c in T]).merge(F, on="t", how="left")
+
+
+def logit_origin(S: pd.DataFrame, d, lab: pd.DataFrame, t: int, cols: list[str], first: int) -> pd.DataFrame:
+    """IMPROVE_V2 run_iv2 baseline path at one origin: iv2_lib.logit_lead (one model per lead, labels known at O(t))."""
+    kb = V.known_labels(d, t, lab)
+    kb = kb[kb["area"] == "BL"][["q", "y"]]
+    clim = float(kb["y"].mean()) if len(kb) else 0.0
+    f = V.logit_lead(S, t, kb, cols, clim, first)
+    f = f[f["lead"].isin(LEADS)].copy()
+    f["cfg"], f["n_train"] = None, -1
+    return f[["t", "lead", "q", "p", "fallback", "cfg", "n_train", "h_last", "sws_newest_published"]]
+
+
+def k2_weight(d, t: int, lead: int, prospective: pd.DataFrame | None = None) -> tuple[float, int]:
+    """The K2 rule (design section 3, phase_c.choose_w) at origin t: past C-b / LOGIT pairs from the development runs
+    (origins <= 2026-Q3) plus earlier sealed prospective rows (columns t, q, lead, model, p); labels known at O(t)."""
+    cb = pd.read_csv(CB_DIR / "out" / "forecasts.csv")
+    cb = cb[(cb["name"] == "C-b") & (cb["lead"] == lead)][["t", "q", "p"]].rename(columns={"p": "cb"})
+    lg = pd.read_csv(ALLBASE / "out" / "fits.csv")
+    lg = lg[(lg["name"] == "LOGIT_regen") & (lg["lead"] == lead)][["t", "p"]].rename(columns={"p": "lg"})
+    Pp = cb.merge(lg, on="t", how="inner")
+    Pp = Pp[Pp["t"] <= V.LAST_ORIGIN]
+    if prospective is not None and len(prospective):
+        x = prospective[(prospective["lead"] == lead) & prospective["model"].isin(["C-b", "LOGIT"])]
+        x = x.pivot_table(index=["t", "q"], columns="model", values="p", aggfunc="first").reset_index()
+        if {"C-b", "LOGIT"} <= set(x.columns):
+            x = x.rename(columns={"C-b": "cb", "LOGIT": "lg"})[["t", "q", "cb", "lg"]]
+            Pp = pd.concat([Pp, x[x["t"] > V.LAST_ORIGIN]], ignore_index=True)
+    lab = V.area_labels(d)
+    lab = lab[lab["area"] == "BL"]
+    return PC.choose_w(Pp, dict(zip(lab["q"].astype(int), lab["y"].astype(int))), H.complete_bl(d, t), t)
+
+
+def _h(obj) -> str:
+    return hashlib.sha256(json.dumps(obj, sort_keys=True, default=str).encode()).hexdigest()
+
+
+def model_version(name: str) -> dict:
+    """model_version / feature_version / config_sha256 of a sealed model (registry spec section 2)."""
+    code = {"iv2_lib": sha(EXP / "IMPROVE_V2" / "runner" / "iv2_lib.py"),
+            "hr_lib": sha(EXP / "HISTORY_RETRAIN" / "runner" / "hr_lib.py")}
+    if name in MODELS or name in LGBM_EXTRA:
+        cols, first = (MODELS[name], H.FIRST_ORIGIN) if name in MODELS else LGBM_EXTRA[name]
+        cfg = {"kind": "LightGBM stacked leads 1-15", "grid": H.GRID, "seed": H.SEED_LGBM, "first_origin": first}
+    elif name in LOGIT_MODELS:
+        cols, first = LOGIT_MODELS[name]
+        cfg = {"kind": "L2 logistic C=1, median imputation, standardized, one model per lead", "first_origin": first}
+    elif name in BLENDS:
+        cols = ["C-b", "LOGIT"]
+        cfg = {"kind": name, "w": 0.5} if name == "K1" else {"kind": name, "w_grid": PC.WGRID, "min_pairs": PC.WMIN_PAIRS,
+                                                               "fallback": 0.5, "ties": "closest to 0.5, then lower"}
+    elif name in CONSTANT:
+        cols, cfg = [], {"kind": name, "p": CONSTANT[name]}
+    else:
+        cols, cfg = [], {"kind": name, "rule": "IMPROVE_V2 baseline (prospective_lib.baselines)"}
+    feat = {"cols": cols, "code": code, **({"reversal": sha(ALLBASE / "runner" / "phase_c.py")} if name == "K3" else {})}
+    return {"model_version": _h({"cols": cols, "cfg": cfg})[:16], "feature_version": _h(feat)[:16],
+            "config_sha256": _h(cfg)}
+
+
+def feature_cutoff(d, t: int) -> dict:
+    """The newest period of each source available at O(t) (registry spec section 2)."""
+    m0 = H.m0_of(t)
+
+    def ym(ix):
+        ix = [int(x) for x in ix if int(x) <= m0]
+        return f"{max(ix) // 12}-{max(ix) % 12 + 1:02d}" if ix else None
+
+    def qq(ix, lim):
+        ix = [int(x) for x in ix if int(x) <= lim]
+        return H.qs(max(ix)) if ix else None
+    fo = d.idx.get((H.REGION, "food"))
+    kn = H.known(d, t, "BL")
+    e = pd.read_csv(E112_FILE)
+    er = e[e["q"] <= t].sort_values("q")
+    prods = [qq(s_.index, t - 1) for (g, _), s_ in d.prod.items() if g == H.REGION]
+    tcs = [qq(s_.index, t) for s_ in d.tc.values()]
+    return {"cpi_food_month": ym(fo.index) if fo is not None else None, "oni_month": ym(d.oni.index),
+            "pinksheet_month": ym(d.pink.index), "production_quarter": max([x for x in prods if x], default=None),
+            "typhoon_quarter_min_over_provinces": min([x for x in tcs if x], default=None),
+            "news_quarter": H.qs(int(er["q"].iloc[-1])) if len(er) else None,
+            "news_last_published": str(er["last_published"].iloc[-1]) if len(er) else None,
+            "sws_newest_quarter": H.qs(kn[-1][0]) if kn else None, "sws_newest_published": kn[-1][2] if kn else None}
+
+
+def generation_record(dry_run: bool) -> dict:
+    import platform
+
+    import lightgbm
+    import sklearn
+    run = Path(__file__).resolve().parent
+    return {"python": platform.python_version(), "lightgbm": lightgbm.__version__, "sklearn": sklearn.__version__,
+            "pandas": pd.__version__, "numpy": np.__version__, "scripts": {s: sha(run / s) for s in SCRIPTS},
+            "phase_c": sha(ALLBASE / "runner" / "phase_c.py"), "allbase_prereg": check_allbase(),
+            "k2_history": {"ALLBASE/out/fits.csv": sha(ALLBASE / "out" / "fits.csv"),
+                           "NEWS_V2/out/forecasts.csv": sha(CB_DIR / "out" / "forecasts.csv")}, "dry_run": dry_run}
+
+
 def origin_of_issue(issue: str) -> int:
     """O(t) = the first day of quarter t+1; the issue date must be the first day of a quarter."""
     d = pd.Timestamp(issue)
@@ -97,7 +223,9 @@ def code_commit() -> dict:
     dirty = git("status", "--porcelain", "--", "aipheed-backend-aligned/experiments/IMPROVE_V2/runner",
                 "aipheed-backend-aligned/experiments/HISTORY_RETRAIN/runner",
                 "aipheed-backend-aligned/experiments/OPTION_1/runner",
-                "aipheed-backend-aligned/experiments/SENIOR_REVIEW/runner")
+                "aipheed-backend-aligned/experiments/SENIOR_REVIEW/runner",
+                "aipheed-backend-aligned/experiments/NEW_MODEL/ALLBASE/runner",
+                "aipheed-backend-aligned/experiments/NEW_MODEL/ALLBASE/PHASE_B_PREREGISTRATION.md")
     return {"commit": git("rev-parse", "HEAD"), "model_code_dirty": bool(dirty)}
 
 
@@ -129,12 +257,13 @@ def build_table(origins: list[int], workers: int = 8) -> pd.DataFrame:
     return T
 
 
-def fit_origin(S: pd.DataFrame, d, lab: pd.DataFrame, t: int, cols: list[str]) -> pd.DataFrame:
-    """OPTION_1 run_option1._origin (V.fit_base, BL, classification), test Leads 1-2, for the given column list."""
+def fit_origin(S: pd.DataFrame, d, lab: pd.DataFrame, t: int, cols: list[str], first: int = H.FIRST_ORIGIN) -> pd.DataFrame:
+    """OPTION_1 run_option1._origin (V.fit_base, BL, classification), test Leads 1-2, for the given column list; rows
+    before `first` are dropped (LGBM-NLP: 2021-Q1, as OBJECTIVES_COMPLETION h3._fit)."""
     kb = V.known_labels(d, t, lab)
     kb = kb[kb["area"] == "BL"]
     clim = float(kb["y"].mean()) if len(kb) else 0.0
-    src = S[S["area"] == "BL"]
+    src = S[(S["area"] == "BL") & (S["t"] >= first)]
     te = src[(src["t"] == t) & src["lead"].isin(LEADS)].copy()
     assert len(te) == len(LEADS), f"no table rows at origin {H.qs(t)}"
     tr = src[(src["t"] < t) & (src["q"] <= t - 1)].merge(V.known_labels(d, t, lab)[["area", "q", "y", "H"]],

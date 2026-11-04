@@ -41,6 +41,8 @@ def fi(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-26T09:00:00")
     monkeypatch.setenv("AIPHEED_MAP_MODEL", "foodinsecurity")
+    monkeypatch.setattr(FI, "DATA", FI.CB_DATA)                 # these tests check C-b's own export (previous main model)
+    monkeypatch.setattr(FI, "LGU_VULNERABILITY", FI.CB_DATA / "lgu_vulnerability.csv")
     return monkeypatch
 
 

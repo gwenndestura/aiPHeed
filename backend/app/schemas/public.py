@@ -429,7 +429,7 @@ class PlainSummary(BaseModel):
 
 class SummaryComponents(BaseModel):
     probabilityHungerElevated: float  # P(regional SWS hunger > 11.3% in the target quarter)
-    probabilityPricePressure: float   # P(provincial food-price pressure in the target quarter)
+    probabilityPricePressure: float | None = None   # P(provincial food-price pressure); None when not forecast
     combination: str
 
 

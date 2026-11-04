@@ -1,0 +1,101 @@
+{
+ "design": {
+  "n_per_round": [
+   600,
+   300
+  ],
+  "source": "SWS Q3 2026 media release (600, +/-4%)",
+  "uncertain_band": [
+   0.1,
+   0.9
+  ]
+ },
+ "leads": {
+  "1": {
+   "n": 62,
+   "uncertain_labels": {
+    "600": 13,
+    "300": 20
+   },
+   "accuracy_ceiling": {
+    "600": 0.925,
+    "300": 0.897
+   },
+   "errors_by_category": {
+    "label-uncertain": 7,
+    "label-change": 3,
+    "regime-2015-2020": 3,
+    "other": 1
+   },
+   "accuracy_certain_vs_uncertain": {
+    "certain": 0.857,
+    "uncertain": 0.462
+   },
+   "brier_hard_vs_soft": {
+    "C-E2": {
+     "hard": 0.1875,
+     "soft_n600": 0.1283
+    },
+    "C-b": {
+     "hard": 0.1874,
+     "soft_n600": 0.1296
+    },
+    "LOGIT": {
+     "hard": 0.1928,
+     "soft_n600": 0.1223
+    },
+    "PERSIST": {
+     "hard": 0.3387,
+     "soft_n600": 0.2647
+    }
+   },
+   "inputs_available_min_max": [
+    21,
+    22
+   ]
+  },
+  "2": {
+   "n": 62,
+   "uncertain_labels": {
+    "600": 13,
+    "300": 20
+   },
+   "accuracy_ceiling": {
+    "600": 0.925,
+    "300": 0.897
+   },
+   "errors_by_category": {
+    "label-uncertain": 5,
+    "label-change": 4,
+    "regime-2015-2020": 4,
+    "other": 2
+   },
+   "accuracy_certain_vs_uncertain": {
+    "certain": 0.796,
+    "uncertain": 0.615
+   },
+   "brier_hard_vs_soft": {
+    "C-E2": {
+     "hard": 0.1879,
+     "soft_n600": 0.1362
+    },
+    "C-b": {
+     "hard": 0.1837,
+     "soft_n600": 0.1331
+    },
+    "LOGIT": {
+     "hard": 0.234,
+     "soft_n600": 0.1862
+    },
+    "PERSIST": {
+     "hard": 0.3387,
+     "soft_n600": 0.2759
+    }
+   },
+   "inputs_available_min_max": [
+    21,
+    22
+   ]
+  }
+ }
+}

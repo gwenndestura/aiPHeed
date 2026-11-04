@@ -5,6 +5,7 @@ import { Compass, Info, Mail } from "lucide-react";
 import { requestTour } from "@/lib/tour";
 import { useFinalEvaluation, useFinalOverview, useFinalRiskEvaluation } from "@/lib/queries";
 import type { FinalOverview } from "@/lib/apiTypes";
+import { type CbEvaluation, cbEvaluation, failsStrict, fmt, MODELS, modelName } from "@/lib/servedModel";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 
@@ -15,6 +16,8 @@ export function AboutModal() {
   const { data: overview } = useFinalOverview(open);
   const { data: evaluation } = useFinalEvaluation(open);
   const { data: risk } = useFinalRiskEvaluation(open);
+  // The C-b food-insecurity forecast has its own payload (foodinsecurity_system.evaluation()); describe it as served.
+  const cb = cbEvaluation(risk);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex items-center gap-1.5 compact:min-h-11 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
@@ -37,6 +40,16 @@ export function AboutModal() {
 
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
+            {cb ? (
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
+                The forecast is the <b className="text-foreground">probability that involuntary hunger in Balance
+                Luzon (SWS) exceeds 11.3%</b> in the quarter; <b>0.50</b> or more is High. Hunger is measured for
+                Balance Luzon only, so every province has the same class; each province's score weights the regional
+                probability by PSA poverty incidence. City and municipal values add population density within the
+                province. They are vulnerability-weighted priorities, not measured hunger rates. A High forecast becomes
+                an alert candidate for an administrator to confirm; nothing is sent automatically.
+              </p>
+            ) : (
             <p className="text-[11px] leading-relaxed text-muted-foreground">
               A province is at <b className="text-foreground">high food-insecurity risk</b> in a quarter when
               regional hunger (SWS, Balance Luzon) is above 11.3% <i>and</i> the province's food prices are rising
@@ -46,6 +59,7 @@ export function AboutModal() {
               higher. City and municipal values rank towns within each province by poverty and density; they are a
               priority ranking, and no measured hunger figure exists for any province, city or municipality.
             </p>
+            )}
           </Section>
 
           <Section title="Measured regional hunger (SWS)">
@@ -69,7 +83,9 @@ export function AboutModal() {
           </Section>
 
           <Section title="Forecast model and its tested accuracy">
-            {risk ? (
+            {cb ? (
+              <CbModelRows cb={cb} />
+            ) : risk ? (
               <div className="grid gap-1.5">
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
                   One LightGBM model using all 12 indicator families forecasts each province's high/low risk. It was
@@ -139,8 +155,9 @@ export function AboutModal() {
               ))}
             </ul>
             <p className="text-[10px] text-muted-foreground/70 mt-1.5">
-              Only data from 2021 onward is used. Estimates are issued at the start of each quarter for the next
-              quarter, three months ahead.
+              {cb
+                ? "Inputs are taken from data published before each issue date; the model is trained walk-forward from 1998 (news from 2021). Not every listed source is a model input: poverty and population weight the province and LGU outputs only."
+                : "Only data from 2021 onward is used. Estimates are issued at the start of each quarter for the next quarter, three months ahead."}
             </p>
           </Section>
 
@@ -175,9 +192,19 @@ export function AboutModal() {
           </Section>
 
           <div className="grid gap-2 pt-1">
-            <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
-            <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
-            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · next quarter: experimental ranking of which provinces to watch, validated prospectively from 2027" />
+            {cb ? (
+              <>
+                <Row k="Model" v={`${modelName(cb)}: one LightGBM, ${MODELS[cb.model]?.inputs ?? 21} inputs (hunger history, prices, world prices, climate, production, FSSI news anomaly${MODELS[cb.model]?.riceStocks ? ", national rice stocks" : ""})`} />
+                <Row k="Map value" v="Regional probability that Balance Luzon hunger exceeds 11.3%, weighted by province poverty" />
+                <Row k="Lead time" v={`Leads 1-${cb.max_reliable_lead ?? "?"} meet the 75% rule; ${failsStrict(cb) ? "none meets the stricter R1-R7 rules" : `Leads 1-${cb.max_reliable_lead_r1_r7} also meet the stricter R1-R7 rules (narrowly)`}`} />
+              </>
+            ) : (
+              <>
+                <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
+                <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
+                <Row k="Lead time" v="Reliable: the quarter starting on the issue date · next quarter: experimental ranking of which provinces to watch, validated prospectively from 2027" />
+              </>
+            )}
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
@@ -195,6 +222,31 @@ export function AboutModal() {
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** C-b's evaluation, read from the served payload (no figures written here). */
+function CbModelRows({ cb }: { cb: CbEvaluation }) {
+  return (
+    <div className="grid gap-1.5">
+      <p className="text-[11px] leading-relaxed text-muted-foreground">
+        One LightGBM model ({modelName(cb)}) forecasts the regional probability, refitted at each issue date using only data
+        published before it. Results are walk-forward back-tests on quarters examined during development.
+      </p>
+      {["1", "2", "3"].map((k) => {
+        const l = cb.leads[k];
+        if (!l) return null;
+        return (
+          <Row
+            key={k}
+            k={`Lead ${k}`}
+            v={`accuracy ${fmt(l.metrics.accuracy, 2)}, AUC ${fmt(l.metrics.auc, 2)}, Brier ${fmt(l.metrics.brier)} (${l.n_quarters} quarters; repeating the latest reading ${fmt(l.persistence_accuracy, 2)}) · ${l.alg3_pass ? "meets the 75% rule" : "below the 75% rule"}`}
+          />
+        );
+      })}
+      <Row k="Reliable forecast horizon" v={`${cb.max_reliable_lead ?? 0} quarters (75% rule); ${cb.max_reliable_lead_r1_r7 ?? 0} under R1-R7`} />
+      <Row k="News" v="The FSSI anomaly is an input; it changed none of the past High/Low calls" />
+    </div>
   );
 }
 

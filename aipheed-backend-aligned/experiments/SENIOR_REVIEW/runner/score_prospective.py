@@ -11,7 +11,10 @@ Steps:
 3. Labels known on the scoring date (section 2); one row per target quarter; prospective targets only.
 4. Per model and lead: metrics, the frozen R1-R7 (hr_lib.evaluate, unedited) and an independent recomputation that must
    agree (else abort), the 75% rule with a 90% Wilson interval, survey-mode notes, the review trigger (section 5.3).
-5. Status per lead: "insufficient prospective evidence" below 40 labelled quarters. The single-look verdict (section 5.2)
+5. ALLBASE registry (PHASE_B_STATISTICAL_PLAN section 6): every sealed model is scored; Algorithm 4 on the first four
+   labelled prospective quarters per lead (F1 and AUC, point values, once); the prospective 42-test Holm family
+   (K1-K3 x 7 baselines x 2 leads, paired Brier), separate from the historical one, from 20 labelled quarters per lead.
+6. Status per lead: "insufficient prospective evidence" below 40 labelled quarters. The single-look verdict (section 5.2)
    is written once, to VERDICT.json, at the first scoring date (1 March) on which REF+news has >= 40 labelled quarters
    at both leads; an existing VERDICT.json is reported and never changed.
 Dry runs write only into --out and may use a replay ledger (--replay-first sets the first prospective target).
@@ -134,6 +137,55 @@ def score_lead(R: pd.DataFrame, model: str, k: int, labels: pd.DataFrame, first_
     return out
 
 
+def algorithm4(R: pd.DataFrame, model: str, k: int, labels: pd.DataFrame, first_q: int) -> dict:
+    """Addendum CB / ALLBASE: the first four labelled prospective quarters at lead k; F1 and AUC as point values."""
+    g = R[(R["model"] == model) & (R["lead"] == k) & (R["q"] >= first_q)].merge(labels[["q", "y"]], on="q")
+    g = g.sort_values("q").head(P.ALG4_N)
+    if len(g) < P.ALG4_N:
+        return {"status": f"not yet testable ({len(g)} of {P.ALG4_N} labelled quarters)"}
+    y, c = g["y"].to_numpy(int), (g["p"] >= .5).astype(int).to_numpy()
+    tp, fp, fn = int(((c == 1) & (y == 1)).sum()), int(((c == 1) & (y == 0)).sum()), int(((c == 0) & (y == 1)).sum())
+    f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) else None
+    auc = None
+    if len(set(y)) == 2:
+        from sklearn.metrics import roc_auc_score
+        auc = float(roc_auc_score(y, g["p"].to_numpy(float)))
+    return {"quarters": [H.qs(int(q)) for q in g["q"]], "f1": f1, "auc": auc,
+            "f1_ge_0.75": None if f1 is None else f1 >= .75, "auc_ge_0.80": None if auc is None else auc >= .80,
+            "note": "four observations: point values only, no meaningful significance; AUC undefined if one class"}
+
+
+def family42(R: pd.DataFrame, labels: pd.DataFrame, first_q: int) -> dict:
+    """The prospective 42-test family (separate from the historical one): paired Brier, one-sided cluster bootstrap,
+    one Holm correction; computed once every lead has >= 20 labelled quarters for every candidate and comparator."""
+    R = R[R["q"] >= first_q].merge(labels[["q", "y"]], on="q")
+    W = {k: R[R["lead"] == k].pivot_table(index="q", columns="model", values="p", aggfunc="first")
+         .join(labels.set_index("q")["y"]) for k in P.LEADS}
+    n = {k: {m: int(W[k][m].notna().sum()) if m in W[k] else 0 for m in P.CANDIDATES + P.COMPARATORS} for k in P.LEADS}
+    if any(v < P.FAMILY_MIN for k in P.LEADS for v in n[k].values()):
+        return {"status": f"not yet: needs >= {P.FAMILY_MIN} labelled prospective quarters per lead for every model",
+                "labelled": n}
+    tests = {}
+    for c in P.CANDIDATES:
+        for k in P.LEADS:
+            for b in P.COMPARATORS:
+                g = W[k][[c, b, "y"]].dropna().reset_index()
+                dv = ((g[c] - g["y"]) ** 2 - (g[b] - g["y"]) ** 2).to_numpy(float)
+                tests[f"{c} L{k} vs {b}"] = {"n": int(len(g)), "brier_candidate": float(((g[c] - g["y"]) ** 2).mean()),
+                                             "brier_comparator": float(((g[b] - g["y"]) ** 2).mean()),
+                                             "diff": float(dv.mean()),
+                                             "p_one_sided": float(np.mean(H.boot_mean(g["q"].to_numpy(), dv, H.rp()) >= 0))}
+    items = sorted(tests.items(), key=lambda x: x[1]["p_one_sided"])
+    run = 0.0
+    for i, (key, v) in enumerate(items):
+        run = max(run, min(1.0, (len(items) - i) * v["p_one_sided"]))
+        v["p_holm_42"] = run
+        v["conclusion"] = "significantly better" if v["diff"] < 0 and run < .05 else "not significantly different"
+    return {"status": "computed", "tests": tests,
+            "all_baseline_pass": {c: all(v["conclusion"] == "significantly better" for key, v in tests.items()
+                                         if key.startswith(c + " ")) for c in P.CANDIDATES}}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", required=True)
@@ -169,10 +221,13 @@ def main():
     missed = [i for i in expected if i not in have]
     leads = {m: {str(k): score_lead(R, m, k, labels, first_q) if len(R) else
                  {"status": "insufficient prospective evidence", "labelled_quarters": 0} for k in P.LEADS}
-             for m in P.MODELS}
+             for m in P.SCORED}
     rep = {"plan_sha256": plan, "scoring_date": a.date, "dry_run": a.dry_run, "first_prospective_target": H.qs(first_q),
            "sealed_files": files, "missed_seals": missed, "n_missed": len(missed), "models": leads,
-           "main_model": P.MAIN, "minimum_quarters": P.MIN_QUARTERS}
+           "main_model": P.MAIN, "minimum_quarters": P.MIN_QUARTERS,
+           "algorithm4": {m: {str(k): algorithm4(R, m, k, labels, first_q) if len(R) else {"status": "not yet testable"}
+                              for k in P.LEADS} for m in P.SCORED},
+           "prospective_family_42": family42(R, labels, first_q) if len(R) else {"status": "not yet"}}
     vpath = out_dir / "VERDICT.json"
     main = leads[P.MAIN]
     if vpath.exists():

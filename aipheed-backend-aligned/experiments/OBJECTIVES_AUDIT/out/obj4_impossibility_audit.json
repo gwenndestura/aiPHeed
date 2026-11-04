@@ -1,0 +1,191 @@
+{
+ "noise_floor": {
+  "plug_in_previous": 0.0505,
+  "posterior_integrated": {
+   "n600_deff1.0": 0.0502,
+   "n600_deff2.0": 0.0689,
+   "n300_deff1.0": 0.0689,
+   "n300_deff2.0": 0.0899
+  },
+  "note": "Expected Brier of a forecaster that knows true quarterly hunger; a valid lower bound on EXPECTED Brier under SRS + normal sampling (deff=1 understates it). A 62-quarter realisation can fall below it by chance."
+ },
+ "holm_logic": "Holm tests the i-th smallest p at alpha/(14-i+1): only one comparison faces alpha/14, so a comparison is not required to reach the alpha/14 Brier target unless it is the strongest.",
+ "single_comparison_required_brier_at_alpha_0.05_80pct": {
+  "L1 PERSIST": 0.1915,
+  "L1 PSA-only": 0.1239,
+  "L1 LOGIT": 0.1024,
+  "L1 NLP-only": 0.1846,
+  "L1 LGBM-GOV": 0.195,
+  "L1 LGBM-NLP": 0.1514,
+  "L1 ALWAYS-HIGH": 0.1163,
+  "L2 PERSIST": 0.2116,
+  "L2 PSA-only": 0.1433,
+  "L2 LOGIT": 0.1357,
+  "L2 NLP-only": 0.1501,
+  "L2 LGBM-GOV": 0.1826,
+  "L2 LGBM-NLP": 0.096,
+  "L2 ALWAYS-HIGH": 0.099
+ },
+ "joint_holm_required_brier_80pct_power": {
+  "sd_x0.75": 0.1205,
+  "sd_x1.0": 0.0735,
+  "sd_x1.25": 0.0215
+ },
+ "current_C-E6_brier_L1": 0.1839,
+ "inputs": [
+  {
+   "lead": 1,
+   "baseline": "PERSIST",
+   "n": 62,
+   "brier_b": 0.3387096774193548,
+   "brier_c": 0.18393175249791902,
+   "scale": 1.0,
+   "sd": 0.3983696694685799,
+   "rho": 0.15607790208741912,
+   "n_eff": 45.25920785796967
+  },
+  {
+   "lead": 1,
+   "baseline": "PSA-only",
+   "n": 62,
+   "brier_b": 0.20823990893163352,
+   "brier_c": 0.18393175249791902,
+   "scale": 1.0,
+   "sd": 0.2022988937793655,
+   "rho": 0.2707103923804365,
+   "n_eff": 35.58321073278496
+  },
+  {
+   "lead": 1,
+   "baseline": "LOGIT",
+   "n": 62,
+   "brier_b": 0.19283142455108157,
+   "brier_c": 0.18393175249791902,
+   "scale": 1.0,
+   "sd": 0.2580609244695116,
+   "rho": 0.10413514635421062,
+   "n_eff": 50.305092732027155
+  },
+  {
+   "lead": 1,
+   "baseline": "NLP-only",
+   "n": 20,
+   "brier_b": 0.3530790065976166,
+   "brier_c": 0.19898559143747466,
+   "scale": 1.0818446991077626,
+   "sd": 0.27141893258981326,
+   "rho": 0.016261609965211747,
+   "n_eff": 19.35994394334079
+  },
+  {
+   "lead": 1,
+   "baseline": "LGBM-GOV",
+   "n": 62,
+   "brier_b": 0.23266480142153115,
+   "brier_c": 0.18393175249791902,
+   "scale": 1.0,
+   "sd": 0.10468683457516959,
+   "rho": 0.12888813834990548,
+   "n_eff": 47.84259271361524
+  },
+  {
+   "lead": 1,
+   "baseline": "LGBM-NLP",
+   "n": 20,
+   "brier_b": 0.3068770543636089,
+   "brier_c": 0.19898559143747466,
+   "scale": 1.0818446991077626,
+   "sd": 0.22457541138314804,
+   "rho": 0.1353752844690317,
+   "n_eff": 15.230641839016565
+  },
+  {
+   "lead": 1,
+   "baseline": "ALWAYS-HIGH",
+   "n": 62,
+   "brier_b": 0.3064516129032258,
+   "brier_c": 0.18393175249791902,
+   "scale": 1.0,
+   "sd": 0.3594635644883025,
+   "rho": 0.47439630436740354,
+   "n_eff": 22.102218401315625
+  },
+  {
+   "lead": 2,
+   "baseline": "PERSIST",
+   "n": 62,
+   "brier_b": 0.3387096774193548,
+   "brier_c": 0.18558319763200973,
+   "scale": 1.0,
+   "sd": 0.39791053151081196,
+   "rho": 0.011372114961304842,
+   "n_eff": 60.60571372856592
+  },
+  {
+   "lead": 2,
+   "baseline": "PSA-only",
+   "n": 62,
+   "brier_b": 0.23893559098857492,
+   "brier_c": 0.18558319763200973,
+   "scale": 1.0,
+   "sd": 0.21831728056776933,
+   "rho": 0.31570240476379885,
+   "n_eff": 32.246236497729186
+  },
+  {
+   "lead": 2,
+   "baseline": "LOGIT",
+   "n": 62,
+   "brier_b": 0.23404211328517102,
+   "brier_c": 0.18558319763200973,
+   "scale": 1.0,
+   "sd": 0.26317242210720526,
+   "rho": 0.16637548296216764,
+   "n_eff": 44.31224833797543
+  },
+  {
+   "lead": 2,
+   "baseline": "NLP-only",
+   "n": 19,
+   "brier_b": 0.43410244060064934,
+   "brier_c": 0.21022153212535952,
+   "scale": 1.1327616659682995,
+   "sd": 0.4151089192357721,
+   "rho": 0.10856861104687589,
+   "n_eff": 15.278437636904341
+  },
+  {
+   "lead": 2,
+   "baseline": "LGBM-GOV",
+   "n": 62,
+   "brier_b": 0.2400839034038984,
+   "brier_c": 0.18558319763200973,
+   "scale": 1.0,
+   "sd": 0.12434972940322311,
+   "rho": 0.3631616581950033,
+   "n_eff": 28.964999825619753
+  },
+  {
+   "lead": 2,
+   "baseline": "LGBM-NLP",
+   "n": 19,
+   "brier_b": 0.3095709727086764,
+   "brier_c": 0.21022153212535952,
+   "scale": 1.1327616659682995,
+   "sd": 0.247681563676437,
+   "rho": 0.33788052462827767,
+   "n_eff": 9.40313413677808
+  },
+  {
+   "lead": 2,
+   "baseline": "ALWAYS-HIGH",
+   "n": 62,
+   "brier_b": 0.3064516129032258,
+   "brier_c": 0.18558319763200973,
+   "scale": 1.0,
+   "sd": 0.36084636125314196,
+   "rho": 0.5363816147633285,
+   "n_eff": 18.709114720239313
+  }
+ ]
+}

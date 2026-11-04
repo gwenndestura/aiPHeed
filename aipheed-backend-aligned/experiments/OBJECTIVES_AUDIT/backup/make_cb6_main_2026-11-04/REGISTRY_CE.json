@@ -1,0 +1,378 @@
+{
+ "registry": "C-E prospective research registry",
+ "plan": {
+  "file": "OBJECTIVES_AUDIT/CE_PROSPECTIVE_PLAN.md",
+  "sha256": "9392917aeaabbbecf5040f13aefdea4b9ff55368c9dc9fb2e3917a85e0e4d24c",
+  "addenda": {
+   "CE_PROSPECTIVE_ADDENDUM_1.md": "3cf7930e437b28937ba22d2c1216458e99992554d0342d4466ebbd9e305407cd"
+  }
+ },
+ "models": {
+  "C-b": {
+   "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
+   "decision_rule": "HIGH when p >= 0.50",
+   "validation": "chronological walk-forward from 1998-Q3; labels known at O(t)",
+   "issuance": "first day of every quarter from 2027-01-01; seal within 14 days; missed = missing, never back-filled",
+   "status": "MAIN MODEL (adopted 2026-11-03; sealed)",
+   "adoption": "adopted",
+   "protocol": "SENIOR_REVIEW/PROSPECTIVE_PLAN.md (sealed by SENIOR_REVIEW/runner/seal_next.py; not by this registry)",
+   "protocol_plan_sha256": "194ecb725113908eb58b26d5e37c7f96d9bd5235a2ce8183ce618c0544b6224c",
+   "seal": {
+    "file": "NEW_MODEL/NEWS_V2/sealed_prospective_CB.csv",
+    "sha256": "67baec6689cbbafc248caac722cc4daa28196c1958ab55ac1100983dd8691015",
+    "matches_recorded": true
+   },
+   "features": [
+    "h_last",
+    "h_change",
+    "h_mean4",
+    "true_h",
+    "pi_H4L",
+    "R_food_yoy",
+    "R_head_yoy",
+    "R_rice_yoy",
+    "R_food_mom",
+    "ONI_last",
+    "ONI_max12",
+    "tc_mean",
+    "R_C3",
+    "R_C4",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy",
+    "W_urea_yoy",
+    "z_N1R",
+    "lead"
+   ],
+   "leads_sealed": [
+    1,
+    2
+   ],
+   "artifacts": {
+    "NEW_MODEL/NEWS_V2/out/forecasts.csv": "19dfcc301fa6b8634a7b2ef80b206a92165416c903301a2524a4b3f0c89ea857"
+   },
+   "development": {
+    "leads": {
+     "1": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "auc": 0.7019583843329253,
+      "brier": 0.18744781437528338,
+      "failed_rules": [
+       "R7"
+      ]
+     },
+     "2": {
+      "accuracy": 0.7903225806451613,
+      "balanced": 0.7166462668298653,
+      "auc": 0.7037943696450428,
+      "brier": 0.18371941023164615,
+      "failed_rules": [
+       "R7"
+      ]
+     }
+    },
+    "max_reliable_lead": 2
+   }
+  },
+  "C-E2": {
+   "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
+   "decision_rule": "HIGH when p >= 0.50",
+   "validation": "chronological walk-forward from 1998-Q3; labels known at O(t)",
+   "issuance": "first day of every quarter from 2027-01-01; seal within 14 days; missed = missing, never back-filled",
+   "status": "DEVELOPMENT CANDIDATE (local demo, port 8081)",
+   "adoption": "not adopted (fails R3 and R7; pre-registered adoption rule not met)",
+   "version": "C-E2 v1 (ce2_model.py e5eb79e06404)",
+   "preregistration": {
+    "file": "OBJECTIVES_AUDIT/CE2_PREREGISTRATION.md",
+    "sha256": "a1b469da7f325c2e7582af57c1a5f4a1b62db308624ae1ce842049e4274bd1aa"
+   },
+   "method": "LightGBM, stacked leads; at each origin the mean of the 8 hr_lib.GRID settings (depth 1/2 x 50/150 trees x class weight none/balanced); mean TreeSHAP",
+   "features": [
+    "h_last",
+    "h_change",
+    "h_mean4",
+    "true_h",
+    "pi_H4L",
+    "R_food_yoy",
+    "R_head_yoy",
+    "R_rice_yoy",
+    "R_food_mom",
+    "ONI_last",
+    "ONI_max12",
+    "tc_mean",
+    "R_C3",
+    "R_C4",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy",
+    "W_urea_yoy",
+    "z_N1R",
+    "E1",
+    "E2",
+    "lead"
+   ],
+   "n_features": 23,
+   "sources_and_publication_rules": {
+    "table": "IMPROVE_V2 pooled BL table rebuilt by prospective_lib.build_table (release rules of iv2_lib)",
+    "E1": "PSA LFS national unemployment change (in the table)",
+    "E2": "IMF BOP personal transfers (bd9982eacd5b), quarters <= t-2"
+   },
+   "leads_sealed": [
+    1,
+    2,
+    3
+   ],
+   "sealing_script": "OBJECTIVES_AUDIT/runner/seal_ce.py",
+   "artifacts": {
+    "OBJECTIVES_AUDIT/out/ce2_fits.csv": "c078aa2703663ee8adf2eafd14ea0ed7e3c30edf681cc62be9002aebc57f933f",
+    "OBJECTIVES_AUDIT/out/ce2_results.json": "13666bfd90d9bfa6bf2c7b3c94dcc30dae65cab93fe66f9dc4ec6eb6f27d18b9"
+   },
+   "development": {
+    "leads": {
+     "1": {
+      "accuracy": 0.7741935483870968,
+      "balanced": 0.6903304773561811,
+      "precision": 0.7959183673469388,
+      "recall": 0.9069767441860465,
+      "f1": 0.8478260869565216,
+      "auc": 0.7148102815177478,
+      "brier": 0.18753406804583042,
+      "failed_rules": [
+       "R3",
+       "R7"
+      ]
+     },
+     "2": {
+      "accuracy": 0.7580645161290323,
+      "balanced": 0.6787025703794369,
+      "precision": 0.7916666666666666,
+      "recall": 0.8837209302325582,
+      "f1": 0.8351648351648352,
+      "auc": 0.6940024479804162,
+      "brier": 0.18790898180788157,
+      "failed_rules": [
+       "R3",
+       "R7"
+      ]
+     }
+    },
+    "max_reliable_lead": 3,
+    "holm_14_significant": 4,
+    "evidence": "development (62 previously examined quarters)"
+   },
+   "evaluation_criteria": "CE_PROSPECTIVE_PLAN.md section 5 (P1: C-E6 vs 7 baselines, Holm 14; P2: vs C-E2 and C-b, Holm 4)"
+  },
+  "C-E6": {
+   "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
+   "decision_rule": "HIGH when p >= 0.50",
+   "validation": "chronological walk-forward from 1998-Q3; labels known at O(t)",
+   "issuance": "first day of every quarter from 2027-01-01; seal within 14 days; missed = missing, never back-filled",
+   "status": "DEVELOPMENT CANDIDATE",
+   "adoption": "not adopted (fails R3 and R7; pre-registered adoption rule not met)",
+   "version": "C-E6 v1 (ce6_model.py 333665cc3d4d)",
+   "preregistration": {
+    "file": "OBJECTIVES_AUDIT/CE6_PREREGISTRATION.md",
+    "sha256": "6e07ee14ecfd7925561c20e7774593d15c69d1d0501f0ee5227854e604af5ac8"
+   },
+   "method": "LightGBM, stacked leads; at each origin the mean of the 8 hr_lib.GRID settings (depth 1/2 x 50/150 trees x class weight none/balanced); mean TreeSHAP",
+   "features": [
+    "h_last",
+    "h_change",
+    "h_mean4",
+    "true_h",
+    "pi_H4L",
+    "R_food_yoy",
+    "R_head_yoy",
+    "R_rice_yoy",
+    "R_food_mom",
+    "ONI_last",
+    "ONI_max12",
+    "tc_mean",
+    "R_C3",
+    "R_C4",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy",
+    "W_urea_yoy",
+    "z_N1R",
+    "E1",
+    "E2",
+    "lead",
+    "ST1",
+    "ST2"
+   ],
+   "n_features": 25,
+   "sources_and_publication_rules": {
+    "table": "IMPROVE_V2 pooled BL table rebuilt by prospective_lib.build_table (release rules of iv2_lib)",
+    "E1": "PSA LFS national unemployment change (in the table)",
+    "E2": "IMF BOP personal transfers (bd9982eacd5b), quarters <= t-2",
+    "ST1_ST2": {
+     "source": "PSA OpenSTAT 2E/CS/0032E4ECNV0 rice stocks inventory (national, monthly, 1980-01..2026-09)",
+     "file": "LEAD2_RELIABILITY_RESEARCH/y12_domestic_rice_supply/data_acquired/tidy_stocks_national.csv (21c6670f20f2)",
+     "ST1": "(total stock at M / total at M-12 - 1) x 100",
+     "ST2": "NFA share of total at M minus at M-12 (points)",
+     "availability": "M <= issue month - 4 (verified release lags 31-92 days)",
+     "features_file": "OBJECTIVES_AUDIT/out/ce6_features.csv (011509a9b106)",
+     "limitation": "OpenSTAT serves the current vintage only; pre-2022 release dates unverified (bounded by the 4-month rule)"
+    }
+   },
+   "leads_sealed": [
+    1,
+    2,
+    3
+   ],
+   "sealing_script": "OBJECTIVES_AUDIT/runner/seal_ce.py",
+   "artifacts": {
+    "OBJECTIVES_AUDIT/out/ce6_fits.csv": "249c358b1a24276bbe5d8bad025256c5f1d6edefb49edc12970bde10f74574a1",
+    "OBJECTIVES_AUDIT/out/ce6_results.json": "7e3ae9379fcd4830027f457143dffc4d7fe1c2a03c747854fc990d3e7c48eec7",
+    "OBJECTIVES_AUDIT/out/ce6_features.csv": "011509a9b10603552bc3833c0195e3bc8dc789f7b52f9a5e01a381336cc66585"
+   },
+   "development": {
+    "leads": {
+     "1": {
+      "accuracy": 0.7741935483870968,
+      "balanced": 0.6903304773561811,
+      "precision": 0.7959183673469388,
+      "recall": 0.9069767441860465,
+      "f1": 0.8478260869565216,
+      "auc": 0.7197062423500612,
+      "brier": 0.18393175249791902,
+      "failed_rules": [
+       "R3",
+       "R7"
+      ]
+     },
+     "2": {
+      "accuracy": 0.7580645161290323,
+      "balanced": 0.6787025703794369,
+      "precision": 0.7916666666666666,
+      "recall": 0.8837209302325582,
+      "f1": 0.8351648351648352,
+      "auc": 0.6952264381884945,
+      "brier": 0.18558319763200973,
+      "failed_rules": [
+       "R3",
+       "R7"
+      ]
+     }
+    },
+    "max_reliable_lead": 3,
+    "holm_14_significant": 8,
+    "evidence": "development (62 previously examined quarters)"
+   },
+   "evaluation_criteria": "CE_PROSPECTIVE_PLAN.md section 5 (P1: C-E6 vs 7 baselines, Holm 14; P2: vs C-E2 and C-b, Holm 4)"
+  },
+  "C-B6": {
+   "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
+   "decision_rule": "HIGH when p >= 0.50",
+   "validation": "chronological walk-forward from 1998-Q3; labels known at O(t)",
+   "issuance": "first day of every quarter from 2027-01-01; seal within 14 days; missed = missing, never back-filled",
+   "status": "DEVELOPMENT CANDIDATE",
+   "adoption": "not adopted (fails R3 and R7; pre-registered adoption rule not met)",
+   "version": "C-B6 v1 (cb6_model.py 884e71dd5e6e)",
+   "preregistration": {
+    "file": "OBJECTIVES_AUDIT/CB6_PREREGISTRATION.md",
+    "sha256": "2efd9677e3785f4b3469b416e34cd824d536e16450ae100ceea537044d20a38b"
+   },
+   "method": "LightGBM, stacked leads; at each origin the setting chosen by hr_lib.lgbm_select on inner chronological folds (C-b's procedure); TreeSHAP",
+   "features": [
+    "h_last",
+    "h_change",
+    "h_mean4",
+    "true_h",
+    "pi_H4L",
+    "R_food_yoy",
+    "R_head_yoy",
+    "R_rice_yoy",
+    "R_food_mom",
+    "ONI_last",
+    "ONI_max12",
+    "tc_mean",
+    "R_C3",
+    "R_C4",
+    "W_rice_yoy",
+    "W_rice_mom",
+    "W_cereal_yoy",
+    "W_crude_yoy",
+    "W_urea_yoy",
+    "z_N1R",
+    "lead",
+    "ST1",
+    "ST2"
+   ],
+   "n_features": 23,
+   "sources_and_publication_rules": {
+    "table": "IMPROVE_V2 pooled BL table rebuilt by prospective_lib.build_table (release rules of iv2_lib)",
+    "ST1_ST2": {
+     "source": "PSA OpenSTAT 2E/CS/0032E4ECNV0 rice stocks inventory (national, monthly, 1980-01..2026-09)",
+     "file": "LEAD2_RELIABILITY_RESEARCH/y12_domestic_rice_supply/data_acquired/tidy_stocks_national.csv (21c6670f20f2)",
+     "ST1": "(total stock at M / total at M-12 - 1) x 100",
+     "ST2": "NFA share of total at M minus at M-12 (points)",
+     "availability": "M <= issue month - 4 (verified release lags 31-92 days)",
+     "features_file": "OBJECTIVES_AUDIT/out/ce6_features.csv (011509a9b106)",
+     "limitation": "OpenSTAT serves the current vintage only; pre-2022 release dates unverified (bounded by the 4-month rule)"
+    }
+   },
+   "leads_sealed": [
+    1,
+    2,
+    3
+   ],
+   "sealing_script": "OBJECTIVES_AUDIT/runner/seal_ce.py",
+   "artifacts": {
+    "OBJECTIVES_AUDIT/out/cb6_fits.csv": "6993011f83c03fe7d994c668e8014c9e9dff2abdcde27e71c2396c9b9d4601e6",
+    "OBJECTIVES_AUDIT/out/cb6_results.json": "4ba9ffda2099646f4fb6d70c4b0f3d10642dd0b7663fb8b53ca5a4158b2f8323",
+    "OBJECTIVES_AUDIT/out/ce6_features.csv": "011509a9b10603552bc3833c0195e3bc8dc789f7b52f9a5e01a381336cc66585"
+   },
+   "development": {
+    "leads": {
+     "1": {
+      "accuracy": 0.8064516129032258,
+      "balanced": 0.7429620563035495,
+      "precision": 0.8297872340425532,
+      "recall": 0.9069767441860465,
+      "f1": 0.8666666666666666,
+      "auc": 0.722766217870257,
+      "brier": 0.1830696125415195,
+      "failed_rules": []
+     },
+     "2": {
+      "accuracy": 0.8064516129032258,
+      "balanced": 0.7429620563035495,
+      "precision": 0.8297872340425532,
+      "recall": 0.9069767441860465,
+      "f1": 0.8666666666666666,
+      "auc": 0.7123623011015912,
+      "brier": 0.18060545134476627,
+      "failed_rules": []
+     }
+    },
+    "max_reliable_lead": 2,
+    "holm_14_significant": 9,
+    "evidence": "development (62 previously examined quarters)"
+   },
+   "evaluation_criteria": "CE_PROSPECTIVE_ADDENDUM_1.md (P4: C-B6 vs 7 baselines, Holm 14; P5: vs C-b, Holm 2)",
+   "added_by": "CE_PROSPECTIVE_ADDENDUM_1.md"
+  }
+ },
+ "code_sha256": {
+  "HISTORY_RETRAIN/runner/hr_lib.py": "5bbeb36ef478e8a5d92745f69b960ca03eae83491e0d7e2bb78a376abfc2a612",
+  "IMPROVE_V2/runner/iv2_lib.py": "6987530d5b2fab28259f4ac5d2bc63b1597d573bbafe3adb7fb6896c042beb48",
+  "NEW_MODEL/ALLBASE/runner/phase_c.py": "5be352e6046a3206c4a87c9ac440dae113a582aac68c384027ae921e660f2374",
+  "NEW_MODEL/NEWS_V2/runner/run_news_v2.py": "c054af673d52b5c441f48db39c71a6147ed3a7287c1cdc8f062891b3af0b336f",
+  "OBJECTIVES_AUDIT/runner/cb6_model.py": "884e71dd5e6ec5e29f3622e14a7fde43965121787b6b62bbc5840f66fd2953de",
+  "OBJECTIVES_AUDIT/runner/ce2_model.py": "e5eb79e0640498742ba478da6bbbb06d7b82f3b6d2bf1c9e617a2d3cf573b34a",
+  "OBJECTIVES_AUDIT/runner/ce6_model.py": "333665cc3d4d2cbd1354e23ac43ba4132213e0c874a7fd9d332aad00185a488d",
+  "OBJECTIVES_AUDIT/runner/ce_model.py": "805479bf6c4d6acdd5b7c166693a8cbe93788e553e6aa7bb30e2961a29fe7321",
+  "OBJECTIVES_AUDIT/runner/ce_prospective.py": "77db3a113c0d60e3d2057a18cd575cfd7fef9d8d26c600c513d4571e39df4f86",
+  "OBJECTIVES_AUDIT/runner/ce_registry.py": "ab02e4189b5e1f6d9549e5b76fe2f862994e825318d6da67701058559c848a73",
+  "OBJECTIVES_AUDIT/runner/score_ce_prospective.py": "00607f268068857713b1b223731fa9aa9530447e8b5b1fe0388eaeff5f1cd2e0",
+  "OBJECTIVES_AUDIT/runner/seal_ce.py": "620ff191da0a349b225f1569cf35ca1922f2b0b915bc271c351b6a3857e5f2a4",
+  "SENIOR_REVIEW/runner/prospective_lib.py": "11ec41428f21ba8024ae2f2a431a77efb36e2e120f84b2c47ac12996c5cc3871"
+ },
+ "prospective_seals": []
+}
