@@ -1,0 +1,738 @@
+{
+ "prereg_sha256": "036676491f1f92c7945af7d1c6e5565943e643503b05513933770d3088f7e16f",
+ "masked_examples": [
+  {
+   "raw": "Japan turns over irrigation system facilities to Quezon farmers",
+   "masked": "Japan turns over irrigation system facilities to farmers"
+  },
+  {
+   "raw": "2 tons of tilapia lost as fish kill hits Laguna\u2019s Sampaloc Lake",
+   "masked": "2 tons of tilapia lost as fish kill hits Lake"
+  },
+  {
+   "raw": "In Laguna, fish kill losses reach P1 million, but no dent in supply seen",
+   "masked": "In , fish kill losses reach P1 million, but no dent in supply seen"
+  },
+  {
+   "raw": "Former barangay captain shot dead in Batangas",
+   "masked": "Former barangay captain shot dead in"
+  },
+  {
+   "raw": "Batangas residents still dealing with effects of Taal eruption",
+   "masked": "residents still dealing with effects of eruption"
+  },
+  {
+   "raw": "Taal Volcano island, a year later",
+   "masked": "Volcano island, a year later"
+  },
+  {
+   "raw": "Taal: Healing comes slowly for land, locals",
+   "masked": ": Healing comes slowly for land, locals"
+  },
+  {
+   "raw": "Is Paulo Avelino building an e-sports headquarters in Cavite?",
+   "masked": "Is Paulo Avelino building an e-sports headquarters in ?"
+  }
+ ],
+ "n_mask_words": 139,
+ "headlines_changed_by_mask": 3516,
+ "configs": {
+  "T0": {
+   "settings": {
+    "mask": false,
+    "fil": false,
+    "ctfidf": false
+   },
+   "summary": {
+    "npmi_mean": -0.4518936316959092,
+    "place_name_share_mean": 0.5538438446759504,
+    "ari_mean": 0.44410324894223924,
+    "geography_driven_share_mean": 0.14712589229506953,
+    "n_topics_mean": 77.26315789473684,
+    "outlier_share_mean": 0.35699058210932927,
+    "passes_all_four": false
+   },
+   "origins": {
+    "2022-Q1": {
+     "n_docs": 873,
+     "n_topics": 15,
+     "outlier_share": 0.22336769759450173,
+     "npmi_mean": -0.5715795830311758,
+     "place_name_topic_share": 0.6666666666666666,
+     "geo_topics_evaluated": 8,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "farm, food businesses, laguna, 2021, philippine",
+      "food, farmers, agri, farms, agriculture",
+      "barangay, cavite, batangas road, calabarzon, habagat",
+      "cavite gov, barangay, cavite town, cavite, maragondon cavite",
+      "manila, philippines 2021, bataan, las, bataan meralco"
+     ]
+    },
+    "2022-Q2": {
+     "n_docs": 1101,
+     "n_topics": 23,
+     "outlier_share": 0.3178928247048138,
+     "npmi_mean": -0.6258025748612078,
+     "place_name_topic_share": 0.4782608695652174,
+     "geo_topics_evaluated": 9,
+     "geography_driven_share": 0.1111111111111111,
+     "top_words_first5": [
+      "davao region, laguna, yield, rizal province, batangas road",
+      "food businesses, snacks, food, vendor photos, snack",
+      "filipinos, philippines, philippines 2021, manila, makati",
+      "land, farmers reap, agritourism sites, stays, agritourism",
+      "cavite, malaca\u00f1ang, pera paraan, maragondon cavite, pahiyas"
+     ],
+     "ari_vs_previous_fit": 0.3216048998974176
+    },
+    "2022-Q3": {
+     "n_docs": 1423,
+     "n_topics": 30,
+     "outlier_share": 0.3520730850316233,
+     "npmi_mean": -0.5338794197901766,
+     "place_name_topic_share": 0.6,
+     "geo_topics_evaluated": 11,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "farm, farmers cooperative, agritourism sites, food businesses, filipino food",
+      "food supply, green food, food producing, food, produce",
+      "philippine, west philippine, philippine sea, cainta, tropical",
+      "filipinas, cavite, pahiyas, maragondon cavite, village",
+      "philippines, araneta city, plant batangas, pilipinas, moringa project"
+     ],
+     "ari_vs_previous_fit": 0.43975926785459174
+    },
+    "2022-Q4": {
+     "n_docs": 1711,
+     "n_topics": 35,
+     "outlier_share": 0.36879018118059614,
+     "npmi_mean": -0.48743472390941256,
+     "place_name_topic_share": 0.5142857142857142,
+     "geo_topics_evaluated": 18,
+     "geography_driven_share": 0.2222222222222222,
+     "top_words_first5": [
+      "farm, food businesses, laguna, philippines, food",
+      "food supply, food, produce, food security, vegetable farm",
+      "filipinos, manila, davao region, community, paeng hit",
+      "stricken areas, cagayan, areas typhoon, severe tropical, tropical storm",
+      "kapuso foundation, cavite, barangays, kapuso, davao region"
+     ],
+     "ari_vs_previous_fit": 0.42402877880181694
+    },
+    "2023-Q1": {
+     "n_docs": 2027,
+     "n_topics": 34,
+     "outlier_share": 0.2964972866304884,
+     "npmi_mean": -0.48483689583421663,
+     "place_name_topic_share": 0.5882352941176471,
+     "geo_topics_evaluated": 16,
+     "geography_driven_share": 0.125,
+     "top_words_first5": [
+      "food businesses, laguna, philippine, philippines, 2022",
+      "batangas, fisherfolk, tinamaan, fishers, activities",
+      "local, hubs, chief highlights, lifestyle, rising",
+      "areas typhoon, cyclone, severe tropical, tropical storm, tropical cyclone",
+      "cavite, davao region, calabarzon, paeng, davao"
+     ],
+     "ari_vs_previous_fit": 0.2864436734829218
+    },
+    "2023-Q2": {
+     "n_docs": 2331,
+     "n_topics": 49,
+     "outlier_share": 0.3710853710853711,
+     "npmi_mean": -0.5332057360618899,
+     "place_name_topic_share": 0.5918367346938775,
+     "geo_topics_evaluated": 17,
+     "geography_driven_share": 0.058823529411764705,
+     "top_words_first5": [
+      "food businesses, laguna, industry, foods, philippine",
+      "bongbong marcos, aquaculture, green, green groups, tayabas",
+      "learning, local, hubs, local farmers, kapampangan",
+      "cavite, laguna, rizal, abacore, moringa project",
+      "cagayan, luzon visayas, paeng, west philippine, catanduanes"
+     ],
+     "ari_vs_previous_fit": 0.2900171280704646
+    },
+    "2023-Q3": {
+     "n_docs": 2722,
+     "n_topics": 49,
+     "outlier_share": 0.4177075679647318,
+     "npmi_mean": -0.508471354438677,
+     "place_name_topic_share": 0.5918367346938775,
+     "geo_topics_evaluated": 20,
+     "geography_driven_share": 0.15,
+     "top_words_first5": [
+      "local farmers, farming, agriculture, farms, farmers",
+      "food, eat, eating, eats, convenience",
+      "barangay, cavite, paeng, batangas city, batangas road",
+      "islands, cagayan isabela, cagayan, cyclone, severe tropical",
+      "palay harvest, manila times, palay, harvest, pna"
+     ],
+     "ari_vs_previous_fit": 0.4618710872593035
+    },
+    "2023-Q4": {
+     "n_docs": 3059,
+     "n_topics": 60,
+     "outlier_share": 0.34946060804184376,
+     "npmi_mean": -0.4804513548751429,
+     "place_name_topic_share": 0.5666666666666667,
+     "geo_topics_evaluated": 27,
+     "geography_driven_share": 0.14814814814814814,
+     "top_words_first5": [
+      "food businesses, laguna, industry, philippine, 2022",
+      "food supply, food, food production, produce, help farmers",
+      "barangay, cavite, paeng, batangas city, calabarzon",
+      "mt, remains, manila times, hike, palay",
+      "cavite, manila, tanza cavite, plant batangas, pasig"
+     ],
+     "ari_vs_previous_fit": 0.4498026360654996
+    },
+    "2024-Q1": {
+     "n_docs": 3475,
+     "n_topics": 67,
+     "outlier_share": 0.34618705035971226,
+     "npmi_mean": -0.4379086075173217,
+     "place_name_topic_share": 0.5671641791044776,
+     "geo_topics_evaluated": 35,
+     "geography_driven_share": 0.17142857142857143,
+     "top_words_first5": [
+      "develop, tropical, philippine sea, philippine, philippines",
+      "food businesses, snacks, food, grocery, eat",
+      "cacao, local, hubs, modernize, local farmers",
+      "mt, remains, manila times, quezon farmers, palay",
+      "bataan, duterte, la, ecq, ecq ayuda"
+     ],
+     "ari_vs_previous_fit": 0.46648447990712283
+    },
+    "2024-Q2": {
+     "n_docs": 3906,
+     "n_topics": 75,
+     "outlier_share": 0.3681515616999488,
+     "npmi_mean": -0.4139831295623991,
+     "place_name_topic_share": 0.52,
+     "geo_topics_evaluated": 36,
+     "geography_driven_share": 0.16666666666666666,
+     "top_words_first5": [
+      "agri fishery, production agri, agritourism, help farmers, local farmers",
+      "quezon farmers, harvest, post harvest, farmers coop, farmers",
+      "manila, quezon farmers, kaliwa dam, marikina watershed, kaliwa",
+      "islands, cagayan, severe tropical, tropical storm, typhoon karding",
+      "cavite, kadiwa, tanza cavite, silang cavite, balai palmera"
+     ],
+     "ari_vs_previous_fit": 0.46226017948533743
+    },
+    "2024-Q3": {
+     "n_docs": 4426,
+     "n_topics": 93,
+     "outlier_share": 0.35720741075463175,
+     "npmi_mean": -0.45025794619781206,
+     "place_name_topic_share": 0.5268817204301075,
+     "geo_topics_evaluated": 45,
+     "geography_driven_share": 0.26666666666666666,
+     "top_words_first5": [
+      "agri fishery, agritourism, farming da, help farmers, farmers harvest",
+      "quezon farmers, manila rizal, aquaculture, conservation, marcos",
+      "kapuso foundation, kapuso, san carlos, batangue\u00f1os, paeng",
+      "cavite gov, cavite, bataan cavite, calax, cavite opens",
+      "cagayan, doh calabarzon, calabarzon, calabarzon central, catanduanes"
+     ],
+     "ari_vs_previous_fit": 0.43112672547153336
+    },
+    "2024-Q4": {
+     "n_docs": 4904,
+     "n_topics": 91,
+     "outlier_share": 0.3438009787928222,
+     "npmi_mean": -0.4044700949569134,
+     "place_name_topic_share": 0.5164835164835165,
+     "geo_topics_evaluated": 42,
+     "geography_driven_share": 0.19047619047619047,
+     "top_words_first5": [
+      "agritourism, help farmers, farming, agricultural, agriculture",
+      "harvest, post harvest, farmers, agriculture chief, affordable",
+      "kapuso foundation, kapuso, san carlos, batangue\u00f1os, paeng",
+      "polillo islands, islands, cagayan, areas typhoon, typhoon nika",
+      "project manila, manila, kaliwa, marikina watershed, pasig"
+     ],
+     "ari_vs_previous_fit": 0.44779844695823406
+    },
+    "2025-Q1": {
+     "n_docs": 5310,
+     "n_topics": 95,
+     "outlier_share": 0.3911487758945386,
+     "npmi_mean": -0.4260744356317032,
+     "place_name_topic_share": 0.631578947368421,
+     "geo_topics_evaluated": 39,
+     "geography_driven_share": 0.1794871794871795,
+     "top_words_first5": [
+      "agri fishery, help farmers, farming, farmers da, agriculture",
+      "food security, harvest, farmers coop, farmers, agriculture chief",
+      "filipino, filipino restaurant, cavite\u00f1os, kakanin, san pedro",
+      "polillo islands, islands, cagayan, areas typhoon, typhoon nika",
+      "cavite, tanza cavite, cavite city, calabarzon, cainta"
+     ],
+     "ari_vs_previous_fit": 0.5344458916373336
+    },
+    "2025-Q2": {
+     "n_docs": 5759,
+     "n_topics": 98,
+     "outlier_share": 0.35665914221218964,
+     "npmi_mean": -0.41597262988105843,
+     "place_name_topic_share": 0.5918367346938775,
+     "geo_topics_evaluated": 47,
+     "geography_driven_share": 0.14893617021276595,
+     "top_words_first5": [
+      "agri fishery, sustainable agriculture, help farmers, local farmers, farming",
+      "food businesses, food business, food, meals, vendor",
+      "kadiwa, kadiwa stores, centers, marcos, ncr",
+      "cavite, binangonan rizal, laguna, batangue\u00f1os, rizal",
+      "cagayan, paeng, quirino, catanduanes, tropical"
+     ],
+     "ari_vs_previous_fit": 0.49075843688190846
+    },
+    "2025-Q3": {
+     "n_docs": 6502,
+     "n_topics": 105,
+     "outlier_share": 0.3814211011996309,
+     "npmi_mean": -0.34480217149362696,
+     "place_name_topic_share": 0.5333333333333333,
+     "geo_topics_evaluated": 52,
+     "geography_driven_share": 0.15384615384615385,
+     "top_words_first5": [
+      "farmers da, farmers, agriculture chief, rice farmers, rice program",
+      "food, foodie, nutritious, food tourism, filipino food",
+      "rural, local, hubs, modernize, local farmers",
+      "cavite province, rizal province, calamity amid, laguna placed, cavite state",
+      "cavite, batangue\u00f1os, moreno, binangonan rizal, kiko pangilinan"
+     ],
+     "ari_vs_previous_fit": 0.47442882476096815
+    },
+    "2025-Q4": {
+     "n_docs": 7198,
+     "n_topics": 125,
+     "outlier_share": 0.39233120311197556,
+     "npmi_mean": -0.3748470695477145,
+     "place_name_topic_share": 0.544,
+     "geo_topics_evaluated": 53,
+     "geography_driven_share": 0.18867924528301888,
+     "top_words_first5": [
+      "farmers, rice farmers, rice program, harvest, growing",
+      "food supply, food safety, food, food production, urban agri",
+      "manila, manila bay, zamboanga, cavite towns, cavite",
+      "angono rizal, cavite, binangonan rizal, laguna, batangue\u00f1os",
+      "san carlos, calabarzon, san mateo, san, habagat"
+     ],
+     "ari_vs_previous_fit": 0.5430653892842784
+    },
+    "2026-Q1": {
+     "n_docs": 7865,
+     "n_topics": 137,
+     "outlier_share": 0.43280356007628734,
+     "npmi_mean": -0.35205117948485987,
+     "place_name_topic_share": 0.45985401459854014,
+     "geo_topics_evaluated": 54,
+     "geography_driven_share": 0.2037037037037037,
+     "top_words_first5": [
+      "rice industry, rice production, increase rice, rice supply, national rice",
+      "batangas residents, 000, rci, cavite, crising habagat",
+      "cavite cavite, villars, cavite, kaliwa dam, binangonan rizal",
+      "calabarzon, sariaya, laguna dswd, san carlos, gatchalian",
+      "davao region, calabarzon, paeng, dante emong, davao"
+     ],
+     "ari_vs_previous_fit": 0.48166701293527076
+    },
+    "2026-Q2": {
+     "n_docs": 8611,
+     "n_topics": 137,
+     "outlier_share": 0.3744048310300778,
+     "npmi_mean": -0.3702515953147846,
+     "place_name_topic_share": 0.5474452554744526,
+     "geo_topics_evaluated": 59,
+     "geography_driven_share": 0.13559322033898305,
+     "top_words_first5": [
+      "farmers, rice farmers, rice program, harvest, p20 rice",
+      "food supply, food safety, food, food production, farmers da",
+      "filipino, philippine food, filipino food, makati, heritage",
+      "cavite towns, cavite town, tawilis, cavite, cavite city",
+      "cavite, calabarzon, ncr calabarzon, walang, cavite laguna"
+     ],
+     "ari_vs_previous_fit": 0.46966919631803705
+    },
+    "2026-Q3": {
+     "n_docs": 9493,
+     "n_topics": 150,
+     "outlier_share": 0.34183082271147164,
+     "npmi_mean": -0.36969849983218106,
+     "place_name_topic_share": 0.4866666666666667,
+     "geo_topics_evaluated": 63,
+     "geography_driven_share": 0.1746031746031746,
+     "top_words_first5": [
+      "farmers da, farmers, rice farmers, rice fields, imported rice",
+      "gma kapuso, goods, livelihood, 000, kapuso",
+      "new generation, calabarzon farmers, modernization, local, modernize",
+      "filipino, makati, tagaytay, espina, ilang",
+      "mindanao, barangay, pasig marikina, manila, cainta"
+     ],
+     "ari_vs_previous_fit": 0.5186264258882665
+    }
+   }
+  },
+  "T2": {
+   "settings": {
+    "mask": true,
+    "fil": true,
+    "ctfidf": true
+   },
+   "summary": {
+    "npmi_mean": -0.1506544796987392,
+    "place_name_share_mean": 0.0,
+    "ari_mean": 0.45628138598212953,
+    "geography_driven_share_mean": 0.04369603853074317,
+    "n_topics_mean": 80.57894736842105,
+    "outlier_share_mean": 0.3591255850524336,
+    "passes_all_four": false
+   },
+   "origins": {
+    "2022-Q1": {
+     "n_docs": 873,
+     "n_topics": 18,
+     "outlier_share": 0.3161512027491409,
+     "npmi_mean": -0.36554151080912883,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 8,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "farmers, da, agri, farm, worth",
+      "photos, food, check, ancestral, dishes",
+      "fishing, illegal, fish, water, denr",
+      "sunday, bloody, cops, pnp, activists",
+      "robredo, campaign, marcos, moreno, support"
+     ]
+    },
+    "2022-Q2": {
+     "n_docs": 1101,
+     "n_topics": 25,
+     "outlier_share": 0.40417801998183467,
+     "npmi_mean": -0.2932646556180527,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 9,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "marcos, robredo, isko, moreno, buying",
+      "food, dishes, caf\u00e9, check, food businesses",
+      "farm, agri, agriculture, farmers, urban",
+      "fishing, illegal, bay, fish, fishermen",
+      "opens, launches, plant, fare, p1"
+     ],
+     "ari_vs_previous_fit": 0.41400219652733733
+    },
+    "2022-Q3": {
+     "n_docs": 1423,
+     "n_topics": 31,
+     "outlier_share": 0.35137034434293746,
+     "npmi_mean": -0.26100518131188644,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 10,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "food, dishes, restaurant, coffee, check",
+      "da, agri, agriculture, farmers, food",
+      "marcos, robredo, moreno, isko, buying",
+      "typhoon, signal, super typhoon, super, karding",
+      "fishing, fish, illegal, bay, fishermen"
+     ],
+     "ari_vs_previous_fit": 0.4531395471015791
+    },
+    "2022-Q4": {
+     "n_docs": 1711,
+     "n_topics": 34,
+     "outlier_share": 0.3383985973115137,
+     "npmi_mean": -0.2519465608083214,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 15,
+     "geography_driven_share": 0.0,
+     "top_words_first5": [
+      "ayuda, ncr, ecq, dswd, ayuda distribution",
+      "da, agri, farmers, agriculture, farm",
+      "man, cops, bloody sunday, murder, sunday",
+      "signal, typhoon, super, super typhoon, storm",
+      "dead, death toll, toll, road, ndrrmc"
+     ],
+     "ari_vs_previous_fit": 0.3516001734099758
+    },
+    "2023-Q1": {
+     "n_docs": 2027,
+     "n_topics": 43,
+     "outlier_share": 0.39417858904785397,
+     "npmi_mean": -0.24420479614470378,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 21,
+     "geography_driven_share": 0.047619047619047616,
+     "top_words_first5": [
+      "ayuda, ayuda distribution, distribution, ecq, ncr",
+      "signal, typhoon, super, super typhoon, karding",
+      "farm, farmers, agriculture, farming, garden",
+      "marcos, robredo, buying, campaign, rally",
+      "oil, gas, island, passage, mindoro"
+     ],
+     "ari_vs_previous_fit": 0.3838179668820289
+    },
+    "2023-Q2": {
+     "n_docs": 2331,
+     "n_topics": 47,
+     "outlier_share": 0.3457743457743458,
+     "npmi_mean": -0.25699425297046513,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 22,
+     "geography_driven_share": 0.045454545454545456,
+     "top_words_first5": [
+      "food, coffee, restaurant, filipino, dishes",
+      "bay, manila bay, fishing, fish, fishermen",
+      "da, farm, agri, farmers, urban",
+      "cops, man, nabbed, npa, murder",
+      "signal, typhoon, super typhoon, super, karding"
+     ],
+     "ari_vs_previous_fit": 0.43227746141405354
+    },
+    "2023-Q3": {
+     "n_docs": 2722,
+     "n_topics": 55,
+     "outlier_share": 0.3570903747244673,
+     "npmi_mean": -0.23711252521983261,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 28,
+     "geography_driven_share": 0.03571428571428571,
+     "top_words_first5": [
+      "marcos, duterte, robredo, campaign, presidential",
+      "food, coffee, cafe, filipino, restaurant",
+      "signal, typhoon, super typhoon, super, areas",
+      "rice, production, farmers, hybrid, pna",
+      "bridge, dpwh, road, project, bataan"
+     ],
+     "ari_vs_previous_fit": 0.44324337091723176
+    },
+    "2023-Q4": {
+     "n_docs": 3059,
+     "n_topics": 63,
+     "outlier_share": 0.38934292252370056,
+     "npmi_mean": -0.19239382271035516,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 32,
+     "geography_driven_share": 0.0625,
+     "top_words_first5": [
+      "food, coffee, restaurant, 2023, cafe",
+      "agri, farming, farm, agriculture, urban",
+      "typhoon, super typhoon, storm, pagasa, super",
+      "tourism, beach, tour, summer, travel",
+      "rains, heavy, rain, floods, flooding"
+     ],
+     "ari_vs_previous_fit": 0.43153306471698266
+    },
+    "2024-Q1": {
+     "n_docs": 3475,
+     "n_topics": 66,
+     "outlier_share": 0.33928057553956836,
+     "npmi_mean": -0.17465014070937745,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 38,
+     "geography_driven_share": 0.05263157894736842,
+     "top_words_first5": [
+      "agri, farmers, farming, da, farm",
+      "coffee, food, filipino, 2023, restaurant",
+      "rice, farmers, production, harvest, da",
+      "bridge, dpwh, bataan, extension, airport",
+      "signal, typhoon, super typhoon, super, pagasa"
+     ],
+     "ari_vs_previous_fit": 0.487740473143198
+    },
+    "2024-Q2": {
+     "n_docs": 3906,
+     "n_topics": 78,
+     "outlier_share": 0.3520225294418843,
+     "npmi_mean": -0.16302570365937388,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 40,
+     "geography_driven_share": 0.075,
+     "top_words_first5": [
+      "food, coffee, filipino, dishes, restaurant",
+      "marcos, robredo, chief, vote, moreno",
+      "beach, tourism, tour, resort, visit",
+      "water, manila water, river, maynilad, lake",
+      "rice, rice production, rice farmers, production, harvest"
+     ],
+     "ari_vs_previous_fit": 0.46329892800410216
+    },
+    "2024-Q3": {
+     "n_docs": 4426,
+     "n_topics": 84,
+     "outlier_share": 0.3296430185268866,
+     "npmi_mean": -0.12417928548198265,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 41,
+     "geography_driven_share": 0.04878048780487805,
+     "top_words_first5": [
+      "food, filipino, dishes, taste, best",
+      "rice, da, production, farmers, harvest",
+      "fish, fishing, bfar, kill, ban",
+      "da, farmers, agri, food, agriculture",
+      "dswd, aid, victims, ayuda, relief"
+     ],
+     "ari_vs_previous_fit": 0.46874842562708985
+    },
+    "2024-Q4": {
+     "n_docs": 4904,
+     "n_topics": 93,
+     "outlier_share": 0.3607259380097879,
+     "npmi_mean": -0.057416002846521284,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 43,
+     "geography_driven_share": 0.046511627906976744,
+     "top_words_first5": [
+      "coffee, food, restaurant, filipino, dishes",
+      "rice, rice farmers, da, production, farmers",
+      "dswd, aid, victims, relief, ayuda",
+      "park, tour, tourism, beach, resort",
+      "oil, oil spill, spill, mindoro, tanker"
+     ],
+     "ari_vs_previous_fit": 0.48998680998876487
+    },
+    "2025-Q1": {
+     "n_docs": 5310,
+     "n_topics": 92,
+     "outlier_share": 0.35423728813559324,
+     "npmi_mean": -0.10335822642783753,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 43,
+     "geography_driven_share": 0.06976744186046512,
+     "top_words_first5": [
+      "rice, da, rice farmers, nfa, prices",
+      "farmers, da, agri, farming, agriculture",
+      "fish, fishing, bfar, kill, ban",
+      "water, flood control, river, flood, control",
+      "duterte, supporters, rally, sara, campaign"
+     ],
+     "ari_vs_previous_fit": 0.5153085610357226
+    },
+    "2025-Q2": {
+     "n_docs": 5759,
+     "n_topics": 107,
+     "outlier_share": 0.35214446952595935,
+     "npmi_mean": -0.058848748395899826,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 46,
+     "geography_driven_share": 0.021739130434782608,
+     "top_words_first5": [
+      "farmers, agriculture, agri, coconut, da",
+      "rice, p20, kilo, da, nfa",
+      "art, philippine, exhibit, entertainment, gma entertainment",
+      "rescued, boat, missing, capsized, ship",
+      "deped, school, schools, youth, students"
+     ],
+     "ari_vs_previous_fit": 0.46454681603204556
+    },
+    "2025-Q3": {
+     "n_docs": 6502,
+     "n_topics": 123,
+     "outlier_share": 0.3646570286065826,
+     "npmi_mean": -0.05008159878963638,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 52,
+     "geography_driven_share": 0.07692307692307693,
+     "top_words_first5": [
+      "rice, p20, kilo, rice program, da",
+      "agri, farmers, farming, food, da",
+      "tour, tourism, resort, beach, visit",
+      "signal, typhoon, intensifies, areas, super typhoon",
+      "classes, suspended, suspensions, class, class suspensions"
+     ],
+     "ari_vs_previous_fit": 0.4834075226786189
+    },
+    "2025-Q4": {
+     "n_docs": 7198,
+     "n_topics": 137,
+     "outlier_share": 0.360377882745207,
+     "npmi_mean": -0.05240441241815567,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 58,
+     "geography_driven_share": 0.06896551724137931,
+     "top_words_first5": [
+      "rice, p20, rice program, kilo, da",
+      "farmers, agriculture, agri, da, farming",
+      "tour, tourism, escape, resort, beach",
+      "classes, suspended, suspensions, class, class suspensions",
+      "signal, areas, areas signal, signal raised, intensifies"
+     ],
+     "ari_vs_previous_fit": 0.49402979476814085
+    },
+    "2026-Q1": {
+     "n_docs": 7865,
+     "n_topics": 142,
+     "outlier_share": 0.386013986013986,
+     "npmi_mean": -0.0006047074256730415,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 59,
+     "geography_driven_share": 0.06779661016949153,
+     "top_words_first5": [
+      "agriculture, da, farming, farmers, agri",
+      "restaurants, restaurant, dishes, michelin, try",
+      "classes, suspended, suspensions, class, class suspensions",
+      "rice, p20, p20 rice, rice program, kilo",
+      "death toll, toll, dead, death, ndrrmc"
+     ],
+     "ari_vs_previous_fit": 0.48999186724574634
+    },
+    "2026-Q2": {
+     "n_docs": 8611,
+     "n_topics": 140,
+     "outlier_share": 0.3730112646614795,
+     "npmi_mean": 0.013676091895340645,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 59,
+     "geography_driven_share": 0.03389830508474576,
+     "top_words_first5": [
+      "food, filipino food, filipino, restaurant, dishes",
+      "wedding, entertainment, gma entertainment, art, look",
+      "farming, agri, farmers, da, agriculture",
+      "rice, p20, p20 rice, rice program, kilo",
+      "tourism, visit, leisure, resort, park"
+     ],
+     "ari_vs_previous_fit": 0.49461433812195765
+    },
+    "2026-Q3": {
+     "n_docs": 9493,
+     "n_topics": 153,
+     "outlier_share": 0.3547877383335089,
+     "npmi_mean": 0.010920925575818544,
+     "place_name_topic_share": 0.0,
+     "geo_topics_evaluated": 65,
+     "geography_driven_share": 0.07692307692307693,
+     "top_words_first5": [
+      "rice, p20, rice program, p20 rice, kilo",
+      "dswd, 4ps, beneficiaries, 4ps beneficiaries, aid",
+      "farmers, agri, agriculture, da, farming",
+      "classes, suspensions, class, class suspensions, suspended",
+      "tourism, resort, escape, tourist, visit"
+     ],
+     "ari_vs_previous_fit": 0.45177763006375504
+    }
+   }
+  }
+ },
+ "T0_reproduction": {
+  "stored": {
+   "npmi_mean": -0.46584132595820893,
+   "place_name_share_mean": 0.5300247845148174,
+   "ari_mean": 0.44475389033634166
+  },
+  "abs_diff": {
+   "npmi": 0.013947694262299748,
+   "place": 0.023819060161133,
+   "ari": 0.0006506413941024247
+  },
+  "ok": false
+ },
+ "decision": {
+  "topic_quality_achieved": null,
+  "note": "decision void: T0 did not reproduce"
+ }
+}
