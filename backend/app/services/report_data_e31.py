@@ -758,7 +758,7 @@ def _window(q_from: str | None, q_to: str | None) -> list[str]:
     lo = max(_qkey(served[0]), _qkey(q_from)) if q_from else _qkey(served[0])
     hi = min(_qkey(served[-1]), _qkey(q_to)) if q_to else _qkey(served[-1])
     if _ch1() and not q_to:                        # the default report ends on the reliable Lead-1 quarter
-        hi = min(hi, max(_qkey(q) for q in served if _row(q)["lead"] == 1))
+        hi = min(hi, max((_qkey(q) for q in served if _row(q)["lead"] == 1), default=hi))   # no Lead-1 row: keep the range
     elif lead2_preview() and not q_to:             # the default report ends on the lead-1 quarter, not the preview
         lead1 = [q for q in E31.served_rows() if q.get("lead", 1) == 1]
         hi = min(hi, max(_qkey(q["quarter"]) for q in lead1))

@@ -554,7 +554,7 @@ function ReviewDetailModal({
 
   // Real municipality / city scores for this province-quarter.
   const { data: muniRes } = useMunicipalities(item.provinceId, item.quarter);
-  const muniData = (muniRes?.data ?? []).slice().sort((a, b) => b.riskIndex - a.riskIndex);
+  const muniData = (muniRes?.data ?? []).slice().sort((a, b) => (b.riskIndex ?? 0) - (a.riskIndex ?? 0));
 
   // Real SHAP driver groups for this province-quarter.
   const { data: explain } = useExplainability("province", item.provinceId, item.quarter);
@@ -602,12 +602,12 @@ function ReviewDetailModal({
                       <div
                         className="h-full"
                         style={{
-                          width: `${Math.min(100, m.riskIndex * 100)}%`,
+                          width: `${Math.min(100, (m.riskIndex ?? 0) * 100)}%`,
                           background: m.riskLevel === "high" ? "hsl(var(--risk-high))" : "hsl(var(--risk-low))",
                         }}
                       />
                     </div>
-                    <span className="w-10 text-right tabular-nums font-bold">{m.riskIndex.toFixed(2)}</span>
+                    <span className="w-10 text-right tabular-nums font-bold">{m.riskIndex == null ? "—" : m.riskIndex.toFixed(2)}</span>
                   </div>
                 ))}
               </div>

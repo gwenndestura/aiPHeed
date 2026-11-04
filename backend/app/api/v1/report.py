@@ -58,6 +58,9 @@ async def get_report(
     """
     q = svc.resolve_quarter(quarter)
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    if scope == "region" and withheld >= set(ref.PROVINCES):       # nothing is public: no table to draw (Rule 1)
+        raise svc.ForecastWithheld(f"The {q} forecast is withheld from publication: it is not shown until an "
+                                   "administrator approves it.")
 
     if scope == "region":
         pdf = rpt.build_region_report(q, withheld)

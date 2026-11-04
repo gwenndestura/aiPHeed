@@ -99,7 +99,10 @@ def test_max_reliable_lead_is_two_under_the_75_rule_and_zero_under_r1_r7(fi):
     assert ev["leads"]["3"]["metrics"]["accuracy"] < 0.75 <= ev["leads"]["2"]["metrics"]["accuracy"]
     assert ev["sources"]["reproduced"] is True
     h = _get("/api/v1/final/risk/rows")
-    assert h["maxReliableLead"] == 2 and max(int(r["lead"]) for r in h["rows"]) == 2
+    # 2026-11-04 audit D-03: an unapproved issued forecast no longer appears on this public route, so the Lead-2 cap is
+    # checked on the export; test_audit_fixes_20261104.py checks that approved rows are returned.
+    assert h["maxReliableLead"] == 2 and max(int(r["lead"]) for r in FI.rows().values()) == 2
+    assert all(FI.kind(r) != "forecast" for r in h["rows"])
 
 
 def test_sealed_lead2_forecast_is_the_served_one(fi):

@@ -152,12 +152,14 @@ def rows() -> dict[tuple[str, str], dict]:
 
 
 @functools.lru_cache(maxsize=1)
-def _evaluation(mtime: int) -> dict:
-    return json.loads((DATA / "evaluation.json").read_text(encoding="utf-8"))
+def _evaluation(path: str, mtime: int) -> dict:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 def evaluation() -> dict:
-    return _evaluation((DATA / "evaluation.json").stat().st_mtime_ns)
+    # keyed by path too: exports written in one checkout can share a timestamp, and would then read each other's metrics
+    p = DATA / "evaluation.json"
+    return _evaluation(str(p), p.stat().st_mtime_ns)
 
 
 def m3_served() -> bool:
@@ -314,10 +316,20 @@ def latest_sws(r: dict) -> str:
             f"{r['sws_newest_published']})")
 
 
+def outcome_pending(r: dict) -> bool:
+    """No label because this quarter comes after the newest labelled quarter: its SWS result is not out yet. An
+    unlabelled quarter before that one really had no regular SWS round."""
+    if r.get("observed"):
+        return False
+    return r["quarter"] > max((x["quarter"] for x in rows().values() if x.get("observed")), default="")
+
+
 def past_text(r: dict) -> str | None:
     """'past forecast; actual: HIGH/LOW' for a walk-forward quarter (None for an issued forecast)."""
     if kind(r) == "forecast":
         return None
+    if outcome_pending(r):
+        return "outcome not yet published (the SWS result for this quarter is not out)"
     if r.get("observed"):
         return f"past forecast; actual: {r['observed']} (SWS hunger {float(r['observed_hunger']):.1f}%)"
     return "past forecast; actual: no label (no regular SWS round that quarter)"
@@ -524,13 +536,15 @@ def market_evidence(code: str | None, quarter: str) -> str | None:
     if not rs:
         return None
     r = rs[0]
-    food, rice = _f(r.get("val_R_food_yoy")), _f(r.get("val_R_rice_yoy"))
+    food, rice, world = _f(r.get("val_R_food_yoy")), _f(r.get("val_R_rice_yoy")), _f(r.get("val_W_rice_yoy"))
     # Only the newest issue's row carries psa_newest_month; past rows leave it blank, so name the month only when known.
     month = str(r.get("psa_newest_month") or "").strip()
     src = f"PSA CPI through {month}" if month and month.lower() != "nan" else "PSA CPI"
     facts = " ".join(x for x in (
         None if food is None else f"Region IV-A food inflation was {food:.1f}% year on year ({src}).",
-        None if rice is None else f"Rice prices were {_change(rice, '%')} than a year earlier.") if x)
+        None if rice is None else f"Rice prices were {_change(rice, '%')} than a year earlier.",
+        None if world is None else f"World rice prices (World Bank) were {_change(world, '%')} than a year earlier.")
+        if x)
     if code is None:
         return facts or None
     if not r.get("price_band"):
@@ -540,10 +554,19 @@ def market_evidence(code: str | None, quarter: str) -> str | None:
             "neither the score nor the class.").strip()
 
 
+def _actual_effect(code: str | None, quarter: str, group: str) -> str:
+    """The group's real SHAP on this forecast: the bars are relative to each driver's usual size, so a small push
+    can show a large bar."""
+    rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
+    v = _f(rs[0].get(f"shap_{group}")) if rs else None
+    return "" if v is None else f" Actual effect on this forecast: {v:+.2f} on the model's log-odds scale."
+
+
 def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
     """The card sentence for a group, from the values the regional forecast used at its issue date."""
     if group == "market":
-        return market_evidence(code, quarter)
+        text = market_evidence(code, quarter)
+        return text + _actual_effect(code, quarter, group) if text else text
     if group in NOT_INPUT:
         return NOT_INPUT_NOTE
     rs = [r for (c, q), r in rows().items() if q == quarter and (code is None or c == code)]
@@ -559,10 +582,11 @@ def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
                                                    f"the provinces in {_q_before(d, 1)}.",
                  None if v["R_C3"] is None else f"The weaker of the regional rice and corn harvests in "
                                                 f"{_q_before(d, 2)} was {_change(-v['R_C3'], '%')} than a year earlier."]
-        return " ".join(p for p in parts if p) or none
+        return " ".join(p for p in parts if p) + _actual_effect(code, quarter, group) if any(parts) else none
     if group == "fish_kill":
         return none if v["R_C4"] is None else (f"Regional fisheries production in {_q_before(d, 2)} was "
-                                               f"{_change(-v['R_C4'], '%')} than a year earlier.")
+                                               f"{_change(-v['R_C4'], '%')} than a year earlier."
+                                               + _actual_effect(code, quarter, group))
     if group == "hunger":
         return f"The forecast starts from the {latest_sws(r)}; the threshold is {H_LINE}%."
     if group == "poverty":
@@ -623,7 +647,15 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
     else:
         ctx = f"; {name}: {province_context(r)}"
     flag = f"; {REVIEW_FLAG[:-1]}" if is_high(r) and kind(r) == "forecast" else ""
-    return f"{head}{ctx}; {reliability_text(r)}{flag}."
+    return f"{head}{ctx}; {reliability_text(r)}{_outside_bars(r)}{flag}."
+
+
+def _outside_bars(r: dict) -> str:
+    """The inputs that move this forecast but have no bar, in the summary so the bars are not read as the whole."""
+    n, h = _f(r.get("shap_news")), _f(r.get("shap_hunger"))
+    if n is None or h is None:
+        return ""
+    return f"; not shown in the bars, on this forecast: news {n:+.2f} and past SWS hunger {h:+.2f} log-odds"
 
 
 def data_status(code: str | None, quarter: str) -> tuple[str, str]:

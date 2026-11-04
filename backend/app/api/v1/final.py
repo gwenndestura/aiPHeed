@@ -6,10 +6,14 @@ existing dashboard routes or the served FIRI v2 priority score.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.dependencies import get_db
 from app.services import dashboard as D
 from app.services import final_engine as FE
+from app.services import reference as ref
+from app.services import review as rv
 
 router = APIRouter()
 
@@ -67,10 +71,11 @@ def final_cpi() -> dict:
 
 
 @router.get("/final/lgus")
-def final_lgus() -> dict:
+async def final_lgus(db: AsyncSession = Depends(get_db)) -> dict:
     """All 142 cities and municipalities with their indicator-based priority score and local-evidence status."""
     q = D.latest_quarter()
-    return _guard(FE.lgus, D.municipality_summary(q))
+    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    return _guard(FE.lgus, D.withhold_lgu_rows(D.municipality_summary(q), withheld))
 
 
 # ------------------------------------------------------------------------------------------------ Chapter I risk
@@ -85,14 +90,18 @@ def final_risk_evaluation() -> dict:
 
 
 @router.get("/final/risk/rows")
-def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
-                    quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$")) -> dict:
-    """Province rows: walk-forward Lead-1 forecasts with observed outcomes, and the forecasts issued 2026-10-01."""
+async def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
+                          quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$"),
+                          db: AsyncSession = Depends(get_db)) -> dict:
+    """Province rows: walk-forward forecasts with observed outcomes, and the issued forecasts. Rule 1: a forecast
+    withheld from the dashboard (rejected, or issued and not yet approved) is withheld here too."""
     from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
     if not CH1.exported():
         raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
+    held = await rv.rejected_pairs(db, quarter)
     rows = [dict(r, kind=CH1.kind(r), reliable_horizon=CH1.status(r) == "reliable", status=CH1.status(r))
             for r in CH1.rows().values()
-            if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)]
+            if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)
+            and (ref.CODE_TO_SLUG.get(r["province_code"]), r["quarter"]) not in held]
     return {"count": len(rows), "maxReliableLead": CH1.reliable_lead(), "horizon": CH1.horizon(), "rows": rows,
             "definition": CH1.INDICATOR["definition"], "caveat": CH1.INDICATOR["caveat"]}
