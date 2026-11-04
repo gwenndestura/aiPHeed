@@ -56,7 +56,7 @@ async def get_config() -> ConfigResponse:
     for h in svc.HORIZONS:
         hq = svc.available_quarters(h)
         horizons[h] = {
-            **(svc.E31_HORIZON_INFO if svc.e31_active() else svc.HORIZON_INFO)[h],
+            **svc.horizon_info()[h],
             "earliest": hq[0] if hq else None,
             "latest": hq[-1] if hq else None,
             "count": len(hq),
@@ -173,6 +173,7 @@ async def get_ranking(
 async def get_municipalities(
     province_id: str,
     quarter: str | None = Query(None),
+    db: AsyncSession = Depends(get_db),
 ) -> MunicipalitiesResponse:
     """
     The province's cities and municipalities, ranked by risk index.
@@ -184,11 +185,12 @@ async def get_municipalities(
     if slug not in ref.PROVINCES:
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
     q = svc.resolve_quarter(quarter)
+    withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,
         indicator=svc.indicator_for(q),
-        data=svc.municipality_summary(q, province_id=slug),
+        data=svc.withhold_lgu_rows(svc.municipality_summary(q, province_id=slug), withheld),
     )
 
 

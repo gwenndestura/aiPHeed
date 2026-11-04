@@ -250,6 +250,21 @@ E31_HORIZON_INFO = {
 }
 
 
+def horizon_info() -> dict:
+    """What /config says about each horizon id. In the food-insecurity mode it comes from the served model's own
+    evaluation; the E36 text below describes a different model."""
+    from app.ml.inference import foodinsecurity_system as FI
+
+    if not FI.active():
+        return E31_HORIZON_INFO if e31_active() else HORIZON_INFO
+    ev = FI.evaluation()
+    leads = " and ".join(f"Lead {k}" for k in ev.get("served_leads") or [])
+    info = {"name": f"{leads} forecasts", "evidenceStatus": ev.get("evidence_status"),
+            "question": "Will SWS hunger in Balance Luzon be above 11.3% in the target quarter?",
+            "definition": FI.indicator().get("definition"), "resultsFile": str(FI.DATA / "evaluation.json")}
+    return {FORECAST: {"id": FORECAST, **info}, NOWCAST: {"id": NOWCAST, "alias_of": FORECAST, **info}}
+
+
 def e31_active() -> bool:
     """E31: the dashboard serves the E31 record unless AIPHEED_DATA_LAYER=legacy (the pre-E31 production model)."""
     import os
@@ -987,6 +1002,19 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
         })
     rows.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["lguCode"]))
     return rows
+
+
+def withhold_lgu_rows(rows: list[dict], withheld: frozenset[str]) -> list[dict]:
+    """Rule 1: an LGU in a withheld province keeps its geography and PSA context but shows nothing that is derived
+    from the withheld forecast, the same as the province row. The order falls back to the name, because the rank
+    would reveal the index."""
+    if not withheld:
+        return rows
+    blank = {"riskIndex": None, "riskLevel": None, "rankRegion": None, "rankInProvince": None, "tied": False,
+             "provinceEstimate": None, "noProvinceEstimate": True}
+    out = [{**r, **blank} if r["provinceId"] in withheld else r for r in rows]
+    out.sort(key=lambda x: (x["riskIndex"] is None, -(x["riskIndex"] or 0.0), x["name"]))
+    return out
 
 
 LGU_POSITION_BASIS = (
