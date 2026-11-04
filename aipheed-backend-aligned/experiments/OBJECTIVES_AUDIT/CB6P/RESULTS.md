@@ -82,3 +82,23 @@ boosting on top.
 - **Acceptance therefore fails** (criteria 2 and 3).
 - **Interpretation:** forcing employment, fish kill and the others into every forecast adds noise. In C-B6P2 they had
   little or no weight because they do not predict the Eq. 3 label on this data.
+
+## C-B6P4 (PREREGISTRATION_P4.md 96582102…, owner directive): C-B6P3 with the logistic C chosen on inner folds
+
+**Script:** `runner/cb6p4_model.py`. **Chosen C per origin:** 0.001 (15), 0.01 (2), 0.1 (2), 1.0 (8).
+
+| Lead 1 / Lead 2 | **C-B6P4** | C-B6P3 | C-B6P2 |
+|---|---|---|---|
+| Accuracy | **0.720 / 0.650** | 0.690 / 0.620 | 0.810 / 0.750 |
+| F1 | 0.788 / 0.745 | 0.760 / 0.716 | 0.869 / 0.828 |
+| AUC-ROC | 0.725 / 0.553 | 0.730 / 0.531 | 0.787 / 0.676 |
+| Brier | 0.194 / 0.240 | 0.212 / 0.264 | 0.158 / 0.187 |
+
+- **All five drivers contribute** in 100% of forecasts. SHAP shares: market 29%, fish kill 10%, employment 9–11%,
+  climate 4%, OFW 3%.
+- **It improves on C-B6P3** (+0.03 accuracy).
+- **It is still well below C-B6P2:** Brier +0.036 / +0.053. Acceptance fails.
+- **The trailing-8 driver view** (an average over the latest 8 forecasts) was also checked for C-B6P2. It still leaves fish
+  kill at 0 in 15 of 85 rows and employment in 5.
+- **Conclusion:** on this data, forcing every driver into every forecast costs 0.09–0.12 accuracy whichever way it is
+  done.
