@@ -112,5 +112,7 @@ LightGBM settings are inherited from E140 and are not tuned. News columns are ad
 
 ## 8. External checks
 
-* **Face validity (agreement only, never pooled).** NNS 2023 FIES for CALABARZON (19.1 %, CI 17.0 to 21.1) and the 2018/2019 ENNS HFIAS for CALABARZON, after checking what those publications actually cover.
-* **Unseen rounds.** The 2021 ENNS provincial decks are known to exist (a Romblon deck is indexed), but the FNRI host returned HTTP 500 on 2026-11-04 and the decks are not in the Wayback index. If they are obtained later, the sealed E145 predictions are scored once under the same rules.
+* **Face validity (agreement only, never pooled).** The verified anchors are in `backend/data/e145/calabarzon_face_validity_anchors.csv`. They were read from the FNRI decks, with instrument and page. The test is direction: is each province's forecast on the same side of the national level as the measurement of the same instrument and year? HFIAS and FIES are never pooled, and FIES is never used for training.
+* **No regional 2019 figure.** The national 2018-2019 ENNS deck prints no CALABARZON figure. The 2019 evidence is provincial: HFIAS and FIES for Quezon and Rizal.
+* **No blind test from 2021.** The 2021 decks (Batangas, Cavite, Lucena) use FIES with 12-month recall, not HFIAS, and their values were seen on 2026-11-04 before this lock. They are agreement evidence only.
+* **Later rounds.** The 2021 and 2023 rounds reviewed use FIES. An HFIAS provincial round after 2019 has not been found, so a future confirmation test for an HFIAS-trained model may have to be a FIES agreement test unless FNRI publishes HFIAS again.

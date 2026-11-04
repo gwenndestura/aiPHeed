@@ -131,10 +131,11 @@ def fit_predict(arm: str, tr: pd.DataFrame, te: pd.DataFrame) -> np.ndarray:
         return M143.Anchored("hre", "lgbm").fit(tr, Level(BC_COLS).fit(tr)).predict_proba(te)
     if arm == "LR-PSA":
         return M137.SoftLogit(M137.PSA_ONLY).fit(tr).predict_proba(te)
+    fill = {c: 0.0 for c in BC_COLS}                             # corrected news is centred on 0 and can be all-missing in early rounds
     if arm == "LR-NLP":
-        return M137.SoftLogit(BC_COLS).fit(tr).predict_proba(te)
+        return M137.SoftLogit(BC_COLS).fit(tr.fillna(fill)).predict_proba(te.fillna(fill))
     if arm == "LR-ALL":
-        return M137.SoftLogit([c for c in M140.LT_FEATURES if c not in HIST] + BC_COLS).fit(tr).predict_proba(te)
+        return M137.SoftLogit([c for c in M140.LT_FEATURES if c not in HIST] + BC_COLS).fit(tr.fillna(fill)).predict_proba(te.fillna(fill))
     raise KeyError(arm)
 
 
