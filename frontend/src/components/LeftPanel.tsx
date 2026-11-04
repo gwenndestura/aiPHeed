@@ -13,6 +13,7 @@ import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
 import { StatusDot } from "@/components/ui/status-dot";
 import { ExplainTip } from "@/components/ui/explain-tip";
 import { isHighRisk } from "@/lib/risk";
+import { isCbIndicator } from "@/lib/servedModel";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -114,6 +115,10 @@ export function RfiiScoreCardBody({
   loadFailed?: boolean;
 }) {
   const { data: regionForecast, error: forecastError } = useForecast("region", "calabarzon", quarterId || undefined, "nowcast");
+  const { data: cardConfig } = useConfig();
+  // With the food-insecurity forecast the number is the mean of the poverty-weighted province scores, not the
+  // regional probability that sets every province's class.
+  const cbServed = isCbIndicator(cardConfig?.indicator?.id);
   const failed = loadFailed || isLoadFailure(forecastError);
   // No score is not a score of zero: while loading, after a failure, or when
   // every province is withheld, show "—" and no band rather than 0.00 / LOW.
@@ -151,7 +156,9 @@ export function RfiiScoreCardBody({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-        <h3 className="text-[13px] font-semibold leading-tight">Regional average risk probability</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">
+          {cbServed ? "Average province score" : "Regional average risk probability"}
+        </h3>
         {quarterLabel && (
           <p className="text-[11px] text-muted-foreground tabular-nums">{quarterLabel}</p>
         )}
@@ -184,7 +191,7 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <MetricLabel className="uppercase tracking-[0.28em]">Risk probability</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">{cbServed ? "Score" : "Risk probability"}</MetricLabel>
           </div>
 
           {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
@@ -216,7 +223,9 @@ export function RfiiScoreCardBody({
             <Note label={null} className="mt-2.5">{LOAD_ERROR_MESSAGE}</Note>
           ) : (
             <p className="mt-2.5 text-[10px] text-muted-foreground/85 leading-snug">
-              Average across all {regionsData.length || 5} provinces
+              {cbServed
+                ? `Average of the ${regionsData.length || 5} poverty-weighted province scores. The class comes from the regional forecast probability and is the same for every province.`
+                : `Average across all ${regionsData.length || 5} provinces`}
             </p>
           )}
 

@@ -1,15 +1,19 @@
 import { NO_DATA_COLOR, RISK_COLORS } from "@/data/types";
 import { useConfig } from "@/lib/queries";
+import { isCbIndicator } from "@/lib/servedModel";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-/** What each colour on the map means, with the cutoff from the server's config. */
+/** What each colour on the map means, with the cutoff from the server's config and the served model's definition. */
 function useMeanings() {
   const { data: config } = useConfig();
   const cutoff = (config?.thresholds.riskDisplayCutoff ?? 0.5).toFixed(2);
+  const high = isCbIndicator(config?.indicator?.id)
+    ? `High risk: a probability of ${cutoff} or more that SWS hunger in Balance Luzon is above 11.3% (a regional forecast: every province gets the same class)`
+    : `High risk: a probability of ${cutoff} or more that the province is HIGH risk (regional hunger above 11.3% and unusually fast food-price rises)`;
   return {
-    high: `High risk: a probability of ${cutoff} or more that the province is HIGH risk (regional hunger above 11.3% and unusually fast food-price rises)`,
+    high,
     low: `Low risk: a probability below ${cutoff}`,
-    none: "No forecast: withheld by DA or not enough data this quarter",
+    none: "No forecast: withheld at review or not enough data this quarter",
   };
 }
 

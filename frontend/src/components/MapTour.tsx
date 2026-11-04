@@ -41,8 +41,10 @@ const MAP_TOUR: TourDef = {
   steps: [
     {
       title: "Welcome to aiPHeed",
-      body: () =>
-        "aiPHeed forecasts each quarter whether each CALABARZON province is at high or low food-insecurity risk: regional hunger above 11.3% together with unusually fast food-price rises. Forecasts are reviewed by Department of Agriculture staff before they are published.",
+      body: ({ cbServed }) =>
+        cbServed
+          ? "aiPHeed forecasts each quarter whether SWS hunger in Balance Luzon will be above 11.3%, and shows it for the five CALABARZON provinces. The class is regional, so every province gets the same one; each province's score weights it by PSA poverty. Forecasts are reviewed by an authorized aiPHeed administrator before they are published."
+          : "aiPHeed forecasts each quarter whether each CALABARZON province is at high or low food-insecurity risk: regional hunger above 11.3% together with unusually fast food-price rises. Forecasts are reviewed by an authorized aiPHeed administrator before they are published.",
       layout: { panel: "summary", sheet: "collapsed" },
     },
     {

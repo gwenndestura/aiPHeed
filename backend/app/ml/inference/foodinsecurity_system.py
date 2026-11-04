@@ -525,9 +525,11 @@ def market_evidence(code: str | None, quarter: str) -> str | None:
         return None
     r = rs[0]
     food, rice = _f(r.get("val_R_food_yoy")), _f(r.get("val_R_rice_yoy"))
+    # Only the newest issue's row carries psa_newest_month; past rows leave it blank, so name the month only when known.
+    month = str(r.get("psa_newest_month") or "").strip()
+    src = f"PSA CPI through {month}" if month and month.lower() != "nan" else "PSA CPI"
     facts = " ".join(x for x in (
-        None if food is None else f"Region IV-A food inflation was {food:.1f}% year on year (PSA CPI through "
-                                  f"{r['psa_newest_month']}).",
+        None if food is None else f"Region IV-A food inflation was {food:.1f}% year on year ({src}).",
         None if rice is None else f"Rice prices were {_change(rice, '%')} than a year earlier.") if x)
     if code is None:
         return facts or None

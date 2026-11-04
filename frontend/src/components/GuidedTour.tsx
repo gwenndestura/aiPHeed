@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useAuth } from "@/lib/auth";
 import { useConfig } from "@/lib/queries";
+import { isCbIndicator } from "@/lib/servedModel";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isTourDone, markTourDone, tourElement, visible, TOUR_LAYOUT_EVENT, TOUR_START_EVENT, type TourId, type TourLayout } from "@/lib/tour";
@@ -28,6 +29,8 @@ export interface StepContext {
   alert: string;
   /** Below 768px the page links are folded into the menu (the header's nav is hidden). */
   linksInMenu: boolean;
+  /** The backend serves the food-insecurity forecast (C-B6 / C-b), whose class is regional. */
+  cbServed?: boolean;
 }
 
 /** An area on screen, in viewport pixels. */
@@ -341,7 +344,7 @@ export function GuidedTour({ tour }: { tour: TourDef }) {
           </p>
           <DialogPrimitive.Title className="mt-1 text-[16px] font-semibold tracking-tight">{step.title}</DialogPrimitive.Title>
           <DialogPrimitive.Description className="mt-2 text-[14px] leading-snug text-foreground/85">
-            {step.body({ layout, cutoff, alert, linksInMenu })}
+            {step.body({ layout, cutoff, alert, linksInMenu, cbServed: isCbIndicator(config?.indicator?.id) })}
           </DialogPrimitive.Description>
           {/* Read out when the step changes; the dialog's label is read only once. */}
           <p className="sr-only" aria-live="polite">

@@ -17,8 +17,15 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "OFW Remittance", def: "Money sent home by relatives working abroad (Overseas Filipino Workers). A drop leaves families with less to spend on food." },
 ];
 
-export function GlossaryPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+/** "Risk Level" when the food-insecurity forecast (C-B6 / C-b) is served: its class is regional. */
+const CB_RISK_LEVEL =
+  "A score from 0 to 1. For a province it is the forecast probability that SWS hunger in Balance Luzon is above 11.3% (a regional forecast, so the class is the same for every province), weighted by the province's PSA poverty incidence; it is not a measured provincial hunger rate. For a city or municipality it is a priority ranking derived from the province's value with poverty and population density, not a measured or forecast municipal rate. Higher values indicate greater risk.";
+
+export function GlossaryPanel({ open, onClose, cbServed = false }: { open: boolean; onClose: () => void; cbServed?: boolean }) {
   if (!open) return null;
+  const terms = cbServed
+    ? TERMS.map((t) => (t.term === "Risk Level" ? { ...t, def: CB_RISK_LEVEL } : t))
+    : TERMS;
   return (
     <div className="absolute inset-0 z-[1200] animate-fade-in">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
@@ -37,7 +44,7 @@ export function GlossaryPanel({ open, onClose }: { open: boolean; onClose: () =>
           </button>
         </div>
         <ul className="px-4 py-3 space-y-3">
-          {TERMS.map((t) => (
+          {terms.map((t) => (
             <li key={t.term}>
               <p className="text-[11px] font-bold text-primary">{t.term}</p>
               <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{t.def}</p>

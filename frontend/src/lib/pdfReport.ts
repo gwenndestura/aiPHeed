@@ -632,7 +632,7 @@ function drawActionsSection(doc: jsPDF, scope: ReportScope, pageNum: number) {
   const colW = CONTENT_W / 2;
   setText(doc, COL.amber);
   doc.setFont(FONT_MONO, "normal").setFontSize(7);
-  doc.text("REVIEWED BY  ·  DA REGION IV-A", MARGIN_X, y + 5);
+  doc.text("FOR REVIEW BY  ·  DA REGION IV-A", MARGIN_X, y + 5);
   doc.text("PREPARED BY  ·  AIPHEED TEAM", MARGIN_X + colW, y + 5);
   setText(doc, COL.ink);
   doc.setFont(FONT_SANS, "bold").setFontSize(10);

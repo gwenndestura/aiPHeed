@@ -584,7 +584,7 @@ function ReviewDetailModal({
             <div className="bg-primary/15 rounded-lg p-2"><FileText className="h-4 w-4 text-primary" /></div>
             <div>
               <p className="text-[12px] font-semibold">{item.province} — {item.quarter} Risk Report</p>
-              <p className="text-[10px] text-muted-foreground">Quarter forecast · reviewed by DA analyst</p>
+              <p className="text-[10px] text-muted-foreground">Quarter forecast · reviewed by an administrator</p>
             </div>
           </div>
 

@@ -49,7 +49,7 @@ export interface FilterState {
   region: string;
 }
 
-/** Provinces with no forecast this quarter (withheld by DA or not enough data). */
+/** Provinces with no forecast this quarter (withheld at review or not enough data). */
 export const NO_DATA_COLOR = "#6b7280";
 
 export const RISK_COLORS: Record<RiskLevel, string> = {

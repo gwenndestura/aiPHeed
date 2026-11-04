@@ -40,6 +40,8 @@ export interface CbEvaluation {
   max_reliable_lead_r1_r7: number | null;
   leads: Record<string, CbLead>;
   objective4_lead1: Record<string, { diff: number; p_holm: number }>;
+  /** The same family with persistence scored as a probability (PLAN_PERSIST_P.md); preferred when present. */
+  objective4_lead1_persist_p?: Record<string, { diff: number; p_holm: number }>;
   seal_sha256?: string;
   seal_issue_date?: string;
   model_description?: string;
@@ -81,19 +83,34 @@ export function cbEvaluation(ev: FinalRiskEvaluation | undefined): CbEvaluation 
 /** Comparator labels of the Objective 4 family in objective4_lead1 (NEW_MODEL/NEWS_V2/runner/align_cb.py OBJ4). */
 export const CB_COMPARATORS: Record<string, string> = {
   PERSIST: "Naive persistence",
+  "PERSIST-P": "Naive persistence (latest reading, with its uncertainty)",
   "PSA-only": "Logistic regression, government (PSA) data only",
   LOGIT: "Logistic regression, combined",
   "NLP-only": "Logistic regression, news only (2021 onward)",
   "ALWAYS-HIGH": "Always High",
 };
 
-/** Comparator Brier = the served model's Brier minus the paired difference (both on the same quarters, except news-only). */
+/** True when the export carries the fair (probabilistic) persistence family. */
+export function hasPersistP(e: CbEvaluation | null | undefined): boolean {
+  return !!e?.objective4_lead1_persist_p && Object.keys(e.objective4_lead1_persist_p).length > 0;
+}
+
+/**
+ * Comparator Brier = the served model's Brier minus the paired difference (both on the same quarters, except
+ * news-only). With the fair-persistence family present, its rows come first and the 0/1 persistence comparison is
+ * added last as a secondary line (PLAN_PERSIST_P.md).
+ */
 export function cbComparatorRows(e: CbEvaluation): { name: string; diff: number; pHolm: number }[] {
-  return Object.entries(e.objective4_lead1 ?? {}).map(([k, v]) => ({
-    name: CB_COMPARATORS[k] ?? k,
+  const row = ([k, v]: [string, { diff: number; p_holm: number }], name?: string) => ({
+    name: name ?? CB_COMPARATORS[k] ?? k,
     diff: v.diff,
     pHolm: v.p_holm,
-  }));
+  });
+  if (!hasPersistP(e)) return Object.entries(e.objective4_lead1 ?? {}).map((x) => row(x));
+  const rows = Object.entries(e.objective4_lead1_persist_p ?? {}).map((x) => row(x));
+  const hard = e.objective4_lead1?.PERSIST;
+  if (hard) rows.push(row(["PERSIST", hard], "Naive persistence as a yes/no forecast (secondary; separate Holm family)"));
+  return rows;
 }
 
 export const fmt = (x: number | null | undefined, d = 3) => (x == null || Number.isNaN(x) ? "n/a" : x.toFixed(d));

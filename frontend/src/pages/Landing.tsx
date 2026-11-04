@@ -9,7 +9,7 @@ import logoLight from "@/assets/logo-light.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import { readStorage } from "@/lib/storage";
 import { useConfig, useFinalRiskEvaluation } from "@/lib/queries";
-import { type CbEvaluation, cbComparatorRows, cbEvaluation, fmt, isCbIndicator, modelName } from "@/lib/servedModel";
+import { type CbEvaluation, cbComparatorRows, cbEvaluation, fmt, hasPersistP, isCbIndicator, modelName } from "@/lib/servedModel";
 import {
   CB_ABOUT,
   CB_ABOUT_LIST,
@@ -619,7 +619,7 @@ function Accuracy({ cbServed, cb }: { cbServed: boolean; cb: CbEvaluation | null
           <div className="mt-10 lg:max-w-[70%]">
             <MetricTable
               title="Brier score against the baselines, Lead 1 (lower is better)"
-              note={`Paired on the same quarters (news-only: 2021 onward). Diff = ${modelName(cb)} minus the baseline; Holm-corrected one-sided bootstrap p. A difference is established only where the Holm p is below 0.05.`}
+              note={`Paired on the same quarters (news-only: 2021 onward). Diff = ${modelName(cb)} minus the baseline; Holm-corrected one-sided bootstrap p. A difference is established only where the Holm p is below 0.05.${hasPersistP(cb) ? " Persistence is scored as a probability (the latest SWS reading with its uncertainty), so it is compared fairly with a probability forecast; the yes/no version is shown last for reference." : ""}`}
               rows={rows}
             />
           </div>

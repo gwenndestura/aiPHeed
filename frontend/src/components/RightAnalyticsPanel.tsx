@@ -8,6 +8,7 @@ import type { Trigger, NewsArticle } from "@/lib/apiTypes";
 import { GlossaryPanel } from "./GlossaryPanel";
 import { quarterPeriodLabel } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
+import { isCbIndicator } from "@/lib/servedModel";
 import { driverCopy, isContributing, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
 import { summaryHeadline } from "@/lib/summaryHeadline";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -125,7 +126,7 @@ export function ShapNarrativeCardBody({
         </p>
       )}
 
-      <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
+      <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} cbServed={isCbIndicator(config?.indicator?.id)} />
     </div>
   );
 }

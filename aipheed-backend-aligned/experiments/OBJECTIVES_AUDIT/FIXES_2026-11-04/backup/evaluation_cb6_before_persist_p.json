@@ -1,0 +1,339 @@
+{
+ "model": "ALLBASE-CB6",
+ "target": "SWS Balance Luzon involuntary hunger > 11.3% (quarter mean of non-commissioned rounds)",
+ "decision_rule": "HIGH when P >= 0.50 (the regional probability; the province score never sets the class)",
+ "design": "MAIN MODEL: C-B6 = C-b (NEWS_V2: one LightGBM, grid selected on inner chronological folds) + PSA national rice stocks (ST1 total y/y %, ST2 NFA share y/y; stock month <= issue - 4), OBJECTIVES_AUDIT/CB6_PREREGISTRATION.md; province score = P x PSA 2023 poverty among families / max",
+ "chosen": "C-B6 adopted as the main model by team decision on 2026-11-04 (OBJECTIVES_AUDIT/ADOPTION_DECISION_CB6.md); adviser approval pending. It did NOT pass the pre-registered adoption rule (out/cb6_results.json: H7, not significantly better than C-b, p 0.13 / 0.20). C-b, the previous main model (sealed 67baec66), is kept unchanged as the reference",
+ "max_reliable_lead": 2,
+ "max_reliable_lead_r1_r7": 2,
+ "served_leads": [
+  2
+ ],
+ "algorithm3": "Algorithm 3: mean fold accuracy >= 0.75 (one quarter per fold), k = 1..8, halt at the first failing lead",
+ "leads": {
+  "1": {
+   "n": 62,
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.8064516129032258,
+    "balanced": 0.7429620563035495,
+    "precision": 0.8297872340425532,
+    "recall": 0.9069767441860465,
+    "f1": 0.8666666666666666,
+    "auc": 0.722766217870257,
+    "brier": 0.1830696125415195,
+    "TP": 39,
+    "FP": 8,
+    "FN": 4,
+    "TN": 11
+   },
+   "persistence_accuracy": 0.6612903225806451,
+   "alg3_pass": true,
+   "reliable": true,
+   "rules": {
+    "R1": {
+     "pass": true
+    },
+    "R2": {
+     "pass": true
+    },
+    "R3": {
+     "pass": true
+    },
+    "R4": {
+     "pass": true
+    },
+    "R5": {
+     "pass": true
+    },
+    "R6": {
+     "pass": true
+    },
+    "R7": {
+     "pass": true
+    }
+   },
+   "failed": [],
+   "shap_shares": {
+    "H1 Hunger (SWS)": 63.5,
+    "A1-A2 Food and headline prices": 6.1,
+    "A3 Rice": 2.3,
+    "C1 Climate (ONI)": 2.0,
+    "C2 Typhoons": 0.0,
+    "C3 Crops": 0.7,
+    "C4 Fisheries": 0.7,
+    "World prices": 21.0,
+    "N1 News": 1.4,
+    "E1 Employment": 0.0,
+    "E2 OFW remittances": 0.0,
+    "S Rice stocks (supply)": 2.3
+   },
+   "vs_REF": null
+  },
+  "2": {
+   "n": 62,
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.8064516129032258,
+    "balanced": 0.7429620563035495,
+    "precision": 0.8297872340425532,
+    "recall": 0.9069767441860465,
+    "f1": 0.8666666666666666,
+    "auc": 0.7123623011015912,
+    "brier": 0.18060545134476627,
+    "TP": 39,
+    "FP": 8,
+    "FN": 4,
+    "TN": 11
+   },
+   "persistence_accuracy": 0.6612903225806451,
+   "alg3_pass": true,
+   "reliable": true,
+   "rules": {
+    "R1": {
+     "pass": true
+    },
+    "R2": {
+     "pass": true
+    },
+    "R3": {
+     "pass": true
+    },
+    "R4": {
+     "pass": true
+    },
+    "R5": {
+     "pass": true
+    },
+    "R6": {
+     "pass": true
+    },
+    "R7": {
+     "pass": true
+    }
+   },
+   "failed": [],
+   "shap_shares": {
+    "H1 Hunger (SWS)": 63.8,
+    "A1-A2 Food and headline prices": 6.2,
+    "A3 Rice": 2.3,
+    "C1 Climate (ONI)": 2.1,
+    "C2 Typhoons": 0.0,
+    "C3 Crops": 0.8,
+    "C4 Fisheries": 0.7,
+    "World prices": 20.9,
+    "N1 News": 0.8,
+    "E1 Employment": 0.0,
+    "E2 OFW remittances": 0.0,
+    "S Rice stocks (supply)": 2.4
+   },
+   "vs_REF": null
+  },
+  "3": {
+   "n": 62,
+   "n_quarters": 62,
+   "period": "2010-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.7419354838709677,
+    "balanced": 0.6670746634026927,
+    "precision": 0.7872340425531915,
+    "recall": 0.8604651162790697,
+    "f1": 0.8222222222222222,
+    "auc": 0.6829865361077111,
+    "brier": 0.19678636287104118,
+    "TP": 37,
+    "FP": 10,
+    "FN": 6,
+    "TN": 9
+   },
+   "persistence_accuracy": 0.6612903225806451,
+   "alg3_pass": false,
+   "reliable": false,
+   "rules": {
+    "R1": {
+     "pass": true
+    },
+    "R2": {
+     "pass": false
+    },
+    "R3": {
+     "pass": false
+    },
+    "R4": {
+     "pass": true
+    },
+    "R5": {
+     "pass": false
+    },
+    "R6": {
+     "pass": true
+    },
+    "R7": {
+     "pass": false
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R5",
+    "R7"
+   ],
+   "shap_shares": null,
+   "vs_REF": null
+  }
+ },
+ "objective4_lead1": {
+  "PERSIST": {
+   "p_holm": 0.0,
+   "diff": -0.15564006487783535
+  },
+  "PSA-only": {
+   "p_holm": 0.424,
+   "diff": -0.02517029639011402
+  },
+  "LOGIT": {
+   "p_holm": 0.424,
+   "diff": -0.009761812009562035
+  },
+  "NLP-only": {
+   "p_holm": 0.0072,
+   "diff": -0.17479515283579014
+  },
+  "ALWAYS-HIGH": {
+   "p_holm": 0.04920000000000001,
+   "diff": -0.12338200036170631
+  }
+ },
+ "news_shap_share_lead1": {
+  "H1 Hunger (SWS)": 63.5,
+  "A1-A2 Food and headline prices": 6.1,
+  "A3 Rice": 2.3,
+  "C1 Climate (ONI)": 2.0,
+  "C2 Typhoons": 0.0,
+  "C3 Crops": 0.7,
+  "C4 Fisheries": 0.7,
+  "World prices": 21.0,
+  "N1 News": 1.4,
+  "E1 Employment": 0.0,
+  "E2 OFW remittances": 0.0,
+  "S Rice stocks (supply)": 2.3
+ },
+ "evidence_status": "development evidence (every scored quarter was examined during development)",
+ "price_band_cuts": [
+  0.33,
+  0.67
+ ],
+ "price_part_reliability": {
+  "source": "P0H4_LEAD12_REVIEW/out/price_warning.json",
+  "lead1_accuracy": 0.614,
+  "lead2_accuracy": 0.6,
+  "verdict": "not reliable"
+ },
+ "province_poverty": [
+  {
+   "province_code": "PH040100000",
+   "province": "Cavite",
+   "pov_families_2023": 4.3,
+   "pov_families_2023_cv": 16.4,
+   "pov_weight": 0.6232,
+   "food_pov_2023": 0.4,
+   "food_pov_2023_cv": 53.3
+  },
+  {
+   "province_code": "PH040200000",
+   "province": "Laguna",
+   "pov_families_2023": 5.4,
+   "pov_families_2023_cv": 13.3,
+   "pov_weight": 0.7826,
+   "food_pov_2023": 0.8,
+   "food_pov_2023_cv": 35.0
+  },
+  {
+   "province_code": "PH040300000",
+   "province": "Quezon",
+   "pov_families_2023": 6.9,
+   "pov_families_2023_cv": 14.4,
+   "pov_weight": 1.0,
+   "food_pov_2023": 0.5,
+   "food_pov_2023_cv": 38.5
+  },
+  {
+   "province_code": "PH040400000",
+   "province": "Rizal",
+   "pov_families_2023": 5.6,
+   "pov_families_2023_cv": 13.5,
+   "pov_weight": 0.8116,
+   "food_pov_2023": 1.5,
+   "food_pov_2023_cv": 24.5
+  },
+  {
+   "province_code": "PH040500000",
+   "province": "Batangas",
+   "pov_families_2023": 4.9,
+   "pov_families_2023_cv": 16.2,
+   "pov_weight": 0.7101,
+   "food_pov_2023": 0.8,
+   "food_pov_2023_cv": 33.9
+  }
+ ],
+ "low_precision_cv": 30.0,
+ "lucena": {
+  "value": 10.0,
+  "cv": 17.0,
+  "own": true,
+  "source": "PSA 2021 Full-Year Official Poverty Statistics, Table 2a (City of Lucena), poverty incidence among population; published to the whole per cent",
+  "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1F/FY/0041F3DF02A.px"
+ },
+ "news_flag_rule": {
+  "families": [
+   "PRICE",
+   "FOODSEC",
+   "DISASTER",
+   "AGRI",
+   "LIVELIHOOD"
+  ],
+  "window": 8,
+  "min_history": 6,
+  "z_min": 1.5,
+  "rise_min": 0.05,
+  "min_articles": 20,
+  "regional_rise_min": 0.05
+ },
+ "news_flags": {
+  "rows": 42
+ },
+ "fnri_2023": {
+  "source": "DOST-FNRI 2023 National Nutrition Survey",
+  "region": "CALABARZON",
+  "moderate_or_severe_food_insecure_pct": 19.1,
+  "ci95": [
+   17.0,
+   21.1
+  ],
+  "national_pct": 31.4,
+  "use": "face validity only: a different measure from SWS hunger, never a label"
+ },
+ "seal_sha256": "",
+ "seal_issue_date": "",
+ "seal_file": "none (C-B6 has no sealed forecast; C-b's seal is 67baec66)",
+ "plan_sha256": "2efd9677e3785f4b3469b416e34cd824d536e16450ae100ceea537044d20a38b",
+ "news_effect": {},
+ "not_input_groups": [
+  "employment",
+  "ofw_remittance"
+ ],
+ "driver_view": "relative",
+ "news_effect_text": "the NLP input (FSSI anomaly) is included and carries 1.4% of SHAP influence on average (rice stocks, not one of the five bars, carry 2.3%)",
+ "model_description": "one LightGBM (setting chosen on inner chronological folds) trained walk-forward (stacked leads) on SWS hunger since 1998 and on PSA prices, climate, production, world-price, news and national rice stock (PSA) inputs",
+ "sources_extra": "PSA rice stocks inventory (national, monthly)",
+ "model_line": "C-B6 (main model, team decision 2026-11-04): C-b's single LightGBM (setting chosen on inner folds; stacked leads, walk-forward from 1998; C-b's inputs plus national rice stocks) forecasting P(Balance Luzon SWS hunger > 11.3%). Maximum Reliable Lead Time 2 quarters under the paper's 75% rule (development accuracy Lead 1 0.806, Lead 2 0.806, Lead 3 0.742); R1-R7 pass at Leads 1-2 on development data (via one changed forecast). Not significantly better than C-b under the pre-registered rule; adviser approval pending.",
+ "sources": {
+  "cb6_fits": "6993011f83c03fe7d994c668e8014c9e9dff2abdcde27e71c2396c9b9d4601e6",
+  "cb6_results": "4ba9ffda2099646f4fb6d70c4b0f3d10642dd0b7663fb8b53ca5a4158b2f8323",
+  "ce6_features": "011509a9b10603552bc3833c0195e3bc8dc789f7b52f9a5e01a381336cc66585",
+  "table_pooled": "12ba4a10092dc43ae62daf1b418de984864e1f4e6dbea34743d2452d3bdc002c",
+  "reproduced": null
+ }
+}
