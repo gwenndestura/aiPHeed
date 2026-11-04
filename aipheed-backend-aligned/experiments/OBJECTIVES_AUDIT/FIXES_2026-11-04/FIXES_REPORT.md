@@ -213,3 +213,40 @@ Likely reasons:
 1. Balance Luzon covers all of Luzon outside Metro Manila, of which CALABARZON is one part.
 2. About half the quarter-to-quarter change in SWS readings is sampling error (FI8).
 3. The archive is about 95% Rappler, so CALABARZON shock coverage is thin (1–22 events per quarter).
+
+---
+
+## Fix 5 (owner directive): employment and OFW remittances as inputs (C-B6E)
+
+**Setup:**
+- **Plan:** `PLAN_CB6E.md`, SHA-256 0b74438c…, committed (e08b8e30) before the fit.
+- **Inputs:** C-B6 + E1 (national unemployment change) + E2 (remittance decline), exactly as C-E.
+- **Check:** C-B6 replication was exact.
+- Run: `runner/cb6e_model.py` → `out/cb6e_fits.csv`, `out/cb6e_results.json`.
+
+**Results (62 quarters):**
+
+| Model | Lead | Accuracy | Balanced | F1 | AUC | Brier | R1–R7 |
+|---|---|---|---|---|---|---|---|
+| C-B6 | 1 | **0.806** | **0.743** | **0.867** | **0.723** | **0.183** | all pass |
+| C-B6E | 1 | 0.790 | 0.717 | 0.857 | 0.698 | 0.192 | R5, R7 fail |
+| C-B6 | 2 | **0.806** | **0.743** | **0.867** | 0.712 | **0.181** | all pass |
+| C-B6E | 2 | 0.790 | 0.717 | 0.857 | **0.720** | 0.184 | R7 fails |
+
+**Paired Brier, C-B6E minus C-B6:**
+
+| | Lead 1 | Lead 2 |
+|---|---|---|
+| Diff | +0.009 (CI 0.000..+0.020) | +0.004 (p 0.86) |
+| Calls changed | 1 | 1 |
+
+**Shares and baselines:**
+- **SHAP share:** E1 3.6%, E2 1.3% on average; at the latest issue, E1 0.2% and E2 1.0%.
+- **Reliable lead (75% rule):** 2, unchanged.
+- **Holm family with PERSIST-P:** 4 of 14.
+
+**Decision (pre-registered serving rule):**
+- C-B6E fails R1–R7 (R5 and R7), so it is **not served automatically**.
+- Employment and remittances do not improve the forecast; it gets slightly worse.
+- Serving C-B6E is the owner's decision: all five driver groups would become model inputs, at the cost of failing the
+  reliability rules and slightly lower accuracy (0.790 vs 0.806).
