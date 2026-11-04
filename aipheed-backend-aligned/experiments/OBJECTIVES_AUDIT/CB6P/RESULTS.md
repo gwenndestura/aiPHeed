@@ -37,3 +37,22 @@
 4. **Provinces almost never differ:** the five provinces get different calls in only 3 of 20 quarters. The Eq. 3 label
    is driven by regional SWS hunger (SHAP 47.5%), so the forecast is still mostly regional.
 5. **Short history:** 20 labelled quarters. Persistence is hard to beat.
+
+## C-B6P2 (PREREGISTRATION_P2.md 93ec374b…): + the province's last known Eq. 3 score (S_last, y_last)
+
+**Script:** `runner/cb6p2_model.py`. The C-B6P replication is exact (1.1e-16). Leakage check passed.
+
+| Lead 1 / Lead 2 | **C-B6P2** | C-B6P | PERSIST |
+|---|---|---|---|
+| Accuracy | **0.810 / 0.750** | 0.780 / 0.720 | 0.830 / 0.780 |
+| F1 | 0.869 / 0.828 | 0.845 / 0.803 | 0.886 / 0.849 |
+| AUC-ROC | 0.787 / 0.676 | 0.783 / 0.671 | 0.780 / 0.733 |
+| Brier | 0.158 / 0.187 | 0.159 / 0.189 | 0.170 / 0.220 |
+| Algorithm 3 | **2** | 1 | 2 |
+
+- **Accuracy rises:** +0.03 at both leads. Lead 2 reaches the 75% rule, so the maximum reliable lead is now 2.
+- **Brier gain is not significant:** −0.0012 (p 0.24) and −0.0016 (p 0.14).
+- **The pre-registered acceptance therefore fails** (Brier p < 0.10 at both leads was required).
+- **Against regional C-B6:** better Brier at both leads (Holm p 0.017 and 0.032).
+- **Against PERSIST and LOGIT:** not better.
+- **Employment and OFW stay in;** SHAP shares are 0.4% and 2.3%.
