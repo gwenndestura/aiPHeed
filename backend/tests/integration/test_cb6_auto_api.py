@@ -46,12 +46,12 @@ def test_new_quarter_is_described_as_the_served_model(added):
     assert svc.indicator_for("2027-Q2")["id"] == FI.indicator()["id"] == "regional_food_insecurity_forecast"
 
 
-def test_new_quarter_is_withheld_until_approved(added):
+def test_new_quarter_is_released_automatically(added):
     r = client.get("/api/v1/provinces", params={"quarter": "2027-Q2"})
     assert r.status_code == 200
     body = r.json()
     assert body["indicator"]["id"] == "regional_food_insecurity_forecast"
-    assert len(body["data"]) == 5 and all(p["riskScore"] is None for p in body["data"])
+    assert len(body["data"]) == 5 and all(p["riskScore"] is not None and not p["withheld"] for p in body["data"])
 
 
 def test_frozen_forecast_says_so_in_its_text(added):

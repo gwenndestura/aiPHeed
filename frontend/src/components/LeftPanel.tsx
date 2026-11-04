@@ -465,7 +465,7 @@ function RejectedForecastPlaceholder({
         <span className="text-3xl text-muted-foreground/30 select-none">—</span>
         <p className="text-[11px] font-semibold text-muted-foreground">No forecast available</p>
         <p className="text-[10px] text-muted-foreground/60 leading-snug max-w-[200px]">
-          This quarter's forecast is not published: it is awaiting administrator approval or was rejected.
+          This quarter's forecast was withheld from publication by an administrator.
         </p>
       </div>
     </div>

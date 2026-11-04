@@ -65,7 +65,7 @@ export function cbNotes(e: CbEvaluation | null) {
   return [
     { t: "Forecast lead", d: `Forecasts are issued on the first day of each quarter for the quarter starting then and the next quarter, using only information published before the issue date. Under the study's 75% accuracy rule the furthest reliable lead is ${mrlt ?? "n/a"} quarter${mrlt === 1 ? "" : "s"}; under the project's stricter seven reliability rules it is ${e?.max_reliable_lead_r1_r7 ?? "n/a"}${e?.max_reliable_lead_r1_r7 ? "." : ", because accuracy in 2015-2020 was below 0.60."}` },
     { t: "Missing data", d: "A missing value is never counted as zero or as low risk. An input with no published value at the issue date is left blank." },
-    { t: "Review before publication", d: "Issued forecasts are staged and are not public until an authorized administrator approves them; a rejected forecast is withheld. Every decision is recorded with the reviewer, the reason and the time." },
+    { t: "Automatic release", d: "Each quarter's forecast is published as soon as it is issued. An authorized administrator can reject a forecast afterwards, which withholds it. Every decision is recorded with the reviewer, the reason and the time." },
   ];
 }
 
@@ -102,7 +102,7 @@ export function cbFaqs(e: CbEvaluation | null) {
     { q: "How accurate is it?", a: `In back-tests on ${l1?.n_quarters ?? ""} quarters (${l1?.period ?? ""}), accuracy was ${fmt(l1?.metrics.accuracy)} at Lead 1 against ${fmt(l1?.persistence_accuracy)} for repeating the latest reading; AUC ${fmt(l1?.metrics.auc)}. These quarters were examined during development.` },
     { q: "Why does every province have the same class?", a: "Because hunger is measured for Balance Luzon only. aiPHeed does not invent provincial hunger figures; provinces differ only in their poverty-weighted scores." },
     { q: "What happens when data is missing?", a: "The missing input is left blank, never counted as zero." },
-    { q: "How often is it updated?", a: "Once per quarter, after the source data are refreshed. Issued forecasts become public only after an authorized administrator approves them." },
+    { q: "How often is it updated?", a: "Once per quarter, after the source data are refreshed. Each forecast is published automatically as soon as it is issued." },
     { q: "Where can I get official food-security information?", a: "From the Department of Agriculture Regional Field Office IV-A, the Philippine Statistics Authority and other mandated agencies. Their websites are listed at the bottom of this page." },
   ];
 }

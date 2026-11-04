@@ -93,8 +93,8 @@ def final_risk_evaluation() -> dict:
 async def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
                           quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$"),
                           db: AsyncSession = Depends(get_db)) -> dict:
-    """Province rows: walk-forward forecasts with observed outcomes, and the issued forecasts. Rule 1: a forecast
-    withheld from the dashboard (rejected, or issued and not yet approved) is withheld here too."""
+    """Province rows: walk-forward forecasts with observed outcomes, and the issued forecasts. A forecast an
+    administrator has rejected is withheld here too, as on the dashboard."""
     from app.ml.inference import served_risk as CH1  # ch1_system or foodinsecurity_system
     if not CH1.exported():
         raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")

@@ -1,6 +1,6 @@
 # Automatic quarterly update (frozen C-B6)
 
-The system updates itself every quarter: it collects its data, scores one saved model, and stages the result for review.
+The system updates itself every quarter: it collects its data, scores one saved model, and releases the result automatically.
 It never trains, tunes or selects a model.
 
 ## What happens, and when
@@ -14,7 +14,7 @@ The scheduler runs `app.cb6_auto.job.run_daily` at 05:00 Asia/Manila every day, 
 | A source is stale | Retries daily for 7 days, then issues the forecast with that input missing and recorded. |
 | 14 days after the issue date with no forecast | Records `MISSED`. It is never back-filled. |
 
-A new forecast stays hidden from public endpoints until an administrator approves it (Rule 1).
+A new forecast is public as soon as it is written, with no approval step (owner decision 2026-11-04). An administrator can reject it afterwards.
 
 ## Files
 
@@ -49,7 +49,6 @@ A new forecast stays hidden from public endpoints until an administrator approve
 
 - **SWS release refused by the parser:** add the round to `sources/sws_area_rounds_full.csv` by hand.
 - **News scoring:** set `AIPHEED_CB6_NEWS_SCORING=1` on a larger instance, or run `python -m scripts.cb6_quarterly score-news` before the issue date. Otherwise `z_N1R` stays missing and the forecast records it as stale.
-- **Approving each forecast:** Rule 1 requires it.
 
 ## Never run in production
 

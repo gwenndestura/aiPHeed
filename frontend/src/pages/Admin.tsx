@@ -266,7 +266,7 @@ function ReviewSection() {
   const { data: quartersRes } = useQuarters("nowcast");
   const years = useMemo(() => {
     // The review queue covers nowcast quarters; the E20 forecast is not reviewed here.
-    const set = new Set((quartersRes?.quarters ?? []).filter((q) => q.state !== "forecast").map((q) => q.year));
+    const set = new Set((quartersRes?.quarters ?? []).map((q) => q.year)); // forecast years too: they hold the items awaiting review
     return Array.from(set).sort((a, b) => b - a);
   }, [quartersRes]);
   useEffect(() => {
@@ -553,11 +553,11 @@ function ReviewDetailModal({
   const chartFs = compact ? 12 : 10;
 
   // Real municipality / city scores for this province-quarter.
-  const { data: muniRes } = useMunicipalities(item.provinceId, item.quarter);
+  const { data: muniRes } = useMunicipalities(item.provinceId, item.quarter, true);
   const muniData = (muniRes?.data ?? []).slice().sort((a, b) => (b.riskIndex ?? 0) - (a.riskIndex ?? 0));
 
   // Real SHAP driver groups for this province-quarter.
-  const { data: explain } = useExplainability("province", item.provinceId, item.quarter);
+  const { data: explain } = useExplainability("province", item.provinceId, item.quarter, true);
   const triggers: Trigger[] = explain?.triggers ?? [];
 
   return (

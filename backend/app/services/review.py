@@ -295,19 +295,9 @@ async def list_rejections(db: AsyncSession, quarter: str | None = None) -> list[
 
 
 async def rejected_pairs(db: AsyncSession, quarter: str | None = None) -> set[tuple[str, str]]:
-    """(province_id, quarter) pairs currently withheld. In the food-insecurity mode (AIPHEED_MAP_MODEL=foodinsecurity)
-    also every issued forecast no administrator has approved (Rule 1: STAGED until approved)."""
-    pairs = {(r.province_id, r.quarter) for r in await list_rejections(db, quarter)}
-    from app.ml.inference import foodinsecurity_system as FI
-
-    if FI.active():
-        # Approved = PUBLISHED or ARCHIVED: an archived forecast was approved and later superseded, not unapproved.
-        # (Both issued leads, e.g. 2026-Q4 and 2027-Q1, come from one issue date; approving the later one archives
-        # the earlier, which must stay public.)
-        q = select(ReviewRecord.province_id, ReviewRecord.quarter).where(ReviewRecord.status.in_((PUBLISHED, ARCHIVED)))
-        published = {(p, rq) for p, rq in (await db.execute(q)).all()}
-        pairs |= FI.unapproved_pairs(published, quarter)
-    return pairs
+    """(province_id, quarter) pairs an administrator has rejected. A forecast is public as soon as it is issued (owner
+    decision 2026-11-04: automatic release, no approval step); a rejection afterwards withholds it."""
+    return {(r.province_id, r.quarter) for r in await list_rejections(db, quarter)}
 
 
 async def is_rejected(db: AsyncSession, province_id: str, quarter: str) -> ReviewRecord | None:

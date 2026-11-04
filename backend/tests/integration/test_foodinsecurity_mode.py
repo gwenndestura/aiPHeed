@@ -99,10 +99,7 @@ def test_max_reliable_lead_is_two_under_the_75_rule_and_zero_under_r1_r7(fi):
     assert ev["leads"]["3"]["metrics"]["accuracy"] < 0.75 <= ev["leads"]["2"]["metrics"]["accuracy"]
     assert ev["sources"]["reproduced"] is True
     h = _get("/api/v1/final/risk/rows")
-    # 2026-11-04 audit D-03: an unapproved issued forecast no longer appears on this public route, so the Lead-2 cap is
-    # checked on the export; test_audit_fixes_20261104.py checks that approved rows are returned.
-    assert h["maxReliableLead"] == 2 and max(int(r["lead"]) for r in FI.rows().values()) == 2
-    assert all(FI.kind(r) != "forecast" for r in h["rows"])
+    assert h["maxReliableLead"] == 2 and max(int(r["lead"]) for r in h["rows"]) == 2
 
 
 def test_sealed_lead2_forecast_is_the_served_one(fi):
@@ -322,24 +319,16 @@ def test_reports_describe_the_food_insecurity_forecast(fi):
 
 
 # ---------------------------------------------------------------------------------------------- Rule 1
-def test_issued_forecasts_are_staged_until_approved(fi):
+def test_issued_forecasts_are_public_without_approval(fi):
+    """Owner decision 2026-11-04: automatic release, no approval step."""
     for q in ("2026-Q4", "2027-Q1"):
         d = _get("/api/v1/provinces", quarter=q)
-        assert all(x["withheld"] and x["riskScore"] is None for x in d["data"])
-    r = client.get("/api/v1/explainability", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"})
-    assert r.status_code == 404 and "STAGED" in r.json()["error"]["message"]
-    r = client.get("/api/v1/forecast", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"})
-    assert r.status_code == 404
-    assert not any(x["withheld"] for x in _get("/api/v1/provinces", quarter="2026-Q3")["data"])   # past: not gated
+        assert all(not x["withheld"] and x["riskScore"] is not None for x in d["data"])
+    assert client.get("/api/v1/explainability", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"}).status_code == 200
+    assert client.get("/api/v1/forecast", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"}).status_code == 200
 
 
-def test_unapproved_pairs_exclude_approved_forecasts(fi):
-    every = FI.unapproved_pairs(set())
-    assert every == {(s, q) for s in SLUGS for q in ("2026-Q4", "2027-Q1")}
-    assert FI.unapproved_pairs({("quezon", "2027-Q1")}, "2027-Q1") == {(s, "2027-Q1") for s in SLUGS if s != "quezon"}
-
-
-async def test_an_approved_forecast_is_public_and_flags_high_for_confirmation(fi, client, test_db):
+async def test_a_released_forecast_flags_high_and_a_rejection_withholds_it(fi, client, test_db):
     from sqlalchemy import select
 
     from app.db.models import ReviewRecord
@@ -347,18 +336,19 @@ async def test_an_approved_forecast_is_public_and_flags_high_for_confirmation(fi
 
     await rv.ensure_rows(test_db, "2027-Q1")
     rows = (await test_db.execute(select(ReviewRecord).where(ReviewRecord.quarter == "2027-Q1"))).scalars().all()
-    assert len(rows) == 5 and {r.status for r in rows} == {rv.STAGED}
-    assert len(await rv.rejected_pairs(test_db, "2027-Q1")) == 5
-    for r in rows:
-        r.status = rv.PUBLISHED
-    await test_db.commit()
-    assert await rv.rejected_pairs(test_db, "2027-Q1") == set()
+    assert len(rows) == 5 and await rv.rejected_pairs(test_db, "2027-Q1") == set()
     d = (await client.get("/api/v1/provinces", params={"quarter": "2027-Q1"})).json()
     assert all(not x["withheld"] and x["riskScore"] is not None for x in d["data"])
     assert {x["riskLevel"] for x in d["data"]} == {"high"}
     f = (await client.get("/api/v1/forecast", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"})).json()
     assert "flagged for human confirmation" in f["confidenceStatement"]
     assert "no notification is sent to DSWD" in f["confidenceStatement"]
+    q = next(r for r in rows if r.province_id == "quezon")
+    q.status, q.rejection_reason = rv.PENDING, "audit test"
+    await test_db.commit()
+    assert await rv.rejected_pairs(test_db, "2027-Q1") == {("quezon", "2027-Q1")}
+    d = (await client.get("/api/v1/provinces", params={"quarter": "2027-Q1"})).json()
+    assert next(x for x in d["data"] if x["id"] == "quezon")["withheld"]
 
 
 # ---------------------------------------------------------------------------------------------- Rule 7

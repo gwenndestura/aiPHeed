@@ -15,7 +15,7 @@ GET /api/v1/search
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_db
@@ -30,6 +30,7 @@ from app.schemas.public import (
 from app.services import dashboard as svc
 from app.services import reference as ref
 from app.services import review as rv
+from app.services.security import is_admin_request
 from app.services import search as search_svc
 
 router = APIRouter()
@@ -171,6 +172,7 @@ async def get_ranking(
     response_model=MunicipalitiesResponse,
 )
 async def get_municipalities(
+    request: Request,
     province_id: str,
     quarter: str | None = Query(None),
     db: AsyncSession = Depends(get_db),
@@ -186,6 +188,8 @@ async def get_municipalities(
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
     q = svc.resolve_quarter(quarter)
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
+    if withheld and await is_admin_request(request, db):           # the reviewer sees what they are asked to approve
+        withheld = frozenset()
     return MunicipalitiesResponse(
         provinceId=slug,
         quarter=q,

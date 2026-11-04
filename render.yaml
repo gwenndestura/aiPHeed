@@ -24,7 +24,7 @@ services:
         value: thesis
       - key: AIPHEED_STRICT_MODEL
         value: "1"
-      # Serve C-B6 and let it update itself each quarter (frozen weights, no retraining; output stays STAGED for review).
+      # Serve C-B6 and let it update itself each quarter (frozen weights, no retraining; each forecast is released automatically).
       - key: AIPHEED_MAP_MODEL
         value: foodinsecurity
       - key: AIPHEED_ENABLE_SCHEDULER

@@ -1,5 +1,5 @@
 """
-Regression tests for the 2026-11-04 audit defects (docs/audit_2026-11-04): D-03 Rule 1 on /final/risk/rows, D-05 the
+Regression tests for the 2026-11-04 audit defects (docs/audit_2026-11-04): D-03 rejected forecasts withheld on /final/risk/rows, automatic release of issued forecasts, D-05 the
 in-progress quarter, D-06 driver evidence, D-09 /config horizons, D-12 /assessments, D-13 /report/data. None of these may
 change a forecast: the last test pins the served probabilities.
 """
@@ -13,6 +13,15 @@ from app.ml.inference import foodinsecurity_system as FI
 
 client = TestClient(app, raise_server_exceptions=False)
 QUEZON = "PH040300000"
+SLUGS = ("cavite", "laguna", "quezon", "rizal", "batangas")
+
+
+def _reject_all(monkeypatch, quarter="2027-Q1"):
+    """An administrator has rejected the quarter's forecast for every province."""
+    async def rejected(db, q=None):
+        return {(s, quarter) for s in SLUGS}
+
+    monkeypatch.setattr("app.services.review.rejected_pairs", rejected)
 
 
 def _clear_caches():
@@ -42,24 +51,30 @@ def _rows(**params):
     return r.json()["rows"]
 
 
-def test_unapproved_forecast_is_withheld_from_final_rows(fi):
-    """The review table is empty here, so the issued 2027-Q1 forecast has no approval."""
+def test_issued_forecast_is_released_without_approval(fi):
+    """Owner decision 2026-11-04: the review table is empty and the forecast is public anyway."""
+    assert {float(r["probability"]) for r in _rows(quarter="2027-Q1")} == {0.955803}
+    assert len(_rows(kind="forecast")) == 5
+    d = client.get("/api/v1/provinces", params={"quarter": "2027-Q1"}).json()["data"]
+    assert all(not x["withheld"] and x["riskScore"] is not None for x in d)
+    assert client.get("/api/v1/explainability", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"}).status_code == 200
+    data = client.get("/api/v1/provinces/quezon/municipalities", params={"quarter": "2027-Q1"}).json()["data"]
+    assert len(data) == 41 and all(x["riskIndex"] is not None for x in data)
+
+
+def test_rejected_forecast_is_withheld_from_final_rows(fi, monkeypatch):
+    _reject_all(monkeypatch)
     assert _rows(quarter="2027-Q1") == []
-    assert _rows(kind="forecast") == []
-    assert "2027-Q1" not in {r["quarter"] for r in _rows()}
-    assert len(_rows(quarter="2026-Q3")) == 5                      # walk-forward quarters are not gated
+    assert len(_rows(quarter="2026-Q3")) == 5
 
 
-def test_approved_forecast_is_returned(fi, monkeypatch):
-    async def nothing_held(db, quarter=None):
-        return set()
-
-    monkeypatch.setattr("app.services.review.rejected_pairs", nothing_held)
+def test_final_rows_without_rejection_are_returned(fi):
     rows = _rows(quarter="2027-Q1")
     assert len(rows) == 5 and {float(r["probability"]) for r in rows} == {0.955803}
 
 
-def test_unapproved_forecast_is_withheld_from_lgus(fi):
+def test_rejected_forecast_is_withheld_from_lgus(fi, monkeypatch):
+    _reject_all(monkeypatch)
     r = client.get("/api/v1/provinces/quezon/municipalities", params={"quarter": "2027-Q1"})
     assert r.status_code == 200
     data = r.json().get("data", r.json().get("municipalities"))
@@ -74,21 +89,21 @@ def test_past_quarter_lgus_are_not_withheld(fi):
     assert len(data) == 41 and all(x["riskIndex"] is not None for x in data)
 
 
-def test_final_lgus_hide_unapproved_values(fi):
+def test_final_lgus_hide_rejected_values(fi, monkeypatch):
+    from app.services import dashboard as D
+
+    _reject_all(monkeypatch, D.latest_quarter())
     rows = client.get("/api/v1/final/lgus").json()["rows"]
     assert len(rows) == 142 and all(r["priorityScore"] is None and r["priorityLevel"] is None for r in rows)
 
 
-def test_final_lgus_show_approved_values(fi, monkeypatch):
-    async def nothing_held(db, quarter=None):
-        return set()
-
-    monkeypatch.setattr("app.services.review.rejected_pairs", nothing_held)
+def test_final_lgus_show_released_values(fi):
     rows = client.get("/api/v1/final/lgus").json()["rows"]
     assert len(rows) == 142 and all(r["priorityScore"] is not None for r in rows)
 
 
-def test_region_pdf_of_a_fully_withheld_quarter_is_refused_cleanly(fi):
+def test_region_pdf_of_a_fully_withheld_quarter_is_refused_cleanly(fi, monkeypatch):
+    _reject_all(monkeypatch)
     r = client.get("/api/v1/report", params={"quarter": "2027-Q1"})
     assert r.status_code == 404 and r.json()["error"]["code"] == "forecast_withheld"
 
@@ -158,3 +173,45 @@ def test_fixes_change_no_forecast(fi):
     assert float(FI.row(QUEZON, "2027-Q1")["probability"]) == 0.955803
     assert float(FI.row("PH040100000", "2027-Q1")["score"]) == pytest.approx(0.595646, abs=1e-6)
     assert FI.row(QUEZON, "2026-Q4")["class"] == "HIGH" and FI.kind(FI.row(QUEZON, "2026-Q4")) == "retrospective"
+
+
+# ---------------------------------------------------------------------------------------------- second audit pass
+@pytest.mark.parametrize("path", ["/api/v1/forecast/timeseries?id=cavite&to=x", "/api/v1/forecast/timeseries?id=cavite&from=-1",
+                                  "/api/v1/report/data?to=x", "/api/v1/report/data?from=%27%20OR%201=1--"])
+def test_bad_quarter_range_is_rejected_not_a_crash(path):
+    assert client.get(path).status_code == 422
+
+
+def test_security_headers_on_every_response():
+    h = client.get("/api/v1/health").headers
+    assert h["x-frame-options"] == "DENY" and h["x-content-type-options"] == "nosniff" and h["referrer-policy"] == "no-referrer"
+    assert client.get("/api/v1/nope").headers["x-content-type-options"] == "nosniff"
+
+
+def test_forged_token_keeps_the_public_withheld_view(fi, monkeypatch):
+    _reject_all(monkeypatch)
+    r = client.get("/api/v1/provinces/cavite/municipalities", params={"quarter": "2027-Q1"},
+                   headers={"Authorization": "Bearer abc.def.ghi"})
+    assert r.status_code == 200 and all(x["riskIndex"] is None for x in r.json()["data"])
+    assert client.get("/api/v1/explainability", params={"scope": "province", "id": "cavite", "quarter": "2027-Q1"},
+                      headers={"Authorization": "Bearer abc.def.ghi"}).status_code == 404
+
+
+def test_signed_in_admin_still_sees_a_rejected_forecast(fi, monkeypatch):
+    _reject_all(monkeypatch)
+
+    async def admin(request, db):
+        return True
+
+    monkeypatch.setattr("app.api.v1.dashboard.is_admin_request", admin)
+    monkeypatch.setattr("app.services.security.is_admin_request", admin)
+    data = client.get("/api/v1/provinces/cavite/municipalities", params={"quarter": "2027-Q1"}).json()["data"]
+    assert len(data) == 23 and all(x["riskIndex"] is not None for x in data)
+    assert client.get("/api/v1/explainability", params={"scope": "province", "id": "cavite", "quarter": "2027-Q1"}).status_code == 200
+
+
+def test_quarter_without_a_published_result_is_not_called_observed(fi):
+    from app.services import dashboard as D
+
+    states = {r["id"]: r["state"] for r in D._ch1_timeline()}
+    assert states["2026-Q4"] == "forecast" and states["2026-Q3"] == "actual" and states["2027-Q1"] == "forecast"

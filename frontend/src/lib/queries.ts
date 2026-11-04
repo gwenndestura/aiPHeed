@@ -117,11 +117,12 @@ export function useProvinces(quarter?: string, horizon: Horizon = "nowcast", ena
   });
 }
 
-export function useMunicipalities(provinceId: string | null, quarter?: string) {
+// `reviewer`: send the admin session, so a staged forecast shows its values on the review screen and nowhere else.
+export function useMunicipalities(provinceId: string | null, quarter?: string, reviewer = false) {
   return useQuery({
-    queryKey: ["municipalities", provinceId, quarter],
+    queryKey: ["municipalities", provinceId, quarter, reviewer],
     queryFn: () =>
-      api.get<MunicipalitiesResponse>(`/api/v1/provinces/${provinceId}/municipalities`, { quarter }, { auth: false }),
+      api.get<MunicipalitiesResponse>(`/api/v1/provinces/${provinceId}/municipalities`, { quarter }, { auth: reviewer }),
     enabled: !!provinceId,
     staleTime: HOUR,
   });
@@ -153,10 +154,10 @@ export function useTimeseries(
   });
 }
 
-export function useExplainability(scope: Scope, id: string, quarter?: string) {
+export function useExplainability(scope: Scope, id: string, quarter?: string, reviewer = false) {
   return useQuery({
-    queryKey: ["explainability", scope, id, quarter],
-    queryFn: () => api.get<ExplainabilityResponse>("/api/v1/explainability", { scope, id, quarter }, { auth: false }),
+    queryKey: ["explainability", scope, id, quarter, reviewer],
+    queryFn: () => api.get<ExplainabilityResponse>("/api/v1/explainability", { scope, id, quarter }, { auth: reviewer }),
     enabled: !!id,
     staleTime: HOUR,
     retry: false, // as useForecast: a 404 (forecast_withheld for a staged quarter) is an answer, not a blip

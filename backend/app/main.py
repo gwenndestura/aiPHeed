@@ -90,6 +90,16 @@ app = FastAPI(
     openapi_url="/openapi.json" if settings.ENABLE_API_DOCS else None,
 )
 
+@app.middleware("http")
+async def security_headers(request, call_next):
+    """Basic browser protections on every API response. This API serves JSON and PDF only, so it is never framed."""
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    return response
+
+
 # CORS: local dev servers + the deployed Vercel frontend. The prod origin is
 # required or the browser blocks every dashboard request to this API.
 app.add_middleware(

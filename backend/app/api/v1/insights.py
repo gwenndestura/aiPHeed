@@ -9,7 +9,7 @@ GET /api/v1/news?scope=&id=&quarter=&page=&pageSize=
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_db
@@ -267,22 +267,26 @@ async def get_index(
     return IndexResponse(scope=scope, id=id.lower(), name=name, **out)
 
 
-async def _staged_gate(db: AsyncSession, code: str | None, quarter: str) -> None:
-    """Food-insecurity mode only (Rule 1): an issued forecast no administrator has approved is withheld here as on the
-    map; the region is withheld while every province is. Other modes are unchanged."""
+async def _staged_gate(db: AsyncSession, code: str | None, quarter: str, request: Request | None = None) -> None:
+    """Food-insecurity mode only: a forecast an administrator has rejected is withheld here as on the map; the region is
+    withheld while every province is. Other modes are unchanged."""
     from app.ml.inference import foodinsecurity_system as FI
     from app.services import review as rv
 
     if not FI.active():
         return
+    from app.services.security import is_admin_request
+
+    if request is not None and await is_admin_request(request, db):  # the reviewer sees what they are asked to approve
+        return
     held = {pid for pid, rq in await rv.rejected_pairs(db, quarter)}
     if (code is None and held >= set(ref.PROVINCES)) or (code is not None and ref.province_slug(code) in held):
-        raise svc.ForecastWithheld(f"The {quarter} forecast is STAGED: it is not shown until an administrator approves "
-                                   "it.")
+        raise svc.ForecastWithheld(f"The {quarter} forecast was withheld from publication by an administrator.")
 
 
 @router.get("/explainability", response_model=ExplainabilityResponse)
 async def get_explainability(
+    request: Request,
     scope: str = Query("province", pattern="^(region|province|municipality)$"),
     id: str = Query(..., description="calabarzon | quezon | quezon-infanta"),
     quarter: str | None = Query(None),
@@ -298,7 +302,7 @@ async def get_explainability(
     """
     q = svc.resolve_quarter(quarter)
     code, name = _resolve_province(scope, id)
-    await _staged_gate(db, code, q)
+    await _staged_gate(db, code, q, request)
 
     if code is None:
         result = svc.explainability_region(q)

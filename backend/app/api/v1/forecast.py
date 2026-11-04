@@ -191,8 +191,8 @@ def _backtest_quarters() -> set[str]:
 async def get_timeseries(
     scope: str = Query("province", pattern="^(region|province|municipality)$"),
     id: str = Query(..., description="calabarzon | quezon | quezon-infanta"),
-    from_: str | None = Query(None, alias="from"),
-    to: str | None = Query(None),
+    from_: str | None = Query(None, alias="from", pattern=r"^\d{4}-Q[1-4]$"),
+    to: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$"),
     horizon: str = Query(svc.DEFAULT_HORIZON, pattern="^(nowcast|forecast)$"),
     db: AsyncSession = Depends(get_db),
 ) -> TimeseriesResponse:

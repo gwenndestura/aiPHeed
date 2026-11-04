@@ -19,7 +19,8 @@ Province design (FOOD_INSECURITY_SYSTEM/PLAN.md revision 2):
 LGUs: 0.6 x PSA 2021 poverty + 0.4 x density within the province (Lucena: its own PSA Table 2a value), times the
 province score; colour = the regional class.
 
-Rule 1: an issued forecast stays STAGED (withheld from the public endpoints) until an administrator approves it.
+Rule 1 (owner decision 2026-11-04): an issued forecast is public at once, with no approval step; an administrator can
+reject it afterwards, which withholds it.
 Rule 7: a HIGH forecast and a provincial news flag on an issued forecast are staged as alert candidates for human
 confirmation; nothing notifies DSWD or any agency automatically.
 
@@ -757,20 +758,6 @@ def method_rows() -> tuple[list[str], list[list[str]]]:
 # ---------------------------------------------------------------------------------------------- Rules 1 and 7
 def forecast_quarters(quarter: str | None = None) -> list[str]:
     return sorted({q for (_, q), r in rows().items() if kind(r) == "forecast" and (quarter is None or q == quarter)})
-
-
-def unapproved_pairs(published: set[tuple[str, str]], quarter: str | None = None) -> set[tuple[str, str]]:
-    """Rule 1: (province_id, quarter) of every issued forecast that no administrator has approved (PUBLISHED review
-    record). They are withheld from the public endpoints like a rejection; walk-forward quarters are not gated."""
-    from app.services import reference as ref
-
-    out = set()
-    for (code, q), r in rows().items():
-        if kind(r) == "forecast" and (quarter is None or q == quarter):
-            pid = ref.CODE_TO_SLUG.get(code)
-            if pid and (pid, q) not in published:
-                out.add((pid, q))
-    return out
 
 
 REGION_CODE = "PH040000000"

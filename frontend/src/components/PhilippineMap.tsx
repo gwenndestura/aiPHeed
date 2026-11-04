@@ -809,8 +809,7 @@ export function PhilippineMap({
         attribution: BASEMAP_ATTRIBUTION,
       }) as unknown as L.GridLayer;
 
-    let tile = makeBasemap().addTo(map);
-    tile.on("tileerror", () => {
+    const warnBasemap = () => {
       if ((map as any).__basemapWarned) return;
       (map as any).__basemapWarned = true;
       console.warn(
@@ -818,11 +817,29 @@ export function PhilippineMap({
           "Province and municipality outlines still render on the themed background. " +
           "See docs/basemap.md to provision the .pmtiles file for this deployment.",
       );
-    });
+    };
+
+    // A host without the file answers with its index page, which the tile library reports once per tile as an error, so
+    // the first bytes are checked before any tile layer exists.
+    let tile: L.GridLayer | null = null;
+    let tilesReady = false;
+    const showTiles = () => {
+      if (tile) map.removeLayer(tile);
+      tile = makeBasemap().addTo(map);
+      tile.on("tileerror", warnBasemap);
+    };
+    fetch(PMTILES_URL, { headers: { Range: "bytes=0-6" } })
+      .then((r) => (r.ok ? r.text() : ""))
+      .then((head) => {
+        if (!head.startsWith("PMTiles")) return warnBasemap();
+        if (!map.getContainer().isConnected) return;
+        tilesReady = true;
+        showTiles();
+      })
+      .catch(warnBasemap);
 
     const onTheme = () => {
-      map.removeLayer(tile);
-      tile = makeBasemap().addTo(map);
+      if (tilesReady) showTiles();
       applyBg();
     };
     window.addEventListener("aipheed:theme", onTheme);

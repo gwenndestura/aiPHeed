@@ -262,6 +262,17 @@ async def set_password(db: AsyncSession, user: AdminUser, new_password: str) -> 
     await end_all_sessions(db, user)
 
 
+async def is_admin_request(request: Request, db: AsyncSession) -> bool:
+    """True for a valid admin session, False otherwise, never an error: public routes use it so the reviewer can see a
+    staged forecast before approving it while everyone else keeps the withheld view."""
+    if not request.headers.get("Authorization"):
+        return False
+    try:
+        return (await current_user(request, db)).role == "admin"
+    except (AuthError, ServerMisconfigured):
+        return False
+
+
 async def require_admin(user: AdminUser = Depends(current_user)) -> AdminUser:
     """Gate for /api/v1/admin/**. 401 without a token, 403 with the wrong role."""
     if user.role != "admin":

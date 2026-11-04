@@ -58,9 +58,8 @@ async def get_report(
     """
     q = svc.resolve_quarter(quarter)
     withheld = frozenset(pid for pid, rq in await rv.rejected_pairs(db, q))
-    if scope == "region" and withheld >= set(ref.PROVINCES):       # nothing is public: no table to draw (Rule 1)
-        raise svc.ForecastWithheld(f"The {q} forecast is withheld from publication: it is not shown until an "
-                                   "administrator approves it.")
+    if scope == "region" and withheld >= set(ref.PROVINCES):       # nothing is public: no table to draw
+        raise svc.ForecastWithheld(f"The {q} forecast was withheld from publication by an administrator.")
 
     if scope == "region":
         pdf = rpt.build_region_report(q, withheld)
@@ -85,8 +84,8 @@ async def get_report_data(
     type: str = Query("trend", pattern="^(trend|shap)$"),
     scope: str = Query("region", pattern="^(region|province)$"),
     id: str | None = Query(None),
-    from_: str | None = Query(None, alias="from"),
-    to: str | None = Query(None),
+    from_: str | None = Query(None, alias="from", pattern=r"^\d{4}-Q[1-4]$"),
+    to: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$"),
     municipality: str | None = Query(None),
     db: AsyncSession = Depends(get_db),
 ):

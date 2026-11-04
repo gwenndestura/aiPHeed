@@ -376,6 +376,9 @@ def _ch1_timeline() -> list[dict]:
         r = {"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn]}
         if q in kinds:
             r["state"] = "forecast" if kinds[q] == "forecast" else "actual"
+            pending = getattr(CH1.engine(), "outcome_pending", None)     # no result published yet: not an observed quarter
+            if pending and any(pending(x) for (_, qq), x in CH1.rows().items() if qq == q):
+                r["state"] = "forecast"
         else:
             r["state"], r["reason"] = "unavailable", (f"No Chapter I forecast exists for {q}. This is missing data, "
                                                        "not a low score.")

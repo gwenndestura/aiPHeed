@@ -262,7 +262,7 @@ def test_simulated_2027_01_01_issue_scores_frozen_model_and_never_trains(state, 
     export_before = export.read_bytes()
     calls: list = []
     r = J.run_due("2027-01-01T05:00:00+08:00", fetchers=_fetchers(calls), news_fn=no_news)
-    assert r["status"] == "FORECAST_STAGED", r
+    assert r["status"] == "FORECAST_RELEASED", r
     assert r["target_quarter"] == "2027-Q2" and set(r["p_high"]) == {"2027-Q1", "2027-Q2"}
     assert r["stale"] == ["news_n1r_quarter_t"]
     assert calls                                                # the sources really were collected
@@ -287,7 +287,7 @@ def test_second_run_same_quarter_changes_nothing(state):
     from app.cb6_auto import job as J
 
     r = J.run_due("2027-01-01T05:00:00+08:00", fetchers=_fetchers([]), news_fn=no_news)
-    assert r["status"] == "FORECAST_STAGED"
+    assert r["status"] == "FORECAST_RELEASED"
     a = (state / "served" / "rows.csv").read_bytes()
     r2 = J.run_due("2027-01-02T05:00:00+08:00", fetchers=_fetchers([]))
     assert r2["status"] == "NOTHING_DUE" and (state / "served" / "rows.csv").read_bytes() == a and len(J.ledger()) == 1
@@ -301,7 +301,7 @@ def test_source_down_waits_then_issues_with_it_recorded_stale(state):
     assert r["status"] == "WAITING" and "cpi_food_month2" in r["blocking"]
     assert not J.ledger()
     r = J.run_due("2027-01-09T05:00:00+08:00", fetchers=only_sws, news_fn=no_news)
-    assert r["status"] == "FORECAST_STAGED" and "cpi_food_month2" in r["stale"]
+    assert r["status"] == "FORECAST_RELEASED" and "cpi_food_month2" in r["stale"]
     f = next(x for x in J.ledger()[0]["forecasts"] if x["lead"] == 2)
     assert f["inputs"]["R_food_yoy"] is None and f["inputs"]["ONI_last"] is None        # missing stays missing
 
@@ -328,7 +328,7 @@ def test_unparsable_sws_release_waits_then_goes_out_flagged(state):
     r = J.run_due("2027-01-02T05:00:00+08:00", fetchers=fs, news_fn=no_news)
     assert r["status"] == "WAITING" and r["needs_human"] == odd
     r = J.run_due("2027-01-08T05:00:00+08:00", fetchers=fs, news_fn=no_news)
-    assert r["status"] == "FORECAST_STAGED" and r["needs_human"] == odd
+    assert r["status"] == "FORECAST_RELEASED" and r["needs_human"] == odd
 
 
 def test_missed_window_is_recorded_and_never_backfilled(state):
@@ -337,7 +337,7 @@ def test_missed_window_is_recorded_and_never_backfilled(state):
     r = J.run_due("2027-01-20T05:00:00+08:00", fetchers=_fetchers([]))
     assert r["status"] == "MISSED" and not J.ledger()
     r = J.run_due("2027-04-01T05:00:00+08:00", fetchers=_fetchers([]), news_fn=no_news)
-    assert r["status"] in ("WAITING", "FORECAST_STAGED")
+    assert r["status"] in ("WAITING", "FORECAST_RELEASED")
     assert all(e["issue_date"] != "2027-01-01" for e in J.ledger())
 
 
@@ -363,7 +363,7 @@ def test_restart_keeps_stored_forecasts(state):
     from app.cb6_auto import job as J
 
     r = J.run_due("2027-01-01T05:00:00+08:00", fetchers=_fetchers([]), news_fn=no_news)
-    assert r["status"] == "FORECAST_STAGED"
+    assert r["status"] == "FORECAST_RELEASED"
     a = (state / "served" / "rows.csv").read_bytes()
     J.ensure_state()
     assert (state / "served" / "rows.csv").read_bytes() == a

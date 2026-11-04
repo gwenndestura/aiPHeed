@@ -5,12 +5,12 @@ The automatic quarterly update. run_daily() is safe to run any number of times; 
 
   every day      news collection (and scoring, when enabled)
   issue date     (first day of a quarter) collect every source, build the origin's input row with the unchanged as-of rules,
-                 score the FROZEN booster, append the forecast to the served rows, stage it for administrator review
+                 score the FROZEN booster, append the forecast to the served rows, which releases it
   retries        a stale source is retried daily for RETRY_STALE_DAYS, then the forecast goes out with the source recorded as
                  stale and its inputs missing; after CATCH_UP_DAYS an issue with no forecast is recorded MISSED, never back-filled
 
-A forecast once written is never rewritten. Rule 1: a new forecast stays withheld from public endpoints until an administrator
-approves it (foodinsecurity_system.unapproved_pairs reads the served rows, so this holds even if staging itself fails).
+A forecast once written is never rewritten. Rule 1 (owner decision 2026-11-04): a new forecast is public as soon as it is
+written, with no approval step; an administrator can reject it afterwards.
 """
 from __future__ import annotations
 
@@ -210,7 +210,7 @@ def append_served(rows_path: Path, new: list[dict]) -> None:
 
 
 def stage(quarter: str) -> dict:
-    """Seed the review rows and alert candidates of a new forecast (Rule 1 and Rule 7). Own engine: this runs on the
+    """Seed the review rows (for a later rejection) and alert candidates of a new forecast (Rule 7). Own engine: this runs on the
     scheduler's thread, outside the web server's event loop."""
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
     from sqlalchemy.pool import NullPool
@@ -257,10 +257,29 @@ def _retry_staging(entry: dict) -> None:
     try:
         res = stage(entry["served_quarter"])
         marker.write_text(json.dumps(res), encoding="utf-8")
-    except Exception as e:  # noqa: BLE001  (the forecast stays withheld by the Rule 1 gate; retried tomorrow)
+    except Exception as e:  # noqa: BLE001  (the forecast is already public; retried tomorrow)
         logger.exception("cb6 update: staging failed for %s", entry["served_quarter"])
         _log({"status": "STAGING_FAILED", "issue_date": entry["issue_date"], "error": f"{type(e).__name__}: {e}"[:300],
               "at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+
+
+def _stage_exported_forecasts() -> None:
+    """Forecasts already in the served export when the job first runs (2026-10-01) get their review rows and alert candidates
+    once, like the ones the job issues. A failure is logged and retried at the next run."""
+    from app.ml.inference import foodinsecurity_system as FI
+
+    if not FI.active():
+        return
+    for q in FI.forecast_quarters():
+        marker = C.state_dir() / f"staged_export_{q}.ok"
+        if marker.exists():
+            continue
+        try:
+            marker.write_text(json.dumps(stage(q)), encoding="utf-8")
+        except Exception as e:  # noqa: BLE001  (the forecast is already public)
+            logger.exception("cb6 update: staging failed for %s", q)
+            _log({"status": "STAGING_FAILED", "issue_date": q, "error": f"{type(e).__name__}: {e}"[:300],
+                  "at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
 
 
 def run_due(now: pd.Timestamp | None = None, fetchers: dict | None = None, news_fn=None) -> dict:
@@ -272,6 +291,7 @@ def run_due(now: pd.Timestamp | None = None, fetchers: dict | None = None, news_
         ensure_state()
     except NotConfigured as e:
         return {"status": "NOT_CONFIGURED", "error": str(e), **stamp}
+    _stage_exported_forecasts()
     iss = quarter_start(now)
     if iss < C.FIRST_AUTO_ISSUE:
         return {"status": "NOTHING_DUE", "reason": f"the first automatic issue is {C.FIRST_AUTO_ISSUE}", **stamp}
@@ -332,7 +352,7 @@ def run_due(now: pd.Timestamp | None = None, fetchers: dict | None = None, news_
     pd.concat([hist, pd.DataFrame(h_rows)], ignore_index=True).to_csv(C.sources_dir() / "shap_history.csv", index=False,
                                                                       lineterminator="\n")
     _retry_staging(entry)
-    return _log({"status": "FORECAST_STAGED", "target_quarter": entry["served_quarter"], "entry_hash": entry["entry_hash"],
+    return _log({"status": "FORECAST_RELEASED", "target_quarter": entry["served_quarter"], "entry_hash": entry["entry_hash"],
                  "p_high": {f["target_quarter"]: f["p_high"] for f in forecasts}, **report})
 
 
