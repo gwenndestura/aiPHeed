@@ -129,8 +129,7 @@ quality check, not a requirement.
    - The model used is XLM-R large fine-tuned on XNLI for exactly this zero-shot use.
 2. **The validation used in this field is predictive (criterion) validation.** The reference study on news-based
    food-crisis prediction (Balashankar et al., Science Advances 2023) validated its news indicators by whether they
-   improved forecasts of the official food-insecurity classification. It did not report per-article human labels
-   [R10]. aiPHeed ran the same kind of test:
+   improved forecasts of the official food-insecurity classification (IPC) [R10]. aiPHeed ran the same kind of test:
    - news changes 0 of 62 forecasts;
    - Brier gain is 0.001;
    - FSSI vs next-quarter hunger: ρ 0.45, p 0.19, n 10.
