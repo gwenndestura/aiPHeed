@@ -129,3 +129,43 @@ early origins (873–1,423 headlines) pull the mean below zero.
   carrying forward the latest SWS reading. This agrees with every earlier SWS study in this repository.
 - On these numbers, C-B6's case as "main model" weakens further. C-E6 now has the most proven comparisons (6 of 14),
   and none of the three is distinguishable from fair persistence.
+
+---
+
+## Fix 3 (requested): FI6-N archive news inside C-B6 (C-B6N)
+
+**Setup:**
+- **Plan:** `PLAN_CB6N.md`, SHA-256 976076dc…, committed (5adc2f9b) before any fit.
+- **Data:** the FI6-N feature file, unchanged (SHA-256 abc0e59c… = the FI6-N lock).
+- **Inputs:** seven z-scored news features, on top of C-B6's 23 inputs.
+- **Coverage:** news exists at 51 of 113 origins, from 2014-Q1.
+- **Checks:** the news leakage check passed; the copied procedure reproduced C-B6 exactly (max difference 1e-16).
+- Run: `runner/cb6n_model.py` → `out/cb6n_fits.csv`, `out/cb6n_results.json`.
+
+**Results (62 quarters):**
+
+| Model | Lead | Accuracy | Precision | Recall | F1 | AUC | Brier | R1–R7 |
+|---|---|---|---|---|---|---|---|---|
+| C-B6 | 1 | **0.806** | 0.830 | 0.907 | 0.867 | **0.723** | **0.183** | all pass |
+| C-B6N (+ news) | 1 | 0.726 | 0.795 | 0.814 | 0.805 | 0.711 | 0.196 | R2, R3, R5, R7 fail |
+| C-B6 | 2 | **0.806** | 0.830 | 0.907 | 0.867 | **0.712** | **0.181** | all pass |
+| C-B6N (+ news) | 2 | 0.710 | 0.791 | 0.791 | 0.791 | 0.684 | 0.205 | R2, R3, R5, R7 fail |
+
+**Paired Brier, C-B6N minus C-B6:**
+
+| | Lead 1 | Lead 2 |
+|---|---|---|
+| All 62 quarters | +0.013 (p 0.84), 5 calls changed | +0.024, CI +0.0002..+0.051: **significantly worse**; 6 calls changed |
+| News-era quarters only | +0.018 | +0.034 |
+
+- **Reliable lead:** 2 → 0.
+- **News share of SHAP:** about 18%. The model uses the news, but it adds noise for this target.
+
+**Decision (pre-registered):** H8 fails. Archive news **did not improve** C-B6; it made it worse at both leads. C-B6
+stays the main model. Per the plan, no other news variant is tried.
+
+**Why this differs from FI6-N:**
+- FI6-N's gain was in probability quality on a different target: a rise of more than the margin of error above the
+  5-year average.
+- Here the target is the 11.3% level. The latest SWS reading already carries most of the information, and seven extra
+  inputs on 62 quarters let the trees fit noise.
