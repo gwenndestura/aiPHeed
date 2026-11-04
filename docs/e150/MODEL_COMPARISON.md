@@ -28,7 +28,7 @@ A-H − E149: −0.024 [−0.071, +0.011].
 | Persistence | 0.88 | 0.70 | 1.00 | 0.40 | 0.74 | 0.120 | 9.61 | 0.62 |
 | Drift | 0.80 | 0.65 | 0.90 | 0.40 | 0.74 | 0.132 | 7.09 | 0.62 |
 
-**On 2021 alone, E150 is not better on class probabilities.** A-H − persistence +0.023 [+0.003, +0.045], and A-H − E149 +0.037 [−0.008, +0.093]. It does have the lowest prevalence error.
+**On 2021 alone, E150 is not better on class probabilities.** A-H − persistence +0.023 [+0.003, +0.045], and A-H − E149 +0.036 [−0.008, +0.093]. It does have the lowest prevalence error.
 
 ## Pool, 2018 + 2019 + 2021 (n = 72, 58 HIGH; always-HIGH 0.806)
 
@@ -73,8 +73,8 @@ A-H − E149: −0.024 [−0.071, +0.011].
 | Rule | Accuracy | Balanced | HIGH recall | LOW recall | AUC | Brier |
 |---|---|---|---|---|---|---|
 | **E150 placement rule** | **0.75** | **0.81** | 1.00 | 0.63 | 0.84 | 0.262 |
-| Shared level alone | 0.33 | 0.50 | 1.00 | 0.00 | n/a | 0.596 |
-| Latest national level | 0.33 | 0.50 | 1.00 | 0.00 | n/a | 0.615 |
+| Shared level alone | 0.33 | 0.50 | 1.00 | 0.00 | 0.50 | 0.596 |
+| Latest national level | 0.33 | 0.50 | 1.00 | 0.00 | 0.50 | 0.615 |
 | Always-LOW (not knowable in advance) | 0.67 | 0.50 | 0.00 | 1.00 | n/a | n/a |
 
 MAE 10.2 points against 18.1 for shared level alone. Correct 9 of 12; approximate 95 % interval 0.47 to 0.91. Largest miss: Batanes, measured 13.6 %, predicted High. The holdout tests placement of city types, not provinces or quarterly movement.
@@ -94,6 +94,8 @@ MAE 10.2 points against 18.1 for shared level alone. Correct 9 of 12; approximat
 
 Leads 1 and 2 fail only two gates. Leads 3 to 6 fall largely because the model has lost later survey rounds and because of the poverty defect in `METHODOLOGY_REDESIGN.md`. Leads 7 and 8 lack the 2018 test rows, so they aren't comparable, and do not imply better long-range skill.
 
+**On 2021 alone, leads 3 to 6 collapse:** accuracy 0.48, Brier 0.289, against persistence +0.169 [+0.040, +0.288]. Leads 1 and 2 hold at 0.84; leads 7 and 8 reach 0.84.
+
 ## What improved, honestly
 
 | Dimension | E149 | E150 | Verdict |
@@ -105,7 +107,7 @@ Leads 1 and 2 fail only two gates. Leads 3 to 6 fall largely because the model h
 | LOW recall, pool | 0.143 | 0.286 (A-G 0.429) | Better, still low |
 | Brier, pool | 0.123 | 0.119 | No real change |
 | Brier, 2021 | 0.107 | 0.143 | **Worse** |
-| Provinces separated | 1 clearly | 0 of 10 pairs | **Worse** |
+| Live spread, five provinces | 32.6 to 51.8 | 34.5 to 39.8, 0 of 10 pairs separated | **Worse** |
 | Quarterly movement used | Almost none | None in A-H; 2.4 to 2.8 points in A-G | Depends on the arm |
 | Independent quarterly evidence | Failed | Response beats history on a held-out area | **Better, at area level** |
 | News value | None | None | No change |

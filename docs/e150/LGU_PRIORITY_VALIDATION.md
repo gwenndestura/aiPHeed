@@ -9,7 +9,7 @@ File: `backend/data/e150/out/issue/lgu_priority_2027-Q1.csv`. Checks: `issue/lgu
 Priority = province P(HIGH ≥ 50) × vulnerability, where vulnerability = 0.6 × poverty percentile + 0.4 × density percentile across the 142 LGUs (PSA SAE 2021; POPCEN 2024).
 
 * **Percentile normalization** limits the effect of extreme density in dense cities.
-* **0.6/0.4 weights** are the recorded owner decision. **Your brief calls them "specified", so please confirm they match the thesis.**
+* **0.6/0.4 weights** are the ones this project already uses. **Please confirm they match the thesis.**
 
 ## Province differences in the ranking
 
@@ -53,7 +53,7 @@ Stable around the chosen weights, but it shifts substantially if either componen
 
 ## Validation limits
 
-* **No municipal food-insecurity measurement is held,** so the ranking cannot be validated against a municipal outcome. Operation Timbang LGU rows are not used, per your earlier decision, and CBMS 2024 is not held.
+* **No municipal food-insecurity measurement is held,** so the ranking cannot be validated against a municipal outcome. Operation Timbang LGU rows measure child nutrition, not food insecurity, so they are not used as validation, and CBMS 2024 is not held.
 * **Province-level check only:** population-weighted LGU poverty against latest measured food insecurity gives Spearman 0.70, n = 5. Too few to rely on, and measurement years differ.
 * **Is the poverty link defensible?** Yes for concept: E150's poverty inputs are the main structural predictor. **Is density's link defensible?** It's an exposure measure, not evidence of hunger, and density's role is the weaker part of this index.
 

@@ -29,10 +29,10 @@ Full evidence database: `docs/e145/LITERATURE_EVIDENCE.csv`.
 | Conformal intervals | Lei et al. 2018, 10.1080/01621459.2017.1307116 | Theory and simulation | **Used** (residual quantile) |
 | Proper scoring, calibration | Gneiting and Raftery, 10.21236/ada454828 | Standard | **Used** |
 | TreeSHAP | Lundberg et al. 2020, 10.1038/s42256-019-0138-9 | Standard | **Used**, descriptive |
-| Deep sequence models | Herteux et al. 2024 | Need daily labels | **Rejected:** not enough data |
+| Deep sequence models | Herteux et al. 2024, arXiv 2312.00626 | Need far more labelled observations than held here | **Rejected:** not enough data |
 | Heavy ensembling | n/a | Would overfit 125 outcomes | **Rejected** |
 
-Papers marked by DOI were verified to exist through Crossref. Not all were read in full; the database marks how far.
+The DOIs in this table were checked through Crossref, except Lentz et al., which comes from the evidence database and was not separately rechecked. The arXiv items were not checked there. Not all were read in full; the database marks how far.
 
 ## 3. Selected structure
 

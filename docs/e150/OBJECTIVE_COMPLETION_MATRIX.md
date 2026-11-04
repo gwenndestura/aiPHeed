@@ -19,10 +19,10 @@ Evidence labels: **D** development (2018, 2019), **R** retrospective, including 
 | Trigger groups | Genuine inputs, used | Selected A-H: poverty only. A-G: all five (climate 29 %, remittances 29 %, poverty 21 %, market 6 %, employment 4 %) | **FAIL for selected arm; PASS for A-G, with national limits** |
 | News value | Before any claim | Holm fails; placebo 30 % | **FAIL** |
 | Quarterly value | Response beats history on held-out SWS area | L1 −0.029 [−0.059, −0.0002]; significant to L3. Survey-fitted loading 0 | **PASS at area level; not carried to provinces** |
-| Updating vs frozen | Beats frozen | −0.015 [−0.036, +0.005] | **FAIL** at L1; passes at leads 3 to 8, but partly a comparison artefact |
+| Updating vs frozen | Locked gate: A-Hh or A-G beats A-frozen | A-H −0.015 [−0.036, +0.005]. A-Hh about −0.013, A-G about −0.010 (point differences of stored Brier; no interval stored) | **FAIL or unproven** at L1. A-H's interval is below 0 at leads 3 to 8, but A-H does not beat persistence at those leads (L3 +0.038 [−0.018, +0.091]) |
 | Maximum reliable lead | Predefined cumulative | **0 quarters;** L1 fails R4, R8 | **Determined; result fails thesis need** |
 | Reproducibility | Locks, seeds, predictions | Lock, 2 deviations logged, seals committed before scoring | **PASS** |
-| No leakage | Temporal and geographic | Release rules, as-of fits, cross-fitted levels; E144's defect fixed | **PASS, by construction and tests** |
+| No leakage | Temporal and geographic | Release rules, as-of fits, cross-fitted levels | **PASS by construction only: E150 has no dedicated unit tests** |
 
 ## Thesis objectives
 
@@ -32,13 +32,13 @@ Evidence labels: **D** development (2018, 2019), **R** retrospective, including 
 | **2. LightGBM, Lead 1, 75 %, max lead** | **Partial** | LightGBM in the level and residual; Lead 1; 0.847 and 0.75 at surveyed rows | Beating persistence; LOW recall; reliable lead above 0 |
 | **3. 142 LGU rankings** | **Built; can't be directly validated** | Rankings, weight sensitivity, rank uncertainty | Municipal outcome; firm provincial forecast |
 | **4. Four baselines** | **Done** | Persistence, PSA-only, NLP-only, logistic, plus drift, always-HIGH, always-LOW | None |
-| **5. Dashboard, ISO/IEC 25010, face validity** | **Not done** | Face validity in `docs/e148/FINAL_REPORT.md` | Deployment held back by the gates; 50 real DA evaluators |
+| **5. Dashboard, ISO/IEC 25010, face validity** | **Face validity done, direction only; rest not done** | Face validity in `docs/e148/FINAL_REPORT.md` | Deployment held back by the gates; 50 real DA evaluators |
 
 ## Exact reasons for failure
 
 | Failure | Reason | Minimum to resolve | Action |
 |---|---|---|---|
-| Doesn't beat persistence | Detectable gap about 0.07 with this sample; observed 0.013 | **Many more unseen rows;** about 25 times the evidence at this effect size, so at least several new rounds | Score sealed forecasts as FNRI releases come |
+| Doesn't beat persistence | Detectable gap about 0.04 with this sample (80 % power, from the bootstrap interval); observed 0.013 | **Many more unseen rows;** about 10 times the evidence at this effect size, a rough estimate, so several new rounds | Score sealed forecasts as FNRI releases come |
 | Low LOW recall | 14 LOW rows of 72 at the 50 % line | More LOW cases, which later rounds may supply | Same; do not change the threshold |
 | No provincial separation | Four provinces share nearly the same structural inputs; intervals ±15 to 20 points | CBMS 2024 or FNRI household microdata | Your data decision |
 | News | One national-outlet-dominated source, weak attribution, few outcomes | Labelled sample, local sources, more rounds | Your decision on labelling |

@@ -6,15 +6,14 @@
 
 | Issue | Cause found |
 |---|---|
-| One outlet | Most Philippine outlets don't expose a public archive API. Tested: Inquirer 401, SunStar and PressReader 403, Philstar, GMA, PNA, Tribune and Manila Times 404, BusinessMirror disallowed by robots.txt, Manila Bulletin and Manila Standard robots unavailable |
+| One outlet | Most Philippine outlets don't expose a public archive API. Inquirer, Philstar, GMA, PNA, SunStar and Manila Times returned 401, 403 or 404; BusinessMirror's robots.txt disallows it; Manila Bulletin and Manila Standard robots files returned errors |
 | Weak attribution | Search matched anywhere in the article body, and only the title and excerpt were kept. Only 9.1 % named the province in that text |
 
 ## What changed
 
 | Stage | E147/E148 | E150 |
 |---|---|---|
-| Outlets | 4 | 6, adding BusinessWorld and Interaksyon |
-| Period | To 2021 | 2012 to September 2026 |
+| Outlets | About 97 % one outlet | 6 outlets, adding BusinessWorld and Interaksyon |
 | Text | Title + excerpt | Full text of food-related articles, kept local |
 | Attribution | Query match | Sentence naming the province |
 | Text scored | Same article for every province | **The province's own sentences** (title + up to 3) |
@@ -26,9 +25,9 @@
 
 **Attributed unique articles by outlet:** Rappler 6,723, BusinessWorld 1,386, Interaksyon 387, VERA Files 184, NewsBytes 60, PCIJ 56. Rappler is 76 % overall, but **78 to 99 % in any one year** (often above 90 %), so diversity is better overall and still weak.
 
-**Models.** Zero-shot `joeddav/xlm-roberta-large-xnli`, run on the Arc GPU; 17,323 unique texts. BERTopic with masked place names, one fit per origin on earlier documents.
+**Models.** Zero-shot `joeddav/xlm-roberta-large-xnli`, run on the Arc GPU; 17,323 unique texts. **Topic features are not rebuilt in E150:** the six `nb_topic` shares come from E148's panel (BERTopic with masked place names, fitted per origin on earlier documents), so they still use E148's older query-based attribution, not the new sentence attribution.
 
-**Volume bias.** Correlation of FSSI with article count, three spot checks: −0.01 (2017), +0.12 (2021), −0.10 (2026). Raw counts ran up to 0.67.
+**Volume bias.** Correlation of FSSI with article count, three spot checks: −0.01, +0.12, −0.10.
 
 ## Ablation, Lead 1
 
@@ -46,10 +45,10 @@
 |---|---|---|
 | A-GN − A-G Brier, pool, Lead 1 | +0.007 [−0.008, +0.023] | No |
 | Holm across leads 1 to 4 | None pass; p from 0.05 to 0.80 | No |
-| Wrong-province placebo, Lead 1 | 30 % of placebo draws match or beat real news; limit is 5 % | No |
+| Wrong-province placebo, 2021, Lead 1 | 30 % of placebo draws match or beat real news; limit is 5 % | No |
 | Development, Lead 1 | +0.010 [−0.011, +0.032] | No |
 
-**The higher 2021 LOW recall with news (0.60) is a change in one or two calls with no Brier gain.** It isn't evidence.
+**The higher 2021 LOW recall with news (0.60) is one changed call out of 5 LOW rows, with no Brier gain.** It isn't evidence.
 
 ## Unmeasured quality
 

@@ -23,7 +23,7 @@ Modelled estimate of HFIAS any-level prevalence on a logit scale, then converted
 
 P(HIGH) = Φ(mu / σ), the probability that prevalence is ≥ 50 %, with σ the root-mean-square of as-of survey errors (0.46 on the logit scale live). On the pool, ECE is 0.034.
 
-**On the holdout it was overconfident:** ECE 0.28, Brier 0.26, partly because that test used a smaller σ from city rows. So treat extreme probabilities with care.
+**On the holdout it was overconfident:** ECE 0.28, Brier 0.26. That test used a smaller σ (0.316), which may have contributed; this was not separately tested. So treat extreme probabilities with care.
 
 ## 3. HIGH or LOW
 

@@ -16,7 +16,7 @@ Full traceable record per province: `backend/data/e150/out/issue/province_trace.
 
 ## Please do not use these numbers operationally yet
 
-1. **The A-H values are probably too low.** They fall about 15 to 22 points below the latest measurements in most provinces, partly from the poverty double-count described in `METHODOLOGY_REDESIGN.md`. The post-hoc correction gives 40.2 to 43.7. FIES did fall in this period (CALABARZON 19.1 % in 2023), but that is a different instrument and doesn't confirm these values.
+1. **The A-H values are probably too low.** They fall 13.5 to 22.4 points below the latest measurements in four provinces (Laguna only 4.3), partly from the poverty double-count described in `METHODOLOGY_REDESIGN.md`. The post-hoc correction gives 40.2 to 43.7. FIES did fall in this period (CALABARZON 19.1 % in 2023), but that is a different instrument and doesn't confirm these values.
 2. **All five intervals include 50 %.** No class is firm.
 3. **Models disagree.** Rizal is LOW under A-H but HIGH under A-G. That disagreement is itself the honest message.
 4. **No pair of provinces is separated:** 0 of 10 pairs exceed their uncertainty. Batangas forecasts below Laguna although it last measured 17.6 points higher.
@@ -47,7 +47,7 @@ Logit contributions, A-H.
 
 Employment and remittances are the same for every province, because the history is national. Rain is **missing** live, and regional unemployment is missing at this issue date in the file used. CPI is current at its release rule. Full values and news indicators are in the trace file.
 
-**Rice CPI (6 to 20 % year on year) is a real, current stress signal, which A-H doesn't use.** A-Hh and the H signal respond to it, but the survey-fitted loading is 0, so it doesn't move the A-H forecast.
+**Rice CPI (6 to 20 % year on year) is a real, current stress signal, which A-H doesn't use.** It enters only through the quarterly response signal and the A-G residual, where its SHAP share is small, and the survey-fitted loading on that signal is 0 at this issue.
 
 ## Quarterly movement
 
