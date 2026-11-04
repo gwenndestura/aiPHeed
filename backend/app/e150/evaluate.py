@@ -202,7 +202,7 @@ def seal_holdout():
     keys = S.base.drop_duplicates("key").set_index("key")
 
     def parent_rel(pk):
-        x = keys.loc[[pk]].assign(T=TQ)
+        x = keys.loc[[pk]].reset_index().assign(T=TQ)
         i2 = TQ - 1
         g = S.s8.gov.loc[(pk, i2)]
         for c in M.LEVEL:

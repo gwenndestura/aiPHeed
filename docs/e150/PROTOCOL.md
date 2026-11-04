@@ -76,3 +76,7 @@ Issued as of 2021-04-01 using only rounds released by then (no 2021 row, includi
 ## 7. Prohibited
 
 No threshold change; no tuning on test rows; no 2021 row used for selection; no estimated label in training; no claim of news value without passing section 5.
+
+## Deviation D1 (2026-11-05, fix-only)
+
+The first holdout seal crashed on an indexing error before producing any prediction or reading any holdout label. One line changed in `seal_holdout`. The development results were already computed and are unaffected. Earlier lock: `PROTOCOL_LOCK_before_d1.json`.
