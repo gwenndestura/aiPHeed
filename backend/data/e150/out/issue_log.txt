@@ -1,0 +1,161 @@
+seal f773fbffc11f413046cf0150ec62f27e2e2dfe3e2fed6545fb3e10d55701e536
+province target_quarter latest_measured_quarter  latest_measured_pct  forecast_pct  low90  high90  p_high_ge50 class  interval_includes_50  sensitivity_pct_A-Hh  sensitivity_pct_A-G  risk_score_B
+Batangas        2027-Q1                 2021-Q3                 56.9          34.5   19.5    53.4        0.082   LOW                  True                  34.5                 37.4          70.1
+  Cavite        2027-Q1                 2021-Q3                 50.2          36.7   21.0    55.8        0.119   LOW                  True                  36.7                 42.4          56.5
+  Laguna        2027-Q1                 2018-Q3                 39.3          35.0   19.9    54.0        0.090   LOW                  True                  35.0                 42.9          57.0
+  Quezon        2027-Q1                 2019-Q3                 61.9          39.8   23.3    59.0        0.184   LOW                  True                  39.8                 49.8          61.2
+   Rizal        2027-Q1                 2019-Q3                 56.6          37.0   21.3    56.1        0.125   LOW                  True                  37.0                 50.5          74.4
+{
+"pairs": {
+"Batangas-Cavite": {
+"diff_logit": -0.098,
+"se": 0.473,
+"separated_90": false
+},
+"Batangas-Laguna": {
+"diff_logit": -0.024,
+"se": 0.472,
+"separated_90": false
+},
+"Batangas-Quezon": {
+"diff_logit": -0.226,
+"se": 0.473,
+"separated_90": false
+},
+"Batangas-Rizal": {
+"diff_logit": -0.11,
+"se": 0.473,
+"separated_90": false
+},
+"Cavite-Laguna": {
+"diff_logit": 0.073,
+"se": 0.472,
+"separated_90": false
+},
+"Cavite-Quezon": {
+"diff_logit": -0.128,
+"se": 0.473,
+"separated_90": false
+},
+"Cavite-Rizal": {
+"diff_logit": -0.012,
+"se": 0.473,
+"separated_90": false
+},
+"Laguna-Quezon": {
+"diff_logit": -0.202,
+"se": 0.472,
+"separated_90": false
+},
+"Laguna-Rizal": {
+"diff_logit": -0.086,
+"se": 0.472,
+"separated_90": false
+},
+"Quezon-Rizal": {
+"diff_logit": 0.116,
+"se": 0.473,
+"separated_90": false
+}
+},
+"lgu": {
+"within_province_score_range": {
+"Batangas": 0.039,
+"Cavite": 0.076,
+"Laguna": 0.047,
+"Quezon": 0.125,
+"Rizal": 0.061
+},
+"unique_scores": 135,
+"mean_rank_interval_width": 72.25352112676056,
+"lgus_with_prob_top20_above_0_9": 0,
+"lgus_with_prob_top20_between_0_1_and_0_9": 51,
+"province_check_poverty_vs_latest_measured": {
+"spearman": 0.7,
+"n": 5,
+"poverty_pop_weighted": {
+"Batangas": 8.79,
+"Cavite": 9.91,
+"Laguna": 6.04,
+"Quezon": 18.45,
+"Rizal": 7.06
+},
+"latest_measured": {
+"Batangas": 56.9,
+"Cavite": 50.2,
+"Laguna": 39.3,
+"Quezon": 61.9,
+"Rizal": 56.6
+}
+},
+"weight_sensitivity": {
+"0.5/0.5": {
+"spearman_with_0.6_0.4": 0.9856826266945079,
+"top20_overlap": 19
+},
+"0.7/0.3": {
+"spearman_with_0.6_0.4": 0.9878810867082585,
+"top20_overlap": 18
+},
+"1.0/0.0": {
+"spearman_with_0.6_0.4": 0.8965753539564233,
+"top20_overlap": 14
+},
+"0.0/1.0": {
+"spearman_with_0.6_0.4": 0.10945569727836445,
+"top20_overlap": 2
+}
+}
+}
+}
+     lgu_name province_name  priority_score  rank_low90  rank_high90  prob_top20
+0    Plaridel        Quezon           0.130           1           52       0.683
+1    Pagbilao        Quezon           0.129           2           54       0.653
+2  Candelaria        Quezon           0.128           3           56       0.629
+3    Agdangan        Quezon           0.128           4           57       0.617
+4      Lucena        Quezon           0.127           5           58       0.593
+5      Tiaong        Quezon           0.125           6           61       0.554
+{
+"A-H": {
+"mean_abs_quarter_change_points": {
+"Batangas": 0.9,
+"Cavite": 1.16,
+"Laguna": 1.15,
+"Quezon": 1.0,
+"Rizal": 1.23
+},
+"mean_spread_points": 10.440990142602422,
+"pair_corr_mean": 0.8831301048219222
+},
+"A-Hh": {
+"mean_abs_quarter_change_points": {
+"Batangas": 0.97,
+"Cavite": 1.25,
+"Laguna": 1.25,
+"Quezon": 1.08,
+"Rizal": 1.34
+},
+"mean_spread_points": 10.445833067978324,
+"pair_corr_mean": 0.88759670555221
+},
+"A-G": {
+"mean_abs_quarter_change_points": {
+"Batangas": 2.58,
+"Cavite": 2.78,
+"Laguna": 2.52,
+"Quezon": 2.4,
+"Rizal": 2.49
+},
+"mean_spread_points": 17.007126558932455,
+"pair_corr_mean": 0.7222752036456079
+}
+}
+province  Batangas  Cavite  Laguna  Quezon  Rizal
+quarter                                          
+2025-Q3       36.8    39.0    37.3    42.1   39.3
+2025-Q4       36.4    38.7    36.9    41.7   39.0
+2026-Q1       36.0    38.3    36.5    41.3   38.6
+2026-Q2       35.6    37.9    36.2    40.9   38.2
+2026-Q3       35.2    37.5    35.8    40.5   37.8
+2026-Q4       34.9    37.1    35.4    40.2   37.4
+2027-Q1       34.5    36.7    35.0    39.8   37.0
