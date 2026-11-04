@@ -183,6 +183,7 @@ def _city_rows():
     h = d[d["fs_survey_category"] == "Food Insecure Households"].copy()
     h = h[h["actual_year"].astype(str).isin(["2013", "2015", "2018", "2019"])]
     h["survey"] = h["actual_year"].astype(str).map({"2013": "NNS2013", "2015": "FNRI2015", "2018": "ENNS2018", "2019": "ENNS2019"})
+    h = h[h["pct"].notna()].copy()
     h["y"] = Fe._logit(h["pct"])
     return h
 
