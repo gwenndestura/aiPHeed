@@ -1,0 +1,802 @@
+{
+ "Batangas": {
+  "measured": [
+   {
+    "survey": "NNS2013",
+    "p": 40.78,
+    "se_p": 3.2771931117010804
+   },
+   {
+    "survey": "FNRI2015",
+    "p": 43.5,
+    "se_p": 2.798542893866775
+   },
+   {
+    "survey": "ENNS2021",
+    "p": 39.9,
+    "se_p": 3.0
+   }
+  ],
+  "government_inputs": {
+   "market": {
+    "cpi_food_yoy": 0.149,
+    "cpi_rice_yoy": 9.041,
+    "cpi_food_3m": 0.175,
+    "cpi_food_accel": -1.89,
+    "cpi_food_rel_nat": -4.469,
+    "cpi_since": 4.174
+   },
+   "climate": {
+    "c_soil_anom_3m": -2.177,
+    "c_rain_anom_6m": null,
+    "c_tc_4q": 1.0,
+    "c_agri_yoy": 0.025,
+    "c_fish_yoy": 0.052,
+    "oni": 1.8,
+    "soil_since": 0.413,
+    "rain_since": 0.842,
+    "tc_rate_since": 2.143,
+    "agri_since": 0.023
+   },
+   "employment": {
+    "unemp_rate": 6.005,
+    "unemp_yoy": 0.674,
+    "unemp_chg_since": -2.723,
+    "unemp_region": null
+   },
+   "remittance": {
+    "remit_yoy": 3.178,
+    "remit_since": 3.17,
+    "remit_q_yoy": 1.877
+   },
+   "poverty": {
+    "p_poverty": -0.871,
+    "p_subsistence": -1.049,
+    "p_poverty_gap": -2.222,
+    "p_density": 1.45
+   }
+  },
+  "input_scope": {
+   "market": "province, monthly PSA CPI",
+   "climate": "province quarterly; ONI national",
+   "employment": "national (regional annual from 2021)",
+   "remittance": "national",
+   "poverty": "province, by PSA release round",
+   "news": "province, area and national streams, stated per feature"
+  },
+  "news_inputs": {
+   "p_e_market": -0.024,
+   "p_e_climate": -0.024,
+   "p_e_employment": -0.0,
+   "p_e_remittance": -0.018,
+   "p_e_poverty": 0.062,
+   "p_e_response": 0.005,
+   "p_tp_market": -0.063,
+   "p_tp_climate": -0.004,
+   "p_tp_employment": -0.005,
+   "p_tp_remittance": -0.033,
+   "p_tp_poverty": 0.249,
+   "p_tp_response": 0.107,
+   "p_e_hunger": 0.002,
+   "p_e_net": 0.056,
+   "p_intensity": 0.442,
+   "p_net_since": -0.004,
+   "a_e_net": 0.037,
+   "a_e_hunger": -0.003,
+   "a_net_since": -0.004,
+   "a_e_market": -0.025,
+   "a_e_climate": 0.007,
+   "a_e_employment": 0.004,
+   "a_e_remittance": -0.013,
+   "a_e_poverty": 0.029,
+   "n_e_net": -0.011,
+   "n_e_hunger": 0.016,
+   "n_net_since": -0.015,
+   "n_e_market": -0.023,
+   "n_e_climate": 0.01,
+   "n_e_employment": 0.007,
+   "n_e_remittance": -0.003,
+   "n_e_poverty": 0.003,
+   "r_e_net": -0.027,
+   "p_tg_hard": -0.017,
+   "p_tg_resp": -0.023,
+   "p_tg_net": 0.006
+  },
+  "h2": 0.06,
+  "forecast": {
+   "score": 25.8,
+   "interval_90": [
+    15.1,
+    40.5
+   ],
+   "anchor_logit": -0.776,
+   "lightgbm_adjustment_logit": -0.28,
+   "adjustment_shap_by_group": {
+    "market": -0.0158,
+    "climate": -0.0014,
+    "remittance": 0.0078,
+    "poverty": -0.0096,
+    "state": -0.0002,
+    "news": 0.0143,
+    "h2_quarterly_signal": 0.0007
+   },
+   "adjustment_shap": {
+    "cpi_food_yoy": -0.0055,
+    "cpi_rice_yoy": 0.0039,
+    "cpi_food_3m": -0.0015,
+    "cpi_food_accel": -0.0014,
+    "cpi_food_rel_nat": -0.0356,
+    "cpi_since": 0.0243,
+    "c_soil_anom_3m": 0.0001,
+    "c_tc_4q": -0.0002,
+    "c_agri_yoy": -0.0005,
+    "c_fish_yoy": 0.0016,
+    "oni": -0.0009,
+    "soil_since": 0.0097,
+    "rain_since": 0.0098,
+    "agri_since": -0.021,
+    "remit_since": 0.0078,
+    "p_poverty": 0.0023,
+    "p_poverty_gap": 0.0042,
+    "p_density": -0.0161,
+    "gap_q": -0.0008,
+    "lead": 0.0006,
+    "p_tp_employment": -0.003,
+    "p_net_since": -0.0001,
+    "a_e_net": 0.0038,
+    "a_e_hunger": 0.0008,
+    "a_net_since": -0.0069,
+    "a_e_market": -0.0004,
+    "a_e_climate": -0.0001,
+    "a_e_employment": 0.0119,
+    "n_e_net": -0.0046,
+    "n_e_hunger": 0.0013,
+    "n_net_since": -0.0058,
+    "n_e_market": 0.011,
+    "n_e_poverty": 0.0064,
+    "h2": 0.0007
+   }
+  },
+  "note": "Explanations describe the model, not causes. Survey reference quarter approximated as Q3; 2021 SE approximated at 3 points."
+ },
+ "Cavite": {
+  "measured": [
+   {
+    "survey": "NNS2013",
+    "p": 38.78,
+    "se_p": 3.0354880169098912
+   },
+   {
+    "survey": "FNRI2015",
+    "p": 41.8,
+    "se_p": 2.5
+   },
+   {
+    "survey": "ENNS2021",
+    "p": 35.5,
+    "se_p": 3.0
+   }
+  ],
+  "government_inputs": {
+   "market": {
+    "cpi_food_yoy": 1.478,
+    "cpi_rice_yoy": 20.427,
+    "cpi_food_3m": 3.113,
+    "cpi_food_accel": -2.753,
+    "cpi_food_rel_nat": -3.14,
+    "cpi_since": 4.01
+   },
+   "climate": {
+    "c_soil_anom_3m": -1.813,
+    "c_rain_anom_6m": null,
+    "c_tc_4q": 1.0,
+    "c_agri_yoy": -0.102,
+    "c_fish_yoy": -0.091,
+    "oni": 1.8,
+    "soil_since": 0.335,
+    "rain_since": 0.15,
+    "tc_rate_since": 1.667,
+    "agri_since": -0.095
+   },
+   "employment": {
+    "unemp_rate": 6.005,
+    "unemp_yoy": 0.674,
+    "unemp_chg_since": -2.723,
+    "unemp_region": null
+   },
+   "remittance": {
+    "remit_yoy": 3.178,
+    "remit_since": 3.17,
+    "remit_q_yoy": 1.877
+   },
+   "poverty": {
+    "p_poverty": -1.007,
+    "p_subsistence": -1.746,
+    "p_poverty_gap": -2.322,
+    "p_density": 2.524
+   }
+  },
+  "input_scope": {
+   "market": "province, monthly PSA CPI",
+   "climate": "province quarterly; ONI national",
+   "employment": "national (regional annual from 2021)",
+   "remittance": "national",
+   "poverty": "province, by PSA release round",
+   "news": "province, area and national streams, stated per feature"
+  },
+  "news_inputs": {
+   "p_e_market": -0.033,
+   "p_e_climate": 0.001,
+   "p_e_employment": -0.007,
+   "p_e_remittance": -0.017,
+   "p_e_poverty": 0.088,
+   "p_e_response": -0.032,
+   "p_tp_market": -0.051,
+   "p_tp_climate": -0.069,
+   "p_tp_employment": -0.006,
+   "p_tp_remittance": -0.036,
+   "p_tp_poverty": 0.089,
+   "p_tp_response": 0.133,
+   "p_e_hunger": 0.006,
+   "p_e_net": 0.104,
+   "p_intensity": 0.734,
+   "p_net_since": 0.038,
+   "a_e_net": 0.037,
+   "a_e_hunger": -0.003,
+   "a_net_since": -0.004,
+   "a_e_market": -0.025,
+   "a_e_climate": 0.007,
+   "a_e_employment": 0.004,
+   "a_e_remittance": -0.013,
+   "a_e_poverty": 0.029,
+   "n_e_net": -0.011,
+   "n_e_hunger": 0.016,
+   "n_net_since": -0.015,
+   "n_e_market": -0.023,
+   "n_e_climate": 0.01,
+   "n_e_employment": 0.007,
+   "n_e_remittance": -0.003,
+   "n_e_poverty": 0.003,
+   "r_e_net": -0.027,
+   "p_tg_hard": -0.05,
+   "p_tg_resp": 0.069,
+   "p_tg_net": -0.119
+  },
+  "h2": 0.118,
+  "forecast": {
+   "score": 32.8,
+   "interval_90": [
+    19.9,
+    48.9
+   ],
+   "anchor_logit": -0.567,
+   "lightgbm_adjustment_logit": -0.15,
+   "adjustment_shap_by_group": {
+    "market": 0.0214,
+    "climate": 0.0941,
+    "remittance": 0.0007,
+    "poverty": -0.0011,
+    "state": -0.0002,
+    "news": 0.0094,
+    "h2_quarterly_signal": 0.0007
+   },
+   "adjustment_shap": {
+    "cpi_food_yoy": -0.0078,
+    "cpi_rice_yoy": 0.0039,
+    "cpi_food_3m": -0.0015,
+    "cpi_food_accel": -0.0002,
+    "cpi_food_rel_nat": -0.0227,
+    "cpi_since": 0.0497,
+    "c_soil_anom_3m": 0.0001,
+    "c_tc_4q": -0.0002,
+    "c_agri_yoy": 0.0028,
+    "c_fish_yoy": 0.0016,
+    "oni": -0.0009,
+    "soil_since": 0.0097,
+    "rain_since": -0.0053,
+    "agri_since": 0.0863,
+    "remit_since": 0.0007,
+    "p_poverty": 0.0023,
+    "p_poverty_gap": 0.0044,
+    "p_density": -0.0078,
+    "gap_q": -0.0008,
+    "lead": 0.0006,
+    "p_tp_employment": -0.003,
+    "p_net_since": 0.0001,
+    "a_e_net": 0.0074,
+    "a_e_hunger": 0.0008,
+    "a_net_since": -0.0103,
+    "a_e_market": -0.0004,
+    "a_e_climate": -0.0001,
+    "a_e_employment": 0.0119,
+    "n_e_net": -0.0079,
+    "n_e_hunger": 0.0006,
+    "n_net_since": -0.0079,
+    "n_e_market": 0.0118,
+    "n_e_poverty": 0.0064,
+    "h2": 0.0007
+   }
+  },
+  "note": "Explanations describe the model, not causes. Survey reference quarter approximated as Q3; 2021 SE approximated at 3 points."
+ },
+ "Laguna": {
+  "measured": [
+   {
+    "survey": "NNS2013",
+    "p": 39.96,
+    "se_p": 3.20631515464995
+   },
+   {
+    "survey": "FNRI2015",
+    "p": 41.4,
+    "se_p": 2.56124969497314
+   },
+   {
+    "survey": "ENNS2018",
+    "p": 26.200000000000003,
+    "se_p": 1.2985597521608503
+   }
+  ],
+  "government_inputs": {
+   "market": {
+    "cpi_food_yoy": 2.172,
+    "cpi_rice_yoy": 6.182,
+    "cpi_food_3m": 3.392,
+    "cpi_food_accel": -1.247,
+    "cpi_food_rel_nat": -2.445,
+    "cpi_since": 4.233
+   },
+   "climate": {
+    "c_soil_anom_3m": -2.106,
+    "c_rain_anom_6m": null,
+    "c_tc_4q": 1.0,
+    "c_agri_yoy": 0.129,
+    "c_fish_yoy": -0.504,
+    "oni": 1.8,
+    "soil_since": 0.276,
+    "rain_since": 1.656,
+    "tc_rate_since": 2.091,
+    "agri_since": 0.045
+   },
+   "employment": {
+    "unemp_rate": 6.005,
+    "unemp_yoy": 0.674,
+    "unemp_chg_since": 0.548,
+    "unemp_region": null
+   },
+   "remittance": {
+    "remit_yoy": 3.178,
+    "remit_since": 3.149,
+    "remit_q_yoy": 1.877
+   },
+   "poverty": {
+    "p_poverty": -0.829,
+    "p_subsistence": -1.049,
+    "p_poverty_gap": -2.122,
+    "p_density": 2.044
+   }
+  },
+  "input_scope": {
+   "market": "province, monthly PSA CPI",
+   "climate": "province quarterly; ONI national",
+   "employment": "national (regional annual from 2021)",
+   "remittance": "national",
+   "poverty": "province, by PSA release round",
+   "news": "province, area and national streams, stated per feature"
+  },
+  "news_inputs": {
+   "p_e_market": -0.058,
+   "p_e_climate": -0.029,
+   "p_e_employment": 0.003,
+   "p_e_remittance": -0.011,
+   "p_e_poverty": 0.059,
+   "p_e_response": 0.037,
+   "p_tp_market": -0.059,
+   "p_tp_climate": -0.155,
+   "p_tp_employment": -0.006,
+   "p_tp_remittance": -0.037,
+   "p_tp_poverty": 0.079,
+   "p_tp_response": 0.117,
+   "p_e_hunger": -0.006,
+   "p_e_net": 0.009,
+   "p_intensity": 1.416,
+   "p_net_since": -0.03,
+   "a_e_net": 0.037,
+   "a_e_hunger": -0.003,
+   "a_net_since": -0.005,
+   "a_e_market": -0.025,
+   "a_e_climate": 0.007,
+   "a_e_employment": 0.004,
+   "a_e_remittance": -0.013,
+   "a_e_poverty": 0.029,
+   "n_e_net": -0.011,
+   "n_e_hunger": 0.016,
+   "n_net_since": -0.003,
+   "n_e_market": -0.023,
+   "n_e_climate": 0.01,
+   "n_e_employment": 0.007,
+   "n_e_remittance": -0.003,
+   "n_e_poverty": 0.003,
+   "r_e_net": -0.027,
+   "p_tg_hard": 0.081,
+   "p_tg_resp": -0.101,
+   "p_tg_net": 0.182
+  },
+  "h2": -0.073,
+  "forecast": {
+   "score": 28.7,
+   "interval_90": [
+    17.1,
+    44.1
+   ],
+   "anchor_logit": -0.678,
+   "lightgbm_adjustment_logit": -0.23,
+   "adjustment_shap_by_group": {
+    "market": 0.0054,
+    "climate": 0.0302,
+    "remittance": 0.0007,
+    "poverty": -0.0096,
+    "state": -0.0002,
+    "news": 0.0214,
+    "h2_quarterly_signal": -0.0029
+   },
+   "adjustment_shap": {
+    "cpi_food_yoy": 0.0003,
+    "cpi_rice_yoy": 0.0025,
+    "cpi_food_3m": -0.0015,
+    "cpi_food_accel": -0.0014,
+    "cpi_food_rel_nat": -0.0216,
+    "cpi_since": 0.0271,
+    "c_soil_anom_3m": 0.0001,
+    "c_tc_4q": -0.0031,
+    "c_agri_yoy": -0.0005,
+    "c_fish_yoy": 0.0016,
+    "oni": -0.0009,
+    "soil_since": 0.0097,
+    "rain_since": 0.0541,
+    "agri_since": -0.0308,
+    "remit_since": 0.0007,
+    "p_poverty": 0.0017,
+    "p_poverty_gap": 0.0043,
+    "p_density": -0.0156,
+    "gap_q": -0.0008,
+    "lead": 0.0006,
+    "p_tp_employment": -0.003,
+    "p_net_since": -0.0022,
+    "a_e_net": 0.005,
+    "a_e_hunger": 0.0008,
+    "a_net_since": -0.0061,
+    "a_e_market": -0.0004,
+    "a_e_climate": -0.0001,
+    "a_e_employment": 0.0115,
+    "n_e_net": -0.0046,
+    "n_e_hunger": 0.0013,
+    "n_net_since": 0.0045,
+    "n_e_market": 0.0091,
+    "n_e_poverty": 0.0056,
+    "h2": -0.0029
+   }
+  },
+  "note": "Explanations describe the model, not causes. Survey reference quarter approximated as Q3; 2021 SE approximated at 3 points."
+ },
+ "Quezon": {
+  "measured": [
+   {
+    "survey": "NNS2013",
+    "p": 48.87,
+    "se_p": 3.664561765845736
+   },
+   {
+    "survey": "FNRI2015",
+    "p": 48.8,
+    "se_p": 3.362940184502145
+   },
+   {
+    "survey": "ENNS2019",
+    "p": 44.0,
+    "se_p": 2.8151284042373037
+   }
+  ],
+  "government_inputs": {
+   "market": {
+    "cpi_food_yoy": 3.451,
+    "cpi_rice_yoy": 19.985,
+    "cpi_food_3m": 2.917,
+    "cpi_food_accel": -3.424,
+    "cpi_food_rel_nat": -1.167,
+    "cpi_since": 3.975
+   },
+   "climate": {
+    "c_soil_anom_3m": -2.089,
+    "c_rain_anom_6m": null,
+    "c_tc_4q": 1.0,
+    "c_agri_yoy": 0.062,
+    "c_fish_yoy": -0.179,
+    "oni": 1.8,
+    "soil_since": 0.392,
+    "rain_since": 2.069,
+    "tc_rate_since": 2.621,
+    "agri_since": 0.01
+   },
+   "employment": {
+    "unemp_rate": 6.005,
+    "unemp_yoy": 0.674,
+    "unemp_chg_since": 0.854,
+    "unemp_region": null
+   },
+   "remittance": {
+    "remit_yoy": 3.178,
+    "remit_since": 3.004,
+    "remit_q_yoy": 1.877
+   },
+   "poverty": {
+    "p_poverty": -0.549,
+    "p_subsistence": -1.522,
+    "p_poverty_gap": -2.022,
+    "p_density": -0.084
+   }
+  },
+  "input_scope": {
+   "market": "province, monthly PSA CPI",
+   "climate": "province quarterly; ONI national",
+   "employment": "national (regional annual from 2021)",
+   "remittance": "national",
+   "poverty": "province, by PSA release round",
+   "news": "province, area and national streams, stated per feature"
+  },
+  "news_inputs": {
+   "p_e_market": 0.076,
+   "p_e_climate": -0.045,
+   "p_e_employment": -0.01,
+   "p_e_remittance": -0.015,
+   "p_e_poverty": -0.033,
+   "p_e_response": 0.027,
+   "p_tp_market": 0.189,
+   "p_tp_climate": 0.037,
+   "p_tp_employment": -0.003,
+   "p_tp_remittance": -0.017,
+   "p_tp_poverty": -0.015,
+   "p_tp_response": -0.031,
+   "p_e_hunger": -0.009,
+   "p_e_net": 0.0,
+   "p_intensity": -0.303,
+   "p_net_since": -0.009,
+   "a_e_net": 0.037,
+   "a_e_hunger": -0.003,
+   "a_net_since": -0.003,
+   "a_e_market": -0.025,
+   "a_e_climate": 0.007,
+   "a_e_employment": 0.004,
+   "a_e_remittance": -0.013,
+   "a_e_poverty": 0.029,
+   "n_e_net": -0.011,
+   "n_e_hunger": 0.016,
+   "n_net_since": -0.004,
+   "n_e_market": -0.023,
+   "n_e_climate": 0.01,
+   "n_e_employment": 0.007,
+   "n_e_remittance": -0.003,
+   "n_e_poverty": 0.003,
+   "r_e_net": -0.027,
+   "p_tg_hard": 0.054,
+   "p_tg_resp": -0.027,
+   "p_tg_net": 0.08
+  },
+  "h2": 0.156,
+  "forecast": {
+   "score": 30.8,
+   "interval_90": [
+    18.5,
+    46.6
+   ],
+   "anchor_logit": -0.623,
+   "lightgbm_adjustment_logit": -0.186,
+   "adjustment_shap_by_group": {
+    "market": 0.0164,
+    "climate": 0.0323,
+    "remittance": 0.0007,
+    "poverty": 0.0162,
+    "state": -0.0002,
+    "news": 0.0227,
+    "h2_quarterly_signal": 0.0007
+   },
+   "adjustment_shap": {
+    "cpi_food_yoy": 0.0039,
+    "cpi_rice_yoy": 0.0025,
+    "cpi_food_3m": -0.0015,
+    "cpi_food_accel": -0.0014,
+    "cpi_food_rel_nat": -0.015,
+    "cpi_since": 0.0279,
+    "c_soil_anom_3m": 0.0001,
+    "c_tc_4q": -0.0031,
+    "c_agri_yoy": -0.0005,
+    "c_fish_yoy": 0.0016,
+    "oni": -0.0009,
+    "soil_since": 0.0097,
+    "rain_since": 0.0541,
+    "agri_since": -0.0287,
+    "remit_since": 0.0007,
+    "p_poverty": 0.0023,
+    "p_poverty_gap": 0.004,
+    "p_density": 0.0099,
+    "gap_q": -0.0008,
+    "lead": 0.0006,
+    "p_tp_employment": -0.003,
+    "p_net_since": -0.0022,
+    "a_e_net": 0.005,
+    "a_e_hunger": 0.0008,
+    "a_net_since": -0.0061,
+    "a_e_market": -0.0004,
+    "a_e_climate": -0.0001,
+    "a_e_employment": 0.0115,
+    "n_e_net": -0.0046,
+    "n_e_hunger": 0.0013,
+    "n_net_since": 0.0045,
+    "n_e_market": 0.0104,
+    "n_e_poverty": 0.0056,
+    "h2": 0.0007
+   }
+  },
+  "note": "Explanations describe the model, not causes. Survey reference quarter approximated as Q3; 2021 SE approximated at 3 points."
+ },
+ "Rizal": {
+  "measured": [
+   {
+    "survey": "NNS2013",
+    "p": 43.8,
+    "se_p": 3.643388943289788
+   },
+   {
+    "survey": "FNRI2015",
+    "p": 41.3,
+    "se_p": 2.758622844826744
+   },
+   {
+    "survey": "ENNS2019",
+    "p": 39.1,
+    "se_p": 3.2321015261766277
+   }
+  ],
+  "government_inputs": {
+   "market": {
+    "cpi_food_yoy": 1.97,
+    "cpi_rice_yoy": 17.705,
+    "cpi_food_3m": 3.226,
+    "cpi_food_accel": -2.472,
+    "cpi_food_rel_nat": -2.647,
+    "cpi_since": 4.731
+   },
+   "climate": {
+    "c_soil_anom_3m": -2.106,
+    "c_rain_anom_6m": null,
+    "c_tc_4q": 1.0,
+    "c_agri_yoy": 0.006,
+    "c_fish_yoy": -0.016,
+    "oni": 1.8,
+    "soil_since": 0.417,
+    "rain_since": 2.005,
+    "tc_rate_since": 2.069,
+    "agri_since": -0.024
+   },
+   "employment": {
+    "unemp_rate": 6.005,
+    "unemp_yoy": 0.674,
+    "unemp_chg_since": 0.854,
+    "unemp_region": null
+   },
+   "remittance": {
+    "remit_yoy": 3.178,
+    "remit_since": 3.004,
+    "remit_q_yoy": 1.877
+   },
+   "poverty": {
+    "p_poverty": -0.75,
+    "p_subsistence": -0.414,
+    "p_poverty_gap": -1.822,
+    "p_density": 2.533
+   }
+  },
+  "input_scope": {
+   "market": "province, monthly PSA CPI",
+   "climate": "province quarterly; ONI national",
+   "employment": "national (regional annual from 2021)",
+   "remittance": "national",
+   "poverty": "province, by PSA release round",
+   "news": "province, area and national streams, stated per feature"
+  },
+  "news_inputs": {
+   "p_e_market": -0.026,
+   "p_e_climate": 0.029,
+   "p_e_employment": -0.007,
+   "p_e_remittance": -0.013,
+   "p_e_poverty": 0.033,
+   "p_e_response": -0.016,
+   "p_tp_market": -0.05,
+   "p_tp_climate": -0.037,
+   "p_tp_employment": -0.005,
+   "p_tp_remittance": -0.031,
+   "p_tp_poverty": 0.223,
+   "p_tp_response": -0.057,
+   "p_e_hunger": -0.008,
+   "p_e_net": 0.086,
+   "p_intensity": 0.736,
+   "p_net_since": 0.009,
+   "a_e_net": 0.037,
+   "a_e_hunger": -0.003,
+   "a_net_since": -0.003,
+   "a_e_market": -0.025,
+   "a_e_climate": 0.007,
+   "a_e_employment": 0.004,
+   "a_e_remittance": -0.013,
+   "a_e_poverty": 0.029,
+   "n_e_net": -0.011,
+   "n_e_hunger": 0.016,
+   "n_net_since": -0.004,
+   "n_e_market": -0.023,
+   "n_e_climate": 0.01,
+   "n_e_employment": 0.007,
+   "n_e_remittance": -0.003,
+   "n_e_poverty": 0.003,
+   "r_e_net": -0.027,
+   "p_tg_hard": 0.119,
+   "p_tg_resp": -0.119,
+   "p_tg_net": 0.238
+  },
+  "h2": 0.167,
+  "forecast": {
+   "score": 35.4,
+   "interval_90": [
+    21.8,
+    51.7
+   ],
+   "anchor_logit": -0.475,
+   "lightgbm_adjustment_logit": -0.128,
+   "adjustment_shap_by_group": {
+    "market": 0.0368,
+    "climate": 0.093,
+    "remittance": 0.0007,
+    "poverty": -0.0067,
+    "state": -0.0002,
+    "news": 0.0236,
+    "h2_quarterly_signal": 0.0007
+   },
+   "adjustment_shap": {
+    "cpi_food_yoy": 0.0003,
+    "cpi_rice_yoy": 0.0025,
+    "cpi_food_3m": -0.0015,
+    "cpi_food_accel": -0.0014,
+    "cpi_food_rel_nat": -0.0283,
+    "cpi_since": 0.0652,
+    "c_soil_anom_3m": 0.0001,
+    "c_tc_4q": -0.0031,
+    "c_agri_yoy": -0.0013,
+    "c_fish_yoy": 0.0016,
+    "oni": -0.0009,
+    "soil_since": 0.0105,
+    "rain_since": 0.0668,
+    "agri_since": 0.0193,
+    "remit_since": 0.0007,
+    "p_poverty": 0.0017,
+    "p_poverty_gap": 0.0043,
+    "p_density": -0.0127,
+    "gap_q": -0.0008,
+    "lead": 0.0006,
+    "p_tp_employment": -0.003,
+    "p_net_since": 0.0013,
+    "a_e_net": 0.005,
+    "a_e_hunger": 0.0008,
+    "a_net_since": -0.0095,
+    "a_e_market": -0.0004,
+    "a_e_climate": -0.0001,
+    "a_e_employment": 0.0115,
+    "n_e_net": -0.0054,
+    "n_e_hunger": 0.0013,
+    "n_net_since": 0.0061,
+    "n_e_market": 0.0104,
+    "n_e_poverty": 0.0056,
+    "h2": 0.0007
+   }
+  },
+  "note": "Explanations describe the model, not causes. Survey reference quarter approximated as Q3; 2021 SE approximated at 3 points."
+ }
+}

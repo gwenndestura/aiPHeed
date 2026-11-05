@@ -1,0 +1,139 @@
+{
+ "target": "mod_sev",
+ "pool": {
+  "scope": "pool of 2018, 2019, 2021",
+  "n": 72,
+  "n_high": 25,
+  "R1_accuracy_ge_75": {
+   "value": 0.7222222222222222,
+   "pass": false
+  },
+  "R2_auc_ge_70": {
+   "value": 0.8553191489361702,
+   "pass": true
+  },
+  "R3_both_recalls_ge_50": {
+   "high": 0.76,
+   "low": 0.7021276595744681,
+   "pass": true
+  },
+  "R4_brier_below_persistence": {
+   "diff": -0.07526797079278613,
+   "ci95": [
+    -0.13515932282529428,
+    -0.02353219104721075
+   ],
+   "pass": true
+  },
+  "R5_above_majority_rule": {
+   "value": 0.7222222222222222,
+   "majority": 0.6527777777777778,
+   "pass": 1.0
+  },
+  "R6_coverage_80_98": {
+   "value": 0.9583333333333334,
+   "pass": true
+  },
+  "R7_slope_interval_includes_1": {
+   "ci95": [
+    0.5053507444595445,
+    0.9760594973936692
+   ],
+   "pass": false
+  },
+  "mean_error_ci95_logit": [
+   0.021020462886751794,
+   0.231908147787571
+  ],
+  "may_be_called_prevalence": false
+ },
+ "round_2021": {
+  "scope": "2021 round",
+  "n": 25,
+  "n_high": 4,
+  "R1_accuracy_ge_75": {
+   "value": 0.84,
+   "pass": true
+  },
+  "R2_auc_ge_70": {
+   "value": 0.9285714285714286,
+   "pass": true
+  },
+  "R3_both_recalls_ge_50": {
+   "high": 0.5,
+   "low": 0.9047619047619048,
+   "pass": true
+  },
+  "R4_brier_below_persistence": {
+   "diff": -0.16255633116781382,
+   "ci95": [
+    -0.24132792067930697,
+    -0.08900327048687244
+   ],
+   "pass": true
+  },
+  "R5_above_majority_rule": {
+   "value": 0.84,
+   "majority": 0.84,
+   "pass": 0.0
+  },
+  "R6_coverage_80_98": {
+   "value": 0.96,
+   "pass": true
+  },
+  "R7_slope_interval_includes_1": {
+   "ci95": [
+    0.2741379820543758,
+    1.0445773778784553
+   ],
+   "pass": true
+  },
+  "mean_error_ci95_logit": [
+   -0.1350277302473177,
+   0.14412735315626238
+  ],
+  "may_be_called_prevalence": true
+ },
+ "R8_province_pair_separated": {
+  "pairs_separated": 0,
+  "of": 10,
+  "pass": false
+ },
+ "R9_news_passes_q1": {
+  "pass": false,
+  "gnt_minus_gov": {
+   "diff": 0.0055496578548361215,
+   "ci95": [
+    -0.006967427848419241,
+    0.0189740368371657
+   ],
+   "dm_t": 0.816829781059498,
+   "dm_p": 0.41402571055212456,
+   "n": 80,
+   "quarters": 20
+  },
+  "share_placebo_as_good": 0.66
+ },
+ "all_pass": false,
+ "province_sentences": {
+  "diff_brier_with_minus_without": {
+   "diff": 0.00026028373013969874,
+   "ci95": [
+    -0.0013719983933607911,
+    0.0019549939736977625
+   ],
+   "n_regions": 16,
+   "p_ge_0": 0.6195
+  },
+  "accuracy_with": 0.7222222222222222,
+  "accuracy_without": 0.7083333333333334,
+  "note": "All provinces; most have few sentences. Exploratory."
+ },
+ "quarterly_movement": {
+  "mean_abs_change_points_between_consecutive_issue_quarters": 2.723537359245353,
+  "median": 1.597814473428894,
+  "share_of_steps_over_1_point": 0.6217391304347826,
+  "same_target_range_mean": 10.592236465644516,
+  "note": "Movement is the change in the forecast of one target as the issue date moves; it is not a measured change."
+ }
+}
