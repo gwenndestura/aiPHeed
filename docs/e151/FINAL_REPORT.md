@@ -284,8 +284,12 @@ Requested by the owner after the results above, one run only, rules hashed first
 * **Retrospective, and written knowing the results.** The candidates were suggested by E151's own outputs. 2018 and 2019 share one choice because only 2013 and 2015 were released then.
 * **On rows clearly above or below 50 given their margins:** 44 of 59 correct.
 
+## 14. Later finding from E152
+
+See `docs/e152/RESULTS.md`. **With all five groups kept and half the adjustment, accuracy is 52 of 72 (0.722), so the 0.750 in section 13 depends on dropping employment, remittances and news on the 2018 and 2019 rows.** The thesis wording below must keep that condition. E152's new inputs and regional drift did not help (0.694).
+
 ## What can honestly be said in the thesis
 
-> "A LightGBM forecast using government inputs improved on repeating the last reading at SWS area level, one quarter ahead, on 2021 to 2026. At province level it improved on the last survey in retrospective tests, most clearly when that survey was six years old. A locked rule that chose its settings on earlier rounds reached 75.0 % accuracy (54 of 72, 95 % interval 64 to 84 %) on moderate-or-severe HFIAS at the 50 line, retrospectively, with higher HIGH recall and slightly worse probability scores than the required model (72.2 %). Corrected news features did not add measurable information. The score is a risk score, not a prevalence estimate. Prospective validation of sealed forecasts is under way."
+> "A LightGBM forecast using government inputs improved on repeating the last reading at SWS area level, one quarter ahead, on 2021 to 2026. At province level it improved on the last survey in retrospective tests, most clearly when that survey was six years old. With all five trigger groups, accuracy was 72.2 % (52 of 72) on moderate-or-severe HFIAS at the 50 line, retrospectively. A locked rule that chose its settings on earlier rounds reached 75.0 % (54 of 72, 95 % interval 64 to 84 %), but only by dropping employment, remittances and news on two of the three rounds, and with slightly worse probability scores. Corrected news features did not add measurable information. The score is a risk score, not a prevalence estimate. Prospective validation of sealed forecasts is under way."
 
 **The next independent evidence** is SWS at area level as it is published, and any new FNRI round. **No further model search on these rows adds evidence.**
