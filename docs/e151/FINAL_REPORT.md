@@ -5,7 +5,7 @@
 **Three findings:**
 
 1. **The quarterly forecast has real skill at SWS area level.** One quarter ahead on 2021 to 2026, it clearly beats repeating the last reading.
-2. **The provincial forecast clearly beats an old survey, most of all when that survey is old,** but accuracy is 0.72 against the 0.75 target and all of this is retrospective.
+2. **The provincial forecast clearly beats an old survey, most of all when that survey is old.** Accuracy is 0.72 on the required model; one locked attempt reached exactly 0.75 with disclosed costs (section 13). All of this is retrospective.
 3. **Corrected news did not add measurable information** one quarter ahead, at area or province level.
 
 Evidence labels: **R** retrospective, rows read by earlier work. **C** confirmation, settings fixed on earlier data, but not strictly blind. **S** sealed, not scored yet. **E** exploratory.
@@ -251,8 +251,41 @@ PYTHONPATH=. python -m app.e151.gates
 
 Raw text and scoring outputs under `backend/data/e151/raw/` are not committed.
 
+## 13. One locked improvement attempt (deviation D5, R)
+
+Requested by the owner after the results above, one run only, rules hashed first. Each round's settings were chosen inside its own training rows, by cross-validation on released rounds, using lowest soft Brier.
+
+| Lead 1 | Required model above | **Attempt** |
+|---|---|---|
+| **Accuracy, pool** | 0.722 (52 of 72) | **0.750 (54 of 72), Wilson 95 % 0.64 to 0.84** |
+| Balanced accuracy | 0.731 | 0.790 |
+| HIGH recall | 0.76 | 0.92 |
+| LOW recall | 0.70 | 0.66 |
+| False alarms | 14 | 16 |
+| AUC | 0.855 | 0.860 |
+| Brier | 0.172 | 0.186 |
+| Error (points) | 8.05 | 8.39 |
+| Mean score vs mean survey 46.0 | 49.2 | 51.0 |
+| Coverage | 0.958 | 0.847 |
+| Accuracy, 2018 | 0.636 | 0.636 |
+| Accuracy, 2019 | 0.68 | 0.72 |
+| Accuracy, 2021 | 0.84 | **0.88, above always-LOW's 0.84** |
+
+**Picked:** for 2018 and 2019, market + climate + poverty with half the LightGBM adjustment. For 2021, all inputs with half the adjustment. **Live forecast:** all inputs at full weight, so the 2027-Q1 scores equal section 9. Sealed `0f430203...`.
+
+**Gates:** R1 to R7 now pass on both the pool and 2021. Slope intervals [0.62, 1.06] and [0.28, 1.09]. **R8 (0 of 10) and R9 (news) still fail, so the release gates still fail.** Mean error interval [+0.10, +0.31] logit excludes 0, so it still may not be called prevalence.
+
+**Read this result with these limits:**
+
+* **It passes by exactly the line.** One row fewer fails. Against E151 it gains 4 rows and loses 2, all with probabilities between 0.42 and 0.64. 14 rows sit within 2 points of 50.
+* **It is less accurate on the probabilities.** Brier is worse than the required model, +0.013 [-0.001, +0.029]. Halving the adjustment moves scores toward the higher anchor, so it over-forecasts and raises false alarms slightly. Accuracy rose because HIGH recall rose.
+* **Against persistence it still holds on the pool:** -0.062 [-0.114, -0.020].
+* **47 of 72 rows came from a setting without employment, remittances or news.** That conflicts with the five-group requirement, and is the owner's decision to weigh. Only the 2021 rows and the live forecast use all five.
+* **Retrospective, and written knowing the results.** The candidates were suggested by E151's own outputs. 2018 and 2019 share one choice because only 2013 and 2015 were released then.
+* **On rows clearly above or below 50 given their margins:** 44 of 59 correct.
+
 ## What can honestly be said in the thesis
 
-> "A LightGBM forecast using government inputs improved on repeating the last reading at SWS area level, one quarter ahead, on 2021 to 2026. At province level it improved on the last survey in retrospective tests, most clearly when that survey was six years old, with accuracy 0.72 on moderate-or-severe HFIAS at the 50 line, below the 0.75 target. Corrected news features did not add measurable information. The score is a risk score, not a prevalence estimate. Prospective validation of sealed forecasts is under way."
+> "A LightGBM forecast using government inputs improved on repeating the last reading at SWS area level, one quarter ahead, on 2021 to 2026. At province level it improved on the last survey in retrospective tests, most clearly when that survey was six years old. A locked rule that chose its settings on earlier rounds reached 75.0 % accuracy (54 of 72, 95 % interval 64 to 84 %) on moderate-or-severe HFIAS at the 50 line, retrospectively, with higher HIGH recall and slightly worse probability scores than the required model (72.2 %). Corrected news features did not add measurable information. The score is a risk score, not a prevalence estimate. Prospective validation of sealed forecasts is under way."
 
 **The next independent evidence** is SWS at area level as it is published, and any new FNRI round. **No further model search on these rows adds evidence.**

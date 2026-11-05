@@ -91,6 +91,15 @@ Deviations are logged here with reasons and never change a threshold or a gate a
 
 ## Deviations and corrections
 
+**D5, 2026-11-05, after the E151 results: one locked improvement attempt, at the owner's request for accuracy above 75 %.** E151's results below stand and are not replaced.
+
+1. **One run only.** `app/e151/attempt.py` refuses a second run. The code and this protocol are hashed before it runs.
+2. **Choices are made inside each target round's training rows,** by cross-validation across regions, on rounds released before the issue date. Rule: lowest soft Brier; ties to the earlier candidate. The target round's outcomes play no part.
+3. **Candidates, all stated in advance:** input set (required, government, market + climate + poverty, the last with overall news); weight on the LightGBM adjustment (1 or 0.5); correction of mean training error (no or yes).
+4. **The gates, the 50 line and the rows do not change.** A pass needs accuracy of at least 0.75 on the pool and all other gates.
+5. **Evidence is retrospective whatever the result.** The author knew the E151 results when writing the candidates: the simplified input set was suggested by the near-zero weight of employment and remittances, and the error correction by the positive mean error. That is disclosed and cannot be removed.
+6. Removing employment and remittances would conflict with the requirement that all five groups be inputs. If such a candidate is picked, that conflict is reported and the owner decides.
+
 **D4, 2026-11-05, before any E151 model was scored: the target becomes HFIAS moderate plus severe, by the owner's decision.** The owner asked for a score that reflects food insecurity as it is, so that areas not very food insecure read low, and for the classes to stay HIGH and LOW. Changes:
 
 1. The province score now tracks HFIAS moderate plus severe (`app/e141/panel.py outcomes("mod_sev")`). This replaces "HFIAS any-level logit" in Tier 2 and in the Q3 wording, so prevalence wording, if earned, reads "estimated HFIAS moderate-or-severe prevalence".
