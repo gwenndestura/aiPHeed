@@ -124,6 +124,55 @@ REPORT_BARS_NOTE = ("Red bars pushed the regional food-insecurity forecast up, g
                     "effect are not shown. Relative model influence, not causes.")
 NOT_INPUT_NOTE = "This indicator is not an input of the regional food-insecurity model; it has no bar value."
 GROUP_NOTES = {g: NOT_INPUT_NOTE for g in NOT_INPUT}
+try:                                            # Chapter III Eq. 3 provincial exports (model "...-PROVINCE")
+    _EV0 = json.loads((DATA / "evaluation.json").read_text(encoding="utf-8"))
+except (OSError, ValueError):
+    _EV0 = {}
+PROVINCIAL = str(_EV0.get("model", "")).endswith("-PROVINCE")
+if PROVINCIAL:
+    # Each province has its own probability and class (rows.csv: probability = score = the province's P; no poverty
+    # weighting), so the regional-model wording above would be false here.
+    _TARGET = _EV0.get("target") or "Chapter III Eq. 3 per province-quarter"
+    REGIONAL = ("Each province has its own probability and class (Chapter III Eq. 3: S = SWS Balance Luzon hunger + 2 x "
+                "the province's food-CPI deviation from the five-province mean); hunger is regional and shared, the "
+                "price deviation is the province's own. Poverty is context and weights nothing.")
+    _INDICATOR_BASE = {**_INDICATOR_BASE, "id": "provincial_food_insecurity_forecast",
+                       "name": ("Food-insecurity forecast per province (Chapter III Eq. 3: hunger + 2 x province "
+                                "food-price deviation)"),
+                       "unit": ("probability 0-1 that the province's Eq. 3 score is above the cut-off; the province's own "
+                                "class is HIGH at 0.50")}
+    EVENT = f"provincial food insecurity ({_TARGET})"
+    COMBINATION = ("Eq. 3: the regional hunger part and the province's food-price deviation part are combined as "
+                   "S = H + 2D into the province's own probability; HIGH at 0.50")
+    EXPLAINABILITY_NOTE = (
+        f"The class shown is the province's own Eq. 3 forecast ({_TARGET}). " + REGIONAL + " The bars are SHAP values "
+        "of the regional hunger part (the same for every province); the province's food-price deviation part is not a "
+        "bar. Past SWS hunger is the largest input and has no bar. " + FNRI + " Shares describe the model's inputs, "
+        "not causes.")
+    RISK_LEVEL_BASIS = ("Province class (HIGH when the province's own probability is 0.50 or more): HIGH means the "
+                        "province's Eq. 3 score (Balance Luzon hunger + 2 x its food-price deviation) is forecast above "
+                        "the cut-off.")
+    REPORT_TABLE_NOTE = ("Risk level: the province's own class (HIGH at a probability of 0.50 and above, Chapter III "
+                         "Eq. 3). The number is that probability and sets the order. The main factor is the indicator "
+                         "group with the largest relative influence on the regional hunger part.")
+    REPORT_SHAP_NOTE = ("Influence is relative SHAP on the regional hunger part of the forecast (the same for every "
+                        "province), rescaled to 100%; the province food-price part is not included; it is model "
+                        "influence, not a cause.")
+    REPORT_COVER = ("<b>Each province's class is its own Chapter III Eq. 3 forecast</b> (SWS Balance Luzon hunger + 2 x "
+                    "the province's food-price deviation above the cut-off), HIGH at a probability of 0.50. <b>Hunger "
+                    "is measured for Balance Luzon only; provinces differ through their food prices, not through a "
+                    "measured provincial hunger rate</b>.")
+    REPORT_FOOTER = ("Provincial Eq. 3 forecast (regional SWS hunger + 2 x province food-price deviation) -- not an "
+                     "official food-insecurity classification.")
+    REPORT_BARS_NOTE = ("Red bars pushed the regional hunger part up, green bars pulled it down; groups with no effect "
+                        "are not shown. Relative model influence, not causes.")
+    LGU_BASIS = LGU_BASIS.replace("the province's poverty-weighted score", "the province's probability").replace(
+        "Every city and municipality shares the regional food-insecurity class",
+        "Every city and municipality shares its province's class")
+    LGU_LEVEL_BASIS = ("Colour = the province's own class (HIGH when its probability is 0.50 or more). The number and "
+                       "rank are this city's or municipality's priority: the province's probability times its PSA "
+                       "poverty (60%) and density (40%) index within the province. Not a measured or official municipal "
+                       "food-insecurity rate.")
 RULE_NAMES = {"R1": "enough quarters", "R2": "accuracy", "R3": "balanced accuracy", "R4": "beating the baselines",
               "R5": "Brier score", "R6": "precision and recall", "R7": "stability"}
 
@@ -204,22 +253,31 @@ def indicator() -> dict:
                       if str(k) in leads)
     news = ev.get("news_effect_text")
     news = (news[0].upper() + news[1:] + ".") if news else NEWS_DEFAULT
+    if PROVINCIAL:
+        definition = (f"The forecast probability that the province's Chapter III Eq. 3 score is above the cut-off "
+                      f"({ev.get('target') or _TARGET}). {ev.get('design') or ''} Each province has its own probability "
+                      "and class (HIGH at 0.50); there is no poverty weighting. Food-price pressure, food poverty and "
+                      "news are shown beside it as context.")
+        caveat = ("A forecast of the paper's provincial food-insecurity score, not a measured provincial hunger rate: SWS "
+                  "reports hunger for Balance Luzon only, so the hunger part is shared and provinces differ through "
+                  "their food-price deviation. " + FNRI + " Development evidence: the scored quarters were examined "
+                  f"while the model was built ({ev.get('model', '?')}); stricter rules R1-R7 failed: {rules}. " + news)
     return {**_INDICATOR_BASE, "evaluationAvailable": True,
-            "definition": ("The forecast probability that SWS involuntary hunger in Balance Luzon (the share of families "
+            "definition": definition if PROVINCIAL else ("The forecast probability that SWS involuntary hunger in Balance Luzon (the share of families "
                            "that went hungry at least once in the past three months) is above 11.3% in the target "
                            f"quarter, from {ev.get('model_description') or MODEL_DEFAULT}. The class is regional: HIGH at "
                            "a probability of 0.50, the same for every province. The province score is that probability "
                            "times the province's PSA 2023 poverty incidence among families divided by the highest "
                            "province's; it orders the provinces and never changes the class. Food-price pressure, food "
-                           "poverty and news are shown beside it as context."),
+                           "poverty and news are shown beside it as context.")),
             "source": _INDICATOR_BASE["source"] + ("; " + ev["sources_extra"] if ev.get("sources_extra") else ""),
             "horizon": (f"issued on the first day of a quarter; served: {shown}. The paper's 75% accuracy rule "
                         f"(Algorithm 3) gives a Maximum Reliable Lead Time of {mrlt} quarters{stop}. Stricter rules "
                         f"R1-R7 failed: {rules}"),
-            "caveat": ("A forecast of regional hunger, not a measured provincial rate: SWS reports hunger for Balance "
+            "caveat": caveat if PROVINCIAL else ("A forecast of regional hunger, not a measured provincial rate: SWS reports hunger for Balance "
                        "Luzon only, so every province has the same class. " + REGIONAL + " " + FNRI + " Development "
                        f"evidence: the scored quarters were examined while the model was built ({ev.get('model', '?')}); "
-                       f"the stricter rules R1-R7 fail ({rules}). " + news)}
+                       f"the stricter rules R1-R7 fail ({rules}). " + news))}
 
 
 def model_performance() -> dict:
@@ -341,6 +399,11 @@ def _max_poverty() -> float:
 
 
 def score_text(r: dict) -> str:
+    if PROVINCIAL:
+        d = _f(r.get("shap_province_price"))
+        return (f"province probability {float(r['probability']):.2f} (Eq. 3; hunger part alone "
+                f"{float(r['pi_hunger']):.2f}" + ("" if d is None else f", forecast food-price deviation {d:+.2f} points")
+                + f"); PSA 2023 poverty among families {float(r['pov_families_2023']):.1f}% is context, not a weight")
     return (f"province score {score(r):.2f} = regional probability {float(r['probability']):.2f} x PSA 2023 poverty "
             f"among families {float(r['pov_families_2023']):.1f}% / {_max_poverty():.1f}% (highest province)")
 
@@ -422,9 +485,10 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
         "estimate_kind": "forecast" if k == "forecast" else "backtest",
         "price_pressure_score": _f(r.get("pi_price")), "hunger_condition_probability": p,
         "regional_probability": p, "class_level": "high" if is_high(r) else "low",
-        "score_type": "poverty_weighted_regional_food_insecurity_score", "score_definition": indicator()["definition"],
+        "score_type": "provincial_eq3_probability" if PROVINCIAL else "poverty_weighted_regional_food_insecurity_score", "score_definition": indicator()["definition"],
         "band": "High" if is_high(r) else "Low",
-        "confidence_statement": (f"{name}, {quarter}: {_class(r)} food-insecurity risk (regional probability {p:.2f}; "
+        "confidence_statement": (f"{name}, {quarter}: {_class(r)} food-insecurity risk "
+                                 f"({'province' if PROVINCIAL else 'regional'} probability {p:.2f}; "
                                  f"{province_context(r)}). {what}{flags}")})
     return out
 
@@ -452,7 +516,11 @@ def lgu_vulnerability_path() -> Path:
 
 
 def lgu_class_probability(quarter: str) -> float | None:
-    """The probability that sets every LGU's colour: the regional one, never the poverty-weighted score."""
+    """The probability that sets every LGU's colour: the regional one, never the poverty-weighted score. A provincial
+    Eq. 3 export has no single regional probability (each province has its own), so None: each LGU then takes its own
+    province's probability (dashboard.municipality_summary, province_probability)."""
+    if PROVINCIAL:
+        return None
     r = next((r for (_, q), r in rows().items() if q == quarter), None)
     return None if r is None else float(r["probability"])
 
@@ -500,6 +568,13 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
                 "(its average over the forecasts issued up to this one), shared among these five groups. A larger bar "
                 "means the driver is pushing harder than usual; past SWS hunger, the strongest input, is not one of the "
                 "five. They are model influence, not shares of hunger caused by each factor.")
+        if rs and code:
+            note += f" Province context: {province_context(rs[0])}."
+        return note
+    if evaluation().get("driver_view") == "five":
+        note = ("The bars show each driver's share of THIS forecast's push (|SHAP|, log-odds) among these five groups; "
+                "every driver is an input to every forecast. Past SWS hunger and news also move the forecast but have "
+                "no bar. They are model influence, not shares of hunger caused by each factor.")
         if rs and code:
             note += f" Province context: {province_context(rs[0])}."
         return note
@@ -610,8 +685,10 @@ def drivers(code: str, quarter: str, base: dict) -> dict:
     if r is None:
         return base
     news = {d["driver_group"]: d.get("trigger_proportion") for d in base.get("drivers", [])}
-    avg = ({g: _f(r.get(f"avg8_shap_{g}")) or 0.0 for g in SHOWN_GROUPS}
-           if evaluation().get("driver_view") in ("trailing8", "relative") else None)
+    view = evaluation().get("driver_view")
+    pre = "shap_" if view == "five" else "avg8_shap_"
+    avg = ({g: _f(r.get(f"{pre}{g}")) or 0.0 for g in SHOWN_GROUPS}
+           if view in ("trailing8", "relative", "five") else None)
     if avg:                                     # C-E demo: trailing-8 influence of this quarter's forecast
         ds = [{"driver_group": g, "driver_label": GROUP_LABELS[g], "group_shap": float(avg.get(g, 0.0)),
                "direction": "increases_risk" if avg.get(g, 0.0) > 0 else "protective" if avg.get(g, 0.0) < 0 else
@@ -640,6 +717,22 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
     r = rs[0]
     p = float(r["probability"])
     past = past_text(r)
+    if PROVINCIAL:
+        if code is None:
+            hi = [x for x in rs if is_high(x)]
+            mean = sum(float(x["probability"]) for x in rs) / len(rs)
+            head = (f"FOOD-INSECURITY RISK for {name}, {quarter}: {len(hi)} of {len(rs)} provinces HIGH (mean of the "
+                    f"province probabilities {mean:.2f}; Chapter III Eq. 3{'; ' + past if past else ''}; {latest_sws(r)}")
+            ctx = ("; provinces by probability: " + ", ".join(
+                f"{x['province']} {score(x):.2f} {_class(x)}" for x in sorted(rs, key=_priority))
+                + f"; {_clause(r.get('regional_news_text'))}")
+            flag = f"; {REVIEW_FLAG[:-1]}" if hi and kind(r) == "forecast" else ""
+        else:
+            head = (f"FOOD-INSECURITY RISK for {name}, {quarter}: {_class(r)} (province probability {p:.2f} that its "
+                    f"Chapter III Eq. 3 score is above the cut-off{'; ' + past if past else ''}; {latest_sws(r)}")
+            ctx = f"; {name}: {province_context(r)}"
+            flag = f"; {REVIEW_FLAG[:-1]}" if is_high(r) and kind(r) == "forecast" else ""
+        return f"{head}{ctx}; {reliability_text(r)}{_outside_bars(r)}{flag}."
     head = (f"FOOD-INSECURITY RISK for {name}, {quarter}: {_class(r)} (regional probability {p:.2f} that Balance Luzon "
             f"SWS hunger is above {H_LINE}%{'; ' + past if past else ''}; {latest_sws(r)}; classification is regional, "
             "the province score weights it by PSA poverty and never changes the class")

@@ -35,6 +35,21 @@ figures.
 
 ## After both files are complete
 
+> **Current workflow (2026-11-04).** This supersedes the steps below where they differ, and matches
+> `FINAL_2026-11-04/HEADLINE_ANNOTATION_PACKAGE.md`:
+> 1. Check that both sheets still hold the same 300 items: `item` 1–300, identical `article_key` and `title`.
+> 2. `python ../runner/obj1_annotation_v2.py disagreements` → `adjudication.csv`, the A ≠ B items.
+> 3. A third team member fills `adjudication.csv`, recording disagreements there and not in `notes`.
+> 4. `python ../runner/obj1_annotation_v2.py score` → `../out/obj1_annotation_scores_v2.json`.
+>
+> **The scoring reports:** κ, relevance P/R/F1, XLM-R stress accuracy and AUC, and geocoding accuracy.
+>
+> **Sealed system outputs:** `system_outputs_SEALED.csv`, SHA-256
+> `f8e668d4080025900278f3ef4c7f301926d35f82644e06248879ebbccc64c883`. The hash is recorded 2026-11-04 and the file is
+> identical to commit 2d762ab. Re-check the hash before scoring.
+>
+> **Earlier steps:** `obj1_nlp.py score` still runs, unchanged, but gives the smaller metric set.
+
 1. Run `python ../runner/obj1_nlp.py score`.
 2. The script reports:
    - Cohen's κ for relevance and province;

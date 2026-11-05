@@ -1,0 +1,334 @@
+{
+ "model": "CB6DEX-PM-PROVINCE",
+ "target": "Chapter III Eq. 3 per province-quarter: SWS Balance Luzon hunger + 2 x province food CPI YoY deviation from the five-province mean > 14.325 (paper: median of S, 2013-2026)",
+ "decision_rule": "HIGH when the province's own P >= 0.50",
+ "design": "LOCAL DEMO, NOT THE SERVED MODEL: C-B6D-E-X = Eq. 3 decomposed: regional hunger part (C-B6E LightGBM, with employment and OFW) + province food-price deviation part, combined as S = H + 2D (CB6P/PREREGISTRATION_FI.md)",
+ "chosen": "Strongest provincial candidate (development evidence); not adopted for serving. C-B6 stays the served model.",
+ "max_reliable_lead": 0,
+ "max_reliable_lead_r1_r7": 0,
+ "served_leads": [
+  1,
+  2
+ ],
+ "algorithm3": "Algorithm 3: mean fold accuracy >= 0.75 (one quarter per fold), k = 1..8, halt at the first failing lead",
+ "leads": {
+  "1": {
+   "n": 250,
+   "n_quarters": 50,
+   "period": "2013-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.644,
+    "balanced": 0.644,
+    "precision": 0.6551724137931034,
+    "recall": 0.608,
+    "f1": 0.6307053941908715,
+    "auc": 0.73264,
+    "brier": 0.21503542428956968,
+    "TP": 76,
+    "FP": 40,
+    "FN": 49,
+    "TN": 85
+   },
+   "persistence_accuracy": 0.688,
+   "alg3_pass": false,
+   "reliable": false,
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "50 q, 250 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": "0.644"
+    },
+    "R3": {
+     "pass": false,
+     "value": "0.644"
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6440 vs 0.5000 / 0.6880"
+    },
+    "R5": {
+     "pass": true,
+     "value": "{'PERSIST-SI': 'diff -0.0970, p 0.001', 'CLIM': 'diff -0.0488, p 0.006'}"
+    },
+    "R6": {
+     "pass": true,
+     "value": "P 0.655, R 0.608"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.671, 0.612, 0.65] (sizes [17, 17, 16]), LOQO min 0.637; other split [0.713, 0.576, 0.647] (sizes [16, 17, 17])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R7"
+   ],
+   "shap_shares": null,
+   "vs_REF": null
+  },
+  "2": {
+   "n": 250,
+   "n_quarters": 50,
+   "period": "2013-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.608,
+    "balanced": 0.608,
+    "precision": 0.6153846153846154,
+    "recall": 0.576,
+    "f1": 0.5950413223140495,
+    "auc": 0.6751680000000001,
+    "brier": 0.23984013051564693,
+    "TP": 72,
+    "FP": 45,
+    "FN": 53,
+    "TN": 80
+   },
+   "persistence_accuracy": 0.644,
+   "alg3_pass": false,
+   "reliable": false,
+   "rules": {
+    "R1": {
+     "pass": true,
+     "value": "50 q, 250 rows"
+    },
+    "R2": {
+     "pass": false,
+     "value": "0.608"
+    },
+    "R3": {
+     "pass": false,
+     "value": "0.608"
+    },
+    "R4": {
+     "pass": false,
+     "value": "0.6080 vs 0.5000 / 0.6440"
+    },
+    "R5": {
+     "pass": true,
+     "value": "{'PERSIST-SI': 'diff -0.1162, p 0.000', 'CLIM': 'diff -0.0286, p 0.063'}"
+    },
+    "R6": {
+     "pass": false,
+     "value": "P 0.615, R 0.576"
+    },
+    "R7": {
+     "pass": false,
+     "value": "thirds [0.635, 0.576, 0.613] (sizes [17, 17, 16]), LOQO min 0.600; other split [0.675, 0.541, 0.612] (sizes [16, 17, 17])"
+    }
+   },
+   "failed": [
+    "R2",
+    "R3",
+    "R4",
+    "R6",
+    "R7"
+   ],
+   "shap_shares": null,
+   "vs_REF": null
+  },
+  "3": {
+   "n": 245,
+   "n_quarters": 50,
+   "period": "2013-Q1..2026-Q3",
+   "metrics": {
+    "accuracy": 0.6448979591836734,
+    "balanced": 0.6443948280458545,
+    "precision": 0.6517857142857143,
+    "recall": 0.6033057851239669,
+    "f1": 0.6266094420600858,
+    "auc": 0.6363303119168222,
+    "brier": 0.25053766709071906,
+    "TP": 73,
+    "FP": 39,
+    "FN": 48,
+    "TN": 85
+   },
+   "persistence_accuracy": 0.6122448979591837,
+   "alg3_pass": false,
+   "reliable": false,
+   "rules": {},
+   "failed": [
+    "not evaluated"
+   ],
+   "shap_shares": null,
+   "vs_REF": null
+  }
+ },
+ "objective4_lead1": {
+  "PERSIST": {
+   "p_holm": 0.0,
+   "diff": -0.15564006487783535
+  },
+  "PSA-only": {
+   "p_holm": 0.424,
+   "diff": -0.02517029639011402
+  },
+  "LOGIT": {
+   "p_holm": 0.424,
+   "diff": -0.009761812009562035
+  },
+  "NLP-only": {
+   "p_holm": 0.0072,
+   "diff": -0.17479515283579014
+  },
+  "ALWAYS-HIGH": {
+   "p_holm": 0.04920000000000001,
+   "diff": -0.12338200036170631
+  }
+ },
+ "news_shap_share_lead1": {
+  "H1 Hunger (SWS)": 63.5,
+  "A1-A2 Food and headline prices": 6.1,
+  "A3 Rice": 2.3,
+  "C1 Climate (ONI)": 2.0,
+  "C2 Typhoons": 0.0,
+  "C3 Crops": 0.7,
+  "C4 Fisheries": 0.7,
+  "World prices": 21.0,
+  "N1 News": 1.4,
+  "E1 Employment": 0.0,
+  "E2 OFW remittances": 0.0,
+  "S Rice stocks (supply)": 2.3
+ },
+ "evidence_status": "development evidence (every scored quarter was examined during development)",
+ "price_band_cuts": [
+  0.33,
+  0.67
+ ],
+ "price_part_reliability": {
+  "source": "P0H4_LEAD12_REVIEW/out/price_warning.json",
+  "lead1_accuracy": 0.614,
+  "lead2_accuracy": 0.6,
+  "verdict": "not reliable"
+ },
+ "province_poverty": [
+  {
+   "province_code": "PH040100000",
+   "province": "Cavite",
+   "pov_families_2023": 4.3,
+   "pov_families_2023_cv": 16.4,
+   "pov_weight": 0.6232,
+   "food_pov_2023": 0.4,
+   "food_pov_2023_cv": 53.3
+  },
+  {
+   "province_code": "PH040200000",
+   "province": "Laguna",
+   "pov_families_2023": 5.4,
+   "pov_families_2023_cv": 13.3,
+   "pov_weight": 0.7826,
+   "food_pov_2023": 0.8,
+   "food_pov_2023_cv": 35.0
+  },
+  {
+   "province_code": "PH040300000",
+   "province": "Quezon",
+   "pov_families_2023": 6.9,
+   "pov_families_2023_cv": 14.4,
+   "pov_weight": 1.0,
+   "food_pov_2023": 0.5,
+   "food_pov_2023_cv": 38.5
+  },
+  {
+   "province_code": "PH040400000",
+   "province": "Rizal",
+   "pov_families_2023": 5.6,
+   "pov_families_2023_cv": 13.5,
+   "pov_weight": 0.8116,
+   "food_pov_2023": 1.5,
+   "food_pov_2023_cv": 24.5
+  },
+  {
+   "province_code": "PH040500000",
+   "province": "Batangas",
+   "pov_families_2023": 4.9,
+   "pov_families_2023_cv": 16.2,
+   "pov_weight": 0.7101,
+   "food_pov_2023": 0.8,
+   "food_pov_2023_cv": 33.9
+  }
+ ],
+ "low_precision_cv": 30.0,
+ "lucena": {
+  "value": 10.0,
+  "cv": 17.0,
+  "own": true,
+  "source": "PSA 2021 Full-Year Official Poverty Statistics, Table 2a (City of Lucena), poverty incidence among population; published to the whole per cent",
+  "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1F/FY/0041F3DF02A.px"
+ },
+ "news_flag_rule": {
+  "families": [
+   "PRICE",
+   "FOODSEC",
+   "DISASTER",
+   "AGRI",
+   "LIVELIHOOD"
+  ],
+  "window": 8,
+  "min_history": 6,
+  "z_min": 1.5,
+  "rise_min": 0.05,
+  "min_articles": 20,
+  "regional_rise_min": 0.05
+ },
+ "news_flags": {
+  "rows": 42
+ },
+ "fnri_2023": {
+  "source": "DOST-FNRI 2023 National Nutrition Survey",
+  "region": "CALABARZON",
+  "moderate_or_severe_food_insecure_pct": 19.1,
+  "ci95": [
+   17.0,
+   21.1
+  ],
+  "national_pct": 31.4,
+  "use": "face validity only: a different measure from SWS hunger, never a label"
+ },
+ "seal_sha256": "",
+ "seal_issue_date": "",
+ "seal_file": "out/seal_prospective_X2.csv (2c1ff50a...)",
+ "plan_sha256": "2efd9677e3785f4b3469b416e34cd824d536e16450ae100ceea537044d20a38b",
+ "news_effect": {},
+ "not_input_groups": [],
+ "driver_view": "trailing8",
+ "news_effect_text": "the NLP input (FSSI anomaly) is included and carries 1.4% of SHAP influence on average (rice stocks, not one of the five bars, carry 2.3%)",
+ "model_description": "one LightGBM (setting chosen on inner chronological folds) trained walk-forward (stacked leads) on SWS hunger since 1998 and on PSA prices, climate, production, world-price, news and national rice stock (PSA) inputs",
+ "sources_extra": "PSA rice stocks inventory (national, monthly)",
+ "model_line": "C-B6D-E-X-PM (LOCAL DEMO, cut-off 14.325): provincial Eq. 3 forecast = regional SWS hunger part + province food-price part. Accuracy Lead 1 0.644, Lead 2 0.608 (failed rules L1 ['R2', 'R3', 'R4', 'R7'], L2 ['R2', 'R3', 'R4', 'R6', 'R7']) on 250 province-quarters 2013-2026. Not the served model.",
+ "sources": {
+  "cb6_fits": "6993011f83c03fe7d994c668e8014c9e9dff2abdcde27e71c2396c9b9d4601e6",
+  "cb6_results": "4ba9ffda2099646f4fb6d70c4b0f3d10642dd0b7663fb8b53ca5a4158b2f8323",
+  "ce6_features": "011509a9b10603552bc3833c0195e3bc8dc789f7b52f9a5e01a381336cc66585",
+  "table_pooled": "12ba4a10092dc43ae62daf1b418de984864e1f4e6dbea34743d2452d3bdc002c",
+  "reproduced": null
+ },
+ "objective4_lead1_persist_p": {
+  "PERSIST-P": {
+   "p_holm": 0.8176,
+   "diff": -0.01592972237738948
+  },
+  "PSA-only": {
+   "p_holm": 0.8176,
+   "diff": -0.02517029639011402
+  },
+  "LOGIT": {
+   "p_holm": 0.8176,
+   "diff": -0.009761812009562035
+  },
+  "NLP-only": {
+   "p_holm": 0.0084,
+   "diff": -0.17479515283579014
+  },
+  "ALWAYS-HIGH": {
+   "p_holm": 0.0656,
+   "diff": -0.12338200036170631
+  }
+ },
+ "objective4_persist_p_source": "OBJECTIVES_AUDIT/FIXES_2026-11-04/PLAN_PERSIST_P.md (b3e8b02d...): persistence scored as a probability (hr_lib.pi_h4l); Holm over the 14-test family with PERSIST-P; objective4_lead1 keeps the 0/1 persistence family as a secondary line"
+}

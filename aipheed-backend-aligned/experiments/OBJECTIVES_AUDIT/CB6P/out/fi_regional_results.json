@@ -1,0 +1,688 @@
+{
+ "prereg_sha256": "2109fecddb82196b98d694d59ed3058e26a49d88c816daa88ef06413e6c774d3",
+ "outcome": "measured SWS BL hunger > 11.3%",
+ "leads": {
+  "1": {
+   "FULL": {
+    "accuracy": 0.7903225806451613,
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.6982864137086904,
+     "brier": 0.1920012573028274,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10,
+     "fpr": 0.47368421052631576,
+     "fnr": 0.09302325581395349,
+     "ece_10": 0.21729136944224067
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1467, p 0.000",
+       "CLIM": "diff -0.0286, p 0.140"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R5",
+     "R7"
+    ]
+   },
+   "NP": {
+    "accuracy": 0.7258064516129032,
+    "metrics": {
+     "accuracy": 0.7258064516129032,
+     "balanced": 0.6848225214198287,
+     "precision": 0.8095238095238095,
+     "recall": 0.7906976744186046,
+     "f1": 0.8,
+     "auc": 0.7166462668298653,
+     "brier": 0.19813936442603572,
+     "TP": 34,
+     "FP": 8,
+     "FN": 9,
+     "TN": 11,
+     "fpr": 0.42105263157894735,
+     "fnr": 0.20930232558139536,
+     "ece_10": 0.10745617745739677
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.7258
+     },
+     "R3": {
+      "pass": false,
+      "value": 0.6848
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7258 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1406, p 0.000",
+       "CLIM": "diff -0.0225, p 0.205"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.810, R 0.791"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.7] (sizes [21, 21, 20]), LOQO min 0.721; other split [0.95, 0.524, 0.714] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R3",
+     "R5",
+     "R7"
+    ]
+   },
+   "PO": {
+    "accuracy": 0.6612903225806451,
+    "metrics": {
+     "accuracy": 0.6612903225806451,
+     "balanced": 0.5208078335373317,
+     "precision": 0.7037037037037037,
+     "recall": 0.8837209302325582,
+     "f1": 0.7835051546391752,
+     "auc": 0.5299877600979193,
+     "brier": 0.22901927396737826,
+     "TP": 38,
+     "FP": 16,
+     "FN": 5,
+     "TN": 3,
+     "fpr": 0.8421052631578947,
+     "fnr": 0.11627906976744186,
+     "ece_10": 0.15944645553070183
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.6613
+     },
+     "R3": {
+      "pass": false,
+      "value": 0.5208
+     },
+     "R4": {
+      "pass": false,
+      "value": "0.6613 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1097, p 0.015",
+       "CLIM": "diff +0.0084, p 0.645"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.704, R 0.884"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.905, 0.524, 0.55] (sizes [21, 21, 20]), LOQO min 0.656; other split [0.9, 0.524, 0.571] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R7"
+    ]
+   },
+   "HO": {
+    "accuracy": 0.7258064516129032,
+    "metrics": {
+     "accuracy": 0.7258064516129032,
+     "balanced": 0.6848225214198287,
+     "precision": 0.8095238095238095,
+     "recall": 0.7906976744186046,
+     "f1": 0.8,
+     "auc": 0.686046511627907,
+     "brier": 0.1990115972196681,
+     "TP": 34,
+     "FP": 8,
+     "FN": 9,
+     "TN": 11,
+     "fpr": 0.42105263157894735,
+     "fnr": 0.20930232558139536,
+     "ece_10": 0.0960895955786141
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.7258
+     },
+     "R3": {
+      "pass": false,
+      "value": 0.6848
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7258 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1397, p 0.001",
+       "CLIM": "diff -0.0216, p 0.208"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.810, R 0.791"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.524, 0.7] (sizes [21, 21, 20]), LOQO min 0.721; other split [0.95, 0.524, 0.714] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R3",
+     "R5",
+     "R7"
+    ]
+   },
+   "n_quarters": 62,
+   "paired": {
+    "FULL_vs_PO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1920012573028274,
+     "brier_comparator": 0.22901927396737826,
+     "diff": -0.03701801666455081,
+     "ci95": [
+      -0.07113359210976457,
+      -0.000364179505238231
+     ],
+     "brier_skill": 0.16163712347557146,
+     "p_one_sided": 0.0242,
+     "n_needed_raw_0.05": 40,
+     "n_needed_holm_strictest_0.05/42": 134
+    },
+    "FULL_vs_NP": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1920012573028274,
+     "brier_comparator": 0.19813936442603572,
+     "diff": -0.006138107123208288,
+     "ci95": [
+      -0.03734691426346927,
+      0.022508631666784094
+     ],
+     "brier_skill": 0.030978736310116828,
+     "p_one_sided": 0.354,
+     "n_needed_raw_0.05": 1053,
+     "n_needed_holm_strictest_0.05/42": 3590
+    },
+    "NP_vs_HO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.19813936442603572,
+     "brier_comparator": 0.1990115972196681,
+     "diff": -0.0008722327936324104,
+     "ci95": [
+      -0.011019517760084797,
+      0.010120480963078216
+     ],
+     "brier_skill": 0.004382823945026759,
+     "p_one_sided": 0.4244,
+     "n_needed_raw_0.05": 6939,
+     "n_needed_holm_strictest_0.05/42": 23672
+    },
+    "FULL_vs_HO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1920012573028274,
+     "brier_comparator": 0.1990115972196681,
+     "diff": -0.007010339916840698,
+     "ci95": [
+      -0.03324880742443172,
+      0.01975111009157853
+     ],
+     "brier_skill": 0.035225785907856966,
+     "p_one_sided": 0.307,
+     "n_needed_raw_0.05": 622,
+     "n_needed_holm_strictest_0.05/42": 2121
+    }
+   },
+   "FULL_shap_share_pct": {
+    "hunger": 57.871082180939844,
+    "price": 30.68254651211605,
+    "non_price_other": 11.44637130694411
+   }
+  },
+  "2": {
+   "FULL": {
+    "accuracy": 0.7903225806451613,
+    "metrics": {
+     "accuracy": 0.7903225806451613,
+     "balanced": 0.7166462668298653,
+     "precision": 0.8125,
+     "recall": 0.9069767441860465,
+     "f1": 0.8571428571428572,
+     "auc": 0.7197062423500612,
+     "brier": 0.1843564076527674,
+     "TP": 39,
+     "FP": 9,
+     "FN": 4,
+     "TN": 10,
+     "fpr": 0.47368421052631576,
+     "fnr": 0.09302325581395349,
+     "ece_10": 0.1874539077241144
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7903
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7166
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7903 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": true,
+      "value": {
+       "PERSIST-SI": "diff -0.1544, p 0.000",
+       "CLIM": "diff -0.0379, p 0.079"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.812, R 0.907"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.952, 0.571, 0.85] (sizes [21, 21, 20]), LOQO min 0.787; other split [0.95, 0.571, 0.857] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R7"
+    ]
+   },
+   "NP": {
+    "accuracy": 0.7580645161290323,
+    "metrics": {
+     "accuracy": 0.7580645161290323,
+     "balanced": 0.722766217870257,
+     "precision": 0.8333333333333334,
+     "recall": 0.813953488372093,
+     "f1": 0.8235294117647058,
+     "auc": 0.736842105263158,
+     "brier": 0.18686422094499758,
+     "TP": 35,
+     "FP": 7,
+     "FN": 8,
+     "TN": 12,
+     "fpr": 0.3684210526315789,
+     "fnr": 0.18604651162790697,
+     "ece_10": 0.1573043844630044
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7581
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7228
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7581 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1518, p 0.000",
+       "CLIM": "diff -0.0354, p 0.107"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.833, R 0.814"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.952, 0.619, 0.7] (sizes [21, 21, 20]), LOQO min 0.754; other split [0.95, 0.667, 0.667] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R5"
+    ]
+   },
+   "PO": {
+    "accuracy": 0.5967741935483871,
+    "metrics": {
+     "accuracy": 0.5967741935483871,
+     "balanced": 0.45960832313341493,
+     "precision": 0.6730769230769231,
+     "recall": 0.813953488372093,
+     "f1": 0.736842105263158,
+     "auc": 0.4895960832313342,
+     "brier": 0.2437997161511778,
+     "TP": 35,
+     "FP": 17,
+     "FN": 8,
+     "TN": 2,
+     "fpr": 0.8947368421052632,
+     "fnr": 0.18604651162790697,
+     "ece_10": 0.13559501098145235
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": false,
+      "value": 0.5968
+     },
+     "R3": {
+      "pass": false,
+      "value": 0.4596
+     },
+     "R4": {
+      "pass": false,
+      "value": "0.5968 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.0949, p 0.037",
+       "CLIM": "diff +0.0215, p 0.860"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.673, R 0.814"
+     },
+     "R7": {
+      "pass": false,
+      "value": "thirds [0.857, 0.333, 0.6] (sizes [21, 21, 20]), LOQO min 0.590; other split [0.85, 0.333, 0.619] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R7"
+    ]
+   },
+   "HO": {
+    "accuracy": 0.7741935483870968,
+    "metrics": {
+     "accuracy": 0.7741935483870968,
+     "balanced": 0.7343941248470012,
+     "precision": 0.8372093023255814,
+     "recall": 0.8372093023255814,
+     "f1": 0.8372093023255814,
+     "auc": 0.7025703794369645,
+     "brier": 0.18761944043361356,
+     "TP": 36,
+     "FP": 7,
+     "FN": 7,
+     "TN": 12,
+     "fpr": 0.3684210526315789,
+     "fnr": 0.16279069767441862,
+     "ece_10": 0.11264181975919589
+    },
+    "rules": {
+     "R1": {
+      "pass": true,
+      "value": "62 q, 62 rows"
+     },
+     "R2": {
+      "pass": true,
+      "value": 0.7742
+     },
+     "R3": {
+      "pass": true,
+      "value": 0.7344
+     },
+     "R4": {
+      "pass": true,
+      "value": "0.7742 vs 0.3065 / 0.6613"
+     },
+     "R5": {
+      "pass": false,
+      "value": {
+       "PERSIST-SI": "diff -0.1511, p 0.000",
+       "CLIM": "diff -0.0346, p 0.101"
+      }
+     },
+     "R6": {
+      "pass": true,
+      "value": "P 0.837, R 0.837"
+     },
+     "R7": {
+      "pass": true,
+      "value": "thirds [0.952, 0.667, 0.7] (sizes [21, 21, 20]), LOQO min 0.770; other split [0.95, 0.714, 0.667] (sizes [20, 21, 21])"
+     }
+    },
+    "failed": [
+     "R5"
+    ]
+   },
+   "n_quarters": 62,
+   "paired": {
+    "FULL_vs_PO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1843564076527674,
+     "brier_comparator": 0.2437997161511778,
+     "diff": -0.05944330849841042,
+     "ci95": [
+      -0.09680035898658265,
+      -0.02127578590614866
+     ],
+     "brier_skill": 0.24382025310296174,
+     "p_one_sided": 0.0012,
+     "n_needed_raw_0.05": 18,
+     "n_needed_holm_strictest_0.05/42": 61
+    },
+    "FULL_vs_NP": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1843564076527674,
+     "brier_comparator": 0.18686422094499758,
+     "diff": -0.0025078132922302376,
+     "ci95": [
+      -0.03171192939128989,
+      0.023534951585282862
+     ],
+     "brier_skill": 0.013420510783433204,
+     "p_one_sided": 0.4564,
+     "n_needed_raw_0.05": 5473,
+     "n_needed_holm_strictest_0.05/42": 18670
+    },
+    "NP_vs_HO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.18686422094499758,
+     "brier_comparator": 0.18761944043361356,
+     "diff": -0.0007552194886159658,
+     "ci95": [
+      -0.011777745773969445,
+      0.011137973544759622
+     ],
+     "brier_skill": 0.004025273110667915,
+     "p_one_sided": 0.4336,
+     "n_needed_raw_0.05": 10074,
+     "n_needed_holm_strictest_0.05/42": 34368
+    },
+    "FULL_vs_HO": {
+     "n_quarters": 62,
+     "brier_candidate": 0.1843564076527674,
+     "brier_comparator": 0.18761944043361356,
+     "diff": -0.0032630327808462036,
+     "ci95": [
+      -0.027552309343093863,
+      0.020551152095344687
+     ],
+     "brier_skill": 0.01739176267291309,
+     "p_one_sided": 0.4102,
+     "n_needed_raw_0.05": 2480,
+     "n_needed_holm_strictest_0.05/42": 8460
+    }
+   },
+   "FULL_shap_share_pct": {
+    "hunger": 58.24614542572846,
+    "price": 30.10911261900246,
+    "non_price_other": 11.644741955269081
+   }
+  },
+  "3": {
+   "FULL": {
+    "accuracy": 0.7258064516129032
+   },
+   "NP": {
+    "accuracy": 0.7096774193548387
+   },
+   "PO": {
+    "accuracy": 0.5967741935483871
+   },
+   "HO": {
+    "accuracy": 0.7258064516129032
+   }
+  },
+  "4": {
+   "FULL": {
+    "accuracy": 0.6774193548387096
+   },
+   "NP": {
+    "accuracy": 0.6612903225806451
+   },
+   "PO": {
+    "accuracy": 0.6290322580645161
+   },
+   "HO": {
+    "accuracy": 0.6774193548387096
+   }
+  },
+  "5": {
+   "FULL": {
+    "accuracy": 0.6129032258064516
+   },
+   "NP": {
+    "accuracy": 0.6290322580645161
+   },
+   "PO": {
+    "accuracy": 0.6451612903225806
+   },
+   "HO": {
+    "accuracy": 0.6290322580645161
+   }
+  },
+  "6": {
+   "FULL": {
+    "accuracy": 0.5967741935483871
+   },
+   "NP": {
+    "accuracy": 0.5967741935483871
+   },
+   "PO": {
+    "accuracy": 0.6612903225806451
+   },
+   "HO": {
+    "accuracy": 0.6129032258064516
+   }
+  },
+  "7": {
+   "FULL": {
+    "accuracy": 0.6451612903225806
+   },
+   "NP": {
+    "accuracy": 0.5806451612903226
+   },
+   "PO": {
+    "accuracy": 0.6935483870967742
+   },
+   "HO": {
+    "accuracy": 0.5645161290322581
+   }
+  },
+  "8": {
+   "FULL": {
+    "accuracy": 0.6612903225806451
+   },
+   "NP": {
+    "accuracy": 0.5645161290322581
+   },
+   "PO": {
+    "accuracy": 0.6774193548387096
+   },
+   "HO": {
+    "accuracy": 0.5483870967741935
+   }
+  }
+ },
+ "algorithm3": {
+  "FULL": 2,
+  "NP": 0,
+  "PO": 0,
+  "HO": 0
+ },
+ "decisions": {
+  "A1_nonprice_improve_FI (FULL<PO)": true,
+  "A2_prices_add (FULL<NP)": false,
+  "A3_other_drivers_add_beyond_hunger (NP<HO)": false
+ }
+}

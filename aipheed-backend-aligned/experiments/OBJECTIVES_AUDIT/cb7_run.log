@@ -1,0 +1,28 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:   1%|          | 2/393 [00:00<00:32, 11.89it/s]Loading weights:   1%|1         | 4/393 [00:00<00:35, 10.96it/s]Loading weights:   3%|2         | 10/393 [00:00<00:18, 21.02it/s]Loading weights:   4%|3         | 14/393 [00:00<00:14, 25.72it/s]Loading weights:   4%|4         | 17/393 [00:00<00:14, 25.29it/s]Loading weights:   5%|5         | 20/393 [00:00<00:15, 24.38it/s]Loading weights:   6%|5         | 23/393 [00:01<00:17, 20.90it/s]Loading weights:   8%|7         | 31/393 [00:01<00:11, 32.24it/s]Loading weights:   9%|8         | 35/393 [00:01<00:16, 22.16it/s]Loading weights:  10%|9         | 38/393 [00:01<00:15, 22.98it/s]Loading weights:  10%|#         | 41/393 [00:01<00:16, 20.97it/s]Loading weights:  11%|#1        | 44/393 [00:01<00:15, 22.24it/s]Loading weights: 100%|##########| 393/393 [00:01<00:00, 197.15it/s]
+[transformers] [1mXLMRobertaForSequenceClassification LOAD REPORT[0m from: joeddav/xlm-roberta-large-xnli
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+roberta.pooler.dense.bias   | UNEXPECTED |  | 
+roberta.pooler.dense.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+scored 373
+{'prereg_sha256': '99dc56d77a64fd91c18bef9548cb400f0bdaaef941e344a566f792e043be408b', 'quarters': 58, 'with_z_G': 21, 'first_z_G': 8074, 'corr_G_vs_volume': 0.14126638535200658, 'leakage_unchanged': True, 'admitted_total': 373}
+{'C-b_replication_max_abs_diff': 1.1102230246251565e-16}
+{'prereg_sha256': 'f616407e17434aeb64ed49d572fd88bdd8f237352a18ec80535a6cc4a4f40bab', 'rows': 904, 'origins': 113}
+L1 C-b   acc 0.790 bal 0.717 P 0.812 R 0.907 F1 0.857 AUC 0.702 Brier 0.1874 failed ['R7'] thirds [0.952, 0.571, 0.85]
+L1 C-B6  acc 0.806 bal 0.743 P 0.830 R 0.907 F1 0.867 AUC 0.723 Brier 0.1831 failed [] thirds [0.952, 0.619, 0.85]
+L1 C-B7  acc 0.790 bal 0.731 P 0.826 R 0.884 F1 0.854 AUC 0.723 Brier 0.1844 failed [] thirds [0.952, 0.619, 0.8]
+   vs C-B6 diff +0.0013 p 0.793
+   vs C-b diff -0.0031 p 0.256 calls changed 2; all five >0.5%: 0 of 62; mean shares {'market': 78.8, 'climate': 11.2, 'fish_kill': 2.1, 'employment': 0.0, 'ofw_remittance': 0.0, 'supply': 7.9}
+L2 C-b   acc 0.790 bal 0.717 P 0.812 R 0.907 F1 0.857 AUC 0.704 Brier 0.1837 failed ['R7'] thirds [0.952, 0.571, 0.85]
+L2 C-B6  acc 0.806 bal 0.743 P 0.830 R 0.907 F1 0.867 AUC 0.712 Brier 0.1806 failed [] thirds [0.952, 0.619, 0.85]
+L2 C-B7  acc 0.790 bal 0.731 P 0.826 R 0.884 F1 0.854 AUC 0.707 Brier 0.1844 failed [] thirds [0.952, 0.619, 0.8]
+   vs C-B6 diff +0.0038 p 0.974
+   vs C-b diff +0.0006 p 0.511 calls changed 2; all five >0.5%: 0 of 62; mean shares {'market': 78.7, 'climate': 11.5, 'fish_kill': 2.1, 'employment': 0.0, 'ofw_remittance': 0.0, 'supply': 7.7}
+significant: 7 of 14; Algorithm 3: {'C-b': 2, 'C-B6': 2, 'C-B7': 2}
+Gates: {'G1': False, 'G2': False, 'G3': True, 'G4': True, 'G5': True, 'adoption_G2_and_G4': False}
+Acceptance: {'H8_brier_below_C-B6_p_lt_0.10_both_leads': False, 'R1_R7_both_leads': True, 'MRLT_ge_2': True, 'accuracy_ge_0.75_both_leads': True, 'leakage_check': True, 'passes': False} beats all seven: False
+latest issue (2026-10-01) five-group shares: [{'market': 85.2, 'climate': 0.8, 'fish_kill': 0.6, 'employment': 0.0, 'ofw_remittance': 0.0, 'supply': 13.4}, {'market': 85.2, 'climate': 0.8, 'fish_kill': 0.6, 'employment': 0.0, 'ofw_remittance': 0.0, 'supply': 13.4}]
