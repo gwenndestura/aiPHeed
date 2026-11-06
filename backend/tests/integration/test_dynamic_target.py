@@ -163,3 +163,13 @@ def test_dashboard_rule_table_e44(viewed, latest, current, target):
     ft = forecast_target(viewed)
     assert (ft["latest_complete_data_quarter"], ft["calendar_quarter"], ft["target_quarter"]) == (latest, current, target)
     assert shift(ft["latest_complete_data_quarter"], ft["lead_from_latest_data_quarter"]) == ft["target_quarter"]
+
+
+import pytest as _pytest_e166
+
+
+@_pytest_e166.fixture(autouse=True)
+def _previous_served_model(monkeypatch):
+    """This file tests the previous served model's contract. Since 2026-11-06 the thesis model E166 serves every dashboard
+    quarter (app.services.e166_serving); it is switched off here so these checks keep testing that model."""
+    monkeypatch.setenv("AIPHEED_E166_SERVE", "0")

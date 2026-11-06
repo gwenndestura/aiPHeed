@@ -1,7 +1,12 @@
 """Public thesis-model routes (E166): reachable without login, consistent with the locked E166 outputs."""
+import os
+
+import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+
+needs_e166 = pytest.mark.skipif(os.environ.get("AIPHEED_E166_SERVE", "1") == "0", reason="E166 serving switched off")
 
 client = TestClient(app)
 
@@ -47,6 +52,7 @@ def test_baselines_e166_beats_all_rq3_on_accuracy_f1_auc():
     assert client.get("/api/v1/thesis/baselines", params={"lead": 9}).status_code == 422
 
 
+@needs_e166
 def test_existing_dashboard_serves_e166_on_every_quarter():
     q = client.get("/api/v1/quarters").json()
     assert q["current"] == "2027-Q1"
@@ -60,6 +66,7 @@ def test_existing_dashboard_serves_e166_on_every_quarter():
         assert n == 142
 
 
+@needs_e166
 def test_live_quarter_equals_the_sealed_e166_forecast():
     import json
     from app.paths import BACKEND_DIR

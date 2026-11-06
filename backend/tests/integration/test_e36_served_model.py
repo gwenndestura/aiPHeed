@@ -170,3 +170,13 @@ def test_prospective_forecast_is_frozen_and_unchanged():
     fr = json.loads(b)
     for code, v in fr["provinces"].items():
         assert FC["provinces"][code]["p_high"] == pytest.approx(v["p_high"], abs=5e-5)
+
+
+import pytest as _pytest_e166
+
+
+@_pytest_e166.fixture(autouse=True)
+def _previous_served_model(monkeypatch):
+    """This file tests the previous served model's contract. Since 2026-11-06 the thesis model E166 serves every dashboard
+    quarter (app.services.e166_serving); it is switched off here so these checks keep testing that model."""
+    monkeypatch.setenv("AIPHEED_E166_SERVE", "0")

@@ -106,3 +106,13 @@ def test_triggers_without_model_input_are_zero_not_invented(e41):
     assert by["market"]["pct"] == 100
     for g in ("climate", "fish_kill", "employment", "ofw_remittance"):
         assert by[g]["pct"] == 0
+
+
+import pytest as _pytest_e166
+
+
+@_pytest_e166.fixture(autouse=True)
+def _previous_served_model(monkeypatch):
+    """This file tests the previous served model's contract. Since 2026-11-06 the thesis model E166 serves every dashboard
+    quarter (app.services.e166_serving); it is switched off here so these checks keep testing that model."""
+    monkeypatch.setenv("AIPHEED_E166_SERVE", "0")

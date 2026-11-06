@@ -106,3 +106,13 @@ def test_candidate_scores_respond_to_each_issue_dates_inputs(e46):
                     client.get(f"/api/v1/provinces?quarter={q}&horizon=nowcast").json()["data"]}
     for code in rec["provinces"]:
         assert len({round(shown[q][code], 4) for q in shown}) == len(shown)
+
+
+import pytest as _pytest_e166
+
+
+@_pytest_e166.fixture(autouse=True)
+def _previous_served_model(monkeypatch):
+    """This file tests the previous served model's contract. Since 2026-11-06 the thesis model E166 serves every dashboard
+    quarter (app.services.e166_serving); it is switched off here so these checks keep testing that model."""
+    monkeypatch.setenv("AIPHEED_E166_SERVE", "0")

@@ -130,3 +130,13 @@ def test_production_default_gets_no_enso_text(e38):
     clim = next(t for t in ex["triggers"] if t["key"] == "climate")
     assert clim["evidenceNote"] is None and clim["status"] == "no_model_input"
     assert ENSO.forecast_sentence("2027-Q1", "e38") is None and ENSO.climate_evidence("2027-Q1", "e64") is None
+
+
+import pytest as _pytest_e166
+
+
+@_pytest_e166.fixture(autouse=True)
+def _previous_served_model(monkeypatch):
+    """This file tests the previous served model's contract. Since 2026-11-06 the thesis model E166 serves every dashboard
+    quarter (app.services.e166_serving); it is switched off here so these checks keep testing that model."""
+    monkeypatch.setenv("AIPHEED_E166_SERVE", "0")
