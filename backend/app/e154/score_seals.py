@@ -16,7 +16,7 @@ import pandas as pd
 from app.paths import BACKEND_DIR
 
 D = BACKEND_DIR / "data"
-SEALS = {"sws_e151": (D / "e151/out/sealed_sws_2026-Q4.json", "1a1c34bf"), "prov_e151": (D / "e151/out/issue/sealed_forecast_2027-Q1.json", "b397c40f"), "prov_d5": (D / "e151/out/issue/sealed_attempt_2027-Q1.json", "0f430203"), "prov_e152": (D / "e152/out/sealed_2027-Q1.json", "f6c07789"), "prov_e154": (D / "e154/out/sealed_2027-Q1.json", "d724c454"), "prov_e158": (D / "e158/out/sealed_2027-Q1.json", "f69e7a02")}
+SEALS = {"sws_e151": (D / "e151/out/sealed_sws_2026-Q4.json", "1a1c34bf"), "prov_e151": (D / "e151/out/issue/sealed_forecast_2027-Q1.json", "b397c40f"), "prov_d5": (D / "e151/out/issue/sealed_attempt_2027-Q1.json", "0f430203"), "prov_e152": (D / "e152/out/sealed_2027-Q1.json", "f6c07789"), "prov_e154": (D / "e154/out/sealed_2027-Q1.json", "d724c454"), "prov_e158": (D / "e158/out/sealed_2027-Q1.json", "f69e7a02"), "prov_e163": (D / "e163/out/sealed_2027-Q1.json", "343d1f06")}
 logit = lambda p: np.log(p / (100 - p))
 
 
@@ -71,7 +71,7 @@ def provinces(ok, path):
         m["error_points"] = (m["score"] - m["pct"]).round(1)
         m["inside_range"] = (m["pct"] >= m["low90"]) & (m["pct"] <= m["high90"])
         print(k)
-        print(m[["province", "score", "low90", "high90", "pct", "class_right", "error_points", "inside_range"]].to_string(index=False))
+        print(m[[c for c in ("arm",) if c in m] + ["province", "score", "low90", "high90", "pct", "class_right", "error_points", "inside_range"]].to_string(index=False))
 
 
 if __name__ == "__main__":
