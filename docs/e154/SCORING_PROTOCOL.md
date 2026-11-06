@@ -13,6 +13,7 @@ Written 2026-11-06, before any target outcome exists. **Nothing here may change 
 | Provinces, E154 frozen | `data/e154/out/sealed_2027-Q1.json` | `d724c454` | 5 provinces |
 | **Provinces, E158 thesis model** | `data/e158/out/sealed_2027-Q1.json` | `f69e7a02` | 5 provinces, Leads 1 to 4 |
 | Provinces, E163 candidates C1–C3 + E158 | `data/e163/out/sealed_2027-Q1.json` | `343d1f06` | 5 provinces, Lead 1. Score each arm, and also the **order** of the five against any 2027 HFIAS round |
+| **Provinces, E164 AUTO release candidate** | `data/e164/out/sealed_2027-Q1.json` | `cbfb61dc` | 5 provinces, Lead 1, config RSS/RF/FULL. Primary prospective test of AUTO |
 
 ## SWS areas: scorable as SWS publishes
 
