@@ -73,3 +73,7 @@ def test_e170_locked_protocol_results_and_seals():
     assert r["decision"] == "NOT ACCEPTED" and r["maximum_reliable_lead"] == 0
     for path, prefix in (("e170/out/sealed_enns2022.json", "af0180af"), ("e170/out/sealed_2027-Q1.json", "df03d885")):
         assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
+
+
+def test_e168_enns2022_seal_intact():
+    assert hashlib.sha256((D / "e168" / "out" / "sealed_enns2022.json").read_bytes()).hexdigest().startswith("f8228fae")
