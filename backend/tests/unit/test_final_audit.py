@@ -62,3 +62,14 @@ def test_e168_lightgbm_only_results():
     assert not l1["E156"]["C1"] and not l1["E156"]["C4"]
     m = json.loads((D / "e156" / "out" / "max_lead_all.json").read_text())
     assert m["E168_LightGBM_only"]["maximum_reliable_lead"] == 0
+
+
+def test_e170_locked_protocol_results_and_seals():
+    r = json.loads((D / "e170" / "out" / "results.json").read_text())
+    l1 = r["leads"]["1"]
+    assert l1["rows"] == 72 and l1["correct"] == 47
+    assert l1["criteria"]["C4"] and not l1["criteria"]["C1"]
+    assert r["leakage_max_abs_change"] < 1e-9
+    assert r["decision"] == "NOT ACCEPTED" and r["maximum_reliable_lead"] == 0
+    for path, prefix in (("e170/out/sealed_enns2022.json", "af0180af"), ("e170/out/sealed_2027-Q1.json", "df03d885")):
+        assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
