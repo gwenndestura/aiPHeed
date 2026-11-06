@@ -67,4 +67,4 @@ def test_results_and_seal_integrity():
 def test_e138_rejected_not_production():
     reg = R.load()
     m = reg["models"]["e138-where-lrp-1.0"]
-    assert m["status"] == "rejected" and (reg.get("production") or {}).get("model_id") is None
+    assert m["status"] == "rejected" and (reg.get("production") or {}).get("model_id") != "e138-where-lrp-1.0"

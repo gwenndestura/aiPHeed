@@ -63,7 +63,7 @@ def test_lock_and_frozen_decision():
 def test_registry_and_candidate_route():
     from app.main import app
     from app.services.security import require_admin
-    assert R.load()["models"]["e141-lgbm-3round-1.0"]["status"] == "rejected" and R.load().get("production") is None
+    assert R.load()["models"]["e141-lgbm-3round-1.0"]["status"] == "rejected" and (R.load().get("production") or {}).get("model_id") != "e141-lgbm-3round-1.0"
     c = TestClient(app)
     assert c.get("/api/v1/admin/candidates/e141-lgbm-3round-1.0/outlook").status_code in (401, 403)
     app.dependency_overrides[require_admin] = lambda: object()

@@ -85,7 +85,7 @@ def test_issue_covers_five_provinces_four_quarters_and_class_rule():
 def test_registry_and_admin_route_only():
     from app.main import app
     from app.services.security import require_admin
-    assert R.load().get("production") is None
+    assert (R.load().get("production") or {}).get("model_id") != "e144-lbf-1.0"
     assert "e144-lbf-1.0" in {x["model_id"] for x in PP.read()} and PP.verify()
     c = TestClient(app)
     assert c.get("/api/v1/admin/candidates/e144-lbf-1.0/outlook").status_code in (401, 403)

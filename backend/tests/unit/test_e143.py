@@ -101,7 +101,7 @@ def test_gate_recorded_and_nothing_promoted():
     a = json.loads((OUT / "audit.json").read_text())
     assert a["C_transition_identification"]["lgbm"]["max_observed_gap_quarters"] == 24
     reg = R.load()
-    assert reg.get("production") is None
+    assert (reg.get("production") or {}).get("model_id") not in ("e143-re-lgbm-1.0", "e143-hre-lgbm-1.0")
     for mid in ("e143-re-lgbm-1.0", "e143-hre-lgbm-1.0"):
         assert reg["models"][mid]["status"] == "rejected"
         assert mid in {x["model_id"] for x in PP.read()}

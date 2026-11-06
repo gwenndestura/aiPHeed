@@ -88,3 +88,13 @@ def test_e171_results_and_seals():
     assert r["leakage_max_abs_change"] < 1e-9 and r["decision"] == "NOT ACCEPTED"
     for path, prefix in (("e171/out/sealed_enns2022.json", "a929929a"), ("e171/out/sealed_2027-Q1.json", "1559746c")):
         assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
+
+
+def test_e168_lead_horizon_and_owner_approval():
+    h = json.loads((D / "e168" / "out" / "lead_horizon.json").read_text())
+    assert h["horizon_75pct_and_beats_persistence"] == 3 and h["skill_horizon_beats_persistence"] == 6 and h["maximum_reliable_lead_E156"] == 0
+    assert [h["leads"][str(k)]["correct"] for k in (1, 2, 3)] == [54, 56, 54]
+    from app import registry as R
+    p = R.production()
+    g = R.load()["models"][p["model_id"]]["gate"]
+    assert p["model_id"] == "e168-lgbm-1.0" and g["passed"] and "NOT the E156" in g["basis"] and g["served_leads"] == [1, 2, 3]

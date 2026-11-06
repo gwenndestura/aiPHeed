@@ -72,9 +72,9 @@ def test_registry_rejected_and_api_gated():
     from app.main import app
     from app.services.security import require_admin
     m = R.load()["models"]["e139-lgbm-1.0"]
-    assert m["status"] == "rejected" and R.load().get("production") is None
+    assert m["status"] == "rejected" and (R.load().get("production") or {}).get("model_id") != "e139-lgbm-1.0"
     c = TestClient(app)
-    assert c.get("/api/v1/final/food-insecurity/outlook").json()["status"] == "validation_pending"
+    assert (c.get("/api/v1/final/food-insecurity/outlook").json().get("production") or {}).get("model_id") != "e139-lgbm-1.0"
     assert c.get("/api/v1/admin/candidates/e139-lgbm-1.0/outlook").status_code in (401, 403)
     app.dependency_overrides[require_admin] = lambda: object()
     try:

@@ -21,17 +21,24 @@ def test_unapproved_forecasts_need_admin(path):
     assert c.get(path).status_code == 401
 
 
-def test_food_insecurity_outlook_is_validation_pending():
+def test_food_insecurity_outlook_serves_only_the_approved_model():
+    from app import registry as R
     j = c.get("/api/v1/final/food-insecurity/outlook").json()
-    assert j["status"] == "validation_pending" and j["forecast"] is None
-    assert not any(k in j for k in ("provinces", "region", "target_quarter"))
+    try:
+        p = R.production()
+    except R.NoApprovedModel:
+        assert j["status"] == "validation_pending" and j["forecast"] is None
+        assert not any(k in j for k in ("provinces", "region", "target_quarter"))
+        return
+    assert j["status"] == "approved" and j["production"]["model_id"] == p["model_id"]
+    assert R.load()["models"][p["model_id"]]["gate"]["passed"]
 
 
 def test_overview_has_no_forecast():
     r = c.get("/api/v1/final/overview")
     if r.status_code == 200:
         j = r.json()
-        assert "outlook" not in j and "validation pending" in j["forecastStatus"]
+        assert "outlook" not in j and "hunger forecast: validation pending" in j["forecastStatus"]
 
 
 def test_ch1_is_labelled_price_pressure_not_food_insecurity():

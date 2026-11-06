@@ -31,8 +31,15 @@ def final_overview() -> dict:
     """Latest measured SWS hunger observation (dates, age), CPI and data freshness. The research engine's hunger
     forecasts are not public (release gate): they are in /api/v1/admin/... and /final/evaluation (admin)."""
     out = {k: v for k, v in _guard(FE.overview).items() if k not in UNAPPROVED_OVERVIEW_KEYS}
-    out["forecastStatus"] = ("validation pending: no food-insecurity or hunger forecast has passed the release gate "
-                             "(see /api/v1/final/model-registry)")
+    from app import registry as R
+    try:
+        p = R.production()
+        fi = (f"food-insecurity forecast: {p['model_id']} approved by the owner-defined acceptance "
+              f"(/api/v1/final/food-insecurity/outlook); ")
+    except R.NoApprovedModel:
+        fi = "food-insecurity forecast: validation pending; "
+    out["forecastStatus"] = fi + ("SWS hunger forecast: validation pending, not public "
+                                  "(see /api/v1/final/model-registry)")
     return out
 
 

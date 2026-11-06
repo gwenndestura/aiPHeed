@@ -42,4 +42,4 @@ def test_diagnostics_present():
 
 def test_e140_not_in_production():
     reg = R.load()
-    assert reg["models"]["e140-lgbm-native-1.0"]["status"] == "rejected" and reg.get("production") is None
+    assert reg["models"]["e140-lgbm-native-1.0"]["status"] == "rejected" and (reg.get("production") or {}).get("model_id") != "e140-lgbm-native-1.0"

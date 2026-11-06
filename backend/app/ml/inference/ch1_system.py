@@ -58,7 +58,7 @@ INDICATOR = {
     "legacy_name": "Food-insecurity risk (Chapter I definition): probability that the province is HIGH risk",
     "is_food_insecurity_measurement": False,
     "food_insecurity_forecast": {"endpoint": "/api/v1/final/food-insecurity/outlook",
-                                 "status": "validation pending: no food-insecurity model has passed the release gate"},
+                                 "status": "approved model e168-lgbm-1.0 (owner-defined acceptance 2026-11-07: accuracy >= 75 % and better than the latest survey at 1-3 quarters ahead)"},
     "definition": ("Price-pressure risk index (label changed in v2; computation unchanged). A province is HIGH risk in a quarter when SWS Balance Luzon hunger is above 11.3% AND the "
                    "province's food prices are rising unusually fast (PSA food inflation, or food inflation minus "
                    "headline inflation, above the province's 2021-22 60th percentile), as Chapter I (1.4, 1.7) "
@@ -71,8 +71,8 @@ INDICATOR = {
                 "Lead 2 = the next quarter (not established as reliable)"),
     "source": ("SWS hunger (Balance Luzon, non-commissioned rounds); PSA provincial CPI; PSA rice, production, LFS, "
                "poverty and population; BSP remittances; PAGASA ENSO; IBTrACS; news (FSSI-v3, GDELT)"),
-    "caveat": ("This is a price-pressure risk index, not a food-insecurity forecast: no food-insecurity model has passed "
-               "the release gate yet (/api/v1/final/food-insecurity/outlook). "
+    "caveat": ("This is a price-pressure risk index, not a food-insecurity forecast; the food-insecurity forecast is the "
+               "approved model at /api/v1/final/food-insecurity/outlook. "
                "A risk class, not a measured provincial hunger rate: SWS reports hunger only for Balance Luzon, the same "
                "for all five provinces, so provinces differ only through food prices. The hunger part follows the newest "
                "SWS reading and cannot anticipate a new hunger surge before SWS publishes it."),

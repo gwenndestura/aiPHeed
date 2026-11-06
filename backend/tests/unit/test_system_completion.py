@@ -114,6 +114,9 @@ def test_outlook_reports_each_candidates_own_check_count():
     from app.main import app
     c = TestClient(app)
     out = c.get("/api/v1/final/food-insecurity/outlook").json()
+    if out["status"] == "approved":                     # an approved model is served instead of the candidate list
+        assert R.load()["models"][out["production"]["model_id"]]["gate"]["passed"]
+        return
     assert out["status"] == "validation_pending" and out["forecast"] is None
     reg = R.load()["models"]
     for cand in out["candidates"]:

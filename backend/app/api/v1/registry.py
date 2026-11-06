@@ -27,7 +27,8 @@ PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": 
                       "e140-lgbm-native-1.0": ("app.e140.serve", "outlook"),
                       "e141-lgbm-3round-1.0": ("app.e141.serve", "outlook"),
                       "e142-state-lgbm-1.0": ("app.e142.serve", "outlook"),
-                      "e143-re-lgbm-1.0": ("app.e143.serve", "outlook"), "e143-hre-lgbm-1.0": ("app.e143.serve", "outlook")}
+                      "e143-re-lgbm-1.0": ("app.e143.serve", "outlook"), "e143-hre-lgbm-1.0": ("app.e143.serve", "outlook"),
+                      "e168-lgbm-1.0": ("app.e168.serve", "outlook")}
 CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve", "e140-lgbm-native-1.0": "app.e140.serve",
               "e141-lgbm-3round-1.0": "app.e141.serve", "e142-state-lgbm-1.0": "app.e142.serve",
               "e143-re-lgbm-1.0": "app.e143.serve", "e143-hre-lgbm-1.0": "app.e143.serve"}

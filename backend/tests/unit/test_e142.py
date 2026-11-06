@@ -73,7 +73,7 @@ def test_fssi_v2_is_as_of_and_removes_volume_dependence():
 def test_registry_register_and_route():
     from app.main import app
     from app.services.security import require_admin
-    assert R.load()["models"]["e142-state-lgbm-1.0"]["status"] == "rejected" and R.load().get("production") is None
+    assert R.load()["models"]["e142-state-lgbm-1.0"]["status"] == "rejected" and (R.load().get("production") or {}).get("model_id") != "e142-state-lgbm-1.0"
     assert "e142-state-lgbm-1.0" in {r["model_id"] for r in PP.read()} and PP.verify()
     c = TestClient(app)
     assert c.get("/api/v1/admin/candidates/e142-state-lgbm-1.0/outlook").status_code in (401, 403)

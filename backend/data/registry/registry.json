@@ -1,5 +1,11 @@
 {
- "production": null,
+ "production": {
+  "model_id": "e168-lgbm-1.0",
+  "version": "E168 LightGBM. Forecast for 2027-Q1 (HFIAS moderate+severe, HIGH at 50%): Batangas LOW 25%; Cavite LOW 28%; Laguna LOW 30%; Quezon LOW 36%; Rizal LOW 36%. Measured accuracy 75.0%, 77.8%, 75.0% at 1 to 3 quarters ahead (latest survey alone: 62.5%)",
+  "artifact_path": "data/e168/out/live_2027.json",
+  "artifact_file_sha256": "0d3b41aec2f0d1c8e41570de2497d9ff0cb2c4e3bf72d5e20dde95a37e06e55f",
+  "approved_utc": "2026-11-06T16:32:03+00:00"
+ },
  "models": {
   "ch1-p0h4": {
    "version": "ch1 (P0H4 Chapter I composite)",
@@ -1446,6 +1452,104 @@
     "evaluated_utc": "2026-11-04T00:48:29+00:00",
     "artifact_file_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9"
    }
+  },
+  "e168-lgbm-1.0": {
+   "version": "E168 LightGBM. Forecast for 2027-Q1 (HFIAS moderate+severe, HIGH at 50%): Batangas LOW 25%; Cavite LOW 28%; Laguna LOW 30%; Quezon LOW 36%; Rizal LOW 36%. Measured accuracy 75.0%, 77.8%, 75.0% at 1 to 3 quarters ahead (latest survey alone: 62.5%)",
+   "artifact_path": "data/e168/out/live_2027.json",
+   "artifact_sha256": "0d3b41aec2f0d1c8e41570de2497d9ff0cb2c4e3bf72d5e20dde95a37e06e55f",
+   "target": "HFIAS moderate+severe household food insecurity by province; HIGH at 50 %",
+   "note": "Owner-defined acceptance (2026-11-07). E156 C1-C6 not passed; disclosed in the gate record.",
+   "model_id": "e168-lgbm-1.0",
+   "status": "approved",
+   "registered_utc": "2026-11-06T16:32:03+00:00",
+   "gate": {
+    "basis": "owner-defined acceptance (decision 2026-11-07): accuracy >= 75 % and skill over the latest survey; NOT the E156 C1-C6 test",
+    "disclosure": "E156 C1-C6 not passed at Lead 1 (maximum reliable lead 0 under that stricter test; 72 rows from 3 survey rounds)",
+    "served_leads": [
+     1,
+     2,
+     3
+    ],
+    "checks": [
+     {
+      "id": "O1",
+      "name": "Accuracy >= 75 % at every served lead",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": 0.75,
+       "2": 0.778,
+       "3": 0.75
+      }
+     },
+     {
+      "id": "O2",
+      "name": "Better than reusing the latest survey at every served lead (Brier CI < 0)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": [
+        -0.144,
+        -0.0433
+       ],
+       "2": [
+        -0.1441,
+        -0.0437
+       ],
+       "3": [
+        -0.124,
+        -0.0392
+       ]
+      }
+     },
+     {
+      "id": "O3",
+      "name": "Served leads are consecutive from Lead 1",
+      "status": "pass",
+      "critical": true,
+      "evidence": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "id": "O4",
+      "name": "HIGH recall >= 0.60 at every served lead",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": 0.88,
+       "2": 0.88,
+       "3": 0.84
+      }
+     },
+     {
+      "id": "O5",
+      "name": "Final algorithm is LightGBM (owner rule)",
+      "status": "pass",
+      "critical": true,
+      "evidence": "E168 LightGBM-only (survey baseline + constrained LightGBM change + calibration layer)"
+     },
+     {
+      "id": "O6",
+      "name": "Leakage test: unreleased surveys corrupted change no forecast",
+      "status": "pass",
+      "critical": true,
+      "evidence": 0.0
+     },
+     {
+      "id": "O7",
+      "name": "Forecasts sealed before new outcomes (ENNS 2022 seal intact)",
+      "status": "pass",
+      "critical": true,
+      "evidence": "data/e168/out/sealed_enns2022.json f8228fae"
+     }
+    ],
+    "passed": true,
+    "artifact_file_sha256": "0d3b41aec2f0d1c8e41570de2497d9ff0cb2c4e3bf72d5e20dde95a37e06e55f",
+    "evaluated_utc": "2026-11-06T16:32:03+00:00"
+   }
   }
  },
  "history": [
@@ -1924,6 +2028,25 @@
     "S1_beats_persistence_holm",
     "S2_beats_region_previous_holm"
    ]
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "registered",
+   "model_id": "e168-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e168-lgbm-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "promoted",
+   "model_id": "e168-lgbm-1.0",
+   "approver": "Angel Melindo (owner), decision 2026-11-07"
   }
  ]
 }
