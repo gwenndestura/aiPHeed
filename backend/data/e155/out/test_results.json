@@ -1,0 +1,81 @@
+{
+ "lock": {
+  "test.py": "3b83922d6f440bb65b232d12f4dbd6448af0bc2e712914d32a18335ebfa07860",
+  "audit.py": "3f1380be28b09468a414fb63a9a4c165290e0d27e94f14728a29b987d1cc5bad",
+  "PROTOCOL.md": "29d20156dc5144911ea25f68ae9c421003285bfe744e14e11ee3dcebef9df000"
+ },
+ "sunstar_panel_rows": 237,
+ "sunstar_provinces": [
+  "benguet",
+  "cebu",
+  "davao del sur",
+  "iloilo province",
+  "leyte",
+  "misamis oriental",
+  "negros occidental",
+  "negros oriental",
+  "pampanga",
+  "pangasinan",
+  "zamboanga del sur"
+ ],
+ "train_rows_with_sunstar": [
+  0,
+  0,
+  11
+ ],
+ "all_rows": {
+  "n": 72,
+  "n_high": 25,
+  "GNT": {
+   "correct": 52,
+   "accuracy": 0.7222222222222222,
+   "high_recall": 0.76,
+   "low_recall": 0.7021276595744681,
+   "brier_soft": 0.137495050817472
+  },
+  "GNT_SUN": {
+   "correct": 52,
+   "accuracy": 0.7222222222222222,
+   "high_recall": 0.76,
+   "low_recall": 0.7021276595744681,
+   "brier_soft": 0.13727593032189056
+  },
+  "sun_minus_gnt_brier": {
+   "diff": -0.00021912049558145408,
+   "ci95": [
+    -0.0007559301277090876,
+    0.00014871276757366726
+   ],
+   "n_regions": 16,
+   "p_ge_0": 0.164
+  }
+ },
+ "rows_with_sunstar": {
+  "n": 5,
+  "n_high": 1,
+  "GNT": {
+   "correct": 5,
+   "accuracy": 1.0,
+   "high_recall": 1.0,
+   "low_recall": 1.0,
+   "brier_soft": 0.034960811107602976
+  },
+  "GNT_SUN": {
+   "correct": 5,
+   "accuracy": 1.0,
+   "high_recall": 1.0,
+   "low_recall": 1.0,
+   "brier_soft": 0.03555295557188327
+  },
+  "sun_minus_gnt_brier": {
+   "diff": 0.0005921444642802975,
+   "ci95": [
+    -0.0004620969576234063,
+    0.0018594803623588354
+   ],
+   "n_regions": 5,
+   "p_ge_0": 0.8
+  }
+ },
+ "sunstar_helps": false
+}
