@@ -66,3 +66,19 @@
 - But **it is not better by a statistically significant margin**, it carries a small upward bias, it loses the 2021 round, and **calibration (C4) still fails at every lead.**
 - **The live input gap remains.** Consumption data ends in 2023, so it is missing at the 2026-Q4 issue. The owner must download PSA 2024–2025 before E166 can be used live.
 - **E158 stays the production thesis model.**
+
+## Lead horizon (added 2026-11-06, the same frozen procedure at Leads 3–8; `backend/app/e166/longer_leads.py`)
+| Lead (quarters ahead) | Rows | Accuracy | HIGH recall | LOW recall | Brier | Brier − persistence [95 %] | Criteria failed |
+|---|---|---|---|---|---|---|---|
+| 1 | 72 | 76.4 % | 0.92 | 0.68 | 0.125 | [−0.141, −0.041] | C1, C4 |
+| 2 | 72 | 79.2 % | 0.92 | 0.72 | 0.125 | [−0.136, −0.043] | C4 |
+| 3 | 72 | 76.4 % | 0.88 | 0.70 | 0.124 | [−0.142, −0.042] | C1, C4 |
+| 4 | 72 | 76.4 % | 0.88 | 0.70 | 0.126 | [−0.139, −0.042] | C1, C4 |
+| 5 | 72 | 73.6 % | 0.84 | 0.68 | 0.128 | [−0.137, −0.037] | C1, C4 |
+| 6 | 72 | 72.2 % | 0.84 | 0.66 | 0.130 | [−0.135, −0.033] | C1, C4 |
+| 7 | 50 | 68.0 % | 0.94 | 0.55 | 0.186 | [−0.059, +0.013] | C1, **C2**, C4 |
+| 8 | 50 | 68.0 % | 0.94 | 0.55 | 0.184 | [−0.060, +0.010] | C1, **C2**, C4 |
+
+- **Maximum reliable lead (all of C1–C6): 0 quarters.**
+- **Skill horizon (beats persistence significantly, C2): 6 quarters.** E158's is 5.
+- Leads 7 and 8 have only 50 rows, because ENNS2018 has too few earlier released rounds at those leads.
