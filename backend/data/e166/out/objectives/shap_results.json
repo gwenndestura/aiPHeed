@@ -1,0 +1,352 @@
+{
+ "model": "RSS|RF|FULL|id",
+ "lam": 0.6866955035293596,
+ "reproduction_max_points": 0.0321,
+ "shap_additivity_max": 1.3877787807814457e-16,
+ "n_inputs": 66,
+ "train_rows": 732,
+ "group_share": {
+  "poverty": 0.5028,
+  "climate": 0.1795,
+  "market": 0.1561,
+  "remittance": 0.0682,
+  "timing": 0.0467,
+  "employment": 0.0466
+ },
+ "source_share": {
+  "news (NLP)": 0.5236,
+  "official": 0.4764
+ },
+ "top15": [
+  {
+   "rank": 1,
+   "feature": "a_net_since",
+   "group": "poverty",
+   "source": "news",
+   "mean_abs_shap": 0.02092
+  },
+  {
+   "rank": 2,
+   "feature": "n_e_market",
+   "group": "market",
+   "source": "news",
+   "mean_abs_shap": 0.01084
+  },
+  {
+   "rank": 3,
+   "feature": "n_e_hunger",
+   "group": "poverty",
+   "source": "news",
+   "mean_abs_shap": 0.00837
+  },
+  {
+   "rank": 4,
+   "feature": "rain_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.00657
+  },
+  {
+   "rank": 5,
+   "feature": "soil_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.00586
+  },
+  {
+   "rank": 6,
+   "feature": "n_e_net",
+   "group": "poverty",
+   "source": "news",
+   "mean_abs_shap": 0.00572
+  },
+  {
+   "rank": 7,
+   "feature": "gap_q",
+   "group": "timing",
+   "source": "official",
+   "mean_abs_shap": 0.0055
+  },
+  {
+   "rank": 8,
+   "feature": "agri_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.00473
+  },
+  {
+   "rank": 9,
+   "feature": "n_net_since",
+   "group": "poverty",
+   "source": "news",
+   "mean_abs_shap": 0.00455
+  },
+  {
+   "rank": 10,
+   "feature": "a_e_net",
+   "group": "poverty",
+   "source": "news",
+   "mean_abs_shap": 0.00423
+  },
+  {
+   "rank": 11,
+   "feature": "remit_since",
+   "group": "remittance",
+   "source": "official",
+   "mean_abs_shap": 0.00419
+  },
+  {
+   "rank": 12,
+   "feature": "remit_yoy",
+   "group": "remittance",
+   "source": "official",
+   "mean_abs_shap": 0.00362
+  },
+  {
+   "rank": 13,
+   "feature": "p_poverty_gap",
+   "group": "poverty",
+   "source": "official",
+   "mean_abs_shap": 0.00359
+  },
+  {
+   "rank": 14,
+   "feature": "tc_rate_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.00348
+  },
+  {
+   "rank": 15,
+   "feature": "p_density",
+   "group": "poverty",
+   "source": "official",
+   "mean_abs_shap": 0.00317
+  }
+ ],
+ "H1": {
+  "definitions": {
+   "FSSI": [
+    "p_e_net",
+    "a_e_net",
+    "n_e_net",
+    "r_e_net",
+    "p_net_since",
+    "a_net_since",
+    "n_net_since"
+   ],
+   "food_CPI_deviation": [
+    "cpi_food_rel_nat"
+   ],
+   "top_k": 10
+  },
+  "best_rank": {
+   "FSSI": 1,
+   "food_CPI_deviation": 21
+  },
+  "among_strongest": {
+   "FSSI": true,
+   "food_CPI_deviation": false
+  },
+  "null_rejected": false,
+  "cpi_since_rank": 23
+ },
+ "anchor_note": "SHAP explains the RandomForest adjustment only; the survey anchor (last measured level, shrunk) is reported as its own part of each score.",
+ "province_2027Q1": [
+  {
+   "province": "Batangas",
+   "score": 32.7,
+   "survey_anchor_part": -0.527,
+   "model_baseline_part": -0.191,
+   "adjustment_part": -0.002,
+   "top_drivers": [
+    {
+     "feature": "a_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.0164
+    },
+    {
+     "feature": "rain_since",
+     "group": "climate",
+     "source": "official",
+     "logit_contribution": 0.0157
+    },
+    {
+     "feature": "a_e_net",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0092
+    },
+    {
+     "feature": "n_e_hunger",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0083
+    },
+    {
+     "feature": "cpi_food_rel_nat",
+     "group": "market",
+     "source": "official",
+     "logit_contribution": -0.0069
+    }
+   ]
+  },
+  {
+   "province": "Cavite",
+   "score": 32.2,
+   "survey_anchor_part": -0.553,
+   "model_baseline_part": -0.191,
+   "adjustment_part": -0.002,
+   "top_drivers": [
+    {
+     "feature": "a_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.0174
+    },
+    {
+     "feature": "a_e_net",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0101
+    },
+    {
+     "feature": "n_e_hunger",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0082
+    },
+    {
+     "feature": "n_e_market",
+     "group": "market",
+     "source": "news",
+     "logit_contribution": 0.0076
+    },
+    {
+     "feature": "n_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.007
+    }
+   ]
+  },
+  {
+   "province": "Laguna",
+   "score": 32.4,
+   "survey_anchor_part": -0.596,
+   "model_baseline_part": -0.191,
+   "adjustment_part": 0.053,
+   "top_drivers": [
+    {
+     "feature": "rain_since",
+     "group": "climate",
+     "source": "official",
+     "logit_contribution": 0.0381
+    },
+    {
+     "feature": "a_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.0115
+    },
+    {
+     "feature": "a_e_net",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0092
+    },
+    {
+     "feature": "soil_since",
+     "group": "climate",
+     "source": "official",
+     "logit_contribution": 0.0077
+    },
+    {
+     "feature": "n_e_hunger",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0075
+    }
+   ]
+  },
+  {
+   "province": "Quezon",
+   "score": 34.7,
+   "survey_anchor_part": -0.492,
+   "model_baseline_part": -0.191,
+   "adjustment_part": 0.052,
+   "top_drivers": [
+    {
+     "feature": "rain_since",
+     "group": "climate",
+     "source": "official",
+     "logit_contribution": 0.0384
+    },
+    {
+     "feature": "a_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.0187
+    },
+    {
+     "feature": "a_e_net",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0106
+    },
+    {
+     "feature": "n_e_hunger",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0082
+    },
+    {
+     "feature": "n_e_market",
+     "group": "market",
+     "source": "news",
+     "logit_contribution": 0.0072
+    }
+   ]
+  },
+  {
+   "province": "Rizal",
+   "score": 33.8,
+   "survey_anchor_part": -0.544,
+   "model_baseline_part": -0.191,
+   "adjustment_part": 0.064,
+   "top_drivers": [
+    {
+     "feature": "rain_since",
+     "group": "climate",
+     "source": "official",
+     "logit_contribution": 0.036
+    },
+    {
+     "feature": "a_net_since",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": -0.0176
+    },
+    {
+     "feature": "a_e_net",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0098
+    },
+    {
+     "feature": "n_e_hunger",
+     "group": "poverty",
+     "source": "news",
+     "logit_contribution": 0.0079
+    },
+    {
+     "feature": "n_e_market",
+     "group": "market",
+     "source": "news",
+     "logit_contribution": 0.0066
+    }
+   ]
+  }
+ ]
+}

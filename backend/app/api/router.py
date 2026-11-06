@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from app.services.security import require_admin
 from app.api.v1 import (
     admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, fi9, fi10, forecast,
-    forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, registry, report, simple,
+    forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, registry, report, simple, thesis,
 )
 
 router = APIRouter()
@@ -51,6 +51,9 @@ router.include_router(e113.router, prefix=API_V1, dependencies=RESEARCH_ONLY, ta
 # Final forecasting engine (branch aiPHeed/final-system-completion): regional SWS hunger, LightGBM evaluation,
 # archive, news context, CPI and the 142-LGU priority records. Read-only.
 router.include_router(final.router, prefix=API_V1, tags=["Final forecasting engine"])
+# Thesis model E166 (owner decision 2026-11-06: public). Read-only exported files; every response carries its validation
+# status (retrospective; C1-C6 at Leads 1-2; adoption pending adviser).
+router.include_router(thesis.router, prefix=API_V1, tags=["Thesis model (E166)"])
 # SWS-release re-issue audit trail (app.ml.inference.sws_reissue): every recorded issue and the forecast in force.
 router.include_router(forecast_history.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Forecast history (SWS re-issue)"])
 

@@ -178,6 +178,10 @@ NOT_RECORDED_EXPLAINABILITY_NOTE = (
 def _served_note(quarter: str | None = None) -> str:
     from app.ml.inference import e31_engine as E31
     from app.ml.inference import e41_lead2 as LEAD2
+    from app.services import e166_serving as E166
+
+    if E166.covers(quarter):                         # thesis model E166 on its own forecast quarter
+        return E166.EXPLAINABILITY_NOTE
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note

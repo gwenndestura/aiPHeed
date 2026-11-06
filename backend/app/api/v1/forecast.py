@@ -210,6 +210,8 @@ async def get_timeseries(
         quarters = svc.ch1_quarters()
     elif svc.E41L2.governs():            # E52: the candidate's own quarters (a CPI-only target covers 2025-Q2/Q3)
         quarters = sorted(set(quarters) | set(svc.E41L2.candidate_quarters()), key=ref.quarter_index)
+    elif svc.E166.enabled():             # thesis model E166: every quarter it covers (fills 2025-Q2/Q3)
+        quarters = sorted(set(quarters) | set(svc.E166.quarters()), key=ref.quarter_index)
     start = from_ or (quarters[0] if quarters else None)
     end = to or (quarters[-1] if quarters else None)
     lo, hi = ref.quarter_index(start), ref.quarter_index(end)
@@ -251,6 +253,8 @@ async def get_timeseries(
         bt = _backtest_quarters()
         series = [p | {"isForecast": p["quarter"] not in bt} for p in series if p["scoreType"] == cand["id"]]
         indicator = cand
+    elif svc.E166.enabled():                # thesis model E166 on every quarter it covers
+        indicator = svc.E166.INDICATOR
     else:
         indicator = svc.INDICATOR
 

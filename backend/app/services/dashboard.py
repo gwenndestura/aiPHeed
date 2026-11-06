@@ -46,6 +46,7 @@ from app.ml.inference import ch1_system as CH1
 from app.ml.inference import enso_context as ENSO
 from app.services import final_engine as FE
 from app.services import reference as ref
+from app.services import e166_serving as E166          # thesis model E166 on its own quarter (2027-Q1) only
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,8 @@ THESIS_INDICATOR = {
 def indicator_for(quarter: str) -> dict:
     """E42: the definition of the number actually served for this quarter. With AIPHEED_LEAD2_MODEL=e41/e42 the
     target quarter carries the price-pressure probability, so it must not be described as the v1 label."""
+    if E166.covers(quarter):                                      # thesis model E166 states its own score
+        return E166.INDICATOR
     if not (E41L2.serves(quarter) or E41L2.governs()):
         return INDICATOR
     if THESIS.active():
@@ -317,6 +320,8 @@ def resolve_quarter(quarter: str | None, horizon: str = DEFAULT_HORIZON) -> str:
         return latest_quarter(horizon)
     if not ref.is_valid_quarter(quarter):
         raise QuarterNotAvailable(f"'{quarter}' is not a quarter id (expected YYYY-Qn).")
+    if E166.covers(quarter):              # thesis model E166 covers this quarter
+        return quarter
     if _ch1_mode():                       # SYSTEM_FIXES item 4: the served forecast's own quarters
         if quarter not in ch1_quarters():
             raise QuarterNotAvailable(f"No Chapter I forecast exists for {quarter}. This is missing data, not a low "
@@ -434,6 +439,11 @@ def timeline(horizon: str = DEFAULT_HORIZON) -> list[dict]:
             elif r["id"] in have and r["state"] == "unavailable":
                 r["state"] = "actual"     # E52: the candidate's backtest covers a quarter the base engine lacks
                 r.pop("reason", None)
+    if E166.enabled():                    # E166 back-forecasts fill quarters the base engine had no record for
+        for r in out:
+            if r["state"] == "unavailable" and E166.covers(r["id"]):
+                r["state"] = "actual"
+                r.pop("reason", None)
     return out
 
 
@@ -505,6 +515,8 @@ def is_estimate_quarter(quarter: str) -> bool:
 
 def _province_forecasts(quarter: str, horizon: str = DEFAULT_HORIZON) -> list[dict]:
     """Raw model output for one quarter, from whichever engine the horizon names (cache keyed by the Lead-2 mode)."""
+    if E166.covers(quarter):                                      # thesis model E166 on every quarter it covers
+        return E166.province_records(quarter)
     return _province_forecasts_cached(quarter, horizon, _lead2_key())
 
 
@@ -533,6 +545,8 @@ def province_forecast_map(quarter: str, horizon: str = DEFAULT_HORIZON) -> dict[
 
 
 def _previous_quarter(quarter: str, horizon: str = DEFAULT_HORIZON) -> str | None:
+    if E166.covers(quarter) and E166.previous(quarter):          # E166: the calendar quarter before, when E166 has it
+        return E166.previous(quarter)
     quarters = available_quarters(horizon)
     i = quarters.index(quarter) if quarter in quarters else -1
     return quarters[i - 1] if i > 0 else None
@@ -543,6 +557,8 @@ def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
     never compared with a forecast). Across a gap (2025-Q1 -> 2025-Q4) it would mix three quarters of change."""
     if ref.quarter_index(quarter) - ref.quarter_index(prev_q) != 1:
         return False
+    if E166.covers(quarter) or E166.covers(prev_q):               # change only between two E166 quarters (same model, Lead 1)
+        return E166.covers(quarter) and E166.covers(prev_q)
     if E41L2.governs():                              # every candidate estimate is a Lead-2 estimate of the same event
         have = set(E41L2.candidate_quarters())
         return quarter in have and prev_q in have
@@ -788,7 +804,9 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 
     delta = None
     prev_q = _previous_quarter(quarter, horizon)
-    if prev_q and score is not None:
+    # E166: a change is shown only between two E166 quarters (same model); other quarters keep the original rule
+    e166_pair_ok = (not (E166.covers(quarter) or E166.covers(prev_q))) or _comparable(quarter, prev_q, horizon) if prev_q else False
+    if prev_q and score is not None and e166_pair_ok:
         # Compare like with like: the same provinces, one quarter earlier.
         prev_scores = [
             p.get("riskScoreExact", p["riskScore"]) for p in province_summary(prev_q, withheld, horizon)
@@ -831,6 +849,8 @@ def region_forecast(quarter: str, withheld: frozenset[str] = frozenset(),
 # ---------------------------------------------------------------------------
 
 def _municipal_frame(quarter: str) -> pd.DataFrame:
+    if E166.covers(quarter):                                      # E166's 142-LGU ranking (paper Algorithm 5)
+        return E166.municipal_frame(quarter)
     return _municipal_frame_cached(quarter, _lead2_key())
 
 
@@ -1013,6 +1033,8 @@ def _integer_shares(values: list[float]) -> list[int]:
 
 
 def _drivers(province_code: str, quarter: str) -> dict:
+    if E166.covers(quarter):                                      # E166's SHAP, grouped as the dashboard groups
+        return E166.drivers(province_code, quarter)
     return _drivers_cached(province_code, quarter, _lead2_key())
 
 
@@ -1067,6 +1089,8 @@ def _model_trigger_groups(quarter: str) -> frozenset[str]:
 
 
 def trigger_status(key: str, quarter: str, pct: int, code: str | None = None) -> str:
+    if E166.covers(quarter):
+        return E166.trigger_status(key, pct, quarter)
     if THESIS.active() and CH1.active() and CH1.covers(quarter):   # the served Chapter I model's own inputs
         own = CH1.group_status(code, quarter, key, pct)
         if own:
@@ -1137,8 +1161,9 @@ def explainability(province_code: str, quarter: str) -> dict:
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
-            "statusNote": TRIGGER_STATUS_NOTES[st],
-            "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct"), d["driver_group"])
+            "statusNote": E166.STATUS_NOTES[st] if E166.covers(quarter) else TRIGGER_STATUS_NOTES[st],
+            "evidenceNote": (E166.evidence_note(province_code, d["driver_group"], quarter) if E166.covers(quarter) else
+                             CH1.evidence_note(province_code, quarter, built.get("other_pct"), d["driver_group"])
                              if ch1 else
                              THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                              if THESIS.active() and E41L2.governs() else
@@ -1208,10 +1233,11 @@ def explainability_region(quarter: str) -> dict:
             "direction": direction,
             "color": trigger_color(pct, direction),
             "status": (st := trigger_status(key, quarter, pct)),
-            "statusNote": TRIGGER_STATUS_NOTES[st],
+            "statusNote": E166.STATUS_NOTES[st] if E166.covers(quarter) else TRIGGER_STATUS_NOTES[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
-            "evidenceNote": (CH1.evidence_note(None, quarter, group=key)
+            "evidenceNote": (E166.evidence_note(None, key, quarter) if E166.covers(quarter) else
+                             CH1.evidence_note(None, quarter, group=key)
                              if THESIS.active() and CH1.active() and CH1.covers(quarter)
                              else THESIS_REGION_EVIDENCE_NOTE if THESIS.active() and E41L2.governs() else
                              REGION_EVIDENCE_NOTE if (E41L2.serves(quarter) or E41L2.has_past_drivers(quarter))
