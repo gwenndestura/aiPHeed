@@ -1,0 +1,68 @@
+{
+ "pairs": {
+  "n": 20,
+  "year": 2019,
+  "source": "FNRI ENNS 2019 provincial factsheets (same households, both scales)",
+  "areas": [
+   "Guimaras",
+   "Nueva Ecija",
+   "Angeles City",
+   "Antique",
+   "Biliran",
+   "Davao del Norte",
+   "Ilocos Norte",
+   "Lapu-Lapu City",
+   "City of Malabon",
+   "Palawan",
+   "Pangasinan",
+   "City of Para\u00f1aque",
+   "Pateros",
+   "Puerto Princesa City",
+   "Quezon",
+   "Rizal",
+   "South Cotabato",
+   "Southern Leyte",
+   "Surigao del Sur",
+   "Zamboanga City"
+  ]
+ },
+ "bridge_logit": {
+  "intercept": 0.158,
+  "slope": 0.917,
+  "slope_ci95": [
+   0.64,
+   1.22
+  ],
+  "residual_sd_logit": 0.274,
+  "corr_pct": 0.818,
+  "mean_hfias_minus_fies_pts": 4.52,
+  "province_HIGH_agreement": 0.85
+ },
+ "checks_on_national_values": {
+  "2019_in_sample": {
+   "fies": 44.2,
+   "bridged_hfias": 48.6,
+   "published_hfias_national": 46.9
+  },
+  "2021_out_of_year": {
+   "fies": 33.4,
+   "bridged_hfias": 38.4,
+   "bridged_ci95": [
+    35.2,
+    41.4
+   ],
+   "mean_hfias_25_test_provinces_unweighted": 41.6,
+   "note": "no national HFIAS 2021 printed; provincial mean is unweighted, so only a rough check"
+  }
+ },
+ "use_2023": {
+  "calabarzon_fies_2023": 19.1,
+  "bridged_hfias_2023": 23.8,
+  "bridged_ci95": [
+   18.5,
+   29.6
+  ],
+  "national_fies_2023": 31.4,
+  "national_bridged_hfias_2023": 36.4
+ }
+}
