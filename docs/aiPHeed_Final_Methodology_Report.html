@@ -1,0 +1,286 @@
+<title>aiPHeed Final Methodology</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column with wide data tables that scroll inside their own frames; status chips carry verdicts. */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#58635c; --line:#d9ded8;
+  --accent:#2f6b4f; --accent-soft:#e3efe7;
+  --ok:#2f6b4f; --ok-bg:#e3efe7; --warn:#8a5a00; --warn-bg:#fbf0d9; --bad:#9b2c2c; --bad-bg:#f8e3e1;
+  --display:"Literata", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1b231f; --fg:#e4ebe6; --muted:#9aa89f; --line:#2f3a34;
+  --accent:#7cc39c; --accent-soft:#1f3329;
+  --ok:#7cc39c; --ok-bg:#1f3329; --warn:#e6b85c; --warn-bg:#3a2e14; --bad:#ec8f86; --bad-bg:#3d1f1d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1b231f; --fg:#e4ebe6; --muted:#9aa89f; --line:#2f3a34;
+  --accent:#7cc39c; --accent-soft:#1f3329;
+  --ok:#7cc39c; --ok-bg:#1f3329; --warn:#e6b85c; --warn-bg:#3a2e14; --bad:#ec8f86; --bad-bg:#3d1f1d; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+header{display:flex;flex-direction:column;gap:12px;border-bottom:2px solid var(--accent);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:650;font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:650;font-size:24px;margin:0;text-wrap:balance}
+h3{font-family:var(--body);font-weight:600;font-size:16px;margin:0}
+section{display:flex;flex-direction:column;gap:14px}
+p{margin:0;max-width:68ch}
+.lede{font-size:18px;color:var(--fg)}
+.muted{color:var(--muted)}
+ul,ol{margin:0;padding-left:22px;max-width:70ch;display:flex;flex-direction:column;gap:6px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;background:var(--accent-soft);color:var(--fg);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ok{background:var(--ok-bg);color:var(--ok)} .warn{background:var(--warn-bg);color:var(--warn)} .bad{background:var(--bad-bg);color:var(--bad)}
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.verdict div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.verdict b{font-family:var(--mono);font-size:24px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.verdict span{font-size:13px;color:var(--muted)}
+blockquote{margin:0;border-left:3px solid var(--accent);padding:10px 16px;background:var(--surface);max-width:72ch}
+code{font-family:var(--mono);font-size:13px}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+a{color:var(--accent)}
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">DA Region IV-A · Thesis methodology · 2026-11-06</div>
+  <h1>aiPHeed: the methodology to use, and what it achieves</h1>
+  <p class="lede">The recommended system is the <b>E151 model</b>: a survey-anchored LightGBM forecast that uses all five trigger groups and the two-tier news pipeline, scored on HFIAS moderate-or-severe food insecurity with HIGH at 50. It meets Specific Objectives 1 to 4 as written. It has not passed the release gates, so it stays off the dashboard.</p>
+</header>
+
+<section>
+  <h2>Headline results</h2>
+  <div class="verdict">
+    <div><b>72.2%</b><span>Accuracy one quarter ahead (52 of 72 province rows), all five groups and news</span></div>
+    <div><b>75.0%</b><span>Same model, four quarters ahead (54 of 72). Most likely chance; report with Lead 1</span></div>
+    <div><b>0.855</b><span>AUC-ROC one quarter ahead</span></div>
+    <div><b>6.5 vs 13.6</b><span>Error in points when the last survey is 6 years old: model vs old survey</span></div>
+  </div>
+  <p class="muted">All provincial results are retrospective, from the ENNS 2018, 2019 and 2021 rounds. Each forecast used only data released before its issue date. Only the sealed forecasts (section 11) are blind tests.</p>
+</section>
+
+<section>
+  <h2>1. Objectives scorecard</h2>
+  <div class="tbl"><table>
+    <tr><th>Objective</th><th>Status</th><th>Evidence</th></tr>
+    <tr><td>General: develop, validate, deploy, using NLP and ML</td><td><span class="chip warn">Partial</span></td><td>Developed with NLP and LightGBM. Validated retrospectively; prospective validation running. Not deployed: release gates not passed</td></tr>
+    <tr><td>1. Two-tier NLP pipeline → FSSI and risk patterns per province-quarter</td><td><span class="chip ok">Achieved</span></td><td>XLM-RoBERTa + BERTopic, bias-corrected; FSSI for 4,368 province-quarters; patterns for 1,130; used as model inputs</td></tr>
+    <tr><td>2. Evaluate LightGBM (accuracy, precision, recall, F1, AUC, leads)</td><td><span class="chip ok">Achieved</span></td><td>All metrics reported; walk-forward expanding window; Leads 0 to 8</td></tr>
+    <tr><td>3. Municipal and city rankings (poverty, density)</td><td><span class="chip ok">Achieved</span></td><td>142 LGUs ranked for 2027-Q1 with rank uncertainty and weight sensitivity</td></tr>
+    <tr><td>4. Compare with four baselines</td><td><span class="chip ok">Achieved</span></td><td>Better than all four; clearly better on Brier than persistence, PSA-only, NLP-only logistic and logistic regression</td></tr>
+  </table></div>
+  <p>Chapter I sets no accuracy target. The 75% target comes from the later mission brief; the adviser should confirm which one the panel uses.</p>
+</section>
+
+<section>
+  <h2>2. The methodology</h2>
+  <pre class="mermaid">
+flowchart LR
+  N[News corpus<br/>141,513 articles] --> T1[Tier 1: XLM-RoBERTa<br/>event and sentiment reading]
+  N --> T2[Tier 2: BERTopic<br/>latent topics]
+  T1 --> F[FSSI and stress by<br/>trigger group]
+  T2 --> F
+  G[Government data<br/>prices, climate, jobs,<br/>remittances, poverty] --> L[LightGBM adjustment]
+  F --> L
+  S[Last released HFIAS<br/>survey level] --> A[Survey anchor]
+  A --> Y[Province score 0-100<br/>HIGH at 50]
+  L --> Y
+  Y --> R[142 LGU<br/>priority rankings]
+  </pre>
+  <ol>
+    <li><b>Anchor.</b> Start from each province's last released HFIAS round, shrunk toward a level predicted from its structure. The shared national level is carried flat, never extrapolated.</li>
+    <li><b>Adjust.</b> LightGBM learns how far surveys moved from the anchor, from government inputs and news, with monotone signs where theory gives a direction.</li>
+    <li><b>Score and classify.</b> Score = 100 / (1 + e<sup>−m</sup>). HIGH at 50 or above, LOW below. Nothing is scaled, shifted or capped.</li>
+    <li><b>Uncertainty.</b> A 90% range from out-of-fold errors.</li>
+    <li><b>As-of rule.</b> Every input is used only if published before the issue date; surveys count as released 6 quarters after reference.</li>
+  </ol>
+  <h3>Lead definitions</h3>
+  <div class="tbl"><table>
+    <tr><th>Lead</th><th>Issued</th><th>Target</th><th>Meaning</th></tr>
+    <tr><td>L0</td><td>First day of a quarter</td><td>That quarter</td><td>Nowcast</td></tr>
+    <tr><td>L1</td><td>First day of a quarter</td><td>Next quarter</td><td>One quarter ahead, the required horizon</td></tr>
+    <tr><td>L2 to L4</td><td>First day of a quarter</td><td>2 to 4 quarters later</td><td>Further ahead</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>3. Data and inputs</h2>
+  <div class="tbl"><table>
+    <tr><th>Group</th><th>Inputs</th><th>Scope</th><th>Share of model use</th></tr>
+    <tr><td>Market</td><td>Food and rice CPI change, local vs national, change since survey</td><td>Province, monthly</td><td class="n">29%</td></tr>
+    <tr><td>Climate</td><td>Soil moisture, rainfall, cyclones, farm and fish output, ONI</td><td>Province; ONI national</td><td class="n">21%</td></tr>
+    <tr><td>Employment</td><td>Unemployment and change</td><td>National; regional from 2021</td><td class="n">0%</td></tr>
+    <tr><td>Remittances</td><td>Remittance growth</td><td>National</td><td class="n">0.3%</td></tr>
+    <tr><td>Poverty</td><td>Poverty, subsistence, poverty gap, density, relative to all provinces</td><td>Province, by PSA round</td><td class="n">17%</td></tr>
+    <tr><td>News (NLP)</td><td>Stress by trigger group, net stress, hunger, topic shares, province sentences</td><td>Province, area, national</td><td class="n">32%</td></tr>
+  </table></div>
+  <p class="muted">Share of model use is the share of mean absolute SHAP adjustment. Using an input is not the same as it improving accuracy; see section 7.</p>
+  <h3>Target</h3>
+  <p><b>HFIAS moderate-or-severe food insecurity</b> (FNRI): households that cut food quality or quantity, or went hungry, in the past 30 days. Chosen by the owner so the score reflects real conditions. The 2015 values match the FNRI report exactly; 2018 to 2021 categories sum to 100%.</p>
+</section>
+
+<section>
+  <h2>4. NLP pipeline (Objective 1)</h2>
+  <div class="tbl"><table>
+    <tr><th>Component</th><th>Result</th></tr>
+    <tr><td>Corpus</td><td>141,513 articles, 43 sites, 2013 to 2026; 17,121 relevant texts; 16,974 stories after duplicates</td></tr>
+    <tr><td>Label check, fresh 80 stories</td><td>Top event 69% (95% range 58 to 78%); 84% on relevant stories; current-problem 80%. Reader is the system's author</td></tr>
+    <tr><td>FSSI</td><td>4,368 province-quarters; response index reported separately</td></tr>
+    <tr><td>National validity</td><td>Market news vs food CPI 0.39; remittance news vs remittances 0.50</td></tr>
+    <tr><td>Province validity</td><td><span class="chip bad">Weak</span> FSSI vs local food CPI 0.03; median 2 to 4 relevant stories per quarter in CALABARZON</td></tr>
+  </table></div>
+  <h3>Does news come before official data?</h3>
+  <div class="tbl"><table>
+    <tr><th>Shock</th><th>News first</th><th>Official first</th><th>Who led</th></tr>
+    <tr><td>COVID job losses, 2020</td><td>Mar 16 to 31, 2020</td><td>LFS, about Jun 5, 2020</td><td><span class="chip ok">News, 2 to 2.5 months</span></td></tr>
+    <tr><td>Typhoon Odette, 2021</td><td>Dec 21 to 31, 2021</td><td>Farm output, about Feb 14, 2022</td><td><span class="chip ok">News, 6 to 8 weeks</span></td></tr>
+    <tr><td>Rice surge, 2023</td><td>Sep 4, 2023</td><td>CPI, about Sep 5, 2023</td><td><span class="chip warn">Tie</span></td></tr>
+    <tr><td>Rice surge, 2018</td><td>May (archive), Sep (others)</td><td>CPI, about May 5, 2018</td><td><span class="chip warn">Official or tie</span></td></tr>
+    <tr><td>Typhoon Kristine, 2024</td><td>Not detected</td><td>Farm output</td><td><span class="chip bad">Missed</span></td></tr>
+  </table></div>
+  <p class="muted">Release dates are approximated. News leads where official data is quarterly, not where it is monthly.</p>
+</section>
+
+<section>
+  <h2>5. Model performance (Objective 2)</h2>
+  <div class="tbl"><table>
+    <tr><th>Metric, Lead 1, 72 rows</th><th class="n">E151</th></tr>
+    <tr><td>Accuracy</td><td class="n">72.2%</td></tr>
+    <tr><td>Precision</td><td class="n">57.6%</td></tr>
+    <tr><td>Recall (HIGH found)</td><td class="n">76.0%</td></tr>
+    <tr><td>LOW found</td><td class="n">70.2%</td></tr>
+    <tr><td>F1</td><td class="n">0.655</td></tr>
+    <tr><td>AUC-ROC</td><td class="n">0.855</td></tr>
+    <tr><td>Error, points</td><td class="n">8.05</td></tr>
+    <tr><td>90% range coverage</td><td class="n">95.8%</td></tr>
+    <tr><td>Confusion (TP / FP / TN / FN)</td><td class="n">19 / 14 / 33 / 6</td></tr>
+  </table></div>
+  <h3>By lead</h3>
+  <div class="tbl"><table>
+    <tr><th>Lead</th><th class="n">Rows</th><th class="n">Accuracy</th><th>Brier vs old survey (95% range)</th><th>Better than old survey</th></tr>
+    <tr><td>L0 nowcast</td><td class="n">72</td><td class="n">65.3%</td><td>—</td><td>—</td></tr>
+    <tr><td>L1</td><td class="n">72</td><td class="n">72.2%</td><td>−0.075 [−0.135, −0.024]</td><td><span class="chip ok">Yes</span></td></tr>
+    <tr><td>L2</td><td class="n">72</td><td class="n">72.2%</td><td>−0.072 [−0.125, −0.023]</td><td><span class="chip ok">Yes</span></td></tr>
+    <tr><td>L3</td><td class="n">72</td><td class="n">70.8%</td><td>−0.067 [−0.127, −0.020]</td><td><span class="chip ok">Yes</span></td></tr>
+    <tr><td>L4</td><td class="n">72</td><td class="n">75.0%</td><td>−0.061 [−0.115, −0.014]</td><td><span class="chip ok">Yes</span></td></tr>
+    <tr><td>L5</td><td class="n">72</td><td class="n">70.8%</td><td>−0.059 [−0.130, +0.001]</td><td><span class="chip warn">Not clear</span></td></tr>
+    <tr><td>L6</td><td class="n">72</td><td class="n">66.7%</td><td>−0.053 [−0.121, +0.009]</td><td><span class="chip warn">Not clear</span></td></tr>
+    <tr><td>L7</td><td class="n">50</td><td class="n">52.0%</td><td>+0.001 [−0.060, +0.055]</td><td><span class="chip bad">No</span></td></tr>
+    <tr><td>L8</td><td class="n">50</td><td class="n">56.0%</td><td>−0.013 [−0.074, +0.046]</td><td><span class="chip bad">No</span></td></tr>
+  </table></div>
+  <p><b>Furthest reliable horizon:</b> 4 quarters if reliable means clearly better than the old survey; 0 under the strict release gates. Chapter I does not define reliable, so state the criterion.</p>
+  <h3>By round and survey age</h3>
+  <div class="tbl"><table>
+    <tr><th>View</th><th>Model</th><th>Old survey</th></tr>
+    <tr><td>2018 round (22)</td><td class="n">63.6%</td><td class="n">59.1%</td></tr>
+    <tr><td>2019 round (25)</td><td class="n">68.0%</td><td class="n">76.0%</td></tr>
+    <tr><td>2021 round (25), always-LOW 84%</td><td class="n">84.0%</td><td class="n">52.0%</td></tr>
+    <tr><td>Last survey 3 to 4 years old, error points</td><td class="n">8.9</td><td class="n">9.9</td></tr>
+    <tr><td>Last survey 6 years old, error points</td><td class="n">6.5</td><td class="n">13.6</td></tr>
+  </table></div>
+  <h3>Area level, SWS hunger, quarterly, 2021 to 2026 (80 rows)</h3>
+  <p>Government inputs beat repeating the last reading: error 0.173 vs 0.266; required model − persistence −0.087 [−0.148, −0.032]. News added nothing: +0.0055 [−0.007, +0.019].</p>
+</section>
+
+<section>
+  <h2>6. Baselines (Objective 4)</h2>
+  <div class="tbl"><table>
+    <tr><th>Model</th><th class="n">Accuracy</th><th class="n">Precision</th><th class="n">Recall</th><th class="n">F1</th><th class="n">AUC</th><th>E151 − baseline, Brier [95%]</th></tr>
+    <tr><td><b>E151</b></td><td class="n">72.2%</td><td class="n">0.576</td><td class="n">0.760</td><td class="n">0.655</td><td class="n">0.855</td><td>—</td></tr>
+    <tr><td>Naive persistence</td><td class="n">62.5%</td><td class="n">0.480</td><td class="n">0.960</td><td class="n">0.640</td><td class="n">0.827</td><td>−0.075 [−0.135, −0.024]</td></tr>
+    <tr><td>PSA-only</td><td class="n">55.6%</td><td class="n">0.436</td><td class="n">0.960</td><td class="n">0.600</td><td class="n">0.762</td><td>−0.091 [−0.136, −0.047]</td></tr>
+    <tr><td>NLP-only, logistic</td><td class="n">63.9%</td><td class="n">0.487</td><td class="n">0.760</td><td class="n">0.594</td><td class="n">0.703</td><td>−0.081 [−0.159, −0.016]</td></tr>
+    <tr><td>NLP-only, LightGBM</td><td class="n">66.7%</td><td class="n">0.514</td><td class="n">0.760</td><td class="n">0.613</td><td class="n">0.831</td><td>−0.012 [−0.028, +0.005]</td></tr>
+    <tr><td>Logistic regression</td><td class="n">61.1%</td><td class="n">0.467</td><td class="n">0.840</td><td class="n">0.600</td><td class="n">0.803</td><td>−0.170 [−0.276, −0.066]</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>7. Why this methodology, and what was tried</h2>
+  <div class="tbl"><table>
+    <tr><th>Approach</th><th class="n">Lead 1 accuracy</th><th>Outcome</th></tr>
+    <tr><td><b>E151 required model, five groups + news</b></td><td class="n">72.2%</td><td><span class="chip ok">Recommended</span> meets objectives</td></tr>
+    <tr><td>Simple 11-input model, no news</td><td class="n">72.2%</td><td>Less overfit; no NLP, so fails the General Objective's NLP requirement. Kept as a robustness check</td></tr>
+    <tr><td>Locked attempt dropping three groups</td><td class="n">75.0%</td><td>Breaks the five-group requirement</td></tr>
+    <tr><td>Local prices, rainfall, regional drift</td><td class="n">69.4%</td><td>Not adopted</td></tr>
+    <tr><td>Heavy tuning with overfitting controls</td><td class="n">69.4%</td><td>Not adopted</td></tr>
+    <tr><td>Latest-quarter news (L0)</td><td class="n">65.3%</td><td>No gain from news</td></tr>
+    <tr><td>Added SunStar regional headlines</td><td class="n">72.2%</td><td>No change; too little overlap with survey years</td></tr>
+  </table></div>
+  <p><b>Why accuracy stops near 72%.</b> Shuffled inputs still reach about 71%: most of the gain over the anchor is a correction of the overall level. Inputs barely improve ranking between provinces (0.67 vs 0.69 for the anchor). With 72 rows, a real gain needs about 6 more correct rows to be told from chance. Survey noise is not the limit; perfect regional knowledge would allow about 92%.</p>
+</section>
+
+<section>
+  <h2>8. What the scores mean</h2>
+  <ul>
+    <li>The score is a <b>risk score on the scale of HFIAS moderate-or-severe</b>. It may not be called a prevalence estimate: the calibration slope interval [0.51, 0.98] excludes 1.</li>
+    <li><b>HIGH and LOW are system classes,</b> not FNRI or FAO categories.</li>
+    <li><b>LOW means below the 50 line, not low food insecurity.</b> In the latest surveys, 26% to 44% of households in the five provinces were cutting food, and 8% to 19% were severely food insecure.</li>
+    <li>Forecast levels assume the 2013 to 2021 decline continued, so Batangas and Quezon may read about 12 to 13 points low.</li>
+  </ul>
+  <div class="tbl"><table>
+    <tr><th>Province</th><th>Latest survey</th><th class="n">Moderate</th><th class="n">Severe</th><th class="n">Mod. or severe</th><th>2027-Q1 score (90% range)</th><th>Class</th></tr>
+    <tr><td>Quezon</td><td>2019</td><td class="n">30.3</td><td class="n">13.7</td><td class="n">44.0</td><td class="n">30.8 (18.5–46.6)</td><td>LOW</td></tr>
+    <tr><td>Batangas</td><td>2021</td><td class="n">23.2</td><td class="n">16.7</td><td class="n">39.9</td><td class="n">25.8 (15.1–40.5)</td><td>LOW</td></tr>
+    <tr><td>Rizal</td><td>2019</td><td class="n">27.5</td><td class="n">11.6</td><td class="n">39.1</td><td class="n">35.4 (21.8–51.7)</td><td>LOW</td></tr>
+    <tr><td>Cavite</td><td>2021</td><td class="n">16.5</td><td class="n">19.0</td><td class="n">35.5</td><td class="n">32.8 (19.9–48.9)</td><td>LOW</td></tr>
+    <tr><td>Laguna</td><td>2018</td><td class="n">18.3</td><td class="n">7.9</td><td class="n">26.2</td><td class="n">28.7 (17.1–44.1)</td><td>LOW</td></tr>
+  </table></div>
+  <p class="muted">0 of 10 province pairs can be separated. On FNRI's own any-level scale, Quezon (61.9%) is High and the rest Medium or Low.</p>
+</section>
+
+<section>
+  <h2>9. LGU rankings (Objective 3)</h2>
+  <p>Priority = province probability of HIGH × vulnerability, where vulnerability = 0.6 × poverty percentile + 0.4 × density percentile. 142 LGUs, 135 distinct scores. The 0.6 / 0.4 weights are not validated: a 0.5 / 0.5 or 0.7 / 0.3 split keeps the ranking almost unchanged (Spearman 0.99), poverty alone gives 0.79 and density alone 0.67. Rank uncertainty is wide (mean 90% range of 69 places), and no municipal food-insecurity measurement exists to check it.</p>
+</section>
+
+<section>
+  <h2>10. Limits a panel will ask about</h2>
+  <ul>
+    <li>Retrospective evidence from three survey rounds; every round has been read by earlier work.</li>
+    <li>False alarms: about 4 in 10 HIGH flags are wrong.</li>
+    <li>Employment and remittances are national and add almost nothing.</li>
+    <li>News is used by the model but adds no measurable accuracy beyond government data.</li>
+    <li>FNRI's 2023 survey used FIES, so no newer provincial HFIAS round exists to test against.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>11. Prospective validation</h2>
+  <div class="tbl"><table>
+    <tr><th>Seal</th><th>Predicts</th><th>Scorable</th></tr>
+    <tr><td>SWS areas <code>1a1c34bf</code></td><td>Hunger, 4 areas, 2027-Q1 to Q4</td><td>From about mid-2027; claims need 4 quarters</td></tr>
+    <tr><td>E151 provinces <code>b397c40f</code></td><td>5 provinces, 2027-Q1</td><td>Only if an HFIAS moderate-or-severe 2027 round appears</td></tr>
+    <tr><td>Comparators <code>0f430203</code>, <code>f6c07789</code>, <code>d724c454</code></td><td>5 provinces, 2027-Q1</td><td>Same</td></tr>
+  </table></div>
+  <p class="muted">Scoring rules were written before any outcome existed: <code>docs/e154/SCORING_PROTOCOL.md</code>; scorer <code>python -m app.e154.score_seals</code>.</p>
+</section>
+
+<section>
+  <h2>12. Decisions for the adviser</h2>
+  <ol>
+    <li>Does HIGH at 50 apply to HFIAS moderate-or-severe?</li>
+    <li>Is the accuracy bar Chapter I (none) or 75%?</li>
+    <li>Which criterion defines the furthest reliable lead: beats persistence (4 quarters) or the strict gates (0)?</li>
+    <li>Deployment: deploy labelled "not yet validated", or report it as future work?</li>
+    <li>Quezon is High on FNRI's any-level scale but LOW in the system: keep the threshold, or redefine it before any rerun?</li>
+  </ol>
+</section>
+
+<section>
+  <h2>13. Wording for the thesis</h2>
+  <blockquote>A survey-anchored LightGBM model using all five trigger groups and a two-tier news pipeline reached 72.2% accuracy one quarter ahead (AUC 0.855, recall 0.76, precision 0.58) on HFIAS moderate-or-severe food insecurity at the 50 line, retrospectively across the 2018, 2019 and 2021 rounds, and 75.0% four quarters ahead. It outperformed naive persistence, PSA-only, NLP-only and logistic baselines, and halved the error of a six-year-old survey. News indicators did not add measurable accuracy beyond official data, but preceded quarterly labor and farm data during the 2020 COVID job losses and Typhoon Odette. The score is a risk score, not a prevalence estimate. Prospective validation of sealed forecasts is under way.</blockquote>
+</section>
+
+<footer>Sources in the repository: <code>docs/e151/FINAL_REPORT.md</code>, <code>docs/e151/OBJECTIVE1_FSSI.md</code>, <code>docs/e152–e155</code>, outputs under <code>backend/data/e151</code> to <code>e155</code>. Branch <code>pfi/e151-news-quarterly</code>, committed locally.</footer>
+</main>
