@@ -146,3 +146,11 @@ The E158 P(highest) favours Rizal (0.47), but **it is not shown**, because E158'
 | Quezon evidence note | Display, with sources #1, #2, #5 and #8. |
 | LGU list | LGU-v2 replaces the multiplier list. Weights await an owner decision. |
 | Production, dashboard, API | **Unchanged.** Wiring E158 and LGU-v2 needs the owner's go-ahead. A prospective seal of the five-province order should be added before the next FNRI release. |
+
+## Owner decision, 2026-11-06: LGU weights kept at 0.6 / 0.4
+- **Final LGU list:** `backend/data/e162/out/lgu_priority_final_2027-Q1.csv`.
+  - Tier by E158 class (all LOW), then vulnerability = 0.6 × poverty percentile + 0.4 × density percentile.
+  - The province P(HIGH) is removed from the file, because the provincial order is not validated.
+- **Ties:** 15 pairs of LGUs have exactly equal vulnerability. With no validated provincial priority to break them, ties now go to the **higher poverty percentile (LGU-level evidence), then PSGC code.** This is neutral and province-blind.
+  - Effect on the top 20: two swaps. Siniloan (24.4 %) moves above Noveleta (12.3 %), and Agdangan (25.5 %) above Candelaria (15.8 %). The set of LGUs is unchanged: Cavite 11, Quezon 6, Laguna 1, Rizal 1, Batangas 1.
+- The poverty-only list remains a sensitivity view, not adopted.
