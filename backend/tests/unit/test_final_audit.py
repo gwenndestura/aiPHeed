@@ -77,3 +77,14 @@ def test_e170_locked_protocol_results_and_seals():
 
 def test_e168_enns2022_seal_intact():
     assert hashlib.sha256((D / "e168" / "out" / "sealed_enns2022.json").read_bytes()).hexdigest().startswith("f8228fae")
+
+
+def test_e171_results_and_seals():
+    r = json.loads((D / "e171" / "out" / "results.json").read_text())
+    l1 = r["leads"]["1"]
+    assert l1["rows"] == 72 and l1["correct"] == 52
+    assert not l1["criteria_E156_original"]["C1"] and not l1["criteria_E156_original"]["C4"]
+    assert l1["criteria_new_rule"]["C4"] is None          # not evaluable without >= 40 new rows
+    assert r["leakage_max_abs_change"] < 1e-9 and r["decision"] == "NOT ACCEPTED"
+    for path, prefix in (("e171/out/sealed_enns2022.json", "a929929a"), ("e171/out/sealed_2027-Q1.json", "1559746c")):
+        assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
