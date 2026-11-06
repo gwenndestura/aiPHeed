@@ -25,7 +25,7 @@ def frames():
     e158 = pd.read_csv(D / "e158" / "out" / "oof.csv")
     e164 = pd.read_csv(D / "e164" / "out" / "oof.csv")
     out = {"E158": (e158, "E158"), "E164_AUTO (withdrawn)": (e164, "AUTO")}
-    for name, path, arm in (("E165_AUTO_FINAL", D / "e165" / "out" / "all_rows.csv", "FINAL"), ("E166", D / "e166" / "out" / "all_rows.csv", "E166"), ("E167", D / "e167" / "out" / "all_rows.csv", "E167")):
+    for name, path, arm in (("E165_AUTO_FINAL", D / "e165" / "out" / "all_rows.csv", "FINAL"), ("E166", D / "e166" / "out" / "all_rows.csv", "E166"), ("E167", D / "e167" / "out" / "all_rows.csv", "E167"), ("E168_LightGBM_only", D / "e168" / "out" / "all_rows.csv", "E168")):
         if not path.exists():
             continue
         a = pd.read_csv(path)

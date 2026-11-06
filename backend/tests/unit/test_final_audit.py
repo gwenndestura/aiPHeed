@@ -51,3 +51,14 @@ def test_c4_definition_is_logit_level_slope_and_fails():
                                          ("e166/out/sealed_enns2022.json", "49e514d2")])
 def test_seals_intact(path, prefix):
     assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
+
+
+def test_e168_lightgbm_only_results():
+    r = json.loads((D / "e168" / "out" / "results.json").read_text())
+    l1 = r["leads"]["1"]["class"]["E168"]
+    assert l1["accuracy"] == pytest.approx(0.75, abs=1e-3) and l1["brier"] == pytest.approx(0.123, abs=1e-3)
+    assert r["leakage_max_abs_change"] < 1e-9
+    assert r["decision"] == "IMPROVED BUT NOT ACCEPTED"
+    assert not l1["E156"]["C1"] and not l1["E156"]["C4"]
+    m = json.loads((D / "e156" / "out" / "max_lead_all.json").read_text())
+    assert m["E168_LightGBM_only"]["maximum_reliable_lead"] == 0
