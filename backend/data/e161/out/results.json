@@ -1,0 +1,363 @@
+{
+ "nested_selection": {
+  "picks_by_heldout_round": {
+   "ENNS2018": "OH_R",
+   "ENNS2019": "E158",
+   "ENNS2021": "OH_R"
+  },
+  "nested_accuracy": 0.722,
+  "best_single_arm": "OH_R",
+  "best_single_accuracy": 0.778,
+  "OVERFIT_SELECTION": true
+ },
+ "by_round_accuracy": {
+  "E158": {
+   "ENNS2018": 0.636,
+   "ENNS2019": 0.68,
+   "ENNS2021": 0.88
+  },
+  "RP_R": {
+   "ENNS2018": 0.591,
+   "ENNS2019": 0.72,
+   "ENNS2021": 0.84
+  },
+  "OH_R": {
+   "ENNS2018": 0.636,
+   "ENNS2019": 0.84,
+   "ENNS2021": 0.84
+  }
+ },
+ "UNSTABLE": {
+  "E158": true,
+  "RP_R": true,
+  "OH_R": true
+ },
+ "shuffled_null": {
+  "E158": {
+   "brier_real": 0.1344,
+   "brier_shuffled": 0.1714,
+   "accuracy_real": 0.736,
+   "accuracy_shuffled": 0.681,
+   "real_minus_shuffled": -0.037,
+   "ci95": [
+    -0.0895,
+    0.014
+   ],
+   "NO_SIGNAL": true
+  },
+  "RP_R": {
+   "brier_real": 0.1475,
+   "brier_shuffled": 0.1362,
+   "accuracy_real": 0.722,
+   "accuracy_shuffled": 0.75,
+   "real_minus_shuffled": 0.0113,
+   "ci95": [
+    0.001,
+    0.024
+   ],
+   "NO_SIGNAL": true
+  },
+  "OH_R": {
+   "brier_real": 0.121,
+   "brier_shuffled": 0.124,
+   "accuracy_real": 0.778,
+   "accuracy_shuffled": 0.75,
+   "real_minus_shuffled": -0.003,
+   "ci95": [
+    -0.0179,
+    0.0117
+   ],
+   "NO_SIGNAL": true
+  }
+ },
+ "bias": {
+  "E158": {
+   "signed_error": {
+    "overall": {
+     "n": 72,
+     "mean_signed_error_pts": 2.9,
+     "ci95": [
+      0.64,
+      5.09
+     ],
+     "BIAS": false
+    },
+    "island:Luzon": {
+     "n": 35,
+     "mean_signed_error_pts": 5.53,
+     "ci95": [
+      3.0,
+      7.73
+     ],
+     "BIAS": true
+    },
+    "island:Visayas": {
+     "n": 15,
+     "mean_signed_error_pts": -0.58,
+     "ci95": [
+      -4.66,
+      4.22
+     ],
+     "BIAS": false
+    },
+    "island:Mindanao": {
+     "n": 22,
+     "mean_signed_error_pts": 1.1,
+     "ci95": [
+      -2.42,
+      4.42
+     ],
+     "BIAS": false
+    },
+    "observed:HIGH": {
+     "n": 25,
+     "mean_signed_error_pts": -1.62,
+     "ci95": [
+      -5.63,
+      2.46
+     ],
+     "BIAS": false
+    },
+    "observed:LOW": {
+     "n": 47,
+     "mean_signed_error_pts": 5.3,
+     "ci95": [
+      2.76,
+      7.74
+     ],
+     "BIAS": true
+    },
+    "CALABARZON": {
+     "n": 5,
+     "mean_signed_error_pts": -0.6,
+     "ci95": [
+      -0.6,
+      -0.6
+     ],
+     "BIAS": false
+    }
+   },
+   "error_rates_by_island": {
+    "Luzon": {
+     "observed_low": 32,
+     "observed_high": 3,
+     "false_alarm_rate": 0.281,
+     "miss_rate": 0.333,
+     "false_alarm_others": 0.4,
+     "miss_others": 0.136,
+     "UNEQUAL_ERROR": false
+    },
+    "Visayas": {
+     "observed_low": 7,
+     "observed_high": 8,
+     "false_alarm_rate": 0.429,
+     "miss_rate": 0.375,
+     "false_alarm_others": 0.3,
+     "miss_others": 0.059,
+     "UNEQUAL_ERROR": true
+    },
+    "Mindanao": {
+     "observed_low": 8,
+     "observed_high": 14,
+     "false_alarm_rate": 0.375,
+     "miss_rate": 0.0,
+     "false_alarm_others": 0.308,
+     "miss_others": 0.364,
+     "UNEQUAL_ERROR": true
+    }
+   }
+  },
+  "RP_R": {
+   "signed_error": {
+    "overall": {
+     "n": 72,
+     "mean_signed_error_pts": 4.45,
+     "ci95": [
+      1.9,
+      7.19
+     ],
+     "BIAS": true
+    },
+    "island:Luzon": {
+     "n": 35,
+     "mean_signed_error_pts": 7.53,
+     "ci95": [
+      3.51,
+      12.23
+     ],
+     "BIAS": true
+    },
+    "island:Visayas": {
+     "n": 15,
+     "mean_signed_error_pts": 3.3,
+     "ci95": [
+      0.61,
+      5.08
+     ],
+     "BIAS": true
+    },
+    "island:Mindanao": {
+     "n": 22,
+     "mean_signed_error_pts": 0.32,
+     "ci95": [
+      -2.22,
+      3.25
+     ],
+     "BIAS": false
+    },
+    "observed:HIGH": {
+     "n": 25,
+     "mean_signed_error_pts": 0.01,
+     "ci95": [
+      -3.31,
+      2.45
+     ],
+     "BIAS": false
+    },
+    "observed:LOW": {
+     "n": 47,
+     "mean_signed_error_pts": 6.81,
+     "ci95": [
+      3.38,
+      10.42
+     ],
+     "BIAS": true
+    },
+    "CALABARZON": {
+     "n": 5,
+     "mean_signed_error_pts": 0.29,
+     "ci95": [
+      0.29,
+      0.29
+     ],
+     "BIAS": false
+    }
+   },
+   "error_rates_by_island": {
+    "Luzon": {
+     "observed_low": 32,
+     "observed_high": 3,
+     "false_alarm_rate": 0.344,
+     "miss_rate": 0.0,
+     "false_alarm_others": 0.467,
+     "miss_others": 0.091,
+     "UNEQUAL_ERROR": false
+    },
+    "Visayas": {
+     "observed_low": 7,
+     "observed_high": 8,
+     "false_alarm_rate": 0.714,
+     "miss_rate": 0.125,
+     "false_alarm_others": 0.325,
+     "miss_others": 0.059,
+     "UNEQUAL_ERROR": true
+    },
+    "Mindanao": {
+     "observed_low": 8,
+     "observed_high": 14,
+     "false_alarm_rate": 0.25,
+     "miss_rate": 0.071,
+     "false_alarm_others": 0.41,
+     "miss_others": 0.091,
+     "UNEQUAL_ERROR": false
+    }
+   }
+  },
+  "OH_R": {
+   "signed_error": {
+    "overall": {
+     "n": 72,
+     "mean_signed_error_pts": 3.22,
+     "ci95": [
+      1.07,
+      5.38
+     ],
+     "BIAS": true
+    },
+    "island:Luzon": {
+     "n": 35,
+     "mean_signed_error_pts": 4.57,
+     "ci95": [
+      1.13,
+      8.18
+     ],
+     "BIAS": true
+    },
+    "island:Visayas": {
+     "n": 15,
+     "mean_signed_error_pts": 1.43,
+     "ci95": [
+      -2.24,
+      6.27
+     ],
+     "BIAS": false
+    },
+    "island:Mindanao": {
+     "n": 22,
+     "mean_signed_error_pts": 2.3,
+     "ci95": [
+      -0.75,
+      5.11
+     ],
+     "BIAS": false
+    },
+    "observed:HIGH": {
+     "n": 25,
+     "mean_signed_error_pts": -0.16,
+     "ci95": [
+      -3.74,
+      2.99
+     ],
+     "BIAS": false
+    },
+    "observed:LOW": {
+     "n": 47,
+     "mean_signed_error_pts": 5.02,
+     "ci95": [
+      2.18,
+      7.9
+     ],
+     "BIAS": true
+    },
+    "CALABARZON": {
+     "n": 5,
+     "mean_signed_error_pts": -3.49,
+     "ci95": [
+      -3.49,
+      -3.49
+     ],
+     "BIAS": true
+    }
+   },
+   "error_rates_by_island": {
+    "Luzon": {
+     "observed_low": 32,
+     "observed_high": 3,
+     "false_alarm_rate": 0.25,
+     "miss_rate": 0.333,
+     "false_alarm_others": 0.467,
+     "miss_others": 0.0,
+     "UNEQUAL_ERROR": true
+    },
+    "Visayas": {
+     "observed_low": 7,
+     "observed_high": 8,
+     "false_alarm_rate": 0.286,
+     "miss_rate": 0.0,
+     "false_alarm_others": 0.325,
+     "miss_others": 0.059,
+     "UNEQUAL_ERROR": false
+    },
+    "Mindanao": {
+     "observed_low": 8,
+     "observed_high": 14,
+     "false_alarm_rate": 0.625,
+     "miss_rate": 0.0,
+     "false_alarm_others": 0.256,
+     "miss_others": 0.091,
+     "UNEQUAL_ERROR": true
+    }
+   }
+  }
+ }
+}
