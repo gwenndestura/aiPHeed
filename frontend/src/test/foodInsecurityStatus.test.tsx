@@ -59,9 +59,9 @@ function files(dir: string): string[] {
 describe("No unapproved forecast on the dashboard", () => {
   const all = files(SRC).map((p) => ({ p: p.replace(/\\/g, "/"), s: readFileSync(p, "utf-8") }));
 
-  it("MapDashboard mounts the release-gated card and not the FI9 or FI10 cards", () => {
+  it("MapDashboard mounts neither the removed status card nor the FI9 or FI10 cards", () => {
     const dash = all.find((f) => f.p.endsWith("components/MapDashboard.tsx"))!.s;
-    expect(dash).toContain("<FoodInsecurityStatusCardBody />");
+    expect(dash).not.toContain("<FoodInsecurityStatusCardBody />");     // removed 2026-11-06 (owner request; E166 on the map)
     expect(dash).not.toMatch(/NextQuarterOutlookCardBody|ProvincialOutlookCardBody/);
   });
 

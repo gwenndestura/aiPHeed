@@ -11,7 +11,6 @@ import {
   NewsArticlesCardBody,
 } from "@/components/RightAnalyticsPanel";
 import { QuarterTimeSlider } from "@/components/QuarterTimeSlider";
-import { FoodInsecurityStatusCardBody } from "@/components/FoodInsecurityStatus";
 import { ForecastHistoryModal } from "@/components/ForecastHistoryModal";
 import { RegionMetadataPopup } from "@/components/RegionMetadataPopup";
 import { MapLegend } from "@/components/MapLegend";
@@ -469,12 +468,9 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
     </Card>
   ) : currentQuarter ? (
     <>
-      {/* Official food-insecurity forecast: the release-gated route only (validation pending until a model is
-          approved). The FI9 regional hunger and FI10 food-inflation cards were removed from the dashboard on
-          2026-11-03 (not approved by the release gate); their components and results are kept for research. */}
-      <Card>
-        <FoodInsecurityStatusCardBody />
-      </Card>
+      {/* The "validation pending" food-insecurity status card was removed on 2026-11-06 (owner request): the map now
+          serves the thesis model E166 on every quarter. The FI9 regional hunger and FI10 food-inflation cards were
+          removed on 2026-11-03. Their components and results are kept for research. */}
       <Card>
         <ShapNarrativeCardBody
           quarter={currentQuarter}
