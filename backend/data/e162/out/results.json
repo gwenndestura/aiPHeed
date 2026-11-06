@@ -1,0 +1,968 @@
+{
+ "ranking": {
+  "pairs": 40,
+  "clusters": 25,
+  "concordance": {
+   "E158": {
+    "est": 0.6,
+    "ci95": [
+     0.436,
+     0.732
+    ]
+   },
+   "RP": {
+    "est": 0.7,
+    "ci95": [
+     0.545,
+     0.837
+    ]
+   },
+   "OH": {
+    "est": 0.675,
+    "ci95": [
+     0.515,
+     0.813
+    ]
+   },
+   "FH": {
+    "est": 0.7,
+    "ci95": [
+     0.538,
+     0.842
+    ]
+   },
+   "SS": {
+    "est": 0.7,
+    "ci95": [
+     0.545,
+     0.837
+    ]
+   }
+  },
+  "per_round_concordance": {
+   "ENNS2018": {
+    "E158": 0.583,
+    "RP": 0.583,
+    "OH": 0.667,
+    "FH": 0.583,
+    "SS": 0.583,
+    "pairs": 12
+   },
+   "ENNS2019": {
+    "E158": 0.571,
+    "RP": 0.643,
+    "OH": 0.571,
+    "FH": 0.643,
+    "SS": 0.643,
+    "pairs": 14
+   },
+   "ENNS2021": {
+    "E158": 0.643,
+    "RP": 0.857,
+    "OH": 0.786,
+    "FH": 0.857,
+    "SS": 0.857,
+    "pairs": 14
+   }
+  },
+  "spearman_kendall": {
+   "ENNS2018": {
+    "E158": {
+     "spearman": 0.715,
+     "kendall": 0.555
+    },
+    "RP": {
+     "spearman": 0.591,
+     "kendall": 0.443
+    },
+    "OH": {
+     "spearman": 0.783,
+     "kendall": 0.625
+    },
+    "FH": {
+     "spearman": 0.745,
+     "kendall": 0.581
+    },
+    "SS": {
+     "spearman": 0.742,
+     "kendall": 0.573
+    }
+   },
+   "ENNS2019": {
+    "E158": {
+     "spearman": 0.536,
+     "kendall": 0.371
+    },
+    "RP": {
+     "spearman": 0.617,
+     "kendall": 0.471
+    },
+    "OH": {
+     "spearman": 0.721,
+     "kendall": 0.544
+    },
+    "FH": {
+     "spearman": 0.739,
+     "kendall": 0.544
+    },
+    "SS": {
+     "spearman": 0.695,
+     "kendall": 0.531
+    }
+   },
+   "ENNS2021": {
+    "E158": {
+     "spearman": 0.653,
+     "kendall": 0.5
+    },
+    "RP": {
+     "spearman": 0.672,
+     "kendall": 0.504
+    },
+    "OH": {
+     "spearman": 0.615,
+     "kendall": 0.487
+    },
+    "FH": {
+     "spearman": 0.648,
+     "kendall": 0.507
+    },
+    "SS": {
+     "spearman": 0.643,
+     "kendall": 0.467
+    }
+   }
+  },
+  "top_hit": {
+   "E158": "3/6",
+   "RP": "3/6",
+   "OH": "3/6",
+   "FH": "3/6",
+   "SS": "3/6"
+  },
+  "position_error": {
+   "E158": 0.467,
+   "RP": 0.333,
+   "OH": 0.373,
+   "FH": 0.307,
+   "SS": 0.333
+  }
+ },
+ "nested": {
+  "picks": {
+   "ENNS2018": "RP",
+   "ENNS2019": "RP",
+   "ENNS2021": "RP"
+  },
+  "nested_concordance": 0.7,
+  "best_single": "RP",
+  "best_single_concordance": 0.7,
+  "OVERFIT_SELECTION": false
+ },
+ "ss_reproduced_max_abs_diff": 2.220446049250313e-16,
+ "shuffled_control": {
+  "SS": {
+   "est": 0.7,
+   "ci95": [
+    0.548,
+    0.833
+   ]
+  },
+  "SH": {
+   "est": 0.55,
+   "ci95": [
+    0.462,
+    0.636
+   ]
+  },
+  "diff": {
+   "est": 0.15,
+   "ci95": [
+    -0.028,
+    0.325
+   ]
+  }
+ },
+ "gates_SS": {
+  "P1": true,
+  "P2": true,
+  "P3": true,
+  "P4": false,
+  "all": false
+ },
+ "bias": {
+  "E158": {
+   "island:Luzon": {
+    "n": 35,
+    "mean_signed_error_pts": 5.53,
+    "ci95": [
+     3.0,
+     7.85
+    ],
+    "flag": "BIAS"
+   },
+   "island:Visayas": {
+    "n": 15,
+    "mean_signed_error_pts": -0.58,
+    "ci95": [
+     -4.66,
+     4.22
+    ],
+    "flag": "not shown"
+   },
+   "island:Mindanao": {
+    "n": 22,
+    "mean_signed_error_pts": 1.1,
+    "ci95": [
+     -2.42,
+     4.32
+    ],
+    "flag": "not shown"
+   },
+   "observed:HIGH": {
+    "n": 25,
+    "mean_signed_error_pts": -1.62,
+    "ci95": [
+     -5.56,
+     2.41
+    ],
+    "flag": "not shown"
+   },
+   "observed:LOW": {
+    "n": 47,
+    "mean_signed_error_pts": 5.3,
+    "ci95": [
+     2.96,
+     7.61
+    ],
+    "flag": "BIAS"
+   },
+   "released_rounds<=2": {
+    "n": 72,
+    "mean_signed_error_pts": 2.9,
+    "ci95": [
+     0.55,
+     5.06
+    ],
+    "flag": "not shown"
+   },
+   "released_rounds>=3": {
+    "n": 0,
+    "flag": "empty"
+   },
+   "survey_older": {
+    "n": 25,
+    "mean_signed_error_pts": -1.53,
+    "ci95": [
+     -4.79,
+     2.37
+    ],
+    "flag": "not shown"
+   },
+   "survey_newer": {
+    "n": 47,
+    "mean_signed_error_pts": 5.26,
+    "ci95": [
+     1.18,
+     9.27
+    ],
+    "flag": "BIAS"
+   }
+  },
+  "SS": {
+   "island:Luzon": {
+    "n": 35,
+    "mean_signed_error_pts": 12.72,
+    "ci95": [
+     9.98,
+     15.65
+    ],
+    "flag": "BIAS"
+   },
+   "island:Visayas": {
+    "n": 15,
+    "mean_signed_error_pts": 7.7,
+    "ci95": [
+     7.0,
+     8.93
+    ],
+    "flag": "BIAS"
+   },
+   "island:Mindanao": {
+    "n": 22,
+    "mean_signed_error_pts": 7.14,
+    "ci95": [
+     3.84,
+     10.78
+    ],
+    "flag": "BIAS"
+   },
+   "observed:HIGH": {
+    "n": 25,
+    "mean_signed_error_pts": 2.94,
+    "ci95": [
+     0.9,
+     4.69
+    ],
+    "flag": "not shown"
+   },
+   "observed:LOW": {
+    "n": 47,
+    "mean_signed_error_pts": 13.71,
+    "ci95": [
+     11.28,
+     16.4
+    ],
+    "flag": "BIAS"
+   },
+   "released_rounds<=2": {
+    "n": 72,
+    "mean_signed_error_pts": 9.97,
+    "ci95": [
+     7.81,
+     12.21
+    ],
+    "flag": "BIAS"
+   },
+   "released_rounds>=3": {
+    "n": 0,
+    "flag": "empty"
+   },
+   "survey_older": {
+    "n": 25,
+    "mean_signed_error_pts": 13.21,
+    "ci95": [
+     10.22,
+     17.1
+    ],
+    "flag": "BIAS"
+   },
+   "survey_newer": {
+    "n": 47,
+    "mean_signed_error_pts": 8.25,
+    "ci95": [
+     4.95,
+     11.49
+    ],
+    "flag": "BIAS"
+   }
+  },
+  "pair_concordance_by_survey_age": {
+   "False": {
+    "E158": 0.577,
+    "RP": 0.615,
+    "OH": 0.615,
+    "FH": 0.615,
+    "SS": 0.615,
+    "pairs": 26
+   },
+   "True": {
+    "E158": 0.643,
+    "RP": 0.857,
+    "OH": 0.786,
+    "FH": 0.857,
+    "SS": 0.857,
+    "pairs": 14
+   }
+  }
+ },
+ "calabarzon_pairs": [
+  {
+   "cluster": "ENNS2019|CALABARZON",
+   "survey": "ENNS2019",
+   "region": "CALABARZON",
+   "a": "Quezon",
+   "b": "Rizal",
+   "E158": 1.0,
+   "RP": 1.0,
+   "OH": 1.0,
+   "FH": 1.0,
+   "SS": 1.0,
+   "touches_older": false
+  },
+  {
+   "cluster": "ENNS2021|CALABARZON",
+   "survey": "ENNS2021",
+   "region": "CALABARZON",
+   "a": "Batangas",
+   "b": "Cavite",
+   "E158": 0.0,
+   "RP": 1.0,
+   "OH": 1.0,
+   "FH": 1.0,
+   "SS": 1.0,
+   "touches_older": true
+  }
+ ],
+ "n_released_by_row": [
+  {
+   "province": "Abra",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Aklan",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Bulacan",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Cagayan Province",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Camarines Norte",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Camiguin",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Capiz",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Eastern Samar",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Iloilo Province",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Isabela Province",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Laguna",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Maguindanao",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Mountain Province",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Northern Samar",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Nueva Vizcaya",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Oriental Mindoro",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Siquijor",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Sorsogon",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Sultan Kudarat",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Samar",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Zambales",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Zamboanga del Norte",
+   "survey": "ENNS2018",
+   "n_released": 2,
+   "gap_q": 12
+  },
+  {
+   "province": "Agusan del Norte",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Antique",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Basilan",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Benguet",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Biliran",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Bukidnon",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Davao del Norte",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Guimaras",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Ilocos Norte",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Kalinga",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Lanao del Norte",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Lanao del Sur",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Marinduque",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Misamis Occidental",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Misamis Oriental",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Nueva Ecija",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Palawan",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Pangasinan",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Quezon",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Quirino",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Rizal",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "South Cotabato",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Southern Leyte",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Surigao del Sur",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Zamboanga Sibugay",
+   "survey": "ENNS2019",
+   "n_released": 2,
+   "gap_q": 16
+  },
+  {
+   "province": "Agusan Del Sur",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Albay",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Apayao",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Aurora",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Bataan",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Batangas",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Bohol",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Catanduanes",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Cavite",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Compostela Valley",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Davao Del Sur",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Ifugao",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Ilocos Sur",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "La Union",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Leyte",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Masbate",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Negros Occidental",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Negros Oriental",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "North Cotabato",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Occidental Mindoro",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Romblon",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Sarangani",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Surigao Del Norte",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Tarlac",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  },
+  {
+   "province": "Tawi-Tawi",
+   "survey": "ENNS2021",
+   "n_released": 2,
+   "gap_q": 24
+  }
+ ],
+ "live_2027Q1": {
+  "q_per_year": 0.05,
+  "rows": [
+   {
+    "province": "Batangas",
+    "SS_level": 40.1,
+    "SS_90": [
+     21.0,
+     62.7
+    ],
+    "SS_p_highest": 0.213,
+    "E158_score": 26.6,
+    "E158_class": "LOW",
+    "E158_p_highest": 0.033
+   },
+   {
+    "province": "Cavite",
+    "SS_level": 35.8,
+    "SS_90": [
+     18.1,
+     58.5
+    ],
+    "SS_p_highest": 0.139,
+    "E158_score": 32.1,
+    "E158_class": "LOW",
+    "E158_p_highest": 0.204
+   },
+   {
+    "province": "Laguna",
+    "SS_level": 26.6,
+    "SS_90": [
+     10.7,
+     52.3
+    ],
+    "SS_p_highest": 0.06,
+    "E158_score": 29.8,
+    "E158_class": "LOW",
+    "E158_p_highest": 0.106
+   },
+   {
+    "province": "Quezon",
+    "SS_level": 44.3,
+    "SS_90": [
+     21.6,
+     69.6
+    ],
+    "SS_p_highest": 0.361,
+    "E158_score": 31.6,
+    "E158_class": "LOW",
+    "E158_p_highest": 0.189
+   },
+   {
+    "province": "Rizal",
+    "SS_level": 39.3,
+    "SS_90": [
+     18.3,
+     65.2
+    ],
+    "SS_p_highest": 0.228,
+    "E158_score": 35.5,
+    "E158_class": "LOW",
+    "E158_p_highest": 0.469
+   }
+  ]
+ },
+ "display": {
+  "priority_method": "E158",
+  "most_likely_highest": "Rizal",
+  "p": 0.469,
+  "rank_first_shown": false,
+  "note": "condition (c), direct comparative evidence, is assessed in the report"
+ },
+ "lgu": {
+  "v2_top20_by_province": {
+   "Cavite": 11,
+   "Quezon": 6,
+   "Laguna": 1,
+   "Rizal": 1,
+   "Batangas": 1
+  },
+  "poverty_only_top20_by_province": {
+   "Quezon": 19,
+   "Laguna": 1
+  },
+  "poverty_only_top10": [
+   {
+    "lgu_name": "San Francisco",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 30.214238
+   },
+   {
+    "lgu_name": "Macalelon",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 30.101027
+   },
+   {
+    "lgu_name": "San Andres",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 27.817577
+   },
+   {
+    "lgu_name": "Infanta",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 27.335361
+   },
+   {
+    "lgu_name": "Panukulan",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 26.02755
+   },
+   {
+    "lgu_name": "Pitogo",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 25.850478
+   },
+   {
+    "lgu_name": "Agdangan",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 25.498332
+   },
+   {
+    "lgu_name": "Buenavista",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 24.961811
+   },
+   {
+    "lgu_name": "Pagbilao",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 24.883842
+   },
+   {
+    "lgu_name": "General Luna",
+    "province_name": "Quezon",
+    "poverty_incidence_2021": 24.606676
+   }
+  ]
+ }
+}
