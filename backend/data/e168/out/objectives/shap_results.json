@@ -1,0 +1,153 @@
+{
+ "model": "E168 RSS|LGBM|FULL|id",
+ "lam": 0.7509923756119671,
+ "n_inputs": 66,
+ "train_rows": 732,
+ "five_driver_share": {
+  "climate": 0.4656,
+  "employment": 0.1553,
+  "fish_kill": 0.0,
+  "market": 0.3536,
+  "ofw_remittance": 0.0255
+ },
+ "other_share_of_total": 0.4735,
+ "source_share": {
+  "news (NLP)": 0.3951,
+  "official": 0.6049
+ },
+ "top15": [
+  {
+   "rank": 1,
+   "feature": "agri_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.01333
+  },
+  {
+   "rank": 2,
+   "feature": "n_e_hunger",
+   "group": "other",
+   "source": "news",
+   "mean_abs_shap": 0.01217
+  },
+  {
+   "rank": 3,
+   "feature": "p_poverty_gap",
+   "group": "other",
+   "source": "official",
+   "mean_abs_shap": 0.012
+  },
+  {
+   "rank": 4,
+   "feature": "n_e_market",
+   "group": "market",
+   "source": "news",
+   "mean_abs_shap": 0.01155
+  },
+  {
+   "rank": 5,
+   "feature": "rain_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.01135
+  },
+  {
+   "rank": 6,
+   "feature": "soil_since",
+   "group": "climate",
+   "source": "official",
+   "mean_abs_shap": 0.01102
+  },
+  {
+   "rank": 7,
+   "feature": "a_e_employment",
+   "group": "employment",
+   "source": "news",
+   "mean_abs_shap": 0.0099
+  },
+  {
+   "rank": 8,
+   "feature": "income_rel",
+   "group": "other",
+   "source": "official",
+   "mean_abs_shap": 0.00971
+  },
+  {
+   "rank": 9,
+   "feature": "n_net_since",
+   "group": "other",
+   "source": "news",
+   "mean_abs_shap": 0.00905
+  },
+  {
+   "rank": 10,
+   "feature": "cpi_food_rel_nat",
+   "group": "market",
+   "source": "official",
+   "mean_abs_shap": 0.00756
+  },
+  {
+   "rank": 11,
+   "feature": "a_net_since",
+   "group": "other",
+   "source": "news",
+   "mean_abs_shap": 0.00687
+  },
+  {
+   "rank": 12,
+   "feature": "p_density",
+   "group": "other",
+   "source": "official",
+   "mean_abs_shap": 0.00558
+  },
+  {
+   "rank": 13,
+   "feature": "n_e_net",
+   "group": "other",
+   "source": "news",
+   "mean_abs_shap": 0.00489
+  },
+  {
+   "rank": 14,
+   "feature": "h2",
+   "group": "other",
+   "source": "official",
+   "mean_abs_shap": 0.00443
+  },
+  {
+   "rank": 15,
+   "feature": "cpi_since",
+   "group": "market",
+   "source": "official",
+   "mean_abs_shap": 0.00408
+  }
+ ],
+ "H1": {
+  "definitions": {
+   "FSSI": [
+    "p_e_net",
+    "a_e_net",
+    "n_e_net",
+    "r_e_net",
+    "p_net_since",
+    "a_net_since",
+    "n_net_since"
+   ],
+   "food_CPI_deviation": [
+    "cpi_food_rel_nat"
+   ],
+   "top_k": 10
+  },
+  "best_rank": {
+   "FSSI": 9,
+   "food_CPI_deviation": 10
+  },
+  "among_strongest": {
+   "FSSI": true,
+   "food_CPI_deviation": true
+  },
+  "null_rejected": true,
+  "cpi_since_rank": 15
+ },
+ "note": "LightGBM exact tree attributions of the model's adjustment to the survey anchor, on the live training rows, times lambda."
+}

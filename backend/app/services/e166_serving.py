@@ -28,18 +28,30 @@ import pandas as pd
 from app.paths import backend_path
 from app.services import reference as ref
 
-HIST = backend_path("data/e166/out/history")
+# Which thesis model is served (owner decision 2026-11-06: "use E168 from now on"); AIPHEED_THESIS_MODEL=e166 serves E166.
+MODEL = os.environ.get("AIPHEED_THESIS_MODEL", "e168").lower()
+NAME = {"e168": "E168", "e166": "E166"}.get(MODEL, MODEL.upper())
+HIST = backend_path(f"data/{MODEL}/out/history")
 LIVE = "2027-Q1"
-STATUS = ("Retrospectively validated: passes all six reliability criteria (C1-C6) at one and two quarters ahead; adoption "
-          "pending the adviser's decision. Risk indicator only; not an official food-insecurity classification.")
+STATUS = {
+    "e168": ("Retrospectively validated: passes all six reliability criteria (C1-C6) one quarter ahead; adoption pending the "
+             "adviser's decision. Risk indicator only; not an official food-insecurity classification."),
+    "e166": ("Retrospectively validated: passes all six reliability criteria (C1-C6) at one and two quarters ahead; adoption "
+             "pending the adviser's decision. Risk indicator only; not an official food-insecurity classification."),
+}.get(MODEL, "Risk indicator only; not an official food-insecurity classification.")
+METHOD = {
+    "e168": ("the province's last DOST-FNRI survey (shrunk toward its history) adjusted by a LightGBM model of the five trigger "
+             "groups and news signals, with temperature-shrunk scores"),
+    "e166": ("the province's last DOST-FNRI survey (shrunk toward its history) adjusted by the five trigger groups and news "
+             "signals through automatic model selection, with temperature-shrunk scores"),
+}.get(MODEL, "the thesis model")
 
 INDICATOR = {
-    "id": "e166_high_food_insecurity_probability",
-    "name": "Probability of HIGH food-insecurity risk (thesis model E166)",
-    "definition": ("Probability that the province's HFIAS moderate-or-severe food insecurity is at or above 50% in the target "
-                   "quarter, from E166: the province's last DOST-FNRI survey (shrunk toward its history) adjusted by the five "
-                   "trigger groups and news signals through automatic model selection, with temperature-shrunk scores. "
-                   "HIGH when the probability is 0.50 or more, equivalent to a forecast score of 50 or more."),
+    "id": f"{MODEL}_high_food_insecurity_probability",
+    "name": f"Probability of HIGH food-insecurity risk (thesis model {NAME}{', LightGBM' if MODEL == 'e168' else ''})",
+    "definition": (f"Probability that the province's HFIAS moderate-or-severe food insecurity is at or above 50% in the target "
+                   f"quarter, from {NAME}: {METHOD}. HIGH when the probability is 0.50 or more, equivalent to a forecast score "
+                   "of 50 or more."),
     "unit": "probability (0-1)",
     "horizon": ("One quarter ahead: each quarter is forecast at the start of the previous quarter with information published "
                 "before that date. 2027-Q1 is the live forecast; earlier quarters are back-forecasts made the same way."),
@@ -49,10 +61,10 @@ INDICATOR = {
 }
 
 STATUS_NOTES = {
-    "contributes": "This factor group is an input of the thesis model (E166) and moved this forecast in the direction shown, "
+    "contributes": f"This factor group is an input of the thesis model ({NAME}) and moved this forecast in the direction shown, "
                    "relative to the province's last DOST-FNRI survey.",
-    "no_effect": "This factor group is an input of the thesis model (E166) but did not measurably move this forecast.",
-    "no_model_input": "The thesis model (E166) has no separate input for this factor group in this forecast.",
+    "no_effect": f"This factor group is an input of the thesis model ({NAME}) but did not measurably move this forecast.",
+    "no_model_input": f"The thesis model ({NAME}) has no separate input for this factor group in this forecast.",
 }
 # The dashboard's five risk drivers (the paper's five trigger categories). Each input, official or news, counts toward the
 # trigger group it belongs to (market news -> Market, climate news -> Climate, ...). Inputs outside the five (general
@@ -63,7 +75,7 @@ LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill":
 ORDER = ["market", "climate", "fish_kill", "employment", "ofw_remittance"]
 RANKING_METHOD = ("risk = province P(HIGH) x (0.6 x poverty_norm + 0.4 x density_norm), min-max within province "
                   "(PSA 2021 small-area poverty, 2020 census density)")
-EXPLAINABILITY_NOTE = ("Thesis model E166. Most of each forecast comes from the province's last DOST-FNRI survey; the bars "
+EXPLAINABILITY_NOTE = (f"Thesis model {NAME}. Most of each forecast comes from the province's last DOST-FNRI survey; the bars "
                        "show how much each factor group moved the forecast up or down from that survey. They describe the "
                        "model, not causes. " + STATUS)
 
@@ -103,8 +115,8 @@ def province_records(quarter: str) -> list[dict]:
         code = ref.province_code(r["province"].lower())
         if code is None:
             continue
-        kind = (f"Forecast issued {q['issue_date']} for {quarter} (one quarter ahead) by the thesis model E166." if live else
-                f"Back-forecast for {quarter} by the thesis model E166, made as of {q['issue_date']} with information "
+        kind = (f"Forecast issued {q['issue_date']} for {quarter} (one quarter ahead) by the thesis model {NAME}." if live else
+                f"Back-forecast for {quarter} by the thesis model {NAME}, made as of {q['issue_date']} with information "
                 "published before that date. No provincial survey exists for this quarter to check it against.")
         out.append({
             "province_code": code, "province_name": r["province"], "quarter": quarter,
@@ -117,7 +129,7 @@ def province_records(quarter: str) -> list[dict]:
             "forecast_horizon_quarters": 1,
             "verification_date": f"{q['issue_date']}T00:00:00+08:00 (exclusive)",
             "data_sufficiency_flag": "LIMITED_SIGNAL" if r["articles_last_quarter"] < 5 else "SUFFICIENT",
-            "mode": "FORECAST", "origin": q["issue_date"], "information_cutoff": q["issue_date"], "provenance": "E166 (app.e166.history)",
+            "mode": "FORECAST", "origin": q["issue_date"], "information_cutoff": q["issue_date"], "provenance": f"{NAME} (app.{MODEL}.history)",
             "observed_S1": None, "observed_label": None,
         })
     return out
@@ -138,7 +150,7 @@ def municipal_frame(quarter: str) -> pd.DataFrame:
         "province_probability": d["province_risk_prob"],
         "vulnerability_index": d["vulnerability"],
         "estimate_source": [{"mode": "FORECAST", "origin": q["issue_date"], "quarter": quarter,
-                             "score_type": "e166_high_food_insecurity_probability"}] * len(d),
+                             "score_type": INDICATOR["id"]}] * len(d),
         "ranking_method": RANKING_METHOD,
         "rows_sha256": sha,
     })
