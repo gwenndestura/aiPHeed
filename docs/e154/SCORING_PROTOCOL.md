@@ -10,7 +10,8 @@ Written 2026-11-06, before any target outcome exists. **Nothing here may change 
 | Provinces, E151 required | `data/e151/out/issue/sealed_forecast_2027-Q1.json` | `b397c40f` | 5 provinces |
 | Provinces, D5 attempt | `data/e151/out/issue/sealed_attempt_2027-Q1.json` | `0f430203` | 5 provinces |
 | Provinces, E152 | `data/e152/out/sealed_2027-Q1.json` | `f6c07789` | 5 provinces |
-| **Provinces, E154 frozen** | `data/e154/out/sealed_2027-Q1.json` | `d724c454` | 5 provinces |
+| Provinces, E154 frozen | `data/e154/out/sealed_2027-Q1.json` | `d724c454` | 5 provinces |
+| **Provinces, E158 thesis model** | `data/e158/out/sealed_2027-Q1.json` | `f69e7a02` | 5 provinces, Leads 1 to 4 |
 
 ## SWS areas: scorable as SWS publishes
 

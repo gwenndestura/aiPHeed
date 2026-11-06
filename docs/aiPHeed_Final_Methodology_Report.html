@@ -70,6 +70,24 @@ a{color:var(--accent)}
 </section>
 
 <section>
+  <h2>Update: E158 is now the thesis model</h2>
+  <p>By the owner's decision, the thesis model is <b>E158: E151 plus PSA regional household consumption per person</b>, the best of five downloaded sources tested one at a time. It keeps all five groups and the news pipeline: income growth joins employment, and relative income joins poverty. It was chosen after comparing those sources on the same rows, so its gain is slightly optimistic and should be treated as small.</p>
+  <div class="tbl"><table>
+    <tr><th>Lead 1, 72 rows</th><th class="n">E151</th><th class="n">E158</th></tr>
+    <tr><td>Accuracy</td><td class="n">72.2%</td><td class="n">73.6%</td></tr>
+    <tr><td>Precision</td><td class="n">0.576</td><td class="n">0.583</td></tr>
+    <tr><td>Recall (HIGH found)</td><td class="n">0.760</td><td class="n">0.840</td></tr>
+    <tr><td>LOW found</td><td class="n">0.702</td><td class="n">0.681</td></tr>
+    <tr><td>F1</td><td class="n">0.655</td><td class="n">0.689</td></tr>
+    <tr><td>AUC-ROC</td><td class="n">0.855</td><td class="n">0.860</td></tr>
+    <tr><td>Brier (survey-weighted)</td><td class="n">0.1375</td><td class="n">0.1344</td></tr>
+    <tr><td>Employment / remittance share of model use</td><td class="n">0% / 0.3%</td><td class="n">4.5% / 1.7%</td></tr>
+    <tr><td>Maximum reliable lead</td><td class="n">0</td><td class="n">0</td></tr>
+  </table></div>
+  <p>E158 − E151 Brier: −0.0031 [−0.0079, +0.0010], so the gain is within noise. Against the baselines on Brier: persistence −0.078 [−0.137, −0.028], PSA-only −0.094 [−0.139, −0.049], NLP-only logistic −0.084 [−0.161, −0.016], logistic regression −0.173 [−0.276, −0.069], NLP-only LightGBM −0.015 [−0.032, +0.003]. Lead 1 still fails C1 and C4 of the reliability criteria (calibration slope [0.48, 0.91]). 2027-Q1: all five provinces LOW (Batangas 26.6, Cavite 32.1, Laguna 29.8, Quezon 31.6, Rizal 35.5); sealed <code>f69e7a02</code>. The sections below describe E151, which E158 extends.</p>
+</section>
+
+<section>
   <h2>1. Objectives scorecard</h2>
   <div class="tbl"><table>
     <tr><th>Objective</th><th>Status</th><th>Evidence</th></tr>

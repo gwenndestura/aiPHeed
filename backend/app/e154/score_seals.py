@@ -16,7 +16,7 @@ import pandas as pd
 from app.paths import BACKEND_DIR
 
 D = BACKEND_DIR / "data"
-SEALS = {"sws_e151": (D / "e151/out/sealed_sws_2026-Q4.json", "1a1c34bf"), "prov_e151": (D / "e151/out/issue/sealed_forecast_2027-Q1.json", "b397c40f"), "prov_d5": (D / "e151/out/issue/sealed_attempt_2027-Q1.json", "0f430203"), "prov_e152": (D / "e152/out/sealed_2027-Q1.json", "f6c07789"), "prov_e154": (D / "e154/out/sealed_2027-Q1.json", "d724c454")}
+SEALS = {"sws_e151": (D / "e151/out/sealed_sws_2026-Q4.json", "1a1c34bf"), "prov_e151": (D / "e151/out/issue/sealed_forecast_2027-Q1.json", "b397c40f"), "prov_d5": (D / "e151/out/issue/sealed_attempt_2027-Q1.json", "0f430203"), "prov_e152": (D / "e152/out/sealed_2027-Q1.json", "f6c07789"), "prov_e154": (D / "e154/out/sealed_2027-Q1.json", "d724c454"), "prov_e158": (D / "e158/out/sealed_2027-Q1.json", "f69e7a02")}
 logit = lambda p: np.log(p / (100 - p))
 
 
@@ -64,6 +64,8 @@ def provinces(ok, path):
         return
     for k in [x for x in SEALS if x.startswith("prov") and ok[x]]:
         f = pd.DataFrame(json.loads(SEALS[k][0].read_text())["forecasts"])
+        if "lead" in f:
+            f = f[f["lead"] == 1]
         m = f.merge(o, on="province")
         m["class_right"] = (m["score"] >= 50) == (m["pct"] >= 50)
         m["error_points"] = (m["score"] - m["pct"]).round(1)
