@@ -54,10 +54,13 @@ STATUS_NOTES = {
     "no_effect": "This factor group is an input of the thesis model (E166) but did not measurably move this forecast.",
     "no_model_input": "The thesis model (E166) has no separate input for this factor group in this forecast.",
 }
-GROUP_OF = {"market": "market", "climate": "climate", "employment": "employment", "remittance": "ofw_remittance", "poverty": "poverty"}
+# The dashboard's five risk drivers (the paper's five trigger categories). Each input, official or news, counts toward the
+# trigger group it belongs to (market news -> Market, climate news -> Climate, ...). Inputs outside the five (general
+# food-stress news / FSSI, poverty and density, survey age) are reported as the "other" share, as before.
+GROUP_OF = {"market": "market", "climate": "climate", "employment": "employment", "remittance": "ofw_remittance"}
 LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill", "employment": "Employment",
-          "ofw_remittance": "OFW Remittance", "poverty": "Poverty & Vulnerability", "news": "News Signals"}
-ORDER = ["market", "climate", "fish_kill", "employment", "ofw_remittance", "poverty", "news"]
+          "ofw_remittance": "OFW Remittance"}
+ORDER = ["market", "climate", "fish_kill", "employment", "ofw_remittance"]
 RANKING_METHOD = ("risk = province P(HIGH) x (0.6 x poverty_norm + 0.4 x density_norm), min-max within province "
                   "(PSA 2021 small-area poverty, 2020 census density)")
 EXPLAINABILITY_NOTE = ("Thesis model E166. Most of each forecast comes from the province's last DOST-FNRI survey; the bars "
@@ -148,11 +151,9 @@ def _contrib(quarter: str) -> pd.DataFrame:
         return pd.DataFrame(columns=["province", "feature", "group", "source", "contribution", "ui_group"])
 
     def ui_group(row) -> str | None:
-        if row["source"] == "news":
-            return "news"
         if row["feature"] == "c_fish_yoy":
             return "fish_kill"
-        return GROUP_OF.get(row["group"])             # timing inputs (survey age, lead) go to the "other" share
+        return GROUP_OF.get(row["group"])             # FSSI / poverty / survey age -> the "other" share
     s["ui_group"] = s.apply(ui_group, axis=1)
     return s
 
