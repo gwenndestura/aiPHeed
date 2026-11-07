@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\admin\aipheed_e145\backend\app\e165\final.py", line 269, in <module>
+    {"eval": evaluate, "live": live}[sys.argv[1]]()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\admin\aipheed_e145\backend\app\e165\final.py", line 209, in evaluate
+    "reliability_C1_C6": rel["criteria"], "reliable": rel["reliable"], "cfg": x.groupby("survey")["cfg"].first().to_dict(), "youden_threshold_sensitivity": {"thresholds": x.groupby("survey")["thr_youden"].first().round(3).to_dict(), "accuracy": round(thr_acc, 3)}}
+                                                                              ~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\groupby\generic.py", line 1951, in __getitem__
+    return super().__getitem__(key)
+           ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\pandas\core\base.py", line 245, in __getitem__
+    raise KeyError(f"Column not found: {key}")
+KeyError: 'Column not found: cfg'

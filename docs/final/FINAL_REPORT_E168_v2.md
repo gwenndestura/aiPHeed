@@ -69,6 +69,7 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 | Market and prices | −0.0073 [−0.0154, −0.0001] | 69.4 % | **Contributes (marginal)** |
 | Climate stress | −0.0044 [−0.0111, +0.0014] | 72.2 % | Not demonstrated |
 | Employment | +0.0003 [−0.0004, +0.0011] | 77.8 % | No contribution |
+| **Employment with official regional data (E173, locked protocol)** | E173 − E168 at Lead 1: −0.0005 [−0.0062, +0.0056] | E173 73.6 % (Lead 1), 76.4 %, 73.6 % | **No measurable information; E168 stays** (`docs/e173/RESULTS.md`) |
 | OFW remittances | +0.0001 [−0.0002, +0.0003] | 76.4 % | No contribution |
 | Fish kill (fisheries production) | +0.0009 [−0.0011, +0.0029] (nested refit without `c_fish_yoy`) | 75.0 % (AUC 0.891 both) | No contribution; largest probability change 0.03 |
 | *Poverty and density (not a trigger; LGU weights, still a model input)* | +0.0008 [−0.0128, +0.0125] | 79.2 % | No contribution. Not removed: the higher accuracy without it is 3 of 72 forecasts with no Brier change, and choosing on it would be test-set selection |
@@ -76,7 +77,9 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 | All triggers shuffled across provinces | −0.0003 [−0.0151, +0.0178] | – | Not better than shuffled |
 | **Group-level permutation, Brier real − permuted (each group shuffled across provinces, full nested refit)** | market −0.005 [−0.012, +0.002]; climate −0.000 [−0.017, +0.015]; employment 0.000 [−0.002, +0.002]; remittances 0.000; poverty +0.007 [−0.006, +0.022] | permuted accuracy 70.8 / 77.8 / 73.6 / 75.0 / 80.6 % | **No group carries significant province-specific information** |
 
-**Why the employment and remittance groups cannot be improved.** Their inputs are national, the same for all five provinces. No public provincial LFS or BSP remittance series exists that was published in time to be used at past forecast origins:
+**Employment was fixed and re-tested (E173).** In E168 the regional unemployment input was empty in every row, because its source starts in 2021, so employment could never differ between provinces. E173 filled it from PSA's official regional unemployment rates (Statistical Yearbook Table 11.1, 2014–2023), using only years published at each forecast date. The protocol and decision rule were locked first (`e27c82ba`). Result: no measurable gain, and Lead-1 accuracy of 73.6 %, so E168 stays. The employment trigger is now *tested and not contributing*, rather than untestable.
+
+**Why the remittance group cannot be improved.** Their inputs are national, the same for all five provinces. No public provincial LFS or BSP remittance series exists that was published in time to be used at past forecast origins:
 - OpenSTAT has no provincial LFS.
 - Provincial LFS for 2018–2020 was released only in 2022.
 - BSP regional tables were not reachable.

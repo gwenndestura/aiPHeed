@@ -1,0 +1,186 @@
+{
+ "model": "E151 required (GNT), Lead 1, 72 rows",
+ "commit_at_start": "44531bcb on pfi/e151-news-quarterly",
+ "leakage_future_inputs_corrupted": {
+  "rows": 72,
+  "max_abs_change_logit": 0.0,
+  "rows_changed_over_1e-9": 0,
+  "pass": true
+ },
+ "effective_sample_size": {
+  "rows": 72,
+  "share_of_error_variance_shared_in_round": 0.063,
+  "share_shared_in_round_and_region": 0.726,
+  "mean_rows_per_round_region": 1.8,
+  "effective_n_approx": 45.6,
+  "independent_rounds": 3,
+  "accuracy_95_range_at_effective_n": [
+   0.592,
+   0.852
+  ]
+ },
+ "province_held_out": {
+  "accuracy_held_out": 0.6944444444444444,
+  "accuracy_standard": 0.7222222222222222,
+  "brier_held_out": 0.14155895207126795,
+  "brier_standard": 0.137495050817472,
+  "note": "the anchor still uses the province's own earlier surveys, as the method defines; only the LightGBM adjustment is refitted without the province"
+ },
+ "employment_remittance_diagnosis": {
+  "training_rows": 532,
+  "distinct_issue_quarters": 14,
+  "distinct_surveys": 3,
+  "unemp_rate": {
+   "distinct_values": 14,
+   "share_variance_explained_by_issue_quarter": 1.0,
+   "corr_with_survey_error": 0.188
+  },
+  "unemp_yoy": {
+   "distinct_values": 13,
+   "share_variance_explained_by_issue_quarter": 1.0,
+   "corr_with_survey_error": -0.085
+  },
+  "unemp_chg_since": {
+   "distinct_values": 14,
+   "share_variance_explained_by_issue_quarter": 1.0,
+   "corr_with_survey_error": -0.025
+  },
+  "remit_yoy": {
+   "distinct_values": 6,
+   "share_variance_explained_by_issue_quarter": 1.0,
+   "corr_with_survey_error": 0.273
+  },
+  "remit_since": {
+   "distinct_values": 14,
+   "share_variance_explained_by_issue_quarter": 1.0,
+   "corr_with_survey_error": 0.24
+  }
+ },
+ "feature_usage_summary": [
+  {
+   "group": "climate",
+   "features": 10,
+   "reaching_model": 10,
+   "same_value_all_provinces": 1,
+   "shap": 0.0549
+  },
+  {
+   "group": "employment",
+   "features": 4,
+   "reaching_model": 3,
+   "same_value_all_provinces": 4,
+   "shap": 0.0
+  },
+  {
+   "group": "h2_quarterly_signal",
+   "features": 1,
+   "reaching_model": 1,
+   "same_value_all_provinces": 0,
+   "shap": 0.0
+  },
+  {
+   "group": "market",
+   "features": 6,
+   "reaching_model": 6,
+   "same_value_all_provinces": 0,
+   "shap": 0.07639
+  },
+  {
+   "group": "news",
+   "features": 36,
+   "reaching_model": 36,
+   "same_value_all_provinces": 9,
+   "shap": 0.055029999999999996
+  },
+  {
+   "group": "poverty",
+   "features": 4,
+   "reaching_model": 4,
+   "same_value_all_provinces": 0,
+   "shap": 0.04073
+  },
+  {
+   "group": "remittance",
+   "features": 3,
+   "reaching_model": 2,
+   "same_value_all_provinces": 3,
+   "shap": 0.0
+  },
+  {
+   "group": "state",
+   "features": 2,
+   "reaching_model": 2,
+   "same_value_all_provinces": 0,
+   "shap": 0.00245
+  }
+ ],
+ "calabarzon_2027Q1": [
+  {
+   "province": "Batangas",
+   "latest_survey": 39.9,
+   "anchor": 31.5,
+   "score": 25.8,
+   "p_high": 0.01
+  },
+  {
+   "province": "Cavite",
+   "latest_survey": 35.5,
+   "anchor": 36.2,
+   "score": 32.8,
+   "p_high": 0.058
+  },
+  {
+   "province": "Laguna",
+   "latest_survey": 26.2,
+   "anchor": 33.7,
+   "score": 28.7,
+   "p_high": 0.023
+  },
+  {
+   "province": "Quezon",
+   "latest_survey": 44.0,
+   "anchor": 34.9,
+   "score": 30.8,
+   "p_high": 0.038
+  },
+  {
+   "province": "Rizal",
+   "latest_survey": 39.1,
+   "anchor": 38.3,
+   "score": 35.4,
+   "p_high": 0.093
+  }
+ ],
+ "share_forecast_high_by_island_L1": {
+  "Luzon": 0.286,
+  "Mindanao": 0.682,
+  "Visayas": 0.533
+ },
+ "share_actual_high_by_island_L1": {
+  "Luzon": 0.086,
+  "Mindanao": 0.636,
+  "Visayas": 0.533
+ },
+ "threshold_sensitivity_report_only": {
+  "40": {
+   "share_actual_high": 0.625,
+   "accuracy": 0.764
+  },
+  "45": {
+   "share_actual_high": 0.458,
+   "accuracy": 0.694
+  },
+  "50": {
+   "share_actual_high": 0.347,
+   "accuracy": 0.722
+  },
+  "55": {
+   "share_actual_high": 0.264,
+   "accuracy": 0.819
+  },
+  "60": {
+   "share_actual_high": 0.111,
+   "accuracy": 0.847
+  }
+ }
+}
