@@ -193,6 +193,16 @@ All serve the same issue (2026-10-01), quarters 2027-Q1 to Q3, probabilities, cl
 | Frontend (vitest, all files) | **88 passed** |
 | Full backend suite (after fixes) | **1657 passed, 18 failed, 20 skipped.** 15 failures predate this work (E125–E131, E137–E143 lock hashes, E144, HFIAS). `test_corrected_pipeline` needed a git-ignored raw IBTrACS file; after copying it into this checkout it passes (9/9). `test_e119r2_framework` and `test_e120_firi_design` are guards that fail while any untracked file sits in the code or data folders; the only one left is the owner's 4 November news export (`backend/data/fi6/news_archive/export/`), which is not mine to commit or ignore. The 39 tests written for the CH1 price-pressure mode now request it explicitly (`AIPHEED_MAP_MODEL=ch1`) and pass. |
 
+## 11a. Threshold decision (owner, 2026-11-07)
+
+**The 50 % HIGH threshold on HFIAS moderate + severe is kept.**
+
+Alternatives that were considered and not adopted:
+- **Transforming the FNRI values** (E175, `docs/e175/TARGET_TRANSFORMATION_STUDY.md`). Every order-preserving transformation only moves the cut. The original values with the 50 % rule rank provinces best (AUC 0.893) and gain most over persistence.
+- **Switching to FNRI's official "High" band (≥ 60 %, any-level food insecurity)** as a new target (proposed E176). Declined by the owner.
+
+FNRI's bands are cited only to help readers interpret LOW ("below the majority line", not "low food insecurity").
+
 ## 12. Deployment (Part 12): owner action needed
 
 **Current state:**
