@@ -1,0 +1,264 @@
+{
+ "model": "e168-lgbm-1.0",
+ "name": "E168 LightGBM-only (survey baseline + constrained LightGBM change + calibration layer)",
+ "created_utc": "2026-11-07T05:53:50+00:00",
+ "issue_quarter": "2026-Q4",
+ "target": "HFIAS moderate+severe household food insecurity, HIGH at 50 %",
+ "provinces": [
+  {
+   "province": "Batangas",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 25.3,
+   "range90_pct": [
+    15.8,
+    38.1
+   ],
+   "p_high": 0.003,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Cavite",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 28.5,
+   "range90_pct": [
+    18.0,
+    41.9
+   ],
+   "p_high": 0.009,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Laguna",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 30.2,
+   "range90_pct": [
+    19.3,
+    44.0
+   ],
+   "p_high": 0.016,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Quezon",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 36.3,
+   "range90_pct": [
+    23.9,
+    50.8
+   ],
+   "p_high": 0.076,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Rizal",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 35.7,
+   "range90_pct": [
+    23.5,
+    50.2
+   ],
+   "p_high": 0.068,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Batangas",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 24.9,
+   "range90_pct": [
+    15.5,
+    37.5
+   ],
+   "p_high": 0.002,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Cavite",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 28.5,
+   "range90_pct": [
+    18.0,
+    41.9
+   ],
+   "p_high": 0.009,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Laguna",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 30.2,
+   "range90_pct": [
+    19.3,
+    44.0
+   ],
+   "p_high": 0.016,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Quezon",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 36.3,
+   "range90_pct": [
+    23.9,
+    50.8
+   ],
+   "p_high": 0.076,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Rizal",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 35.7,
+   "range90_pct": [
+    23.5,
+    50.2
+   ],
+   "p_high": 0.068,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Batangas",
+   "lead": 3,
+   "target_quarter": "2027-Q3",
+   "score_pct": 24.9,
+   "range90_pct": [
+    15.5,
+    37.5
+   ],
+   "p_high": 0.002,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Cavite",
+   "lead": 3,
+   "target_quarter": "2027-Q3",
+   "score_pct": 28.5,
+   "range90_pct": [
+    18.0,
+    41.9
+   ],
+   "p_high": 0.009,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Laguna",
+   "lead": 3,
+   "target_quarter": "2027-Q3",
+   "score_pct": 30.3,
+   "range90_pct": [
+    19.3,
+    44.0
+   ],
+   "p_high": 0.017,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Quezon",
+   "lead": 3,
+   "target_quarter": "2027-Q3",
+   "score_pct": 36.3,
+   "range90_pct": [
+    23.9,
+    50.8
+   ],
+   "p_high": 0.076,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  },
+  {
+   "province": "Rizal",
+   "lead": 3,
+   "target_quarter": "2027-Q3",
+   "score_pct": 35.7,
+   "range90_pct": [
+    23.5,
+    50.2
+   ],
+   "p_high": 0.068,
+   "risk_class": "LOW",
+   "config": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw"
+  }
+ ],
+ "accuracy_by_lead": {
+  "1": {
+   "accuracy": 0.75,
+   "high_recall": 0.88,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "2": {
+   "accuracy": 0.778,
+   "high_recall": 0.88,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "3": {
+   "accuracy": 0.75,
+   "high_recall": 0.84,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "4": {
+   "accuracy": 0.736,
+   "high_recall": 0.8,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "5": {
+   "accuracy": 0.722,
+   "high_recall": 0.8,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "6": {
+   "accuracy": 0.694,
+   "high_recall": 0.8,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "7": {
+   "accuracy": 0.7,
+   "high_recall": 0.882,
+   "persistence_accuracy": 0.64,
+   "beats_persistence": false
+  },
+  "8": {
+   "accuracy": 0.66,
+   "high_recall": 0.941,
+   "persistence_accuracy": 0.64,
+   "beats_persistence": false
+  }
+ },
+ "acceptance_basis": "owner-defined (2026-11-07): accuracy >= 75 % and significantly better than reusing the latest survey (Brier CI < 0) at each served lead",
+ "served_leads": [
+  1,
+  2,
+  3
+ ],
+ "statistical_reliability": "E156 C1-C6 not passed at Lead 1 (maximum reliable lead 0 under that stricter test; 72 validation rows from 3 survey rounds)",
+ "seals": {
+  "ENNS2022": "f8228fae"
+ }
+}

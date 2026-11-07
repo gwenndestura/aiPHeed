@@ -4,8 +4,8 @@
 **Branch:** `aiPHeed/e158-thesis-model` in `C:\Users\admin\aipheed_e145`. Builds on the audit at `61f894a5`.
 **Status of this version:** local working tree, **not committed and not deployed**.
 
-**Pending items.** Three runs were still executing when this was written. Their rows are marked ⏳ and will be filled in when they finish:
-1. End-to-end quarterly-regeneration test (§9). (The permutation test and the full backend suite have finished; their results are below.)
+**Pending items.**
+None. All runs have finished; their results are below.
 
 **Reliability rule (project acceptance standard, owner decision 2026-11-07).** A lead is reliable when:
 - pooled accuracy is ≥ 75 %, **and**
@@ -164,7 +164,7 @@ All serve the same issue (2026-10-01), quarters 2027-Q1 to Q3, probabilities, cl
 - Registers and promotes it through the registry.
 - Only then do the outlook, map, LGU ranking, explanations and alerts move to it. Earlier issues are kept.
 
-**Tests:** 11 safeguard tests pass. **End-to-end test (stage 2026-Q4, must equal the approved values): ⏳ running.**
+**Tests:** 11 safeguard tests pass. **End-to-end test passed:** staging issue 2026-Q4 through the workflow (`data/e168/issues/2026-Q4/`, input hashes in `manifest.json`) reproduced the approved `live_2027.json` exactly: all 15 province-lead rows (score, 90 % range, probability, class, target quarter) and served leads 1–3. The staged issue is not promoted; serving is unchanged.
 
 ## 10. FNRI face validity and ISO/IEC 25010 (Parts 9–10)
 
