@@ -50,7 +50,10 @@ def test_explainability_count_matches_news_feed():
     for p in ("laguna", "quezon"):
         n = client.get(f"/api/v1/news?scope=province&id={p}&quarter=2027-Q1&pageSize=100").json()["articleCount"]
         e = client.get(f"/api/v1/explainability?scope=province&id={p}&quarter=2027-Q1").json()["articleCount"]
-        assert n == e
+        if svc.E166.covers("2027-Q1"):   # thesis model: explanations quote the articles the model used (its LIMITED rule)
+            assert e == svc.E166.model_articles(svc.ref.province_code(p), "2027-Q1")
+        else:
+            assert n == e
 
 
 def test_unrelated_food_titles_are_excluded():

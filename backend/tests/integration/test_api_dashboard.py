@@ -16,6 +16,8 @@ in the alarm colour.
 from __future__ import annotations
 
 import pytest
+
+from app.services import dashboard as svc
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -212,7 +214,8 @@ def test_every_municipal_row_declares_it_is_disaggregated():
 ])
 def test_driver_percentages_sum_to_exactly_100(scope, subject):
     body = client.get(f"/api/v1/explainability?scope={scope}&id={subject}").json()
-    assert sum(t["pct"] for t in body["triggers"]) == 100
+    # thesis model: the five driver groups plus the other model inputs (otherPct) add up to 100
+    assert sum(t["pct"] for t in body["triggers"]) + (body.get("otherPct") or 0) == 100
 
 
 def test_drivers_are_ranked_descending():
@@ -299,7 +302,11 @@ def test_news_count_agrees_with_the_province_summary():
     provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
-        assert news["articleCount"] == province["articleCount"]
+        if svc.E166.covers(quarter):     # thesis model: the card quotes the articles the model used (its LIMITED rule)
+            assert province["articleCount"] == svc.E166.model_articles(svc.ref.province_code(slug), quarter)
+            assert province["limitedSignal"] == (province["articleCount"] < 5)
+        else:
+            assert news["articleCount"] == province["articleCount"]
         # E31 alignment (promoted in E34): a forecast's news is the previous quarter's; a nowcast's is its own.
         assert news["sourceQuarter"] == _evidence_quarter(quarter)
 
@@ -317,7 +324,11 @@ def test_forecast_quarter_news_comes_from_the_information_cutoff():
         assert news["quarter"] == quarter
         # E31 (promoted in E34): the evidence quarter is the one before the forecast target (no originQuarter field).
         assert news["sourceQuarter"] == _evidence_quarter(quarter) != quarter
-        assert news["articleCount"] == province["articleCount"]
+        if svc.E166.covers(quarter):     # thesis model: the card quotes the articles the model used (its LIMITED rule)
+            assert province["articleCount"] == svc.E166.model_articles(svc.ref.province_code(slug), quarter)
+            assert province["limitedSignal"] == (province["articleCount"] < 5)
+        else:
+            assert news["articleCount"] == province["articleCount"]
 
 
 # ---------------------------------------------------------------------------
@@ -328,6 +339,9 @@ def test_timeseries_is_chronological_and_flags_only_e20_quarters():
     body = client.get("/api/v1/forecast/timeseries?scope=province&id=quezon").json()
     quarters = [p["quarter"] for p in body["series"]]
     assert quarters == sorted(quarters)
+    if body["indicator"]["id"].startswith(("e168", "e166")):       # thesis model: every value is a forecast (live or back-forecast)
+        assert all(p["isForecast"] for p in body["series"])
+        return
     forecast = set(client.get("/api/v1/config").json()["quarterRange"]["forecastQuarters"])
     assert {p["quarter"] for p in body["series"] if p["isForecast"]} == forecast & set(quarters)
 

@@ -7,7 +7,7 @@ function useMeanings() {
   const { data: config } = useConfig();
   const cutoff = (config?.thresholds.riskDisplayCutoff ?? 0.5).toFixed(2);
   return {
-    high: `High risk: a probability of ${cutoff} or more that the province is HIGH risk (regional hunger above 11.3% and unusually fast food-price rises)`,
+    high: `High risk: a probability of ${cutoff} or more that the province is HIGH risk (at least half of households moderately or severely food insecure, HFIAS)`,
     low: `Low risk: a probability below ${cutoff}`,
     none: "No forecast: withheld by DA or not enough data this quarter",
   };

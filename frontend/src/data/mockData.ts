@@ -46,11 +46,11 @@ const defaultFeatures = () => [
 
 // === CALABARZON Provinces (top-level "regions") ===
 const provincesRaw: Omit<RegionData, "riskLevel" | "historicalTrend" | "featureImportance" | "shapValues" | "whatIfFeatures">[] = [
-  { id: "batangas", name: "Batangas", riskScore: 0.48, population: 2908494, povertyRate: 9.2, unemploymentRate: 6.4, cropYieldIndex: 62, accessToFood: 78, householdsAtRisk: 96000, fpsi: 2.6, momChange: 2.4, lat: 13.7565, lng: 121.0583 },
-  { id: "cavite",   name: "Cavite",   riskScore: 0.41, population: 4344829, povertyRate: 5.1, unemploymentRate: 7.8, cropYieldIndex: 45, accessToFood: 88, householdsAtRisk: 88000, fpsi: 2.2, momChange: 1.8, lat: 14.2456, lng: 120.8786 },
-  { id: "laguna",   name: "Laguna",   riskScore: 0.39, population: 3382193, povertyRate: 4.8, unemploymentRate: 7.2, cropYieldIndex: 50, accessToFood: 89, householdsAtRisk: 72000, fpsi: 2.1, momChange: 1.4, lat: 14.1652, lng: 121.3308 },
-  { id: "quezon",   name: "Quezon",   riskScore: 0.66, population: 2122830, povertyRate: 19.5, unemploymentRate: 5.6, cropYieldIndex: 58, accessToFood: 60, householdsAtRisk: 132000, fpsi: 3.4, momChange: 4.6, lat: 14.0313, lng: 122.1106 },
-  { id: "rizal",    name: "Rizal",    riskScore: 0.45, population: 3330143, povertyRate: 7.4, unemploymentRate: 6.9, cropYieldIndex: 38, accessToFood: 84, householdsAtRisk: 81000, fpsi: 2.4, momChange: 2.0, lat: 14.6037, lng: 121.3084 },
+  { id: "batangas", name: "Batangas", riskScore: 0.48, population: 2908494, povertyRate: 9.2, unemploymentRate: 6.4, cropYieldIndex: 62, accessToFood: 78, householdsAtRisk: 96000, fpsi: 2.6, momChange: 2.4, limitedSignal: false, articleCount: 0, seriesMonitored: 0, seriesNeedingReview: 0, lat: 13.7565, lng: 121.0583 },
+  { id: "cavite",   name: "Cavite",   riskScore: 0.41, population: 4344829, povertyRate: 5.1, unemploymentRate: 7.8, cropYieldIndex: 45, accessToFood: 88, householdsAtRisk: 88000, fpsi: 2.2, momChange: 1.8, limitedSignal: false, articleCount: 0, seriesMonitored: 0, seriesNeedingReview: 0, lat: 14.2456, lng: 120.8786 },
+  { id: "laguna",   name: "Laguna",   riskScore: 0.39, population: 3382193, povertyRate: 4.8, unemploymentRate: 7.2, cropYieldIndex: 50, accessToFood: 89, householdsAtRisk: 72000, fpsi: 2.1, momChange: 1.4, limitedSignal: false, articleCount: 0, seriesMonitored: 0, seriesNeedingReview: 0, lat: 14.1652, lng: 121.3308 },
+  { id: "quezon",   name: "Quezon",   riskScore: 0.66, population: 2122830, povertyRate: 19.5, unemploymentRate: 5.6, cropYieldIndex: 58, accessToFood: 60, householdsAtRisk: 132000, fpsi: 3.4, momChange: 4.6, limitedSignal: false, articleCount: 0, seriesMonitored: 0, seriesNeedingReview: 0, lat: 14.0313, lng: 122.1106 },
+  { id: "rizal",    name: "Rizal",    riskScore: 0.45, population: 3330143, povertyRate: 7.4, unemploymentRate: 6.9, cropYieldIndex: 38, accessToFood: 84, householdsAtRisk: 81000, fpsi: 2.4, momChange: 2.0, limitedSignal: false, articleCount: 0, seriesMonitored: 0, seriesNeedingReview: 0, lat: 14.6037, lng: 121.3084 },
 ];
 
 export const regionsData: RegionData[] = provincesRaw.map((r) => ({
@@ -100,6 +100,8 @@ export const municipalitiesData: MunicipalityData[] = (muniListRaw as RawMuni[])
     fpsi: Math.round((1.5 + variance * 6 + base * 2) * 10) / 10,
     momChange: Math.round((variance * 8 + 1) * 10) / 10,
     classification: isCity ? "City" : "Municipality",
+    limitedSignal: false,
+    disaggregationLabel: "Demo data (admin preview only): not a forecast",
   };
 });
 

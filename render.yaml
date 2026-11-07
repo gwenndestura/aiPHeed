@@ -20,8 +20,9 @@ services:
         value: sqlite+aiosqlite:////var/data/aipheed.db
       - key: SECRET_KEY
         generateValue: true
-      - key: AIPHEED_LEAD2_MODEL
-        value: thesis
+      # Thesis model E168 (LightGBM). AIPHEED_LEAD2_MODEL must stay unset: a Lead-2 research mode switches the E168 overlay off.
+      - key: AIPHEED_THESIS_MODEL
+        value: e168
       - key: AIPHEED_STRICT_MODEL
         value: "1"
       - key: FRONTEND_BASE_URL

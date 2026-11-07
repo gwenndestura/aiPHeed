@@ -34,8 +34,9 @@ NAME = {"e168": "E168", "e166": "E166"}.get(MODEL, MODEL.upper())
 HIST = backend_path(f"data/{MODEL}/out/history")
 LIVE = "2027-Q1"
 STATUS = {
-    "e168": ("Retrospectively validated: passes all six reliability criteria (C1-C6) one quarter ahead; adoption pending the "
-             "adviser's decision. Risk indicator only; not an official food-insecurity classification."),
+    "e168": ("Retrospectively validated on DOST-FNRI surveys: reliable up to three quarters ahead by the study's 75% accuracy "
+             "rule, and passes all six strict reliability criteria (C1-C6) one quarter ahead. Risk indicator only; not an "
+             "official food-insecurity classification."),
     "e166": ("Retrospectively validated: passes all six reliability criteria (C1-C6) at one and two quarters ahead; adoption "
              "pending the adviser's decision. Risk indicator only; not an official food-insecurity classification."),
 }.get(MODEL, "Risk indicator only; not an official food-insecurity classification.")
@@ -70,8 +71,8 @@ STATUS_NOTES = {
 # trigger group it belongs to (market news -> Market, climate news -> Climate, ...). Inputs outside the five (general
 # food-stress news / FSSI, poverty and density, survey age) are reported as the "other" share, as before.
 GROUP_OF = {"market": "market", "climate": "climate", "employment": "employment", "remittance": "ofw_remittance"}
-LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill", "employment": "Employment",
-          "ofw_remittance": "OFW Remittance"}
+LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Production", "employment": "Employment (national)",
+          "ofw_remittance": "OFW Remittance (national)"}
 ORDER = ["market", "climate", "fish_kill", "employment", "ofw_remittance"]
 RANKING_METHOD = ("risk = province P(HIGH) x (0.6 x poverty_norm + 0.4 x density_norm), min-max within province "
                   "(PSA 2021 small-area poverty, 2020 census density)")
@@ -107,6 +108,45 @@ def _q(quarter: str) -> dict:
     return json.loads((HIST / f"{quarter}.json").read_text())
 
 
+def model_articles(province_code: str | None, quarter: str) -> int:
+    """Articles the thesis model used for this province-quarter (the last complete quarter before its issue date); the
+    region is the sum over the five provinces. The LIMITED_SIGNAL rule (fewer than 5) applies to this count."""
+    rows = _q(quarter)["forecasts"]
+    if province_code is None:
+        return int(sum(r["articles_last_quarter"] for r in rows))
+    name = _name(province_code, quarter)
+    return int(next((r["articles_last_quarter"] for r in rows if r["province"] == name), 0))
+
+
+def validate() -> list[str]:
+    """Strict-mode readiness: serving enabled, every quarter present, the live forecast equal to its seal."""
+    import json as _json
+    problems = []
+    if not enabled():
+        problems.append("serving disabled (AIPHEED_E166_SERVE=0, a Lead-2 research mode active, or no history files)")
+    expected = [f"{y}-Q{q}" for y in range(2023, 2028) for q in range(1, 5)]
+    expected = expected[:expected.index(LIVE) + 1]
+    missing = [q for q in expected if q not in quarters()]
+    if missing:
+        problems.append(f"missing quarters: {missing}")
+    seal = HIST.parent / f"sealed_{LIVE}.json"
+    if not seal.exists():
+        problems.append(f"sealed forecast missing: {seal.name}")
+    elif LIVE in quarters() and _json.loads(seal.read_text())["forecasts"] != _q(LIVE)["forecasts"]:
+        problems.append("live forecast differs from its seal")
+    return problems
+
+
+def shown_articles(province_code: str, quarter: str) -> int:
+    """The article count the dashboard shows for this province-quarter (news panel and province card). The LIMITED_SIGNAL
+    flag uses this same count, so the number on screen and the flag never disagree (paper: fewer than 5 articles)."""
+    return model_articles(province_code, quarter)
+
+
+def _flag(province_code: str, quarter: str) -> str:
+    return "LIMITED_SIGNAL" if shown_articles(province_code, quarter) < 5 else "SUFFICIENT"
+
+
 def province_records(quarter: str) -> list[dict]:
     q = _q(quarter)
     live = quarter == LIVE
@@ -128,7 +168,7 @@ def province_records(quarter: str) -> list[dict]:
                               f"One quarter ahead (back-forecast as of {q['issue_date']})"),
             "forecast_horizon_quarters": 1,
             "verification_date": f"{q['issue_date']}T00:00:00+08:00 (exclusive)",
-            "data_sufficiency_flag": "LIMITED_SIGNAL" if r["articles_last_quarter"] < 5 else "SUFFICIENT",
+            "data_sufficiency_flag": _flag(code, quarter),
             "mode": "FORECAST", "origin": q["issue_date"], "information_cutoff": q["issue_date"], "provenance": f"{NAME} (app.{MODEL}.history)",
             "observed_S1": None, "observed_label": None,
         })
@@ -146,7 +186,7 @@ def municipal_frame(quarter: str) -> pd.DataFrame:
         "rank_in_province": d["rank_in_province"],
         "tied": d.duplicated("risk_index", keep=False),
         "disaggregation_label": d["disaggregation_label"],
-        "data_sufficiency_flag": d["data_sufficiency_flag"],
+        "data_sufficiency_flag": [_flag(ref.province_code(p.lower()), quarter) for p in d["province_name"]],
         "province_probability": d["province_risk_prob"],
         "vulnerability_index": d["vulnerability"],
         "estimate_source": [{"mode": "FORECAST", "origin": q["issue_date"], "quarter": quarter,
@@ -184,9 +224,12 @@ def drivers(province_code: str, quarter: str) -> dict:
     for g in ORDER:
         v = float(s[s["ui_group"] == g]["contribution"].sum())
         rows.append({"driver_group": g, "driver_label": LABELS[g], "group_shap": round(v, 6),
+                     "abs_shap": round(float(s[s["ui_group"] == g]["contribution"].abs().sum()), 6),   # share numerator
                      "direction": "increases_risk" if v >= 0 else "protective", "trigger_proportion": None})
     arts = next((r["articles_last_quarter"] for r in _q(quarter)["forecasts"] if r["province"] == name), 0)
-    return {"drivers": rows, "article_count": arts, "other_pct": round(other / total * 100, 1), "evidence_quarter": quarter}
+    # driver share = sum |SHAP| of the group's inputs / sum |SHAP| of all served inputs; other_abs = the remainder
+    return {"drivers": rows, "article_count": arts, "other_pct": round(other / total * 100, 1), "other_abs": round(other, 6),
+            "evidence_quarter": quarter}
 
 
 def trigger_status(key: str, pct: int, quarter: str) -> str:
@@ -223,3 +266,55 @@ FEATURE_LABELS = {
     "p_poverty": "poverty incidence (relative)", "p_subsistence": "subsistence incidence (relative)", "p_poverty_gap": "poverty gap (relative)",
     "p_density": "population density (relative)", "income_rel": "regional household consumption (relative)",
 }
+
+
+# ------------------------------------------------------------------ validated performance (PDF Method section, /config)
+@functools.lru_cache(maxsize=1)
+def performance() -> dict:
+    """The served thesis model's locked retrospective results: leads 1-8 and the Lead-1 baseline comparison."""
+    import json
+
+    r = json.loads(backend_path(f"data/{MODEL}/out/results.json").read_text())
+    rel = r["reliability"]["TS"] if MODEL == "e166" else r["reliability"]
+    leads = [{"lead": x["lead"], "rows": x["rows"], "correct": x["confusion"]["tp"] + x["confusion"]["tn"], "accuracy": x["accuracy"],
+              "precision": x["precision"], "recall": x["high_recall"], "f1": x["f1"], "auc": x["auc"], "brier": x["brier_soft"],
+              "meets75": x["accuracy"] >= 0.75, "strictC1toC6": bool(x["reliable"]),
+              "failedCriteria": [k for k, v in x["criteria"].items() if not v]} for x in rel["leads"]]
+    paper = 0
+    for x in leads:
+        if not x["meets75"]:
+            break
+        paper = x["lead"]
+    names = {"PERS": "B1 Persistence (last survey)", "LR": "B2 Logistic regression, combined", "LR_GOV": "B3 Logistic regression, government",
+             "LR_NEWS": "B4 Logistic regression, news (NLP)", "GOV": "B5 LightGBM, government", "NEWS": "B6 LightGBM, news (NLP)",
+             "PSA": "PSA poverty only"}
+    if MODEL == "e166":
+        b = json.loads(backend_path("data/e166/out/objectives/baseline_results.json").read_text())["leads"]["1"]["metrics"]
+    else:
+        b = {k: v["metrics"] for k, v in r["lead1_vs"].items()}
+    base = {names[k]: {m: b[k][m] for m in ("accuracy", "f1", "auc", "brier")} for k in names if k in b}
+    return {"model": INDICATOR["name"], "target": INDICATOR["definition"], "status": STATUS,
+            "validation": "Rolling origin over DOST-FNRI ENNS 2018, 2019 and 2021 (72 province rows per lead); each forecast uses "
+                          "only information published before its issue date.",
+            "reliabilityRule": "At least 75% accuracy (the study's rule); six strict criteria C1-C6 reported as a robustness check.",
+            "maxReliableLeadTime": paper, "maxReliableLeadStrict": rel["maximum_reliable_lead"],
+            "accuracy": leads[0]["accuracy"], "precision": leads[0]["precision"], "recall": leads[0]["recall"], "f1": leads[0]["f1"],
+            "rocAuc": leads[0]["auc"], "brier": leads[0]["brier"], "leads": leads, "baselines": base}
+
+
+# labels for the remaining news-signal inputs (prefix: p = province, a = SWS area, n = national; e = tone, tp = share of articles)
+_SCOPE = {"p": "province", "a": "area", "n": "national"}
+_TOPIC = {"market": "market", "climate": "climate", "employment": "employment", "remittance": "remittance", "poverty": "poverty",
+          "hunger": "hunger", "response": "government-response"}
+for _s, _w in _SCOPE.items():
+    for _t, _tw in _TOPIC.items():
+        FEATURE_LABELS.setdefault(f"{_s}_e_{_t}", f"{_w} {_tw} news")
+        FEATURE_LABELS.setdefault(f"{_s}_tp_{_t}", f"{_w} share of {_tw} news")
+FEATURE_LABELS.setdefault("p_intensity", "province news volume")
+FEATURE_LABELS.setdefault("p_tg_hard", "province hardship news (trigger keywords)")
+FEATURE_LABELS.setdefault("p_tg_resp", "province response news (trigger keywords)")
+FEATURE_LABELS.setdefault("p_tg_net", "province net trigger news")
+FEATURE_LABELS.setdefault("r_e_net", "regional food-stress news (FSSI)")
+FEATURE_LABELS.setdefault("h2", "province survey history (two rounds)")
+FEATURE_LABELS.setdefault("gap_q", "quarters since the last survey")
+FEATURE_LABELS.setdefault("lead", "forecast lead")

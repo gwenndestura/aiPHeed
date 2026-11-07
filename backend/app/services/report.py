@@ -355,7 +355,39 @@ def _thesis_driver_text(explain: dict) -> str:
         + "Shares describe how the estimate is built from the evidence; they are not causes.")
 
 
+def _srv() -> bool:
+    """The thesis model (E168; app.services.e166_serving) is served."""
+    from app.services import e166_serving as SRV
+
+    return SRV.enabled() and not _ch1()
+
+
+def _srv_method_block(perf: dict) -> list:
+    """The served thesis model: what it predicts, how it was validated, every lead, and the Lead-1 baselines."""
+    rows = [[f"Lead {x['lead']} ({x['rows']} rows)", f"{x['accuracy']:.3f}", f"{x['precision']:.3f}", f"{x['recall']:.3f}",
+             f"{x['f1']:.3f}", f"{x['auc']:.3f}", f"{x['brier']:.3f}", "yes" if x["meets75"] else "no",
+             "yes" if x["strictC1toC6"] else "no (" + ", ".join(x["failedCriteria"]) + ")"] for x in perf["leads"]]
+    base = [[k, f"{v['accuracy']:.3f}", f"{v['f1']:.3f}", f"{v['auc']:.3f}", f"{v['brier']:.3f}"] for k, v in perf["baselines"].items()]
+    l1 = perf["leads"][0]
+    return [
+        _p(svc._ascii(f"{perf['model']}. {perf['target']}"), "body"), Spacer(1, 2 * mm),
+        _p(svc._ascii(perf["validation"] + " " + perf["reliabilityRule"]), "small"), Spacer(1, 2 * mm),
+        _data_table(["Lead", "Accuracy", "Precision", "Recall", "F1", "AUC-ROC", "Brier", ">= 75%", "C1-C6"], rows,
+                    [26 * mm] + [15 * mm] * 7 + [26 * mm], {i: "RIGHT" for i in range(1, 8)}),
+        Spacer(1, 3 * mm),
+        _data_table(["Lead 1: model vs baselines", "Accuracy", "F1", "AUC-ROC", "Brier"],
+                    [["This model", f"{l1['accuracy']:.3f}", f"{l1['f1']:.3f}", f"{l1['auc']:.3f}", f"{l1['brier']:.3f}"]] + base,
+                    [80 * mm] + [20 * mm] * 4, {i: "RIGHT" for i in range(1, 5)}),
+        Spacer(1, 2 * mm),
+        _p(svc._ascii(f"Maximum Reliable Lead Time: {perf['maxReliableLeadTime']} quarter(s) by the study's 75% accuracy rule; "
+                      f"{perf['maxReliableLeadStrict']} quarter(s) under all six strict criteria (C1-C6). {perf['status']}"), "small"),
+    ]
+
+
 def _method_block(performance: dict) -> list:
+    if _srv():
+        from app.services import e166_serving as SRV
+        return _srv_method_block(SRV.performance())
     if _ch1():                                       # SYSTEM_FIXES item 1: the served Chapter I forecast's own evidence
         from app.ml.inference import ch1_system as CH1
         head, rows = CH1.method_rows()
@@ -434,6 +466,10 @@ def _limitations_block(limited_signal: bool, article_count: int,
          "Outputs are relative ordinal estimates of potential risk. They are not "
          "definitive determinations of food insecurity status and must not be read as "
          "official government assessments or policy recommendations."),
+        ("Survey-anchored, few survey rounds",
+         "The label is DOST-FNRI's provincial HFIAS household survey (moderate or severe food insecurity at 50% or more). "
+         "Surveys are not quarterly, so quarters between surveys are forecasts, and validation rests on three survey rounds "
+         "(72 province rows per lead).") if _srv() else
         ("Proxy label, not a direct measurement",
          "No publicly accessible province-quarter food insecurity label exists in the "
          "Philippines. The training target is a composite of SWS hunger prevalence, "
@@ -550,6 +586,10 @@ def _cover(title: str, subject: str, quarter: str, width: float) -> list:
         Spacer(1, 5 * mm),
         _callout("What these outputs are", _ch1_text("REPORT_COVER")) if _ch1() else
         _callout("What these outputs are", THESIS_COVER) if _thesis() else _callout(
+            "What this number is",
+            "The probability that this area's share of households with moderate or severe food insecurity (DOST-FNRI HFIAS) "
+            "is 50% or more in the quarter, from the thesis model. <b>It is an indicative risk estimate, not an official food "
+            "insecurity classification.</b>") if _srv() else _callout(
             "What this number is",
             "The modelled probability that this area falls in the HIGH class of the "
             "composite food stress label. "

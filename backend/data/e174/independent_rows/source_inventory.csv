@@ -1,0 +1,12 @@
+source,path,rounds,instrument,coverage,rows,sha256_12,existing_use
+DOST-FNRI Heat Map API (provincial bar charts),backend/data/e147/raw/heatmap_provincial.jsonl,"2011, 2013, 2015, 2018, 2019, 2021","Radimer-Cornell (2011, inferred); HFIAS (2013+)",124 areas (provinces and HUCs),1492,0f845b1fda33,E147+ label source (2018/2019 reconciled; 2021 sealed labels)
+ENNS 2018/2019 HFIAS provincial tables,backend/data/hfias/clean/enns_hfias.csv,"2018, 2019",HFIAS,38 + 38 areas,76,db2d1d63f421,E137+ target (cities excluded)
+FNRI 2015 Food Security Survey appendices,backend/data/hfias/clean/fnri2015_hfias.csv,2015,HFIAS,provinces,100,c0a1ad6c56d0,E137+ target / anchor
+NNS 2013 HFIAS provincial,backend/data/e141 clean nns2013_hfias.csv,2013,HFIAS,provinces,,,E141+ anchor
+ENNS 2021 sealed provincial labels,backend/data/e147/raw/sealed_2021_labels.csv,2021,HFIAS,37 areas,148,f15a1977b8c5,"E147+ held-out test round, used repeatedly since"
+ENNS 2021 provincial dissemination decks; 2023 NNS and 2025 Updating Survey regional decks,aipheed-backend-aligned/experiments/E87_Outcome_Gap/data_acquired/fnri_fies_observations.csv,"2021 (province/HUC), 2023, 2025 (region)",FIES,"Batangas, Cavite, Lucena City; CALABARZON",10,5dfaebfad70f,E87/E129 external reference; never a target
+PSA OpenSTAT SDG 2.1.2 (FNRI ENNS/NNS),backend/data/fi_labels/clean/published_fies_psa_sdg212.csv,"2019, 2021, 2023",FIES,"national, regions",20,b5ff5f35e17c,face validity only
+Owner workbook (CALABARZON labelled provincial data),backend/data/fi_labels/raw/owner_supplied/aiPHeed_CALABARZON_Labeled_Provincial_Data.xlsx,"2015, 2018, 2019, 2021 (ENNS via RDP), 2023 (PSA subsistence, regional FIES)",HFIAS / FIES / PSA poverty,5 provinces,50,6655178448d5,verification of the same published rounds; no new survey round
+"2022 ENNS (FIES), about 20 provinces/HUCs",not in repository,2022 (Jul-Dec),FIES,unverified,0,,"listed in E129 inventory; DOST-FNRI request drafted (E87 request B), not sent"
+2024 POPCEN-CBMS SDG 2.1.2 (FIES) by LGU,not in repository,Jul 2023 - Jun 2024,FIES,LGU (aggregable to province),0,,"E129 inventory; PSA request drafted (E87 request A), not sent"
+Household microdata (any round: .dta/.sav/PUF),none found in repository,,,,0,,eNutrition PUF pages returned HTTP 500 on 2026-11-07

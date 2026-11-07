@@ -501,6 +501,8 @@ def _e31_fill_gaps(rows: list[dict], horizon: str) -> list[dict]:
 def is_estimate_quarter(quarter: str) -> bool:
     """E31: True for the quarters whose outcome is not yet known (the 2026-Q4 nowcast, the 2027-Q1 forecast); False for
     backtests and the scored 2026-Q3. Same rule as /config quarterRange.forecastQuarters (E34, D2)."""
+    if E166.covers(quarter):                   # thesis model: every value is a model forecast (2027-Q1 live; earlier quarters are
+        return True                            # back-forecasts with no provincial survey outcome), never an observation
     if _ch1_mode() and CH1.covers(quarter):   # SYSTEM_FIXES item 4: a backtest is never an estimate quarter
         return any(CH1.kind(r) == "forecast" for (_, q), r in CH1.rows().items() if q == quarter)
     if not e31_active():
@@ -978,7 +980,7 @@ def municipality_summary(quarter: str, province_id: str | None = None) -> list[d
             "tied": bool(r.get("tied", False)),
             "evidenceStatus": "EXPERIMENTAL",
             "riskLevelBasis": (CH1.LGU_LEVEL_BASIS if ch1_lgu else CH1.LGU_BASIS if THESIS.active() and CH1.active()
-                               else LGU_POSITION_BASIS),
+                               else LGU_POSITION_BASIS_THESIS if E166.covers(quarter) else LGU_POSITION_BASIS),
             "disaggregationLabel": (CH1.LGU_BASIS if THESIS.active() and CH1.active() else r["disaggregation_label"]),
             "limitedSignal": r.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
             "noProvinceEstimate": score is None,
@@ -997,6 +999,13 @@ LGU_POSITION_BASIS = (
     "Relative position only: the province estimate re-weighted by PSA poverty incidence (60%) and population density "
     "(40%) within the province, shown on the map with the province risk colours (display cutoff 0.50). The province "
     "estimate is not validated; this is not a measured or official municipal food-insecurity classification.")
+
+
+LGU_POSITION_BASIS_THESIS = (
+    "Relative position only: the province estimate re-weighted by PSA poverty incidence (60%) and population density "
+    "(40%) within the province (paper Algorithm 5), shown on the map with the province risk colours (display cutoff 0.50). "
+    "The province estimate is the thesis model's, retrospectively validated on DOST-FNRI surveys; the LGU position itself is "
+    "not a measured or official municipal food-insecurity classification.")
 
 
 def municipality_forecast(municipality_id: str, quarter: str) -> dict:
@@ -1148,7 +1157,12 @@ def explainability(province_code: str, quarter: str) -> dict:
     if ch1:                                           # the Chapter I forecast: SHAP of its LightGBM price part
         built = CH1.drivers(province_code, quarter, built)
     drivers = built["drivers"]
-    pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
+    other_pct = built.get("other_pct")
+    if E166.covers(quarter):                          # thesis model: |SHAP| of each group over |SHAP| of all inputs + other
+        shares = _integer_shares([d["abs_shap"] for d in drivers] + [built["other_abs"]])
+        pcts, other_pct = shares[:-1], shares[-1]
+    else:
+        pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
 
     triggers = []
     for d, pct in zip(drivers, pcts):
@@ -1175,6 +1189,7 @@ def explainability(province_code: str, quarter: str) -> dict:
                               THESIS.plain_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
                               if THESIS.active() and E41L2.governs() else None),
             "newsSignalProportion": d["trigger_proportion"],
+            "absContribution": d.get("abs_shap"),
         })
     triggers.sort(key=lambda t: t["pct"], reverse=True)
     return {
@@ -1186,7 +1201,8 @@ def explainability(province_code: str, quarter: str) -> dict:
         "articleCount": article_count(province_code, quarter),
         "triggerMatchedArticles": built["article_count"],
         # E36/E38: share of the model's attribution outside the five trigger groups (E20 convention)
-        "otherPct": built.get("other_pct"),
+        "otherPct": other_pct,
+        "otherAbs": built.get("other_abs"),
     }
 
 
@@ -1210,13 +1226,18 @@ def explainability_region(quarter: str) -> dict:
                 "key": t["key"], "label": t["label"],
                 "signed": 0.0, "raw": 0.0, "news": [],
             })
-            acc["raw"] += abs(t["signedContribution"])
+            acc["raw"] += t["absContribution"] if E166.covers(quarter) else abs(t["signedContribution"])
             acc["signed"] += t["signedContribution"]
             if t["newsSignalProportion"] is not None:
                 acc["news"].append(t["newsSignalProportion"])
 
     keys = list(totals)
-    pcts = _integer_shares([totals[k]["raw"] for k in keys])
+    region_other = None
+    if E166.covers(quarter):                          # thesis model: pooled |SHAP| shares, remainder = other inputs
+        shares = _integer_shares([totals[k]["raw"] for k in keys] + [sum(r["otherAbs"] or 0.0 for r in per_province)])
+        pcts, region_other = shares[:-1], shares[-1]
+    else:
+        pcts = _integer_shares([totals[k]["raw"] for k in keys])
 
     triggers = []
     for key, pct in zip(keys, pcts):
@@ -1256,6 +1277,7 @@ def explainability_region(quarter: str) -> dict:
         "triggers": triggers,
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+        "otherPct": region_other,
     }
 
 
@@ -1836,6 +1858,8 @@ def model_performance(horizon: str = DEFAULT_HORIZON) -> dict:
     # THESIS: the final Objective 2/4 evaluation, read outside the per-horizon cache (the cache key has no mode)
     if THESIS.active():
         return THESIS.model_performance()
+    if E166.enabled():                                            # the served thesis model's locked validation results
+        return E166.performance()
     return _model_performance(horizon)
 
 
@@ -1950,6 +1974,8 @@ def _e31_articles() -> list[dict]:
 
 
 def article_count(province_code: str | None, quarter: str) -> int:
+    if E166.covers(quarter):                  # thesis model: the articles it used (same count as its LIMITED_SIGNAL rule)
+        return E166.model_articles(province_code, quarter)
     if e31_active():
         # E45: the same restored feed window the news panel lists, so every surface quotes one count
         return len(_feed_window(province_code, e31_news_evidence(quarter)[0])[0])

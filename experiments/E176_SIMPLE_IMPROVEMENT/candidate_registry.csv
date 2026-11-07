@@ -1,0 +1,8 @@
+candidate,lever,lightgbm,selectable_without_the_72_outcomes,keeps_59_of_72_guaranteed,run,reason
+SIMPLE (frozen),baseline,yes,no (post-hoc E172 diagnostic),n/a,no (saved forecasts used),baseline is itself selected after its 72-row result was seen
+Platt / sigmoid recalibration per issue,probability scale,yes,yes in principle (training folds),no: moves the 0.5 crossing unless constrained,no,"SIMPLE's selection already chooses identity vs cross-fitted linear calibration on training folds (both chose identity); a sigmoid that keeps P=0.5 fixed is a temperature change, which is the E168 shrink SIMPLE already applies"
+Stronger temperature shrink for the 2021-type issue,probability scale,yes,no,yes (sign-preserving),no,"the only lever that fixes SIMPLE's Brier gap; its need is known only from the 2021 test rows (lambda 0.97 there); E168's training-only lambda rule already set it"
+Isotonic calibration,probability scale,yes,no,no,no,"training folds of 156 rows (one survey transition) for 2018/2019 issues; isotonic would also move classes"
+Lower complexity / regularization / leaves,ranking,yes,yes,no,no,"already the E172 menu; SIMPLE's 2018 gains are P(HIGH) margins of 0.001-0.013, so any refit risks the 59/72; already tested in E172"
+Training-only feature selection / interactions,ranking,yes,yes,no,no,"already E171/E172 (GOV, FULL, GOV+SWS); within-survey ranking is not SIMPLE's weakness (41 discordant pairs, same as E168)"
+Seed bagging,stability,yes,yes,no,no,already E172 BAG (54/72)

@@ -153,6 +153,17 @@ def run_sws_reissue() -> dict:
     return out
 
 
+def run_e168_refresh() -> dict:
+    """Thesis model E168: issue the next quarter's forecast if it is missing and stage alert candidates for review."""
+    from app.e168.refresh import run
+
+    try:
+        return run()
+    except Exception:                                    # noqa: BLE001 - a failed refresh must not stop the API
+        logger.exception("E168 refresh failed")
+        return {"error": True}
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -189,6 +200,15 @@ def start_scheduler():
         trigger=CronTrigger(month=CRON_MONTHS, day=CRON_DAY, hour=CRON_HOUR),
         id=JOB_ID,
         name="aiPHeed quarterly pipeline",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+    )
+    _scheduler.add_job(
+        run_e168_refresh,
+        trigger=CronTrigger(month=CRON_MONTHS, day="2", hour=CRON_HOUR),
+        id="aipheed_e168_refresh",
+        name="aiPHeed thesis model E168: next-quarter forecast and alert staging",
         replace_existing=True,
         max_instances=1,
         coalesce=True,

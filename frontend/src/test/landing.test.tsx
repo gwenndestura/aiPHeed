@@ -21,6 +21,11 @@ const FIGURES = JSON.parse(
   ),
 );
 
+// The thesis model E168's locked evaluation: every accuracy figure the page states comes from here.
+// results.json is written by Python and may contain NaN (not valid JSON for JS): read as null.
+const E168 = JSON.parse(readFileSync(resolve(__dirname, "../../../backend/data/e168/out/results.json"), "utf-8").replace(/NaN/g, "null"));
+const E168_LEADS: Record<number, any> = Object.fromEntries(E168.reliability.leads.map((l: any) => [l.lead, l]));
+
 // The footer's feedback form submits through react-query.
 const renderLanding = () =>
   render(
@@ -78,7 +83,7 @@ describe("Landing page", () => {
     );
     const sub = within(card).getByText(/^A geospatial system/);
     expect(sub.textContent).toBe(
-      "A geospatial system being developed to forecast food insecurity in the five CALABARZON provinces. Its food-insecurity forecast is validation pending; the map currently shows a price-pressure risk index as context.",
+      "A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces with the thesis model E168 (LightGBM), validated on DOST-FNRI provincial food-security surveys.",
     );
     expect(sub.className).not.toContain("italic");
     expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
@@ -101,9 +106,9 @@ describe("Landing page", () => {
     const titles = [...container.querySelectorAll("#methodology h4")].map((h) => h.textContent);
     expect(titles.slice(0, 5)).toEqual([
       "1.What High risk means",
-      "2.Hunger condition",
-      "3.Food-price condition",
-      "4.Classification",
+      "2.Starting point",
+      "3.LightGBM adjustment",
+      "4.Confidence and classification",
       "5.City and municipal ranking",
     ]);
   });
@@ -142,19 +147,14 @@ describe("Landing page", () => {
     const { container } = renderLanding();
     expect(container.textContent).not.toMatch(/ensemble/i);
     expect(container.textContent).toContain(
-      "The map shows a price-pressure risk index that combines regional hunger from SWS with a LightGBM food-price forecast on 12 indicator families",
+      "aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces with the thesis model E168 (LightGBM), tested on DOST-FNRI provincial food-security surveys",
     );
   });
 
-  it("words the lead time one way: three months ahead, never two quarters or Lead-2", () => {
-    const { container } = renderLanding();
-    const text = container.textContent ?? "";
-    expect(text).not.toMatch(/two quarters|two-quarter|Lead-2|\(Lead 2\)/i);
-    expect(text).toContain("one for the quarter just starting and one for the next quarter, three months ahead");
+  it("states the lead time as E168's reliable horizon (75% rule: three quarters ahead)", () => {
+    renderLanding();
     fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
-    expect(
-      screen.getByText(/^Forecasts are issued on the first day of each quarter.*the forecast three months ahead, for the next quarter, is experimental\.$/),
-    ).toBeTruthy();
+    expect(screen.getByText(/By the study's 75% accuracy rule, E168 is reliable up to three quarters ahead\.$/)).toBeTruthy();
   });
 
   it("has no research email and no [CONFIRM] placeholder", () => {
@@ -192,92 +192,67 @@ describe("Landing page", () => {
     expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
   });
 
-  it("shows the served forecast's lead-time table exactly as in landing_figures.json, with Lead 1 marked reliable", () => {
+  it("shows E168's lead-time table exactly as in its locked results, with Leads 1-3 meeting the 75% rule", () => {
     const { container } = renderLanding();
     const table = container.querySelector("#accuracy table") as HTMLTableElement;
     const rows = [...table.querySelectorAll("tbody tr")].map((tr) =>
       [...tr.querySelectorAll("td")].slice(0, 5).map((td) => td.textContent),
     );
-    const f2 = (v: number) => v.toFixed(2);
+    const f3 = (v: number) => v.toFixed(3);
     expect(rows).toEqual(
-      ["1", "2", "3"].map((k) => {
-        const l = FIGURES.leads[k];
-        return [f2(l.accuracy), f2(l.precision), f2(l.recall), f2(l.f1), f2(l.auc)];
+      [1, 2, 3].map((k) => {
+        const l = E168_LEADS[k];
+        return [f3(l.accuracy), f3(l.precision), f3(l.high_recall), f3(l.f1), f3(l.auc)];
       }),
     );
-    const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
-    expect(heads[0]).toBe("Lead 1: current quarterPassed the reliability test");
-    expect(heads[1]).toBe("Lead 2: three months ahead (experimental)");
-    expect(heads[2]).toBe("Lead 3: six months ahead");
-    for (const k of ["1", "2", "3"]) {
-      const l = FIGURES.leads[k];
-      expect(table.textContent).toContain(`${l.rows} province-quarters, ${l.quarters} quarters`);
+    for (const k of [1, 2, 3]) {
+      const l = E168_LEADS[k];
+      expect(l.accuracy).toBeGreaterThanOrEqual(0.75);
+      expect(table.textContent).toContain(`72 province results (${l.confusion.tp + l.confusion.tn} correct)`);
     }
-    expect(FIGURES.leads["1"].reliable).toBe(true);
-    expect(FIGURES.leads["2"].reliable).toBe(false);
+    expect(E168_LEADS[1].reliable).toBe(true);           // all six strict criteria at Lead 1
+    expect(E168_LEADS[2].criteria.C1).toBe(false);       // stated on the page: Lead 2 passes five of six
     const acc = container.querySelector("#accuracy")?.textContent ?? "";
-    expect(acc).toContain("the next quarter is labelled experimental");
-    expect(acc).toContain("All results below are development evidence");
-    expect(acc).toContain("The 75% accuracy goal");
-    expect(acc).toContain("SHA-256 " + FIGURES.seal);
+    expect(acc).toContain("five of six two quarters ahead");
+    expect(acc).toContain("SHA-256 28f2c918");
   });
 
-  it("shows the Lead-1 Brier comparison exactly as in landing_figures.json", () => {
+  it("shows the Lead-1 Brier comparison exactly as in E168's locked results", () => {
     const { container } = renderLanding();
     const tables = [...container.querySelectorAll("#accuracy table")];
     const brier = tables[tables.length - 1];
-    const cells = [...brier.querySelectorAll("tr")].map((tr) => [
-      tr.querySelector("th")?.textContent,
-      tr.querySelector("td")?.textContent,
-    ]);
-    const m = FIGURES.lead1_brier.models;
+    const cells = [...brier.querySelectorAll("tr")].map((tr) => [tr.querySelector("th")?.textContent, tr.querySelector("td")?.textContent]);
+    const b = (k: string) => E168.lead1_vs[k].metrics.brier.toFixed(3);
     expect(cells).toEqual([
-      ["LightGBM (served forecast)", m["LightGBM (served, P0H4)"].brier.toFixed(3)],
-      ["Naive persistence", m["I. Naive persistence"].brier.toFixed(3)],
-      ["Logistic regression, combined", m["Logistic regression, combined"].brier.toFixed(3)],
-      ["Logistic regression, government data only", m["Logistic regression, government data only"].brier.toFixed(3)],
-      ["Logistic regression, news only", m["Logistic regression, news only"].brier.toFixed(3)],
-      ["LightGBM, government data only", m["LightGBM, government data only"].brier.toFixed(3)],
-      ["LightGBM, news only", m["LightGBM, news only"].brier.toFixed(3)],
+      ["E168 (served forecast)", E168_LEADS[1].brier_soft.toFixed(3)],
+      ["Naive persistence (last survey)", b("PERS")],
+      ["Logistic regression, combined", b("LR")],
+      ["Logistic regression, government data only", b("LR_GOV")],
+      ["Logistic regression, news only", b("LR_NEWS")],
+      ["LightGBM, government data only", b("GOV")],
+      ["LightGBM, news only", b("NEWS")],
     ]);
-    // the note's claims follow the Holm-corrected tests
-    expect(m["I. Naive persistence"].established).toBe(false);
-    expect(m["LightGBM, government data only"].p0h4_minus).toBeGreaterThan(0);
-    for (const k of [
-      "Logistic regression, combined",
-      "Logistic regression, government data only",
-      "Logistic regression, news only",
-      "LightGBM, news only",
-    ])
-      expect(m[k].established).toBe(true);
-    expect(container.querySelector("#accuracy")?.textContent).toContain(
-      `Same ${FIGURES.lead1_brier.rows} province-quarters. The advantage is statistically established against the three logistic regressions and the news-only LightGBM, but not against naive persistence`,
-    );
+    // the note's claims follow the paired 95% intervals in results.json
+    for (const k of ["PERS", "LR", "LR_GOV", "LR_NEWS"]) expect(E168.lead1_vs[k].E168_minus_brier.ci95[1]).toBeLessThan(0);
+    for (const k of ["GOV", "NEWS"]) expect(E168.lead1_vs[k].E168_minus_brier.ci95[1]).toBeGreaterThan(0);
   });
 
-  it("states the quarter counts in the small-sample limitation", () => {
+  it("states the sample size in the small-sample limitation", () => {
     renderLanding();
-    expect(screen.getByText(/12 to 14 quarters of evidence for each lead time/)).toBeTruthy();
+    expect(screen.getByText(/Only 72 survey results per lead time are available/)).toBeTruthy();
   });
 
-  it("describes the served forecast (P0H4), never the FIRI v2 index", () => {
+  it("describes E168 (DOST-FNRI HFIAS target), never the retired price-pressure index", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
-    expect(text).not.toMatch(/FIRI|(?<!price-pressure )risk index|six domains|proxy index|not a probability|Combining the domains/i);
-    expect(text).toContain("The number shown is the forecast probability of High risk, from 0 to 1");
-    expect(text).toContain("regional hunger measured by SWS (Balance Luzon) is above 11.3%");
-    expect(text).toContain("The forecast probability is the hunger chance multiplied by the food-price chance.");
+    expect(text).not.toMatch(/FIRI|price-pressure|11\.3%|hunger chance multiplied|six domains|proxy index/i);
+    expect(text).toContain("Household Food Insecurity Access Scale (HFIAS)");
     expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
-    // the sources the served forecast uses, with the periods available at the 1 October 2026 issue date
     const src = container.querySelector("#methodology table")?.textContent ?? "";
-    expect(src).toContain("World Bank Commodity Price Data (Pink Sheet)");
-    expect(src).toContain("GDELT news event database");
-    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*2021 to 2026-Q2/);
-    expect(FIGURES.issue_2026_10_01.available_at_issue.E2).toBe(true);
-    expect(FIGURES.issue_2026_10_01.psa_cpi_through).toBe("2026-08");
-    // the two influence cautions the dashboard shows
-    expect(text).toContain("The unemployment input mostly follows the calendar trend");
-    expect(text).toContain("The Food Stress Sentiment Index has no measured effect on the forecast");
+    expect(src).toContain("DOST-FNRI food-security surveys (HFIAS)");
+    expect(src).toMatch(/PSA Labor Force Survey.*National/);
+    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*National/);
+    expect(text).toContain("Some inputs are national.");
   });
 
   it("opens one FAQ row at a time, with aria-expanded", () => {
@@ -299,18 +274,18 @@ describe("About dialog", () => {
     const rows = within(dlg).getByText(/^Philippine Statistics Authority/).closest("ul") as HTMLElement;
     expect(rows.className).toContain("divide-y");
     expect([...rows.querySelectorAll("li")].map((li) => li.textContent)).toEqual([
+      "DOST-FNRI provincial food-security surveys (HFIAS): 2013, 2015, 2018, 2019, 2021",
       "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
       "Bangko Sentral ng Pilipinas (BSP): cash remittances",
-      "PAGASA: El Niño advisories · IBTrACS: typhoons",
-      "World Bank Commodity Price Data (Pink Sheet): world rice, cereal, oil and fertilizer prices",
-      "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
+      "NASA POWER: rainfall and soil moisture · IBTrACS: typhoons · NOAA: El Niño index",
+      "Social Weather Stations (SWS): hunger by area (used to scale forecast confidence)",
       "Google News headlines in Filipino and English",
     ]);
     const titles = [...dlg.querySelectorAll("h4")].map((h) => h.textContent);
     expect(titles).toEqual([
       "How to read the map",
-      "Measured regional hunger (SWS)",
-      "Price-pressure risk index and its tested accuracy",
+      "Regional hunger context (SWS)",
+      "How accurate is E168?",
       "Data sources",
       "Missing and limited data",
       "Disclaimer",
@@ -320,13 +295,11 @@ describe("About dialog", () => {
 
   it("states the model, the map value and the tested lead time", () => {
     const dlg = openAbout();
-    expect(dlg.textContent).toContain("LightGBM, 12 indicator families · risk = hunger condition × food-price condition");
+    expect(dlg.textContent).toContain("E168: last DOST-FNRI survey adjusted by LightGBM");
     const lead = within(dlg).getByText("Lead time").parentElement as HTMLElement;
-    expect(lead.textContent).toBe(
-      "Lead timeReliable: the quarter starting on the issue date · further ahead: experimental",
-    );
-    expect(dlg.textContent).toContain("no measured hunger figure exists for any province, city or municipality");
-    expect(dlg.textContent).not.toContain("reliability test");
+    expect(lead.textContent).toBe("Lead timeReliable up to 3 quarters ahead (≥ 75% accuracy)");
+    expect(dlg.textContent).toContain("they are a priority ranking, not separate forecasts");
+    expect(dlg.textContent).toContain("accuracy 0.78 (56 of 72)");
   });
 
   it("has no research email and no [CONFIRM] text", () => {

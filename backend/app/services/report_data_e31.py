@@ -35,7 +35,7 @@ from app.services.dashboard import _ascii, _join_series
 REPORT_TITLE = "aiPHeed Food Insecurity Forecast Report"
 PREPARED_FOR = "DA Region IV-A"
 SUBTITLES = {"trend": "Province Risk Level Trend", "shap": "What Is Driving the Risk"}
-MODE_SHORT = {"BACKTEST": "backtest", "RETROSPECTIVE_BLIND": "frozen forecast, scored", "NOWCAST": "nowcast",
+MODE_SHORT = {"BACK_FORECAST": "back-forecast", "BACKTEST": "backtest", "RETROSPECTIVE_BLIND": "frozen forecast, scored", "NOWCAST": "nowcast",
               "FORECAST": "forecast"}
 PH = timezone(timedelta(hours=8))
 
@@ -56,7 +56,18 @@ def _ch1() -> bool:
     return svc._ch1_mode()
 
 
+def _srv() -> bool:
+    """The thesis model (E168; app.services.e166_serving) is served: the report describes it, on its own quarters."""
+    from app.services import e166_serving as SRV
+
+    return SRV.enabled() and not _ch1()
+
+
 def _served_quarters() -> list[str]:
+    if _srv():
+        from app.services import e166_serving as SRV
+
+        return list(SRV.quarters())
     if _ch1():
         from app.services import dashboard as svc
 
@@ -65,6 +76,13 @@ def _served_quarters() -> list[str]:
 
 
 def _row(quarter: str) -> dict | None:
+    if _srv():
+        from app.services import e166_serving as SRV
+
+        if not SRV.covers(quarter):
+            return None
+        return {"quarter": quarter, "lead": 1, "origin": SRV._q(quarter)["issue_date"],
+                "mode": "FORECAST" if quarter == SRV.LIVE else "BACK_FORECAST"}
     if _ch1():                            # the forecast's own kind, lead and issue date (one row per quarter)
         from app.ml.inference import ch1_system as CH1
 
@@ -172,6 +190,12 @@ def _axis(values: list[float]) -> tuple[float, float, float]:
 
 # --------------------------------------------------------------------------------------------- wording
 def _score_explainer(rec: dict) -> str:
+    if _srv():
+        from app.services import e166_serving as SRV
+
+        return ("The risk score ranges from 0 to 1. It is the probability, from the thesis model " + SRV.NAME + ", that the "
+                "share of households with moderate or severe food insecurity (DOST-FNRI HFIAS) in the province is 50% or more "
+                "in that quarter. A score of 0.50 or more is HIGH. It is a risk indicator, not an official food-insecurity statistic.")
     td = rec.get("target_definition") or {}
     if "H + 2D" in (td.get("label") or "") and "trailing median" in (td.get("tau") or ""):
         what = ("It is the estimated chance that the province's hunger-and-food-price score -- regional hunger from "
@@ -598,8 +622,16 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         if summary.get("sentence"):
             blocks.append(_p(summary["sentence"]))
     elif kind == "shap":
-        v = rows_by_q[last_q]["provinces"][codes[slugs[0]]]
-        ds = sorted(v.get("drivers") or [], key=lambda d: -abs(d.get("contribution") or 0))[:10]
+        if _srv():                                 # the thesis model's exact LightGBM attributions for this province-quarter
+            from app.services import e166_serving as SRV
+
+            c = SRV._contrib(last_q)
+            c = c[c["province"] == names[slugs[0]]].groupby("feature")["contribution"].sum()
+            ds = [{"factor": SRV.FEATURE_LABELS.get(f, f), "value": None, "contribution": float(x)}
+                  for f, x in c.reindex(c.abs().sort_values(ascending=False).index).head(10).items()]
+        else:
+            v = rows_by_q[last_q]["provinces"][codes[slugs[0]]]
+            ds = sorted(v.get("drivers") or [], key=lambda d: -abs(d.get("contribution") or 0))[:10]
         if ds:
             tables += 1
             blocks.append(_p(f"Table {tables} lists the {len(ds)} model inputs with the largest effect on the score."))
@@ -609,6 +641,8 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                 [[d["factor"], (f"{d['value']:.2f}" if isinstance(d.get("value"), (int, float)) else "Not available"),
                   ("Raises" if (d.get("contribution") or 0) > 0 else "Lowers")
                   + f" ({abs(d.get('contribution') or 0):.2f})"] for d in ds],
+                ("Effect is the input's contribution to the forecast score (logit of the HFIAS share), after the model's "
+                 "temperature shrink. These are associations the model learned, not causes.") if _srv() else
                 "Effect is the input's contribution in the model's own units (log-odds, before calibration). "
                 "These are associations the model learned, not causes."))
 
@@ -675,6 +709,10 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
 
         sent = THESIS.performance_tables()["sentences"]
         notes = [THESIS_FOOTER, sent[1], sent[-1]]
+    elif _srv():
+        from app.services import e166_serving as SRV
+
+        notes = [SRV.STATUS, SRV.INDICATOR["horizon"]]
     else:
         notes = ["The risk score is the estimated chance that the combined hunger-and-food-price score is above its "
                  "usual level. It is not a measure of hunger or of how many families lack food.",
@@ -708,11 +746,40 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                          (f"Lead-{row_last['lead']} forecast issued {row_last['origin']}" if row_last["mode"] == "FORECAST"
                           else f"walk-forward Lead-{row_last['lead']} backtest made as of {row_last['origin']}")
                          + " (price-pressure risk index; not a food-insecurity forecast)" if ch1 else
+                         (f"Lead-1 forecast issued {row_last['origin']}" if row_last["mode"] == "FORECAST"
+                          else f"Lead-1 back-forecast made as of {row_last['origin']}") + " (probability of HIGH food-insecurity risk)"
+                         if _srv() else
                          "estimated food-insecurity risk index (FIRI v2)" if thesis else mode_label(row_last)))],
-                     *([["Model", _ascii(CH1.model_line())]] if ch1 else
+                     *([["Model", _ascii(CH1.model_line())]] if ch1 else _srv_metadata() if _srv() else
                        _thesis_metadata() if thesis else _model_metadata(rec, row_last))],
         "blocks": blocks,
     }
+
+
+def _srv_metadata() -> list:
+    """The served thesis model's name and its validated performance, from its locked results file."""
+    import json
+
+    from app.paths import BACKEND_DIR
+    from app.services import e166_serving as SRV
+
+    name = SRV.INDICATOR["name"].split("(", 1)[-1].rstrip(")")
+    try:
+        r = json.loads((BACKEND_DIR / "data" / SRV.MODEL / "out" / "results.json").read_text())
+        rel = r["reliability"]["TS"] if SRV.MODEL == "e166" else r["reliability"]
+        l1 = next(x for x in rel["leads"] if x["lead"] == 1)
+        c = l1["confusion"]
+        paper = 0
+        for x in sorted(rel["leads"], key=lambda z: z["lead"]):
+            if x["accuracy"] < 0.75:
+                break
+            paper = x["lead"]
+        line = (f"{name[0].upper() + name[1:]}. One quarter ahead: accuracy {l1['accuracy']:.3f} ({c['tp'] + c['tn']}/{l1['rows']}), "
+                f"ROC-AUC {l1['auc']:.3f}, F1 {l1['f1']:.3f}; reliable up to {paper} quarters ahead by the study's 75% rule, "
+                f"and {rel['maximum_reliable_lead']} by the six strict criteria (C1-C6).")
+    except Exception:                                      # noqa: BLE001 - the name alone when the results file is absent
+        line = name
+    return [["Model", _ascii(line)]]
 
 
 def _thesis_metadata() -> list:
@@ -758,7 +825,7 @@ def _window(q_from: str | None, q_to: str | None) -> list[str]:
     hi = min(_qkey(served[-1]), _qkey(q_to)) if q_to else _qkey(served[-1])
     if _ch1() and not q_to:                        # the default report ends on the reliable Lead-1 quarter
         hi = min(hi, max(_qkey(q) for q in served if _row(q)["lead"] == 1))
-    elif lead2_preview() and not q_to:             # the default report ends on the lead-1 quarter, not the preview
+    elif lead2_preview() and not q_to and not _srv():             # the default report ends on the lead-1 quarter, not the preview
         lead1 = [q for q in E31.served_rows() if q.get("lead", 1) == 1]
         hi = min(hi, max(_qkey(q["quarter"]) for q in lead1))
     return [_qstr(k) for k in range(lo, hi + 1)]

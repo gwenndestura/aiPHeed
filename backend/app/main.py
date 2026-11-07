@@ -37,6 +37,14 @@ def strict_model_check() -> None:
 
     if os.getenv("AIPHEED_STRICT_MODEL", "").strip() not in ("1", "true", "True"):
         return
+    from app.services import e166_serving as SRV
+
+    if os.getenv("AIPHEED_THESIS_MODEL"):           # the thesis model (E168): serve it or refuse to start
+        problems = SRV.validate()
+        if problems:
+            raise RuntimeError(f"thesis model {SRV.NAME} not ready: " + "; ".join(problems))
+        print(f"Serving thesis model {SRV.NAME} (strict)")
+        return
     from app.ml.inference import thesis_system as THESIS
 
     if not THESIS.active():

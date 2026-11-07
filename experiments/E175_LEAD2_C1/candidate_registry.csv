@@ -1,0 +1,10 @@
+candidate,direction,lightgbm,already_evaluated_on_the_72_rows,where,lead2_correct,lead2_C1,run_in_E175,reason
+E168,locked reference,yes,yes,E168 (2026-11-06),55,fail,no,reference; not modified
+SIMPLE,lower complexity (R1-R4: 2-3 leaves; min child 20-40; L2 10-20),yes,yes,E172 diagnostic; frozen in E173 (config ad38a0f1),59,pass,no,"chosen after its 72-row result was seen; re-running it here would re-score a known result, not select it blind"
+E172 pre-declared,40 LightGBM variants (complexity x inputs x lead use x bagging) selected by training-only score,yes,yes,E172,53,fail,no,"already the training-only selection over every listed regularization/depth/leaf/feature-set direction; failed"
+Regularization / depth / leaves,R0-R4 grid,yes,yes,E172 (all 5 settings in the menu),53-59 by subset,mixed,no,already tested; picking the subset that passes is selection on the test rows
+Feature selection (training-only),GOV / FULL / GOV+SWS chosen by training score,yes,yes,E171 and E172,53,fail,no,already tested
+Lead-exact training,dedicated Lead-2 training rows,yes,yes,E172 EXACT subset,55,fail,no,already tested
+Seed bagging,5 seeds,yes,yes,E172 BAG subset (E169 did not apply it),54,fail,no,already tested
+Class weighting (down-weight LOW-vs-HIGH errors),new,yes,no,,,,no,"motivated by the E168 Lead-2 error analysis (15 of 17 errors are false HIGH); designing it from that analysis uses the held-out outcomes"
+Rolling-origin (round-held-out) selection,survey-round-aware training score,yes,yes,E171 and E172 (forward over rounds when 2+ rounds),53,fail,no,already the selection procedure of E171/E172

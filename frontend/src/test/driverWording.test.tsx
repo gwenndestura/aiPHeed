@@ -17,6 +17,6 @@ describe("driver and risk wording", () => {
     render(<GlossaryPanel open onClose={() => {}} />);
     const risk = screen.getByText(/A score from 0 to 1\./);
     expect(risk.textContent).toContain("priority ranking");
-    expect(risk.textContent).toContain("not a measured provincial hunger rate");
+    expect(risk.textContent).toContain("not a measured provincial food-insecurity rate");
   });
 });

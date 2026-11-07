@@ -1,0 +1,6 @@
+candidate,lightgbm,description,rationale,selection_rule
+C0_SIMPLE,yes,"SIMPLE exactly (E173 rule): anchor by E168 stage-1 training score, learner by SIMPLE menu training score; P(HIGH)=Phi(mu/sd)",baseline,"registered before any run (2026-11-07): winner = lowest cross-fitted out-of-fold Brier on the 156 untainted FNRI2015 training rows, among candidates whose out-of-fold accuracy is not below C0; ties keep the simpler (C0 < C2 < C1 < C3)"
+C1_PLATT,yes,C0 + Platt (logistic) recalibration of the score; for each region fold fitted only on the other folds' out-of-fold scores,E176 hypothesis: probability scale/over-confidence,same
+C2_TEMPERATURE,yes,"C0 + temperature lambda (score x lambda, grid 0.3-1.5) chosen per fold on the other folds' out-of-fold Brier; keeps P=0.5 fixed so classes cannot change",E176 hypothesis: shrink fixes Brier without changing classes,same
+C3_STUMPS,yes,"C0 learner forced to the lowest complexity (R1: 2 leaves, depth 1, min child 20, L2 10), same anchor and inputs",complexity vs one-transition sample,same
+REF_E168CFG,yes,"E168's LightGBM settings (R0) with the same anchor, FULL inputs",reference only (not selectable),not selectable

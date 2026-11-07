@@ -1,0 +1,10 @@
+model,population,correct,accuracy,c1_low_bound,C1,C2,C3,C4,C5,C6,brier,roc_auc,f1,balanced_accuracy,decision
+"E168 (locked, served)",72 Lead-2 evaluation rows (previously inspected; historical reference only),55.0,0.764,0.641,False,True,True,True,True,True,0.1373,0.887,0.73,0.8,
+"SIMPLE (frozen, post-hoc)",72 Lead-2 evaluation rows (previously inspected; historical reference only),59.0,0.819,0.708,True,True,True,True,True,True,0.1437,0.874,0.772,0.834,
+K0_SIMPLE,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.7821,,,,,,,,0.0825,0.7699,,,reference
+K1_SEED_ENSEMBLE,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.7949,,,,,,,,0.0836,0.7695,,,stability improvement only (predictive unverified)
+K2_DEGENERATE_INPUTS_REMOVED,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.7692,,,,,,,,0.0827,0.7739,,,no improvement
+K3_K1_PLUS_K2,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.7885,,,,,,,,0.0837,0.7697,,,stability improvement only (predictive unverified)
+REF_E168CFG,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.7436,,,,,,,,0.0808,0.7695,,,reference
+REF_E168CFG_ENSEMBLE,156 untainted FNRI2015 training rows (training-only; NOT comparable with the 72-row figures),,0.75,,,,,,,,0.082,0.7668,,,reference
+K1 on the 72 rows,NOT evaluated: no legitimate independent rows; UNVERIFIED,,,,,,,,,,,,,,

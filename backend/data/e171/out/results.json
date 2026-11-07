@@ -1,0 +1,7422 @@
+{
+ "model": "E171 exploratory Lead-2 candidates",
+ "decision": {
+  "reproduces_E168_max_abs_diff": 0.0,
+  "leakage_max_abs_change": 0.0,
+  "valid": true,
+  "E171_lead1_C1_C6": true,
+  "E171_lead2_C1_C6": false,
+  "E171_lead2_brier_minus_E168": {
+   "diff": 0.0022,
+   "ci95": [
+    -0.005,
+    0.011
+   ]
+  },
+  "lead2_genuinely_improved_exploratory": false,
+  "status": "EXPLORATORY (rows used in E151-E169); E168 remains the thesis model",
+  "no_interval_arms": [
+   "E169",
+   "GOV",
+   "NEWS",
+   "LR",
+   "LR_GOV",
+   "LR_NEWS",
+   "PSA"
+  ]
+ },
+ "config_by_issue": [
+  {
+   "survey": "ENNS2018",
+   "lead": 1,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2018",
+   "lead": 2,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2018",
+   "lead": 3,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 1,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 2,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 3,
+   "scheme": "region",
+   "train_rounds": 1,
+   "tag_E168TA": "OH|LGBM|FULL|id",
+   "tag_A": "OH|LGBM|GOV_S|id",
+   "tag_B": "OH|LGBMLB|GOV_S|id",
+   "tag_C": "OH|ENET|GOV_S|id",
+   "tag_D": "OH|TREND|GOV_S|id",
+   "tag_E171": "OH|LGBM|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 1,
+   "scheme": "forward",
+   "train_rounds": 3,
+   "tag_E168TA": "RSS|LGBM|FULL|id",
+   "tag_A": "RSS|LGBM|FULL_S|id",
+   "tag_B": "RSS|LGBMLB|GOV_S|id",
+   "tag_C": "RSS|ENET|GOV_S|id",
+   "tag_D": "RSS|TREND|GOV_S|id",
+   "tag_E171": "RSS|ENET|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 2,
+   "scheme": "forward",
+   "train_rounds": 3,
+   "tag_E168TA": "RSS|LGBM|FULL|id",
+   "tag_A": "RSS|LGBM|FULL_S|id",
+   "tag_B": "RSS|LGBMLB|GOV_S|id",
+   "tag_C": "RSS|ENET|GOV_S|id",
+   "tag_D": "RSS|TREND|GOV_S|id",
+   "tag_E171": "RSS|ENET|GOV_S|id"
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 3,
+   "scheme": "forward",
+   "train_rounds": 2,
+   "tag_E168TA": "RSS|LGBM|FULL|id",
+   "tag_A": "RSS|LGBM|FULL_S|id",
+   "tag_B": "RSS|LGBMLB|GOV_S|id",
+   "tag_C": "RSS|ENET|GOV_S|id",
+   "tag_D": "RSS|TREND|GOV_S|id",
+   "tag_E171": "RSS|ENET|GOV_S|id"
+  }
+ ],
+ "lambda_by_issue": [
+  {
+   "survey": "ENNS2018",
+   "lead": 1,
+   "lam_E168TA": 0.357,
+   "lam_A": 0.357,
+   "lam_B": 0.357,
+   "lam_C": 0.357,
+   "lam_D": 0.357,
+   "lam_E171": 0.357
+  },
+  {
+   "survey": "ENNS2018",
+   "lead": 2,
+   "lam_E168TA": 0.382,
+   "lam_A": 0.382,
+   "lam_B": 0.382,
+   "lam_C": 0.382,
+   "lam_D": 0.382,
+   "lam_E171": 0.382
+  },
+  {
+   "survey": "ENNS2018",
+   "lead": 3,
+   "lam_E168TA": 0.3,
+   "lam_A": 0.3,
+   "lam_B": 0.3,
+   "lam_C": 0.3,
+   "lam_D": 0.3,
+   "lam_E171": 0.3
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 1,
+   "lam_E168TA": 0.36,
+   "lam_A": 0.36,
+   "lam_B": 0.36,
+   "lam_C": 0.36,
+   "lam_D": 0.36,
+   "lam_E171": 0.36
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 2,
+   "lam_E168TA": 0.407,
+   "lam_A": 0.407,
+   "lam_B": 0.407,
+   "lam_C": 0.407,
+   "lam_D": 0.407,
+   "lam_E171": 0.407
+  },
+  {
+   "survey": "ENNS2019",
+   "lead": 3,
+   "lam_E168TA": 0.3,
+   "lam_A": 0.3,
+   "lam_B": 0.3,
+   "lam_C": 0.3,
+   "lam_D": 0.3,
+   "lam_E171": 0.3
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 1,
+   "lam_E168TA": 0.906,
+   "lam_A": 0.895,
+   "lam_B": 0.887,
+   "lam_C": 1.0,
+   "lam_D": 0.86,
+   "lam_E171": 1.0
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 2,
+   "lam_E168TA": 0.92,
+   "lam_A": 0.908,
+   "lam_B": 0.886,
+   "lam_C": 1.0,
+   "lam_D": 0.874,
+   "lam_E171": 1.0
+  },
+  {
+   "survey": "ENNS2021",
+   "lead": 3,
+   "lam_E168TA": 1.0,
+   "lam_A": 1.0,
+   "lam_B": 1.0,
+   "lam_C": 1.0,
+   "lam_D": 0.915,
+   "lam_E171": 1.0
+  }
+ ],
+ "reliability": {
+  "E168": {
+   "model": "E168",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.778,
+     "accuracy_95_low_effective_n": 0.657,
+     "majority_rule": 0.653,
+     "precision": 0.622,
+     "high_recall": 0.92,
+     "low_recall": 0.702,
+     "f1": 0.742,
+     "balanced_accuracy": 0.811,
+     "auc": 0.895,
+     "brier_soft": 0.1394,
+     "error_points": 7.83,
+     "brier_minus_persistence": -0.0734,
+     "brier_minus_persistence_ci95": [
+      -0.1275,
+      -0.0255
+     ],
+     "calibration_slope_ci95": [
+      0.66,
+      1.33
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 23,
+      "fp": 14,
+      "tn": 33,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.605,
+     "high_recall": 0.92,
+     "low_recall": 0.681,
+     "f1": 0.73,
+     "balanced_accuracy": 0.8,
+     "auc": 0.887,
+     "brier_soft": 0.1373,
+     "error_points": 7.82,
+     "brier_minus_persistence": -0.0755,
+     "brier_minus_persistence_ci95": [
+      -0.1222,
+      -0.0294
+     ],
+     "calibration_slope_ci95": [
+      0.61,
+      1.28
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 15,
+      "tn": 32,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.75,
+     "accuracy_95_low_effective_n": 0.624,
+     "majority_rule": 0.653,
+     "precision": 0.595,
+     "high_recall": 0.88,
+     "low_recall": 0.681,
+     "f1": 0.71,
+     "balanced_accuracy": 0.78,
+     "auc": 0.86,
+     "brier_soft": 0.1496,
+     "error_points": 8.55,
+     "brier_minus_persistence": -0.0634,
+     "brier_minus_persistence_ci95": [
+      -0.1138,
+      -0.0183
+     ],
+     "calibration_slope_ci95": [
+      0.48,
+      1.13
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 15,
+      "tn": 32,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 1,
+   "first_failing_lead": 2,
+   "lead1_passes": true
+  },
+  "E169": {
+   "model": "E169",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.778,
+     "accuracy_95_low_effective_n": 0.657,
+     "majority_rule": 0.653,
+     "precision": 0.622,
+     "high_recall": 0.92,
+     "low_recall": 0.702,
+     "f1": 0.742,
+     "balanced_accuracy": 0.811,
+     "auc": 0.898,
+     "brier_soft": 0.1399,
+     "error_points": 7.85,
+     "brier_minus_persistence": -0.0729,
+     "brier_minus_persistence_ci95": [
+      -0.1272,
+      -0.0249
+     ],
+     "calibration_slope_ci95": [
+      0.66,
+      1.33
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 23,
+      "fp": 14,
+      "tn": 33,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.605,
+     "high_recall": 0.92,
+     "low_recall": 0.681,
+     "f1": 0.73,
+     "balanced_accuracy": 0.8,
+     "auc": 0.889,
+     "brier_soft": 0.1363,
+     "error_points": 7.77,
+     "brier_minus_persistence": -0.0765,
+     "brier_minus_persistence_ci95": [
+      -0.1232,
+      -0.0304
+     ],
+     "calibration_slope_ci95": [
+      0.62,
+      1.27
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 15,
+      "tn": 32,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.75,
+     "accuracy_95_low_effective_n": 0.624,
+     "majority_rule": 0.653,
+     "precision": 0.595,
+     "high_recall": 0.88,
+     "low_recall": 0.681,
+     "f1": 0.71,
+     "balanced_accuracy": 0.78,
+     "auc": 0.86,
+     "brier_soft": 0.1496,
+     "error_points": 8.55,
+     "brier_minus_persistence": -0.0634,
+     "brier_minus_persistence_ci95": [
+      -0.1138,
+      -0.0183
+     ],
+     "calibration_slope_ci95": [
+      0.48,
+      1.13
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 15,
+      "tn": 32,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 1,
+   "first_failing_lead": 2,
+   "lead1_passes": true
+  },
+  "E168TA": {
+   "model": "E168TA",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.778,
+     "accuracy_95_low_effective_n": 0.657,
+     "majority_rule": 0.653,
+     "precision": 0.622,
+     "high_recall": 0.92,
+     "low_recall": 0.702,
+     "f1": 0.742,
+     "balanced_accuracy": 0.811,
+     "auc": 0.894,
+     "brier_soft": 0.1389,
+     "error_points": 7.86,
+     "brier_minus_persistence": -0.0739,
+     "brier_minus_persistence_ci95": [
+      -0.1279,
+      -0.026
+     ],
+     "calibration_slope_ci95": [
+      0.64,
+      1.31
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 23,
+      "fp": 14,
+      "tn": 33,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.605,
+     "high_recall": 0.92,
+     "low_recall": 0.681,
+     "f1": 0.73,
+     "balanced_accuracy": 0.8,
+     "auc": 0.887,
+     "brier_soft": 0.1371,
+     "error_points": 7.9,
+     "brier_minus_persistence": -0.0757,
+     "brier_minus_persistence_ci95": [
+      -0.1233,
+      -0.0287
+     ],
+     "calibration_slope_ci95": [
+      0.57,
+      1.23
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 15,
+      "tn": 32,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.75,
+     "accuracy_95_low_effective_n": 0.624,
+     "majority_rule": 0.653,
+     "precision": 0.595,
+     "high_recall": 0.88,
+     "low_recall": 0.681,
+     "f1": 0.71,
+     "balanced_accuracy": 0.78,
+     "auc": 0.858,
+     "brier_soft": 0.1505,
+     "error_points": 8.55,
+     "brier_minus_persistence": -0.0625,
+     "brier_minus_persistence_ci95": [
+      -0.1134,
+      -0.0173
+     ],
+     "calibration_slope_ci95": [
+      0.48,
+      1.13
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 15,
+      "tn": 32,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 1,
+   "first_failing_lead": 2,
+   "lead1_passes": true
+  },
+  "A": {
+   "model": "A",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.736,
+     "accuracy_95_low_effective_n": 0.608,
+     "majority_rule": 0.653,
+     "precision": 0.575,
+     "high_recall": 0.92,
+     "low_recall": 0.638,
+     "f1": 0.708,
+     "balanced_accuracy": 0.779,
+     "auc": 0.864,
+     "brier_soft": 0.1455,
+     "error_points": 7.94,
+     "brier_minus_persistence": -0.0672,
+     "brier_minus_persistence_ci95": [
+      -0.1173,
+      -0.023
+     ],
+     "calibration_slope_ci95": [
+      0.67,
+      1.31
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.72,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 17,
+      "tn": 30,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.694,
+     "accuracy_95_low_effective_n": 0.561,
+     "majority_rule": 0.653,
+     "precision": 0.537,
+     "high_recall": 0.88,
+     "low_recall": 0.596,
+     "f1": 0.667,
+     "balanced_accuracy": 0.738,
+     "auc": 0.868,
+     "brier_soft": 0.1442,
+     "error_points": 7.94,
+     "brier_minus_persistence": -0.0686,
+     "brier_minus_persistence_ci95": [
+      -0.1136,
+      -0.0249
+     ],
+     "calibration_slope_ci95": [
+      0.6,
+      1.22
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.72,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 19,
+      "tn": 28,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.722,
+     "accuracy_95_low_effective_n": 0.592,
+     "majority_rule": 0.653,
+     "precision": 0.568,
+     "high_recall": 0.84,
+     "low_recall": 0.66,
+     "f1": 0.677,
+     "balanced_accuracy": 0.75,
+     "auc": 0.85,
+     "brier_soft": 0.1512,
+     "error_points": 8.83,
+     "brier_minus_persistence": -0.0618,
+     "brier_minus_persistence_ci95": [
+      -0.1167,
+      -0.0138
+     ],
+     "calibration_slope_ci95": [
+      0.41,
+      1.03
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 21,
+      "fp": 16,
+      "tn": 31,
+      "fn": 4
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "B": {
+   "model": "B",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.736,
+     "accuracy_95_low_effective_n": 0.608,
+     "majority_rule": 0.653,
+     "precision": 0.575,
+     "high_recall": 0.92,
+     "low_recall": 0.638,
+     "f1": 0.708,
+     "balanced_accuracy": 0.779,
+     "auc": 0.848,
+     "brier_soft": 0.1502,
+     "error_points": 8.05,
+     "brier_minus_persistence": -0.0626,
+     "brier_minus_persistence_ci95": [
+      -0.11,
+      -0.0188
+     ],
+     "calibration_slope_ci95": [
+      0.68,
+      1.28
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.72,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 17,
+      "tn": 30,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.694,
+     "accuracy_95_low_effective_n": 0.561,
+     "majority_rule": 0.653,
+     "precision": 0.537,
+     "high_recall": 0.88,
+     "low_recall": 0.596,
+     "f1": 0.667,
+     "balanced_accuracy": 0.738,
+     "auc": 0.85,
+     "brier_soft": 0.149,
+     "error_points": 8.02,
+     "brier_minus_persistence": -0.0637,
+     "brier_minus_persistence_ci95": [
+      -0.107,
+      -0.0204
+     ],
+     "calibration_slope_ci95": [
+      0.59,
+      1.18
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.72,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 19,
+      "tn": 28,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.618,
+     "high_recall": 0.84,
+     "low_recall": 0.723,
+     "f1": 0.712,
+     "balanced_accuracy": 0.782,
+     "auc": 0.857,
+     "brier_soft": 0.1535,
+     "error_points": 9.03,
+     "brier_minus_persistence": -0.0594,
+     "brier_minus_persistence_ci95": [
+      -0.1153,
+      -0.0108
+     ],
+     "calibration_slope_ci95": [
+      0.37,
+      0.98
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 21,
+      "fp": 13,
+      "tn": 34,
+      "fn": 4
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "C": {
+   "model": "C",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.647,
+     "high_recall": 0.88,
+     "low_recall": 0.745,
+     "f1": 0.746,
+     "balanced_accuracy": 0.812,
+     "auc": 0.886,
+     "brier_soft": 0.1418,
+     "error_points": 8.5,
+     "brier_minus_persistence": -0.071,
+     "brier_minus_persistence_ci95": [
+      -0.1312,
+      -0.0151
+     ],
+     "calibration_slope_ci95": [
+      0.42,
+      1.07
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 22,
+      "fp": 12,
+      "tn": 35,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.639,
+     "high_recall": 0.92,
+     "low_recall": 0.723,
+     "f1": 0.754,
+     "balanced_accuracy": 0.822,
+     "auc": 0.891,
+     "brier_soft": 0.1392,
+     "error_points": 8.02,
+     "brier_minus_persistence": -0.0736,
+     "brier_minus_persistence_ci95": [
+      -0.1253,
+      -0.0227
+     ],
+     "calibration_slope_ci95": [
+      0.54,
+      1.17
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 23,
+      "fp": 13,
+      "tn": 34,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.611,
+     "high_recall": 0.88,
+     "low_recall": 0.702,
+     "f1": 0.721,
+     "balanced_accuracy": 0.791,
+     "auc": 0.875,
+     "brier_soft": 0.1485,
+     "error_points": 8.89,
+     "brier_minus_persistence": -0.0645,
+     "brier_minus_persistence_ci95": [
+      -0.1237,
+      -0.0119
+     ],
+     "calibration_slope_ci95": [
+      0.4,
+      1.02
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 14,
+      "tn": 33,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 2,
+   "first_failing_lead": 3,
+   "lead1_passes": true
+  },
+  "D": {
+   "model": "D",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.653,
+     "accuracy_95_low_effective_n": 0.515,
+     "majority_rule": 0.653,
+     "precision": 0.5,
+     "high_recall": 1.0,
+     "low_recall": 0.468,
+     "f1": 0.667,
+     "balanced_accuracy": 0.734,
+     "auc": 0.837,
+     "brier_soft": 0.1736,
+     "error_points": 9.07,
+     "brier_minus_persistence": -0.0392,
+     "brier_minus_persistence_ci95": [
+      -0.08,
+      -0.0018
+     ],
+     "calibration_slope_ci95": [
+      0.86,
+      1.48
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.72,
+       0.76
+      ],
+      "ENNS2021": [
+       0.68,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": false,
+      "C4": true,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 25,
+      "fp": 25,
+      "tn": 22,
+      "fn": 0
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.667,
+     "accuracy_95_low_effective_n": 0.53,
+     "majority_rule": 0.653,
+     "precision": 0.511,
+     "high_recall": 0.92,
+     "low_recall": 0.532,
+     "f1": 0.657,
+     "balanced_accuracy": 0.726,
+     "auc": 0.835,
+     "brier_soft": 0.1593,
+     "error_points": 8.36,
+     "brier_minus_persistence": -0.0535,
+     "brier_minus_persistence_ci95": [
+      -0.0931,
+      -0.0155
+     ],
+     "calibration_slope_ci95": [
+      0.79,
+      1.39
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.68,
+       0.76
+      ],
+      "ENNS2021": [
+       0.72,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 22,
+      "tn": 25,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.694,
+     "accuracy_95_low_effective_n": 0.561,
+     "majority_rule": 0.653,
+     "precision": 0.541,
+     "high_recall": 0.8,
+     "low_recall": 0.638,
+     "f1": 0.645,
+     "balanced_accuracy": 0.719,
+     "auc": 0.843,
+     "brier_soft": 0.1539,
+     "error_points": 8.86,
+     "brier_minus_persistence": -0.059,
+     "brier_minus_persistence_ci95": [
+      -0.1119,
+      -0.0122
+     ],
+     "calibration_slope_ci95": [
+      0.39,
+      1.04
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.5,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 20,
+      "fp": 17,
+      "tn": 30,
+      "fn": 5
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "E171": {
+   "model": "E171",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.647,
+     "high_recall": 0.88,
+     "low_recall": 0.745,
+     "f1": 0.746,
+     "balanced_accuracy": 0.812,
+     "auc": 0.876,
+     "brier_soft": 0.1421,
+     "error_points": 8.52,
+     "brier_minus_persistence": -0.0706,
+     "brier_minus_persistence_ci95": [
+      -0.1307,
+      -0.0155
+     ],
+     "calibration_slope_ci95": [
+      0.41,
+      1.06
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.84,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 22,
+      "fp": 12,
+      "tn": 35,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.736,
+     "accuracy_95_low_effective_n": 0.608,
+     "majority_rule": 0.653,
+     "precision": 0.579,
+     "high_recall": 0.88,
+     "low_recall": 0.66,
+     "f1": 0.698,
+     "balanced_accuracy": 0.77,
+     "auc": 0.883,
+     "brier_soft": 0.1395,
+     "error_points": 8.04,
+     "brier_minus_persistence": -0.0733,
+     "brier_minus_persistence_ci95": [
+      -0.1244,
+      -0.022
+     ],
+     "calibration_slope_ci95": [
+      0.52,
+      1.14
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 16,
+      "tn": 31,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.722,
+     "accuracy_95_low_effective_n": 0.592,
+     "majority_rule": 0.653,
+     "precision": 0.568,
+     "high_recall": 0.84,
+     "low_recall": 0.66,
+     "f1": 0.677,
+     "balanced_accuracy": 0.75,
+     "auc": 0.868,
+     "brier_soft": 0.1484,
+     "error_points": 8.89,
+     "brier_minus_persistence": -0.0645,
+     "brier_minus_persistence_ci95": [
+      -0.1234,
+      -0.0124
+     ],
+     "calibration_slope_ci95": [
+      0.39,
+      1.01
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.545,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 21,
+      "fp": 16,
+      "tn": 31,
+      "fn": 4
+     }
+    }
+   ],
+   "maximum_reliable_lead": 1,
+   "first_failing_lead": 2,
+   "lead1_passes": true
+  },
+  "E166": {
+   "model": "E166",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.647,
+     "high_recall": 0.88,
+     "low_recall": 0.745,
+     "f1": 0.746,
+     "balanced_accuracy": 0.812,
+     "auc": 0.893,
+     "brier_soft": 0.145,
+     "error_points": 8.37,
+     "brier_minus_persistence": -0.0677,
+     "brier_minus_persistence_ci95": [
+      -0.125,
+      -0.0144
+     ],
+     "calibration_slope_ci95": [
+      0.48,
+      1.17
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 22,
+      "fp": 12,
+      "tn": 35,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.639,
+     "high_recall": 0.92,
+     "low_recall": 0.723,
+     "f1": 0.754,
+     "balanced_accuracy": 0.822,
+     "auc": 0.894,
+     "brier_soft": 0.1388,
+     "error_points": 7.94,
+     "brier_minus_persistence": -0.074,
+     "brier_minus_persistence_ci95": [
+      -0.1245,
+      -0.0246
+     ],
+     "calibration_slope_ci95": [
+      0.57,
+      1.2
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": true,
+     "confusion": {
+      "tp": 23,
+      "fp": 13,
+      "tn": 34,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.611,
+     "high_recall": 0.88,
+     "low_recall": 0.702,
+     "f1": 0.721,
+     "balanced_accuracy": 0.791,
+     "auc": 0.86,
+     "brier_soft": 0.1488,
+     "error_points": 8.87,
+     "brier_minus_persistence": -0.0642,
+     "brier_minus_persistence_ci95": [
+      -0.119,
+      -0.0144
+     ],
+     "calibration_slope_ci95": [
+      0.41,
+      1.02
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 14,
+      "tn": 33,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 2,
+   "first_failing_lead": 3,
+   "lead1_passes": true
+  },
+  "AUTO": {
+   "model": "AUTO",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.647,
+     "high_recall": 0.88,
+     "low_recall": 0.745,
+     "f1": 0.746,
+     "balanced_accuracy": 0.812,
+     "auc": 0.901,
+     "brier_soft": 0.1223,
+     "error_points": 7.79,
+     "brier_minus_persistence": -0.0904,
+     "brier_minus_persistence_ci95": [
+      -0.1461,
+      -0.0405
+     ],
+     "calibration_slope_ci95": [
+      0.51,
+      0.88
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 12,
+      "tn": 35,
+      "fn": 3
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.792,
+     "accuracy_95_low_effective_n": 0.674,
+     "majority_rule": 0.653,
+     "precision": 0.639,
+     "high_recall": 0.92,
+     "low_recall": 0.723,
+     "f1": 0.754,
+     "balanced_accuracy": 0.822,
+     "auc": 0.9,
+     "brier_soft": 0.1232,
+     "error_points": 7.69,
+     "brier_minus_persistence": -0.0896,
+     "brier_minus_persistence_ci95": [
+      -0.1394,
+      -0.0427
+     ],
+     "calibration_slope_ci95": [
+      0.56,
+      0.9
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.727,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 13,
+      "tn": 34,
+      "fn": 2
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.764,
+     "accuracy_95_low_effective_n": 0.641,
+     "majority_rule": 0.653,
+     "precision": 0.611,
+     "high_recall": 0.88,
+     "low_recall": 0.702,
+     "f1": 0.721,
+     "balanced_accuracy": 0.791,
+     "auc": 0.889,
+     "brier_soft": 0.1244,
+     "error_points": 8.23,
+     "brier_minus_persistence": -0.0886,
+     "brier_minus_persistence_ci95": [
+      -0.1415,
+      -0.042
+     ],
+     "calibration_slope_ci95": [
+      0.48,
+      0.83
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.8,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 22,
+      "fp": 14,
+      "tn": 33,
+      "fn": 3
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "GOV": {
+   "model": "GOV",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.736,
+     "accuracy_95_low_effective_n": 0.608,
+     "majority_rule": 0.653,
+     "precision": 0.594,
+     "high_recall": 0.76,
+     "low_recall": 0.723,
+     "f1": 0.667,
+     "balanced_accuracy": 0.742,
+     "auc": 0.857,
+     "brier_soft": 0.137,
+     "error_points": 8.0,
+     "brier_minus_persistence": -0.0758,
+     "brier_minus_persistence_ci95": [
+      -0.1335,
+      -0.0242
+     ],
+     "calibration_slope_ci95": [
+      0.52,
+      0.97
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.68,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 13,
+      "tn": 34,
+      "fn": 6
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.722,
+     "accuracy_95_low_effective_n": 0.592,
+     "majority_rule": 0.653,
+     "precision": 0.571,
+     "high_recall": 0.8,
+     "low_recall": 0.681,
+     "f1": 0.667,
+     "balanced_accuracy": 0.74,
+     "auc": 0.858,
+     "brier_soft": 0.1393,
+     "error_points": 8.17,
+     "brier_minus_persistence": -0.0735,
+     "brier_minus_persistence_ci95": [
+      -0.1301,
+      -0.0256
+     ],
+     "calibration_slope_ci95": [
+      0.49,
+      0.91
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.72,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 20,
+      "fp": 15,
+      "tn": 32,
+      "fn": 5
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.708,
+     "accuracy_95_low_effective_n": 0.576,
+     "majority_rule": 0.653,
+     "precision": 0.559,
+     "high_recall": 0.76,
+     "low_recall": 0.681,
+     "f1": 0.644,
+     "balanced_accuracy": 0.72,
+     "auc": 0.831,
+     "brier_soft": 0.1477,
+     "error_points": 8.46,
+     "brier_minus_persistence": -0.0653,
+     "brier_minus_persistence_ci95": [
+      -0.1282,
+      -0.016
+     ],
+     "calibration_slope_ci95": [
+      0.45,
+      0.87
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.68,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 15,
+      "tn": 32,
+      "fn": 6
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "NEWS": {
+   "model": "NEWS",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.667,
+     "accuracy_95_low_effective_n": 0.53,
+     "majority_rule": 0.653,
+     "precision": 0.514,
+     "high_recall": 0.76,
+     "low_recall": 0.617,
+     "f1": 0.613,
+     "balanced_accuracy": 0.689,
+     "auc": 0.831,
+     "brier_soft": 0.1491,
+     "error_points": 17.88,
+     "brier_minus_persistence": -0.0637,
+     "brier_minus_persistence_ci95": [
+      -0.1201,
+      -0.0146
+     ],
+     "calibration_slope_ci95": [
+      0.13,
+      0.26
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 18,
+      "tn": 29,
+      "fn": 6
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.681,
+     "accuracy_95_low_effective_n": 0.545,
+     "majority_rule": 0.653,
+     "precision": 0.529,
+     "high_recall": 0.72,
+     "low_recall": 0.66,
+     "f1": 0.61,
+     "balanced_accuracy": 0.69,
+     "auc": 0.82,
+     "brier_soft": 0.1476,
+     "error_points": 18.58,
+     "brier_minus_persistence": -0.0652,
+     "brier_minus_persistence_ci95": [
+      -0.1179,
+      -0.0178
+     ],
+     "calibration_slope_ci95": [
+      0.11,
+      0.23
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 18,
+      "fp": 16,
+      "tn": 31,
+      "fn": 7
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.667,
+     "accuracy_95_low_effective_n": 0.53,
+     "majority_rule": 0.653,
+     "precision": 0.514,
+     "high_recall": 0.76,
+     "low_recall": 0.617,
+     "f1": 0.613,
+     "balanced_accuracy": 0.689,
+     "auc": 0.834,
+     "brier_soft": 0.1559,
+     "error_points": 17.9,
+     "brier_minus_persistence": -0.0571,
+     "brier_minus_persistence_ci95": [
+      -0.1116,
+      -0.0161
+     ],
+     "calibration_slope_ci95": [
+      0.13,
+      0.27
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": true,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 18,
+      "tn": 29,
+      "fn": 6
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "LR": {
+   "model": "LR",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.611,
+     "accuracy_95_low_effective_n": 0.47,
+     "majority_rule": 0.653,
+     "precision": 0.467,
+     "high_recall": 0.84,
+     "low_recall": 0.489,
+     "f1": 0.6,
+     "balanced_accuracy": 0.665,
+     "auc": 0.803,
+     "brier_soft": 0.3072,
+     "error_points": 41.83,
+     "brier_minus_persistence": 0.0944,
+     "brier_minus_persistence_ci95": [
+      -0.0099,
+      0.1835
+     ],
+     "calibration_slope_ci95": [
+      0.02,
+      0.08
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.52,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 21,
+      "fp": 24,
+      "tn": 23,
+      "fn": 4
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.653,
+     "accuracy_95_low_effective_n": 0.515,
+     "majority_rule": 0.653,
+     "precision": 0.5,
+     "high_recall": 0.8,
+     "low_recall": 0.574,
+     "f1": 0.615,
+     "balanced_accuracy": 0.687,
+     "auc": 0.697,
+     "brier_soft": 0.2716,
+     "error_points": 35.89,
+     "brier_minus_persistence": 0.0588,
+     "brier_minus_persistence_ci95": [
+      -0.0513,
+      0.1605
+     ],
+     "calibration_slope_ci95": [
+      -0.01,
+      0.09
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.636,
+       0.591
+      ],
+      "ENNS2019": [
+       0.48,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 20,
+      "fp": 20,
+      "tn": 27,
+      "fn": 5
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.542,
+     "accuracy_95_low_effective_n": 0.397,
+     "majority_rule": 0.653,
+     "precision": 0.405,
+     "high_recall": 0.68,
+     "low_recall": 0.468,
+     "f1": 0.507,
+     "balanced_accuracy": 0.574,
+     "auc": 0.597,
+     "brier_soft": 0.3574,
+     "error_points": 37.08,
+     "brier_minus_persistence": 0.1444,
+     "brier_minus_persistence_ci95": [
+      0.0384,
+      0.2376
+     ],
+     "calibration_slope_ci95": [
+      -0.05,
+      0.04
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.409,
+       0.591
+      ],
+      "ENNS2019": [
+       0.32,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 17,
+      "fp": 25,
+      "tn": 22,
+      "fn": 8
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "LR_GOV": {
+   "model": "LR_GOV",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.597,
+     "accuracy_95_low_effective_n": 0.455,
+     "majority_rule": 0.653,
+     "precision": 0.45,
+     "high_recall": 0.72,
+     "low_recall": 0.532,
+     "f1": 0.554,
+     "balanced_accuracy": 0.626,
+     "auc": 0.762,
+     "brier_soft": 0.2342,
+     "error_points": 30.84,
+     "brier_minus_persistence": 0.0214,
+     "brier_minus_persistence_ci95": [
+      -0.0559,
+      0.082
+     ],
+     "calibration_slope_ci95": [
+      0.05,
+      0.16
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.409,
+       0.591
+      ],
+      "ENNS2019": [
+       0.56,
+       0.76
+      ],
+      "ENNS2021": [
+       0.8,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 18,
+      "fp": 22,
+      "tn": 25,
+      "fn": 7
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.597,
+     "accuracy_95_low_effective_n": 0.455,
+     "majority_rule": 0.653,
+     "precision": 0.45,
+     "high_recall": 0.72,
+     "low_recall": 0.532,
+     "f1": 0.554,
+     "balanced_accuracy": 0.626,
+     "auc": 0.741,
+     "brier_soft": 0.229,
+     "error_points": 27.18,
+     "brier_minus_persistence": 0.0162,
+     "brier_minus_persistence_ci95": [
+      -0.0583,
+      0.0779
+     ],
+     "calibration_slope_ci95": [
+      0.06,
+      0.21
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.56,
+       0.76
+      ],
+      "ENNS2021": [
+       0.76,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 18,
+      "fp": 22,
+      "tn": 25,
+      "fn": 7
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.653,
+     "accuracy_95_low_effective_n": 0.515,
+     "majority_rule": 0.653,
+     "precision": 0.5,
+     "high_recall": 0.76,
+     "low_recall": 0.596,
+     "f1": 0.603,
+     "balanced_accuracy": 0.678,
+     "auc": 0.762,
+     "brier_soft": 0.2095,
+     "error_points": 27.92,
+     "brier_minus_persistence": -0.0035,
+     "brier_minus_persistence_ci95": [
+      -0.0774,
+      0.0567
+     ],
+     "calibration_slope_ci95": [
+      0.05,
+      0.19
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.88,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 19,
+      "tn": 28,
+      "fn": 6
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "LR_NEWS": {
+   "model": "LR_NEWS",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.639,
+     "accuracy_95_low_effective_n": 0.499,
+     "majority_rule": 0.653,
+     "precision": 0.487,
+     "high_recall": 0.76,
+     "low_recall": 0.574,
+     "f1": 0.594,
+     "balanced_accuracy": 0.667,
+     "auc": 0.703,
+     "brier_soft": 0.2185,
+     "error_points": 17.92,
+     "brier_minus_persistence": 0.0058,
+     "brier_minus_persistence_ci95": [
+      -0.0631,
+      0.0857
+     ],
+     "calibration_slope_ci95": [
+      0.06,
+      0.34
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.682,
+       0.591
+      ],
+      "ENNS2019": [
+       0.68,
+       0.76
+      ],
+      "ENNS2021": [
+       0.56,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 19,
+      "fp": 20,
+      "tn": 27,
+      "fn": 6
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.472,
+     "accuracy_95_low_effective_n": 0.327,
+     "majority_rule": 0.653,
+     "precision": 0.314,
+     "high_recall": 0.44,
+     "low_recall": 0.489,
+     "f1": 0.367,
+     "balanced_accuracy": 0.465,
+     "auc": 0.497,
+     "brier_soft": 0.3305,
+     "error_points": 29.02,
+     "brier_minus_persistence": 0.1177,
+     "brier_minus_persistence_ci95": [
+      0.0139,
+      0.2228
+     ],
+     "calibration_slope_ci95": [
+      -0.07,
+      0.05
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.409,
+       0.591
+      ],
+      "ENNS2019": [
+       0.24,
+       0.76
+      ],
+      "ENNS2021": [
+       0.76,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 11,
+      "fp": 24,
+      "tn": 23,
+      "fn": 14
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.528,
+     "accuracy_95_low_effective_n": 0.383,
+     "majority_rule": 0.653,
+     "precision": 0.371,
+     "high_recall": 0.52,
+     "low_recall": 0.532,
+     "f1": 0.433,
+     "balanced_accuracy": 0.526,
+     "auc": 0.509,
+     "brier_soft": 0.2971,
+     "error_points": 29.13,
+     "brier_minus_persistence": 0.0842,
+     "brier_minus_persistence_ci95": [
+      -0.0106,
+      0.1761
+     ],
+     "calibration_slope_ci95": [
+      -0.12,
+      0.06
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.28,
+       0.76
+      ],
+      "ENNS2021": [
+       0.84,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": true,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 13,
+      "fp": 22,
+      "tn": 25,
+      "fn": 12
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "PSA": {
+   "model": "PSA",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.556,
+     "accuracy_95_low_effective_n": 0.411,
+     "majority_rule": 0.653,
+     "precision": 0.436,
+     "high_recall": 0.96,
+     "low_recall": 0.34,
+     "f1": 0.6,
+     "balanced_accuracy": 0.65,
+     "auc": 0.762,
+     "brier_soft": 0.2284,
+     "error_points": 21.02,
+     "brier_minus_persistence": 0.0157,
+     "brier_minus_persistence_ci95": [
+      -0.0322,
+      0.0601
+     ],
+     "calibration_slope_ci95": [
+      0.18,
+      0.39
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.6,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 24,
+      "fp": 31,
+      "tn": 16,
+      "fn": 1
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.556,
+     "accuracy_95_low_effective_n": 0.411,
+     "majority_rule": 0.653,
+     "precision": 0.436,
+     "high_recall": 0.96,
+     "low_recall": 0.34,
+     "f1": 0.6,
+     "balanced_accuracy": 0.65,
+     "auc": 0.762,
+     "brier_soft": 0.2284,
+     "error_points": 21.02,
+     "brier_minus_persistence": 0.0157,
+     "brier_minus_persistence_ci95": [
+      -0.0321,
+      0.0592
+     ],
+     "calibration_slope_ci95": [
+      0.18,
+      0.39
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.6,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 24,
+      "fp": 31,
+      "tn": 16,
+      "fn": 1
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.514,
+     "accuracy_95_low_effective_n": 0.369,
+     "majority_rule": 0.653,
+     "precision": 0.411,
+     "high_recall": 0.92,
+     "low_recall": 0.298,
+     "f1": 0.568,
+     "balanced_accuracy": 0.609,
+     "auc": 0.758,
+     "brier_soft": 0.2366,
+     "error_points": 21.38,
+     "brier_minus_persistence": 0.0237,
+     "brier_minus_persistence_ci95": [
+      -0.0209,
+      0.0662
+     ],
+     "calibration_slope_ci95": [
+      0.18,
+      0.41
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.455,
+       0.591
+      ],
+      "ENNS2019": [
+       0.6,
+       0.76
+      ],
+      "ENNS2021": [
+       0.48,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": false,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 23,
+      "fp": 33,
+      "tn": 14,
+      "fn": 2
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  },
+  "PERS": {
+   "model": "PERS",
+   "leads": [
+    {
+     "lead": 1,
+     "rows": 72,
+     "accuracy": 0.625,
+     "accuracy_95_low_effective_n": 0.484,
+     "majority_rule": 0.653,
+     "precision": 0.48,
+     "high_recall": 0.96,
+     "low_recall": 0.447,
+     "f1": 0.64,
+     "balanced_accuracy": 0.703,
+     "auc": 0.827,
+     "brier_soft": 0.2128,
+     "error_points": 11.16,
+     "brier_minus_persistence": 0.0,
+     "brier_minus_persistence_ci95": [
+      0.0,
+      0.0
+     ],
+     "calibration_slope_ci95": [
+      0.51,
+      0.86
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.52,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 24,
+      "fp": 26,
+      "tn": 21,
+      "fn": 1
+     }
+    },
+    {
+     "lead": 2,
+     "rows": 72,
+     "accuracy": 0.625,
+     "accuracy_95_low_effective_n": 0.484,
+     "majority_rule": 0.653,
+     "precision": 0.48,
+     "high_recall": 0.96,
+     "low_recall": 0.447,
+     "f1": 0.64,
+     "balanced_accuracy": 0.703,
+     "auc": 0.827,
+     "brier_soft": 0.2128,
+     "error_points": 11.16,
+     "brier_minus_persistence": 0.0,
+     "brier_minus_persistence_ci95": [
+      0.0,
+      0.0
+     ],
+     "calibration_slope_ci95": [
+      0.52,
+      0.86
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.52,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 24,
+      "fp": 26,
+      "tn": 21,
+      "fn": 1
+     }
+    },
+    {
+     "lead": 3,
+     "rows": 72,
+     "accuracy": 0.625,
+     "accuracy_95_low_effective_n": 0.484,
+     "majority_rule": 0.653,
+     "precision": 0.48,
+     "high_recall": 0.96,
+     "low_recall": 0.447,
+     "f1": 0.64,
+     "balanced_accuracy": 0.703,
+     "auc": 0.827,
+     "brier_soft": 0.213,
+     "error_points": 11.16,
+     "brier_minus_persistence": 0.0,
+     "brier_minus_persistence_ci95": [
+      0.0,
+      0.0
+     ],
+     "calibration_slope_ci95": [
+      0.52,
+      0.86
+     ],
+     "by_round_model_vs_persistence": {
+      "ENNS2018": [
+       0.591,
+       0.591
+      ],
+      "ENNS2019": [
+       0.76,
+       0.76
+      ],
+      "ENNS2021": [
+       0.52,
+       0.52
+      ]
+     },
+     "criteria": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "C4": false,
+      "C5": true,
+      "C6": true
+     },
+     "reliable": false,
+     "confusion": {
+      "tp": 24,
+      "fp": 26,
+      "tn": 21,
+      "fn": 1
+     }
+    }
+   ],
+   "maximum_reliable_lead": 0,
+   "first_failing_lead": 1,
+   "lead1_passes": false
+  }
+ },
+ "extra": {
+  "E168": {
+   "1": {
+    "pr_auc": 0.854,
+    "slope": 1.052,
+    "slope_ci95": [
+     0.64,
+     1.334
+    ],
+    "intercept": -0.079,
+    "intercept_ci95": [
+     -0.243,
+     0.04
+    ]
+   },
+   "2": {
+    "pr_auc": 0.842,
+    "slope": 0.993,
+    "slope_ci95": [
+     0.601,
+     1.288
+    ],
+    "intercept": -0.09,
+    "intercept_ci95": [
+     -0.253,
+     0.031
+    ]
+   },
+   "3": {
+    "pr_auc": 0.76,
+    "slope": 0.848,
+    "slope_ci95": [
+     0.459,
+     1.147
+    ],
+    "intercept": -0.073,
+    "intercept_ci95": [
+     -0.26,
+     0.077
+    ]
+   }
+  },
+  "E169": {
+   "1": {
+    "pr_auc": 0.862,
+    "slope": 1.052,
+    "slope_ci95": [
+     0.639,
+     1.335
+    ],
+    "intercept": -0.078,
+    "intercept_ci95": [
+     -0.244,
+     0.041
+    ]
+   },
+   "2": {
+    "pr_auc": 0.844,
+    "slope": 0.993,
+    "slope_ci95": [
+     0.607,
+     1.283
+    ],
+    "intercept": -0.092,
+    "intercept_ci95": [
+     -0.254,
+     0.026
+    ]
+   },
+   "3": {
+    "pr_auc": 0.76,
+    "slope": 0.848,
+    "slope_ci95": [
+     0.459,
+     1.147
+    ],
+    "intercept": -0.073,
+    "intercept_ci95": [
+     -0.26,
+     0.077
+    ]
+   }
+  },
+  "E168TA": {
+   "1": {
+    "pr_auc": 0.853,
+    "slope": 1.031,
+    "slope_ci95": [
+     0.624,
+     1.32
+    ],
+    "intercept": -0.078,
+    "intercept_ci95": [
+     -0.245,
+     0.044
+    ]
+   },
+   "2": {
+    "pr_auc": 0.845,
+    "slope": 0.94,
+    "slope_ci95": [
+     0.556,
+     1.236
+    ],
+    "intercept": -0.081,
+    "intercept_ci95": [
+     -0.251,
+     0.045
+    ]
+   },
+   "3": {
+    "pr_auc": 0.748,
+    "slope": 0.848,
+    "slope_ci95": [
+     0.459,
+     1.147
+    ],
+    "intercept": -0.073,
+    "intercept_ci95": [
+     -0.26,
+     0.077
+    ]
+   }
+  },
+  "A": {
+   "1": {
+    "pr_auc": 0.809,
+    "slope": 1.043,
+    "slope_ci95": [
+     0.655,
+     1.321
+    ],
+    "intercept": -0.1,
+    "intercept_ci95": [
+     -0.256,
+     0.015
+    ]
+   },
+   "2": {
+    "pr_auc": 0.817,
+    "slope": 0.951,
+    "slope_ci95": [
+     0.586,
+     1.228
+    ],
+    "intercept": -0.105,
+    "intercept_ci95": [
+     -0.261,
+     0.007
+    ]
+   },
+   "3": {
+    "pr_auc": 0.757,
+    "slope": 0.749,
+    "slope_ci95": [
+     0.391,
+     1.057
+    ],
+    "intercept": -0.059,
+    "intercept_ci95": [
+     -0.255,
+     0.096
+    ]
+   }
+  },
+  "B": {
+   "1": {
+    "pr_auc": 0.739,
+    "slope": 1.055,
+    "slope_ci95": [
+     0.671,
+     1.293
+    ],
+    "intercept": -0.112,
+    "intercept_ci95": [
+     -0.262,
+     0.001
+    ]
+   },
+   "2": {
+    "pr_auc": 0.765,
+    "slope": 0.941,
+    "slope_ci95": [
+     0.584,
+     1.194
+    ],
+    "intercept": -0.112,
+    "intercept_ci95": [
+     -0.265,
+     -0.0
+    ]
+   },
+   "3": {
+    "pr_auc": 0.756,
+    "slope": 0.698,
+    "slope_ci95": [
+     0.349,
+     0.988
+    ],
+    "intercept": -0.059,
+    "intercept_ci95": [
+     -0.258,
+     0.102
+    ]
+   }
+  },
+  "C": {
+   "1": {
+    "pr_auc": 0.852,
+    "slope": 0.762,
+    "slope_ci95": [
+     0.4,
+     1.062
+    ],
+    "intercept": -0.048,
+    "intercept_ci95": [
+     -0.244,
+     0.098
+    ]
+   },
+   "2": {
+    "pr_auc": 0.852,
+    "slope": 0.886,
+    "slope_ci95": [
+     0.521,
+     1.163
+    ],
+    "intercept": -0.071,
+    "intercept_ci95": [
+     -0.241,
+     0.052
+    ]
+   },
+   "3": {
+    "pr_auc": 0.84,
+    "slope": 0.724,
+    "slope_ci95": [
+     0.381,
+     1.031
+    ],
+    "intercept": -0.049,
+    "intercept_ci95": [
+     -0.251,
+     0.11
+    ]
+   }
+  },
+  "D": {
+   "1": {
+    "pr_auc": 0.663,
+    "slope": 1.265,
+    "slope_ci95": [
+     0.873,
+     1.478
+    ],
+    "intercept": -0.231,
+    "intercept_ci95": [
+     -0.34,
+     -0.095
+    ]
+   },
+   "2": {
+    "pr_auc": 0.709,
+    "slope": 1.152,
+    "slope_ci95": [
+     0.804,
+     1.377
+    ],
+    "intercept": -0.187,
+    "intercept_ci95": [
+     -0.308,
+     -0.077
+    ]
+   },
+   "3": {
+    "pr_auc": 0.765,
+    "slope": 0.731,
+    "slope_ci95": [
+     0.372,
+     1.054
+    ],
+    "intercept": -0.07,
+    "intercept_ci95": [
+     -0.268,
+     0.087
+    ]
+   }
+  },
+  "E171": {
+   "1": {
+    "pr_auc": 0.837,
+    "slope": 0.756,
+    "slope_ci95": [
+     0.393,
+     1.056
+    ],
+    "intercept": -0.047,
+    "intercept_ci95": [
+     -0.247,
+     0.103
+    ]
+   },
+   "2": {
+    "pr_auc": 0.846,
+    "slope": 0.87,
+    "slope_ci95": [
+     0.504,
+     1.144
+    ],
+    "intercept": -0.076,
+    "intercept_ci95": [
+     -0.25,
+     0.052
+    ]
+   },
+   "3": {
+    "pr_auc": 0.83,
+    "slope": 0.719,
+    "slope_ci95": [
+     0.37,
+     1.026
+    ],
+    "intercept": -0.051,
+    "intercept_ci95": [
+     -0.253,
+     0.11
+    ]
+   }
+  },
+  "E166": {
+   "1": {
+    "pr_auc": 0.857,
+    "slope": 0.854,
+    "slope_ci95": [
+     0.459,
+     1.176
+    ],
+    "intercept": -0.055,
+    "intercept_ci95": [
+     -0.246,
+     0.086
+    ]
+   },
+   "2": {
+    "pr_auc": 0.856,
+    "slope": 0.921,
+    "slope_ci95": [
+     0.552,
+     1.195
+    ],
+    "intercept": -0.076,
+    "intercept_ci95": [
+     -0.241,
+     0.042
+    ]
+   },
+   "3": {
+    "pr_auc": 0.791,
+    "slope": 0.743,
+    "slope_ci95": [
+     0.393,
+     1.03
+    ],
+    "intercept": -0.056,
+    "intercept_ci95": [
+     -0.252,
+     0.099
+    ]
+   }
+  },
+  "AUTO": {
+   "1": {
+    "pr_auc": 0.861,
+    "slope": 0.734,
+    "slope_ci95": [
+     0.513,
+     0.868
+    ],
+    "intercept": -0.129,
+    "intercept_ci95": [
+     -0.248,
+     -0.025
+    ]
+   },
+   "2": {
+    "pr_auc": 0.856,
+    "slope": 0.768,
+    "slope_ci95": [
+     0.554,
+     0.9
+    ],
+    "intercept": -0.147,
+    "intercept_ci95": [
+     -0.258,
+     -0.046
+    ]
+   },
+   "3": {
+    "pr_auc": 0.846,
+    "slope": 0.695,
+    "slope_ci95": [
+     0.474,
+     0.832
+    ],
+    "intercept": -0.121,
+    "intercept_ci95": [
+     -0.244,
+     -0.012
+    ]
+   }
+  },
+  "GOV": {
+   "1": {
+    "pr_auc": 0.803,
+    "slope": 0.781,
+    "slope_ci95": [
+     0.508,
+     0.968
+    ],
+    "intercept": -0.131,
+    "intercept_ci95": [
+     -0.278,
+     -0.009
+    ]
+   },
+   "2": {
+    "pr_auc": 0.794,
+    "slope": 0.73,
+    "slope_ci95": [
+     0.49,
+     0.911
+    ],
+    "intercept": -0.14,
+    "intercept_ci95": [
+     -0.286,
+     -0.015
+    ]
+   },
+   "3": {
+    "pr_auc": 0.724,
+    "slope": 0.699,
+    "slope_ci95": [
+     0.465,
+     0.86
+    ],
+    "intercept": -0.117,
+    "intercept_ci95": [
+     -0.268,
+     0.016
+    ]
+   }
+  },
+  "NEWS": {
+   "1": {
+    "pr_auc": 0.761,
+    "slope": 0.2,
+    "slope_ci95": [
+     0.126,
+     0.257
+    ],
+    "intercept": -0.139,
+    "intercept_ci95": [
+     -0.291,
+     -0.009
+    ]
+   },
+   "2": {
+    "pr_auc": 0.754,
+    "slope": 0.171,
+    "slope_ci95": [
+     0.105,
+     0.229
+    ],
+    "intercept": -0.102,
+    "intercept_ci95": [
+     -0.274,
+     0.04
+    ]
+   },
+   "3": {
+    "pr_auc": 0.744,
+    "slope": 0.2,
+    "slope_ci95": [
+     0.128,
+     0.267
+    ],
+    "intercept": -0.156,
+    "intercept_ci95": [
+     -0.305,
+     -0.018
+    ]
+   }
+  },
+  "LR": {
+   "1": {
+    "pr_auc": 0.688,
+    "slope": 0.05,
+    "slope_ci95": [
+     0.019,
+     0.076
+    ],
+    "intercept": -0.181,
+    "intercept_ci95": [
+     -0.369,
+     0.012
+    ]
+   },
+   "2": {
+    "pr_auc": 0.475,
+    "slope": 0.03,
+    "slope_ci95": [
+     -0.005,
+     0.082
+    ],
+    "intercept": -0.173,
+    "intercept_ci95": [
+     -0.38,
+     0.039
+    ]
+   },
+   "3": {
+    "pr_auc": 0.444,
+    "slope": -0.002,
+    "slope_ci95": [
+     -0.047,
+     0.043
+    ],
+    "intercept": -0.162,
+    "intercept_ci95": [
+     -0.387,
+     0.077
+    ]
+   }
+  },
+  "LR_GOV": {
+   "1": {
+    "pr_auc": 0.613,
+    "slope": 0.101,
+    "slope_ci95": [
+     0.046,
+     0.153
+    ],
+    "intercept": -0.153,
+    "intercept_ci95": [
+     -0.351,
+     0.043
+    ]
+   },
+   "2": {
+    "pr_auc": 0.61,
+    "slope": 0.13,
+    "slope_ci95": [
+     0.056,
+     0.204
+    ],
+    "intercept": -0.181,
+    "intercept_ci95": [
+     -0.372,
+     0.015
+    ]
+   },
+   "3": {
+    "pr_auc": 0.662,
+    "slope": 0.124,
+    "slope_ci95": [
+     0.051,
+     0.188
+    ],
+    "intercept": -0.129,
+    "intercept_ci95": [
+     -0.335,
+     0.062
+    ]
+   }
+  },
+  "LR_NEWS": {
+   "1": {
+    "pr_auc": 0.611,
+    "slope": 0.202,
+    "slope_ci95": [
+     0.048,
+     0.342
+    ],
+    "intercept": -0.238,
+    "intercept_ci95": [
+     -0.43,
+     -0.011
+    ]
+   },
+   "2": {
+    "pr_auc": 0.353,
+    "slope": -0.025,
+    "slope_ci95": [
+     -0.068,
+     0.047
+    ],
+    "intercept": -0.168,
+    "intercept_ci95": [
+     -0.381,
+     0.076
+    ]
+   },
+   "3": {
+    "pr_auc": 0.397,
+    "slope": -0.03,
+    "slope_ci95": [
+     -0.12,
+     0.055
+    ],
+    "intercept": -0.167,
+    "intercept_ci95": [
+     -0.378,
+     0.076
+    ]
+   }
+  },
+  "PSA": {
+   "1": {
+    "pr_auc": 0.675,
+    "slope": 0.298,
+    "slope_ci95": [
+     0.186,
+     0.388
+    ],
+    "intercept": -0.363,
+    "intercept_ci95": [
+     -0.509,
+     -0.182
+    ]
+   },
+   "2": {
+    "pr_auc": 0.675,
+    "slope": 0.298,
+    "slope_ci95": [
+     0.186,
+     0.388
+    ],
+    "intercept": -0.363,
+    "intercept_ci95": [
+     -0.509,
+     -0.182
+    ]
+   },
+   "3": {
+    "pr_auc": 0.675,
+    "slope": 0.307,
+    "slope_ci95": [
+     0.182,
+     0.408
+    ],
+    "intercept": -0.382,
+    "intercept_ci95": [
+     -0.533,
+     -0.183
+    ]
+   }
+  },
+  "PERS": {
+   "1": {
+    "pr_auc": 0.705,
+    "slope": 0.71,
+    "slope_ci95": [
+     0.522,
+     0.856
+    ],
+    "intercept": -0.331,
+    "intercept_ci95": [
+     -0.455,
+     -0.175
+    ]
+   },
+   "2": {
+    "pr_auc": 0.705,
+    "slope": 0.71,
+    "slope_ci95": [
+     0.522,
+     0.856
+    ],
+    "intercept": -0.331,
+    "intercept_ci95": [
+     -0.455,
+     -0.175
+    ]
+   },
+   "3": {
+    "pr_auc": 0.705,
+    "slope": 0.71,
+    "slope_ci95": [
+     0.522,
+     0.856
+    ],
+    "intercept": -0.331,
+    "intercept_ci95": [
+     -0.455,
+     -0.175
+    ]
+   }
+  }
+ },
+ "by_round": {
+  "E168": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   }
+  },
+  "E169": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   }
+  },
+  "E168TA": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   }
+  },
+  "A": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 18,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 18,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "B": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 18,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 18,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "C": {
+   "1": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "D": {
+   "1": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 18,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 17,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 17,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 18,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 11,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "E171": {
+   "1": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 21,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 12,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "E166": {
+   "1": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "AUTO": {
+   "1": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 16,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 20,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "GOV": {
+   "1": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 17,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 18,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 17,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "NEWS": {
+   "1": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   }
+  },
+  "LR": {
+   "1": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 13,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 14,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 12,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 9,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 8,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   }
+  },
+  "LR_GOV": {
+   "1": {
+    "ENNS2018": {
+     "correct": 9,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 14,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 20,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 14,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 19,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 22,
+     "rows": 25
+    }
+   }
+  },
+  "LR_NEWS": {
+   "1": {
+    "ENNS2018": {
+     "correct": 15,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 17,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 14,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 9,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 6,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 19,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 7,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 21,
+     "rows": 25
+    }
+   }
+  },
+  "PSA": {
+   "1": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 15,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 15,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 10,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 15,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 12,
+     "rows": 25
+    }
+   }
+  },
+  "PERS": {
+   "1": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 13,
+     "rows": 25
+    }
+   },
+   "2": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 13,
+     "rows": 25
+    }
+   },
+   "3": {
+    "ENNS2018": {
+     "correct": 13,
+     "rows": 22
+    },
+    "ENNS2019": {
+     "correct": 19,
+     "rows": 25
+    },
+    "ENNS2021": {
+     "correct": 13,
+     "rows": 25
+    }
+   }
+  }
+ },
+ "by_province": {
+  "E168": [
+   {
+    "province": "Abra",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Agusan del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aklan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Albay",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Antique",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Apayao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aurora",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Basilan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bataan",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Benguet",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Biliran",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bohol",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bukidnon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bulacan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cagayan Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Camarines Norte",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camiguin",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Capiz",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Catanduanes",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Compostela Valley",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Eastern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Guimaras",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ifugao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Iloilo Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Isabela Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Kalinga",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "La Union",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Leyte",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Maguindanao",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Marinduque",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Masbate",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Occidental",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Oriental",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Mountain Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Negros Occidental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Negros Oriental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "North Cotabato",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Northern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Ecija",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Vizcaya",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Occidental Mindoro",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Oriental Mindoro",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Palawan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Pangasinan",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Quirino",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Romblon",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Sarangani",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Siquijor",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sorsogon",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "South Cotabato",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Southern Leyte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sultan Kudarat",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao Del Norte",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tarlac",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tawi-Tawi",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zambales",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Zamboanga Sibugay",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga del Norte",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   }
+  ],
+  "E171": [
+   {
+    "province": "Abra",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan Del Sur",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aklan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Albay",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Antique",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Apayao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aurora",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Basilan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bataan",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Benguet",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Biliran",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bohol",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bukidnon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bulacan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cagayan Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Camarines Norte",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camiguin",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Capiz",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Catanduanes",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Compostela Valley",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Eastern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Guimaras",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ifugao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Iloilo Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Isabela Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Kalinga",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "La Union",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Leyte",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Maguindanao",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Marinduque",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Masbate",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Occidental",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Oriental",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Mountain Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Negros Occidental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Negros Oriental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "North Cotabato",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Northern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Ecija",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Vizcaya",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Occidental Mindoro",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Oriental Mindoro",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Palawan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Pangasinan",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Quirino",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Romblon",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Sarangani",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Siquijor",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sorsogon",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "South Cotabato",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Southern Leyte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sultan Kudarat",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao Del Norte",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tarlac",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tawi-Tawi",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zambales",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Zamboanga Sibugay",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga del Norte",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   }
+  ],
+  "A": [
+   {
+    "province": "Abra",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aklan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Albay",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Antique",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Apayao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aurora",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Basilan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bataan",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Benguet",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Biliran",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bohol",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bukidnon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bulacan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cagayan Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Camarines Norte",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camiguin",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Capiz",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Catanduanes",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Compostela Valley",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Eastern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Guimaras",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ifugao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Iloilo Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Isabela Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Kalinga",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "La Union",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Leyte",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Maguindanao",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Marinduque",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Masbate",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Occidental",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Oriental",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Mountain Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Negros Occidental",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Negros Oriental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "North Cotabato",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Northern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Ecija",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Vizcaya",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Occidental Mindoro",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Oriental Mindoro",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Palawan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Pangasinan",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Quirino",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Romblon",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Sarangani",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Siquijor",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sorsogon",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "South Cotabato",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Southern Leyte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sultan Kudarat",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao Del Norte",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tarlac",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tawi-Tawi",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zambales",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Zamboanga Sibugay",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga del Norte",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   }
+  ],
+  "C": [
+   {
+    "province": "Abra",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan Del Sur",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aklan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Albay",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Antique",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Apayao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aurora",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Basilan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bataan",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Benguet",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Biliran",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bohol",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bukidnon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bulacan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cagayan Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Camarines Norte",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camiguin",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Capiz",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Catanduanes",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Compostela Valley",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao del Norte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Eastern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Guimaras",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ifugao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Iloilo Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Isabela Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Kalinga",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "La Union",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Leyte",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Maguindanao",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Marinduque",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Masbate",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Occidental",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Oriental",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Mountain Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Negros Occidental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Negros Oriental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "North Cotabato",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Northern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Ecija",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Vizcaya",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Occidental Mindoro",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Oriental Mindoro",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Palawan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Pangasinan",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Quirino",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Romblon",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Sarangani",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Siquijor",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sorsogon",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "South Cotabato",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Southern Leyte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sultan Kudarat",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao Del Norte",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tarlac",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tawi-Tawi",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zambales",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga Sibugay",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga del Norte",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   }
+  ],
+  "D": [
+   {
+    "province": "Abra",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan Del Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Agusan del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aklan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Albay",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Antique",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Apayao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Aurora",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Basilan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bataan",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Benguet",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Biliran",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bohol",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bukidnon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Bulacan",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cagayan Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camarines Norte",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Camiguin",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Capiz",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Catanduanes",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Compostela Valley",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao Del Sur",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Davao del Norte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Eastern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Guimaras",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Ifugao",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Norte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Ilocos Sur",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Iloilo Province",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Isabela Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Kalinga",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "La Union",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Norte",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Lanao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Leyte",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Maguindanao",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Marinduque",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Masbate",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Occidental",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Misamis Oriental",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Mountain Province",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Negros Occidental",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Negros Oriental",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "North Cotabato",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Northern Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Ecija",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Nueva Vizcaya",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Occidental Mindoro",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 0.0
+   },
+   {
+    "province": "Oriental Mindoro",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Palawan",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Pangasinan",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Quirino",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Romblon",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Samar",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Sarangani",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Siquijor",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sorsogon",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "South Cotabato",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Southern Leyte",
+    "survey": "ENNS2019",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Sultan Kudarat",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao Del Norte",
+    "survey": "ENNS2021",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   {
+    "province": "Surigao del Sur",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tarlac",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Tawi-Tawi",
+    "survey": "ENNS2021",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zambales",
+    "survey": "ENNS2018",
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   {
+    "province": "Zamboanga Sibugay",
+    "survey": "ENNS2019",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   },
+   {
+    "province": "Zamboanga del Norte",
+    "survey": "ENNS2018",
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0
+   }
+  ]
+ },
+ "brier_minus_E168": {
+  "E169": {
+   "1": {
+    "diff": 0.0005,
+    "ci95": [
+     0.0001,
+     0.001
+    ]
+   },
+   "2": {
+    "diff": -0.001,
+    "ci95": [
+     -0.0018,
+     -0.0002
+    ]
+   },
+   "3": {
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "E168TA": {
+   "1": {
+    "diff": -0.0005,
+    "ci95": [
+     -0.0012,
+     0.0004
+    ]
+   },
+   "2": {
+    "diff": -0.0002,
+    "ci95": [
+     -0.002,
+     0.0019
+    ]
+   },
+   "3": {
+    "diff": 0.0009,
+    "ci95": [
+     -0.0019,
+     0.0042
+    ]
+   }
+  },
+  "A": {
+   "1": {
+    "diff": 0.0061,
+    "ci95": [
+     -0.0005,
+     0.0167
+    ]
+   },
+   "2": {
+    "diff": 0.0069,
+    "ci95": [
+     0.0001,
+     0.0166
+    ]
+   },
+   "3": {
+    "diff": 0.0016,
+    "ci95": [
+     -0.0058,
+     0.0092
+    ]
+   }
+  },
+  "B": {
+   "1": {
+    "diff": 0.0108,
+    "ci95": [
+     -0.0001,
+     0.0277
+    ]
+   },
+   "2": {
+    "diff": 0.0118,
+    "ci95": [
+     0.001,
+     0.0264
+    ]
+   },
+   "3": {
+    "diff": 0.0039,
+    "ci95": [
+     -0.0058,
+     0.0134
+    ]
+   }
+  },
+  "C": {
+   "1": {
+    "diff": 0.0024,
+    "ci95": [
+     -0.0089,
+     0.015
+    ]
+   },
+   "2": {
+    "diff": 0.0019,
+    "ci95": [
+     -0.0056,
+     0.0107
+    ]
+   },
+   "3": {
+    "diff": -0.0011,
+    "ci95": [
+     -0.0146,
+     0.0099
+    ]
+   }
+  },
+  "D": {
+   "1": {
+    "diff": 0.0342,
+    "ci95": [
+     0.0123,
+     0.065
+    ]
+   },
+   "2": {
+    "diff": 0.022,
+    "ci95": [
+     0.0056,
+     0.0447
+    ]
+   },
+   "3": {
+    "diff": 0.0043,
+    "ci95": [
+     -0.0022,
+     0.0112
+    ]
+   }
+  },
+  "E171": {
+   "1": {
+    "diff": 0.0027,
+    "ci95": [
+     -0.0091,
+     0.0154
+    ]
+   },
+   "2": {
+    "diff": 0.0022,
+    "ci95": [
+     -0.005,
+     0.011
+    ]
+   },
+   "3": {
+    "diff": -0.0012,
+    "ci95": [
+     -0.0151,
+     0.0101
+    ]
+   }
+  },
+  "E166": {
+   "1": {
+    "diff": 0.0056,
+    "ci95": [
+     -0.0006,
+     0.0128
+    ]
+   },
+   "2": {
+    "diff": 0.0015,
+    "ci95": [
+     -0.0056,
+     0.0091
+    ]
+   },
+   "3": {
+    "diff": -0.0008,
+    "ci95": [
+     -0.0072,
+     0.0056
+    ]
+   }
+  },
+  "AUTO": {
+   "1": {
+    "diff": -0.0171,
+    "ci95": [
+     -0.0366,
+     0.0039
+    ]
+   },
+   "2": {
+    "diff": -0.0141,
+    "ci95": [
+     -0.0301,
+     0.0061
+    ]
+   },
+   "3": {
+    "diff": -0.0252,
+    "ci95": [
+     -0.0446,
+     -0.0025
+    ]
+   }
+  },
+  "GOV": {
+   "1": {
+    "diff": -0.0024,
+    "ci95": [
+     -0.0267,
+     0.0222
+    ]
+   },
+   "2": {
+    "diff": 0.002,
+    "ci95": [
+     -0.0251,
+     0.0287
+    ]
+   },
+   "3": {
+    "diff": -0.0019,
+    "ci95": [
+     -0.0261,
+     0.0222
+    ]
+   }
+  },
+  "NEWS": {
+   "1": {
+    "diff": 0.0097,
+    "ci95": [
+     -0.0137,
+     0.0308
+    ]
+   },
+   "2": {
+    "diff": 0.0103,
+    "ci95": [
+     -0.0062,
+     0.0279
+    ]
+   },
+   "3": {
+    "diff": 0.0063,
+    "ci95": [
+     -0.0191,
+     0.0316
+    ]
+   }
+  },
+  "LR": {
+   "1": {
+    "diff": 0.1678,
+    "ci95": [
+     0.072,
+     0.2689
+    ]
+   },
+   "2": {
+    "diff": 0.1343,
+    "ci95": [
+     0.0364,
+     0.2319
+    ]
+   },
+   "3": {
+    "diff": 0.2078,
+    "ci95": [
+     0.1042,
+     0.3168
+    ]
+   }
+  },
+  "LR_GOV": {
+   "1": {
+    "diff": 0.0948,
+    "ci95": [
+     0.0402,
+     0.1431
+    ]
+   },
+   "2": {
+    "diff": 0.0917,
+    "ci95": [
+     0.0367,
+     0.1437
+    ]
+   },
+   "3": {
+    "diff": 0.0599,
+    "ci95": [
+     -0.0005,
+     0.1131
+    ]
+   }
+  },
+  "LR_NEWS": {
+   "1": {
+    "diff": 0.0792,
+    "ci95": [
+     0.0222,
+     0.1535
+    ]
+   },
+   "2": {
+    "diff": 0.1932,
+    "ci95": [
+     0.1063,
+     0.2807
+    ]
+   },
+   "3": {
+    "diff": 0.1475,
+    "ci95": [
+     0.0685,
+     0.2243
+    ]
+   }
+  },
+  "PSA": {
+   "1": {
+    "diff": 0.0891,
+    "ci95": [
+     0.0417,
+     0.1351
+    ]
+   },
+   "2": {
+    "diff": 0.0912,
+    "ci95": [
+     0.0489,
+     0.1353
+    ]
+   },
+   "3": {
+    "diff": 0.087,
+    "ci95": [
+     0.0447,
+     0.133
+    ]
+   }
+  },
+  "PERS": {
+   "1": {
+    "diff": 0.0734,
+    "ci95": [
+     0.0255,
+     0.1287
+    ]
+   },
+   "2": {
+    "diff": 0.0755,
+    "ci95": [
+     0.0315,
+     0.1249
+    ]
+   },
+   "3": {
+    "diff": 0.0634,
+    "ci95": [
+     0.0199,
+     0.1147
+    ]
+   }
+  }
+ }
+}

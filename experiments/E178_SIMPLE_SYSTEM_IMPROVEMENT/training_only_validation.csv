@@ -1,0 +1,7 @@
+candidate,config,inputs,instances,accuracy,brier_vs_q,roc_auc,calibration_slope_logit,calibration_intercept_logit,brier_sd_across_instances,accuracy_range_across_instances,population,decision_by_registered_rule
+K0_SIMPLE,OH|GR2P|GOV,32,5 single seeds,0.7821,0.0825,0.7699,0.774,0.16,0.00091,0.7756-0.7949,"156 untainted FNRI2015 training rows, region folds",reference
+K1_SEED_ENSEMBLE,OH|GR2P|GOV,32,3 5-seed ensembles,0.7949,0.0836,0.7695,0.775,0.16,0.00024,0.7949-0.7949,"156 untainted FNRI2015 training rows, region folds",stability improvement only (predictive unverified)
+K2_DEGENERATE_INPUTS_REMOVED,OH|GR2P|K2,22,5 single seeds,0.7692,0.0827,0.7739,0.78,0.166,0.00128,0.7692-0.7949,"156 untainted FNRI2015 training rows, region folds",no improvement
+K3_K1_PLUS_K2,OH|GR2P|K2,22,3 5-seed ensembles,0.7885,0.0837,0.7697,0.774,0.159,0.00033,0.7756-0.7949,"156 untainted FNRI2015 training rows, region folds",stability improvement only (predictive unverified)
+REF_E168CFG,OH|GR0P|FULL,68,5 single seeds,0.7436,0.0808,0.7695,0.776,0.186,0.00091,0.7436-0.7564,"156 untainted FNRI2015 training rows, region folds",reference
+REF_E168CFG_ENSEMBLE,OH|GR0P|FULL,68,3 5-seed ensembles,0.75,0.082,0.7668,0.76,0.191,0.0005,0.7436-0.7564,"156 untainted FNRI2015 training rows, region folds",reference

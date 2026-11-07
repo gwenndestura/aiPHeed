@@ -120,7 +120,7 @@ export const TRIGGER_CATEGORIES = [
   { key: "climate", name: "Climate / Panahon", color: "hsl(var(--risk-high))" },
   { key: "employment", name: "Employment / Hanapbuhay", color: "hsl(var(--primary))" },
   { key: "ofw", name: "OFW Remittance", color: "#8b5cf6" },
-  { key: "fishkill", name: "Fish Kill", color: "#06b6d4" },
+  { key: "fishkill", name: "Fish Production", color: "#06b6d4" },
 ] as const;
 
 // Per-province trigger composition (proportions sum ~1.0)
@@ -159,7 +159,7 @@ export const TRIGGER_LABELS: Record<TriggerKey, string> = {
   climate: "Climate Stress",
   employment: "Employment",
   ofw: "OFW Remittance",
-  fishkill: "Fish Kill",
+  fishkill: "Fish Production",
 };
 
 // Red / yellow cutoff — shared everywhere. `pct` is a trigger's share of ALL 5
@@ -253,7 +253,7 @@ export function explainTriggerBreakdown(
 
   const sentences: string[] = [];
   sentences.push(
-    `This SHAP explainability view breaks ${subject}'s ${quarterLabel} price-pressure risk index into all five trigger categories, scaled so the shares add up to 100%.`,
+    `This SHAP explainability view breaks ${subject}'s ${quarterLabel} food-insecurity forecast into the five risk-driver groups and the other model inputs, whose shares add up to 100%.`,
   );
   sentences.push(`Ranked contribution this quarter: ${list}.`);
   sentences.push(

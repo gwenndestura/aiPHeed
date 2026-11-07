@@ -442,6 +442,9 @@ class ExplainabilityResponse(BaseModel):
     triggers: list[Trigger]
     articleCount: int
     triggerMatchedArticles: int
+    # share of the model's attribution from inputs outside the five driver groups (thesis model); the five
+    # trigger pcts plus otherPct sum to 100
+    otherPct: int | None = None
     narrative: str
     note: str
     summary: PlainSummary | None = None

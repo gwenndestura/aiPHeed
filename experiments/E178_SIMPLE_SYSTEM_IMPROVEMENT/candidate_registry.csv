@@ -1,0 +1,6 @@
+candidate,lightgbm,change,data_quality_or_method_reason,uses_72_outcomes
+K0_SIMPLE,yes,"SIMPLE's training-only choice at the ENNS 2018 Lead-2 issue (OH anchor, R2: 3 leaves, GOV), seed 151",reference,no
+K1_SEED_ENSEMBLE,yes,"K0 averaged over 5 seeds (151-155); ensemble size fixed at 5 before running, equal weights",reduce seed instability found in E177 (8/156 class flips across seeds),no
+K2_DEGENERATE_INPUTS_REMOVED,yes,"K0 without inputs that are constant in the training rows or take <= 2 values in lockstep with 'lead' (national series: one bit in one transition)",audit: 15 national inputs are collinear with lead in the 156 rows; 4 GOV inputs constant,no
+K3_K1_PLUS_K2,yes,K2 averaged over 5 seeds (151-155),both reasons,no
+REF_E168CFG,yes,"E168 settings (R0, FULL), seed 151; and its 5-seed average",reference only,no

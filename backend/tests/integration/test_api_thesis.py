@@ -80,3 +80,55 @@ def test_drivers_and_face_validity():
     assert abs(sum(d["groupShare"].values()) - 1) < 1e-3 and set(d["h1"]["best_rank"]) == {"FSSI", "food_CPI_deviation"}
     f = client.get("/api/v1/thesis/face-validity").json()
     assert f["calabarzon_class_agreement"] == "5 of 5"
+
+
+@needs_e166
+def test_driver_shares_use_abs_shap_over_all_inputs_and_add_to_100():
+    """Each driver's share = sum |SHAP| of its inputs / sum |SHAP| of all served inputs; otherPct is the rest (sums to 100)."""
+    from app.services import e166_serving as S
+    c = S._contrib("2027-Q1")
+    for slug, name in (("batangas", "Batangas"), ("quezon", "Quezon"), ("cavite", "Cavite")):
+        d = client.get("/api/v1/explainability", params={"scope": "province", "id": slug, "quarter": "2027-Q1"}).json()
+        five = {t["key"]: t["pct"] for t in d["triggers"]}
+        assert d["otherPct"] is not None and sum(five.values()) + d["otherPct"] == 100
+        x = c[c["province"] == name]
+        tot = x["contribution"].abs().sum()
+        for k, v in five.items():
+            assert abs(v - 100 * x[x["ui_group"] == k]["contribution"].abs().sum() / tot) <= 1.0
+    r = client.get("/api/v1/explainability", params={"scope": "region", "id": "calabarzon", "quarter": "2027-Q1"}).json()
+    assert sum(t["pct"] for t in r["triggers"]) + r["otherPct"] == 100
+
+
+@needs_e166
+def test_thesis_model_quarters_are_marked_as_forecasts_and_fish_is_production():
+    s = client.get("/api/v1/forecast/timeseries", params={"scope": "province", "id": "quezon"}).json()["series"]
+    assert s and all(p["isForecast"] for p in s)
+    d = client.get("/api/v1/explainability", params={"scope": "province", "id": "quezon", "quarter": "2027-Q1"}).json()
+    assert "Fish Production" in {t["label"] for t in d["triggers"]} and "Fish Kill" not in {t["label"] for t in d["triggers"]}
+
+
+def test_render_deployment_serves_e168_in_strict_mode(monkeypatch):
+    """render.yaml must deploy the thesis model: no Lead-2 research mode (it switches E168 off), AIPHEED_THESIS_MODEL=e168,
+    and the strict start-up check passes on the committed E168 files."""
+    import re
+    from app.main import strict_model_check
+    from app.paths import BACKEND_DIR
+    from app.services import e166_serving as S
+    text = (BACKEND_DIR.parent / "render.yaml").read_text()
+    env = dict(re.findall(r"- key: (\w+)\s+value: \"?([^\"\n]+)\"?", text))
+    assert "AIPHEED_LEAD2_MODEL" not in env and env.get("AIPHEED_THESIS_MODEL") == "e168" and env.get("AIPHEED_STRICT_MODEL") == "1"
+    monkeypatch.delenv("AIPHEED_LEAD2_MODEL", raising=False)
+    monkeypatch.setenv("AIPHEED_THESIS_MODEL", "e168")
+    monkeypatch.setenv("AIPHEED_STRICT_MODEL", "1")
+    assert S.validate() == []
+    strict_model_check()                                   # raises if E168 cannot be served
+    assert client.get("/api/v1/provinces", params={"quarter": "2027-Q1"}).json()["indicator"]["id"] == "e168_high_food_insecurity_probability"
+
+
+def test_e168_alerts_and_refresh_are_wired():
+    from datetime import date
+    from app.e168 import alerts as A, refresh as R
+    from app.tasks import scheduler as SCH
+    assert R.next_target(date(2026, 11, 7)) == "2027-Q1" and R.next_target(date(2027, 1, 2)) == "2027-Q2"
+    assert A.candidates("2027-Q1") == []                   # every 2027-Q1 P(HIGH) is below the 0.60 alert threshold
+    assert callable(SCH.run_e168_refresh)
