@@ -94,3 +94,7 @@ Add FNRI's official interpretation **beside** E168's validated HIGH/LOW. The mod
    - This is an interpretation, not a separately validated model.
 
 **Backend only**, through the existing text fields and alert staging; no design change.
+
+## 7. Owner decision (2026-11-07)
+
+**Not added to the dashboard.** The owner declined the FNRI interpretation layer and the "FNRI High" alert tier. This study stays as research evidence only; the system shows E168's validated HIGH/LOW (50 % rule) unchanged.
