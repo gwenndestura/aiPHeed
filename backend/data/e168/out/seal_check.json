@@ -1,0 +1,85 @@
+{
+ "file": "data/e168/out/sealed_enns2022.json",
+ "sha256": "f8228fae163cf13b631b286d7129c925488fcb2d3845da0764569412f8c44af8",
+ "expected_prefix": "f8228fae",
+ "intact": true,
+ "sealed_utc": "2026-11-06T14:48:45.360837+00:00",
+ "model": "E168 LightGBM-only, frozen procedure (app.e168.lgbm_only.run_proc, commit b11aa542)",
+ "target": "ENNS 2022 provincial HFIAS moderate+severe, reference 2022-Q3",
+ "rule": "HIGH = p_high >= 0.5; scored only on HFIAS moderate_or_severe rows",
+ "forecasts": 156,
+ "calabarzon": [
+  {
+   "province": "Batangas",
+   "lead": 1,
+   "E168_score": 27.7,
+   "E168_p_high": 0.0309,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Cavite",
+   "lead": 1,
+   "E168_score": 26.84,
+   "E168_p_high": 0.0255,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Laguna",
+   "lead": 1,
+   "E168_score": 26.94,
+   "E168_p_high": 0.026,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Quezon",
+   "lead": 1,
+   "E168_score": 33.98,
+   "E168_p_high": 0.098,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Rizal",
+   "lead": 1,
+   "E168_score": 32.51,
+   "E168_p_high": 0.0775,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Batangas",
+   "lead": 2,
+   "E168_score": 28.61,
+   "E168_p_high": 0.0375,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Cavite",
+   "lead": 2,
+   "E168_score": 28.69,
+   "E168_p_high": 0.0382,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Laguna",
+   "lead": 2,
+   "E168_score": 30.05,
+   "E168_p_high": 0.0499,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Quezon",
+   "lead": 2,
+   "E168_score": 34.58,
+   "E168_p_high": 0.1072,
+   "E168_class": "LOW"
+  },
+  {
+   "province": "Rizal",
+   "lead": 2,
+   "E168_score": 33.05,
+   "E168_p_high": 0.0846,
+   "E168_class": "LOW"
+  }
+ ],
+ "outcomes_status": "Not published: no FNRI ENNS 2022 provincial HFIAS table was found in public sources (docs/final/ENNS2022_OUTCOME_SEARCH.md). The forecasts stay sealed; no performance is reported.",
+ "scoring": "python -m app.e171.score_enns2022 <outcomes.csv> once FNRI publishes provincial ENNS 2022 HFIAS"
+}

@@ -42,7 +42,7 @@ from app.ml.inference import e67_disclosure as D67
 from app.ml.inference import e68_disclosure as D68
 from app.ml.inference import e69_disclosure as D69
 from app.ml.inference import thesis_system as THESIS
-from app.ml.inference import ch1_system as CH1
+from app.ml.inference import map_engine as CH1
 from app.ml.inference import enso_context as ENSO
 from app.services import final_engine as FE
 from app.services import reference as ref
@@ -345,8 +345,17 @@ def _ch1_mode() -> bool:
 def ch1_quarters() -> list[str]:
     """SYSTEM_FIXES item 4: the quarters the served Chapter I forecast covers, up to the dashboard's forecast target
     (Leads 3-4 stay off the map), oldest first."""
-    last = ref.quarter_index(forecast_target()["target_quarter"])
+    last = _ch1_last_index()
     return sorted({q for _, q in CH1.rows() if ref.quarter_index(q) <= last}, key=ref.quarter_index)
+
+
+def _ch1_last_index() -> int:
+    """The forecast target, or further when the served model's forecasts at reliable leads reach further (E168: Leads
+    1-3 meet the acceptance rule, so 2027-Q1 to Q3 are all on the map)."""
+    last = ref.quarter_index(forecast_target()["target_quarter"])
+    rl = CH1.reliable_lead() or 0
+    ok = [ref.quarter_index(q) for (_, q), r in CH1.rows().items() if CH1.kind(r) == "forecast" and int(r["lead"]) <= rl]
+    return max([last] + ok)
 
 
 def ch1_default_quarter() -> str:
@@ -357,6 +366,9 @@ def ch1_default_quarter() -> str:
     rl = CH1.reliable_lead() or 1
     ok = [q for q in qs if any(CH1.kind(r) == "forecast" and int(r["lead"]) <= rl
                                for (_, q2), r in CH1.rows().items() if q2 == q)]
+    target = forecast_target()["target_quarter"]
+    if target in ok:                      # E168: open on the next quarter (Lead 1); Leads 2-3 stay selectable
+        return target
     return ok[-1] if ok else qs[-1]
 
 
@@ -367,7 +379,7 @@ def _ch1_timeline() -> list[dict]:
     qs = ch1_quarters()
     kinds = {q: CH1.kind(r) for (_, q), r in CH1.rows().items()}
     out = []
-    for i in range(ref.quarter_index(qs[0]), ref.quarter_index(forecast_target()["target_quarter"]) + 1):
+    for i in range(ref.quarter_index(qs[0]), _ch1_last_index() + 1):
         q = f"{i // 4}-Q{i % 4 + 1}"
         year, qn = ref.quarter_parts(q)
         r = {"id": q, "year": year, "q": qn, "label": f"Q{qn}", "monthsLabel": ref.QUARTER_MONTHS[qn]}
@@ -659,7 +671,8 @@ def province_summary(
             **({"estimateKind": record["estimate_kind"], "observedOutcome": record.get("observed_label")}
                if record.get("estimate_kind") else {}),
             "evidenceStatus": "EXPERIMENTAL",
-            "riskLevelBasis": CH1_RISK_LEVEL_BASIS if THESIS.active() and CH1.active() else RISK_LEVEL_BASIS,
+            "riskLevelBasis": (getattr(CH1, "RISK_LEVEL_BASIS", CH1_RISK_LEVEL_BASIS) if THESIS.active() and CH1.active()
+                               else RISK_LEVEL_BASIS),
             # Rule 6: every forecast carries an explicit horizon label, a
             # confidence statement and a verification date.
             "forecastHorizonQuarters": record.get("forecast_horizon_quarters"),
@@ -1035,7 +1048,7 @@ def _drivers_cached(province_code: str, quarter: str, lead2_mode: str) -> dict:
 # group that has no model input or no official data (the "0% Weather is hurting food supply" defect).
 TRIGGER_STATUS_NOTES = {
     "contributes": "This factor is an input of the price-pressure risk index (CH1) and moved that index in the direction "
-                   "shown. It does not explain provincial food-insecurity risk, which is still validation-pending.",
+                   "shown. It does not explain provincial food-insecurity risk; that is the approved E168 forecast.",
     "no_effect": "This factor is an input of the price-pressure risk index (CH1) but did not measurably move that index.",
     "no_model_input": "The price-pressure risk index (CH1) has no input for this factor, so it neither raised nor lowered the score. "
                       "News shares and official indicators, where available, are shown as evidence only.",
@@ -1056,6 +1069,12 @@ REGION_EVIDENCE_NOTE = ("Average of the five provinces' model attributions for t
 THESIS_REGION_EVIDENCE_NOTE = ("In the risk index (FIRI v2): the five provinces' combined push of this factor group "
                                "(above or below its historical middle). Open a province to see each indicator's value, "
                                "score and status.")
+
+
+def _status_notes() -> dict:
+    """The trigger-status notes of the model behind the map (E168's own wording when it is the served model)."""
+    own = getattr(CH1, "TRIGGER_STATUS_NOTES", None) if THESIS.active() and CH1.active() else None
+    return own or TRIGGER_STATUS_NOTES
 
 
 def _model_trigger_groups(quarter: str) -> frozenset[str]:
@@ -1117,10 +1136,15 @@ def explainability(province_code: str, quarter: str) -> dict:
     employment, macro/OFW -- so a panel built for those five categories fits
     without anything being dropped.
     """
-    built = _drivers(province_code, quarter)
-    if THESIS.active() and E41L2.governs():            # THESIS: the bars explain the served FIRI, not the price part
-        built = THESIS.firi_drivers(E41L2.record(), quarter, province_code, built)
     ch1 = THESIS.active() and CH1.active() and CH1.covers(quarter)
+    try:
+        built = _drivers(province_code, quarter)
+        if THESIS.active() and E41L2.governs():        # THESIS: the bars explain the served FIRI, not the price part
+            built = THESIS.firi_drivers(E41L2.record(), quarter, province_code, built)
+    except Exception:                                  # a served-model quarter the FIRI record lacks: its own bars only
+        if not ch1:
+            raise
+        built = {"drivers": [], "article_count": 0}
     if ch1:                                           # the Chapter I forecast: SHAP of its LightGBM price part
         built = CH1.drivers(province_code, quarter, built)
     drivers = built["drivers"]
@@ -1137,7 +1161,7 @@ def explainability(province_code: str, quarter: str) -> dict:
             "direction": d["direction"],
             "color": trigger_color(pct, d["direction"]),
             "status": (st := trigger_status(d["driver_group"], quarter, pct, province_code)),
-            "statusNote": TRIGGER_STATUS_NOTES[st],
+            "statusNote": _status_notes()[st],
             "evidenceNote": (CH1.evidence_note(province_code, quarter, built.get("other_pct"), d["driver_group"])
                              if ch1 else
                              THESIS.group_evidence(E41L2.record(), quarter, province_code, d["driver_group"])
@@ -1208,7 +1232,7 @@ def explainability_region(quarter: str) -> dict:
             "direction": direction,
             "color": trigger_color(pct, direction),
             "status": (st := trigger_status(key, quarter, pct)),
-            "statusNote": TRIGGER_STATUS_NOTES[st],
+            "statusNote": _status_notes()[st],
             # E47: the region pools five provinces' attributions, so it states that rather than a generic claim
             # ("prices are too high") that no regional observation supports
             "evidenceNote": (CH1.evidence_note(None, quarter, group=key)
@@ -1342,12 +1366,13 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
     else:
         sentence = f"{head}; no factor breakdown is available for it."
     # E58: the two-signal early warning (model warning for DA review), appended to the same sentence field
-    warnings = E41L2.early_warning(quarter, province_code)
+    own_warning = getattr(CH1, "early_warning", None) if THESIS.active() and CH1.active() and CH1.covers(quarter) else None
+    warnings = own_warning(quarter, province_code) if own_warning else E41L2.early_warning(quarter, province_code)
     if province_code and warnings:
         text = warnings[0]["text"]
         if comp:                                         # same wording rule as the head (record text kept as stored)
             text = text.replace("HIGH-risk probability", "HIGH-risk score")
-        if THESIS.active():                              # the E58 rule watches the price score, not FIRI
+        if THESIS.active() and not own_warning:          # the E58 rule watches the price score, not FIRI
             text = (text.replace("No early warning:", "No price-score early warning:")
                         .replace("Early warning ", "Price-score early warning ")
                         .replace("HIGH-risk probability", "price-score HIGH-risk probability"))
@@ -1406,8 +1431,8 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
             obs = (rs[0]["observed"] or None) if province_code else None
             kind = "forecast" if CH1.kind(rs[0]) == "forecast" else "backtest"
             ch1_issued = rs[0]["issue_date"]
-            comp = {"hunger": sum(float(r["pi_hunger"]) for r in rs) / len(rs),
-                    "price": sum(float(r["pi_price"]) for r in rs) / len(rs)}
+            comp = ({"hunger": sum(float(r["pi_hunger"]) for r in rs) / len(rs),
+                     "price": sum(float(r["pi_price"]) for r in rs) / len(rs)} if "pi_hunger" in rs[0] else None)
             caveat = CH1.INDICATOR["caveat"]
             sentence = CH1.sentence(province_code, name, quarter, p) or sentence
             # SYSTEM_FIXES item 1: the summary describes the served forecast; FIRI's passage fields, data status and
@@ -1428,6 +1453,7 @@ def plain_summary(province_code: str | None, quarter: str, name: str, triggers: 
                            "combination": "product of the two parts (an approximation: the two conditions are not "
                                           "independent; the joint probability cannot exceed the smaller part)"},
             "caveat": _ascii(caveat)} if comp else {}),
+        **({"caveat": _ascii(caveat)} if ch1_issued and not comp else {}),
         **({"climateWatch": cfsw} if cfsw else {}),
         **({"modelIdentity": e67["modelIdentity"], "triggerCoverage": e67["triggerCoverage"]} if e67 else {}),
         **({"modelIdentity": CH1.identity(province_code, quarter)} if ch1_issued else {}),

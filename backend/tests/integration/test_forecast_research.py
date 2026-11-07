@@ -26,6 +26,7 @@ pytestmark = pytest.mark.skipif(not (CH1.DATA_FR / "rows.csv").exists(), reason=
 @pytest.fixture
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # these tests check the Chapter I research mode explicitly
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
     return monkeypatch
 

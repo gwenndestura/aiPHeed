@@ -253,7 +253,7 @@ export function explainTriggerBreakdown(
 
   const sentences: string[] = [];
   sentences.push(
-    `This SHAP explainability view breaks ${subject}'s ${quarterLabel} price-pressure risk index into all five trigger categories, scaled so the shares add up to 100%.`,
+    `This SHAP explainability view breaks ${subject}'s ${quarterLabel} food-insecurity risk forecast into all five trigger categories, scaled so the shares add up to 100%.`,
   );
   sentences.push(`Ranked contribution this quarter: ${list}.`);
   sentences.push(

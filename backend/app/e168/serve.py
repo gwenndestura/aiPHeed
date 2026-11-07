@@ -28,7 +28,8 @@ class ArtifactMissing(RuntimeError):
     pass
 
 
-def _forecast(lead):
+def _forecast(lead, issue_label: str = "2026-Q4"):
+    """Forecasts issued at the start of `issue_label` (data published before it) for the quarter `lead` quarters later."""
     from app.e147 import features as Fe
     from app.e150 import model as M
     from app.e151 import prov as Pv
@@ -38,21 +39,21 @@ def _forecast(lead):
     from app.e164 import auto as A4
     from app.e166 import nested_source as N
     from app.e168.lgbm_only import run_proc
-    from app.fi5.target import qindex
+    from app.fi5.target import qindex, qlabel
     Fe.LT = 0.0
     M.Hier, M.Store = Pv.Hier2, Pv.Store2
-    issue = qindex("2026-Q4")
+    issue = qindex(issue_label)
     H, L, S_P = E154.income(), pd.read_parquet(O152 / "local_panel.parquet"), sun_panel()
     S = Pv.Store2(Pv.target_rows(with_2021=True))
     P = M.Pipeline(S, issue, Pv.ROUNDS, "F")
     b = S.base.drop_duplicates("key")
     five = b[b["province"].isin(CAL)].assign(T=issue + lead, survey="LIVE").drop(columns=["y", "se_y", "q_high", "p"])
-    te = N.add_sources(E154.add_income(Pv.add_inputs(S, M.rows_for(S, five, [lead], "F")), H), L, H, S_P).reset_index(drop=True)
-    tr = N.add_sources(E154.add_income(Pv.add_inputs(S, P.tr), H), L, H, S_P).reset_index(drop=True)
+    te = N.add_sources(Pv.add_inputs(S, M.rows_for(S, five, [lead], "F")), L, H, S_P).reset_index(drop=True)   # same path as lgbm_only.task
+    tr = N.add_sources(Pv.add_inputs(S, P.tr), L, H, S_P).reset_index(drop=True)
     AN = A4.anchors(S, P, tr, te)
     Pr, chosen, tag, _, _, nf = run_proc(tr, te, AN)
     mu, p, half = Pr[chosen]
-    return [{"province": te["province"].iloc[k], "lead": lead, "target_quarter": ["2027-Q1", "2027-Q2", "2027-Q3"][lead - 1],
+    return [{"province": te["province"].iloc[k], "lead": lead, "target_quarter": qlabel(issue + lead),
              "score_pct": round(float(pct(mu[k])), 1), "range90_pct": [round(float(pct(mu[k] - half[k])), 1), round(float(pct(mu[k] + half[k])), 1)],
              "p_high": round(float(p[k]), 3), "risk_class": "HIGH" if p[k] >= .5 else "LOW", "config": tag} for k in range(len(te))]
 
@@ -72,12 +73,28 @@ def live():
     print(json.dumps(doc, indent=1))
 
 
+def artifact():
+    """The approved E168 artifact: the registry's production artifact when it is an E168 issue, else the 2026-Q4 export."""
+    try:
+        from app import registry as R
+        p = R.production()
+        if p["model_id"] == "e168-lgbm-1.0":
+            return BACKEND_DIR / p["artifact_path"]
+    except Exception:
+        pass
+    return LIVE
+
+
 def outlook() -> dict:
-    if not LIVE.exists():
+    path = artifact()
+    if not path.exists():
         raise ArtifactMissing("E168 live forecast not exported (python -m app.e168.serve live)")
-    d = json.loads(LIVE.read_text())
+    d = json.loads(path.read_text())
     served = set(d["served_leads"])
+    y, q = d["issue_quarter"].split("-Q")
     return {**{k: d[k] for k in ("model", "name", "issue_quarter", "target", "accuracy_by_lead", "acceptance_basis", "statistical_reliability", "seals")},
+            "origin_date": f"{y}-{3 * (int(q) - 1) + 1:02d}-01", "classification_threshold": 0.5,
+            "information_cutoff": f"data published before {y}-{3 * (int(q) - 1) + 1:02d}-01",
             "provinces": [r for r in d["provinces"] if r["lead"] in served]}
 
 

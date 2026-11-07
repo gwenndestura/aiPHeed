@@ -62,6 +62,7 @@ def test_timing_and_alignment(res):
 @pytest.mark.parametrize("quarter", ["2026-Q4", "2027-Q1"])          # Lead 1 and Lead 2 of the 2026-10-01 issue
 def test_dashboard_serves_the_evaluated_model(monkeypatch, quarter):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # these tests check the Chapter I research mode explicitly
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
     for v in ("AIPHEED_CH1_ENGINE", "AIPHEED_SWS_REISSUE", "AIPHEED_SWS_REISSUE_DIR"):
         monkeypatch.delenv(v, raising=False)

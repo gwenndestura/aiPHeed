@@ -184,7 +184,7 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <MetricLabel className="uppercase tracking-[0.28em]">Price-pressure risk</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">Food-insecurity risk</MetricLabel>
           </div>
 
           {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
@@ -528,7 +528,7 @@ function RegionDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Price-pressure risk</MetricLabel>
+          <MetricLabel>Food-insecurity risk</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
@@ -640,7 +640,7 @@ function MunicipalityDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Price-pressure risk</MetricLabel>
+          <MetricLabel>Food-insecurity risk</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div

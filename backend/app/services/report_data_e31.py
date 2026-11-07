@@ -66,7 +66,7 @@ def _served_quarters() -> list[str]:
 
 def _row(quarter: str) -> dict | None:
     if _ch1():                            # the forecast's own kind, lead and issue date (one row per quarter)
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import map_engine as CH1
 
         if quarter not in _served_quarters():
             return None
@@ -325,7 +325,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
     thesis = _thesis()
     ch1 = _ch1()
     if ch1:
-        from app.ml.inference import ch1_system as CH1
+        from app.ml.inference import map_engine as CH1
 
         blocks: list[dict] = [_p(_strip_tags(CH1.text("REPORT_COVER")))]
     elif thesis:
@@ -500,7 +500,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
             pe = prev_expl[slugs[0]]
             if ch1:
                 hr = CH1.row(codes[slugs[0]], last_q)
-                blocks.append(_p(CH1.driver_text(e["shown"], float(hr["pi_hunger"]) if hr else None,
+                blocks.append(_p(CH1.driver_text(e["shown"], float(hr["pi_hunger"]) if hr and hr.get("pi_hunger") else None,
                                                  e.get("otherPct"))))
             elif thesis:
                 from app.services.report import _thesis_driver_text

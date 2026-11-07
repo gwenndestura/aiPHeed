@@ -26,10 +26,10 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed is being built to forecast food insecurity in the five CALABARZON provinces. No food-insecurity
-            forecasting model has passed its acceptance tests yet, so no food-insecurity forecast is shown (validation
-            pending). The map shows a price-pressure risk index for each province and a planning priority for its 142
-            cities and municipalities, with the latest measured regional hunger (SWS), as context. It was developed by a student research
+            aiPHeed forecasts food-insecurity risk in the five CALABARZON provinces with the approved E168 LightGBM
+            model (accepted 2026-11-07 under the project rule: accuracy of at least 75% and better than the latest
+            survey, one to three quarters ahead). The map shows each province's forecast and a planning priority for
+            its 142 cities and municipalities, with the latest measured regional hunger (SWS) as context. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
           </DialogDescription>
@@ -38,14 +38,14 @@ export function AboutModal() {
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              The map shows a <b className="text-foreground">price-pressure risk index</b>, not a food-insecurity
-              forecast. A province is at <b className="text-foreground">high price-pressure risk</b> in a quarter when
-              regional hunger (SWS, Balance Luzon) is above 11.3% <i>and</i> the province's food prices are rising
-              unusually fast (PSA), as the study defines risk. Each province shows the forecast{" "}
+              The map shows the <b className="text-foreground">E168 food-insecurity risk forecast</b>. A province is
+              at <b className="text-foreground">high food-insecurity risk</b> in a quarter when 50% or more of its
+              households are forecast to be moderately or severely food insecure (FNRI HFIAS). Each province shows
+              the forecast{" "}
               <b className="text-foreground">probability of high risk</b>; <b>0.50</b> or more is High risk. An{" "}
               <b className="text-foreground">active alert</b> appears when the regional value is <b>0.60</b> or
               higher. City and municipal values rank towns within each province by poverty and density; they are a
-              priority ranking, and no measured hunger figure exists for any province, city or municipality.
+              priority ranking from the province forecast, not a measured or forecast municipal rate.
             </p>
           </Section>
 
@@ -68,14 +68,14 @@ export function AboutModal() {
             )}
           </Section>
 
-          <Section title="Price-pressure risk index and its tested accuracy">
+          <Section title="Forecast model and its tested accuracy">
             {risk ? (
               <div className="grid gap-1.5">
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  One LightGBM model using all 12 indicator families forecasts each province's high/low price-pressure
-                  risk (a proxy definition, not food insecurity). It was
-                  tested quarter by quarter on 2023–2026, using only data published before each forecast was issued
-                  (issued on the first day of a quarter). Accuracy is the share of correct high/low calls.
+                  E168: a constrained LightGBM forecasts each province's change from its latest FNRI survey level,
+                  from the five trigger groups. It was tested on 72 provincial forecasts for the 2018, 2019 and 2021
+                  survey rounds, using only data published before each forecast was issued. Accuracy is the share of
+                  correct high/low calls.
                 </p>
                 {[1, 2, 3, 4].map((k) => {
                   const l = risk.leads[String(k)];
@@ -83,14 +83,14 @@ export function AboutModal() {
                   return (
                     <Row
                       key={k}
-                      k={k === 1 ? "Quarter starting on the issue date" : `${k} quarters ahead`}
+                      k={`${k} quarter${k > 1 ? "s" : ""} ahead`}
                       v={`accuracy ${l.metrics.accuracy.toFixed(2)} (${l.n} cases; always-low ${(l.baseline_accuracy["ALWAYS-LOW"] ?? 0).toFixed(2)}) · ${l.reliable ? "reliable" : "not reliable"}`}
                     />
                   );
                 })}
                 <Row
-                  k="75% accuracy on the price-pressure index"
-                  v={risk.max_reliable_lead ? `Reached for the quarter starting on the issue date (${risk.leads["1"].metrics.accuracy.toFixed(2)}); this is not food-insecurity accuracy` : "Not reached"}
+                  k="75% accuracy (project acceptance rule)"
+                  v={risk.max_reliable_lead ? `Reached 1 to ${risk.max_reliable_lead} quarters ahead, each also better than the latest survey` : "Not reached"}
                 />
                 {risk.horizon && (
                   <>
@@ -103,7 +103,7 @@ export function AboutModal() {
                     />
                     <Row
                       k="Longest horizon with enough data to test"
-                      v={risk.horizon.testable_horizon_R1 ? `${risk.horizon.testable_horizon_R1} quarters ahead (at least 10 past quarters)` : "None"}
+                      v={risk.horizon.testable_horizon_R1 ? `${risk.horizon.testable_horizon_R1} quarters ahead` : "None"}
                     />
                   </>
                 )}
@@ -111,15 +111,13 @@ export function AboutModal() {
                   k="Reliable forecast horizon"
                   v={
                     risk.max_reliable_lead
-                      ? `One quarter: the quarter starting on the issue date, ${
-                          risk.horizon?.leads["1"]?.quarters_after_newest_sws.join("–") ?? "1–2"
-                        } quarters after the newest published SWS survey`
+                      ? `${risk.max_reliable_lead} quarters ahead (evidence from 3 survey rounds; Leads 1 and 3 are exactly at 75%)`
                       : "Not established"
                   }
                 />
-                <Row k="Forecasts further ahead" v="Generated up to 4 quarters ahead, but experimental: they failed the test" />
-                <Row k="News" v="Context only: it did not improve the forecasts" />
-                <Row k="Food-insecurity forecast" v="Validation pending: no model has passed the acceptance tests" />
+                <Row k="Forecasts further ahead" v="Not shown: from 4 quarters ahead accuracy is below 75%" />
+                <Row k="News" v="Inside the five trigger groups; removing it did not measurably change the tested accuracy" />
+                <Row k="Food-insecurity forecast" v="Approved: E168 LightGBM (2026-11-07, project acceptance rule)" />
               </div>
             ) : (
               <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>
@@ -135,17 +133,15 @@ export function AboutModal() {
               ))}
             </ul>
             <p className="text-[10px] text-muted-foreground/70 mt-1.5">
-              Only data from 2021 onward is used. Estimates are issued at the start of each quarter for the next
-              quarter, three months ahead.
+              Forecasts are issued at the start of a quarter for the next one to three quarters, using only data
+              published before the issue date.
             </p>
           </Section>
 
           <Section title="Missing and limited data">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
               A missing input is left out, never counted as zero, and the dashboard lists missing
-              inputs. With fewer than 4 of the 6 domains the province shows "Insufficient data". News
-              is used only when a province has at least 5 articles in the quarter; provinces below that
-              are marked "Limited data".
+              inputs. Provinces with fewer than 5 news articles in the quarter are marked "Limited data".
             </p>
           </Section>
 
@@ -171,9 +167,9 @@ export function AboutModal() {
           </Section>
 
           <div className="grid gap-2 pt-1">
-            <Row k="Model" v="LightGBM, 12 indicator families · risk = hunger condition × food-price condition" />
-            <Row k="Map value" v="Probability that the province is high risk (calibration checked)" />
-            <Row k="Lead time" v="Reliable: the quarter starting on the issue date · further ahead: experimental" />
+            <Row k="Model" v="E168: latest FNRI survey level + LightGBM change from the five trigger groups" />
+            <Row k="Map value" v="Probability that 50% or more of households are moderately or severely food insecure" />
+            <Row k="Lead time" v="1 to 3 quarters ahead meet the acceptance rule · further ahead: not shown" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
@@ -196,6 +192,7 @@ export function AboutModal() {
 
 /** The data sources, one row each with a thin divider between rows. */
 const DATA_SOURCES = [
+  "FNRI National and Expanded National Nutrition Surveys: household food insecurity (HFIAS), by province",
   "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
   "Bangko Sentral ng Pilipinas (BSP): cash remittances",
   "PAGASA: El Niño advisories · IBTrACS: typhoons",

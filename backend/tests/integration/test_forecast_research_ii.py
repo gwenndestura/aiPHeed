@@ -37,6 +37,7 @@ def _clear_caches():
 @pytest.fixture
 def engine(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # these tests check the Chapter I research mode explicitly
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
 
     def use(name: str | None):

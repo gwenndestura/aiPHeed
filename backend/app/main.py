@@ -56,6 +56,8 @@ async def lifespan(app: FastAPI):
     load_model_settings()
     strict_model_check()
     start_scheduler()
+    from app.quarterly.alerts_e168 import stage_on_startup
+    await stage_on_startup()                 # E168 early-warning candidates, staged for DA review (never published)
     yield
     # Shutdown
     shutdown_scheduler()

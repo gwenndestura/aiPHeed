@@ -86,7 +86,21 @@ def final_cpi() -> dict:
 def final_lgus() -> dict:
     """All 142 cities and municipalities with their indicator-based priority score and local-evidence status."""
     q = D.latest_quarter()
-    return _guard(FE.lgus, D.municipality_summary(q))
+    muni = D.municipality_summary(q)
+    out = _guard(FE.lgus, muni)
+    from app.ml.inference import e168_system as E168, map_engine
+    if map_engine.selected() is E168:     # the approved forecast drives the ranking: say so, and trace each row to it
+        by = {m["id"]: m for m in muni}
+        out["label"] = ("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk forecast "
+                        "(E168)")
+        out["note"] = (E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
+                       "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
+        out["quarter"], out["model"] = q, E168.MODEL_ID
+        for r in out["rows"]:
+            m = by.get(r["id"], {})
+            r["provinceEstimate"], r["rankingBasis"] = m.get("provinceEstimate"), m.get("riskLevelBasis")
+            r.pop("localHungerEvidence", None)
+    return out
 
 
 # ------------------------------------------------------------------------------------------------ Chapter I risk
@@ -94,9 +108,9 @@ def final_lgus() -> dict:
 def final_risk_evaluation() -> dict:
     """Walk-forward evaluation of the Chapter I province risk forecast (UNI-FINAL, one LightGBM across leads): per-lead metrics, baselines,
     reliability verdicts, Objective-4 comparisons, news tests and calibration."""
-    from app.ml.inference import ch1_system as CH1
+    from app.ml.inference import map_engine as CH1
     if not CH1.active():
-        raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
+        raise HTTPException(status_code=503, detail="Province risk engine not exported")
     return CH1.evaluation()
 
 
@@ -104,9 +118,9 @@ def final_risk_evaluation() -> dict:
 def final_risk_rows(kind: str | None = Query(None, pattern="^(forecast|retrospective)$"),
                     quarter: str | None = Query(None, pattern=r"^\d{4}-Q[1-4]$")) -> dict:
     """Province rows: walk-forward Lead-1 forecasts with observed outcomes, and the forecasts issued 2026-10-01."""
-    from app.ml.inference import ch1_system as CH1
+    from app.ml.inference import map_engine as CH1
     if not CH1.active():
-        raise HTTPException(status_code=503, detail="Chapter I risk engine not exported (run export_ch1.py)")
+        raise HTTPException(status_code=503, detail="Province risk engine not exported")
     rows = [dict(r, kind=CH1.kind(r), reliable_horizon=CH1.status(r) == "reliable", status=CH1.status(r))
             for r in CH1.rows().values()
             if (kind is None or CH1.kind(r) == kind) and (quarter is None or r["quarter"] == quarter)]

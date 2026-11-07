@@ -26,7 +26,7 @@ LEAD2 = ROOT / "aipheed-backend-aligned" / "experiments" / "LEAD2_OPTIMIZATION" 
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-26T09:00:00")
-    monkeypatch.delenv("AIPHEED_MAP_MODEL", raising=False)
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # the Chapter I research mode, explicitly
     return monkeypatch
 
 
@@ -58,7 +58,7 @@ def test_served_lead1_rows_equal_the_evaluated_predictions():
         assert (r["observed"] == "HIGH") == bool(p.y)
 
 
-def test_reliability_and_75_percent_follow_from_the_evaluation():
+def test_reliability_and_75_percent_follow_from_the_evaluation(thesis):
     ev = _get("/api/v1/final/risk/evaluation")
     assert ev["max_reliable_lead"] == 1
     l1 = ev["leads"]["1"]

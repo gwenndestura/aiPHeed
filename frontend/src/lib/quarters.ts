@@ -8,8 +8,8 @@
 /** Earliest quarter any public quarter selector offers. */
 export const EARLIEST_SELECTABLE_QUARTER = "2025-Q1";
 
-/** How many quarters past the calendar quarter a selector may reach. */
-export const FORECAST_QUARTERS_AHEAD = 1;
+/** How many quarters past the calendar quarter a selector may reach: E168 is accepted 1 to 3 quarters ahead. */
+export const FORECAST_QUARTERS_AHEAD = 3;
 
 /**
  * How many quarters the map timeline shows: the newest ones, ending at the

@@ -27,6 +27,7 @@ pytestmark = pytest.mark.skipif(not CH1.TRIGGER_EVIDENCE.exists(), reason="trigg
 @pytest.fixture
 def thesis(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # these tests check the Chapter I research mode explicitly
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-20T09:00:00")
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)
     return monkeypatch

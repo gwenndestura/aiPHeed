@@ -10,13 +10,13 @@ describe("driver and risk wording", () => {
     render(<GlossaryPanel open onClose={() => {}} />);
     const shap = screen.getByText(/splits one model prediction/);
     expect(shap.textContent).toContain("not the percentage of food insecurity caused by each factor");
-    expect(shap.textContent).toContain("food-price part");
+    expect(shap.textContent).toContain("change from the province's latest survey level");
   });
 
   it("does not present municipal values as food-insecurity probabilities", () => {
     render(<GlossaryPanel open onClose={() => {}} />);
     const risk = screen.getByText(/A score from 0 to 1\./);
     expect(risk.textContent).toContain("priority ranking");
-    expect(risk.textContent).toContain("not a measured provincial hunger rate");
+    expect(risk.textContent).toContain("not a measured provincial rate");
   });
 });

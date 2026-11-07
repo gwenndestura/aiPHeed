@@ -31,6 +31,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setenv("AIPHEED_SWS_REISSUE_DIR", str(tmp_path))
     monkeypatch.setenv("AIPHEED_SWS_REISSUE", "1")
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")
+    monkeypatch.setenv("AIPHEED_MAP_MODEL", "ch1")   # these tests check the Chapter I research mode explicitly
     monkeypatch.delenv("AIPHEED_CH1_ENGINE", raising=False)
 
     def at(day: str):

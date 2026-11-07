@@ -122,10 +122,10 @@ function RiskArchive({ enabled }: { enabled: boolean }) {
   if (!quarters.length) return null;
   return (
     <div className="mt-4">
-      <p className="text-[11px] font-semibold">Province price-pressure risk index vs what happened (not food insecurity)</p>
+      <p className="text-[11px] font-semibold">Province food-insecurity risk forecasts (E168) vs what happened</p>
       <p className="text-[10px] text-muted-foreground leading-snug pt-0.5">
-        High-risk provinces forecast for each quarter (issued on its first day) and the high-risk provinces later
-        observed from SWS hunger and PSA food prices. Rows marked Sealed are not yet scored.
+        High-risk provinces forecast for each quarter and the high-risk provinces later observed in FNRI provincial
+        survey results. Rows marked Sealed are not yet scored.
       </p>
       <div className="mt-2 overflow-x-auto">
         <table className="w-full text-[11px] border-collapse">

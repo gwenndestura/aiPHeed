@@ -153,6 +153,22 @@ def run_sws_reissue() -> dict:
     return out
 
 
+E168_JOB_ID = "aipheed_e168_quarterly_stage"
+
+
+def run_e168_stage() -> dict:
+    """Stage this quarter's E168 forecast (app.e168.regenerate). Staging only: serving moves to it only after the owner
+    promotes it through the registry."""
+    from app.e168 import regenerate as RG
+
+    try:
+        out = RG.stage()
+    except RG.RegenerationError as exc:          # stale or invalid inputs: nothing is written, nothing is served
+        out = {"status": "refused", "reason": str(exc)}
+    logger.info("E168 quarterly stage: %s", out)
+    return out
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -207,6 +223,15 @@ def start_scheduler():
         trigger=CronTrigger(day=MONTHLY_DAY, hour=MONTHLY_HOUR),
         id=MONTHLY_JOB_ID,
         name="aiPHeed monthly refresh (lead text + idempotent cycle)",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+    )
+    _scheduler.add_job(
+        run_e168_stage,
+        trigger=CronTrigger(month=CRON_MONTHS, day=CRON_DAY, hour=str(int(CRON_HOUR) + 1)),
+        id=E168_JOB_ID,
+        name="aiPHeed E168 quarterly forecast staging (owner promotes)",
         replace_existing=True,
         max_instances=1,
         coalesce=True,
