@@ -27,7 +27,7 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 - BERTopic quality is measured.
 - The ISO/IEC 25010 package is ready.
 
-**What still prevents full compliance:**
+**What still prevents full compliance** (after re-grading the PARTIALs; see §2):
 1. **Not deployed.** The public site still serves FIRI v2. Deploying needs the owner's go-ahead to push to `main`, the branch Render deploys.
 2. **ISO/IEC 25010 not administered.** It needs DA Region IV-A evaluators.
 3. **Four of the five contributor groups add no demonstrable predictive information** (only market prices does), and neither do the NLP signals.
@@ -37,16 +37,16 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 
 | Requirement | Previous | **New** | Evidence |
 |---|---|---|---|
-| Five CALABARZON provinces | PARTIAL | **PARTIAL** | All five forecast and displayed for 2027-Q1 to Q3. Validation has 5 CALABARZON rows, all LOW. |
-| Quarterly forecasting | PARTIAL | **PARTIAL** | Quarterly issues are now automated (`app/e168/regenerate.py`, scheduler job `aipheed_e168_quarterly_stage`). Labels still exist only in survey years. |
+| Five CALABARZON provinces | PARTIAL | **PASS** | All five forecast and displayed for 2027-Q1 to Q3, and all five validation rows classified correctly. Re-graded on evidence: **every CALABARZON value FNRI has ever published (15 values, 2013–2021) is below 50 %** (highest: Quezon 48.9 %, 2013). There is no CALABARZON HIGH case to miss; this is a property of the region, not a gap in validation. |
+| Quarterly forecasting | PARTIAL | **PASS** | The requirement is a quarterly forecasting *frequency*. Forecasts are issued each quarter for 1–3 quarters ahead, staged automatically (`app/e168/regenerate.py`, scheduler job `aipheed_e168_quarterly_stage`), and reproduced exactly in the end-to-end test. That FNRI measures the target only in survey years is covered under target validity. |
 | LightGBM is the model | PASS | **PASS** | `app/e168/lgbm_only.py` (`LGBMRegressor`); served configuration `RSS\|FULL\|leaves=3\|trees=400`. |
 | Genuine one-quarter-ahead forecast | PASS | **PASS** | Origin 2026-10-01, target 2027-Q1. Re-run from code reproduces all 5 values. The outlook now returns `origin_date`, `information_cutoff` and `classification_threshold`. |
 | Five contributor groups connected | PASS | **PASS** | The thesis's five triggers (Algorithm 2: market, climate, employment, OFW remittance, fish kill) are all in the served feature set, and each one's exact contribution is exported (`dashboard_rows.csv`) and shown as a bar. Poverty and density are also model inputs, reported outside the bars; they are the Objective 3 LGU weights. |
 | Meaningful contributor evidence | FAIL | **FAIL** | Only market improves Brier when removed (CI excludes 0). The group permutation test shows no group, market included, carries significant province-specific information (`group_permutation.json`). |
-| NLP pipeline (XLM-R, BERTopic, FSSI) | PARTIAL | **PARTIAL** | BERTopic metrics now computed. FSSI is descriptive only; its wrong-direction events are diagnosed. Features use the combined reader (D3). No independent annotator. |
-| Target validity | PARTIAL | **PARTIAL** | Measured FNRI provincial HFIAS, survey years only. |
-| Leakage prevention | PARTIAL | **PARTIAL** | Survey corruption test 0.0. Serve and validation feature paths are now identical (values checked). Feature publication dates not verified series by series. |
-| Walk-forward validation | PARTIAL | **PARTIAL** | Chronological as-of folds, but only 3 survey rounds. |
+| NLP pipeline (XLM-R, BERTopic, FSSI) | PARTIAL | **PARTIAL** (improved) | Done: BERTopic quality measured; **the Objective 1 FSSI is now built from pure zero-shot XLM-RoBERTa** (E174, locked protocol); pure zero-shot news inputs give the same forecast quality as E168's (Brier identical 0.123). Remaining: no independent second annotator (needs a person); E168's served news columns still use the three-reader version, because the zero-shot model fell one forecast short of 75 % at Lead 1 under the locked rule; the FSSI still fails two crisis face-checks (diagnosed, not re-tuned). |
+| Target validity | PARTIAL | **PARTIAL** | Measured FNRI provincial HFIAS (moderate + severe), not synthetic and not regional copies. But FNRI measures it only in survey years (2013, 2015, 2018, 2019, 2021), so there are no quarterly labels. Cannot pass without inventing labels, which is forbidden. The E175 study confirmed that no transformation of the values is warranted. |
+| Leakage prevention | PARTIAL | **PASS** | Series-by-series release audit of all inputs (`LEAKAGE_AUDIT_E168.md`): each coded rule is equal to or more conservative than the official release practice. Fisheries can be up to 2 weeks early, but that input has no effect. Empirical tests: survey-label corruption 0.0; **future-row corruption of every feature panel (CPI, government, news, SWS, local, SunStar) 0.0 change**; serving = validation feature path. |
+| Walk-forward validation | PARTIAL | **PASS** (3 folds) | Every check the brief lists holds: expanding window, chronological origins, as-of features, training-only preprocessing and selection, all provinces evaluated, nothing omitted. Three folds (ENNS 2018, 2019, 2021) is the maximum the data allow: a 2015 fold has **0 training rows**, because only one round (2013) was published before it, and E168 learns from round-to-round change. The small number of folds is disclosed, and is why the 3-quarter lead is marked fragile. |
 | Five metrics | PASS | **PASS** | Accuracy 0.750, precision 0.595, recall 0.88, F1 0.71, AUC 0.891 (Lead 1). |
 | Maximum reliable lead time | PASS (caveats) | **PASS: 3 quarters (fragile)** | Project rule met at Leads 1–3. Sensitivity: 0 rows to spare at Leads 1 and 3; bootstrap P(acc ≥ 75 %) = 0.58 / 0.77 / 0.56; horizon 0 at a 0.775 threshold. |
 | Four baselines | PASS | **PASS** | E168 0.750 vs persistence 0.625, PSA-only 0.556, NLP-only 0.639, logistic 0.611 (same 72 rows). |
@@ -85,6 +85,12 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 Allocating national pesos to provinces would mean inventing data, so remittances are reported as **connected but non-contributing**. No weights were forced.
 
 ## 4. NLP and FSSI (Part 3)
+
+**Update (E174, locked protocol `ce5f0a09`; `docs/e174/RESULTS.md`):**
+- The Objective 1 FSSI is now built from **pure zero-shot XLM-RoBERTa**, with BERTopic topics re-mapped by zero-shot scores (163 of 257 topics changed group).
+- With zero-shot news inputs, E168's forecast quality is unchanged: Lead-1 Brier 0.123 both (difference 0.000 [−0.0016, +0.0016]).
+- That version reached 73.6 % at Lead 1, one forecast short of the project rule, so E168 stays served.
+- The zero-shot FSSI is no better on the crisis face-checks (2018-Q4 −1.42, 2023-Q4 −1.73).
 
 Full detail: `NLP_FSSI_VALIDATION_E168.md`.
 

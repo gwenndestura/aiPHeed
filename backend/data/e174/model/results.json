@@ -1,0 +1,70 @@
+{
+ "protocol": "docs/e174/PROTOCOL.md blob 0552e845",
+ "leads": {
+  "1": {
+   "n": 72,
+   "accuracy_E174": 0.736,
+   "accuracy_E168": 0.75,
+   "accuracy_persistence": 0.625,
+   "brier_E174": 0.123,
+   "brier_E168": 0.123,
+   "brier_E174_minus_E168": -0.0,
+   "ci95": [
+    -0.0016,
+    0.0016
+   ],
+   "beats_persistence": true,
+   "max_abs_prob_change_vs_E168": 0.08,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|GOV|prune=True|leaves=3,minchild=10,lambda=5.0,trees=150|cal=raw"
+   }
+  },
+  "2": {
+   "n": 72,
+   "accuracy_E174": 0.778,
+   "accuracy_E168": 0.778,
+   "accuracy_persistence": 0.625,
+   "brier_E174": 0.123,
+   "brier_E168": 0.1221,
+   "brier_E174_minus_E168": 0.0008,
+   "ci95": [
+    -0.0033,
+    0.0053
+   ],
+   "beats_persistence": true,
+   "max_abs_prob_change_vs_E168": 0.0727,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|GOV|prune=True|leaves=3,minchild=10,lambda=5.0,trees=150|cal=raw"
+   }
+  },
+  "3": {
+   "n": 72,
+   "accuracy_E174": 0.75,
+   "accuracy_E168": 0.75,
+   "accuracy_persistence": 0.625,
+   "brier_E174": 0.1323,
+   "brier_E168": 0.1352,
+   "brier_E174_minus_E168": -0.0029,
+   "ci95": [
+    -0.0119,
+    0.0064
+   ],
+   "beats_persistence": true,
+   "max_abs_prob_change_vs_E168": 0.1645,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|FULL|prune=False|leaves=7,minchild=10,lambda=20.0,trees=150|cal=raw"
+   }
+  }
+ },
+ "checks": {
+  "1_project_rule_leads_1_3": false,
+  "2_non_inferior_lead1_margin_0.010": true
+ },
+ "decision": "E168 STAYS SERVED; zero-shot version built and tested, not adopted"
+}
