@@ -23,12 +23,22 @@ ROWS = DATA / "dashboard_rows.csv"
 MODEL_ID = "e168-lgbm-1.0"
 ISSUE = "2026-10-01"
 SEAL = "f8228fae"
-# The thesis's five triggers (Chapter III, Algorithm 2): market, climate, employment, OFW remittance and fish kill. Poverty
-# and density are model inputs but belong to the LGU weighting (Objective 3); their push is reported in otherPct, not as a bar.
-GROUPS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fisheries production",
-          "employment": "Employment", "ofw_remittance": "OFW Remittance"}
+# The thesis's five triggers (Chapter III, Algorithm 2): market, climate, employment, OFW remittance and fish kill.
+# Fish kill is measured by a PROXY, PSA provincial fisheries production year-on-year (c_fish_yoy): no public fish-kill event
+# series exists, so the label says so. Employment and OFW remittances are national series (the same for every province).
+# Poverty and density are model inputs but belong to the LGU weighting (Objective 3); with forecast timing and survey
+# history they are shown as "Other model inputs", so the five bars plus Other add to 100 % of |contribution| (nothing is
+# rescaled away). Contributions are exact LightGBM pred_contrib values, which add, so a bar is the sum of its stored columns.
+GROUPS = {"market": "Market / Prices", "climate": "Climate Stress", "employment": "Employment (national)",
+          "ofw_remittance": "OFW Remittance (national)", "fish_kill": "Fish Kill (fisheries production proxy)"}
+BAR_COLS = {"market": ("shap_market",), "climate": ("shap_climate",), "employment": ("shap_employment",),
+            "ofw_remittance": ("shap_ofw_remittance",), "fish_kill": ("shap_fish_kill",)}
 OTHER_COLS = ("shap_poverty", "shap_other")
 SHOWN_GROUPS = dict(GROUPS)
+# PDF report wording (app.services.report_data_e31 reads it through the map engine)
+REPORT_NOUN = ("food-insecurity risk (E168 forecast probability that 50% or more of households are moderately or severely "
+               "food insecure; not a measured rate)")
+REPORT_DATA_NOUN = "E168 food-insecurity risk forecast (probability of HIGH; not a measured rate)"
 
 INDICATOR = {
     "id": "e168_food_insecurity_risk",
@@ -39,8 +49,10 @@ INDICATOR = {
     "definition": ("Forecast probability that the share of households with moderate or severe food insecurity (FNRI "
                    "HFIAS) in the province is 50% or more (HIGH). E168 starts from the latest published provincial survey "
                    "level and adds a constrained LightGBM forecast of the change, from the five trigger groups (market and "
-                   "prices, climate, fisheries production (fish kill), employment and OFW remittances; news signals inside each "
-                   "group; poverty and density also enter the model and weight the city and municipal ranking). HIGH at 0.50."),
+                   "prices; climate; employment and OFW remittances, both national series; and fish kill, measured by the "
+                   "proxy of provincial fisheries production change, not by fish-kill event records), with news signals "
+                   "inside each group. Poverty and density are also inputs and weight the city and municipal ranking. "
+                   "HIGH at 0.50."),
     "unit": "probability 0-1 (HIGH at 0.50)",
     "horizon": ("issued 2026-10-01; Lead 1 = 2027-Q1, Lead 2 = 2027-Q2, Lead 3 = 2027-Q3. Leads 1-3 meet the project "
                 "acceptance rule (accuracy >= 75% and better than the latest survey)."),
@@ -61,10 +73,11 @@ LGU_LEVEL_BASIS = ("Colour = the province's E168 risk class (HIGH when the provi
                    "re-weighted by PSA poverty incidence (60%) and population density (40%). Not a measured or official "
                    "municipal food-insecurity rate; the ranking has not been checked against municipal outcomes.")
 EVENT = "food-insecurity risk (E168: probability that HFIAS moderate+severe is 50% or more)"
-NATIONAL = ("Caution: this input is a national figure, the same for all five provinces, and removing it did not change "
-            "E168's validation accuracy.")
+NATIONAL = ("This is a national figure, the same for all five provinces, and leaving it out did not change how accurate "
+            "the forecast was.")
 GROUP_NOTES = {"employment": NATIONAL, "ofw_remittance": NATIONAL,
-               "news": "News signals are inside the five groups; removing them did not change E168's validation Brier score."}
+               "news": "News reports are counted inside the five groups; leaving them out did not change how accurate the "
+                       "forecast was."}
 TRIGGER_STATUS_NOTES = {
     "contributes": "This factor is an input of the approved E168 food-insecurity model and moved this forecast in the "
                    "direction shown (model influence, not a cause).",
@@ -95,6 +108,21 @@ def active() -> bool:
     from app import registry as R
     reg = R.DIR / "registry.json"
     return reg.exists() and _production(str(reg), reg.stat().st_mtime_ns) == MODEL_ID
+
+
+def not_served_reasons() -> list[str]:
+    """Why E168 is not on the map engine (empty when it is). Used by the strict start-up check."""
+    from app import registry as R
+    reg = R.DIR / "registry.json"
+    out = []
+    if os.getenv("AIPHEED_MAP_MODEL", "auto").lower() not in ("auto", "e168"):
+        out.append(f"AIPHEED_MAP_MODEL={os.getenv('AIPHEED_MAP_MODEL')} overrides the approved model")
+    if not ROWS.exists():
+        out.append(f"served rows missing: {ROWS}")
+    prod = _production(str(reg), reg.stat().st_mtime_ns) if reg.exists() else None
+    if prod != MODEL_ID:
+        out.append(f"registry production model is {prod!r}, not {MODEL_ID}")
+    return out
 
 
 @functools.lru_cache(maxsize=2)
@@ -157,12 +185,18 @@ def evaluation() -> dict:
         a = v["accuracy"]
         c, h = (a + z * z / (2 * n)) / (1 + z * z / n), z * ((a * (1 - a) / n + z * z / (4 * n * n)) ** 0.5) / (1 + z * z / n)
         ok75, beats = a >= 0.75, bool(v["beats_persistence_C2"])
+        # confusion counts from the stored HIGH count, recall and precision (previously tp held the number correct, tn 0)
+        nh, rec_h, prec_h = t.get("n_high"), m.get("recall_high", v["high_recall"]), m.get("precision_high", v["precision"])
+        tp = round(rec_h * nh) if nh else None
+        fp = round(tp / prec_h - tp) if tp and prec_h else None
+        cm = ({"tp": tp, "fp": fp, "fn": nh - tp, "tn": n - nh - fp} if tp is not None and fp is not None
+              else {"tp": None, "fp": None, "fn": None, "tn": None})
         leads[str(k)] = {"n": n, "n_quarters": len(t.get("folds", {})) or 3, "high_share": round(1 - always_low, 3) if always_low is not None else None,
                          "reliable": int(k) <= rl, "accuracy_ci90": [round(c - h, 3), round(c + h, 3)],
                          "baseline_accuracy": {"ALWAYS-LOW": always_low, "PERSISTENCE": v["persistence_accuracy"]},
                          "metrics": {"n": n, "accuracy": a, "balanced_accuracy": round((v["high_recall"] + v["low_recall"]) / 2, 3),
                                      "precision": m.get("precision_high", v["precision"]), "recall": m.get("recall_high", v["high_recall"]),
-                                     "f1": m.get("f1_high"), "auc": m.get("auc_roc"), "brier": v["brier"], "tp": v["correct"], "tn": 0,
+                                     "f1": m.get("f1_high"), "auc": m.get("auc_roc"), "brier": v["brier"], **cm, "correct": v["correct"],
                                      "persistence_accuracy": v["persistence_accuracy"]}}
         hz[str(k)] = {"n": n, "n_quarters": leads[str(k)]["n_quarters"], "accuracy": a, "always_low_accuracy": always_low,
                       "reliable": int(k) <= rl, "criteria": {"accuracy_at_least_75": ok75, "better_than_latest_survey": beats},
@@ -268,10 +302,15 @@ def _shap(r: dict, col: str) -> float:
     return abs(_f(r.get(col)) or 0.0)
 
 
+def bar_value(r: dict, group: str) -> float:
+    """Signed LightGBM contribution of one trigger bar: the sum of its stored columns (BAR_COLS)."""
+    return sum(_f(r.get(c)) or 0.0 for c in BAR_COLS[group])
+
+
 def other_share(rs: list[dict]) -> float:
-    """Share of the change attribution outside the five trigger bars: poverty and density, and forecast timing."""
+    """Share of the change attribution outside the five trigger bars: poverty, density, forecast timing, survey history."""
     oth = sum(_shap(r, c) for r in rs for c in OTHER_COLS)
-    tot = sum(_shap(r, f"shap_{g}") for r in rs for g in GROUPS) + oth
+    tot = sum(abs(bar_value(r, g)) for r in rs for g in GROUPS) + oth
     return 100 * oth / tot if tot else 0.0
 
 
@@ -281,9 +320,9 @@ def evidence_note(code: str | None, quarter: str, other_pct: float | None = None
             f"this province)" if code and rs else " The forecast starts from each province's latest published survey level")
     if other_pct is None:
         other_pct = other_share(rs)
-    other = (f" Poverty and density (which also weight the city and municipal ranking) and forecast timing account for "
-             f"another {other_pct:.0f}% of the change, not shown in the bars." if other_pct else "")
-    note = ("The bars show each trigger group's push (exact LightGBM contributions, log-odds, rescaled to 100%) on E168's "
+    other = (f" Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history "
+             f"account for the remaining {other_pct:.0f}%, shown as \"Other model inputs\"." if other_pct else "")
+    note = ("The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's "
             "forecast change in household food insecurity. News signals are counted inside their group. They are model "
             f"influence, not causes.{base}; the bars explain only the change from it.{other}")
     return f"{note} {GROUP_NOTES[group]}" if group in GROUP_NOTES and group != "news" else note
@@ -299,31 +338,34 @@ def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
     r = row(code, quarter)
     if r is None:
         return None
-    none = "No published value was available at this forecast's issue date; missing data is not a sign of low risk."
+    # Plain words for the general public. Only values with an everyday unit are quoted (food price change in %, number
+    # of typhoons, El Nino or La Nina); the other inputs are named, not quoted.
+    none = "No figures had been published yet when this forecast was made. That does not mean the risk is low."
     v = lambda c: _val(r, c)
-    # Only values whose unit is unambiguous are quoted (provincial food inflation in %, cyclone count, ONI in deg C); the
-    # other inputs enter the model transformed (logits, standardised changes), so they are named, not quoted.
     if group == "market":
-        return none if v("cpi_food_yoy") is None else (
-            f"Provincial food inflation (PSA CPI) was {v('cpi_food_yoy'):.1f}% year on year at the issue date; rice prices "
-            "and the change since the last survey are also inputs.")
+        x = v("cpi_food_yoy")
+        return none if x is None else (
+            f"Food prices in the province were {abs(x):.1f}% {'higher' if x >= 0 else 'lower'} than a year before. "
+            "Rice prices also count.")
     if group == "climate":
-        parts = [None if v("c_tc_4q") is None else f"{int(round(v('c_tc_4q')))} tropical cyclone(s) in the last four quarters.",
-                 None if v("oni") is None else f"ONI (El Nino index) {v('oni'):+.1f} deg C.",
-                 "Agricultural production changes and soil and rainfall anomalies are also inputs."]
+        tc, oni = v("c_tc_4q"), v("oni")
+        enso = (None if oni is None else "El Niño conditions were present." if oni >= 0.5 else
+                "La Niña conditions were present." if oni <= -0.5 else "There was no El Niño or La Niña.")
+        parts = [None if tc is None else f"{int(round(tc))} typhoon{'s' if round(tc) != 1 else ''} in the past year.", enso,
+                 "Rainfall, dry soil and farm harvests also count."]
         return " ".join(p for p in parts if p)
     if group == "fish_kill":
-        return ("Fisheries production (PSA, provincial): its year-on-year change is an input; a fall pushes risk up."
+        return ("Based on the province's fish catch compared with a year before (a smaller catch raises the risk). No "
+                "official list of fish kills exists, so this uses the fish catch, not reports of fish kills."
                 if v("c_fish_yoy") is not None else none)
     if group == "employment":
-        return ("National unemployment (PSA LFS): its level and its change since the last survey are inputs. " + NATIONAL
+        return ("Based on the unemployment rate for the whole country. " + NATIONAL
                 if v("unemp_rate") is not None else none)
     if group == "ofw_remittance":
-        return ("OFW cash remittances (BSP, national): their year-on-year change is an input. " + NATIONAL
+        return ("Based on money sent home by OFWs to the whole country. " + NATIONAL
                 if v("remit_yoy") is not None else none)
     if group == "poverty":
-        return ("PSA provincial poverty incidence, subsistence incidence and poverty gap (the latest release usable at the "
-                "issue date) and population density; they change only when PSA publishes a new round."
+        return ("How poor the province is and how crowded it is (latest government figures)."
                 if v("p_poverty") is not None else none)
     return None
 
@@ -334,31 +376,59 @@ def drivers(code: str, quarter: str, base: dict) -> dict:
         return base
     ds = []
     for g, lab in GROUPS.items():
-        c = _f(r.get(f"shap_{g}")) or 0.0
+        c = bar_value(r, g)
         ds.append({"driver_group": g, "driver_label": lab, "group_shap": round(c, 6),
                    "direction": "increases_risk" if c > 0 else "protective" if c < 0 else "no_effect",
                    "trigger_proportion": None})
     return {**base, "drivers": ds, "article_count": (base or {}).get("article_count", 0),
-            "other_pct": round(other_share([r]), 1), "ch1": r}
+            "other_pct": round(other_share([r]), 1), "other_abs": sum(_shap(r, c) for c in OTHER_COLS), "ch1": r}
+
+
+def model_performance() -> dict:
+    """/api/v1/config modelPerformance while E168 is served: its own evaluation, not the retired thesis system's."""
+    ev = evaluation()
+    return {"model": f"{MODEL_ID} (E168 LightGBM)", "target": INDICATOR["definition"], "maxReliableLead": ev["max_reliable_lead"],
+            "acceptanceRule": ev["acceptance_rule"], "leads": {k: v["metrics"] for k, v in ev["leads"].items()}}
+
+
+def serving_model() -> dict:
+    """/api/v1/config servingModel while E168 is served."""
+    return {"mode": "e168", "model": MODEL_ID, "issued": ISSUE, "targetQuarter": "2027-Q1", "lead": 1,
+            "servedLeads": [1, 2, 3], "strict": os.getenv("AIPHEED_STRICT_MODEL", "") in ("1", "true", "True")}
 
 
 def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = None) -> str | None:
+    # Plain words for the general public; the first sentence is the headline the dashboard shows.
+    period = f"{_MONTHS.get(quarter[-2:], quarter)} {quarter[:4]}" if len(quarter) == 7 else quarter
     if code is None:
         rs = _rs(None, quarter)
         if not rs:
             return None
         high = sum(float(r["probability"]) >= 0.5 for r in rs)
         top = max(rs, key=lambda r: float(r["score_pct"]))
-        return (f"FOOD-INSECURITY RISK for CALABARZON, {quarter} (E168 forecast): {high} of {len(rs)} provinces HIGH; highest "
-                f"forecast share {top['province']} {float(top['score_pct']):.0f}% of households moderately or severely "
-                f"food insecure (HIGH at 50%); {reliability_text(rs[0])}.")
+        return (f"In CALABARZON, {period}: {high} of {len(rs)} provinces at high risk. The highest is {top['province']}, where "
+                f"about {float(top['score_pct']):.0f} in 100 households are expected to have moderate or severe trouble "
+                f"getting enough food (high risk means 50 in 100 or more). {_plain_reliability(rs[0])}")
     r = row(code, quarter)
     if r is None:
         return None
     p = float(r["probability"])
-    return (f"FOOD-INSECURITY RISK for {name}, {quarter} (E168 forecast): {'HIGH' if p >= 0.5 else 'LOW'} (probability "
-            f"{p:.2f}; forecast {float(r['score_pct']):.1f}% of households moderately or severely food insecure, 90% range "
-            f"{float(r['range90_low']):.0f}-{float(r['range90_high']):.0f}%; HIGH at 50%); {reliability_text(r)}.")
+    chance = "less than 1 in 100" if p < 0.005 else f"about {round(p * 100)} in 100"
+    return (f"{name}, {period}: {'high' if p >= 0.5 else 'low'} risk. About {float(r['score_pct']):.0f} in 100 households are "
+            f"expected to have moderate or severe trouble getting enough food (most likely between "
+            f"{float(r['range90_low']):.0f} and {float(r['range90_high']):.0f}). High risk means 50 in 100 or more; the "
+            f"chance of that is {chance}. {_plain_reliability(r)}")
+
+
+_MONTHS = {"Q1": "January-March", "Q2": "April-June", "Q3": "July-September", "Q4": "October-December"}
+
+
+def _plain_reliability(r: dict) -> str:
+    v = evaluation()["leads"].get(str(int(r["lead"])))
+    if v and v["reliable"]:
+        return (f"In tests on past surveys, forecasts made this far ahead were right {v['metrics']['accuracy'] * 100:.0f}% "
+                f"of the time.")
+    return "Forecasts this far ahead were less reliable in past tests, so treat this as a rough guide."
 
 
 def early_warning(quarter: str, code: str | None) -> list[dict]:
@@ -443,13 +513,13 @@ def data_status(code: str | None, quarter: str) -> tuple[str, str]:
     rs = _rs(code, quarter)
     if not rs:
         return "unavailable", "The input values of this forecast were not recorded."
-    labels = {"cpi_food_yoy": "provincial food inflation", "unemp_rate": "unemployment", "remit_yoy": "OFW remittances",
-              "p_poverty": "poverty incidence", "c_tc_4q": "tropical cyclones"}
+    labels = {"cpi_food_yoy": "food prices", "unemp_rate": "unemployment", "remit_yoy": "money sent home by OFWs",
+              "p_poverty": "poverty", "c_tc_4q": "typhoons"}
     missing = [lab for c, lab in labels.items() if any(_val(r, c) is None for r in rs)]
     if not missing:
-        return "sufficient", "Every main input had a published value at the issue date."
-    return "limited", ("No published value at the issue date for: " + ", ".join(missing) + ". Missing data is left blank, "
-                       "never counted as low risk.")
+        return "complete", "All the main figures had been published when this forecast was made."
+    return "incomplete", ("Not yet published when this forecast was made: " + ", ".join(missing) + ". Missing figures are "
+                          "left out, never counted as low risk.")
 
 
 def identity(code: str | None, quarter: str) -> dict | None:

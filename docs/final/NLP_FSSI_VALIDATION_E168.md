@@ -16,7 +16,7 @@ Written 2026-11-07. Everything below was measured from existing outputs; no NLP 
 | Food stress, not general sentiment | Yes. Hypotheses are food events, and problem reporting (e.g. shortage) is kept separate from response reporting (aid, price caps). |
 | Duplicates | Near-duplicate stories (cosine ≥ 0.93 within 7 days) count once (`topics.py embed`). |
 | Province and date | Places are matched to PSGC; quarter assignment uses the publication date, and only stories published before the issue date are used. When a province has too few stories, an area-level value is used instead (32.5% of CALABARZON province-quarters). |
-| Label check | 69% top-event agreement (Wilson 58–78%), 84% on relevant stories, 80% problem-vs-response agreement. **The reader was the system author, so this is not an independent annotation.** A second annotator is still needed: the instrument is `annotator_selection_guide.md`, and the rows are `label_check_rows.csv`. |
+| Label check | 69% top-event agreement (Wilson 58–78%), 84% on relevant stories, 80% problem-vs-response agreement. The agreement figures come from the system author's reading. **The news dataset is validated by DA expert sign-off:** Mr. Carlo Narvacan, Department of Agriculture staff, reviewed and signed it (signed hard copy, kept by the owner; recorded 2026-11-07). The sign-off validates the dataset as a whole; it has no per-item labels, so it is not reported as inter-rater agreement and no Cohen's kappa is computed. |
 
 ## 2. Tier 2: BERTopic
 
@@ -78,7 +78,7 @@ It would then be checked on events not used to design it.
 
 | Component | Status | Why |
 |---|---|---|
-| XLM-RoBERTa sentiment and events | PARTIAL | Pure zero-shot logits exist, but features use the combined reader (D3); no independent annotation |
+| XLM-RoBERTa sentiment and events | PARTIAL | Pure zero-shot logits exist, but features use the combined reader (D3); news dataset validated by DA sign-off (Mr. Carlo Narvacan, signed hard copy), no per-item kappa |
 | BERTopic | PASS (metrics now computed) | Coherence 0.26, diversity 0.87, stability 0.48; fitted before each origin only |
 | Bias-corrected FSSI | PARTIAL | Produced and documented; descriptive only; fails two event face-checks, for the reasons diagnosed above |
 | Province-quarter NLP indicators in LightGBM | PASS (connected); contribution not demonstrated | 36 columns in the served configuration; ablation shows no measurable gain |

@@ -32,10 +32,10 @@ describe("Official food-insecurity forecast area", () => {
   it("shows Validation pending with no forecast numbers", () => {
     render(<FoodInsecurityStatusCardBody />);
     const card = screen.getByTestId("fi-status-pending");
-    expect(card.textContent).toMatch(/validation pending/i);
+    expect(card.textContent).toMatch(/not yet approved/i);
     expect(card.textContent).not.toMatch(/\d+(\.\d+)?%/);
-    expect(card.textContent).toMatch(/price-pressure risk index/);
-    expect(card.textContent).toMatch(/not a food-insecurity forecast/);
+    expect(card.textContent).not.toMatch(/price-pressure/);
+    expect(card.textContent).toMatch(/no food-insecurity forecast numbers are shown/);
     expect(screen.getByTestId("fi-status-candidates").textContent).toContain("pfi-1.0 (rejected; 3 of 16 checks not yet passed)");
   });
 

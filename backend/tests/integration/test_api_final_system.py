@@ -36,7 +36,8 @@ def test_overview_shows_latest_sws_observation_with_dates_and_age():
     assert last["fieldworkEnd"] < last["published"]
     assert last["ageDaysAtAsOf"] == (pd.Timestamp(o["asOf"]) - pd.Timestamp(last["fieldworkEnd"])).days
     assert "Balance Luzon" in o["regionalHunger"]["geography"] and "No province" in o["regionalHunger"]["geography"]
-    assert "not a food-insecurity rate or probability" in o["localEvidence"]
+    # the map's province values are model forecasts (E168), never presented as measured rates
+    assert "not measured rates" in o["localEvidence"] and "indicator-based priority score" not in o["localEvidence"]
 
 
 def test_latest_observation_is_kept_apart_from_forecasts():

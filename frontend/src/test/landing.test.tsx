@@ -255,7 +255,9 @@ describe("Landing page", () => {
     expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
     const src = container.querySelector("#methodology table")?.textContent ?? "";
     expect(src).toContain("FNRI National/Expanded National Nutrition Survey (HFIAS)");
-    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*2021 to 2026-Q2/);
+    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*2013 to the issue date/);
+    expect(src).not.toMatch(/Pink Sheet|PAGASA El Ni|9,667/);
+    expect(src).toMatch(/fisheries production.*proxy for the Fish Kill trigger, not a record of fish-kill events/);
     expect(text).toContain("removing employment or remittances did not change the tested accuracy");
     expect(text).toContain("Removing the news signals did not measurably change the tested accuracy.");
   });
@@ -280,12 +282,11 @@ describe("About dialog", () => {
     expect(rows.className).toContain("divide-y");
     expect([...rows.querySelectorAll("li")].map((li) => li.textContent)).toEqual([
       "FNRI National and Expanded National Nutrition Surveys: household food insecurity (HFIAS), by province",
-      "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
+      "Philippine Statistics Authority (PSA): food and rice prices, farm and fisheries production, poverty, population, labor force",
       "Bangko Sentral ng Pilipinas (BSP): cash remittances",
-      "PAGASA: El Niño advisories · IBTrACS: typhoons",
-      "World Bank Commodity Price Data (Pink Sheet): world rice, cereal, oil and fertilizer prices",
-      "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
-      "Google News headlines in Filipino and English",
+      "NASA POWER: rainfall and soil moisture · IBTrACS: typhoons · NOAA: El Niño index (ONI)",
+      "News in Filipino and English (GDELT, newspaper archives, Google News titles)",
+      "Social Weather Stations (SWS): hunger, Balance Luzon (regional; context, not a model input)",
     ]);
     const titles = [...dlg.querySelectorAll("h4")].map((h) => h.textContent);
     expect(titles).toEqual([

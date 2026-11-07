@@ -5,6 +5,8 @@ export interface RegionData {
   name: string;
   riskScore: number;
   riskLevel: RiskLevel;
+  /** False when the API returned no score for this province-quarter: shown as "no forecast", never as 0 / Low. */
+  hasForecast?: boolean;
   population: number;
   povertyRate: number;
   unemploymentRate: number;
@@ -59,9 +61,10 @@ export const RISK_COLORS: Record<RiskLevel, string> = {
   severe: "#ef4444",
 };
 
+// The served model (E168) forecasts FOOD-INSECURITY risk (FNRI HFIAS), not food-price risk; only Low and High are used.
 export const RISK_LABELS: Record<RiskLevel, string> = {
-  low: "Low Price Risk",
-  moderate: "Moderate Price Risk",
-  high: "High Price Risk",
-  severe: "High Price Risk",
+  low: "Low risk",
+  moderate: "Low risk",
+  high: "High risk",
+  severe: "High risk",
 };

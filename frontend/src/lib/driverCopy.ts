@@ -33,8 +33,8 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
     lowers: "Food prices were lower than usual.",
   },
   fish_kill: {
-    raises: "Fisheries production fell more than usual.",
-    lowers: "Fisheries production held up better than usual.",
+    raises: "The fish catch fell more than usual.",
+    lowers: "The fish catch held up better than usual.",
   },
   ofw_remittance: {
     raises: "Money sent home by OFWs grew less than usual.",
@@ -57,45 +57,57 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
 // E42: a direction is only stated for a group that actually moved the forecast. A group with no model input, no
 // official data, or no measurable effect gets neutral copy that says exactly that (previously a 0% climate group read
 // "Weather is hurting food supply").
+// Plain names for the general public (one place, used by every panel). "(national figures)" and "instead of fish-kill
+// reports" keep the honest disclosures in everyday words.
 const FRIENDLY_NAME: Record<string, string> = {
   market: "Food prices",
   climate: "Weather and farm supply",
-  fish_kill: "Fisheries production",
-  employment: "Jobs and livelihoods",
-  ofw_remittance: "OFW remittances",
+  fish_kill: "Fish catch (instead of fish-kill reports)",
+  employment: "Jobs (national figures)",
+  ofw_remittance: "Money sent home by OFWs (national figures)",
   poverty: "Poverty and vulnerability",
-  news: "News signals",
+  news: "News reports",
   hunger_indicator: "Regional hunger (indicator)",
 };
 
+/** The plain name of a trigger group for the public dashboard; falls back to the label the API sent. */
+export function plainName(key: string, fallback?: string): string {
+  return FRIENDLY_NAME[key] ?? fallback ?? key;
+}
+
+/** Plain name and hover note for the share outside the five groups. */
+export const OTHER_FACTORS_NAME = "Other factors (poverty, population, timing)";
+export const OTHER_FACTORS_NOTE =
+  "Things the forecast also uses that are not one of the five groups: how poor the province is, how crowded it is, and how far ahead the forecast looks.";
+
 const NEUTRAL_COPY: Record<Exclude<TriggerStatus, "contributes">, (name: string) => Copy> = {
   no_effect: (name) => ({
-    title: `${name}: no measurable effect`,
-    description: "This factor is in the model but did not move this quarter's score.",
+    title: `${name}: no effect this time`,
+    description: "This is part of the forecast but did not change this quarter's result.",
   }),
   data_not_in_model: (name) => ({
-    title: `${name}: data shown, not in the model`,
-    description: "Official data exist and are shown as evidence, but the model does not use them for this score.",
+    title: `${name}: shown, not used`,
+    description: "Official figures exist and are shown for reference, but the forecast does not use them.",
   }),
   stale: (name) => ({
-    title: `${name}: data out of date`,
-    description: "The latest official figure is more than two quarters old, so it says little about this quarter.",
+    title: `${name}: figures out of date`,
+    description: "The latest official figure is more than six months old, so it says little about this quarter.",
   }),
   no_model_input: (name) => ({
     title: `${name}: not used in this forecast`,
-    description: "The current model has no input for this factor, so it neither raised nor lowered the score.",
+    description: "The forecast does not use this, so it did not raise or lower the result.",
   }),
   no_data: (name) => ({
-    title: `${name}: no official data`,
-    description: "No official data series is available for this factor; this is not a sign of low risk.",
+    title: `${name}: no official figures`,
+    description: "There are no official figures for this, which does not mean the risk is low.",
   }),
   insufficient_data: (name) => ({
-    title: `${name}: insufficient data`,
-    description: "No published data were available when this forecast was issued; this is not a sign of low risk.",
+    title: `${name}: not enough figures`,
+    description: "No figures had been published when this forecast was made, which does not mean the risk is low.",
   }),
   not_recorded: (name) => ({
     title: `${name}: not recorded for this quarter`,
-    description: "Factor contributions are recorded only for the issued forecast, not for past quarters.",
+    description: "This breakdown is kept only for the current forecast, not for past quarters.",
   }),
 };
 

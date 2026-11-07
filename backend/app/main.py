@@ -45,7 +45,14 @@ def strict_model_check() -> None:
     problems = THESIS.validate()
     if problems:
         raise RuntimeError("thesis system not ready: " + "; ".join(problems))
-    print(f"Serving {THESIS.MODEL_NAME} (strict)")
+    # The map, rankings, explanations and reports are served by the approved food-insecurity model (E168). Strict mode
+    # must not let them fall back silently to the Chapter I price index when its registry entry or rows are missing.
+    from app.ml.inference import e168_system as E168
+
+    missing = E168.not_served_reasons()
+    if missing:
+        raise RuntimeError(f"approved model {E168.MODEL_ID} is not served: " + "; ".join(missing))
+    print(f"Serving {E168.MODEL_ID} (E168 LightGBM food-insecurity risk) on the dashboard (strict)")
 
 
 @asynccontextmanager

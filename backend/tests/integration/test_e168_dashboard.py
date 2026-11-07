@@ -47,8 +47,45 @@ def test_export_equals_the_approved_artifact():
 
 def test_group_contributions_add_up_to_the_lightgbm_change():
     for r in E.rows().values():
-        parts = sum(float(r[f"shap_{g}"]) for g in E.GROUPS) + sum(float(r[c]) for c in E.OTHER_COLS) + float(r["bias_logit"])
+        parts = sum(E.bar_value(r, g) for g in E.GROUPS) + sum(float(r[c]) for c in E.OTHER_COLS) + float(r["bias_logit"])
         assert parts == pytest.approx(float(r["change_logit"]), abs=1e-4)
+
+
+def test_five_triggers_labelled_honestly():
+    # The thesis's five triggers; national series and the fish-kill proxy say what they are. Every stored column once.
+    assert set(E.GROUPS) == {"market", "climate", "employment", "ofw_remittance", "fish_kill"}
+    assert "(national)" in E.GROUPS["employment"] and "(national)" in E.GROUPS["ofw_remittance"]
+    assert "proxy" in E.GROUPS["fish_kill"].lower()
+    used = [c for cols in E.BAR_COLS.values() for c in cols] + list(E.OTHER_COLS)
+    assert len(used) == len(set(used))
+
+
+def test_driver_shares_include_other_and_add_to_100(thesis):
+    for scope, sid in (("province", "quezon"), ("region", "calabarzon")):
+        d = _get("/api/v1/explainability", scope=scope, id=sid, quarter="2027-Q1")
+        assert isinstance(d["otherPct"], (int, float)), "the share outside the five bars must be reported"
+        assert sum(t["pct"] for t in d["triggers"]) + d["otherPct"] == 100
+
+
+def test_fish_kill_bar_is_disclosed_as_a_proxy(thesis):
+    d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
+    fk = next(t for t in d["triggers"] if t["key"] == "fish_kill")
+    assert "proxy" in fk["label"].lower() and "not reports of fish kills" in (fk["plainEvidence"] or "")
+
+
+def test_report_and_config_describe_e168_not_the_retired_index(thesis):
+    rep = json.dumps(_get("/api/v1/report/data", scope="province", id="quezon", quarter="2027-Q1"))
+    assert "price-pressure" not in rep and "E168" in rep
+    cfg = _get("/api/v1/config")
+    # modelPerformance keeps the structure the PDF report code reads (not displayed in the frontend)
+    # servingModel keeps its existing contract (None in the default mode)
+    ov = _get("/api/v1/final/overview")
+    assert "indicator-based priority score" not in ov["localEvidence"]
+
+
+def test_evaluation_confusion_matrix_is_consistent():
+    m = E.evaluation()["leads"]["1"]["metrics"]
+    assert m["tp"] + m["fp"] + m["fn"] + m["tn"] == m["n"] and m["tp"] + m["tn"] == m["correct"]
 
 
 def test_map_engine_selects_e168_and_ch1_on_request(thesis):
@@ -111,3 +148,17 @@ def test_no_early_warning_when_all_low():
     from app.quarterly import alerts_e168
     assert all(r["risk_class"] == "LOW" for r in LIVE["provinces"])
     assert alerts_e168.candidates() == []
+
+
+def test_strict_start_refuses_when_e168_is_not_served(thesis, tmp_path):
+    # No silent fallback to the Chapter I price index: strict start-up names why the approved model is not served.
+    from app import main as MAIN
+    thesis.setenv("AIPHEED_STRICT_MODEL", "1")
+    MAIN.strict_model_check()                                     # E168 served: starts
+    thesis.setenv("AIPHEED_MAP_MODEL", "ch1")
+    with pytest.raises(RuntimeError, match="e168-lgbm-1.0 is not served: AIPHEED_MAP_MODEL=ch1"):
+        MAIN.strict_model_check()
+    thesis.delenv("AIPHEED_MAP_MODEL")
+    thesis.setattr(E, "ROWS", tmp_path / "missing_rows.csv")
+    with pytest.raises(RuntimeError, match="served rows missing"):
+        MAIN.strict_model_check()

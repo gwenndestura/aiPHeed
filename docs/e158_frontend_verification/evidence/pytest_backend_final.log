@@ -1,0 +1,398 @@
+........................................................................ [  4%]
+...........................................................s...s.....s.. [  8%]
+s.........s......sss.........................................ss.s.s..... [ 12%]
+........................................................................ [ 16%]
+....................................s.......F.F......................... [ 21%]
+........................................................................ [ 25%]
+........................................................................ [ 29%]
+........................................................................ [ 33%]
+........................................................................ [ 38%]
+.....ss.s........sss.................................................... [ 42%]
+........................................................................ [ 46%]
+........................................................................ [ 50%]
+........................................................................ [ 54%]
+................................................................s.....F. [ 59%]
+................................F.....F...F..........................F.. [ 63%]
+...................................F.F......F.......F........F.F......F. [ 67%]
+.........FF............................................................. [ 71%]
+........................................................................ [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+.......F................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 97%]
+.............F...................................                        [100%]
+================================== FAILURES ===================================
+_______________________ test_all_validation_checks_pass _______________________
+
+results = {'Quezon City and Lucena never appear as province units': {'check': 'Quezon City and Lucena never appear as province u...{'check': 'computed changes start 2022-Q1 or later (2021+ base only)', 'detail': 'min 2022-Q1', 'result': 'PASS'}, ...}
+
+    def test_all_validation_checks_pass(results):
+        failed = {k: v["detail"] for k, v in results.items() if v["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/api/v1/insights.py
+E          M backend/app/main.p...68_system.py
+E          M backend/app/schemas/public.py
+E          M backend/app/services/dashboard.py
+E          M backend/app/services/final_e'}
+E       assert not {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/api/v1/insights.py\n M backend/app/main.p...68_system.py\n M backend/app/schemas/public.py\n M backend/app/services/dashboard.py\n M backend/app/services/final_e'}
+
+tests\integration\test_e119r2_framework.py:32: AssertionError
+____________________________ test_e120_checks_pass ____________________________
+
+    def test_e120_checks_pass():
+        sys.path.insert(0, str(E / "runner"))
+        spec = importlib.util.spec_from_file_location("e120_validate", E / "runner" / "validate.py")
+        validate = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validate)
+        r = validate.checks()
+        failed = {x["check"]: x["detail"] for x in r if x["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/api/v1/insights.py
+E          M ...68_system.py
+E          M backend/app/schemas/public.py
+E          M backend/app/services/dashboard.py
+E          M backend/app/services/final_e'}
+E       assert not {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/api/v1/insights.py\n M ...68_system.py\n M backend/app/schemas/public.py\n M backend/app/services/dashboard.py\n M backend/app/services/final_e'}
+
+tests\integration\test_e120_firi_design.py:28: AssertionError
+____________ test_real_store_untouched_and_duplicate_issue_refused ____________
+
+tmp_path = WindowsPath('C:/Users/admin/AppData/Local/Temp/pytest-of-velvetvhea/pytest-820/test_real_store_untouched_and_0')
+s = {'conditions': {'C1_date_on_or_after_issue': False, 'C2_frozen_configuration_and_hashes': True, 'C3_required_periods_c...32026(PEILOU); WP172026(SAUDEL); WP222026(KROVANH); WP252026(SURIGAE)', 'track_types': 'PROVISIONAL', ...}], ...}, ...}
+
+    def test_real_store_untouched_and_duplicate_issue_refused(tmp_path, s):
+        assert s["store"]["forecasts"] == [] and [e[0] for e in s["store"]["events"]] == ["attempt_blocked"]
+>       assert not any((E124 / "store" / "forecasts").iterdir())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_e125_pre_issuance.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/admin/aipheed_e145/aipheed-backend-aligned/experiments/E124_FIRI3_Prospective_Validation/store/forecasts')
+
+    def iterdir(self):
+        """Yield path objects of the directory contents.
+    
+        The children are yielded in arbitrary order, and the
+        special entries '.' and '..' are not included.
+        """
+        root_dir = str(self)
+>       with os.scandir(root_dir) as scandir_it:
+             ^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\admin\\aipheed_e145\\aipheed-backend-aligned\\experiments\\E124_FIRI3_Prospective_Validation\\store\\forecasts'
+
+C:\Program Files\Python313\Lib\pathlib\_local.py:575: FileNotFoundError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        firi = REPO / "backend" / "app" / "ml" / "inference" / "firi.py"
+        firi3 = REPO / "backend" / "app" / "ml" / "inference" / "firi3.py"
+        assert hashlib.sha256(firi.read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+>       assert hashlib.sha256(firi3.read_bytes()).hexdigest() == "d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1"
+E       AssertionError: assert '210082af6807...94d56889b877d' == 'd8298024541f...7ab616d8e2cd1'
+E         
+E         - d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1
+E         + 210082af6807a416a8d561b607bfaf05311cb63c7b1a7c267a894d56889b877d
+
+tests\unit\test_e128_ml.py:115: AssertionError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+        assert hashlib.sha256((inf / "firi.py").read_bytes()).hexdigest() == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+>       assert hashlib.sha256((inf / "firi3.py").read_bytes()).hexdigest() == "d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1"
+E       AssertionError: assert '210082af6807...94d56889b877d' == 'd8298024541f...7ab616d8e2cd1'
+E         
+E         - d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1
+E         + 210082af6807a416a8d561b607bfaf05311cb63c7b1a7c267a894d56889b877d
+
+tests\unit\test_e129_feasibility.py:74: AssertionError
+________________ test_e128_e129_firi_and_production_untouched _________________
+
+    def test_e128_e129_firi_and_production_untouched():
+        assert _sha(E128 / "E128_FROZEN_EXPERIMENT_PROTOCOL.md") == "c7a92670d65da9ddf04233739341f6765b719cf8338be2642bda2a9f3e8618f3"
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+        assert _sha(inf / "firi.py") == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+>       assert _sha(inf / "firi3.py") == "d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1"
+E       AssertionError: assert '210082af6807...94d56889b877d' == 'd8298024541f...7ab616d8e2cd1'
+E         
+E         - d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1
+E         + 210082af6807a416a8d561b607bfaf05311cb63c7b1a7c267a894d56889b877d
+
+tests\unit\test_e130_provincial.py:83: AssertionError
+__________________________ test_production_untouched __________________________
+
+    def test_production_untouched():
+        inf = REPO / "backend" / "app" / "ml" / "inference"
+        assert _sha(inf / "firi.py") == "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3"
+>       assert _sha(inf / "firi3.py") == "d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1"
+E       AssertionError: assert '210082af6807...94d56889b877d' == 'd8298024541f...7ab616d8e2cd1'
+E         
+E         - d8298024541f48ae9a472179c836fc1428ebae7fd83e58a24e47ab616d8e2cd1
+E         + 210082af6807a416a8d561b607bfaf05311cb63c7b1a7c267a894d56889b877d
+
+tests\unit\test_e131_resolution.py:170: AssertionError
+_______________________ test_protocol_lock_matches_code _______________________
+
+    def test_protocol_lock_matches_code():
+>       E.verify_lock()
+
+tests\unit\test_e137.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock() -> None:
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        now = _hashes()
+        bad = [k for k, v in rec["hashes"].items() if now.get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E137 lock mismatch: {bad}")
+E           RuntimeError: E137 lock mismatch: ['protocol', 'outcomes.py', 'features.py', 'model.py', 'evaluate.py']
+
+app\e137\evaluate.py:73: RuntimeError
+_______________________ test_protocol_lock_matches_code _______________________
+
+    def test_protocol_lock_matches_code():
+>       E.verify_lock()
+
+tests\unit\test_e138.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock() -> None:
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E138 lock mismatch: {bad}")
+E           RuntimeError: E138 lock mismatch: ['protocol', 'models.py', 'where.py', 'when.py', 'evaluate.py']
+
+app\e138\evaluate.py:60: RuntimeError
+_______________________ test_protocol_lock_matches_code _______________________
+
+    def test_protocol_lock_matches_code():
+>       E.verify_lock()
+
+tests\unit\test_e139.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock():
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E139 lock mismatch: {bad}")
+E           RuntimeError: E139 lock mismatch: ['protocol', 'model.py', 'evaluate.py']
+
+app\e139\evaluate.py:62: RuntimeError
+_______________________ test_protocol_lock_matches_code _______________________
+
+    def test_protocol_lock_matches_code():
+>       E.verify_lock()
+
+tests\unit\test_e140.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock():
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E140 lock mismatch: {bad}")
+E           RuntimeError: E140 lock mismatch: ['protocol', 'evaluate.py']
+
+app\e140\evaluate.py:51: RuntimeError
+________________________ test_lock_and_frozen_decision ________________________
+
+    def test_lock_and_frozen_decision():
+>       E.verify_lock()
+
+tests\unit\test_e141.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock():
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E141 lock mismatch: {bad}")
+E           RuntimeError: E141 lock mismatch: ['protocol', 'panel.py', 'evaluate.py', 'nns2013.py']
+
+app\e141\evaluate.py:89: RuntimeError
+__________________________________ test_lock __________________________________
+
+    def test_lock():
+>       E.verify_lock()
+
+tests\unit\test_e142.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock():
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E142 lock mismatch: {bad}")
+E           RuntimeError: E142 lock mismatch: ['protocol', 'model.py', 'evaluate.py']
+
+app\e142\evaluate.py:61: RuntimeError
+__________________________________ test_lock __________________________________
+
+    def test_lock():
+>       E.verify_lock()
+
+tests\unit\test_e143.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def verify_lock():
+        rec = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        bad = [k for k, v in rec["hashes"].items() if _hashes().get(k) != v]
+        if bad:
+>           raise RuntimeError(f"E143 lock mismatch: {bad}")
+E           RuntimeError: E143 lock mismatch: ['protocol', 'model.py', 'evaluate.py']
+
+app\e143\evaluate.py:58: RuntimeError
+________ test_issue_covers_five_provinces_four_quarters_and_class_rule ________
+
+    def test_issue_covers_five_provinces_four_quarters_and_class_rule():
+>       f = json.loads((OUT / "issue" / "forecast.json").read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_e144.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Program Files\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Program Files\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/admin/aipheed_e145/backend/data/e144/out/issue/forecast.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\admin\\aipheed_e145\\backend\\data\\e144\\out\\issue\\forecast.json'
+
+C:\Program Files\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+_____________________ test_registry_and_admin_route_only ______________________
+
+    def test_registry_and_admin_route_only():
+        from app.main import app
+        from app.services.security import require_admin
+        assert (R.load().get("production") or {}).get("model_id") != "e144-lbf-1.0"
+>       assert "e144-lbf-1.0" in {x["model_id"] for x in PP.read()} and PP.verify()
+E       AssertionError: assert ('e144-lbf-1.0' in {'e138-where-lrp-1.0', 'e139-lgbm-1.0', 'e140-lgbm-native-1.0', 'e141-lgbm-3round-1.0', 'e142-state-lgbm-1.0', 'e143-hre-lgbm-1.0', ...})
+
+tests\unit\test_e144.py:89: AssertionError
+_______________________ test_protocol_lock_matches_code _______________________
+
+    def test_protocol_lock_matches_code():
+        lock = json.loads((OUT / "PROTOCOL_LOCK.json").read_text())
+        assert lock["protocol_sha256"] == S.protocol_sha()
+        from app.paths import BACKEND_DIR
+        code = hashlib.sha256((BACKEND_DIR / "app/hfias/study.py").read_bytes() + (BACKEND_DIR / "app/hfias/panel.py").read_bytes()).hexdigest()
+>       assert lock["code_sha256"] == code
+E       AssertionError: assert '8d4ea2fb9c33...581212b260ebb' == '3a9cc0800b25...68b2abf3a0857'
+E         
+E         - 3a9cc0800b2599684c2e43fe7b696bdbba49843aa59a0f1cbc568b2abf3a0857
+E         + 8d4ea2fb9c337d3a8336abe49c04a829f1c751d02f24a1baf77581212b260ebb
+
+tests\unit\test_hfias.py:91: AssertionError
+_______________ test_api_identical_from_two_working_directories _______________
+
+    def test_api_identical_from_two_working_directories():
+>       a, b = _run(BACKEND), _run(BACKEND.parent)
+               ^^^^^^^^^^^^^
+
+tests\unit\test_v2_paths.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cwd = WindowsPath('C:/Users/admin/aipheed_e145/backend')
+
+    def _run(cwd: Path) -> dict:
+        env = {**os.environ, "AIPHEED_NOW": "2026-11-01T10:00"}      # fixed clock: /config echoes the current time
+        r = subprocess.run([sys.executable, "-c", PROBE], cwd=cwd, capture_output=True, text=True, timeout=600, env=env)
+>       assert r.returncode == 0, r.stderr[-2000:]
+E       AssertionError: sqlite.py", line 164, in execute
+E             self.await_(_cursor.execute(operation, parameters))
+E             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+E             return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+E                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+E             value = await result
+E                     ^^^^^^^^^^^^
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\aiosqlite\cursor.py", line 40, in execute
+E             await self._execute(self._cursor.execute, sql, parameters)
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\aiosqlite\cursor.py", line 32, in _execute
+E             return await self._conn._execute(fn, *args, **kwargs)
+E                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\aiosqlite\core.py", line 160, in _execute
+E             return await future
+E                    ^^^^^^^^^^^^
+E           File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\aiosqlite\core.py", line 63, in _connection_worker_thread
+E             result = function()
+E         sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: review_records
+E         [SQL: SELECT review_records.id, review_records.province_code, review_records.province_id, review_records.province_name, review_records.quarter, review_records.risk_score, review_records.risk_level, review_records.status, review_records.rejection_reason, review_records.rejection_notes, review_records.generated_on, review_records.updated_at, review_records.updated_by, review_records.updated_by_name 
+E         FROM review_records 
+E         WHERE review_records.status = ? AND review_records.rejection_reason IS NOT NULL AND review_records.quarter = ?]
+E         [parameters: ('Pending', '2027-Q1')]
+E         (Background on this error at: https://sqlalche.me/e/20/e3q8)
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\admin\\aipheed\\backend\\venv\\Scripts\\python.exe', '-c', "\nimport hashlib, json,...uarter = ?]\n[parameters: (\'Pending\', \'2027-Q1\')]\n(Background on this error at: https://sqlalche.me/e/20/e3q8)\n').returncode
+
+tests\unit\test_v2_paths.py:39: AssertionError
+============================== warnings summary ===============================
+tests/unit/test_e126_maintenance.py::test_zero_versus_missing_and_dedup
+  C:\Users\admin\aipheed_e145\aipheed-backend-aligned\experiments\E126_FIRI3_Pre_Issuance_Maintenance\runner\run_e126.py:127: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    return pd.concat([df, z], ignore_index=True)
+
+tests/unit/test_fi9.py::test_ece_and_calibration_line
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+    warnings.warn(
+
+tests/unit/test_iso25010_score.py::test_arithmetic_on_synthetic_rows
+  C:\Users\admin\aipheed_e145\backend\app\iso25010\score.py:75: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+    done = pd.to_numeric(df[f"{k}_done"].replace({"yes": 1, "no": 0}), errors="coerce").dropna()
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/integration/test_e119r2_framework.py::test_all_validation_checks_pass
+FAILED tests/integration/test_e120_firi_design.py::test_e120_checks_pass - As...
+FAILED tests/unit/test_e125_pre_issuance.py::test_real_store_untouched_and_duplicate_issue_refused
+FAILED tests/unit/test_e128_ml.py::test_production_untouched - AssertionError...
+FAILED tests/unit/test_e129_feasibility.py::test_production_untouched - Asser...
+FAILED tests/unit/test_e130_provincial.py::test_e128_e129_firi_and_production_untouched
+FAILED tests/unit/test_e131_resolution.py::test_production_untouched - Assert...
+FAILED tests/unit/test_e137.py::test_protocol_lock_matches_code - RuntimeErro...
+FAILED tests/unit/test_e138.py::test_protocol_lock_matches_code - RuntimeErro...
+FAILED tests/unit/test_e139.py::test_protocol_lock_matches_code - RuntimeErro...
+FAILED tests/unit/test_e140.py::test_protocol_lock_matches_code - RuntimeErro...
+FAILED tests/unit/test_e141.py::test_lock_and_frozen_decision - RuntimeError:...
+FAILED tests/unit/test_e142.py::test_lock - RuntimeError: E142 lock mismatch:...
+FAILED tests/unit/test_e143.py::test_lock - RuntimeError: E143 lock mismatch:...
+FAILED tests/unit/test_e144.py::test_issue_covers_five_provinces_four_quarters_and_class_rule
+FAILED tests/unit/test_e144.py::test_registry_and_admin_route_only - Assertio...
+FAILED tests/unit/test_hfias.py::test_protocol_lock_matches_code - AssertionE...
+FAILED tests/unit/test_v2_paths.py::test_api_identical_from_two_working_directories
+18 failed, 1667 passed, 20 skipped, 6 warnings in 348.19s (0:05:48)

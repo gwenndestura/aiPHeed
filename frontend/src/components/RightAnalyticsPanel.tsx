@@ -73,7 +73,7 @@ export function ShapNarrativeCardBody({
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="min-w-0">
           <p className="text-[11px] text-muted-foreground">{quarterPeriodLabel(quarter)}</p>
-          <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} Summary</h2>
+          <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} at a glance</h2>
         </div>
         <button
           onClick={() => setGlossaryOpen(true)}
@@ -98,7 +98,7 @@ export function ShapNarrativeCardBody({
           </StatusBadge>
         )}
         {region?.limitedSignal && (
-          <ConfidenceTag explanation="This province had fewer than the minimum number of geocoded news articles this quarter." />
+          <ConfidenceTag explanation="This province had fewer than 5 news reports this quarter, so its forecast relies less on the news." />
         )}
       </div>
 
@@ -116,9 +116,9 @@ export function ShapNarrativeCardBody({
         <p
           data-testid="plain-summary"
           className="mt-2 px-1 text-[11px] text-foreground/80 leading-snug truncate"
-          title={`Data: ${explain.summary.dataStatus} (${explain.summary.dataStatusNote}). ${summaryHeadline(explain.summary.sentence)}`}
+          title={`Figures: ${explain.summary.dataStatus} (${explain.summary.dataStatusNote}). ${summaryHeadline(explain.summary.sentence)}`}
         >
-          <span className="font-semibold">Data: {explain.summary.dataStatus}</span>
+          <span className="font-semibold">Figures: {explain.summary.dataStatus}</span>
           <span className="sr-only"> ({explain.summary.dataStatusNote})</span>
           {" · "}
           {summaryHeadline(explain.summary.sentence)}
@@ -165,13 +165,13 @@ function ShapDriverList({ items }: { items: Trigger[] }) {
   return (
     <section className="mb-2 space-y-3">
       {risky.length > 0 && (
-        <DriverGroup heading="Factors pushing risk up" items={risky} />
+        <DriverGroup heading="What is raising the risk" items={risky} />
       )}
       {protective.length > 0 && (
-        <DriverGroup heading="Factors pulling risk down" items={protective} />
+        <DriverGroup heading="What is lowering the risk" items={protective} />
       )}
       {inactive.length > 0 && (
-        <DriverGroup heading="Not part of this forecast" items={inactive} />
+        <DriverGroup heading="No effect this time" items={inactive} />
       )}
     </section>
   );
@@ -268,7 +268,7 @@ export function NewsArticlesCardBody({
         >
           <div className="flex items-center gap-2">
             <Newspaper className="h-3.5 w-3.5 text-primary" />
-            <span className="text-[13px] font-semibold leading-tight">News articles analyzed</span>
+            <span className="text-[13px] font-semibold leading-tight">News reports used</span>
             <span className="text-[10px] text-muted-foreground tabular-nums font-mono-num font-bold">{articleCount}</span>
           </div>
           {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}

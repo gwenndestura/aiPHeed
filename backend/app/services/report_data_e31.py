@@ -56,6 +56,18 @@ def _ch1() -> bool:
     return svc._ch1_mode()
 
 
+_CH1_NOUN = "price-pressure risk index (probability of HIGH; not a food-insecurity forecast)"
+_CH1_DATA_NOUN = "price-pressure risk index; not a food-insecurity forecast"
+
+
+def _engine_noun(data: bool = False) -> str:
+    """What the map engine's number is, in the engine's own words: E168 is a food-insecurity risk forecast, the Chapter I
+    engine a price-pressure index. Read through app.ml.inference.map_engine so the report always matches the map."""
+    from app.ml.inference import map_engine as CH1
+
+    return getattr(CH1, "REPORT_DATA_NOUN" if data else "REPORT_NOUN", _CH1_DATA_NOUN if data else _CH1_NOUN)
+
+
 def _served_quarters() -> list[str]:
     if _ch1():
         from app.services import dashboard as svc
@@ -342,7 +354,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
         lv = {s: (summ[last_q].get(s) or {}).get("riskLevel") for s in slugs}
         shown = [r for r in rows if r["value"] is not None]
         # SYSTEM_FIXES item 1: the Chapter I forecast is a probability, not the FIRI index
-        noun = "price-pressure risk index (probability of HIGH; not a food-insecurity forecast)" if ch1 else "estimated food-insecurity risk index"
+        noun = _engine_noun() if ch1 else "estimated food-insecurity risk index"
         short = "probability" if ch1 else "risk index"
         if single and shown:
             r = shown[0]
@@ -386,7 +398,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
     tables += 1
     t1 = f"Table {tables}"
     if ch1:
-        blocks.append(_p(f"{t1} shows the price-pressure risk index (probability of HIGH; not a food-insecurity forecast), its level and rank on the "
+        blocks.append(_p(f"{t1} shows the {_engine_noun()}, its level and rank on the "
                          f"map, and the main factor for {pt.qlabel(last_q)}, from the highest probability to the lowest."))
     elif thesis:
         blocks.append(_p(f"{t1} shows the estimated food-insecurity risk index (FIRI v2), its level and rank on the map, "
@@ -707,7 +719,7 @@ def _build(kind: str, scope: str, pid: str | None, window: list[str]) -> dict:
                      ["Data", _ascii(f"{pt.qlabel(last_q)} " + (
                          (f"Lead-{row_last['lead']} forecast issued {row_last['origin']}" if row_last["mode"] == "FORECAST"
                           else f"walk-forward Lead-{row_last['lead']} backtest made as of {row_last['origin']}")
-                         + " (price-pressure risk index; not a food-insecurity forecast)" if ch1 else
+                         + f" ({_engine_noun(data=True)})" if ch1 else
                          "estimated food-insecurity risk index (FIRI v2)" if thesis else mode_label(row_last)))],
                      *([["Model", _ascii(CH1.model_line())]] if ch1 else
                        _thesis_metadata() if thesis else _model_metadata(rec, row_last))],

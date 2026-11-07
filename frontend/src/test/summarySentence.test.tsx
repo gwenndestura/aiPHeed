@@ -36,7 +36,7 @@ describe("plain summary", () => {
     expect(p.className).toContain("truncate");
     expect(p.textContent).toContain(first);
     expect(p.textContent).not.toContain("Slower food inflation");
-    expect(p.textContent).toContain("Data: limited (Some inputs not available at the issue date for OFW Remittance.)");
+    expect(p.textContent).toContain("Figures: limited (Some inputs not available at the issue date for OFW Remittance.)");
     expect(container.querySelector("details")).toBeNull();
   });
 });

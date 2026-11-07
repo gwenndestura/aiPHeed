@@ -276,6 +276,7 @@ async def get_explainability(
         narrative=(f"{summary['sentence']} These are model attributions, not causes." if summary
                    else svc.compose_narrative(name, q, triggers)),
         note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,
+        otherPct=result.get("otherPct"),
         summary=summary,
     )
 

@@ -18,7 +18,6 @@ import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { MetricLabel } from "@/components/ui/metric";
 import { Note } from "@/components/ui/note";
 import { MapDashboard } from "@/components/MapDashboard";
-import { SidebarPeek } from "@/components/SidebarPeek";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MENU_SHEET_CLASS, MenuSection, MenuSheetHeader } from "@/components/MenuSection";
 import { PSTClock, PSTClockMenuRow } from "@/components/PSTClock";

@@ -320,7 +320,8 @@ export interface ExplainabilityResponse {
   quarter: string;
   riskScore: number;
   triggers: Trigger[];
-  otherPct: number;
+  /** % of the model's absolute attribution outside the five trigger groups; null when not reported. */
+  otherPct?: number | null;
   articleCount: number;
   triggerMatchedArticles: number;
   narrative: string;
@@ -843,4 +844,6 @@ export interface FoodInsecurityStatus {
   candidates: { model_id: string; status: string; failed_checks: string[]; checks_total?: number | null }[];
   acceptance_checks_total?: number;
   production?: { model_id: string; version: string; approved_utc: string };
+  /** Approved model only: tested accuracy by lead ("1" = one quarter ahead). */
+  accuracy_by_lead?: Record<string, { accuracy: number }>;
 }

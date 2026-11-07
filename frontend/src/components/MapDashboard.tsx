@@ -178,9 +178,14 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
   );
 
   const { data: rejectionsRes } = useRejections(quarterId || undefined, !noData);
+  // Provinces with no forecast this quarter: rejected by a reviewer, or returned without a score by the API. Both are
+  // drawn grey ("no forecast"), never in the Low colour.
   const rejectedIds = useMemo(
-    () => new Set((rejectionsRes?.data ?? []).map((r) => r.provinceId)),
-    [rejectionsRes]
+    () => new Set([
+      ...(rejectionsRes?.data ?? []).map((r) => r.provinceId),
+      ...regionsData.filter((r) => r.hasForecast === false).map((r) => r.id),
+    ]),
+    [rejectionsRes, regionsData]
   );
 
   const { data: municipalitiesRes } = useMunicipalities(selectedRegion?.id ?? null, quarterId || undefined);

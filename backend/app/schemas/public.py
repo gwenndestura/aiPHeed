@@ -445,6 +445,9 @@ class ExplainabilityResponse(BaseModel):
     narrative: str
     note: str
     summary: PlainSummary | None = None
+    # share (%) of the model's absolute attribution outside the five trigger bars ("Other model inputs"); the five
+    # trigger pcts plus otherPct add to 100. None when the served model does not report it.
+    otherPct: float | None = None
 
 
 # ---------------------------------------------------------------------------

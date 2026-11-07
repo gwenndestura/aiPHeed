@@ -10,6 +10,7 @@ import { api, ApiError } from "@/lib/api";
 import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
 import { X, ImageIcon, FileText } from "lucide-react";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { plainName, OTHER_FACTORS_NAME } from "@/lib/driverCopy";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY } from "@/lib/breakpoints";
 import {
@@ -197,10 +198,10 @@ export default function VisualizationPage() {
           {/* Sub-tabs */}
           <div className="flex items-center gap-2 mb-4" data-tour="viz-tabs">
             <SubTab active={tab === "trend"} onClick={() => setTab("trend")}>
-              Province Risk Level Trend
+              Risk over time
             </SubTab>
             <SubTab active={tab === "shap"} onClick={() => setTab("shap")}>
-              Feature Contribution Breakdown
+              Why is this at risk?
             </SubTab>
           </div>
 
@@ -378,9 +379,9 @@ function TrendView() {
   return (
     <div>
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
-        <h1 className="text-base sm:text-lg font-bold tracking-tight">Province / Municipality Risk Level Trend</h1>
+        <h1 className="text-base sm:text-lg font-bold tracking-tight">Risk over time, by province or town</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
-          Risk Level time series across selected province, municipality, and quarters
+          How the chance of high food insecurity changes from quarter to quarter
         </p>
       </div>
 
@@ -456,7 +457,7 @@ function TrendView() {
               <YAxis
                 domain={[0, 1]}
                 tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
-                label={{ value: "Risk Level Score", angle: -90, position: "insideLeft", fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
+                label={{ value: "Chance of high risk", angle: -90, position: "insideLeft", fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip
                 contentStyle={{
@@ -557,16 +558,22 @@ function ShapView() {
   const triggers = explain?.triggers ?? [];
   const loadFailed = isLoadFailure(quartersError) || isLoadFailure(explainError);
 
+  const otherPct = explain?.otherPct;
   const data = useMemo(
-    () =>
-      triggers
+    () => [
+      ...triggers
         .map((t) => ({
-          feature: t.label,
+          feature: plainName(t.key, t.label),
           pct: t.pct,
           color: t.color === "red" ? "hsl(var(--risk-high))" : t.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))",
         }))
         .sort((a, b) => b.pct - a.pct),
-    [triggers]
+      // the share outside the five trigger groups, so the bars add to 100% of the model's attribution
+      ...(typeof otherPct === "number"
+        ? [{ feature: OTHER_FACTORS_NAME, pct: otherPct, color: "hsl(var(--muted-foreground))" }]
+        : []),
+    ],
+    [triggers, otherPct]
   );
 
   const handleGenerate = () => setGenerated({ province, quarter });
@@ -594,9 +601,9 @@ function ShapView() {
   return (
     <div>
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
-        <h1 className="text-base sm:text-lg font-bold tracking-tight">SHAP Explainability — Driver Groups</h1>
+        <h1 className="text-base sm:text-lg font-bold tracking-tight">Why is this at risk?</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
-          Per-group contribution to the risk forecast, by province and quarter
+          What raised or lowered the forecast, by province and quarter
         </p>
       </div>
 
@@ -645,7 +652,7 @@ function ShapView() {
           </div>
         ) : !generated || data.length === 0 ? (
           <div className="h-[360px] flex items-center justify-center text-[12px] text-muted-foreground italic">
-            Select a province and quarter to view the trigger contributions.
+            Select a province and quarter to see what raised or lowered its risk.
           </div>
         ) : (
           <>
@@ -653,9 +660,9 @@ function ShapView() {
               <h2 className="text-[13px] font-bold tracking-tight">
                 {generated.province} · {quarterOptions.find((q) => q.value === generated.quarter)?.label.includes("(forecast)")
                   ? forecastQuarterLabel(generated.quarter)
-                  : generated.quarter.replace("-", " ")} — trigger contributions
+                  : generated.quarter.replace("-", " ")} — what raised or lowered the risk
               </h2>
-              <span className="text-[10px] text-muted-foreground">SHAP explainability</span>
+              <span className="text-[10px] text-muted-foreground">Share of what moved the forecast</span>
             </div>
             <div ref={pngRef}>
             <ResponsiveContainer width="100%" height={320}>
@@ -686,7 +693,7 @@ function ShapView() {
                   x={redCutoff}
                   stroke="hsl(var(--risk-high))"
                   strokeDasharray="4 4"
-                  label={{ value: `${redCutoff}% even share`, position: "top", fontSize: fs(8.5), fill: "hsl(var(--risk-high))" }}
+                  label={{ value: `${redCutoff}% (equal share)`, position: "top", fontSize: fs(8.5), fill: "hsl(var(--risk-high))" }}
                 />
                 <Bar dataKey="pct" radius={[0, 0, 0, 0]}>
                   {data.map((d, i) => (
@@ -699,8 +706,8 @@ function ShapView() {
 
             {/* Colour key only. The written SHAP interpretation is in the PDF report. */}
             <div className="mt-3 flex flex-wrap justify-center gap-4 text-[9px] text-muted-foreground">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-high))" }} /> Above {redCutoff}% even share</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-moderate))" }} /> At or below {redCutoff}%</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-high))" }} /> Bigger than an equal share ({redCutoff}%)</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{ background: "hsl(var(--risk-moderate))" }} /> Equal share or smaller</span>
             </div>
             </div>
           </>

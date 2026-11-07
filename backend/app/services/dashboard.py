@@ -1148,7 +1148,12 @@ def explainability(province_code: str, quarter: str) -> dict:
     if ch1:                                           # the Chapter I forecast: SHAP of its LightGBM price part
         built = CH1.drivers(province_code, quarter, built)
     drivers = built["drivers"]
-    pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
+    other_abs = built.get("other_abs")
+    if other_abs is not None:                         # E168: shares of ALL |contributions|; the rest is "Other model inputs"
+        shares = _integer_shares([abs(d["group_shap"]) for d in drivers] + [other_abs])
+        pcts, built["other_pct"] = shares[:-1], shares[-1]
+    else:
+        pcts = _integer_shares([abs(d["group_shap"]) for d in drivers])
 
     triggers = []
     for d, pct in zip(drivers, pcts):
@@ -1186,6 +1191,7 @@ def explainability(province_code: str, quarter: str) -> dict:
         "triggerMatchedArticles": built["article_count"],
         # E36/E38: share of the model's attribution outside the five trigger groups (E20 convention)
         "otherPct": built.get("other_pct"),
+        "otherAbs": other_abs,                        # internal: pooled by explainability_region (not in the schema)
     }
 
 
@@ -1215,7 +1221,13 @@ def explainability_region(quarter: str) -> dict:
                 acc["news"].append(t["newsSignalProportion"])
 
     keys = list(totals)
-    pcts = _integer_shares([totals[k]["raw"] for k in keys])
+    others = [r.get("otherAbs") for r in per_province]
+    other_pct = None
+    if others and all(o is not None for o in others):  # E168: the pooled "Other model inputs" share, as for a province
+        shares = _integer_shares([totals[k]["raw"] for k in keys] + [sum(others)])
+        pcts, other_pct = shares[:-1], shares[-1]
+    else:
+        pcts = _integer_shares([totals[k]["raw"] for k in keys])
 
     triggers = []
     for key, pct in zip(keys, pcts):
@@ -1254,6 +1266,7 @@ def explainability_region(quarter: str) -> dict:
         "triggers": triggers,
         "articleCount": sum(r["articleCount"] for r in per_province),
         "triggerMatchedArticles": sum(r["triggerMatchedArticles"] for r in per_province),
+        "otherPct": other_pct,
     }
 
 
@@ -1283,7 +1296,7 @@ CANDIDATE_EVENTS = {
 }
 LIMITED_STATUSES = ("insufficient_data", "stale", "no_data")
 LABEL_OF = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
-            "employment": "Employment", "ofw_remittance": "OFW Remittance"}
+            "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty"}
 
 
 def plain_summary(province_code: str | None, quarter: str, name: str, triggers: list[dict]) -> dict | None:

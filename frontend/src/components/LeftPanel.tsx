@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS } from "@/data/types";
+import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS, NO_DATA_COLOR } from "@/data/types";
 import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish, Home, Newspaper, Utensils } from "lucide-react";
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
@@ -15,6 +15,7 @@ import { ExplainTip } from "@/components/ui/explain-tip";
 import { isHighRisk } from "@/lib/risk";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { plainName, OTHER_FACTORS_NAME, OTHER_FACTORS_NOTE } from "@/lib/driverCopy";
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -124,6 +125,7 @@ export function RfiiScoreCardBody({
 
   let high = 0, low = 0, limited = 0;
   regionsData.forEach((r) => {
+    if (r.hasForecast === false) return;            // no forecast is neither High nor Low
     if (r.riskLevel === "high") high++;
     else low++;
     if (r.limitedSignal) limited++;
@@ -151,7 +153,7 @@ export function RfiiScoreCardBody({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-        <h3 className="text-[13px] font-semibold leading-tight">Regional average risk probability</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Overall risk in CALABARZON</h3>
         {quarterLabel && (
           <p className="text-[11px] text-muted-foreground tabular-nums">{quarterLabel}</p>
         )}
@@ -184,7 +186,7 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <MetricLabel className="uppercase tracking-[0.28em]">Food-insecurity risk</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">Chance of high food insecurity</MetricLabel>
           </div>
 
           {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
@@ -259,10 +261,10 @@ export function RfiiScoreCardBody({
         <SummaryChip label="High risk" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
         <SummaryChip label="Low risk" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
         <SummaryChip
-          label="Limited data"
+          label="Few news reports"
           value={failed ? "—" : limited}
           color="hsl(var(--muted-foreground))"
-          tip="Provinces with fewer than 5 news articles linked to them this quarter, so their forecast rests on less news evidence."
+          tip="Provinces with fewer than 5 news reports this quarter. Their forecast relies less on the news."
         />
       </div>
     </div>
@@ -295,9 +297,9 @@ export function RiskDriversCardBody({
   return (
     <div key={`${provinceId ?? "region"}-${quarterId}`}>
       <div className="flex items-center gap-2 mb-3">
-        <h3 className="text-[13px] font-semibold leading-tight">Relative model influence</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Why is this at risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
-          {isLoading ? "Computing…" : failed ? "" : "Ranked"}
+          {isLoading ? "Loading…" : failed ? "" : "Biggest first"}
         </span>
       </div>
       {isLoading ? (
@@ -314,7 +316,7 @@ export function RiskDriversCardBody({
               <Icon className="h-3.5 w-3.5 text-muted-foreground" />
               <div>
                 <div className="flex items-center justify-between text-[10px] mb-1">
-                  <span className="font-semibold">{d.label}</span>
+                  <span className="font-semibold">{plainName(d.key, d.label)}</span>
                 </div>
                 <div className="h-2 bg-secondary/40 rounded-full overflow-hidden">
                   <div
@@ -334,6 +336,22 @@ export function RiskDriversCardBody({
             </div>
           );
         })}
+        {typeof data?.otherPct === "number" && (
+          <div className="grid grid-cols-[18px_1fr_42px] items-center gap-2" title={OTHER_FACTORS_NOTE}>
+            <span className="h-3.5 w-3.5" />
+            <div>
+              <div className="flex items-center justify-between text-[10px] mb-1">
+                <span className="font-semibold text-muted-foreground">{OTHER_FACTORS_NAME}</span>
+              </div>
+              <div className="h-2 bg-secondary/40 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-muted-foreground/50" style={{ width: `${data.otherPct}%` }} />
+              </div>
+            </div>
+            <span className="font-mono-num text-[10px] font-bold tabular-nums text-right text-muted-foreground">
+              {data.otherPct}%
+            </span>
+          </div>
+        )}
       </div>
       )}
     </div>
@@ -369,19 +387,24 @@ export function ProvinceRankingCardBody({
   /** The province list failed to load. */
   loadFailed?: boolean;
 }) {
-  const sortedProvinces = regionsData.slice().sort((a, b) => b.riskScore - a.riskScore);
-  const maxScore = Math.max(...regionsData.map((r) => r.riskScore), 0.01);
+  // Ranked by the API's riskScore (the E168 probability); provinces without a forecast go last, shown as "—".
+  const scored = (r: RegionData) => r.hasForecast !== false;
+  const sortedProvinces = regionsData.slice().sort((a, b) =>
+    Number(scored(b)) - Number(scored(a)) || b.riskScore - a.riskScore);
+  const maxScore = Math.max(...regionsData.filter(scored).map((r) => r.riskScore), 0.01);
 
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <h3 className="text-[13px] font-semibold leading-tight">Province ranking</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Provinces from highest to lowest risk</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">High → Low</span>
       </div>
       {loadFailed && <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>}
       <div className="space-y-1.5">
         {sortedProvinces.map((r) => {
-          const widthPct = (r.riskScore / maxScore) * 100;
+          const has = scored(r);
+          const widthPct = has ? (r.riskScore / maxScore) * 100 : 0;
+          const color = has ? RISK_COLORS[r.riskLevel] : NO_DATA_COLOR;
           return (
             <button
               key={r.id}
@@ -390,20 +413,20 @@ export function ProvinceRankingCardBody({
             >
               <div className="flex items-center justify-between text-[10px] mb-1">
                 <span className="font-semibold flex items-center gap-1.5">
-                  <StatusDot color={RISK_COLORS[r.riskLevel]} />
+                  <StatusDot color={color} />
                   {r.name}
                   <span className="text-[9px] text-muted-foreground ml-1 opacity-60">
-                    {RISK_LABELS[r.riskLevel]}
+                    {has ? RISK_LABELS[r.riskLevel] : "No forecast"}
                   </span>
                 </span>
-                <span className="font-mono-num font-bold tabular-nums" style={{ color: RISK_COLORS[r.riskLevel] }}>
-                  {r.riskScore.toFixed(2)}
+                <span className="font-mono-num font-bold tabular-nums" style={{ color }}>
+                  {has ? r.riskScore.toFixed(2) : "—"}
                 </span>
               </div>
               <div className="h-2 bg-secondary/40 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full animate-bar-fill"
-                  style={{ width: `${widthPct}%`, backgroundColor: RISK_COLORS[r.riskLevel] }}
+                  style={{ width: `${widthPct}%`, backgroundColor: color }}
                 />
               </div>
             </button>
@@ -528,14 +551,14 @@ function RegionDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Food-insecurity risk</MetricLabel>
+          <MetricLabel>Chance of high food insecurity</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
           </div>
         </div>
         <div className="inner-box px-3 py-3 overflow-hidden">
-          <MetricLabel>Quarter-on-quarter change</MetricLabel>
+          <MetricLabel>Change from last quarter</MetricLabel>
           <FitText
             text={qoqText}
             className={`font-extrabold mt-1 tracking-tight tabular-nums ${
@@ -562,12 +585,12 @@ function RegionDetail({
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-[13px] font-semibold leading-tight">Cities and municipalities</h3>
+            <h3 className="text-[13px] font-semibold leading-tight">Towns and cities</h3>
           </div>
           <span className="text-[9px] text-muted-foreground tabular-nums">{munis.length}</span>
         </div>
         <p className="text-[9px] text-muted-foreground/70 italic mb-2 leading-snug">
-          Relative prioritization derived from the province forecast with PSA poverty and population density; not validated municipal forecasts.
+          Ranked by need within the province, using the province forecast, poverty and population. These are not separate forecasts for each town.
         </p>
         <div className="space-y-1 max-h-[260px] overflow-y-auto thin-scrollbar pr-1">
           {munis.map((m) => (
@@ -640,7 +663,7 @@ function MunicipalityDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Food-insecurity risk</MetricLabel>
+          <MetricLabel>Priority within the province</MetricLabel>
           <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div
@@ -650,7 +673,7 @@ function MunicipalityDetail({
           </div>
         </div>
         <div className="inner-box px-3 py-3">
-          <MetricLabel className="mb-1">Basis</MetricLabel>
+          <MetricLabel className="mb-1">How this is worked out</MetricLabel>
           <p className="text-[10px] leading-snug text-muted-foreground line-clamp-4">{municipality.disaggregationLabel}</p>
         </div>
       </div>
@@ -740,7 +763,7 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
-        <h3 className="text-[13px] font-semibold leading-tight">Relative influence by trigger</h3>
+        <h3 className="text-[13px] font-semibold leading-tight">Why is this at risk?</h3>
       </div>
       {isLoading ? (
         <div className="animate-pulse">
@@ -759,12 +782,15 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
           return (
             <div
               key={t.key}
-              title={`${t.label} — ${t.pct}%`}
+              title={`${plainName(t.key, t.label)} — ${t.pct}%`}
               style={{ width: `${t.pct}%`, background: color }}
               className="animate-bar-fill"
             />
           );
         })}
+        {typeof data?.otherPct === "number" && (
+          <div title={`${OTHER_FACTORS_NAME} — ${data.otherPct}%`} style={{ width: `${data.otherPct}%` }} className="bg-muted-foreground/50" />
+        )}
       </div>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
         {triggers.map((t) => {
@@ -772,13 +798,20 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
           return (
             <div key={t.key} className="flex items-center gap-1.5 text-[9px]">
               <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: color }} />
-              <span className="truncate text-muted-foreground">{t.label}</span>
+              <span className="truncate text-muted-foreground">{plainName(t.key, t.label)}</span>
               <span className="ml-auto font-mono-num font-bold tabular-nums text-foreground/90">
                 {t.pct}%
               </span>
             </div>
           );
         })}
+        {typeof data?.otherPct === "number" && (
+          <div className="flex items-center gap-1.5 text-[9px]" title={OTHER_FACTORS_NOTE}>
+            <span className="w-2 h-2 rounded-sm shrink-0 bg-muted-foreground/50" />
+            <span className="truncate text-muted-foreground">{OTHER_FACTORS_NAME}</span>
+            <span className="ml-auto font-mono-num font-bold tabular-nums text-foreground/90">{data.otherPct}%</span>
+          </div>
+        )}
       </div>
       </>
       )}

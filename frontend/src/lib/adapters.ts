@@ -26,6 +26,9 @@ export function provinceToRegion(p: ProvinceSummary): RegionData {
   return {
     id: p.id,
     name: p.name,
+    // A missing score stays missing: hasForecast is false and every screen shows "no forecast" (grey), not 0 / Low.
+    // riskScore 0 is only a type placeholder that no screen reads when hasForecast is false.
+    hasForecast: typeof p.riskScore === "number" && p.riskLevel != null,
     riskScore: p.riskScore ?? 0,
     riskLevel: (p.riskLevel as RegionData["riskLevel"]) ?? "low",
     population: p.population ?? 0,

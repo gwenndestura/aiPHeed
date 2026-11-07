@@ -27,13 +27,12 @@ export function FoodInsecurityStatusCardBody() {
         <div className="flex items-center gap-2">
           <h3 className="text-[13px] font-semibold leading-tight">Food-insecurity forecast</h3>
           <span className="ml-auto px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground text-[9px] font-bold uppercase tracking-wider">
-            validation pending
+            not yet approved
           </span>
         </div>
         <p className="text-[10px] leading-snug">{data.message}</p>
         <p className="text-[9px] text-muted-foreground leading-snug">
-          The colours and scores on the map are a price-pressure risk index (food prices together with regional hunger),
-          shown as context. They are not a food-insecurity forecast.
+          Until a forecast is approved, no food-insecurity forecast numbers are shown here.
         </p>
         {data.candidates.length > 0 && (
           <p className="text-[9px] text-muted-foreground leading-snug" data-testid="fi-status-candidates">
@@ -48,12 +47,19 @@ export function FoodInsecurityStatusCardBody() {
     );
   }
 
-  // An approved model exists: show its identity only. Its forecast display is added when a model is approved.
+  // An approved model exists: say in plain words what it is and how often it was right in past tests.
+  const acc = data.accuracy_by_lead?.["1"]?.accuracy;
+  const approved = data.production?.approved_utc?.slice(0, 10);
   return (
     <div className="space-y-1" data-testid="fi-status-approved">
-      <h3 className="text-[13px] font-semibold leading-tight">Food-insecurity forecast</h3>
-      <p className="text-[10px] text-muted-foreground">
-        Approved model {data.production?.model_id} ({data.production?.version}), approved {data.production?.approved_utc}.
+      <h3 className="text-[13px] font-semibold leading-tight">About this forecast</h3>
+      <p className="text-[10px] leading-snug">
+        A computer model estimates each province's chance of high food insecurity, using food prices, weather, jobs, money
+        from OFWs, fish catch and news.
+        {typeof acc === "number" && ` When tested on past government surveys, it was right ${Math.round(acc * 100)}% of the time one quarter ahead.`}
+      </p>
+      <p className="text-[9px] text-muted-foreground">
+        Model {data.production?.model_id}{approved ? `, approved ${approved}` : ""}.
       </p>
     </div>
   );

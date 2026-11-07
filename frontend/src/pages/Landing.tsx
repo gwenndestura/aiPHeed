@@ -197,21 +197,22 @@ function About() {
 }
 
 /* ---------------- METHODOLOGY ---------------- */
+/* The inputs of the served E168 model (backend/app/e168/lgbm_only.py FS; app/e151/prov.py GOV_COLS and the E151 news
+   panel). Each forecast uses only values published before its issue date; training rows start with the 2013 survey round. */
 const SOURCES = [
-  { s: "FNRI National/Expanded National Nutrition Survey (HFIAS)", m: "Share of households moderately or severely food insecure (the forecast target)", p: "Survey rounds 2013, 2015, 2018, 2019 and 2021", l: "Provincial" },
-  { s: "PSA Consumer Price Index (food and headline)", m: "Price changes faced by households", p: "2021 to August 2026", l: "Provincial" },
-  { s: "PSA wholesale rice prices", m: "Change in the price of rice", p: "2021 to 2026-Q2", l: "Provincial" },
-  { s: "PSA 2021 Small Area Estimates of poverty", m: "Share of the population below the poverty line", p: "2021 (fixed)", l: "Municipal, combined to provincial" },
-  { s: "PSA 2024 Census of Population (POPCEN)", m: "Population and land area, for density", p: "2024 (fixed)", l: "Municipal, combined to provincial" },
-  { s: "PSA palay, corn and fisheries production", m: "Drops in local food production", p: "2021 to 2026-Q2", l: "Provincial" },
-  { s: "PSA Labor Force Survey", m: "Change in the unemployment rate", p: "2021 to 2026-Q2", l: "National" },
-  { s: "Bangko Sentral ng Pilipinas cash remittances", m: "Change in money sent home by overseas Filipinos", p: "2021 to 2026-Q2", l: "National" },
-  { s: "World Bank Commodity Price Data (Pink Sheet)", m: "World rice, cereal, oil and fertilizer prices", p: "2021 to August 2026", l: "World" },
-  { s: "PAGASA El Niño Alert, Advisory and Climate Advisory", m: "Whether an official El Niño advisory was in force", p: "Dated advisories, 2021 to 23 September 2026", l: "National" },
-  { s: "IBTrACS (NOAA) tropical cyclone tracks", m: "Typhoons passing within 300 km", p: "2021 to 2026-Q2 (2026-Q3 incomplete)", l: "Provincial" },
-  { s: "Social Weather Stations (SWS) involuntary hunger", m: "Share of families that experienced hunger", p: "Survey rounds 2021 to 2026-Q2 (latest 17.3%)", l: "Regional (Balance Luzon)" },
-  { s: "Google News headlines (Filipino and English)", m: "Food-stress content of local news", p: "1 January 2021 to 14 October 2026 (9,667 headlines); a forecast uses only those published before its issue date", l: "Provincial" },
-  { s: "GDELT news event database", m: "Share of Philippine food-security news about prices", p: "2021 to 2026-Q3", l: "National" },
+  { s: "FNRI National/Expanded National Nutrition Survey (HFIAS)", m: "Share of households moderately or severely food insecure: the forecast target and each province's starting level", p: "Survey rounds 2013, 2015, 2018, 2019 and 2021", l: "Provincial" },
+  { s: "PSA Consumer Price Index (food and rice)", m: "Food and rice inflation, and provincial food prices relative to the national level (Market / Prices)", p: "2013 to the issue date", l: "Provincial" },
+  { s: "PSA palay and corn production", m: "Drops in local farm production (Climate Stress)", p: "2013 to the issue date", l: "Provincial" },
+  { s: "PSA fisheries production", m: "Year-on-year change in fish production; the proxy for the Fish Kill trigger, not a record of fish-kill events", p: "2013 to the issue date", l: "Provincial" },
+  { s: "NASA POWER rainfall and soil moisture", m: "Rainfall and soil-moisture anomalies (Climate Stress)", p: "2013 to the issue date", l: "Provincial" },
+  { s: "IBTrACS (NOAA) tropical cyclone tracks", m: "Typhoons in the last four quarters (Climate Stress)", p: "2013 to the issue date", l: "Provincial" },
+  { s: "NOAA Oceanic Niño Index (ONI)", m: "El Niño / La Niña conditions (Climate Stress)", p: "2013 to the issue date", l: "Global" },
+  { s: "PSA Labor Force Survey", m: "Unemployment rate and its change (Employment)", p: "2013 to the issue date", l: "National" },
+  { s: "Bangko Sentral ng Pilipinas cash remittances", m: "Change in money sent home by overseas Filipinos (OFW Remittance)", p: "2013 to the issue date", l: "National" },
+  { s: "PSA official poverty statistics and population density", m: "Poverty incidence, subsistence incidence, poverty gap and density (model inputs shown under Other model inputs)", p: "Releases 2015, 2018, 2021 and 2023, as published by the issue date", l: "Provincial" },
+  { s: "PSA 2021 Small Area Estimates of poverty and 2024 Census of Population", m: "City and municipal weights for the priority ranking (60% poverty, 40% density); not model inputs", p: "2021 and 2024 (fixed)", l: "Municipal" },
+  { s: "News (GDELT, newspaper archives and Google News titles, Filipino and English)", m: "Food-stress news signals, counted inside the five trigger groups", p: "17,125 stories; a forecast uses only those published before its issue date", l: "Provincial, area and national" },
+  { s: "Social Weather Stations (SWS) involuntary hunger", m: "Regional hunger, shown in About as context; not an E168 input", p: "Latest survey round", l: "Regional (Balance Luzon)" },
 ];
 
 /* The approved forecast (E168): backend/app/e168/lgbm_only.py, serve.py; docs/final/FINAL_SYSTEM_REPORT_E168.md. */
@@ -226,7 +227,7 @@ const STEPS = [
   },
   {
     t: "Forecast change (LightGBM)",
-    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices, climate, fisheries production (fish kill), employment and OFW remittances, with news signals (XLM-RoBERTa event scores and BERTopic topics) inside each group; the province's poverty and density profile is also an input and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
+    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices; climate; employment and OFW remittances (both national series, the same for every province); and fish kill, measured by the proxy of provincial fisheries production change because no record of fish-kill events exists. News signals (XLM-RoBERTa event scores and BERTopic topics) are counted inside each group. The province's poverty and density profile is also an input (shown as Other model inputs) and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
   },
   {
     t: "Classification",
@@ -513,9 +514,10 @@ const DISCLAIMER = [
   "A forecast probability, not a measurement. The number is E168's forecast probability that 50% or more of a province's households are moderately or severely food insecure (FNRI HFIAS). It is not a measured food-insecurity rate, and not an official statistic or classification.",
   "Validated on few survey rounds. The forecast was tested on 72 provincial forecasts from three FNRI survey rounds (2018, 2019, 2021). Only 5 were CALABARZON provinces, all observed Low.",
   "The acceptance rule was set after the results. Accuracy of at least 75% and better than the latest survey was adopted on 7 November 2026, after these results were known; one and three quarters ahead are exactly at 75%.",
-  "Some inputs are national. Unemployment, remittances and El Niño status are national figures, the same for every province; removing employment or remittances did not change the tested accuracy.",
+  "Some inputs are national. Unemployment, remittances and the El Niño index are national or global figures, the same for every province; removing employment or remittances did not change the tested accuracy.",
+  "Fish kill is measured by a proxy. No public record of fish-kill events exists, so the Fish Kill group uses the change in provincial fisheries production. It does not show whether a fish kill happened.",
   "City and municipal values are a relative prioritization within each province, based on the province forecast, poverty and population density. They are not forecasts for each city or municipality. Some cities have no PSA 2021 municipal poverty estimate; this is stated where it applies.",
-  "News has limits. Only headlines are used, collected after the fact, and the news classifier was checked by the system author, not by an independent reviewer. Removing the news signals did not measurably change the tested accuracy.",
+  "News has limits. Only headlines are used, collected after the fact, and the news dataset was reviewed and signed off by Department of Agriculture staff; no item-by-item second annotation was done. Removing the news signals did not measurably change the tested accuracy.",
   "Missing data is not low risk. When a source has not yet published, the input is left blank. The dashboard says which inputs are missing.",
   "Back-test results are not live results. They were computed after the fact on survey rounds examined during development. The sealed forecasts for the ENNS 2022 round will be a true test.",
   "aiPHeed outputs must not replace official assessment procedures or be used as official food-insecurity classifications or policy recommendations.",

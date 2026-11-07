@@ -16,14 +16,14 @@ type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCou
 
 /** Phones: the table's sortable headings as one menu. */
 const SORT_OPTIONS: { value: `${SortKey}:${"asc" | "desc"}`; label: string }[] = [
-  { value: "riskScore:desc", label: "Sort: risk probability, high to low" },
-  { value: "riskScore:asc", label: "Sort: risk probability, low to high" },
+  { value: "riskScore:desc", label: "Sort: chance of high risk, highest first" },
+  { value: "riskScore:asc", label: "Sort: chance of high risk, lowest first" },
   { value: "name:asc", label: "Sort: province, A to Z" },
   { value: "name:desc", label: "Sort: province, Z to A" },
-  { value: "qoqChangePct:desc", label: "Sort: quarter-on-quarter change, largest first" },
-  { value: "qoqChangePct:asc", label: "Sort: quarter-on-quarter change, smallest first" },
-  { value: "articleCount:desc", label: "Sort: articles, most first" },
-  { value: "articleCount:asc", label: "Sort: articles, fewest first" },
+  { value: "qoqChangePct:desc", label: "Sort: change from last quarter, largest first" },
+  { value: "qoqChangePct:asc", label: "Sort: change from last quarter, smallest first" },
+  { value: "articleCount:desc", label: "Sort: news reports, most first" },
+  { value: "articleCount:asc", label: "Sort: news reports, fewest first" },
   { value: "riskLevel:desc", label: "Sort: risk level, high first" },
   { value: "riskLevel:asc", label: "Sort: risk level, low first" },
 ];
@@ -99,10 +99,10 @@ export default function DataPage() {
 
   const columns: { key: SortKey; label: string }[] = [
     { key: "name", label: "Province" },
-    { key: "riskScore", label: "Risk score" },
-    { key: "riskLevel", label: "Risk Level" },
-    { key: "qoqChangePct", label: "Quarter-on-quarter change" },
-    { key: "articleCount", label: "Articles" },
+    { key: "riskScore", label: "Chance of high risk" },
+    { key: "riskLevel", label: "Risk level" },
+    { key: "qoqChangePct", label: "Change from last quarter" },
+    { key: "articleCount", label: "News reports" },
   ];
 
   return (

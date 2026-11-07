@@ -43,23 +43,23 @@ describe("factor cards", () => {
     render(<ShapNarrativeCardBody quarter={QUARTER} selectedRegion={QUEZON} />);
 
     // Sections, order, titles and percentages.
-    const headings = screen.getAllByText(/^(Factors pushing risk up|Factors pulling risk down|Not part of this forecast)$/).map((e) => e.textContent);
-    expect(headings).toEqual(["Factors pushing risk up", "Factors pulling risk down", "Not part of this forecast"]);
+    const headings = screen.getAllByText(/^(What is raising the risk|What is lowering the risk|No effect this time)$/).map((e) => e.textContent);
+    expect(headings).toEqual(["What is raising the risk", "What is lowering the risk", "No effect this time"]);
     const tops = cards().map((c) => c.firstElementChild?.textContent);
     expect(tops).toEqual([
-      "Jobs and livelihoods54%",
+      "Jobs (national figures)54%",
       "Weather and farm supply28%",
       "Food prices5%",
-      "Fisheries production13%",
-      "OFW remittances: insufficient data0%",
+      "Fish catch (instead of fish-kill reports)13%",
+      "Money sent home by OFWs (national figures): not enough figures0%",
     ]);
     // Bars keep their widths.
     expect(cards().map((c) => (c.querySelector("[style*='width']") as HTMLElement).style.width)).toEqual(["54%", "28%", "5%", "13%", "0%"]);
 
     const jobs = cards()[0];
     expect(within(jobs).getByText("Unemployment rose more than usual compared with a year earlier.")).toBeTruthy();
-    expect(within(cards()[3]).getByText("Fisheries production held up better than usual.")).toBeTruthy();
-    expect(within(cards()[4]).getByText("No published data were available when this forecast was issued; this is not a sign of low risk.")).toBeTruthy();
+    expect(within(cards()[3]).getByText("The fish catch held up better than usual.")).toBeTruthy();
+    expect(within(cards()[4]).getByText("No figures had been published when this forecast was made, which does not mean the risk is low.")).toBeTruthy();
     // The evidence note and any Details control are gone.
     expect(document.body.textContent).not.toContain("FIRI v2");
     expect(document.body.textContent).not.toContain(JOBS_NOTE);

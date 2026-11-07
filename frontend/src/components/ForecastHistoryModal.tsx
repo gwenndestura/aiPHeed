@@ -40,9 +40,8 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <DialogTitle className="text-sm">Forecast history</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
-            Past quarterly risk forecasts for the region (walk-forward: each made with information published before its quarter began). The current quarter
-            {cur ? ` (${cur.label} ${cur.year})` : ""} is the newest PSA has published data for.
-            Select a row to load that quarter on the map.
+            Quarterly E168 food-insecurity risk forecasts for the region, each made only with information published before
+            its issue date (1 October 2026 for 2027-Q1 to Q3). Select a row to load that quarter on the map.
           </DialogDescription>
         </DialogHeader>
 
@@ -51,7 +50,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <thead>
               <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
                 <th className="text-left py-1.5 pr-3">Quarter</th>
-                <th className="text-right px-2">Index</th>
+                <th className="text-right px-2">Probability</th>
                 <th className="text-center px-2">Band</th>
                 <th className="text-right px-2">QoQ</th>
                 <th className="text-left px-2">Top driver</th>

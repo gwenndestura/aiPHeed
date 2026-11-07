@@ -191,14 +191,14 @@ export function AboutModal() {
 }
 
 /** The data sources, one row each with a thin divider between rows. */
+// The served E168 model's sources (backend/app/e168/lgbm_only.py inputs); SWS is shown as context only.
 const DATA_SOURCES = [
   "FNRI National and Expanded National Nutrition Surveys: household food insecurity (HFIAS), by province",
-  "Philippine Statistics Authority (PSA): prices, rice, poverty, population, production, labor force",
+  "Philippine Statistics Authority (PSA): food and rice prices, farm and fisheries production, poverty, population, labor force",
   "Bangko Sentral ng Pilipinas (BSP): cash remittances",
-  "PAGASA: El Niño advisories · IBTrACS: typhoons",
-  "World Bank Commodity Price Data (Pink Sheet): world rice, cereal, oil and fertilizer prices",
-  "Social Weather Stations (SWS): hunger, Balance Luzon (regional)",
-  "Google News headlines in Filipino and English",
+  "NASA POWER: rainfall and soil moisture · IBTrACS: typhoons · NOAA: El Niño index (ONI)",
+  "News in Filipino and English (GDELT, newspaper archives, Google News titles)",
+  "Social Weather Stations (SWS): hunger, Balance Luzon (regional; context, not a model input)",
 ];
 
 /** The phone number and email: outlined pills. */

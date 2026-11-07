@@ -42,7 +42,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Welcome to aiPHeed",
       body: () =>
-        "The map shows the E168 food-insecurity risk forecast for each CALABARZON province: the probability that 50% or more of its households are moderately or severely food insecure (FNRI HFIAS). Forecasts are reviewed by Department of Agriculture staff before they are published.",
+        "The map shows, for each CALABARZON province, the chance that half or more of its households will have trouble getting enough food in the coming months. Forecasts are reviewed by Department of Agriculture staff before they are published.",
       layout: { panel: "summary", sheet: "collapsed" },
     },
     {
@@ -55,28 +55,28 @@ const MAP_TOUR: TourDef = {
     {
       title: "Reading the colours",
       body: ({ cutoff }) =>
-        `Red means high risk: a forecast probability of ${cutoff} or more. Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
+        `Red means high risk (a chance of ${cutoff} or more). Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
       target: () => "legend",
       layout: { sheet: "collapsed" },
     },
     {
       title: "Province summary",
       body: ({ layout }) =>
-        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its risk probability, its change from the previous quarter and its population.`,
+        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its chance of high risk, how it changed from last quarter and its population.`,
       target: (l) => (l === "phone" ? "sheet" : "summary"),
       layout: { panel: "summary", sheet: "half" },
     },
     {
-      title: "Why this risk",
+      title: "Why is this at risk?",
       body: ({ layout }) =>
         `${layout === "phone" ? "The Why tab" : "This panel"} lists the factors pushing the risk up or down, such as food prices or the weather.`,
       target: (l) => (l === "phone" ? "sheet" : "why"),
       layout: { panel: "why", sheet: "half" },
     },
     {
-      title: "News articles analyzed",
+      title: "News reports used",
       body: () =>
-        "The news is sorted into topics such as fish kill or typhoon and disaster; each percentage is that topic's share of the articles analyzed. The list below shows the news the forecast was built from.",
+        "News reports are sorted into topics such as fish kill or typhoon and disaster; each percentage is that topic's share of the reports. The list below shows the news the forecast used.",
       target: () => "news",
       // At the top of its panel or tab, so the article list shows below it.
       scroll: "start",
@@ -87,7 +87,7 @@ const MAP_TOUR: TourDef = {
       body: ({ layout }) =>
         layout === "phone"
           ? "Pick a quarter here. Forecast quarters have a dashed outline, and Current marks the quarter we are in now. History lists every quarter."
-          : "Pick a quarter on the timeline. The solid line marks observed quarters, the dashed line forecasts, and Today marks where we are now. View history lists every quarter.",
+          : "Pick a quarter on the timeline. The solid line marks past quarters, the dashed line forecasts, and Today marks where we are now. View history lists every quarter.",
       target: () => "timeline",
       layout: { panel: "summary", sheet: "collapsed" },
     },

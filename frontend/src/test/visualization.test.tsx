@@ -116,7 +116,7 @@ describe("Visualization: Province Risk Level Trend", () => {
 describe("Visualization: Driver groups", () => {
   it("defaults to the quarter the map opens on and offers the forecast quarters", async () => {
     render(<VisualizationPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Feature Contribution Breakdown" }));
+    fireEvent.click(screen.getByRole("button", { name: "Why is this at risk?" }));
     const [, quarter] = selects();
     expect(quarter.value).toBe("2027-Q1");
     expect(quarter.selectedOptions[0].textContent).toBe("Q1 2027 (forecast)");
@@ -125,7 +125,7 @@ describe("Visualization: Driver groups", () => {
     fireEvent.click(screen.getByRole("button", { name: "Generate Chart" }));
     // The same explainability request as the map's Why panel for this quarter.
     expect(explainCalls).toContain("2027-Q1");
-    expect(screen.getByText(/Quezon · Q1 2027 \(forecast\) — trigger contributions/)).toBeTruthy();
+    expect(screen.getByText(/Quezon · Q1 2027 \(forecast\) — what raised or lowered the risk/)).toBeTruthy();
     expect((screen.getByRole("button", { name: /Download PDF/ }) as HTMLButtonElement).disabled).toBe(false);
   });
 });

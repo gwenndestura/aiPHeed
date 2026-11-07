@@ -6,11 +6,11 @@ const contributing = (key: string, direction: "increases_risk" | "protective") =
 
 describe("factor card copy: contributing groups", () => {
   it("titles a card with the group's plain name only, never the direction", () => {
-    expect(contributing("employment", "increases_risk").title).toBe("Jobs and livelihoods");
+    expect(contributing("employment", "increases_risk").title).toBe("Jobs (national figures)");
     expect(contributing("climate", "increases_risk").title).toBe("Weather and farm supply");
     expect(contributing("market", "protective").title).toBe("Food prices");
-    expect(contributing("fish_kill", "protective").title).toBe("Fisheries production");
-    expect(contributing("ofw_remittance", "increases_risk").title).toBe("OFW remittances");
+    expect(contributing("fish_kill", "protective").title).toBe("Fish catch (instead of fish-kill reports)");
+    expect(contributing("ofw_remittance", "increases_risk").title).toBe("Money sent home by OFWs (national figures)");
     for (const k of ["employment", "climate", "market", "fish_kill", "ofw_remittance"]) {
       for (const d of ["increases_risk", "protective"] as const) {
         expect(contributing(k, d).title).not.toMatch(/raises|lowers|forecast/);
@@ -23,7 +23,7 @@ describe("factor card copy: contributing groups", () => {
       ["employment", "Unemployment rose more than usual compared with a year earlier.", "Unemployment changed less than usual compared with a year earlier."],
       ["climate", "Weather and farm-supply conditions were worse than usual.", "Weather and farm-supply conditions were better than usual."],
       ["market", "Food prices were higher than usual.", "Food prices were lower than usual."],
-      ["fish_kill", "Fisheries production fell more than usual.", "Fisheries production held up better than usual."],
+      ["fish_kill", "The fish catch fell more than usual.", "The fish catch held up better than usual."],
       ["ofw_remittance", "Money sent home by OFWs grew less than usual.", "Money sent home by OFWs grew more than usual."],
     ];
     for (const [k, raises, lowers] of table) {
@@ -46,30 +46,30 @@ describe("factor card copy: groups that did not move the forecast (E42/E47)", ()
 
   it("says missing OFW data is not low risk", () => {
     const c = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "no_data", pct: 0 });
-    expect(c.title).toBe("OFW remittances: no official data");
-    expect(c.description).toMatch(/not a sign of low risk/);
+    expect(c.title).toBe("Money sent home by OFWs (national figures): no official figures");
+    expect(c.description).toMatch(/does not mean the risk is low/);
   });
 
   it("falls back to neutral copy at 0% when an older backend sends no status", () => {
     expect(isContributing({ pct: 0 })).toBe(false);
     expect(driverCopy({ key: "fish_kill", direction: "increases_risk", pct: 0 }).title)
-      .toBe("Fisheries production: no measurable effect");
+      .toBe("Fish catch (instead of fish-kill reports): no effect this time");
     expect(isContributing({ pct: 12 })).toBe(true);
   });
 
   it("describes available-but-unused and stale data without a direction", () => {
     expect(driverCopy({ key: "employment", direction: "protective", status: "data_not_in_model", pct: 0 }).title)
-      .toBe("Jobs and livelihoods: data shown, not in the model");
+      .toBe("Jobs (national figures): shown, not used");
     expect(driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "stale", pct: 0 }).title)
-      .toBe("OFW remittances: data out of date");
+      .toBe("Money sent home by OFWs (national figures): figures out of date");
   });
 
   it("separates missing inputs from a computed, negligible contribution", () => {
     const missing = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "insufficient_data", pct: 0 });
     const negligible = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "no_effect", pct: 0 });
-    expect(missing.title).toBe("OFW remittances: insufficient data");
-    expect(missing.description).toBe("No published data were available when this forecast was issued; this is not a sign of low risk.");
-    expect(negligible.title).toBe("OFW remittances: no measurable effect");
+    expect(missing.title).toBe("Money sent home by OFWs (national figures): not enough figures");
+    expect(missing.description).toBe("No figures had been published when this forecast was made, which does not mean the risk is low.");
+    expect(negligible.title).toBe("Money sent home by OFWs (national figures): no effect this time");
   });
 
   it("states that past-quarter contributions were not recorded instead of a direction", () => {
@@ -94,6 +94,6 @@ describe("driverCopy with measured values (E87)", () => {
     expect(generic.description).toBe("Food prices were higher than usual.");
     const missing = driverCopy({ key: "ofw_remittance", direction: "increases_risk", status: "insufficient_data", pct: 0,
       plainEvidence: "ignored" });
-    expect(missing.description).toBe("No published data were available when this forecast was issued; this is not a sign of low risk.");
+    expect(missing.description).toBe("No figures had been published when this forecast was made, which does not mean the risk is low.");
   });
 });
