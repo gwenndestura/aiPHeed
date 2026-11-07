@@ -2,10 +2,9 @@
 
 **Date:** 2026-11-07
 **Branch:** `aiPHeed/e158-thesis-model` in `C:\Users\admin\aipheed_e145`. Builds on the audit at `61f894a5`.
-**Status of this version:** local working tree, **not committed and not deployed**.
+**Status of this version:** committed locally on `aiPHeed/e158-thesis-model` (latest `7f021ddb`); **not pushed and not deployed**.
 
-**Pending items.**
-None. All runs have finished; their results are below.
+**Pending items.** None. All runs have finished; their results are below.
 
 **Reliability rule (project acceptance standard, owner decision 2026-11-07).** A lead is reliable when:
 - pooled accuracy is ≥ 75 %, **and**
@@ -79,12 +78,11 @@ The rule was set after E168's results were known; this is disclosed throughout. 
 
 **Employment was fixed and re-tested (E173).** In E168 the regional unemployment input was empty in every row, because its source starts in 2021, so employment could never differ between provinces. E173 filled it from PSA's official regional unemployment rates (Statistical Yearbook Table 11.1, 2014–2023), using only years published at each forecast date. The protocol and decision rule were locked first (`e27c82ba`). Result: no measurable gain, and Lead-1 accuracy of 73.6 %, so E168 stays. The employment trigger is now *tested and not contributing*, rather than untestable.
 
-**Why the remittance group cannot be improved.** Their inputs are national, the same for all five provinces. No public provincial LFS or BSP remittance series exists that was published in time to be used at past forecast origins:
-- OpenSTAT has no provincial LFS.
-- Provincial LFS for 2018–2020 was released only in 2022.
-- BSP regional tables were not reachable.
+**Why the remittance group cannot be improved.** Its inputs are national, the same for all five provinces. No official regional or provincial remittance series exists:
+- BSP publishes cash remittances by source country, not by Philippine region.
+- PSA's Survey on Overseas Filipinos gives only the regional share of OFWs (in PDF releases). A share is not a remittance flow.
 
-Making provincial values for them would mean inventing data, so the groups are reported as **connected but non-contributing**. No weights were forced.
+Allocating national pesos to provinces would mean inventing data, so remittances are reported as **connected but non-contributing**. No weights were forced.
 
 ## 4. NLP and FSSI (Part 3)
 
@@ -187,17 +185,17 @@ All serve the same issue (2026-10-01), quarters 2027-Q1 to Q3, probabilities, cl
 | `tests/unit/test_e168_regenerate.py` (validation, duplicate and concurrent runs, single feature path, outlook fields) | **11 passed** |
 | `tests/unit/test_iso25010_score.py` | **3 passed** |
 | Frontend (vitest, all files) | **88 passed** |
-| Full backend suite (after fixes) | **1657 passed, 18 failed, 20 skipped.** 15 failures predate this work (E125–E131, E137–E143 lock hashes, E144, HFIAS). `test_corrected_pipeline` needs a raw IBTrACS file absent from this checkout. `test_e119r2_framework` and `test_e120_firi_design` are guards that fail while production files have uncommitted changes. The 39 tests written for the CH1 price-pressure mode now request it explicitly (`AIPHEED_MAP_MODEL=ch1`) and pass. |
+| Full backend suite (after fixes) | **1657 passed, 18 failed, 20 skipped.** 15 failures predate this work (E125–E131, E137–E143 lock hashes, E144, HFIAS). `test_corrected_pipeline` needed a git-ignored raw IBTrACS file; after copying it into this checkout it passes (9/9). `test_e119r2_framework` and `test_e120_firi_design` are guards that fail while any untracked file sits in the code or data folders; the only one left is the owner's 4 November news export (`backend/data/fi6/news_archive/export/`), which is not mine to commit or ignore. The 39 tests written for the CH1 price-pressure mode now request it explicitly (`AIPHEED_MAP_MODEL=ch1`) and pass. |
 
 ## 12. Deployment (Part 12): owner action needed
 
 **Current state:**
 - Render deploys `main` of `gwenndestura/aiPHeed`.
 - This branch already contains `origin/main`, so the push would be a fast-forward with nothing overwritten.
-- `dashboard_rows.csv` and the new code must be committed first.
+- Everything needed to serve E168 is committed (code, `dashboard_rows.csv`, registry, artifacts).
 
 **Remaining steps, in order:**
-1. Owner approval to commit, merge into `main` and push.
+1. Owner approval to merge into `main` and push.
 2. Render rebuilds from `main`.
 3. Production checks:
    - `/api/v1/final/food-insecurity/outlook` returns 200 with e168-lgbm-1.0;
@@ -210,6 +208,7 @@ All serve the same issue (2026-10-01), quarters 2027-Q1 to Q3, probabilities, cl
 **New code:**
 - `app/ml/inference/e168_system.py`, `app/ml/inference/map_engine.py`
 - `app/e168/dashboard_export.py`, `evidence.py`, `group_permutation.py`, `regenerate.py`, `thesis_metrics.py`
+- `app/e173/model.py` (regional-unemployment test)
 - `app/e151/topic_quality.py`
 - `app/quarterly/alerts_e168.py`
 - `app/iso25010/score.py`
@@ -225,9 +224,12 @@ All serve the same issue (2026-10-01), quarters 2027-Q1 to Q3, probabilities, cl
 **Data:**
 - `data/e168/out/{dashboard_rows.csv, face_validity.json, lead_sensitivity.json, seal_check.json}`
 - `data/e151/out/topic_quality.json`
+- `data/e173/raw` (PSA regional unemployment), `data/e173/out`
+- `data/e168/issues/2026-Q4` (staged regeneration test, not promoted)
 
 **Reports:**
 - `FNRI_FACE_VALIDITY_E168.md`
 - `NLP_FSSI_VALIDATION_E168.md`
+- `docs/e173/PROTOCOL.md`, `docs/e173/RESULTS.md`
 - `iso25010/`
 - this file
