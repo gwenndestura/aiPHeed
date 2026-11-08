@@ -36,4 +36,4 @@ ENV AIPHEED_LEAD2_MODEL=thesis \
 EXPOSE 8000
 
 # Create or upgrade the database schema on the disk, then serve.
-CMD ["sh", "-c", "python -m alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
+CMD ["sh", "-c", "python -m alembic upgrade head && (python scripts/bootstrap_admin.py apply || true) && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
