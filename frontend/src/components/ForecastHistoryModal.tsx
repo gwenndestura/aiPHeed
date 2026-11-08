@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { History, ArrowRight } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
-import { useConfig, useTimeseries, useExplainability, useFinalRiskRows } from "@/lib/queries";
+import { useConfig, useTimeseries, useExplainability } from "@/lib/queries";
 import { quarterOrdinal } from "@/lib/quarters";
 import { isHighRisk } from "@/lib/risk";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -41,7 +41,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
             Quarterly E168 food-insecurity risk forecasts for the region, each made only with information published before
-            its issue date (1 October 2026 for 2027-Q1 to Q3). Select a row to load that quarter on the map.
+            the forecast was made. Select a row to load that quarter on the map.
           </DialogDescription>
         </DialogHeader>
 
@@ -99,75 +99,8 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
           preceding quarter. Risk classes, not measured hunger rates or official classifications.
         </p>
 
-        <RiskArchive enabled={open} />
       </DialogContent>
     </Dialog>
-  );
-}
-
-/**
- * The province risk forecasts per quarter against the observed class (Chapter I definition): the walk-forward
- * forecasts for the quarter starting on their issue date, and the forecasts issued 2026-10-01 (not yet scored).
- */
-function RiskArchive({ enabled }: { enabled: boolean }) {
-  const { data } = useFinalRiskRows(enabled);
-  const rows = data?.rows ?? [];
-  const byQ = new Map<string, typeof rows>();
-  for (const r of rows) {
-    if (r.kind === "retrospective" ? r.lead !== "1" : false) continue;
-    byQ.set(r.quarter, [...(byQ.get(r.quarter) ?? []), r]);
-  }
-  const quarters = [...byQ.keys()].sort().reverse();
-  if (!quarters.length) return null;
-  return (
-    <div className="mt-4">
-      <p className="text-[11px] font-semibold">Province food-insecurity risk forecasts (E168) vs what happened</p>
-      <p className="text-[10px] text-muted-foreground leading-snug pt-0.5">
-        High-risk provinces forecast for each quarter and the high-risk provinces later observed in FNRI provincial
-        survey results. Rows marked Sealed are not yet scored.
-      </p>
-      <div className="mt-2 overflow-x-auto">
-        <table className="w-full text-[11px] border-collapse">
-          <thead>
-            <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
-              <th className="text-left py-1.5 pr-3">Quarter</th>
-              <th className="text-left px-2">Issued</th>
-              <th className="text-left px-2">Forecast high</th>
-              <th className="text-left px-2">Observed high</th>
-              <th className="text-right px-2">Correct</th>
-            </tr>
-          </thead>
-          <tbody>
-            {quarters.map((q) => {
-              const rs = byQ.get(q) ?? [];
-              const sealed = rs[0].kind === "forecast";
-              const scored = rs.filter((r) => r.observed);
-              const names = (f: (r: (typeof rs)[number]) => boolean) =>
-                rs.filter(f).map((r) => r.province).join(", ") || "none";
-              return (
-                <tr key={q} className="border-b border-border/25">
-                  <td className="py-2 pr-3 font-semibold whitespace-nowrap">
-                    {q}
-                    {sealed && (
-                      <span className="ml-1.5 text-label font-normal text-ink-secondary">
-                        Sealed · lead {rs[0].lead}
-                        {rs[0].reliable_horizon ? " (reliable)" : " (experimental)"}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-2 whitespace-nowrap text-muted-foreground">{rs[0].issue_date}</td>
-                  <td className="px-2">{names((r) => r.class === "HIGH")}</td>
-                  <td className="px-2">{scored.length ? names((r) => r.observed === "HIGH") : "—"}</td>
-                  <td className="text-right px-2 font-mono-num tabular-nums">
-                    {scored.length ? `${scored.filter((r) => r.class === r.observed).length}/${scored.length}` : "—"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
   );
 }
 
