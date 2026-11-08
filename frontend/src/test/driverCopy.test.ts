@@ -9,7 +9,7 @@ describe("factor card copy: contributing groups", () => {
     expect(contributing("employment", "increases_risk").title).toBe("Jobs (national figures)");
     expect(contributing("climate", "increases_risk").title).toBe("Weather and farm supply");
     expect(contributing("market", "protective").title).toBe("Food prices");
-    expect(contributing("fish_kill", "protective").title).toBe("Fish catch");
+    expect(contributing("fish_kill", "protective").title).toBe("Fish production");
     expect(contributing("ofw_remittance", "increases_risk").title).toBe("Money sent home by OFWs (national figures)");
     for (const k of ["employment", "climate", "market", "fish_kill", "ofw_remittance"]) {
       for (const d of ["increases_risk", "protective"] as const) {
@@ -23,7 +23,7 @@ describe("factor card copy: contributing groups", () => {
       ["employment", "Unemployment rose more than usual compared with a year earlier.", "Unemployment changed less than usual compared with a year earlier."],
       ["climate", "Weather and farm-supply conditions were worse than usual.", "Weather and farm-supply conditions were better than usual."],
       ["market", "Food prices were higher than usual.", "Food prices were lower than usual."],
-      ["fish_kill", "The fish catch fell more than usual.", "The fish catch held up better than usual."],
+      ["fish_kill", "Fish production fell more than usual.", "Fish production held up better than usual."],
       ["ofw_remittance", "Money sent home by OFWs grew less than usual.", "Money sent home by OFWs grew more than usual."],
     ];
     for (const [k, raises, lowers] of table) {
@@ -53,7 +53,7 @@ describe("factor card copy: groups that did not move the forecast (E42/E47)", ()
   it("falls back to neutral copy at 0% when an older backend sends no status", () => {
     expect(isContributing({ pct: 0 })).toBe(false);
     expect(driverCopy({ key: "fish_kill", direction: "increases_risk", pct: 0 }).title)
-      .toBe("Fish catch: no effect this time");
+      .toBe("Fish production: no effect this time");
     expect(isContributing({ pct: 12 })).toBe(true);
   });
 

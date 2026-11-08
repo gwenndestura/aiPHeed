@@ -257,7 +257,7 @@ describe("Landing page", () => {
     expect(src).toContain("FNRI National/Expanded National Nutrition Survey (HFIAS)");
     expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*Yearly, 2013 to 2025/);
     expect(src).not.toMatch(/Pink Sheet|PAGASA El Ni|9,667/);
-    expect(src).toMatch(/fisheries production.*proxy for the Fish Kill trigger, not a record of fish-kill events/);
+    expect(src).toMatch(/PSA fisheries production.*total fish production: commercial, municipal and aquaculture/);
     expect(text).not.toMatch(/did not (measurably )?change the tested accuracy/);
   });
 

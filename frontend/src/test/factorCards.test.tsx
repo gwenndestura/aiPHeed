@@ -50,7 +50,7 @@ describe("factor cards", () => {
       "Jobs (national figures)54%",
       "Weather and farm supply28%",
       "Food prices5%",
-      "Fish catch13%",
+      "Fish production13%",
       "Money sent home by OFWs (national figures): not enough figures0%",
     ]);
     // Bars keep their widths.
@@ -58,7 +58,7 @@ describe("factor cards", () => {
 
     const jobs = cards()[0];
     expect(within(jobs).getByText("Unemployment rose more than usual compared with a year earlier.")).toBeTruthy();
-    expect(within(cards()[3]).getByText("The fish catch held up better than usual.")).toBeTruthy();
+    expect(within(cards()[3]).getByText("Fish production held up better than usual.")).toBeTruthy();
     expect(within(cards()[4]).getByText("No figures had been published when this forecast was made, which does not mean the risk is low.")).toBeTruthy();
     // The evidence note and any Details control are gone.
     expect(document.body.textContent).not.toContain("FIRI v2");

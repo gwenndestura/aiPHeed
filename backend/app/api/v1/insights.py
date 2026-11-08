@@ -145,8 +145,8 @@ THESIS_EXPLAINABILITY_NOTE = (
     "which 0.5 means every indicator is at its historical middle. Each bar is a factor group's exact share of how far "
     "the index moved from 0.5: red groups are above their usual level and raise the estimate, green groups are below it "
     "and lower it. Market / Prices = the LightGBM food-price-pressure forecast, headline inflation and rice prices; "
-    "Climate Stress = PAGASA El Nino status, typhoons, palay and corn production; Fish Kill = fisheries production (not "
-    "fish-kill events); Employment and OFW Remittance = national figures. Household vulnerability, regional hunger (SWS, "
+    "Climate Stress = PAGASA El Nino status, typhoons, palay and corn production; Fish Production = total provincial fisheries "
+    "production; Employment and OFW Remittance = national figures. Household vulnerability, regional hunger (SWS, "
     "Balance Luzon) and news are also in the index but not among the five bars; their share and every domain score and "
     "weight are in the summary text. Shares describe how the estimate is built from the evidence; they are not causes."
 )

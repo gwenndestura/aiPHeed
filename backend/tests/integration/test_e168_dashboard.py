@@ -56,10 +56,10 @@ def test_group_contributions_add_up_to_the_lightgbm_change():
 
 
 def test_five_triggers_labelled_honestly():
-    # The thesis's five triggers; national series and the fish-kill proxy say what they are. Every stored column once.
+    # The thesis's five triggers; national series say what they are, and the fisheries group is named for what it measures. Every stored column once.
     assert set(E.GROUPS) == {"market", "climate", "employment", "ofw_remittance", "fish_kill"}
     assert "(national)" in E.GROUPS["employment"] and "(national)" in E.GROUPS["ofw_remittance"]
-    assert "proxy" in E.GROUPS["fish_kill"].lower()
+    assert E.GROUPS["fish_kill"] == "Fish Production"
     used = [c for cols in E.BAR_COLS.values() for c in cols] + list(E.OTHER_COLS)
     assert len(used) == len(set(used))
 
@@ -74,7 +74,7 @@ def test_driver_shares_include_other_and_add_to_100(thesis):
 def test_fish_kill_bar_is_disclosed_as_a_proxy(thesis):
     d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
     fk = next(t for t in d["triggers"] if t["key"] == "fish_kill")
-    assert "proxy" in fk["label"].lower() and "fish catch" in (fk["plainEvidence"] or "")
+    assert fk["label"] == "Fish Production" and "Fish production" in (fk["plainEvidence"] or "")
 
 
 def test_report_and_config_describe_e168_not_the_retired_index(thesis):

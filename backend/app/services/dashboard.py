@@ -1309,7 +1309,7 @@ CANDIDATE_EVENTS = {
     "e43": "food stress (high hunger together with food-price pressure)",
 }
 LIMITED_STATUSES = ("insufficient_data", "stale", "no_data")
-LABEL_OF = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
+LABEL_OF = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Production",
             "employment": "Employment", "ofw_remittance": "OFW Remittance", "poverty": "Poverty"}
 
 
@@ -2185,7 +2185,7 @@ def e31_news_evidence(quarter: str) -> tuple[str, str, str]:
                                  f"estimate was made with the previous quarter's news).")
 
 
-TRIGGER_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Kill",
+TRIGGER_LABELS = {"market": "Market / Prices", "climate": "Climate Stress", "fish_kill": "Fish Production",
                   "employment": "Employment", "ofw_remittance": "OFW Remittance"}
 FEED_MIN_ARTICLES, FEED_MAX_BACK = 5, 3
 # A trigger keyword alone ("flood", "price surge") also matches politics and transport stories; an unvalidated title
