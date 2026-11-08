@@ -15,7 +15,7 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "Fish production", def: "The province's total fish production (commercial, municipal and aquaculture) compared with the year before (PSA). Lower production means less fish to eat and less income for fishing families." },
   { term: "Other factors", def: "Inputs outside the five groups: how poor and how crowded the province is, and how far ahead the forecast looks." },
   { term: "News reports used", def: "The news stories the forecast read: those published in the three months before the forecast was made, about the province, CALABARZON, Luzon or the whole country. Off-topic stories are removed. News feeds into the five groups above; it is not a separate bar." },
-  { term: "Few news reports", def: "Fewer than 5 news stories were about the province itself, so its forecast rests on less local news. It does not mean the risk is low." },
+  { term: "LIMITED_SIGNAL", def: "Fewer than 5 news stories were about the province itself, so its forecast rests on less local news. It does not mean the risk is low." },
   { term: "Latest data used", def: "The newest month or period of each source the forecast used. Only complete months are used: in November, the newest data is October." },
   { term: "Updated monthly", def: "On the 10th of each month the system downloads the newest public figures and news and updates the forecast if anything new came out." },
   { term: "Towns and cities", def: "Towns and cities ranked by priority within their province, using the province's chance, poverty and population. They are not separate forecasts." },
