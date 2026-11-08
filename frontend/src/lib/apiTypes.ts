@@ -158,6 +158,10 @@ export interface ProvinceSummary {
   riskLevel: string | null;
   qoqChange: number | null;
   qoqChangePct: number | null;
+  /** E168: the score the change is measured from, its quarter and which forecast made it. */
+  qoqPreviousScore?: number | null;
+  qoqPreviousQuarter?: string | null;
+  qoqPreviousBasis?: string | null;
   seriesMonitored: number | null;
   seriesAtRisk: number | null;
   // Of seriesMonitored, how many scored below the model's own confidence
@@ -846,4 +850,11 @@ export interface FoodInsecurityStatus {
   production?: { model_id: string; version: string; approved_utc: string };
   /** Approved model only: tested accuracy by lead ("1" = one quarter ahead). */
   accuracy_by_lead?: Record<string, { accuracy: number }>;
+  /** Approved model only: information cut-off of the served issue (a live refresh moves it to the day of the refresh). */
+  origin_date?: string;
+  /** Last day of the newest period used (the cut-off minus one day) and the day the figures were checked online. */
+  data_through?: string;
+  data_published_by?: string;
+  /** The newest period of every input the served forecast used (app.ml.inference.e168_system.data_used). */
+  data_used?: { group: string; name: string; source: string; level: string; period: string; note?: string; label?: string; when?: string }[];
 }

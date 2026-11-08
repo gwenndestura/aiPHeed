@@ -294,6 +294,8 @@ def _evidence_quarter(quarter: str) -> str:
     return row["provenance"]["news_evidence_window"]["evidence_quarter"] if row.get("provenance") else _prev(quarter)
 
 
+@pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
+                    reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
 def test_news_count_agrees_with_the_province_summary():
     quarter = client.get("/api/v1/quarters").json()["current"]
     provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
@@ -304,6 +306,8 @@ def test_news_count_agrees_with_the_province_summary():
         assert news["sourceQuarter"] == _evidence_quarter(quarter)
 
 
+@pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
+                    reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
 def test_forecast_quarter_news_comes_from_the_information_cutoff():
     forecast = [q["id"] for q in client.get("/api/v1/quarters").json()["quarters"]
                 if q.get("state") == "forecast"]

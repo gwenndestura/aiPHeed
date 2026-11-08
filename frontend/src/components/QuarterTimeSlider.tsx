@@ -118,8 +118,9 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
   const todayOnPoint = today !== null && Number.isInteger(today) ? today : -1;
   const split = today !== null ? at(today) : qs.every((q) => q.forecast) ? 0 : 100;
 
+  const hasObserved = qs.some((q) => !q.forecast);
   const description = [
-    "Solid line: observed quarters. Dashed line: forecast quarters.",
+    hasObserved ? "Solid line: observed quarters. Dashed line: forecast quarters." : "All quarters shown are forecasts.",
     today === null
       ? ""
       : todayOnPoint >= 0
@@ -295,10 +296,13 @@ export function QuarterTimeSlider({ value, onChange, quarters, allQuarters, onOp
 
       {/* Legend, centred under the track */}
       <div aria-hidden className="qt-muted flex items-center justify-center gap-4 text-[10px] leading-[14px]">
-        <span className="flex items-center gap-1.5">
-          <span className="qt-key qt-line-observed" />
-          Observed
-        </span>
+        {/* "Observed" only when the timeline actually has observed quarters (E168 shows forecasts only). */}
+        {hasObserved && (
+          <span className="flex items-center gap-1.5">
+            <span className="qt-key qt-line-observed" />
+            Observed
+          </span>
+        )}
         <span className="flex items-center gap-1.5">
           <span className="qt-key qt-line-forecast" />
           Forecast

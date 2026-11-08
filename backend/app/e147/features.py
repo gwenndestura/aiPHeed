@@ -57,7 +57,11 @@ def _quarterly_late(name: str) -> pd.DataFrame:
     d["k"] = d["Geolocation"].map(F.nospace)
     qc = [c for c in d.columns if re.match(r"^\d{4} Quarter \d$", c)]
     d[qc] = d[qc].apply(pd.to_numeric, errors="coerce")
-    return d.groupby("k")[qc].sum(min_count=1)
+    q = d.groupby("k")[qc].sum(min_count=1)
+    from app.e168 import live_data as LD
+    lv = LD.production(name)
+    new = [c for c in lv.columns if c not in q.columns and lv[c].notna().any()]
+    return q.join(lv[new], how="outer") if new else q
 
 
 @lru_cache(maxsize=None)
@@ -69,6 +73,12 @@ def _rain_late() -> dict:
         v = json.loads(f.read_text())["properties"]["parameter"]["PRECTOTCORR"]
         s = pd.Series({pd.Period(f"{x[:4]}-{x[4:]}", "M"): val for x, val in v.items() if x[4:] != "13"}, dtype=float)
         out[k] = s.where(s > -900)
+    from app.e168 import live_data as LD
+    for k, s in LD.nasa("rain").items():                 # months after the y2023 file only
+        k = k.replace(" ", "")
+        old = out.get(k)
+        add = s if old is None else s[s.index > old.dropna().index.max()]
+        out[k] = add if old is None else pd.concat([old.dropna(), add]).sort_index()
     return out
 
 
@@ -93,7 +103,7 @@ def gov_row(k: str, d: pd.Timestamp) -> dict:
     if d >= pd.Timestamp("2020-07-01"):
         for name, fname, col, labs in (("agri", "palay_corn_quarterly.csv", "Ecosystem/Croptype", ("Palay", "Corn")), ("fish", "fisheries_quarterly.csv", "Subsector", ("FISHERIES",))):
             q0, q1 = F._quarterly(fname, col, labs), _quarterly_late(name)
-            pub = F._published_quarters(list(q0.columns) + list(q1.columns), d)
+            pub = F._published_quarters(list(q0.columns) + list(q1.columns), d, {"agri": "palay_corn_q", "fish": "fisheries_q"}[name])
             def get(c):
                 t = q0 if c in q0.columns else q1
                 return t.at[k, c] if k in t.index else np.nan

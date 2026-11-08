@@ -173,6 +173,17 @@ def palay() -> pd.DataFrame:
     return out.dropna().reset_index()
 
 
+def _live(name: str):
+    p = BACKEND_DIR / "data" / "e168" / "live_raw" / name
+    return p if p.exists() else None
+
+
+def _seen(source: str, period_end: pd.Timestamp, rule: pd.Timestamp) -> pd.Timestamp:
+    from app.e168 import live_data as LD
+    s = LD.effective_seen(source, f"{period_end.year}-{period_end.month:02d}" if source != "remittances" else str(period_end.year), period_end)
+    return min(rule, s) if s is not None else rule
+
+
 def lfs() -> pd.DataFrame:
     d = pd.read_csv(RAW / "psa/lfs_unemployment_rate_national.csv", dtype=str)
     months = {m: i + 1 for i, m in enumerate(["January", "February", "March", "April", "May", "June", "July",
@@ -180,6 +191,14 @@ def lfs() -> pd.DataFrame:
     d = d[d["Month"].isin(months)].copy()
     d["rate"] = pd.to_numeric(d["Unemployment Rate Both sexes"], errors="coerce")
     d = d.dropna(subset=["rate"])
+    lv = _live("psa/lfs_unemployment_rate_national.csv")
+    if lv is not None:                                    # months the archived file does not hold
+        n = pd.read_csv(lv, dtype=str)
+        n = n[n["Month"].isin(months)].copy()
+        n["rate"] = pd.to_numeric(n["Unemployment Rate Both sexes"], errors="coerce")
+        n = n.dropna(subset=["rate"])
+        have = set(zip(d["Year"], d["Month"]))
+        d = pd.concat([d, n[[(y, m) not in have for y, m in zip(n["Year"], n["Month"])]]], ignore_index=True)
     d["period_end"] = [_month_end(y, months[m]) for y, m in zip(d["Year"], d["Month"])]
     d = d.sort_values("period_end").set_index("period_end")
     # YoY: same survey month one year earlier (the pre-2021 rounds are Jan/Apr/Jul/Oct, so this always exists)
@@ -187,7 +206,7 @@ def lfs() -> pd.DataFrame:
     prev.index = prev.index + pd.DateOffset(years=1)
     prev.index = prev.index + pd.offsets.MonthEnd(0)
     out = pd.DataFrame({"unemp_rate": d["rate"], "unemp_yoy": d["rate"] - prev.reindex(d.index)})
-    out["available_from"] = out.index + pd.Timedelta(days=45)
+    out["available_from"] = [_seen("lfs", t, t + pd.Timedelta(days=45)) for t in out.index]
     return out.reset_index()
 
 
@@ -232,14 +251,22 @@ def typhoons() -> pd.DataFrame:
 def oni() -> pd.DataFrame:
     rows = []
     seas = ["DJF", "JFM", "FMA", "MAM", "AMJ", "MJJ", "JJA", "JAS", "ASO", "SON", "OND", "NDJ"]
-    for line in (RAW / "noaa/noaa_oni.txt").read_text().splitlines()[1:]:
-        p = line.split()
-        if len(p) == 4 and p[0] in seas:
-            m = seas.index(p[0]) + 2            # season's last month (NDJ ends in January of the next year)
-            y = int(p[1]) + (1 if m > 12 else 0)
-            rows.append({"period_end": _month_end(y, (m - 1) % 12 + 1), "oni": float(p[3])})
+    def parse(text):
+        out = []
+        for line in text.splitlines()[1:]:
+            p = line.split()
+            if len(p) == 4 and p[0] in seas:
+                m = seas.index(p[0]) + 2            # season's last month (NDJ ends in January of the next year)
+                y = int(p[1]) + (1 if m > 12 else 0)
+                out.append({"period_end": _month_end(y, (m - 1) % 12 + 1), "oni": float(p[3])})
+        return out
+    rows = parse((RAW / "noaa/noaa_oni.txt").read_text())
+    lv = _live("noaa/oni.txt")
+    if lv is not None:                                    # seasons after the archived file only
+        last = max(r["period_end"] for r in rows)
+        rows += [r for r in parse(lv.read_text()) if r["period_end"] > last]
     d = pd.DataFrame(rows).sort_values("period_end")
-    d["available_from"] = d["period_end"] + pd.Timedelta(days=10)
+    d["available_from"] = [_seen("oni", t, t + pd.Timedelta(days=10)) for t in d["period_end"]]
     return d
 
 
@@ -264,10 +291,14 @@ def gdelt() -> pd.DataFrame:
 def remittances() -> pd.DataFrame:
     d = json.loads((RAW / "bsp/wdi_BX.TRF.PWKR.CD.DT_PHL.json").read_text())[1]
     s = pd.Series({int(r["date"]): r["value"] for r in d if r["value"] is not None}).sort_index()
+    lv = _live("worldbank/remittances.json")
+    if lv is not None:                                    # years after the archived file only
+        n = {int(r["date"]): r["value"] for r in json.loads(lv.read_text())[1] if r["value"] is not None}
+        s = pd.concat([s, pd.Series({y: v for y, v in n.items() if y > s.index.max()}, dtype=float)]).sort_index()
     out = pd.DataFrame({"year": s.index, "remit_usd": s.values})
     out["remit_yoy"] = 100 * (out["remit_usd"] / out["remit_usd"].shift(1) - 1)
     out["period_end"] = [pd.Timestamp(year=y, month=12, day=31) for y in out["year"]]
-    out["available_from"] = [pd.Timestamp(year=y + 1, month=2, day=15) for y in out["year"]]
+    out["available_from"] = [_seen("remittances", pd.Timestamp(year=y, month=12, day=31), pd.Timestamp(year=y + 1, month=2, day=15)) for y in out["year"]]
     return out.dropna()
 
 

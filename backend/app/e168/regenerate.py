@@ -83,11 +83,16 @@ def validate(issue: str, rows: list[dict], dash: pd.DataFrame) -> None:
         raise RegenerationError("; ".join(problems))
 
 
-def stage(issue: str | None = None) -> dict:
+def folder_name(issue: str, as_of: str | None = None, revision: int | None = None) -> str:
+    return (f"{issue}_{as_of}" if as_of else issue) + (f"_r{revision}" if revision and revision > 1 else "")
+
+
+def stage(issue: str | None = None, as_of: str | None = None, revision: int | None = None) -> dict:
+    """Stage `issue`; with `as_of` (a day inside the issue quarter, set as AIPHEED_LIVE_ASOF by app.e168.live_refresh) the
+    information cut-off is that day instead of the quarter's first day and the folder is <issue>_<as_of>."""
     from app.e168 import dashboard_export as X
-    from app.e168 import serve as SV
     issue = issue or current_issue()
-    final = ISSUES / issue
+    final = ISSUES / folder_name(issue, as_of, revision)
     if (final / "live.json").exists():
         return {"issue": issue, "status": "exists", "path": str(final)}
     ISSUES.mkdir(parents=True, exist_ok=True)
@@ -96,7 +101,7 @@ def stage(issue: str | None = None) -> dict:
         fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError:
         return {"issue": issue, "status": "already running", "lock": str(lock)}
-    tmp = ISSUES / f".{issue}.tmp"
+    tmp = ISSUES / f".{final.name}.tmp"
     try:
         os.write(fd, issue.encode())
         fresh = _check_fresh(issue)
@@ -110,6 +115,7 @@ def stage(issue: str | None = None) -> dict:
         validate(issue, rows, dash)
         doc = {"model": MODEL_ID, "name": "E168 LightGBM-only (survey baseline + constrained LightGBM change + calibration layer)",
                "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "issue_quarter": issue,
+               "information_cutoff": X._cutoff(issue), "data_published_by": os.getenv("AIPHEED_LIVE_PUBLISHED") or X._cutoff(issue),
                "target": "HFIAS moderate+severe household food insecurity, HIGH at 50 %", "provinces": rows, "accuracy_by_lead": acc,
                "acceptance_basis": "owner-defined (2026-11-07): accuracy >= 75 % and significantly better than reusing the latest survey (Brier CI < 0) at each served lead",
                "served_leads": [l for l in LEADS if acc[l]["accuracy"] >= 0.75 and acc[l]["beats_persistence"]],
@@ -119,13 +125,19 @@ def stage(issue: str | None = None) -> dict:
         tmp.mkdir()
         (tmp / "live.json").write_text(json.dumps(doc, indent=1), newline="\n")
         dash.to_csv(tmp / "dashboard_rows.csv", index=False, lineterminator="\n")
-        man = {"issue": issue, "status": "staged", "model": MODEL_ID, "procedure": "app.e168.serve._forecast (frozen E168, validation feature path)",
+        try:                                             # the stories this issue read, for the dashboard's news panel
+            from app.e168 import news_used as NU
+            (tmp / "news_used.json").write_text(json.dumps(NU.build(doc["information_cutoff"]), indent=1, ensure_ascii=False),
+                                               encoding="utf-8", newline="\n")
+        except Exception as e:                           # noqa: BLE001 - descriptive only; the forecast does not depend on it
+            (tmp / "news_used_error.txt").write_text(str(e))
+        man = {"issue": issue, "folder": final.name, "information_cutoff": doc["information_cutoff"], "status": "staged", "model": MODEL_ID, "procedure": "app.e168.serve._forecast (frozen E168, validation feature path)",
                "created_utc": doc["created_utc"], "inputs_sha256": {p: _sha(p) for p in INPUTS}, "freshness": fresh,
                "live_sha256": hashlib.sha256((tmp / "live.json").read_bytes()).hexdigest(),
-               "promote": f"python -m app.e168.regenerate promote --issue {issue} --approver \"<name>\""}
+               "promote": f"python -m app.e168.regenerate promote --issue {final.name} --approver \"<name>\""}
         (tmp / "manifest.json").write_text(json.dumps(man, indent=1), newline="\n")
         os.replace(tmp, final)
-        return {"issue": issue, "status": "staged", "path": str(final)}
+        return {"issue": issue, "folder": final.name, "status": "staged", "path": str(final)}
     finally:
         os.close(fd)
         lock.unlink(missing_ok=True)
@@ -133,9 +145,11 @@ def stage(issue: str | None = None) -> dict:
 
 
 def promote(issue: str, approver: str) -> dict:
+    """`issue` is the staged folder name: '2027-Q1', or '2026-Q4_2026-11-08' for a live as-of issue."""
     from app import registry as R
     from app.e168 import owner_gate as OG
     d = ISSUES / issue
+    folder, issue = issue, issue[:7]
     man = json.loads((d / "manifest.json").read_text())
     live = json.loads((d / "live.json").read_text())
     if hashlib.sha256((d / "live.json").read_bytes()).hexdigest() != man["live_sha256"]:
@@ -146,14 +160,14 @@ def promote(issue: str, approver: str) -> dict:
     if not g["passed"]:
         raise RegenerationError(f"owner gate failed: {[c['id'] for c in g['checks'] if c['status'] != 'pass']}")
     g["artifact_file_sha256"] = R.file_sha256(d / "live.json")
-    R.register(MODEL_ID, {"version": f"E168 LightGBM, issue {issue}", "artifact_path": art, "artifact_sha256": g["artifact_file_sha256"],
+    R.register(MODEL_ID, {"version": f"E168 LightGBM, issue {folder}", "artifact_path": art, "artifact_sha256": g["artifact_file_sha256"],
                           "target": "HFIAS moderate+severe household food insecurity by province; HIGH at 50 %",
-                          "note": f"Quarterly issue {issue} of the frozen E168 procedure."}, "candidate")
+                          "note": f"Issue {folder} of the frozen E168 procedure (information cut-off {live.get('information_cutoff', issue)})."}, "candidate")
     R.record_gate(MODEL_ID, g)
     rec = R.promote(MODEL_ID, approver)
     man["status"], man["promoted_utc"], man["approver"] = "promoted", rec.get("approved_utc"), approver
     (d / "manifest.json").write_text(json.dumps(man, indent=1), newline="\n")
-    return {"issue": issue, "status": "promoted", "artifact": art}
+    return {"issue": folder, "status": "promoted", "artifact": art}
 
 
 if __name__ == "__main__":

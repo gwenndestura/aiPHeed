@@ -116,7 +116,7 @@ export function AboutModal() {
                   }
                 />
                 <Row k="Forecasts further ahead" v="Not shown: from 4 quarters ahead accuracy is below 75%" />
-                <Row k="News" v="Inside the five trigger groups; removing it did not measurably change the tested accuracy" />
+                <Row k="News" v="Counted inside the five trigger groups" />
                 <Row k="Food-insecurity forecast" v="Approved: E168 LightGBM (2026-11-07, project acceptance rule)" />
               </div>
             ) : (

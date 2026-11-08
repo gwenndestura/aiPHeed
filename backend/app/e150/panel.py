@@ -27,6 +27,13 @@ ALIAS = {"cotabato": "northcotabato", "cotabato(northcotabato)": "northcotabato"
 
 def _yoy_table() -> pd.DataFrame:
     d = pd.read_csv(RAW / "cpi_monthly.csv")
+    from app.e168 import live_data as LD
+    lv = LD.LIVE / "psa" / "cpi_monthly.csv"
+    if lv.exists():
+        n = pd.read_csv(lv).dropna(subset=["value"])
+        dd = d.dropna(subset=["value"])
+        have = set(zip(dd["geo"], dd["commodity_text"], dd["year"], dd["period"], dd["base"]))
+        d = pd.concat([d, n[[t not in have for t in zip(n["geo"], n["commodity_text"], n["year"], n["period"], n["base"])]]], ignore_index=True)
     d = d[d["period"].isin(MONTHS)].dropna(subset=["value"]).copy()
     d["k"] = d["geo"].str.replace(".", "", regex=False).str.strip().map(F.nospace)
     d["k"] = d["k"].map(lambda x: ALIAS.get(x, x))
@@ -41,6 +48,13 @@ def _yoy_table() -> pd.DataFrame:
     return d[use & d["yoy"].notna()][["k", "commodity", "m", "yoy"]]
 
 
+def _seen_month(d: pd.Timestamp) -> int:
+    """Newest CPI month already in the public PSA table on or before `d` (live downloads only), as year*12+month-1."""
+    from app.e168 import live_data as LD
+    ok = [p for p in LD._seen_cached().get("cpi", {}) if LD.usable("cpi", p, pd.Timestamp(p + "-01") + pd.offsets.MonthEnd(0), d)]
+    return max((int(p[:4]) * 12 + int(p[5:]) - 1 for p in ok), default=-1)
+
+
 def cpi_panel() -> pd.DataFrame:
     Y = _yoy_table()
     keys = Fe.base_rows()["key"].drop_duplicates().tolist()
@@ -50,7 +64,7 @@ def cpi_panel() -> pd.DataFrame:
     rows = []
     for i in range(Pn.FIRST, Pn.LAST + 1):
         d = Pn.q_start(i)
-        last = d.year * 12 + d.month - 1 - 2                # a month is usable from the first day of the second following month
+        last = max(d.year * 12 + d.month - 1 - 2, _seen_month(d))   # first day of the second following month, or already published
         for key in keys:
             k = key.replace(" ", "")
             r = {"key": key, "qi": i}

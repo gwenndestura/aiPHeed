@@ -69,6 +69,8 @@ def test_employment_caveat_follows_every_drawn_bar(e58):
     assert seen == 5                                   # 2027-Q1: employment lowers all five while unemployment rose
 
 
+@pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
+                    reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
 def test_news_beside_a_lead2_estimate_never_postdates_its_issue_date(e58):
     for q in LEAD2.candidate_quarters():
         rows = LEAD2.rows_for(q)

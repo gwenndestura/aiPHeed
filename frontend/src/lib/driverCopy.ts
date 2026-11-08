@@ -62,7 +62,7 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
 const FRIENDLY_NAME: Record<string, string> = {
   market: "Food prices",
   climate: "Weather and farm supply",
-  fish_kill: "Fish catch (instead of fish-kill reports)",
+  fish_kill: "Fish catch",
   employment: "Jobs (national figures)",
   ofw_remittance: "Money sent home by OFWs (national figures)",
   poverty: "Poverty and vulnerability",
@@ -126,7 +126,9 @@ export function driverCopy(t: Pick<Trigger, "key" | "direction" | "status" | "pc
   if (!isContributing(t)) {
     const status: Exclude<TriggerStatus, "contributes"> =
       t.status && t.status !== "contributes" ? t.status : "no_effect";
-    return NEUTRAL_COPY[status](name);
+    const neutral = NEUTRAL_COPY[status](name);
+    // A group that was in the forecast but barely moved it: still say the actual figures when the backend sends them.
+    return status === "no_effect" && t.plainEvidence ? { title: neutral.title, description: t.plainEvidence } : neutral;
   }
   // E87: when the backend sends the measured values behind the group, say them; otherwise the generic sentence
   if (t.plainEvidence) return { title: name, description: t.plainEvidence };

@@ -15,6 +15,13 @@ export interface RegionData {
   householdsAtRisk: number;
   fpsi: number; // Food Price Stress Index
   momChange: number; // Quarter-over-quarter change %
+  /** False when the API has no earlier forecast to compare with (shown as "—", never 0.0%). */
+  momChangeKnown?: boolean;
+  /** The previous quarter's score the change is measured from, and that quarter ("2026-Q4"). */
+  prevScore?: number;
+  /** The change in the chance itself (current minus previous, 0-1 scale), when known. */
+  momDelta?: number;
+  prevQuarter?: string;
   limitedSignal: boolean; // fewer than the minimum geocoded articles this quarter
   articleCount: number;
   seriesMonitored: number | null;

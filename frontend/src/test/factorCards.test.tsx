@@ -50,7 +50,7 @@ describe("factor cards", () => {
       "Jobs (national figures)54%",
       "Weather and farm supply28%",
       "Food prices5%",
-      "Fish catch (instead of fish-kill reports)13%",
+      "Fish catch13%",
       "Money sent home by OFWs (national figures): not enough figures0%",
     ]);
     // Bars keep their widths.

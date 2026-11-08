@@ -85,6 +85,14 @@ def artifact():
     return LIVE
 
 
+def _data_used() -> list[dict]:
+    try:
+        from app.ml.inference import e168_system as E
+        return E.data_used()["items"]
+    except Exception:                       # the list is descriptive; the forecast is served without it
+        return []
+
+
 def outlook() -> dict:
     path = artifact()
     if not path.exists():
@@ -92,9 +100,11 @@ def outlook() -> dict:
     d = json.loads(path.read_text())
     served = set(d["served_leads"])
     y, q = d["issue_quarter"].split("-Q")
+    cut = d.get("information_cutoff") or f"{y}-{3 * (int(q) - 1) + 1:02d}-01"      # a live issue carries its own as-of date
     return {**{k: d[k] for k in ("model", "name", "issue_quarter", "target", "accuracy_by_lead", "acceptance_basis", "statistical_reliability", "seals")},
-            "origin_date": f"{y}-{3 * (int(q) - 1) + 1:02d}-01", "classification_threshold": 0.5,
-            "information_cutoff": f"data published before {y}-{3 * (int(q) - 1) + 1:02d}-01",
+            "origin_date": cut, "classification_threshold": 0.5, "information_cutoff": f"data published before {cut}",
+            "created_utc": d.get("created_utc"), "data_published_by": d.get("data_published_by") or cut,
+            "data_through": (pd.Timestamp(cut) - pd.Timedelta(days=1)).date().isoformat(), "data_used": _data_used(),
             "provinces": [r for r in d["provinces"] if r["lead"] in served]}
 
 

@@ -70,7 +70,7 @@ describe("driver bars use the API's shares and disclose the rest", () => {
       otherPct: 36,
     };
     render(<RiskDriversCardBody provinceId="quezon" quarterId="2027-Q1" />);
-    for (const lab of ["Weather and farm supply", "Jobs (national figures)", "Food prices", "Fish catch (instead of fish-kill reports)",
+    for (const lab of ["Weather and farm supply", "Jobs (national figures)", "Food prices", "Fish catch",
       "Money sent home by OFWs (national figures)", "Other factors (poverty, population, timing)"]) expect(screen.getByText(lab)).toBeTruthy();
     expect(screen.getByText("36%")).toBeTruthy();
     expect(49 + 9 + 5 + 1 + 0 + 36).toBe(100);

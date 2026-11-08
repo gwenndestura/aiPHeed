@@ -1,0 +1,21 @@
+{
+ "issue": "2026-Q4",
+ "folder": "2026-Q4_2026-11-08",
+ "information_cutoff": "2026-11-08",
+ "status": "promoted",
+ "model": "e168-lgbm-1.0",
+ "procedure": "app.e168.serve._forecast (frozen E168, validation feature path)",
+ "created_utc": "2026-11-08T04:18:21+00:00",
+ "inputs_sha256": {
+  "e152/out/local_panel.parquet": "01025bdc0972a1302186ab5d9331924dc3c10854146478b0d932f70d6671e44f",
+  "e151/out/news_panel.parquet": "6185b37c66c41c94bd28f63563cc043f87653129437c5e933247a5523a9e0214",
+  "hfias/clean/enns_hfias.csv": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3"
+ },
+ "freshness": {
+  "provincial_panel_newest_quarter": "2026-Q4"
+ },
+ "live_sha256": "103bf421677539389fb1eb9d39ca39d7485e958d415ffed63a0d260afb37869c",
+ "promote": "python -m app.e168.regenerate promote --issue 2026-Q4_2026-11-08 --approver \"<name>\"",
+ "promoted_utc": "2026-11-08T04:18:56+00:00",
+ "approver": "automatic live refresh (standing instruction of the owner, Angel Melindo, 2026-11-08)"
+}

@@ -40,7 +40,12 @@ def fetch() -> None:
 def _table() -> dict:
     d = pd.read_csv(CSV)
     d["p"] = pd.PeriodIndex(d["month"], freq="M")
-    return {k: g.set_index("p")["gwetroot"] for k, g in d.groupby("k")}
+    out = {k: g.set_index("p")["gwetroot"] for k, g in d.groupby("k")}
+    from app.e168 import live_data as LD
+    for k, s in LD.nasa("gwetroot").items():             # months after the archived file only
+        old = out.get(k)
+        out[k] = s if old is None else pd.concat([old, s[s.index > old.index.max()]]).sort_index()
+    return out
 
 
 def anomaly(k: str, issue: pd.Timestamp) -> float:

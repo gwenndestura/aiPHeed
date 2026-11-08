@@ -31,6 +31,13 @@ VALUES = ["cpi_food_yoy", "cpi_rice_yoy", "c_tc_4q", "c_agri_yoy", "c_fish_yoy",
 pct = lambda y: 100 / (1 + np.exp(-np.asarray(y, float)))
 
 
+def _cutoff(issue: str) -> str:
+    """Information cut-off of the issue: the quarter's first day, or the live refresh's as-of date (app.e148.panel.q_start)."""
+    from app.e148 import panel as Pn
+    from app.fi5.target import qindex
+    return Pn.q_start(qindex(issue)).date().isoformat()
+
+
 def _lead(lead: int, issue: str = "2026-Q4") -> pd.DataFrame:
     from app.e163 import model as C
     from app.e168 import lgbm_only as E
@@ -64,7 +71,7 @@ def _lead(lead: int, issue: str = "2026-Q4") -> pd.DataFrame:
         change = float(contrib.sum())               # LightGBM change on the logit scale (bias column included)
         mu = np.log(r["score_pct"] / (100 - r["score_pct"]))
         o = {"province_code": CODES[r["province"]], "province": r["province"], "quarter": r["target_quarter"], "lead": lead,
-             "issue_date": f"{issue[:4]}-{3 * (int(issue[-1]) - 1) + 1:02d}-01", "probability": r["p_high"], "class": r["risk_class"], "score_pct": r["score_pct"],
+             "issue_date": _cutoff(issue), "probability": r["p_high"], "class": r["risk_class"], "score_pct": r["score_pct"],
              "range90_low": r["range90_pct"][0], "range90_high": r["range90_pct"][1], "config": r["config"],
              "baseline_pct": round(float(pct(mu - change)), 2), "change_logit": round(change, 6), "bias_logit": round(float(contrib[-1]), 6),
              "shap_other": round(float(other), 6), "model": "e168-lgbm-1.0"}

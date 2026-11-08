@@ -502,7 +502,7 @@ export function PhilippineMap({
               <strong>${name}</strong>
               ${isProvRejected
                 ? `<br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span>`
-                : muni ? `<br/><span style="color:${tipColor}">Risk Level ${muni.riskScore.toFixed(2)} • ${muni.riskLevel}</span>`
+                : muni ? `<br/><span style="color:${tipColor}">Priority ${muni.riskScore.toFixed(2)} • ${muni.riskLevel === "high" ? "high" : "low"}-risk province</span>`
                 : `<br/><span style="color:var(--map-tip-muted);font-style:italic">No data available</span>`}
             </div>`,
             { sticky: true }

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
@@ -17,7 +18,10 @@ from app.ml.inference import e168_system as E
 from app.ml.inference import map_engine
 
 client = TestClient(app)
-LIVE = json.loads((E.DATA / "live_2027.json").read_text())
+from app.e168 import serve as SV
+
+LIVE = json.loads(SV.artifact().read_text())          # the approved issue being served (a live refresh moves it daily)
+CUT = LIVE.get("information_cutoff") or "2026-10-01"
 pytestmark = pytest.mark.skipif(not E.ROWS.exists(), reason="E168 dashboard export not present")
 
 
@@ -70,7 +74,7 @@ def test_driver_shares_include_other_and_add_to_100(thesis):
 def test_fish_kill_bar_is_disclosed_as_a_proxy(thesis):
     d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
     fk = next(t for t in d["triggers"] if t["key"] == "fish_kill")
-    assert "proxy" in fk["label"].lower() and "not reports of fish kills" in (fk["plainEvidence"] or "")
+    assert "proxy" in fk["label"].lower() and "fish catch" in (fk["plainEvidence"] or "")
 
 
 def test_report_and_config_describe_e168_not_the_retired_index(thesis):
@@ -162,3 +166,50 @@ def test_strict_start_refuses_when_e168_is_not_served(thesis, tmp_path):
     thesis.setattr(E, "ROWS", tmp_path / "missing_rows.csv")
     with pytest.raises(RuntimeError, match="served rows missing"):
         MAIN.strict_model_check()
+
+
+def test_trigger_cards_quote_the_figures_periods_and_effect():
+    # Each card states the real input value and period the forecast used, and how many points it moved the forecast,
+    # computed from the same stored LightGBM contributions as the bars.
+    r = E.row("PH040300000", "2027-Q1")                                         # Quezon
+    jobs = E.plain_evidence("PH040300000", "2027-Q1", "employment")
+    issue = pd.Timestamp(r["issue_date"])
+    lfs, cpi = E._month_name(E._latest_month(issue, 45, "lfs")), E._month_name(E._latest_month(issue, 9, "cpi"))
+    assert f"{float(r['val_unemp_rate']):.1f}% in {lfs}" in jobs and "national figure" in jobs
+    assert "raised Quezon's forecast by about" in jobs and "points" in jobs
+    market = E.plain_evidence("PH040300000", "2027-Q1", "market")
+    assert f"In {cpi}" in market and f"{float(r['val_cpi_food_yoy']):.1f}% higher" in market
+    total = sum(E._pp(r, g) for g in E.GROUPS)
+    assert abs(total) < float(r["score_pct"])                                   # effects are points of the forecast
+    region = E.plain_evidence(None, "2027-Q1", "employment")
+    assert "On average it" in region and lfs in region
+
+
+def test_production_cards_state_the_period_actually_used():
+    # Farm and fish production: the cards must name the period the forecast really compared (the files can lag),
+    # never an assumed recent window.
+    qs = E._production_quarters("fish", CUT)
+    fish = E.plain_evidence("PH040300000", "2027-Q1", "fish_kill")
+    assert len(qs) == 8 and f"in {E._period_words(qs[4:])}" in fish and E._period_words(qs[:4]) in fish
+    q_end = pd.Timestamp(year=int(qs[-1][:4]), month=3 * int(qs[-1][-1]), day=1) + pd.offsets.MonthEnd(0)
+    stale = (pd.Timestamp(CUT) - q_end).days > 365
+    assert ("newest figures in the system" in fish) == stale       # stale data, and only stale data, is labelled as such
+
+
+def test_news_panel_lists_the_stories_the_forecast_read():
+    """The news panel is the served issue's own reading list: every story published in the three months before the
+    cut-off, national ones included, none on or after the cut-off; local counts drive the few-news flag."""
+    from app.services import dashboard as svc
+    doc = svc._e168_news()
+    if doc is None:
+        pytest.skip("served issue has no news list")
+    cut = pd.Timestamp(LIVE.get("information_cutoff") or "2026-10-01")
+    assert all(pd.Timestamp(s["date"]) < cut for s in doc["stories"])
+    assert all(pd.Timestamp(s["date"]) >= cut - pd.DateOffset(months=3) for s in doc["stories"])
+    region = client.get("/api/v1/news?scope=region&id=calabarzon&quarter=2027-Q1&pageSize=5").json()
+    assert region["articleCount"] == len(doc["stories"])
+    q = client.get("/api/v1/news?scope=province&id=quezon&quarter=2027-Q1&pageSize=100").json()
+    own = [s for s in doc["stories"] if "Quezon" in s["provinces"]]
+    assert q["provinceAttributed"] == len(own) == svc.article_count("PH040300000", "2027-Q1")
+    assert any(a["province"] == "Philippines" for a in q["data"])                 # national stories are read too
+    assert any(a["excerpt"] for a in q["data"])                                    # leads shown where the source has one

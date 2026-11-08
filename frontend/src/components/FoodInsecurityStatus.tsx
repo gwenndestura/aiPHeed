@@ -50,14 +50,32 @@ export function FoodInsecurityStatusCardBody() {
   // An approved model exists: say in plain words what it is and how often it was right in past tests.
   const acc = data.accuracy_by_lead?.["1"]?.accuracy;
   const approved = data.production?.approved_utc?.slice(0, 10);
+  const through = data.data_through
+    ? new Date(`${data.data_through}T00:00:00`).toLocaleDateString("en-PH", { month: "long", year: "numeric" })
+    : null;
   return (
-    <div className="space-y-1" data-testid="fi-status-approved">
+    <div className="space-y-2" data-testid="fi-status-approved">
       <h3 className="text-[13px] font-semibold leading-tight">About this forecast</h3>
       <p className="text-[10px] leading-snug">
-        A computer model estimates each province's chance of high food insecurity, using food prices, weather, jobs, money
-        from OFWs, fish catch and news.
-        {typeof acc === "number" && ` When tested on past government surveys, it was right ${Math.round(acc * 100)}% of the time one quarter ahead.`}
+        Shows each province's chance of high food insecurity.
+        {typeof acc === "number" && ` Correct ${Math.round(acc * 100)}% of the time in past tests.`}
       </p>
+      {through && (
+        <p className="text-[10px] leading-snug" data-testid="fi-status-cutoff">
+          <span className="font-semibold">Data up to {through}</span>
+          <span className="text-muted-foreground"> · updated monthly</span>
+        </p>
+      )}
+      {data.data_used && data.data_used.length > 0 && (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[10px] leading-snug" data-testid="fi-status-data-used">
+          {data.data_used.map((d) => (
+            <div key={d.name} className="contents" title={`${d.name}: ${d.period} (${d.source})`}>
+              <dt className="text-muted-foreground">{d.label ?? d.name}</dt>
+              <dd className="text-right font-mono-num">{d.when ?? d.period}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
       <p className="text-[9px] text-muted-foreground">
         Model {data.production?.model_id}{approved ? `, approved ${approved}` : ""}.
       </p>

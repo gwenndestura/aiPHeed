@@ -7,6 +7,7 @@ Quarter index: qi = year*4 + quarter - 1 (app.fi5.target). Issue date = first da
 """
 from __future__ import annotations
 
+import os
 import sys
 
 import numpy as np
@@ -24,6 +25,9 @@ from app.fi5.target import qindex
 from app.paths import BACKEND_DIR
 
 FIRST, LAST = qindex("2013-Q1"), qindex("2026-Q4")
+if os.getenv("AIPHEED_LIVE_ASOF"):          # a live issue after 2026-Q4 extends the panels to its quarter (app.e168.live_refresh)
+    _t = pd.Timestamp(os.getenv("AIPHEED_LIVE_ASOF"))
+    LAST = max(LAST, _t.year * 4 + (_t.month - 1) // 3)
 QUARTERLY = ["c_soil_anom_3m", "c_rain_anom_6m", "c_tc_4q", "c_agri_yoy", "c_fish_yoy", "oni", "unemp_rate", "remit_yoy"]
 ANCHOR_LAG = 6
 TOPIC_CUTOFF = {"O2": "2016-07-01", "O3": "2017-07-01", "F": "2019-07-01"}
@@ -31,7 +35,15 @@ NEWS_LAST_ISSUE = qindex("2021-Q3")
 
 
 def q_start(i: int) -> pd.Timestamp:
-    return pd.Timestamp(year=i // 4, month=3 * (i % 4) + 1, day=1)
+    """Information cut-off for issue quarter i: its first day, or, for the live issue only, the later as-of date set by
+    the live refresh (AIPHEED_LIVE_ASOF, a day inside quarter i; app.e168.live_refresh). Past quarters never move."""
+    d = pd.Timestamp(year=i // 4, month=3 * (i % 4) + 1, day=1)
+    a = os.getenv("AIPHEED_LIVE_ASOF")
+    if a:
+        t = pd.Timestamp(a).normalize()
+        if t.year * 4 + (t.month - 1) // 3 == i and t > d:
+            return t
+    return d
 
 
 def _one(k_key, i):

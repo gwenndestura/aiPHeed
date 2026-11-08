@@ -90,7 +90,9 @@ def _log(row: dict):
         pd.DataFrame([row]).to_csv(LEDGER, mode="a", header=new, index=False, lineterminator="\n")
 
 
-def collect_site(key: str, years: range | None = None):
+def collect_site(key: str, years: range | None = None, window: tuple[str, str] | None = None):
+    """Collect `key` by calendar year, or (live refresh) only the publications in `window` = (after, before), ISO
+    timestamps. A window is recorded in the ledger as 'YYYY-MM-DD..YYYY-MM-DD' and never repeated."""
     host, first, min_delay, stype = SITES[key]
     ok, cd = allowed(host)
     if not ok:
@@ -99,14 +101,21 @@ def collect_site(key: str, years: range | None = None):
         return
     delay = max(min_delay, cd)
     done = _ledger()
+    if window and len(done):                 # a live window is redone unless it completed
+        done = done[done["status"] == "COMPLETE"]
     done = set(zip(done["site"], done["query"], done["year"].astype(str))) if len(done) else set()
     RAW.mkdir(parents=True, exist_ok=True)
     out = RAW / f"{key}.jsonl"
-    for year in years or range(first, 2027):
+    spans = [(f"{window[0][:10]}..{window[1][:10]}", window[0], window[1])] if window else         [(year, f"{year}-01-01T00:00:00", f"{year + 1}-01-01T00:00:00" if year < 2026 else LAST_DAY) for year in (years or range(first, 2027))]
+    fails = 0
+    for year, after, before in spans:
         for kind, q in QUERIES:
             if (key, q, str(year)) in done:
                 continue
-            after, before = f"{year}-01-01T00:00:00", (f"{year + 1}-01-01T00:00:00" if year < 2026 else LAST_DAY)
+            if window and fails >= 3:            # live refresh: a site failing 3 queries in a row is skipped until the next run
+                _log({"site": key, "kind": kind, "query": q, "year": year, "status": "SKIPPED_SITE_FAILING", "total": 0, "pages": 0,
+                      "items": 0, "fetched_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+                continue
             page, pages, total, items, status = 1, 1, 0, 0, "COMPLETE"
             while page <= pages:
                 url = (f"https://{host}/wp-json/wp/v2/posts?search={quote(q)}&after={after}&before={before}"
@@ -140,12 +149,13 @@ def collect_site(key: str, years: range | None = None):
                 items += len(rows)
                 page += 1
                 time.sleep(delay)
+            fails = 0 if status == "COMPLETE" else fails + 1
             _log({"site": key, "kind": kind, "query": q, "year": year, "status": status, "total": total, "pages": pages,
                   "items": items, "fetched_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")})
 
 
-def collect(sites: list[str]):
-    th = [threading.Thread(target=collect_site, args=(s,), daemon=True) for s in sites]
+def collect(sites: list[str], window: tuple[str, str] | None = None):
+    th = [threading.Thread(target=collect_site, args=(s, None, window), daemon=True) for s in sites]
     for t in th:
         t.start()
     for t in th:

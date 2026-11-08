@@ -288,7 +288,7 @@ export function NewsArticlesCardBody({
           <div className="mt-3 space-y-3 px-1">
             {regionWide > 0 && news && (
               <p className="text-[9px] italic text-muted-foreground leading-snug">
-                {news.provinceAttributed} tagged to a province · {regionWide} cover CALABARZON as a whole
+                {news.provinceAttributed} about CALABARZON · {regionWide} national or Luzon-wide
               </p>
             )}
 
@@ -330,6 +330,7 @@ export function NewsArticlesCardBody({
                 className="w-full text-left text-[10px] py-1.5 px-2 compact:min-h-11 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <p className="truncate font-semibold text-foreground/90">{a.title}</p>
+                {a.excerpt && <p className="text-[9px] leading-snug line-clamp-2 text-foreground/70">{a.excerpt}</p>}
                 <p className="text-[9px]">
                   {a.source}{a.date ? ` · ${a.date}` : ""}{a.province ? ` · ${a.province}` : ""}
                 </p>

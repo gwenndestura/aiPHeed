@@ -565,9 +565,21 @@ def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
     return bool(a and b) and a["lead"] == b["lead"] and (a["mode"] == "NOWCAST") == (b["mode"] == "NOWCAST")
 
 
+def _e168_previous(quarter: str, code: str) -> dict | None:
+    try:
+        from app.ml.inference import e168_system as E
+        return E.previous(code, quarter) if E.active() and E.covers(quarter) else None
+    except Exception:
+        return None
+
+
 def _qoq(current: float, quarter: str, code: str,
          horizon: str = DEFAULT_HORIZON) -> tuple[float | None, float | None]:
     """Absolute and percentage change against the previous quarter, when the two are comparable (E35-D3)."""
+    e = _e168_previous(quarter, code)
+    if e is not None:                         # E168: the previous quarter's forecast (same issue, or an earlier issue's Lead 1)
+        prev_score = e["probability"]
+        return round(current - prev_score, 4), (round((current - prev_score) / prev_score * 100, 1) if prev_score else None)
     prev_q = _previous_quarter(quarter, horizon)
     if prev_q is None or not _comparable(quarter, prev_q, horizon):
         return None, None
@@ -663,6 +675,8 @@ def province_summary(
             "riskLevel": _level(score),
             "qoqChange": delta,
             "qoqChangePct": pct,
+            **({"qoqPreviousScore": _shown(pv["probability"]), "qoqPreviousQuarter": pv["quarter"], "qoqPreviousBasis": pv["basis"]}
+               if (pv := _e168_previous(quarter, code)) else {}),
             "riskLabel": record.get("risk_label"),
             # E41: what the score is (present only for the E41 candidate; absent rows keep the E38 meaning)
             **({"scoreType": record["score_type"], "scoreDefinition": record["score_definition"],
@@ -1962,7 +1976,63 @@ def _e31_articles() -> list[dict]:
     return E31.record()["news"]["articles"]
 
 
+def _e168_news() -> dict | None:
+    """The stories the served E168 issue used (app.e168.news_used), or None when E168 is not served or has no list."""
+    try:
+        from app.e168 import serve as SV
+        from app.ml.inference import e168_system as E
+        if not E.active():
+            return None
+        p = SV.artifact().parent / "news_used.json"
+        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+    except Exception:
+        return None
+
+
+def _e168_news_rows(doc: dict, province_code: str | None, local_only: bool = False) -> list[dict]:
+    """Stories the forecast read for the subject: its own (province, or all five) plus, unless `local_only`, the
+    region-wide, Balance Luzon and national stories every CALABARZON forecast reads."""
+    from app.e168.dashboard_export import CODES
+    name = next((n for n, c in CODES.items() if c == province_code), None) if province_code else None
+    def own(r):
+        lvl = r.get("level", "province")
+        if lvl == "province":
+            return name is None or name in r["provinces"]
+        return lvl == "region" and not local_only
+    return [r for r in doc["stories"] if own(r) or (not local_only and r.get("level") in ("national", "luzon"))]
+
+
+def _e168_news_page(doc: dict, province_code: str | None, page: int, page_size: int) -> dict:
+    from app.e168.dashboard_export import CODES
+    rows = _e168_news_rows(doc, province_code)
+    local = _e168_news_rows(doc, province_code, local_only=True)
+    counts: dict[str, int] = {}
+    for r in rows:
+        counts[r["group"]] = counts.get(r["group"], 0) + 1
+    labels = list(counts)
+    pcts = _integer_shares([counts[k] for k in labels]) if labels else []
+    label = {r["group"]: r["groupLabel"] for r in rows}
+    topics = [{"key": f"e168_{k}", "label": label[k], "count": counts[k], "pct": p} for k, p in zip(labels, pcts)]
+    start = (page - 1) * page_size
+    where = {"national": "Philippines", "luzon": "Luzon", "region": "CALABARZON"}
+    data = [{"id": r["id"], "title": r["title"], "source": r["source"], "date": r["date"], "url": r["url"], "excerpt": r.get("lead", ""),
+             "topicKey": r["group"], "topicLabel": r["groupLabel"], "relevanceScore": None, "relevanceStatus": "classifier_v2",
+             "relevanceLabel": "Story the forecast read (food-security news, off-topic stories removed)",
+             "province": ", ".join(r["provinces"]) or where.get(r.get("level"), "CALABARZON"),
+             "provinceCode": CODES.get(r["provinces"][0]) if r["provinces"] else None,
+             "triggers": [r["groupLabel"]], "quarter": None, "collectedRetrospectively": False}
+            for r in rows[start:start + page_size]]
+    note = (f"{len(rows)} stories the forecast read, published {doc['from']} to {doc['to']}: {len(local)} about "
+            f"{'this province' if province_code else 'CALABARZON and its provinces'}, the rest national or Luzon-wide.")
+    return {"articleCount": len(rows), "provinceAttributed": len(local), "topics": topics, "data": data, "total": len(rows),
+            "evidenceQuarter": None, "sourceQuarter": None, "evidenceMode": "FORECAST", "evidenceNote": note,
+            "windowQuarters": [], "validatedCount": len(rows), "triggerMatchCount": 0, "feedNote": note}
+
+
 def article_count(province_code: str | None, quarter: str) -> int:
+    doc = _e168_news()
+    if doc is not None:                      # local stories only: the few-news-reports flag is about local coverage
+        return len(_e168_news_rows(doc, province_code, local_only=True))
     if e31_active():
         # E45: the same restored feed window the news panel lists, so every surface quotes one count
         return len(_feed_window(province_code, e31_news_evidence(quarter)[0])[0])
@@ -1984,6 +2054,9 @@ def news(province_code: str | None, quarter: str, page: int, page_size: int) -> 
     and without it the regional count looks irreconcilable with the five
     province counts that are supposed to add up to it.
     """
+    doc = _e168_news()
+    if doc is not None:
+        return _e168_news_page(doc, province_code, page, page_size)
     if e31_active():
         return _e31_news(province_code, quarter, page, page_size)
     df = _corpus()

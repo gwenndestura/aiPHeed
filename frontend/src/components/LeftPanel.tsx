@@ -501,7 +501,12 @@ function RegionDetail({
 }) {
   const { data: config } = useConfig();
   const riskColor = RISK_COLORS[region.riskLevel];
-  const qoqText = formatSigned(region.momChange, 1, "%");
+  const changeKnown = region.momChangeKnown !== false;
+  // E168: the chances are small, so the change is shown in points of the chance (0.076 -> 0.064 is -1.2 pts), not as a
+  // percentage of a tiny number
+  const byPoints = changeKnown && typeof region.momDelta === "number" && typeof region.prevScore === "number";
+  const qoqValue = byPoints ? (region.momDelta as number) * 100 : region.momChange;
+  const qoqText = changeKnown ? formatSigned(qoqValue, 1, byPoints ? " pts" : "%") : "—";
   const munis = municipalitiesData.slice().sort((a, b) => b.riskScore - a.riskScore);
 
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
@@ -562,11 +567,21 @@ function RegionDetail({
           <FitText
             text={qoqText}
             className={`font-extrabold mt-1 tracking-tight tabular-nums ${
-              { neutral: "text-foreground", danger: "text-value-danger", success: "text-value-success" }[changeTone(region.momChange)]
+              { neutral: "text-foreground", danger: "text-value-danger", success: "text-value-success" }[changeTone(qoqValue)]
             }`}
             maxSize={30}
             minSize={11}
           />
+          {changeKnown && typeof region.prevScore === "number" && region.prevQuarter && (
+            <p className="text-[9px] text-muted-foreground leading-snug mt-1" data-testid="qoq-basis">
+              Q{region.prevQuarter.slice(-1)} {region.prevQuarter.slice(0, 4)}: {region.prevScore.toFixed(2)} → now {region.riskScore.toFixed(2)}
+            </p>
+          )}
+          {!changeKnown && (
+            <p className="text-[9px] text-muted-foreground leading-snug mt-1">
+              No earlier forecast to compare with.
+            </p>
+          )}
         </div>
       </div>
 

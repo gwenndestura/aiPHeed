@@ -169,6 +169,23 @@ def run_e168_stage() -> dict:
     return out
 
 
+LIVE_JOB_ID = "aipheed_e168_live_refresh"
+# Monthly, 06:00 PHT on the 10th (owner decision 2026-11-08): by then PSA's CPI and NOAA's ONI for the month just ended
+# are published. Cut-off = the first day of the current month, so only complete months are used; frozen E168 procedure,
+# owner gate, promoted automatically (app.e168.live_refresh). A month with nothing new keeps the served issue.
+LIVE_DAY = os.getenv("AIPHEED_LIVE_REFRESH_DAY", "10")
+LIVE_HOUR = os.getenv("AIPHEED_LIVE_REFRESH_HOUR", "6")
+LIVE_ENABLED = os.getenv("AIPHEED_LIVE_REFRESH", "1").strip() == "1"
+
+
+def run_e168_live_refresh() -> dict:
+    from app.e168 import live_refresh as LR
+
+    out = LR.run()
+    logger.info("E168 live refresh: %s", {k: out.get(k) for k in ("as_of", "status", "seconds", "error")})
+    return out
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -236,6 +253,16 @@ def start_scheduler():
         max_instances=1,
         coalesce=True,
     )
+    if LIVE_ENABLED:
+        _scheduler.add_job(
+            run_e168_live_refresh,
+            trigger=CronTrigger(day=LIVE_DAY, hour=LIVE_HOUR, minute=0),
+            id=LIVE_JOB_ID,
+            name="aiPHeed E168 monthly live refresh (last complete month, auto-promoted after the owner gate)",
+            replace_existing=True,
+            max_instances=1,
+            coalesce=True,
+        )
     from app.ml.inference import sws_reissue as RI
     if RI.enabled():
         _scheduler.add_job(

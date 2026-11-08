@@ -15,8 +15,11 @@ from __future__ import annotations
 import csv
 import functools
 import json
+import math
 import os
 from pathlib import Path
+
+import pandas as pd
 
 DATA = Path(__file__).resolve().parents[3] / "data" / "e168" / "out"
 ROWS = DATA / "dashboard_rows.csv"
@@ -73,11 +76,9 @@ LGU_LEVEL_BASIS = ("Colour = the province's E168 risk class (HIGH when the provi
                    "re-weighted by PSA poverty incidence (60%) and population density (40%). Not a measured or official "
                    "municipal food-insecurity rate; the ranking has not been checked against municipal outcomes.")
 EVENT = "food-insecurity risk (E168: probability that HFIAS moderate+severe is 50% or more)"
-NATIONAL = ("This is a national figure, the same for all five provinces, and leaving it out did not change how accurate "
-            "the forecast was.")
+NATIONAL = "This is a national figure, the same for all five provinces."
 GROUP_NOTES = {"employment": NATIONAL, "ofw_remittance": NATIONAL,
-               "news": "News reports are counted inside the five groups; leaving them out did not change how accurate the "
-                       "forecast was."}
+               "news": "News reports are counted inside the five groups."}
 TRIGGER_STATUS_NOTES = {
     "contributes": "This factor is an input of the approved E168 food-insecurity model and moved this forecast in the "
                    "direction shown (model influence, not a cause).",
@@ -244,6 +245,50 @@ def row(code: str, quarter: str) -> dict | None:
     return rows().get((code, quarter))
 
 
+def _shift_q(q: str, k: int) -> str:
+    i = int(q[:4]) * 4 + int(q[-1]) - 1 + k
+    return f"{i // 4}-Q{i % 4 + 1}"
+
+
+@functools.lru_cache(maxsize=4)
+def _earlier_issues(served_cutoff: str) -> dict[tuple[str, str], tuple[float, str]]:
+    """Lead-1 forecasts from E168 issues made before the served one (data/e168/issues/*, data/e168/out/previous_quarter_*):
+    {(province code, target quarter): (P(HIGH), information cut-off)}, the latest issue before the served cut-off winning."""
+    from app.e168.dashboard_export import CODES
+    out: dict[tuple[str, str], tuple[float, str]] = {}
+    files = list((DATA.parent / "issues").glob("*/live.json")) + list(DATA.glob("previous_quarter_*.json"))
+    for f in files:
+        try:
+            d = json.loads(f.read_text())
+        except Exception:
+            continue
+        cut = d.get("information_cutoff") or f"{d['issue_quarter'][:4]}-{3 * int(d['issue_quarter'][-1]) - 2:02d}-01"
+        if cut >= served_cutoff:
+            continue
+        for r in d.get("provinces", []):
+            k = (CODES.get(r["province"]), r["target_quarter"])
+            if r.get("lead") == 1 and k[0] and (k not in out or out[k][1] < cut):
+                out[k] = (float(r["p_high"]), cut)
+    return out
+
+
+def previous(code: str, quarter: str) -> dict | None:
+    """The forecast for the quarter before `quarter`, to show the change from last quarter: the same served issue's
+    forecast for that quarter when it has one (Leads 2-3), else the Lead-1 forecast an earlier issue made for it."""
+    prev_q = _shift_q(quarter, -1)
+    r = row(code, prev_q)
+    if r is not None:
+        return {"quarter": prev_q, "probability": float(r["probability"]), "basis": "same forecast"}
+    rs = list(rows().values())
+    if not rs:
+        return None
+    hit = _earlier_issues(str(_issue(rs[0]).date()))
+    if (code, prev_q) in hit:
+        p, cut = hit[(code, prev_q)]
+        return {"quarter": prev_q, "probability": p, "basis": f"forecast made {cut}"}
+    return None
+
+
 def kind(r: dict) -> str:
     return "forecast"
 
@@ -332,42 +377,227 @@ def _val(r: dict, c: str) -> float | None:
     return _f(r.get(f"val_{c}"))
 
 
-def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
-    if code is None:
-        return GROUP_NOTES.get(group)
-    r = row(code, quarter)
-    if r is None:
+# ------------------------------------------------------------------------------------------------- plain evidence
+# What each trigger card says to the public: the actual figure the forecast used, the period it refers to, why it
+# matters for food, and how many percentage points it moved this province's forecast. The points come from the stored
+# exact LightGBM contributions (the forecast with the group's push minus the forecast without it), so the cards and the
+# bars describe the same numbers. Periods follow the release rules of each series at the issue date.
+_MONTH = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December"]
+
+
+def _issue(r: dict) -> pd.Timestamp:
+    return pd.Timestamp(str(r.get("issue_date") or ISSUE)[:10])
+
+
+def _month_name(ts: pd.Timestamp) -> str:
+    return f"{_MONTH[ts.month - 1]} {ts.year}"
+
+
+def _latest_month(issue: pd.Timestamp, lag_days: int, source: str | None = None) -> pd.Timestamp:
+    """The newest month whose figure was public on the issue date: month end + lag_days <= issue, or (live refresh) a
+    month already in the public download on or before the issue date (app.e168.live_data.first_seen)."""
+    m = (issue - pd.offsets.MonthBegin(1)).normalize()
+    while (m + pd.offsets.MonthEnd(0)) + pd.Timedelta(days=lag_days) > issue:
+        m = m - pd.offsets.MonthBegin(1)
+    if source:
+        from app.e168 import live_data as LD
+        seen = [pd.Timestamp(p + "-01") for p in LD._seen_cached().get(source, {})
+                if len(p) == 7 and LD.usable(source, p, pd.Timestamp(p + "-01") + pd.offsets.MonthEnd(0), issue)]
+        if seen and max(seen) > m:
+            m = max(seen)
+    return m
+
+
+@functools.lru_cache(maxsize=8)
+def _production_quarters(name: str, issue: str) -> tuple[str, ...]:
+    """The eight quarters the forecast actually compared for farm ('agri') or fish production: the same files and release
+    rule as app.e147.features (four newest published quarters vs the four before). The files may end long before the
+    issue date, so the period is read from the data, never assumed."""
+    from app.e137 import features as F
+    from app.e147 import features as Fe
+    fname, col, labs = {"agri": ("palay_corn_quarterly.csv", "Ecosystem/Croptype", ("Palay", "Corn")),
+                        "fish": ("fisheries_quarterly.csv", "Subsector", ("FISHERIES",))}[name]
+    try:
+        cols = list(F._quarterly(fname, col, labs).columns) + list(Fe._quarterly_late(name).columns)
+        src = {"agri": "palay_corn_q", "fish": "fisheries_q"}[name]
+        return tuple(F._published_quarters(sorted(set(cols)), pd.Timestamp(issue), src)[-8:])
+    except Exception:
+        return ()
+
+
+def _period_words(qs: tuple[str, ...]) -> str:
+    """'2023' for a calendar year of quarters, else 'Q3 2025 to Q2 2026'."""
+    if len(qs) == 4 and qs[0][:4] == qs[-1][:4] and qs[0].endswith("1") and qs[-1].endswith("4"):
+        return qs[0][:4]
+    return f"Q{qs[0][-1]} {qs[0][:4]} to Q{qs[-1][-1]} {qs[-1][:4]}"
+
+
+def _production_period(name: str, issue: pd.Timestamp) -> tuple[str, str, bool] | None:
+    """(this year's period, the year before, stale) for the production comparison the forecast used."""
+    qs = _production_quarters(name, str(issue.date()))
+    if len(qs) < 8:
         return None
-    # Plain words for the general public. Only values with an everyday unit are quoted (food price change in %, number
-    # of typhoons, El Nino or La Nina); the other inputs are named, not quoted.
+    last = qs[-1]
+    last_end = pd.Timestamp(year=int(last[:4]), month=3 * int(last[-1]), day=1) + pd.offsets.MonthEnd(0)
+    return _period_words(qs[4:]), _period_words(qs[:4]), (issue - last_end).days > 365
+
+
+def _production_text(name: str, issue: pd.Timestamp) -> tuple[str, str]:
+    """Words for 'in <period> (...)' and 'than in <previous period>'."""
+    p = _production_period(name, issue)
+    if p is None:
+        return "in the latest year", "the year before"
+    this, prev, stale = p
+    return (f"in {this}" + (" (the newest figures in the system)" if stale else "")), prev
+
+
+def _pp(r: dict, group: str) -> float:
+    """Percentage points of households this group moved the forecast (with its push minus without it)."""
+    score = float(r["score_pct"])
+    lg = math.log(score / (100 - score))
+    without = 100 / (1 + math.exp(-(lg - bar_value(r, group))))
+    return score - without
+
+
+def _effect(r: dict, group: str) -> str:
+    pp = _pp(r, group)
+    if abs(pp) < 0.05:
+        return f"It barely changed {r['province']}'s forecast."
+    return f"This {'raised' if pp > 0 else 'lowered'} {r['province']}'s forecast by about {abs(pp):.1f} points."
+
+
+def _change(x: float, more: str = "higher", less: str = "lower", unit: str = "%") -> str:
+    return f"{abs(x):.1f}{unit} {more if x >= 0 else less}"
+
+
+def _enso(oni: float, when: str) -> str:
+    strength = "strong" if abs(oni) >= 1.5 else "moderate" if abs(oni) >= 1.0 else "weak"
+    if oni >= 0.5:
+        return (f"A {strength} El Niño was under way in {when} (sea temperature {oni:+.1f} °C above normal), which "
+                "usually means less rain.")
+    if oni <= -0.5:
+        return f"A {strength} La Niña was under way in {when} (sea temperature {oni:+.1f} °C), which usually means more rain."
+    return f"There was no El Niño or La Niña in {when}."
+
+
+def _remit_year(issue: pd.Timestamp) -> int:
+    return issue.year - 1 if issue >= pd.Timestamp(year=issue.year, month=2, day=15) else issue.year - 2
+
+
+def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
+    rs = _rs(code, quarter)
+    if not rs:
+        return None
+    if code is None:
+        return _region_evidence(rs, group)
+    r = rs[0]
     none = "No figures had been published yet when this forecast was made. That does not mean the risk is low."
     v = lambda c: _val(r, c)
+    issue = _issue(r)
     if group == "market":
-        x = v("cpi_food_yoy")
-        return none if x is None else (
-            f"Food prices in the province were {abs(x):.1f}% {'higher' if x >= 0 else 'lower'} than a year before. "
-            "Rice prices also count.")
+        x, rice = v("cpi_food_yoy"), v("cpi_rice_yoy")
+        if x is None:
+            return none
+        when = _month_name(_latest_month(issue, 9, "cpi"))
+        rice_txt = f", and rice prices were {_change(rice)}" if rice is not None else ""
+        why = ("Rising food prices make it harder for families to buy enough food." if _pp(r, group) >= 0 else
+               "Taken together, food prices here were not rising fast enough to raise the risk.")
+        return f"In {when}, food prices in {r['province']} were {_change(x)} than a year before{rice_txt}. {why} {_effect(r, group)}"
     if group == "climate":
-        tc, oni = v("c_tc_4q"), v("oni")
-        enso = (None if oni is None else "El Niño conditions were present." if oni >= 0.5 else
-                "La Niña conditions were present." if oni <= -0.5 else "There was no El Niño or La Niña.")
-        parts = [None if tc is None else f"{int(round(tc))} typhoon{'s' if round(tc) != 1 else ''} in the past year.", enso,
-                 "Rainfall, dry soil and farm harvests also count."]
-        return " ".join(p for p in parts if p)
+        tc, oni, agri = v("c_tc_4q"), v("oni"), v("c_agri_yoy")
+        parts = []
+        if tc is not None:
+            n = int(round(tc))
+            parts.append(f"{n} typhoon{'s' if n != 1 else ''} passed near the province from "
+                         f"{_month_name(issue - pd.DateOffset(years=1))} to {_month_name(issue - pd.DateOffset(months=1))}.")
+        if oni is not None:
+            parts.append(_enso(oni, _month_name(_latest_month(issue, 10, "oni"))))
+        if agri is not None:
+            when, prev = _production_text("agri", issue)
+            parts.append(f"Rice and corn harvests {when} were {_change(100 * (math.exp(agri) - 1))} than in {prev}.")
+        rain, soil = v("c_rain_anom_6m"), v("c_soil_anom_3m")
+        word = lambda z: "wetter than usual" if z > 0.5 else ("drier than usual" if z < -0.5 else "close to normal")
+        if rain is not None:
+            rm = (issue - pd.Timedelta(days=30)).to_period("M") - 1
+            parts.append(f"Rainfall from {_month_name((rm - 5).to_timestamp())} to {_month_name(rm.to_timestamp())} was {word(rain)}.")
+        if soil is not None:
+            sm = issue.to_period("M") - 3
+            parts.append(f"Soil from {_month_name((sm - 2).to_timestamp())} to {_month_name(sm.to_timestamp())} was {word(soil)}.")
+        parts.append("Typhoons, dry weather and poor harvests can cut food supply and income." if _pp(r, group) >= 0 else
+                     "Taken together, weather and harvests were not bad enough to raise the risk here.")
+        return " ".join(parts) + " " + _effect(r, group)
     if group == "fish_kill":
-        return ("Based on the province's fish catch compared with a year before (a smaller catch raises the risk). No "
-                "official list of fish kills exists, so this uses the fish catch, not reports of fish kills."
-                if v("c_fish_yoy") is not None else none)
+        f = v("c_fish_yoy")
+        if f is None:
+            return none
+        why = ("A smaller catch means less fish to eat and less income for fishing families." if f < 0 else
+               "A bigger catch means more fish to eat and more income for fishing families.")
+        when, prev = _production_text("fish", issue)
+        return (f"The fish catch in {r['province']} {when} was {_change(100 * (math.exp(f) - 1))} than in {prev}. "
+                f"{why} {_effect(r, group)}")
     if group == "employment":
-        return ("Based on the unemployment rate for the whole country. " + NATIONAL
-                if v("unemp_rate") is not None else none)
+        rate, yoy = v("unemp_rate"), v("unemp_yoy")
+        if rate is None:
+            return none
+        m = _latest_month(issue, 45, "lfs")
+        yoy_txt = f", {_change(yoy, unit=' points')} than in {_MONTH[m.month - 1]} {m.year - 1}" if yoy is not None else ""
+        return (f"Unemployment in the whole country was {rate:.1f}% in {_month_name(m)} (the latest figure when this "
+                f"forecast was made){yoy_txt}. "
+                + ("When more people are out of work, families have less money for food. " if (yoy or 0) >= 0 else
+                   "With fewer people out of work, more families have income for food. ")
+                + f"{_effect(r, group)} {NATIONAL}")
     if group == "ofw_remittance":
-        return ("Based on money sent home by OFWs to the whole country. " + NATIONAL
-                if v("remit_yoy") is not None else none)
+        x = v("remit_yoy")
+        if x is None:
+            return none
+        y = _remit_year(issue)
+        return (f"Money sent home by OFWs in {y} was {_change(x, 'more', 'less')} than in {y - 1} (the latest yearly "
+                f"figure). This money helps many families buy food. {_effect(r, group)} {NATIONAL}")
     if group == "poverty":
         return ("How poor the province is and how crowded it is (latest government figures)."
                 if v("p_poverty") is not None else none)
     return None
+
+
+def _region_evidence(rs: list[dict], group: str) -> str | None:
+    """The CALABARZON card: national figures once, provincial figures as a range, and the average effect."""
+    r = rs[0]
+    issue = _issue(r)
+
+    def vals(c):
+        return [x for x in (_val(q, c) for q in rs) if x is not None]
+
+    def rng(xs, f=lambda x: x):
+        ys = [f(x) for x in xs]
+        return f"{min(ys):+.1f}% to {max(ys):+.1f}%"
+
+    pps = [_pp(q, group) for q in rs]
+    avg = sum(pps) / len(pps)
+    eff = ("On average it barely changed the provinces' forecasts." if abs(avg) < 0.05 else
+           f"On average it {'raised' if avg > 0 else 'lowered'} each province's forecast by about {abs(avg):.1f} points.")
+    if group == "market" and vals("cpi_food_yoy"):
+        rice = vals("cpi_rice_yoy")
+        return (f"In {_month_name(_latest_month(issue, 9, "cpi"))}, food prices changed by {rng(vals('cpi_food_yoy'))} across "
+                f"the five provinces compared with a year before" + (f" (rice: {rng(rice)})" if rice else "") + f". {eff}")
+    if group == "climate":
+        oni = vals("oni")
+        lead = (_enso(oni[0], _month_name(_latest_month(issue, 10, "oni"))) + " ") if oni else ""
+        return lead + "Typhoons, soil moisture and farm harvests also count. " + eff
+    if group == "fish_kill" and vals("c_fish_yoy"):
+        when, prev = _production_text("fish", issue)
+        return (f"The fish catch {when} changed by {rng(vals('c_fish_yoy'), lambda x: 100 * (math.exp(x) - 1))} across "
+                f"the five provinces compared with {prev}. {eff}")
+    if group == "employment" and vals("unemp_rate"):
+        m = _latest_month(issue, 45, "lfs")
+        yoy = vals("unemp_yoy")
+        return (f"Unemployment in the whole country was {vals('unemp_rate')[0]:.1f}% in {_month_name(m)}"
+                + (f", {_change(yoy[0], unit=' points')} than a year before" if yoy else "") + f". {eff} {NATIONAL}")
+    if group == "ofw_remittance" and vals("remit_yoy"):
+        y = _remit_year(issue)
+        return (f"Money sent home by OFWs in {y} was {_change(vals('remit_yoy')[0], 'more', 'less')} than in {y - 1}. "
+                f"{eff} {NATIONAL}")
+    return GROUP_NOTES.get(group)
 
 
 def drivers(code: str, quarter: str, base: dict) -> dict:
@@ -389,6 +619,76 @@ def model_performance() -> dict:
     ev = evaluation()
     return {"model": f"{MODEL_ID} (E168 LightGBM)", "target": INDICATOR["definition"], "maxReliableLead": ev["max_reliable_lead"],
             "acceptanceRule": ev["acceptance_rule"], "leads": {k: v["metrics"] for k, v in ev["leads"].items()}}
+
+
+def data_used() -> dict:
+    """The newest data the served forecast used, source by source, read with the same release rules as the model: the
+    period of each input, where it comes from and at what level. Shown on the dashboard under 'Latest data used'."""
+    rs = list(rows().values())
+    if not rs:
+        return {"cutoff": None, "items": []}
+    issue = _issue(rs[0])
+    from app.e168 import live_data as LD
+    a, p = LD._live_dates()
+    checked = p if a is not None and a == issue.normalize() else issue
+    m = _month_name
+
+    def prod(name):
+        qs = _production_quarters(name, issue.date().isoformat())
+        return f"{_period_words(qs[4:])}, compared with {_period_words(qs[:4])}" if len(qs) == 8 else "not available"
+    rm = (issue - pd.Timedelta(days=30)).to_period("M") - 1
+    sm = issue.to_period("M") - 3
+    oni_m = _latest_month(issue, 10, "oni")
+    news_from = (issue - pd.DateOffset(months=3)).normalize()
+    last_day = issue - pd.Timedelta(days=1)
+    def rng(a: pd.Timestamp, b: pd.Timestamp) -> str:           # 'Apr–Sep 2026' or 'Nov 2025–Oct 2026'
+        return f"{a:%b}–{b:%b %Y}" if a.year == b.year else f"{a:%b %Y}–{b:%b %Y}"
+
+    def prod_short(name):
+        qs = _production_quarters(name, issue.date().isoformat())
+        if len(qs) != 8:
+            return "not available"
+        q0, q1 = qs[4], qs[-1]
+        return rng(pd.Timestamp(year=int(q0[:4]), month=3 * int(q0[-1]) - 2, day=1), pd.Timestamp(year=int(q1[:4]), month=3 * int(q1[-1]), day=1))
+    short = {   # (short label, short period) for the dashboard; the long fields stay for reports
+        "market": ("Food prices", f"{_latest_month(issue, 9, 'cpi'):%b %Y}"),
+        "agri": ("Rice & corn harvest", prod_short("agri")),
+        "rain": ("Rainfall", rng((rm - 5).to_timestamp(), rm.to_timestamp())),
+        "soil": ("Soil moisture", rng((sm - 2).to_timestamp(), sm.to_timestamp())),
+        "tc": ("Typhoons", rng(issue - pd.DateOffset(years=1), issue - pd.DateOffset(months=1))),
+        "oni": ("El Niño", rng(oni_m - pd.DateOffset(months=2), oni_m)),
+        "employment": ("Unemployment", f"{_latest_month(issue, 45, 'lfs'):%b %Y}"),
+        "ofw_remittance": ("OFW remittances", str(_remit_year(issue))),
+        "fish_kill": ("Fish catch", prod_short("fish")),
+        "news": ("News", rng(news_from, last_day)),
+        "poverty": ("Poverty & population", "2023, 2024"),
+    }
+    items = [
+        {"group": "market", "name": "Food and rice prices (CPI)", "source": "PSA", "level": "Province",
+         "period": m(_latest_month(issue, 9, "cpi")), "note": "Compared with the same month a year before"},
+        {"group": "climate", "name": "Rice and corn harvest", "source": "PSA", "level": "Province", "period": prod("agri")},
+        {"group": "climate", "name": "Rainfall", "source": "NASA POWER", "level": "Province",
+         "period": f"{m((rm - 5).to_timestamp())} to {m(rm.to_timestamp())}", "note": "Compared with 2000-2009"},
+        {"group": "climate", "name": "Soil moisture", "source": "NASA POWER", "level": "Province",
+         "period": f"{m((sm - 2).to_timestamp())} to {m(sm.to_timestamp())}", "note": "Compared with 2000-2009"},
+        {"group": "climate", "name": "Typhoons passing within 150 km", "source": "NOAA IBTrACS", "level": "Province",
+         "period": f"{m(issue - pd.DateOffset(years=1))} to {m(issue - pd.DateOffset(months=1))}"},
+        {"group": "climate", "name": "El Niño / La Niña (ONI)", "source": "NOAA", "level": "Global",
+         "period": f"{m(oni_m - pd.DateOffset(months=2))} to {m(oni_m)} average"},
+        {"group": "employment", "name": "Unemployment rate", "source": "PSA Labor Force Survey", "level": "National",
+         "period": m(_latest_month(issue, 45, "lfs")), "note": "Compared with the same month a year before"},
+        {"group": "ofw_remittance", "name": "Money sent home by OFWs", "source": "BSP (World Bank series)", "level": "National",
+         "period": f"{_remit_year(issue)} full year", "note": "Compared with the year before"},
+        {"group": "fish_kill", "name": "Fish catch", "source": "PSA", "level": "Province", "period": prod("fish")},
+        {"group": "news", "name": "News reports", "source": "Rappler, Vera Files, Newsbytes, PCIJ and earlier archives",
+         "level": "Province, area and national", "period": f"{news_from.day} {m(news_from)} to {last_day.day} {m(last_day)}"},
+        {"group": "poverty", "name": "Poverty and population", "source": "PSA", "level": "Province",
+         "period": "2023 poverty round; 2024 census"},
+    ]
+    for it, k in zip(items, ("market", "agri", "rain", "soil", "tc", "oni", "employment", "ofw_remittance", "fish_kill", "news", "poverty")):
+        it["label"], it["when"] = short[k]
+    return {"cutoff": issue.date().isoformat(), "data_through": last_day.date().isoformat(),
+            "checked_online": checked.date().isoformat(), "items": items}
 
 
 def serving_model() -> dict:

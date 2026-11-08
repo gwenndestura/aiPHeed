@@ -27,6 +27,8 @@ def _clock(monkeypatch):
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-15T09:00:00")
 
 
+@pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
+                    reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
 @pytest.mark.parametrize("scope,id_", SUBJECTS)
 def test_news_feed_returns_real_relevant_articles(scope, id_):
     r = client.get(f"/api/v1/news?scope={scope}&id={id_}&quarter=2027-Q1&pageSize=100")
@@ -48,7 +50,10 @@ def test_news_feed_returns_real_relevant_articles(scope, id_):
 
 def test_explainability_count_matches_news_feed():
     for p in ("laguna", "quezon"):
-        n = client.get(f"/api/v1/news?scope=province&id={p}&quarter=2027-Q1&pageSize=100").json()["articleCount"]
+        body = client.get(f"/api/v1/news?scope=province&id={p}&quarter=2027-Q1&pageSize=100").json()
+        # E168: the panel lists every story the forecast read (national ones too); the province's own stories are the
+        # count behind the few-news-reports flag
+        n = body["provinceAttributed"] if svc._e168_news() is not None else body["articleCount"]
         e = client.get(f"/api/v1/explainability?scope=province&id={p}&quarter=2027-Q1").json()["articleCount"]
         assert n == e
 

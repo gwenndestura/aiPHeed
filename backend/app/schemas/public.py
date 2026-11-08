@@ -131,6 +131,10 @@ class ProvinceSummary(BaseModel):
     riskLevel: str | None = None
     qoqChange: float | None = None
     qoqChangePct: float | None = None
+    # E168: the score the change is measured from, its quarter, and which forecast it comes from
+    qoqPreviousScore: float | None = None
+    qoqPreviousQuarter: str | None = None
+    qoqPreviousBasis: str | None = None
     riskLabel: str | None = None
     # E41 (only with AIPHEED_LEAD2_MODEL=e41, for its target quarter): what riskScore is, and the documented band
     scoreType: str | None = None

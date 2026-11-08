@@ -1,21 +1,25 @@
 import { X } from "lucide-react";
 
+// Plain words, in the order a visitor meets them on the dashboard. Each term is the label the dashboard shows.
 const TERMS: Array<{ term: string; def: string }> = [
-  { term: "Risk Level", def: "A score from 0 to 1. For a province it is the E168 forecast probability that 50% or more of its households are moderately or severely food insecure (FNRI HFIAS), not a measured provincial rate. For a city or municipality it is a priority ranking derived from the province's value with poverty and population density, not a measured or forecast municipal rate. Higher values indicate greater risk. Formerly referred to as RFII (Regional Food Insecurity Index)." },
-  { term: "High / Low risk", def: "The band a Risk Level falls in. It is judged on the score as shown, rounded to two decimals: 0.50 and above is High, below 0.50 is Low. A score of 0.4982 reads 0.50, so it is High." },
-  { term: "Active alert", def: "A stricter flag for anticipatory action, raised when the risk probability is at or above 0.60. Every active alert is High risk, but not every High risk area has an active alert." },
-  { term: "Observed quarter", def: "A quarter PSA has already published data for, scored from that quarter's own data (a nowcast). The newest one is marked as the current quarter. Shown with a solid line on the timeline." },
-  { term: "Forecast Quarter", def: "A quarter beyond the newest published PSA data. Its risk is forecast from information published before the quarter began. Shown with a dashed line on the timeline." },
-  { term: "No data", def: "A quarter on the timeline with no forecast, shown in gray. Either the model has no input data for it, or PSA has not published its data yet and the forecast does not reach it. Select the quarter to see which." },
-  { term: "Limited data", def: "Fewer than 5 news articles about the province were found for the quarter, so its score rests on less evidence. The tag carries over to every municipality in that province." },
-  { term: "Quarter-on-quarter change", def: "The percentage shift in the risk probability compared to the previous quarter. Positive values indicate worsening conditions." },
-  { term: "SHAP", def: "SHapley Additive exPlanations. A method that splits one model prediction into the contributions of its inputs. The dashboard sums these into five driver groups and shows each group's share of the model's total absolute push; the rest (poverty, population density, forecast timing and survey history) is shown as Other model inputs, so all the bars add to 100%. A driver either pushes the estimate up or pulls it down. The shares describe what the model relied on, not the percentage of food insecurity caused by each factor; for the E168 forecast they explain the forecast change from the province's latest survey level, which the bars do not include." },
-  { term: "Market / Prices", def: "Food retail prices, including rice, and how fast they are rising. Higher prices make it harder for households to afford enough food." },
-  { term: "Climate Stress", def: "Typhoons, heavy rain, flooding and other weather that damage farms and disrupt food supply." },
-  { term: "Fish Kill (fisheries production proxy)", def: "The thesis's fish-kill trigger. No public record of fish-kill events exists, so it is measured by a proxy: the province's fisheries production compared with a year earlier (PSA). A drop can reduce local fish supply and fishers' incomes. It does not show whether a fish kill happened." },
-  { term: "Employment (national)", def: "How many people have jobs. Rising unemployment leaves households with less income for food. The data are the national rate (PSA Labor Force Survey), the same for every province." },
-  { term: "OFW Remittance (national)", def: "Money sent home by relatives working abroad (Overseas Filipino Workers). A drop leaves families with less to spend on food. The data are national (BSP), the same for every province." },
-  { term: "Other model inputs", def: "Model inputs outside the five trigger groups: provincial poverty incidence and population density (which also weight the city and municipal ranking), forecast timing and survey history." },
+  { term: "Chance of high food insecurity", def: "A score from 0 to 1. For a province it is the forecast chance that half or more of its households will not have enough food (moderately or severely food insecure, FNRI survey measure). It is a forecast, not a measured provincial rate. For a town or city it is a priority ranking (the province's chance weighted by poverty and population), not its own forecast." },
+  { term: "High risk / Low risk", def: "0.50 and above is High risk; below 0.50 is Low risk." },
+  { term: "Active alert", def: "A stronger warning, shown when the chance is 0.60 or higher." },
+  { term: "Forecast quarter", def: "The three-month period being forecast (Q1 = January to March, and so on). The dashboard forecasts the next three quarters, using only data published before the forecast was made." },
+  { term: "Change from last quarter", def: "How much the chance moved compared with the previous quarter's forecast, in points (0.076 to 0.064 is −1.2 pts). Up means more risk, down means less. The line below it shows both values." },
+  { term: "Why is this at risk?", def: "What pushed the forecast up or down, as shares that add to 100%. The model's output is split into the contribution of each input (SHAP, a method that splits one model prediction into its inputs). The shares show what the forecast relied on, not the percentage of food insecurity caused by each factor. They explain the forecast's change from the province's latest survey level, which the bars do not include." },
+  { term: "Food prices", def: "How much food and rice prices rose compared with a year earlier, by province (PSA consumer price index). Higher prices make it harder for families to buy enough food." },
+  { term: "Weather and farm supply", def: "Typhoons passing nearby, El Niño or La Niña, rainfall, soil moisture and the rice and corn harvest. Bad weather and poor harvests can cut food supply and income." },
+  { term: "Jobs (national figures)", def: "The national unemployment rate and its change from a year earlier (PSA Labor Force Survey). The same figure for every province." },
+  { term: "Money sent home by OFWs (national figures)", def: "The yearly change in money sent home by Filipinos working abroad (BSP). The same figure for every province." },
+  { term: "Fish catch", def: "The province's fish catch compared with the year before (PSA). It stands in for the fish-kill trigger, because there is no public record of fish-kill events; it does not show whether a fish kill happened." },
+  { term: "Other factors", def: "Inputs outside the five groups: how poor and how crowded the province is, and how far ahead the forecast looks." },
+  { term: "News reports used", def: "The news stories the forecast read: those published in the three months before the forecast was made, about the province, CALABARZON, Luzon or the whole country. Off-topic stories are removed. News feeds into the five groups above; it is not a separate bar." },
+  { term: "Few news reports", def: "Fewer than 5 news stories were about the province itself, so its forecast rests on less local news. It does not mean the risk is low." },
+  { term: "Latest data used", def: "The newest month or period of each source the forecast used. Only complete months are used: in November, the newest data is October." },
+  { term: "Updated monthly", def: "On the 10th of each month the system downloads the newest public figures and news and updates the forecast if anything new came out." },
+  { term: "Towns and cities", def: "Towns and cities ranked by priority within their province, using the province's chance, poverty and population. They are not separate forecasts." },
+  { term: "No data", def: "A quarter shown in gray has no forecast. It does not mean the risk is low." },
 ];
 
 export function GlossaryPanel({ open, onClose }: { open: boolean; onClose: () => void }) {

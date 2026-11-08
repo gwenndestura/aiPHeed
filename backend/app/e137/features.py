@@ -32,6 +32,7 @@ from app.e137 import RAW
 from app.e137.acquire import centroids
 from app.hfias import RAW as HRAW
 from app.hfias.panel import norm as key
+from app.paths import BACKEND_DIR
 
 GROUPS = {
     "market": ["m_food_cpi_yoy", "m_rice_cpi_yoy", "m_food_threshold_rel"],
@@ -118,11 +119,18 @@ def _quarterly(fname: str, label_col: str, labels: tuple) -> pd.DataFrame:
     return d.groupby("k")[qcols].sum(min_count=1)
 
 
-def _published_quarters(cols, as_of):
+def _published_quarters(cols, as_of, source: str | None = None):
+    """Quarters usable at `as_of`: 45 days after the quarter ends, or (live downloads, `source` given) already seen in
+    the public PSA table on or before `as_of` (app.e168.live_data.first_seen)."""
     def end(c):
         y, q = int(c[:4]), int(c[-1])
         return pd.Timestamp(year=y, month=3 * q, day=1) + pd.offsets.MonthEnd(0)
-    return [c for c in cols if end(c) + pd.Timedelta(days=45) <= as_of]
+    def seen(c):
+        if source is None:
+            return False
+        from app.e168 import live_data as LD
+        return LD.usable(source, c, end(c), as_of)
+    return [c for c in cols if end(c) + pd.Timedelta(days=45) <= as_of or seen(c)]
 
 
 @lru_cache(maxsize=None)
@@ -154,8 +162,13 @@ def _rain() -> dict:
 def _tracks() -> pd.DataFrame:
     d = pd.read_csv(RAW / "ibtracs" / "ibtracs.WP.list.v04r01.csv", skiprows=[1], usecols=["SID", "ISO_TIME", "LAT", "LON"],
                     low_memory=False)
+    live = BACKEND_DIR / "data" / "e168" / "live_raw" / "ibtracs" / "wp_last3years.csv"
+    if live.exists():                                   # newer track points only; the archive file's points are kept as they are
+        n = pd.read_csv(live, usecols=["SID", "ISO_TIME", "LAT", "LON"], low_memory=False)
+        n = n[pd.to_datetime(n["ISO_TIME"], errors="coerce") > pd.to_datetime(d["ISO_TIME"], errors="coerce").max()]
+        d = pd.concat([d, n], ignore_index=True)
     d["t"] = pd.to_datetime(d["ISO_TIME"], errors="coerce")
-    d = d[(d["t"] >= "1990-01-01") & (d["t"] < "2027-01-01")]
+    d = d[(d["t"] >= "1990-01-01") & (d["t"] < "2100-01-01")]
     d["LAT"], d["LON"] = pd.to_numeric(d["LAT"], errors="coerce"), pd.to_numeric(d["LON"], errors="coerce")
     return d[d["LAT"].between(2, 23) & d["LON"].between(113, 131)].reset_index(drop=True)
 

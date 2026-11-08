@@ -77,6 +77,11 @@ def load_all() -> pd.DataFrame:
     m["published"] = pd.to_datetime(m["date"])
     m = m[["id", "title", "text", "published", "link", "site"]].assign(origin="province_query")
     f6 = pd.read_parquet(DATA / "fi6" / "news_archive" / "articles.parquet")
+    live = DATA / "e168" / "live_raw" / "news" / "fi6_new_articles.parquet"
+    if live.exists():                     # articles collected by the live refresh after the archive build (app.e168.live_refresh)
+        n = pd.read_parquet(live)
+        n = n[~(n["site"] + ":" + n["wp_id"].astype(str)).isin(set(f6["site"] + ":" + f6["wp_id"].astype(str)))]
+        f6 = pd.concat([f6, n], ignore_index=True)
     f6["id"] = f6["site"] + ":" + f6["wp_id"].astype(str)
     f6["title"], f6["lead"] = f6["title"].map(_clean), f6["lead"].map(_clean)
     f6["text"] = (f6["title"] + ". " + f6["lead"]).str.slice(0, 700)

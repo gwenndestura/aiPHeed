@@ -255,11 +255,10 @@ describe("Landing page", () => {
     expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
     const src = container.querySelector("#methodology table")?.textContent ?? "";
     expect(src).toContain("FNRI National/Expanded National Nutrition Survey (HFIAS)");
-    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*2013 to the issue date/);
+    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*Yearly, 2013 to 2025/);
     expect(src).not.toMatch(/Pink Sheet|PAGASA El Ni|9,667/);
     expect(src).toMatch(/fisheries production.*proxy for the Fish Kill trigger, not a record of fish-kill events/);
-    expect(text).toContain("removing employment or remittances did not change the tested accuracy");
-    expect(text).toContain("Removing the news signals did not measurably change the tested accuracy.");
+    expect(text).not.toMatch(/did not (measurably )?change the tested accuracy/);
   });
 
   it("opens one FAQ row at a time, with aria-expanded", () => {
