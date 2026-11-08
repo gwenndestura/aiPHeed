@@ -1,0 +1,591 @@
+{
+ "aggregation": {
+  "feature": "expanding mid-rank percentile among earlier available 2021+ observations of the scope (>= 8), or cross-province mid-rank (rank5)",
+  "firi3": "equal-weighted mean of available indicators",
+  "indicator": "mean of available components; needs >= ceil(defined/2)"
+ },
+ "amendment_1": {
+  "base_required_series": [
+   "E1_unemployment_change_pp",
+   "E2_remittance_decline_pct",
+   "chicken_production_yoy_pct",
+   "corn_production_yoy_pct",
+   "cpi_food_yoy_pct",
+   "cpi_headline_yoy_pct",
+   "farmgate_palay_yoy_pct",
+   "fisheries_production_yoy_pct",
+   "livestock_production_yoy_pct",
+   "palay_production_yoy_pct",
+   "rainfall_anomaly_mm",
+   "region_cpi_food_yoy_pct",
+   "region_cpi_headline_yoy_pct",
+   "retail_chicken_yoy_pct",
+   "retail_pork_yoy_pct",
+   "retail_tilapia_yoy_pct",
+   "rice_wholesale_yoy_pct",
+   "rootcrops_only_production_yoy_pct",
+   "temperature_anomaly_c",
+   "vegetables_only_production_yoy_pct"
+  ],
+  "file": "experiments/E122_Data_Cutoff_Audit/E122_FIRI3_PROTOCOL_AMENDMENT_1.md",
+  "rule": "change-type series admitted only from 2022-Q1 (2021+ comparison base)",
+  "sha256": "4fd05309c3dee0800693e9a12b92ed112aebef35f9a219a8a620c88860050549"
+ },
+ "amendment_2": {
+  "file": "experiments/E123_FIRI3_Design_Resolution/E123_FIRI3_PROTOCOL_AMENDMENT_2.md",
+  "rules": [
+   "annual features: latest COMPLETE published year; newer incomplete years skipped",
+   "supplementary CCS (FMA AFP CEC FIS, >= 3 of 4) and SVS (EHS PSV, both, provincial only)",
+   "fixed core FMA AFP CEC EHS; cross-province core (>= 3 common indicators)"
+  ],
+  "sha256": "8b5f729cc34790e00dbadbc5ce02bfd050ca31dc665fd049bff9e38675f7711b"
+ },
+ "amendment_3": {
+  "approved": "owner, E127 instruction section 1",
+  "data_layer": "experiments/E127_FIRI3_Amendment_3_Implementation/runner/par_counts.py",
+  "file": "experiments/E127_FIRI3_Amendment_3_Implementation/E127_FIRI3_PROTOCOL_AMENDMENT_3.md",
+  "rule": "PAR count: every quarter the IBTrACS file covers completely is recorded, 0 when no storm qualifies; uncovered quarters stay missing",
+  "sha256": "4095ad4c2788a9203a7d6ee37dab92560c9705e14e7f6db621228183d7d5bcbb"
+ },
+ "completeness": {
+  "ccs": "3 of 4",
+  "max_staleness_quarters": 3,
+  "provincial": "4 of 6",
+  "regional": "4 of 5",
+  "svs": "2 of 2 (provincial only)"
+ },
+ "component_weights": "equal (mean of scored features), components equal within an indicator",
+ "cutoff": {
+  "first_change_period": "2022-Q1",
+  "first_period": "2021-Q1",
+  "last_period": "2026-Q4",
+  "rule": "pre-2021 rows rejected; change rows need a 2021+ base"
+ },
+ "evaluation_rules": [
+  "forecast stability: issued snapshot files and content hash unchanged",
+  "data revision sensitivity: same observation period, different value, in a later recomputation",
+  "prospective measurement behaviour: later periods or availability changes in a later recomputation",
+  "SWS: descriptive external comparison only; never used to tune",
+  "no tuning from prospective results; any change is a new version and never overwrites issued snapshots"
+ ],
+ "features": [
+  {
+   "code": "FMA_food_cpi",
+   "component": "food inflation",
+   "dataset": "D01",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "cpi_food_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_headline_cpi",
+   "component": "cost of living",
+   "dataset": "D02",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "cpi_headline_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_rice_wholesale",
+   "component": "rice price",
+   "dataset": "D05",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "rice_wholesale_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_chicken",
+   "component": "protein prices",
+   "dataset": "D08",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "retail_chicken_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_pork",
+   "component": "protein prices",
+   "dataset": "D09",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "retail_pork_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_tilapia",
+   "component": "protein prices",
+   "dataset": "D10",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "retail_tilapia_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FMA_food_cpi_R",
+   "component": "food inflation",
+   "dataset": "D03",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "region_cpi_food_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "FMA_headline_cpi_R",
+   "component": "cost of living",
+   "dataset": "D03",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "region_cpi_headline_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "FMA_rice_R",
+   "component": "rice price",
+   "dataset": "D07",
+   "direction": 1,
+   "indicator": "FMA",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "farmgate_palay_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "AFP_palay",
+   "component": "cereals",
+   "dataset": "D20",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "palay_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_corn",
+   "component": "cereals",
+   "dataset": "D21",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "corn_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_vegetables",
+   "component": "vegetables",
+   "dataset": "D22",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "vegetables_only_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_rootcrops",
+   "component": "root crops",
+   "dataset": "D23",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "rootcrops_only_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_fisheries",
+   "component": "fisheries",
+   "dataset": "D24",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "fisheries_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_chicken",
+   "component": "poultry and livestock",
+   "dataset": "D26",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "chicken_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_livestock",
+   "component": "poultry and livestock",
+   "dataset": "D27",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "livestock_production_yoy_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "AFP_palay_R",
+   "component": "cereals",
+   "dataset": "D20",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "palay_production_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "AFP_corn_R",
+   "component": "cereals",
+   "dataset": "D21",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "corn_production_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "AFP_vegetables_R",
+   "component": "vegetables",
+   "dataset": "D22",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "vegetables_only_production_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "AFP_rootcrops_R",
+   "component": "root crops",
+   "dataset": "D23",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "rootcrops_only_production_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "AFP_fisheries_R",
+   "component": "fisheries",
+   "dataset": "D24",
+   "direction": -1,
+   "indicator": "AFP",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "fisheries_production_yoy_pct",
+   "series_unit": "Region IV-A",
+   "transform": "none"
+  },
+  {
+   "code": "CEC_rain_departure",
+   "component": "rainfall",
+   "dataset": "D36",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "rainfall_anomaly_mm",
+   "series_unit": null,
+   "transform": "abs"
+  },
+  {
+   "code": "CEC_heat",
+   "component": "temperature",
+   "dataset": "D37",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "temperature_anomaly_c",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "CEC_cyclones_100km",
+   "component": "cyclones",
+   "dataset": "D33",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "typhoons_local_100km",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "CEC_rain_departure_R",
+   "component": "rainfall",
+   "dataset": "D36",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "rainfall_anomaly_mm",
+   "series_unit": "CALABARZON (mean of 5 province points)",
+   "transform": "abs"
+  },
+  {
+   "code": "CEC_heat_R",
+   "component": "temperature",
+   "dataset": "D37",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "temperature_anomaly_c",
+   "series_unit": "CALABARZON (mean of 5 province points)",
+   "transform": "none"
+  },
+  {
+   "code": "CEC_cyclones_R",
+   "component": "cyclones",
+   "dataset": "D34",
+   "direction": 1,
+   "indicator": "CEC",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "typhoons_PAR",
+   "series_unit": "PHILIPPINES",
+   "transform": "none"
+  },
+  {
+   "code": "EHS_unemployment_prov",
+   "component": "employment",
+   "dataset": "D41",
+   "direction": 1,
+   "indicator": "EHS",
+   "normalization": "rank5",
+   "scope": "P",
+   "series": "provincial_unemployment_rate_pct_annual",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "EHS_underemployment_prov",
+   "component": "employment",
+   "dataset": "D41",
+   "direction": 1,
+   "indicator": "EHS",
+   "normalization": "rank5",
+   "scope": "P",
+   "series": "provincial_underemployment_rate_pct_annual",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "EHS_unemployment_change_R",
+   "component": "employment",
+   "dataset": "D40",
+   "direction": 1,
+   "indicator": "EHS",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "E1_unemployment_change_pp",
+   "series_unit": "PHILIPPINES",
+   "transform": "none"
+  },
+  {
+   "code": "EHS_remittance_decline_R",
+   "component": "remittances",
+   "dataset": "D42",
+   "direction": 1,
+   "indicator": "EHS",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "E2_remittance_decline_pct",
+   "series_unit": "PHILIPPINES",
+   "transform": "none"
+  },
+  {
+   "code": "PSV_poverty",
+   "component": "poverty",
+   "dataset": "D50",
+   "direction": 1,
+   "indicator": "PSV",
+   "normalization": "rank5",
+   "scope": "P",
+   "series": "poverty_incidence_popweighted_pct",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FIS_fssi",
+   "component": "local news",
+   "dataset": "D60",
+   "direction": 1,
+   "indicator": "FIS",
+   "normalization": "pct",
+   "scope": "P",
+   "series": "N1_fssi_v3",
+   "series_unit": null,
+   "transform": "none"
+  },
+  {
+   "code": "FIS_shortage_news_R",
+   "component": "national news",
+   "dataset": "D62",
+   "direction": 1,
+   "indicator": "FIS",
+   "normalization": "pct",
+   "scope": "R",
+   "series": "news_gdelt_shortage_share",
+   "series_unit": "PHILIPPINES",
+   "transform": "none"
+  }
+ ],
+ "firi3_version": "FIRI3-candidate-1.3",
+ "geography": {
+  "provincial_units": [
+   "Cavite",
+   "Laguna",
+   "Batangas",
+   "Rizal",
+   "Quezon"
+  ],
+  "regional_label": "CALABARZON (regional)",
+  "regional_units": [
+   "Region IV-A",
+   "CALABARZON (mean of 5 province points)",
+   "PHILIPPINES"
+  ],
+  "rule": "provincial scores from provincial observations only; national values never copied into provinces"
+ },
+ "indicators": {
+  "AFP": "Agricultural and Fisheries Production",
+  "CEC": "Climate and Environmental Conditions",
+  "EHS": "Employment and Household Economic Stability",
+  "FIS": "Food Insecurity Early-Warning Signals",
+  "FMA": "Food Market Accessibility and Affordability",
+  "PSV": "Household Poverty and Social Vulnerability"
+ },
+ "inputs_builder": "experiments/E127_FIRI3_Amendment_3_Implementation/runner/firi3_inputs.py",
+ "issuance_conditions": [
+  "C1: the run date is on or after the issue date",
+  "C2: firi3 version and protocol / amendment hashes equal this configuration",
+  "C3: every source was retrieved on or after the date its rule makes the needed period available (or is documented as not yet released / discontinued)",
+  "C4: no input value with availability date on or after the issue date is scored"
+ ],
+ "issue": {
+  "first_issue_date": "2027-01-01",
+  "first_prospective_origin": "2026-Q4",
+  "issue_date_rule": "O(t) = first day of quarter t+1, 00:00 PHT"
+ },
+ "module": "backend/app/ml/inference/firi3.py",
+ "name": "FIRI3 prospective validation configuration (v1.3)",
+ "protocol": {
+  "file": "experiments/E121_FIRI3_Implementation/E121_FIRI3_PROTOCOL.md",
+  "sha256": "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717"
+ },
+ "publication_eligibility": {
+  "by_feature": {
+   "AFP_chicken": "provisionally eligible",
+   "AFP_corn": "provisionally eligible",
+   "AFP_corn_R": "provisionally eligible",
+   "AFP_fisheries": "provisionally eligible",
+   "AFP_fisheries_R": "provisionally eligible",
+   "AFP_livestock": "provisionally eligible",
+   "AFP_palay": "provisionally eligible",
+   "AFP_palay_R": "provisionally eligible",
+   "AFP_rootcrops": "provisionally eligible",
+   "AFP_rootcrops_R": "provisionally eligible",
+   "AFP_vegetables": "provisionally eligible",
+   "AFP_vegetables_R": "provisionally eligible",
+   "CEC_cyclones_100km": "verified",
+   "CEC_cyclones_R": "verified",
+   "CEC_heat": "provisionally eligible",
+   "CEC_heat_R": "provisionally eligible",
+   "CEC_rain_departure": "provisionally eligible",
+   "CEC_rain_departure_R": "provisionally eligible",
+   "EHS_remittance_decline_R": "provisionally eligible",
+   "EHS_underemployment_prov": "unverified",
+   "EHS_unemployment_change_R": "provisionally eligible",
+   "EHS_unemployment_prov": "unverified",
+   "FIS_fssi": "verified",
+   "FIS_shortage_news_R": "verified",
+   "FMA_chicken": "provisionally eligible",
+   "FMA_food_cpi": "provisionally eligible",
+   "FMA_food_cpi_R": "provisionally eligible",
+   "FMA_headline_cpi": "provisionally eligible",
+   "FMA_headline_cpi_R": "provisionally eligible",
+   "FMA_pork": "provisionally eligible",
+   "FMA_rice_R": "provisionally eligible",
+   "FMA_rice_wholesale": "provisionally eligible",
+   "FMA_tilapia": "provisionally eligible",
+   "PSV_poverty": "unverified"
+  },
+  "classes": [
+   "verified",
+   "provisionally eligible",
+   "unverified",
+   "ineligible"
+  ],
+  "rule": "a value is used only if its availability date is strictly before the issue date"
+ },
+ "risk_bands": {
+  "above usual": "< 0.5 + sd_k",
+  "elevated": "< 0.5 + 1.645 sd_k",
+  "high": ">= 0.5 + 1.645 sd_k",
+  "meaning": "relative to the 2021+ usual level; not a probability",
+  "sd_k": "sqrt(1/12)/sqrt(k)",
+  "usual or below": "< 0.5"
+ },
+ "snapshot_schema": "experiments/E124_FIRI3_Prospective_Validation/E124_SNAPSHOT_SCHEMA.md",
+ "supersedes": {
+  "canonical_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+  "file": "experiments/E124_FIRI3_Prospective_Validation/E124_FROZEN_VALIDATION_CONFIGURATION.json",
+  "version": "FIRI3-candidate-1.2"
+ },
+ "weights": {
+  "AFP": 1.0,
+  "CEC": 1.0,
+  "EHS": 1.0,
+  "FIS": 1.0,
+  "FMA": 1.0,
+  "PSV": 1.0
+ }
+}

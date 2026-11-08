@@ -1,0 +1,56 @@
+             option  lead   n  median_tol_pp  oracle_analytic  oracle_analytic_pre_surge_q  oracle_empirical_O_NOW  persistence  v2_selected  persistence_if_true_level_never_changed
+0          a_frozen     1  44          3.723            0.493                        0.660                   0.545        0.477        0.477                                    0.765
+1          a_frozen     2  40          3.783            0.425                        0.596                   0.350        0.400        0.400                                    0.767
+2          a_frozen     3  36          3.835            0.382                        0.551                   0.417        0.361        0.361                                    0.773
+3          a_frozen     4  32          3.900            0.351                        0.515                   0.438        0.375        0.375                                    0.782
+4    b_published_se     1  44          4.784            0.598                        0.772                   0.591        0.568        0.568                                    0.864
+5    b_published_se     2  40          4.784            0.513                        0.698                   0.500        0.475        0.475                                    0.859
+6    b_published_se     3  36          4.784            0.457                        0.644                   0.500        0.500        0.500                                    0.859
+7    b_published_se     4  32          5.035            0.417                        0.601                   0.500        0.469        0.469                                    0.863
+8   b_published_moe     1  44          5.700            0.680                        0.847                   0.682        0.614        0.614                                    0.922
+9   b_published_moe     2  40          5.700            0.591                        0.779                   0.550        0.500        0.500                                    0.918
+10  b_published_moe     3  36          5.700            0.531                        0.727                   0.583        0.528        0.528                                    0.919
+11  b_published_moe     4  32          6.000            0.487                        0.683                   0.594        0.594        0.594                                    0.922
+12        a_x2_info     1  44          7.445            0.805                        0.936                   0.750        0.727        0.727                                    0.980
+13        a_x2_info     2  40          7.565            0.729                        0.895                   0.775        0.675        0.675                                    0.980
+14        a_x2_info     3  36          7.670            0.676                        0.861                   0.722        0.639        0.639                                    0.982
+15        a_x2_info     4  32          7.800            0.632                        0.829                   0.719        0.719        0.719                                    0.984
+             option  lead   n  share_high  majority_class_hindsight  oracle_analytic  oracle_empirical_O_NOW  persistence  v2_selected
+0  c1_chapter1_11.3     1  44       0.955                     0.955            0.857                   0.841        0.864        0.864
+1  c1_chapter1_11.3     2  40       0.975                     0.975            0.827                   0.800        0.825        0.825
+2  c1_chapter1_11.3     3  36       1.000                     1.000            0.806                   0.778        0.806        0.806
+3  c1_chapter1_11.3     4  32       1.000                     1.000            0.784                   0.781        0.781        0.781
+4     c2_e110_b3_20     1  44       0.545                     0.545            0.745                   0.682        0.659        0.659
+5     c2_e110_b3_20     2  40       0.600                     0.600            0.728                   0.575        0.550        0.550
+6     c2_e110_b3_20     3  36       0.667                     0.667            0.705                   0.556        0.528        0.528
+7     c2_e110_b3_20     4  32       0.750                     0.750            0.693                   0.531        0.531        0.531
+                      option  lead   n  share_rise  oracle_analytic  oracle_empirical_O_NOW  persistence  v2_selected  balanced_accuracy_persistence
+0  d1_e110_b4_rise_gt_margin     1  44       0.295            0.839                   0.705        0.705        0.705                            0.5
+1            d2_sign_up_down     1  44       0.682            0.584                   0.727        0.500        0.500                            0.5
+2  d1_e110_b4_rise_gt_margin     2  40       0.375            0.800                   0.625        0.625        0.625                            0.5
+3            d2_sign_up_down     2  40       0.675            0.577                   0.625        0.500        0.500                            0.5
+4  d1_e110_b4_rise_gt_margin     3  36       0.389            0.771                   0.611        0.611        0.611                            0.5
+5            d2_sign_up_down     3  36       0.694            0.566                   0.667        0.500        0.500                            0.5
+6  d1_e110_b4_rise_gt_margin     4  32       0.375            0.751                   0.625        0.625        0.625                            0.5
+7            d2_sign_up_down     4  32       0.719            0.557                   0.688        0.500        0.500                            0.5
+   lead2_rows  median_frozen_tol  median_published_moe_quarter  median_ratio_frozen_tol_to_moe  median_sd_difference_two_readings  median_95pct_least_significant_difference  share_rows_frozen_tol_below_lsd95
+0          40              3.783                           5.7                           0.684                              3.085                                      6.047                                1.0
+{
+ "n_pairs": 68,
+ "a_frozen": {
+  "oracle_analytic": 0.5879606929194334,
+  "persistence": 0.4852941176470588,
+  "persistence_if_true_level_never_changed": 0.7633872017149429
+ },
+ "b_published_se": {
+  "oracle_analytic": 0.748106725018304,
+  "persistence": 0.6323529411764706,
+  "persistence_if_true_level_never_changed": 0.8937971263148176
+ },
+ "b_published_moe": {
+  "oracle_analytic": 0.8261039181513721,
+  "persistence": 0.7352941176470589,
+  "persistence_if_true_level_never_changed": 0.9417725906305231
+ }
+}
+q_true 12.259795098122364 q_pre_surge 4.5084396952427

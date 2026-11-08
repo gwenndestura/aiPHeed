@@ -1,0 +1,49 @@
+dataset,feature,indicator,source_frequency,aggregation,availability_rule,obs_quarter_lag_at_issue_median,obs_quarter_lag_min,obs_quarter_lag_max,values,verified_share,all_available_before_issue
+provincial,A1_food_projection_asof,A1,quarterly,see dictionary,see dictionary,,,,95,0.347,True
+provincial,A1_gap_projection_asof,A1,quarterly,see dictionary,see dictionary,,,,95,0.347,True
+provincial,A2_headline_above_usual_asof,A2,quarterly,see dictionary,see dictionary,,,,95,0.347,True
+provincial,C2_typhoons_300km,C2,quarterly,count of distinct storms within 300 km,quarter complete,1.0,1.0,1.0,110,1.0,True
+provincial,C3_palay_corn_drop,C3,quarterly,"-min(palay YoY, corn YoY)",as source,2.0,2.0,2.0,85,0.0,True
+provincial,C4_fisheries_drop,C4,quarterly,-fisheries YoY,as source,2.0,2.0,2.0,85,0.0,True
+provincial,N1_admitted_articles,N1,quarterly,count,articles dated,1.0,1.0,1.0,110,1.0,True
+provincial,N1_fssi_v3,N1,quarterly,FSSI-v3 (needs >= 5 admitted articles),articles dated,2.0,1.0,6.0,50,1.0,True
+provincial,aquaculture_production_yoy_pct,C4,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,85,0.0,True
+provincial,chicken_production_yoy_pct,UNASSIGNED,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,45,0.0,True
+provincial,cpi_bottom30_food_yoy_pct,A1,monthly,quarterly mean,day 10 of m+1,1.0,1.0,1.0,110,0.0,True
+provincial,cpi_food_yoy_pct,A1,monthly,quarterly mean of 3 published months,day 10 of m+1; archived release where verified,1.0,1.0,1.0,110,0.0,True
+provincial,cpi_headline_yoy_pct,A2,monthly,quarterly mean of 3 published months,day 10 of m+1; archived release where verified,1.0,1.0,1.0,110,0.0,True
+provincial,farmgate_palay_yoy_pct,A3,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,2.0,90,0.0,True
+provincial,livestock_production_yoy_pct,UNASSIGNED,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,45,0.0,True
+provincial,rainfall_anomaly_mm,UNASSIGNED,quarterly,value minus earlier same-quarter mean (2021+),as source,1.0,1.0,3.0,90,0.0,True
+provincial,rainfall_total_mm,UNASSIGNED,monthly,quarterly total,first day of m+2 (rule),1.0,1.0,3.0,110,0.0,True
+provincial,retail_chicken_yoy_pct,A1,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,1.0,90,0.0,True
+provincial,retail_pork_yoy_pct,A1,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,1.0,90,0.0,True
+provincial,retail_rice_regular_price_php_kg,A3,monthly,quarterly mean of 3 published months,day 15 of m+1 (rule),1.0,1.0,1.0,110,0.0,True
+provincial,retail_rice_regular_volatility_cv,A3,quarterly,SD / mean of the 3 months,as source,1.0,1.0,1.0,110,0.0,True
+provincial,retail_rice_regular_yoy_pct,A3,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,1.0,90,0.0,True
+provincial,retail_tilapia_yoy_pct,A1,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,1.0,90,0.0,True
+provincial,rice_wholesale_yoy_pct,A3,quarterly,YoY of 2021+ quarterly price,as source,2.0,2.0,4.0,85,0.0,True
+provincial,temperature_anomaly_c,UNASSIGNED,quarterly,value minus earlier same-quarter mean (2021+),as source,1.0,1.0,3.0,90,0.0,True
+provincial,typhoons_local_100km,C2,quarterly,count within 100 km,quarter complete,1.0,1.0,1.0,110,1.0,True
+provincial,vegetables_rootcrops_production_yoy_pct,UNASSIGNED,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,85,0.0,True
+regional,C1_el_nino_in_force,C1,quarterly,state in force before the issue,dated items,0.0,0.0,0.0,46,1.0,True
+regional,C3_palay_corn_drop,C3,quarterly,"-min(palay YoY, corn YoY)",as source,2.0,2.0,2.0,34,0.0,True
+regional,C4_fisheries_drop,C4,quarterly,-fisheries YoY,as source,2.0,2.0,2.0,34,0.0,True
+regional,E1_unemployment_change_pp,E1,quarterly,change vs same quarter a year earlier (2021+),as source,1.0,1.0,1.0,36,0.0,True
+regional,E2_remittance_decline_pct,E2,quarterly,-YoY (2021+),as source,2.0,1.0,3.0,36,0.222,True
+regional,H1_bl_latest,H1,quarterly,see dictionary,see dictionary,,,,42,1.0,True
+regional,aquaculture_production_yoy_pct,C4,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,34,0.0,True
+regional,farmgate_palay_yoy_pct,A3,quarterly,YoY of 2021+ quarterly mean,as source,1.0,1.0,1.0,36,0.0,True
+regional,news_gdelt_agri_supply_share,N1,quarterly,quarterly mean of monthly shares,quarter complete,1.0,1.0,1.0,44,1.0,True
+regional,news_gdelt_assistance_share,N1,quarterly,quarterly mean of monthly shares,quarter complete,1.0,1.0,1.0,44,1.0,True
+regional,news_gdelt_jobs_income_share,N1,quarterly,quarterly mean of monthly shares,quarter complete,1.0,1.0,1.0,44,1.0,True
+regional,news_gdelt_shortage_share,N1,quarterly,quarterly mean of monthly shares,quarter complete,1.0,1.0,1.0,44,1.0,True
+regional,oni_quarter_mean,C1,monthly,quarterly mean,day 10 of m+1 (rule),1.0,1.0,1.0,44,0.0,True
+regional,rainfall_anomaly_mm,UNASSIGNED,quarterly,value minus earlier same-quarter mean (2021+),as source,1.0,1.0,3.0,36,0.0,True
+regional,rainfall_total_mm,UNASSIGNED,monthly,quarterly total,first day of m+2 (rule),1.0,1.0,3.0,44,0.0,True
+regional,region_cpi_food_yoy_pct,A1,monthly,"YoY of 2021+ index, quarterly mean",day 10 of m+1,1.0,1.0,1.0,36,0.0,True
+regional,region_cpi_headline_yoy_pct,A2,monthly,"YoY of 2021+ index, quarterly mean",day 10 of m+1,1.0,1.0,1.0,36,0.0,True
+regional,temperature_anomaly_c,UNASSIGNED,quarterly,value minus earlier same-quarter mean (2021+),as source,1.0,1.0,3.0,36,0.0,True
+regional,typhoons_PAR,C2,quarterly,count,quarter complete,1.0,1.0,2.0,44,1.0,True
+regional,unemployment_rate_pct,E1,monthly,mean of available survey months in the quarter,first day of m+3 (rule),1.0,1.0,1.0,44,0.0,True
+regional,vegetables_rootcrops_production_yoy_pct,UNASSIGNED,quarterly,YoY of 2021+ quarterly value,as source,2.0,2.0,2.0,34,0.0,True

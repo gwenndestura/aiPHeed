@@ -1,0 +1,25 @@
+check,example,rows,violations,rule
+"Lead 1: issue, latest CPI month, latest SWS round, target","origin 2023-Q4, issue 2024-01-01, CPI through 2023-11, SWS 2023-Q3 (published 2023-11-20), target 2024-Q1",115.0,0.0,target quarter = origin + lead; issue = day 1 of quarter t+1 (schedule A; Lead-2 re-issue schedule B is later)
+Lead 1: newest CPI month ends before issue,,115.0,0.0,CPI month m used only if m ends before the issue (release dates: see release ledger)
+Lead 1: SWS round published before issue,,105.0,0.0,published < issue
+Lead 1: news articles published before issue,,105.0,0.0,published < issue
+"Lead 2: issue, latest CPI month, latest SWS round, target","origin 2023-Q4, issue 2024-01-01, CPI through 2023-11, SWS 2023-Q3 (published 2023-11-20), target 2024-Q2",115.0,0.0,target quarter = origin + lead; issue = day 1 of quarter t+1 (schedule A; Lead-2 re-issue schedule B is later)
+Lead 2: newest CPI month ends before issue,,115.0,0.0,CPI month m used only if m ends before the issue (release dates: see release ledger)
+Lead 2: SWS round published before issue,,105.0,0.0,published < issue
+Lead 2: news articles published before issue,,105.0,0.0,published < issue
+A1 availability rule,"Food-price-pressure forecast (LightGBM, Lead-2)",,,monthly; CPI through month 2 of t at O(t); status: base month verified 35/36; refresh months partly unresolved
+A2 availability rule,Headline inflation above the usual level,,,monthly; months 1-2 of t; status: as A1
+A3 availability rule,Wholesale rice price change,,,"quarterly; quarter t-1; status: assumed lag, unverified"
+V1 availability rule,Poverty and population density,,,"static; static at every origin; status: VIOLATION: published 2024-25, used at all origins"
+C1 availability rule,PAGASA El Nino alert/advisory in force,,,event; items before O(t); status: verified (dated items)
+C2 availability rule,Typhoons within 300 km,,,quarterly; quarter t (complete); status: plausible; 2026-Q3 incomplete; best-track revisions unchecked; rainfall anomaly column 100% empty
+C3 availability rule,Palay/corn production drop,,,"quarterly; quarter t-1; status: assumed lag, unverified; revisions unchecked"
+C4 availability rule,Fisheries production drop,,,"quarterly; quarter t-1; status: assumed lag, unverified; revisions unchecked"
+E1 availability rule,Unemployment change (national),,,"monthly; months of t-1; status: assumed lag, unverified"
+E2 availability rule,Remittance decline (national),,,quarterly; quarter t-1; status: assumed lag; series ends 2025-Q4 in stack
+N1 availability rule,Food Stress Sentiment Index (FSSI-v3),,,quarterly; headlines before O(t); status: verified (dated articles)
+H1 availability rule,Regional hunger outlook above 11.3%,,,quarterly; rounds posted before issue; status: verified
+Lead-2 CPI refresh months (CR/CR-ANC research only),180 province-months,180.0,,"32 verified, 61 owner-reported, 79 unresolved, 8 not before issue (psa_cpi_availability_ledger_20261029.csv)"
+Price thresholds (2021-22 P60) vs issue dates,600 training rows issued before 2023-01-06,600.0,600.0,label constant computed from 2021-22 data; not computable at those issue dates (no evaluation row affected)
+CPI base year (2018=100 public from 2022),375 training rows issued before 2022-06-07,375.0,375.0,values in a series not yet public at issue (no evaluation row affected)
+Archived headline CPI vs final vintage,Cavite 2025-03 1.5 vs 1.1; Batangas 2025-06 1.4 vs 1.3; Quezon 2025-06 1.8 vs 1.7,29.0,3.0,as-released values differ from the final vintage the model reads

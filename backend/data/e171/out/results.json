@@ -1,0 +1,634 @@
+{
+ "protocol": "docs/e171/PROTOCOL.md (blob 5d70b029)",
+ "design": "INFORMED - retrospective is not acceptance evidence",
+ "prospective_rows": 0,
+ "leads": {
+  "1": {
+   "rows": 72,
+   "correct": 52,
+   "accuracy": 0.722,
+   "accuracy_95_low_effective_n": 0.592,
+   "majority_rule": 0.653,
+   "precision": 0.561,
+   "high_recall": 0.92,
+   "low_recall": 0.617,
+   "f1": 0.697,
+   "auc": 0.862,
+   "brier_soft": 0.1481,
+   "calibration_slope_ci95": [
+    0.36,
+    0.93
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1223,
+    -0.016
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": 0.0137,
+   "brier_minus_E158_ci95": [
+    -0.0324,
+    0.0573
+   ],
+   "within_round_slope_supplementary": 0.75,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.591,
+     "bias_pts": 7.31,
+     "level_pct": 53.9,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 5.33,
+     "level_pct": 55.3,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.84,
+     "bias_pts": -0.77,
+     "level_pct": 40.5,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[GOV+cons|prune=True|(3, 10, 5.0, 150)] DEV[FULL+cons|prune=False|(3, 10, 20.0, 150)|cal=linear]"
+   }
+  },
+  "2": {
+   "rows": 72,
+   "correct": 55,
+   "accuracy": 0.764,
+   "accuracy_95_low_effective_n": 0.641,
+   "majority_rule": 0.653,
+   "precision": 0.605,
+   "high_recall": 0.92,
+   "low_recall": 0.681,
+   "f1": 0.73,
+   "auc": 0.895,
+   "brier_soft": 0.1279,
+   "calibration_slope_ci95": [
+    0.43,
+    0.94
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1446,
+    -0.0329
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0092,
+   "brier_minus_E158_ci95": [
+    -0.0519,
+    0.0329
+   ],
+   "within_round_slope_supplementary": 0.786,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.682,
+     "bias_pts": 5.19,
+     "level_pct": 51.9,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": 4.71,
+     "level_pct": 54.2,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.84,
+     "bias_pts": -1.16,
+     "level_pct": 40.1,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[GOV+cons|prune=True|(3, 10, 5.0, 150)] DEV[FULL+cons|prune=False|(3, 10, 20.0, 150)|cal=linear]"
+   }
+  },
+  "3": {
+   "rows": 72,
+   "correct": 50,
+   "accuracy": 0.694,
+   "accuracy_95_low_effective_n": 0.561,
+   "majority_rule": 0.653,
+   "precision": 0.538,
+   "high_recall": 0.84,
+   "low_recall": 0.617,
+   "f1": 0.656,
+   "auc": 0.835,
+   "brier_soft": 0.1546,
+   "calibration_slope_ci95": [
+    0.5,
+    0.97
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1127,
+    -0.0073
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": 0.0092,
+   "brier_minus_E158_ci95": [
+    -0.0382,
+    0.0571
+   ],
+   "within_round_slope_supplementary": 1.047,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.591,
+     "bias_pts": 7.21,
+     "level_pct": 54.1,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 5.32,
+     "level_pct": 54.8,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": -1.91,
+     "level_pct": 38.7,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=True|(3, 40, 5.0, 150)] DEV[GOV+cons|prune=False|(3, 40, 5.0, 150)|cal=linear]"
+   }
+  },
+  "4": {
+   "rows": 72,
+   "correct": 50,
+   "accuracy": 0.694,
+   "accuracy_95_low_effective_n": 0.561,
+   "majority_rule": 0.653,
+   "precision": 0.543,
+   "high_recall": 0.76,
+   "low_recall": 0.66,
+   "f1": 0.633,
+   "auc": 0.83,
+   "brier_soft": 0.1477,
+   "calibration_slope_ci95": [
+    0.52,
+    1.0
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1198,
+    -0.011
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0047,
+   "brier_minus_E158_ci95": [
+    -0.0586,
+    0.0482
+   ],
+   "within_round_slope_supplementary": 1.007,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.636,
+     "bias_pts": 4.55,
+     "level_pct": 51.2,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.68,
+     "bias_pts": 4.69,
+     "level_pct": 54.2,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": -2.02,
+     "level_pct": 38.5,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=True|(3, 40, 5.0, 150)] DEV[GOV+cons|prune=False|(3, 40, 5.0, 150)|cal=linear]"
+   }
+  },
+  "5": {
+   "rows": 72,
+   "correct": 54,
+   "accuracy": 0.75,
+   "accuracy_95_low_effective_n": 0.624,
+   "majority_rule": 0.653,
+   "precision": 0.606,
+   "high_recall": 0.8,
+   "low_recall": 0.723,
+   "f1": 0.69,
+   "auc": 0.844,
+   "brier_soft": 0.1374,
+   "calibration_slope_ci95": [
+    0.52,
+    0.89
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1367,
+    -0.0184
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0164,
+   "brier_minus_E158_ci95": [
+    -0.0668,
+    0.0352
+   ],
+   "within_round_slope_supplementary": 1.07,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.636,
+     "bias_pts": 6.38,
+     "level_pct": 53.0,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": 4.2,
+     "level_pct": 53.9,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.84,
+     "bias_pts": -4.77,
+     "level_pct": 36.1,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=True|(3, 40, 5.0, 150)] DEV[GOV+cons|prune=False|(3, 40, 5.0, 150)|cal=linear]"
+   }
+  },
+  "6": {
+   "rows": 72,
+   "correct": 54,
+   "accuracy": 0.75,
+   "accuracy_95_low_effective_n": 0.624,
+   "majority_rule": 0.653,
+   "precision": 0.606,
+   "high_recall": 0.8,
+   "low_recall": 0.723,
+   "f1": 0.69,
+   "auc": 0.814,
+   "brier_soft": 0.146,
+   "calibration_slope_ci95": [
+    0.47,
+    0.89
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.1287,
+    -0.0095
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": false,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0122,
+   "brier_minus_E158_ci95": [
+    -0.061,
+    0.0401
+   ],
+   "within_round_slope_supplementary": 1.013,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.545,
+     "bias_pts": 7.45,
+     "level_pct": 54.2,
+     "observed_pct": 47.4
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.84,
+     "bias_pts": 2.15,
+     "level_pct": 52.1,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.84,
+     "bias_pts": -4.82,
+     "level_pct": 36.2,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2018": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=True|(3, 40, 5.0, 150)] DEV[GOV+cons|prune=False|(3, 40, 5.0, 150)|cal=linear]"
+   }
+  },
+  "7": {
+   "rows": 50,
+   "correct": 34,
+   "accuracy": 0.68,
+   "accuracy_95_low_effective_n": 0.517,
+   "majority_rule": 0.66,
+   "precision": 0.517,
+   "high_recall": 0.882,
+   "low_recall": 0.576,
+   "f1": 0.652,
+   "auc": 0.802,
+   "brier_soft": 0.171,
+   "calibration_slope_ci95": [
+    0.55,
+    1.2
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0839,
+    0.008
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": false,
+    "C3": true,
+    "C4": true,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": false,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0363,
+   "brier_minus_E158_ci95": [
+    -0.0761,
+    0.0015
+   ],
+   "within_round_slope_supplementary": 0.85,
+   "per_round": {
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": 3.79,
+     "level_pct": 53.9,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.6,
+     "bias_pts": 9.25,
+     "level_pct": 51.8,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]"
+   }
+  },
+  "8": {
+   "rows": 50,
+   "correct": 32,
+   "accuracy": 0.64,
+   "accuracy_95_low_effective_n": 0.473,
+   "majority_rule": 0.66,
+   "precision": 0.481,
+   "high_recall": 0.765,
+   "low_recall": 0.576,
+   "f1": 0.591,
+   "auc": 0.759,
+   "brier_soft": 0.1744,
+   "calibration_slope_ci95": [
+    0.43,
+    1.13
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0857,
+    0.0176
+   ],
+   "criteria_E156_original": {
+    "C1": false,
+    "C2": false,
+    "C3": true,
+    "C4": true,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_original": false,
+   "criteria_new_rule": {
+    "C1": false,
+    "C2": false,
+    "C3": true,
+    "C4": null,
+    "C5": true,
+    "C6": true
+   },
+   "reliable_new_rule": false,
+   "brier_minus_E158": -0.0196,
+   "brier_minus_E158_ci95": [
+    -0.0583,
+    0.016
+   ],
+   "within_round_slope_supplementary": 0.883,
+   "per_round": {
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.76,
+     "bias_pts": 1.32,
+     "level_pct": 51.3,
+     "observed_pct": 49.2
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.52,
+     "bias_pts": 10.37,
+     "level_pct": 52.8,
+     "observed_pct": 41.6
+    }
+   },
+   "selected": {
+    "ENNS2019": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]",
+    "ENNS2021": "LEVEL[FULL+cons|prune=False|(3, 40, 20.0, 150)] DEV[FULL|prune=True|(3, 40, 20.0, 150)|cal=linear]"
+   }
+  }
+ },
+ "maximum_reliable_lead_original": 0,
+ "maximum_reliable_lead_new_rule": 0,
+ "shuffle": {
+  "brier_shuffled": 0.1363,
+  "E171_minus_shuffled": 0.0118,
+  "ci95": [
+   -0.0008,
+   0.0267
+  ]
+ },
+ "leakage_max_abs_change": 0.0,
+ "ablation": {
+  "market": {
+   "E171_minus_without": -0.0044,
+   "ci95": [
+    -0.0096,
+    0.0005
+   ],
+   "accuracy_without": 0.708
+  },
+  "climate": {
+   "E171_minus_without": 0.0032,
+   "ci95": [
+    -0.0009,
+    0.0072
+   ],
+   "accuracy_without": 0.736
+  },
+  "employment": {
+   "E171_minus_without": -0.0034,
+   "ci95": [
+    -0.0089,
+    0.0019
+   ],
+   "accuracy_without": 0.681
+  },
+  "remittance": {
+   "E171_minus_without": 0.004,
+   "ci95": [
+    0.0014,
+    0.0065
+   ],
+   "accuracy_without": 0.736
+  },
+  "poverty": {
+   "E171_minus_without": 0.0004,
+   "ci95": [
+    -0.0091,
+    0.0074
+   ],
+   "accuracy_without": 0.708
+  }
+ },
+ "controls": {
+  "leakage": true,
+  "real_not_worse_than_shuffled": false
+ },
+ "decision": "NOT ACCEPTED",
+ "note": "no prospective rows yet: the INFORMED retrospective cannot be acceptance evidence (protocol header); original E156 rule governs until adviser confirms the new rule"
+}

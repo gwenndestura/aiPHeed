@@ -1,0 +1,65 @@
+feature,fiRI_indicator,role,unit,resolution,source,aggregation_or_formula,availability_rule,units_present
+cpi_food_yoy_pct,A1,direct (PSA-published YoY),% YoY (quarter mean of monthly),province,PSA OpenSTAT 0012M4ACP23 (E40),quarterly mean of 3 published months,day 10 of m+1; archived release where verified,Batangas; Cavite; Laguna; Quezon; Rizal
+cpi_headline_yoy_pct,A2,direct (PSA-published YoY),% YoY (quarter mean of monthly),province,PSA OpenSTAT 0012M4ACP23 (E40),quarterly mean of 3 published months,day 10 of m+1; archived release where verified,Batangas; Cavite; Laguna; Quezon; Rizal
+region_cpi_food_yoy_pct,A1,direct (regional),% YoY,region,PSA OpenSTAT 0012M4ACP22 (E114),"YoY of 2021+ index, quarterly mean",day 10 of m+1,Region IV-A
+region_cpi_headline_yoy_pct,A2,direct (regional),% YoY,region,PSA OpenSTAT 0012M4ACP22 (E114),"YoY of 2021+ index, quarterly mean",day 10 of m+1,Region IV-A
+rice_wholesale_price_php_kg,A3,direct (served A3 source),PHP/kg,province,PSA wholesale rice prices (E107 parquet),quarterly as published,quarter q at start of q+2,Batangas; Cavite; Laguna; Quezon; Rizal
+rice_wholesale_yoy_pct,A3,direct (A3 definition: YoY),% YoY,province,derived,YoY of 2021+ quarterly price,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_rice_regular_price_php_kg,A3,"supporting (retail, r = 0.86 with A3)",PHP/kg (quarter mean),province,"PSA OpenSTAT (retail_cereals, E118)",quarterly mean of 3 published months,day 15 of m+1 (rule),Batangas; Cavite; Laguna; Quezon; Rizal
+retail_rice_regular_volatility_cv,A3,"supporting (retail, r = 0.86 with A3)",within-quarter CV,province,derived,SD / mean of the 3 months,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_rice_regular_yoy_pct,A3,"supporting (retail, r = 0.86 with A3)",% YoY,province,derived,YoY of 2021+ quarterly mean,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+farmgate_palay_price_php_kg,A3,supporting (producer price),PHP/kg (quarter mean),province,"PSA OpenSTAT (farmgate_cereals, E118)",quarterly mean of 3 published months,day 15 of m+1 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+farmgate_palay_volatility_cv,A3,supporting (producer price),within-quarter CV,province,derived,SD / mean of the 3 months,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+farmgate_palay_yoy_pct,A3,supporting (producer price),% YoY,province,derived,YoY of 2021+ quarterly mean,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+retail_chicken_price_php_kg,A1,supporting (food price component),PHP/kg (quarter mean),province,"PSA OpenSTAT (retail_poultry, E118)",quarterly mean of 3 published months,day 15 of m+1 (rule),Batangas; Cavite; Laguna; Quezon; Rizal
+retail_chicken_volatility_cv,A1,supporting (food price component),within-quarter CV,province,derived,SD / mean of the 3 months,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_chicken_yoy_pct,A1,supporting (food price component),% YoY,province,derived,YoY of 2021+ quarterly mean,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_pork_price_php_kg,A1,supporting (food price component),PHP/kg (quarter mean),province,"PSA OpenSTAT (retail_livestock, E118)",quarterly mean of 3 published months,day 15 of m+1 (rule),Batangas; Cavite; Laguna; Quezon; Rizal
+retail_pork_volatility_cv,A1,supporting (food price component),within-quarter CV,province,derived,SD / mean of the 3 months,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_pork_yoy_pct,A1,supporting (food price component),% YoY,province,derived,YoY of 2021+ quarterly mean,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_tilapia_price_php_kg,A1,supporting (food price component),PHP/kg (quarter mean),province,"PSA OpenSTAT (retail_fish, E118)",quarterly mean of 3 published months,day 15 of m+1 (rule),Batangas; Cavite; Laguna; Quezon; Rizal
+retail_tilapia_volatility_cv,A1,supporting (food price component),within-quarter CV,province,derived,SD / mean of the 3 months,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+retail_tilapia_yoy_pct,A1,supporting (food price component),% YoY,province,derived,YoY of 2021+ quarterly mean,as source,Batangas; Cavite; Laguna; Quezon; Rizal
+cpi_bottom30_food_yoy_pct,A1,supporting (redundant: r = 0.94 with all-income food CPI),% YoY,province,PSA OpenSTAT 0022M4ABIR2 (E118),quarterly mean,day 10 of m+1,Batangas; Cavite; Laguna; Quezon; Rizal
+palay_production_t,C3,direct,metric tons (as published),province,"PSA OpenSTAT (prod_palay_corn, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+palay_production_yoy_pct,C3,direct,% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+corn_production_t,C3,direct,metric tons (as published),province,"PSA OpenSTAT (prod_palay_corn, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+corn_production_yoy_pct,C3,direct,% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+fisheries_production_t,C4,direct,metric tons (as published),province,"PSA OpenSTAT (prod_fisheries, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+fisheries_production_yoy_pct,C4,direct,% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+aquaculture_production_t,C4,supporting (subsector of C4),metric tons (as published),province,"PSA OpenSTAT (prod_aquaculture, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+aquaculture_production_yoy_pct,C4,supporting (subsector of C4),% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+vegetables_rootcrops_production_t,UNASSIGNED,unassigned (availability support),metric tons (as published),province,"PSA OpenSTAT (prod_vegetables_rootcrops, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+vegetables_rootcrops_production_yoy_pct,UNASSIGNED,unassigned (availability support),% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+chicken_production_t,UNASSIGNED,unassigned (availability support; 2023+),metric tons (as published),province,"PSA OpenSTAT (prod_chicken, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+chicken_production_yoy_pct,UNASSIGNED,unassigned (availability support; 2023+),% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+livestock_production_t,UNASSIGNED,unassigned (availability support; 2023+),metric tons (as published),province,"PSA OpenSTAT (prod_livestock, E118)",quarterly as published (sum over listed items where needed),quarter q at start of q+2 (rule),Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+livestock_production_yoy_pct,UNASSIGNED,unassigned (availability support; 2023+),% YoY,province,derived,YoY of 2021+ quarterly value,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+C3_palay_corn_drop,C3,direct (FIRI C3 definition),% (minus lower YoY),province,derived,"-min(palay YoY, corn YoY)",as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+C4_fisheries_drop,C4,direct (FIRI C4 definition),% (minus YoY),province,derived,-fisheries YoY,as source,Batangas; Cavite; Laguna; Quezon; Region IV-A; Rizal
+oni_quarter_mean,C1,supporting (ENSO state behind the C1 advisory),degC anomaly,global/national,NOAA CPC ONI (E114),quarterly mean,day 10 of m+1 (rule),PHILIPPINES (global index)
+C1_el_nino_in_force,C1,direct (served C1),0/1,national,PAGASA ENSO items (enso_context.py),state in force before the issue,dated items,PHILIPPINES
+C2_typhoons_300km,C2,direct (served C2),storms in quarter,province,IBTrACS via pagasa_climate.parquet,count of distinct storms within 300 km,quarter complete,Batangas; Cavite; Laguna; Quezon; Rizal
+typhoons_local_100km,C2,supporting (local exposure),storms in quarter,province,IBTrACS raw (corrected pipeline),count within 100 km,quarter complete,Batangas; Cavite; Laguna; Quezon; Rizal
+typhoons_PAR,C2,supporting (national exposure),storms in quarter,national,IBTrACS PAR box (E114),count,quarter complete,PHILIPPINES
+rainfall_total_mm,UNASSIGNED,unassigned (climate-domain support; no matching FIRI indicator),mm per quarter,province (centroid point),NASA POWER (E118),quarterly total,first day of m+2 (rule),Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal
+rainfall_anomaly_mm,UNASSIGNED,unassigned (climate-domain support),vs mean of the same quarter in earlier 2021+ years,province (centroid point),derived,value minus earlier same-quarter mean (2021+),as source,Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal
+temperature_mean_c,UNASSIGNED,unassigned (climate-domain support; no matching FIRI indicator),degC,province (centroid point),NASA POWER (E118),quarterly mean,first day of m+2 (rule),Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal
+temperature_anomaly_c,UNASSIGNED,unassigned (climate-domain support),vs mean of the same quarter in earlier 2021+ years,province (centroid point),derived,value minus earlier same-quarter mean (2021+),as source,Batangas; CALABARZON (mean of 5 province points); Cavite; Laguna; Quezon; Rizal
+unemployment_rate_pct,E1,direct source,% (quarter mean of survey months),national,PSA LFS (E114),mean of available survey months in the quarter,first day of m+3 (rule),PHILIPPINES
+E1_unemployment_change_pp,E1,direct (FIRI E1 definition),pp vs 4 quarters earlier,national,derived,change vs same quarter a year earlier (2021+),as source,PHILIPPINES
+remittances_usd_bn,E2,direct source,USD bn,national,BSP via dated news reports (corrected pipeline),quarterly as reported,first dated report; else start of q+2 (rule),PHILIPPINES
+E2_remittance_decline_pct,E2,direct (FIRI E2 definition),% (minus YoY),national,derived,-YoY (2021+),as source,PHILIPPINES
+N1_fssi_v3,N1,direct (served N1),index,province,aiPHeed news corpus,FSSI-v3 (needs >= 5 admitted articles),articles dated,Batangas; Cavite; Laguna; Quezon; Rizal
+N1_admitted_articles,N1,supporting (coverage),count,province,aiPHeed news corpus,count,articles dated,Batangas; Cavite; Laguna; Quezon; Rizal
+news_gdelt_agri_supply_share,N1,supporting (national news signal),share of monitored articles,national,GDELT DOC (E114),quarterly mean of monthly shares,quarter complete,PHILIPPINES
+news_gdelt_assistance_share,N1,supporting (national news signal),share of monitored articles,national,GDELT DOC (E114),quarterly mean of monthly shares,quarter complete,PHILIPPINES
+news_gdelt_jobs_income_share,N1,supporting (national news signal),share of monitored articles,national,GDELT DOC (E114),quarterly mean of monthly shares,quarter complete,PHILIPPINES
+news_gdelt_shortage_share,N1,supporting (national news signal),share of monitored articles,national,GDELT DOC (E114),quarterly mean of monthly shares,quarter complete,PHILIPPINES
+H1_bl_latest,H1,direct (latest published SWS Balance Luzon reading),%,region (Balance Luzon),"SWS tables (E114, non-commissioned)",mean of rounds of the newest quarter published before issue,published < issue (verified),Balance Luzon
+H1_bl_previous,H1,direct (latest published SWS Balance Luzon reading),%,region (Balance Luzon),"SWS tables (E114, non-commissioned)",the quarter before that,published < issue (verified),Balance Luzon
+H1_bl_change,H1,direct (latest published SWS Balance Luzon reading),%,region (Balance Luzon),"SWS tables (E114, non-commissioned)",latest - previous,published < issue (verified),Balance Luzon
+H1_staleness_q,H1,direct (latest published SWS Balance Luzon reading),quarters,region (Balance Luzon),"SWS tables (E114, non-commissioned)",origin - quarter of latest reading,published < issue (verified),Balance Luzon
+A1_food_projection_asof,A1,"direct (served A1/A2 definition, as-of thresholds)",pp,province,corrected pipeline (provincial_profile),projection minus P60 of quarters published before issue (2021+),CPI to month 2 of t; release ledger status,5 provinces
+A1_gap_projection_asof,A1,"direct (served A1/A2 definition, as-of thresholds)",pp,province,corrected pipeline (provincial_profile),projection minus P60 of quarters published before issue (2021+),CPI to month 2 of t; release ledger status,5 provinces
+A2_headline_above_usual_asof,A2,"direct (served A1/A2 definition, as-of thresholds)",pp,province,corrected pipeline (provincial_profile),projection minus P60 of quarters published before issue (2021+),CPI to month 2 of t; release ledger status,5 provinces

@@ -1,0 +1,48 @@
+........................................................................ [  5%]
+...........................................................s...s.....s.. [ 10%]
+s.........s......sss.........................................ss.s.s..... [ 16%]
+........................................................................ [ 21%]
+........................................................................ [ 26%]
+........................................................................ [ 32%]
+........................................................................ [ 37%]
+........................................................................ [ 42%]
+..............................................................ss.s...... [ 48%]
+..sss................................................................... [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 64%]
+........................................................................ [ 69%]
+........................................................................ [ 74%]
+........................................................................ [ 80%]
+........................................................................ [ 85%]
+........................................................................ [ 90%]
+........................................................................ [ 96%]
+.....................................................                    [100%]
+============================== warnings summary ===============================
+tests/unit/test_e126_maintenance.py::test_zero_versus_missing_and_dedup
+  C:\Users\admin\aipheed_final\aipheed-backend-aligned\experiments\E126_FIRI3_Pre_Issuance_Maintenance\runner\run_e126.py:127: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    return pd.concat([df, z], ignore_index=True)
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_v2_defects.py::test_d3_reexport_identical_and_version_consistent
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [5] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [3] tests\integration\test_api_dashboard.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the E20 forecast-quarter / two-model contract (is_forecast_quarter, originQuarter, E20 horizon edges)
+SKIPPED [2] tests\integration\test_api_report.py: E34 superseded by the E31 promotion: asserts the legacy food-availability LightGBM (its target name, majority-class and seasonal-persistence baselines, seasonal/series_history driver groups)
+SKIPPED [3] tests\integration\test_plain_report.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+SKIPPED [3] tests\integration\test_report_data.py: E34 superseded by the E31 promotion: plain-language report built on the E20 path (report_data/plain_report call dashboard.is_forecast_quarter)
+1331 passed, 18 skipped, 4 warnings in 233.04s (0:03:53)

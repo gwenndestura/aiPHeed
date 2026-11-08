@@ -1,0 +1,299 @@
+{
+ "version": "pfi-1.0",
+ "model_version": "pfi-1.0",
+ "artifact_sha256": "d7c5849cf5763fd555df218b70fc48d0a4a6f5c193fd95d2410a9cbcae50327e",
+ "issued_utc": "2026-11-03T04:34:38+00:00",
+ "issue_date": "2026-11-03",
+ "current_quarter": "2026-Q4",
+ "target_quarter": "2027-Q1",
+ "horizon": 1,
+ "what_is_forecast": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+ "geographic_resolution": "province (5); LGUs inherit their province's value",
+ "data_cutoff": "2026-10-14",
+ "inputs": {
+  "sws_balance_luzon_window": [
+   {
+    "quarter": "2026-Q2",
+    "kind": "observed",
+    "value": 17.3,
+    "se": 3.061224,
+    "published": "2026-08-24"
+   },
+   {
+    "quarter": "2026-Q3",
+    "kind": "observed",
+    "value": 23.6,
+    "se": 2.040816,
+    "published": "2026-10-14"
+   },
+   {
+    "quarter": "2026-Q4",
+    "kind": "projected",
+    "value": 21.032417,
+    "se": 5.328922,
+    "age_quarters": 1
+   },
+   {
+    "quarter": "2027-Q1",
+    "kind": "projected",
+    "value": 19.312136,
+    "se": 5.328922,
+    "age_quarters": 2
+   }
+  ],
+  "sws_latest_quarter": "2026-Q3",
+  "sws_latest_published": "2026-10-14",
+  "sws_normal_5y": 15.819444,
+  "state_reference_year": 2025,
+  "lambda_median": 0.515785,
+  "level_model": "M2 subsistence (food poverty)"
+ },
+ "region": {
+  "current_pct": 23.414267,
+  "forecast": {
+   "pct": 23.483543,
+   "p05": 19.430902,
+   "p10": 20.356672,
+   "p50": 23.483543,
+   "p90": 28.007593,
+   "p95": 30.348329
+  },
+  "survey_2023_pct": 19.1,
+  "survey_2023_ci95": [
+   17.0,
+   21.1
+  ],
+  "state_update_2025": {
+   "prior_pct": 26.27154,
+   "measured_pct": 22.6,
+   "weight_on_measurement": 0.938793,
+   "posterior_pct": 22.806671,
+   "status": "provisional_secondary"
+  }
+ },
+ "provinces": [
+  {
+   "province": "Batangas",
+   "population_2024": 2994795,
+   "estimate_2023": {
+    "pct": 19.313917,
+    "kind": "model estimate anchored to the 2023 CALABARZON survey",
+    "p05": 15.753416,
+    "p10": 16.494098,
+    "p50": 19.313917,
+    "p90": 22.482795,
+    "p95": 23.398069
+   },
+   "current": {
+    "pct": 23.802807,
+    "kind": "model estimate (latest SWS quarters, no projection)",
+    "through_quarter": "2026-Q3",
+    "p05": 18.851516,
+    "p10": 19.886417,
+    "p50": 23.802807,
+    "p90": 28.68949,
+    "p95": 30.374642
+   },
+   "forecast": {
+    "pct": 23.85196,
+    "kind": "forecast",
+    "target_quarter": "2027-Q1",
+    "p05": 18.256501,
+    "p10": 19.420454,
+    "p50": 23.85196,
+    "p90": 29.687978,
+    "p95": 31.950563,
+    "class": "HIGH",
+    "p_high": 0.76425,
+    "p_rise_vs_current": 0.51325,
+    "high_line_pct": 21.363917,
+    "persons_in_food_insecure_households_approx": 714000
+   },
+   "contributions_pp": {
+    "regional_2023_level": 19.101447,
+    "province_structure": 0.270785,
+    "change_since_2023": 4.460323
+   },
+   "priority_rank": 2
+  },
+  {
+   "province": "Cavite",
+   "population_2024": 4573884,
+   "estimate_2023": {
+    "pct": 18.349225,
+    "kind": "model estimate anchored to the 2023 CALABARZON survey",
+    "p05": 15.3265,
+    "p10": 15.968754,
+    "p50": 18.349225,
+    "p90": 20.937061,
+    "p95": 21.681529
+   },
+   "current": {
+    "pct": 22.645536,
+    "kind": "model estimate (latest SWS quarters, no projection)",
+    "through_quarter": "2026-Q3",
+    "p05": 18.303572,
+    "p10": 19.191223,
+    "p50": 22.645536,
+    "p90": 27.007117,
+    "p95": 28.620209
+   },
+   "forecast": {
+    "pct": 22.697285,
+    "kind": "forecast",
+    "target_quarter": "2027-Q1",
+    "p05": 17.673174,
+    "p10": 18.73065,
+    "p50": 22.697285,
+    "p90": 27.947158,
+    "p95": 30.341204,
+    "class": "HIGH",
+    "p_high": 0.76825,
+    "p_rise_vs_current": 0.51325,
+    "high_line_pct": 20.399225,
+    "persons_in_food_insecure_households_approx": 1038000
+   },
+   "contributions_pp": {
+    "regional_2023_level": 19.101447,
+    "province_structure": -0.792197,
+    "change_since_2023": 4.378672
+   },
+   "priority_rank": 5
+  },
+  {
+   "province": "Laguna",
+   "population_2024": 3687345,
+   "estimate_2023": {
+    "pct": 18.368337,
+    "kind": "model estimate anchored to the 2023 CALABARZON survey",
+    "p05": 15.129801,
+    "p10": 15.815468,
+    "p50": 18.368337,
+    "p90": 21.17098,
+    "p95": 22.003596
+   },
+   "current": {
+    "pct": 22.693377,
+    "kind": "model estimate (latest SWS quarters, no projection)",
+    "through_quarter": "2026-Q3",
+    "p05": 18.118593,
+    "p10": 19.056574,
+    "p50": 22.693377,
+    "p90": 27.165565,
+    "p95": 28.824964
+   },
+   "forecast": {
+    "pct": 22.746259,
+    "kind": "forecast",
+    "target_quarter": "2027-Q1",
+    "p05": 17.429203,
+    "p10": 18.633905,
+    "p50": 22.746259,
+    "p90": 28.056072,
+    "p95": 30.399072,
+    "class": "HIGH",
+    "p_high": 0.7602,
+    "p_rise_vs_current": 0.51325,
+    "high_line_pct": 20.418337,
+    "persons_in_food_insecure_households_approx": 839000
+   },
+   "contributions_pp": {
+    "regional_2023_level": 19.101447,
+    "province_structure": -0.784344,
+    "change_since_2023": 4.379286
+   },
+   "priority_rank": 4
+  },
+  {
+   "province": "Quezon",
+   "population_2024": 2260669,
+   "estimate_2023": {
+    "pct": 21.427024,
+    "kind": "model estimate anchored to the 2023 CALABARZON survey",
+    "p05": 17.263848,
+    "p10": 18.121839,
+    "p50": 21.427024,
+    "p90": 25.028051,
+    "p95": 26.046131
+   },
+   "current": {
+    "pct": 26.202818,
+    "kind": "model estimate (latest SWS quarters, no projection)",
+    "through_quarter": "2026-Q3",
+    "p05": 20.660627,
+    "p10": 21.817576,
+    "p50": 26.202818,
+    "p90": 31.589683,
+    "p95": 33.565344
+   },
+   "forecast": {
+    "pct": 26.2909,
+    "kind": "forecast",
+    "target_quarter": "2027-Q1",
+    "p05": 20.02202,
+    "p10": 21.382536,
+    "p50": 26.2909,
+    "p90": 32.578031,
+    "p95": 35.170922,
+    "class": "HIGH",
+    "p_high": 0.7646,
+    "p_rise_vs_current": 0.51325,
+    "high_line_pct": 23.477024,
+    "persons_in_food_insecure_households_approx": 594000
+   },
+   "contributions_pp": {
+    "regional_2023_level": 19.101447,
+    "province_structure": 2.521228,
+    "change_since_2023": 4.623343
+   },
+   "priority_rank": 1
+  },
+  {
+   "province": "Rizal",
+   "population_2024": 3416541,
+   "estimate_2023": {
+    "pct": 18.783614,
+    "kind": "model estimate anchored to the 2023 CALABARZON survey",
+    "p05": 15.387289,
+    "p10": 16.122831,
+    "p50": 18.783614,
+    "p90": 21.674074,
+    "p95": 22.524122
+   },
+   "current": {
+    "pct": 23.161075,
+    "kind": "model estimate (latest SWS quarters, no projection)",
+    "through_quarter": "2026-Q3",
+    "p05": 18.497772,
+    "p10": 19.468409,
+    "p50": 23.161075,
+    "p90": 27.714495,
+    "p95": 29.387705
+   },
+   "forecast": {
+    "pct": 23.223416,
+    "kind": "forecast",
+    "target_quarter": "2027-Q1",
+    "p05": 17.874979,
+    "p10": 19.027983,
+    "p50": 23.223416,
+    "p90": 28.665537,
+    "p95": 31.056259,
+    "class": "HIGH",
+    "p_high": 0.76125,
+    "p_rise_vs_current": 0.51325,
+    "high_line_pct": 20.833614,
+    "persons_in_food_insecure_households_approx": 793000
+   },
+   "contributions_pp": {
+    "regional_2023_level": 19.101447,
+    "province_structure": -0.321496,
+    "change_since_2023": 4.415196
+   },
+   "priority_rank": 3
+  }
+ ],
+ "class_rule": "HIGH when the chance is at least 50% that the province's rate in 2027-Q1 is above its 2023 estimate plus 2.1 points (the 2023 survey's margin of error): significantly above the last measured level.",
+ "evidence_status": "Forecast from a survey-anchored model. Provincial levels are model estimates (no provincial FIES measurement exists after the 2023 regional one); quarterly values are not measured by any survey, so this forecast cannot be scored quarterly. It is registered and will be scored against the next published FIES wave.",
+ "sha256": "a7f7ba7c97978503ba6b559502d7136a97531f98b22b6078d331558e74a21a9b"
+}

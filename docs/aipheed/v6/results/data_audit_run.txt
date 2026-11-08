@@ -1,0 +1,87 @@
+[transformers] The tokenizer you are loading from 'joeddav/xlm-roberta-large-xnli' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  56%|#####6    | 221/393 [00:00<00:00, 2202.10it/s]Loading weights: 100%|##########| 393/393 [00:00<00:00, 2994.43it/s]
+[transformers] [1mXLMRobertaForSequenceClassification LOAD REPORT[0m from: joeddav/xlm-roberta-large-xnli
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+roberta.pooler.dense.weight | UNEXPECTED |  | 
+roberta.pooler.dense.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+{
+ "A_sws": {
+  "backend_copy_equals_E110_source": true,
+  "validation_problems": [],
+  "fieldwork_midpoint_quarter_equals_label": 23,
+  "rounds": 23,
+  "duplicate_rounds": 0,
+  "commissioned_kept": 0,
+  "publication_lag_days": {
+   "min": 17.0,
+   "50%": 42.0,
+   "max": 99.0
+  },
+  "independent_source": "SWS media release 14 Oct 2026, Tables 1-6 (sha256 recorded in the E114 file; PDF not re-opened this session)",
+  "independent_rows_compared": 88,
+  "independent_max_abs_diff": 0.0,
+  "independent_mismatches_gt_0.05": [],
+  "unmatched_rounds": [
+   "2025-04-23/2025-04-28"
+  ],
+  "lead2_months_issue_to_target_fieldwork": {
+   "min": 4.763469119579501,
+   "median": 5.716162943495401,
+   "max": 5.88042049934297
+  },
+  "lead2_months_latest_fieldwork_to_issue": {
+   "median": 3.350854139290407
+  },
+  "lead2_months_latest_fieldwork_to_target_fieldwork_median": 8.886333771353481
+ },
+ "B_cpi": {
+  "rows": 12,
+  "max_abs_diff": 3.552713678800501e-15,
+  "all_periods_before_issue": true,
+  "regions_per_area": {
+   "balance_luzon": 7,
+   "metro_manila": 1,
+   "mindanao": 6,
+   "visayas": 4
+  }
+ },
+ "C_D_features": {
+  "snapshot_rows": 88,
+  "typhoons_PAR_missing": 0,
+  "oni_quarter_mean_missing": 0,
+  "E1_unemployment_change_pp_missing": 16,
+  "news_gdelt_shortage_share_missing": 0,
+  "rice_yoy_missing": 16,
+  "values_with_period_not_before_issue_quarter": 0,
+  "E119_status_types": {
+   "rule_unverified": 512,
+   "verified": 274,
+   "missing": 134
+  },
+  "poverty_ncr_2025_raw_vs_snapshot": [
+   1.2,
+   1.2
+  ]
+ },
+ "E_F_firi_nlp": {
+  "firi_issues": [
+   "2022-04-01",
+   "2024-07-01",
+   "2026-10-01"
+  ],
+  "firi_rows": 15,
+  "firi_max_abs_diff": 4.892091581137903e-07,
+  "fssi_rows_with_value": 5,
+  "fssi_max_abs_diff": 0.0,
+  "xlmr": {
+   "model_key": "joeddav/xlm-roberta-large-xnli@b227ee8435ce|clf:35119d382e163448",
+   "scored_rows_matching_key": 321,
+   "sample": 12,
+   "max_abs_diff": 0.0
+  }
+ }
+}

@@ -1,0 +1,1754 @@
+{
+ "version": "e144-1.0",
+ "protocol_version": "E144-P2",
+ "run_utc": "2026-11-04T11:35:49.738228+00:00",
+ "primary": {
+  "by_horizon": {
+   "h1": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.6333333333333333,
+      "balanced_accuracy": 0.6904761904761905,
+      "precision": 0.8846153846153846,
+      "recall_high": 0.5476190476190477,
+      "f1": 0.6764705882352942,
+      "auc": 0.7182539682539683,
+      "brier": 0.2414115802860197,
+      "ece": 0.24592891060636032,
+      "confusion": {
+       "tp": 23,
+       "fp": 3,
+       "tn": 15,
+       "fn": 19
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.6333333333333333,
+      "balanced_accuracy": 0.7380952380952381,
+      "precision": 1.0,
+      "recall_high": 0.47619047619047616,
+      "f1": 0.6451612903225806,
+      "auc": 0.8095238095238095,
+      "brier": 0.24542234410382005,
+      "ece": 0.29416250999451443,
+      "confusion": {
+       "tp": 20,
+       "fp": 0,
+       "tn": 18,
+       "fn": 22
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.6166666666666667,
+      "balanced_accuracy": 0.7261904761904762,
+      "precision": 1.0,
+      "recall_high": 0.4523809523809524,
+      "f1": 0.6229508196721312,
+      "auc": 0.6765873015873016,
+      "brier": 0.2447200591131229,
+      "ece": 0.24891220668463304,
+      "confusion": {
+       "tp": 19,
+       "fp": 0,
+       "tn": 18,
+       "fn": 23
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.5333333333333333,
+      "balanced_accuracy": 0.5714285714285714,
+      "precision": 0.7692307692307693,
+      "recall_high": 0.47619047619047616,
+      "f1": 0.588235294117647,
+      "auc": 0.6044973544973544,
+      "brier": 0.3055235030566097,
+      "ece": 0.2979350353720233,
+      "confusion": {
+       "tp": 20,
+       "fp": 6,
+       "tn": 12,
+       "fn": 22
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.6,
+      "balanced_accuracy": 0.7142857142857143,
+      "precision": 1.0,
+      "recall_high": 0.42857142857142855,
+      "f1": 0.6,
+      "auc": 0.6521164021164021,
+      "brier": 0.26792989285398655,
+      "ece": 0.28214147247718174,
+      "confusion": {
+       "tp": 18,
+       "fp": 0,
+       "tn": 18,
+       "fn": 24
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.6166666666666667,
+      "balanced_accuracy": 0.6944444444444444,
+      "precision": 0.9130434782608695,
+      "recall_high": 0.5,
+      "f1": 0.6461538461538461,
+      "auc": 0.7572751322751323,
+      "brier": 0.25000371323346454,
+      "ece": 0.2898191516856349,
+      "confusion": {
+       "tp": 21,
+       "fp": 2,
+       "tn": 16,
+       "fn": 21
+      }
+     },
+     "B1 Persistence": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.3,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.7453703703703703,
+      "brier": 0.30404329559809967,
+      "ece": 0.34015824880435896,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 18,
+       "fn": 42
+      }
+     },
+     "Climatology": {
+      "n": 60,
+      "n_high": 42,
+      "accuracy": 0.3,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.7513227513227513,
+      "brier": 0.3285348924058484,
+      "ece": 0.3572488296917612,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 18,
+       "fn": 42
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.06263171531207998,
+     "ci95": [
+      -0.11919141049262676,
+      -0.0067672356048567766
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": -0.004010763817800356,
+     "ci95": [
+      -0.06431603194134972,
+      0.05434050481732716
+     ],
+     "p_ge_0": 0.455
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.08712331211982868,
+     "ci95": [
+      -0.1595389563363398,
+      -0.01883745700726566
+     ]
+    },
+    "auc_ci95": [
+     0.5430909189090124,
+     0.858471359558316
+    ],
+    "reliability": {
+     "R1_auc": true,
+     "R2_recall_precision": true,
+     "R3_below_climatology": true,
+     "R4_below_persistence": true,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h2": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.5714285714285714,
+      "balanced_accuracy": 0.60625,
+      "precision": 0.8076923076923077,
+      "recall_high": 0.525,
+      "f1": 0.6363636363636364,
+      "auc": 0.65078125,
+      "brier": 0.2648121942747751,
+      "ece": 0.2576053790986428,
+      "confusion": {
+       "tp": 21,
+       "fp": 5,
+       "tn": 11,
+       "fn": 19
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.6071428571428571,
+      "balanced_accuracy": 0.725,
+      "precision": 1.0,
+      "recall_high": 0.45,
+      "f1": 0.6206896551724138,
+      "auc": 0.7109375,
+      "brier": 0.26555691014722566,
+      "ece": 0.30222535225893093,
+      "confusion": {
+       "tp": 18,
+       "fp": 0,
+       "tn": 16,
+       "fn": 22
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.5535714285714286,
+      "balanced_accuracy": 0.6875,
+      "precision": 1.0,
+      "recall_high": 0.375,
+      "f1": 0.5454545454545454,
+      "auc": 0.5859375,
+      "brier": 0.2873190824516572,
+      "ece": 0.29054457629148644,
+      "confusion": {
+       "tp": 15,
+       "fp": 0,
+       "tn": 16,
+       "fn": 25
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.44642857142857145,
+      "balanced_accuracy": 0.48125,
+      "precision": 0.6956521739130435,
+      "recall_high": 0.4,
+      "f1": 0.507936507936508,
+      "auc": 0.4359375,
+      "brier": 0.38497506782696045,
+      "ece": 0.3629707504365794,
+      "confusion": {
+       "tp": 16,
+       "fp": 7,
+       "tn": 9,
+       "fn": 24
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.5357142857142857,
+      "balanced_accuracy": 0.675,
+      "precision": 1.0,
+      "recall_high": 0.35,
+      "f1": 0.5185185185185185,
+      "auc": 0.6187499999999999,
+      "brier": 0.2856970313150405,
+      "ece": 0.30898584444233224,
+      "confusion": {
+       "tp": 14,
+       "fp": 0,
+       "tn": 16,
+       "fn": 26
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.5535714285714286,
+      "balanced_accuracy": 0.65,
+      "precision": 0.8947368421052632,
+      "recall_high": 0.425,
+      "f1": 0.576271186440678,
+      "auc": 0.65859375,
+      "brier": 0.31831747803974747,
+      "ece": 0.3421078335050447,
+      "confusion": {
+       "tp": 17,
+       "fp": 2,
+       "tn": 14,
+       "fn": 23
+      }
+     },
+     "B1 Persistence": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.2857142857142857,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.6921875,
+      "brier": 0.3219323894677729,
+      "ece": 0.36574065100701514,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 16,
+       "fn": 40
+      }
+     },
+     "Climatology": {
+      "n": 56,
+      "n_high": 40,
+      "accuracy": 0.2857142857142857,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.6843750000000001,
+      "brier": 0.33701411168349515,
+      "ece": 0.3742039104712404,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 16,
+       "fn": 40
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.057120195192997825,
+     "ci95": [
+      -0.13852094021688824,
+      0.02206875853216755
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": -0.0007447158724505631,
+     "ci95": [
+      -0.10227016808450162,
+      0.08752572172816593
+     ],
+     "p_ge_0": 0.5195
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.07220191740872006,
+     "ci95": [
+      -0.1606176644311489,
+      0.011061695990096553
+     ]
+    },
+    "auc_ci95": [
+     0.44726790716286513,
+     0.8583333333333332
+    ],
+    "reliability": {
+     "R1_auc": false,
+     "R2_recall_precision": true,
+     "R3_below_climatology": true,
+     "R4_below_persistence": false,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h3": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.6730769230769231,
+      "balanced_accuracy": 0.7307692307692308,
+      "precision": 0.9230769230769231,
+      "recall_high": 0.6153846153846154,
+      "f1": 0.7384615384615384,
+      "auc": 0.7790927021696253,
+      "brier": 0.2261891380485526,
+      "ece": 0.2742233570552643,
+      "confusion": {
+       "tp": 24,
+       "fp": 2,
+       "tn": 11,
+       "fn": 15
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.6153846153846154,
+      "balanced_accuracy": 0.7435897435897436,
+      "precision": 1.0,
+      "recall_high": 0.48717948717948717,
+      "f1": 0.6551724137931034,
+      "auc": 0.7140039447731755,
+      "brier": 0.2650930509548895,
+      "ece": 0.3083854679714875,
+      "confusion": {
+       "tp": 19,
+       "fp": 0,
+       "tn": 13,
+       "fn": 20
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.5192307692307693,
+      "balanced_accuracy": 0.6794871794871795,
+      "precision": 1.0,
+      "recall_high": 0.358974358974359,
+      "f1": 0.5283018867924528,
+      "auc": 0.5355029585798816,
+      "brier": 0.29502329926249576,
+      "ece": 0.32188443184710736,
+      "confusion": {
+       "tp": 14,
+       "fp": 0,
+       "tn": 13,
+       "fn": 25
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.38461538461538464,
+      "balanced_accuracy": 0.4358974358974359,
+      "precision": 0.6842105263157895,
+      "recall_high": 0.3333333333333333,
+      "f1": 0.44827586206896547,
+      "auc": 0.3293885601577909,
+      "brier": 0.4295816052140298,
+      "ece": 0.4195746526256825,
+      "confusion": {
+       "tp": 13,
+       "fp": 6,
+       "tn": 7,
+       "fn": 26
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.4423076923076923,
+      "balanced_accuracy": 0.6282051282051282,
+      "precision": 1.0,
+      "recall_high": 0.2564102564102564,
+      "f1": 0.4081632653061224,
+      "auc": 0.5167652859960552,
+      "brier": 0.3166592526221356,
+      "ece": 0.3543358445759766,
+      "confusion": {
+       "tp": 10,
+       "fp": 0,
+       "tn": 13,
+       "fn": 29
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.46153846153846156,
+      "balanced_accuracy": 0.5641025641025641,
+      "precision": 0.8235294117647058,
+      "recall_high": 0.358974358974359,
+      "f1": 0.5,
+      "auc": 0.5512820512820513,
+      "brier": 0.3748752496612719,
+      "ece": 0.4019251786770422,
+      "confusion": {
+       "tp": 14,
+       "fp": 3,
+       "tn": 10,
+       "fn": 25
+      }
+     },
+     "B1 Persistence": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.25,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.7307692307692307,
+      "brier": 0.33671266064207417,
+      "ece": 0.4036483789065029,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 13,
+       "fn": 39
+      }
+     },
+     "Climatology": {
+      "n": 52,
+      "n_high": 39,
+      "accuracy": 0.25,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.7130177514792899,
+      "brier": 0.3527165657108093,
+      "ece": 0.4124805379668057,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 13,
+       "fn": 39
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.11052352259352158,
+     "ci95": [
+      -0.17635321545023394,
+      -0.0411297986721582
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": -0.03890391290633691,
+     "ci95": [
+      -0.14102726746171215,
+      0.04689596085219068
+     ],
+     "p_ge_0": 0.1995
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.1265274276622567,
+     "ci95": [
+      -0.19839297860249525,
+      -0.056910223772199564
+     ]
+    },
+    "auc_ci95": [
+     0.6340853658536585,
+     0.9388673469387756
+    ],
+    "reliability": {
+     "R1_auc": true,
+     "R2_recall_precision": true,
+     "R3_below_climatology": true,
+     "R4_below_persistence": true,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h4": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.5625,
+      "balanced_accuracy": 0.7307692307692308,
+      "precision": 1.0,
+      "recall_high": 0.46153846153846156,
+      "f1": 0.631578947368421,
+      "auc": 0.7606837606837606,
+      "brier": 0.28211890351388397,
+      "ece": 0.3769520166719843,
+      "confusion": {
+       "tp": 18,
+       "fp": 0,
+       "tn": 9,
+       "fn": 21
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.5833333333333334,
+      "balanced_accuracy": 0.7435897435897436,
+      "precision": 1.0,
+      "recall_high": 0.48717948717948717,
+      "f1": 0.6551724137931034,
+      "auc": 0.7635327635327636,
+      "brier": 0.28084887497601735,
+      "ece": 0.3726846177222578,
+      "confusion": {
+       "tp": 19,
+       "fp": 0,
+       "tn": 9,
+       "fn": 20
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.3958333333333333,
+      "balanced_accuracy": 0.6282051282051282,
+      "precision": 1.0,
+      "recall_high": 0.2564102564102564,
+      "f1": 0.4081632653061224,
+      "auc": 0.5341880341880343,
+      "brier": 0.34085402285012273,
+      "ece": 0.41333029405746763,
+      "confusion": {
+       "tp": 10,
+       "fp": 0,
+       "tn": 9,
+       "fn": 29
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.3958333333333333,
+      "balanced_accuracy": 0.5,
+      "precision": 0.8125,
+      "recall_high": 0.3333333333333333,
+      "f1": 0.4727272727272727,
+      "auc": 0.32763532763532766,
+      "brier": 0.4433666619881406,
+      "ece": 0.4624245640736774,
+      "confusion": {
+       "tp": 13,
+       "fp": 3,
+       "tn": 6,
+       "fn": 26
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.3541666666666667,
+      "balanced_accuracy": 0.6025641025641025,
+      "precision": 1.0,
+      "recall_high": 0.20512820512820512,
+      "f1": 0.3404255319148936,
+      "auc": 0.5698005698005699,
+      "brier": 0.33886022500352125,
+      "ece": 0.43119242926499274,
+      "confusion": {
+       "tp": 8,
+       "fp": 0,
+       "tn": 9,
+       "fn": 31
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.4375,
+      "balanced_accuracy": 0.611111111111111,
+      "precision": 0.9285714285714286,
+      "recall_high": 0.3333333333333333,
+      "f1": 0.4905660377358491,
+      "auc": 0.5213675213675215,
+      "brier": 0.40417454008686704,
+      "ece": 0.46954522964778705,
+      "confusion": {
+       "tp": 13,
+       "fp": 1,
+       "tn": 8,
+       "fn": 26
+      }
+     },
+     "B1 Persistence": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.1875,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.7535612535612537,
+      "brier": 0.36448484437533896,
+      "ece": 0.4700601174648177,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 9,
+       "fn": 39
+      }
+     },
+     "Climatology": {
+      "n": 48,
+      "n_high": 39,
+      "accuracy": 0.1875,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.6709401709401709,
+      "brier": 0.3776652571476154,
+      "ece": 0.4778359567132622,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 9,
+       "fn": 39
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.08236594086145499,
+     "ci95": [
+      -0.15686134141667088,
+      -0.0024130091536214223
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": 0.0012700285378666187,
+     "ci95": [
+      -0.11999404582754702,
+      0.1038398594143796
+     ],
+     "p_ge_0": 0.548
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.09554635363373143,
+     "ci95": [
+      -0.17042806372700134,
+      -0.01742898426816052
+     ]
+    },
+    "auc_ci95": [
+     0.5452947052947053,
+     0.9481481481481481
+    ],
+    "reliability": {
+     "R1_auc": true,
+     "R2_recall_precision": false,
+     "R3_below_climatology": true,
+     "R4_below_persistence": true,
+     "R5_calibration": false,
+     "passes": false
+    }
+   }
+  },
+  "maximum_reliable_lead_time_quarters": 0,
+  "news_holm": {
+   "h3": {
+    "one_sided_p": 0.1995,
+    "level": 0.9875,
+    "news_improves": false
+   },
+   "h1": {
+    "one_sided_p": 0.455,
+    "level": 0.9833333333333333,
+    "news_improves": false
+   },
+   "h2": {
+    "one_sided_p": 0.5195,
+    "level": 0.975,
+    "news_improves": false
+   },
+   "h4": {
+    "one_sided_p": 0.548,
+    "level": 0.95,
+    "news_improves": false
+   }
+  },
+  "n_issues": 16
+ },
+ "secondary": {
+  "by_horizon": {
+   "h1": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.6453488372093024,
+      "balanced_accuracy": 0.6036111111111111,
+      "precision": 0.6410256410256411,
+      "recall_high": 0.3472222222222222,
+      "f1": 0.45045045045045046,
+      "auc": 0.6607638888888889,
+      "brier": 0.23993933450077976,
+      "ece": 0.12122993682206823,
+      "confusion": {
+       "tp": 25,
+       "fp": 14,
+       "tn": 86,
+       "fn": 47
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.6511627906976745,
+      "balanced_accuracy": 0.6047222222222222,
+      "precision": 0.6764705882352942,
+      "recall_high": 0.3194444444444444,
+      "f1": 0.4339622641509434,
+      "auc": 0.6507638888888888,
+      "brier": 0.23723665702802935,
+      "ece": 0.11621906455534133,
+      "confusion": {
+       "tp": 23,
+       "fp": 11,
+       "tn": 89,
+       "fn": 49
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.6918604651162791,
+      "balanced_accuracy": 0.6319444444444444,
+      "precision": 1.0,
+      "recall_high": 0.2638888888888889,
+      "f1": 0.4175824175824176,
+      "auc": 0.5061805555555555,
+      "brier": 0.22851625215456187,
+      "ece": 0.08902294535770287,
+      "confusion": {
+       "tp": 19,
+       "fp": 0,
+       "tn": 100,
+       "fn": 53
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.5697674418604651,
+      "balanced_accuracy": 0.5502777777777779,
+      "precision": 0.484375,
+      "recall_high": 0.4305555555555556,
+      "f1": 0.4558823529411765,
+      "auc": 0.5761111111111111,
+      "brier": 0.2977990752885886,
+      "ece": 0.23828632886328976,
+      "confusion": {
+       "tp": 31,
+       "fp": 33,
+       "tn": 67,
+       "fn": 41
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.686046511627907,
+      "balanced_accuracy": 0.6483333333333333,
+      "precision": 0.7142857142857143,
+      "recall_high": 0.4166666666666667,
+      "f1": 0.5263157894736842,
+      "auc": 0.6616666666666667,
+      "brier": 0.2488312653876118,
+      "ece": 0.1634313726051183,
+      "confusion": {
+       "tp": 30,
+       "fp": 12,
+       "tn": 88,
+       "fn": 42
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.6918604651162791,
+      "balanced_accuracy": 0.6358333333333334,
+      "precision": 0.9130434782608695,
+      "recall_high": 0.2916666666666667,
+      "f1": 0.4421052631578948,
+      "auc": 0.5752083333333333,
+      "brier": 0.23063016627410707,
+      "ece": 0.0535624577952497,
+      "confusion": {
+       "tp": 21,
+       "fp": 2,
+       "tn": 98,
+       "fn": 51
+      }
+     },
+     "B1 Persistence": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.5872093023255814,
+      "balanced_accuracy": 0.5088888888888888,
+      "precision": 0.6666666666666666,
+      "recall_high": 0.027777777777777776,
+      "f1": 0.05333333333333333,
+      "auc": 0.5913194444444444,
+      "brier": 0.24477277582645934,
+      "ece": 0.09179328303649,
+      "confusion": {
+       "tp": 2,
+       "fp": 1,
+       "tn": 99,
+       "fn": 70
+      }
+     },
+     "Climatology": {
+      "n": 172,
+      "n_high": 72,
+      "accuracy": 0.5813953488372093,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.4722222222222222,
+      "brier": 0.25817566900564787,
+      "ece": 0.1599749119812376,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 100,
+       "fn": 72
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.004833441325679588,
+     "ci95": [
+      -0.036608214672615484,
+      0.02443509123278468
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": 0.002702677472750409,
+     "ci95": [
+      -0.022929631541083424,
+      0.027992352319608883
+     ],
+     "p_ge_0": 0.589
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.018236334504868112,
+     "ci95": [
+      -0.05714659681203496,
+      0.017347788526805765
+     ]
+    },
+    "auc_ci95": [
+     0.5257891491224825,
+     0.783680762201244
+    ],
+    "reliability": {
+     "R1_auc": false,
+     "R2_recall_precision": false,
+     "R3_below_climatology": true,
+     "R4_below_persistence": false,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h2": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.6130952380952381,
+      "balanced_accuracy": 0.5685111989459816,
+      "precision": 0.55,
+      "recall_high": 0.3188405797101449,
+      "f1": 0.40366972477064217,
+      "auc": 0.6103791538574146,
+      "brier": 0.25544729337871913,
+      "ece": 0.14293086957042006,
+      "confusion": {
+       "tp": 22,
+       "fp": 18,
+       "tn": 81,
+       "fn": 47
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.625,
+      "balanced_accuracy": 0.5720245937637243,
+      "precision": 0.59375,
+      "recall_high": 0.2753623188405797,
+      "f1": 0.37623762376237624,
+      "auc": 0.5406236275801494,
+      "brier": 0.258368618140226,
+      "ece": 0.14500685860546367,
+      "confusion": {
+       "tp": 19,
+       "fp": 13,
+       "tn": 86,
+       "fn": 50
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.6785714285714286,
+      "balanced_accuracy": 0.6086956521739131,
+      "precision": 1.0,
+      "recall_high": 0.21739130434782608,
+      "f1": 0.3571428571428571,
+      "auc": 0.4066022544283414,
+      "brier": 0.2469430381534249,
+      "ece": 0.10938045022524828,
+      "confusion": {
+       "tp": 15,
+       "fp": 0,
+       "tn": 99,
+       "fn": 54
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.5297619047619048,
+      "balanced_accuracy": 0.5043917435221783,
+      "precision": 0.4166666666666667,
+      "recall_high": 0.36231884057971014,
+      "f1": 0.3875968992248062,
+      "auc": 0.49787732396428047,
+      "brier": 0.32742221200057325,
+      "ece": 0.24919163953613993,
+      "confusion": {
+       "tp": 25,
+       "fp": 35,
+       "tn": 64,
+       "fn": 44
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.6369047619047619,
+      "balanced_accuracy": 0.5909090909090909,
+      "precision": 0.6052631578947368,
+      "recall_high": 0.3333333333333333,
+      "f1": 0.4299065420560747,
+      "auc": 0.5874688918167178,
+      "brier": 0.2788418972216414,
+      "ece": 0.16916272380440384,
+      "confusion": {
+       "tp": 23,
+       "fp": 15,
+       "tn": 84,
+       "fn": 46
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.6785714285714286,
+      "balanced_accuracy": 0.6130873956960914,
+      "precision": 0.8947368421052632,
+      "recall_high": 0.2463768115942029,
+      "f1": 0.38636363636363635,
+      "auc": 0.4776753037622603,
+      "brier": 0.25672241677099494,
+      "ece": 0.08794579375456815,
+      "confusion": {
+       "tp": 17,
+       "fp": 2,
+       "tn": 97,
+       "fn": 52
+      }
+     },
+     "B1 Persistence": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.5714285714285714,
+      "balanced_accuracy": 0.48484848484848486,
+      "precision": 0.0,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.5113453374322939,
+      "brier": 0.25580142917716825,
+      "ece": 0.08317898211027516,
+      "confusion": {
+       "tp": 0,
+       "fp": 3,
+       "tn": 96,
+       "fn": 69
+      }
+     },
+     "Climatology": {
+      "n": 168,
+      "n_high": 69,
+      "accuracy": 0.5892857142857143,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.4048455570194701,
+      "brier": 0.26311744607363186,
+      "ece": 0.17092981877540642,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 99,
+       "fn": 69
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.0003541357984491178,
+     "ci95": [
+      -0.03796868597570579,
+      0.03674543300271449
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": -0.0029213247615068605,
+     "ci95": [
+      -0.03969271681289685,
+      0.030137149701130884
+     ],
+     "p_ge_0": 0.4435
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.007670152694912724,
+     "ci95": [
+      -0.04944460359933076,
+      0.03241897487324927
+     ]
+    },
+    "auc_ci95": [
+     0.4631926103173786,
+     0.746990551301377
+    ],
+    "reliability": {
+     "R1_auc": false,
+     "R2_recall_precision": false,
+     "R3_below_climatology": true,
+     "R4_below_persistence": false,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h3": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.6585365853658537,
+      "balanced_accuracy": 0.618001525553013,
+      "precision": 0.6756756756756757,
+      "recall_high": 0.36231884057971014,
+      "f1": 0.4716981132075472,
+      "auc": 0.6373760488176964,
+      "brier": 0.2429552515601828,
+      "ece": 0.1271959444431182,
+      "confusion": {
+       "tp": 25,
+       "fp": 12,
+       "tn": 83,
+       "fn": 44
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.6524390243902439,
+      "balanced_accuracy": 0.6107551487414188,
+      "precision": 0.6666666666666666,
+      "recall_high": 0.34782608695652173,
+      "f1": 0.4571428571428571,
+      "auc": 0.5585049580472922,
+      "brier": 0.2538465367180198,
+      "ece": 0.13172484052429198,
+      "confusion": {
+       "tp": 24,
+       "fp": 12,
+       "tn": 83,
+       "fn": 45
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.6646341463414634,
+      "balanced_accuracy": 0.6014492753623188,
+      "precision": 1.0,
+      "recall_high": 0.2028985507246377,
+      "f1": 0.3373493975903615,
+      "auc": 0.3784134248665141,
+      "brier": 0.25058215929900896,
+      "ece": 0.13809365232575008,
+      "confusion": {
+       "tp": 14,
+       "fp": 0,
+       "tn": 95,
+       "fn": 55
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.5060975609756098,
+      "balanced_accuracy": 0.4864225781845919,
+      "precision": 0.4032258064516129,
+      "recall_high": 0.36231884057971014,
+      "f1": 0.3816793893129771,
+      "auc": 0.4541571319603356,
+      "brier": 0.3583590218987324,
+      "ece": 0.2963994644895546,
+      "confusion": {
+       "tp": 25,
+       "fp": 37,
+       "tn": 58,
+       "fn": 44
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.5914634146341463,
+      "balanced_accuracy": 0.5501906941266209,
+      "precision": 0.5263157894736842,
+      "recall_high": 0.2898550724637681,
+      "f1": 0.37383177570093457,
+      "auc": 0.557437070938215,
+      "brier": 0.30337453426613786,
+      "ece": 0.2136638193856799,
+      "confusion": {
+       "tp": 20,
+       "fp": 18,
+       "tn": 77,
+       "fn": 49
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.6463414634146342,
+      "balanced_accuracy": 0.5856598016781083,
+      "precision": 0.8235294117647058,
+      "recall_high": 0.2028985507246377,
+      "f1": 0.32558139534883723,
+      "auc": 0.42784134248665145,
+      "brier": 0.27562394231662396,
+      "ece": 0.10873910926321105,
+      "confusion": {
+       "tp": 14,
+       "fp": 3,
+       "tn": 92,
+       "fn": 55
+      }
+     },
+     "B1 Persistence": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.5548780487804879,
+      "balanced_accuracy": 0.4789473684210526,
+      "precision": 0.0,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.49595728451563686,
+      "brier": 0.2631542447483809,
+      "ece": 0.09209644840730552,
+      "confusion": {
+       "tp": 0,
+       "fp": 4,
+       "tn": 91,
+       "fn": 69
+      }
+     },
+     "Climatology": {
+      "n": 164,
+      "n_high": 69,
+      "accuracy": 0.5792682926829268,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.3895499618611747,
+      "brier": 0.2683513970916155,
+      "ece": 0.18380582485688685,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 95,
+       "fn": 69
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.020198993188198094,
+     "ci95": [
+      -0.05895653845311341,
+      0.015202944974736642
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": -0.010891285157837022,
+     "ci95": [
+      -0.04487418195650487,
+      0.01888673470371076
+     ],
+     "p_ge_0": 0.254
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.025396145531432684,
+     "ci95": [
+      -0.06750912616615892,
+      0.014990935352625731
+     ]
+    },
+    "auc_ci95": [
+     0.4889301704492507,
+     0.7688235134026484
+    ],
+    "reliability": {
+     "R1_auc": false,
+     "R2_recall_precision": false,
+     "R3_below_climatology": true,
+     "R4_below_persistence": false,
+     "R5_calibration": false,
+     "passes": false
+    }
+   },
+   "h4": {
+    "metrics": {
+     "A LightGBM (full)": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.61875,
+      "balanced_accuracy": 0.5772415989807294,
+      "precision": 0.6333333333333333,
+      "recall_high": 0.2753623188405797,
+      "f1": 0.3838383838383838,
+      "auc": 0.6067845198279982,
+      "brier": 0.26192405499090843,
+      "ece": 0.14460743522179262,
+      "confusion": {
+       "tp": 19,
+       "fp": 11,
+       "tn": 80,
+       "fn": 50
+      }
+     },
+     "B5 LightGBM, no news": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.65,
+      "balanced_accuracy": 0.6134734830387004,
+      "precision": 0.6857142857142857,
+      "recall_high": 0.34782608695652173,
+      "f1": 0.4615384615384615,
+      "auc": 0.547857939162287,
+      "brier": 0.26182396648521133,
+      "ece": 0.1428624868135582,
+      "confusion": {
+       "tp": 24,
+       "fp": 11,
+       "tn": 80,
+       "fn": 45
+      }
+     },
+     "B6 LightGBM, news only": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.63125,
+      "balanced_accuracy": 0.572463768115942,
+      "precision": 1.0,
+      "recall_high": 0.14492753623188406,
+      "f1": 0.25316455696202533,
+      "auc": 0.3686096512183469,
+      "brier": 0.26125576706047504,
+      "ece": 0.16017481028574987,
+      "confusion": {
+       "tp": 10,
+       "fp": 0,
+       "tn": 91,
+       "fn": 59
+      }
+     },
+     "B2 Logistic, combined": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.4625,
+      "balanced_accuracy": 0.4433827042522695,
+      "precision": 0.3559322033898305,
+      "recall_high": 0.30434782608695654,
+      "f1": 0.32812500000000006,
+      "auc": 0.419812071985985,
+      "brier": 0.39084599707055967,
+      "ece": 0.3523886101004079,
+      "confusion": {
+       "tp": 21,
+       "fp": 38,
+       "tn": 53,
+       "fn": 48
+      }
+     },
+     "B3 Logistic, government + history (PSA-only)": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.54375,
+      "balanced_accuracy": 0.5060519190953974,
+      "precision": 0.4444444444444444,
+      "recall_high": 0.2318840579710145,
+      "f1": 0.30476190476190473,
+      "auc": 0.5239687848383501,
+      "brier": 0.3365246932029769,
+      "ece": 0.2661453834046711,
+      "confusion": {
+       "tp": 16,
+       "fp": 20,
+       "tn": 71,
+       "fn": 53
+      }
+     },
+     "B4 Logistic, news only (NLP-only)": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.61875,
+      "balanced_accuracy": 0.5667303710781971,
+      "precision": 0.7222222222222222,
+      "recall_high": 0.18840579710144928,
+      "f1": 0.29885057471264365,
+      "auc": 0.39544513457556935,
+      "brier": 0.28066958129696207,
+      "ece": 0.12285612973912682,
+      "confusion": {
+       "tp": 13,
+       "fp": 5,
+       "tn": 86,
+       "fn": 56
+      }
+     },
+     "B1 Persistence": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.54375,
+      "balanced_accuracy": 0.47802197802197804,
+      "precision": 0.0,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.5009555661729576,
+      "brier": 0.2663366504816003,
+      "ece": 0.10837864460738036,
+      "confusion": {
+       "tp": 0,
+       "fp": 4,
+       "tn": 87,
+       "fn": 69
+      }
+     },
+     "Climatology": {
+      "n": 160,
+      "n_high": 69,
+      "accuracy": 0.56875,
+      "balanced_accuracy": 0.5,
+      "precision": NaN,
+      "recall_high": 0.0,
+      "f1": 0.0,
+      "auc": 0.3757763975155279,
+      "brier": 0.27209412131121546,
+      "ece": 0.19656488571665903,
+      "confusion": {
+       "tp": 0,
+       "fp": 0,
+       "tn": 91,
+       "fn": 69
+      }
+     }
+    },
+    "A_minus_persistence_brier": {
+     "diff": -0.004412595490691895,
+     "ci95": [
+      -0.03838371129315087,
+      0.03108131417745883
+     ]
+    },
+    "A_minus_no_news_brier": {
+     "diff": 0.00010008850569709349,
+     "ci95": [
+      -0.036760054545744866,
+      0.03377285477067037
+     ],
+     "p_ge_0": 0.5255
+    },
+    "A_minus_climatology_brier": {
+     "diff": -0.010170066320307036,
+     "ci95": [
+      -0.047325996999402646,
+      0.02931150303379794
+     ]
+    },
+    "auc_ci95": [
+     0.4603351219714457,
+     0.7276079820685949
+    ],
+    "reliability": {
+     "R1_auc": false,
+     "R2_recall_precision": false,
+     "R3_below_climatology": true,
+     "R4_below_persistence": false,
+     "R5_calibration": false,
+     "passes": false
+    }
+   }
+  },
+  "maximum_reliable_lead_time_quarters": 0,
+  "news_holm": {
+   "h3": {
+    "one_sided_p": 0.254,
+    "level": 0.9875,
+    "news_improves": false
+   },
+   "h2": {
+    "one_sided_p": 0.4435,
+    "level": 0.9833333333333333,
+    "news_improves": false
+   },
+   "h4": {
+    "one_sided_p": 0.5255,
+    "level": 0.975,
+    "news_improves": false
+   },
+   "h1": {
+    "one_sided_p": 0.589,
+    "level": 0.95,
+    "news_improves": false
+   }
+  },
+  "n_issues": 48
+ },
+ "link": {
+  "n": 203,
+  "rounds": {
+   "NNS2013": 78,
+   "FNRI2015": 78,
+   "ENNS2019": 25,
+   "ENNS2018": 22
+  },
+  "area_hunger_by_round": {
+   "('ENNS2018', 'balance_luzon')": "12.7",
+   "('ENNS2018', 'mindanao')": "18.3",
+   "('ENNS2018', 'visayas')": "6.0",
+   "('ENNS2019', 'balance_luzon')": "8.1",
+   "('ENNS2019', 'mindanao')": "11.9",
+   "('ENNS2019', 'visayas')": "8.7",
+   "('FNRI2015', 'balance_luzon')": "14.7",
+   "('FNRI2015', 'mindanao')": "21.7",
+   "('FNRI2015', 'visayas')": "9.3",
+   "('NNS2013', 'balance_luzon')": "16.7",
+   "('NNS2013', 'mindanao')": "22.3",
+   "('NNS2013', 'visayas')": "11.0"
+  },
+  "M1": {
+   "alpha": 0.5384166925656987,
+   "delta_r_hat": 0.8040619271571777,
+   "gamma_logit_H": 0.26548589243503457,
+   "s2": 0.17995465869341667
+  },
+  "M0": {
+   "alpha": 0.05537037062541886,
+   "delta_r_hat": 0.8680143632637317,
+   "s2": 0.1923864333681769
+  },
+  "gamma_ci95": [
+   0.14004367215535085,
+   0.3982162290878487
+  ],
+  "loro": {
+   "NNS2013": {
+    "M1 (with area hunger)": {
+     "wrmse_logit": 0.48344670614274726,
+     "eb_above_tau": 0.1132736272122991,
+     "bias_logit": 0.2071696975017551
+    },
+    "M0 (no time signal)": {
+     "wrmse_logit": 0.5108041718404818,
+     "eb_above_tau": 0.11716218571292702,
+     "bias_logit": 0.26034250697332384
+    }
+   },
+   "FNRI2015": {
+    "M1 (with area hunger)": {
+     "wrmse_logit": 0.503479998165934,
+     "eb_above_tau": 0.1235824019289096,
+     "bias_logit": 0.006379631651940436
+    },
+    "M0 (no time signal)": {
+     "wrmse_logit": 0.4763410511137605,
+     "eb_above_tau": 0.1222971188991195,
+     "bias_logit": 0.04884828276008674
+    }
+   },
+   "ENNS2018": {
+    "M1 (with area hunger)": {
+     "wrmse_logit": 0.4457820803103239,
+     "eb_above_tau": 0.22413102487868744,
+     "bias_logit": -0.22765264431503127
+    },
+    "M0 (no time signal)": {
+     "wrmse_logit": 0.46586752083777394,
+     "eb_above_tau": 0.21171137467540363,
+     "bias_logit": -0.3360989154998981
+    }
+   },
+   "ENNS2019": {
+    "M1 (with area hunger)": {
+     "wrmse_logit": 0.4241159856498748,
+     "eb_above_tau": 0.1431051350928082,
+     "bias_logit": -0.17254513931380117
+    },
+    "M0 (no time signal)": {
+     "wrmse_logit": 0.4799377800892449,
+     "eb_above_tau": 0.16323664180795996,
+     "bias_logit": -0.26320097917211116
+    }
+   }
+  },
+  "loro_mean_wrmse": {
+   "M1 (with area hunger)": 0.46420619256722,
+   "M0 (no time signal)": 0.48323763097031525
+  }
+ },
+ "e2e": {
+  "n": 125,
+  "n_decisive": 95,
+  "n_above_tau_decisive": 80,
+  "models": {
+   "E2E": {
+    "eb": 0.1357109530398309,
+    "auc_decisive": 0.8949999999999999,
+    "accuracy_decisive": 0.8526315789473684
+   },
+   "C4-only": {
+    "eb": 0.14071773716938923,
+    "auc_decisive": 0.8691666666666666,
+    "accuracy_decisive": 0.8315789473684211
+   },
+   "Persistence": {
+    "eb": 0.14716785365432183,
+    "auc_decisive": 0.7958333333333333,
+    "accuracy_decisive": 0.8631578947368421
+   }
+  },
+  "E2E_minus": {
+   "C4-only": {
+    "diff": -0.005006784129558323,
+    "ci95": [
+     -0.010884303317724824,
+     -0.0007545048700161165
+    ]
+   },
+   "Persistence": {
+    "diff": -0.011456900614490922,
+    "ci95": [
+     -0.036027468301162824,
+     0.00830028462740758
+    ]
+   }
+  },
+  "by_origin": {
+   "O1": {
+    "E2E": 0.10369161306172252,
+    "C4-only": 0.10808573570631666,
+    "Persistence": 0.09869735702510286
+   },
+   "O2": {
+    "E2E": 0.225978327140825,
+    "C4-only": 0.23082335072190696,
+    "Persistence": 0.2784824413713416
+   },
+   "O3": {
+    "E2E": 0.1561760045626544,
+    "C4-only": 0.16323664180795996,
+    "Persistence": 0.1828389659465077
+   }
+  },
+  "calabarzon": [
+   {
+    "origin": "O1",
+    "province": "Batangas",
+    "survey": "FNRI2015",
+    "p": 43.5,
+    "q_star": 0.599,
+    "E2E": 0.709,
+    "C4-only": 0.671,
+    "Persistence": 0.425
+   },
+   {
+    "origin": "O1",
+    "province": "Cavite",
+    "survey": "FNRI2015",
+    "p": 41.8,
+    "q_star": 0.345,
+    "E2E": 0.506,
+    "C4-only": 0.458,
+    "Persistence": 0.352
+   },
+   {
+    "origin": "O1",
+    "province": "Laguna",
+    "survey": "FNRI2015",
+    "p": 41.4,
+    "q_star": 0.293,
+    "E2E": 0.442,
+    "C4-only": 0.394,
+    "Persistence": 0.395
+   },
+   {
+    "origin": "O1",
+    "province": "Quezon",
+    "survey": "FNRI2015",
+    "p": 48.8,
+    "q_star": 0.964,
+    "E2E": 0.668,
+    "C4-only": 0.627,
+    "Persistence": 0.709
+   },
+   {
+    "origin": "O1",
+    "province": "Rizal",
+    "survey": "FNRI2015",
+    "p": 41.3,
+    "q_star": 0.294,
+    "E2E": 0.562,
+    "C4-only": 0.516,
+    "Persistence": 0.536
+   },
+   {
+    "origin": "O2",
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "p": 26.2,
+    "q_star": 0.0,
+    "E2E": 0.582,
+    "C4-only": 0.589,
+    "Persistence": 0.448
+   },
+   {
+    "origin": "O3",
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "p": 44.0,
+    "q_star": 0.666,
+    "E2E": 0.757,
+    "C4-only": 0.791,
+    "Persistence": 0.702
+   },
+   {
+    "origin": "O3",
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "p": 39.1,
+    "q_star": 0.13,
+    "E2E": 0.319,
+    "C4-only": 0.345,
+    "Persistence": 0.446
+   }
+  ]
+ },
+ "decisions": {
+  "H_A_dashboard_horizon": false,
+  "maximum_reliable_lead_time_quarters": 0,
+  "H_N_news_improves_h1": false,
+  "H_C_link": true,
+  "H_E2E": true,
+  "validated_forecast": false
+ }
+}

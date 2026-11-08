@@ -1,0 +1,3501 @@
+{
+ "protocol_sha256": "31f99369b3d1bb2e201f0f24503eec07980a68fd3892cc4a57b65b2946796280",
+ "fi6n_reproduction": {
+  "lead1": {
+   "recomputed": {
+    "Government only": {
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "auc": 0.7023172905525847,
+     "brier": 0.12890343705702104
+    },
+    "News only": {
+     "accuracy": 0.8548387096774194,
+     "recall": 0.36363636363636365,
+     "auc": 0.7415329768270945,
+     "brier": 0.12001510946720806
+    },
+    "Government + news": {
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "auc": 0.7647058823529411,
+     "brier": 0.11899910526083832
+    },
+    "Naive persistence": {
+     "accuracy": 0.8709677419354839,
+     "recall": 0.5454545454545454,
+     "auc": 0.7433155080213903,
+     "brier": 0.11632522222592956
+    }
+   },
+   "reported_brier": {
+    "Government only": 0.12890343705702104,
+    "News only": 0.12001510946720806,
+    "Government + news": 0.11899910526083832,
+    "Naive persistence": 0.11632522222592954
+   },
+   "reported_auc": {
+    "Government only": 0.7023172905525847,
+    "News only": 0.7415329768270945,
+    "Government + news": 0.7647058823529411,
+    "Naive persistence": 0.7433155080213903
+   },
+   "recomputed_gov_news_minus_gov": [
+    -0.009904331796182735,
+    -0.02110769836873716,
+    -0.001619179512168511
+   ],
+   "reported_gov_news_minus_gov": [
+    -0.009904331796182737,
+    -0.021107698368737167,
+    -0.0016191795121685163
+   ]
+  },
+  "lead2": {
+   "recomputed": {
+    "Government only": {
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "auc": 0.44028520499108736,
+     "brier": 0.1663206403229482
+    },
+    "News only": {
+     "accuracy": 0.7903225806451613,
+     "recall": 0.09090909090909091,
+     "auc": 0.40819964349376114,
+     "brier": 0.1763411957765533
+    },
+    "Government + news": {
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "auc": 0.46702317290552586,
+     "brier": 0.1611057142376222
+    },
+    "Naive persistence": {
+     "accuracy": 0.7096774193548387,
+     "recall": 0.09090909090909091,
+     "auc": 0.5811051693404634,
+     "brier": 0.19802725246804204
+    }
+   },
+   "reported_brier": {
+    "Government only": 0.1663206403229482,
+    "News only": 0.1763411957765533,
+    "Government + news": 0.1611057142376222,
+    "Naive persistence": 0.19802725246804198
+   },
+   "reported_auc": {
+    "Government only": 0.44028520499108736,
+    "News only": 0.40819964349376114,
+    "Government + news": 0.46702317290552586,
+    "Naive persistence": 0.5811051693404634
+   },
+   "recomputed_gov_news_minus_gov": [
+    -0.005214926085325967,
+    -0.009774903712243281,
+    0.00011367124011102286
+   ],
+   "reported_gov_news_minus_gov": [
+    -0.005214926085325971,
+    -0.009774903712243292,
+    0.00011367124011101918
+   ]
+  }
+ },
+ "rerun_vs_fi6n_saved_max_abs_p_diff": {
+  "QE1": {
+   "Government only": 9.71445146547012e-17,
+   "Government + news": 9.71445146547012e-17,
+   "News + latest reading": 9.367506770274758e-17,
+   "Naive persistence": 1.1102230246251565e-16
+  },
+  "QE2": {
+   "Government only": 9.71445146547012e-17,
+   "Government + news": 9.71445146547012e-17,
+   "News + latest reading": 9.71445146547012e-17,
+   "Naive persistence": 1.1102230246251565e-16
+  }
+ },
+ "horizons": {
+  "OP0": {
+   "issue_dates_example": [
+    "2026-02-28",
+    "2026-05-31",
+    "2026-08-31"
+   ],
+   "mean_age_of_latest_reading_q": 1.2419354838709677,
+   "metrics": {
+    "Government only": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7741935483870968,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.47058823529411764,
+     "auc": 0.4830659536541889,
+     "brier": 0.16590904932643546,
+     "ece_5bin": 0.08337986720451332,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4830659536541889,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7580645161290323,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.46078431372549017,
+     "auc": 0.5169340463458111,
+     "brier": 0.16219523186869908,
+     "ece_5bin": 0.09769594498224533,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.5169340463458111,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "News + latest reading": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7580645161290323,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.46078431372549017,
+     "auc": 0.6042780748663101,
+     "brier": 0.15838615498065337,
+     "ece_5bin": 0.0848857697072615,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.75,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.6,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.6042780748663101,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without market news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7580645161290323,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.46078431372549017,
+     "auc": 0.5222816399286987,
+     "brier": 0.16204895703089076,
+     "ece_5bin": 0.09298912314731672,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.5222816399286987,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without climate news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7741935483870968,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.47058823529411764,
+     "auc": 0.554367201426025,
+     "brier": 0.15920166807447247,
+     "ece_5bin": 0.07111930134993097,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.554367201426025,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without employment news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7580645161290323,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.46078431372549017,
+     "auc": 0.5187165775401069,
+     "brier": 0.16217385247641283,
+     "ece_5bin": 0.09693550250683637,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.5187165775401069,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without remittance news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7741935483870968,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.47058823529411764,
+     "auc": 0.5294117647058824,
+     "brier": 0.1624065421467576,
+     "ece_5bin": 0.09656613178029844,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.5294117647058824,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without poverty news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7741935483870968,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.47058823529411764,
+     "auc": 0.48841354723707664,
+     "brier": 0.16637522754936734,
+     "ece_5bin": 0.12379334141188068,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7083333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.48841354723707664,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Naive persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7258064516129032,
+     "recall": 0.18181818181818182,
+     "precision": 0.2,
+     "balanced_accuracy": 0.5124777183600713,
+     "auc": 0.6488413547237076,
+     "brier": 0.18673058754915664,
+     "ece_5bin": 0.10611177841512925,
+     "share_predicted_high": 0.16129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.8888888888888888,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6488413547237076,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Damped persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.6327985739750446,
+     "brier": 0.14647086638289766,
+     "ece_5bin": 0.07355009686086698,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.6327985739750446,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Climatology": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.4385026737967914,
+     "brier": 0.1488770875991356,
+     "ece_5bin": 0.035896792408455475,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4385026737967914,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    }
+   },
+   "news_vs_no_news": {
+    "mean": -0.003713817457736405,
+    "ci95": [
+     -0.006635566215194784,
+     0.003473869811914701
+    ],
+    "ci99_bonferroni5": [
+     -0.009071677035703614,
+     0.004640107031856268
+    ],
+    "p_better": 0.6525,
+    "auc_diff": 0.033868092691622165,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "news_latest_vs_no_news": {
+    "mean": -0.007522894345782151,
+    "ci95": [
+     -0.020173916444503427,
+     0.010994437572641125
+    ],
+    "ci99_bonferroni5": [
+     -0.024237491376059017,
+     0.01586448347071323
+    ],
+    "p_better": 0.738,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "gov_news_vs_persistence": {
+    "mean": -0.024535355680457546,
+    "ci95": [
+     -0.06388384742073391,
+     0.020905432258190932
+    ],
+    "ci99_bonferroni5": [
+     -0.08058127293636208,
+     0.03208779961971014
+    ],
+    "p_better": 0.8425
+   },
+   "news_latest_vs_persistence": {
+    "mean": -0.028344432568503285,
+    "ci95": [
+     -0.06434455018272461,
+     0.01911102471412686
+    ],
+    "ci99_bonferroni5": [
+     -0.07694868427089428,
+     0.03236331843456668
+    ],
+    "p_better": 0.8695
+   },
+   "no_news_vs_persistence": {
+    "mean": -0.020821538222721137,
+    "ci95": [
+     -0.06310839377578199,
+     0.02298699559283003
+    ],
+    "ci99_bonferroni5": [
+     -0.07813137480627552,
+     0.03350037940547848
+    ],
+    "p_better": 0.823
+   },
+   "news_domain_removal": {
+    "market": {
+     "mean": -0.000146274837808301,
+     "ci95": [
+      -0.00265348500143037,
+      0.001630794214313583
+     ],
+     "ci99_bonferroni5": [
+      -0.0033377914648671813,
+      0.0026637633555709602
+     ],
+     "p_better": 0.687
+    },
+    "climate": {
+     "mean": -0.0029935637942266158,
+     "ci95": [
+      -0.008318581888142712,
+      0.000540209347212233
+     ],
+     "ci99_bonferroni5": [
+      -0.010742549729149713,
+      0.0010044498382337972
+     ],
+     "p_better": 0.935
+    },
+    "employment": {
+     "mean": -2.1379392286263196e-05,
+     "ci95": [
+      -0.002536024983302036,
+      0.0020440131590493855
+     ],
+     "ci99_bonferroni5": [
+      -0.0033529349308452933,
+      0.0028233908144155535
+     ],
+     "p_better": 0.599
+    },
+    "remittance": {
+     "mean": 0.00021131027805846957,
+     "ci95": [
+      -0.0024987967991633863,
+      0.002126578164611339
+     ],
+     "ci99_bonferroni5": [
+      -0.0031684959018659685,
+      0.0026386469307403417
+     ],
+     "p_better": 0.472
+    },
+    "poverty": {
+     "mean": 0.004179995680668268,
+     "ci95": [
+      -0.003029144335498127,
+      0.008639591465647226
+     ],
+     "ci99_bonferroni5": [
+      -0.004560636588584495,
+      0.011615973315147366
+     ],
+     "p_better": 0.2385
+    }
+   },
+   "by_era_news_minus_no_news": {
+    "2010-2015": {
+     "n": 24,
+     "news_available": 7,
+     "mean_brier_diff": 0.0
+    },
+    "2016-2020": {
+     "n": 18,
+     "news_available": 18,
+     "mean_brier_diff": 0.0005586656616506315
+    },
+    "2021-2026": {
+     "n": 20,
+     "news_available": 20,
+     "mean_brier_diff": -0.012015633214468423
+    }
+   },
+   "without_sawtooth": {
+    "n": 58,
+    "news_vs_no_news": {
+     "mean": -0.00406590686608799,
+     "ci95": [
+      -0.008078037669432298,
+      0.003567924489701416
+     ],
+     "ci99_bonferroni5": [
+      -0.011603633405472817,
+      0.004808580277334339
+     ],
+     "p_better": 0.64
+    },
+    "gov_news_vs_persistence": {
+     "mean": -0.013377138329402372,
+     "ci95": [
+      -0.04520212713412188,
+      0.032465383080593456
+     ],
+     "ci99_bonferroni5": [
+      -0.055093597104270295,
+      0.04509037315182865
+     ],
+     "p_better": 0.688
+    }
+   },
+   "origins_with_news": {
+    "n": 45,
+    "news_vs_no_news": {
+     "mean": -0.005116815163992381,
+     "ci95": [
+      -0.009040244698892388,
+      0.0046542791018571224
+     ],
+     "ci99_bonferroni5": [
+      -0.01195912495891879,
+      0.006869451322567711
+     ],
+     "p_better": 0.679
+    }
+   },
+   "decisions": {
+    "probability_quality_improved_95": false,
+    "probability_quality_improved_bonferroni": false,
+    "auc_improved": true,
+    "accuracy_or_recall_improved": false,
+    "beyond_latest_reading": false,
+    "stable_across_eras": false,
+    "survives_sawtooth_exclusion": false,
+    "operationally_meaningful": false
+   },
+   "decision_text": {
+    "news_improves_probability_quality": "Brier(Government + news) - Brier(Government only): 95% block-bootstrap CI below 0; Bonferroni over the 5 horizons (99% CI) reported and required for a 'robust' claim",
+    "news_improves_accuracy_or_recall": "McNemar p < 0.05 on correct classifications, or recall difference with a bootstrap CI excluding 0",
+    "news_beyond_latest_reading": "Brier(News + latest reading) and Brier(Government + news) vs naive persistence: 95% CI below 0",
+    "stable": "Brier difference (news vs no news) negative in each era with news (2016-2020, 2021-2026) and 95% CI below 0 without the FI7 sawtooth quarters",
+    "operationally_meaningful": "a news configuration that passes the FI7 reliability rule AND beats naive persistence (95% CI below 0) at that horizon"
+   }
+  },
+  "OP1": {
+   "issue_dates_example": [
+    "2025-11-30",
+    "2026-02-28",
+    "2026-05-31"
+   ],
+   "mean_age_of_latest_reading_q": 2.2419354838709675,
+   "metrics": {
+    "Government only": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6791443850267379,
+     "brier": 0.13016774464305758,
+     "ece_5bin": 0.024646072569747275,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6791443850267379,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6827094474153298,
+     "brier": 0.12883605735508352,
+     "ece_5bin": 0.02715576475991697,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6827094474153298,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "News + latest reading": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.7290552584670232,
+     "brier": 0.12241214456878612,
+     "ece_5bin": 0.024257761524204433,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.7290552584670232,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without market news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6880570409982175,
+     "brier": 0.1280499687278374,
+     "ece_5bin": 0.027048449252683154,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6880570409982175,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without climate news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.09090909090909091,
+     "precision": 0.3333333333333333,
+     "balanced_accuracy": 0.5258467023172906,
+     "auc": 0.6684491978609626,
+     "brier": 0.13156184539632168,
+     "ece_5bin": 0.04074701990044826,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.6684491978609626,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without employment news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6934046345811052,
+     "brier": 0.12740561049899657,
+     "ece_5bin": 0.024234749995104637,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6934046345811052,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without remittance news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6844919786096256,
+     "brier": 0.1276360671587039,
+     "ece_5bin": 0.028191880393867927,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6844919786096256,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without poverty news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.09090909090909091,
+     "precision": 0.3333333333333333,
+     "balanced_accuracy": 0.5258467023172906,
+     "auc": 0.6631016042780749,
+     "brier": 0.13334758416226372,
+     "ece_5bin": 0.037371679192752805,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.6631016042780749,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Naive persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8709677419354839,
+     "recall": 0.5454545454545454,
+     "precision": 0.6666666666666666,
+     "balanced_accuracy": 0.7433155080213903,
+     "auc": 0.7789661319073083,
+     "brier": 0.11478688249331595,
+     "ece_5bin": 0.07724685950666796,
+     "share_predicted_high": 0.14516129032258066,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "roc_auc": 0.7789661319073083,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     }
+    },
+    "Damped persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.7736185383244206,
+     "brier": 0.11787340670824138,
+     "ece_5bin": 0.07295866987822072,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.7736185383244206,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Climatology": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.4393939393939394,
+     "brier": 0.14865644463629166,
+     "ece_5bin": 0.03605416484541715,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4393939393939394,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    }
+   },
+   "news_vs_no_news": {
+    "mean": -0.0013316872879740932,
+    "ci95": [
+     -0.005057055377262974,
+     0.002252375834230302
+    ],
+    "ci99_bonferroni5": [
+     -0.006490943505455251,
+     0.003292293399017476
+    ],
+    "p_better": 0.7585,
+    "auc_diff": 0.0035650623885918886,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "news_latest_vs_no_news": {
+    "mean": -0.007755600074271494,
+    "ci95": [
+     -0.023340115424940095,
+     0.0033349594220290495
+    ],
+    "ci99_bonferroni5": [
+     -0.028285734636579952,
+     0.005923296123990407
+    ],
+    "p_better": 0.916,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      -0.125,
+      0.35730519480519385
+     ]
+    }
+   },
+   "gov_news_vs_persistence": {
+    "mean": 0.014049174861767549,
+    "ci95": [
+     -0.022138710230660334,
+     0.05457425122009458
+    ],
+    "ci99_bonferroni5": [
+     -0.028585082138208467,
+     0.06597877658411437
+    ],
+    "p_better": 0.279
+   },
+   "news_latest_vs_persistence": {
+    "mean": 0.007625262075470152,
+    "ci95": [
+     -0.022466723808254447,
+     0.033523404661293284
+    ],
+    "ci99_bonferroni5": [
+     -0.02821085459817728,
+     0.04197155005253851
+    ],
+    "p_better": 0.3955
+   },
+   "no_news_vs_persistence": {
+    "mean": 0.015380862149741645,
+    "ci95": [
+     -0.020001041971596308,
+     0.05341800334418335
+    ],
+    "ci99_bonferroni5": [
+     -0.02684737173990639,
+     0.06552744895879213
+    ],
+    "p_better": 0.242
+   },
+   "news_domain_removal": {
+    "market": {
+     "mean": -0.0007860886272461324,
+     "ci95": [
+      -0.0023572140003711092,
+      0.0008004307512223629
+     ],
+     "ci99_bonferroni5": [
+      -0.0031842324875911874,
+      0.0012016497324165722
+     ],
+     "p_better": 0.7655
+    },
+    "climate": {
+     "mean": 0.0027257880412381846,
+     "ci95": [
+      8.260693365085596e-05,
+      0.0052941798086892896
+     ],
+     "ci99_bonferroni5": [
+      -0.00011660189415032586,
+      0.006284496340720567
+     ],
+     "p_better": 0.0145
+    },
+    "employment": {
+     "mean": -0.0014304468560869682,
+     "ci95": [
+      -0.0047237161861618405,
+      0.001337449125867497
+     ],
+     "ci99_bonferroni5": [
+      -0.005699397159233263,
+      0.0020125597295341407
+     ],
+     "p_better": 0.78
+    },
+    "remittance": {
+     "mean": -0.0011999901963796297,
+     "ci95": [
+      -0.002742898736481202,
+      0.00023600536121156013
+     ],
+     "ci99_bonferroni5": [
+      -0.003324564681048007,
+      0.0005029504250450164
+     ],
+     "p_better": 0.9305
+    },
+    "poverty": {
+     "mean": 0.004511526807180206,
+     "ci95": [
+      -7.963038919846683e-05,
+      0.009282568301657426
+     ],
+     "ci99_bonferroni5": [
+      -0.0007816629762529176,
+      0.010782993062285756
+     ],
+     "p_better": 0.029
+    }
+   },
+   "by_era_news_minus_no_news": {
+    "2010-2015": {
+     "n": 24,
+     "news_available": 6,
+     "mean_brier_diff": 0.0
+    },
+    "2016-2020": {
+     "n": 18,
+     "news_available": 18,
+     "mean_brier_diff": -0.00014681846571020703
+    },
+    "2021-2026": {
+     "n": 20,
+     "news_available": 20,
+     "mean_brier_diff": -0.003996093973580504
+    }
+   },
+   "without_sawtooth": {
+    "n": 58,
+    "news_vs_no_news": {
+     "mean": -0.0012374767497892198,
+     "ci95": [
+      -0.004796524181925491,
+      0.0021459269150039427
+     ],
+     "ci99_bonferroni5": [
+      -0.006459437191643829,
+      0.003017762846821213
+     ],
+     "p_better": 0.728
+    },
+    "gov_news_vs_persistence": {
+     "mean": 0.011282237767051239,
+     "ci95": [
+      -0.024596279927758646,
+      0.054680681680068094
+     ],
+     "ci99_bonferroni5": [
+      -0.034428343588889104,
+      0.0699005347747406
+     ],
+     "p_better": 0.3605
+    }
+   },
+   "origins_with_news": {
+    "n": 44,
+    "news_vs_no_news": {
+     "mean": -0.001876468451236222,
+     "ci95": [
+      -0.006849067778229563,
+      0.0032778840476873675
+     ],
+     "ci99_bonferroni5": [
+      -0.009210837721007555,
+      0.004885539989538759
+     ],
+     "p_better": 0.733
+    }
+   },
+   "decisions": {
+    "probability_quality_improved_95": false,
+    "probability_quality_improved_bonferroni": false,
+    "auc_improved": true,
+    "accuracy_or_recall_improved": false,
+    "beyond_latest_reading": false,
+    "stable_across_eras": true,
+    "survives_sawtooth_exclusion": false,
+    "operationally_meaningful": false
+   },
+   "decision_text": {
+    "news_improves_probability_quality": "Brier(Government + news) - Brier(Government only): 95% block-bootstrap CI below 0; Bonferroni over the 5 horizons (99% CI) reported and required for a 'robust' claim",
+    "news_improves_accuracy_or_recall": "McNemar p < 0.05 on correct classifications, or recall difference with a bootstrap CI excluding 0",
+    "news_beyond_latest_reading": "Brier(News + latest reading) and Brier(Government + news) vs naive persistence: 95% CI below 0",
+    "stable": "Brier difference (news vs no news) negative in each era with news (2016-2020, 2021-2026) and 95% CI below 0 without the FI7 sawtooth quarters",
+    "operationally_meaningful": "a news configuration that passes the FI7 reliability rule AND beats naive persistence (95% CI below 0) at that horizon"
+   }
+  },
+  "OP1w": {
+   "issue_dates_example": [
+    "2025-11-30",
+    "2026-02-28",
+    "2026-05-31"
+   ],
+   "mean_age_of_latest_reading_q": 2.2419354838709675,
+   "metrics": {
+    "Government only": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6791443850267379,
+     "brier": 0.13016774464305758,
+     "ece_5bin": 0.024646072569747275,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6791443850267379,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6737967914438502,
+     "brier": 0.13004741113602852,
+     "ece_5bin": 0.05146078214085208,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6737967914438502,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "News + latest reading": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7058823529411765,
+     "brier": 0.1286067114270022,
+     "ece_5bin": 0.09359812755608422,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7058823529411765,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without market news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.679144385026738,
+     "brier": 0.12855803363269525,
+     "ece_5bin": 0.043661032420862514,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.679144385026738,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without climate news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.09090909090909091,
+     "precision": 0.3333333333333333,
+     "balanced_accuracy": 0.5258467023172906,
+     "auc": 0.6470588235294118,
+     "brier": 0.13271793875529517,
+     "ece_5bin": 0.059078408328596836,
+     "share_predicted_high": 0.04838709677419355,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.6470588235294118,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without employment news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6720142602495544,
+     "brier": 0.1292342219691871,
+     "ece_5bin": 0.05055588048030882,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6720142602495544,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without remittance news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6844919786096256,
+     "brier": 0.12862623516494723,
+     "ece_5bin": 0.04609926060340986,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6844919786096256,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without poverty news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.18181818181818182,
+     "precision": 0.5,
+     "balanced_accuracy": 0.571301247771836,
+     "auc": 0.6470588235294118,
+     "brier": 0.13270127085402347,
+     "ece_5bin": 0.059753441269328016,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.7916666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.6470588235294118,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Naive persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8709677419354839,
+     "recall": 0.5454545454545454,
+     "precision": 0.6666666666666666,
+     "balanced_accuracy": 0.7433155080213903,
+     "auc": 0.7789661319073083,
+     "brier": 0.11478688249331595,
+     "ece_5bin": 0.07724685950666796,
+     "share_predicted_high": 0.14516129032258066,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "roc_auc": 0.7789661319073083,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     }
+    },
+    "Damped persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.7736185383244206,
+     "brier": 0.11787340670824138,
+     "ece_5bin": 0.07295866987822072,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.7736185383244206,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Climatology": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.4393939393939394,
+     "brier": 0.14865644463629166,
+     "ece_5bin": 0.03605416484541715,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4393939393939394,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    }
+   },
+   "news_vs_no_news": {
+    "mean": -0.00012033350702910398,
+    "ci95": [
+     -0.00562491478034034,
+     0.0070632195451083134
+    ],
+    "ci99_bonferroni5": [
+     -0.007591782010313963,
+     0.009238608008574548
+    ],
+    "p_better": 0.511,
+    "auc_diff": -0.005347593582887722,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "news_latest_vs_no_news": {
+    "mean": -0.001561033216055411,
+    "ci95": [
+     -0.01522836910946948,
+     0.012891547968003625
+    ],
+    "ci99_bonferroni5": [
+     -0.019784693415559725,
+     0.01591680470143873
+    ],
+    "p_better": 0.597,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.09090909090909088,
+     "ci95": [
+      0.0,
+      0.36363636363636365
+     ]
+    }
+   },
+   "gov_news_vs_persistence": {
+    "mean": 0.015260528642712538,
+    "ci95": [
+     -0.022231278830399392,
+     0.058029186649437195
+    ],
+    "ci99_bonferroni5": [
+     -0.029146914288783656,
+     0.06924860917143279
+    ],
+    "p_better": 0.2715
+   },
+   "news_latest_vs_persistence": {
+    "mean": 0.013819828933686234,
+    "ci95": [
+     -0.021278699734741814,
+     0.051754432816648044
+    ],
+    "ci99_bonferroni5": [
+     -0.029077270543015902,
+     0.06371018431096802
+    ],
+    "p_better": 0.2785
+   },
+   "no_news_vs_persistence": {
+    "mean": 0.015380862149741645,
+    "ci95": [
+     -0.020001041971596308,
+     0.05341800334418335
+    ],
+    "ci99_bonferroni5": [
+     -0.02684737173990639,
+     0.06552744895879213
+    ],
+    "p_better": 0.242
+   },
+   "news_domain_removal": {
+    "market": {
+     "mean": -0.0014893775033332465,
+     "ci95": [
+      -0.005359565388943842,
+      0.0013366728533167722
+     ],
+     "ci99_bonferroni5": [
+      -0.006480004132729365,
+      0.002182915146615125
+     ],
+     "p_better": 0.7865
+    },
+    "climate": {
+     "mean": 0.0026705276192666634,
+     "ci95": [
+      3.5277449642620325e-05,
+      0.00473422415931178
+     ],
+     "ci99_bonferroni5": [
+      -0.0003263198356827529,
+      0.00591870094906145
+     ],
+     "p_better": 0.0225
+    },
+    "employment": {
+     "mean": -0.0008131891668414287,
+     "ci95": [
+      -0.0037777867864307716,
+      0.0019338494853905059
+     ],
+     "ci99_bonferroni5": [
+      -0.00500840499595158,
+      0.0028330070745962734
+     ],
+     "p_better": 0.696
+    },
+    "remittance": {
+     "mean": -0.001421175971081319,
+     "ci95": [
+      -0.005774290449594388,
+      0.0019071855212325142
+     ],
+     "ci99_bonferroni5": [
+      -0.007208955043179599,
+      0.003037989930486028
+     ],
+     "p_better": 0.765
+    },
+    "poverty": {
+     "mean": 0.002653859717994968,
+     "ci95": [
+      -0.00018372742082844445,
+      0.005580573883224467
+     ],
+     "ci99_bonferroni5": [
+      -0.000616985768396193,
+      0.006731889995141889
+     ],
+     "p_better": 0.0405
+    }
+   },
+   "by_era_news_minus_no_news": {
+    "2010-2015": {
+     "n": 24,
+     "news_available": 8,
+     "mean_brier_diff": 0.0
+    },
+    "2016-2020": {
+     "n": 18,
+     "news_available": 18,
+     "mean_brier_diff": -0.001159789251310861
+    },
+    "2021-2026": {
+     "n": 20,
+     "news_available": 20,
+     "mean_brier_diff": 0.0006707764543895514
+    }
+   },
+   "without_sawtooth": {
+    "n": 58,
+    "news_vs_no_news": {
+     "mean": -0.0012465301493078122,
+     "ci95": [
+      -0.005788072506329256,
+      0.00402909601609971
+     ],
+     "ci99_bonferroni5": [
+      -0.007571389826382798,
+      0.005561266891128556
+     ],
+     "p_better": 0.669
+    },
+    "gov_news_vs_persistence": {
+     "mean": 0.011273184367532647,
+     "ci95": [
+      -0.025208755562125835,
+      0.05621893999884267
+     ],
+     "ci99_bonferroni5": [
+      -0.03420219727822037,
+      0.07275190431423845
+     ],
+     "p_better": 0.3615
+    }
+   },
+   "origins_with_news": {
+    "n": 46,
+    "news_vs_no_news": {
+     "mean": -0.00016218863990879234,
+     "ci95": [
+      -0.007190371923430408,
+      0.00956267591405911
+     ],
+     "ci99_bonferroni5": [
+      -0.009097050921259914,
+      0.013652174176765713
+     ],
+     "p_better": 0.503
+    }
+   },
+   "decisions": {
+    "probability_quality_improved_95": false,
+    "probability_quality_improved_bonferroni": false,
+    "auc_improved": false,
+    "accuracy_or_recall_improved": false,
+    "beyond_latest_reading": false,
+    "stable_across_eras": false,
+    "survives_sawtooth_exclusion": false,
+    "operationally_meaningful": false
+   },
+   "decision_text": {
+    "news_improves_probability_quality": "Brier(Government + news) - Brier(Government only): 95% block-bootstrap CI below 0; Bonferroni over the 5 horizons (99% CI) reported and required for a 'robust' claim",
+    "news_improves_accuracy_or_recall": "McNemar p < 0.05 on correct classifications, or recall difference with a bootstrap CI excluding 0",
+    "news_beyond_latest_reading": "Brier(News + latest reading) and Brier(Government + news) vs naive persistence: 95% CI below 0",
+    "stable": "Brier difference (news vs no news) negative in each era with news (2016-2020, 2021-2026) and 95% CI below 0 without the FI7 sawtooth quarters",
+    "operationally_meaningful": "a news configuration that passes the FI7 reliability rule AND beats naive persistence (95% CI below 0) at that horizon"
+   }
+  },
+  "QE1": {
+   "issue_dates_example": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "mean_age_of_latest_reading_q": 2.0806451612903225,
+   "metrics": {
+    "Government only": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7023172905525847,
+     "brier": 0.12890343705702104,
+     "ece_5bin": 0.028242785726932073,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7023172905525847,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7647058823529411,
+     "brier": 0.11899910526083832,
+     "ece_5bin": 0.011977046485316237,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7647058823529411,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "News + latest reading": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8548387096774194,
+     "recall": 0.36363636363636365,
+     "precision": 0.6666666666666666,
+     "balanced_accuracy": 0.6622103386809269,
+     "auc": 0.7415329768270945,
+     "brier": 0.12001510946720806,
+     "ece_5bin": 0.05894764337090354,
+     "share_predicted_high": 0.0967741935483871,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.8,
+       "recall": 0.5
+      }
+     },
+     "roc_auc": 0.7415329768270945,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without market news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7379679144385027,
+     "brier": 0.12146528260844457,
+     "ece_5bin": 0.03842481111152361,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7379679144385027,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without climate news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.750445632798574,
+     "brier": 0.12120254389282382,
+     "ece_5bin": 0.014784298012723567,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.750445632798574,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without employment news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7415329768270944,
+     "brier": 0.12198088399908961,
+     "ece_5bin": 0.038595077513264194,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7415329768270944,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without remittance news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7433155080213903,
+     "brier": 0.12197870039991973,
+     "ece_5bin": 0.039396815368586614,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7433155080213903,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without poverty news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8387096774193549,
+     "recall": 0.2727272727272727,
+     "precision": 0.6,
+     "balanced_accuracy": 0.6167557932263814,
+     "auc": 0.7272727272727273,
+     "brier": 0.12409691502038657,
+     "ece_5bin": 0.028722261448770475,
+     "share_predicted_high": 0.08064516129032258,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.25
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.75,
+       "recall": 0.3333333333333333
+      }
+     },
+     "roc_auc": 0.7272727272727273,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Naive persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8709677419354839,
+     "recall": 0.5454545454545454,
+     "precision": 0.6666666666666666,
+     "balanced_accuracy": 0.7433155080213903,
+     "auc": 0.7433155080213903,
+     "brier": 0.11632522222592954,
+     "ece_5bin": 0.07418095461830358,
+     "share_predicted_high": 0.14516129032258066,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.5
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.85,
+       "recall": 0.6666666666666666
+      }
+     },
+     "roc_auc": 0.7433155080213903,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": true,
+       "precision": true,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": true
+     }
+    },
+    "Damped persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.7379679144385026,
+     "brier": 0.11912889180190885,
+     "ece_5bin": 0.05337663216233813,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.7379679144385026,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": true,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Climatology": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.4429590017825312,
+     "brier": 0.1486599234016499,
+     "ece_5bin": 0.03642560303313577,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4429590017825312,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    }
+   },
+   "news_vs_no_news": {
+    "mean": -0.009904331796182737,
+    "ci95": [
+     -0.021107698368737167,
+     -0.0016191795121685163
+    ],
+    "ci99_bonferroni5": [
+     -0.02468245756542425,
+     -0.0004672122108076266
+    ],
+    "p_better": 0.998,
+    "auc_diff": 0.062388591800356386,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "news_latest_vs_no_news": {
+    "mean": -0.008888327589813,
+    "ci95": [
+     -0.025109141907784082,
+     0.003306466991540176
+    ],
+    "ci99_bonferroni5": [
+     -0.031184877056912096,
+     0.006787187230415087
+    ],
+    "p_better": 0.923,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.09090909090909094,
+     "ci95": [
+      0.0,
+      0.25
+     ]
+    }
+   },
+   "gov_news_vs_persistence": {
+    "mean": 0.0026738830349087505,
+    "ci95": [
+     -0.027308221892564214,
+     0.03960016016607014
+    ],
+    "ci99_bonferroni5": [
+     -0.03442592497338754,
+     0.05191962353798865
+    ],
+    "p_better": 0.4575
+   },
+   "news_latest_vs_persistence": {
+    "mean": 0.00368988724127849,
+    "ci95": [
+     -0.02480874314320168,
+     0.035081660890088864
+    ],
+    "ci99_bonferroni5": [
+     -0.03333083249085047,
+     0.04819251595918493
+    ],
+    "p_better": 0.472
+   },
+   "no_news_vs_persistence": {
+    "mean": 0.012578214831091488,
+    "ci95": [
+     -0.023124721216675793,
+     0.05650104601098766
+    ],
+    "ci99_bonferroni5": [
+     -0.03141009020469424,
+     0.07059916109254474
+    ],
+    "p_better": 0.286
+   },
+   "news_domain_removal": {
+    "market": {
+     "mean": 0.0024661773476062606,
+     "ci95": [
+      -0.002157439896213517,
+      0.009238537788370636
+     ],
+     "ci99_bonferroni5": [
+      -0.0029106163161799464,
+      0.012236467710901063
+     ],
+     "p_better": 0.2825
+    },
+    "climate": {
+     "mean": 0.002203438631985498,
+     "ci95": [
+      -0.004808880098740632,
+      0.010761255586872078
+     ],
+     "ci99_bonferroni5": [
+      -0.006267558406691703,
+      0.014228296954964557
+     ],
+     "p_better": 0.2955
+    },
+    "employment": {
+     "mean": 0.002981778738251296,
+     "ci95": [
+      -0.0021073674477218637,
+      0.009953823385795762
+     ],
+     "ci99_bonferroni5": [
+      -0.0030167977259778376,
+      0.012746608449740264
+     ],
+     "p_better": 0.1885
+    },
+    "remittance": {
+     "mean": 0.002979595139081423,
+     "ci95": [
+      -0.0015359845939250927,
+      0.00971338337304874
+     ],
+     "ci99_bonferroni5": [
+      -0.002046072945201691,
+      0.012521332990081726
+     ],
+     "p_better": 0.1945
+    },
+    "poverty": {
+     "mean": 0.005097809759548244,
+     "ci95": [
+      -0.004293439449053531,
+      0.01682202062881199
+     ],
+     "ci99_bonferroni5": [
+      -0.005801836653260691,
+      0.02254565258412005
+     ],
+     "p_better": 0.214
+    }
+   },
+   "by_era_news_minus_no_news": {
+    "2010-2015": {
+     "n": 24,
+     "news_available": 7,
+     "mean_brier_diff": 0.0
+    },
+    "2016-2020": {
+     "n": 18,
+     "news_available": 18,
+     "mean_brier_diff": -0.0032420582653244854
+    },
+    "2021-2026": {
+     "n": 20,
+     "news_available": 20,
+     "mean_brier_diff": -0.027785576129374445
+    }
+   },
+   "without_sawtooth": {
+    "n": 58,
+    "news_vs_no_news": {
+     "mean": -0.008013493610716394,
+     "ci95": [
+      -0.01647783333184757,
+      -0.0009742312007768188
+     ],
+     "ci99_bonferroni5": [
+      -0.02043331655720975,
+      -0.0001977191750006441
+     ],
+     "p_better": 0.9975
+    },
+    "gov_news_vs_persistence": {
+     "mean": 0.004311075121446907,
+     "ci95": [
+      -0.02745617558756601,
+      0.04795350900793836
+     ],
+     "ci99_bonferroni5": [
+      -0.035209614495317634,
+      0.06344604957582949
+     ],
+     "p_better": 0.4325
+    }
+   },
+   "origins_with_news": {
+    "n": 45,
+    "news_vs_no_news": {
+     "mean": -0.013645968252518438,
+     "ci95": [
+      -0.028992033741817587,
+      -0.002262427139159364
+     ],
+     "ci99_bonferroni5": [
+      -0.03501017621258003,
+      -0.0009087964750057698
+     ],
+     "p_better": 1.0
+    }
+   },
+   "decisions": {
+    "probability_quality_improved_95": true,
+    "probability_quality_improved_bonferroni": true,
+    "auc_improved": true,
+    "accuracy_or_recall_improved": false,
+    "beyond_latest_reading": false,
+    "stable_across_eras": true,
+    "survives_sawtooth_exclusion": true,
+    "operationally_meaningful": false
+   },
+   "decision_text": {
+    "news_improves_probability_quality": "Brier(Government + news) - Brier(Government only): 95% block-bootstrap CI below 0; Bonferroni over the 5 horizons (99% CI) reported and required for a 'robust' claim",
+    "news_improves_accuracy_or_recall": "McNemar p < 0.05 on correct classifications, or recall difference with a bootstrap CI excluding 0",
+    "news_beyond_latest_reading": "Brier(News + latest reading) and Brier(Government + news) vs naive persistence: 95% CI below 0",
+    "stable": "Brier difference (news vs no news) negative in each era with news (2016-2020, 2021-2026) and 95% CI below 0 without the FI7 sawtooth quarters",
+    "operationally_meaningful": "a news configuration that passes the FI7 reliability rule AND beats naive persistence (95% CI below 0) at that horizon"
+   }
+  },
+  "QE2": {
+   "issue_dates_example": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "mean_age_of_latest_reading_q": 3.0806451612903225,
+   "metrics": {
+    "Government only": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.44028520499108736,
+     "brier": 0.1663206403229482,
+     "ece_5bin": 0.10480850571966438,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.44028520499108736,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.46702317290552586,
+     "brier": 0.1611057142376222,
+     "ece_5bin": 0.07389290064851523,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.46702317290552586,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "News + latest reading": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7903225806451613,
+     "recall": 0.09090909090909091,
+     "precision": 0.25,
+     "balanced_accuracy": 0.516042780748663,
+     "auc": 0.40819964349376114,
+     "brier": 0.1763411957765533,
+     "ece_5bin": 0.12812202886523988,
+     "share_predicted_high": 0.06451612903225806,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.75,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.40819964349376114,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without market news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.4848484848484848,
+     "brier": 0.16139273582133865,
+     "ece_5bin": 0.07582536125876571,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4848484848484848,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without climate news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.4866310160427808,
+     "brier": 0.16001251193942714,
+     "ece_5bin": 0.08164853268482115,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.4866310160427808,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without employment news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.48128342245989303,
+     "brier": 0.16141149625892648,
+     "ece_5bin": 0.08093705429389217,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.48128342245989303,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without remittance news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8064516129032258,
+     "recall": 0.0,
+     "precision": 0.0,
+     "balanced_accuracy": 0.49019607843137253,
+     "auc": 0.48128342245989303,
+     "brier": 0.16146508933798684,
+     "ece_5bin": 0.07439726250824019,
+     "share_predicted_high": 0.016129032258064516,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.65,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.48128342245989303,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Government + news without poverty news": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.46880570409982175,
+     "brier": 0.16249468365751188,
+     "ece_5bin": 0.10429947138305236,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.46880570409982175,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Naive persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.7096774193548387,
+     "recall": 0.09090909090909091,
+     "precision": 0.1111111111111111,
+     "balanced_accuracy": 0.46702317290552586,
+     "auc": 0.5811051693404634,
+     "brier": 0.19802725246804198,
+     "ece_5bin": 0.15507243928433495,
+     "share_predicted_high": 0.14516129032258066,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.6666666666666666,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.55,
+       "recall": 0.16666666666666666
+      }
+     },
+     "roc_auc": 0.5811051693404634,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": false,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": false
+      },
+      "passes": false
+     }
+    },
+    "Damped persistence": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.5026737967914439,
+     "brier": 0.14987281301790295,
+     "ece_5bin": 0.07463638746566546,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.5026737967914439,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": true,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    },
+    "Climatology": {
+     "n": 62,
+     "n_high": 11,
+     "accuracy": 0.8225806451612904,
+     "recall": 0.0,
+     "precision": null,
+     "balanced_accuracy": 0.5,
+     "auc": 0.3368983957219251,
+     "brier": 0.1505990469216777,
+     "ece_5bin": 0.03632841849426713,
+     "share_predicted_high": 0.0,
+     "eras": {
+      "2010-2015": {
+       "n": 24,
+       "accuracy": 0.8333333333333334,
+       "recall": 0.0
+      },
+      "2016-2020": {
+       "n": 18,
+       "accuracy": 0.9444444444444444,
+       "recall": 0.0
+      },
+      "2021-2026": {
+       "n": 20,
+       "accuracy": 0.7,
+       "recall": 0.0
+      }
+     },
+     "roc_auc": 0.3368983957219251,
+     "reliability_fi7": {
+      "checks": {
+       "accuracy": true,
+       "recall": false,
+       "precision": false,
+       "auc": false,
+       "brier_below_climatology": false,
+       "every_era_accuracy": true
+      },
+      "passes": false
+     }
+    }
+   },
+   "news_vs_no_news": {
+    "mean": -0.005214926085325971,
+    "ci95": [
+     -0.009774903712243292,
+     0.00011367124011101918
+    ],
+    "ci99_bonferroni5": [
+     -0.012503365410941695,
+     0.0005606517593508518
+    ],
+    "p_better": 0.97,
+    "auc_diff": 0.0267379679144385,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "news_latest_vs_no_news": {
+    "mean": 0.010020555453605091,
+    "ci95": [
+     -0.023776934824598018,
+     0.05282559717488546
+    ],
+    "ci99_bonferroni5": [
+     -0.03382850865573531,
+     0.0679553150934991
+    ],
+    "p_better": 0.2755,
+    "mcnemar_p": 1.0,
+    "recall_diff": {
+     "mean": 0.09090909090909091,
+     "ci95": [
+      0.0,
+      0.2857142857142857
+     ]
+    }
+   },
+   "gov_news_vs_persistence": {
+    "mean": -0.03692153823041976,
+    "ci95": [
+     -0.09066027755550314,
+     0.018442824988397267
+    ],
+    "ci99_bonferroni5": [
+     -0.10696204108610122,
+     0.03758899052424946
+    ],
+    "p_better": 0.8985
+   },
+   "news_latest_vs_persistence": {
+    "mean": -0.021686056691488688,
+    "ci95": [
+     -0.05376288814966004,
+     0.012679802089210582
+    ],
+    "ci99_bonferroni5": [
+     -0.06568967357309731,
+     0.021173100218406838
+    ],
+    "p_better": 0.888
+   },
+   "no_news_vs_persistence": {
+    "mean": -0.03170661214509379,
+    "ci95": [
+     -0.08642064761381754,
+     0.02101943448891016
+    ],
+    "ci99_bonferroni5": [
+     -0.1000443463954037,
+     0.03901526572197148
+    ],
+    "p_better": 0.8795
+   },
+   "news_domain_removal": {
+    "market": {
+     "mean": 0.0002870215837164244,
+     "ci95": [
+      -0.0031368905740479913,
+      0.002504351133478479
+     ],
+     "ci99_bonferroni5": [
+      -0.004148502124882236,
+      0.0037828886656228076
+     ],
+     "p_better": 0.524
+    },
+    "climate": {
+     "mean": -0.0010932022981950857,
+     "ci95": [
+      -0.004290287195423279,
+      0.0014001237401454279
+     ],
+     "ci99_bonferroni5": [
+      -0.005229355803545641,
+      0.002547957130507915
+     ],
+     "p_better": 0.7815
+    },
+    "employment": {
+     "mean": 0.00030578202130426564,
+     "ci95": [
+      -0.0038593197334732456,
+      0.0029504316120039227
+     ],
+     "ci99_bonferroni5": [
+      -0.004991468568932059,
+      0.004497229942686581
+     ],
+     "p_better": 0.6005
+    },
+    "remittance": {
+     "mean": 0.00035937510036463625,
+     "ci95": [
+      -0.0036059383726304785,
+      0.0027076352833473034
+     ],
+     "ci99_bonferroni5": [
+      -0.004632731788685839,
+      0.004431610632511964
+     ],
+     "p_better": 0.5965
+    },
+    "poverty": {
+     "mean": 0.001388969419889664,
+     "ci95": [
+      -0.004919005008668742,
+      0.0036734989441406566
+     ],
+     "ci99_bonferroni5": [
+      -0.006523409983787242,
+      0.006323141211060085
+     ],
+     "p_better": 0.6225
+    }
+   },
+   "by_era_news_minus_no_news": {
+    "2010-2015": {
+     "n": 24,
+     "news_available": 6,
+     "mean_brier_diff": 0.0
+    },
+    "2016-2020": {
+     "n": 18,
+     "news_available": 18,
+     "mean_brier_diff": -0.0022429521712528555
+    },
+    "2021-2026": {
+     "n": 20,
+     "news_available": 20,
+     "mean_brier_diff": -0.014147613910382942
+    }
+   },
+   "without_sawtooth": {
+    "n": 58,
+    "news_vs_no_news": {
+     "mean": -0.0057748389717301755,
+     "ci95": [
+      -0.010993763714199644,
+      -3.373861237844202e-05
+     ],
+     "ci99_bonferroni5": [
+      -0.013256379732566778,
+      0.00014713351993429717
+     ],
+     "p_better": 0.9795
+    },
+    "gov_news_vs_persistence": {
+     "mean": -0.040140273794312134,
+     "ci95": [
+      -0.08679293955445129,
+      -0.000273130665534428
+     ],
+     "ci99_bonferroni5": [
+      -0.1056829683901925,
+      0.011015814719537326
+     ],
+     "p_better": 0.9765
+    }
+   },
+   "origins_with_news": {
+    "n": 44,
+    "news_vs_no_news": {
+     "mean": -0.007348304938413868,
+     "ci95": [
+      -0.013872534642406077,
+      0.00012909544912613306
+     ],
+     "ci99_bonferroni5": [
+      -0.01692679165182017,
+      0.0008864124847583581
+     ],
+     "p_better": 0.9685
+    }
+   },
+   "decisions": {
+    "probability_quality_improved_95": false,
+    "probability_quality_improved_bonferroni": false,
+    "auc_improved": true,
+    "accuracy_or_recall_improved": false,
+    "beyond_latest_reading": false,
+    "stable_across_eras": true,
+    "survives_sawtooth_exclusion": true,
+    "operationally_meaningful": false
+   },
+   "decision_text": {
+    "news_improves_probability_quality": "Brier(Government + news) - Brier(Government only): 95% block-bootstrap CI below 0; Bonferroni over the 5 horizons (99% CI) reported and required for a 'robust' claim",
+    "news_improves_accuracy_or_recall": "McNemar p < 0.05 on correct classifications, or recall difference with a bootstrap CI excluding 0",
+    "news_beyond_latest_reading": "Brier(News + latest reading) and Brier(Government + news) vs naive persistence: 95% CI below 0",
+    "stable": "Brier difference (news vs no news) negative in each era with news (2016-2020, 2021-2026) and 95% CI below 0 without the FI7 sawtooth quarters",
+    "operationally_meaningful": "a news configuration that passes the FI7 reliability rule AND beats naive persistence (95% CI below 0) at that horizon"
+   }
+  }
+ }
+}

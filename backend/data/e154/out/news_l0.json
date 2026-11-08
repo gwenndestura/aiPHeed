@@ -1,0 +1,83 @@
+{
+ "definition": "issued on the first day of the target quarter: news and government data to the end of the previous quarter",
+ "n": 72,
+ "n_high": 25,
+ "GNT": {
+  "correct": 47,
+  "accuracy": 0.6527777777777778,
+  "high_recall": 0.68,
+  "low_recall": 0.6382978723404256,
+  "brier_soft": 0.14432393624545917,
+  "by_round": {
+   "ENNS2018": 12,
+   "ENNS2019": 14,
+   "ENNS2021": 21
+  }
+ },
+ "GOV": {
+  "correct": 49,
+  "accuracy": 0.6805555555555556,
+  "high_recall": 0.68,
+  "low_recall": 0.6808510638297872,
+  "brier_soft": 0.14302150036415115,
+  "by_round": {
+   "ENNS2018": 13,
+   "ENNS2019": 15,
+   "ENNS2021": 21
+  }
+ },
+ "NEWS": {
+  "correct": 49,
+  "accuracy": 0.6805555555555556,
+  "high_recall": 0.8,
+  "low_recall": 0.6170212765957447,
+  "brier_soft": 0.14410490632082876,
+  "by_round": {
+   "ENNS2018": 12,
+   "ENNS2019": 17,
+   "ENNS2021": 20
+  }
+ },
+ "ANCHOR": {
+  "correct": 46,
+  "accuracy": 0.6388888888888888,
+  "high_recall": 0.96,
+  "low_recall": 0.46808510638297873,
+  "brier_soft": 0.172915688249216,
+  "by_round": {
+   "ENNS2018": 12,
+   "ENNS2019": 17,
+   "ENNS2021": 17
+  }
+ },
+ "PERS": {
+  "correct": 45,
+  "accuracy": 0.625,
+  "high_recall": 0.96,
+  "low_recall": 0.44680851063829785,
+  "brier_soft": 0.2127630216102581,
+  "by_round": {
+   "ENNS2018": 13,
+   "ENNS2019": 19,
+   "ENNS2021": 13
+  }
+ },
+ "news_gain_brier": {
+  "diff": 0.0013024358813080728,
+  "ci95": [
+   -0.0014038006890805318,
+   0.003867089231720063
+  ],
+  "n_regions": 16,
+  "p_ge_0": 0.8395
+ },
+ "gnt_vs_persistence": {
+  "diff": -0.06843908536479892,
+  "ci95": [
+   -0.12529307100282172,
+   -0.020675199294690385
+  ],
+  "n_regions": 16,
+  "p_ge_0": 0.0015
+ }
+}

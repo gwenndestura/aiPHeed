@@ -1,0 +1,1454 @@
+{
+ "candidates": {
+  "OP1 | Damped persistence": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": true,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 4
+  },
+  "OP1 | Elastic-net logistic (government + news R2)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 11
+  },
+  "OP1 | Elastic-net logistic (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Intermediate PCA (government + news)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Intermediate PCA (government only)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "OP1 | Late fusion: average (damped, ridge gov + news R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Late fusion: stack (damped, LightGBM gov, news-only R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Late fusion: stack without news (damped, LightGBM gov)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | LightGBM (government + news R0)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | LightGBM (government + news R1)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | LightGBM (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Local level": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "OP1 | Logistic (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "OP1 | NLP-only logistic (news R2, no SWS)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "OP1 | News-only ridge (latest + news R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "OP1 | News-only ridge (latest + news R2)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 11
+  },
+  "OP1 | Residual: LightGBM government + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Residual: damped + news R0": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: damped + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Residual: damped + news R2": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Residual: damped + news R3": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: damped + news R4": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: damped + news R5": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Residual: damped + news R6": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: damped + news R7": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: damped + news R8": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Residual: damped + news R9": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "OP1 | Residual: seasonal + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Ridge (government + news R0)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Ridge (government + news R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Ridge (government + news R2)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "OP1 | Ridge (government + news R3)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Ridge (government + news R4)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Ridge (government + news R5)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "OP1 | Ridge (government + news R6)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Ridge (government + news R7)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "OP1 | Ridge (government + news R8)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Ridge (government + news R9)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Ridge (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "OP1 | Ridge (latest reading only)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Seasonal damped persistence": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 5
+  },
+  "OP1 | Timing-aware nested: early ridge, representation chosen in training": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "OP1 | Timing-aware nested: residual, representation chosen in training": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": true,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Damped persistence": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "QE1 | Elastic-net logistic (government + news R2)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "QE1 | Elastic-net logistic (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Intermediate PCA (government + news)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "QE1 | Intermediate PCA (government only)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Late fusion: average (damped, ridge gov + news R1)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Late fusion: stack (damped, LightGBM gov, news-only R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Late fusion: stack without news (damped, LightGBM gov)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "QE1 | LightGBM (government + news R0)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": true
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | LightGBM (government + news R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": true
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | LightGBM (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Local level": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "QE1 | Logistic (government)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "QE1 | NLP-only logistic (news R2, no SWS)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 11
+  },
+  "QE1 | News-only ridge (latest + news R1)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "QE1 | News-only ridge (latest + news R2)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 10
+  },
+  "QE1 | Residual: LightGBM government + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: damped + news R0": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "QE1 | Residual: damped + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: damped + news R2": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "QE1 | Residual: damped + news R3": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: damped + news R4": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Residual: damped + news R5": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Residual: damped + news R6": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Residual: damped + news R7": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: damped + news R8": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: damped + news R9": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Residual: seasonal + news R1": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Ridge (government + news R0)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government + news R1)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government + news R2)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government + news R3)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 8
+  },
+  "QE1 | Ridge (government + news R4)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government + news R5)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "QE1 | Ridge (government + news R6)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 7
+  },
+  "QE1 | Ridge (government + news R7)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Ridge (government + news R8)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government + news R9)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 6
+  },
+  "QE1 | Ridge (government)": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 5
+  },
+  "QE1 | Ridge (latest reading only)": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": false,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Seasonal damped persistence": {
+   "checks": {
+    "reliability_full": true,
+    "reliability_B": true,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": true
+   },
+   "adopt": false,
+   "n_failed": 5
+  },
+  "QE1 | Timing-aware nested: early ridge, representation chosen in training": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": false,
+    "overfit_gap_le_010": true,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  },
+  "QE1 | Timing-aware nested: residual, representation chosen in training": {
+   "checks": {
+    "reliability_full": false,
+    "reliability_B": false,
+    "reliability_without_sawtooth": false,
+    "accuracy_ge_075_bacc_ge_070_recall_ge_050": true,
+    "brier_vs_C0_P90": false,
+    "brier_vs_naive_P90": false,
+    "both_halves_better_than_naive": false,
+    "drop_one_quarter_robust": false,
+    "ece_le_010": true,
+    "overfit_gap_le_010": false,
+    "news_beats_counterpart_P90": false
+   },
+   "adopt": false,
+   "n_failed": 9
+  }
+ },
+ "adopted": [],
+ "n_configurations_tested": 86,
+ "reliable_configurations_by_lead_FI9_timing": {
+  "OP1": [],
+  "OP2": []
+ },
+ "max_reliable_lead": null,
+ "decision": "retain production C0: no configuration passed every adoption check"
+}

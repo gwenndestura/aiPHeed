@@ -1,0 +1,75 @@
+........................................................................ [  5%]
+...........................................................s...s.....s.. [ 11%]
+s.........s......sss.........................................ss.s.s..... [ 16%]
+........................................................................ [ 22%]
+............................................F.F......................... [ 28%]
+........................................................................ [ 33%]
+........................................................................ [ 39%]
+........................................................................ [ 44%]
+..............................................................ss.s...... [ 50%]
+..sss................................................................... [ 56%]
+........................................................................ [ 61%]
+........................................................................ [ 67%]
+........................................................................ [ 72%]
+........................................................................ [ 78%]
+........................................................................ [ 84%]
+........................................................................ [ 89%]
+........................................................................ [ 95%]
+...........................................................              [100%]
+================================== FAILURES ===================================
+_______________________ test_all_validation_checks_pass _______________________
+
+results = {'Quezon City and Lucena never appear as province units': {'check': 'Quezon City and Lucena never appear as province u...{'check': 'computed changes start 2022-Q1 or later (2021+ base only)', 'detail': 'min 2022-Q1', 'result': 'PASS'}, ...}
+
+    def test_all_validation_checks_pass(results):
+        failed = {k: v["detail"] for k, v in results.items() if v["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/ml/inference/explainer.py
+E          M backend/app...backend/app/ml/inference/predictor.py
+E          M backend/app/ml/inference/thesis_explainer.py
+E          M backend/app/ml/inference/t'}
+E       assert not {'production code, dashboard, E118 and E119 files unchanged': 'M backend/app/ml/inference/explainer.py\n M backend/app...backend/app/ml/inference/predictor.py\n M backend/app/ml/inference/thesis_explainer.py\n M backend/app/ml/inference/t'}
+
+tests\integration\test_e119r2_framework.py:32: AssertionError
+____________________________ test_e120_checks_pass ____________________________
+
+    def test_e120_checks_pass():
+        sys.path.insert(0, str(E / "runner"))
+        spec = importlib.util.spec_from_file_location("e120_validate", E / "runner" / "validate.py")
+        validate = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validate)
+        r = validate.checks()
+        failed = {x["check"]: x["detail"] for x in r if x["result"] != "PASS"}
+>       assert not failed, failed
+E       AssertionError: {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/ml/inference/explainer....backend/app/ml/inference/predictor.py
+E          M backend/app/ml/inference/thesis_explainer.py
+E          M backend/app/ml/inference/t'}
+E       assert not {'firi.py, production code, dashboard, data, E118, E119 and E119-R2 unchanged': 'M backend/app/ml/inference/explainer....backend/app/ml/inference/predictor.py\n M backend/app/ml/inference/thesis_explainer.py\n M backend/app/ml/inference/t'}
+
+tests\integration\test_e120_firi_design.py:28: AssertionError
+============================== warnings summary ===============================
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/integration/test_plain_report.py::test_factors_report_for_one_province
+  C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/unit/test_e126_maintenance.py::test_zero_versus_missing_and_dedup
+  C:\Users\admin\aipheed_final\aipheed-backend-aligned\experiments\E126_FIRI3_Pre_Issuance_Maintenance\runner\run_e126.py:127: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+    return pd.concat([df, z], ignore_index=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/integration/test_e119r2_framework.py::test_all_validation_checks_pass
+FAILED tests/integration/test_e120_firi_design.py::test_e120_checks_pass - As...
+2 failed, 1263 passed, 18 skipped, 4 warnings in 214.41s (0:03:34)
+exit=1

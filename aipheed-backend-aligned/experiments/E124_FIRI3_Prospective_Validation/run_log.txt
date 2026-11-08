@@ -1,0 +1,311 @@
+{
+ "today": "2026-10-31",
+ "origin": "2026-Q4",
+ "issue_date": "2027-01-01",
+ "hashes_ok": true,
+ "config_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+ "reproduces_e123": true,
+ "attempt": "blocked: issuance blocked: today 2026-10-31 is before the issue date 2027-01-01; C3: inputs to refresh: e118_nasa_power_monthly, lfs, par, profile",
+ "rule_check": {
+  "cpi_food_yoy_pct": {
+   "rows": 115,
+   "equal_rule_pct": 82.6,
+   "not_later_than_rule_pct": 92.2
+  },
+  "cpi_headline_yoy_pct": {
+   "rows": 115,
+   "equal_rule_pct": 82.6,
+   "not_later_than_rule_pct": 92.2
+  },
+  "region_cpi_food_yoy_pct": {
+   "rows": 19,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "region_cpi_headline_yoy_pct": {
+   "rows": 19,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "retail_chicken_yoy_pct": {
+   "rows": 95,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "retail_pork_yoy_pct": {
+   "rows": 95,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "retail_tilapia_yoy_pct": {
+   "rows": 95,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "farmgate_palay_yoy_pct": {
+   "rows": 113,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "rice_wholesale_yoy_pct": {
+   "rows": 89,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "palay_production_yoy_pct": {
+   "rows": 114,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "corn_production_yoy_pct": {
+   "rows": 114,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "vegetables_only_production_yoy_pct": {
+   "rows": 108,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "rootcrops_only_production_yoy_pct": {
+   "rows": 108,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "fisheries_production_yoy_pct": {
+   "rows": 108,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "chicken_production_yoy_pct": {
+   "rows": 60,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "livestock_production_yoy_pct": {
+   "rows": 60,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "E2_remittance_decline_pct": {
+   "rows": 18,
+   "equal_rule_pct": 77.8,
+   "not_later_than_rule_pct": 88.9
+  },
+  "rainfall_anomaly_mm": {
+   "rows": 96,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "temperature_anomaly_c": {
+   "rows": 96,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "typhoons_local_100km": {
+   "rows": 110,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "typhoons_PAR": {
+   "rows": 19,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "N1_fssi_v3": {
+   "rows": 20,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "news_gdelt_shortage_share": {
+   "rows": 23,
+   "equal_rule_pct": 100.0,
+   "not_later_than_rule_pct": 100.0
+  },
+  "E1_unemployment_change_pp": {
+   "rows": 19,
+   "equal_rule_pct": 94.7,
+   "not_later_than_rule_pct": 100.0
+  }
+ },
+ "release_status_counts": {
+  "released (publication date unverified)": 22,
+  "retrieved but incomplete": 5,
+  "released per rule but not retrieved (refresh needed)": 4,
+  "released and verified": 2,
+  "not applicable": 1
+ },
+ "eligible_with_current_holdings": {
+  "provincial": 18,
+  "regional": 12
+ },
+ "features": {
+  "provincial": 20,
+  "regional": 14
+ },
+ "missing_inputs": [
+  {
+   "feature": "CEC_rain_departure",
+   "source_key": "e118_nasa_power_monthly",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "released per rule but not retrieved (refresh needed)",
+   "note": "NASA POWER monthly endpoint returned data only to 2025-12 at retrieval (E118)",
+   "blocking": true
+  },
+  {
+   "feature": "CEC_heat",
+   "source_key": "e118_nasa_power_monthly",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "released per rule but not retrieved (refresh needed)",
+   "note": "NASA POWER monthly endpoint returned data only to 2025-12 at retrieval (E118)",
+   "blocking": true
+  },
+  {
+   "feature": "CEC_cyclones_100km",
+   "source_key": "profile",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "retrieved but incomplete",
+   "note": "2026-Q3 count was incomplete at retrieval (quarter in progress)",
+   "blocking": true
+  },
+  {
+   "feature": "CEC_rain_departure_R",
+   "source_key": "e118_nasa_power_monthly",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "released per rule but not retrieved (refresh needed)",
+   "note": "NASA POWER monthly endpoint returned data only to 2025-12 at retrieval (E118)",
+   "blocking": true
+  },
+  {
+   "feature": "CEC_heat_R",
+   "source_key": "e118_nasa_power_monthly",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "released per rule but not retrieved (refresh needed)",
+   "note": "NASA POWER monthly endpoint returned data only to 2025-12 at retrieval (E118)",
+   "blocking": true
+  },
+  {
+   "feature": "CEC_cyclones_R",
+   "source_key": "par",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "retrieved but incomplete",
+   "note": "E119 kept PAR to 2026-Q2 (2026-Q3 incomplete at retrieval)",
+   "blocking": true
+  },
+  {
+   "feature": "EHS_unemployment_prov",
+   "source_key": "emp_owner",
+   "target_observation_period": "2025",
+   "availability_status": "retrieved but incomplete",
+   "note": "2025 lacks: ['Batangas']; latest complete 2024",
+   "blocking": false
+  },
+  {
+   "feature": "EHS_underemployment_prov",
+   "source_key": "emp_owner",
+   "target_observation_period": "2025",
+   "availability_status": "retrieved but incomplete",
+   "note": "2025 lacks: ['Quezon']; latest complete 2024",
+   "blocking": false
+  },
+  {
+   "feature": "EHS_unemployment_change_R",
+   "source_key": "lfs",
+   "target_observation_period": "2026-Q3",
+   "availability_status": "retrieved but incomplete",
+   "note": "2 of 3 survey months of 2026-Q3 held; the last is due 2026-12-01",
+   "blocking": true
+  }
+ ],
+ "comparison": {
+  "rows_both": 75,
+  "spearman": -0.277,
+  "side_agreement_pct": 40.0,
+  "v2_high_pct": 81.3,
+  "firi3_ge_0_5_pct": 45.3,
+  "rank_spearman_mean": -0.067,
+  "amendment_1_rows_changed": 73,
+  "amendment_2_rows_changed": 10,
+  "v2_rows_firi3_not_computable": 20,
+  "firi3_computable": {
+   "provincial": 75,
+   "regional": 10
+  }
+ },
+ "firi_v2_sha256": {
+  "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+  "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+  "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+ },
+ "production_tree_clean": true
+}
+                      feature target_observation_period latest_in_hand expected_available_on retrieved_on                                   availability_status
+0                FMA_food_cpi                   2026-Q3        2026-Q3            2026-10-10   2026-10-20                released (publication date unverified)
+1            FMA_headline_cpi                   2026-Q3        2026-Q3            2026-10-10   2026-10-20                released (publication date unverified)
+2          FMA_rice_wholesale                   2026-Q2        2026-Q3            2026-10-01   2026-10-25                released (publication date unverified)
+3                 FMA_chicken                   2026-Q3        2026-Q3            2026-10-15   2026-10-31                released (publication date unverified)
+4                    FMA_pork                   2026-Q3        2026-Q3            2026-10-15   2026-10-31                released (publication date unverified)
+5                 FMA_tilapia                   2026-Q3        2026-Q3            2026-10-15   2026-10-31                released (publication date unverified)
+6              FMA_food_cpi_R                   2026-Q3        2026-Q3            2026-10-10   2026-10-25                released (publication date unverified)
+7          FMA_headline_cpi_R                   2026-Q3        2026-Q3            2026-10-10   2026-10-25                released (publication date unverified)
+8                  FMA_rice_R                   2026-Q3        2026-Q3            2026-10-15   2026-10-31                released (publication date unverified)
+9                   AFP_palay                   2026-Q2        2026-Q3            2026-10-01   2026-10-31                released (publication date unverified)
+10                   AFP_corn                   2026-Q2        2026-Q3            2026-10-01   2026-10-31                released (publication date unverified)
+11             AFP_vegetables                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+12              AFP_rootcrops                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+13              AFP_fisheries                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+14                AFP_chicken                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+15              AFP_livestock                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+16                AFP_palay_R                   2026-Q2        2026-Q3            2026-10-01   2026-10-31                released (publication date unverified)
+17                 AFP_corn_R                   2026-Q2        2026-Q3            2026-10-01   2026-10-31                released (publication date unverified)
+18           AFP_vegetables_R                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+19            AFP_rootcrops_R                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+20            AFP_fisheries_R                   2026-Q2        2026-Q2            2026-10-01   2026-10-31                released (publication date unverified)
+21         CEC_rain_departure                   2026-Q3        2025-Q4            2026-11-01   2026-10-31  released per rule but not retrieved (refresh needed)
+22                   CEC_heat                   2026-Q3        2025-Q4            2026-11-01   2026-10-31  released per rule but not retrieved (refresh needed)
+23         CEC_cyclones_100km                   2026-Q3        2026-Q2            2026-10-01   2026-10-30                              retrieved but incomplete
+24       CEC_rain_departure_R                   2026-Q3        2025-Q4            2026-11-01   2026-10-31  released per rule but not retrieved (refresh needed)
+25                 CEC_heat_R                   2026-Q3        2025-Q4            2026-11-01   2026-10-31  released per rule but not retrieved (refresh needed)
+26             CEC_cyclones_R                   2026-Q3        2026-Q2            2026-10-01   2026-10-25                              retrieved but incomplete
+27      EHS_unemployment_prov                      2025           2025            2026-06-30   2026-10-30                              retrieved but incomplete
+28   EHS_underemployment_prov                      2025           2025            2026-06-30   2026-10-30                              retrieved but incomplete
+29  EHS_unemployment_change_R                   2026-Q3        2026-Q3            2026-12-01   2026-10-25                              retrieved but incomplete
+30   EHS_remittance_decline_R                   2026-Q2        2026-Q2            2026-10-01   2026-10-30                released (publication date unverified)
+31                PSV_poverty                      2021           2021            2025-07-01   2026-10-20                                        not applicable
+32                   FIS_fssi                   2026-Q3        2026-Q3            2026-10-01   2026-10-28                                 released and verified
+33        FIS_shortage_news_R                   2026-Q3        2026-Q3            2026-10-01   2026-10-25                                 released and verified
+                      feature period_used_with_current_holdings period_expected_by_release_rule statuses_with_current_holdings  eligible_with_current_holdings
+0                FMA_food_cpi                           2026-Q3                         2026-Q3             rule_unverified: 5                            True
+1            FMA_headline_cpi                           2026-Q3                         2026-Q3             rule_unverified: 5                            True
+2          FMA_rice_wholesale                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+3                 FMA_chicken                           2026-Q3                         2026-Q3             rule_unverified: 5                            True
+4                    FMA_pork                           2026-Q3                         2026-Q3             rule_unverified: 5                            True
+5                 FMA_tilapia                           2026-Q3                         2026-Q3             rule_unverified: 5                            True
+6              FMA_food_cpi_R                           2026-Q3                         2026-Q3             rule_unverified: 1                            True
+7          FMA_headline_cpi_R                           2026-Q3                         2026-Q3             rule_unverified: 1                            True
+8                  FMA_rice_R                           2026-Q3                         2026-Q3             rule_unverified: 1                            True
+9                   AFP_palay                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+10                   AFP_corn                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+11             AFP_vegetables                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+12              AFP_rootcrops                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+13              AFP_fisheries                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+14                AFP_chicken                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+15              AFP_livestock                           2026-Q2                         2026-Q2             rule_unverified: 5                            True
+16                AFP_palay_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+17                 AFP_corn_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+18           AFP_vegetables_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+19            AFP_rootcrops_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+20            AFP_fisheries_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+21         CEC_rain_departure                           2025-Q4                         2026-Q3                       stale: 5                           False
+22                   CEC_heat                           2025-Q4                         2026-Q3                       stale: 5                           False
+23         CEC_cyclones_100km                           2026-Q2                         2026-Q3                    verified: 5                            True
+24       CEC_rain_departure_R                           2025-Q4                         2026-Q3                       stale: 1                           False
+25                 CEC_heat_R                           2025-Q4                         2026-Q3                       stale: 1                           False
+26             CEC_cyclones_R                           2026-Q2                         2026-Q3                    verified: 1                            True
+27      EHS_unemployment_prov                              2024                            2025             rule_unverified: 5                            True
+28   EHS_underemployment_prov                              2024                            2025             rule_unverified: 5                            True
+29  EHS_unemployment_change_R                           2026-Q3                         2026-Q3             rule_unverified: 1                            True
+30   EHS_remittance_decline_R                           2026-Q2                         2026-Q2             rule_unverified: 1                            True
+31                PSV_poverty                              2021                            2021                    verified: 5                            True
+32                   FIS_fssi                  2026-Q2; 2026-Q3                         2026-Q3                    verified: 5                            True
+33        FIS_shortage_news_R                           2026-Q3                         2026-Q3                    verified: 1                            True

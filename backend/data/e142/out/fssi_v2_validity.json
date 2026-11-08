@@ -1,0 +1,80 @@
+{
+  "T1_volume_dependence": {
+    "raw_share": {
+      "n": 344,
+      "spearman": 0.4399029530325457,
+      "p_one_sided": 5.165510151792765e-18
+    },
+    "fi6n_shrunk_share": {
+      "n": 344,
+      "spearman": 0.4270617883883205,
+      "p_one_sided": 5.543043226805584e-17
+    },
+    "fssi_v2": {
+      "n": 344,
+      "spearman": 0.045670014705105524,
+      "p_one_sided": 0.19922012458482627
+    },
+    "attention_vs_articles": {
+      "n": 344,
+      "spearman": 0.6150209264189935,
+      "p_one_sided": 1.7817669284795518e-37
+    }
+  },
+  "T2_stability_by_volume_tercile": [
+    {
+      "tercile": "low",
+      "count": 115,
+      "mean": -0.0986,
+      "std": 1.2923
+    },
+    {
+      "tercile": "mid",
+      "count": 114,
+      "mean": -0.4331,
+      "std": 1.3195
+    },
+    {
+      "tercile": "high",
+      "count": 115,
+      "mean": -0.1096,
+      "std": 1.1904
+    }
+  ],
+  "T3_convergent_validity": {
+    "fssi_v2_vs_cyclones": {
+      "n": 344,
+      "spearman": 0.21520968403898866,
+      "p_one_sided": 2.857618069362845e-05
+    },
+    "attention_vs_cyclones": {
+      "n": 344,
+      "spearman": 0.09555651136825,
+      "p_one_sided": 0.038371027926159554
+    },
+    "fi6n_shrunk_share_vs_cyclones": {
+      "n": 344,
+      "spearman": 0.22817899691609755,
+      "p_one_sided": 9.634791494814672e-06
+    }
+  },
+  "T4_coverage": {
+    "province_quarters": 344,
+    "quarters": [
+      "2008-Q2",
+      "2026-Q4"
+    ],
+    "outlets": {
+      "rappler": 59497,
+      "verafiles": 1843,
+      "newsbytes": 1010,
+      "pcij": 348
+    },
+    "multi_source_events": 3,
+    "note": "one outlet supplies about 95 % of articles, so outlet bias cannot be corrected by re-weighting"
+  },
+  "not_established": [
+    "sentiment classification accuracy (no human-labelled set; owner rule)",
+    "provincial forecasting contribution (no news outside CALABARZON for the training rounds; 8 measured CALABARZON rows cannot test it)"
+  ]
+}

@@ -1,0 +1,647 @@
+{
+ "schema": "aipheed.firi.evaluation/1",
+ "protocolSha256": "82038f6dc69c36daa6cb5c9e6275554d9b73b8727e8b60887f66d90aba2ff801",
+ "amendment1Sha256": "1007d2c413a552e27eb70885d00c7e5d560ad1469a1fe595e91ec5f08c314d72",
+ "anchorsSha256": "56223d76ce1a91ffb504793d4a361d219c63304ba13098fa62b57b5b90c9f0b0",
+ "domainsUsed": [
+  "A",
+  "C",
+  "E",
+  "H",
+  "V"
+ ],
+ "newsDomain": "excluded by the frozen rule: FSSI-v3 has only 3 SUFFICIENT province-quarters in the anchor window",
+ "leads": [
+  {
+   "lead": 1,
+   "rows": 60,
+   "quarters": 12,
+   "FIRI": {
+    "n": 60,
+    "positives": 21,
+    "accuracy": 0.4,
+    "accuracy_wilson95": [
+     0.28569303003765506,
+     0.5263417560579315
+    ],
+    "precision_HIGH": 0.36363636363636365,
+    "recall_HIGH": 0.9523809523809523,
+    "recall_LOW": 0.10256410256410256,
+    "f1_HIGH": 0.5263157894736842,
+    "balanced_accuracy": 0.5274725274725275,
+    "auc_roc": 0.6361416361416361,
+    "brier": 0.27831885644248516,
+    "confusion": {
+     "TP": 20,
+     "FP": 35,
+     "FN": 1,
+     "TN": 4
+    }
+   },
+   "FIRI_class_rate_HIGH": 0.9166666666666666,
+   "LightGBM": {
+    "n": 60,
+    "positives": 21,
+    "accuracy": 0.85,
+    "accuracy_wilson95": [
+     0.7388517410884038,
+     0.9190265075770431
+    ],
+    "precision_HIGH": 0.8333333333333334,
+    "recall_HIGH": 0.7142857142857143,
+    "recall_LOW": 0.9230769230769231,
+    "f1_HIGH": 0.7692307692307693,
+    "balanced_accuracy": 0.8186813186813187,
+    "auc_roc": 0.9010989010989011,
+    "brier": 0.1296690573527516,
+    "confusion": {
+     "TP": 15,
+     "FP": 3,
+     "FN": 6,
+     "TN": 36
+    }
+   },
+   "persistence": {
+    "n": 60,
+    "positives": 21,
+    "accuracy": 0.6833333333333333,
+    "accuracy_wilson95": [
+     0.5576599505698345,
+     0.7869429415882567
+    ],
+    "precision_HIGH": 0.55,
+    "recall_HIGH": 0.5238095238095238,
+    "recall_LOW": 0.7692307692307693,
+    "f1_HIGH": 0.5365853658536586,
+    "balanced_accuracy": 0.6465201465201466,
+    "auc_roc": 0.6465201465201464,
+    "brier": 0.31666666666666665,
+    "confusion": {
+     "TP": 11,
+     "FP": 9,
+     "FN": 10,
+     "TN": 30
+    }
+   },
+   "majority": {
+    "n": 60,
+    "positives": 21,
+    "accuracy": 0.65,
+    "accuracy_wilson95": [
+     0.5236238380947751,
+     0.7583239827618451
+    ],
+    "precision_HIGH": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1_HIGH": 0.0,
+    "balanced_accuracy": 0.5,
+    "auc_roc": 0.5,
+    "brier": 0.35,
+    "confusion": {
+     "TP": 0,
+     "FP": 0,
+     "FN": 21,
+     "TN": 39
+    }
+   },
+   "vs_persistence": {
+    "mean_brier_diff": -0.038347810224181565,
+    "ci95_lo": -0.17357587800904564,
+    "ci95_hi": 0.09936852313381332,
+    "quarter_wins": 7,
+    "quarter_losses": 5,
+    "sign_p_two_sided": 0.7744140625,
+    "holds": false
+   },
+   "vs_climatology": {
+    "mean_brier_diff": -0.006111290422259808,
+    "ci95_lo": -0.16782801562484922,
+    "ci95_hi": 0.15082941793724275,
+    "quarter_wins": 6,
+    "quarter_losses": 6,
+    "sign_p_two_sided": 1.0,
+    "holds": false
+   },
+   "reliable": false,
+   "sensitivity_strictV": {
+    "rows_computable": 60,
+    "accuracy": 0.38333333333333336,
+    "auc_roc": 0.7277167277167278,
+    "brier": 0.2841461456958643
+   },
+   "sensitivity_noH": {
+    "accuracy": 0.5333333333333333,
+    "auc_roc": 0.6349206349206349,
+    "brier": 0.24959375808931036,
+    "recall_HIGH": 0.7619047619047619
+   }
+  },
+  {
+   "lead": 2,
+   "rows": 50,
+   "quarters": 10,
+   "FIRI": {
+    "n": 50,
+    "positives": 18,
+    "accuracy": 0.44,
+    "accuracy_wilson95": [
+     0.3116198721023534,
+     0.5769421319985648
+    ],
+    "precision_HIGH": 0.38636363636363635,
+    "recall_HIGH": 0.9444444444444444,
+    "recall_LOW": 0.15625,
+    "f1_HIGH": 0.5483870967741935,
+    "balanced_accuracy": 0.5503472222222222,
+    "auc_roc": 0.7170138888888888,
+    "brier": 0.2637878807265118,
+    "confusion": {
+     "TP": 17,
+     "FP": 27,
+     "FN": 1,
+     "TN": 5
+    }
+   },
+   "FIRI_class_rate_HIGH": 0.88,
+   "LightGBM": {
+    "n": 50,
+    "positives": 18,
+    "accuracy": 0.72,
+    "accuracy_wilson95": [
+     0.5833461285401034,
+     0.8252598564231963
+    ],
+    "precision_HIGH": 0.625,
+    "recall_HIGH": 0.5555555555555556,
+    "recall_LOW": 0.8125,
+    "f1_HIGH": 0.5882352941176471,
+    "balanced_accuracy": 0.6840277777777778,
+    "auc_roc": 0.6493055555555556,
+    "brier": 0.21404436047269074,
+    "confusion": {
+     "TP": 10,
+     "FP": 6,
+     "FN": 8,
+     "TN": 26
+    }
+   },
+   "persistence": {
+    "n": 50,
+    "positives": 18,
+    "accuracy": 0.56,
+    "accuracy_wilson95": [
+     0.4230578680014353,
+     0.6883801278976466
+    ],
+    "precision_HIGH": 0.4,
+    "recall_HIGH": 0.4444444444444444,
+    "recall_LOW": 0.625,
+    "f1_HIGH": 0.42105263157894735,
+    "balanced_accuracy": 0.5347222222222222,
+    "auc_roc": 0.5347222222222222,
+    "brier": 0.44,
+    "confusion": {
+     "TP": 8,
+     "FP": 12,
+     "FN": 10,
+     "TN": 20
+    }
+   },
+   "majority": {
+    "n": 50,
+    "positives": 18,
+    "accuracy": 0.64,
+    "accuracy_wilson95": [
+     0.5014076201030195,
+     0.7586143703281711
+    ],
+    "precision_HIGH": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1_HIGH": 0.0,
+    "balanced_accuracy": 0.5,
+    "auc_roc": 0.5,
+    "brier": 0.36,
+    "confusion": {
+     "TP": 0,
+     "FP": 0,
+     "FN": 18,
+     "TN": 32
+    }
+   },
+   "vs_persistence": {
+    "mean_brier_diff": -0.1762121192734882,
+    "ci95_lo": -0.3419791961376913,
+    "ci95_hi": -0.0003910040631920448,
+    "quarter_wins": 7,
+    "quarter_losses": 3,
+    "sign_p_two_sided": 0.34375,
+    "holds": false
+   },
+   "vs_climatology": {
+    "mean_brier_diff": -0.040672163757983014,
+    "ci95_lo": -0.21860224836251665,
+    "ci95_hi": 0.12119700827204732,
+    "quarter_wins": 5,
+    "quarter_losses": 5,
+    "sign_p_two_sided": 1.0,
+    "holds": false
+   },
+   "reliable": false,
+   "sensitivity_strictV": {
+    "rows_computable": 50,
+    "accuracy": 0.46,
+    "auc_roc": 0.7777777777777778,
+    "brier": 0.27141641973761205
+   },
+   "sensitivity_noH": {
+    "accuracy": 0.66,
+    "auc_roc": 0.8090277777777778,
+    "brier": 0.21816072919629817,
+    "recall_HIGH": 0.8333333333333334
+   }
+  },
+  {
+   "lead": 3,
+   "rows": 45,
+   "quarters": 9,
+   "FIRI": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.37777777777777777,
+    "accuracy_wilson95": [
+     0.25107885298349863,
+     0.5237032999353246
+    ],
+    "precision_HIGH": 0.3333333333333333,
+    "recall_HIGH": 1.0,
+    "recall_LOW": 0.0967741935483871,
+    "f1_HIGH": 0.5,
+    "balanced_accuracy": 0.5483870967741935,
+    "auc_roc": 0.6981566820276497,
+    "brier": 0.2812601782961285,
+    "confusion": {
+     "TP": 14,
+     "FP": 28,
+     "FN": 0,
+     "TN": 3
+    }
+   },
+   "FIRI_class_rate_HIGH": 0.9333333333333333,
+   "LightGBM": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.6222222222222222,
+    "accuracy_wilson95": [
+     0.4762967000646754,
+     0.7489211470165014
+    ],
+    "precision_HIGH": 0.4,
+    "recall_HIGH": 0.42857142857142855,
+    "recall_LOW": 0.7096774193548387,
+    "f1_HIGH": 0.41379310344827586,
+    "balanced_accuracy": 0.5691244239631337,
+    "auc_roc": 0.6198156682027649,
+    "brier": 0.25146838803244465,
+    "confusion": {
+     "TP": 6,
+     "FP": 9,
+     "FN": 8,
+     "TN": 22
+    }
+   },
+   "persistence": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.5111111111111111,
+    "accuracy_wilson95": [
+     0.3700422432648975,
+     0.6504321064697549
+    ],
+    "precision_HIGH": 0.3,
+    "recall_HIGH": 0.42857142857142855,
+    "recall_LOW": 0.5483870967741935,
+    "f1_HIGH": 0.35294117647058826,
+    "balanced_accuracy": 0.48847926267281105,
+    "auc_roc": 0.48847926267281105,
+    "brier": 0.4888888888888889,
+    "confusion": {
+     "TP": 6,
+     "FP": 14,
+     "FN": 8,
+     "TN": 17
+    }
+   },
+   "majority": {
+    "n": 45,
+    "positives": 14,
+    "accuracy": 0.6888888888888889,
+    "accuracy_wilson95": [
+     0.5433492001245104,
+     0.8047147453645809
+    ],
+    "precision_HIGH": null,
+    "recall_HIGH": 0.0,
+    "recall_LOW": 1.0,
+    "f1_HIGH": 0.0,
+    "balanced_accuracy": 0.5,
+    "auc_roc": 0.5,
+    "brier": 0.3111111111111111,
+    "confusion": {
+     "TP": 0,
+     "FP": 0,
+     "FN": 14,
+     "TN": 31
+    }
+   },
+   "vs_persistence": {
+    "mean_brier_diff": -0.20762871059276036,
+    "ci95_lo": -0.38799648100966544,
+    "ci95_hi": -0.04433099381698494,
+    "quarter_wins": 6,
+    "quarter_losses": 3,
+    "sign_p_two_sided": 0.5078125,
+    "holds": false
+   },
+   "vs_climatology": {
+    "mean_brier_diff": 0.01509836082174499,
+    "ci95_lo": -0.16702642466880363,
+    "ci95_hi": 0.17495264970534113,
+    "quarter_wins": 3,
+    "quarter_losses": 6,
+    "sign_p_two_sided": 0.5078125,
+    "holds": false
+   },
+   "reliable": false,
+   "sensitivity_strictV": {
+    "rows_computable": 45,
+    "accuracy": 0.35555555555555557,
+    "auc_roc": 0.7142857142857143,
+    "brier": 0.2977734023321001
+   },
+   "sensitivity_noH": {
+    "accuracy": 0.6222222222222222,
+    "auc_roc": 0.6820276497695852,
+    "brier": 0.24334371721172893,
+    "recall_HIGH": 0.9285714285714286
+   }
+  }
+ ],
+ "objective4": {
+  "FIRI": {
+   "n": 45,
+   "positives": 14,
+   "accuracy": 0.4222222222222222,
+   "accuracy_wilson95": [
+    0.2896848798168781,
+    0.566994672040555
+   ],
+   "precision_HIGH": 0.35,
+   "recall_HIGH": 1.0,
+   "recall_LOW": 0.16129032258064516,
+   "f1_HIGH": 0.5185185185185185,
+   "balanced_accuracy": 0.5806451612903226,
+   "auc_roc": 0.8087557603686636,
+   "brier": 0.26759174249000733,
+   "confusion": {
+    "TP": 14,
+    "FP": 26,
+    "FN": 0,
+    "TN": 5
+   }
+  },
+  "comparisons": {
+   "I. Naive persistence": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.6,
+     "accuracy_wilson95": [
+      0.4545159420914473,
+      0.7297532055204246
+     ],
+     "precision_HIGH": 0.4,
+     "recall_HIGH": 0.5714285714285714,
+     "recall_LOW": 0.6129032258064516,
+     "f1_HIGH": 0.47058823529411764,
+     "balanced_accuracy": 0.5921658986175116,
+     "auc_roc": 0.5921658986175116,
+     "brier": 0.4,
+     "confusion": {
+      "TP": 8,
+      "FP": 12,
+      "FN": 6,
+      "TN": 19
+     }
+    },
+    "brier_diff_firi_minus_baseline": -0.1324082575099927,
+    "ci95": [
+     -0.2918596639959897,
+     0.03191045113004405
+    ],
+    "quarter_wins_firi": 6,
+    "quarter_losses_firi": 3,
+    "quarter_sign_p": 0.25390625,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 9,
+    "mcnemar_baseline_right_only": 17,
+    "mcnemar_p": 0.16863754391670227
+   },
+   "II. PSA-only indicator (LR)": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.37777777777777777,
+     "accuracy_wilson95": [
+      0.25107885298349863,
+      0.5237032999353246
+     ],
+     "precision_HIGH": 0.15,
+     "recall_HIGH": 0.21428571428571427,
+     "recall_LOW": 0.45161290322580644,
+     "f1_HIGH": 0.17647058823529413,
+     "balanced_accuracy": 0.33294930875576034,
+     "auc_roc": 0.2949308755760369,
+     "brier": 0.5984197026918154,
+     "confusion": {
+      "TP": 3,
+      "FP": 17,
+      "FN": 11,
+      "TN": 14
+     }
+    },
+    "brier_diff_firi_minus_baseline": -0.33082796020180805,
+    "ci95": [
+     -0.5213684494748947,
+     -0.11253624445314785
+    ],
+    "quarter_wins_firi": 7,
+    "quarter_losses_firi": 2,
+    "quarter_sign_p": 0.08984375,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 14,
+    "mcnemar_baseline_right_only": 12,
+    "mcnemar_p": 0.8450189828872681
+   },
+   "III. NLP-only sentiment (LR)": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.6666666666666666,
+     "accuracy_wilson95": [
+      0.520702168092554,
+      0.7864130779272324
+     ],
+     "precision_HIGH": 0.4,
+     "recall_HIGH": 0.14285714285714285,
+     "recall_LOW": 0.9032258064516129,
+     "f1_HIGH": 0.21052631578947367,
+     "balanced_accuracy": 0.5230414746543779,
+     "auc_roc": 0.48847926267281105,
+     "brier": 0.23546327482331242,
+     "confusion": {
+      "TP": 2,
+      "FP": 3,
+      "FN": 12,
+      "TN": 28
+     }
+    },
+    "brier_diff_firi_minus_baseline": 0.032128467666694915,
+    "ci95": [
+     -0.0788699715953265,
+     0.1267925504092912
+    ],
+    "quarter_wins_firi": 4,
+    "quarter_losses_firi": 5,
+    "quarter_sign_p": 0.74609375,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 12,
+    "mcnemar_baseline_right_only": 23,
+    "mcnemar_p": 0.08953107893466952
+   },
+   "IV. Logistic regression (combined)": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.3333333333333333,
+     "accuracy_wilson95": [
+      0.21358692207276764,
+      0.479297831907446
+     ],
+     "precision_HIGH": 0.13636363636363635,
+     "recall_HIGH": 0.21428571428571427,
+     "recall_LOW": 0.3870967741935484,
+     "f1_HIGH": 0.16666666666666666,
+     "balanced_accuracy": 0.30069124423963134,
+     "auc_roc": 0.24654377880184333,
+     "brier": 0.6456957028251958,
+     "confusion": {
+      "TP": 3,
+      "FP": 19,
+      "FN": 11,
+      "TN": 12
+     }
+    },
+    "brier_diff_firi_minus_baseline": -0.3781039603351884,
+    "ci95": [
+     -0.5400885925410381,
+     -0.18524739583113412
+    ],
+    "quarter_wins_firi": 7,
+    "quarter_losses_firi": 2,
+    "quarter_sign_p": 0.08984375,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 15,
+    "mcnemar_baseline_right_only": 11,
+    "mcnemar_p": 0.557197093963623
+   },
+   "Majority class (always LOW)": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.6888888888888889,
+     "accuracy_wilson95": [
+      0.5433492001245104,
+      0.8047147453645809
+     ],
+     "precision_HIGH": null,
+     "recall_HIGH": 0.0,
+     "recall_LOW": 1.0,
+     "f1_HIGH": 0.0,
+     "balanced_accuracy": 0.5,
+     "auc_roc": 0.5,
+     "brier": 0.3111111111111111,
+     "confusion": {
+      "TP": 0,
+      "FP": 0,
+      "FN": 14,
+      "TN": 31
+     }
+    },
+    "brier_diff_firi_minus_baseline": -0.04351936862110379,
+    "ci95": [
+     -0.24970619640014674,
+     0.1524124673270397
+    ],
+    "quarter_wins_firi": 4,
+    "quarter_losses_firi": 5,
+    "quarter_sign_p": 0.74609375,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 14,
+    "mcnemar_baseline_right_only": 26,
+    "mcnemar_p": 0.0806904677519924
+   },
+   "LightGBM E56-TUNED": {
+    "baseline": {
+     "n": 45,
+     "positives": 14,
+     "accuracy": 0.7777777777777778,
+     "accuracy_wilson95": [
+      0.637304262026367,
+      0.8745544813399436
+     ],
+     "precision_HIGH": 0.625,
+     "recall_HIGH": 0.7142857142857143,
+     "recall_LOW": 0.8064516129032258,
+     "f1_HIGH": 0.6666666666666666,
+     "balanced_accuracy": 0.76036866359447,
+     "auc_roc": 0.7626728110599078,
+     "brier": 0.1784676345424615,
+     "confusion": {
+      "TP": 10,
+      "FP": 6,
+      "FN": 4,
+      "TN": 25
+     }
+    },
+    "brier_diff_firi_minus_baseline": 0.0891241079475458,
+    "ci95": [
+     0.027011587286303575,
+     0.14297359524735467
+    ],
+    "quarter_wins_firi": 2,
+    "quarter_losses_firi": 7,
+    "quarter_sign_p": 0.98046875,
+    "firi_better_by_rule": false,
+    "mcnemar_firi_right_only": 4,
+    "mcnemar_baseline_right_only": 20,
+    "mcnemar_p": 0.001543879508972168
+   }
+  }
+ },
+ "regionalOutcome": {
+  "quarters": 18,
+  "accuracy": 0.8888888888888888,
+  "always_elevated_accuracy": 0.7222222222222222,
+  "auc": 0.9384615384615385,
+  "note": "regional outcome shares its source with the H1 component (SWS)",
+  "sensitivity_noH": {
+   "quarters": 16,
+   "accuracy": 0.75,
+   "auc": 0.9583333333333333,
+   "always_elevated": 0.75
+  }
+ },
+ "evidenceStatus": "development evidence on rows examined during development; the labels (T43) share price sources with A1/A2 and the regional outcome shares SWS with H1, so no result validates FIRI as a measure of food insecurity"
+}

@@ -1,0 +1,321 @@
+{
+ "gates": {
+  "F1": true,
+  "F2": false,
+  "F3": true,
+  "F4": true,
+  "F5": true,
+  "F6": false,
+  "F7": false,
+  "F8": false,
+  "F9_ranks_displayable": true,
+  "F10": false
+ },
+ "status": "not accepted",
+ "lead2_reliable": false,
+ "leakage_max_abs_change": 0.0,
+ "mcnemar": {
+  "1": {
+   "final_right_e158_wrong": 5,
+   "final_wrong_e158_right": 5,
+   "p_exact": 1.0
+  },
+  "2": {
+   "final_right_e158_wrong": 5,
+   "final_wrong_e158_right": 3,
+   "p_exact": 0.7266
+  }
+ },
+ "controls": {
+  "SHUF_ALL": {
+   "brier": 0.1275,
+   "accuracy": 0.778,
+   "FINAL_minus_this": -0.0062,
+   "ci95": [
+    -0.0195,
+    0.0075
+   ]
+  },
+  "SHUF_market": {
+   "brier": 0.1263,
+   "accuracy": 0.736,
+   "FINAL_minus_this": -0.005,
+   "ci95": [
+    -0.0111,
+    0.0007
+   ]
+  },
+  "SHUF_climate": {
+   "brier": 0.1266,
+   "accuracy": 0.778,
+   "FINAL_minus_this": -0.0053,
+   "ci95": [
+    -0.0188,
+    0.0058
+   ]
+  },
+  "SHUF_employment": {
+   "brier": 0.1225,
+   "accuracy": 0.722,
+   "FINAL_minus_this": -0.0012,
+   "ci95": [
+    -0.0026,
+    0.0002
+   ]
+  },
+  "SHUF_remittance": {
+   "brier": 0.121,
+   "accuracy": 0.736,
+   "FINAL_minus_this": 0.0003,
+   "ci95": [
+    -0.0004,
+    0.0012
+   ]
+  },
+  "SHUF_poverty": {
+   "brier": 0.1243,
+   "accuracy": 0.75,
+   "FINAL_minus_this": -0.003,
+   "ci95": [
+    -0.0215,
+    0.0138
+   ]
+  },
+  "SH": {
+   "brier": 0.1629,
+   "accuracy": 0.639,
+   "FINAL_minus_this": -0.0416,
+   "ci95": [
+    -0.0597,
+    -0.0239
+   ]
+  },
+  "nonews": {
+   "brier": 0.1287,
+   "accuracy": 0.722,
+   "FINAL_minus_this": -0.0074,
+   "ci95": [
+    -0.0171,
+    0.0005
+   ]
+  },
+  "nonat": {
+   "brier": 0.1234,
+   "accuracy": 0.736,
+   "FINAL_minus_this": -0.0021,
+   "ci95": [
+    -0.0046,
+    0.0004
+   ]
+  }
+ }
+}
+
+Lead 1 cfg {'ENNS2018': 'OH|LGBM|FULL|id', 'ENNS2019': 'OH|LGBM|FULL|id', 'ENNS2021': 'OH|RF|FULL|id'} C1-C6 {'C1': False, 'C2': True, 'C3': True, 'C4': False, 'C5': True, 'C6': True} brier-E158 {'FINAL': {'diff': -0.013, 'ci95': [-0.0356, 0.0076]}, 'AUTO': {'diff': -0.012, 'ci95': [-0.0423, 0.0176]}} youden {'thresholds': {'ENNS2018': 0.65, 'ENNS2019': 0.65, 'ENNS2021': 0.306}, 'accuracy': 0.833}
+      accuracy balanced_accuracy high_precision high_recall low_precision low_recall     f1 macro_f1    auc pr_auc   brier calibration_slope mae_pts false_alarm_rate missed_high_rate pcal_slope         pcal_ci                                     conf
+PERS     0.625             0.703           0.48        0.96         0.955      0.447   0.64    0.624  0.827  0.705  0.2128              0.71   11.16            0.553             0.04      1.094  [0.617, 1.891]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158     0.736              0.76          0.583        0.84         0.889      0.681  0.689     0.73   0.86   0.81  0.1344             0.718    8.23            0.319             0.16      1.534  [0.952, 2.776]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO     0.792             0.812          0.647        0.88         0.921      0.745  0.746    0.785  0.901  0.861  0.1223             0.734    7.79            0.255             0.12      1.425  [0.867, 2.982]  {'tp': 22, 'fp': 12, 'fn': 3, 'tn': 35}
+FINAL    0.736              0.77          0.579        0.88         0.912       0.66  0.698    0.732  0.894  0.852  0.1213             0.739    8.03             0.34             0.12      1.734   [1.14, 2.942]  {'tp': 22, 'fp': 16, 'fn': 3, 'tn': 31}
+per round {'ENNS2018': {'E158': {'accuracy': 0.636, 'brier': 0.1497}, 'FINAL': {'accuracy': 0.636, 'brier': 0.1473}}, 'ENNS2019': {'E158': {'accuracy': 0.68, 'brier': 0.1721}, 'FINAL': {'accuracy': 0.76, 'brier': 0.1377}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0831}, 'FINAL': {'accuracy': 0.8, 'brier': 0.0821}}} conc {'E158': {'est': 0.6, 'ci95': [0.436, 0.732]}, 'AUTO': {'est': 0.725, 'ci95': [0.581, 0.854]}, 'FINAL': {'est': 0.7, 'ci95': [0.559, 0.838]}}
+reliability FINAL [{'FINAL': '(-0.001, 0.2]', 'n': '18', 'mean_p': '0.061', 'observed': '0.0'}, {'FINAL': '(0.2, 0.4]', 'n': '8', 'mean_p': '0.293', 'observed': '0.25'}, {'FINAL': '(0.4, 0.6]', 'n': '22', 'mean_p': '0.51', 'observed': '0.227'}, {'FINAL': '(0.6, 0.8]', 'n': '15', 'mean_p': '0.712', 'observed': '0.6'}, {'FINAL': '(0.8, 1.0]', 'n': '9', 'mean_p': '0.917', 'observed': '1.0'}]
+
+Lead 2 cfg {'ENNS2018': 'OH|LGBM|FULL|id', 'ENNS2019': 'OH|LGBM|FULL|id', 'ENNS2021': 'OH|RF|FULL|id'} C1-C6 {'C1': False, 'C2': True, 'C3': True, 'C4': False, 'C5': True, 'C6': True} brier-E158 {'FINAL': {'diff': -0.0098, 'ci95': [-0.0352, 0.0133]}, 'AUTO': {'diff': -0.0139, 'ci95': [-0.0451, 0.0202]}} youden {'thresholds': {'ENNS2018': 0.65, 'ENNS2019': 0.65, 'ENNS2021': 0.306}, 'accuracy': 0.819}
+      accuracy balanced_accuracy high_precision high_recall low_precision low_recall     f1 macro_f1    auc pr_auc   brier calibration_slope mae_pts false_alarm_rate missed_high_rate pcal_slope         pcal_ci                                     conf
+PERS     0.625             0.703           0.48        0.96         0.955      0.447   0.64    0.624  0.827  0.705  0.2128              0.71   11.16            0.553             0.04      1.094  [0.617, 1.891]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158     0.736              0.76          0.583        0.84         0.889      0.681  0.689     0.73  0.861    0.8  0.1371             0.679     8.5            0.319             0.16      1.345  [0.901, 2.333]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO     0.792             0.822          0.639        0.92         0.944      0.723  0.754    0.786    0.9  0.856  0.1232             0.768    7.69            0.277             0.08      1.502    [0.95, 2.95]  {'tp': 23, 'fp': 13, 'fn': 2, 'tn': 34}
+FINAL    0.764             0.791          0.611        0.88         0.917      0.702  0.721    0.758  0.887  0.838  0.1272             0.688     8.4            0.298             0.12      1.459  [0.943, 2.562]  {'tp': 22, 'fp': 14, 'fn': 3, 'tn': 33}
+per round {'ENNS2018': {'E158': {'accuracy': 0.591, 'brier': 0.1632}, 'FINAL': {'accuracy': 0.682, 'brier': 0.1542}}, 'ENNS2019': {'E158': {'accuracy': 0.72, 'brier': 0.1635}, 'FINAL': {'accuracy': 0.8, 'brier': 0.1424}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0877}, 'FINAL': {'accuracy': 0.8, 'brier': 0.0883}}} conc {'E158': {'est': 0.6, 'ci95': [0.419, 0.762]}, 'AUTO': {'est': 0.675, 'ci95': [0.519, 0.821]}, 'FINAL': {'est': 0.725, 'ci95': [0.585, 0.848]}}
+reliability FINAL [{'FINAL': '(-0.001, 0.2]', 'n': '19', 'mean_p': '0.06', 'observed': '0.0'}, {'FINAL': '(0.2, 0.4]', 'n': '9', 'mean_p': '0.303', 'observed': '0.222'}, {'FINAL': '(0.4, 0.6]', 'n': '16', 'mean_p': '0.511', 'observed': '0.25'}, {'FINAL': '(0.6, 0.8]', 'n': '18', 'mean_p': '0.695', 'observed': '0.5'}, {'FINAL': '(0.8, 1.0]', 'n': '10', 'mean_p': '0.914', 'observed': '1.0'}]
+{
+ "E158": {
+  "overall": {
+   "n": 72,
+   "mean": 2.9,
+   "ci95": [
+    0.64,
+    5.09
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 5.53,
+   "ci95": [
+    3.07,
+    7.75
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": -0.58,
+   "ci95": [
+    -4.66,
+    4.22
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 1.1,
+   "ci95": [
+    -2.42,
+    4.3
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -1.62,
+   "ci95": [
+    -5.5,
+    2.35
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 5.3,
+   "ci95": [
+    2.89,
+    7.56
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 9.3,
+   "Quezon|ENNS2019": 4.0,
+   "Rizal|ENNS2019": 3.6,
+   "Batangas|ENNS2021": -13.7,
+   "Cavite|ENNS2021": -6.2
+  }
+ },
+ "AUTO": {
+  "overall": {
+   "n": 72,
+   "mean": 2.82,
+   "ci95": [
+    0.71,
+    4.93
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 3.91,
+   "ci95": [
+    0.8,
+    7.44
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 0.8,
+   "ci95": [
+    -5.4,
+    6.55
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 2.47,
+   "ci95": [
+    -0.02,
+    4.44
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -0.61,
+   "ci95": [
+    -4.76,
+    2.69
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 4.65,
+   "ci95": [
+    1.94,
+    7.23
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 8.9,
+   "Quezon|ENNS2019": 1.2,
+   "Rizal|ENNS2019": -1.6,
+   "Batangas|ENNS2021": -13.1,
+   "Cavite|ENNS2021": -9.0
+  }
+ },
+ "FINAL": {
+  "overall": {
+   "n": 72,
+   "mean": 2.64,
+   "ci95": [
+    0.47,
+    4.88
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 4.4,
+   "ci95": [
+    1.06,
+    8.04
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 0.54,
+   "ci95": [
+    -3.63,
+    4.84
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 1.28,
+   "ci95": [
+    -1.9,
+    4.1
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -1.18,
+   "ci95": [
+    -4.73,
+    1.9
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 4.68,
+   "ci95": [
+    1.96,
+    7.34
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 6.8,
+   "Quezon|ENNS2019": 1.4,
+   "Rizal|ENNS2019": -2.9,
+   "Batangas|ENNS2021": -11.9,
+   "Cavite|ENNS2021": -8.5
+  }
+ }
+}

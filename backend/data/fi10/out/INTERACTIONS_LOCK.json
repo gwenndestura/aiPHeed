@@ -1,0 +1,65 @@
+{
+ "sha256": "e85a6e94680ca66f3955cc82085c5580c64d8553319cd2c343cd3bdc6fc58191",
+ "code_sha256": "2fd5ec7a88e3838f5ac18914c3ad6f24c9d51a3e3d3894ba673664919ab018f1",
+ "locked_utc": "2026-11-03T00:33:02+00:00",
+ "protocol": {
+  "version": "fi10-1.0",
+  "candidates": {
+   "I1 residual correction, main effects": [
+    "cpi_food_yoy",
+    "cpi_rice_yoy",
+    "poverty_inc",
+    "unemp_rate"
+   ],
+   "I2 residual correction, main effects + interactions": [
+    "cpi_food_yoy",
+    "cpi_rice_yoy",
+    "poverty_inc",
+    "unemp_rate",
+    "poverty_inc__x__cpi_food_yoy",
+    "poverty_inc__x__cpi_rice_yoy",
+    "unemp_rate__x__cpi_food_yoy"
+   ],
+   "I3 logistic, SWS state + main effects": [
+    "gap",
+    "hunger_last_anom",
+    "hunger_age_q",
+    "moe_last",
+    "cpi_food_yoy",
+    "cpi_rice_yoy",
+    "poverty_inc",
+    "unemp_rate"
+   ],
+   "I4 logistic, SWS state + main effects + interactions": [
+    "gap",
+    "hunger_last_anom",
+    "hunger_age_q",
+    "moe_last",
+    "cpi_food_yoy",
+    "cpi_rice_yoy",
+    "poverty_inc",
+    "unemp_rate",
+    "poverty_inc__x__cpi_food_yoy",
+    "poverty_inc__x__cpi_rice_yoy",
+    "unemp_rate__x__cpi_food_yoy"
+   ]
+  },
+  "interactions": [
+   [
+    "poverty_inc",
+    "cpi_food_yoy"
+   ],
+   [
+    "poverty_inc",
+    "cpi_rice_yoy"
+   ],
+   [
+    "unemp_rate",
+    "cpi_food_yoy"
+   ]
+  ],
+  "threshold": "balanced-accuracy-optimal on the inner time holdout (latest 25 % of training targets)",
+  "interaction_adds_value": "Brier better than the no-interaction counterpart with quarter-block bootstrap P >= 0.90, or balanced accuracy better with P >= 0.90",
+  "production_adoption": "only if a candidate also meets every FI9-Z class, skill and robustness requirement"
+ }
+}

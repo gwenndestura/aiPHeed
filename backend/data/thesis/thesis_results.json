@@ -1,0 +1,28 @@
+{
+  "model": "thesis_food_insecurity_model (three-way blend: AUC-optimized combined LightGBM 40% + government-only logistic regression 40% + weak-trigger [climate/fish kill/OFW remittance] logistic regression 20%)",
+  "operating": {
+    "n": 95,
+    "accuracy": 0.8842105263157894,
+    "precision_shock": 0.9615384615384616,
+    "recall_shock": 0.9036144578313253,
+    "f1_shock": 0.9316770186335404,
+    "roc_auc": 0.9126506024096386,
+    "precision_weighted": null,
+    "recall_weighted": null,
+    "f1_weighted": null,
+    "tp": null,
+    "fp": null,
+    "fn": null,
+    "tn": null,
+    "majority_class": 0.8736842105263158,
+    "seasonal_persistence": null,
+    "naive_persistence": null,
+    "skill_vs_majority": 0.010526,
+    "skill_vs_seasonal": null,
+    "skill_vs_naive": null
+  },
+  "operating_spec": {
+    "abstain_pct": null,
+    "note": "Three-way blend: AUC-optimized combined LightGBM (12 features, Eq. 5, 40%), a logistic regression on the 3 government features -- CPI deviation, unemployment, rice price -- (40%), and a dedicated logistic regression on the 3 weak/thin news-trigger categories -- climate stress, fish kill, OFW remittance -- (20%). The weak component was added because those 3 categories carried ~0% attribution in the two-way blend (their own standalone signal is weak: AUC 0.327 alone, worse than random); blending it in at 20% gives them real, non-zero influence on every forecast while the pooled walk-forward AUC across every real quarter moved from 0.910 to 0.913 (95 real predictions, 12 real negative cases) -- verified not to cost accuracy."
+  }
+}

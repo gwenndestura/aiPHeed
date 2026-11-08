@@ -1,0 +1,21 @@
+experiment,hypothesis,change,selection_data,result
+IMPROVE B1,3 of 7 misses = price rose after issue; flat projection biased,add BSP-anchored projections,dev targets <=2024-Q4,dev L2 Brier 0.1769 vs B0 0.1766: no gain; not adopted
+IMPROVE B2,price model trained on 2022-23 regime,"recency weighting HL in {none,8,4}",dev,0.1898: worse
+IMPROVE B3,B1+B2,both,dev,0.1921: worse
+IMPROVE B4,non-market triggers enter as levels only,"changes dC3,dC4,dE1,dE2, C2_2q, C1_run",dev,0.1794: worse
+CANDIDATES C2/C3,price condition persists,"PC_now, PC_hist4, dF_ex, dG_ex (lagged labels)",dev,0.1851: worse
+CANDIDATES C4/C5,other composition/feature forms,see candidates.py,dev,0.1886 / 0.1986: worse at Lead 2
+"TUNING N0-N2, G0",configuration/feature form limits LightGBM,structured grid + forms,dev (inner folds),"G0 dev L2 0.1670 (gain) but fails adoption: accuracy, precision, FA>hits, confirmation"
+FINAL K1/K2,food-price composition and breadth,"K_core, K_fresh_gap, K_diff",dev,"L2 gain; L1 worse, FA>hits, L1 R6 fails; not adopted"
+SUBGROUP K2,independent subgroup signal,subgroup columns,dev,fails adoption
+COMBINATION screen,hunger x price product restricts ranking,screen of combination forms,dev,product not restrictive (AUC 0.775); no candidate
+CAUSES rain screen,unused provincial rainfall source,screen,dev,no signal; no candidate
+POVERTY_V3,poverty feature mis-specified,corrected V1,dev,B0 kept
+THRESHOLD CT / CR-T,decision cut not 0.50,earlier-outcome thresholds,walk-forward,fails
+CPI_REFRESH CR,Lead 2 re-issued later; fresher CPI available,refresh CPI cut-off (day-10 rule),dev,dev L2 0.1464; passes R1-R7 at L2; adoption fails (FA>hits); timing unverified
+CR_RESOLVE CR-CAL,CR over-confident,training-only Platt,dev,fails
+ROOT_CAUSE CR-ANC / CR-WCAL,CR projection flat after refresh,anchored projections at refreshed cut-off; walk-forward Platt,dev,"CR-ANC L2 0.132, R1-R7 pass, adoption fails (precision -0.025, FA>hits); WCAL fails"
+ASOF_REEVAL CR/CR-ANC verified,CR gains depend on unverified timing,cut-off from verified ledger only,dev,"CR-VER dev 0.1689 (passes the dev rule) but full: Brier 0.171 vs B0 0.167, fails R5 R6, L1 R6; CR-ANC-VER fails R3 R6"
+ROOTCAUSE_II ceiling,price unpredictable at Lead 2 from projections,Gaussian projection-error reference (not a candidate),pre-eval targets; oracle labelled,oracle-noise reference: price acc 0.815 but T43 recall 8/17 = 0.47 < 0.60
+BIAS_TRACK X1,projection bias drifts by regime; model cannot see recent error,"B0 + EF_recent, EG_recent",dev,dev L2 0.1807 vs 0.1766: worse; fails dev rule
+BIAS_TRACK X1-VER,same on verified CR stack,"CR-VER + EF_recent, EG_recent",dev,dev L2 0.1719 vs CR-VER 0.1689: fails dev rule (full-sample R1-R7 pass is not evidence; L1 R6 fails)

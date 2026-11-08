@@ -1,0 +1,114 @@
+{
+ "gdelt": {
+  "provinces": 4,
+  "months": 118,
+  "articles_all": 101687.0,
+  "median_per_province_quarter": 280.25,
+  "calabarzon_total": {
+   "batangas": 46134.0,
+   "cavite": 48686.0,
+   "laguna": 0.0,
+   "quezon": 6867.0,
+   "rizal": 0.0
+  }
+ },
+ "sunstar": {
+  "editions_matched": 11,
+  "months": 108,
+  "headlines": 154532,
+  "note": "No CALABARZON edition, so SunStar adds no CALABARZON news; it helps the provinces the model trains on."
+ },
+ "construct_gdelt": {
+  "share_price~cpi_food_yoy": {
+   "n": 80,
+   "spearman": -0.13816221284575717,
+   "within_province_spearman": -0.1242147210501641
+  },
+  "share_agri~c_rain_anom_6m": {
+   "n": 58,
+   "spearman": -0.14011504506444372,
+   "within_province_spearman": -0.17530530007074968
+  },
+  "share_jobs~unemp_rate": {
+   "n": 80,
+   "spearman": 0.3382811607259037,
+   "within_province_spearman": 0.34303467998254994
+  }
+ },
+ "construct_sunstar": {
+  "share_price~cpi_food_yoy": {
+   "n": 310,
+   "spearman": 0.08699375584365304,
+   "within_province_spearman": 0.09831541265327576
+  },
+  "share_disaster~c_tc_4q": {
+   "n": 310,
+   "spearman": 0.17445464936573365,
+   "within_province_spearman": 0.15990364907305396
+  },
+  "share_agri~c_rain_anom_6m": {
+   "n": 250,
+   "spearman": 0.0031882479566497286,
+   "within_province_spearman": 0.014792502780751823
+  },
+  "share_jobs~unemp_rate": {
+   "n": 310,
+   "spearman": 0.2659865375075234,
+   "within_province_spearman": 0.3477593871553825
+  }
+ },
+ "events_gdelt": {
+  "rice price surge 2018-08 to 2018-10": {
+   "share": 0.1255,
+   "same_months_year_before": 0.1648,
+   "ratio": 0.76
+  },
+  "rice crisis 2023-08 to 2023-10": {
+   "share": 0.1599,
+   "same_months_year_before": 0.1428,
+   "ratio": 1.12
+  },
+  "COVID lockdown 2020-04 to 2020-06 jobs": {
+   "share": 0.0277,
+   "same_months_year_before": 0.0071,
+   "ratio": 3.92
+  },
+  "COVID aid 2020-04 to 2020-06": {
+   "share": 0.0237,
+   "same_months_year_before": 0.0106,
+   "ratio": 2.23
+  }
+ },
+ "events_sunstar": {
+  "rice price surge 2018-08 to 2018-10": {
+   "share": 0.0234,
+   "same_months_year_before": null,
+   "ratio": null
+  },
+  "rice crisis 2023-08 to 2023-10": {
+   "share": 0.0573,
+   "same_months_year_before": 0.012,
+   "ratio": 4.78
+  },
+  "COVID lockdown 2020-04 to 2020-06 jobs": {
+   "share": 0.0155,
+   "same_months_year_before": 0.0087,
+   "ratio": 1.78
+  },
+  "COVID aid 2020-04 to 2020-06": {
+   "share": 0.0584,
+   "same_months_year_before": 0.0157,
+   "ratio": 3.72
+  },
+  "Odette 2021-12 to 2022-01": {
+   "share": 0.0492,
+   "same_months_year_before": 0.0158,
+   "ratio": 3.1
+  },
+  "Kristine 2024-10 to 2024-11": {
+   "share": 0.0,
+   "same_months_year_before": 0.002,
+   "ratio": 0.0
+  }
+ }
+}

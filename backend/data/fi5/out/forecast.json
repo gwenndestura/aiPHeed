@@ -1,0 +1,410 @@
+{
+ "version": "fi5-1.0",
+ "issued_utc": "2026-11-02T12:39:49+00:00",
+ "issue_quarter": "2026-Q3",
+ "forecasts": [
+  {
+   "lead": 1,
+   "issue_quarter": "2026-Q3",
+   "issue_date": "2026-09-30",
+   "target_quarter": "2026-Q4",
+   "p_high": 0.6481,
+   "class": "HIGH",
+   "persistence_class": "HIGH",
+   "logistic_p_high": 0.7178,
+   "latest_hunger_reading": 17.3,
+   "latest_reading_quarter": "2026-Q2",
+   "five_year_average": 15.361764705882354,
+   "observed_hunger": null,
+   "reliable_lead": false,
+   "explanation": "Household hardship and unemployment raised the estimated chance of above-normal hunger in 2026-Q4, while food prices and weather conditions lowered it. These are the factors the model leaned on, not proven causes.",
+   "block_contributions": {
+    "poverty": 0.4412,
+    "employment": 0.2652,
+    "market": -0.1379,
+    "climate": -0.1346,
+    "outcome": 0.115,
+    "remittance": 0.0474
+   },
+   "top_features": [
+    {
+     "feature": "cpi_food_yoy",
+     "block": "market",
+     "value": 1.845018450184499,
+     "shap": -0.2761
+    },
+    {
+     "feature": "hunger_news_share",
+     "block": "poverty",
+     "value": 0.3812685289567829,
+     "shap": 0.2031
+    },
+    {
+     "feature": "poverty_inc",
+     "block": "poverty",
+     "value": 4.2,
+     "shap": 0.1828
+    },
+    {
+     "feature": "tmax_anom_3m",
+     "block": "climate",
+     "value": 1.57002962962963,
+     "shap": 0.1727
+    },
+    {
+     "feature": "unemp_yoy",
+     "block": "employment",
+     "value": 0.6739999999999995,
+     "shap": 0.1602
+    },
+    {
+     "feature": "fssi_employment",
+     "block": "employment",
+     "value": -0.5747764218812813,
+     "shap": 0.1561
+    }
+   ],
+   "model": {
+    "config": "stumps",
+    "n_train": 97,
+    "train_targets": "2000-Q4..2026-Q2",
+    "features_used": [
+     "hunger_last",
+     "hunger_last_anom",
+     "hunger_age_q",
+     "cpi_food_yoy",
+     "cpi_rice_yoy",
+     "cpi_food_rel",
+     "cpi_food_accel",
+     "palay_yoy",
+     "rain_anom_3m",
+     "tmax_anom_3m",
+     "tc_exposure_q",
+     "tc_exposure_4q",
+     "oni",
+     "unemp_rate",
+     "unemp_yoy",
+     "remit_yoy",
+     "poverty_inc",
+     "gdelt_shortage",
+     "gdelt_agri_supply",
+     "gdelt_jobs_income",
+     "gdelt_assistance",
+     "fssi_market",
+     "fssi_climate",
+     "fssi_employment",
+     "fssi_remittance",
+     "fssi_poverty",
+     "topic_market",
+     "topic_climate",
+     "topic_employment",
+     "hunger_news_share"
+    ],
+    "file": "data/fi5/models/fi5_lead1.txt"
+   }
+  },
+  {
+   "lead": 2,
+   "issue_quarter": "2026-Q3",
+   "issue_date": "2026-09-30",
+   "target_quarter": "2027-Q1",
+   "p_high": 0.5676,
+   "class": "HIGH",
+   "persistence_class": "HIGH",
+   "logistic_p_high": 0.8035,
+   "latest_hunger_reading": 17.3,
+   "latest_reading_quarter": "2026-Q2",
+   "five_year_average": 15.746875000000001,
+   "observed_hunger": null,
+   "reliable_lead": false,
+   "explanation": "Household hardship and OFW remittances raised the estimated chance of above-normal hunger in 2027-Q1, while weather conditions and food prices lowered it. These are the factors the model leaned on, not proven causes.",
+   "block_contributions": {
+    "poverty": 0.376,
+    "remittance": 0.3543,
+    "climate": -0.3291,
+    "market": -0.1129,
+    "employment": -0.0845,
+    "outcome": 0.0664
+   },
+   "top_features": [
+    {
+     "feature": "unemp_rate",
+     "block": "employment",
+     "value": 6.005,
+     "shap": -0.857
+    },
+    {
+     "feature": "fssi_employment",
+     "block": "employment",
+     "value": -0.5747764218812813,
+     "shap": 0.3735
+    },
+    {
+     "feature": "hunger_news_share",
+     "block": "poverty",
+     "value": 0.3812685289567829,
+     "shap": 0.3507
+    },
+    {
+     "feature": "remit_yoy",
+     "block": "remittance",
+     "value": 3.1783867203492244,
+     "shap": 0.2704
+    },
+    {
+     "feature": "tmax_anom_3m",
+     "block": "climate",
+     "value": 1.57002962962963,
+     "shap": 0.2281
+    },
+    {
+     "feature": "rain_anom_3m",
+     "block": "climate",
+     "value": 0.9017429813962786,
+     "shap": -0.2012
+    }
+   ],
+   "model": {
+    "config": "medium",
+    "n_train": 97,
+    "train_targets": "2000-Q4..2026-Q2",
+    "features_used": [
+     "hunger_last",
+     "hunger_last_anom",
+     "hunger_age_q",
+     "cpi_food_yoy",
+     "cpi_rice_yoy",
+     "cpi_food_rel",
+     "cpi_food_accel",
+     "palay_yoy",
+     "rain_anom_3m",
+     "tmax_anom_3m",
+     "tc_exposure_q",
+     "tc_exposure_4q",
+     "oni",
+     "unemp_rate",
+     "unemp_yoy",
+     "remit_yoy",
+     "poverty_inc",
+     "gdelt_shortage",
+     "gdelt_agri_supply",
+     "gdelt_jobs_income",
+     "gdelt_assistance",
+     "fssi_market",
+     "fssi_climate",
+     "fssi_employment",
+     "fssi_remittance",
+     "fssi_poverty",
+     "topic_market",
+     "topic_climate",
+     "topic_employment",
+     "hunger_news_share"
+    ],
+    "file": "data/fi5/models/fi5_lead2.txt"
+   }
+  },
+  {
+   "lead": 3,
+   "issue_quarter": "2026-Q3",
+   "issue_date": "2026-09-30",
+   "target_quarter": "2027-Q2",
+   "p_high": 0.7821,
+   "class": "HIGH",
+   "persistence_class": "HIGH",
+   "logistic_p_high": 0.803,
+   "latest_hunger_reading": 17.3,
+   "latest_reading_quarter": "2026-Q2",
+   "five_year_average": 15.746875000000001,
+   "observed_hunger": null,
+   "reliable_lead": false,
+   "explanation": "OFW remittances and food prices raised the estimated chance of above-normal hunger in 2027-Q2. These are the factors the model leaned on, not proven causes.",
+   "block_contributions": {
+    "remittance": 0.5088,
+    "market": 0.3098,
+    "outcome": 0.2534,
+    "poverty": 0.1855,
+    "employment": 0.0312,
+    "climate": -0.009
+   },
+   "top_features": [
+    {
+     "feature": "remit_yoy",
+     "block": "remittance",
+     "value": 3.1783867203492244,
+     "shap": 0.5088
+    },
+    {
+     "feature": "topic_market",
+     "block": "market",
+     "value": -1.2094545315872858,
+     "shap": 0.3704
+    },
+    {
+     "feature": "hunger_last",
+     "block": "outcome",
+     "value": 17.3,
+     "shap": 0.2688
+    },
+    {
+     "feature": "unemp_rate",
+     "block": "employment",
+     "value": 6.005,
+     "shap": -0.2244
+    },
+    {
+     "feature": "tmax_anom_3m",
+     "block": "climate",
+     "value": 1.57002962962963,
+     "shap": -0.1816
+    },
+    {
+     "feature": "gdelt_jobs_income",
+     "block": "employment",
+     "value": -0.899631117799057,
+     "shap": 0.1339
+    }
+   ],
+   "model": {
+    "config": "small",
+    "n_train": 97,
+    "train_targets": "2000-Q4..2026-Q2",
+    "features_used": [
+     "hunger_last",
+     "hunger_last_anom",
+     "hunger_age_q",
+     "cpi_food_yoy",
+     "cpi_rice_yoy",
+     "cpi_food_rel",
+     "cpi_food_accel",
+     "palay_yoy",
+     "rain_anom_3m",
+     "tmax_anom_3m",
+     "tc_exposure_q",
+     "tc_exposure_4q",
+     "oni",
+     "unemp_rate",
+     "unemp_yoy",
+     "remit_yoy",
+     "poverty_inc",
+     "gdelt_shortage",
+     "gdelt_agri_supply",
+     "gdelt_jobs_income",
+     "gdelt_assistance",
+     "fssi_market",
+     "fssi_climate",
+     "fssi_employment",
+     "fssi_remittance",
+     "fssi_poverty",
+     "topic_market",
+     "topic_climate",
+     "topic_employment",
+     "hunger_news_share"
+    ],
+    "file": "data/fi5/models/fi5_lead3.txt"
+   }
+  },
+  {
+   "lead": 4,
+   "issue_quarter": "2026-Q3",
+   "issue_date": "2026-09-30",
+   "target_quarter": "2027-Q3",
+   "p_high": 0.4368,
+   "class": "LOW",
+   "persistence_class": "HIGH",
+   "logistic_p_high": 0.6382,
+   "latest_hunger_reading": 17.3,
+   "latest_reading_quarter": "2026-Q2",
+   "five_year_average": 16.01,
+   "observed_hunger": null,
+   "reliable_lead": false,
+   "explanation": "OFW remittances raised the estimated chance of above-normal hunger in 2027-Q3, while unemployment and food prices lowered it. These are the factors the model leaned on, not proven causes.",
+   "block_contributions": {
+    "remittance": 0.8743,
+    "employment": -0.657,
+    "market": -0.4822,
+    "outcome": -0.0801,
+    "climate": 0.0662,
+    "poverty": -0.0251
+   },
+   "top_features": [
+    {
+     "feature": "remit_yoy",
+     "block": "remittance",
+     "value": 3.1783867203492244,
+     "shap": 0.8743
+    },
+    {
+     "feature": "unemp_rate",
+     "block": "employment",
+     "value": 6.005,
+     "shap": -0.6099
+    },
+    {
+     "feature": "cpi_food_rel",
+     "block": "market",
+     "value": -3.706253716353669,
+     "shap": -0.3715
+    },
+    {
+     "feature": "tmax_anom_3m",
+     "block": "climate",
+     "value": 1.57002962962963,
+     "shap": -0.3655
+    },
+    {
+     "feature": "cpi_food_yoy",
+     "block": "market",
+     "value": 1.845018450184499,
+     "shap": -0.2377
+    },
+    {
+     "feature": "rain_anom_3m",
+     "block": "climate",
+     "value": 0.9017429813962786,
+     "shap": 0.2229
+    }
+   ],
+   "model": {
+    "config": "medium",
+    "n_train": 97,
+    "train_targets": "2000-Q4..2026-Q2",
+    "features_used": [
+     "hunger_last",
+     "hunger_last_anom",
+     "hunger_age_q",
+     "cpi_food_yoy",
+     "cpi_rice_yoy",
+     "cpi_food_rel",
+     "cpi_food_accel",
+     "palay_yoy",
+     "rain_anom_3m",
+     "tmax_anom_3m",
+     "tc_exposure_q",
+     "tc_exposure_4q",
+     "oni",
+     "unemp_rate",
+     "unemp_yoy",
+     "remit_yoy",
+     "poverty_inc",
+     "gdelt_shortage",
+     "gdelt_agri_supply",
+     "gdelt_jobs_income",
+     "gdelt_assistance",
+     "fssi_market",
+     "fssi_climate",
+     "fssi_employment",
+     "fssi_remittance",
+     "fssi_poverty",
+     "topic_market",
+     "topic_climate",
+     "topic_employment",
+     "hunger_news_share"
+    ],
+    "file": "data/fi5/models/fi5_lead4.txt"
+   }
+  }
+ ],
+ "max_reliable_lead": null,
+ "seal_sha256": "350ffe4fb12795323d52e1d659b78beef732b0138ab363c59abeb4fb596f75ed",
+ "what_is_forecast": "Probability that SWS involuntary hunger in Balance Luzon (the SWS area containing CALABARZON) is above its five-year average in the target quarter."
+}

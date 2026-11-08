@@ -1,0 +1,5 @@
+routes 106; GET smoke-tested 85; status counts: {200: 67, 401: 7, 404: 4, 422: 5, 503: 2}
+5xx: [('/api/v1/assessments/quarters', 503), ('/api/v1/assessments/methodology', 503)]
+non-JSON errors: []
+secret-like: []
+unguarded mutating: [('POST', '/api/v1/auth/login'), ('POST', '/api/v1/auth/refresh'), ('POST', '/api/v1/auth/signup'), ('POST', '/api/v1/auth/verify-email'), ('POST', '/api/v1/auth/resend-verification'), ('POST', '/api/v1/auth/forgot-password'), ('POST', '/api/v1/auth/reset-password'), ('POST', '/api/v1/feedback')]

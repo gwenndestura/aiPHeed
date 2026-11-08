@@ -1,0 +1,68 @@
+feature,indicator,component,geographic_scope,frequency,firi_role,ml_role
+FMA_food_cpi,FMA,food inflation,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_headline_cpi,FMA,cost of living,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_rice_wholesale,FMA,rice price,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_chicken,FMA,protein prices,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_pork,FMA,protein prices,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_tilapia,FMA,protein prices,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FMA_food_cpi_R,FMA,food inflation,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+FMA_headline_cpi_R,FMA,cost of living,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+FMA_rice_R,FMA,rice price,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+AFP_palay,AFP,cereals,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_corn,AFP,cereals,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_vegetables,AFP,vegetables,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_rootcrops,AFP,root crops,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_fisheries,AFP,fisheries,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_chicken,AFP,poultry and livestock,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_livestock,AFP,poultry and livestock,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+AFP_palay_R,AFP,cereals,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+AFP_corn_R,AFP,cereals,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+AFP_vegetables_R,AFP,vegetables,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+AFP_rootcrops_R,AFP,root crops,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+AFP_fisheries_R,AFP,fisheries,Region IV-A,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+CEC_rain_departure,CEC,rainfall,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+CEC_heat,CEC,temperature,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+CEC_cyclones_100km,CEC,cyclones,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+CEC_rain_departure_R,CEC,rainfall,CALABARZON (mean of 5 province points),quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+CEC_heat_R,CEC,temperature,CALABARZON (mean of 5 province points),quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+CEC_cyclones_R,CEC,cyclones,PHILIPPINES,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+EHS_unemployment_prov,EHS,employment,province (5),annual (latest published year),scored in the provincial FIRI,provincial vulnerability profiling
+EHS_underemployment_prov,EHS,employment,province (5),annual (latest published year),scored in the provincial FIRI,provincial vulnerability profiling
+EHS_unemployment_change_R,EHS,employment,PHILIPPINES,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+EHS_remittance_decline_R,EHS,remittances,PHILIPPINES,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+PSV_poverty,PSV,poverty,province (5),annual (latest published year),scored in the provincial FIRI,provincial vulnerability profiling
+FIS_fssi,FIS,local news,province (5),quarterly (monthly -> 3-month mean where monthly),scored in the provincial FIRI,provincial vulnerability profiling
+FIS_shortage_news_R,FIS,national news,PHILIPPINES,quarterly (monthly -> 3-month mean where monthly),scored in the regional FIRI,regional forecasting predictor (candidate)
+PSV_subsistence,PSV,food poverty,province (5),,provincial profile only (not scored),profiling / context
+PSV_fies_food_share,PSV,food expenditure,province (5),,provincial profile only (not scored),profiling / context
+PSV_density,PSV,density,province (5),,context only,profiling / context
+FMA_bottom30_cpi,FMA,food inflation,province (5),,alternative / sensitivity series (not scored),profiling / context
+FMA_retail_rice,FMA,rice price,province (5),,alternative / sensitivity series (not scored),profiling / context
+FMA_farmgate_palay,FMA,rice price,province (5),,alternative / sensitivity series (not scored),profiling / context
+FMA_vegetable_prices,FMA,vegetable prices,province (5),,provincial profile only (not scored),profiling / context
+FMA_farmgate_hog,FMA,producer prices,province (5),,provincial profile only (not scored),profiling / context
+AFP_aquaculture,AFP,fisheries,province (5),,alternative / sensitivity series (not scored),profiling / context
+CEC_cyclones_300km,CEC,cyclones,province (5),,alternative / sensitivity series (not scored),profiling / context
+CEC_rain_total,CEC,rainfall,province (5),,alternative / sensitivity series (not scored),profiling / context
+CEC_enso,CEC,ENSO,regional / national,,context only,profiling / context
+EHS_unemployment_rate_R,EHS,employment,regional / national,,alternative / sensitivity series (not scored),regional predictor candidate only if pre-registered
+FIS_agri_supply_news,FIS,national news,regional / national,,alternative / sensitivity series (not scored),regional predictor candidate only if pre-registered
+FIS_jobs_income_news,FIS,national news,regional / national,,context only,profiling / context
+FIS_assistance_news,FIS,national news,regional / national,,context only,profiling / context
+FIS_article_count,FIS,local news,province (5),,context only,profiling / context
+SWS_hunger,outside FIRI,outcome,regional / national,,outside the FIRI (forecasting target),regional forecasting target (its lagged readings may be predictors)
+FIRI_v2_A1,outside FIRI,model output,province (5),,excluded,excluded
+FMA indicator score (regional),FMA,all,regional,quarterly,Level 2 score,"regional forecasting predictor (candidate): built only from as-of features and earlier values, no target"
+FMA indicator score (provincial),FMA,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+AFP indicator score (regional),AFP,all,regional,quarterly,Level 2 score,"regional forecasting predictor (candidate): built only from as-of features and earlier values, no target"
+AFP indicator score (provincial),AFP,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+CEC indicator score (regional),CEC,all,regional,quarterly,Level 2 score,"regional forecasting predictor (candidate): built only from as-of features and earlier values, no target"
+CEC indicator score (provincial),CEC,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+EHS indicator score (regional),EHS,all,regional,quarterly,Level 2 score,"regional forecasting predictor (candidate): built only from as-of features and earlier values, no target"
+EHS indicator score (provincial),EHS,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+PSV indicator score (provincial),PSV,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+FIS indicator score (regional),FIS,all,regional,quarterly,Level 2 score,"regional forecasting predictor (candidate): built only from as-of features and earlier values, no target"
+FIS indicator score (provincial),FIS,all,provincial,quarterly,Level 2 score,provincial vulnerability profiling (no provincial label)
+overall FIRI (regional),FIRI,all,regional,quarterly,Level 3,"eligible as one summary predictor (no SWS input, equal weights, no target-derived weights); not alongside its own indicators"
+overall FIRI (provincial),FIRI,all,province (5),quarterly,Level 3,provincial vulnerability profiling (no provincial label)
+served FIRI v2,FIRI v2,all,province,quarterly,legacy,excluded as a predictor: contains H1 (regional hunger) and SWS-derived walk-forward weights

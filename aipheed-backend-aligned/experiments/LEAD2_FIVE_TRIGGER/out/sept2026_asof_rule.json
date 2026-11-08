@@ -1,0 +1,520 @@
+{
+ "issue_date": "2026-10-15",
+ "rule_file_sha256": "4ac9bde824cfbb78d0337e4600782298e9fb8da3b24c3b0434832cd6010c0b30",
+ "sealed_at": {
+  "cr_prospective.csv": "2026-10-28T15:06:37Z",
+  "cranc_prospective.csv": "2026-10-29T01:39:48Z",
+  "rizal_2027q1_companion.csv": "2026-10-29T11:09:39Z"
+ },
+ "sources": {
+  "index_table": {
+   "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP22.px",
+   "title": "Consumer Price Index for All Income Households by Commodity Group (2018=100): January 2018 - September 2026",
+   "retrieved_at_utc": "2026-10-15T09:54:05Z",
+   "commit": "7960517",
+   "raw_sha256": "5fbb3825a6eb122ee433128bf260663ae66d4cd5dcd9756cbfc3c9d5e72f4938",
+   "cells_matched_to_model_csv": 690,
+   "mismatches": 0
+  },
+  "yoy_all_items_and_food": {
+   "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px",
+   "retrieved_at_utc": "2026-10-15T09:18:32Z",
+   "commit": "9624188",
+   "raw_sha256": "6e498c6cb9792527f0dd3b0f450894e7d322c06c561e695a52b1c29df074b9da"
+  },
+  "yoy_food_only": {
+   "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px",
+   "title": "Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - September 2026",
+   "retrieved_at_utc": "2026-10-14T15:34:40.253329+00:00",
+   "commit": "81b5fa8",
+   "commodities_requested": [
+    "2"
+   ],
+   "note": "query requested commodity code 2 (01.1 FOOD) only; all-items cells were not retrieved"
+  }
+ },
+ "checks": [
+  {
+   "province": "Batangas",
+   "month": "2026-08",
+   "series": "food",
+   "index": 134.3,
+   "index_year_before": 134.1,
+   "implied_yoy": 0.149,
+   "yoy_E40_20261015": 0.1,
+   "yoy_E31_20261014": 0.1
+  },
+  {
+   "province": "Batangas",
+   "month": "2026-08",
+   "series": "all_items",
+   "index": 136.6,
+   "index_year_before": 130.6,
+   "implied_yoy": 4.594,
+   "yoy_E40_20261015": 4.6,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Batangas",
+   "month": "2026-09",
+   "series": "food",
+   "index": 135.5,
+   "index_year_before": 133.2,
+   "implied_yoy": 1.727,
+   "yoy_E40_20261015": 1.7,
+   "yoy_E31_20261014": 1.7
+  },
+  {
+   "province": "Batangas",
+   "month": "2026-09",
+   "series": "all_items",
+   "index": 137.7,
+   "index_year_before": 130.4,
+   "implied_yoy": 5.598,
+   "yoy_E40_20261015": 5.6,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Cavite",
+   "month": "2026-08",
+   "series": "food",
+   "index": 137.3,
+   "index_year_before": 135.3,
+   "implied_yoy": 1.478,
+   "yoy_E40_20261015": 1.5,
+   "yoy_E31_20261014": 1.5
+  },
+  {
+   "province": "Cavite",
+   "month": "2026-08",
+   "series": "all_items",
+   "index": 134.9,
+   "index_year_before": 129.3,
+   "implied_yoy": 4.331,
+   "yoy_E40_20261015": 4.3,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Cavite",
+   "month": "2026-09",
+   "series": "food",
+   "index": 141.9,
+   "index_year_before": 133.2,
+   "implied_yoy": 6.532,
+   "yoy_E40_20261015": 6.5,
+   "yoy_E31_20261014": 6.5
+  },
+  {
+   "province": "Cavite",
+   "month": "2026-09",
+   "series": "all_items",
+   "index": 137.1,
+   "index_year_before": 128.7,
+   "implied_yoy": 6.527,
+   "yoy_E40_20261015": 6.5,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Laguna",
+   "month": "2026-08",
+   "series": "food",
+   "index": 136.4,
+   "index_year_before": 133.5,
+   "implied_yoy": 2.172,
+   "yoy_E40_20261015": 2.2,
+   "yoy_E31_20261014": 2.2
+  },
+  {
+   "province": "Laguna",
+   "month": "2026-08",
+   "series": "all_items",
+   "index": 132.5,
+   "index_year_before": 124.2,
+   "implied_yoy": 6.683,
+   "yoy_E40_20261015": 6.7,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Laguna",
+   "month": "2026-09",
+   "series": "food",
+   "index": 139.6,
+   "index_year_before": 132.8,
+   "implied_yoy": 5.12,
+   "yoy_E40_20261015": 5.1,
+   "yoy_E31_20261014": 5.1
+  },
+  {
+   "province": "Laguna",
+   "month": "2026-09",
+   "series": "all_items",
+   "index": 134.0,
+   "index_year_before": 123.9,
+   "implied_yoy": 8.152,
+   "yoy_E40_20261015": 8.2,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Quezon",
+   "month": "2026-08",
+   "series": "food",
+   "index": 134.9,
+   "index_year_before": 130.4,
+   "implied_yoy": 3.451,
+   "yoy_E40_20261015": 3.5,
+   "yoy_E31_20261014": 3.5
+  },
+  {
+   "province": "Quezon",
+   "month": "2026-08",
+   "series": "all_items",
+   "index": 134.3,
+   "index_year_before": 126.4,
+   "implied_yoy": 6.25,
+   "yoy_E40_20261015": 6.3,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Quezon",
+   "month": "2026-09",
+   "series": "food",
+   "index": 136.4,
+   "index_year_before": 128.2,
+   "implied_yoy": 6.396,
+   "yoy_E40_20261015": 6.4,
+   "yoy_E31_20261014": 6.4
+  },
+  {
+   "province": "Quezon",
+   "month": "2026-09",
+   "series": "all_items",
+   "index": 134.9,
+   "index_year_before": 125.7,
+   "implied_yoy": 7.319,
+   "yoy_E40_20261015": 7.3,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Rizal",
+   "month": "2026-08",
+   "series": "food",
+   "index": 144.9,
+   "index_year_before": 142.1,
+   "implied_yoy": 1.97,
+   "yoy_E40_20261015": 2.0,
+   "yoy_E31_20261014": 2.0
+  },
+  {
+   "province": "Rizal",
+   "month": "2026-08",
+   "series": "all_items",
+   "index": 146.0,
+   "index_year_before": 137.0,
+   "implied_yoy": 6.569,
+   "yoy_E40_20261015": 6.6,
+   "yoy_E31_20261014": NaN
+  },
+  {
+   "province": "Rizal",
+   "month": "2026-09",
+   "series": "food",
+   "index": 149.5,
+   "index_year_before": 140.6,
+   "implied_yoy": 6.33,
+   "yoy_E40_20261015": 6.3,
+   "yoy_E31_20261014": 6.3
+  },
+  {
+   "province": "Rizal",
+   "month": "2026-09",
+   "series": "all_items",
+   "index": 147.7,
+   "index_year_before": 136.6,
+   "implied_yoy": 8.126,
+   "yoy_E40_20261015": 8.1,
+   "yoy_E31_20261014": NaN
+  }
+ ],
+ "training_rows_lead_ge_2_with_refresh": 1610,
+ "training_rows_with_split_vintage": 0,
+ "cpi_refresh_single_month_per_row": true,
+ "owner_release_dates": {
+  "Cavite": "2026-10-12",
+  "Laguna": "2026-10-13",
+  "Batangas": "2026-10-13",
+  "Rizal": "2026-10-15",
+  "Quezon": "2026-10-16"
+ },
+ "owner_release_strictly_before_issue": {
+  "Cavite": true,
+  "Laguna": true,
+  "Batangas": true,
+  "Rizal": false,
+  "Quezon": false
+ },
+ "wayback_oct_2026": "CDX 2026-10-01..16: no capture of OpenSTAT 0012M4ACP22/ACP23 and no Region IV-A CPI release page (checked 2026-10-29)",
+ "companion_reproduced_max_abs": 4.169514316032519e-07,
+ "seals": {
+  "CR": {
+   "V0_reproduces_sealed_max_abs": 5.14628900605274e-07,
+   "high_by_variant": {
+    "V0_sealed_Sep": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ],
+     [
+      "Rizal",
+      4
+     ]
+    ],
+    "V3_rule_unverified_Aug": [],
+    "V2_rule_owner_dates": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ]
+    ],
+    "V1_companion_split": [
+     [
+      "Rizal",
+      2
+     ],
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ],
+     [
+      "Rizal",
+      4
+     ]
+    ],
+    "V4_split_food_Sep_gap_Aug": [
+     [
+      "Cavite",
+      3
+     ]
+    ]
+   }
+  },
+  "CR-ANC": {
+   "V0_reproduces_sealed_max_abs": 6.737151443392264e-07,
+   "high_by_variant": {
+    "V0_sealed_Sep": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Quezon",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ],
+     [
+      "Quezon",
+      4
+     ],
+     [
+      "Rizal",
+      4
+     ],
+     [
+      "Batangas",
+      4
+     ]
+    ],
+    "V3_rule_unverified_Aug": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Quezon",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Quezon",
+      4
+     ]
+    ],
+    "V2_rule_owner_dates": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Quezon",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ],
+     [
+      "Quezon",
+      4
+     ],
+     [
+      "Batangas",
+      4
+     ]
+    ],
+    "V1_companion_split": [
+     [
+      "Rizal",
+      2
+     ],
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Quezon",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Laguna",
+      4
+     ],
+     [
+      "Quezon",
+      4
+     ],
+     [
+      "Rizal",
+      4
+     ],
+     [
+      "Batangas",
+      4
+     ]
+    ],
+    "V4_split_food_Sep_gap_Aug": [
+     [
+      "Cavite",
+      3
+     ],
+     [
+      "Laguna",
+      3
+     ],
+     [
+      "Quezon",
+      3
+     ],
+     [
+      "Rizal",
+      3
+     ],
+     [
+      "Cavite",
+      4
+     ],
+     [
+      "Quezon",
+      4
+     ],
+     [
+      "Batangas",
+      4
+     ]
+    ]
+   }
+  }
+ }
+}

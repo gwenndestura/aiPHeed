@@ -1,0 +1,212 @@
+{
+ "version": "pfi-1.0",
+ "built_utc": "2026-11-03T04:30:56+00:00",
+ "as_of": "2026-11-03",
+ "seed": 20261103,
+ "n_draws": 20000,
+ "outcome": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+ "level": {
+  "selected": "M2 subsistence (food poverty)",
+  "selection_rule": "lowest LOO MAE (pp); fewer covariates within 0.25 pp",
+  "terms": [
+   "intercept",
+   "logit(subsistence)"
+  ],
+  "beta": [
+   0.271775,
+   0.256346
+  ],
+  "cov": [
+   [
+    0.05207,
+    0.012686
+   ],
+   [
+    0.012686,
+    0.003357
+   ]
+  ],
+  "residual_var_logit": 0.070181,
+  "dof": 15,
+  "n_regions": 17,
+  "fit_year": 2023
+ },
+ "province_covariates": [
+  {
+   "covariate": "subsistence",
+   "province": "Batangas",
+   "value": 0.8,
+   "cv": 0.339,
+   "region_value": 0.8,
+   "scale": "logit",
+   "z": -4.820282,
+   "se_z": 0.341734,
+   "reliability_w": 0.499063,
+   "z_shrunk": -4.820282,
+   "z_posterior_sd": 0.241416,
+   "tau2_between_provinces": 0.116345,
+   "z_region": -4.820282
+  },
+  {
+   "covariate": "subsistence",
+   "province": "Cavite",
+   "value": 0.4,
+   "cv": 0.533,
+   "region_value": 0.8,
+   "scale": "logit",
+   "z": -5.517453,
+   "se_z": 0.535141,
+   "reliability_w": 0.288898,
+   "z_shrunk": -5.021693,
+   "z_posterior_sd": 0.287634,
+   "tau2_between_provinces": 0.116345,
+   "z_region": -4.820282
+  },
+  {
+   "covariate": "subsistence",
+   "province": "Laguna",
+   "value": 0.8,
+   "cv": 0.35,
+   "region_value": 0.8,
+   "scale": "logit",
+   "z": -4.820282,
+   "se_z": 0.352823,
+   "reliability_w": 0.483103,
+   "z_shrunk": -4.820282,
+   "z_posterior_sd": 0.245231,
+   "tau2_between_provinces": 0.116345,
+   "z_region": -4.820282
+  },
+  {
+   "covariate": "subsistence",
+   "province": "Quezon",
+   "value": 0.5,
+   "cv": 0.385,
+   "region_value": 0.8,
+   "scale": "logit",
+   "z": -5.293305,
+   "se_z": 0.386935,
+   "reliability_w": 0.437283,
+   "z_shrunk": -5.027127,
+   "z_posterior_sd": 0.25587,
+   "tau2_between_provinces": 0.116345,
+   "z_region": -4.820282
+  },
+  {
+   "covariate": "subsistence",
+   "province": "Rizal",
+   "value": 1.5,
+   "cv": 0.245,
+   "region_value": 0.8,
+   "scale": "logit",
+   "z": -4.184591,
+   "se_z": 0.248731,
+   "reliability_w": 0.652846,
+   "z_shrunk": -4.405274,
+   "z_posterior_sd": 0.200972,
+   "tau2_between_provinces": 0.116345,
+   "z_region": -4.820282
+  }
+ ],
+ "composite": {
+  "direct_source": "FNRI 2015 Food Security Survey, HFIAS moderate+severe, province minus CALABARZON (verified, published SEs; n 735-1,076 households per province)",
+  "drift_sd_logit": 0.1,
+  "drift_note": "assumed allowance for change since 2015 and for HFIAS vs FIES (about +/-2 points at 20%); sensitivity at 0 and 0.2 in evaluation.json",
+  "direct": [
+   {
+    "province": "Batangas",
+    "hfias_mod_sev_pct": 43.5,
+    "offset_logit": 0.020371,
+    "se_logit": 0.139642,
+    "n_households": 793
+   },
+   {
+    "province": "Cavite",
+    "hfias_mod_sev_pct": 41.8,
+    "offset_logit": -0.049138,
+    "se_logit": 0.115284,
+    "n_households": 1076
+   },
+   {
+    "province": "Laguna",
+    "hfias_mod_sev_pct": 41.4,
+    "offset_logit": -0.065603,
+    "se_logit": 0.117795,
+    "n_households": 989
+   },
+   {
+    "province": "Quezon",
+    "hfias_mod_sev_pct": 48.8,
+    "offset_logit": 0.233842,
+    "se_logit": 0.156573,
+    "n_households": 735
+   },
+   {
+    "province": "Rizal",
+    "hfias_mod_sev_pct": 41.3,
+    "offset_logit": -0.069726,
+    "se_logit": 0.125212,
+    "n_households": 735
+   }
+  ]
+ },
+ "benchmark": {
+  "region": "Region IV-A",
+  "year": 2023,
+  "pct": 19.1,
+  "se_pp": 1.045918,
+  "ci95": [
+   17.0,
+   21.1
+  ]
+ },
+ "state_update_2025": {
+  "pct": 22.6,
+  "status": "provisional_secondary",
+  "assumed_se_pp": 1.568878
+ },
+ "bridge": {
+  "lambda": 0.550996,
+  "lambda_median": 0.518309,
+  "lambda_ci90": [
+   0.070806,
+   2.0
+  ],
+  "fit_interval": "national FIES 2021 -> 2023 (verified) with national SWS annual means",
+  "fies_pct": {
+   "2021": 33.4,
+   "2023": 31.4
+  },
+  "sws_annual_pct": {
+   "2021": 12.333333,
+   "2023": 10.65
+  },
+  "sws_quarters": {
+   "2021": 3,
+   "2023": 4
+  },
+  "fies_change_logit": -0.091336,
+  "sws_change_logit": -0.165765,
+  "sensitivity_pre_window": {
+   "interval": "national 2019 -> 2021 (pre-2021; sensitivity only, not used)",
+   "fies_change_logit": -0.4571,
+   "sws_change_logit": 0.310393,
+   "implied_lambda": -1.472646,
+   "note": "Opposite signs: SWS 3-month hunger rose during the 2020-21 lockdown quarters while 12-month FIES fell between the 2019 and 2021 waves. The bridge is not supported across that shock."
+  }
+ },
+ "population_weights": {
+  "Batangas": 2994795,
+  "Cavite": 4573884,
+  "Laguna": 3687345,
+  "Quezon": 2260669,
+  "Rizal": 3416541
+ },
+ "projection": {
+  "source": "FI9 damped persistence (frozen)",
+  "fi9_artifact": "data\\fi9\\model\\lead1_model.json",
+  "phi": 0.67,
+  "conformal_halfwidth_95": 10.444687
+ },
+ "sha256": "d7c5849cf5763fd555df218b70fc48d0a4a6f5c193fd95d2410a9cbcae50327e"
+}

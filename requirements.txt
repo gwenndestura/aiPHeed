@@ -1,0 +1,25 @@
+# aiPHeed - dependency entry point
+#
+# This file previously held a 1,375-package `pip freeze` of an entire machine,
+# saved as UTF-16 with a byte-order mark. Installing from it either failed on
+# the BOM or pulled in a large amount of software unrelated to this project.
+#
+# aiPHeed is backend-only, so the authoritative dependency list lives in
+# backend/requirements.txt (157 pinned packages). This file forwards to it so
+# that the command people naturally reach for from the repository root does the
+# right thing:
+#
+#     pip install -r requirements.txt
+#
+# To also install the test tooling (pytest and friends):
+#
+#     pip install -r backend/requirements-dev.txt
+#
+# Regenerate the real list from inside an activated project venv only - never
+# from a global interpreter, which is how the previous version came about:
+#
+#     cd backend && pip freeze > requirements.txt
+#
+# See README.md for full setup instructions.
+
+-r backend/requirements.txt

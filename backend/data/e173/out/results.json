@@ -1,0 +1,86 @@
+{
+ "protocol": "docs/e173/PROTOCOL.md blob 1c4007cf",
+ "leads": {
+  "1": {
+   "n": 72,
+   "accuracy_E173": 0.736,
+   "accuracy_E168": 0.75,
+   "accuracy_persistence": 0.625,
+   "brier_E173": 0.1225,
+   "brier_E168": 0.123,
+   "brier_E173_minus_E168": -0.0005,
+   "ci95": [
+    -0.0062,
+    0.0056
+   ],
+   "beats_persistence": true,
+   "brier_minus_persistence_ci95": [
+    -0.1424,
+    -0.0462
+   ],
+   "test_unemp_region_filled": 1.0,
+   "train_unemp_region_filled": 0.623,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|GOV|prune=False|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw"
+   }
+  },
+  "2": {
+   "n": 72,
+   "accuracy_E173": 0.764,
+   "accuracy_E168": 0.778,
+   "accuracy_persistence": 0.625,
+   "brier_E173": 0.1238,
+   "brier_E168": 0.1221,
+   "brier_E173_minus_E168": 0.0017,
+   "ci95": [
+    -0.0056,
+    0.009
+   ],
+   "beats_persistence": true,
+   "brier_minus_persistence_ci95": [
+    -0.1376,
+    -0.0469
+   ],
+   "test_unemp_region_filled": 1.0,
+   "train_unemp_region_filled": 0.623,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|GOV|prune=False|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw"
+   }
+  },
+  "3": {
+   "n": 72,
+   "accuracy_E173": 0.736,
+   "accuracy_E168": 0.75,
+   "accuracy_persistence": 0.625,
+   "brier_E173": 0.1312,
+   "brier_E168": 0.1352,
+   "brier_E173_minus_E168": -0.004,
+   "ci95": [
+    -0.0115,
+    0.0031
+   ],
+   "beats_persistence": true,
+   "brier_minus_persistence_ci95": [
+    -0.1277,
+    -0.0424
+   ],
+   "test_unemp_region_filled": 1.0,
+   "train_unemp_region_filled": 0.592,
+   "selected_configs": {
+    "ENNS2018": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2019": "OH|GOV+cons|prune=True|leaves=3,minchild=10,lambda=20.0,trees=150|cal=raw",
+    "ENNS2021": "RSS|FULL|prune=True|leaves=7,minchild=40,lambda=20.0,trees=150|cal=raw"
+   }
+  }
+ },
+ "checks": {
+  "1_better_than_E168_lead1": false,
+  "2_project_rule_leads_1_3": false,
+  "3_no_unpublished_year_used": true
+ },
+ "decision": "E168 STAYS: regional unemployment adds no measurable information"
+}

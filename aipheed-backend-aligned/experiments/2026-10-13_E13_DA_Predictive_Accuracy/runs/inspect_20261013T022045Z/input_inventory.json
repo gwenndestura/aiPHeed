@@ -1,0 +1,530 @@
+{
+ "utc": "20261013T022045Z",
+ "allowlist_sha256": {
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv": "6719baf75ad60dd47f94cfb269058354783414d7437b19a93101582432e67ce1",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json": "ee022c35135d86fa9ec987d52212bd9c229037b835628ef03f2e4ec281a6865c",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\nns_fies.parquet": "4f68d37626e830677a74a3f2f897e59374d3724d51298bb6a6b08e0581edb411",
+  "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_poverty.parquet": "03c92a8db785534e305c1fcd6dfb5bc9b5e1c26fd860f9cd655387edb9ef16b7",
+  "C:\\Users\\admin\\aipheed\\backend\\data\\processed\\psa_subsistence.parquet": "389a0dee24ccb893bfbd7eb25870fecb77f4bdcf2a4fcd7a04805f3a015c7c79"
+ },
+ "components": {
+  "rows": 100,
+  "columns": [
+   "province_code",
+   "quarter",
+   "F",
+   "mean5",
+   "D",
+   "H",
+   "S1",
+   "province"
+  ],
+  "quarters": [
+   "2021-Q1",
+   "2025-Q4"
+  ],
+  "n_quarters": 20,
+  "provinces": [
+   "Batangas",
+   "Cavite",
+   "Laguna",
+   "Quezon",
+   "Rizal"
+  ],
+  "non_missing": {
+   "F": 100,
+   "mean5": 100,
+   "D": 100,
+   "H": 80,
+   "S1": 80
+  },
+  "quarters_with_H": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q4"
+  ],
+  "quarters_complete_five_F": 20
+ },
+ "regional_rounds": {
+  "rows": 21,
+  "quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q2",
+   "2025-Q3",
+   "2025-Q4"
+  ],
+  "first_published": "2021-07-12",
+  "last_published": "2026-01-14",
+  "date_type_counts": {
+   "verified": 18,
+   "verified-single": 3
+  },
+  "definition_A_counts": {
+   "true": 18,
+   "false": 3
+  },
+  "source_counts": {
+   "production": 18,
+   "supplementary": 3
+  },
+  "regional_scope": "SWS Balance Luzon (wider than CALABARZON); one value per quarter shared by all five provinces"
+ },
+ "details_keys_used": [
+  "two_layer.regional_layer_rounds",
+  "two_layer.regional_scope",
+  "tau0_recorded",
+  "tau0_full_precision",
+  "tau0_quarters"
+ ],
+ "tau0": {
+  "recorded": 10.84335,
+  "full_precision": 10.843333333333334,
+  "quarters": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2"
+  ]
+ },
+ "nns_fies": {
+  "rows": 5,
+  "records": [
+   {
+    "survey_cycle": "NNS_2025",
+    "year": 2025,
+    "region_code": "PH040000000",
+    "region_name": "Region IV-A (CALABARZON)",
+    "province_code": "PH040100000",
+    "province_name": "Cavite",
+    "fies_moderate_severe_pct": 22.6,
+    "fies_severe_pct": null,
+    "geographic_level": "region_inherited",
+    "verified": true,
+    "provenance": "secondary_reporting",
+    "source_url": "https://explained.ph/3-sa-10-pilipino-nakaranas-ng-food-insecurity-noong-2025-barmm-pinakaapektado/",
+    "source_note": "DOST-FNRI 2025 Updating of the Nutritional Status of Filipino Children and Other Population Groups, food insecurity component; presented at the 2026 National Nutrition Summit, released 17 June 2026. Regional table as reported in press coverage (national 32.6%, severe 2.9%; BARMM highest 60.4%, CAR lowest 18.9%). Replace source_url with the DOST-FNRI primary publication when obtained \u2014 this is the dataset FNRI authorised for regional validation."
+   },
+   {
+    "survey_cycle": "NNS_2025",
+    "year": 2025,
+    "region_code": "PH040000000",
+    "region_name": "Region IV-A (CALABARZON)",
+    "province_code": "PH040200000",
+    "province_name": "Laguna",
+    "fies_moderate_severe_pct": 22.6,
+    "fies_severe_pct": null,
+    "geographic_level": "region_inherited",
+    "verified": true,
+    "provenance": "secondary_reporting",
+    "source_url": "https://explained.ph/3-sa-10-pilipino-nakaranas-ng-food-insecurity-noong-2025-barmm-pinakaapektado/",
+    "source_note": "DOST-FNRI 2025 Updating of the Nutritional Status of Filipino Children and Other Population Groups, food insecurity component; presented at the 2026 National Nutrition Summit, released 17 June 2026. Regional table as reported in press coverage (national 32.6%, severe 2.9%; BARMM highest 60.4%, CAR lowest 18.9%). Replace source_url with the DOST-FNRI primary publication when obtained \u2014 this is the dataset FNRI authorised for regional validation."
+   },
+   {
+    "survey_cycle": "NNS_2025",
+    "year": 2025,
+    "region_code": "PH040000000",
+    "region_name": "Region IV-A (CALABARZON)",
+    "province_code": "PH040300000",
+    "province_name": "Quezon",
+    "fies_moderate_severe_pct": 22.6,
+    "fies_severe_pct": null,
+    "geographic_level": "region_inherited",
+    "verified": true,
+    "provenance": "secondary_reporting",
+    "source_url": "https://explained.ph/3-sa-10-pilipino-nakaranas-ng-food-insecurity-noong-2025-barmm-pinakaapektado/",
+    "source_note": "DOST-FNRI 2025 Updating of the Nutritional Status of Filipino Children and Other Population Groups, food insecurity component; presented at the 2026 National Nutrition Summit, released 17 June 2026. Regional table as reported in press coverage (national 32.6%, severe 2.9%; BARMM highest 60.4%, CAR lowest 18.9%). Replace source_url with the DOST-FNRI primary publication when obtained \u2014 this is the dataset FNRI authorised for regional validation."
+   },
+   {
+    "survey_cycle": "NNS_2025",
+    "year": 2025,
+    "region_code": "PH040000000",
+    "region_name": "Region IV-A (CALABARZON)",
+    "province_code": "PH040400000",
+    "province_name": "Rizal",
+    "fies_moderate_severe_pct": 22.6,
+    "fies_severe_pct": null,
+    "geographic_level": "region_inherited",
+    "verified": true,
+    "provenance": "secondary_reporting",
+    "source_url": "https://explained.ph/3-sa-10-pilipino-nakaranas-ng-food-insecurity-noong-2025-barmm-pinakaapektado/",
+    "source_note": "DOST-FNRI 2025 Updating of the Nutritional Status of Filipino Children and Other Population Groups, food insecurity component; presented at the 2026 National Nutrition Summit, released 17 June 2026. Regional table as reported in press coverage (national 32.6%, severe 2.9%; BARMM highest 60.4%, CAR lowest 18.9%). Replace source_url with the DOST-FNRI primary publication when obtained \u2014 this is the dataset FNRI authorised for regional validation."
+   },
+   {
+    "survey_cycle": "NNS_2025",
+    "year": 2025,
+    "region_code": "PH040000000",
+    "region_name": "Region IV-A (CALABARZON)",
+    "province_code": "PH040500000",
+    "province_name": "Batangas",
+    "fies_moderate_severe_pct": 22.6,
+    "fies_severe_pct": null,
+    "geographic_level": "region_inherited",
+    "verified": true,
+    "provenance": "secondary_reporting",
+    "source_url": "https://explained.ph/3-sa-10-pilipino-nakaranas-ng-food-insecurity-noong-2025-barmm-pinakaapektado/",
+    "source_note": "DOST-FNRI 2025 Updating of the Nutritional Status of Filipino Children and Other Population Groups, food insecurity component; presented at the 2026 National Nutrition Summit, released 17 June 2026. Regional table as reported in press coverage (national 32.6%, severe 2.9%; BARMM highest 60.4%, CAR lowest 18.9%). Replace source_url with the DOST-FNRI primary publication when obtained \u2014 this is the dataset FNRI authorised for regional validation."
+   }
+  ]
+ },
+ "psa_subsistence_2021_2023": {
+  "rows": 12,
+  "records": [
+   {
+    "psgc_code": "PH040500000",
+    "area_name": "Batangas",
+    "geographic_level": "province",
+    "year": 2021,
+    "food_threshold_php": 21395.0,
+    "subsistence_pct": 0.6,
+    "subsistence_cv": 34.8,
+    "subsistence_ci_low": 0.2,
+    "subsistence_ci_high": 1.1,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040100000",
+    "area_name": "Cavite",
+    "geographic_level": "province",
+    "year": 2021,
+    "food_threshold_php": 24884.0,
+    "subsistence_pct": 1.5,
+    "subsistence_cv": 31.6,
+    "subsistence_ci_low": 0.6,
+    "subsistence_ci_high": 2.5,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040200000",
+    "area_name": "Laguna",
+    "geographic_level": "province",
+    "year": 2021,
+    "food_threshold_php": 20669.0,
+    "subsistence_pct": 1.5,
+    "subsistence_cv": 24.3,
+    "subsistence_ci_low": 0.8,
+    "subsistence_ci_high": 2.2,
+    "discriminating": true,
+    "usable_as_feature": true,
+    "usable_for_validation": true,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040300000",
+    "area_name": "Quezon",
+    "geographic_level": "province",
+    "year": 2021,
+    "food_threshold_php": 18945.0,
+    "subsistence_pct": 4.7,
+    "subsistence_cv": 17.3,
+    "subsistence_ci_low": 3.1,
+    "subsistence_ci_high": 6.3,
+    "discriminating": true,
+    "usable_as_feature": true,
+    "usable_for_validation": true,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040400000",
+    "area_name": "Rizal",
+    "geographic_level": "province",
+    "year": 2021,
+    "food_threshold_php": 21902.0,
+    "subsistence_pct": 0.6,
+    "subsistence_cv": 34.2,
+    "subsistence_ci_low": 0.2,
+    "subsistence_ci_high": 1.0,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040000000",
+    "area_name": "Region IV-A (CALABARZON)",
+    "geographic_level": "region",
+    "year": 2021,
+    "food_threshold_php": 21326.0,
+    "subsistence_pct": 1.6,
+    "subsistence_cv": 12.3,
+    "subsistence_ci_low": 1.2,
+    "subsistence_ci_high": 2.0,
+    "discriminating": true,
+    "usable_as_feature": true,
+    "usable_for_validation": true,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040500000",
+    "area_name": "Batangas",
+    "geographic_level": "province",
+    "year": 2023,
+    "food_threshold_php": 24893.0,
+    "subsistence_pct": 0.8,
+    "subsistence_cv": 33.9,
+    "subsistence_ci_low": 0.3,
+    "subsistence_ci_high": 1.3,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040100000",
+    "area_name": "Cavite",
+    "geographic_level": "province",
+    "year": 2023,
+    "food_threshold_php": 29192.0,
+    "subsistence_pct": 0.4,
+    "subsistence_cv": 53.3,
+    "subsistence_ci_low": 0.0,
+    "subsistence_ci_high": 0.8,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040200000",
+    "area_name": "Laguna",
+    "geographic_level": "province",
+    "year": 2023,
+    "food_threshold_php": 27090.0,
+    "subsistence_pct": 0.8,
+    "subsistence_cv": 35.0,
+    "subsistence_ci_low": 0.3,
+    "subsistence_ci_high": 1.4,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040300000",
+    "area_name": "Quezon",
+    "geographic_level": "province",
+    "year": 2023,
+    "food_threshold_php": 20258.0,
+    "subsistence_pct": 0.5,
+    "subsistence_cv": 38.5,
+    "subsistence_ci_low": 0.1,
+    "subsistence_ci_high": 0.9,
+    "discriminating": false,
+    "usable_as_feature": true,
+    "usable_for_validation": false,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040400000",
+    "area_name": "Rizal",
+    "geographic_level": "province",
+    "year": 2023,
+    "food_threshold_php": 27210.0,
+    "subsistence_pct": 1.5,
+    "subsistence_cv": 24.5,
+    "subsistence_ci_low": 0.8,
+    "subsistence_ci_high": 2.3,
+    "discriminating": true,
+    "usable_as_feature": true,
+    "usable_for_validation": true,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   },
+   {
+    "psgc_code": "PH040000000",
+    "area_name": "Region IV-A (CALABARZON)",
+    "geographic_level": "region",
+    "year": 2023,
+    "food_threshold_php": 26405.0,
+    "subsistence_pct": 0.8,
+    "subsistence_cv": 15.8,
+    "subsistence_ci_low": 0.6,
+    "subsistence_ci_high": 1.0,
+    "discriminating": true,
+    "usable_as_feature": true,
+    "usable_for_validation": true,
+    "source_url": "https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/",
+    "source_note": "PSA Full Year Official Poverty Statistics, Table 3: Annual Per Capita Food Threshold and Subsistence Incidence Among Families, by Region and Province. Retrieved live from OpenStat PXWeb."
+   }
+  ]
+ },
+ "lgu_poverty": {
+  "rows": 142,
+  "years": [
+   2021
+  ],
+  "per_province": [
+   {
+    "province_name": "Batangas",
+    "count": 34,
+    "median": 7.1,
+    "min": 5.1,
+    "max": 9.4
+   },
+   {
+    "province_name": "Cavite",
+    "count": 23,
+    "median": 4.3,
+    "min": 2.8,
+    "max": 5.6
+   },
+   {
+    "province_name": "Laguna",
+    "count": 30,
+    "median": 4.2,
+    "min": 2.9,
+    "max": 6.4
+   },
+   {
+    "province_name": "Quezon",
+    "count": 41,
+    "median": 16.8,
+    "min": 9.2,
+    "max": 18.7
+   },
+   {
+    "province_name": "Rizal",
+    "count": 14,
+    "median": 3.5,
+    "min": 3.2,
+    "max": 6.5
+   }
+  ],
+  "distinct_values_per_province": {
+   "Batangas": 4,
+   "Cavite": 5,
+   "Laguna": 4,
+   "Quezon": 5,
+   "Rizal": 3
+  },
+  "source_note_examples": [
+   "PSA 2021 Small Area Estimates of Poverty in the Philippines (released 2024) (province-mean fallback \u2014 LGU SAE not in table)",
+   "PSA 2021 Small Area Estimates of Poverty in the Philippines (released 2024) (LGU-specific SAE)"
+  ]
+ },
+ "access_log": [
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\realized_components_2021_2025.csv",
+   "bytes": 9110
+  },
+  {
+   "op": "open",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json"
+  },
+  {
+   "op": "read_text",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\experiments\\2026-10-12_E12_SWS_Scoring_Comparison\\runs\\20261012T151208Z\\details.json",
+   "bytes": 70271
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\nns_fies.parquet",
+   "columns": [
+    "fies_moderate_severe_pct",
+    "fies_severe_pct",
+    "geographic_level",
+    "provenance",
+    "province_code",
+    "province_name",
+    "region_code",
+    "region_name",
+    "source_note",
+    "source_url",
+    "survey_cycle",
+    "verified",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 5
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\aipheed-backend-aligned\\data\\processed\\lgu_poverty.parquet",
+   "columns": [
+    "lgu_code",
+    "lgu_name",
+    "poverty_incidence_pct",
+    "province_code",
+    "province_name",
+    "source_note",
+    "source_url",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 142
+  },
+  {
+   "op": "read_parquet",
+   "path": "C:\\Users\\admin\\aipheed\\backend\\data\\processed\\psa_subsistence.parquet",
+   "columns": [
+    "area_name",
+    "discriminating",
+    "food_threshold_php",
+    "geographic_level",
+    "psgc_code",
+    "source_note",
+    "source_url",
+    "subsistence_ci_high",
+    "subsistence_ci_low",
+    "subsistence_cv",
+    "subsistence_pct",
+    "usable_as_feature",
+    "usable_for_validation",
+    "year"
+   ],
+   "row_filter": "2021 <= year <= 2025",
+   "rows_returned": 12
+  }
+ ]
+}

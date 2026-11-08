@@ -1,0 +1,102 @@
+{
+ "name": "aiPHeed E40 binary food-stress label (exploratory)",
+ "version": "E40-label-1.0",
+ "frozen_at_utc": "2026-10-15T09:24:41Z",
+ "rule": "HIGH (1) if sws_hi AND (cpi_hi OR gap_hi) in quarter q AND in quarter q-1 (sustain = 2); LOW (0) otherwise; no label where the quarter has no approved SWS round (never zero-filled)",
+ "signals": {
+  "sws_hi": "Balance Luzon hunger H_q > P60 of H over the frozen window",
+  "cpi_hi": "province food CPI YoY (PSA published, quarter mean) > P60 of that province over the window",
+  "gap_hi": "food minus headline CPI YoY > P60 of that province over the window",
+  "cpi_rel": "food YoY minus the five-province mean (reported; ranking and ties)"
+ },
+ "frozen_window": [
+  "2021-Q1",
+  "2022-Q4"
+ ],
+ "window_never_recomputed": true,
+ "thresholds": {
+  "pct": 60,
+  "window": [
+   "2021-Q1",
+   "2022-Q4"
+  ],
+  "n_window_quarters_H": 6,
+  "H": 11.3,
+  "food": {
+   "PH040100000": 4.713333333333334,
+   "PH040200000": 6.053333333333334,
+   "PH040300000": 6.240000000000001,
+   "PH040400000": 7.1000000000000005,
+   "PH040500000": 7.153333333333333
+  },
+  "gap": {
+   "PH040100000": 0.7399999999999994,
+   "PH040200000": 0.6066666666666671,
+   "PH040300000": -0.5599999999999993,
+   "PH040400000": 0.9199999999999998,
+   "PH040500000": 0.6599999999999998
+  }
+ },
+ "percentile": 60,
+ "sustain_quarters": 2,
+ "selection": "researcher's choice (2026-10-15) after the P60-P85 grid; amended gates: 5-30% overall HIGH share of the development sample; 40% per-year cap only on years with >= 3 development quarters",
+ "development_quarters": [
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q1"
+ ],
+ "holdout_quarters_untouched": [
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "development_prevalence": {
+  "HIGH_share": 0.1111111111111111,
+  "rows": 45,
+  "HIGH_share_by_year": {
+   "2023": 0.0,
+   "2024": 0.1,
+   "2025": 0.6
+  },
+  "HIGH_share_by_quarter": {
+   "2023-Q1": 0.0,
+   "2023-Q2": 0.0,
+   "2023-Q3": 0.0,
+   "2023-Q4": 0.0,
+   "2024-Q1": 0.0,
+   "2024-Q2": 0.0,
+   "2024-Q3": 0.2,
+   "2024-Q4": 0.2,
+   "2025-Q1": 0.6
+  },
+  "quarters_all_five_identical": 6,
+  "quarters": 9
+ },
+ "gates": {
+  "overall_share_in_5_30pct": true,
+  "year_cap_40pct_on_years_with_3plus_dev_quarters": true,
+  "years_checked": {
+   "2023": 0.0,
+   "2024": 0.1
+  },
+  "years_exempt_fewer_than_3_dev_quarters": [
+   "2025"
+  ]
+ },
+ "sensitivity_P75": "reported only (label_sensitivity_P75.csv)",
+ "variant_sws_21_1": "21.1% = SWS 2020 annual average hunger, as supplied by the researcher (2026-10-15); not verified in this run. It is a pre-2021 statistic used as a threshold, an explicit exception to the study-window rule, so it is reported as a variant only and never selected as the primary label.",
+ "training_use_of_burn_in_labels": "labels of 2021-2022 quarters (computed with the frozen thresholds) are used as training targets only, never scored",
+ "data": {
+  "cpi": "PSA OpenStat 0012M4ACP23 published monthly YoY, All items and 01.1 Food, 2021-01..2026-09",
+  "sws": "backend/data/inputs/sws_rounds.csv, definition_A rounds",
+  "earliest_month": "2021-01"
+ },
+ "not": "not a validated measure of food insecurity; indicative, not an official classification"
+}

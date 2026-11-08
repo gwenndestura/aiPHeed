@@ -1,0 +1,184 @@
+{
+ "protocol_sha256": "8a431a9ddb1efc0515e1b539924562b65119649edf44dfac8e4c878c2bf4b717",
+ "deterministic": true,
+ "reproduces_e120": true,
+ "bands_match_e120": true,
+ "leakage": {
+  "protocol_hash_verified": true,
+  "no_future_observation": true,
+  "no_future_publication": true,
+  "no_stale_beyond_3_quarters": true,
+  "no_sws_or_index_series_in_features": true,
+  "sws_refused_if_passed": true,
+  "no_pre2021_observation_scored": true,
+  "pre2021_rows_rejected_count": 0,
+  "provincial_scores_from_provinces_only": true,
+  "regional_scores_from_regional_units_only": true,
+  "no_national_feature_in_provincial_score": true,
+  "annual_not_expanded": true,
+  "rolling_prior_strictly_earlier_and_available": true,
+  "missing_never_scored": true,
+  "firi_only_when_complete": true,
+  "firi_v2_files_unchanged": true
+ },
+ "log": {
+  "pre2021_rows_rejected": 0,
+  "pre2021_annual_rows_rejected": 0,
+  "series_used": [
+   "E1_unemployment_change_pp",
+   "E2_remittance_decline_pct",
+   "N1_fssi_v3",
+   "chicken_production_yoy_pct",
+   "corn_production_yoy_pct",
+   "cpi_food_yoy_pct",
+   "cpi_headline_yoy_pct",
+   "farmgate_palay_yoy_pct",
+   "fisheries_production_yoy_pct",
+   "livestock_production_yoy_pct",
+   "news_gdelt_shortage_share",
+   "palay_production_yoy_pct",
+   "poverty_incidence_popweighted_pct",
+   "provincial_underemployment_rate_pct_annual",
+   "provincial_unemployment_rate_pct_annual",
+   "rainfall_anomaly_mm",
+   "region_cpi_food_yoy_pct",
+   "region_cpi_headline_yoy_pct",
+   "retail_chicken_yoy_pct",
+   "retail_pork_yoy_pct",
+   "retail_tilapia_yoy_pct",
+   "rice_wholesale_yoy_pct",
+   "rootcrops_only_production_yoy_pct",
+   "temperature_anomaly_c",
+   "typhoons_PAR",
+   "typhoons_local_100km",
+   "vegetables_only_production_yoy_pct"
+  ]
+ },
+ "weights": {
+  "component-count": {
+   "FMA": 4,
+   "AFP": 5,
+   "CEC": 3,
+   "EHS": 1,
+   "PSV": 1,
+   "FIS": 1
+  },
+  "feature-count": {
+   "FMA": 6,
+   "AFP": 7,
+   "CEC": 3,
+   "EHS": 2,
+   "PSV": 1,
+   "FIS": 1
+  },
+  "redundancy-adjusted": {
+   "FMA": 0.7029,
+   "AFP": 0.6351,
+   "CEC": 0.9329,
+   "EHS": 0.9255,
+   "PSV": 0.7968,
+   "FIS": 0.9819
+  },
+  "PCA": {
+   "FMA": 0.4358,
+   "AFP": 0.4077,
+   "CEC": 0.0539,
+   "EHS": 0.1026,
+   "PSV": 0.25,
+   "FIS": 0.25
+  },
+  "pca_pc1_share": 0.317
+ },
+ "geographic": {
+  "comparable_origins": [
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q1",
+   "2025-Q2",
+   "2025-Q3"
+  ],
+  "kendall_w": 0.421,
+  "distinct_indicator_sets_per_origin": {
+   "1": 11,
+   "2": 4
+  }
+ },
+ "v2_comparison": {
+  "rows": 75,
+  "origins": 15,
+  "spearman_firi3_v2": -0.298,
+  "side_of_0_5_agreement_pct": 38.7,
+  "share_v2_high": 0.813,
+  "share_firi3_ge_0_5": 0.44,
+  "firi3_band_counts": {
+   "usual or below": 42,
+   "above usual": 30,
+   "elevated": 2,
+   "high": 1
+  },
+  "spearman_with_v2_domain": {
+   "A": 0.391,
+   "V": -0.055,
+   "C": -0.099,
+   "E": -0.179,
+   "N": 0.329,
+   "H": -0.347
+  },
+  "spearman_v2_with_its_H_domain": 0.448,
+  "spearman_firi3_v2_without_H": -0.125,
+  "spearman_firi3_v2_without_H_E": 0.105,
+  "spearman_firi3_v2_A_V_only": 0.287,
+  "mean_v2_weights": {
+   "A": 0.129,
+   "V": 0.122,
+   "C": 0.401,
+   "E": 0.129,
+   "N": 0.022,
+   "H": 0.198
+  },
+  "v2_identical_across_provinces_share": 0.0,
+  "firi3_mean_quarter_change": 0.0632,
+  "v2_mean_quarter_change": 0.0724,
+  "province_rank_spearman_mean": -0.067,
+  "v2_rows_with_firi3_not_computable": 20,
+  "v2_regional_score": "none (FIRI v2 has no regional index)"
+ },
+ "sws_descriptive": {
+  "quarters": 10,
+  "spearman_same_quarter": -0.067,
+  "spearman_next_quarter": 0.548,
+  "n_next": 8,
+  "note": "descriptive only; computed after the design was frozen; not used for any choice"
+ },
+ "watched_sha256": {
+  "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+  "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+  "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+ },
+ "temporal": {
+  "provincial": {
+   "rows": 70,
+   "mean_abs_change": 0.0632,
+   "sd_change": 0.0844,
+   "abrupt_changes_gt_0_15": 5,
+   "mean_abs_composition_effect": 0.0114,
+   "rows_with_composition_change": 18,
+   "band_changes": 20
+  },
+  "regional": {
+   "rows": 9,
+   "mean_abs_change": 0.08,
+   "sd_change": 0.1129,
+   "abrupt_changes_gt_0_15": 2,
+   "mean_abs_composition_effect": 0.0036,
+   "rows_with_composition_change": 1,
+   "band_changes": 4
+  }
+ }
+}

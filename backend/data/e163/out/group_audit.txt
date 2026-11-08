@@ -1,0 +1,24 @@
+            cols  news_cols  all_missing  mean_missing  provincial  regional  national
+group                                                                                 
+climate       14          4            0          0.01           8         4         2
+employment     9          4            1          0.11           0         4         5
+market        10          4            0          0.02           6         3         1
+poverty       26         20            0          0.07           6        15         5
+remittance     7          4            1          0.14           0         3         4
+     group          column  missing_train  live_missing  unique  varies_within_region_share       granularity  news
+employment      unemp_rate            0.0         False      22                        0.00 national/constant False
+employment       unemp_yoy            0.0         False      21                        0.00 national/constant False
+employment unemp_chg_since            0.0         False      22                        0.00 national/constant False
+employment    unemp_region            1.0          True       0                         NaN national/constant False
+remittance       remit_yoy            0.0         False       8                        0.00 national/constant False
+remittance     remit_since            0.0         False      22                        0.00 national/constant False
+remittance     remit_q_yoy            1.0         False       0                         NaN national/constant False
+employment  p_e_employment            0.0         False     245                        0.47          regional  True
+remittance  p_e_remittance            0.0         False     245                        0.47          regional  True
+employment p_tp_employment            0.0         False      78                        0.38          regional  True
+remittance p_tp_remittance            0.0         False      96                        0.45          regional  True
+employment  a_e_employment            0.0         False      66                        0.00          regional  True
+remittance  a_e_remittance            0.0         False      66                        0.00          regional  True
+employment  n_e_employment            0.0         False      22                        0.00 national/constant  True
+remittance  n_e_remittance            0.0         False      22                        0.00 national/constant  True
+employment   income_growth            0.0          True      70                        0.00          regional False

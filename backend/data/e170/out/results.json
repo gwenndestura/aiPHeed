@@ -1,0 +1,547 @@
+{
+ "protocol": "docs/e170/PROTOCOL.md (blob ef63fe67)",
+ "prospective_rows": 0,
+ "leads": {
+  "1": {
+   "rows": 72,
+   "correct": 47,
+   "accuracy": 0.653,
+   "accuracy_95_low_effective_n": 0.515,
+   "majority_rule": 0.653,
+   "precision": 0.5,
+   "high_recall": 0.96,
+   "low_recall": 0.489,
+   "f1": 0.658,
+   "auc": 0.877,
+   "brier_soft": 0.1782,
+   "calibration_slope_ci95": [
+    0.59,
+    1.02
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0793,
+    0.0043
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": false,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1344,
+   "brier_minus_E158": 0.0439,
+   "brier_minus_E158_ci95": [
+    -0.0052,
+    0.1037
+   ],
+   "within_round_slope_supplementary": 0.836,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.545,
+     "bias_pts": 9.24,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.3,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.68,
+     "bias_pts": 6.86,
+     "level_source": "HFIAS_ENNS2019"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "FULL+cons|prune=False|leaves=3,minchild=10,lambda=20.0,trees=150|cal=linear"
+   }
+  },
+  "2": {
+   "rows": 72,
+   "correct": 46,
+   "accuracy": 0.639,
+   "accuracy_95_low_effective_n": 0.499,
+   "majority_rule": 0.653,
+   "precision": 0.49,
+   "high_recall": 0.96,
+   "low_recall": 0.468,
+   "f1": 0.649,
+   "auc": 0.885,
+   "brier_soft": 0.1797,
+   "calibration_slope_ci95": [
+    0.59,
+    1.01
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.077,
+    0.0055
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": false,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1371,
+   "brier_minus_E158": 0.0426,
+   "brier_minus_E158_ci95": [
+    -0.0068,
+    0.1044
+   ],
+   "within_round_slope_supplementary": 0.84,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.5,
+     "bias_pts": 9.13,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.78,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.68,
+     "bias_pts": 6.84,
+     "level_source": "HFIAS_ENNS2019"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "FULL+cons|prune=False|leaves=3,minchild=10,lambda=20.0,trees=150|cal=linear"
+   }
+  },
+  "3": {
+   "rows": 72,
+   "correct": 47,
+   "accuracy": 0.653,
+   "accuracy_95_low_effective_n": 0.515,
+   "majority_rule": 0.653,
+   "precision": 0.5,
+   "high_recall": 0.92,
+   "low_recall": 0.511,
+   "f1": 0.648,
+   "auc": 0.86,
+   "brier_soft": 0.174,
+   "calibration_slope_ci95": [
+    0.73,
+    1.14
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0815,
+    -0.0008
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": true,
+    "C3": true,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1455,
+   "brier_minus_E158": 0.0285,
+   "brier_minus_E158_ci95": [
+    -0.0235,
+    0.0913
+   ],
+   "within_round_slope_supplementary": 1.031,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.545,
+     "bias_pts": 8.96,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.79,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.68,
+     "bias_pts": 4.3,
+     "level_source": "HFIAS_ENNS2018"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "GOV+cons|prune=False|leaves=3,minchild=40,lambda=5.0,trees=150|cal=linear"
+   }
+  },
+  "4": {
+   "rows": 72,
+   "correct": 47,
+   "accuracy": 0.653,
+   "accuracy_95_low_effective_n": 0.515,
+   "majority_rule": 0.653,
+   "precision": 0.5,
+   "high_recall": 0.92,
+   "low_recall": 0.511,
+   "f1": 0.648,
+   "auc": 0.861,
+   "brier_soft": 0.1755,
+   "calibration_slope_ci95": [
+    0.72,
+    1.14
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0796,
+    0.0005
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": false,
+    "C3": true,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1523,
+   "brier_minus_E158": 0.0231,
+   "brier_minus_E158_ci95": [
+    -0.0318,
+    0.0893
+   ],
+   "within_round_slope_supplementary": 1.03,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.545,
+     "bias_pts": 9.1,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.7,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.68,
+     "bias_pts": 4.32,
+     "level_source": "HFIAS_ENNS2018"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "GOV+cons|prune=False|leaves=3,minchild=40,lambda=5.0,trees=150|cal=linear"
+   }
+  },
+  "5": {
+   "rows": 72,
+   "correct": 45,
+   "accuracy": 0.625,
+   "accuracy_95_low_effective_n": 0.484,
+   "majority_rule": 0.653,
+   "precision": 0.478,
+   "high_recall": 0.88,
+   "low_recall": 0.489,
+   "f1": 0.62,
+   "auc": 0.859,
+   "brier_soft": 0.1732,
+   "calibration_slope_ci95": [
+    0.71,
+    1.13
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0822,
+    -0.0017
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": true,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1538,
+   "brier_minus_E158": 0.0194,
+   "brier_minus_E158_ci95": [
+    -0.036,
+    0.0832
+   ],
+   "within_round_slope_supplementary": 1.031,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.5,
+     "bias_pts": 9.23,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.5,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.64,
+     "bias_pts": 4.02,
+     "level_source": "HFIAS_ENNS2018"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "GOV+cons|prune=False|leaves=3,minchild=40,lambda=5.0,trees=150|cal=linear"
+   }
+  },
+  "6": {
+   "rows": 72,
+   "correct": 45,
+   "accuracy": 0.625,
+   "accuracy_95_low_effective_n": 0.484,
+   "majority_rule": 0.653,
+   "precision": 0.478,
+   "high_recall": 0.88,
+   "low_recall": 0.489,
+   "f1": 0.62,
+   "auc": 0.854,
+   "brier_soft": 0.1713,
+   "calibration_slope_ci95": [
+    0.71,
+    1.13
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0855,
+    -0.0019
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": true,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.1583,
+   "brier_minus_E158": 0.013,
+   "brier_minus_E158_ci95": [
+    -0.0436,
+    0.0787
+   ],
+   "within_round_slope_supplementary": 1.035,
+   "per_round": {
+    "ENNS2018": {
+     "rows": 22,
+     "accuracy": 0.5,
+     "bias_pts": 9.1,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.25,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.64,
+     "bias_pts": 3.82,
+     "level_source": "HFIAS_ENNS2018"
+    }
+   },
+   "selected": {
+    "ENNS2018": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "GOV+cons|prune=False|leaves=3,minchild=40,lambda=5.0,trees=150|cal=linear"
+   }
+  },
+  "7": {
+   "rows": 50,
+   "correct": 29,
+   "accuracy": 0.58,
+   "accuracy_95_low_effective_n": 0.408,
+   "majority_rule": 0.66,
+   "precision": 0.447,
+   "high_recall": 1.0,
+   "low_recall": 0.364,
+   "f1": 0.618,
+   "auc": 0.852,
+   "brier_soft": 0.1974,
+   "calibration_slope_ci95": [
+    0.57,
+    1.22
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0345,
+    0.0166
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": false,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.2073,
+   "brier_minus_E158": -0.0099,
+   "brier_minus_E158_ci95": [
+    -0.06,
+    0.0408
+   ],
+   "within_round_slope_supplementary": 0.853,
+   "per_round": {
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.17,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.44,
+     "bias_pts": 12.25,
+     "level_source": "HFIAS_FNRI2015"
+    }
+   },
+   "selected": {
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear"
+   }
+  },
+  "8": {
+   "rows": 50,
+   "correct": 29,
+   "accuracy": 0.58,
+   "accuracy_95_low_effective_n": 0.408,
+   "majority_rule": 0.66,
+   "precision": 0.447,
+   "high_recall": 1.0,
+   "low_recall": 0.364,
+   "f1": 0.618,
+   "auc": 0.848,
+   "brier_soft": 0.1997,
+   "calibration_slope_ci95": [
+    0.56,
+    1.22
+   ],
+   "brier_minus_persistence_ci95": [
+    -0.0314,
+    0.0176
+   ],
+   "criteria": {
+    "C1": false,
+    "C2": false,
+    "C3": false,
+    "C4": true,
+    "C5": false,
+    "C6": true
+   },
+   "reliable": false,
+   "brier_E158": 0.194,
+   "brier_minus_E158": 0.0058,
+   "brier_minus_E158_ci95": [
+    -0.0438,
+    0.0579
+   ],
+   "within_round_slope_supplementary": 0.85,
+   "per_round": {
+    "ENNS2019": {
+     "rows": 25,
+     "accuracy": 0.72,
+     "bias_pts": 6.28,
+     "level_source": "HFIAS_FNRI2015"
+    },
+    "ENNS2021": {
+     "rows": 25,
+     "accuracy": 0.44,
+     "bias_pts": 12.35,
+     "level_source": "HFIAS_FNRI2015"
+    }
+   },
+   "selected": {
+    "ENNS2019": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear",
+    "ENNS2021": "FULL|prune=True|leaves=3,minchild=40,lambda=20.0,trees=150|cal=linear"
+   }
+  }
+ },
+ "maximum_reliable_lead": 0,
+ "shuffle": {
+  "brier_shuffled": 0.1722,
+  "E170_minus_shuffled": 0.006,
+  "ci95": [
+   -0.0014,
+   0.0146
+  ]
+ },
+ "leakage_max_abs_change": 0.0,
+ "ablation": {
+  "market": {
+   "E170_minus_without": -0.0019,
+   "ci95": [
+    -0.0051,
+    0.0011
+   ],
+   "accuracy_without": 0.667
+  },
+  "climate": {
+   "E170_minus_without": 0.0011,
+   "ci95": [
+    -0.0004,
+    0.0029
+   ],
+   "accuracy_without": 0.667
+  },
+  "employment": {
+   "E170_minus_without": 0.0005,
+   "ci95": [
+    0.0,
+    0.0012
+   ],
+   "accuracy_without": 0.667
+  },
+  "remittance": {
+   "E170_minus_without": 0.0005,
+   "ci95": [
+    0.0001,
+    0.0013
+   ],
+   "accuracy_without": 0.653
+  },
+  "poverty": {
+   "E170_minus_without": 0.0018,
+   "ci95": [
+    -0.0019,
+    0.006
+   ],
+   "accuracy_without": 0.653
+  }
+ },
+ "acceptance": {
+  "C1_C6_lead1_pooled": false,
+  "leakage": true,
+  "real_not_worse_than_shuffled": false
+ },
+ "decision": "NOT ACCEPTED",
+ "note": "pooled set = retrospective rows only until qualifying provincial HFIAS outcomes are released (protocol 3.2)"
+}

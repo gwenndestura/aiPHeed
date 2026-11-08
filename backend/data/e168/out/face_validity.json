@@ -1,0 +1,117 @@
+{
+ "fnri_2019_and_other_calabarzon_survey_rows": {
+  "rows": [
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "lead": 1,
+    "forecast_pct": 30.0,
+    "observed_pct": 26.2,
+    "difference_pts": 3.8,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "lead": 1,
+    "forecast_pct": 44.8,
+    "observed_pct": 44.0,
+    "difference_pts": 0.8,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "lead": 1,
+    "forecast_pct": 34.3,
+    "observed_pct": 39.1,
+    "difference_pts": -4.8,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   },
+   {
+    "province": "Batangas",
+    "survey": "ENNS2021",
+    "lead": 1,
+    "forecast_pct": 28.6,
+    "observed_pct": 39.9,
+    "difference_pts": -11.3,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   },
+   {
+    "province": "Cavite",
+    "survey": "ENNS2021",
+    "lead": 1,
+    "forecast_pct": 28.8,
+    "observed_pct": 35.5,
+    "difference_pts": -6.7,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   }
+  ],
+  "basis": "Lead-1 E168 forecast made as of one quarter before the survey quarter, with only survey rounds published by then, against the FNRI-published provincial HFIAS moderate+severe share. difference = forecast - observed.",
+  "fnri_2019": [
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "lead": 1,
+    "forecast_pct": 44.8,
+    "observed_pct": 44.0,
+    "difference_pts": 0.8,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "lead": 1,
+    "forecast_pct": 34.3,
+    "observed_pct": 39.1,
+    "difference_pts": -4.8,
+    "forecast_class": "LOW",
+    "observed_class": "LOW"
+   }
+  ],
+  "class_agreement": "5 of 5",
+  "limits": "Five CALABARZON rows in total (2 in ENNS 2019), all observed LOW; no CALABARZON HIGH case exists to check."
+ },
+ "fnri_2023": {
+  "published": {
+   "measure": "FIES moderate or severe food insecurity (FAO SDG 2.1.2), past 12 months",
+   "geography": "Region IV-A (CALABARZON)",
+   "year": 2023,
+   "percent": 19.1,
+   "ci95": [
+    17.0,
+    21.1
+   ],
+   "source": "openstat.psa.gov.ph DB/3I/G02/0023I3B2121.px; 95% CI from 2._Household_and_Food_Security_.pdf (FNRI 2023 NNS)"
+  },
+  "bridge": {
+   "what": "E169 FIES->HFIAS logit bridge fitted on 20 ENNS 2019 provincial factsheets reporting both scales",
+   "intercept": 0.158,
+   "slope": 0.917,
+   "residual_sd_logit": 0.274
+  },
+  "bridged_hfias_2023_pct": 23.8,
+  "bridged_range_from_fies_ci_pct": [
+   21.5,
+   25.9
+  ],
+  "e168_sealed_2022_regional_pct": 29.1,
+  "e168_sealed_2022_provinces": {
+   "Batangas": 27.7,
+   "Cavite": 26.84,
+   "Laguna": 26.94,
+   "Quezon": 33.98,
+   "Rizal": 32.51
+  },
+  "weights": "PSA POPCEN 2024 (dashboard province population)",
+  "difference_pts": 5.3,
+  "what_it_shows": "Whether E168's provincial forecasts, combined to CALABARZON, are on the same scale as the region's published 2023 food-insecurity level once the FIES figure is put on the HFIAS scale.",
+  "what_it_cannot_show": "It is not a validation: FIES is not HFIAS (bridged with error), regional is not provincial, the E168 forecasts are for the 2022 survey (sealed; the nearest E168 forecast to 2023), and the 19.1% is never used as a training label or provincial target."
+ }
+}

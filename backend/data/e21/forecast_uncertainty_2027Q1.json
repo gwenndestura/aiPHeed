@@ -1,0 +1,49 @@
+{
+ "target_quarter": "2027-Q1",
+ "model": "B3_lr_gov",
+ "params": {
+  "C": 0.01
+ },
+ "n_refits": 1000,
+ "seed": 11,
+ "training_quarters": 19,
+ "note": "Parameter uncertainty: the 5th-95th percentile of the province probability over 1000 refits on resampled training quarters, and how often the HIGH/LOW call flips. Not a calibrated interval for the outcome.",
+ "provinces": {
+  "PH040100000": {
+   "p05": 0.4295629845995126,
+   "p50": 0.4841923975309486,
+   "p95": 0.5334828914623643,
+   "call_flip_share": 0.289
+  },
+  "PH040200000": {
+   "p05": 0.4265784762676991,
+   "p50": 0.48358780621541864,
+   "p95": 0.5390054933741204,
+   "call_flip_share": 0.318
+  },
+  "PH040300000": {
+   "p05": 0.4511666048930747,
+   "p50": 0.4988869195836676,
+   "p95": 0.543508155157582,
+   "call_flip_share": 0.476
+  },
+  "PH040400000": {
+   "p05": 0.46942889759585676,
+   "p50": 0.51442662255289,
+   "p95": 0.5591846287195298,
+   "call_flip_share": 0.305
+  },
+  "PH040500000": {
+   "p05": 0.46874103190142286,
+   "p50": 0.5189822427076674,
+   "p95": 0.5681666377901234,
+   "call_flip_share": 0.275
+  }
+ },
+ "source": {
+  "run": "20261013T084646Z",
+  "protocol_sha256": "f2296ce7c21796f05eda61b0938bdb2ba16ec92c3fb796e12e4ac29832729170",
+  "file_sha256": "71d5edd1eea0cd4ef3d5e7725949d37eb4f457ce502d48ea9ac65efd9cbbb650",
+  "serving_sha256": "23cd04fdabef840076a7e9cb8e73a05973140bc82fffb2ee8d9d749e9c80445e"
+ }
+}

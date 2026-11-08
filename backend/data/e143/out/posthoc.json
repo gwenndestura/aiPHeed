@@ -1,0 +1,313 @@
+{
+ "identified_origins_O2_O3": {
+  "label": "DESCRIPTIVE ONLY (origins O2+O3, where training contains a measured transition); the pre-registered gate is pooled over O1-O3 and is not changed",
+  "n": 47,
+  "n_regions": 16,
+  "C4 HRE-LGBM-X": {
+   "PERS": {
+    "diff": -0.08409516490574397,
+    "se": 0.0342258348528729,
+    "ci95": [
+     -0.14863205069194022,
+     -0.012617632776159647
+    ],
+    "n": 47
+   },
+   "REGPREV": {
+    "diff": -0.040604361259858154,
+    "se": 0.03029229945185352,
+    "ci95": [
+     -0.09614529394702802,
+     0.017080863411841857
+    ],
+    "n": 47
+   }
+  },
+  "C2 RE-LGBM-X": {
+   "PERS": {
+    "diff": -0.051636444038822976,
+    "se": 0.03628224863017076,
+    "ci95": [
+     -0.1225543539794414,
+     0.019668470813895184
+    ],
+    "n": 47
+   },
+   "REGPREV": {
+    "diff": -0.008145640392937165,
+    "se": 0.0415765059537725,
+    "ci95": [
+     -0.08840784797306717,
+     0.07234597208824156
+    ],
+    "n": 47
+   }
+  },
+  "STATE-LGBM": {
+   "PERS": {
+    "diff": -0.050823415208366696,
+    "se": 0.03023153208563689,
+    "ci95": [
+     -0.11125329887324521,
+     0.011201192523342153
+    ],
+    "n": 47
+   },
+   "REGPREV": {
+    "diff": -0.007332611562480884,
+    "se": 0.03507476029435216,
+    "ci95": [
+     -0.07545822088156601,
+     0.06266634328405851
+    ],
+    "n": 47
+   }
+  }
+ },
+ "calibration_2013": {
+  "STATE-LGBM": {
+   "ece": 0.1061856602890232,
+   "ece_if_perfectly_calibrated_median_p95": [
+    0.07237973629127911,
+    0.12283260461406045
+   ],
+   "share_of_perfectly_calibrated_runs_with_higher_ece": 0.129,
+   "calibration": {
+    "slope": 1.4689871252228635,
+    "intercept": 0.3133144246632985
+   },
+   "sharpness_mean_abs_p_minus_half": 0.2099002993509602,
+   "reliability": [
+    {
+     "bin": 0,
+     "n": 5,
+     "mean_p": 0.11186088162151071,
+     "mean_q": 0.021885792205192378
+    },
+    {
+     "bin": 1,
+     "n": 4,
+     "mean_p": 0.2698149270488528,
+     "mean_q": 0.039767028224129176
+    },
+    {
+     "bin": 2,
+     "n": 28,
+     "mean_p": 0.4602682648598833,
+     "mean_q": 0.6018152214703789
+    },
+    {
+     "bin": 3,
+     "n": 22,
+     "mean_p": 0.7200625919922916,
+     "mean_q": 0.7590464527571953
+    },
+    {
+     "bin": 4,
+     "n": 19,
+     "mean_p": 0.8819672091713541,
+     "mean_q": 0.9920437743419628
+    }
+   ],
+   "mean_p": 0.6041644811598185,
+   "mean_q": 0.6752202172852395
+  },
+  "C4 HRE-LGBM-X": {
+   "ece": 0.09126546865732635,
+   "ece_if_perfectly_calibrated_median_p95": [
+    0.07287661864242695,
+    0.1255371524572644
+   ],
+   "share_of_perfectly_calibrated_runs_with_higher_ece": 0.2635,
+   "calibration": {
+    "slope": 1.3149320091484078,
+    "intercept": 0.4155269887328183
+   },
+   "sharpness_mean_abs_p_minus_half": 0.21577335069192158,
+   "reliability": [
+    {
+     "bin": 0,
+     "n": 3,
+     "mean_p": 0.14173353314295473,
+     "mean_q": 0.010162268296683544
+    },
+    {
+     "bin": 1,
+     "n": 16,
+     "mean_p": 0.30250003238344775,
+     "mean_q": 0.3874465121385907
+    },
+    {
+     "bin": 2,
+     "n": 18,
+     "mean_p": 0.49700409588899486,
+     "mean_q": 0.6056502593308325
+    },
+    {
+     "bin": 3,
+     "n": 27,
+     "mean_p": 0.7259564181452625,
+     "mean_q": 0.8026277030899001
+    },
+    {
+     "bin": 4,
+     "n": 14,
+     "mean_p": 0.894699989183345,
+     "mean_q": 0.9903495212684923
+    }
+   ],
+   "mean_p": 0.5940756151545492,
+   "mean_q": 0.6752202172852395
+  },
+  "survey_se_sensitivity_2013 (E141 approximates the 2013 SE with design effect 3.17)": {
+   "deff 2.0": {
+    "STATE-LGBM": 0.11206516122214769,
+    "C2 RE-LGBM-X": 0.09415323400610795,
+    "C4 HRE-LGBM-X": 0.09415323400610795,
+    "LGBM": 0.14679720410371513,
+    "PRIOR": 0.08367817965596645
+   },
+   "deff 3.17": {
+    "STATE-LGBM": 0.10618566028902318,
+    "C2 RE-LGBM-X": 0.09126546865732638,
+    "C4 HRE-LGBM-X": 0.09126546865732638,
+    "LGBM": 0.13852324913406477,
+    "PRIOR": 0.07956877281494727
+   },
+   "deff 4.5": {
+    "STATE-LGBM": 0.09929288113270784,
+    "C2 RE-LGBM-X": 0.08736737554832145,
+    "C4 HRE-LGBM-X": 0.08736737554832145,
+    "LGBM": 0.12972931215328073,
+    "PRIOR": 0.07460864952935259
+   }
+  }
+ },
+ "fssi": {
+  "outlets": {
+   "rappler": 59497,
+   "verafiles": 1843,
+   "newsbytes": 1010,
+   "pcij": 348
+  },
+  "geo_level_of_articles": {
+   "body_mention": 47449,
+   "national": 12841,
+   "lgu": 1875,
+   "province": 283,
+   "region": 250
+  },
+  "multi_source_events": 3,
+  "r2_of_fssi_v2_on_cyclones_and_volume": 0.034113738219370915,
+  "unique_variance_share": 0.9658862617806291,
+  "measured_rounds_with_fssi": [
+   {
+    "province": "Batangas",
+    "survey": "NNS2013",
+    "y": -0.4050702886133099,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": 0.21023192379338151,
+    "n_quarters": 4
+   },
+   {
+    "province": "Batangas",
+    "survey": "FNRI2015",
+    "y": -0.4137733691378019,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": 0.12348117323997256,
+    "n_quarters": 4
+   },
+   {
+    "province": "Cavite",
+    "survey": "NNS2013",
+    "y": -0.48857201478893436,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": -0.2230048362307272,
+    "n_quarters": 4
+   },
+   {
+    "province": "Cavite",
+    "survey": "FNRI2015",
+    "y": -0.4832826842867268,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": 0.2640772567545355,
+    "n_quarters": 4
+   },
+   {
+    "province": "Laguna",
+    "survey": "NNS2013",
+    "y": -0.43913478407108225,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": 0.2720305989172379,
+    "n_quarters": 4
+   },
+   {
+    "province": "Laguna",
+    "survey": "FNRI2015",
+    "y": -0.4997474848317436,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": -0.08750915653545921,
+    "n_quarters": 4
+   },
+   {
+    "province": "Laguna",
+    "survey": "ENNS2018",
+    "y": -0.7455835250413742,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": -1.9160114195982825,
+    "n_quarters": 4
+   },
+   {
+    "province": "Quezon",
+    "survey": "NNS2013",
+    "y": -0.07721042889601835,
+    "status": "NOT_DISTINGUISHABLE",
+    "fssi_v2_mean_4q_before_issue": -0.31868426850606435,
+    "n_quarters": 4
+   },
+   {
+    "province": "Quezon",
+    "survey": "FNRI2015",
+    "y": -0.20030288826640577,
+    "status": "NOT_DISTINGUISHABLE",
+    "fssi_v2_mean_4q_before_issue": -0.26651705183435037,
+    "n_quarters": 4
+   },
+   {
+    "province": "Quezon",
+    "survey": "ENNS2019",
+    "y": 0.0488537389811132,
+    "status": "NOT_DISTINGUISHABLE",
+    "fssi_v2_mean_4q_before_issue": -0.5591294714298388,
+    "n_quarters": 4
+   },
+   {
+    "province": "Rizal",
+    "survey": "NNS2013",
+    "y": -0.2812856706034189,
+    "status": "NOT_DISTINGUISHABLE",
+    "fssi_v2_mean_4q_before_issue": -0.3547677478669521,
+    "n_quarters": 4
+   },
+   {
+    "province": "Rizal",
+    "survey": "FNRI2015",
+    "y": -0.5038708959471089,
+    "status": "LOWER",
+    "fssi_v2_mean_4q_before_issue": -0.7911764377074538,
+    "n_quarters": 4
+   },
+   {
+    "province": "Rizal",
+    "survey": "ENNS2019",
+    "y": -0.15309491192652996,
+    "status": "NOT_DISTINGUISHABLE",
+    "fssi_v2_mean_4q_before_issue": -1.277039962726373,
+    "n_quarters": 4
+   }
+  ],
+  "rank_corr_with_measured_relative_logit": -0.07692307692307691,
+  "n_rounds": 13,
+  "note": "n is too small for any inference; there are no quarterly provincial outcomes against which FSSI could be tested as a forecast input, and no human-labelled sentiment sample may be used (owner rule)."
+ }
+}

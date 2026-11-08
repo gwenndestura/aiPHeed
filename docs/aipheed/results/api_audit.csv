@@ -1,0 +1,107 @@
+method,path,tags,guarded,status,json_error_message,secret_like_in_body
+GET,/,,False,200,,False
+GET,/v1/health,Health,False,200,,False
+GET,/v1/readiness,Health,False,200,,False
+GET,/api/v1/health,Health,False,200,,False
+GET,/api/v1/readiness,Health,False,200,,False
+GET,/api/v1/config,Dashboard,False,200,,False
+GET,/api/v1/quarters,Dashboard,False,200,,False
+GET,/api/v1/provinces,Dashboard,False,200,,False
+GET,/api/v1/ranking,Dashboard,False,200,,False
+GET,/api/v1/provinces/{province_id}/municipalities,Dashboard,False,,,
+GET,/api/v1/search,Dashboard,False,422,True,False
+GET,/api/v1/forecast,Forecast,False,200,,False
+GET,/api/v1/forecast/timeseries,Forecast,False,422,True,False
+GET,/api/v1/explainability,Insights,False,422,True,False
+GET,/api/v1/news,Insights,False,422,True,False
+GET,/api/v1/report,Report,False,200,,False
+GET,/api/v1/report/data,Report,False,200,,False
+GET,/api/v1/assessments/quarters,Assessments,False,503,True,False
+GET,/api/v1/assessments/methodology,Assessments,False,503,True,False
+GET,/api/v1/assessments,Assessments,False,422,True,False
+GET,/api/v1/quarterly/timeline,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/timeline.pdf,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e28/brief,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e28/brief.pdf,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e28/lgu-ranking,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e28/news-coverage,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e29/brief,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e29/brief.pdf,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/targets,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/news/status,Quarterly;quarterly,False,404,True,False
+GET,/api/v1/quarterly/e25-timeline,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/forecast-period,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/record,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/summary,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/news,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/news/funnel,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/lgu-ranking,Quarterly;quarterly,False,200,,False
+GET,/api/v1/quarterly/e31/report.pdf,Quarterly;quarterly,False,200,,False
+GET,/api/v1/fpp/record,Food Price Pressure (exploratory),False,404,True,False
+GET,/api/v1/fpp/summary,Food Price Pressure (exploratory),False,404,True,False
+GET,/api/v1/fpp/report.pdf,Food Price Pressure (exploratory),False,404,True,False
+GET,/api/v1/lead2/summary,Lead-2 candidate (E41),False,200,,False
+GET,/api/v1/lead2/provinces/{province_id},Lead-2 candidate (E41),False,,,
+GET,/api/v1/simple/forecast,Simple methodology (E106),False,200,,False
+GET,/api/v1/simple/evaluation,Simple methodology (E106),False,200,,False
+GET,/api/v1/e107/evaluation,Twelve-indicator LightGBM (E107),False,200,,False
+GET,/api/v1/e107/forecast,Twelve-indicator LightGBM (E107),False,200,,False
+GET,/api/v1/e107/indicators,Twelve-indicator LightGBM (E107),False,200,,False
+GET,/api/v1/e108/evaluation,Factored twelve-indicator LightGBM (E108),False,200,,False
+GET,/api/v1/e108/forecast,Factored twelve-indicator LightGBM (E108),False,200,,False
+GET,/api/v1/e108/indicators,Factored twelve-indicator LightGBM (E108),False,200,,False
+GET,/api/v1/e109/evaluation,Regional hunger forecasting (E109),False,200,,False
+GET,/api/v1/e109/forecast,Regional hunger forecasting (E109),False,200,,False
+GET,/api/v1/e109/lgu-status,Regional hunger forecasting (E109),False,200,,False
+GET,/api/v1/e110/evaluation,Hunger forecast generalization (E110),False,200,,False
+GET,/api/v1/e110/forecast,Hunger forecast generalization (E110),False,200,,False
+GET,/api/v1/e111/evaluation,Audited hunger forecasting (E111),False,200,,False
+GET,/api/v1/e111/forecast,Audited hunger forecasting (E111),False,200,,False
+GET,/api/v1/e112/evaluation,Food-insecurity forecasting with news (E112),False,200,,False
+GET,/api/v1/e112/forecast,Food-insecurity forecasting with news (E112),False,200,,False
+GET,/api/v1/e112/news-indicators,Food-insecurity forecasting with news (E112),False,200,,False
+GET,/api/v1/e113/evaluation,Final hunger forecast model (E113),False,200,,False
+GET,/api/v1/e113/forecast,Final hunger forecast model (E113),False,200,,False
+GET,/api/v1/final/overview,Final forecasting engine,False,200,,False
+GET,/api/v1/final/evaluation,Final forecasting engine,False,200,,False
+GET,/api/v1/final/families,Final forecasting engine,False,200,,False
+GET,/api/v1/final/contributions,Final forecasting engine,False,200,,False
+GET,/api/v1/final/archive,Final forecasting engine,False,200,,False
+GET,/api/v1/final/news,Final forecasting engine,False,200,,False
+GET,/api/v1/final/cpi,Final forecasting engine,False,200,,False
+GET,/api/v1/final/lgus,Final forecasting engine,False,200,,False
+GET,/api/v1/final/risk/evaluation,Final forecasting engine,False,200,,False
+GET,/api/v1/final/risk/rows,Final forecasting engine,False,200,,False
+GET,/api/v1/forecast-history,Forecast history (SWS re-issue),False,200,,False
+GET,/api/v1/forecast-history/status,Forecast history (SWS re-issue),False,200,,False
+GET,/api/v1/hunger-forecast,"Hunger forecast (numerical, SWS areas)",False,200,,False
+GET,/api/v1/hunger-forecast/explanation,"Hunger forecast (numerical, SWS areas)",False,200,,False
+GET,/api/v1/hunger-forecast/geography,"Hunger forecast (numerical, SWS areas)",False,200,,False
+POST,/api/v1/auth/login,Auth,False,,,
+POST,/api/v1/auth/refresh,Auth,False,,,
+GET,/api/v1/auth/me,Auth,True,401,True,False
+POST,/api/v1/auth/logout,Auth,True,,,
+POST,/api/v1/auth/signup,Auth,False,,,
+POST,/api/v1/auth/verify-email,Auth,False,,,
+POST,/api/v1/auth/resend-verification,Auth,False,,,
+POST,/api/v1/auth/forgot-password,Auth,False,,,
+POST,/api/v1/auth/reset-password,Auth,False,,,
+GET,/api/v1/rejections,Publication,False,200,,False
+POST,/api/v1/feedback,Publication,False,,,
+GET,/api/v1/alerts,Alerts,False,200,,False
+GET,/api/v1/admin/review,Admin,True,401,True,False
+POST,/api/v1/admin/review/{item_id}/approve,Admin,True,,,
+POST,/api/v1/admin/review/{item_id}/reject,Admin,True,,,
+POST,/api/v1/admin/review/{item_id}/undo,Admin,True,,,
+DELETE,/api/v1/admin/rejections/{province_id}/{quarter},Admin,True,,,
+POST,/api/v1/admin/pipeline/run,Admin,True,,,
+GET,/api/v1/admin/pipeline/status,Admin,True,401,True,False
+GET,/api/v1/admin/audit,Admin,True,401,True,False
+GET,/api/v1/admin/feedback,Admin,True,401,True,False
+GET,/api/v1/admin/accounts,Admin,True,401,True,False
+POST,/api/v1/admin/accounts/{account_id}/approve,Admin,True,,,
+POST,/api/v1/admin/accounts/{account_id}/reject,Admin,True,,,
+POST,/api/v1/admin/accounts/{account_id}/deactivate,Admin,True,,,
+GET,/api/v1/admin/alerts,Admin,True,401,True,False
+POST,/api/v1/admin/alerts/{alert_id}/confirm,Admin,True,,,
+POST,/api/v1/admin/alerts/{alert_id}/dismiss,Admin,True,,,

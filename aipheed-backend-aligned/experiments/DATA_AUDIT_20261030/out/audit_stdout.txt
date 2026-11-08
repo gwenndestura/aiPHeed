@@ -1,0 +1,65 @@
+                                              dataset frequency    rows  units period_min period_max  missing_pct  duplicate_keys  share_periods_identical_across_units  longest_gap_periods  abrupt_changes_gt6_robust_sd
+0    PSA CPI index by province (OpenSTAT 0012M4ACP22)         M   720.0    5.0    2021-01    2026-12         0.00             0.0                                 0.000                  0.0                           1.0
+1               PSA CPI YoY by province (0012M4ACP23)         M   690.0    5.0    2021-01    2026-09         0.00             0.0                                 0.000                  0.0                           0.0
+2               PSA wholesale rice prices by province         Q   112.0    5.0    2021-Q1    2026-Q3         2.61             0.0                                 0.000                  2.0                           1.0
+3   LGU vulnerability (SAE 2021 poverty, POPCEN 2024)    static   142.0  142.0       2021       2021         0.70             0.0                                   NaN                  NaN                           0.0
+4               PSA subsistence incidence by province         A    10.0    5.0       2021       2023        33.33             0.0                                   NaN                  1.0                           0.0
+5                   PAGASA ENSO alert items (in code)       NaN     NaN    NaN        NaN        NaN          NaN             NaN                                   NaN                  NaN                           NaN
+6            Climate panel (typhoons, ENSO, rainfall)         Q   460.0    5.0    2021-Q1    2026-Q3        25.00             0.0                                 0.841                  0.0                           0.0
+7              PSA palay and corn production (region)         Q   288.0    6.0    2021-Q1    2026-Q4         0.00             0.0                                 0.000                  0.0                           0.0
+8                   PSA fisheries production (region)         Q   864.0    6.0    2021-Q1    2026-Q4        11.11             0.0                                 0.000                  0.0                          13.0
+9                   PSA LFS rates (national, monthly)         M   144.0    1.0    2021-01    2026-12         0.00             0.0                                   NaN                  0.0                           0.0
+10             BSP OFW cash remittances (macro panel)         Q   115.0    5.0    2021-Q1    2026-Q3         0.00             0.0                                 1.000                  0.0                           0.0
+11          BSP cash remittances quarterly (national)         Q    22.0    1.0    2021-Q1    2026-Q2         0.00             0.0                                   NaN                  0.0                           0.0
+12               FSSI news panel (province x quarter)         Q   120.0    5.0    2021-Q1    2026-Q4        80.00             0.0                                 0.000                 14.0                           0.0
+13           SWS hunger rounds, Balance Luzon (2021+)         Q    24.0    1.0    2021-Q2    2026-Q3         4.55             3.0                                   NaN                  1.0                           0.0
+14                      SWS hunger by area, 1998-2026         Q   460.0    4.0    1998-Q3    2026-Q3         6.19            36.0                                 0.000                  1.0                           1.0
+15                   Area food / all-items CPI (E116)         M  3048.0    4.0    1995-01    2026-09         0.00             0.0                                 0.000                  0.0                          13.0
+16               Area fisheries production YoY (E116)         Q   536.0    4.0    1993-Q1    2026-Q2         0.00             0.0                                 0.000                  0.0                           2.0
+17                   Area palay production YoY (E116)         Q   477.0    3.0    1987-Q1    2026-Q3         0.00             0.0                                 0.000                  0.0                           9.0
+18                             FNRI FIES observations         A    10.0    4.0       2021       2025        75.00             0.0                                   NaN                  1.0                           0.0
+19               Owner provincial employment (annual)         A    90.0    5.0       2021       2026        10.67             0.0                                   NaN                  1.0                           0.0
+20             Served training stack (LEAD2 stack_l2)     stack  2990.0    5.0      80841      81062        17.79             0.0                                 0.379                  NaN                           0.0
+   indicator          trigger_domain                                     geographic_resolution  varies_between_provinces_in_stack  missing_share_leads_1_2 fully_missing_origin_years  distinct_values classification
+0         A1  Market and food prices                                                  province                               True                    0.109                                         204              B
+1         A2  Market and food prices                                                  province                               True                    0.000                                         111              B
+2         A3  Market and food prices                                                  province                               True                    0.270                       2021               84              B
+3         V1  (other input: poverty)                                           LGU -> province                               True                    0.000                                           5              D
+4         C1                 Climate                                                  national                              False                    0.000                                           2              B
+5         C2                 Climate  province (identical across provinces in 61% of quarters)                              False                    0.043                                           5              B
+6         C3                 Climate                                                  province                               True                    0.217                       2021               90              B
+7         C4         Fish production                                                  province                               True                    0.217                       2021               90              B
+8         E1              Employment                              national copied to provinces                              False                    0.217                       2021               18              C
+9         E2         OFW remittances                              national copied to provinces                              False                    0.217                       2021               18              C
+10        N1     (other input: news)                                                  province                              False                    0.826                       2021               20              C
+11        H1      (target component)                                region copied to provinces                              False                    0.087                                          33              B
+{
+ "provincial_T43c_lead1": {
+  "rows": 70,
+  "target_quarters": 14,
+  "high_rows": 17,
+  "high_quarters": 7,
+  "independent_hunger_observations": 14
+ },
+ "provincial_T43c_lead2": {
+  "rows": 65,
+  "target_quarters": 13,
+  "high_rows": 17,
+  "high_quarters": 7,
+  "independent_hunger_observations": 13
+ },
+ "t43c_labels": {
+  "rows": 100,
+  "quarters": 20,
+  "provinces": 5,
+  "hunger_values_per_quarter": 1
+ },
+ "regional_sws_long": {
+  "quarters": 106,
+  "first": "1998-Q3",
+  "last": "2026-Q3",
+  "areas": 4,
+  "area_quarters": 424,
+  "missing_quarters_1998Q3_2026Q3": 7
+ }
+}

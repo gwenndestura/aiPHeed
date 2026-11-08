@@ -1,0 +1,181 @@
+===== data
+feature map 27 rows; families ['A1', 'A2', 'A3', 'C1', 'C2', 'C3', 'C4', 'E1', 'E2', 'H1', 'N1', 'V1', 'design']
+===== audit
+2023-Q3 identical
+2023-Q4 identical
+2024-Q1 identical
+2024-Q2 identical
+2024-Q3 identical
+2024-Q4 identical
+2025-Q2 identical
+2025-Q3 identical
+2026-Q1 identical
+2026-Q2 identical
+negative control (past data perturbed) changed: True
+===== score
+FIL-NONEWS [0.409, 0.425, 0.444, 0.531]
+FIL-H [0.5, 0.45, 0.5, 0.531]
+FIL-HN [0.568, 0.45, 0.389, 0.531]
+FIL-drop-A1 [0.409, 0.375, 0.389, 0.531]
+FIL-drop-A2 [0.432, 0.375, 0.444, 0.5]
+FIL-drop-A3 [0.455, 0.475, 0.5, 0.594]
+FIL-drop-V1 [0.386, 0.425, 0.444, 0.5]
+FIL-drop-C1 [0.455, 0.425, 0.361, 0.531]
+FIL-drop-C2 [0.386, 0.45, 0.444, 0.5]
+FIL-drop-C3 [0.386, 0.425, 0.444, 0.5]
+FIL-drop-C4 [0.318, 0.35, 0.472, 0.5]
+FIL-drop-E1 [0.386, 0.375, 0.444, 0.5]
+FIL-drop-E2 [0.386, 0.375, 0.444, 0.5]
+FIL-drop-N1 [0.409, 0.425, 0.444, 0.531]
+FIL-drop-H1 [0.341, 0.35, 0.444, 0.5]
+lead 1 n 44 q 11 {'accuracy': 0.318, 'balanced_accuracy': 0.371, 'precision': 0.417, 'recall': 0.179, 'auc': 0.469, 'brier': 0.298} {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': False}
+lead 2 n 40 q 10 {'accuracy': 0.4, 'balanced_accuracy': 0.423, 'precision': 0.562, 'recall': 0.346, 'auc': 0.411, 'brier': 0.313} {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': False}
+lead 3 n 36 q 9 {'accuracy': 0.444, 'balanced_accuracy': 0.465, 'precision': 0.6, 'recall': 0.391, 'auc': 0.358, 'brier': 0.307} {'R1': False, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': False}
+lead 4 n 32 q 8 {'accuracy': 0.5, 'balanced_accuracy': 0.506, 'precision': 0.6, 'recall': 0.474, 'auc': 0.482, 'brier': 0.297} {'R1': False, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': False}
+max reliable lead 0
+===== long
+untouched_2003_2020 lead 1 n 280 q 70 0.504 0.506 persist acc 0.525 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+untouched_2003_2020 lead 2 n 280 q 70 0.518 0.521 persist acc 0.493 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+untouched_2003_2020 lead 3 n 280 q 70 0.554 0.555 persist acc 0.475 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+untouched_2003_2020 lead 4 n 280 q 70 0.536 0.537 persist acc 0.482 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+y2021_plus lead 1 n 80 q 20 0.438 0.438 persist acc 0.562 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+y2021_plus lead 2 n 80 q 20 0.512 0.512 persist acc 0.525 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+y2021_plus lead 3 n 80 q 20 0.525 0.525 persist acc 0.463 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+y2021_plus lead 4 n 80 q 20 0.575 0.575 persist acc 0.5 {'R1': True, 'R2': False, 'R3': False, 'R4': False, 'R5': False, 'R6': False, 'R7': False, 'R8': True}
+===== news
+placebo 10
+placebo 20
+placebo 30
+placebo 40
+placebo 50
+placebo 60
+placebo 70
+placebo 80
+placebo 90
+placebo 100
+{"FIL vs FIL-NONEWS": {"1": {"n": 44, "acc_with": 0.3181818181818182, "acc_without": 0.4090909090909091, "brier_diff": {"diff": 0.005097395393653409, "p_less": 0.7595, "p_two": 0.481, "ci90": [-0.007717303134706814, 0.016996114612936073]}, "mcnemar_p": 0.125, "holm_p": 1.0}, "2": {"n": 40, "acc_with": 0.4, "acc_without": 0.425, "brier_diff": {"diff": 0.00034579754079999204, "p_less": 0.5545, "p_two": 0.891, "ci90": [-0.011776960097328766, 0.011344496313894998]}, "mcnemar_p": 1.0, "holm_p": 1.0}, "3": {"n": 36, "acc_with": 0.4444444444444444, "acc_without": 0.4444444444444444, "brier_diff": {"diff": -0.0058319361041222284, "p_less": 0.269, "p_two": 0.538, "ci90": [-0.020049909861094447, 0.0030934376041386272]}, "mcnemar_p": 1.0, "holm_p": 1.0}, "4": {"n": 32, "acc_with": 0.5, "acc_without": 0.53125, "brier_diff": {"diff": 0.00010534014351467474, "p_less": 0.5425, "p_two": 0.915, "ci90": [-0.0049233808730157445, 0.0048514151622816295]}, "mcnemar_p": 1.0, "holm_p": 1.0}}, "FIL-HN vs FIL-H": {"1": {"n": 44, "acc_with": 0.5681818181818182, "acc_without": 0.5, "brier_diff": {"diff": -0.03429529744061363, "p_less": 0.1155, "p_two": 0.231, "ci90": [-0.07981994924433636, 0.013194919684264755]}, "mcnemar_p": 0.5810546875, "holm_p": 0.924}, "2": {"n": 40, "acc_with": 0.45, "acc_without": 0.45, "brier_diff": {"diff": 0.021824554307643986, "p_less": 0.857, "p_two": 0.286, "ci90": [-0.010537745966751014, 0.054169729643142886]}, "mcnemar_p": 1.0, "holm_p": 0.924}, "3": {"n": 36, "acc_with":
+{1: {'real_brier': 0.2981550301702272, 'perm_mean': 0.2906590744156113, 'p_perm_le_real': 0.93, 'n': 100}, 2: {'real_brier': 0.31250975516147494, 'perm_mean': 0.3115137112864147, 'p_perm_le_real': 0.53, 'n': 100}, 3: {'real_brier': 0.30657793500340447, 'perm_mean': 0.30727874054061505, 'p_perm_le_real': 0.48, 'n': 100}, 4: {'real_brier': 0.2972212996118925, 'perm_mean': 0.30047201939844725, 'p_perm_le_real': 0.3, 'n': 100}}
+===== psa
+{"coverage": {"provinces": 5, "quarters": ["2021-Q1", "2026-Q3"], "rows": 115, "missing_months": 0, "squeeze_rate": 0.5391304347826087, "by_province_squeeze_rate": {"Batangas": 0.652, "Cavite": 0.522, "Laguna": 0.696, "Quezon": 0.478, "Rizal": 0.348}}, "persistence_forecastability": {"1": {"n": 105, "persistence_accuracy": 0.6952380952380952}, "2": {"n": 100, "persistence_accuracy": 0.63}, "3": {"n": 95, "persistence_accuracy": 0.4842105263157895}, "4": {"n": 90, "persistence_accuracy": 0.4666666666666667}}, "concurrent_BL": {"rho": 0.13519091847265222, "p": 0.5927498112228585, "n_quarters": 18, "crosstab": {"false": {"false": 4, "true": 2}, "true": {"false": 4, "true": 8}}}, "leading_BL": {"1": {"rho": -0.17234262125902994, "p": 0.49407642787678363, "n": 18, "holm_p": 1.0}, "2": {"rho": 0.10294117647058824, "p": 0.6942047830993175, "n": 17, "holm_p": 1.0}, "3": {"rho": 0.004901960784313726, "p": 0.9851029592703197, "n": 17, "holm_p": 1.0}, "4": {"rho": 0.19705882352941176, "p": 0.46446421122573883, "n": 16, "holm_p": 1.0}}}
+===== general
+{"1": {"n_events": 10, "events": ["VIS 2024-Q1", "NCR 2024-Q2", "VIS 2024-Q3", "MIN 2024-Q3", "BL 2024-Q4", "VIS 2024-Q4", "MIN 2024-Q4", "BL 2025-Q3", "MIN 2025-Q4", "VIS 2026-Q1"], "FIL_elevated_recall": 0.2, "PERSIST_elevated_recall": 0.4, "FIL_mean_error": -10.962016, "PERSIST_mean_error": -10.540000000000001}, "2": {"n_events": 13, "events": ["BL 2024-Q2", "VIS 2024-Q2", "MIN 2024-Q2", "NCR 2024-Q3", "VIS 2024-Q3", "MIN 2024-Q3", "BL 2024-Q4", "VIS 2024-Q4", "MIN 2024-Q4", "BL 2026-Q1", "VIS 2026-Q1", "NCR 2026-Q3", "BL 2026-Q3"], "FIL_elevated_recall": 0.38461538461538464, "PERSIST_elevated_recall": 0.38461538461538464, "FIL_mean_error": -11.19464, "PERSIST_mean_error": -10.603846153846153}, "3": {"n_events": 13, "events": ["BL 2024-Q2", "MIN 2024-Q2", "BL 2024-Q3", "VIS 2024-Q3", "MIN 2024-Q3", "NCR 2024-Q4", "BL 2024-Q4", "VIS 2024-Q4", "MIN 2024-Q4", "VIS 2025-Q2", "BL 2025-Q3", "BL 2026-Q1", "VIS 2026-Q1"], "FIL_elevated_recall": 0.5384615384615384, "PERSIST_elevated_recall": 0.0, "FIL_mean_error": -11.351892307692308, "PERSIST_mean_error": -11.46923076923077}, "4": {"n_events": 10, "events": ["NCR 2024-Q3", "BL 2024-Q3", "VIS 2024-Q3", "MIN 2024-Q3", "BL 2024-Q4", "VIS 2024-Q4", "MIN 2024-Q4", "MIN 2025-Q2", "BL 2025-Q3", "BL 2026-Q3"], "FIL_elevated_recall": 0.6, "PERSIST_elevated_recall": 0.0, "FIL_mean_error": -13.331993, "PERSIST_mean_error": -13.115}}
+===== addendum1
+NCR {1: 0.564, 2: 0.564, 3: 0.555, 4: 0.498} {1: 0.622, 2: 0.609, 3: 0.585, 4: 0.522} phi 0.752
+BL {1: 0.581, 2: 0.534, 3: 0.522, 4: 0.499} {1: 0.649, 2: 0.633, 3: 0.599, 4: 0.527} phi 0.391
+VIS {1: 0.579, 2: 0.533, 3: 0.527, 4: 0.5} {1: 0.645, 2: 0.633, 3: 0.605, 4: 0.538} phi 0.484
+MIN {1: 0.599, 2: 0.539, 3: 0.517, 4: 0.502} {1: 0.655, 2: 0.646, 3: 0.615, 4: 0.547} phi 0.488
+2003_2020_second_use 1 acc 0.489 MAE 4.21 4.57 4.14 p vs MA2 0.736
+2003_2020_second_use 2 acc 0.514 MAE 4.45 4.87 4.34 p vs MA2 0.836
+2003_2020_second_use 3 acc 0.536 MAE 4.79 4.91 4.49 p vs MA2 0.987
+2003_2020_second_use 4 acc 0.518 MAE 4.82 5.06 4.51 p vs MA2 0.992
+y2021_plus 1 acc 0.512 MAE 4.42 4.5 4.88 p vs MA2 0.007
+y2021_plus 2 acc 0.512 MAE 5.02 5.19 5.07 p vs MA2 0.399
+y2021_plus 3 acc 0.588 MAE 5.25 5.59 5.29 p vs MA2 0.411
+y2021_plus 4 acc 0.525 MAE 5.84 5.89 5.73 p vs MA2 0.696
+===== addendum2
+{
+ "addendum_sha256": "705f58d281b8530708b41652767ec7f91b94c232b1e1943f0999de5f12ab30a3",
+ "a_2018_2020_untouched": {
+  "rho": 0.05454545454545454,
+  "p_one_sided": 0.4405180905809263,
+  "n_origins": 10,
+  "targets": [
+   "2018-Q2",
+   "2018-Q3",
+   "2018-Q4",
+   "2019-Q1",
+   "2019-Q2",
+   "2019-Q3",
+   "2019-Q4",
+   "2020-Q2",
+   "2020-Q3",
+   "2020-Q4"
+  ]
+ },
+ "b_2021_plus": {
+  "rho": -0.3233082706766917,
+  "p_one_sided": 0.917805131480675,
+  "n_origins": 20,
+  "targets": [
+   "2021-Q2",
+   "2021-Q3",
+   "2021-Q4",
+   "2022-Q2",
+   "2022-Q3",
+   "2022-Q4",
+   "2023-Q1",
+   "2023-Q2",
+   "2023-Q3",
+   "2023-Q4",
+   "2024-Q1",
+   "2024-Q2",
+   "2024-Q3",
+   "2024-Q4",
+   "2025-Q2",
+   "2025-Q3",
+   "2025-Q4",
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ]
+ },
+ "replicated": false,
+ "consistent_2021": false
+}
+===== seal
+     model area issue_date  lead target_quarter sws_newest_q  h_last  ref_hat  forecast_level  p_elevated  persistence_level  persistence_elevated
+       FIL  NCR 2026-10-01     1        2026-Q4      2026-Q2    21.0   21.075         22.8556      0.5942               21.0                     0
+       FIL  NCR 2026-10-01     2        2027-Q1      2026-Q2    21.0   21.250         21.5089      0.5120               21.0                     0
+       FIL  NCR 2026-10-01     3        2027-Q2      2026-Q2    21.0   21.000         21.9698      0.5380               21.0                     0
+       FIL  NCR 2026-10-01     4        2027-Q3      2026-Q2    21.0   21.000         22.1438      0.5450               21.0                     0
+       FIL   BL 2026-10-01     1        2026-Q4      2026-Q2    17.3   18.425         21.1904      0.6444               17.3                     0
+       FIL   BL 2026-10-01     2        2027-Q1      2026-Q2    17.3   18.575         18.5657      0.4996               17.3                     0
+       FIL   BL 2026-10-01     3        2027-Q2      2026-Q2    17.3   17.300         18.1039      0.5315               17.3                     0
+       FIL   BL 2026-10-01     4        2027-Q3      2026-Q2    17.3   17.300         18.3086      0.5397               17.3                     0
+       FIL  VIS 2026-10-01     1        2026-Q4      2026-Q2    22.3   23.225         25.0335      0.5957               22.3                     0
+       FIL  VIS 2026-10-01     2        2027-Q1      2026-Q2    22.3   23.725         23.5333      0.4911               22.3                     0
+       FIL  VIS 2026-10-01     3        2027-Q2      2026-Q2    22.3   22.300         23.7221      0.5556               22.3                     0
+       FIL  VIS 2026-10-01     4        2027-Q3      2026-Q2    22.3   22.300         23.8961      0.5627               22.3                     0
+       FIL  MIN 2026-10-01     1        2026-Q4      2026-Q2    24.0   24.100         23.3150      0.4581               24.0                     0
+       FIL  MIN 2026-10-01     2        2027-Q1      2026-Q2    24.0   23.425         22.7966      0.4709               24.0                     1
+       FIL  MIN 2026-10-01     3        2027-Q2      2026-Q2    24.0   24.000         22.4366      0.4389               24.0                     0
+       FIL  MIN 2026-10-01     4        2027-Q3      2026-Q2    24.0   24.000         22.6106      0.4454               24.0                     0
+  FIL-LONG  NCR 2026-10-01     1        2026-Q4      2026-Q2    21.0   21.075         20.3507      0.4477               21.0                     0
+  FIL-LONG  NCR 2026-10-01     2        2027-Q1      2026-Q2    21.0   21.250         20.5545      0.4533               21.0                     0
+  FIL-LONG  NCR 2026-10-01     3        2027-Q2      2026-Q2    21.0   21.000         20.6895      0.4802               21.0                     0
+  FIL-LONG  NCR 2026-10-01     4        2027-Q3      2026-Q2    21.0   21.000         20.6895      0.4809               21.0                     0
+  FIL-LONG   BL 2026-10-01     1        2026-Q4      2026-Q2    17.3   18.425         18.6565      0.5168               17.3                     0
+  FIL-LONG   BL 2026-10-01     2        2027-Q1      2026-Q2    17.3   18.575         18.8353      0.5175               17.3                     0
+  FIL-LONG   BL 2026-10-01     3        2027-Q2      2026-Q2    17.3   17.300         17.9453      0.5411               17.3                     0
+  FIL-LONG   BL 2026-10-01     4        2027-Q3      2026-Q2    17.3   17.300         17.9453      0.5397               17.3                     0
+  FIL-LONG  VIS 2026-10-01     1        2026-Q4      2026-Q2    22.3   23.225         21.5593      0.3812               22.3                     0
+  FIL-LONG  VIS 2026-10-01     2        2027-Q1      2026-Q2    22.3   23.725         22.0881      0.3913               22.3                     0
+  FIL-LONG  VIS 2026-10-01     3        2027-Q2      2026-Q2    22.3   22.300         21.0481      0.4207               22.3                     0
+  FIL-LONG  VIS 2026-10-01     4        2027-Q3      2026-Q2    22.3   22.300         21.0481      0.4233               22.3                     0
+  FIL-LONG  MIN 2026-10-01     1        2026-Q4      2026-Q2    24.0   24.100         21.0644      0.2908               24.0                     0
+  FIL-LONG  MIN 2026-10-01     2        2027-Q1      2026-Q2    24.0   23.425         20.4171      0.3061               24.0                     1
+  FIL-LONG  MIN 2026-10-01     3        2027-Q2      2026-Q2    24.0   24.000         20.9921      0.3153               24.0                     0
+  FIL-LONG  MIN 2026-10-01     4        2027-Q3      2026-Q2    24.0   24.000         20.9921      0.3210               24.0                     0
+FIL-LONG-S  NCR 2026-10-01     1        2026-Q4      2026-Q2    21.0   21.075         21.1026      0.5020               21.0                     0
+FIL-LONG-S  NCR 2026-10-01     2        2027-Q1      2026-Q2    21.0   21.250         20.8149      0.4707               21.0                     0
+FIL-LONG-S  NCR 2026-10-01     3        2027-Q2      2026-Q2    21.0   21.000         21.0276      0.5018               21.0                     0
+FIL-LONG-S  NCR 2026-10-01     4        2027-Q3      2026-Q2    21.0   21.000         21.0276      0.5017               21.0                     0
+FIL-LONG-S   BL 2026-10-01     1        2026-Q4      2026-Q2    17.3   18.425         19.1158      0.5494               17.3                     0
+FIL-LONG-S   BL 2026-10-01     2        2027-Q1      2026-Q2    17.3   18.575         19.2658      0.5465               17.3                     0
+FIL-LONG-S   BL 2026-10-01     3        2027-Q2      2026-Q2    17.3   17.300         19.6118      0.6442               17.3                     0
+FIL-LONG-S   BL 2026-10-01     4        2027-Q3      2026-Q2    17.3   17.300         19.6118      0.6404               17.3                     0
+FIL-LONG-S  VIS 2026-10-01     1        2026-Q4      2026-Q2    22.3   23.225         21.2200      0.3592               22.3                     0
+FIL-LONG-S  VIS 2026-10-01     2        2027-Q1      2026-Q2    22.3   23.725         21.3745      0.3455               22.3                     0
+FIL-LONG-S  VIS 2026-10-01     3        2027-Q2      2026-Q2    22.3   22.300         21.6424      0.4581               22.3                     0
+FIL-LONG-S  VIS 2026-10-01     4        2027-Q3      2026-Q2    22.3   22.300         21.6424      0.4593               22.3                     0
+FIL-LONG-S  MIN 2026-10-01     1        2026-Q4      2026-Q2    24.0   24.100         20.9655      0.2865               24.0                     0
+FIL-LONG-S  MIN 2026-10-01     2        2027-Q1      2026-Q2    24.0   23.425         21.3151      0.3606               24.0                     1
+FIL-LONG-S  MIN 2026-10-01     3        2027-Q2      2026-Q2    24.0   24.000         20.8655      0.3081               24.0                     0
+FIL-LONG-S  MIN 2026-10-01     4        2027-Q3      2026-Q2    24.0   24.000         20.8655      0.3129               24.0                     0
+seal c73a0709d8b0022ef272375d4a68b7e1ee83b97badff464d064ef0ccc5cd9fe5
+BL margin 6 {1: 0.581, 2: 0.535, 3: 0.521, 4: 0.502}
+BL margin 4 {1: 0.609, 2: 0.542, 3: 0.512, 4: 0.498}
+BL margin 3 {1: 0.615, 2: 0.552, 3: 0.506, 4: 0.495}
+BL margin 2 {1: 0.623, 2: 0.549, 3: 0.506, 4: 0.501}
+BL margin 1 {1: 0.628, 2: 0.557, 3: 0.502, 4: 0.499}
+BL margin 0.01 {1: 0.634, 2: 0.56, 3: 0.497, 4: 0.492}

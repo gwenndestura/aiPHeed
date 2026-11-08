@@ -1,0 +1,268 @@
+{
+  "model": "e141-lgbm-3round-1.0 (LGBM-AUTO, trained on 203 measured HFIAS rows)",
+  "validation_status": "CANDIDATE - E141 forecast gate not passed; validation pending; not a released forecast",
+  "claim": "Estimated relative risk for the display quarter: P(the province's HFIAS moderate-or-severe food insecurity is above the national level), from information public before the issue date. Evidence (E141): on the untouched 2013 round the model ranks provinces well (AUC 0.94) but is under-calibrated (ECE 0.14); forecasting the next measured round (three survey-to-survey origins) it is not significantly better than the previous survey or the region's previous level. Quarter-to-quarter change is NOT validated: no quarterly provincial measurement exists.",
+  "issue_date": "2026-10-01",
+  "issue_quarter": "2026-Q4",
+  "information_cutoff": "2026-10-01 (exclusive)",
+  "target_quarter": "2027-Q1",
+  "display_lead": 1,
+  "final_model": {
+    "kind": "GBC",
+    "n_trees": 600,
+    "sigma": 0.39500917086073634
+  },
+  "explanation_method": "exact TreeSHAP (sums with the base value to the predicted relative logit)",
+  "interval_note": "model-refit uncertainty (16-region bootstrap, 200 refits); excludes survey sampling error and temporal change, so it understates the total uncertainty",
+  "class_rule": "HIGH if the whole 90 % interval is >= 0.5, LOW if it is < 0.5, otherwise UNCERTAIN",
+  "meaning": "Estimated probability that the province's household food insecurity (HFIAS moderate-or-severe) is above the national level. A risk estimate: HIGH does not confirm food insecurity and LOW does not guarantee food security. It is not the share of food-insecure households.",
+  "provinces": [
+    {
+      "province": "Batangas",
+      "target_quarter": "2027-Q1",
+      "p_elevated": 0.1028,
+      "p_interval90": [
+        0.0453,
+        0.5222
+      ],
+      "risk_class": "UNCERTAIN",
+      "explanations": [
+        {
+          "group": "poverty",
+          "fao_dimension": "access and vulnerability (ability to cope)",
+          "contribution_logit": -0.284,
+          "sentence": "Lower poverty levels mean fewer households are likely to lack the money for enough food."
+        },
+        {
+          "group": "history",
+          "fao_dimension": "measured outcome history (HFIAS)",
+          "contribution_logit": -0.088,
+          "sentence": "Earlier food-security surveys found this area below the national level of food insecurity."
+        },
+        {
+          "group": "geography",
+          "fao_dimension": "island group (Luzon/Visayas/Mindanao), a geographic covariate",
+          "contribution_logit": -0.205,
+          "sentence": "Provinces in this island group have tended to show lower measured food insecurity."
+        },
+        {
+          "group": "market",
+          "fao_dimension": "access (affordability) and stability",
+          "contribution_logit": -0.042,
+          "sentence": "This factor did not noticeably change the estimate."
+        },
+        {
+          "group": "climate",
+          "fao_dimension": "availability and stability",
+          "contribution_logit": -0.079,
+          "sentence": "Recent weather and harvests have not added pressure on local food supply."
+        }
+      ],
+      "base_logit": 0.198,
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the training years",
+        "news_nlp": "CALABARZON-only archive; regional context",
+        "utilization": "no nutrition, water or sanitation data held"
+      }
+    },
+    {
+      "province": "Cavite",
+      "target_quarter": "2027-Q1",
+      "p_elevated": 0.051,
+      "p_interval90": [
+        0.0423,
+        0.6578
+      ],
+      "risk_class": "UNCERTAIN",
+      "explanations": [
+        {
+          "group": "poverty",
+          "fao_dimension": "access and vulnerability (ability to cope)",
+          "contribution_logit": -0.314,
+          "sentence": "Lower poverty levels mean fewer households are likely to lack the money for enough food."
+        },
+        {
+          "group": "history",
+          "fao_dimension": "measured outcome history (HFIAS)",
+          "contribution_logit": -0.201,
+          "sentence": "Earlier food-security surveys found this area below the national level of food insecurity."
+        },
+        {
+          "group": "geography",
+          "fao_dimension": "island group (Luzon/Visayas/Mindanao), a geographic covariate",
+          "contribution_logit": -0.211,
+          "sentence": "Provinces in this island group have tended to show lower measured food insecurity."
+        },
+        {
+          "group": "market",
+          "fao_dimension": "access (affordability) and stability",
+          "contribution_logit": -0.036,
+          "sentence": "This factor did not noticeably change the estimate."
+        },
+        {
+          "group": "climate",
+          "fao_dimension": "availability and stability",
+          "contribution_logit": -0.083,
+          "sentence": "Recent weather and harvests have not added pressure on local food supply."
+        }
+      ],
+      "base_logit": 0.198,
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the training years",
+        "news_nlp": "CALABARZON-only archive; regional context",
+        "utilization": "no nutrition, water or sanitation data held"
+      }
+    },
+    {
+      "province": "Laguna",
+      "target_quarter": "2027-Q1",
+      "p_elevated": 0.0276,
+      "p_interval90": [
+        0.0267,
+        0.4735
+      ],
+      "risk_class": "LOW",
+      "explanations": [
+        {
+          "group": "poverty",
+          "fao_dimension": "access and vulnerability (ability to cope)",
+          "contribution_logit": -0.337,
+          "sentence": "Lower poverty levels mean fewer households are likely to lack the money for enough food."
+        },
+        {
+          "group": "history",
+          "fao_dimension": "measured outcome history (HFIAS)",
+          "contribution_logit": -0.283,
+          "sentence": "Earlier food-security surveys found this area below the national level of food insecurity."
+        },
+        {
+          "group": "geography",
+          "fao_dimension": "island group (Luzon/Visayas/Mindanao), a geographic covariate",
+          "contribution_logit": -0.211,
+          "sentence": "Provinces in this island group have tended to show lower measured food insecurity."
+        },
+        {
+          "group": "market",
+          "fao_dimension": "access (affordability) and stability",
+          "contribution_logit": -0.037,
+          "sentence": "This factor did not noticeably change the estimate."
+        },
+        {
+          "group": "climate",
+          "fao_dimension": "availability and stability",
+          "contribution_logit": -0.087,
+          "sentence": "Recent weather and harvests have not added pressure on local food supply."
+        }
+      ],
+      "base_logit": 0.198,
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the training years",
+        "news_nlp": "CALABARZON-only archive; regional context",
+        "utilization": "no nutrition, water or sanitation data held"
+      }
+    },
+    {
+      "province": "Quezon",
+      "target_quarter": "2027-Q1",
+      "p_elevated": 0.2506,
+      "p_interval90": [
+        0.1129,
+        0.5527
+      ],
+      "risk_class": "UNCERTAIN",
+      "explanations": [
+        {
+          "group": "poverty",
+          "fao_dimension": "access and vulnerability (ability to cope)",
+          "contribution_logit": -0.154,
+          "sentence": "Lower poverty levels mean fewer households are likely to lack the money for enough food."
+        },
+        {
+          "group": "history",
+          "fao_dimension": "measured outcome history (HFIAS)",
+          "contribution_logit": -0.072,
+          "sentence": "Earlier food-security surveys found this area below the national level of food insecurity."
+        },
+        {
+          "group": "geography",
+          "fao_dimension": "island group (Luzon/Visayas/Mindanao), a geographic covariate",
+          "contribution_logit": -0.194,
+          "sentence": "Provinces in this island group have tended to show lower measured food insecurity."
+        },
+        {
+          "group": "market",
+          "fao_dimension": "access (affordability) and stability",
+          "contribution_logit": 0.037,
+          "sentence": "This factor did not noticeably change the estimate."
+        },
+        {
+          "group": "climate",
+          "fao_dimension": "availability and stability",
+          "contribution_logit": -0.082,
+          "sentence": "Recent weather and harvests have not added pressure on local food supply."
+        }
+      ],
+      "base_logit": 0.198,
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the training years",
+        "news_nlp": "CALABARZON-only archive; regional context",
+        "utilization": "no nutrition, water or sanitation data held"
+      }
+    },
+    {
+      "province": "Rizal",
+      "target_quarter": "2027-Q1",
+      "p_elevated": 0.1431,
+      "p_interval90": [
+        0.0681,
+        0.6078
+      ],
+      "risk_class": "UNCERTAIN",
+      "explanations": [
+        {
+          "group": "poverty",
+          "fao_dimension": "access and vulnerability (ability to cope)",
+          "contribution_logit": -0.247,
+          "sentence": "Lower poverty levels mean fewer households are likely to lack the money for enough food."
+        },
+        {
+          "group": "history",
+          "fao_dimension": "measured outcome history (HFIAS)",
+          "contribution_logit": -0.072,
+          "sentence": "Earlier food-security surveys found this area below the national level of food insecurity."
+        },
+        {
+          "group": "geography",
+          "fao_dimension": "island group (Luzon/Visayas/Mindanao), a geographic covariate",
+          "contribution_logit": -0.192,
+          "sentence": "Provinces in this island group have tended to show lower measured food insecurity."
+        },
+        {
+          "group": "market",
+          "fao_dimension": "access (affordability) and stability",
+          "contribution_logit": -0.035,
+          "sentence": "This factor did not noticeably change the estimate."
+        },
+        {
+          "group": "climate",
+          "fao_dimension": "availability and stability",
+          "contribution_logit": -0.073,
+          "sentence": "Recent weather and harvests have not added pressure on local food supply."
+        }
+      ],
+      "base_logit": 0.198,
+      "not_model_inputs": {
+        "employment_remittances": "no provincial series for the training years",
+        "news_nlp": "CALABARZON-only archive; regional context",
+        "utilization": "no nutrition, water or sanitation data held"
+      }
+    }
+  ],
+  "p_rank_first": {
+    "Quezon": 0.705,
+    "Rizal": 0.18,
+    "Cavite": 0.1,
+    "Batangas": 0.015
+  },
+  "sealed_prediction_sha256": "c51d3384a03ec0224b6d93a064fbf7a741f0b662584a9d96311bf6c946fc0b36"
+}

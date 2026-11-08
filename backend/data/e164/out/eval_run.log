@@ -1,0 +1,259 @@
+{
+ "leakage_max_abs_change": 0.0,
+ "gates": {
+  "A1": true,
+  "A2": true,
+  "A3": true,
+  "A4": true,
+  "A5": true,
+  "A6": true,
+  "A7": true,
+  "A8": true,
+  "all": true
+ },
+ "groups_contribute": true,
+ "controls": {
+  "SHUF": {
+   "brier": 0.1598,
+   "AUTO_minus_this": -0.0375,
+   "ci95": [
+    -0.0629,
+    -0.0121
+   ],
+   "accuracy": 0.708
+  },
+  "nonews": {
+   "brier": 0.1222,
+   "AUTO_minus_this": 0.0001,
+   "ci95": [
+    -0.0032,
+    0.0046
+   ],
+   "accuracy": 0.792
+  },
+  "newsonly": {
+   "brier": 0.1586,
+   "AUTO_minus_this": -0.0363,
+   "ci95": [
+    -0.0647,
+    -0.0116
+   ],
+   "accuracy": 0.708
+  }
+ },
+ "selected_configs": {
+  "1": {
+   "ENNS2018": "OH|ENET|GOV|id",
+   "ENNS2019": "OH|ENET|GOV|id",
+   "ENNS2021": "RSS|ENET|FULL|id"
+  },
+  "2": {
+   "ENNS2018": "OH|ENET|GOV|id",
+   "ENNS2019": "OH|ENET|GOV|id",
+   "ENNS2021": "RSS|ENET|FULL|id"
+  },
+  "3": {
+   "ENNS2018": "OH|ENET|GOV|id",
+   "ENNS2019": "OH|ENET|GOV|id",
+   "ENNS2021": "RSS|RF|FULL|id"
+  },
+  "4": {
+   "ENNS2018": "OH|ENET|GOV|id",
+   "ENNS2019": "OH|ENET|GOV|id",
+   "ENNS2021": "RSS|RF|FULL|id"
+  }
+ },
+ "selected_configs_controls": {
+  "shuf1": {
+   "ENNS2018": "RP|NONE|-|cal",
+   "ENNS2019": "RP|NONE|-|cal",
+   "ENNS2021": "RSS|RF|FULL|id"
+  },
+  "nonews": {
+   "ENNS2018": "OH|ENET|GOV|id",
+   "ENNS2019": "OH|ENET|GOV|id",
+   "ENNS2021": "RSS|ENET|GOV|id"
+  },
+  "newsonly": {
+   "ENNS2018": "RP|NONE|-|cal",
+   "ENNS2019": "RP|NONE|-|cal",
+   "ENNS2021": "RSS|RF|NEWSONLY|id"
+  }
+ },
+ "max_reliable_lead": {
+  "AUTO": 0
+ }
+}
+
+Lead 1  AUTO-E158 {'diff': -0.012, 'ci95': [-0.0419, 0.0196]}
+            accuracy  balanced_accuracy  high_precision  high_recall  low_precision  low_recall     f1    auc  pr_auc   brier  calibration_slope  calibration_intercept  mae_pts  false_alarm_rate  missed_high_rate
+ALWAYS_LOW     0.653                NaN             NaN         0.00            NaN       1.000    NaN    NaN   0.347  0.2542                NaN                    NaN      NaN               NaN               NaN
+PERS           0.625              0.703           0.480         0.96          0.955       0.447  0.640  0.827   0.705  0.2128              0.710                 -0.331    11.16             0.553              0.04
+ANCHOR         0.639              0.714           0.490         0.96          0.957       0.468  0.649  0.855   0.799  0.1729              0.940                 -0.288     9.36             0.532              0.04
+RP             0.694              0.757           0.533         0.96          0.963       0.553  0.686  0.855   0.764  0.1707              0.696                 -0.252     9.02             0.447              0.04
+C1             0.694              0.757           0.533         0.96          0.963       0.553  0.686  0.930   0.882  0.1518              0.985                 -0.299     8.55             0.447              0.04
+E158           0.736              0.760           0.583         0.84          0.889       0.681  0.689  0.860   0.810  0.1344              0.718                 -0.130     8.23             0.319              0.16
+AUTO           0.792              0.812           0.647         0.88          0.921       0.745  0.746  0.901   0.861  0.1223              0.734                 -0.129     7.79             0.255              0.12
+conc {'E158': 0.6, 'AUTO': 0.725, 'C1': 0.675, 'RP': 0.7, 'PERS': 0.7} per round {'ENNS2018': {'E158': {'accuracy': 0.636, 'brier': 0.1497}, 'AUTO': {'accuracy': 0.727, 'brier': 0.1344}}, 'ENNS2019': {'E158': {'accuracy': 0.68, 'brier': 0.1721}, 'AUTO': {'accuracy': 0.76, 'brier': 0.1423}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0831}, 'AUTO': {'accuracy': 0.88, 'brier': 0.0917}}}
+
+Lead 2  AUTO-E158 {'diff': -0.0139, 'ci95': [-0.0464, 0.023]}
+            accuracy  balanced_accuracy  high_precision  high_recall  low_precision  low_recall     f1    auc  pr_auc   brier  calibration_slope  calibration_intercept  mae_pts  false_alarm_rate  missed_high_rate
+ALWAYS_LOW     0.653                NaN             NaN         0.00            NaN       1.000    NaN    NaN   0.347  0.2542                NaN                    NaN      NaN               NaN               NaN
+PERS           0.625              0.703           0.480         0.96          0.955       0.447  0.640  0.827   0.705  0.2128              0.710                 -0.331    11.16             0.553              0.04
+ANCHOR         0.639              0.714           0.490         0.96          0.957       0.468  0.649  0.855   0.799  0.1729              0.940                 -0.288     9.36             0.532              0.04
+RP             0.694              0.757           0.533         0.96          0.963       0.553  0.686  0.855   0.764  0.1707              0.696                 -0.252     9.02             0.447              0.04
+C1             0.694              0.757           0.533         0.96          0.963       0.553  0.686  0.930   0.882  0.1518              0.985                 -0.299     8.55             0.447              0.04
+E158           0.736              0.760           0.583         0.84          0.889       0.681  0.689  0.861   0.800  0.1371              0.679                 -0.139     8.50             0.319              0.16
+AUTO           0.792              0.822           0.639         0.92          0.944       0.723  0.754  0.900   0.856  0.1232              0.768                 -0.147     7.69             0.277              0.08
+conc {'E158': 0.6, 'AUTO': 0.675, 'C1': 0.675, 'RP': 0.7, 'PERS': 0.7} per round {'ENNS2018': {'E158': {'accuracy': 0.591, 'brier': 0.1632}, 'AUTO': {'accuracy': 0.727, 'brier': 0.1352}}, 'ENNS2019': {'E158': {'accuracy': 0.72, 'brier': 0.1635}, 'AUTO': {'accuracy': 0.8, 'brier': 0.1412}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0877}, 'AUTO': {'accuracy': 0.84, 'brier': 0.0946}}}
+
+Lead 3  AUTO-E158 {'diff': -0.0211, 'ci95': [-0.049, 0.0091]}
+            accuracy  balanced_accuracy  high_precision  high_recall  low_precision  low_recall     f1    auc  pr_auc   brier  calibration_slope  calibration_intercept  mae_pts  false_alarm_rate  missed_high_rate
+ALWAYS_LOW     0.653                NaN             NaN         0.00            NaN       1.000    NaN    NaN   0.347  0.2541                NaN                    NaN      NaN               NaN               NaN
+PERS           0.625              0.703           0.480         0.96          0.955       0.447  0.640  0.827   0.705  0.2130              0.710                 -0.331    11.16             0.553              0.04
+ANCHOR         0.681              0.746           0.522         0.96          0.962       0.532  0.676  0.843   0.756  0.1732              0.871                 -0.267     9.35             0.468              0.04
+RP             0.736              0.789           0.571         0.96          0.967       0.617  0.716  0.861   0.766  0.1636              0.676                 -0.231     8.79             0.383              0.04
+C1             0.694              0.747           0.535         0.92          0.931       0.574  0.676  0.927   0.878  0.1440              0.938                 -0.268     8.36             0.426              0.08
+E158           0.750              0.762           0.606         0.80          0.872       0.723  0.690  0.840   0.750  0.1455              0.675                 -0.122     8.61             0.277              0.20
+AUTO           0.764              0.791           0.611         0.88          0.917       0.702  0.721  0.889   0.846  0.1244              0.695                 -0.121     8.23             0.298              0.12
+conc {'E158': 0.6, 'AUTO': 0.65, 'C1': 0.675, 'RP': 0.7, 'PERS': 0.7} per round {'ENNS2018': {'E158': {'accuracy': 0.682, 'brier': 0.1633}, 'AUTO': {'accuracy': 0.682, 'brier': 0.1395}}, 'ENNS2019': {'E158': {'accuracy': 0.76, 'brier': 0.1502}, 'AUTO': {'accuracy': 0.8, 'brier': 0.1319}}, 'ENNS2021': {'E158': {'accuracy': 0.8, 'brier': 0.1251}, 'AUTO': {'accuracy': 0.8, 'brier': 0.1037}}}
+
+Lead 4  AUTO-E158 {'diff': -0.0263, 'ci95': [-0.0586, 0.0034]}
+            accuracy  balanced_accuracy  high_precision  high_recall  low_precision  low_recall     f1    auc  pr_auc   brier  calibration_slope  calibration_intercept  mae_pts  false_alarm_rate  missed_high_rate
+ALWAYS_LOW     0.653                NaN             NaN         0.00            NaN       1.000    NaN    NaN   0.347  0.2541                NaN                    NaN      NaN               NaN               NaN
+PERS           0.625              0.703           0.480         0.96          0.955       0.447  0.640  0.827   0.705  0.2130              0.710                 -0.331    11.16             0.553              0.04
+ANCHOR         0.681              0.746           0.522         0.96          0.962       0.532  0.676  0.843   0.756  0.1732              0.871                 -0.267     9.35             0.468              0.04
+RP             0.736              0.789           0.571         0.96          0.967       0.617  0.716  0.861   0.766  0.1636              0.676                 -0.231     8.79             0.383              0.04
+C1             0.694              0.747           0.535         0.92          0.931       0.574  0.676  0.927   0.878  0.1440              0.938                 -0.268     8.36             0.426              0.08
+E158           0.750              0.752           0.613         0.76          0.854       0.745  0.679  0.826   0.704  0.1523              0.655                 -0.124     8.65             0.255              0.24
+AUTO           0.764              0.791           0.611         0.88          0.917       0.702  0.721  0.887   0.848  0.1260              0.690                 -0.124     8.30             0.298              0.12
+conc {'E158': 0.625, 'AUTO': 0.7, 'C1': 0.675, 'RP': 0.7, 'PERS': 0.7} per round {'ENNS2018': {'E158': {'accuracy': 0.591, 'brier': 0.1847}, 'AUTO': {'accuracy': 0.682, 'brier': 0.1416}}, 'ENNS2019': {'E158': {'accuracy': 0.84, 'brier': 0.1355}, 'AUTO': {'accuracy': 0.8, 'brier': 0.1314}}, 'ENNS2021': {'E158': {'accuracy': 0.8, 'brier': 0.1407}, 'AUTO': {'accuracy': 0.8, 'brier': 0.1069}}}
+fixed L1 top 8 by brier [('OH_RF_FULL', {'accuracy': 0.764, 'brier': 0.117}), ('OH_ENET_FULL', {'accuracy': 0.778, 'brier': 0.1186}), ('OH_RF_GOV', {'accuracy': 0.764, 'brier': 0.1193}), ('RSS_LGBM_GOV', {'accuracy': 0.764, 'brier': 0.1194}), ('OH_ENET_GOV', {'accuracy': 0.778, 'brier': 0.1196}), ('OH_LGBM_FULL', {'accuracy': 0.778, 'brier': 0.121}), ('RSS_RF_GOV', {'accuracy': 0.736, 'brier': 0.1223}), ('OH_LGBM_GOV', {'accuracy': 0.792, 'brier': 0.1228})]
+{
+ "E158": {
+  "overall": {
+   "n": 72,
+   "mean": 2.9,
+   "ci95": [
+    0.64,
+    5.09
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 5.53,
+   "ci95": [
+    3.07,
+    7.75
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": -0.58,
+   "ci95": [
+    -4.66,
+    4.22
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 1.1,
+   "ci95": [
+    -2.42,
+    4.3
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -1.62,
+   "ci95": [
+    -5.5,
+    2.35
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 5.3,
+   "ci95": [
+    2.89,
+    7.56
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 9.3,
+   "Quezon|ENNS2019": 4.0,
+   "Rizal|ENNS2019": 3.6,
+   "Batangas|ENNS2021": -13.7,
+   "Cavite|ENNS2021": -6.2
+  }
+ },
+ "AUTO": {
+  "overall": {
+   "n": 72,
+   "mean": 2.82,
+   "ci95": [
+    0.71,
+    4.93
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 3.91,
+   "ci95": [
+    0.8,
+    7.44
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 0.8,
+   "ci95": [
+    -5.4,
+    6.55
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 2.47,
+   "ci95": [
+    -0.02,
+    4.44
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -0.61,
+   "ci95": [
+    -4.76,
+    2.69
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 4.65,
+   "ci95": [
+    1.94,
+    7.23
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 8.9,
+   "Quezon|ENNS2019": 1.2,
+   "Rizal|ENNS2019": -1.6,
+   "Batangas|ENNS2021": -13.1,
+   "Cavite|ENNS2021": -9.0
+  }
+ }
+} [{'AUTO': '(-0.001, 0.2]', 'n': '17', 'mean_p': '0.076', 'observed': '0.0'}, {'AUTO': '(0.2, 0.4]', 'n': '9', 'mean_p': '0.262', 'observed': '0.222'}, {'AUTO': '(0.4, 0.6]', 'n': '22', 'mean_p': '0.501', 'observed': '0.182'}, {'AUTO': '(0.6, 0.8]', 'n': '11', 'mean_p': '0.716', 'observed': '0.727'}, {'AUTO': '(0.8, 1.0]', 'n': '13', 'mean_p': '0.905', 'observed': '0.846'}]

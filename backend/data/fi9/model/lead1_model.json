@@ -1,0 +1,22 @@
+{
+ "model": "Damped persistence (statistical)",
+ "kind": "damped_tau",
+ "version": "fi9-1.0",
+ "params": {
+  "phi": 0.67,
+  "sigma": 4.549307843031703,
+  "tau": 0.125,
+  "conformal_halfwidth_95": 10.4446871875
+ },
+ "protocol_sha256": "adc90414fa63373d2cd596bf17fa3bd9878ea7178b62e773b56f5c4b9f95143e",
+ "issue_quarter": "2026-Q4",
+ "issue_date": "2026-11-03",
+ "n_training_rows": 98,
+ "training_targets": [
+  "2000-Q4",
+  "2026-Q3"
+ ],
+ "training_data_cutoff": "2026-10-14",
+ "formula": "level = normal + phi**age * (latest - normal); p_high = 1 - Phi((line - level) / sigma); class = p_high >= tau; interval = level +/- conformal_halfwidth_95 (adopted by FI9-R: the Gaussian level +/- 1.96 sigma covered only 89% of past outcomes)",
+ "sha256": "952ce49074290fa1b0a099f1d1eb9cca27ce983411c877fc13464c0d3db1c041"
+}

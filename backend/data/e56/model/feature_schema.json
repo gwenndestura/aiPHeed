@@ -1,0 +1,185 @@
+{
+ "features": [
+  {
+   "name": "F_hat_M1",
+   "group": "market",
+   "source": "PSA CPI food index (OpenSTAT 0012M4ACP22)",
+   "reference_at_issue": "months through m0 (published before O(t))"
+  },
+  {
+   "name": "F_now",
+   "group": "market",
+   "source": "PSA CPI food YoY",
+   "reference_at_issue": "latest two published months"
+  },
+  {
+   "name": "D_now",
+   "group": "market",
+   "source": "PSA CPI food YoY",
+   "reference_at_issue": "latest two published months"
+  },
+  {
+   "name": "gap_now",
+   "group": "market",
+   "source": "PSA CPI food and all-items YoY",
+   "reference_at_issue": "latest two published months"
+  },
+  {
+   "name": "rice_whsl_yoy",
+   "group": "market",
+   "source": "PSA wholesale rice prices",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "tc_count",
+   "group": "climate",
+   "source": "IBTrACS typhoon tracks",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "tc_count_l1",
+   "group": "climate",
+   "source": "IBTrACS typhoon tracks",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "enso",
+   "group": "climate",
+   "source": "NOAA ONI",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "enso_l2",
+   "group": "climate",
+   "source": "NOAA ONI",
+   "reference_at_issue": "quarter t-2"
+  },
+  {
+   "name": "palay_yoy",
+   "group": "climate",
+   "source": "PSA palay production (OpenSTAT 0012E4EVCP0)",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "corn_yoy",
+   "group": "climate",
+   "source": "PSA corn production",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "enso_x_mom",
+   "group": "climate",
+   "source": "ONI x CPI momentum",
+   "reference_at_issue": "t-1 / latest months"
+  },
+  {
+   "name": "tcl1_x_palay",
+   "group": "climate",
+   "source": "typhoons x palay",
+   "reference_at_issue": "t-1"
+  },
+  {
+   "name": "fish_yoy",
+   "group": "fish_kill",
+   "source": "PSA fisheries production (0132E4GVFP1)",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "aqua_yoy",
+   "group": "fish_kill",
+   "source": "PSA aquaculture production",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "ur_yoy",
+   "group": "employment",
+   "source": "PSA LFS unemployment rate",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "under_yoy",
+   "group": "employment",
+   "source": "PSA LFS underemployment rate",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "remit_usd_yoy",
+   "group": "ofw_remittance",
+   "source": "BSP OF cash remittances",
+   "reference_at_issue": "quarter t-1 (dataset ends 2025-Q4)"
+  },
+  {
+   "name": "remit_php_yoy",
+   "group": "ofw_remittance",
+   "source": "BSP remittances x USD/PHP",
+   "reference_at_issue": "quarter t-1 (dataset ends 2025-Q4)"
+  },
+  {
+   "name": "fx_yoy",
+   "group": "ofw_remittance",
+   "source": "ECB USD/PHP reference rate",
+   "reference_at_issue": "quarter t-1"
+  },
+  {
+   "name": "news_market",
+   "group": "market",
+   "source": "news corpus, trigger classifier",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "news_climate",
+   "group": "climate",
+   "source": "news corpus, trigger classifier",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "news_fish_kill",
+   "group": "fish_kill",
+   "source": "news corpus, trigger classifier",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "news_employment",
+   "group": "employment",
+   "source": "news corpus, trigger classifier",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "news_ofw_remittance",
+   "group": "ofw_remittance",
+   "source": "news corpus, trigger classifier",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "news_n",
+   "group": "other",
+   "source": "news corpus",
+   "reference_at_issue": "quarter t"
+  },
+  {
+   "name": "tariff_yoy_regime",
+   "group": "market",
+   "source": "EO 62 (2024) rice tariff cut",
+   "reference_at_issue": "orders announced before O(t)"
+  },
+  {
+   "name": "import_suspension_share",
+   "group": "market",
+   "source": "DA rice import suspension orders",
+   "reference_at_issue": "announced before O(t)"
+  },
+  {
+   "name": "price_ceiling_share",
+   "group": "market",
+   "source": "rice price ceiling / MSRP orders",
+   "reference_at_issue": "announced before O(t)"
+  },
+  {
+   "name": "food_emergency_share",
+   "group": "market",
+   "source": "food security emergency declaration",
+   "reference_at_issue": "announced before O(t)"
+  }
+ ],
+ "missing": "native LightGBM (NaN)"
+}

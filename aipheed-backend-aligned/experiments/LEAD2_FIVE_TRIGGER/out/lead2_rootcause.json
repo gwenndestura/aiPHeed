@@ -1,0 +1,481 @@
+{
+ "protocol_sha256": "431cdefb1ec62c9499b604b4865daa1d32694565ebd8a064b743d83cb13e79a1",
+ "error_attribution": {
+  "B0": {
+   "errors": 13,
+   "by_part": {
+    "price": 13
+   },
+   "by_type": {
+    "price rose after issue (projection < 0 <= realised)": 6,
+    "price fell after issue (projection >= 0 > realised)": 4,
+    "model over-called a negative projection": 2,
+    "model under-called a positive projection": 1
+   },
+   "by_quarter": {
+    "2023-Q4": 3,
+    "2024-Q2": 1,
+    "2024-Q3": 2,
+    "2024-Q4": 2,
+    "2025-Q2": 2,
+    "2025-Q3": 1,
+    "2026-Q2": 1,
+    "2026-Q3": 1
+   }
+  },
+  "CRANCVER": {
+   "errors": 15,
+   "by_part": {
+    "price": 14,
+    "neither (sign)": 1
+   },
+   "by_type": {
+    "price rose after issue (projection < 0 <= realised)": 6,
+    "price fell after issue (projection >= 0 > realised)": 4,
+    "model over-called a negative projection": 3,
+    "product of two correct-sign parts crosses 0.5": 1,
+    "model under-called a positive projection": 1
+   },
+   "by_quarter": {
+    "2023-Q4": 3,
+    "2024-Q2": 2,
+    "2024-Q3": 1,
+    "2024-Q4": 3,
+    "2025-Q2": 2,
+    "2026-Q1": 1,
+    "2026-Q2": 2,
+    "2026-Q3": 1
+   }
+  },
+  "CRANCD10": {
+   "errors": 13,
+   "by_part": {
+    "price": 10,
+    "neither (sign)": 3
+   },
+   "by_type": {
+    "price fell after issue (projection >= 0 > realised)": 5,
+    "product of two correct-sign parts crosses 0.5": 3,
+    "model over-called a negative projection": 3,
+    "price rose after issue (projection < 0 <= realised)": 2
+   },
+   "by_quarter": {
+    "2023-Q4": 3,
+    "2024-Q2": 2,
+    "2024-Q3": 2,
+    "2024-Q4": 1,
+    "2025-Q2": 2,
+    "2026-Q2": 3
+   }
+  }
+ },
+ "cluster": {
+  "B0": {
+   "rows": 65,
+   "quarters": 13,
+   "high_rows": 17,
+   "high_quarters": 7,
+   "icc_correct_within_quarter": 0.05660377358490561,
+   "design_effect": 1.2264150943396224,
+   "effective_n": 53.000000000000014,
+   "accuracy_ci90_cluster": [
+    0.7076923076923077,
+    0.8923076923076924
+   ],
+   "recall_ci90_cluster": [
+    0.25,
+    0.8571428571428571
+   ],
+   "precision_ci90_cluster": [
+    0.4208333333333334,
+    0.75
+   ],
+   "R6_pass_rate_cluster_bootstrap": 0.375,
+   "R2_pass_rate_cluster_bootstrap": 0.8525,
+   "tp_fp_fn": [
+    10,
+    6,
+    7
+   ],
+   "recall_slack_rows": -1,
+   "precision_slack_rows": 0,
+   "extra_hits_needed_for_R6_recall": 1
+  },
+  "CRVER": {
+   "rows": 65,
+   "quarters": 13,
+   "high_rows": 17,
+   "high_quarters": 7,
+   "icc_correct_within_quarter": 0.09999999999999994,
+   "design_effect": 1.3999999999999997,
+   "effective_n": 46.42857142857144,
+   "accuracy_ci90_cluster": [
+    0.7230769230769231,
+    0.9076923076923077
+   ],
+   "recall_ci90_cluster": [
+    0.25,
+    0.8571428571428571
+   ],
+   "precision_ci90_cluster": [
+    0.42857142857142855,
+    0.8
+   ],
+   "R6_pass_rate_cluster_bootstrap": 0.445,
+   "R2_pass_rate_cluster_bootstrap": 0.90175,
+   "tp_fp_fn": [
+    10,
+    5,
+    7
+   ],
+   "recall_slack_rows": -1,
+   "precision_slack_rows": 1,
+   "extra_hits_needed_for_R6_recall": 1
+  },
+  "CRANCVER": {
+   "rows": 65,
+   "quarters": 13,
+   "high_rows": 17,
+   "high_quarters": 7,
+   "icc_correct_within_quarter": 0.11016949152542367,
+   "design_effect": 1.4406779661016946,
+   "effective_n": 45.117647058823536,
+   "accuracy_ci90_cluster": [
+    0.6615384615384615,
+    0.8615384615384616
+   ],
+   "recall_ci90_cluster": [
+    0.23529411764705882,
+    0.7777777777777778
+   ],
+   "precision_ci90_cluster": [
+    0.3333333333333333,
+    0.7099078341013813
+   ],
+   "R6_pass_rate_cluster_bootstrap": 0.18575,
+   "R2_pass_rate_cluster_bootstrap": 0.66025,
+   "tp_fp_fn": [
+    9,
+    7,
+    8
+   ],
+   "recall_slack_rows": -2,
+   "precision_slack_rows": -1,
+   "extra_hits_needed_for_R6_recall": 2
+  },
+  "CRANCD10": {
+   "rows": 65,
+   "quarters": 13,
+   "high_rows": 17,
+   "high_quarters": 7,
+   "icc_correct_within_quarter": 0.205607476635514,
+   "design_effect": 1.8224299065420562,
+   "effective_n": 35.666666666666664,
+   "accuracy_ci90_cluster": [
+    0.6923076923076923,
+    0.9076923076923077
+   ],
+   "recall_ci90_cluster": [
+    0.45454545454545453,
+    0.9333333333333333
+   ],
+   "precision_ci90_cluster": [
+    0.42105263157894735,
+    0.8
+   ],
+   "R6_pass_rate_cluster_bootstrap": 0.44075,
+   "R2_pass_rate_cluster_bootstrap": 0.79925,
+   "tp_fp_fn": [
+    12,
+    8,
+    5
+   ],
+   "recall_slack_rows": 1,
+   "precision_slack_rows": 0,
+   "extra_hits_needed_for_R6_recall": 0
+  }
+ },
+ "transitions": {
+  "price": {
+   "onsets": 16,
+   "offsets": 18,
+   "high_rows_before_first_eval_issue": 12,
+   "rows_before_first_eval_issue": 30
+  },
+  "hunger": {
+   "onsets": 10,
+   "offsets": 10,
+   "high_rows_before_first_eval_issue": 10,
+   "rows_before_first_eval_issue": 30
+  },
+  "y": {
+   "onsets": 11,
+   "offsets": 13,
+   "high_rows_before_first_eval_issue": 2,
+   "rows_before_first_eval_issue": 30
+  },
+  "hunger_regional_crossings": 4,
+  "hunger_quarters": {
+   "high": 13,
+   "total": 20
+  }
+ },
+ "target_components": {
+  "hunger": "Balance Luzon SWS involuntary hunger > 11.3: observed food insecurity, regional, one value per quarter for all five provinces",
+  "price": "province food YoY > 2021-22 P60 or food-minus-headline > gap P60: a provincial food-price-pressure proxy, not observed food insecurity",
+  "T43c": "hunger AND price: a composite risk proxy; no provincial observed food-insecurity series exists in the repository (outcome_gap_resolution: NOT EVALUABLE)",
+  "what_lightgbm_predicts": "the price label only; pi_H is the latest-reading rule, not learned",
+  "lead2_label_shares": {
+   "hunger_high": 0.8461538461538461,
+   "price_high": 0.4,
+   "T43_high": 0.26153846153846155
+  }
+ },
+ "ceiling_on_stack_m0": {
+  "1": {
+   "estimation_rows": 20,
+   "estimation_targets": "2022-Q2..2023-Q1",
+   "error_sd_food_gap": [
+    1.5003198161476268,
+    1.298189368252355
+   ],
+   "error_mean": [
+    2.807848341814999,
+    0.7095691431021665
+   ],
+   "eval_rows": 70,
+   "price_base_rate_low": 0.5571428571428572,
+   "share_rows_margin_within_1sd": 0.5,
+   "reference_price_accuracy_expected": 0.8269621223125162,
+   "reference_price_accuracy_realised": 0.8,
+   "lgbm_price_accuracy": {
+    "B0": 0.6142857142857143,
+    "CRANCVER": 0.7285714285714285,
+    "CRANCD10": 0.7142857142857143
+   },
+   "reference_T43_accuracy": 0.8714285714285714,
+   "reference_T43_tp_fp_fn": [
+    14,
+    6,
+    3
+   ],
+   "reference_T43_recall_precision": [
+    0.8235294117647058,
+    0.7
+   ]
+  },
+  "2": {
+   "estimation_rows": 20,
+   "estimation_targets": "2022-Q2..2023-Q1",
+   "error_sd_food_gap": [
+    2.729878458416368,
+    2.0455515737606804
+   ],
+   "error_mean": [
+    5.143273993075001,
+    1.1746054041341665
+   ],
+   "eval_rows": 65,
+   "price_base_rate_low": 0.6,
+   "share_rows_margin_within_1sd": 0.7692307692307693,
+   "reference_price_accuracy_expected": 0.759255095582011,
+   "reference_price_accuracy_realised": 0.5538461538461539,
+   "lgbm_price_accuracy": {
+    "B0": 0.6,
+    "CRANCVER": 0.5692307692307692,
+    "CRANCD10": 0.7230769230769231
+   },
+   "reference_T43_accuracy": 0.6307692307692307,
+   "reference_T43_tp_fp_fn": [
+    12,
+    19,
+    5
+   ],
+   "reference_T43_recall_precision": [
+    0.7058823529411765,
+    0.3870967741935484
+   ]
+  }
+ },
+ "ceiling_on_stack_verified": {
+  "1": {
+   "estimation_rows": 20,
+   "estimation_targets": "2022-Q2..2023-Q1",
+   "error_sd_food_gap": [
+    1.5003198161476268,
+    1.298189368252355
+   ],
+   "error_mean": [
+    2.807848341814999,
+    0.7095691431021665
+   ],
+   "eval_rows": 70,
+   "price_base_rate_low": 0.5571428571428572,
+   "share_rows_margin_within_1sd": 0.5,
+   "reference_price_accuracy_expected": 0.8269621223125162,
+   "reference_price_accuracy_realised": 0.8,
+   "lgbm_price_accuracy": {
+    "B0": 0.6142857142857143,
+    "CRANCVER": 0.7285714285714285,
+    "CRANCD10": 0.7142857142857143
+   },
+   "reference_T43_accuracy": 0.8714285714285714,
+   "reference_T43_tp_fp_fn": [
+    14,
+    6,
+    3
+   ],
+   "reference_T43_recall_precision": [
+    0.8235294117647058,
+    0.7
+   ]
+  },
+  "2": {
+   "estimation_rows": 20,
+   "estimation_targets": "2022-Q2..2023-Q1",
+   "error_sd_food_gap": [
+    2.724520051674051,
+    2.04631212135519
+   ],
+   "error_mean": [
+    5.043019125875,
+    1.2033883008841666
+   ],
+   "eval_rows": 65,
+   "price_base_rate_low": 0.6,
+   "share_rows_margin_within_1sd": 0.7692307692307693,
+   "reference_price_accuracy_expected": 0.7409244038278304,
+   "reference_price_accuracy_realised": 0.5384615384615384,
+   "lgbm_price_accuracy": {
+    "B0": 0.6,
+    "CRANCVER": 0.5692307692307692,
+    "CRANCD10": 0.7230769230769231
+   },
+   "reference_T43_accuracy": 0.6461538461538462,
+   "reference_T43_tp_fp_fn": [
+    12,
+    18,
+    5
+   ],
+   "reference_T43_recall_precision": [
+    0.7058823529411765,
+    0.4
+   ]
+  }
+ },
+ "pit_checks": {
+  "psa_newest_month_end_before_issue": true,
+  "sws_published_before_issue": true,
+  "news_published_before_issue": true,
+  "target_after_origin": true,
+  "missing_share_lead2": {
+   "A1_food": 0.08695652173913043,
+   "A1_gap": 0.08695652173913043,
+   "A2": 0.0,
+   "A3": 0.26956521739130435,
+   "V1": 0.0,
+   "C1": 0.0,
+   "C2": 0.043478260869565216,
+   "C3": 0.21739130434782608,
+   "C4": 0.21739130434782608,
+   "E1": 0.21739130434782608,
+   "E2": 0.21739130434782608,
+   "N1": 0.8260869565217391,
+   "H1": 0.08695652173913043,
+   "A_mom": 0.043478260869565216,
+   "G_pri_yoy": 0.17391304347826086,
+   "NG_gap_price": 0.17391304347826086,
+   "W_rice_yoy": 0.0,
+   "W_rice_mom": 0.0,
+   "W_cereal_yoy": 0.0,
+   "W_crude_yoy": 0.0,
+   "W_urea_yoy": 0.0
+  },
+  "lightgbm_missing_handling": "native NaN branches; no imputation, no scaling fitted on future rows (lt_lib.Uni)",
+  "threshold_window_end": "2022-12 (2021-22 P60; label definition, frozen)",
+  "training_rows_using_thresholds_before_they_were_computable": 600
+ },
+ "ceiling_oracle_eval_period_noise_UPPER_BOUND": {
+  "1": {
+   "oracle_error_sd": [
+    1.82,
+    1.48
+   ],
+   "oracle_error_mean": [
+    0.7,
+    -0.23
+   ],
+   "price_acc_expected": 0.798,
+   "price_acc_realised": 0.857,
+   "T43_acc": 0.857,
+   "tp_fp_fn": [
+    10,
+    3,
+    7
+   ],
+   "error_by_target_year": {
+    "2022": [
+     3.0,
+     1.63
+    ],
+    "2023": [
+     0.78,
+     2.49
+    ],
+    "2024": [
+     1.03,
+     1.15
+    ],
+    "2025": [
+     -0.39,
+     1.72
+    ],
+    "2026": [
+     1.25,
+     1.15
+    ]
+   }
+  },
+  "2": {
+   "oracle_error_sd": [
+    1.9,
+    1.73
+   ],
+   "oracle_error_mean": [
+    1.34,
+    -0.55
+   ],
+   "price_acc_expected": 0.794,
+   "price_acc_realised": 0.815,
+   "T43_acc": 0.8,
+   "tp_fp_fn": [
+    8,
+    4,
+    9
+   ],
+   "error_by_target_year": {
+    "2022": [
+     4.49,
+     2.81
+    ],
+    "2023": [
+     2.75,
+     3.3
+    ],
+    "2024": [
+     1.88,
+     1.73
+    ],
+    "2025": [
+     0.15,
+     1.75
+    ],
+    "2026": [
+     1.84,
+     1.38
+    ]
+   }
+  }
+ },
+ "ceiling_oracle_note": "added after the frozen analyses: error mean/cov taken from the evaluation targets themselves (an upper bound on what the projection inputs could deliver with perfectly known noise; not a forecast, not a candidate)"
+}

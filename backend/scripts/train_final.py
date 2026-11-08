@@ -1,0 +1,303 @@
+"""
+scripts/train_final.py
+----------------------
+Production training for the aiPHeed food-availability shock model.
+
+Winning configuration, selected empirically over every variant tried:
+
+    per-commodity-group models
+      + 4-model ensemble (LightGBM, RandomForest, ExtraTrees, LogisticRegression)
+      + commodity target encoding (smoothed, fit on training folds only)
+      + decision threshold chosen on the training fold
+
+Operating figure (>= 12 quarters history, 90% coverage):
+    accuracy 0.8217 · F1 0.8130 · majority class 0.7326 -> skill +0.0891
+Full coverage, mature window:
+    accuracy 0.7979 · majority 0.7153 -> skill +0.0826
+All folds, full coverage:
+    accuracy 0.7554 · majority 0.6853 -> skill +0.0700
+
+Abstention raises accuracy AND skill, which is what separates it from tightening
+the shock threshold -- that raises accuracy while skill collapses (+0.070 at
+-10% down to +0.012 at -25%, where a constant predictor already scores 0.846).
+
+Each component was measured, not assumed:
+    per-group vs pooled          0.7543 vs 0.7496
+    ensemble vs LightGBM alone   0.7543 vs 0.7316
+    with vs without target enc.  0.7543 vs 0.7502
+
+Rejected after testing (all made it worse):
+    regression head on dev_pct   0.7510      recency weighting     0.7539
+    deep seasonal lag8 features  0.7126      seed averaging        0.7271
+    regression head alone        0.6837
+
+Validation is walk-forward by quarter. Every fit -- model, target encoding and
+threshold -- happens inside the training window; no test quarter influences any
+of them. The comparator is seasonal persistence (same quarter last year), which
+is the honest baseline for an annual agricultural cycle.
+
+Target : label_shock from build_food_availability_panel.py
+         (PSA OpenStat production volumes, CALABARZON, 2021-2026)
+"""
+from __future__ import annotations
+
+import json
+import logging
+import sys
+import warnings
+from pathlib import Path
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+
+warnings.filterwarnings("ignore")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.train_food_availability import (  # noqa: E402
+    GOV, MATCHED, NLP, SEASONAL, SERIES, classification_metrics, load,
+    seasonal_baseline_acc,
+)
+from scripts.train_food_availability_v2 import (  # noqa: E402
+    MIN_TRAIN, best_params, build_members, fit_predict, pick_threshold,
+    target_encode,
+)
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("final")
+
+OUT = Path("data/processed/final_results.json")
+VARIANT = "ens_tenc"
+
+# --- Operating specification -------------------------------------------------
+# Two conditions, both stated in every report of the headline figure.
+#
+# MATURITY_FOLDS: the model needs training history. Cold-start folds score 0.7104
+# against 0.7979 once >= 12 quarters are available, so the first folds are
+# reported separately rather than averaged into an operating figure.
+#
+# COVERAGE: the model abstains on the least-confident band, which is how an
+# operational triage tool is meant to work -- high-confidence province-commodity
+# quarters are auto-flagged, the rest go to analyst review. Unlike tightening the
+# shock threshold (which raises accuracy while skill collapses, +0.070 -> +0.012),
+# abstention raises accuracy AND skill: +0.0826 at full coverage, +0.0891 at 90%.
+MATURITY_FOLDS = 4        # folds discarded as cold-start
+COVERAGE = 0.90           # fraction of cases the model answers
+
+# Tried and reverted 2026-09-23: lowering fruit_crops/vegetables_rootcrops'
+# threshold by a flat 0.10 to trade precision for recall (0.6044 -> 0.7246
+# recall, at a cost of accuracy 0.8153 -> 0.7863 and precision 0.7022 ->
+# 0.6262). Genuinely measured and it worked as intended, but reverted at the
+# user's request in favor of the higher-accuracy/precision operating point --
+# plain pick_threshold() below is that original point. A second attempt,
+# replacing the flat shift with a threshold chosen to directly maximize F1
+# per group, was also tried and reverted the same day: it looked better in a
+# static simulation but made recall *worse* on a real retrain (0.7246 ->
+# 0.6725), because the simulation didn't account for the threshold change
+# also moving which rows fall in the confidence-based 90% operating set.
+# Both are preserved here as a record so neither gets re-tried blind.
+
+BUNDLE = Path("models/food_availability_model.joblib")
+
+
+def persist_deployable(df: pd.DataFrame, cols: list[str], params: dict,
+                       confidence_cutoff: float) -> None:
+    """
+    Fit once on ALL available data and save a servable bundle.
+
+    The walk-forward loop above refits per fold, which is right for measuring
+    performance but leaves nothing to serve from. This fits the same
+    configuration on the full panel and stores everything a caller needs to
+    score a new quarter: the per-group ensembles, the commodity target-encoding
+    map, the per-group decision thresholds and the feature order.
+
+    The reported metrics come from the walk-forward evaluation, NOT from this
+    fit -- scoring the rows it was trained on would be meaningless.
+    """
+    from scripts.train_food_availability_v2 import SMOOTHING
+    prior = df["label_shock"].mean()
+    stats = df.groupby("commodity")["label_shock"].agg(["sum", "count"])
+    encoding = ((stats["sum"] + SMOOTHING * prior) / (stats["count"] + SMOOTHING)).to_dict()
+
+    fitted = df.copy()
+    fitted["commodity_te"] = fitted["commodity"].map(encoding).fillna(prior)
+    use = cols + ["commodity_te"]
+
+    groups: dict[str, dict] = {}
+    for grp, sub in fitted.groupby("group"):
+        train = sub if (len(sub) >= 50 and sub["label_shock"].nunique() > 1) else fitted
+        members = build_members(params)
+        for name, m in members:
+            X = train[use].fillna(-999) if name in ("rf", "et") else train[use]
+            m.fit(X, train["label_shock"])
+        p_tr = np.mean([
+            m.predict_proba(train[use].fillna(-999) if n in ("rf", "et") else train[use])[:, 1]
+            for n, m in members], axis=0)
+        groups[grp] = {"members": members,
+                       "threshold": pick_threshold(train["label_shock"], p_tr)}
+        log.info("fitted %-22s n=%5d threshold=%.3f", grp, len(train),
+                 groups[grp]["threshold"])
+
+    BUNDLE.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump({"groups": groups, "feature_cols": use,
+                 "commodity_encoding": encoding, "encoding_prior": float(prior),
+                 "trained_through": max(df["quarter"]),
+                 "n_train_rows": len(fitted),
+                 # Minimum |prob - threshold| among the walk-forward operating
+                 # set (COVERAGE, the most-confident share of commodity-series
+                 # predictions the reported accuracy/precision figures are
+                 # actually measured on). Serving uses the same fixed cutoff
+                 # so "this prediction is low-confidence" means the same thing
+                 # live as it does in the reported evaluation, rather than the
+                 # 90%-coverage figures describing a behavior nothing serves.
+                 "confidence_cutoff": float(confidence_cutoff),
+                 "note": ("Fitted on the full panel for serving. Performance figures "
+                          "come from the walk-forward evaluation in final_results.json, "
+                          "not from this fit.")}, BUNDLE)
+    log.info("deployable bundle -> %s (confidence_cutoff=%.4f)", BUNDLE, confidence_cutoff)
+
+
+def main() -> None:
+    df = load()
+    cols = [c for c in SERIES + SEASONAL + GOV + NLP + MATCHED if c in df.columns]
+    params = best_params()
+    quarters = sorted(df["quarter"].unique())
+
+    rows = []
+    for i in range(MIN_TRAIN, len(quarters)):
+        tr = df[df["quarter"].isin(quarters[:i])].copy()
+        te = df[df["quarter"] == quarters[i]].copy()
+        if len(te) < 10 or tr["label_shock"].nunique() < 2:
+            continue
+
+        tr["commodity_te"], te["commodity_te"] = target_encode(tr, te, "commodity")
+        use = cols + ["commodity_te"]
+
+        prob = np.zeros(len(te))
+        thr_col = np.zeros(len(te))
+        for grp in te["group"].unique():
+            mask = (te["group"] == grp).to_numpy()
+            sub = tr[tr["group"] == grp]
+            if len(sub) < 50 or sub["label_shock"].nunique() < 2:
+                sub = tr                      # fall back to pooled for thin groups
+            # Fit on the group, score its own training rows (for the threshold)
+            # and the test rows.
+            p_tr_g, _ = fit_predict(sub, sub.head(1), use, VARIANT, params)
+            _, p_g = fit_predict(sub, te[mask], use, VARIANT, params)
+            prob[mask] = p_g
+            # PER-GROUP threshold. The groups have very different base rates --
+            # fisheries shocks ~56% of quarters, crops 24-30% -- so a single
+            # pooled cut-off is systematically wrong for at least one of them.
+            # Fisheries AUC was healthy (0.75) while its accuracy lagged, which
+            # is the signature of a mis-set threshold rather than poor ranking.
+            thr_col[mask] = pick_threshold(sub["label_shock"], p_tr_g)
+
+        te = te.assign(prob=prob, pred=(prob >= thr_col).astype(int),
+                       threshold=thr_col)
+        rows.append(te)
+
+    preds = pd.concat(rows, ignore_index=True)
+
+    def m(d: pd.DataFrame) -> dict:
+        seasonal, seasonal_n = seasonal_baseline_acc(d)
+        out = {"n": len(d)}
+        # accuracy, precision, recall, F1 (positive class and weighted),
+        # ROC-AUC and the confusion counts.
+        out.update(classification_metrics(d["label_shock"], d["pred"], d["prob"]))
+        out.update({
+               "seasonal_persistence": seasonal,
+               # Rows the seasonal baseline could actually be scored on. Below
+               # n, because 2021 has no fourth lag inside the window; quote it
+               # whenever skill_vs_seasonal is quoted.
+               "seasonal_persistence_n": seasonal_n,
+               "naive_persistence": accuracy_score(d["label_shock"],
+                                                   d["shock_lag1"].astype(int)),
+               # Always-predict-the-common-class. Any reported accuracy must be
+               # quoted against this: on an imbalanced target a constant
+               # predictor can look strong, and a stricter shock threshold
+               # inflates accuracy by shrinking the positive class rather than
+               # by predicting better.
+               "majority_class": max(d["label_shock"].mean(),
+                                     1 - d["label_shock"].mean())})
+        out["skill_vs_seasonal"] = out["accuracy"] - out["seasonal_persistence"]
+        out["skill_vs_naive"] = out["accuracy"] - out["naive_persistence"]
+        out["skill_vs_majority"] = out["accuracy"] - out["majority_class"]
+        return out
+
+    # Confidence = distance from the decision boundary.
+    preds["confidence"] = (preds["prob"] - preds["threshold"]).abs()
+
+    quarters_scored = sorted(preds["quarter"].unique())
+    mature = preds[preds["quarter"].isin(quarters_scored[MATURITY_FOLDS:])].copy()
+    k = int(len(mature) * COVERAGE)
+    operating = mature.nlargest(k, "confidence")
+    operating_is = preds.index.isin(operating.index)
+    preds["in_operating_set"] = operating_is
+
+    cold_start = preds[preds["quarter"].isin(quarters_scored[:MATURITY_FOLDS])]
+
+    overall = m(preds)
+    mature_all = m(mature)
+    operating_m = m(operating)
+    cold = m(cold_start)
+    by_group = {g: m(d) for g, d in operating.groupby("group")}
+    by_prov = {g: m(d) for g, d in operating.groupby("province_name")}
+
+    print("\n" + "=" * 78)
+    print("aiPHeed — FINAL MODEL")
+    print("=" * 78)
+    def block(title: str, r: dict, note: str = "") -> None:
+        print(f"\n  {title}{note}")
+        # The four metrics the department requires, reported on the SHOCK class
+        # first: the positive rate is ~0.29, so the weighted averages are
+        # flattered by the easy majority class and are printed underneath only
+        # for comparison.
+        print(f"    n={r['n']:5d}   accuracy={r['accuracy']:.4f}")
+        print(f"      shock class    precision={r['precision_shock']:.4f}  "
+              f"recall={r['recall_shock']:.4f}  F1={r['f1_shock']:.4f}")
+        print(f"      weighted avg   precision={r['precision_weighted']:.4f}  "
+              f"recall={r['recall_weighted']:.4f}  F1={r['f1_weighted']:.4f}")
+        print(f"      ROC-AUC={r['roc_auc']:.4f}   confusion "
+              f"TP={r['tp']} FP={r['fp']} FN={r['fn']} TN={r['tn']}")
+        print(f"    majority {r['majority_class']:.4f} (skill {r['skill_vs_majority']:+.4f})"
+              f"   |   seasonal persistence {r['seasonal_persistence']:.4f} "
+              f"(skill {r['skill_vs_seasonal']:+.4f})")
+
+    block("OPERATING FIGURE", operating_m,
+          f"   [>={MATURITY_FOLDS} folds history, {COVERAGE:.0%} coverage]")
+    print("    ^ quote WITH: the majority baseline, the coverage, and that the")
+    print(f"      remaining {100 * (1 - COVERAGE):.0f}% are referred for analyst review.")
+    block("mature window, full coverage", mature_all)
+    block("all folds, full coverage", overall)
+    block("cold-start folds (excluded from operating figure)", cold)
+
+    def rows(title: str, table: dict) -> None:
+        print(f"\n  {title}   (precision/recall/F1 = shock class)")
+        print(f"    {'':22s} {'n':>5s} {'acc':>8s} {'prec':>8s} {'rec':>8s} "
+              f"{'F1':>8s} {'AUC':>8s}")
+        for g, r in table.items():
+            print(f"    {g:22s} {r['n']:5d} {r['accuracy']:8.4f} "
+                  f"{r['precision_shock']:8.4f} {r['recall_shock']:8.4f} "
+                  f"{r['f1_shock']:8.4f} {r['roc_auc']:8.4f}")
+
+    rows("by commodity group  [operating set]", by_group)
+    rows("by province", by_prov)
+    print("=" * 78)
+
+    OUT.write_text(json.dumps({
+        "operating_spec": {"maturity_folds_excluded": MATURITY_FOLDS,
+                           "coverage": COVERAGE,
+                           "abstain_pct": round(100 * (1 - COVERAGE), 1)},
+        "operating": operating_m, "mature_full_coverage": mature_all,
+        "all_folds": overall, "cold_start": cold,
+        "by_group": by_group, "by_province": by_prov}, indent=2, default=float))
+    preds.to_parquet("data/processed/final_predictions.parquet", index=False)
+    log.info("saved -> %s and data/processed/final_predictions.parquet", OUT)
+
+    confidence_cutoff = float(operating["confidence"].min())
+    persist_deployable(df, cols, params, confidence_cutoff)
+
+
+if __name__ == "__main__":
+    main()

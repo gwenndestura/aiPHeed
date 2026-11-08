@@ -1,0 +1,156 @@
+{
+ "rule": "accuracy >= 0.75 and Brier significantly better than reusing the latest survey (fixed 2026-11-07, after results)",
+ "leads": {
+  "1": {
+   "n": 72,
+   "correct": 54,
+   "accuracy": 0.75,
+   "wilson95": [
+    0.639,
+    0.836
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.576,
+   "correct_needed_for_75": 54,
+   "margin_rows": 0,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.78,
+    "ENNS2019": 0.745,
+    "ENNS2021": 0.723
+   },
+   "beats_persistence": true
+  },
+  "2": {
+   "n": 72,
+   "correct": 56,
+   "accuracy": 0.778,
+   "wilson95": [
+    0.669,
+    0.858
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.768,
+   "correct_needed_for_75": 54,
+   "margin_rows": 2,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.82,
+    "ENNS2019": 0.766,
+    "ENNS2021": 0.745
+   },
+   "beats_persistence": true
+  },
+  "3": {
+   "n": 72,
+   "correct": 54,
+   "accuracy": 0.75,
+   "wilson95": [
+    0.639,
+    0.836
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.557,
+   "correct_needed_for_75": 54,
+   "margin_rows": 0,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.8,
+    "ENNS2019": 0.745,
+    "ENNS2021": 0.702
+   },
+   "beats_persistence": true
+  },
+  "4": {
+   "n": 72,
+   "correct": 53,
+   "accuracy": 0.736,
+   "wilson95": [
+    0.624,
+    0.824
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.469,
+   "correct_needed_for_75": 54,
+   "margin_rows": -1,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.82,
+    "ENNS2019": 0.681,
+    "ENNS2021": 0.702
+   },
+   "beats_persistence": true
+  },
+  "5": {
+   "n": 72,
+   "correct": 52,
+   "accuracy": 0.722,
+   "wilson95": [
+    0.61,
+    0.812
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.357,
+   "correct_needed_for_75": 54,
+   "margin_rows": -2,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.82,
+    "ENNS2019": 0.66,
+    "ENNS2021": 0.681
+   },
+   "beats_persistence": true
+  },
+  "6": {
+   "n": 72,
+   "correct": 50,
+   "accuracy": 0.694,
+   "wilson95": [
+    0.58,
+    0.789
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.183,
+   "correct_needed_for_75": 54,
+   "margin_rows": -4,
+   "leave_one_round_out_accuracy": {
+    "ENNS2018": 0.8,
+    "ENNS2019": 0.638,
+    "ENNS2021": 0.638
+   },
+   "beats_persistence": true
+  },
+  "7": {
+   "n": 50,
+   "correct": 35,
+   "accuracy": 0.7,
+   "wilson95": [
+    0.562,
+    0.809
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.232,
+   "correct_needed_for_75": 38,
+   "margin_rows": -3,
+   "leave_one_round_out_accuracy": {
+    "ENNS2019": 0.6,
+    "ENNS2021": 0.8
+   },
+   "beats_persistence": false
+  },
+  "8": {
+   "n": 50,
+   "correct": 33,
+   "accuracy": 0.66,
+   "wilson95": [
+    0.522,
+    0.776
+   ],
+   "p_bootstrap_accuracy_ge_75": 0.088,
+   "correct_needed_for_75": 38,
+   "margin_rows": -5,
+   "leave_one_round_out_accuracy": {
+    "ENNS2019": 0.56,
+    "ENNS2021": 0.76
+   },
+   "beats_persistence": false
+  }
+ },
+ "horizon_by_threshold": {
+  "0.700": 5,
+  "0.725": 4,
+  "0.750": 3,
+  "0.775": 0,
+  "0.800": 0
+ },
+ "horizon_lower_wilson_bound_ge_75": 0,
+ "reading": "Margins over 75%: Lead 1 +0 rows, Lead 2 +2 rows, Lead 3 +0 rows. Horizon by threshold: 0.70 -> 5, 0.725 -> 4, 0.75 -> 3, 0.775 -> 0, 0.80 -> 0. Horizon whose 95% lower bound is at least 75%: 0. Bootstrap probability that accuracy is at least 75%: Lead 1 0.58, Lead 2 0.77, Lead 3 0.56. 'Reliable to 3 quarters' holds under the project rule but is not statistically robust."
+}

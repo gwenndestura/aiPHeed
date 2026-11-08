@@ -1,0 +1,773 @@
+"""
+run_expanded_corpus_collection.py
+-----------------------------------
+Master script — collect CALABARZON food insecurity news from ALL sources.
+
+Sources
+-------
+  1. Google News RSS      (gnews_rss_fetcher)     — existing, no API key
+  2. RSS direct feeds     (rss_fetcher)            — existing, no API key
+  3. NewsData.io          (newsdata_fetcher)       — NEWSDATA_API_KEY
+  4. GDELT Project        (gdelt_fetcher)          — free, no API key
+  5. Google Custom Search (google_cse_fetcher)     — GOOGLE_CSE_API_KEY + GOOGLE_CSE_CX
+
+Anthropic Classifier
+--------------------
+  After collection, Claude claude-haiku-4-5 scores each article 0–4 for food
+  insecurity relevance. Only articles scoring >= 2 are kept.
+
+Coverage guarantee
+------------------
+  Queries target ALL 142 CALABARZON LGUs (municipalities + cities) individually
+  across all 5 provinces — ensuring no municipality is silently uncovered.
+
+Usage
+-----
+  # Full collection (all sources, 2020–2025)
+  cd backend
+  python run_expanded_corpus_collection.py
+
+  # Specific sources only
+  python run_expanded_corpus_collection.py --sources gdelt newsdata
+
+  # Skip Anthropic classification (keep all fetched articles)
+  python run_expanded_corpus_collection.py --no-classify
+
+  # Date range
+  python run_expanded_corpus_collection.py --start 2024-01-01 --end 2025-12-31
+
+Output
+------
+  data/raw/corpus_raw.parquet          — appended with new articles (deduped)
+  data/raw/corpus_raw_expanded.parquet — full expanded corpus this run
+  data/processed/corpus_geocoded.parquet — re-geocoded after expansion
+
+Required .env keys (add to backend/.env)
+-----------------------------------------
+  NEWSDATA_API_KEY=pub_xxxx
+  GOOGLE_CSE_API_KEY=AIzaSy...
+  GOOGLE_CSE_CX=xxxxxxxxxx
+  ANTHROPIC_API_KEY=sk-ant-...
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import logging
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
+# Adjust sys.path so script runs from backend/ directory
+sys.path.insert(0, str(Path(__file__).parent))
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-8s %(name)s — %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger("corpus_collection")
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+
+RAW_PATH       = Path("data/raw/corpus_raw.parquet")
+EXPANDED_PATH  = Path("data/raw/corpus_raw_expanded.parquet")
+GEOCODED_PATH  = Path("data/processed/corpus_geocoded.parquet")
+CHECKPOINT_DIR = Path("data/raw/checkpoints")
+
+# ---------------------------------------------------------------------------
+# LGU coverage report
+# ---------------------------------------------------------------------------
+
+ALL_LGUS: dict[str, list[str]] = {
+    "Batangas": [
+        "Batangas City", "Lipa City", "Tanauan City", "Santo Tomas",
+        "Agoncillo", "Alitagtag", "Balayan", "Balete", "Bauan", "Calaca",
+        "Calatagan", "Cuenca", "Ibaan", "Laurel", "Lemery", "Lian", "Lobo",
+        "Mabini", "Malvar", "Mataas na Kahoy", "Nasugbu", "Padre Garcia",
+        "Rosario", "San Jose", "San Juan", "San Luis", "San Nicolas",
+        "San Pascual", "Santa Teresita", "Taysan", "Tingloy", "Tuy",
+    ],
+    "Cavite": [
+        "Bacoor", "Cavite City", "Dasmariñas", "General Trias", "Imus",
+        "Tagaytay", "Trece Martires", "Alfonso", "Amadeo", "Carmona",
+        "General Emilio Aguinaldo", "General Mariano Alvarez", "Indang",
+        "Kawit", "Magallanes", "Maragondon", "Mendez", "Naic",
+        "Noveleta", "Rosario Cavite", "Silang", "Tanza", "Ternate",
+    ],
+    "Laguna": [
+        "Biñan", "Cabuyao", "Calamba", "San Pablo", "San Pedro", "Santa Rosa",
+        "Alaminos", "Bay", "Calauan", "Cavinti", "Famy", "Kalayaan", "Liliw",
+        "Los Baños", "Luisiana", "Lumban", "Mabitac", "Magdalena", "Majayjay",
+        "Nagcarlan", "Paete", "Pagsanjan", "Pakil", "Pangil", "Pila",
+        "Rizal Laguna", "Santa Cruz", "Santa Maria Laguna", "Siniloan", "Victoria",
+    ],
+    "Quezon": [
+        "Candelaria", "Lucena", "Tayabas", "Agdangan", "Alabat", "Atimonan",
+        "Buenavista", "Burdeos", "Calauag", "Catanauan", "Dolores",
+        "General Luna", "General Nakar", "Guinayangan", "Gumaca", "Infanta",
+        "Jomalig", "Lopez", "Lucban", "Macalelon", "Mulanay", "Padre Burgos",
+        "Panukulan", "Patnanungan", "Perez", "Pitogo", "Plaridel", "Polillo",
+        "Real", "Sampaloc", "San Andres", "San Antonio Quezon", "San Francisco",
+        "San Narciso", "Sariaya", "Tagkawayan", "Tiaong", "Unisan",
+    ],
+    "Rizal": [
+        "Antipolo", "Angono", "Baras", "Binangonan", "Cainta", "Cardona",
+        "Jala-Jala", "Morong", "Pililla", "Rodriguez", "San Mateo", "Tanay",
+        "Taytay", "Teresa",
+    ],
+}
+
+
+def _lgu_coverage_report(df: pd.DataFrame) -> None:
+    """Print which LGUs have at least 1 article vs. 0."""
+    titles_lower = df["title"].str.lower().fillna("")
+    logger.info("\n%s\nLGU COVERAGE REPORT\n%s", "="*60, "="*60)
+    total_covered = 0
+    total_missing = 0
+    missing_list: list[str] = []
+    for province, lgus in ALL_LGUS.items():
+        covered = []
+        missing = []
+        for lgu in lgus:
+            if titles_lower.str.contains(lgu.lower(), na=False).any():
+                covered.append(lgu)
+            else:
+                missing.append(lgu)
+        total_covered += len(covered)
+        total_missing += len(missing)
+        missing_list += [f"{province}/{m}" for m in missing]
+        logger.info(
+            "%s: %d/%d LGUs covered. Missing: %s",
+            province, len(covered), len(lgus),
+            ", ".join(missing) if missing else "None",
+        )
+    logger.info(
+        "\nTotal: %d/%d LGUs covered (%.0f%%)",
+        total_covered, total_covered + total_missing,
+        total_covered / (total_covered + total_missing) * 100,
+    )
+    if missing_list:
+        logger.warning("LGUs with zero article coverage: %s", "; ".join(missing_list))
+
+
+# ---------------------------------------------------------------------------
+# Deduplication
+# ---------------------------------------------------------------------------
+
+import re as _re
+from collections import defaultdict as _defaultdict
+
+# Stop words removed before Jaccard comparison.
+# Includes common action verbs that outlets swap when republishing the same
+# PNA wire story (distributes → gives → provides → releases).
+_TITLE_STOP: frozenset[str] = frozenset({
+    # Articles / prepositions / conjunctions
+    "a", "an", "the", "and", "or", "of", "in", "on", "at", "to", "for",
+    "by", "with", "as", "its", "it", "this", "that", "their", "from",
+    "after", "before", "over", "more", "new", "up", "out", "into", "amid",
+    "due", "per", "vs",
+    # Common auxiliary verbs
+    "is", "are", "was", "were", "be", "been", "has", "have", "had",
+    # Action verbs swapped across reposts of the same story
+    "says", "say", "said",
+    "report", "reports", "reported",
+    "hit", "hits",
+    "see", "sees", "seen",
+    "get", "gets", "got",
+    "give", "gives", "gave",
+    "distribute", "distributes", "distributed",
+    "provide", "provides", "provided",
+    "issue", "issues", "issued",
+    "release", "releases", "released",
+    # Philippine boilerplate
+    "ph", "philippines", "philippine",
+})
+
+# Jaccard threshold: ≥ 0.75 word overlap → same story.
+# High enough to avoid false positives (Batangas vs Cavite articles
+# share ~71% words and are correctly kept separate), low enough to
+# catch paraphrased reposts of the same PNA wire story (~83%+ overlap).
+_JACCARD_THRESHOLD = 0.75
+
+
+def _title_wordset(title: str) -> frozenset[str]:
+    """Return content-word set for a title, excluding stop words."""
+    t = _re.sub(r"[^a-z0-9\s]", " ", title.lower())
+    return frozenset(w for w in t.split() if w not in _TITLE_STOP and len(w) > 2)
+
+
+def _jaccard(a: frozenset, b: frozenset) -> float:
+    if not a or not b:
+        return 0.0
+    return len(a & b) / len(a | b)
+
+
+def _dedup(records: list[dict]) -> list[dict]:
+    """
+    Two-pass deduplication:
+
+    Pass 1 — Exact (URL / article_id hash)
+        Catches the same URL returned by multiple fetchers or queries.
+
+    Pass 2 — Content (Jaccard similarity on title word sets)
+        Catches the same news story republished across outlets with slightly
+        different wording (e.g. PNA wire stories on Rappler, MB, Inquirer).
+        Uses an inverted index for O(n) candidate lookup instead of O(n²)
+        brute force — fast even for 35,000+ articles.
+
+        Threshold 0.75: two titles must share ≥ 75% of their content words
+        to be considered duplicates. This prevents different-province
+        articles with similar templates from being incorrectly merged.
+    """
+    seen_ids: set[str] = set()
+    seen_wordsets: list[frozenset] = []
+    # Inverted index: word → indices into seen_wordsets
+    word_index: dict[str, list[int]] = _defaultdict(list)
+    out: list[dict] = []
+
+    for r in records:
+        # ── Pass 1: exact ID / URL dedup ─────────────────────────────────
+        key = r.get("article_id") or hashlib.md5(r.get("link", "").encode()).hexdigest()
+        if key in seen_ids:
+            continue
+        seen_ids.add(key)
+
+        # ── Pass 2: Jaccard title dedup ───────────────────────────────────
+        words = _title_wordset(r.get("title") or "")
+        is_dup = False
+
+        if len(words) >= 4:  # only dedup titles with ≥ 4 content words
+            # Find candidate indices via inverted index (O(|words|) lookup)
+            candidate_idxs: set[int] = set()
+            for w in words:
+                candidate_idxs.update(word_index.get(w, []))
+
+            for idx in candidate_idxs:
+                if _jaccard(words, seen_wordsets[idx]) >= _JACCARD_THRESHOLD:
+                    is_dup = True
+                    break
+
+        if is_dup:
+            continue
+
+        # Register new article in index
+        idx = len(seen_wordsets)
+        for w in words:
+            word_index[w].append(idx)
+        seen_wordsets.append(words)
+        out.append(r)
+
+    return out
+
+
+def _save_checkpoint(source: str, records: list[dict]) -> None:
+    """Save a fetcher's results immediately so a Ctrl+C cannot lose them."""
+    CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    path = CHECKPOINT_DIR / f"{source}.parquet"
+    pd.DataFrame(records).to_parquet(path, index=False)
+    logger.info("Checkpoint saved: %s (%d articles) → %s", source, len(records), path)
+
+
+def _load_checkpoint(source: str) -> list[dict] | None:
+    """Return saved records for a source, or None if no checkpoint exists."""
+    path = CHECKPOINT_DIR / f"{source}.parquet"
+    if path.exists():
+        records = pd.read_parquet(path).to_dict(orient="records")
+        logger.info("Resuming from checkpoint: %s (%d articles)", source, len(records))
+        return records
+    return None
+
+
+def _clear_checkpoints(sources: list[str]) -> None:
+    """
+    Remove only the checkpoint files belonging to the sources processed in
+    THIS run. A parallel fetch-only process may be writing checkpoints for
+    other sources (e.g. gnews_rss years) — those must survive. The XLM-R
+    score cache (xlmr_scores.parquet) is never cleared: it is keyed by
+    article_id and lets any future run skip re-scoring.
+    """
+    if not CHECKPOINT_DIR.exists():
+        return
+    patterns: list[str] = []
+    if "gnews_rss" in sources:
+        patterns.append("gnews_rss_*.parquet")
+    if "rss" in sources:
+        patterns.append("rss.parquet")
+    if "gdelt" in sources:
+        patterns.append("gdelt.parquet")
+    for pat in patterns:
+        for f in CHECKPOINT_DIR.glob(pat):
+            f.unlink()
+            logger.info("Checkpoint cleared: %s", f.name)
+
+
+def _dedup_against_existing(new_records: list[dict], existing_df: pd.DataFrame) -> list[dict]:
+    if existing_df.empty:
+        return new_records
+    existing_ids: set[str] = set(existing_df["article_id"].dropna().tolist())
+    existing_links: set[str] = set(existing_df["link"].dropna().tolist())
+    out = []
+    for r in new_records:
+        if r.get("article_id") in existing_ids:
+            continue
+        if r.get("link") in existing_links:
+            continue
+        out.append(r)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Zero-shot XLM-RoBERTa scoring (thesis §3.3.2) with resumable checkpoints
+# ---------------------------------------------------------------------------
+
+SCORE_CKPT = CHECKPOINT_DIR / "xlmr_scores.parquet"
+
+
+def _save_score_cache(prior: dict[str, dict], rows: list[dict]) -> None:
+    """
+    Persist the score cache as the UNION of everything ever scored.
+
+    `rows` only covers the articles in the current run. Writing it directly
+    would erase scores for articles from other source pools, forcing a
+    multi-hour re-score of work already done. Always merge with what is
+    already on disk, keyed by article_id.
+    """
+    CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    merged: dict[str, dict] = {}
+    if SCORE_CKPT.exists():
+        for r in pd.read_parquet(SCORE_CKPT).to_dict("records"):
+            merged[r["article_id"]] = r
+    for r in prior.values():
+        merged[r["article_id"]] = r
+    for r in rows:
+        merged[r["article_id"]] = r
+    pd.DataFrame(list(merged.values())).to_parquet(SCORE_CKPT, index=False)
+
+
+def _score_with_xlmr(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Score every article with the XLM-RoBERTa zero-shot classifier and merge
+    the results back onto df. Checkpoints every 200 articles so a long run
+    can resume with --resume semantics (scored articles are never re-scored).
+
+    Raises RuntimeError if the transformer fails to load — the approved
+    methodology requires contextual NLI scoring, so we refuse to silently
+    degrade to the keyword fallback for corpus construction.
+    """
+    from app.ml.nlp.classifier import load_classifier, score_article
+
+    clf = load_classifier()
+    if clf.mode != "xlm-roberta":
+        raise RuntimeError(
+            "XLM-RoBERTa zero-shot pipeline failed to load. Corpus relevance "
+            "must use contextual NLI scoring (thesis §3.3.2), not the keyword "
+            "fallback. Check torch/transformers installation and disk space "
+            "for the model download, then re-run."
+        )
+
+    done: dict[str, dict] = {}
+    if SCORE_CKPT.exists():
+        ck = pd.read_parquet(SCORE_CKPT)
+        done = {r["article_id"]: r for r in ck.to_dict("records")}
+        logger.info("Score checkpoint found: %d articles already scored", len(done))
+
+    rows: list[dict] = []
+    total = len(df)
+    since_save = 0
+    for i, rec in enumerate(df.to_dict("records"), 1):
+        aid = rec["article_id"]
+        if aid in done:
+            rows.append(done[aid])
+            continue
+        s = score_article(clf, str(rec.get("title") or ""), str(rec.get("summary") or ""))
+        rows.append({
+            "article_id": aid,
+            "food_insecurity_score": s["food_insecurity_score"],
+            "is_relevant": bool(s["is_relevant"]),
+            "top_hypothesis": s["top_hypothesis"],
+            "top_topic_name": s["top_topic_name"],
+        })
+        since_save += 1
+        if since_save >= 200:
+            _save_score_cache(done, rows)
+            since_save = 0
+            relevant_so_far = sum(1 for r in rows if r["is_relevant"])
+            logger.info(
+                "  scored %d/%d (%.1f%%) — %d relevant so far",
+                i, total, i / total * 100, relevant_so_far,
+            )
+
+    _save_score_cache(done, rows)
+
+    return df.merge(pd.DataFrame(rows), on="article_id", how="left")
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Expand CALABARZON corpus")
+    parser.add_argument("--start", default="2020-01-01")
+    parser.add_argument("--end", default="2025-12-31")
+    parser.add_argument(
+        "--sources", nargs="+",
+        choices=["gnews_rss", "rss", "gdelt", "gdelt_bq", "gdelt_bq_national",
+                 "gdelt_bq_gov", "gdelt_bq_recovered", "commoncrawl", "eventregistry"],
+        default=["gnews_rss", "rss", "gdelt", "gdelt_bq", "gdelt_bq_national",
+                 "gdelt_bq_gov", "gdelt_bq_recovered", "commoncrawl", "eventregistry"],
+        help="Which fetchers to run (default: all)",
+    )
+    parser.add_argument("--no-classify", action="store_true",
+                        help="Skip Anthropic Claude food insecurity classification")
+    parser.add_argument("--classify-only", action="store_true",
+                        help="Only run Claude classification on existing corpus")
+    parser.add_argument("--resume", action="store_true",
+                        help="Skip fetchers that already have a saved checkpoint")
+    parser.add_argument("--gdelt-window-days", type=int, default=90,
+                        help="GDELT REST window size in days (30 = 3x density)")
+    args = parser.parse_args()
+
+    start_date = args.start
+    end_date = args.end
+
+    logger.info("="*60)
+    logger.info("CALABARZON CORPUS EXPANSION: %s to %s", start_date, end_date)
+    logger.info("Sources: %s", ", ".join(args.sources))
+    logger.info("="*60)
+
+    # ── Load existing corpus ──────────────────────────────────────────────
+    existing_df = pd.DataFrame()
+    if RAW_PATH.exists():
+        existing_df = pd.read_parquet(RAW_PATH)
+        logger.info("Existing corpus: %d articles", len(existing_df))
+
+    all_new: list[dict] = []
+
+    if not args.classify_only:
+        # ── 0. GDELT BigQuery (pre-harvested by scripts/gdelt_bigquery_harvest.py)
+        # Prefers the enriched variant (real title + lead paragraphs from
+        # scripts/enrich_bigquery_articles.py) — the NLI scorer needs real
+        # text, not slug-derived pseudo-titles.
+        if "gdelt_bq" in args.sources:
+            candidates = [
+                Path("data/raw/gdelt_bigquery_enriched.parquet"),
+                Path("data/raw/gdelt_bigquery.parquet"),
+            ]
+            bq_path = next((p for p in candidates if p.exists()), None)
+            if bq_path is not None:
+                bq_df = pd.read_parquet(bq_path)
+                keep = [c for c in ["title", "link", "article_id", "published",
+                                    "summary", "source_domain", "fetcher_source"]
+                        if c in bq_df.columns]
+                bq = bq_df[keep].to_dict(orient="records")
+                logger.info("[0/4] GDELT BigQuery harvest (%s): %d articles",
+                            bq_path.name, len(bq))
+                all_new += bq
+            else:
+                logger.warning(
+                    "gdelt_bq requested but no harvest file found — run "
+                    "scripts/gdelt_bigquery_harvest.py first; skipping.",
+                )
+
+        # ── 0a. GDELT BigQuery national sweep (enriched) ──────────────────
+        if "gdelt_bq_national" in args.sources:
+            nat_candidates = [
+                Path("data/raw/gdelt_bq_national_enriched.parquet"),
+                Path("data/raw/gdelt_bq_national_only.parquet"),
+            ]
+            nat_path = next((p for p in nat_candidates if p.exists()), None)
+            if nat_path is not None:
+                nat_df = pd.read_parquet(nat_path)
+                keep = [c for c in ["title", "link", "article_id", "published",
+                                    "summary", "source_domain", "fetcher_source"]
+                        if c in nat_df.columns]
+                nat = nat_df[keep].to_dict(orient="records")
+                logger.info("[0a] GDELT BigQuery national (%s): %d articles",
+                            nat_path.name, len(nat))
+                all_new += nat
+            else:
+                logger.info("gdelt_bq_national: no harvest file yet — skipping.")
+
+        # ── 0a2. GDELT BigQuery government/regional sweep (enriched) ──────
+        if "gdelt_bq_gov" in args.sources:
+            gov_path = Path("data/raw/gdelt_bq_gov_enriched.parquet")
+            if gov_path.exists():
+                gov_df = pd.read_parquet(gov_path)
+                keep = [c for c in ["title", "link", "article_id", "published",
+                                    "summary", "source_domain", "fetcher_source"]
+                        if c in gov_df.columns]
+                gov = gov_df[keep].to_dict(orient="records")
+                logger.info("[0a2] GDELT BigQuery gov/regional: %d articles", len(gov))
+                all_new += gov
+            else:
+                logger.info("gdelt_bq_gov: no harvest file yet — skipping.")
+
+        # ── 0a3. GDELT CALABARZON recovery pool (GDELT-geocoded) ──────────
+        # Articles GDELT tagged to a CALABARZON province from full body text
+        # but the old slug/title filters dropped. province_code is carried
+        # through (authoritative) and coalesced during geocoding.
+        if "gdelt_bq_recovered" in args.sources:
+            rec_candidates = [
+                Path("data/raw/gdelt_calabarzon_recovered_enriched.parquet"),
+                Path("data/raw/gdelt_calabarzon_recovered.parquet"),
+            ]
+            rec_path = next((p for p in rec_candidates if p.exists()), None)
+            if rec_path is not None:
+                rec_df = pd.read_parquet(rec_path)
+                keep = [c for c in ["title", "link", "article_id", "published",
+                                    "summary", "source_domain", "fetcher_source",
+                                    "province_code"]
+                        if c in rec_df.columns]
+                rec = rec_df[keep].to_dict(orient="records")
+                logger.info("[0a3] GDELT CALABARZON recovery (%s): %d articles",
+                            rec_path.name, len(rec))
+                all_new += rec
+            else:
+                logger.info("gdelt_bq_recovered: no recovery file yet — skipping.")
+
+        # ── 0a4. Event Registry (NewsAPI.ai) — recall-gap capture ─────────
+        if "eventregistry" in args.sources:
+            er_path = Path("data/raw/eventregistry_raw.parquet")
+            if er_path.exists():
+                er = pd.read_parquet(er_path).to_dict(orient="records")
+                logger.info("[0a4] Event Registry: %d articles", len(er))
+                all_new += er
+            else:
+                logger.info("eventregistry: no fetch file yet — skipping.")
+
+        # ── 0b. Common Crawl (pre-harvested, pre-enriched) ────────────────
+        if "commoncrawl" in args.sources:
+            cc_path = Path("data/raw/commoncrawl.parquet")
+            if cc_path.exists():
+                cc = pd.read_parquet(cc_path).to_dict(orient="records")
+                logger.info("[0b] Common Crawl harvest: %d articles", len(cc))
+                all_new += cc
+            else:
+                logger.info("commoncrawl source: no harvest file yet — skipping.")
+
+        # ── 1. Google News RSS (monthly windows, checkpointed per year) ──
+        if "gnews_rss" in args.sources:
+            logger.info("[1/4] Google News RSS fetcher (monthly windows)...")
+            from app.ml.corpus.gnews_rss_fetcher import fetch_gnews_rss_articles
+
+            start_year = int(start_date[:4])
+            end_year = int(end_date[:4])
+            for year in range(start_year, end_year + 1):
+                ckpt_name = f"gnews_rss_{year}"
+                cached = _load_checkpoint(ckpt_name) if args.resume else None
+                if cached is not None:
+                    all_new += cached
+                    continue
+                y_start = max(start_date, f"{year}-01-01")
+                y_end = min(end_date, f"{year}-12-31")
+                gnews = fetch_gnews_rss_articles(y_start, y_end, window_months=1)
+                for r in gnews:
+                    r.setdefault("fetcher_source", "gnews_rss")
+                _save_checkpoint(ckpt_name, gnews)
+                logger.info("  Google News RSS %d: %d articles", year, len(gnews))
+                all_new += gnews
+
+            # Also fold in any per-LGU Google News checkpoints produced by
+            # scripts/gnews_fetch_only.py --profile lgu (gnews_lgu_<year>).
+            for lgu_ckpt in sorted(CHECKPOINT_DIR.glob("gnews_lgu_*.parquet")):
+                recs = pd.read_parquet(lgu_ckpt).to_dict(orient="records")
+                for r in recs:
+                    r.setdefault("fetcher_source", "gnews_rss")
+                logger.info("  Google News LGU %s: %d articles",
+                            lgu_ckpt.stem, len(recs))
+                all_new += recs
+
+        # ── 2. Direct RSS feeds ───────────────────────────────────────────
+        # NOTE: RSS feeds are a live window (last 10-50 articles only).
+        # The fetcher automatically extends the upper date bound to today so
+        # current articles are captured even when end_date is in the past.
+        # For the 2020-2025 historical window, gnews_rss and gdelt are the
+        # primary sources; RSS contributes near-real-time top-up only.
+        if "rss" in args.sources:
+            cached = _load_checkpoint("rss") if args.resume else None
+            if cached is not None:
+                all_new += cached
+            else:
+                logger.info("[2/4] Direct RSS feeds (near-real-time top-up)...")
+                from app.ml.corpus.rss_fetcher import fetch_rss_articles, FEED_URLS
+                rss = fetch_rss_articles(FEED_URLS, start_date, end_date)
+                for r in rss:
+                    r.setdefault("article_id", hashlib.md5(r["link"].encode()).hexdigest())
+                    r.setdefault("fetcher_source", "rss")
+                _save_checkpoint("rss", rss)
+                logger.info("  RSS: %d articles", len(rss))
+                all_new += rss
+
+        # ── 3. GDELT Project (last — slowest, ~40-60 min) ─────────────────
+        if "gdelt" in args.sources:
+            cached = _load_checkpoint("gdelt") if args.resume else None
+            if cached is not None:
+                all_new += cached
+            else:
+                logger.info("[3/3] GDELT Project fetcher (this takes ~40-60 min)...")
+                from app.ml.corpus.gdelt_fetcher import fetch_gdelt_articles
+                gdelt = fetch_gdelt_articles(
+                    start_date, end_date,
+                    window_days=args.gdelt_window_days,
+                )
+                for r in gdelt:
+                    r.setdefault("fetcher_source", "gdelt")
+                _save_checkpoint("gdelt", gdelt)
+                logger.info("  GDELT: %d articles", len(gdelt))
+                all_new += gdelt
+       
+        
+        # ── Dedup within new batch ────────────────────────────────────────
+        all_new = _dedup(all_new)
+        logger.info("After dedup (new batch): %d articles", len(all_new))
+
+        # ── Dedup against existing corpus ─────────────────────────────────
+        all_new = _dedup_against_existing(all_new, existing_df)
+        logger.info("After dedup (vs existing): %d truly new articles", len(all_new))
+
+    else:
+        logger.info("--classify-only: loading existing corpus for re-classification")
+        all_new = existing_df.to_dict(orient="records") if not existing_df.empty else []
+
+    if not all_new:
+        logger.warning("No new articles collected — exiting.")
+        return
+
+    # ── Build new DataFrame ───────────────────────────────────────────────
+    new_df = pd.DataFrame(all_new)
+    for col in ["title", "link", "article_id", "published", "summary",
+                "source_domain", "fetcher_source"]:
+        if col not in new_df.columns:
+            new_df[col] = None
+
+    # ── Zero-shot XLM-RoBERTa relevance scoring (thesis §3.3.2) ──────────
+    # Contextual NLI entailment against the 10 bilingual HungerGist
+    # hypotheses — relevance is judged from the article's meaning, not
+    # keyword presence. Articles below RELEVANCE_THRESHOLD (0.30) are
+    # excluded from the corpus.
+    if not args.no_classify:
+        logger.info(
+            "Running XLM-RoBERTa zero-shot relevance scoring "
+            "(joeddav/xlm-roberta-large-xnli, 10 HungerGist hypotheses)..."
+        )
+        new_df = _score_with_xlmr(new_df)
+
+        before = len(new_df)
+        new_df = new_df[new_df["is_relevant"]].copy()
+        logger.info(
+            "After relevance filter (score >= 0.30): %d/%d articles kept (%.1f%%)",
+            len(new_df), before, len(new_df) / before * 100 if before else 0,
+        )
+    else:
+        logger.info("Skipping relevance scoring (--no-classify flag set)")
+
+    # Add quarter column
+    def _to_quarter(pub: str) -> str:
+        try:
+            dt = pd.Timestamp(pub)
+            return f"{dt.year}-Q{(dt.month - 1) // 3 + 1}"
+        except Exception:
+            return ""
+
+    new_df["quarter"] = new_df["published"].apply(_to_quarter)
+
+    # ── Merge with existing corpus ────────────────────────────────────────
+    combined = pd.concat([existing_df, new_df], ignore_index=True)
+    combined = combined.drop_duplicates(subset=["article_id"], keep="first")
+    combined = combined.drop_duplicates(subset=["link"], keep="first")
+
+    # ── Geocode the FULL combined corpus ──────────────────────────────────
+    # Three-stage PSGC matching (alias table → exact substring → fuzzy) on
+    # title + summary, COALESCED onto any authoritative province_code already
+    # attached upstream (GDELT V2Locations full-body geocode, which is more
+    # reliable than title-only matching). Text geocoding only fills rows that
+    # arrive without a province tag; it never overwrites a GDELT tag.
+    logger.info("Geocoding combined corpus to CALABARZON provinces...")
+    from app.ml.corpus.geocoder import geocode_to_province
+    prior_pc = (combined["province_code"]
+                if "province_code" in combined.columns
+                else pd.Series([None] * len(combined), index=combined.index))
+    text_pc = (
+        combined["title"].fillna("").astype(str)
+        + ". "
+        + combined["summary"].fillna("").astype(str)
+    ).apply(geocode_to_province)
+    # Prefer the authoritative GDELT tag; fall back to text geocode.
+    combined["province_code"] = prior_pc.where(prior_pc.notna(), text_pc)
+
+    # ── Sub-province geography (city / municipality / barangay) ────────────
+    # Refine every province-tagged row to the most specific CALABARZON place
+    # its text names, using the full Region IV-A PSGC gazetteer. Adds
+    # lgu_name / lgu_psgc / barangay_name / barangay_psgc / match_level /
+    # geo_specificity / geo_conflict so the corpus is geographically specific
+    # rather than province-only. The province_code just set above is passed as
+    # the trusted prior and is never overwritten.
+    logger.info("Refining to city / municipality / barangay via PSGC gazetteer...")
+    try:
+        from app.ml.corpus.location_geocoder import geocode_location_batch
+        combined = geocode_location_batch(combined)
+        _lvl = combined["match_level"].value_counts().to_dict()
+        logger.info(
+            "Sub-province tags — lgu:%d barangay:%d (province:%d region:%d none:%d)",
+            _lvl.get("lgu", 0), _lvl.get("barangay", 0), _lvl.get("province", 0),
+            _lvl.get("region", 0), _lvl.get("none", 0),
+        )
+    except FileNotFoundError:
+        logger.warning(
+            "PSGC gazetteer missing — run `python -m "
+            "app.ml.corpus.psgc_gazetteer_fetcher` to enable sub-province tags. "
+            "Continuing with province-level geography only."
+        )
+
+    logger.info(
+        "Combined corpus: %d articles (%d existing + %d new)",
+        len(combined), len(existing_df), len(new_df),
+    )
+
+    # ── LGU coverage report ───────────────────────────────────────────────
+    calabarzon_combined = combined[combined["province_code"].notna()]
+    _lgu_coverage_report(calabarzon_combined)
+
+    # ── Save ──────────────────────────────────────────────────────────────
+    RAW_PATH.parent.mkdir(parents=True, exist_ok=True)
+    combined.to_parquet(RAW_PATH, index=False)
+    logger.info("Saved combined corpus → %s (%d articles)", RAW_PATH, len(combined))
+
+    new_df.to_parquet(EXPANDED_PATH, index=False)
+    logger.info("Saved new articles only → %s (%d articles)", EXPANDED_PATH, len(new_df))
+    _clear_checkpoints(args.sources)
+
+    # ── Save geocoded ─────────────────────────────────────────────────────
+    GEOCODED_PATH.parent.mkdir(parents=True, exist_ok=True)
+    combined.to_parquet(GEOCODED_PATH, index=False)
+    logger.info("Saved geocoded corpus → %s", GEOCODED_PATH)
+
+    # ── Final stats ───────────────────────────────────────────────────────
+    logger.info("\n%s\nFINAL CORPUS STATISTICS\n%s", "="*60, "="*60)
+    logger.info("Total articles:       %d", len(combined))
+    calabarzon_only = combined[combined["province_code"].notna()]
+    logger.info("Calabarzon articles:  %d", len(calabarzon_only))
+    if "province_code" in combined.columns:
+        prov_map = {
+            "PH040100000": "Cavite", "PH040200000": "Laguna",
+            "PH040300000": "Quezon", "PH040400000": "Rizal",
+            "PH040500000": "Batangas",
+        }
+        for code, name in prov_map.items():
+            count = (combined["province_code"] == code).sum()
+            logger.info("  %-12s %d", name, count)
+    if "fetcher_source" in combined.columns:
+        logger.info("\nBy source:")
+        for src, cnt in combined["fetcher_source"].value_counts().items():
+            logger.info("  %-20s %d", src, cnt)
+
+
+if __name__ == "__main__":
+    main()

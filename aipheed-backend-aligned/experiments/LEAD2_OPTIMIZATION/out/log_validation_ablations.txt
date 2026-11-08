@@ -1,0 +1,19 @@
+refit no_market_A1_A3 13 columns
+refit no_H1_feature 21 columns
+refit no_market_no_H1 12 columns
+full (UNI-FINAL: pi_H x pi_P, 12 families)                   L1 acc 0.829 bal 0.767 R 0.65 Brier 0.131 | L2 acc 0.769 bal 0.635 R 0.35 Brier 0.206
+no market A1-A3 (pi_H x pi_P')                               L1 acc 0.714 bal 0.651 R 0.53 Brier 0.188 | L2 acc 0.569 bal 0.442 R 0.18 Brier 0.242
+no H1 feature (pi_H x pi_P')                                 L1 acc 0.843 bal 0.816 R 0.76 Brier 0.125 | L2 acc 0.754 bal 0.643 R 0.41 Brier 0.214
+no hunger at all (pi_P' only, H1 feature removed)            L1 acc 0.686 bal 0.752 R 0.88 Brier 0.191 | L2 acc 0.631 bal 0.636 R 0.65 Brier 0.224
+no market and no H1 feature (pi_H x pi_P')                   L1 acc 0.714 bal 0.651 R 0.53 Brier 0.189 | L2 acc 0.569 bal 0.442 R 0.18 Brier 0.243
+no market, no hunger at all (pi_P'' only)                    L1 acc 0.543 bal 0.598 R 0.71 Brier 0.247 | L2 acc 0.477 bal 0.513 R 0.59 Brier 0.260
+price-only model output (pi_P, no hunger multiplier)         L1 acc 0.700 bal 0.762 R 0.88 Brier 0.205 | L2 acc 0.615 bal 0.607 R 0.59 Brier 0.214
+price-only structural rule (A1-only STRUCT)                  L1 acc 0.714 bal 0.811 R 1.00 Brier 0.249 | L2 acc 0.523 bal 0.563 R 0.65 Brier 0.307
+price-only persistence (last complete quarter's price condition) L1 acc 0.543 bal 0.598 R 0.71 Brier 0.457 | L2 acc 0.523 bal 0.563 R 0.65 Brier 0.477
+hunger-only: pi_H                                            L1 acc 0.457 bal 0.642 R 1.00 Brier 0.451 | L2 acc 0.277 bal 0.377 R 0.59 Brier 0.489
+hunger-only: latest SWS reading > 11.3                       L1 acc 0.514 bal 0.619 R 0.82 Brier 0.486 | L2 acc 0.431 bal 0.482 R 0.59 Brier 0.569
+always-LOW                                                   L1 acc 0.757 bal 0.500 R 0.00 Brier 0.243 | L2 acc 0.738 bal 0.500 R 0.00 Brier 0.262
+PERSIST-SI (latest hunger AND latest price condition)        L1 acc 0.743 bal 0.670 R 0.53 Brier 0.257 | L2 acc 0.677 bal 0.591 R 0.41 Brier 0.323
+components lead 1 {'price_condition_pi_P': (0.614, 0.672), 'price_condition_structural': (0.914, 0.927), 'hunger_condition_pi_H_per_quarter': (0.857, 0.955), 'hunger_condition_latest_reading_per_quarter': (0.857, 0.909)} 0.8
+components lead 2 {'price_condition_pi_P': (0.6, 0.674), 'price_condition_structural': (0.662, 0.822), 'hunger_condition_pi_H_per_quarter': (0.769, 0.795), 'hunger_condition_latest_reading_per_quarter': (0.769, 0.864)} 0.862
+components lead 3 {'price_condition_pi_P': (0.583, 0.618), 'price_condition_structural': (0.733, 0.88), 'hunger_condition_pi_H_per_quarter': (0.833, 0.818), 'hunger_condition_latest_reading_per_quarter': (0.667, 0.818)} 0.917

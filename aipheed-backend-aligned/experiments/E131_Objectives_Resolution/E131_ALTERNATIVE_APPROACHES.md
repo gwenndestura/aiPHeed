@@ -1,0 +1,16 @@
+# E131 alternative approaches considered
+
+| # | Approach | Target | Why it might work | Why it fails or is limited | Tested? | Decision |
+|---|---|---|---|---|---|---|
+| A1 | **Measured quarterly hunger, 4-area panel, measurement-aware models** | SWS hunger (areas) | A measured food-insecurity series; noise known from published margins; 80 area-quarters | Not provincial. True changes (surges) are not anticipated. | **Yes (X1)** | **Selected as the quarterly layer** |
+| A2 | Learned models with the five trigger groups on A1 | Same | Uses affordability, climate, jobs, news and poverty | Overfits (training MAE 2.1 against 6.1 out of sample); no group stable in ablation | **Yes (X1)** | Not adopted (worse than LLM) |
+| A3 | Release-anchored issue (P-REL) | Same | One more quarter of information at the same operational lead | Helps persistence a little; still far from 75 % | **Yes (X1)** | Reported; dashboard change needs owner approval |
+| A4 | **Provincial food deprivation at survey years (PFDR)** | PSA subsistence | Measured, provincial, independent of predictors | 2 rounds held; no 2025 provincial table | **Yes (E130 seal; X3)** | **Selected as the provincial reference** |
+| A5 | **Quarterly provincial deprivation built from CPI (threshold indexing)** | Constructed | CPI is quarterly and provincial | Captures only the price side: income dominated 3 of 5 provinces' changes; CPI misses the official threshold by up to 16 %; circular as a target | **Yes (X3a)** | **Rejected** (invalid as a target) |
+| A6 | Microsimulation nowcast (FIES microdata + CPI + income proxies) | Constructed | Uses PSA's own definition | No quarterly provincial income proxy. Built from predictors, so circular. Validation possible only at survey years. | Partly (X3a gives its price half) | Model output at most, never ground truth |
+| A7 | Regional forecast disaggregated to provinces by relative deprivation | Model-based | Gives every province a quarterly number | Depends on the measure: Quezon's relative risk is 0.76 on subsistence, 2.86 on poverty. The subsistence order reversed between rounds (p = 0.022). | **Yes (X3b/c)** | **Labelled estimates only**, not validated forecasts |
+| A8 | Composite of PSA + FNRI measurements | Constructed | More provincial points | Different constructs, units and years; no defensible weights (E130) | Reviewed | Rejected |
+| A9 | CBMS 2024 LGU cross-section | CBMS FIES | 142 measured LGUs | One window, so no lead; not held | No (data) | Recommended data request |
+| A10 | Pre-2021 SWS (E114) | SWS | Long series (E114: LightGBM beats persistence on 2013–2020, damped smoothing better) | Conflicts with the owner's 2021+ rule | Not used | Owner decision only |
+| A11 | Combine SWS with OCTA | Hunger | Two independent measurements | About 10 OCTA values. Combining lowers SE, which *tightens* the tolerance. | Reviewed | Cross-check only |
+| A12 | A practical (decision-based) tolerance in place of the measurement one | — | Matches how DA would read the numbers | Changing it now would be post hoc. 2× the tolerance gives 0.79 for LLM at Lead 2 but counts 3 of 7 missed surges as "agreement", information only. | **Yes (Addendum 1)** | **No DA tolerance exists. Primary only.** |

@@ -1,0 +1,59 @@
+{
+ "status": "EXPLORATORY: written after seeing the pre-registered control outcome; changes no decision",
+ "a_fallback": {
+  "fits": 84,
+  "no_model": 54,
+  "no_model_under_30_rows": 54,
+  "no_model_with_30_plus_rows": 0,
+  "lead2_devtest_issues_with_a_model": [
+   "2025-01-01",
+   "2025-04-01",
+   "2025-07-01",
+   "2025-10-01",
+   "2026-01-01",
+   "2026-04-01"
+  ]
+ },
+ "b_shuffled_series_lead2_within": {
+  "LGBM-D": 0.4,
+  "LGBM-D-S": 0.4,
+  "expanding_area_mean": 0.325,
+  "persist": 0.275
+ },
+ "c_label_permutation_lead2_within": {
+  "seeds": 20,
+  "mean": 0.355,
+  "min": 0.3,
+  "max": 0.475,
+  "persist": 0.4,
+  "lgbm_d_honest": 0.3
+ },
+ "d_future_shifted_features_lead2": {
+  "LGBM-D": {
+   "n": 40,
+   "within": 0.325,
+   "mae": 6.933421649376311
+  },
+  "LGBM-D-S": {
+   "n": 40,
+   "within": 0.325,
+   "mae": 6.933421649376311
+  }
+ },
+ "e_loao": {
+  "rows": 40,
+  "rows_identical_to_persistence": 24,
+  "rows_with_a_model": 16,
+  "on_those_rows_within_loao": 0.5625,
+  "on_those_rows_within_persist": 0.5,
+  "on_those_rows_mae_loao": 3.611926480991996,
+  "on_those_rows_mae_persist": 3.7843750000000007
+ },
+ "e_pooled_rows_with_a_model": {
+  "rows": 24,
+  "within_lgbm_d": 0.3333333333333333,
+  "within_persist": 0.5,
+  "mae_lgbm_d": 6.844135927673495,
+  "mae_persist": 4.3125
+ }
+}

@@ -1,0 +1,63 @@
+# Local tooling and personal notes
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+Claude outputs/
+QA_REPORT.md
+
+# Secrets: only the .env.example templates are committed
+.env
+.env.*
+!.env.example
+
+# Python and Node build output, anywhere in the tree
+__pycache__/
+*.pyc
+venv/
+.venv/
+node_modules/
+
+# Bulk reference geometry — geoBoundaries PHL ADM2 is 424MB and re-downloadable
+# from https://www.geoboundaries.org/api/current/gbOpen/PHL/ADM2/
+backend/data/reference/*.geojson
+
+# Local backups taken before destructive rebuilds; regenerable, not history
+backend/data/archive/
+
+# Relevance-gate labelling sample: regenerable from the scripts, and the
+# workbook is a working file that changes on every save.
+backend/data/processed/relevance_eval/
+
+# Parallel reimplementation kept deliberately out of the repository. It carries
+# its own train.py and config.py, so anything pushed from it would produce
+# numbers that look authoritative while disagreeing with backend/. Local only,
+# by decision (2026-09-10).
+aiPHeed_Simplified_Methodology/
+
+# Local SQLite databases and their backups. The DB holds account rows and
+# password hashes, so it is never committed; create one with
+# `alembic upgrade head` (see README).
+backend/*.db
+backend/*.db.*
+
+# Demo videos and their working files are never committed (only demo-video/DEMO_SCRIPT.md is).
+demo-video/*.mp4
+demo-video/**/*.mp4
+demo-video/work/
+demo video/
+
+# E83 publisher lead text (third-party paragraphs) and its embeddings stay local; leads_status.csv (no text) is committed.
+backend/data/news_e83/leads.jsonl
+backend/data/news_e83/embeddings.npz
+
+# E85 raw GDELT GKG rows (large; aggregated features are committed)
+backend/data/gdelt_e85/
+
+# E87 FNRI and NWPC source PDFs (third-party documents; extracted values with citations are committed)
+aipheed-backend-aligned/experiments/E87_Outcome_Gap/data_acquired/fnri/
+aipheed-backend-aligned/experiments/E87_Outcome_Gap/data_acquired/wage_orders/
+
+# FNRI ENNS provincial monographs (Internet Archive copies of FNRI uploads; third-party PDFs). Extracted values,
+# source URLs and sha256 are committed in backend/data/hfias/clean and raw/MANIFEST.csv.
+backend/data/hfias/raw/fnri/*.pdf
+backend/data/e141/raw/fnri/*.pdf

@@ -1,0 +1,9 @@
+[before_fix] served rows: 95 | group rows: 475
+'insufficient_data' although the served model had a published input: 135 of 135; by group {'climate': 10, 'employment': 45, 'fish_kill': 15, 'market': 10, 'ofw_remittance': 55}
+'contributes'/'no_effect' although every input was missing: 0
+status counts: {'contributes': 176, 'no_effect': 164, 'insufficient_data': 135}
+otherPct (share of |SHAP| in V1, N1, H1, outside the five bars that are rescaled to 100 percent): mean 22.8, min 0.0, max 88.9
+top group per served row: {'market': 73, 'employment': 11, 'fish_kill': 6, 'climate': 5} | bars at 100 percent: 28
+variance share of log P(HIGH) over served rows: hunger term 0.10, price term 0.90
+mean |SHAP| share by family: {'shap_A1': 0.423, 'shap_A2': 0.008, 'shap_A3': 0.12, 'shap_V1': 0.138, 'shap_C1': 0.0, 'shap_C2': 0.001, 'shap_C3': 0.028, 'shap_C4': 0.039, 'shap_E1': 0.176, 'shap_E2': 0.0, 'shap_N1': 0.042, 'shap_H1': 0.025}
+evidence note (market, first row): In the Chapter I risk forecast: this group's push (SHAP, log-odds) on the LightGBM's estimate that the province's food prices will rise unusually fast. Regional hunger, poverty and news are counted in the remaining share.

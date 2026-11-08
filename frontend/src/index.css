@@ -1,0 +1,871 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Shape, depth and surfaces: rounded floating
+   panels, soft shadows, translucent surfaces and pill-shaped controls,
+   in aiPHeed's own colours. Every value lives in the tokens below; the
+   Tailwind theme maps rounded-*, shadow-* and the border colour onto
+   them, so the whole site is tuned from here.
+   ------------------------------------------------------------------ */
+
+@layer base {
+  :root {
+    /* Dark theme — #0D0D0F background, #161618 surface */
+    --background: 240 7% 5%;
+    --foreground: 36 22% 92%;
+
+    --card: 240 5% 9%;
+    --card-foreground: 36 22% 92%;
+
+    --popover: 240 5% 9%;
+    --popover-foreground: 36 22% 92%;
+
+    --primary: 35 91% 55%;
+    --primary-foreground: 240 10% 6%;
+
+    --secondary: 240 5% 14%;
+    --secondary-foreground: 36 15% 85%;
+
+    --muted: 240 5% 13%;
+    --muted-foreground: 38 6% 47%;
+
+    --accent: 240 5% 14%;
+    --accent-foreground: 36 15% 85%;
+
+    --destructive: 4 80% 57%;
+    --destructive-foreground: 36 22% 92%;
+
+    --border: 0 0% 100%;
+    --border-opacity: 0.06;
+    --input: 240 5% 14%;
+    --ring: 35 91% 55%;
+    --radius: var(--radius-panel);
+
+    /* Risk palette */
+    --risk-low: 45 93% 55%;         /* yellow */
+    --risk-moderate: 38 91% 55%;    /* #F5A623 */
+    --risk-high: 0 84% 55%;         /* red */
+    --risk-severe: 0 84% 55%;       /* red */
+
+    --surface: 240 5% 9%;
+    --surface-hover: 240 5% 13%;
+    --chart-grid: 240 5% 18%;
+
+    --sidebar-background: 240 7% 6%;
+    --sidebar-foreground: 36 22% 92%;
+    --sidebar-primary: 35 91% 55%;
+    --sidebar-primary-foreground: 240 10% 6%;
+    --sidebar-accent: 240 5% 14%;
+    --sidebar-accent-foreground: 36 15% 85%;
+    --sidebar-border: 240 5% 14%;
+    --sidebar-ring: 35 91% 55%;
+
+    --motion-duration: 300ms;
+
+    /* Corners: small marks, controls (buttons, fields), floating panels
+       and cards, dialogs and sheets, and pills (badges, chips, toggles). */
+    --radius-sm: 6px;
+    --radius-control: 10px;
+    --radius-panel: 14px;
+    --radius-sheet: 22px;
+    --radius-pill: 9999px;
+    /* The map's side panels, and the flat cards inside them. */
+    --radius-float: 16px;
+    --radius-inner: 12px;
+
+    /* Edges of panels and cards: the --border colour at this opacity, a
+       faint line rather than a hard one (form fields keep their borders). */
+    --edge-alpha: 0.08;
+    /* Outline of a secondary button: faint, still visible. */
+    --edge-control-alpha: 0.2;
+
+    /* Floating surfaces: the --card colour at this opacity, blurred.
+       Dialogs and sheets hold reading text: nearly opaque. */
+    --surface-alpha: 0.92;
+    --surface-alpha-dialog: 0.97;
+    /* Side panels hold reading text: a little more opaque than buttons. */
+    --surface-alpha-panel: 0.96;
+    --surface-blur: 14px;
+
+    /* Soft shadows, black only. */
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.3);
+    --shadow-control: 0 4px 12px rgb(0 0 0 / 0.3);
+    --shadow-float: 0 12px 32px -12px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.25);
+    --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.5);
+    --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.35);
+    /* The header: a soft shadow cast down onto the page, no bottom line. */
+    --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.6);
+    /* A card floating over the map: small and diffuse, fading out. */
+    --shadow-card: 0 4px 14px -4px rgb(0 0 0 / 0.45), 0 1px 3px rgb(0 0 0 / 0.2);
+    --surface-alpha-header: 0.82;
+
+    /* Map labels: the page's text colour on a soft halo of its background
+       colour, readable over any fill (both follow dark / light mode). */
+    --map-label-halo:
+      0 0 2px hsl(var(--background)),
+      0 0 4px hsl(var(--background)),
+      0 1px 3px hsl(var(--background) / 0.9);
+
+    /* Text on a filled amber control: the existing --primary-foreground
+       here, the existing --foreground in light mode (AA on the amber). */
+    --primary-ink: var(--primary-foreground);
+  }
+
+  .light {
+    --background: 36 25% 94%;       /* #F4F1EC */
+    --foreground: 0 0% 10%;         /* #1A1A1A */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 35 91% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 36 18% 88%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 36 18% 90%;
+    --muted-foreground: 36 5% 40%;  /* #6B6860 */
+
+    --accent: 36 18% 88%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 4 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 0%;
+    --border-opacity: 0.08;
+    --input: 36 18% 88%;
+    --ring: 35 91% 50%;
+
+    --surface: 0 0% 100%;
+    --surface-hover: 36 18% 92%;
+    --chart-grid: 36 8% 80%;
+
+    --sidebar-background: 36 25% 96%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-accent: 36 18% 88%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 36 8% 82%;
+
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.08);
+    --shadow-control: 0 3px 10px rgb(0 0 0 / 0.1);
+    --shadow-float: 0 12px 32px -12px rgb(0 0 0 / 0.2), 0 2px 6px rgb(0 0 0 / 0.06);
+    --shadow-dialog: 0 20px 48px rgb(0 0 0 / 0.18);
+    --shadow-inset: inset 0 2px 5px rgb(0 0 0 / 0.08);
+    --shadow-header: 0 6px 20px -8px rgb(0 0 0 / 0.16);
+    --shadow-card: 0 4px 14px -4px rgb(0 0 0 / 0.14), 0 1px 3px rgb(0 0 0 / 0.07);
+
+    --primary-ink: var(--foreground);
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border) / var(--border-opacity, 1));
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Sora', system-ui, -apple-system, sans-serif;
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+  .font-mono-num {
+    font-family: 'DM Mono', ui-monospace, SFMono-Regular, monospace;
+    font-feature-settings: "tnum";
+  }
+}
+
+@layer utilities {
+  .risk-low { background-color: hsl(var(--risk-low)); }
+  .risk-moderate { background-color: hsl(var(--risk-moderate)); }
+  .risk-high { background-color: hsl(var(--risk-high)); }
+  .risk-severe { background-color: hsl(var(--risk-severe)); }
+  .text-risk-low { color: hsl(var(--risk-low)); }
+  .text-risk-moderate { color: hsl(var(--risk-moderate)); }
+  .text-risk-high { color: hsl(var(--risk-high)); }
+  .text-risk-severe { color: hsl(var(--risk-severe)); }
+
+  .glass {
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* A panel or card edge: the faint --edge-alpha line. */
+  .edge-faint { border-color: hsl(var(--border) / var(--edge-alpha)); }
+  .edge-control { border-color: hsl(var(--border) / var(--edge-control-alpha)); }
+
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+  /* Same as every scroll area (below): thin, shown on hover. */
+  .thin-scrollbar { scrollbar-width: thin; }
+  .left-sidebar-scrollbar-left { direction: rtl; }
+  .left-sidebar-scrollbar-left > * { direction: ltr; }
+
+  /* Theme-aware visibility helpers (project uses .light on <html>) */
+  .light .dark-only { display: none !important; }
+  html:not(.light) .light-only { display: none !important; }
+
+  .severe-pulse {
+    animation: severe-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes severe-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 hsl(var(--risk-high) / 0.5), 0 0 12px hsl(var(--risk-high) / 0.4); }
+    50% { box-shadow: 0 0 0 8px hsl(var(--risk-high) / 0), 0 0 24px hsl(var(--risk-high) / 0.7); }
+  }
+
+  .donut-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--risk-high) / 0.6));
+    animation: donut-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes donut-pulse {
+    0%, 100% { filter: drop-shadow(0 0 6px hsl(var(--risk-high) / 0.5)); }
+    50% { filter: drop-shadow(0 0 14px hsl(var(--risk-high) / 0.85)); }
+  }
+
+  .animate-fade-in { animation: fade-in 0.4s ease-out both; }
+  .animate-slide-in-left { animation: slide-in-left 0.5s ease-out both; }
+  .animate-slide-in-right { animation: slide-in-right 0.5s ease-out both; }
+  .animate-slide-up { animation: slide-up 0.5s ease-out both; }
+  .animate-bar-fill { animation: bar-fill 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bar-fill {
+    from { width: 0; }
+  }
+
+  /* Headline word reveal */
+  .word-reveal {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: word-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes word-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Silhouette pulse */
+  .silhouette-pulse path {
+    animation: silhouette-glow 4s ease-in-out infinite;
+  }
+  @keyframes silhouette-glow {
+    0%, 100% { stroke-opacity: 0.25; filter: drop-shadow(0 0 4px hsl(var(--primary) / 0.3)); }
+    50% { stroke-opacity: 0.6; filter: drop-shadow(0 0 14px hsl(var(--primary) / 0.6)); }
+  }
+
+  /* Grain overlay */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Pulse marker animations (existing) */
+.pulse-marker { position: relative; width: 20px; height: 20px; }
+.pulse-dot { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; border-radius: 50%; transform: translate(-50%, -50%); z-index: 2; box-shadow: 0 0 6px 2px currentColor; }
+.pulse-ring { position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; border-radius: 50%; border: 2px solid; transform: translate(-50%, -50%); animation: pulse-ring 2s ease-out infinite; opacity: 0; }
+@keyframes pulse-ring {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+/* Scrollbars: thin, on a clear track, the thumb hidden until the pointer
+   is over the scroll area (or focus is inside it). */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: var(--radius-pill); }
+:hover::-webkit-scrollbar-thumb,
+:focus-within::-webkit-scrollbar-thumb { background: hsl(var(--foreground) / 0.2); }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--foreground) / 0.32); }
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+*:hover, *:focus-within { scrollbar-color: hsl(var(--foreground) / 0.25) transparent; }
+
+/* Leaflet focus reset */
+.leaflet-interactive:focus,
+.leaflet-interactive:focus-visible,
+.leaflet-container:focus,
+.leaflet-container:focus-visible,
+.leaflet-container *:focus,
+.leaflet-container *:focus-visible { outline: none !important; outline-offset: 0 !important; }
+.leaflet-container path.leaflet-interactive { outline: none; }
+
+/* Map tooltips and popups: a rounded, translucent dark surface with a soft
+   shadow in both themes, so the risk colours and grey notes in them stay
+   readable (dark mode: the card colour; light mode: the page text colour,
+   with the page background colour as text). */
+:root {
+  --map-tip-bg: hsl(var(--card) / var(--surface-alpha));
+  --map-tip-text: hsl(var(--foreground));
+  --map-tip-muted: hsl(var(--foreground) / 0.68);
+}
+.light {
+  --map-tip-bg: hsl(var(--foreground) / 0.9);
+  --map-tip-text: hsl(var(--background));
+  --map-tip-muted: hsl(var(--background) / 0.72);
+}
+.leaflet-container .leaflet-tooltip,
+.leaflet-container .leaflet-popup-content-wrapper {
+  background: var(--map-tip-bg);
+  color: var(--map-tip-text);
+  border: 0;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-float);
+  -webkit-backdrop-filter: blur(var(--surface-blur));
+  backdrop-filter: blur(var(--surface-blur));
+  font-family: 'Sora', system-ui, -apple-system, sans-serif;
+}
+.leaflet-container .leaflet-tooltip { padding: 6px 10px; }
+.leaflet-container .leaflet-tooltip::before { display: none; }
+.leaflet-container .leaflet-popup-tip { background: var(--map-tip-bg); box-shadow: none; }
+.leaflet-container .leaflet-popup-content { margin: 10px 14px; }
+
+@keyframes rfii-gauge-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
+
+/* Hero card — prominent breathing border + ambient halo */
+@keyframes rfii-hero-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px hsl(var(--accent-color) / 0.55),
+      0 0 24px -2px hsl(var(--accent-color) / 0.45),
+      0 0 60px -10px hsl(var(--accent-color) / 0.35),
+      inset 0 0 30px -8px hsl(var(--accent-color) / 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px hsl(var(--accent-color) / 0.85),
+      0 0 38px 0 hsl(var(--accent-color) / 0.65),
+      0 0 90px -8px hsl(var(--accent-color) / 0.55),
+      inset 0 0 42px -6px hsl(var(--accent-color) / 0.4);
+  }
+}
+@keyframes rfii-aurora {
+  0%   { transform: translate(-15%, -10%) rotate(0deg); }
+  50%  { transform: translate(15%, 10%) rotate(180deg); }
+  100% { transform: translate(-15%, -10%) rotate(360deg); }
+}
+@keyframes rfii-score-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.025); }
+}
+@keyframes rfii-ring-expand {
+  0%   { transform: scale(0.85); opacity: 0.55; }
+  80%  { opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* ------------------------------------------------------------------
+   Status components shared by the public site and the DA Administrator
+   view (components/ui/status-badge, confidence-tag, note, metric,
+   status-dot). Dark theme on :root, light on .light. Every text and
+   background pair meets WCAG AA (4.5:1).
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    --text-primary: var(--foreground);
+    --text-secondary: 36 8% 76%;      /* 10:1 on --card */
+    --text-muted: 36 5% 64%;          /* 6.9:1 on --card */
+    --border-subtle: 240 4% 18%;
+    --border-strong: 240 4% 32%;
+
+    /* Risk: tinted background + same-hue text and border */
+    --risk-low-bg: 45 40% 15%;
+    --risk-low-text: 45 75% 70%;      /* 9:1 on its bg */
+    --risk-low-border: 45 40% 32%;
+    --risk-moderate-bg: 28 40% 15%;
+    --risk-moderate-text: 28 80% 72%;
+    --risk-moderate-border: 28 40% 32%;
+    --risk-high-bg: 2 40% 16%;
+    --risk-high-text: 2 80% 76%;      /* 8:1 on its bg */
+    --risk-high-border: 2 40% 34%;
+
+    /* Review statuses */
+    --status-positive-bg: 145 30% 14%;
+    --status-positive-text: 145 45% 68%;
+    --status-positive-border: 145 30% 30%;
+    --status-neutral-bg: 240 4% 16%;
+    --status-neutral-text: 36 8% 76%;
+    --status-neutral-border: 240 4% 30%;
+
+    /* Values whose direction has meaning: more risk = danger, less = success */
+    --value-danger: 2 80% 72%;
+    --value-success: 145 45% 62%;
+
+    --radius-badge: var(--radius-pill);
+  }
+  .light {
+    --text-secondary: 36 5% 30%;      /* 9.6:1 on white */
+    --text-muted: 36 5% 40%;          /* 6.3:1 on white */
+    --border-subtle: 36 8% 86%;
+    --border-strong: 36 6% 70%;
+
+    --risk-low-bg: 45 80% 92%;
+    --risk-low-text: 35 85% 25%;      /* 8.5:1 on its bg */
+    --risk-low-border: 45 60% 70%;
+    --risk-moderate-bg: 28 85% 93%;
+    --risk-moderate-text: 22 80% 30%;
+    --risk-moderate-border: 28 60% 72%;
+    --risk-high-bg: 2 75% 95%;
+    --risk-high-text: 2 70% 36%;      /* 7.4:1 on its bg */
+    --risk-high-border: 2 55% 78%;
+
+    --status-positive-bg: 145 45% 93%;
+    --status-positive-text: 145 60% 23%;
+    --status-positive-border: 145 35% 70%;
+    --status-neutral-bg: 36 12% 93%;
+    --status-neutral-text: 36 5% 30%;
+    --status-neutral-border: 36 6% 75%;
+
+    --value-danger: 2 70% 40%;
+    --value-success: 145 60% 26%;
+  }
+}
+
+@layer components {
+  /* StatusBadge: a pill. */
+  .ui-badge {
+    border-radius: var(--radius-badge);
+    line-height: 16px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  /* A panel, card or control floating over the map or page: the card
+     colour at --surface-alpha with a blur behind, a faint edge, rounded
+     corners and a soft shadow. */
+  .surface-float {
+    background-color: hsl(var(--surface-base, var(--card)) / var(--surface-alpha));
+    border-color: hsl(var(--border) / var(--edge-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-float);
+  }
+  /* A card in the map's side columns: its own floating surface (the
+     translucent card colour with a blur), rounded, with a soft shadow. */
+  .surface-card {
+    background-color: hsl(var(--card) / var(--surface-alpha-panel));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border-radius: var(--radius-float);
+    box-shadow: var(--shadow-card);
+  }
+  /* A side column's scroll area: 12px of padding on every side, taken back
+     by a negative margin, so the cards stay in place and their shadows fade
+     out inside the scroll area instead of being cut off at its edge. */
+  .shadow-room {
+    margin: -12px;
+    padding: 12px;
+    /* Cards scrolled past the top or bottom fade out over that 12px instead
+       of being cut off by a hard edge (unscrolled, nothing is faded). */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, hsl(var(--background)) 12px, hsl(var(--background)) calc(100% - 12px), transparent);
+    mask-image: linear-gradient(to bottom, transparent, hsl(var(--background)) 12px, hsl(var(--background)) calc(100% - 12px), transparent);
+  }
+  /* A card inside a panel or sheet: flat, a step lighter than the panel,
+     no edge and no shadow. */
+  .inner-card {
+    background-color: hsl(var(--secondary) / 0.55);
+    border-radius: var(--radius-inner);
+  }
+
+  /* A box inside a panel, card or dialog (a figure, a factor, a detail):
+     flat, a step lighter than what it sits on, no edge. */
+  .inner-box {
+    background-color: hsl(var(--secondary));
+    border-radius: var(--radius-control);
+  }
+
+  /* Dialogs and sheets: the same surface, larger corners, deeper shadow.
+     Either sets --surface-base to sit on another existing colour token
+     (dialogs keep --background). */
+  .surface-dialog {
+    background-color: hsl(var(--surface-base, var(--card)) / var(--surface-alpha-dialog));
+    border-color: hsl(var(--border) / var(--edge-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border-radius: var(--radius-sheet);
+    box-shadow: var(--shadow-dialog);
+  }
+
+  /* The page header: the card colour, translucent and blurred, with a
+     soft shadow in place of a bottom line. */
+  .surface-header {
+    background-color: hsl(var(--card) / var(--surface-alpha-header));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    box-shadow: var(--shadow-header);
+  }
+
+  /* The amber tint: the icon tile in a menu or dialog header. Its icon is
+     amber in dark mode and the page text colour in light mode (AA on the
+     tint either way). */
+  .tint-primary {
+    background-color: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+  }
+  .light .tint-primary { color: hsl(var(--primary-ink)); }
+
+  /* Segmented choices: a pill track, the chosen option a filled amber pill,
+     the others plain text. */
+  .seg-track {
+    background-color: hsl(var(--muted));
+    border-radius: var(--radius-pill);
+  }
+  /* A track drawn around options that have no padding of their own,
+     without changing their size or position. */
+  .seg-track-flush { box-shadow: 0 0 0 4px hsl(var(--muted)); }
+  .seg-option {
+    border-radius: var(--radius-pill);
+    border-color: transparent;
+    background-color: transparent;
+  }
+  .seg-option[aria-pressed="true"],
+  .seg-option[aria-selected="true"],
+  .seg-option[data-state="active"],
+  .seg-option.seg-on {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-ink));
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* The map search: a darker field inset in its pill (the ring is the
+     pill's own surface colour), with an inner shadow. */
+  .field-inset {
+    background-color: hsl(var(--secondary));
+    box-shadow:
+      inset 0 0 0 3px hsl(var(--surface-base, var(--card)) / var(--surface-alpha)),
+      var(--shadow-inset);
+  }
+
+  /* A control narrower than 44px: on touch screens its tap area reaches
+     44px across, centred on it, without changing its size or position. */
+  @media (pointer: coarse) {
+    .touch-target-x::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 44px;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Map quarter timeline and risk-level legend: rounded floating bars.
+   Neutral chrome only: the orange/red theme colours belong to the risk
+   data on the map, not to these controls. Corners, shadows and surface
+   opacity come from the shape tokens at the top of this file.
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    --qt-panel: 240 5% 9%;
+    --qt-border: 240 4% 20%;
+    --qt-text: 0 0% 93%;
+    --qt-text-muted: 240 4% 68%;      /* 7.8:1 on --qt-panel */
+    --qt-track: 240 4% 64%;
+    --qt-track-forecast: 240 4% 44%;
+    --qt-dot-border: 240 4% 62%;
+    --qt-selected: 0 0% 100%;
+    --qt-today: 240 4% 52%;
+    --qt-link: 35 91% 62%;            /* 9:1 on --qt-panel */
+    --qt-focus: 0 0% 100%;
+    /* The timeline floats on the map with no panel behind it: a dark halo
+       keeps its text and lines legible over any tile colour. */
+    --qt-float-text: 0 0% 100%;
+    --qt-float-muted: 0 0% 88%;
+    --qt-halo: var(--background);
+    /* A quarter with no score: gray, the map's own no-data colour family. */
+    --qt-nodata: 220 9% 62%;
+  }
+  .light {
+    --qt-panel: 0 0% 100%;
+    --qt-border: 240 5% 86%;
+    --qt-text: 240 6% 10%;
+    --qt-text-muted: 240 4% 40%;      /* 6.2:1 on white */
+    --qt-track: 240 4% 46%;
+    --qt-track-forecast: 240 4% 58%;
+    --qt-dot-border: 240 4% 46%;
+    --qt-selected: 240 6% 10%;
+    --qt-today: 240 4% 46%;
+    --qt-link: 28 90% 32%;            /* 6.2:1 on white */
+    --qt-focus: 240 6% 10%;
+    --qt-float-text: 240 6% 6%;
+    --qt-float-muted: 240 5% 22%;
+    --qt-halo: var(--background);
+    --qt-nodata: 220 9% 42%;
+  }
+}
+
+@layer components {
+  .qt-panel {
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border: 1px solid hsl(var(--border) / var(--edge-alpha));
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-control);
+    color: hsl(var(--qt-text));
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  /* 42px tall: 28px of content + 6px padding + 1px border, top and bottom. */
+  .qt-bar {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 6px 12px;
+  }
+  .qt-muted { color: hsl(var(--qt-text-muted)); }
+
+  /* Text floating on the map: high contrast, with a halo. */
+  .qt-float {
+    --qt-text: var(--qt-float-text);
+    --qt-text-muted: var(--qt-float-muted);
+    --qt-track: var(--qt-float-muted);
+    --qt-track-forecast: var(--qt-float-muted);
+    --qt-dot-border: var(--qt-float-text);
+    --qt-today: var(--qt-float-muted);
+    color: hsl(var(--qt-text));
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: normal;
+    text-transform: none;
+    text-shadow: var(--map-label-halo);
+  }
+  /* On the timeline, the selected quarter and View history: small floating
+     pills (their text sits on the surface, so no halo). */
+  .qt-pill {
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-float);
+    padding: 4px 14px;
+    text-shadow: none;
+  }
+  .qt-pill .qt-tag { box-shadow: none; }
+  .qt-float .qt-link { font-size: 11px; font-weight: 600; }
+  .qt-float .qt-line-observed,
+  .qt-float .qt-line-forecast,
+  .qt-float .qt-dot,
+  .qt-float .qt-today-line { filter: drop-shadow(0 0 2px hsl(var(--qt-halo))); }
+  .qt-tag {
+    font-size: 10px;
+    line-height: 14px;
+    padding: 0 5px;
+    border: 1px solid hsl(var(--qt-text) / 0.7);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 3px hsl(var(--qt-halo) / 0.8), inset 0 0 3px hsl(var(--qt-halo) / 0.8);
+  }
+  .qt-key { display: inline-block; width: 20px; }
+
+  .qt-link {
+    color: hsl(var(--qt-link));
+    font-size: 12px;
+    background: none;
+    border: 0;
+    border-radius: 2px;
+    padding: 0;
+  }
+  .qt-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+  /* View history as a pill: the pill's surface, shape and padding. */
+  .qt-link.qt-pill {
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    border-radius: var(--radius-pill);
+    padding: 4px 12px;
+  }
+
+  /* The track spans the whole bar, squeezing down to --qt-track-min
+     before it scrolls. */
+  .qt-track { width: 100%; min-width: var(--qt-track-min); }
+
+  /* A line segment with a 14px-tall hover area for its tooltip. */
+  .qt-segment { height: 14px; }
+  .qt-segment > span { position: absolute; left: 0; right: 0; top: 6px; }
+  .qt-line-observed { display: block; border-top: 2px solid hsl(var(--qt-track)); }
+  .qt-line-forecast { display: block; border-top: 2px dashed hsl(var(--qt-track-forecast)); }
+  .qt-today-line { display: block; width: 1px; background: hsl(var(--qt-today)); }
+
+  .qt-point { border-radius: 4px; color: hsl(var(--qt-text-muted)); }
+  .qt-point:disabled { cursor: not-allowed; opacity: 0.45; }
+  .qt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid hsl(var(--qt-dot-border));
+    background: hsl(var(--qt-panel));
+  }
+  .qt-point[aria-checked="true"] { color: hsl(var(--qt-text)); font-weight: 500; }
+  .qt-point[aria-checked="true"] .qt-dot {
+    width: 11px;
+    height: 11px;
+    border: 0;
+    background: hsl(var(--qt-selected));
+  }
+  .qt-label { border-radius: var(--radius-pill); padding: 0 6px; }
+  .qt-point[aria-checked="true"] .qt-label {
+    background: hsl(var(--qt-selected));
+    color: hsl(var(--qt-panel));
+    text-shadow: none;
+  }
+  .qt-point.qt-point-nodata[aria-checked="true"] .qt-label { background: hsl(var(--qt-nodata)); }
+  .qt-point:not(:disabled):hover { color: hsl(var(--qt-text)); }
+  .qt-point:not(:disabled):hover .qt-dot { border-color: hsl(var(--qt-text)); }
+  /* A quarter with no score: still selectable, drawn gray. */
+  .qt-point.qt-point-nodata,
+  .qt-point.qt-point-nodata:hover,
+  .qt-point.qt-point-nodata[aria-checked="true"] { color: hsl(var(--qt-nodata)); }
+  .qt-point.qt-point-nodata .qt-dot,
+  .qt-point.qt-point-nodata:hover .qt-dot { border-color: hsl(var(--qt-nodata)); background: hsl(var(--qt-nodata)); }
+
+  .qt-point:focus { outline: none; }
+  /* Inset: the track's scroll box would clip an outer ring. */
+  .qt-point:focus-visible { outline: 2px solid hsl(var(--qt-focus)); outline-offset: -2px; }
+  .qt-link:focus-visible { outline: 2px solid hsl(var(--qt-focus)); outline-offset: 2px; }
+
+  .qt-swatch { display: inline-block; width: 10px; height: 10px; }
+
+  /* Phone layout: a slimmer legend box, and the timeline as a row of
+     44px quarter buttons (dashed: forecast, as the track's dashed line). */
+  .qt-bar-compact { display: flex; align-items: center; padding: 4px 8px; }
+  .qt-chip {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 4px 10px;
+    background: hsl(var(--qt-panel) / var(--surface-alpha));
+    -webkit-backdrop-filter: blur(var(--surface-blur));
+    backdrop-filter: blur(var(--surface-blur));
+    border: 1px solid hsl(var(--qt-border));
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-control);
+    color: hsl(var(--qt-text));
+    font-size: 12px;
+    line-height: 16px;
+    text-align: left;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .qt-chip-forecast { border-style: dashed; }
+  .qt-chip[aria-checked="true"],
+  .qt-chip[aria-current="true"] {
+    background: hsl(var(--qt-selected));
+    border-color: hsl(var(--qt-selected));
+    color: hsl(var(--qt-panel));
+  }
+  .qt-chip[aria-checked="true"] .qt-muted,
+  .qt-chip[aria-current="true"] .qt-muted { color: inherit; opacity: 0.8; }
+  .qt-chip.qt-point-nodata { color: hsl(var(--qt-nodata)); }
+  .qt-chip:disabled { opacity: 0.45; cursor: not-allowed; }
+  .qt-chip:focus { outline: none; }
+  .qt-chip:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: -3px; }
+}
+
+/* Bottom of the map: the quarter bar spanning the whole map area between the
+   sidebars, the risk legend stacked above its left edge. The row is a size
+   container so the bar adapts to that area, not just to the window. */
+.qt-row { container-type: inline-size; display: flex; }
+.qt-row-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  /* At most 900px wide, centred between the panels or their tabs. */
+  max-width: 900px;
+  margin-inline: auto;
+}
+.qt-row-bar { align-self: stretch; min-width: 0; }
+.qt-history-short { display: none; }
+
+/* Too narrow for the full header line: drop the month range and shorten
+   the history link. */
+@container (max-width: 539px) {
+  .qt-status, .qt-history-full { display: none; }
+  .qt-history-short { display: inline; }
+}
+@media (max-width: 639px) {
+  .qt-status, .qt-history-full { display: none; }
+  .qt-history-short { display: inline; }
+}
+
+
+/* ------------------------------------------------------------------
+   Phones, upright or sideways (and very short windows): the layout
+   these widths and heights get (see lib/breakpoints.ts).
+   - No text under 12px. Desktop keeps its compact 8-11px labels.
+   - No automatic text inflation when a phone is turned sideways.
+   ------------------------------------------------------------------ */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* Mobile browsers count the hidden address bar in 100vh; the app pages
+   (h-screen) use the visible height, so the map's sheet is never under it. */
+@supports (height: 100dvh) {
+  .h-screen { height: 100dvh; }
+}
+@media (max-width: 767px), (max-height: 500px) {
+  /* Not where the element sets its own phone size (compact:text-[14px]). */
+  :is(.text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[11px\]):not([class*="compact:text-"]),
+  .map-label { font-size: 12px !important; }
+
+  /* Tables marked .stack-table become one card per row: each cell on its
+     own line, its column heading (data-label) on the left. The headings
+     stay in the page for screen readers. */
+  .stack-table thead {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .stack-table, .stack-table tbody, .stack-table tr, .stack-table td { display: block; width: 100%; }
+  .stack-table tr { padding: 8px 16px; }
+  .stack-table td {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end;
+    gap: 4px 8px; padding: 6px 0 !important; min-height: 32px;
+    text-align: right; overflow-wrap: anywhere;
+  }
+  .stack-table td::before {
+    content: attr(data-label); margin-right: auto; text-align: left;
+    font-size: 12px; font-weight: 500; color: hsl(var(--muted-foreground));
+  }
+  .stack-table td:not([data-label])::before { content: none; }
+  .stack-table td:not([data-label]) { justify-content: center; text-align: center; }
+}

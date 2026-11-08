@@ -1,0 +1,94 @@
+{
+  "reference_quarter": "2026-Q4",
+  "target_quarter": "2027-Q1",
+  "cutoff": "2026-12-31T23:59:59+08:00",
+  "timezone": "Asia/Manila",
+  "model_version": "PCF21 (E25 frozen protocol 694a757082e3)",
+  "feature_version": "E25: SWS rounds usable at the origin (verified date or documented upper bound); D through reference-1; Dnow months 1-2 of the reference quarter; 2021+ only",
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q4",
+      "source_ids": [
+        "news_2026Q4"
+      ],
+      "blocking": false,
+      "note": "Supporting news (display only; PCF21 does not use news).",
+      "needs": "2026-Q4 news articles (October-December 2026) with original publication times",
+      "supplier": "aiPHeed news fetchers; researcher authorizes",
+      "normal_release": "continuous; complete at the cutoff"
+    },
+    {
+      "id": "sws_rounds",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "source_ids": [
+        "sws_rounds"
+      ],
+      "note": "SWS Balance Luzon rounds; the September 2026 round (with its publication date) is needed",
+      "needs": "SWS Balance Luzon production round for 2026-Q3 (September 2026) with its publication date",
+      "supplier": "researcher authorizes; source SWS",
+      "normal_release": "2021-2025 Q3 rounds were published 17 October - 6 December of the same year"
+    },
+    {
+      "id": "label_history",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "source_ids": [
+        "s1_labels"
+      ],
+      "note": "Published S1 labels through 2026-Q3 (threshold rule and persistence)",
+      "needs": "S1 labels through 2026-Q3 (needs the 2026-Q3 SWS round and July-September 2026 provincial CPI)",
+      "supplier": "derived by aiPHeed once both inputs are authorized",
+      "normal_release": "after both inputs are published"
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "kind": "indicator",
+      "quarter": "2026-Q3",
+      "source_ids": [
+        "d_quarterly_panel"
+      ],
+      "note": "D through 2026-Q3 (July-September 2026 provincial CPI)",
+      "needs": "provincial food CPI YoY, July-September 2026, with PSA release dates",
+      "supplier": "researcher authorizes; source PSA",
+      "normal_release": "PSA monthly CPI is released in the first week of the following month (September 2026 -> early October 2026)"
+    },
+    {
+      "id": "provincial_D_now",
+      "kind": "indicator",
+      "quarter": "2026-Q4",
+      "source_ids": [
+        "dnow_panel"
+      ],
+      "note": "October-November 2026 provincial CPI: price-pressure indicator only; NOT used by the regional-risk forecast, so it does not block it",
+      "needs": "provincial food CPI YoY, October-November 2026 (price-pressure indicator only)",
+      "supplier": "researcher authorizes; source PSA",
+      "normal_release": "November 2026 CPI -> early December 2026",
+      "blocking": false
+    },
+    {
+      "id": "forecasting_model",
+      "kind": "model",
+      "source_ids": [
+        "pcf_model_card"
+      ],
+      "note": "PCF21 (E25 FINAL_T1); development evidence only",
+      "needs": "PCF21 model card",
+      "supplier": "aiPHeed",
+      "normal_release": "present"
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "source_ids": [
+        "lgu_vulnerability"
+      ],
+      "note": "142 LGUs; 126 carry a labelled province-mean poverty substitute",
+      "needs": "142-LGU census and poverty table",
+      "supplier": "aiPHeed",
+      "normal_release": "present"
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+selected
+PERSIST    22
+         issue challenger incumbent  inner_rows  inner_quarters  diff_within  ci_lo  ci_hi  replaces
+0   2021-07-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+1   2021-07-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+2   2021-10-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+3   2021-10-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+4   2022-01-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+5   2022-01-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+6   2022-04-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+7   2022-04-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+8   2022-07-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+9   2022-07-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+10  2022-10-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+11  2022-10-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+12  2023-01-01         LL   PERSIST           0               0          NaN    NaN    NaN     False
+13  2023-01-01       LL-K   PERSIST           0               0          NaN    NaN    NaN     False
+14  2023-04-01         LL   PERSIST           4               1          NaN    NaN    NaN     False
+15  2023-04-01       LL-K   PERSIST           4               1          NaN    NaN    NaN     False
+16  2023-07-01         LL   PERSIST           8               2          NaN    NaN    NaN     False
+17  2023-07-01       LL-K   PERSIST           8               2          NaN    NaN    NaN     False
+18  2023-10-01         LL   PERSIST          12               3          NaN    NaN    NaN     False
+19  2023-10-01       LL-K   PERSIST          12               3          NaN    NaN    NaN     False
+20  2024-01-01         LL   PERSIST          16               4          NaN    NaN    NaN     False
+21  2024-01-01       LL-K   PERSIST          16               4          NaN    NaN    NaN     False
+22  2024-04-01         LL   PERSIST          20               5          NaN    NaN    NaN     False
+23  2024-04-01       LL-K   PERSIST          20               5          NaN    NaN    NaN     False
+24  2024-07-01         LL   PERSIST          24               6       -0.042 -0.125  0.000     False
+25  2024-07-01       LL-K   PERSIST          24               6        0.125 -0.083  0.333     False
+26  2024-10-01         LL   PERSIST          28               7       -0.071 -0.143  0.000     False
+27  2024-10-01       LL-K   PERSIST          28               7        0.071 -0.107  0.250     False
+28  2025-01-01         LL   PERSIST          32               8       -0.062 -0.125  0.000     False
+29  2025-01-01       LL-K   PERSIST          32               8        0.062 -0.094  0.219     False
+30  2025-04-01         LL   PERSIST          36               9       -0.083 -0.167  0.000     False
+31  2025-04-01       LL-K   PERSIST          36               9        0.028 -0.111  0.194     False
+32  2025-07-01         LL   PERSIST          40              10       -0.050 -0.125  0.050     False
+33  2025-07-01       LL-K   PERSIST          40              10        0.025 -0.100  0.175     False
+34  2025-10-01         LL   PERSIST          40              10       -0.050 -0.125  0.050     False
+35  2025-10-01       LL-K   PERSIST          40              10        0.050 -0.100  0.200     False
+36  2026-01-01         LL   PERSIST          44              11       -0.045 -0.136  0.045     False
+37  2026-01-01       LL-K   PERSIST          44              11        0.045 -0.091  0.182     False
+38  2026-04-01         LL   PERSIST          48              12       -0.042 -0.125  0.042     False
+39  2026-04-01       LL-K   PERSIST          48              12        0.042 -0.083  0.167     False
+40  2026-07-01         LL   PERSIST          52              13       -0.038 -0.115  0.038     False
+41  2026-07-01       LL-K   PERSIST          52              13        0.038 -0.077  0.173     False
+42  2026-10-01         LL   PERSIST          56              14       -0.018 -0.089  0.054     False
+43  2026-10-01       LL-K   PERSIST          56              14        0.054 -0.054  0.179     False
+    lead      model   n  n_quarters  n_within  within  within_ci_lo  within_ci_hi  diff_vs_persist  diff_ci_lo  diff_ci_hi    mae    rmse   bias  high_tercile_bias  sharp_increases  sharp_within  var_ratio   corr  coverage80  mean_width80                               rows_note
+0      1         V2  44          11        21   0.477         0.318         0.659            0.000       0.000       0.000  5.050   6.764 -2.375             -6.753               15             0      1.369  0.350       0.636        12.136                                     NaN
+1      1    PERSIST  44          11        21   0.477         0.318         0.659            0.000       0.000       0.000  5.050   6.764 -2.375             -6.753               15             0      1.369  0.350       0.636        12.136                                     NaN
+2      1         LL  44          11        19   0.432         0.250         0.614           -0.045      -0.114       0.000  5.057   6.817 -2.739             -7.223               15             0      1.277  0.341       0.659        12.522                                     NaN
+3      1       LL-K  44          11        18   0.409         0.205         0.614           -0.068      -0.136       0.000  5.253   7.103 -3.021             -7.786               15             1      1.249  0.291       0.614        12.156                                     NaN
+4      1    TREND-D  44          11        18   0.409         0.341         0.477           -0.068      -0.227       0.091  5.698   7.622 -2.297             -6.535               15             1      1.852  0.298         NaN           NaN                                     NaN
+5      1       CLIM  44          11         9   0.205         0.068         0.364           -0.273      -0.386      -0.159  6.899   8.258 -6.617            -11.852               15             1      0.238  0.301         NaN           NaN                                     NaN
+6      1  RIDGE-ALL  36           9        14   0.389         0.194         0.583           -0.056      -0.389       0.306  6.788   8.548 -6.434            -11.845               12             3      0.661 -0.170         NaN           NaN  only 36 of 44 S-U rows have a forecast
+7      1   SEAS-LLM  44          11        17   0.386         0.250         0.523           -0.091      -0.159      -0.023  5.488   6.962 -2.556             -7.197               15             2      1.411  0.332         NaN           NaN                                     NaN
+8      1      HFM-X  44          11        24   0.545         0.432         0.659            0.068      -0.091       0.250  4.698   6.130 -1.683             -6.355               15             6      0.852  0.275         NaN           NaN                                     NaN
+9      2         V2  40          10        16   0.400         0.250         0.575            0.000       0.000       0.000  5.982   7.706 -3.070             -7.661               16             0      1.944  0.195       0.725        15.710                                     NaN
+10     2    PERSIST  40          10        16   0.400         0.250         0.575            0.000       0.000       0.000  5.982   7.706 -3.070             -7.661               16             0      1.944  0.195       0.725        15.710                                     NaN
+11     2         LL  40          10        15   0.375         0.175         0.575           -0.025      -0.125       0.075  5.667   7.557 -3.517             -7.976               16             0      1.668  0.201       0.775        15.011                                     NaN
+12     2       LL-K  40          10        15   0.375         0.175         0.575           -0.025      -0.125       0.075  5.604   7.632 -3.835             -8.271               16             0      1.541  0.181       0.675        13.102                                     NaN
+13     2    TREND-D  40          10        12   0.300         0.200         0.425           -0.100      -0.200       0.000  7.168   8.866 -2.904             -7.720               16             1      2.907  0.158         NaN           NaN                                     NaN
+14     2       CLIM  40          10         6   0.150         0.025         0.275           -0.250      -0.400      -0.100  7.752   8.901 -7.562            -12.356               16             0      0.280  0.209         NaN           NaN                                     NaN
+15     2  RIDGE-ALL  28           7        11   0.393         0.250         0.537           -0.071      -0.179       0.071  7.363   9.299 -5.205            -10.393                7             0      2.728 -0.251         NaN           NaN  only 28 of 40 S-U rows have a forecast
+16     2   SEAS-LLM  40          10        18   0.450         0.225         0.675            0.050      -0.100       0.200  5.723   7.579 -3.190             -7.240               16             3      1.898  0.228         NaN           NaN                                     NaN
+17     2      HFM-X  40          10        20   0.500         0.325         0.675            0.100      -0.125       0.325  4.866   6.422 -2.528             -7.270               16             8      0.797  0.069         NaN           NaN                                     NaN
+18     3         V2  36           9        13   0.361         0.139         0.583            0.000       0.000       0.000  6.464   8.488 -3.828             -9.450               15             0      2.477 -0.011       0.750        17.122                                     NaN
+19     3    PERSIST  36           9        13   0.361         0.139         0.583            0.000       0.000       0.000  6.464   8.488 -3.828             -9.450               15             0      2.477 -0.011       0.750        17.122                                     NaN
+20     3         LL  36           9        12   0.333         0.111         0.583           -0.028      -0.111       0.056  6.354   8.372 -4.334             -9.827               15             0      2.130 -0.003       0.778        16.112                                     NaN
+21     3       LL-K  36           9        14   0.389         0.167         0.611            0.028      -0.056       0.111  6.251   8.318 -4.707             -9.931               15             0      1.950  0.026       0.722        15.168                                     NaN
+22     3    TREND-D  36           9        15   0.417         0.250         0.556            0.056      -0.083       0.167  7.400   9.511 -3.585             -9.496               15             0      3.637 -0.029         NaN           NaN                                     NaN
+23     3       CLIM  36           9         6   0.167         0.056         0.306           -0.194      -0.389      -0.028  8.449   9.530 -8.449            -13.275               15             1      0.345  0.132         NaN           NaN                                     NaN
+24     3  RIDGE-ALL  24           6         8   0.333         0.125         0.542           -0.208      -0.417       0.000  6.231   7.307 -3.996             -6.001                5             0      2.718  0.130         NaN           NaN  only 24 of 36 S-U rows have a forecast
+25     3   SEAS-LLM  36           9        12   0.333         0.111         0.556           -0.028      -0.139       0.083  6.226   8.331 -3.963             -9.401               15             1      2.348  0.020         NaN           NaN                                     NaN
+26     3      HFM-X  36           9        18   0.500         0.306         0.694            0.139      -0.222       0.445  5.100   6.557 -3.444             -7.653               15             5      1.227  0.145         NaN           NaN                                     NaN
+27     4         V2  32           8        12   0.375         0.125         0.625            0.000       0.000       0.000  6.512   8.993 -4.562            -10.055               15             0      2.796 -0.091       0.812        18.955                                     NaN
+28     4    PERSIST  32           8        12   0.375         0.125         0.625            0.000       0.000       0.000  6.512   8.993 -4.562            -10.055               15             0      2.796 -0.091       0.812        18.955                                     NaN
+29     4         LL  32           8        12   0.375         0.094         0.688            0.000      -0.125       0.125  6.523   8.912 -5.126            -10.489               15             0      2.363 -0.087       0.688        18.416                                     NaN
+30     4       LL-K  32           8        10   0.312         0.094         0.625           -0.062      -0.219       0.062  6.842   8.934 -5.626            -10.828               15             0      2.171 -0.040       0.625        18.201                                     NaN
+31     4    TREND-D  32           8        13   0.406         0.250         0.531            0.031      -0.156       0.188  7.293  10.008 -4.424             -9.850               15             3      4.167 -0.082         NaN           NaN                                     NaN
+32     4       CLIM  32           8         4   0.125         0.031         0.250           -0.250      -0.438      -0.031  9.194  10.168 -9.194            -13.892               15             0      0.373  0.070         NaN           NaN                                     NaN
+33     4  RIDGE-ALL  20           5         3   0.150         0.000         0.350           -0.350      -0.700      -0.050  8.411   9.423 -5.725            -10.638                5             0      3.882 -0.016         NaN           NaN  only 20 of 32 S-U rows have a forecast
+34     4   SEAS-LLM  32           8        14   0.438         0.156         0.719            0.062      -0.094       0.219  6.297   8.839 -4.724            -10.215               15             2      2.565 -0.077         NaN           NaN                                     NaN
+35     4      HFM-X  32           8        10   0.312         0.156         0.469           -0.062      -0.281       0.156  5.513   6.803 -3.624             -7.421               15             3      1.738  0.180         NaN           NaN                                     NaN
+    lead    model  N1_data  N2_within_tolerance_75  N3_beats_every_baseline_mae_rmse  N4_squared_error_vs_persistence_and_climatology  N5_stability  N6_no_province_below_persistence  N7_interval_coverage_80  all_pass  n_rows  n_quarters                                                   within_thirds  loqo_min  p_vs_persistence  p_vs_climatology  coverage80         label
+0      1       V2     True                   False                              True                                            False         False                              True                    False     False      44          11                   [0.4, 0.3333333333333333, 0.7142857142857143]  0.425000            1.0000            0.0120    0.636364  NOT_RELIABLE
+1      1  PERSIST     True                   False                              True                                            False         False                              True                    False     False      44          11                   [0.4, 0.3333333333333333, 0.7142857142857143]  0.425000            1.0000            0.0120    0.636364  NOT_RELIABLE
+2      1       LL     True                   False                             False                                            False         False                             False                    False     False      44          11   [0.26666666666666666, 0.3333333333333333, 0.7142857142857143]  0.375000            0.5745            0.0045    0.659091  NOT_RELIABLE
+3      1     LL-K     True                   False                             False                                            False         False                             False                    False     False      44          11  [0.26666666666666666, 0.26666666666666666, 0.7142857142857143]  0.350000            0.7440            0.0145    0.613636  NOT_RELIABLE
+4      2       V2     True                   False                              True                                            False         False                              True                     True     False      40          10   [0.2857142857142857, 0.5384615384615384, 0.38461538461538464]  0.333333            1.0000            0.0080    0.725000  NOT_RELIABLE
+5      2  PERSIST     True                   False                              True                                            False         False                              True                     True     False      40          10   [0.2857142857142857, 0.5384615384615384, 0.38461538461538464]  0.333333            1.0000            0.0080    0.725000  NOT_RELIABLE
+6      2       LL     True                   False                              True                                            False         False                             False                     True     False      40          10  [0.07142857142857142, 0.6153846153846154, 0.46153846153846156]  0.305556            0.3095            0.0060    0.775000  NOT_RELIABLE
+7      2     LL-K     True                   False                              True                                            False         False                             False                    False     False      40          10  [0.07142857142857142, 0.6153846153846154, 0.46153846153846156]  0.305556            0.4285            0.0130    0.675000  NOT_RELIABLE
+8      3       V2    False                   False                              True                                            False         False                              True                     True     False      36           9                   [0.0, 0.4166666666666667, 0.6666666666666666]  0.281250            1.0000            0.0820    0.750000  NOT_RELIABLE
+9      3  PERSIST    False                   False                              True                                            False         False                              True                     True     False      36           9                   [0.0, 0.4166666666666667, 0.6666666666666666]  0.281250            1.0000            0.0820    0.750000  NOT_RELIABLE
+10     3       LL    False                   False                              True                                            False         False                             False                     True     False      36           9                   [0.0, 0.3333333333333333, 0.6666666666666666]  0.250000            0.3475            0.0650    0.777778  NOT_RELIABLE
+11     3     LL-K    False                   False                              True                                            False         False                             False                     True     False      36           9                                  [0.0, 0.5, 0.6666666666666666]  0.312500            0.3405            0.0460    0.722222  NOT_RELIABLE
+12     4       V2    False                   False                              True                                            False         False                              True                     True     False      32           8                 [0.18181818181818182, 0.45454545454545453, 0.5]  0.285714            1.0000            0.1190    0.812500  NOT_RELIABLE
+13     4  PERSIST    False                   False                              True                                            False         False                              True                     True     False      32           8                 [0.18181818181818182, 0.45454545454545453, 0.5]  0.285714            1.0000            0.1190    0.812500  NOT_RELIABLE
+14     4       LL    False                   False                             False                                            False         False                             False                    False     False      32           8                  [0.09090909090909091, 0.5454545454545454, 0.5]  0.285714            0.3065            0.0945    0.687500  NOT_RELIABLE
+15     4     LL-K    False                   False                             False                                            False         False                             False                    False     False      32           8                                 [0.0, 0.45454545454545453, 0.5]  0.214286            0.4325            0.0620    0.625000  NOT_RELIABLE
+     model  train_one_step_mae  inner_lead2_mae  outer_lead2_mae
+0  PERSIST               3.378            4.559            5.982
+1       LL               3.236            4.391            5.667
+2     LL-K               3.178            4.097            5.604
+3       V2               3.378            4.559            5.982
+        period     model   n  within    mae   bias
+0      2025-26        V2  24   0.500  4.312  0.542
+1      2025-26   PERSIST  24   0.500  4.312  0.542
+2      2025-26        LL  24   0.583  3.447  0.136
+3      2025-26      LL-K  24   0.583  3.102 -0.221
+4      2025-26  SEAS-LLM  24   0.708  3.540  0.682
+5      2025-26     HFM-X  24   0.458  4.220 -1.316
+6   surge 2024        V2  16   0.250  8.488 -8.488
+7   surge 2024   PERSIST  16   0.250  8.488 -8.488
+8   surge 2024        LL  16   0.062  8.997 -8.997
+9   surge 2024      LL-K  16   0.062  9.356 -9.255
+10  surge 2024  SEAS-LLM  16   0.062  8.997 -8.997
+11  surge 2024     HFM-X  16   0.562  5.835 -4.346
+     model   n  within    mae window_start
+0  PERSIST  40   0.400  5.982      2021-Q2
+1       LL  40   0.375  5.667      2021-Q2
+2     LL-K  40   0.375  5.604      2021-Q2
+3       V2  40   0.400  5.982      2021-Q2
+0  PERSIST  28   0.464  5.275      2022-Q1
+1       LL  28   0.500  4.741      2022-Q1
+2     LL-K  28   0.500  4.648      2022-Q1
+3       V2  28   0.464  5.275      2022-Q1
+{
+ "status": "DEVELOPMENT (all 2021-2026-Q3 SWS quarters were seen before v2 was designed)",
+ "preregistration_sha256_lf": "90ad51a99a90b3a06597c02f8d6a6515b1034388953afe7e37c24506220a691b",
+ "data_sha256": "936d0c26c02c784d9db4521ecd30f2d5c632efaa1d2d388c4dd9278e09f19ec2",
+ "seed": 2026,
+ "outer_draws": 10000,
+ "selected_by_issue_counts": {
+  "PERSIST": 22
+ },
+ "served_model_at": "2026-10-01",
+ "served_model": "PERSIST",
+ "served_selection_log": [
+  {
+   "issue": "2026-10-01",
+   "challenger": "LL",
+   "incumbent": "PERSIST",
+   "inner_rows": 56,
+   "inner_quarters": 14,
+   "diff_within": -0.01785714285714285,
+   "ci_lo": -0.08928571428571429,
+   "ci_hi": 0.05357142857142857,
+   "replaces": false
+  },
+  {
+   "issue": "2026-10-01",
+   "challenger": "LL-K",
+   "incumbent": "PERSIST",
+   "inner_rows": 56,
+   "inner_quarters": 14,
+   "diff_within": 0.0535714285714286,
+   "ci_lo": -0.05357142857142857,
+   "ci_hi": 0.17857142857142858,
+   "replaces": false
+  }
+ ],
+ "development_label_by_lead": {
+  "1": "NOT_RELIABLE",
+  "2": "NOT_RELIABLE",
+  "3": "NOT_RELIABLE",
+  "4": "NOT_RELIABLE"
+ },
+ "future_label_by_lead": {
+  "1": "NOT_YET_TESTABLE",
+  "2": "NOT_YET_TESTABLE",
+  "3": "NOT_YET_TESTABLE",
+  "4": "NOT_YET_TESTABLE"
+ },
+ "served_reliability_status_by_lead": {
+  "1": "NOT_RELIABLE",
+  "2": "NOT_RELIABLE",
+  "3": "NOT_RELIABLE",
+  "4": "NOT_RELIABLE"
+ },
+ "maximum_reliable_lead_future": null,
+ "lead2_v2": {
+  "lead": 2,
+  "model": "V2",
+  "n": 40,
+  "n_quarters": 10,
+  "n_within": 16,
+  "within": 0.4,
+  "within_ci_lo": 0.25,
+  "within_ci_hi": 0.575,
+  "diff_vs_persist": 0.0,
+  "diff_ci_lo": 0.0,
+  "diff_ci_hi": 0.0,
+  "mae": 5.9825,
+  "rmse": 7.705768942811613,
+  "bias": -3.0699999999999994,
+  "high_tercile_bias": -7.660714285714286,
+  "sharp_increases": 16,
+  "sharp_within": 0,
+  "var_ratio": 1.9435138763140665,
+  "corr": 0.19538179724229165,
+  "coverage80": 0.725,
+  "mean_width80": 15.710000000000003,
+  "rows_note": NaN
+ },
+ "leakage_controls": {
+  "shuffle_target_lead2": [
+   {
+    "model": "PERSIST",
+    "n": 40,
+    "within": 0.275,
+    "mae": 7.352500000000001
+   },
+   {
+    "model": "LL",
+    "n": 40,
+    "within": 0.3,
+    "mae": 7.0796753754179065
+   },
+   {
+    "model": "LL-K",
+    "n": 40,
+    "within": 0.35,
+    "mae": 5.742381847924847
+   },
+   {
+    "model": "V2",
+    "n": 40,
+    "within": 0.275,
+    "mae": 7.352500000000001
+   }
+  ],
+  "shuffle_target_selected_counts": {
+   "PERSIST": 22
+  },
+  "future_shift_lead2_within": {
+   "LL": 0.975,
+   "PERSIST": 1.0
+  }
+ },
+ "future_unseen_lead2_quarters": 0
+}

@@ -1,0 +1,480 @@
+{
+ "version": "fi6-1.0",
+ "written_utc": "2026-11-02T12:58:34+00:00",
+ "target": "HIGH = SWS Balance Luzon hunger above the mean of the preceding 20 quarters (>= 8 readings) by more than the round's published 95% margin of error; unobserved quarters unlabeled",
+ "target_choice_basis": [
+  {
+   "target": "FI5: above five-year average",
+   "n": 62,
+   "n_high": 28,
+   "high_share": 0.45161290322580644,
+   "mean_p_flip": 0.14233724225294192,
+   "share_p_flip_over_0.2": 0.3387096774193548,
+   "oracle_accuracy_ceiling": 0.8576627577470581
+  },
+  {
+   "target": "FI6: above five-year average by more than the margin of error",
+   "n": 62,
+   "n_high": 11,
+   "high_share": 0.1774193548387097,
+   "mean_p_flip": 0.06724851952181965,
+   "share_p_flip_over_0.2": 0.11290322580645161,
+   "oracle_accuracy_ceiling": 0.9327514804781804
+  },
+  {
+   "target": "above five-year average by more than one standard error",
+   "n": 62,
+   "n_high": 17,
+   "high_share": 0.27419354838709675,
+   "mean_p_flip": 0.10975129605841195,
+   "share_p_flip_over_0.2": 0.24193548387096775,
+   "oracle_accuracy_ceiling": 0.8902487039415881
+  },
+  {
+   "target": "absolute: at least 20 % of families",
+   "n": 62,
+   "n_high": 13,
+   "high_share": 0.20967741935483872,
+   "mean_p_flip": 0.0735953081514605,
+   "share_p_flip_over_0.2": 0.12903225806451613,
+   "oracle_accuracy_ceiling": 0.9264046918485395
+  },
+  {
+   "target": "absolute: at least 15 % of families",
+   "n": 62,
+   "n_high": 28,
+   "high_share": 0.45161290322580644,
+   "mean_p_flip": 0.1602761394102102,
+   "share_p_flip_over_0.2": 0.3548387096774194,
+   "oracle_accuracy_ceiling": 0.8397238605897898
+  },
+  {
+   "target": "rise versus the previous reading",
+   "n": 61,
+   "n_high": 29,
+   "high_share": 0.47540983606557374,
+   "mean_p_flip": 0.17786951325115596,
+   "share_p_flip_over_0.2": 0.4262295081967213,
+   "oracle_accuracy_ceiling": 0.822130486748844
+  }
+ ],
+ "proposed_model": "LightGBM regression of change in hunger from the latest published reading, monotone constraints, config and sigma from expanding inner folds; P(HIGH)=1-Phi((threshold_known-level_hat)/sigma); class at 0.5",
+ "features": [
+  "hunger_last",
+  "hunger_last_anom",
+  "hunger_age_q",
+  "cpi_food_yoy",
+  "cpi_rice_yoy",
+  "palay_yoy",
+  "news_market",
+  "rain_anom_3m",
+  "tc_exposure_q",
+  "oni",
+  "news_climate",
+  "unemp_rate",
+  "unemp_yoy",
+  "news_employment",
+  "remit_yoy",
+  "news_remittance",
+  "poverty_inc",
+  "news_poverty"
+ ],
+ "monotone": {
+  "hunger_last": 0,
+  "hunger_last_anom": -1,
+  "hunger_age_q": 0,
+  "cpi_food_yoy": 1,
+  "cpi_rice_yoy": 1,
+  "palay_yoy": -1,
+  "news_market": 1,
+  "rain_anom_3m": 0,
+  "tc_exposure_q": 1,
+  "oni": 0,
+  "news_climate": 1,
+  "unemp_rate": 1,
+  "unemp_yoy": 1,
+  "news_employment": 1,
+  "remit_yoy": -1,
+  "news_remittance": 1,
+  "poverty_inc": 1,
+  "news_poverty": 1
+ },
+ "domains": {
+  "hunger_last": "outcome",
+  "hunger_last_anom": "outcome",
+  "hunger_age_q": "outcome",
+  "cpi_food_yoy": "market",
+  "cpi_rice_yoy": "market",
+  "palay_yoy": "market",
+  "news_market": "market",
+  "rain_anom_3m": "climate",
+  "tc_exposure_q": "climate",
+  "oni": "climate",
+  "news_climate": "climate",
+  "unemp_rate": "employment",
+  "unemp_yoy": "employment",
+  "news_employment": "employment",
+  "remit_yoy": "remittance",
+  "news_remittance": "remittance",
+  "poverty_inc": "poverty",
+  "news_poverty": "poverty"
+ },
+ "feature_sets": {
+  "full": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "gov_only": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc"
+  ],
+  "psa_only": [
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc"
+  ],
+  "nlp_only": [
+   "news_market",
+   "news_climate",
+   "news_employment",
+   "news_remittance",
+   "news_poverty"
+  ],
+  "minus_news_market": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_news_climate": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_news_employment": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_news_remittance": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_news_poverty": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc"
+  ],
+  "minus_domain_market": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_domain_climate": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_domain_employment": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "remit_yoy",
+   "news_remittance",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_domain_remittance": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "poverty_inc",
+   "news_poverty"
+  ],
+  "minus_domain_poverty": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "news_market",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "news_climate",
+   "unemp_rate",
+   "unemp_yoy",
+   "news_employment",
+   "remit_yoy",
+   "news_remittance"
+  ]
+ },
+ "leads": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "eval_first_target": "2010-Q1",
+ "eras": [
+  [
+   "2010-2015",
+   2010,
+   2015
+  ],
+  [
+   "2016-2020",
+   2016,
+   2020
+  ],
+  [
+   "2021-2026",
+   2021,
+   2026
+  ]
+ ],
+ "reliability": {
+  "accuracy": 0.75,
+  "recall": 0.5,
+  "precision": 0.5,
+  "auc": 0.7,
+  "brier_skill": 0.0,
+  "era_accuracy": 0.6
+ },
+ "models": {
+  "LightGBM (proposed)": [
+   "reg",
+   "full"
+  ],
+  "Naive persistence": [
+   "persist",
+   null
+  ],
+  "PSA-only (government indicators)": [
+   "clf_lgbm",
+   "psa_only"
+  ],
+  "NLP-only (news composites)": [
+   "clf_lgbm",
+   "nlp_only"
+  ],
+  "Logistic regression": [
+   "logit",
+   "full"
+  ],
+  "Climatology (base rate)": [
+   "clim",
+   null
+  ],
+  "LightGBM classifier, direct (reference)": [
+   "clf_lgbm",
+   "full"
+  ],
+  "LightGBM without news (government + latest reading)": [
+   "reg",
+   "gov_only"
+  ],
+  "LightGBM without news_market": [
+   "reg",
+   "minus_news_market"
+  ],
+  "LightGBM without news_climate": [
+   "reg",
+   "minus_news_climate"
+  ],
+  "LightGBM without news_employment": [
+   "reg",
+   "minus_news_employment"
+  ],
+  "LightGBM without news_remittance": [
+   "reg",
+   "minus_news_remittance"
+  ],
+  "LightGBM without news_poverty": [
+   "reg",
+   "minus_news_poverty"
+  ],
+  "LightGBM without market domain": [
+   "reg",
+   "minus_domain_market"
+  ],
+  "LightGBM without climate domain": [
+   "reg",
+   "minus_domain_climate"
+  ],
+  "LightGBM without employment domain": [
+   "reg",
+   "minus_domain_employment"
+  ],
+  "LightGBM without remittance domain": [
+   "reg",
+   "minus_domain_remittance"
+  ],
+  "LightGBM without poverty domain": [
+   "reg",
+   "minus_domain_poverty"
+  ]
+ },
+ "code_sha256": {
+  "fi6/__init__.py": "f780c81c88eabff45f7b8874d730a777f39dfe68169b421c3ca48853335eb750",
+  "fi6/target.py": "abdea0aba55b681397bd63345da54d0c2ad620ccf85a9498c0c1ccd7a5408c51",
+  "fi6/features.py": "5c987f09e114922d1fc1b274e5727cd707ca7308cd25bb548fa28c54e4b663b6",
+  "fi6/models.py": "6bc7cc2f613b0726ba19250acfe8698cadbf201cf3bcb2e0d625f98c0f6087ea",
+  "fi6/evaluate.py": "0619ccf43fd0ebbb43ae9b295ce24c7a20b18b375691b9b1f211ae9fb336293a",
+  "fi6/pipeline.py": "507cdaa24e0f5e1e3fa608bc7936b03f3e9872ff3b9461756e2d292dac36b4b6",
+  "fi5/sources.py": "c7bc5dba71e12372a3ec24f0deb6baa0145e8eb97ba50f641d01936ecf11e8e1",
+  "fi5/target.py": "ed9ea2ec76b2b0d1d6a9f2b7ffac385f137333c90c32f8938e45d396beffc00c",
+  "fi5/nlp.py": "c59cc32386cd0fc97aa91cb1e7e6b8344e1d8c05c5d1cc94fa41e28095eb2333",
+  "fi5/features.py": "fe8073e28c164c0880cf203ade0007b081c0546cfa7c34d4865e600779efd5bf",
+  "fi5/models.py": "25962dd1699dfc359c215db4c0c3306d48789733d28abe975e50822af384d9bf",
+  "fi5/rankings.py": "cf785f6a2441af524832390cfce54e0846dba71dd8c59102303dae57993062b1"
+ },
+ "note": "All SWS quarters 1998-2026-Q3 have been seen by earlier aiPHeed work (FI5, E114, v12x, v13); this is development evidence. The FI6 target, features and model were fixed from label-reliability statistics and a-priori reasoning, not from FI6 model results. Untouched test = SWS quarters after 2026-Q3.",
+ "lock_sha256": "ccdfda3d6e625c7969b39c6e5bfec3f8ee2af002cf4b0b67ab52925f8692f2f6"
+}

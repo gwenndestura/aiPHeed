@@ -1,0 +1,22 @@
+check,result,detail
+every FIRI v2 indicator reviewed,PASS,12 of 12
+every FIRI v2 indicator assigned to a proposed indicator,PASS,
+every E118 inventory dataset mapped,PASS,38 E118 rows; unmapped: []
+every E118 acquired clean table mapped,PASS,20 tables
+every E119 feature mapped to a dataset,PASS,70 features; unmapped: []
+all mapped dataset ids exist,PASS,
+"every dataset has an indicator, a role and a reason",PASS,54 datasets
+every proposed indicator has at least one acquired dataset,PASS,
+all four FAO dimensions represented,PASS,
+provincial units are exactly the five provinces,PASS,"['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal']"
+Quezon City and Lucena never appear as province units,PASS,
+"national / regional values carry their own unit, never a province name",PASS,
+no national/regional value copied to provinces; no annual value spread to quarters,PASS,
+regional forecasting predictors all have a regional or national series,PASS,D03 D07 D20 D21 D22 D24 D31 D34 D35 D40 D62 D70
+no supervised provincial food-insecurity label claimed,PASS,
+no pre-2021 observation in any analysed series,PASS,min 2021-Q1
+computed changes start 2022-Q1 or later (2021+ base only),PASS,min 2022-Q1
+every value becomes available after its period starts,PASS,
+"production code, dashboard, E118 and E119 files unchanged",PASS,
+inputs read only (hashes equal before and after),PASS,38 files
+no model fitted in this phase,PASS,

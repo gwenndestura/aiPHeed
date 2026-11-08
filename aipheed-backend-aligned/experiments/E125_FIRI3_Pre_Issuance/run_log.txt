@@ -1,0 +1,322 @@
+{
+ "today": "2026-10-31",
+ "head": "7d7390886567506b862810f47ca890ceca622cd7",
+ "config_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+ "frozen_ok": true,
+ "hashes_ok": true,
+ "store": {
+  "forecasts": [],
+  "events": [
+   [
+    "attempt_blocked",
+    "2026-10-31"
+   ]
+  ]
+ },
+ "firi_v2": {
+  "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+  "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+  "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+ },
+ "production_clean": true,
+ "nasa": {
+  "months_2026_present": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "months_2026_missing": [
+   "2026-10"
+  ],
+  "revised_2021_2025": 0,
+  "max_abs_revision": 0.0,
+  "complete_quarters_2026": [
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "method_reproduces_e119": true
+ },
+ "cyclones": {
+  "history_match_pct": 98.1,
+  "mismatches": [
+   {
+    "scope": "PAR",
+    "unit": "PHILIPPINES",
+    "quarter": "2025-Q1",
+    "count_previous": NaN,
+    "count_refreshed": 0
+   }
+  ],
+  "q3_2026": [
+   {
+    "scope": "local 100 km",
+    "unit": "Cavite",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Laguna",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Quezon",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Rizal",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Batangas",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "PAR",
+    "unit": "PHILIPPINES",
+    "count_refreshed": 7,
+    "storms": "WP092026(BAVI); WP102026(MAYSAK); WP112026(NOUL); WP132026(PEILOU); WP172026(SAUDEL); WP222026(KROVANH); WP252026(SURIGAE)",
+    "track_types": "PROVISIONAL"
+   }
+  ],
+  "same_name_multiple_sids": {
+   "SAUDEL 2026-Q3": 2
+  },
+  "last_fix_in_file": "2026-10-29 00:00:00",
+  "quarter_complete": true
+ },
+ "lfs": {
+  "q3_months_present": [
+   "July",
+   "August"
+  ],
+  "september_2026": "not yet published in the PSA table (value '.')",
+  "rows_changed_vs_e114": 0,
+  "expected_rule_date": "2026-12-01 (first day of m+3)"
+ },
+ "cpi": {
+  "scored_quarter_uses": 160,
+  "uses_with_any_month_evidence": 124,
+  "uses_where_evidence_is_on_or_after_issue": 0,
+  "archived_release_minus_day10_days": {
+   "n": 32,
+   "later_than_rule": 13,
+   "max": 12,
+   "median": -1.5
+  },
+  "min_margin_days_rule_to_issue": 71,
+  "sep_2026_evidence": [
+   {
+    "province": "Batangas",
+    "evidence_date": "2026-10-13"
+   },
+   {
+    "province": "Cavite",
+    "evidence_date": "2026-10-12"
+   },
+   {
+    "province": "Laguna",
+    "evidence_date": "2026-10-13"
+   },
+   {
+    "province": "Quezon",
+    "evidence_date": "2026-10-16"
+   },
+   {
+    "province": "Rizal",
+    "evidence_date": "2026-10-15"
+   }
+  ]
+ },
+ "refreshed_rows": {
+  "new observation": 42,
+  "revised value": 20,
+  "removed": 0
+ },
+ "reconciliation": {
+  "rows": 138,
+  "changed": 12,
+  "explained": true,
+  "changed_by_scope": {
+   "provincial": 10,
+   "regional": 2
+  },
+  "computable_previous": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "computable_refreshed": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "max_abs_change": 0.05542483660130715,
+  "band_changes": 3,
+  "causes": {
+   "newly available observations": 24
+  }
+ },
+ "par_zero_quarter_sensitivity": {
+  "zero_quarters": [
+   "2023-Q1",
+   "2024-Q1",
+   "2025-Q1"
+  ],
+  "scores_changed": 9,
+  "max_abs_change": 0.041987179487179505,
+  "band_changes": 1,
+  "detail": [
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q2",
+    "firi3": 0.5479166666666666,
+    "firi3_z": 0.5347222222222222,
+    "band": "above usual",
+    "band_z": "above usual"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q3",
+    "firi3": 0.5728705322455322,
+    "firi3_z": 0.5807959401709402,
+    "band": "above usual",
+    "band_z": "above usual"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q4",
+    "firi3": 0.4973412698412699,
+    "firi3_z": 0.4977380952380953,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q1",
+    "firi3": 0.4521639471639471,
+    "firi3_z": 0.4548989898989899,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q2",
+    "firi3": 0.5282245532245532,
+    "firi3_z": 0.4862373737373737,
+    "band": "above usual",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q3",
+    "firi3": 0.3431317457052751,
+    "firi3_z": 0.3540561154531742,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q1",
+    "firi3": 0.3305064745196324,
+    "firi3_z": 0.33478279030910607,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q2",
+    "firi3": 0.36235294117647066,
+    "firi3_z": 0.37,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q3",
+    "firi3": 0.6825975529100529,
+    "firi3_z": 0.6876240079365079,
+    "band": "elevated",
+    "band_z": "elevated"
+   }
+  ]
+ },
+ "previous_reproduces_e123": true,
+ "reproducible": true,
+ "conditions": {
+  "C1_date_on_or_after_issue": false,
+  "C2_frozen_configuration_and_hashes": true,
+  "C3_required_periods_complete_and_refreshed": false,
+  "C4_no_value_after_issue": true,
+  "reproducible": true,
+  "store_operational_and_empty": true,
+  "no_critical_integrity_failure": true
+ },
+ "feature_decisions": {
+  "READY WITH WARNING": 29,
+  "READY": 4,
+  "BLOCKED": 1
+ },
+ "overall": "BLOCKED"
+}
+                      feature       period_used target_period_by_rule                     availability_status       publication_class            decision
+0                FMA_food_cpi           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+1            FMA_headline_cpi           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+2          FMA_rice_wholesale           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+3                 FMA_chicken           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+4                    FMA_pork           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+5                 FMA_tilapia           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+6              FMA_food_cpi_R           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+7          FMA_headline_cpi_R           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+8                  FMA_rice_R           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+9                   AFP_palay           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+10                   AFP_corn           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+11             AFP_vegetables           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+12              AFP_rootcrops           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+13              AFP_fisheries           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+14                AFP_chicken           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+15              AFP_livestock           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+16                AFP_palay_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+17                 AFP_corn_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+18           AFP_vegetables_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+19            AFP_rootcrops_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+20            AFP_fisheries_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+21         CEC_rain_departure           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+22                   CEC_heat           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+23         CEC_cyclones_100km           2026-Q3               2026-Q3                   released and verified                verified               READY
+24       CEC_rain_departure_R           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+25                 CEC_heat_R           2026-Q3               2026-Q3  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+26             CEC_cyclones_R           2026-Q3               2026-Q3                   released and verified                verified               READY
+27      EHS_unemployment_prov              2024                  2025                retrieved but incomplete              unverified  READY WITH WARNING
+28   EHS_underemployment_prov              2024                  2025                retrieved but incomplete              unverified  READY WITH WARNING
+29  EHS_unemployment_change_R           2026-Q3               2026-Q3                retrieved but incomplete  provisionally eligible             BLOCKED
+30   EHS_remittance_decline_R           2026-Q2               2026-Q2  released (publication date unverified)  provisionally eligible  READY WITH WARNING
+31                PSV_poverty              2021                  2021                          not applicable              unverified  READY WITH WARNING
+32                   FIS_fssi  2026-Q2; 2026-Q3               2026-Q3                   released and verified                verified               READY
+33        FIS_shortage_news_R           2026-Q3               2026-Q3                   released and verified                verified               READY

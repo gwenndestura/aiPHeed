@@ -1,0 +1,350 @@
+{
+ "today": "2026-10-31",
+ "head": "7d7390886567506b862810f47ca890ceca622cd7",
+ "config_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+ "frozen_ok": true,
+ "hashes_ok": true,
+ "store": {
+  "forecasts": [],
+  "events": [
+   [
+    "attempt_blocked",
+    "2026-10-31"
+   ]
+  ]
+ },
+ "firi_v2": {
+  "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+  "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+  "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+ },
+ "production_clean": true,
+ "nasa": {
+  "months_2026_present": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "months_2026_missing": [
+   "2026-10"
+  ],
+  "revised_2021_2025": 0,
+  "max_abs_revision": 0.0,
+  "complete_quarters_2026": [
+   "2026-Q1",
+   "2026-Q2",
+   "2026-Q3"
+  ],
+  "method_reproduces_e119": true
+ },
+ "cyclones": {
+  "history_match_pct": 98.1,
+  "mismatches": [
+   {
+    "scope": "PAR",
+    "unit": "PHILIPPINES",
+    "quarter": "2025-Q1",
+    "count_previous": NaN,
+    "count_refreshed": 0
+   }
+  ],
+  "q3_2026": [
+   {
+    "scope": "local 100 km",
+    "unit": "Cavite",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Laguna",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Quezon",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Rizal",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "local 100 km",
+    "unit": "Batangas",
+    "count_refreshed": 0,
+    "storms": "",
+    "track_types": ""
+   },
+   {
+    "scope": "PAR",
+    "unit": "PHILIPPINES",
+    "count_refreshed": 7,
+    "storms": "WP092026(BAVI); WP102026(MAYSAK); WP112026(NOUL); WP132026(PEILOU); WP172026(SAUDEL); WP222026(KROVANH); WP252026(SURIGAE)",
+    "track_types": "PROVISIONAL"
+   }
+  ],
+  "same_name_multiple_sids": {
+   "SAUDEL 2026-Q3": 2
+  },
+  "last_fix_in_file": "2026-10-29 00:00:00",
+  "quarter_complete": true
+ },
+ "lfs": {
+  "q3_months_present": [
+   "July",
+   "August"
+  ],
+  "september_2026": "not yet published in the PSA table (value '.')",
+  "rows_changed_vs_e114": 0,
+  "expected_rule_date": "2026-12-01 (first day of m+3)"
+ },
+ "cpi": {
+  "scored_quarter_uses": 160,
+  "uses_with_any_month_evidence": 124,
+  "uses_where_evidence_is_on_or_after_issue": 0,
+  "archived_release_minus_day10_days": {
+   "n": 32,
+   "later_than_rule": 13,
+   "max": 12,
+   "median": -1.5
+  },
+  "min_margin_days_rule_to_issue": 71,
+  "sep_2026_evidence": [
+   {
+    "province": "Batangas",
+    "evidence_date": "2026-10-13"
+   },
+   {
+    "province": "Cavite",
+    "evidence_date": "2026-10-12"
+   },
+   {
+    "province": "Laguna",
+    "evidence_date": "2026-10-13"
+   },
+   {
+    "province": "Quezon",
+    "evidence_date": "2026-10-16"
+   },
+   {
+    "province": "Rizal",
+    "evidence_date": "2026-10-15"
+   }
+  ]
+ },
+ "refreshed_rows": {
+  "new observation": 42,
+  "revised value": 20,
+  "removed": 0
+ },
+ "reconciliation": {
+  "rows": 138,
+  "changed": 12,
+  "explained": true,
+  "changed_by_scope": {
+   "provincial": 10,
+   "regional": 2
+  },
+  "computable_previous": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "computable_refreshed": {
+   "provincial": 75,
+   "regional": 10
+  },
+  "max_abs_change": 0.05542483660130715,
+  "band_changes": 3,
+  "causes": {
+   "newly available observations": 24
+  }
+ },
+ "par_zero_quarter_sensitivity": {
+  "zero_quarters": [
+   "2023-Q1",
+   "2024-Q1",
+   "2025-Q1"
+  ],
+  "scores_changed": 9,
+  "max_abs_change": 0.041987179487179505,
+  "band_changes": 1,
+  "detail": [
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q2",
+    "firi3": 0.5479166666666666,
+    "firi3_z": 0.5347222222222222,
+    "band": "above usual",
+    "band_z": "above usual"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q3",
+    "firi3": 0.5728705322455322,
+    "firi3_z": 0.5807959401709402,
+    "band": "above usual",
+    "band_z": "above usual"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2024-Q4",
+    "firi3": 0.4973412698412699,
+    "firi3_z": 0.4977380952380953,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q1",
+    "firi3": 0.4521639471639471,
+    "firi3_z": 0.4548989898989899,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q2",
+    "firi3": 0.5282245532245532,
+    "firi3_z": 0.4862373737373737,
+    "band": "above usual",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2025-Q3",
+    "firi3": 0.3431317457052751,
+    "firi3_z": 0.3540561154531742,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q1",
+    "firi3": 0.3305064745196324,
+    "firi3_z": 0.33478279030910607,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q2",
+    "firi3": 0.36235294117647066,
+    "firi3_z": 0.37,
+    "band": "usual or below",
+    "band_z": "usual or below"
+   },
+   {
+    "scope": "regional",
+    "unit": "CALABARZON (regional)",
+    "origin": "2026-Q3",
+    "firi3": 0.6825975529100529,
+    "firi3_z": 0.6876240079365079,
+    "band": "elevated",
+    "band_z": "elevated"
+   }
+  ]
+ },
+ "previous_reproduces_e123": true,
+ "reproducible": true,
+ "conditions": {
+  "C1_date_on_or_after_issue": false,
+  "C2_frozen_configuration_and_hashes": true,
+  "C3_required_periods_complete_and_refreshed": false,
+  "C4_no_value_after_issue": true,
+  "reproducible": true,
+  "store_operational_and_empty": true,
+  "no_critical_integrity_failure": true
+ },
+ "feature_decisions": {
+  "READY WITH WARNING": 29,
+  "READY": 4,
+  "BLOCKED": 1
+ },
+ "overall": "BLOCKED",
+ "refresh_log": {
+  "fetched_utc": "2026-10-31T06:00:12+00:00",
+  "power": {
+   "Cavite": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR,T2M,T2M_MAX,RH2M&community=AG&longitude=120.87&latitude=14.28&start=2021&end=2026&format=JSON",
+    "lat": 14.28,
+    "lon": 120.87,
+    "sha256": "544dda8fbfac89d7ae6736fb24bff8e8637ffb1a6115ef599531068f0ba6b94b",
+    "bytes": 5144,
+    "fetched_utc": "2026-10-31T06:00:13+00:00",
+    "api_version": "v2.10.0"
+   },
+   "Laguna": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR,T2M,T2M_MAX,RH2M&community=AG&longitude=121.33&latitude=14.17&start=2021&end=2026&format=JSON",
+    "lat": 14.17,
+    "lon": 121.33,
+    "sha256": "5924af9ec37012133f79e7140294c17f409b964cc66e2e4bd42cbd7e6e097430",
+    "bytes": 5154,
+    "fetched_utc": "2026-10-31T06:00:15+00:00",
+    "api_version": "v2.10.0"
+   },
+   "Batangas": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR,T2M,T2M_MAX,RH2M&community=AG&longitude=121.06&latitude=13.76&start=2021&end=2026&format=JSON",
+    "lat": 13.76,
+    "lon": 121.06,
+    "sha256": "6e3d28466223b0fdc8f995e11054c96fa78db264c90ed78a69910f8ae1455b03",
+    "bytes": 5154,
+    "fetched_utc": "2026-10-31T06:00:16+00:00",
+    "api_version": "v2.10.0"
+   },
+   "Rizal": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR,T2M,T2M_MAX,RH2M&community=AG&longitude=121.31&latitude=14.6&start=2021&end=2026&format=JSON",
+    "lat": 14.6,
+    "lon": 121.31,
+    "sha256": "88e05ea338ff2927f9d8dd8680a8fada80a95f603873e27f33120712d92b88d1",
+    "bytes": 5152,
+    "fetched_utc": "2026-10-31T06:00:17+00:00",
+    "api_version": "v2.10.0"
+   },
+   "Quezon": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR,T2M,T2M_MAX,RH2M&community=AG&longitude=122.11&latitude=14.03&start=2021&end=2026&format=JSON",
+    "lat": 14.03,
+    "lon": 122.11,
+    "sha256": "a0ade07f1f2aaadfc73f6c9e7464808ccf2577090660cbd07567eac9180af47e",
+    "bytes": 5152,
+    "fetched_utc": "2026-10-31T06:00:17+00:00",
+    "api_version": "v2.10.0"
+   }
+  },
+  "ibtracs": {
+   "url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.last3years.list.v04r01.csv",
+   "sha256": "f4b8eb58f5f4ac853f907d123d93215ea709e99c57142454cc67f9114c30143a",
+   "bytes": 11743983,
+   "last_modified": "Fri, 30 Oct 2026 04:27:24 GMT",
+   "fetched_utc": "2026-10-31T06:00:23+00:00"
+  },
+  "lfs": {
+   "table": "1B/LFS/0021B3FKEI2.px",
+   "sha256": "88acc6df3f86c424cc76e16aec066f6e3bccd97c98f9f39ed2d8cbf121098538",
+   "rows": 286,
+   "fetched_utc": "2026-10-31T06:00:26+00:00"
+  }
+ }
+}

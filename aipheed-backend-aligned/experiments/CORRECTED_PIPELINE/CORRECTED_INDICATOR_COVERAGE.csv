@@ -1,0 +1,20 @@
+indicator,trigger_domain,table,column,rows,non_missing,missing_pct,verified,flagged_vintage,rule_unverified,unavailable_at_issue,not_collected,insufficient_data,status_values
+A1,market_prices,provincial_profile,A1_food_asof,115,95,17.4,33,0,62,0,0,20,rule_unverified: 62; verified: 33; insufficient_data (threshold): 20
+A2,market_prices,provincial_profile,A2_asof,115,95,17.4,33,0,62,0,0,20,rule_unverified: 62; verified: 33; insufficient_data (threshold): 20
+A3,market_prices,provincial_profile,A3_rice_yoy,115,84,27.0,0,0,84,0,31,0,rule_unverified: 84; not_collected (no pre-2021 base): 31
+V1,poverty_vulnerability (other input),provincial_profile,V1_vulnerability_profile,115,115,0.0,30,0,0,85,0,0,unavailable_at_issue (published 2024-2025): 85; verified: 30
+C1,climate,national_context,C1_el_nino_in_force,23,23,0.0,23,0,0,0,0,0,verified: 23
+C2,climate,provincial_profile,C2_tc_local_100km,115,110,4.3,110,0,0,0,0,0,verified: 110; incomplete: 5
+C3,climate,provincial_profile,C3_palay_corn_drop,115,90,21.7,0,0,90,0,25,0,rule_unverified: 90; not_collected (no pre-2021 base): 25
+C4,fish_production,provincial_profile,C4_fish_drop,115,90,21.7,0,0,90,0,25,0,rule_unverified: 90; not_collected (no pre-2021 base): 25
+E1,employment,provincial_profile (annual),E1_prov_unemployment_annual,115,96,16.5,0,0,100,0,15,0,rule_unverified (no publication date): 80; rule_unverified (derived 100 - employment rate): 20; not_collected: 15
+E1,employment,national_context,E1_national_unemployment_change,23,18,21.7,0,0,18,0,5,0,rule_unverified: 18; not_collected (no pre-2021 base): 5
+E2,ofw_remittances,national_context,E2_remit_decline_pct,23,18,21.7,2,0,16,0,5,0,rule_unverified: 14; not_collected (no pre-2021 base): 5; verified: 2; rule_unverified (earliest dated evidence after issue): 2
+N1,news_nlp (other input),provincial_profile,N1_fssi,115,20,82.6,20,0,0,0,0,95,insufficient_data (0 admitted articles; corpus collected): 53; insufficient_data (< 5 admitted articles): 42; observed: 20
+H1,regional_hunger (target component),national_context,H1_balance_luzon_outlook,23,21,8.7,21,0,0,0,2,0,verified: 21; not_collected: 2
+A1,market_prices,regional_forecast_panel,AF_food,872,872,0.0,280,592,0,0,0,0,2018=100 back-cast (not as published): 592; 2018=100: 280
+C4,fish_production,regional_forecast_panel,F_yoy,872,872,0.0,0,0,872,0,0,0,rule_unverified: 872
+C3,climate,regional_forecast_panel,PAL_yoy,872,654,25.0,0,0,654,0,218,0,rule_unverified: 654; not_collected: 218
+E1,employment,regional_forecast_panel,P-UNEMP,872,656,24.8,0,0,656,0,216,0,rule_unverified: 656; not_collected: 216
+N1,news_nlp (other input),regional_forecast_panel,N-SUP,872,280,67.9,280,0,0,0,592,0,not_collected (GDELT starts 2017): 592; verified: 280
+E2,ofw_remittances,regional_forecast_panel,(none),872,0,100.0,0,0,0,0,872,0,not_collected (no long national series; BSP blocks download): 872

@@ -1,0 +1,65 @@
+{
+ "gates": {
+  "F1": true,
+  "F2": false,
+  "F3": false,
+  "F4": false,
+  "F5": false,
+  "F6": true,
+  "F7": false,
+  "F8": false,
+  "F9_ranks_displayable": false,
+  "F10": false
+ },
+ "status": "not accepted",
+ "lead2_reliable": false,
+ "leakage_max_abs_change": 0.0,
+ "mcnemar": {
+  "1": {
+   "e167_right_e158_wrong": 2,
+   "e167_wrong_e158_right": 7,
+   "p_exact": 0.1797
+  },
+  "2": {
+   "e167_right_e158_wrong": 4,
+   "e167_wrong_e158_right": 8,
+   "p_exact": 0.3877
+  }
+ },
+ "shuffle": {
+  "brier": 0.1241,
+  "accuracy": 0.764,
+  "E167_minus_shuffled": 0.0321,
+  "ci95": [
+   0.0083,
+   0.058
+  ]
+ },
+ "consumption_shuffle": {
+  "brier": 0.135,
+  "E167_minus_shuffled": 0.0212,
+  "ci95": [
+   0.0028,
+   0.0428
+  ]
+ }
+}
+
+Lead 1 selected {'ENNS2018': {'cfg_E167': 'OH|RIDGE|GOV+regional_consumption|id|region', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2019': {'cfg_E167': 'OH|RIDGE|GOV+regional_consumption|id|region', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2021': {'cfg_E167': 'OH|LGBM|GOV+regional_consumption|id|round', 'source': 'regional_consumption', 'src_missing_test': 0.0}} C1-C6 {'C1': False, 'C2': True, 'C3': True, 'C4': False, 'C5': False, 'C6': True} brier-E158 {'diff': 0.0218, 'ci95': [-0.0136, 0.0578]}
+     accuracy balanced_accuracy high_precision high_recall low_precision low_recall macro_f1    auc pr_auc   brier calibration_slope false_alarm_rate missed_high_rate   pcal         pcal_ci                                     conf
+PERS    0.625             0.703           0.48        0.96         0.955      0.447    0.624  0.827  0.705  0.2128              0.71            0.553             0.04  1.094  [0.632, 1.826]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158    0.736              0.76          0.583        0.84         0.889      0.681     0.73   0.86   0.81  0.1344             0.718            0.319             0.16  1.534  [0.934, 2.789]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO    0.792             0.812          0.647        0.88         0.921      0.745    0.785  0.901  0.861  0.1223             0.734            0.255             0.12  1.425  [0.871, 3.124]  {'tp': 22, 'fp': 12, 'fn': 3, 'tn': 35}
+E166    0.764               0.8          0.605        0.92         0.941      0.681     0.76  0.904  0.864  0.1247             0.743            0.319             0.08  1.531  [0.893, 3.472]  {'tp': 23, 'fp': 15, 'fn': 2, 'tn': 32}
+E167    0.667             0.726          0.511        0.92         0.926      0.532    0.666  0.893  0.845  0.1562             0.629            0.468             0.08  1.392  [0.933, 2.516]  {'tp': 23, 'fp': 22, 'fn': 2, 'tn': 25}
+per round {'ENNS2018': {'E158': {'accuracy': 0.636, 'brier': 0.1497}, 'E167': {'accuracy': 0.5, 'brier': 0.1743}}, 'ENNS2019': {'E158': {'accuracy': 0.68, 'brier': 0.1721}, 'E167': {'accuracy': 0.64, 'brier': 0.2095}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0831}, 'E167': {'accuracy': 0.84, 'brier': 0.0869}}} conc {'est': 0.65, 'ci95': [0.487, 0.795]} reliab [{'E167': '(-0.001, 0.2]', 'n': '15', 'mean_p': '0.059', 'observed': '0.0'}, {'E167': '(0.2, 0.4]', 'n': '7', 'mean_p': '0.298', 'observed': '0.0'}, {'E167': '(0.4, 0.6]', 'n': '11', 'mean_p': '0.516', 'observed': '0.364'}, {'E167': '(0.6, 0.8]', 'n': '19', 'mean_p': '0.695', 'observed': '0.263'}, {'E167': '(0.8, 1.0]', 'n': '20', 'mean_p': '0.917', 'observed': '0.8'}]
+
+Lead 2 selected {'ENNS2018': {'cfg_E167': 'OH|RIDGE|GOV+regional_consumption|id|region', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2019': {'cfg_E167': 'OH|RIDGE|GOV+regional_consumption|id|region', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2021': {'cfg_E167': 'OH|LGBM|GOV+regional_consumption|id|round', 'source': 'regional_consumption', 'src_missing_test': 0.0}} C1-C6 {'C1': False, 'C2': True, 'C3': True, 'C4': False, 'C5': False, 'C6': True} brier-E158 {'diff': 0.0162, 'ci95': [-0.0186, 0.0534]}
+     accuracy balanced_accuracy high_precision high_recall low_precision low_recall macro_f1    auc pr_auc   brier calibration_slope false_alarm_rate missed_high_rate   pcal         pcal_ci                                     conf
+PERS    0.625             0.703           0.48        0.96         0.955      0.447    0.624  0.827  0.705  0.2128              0.71            0.553             0.04  1.094  [0.632, 1.826]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158    0.736              0.76          0.583        0.84         0.889      0.681     0.73  0.861    0.8  0.1371             0.679            0.319             0.16  1.345  [0.885, 2.308]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO    0.792             0.822          0.639        0.92         0.944      0.723    0.786    0.9  0.856  0.1232             0.768            0.277             0.08  1.502  [0.959, 3.089]  {'tp': 23, 'fp': 13, 'fn': 2, 'tn': 34}
+E166    0.792             0.822          0.639        0.92         0.944      0.723    0.786  0.899  0.858  0.1246             0.734            0.277             0.08  1.489  [0.881, 3.254]  {'tp': 23, 'fp': 13, 'fn': 2, 'tn': 34}
+E167    0.681             0.746          0.522        0.96         0.962      0.532    0.681  0.897   0.85  0.1532             0.625            0.468             0.04  1.392    [0.99, 2.37]  {'tp': 24, 'fp': 22, 'fn': 1, 'tn': 25}
+per round {'ENNS2018': {'E158': {'accuracy': 0.591, 'brier': 0.1632}, 'E167': {'accuracy': 0.545, 'brier': 0.1702}}, 'ENNS2019': {'E158': {'accuracy': 0.72, 'brier': 0.1635}, 'E167': {'accuracy': 0.64, 'brier': 0.2026}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0877}, 'E167': {'accuracy': 0.84, 'brier': 0.089}}} conc {'est': 0.7, 'ci95': [0.542, 0.857]} reliab [{'E167': '(-0.001, 0.2]', 'n': '15', 'mean_p': '0.063', 'observed': '0.0'}, {'E167': '(0.2, 0.4]', 'n': '7', 'mean_p': '0.274', 'observed': '0.0'}, {'E167': '(0.4, 0.6]', 'n': '11', 'mean_p': '0.513', 'observed': '0.273'}, {'E167': '(0.6, 0.8]', 'n': '17', 'mean_p': '0.676', 'observed': '0.294'}, {'E167': '(0.8, 1.0]', 'n': '22', 'mean_p': '0.911', 'observed': '0.773'}]
+{'E158': {'overall': (2.9, [0.64, 5.09]), 'island:Luzon': (5.53, [3.07, 7.75]), 'island:Visayas': (-0.58, [-4.66, 4.22]), 'island:Mindanao': (1.1, [-2.42, 4.3]), 'observed:HIGH': (-1.62, [-5.5, 2.35]), 'observed:LOW': (5.3, [2.89, 7.56]), 'CAL': {'Laguna|ENNS2018': 9.3, 'Quezon|ENNS2019': 4.0, 'Rizal|ENNS2019': 3.6, 'Batangas|ENNS2021': -13.7, 'Cavite|ENNS2021': -6.2}}, 'E166': {'overall': (3.25, [1.33, 5.18]), 'island:Luzon': (4.01, [0.96, 7.44]), 'island:Visayas': (1.36, [-3.58, 6.61]), 'island:Mindanao': (3.34, [1.32, 4.99]), 'observed:HIGH': (-0.26, [-4.25, 2.83]), 'observed:LOW': (5.12, [2.57, 7.64]), 'CAL': {'Laguna|ENNS2018': 8.9, 'Quezon|ENNS2019': 1.2, 'Rizal|ENNS2019': -1.6, 'Batangas|ENNS2021': -12.6, 'Cavite|ENNS2021': -8.2}}, 'E167': {'overall': (6.3, [4.09, 8.5]), 'island:Luzon': (7.16, [3.8, 10.97]), 'island:Visayas': (4.37, [-0.84, 10.62]), 'island:Mindanao': (6.25, [3.09, 9.09]), 'observed:HIGH': (4.17, [0.17, 7.88]), 'observed:LOW': (7.43, [4.66, 10.29]), 'CAL': {'Laguna|ENNS2018': 9.6, 'Quezon|ENNS2019': 5.8, 'Rizal|ENNS2019': 3.0, 'Batangas|ENNS2021': -12.6, 'Cavite|ENNS2021': -8.6}}}

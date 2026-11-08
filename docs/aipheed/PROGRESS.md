@@ -1,0 +1,236 @@
+# AIPHEED backend completion: progress log
+
+**Evidence tags used throughout:**
+- **VERIFIED:** a command was run and its output saved (path given).
+- **INFERRED:** read from code or documents, not executed.
+- **NOT VERIFIED.**
+
+## Session 1 · 2026-11-01
+
+**Setup**
+- Repository `gwenndestura/aiPHeed`, worktree `C:\Users\admin\aipheed_final`.
+- Started on branch `aiPHeed/corrected-data-pipeline` @ `2d9a2d9`; working branch `impl/backend-completion`, created from it.
+- `git status` at start: 15 untracked paths that predate this work (CREDIBILITY_AUDIT/, E114 GDELT raw files, FINAL_SYSTEM_SELECTION annotation workbooks, docs/aiPHeed_Complete_System_Guide.docx, node_modules/). They are **left untouched** (not added, not stashed, not deleted).
+- Rules: never push, deploy, delete experiment packages or overwrite artifacts; one commit per phase.
+
+**Baseline tests:** `docs/aipheed/baseline_tests.txt` (VERIFIED; result below).
+- **Result:** 1258 passed, 0 failed, 18 skipped, exit 0, in 214 s (VERIFIED, `docs/aipheed/baseline_tests.txt`).
+
+## Phase 0 · Protocol lock: DONE
+
+**`docs/aipheed/PROTOCOL_LOCK.md`** (VERIFIED). It holds 15 verbatim excerpts, each with its path, frozen commit and line range:
+- tolerance: T1–T4;
+- leads, issue policy and eligible rows: E1–E2;
+- N1–N7, the reliable lead and the maximum reliable lead: R1–R2;
+- CPI cutoff and YoY base: C1–C4;
+- windows: W1–W3.
+
+**Integrity checks:**
+- `backend/scripts/build_protocol_lock.py` reads each excerpt with `git show <commit>:<path>` and refuses to build if the working tree differs from the frozen commit.
+- The lock's SHA-256 is in `PROTOCOL_LOCK.sha256` (`8bae6962…`); `protocol_lock_manifest.json` holds per-excerpt hashes.
+- `backend/tests/unit/test_protocol_lock.py` has 4 tests. They check the lock hash, every source excerpt and the frozen numbers in code (1.645, N1 at 10 quarters / 40 rows, N2 at 0.75). One test shows that an edited excerpt (1.645 → 2.000) is detected.
+- `docs/aipheed/.gitattributes` is `* -text`, so a CRLF conversion cannot change the hash.
+
+**Nothing was missing**: every requested value was found in the repository.
+
+## Phase 1 · Audit: DONE
+
+**Output: `docs/aipheed/AUDIT.md`**, with a data-flow diagram and 9 defects.
+
+**Served model.**
+- Deployment serves `AIPHEED_LEAD2_MODEL=thesis` with `AIPHEED_STRICT_MODEL=1`; the map shows the P0H4 Chapter I risk probability (`data/ch1_engine/rows.csv`).
+- Its Lead-1 metrics reproduce exactly from the export: 70 rows, 14 quarters, Brier 0.1322, accuracy 0.8429 (VERIFIED, `docs/aipheed/served_model_reproduction.txt`).
+- Its Leads 2–4 metrics cannot be reproduced from served artifacts (NOT VERIFIED).
+
+**Fixed.**
+- **D2 (High):** the 6 `joblib.load` sites now go through `app/forecasting/safe_load.py`, which checks a SHA-256 manifest and refuses files outside `models/`.
+- `models/MODEL_MANIFEST.json` records the 3 existing artifacts; no artifact was modified. `backend/models/` is gitignored, so only the manifest is force-added; the artifacts stay local.
+- Tests: `tests/unit/test_safe_load.py` (3, VERIFIED).
+
+**Logged, not fixed** (they need owner approval or carry risk to the served system):
+- D1: the served target is a composite probability;
+- D3: the scikit-learn version of the artifact differs from the pinned version;
+- D4: cwd-relative paths;
+- D5: no single as-of selector in legacy paths;
+- D6: API surface;
+- D9: missing legacy artifact.
+
+**Full suite after phase 1 edits (VERIFIED, `docs/aipheed/phase1_tests.txt`):** 1263 passed, 2 failed, 18 skipped.
+- The 2 failures are `test_e119r2_framework::test_all_validation_checks_pass` and `test_e120_firi_design::test_e120_checks_pass`.
+- Both are experiment self-checks that require `git status` to show no uncommitted changes under `backend/app`.
+- **Classification: intended change** (the edits were uncommitted at run time). Re-checked after commit (phase 2 entry).
+
+## Phases 2–4 · Data, as-of control, target gate, FIRI: DONE
+
+**Output: `docs/aipheed/DATA_INVENTORY.md`.**
+
+**New package: `backend/app/forecasting/`.**
+
+| Module | Purpose |
+|---|---|
+| `evidence.py` | EvidenceStatus, DataState and ReliabilityStatus enums |
+| `as_of.py` | The one selector, strictly before 00:00 PHT on the issue day |
+| `validation.py` | Checks on SWS rounds and LGUs |
+| `sws.py` | Target with binomial SE and the frozen tolerance |
+| `models.py` | PERSIST, TREND-D, SEAS-LLM |
+| `artifact.py` | Hashed JSON artifacts, write-once |
+| `inference.py` | Forecasts from an artifact; never refits; fails loudly |
+| `explain.py` | Exact additive explanation; trigger groups as context |
+| `geography.py` | 142 LGUs and 5 provinces with explicit status |
+| `store.py` | Write-once store keyed by (artifact hash, data vintage, issue date) |
+
+**Supporting files:**
+- Data copy `backend/data/forecasting/sws_area_rounds.csv` (identical to the E110 source).
+- Artifact `backend/data/forecasting/artifacts/seas_llm_2026-10-01.json`.
+- Stored forecast `backend/data/forecasting/forecasts/09ee23b09a0207c8_2026-08-24_2026-10-01.json`.
+- Read-only router `app/api/v1/hunger_forecast.py`, registered additively.
+
+**Exactness (VERIFIED by tests):**
+- The target equals the E131 implementation.
+- SEAS-LLM equals the E132 seal (to 1e-9) and the walk-forward. An ad-hoc run over all 272 P-DASH rows gave a maximum difference of 7e-15.
+
+**Target gate decision.**
+- Balance Luzon / SWS-area claims only. Provincial and LGU estimates are `null` / `AWAITING_GROUND_TRUTH`.
+- The evidence-status enum existed before any model work.
+
+**Tests:** `tests/unit/test_forecasting_core.py` (13). Leak injection demonstrated in `docs/aipheed/leak_injection_demo.txt`.
+
+**Open issues:**
+- Legacy feature paths are not rerouted through `as_of` (AUDIT D5).
+- The NLP pipeline was not re-executed (NOT VERIFIED).
+
+## Phases 5–6 · Model selection and reliability: DONE
+
+**Inputs and outputs:**
+- Rule `SELECTION_RULE.md`, committed before the first run (`c07324e`).
+- Report `MODEL_REPORT.md` and `results/*.csv` (VERIFIED, `python -I backend/scripts/model_report.py`; seed 2026; SHA-256s in `run_config.json`).
+
+**Selected by the rule: PERSIST.** No candidate beats it with a paired 95 % CI above 0:
+
+| Candidate | Δ within vs PERSIST | 95 % CI |
+|---|---|---|
+| SEAS-LLM | +0.05 | [−0.10, +0.20] |
+| HFM-X | +0.10 | [−0.125, +0.325] |
+
+**Reliability:**
+- **Maximum reliable lead: none.** No model passes N1–N7 at any lead.
+- **Lead-2 blockers:** signal absent (best 20/40 within, 30 needed; correlation ≤ 0.25), target lag (h = 3), N5 instability, N1 too few quarters at Leads 3–4.
+
+**Conflict for the owner.** The pre-declared backend rule selects PERSIST, while E134 Addendum 2 (owner-approved) makes SEAS-LLM the prospective primary. The new endpoint serves SEAS-LLM under that approval and shows the latest SWS value (= persistence) in every record. Not changed without approval.
+
+**Test:** the served `reliability_status` is pinned to the mechanical verdict (`test_served_reliability_status_matches_mechanical_verdict`).
+
+## Phases 7–8 · Inference, geography, explanations and API: DONE
+
+**Phase 7** (built in phases 2–4; VERIFIED by `tests/unit/test_forecasting_core.py`).
+- **Inference** loads only the hashed JSON artifact and checks its schema, hash, feature config and preprocessing version. It never refits (a test fails if `fit_seas` is called), validates ranges and fails loudly.
+- **Each record** stores the provenance fields listed in API.md.
+- **Geography:** 142 LGUs and 5 provinces with explicit status. Province codes equal the served dashboard's.
+- **Explanations** are exact and additive (level + design effect). The trigger groups are listed separately as context.
+- **Uncertainty:** Kalman 80 % interval. Development coverage at Lead 2 is 0.725 on 40 rows (MODEL_REPORT).
+
+**Phase 8.**
+- `docs/aipheed/API.md` and `results/api_audit.csv`: 106 routes; 85 GETs smoke-tested.
+- **Fixed D10 (High):** two unhandled 500s on the legacy assessments routes, caused by a missing artifact, now return 503 with a JSON message.
+- No secrets in bodies. All admin routes are guarded; the only unguarded writes are the public auth and feedback routes.
+
+## Phases 9–12 · Tests, security and performance, E2E, documentation: DONE
+
+**Phase 9:** 1280 passed, 0 failed, 18 skipped (pre-existing skips; VERIFIED, `final_tests.txt`). 22 new tests. Coverage **not measured** (no coverage tool in the virtual environment).
+
+**Phase 10:** D2 and D10 fixed; secrets, timeouts and caching reviewed (`ARCHITECTURE.md`).
+
+**Phase 11:** two E2E runs are byte-identical (VERIFIED, `results/e2e_run.json`).
+
+**Phase 12:** METHODOLOGY, ARCHITECTURE, DATA_INVENTORY, MODEL_REPORT, API, TEST_REPORT and FINAL_REPORT written.
+
+**Verdicts:**
+- **A software:** YES.
+- **B research:** NO. 75 % not met (best 50 %); Lead 2 not reliable; maximum reliable lead none.
+- **C data:** unseen SWS quarters, a leading indicator of hunger change, and a provincial measurement.
+
+**Awaiting the owner:**
+1. PERSIST (rule-selected) or SEAS-LLM (Addendum 2) on the new endpoint.
+2. D1, the served dashboard target.
+3. D3, rebuilding the thesis pickle under the pinned scikit-learn.
+
+**Final commit:** `9171949` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work (verified below).
+
+---
+
+# v2: final methodology redesign (started 2026-11-01)
+
+**Start state:** branch `impl/backend-completion` @ `9f975ec`; only the 15 pre-existing untracked paths. Protocol lock verified at start: `tests/unit/test_protocol_lock.py` 4 passed, `PROTOCOL_LOCK.md` SHA-256 `8bae6962…dd0d3` (VERIFIED).
+
+## WP1 · Step 1 diagnosis and Gate 1: DONE
+- `backend/scripts/v2_diagnosis.py` → `docs/aipheed/v2/results/` (VERIFIED); `docs/aipheed/v2/DIAGNOSIS.md`.
+- Alignment re-verified (272/272 rows identical to E136; planted shift detected).
+- **Gate 1: 75 % at Lead 2 NOT ACHIEVABLE with existing measurements.** Known-current-true-level bound 42.5 %; a predictor must explain ≈ 85 % of the true 3-quarter change variance; no repeatable leading signal (ONI = one 2023–24 episode); 10 quarters give a ±14.5 pp CI.
+
+## WP2 · Steps 2–3 design and pre-registration: DONE
+- `docs/aipheed/v2/PREREGISTRATION.md` committed **before any v2 fit**; SHA-256 (LF-normalised) `90ad51a9…a691b` frozen in `backend/tests/unit/test_v2_preregistration.py`.
+- Candidates: PERSIST, LL (pooled local level, 1 parameter), LL-K (+ noise multiplier κ, 2 parameters). Nested inner-fold selection with the paired block-bootstrap CI rule; split-conformal 80 % intervals; sealed set = future data only (0 unseen historical quarters).
+
+## WP3 · Step 4 implementation and validation: DONE
+- `backend/app/forecasting/v2/` (models, select, verdict, artifact, inference, explain, store); `backend/scripts/v2_validate.py`, `v2_seal.py`, `v2_score_sealed.py`, `v2_context.py`.
+- **Nested selection chose PERSIST at all 22 issues** (no challenger's inner CI above 0). V2 Lead 2: 16/40 = 40.0 % [25.0, 57.5]; every lead NOT_RELIABLE (development). LL equals the independent E131 local level on 272/272 rows (< 1e-9).
+- Prospective seal `docs/aipheed/v2/sealed/V2_PROSPECTIVE_SEAL.csv` (issues 2026-07-01 and 2026-10-01; 112 rows; targets 2026-Q4 … 2027-Q3), SHA-256 `e88f7bb2…25d7`. The scorer ran once: 0 rows scorable (NOT_YET_TESTABLE).
+- Served artifact `backend/data/forecasting/artifacts/v2_2026-10-01.json` (PERSIST) and stored forecasts under `forecasts_v2/`. Deviations: `docs/aipheed/v2/DEVIATIONS.md` (2, both non-substantive).
+
+## WP4 · Step 5 integration and defect fixes: DONE
+- **API (additive):** `/api/v1/hunger-forecast/v2`, `/v2/explanation`, `/v2/geography`. The legacy SEAS-LLM routes are kept, with their status marked superseded.
+- **P0H4 relabelled** "Price-pressure risk index" in `ch1_system.INDICATOR`: computation and `id` unchanged; pointer to the v2 hunger forecast added. Frontend copy is not changed (owner decision).
+- **D3:** the thesis pickle was re-exported under scikit-learn 1.8.0 to `models/thesis_food_insecurity_model_skl180.joblib` (new manifest entry; original kept). Scores are identical on all 135 panel rows and there is no version warning. The loaders point at the re-export.
+- **D4:** `app/paths.py`. Rewritten: 142 literals in 48 modules, plus `config.py` (`.env` and relative SQLite resolve against `backend/`). The API is identical from `backend/` and from the repo root (test).
+  - **Two exceptions, reverted and documented:**
+    - `app/ml/inference/firi.py` is hash-frozen by 7 experiment guard tests;
+    - `app/tasks/scheduler.py` monthly refresh: its test sandboxes by `chdir`.
+- **D9:** `models/lgbm_best.pkl` exists in history (`c06cbf1d`, `b299ea8d`) but was deliberately removed in `8725531e` (abandoned pipeline). It was **not** restored; it still fails loudly (test). Restoring it is the owner's call.
+- **Leak tests for legacy paths:** FIRI v2 normalisation history, news `asof`, dashboard cutoff (`tests/unit/test_v2_legacy_leakage.py`).
+- **Full suite before the reverts:** 10 failed / 1294 passed / 18 skipped (`v2/results/tests_after_d4.txt`):
+  - 2 were the git-clean self-checks (pass after commit);
+  - 7 were the `firi.py` hash guards (fixed by reverting `firi.py`);
+  - 1 was the scheduler sandbox (fixed by reverting `scheduler.py`).
+
+## WP5 · Step 6 tests, coverage, acceptance and documentation: DONE
+- **Full suite:** 1317 passed, 0 failed, 18 skipped (pre-existing) (`v2/results/final_tests_v2.txt`, VERIFIED); 37 new v2 tests.
+- **Coverage (stdlib tracer, measured):** 88.4 % (918/1038) of `app/forecasting/**`, the hunger-forecast router and `app/paths.py`; v2 90.9 %.
+- **Mutation check:** 5/5 planted bugs killed. **E2E:** 4 runs identical; artifact, store, API and seal reproduced. Validation rerun gives byte-identical results.
+- **Hashes at the end:** protocol lock, pre-registration and seal all unchanged.
+- **Docs:** `v2/{METHODOLOGY_V2, MODEL_REPORT_V2, TEST_REPORT, FINAL_REPORT}.md`; API, ARCHITECTURE and DATA_INVENTORY updated; the old FINAL_REPORT points to v2.
+- **Verdicts:** A software YES. B research NO (Gate 1 not achievable; 40.0 % at Lead 2, development; future NOT_YET_TESTABLE; maximum reliable lead none). C data: ≥ 10 unseen quarters (about 2029-05), a leading indicator, provincial measurement.
+
+**Final commit:** `808544c` on `impl/backend-completion`. `git status` after it: only the 15 untracked paths that predate this work.
+
+## v3 · Protocol validity study (no model or protocol change): DONE
+- `backend/scripts/v3_protocol_validity.py` → `docs/aipheed/v3/results/`; `docs/aipheed/v3/PROTOCOL_VALIDITY.md`; `PROTOCOL_AMENDMENT_DRAFT.md` (draft, not active).
+- The frozen tolerance is 0.68 × the published margin and narrower than the 95 % least significant difference on 40/40 Lead-2 rows. If hunger never changed, persistence would still score only 76.7 %.
+- **Lead-2 oracle (all-data q / pre-surge q):** frozen 0.43/0.60; b1 0.51/0.70; b2 (published margin) 0.59/0.78. Bands and direction pass only through base rates. A one-quarter nowcast against the published margin has oracle 0.83 and persistence 0.74.
+- 8 early-round margins (2021-Q2 … 2023-Q1) are assumed (NOT VERIFIED). Lock, pre-registration and seal hashes unchanged.
+
+---
+
+# v4: final build on a legitimate footing (started 2026-11-01)
+
+Start: protocol lock verified (`8bae6962…dd0d3`); `test_protocol_lock.py` + `test_v2_preregistration.py` 6 passed.
+
+## v4 WP1 · Steps A–C: DONE
+- `v4/TARGET_OPTIONS.md`: SWS is the only quarterly food-insecurity series. No held or obtainable source adds Lead-2 test observations faster than about 4 area rows per quarter.
+- `v4/EVALUATION_DESIGN.md`: the ±15 pp test needs 10 future quarters (about 2029-05); ±10 pp needs 22 (about 2032-05). Unseen today: 0.
+- `v4/PREREGISTRATION.md`, committed before any v4 fit; hash in `test_v4_preregistration.py`.
+
+## v4 WP2 · Steps D–F build: DONE (development)
+- `app/forecasting/v4/` (`features`, `models` DELTA-X, `select`, `verdict`, `serving`); scripts `v4_features.py`, `v4_validate.py`, `v4_seal.py`, `v4_score_sealed.py`, `v4_e2e.py`. Routes `/api/v1/hunger-forecast/v4{,/explanation,/geography}`.
+- **Rule chose PERSIST at all 22 issues.** DELTA-X features entered at 34 of 84 issue × lead fits (mostly ONI) but did not help: Lead-2 0.375 vs 0.40.
+- **Development results:** V4 Lead 2 40.0 % [block CI 22.5, 62.5]; amended (proposed) 50.0 %; beats all = NO; every lead NOT_RELIABLE. Sealed: NOT_YET_TESTABLE (0 scorable).
+- Seal `v4/sealed/V4_PROSPECTIVE_SEAL.csv` `7ac72fec…`. Artifact `v4_2026-10-01.json` `29c9fd36…`.
+- E2E: two runs identical. Coverage 89.4 % (v4 package measured).
+
+## v4 WP3 · Reports and acceptance: DONE
+- Full suite: 1331 passed, 0 failed, 18 skipped. Coverage 89.4 % (v4 package 91.5 %). E2E identical. All hashes unchanged at the end.
+- **Verdicts:**
+  - A software: YES.
+  - B research: development NO on frozen (40 %), amended (50 %) and beats-all; sealed NOT_YET_TESTABLE.
+  - C data: 10 sealed quarters (about 2029-05; ±10 pp about 2032-05); a RIDGE-ALL prospective forecast before about 2027-01; adviser sign-off for the amendment; SWS round documentation.
+
+**v4 final commit:** `38486b4` on `impl/backend-completion`. `git status` after it: only the 15 pre-existing untracked paths.

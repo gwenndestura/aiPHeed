@@ -1,0 +1,230 @@
+{
+ "written_utc": "2026-11-02T16:06:56+00:00",
+ "sets": {
+  "gov_only": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc"
+  ],
+  "news_only": [
+   "hunger_last",
+   "na_market",
+   "na_climate",
+   "na_employment",
+   "na_remittance",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ],
+  "gov_plus_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_market",
+   "na_climate",
+   "na_employment",
+   "na_remittance",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ],
+  "minus_market_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_climate",
+   "na_employment",
+   "na_remittance",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ],
+  "minus_climate_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_market",
+   "na_employment",
+   "na_remittance",
+   "na_poverty",
+   "na_displaced"
+  ],
+  "minus_employment_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_market",
+   "na_climate",
+   "na_remittance",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ],
+  "minus_remittance_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_market",
+   "na_climate",
+   "na_employment",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ],
+  "minus_poverty_news": [
+   "hunger_last",
+   "hunger_last_anom",
+   "hunger_age_q",
+   "cpi_food_yoy",
+   "cpi_rice_yoy",
+   "palay_yoy",
+   "rain_anom_3m",
+   "tc_exposure_q",
+   "oni",
+   "unemp_rate",
+   "unemp_yoy",
+   "remit_yoy",
+   "poverty_inc",
+   "na_market",
+   "na_climate",
+   "na_employment",
+   "na_remittance",
+   "na_climate_damage"
+  ],
+  "nlp_archive": [
+   "na_market",
+   "na_climate",
+   "na_employment",
+   "na_remittance",
+   "na_poverty",
+   "na_climate_damage",
+   "na_displaced"
+  ]
+ },
+ "specs": {
+  "Government only": [
+   "reg",
+   "gov_only"
+  ],
+  "News only": [
+   "reg",
+   "news_only"
+  ],
+  "Government + news": [
+   "reg",
+   "gov_plus_news"
+  ],
+  "Government + news without market news": [
+   "reg",
+   "minus_market_news"
+  ],
+  "Government + news without climate news": [
+   "reg",
+   "minus_climate_news"
+  ],
+  "Government + news without employment news": [
+   "reg",
+   "minus_employment_news"
+  ],
+  "Government + news without remittance news": [
+   "reg",
+   "minus_remittance_news"
+  ],
+  "Government + news without poverty news": [
+   "reg",
+   "minus_poverty_news"
+  ],
+  "NLP-only baseline (classifier, archive news)": [
+   "clf_lgbm",
+   "nlp_archive"
+  ],
+  "Naive persistence": [
+   "persist",
+   null
+  ],
+  "Climatology (base rate)": [
+   "clim",
+   null
+  ]
+ },
+ "news_features": {
+  "na_market": "risk_share_market",
+  "na_climate": "risk_share_climate",
+  "na_employment": "risk_share_employment",
+  "na_remittance": "risk_share_remittance",
+  "na_poverty": "risk_share_poverty",
+  "na_climate_damage": "climate_damage_log",
+  "na_displaced": "displaced_families_log"
+ },
+ "min_history": 8,
+ "decision_rule": "news helps only if the 95% block-bootstrap CI of Brier(Government + news) - Brier(Government only) is below 0",
+ "features_sha256": "abc0e59c5cc5265ccb0dcec181057632d3f0bb04cc11bd9b526e81cb1ff88d3e",
+ "code_sha256": {
+  "app/fi6/news_archive.py": "11e09f9e9f8ca1d74487c036470923616edd5449116d1a6bdf851d6f72def08c",
+  "app/fi6/news_events.py": "c5379ed4a820893897fc09d0a37c89df707d0aa4a45155f51e7a297a28048045",
+  "app/fi6/news_model.py": "ebd85bd87db389a8886a98066ce9760badbaf4d73ecfcc1fd415fa580a08039a",
+  "app/fi6/models.py": "1942ba9709213c3c591e51c2542d7c25b1c20e1899367e45f958ed3b996aba22",
+  "app/fi6/features.py": "5c987f09e114922d1fc1b274e5727cd707ca7308cd25bb548fa28c54e4b663b6"
+ },
+ "lock_sha256": "b10406be612010dd74fa6b939386efad33edc5d4041ceec575ac190d48c4f059"
+}

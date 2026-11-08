@@ -1,0 +1,45 @@
+{
+  "total_rows": 20,
+  "provinces": [
+    "PH040100000",
+    "PH040200000",
+    "PH040300000",
+    "PH040400000",
+    "PH040500000"
+  ],
+  "quarters": [
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4"
+  ],
+  "label_stress": {
+    "positive": 10,
+    "negative": 10,
+    "positive_rate": 0.5
+  },
+  "label_cpi_robustness": {
+    "positive": 20,
+    "negative": 0,
+    "positive_rate": 1.0
+  },
+  "label_agreement_pct": 50.0,
+  "label_definition": {
+    "primary": "stress_score_p,t = sws_hunger_t + 2 * (food_cpi_yoy_p,t - regional_mean_food_cpi_yoy_t); label_stress = 1 if stress_score > global_median",
+    "robustness": "label_cpi = 1 if food_cpi > rolling_24q_mean + 1\u03c3 for >= 2 consecutive quarters"
+  },
+  "sources": {
+    "primary_label_temporal": "SWS quarterly Hunger Survey (1998-present)",
+    "primary_label_spatial": "PSA OpenStat food CPI YoY by province",
+    "robustness_label": "PSA OpenStat food CPI rolling deviation"
+  },
+  "fao_sdg_2_1_2_anchor": {
+    "note": "DOST-FNRI ENNS FIES regional baseline \u2014 NOT used in label generation. Cited as context in thesis intro to establish CALABARZON's elevated food insecurity prevalence per FAO SDG 2.1.2 methodology.",
+    "values": {
+      "NNS_2025": {
+        "moderate_or_severe_pct": 22.6,
+        "severe_pct": null
+      }
+    }
+  }
+}

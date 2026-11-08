@@ -1,0 +1,27 @@
+table,column,meaning,unit,resolution,source,availability_rule,status_column
+provincial_profile,A1_food_frozen,food-price projection minus frozen 2021-22 P60 (served definition),pp,province,PSA CPI,CPI to month 2 of t,cpi_release_status
+provincial_profile,A1_food_asof,same projection minus P60 of quarters published before the issue,pp,province,PSA CPI,as above; thresholds from published quarters only,threshold_status
+provincial_profile,A1_gap_frozen / A1_gap_asof,food-minus-headline projection minus frozen / as-of P60,pp,province,PSA CPI,as above,threshold_status
+provincial_profile,A2_frozen / A2_asof,headline YoY minus frozen / as-of headline P60,pp,province,PSA CPI,months 1-2 of t,threshold_status
+provincial_profile,threshold_quarters_asof,quarters in the as-of threshold window,count,province,PSA CPI,"complete quarter, day-10 rule",threshold_status
+provincial_profile,A_status,combined status of A1/A2: threshold sufficiency and archived CPI release before issue,status,province,derived,-,-
+provincial_profile,cpi_release_status,archived PSA release of the newest CPI month before the issue,status,province,Wayback PSA pages,printed release < issue,-
+provincial_profile,cpi_vintage_status,whether the 2018=100 series is shown public at the issue,status,province,Wayback PSA pages,2022-06-07,-
+provincial_profile,A3_rice_yoy,wholesale rice price YoY (quarter t-1),%,province,PSA,rule t-1,A3_status
+provincial_profile,C2_tc_300km,typhoons within 300 km of the province centroid in quarter t (served),count,province,IBTrACS,quarter complete,C2_status
+provincial_profile,C2_tc_local_100km,typhoons within 100 km of the centroid (local exposure),count,province,IBTrACS raw (E114),quarter complete,C2_status
+provincial_profile,C3_palay_corn_drop,minus lower of palay/corn YoY (t-1),%,province,PSA,rule t-1,C3_status
+provincial_profile,C4_fish_drop,minus fisheries production YoY (t-1),%,province,PSA,rule t-1,C4_status
+provincial_profile,E1_prov_unemployment_annual,annual provincial unemployment rate of an earlier year,%,"province, annual",PSA (owner file),year < issue year; publication date unknown,E1_prov_status
+provincial_profile,E1_prov_underemployment_annual,annual provincial underemployment rate,%,"province, annual",PSA (owner file),as above,E1_prov_status
+provincial_profile,N1_fssi / N1_admitted_articles,FSSI-v3 news index and the admitted articles behind it,index / count,province,aiPHeed corpus,published before issue,N1_status
+provincial_profile,V1_vulnerability_profile,"0.6 poverty + 0.4 density (structural profile, not dynamic)",0-1,province (from 142 LGUs),"PSA SAE 2021, POPCEN 2024",public from 2025-07-01,V1_status
+national_context,C1_el_nino_in_force,PAGASA El Nino alert/advisory in force,0/1,national,PAGASA,items before issue,C1_status
+national_context,E1_national_unemployment_change,national unemployment change,pp,national,PSA LFS,rule t-1,E1_status
+national_context,E2_remit_decline_pct,minus YoY of national OFW cash remittances (t-1),%,national,BSP via news reports,first dated report,E2_status
+national_context,H1_balance_luzon_outlook,regional hunger outlook (Balance Luzon),probability,region,SWS,rounds posted before issue,H1_status
+regional_forecast_panel,y / h_last / MR / d_last / stale,SWS hunger target and its history by area,% / quarters,SWS area,SWS,published before issue,sws_release_status
+regional_forecast_panel,AF_food / AF_gap / AF_dfood,"area food CPI YoY, food-minus-headline, 1-year change",pp,SWS area,PSA OpenSTAT,day-10 rule,cpi_vintage
+regional_forecast_panel,F_yoy / F_dyoy,area fisheries production YoY (t-1) and change,%,SWS area,PSA OpenSTAT,rule t-1,F_yoy_status
+regional_forecast_panel,PAL_yoy,area palay YoY (t-1),%,SWS area (no NCR),PSA OpenSTAT,rule t-1,PAL_yoy_status
+regional_forecast_panel,P-RICE / C-ONI / C_nino / C-TC / P-UNEMP / N-SUP / N-AST,"national rice CPI, ENSO, typhoons, unemployment, news",mixed,national,PSA / NOAA / IBTrACS / GDELT,E114 rules,"P-UNEMP_status, N_status"

@@ -1,0 +1,20 @@
+== P0H4 Lead-2 outcome types: {'TN': 44, 'FN': 11, 'TP': 6, 'FP': 4}
+== missed HIGH by cause: {'hunger': 4, 'price': 4, 'both': 3}
+== error patterns:
+   FN x3: persistent high hunger; price shock after issue (no issue-time price warning)
+   FN x1: persistent high hunger; structural price projection pointed HIGH but the model said LOW
+   FN x3: sudden hunger increase and price rise both after issue (no credible early warning)
+   FN x4: sudden hunger increase; price risk flagged before hunger (food-price surge preceding hunger)
+   FP x4: persistent high hunger; price condition did not materialise
+== news at issue for the 11 missed HIGH rows: available 1 of 11 | news coverage on all Lead-2 rows: 0.17
+== product rule: rows with both components >= 0.5: 23; product < 0.5 among them: 13 (HIGH among those: 0)
+   hunger condition, Lead 2 (13 quarters): pi_H4 (served)                         correct 10/13 Brier 0.137 onset values [0.221, 0.402]
+   hunger condition, Lead 2 (13 quarters): pi_H0 (UNI-FINAL)                      correct 10/13 Brier 0.135 onset values [0.258, 0.288]
+   hunger condition, Lead 2 (13 quarters): persistence: latest > 11.3             correct 10/13 Brier 0.231 onset values [0.0, 0.0]
+   hunger condition, Lead 2 (13 quarters): latest + last change > 11.3            correct 7/13 Brier 0.462 onset values [0.0, 0.0]
+   hunger condition, Lead 2 (13 quarters): either of last two readings > 11.3     correct 9/13 Brier 0.308 onset values [0.0, 0.0]
+== four-area sigma (true horizon 3, all errors known by 2026-Q3): 56 pooled errors from 14 common start quarters; mean cross-area error correlation 0.51; design effect 2.52; effective independent errors ~22.2
+   per-area RMSE: {'NCR': 4.36, 'BL': 5.01, 'VIS': 6.79, 'MIN': 9.82} | BL-only RMSE vs pooled: 5.01 6.83
+== SWS design shift: BL mean 2023-Q4..2025-Q1 18.5 (sd 4.3, n 5) vs 2025-Q2+ 20.0 (sd 3.6, n 6); share > 11.3: 1.00 vs 1.00; quarter-to-quarter |change| 3.5 vs 6.4
+   P0H4 Lead 2 targets < 2025-Q2: rows 35 quarters 7 HIGH 11 acc 0.686 recall 1/11 hunger-true quarters 5/7
+   P0H4 Lead 2 targets >= 2025-Q2: rows 30 quarters 6 HIGH 6 acc 0.867 recall 5/6 hunger-true quarters 6/6

@@ -1,0 +1,73 @@
+{
+ "errors_by_pattern": {
+  "CR": {
+   "price_fell_after_issue": 5,
+   "hunger_cap": 3,
+   "price_rose_after_issue": 3,
+   "model_behaviour": 2
+  },
+  "B0": {
+   "model_behaviour": 5,
+   "hunger_cap": 3,
+   "price_fell_after_issue": 3,
+   "price_rose_after_issue": 2
+  }
+ },
+ "n_errors": {
+  "CR": 13,
+  "B0": 13
+ },
+ "decomposition_lead2": {
+  "P0H4": {
+   "hunger_part_accuracy": 0.7846153846153846,
+   "price_part_accuracy": 0.6,
+   "price_part_accuracy_on_hunger_rows": 0.6181818181818182,
+   "price_part_recall_on_price_high": 0.5384615384615384,
+   "price_part_false_alarm_rate": 0.358974358974359
+  },
+  "B0": {
+   "hunger_part_accuracy": 0.8461538461538461,
+   "price_part_accuracy": 0.6,
+   "price_part_accuracy_on_hunger_rows": 0.6181818181818182,
+   "price_part_recall_on_price_high": 0.5384615384615384,
+   "price_part_false_alarm_rate": 0.358974358974359
+  },
+  "CR": {
+   "hunger_part_accuracy": 0.8461538461538461,
+   "price_part_accuracy": 0.6923076923076923,
+   "price_part_accuracy_on_hunger_rows": 0.7272727272727273,
+   "price_part_recall_on_price_high": 0.6923076923076923,
+   "price_part_false_alarm_rate": 0.3076923076923077
+  }
+ },
+ "oracle_lead2_accuracy": {
+  "true_hunger_x_CR_price": 0.7692307692307693,
+  "CR_hunger_x_true_price": 0.9384615384615385
+ },
+ "cap_cases": [
+  {
+   "province": "Laguna",
+   "target_quarter": "2023-Q4",
+   "sws_used_at_reissue": "2023-Q2",
+   "h_last_at_reissue": 11.3,
+   "pi_hunger": 0.5,
+   "H_realised": 14.3
+  },
+  {
+   "province": "Quezon",
+   "target_quarter": "2023-Q4",
+   "sws_used_at_reissue": "2023-Q2",
+   "h_last_at_reissue": 11.3,
+   "pi_hunger": 0.5,
+   "H_realised": 14.3
+  },
+  {
+   "province": "Batangas",
+   "target_quarter": "2023-Q4",
+   "sws_used_at_reissue": "2023-Q2",
+   "h_last_at_reissue": 11.3,
+   "pi_hunger": 0.5,
+   "H_realised": 14.3
+  }
+ ]
+}

@@ -1,0 +1,121 @@
+{
+ "protocol_sha256_lf": "eb305b636dd7cc3cec32bd9a11ca8174ed7e29239c98e8d23fae80bebce3d487",
+ "n_rows": 85,
+ "quarters": [
+  "2022-Q2",
+  "2022-Q3",
+  "2022-Q4",
+  "2023-Q1",
+  "2023-Q2",
+  "2023-Q3",
+  "2023-Q4",
+  "2024-Q1",
+  "2024-Q2",
+  "2024-Q3",
+  "2024-Q4",
+  "2025-Q2",
+  "2025-Q3",
+  "2025-Q4",
+  "2026-Q1",
+  "2026-Q2",
+  "2026-Q3"
+ ],
+ "stress_var_total": 38.045172472126104,
+ "stress_var_between_quarters": 26.8718339100346,
+ "stress_var_share_between": 0.7063138938250922,
+ "stress_quarter_mean_equals_sws": true,
+ "base_rate": {
+  "L-COMP": 0.49411764705882355,
+  "L-SWS": 0.47058823529411764,
+  "L-CPI": 0.8235294117647058
+ },
+ "base_rate_eval_rows": {
+  "L-COMP": 0.78,
+  "L-SWS": 0.8,
+  "L-CPI": 0.86
+ },
+ "base_rate_before_eval_rows": {
+  "L-COMP": 0.08571428571428572,
+  "L-SWS": 0.0,
+  "L-CPI": 0.7714285714285715
+ },
+ "quarters_all_5_same": {
+  "L-COMP": 0.5294117647058824,
+  "L-SWS": 1.0,
+  "L-CPI": 0.47058823529411764
+ },
+ "P_LCPI_given_prev_flag_0": 0.0,
+ "P_LCPI_given_prev_flag_1": 0.9375,
+ "L_SWS_L_CPI_agreement": 0.5294117647058824,
+ "L_SWS_L_CPI_phi": 0.1272937693043289,
+ "L_COMP_L_SWS_agreement": 0.8352941176470589,
+ "L_COMP_L_CPI_agreement": 0.5764705882352941,
+ "panel_label_stress_equals_cpi_rule": {
+  "rows": 135,
+  "equal": 135,
+  "base_rate_from_2024": 0.9454545454545454
+ },
+ "unemployment_quarters_with_provincial_variation": 0
+}
+    lead   label         model   n  base_rate  accuracy  balanced_accuracy  precision  recall     f1    auc  brier  quarters_with_a_fit  quarters
+0      1  L-COMP   ALWAYS-HIGH  50       0.78      0.78              0.500      0.780   1.000  0.876  0.500  0.220                  NaN       NaN
+1      1  L-COMP    ALWAYS-LOW  50       0.78      0.22              0.500        NaN   0.000  0.000  0.500  0.780                  NaN       NaN
+2      1  L-COMP       PERSIST  50       0.78      0.66              0.586      0.824   0.718  0.767  0.586  0.340                  NaN       NaN
+3      1  L-COMP    LGBM F-ALL  50       0.78      0.34              0.577      1.000   0.154  0.267  0.577  0.390                 10.0      10.0
+4      1  L-COMP  LGBM F-NOCPI  50       0.78      0.40              0.550      0.846   0.282  0.423  0.576  0.362                 10.0      10.0
+5      1   L-SWS   ALWAYS-HIGH  50       0.80      0.80              0.500      0.800   1.000  0.889  0.500  0.200                  NaN       NaN
+6      1   L-SWS    ALWAYS-LOW  50       0.80      0.20              0.500        NaN   0.000  0.000  0.500  0.800                  NaN       NaN
+7      1   L-SWS       PERSIST  50       0.80      0.60              0.562      0.833   0.625  0.714  0.562  0.400                  NaN       NaN
+8      1   L-SWS    LGBM F-ALL  50       0.80      0.60              0.750      1.000   0.500  0.667  0.719  0.370                  4.0      10.0
+9      1   L-SWS  LGBM F-NOCPI  50       0.80      0.60              0.750      1.000   0.500  0.667  0.719  0.368                  4.0      10.0
+10     1   L-CPI   ALWAYS-HIGH  50       0.86      0.86              0.500      0.860   1.000  0.925  0.500  0.140                  NaN       NaN
+11     1   L-CPI    ALWAYS-LOW  50       0.86      0.14              0.500        NaN   0.000  0.000  0.500  0.860                  NaN       NaN
+12     1   L-CPI       PERSIST  50       0.86      0.76              0.502      0.860   0.860  0.860  0.502  0.240                  NaN       NaN
+13     1   L-CPI    LGBM F-ALL  50       0.86      0.84              0.488      0.857   0.977  0.913  0.462  0.133                 10.0      10.0
+14     1   L-CPI  LGBM F-NOCPI  50       0.86      0.86              0.500      0.860   1.000  0.925  0.312  0.136                 10.0      10.0
+15     2  L-COMP   ALWAYS-HIGH  50       0.78      0.78              0.500      0.780   1.000  0.876  0.500  0.220                  NaN       NaN
+16     2  L-COMP    ALWAYS-LOW  50       0.78      0.22              0.500        NaN   0.000  0.000  0.500  0.780                  NaN       NaN
+17     2  L-COMP       PERSIST  50       0.78      0.58              0.600      0.846   0.564  0.677  0.600  0.420                  NaN       NaN
+18     2  L-COMP    LGBM F-ALL  50       0.78      0.30              0.551      1.000   0.103  0.186  0.610  0.433                  9.0      10.0
+19     2  L-COMP  LGBM F-NOCPI  50       0.78      0.34              0.544      0.875   0.179  0.298  0.605  0.410                  9.0      10.0
+20     2   L-SWS   ALWAYS-HIGH  50       0.80      0.80              0.500      0.800   1.000  0.889  0.500  0.200                  NaN       NaN
+21     2   L-SWS    ALWAYS-LOW  50       0.80      0.20              0.500        NaN   0.000  0.000  0.500  0.800                  NaN       NaN
+22     2   L-SWS       PERSIST  50       0.80      0.50              0.500      0.800   0.500  0.615  0.500  0.500                  NaN       NaN
+23     2   L-SWS    LGBM F-ALL  50       0.80      0.24              0.525      1.000   0.050  0.095  0.719  0.533                  3.0      10.0
+24     2   L-SWS  LGBM F-NOCPI  50       0.80      0.24              0.525      1.000   0.050  0.095  0.719  0.520                  3.0      10.0
+25     2   L-CPI   ALWAYS-HIGH  50       0.86      0.86              0.500      0.860   1.000  0.925  0.500  0.140                  NaN       NaN
+26     2   L-CPI    ALWAYS-LOW  50       0.86      0.14              0.500        NaN   0.000  0.000  0.500  0.860                  NaN       NaN
+27     2   L-CPI       PERSIST  50       0.86      0.76              0.502      0.860   0.860  0.860  0.502  0.240                  NaN       NaN
+28     2   L-CPI    LGBM F-ALL  50       0.86      0.86              0.500      0.860   1.000  0.925  0.251  0.146                  9.0      10.0
+29     2   L-CPI  LGBM F-NOCPI  50       0.86      0.86              0.500      0.860   1.000  0.925  0.198  0.147                  9.0      10.0
+    lead   label                model               stat     lo     hi
+0      1  L-COMP                F-ALL                auc  0.338  0.676
+1      1  L-COMP                F-ALL  balanced_accuracy  0.500  0.622
+2      1  L-COMP              F-NOCPI                auc  0.269  0.720
+3      1  L-COMP              F-NOCPI  balanced_accuracy  0.348  0.636
+4      1  L-COMP  F-ALL minus F-NOCPI           auc_diff -0.138  0.167
+5      1   L-SWS                F-ALL                auc  0.071  0.906
+6      1   L-SWS                F-ALL  balanced_accuracy  0.500  0.900
+7      1   L-SWS              F-NOCPI                auc  0.071  0.906
+8      1   L-SWS              F-NOCPI  balanced_accuracy  0.500  0.900
+9      1   L-SWS  F-ALL minus F-NOCPI           auc_diff  0.000  0.000
+10     1   L-CPI                F-ALL                auc  0.375  0.780
+11     1   L-CPI                F-ALL  balanced_accuracy  0.461  0.500
+12     1   L-CPI              F-NOCPI                auc  0.180  0.633
+13     1   L-CPI              F-NOCPI  balanced_accuracy  0.500  0.500
+14     1   L-CPI  F-ALL minus F-NOCPI           auc_diff  0.117  0.256
+15     2  L-COMP                F-ALL                auc  0.406  0.736
+16     2  L-COMP                F-ALL  balanced_accuracy  0.500  0.591
+17     2  L-COMP              F-NOCPI                auc  0.431  0.742
+18     2  L-COMP              F-NOCPI  balanced_accuracy  0.488  0.631
+19     2  L-COMP  F-ALL minus F-NOCPI           auc_diff -0.063  0.020
+20     2   L-SWS                F-ALL                auc  0.125  1.000
+21     2   L-SWS                F-ALL  balanced_accuracy  0.000  0.529
+22     2   L-SWS              F-NOCPI                auc  0.125  1.000
+23     2   L-SWS              F-NOCPI  balanced_accuracy  0.060  0.544
+24     2   L-SWS  F-ALL minus F-NOCPI           auc_diff  0.000  0.000
+25     2   L-CPI                F-ALL                auc  0.000  0.480
+26     2   L-CPI                F-ALL  balanced_accuracy  0.500  0.500
+27     2   L-CPI              F-NOCPI                auc  0.000  0.397
+28     2   L-CPI              F-NOCPI  balanced_accuracy  0.500  0.500
+29     2   L-CPI  F-ALL minus F-NOCPI           auc_diff -0.003  0.239

@@ -1,0 +1,17 @@
+{
+ "issue": "2026-Q4",
+ "status": "staged",
+ "model": "e168-lgbm-1.0",
+ "procedure": "app.e168.serve._forecast (frozen E168, validation feature path)",
+ "created_utc": "2026-11-07T05:53:50+00:00",
+ "inputs_sha256": {
+  "e152/out/local_panel.parquet": "01025bdc0972a1302186ab5d9331924dc3c10854146478b0d932f70d6671e44f",
+  "e151/out/news_panel.parquet": "2a5228a5887eae7efeb051e8aa3fcc44fdfbb4943f492540bc4515f0876ee7f1",
+  "hfias/clean/enns_hfias.csv": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3"
+ },
+ "freshness": {
+  "provincial_panel_newest_quarter": "2026-Q4"
+ },
+ "live_sha256": "d968878b610e6d2e4433e6f1b1f40ccb9d728389559dc745b3d996c34cf155cd",
+ "promote": "python -m app.e168.regenerate promote --issue 2026-Q4 --approver \"<name>\""
+}

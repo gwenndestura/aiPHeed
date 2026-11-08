@@ -1,0 +1,28 @@
+task,model,role,lead,trained,n_train_rows,n_eval_rows,train_mae,oos_mae,status
+quarterly provincial risk score,M1_LightGBM,proposed (LightGBM regression),1,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M1_LightGBM,proposed (LightGBM regression),2,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M1_LightGBM,proposed (LightGBM regression),3,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M1_LightGBM,proposed (LightGBM regression),4,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M2_Persistence,baseline,1,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M2_Persistence,baseline,2,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M2_Persistence,baseline,3,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M2_Persistence,baseline,4,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M3_PSA_only,baseline,1,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M3_PSA_only,baseline,2,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M3_PSA_only,baseline,3,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M3_PSA_only,baseline,4,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M4_NLP_only,baseline,1,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M4_NLP_only,baseline,2,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M4_NLP_only,baseline,3,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M4_NLP_only,baseline,4,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M5_Linear,baseline (continuous counterpart of logistic regression),1,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M5_Linear,baseline (continuous counterpart of logistic regression),2,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M5_Linear,baseline (continuous counterpart of logistic regression),3,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+quarterly provincial risk score,M5_Linear,baseline (continuous counterpart of logistic regression),4,False,0,0,,,not evaluable: gate BLOCKED (no quarterly provincial reference; G3/G8 fail)
+survey-year provincial PFDR,S1_persistence,survey-year forecaster,next round,False,0,5,,,non-learned; sealed
+survey-year provincial PFDR,S2_two_round_mean,survey-year forecaster,next round,False,0,5,,,non-learned; sealed
+survey-year provincial PFDR,S3_eb_shrunk_2023,survey-year forecaster,next round,False,0,5,,,non-learned (EB weights from the 2023 cross-section); sealed
+survey-year provincial PFDR,M1_LightGBM,proposed (LightGBM regression),next round,False,5,5,,,not trainable: 5 training rows (one change per province) < protocol minimum 20
+survey-year provincial PFDR,M3_PSA_only,baseline,next round,False,5,5,,,not trainable: 5 training rows (one change per province) < protocol minimum 20
+survey-year provincial PFDR,M4_NLP_only,baseline,next round,False,5,5,,,not trainable: 5 training rows (one change per province) < protocol minimum 20
+survey-year provincial PFDR,M5_Linear,baseline (continuous counterpart of logistic regression),next round,False,5,5,,,not trainable: 5 training rows (one change per province) < protocol minimum 20

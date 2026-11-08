@@ -1,0 +1,83 @@
+{
+ "frozen_utc": "2026-11-05T15:31:14.690998+00:00",
+ "spec": {
+  "inputs": {
+   "market": [
+    "cpi_since",
+    "cpi_food_rel_nat"
+   ],
+   "climate": [
+    "soil_since",
+    "rain_since",
+    "agri_since",
+    "tc_rate_since"
+   ],
+   "employment": [
+    "unemp_chg_since",
+    "income_growth"
+   ],
+   "remittance": [
+    "remit_since"
+   ],
+   "poverty": [
+    "p_poverty",
+    "income_rel"
+   ]
+  },
+  "lightgbm": {
+   "objective": "regression",
+   "n_estimators": 200,
+   "learning_rate": 0.02,
+   "num_leaves": 2,
+   "max_depth": 1,
+   "min_child_samples": 20,
+   "reg_lambda": 20.0,
+   "subsample": 0.8,
+   "subsample_freq": 1,
+   "colsample_bytree": 0.8,
+   "n_jobs": 1,
+   "verbose": -1
+  },
+  "seeds": 10,
+  "signs": {
+   "cpi_since": 1,
+   "cpi_food_rel_nat": 1,
+   "soil_since": 0,
+   "rain_since": 0,
+   "agri_since": -1,
+   "tc_rate_since": 1,
+   "unemp_chg_since": 1,
+   "income_growth": -1,
+   "remit_since": -1,
+   "p_poverty": 1,
+   "income_rel": -1
+  },
+  "target": "HFIAS moderate plus severe",
+  "classes": "HIGH at score >= 50, LOW below"
+ },
+ "model_sha256": "3508ce63fceb9f7fe422e6ed01dddc7cd878eb26a3b3329161eaacb94dc5e0c9",
+ "status": "frozen for future testing; not validated; not production",
+ "shap_group_share": {
+  "climate": 0.3372,
+  "market": 0.2937,
+  "poverty": 0.2685,
+  "employment": 0.0742,
+  "remittance": 0.0264
+ },
+ "train_rows": 732,
+ "sd": 0.43405844320600667,
+ "half": 0.6783548407800204,
+ "used": [
+  "cpi_since",
+  "cpi_food_rel_nat",
+  "soil_since",
+  "rain_since",
+  "agri_since",
+  "tc_rate_since",
+  "unemp_chg_since",
+  "income_growth",
+  "remit_since",
+  "p_poverty",
+  "income_rel"
+ ]
+}

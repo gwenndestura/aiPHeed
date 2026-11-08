@@ -1,0 +1,407 @@
+import { useEffect, useRef, useState } from "react";
+import { RegionData, MunicipalityData } from "@/data/types";
+import { ChevronDown, ChevronRight, Newspaper, Info } from "lucide-react";
+import { Quarter } from "./QuarterTimeSlider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useConfig, useExplainability, useNews } from "@/lib/queries";
+import type { Trigger, NewsArticle } from "@/lib/apiTypes";
+import { GlossaryPanel } from "./GlossaryPanel";
+import { quarterPeriodLabel } from "@/lib/quarters";
+import { isHighRisk } from "@/lib/risk";
+import { driverCopy, isContributing, TOPIC_FRIENDLY_LABELS } from "@/lib/driverCopy";
+import { summaryHeadline } from "@/lib/summaryHeadline";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { ConfidenceTag } from "@/components/ui/confidence-tag";
+import { Note } from "@/components/ui/note";
+import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+
+interface Props {
+  quarter: Quarter;
+  selectedRegion: RegionData | null;
+  selectedMunicipality?: MunicipalityData | null;
+}
+
+export function RightAnalyticsPanel({ quarter, selectedRegion, selectedMunicipality }: Props) {
+  const region = selectedRegion;
+
+  return (
+    <div className="h-full flex flex-col bg-card/95 backdrop-blur-sm border-l border-border/50 overflow-hidden">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        <ShapNarrativeCardBody quarter={quarter} selectedRegion={region} selectedMunicipality={selectedMunicipality} />
+        <NewsArticlesCardBody selectedRegion={region} quarterId={quarter.id} />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Standalone card bodies for floating cards layout ─── */
+
+export function ShapNarrativeCardBody({
+  quarter,
+  selectedRegion,
+  selectedMunicipality,
+}: {
+  quarter: Quarter;
+  selectedRegion: RegionData | null;
+  selectedMunicipality?: MunicipalityData | null;
+}) {
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
+  const region = selectedRegion;
+  const { data: config } = useConfig();
+
+  // Same source of truth as the left "Why is this Province at Risk?" card.
+  // Recomputed per province × quarter.
+  const scope = region ? "province" : "region";
+  const id = region?.id ?? "calabarzon";
+  const { data: explain, isLoading: explainLoading, error: explainError } = useExplainability(scope, id, quarter.id);
+  const triggers: Trigger[] = explain?.triggers ?? [];
+  const explainFailed = isLoadFailure(explainError);
+
+  // Badges only for a real score -- never a 0 standing in for "unknown".
+  const rawScore = explain?.riskScore ?? region?.riskScore;
+  const hasScore = !explainFailed && typeof rawScore === "number";
+  const finalScore = hasScore ? rawScore : 0;
+  const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
+  const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
+
+  const subjectName = selectedMunicipality
+    ? `${selectedMunicipality.name}, ${selectedMunicipality.provinceName}`
+    : region ? region.name : "CALABARZON";
+
+  return (
+    <div key={`${subjectName}-${quarter.id}`} className="animate-fade-in">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="min-w-0">
+          <p className="text-[11px] text-muted-foreground">{quarterPeriodLabel(quarter)}</p>
+          <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} at a glance</h2>
+        </div>
+        <button
+          onClick={() => setGlossaryOpen(true)}
+          className="shrink-0 p-1 compact:min-h-11 compact:min-w-11 flex items-center justify-center rounded-md hover:bg-secondary/60 text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="Open glossary"
+          title="Glossary of terms"
+        >
+          <Info className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 mb-2">
+        {hasScore && (
+          <StatusBadge
+            level={isHighRisk(finalScore, displayCutoff) ? "high" : "low"}
+            title={`Forecast display cutoff: ${displayCutoff}`}
+          />
+        )}
+        {hasScore && finalScore >= alertThreshold && (
+          <StatusBadge tone="high" title={`Active alert: risk probability at or above ${alertThreshold}`}>
+            Active alert
+          </StatusBadge>
+        )}
+        {region?.limitedSignal && (
+          <ConfidenceTag explanation="This province had fewer than 5 news reports this quarter, so its forecast relies less on the news." />
+        )}
+      </div>
+
+      {explainLoading ? (
+        <ShapDriverListSkeleton />
+      ) : explainFailed ? (
+        <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>
+      ) : (
+        <ShapDriverList items={triggers} />
+      )}
+
+      {/* The backend's plain-language summary as one line: the data status and
+          the summary's first sentence; the full text of both on hover. */}
+      {!explainLoading && !explainFailed && explain?.summary && (
+        <p
+          data-testid="plain-summary"
+          className="mt-2 px-1 text-[11px] text-foreground/80 leading-snug truncate"
+          title={`Figures: ${explain.summary.dataStatus} (${explain.summary.dataStatusNote}). ${summaryHeadline(explain.summary.sentence)}`}
+        >
+          <span className="font-semibold">Figures: {explain.summary.dataStatus}</span>
+          <span className="sr-only"> ({explain.summary.dataStatusNote})</span>
+          {" · "}
+          {summaryHeadline(explain.summary.sentence)}
+        </p>
+      )}
+
+      <GlossaryPanel open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
+    </div>
+  );
+}
+
+function ShapDriverListSkeleton() {
+  return (
+    <section className="mb-2 space-y-3 animate-pulse">
+      {[0, 1].map((g) => (
+        <div key={g} className="space-y-1.5">
+          <div className="h-2.5 w-32 rounded bg-secondary/50" />
+          <div className="space-y-1">
+            {[0, 1].map((i) => (
+              <div key={i} className="inner-box px-2 py-1.5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="h-2.5 w-28 rounded bg-secondary/50" />
+                  <div className="h-2.5 w-6 rounded bg-secondary/50" />
+                </div>
+                <div className="h-2 w-full rounded bg-secondary/40 mb-1.5" />
+                <div className="h-[3px] rounded-full bg-border/30" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function ShapDriverList({ items }: { items: Trigger[] }) {
+  if (!items.length) return null;
+  // Only groups that moved the forecast are listed as pushing risk up or
+  // down; the rest (no data, no effect, not in the model) are listed apart.
+  const moving = items.filter((t) => isContributing(t));
+  const risky = moving.filter((t) => t.direction !== "protective");
+  const protective = moving.filter((t) => t.direction === "protective");
+  const inactive = items.filter((t) => !isContributing(t));
+  return (
+    <section className="mb-2 space-y-3">
+      {risky.length > 0 && (
+        <DriverGroup heading="What is raising the risk" items={risky} />
+      )}
+      {protective.length > 0 && (
+        <DriverGroup heading="What is lowering the risk" items={protective} />
+      )}
+      {inactive.length > 0 && (
+        <DriverGroup heading="No effect this time" items={inactive} />
+      )}
+    </section>
+  );
+}
+
+function DriverGroup({ heading, items }: { heading: string; items: Trigger[] }) {
+  return (
+    <div className="space-y-1.5">
+      <p className="text-[12px] font-semibold text-foreground/90">{heading}</p>
+      <div className="space-y-1">
+        {items.map((s) => (
+          <FactorCard key={s.key} trigger={s} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** One factor group: its plain name and share, one plain sentence, and the bar. */
+function FactorCard({ trigger: s }: { trigger: Trigger }) {
+  const color = s.color === "red" ? "hsl(var(--risk-high))" : s.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))";
+  const copy = driverCopy(s);
+  return (
+    <div className="inner-box px-2 py-1.5">
+      <div className="flex items-center justify-between mb-0.5">
+        <span className="truncate text-[10px] font-bold text-foreground/90">{copy.title}</span>
+        <span className="text-[10px] font-mono-num font-bold ml-2 shrink-0" style={{ color }}>{s.pct}%</span>
+      </div>
+      <p className="text-[10px] leading-snug text-muted-foreground">{copy.description}</p>
+      <div className="mt-1 h-[3px] rounded-full bg-border/30 overflow-hidden">
+        <div className="h-full rounded-full opacity-70" style={{ width: `${s.pct}%`, backgroundColor: color }} />
+      </div>
+    </div>
+  );
+}
+
+/** Why an article is in the feed, as a short chip: the backend's own label, without its explanation. */
+function relevanceChip(a: NewsArticle): string {
+  if (a.relevanceStatus === "validated") return "Validated";
+  if (a.relevanceStatus === "trigger_match") return "Keyword match";
+  return a.relevanceLabel?.split(" (")[0] || "Food-stress article";
+}
+
+export function NewsArticlesCardBody({
+  selectedRegion,
+  quarterId,
+  tourOpen = false,
+}: {
+  selectedRegion: RegionData | null;
+  quarterId?: string;
+  /** The map tour's news step: open while it shows, then back as it was. */
+  tourOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(tourOpen);
+  const openRef = useRef(open);
+  openRef.current = open;
+  const openedByTour = useRef(tourOpen);
+  useEffect(() => {
+    if (tourOpen && !openRef.current) {
+      openedByTour.current = true;
+      setOpen(true);
+    } else if (!tourOpen && openedByTour.current) {
+      openedByTour.current = false;
+      setOpen(false);
+    }
+  }, [tourOpen]);
+  const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
+
+  const scope = selectedRegion ? "province" : "region";
+  const id = selectedRegion?.id ?? "calabarzon";
+  // Fetched even while collapsed: the header count needs it, and at region
+  // scope there is no selectedRegion to fall back on, so deferring the call
+  // until the drawer opened left CALABARZON reading 0. The corpus is cached
+  // server-side (lru_cache), so this is a cheap read.
+  const { data: news, isLoading: newsLoading, isError: newsError, refetch: refetchNews } = useNews(scope, id, quarterId);
+
+  const articleCount = news?.articleCount ?? selectedRegion?.articleCount ?? 0;
+  // Region-wide articles (province = null in the corpus) count toward
+  // CALABARZON but toward no province, so the five province counts sum to
+  // less than the regional one.
+  const regionWide = !selectedRegion && news ? news.articleCount - news.provinceAttributed : 0;
+
+  const notes = news && regionWide > 0;
+  const topics = news && news.topics.length > 0;
+
+  return (
+    <div>
+      {/* The tour outlines the heading and the topics; the article list shows below. */}
+      <div data-tour="news">
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="w-full flex items-center justify-between compact:min-h-11"
+        >
+          <div className="flex items-center gap-2">
+            <Newspaper className="h-3.5 w-3.5 text-primary" />
+            <span className="text-[13px] font-semibold leading-tight">News reports used</span>
+            <span className="text-[10px] text-muted-foreground tabular-nums font-mono-num font-bold">{articleCount}</span>
+          </div>
+          {open ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
+        </button>
+        {open && (newsLoading || newsError) && (
+          <div className="mt-3 px-1">
+            {newsLoading && <p className="text-[10px] text-muted-foreground italic">Loading articles…</p>}
+            {newsError && (
+              <p className="text-[10px] text-destructive">
+                The news feed could not be loaded.{" "}
+                <button className="underline compact:min-h-11" onClick={() => refetchNews()}>Try again</button>
+              </p>
+            )}
+          </div>
+        )}
+        {open && (notes || topics) && (
+          <div className="mt-3 space-y-3 px-1">
+            {regionWide > 0 && news && (
+              <p className="text-[9px] italic text-muted-foreground leading-snug">
+                {news.provinceAttributed} about CALABARZON · {regionWide} national or Luzon-wide
+              </p>
+            )}
+
+            {/* Topic breakdown */}
+            {news && news.topics.length > 0 && (
+              <div className="space-y-2">
+                {news.topics.map((t) => (
+                  <div key={t.key}>
+                    <div className="flex items-center justify-between text-[10px] mb-0.5">
+                      <span className="text-foreground/80 font-medium">{TOPIC_FRIENDLY_LABELS[t.key] ?? t.label}</span>
+                      <span className="font-mono-num font-bold text-foreground/70">{t.pct}%</span>
+                    </div>
+                    <div className="h-[4px] rounded-full bg-border/30 overflow-hidden">
+                      <div className="h-full rounded-full opacity-80" style={{ width: `${t.pct}%`, backgroundColor: "hsl(var(--primary))" }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {open && (
+        <div className="mt-3 px-1">
+          {/* Clickable articles */}
+          <div className="space-y-1 border-t border-border/30 pt-2">
+            {news && !news.data.length && (
+              <p className="text-[10px] text-muted-foreground/70 italic px-2 py-1.5">
+                No validated or trigger-matched food-stress articles were found for this area in the news window
+                {news.windowQuarters?.length ? ` (${news.windowQuarters.join(", ")})` : ""}. This reflects news coverage,
+                not low risk.
+              </p>
+            )}
+            {news?.data.map((a) => (
+              <button
+                key={a.id}
+                onClick={() => setActiveArticle(a)}
+                className="w-full text-left text-[10px] py-1.5 px-2 compact:min-h-11 rounded hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <p className="truncate font-semibold text-foreground/90">{a.title}</p>
+                {a.excerpt && <p className="text-[9px] leading-snug line-clamp-2 text-foreground/70">{a.excerpt}</p>}
+                <p className="text-[9px]">
+                  {a.source}{a.date ? ` · ${a.date}` : ""}{a.province ? ` · ${a.province}` : ""}
+                </p>
+                {(a.relevanceStatus || (a.triggers && a.triggers.length > 0)) && (
+                  <p className="text-[9px] flex flex-wrap gap-1 mt-0.5">
+                    {a.relevanceStatus && (
+                      <span className={`rounded-full px-1.5 ${a.relevanceStatus === "validated" ? "tint-primary" : "bg-secondary text-muted-foreground"}`}>
+                        {relevanceChip(a)}
+                      </span>
+                    )}
+                    {a.triggers?.map((t) => (
+                      <span key={t} className="rounded-full px-1.5 bg-secondary text-foreground/70">{t}</span>
+                    ))}
+                  </p>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Dialog open={!!activeArticle} onOpenChange={(o) => !o && setActiveArticle(null)}>
+        <DialogContent className="z-[1300] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-sm">{activeArticle?.title}</DialogTitle>
+            <DialogDescription className="text-[11px]">
+              {activeArticle?.source}{activeArticle?.date ? ` · ${activeArticle.date}` : ""}
+            </DialogDescription>
+          </DialogHeader>
+          {activeArticle?.excerpt && (
+            <p className="text-[12px] text-muted-foreground leading-relaxed">{activeArticle.excerpt}</p>
+          )}
+          {activeArticle?.url && (
+            <a
+              href={activeArticle.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[11px] font-semibold text-primary hover:underline break-all"
+            >
+              Read full article ↗
+            </a>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+export function Sparkline({ data, color, width = 50, height = 16, thick = false }: { data: number[]; color: string; width?: number; height?: number; thick?: boolean }) {
+  if (!data.length) return <span style={{ width, height }} />;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data
+    .map((v, i) => {
+      const x = (i / (data.length - 1)) * width;
+      const y = height - ((v - min) / range) * height;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  return (
+    <svg width={width} height={height} className="shrink-0 overflow-visible">
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth={thick ? 2 : 1.4}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        points={pts}
+        style={{ filter: `drop-shadow(0 0 3px ${color})` }}
+      />
+    </svg>
+  );
+}

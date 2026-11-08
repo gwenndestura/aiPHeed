@@ -1,0 +1,177 @@
+{
+ "version": "fi5-1.0",
+ "written_utc": "2026-11-02T12:37:16+00:00",
+ "target": "SWS involuntary hunger, Balance Luzon; HIGH = above the mean of the preceding 20 quarters (>= 8 readings); quarters without a round unlabeled",
+ "issue_rule": "last day of issue quarter; features with available_from <= issue date",
+ "leads": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "eval_targets": "2010-Q1..latest",
+ "eras": [
+  [
+   "2010-2015",
+   2010,
+   2015
+  ],
+  [
+   "2016-2020",
+   2016,
+   2020
+  ],
+  [
+   "2021-2026",
+   2021,
+   2026
+  ]
+ ],
+ "reliability": {
+  "accuracy": 0.75,
+  "recall": 0.5,
+  "precision": 0.5,
+  "auc": 0.7,
+  "brier_skill": 0.0,
+  "era_accuracy": 0.6
+ },
+ "models": {
+  "LightGBM (proposed)": [
+   "lgbm",
+   "full"
+  ],
+  "Naive persistence": [
+   "persistence",
+   null
+  ],
+  "PSA-only (government indicators)": [
+   "lgbm",
+   "psa_only"
+  ],
+  "NLP-only (news features)": [
+   "lgbm",
+   "nlp_only"
+  ],
+  "Logistic regression": [
+   "logit",
+   "full"
+  ],
+  "Climatology (base rate)": [
+   "climatology",
+   null
+  ],
+  "LightGBM without news (ablation)": [
+   "lgbm",
+   "full_no_news"
+  ],
+  "LightGBM without market domain": [
+   "lgbm",
+   "drop_market"
+  ],
+  "LightGBM without climate domain": [
+   "lgbm",
+   "drop_climate"
+  ],
+  "LightGBM without employment domain": [
+   "lgbm",
+   "drop_employment"
+  ],
+  "LightGBM without remittance domain": [
+   "lgbm",
+   "drop_remittance"
+  ],
+  "LightGBM without poverty domain": [
+   "lgbm",
+   "drop_poverty"
+  ]
+ },
+ "lgbm_configs": {
+  "stumps": {
+   "num_leaves": 2,
+   "max_depth": 1,
+   "min_child_samples": 10,
+   "n_estimators": 120,
+   "learning_rate": 0.05
+  },
+  "small": {
+   "num_leaves": 4,
+   "max_depth": 2,
+   "min_child_samples": 8,
+   "n_estimators": 150,
+   "learning_rate": 0.03
+  },
+  "medium": {
+   "num_leaves": 7,
+   "max_depth": 3,
+   "min_child_samples": 6,
+   "n_estimators": 200,
+   "learning_rate": 0.03
+  }
+ },
+ "lgbm_common": {
+  "reg_lambda": 1.0,
+  "colsample_bytree": 0.8,
+  "subsample": 0.8,
+  "subsample_freq": 1,
+  "class_weight": "balanced",
+  "random_state": 42,
+  "deterministic": true,
+  "force_col_wise": true,
+  "n_jobs": 1,
+  "verbose": -1
+ },
+ "logit_C": [
+  0.03,
+  0.1,
+  0.3,
+  1.0
+ ],
+ "features": [
+  "hunger_last",
+  "hunger_last_anom",
+  "hunger_age_q",
+  "cpi_food_yoy",
+  "cpi_rice_yoy",
+  "cpi_food_rel",
+  "cpi_food_accel",
+  "palay_yoy",
+  "rain_anom_3m",
+  "tmax_anom_3m",
+  "tc_exposure_q",
+  "tc_exposure_4q",
+  "oni",
+  "unemp_rate",
+  "unemp_yoy",
+  "remit_yoy",
+  "poverty_inc",
+  "gdelt_shortage",
+  "gdelt_agri_supply",
+  "gdelt_jobs_income",
+  "gdelt_assistance",
+  "fssi_market",
+  "fssi_climate",
+  "fssi_employment",
+  "fssi_remittance",
+  "fssi_poverty",
+  "topic_market",
+  "topic_climate",
+  "topic_employment",
+  "topic_remittance",
+  "topic_poverty",
+  "hunger_news_share"
+ ],
+ "code_sha256": {
+  "__init__.py": "60c610f350aeab299770321e40c5e2975c94af144df35c4d2fbe2988054c5b3e",
+  "sources.py": "c7bc5dba71e12372a3ec24f0deb6baa0145e8eb97ba50f641d01936ecf11e8e1",
+  "target.py": "ed9ea2ec76b2b0d1d6a9f2b7ffac385f137333c90c32f8938e45d396beffc00c",
+  "nlp.py": "c59cc32386cd0fc97aa91cb1e7e6b8344e1d8c05c5d1cc94fa41e28095eb2333",
+  "features.py": "fe8073e28c164c0880cf203ade0007b081c0546cfa7c34d4865e600779efd5bf",
+  "models.py": "25962dd1699dfc359c215db4c0c3306d48789733d28abe975e50822af384d9bf",
+  "evaluate.py": "5b303ab171cd44fb2e7a4bb2a4f2510eaee06cc68a9d0e2296ba84679d151601",
+  "rankings.py": "cf785f6a2441af524832390cfce54e0846dba71dd8c59102303dae57993062b1",
+  "explain.py": "c1a67274c1e7d711cf035e45c976d13d5e6f3fac592c8b8ac487886bb612c1a8",
+  "pipeline.py": "f1623337029ba787eb71a43074df86a492640b7086e2b4c893c682e14dd1102f"
+ },
+ "note": "Pre-2021 and 2021-2026 SWS quarters were seen by earlier aiPHeed experiments (E114, v12x, v13); they are development evidence for this design. Only quarters after 2026-Q3 are untouched.",
+ "lock_sha256": "dc8f1023e416c383d98520984feab68fd1c776484f04aee12971a5e8e486e97b"
+}

@@ -1,0 +1,25 @@
+indicator,domain,methodological_role,source,geographic_level,frequency,history,release_or_availability,uncertainty,current_use
+SWS involuntary hunger (Balance Luzon),outcome,Direct food-insecurity outcome (Balance Luzon only); regional contextual indicator for CALABARZON,SWS releases,Balance Luzon (CALABARZON ~34%),~quarterly,1998-Q3..2026-Q3,"published date (pre-2021: fieldwork month end + 60 d, conservative)",published MOE 3-6 pp; sample-size effect suspected,FI6-FI8 Balance Luzon outlook; never provincial
+SWS involuntary hunger (other areas),outcome,Contextual information,SWS releases,Metro Manila / Visayas / Mindanao,~quarterly,1998-Q3..2026-Q3,published date,MOE 5-6 pp,geographic-transfer diagnostic only
+FIES moderate/severe (FNRI ENNS/NNS),outcome,"External validation benchmark (periodic, cross-sectional)",DOST-FNRI,"national, regional; provincial in some rounds",irregular,"2018-19, 2021, 2023",report dates,survey CI (published),not held as a series; benchmark only
+PSA APIS hunger item,outcome,"Direct food-insecurity outcome (potential, regional)",PSA (microdata on request),region,~annual (non-FIES years),rounds to 2022,~1 year,design-based SE,not held; acquisition rank 1
+Food CPI YoY (food and non-alcoholic beverages),market,Predictor / affordability pressure,PSA OpenSTAT CPI,Region IV-A,monthly,1995-01..2026-09,10th of next month,"index, no SE",model input
+Rice CPI YoY,market,Predictor / affordability pressure,PSA OpenSTAT CPI,Region IV-A,monthly,1995-01..2026-09,10th of next month,index,model input
+Palay production YoY,market,Predictor (availability),PSA crops,Region IV-A,quarterly,1988..2026-Q3,quarter end + 45 d,revisions not tracked,model input
+World rice (Thai 5%) and urea prices,market,Predictor (international market signal),World Bank Pink Sheet,world,monthly,1961..2026-09,month end + 10 d,none,model input (adopted in FI7)
+"Food threshold (per capita, PhP)",market,Affordability indicator (cost of the basic food basket),PSA official poverty statistics,"region, province",triennial,2006..2023,documented / Y+2,CV published,reference; affordability design (not yet a model input)
+Rainfall anomaly (3 months),climate,Predictor,NASA POWER,5 province centroids,monthly,1982..2026-09,month end + 30 d,gridded model,model input
+Storms within 200 km; typhoon intensity,climate,Predictor,NOAA IBTrACS,CALABARZON,event,1884..2026-10,real time,best-track revisions,model input (intensity rejected in FI7)
+ONI (ENSO),climate,Predictor,NOAA CPC,Nino 3.4,monthly,1950..2026-09,season end + 10 d,none,model input
+"Unemployment rate, YoY",employment,Predictor,PSA LFS,Philippines,quarterly then monthly,2005-04..2026-08,survey month + 45 d,SE published,model input; national level
+Underemployment rate,employment,"Predictor (tested, rejected)",PSA LFS,Philippines,quarterly then monthly,2005..2026-08,survey month + 45 d,SE published,not in model
+Personal remittances YoY,remittance,Predictor,BSP via World Bank WDI,Philippines,annual,1991..2025,15 Feb next year,none,model input; national level
+Poverty incidence,poverty,Structural vulnerability indicator,PSA,"region, province; city/municipal SAE 2021",triennial,2006..2025,documented / Y+2,CV published,model input (+ constraint); LGU ranking (SAE)
+Subsistence incidence,poverty,Structural vulnerability / affordability indicator (income-based food poverty; not experienced food insecurity),PSA,"region, province",triennial,2006..2023 (break 2015 to 2018),documented / Y+2,CV published,context; not a model input
+Population density,poverty,Structural vulnerability indicator (exposure),PSA POPCEN 2024 / land area,city/municipal,census,2024,2025,none,LGU ranking
+News risk-event shares per domain (FI6-N),all five,Predictor / early-warning signal (inside its domain),"publisher archives, XLM-R",CALABARZON (text or body mention) or national,quarterly / 90-day,2012-Q3..2026-Q3,publication date,unvalidated zero-shot labels; 95% one source,model input
+News-reported displacement (FI6-N na_displaced),poverty,Predictor / early-warning signal,publisher archives,CALABARZON,quarterly,2014..2026,publication date,sparse,model input; strongest correlate of persistence error (FI8)
+GDELT theme volume,market/employment/poverty,Predictor,GDELT,Philippine sources,quarterly,2017..2026,real time,volume only,FI5/FI6 inputs
+"FI6/FI7 P(HIGH), Balance Luzon",outcome,Model-generated estimate,aiPHeed,Balance Luzon,per issue,walk-forward 2010..2026,issue date,walk-forward metrics,outlook (provisional)
+LGU priority score,poverty,Model-generated estimate (vulnerability-adjusted priority),aiPHeed,city/municipal (142),per issue,-,issue date,weight sensitivity reported,priority only; not measured hunger
+P0H4 price-pressure index (served dashboard),market,"Model-generated estimate (price pressure, not food insecurity)",aiPHeed (ch1_engine),province,per issue,2023..,issue date,its own evaluation,served dashboard; unchanged

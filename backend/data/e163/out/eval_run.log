@@ -1,0 +1,494 @@
+{
+ "leakage_max_abs_change": {
+  "C1": 0.0,
+  "C2": 0.0,
+  "C3": 0.0,
+  "C1_noown": 0.0
+ },
+ "gates": {
+  "C1": {
+   "S1": false,
+   "S2": true,
+   "S3": false,
+   "S4": true,
+   "S5": false,
+   "S6": true,
+   "S7": true,
+   "all": false
+  },
+  "C2": {
+   "S1": true,
+   "S2": true,
+   "S3": false,
+   "S4": false,
+   "S5": true,
+   "S6": true,
+   "S7": true,
+   "all": false
+  },
+  "C3": {
+   "S1": false,
+   "S2": false,
+   "S3": false,
+   "S4": false,
+   "S5": false,
+   "S6": true,
+   "S7": true,
+   "all": false
+  }
+ },
+ "adopted": null,
+ "groups_contribute": {
+  "C2": false,
+  "C3": false
+ },
+ "nested": {
+  "picks": {
+   "ENNS2018": "C2",
+   "ENNS2019": "E158",
+   "ENNS2021": "C2"
+  },
+  "nested_accuracy": 0.708
+ },
+ "own_evidence_control": {
+  "C1_diff": {
+   "est": 0.35,
+   "ci95": [
+    0.046,
+    0.619
+   ]
+  },
+  "C2_diff": {
+   "est": 0.325,
+   "ci95": [
+    0.03,
+    0.583
+   ]
+  },
+  "C3_diff": {
+   "est": 0.325,
+   "ci95": [
+    0.077,
+    0.583
+   ]
+  }
+ }
+}
+
+Lead 1
+         accuracy balanced_accuracy high_precision high_recall low_recall     f1    auc   brier calibration_slope mae_pts mean_signed_pts false_alarm_rate missed_high_rate   conc conc_lo pos_err spread    C1-6
+E158        0.736              0.76          0.583        0.84      0.681  0.689   0.86  0.1344             0.718    8.23             2.9            0.319             0.16    0.6   0.436   0.467   1.23  011011
+C1          0.694             0.757          0.533        0.96      0.553  0.686   0.93  0.1518             0.985    8.55            7.18            0.447             0.04  0.675   0.516   0.373   0.55  011111
+C2          0.708             0.749           0.55        0.88      0.617  0.677  0.903  0.1265             0.795    7.64            3.74            0.383             0.12   0.65   0.486   0.413   0.55  011011
+C3          0.694             0.729          0.538        0.84      0.617  0.656  0.862  0.1512             0.644    9.29            5.12            0.383             0.16   0.65   0.465   0.307   0.72  011011
+C1_noown    0.694             0.747          0.535        0.92      0.574  0.676  0.875  0.1593             0.913    8.78            7.14            0.426             0.08  0.325   0.187    0.58   0.29  001111
+brier vs E158 {'C1': {'diff': 0.0174, 'ci95': [-0.0274, 0.0628]}, 'C2': {'diff': -0.0079, 'ci95': [-0.0373, 0.0236]}, 'C3': {'diff': 0.0168, 'ci95': [-0.0141, 0.0503]}}
+per round conc {'ENNS2018': {'E158': 0.583, 'C1': 0.583, 'C2': 0.583, 'C3': 0.583, 'C1_noown': 0.333, 'pairs': 12}, 'ENNS2019': {'E158': 0.571, 'C1': 0.643, 'C2': 0.571, 'C3': 0.571, 'C1_noown': 0.429, 'pairs': 14}, 'ENNS2021': {'E158': 0.643, 'C1': 0.786, 'C2': 0.786, 'C3': 0.786, 'C1_noown': 0.214, 'pairs': 14}}
+
+Lead 2
+         accuracy balanced_accuracy high_precision high_recall low_recall     f1    auc   brier calibration_slope mae_pts mean_signed_pts false_alarm_rate missed_high_rate   conc conc_lo pos_err spread    C1-6
+E158        0.736              0.76          0.583        0.84      0.681  0.689  0.861  0.1371             0.679     8.5            3.13            0.319             0.16    0.6   0.419     0.4    1.1  011011
+C1          0.694             0.757          0.533        0.96      0.553  0.686   0.93  0.1518             0.985    8.55            7.18            0.447             0.04  0.675   0.516   0.373   0.55  011111
+C2          0.736             0.779          0.575        0.92      0.638  0.708  0.911  0.1162              0.78    7.47             3.1            0.362             0.08   0.65   0.484   0.413   0.95  011011
+C3          0.792             0.812          0.647        0.88      0.745  0.746  0.911  0.1269             0.653     8.3             5.1            0.255             0.12    0.6   0.458     0.4   1.07  111011
+C1_noown    0.694             0.747          0.535        0.92      0.574  0.676  0.875  0.1593             0.913    8.78            7.14            0.426             0.08  0.325   0.187    0.58   0.29  001111
+brier vs E158 {'C1': {'diff': 0.0147, 'ci95': [-0.0306, 0.0655]}, 'C2': {'diff': -0.0209, 'ci95': [-0.048, 0.0076]}, 'C3': {'diff': -0.0102, 'ci95': [-0.0433, 0.0238]}}
+per round conc {'ENNS2018': {'E158': 0.417, 'C1': 0.583, 'C2': 0.583, 'C3': 0.583, 'C1_noown': 0.333, 'pairs': 12}, 'ENNS2019': {'E158': 0.714, 'C1': 0.643, 'C2': 0.643, 'C3': 0.571, 'C1_noown': 0.429, 'pairs': 14}, 'ENNS2021': {'E158': 0.643, 'C1': 0.786, 'C2': 0.714, 'C3': 0.643, 'C1_noown': 0.214, 'pairs': 14}}
+
+Lead 3
+         accuracy balanced_accuracy high_precision high_recall low_recall     f1    auc   brier calibration_slope mae_pts mean_signed_pts false_alarm_rate missed_high_rate   conc conc_lo pos_err spread    C1-6
+E158         0.75             0.762          0.606         0.8      0.723   0.69   0.84  0.1455             0.675    8.61            2.49            0.277              0.2    0.6   0.435   0.433   1.79  011011
+C1          0.694             0.747          0.535        0.92      0.574  0.676  0.927   0.144             0.938    8.36            6.56            0.426             0.08  0.675   0.516   0.373   0.63  011111
+C2          0.736             0.779          0.575        0.92      0.638  0.708  0.895  0.1316             0.759    8.13            3.74            0.362             0.08   0.65   0.484    0.44   0.71  011011
+C3          0.667             0.717          0.512        0.88      0.553  0.647  0.871  0.1682             0.612   10.31            6.55            0.447             0.12  0.625   0.479   0.393   1.22  011001
+C1_noown    0.708             0.758          0.548        0.92      0.596  0.687  0.876  0.1544             0.875    8.68            6.54            0.404             0.08  0.325   0.187    0.58   0.29  001111
+brier vs E158 {'C1': {'diff': -0.0015, 'ci95': [-0.04, 0.0398]}, 'C2': {'diff': -0.0139, 'ci95': [-0.0436, 0.0188]}, 'C3': {'diff': 0.0228, 'ci95': [-0.0162, 0.0677]}}
+per round conc {'ENNS2018': {'E158': 0.667, 'C1': 0.583, 'C2': 0.667, 'C3': 0.5, 'C1_noown': 0.333, 'pairs': 12}, 'ENNS2019': {'E158': 0.571, 'C1': 0.643, 'C2': 0.643, 'C3': 0.643, 'C1_noown': 0.429, 'pairs': 14}, 'ENNS2021': {'E158': 0.571, 'C1': 0.786, 'C2': 0.643, 'C3': 0.714, 'C1_noown': 0.214, 'pairs': 14}}
+
+Lead 4
+         accuracy balanced_accuracy high_precision high_recall low_recall     f1    auc   brier calibration_slope mae_pts mean_signed_pts false_alarm_rate missed_high_rate   conc conc_lo pos_err spread    C1-6
+E158         0.75             0.752          0.613        0.76      0.745  0.679  0.826  0.1523             0.655    8.65            2.53            0.255             0.24  0.625   0.452   0.427   1.81  011011
+C1          0.694             0.747          0.535        0.92      0.574  0.676  0.927   0.144             0.938    8.36            6.56            0.426             0.08  0.675   0.516   0.373   0.63  011111
+C2          0.778             0.802          0.629        0.88      0.723  0.733  0.891  0.1231             0.759    7.53            2.74            0.277             0.12  0.625   0.472   0.453   0.97  111011
+C3          0.764             0.782          0.618        0.84      0.723  0.712  0.849  0.1401              0.79    7.85            4.01            0.277             0.16  0.625   0.485   0.393    1.2  011011
+C1_noown    0.708             0.758          0.548        0.92      0.596  0.687  0.876  0.1544             0.875    8.68            6.54            0.404             0.08  0.325   0.187    0.58   0.29  001111
+brier vs E158 {'C1': {'diff': -0.0083, 'ci95': [-0.05, 0.0353]}, 'C2': {'diff': -0.0293, 'ci95': [-0.0568, 0.0005]}, 'C3': {'diff': -0.0122, 'ci95': [-0.044, 0.0266]}}
+per round conc {'ENNS2018': {'E158': 0.667, 'C1': 0.583, 'C2': 0.667, 'C3': 0.583, 'C1_noown': 0.333, 'pairs': 12}, 'ENNS2019': {'E158': 0.643, 'C1': 0.643, 'C2': 0.643, 'C3': 0.643, 'C1_noown': 0.429, 'pairs': 14}, 'ENNS2021': {'E158': 0.571, 'C1': 0.786, 'C2': 0.571, 'C3': 0.643, 'C1_noown': 0.214, 'pairs': 14}}
+{
+ "C3_drop_market": {
+  "brier": 0.1447,
+  "C3_minus_this": 0.0065,
+  "ci95": [
+   -0.0095,
+   0.0256
+  ],
+  "n_cols": 10
+ },
+ "C3_shuf_market": {
+  "brier": 0.1511,
+  "C3_minus_this": 0.0001,
+  "ci95": [
+   -0.0163,
+   0.0194
+  ],
+  "n_cols": 10
+ },
+ "C3_drop_climate": {
+  "brier": 0.1533,
+  "C3_minus_this": -0.0021,
+  "ci95": [
+   -0.0101,
+   0.0065
+  ],
+  "n_cols": 14
+ },
+ "C3_shuf_climate": {
+  "brier": 0.147,
+  "C3_minus_this": 0.0042,
+  "ci95": [
+   -0.0023,
+   0.011
+  ],
+  "n_cols": 14
+ },
+ "C3_drop_employment": {
+  "brier": 0.1454,
+  "C3_minus_this": 0.0058,
+  "ci95": [
+   -0.0033,
+   0.0181
+  ],
+  "n_cols": 9
+ },
+ "C3_shuf_employment": {
+  "brier": 0.1445,
+  "C3_minus_this": 0.0067,
+  "ci95": [
+   0.0024,
+   0.0114
+  ],
+  "n_cols": 9
+ },
+ "C3_drop_remittance": {
+  "brier": 0.1255,
+  "C3_minus_this": 0.0257,
+  "ci95": [
+   -0.0048,
+   0.053
+  ],
+  "n_cols": 7
+ },
+ "C3_shuf_remittance": {
+  "brier": 0.1493,
+  "C3_minus_this": 0.0019,
+  "ci95": [
+   -0.0023,
+   0.0057
+  ],
+  "n_cols": 7
+ },
+ "C3_drop_poverty": {
+  "brier": 0.2121,
+  "C3_minus_this": -0.0609,
+  "ci95": [
+   -0.1032,
+   -0.0193
+  ],
+  "n_cols": 26
+ },
+ "C3_shuf_poverty": {
+  "brier": 0.136,
+  "C3_minus_this": 0.0152,
+  "ci95": [
+   0.005,
+   0.0255
+  ],
+  "n_cols": 26
+ },
+ "C3_nonews": {
+  "brier": 0.1899,
+  "C3_minus_this": -0.0387,
+  "ci95": [
+   -0.0696,
+   -0.0033
+  ]
+ },
+ "C3_shufnews": {
+  "brier": 0.1249,
+  "C3_minus_this": 0.0263,
+  "ci95": [
+   0.0128,
+   0.0407
+  ]
+ },
+ "C2_shufall": {
+  "brier": 0.1221,
+  "C2_minus_this": 0.0044,
+  "ci95": [
+   -0.0119,
+   0.0233
+  ]
+ },
+ "C3_shufall": {
+  "brier": 0.1216,
+  "C3_minus_this": 0.0296,
+  "ci95": [
+   0.0083,
+   0.0519
+  ]
+ }
+}
+{
+ "E158": {
+  "overall": {
+   "n": 72,
+   "mean": 2.9,
+   "ci95": [
+    0.64,
+    5.09
+   ],
+   "BIAS": false
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 5.53,
+   "ci95": [
+    3.07,
+    7.75
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": -0.58,
+   "ci95": [
+    -4.66,
+    4.22
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 1.1,
+   "ci95": [
+    -2.42,
+    4.3
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -1.62,
+   "ci95": [
+    -5.5,
+    2.35
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 5.3,
+   "ci95": [
+    2.89,
+    7.56
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 9.3,
+   "Quezon|ENNS2019": 4.0,
+   "Rizal|ENNS2019": 3.6,
+   "Batangas|ENNS2021": -13.7,
+   "Cavite|ENNS2021": -6.2
+  }
+ },
+ "C1": {
+  "overall": {
+   "n": 72,
+   "mean": 7.18,
+   "ci95": [
+    5.55,
+    8.93
+   ],
+   "BIAS": true
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 8.53,
+   "ci95": [
+    6.11,
+    11.21
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 5.05,
+   "ci95": [
+    0.58,
+    8.57
+   ],
+   "BIAS": true
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 6.49,
+   "ci95": [
+    3.99,
+    8.74
+   ],
+   "BIAS": true
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": 2.13,
+   "ci95": [
+    -1.15,
+    4.43
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 9.87,
+   "ci95": [
+    7.39,
+    12.39
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 15.2,
+   "Quezon|ENNS2019": 1.0,
+   "Rizal|ENNS2019": 2.8,
+   "Batangas|ENNS2021": -5.0,
+   "Cavite|ENNS2021": -0.9
+  }
+ },
+ "C2": {
+  "overall": {
+   "n": 72,
+   "mean": 3.74,
+   "ci95": [
+    1.49,
+    6.05
+   ],
+   "BIAS": true
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 5.5,
+   "ci95": [
+    2.0,
+    9.64
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 1.82,
+   "ci95": [
+    -4.67,
+    7.07
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 2.25,
+   "ci95": [
+    -0.74,
+    4.33
+   ],
+   "BIAS": false
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": -0.25,
+   "ci95": [
+    -4.39,
+    2.83
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 5.86,
+   "ci95": [
+    3.0,
+    8.96
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 10.8,
+   "Quezon|ENNS2019": -1.9,
+   "Rizal|ENNS2019": 0.3,
+   "Batangas|ENNS2021": -11.6,
+   "Cavite|ENNS2021": -6.7
+  }
+ },
+ "C3": {
+  "overall": {
+   "n": 72,
+   "mean": 5.12,
+   "ci95": [
+    2.61,
+    7.47
+   ],
+   "BIAS": true
+  },
+  "island:Luzon": {
+   "n": 35,
+   "mean": 7.16,
+   "ci95": [
+    3.89,
+    10.6
+   ],
+   "BIAS": true
+  },
+  "island:Visayas": {
+   "n": 15,
+   "mean": 1.58,
+   "ci95": [
+    -5.48,
+    8.22
+   ],
+   "BIAS": false
+  },
+  "island:Mindanao": {
+   "n": 22,
+   "mean": 4.29,
+   "ci95": [
+    0.73,
+    7.07
+   ],
+   "BIAS": true
+  },
+  "observed:HIGH": {
+   "n": 25,
+   "mean": 1.72,
+   "ci95": [
+    -3.02,
+    5.51
+   ],
+   "BIAS": false
+  },
+  "observed:LOW": {
+   "n": 47,
+   "mean": 6.93,
+   "ci95": [
+    4.11,
+    9.75
+   ],
+   "BIAS": true
+  },
+  "calabarzon_rows": {
+   "Laguna|ENNS2018": 12.0,
+   "Quezon|ENNS2019": 9.2,
+   "Rizal|ENNS2019": 3.6,
+   "Batangas|ENNS2021": -9.2,
+   "Cavite|ENNS2021": -9.0
+  }
+ }
+}

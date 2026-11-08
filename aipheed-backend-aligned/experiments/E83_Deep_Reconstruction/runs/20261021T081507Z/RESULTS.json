@@ -1,0 +1,808 @@
+{
+ "t43_audit": {
+  "labelled_quarters_all": 19,
+  "eval_quarters": 13,
+  "eval_rows": 65,
+  "eval_high": 16,
+  "share_eval_rows_with_hunger_above_line": 0.7692307692307693,
+  "quarters_since_2023Q4_with_hunger_above_line": "10/10",
+  "agreement_T43_with_price_signal_since_2023Q4": 1.0,
+  "corr_regional_H_vs_mean_province_food_yoy": -0.6070785265934785,
+  "high_by_province": {
+   "Cavite": 4,
+   "Laguna": 4,
+   "Quezon": 5,
+   "Rizal": 0,
+   "Batangas": 3
+  },
+  "high_by_year": {
+   "2023": 3,
+   "2024": 8,
+   "2025": 4,
+   "2026": 1
+  }
+ },
+ "leads": {
+  "2": {
+   "rows": 65,
+   "targets": [
+    "2023-Q1",
+    "2023-Q2",
+    "2023-Q3",
+    "2023-Q4",
+    "2024-Q1",
+    "2024-Q2",
+    "2024-Q3",
+    "2024-Q4",
+    "2025-Q1",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2",
+    "2026-Q3"
+   ],
+   "prevalence": 0.24615384615384617,
+   "pass": {
+    "S-SIM": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "S-SIM-SEAS": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "S-SIM-THR": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "S-SIM-SEAS-THR": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "ST-LR": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "ST-LR-N2": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "ST-LR-N3": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "M-LR-ALL": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "M-GB-ALL": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    },
+    "M-GB-S": {
+     "acc_gt_75": false,
+     "bal_beats_baselines": false,
+     "brier_beats_sig": false,
+     "recall_ge_50": false,
+     "PASS": false,
+     "TARGET_80": false
+    }
+   },
+   "news_ablation": {
+    "LR": [
+     {
+      "arm": "NA-LR",
+      "issued": 25,
+      "accuracy": 0.2,
+      "balanced": 0.2,
+      "brier": 0.6728796905349932,
+      "recall_HIGH": 0.2,
+      "f1": 0.0909090909090909,
+      "auc": 0.23000000000000004
+     },
+     {
+      "arm": "NB-LR",
+      "issued": 25,
+      "accuracy": 0.32,
+      "balanced": 0.425,
+      "brier": 0.6096277386712284,
+      "recall_HIGH": 0.6,
+      "f1": 0.2608695652173913,
+      "auc": 0.30000000000000004
+     },
+     {
+      "arm": "NC-LR",
+      "issued": 25,
+      "accuracy": 0.2,
+      "balanced": 0.2,
+      "brier": 0.6694583861022038,
+      "recall_HIGH": 0.2,
+      "f1": 0.0909090909090909,
+      "auc": 0.24000000000000005
+     },
+     {
+      "arm": "ND-LR",
+      "issued": 25,
+      "accuracy": 0.44,
+      "balanced": 0.5,
+      "brier": 0.3798282505987817,
+      "recall_HIGH": 0.6,
+      "f1": 0.3,
+      "auc": 0.41000000000000003
+     },
+     {
+      "arm": "NN3-LR",
+      "issued": 25,
+      "accuracy": 0.28,
+      "balanced": 0.325,
+      "brier": 0.5905466788921835,
+      "recall_HIGH": 0.4,
+      "f1": 0.1818181818181818,
+      "auc": 0.32
+     }
+    ],
+    "GB": [
+     {
+      "arm": "NA-GB",
+      "issued": 25,
+      "accuracy": 0.44,
+      "balanced": 0.65,
+      "brier": 0.34217970669962683,
+      "recall_HIGH": 1.0,
+      "f1": 0.4166666666666667,
+      "auc": 0.91
+     },
+     {
+      "arm": "NB-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.33982875497871057,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.85
+     },
+     {
+      "arm": "NC-GB",
+      "issued": 25,
+      "accuracy": 0.44,
+      "balanced": 0.65,
+      "brier": 0.34217970669962683,
+      "recall_HIGH": 1.0,
+      "f1": 0.4166666666666667,
+      "auc": 0.91
+     },
+     {
+      "arm": "ND-GB",
+      "issued": 25,
+      "accuracy": 0.28,
+      "balanced": 0.55,
+      "brier": 0.38207262922951735,
+      "recall_HIGH": 1.0,
+      "f1": 0.3571428571428571,
+      "auc": 0.88
+     },
+     {
+      "arm": "NN3-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.34416382552743985,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.8999999999999999
+     }
+    ]
+   },
+   "news_ablation_structural": [
+    {
+     "arm": "ST-LR",
+     "issued": 60,
+     "accuracy": 0.6,
+     "balanced": 0.5284090909090908,
+     "brier": 0.2880472142122342,
+     "recall_HIGH": 0.375,
+     "f1": 0.33333333333333326,
+     "auc": 0.4360795454545455
+    },
+    {
+     "arm": "ST-LR-N2",
+     "issued": 60,
+     "accuracy": 0.65,
+     "balanced": 0.5426136363636364,
+     "brier": 0.2580723601881197,
+     "recall_HIGH": 0.3125,
+     "f1": 0.3225806451612903,
+     "auc": 0.4630681818181819
+    },
+    {
+     "arm": "ST-LR-N3",
+     "issued": 60,
+     "accuracy": 0.7,
+     "balanced": 0.5965909090909092,
+     "brier": 0.25868027987453307,
+     "recall_HIGH": 0.375,
+     "f1": 0.39999999999999997,
+     "auc": 0.47159090909090917
+    }
+   ],
+   "news_paired_tests": {
+    "NA-LR->NB-LR": {
+     "dates": 5,
+     "mean_gain": 0.0632519518637649,
+     "p_one_sided": 0.28125,
+     "p_two_sided": 0.5625
+    },
+    "NA-LR->NC-LR": {
+     "dates": 5,
+     "mean_gain": 0.0034213044327894965,
+     "p_one_sided": 0.0625,
+     "p_two_sided": 0.125
+    },
+    "NA-LR->ND-LR": {
+     "dates": 5,
+     "mean_gain": 0.2930514399362115,
+     "p_one_sided": 0.09375,
+     "p_two_sided": 0.1875
+    },
+    "NA-LR->NN3-LR": {
+     "dates": 5,
+     "mean_gain": 0.0823330116428098,
+     "p_one_sided": 0.09375,
+     "p_two_sided": 0.1875
+    },
+    "NA-GB->NB-GB": {
+     "dates": 5,
+     "mean_gain": 0.0023509517209164203,
+     "p_one_sided": 0.40625,
+     "p_two_sided": 0.8125
+    },
+    "NA-GB->NC-GB": {
+     "dates": 5,
+     "mean_gain": 0.0,
+     "p_one_sided": 1.0,
+     "p_two_sided": 1.0
+    },
+    "NA-GB->ND-GB": {
+     "dates": 5,
+     "mean_gain": -0.03989292252989049,
+     "p_one_sided": 0.9375,
+     "p_two_sided": 0.25
+    },
+    "NA-GB->NN3-GB": {
+     "dates": 5,
+     "mean_gain": -0.0019841188278129206,
+     "p_one_sided": 0.65625,
+     "p_two_sided": 0.75
+    },
+    "ST-LR->ST-LR-N2": {
+     "dates": 12,
+     "mean_gain": 0.02997485402411454,
+     "p_one_sided": 0.0625,
+     "p_two_sided": 0.125
+    },
+    "ST-LR->ST-LR-N3": {
+     "dates": 12,
+     "mean_gain": 0.02936693433770111,
+     "p_one_sided": 0.25,
+     "p_two_sided": 0.5
+    }
+   },
+   "driver_ablation": {
+    "LR": [
+     {
+      "arm": "DROP-D1_prices-LR",
+      "issued": 25,
+      "accuracy": 0.16,
+      "balanced": 0.175,
+      "brier": 0.6550037703957989,
+      "recall_HIGH": 0.2,
+      "f1": 0.08695652173913045,
+      "auc": 0.24
+     },
+     {
+      "arm": "DROP-D2_climate-LR",
+      "issued": 25,
+      "accuracy": 0.24,
+      "balanced": 0.375,
+      "brier": 0.6937070138597079,
+      "recall_HIGH": 0.6,
+      "f1": 0.24,
+      "auc": 0.29000000000000004
+     },
+     {
+      "arm": "DROP-D3_agri_supply-LR",
+      "issued": 25,
+      "accuracy": 0.24,
+      "balanced": 0.30000000000000004,
+      "brier": 0.726717474787376,
+      "recall_HIGH": 0.4,
+      "f1": 0.1739130434782609,
+      "auc": 0.22
+     },
+     {
+      "arm": "DROP-D4_household_economy-LR",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.4,
+      "brier": 0.48700512059330614,
+      "recall_HIGH": 0.4,
+      "f1": 0.21052631578947364,
+      "auc": 0.38999999999999996
+     },
+     {
+      "arm": "DROP-H_history-LR",
+      "issued": 25,
+      "accuracy": 0.44,
+      "balanced": 0.5,
+      "brier": 0.42973202300353236,
+      "recall_HIGH": 0.6,
+      "f1": 0.3,
+      "auc": 0.7000000000000001
+     },
+     {
+      "arm": "DROP-NEWS-LR",
+      "issued": 25,
+      "accuracy": 0.2,
+      "balanced": 0.2,
+      "brier": 0.6728796905349932,
+      "recall_HIGH": 0.2,
+      "f1": 0.0909090909090909,
+      "auc": 0.23000000000000004
+     },
+     {
+      "arm": "ONLY-D1_prices-LR",
+      "issued": 25,
+      "accuracy": 0.52,
+      "balanced": 0.625,
+      "brier": 0.2588002761191781,
+      "recall_HIGH": 0.8,
+      "f1": 0.4,
+      "auc": 0.6699999999999999
+     },
+     {
+      "arm": "ONLY-D2_climate-LR",
+      "issued": 25,
+      "accuracy": 0.6,
+      "balanced": 0.75,
+      "brier": 0.3108667000054113,
+      "recall_HIGH": 1.0,
+      "f1": 0.5,
+      "auc": 0.5449999999999999
+     },
+     {
+      "arm": "ONLY-D3_agri_supply-LR",
+      "issued": 25,
+      "accuracy": 0.52,
+      "balanced": 0.7,
+      "brier": 0.20211720651238768,
+      "recall_HIGH": 1.0,
+      "f1": 0.45454545454545453,
+      "auc": 0.94
+     },
+     {
+      "arm": "ONLY-D4_household_economy-LR",
+      "issued": 25,
+      "accuracy": 0.2,
+      "balanced": 0.5,
+      "brier": 0.71249224540373,
+      "recall_HIGH": 1.0,
+      "f1": 0.33333333333333337,
+      "auc": 0.20000000000000007
+     },
+     {
+      "arm": "ONLY-H_history-LR",
+      "issued": 25,
+      "accuracy": 0.28,
+      "balanced": 0.25,
+      "brier": 0.7506944355021503,
+      "recall_HIGH": 0.2,
+      "f1": 0.1,
+      "auc": 0.20000000000000007
+     },
+     {
+      "arm": "ONLY-NEWS-LR",
+      "issued": 25,
+      "accuracy": 0.2,
+      "balanced": 0.35,
+      "brier": 0.35114166845185596,
+      "recall_HIGH": 0.6,
+      "f1": 0.23076923076923073,
+      "auc": 0.5499999999999999
+     }
+    ],
+    "GB": [
+     {
+      "arm": "DROP-D1_prices-GB",
+      "issued": 25,
+      "accuracy": 0.64,
+      "balanced": 0.775,
+      "brier": 0.2896212331195283,
+      "recall_HIGH": 1.0,
+      "f1": 0.5263157894736842,
+      "auc": 0.8999999999999999
+     },
+     {
+      "arm": "DROP-D2_climate-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.3411671501082636,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.85
+     },
+     {
+      "arm": "DROP-D3_agri_supply-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.3979582715260104,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.745
+     },
+     {
+      "arm": "DROP-D4_household_economy-GB",
+      "issued": 25,
+      "accuracy": 0.64,
+      "balanced": 0.475,
+      "brier": 0.23671443907284703,
+      "recall_HIGH": 0.2,
+      "f1": 0.1818181818181818,
+      "auc": 0.5700000000000001
+     },
+     {
+      "arm": "DROP-H_history-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.33982875497871057,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.85
+     },
+     {
+      "arm": "DROP-NEWS-GB",
+      "issued": 25,
+      "accuracy": 0.44,
+      "balanced": 0.65,
+      "brier": 0.34217970669962683,
+      "recall_HIGH": 1.0,
+      "f1": 0.4166666666666667,
+      "auc": 0.91
+     },
+     {
+      "arm": "ONLY-D1_prices-GB",
+      "issued": 25,
+      "accuracy": 0.52,
+      "balanced": 0.325,
+      "brier": 0.2910658497143222,
+      "recall_HIGH": 0.0,
+      "f1": 0.0,
+      "auc": 0.27
+     },
+     {
+      "arm": "ONLY-D2_climate-GB",
+      "issued": 25,
+      "accuracy": 0.48,
+      "balanced": 0.375,
+      "brier": 0.2910695741420694,
+      "recall_HIGH": 0.2,
+      "f1": 0.13333333333333333,
+      "auc": 0.55
+     },
+     {
+      "arm": "ONLY-D3_agri_supply-GB",
+      "issued": 25,
+      "accuracy": 0.68,
+      "balanced": 0.6499999999999999,
+      "brier": 0.19124758336557254,
+      "recall_HIGH": 0.6,
+      "f1": 0.42857142857142855,
+      "auc": 0.74
+     },
+     {
+      "arm": "ONLY-D4_household_economy-GB",
+      "issued": 25,
+      "accuracy": 0.4,
+      "balanced": 0.625,
+      "brier": 0.47414778497350196,
+      "recall_HIGH": 1.0,
+      "f1": 0.4,
+      "auc": 0.875
+     },
+     {
+      "arm": "ONLY-H_history-GB",
+      "issued": 25,
+      "accuracy": 0.28,
+      "balanced": 0.25,
+      "brier": 0.30458274892698706,
+      "recall_HIGH": 0.2,
+      "f1": 0.1,
+      "auc": 0.15000000000000002
+     },
+     {
+      "arm": "ONLY-NEWS-GB",
+      "issued": 25,
+      "accuracy": 0.56,
+      "balanced": 0.5,
+      "brier": 0.25226402069508597,
+      "recall_HIGH": 0.4,
+      "f1": 0.26666666666666666,
+      "auc": 0.57
+     }
+    ]
+   },
+   "tests": {
+    "S-SIM vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.16756855199999998,
+     "p_one_sided": 0.045654296875,
+     "p_two_sided": 0.09130859375,
+     "p_holm": 0.09130859375
+    },
+    "S-SIM vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": 0.020835134492667,
+     "p_one_sided": 0.355224609375,
+     "p_two_sided": 0.71044921875,
+     "p_holm": 0.355224609375
+    },
+    "S-SIM vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.5175685520000001,
+     "p_one_sided": 0.002685546875,
+     "p_two_sided": 0.00537109375,
+     "p_holm": 0.008056640625
+    },
+    "S-SIM-SEAS vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.16665503441666665,
+     "p_one_sided": 0.034423828125,
+     "p_two_sided": 0.06884765625,
+     "p_holm": 0.06884765625
+    },
+    "S-SIM-SEAS vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": 0.019921616909333657,
+     "p_one_sided": 0.36572265625,
+     "p_two_sided": 0.7314453125,
+     "p_holm": 0.36572265625
+    },
+    "S-SIM-SEAS vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.5166550344166667,
+     "p_one_sided": 0.002685546875,
+     "p_two_sided": 0.00537109375,
+     "p_holm": 0.008056640625
+    },
+    "S-SIM-THR vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.17299153509876541,
+     "p_one_sided": 0.040771484375,
+     "p_two_sided": 0.08154296875,
+     "p_holm": 0.08154296875
+    },
+    "S-SIM-THR vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": 0.026258117591432432,
+     "p_one_sided": 0.335205078125,
+     "p_two_sided": 0.67041015625,
+     "p_holm": 0.335205078125
+    },
+    "S-SIM-THR vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.5229915350987654,
+     "p_one_sided": 0.00244140625,
+     "p_two_sided": 0.0048828125,
+     "p_holm": 0.00732421875
+    },
+    "S-SIM-SEAS-THR vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.17013744656893004,
+     "p_one_sided": 0.0302734375,
+     "p_two_sided": 0.060546875,
+     "p_holm": 0.060546875
+    },
+    "S-SIM-SEAS-THR vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": 0.023404029061597036,
+     "p_one_sided": 0.3544921875,
+     "p_two_sided": 0.708984375,
+     "p_holm": 0.3544921875
+    },
+    "S-SIM-SEAS-THR vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.52013744656893,
+     "p_one_sided": 0.00244140625,
+     "p_two_sided": 0.0048828125,
+     "p_holm": 0.00732421875
+    },
+    "ST-LR vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.09528611912109913,
+     "p_one_sided": 0.063720703125,
+     "p_two_sided": 0.12744140625,
+     "p_holm": 0.12744140625
+    },
+    "ST-LR vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": -0.05144729838623388,
+     "p_one_sided": 0.738037109375,
+     "p_two_sided": 0.5244140625,
+     "p_holm": 0.738037109375
+    },
+    "ST-LR vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.4452861191210992,
+     "p_one_sided": 0.003173828125,
+     "p_two_sided": 0.00634765625,
+     "p_holm": 0.009521484375
+    },
+    "ST-LR-N2 vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.1252609731452137,
+     "p_one_sided": 0.037353515625,
+     "p_two_sided": 0.07470703125,
+     "p_holm": 0.07470703125
+    },
+    "ST-LR-N2 vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": -0.02147244436211933,
+     "p_one_sided": 0.615234375,
+     "p_two_sided": 0.77001953125,
+     "p_holm": 0.615234375
+    },
+    "ST-LR-N2 vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.4752609731452137,
+     "p_one_sided": 0.002685546875,
+     "p_two_sided": 0.00537109375,
+     "p_holm": 0.008056640625
+    },
+    "ST-LR-N3 vs B-PERSIST": {
+     "dates": 12,
+     "mean_gain": 0.12465305345880023,
+     "p_one_sided": 0.0703125,
+     "p_two_sided": 0.140625,
+     "p_holm": 0.140625
+    },
+    "ST-LR-N3 vs B-CLIM": {
+     "dates": 12,
+     "mean_gain": -0.02208036404853277,
+     "p_one_sided": 0.631103515625,
+     "p_two_sided": 0.73828125,
+     "p_holm": 0.631103515625
+    },
+    "ST-LR-N3 vs B-AH": {
+     "dates": 12,
+     "mean_gain": 0.4746530534588002,
+     "p_one_sided": 0.002685546875,
+     "p_two_sided": 0.00537109375,
+     "p_holm": 0.008056640625
+    },
+    "M-LR-ALL vs B-PERSIST": {
+     "dates": 5,
+     "mean_gain": -0.16962773867122846,
+     "p_one_sided": 0.90625,
+     "p_two_sided": 0.25,
+     "p_holm": 1.0
+    },
+    "M-LR-ALL vs B-CLIM": {
+     "dates": 5,
+     "mean_gain": -0.43140315533789514,
+     "p_one_sided": 0.96875,
+     "p_two_sided": 0.125,
+     "p_holm": 1.0
+    },
+    "M-LR-ALL vs B-AH": {
+     "dates": 5,
+     "mean_gain": 0.19037226132877155,
+     "p_one_sided": 0.15625,
+     "p_two_sided": 0.3125,
+     "p_holm": 0.46875
+    },
+    "M-GB-ALL vs B-PERSIST": {
+     "dates": 5,
+     "mean_gain": 0.10017124502128956,
+     "p_one_sided": 0.25,
+     "p_two_sided": 0.5,
+     "p_holm": 0.5
+    },
+    "M-GB-ALL vs B-CLIM": {
+     "dates": 5,
+     "mean_gain": -0.16160417164537716,
+     "p_one_sided": 0.875,
+     "p_two_sided": 0.3125,
+     "p_holm": 0.875
+    },
+    "M-GB-ALL vs B-AH": {
+     "dates": 5,
+     "mean_gain": 0.46017124502128953,
+     "p_one_sided": 0.03125,
+     "p_two_sided": 0.0625,
+     "p_holm": 0.09375
+    },
+    "M-GB-S vs B-PERSIST": {
+     "dates": 5,
+     "mean_gain": 0.09591647468233211,
+     "p_one_sided": 0.25,
+     "p_two_sided": 0.5,
+     "p_holm": 0.5
+    },
+    "M-GB-S vs B-CLIM": {
+     "dates": 5,
+     "mean_gain": -0.16585894198433457,
+     "p_one_sided": 0.875,
+     "p_two_sided": 0.3125,
+     "p_holm": 0.875
+    },
+    "M-GB-S vs B-AH": {
+     "dates": 5,
+     "mean_gain": 0.45591647468233204,
+     "p_one_sided": 0.03125,
+     "p_two_sided": 0.0625,
+     "p_holm": 0.09375
+    }
+   },
+   "group_permutation_LR": {
+    "D1_prices": -0.0006733635810714089,
+    "D2_climate": 0.0009167811808071594,
+    "D3_agri_supply": -0.005524746745377108,
+    "D4_household_economy": 0.0,
+    "H_history": 0.0,
+    "D5_news_v0": 0.020151287239195965
+   },
+   "perm_origins": 5,
+   "group_permutation_GB": {
+    "D1_prices": -0.0030654027317954793,
+    "D2_climate": 0.0,
+    "D3_agri_supply": 0.0006199639712779082,
+    "D4_household_economy": 0.0,
+    "H_history": 0.0,
+    "D5_news_v0": -0.0009809257537180924
+   },
+   "placebo_ST_LR_N3": {
+    "placebo_brier_gain_vs_clim_mean": 0.03695463849721953,
+    "placebo_p95": 0.058377446532867944,
+    "real_brier_gain_vs_clim": -0.022080364048532752
+   }
+  }
+ }
+}

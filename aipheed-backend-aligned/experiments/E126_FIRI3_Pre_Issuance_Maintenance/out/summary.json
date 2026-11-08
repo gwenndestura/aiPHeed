@@ -1,0 +1,636 @@
+{
+ "today": "2026-10-31",
+ "baseline": {
+  "head": "26742c09f96707d09a3bf8dd32dc82e5ffc394ed",
+  "config_sha256": "8973ca661cfcd68d41d7d1c9eb033adcdf3454723a7253294a8343f70d2178f0",
+  "config_frozen": true,
+  "protocol_ok": true,
+  "amendment_1_ok": true,
+  "amendment_2_ok": true,
+  "firi3_sha256": "c55224e3dd3e7e53ef9f948431f4adc9bc43e6d4d01261332b552c04582892cd",
+  "firi3_version": "FIRI3-candidate-1.2",
+  "firi_v2": {
+   "backend\\app\\ml\\inference\\firi.py": "0e583131a7de3b9844241d3927eede813077d7cccbf949cd8313973436d0f8e3",
+   "backend\\data\\thesis\\firi2_history.csv": "b84558def7a00d4f077c0206d9c9cb6e9df3ef1fa02125fe0141f263ebb753ad",
+   "backend\\data\\thesis\\firi2_reference.json": "25af6411488563d0b5782aa9ac05792be79d4880399d18558a63203a44860189"
+  },
+  "production_clean": true,
+  "store_forecasts": [],
+  "registry_events": [
+   [
+    "attempt_blocked",
+    "2026-10-31"
+   ]
+  ],
+  "e125_outputs_sha256": {
+   "E125_AUTOMATED_TEST_REPORT.md": "677db1aa6d177adebca664631f4b44d1ce507b2f030770d845e60f2fac0b8225",
+   "E125_BASELINE_VERIFICATION.md": "3d7b96242f129affedf066a037d2ce2bdf7b135b5eca92758eca539cf0d916b6",
+   "E125_CYCLONE_REFRESH_AUDIT.csv": "b500f9275f4cb39ed73baa5c9654dca5b0b09eaf76dcac81ffb59b804d6b2949",
+   "E125_FEATURE_ELIGIBILITY_AUDIT.csv": "17689e556988229505956a51396141654cea1184b597f540c58535f7392cca56",
+   "E125_FINAL_RECOMMENDATION.md": "b932dbe7cf3c5d3f221e81013b66f565954149c51c106c9a72a567ec40558b3f",
+   "E125_ISSUANCE_READINESS_REPORT.md": "66b3e1ba859d66c81bfd1f95198627a9d14686f1a5a0f5ee26400a24e791c47f",
+   "E125_LFS_SEPTEMBER_2026_AUDIT.md": "fea9f876ba1df58f666f980cad5acf7fc350d78e712fe327a8c4ddd16e0330f4",
+   "E125_NASA_POWER_REFRESH_AUDIT.csv": "2953dfb649f611a1f1f67d78ce67d0639d3a4589cc41070fa224bbb93c7b6ae1",
+   "E125_PUBLICATION_DATE_VERIFICATION.csv": "7f8cfef122fc851a971653b9b0df4d580f00b47b97902d7c9266d9063b6eb51c",
+   "E125_REFRESHED_FEATURES.csv": "da9d65f0b07f7d0e402b11fe09fb1ef1952d98eec24e11527b405862d882c9e5",
+   "E125_SCORE_RECONCILIATION.csv": "5f23216eb1e8c48e6bd0bad594e8d544c1e11c5a6d0a3580ee1aa6f060bcc23e"
+  },
+  "e125_refreshed": {
+   "nasa_2026_months": [
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+   ],
+   "par_2026q3": [
+    7
+   ],
+   "local_2026q3": {
+    "Cavite": 0,
+    "Laguna": 0,
+    "Quezon": 0,
+    "Rizal": 0,
+    "Batangas": 0
+   },
+   "lfs_q3_months": [
+    "July",
+    "August"
+   ]
+  },
+  "e125_blockers": [
+   "C1_date_on_or_after_issue",
+   "C3_required_periods_complete_and_refreshed"
+  ]
+ },
+ "par_verification": {
+  "confirmed_true_zero": [
+   "2023-Q1",
+   "2024-Q1",
+   "2025-Q1"
+  ],
+  "all_confirmed": true,
+  "e114_absent_quarters_2021plus": [
+   "2023-Q1",
+   "2024-Q1",
+   "2025-Q1"
+  ],
+  "e114_other_quarters_match_recount": true
+ },
+ "impact": {
+  "E123 inputs (pre-refresh)": {
+   "scores_changed": 9,
+   "scopes": [
+    "regional"
+   ],
+   "max_abs_change": 0.041987179487179505,
+   "band_changes": 2,
+   "detail": [
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q2",
+     "firi3": 0.5479166666666666,
+     "firi3_a3": 0.5347222222222222,
+     "band": "above usual",
+     "band_a3": "above usual"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q3",
+     "firi3": 0.5728705322455322,
+     "firi3_a3": 0.5807959401709402,
+     "band": "above usual",
+     "band_a3": "above usual"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q4",
+     "firi3": 0.4973412698412699,
+     "firi3_a3": 0.4977380952380953,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q1",
+     "firi3": 0.4521639471639471,
+     "firi3_a3": 0.4548989898989899,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q2",
+     "firi3": 0.5282245532245532,
+     "firi3_a3": 0.4862373737373737,
+     "band": "above usual",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q3",
+     "firi3": 0.3431317457052751,
+     "firi3_a3": 0.3540561154531742,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q1",
+     "firi3": 0.3305064745196324,
+     "firi3_a3": 0.33478279030910607,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q2",
+     "firi3": 0.4079084967320261,
+     "firi3_a3": 0.41555555555555557,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q3",
+     "firi3": 0.6271727163087457,
+     "firi3_a3": 0.6321991713352008,
+     "band": "above usual",
+     "band_a3": "elevated"
+    }
+   ],
+   "features_changed": {
+    "CEC_cyclones_R": 13
+   },
+   "feature_rows": [
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2022-Q4",
+     "period_a3": "2023-Q1",
+     "raw_value": 6.0,
+     "raw_value_a3": 0.0,
+     "score": NaN,
+     "score_a3": 0.0
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q2",
+     "period_a3": "2023-Q2",
+     "raw_value": 3.0,
+     "raw_value_a3": 3.0,
+     "score": 0.25,
+     "score_a3": 0.3333333333333333
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q4",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q3",
+     "period_a3": "2023-Q3",
+     "raw_value": 8.0,
+     "raw_value_a3": 8.0,
+     "score": 0.7777777777777778,
+     "score_a3": 0.8
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q4",
+     "period_a3": "2023-Q4",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.2,
+     "score_a3": 0.2727272727272727
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q4",
+     "period_a3": "2024-Q1",
+     "raw_value": 2.0,
+     "raw_value_a3": 0.0,
+     "score": 0.2,
+     "score_a3": 0.041666666666666664
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q2",
+     "period_a3": "2024-Q2",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.22727272727272727,
+     "score_a3": 0.34615384615384615
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q4",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q3",
+     "period_a3": "2024-Q3",
+     "raw_value": 10.0,
+     "raw_value_a3": 10.0,
+     "score": 0.9583333333333334,
+     "score_a3": 0.9642857142857143
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q4",
+     "period_a3": "2024-Q4",
+     "raw_value": 7.0,
+     "raw_value_a3": 7.0,
+     "score": 0.6923076923076923,
+     "score_a3": 0.7333333333333333
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q4",
+     "period_a3": "2025-Q1",
+     "raw_value": 7.0,
+     "raw_value_a3": 0.0,
+     "score": 0.6923076923076923,
+     "score_a3": 0.0625
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2025-Q2",
+     "period_a3": "2025-Q2",
+     "raw_value": 1.0,
+     "raw_value_a3": 1.0,
+     "score": 0.07142857142857142,
+     "score_a3": 0.23529411764705882
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2025-Q4",
+     "period_a3": "2025-Q4",
+     "raw_value": 6.0,
+     "raw_value_a3": 6.0,
+     "score": 0.59375,
+     "score_a3": 0.6578947368421053
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2026-Q1",
+     "period_a3": "2026-Q1",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.23529411764705882,
+     "score_a3": 0.35
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2026-Q2",
+     "period_a3": "2026-Q2",
+     "raw_value": 4.0,
+     "raw_value_a3": 4.0,
+     "score": 0.4722222222222222,
+     "score_a3": 0.5476190476190477
+    }
+   ],
+   "ccs_changed": 9,
+   "provincial_changed": 0,
+   "origin_2026q4_feature": {
+    "period_without_a3": "2026-Q2",
+    "period_with_a3": "2026-Q2",
+    "score_without_a3": 0.4722222222222222,
+    "score_with_a3": 0.5476190476190477,
+    "affected": true
+   }
+  },
+  "E125 refreshed inputs": {
+   "scores_changed": 9,
+   "scopes": [
+    "regional"
+   ],
+   "max_abs_change": 0.041987179487179505,
+   "band_changes": 1,
+   "detail": [
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q2",
+     "firi3": 0.5479166666666666,
+     "firi3_a3": 0.5347222222222222,
+     "band": "above usual",
+     "band_a3": "above usual"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q3",
+     "firi3": 0.5728705322455322,
+     "firi3_a3": 0.5807959401709402,
+     "band": "above usual",
+     "band_a3": "above usual"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2024-Q4",
+     "firi3": 0.4973412698412699,
+     "firi3_a3": 0.4977380952380953,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q1",
+     "firi3": 0.4521639471639471,
+     "firi3_a3": 0.4548989898989899,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q2",
+     "firi3": 0.5282245532245532,
+     "firi3_a3": 0.4862373737373737,
+     "band": "above usual",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2025-Q3",
+     "firi3": 0.3431317457052751,
+     "firi3_a3": 0.3540561154531742,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q1",
+     "firi3": 0.3305064745196324,
+     "firi3_a3": 0.33478279030910607,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q2",
+     "firi3": 0.36235294117647066,
+     "firi3_a3": 0.37,
+     "band": "usual or below",
+     "band_a3": "usual or below"
+    },
+    {
+     "scope": "regional",
+     "unit": "CALABARZON (regional)",
+     "origin": "2026-Q3",
+     "firi3": 0.6825975529100529,
+     "firi3_a3": 0.6876240079365079,
+     "band": "elevated",
+     "band_a3": "elevated"
+    }
+   ],
+   "features_changed": {
+    "CEC_cyclones_R": 13
+   },
+   "feature_rows": [
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2022-Q4",
+     "period_a3": "2023-Q1",
+     "raw_value": 6.0,
+     "raw_value_a3": 0.0,
+     "score": NaN,
+     "score_a3": 0.0
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q2",
+     "period_a3": "2023-Q2",
+     "raw_value": 3.0,
+     "raw_value_a3": 3.0,
+     "score": 0.25,
+     "score_a3": 0.3333333333333333
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2023-Q4",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q3",
+     "period_a3": "2023-Q3",
+     "raw_value": 8.0,
+     "raw_value_a3": 8.0,
+     "score": 0.7777777777777778,
+     "score_a3": 0.8
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q4",
+     "period_a3": "2023-Q4",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.2,
+     "score_a3": 0.2727272727272727
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2023-Q4",
+     "period_a3": "2024-Q1",
+     "raw_value": 2.0,
+     "raw_value_a3": 0.0,
+     "score": 0.2,
+     "score_a3": 0.041666666666666664
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q2",
+     "period_a3": "2024-Q2",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.22727272727272727,
+     "score_a3": 0.34615384615384615
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2024-Q4",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q3",
+     "period_a3": "2024-Q3",
+     "raw_value": 10.0,
+     "raw_value_a3": 10.0,
+     "score": 0.9583333333333334,
+     "score_a3": 0.9642857142857143
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q4",
+     "period_a3": "2024-Q4",
+     "raw_value": 7.0,
+     "raw_value_a3": 7.0,
+     "score": 0.6923076923076923,
+     "score_a3": 0.7333333333333333
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2024-Q4",
+     "period_a3": "2025-Q1",
+     "raw_value": 7.0,
+     "raw_value_a3": 0.0,
+     "score": 0.6923076923076923,
+     "score_a3": 0.0625
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2025-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2025-Q2",
+     "period_a3": "2025-Q2",
+     "raw_value": 1.0,
+     "raw_value_a3": 1.0,
+     "score": 0.07142857142857142,
+     "score_a3": 0.23529411764705882
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q1",
+     "feature": "CEC_cyclones_R",
+     "period": "2025-Q4",
+     "period_a3": "2025-Q4",
+     "raw_value": 6.0,
+     "raw_value_a3": 6.0,
+     "score": 0.59375,
+     "score_a3": 0.6578947368421053
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q2",
+     "feature": "CEC_cyclones_R",
+     "period": "2026-Q1",
+     "period_a3": "2026-Q1",
+     "raw_value": 2.0,
+     "raw_value_a3": 2.0,
+     "score": 0.23529411764705882,
+     "score_a3": 0.35
+    },
+    {
+     "unit": "CALABARZON (regional)",
+     "t": "2026-Q3",
+     "feature": "CEC_cyclones_R",
+     "period": "2026-Q2",
+     "period_a3": "2026-Q2",
+     "raw_value": 4.0,
+     "raw_value_a3": 4.0,
+     "score": 0.4722222222222222,
+     "score_a3": 0.5476190476190477
+    }
+   ],
+   "ccs_changed": 9,
+   "provincial_changed": 0,
+   "origin_2026q4_feature": {
+    "period_without_a3": "2026-Q3",
+    "period_with_a3": "2026-Q3",
+    "score_without_a3": 0.7105263157894737,
+    "score_with_a3": 0.75,
+    "affected": true
+   }
+  }
+ },
+ "lfs": {
+  "quarters_complete": 22,
+  "max_abs_rate_difference_pp": 0.0205,
+  "mean_abs_rate_difference_pp": 0.0059,
+  "frozen_input_equals_mean_of_rates": true,
+  "q3_2026": {
+   "fetched_utc": "2026-10-31T07:00:35+00:00",
+   "titles": {
+    "rates": "Rates Key Employment Indicators: April 2005 to August 2026",
+    "levels": "Levels of Key Employment Indicators: April 2005 to August  2026"
+   },
+   "files_sha256": {
+    "psa_lfs_0021B3FKEI2_rates.csv": "88acc6df3f86c424cc76e16aec066f6e3bccd97c98f9f39ed2d8cbf121098538",
+    "psa_lfs_0011B3FKEI1_levels.csv": "53c0507f85a4821ccb28d07803b3039779736e5a2eea1a600d0d0ffbd1a9a5b5"
+   },
+   "quarter": "2026-Q3",
+   "months_present": [
+    "July",
+    "August"
+   ],
+   "complete": false,
+   "status": "BLOCKED",
+   "reason": "1 of 3 months not published",
+   "mean_of_rates": null,
+   "level_based_rate": null
+  },
+  "e1_change_max_abs_difference_pp": 0.0179,
+  "firi3_sensitivity_level_based": {
+   "scores_changed": 0,
+   "max_abs_change": 0.0,
+   "band_changes": 0
+  }
+ },
+ "cpi_region_recheck": {
+  "rows_compared": 432,
+  "revised": 0,
+  "new_rows": 0,
+  "latest_month": 24323,
+  "sha256": "696c0d8f19c95da76ae7a8643b50870775200e0d49e3e9c402a08937a2ef3377"
+ },
+ "readiness_counts": {
+  "already available": 33,
+  "incomplete (expected before the issue: September LFS by rule 2026-12-01)": 1
+ },
+ "decisions": {
+  "READY WITH WARNING": 29,
+  "READY": 4,
+  "BLOCKED": 1
+ },
+ "blockers": [
+  "B1 issue date 2027-01-01 not reached (today 2026-10-31)",
+  "B2 September 2026 national unemployment not published (PSA tables end August 2026)"
+ ],
+ "result": "BLOCKED"
+}

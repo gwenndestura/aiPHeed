@@ -1,0 +1,2102 @@
+{
+ "production": {
+  "model_id": "e168-lgbm-1.0",
+  "version": "E168 LightGBM, issue 2026-Q4_2026-11-01",
+  "artifact_path": "data/e168/issues/2026-Q4_2026-11-01/live.json",
+  "artifact_file_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
+  "approved_utc": "2026-11-08T04:39:41+00:00"
+ },
+ "models": {
+  "ch1-p0h4": {
+   "version": "ch1 (P0H4 Chapter I composite)",
+   "artifact_path": "data/ch1_engine/rows.csv",
+   "target": "Price-pressure risk index: probability that the province is HIGH risk (not a food-insecurity measurement)",
+   "note": "Served on the map and left panel before this release gate existed; never evaluated by it. Its own metadata marks it is_food_insecurity_measurement = False.",
+   "artifact_sha256": "86d05bb62b3449d25b4261097a6ad1db1303ed628e3ad8aeea1eb01da1410cb3",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent",
+   "registered_utc": "2026-11-03T04:54:48+00:00"
+  },
+  "pfi-1.0": {
+   "version": "pfi-1.0",
+   "artifact_path": "data/pfi/model/pfi_model.json",
+   "target": "FIES moderate-or-severe food insecurity, % of households, province, next calendar quarter",
+   "evidence_builder": "app.pfi.evidence:build",
+   "tests": {
+    "release": [
+     "tests/unit/test_pfi.py::test_sws_release_filter",
+     "tests/unit/test_pfi.py::test_issue_uses_only_released_inputs",
+     "tests/unit/test_pfi.py::test_build_refuses_unreleased_survey"
+    ],
+    "leakage": [
+     "tests/unit/test_pfi.py::test_loo_prediction_ignores_held_out_outcome",
+     "tests/unit/test_pfi.py::test_issue_uses_only_released_inputs"
+    ],
+    "all": [
+     "tests/unit/test_pfi.py"
+    ]
+   },
+   "artifact_sha256": "a771c263eac74ece421f04d4c759daecf5a2682459ce6076104dbb16955a7775",
+   "model_id": "pfi-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T04:54:48+00:00",
+   "gate": {
+    "model_id": "pfi-1.0",
+    "evaluated_utc": "2026-11-03T04:55:16+00:00",
+    "thresholds": {
+     "accuracy_min": 0.75,
+     "balanced_accuracy_min": 0.7,
+     "high_recall_min": 0.6,
+     "high_precision_min": 0.5,
+     "ece_max": 0.1,
+     "interval_coverage_tolerance": 0.05,
+     "chronological_targets_min": 20,
+     "chronological_high_min": 10,
+     "required_groups": [
+      "market",
+      "climate",
+      "employment",
+      "poverty",
+      "news"
+     ],
+     "required_families": [
+      "A1",
+      "A2",
+      "A3",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "E1",
+      "E2",
+      "V1",
+      "N1",
+      "H1"
+     ],
+     "required_n1": "improved"
+    },
+    "thresholds_sha256": "e1e705ef4458324b6585c5888a3d97672213622fa626e83bd1b2bbdcb54e2489",
+    "artifact_file_sha256": "a771c263eac74ece421f04d4c759daecf5a2682459ce6076104dbb16955a7775",
+    "passed": false,
+    "decision": "REJECTED: not eligible for the dashboard",
+    "checks": [
+     {
+      "id": "B1",
+      "name": "Model training completed (sealed artifact loads, hash verified)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "artifact": "data/pfi/model/pfi_model.json"
+      }
+     },
+     {
+      "id": "B2",
+      "name": "All required features verified (five groups, twelve families in the model)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "families_used": [
+        "H1",
+        "V1"
+       ],
+       "missing_families": [
+        "A1",
+        "A2",
+        "A3",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "E1",
+        "E2",
+        "N1"
+       ],
+       "missing_groups": [
+        "market",
+        "climate",
+        "employment",
+        "news"
+       ]
+      }
+     },
+     {
+      "id": "B3",
+      "name": "Improved N1 integrated in the predictive pipeline",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "n1_version": null
+      }
+     },
+     {
+      "id": "B4",
+      "name": "Data and release-date audits",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py::test_sws_release_filter tests/unit/test_pfi.py::test_issue_uses_only_released_inputs tests/unit/test_pfi.py::test_build_refuses_unreleased_survey",
+       "returncode": 0,
+       "summary": "3 passed in 0.35s",
+       "notes": "Survey release dates are approximate (conservative month-end); SWS uses published dates."
+      }
+     },
+     {
+      "id": "B5",
+      "name": "Leakage checks",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py::test_loo_prediction_ignores_held_out_outcome tests/unit/test_pfi.py::test_issue_uses_only_released_inputs",
+       "returncode": 0,
+       "summary": "2 passed in 0.45s"
+      }
+     },
+     {
+      "id": "B6",
+      "name": "Chronological evaluation on the food-insecurity target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": "No chronological series of the target exists: FIES is measured for provinces never, for CALABARZON in 2023 and 2025 (provisional) only. One held-out wave (n = 1) is not a chronological evaluation. Held-out wave: 24.9% predicted vs 22.6% reported."
+     },
+     {
+      "id": "B7",
+      "name": "Independent validation where data permit",
+      "status": "pass",
+      "critical": false,
+      "evidence": {
+       "applicable": true,
+       "passed": true,
+       "what": "independent observation-level validation (leave-one-region-out, one wave)",
+       "accuracy": 1.0,
+       "accuracy_ci95": [
+        0.815676,
+        1.0
+       ],
+       "n": 17,
+       "note": "Regional level only (one wave); provincial quarterly forecasts are not covered."
+      }
+     },
+     {
+      "id": "B8",
+      "name": "Beats the best simple baseline on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": null
+     },
+     {
+      "id": "B9",
+      "name": "Accuracy and class-sensitive metrics on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": null
+     },
+     {
+      "id": "B10",
+      "name": "Calibration and uncertainty",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "interval_nominal": 0.95,
+       "interval_coverage": 0.882353,
+       "ece": 0.18034052941176468,
+       "basis": "leave-one-region-out level model (17 regions)"
+      }
+     },
+     {
+      "id": "B11",
+      "name": "Geographic generalization at the served resolution",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "passed_at_served_resolution": null,
+       "regional_loo": {
+        "mae_pp": 5.296442,
+        "n": 17
+       },
+       "note": "No province has a FIES measurement, so leave-one-province-out cannot be run."
+      }
+     },
+     {
+      "id": "B12",
+      "name": "Forecast horizon justified on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "validated_leads": [],
+       "note": "No lead is validated on the food-insecurity target; the SWS input's Lead 1 record is regional hunger, not the target."
+      }
+     },
+     {
+      "id": "B13",
+      "name": "Five-group contribution analysis (out-of-sample ablation)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "untested_groups": [
+        "climate",
+        "news"
+       ],
+       "groups": {
+        "market": {
+         "tested_out_of_sample": true,
+         "how": "M4 rice inflation; M6 poverty + rice inflation",
+         "result": {
+          "model": "M4 rice inflation",
+          "loo_mae_pp": 6.117137,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 0.647059,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": false
+        },
+        "employment": {
+         "tested_out_of_sample": true,
+         "how": "M3 unemployment; M5 poverty + unemployment",
+         "result": {
+          "model": "M3 unemployment",
+          "loo_mae_pp": 7.285841,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 0.647059,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": false
+        },
+        "poverty": {
+         "tested_out_of_sample": true,
+         "how": "M1 poverty; M2 subsistence (food poverty)",
+         "result": {
+          "model": "M2 subsistence (food poverty)",
+          "loo_mae_pp": 5.296442,
+          "baseline_loo_mae_pp": 7.263519,
+          "accuracy_above_national": 1.0,
+          "selected_model_loo_mae_pp": 5.296442
+         },
+         "in_model": true
+        },
+        "climate": {
+         "tested_out_of_sample": false,
+         "how": "not testable for the level: no region-level 2023 series on file for all 17 FIES regions",
+         "in_model": false
+        },
+        "news": {
+         "tested_out_of_sample": false,
+         "how": "no region-level news series matched to the FIES regions",
+         "in_model": false
+        }
+       }
+      }
+     },
+     {
+      "id": "B14",
+      "name": "All automated tests pass",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_pfi.py",
+       "returncode": 0,
+       "summary": "22 passed in 3.78s"
+      }
+     },
+     {
+      "id": "B15",
+      "name": "Model card and methodology report",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "documents": [
+        "docs/pfi/METHODOLOGY.md"
+       ],
+       "found": [
+        "docs/pfi/METHODOLOGY.md"
+       ]
+      }
+     },
+     {
+      "id": "A1",
+      "name": "Valid food-insecurity target (not a proxy)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "construct": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+       "is_food_insecurity_measurement": true,
+       "served_resolution": "province",
+       "served_frequency": "calendar quarter"
+      }
+     }
+    ],
+    "evidence": {
+     "model_id": "pfi-1.0",
+     "artifact_loads": true,
+     "artifact_path": "data/pfi/model/pfi_model.json",
+     "target": {
+      "construct": "FIES moderate-or-severe food insecurity, % of households (SDG 2.1.2; 12-month recall)",
+      "is_food_insecurity_measurement": true,
+      "served_resolution": "province",
+      "served_frequency": "calendar quarter"
+     },
+     "families_used": [
+      "H1",
+      "V1"
+     ],
+     "groups_used": [
+      "poverty"
+     ],
+     "n1_version": null,
+     "release_notes": "Survey release dates are approximate (conservative month-end); SWS uses published dates.",
+     "chronological": null,
+     "chronological_note": "No chronological series of the target exists: FIES is measured for provinces never, for CALABARZON in 2023 and 2025 (provisional) only. One held-out wave (n = 1) is not a chronological evaluation. Held-out wave: 24.9% predicted vs 22.6% reported.",
+     "independent": {
+      "applicable": true,
+      "passed": true,
+      "what": "independent observation-level validation (leave-one-region-out, one wave)",
+      "accuracy": 1.0,
+      "accuracy_ci95": [
+       0.815676,
+       1.0
+      ],
+      "n": 17,
+      "note": "Regional level only (one wave); provincial quarterly forecasts are not covered."
+     },
+     "calibration": {
+      "interval_nominal": 0.95,
+      "interval_coverage": 0.882353,
+      "ece": 0.18034052941176468,
+      "basis": "leave-one-region-out level model (17 regions)"
+     },
+     "geographic": {
+      "passed_at_served_resolution": null,
+      "regional_loo": {
+       "mae_pp": 5.296442,
+       "n": 17
+      },
+      "note": "No province has a FIES measurement, so leave-one-province-out cannot be run."
+     },
+     "horizon": {
+      "validated_leads": [],
+      "note": "No lead is validated on the food-insecurity target; the SWS input's Lead 1 record is regional hunger, not the target."
+     },
+     "group_contribution": {
+      "market": {
+       "tested_out_of_sample": true,
+       "how": "M4 rice inflation; M6 poverty + rice inflation",
+       "result": {
+        "model": "M4 rice inflation",
+        "loo_mae_pp": 6.117137,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 0.647059,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": false
+      },
+      "employment": {
+       "tested_out_of_sample": true,
+       "how": "M3 unemployment; M5 poverty + unemployment",
+       "result": {
+        "model": "M3 unemployment",
+        "loo_mae_pp": 7.285841,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 0.647059,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": false
+      },
+      "poverty": {
+       "tested_out_of_sample": true,
+       "how": "M1 poverty; M2 subsistence (food poverty)",
+       "result": {
+        "model": "M2 subsistence (food poverty)",
+        "loo_mae_pp": 5.296442,
+        "baseline_loo_mae_pp": 7.263519,
+        "accuracy_above_national": 1.0,
+        "selected_model_loo_mae_pp": 5.296442
+       },
+       "in_model": true
+      },
+      "climate": {
+       "tested_out_of_sample": false,
+       "how": "not testable for the level: no region-level 2023 series on file for all 17 FIES regions",
+       "in_model": false
+      },
+      "news": {
+       "tested_out_of_sample": false,
+       "how": "no region-level news series matched to the FIES regions",
+       "in_model": false
+      }
+     },
+     "documents": [
+      "docs/pfi/METHODOLOGY.md"
+     ]
+    }
+   }
+  },
+  "hfias-1.0": {
+   "version": "hfias-1.0",
+   "artifact_path": "data/hfias/out/study_insecure.json",
+   "target": "HFIAS household food insecurity (any level), province, FNRI ENNS round; locked protocol",
+   "evidence_builder": "app.hfias.evidence:build",
+   "tests": {
+    "release": [
+     "tests/unit/test_hfias.py::test_features_respect_release_dates",
+     "tests/unit/test_hfias.py::test_quarterly_production_uses_published_quarters_only"
+    ],
+    "leakage": [
+     "tests/unit/test_hfias.py::test_study_split_is_chronological_and_disjoint",
+     "tests/unit/test_hfias.py::test_protocol_lock_matches_code"
+    ],
+    "all": [
+     "tests/unit/test_hfias.py"
+    ]
+   },
+   "artifact_sha256": "4f46ffd1d0240823f0f8834f7eefc2d7ea79ab85734a78a1b90ee519f82dddc1",
+   "model_id": "hfias-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T06:16:28+00:00",
+   "gate": {
+    "model_id": "hfias-1.0",
+    "evaluated_utc": "2026-11-03T06:17:40+00:00",
+    "thresholds": {
+     "accuracy_min": 0.75,
+     "balanced_accuracy_min": 0.7,
+     "high_recall_min": 0.6,
+     "high_precision_min": 0.5,
+     "ece_max": 0.1,
+     "interval_coverage_tolerance": 0.05,
+     "chronological_targets_min": 20,
+     "chronological_high_min": 10,
+     "required_groups": [
+      "market",
+      "climate",
+      "employment",
+      "poverty",
+      "news"
+     ],
+     "required_families": [
+      "A1",
+      "A2",
+      "A3",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "E1",
+      "E2",
+      "V1",
+      "N1",
+      "H1"
+     ],
+     "required_n1": "improved"
+    },
+    "thresholds_sha256": "e1e705ef4458324b6585c5888a3d97672213622fa626e83bd1b2bbdcb54e2489",
+    "artifact_file_sha256": "4f46ffd1d0240823f0f8834f7eefc2d7ea79ab85734a78a1b90ee519f82dddc1",
+    "passed": false,
+    "decision": "REJECTED: not eligible for the dashboard",
+    "checks": [
+     {
+      "id": "B1",
+      "name": "Model training completed (sealed artifact loads, hash verified)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "artifact": "data/hfias/out/study_insecure.json"
+      }
+     },
+     {
+      "id": "B2",
+      "name": "All required features verified (five groups, twelve families in the model)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "families_used": [
+        "A1",
+        "A2",
+        "A3",
+        "C3",
+        "C4",
+        "H1",
+        "V1",
+        "H1"
+       ],
+       "missing_families": [
+        "C1",
+        "C2",
+        "E1",
+        "E2",
+        "N1"
+       ],
+       "missing_groups": [
+        "employment",
+        "news"
+       ]
+      }
+     },
+     {
+      "id": "B3",
+      "name": "Improved N1 integrated in the predictive pipeline",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "n1_version": null
+      }
+     },
+     {
+      "id": "B4",
+      "name": "Data and release-date audits",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py::test_features_respect_release_dates tests/unit/test_hfias.py::test_quarterly_production_uses_published_quarters_only",
+       "returncode": 0,
+       "summary": "5 passed in 1.21s",
+       "notes": null
+      }
+     },
+     {
+      "id": "B5",
+      "name": "Leakage checks",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py::test_study_split_is_chronological_and_disjoint tests/unit/test_hfias.py::test_protocol_lock_matches_code",
+       "returncode": 0,
+       "summary": "2 passed in 0.08s"
+      }
+     },
+     {
+      "id": "B6",
+      "name": "Chronological evaluation on the food-insecurity target",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "design": "train ENNS 2018 provinces, test ENNS 2019 provinces (later, different provinces)",
+       "n_targets": 30,
+       "n_high": 19,
+       "metrics": {
+        "accuracy": 0.6666666666666666,
+        "balanced_accuracy": 0.6220095693779905,
+        "high_recall": 0.7894736842105263,
+        "high_precision": 0.7142857142857143
+       },
+       "baselines": {
+        "model_brier": 0.2441728718531698,
+        "baseline_brier": {
+         "B0 no change": 0.20977370441617713,
+         "B1 mean change": 0.22100096326365923,
+         "B2 mean level": 0.2338662410582531
+        },
+        "model_mae_pp": 10.373877406475268,
+        "baseline_mae_pp": {
+         "B0 no change": 7.866666666666666,
+         "B1 mean change": 12.382545910996525,
+         "B2 mean level": 10.082636082523823
+        }
+       }
+      }
+     },
+     {
+      "id": "B7",
+      "name": "Independent validation where data permit",
+      "status": "fail",
+      "critical": false,
+      "evidence": {
+       "applicable": true,
+       "passed": false,
+       "what": "held-out ENNS 2019 provinces, FNRI-published HFIAS values",
+       "n": 30
+      }
+     },
+     {
+      "id": "B8",
+      "name": "Beats the best simple baseline on the target",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "model_brier": 0.2441728718531698,
+       "baseline_brier": {
+        "B0 no change": 0.20977370441617713,
+        "B1 mean change": 0.22100096326365923,
+        "B2 mean level": 0.2338662410582531
+       },
+       "model_mae_pp": 10.373877406475268,
+       "baseline_mae_pp": {
+        "B0 no change": 7.866666666666666,
+        "B1 mean change": 12.382545910996525,
+        "B2 mean level": 10.082636082523823
+       }
+      }
+     },
+     {
+      "id": "B9",
+      "name": "Accuracy and class-sensitive metrics on the target",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "accuracy": 0.6666666666666666,
+       "balanced_accuracy": 0.6220095693779905,
+       "high_recall": 0.7894736842105263,
+       "high_precision": 0.7142857142857143
+      }
+     },
+     {
+      "id": "B10",
+      "name": "Calibration and uncertainty",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "interval_nominal": 0.9,
+       "interval_coverage": 0.8666666666666667,
+       "ece": 0.2188962548433399
+      }
+     },
+     {
+      "id": "B11",
+      "name": "Geographic generalization at the served resolution",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "passed_at_served_resolution": false,
+       "island_cv_pooled_mae_pp": 13.688296698832547
+      }
+     },
+     {
+      "id": "B12",
+      "name": "Forecast horizon justified on the target",
+      "status": "not_evaluable",
+      "critical": true,
+      "evidence": {
+       "validated_leads": [],
+       "note": "Lead k = issue k quarters before Q1 of the survey year; the outcome is a survey round, not a quarter."
+      }
+     },
+     {
+      "id": "B13",
+      "name": "Five-group contribution analysis (out-of-sample ablation)",
+      "status": "fail",
+      "critical": true,
+      "evidence": {
+       "untested_groups": [
+        "employment",
+        "news"
+       ],
+       "groups": {
+        "market": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": -0.15400659840081232
+        },
+        "climate": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": -0.5616681812815774
+        },
+        "poverty": {
+         "tested_out_of_sample": true,
+         "mae_change_when_dropped_pp": 0.506844204035799
+        },
+        "employment": {
+         "tested_out_of_sample": false,
+         "why": "no provincial employment series for 2015-2019 on file nationwide"
+        },
+        "news": {
+         "tested_out_of_sample": false,
+         "why": "news corpus covers CALABARZON only; no nationwide provincial news series"
+        }
+       }
+      }
+     },
+     {
+      "id": "B14",
+      "name": "All automated tests pass",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_hfias.py",
+       "returncode": 0,
+       "summary": "12 passed in 1.28s"
+      }
+     },
+     {
+      "id": "B15",
+      "name": "Model card and methodology report",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "documents": [
+        "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+       ],
+       "found": [
+        "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+       ]
+      }
+     },
+     {
+      "id": "A1",
+      "name": "Valid food-insecurity target (not a proxy)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "construct": "HFIAS: share of households food insecure (any level), province, FNRI ENNS round",
+       "is_food_insecurity_measurement": true,
+       "served_resolution": "province",
+       "served_frequency": "survey round"
+      }
+     }
+    ],
+    "evidence": {
+     "model_id": "hfias-1.0",
+     "artifact_loads": true,
+     "artifact_path": "data/hfias/out/study_insecure.json",
+     "target": {
+      "construct": "HFIAS: share of households food insecure (any level), province, FNRI ENNS round",
+      "is_food_insecurity_measurement": true,
+      "served_resolution": "province",
+      "served_frequency": "survey round"
+     },
+     "families_used": [
+      "A1",
+      "A2",
+      "A3",
+      "C3",
+      "C4",
+      "H1",
+      "V1",
+      "H1"
+     ],
+     "groups_used": [
+      "climate",
+      "market",
+      "poverty"
+     ],
+     "n1_version": null,
+     "chronological": {
+      "design": "train ENNS 2018 provinces, test ENNS 2019 provinces (later, different provinces)",
+      "n_targets": 30,
+      "n_high": 19,
+      "metrics": {
+       "accuracy": 0.6666666666666666,
+       "balanced_accuracy": 0.6220095693779905,
+       "high_recall": 0.7894736842105263,
+       "high_precision": 0.7142857142857143
+      },
+      "baselines": {
+       "model_brier": 0.2441728718531698,
+       "baseline_brier": {
+        "B0 no change": 0.20977370441617713,
+        "B1 mean change": 0.22100096326365923,
+        "B2 mean level": 0.2338662410582531
+       },
+       "model_mae_pp": 10.373877406475268,
+       "baseline_mae_pp": {
+        "B0 no change": 7.866666666666666,
+        "B1 mean change": 12.382545910996525,
+        "B2 mean level": 10.082636082523823
+       }
+      }
+     },
+     "independent": {
+      "applicable": true,
+      "passed": false,
+      "what": "held-out ENNS 2019 provinces, FNRI-published HFIAS values",
+      "n": 30
+     },
+     "calibration": {
+      "interval_nominal": 0.9,
+      "interval_coverage": 0.8666666666666667,
+      "ece": 0.2188962548433399
+     },
+     "geographic": {
+      "passed_at_served_resolution": false,
+      "island_cv_pooled_mae_pp": 13.688296698832547
+     },
+     "horizon": {
+      "validated_leads": [],
+      "note": "Lead k = issue k quarters before Q1 of the survey year; the outcome is a survey round, not a quarter."
+     },
+     "group_contribution": {
+      "market": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": -0.15400659840081232
+      },
+      "climate": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": -0.5616681812815774
+      },
+      "poverty": {
+       "tested_out_of_sample": true,
+       "mae_change_when_dropped_pp": 0.506844204035799
+      },
+      "employment": {
+       "tested_out_of_sample": false,
+       "why": "no provincial employment series for 2015-2019 on file nationwide"
+      },
+      "news": {
+       "tested_out_of_sample": false,
+       "why": "news corpus covers CALABARZON only; no nationwide provincial news series"
+      }
+     },
+     "documents": [
+      "docs/hfias/METHODOLOGY_AND_RESULTS.md"
+     ]
+    }
+   }
+  },
+  "e137-sarf-1.0": {
+   "version": "e137-sarf-1.0 (protocol E137-P1)",
+   "artifact_path": "data/e137/out/results.json",
+   "target": "Food-insecurity RISK: probability that a province's HFIAS moderate-or-severe food insecurity is above the national level of the same survey (not a prevalence)",
+   "note": "Evaluated by its own pre-registered risk gate (app.e137.gate), not by the B-check gate.",
+   "artifact_sha256": "4a53a5fd426e5604022970be7e300de32b3d89033bca9b62efb6e901a6635bd8",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T14:32:17+00:00",
+   "gate": {
+    "gate_version": "risk-gate E137-P1",
+    "evaluated_utc": "2026-11-03T14:32:17+00:00",
+    "artifact_file_sha256": "4a53a5fd426e5604022970be7e300de32b3d89033bca9b62efb6e901a6635bd8",
+    "passed": false,
+    "max_reliable_lead": null,
+    "checks": [
+     {
+      "id": "S1_beats_baselines",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S2_discrimination",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S3_classes",
+      "status": "pass",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S4_calibration",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S5_island_stability",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S6_overfitting",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S7_beats_persistence_enns",
+      "status": "fail",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S8_out_of_round",
+      "status": "pass",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S9_sensitivity",
+      "status": "pass",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S10_no_dominance",
+      "status": "pass",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S11_external",
+      "status": "pass",
+      "evidence": "lead 0; per-lead values in data/e137/out/results.json"
+     },
+     {
+      "id": "S12_confirmatory",
+      "status": "not_evaluable",
+      "evidence": "no unseen provincial HFIAS/FIES round yet; ENNS rows are development evidence (D-3)"
+     }
+    ],
+    "per_lead": {
+     "0": {
+      "S1_beats_baselines": false,
+      "S2_discrimination": false,
+      "S3_classes": true,
+      "S4_calibration": false,
+      "S5_island_stability": false,
+      "S6_overfitting": false,
+      "S7_beats_persistence_enns": false,
+      "S8_out_of_round": true,
+      "S9_sensitivity": true,
+      "S10_no_dominance": true,
+      "S11_external": true
+     },
+     "1": {
+      "S1_beats_baselines": false,
+      "S2_discrimination": false,
+      "S3_classes": true,
+      "S4_calibration": false,
+      "S5_island_stability": false,
+      "S6_overfitting": false,
+      "S7_beats_persistence_enns": false,
+      "S8_out_of_round": true,
+      "S9_sensitivity": true,
+      "S10_no_dominance": true,
+      "S11_external": true
+     },
+     "2": {
+      "S1_beats_baselines": false,
+      "S2_discrimination": true,
+      "S3_classes": true,
+      "S4_calibration": true,
+      "S5_island_stability": false,
+      "S6_overfitting": false,
+      "S7_beats_persistence_enns": false,
+      "S8_out_of_round": true,
+      "S9_sensitivity": true,
+      "S10_no_dominance": true,
+      "S11_external": true
+     },
+     "3": {
+      "S1_beats_baselines": false,
+      "S2_discrimination": true,
+      "S3_classes": true,
+      "S4_calibration": true,
+      "S5_island_stability": false,
+      "S6_overfitting": false,
+      "S7_beats_persistence_enns": false,
+      "S8_out_of_round": true,
+      "S9_sensitivity": true,
+      "S10_no_dominance": true,
+      "S11_external": true
+     },
+     "4": {
+      "S1_beats_baselines": false,
+      "S2_discrimination": true,
+      "S3_classes": true,
+      "S4_calibration": true,
+      "S5_island_stability": false,
+      "S6_overfitting": false,
+      "S7_beats_persistence_enns": false,
+      "S8_out_of_round": true,
+      "S9_sensitivity": true,
+      "S10_no_dominance": true,
+      "S11_external": true
+     }
+    },
+    "note": "A pass would mean APPROVED-PROVISIONAL (S12 pending) and still need owner approval to promote."
+   }
+  },
+  "e138-where-lrp-1.0": {
+   "version": "e138 LR-P (protocol E138-P1)",
+   "artifact_path": "data/e138/out/results.json",
+   "target": "Structural food-insecurity RISK (WHERE only): P(province HFIAS moderate-or-severe above national); poverty, subsistence and poverty gap; no forecast lead",
+   "note": "Selected by E138's frozen one-SE rule; evaluated by its pre-registered gate (app.e138.gate).",
+   "artifact_sha256": "ab2f7b49d4e6e381214b299381a9721502ea835391acb2588e718428656da8eb",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T15:02:25+00:00",
+   "gate": {
+    "gate_version": "risk-gate E138-P1",
+    "evaluated_utc": "2026-11-03T15:02:25+00:00",
+    "artifact_file_sha256": "ab2f7b49d4e6e381214b299381a9721502ea835391acb2588e718428656da8eb",
+    "selected": "LR-P",
+    "passed": false,
+    "checks": [
+     {
+      "id": "G1_beats_national",
+      "status": "fail",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G2_beats_regional_LOPO",
+      "status": "fail",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G3_discrimination",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G4_classes",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G5_calibration",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G6_island_transfer",
+      "status": "fail",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G7_overfitting",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G8_noninferior_to_persistence",
+      "status": "fail",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G9_across_surveys",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G10_sensitivity",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G11_robust_to_missing",
+      "status": "pass",
+      "evidence": "data/e138/out/results.json"
+     },
+     {
+      "id": "G12_confirmatory",
+      "status": "not_evaluable",
+      "evidence": "sealed prediction data/e138/out/sealed_prediction.json awaits the next provincial round"
+     }
+    ]
+   }
+  },
+  "e139-lgbm-1.0": {
+   "version": "e139 linear-prior LightGBM (protocol E139-P1)",
+   "artifact_path": "data/e139/out/model_artifact.json",
+   "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above the national level of the same survey); structural estimate, next-survey forecast only if a lead is validated",
+   "note": "Final-system candidate; evaluated by its pre-registered gate (app.e139.gate). Candidate outputs on admin routes /api/v1/admin/candidates/e139-lgbm-1.0/*.",
+   "artifact_sha256": "12008f78693220cef2420bcff3b0d42dbf8f13c98fd43b94a1cfb88969e23b82",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T15:51:29+00:00",
+   "gate": {
+    "gate_version": "risk-gate E139-P1",
+    "evaluated_utc": "2026-11-03T15:51:29+00:00",
+    "artifact_file_sha256": "12008f78693220cef2420bcff3b0d42dbf8f13c98fd43b94a1cfb88969e23b82",
+    "max_reliable_lead": null,
+    "passed": false,
+    "checks": [
+     {
+      "id": "G1_beats_national",
+      "status": "pass",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G2_beyond_region_history",
+      "status": "fail",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G3_noninferior_persistence",
+      "status": "fail",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G5_discrimination_classes",
+      "status": "pass",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G6_calibration",
+      "status": "pass",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G9_forward_in_time",
+      "status": "pass",
+      "evidence": "lead 0, data/e139/out/results.json"
+     },
+     {
+      "id": "G4_not_worse_than_best_benchmark",
+      "status": "pass",
+      "evidence": "data/e139/out/results.json"
+     },
+     {
+      "id": "G7_overfitting",
+      "status": "pass",
+      "evidence": "data/e139/out/results.json"
+     },
+     {
+      "id": "G8_island_transfer",
+      "status": "pass",
+      "evidence": "data/e139/out/results.json"
+     },
+     {
+      "id": "G10_sensitivity",
+      "status": "pass",
+      "evidence": "data/e139/out/results.json"
+     },
+     {
+      "id": "G11_robust_missing",
+      "status": "pass",
+      "evidence": "data/e139/out/results.json"
+     },
+     {
+      "id": "G12_confirmatory",
+      "status": "not_evaluable",
+      "evidence": "sealed_prediction.json awaits the next provincial food-insecurity round"
+     }
+    ]
+   }
+  },
+  "e140-lgbm-native-1.0": {
+   "version": "e140 LightGBM-native (protocol E140-P1)",
+   "artifact_path": "data/e140/out/results.json",
+   "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); LightGBM trees without a linear prior (linear-tree or constant-leaf, nested choice)",
+   "note": "Zero-tree resolution attempt; evaluated by its pre-registered gate (app.e140.gate).",
+   "artifact_sha256": "a286c7d3b0fc0b2a6dcc8bc8e15e55436f04c66ff3912b25da220c9a39b3d383",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T16:16:20+00:00",
+   "gate": {
+    "gate_version": "risk-gate E140-P1",
+    "decision": "C",
+    "evaluated_utc": "2026-11-03T16:16:20+00:00",
+    "artifact_file_sha256": "a286c7d3b0fc0b2a6dcc8bc8e15e55436f04c66ff3912b25da220c9a39b3d383",
+    "passed": false,
+    "checks": [
+     {
+      "id": "T1_trees_selected",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "T2_trees_beat_linear_prior",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G1_beats_national",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G2_beyond_region_history",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G3_noninferior_persistence",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G5_discrimination_classes",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G6_calibration",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G9_forward_in_time",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G4_not_worse_than_best_benchmark",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G7_overfitting",
+      "status": "pass",
+      "evidence": "data/e140/out/results.json"
+     },
+     {
+      "id": "G8_island_transfer",
+      "status": "fail",
+      "evidence": "data/e140/out/results.json"
+     }
+    ]
+   }
+  },
+  "e141-lgbm-3round-1.0": {
+   "version": "e141 LightGBM on three HFIAS rounds (protocol E141-P1)",
+   "artifact_path": "data/e141/out/results.json",
+   "target": "Food-insecurity RISK: P(province HFIAS moderate-or-severe above national); trained on FNRI 2013, 2015 and ENNS 2018/2019; untouched-round and rolling survey-round validation",
+   "note": "Evaluated by its pre-registered gate (app.e141.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "eae7d38feaffeb7fe86304b564baed9e654d488ca8bde4a91e6afa9438d4333c",
+   "model_id": "e141-lgbm-3round-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-03T17:54:52+00:00",
+   "gate": {
+    "gate_version": "risk-gate E141-P1",
+    "checks": [
+     {
+      "id": "U1_untouched_beats_NAT_and_PSA_only",
+      "status": "pass",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "U2_untouched_discrimination",
+      "status": "pass",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "U3_untouched_calibration",
+      "status": "fail",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R1_beats_persistence",
+      "status": "fail",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R1_beats_region_history",
+      "status": "fail",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R1_not_worse_than_best_simple",
+      "status": "pass",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R1_classes",
+      "status": "pass",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R1_calibration",
+      "status": "pass",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R2_beats_persistence_every_origin",
+      "status": "fail",
+      "evidence": "data/e141/out/results.json"
+     },
+     {
+      "id": "R3_trees_beat_linear_prior",
+      "status": "fail",
+      "evidence": "data/e141/out/results.json"
+     }
+    ],
+    "evaluated_utc": "2026-11-03T17:54:52+00:00",
+    "artifact_file_sha256": "eae7d38feaffeb7fe86304b564baed9e654d488ca8bde4a91e6afa9438d4333c",
+    "passed": false
+   }
+  },
+  "e142-state-lgbm-1.0": {
+   "version": "e142 survey-anchored risk-state model (protocol E142-P1)",
+   "artifact_path": "data/e142/out/results.json",
+   "target": "Food-insecurity RISK in the target quarter: LightGBM structural level pulled toward the last measured HFIAS round with a weight that decays with quarters since that survey; P(above national)",
+   "note": "Evaluated by its pre-registered gate (app.e142.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "baa9190c21906add91b2fc95158d3aa4ff7af0b3ae1405666ccecf56c9ce1e1b",
+   "model_id": "e142-state-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-04T00:09:38+00:00",
+   "gate": {
+    "gate_version": "risk-gate E142-P1",
+    "checks": [
+     {
+      "id": "S1_beats_persistence",
+      "status": "fail",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S2_beats_region_history",
+      "status": "fail",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S3_calibration",
+      "status": "fail",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S4_classes",
+      "status": "pass",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S5_predicts_change",
+      "status": "pass",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S6_beats_persistence_O2_O3",
+      "status": "pass",
+      "evidence": "data/e142/out/results.json"
+     },
+     {
+      "id": "S7_lightgbm_level_not_worse_than_ridge_level",
+      "status": "pass",
+      "evidence": "data/e142/out/results.json"
+     }
+    ],
+    "passed": false,
+    "evaluated_utc": "2026-11-04T00:09:38+00:00",
+    "artifact_file_sha256": "baa9190c21906add91b2fc95158d3aa4ff7af0b3ae1405666ccecf56c9ce1e1b"
+   }
+  },
+  "e143-re-lgbm-1.0": {
+   "version": "e143 C2 RE-LGBM-X (protocol E143-P1)",
+   "artifact_path": "data/e143/out/results.json",
+   "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus a permanent province component estimated from all measured HFIAS rounds; P(above national)",
+   "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9",
+   "model_id": "e143-re-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-04T00:48:29+00:00",
+   "gate": {
+    "gate_version": "risk-gate E143-P1",
+    "checks": [
+     {
+      "id": "S1_beats_persistence_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S2_beats_region_previous_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S3_calibration",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S4_classes",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S5_predicts_change",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S6_beats_persistence_O2_O3",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S7_lightgbm_level_not_worse_than_ridge",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S8_interval_coverage",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     }
+    ],
+    "passed": false,
+    "evaluated_utc": "2026-11-04T00:48:29+00:00",
+    "artifact_file_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9"
+   }
+  },
+  "e143-hre-lgbm-1.0": {
+   "version": "e143 C4 HRE-LGBM-X (protocol E143-P1)",
+   "artifact_path": "data/e143/out/results.json",
+   "target": "Food-insecurity RISK in the target quarter: cross-fitted LightGBM structural level plus hierarchical (region + province) permanent components from measured HFIAS rounds; P(above national)",
+   "note": "Evaluated by its pre-registered gate (app.e143.gate). Candidate outputs on admin routes only.",
+   "artifact_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9",
+   "model_id": "e143-hre-lgbm-1.0",
+   "status": "rejected",
+   "registered_utc": "2026-11-04T00:48:29+00:00",
+   "gate": {
+    "gate_version": "risk-gate E143-P1",
+    "checks": [
+     {
+      "id": "S1_beats_persistence_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S2_beats_region_previous_holm",
+      "status": "fail",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S3_calibration",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S4_classes",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S5_predicts_change",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S6_beats_persistence_O2_O3",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S7_lightgbm_level_not_worse_than_ridge",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     },
+     {
+      "id": "S8_interval_coverage",
+      "status": "pass",
+      "evidence": "data/e143/out/results.json"
+     }
+    ],
+    "passed": false,
+    "evaluated_utc": "2026-11-04T00:48:29+00:00",
+    "artifact_file_sha256": "c66be7db69b825075e2693c91d451589c96f9689a169d05530ba6308e96391b9"
+   }
+  },
+  "e168-lgbm-1.0": {
+   "version": "E168 LightGBM, issue 2026-Q4_2026-11-01",
+   "artifact_path": "data/e168/issues/2026-Q4_2026-11-01/live.json",
+   "artifact_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
+   "target": "HFIAS moderate+severe household food insecurity by province; HIGH at 50 %",
+   "note": "Issue 2026-Q4_2026-11-01 of the frozen E168 procedure (information cut-off 2026-11-01).",
+   "model_id": "e168-lgbm-1.0",
+   "status": "approved",
+   "registered_utc": "2026-11-08T04:39:41+00:00",
+   "gate": {
+    "basis": "owner-defined acceptance (decision 2026-11-07): accuracy >= 75 % and skill over the latest survey; NOT the E156 C1-C6 test",
+    "disclosure": "E156 C1-C6 not passed at Lead 1 (maximum reliable lead 0 under that stricter test; 72 rows from 3 survey rounds)",
+    "served_leads": [
+     1,
+     2,
+     3
+    ],
+    "checks": [
+     {
+      "id": "O1",
+      "name": "Accuracy >= 75 % at every served lead",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": 0.75,
+       "2": 0.778,
+       "3": 0.75
+      }
+     },
+     {
+      "id": "O2",
+      "name": "Better than reusing the latest survey at every served lead (Brier CI < 0)",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": [
+        -0.144,
+        -0.0433
+       ],
+       "2": [
+        -0.1441,
+        -0.0437
+       ],
+       "3": [
+        -0.124,
+        -0.0392
+       ]
+      }
+     },
+     {
+      "id": "O3",
+      "name": "Served leads are consecutive from Lead 1",
+      "status": "pass",
+      "critical": true,
+      "evidence": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "id": "O4",
+      "name": "HIGH recall >= 0.60 at every served lead",
+      "status": "pass",
+      "critical": true,
+      "evidence": {
+       "1": 0.88,
+       "2": 0.88,
+       "3": 0.84
+      }
+     },
+     {
+      "id": "O5",
+      "name": "Final algorithm is LightGBM (owner rule)",
+      "status": "pass",
+      "critical": true,
+      "evidence": "E168 LightGBM-only (survey baseline + constrained LightGBM change + calibration layer)"
+     },
+     {
+      "id": "O6",
+      "name": "Leakage test: unreleased surveys corrupted change no forecast",
+      "status": "pass",
+      "critical": true,
+      "evidence": 0.0
+     },
+     {
+      "id": "O7",
+      "name": "Forecasts sealed before new outcomes (ENNS 2022 seal intact)",
+      "status": "pass",
+      "critical": true,
+      "evidence": "data/e168/out/sealed_enns2022.json f8228fae"
+     }
+    ],
+    "passed": true,
+    "artifact_file_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
+    "evaluated_utc": "2026-11-08T04:39:41+00:00"
+   }
+  }
+ },
+ "history": [
+  {
+   "utc": "2026-11-03T04:54:48+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T04:54:48+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T04:55:16+00:00",
+   "event": "gate_evaluated",
+   "model_id": "pfi-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B6",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ]
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T06:16:28+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T06:16:50+00:00",
+   "event": "gate_evaluated",
+   "model_id": "hfias-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B7",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B15"
+   ]
+  },
+  {
+   "utc": "2026-11-03T06:17:40+00:00",
+   "event": "gate_evaluated",
+   "model_id": "hfias-1.0",
+   "passed": false,
+   "failed_checks": [
+    "B2",
+    "B3",
+    "B7",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12",
+    "B13"
+   ]
+  },
+  {
+   "utc": "2026-11-03T14:32:17+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T14:32:17+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T14:32:17+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T14:32:17+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T14:32:17+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e137-sarf-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_baselines",
+    "S2_discrimination",
+    "S4_calibration",
+    "S5_island_stability",
+    "S6_overfitting",
+    "S7_beats_persistence_enns",
+    "S12_confirmatory"
+   ]
+  },
+  {
+   "utc": "2026-11-03T15:02:24+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T15:02:24+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:02:25+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:02:25+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:02:25+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T15:02:25+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e138-where-lrp-1.0",
+   "passed": false,
+   "failed_checks": [
+    "G1_beats_national",
+    "G2_beats_regional_LOPO",
+    "G6_island_transfer",
+    "G8_noninferior_to_persistence",
+    "G12_confirmatory"
+   ]
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T15:51:29+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e139-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "G2_beyond_region_history",
+    "G3_noninferior_persistence",
+    "G12_confirmatory"
+   ]
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T16:16:20+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e140-lgbm-native-1.0",
+   "passed": false,
+   "failed_checks": [
+    "T2_trees_beat_linear_prior",
+    "G2_beyond_region_history",
+    "G8_island_transfer"
+   ]
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "registered",
+   "model_id": "e141-lgbm-3round-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-03T17:54:52+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e141-lgbm-3round-1.0",
+   "passed": false,
+   "failed_checks": [
+    "U3_untouched_calibration",
+    "R1_beats_persistence",
+    "R1_beats_region_history",
+    "R2_beats_persistence_every_origin",
+    "R3_trees_beat_linear_prior"
+   ]
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e141-lgbm-3round-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "registered",
+   "model_id": "e142-state-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-04T00:09:38+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e142-state-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_persistence",
+    "S2_beats_region_history",
+    "S3_calibration"
+   ]
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "ch1-p0h4",
+   "status": "legacy_incumbent"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "pfi-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "hfias-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e137-sarf-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e138-where-lrp-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e139-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e140-lgbm-native-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e141-lgbm-3round-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e142-state-lgbm-1.0",
+   "status": "rejected"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e143-re-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "registered",
+   "model_id": "e143-hre-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e143-re-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_persistence_holm",
+    "S2_beats_region_previous_holm"
+   ]
+  },
+  {
+   "utc": "2026-11-04T00:48:29+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e143-hre-lgbm-1.0",
+   "passed": false,
+   "failed_checks": [
+    "S1_beats_persistence_holm",
+    "S2_beats_region_previous_holm"
+   ]
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "registered",
+   "model_id": "e168-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e168-lgbm-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-06T16:32:03+00:00",
+   "event": "promoted",
+   "model_id": "e168-lgbm-1.0",
+   "approver": "Angel Melindo (owner), decision 2026-11-07"
+  },
+  {
+   "utc": "2026-11-08T04:18:56+00:00",
+   "event": "production_cleared",
+   "model_id": "e168-lgbm-1.0",
+   "reason": "artifact changed after approval"
+  },
+  {
+   "utc": "2026-11-08T04:18:56+00:00",
+   "event": "registered",
+   "model_id": "e168-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-08T04:18:56+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e168-lgbm-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-08T04:18:56+00:00",
+   "event": "promoted",
+   "model_id": "e168-lgbm-1.0",
+   "approver": "automatic live refresh (standing instruction of the owner, Angel Melindo, 2026-11-08)"
+  },
+  {
+   "utc": "2026-11-08T04:39:41+00:00",
+   "event": "production_cleared",
+   "model_id": "e168-lgbm-1.0",
+   "reason": "artifact changed after approval"
+  },
+  {
+   "utc": "2026-11-08T04:39:41+00:00",
+   "event": "registered",
+   "model_id": "e168-lgbm-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-08T04:39:41+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e168-lgbm-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-08T04:39:41+00:00",
+   "event": "promoted",
+   "model_id": "e168-lgbm-1.0",
+   "approver": "automatic live refresh (standing instruction of the owner, Angel Melindo, 2026-11-08)"
+  }
+ ]
+}

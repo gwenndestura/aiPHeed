@@ -1,0 +1,282 @@
+{
+ "checks": {
+  "protocol_and_amendment_hash": true,
+  "deterministic": true,
+  "no_scored_period_before_2021": true,
+  "no_change_series_before_2022": true,
+  "no_underlying_period_before_2021": true,
+  "no_period_after_2026": true,
+  "all_available_before_issue": true,
+  "no_future_reference_values": true,
+  "independent_rederivation_agrees": true,
+  "geography_pass": true,
+  "every_score_reproduces": true,
+  "firi_v2_unchanged": true,
+  "sws_absent_from_inputs": true
+ },
+ "log": {
+  "pre2021_rows_rejected": 0,
+  "pre2021_base_rows_rejected": 40,
+  "pre2021_base_rows_by_series": {
+   "cpi_food_yoy_pct": 20,
+   "cpi_headline_yoy_pct": 20
+  },
+  "pre2021_annual_rows_rejected": 0,
+  "series_used": [
+   "E1_unemployment_change_pp",
+   "E2_remittance_decline_pct",
+   "N1_fssi_v3",
+   "chicken_production_yoy_pct",
+   "corn_production_yoy_pct",
+   "cpi_food_yoy_pct",
+   "cpi_headline_yoy_pct",
+   "farmgate_palay_yoy_pct",
+   "fisheries_production_yoy_pct",
+   "livestock_production_yoy_pct",
+   "news_gdelt_shortage_share",
+   "palay_production_yoy_pct",
+   "poverty_incidence_popweighted_pct",
+   "provincial_underemployment_rate_pct_annual",
+   "provincial_unemployment_rate_pct_annual",
+   "rainfall_anomaly_mm",
+   "region_cpi_food_yoy_pct",
+   "region_cpi_headline_yoy_pct",
+   "retail_chicken_yoy_pct",
+   "retail_pork_yoy_pct",
+   "retail_tilapia_yoy_pct",
+   "rice_wholesale_yoy_pct",
+   "rootcrops_only_production_yoy_pct",
+   "temperature_anomaly_c",
+   "typhoons_PAR",
+   "typhoons_local_100km",
+   "vegetables_only_production_yoy_pct"
+  ]
+ },
+ "effect_vs_e121": {
+  "rows": 138,
+  "changed": 73,
+  "computable_e121": 85,
+  "computable_amended": 85,
+  "lost": 0,
+  "gained": 0,
+  "mean_abs_change_where_both": 0.0032,
+  "max_abs_change_where_both": 0.0125,
+  "band_changes_where_both": 0,
+  "by_scope": {
+   "provincial": {
+    "changed": 73,
+    "computable_e121": 75,
+    "computable_amended": 75
+   },
+   "regional": {
+    "changed": 0,
+    "computable_e121": 10,
+    "computable_amended": 10
+   }
+  }
+ },
+ "first_scored_by_year": {
+  "2021": [
+   "CEC_cyclones_100km"
+  ],
+  "2022": [
+   "FMA_food_cpi",
+   "FMA_headline_cpi",
+   "FMA_chicken",
+   "FMA_pork",
+   "FMA_tilapia",
+   "CEC_rain_departure",
+   "CEC_heat",
+   "EHS_unemployment_prov",
+   "EHS_underemployment_prov"
+  ],
+  "2023": [
+   "FMA_rice_wholesale",
+   "AFP_palay",
+   "AFP_corn",
+   "AFP_vegetables",
+   "AFP_rootcrops",
+   "AFP_fisheries",
+   "CEC_cyclones_R",
+   "FIS_shortage_news_R"
+  ],
+  "2024": [
+   "FMA_food_cpi_R",
+   "FMA_headline_cpi_R",
+   "FMA_rice_R",
+   "AFP_palay_R",
+   "AFP_corn_R",
+   "AFP_vegetables_R",
+   "AFP_rootcrops_R",
+   "AFP_fisheries_R",
+   "CEC_rain_departure_R",
+   "CEC_heat_R",
+   "EHS_unemployment_change_R",
+   "EHS_remittance_decline_R"
+  ],
+  "2025": [
+   "AFP_chicken",
+   "AFP_livestock",
+   "PSV_poverty",
+   "FIS_fssi"
+  ]
+ },
+ "snapshots": {
+  "verified unchanged": 23
+ },
+ "scores": {
+  "provincial": {
+   "computable": 75,
+   "possible": 115,
+   "first": "2023-Q1",
+   "k": {
+    "4": 54,
+    "5": 13,
+    "6": 8
+   },
+   "bands": {
+    "usual or below": 42,
+    "not_computable": 40,
+    "above usual": 30,
+    "elevated": 2,
+    "high": 1
+   }
+  },
+  "regional": {
+   "computable": 10,
+   "possible": 23,
+   "first": "2024-Q2",
+   "k": {
+    "4": 1,
+    "5": 9
+   },
+   "bands": {
+    "not_computable": 13,
+    "usual or below": 6,
+    "above usual": 4
+   }
+  }
+ },
+ "datasets_with_pre2021": [
+  [
+   "S02",
+   "CPI index (2018=100) by region incl. Region IV-A",
+   1944
+  ],
+  [
+   "S05",
+   "E118 retail_poultry",
+   576
+  ],
+  [
+   "S06",
+   "E118 retail_livestock",
+   1080
+  ],
+  [
+   "S07",
+   "E118 retail_fish",
+   2052
+  ],
+  [
+   "S08",
+   "E118 farmgate_cereals",
+   1716
+  ],
+  [
+   "S09",
+   "E118 prod_palay_corn",
+   4896
+  ],
+  [
+   "S10",
+   "E118 prod_vegetables_rootcrops",
+   37488
+  ],
+  [
+   "S11",
+   "E118 prod_fisheries",
+   3560
+  ],
+  [
+   "S14",
+   "E118 nasa_power_monthly",
+   9600
+  ],
+  [
+   "C01",
+   "E118 cpi_bottom30_yoy",
+   25248
+  ],
+  [
+   "C02",
+   "E118 retail_cereals",
+   1080
+  ],
+  [
+   "C03",
+   "E118 wholesale_cereals",
+   3571
+  ],
+  [
+   "C04",
+   "E118 wholesale_fish",
+   5751
+  ],
+  [
+   "C05",
+   "E118 prod_aquaculture",
+   7801
+  ],
+  [
+   "C06",
+   "E118 retail_fruit_veg",
+   972
+  ],
+  [
+   "C07",
+   "E118 retail_leafy_veg",
+   108
+  ],
+  [
+   "C08",
+   "E118 retail_rootcrops",
+   900
+  ],
+  [
+   "C09",
+   "E118 farmgate_livestock_household",
+   3720
+  ],
+  [
+   "C10",
+   "E118 cpi_bottom30_index",
+   37872
+  ],
+  [
+   "S16",
+   "Tropical cyclones in PAR",
+   87
+  ],
+  [
+   "S17",
+   "LFS unemployment rate, national, monthly",
+   63
+  ],
+  [
+   "S22",
+   "GDELT DOC daily volume intensity by food category",
+   5832
+  ],
+  [
+   "C11",
+   "NOAA ONI (context)",
+   851
+  ],
+  [
+   "T01",
+   "SWS hunger by area (TARGET; never a FIRI3 input)",
+   92
+  ]
+ ]
+}

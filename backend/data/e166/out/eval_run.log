@@ -1,0 +1,55 @@
+{
+ "gates": {
+  "F1": true,
+  "F2": true,
+  "F3": true,
+  "F4": true,
+  "F5": false,
+  "F6": true,
+  "F7": false,
+  "F8": true,
+  "F9_ranks_displayable": true,
+  "F10": false
+ },
+ "status": "not accepted",
+ "lead2_reliable": false,
+ "leakage_max_abs_change": 0.0,
+ "mcnemar": {
+  "1": {
+   "e166_right_e158_wrong": 7,
+   "e166_wrong_e158_right": 5,
+   "p_exact": 0.7744
+  },
+  "2": {
+   "e166_right_e158_wrong": 7,
+   "e166_wrong_e158_right": 3,
+   "p_exact": 0.3438
+  }
+ },
+ "shuffle": {
+  "brier": 0.1595,
+  "accuracy": 0.708,
+  "E166_minus_shuffled": -0.0348,
+  "ci95": [
+   -0.0631,
+   -0.009
+  ]
+ }
+}
+
+Lead 1 selected {'ENNS2018': {'cfg_E166': 'OH|ENET|GOV+regional_consumption|id', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2019': {'cfg_E166': 'OH|ENET|GOV+regional_consumption|id', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2021': {'cfg_E166': 'RSS|RF|GOV+farmgate_palay|id', 'source': 'farmgate_palay', 'src_missing_test': 0.0}} C1-C6 {'C1': False, 'C2': True, 'C3': True, 'C4': False, 'C5': True, 'C6': True} brier-E158 {'diff': -0.0097, 'ci95': [-0.0376, 0.0197]}
+     accuracy balanced_accuracy high_precision high_recall low_precision low_recall macro_f1    auc pr_auc   brier calibration_slope false_alarm_rate missed_high_rate   pcal         pcal_ci                                     conf
+PERS    0.625             0.703           0.48        0.96         0.955      0.447    0.624  0.827  0.705  0.2128              0.71            0.553             0.04  1.094  [0.632, 1.826]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158    0.736              0.76          0.583        0.84         0.889      0.681     0.73   0.86   0.81  0.1344             0.718            0.319             0.16  1.534  [0.934, 2.789]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO    0.792             0.812          0.647        0.88         0.921      0.745    0.785  0.901  0.861  0.1223             0.734            0.255             0.12  1.425  [0.871, 3.124]  {'tp': 22, 'fp': 12, 'fn': 3, 'tn': 35}
+E166    0.764               0.8          0.605        0.92         0.941      0.681     0.76  0.904  0.864  0.1247             0.743            0.319             0.08  1.531  [0.893, 3.472]  {'tp': 23, 'fp': 15, 'fn': 2, 'tn': 32}
+per round {'ENNS2018': {'E158': {'accuracy': 0.636, 'brier': 0.1497}, 'E166': {'accuracy': 0.727, 'brier': 0.1344}}, 'ENNS2019': {'E158': {'accuracy': 0.68, 'brier': 0.1721}, 'E166': {'accuracy': 0.76, 'brier': 0.1423}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0831}, 'E166': {'accuracy': 0.8, 'brier': 0.0984}}} conc {'est': 0.75, 'ci95': [0.614, 0.881]} reliab [{'E166': '(-0.001, 0.2]', 'n': '14', 'mean_p': '0.067', 'observed': '0.0'}, {'E166': '(0.2, 0.4]', 'n': '12', 'mean_p': '0.273', 'observed': '0.167'}, {'E166': '(0.4, 0.6]', 'n': '20', 'mean_p': '0.511', 'observed': '0.15'}, {'E166': '(0.6, 0.8]', 'n': '13', 'mean_p': '0.7', 'observed': '0.692'}, {'E166': '(0.8, 1.0]', 'n': '13', 'mean_p': '0.908', 'observed': '0.846'}]
+
+Lead 2 selected {'ENNS2018': {'cfg_E166': 'OH|ENET|GOV+regional_consumption|id', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2019': {'cfg_E166': 'OH|ENET|GOV+regional_consumption|id', 'source': 'regional_consumption', 'src_missing_test': 0.0}, 'ENNS2021': {'cfg_E166': 'RSS|RF|GOV+farmgate_palay|id', 'source': 'farmgate_palay', 'src_missing_test': 0.0}} C1-C6 {'C1': True, 'C2': True, 'C3': True, 'C4': False, 'C5': True, 'C6': True} brier-E158 {'diff': -0.0124, 'ci95': [-0.0437, 0.0226]}
+     accuracy balanced_accuracy high_precision high_recall low_precision low_recall macro_f1    auc pr_auc   brier calibration_slope false_alarm_rate missed_high_rate   pcal         pcal_ci                                     conf
+PERS    0.625             0.703           0.48        0.96         0.955      0.447    0.624  0.827  0.705  0.2128              0.71            0.553             0.04  1.094  [0.632, 1.826]  {'tp': 24, 'fp': 26, 'fn': 1, 'tn': 21}
+E158    0.736              0.76          0.583        0.84         0.889      0.681     0.73  0.861    0.8  0.1371             0.679            0.319             0.16  1.345  [0.885, 2.308]  {'tp': 21, 'fp': 15, 'fn': 4, 'tn': 32}
+AUTO    0.792             0.822          0.639        0.92         0.944      0.723    0.786    0.9  0.856  0.1232             0.768            0.277             0.08  1.502  [0.959, 3.089]  {'tp': 23, 'fp': 13, 'fn': 2, 'tn': 34}
+E166    0.792             0.822          0.639        0.92         0.944      0.723    0.786  0.899  0.858  0.1246             0.734            0.277             0.08  1.489  [0.881, 3.254]  {'tp': 23, 'fp': 13, 'fn': 2, 'tn': 34}
+per round {'ENNS2018': {'E158': {'accuracy': 0.591, 'brier': 0.1632}, 'E166': {'accuracy': 0.727, 'brier': 0.1352}}, 'ENNS2019': {'E158': {'accuracy': 0.72, 'brier': 0.1635}, 'E166': {'accuracy': 0.8, 'brier': 0.1412}}, 'ENNS2021': {'E158': {'accuracy': 0.88, 'brier': 0.0877}, 'E166': {'accuracy': 0.84, 'brier': 0.0988}}} conc {'est': 0.7, 'ci95': [0.558, 0.846]} reliab [{'E166': '(-0.001, 0.2]', 'n': '15', 'mean_p': '0.074', 'observed': '0.0'}, {'E166': '(0.2, 0.4]', 'n': '11', 'mean_p': '0.278', 'observed': '0.182'}, {'E166': '(0.4, 0.6]', 'n': '21', 'mean_p': '0.511', 'observed': '0.143'}, {'E166': '(0.6, 0.8]', 'n': '12', 'mean_p': '0.715', 'observed': '0.75'}, {'E166': '(0.8, 1.0]', 'n': '13', 'mean_p': '0.909', 'observed': '0.846'}]
+{'E158': {'overall': (2.9, [0.64, 5.09]), 'island:Luzon': (5.53, [3.07, 7.75]), 'island:Visayas': (-0.58, [-4.66, 4.22]), 'island:Mindanao': (1.1, [-2.42, 4.3]), 'observed:HIGH': (-1.62, [-5.5, 2.35]), 'observed:LOW': (5.3, [2.89, 7.56]), 'CAL': {'Laguna|ENNS2018': 9.3, 'Quezon|ENNS2019': 4.0, 'Rizal|ENNS2019': 3.6, 'Batangas|ENNS2021': -13.7, 'Cavite|ENNS2021': -6.2}}, 'E166': {'overall': (3.25, [1.33, 5.18]), 'island:Luzon': (4.01, [0.96, 7.44]), 'island:Visayas': (1.36, [-3.58, 6.61]), 'island:Mindanao': (3.34, [1.32, 4.99]), 'observed:HIGH': (-0.26, [-4.25, 2.83]), 'observed:LOW': (5.12, [2.57, 7.64]), 'CAL': {'Laguna|ENNS2018': 8.9, 'Quezon|ENNS2019': 1.2, 'Rizal|ENNS2019': -1.6, 'Batangas|ENNS2021': -12.6, 'Cavite|ENNS2021': -8.2}}}

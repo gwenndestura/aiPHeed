@@ -1,0 +1,35 @@
+feature,indicator,dataset,classification,evidence,scored_rows,rows_with_archived_date,rows_available_after_issue,change_from_e122
+FMA_food_cpi,FMA,D01,provisionally eligible,PSA CPI release rule (about day 5-10 of m+1); 32 province-months archived (ledger V1/V2) but no quarter has all 3 months archived,80,0,0,unchanged
+FMA_headline_cpi,FMA,D02,provisionally eligible,as D01,80,0,0,unchanged
+FMA_rice_wholesale,FMA,D05,provisionally eligible,PSA quarterly wholesale price release rule; no archive,72,0,0,unchanged
+FMA_chicken,FMA,D08,provisionally eligible,PSA monthly retail price release rule; no archive,80,0,0,unchanged
+FMA_pork,FMA,D09,provisionally eligible,as D08,80,0,0,unchanged
+FMA_tilapia,FMA,D10,provisionally eligible,as D08,80,0,0,unchanged
+FMA_food_cpi_R,FMA,D03,provisionally eligible,PSA CPI release rule; no archive,10,0,0,unchanged
+FMA_headline_cpi_R,FMA,D03,provisionally eligible,PSA CPI release rule; no archive,10,0,0,unchanged
+FMA_rice_R,FMA,D07,provisionally eligible,PSA monthly farmgate price release rule; no archive,10,0,0,unchanged
+AFP_palay,AFP,D20,provisionally eligible,PSA quarterly palay/corn production release rule; no archive,75,0,0,unchanged
+AFP_corn,AFP,D21,provisionally eligible,as D20,75,0,0,unchanged
+AFP_vegetables,AFP,D22,provisionally eligible,PSA quarterly crop production release rule; no archive,75,0,0,unchanged
+AFP_rootcrops,AFP,D23,provisionally eligible,as D22,75,0,0,unchanged
+AFP_fisheries,AFP,D24,provisionally eligible,PSA quarterly fisheries release rule; no archive,75,0,0,unchanged
+AFP_chicken,AFP,D26,provisionally eligible,PSA quarterly livestock and poultry release rule; no archive,35,0,0,unchanged
+AFP_livestock,AFP,D27,provisionally eligible,as D26,35,0,0,unchanged
+AFP_palay_R,AFP,D20,provisionally eligible,PSA quarterly palay/corn production release rule; no archive,9,0,0,unchanged
+AFP_corn_R,AFP,D21,provisionally eligible,as D20,9,0,0,unchanged
+AFP_vegetables_R,AFP,D22,provisionally eligible,PSA quarterly crop production release rule; no archive,9,0,0,unchanged
+AFP_rootcrops_R,AFP,D23,provisionally eligible,as D22,9,0,0,unchanged
+AFP_fisheries_R,AFP,D24,provisionally eligible,PSA quarterly fisheries release rule; no archive,9,0,0,unchanged
+CEC_rain_departure,CEC,D36,provisionally eligible,NASA POWER documented latency (monthly values within about two months); values may be revised,80,0,0,unchanged
+CEC_heat,CEC,D37,provisionally eligible,as D36,80,0,0,unchanged
+CEC_cyclones_100km,CEC,D33,verified,IBTrACS track positions are real-time observations; count complete at quarter end,100,100,0,unchanged
+CEC_rain_departure_R,CEC,D36,provisionally eligible,NASA POWER documented latency (monthly values within about two months); values may be revised,10,0,0,unchanged
+CEC_heat_R,CEC,D37,provisionally eligible,as D36,10,0,0,unchanged
+CEC_cyclones_R,CEC,D34,verified,as D33,13,13,0,unchanged
+EHS_unemployment_prov,EHS,D41,unverified,"owner-compiled from PSA provincial LFS tables / infographics; the '30 June of Y+1' date is an assumption, not a documented PSA rule; 2023 Batangas value corroborated by a PSA RSSO IV-A release found by search (document not retrievable: 403)",90,0,0,downgraded: provisional -> unverified (date is an assumption)
+EHS_underemployment_prov,EHS,D41,unverified,"owner-compiled from PSA provincial LFS tables / infographics; the '30 June of Y+1' date is an assumption, not a documented PSA rule; 2023 Batangas value corroborated by a PSA RSSO IV-A release found by search (document not retrievable: 403)",90,0,0,downgraded: provisional -> unverified (date is an assumption)
+EHS_unemployment_change_R,EHS,D40,provisionally eligible,PSA monthly LFS release rule (about 5-6 weeks); no archive,10,0,0,unchanged
+EHS_remittance_decline_R,EHS,D42,provisionally eligible,first dated news report for 25% of quarters (verified rows); others by BSP release rule,8,2,0,unchanged
+PSV_poverty,PSV,D50,unverified,"SAE 2021 poverty: availability from 2025-07-01 is the V1 assumption in firi.py, not an archived release date",25,25,0,downgraded: provisional -> unverified (date is an assumption)
+FIS_fssi,FIS,D60,verified,articles carry publication timestamps; FSSI recomputed exactly from articles published before each issue,14,14,0,unchanged
+FIS_shortage_news_R,FIS,D62,verified,GDELT dated articles; quarter complete before the issue (vintage caveat: queried 2026-10-25),14,14,0,unchanged

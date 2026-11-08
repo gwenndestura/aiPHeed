@@ -1,0 +1,62 @@
+done A
+done B
+done C
+done D
+done E
+done G
+done H
+done I
+done IA1
+done IA2
+done IA3
+done IC1
+done IC2
+done IC3
+done IC4
+done IE1
+done IN1
+done X1
+done X1n
+done X2
+done X2n
+done X3
+done X3n
+done S_A
+done S_G
+done S_C2
+done S_ALL
+done RIDGE
+C:\Users\admin\aipheed_final\aipheed-backend-aligned\experiments\E114_Final_Run\runner\run_e114.py:173: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  R["y11"] = (R["y"] > 11.3).astype(float)
+                                   domain         mode  lead  pooled_delta_mse  pooled_ci90_low  pooled_ci90_high    holm_p                                                             decision
+0                           market_prices  provisional     1         -0.133068        -1.805390          1.624030  1.000000                                                          conditional
+1                         fish_production  provisional     1         -0.540457        -1.001990         -0.106038  0.116002                                                          conditional
+2                                 climate  provisional     1          0.031023        -0.990555          1.005670  1.000000                                                  no measurable value
+3                              employment  provisional     1         -0.405291        -1.528840          0.732099  1.000000                                                  no measurable value
+4                                news_nlp  provisional     1          1.547730         0.275914          3.062930  1.000000                                                       possible noise
+5                           market_prices  provisional     2         -1.043010        -2.720170          0.678497  0.927301                                                          conditional
+6                         fish_production  provisional     2         -0.081476        -0.744767          0.534167  1.000000                                                  no measurable value
+7                                 climate  provisional     2          0.779644        -0.553836          2.090050  1.000000                                                  no measurable value
+8                              employment  provisional     2          0.524257        -0.536445          1.655890  1.000000                                                  no measurable value
+9                                news_nlp  provisional     2          2.974240         1.019200          5.250830  1.000000                                                       possible noise
+10                        ofw_remittances  provisional     1               NaN              NaN               NaN       NaN  not testable (no series before 2021; BSP blocks automated download)
+11          all_testable_domains (H vs A)  provisional     1         -0.196614        -1.876930          1.360560       NaN                                                            see delta
+12                          full (I vs A)  provisional     1          1.359240        -0.423074          3.069040       NaN                                                            see delta
+13   interaction food prices x employment  provisional     1         -0.187261        -0.510898          0.047513       NaN                                                  no measurable value
+14             interaction fish x climate  provisional     1          0.333402         0.024138          0.657677       NaN                                                       possible noise
+15      interaction climate x food prices  provisional     1         -0.155883        -0.513288          0.213926       NaN                                                  no measurable value
+16  interaction food prices x remittances  provisional     1               NaN              NaN               NaN       NaN                                        not testable (no time series)
+17           interaction poverty x market  provisional     1               NaN              NaN               NaN       NaN                                        not testable (no time series)
+18                        ofw_remittances  provisional     2               NaN              NaN               NaN       NaN  not testable (no series before 2021; BSP blocks automated download)
+19          all_testable_domains (H vs A)  provisional     2          0.567631        -1.521020          2.713770       NaN                                                            see delta
+20                          full (I vs A)  provisional     2          2.149200        -0.372388          4.801820       NaN                                                            see delta
+21   interaction food prices x employment  provisional     2          0.495654         0.063381          0.987679       NaN                                                       possible noise
+22             interaction fish x climate  provisional     2          0.566499         0.125294          1.059610       NaN                                                       possible noise
+23      interaction climate x food prices  provisional     2          0.424654         0.095855          0.773159       NaN                                                       possible noise
+24  interaction food prices x remittances  provisional     2               NaN              NaN               NaN       NaN                                        not testable (no time series)
+25           interaction poverty x market  provisional     2               NaN              NaN               NaN       NaN                                        not testable (no time series)
+26                               news_nlp       strict     1          1.547730         0.275914          3.062930  1.000000                                                       possible noise
+27                 climate (typhoon only)       strict     1          0.058804        -0.660755          0.770156  1.000000                                                  no measurable value
+28                               news_nlp       strict     2          2.974240         1.019200          5.250830  1.000000                                                       possible noise
+29                 climate (typhoon only)       strict     2          0.538896        -0.312465          1.346910  1.000000                                                  no measurable value
+EXIT 0

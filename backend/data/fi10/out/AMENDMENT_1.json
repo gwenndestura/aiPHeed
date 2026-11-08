@@ -1,0 +1,10 @@
+{
+ "date": "2026-11-03",
+ "change": "app/fi10/data.py: build(live=None) parameter added to build the current issue rows for serving; nothing else changed",
+ "locked_code_sha256": "59491fb7fe1c8e6036036a138e2cac0fdb4af911bc065995857f27645991ed32",
+ "new_code_sha256": "359d425f1a8dbe8e341c1f980ee03c0b1c08f56e38696c8526964c95c82ce094",
+ "verification": "historical dataset rebuilt after the change: dataset.csv sha256 unchanged",
+ "dataset_sha256": "68274c425aa0fbd0c6cfe9ac41b8c5dc99b1c13617c34d1e87a912dfa6c5e2e0",
+ "study_results": "produced before the change (evaluation.json, predictions.csv); not re-run",
+ "note": "write guard corrected on 2026-11-03: two serving runs had briefly rewritten dataset.csv with the live-issue rows (no labels, so no effect on any evaluation); the file was rebuilt and its sha256 matches the original"
+}

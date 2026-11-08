@@ -1,0 +1,31 @@
+domain,mode,variant,lead,pooled_delta_mse,pooled_ci90_low,pooled_ci90_high,pooled_p_better,holm_p,P1_2003_2012_delta_mse,P2_2013_2020_delta_mse,P3_2021_2026_delta_mse,P1_2003_2012_ci90_high,P2_2013_2020_ci90_high,P3_2021_2026_ci90_high,decision
+market_prices,provisional,B,1,-0.133068,-1.80539,1.62403,0.452719,1,1.41407,2.20248,-6.73066,4.25529,3.88155,-3.48725,conditional
+fish_production,provisional,C,1,-0.540457,-1.00199,-0.106038,0.0232005,0.116002,-0.773478,-0.160141,-0.644891,-0.186887,0.682167,0.259559,conditional
+climate,provisional,D,1,0.0310231,-0.990555,1.00567,0.52024,1,-0.449571,0.326989,0.548262,0.970753,2.47651,1.38568,no measurable value
+employment,provisional,E,1,-0.405291,-1.52884,0.732099,0.29259,1,-0.30962,0.787963,-2.38651,0.716775,2.12151,1.74988,no measurable value
+news_nlp,provisional,G,1,1.54773,0.275914,3.06293,0.940425,1,0,2.86717,2.66403,0,6.40383,6.56736,possible noise
+market_prices,provisional,B,2,-1.04301,-2.72017,0.678497,0.18546,0.927301,-0.267895,1.15125,-5.88461,2.6673,3.06147,-2.71468,conditional
+fish_production,provisional,C,2,-0.0814757,-0.744767,0.534167,0.424903,1,-0.401544,-0.218541,0.764258,0.606657,0.668059,2.17846,no measurable value
+climate,provisional,D,2,0.779644,-0.553836,2.09005,0.80215,1,-0.738292,1.7547,2.35293,0.986022,4.57234,4.76803,no measurable value
+employment,provisional,E,2,0.524257,-0.536445,1.65589,0.763771,1,0.0956788,0.561639,1.32534,1.0747,2.04401,5.32938,no measurable value
+news_nlp,provisional,G,2,2.97424,1.0192,5.25083,0.957628,1,0,3.10156,8.73173,0,6.6019,17.0071,possible noise
+ofw_remittances,provisional,F,1,,,,,,,,,,,,not testable (no series before 2021; BSP blocks automated download)
+all_testable_domains (H vs A),provisional,H,1,-0.196614,-1.87693,1.36056,0.425105,,,,,,,,see delta
+full (I vs A),provisional,I,1,1.35924,-0.423074,3.06904,0.876327,,,,,,,,see delta
+interaction food prices x employment,provisional,X1,1,-0.187261,-0.510898,0.0475128,0.129879,,,,,,,,no measurable value
+interaction fish x climate,provisional,X2,1,0.333402,0.0241377,0.657677,0.973544,,,,,,,,possible noise
+interaction climate x food prices,provisional,X3,1,-0.155883,-0.513288,0.213926,0.249399,,,,,,,,no measurable value
+interaction food prices x remittances,provisional,,1,,,,,,,,,,,,not testable (no time series)
+interaction poverty x market,provisional,,1,,,,,,,,,,,,not testable (no time series)
+ofw_remittances,provisional,F,2,,,,,,,,,,,,not testable (no series before 2021; BSP blocks automated download)
+all_testable_domains (H vs A),provisional,H,2,0.567631,-1.52102,2.71377,0.651263,,,,,,,,see delta
+full (I vs A),provisional,I,2,2.1492,-0.372388,4.80182,0.877086,,,,,,,,see delta
+interaction food prices x employment,provisional,X1,2,0.495654,0.0633808,0.987679,0.949817,,,,,,,,possible noise
+interaction fish x climate,provisional,X2,2,0.566499,0.125294,1.05961,0.97454,,,,,,,,possible noise
+interaction climate x food prices,provisional,X3,2,0.424654,0.0958555,0.773159,0.983254,,,,,,,,possible noise
+interaction food prices x remittances,provisional,,2,,,,,,,,,,,,not testable (no time series)
+interaction poverty x market,provisional,,2,,,,,,,,,,,,not testable (no time series)
+news_nlp,strict,S_G,1,1.54773,0.275914,3.06293,0.940425,1,0,2.86717,2.66403,0,6.40383,6.56736,possible noise
+climate (typhoon only),strict,S_C2,1,0.058804,-0.660755,0.770156,0.552491,1,-0.538651,1.02525,-0.195952,0.753185,2.07918,0.487134,no measurable value
+news_nlp,strict,S_G,2,2.97424,1.0192,5.25083,0.957628,1,0,3.10156,8.73173,0,6.6019,17.0071,possible noise
+climate (typhoon only),strict,S_C2,2,0.538896,-0.312465,1.34691,0.875173,1,-0.42762,1.40866,1.16729,0.947037,2.68957,2.37707,no measurable value

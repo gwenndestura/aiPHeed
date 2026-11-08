@@ -1,0 +1,41 @@
+{
+ "sha256": "106a5b831e0344a66adea3217250446550b819069d97a34699d56b3fe6dee48b",
+ "code_sha256": "a75103ada941c5fbf8b2714169168e96a2679ffd042d482e214a8bfe62ca256b",
+ "locked_utc": "2026-11-03T00:05:45+00:00",
+ "protocol": {
+  "version": "fi9z-1.0",
+  "origins": {
+   "OP1": "FI9 issue timing (end of the quarter's 2nd month), lead 1",
+   "OP2": "same issue timing, lead 2"
+  },
+  "candidates": {
+   "Z1 class-weighted logistic (SWS state)": "('logit_w', ['gap', 'hunger_last_anom', 'hunger_age_q', 'moe_last'])",
+   "Z2 class-weighted elastic net (SWS state + government)": "('enet_w', ['gap', 'hunger_last_anom', 'hunger_age_q', 'moe_last', 'cpi_food_yoy', 'cpi_rice_yoy', 'palay_yoy', 'rain_anom_3m', 'tc_exposure_q', 'oni', 'unemp_rate', 'unemp_yoy', 'remit_yoy', 'poverty_inc', 'world_rice_yoy', 'world_rice_3m', 'world_urea_yoy'])",
+   "Z3 class-weighted elastic net (SWS state + government + news)": "('enet_w', ['gap', 'hunger_last_anom', 'hunger_age_q', 'moe_last', 'cpi_food_yoy', 'cpi_rice_yoy', 'palay_yoy', 'rain_anom_3m', 'tc_exposure_q', 'oni', 'unemp_rate', 'unemp_yoy', 'remit_yoy', 'poverty_inc', 'world_rice_yoy', 'world_rice_3m', 'world_urea_yoy', 'nidx_QTD', 'z_hard_QTD', 'z_warn_QTD', 'z_resp_QTD', 'z_disr_QTD', 'z_netdir_QTD'])",
+   "Z4 damped persistence, cost-sensitive threshold": "('cost', 'damped')",
+   "Z5 naive persistence, cost-sensitive threshold": "('cost', 'persist')",
+   "Z6 class-weighted LightGBM (SWS state + government)": "('lgbm_w', ['gap', 'hunger_last_anom', 'hunger_age_q', 'moe_last', 'cpi_food_yoy', 'cpi_rice_yoy', 'palay_yoy', 'rain_anom_3m', 'tc_exposure_q', 'oni', 'unemp_rate', 'unemp_yoy', 'remit_yoy', 'poverty_inc', 'world_rice_yoy', 'world_rice_3m', 'world_urea_yoy'])",
+   "Z7 class-weighted LightGBM (SWS state + government + news)": "('lgbm_w', ['gap', 'hunger_last_anom', 'hunger_age_q', 'moe_last', 'cpi_food_yoy', 'cpi_rice_yoy', 'palay_yoy', 'rain_anom_3m', 'tc_exposure_q', 'oni', 'unemp_rate', 'unemp_yoy', 'remit_yoy', 'poverty_inc', 'world_rice_yoy', 'world_rice_3m', 'world_urea_yoy', 'nidx_QTD', 'z_hard_QTD', 'z_warn_QTD', 'z_resp_QTD', 'z_disr_QTD', 'z_netdir_QTD'])"
+  },
+  "class_requirements": {
+   "high_recall": 0.6,
+   "high_precision": 0.5,
+   "low_recall": 0.85,
+   "low_precision": 0.9,
+   "balanced_accuracy": 0.7,
+   "macro_f1": 0.7,
+   "accuracy": 0.75,
+   "ece_5bin": 0.1,
+   "rationale": "HIGH recall >= 0.60: an early warning must catch most HIGH quarters (>= 7 of 11). HIGH precision >= 0.50: at most one false alarm per true alarm. LOW recall >= 0.85: false HIGH rate <= 15 %. LOW precision >= 0.90: a LOW call is trustworthy. Balanced accuracy and macro-F1 >= 0.70 so neither class carries the score. 75 % accuracy is the thesis target, necessary but not sufficient. Fixed before any FI9-Z candidate was scored; all FI9-X and earlier historical results were already known (disclosed)."
+  },
+  "skill_requirement": "beat naive persistence: Brier difference P(better) >= 0.90, OR balanced accuracy higher with block-bootstrap P >= 0.90 and macro-F1 not lower; AND not worse than production C0 on balanced accuracy",
+  "robustness": [
+   "2018+ subset: balanced accuracy >= 0.70 and HIGH recall >= 0.50",
+   "without the FI7 sawtooth quarters: balanced accuracy >= 0.65",
+   "dropping any single quarter keeps the balanced-accuracy advantage over naive persistence >= 0"
+  ],
+  "news_requirement": "a news candidate must beat its no-news counterpart on Brier (P >= 0.90) or on balanced accuracy (P >= 0.90)",
+  "lead_rule": "the maximum reliable lead is the longest lead with a configuration meeting every class, skill and robustness requirement",
+  "historical_status": "all historical quarters were seen in earlier studies; an adopted model is still provisional until prospective forecasts meet the same requirements"
+ }
+}

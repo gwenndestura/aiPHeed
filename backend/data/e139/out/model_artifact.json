@@ -1,0 +1,46 @@
+{
+  "version": "e139-lgbm-1.0",
+  "results_sha256": "7a5f2a6af1289025184d027a095e2a1a3e315ca36ac83ac4b91604d59ade7e58",
+  "sealed_prediction_sha256": "0bcb5584af8ae34822b2a7a650ca0e32efa9dbaf113741a5ac71e65f7faf289f",
+  "final_model": {
+    "n_trees": 0,
+    "base_alpha": 10.0,
+    "sigma": 0.3481125903622097
+  },
+  "features": [
+    "p_poverty",
+    "p_subsistence",
+    "p_poverty_gap",
+    "p_density",
+    "m_food_cpi_yoy",
+    "m_rice_cpi_yoy",
+    "m_food_threshold_rel",
+    "c_rain_anom_6m",
+    "c_tc_4q",
+    "c_tc_clim",
+    "c_agri_pc",
+    "c_agri_yoy",
+    "c_fish_yoy",
+    "a_prev_y",
+    "a_region_prev"
+  ],
+  "trees_grid": [
+    0,
+    30,
+    100
+  ],
+  "lgb_params": {
+    "objective": "regression",
+    "num_leaves": 3,
+    "max_depth": 2,
+    "min_child_samples": 15,
+    "reg_lambda": 10.0,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "subsample_freq": 1,
+    "colsample_bytree": 0.7,
+    "random_state": 20261105,
+    "n_jobs": 1,
+    "verbose": -1
+  }
+}

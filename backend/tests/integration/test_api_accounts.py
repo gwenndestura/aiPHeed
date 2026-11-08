@@ -1,0 +1,679 @@
+"""
+Integration tests for admin accounts (QA_REPORT ACCT-1): account states at
+sign-in, sign-up and email verification, approval, forgot/reset password and
+the view-only demo account.
+
+Same throwaway-database client as test_api_sessions.py (http://localhost, so
+the refresh cookie round-trips).
+"""
+
+from __future__ import annotations
+
+import re
+from datetime import datetime, timedelta, timezone
+
+import pytest
+from sqlalchemy import func, select, update
+
+from app.config import settings
+from app.db.models import AccountToken, AdminUser, AuditRecord
+from app.services import accounts, mailer, security
+from tests.integration.test_api_sessions import (  # noqa: F401  (api is a fixture)
+    CSRF,
+    EMAIL,
+    PASSWORD,
+    REFRESH,
+    api,
+    bearer,
+    present,
+    run,
+)
+from app.services import sessions
+
+GENERIC = "Email or password is incorrect."
+
+
+def add_user(api, email=EMAIL, password=PASSWORD, status=accounts.ACTIVE, **extra):
+    async def _create(db):
+        user = AdminUser(email=email, full_name="J. Dela Cruz", password_hash=security.hash_password(password),
+                         role="admin", **extra)
+        accounts.set_status(user, status)
+        db.add(user)
+    run(api, _create)
+
+
+def sign_in(api, email=EMAIL, password=PASSWORD):
+    return api.post("/api/v1/auth/login", json={"email": email, "password": password})
+
+
+def error(r):
+    return r.json()["error"]
+
+
+# ---------------------------------------------------------------------------
+# Account states at sign-in
+# ---------------------------------------------------------------------------
+
+class TestStatesAtSignIn:
+
+    def test_active_account_signs_in(self, api):
+        add_user(api)
+        assert sign_in(api).status_code == 200
+
+    def test_unverified_account_is_told_to_verify(self, api):
+        add_user(api, status=accounts.PENDING_VERIFICATION)
+        r = sign_in(api)
+        assert r.status_code == 401
+        assert error(r) == {**error(r), "code": "email_not_verified", "message": "Verify your email to continue."}
+
+    def test_unapproved_account_is_told_it_is_waiting(self, api):
+        add_user(api, status=accounts.PENDING_APPROVAL)
+        r = sign_in(api)
+        assert r.status_code == 401
+        assert error(r)["code"] == "account_pending_approval"
+        assert error(r)["message"] == "Your account is waiting for approval."
+
+    @pytest.mark.parametrize("status", [accounts.REJECTED, accounts.DEACTIVATED])
+    def test_rejected_and_deactivated_get_the_generic_error(self, api, status):
+        add_user(api, status=status)
+        r = sign_in(api)
+        assert r.status_code == 401 and error(r)["message"] == GENERIC
+
+    @pytest.mark.parametrize("status", [accounts.PENDING_VERIFICATION, accounts.PENDING_APPROVAL])
+    def test_a_wrong_password_never_reveals_the_status(self, api, status):
+        add_user(api, status=status)
+        r = sign_in(api, password="wrong-password-xyz")
+        assert error(r)["message"] == GENERIC
+
+    def test_status_and_is_active_move_together(self):
+        user = AdminUser(email=EMAIL, full_name="x", password_hash="x")
+        for status in accounts.STATUSES:
+            accounts.set_status(user, status)
+            assert user.is_active == (status == accounts.ACTIVE)
+        with pytest.raises(ValueError):
+            accounts.set_status(user, "superuser")
+
+    def test_an_account_made_without_a_status_is_active(self, api):
+        # Rows made the pre-ACCT-1 way (and by the migration) default to active.
+        async def _create(db):
+            db.add(AdminUser(email=EMAIL, full_name="x", password_hash=security.hash_password(PASSWORD),
+                             role="admin", is_active=True))
+        run(api, _create)
+        assert sign_in(api).status_code == 200
+        user = run(api, lambda db: db.scalar(select(AdminUser)))
+        assert user.status == accounts.ACTIVE
+
+
+# ---------------------------------------------------------------------------
+# Sign-up and email verification
+# ---------------------------------------------------------------------------
+
+NEW_EMAIL = "maria.santos@calabarzon.da.gov.ph"
+GOOD_PASSWORD = "lambanog-tricycle-sampaguita-77"
+
+
+@pytest.fixture
+def outbox(monkeypatch):
+    """Emails 'sent' during the test, as (to, subject, body)."""
+    sent: list[tuple[str, str, str]] = []
+    monkeypatch.setattr(mailer, "send_email", lambda to, subject, body: sent.append((to, subject, body)))
+    return sent
+
+
+def link_token(mail) -> str:
+    return re.search(r"token=([A-Za-z0-9_-]+)", mail[2]).group(1)
+
+
+def signup(api, email=NEW_EMAIL, password=GOOD_PASSWORD, **over):
+    body = {"fullName": "Maria Santos", "email": email, "office": "Regional Field Office IV-A", "password": password}
+    return api.post("/api/v1/auth/signup", json={**body, **over})
+
+
+def find(api, email=NEW_EMAIL):
+    return run(api, lambda db: db.scalar(select(AdminUser).where(AdminUser.email == email)))
+
+
+async def _scalars(db, stmt):
+    return list((await db.scalars(stmt)).all())
+
+
+class TestSignUp:
+
+    def test_new_account_is_pending_verification_with_no_access(self, api, outbox):
+        r = signup(api)
+        assert r.status_code == 202
+        user = find(api)
+        assert user.status == accounts.PENDING_VERIFICATION and not user.is_active
+        assert user.office_unit == "Regional Field Office IV-A"
+        assert outbox and outbox[0][0] == NEW_EMAIL and "/verify-email?token=" in outbox[0][2]
+        assert error(sign_in(api, NEW_EMAIL, GOOD_PASSWORD))["code"] == "email_not_verified"
+
+    @pytest.mark.parametrize("email", [
+        "name@da.gov.ph", "name@fakecalabarzon.da.gov.ph", "name@calabarzon.da.gov.ph.evil.com",
+        "name@sub.calabarzon.da.gov.ph", "name@gmail.com",
+    ])
+    def test_only_the_admin_domain_can_sign_up(self, api, outbox, email):
+        r = signup(api, email=email)
+        assert r.status_code == 400 and error(r)["code"] == "domain_not_allowed"
+        assert "calabarzon.da.gov.ph" in error(r)["message"]
+        assert find(api, email) is None and not outbox
+
+    def test_uppercase_address_is_stored_lowercase(self, api, outbox):
+        assert signup(api, email=NEW_EMAIL.upper()).status_code == 202
+        assert find(api).email == NEW_EMAIL
+
+    @pytest.mark.parametrize("password", ["short", "password1234", "Password1234"])
+    def test_weak_passwords_are_refused(self, api, outbox, password):
+        r = signup(api, password=password)
+        assert r.status_code == 400 and error(r)["code"] == "weak_password"
+        assert find(api) is None
+
+    @pytest.mark.parametrize("field,value", [
+        ("fullName", "x" * 201), ("office", "x" * 201), ("password", "x" * 1025), ("fullName", ""), ("office", ""),
+    ])
+    def test_length_caps_match_the_rest_of_the_api(self, api, outbox, field, value):
+        assert signup(api, **{field: value}).status_code == 422
+
+    def test_a_registered_address_gets_the_same_reply_and_no_second_account(self, api, outbox):
+        add_user(api)  # analyst@..., active
+        new = signup(api, email="other.person@calabarzon.da.gov.ph")
+        taken = signup(api, email=EMAIL, password="a-completely-different-pass-99")
+        assert taken.status_code == new.status_code == 202
+        assert taken.json() == new.json()
+        # The owner is told by email; the account and its password are untouched.
+        assert outbox[-1][0] == EMAIL and "already exists" in outbox[-1][2]
+        assert sign_in(api).status_code == 200
+        count = run(api, lambda db: db.scalar(select(func.count()).select_from(AdminUser).where(AdminUser.email == EMAIL)))
+        assert count == 1
+
+    def test_signing_up_again_while_unverified_resends_but_keeps_the_password(self, api, outbox):
+        signup(api)
+        first = link_token(outbox[-1])
+        assert signup(api, password="another-strong-passphrase-42").status_code == 202
+        second = link_token(outbox[-1])
+        # Only the newest link works...
+        assert error(api.post("/api/v1/auth/verify-email", json={"token": first}))["code"] == "link_used"
+        assert api.post("/api/v1/auth/verify-email", json={"token": second}).status_code == 200
+        # ...and the second sign-up did not change the password.
+        assert error(sign_in(api, NEW_EMAIL, GOOD_PASSWORD))["code"] == "account_pending_approval"
+
+    def test_sign_up_is_rate_limited_per_ip(self, api, outbox, monkeypatch):
+        from app.services import ratelimit
+        ratelimit.reset()
+        monkeypatch.setattr(settings, "RATE_LIMIT_ENABLED", True)
+        monkeypatch.setattr(settings, "RATE_LIMIT_SIGNUP_PER_HOUR", 2)
+        codes = [signup(api, email=f"user{i}@calabarzon.da.gov.ph").status_code for i in range(3)]
+        ratelimit.reset()
+        assert codes == [202, 202, 429]
+
+
+class TestVerification:
+
+    def test_valid_link_verifies_and_moves_to_pending_approval(self, api, outbox):
+        signup(api)
+        r = api.post("/api/v1/auth/verify-email", json={"token": link_token(outbox[-1])})
+        assert r.status_code == 200 and r.json()["status"] == accounts.PENDING_APPROVAL
+        user = find(api)
+        assert user.email_verified_at is not None and not user.is_active
+        assert error(sign_in(api, NEW_EMAIL, GOOD_PASSWORD))["message"] == "Your account is waiting for approval."
+
+    def test_a_link_works_once(self, api, outbox):
+        signup(api)
+        token = link_token(outbox[-1])
+        assert api.post("/api/v1/auth/verify-email", json={"token": token}).status_code == 200
+        again = api.post("/api/v1/auth/verify-email", json={"token": token})
+        assert again.status_code == 400 and error(again)["code"] == "link_used"
+
+    def test_an_expired_link_is_refused(self, api, outbox):
+        signup(api)
+        token = link_token(outbox[-1])
+        past = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(seconds=1)
+        run(api, lambda db: db.execute(update(AccountToken).values(expires_at=past)))
+        r = api.post("/api/v1/auth/verify-email", json={"token": token})
+        assert r.status_code == 400 and error(r)["code"] == "link_expired"
+        assert find(api).status == accounts.PENDING_VERIFICATION
+
+    def test_a_made_up_link_is_refused(self, api):
+        r = api.post("/api/v1/auth/verify-email", json={"token": "not-a-real-token"})
+        assert r.status_code == 400 and error(r)["code"] == "link_invalid"
+
+    def test_links_are_stored_only_as_hashes(self, api, outbox):
+        signup(api)
+        token = link_token(outbox[-1])
+        rows = run(api, lambda db: _scalars(db, select(AccountToken)))
+        assert rows and all(row.token_hash != token and len(row.token_hash) == 64 for row in rows)
+        assert rows[0].expires_at - rows[0].created_at == timedelta(hours=24)
+
+    def test_resend_gives_the_same_reply_for_any_address(self, api, outbox):
+        signup(api)
+        replies = [api.post("/api/v1/auth/resend-verification", json={"email": e})
+                   for e in (NEW_EMAIL, "nobody@calabarzon.da.gov.ph")]
+        assert [r.status_code for r in replies] == [202, 202]
+        assert replies[0].json() == replies[1].json()
+        assert len(outbox) == 2  # sign-up + one resend to the real pending address
+
+    def test_resend_issues_a_new_link_and_retires_the_old_one(self, api, outbox):
+        signup(api)
+        old = link_token(outbox[-1])
+        api.post("/api/v1/auth/resend-verification", json={"email": NEW_EMAIL})
+        assert error(api.post("/api/v1/auth/verify-email", json={"token": old}))["code"] == "link_used"
+        assert api.post("/api/v1/auth/verify-email", json={"token": link_token(outbox[-1])}).status_code == 200
+
+    def test_sign_up_and_verification_are_audited_without_secrets(self, api, outbox):
+        signup(api)
+        token = link_token(outbox[-1])
+        api.post("/api/v1/auth/verify-email", json={"token": token})
+        rows = run(api, lambda db: _scalars(db, select(AuditRecord)))
+        assert [r.action for r in rows] == ["signup", "email_verified"]
+        assert all(r.actor_email == NEW_EMAIL and r.subject_type == "account" for r in rows)
+        dump = str([(r.reason, r.notes, r.subject_id) for r in rows])
+        assert token not in dump and GOOD_PASSWORD not in dump
+
+
+
+# ---------------------------------------------------------------------------
+# Admin approval (Accounts page)
+# ---------------------------------------------------------------------------
+
+ADMIN = "approver@calabarzon.da.gov.ph"
+
+
+def admin_headers(api):
+    add_user(api, email=ADMIN)
+    r = sign_in(api, ADMIN)
+    assert r.status_code == 200, r.text
+    return bearer(r.json()["token"])
+
+
+def verified_request(api, outbox, email=NEW_EMAIL):
+    signup(api, email=email)
+    api.post("/api/v1/auth/verify-email", json={"token": link_token(outbox[-1])})
+    return find(api, email)
+
+
+class TestApproval:
+
+    def test_pending_list_shows_verified_requests_only(self, api, outbox):
+        h = admin_headers(api)
+        verified_request(api, outbox)
+        signup(api, email="not.verified@calabarzon.da.gov.ph")
+        body = api.get("/api/v1/admin/accounts", headers=h).json()
+        assert [a["email"] for a in body["pending"]] == [NEW_EMAIL]
+        assert body["pendingCount"] == 1
+        assert body["pending"][0]["office"] == "Regional Field Office IV-A"
+        me = [a for a in body["active"] if a["email"] == ADMIN]
+        assert me and me[0]["isSelf"]
+
+    def test_approve_lets_the_new_admin_sign_in_and_tells_them(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        r = api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        assert r.status_code == 200 and r.json()["status"] == accounts.ACTIVE
+        assert outbox[-1][0] == NEW_EMAIL and "approved" in outbox[-1][1]
+        new = sign_in(api, NEW_EMAIL, GOOD_PASSWORD)
+        assert new.status_code == 200
+        assert api.get("/api/v1/admin/review", headers=bearer(new.json()["token"])).status_code == 200
+        user = find(api)
+        assert user.approved_at is not None and user.approved_by_id is not None
+
+    def test_reject_means_the_generic_error_at_sign_in(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        assert api.post(f"/api/v1/admin/accounts/{target.id}/reject", headers=h).json()["status"] == accounts.REJECTED
+        r = sign_in(api, NEW_EMAIL, GOOD_PASSWORD)
+        assert r.status_code == 401 and error(r)["message"] == GENERIC
+        assert api.get("/api/v1/admin/accounts", headers=h).json()["pendingCount"] == 0
+
+    def test_only_pending_requests_can_be_approved_or_rejected(self, api, outbox):
+        h = admin_headers(api)
+        target = verified_request(api, outbox)
+        api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        again = api.post(f"/api/v1/admin/accounts/{target.id}/approve", headers=h)
+        assert again.status_code == 400 and error(again)["code"] == "not_pending_approval"
+        assert api.post(f"/api/v1/admin/accounts/{target.id}/reject", headers=h).status_code == 400
+
+    def test_unknown_account_is_404(self, api):
+        h = admin_headers(api)
+        assert api.post("/api/v1/admin/accounts/9999/approve", headers=h).status_code == 404
+
+    def test_deactivate_ends_every_session_at_once(self, api, outbox):
+        add_user(api)  # analyst, the one to deactivate
+        target_login = sign_in(api)
+        target_token = target_login.json()["token"]
+        target_cookie = api.cookies.get(sessions.COOKIE_NAME)
+        api.cookies.clear()
+        h = admin_headers(api)
+        target_id = find(api, EMAIL).id
+        r = api.post(f"/api/v1/admin/accounts/{target_id}/deactivate", headers=h)
+        assert r.status_code == 200 and r.json()["status"] == accounts.DEACTIVATED
+        assert api.get("/api/v1/admin/review", headers=bearer(target_token)).status_code == 401
+        assert present(api, target_cookie).status_code == 401
+        assert error(sign_in(api))["message"] == GENERIC
+
+    def test_an_admin_cannot_deactivate_themselves(self, api):
+        h = admin_headers(api)
+        me = find(api, ADMIN)
+        r = api.post(f"/api/v1/admin/accounts/{me.id}/deactivate", headers=h)
+        assert r.status_code == 400 and error(r)["code"] == "cannot_deactivate_self"
+        assert api.get("/api/v1/admin/review", headers=h).status_code == 200
+
+    def test_decisions_are_audited_with_who_whom_and_when(self, api, outbox):
+        h = admin_headers(api)
+        a = verified_request(api, outbox)
+        b = verified_request(api, outbox, email="second.person@calabarzon.da.gov.ph")
+        api.post(f"/api/v1/admin/accounts/{a.id}/approve", headers=h)
+        api.post(f"/api/v1/admin/accounts/{b.id}/reject", headers=h)
+        api.post(f"/api/v1/admin/accounts/{a.id}/deactivate", headers=h)
+        rows = run(api, lambda db: _scalars(db, select(AuditRecord).where(AuditRecord.subject_type == "account")))
+        decisions = [(r.action, r.actor_email, r.subject_id, r.notes) for r in rows if r.action.startswith("account_")]
+        assert decisions == [
+            ("account_approved", ADMIN, str(a.id), NEW_EMAIL),
+            ("account_rejected", ADMIN, str(b.id), "second.person@calabarzon.da.gov.ph"),
+            ("account_deactivated", ADMIN, str(a.id), NEW_EMAIL),
+        ]
+        assert all(r.timestamp is not None for r in rows)
+        assert GOOD_PASSWORD not in str([(r.reason, r.notes) for r in rows])
+
+    def test_accounts_need_an_admin_session(self, api):
+        assert api.get("/api/v1/admin/accounts").status_code == 401
+        assert api.post("/api/v1/admin/accounts/1/approve").status_code == 401
+
+
+
+# ---------------------------------------------------------------------------
+# Forgot / reset password
+# ---------------------------------------------------------------------------
+
+NEW_PASSWORD = "kalesa-bibingka-puto-bumbong-8"
+
+
+def forgot(api, email=EMAIL):
+    return api.post("/api/v1/auth/forgot-password", json={"email": email})
+
+
+def reset(api, token, password=NEW_PASSWORD):
+    return api.post("/api/v1/auth/reset-password", json={"token": token, "password": password})
+
+
+class TestForgotAndReset:
+
+    def test_same_reply_whether_or_not_the_address_exists(self, api, outbox):
+        add_user(api)
+        add_user(api, email="pending@calabarzon.da.gov.ph", status=accounts.PENDING_APPROVAL)
+        replies = [forgot(api, e) for e in (EMAIL, "nobody@calabarzon.da.gov.ph", "pending@calabarzon.da.gov.ph")]
+        assert {r.status_code for r in replies} == {202}
+        assert len({r.text for r in replies}) == 1
+        # Only the active account gets an email.
+        assert [m[0] for m in outbox] == [EMAIL]
+        assert "/reset-password?token=" in outbox[0][2]
+
+    def test_reset_sets_the_password_and_ends_every_old_session(self, api, outbox):
+        add_user(api)
+        old = sign_in(api)
+        old_token = old.json()["token"]
+        old_cookie = api.cookies.get(sessions.COOKIE_NAME)
+        forgot(api)
+        r = reset(api, link_token(outbox[-1]))
+        assert r.status_code == 200 and "signed out everywhere" in r.json()["message"]
+        assert api.get("/api/v1/admin/review", headers=bearer(old_token)).status_code == 401
+        assert present(api, old_cookie).status_code == 401
+        assert error(sign_in(api))["message"] == GENERIC                 # old password
+        assert sign_in(api, EMAIL, NEW_PASSWORD).status_code == 200      # new password
+
+    def test_reset_link_lasts_one_hour_and_is_stored_hashed(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        row = run(api, lambda db: db.scalar(select(AccountToken).where(AccountToken.purpose == accounts.RESET_PASSWORD)))
+        assert row.token_hash != token and row.expires_at - row.created_at == timedelta(hours=1)
+
+    def test_a_reset_link_works_once(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        assert reset(api, token).status_code == 200
+        again = reset(api, token, "yet-another-strong-passphrase-3")
+        assert again.status_code == 400 and error(again)["code"] == "link_used"
+
+    def test_an_expired_reset_link_is_refused(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        past = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(seconds=1)
+        run(api, lambda db: db.execute(update(AccountToken).values(expires_at=past)))
+        r = reset(api, token)
+        assert r.status_code == 400 and error(r)["code"] == "link_expired"
+        assert sign_in(api).status_code == 200  # password unchanged
+
+    def test_a_made_up_reset_link_is_refused(self, api):
+        r = reset(api, "not-a-real-token")
+        assert r.status_code == 400 and error(r)["code"] == "link_invalid"
+
+    def test_a_weak_password_is_refused_and_the_link_still_works(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        weak = reset(api, token, "password1234")
+        assert weak.status_code == 400 and error(weak)["code"] == "weak_password"
+        assert reset(api, token).status_code == 200
+
+    def test_a_newer_link_retires_the_older_one(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        first = link_token(outbox[-1])
+        forgot(api)
+        assert error(reset(api, first))["code"] == "link_used"
+        assert reset(api, link_token(outbox[-1])).status_code == 200
+
+    def test_the_demo_account_cannot_reset_its_password(self, api, outbox):
+        add_user(api, email="demo@calabarzon.da.gov.ph", is_demo=True)
+        forgot(api, "demo@calabarzon.da.gov.ph")
+        assert outbox == []  # no link is ever sent
+        # Even a link obtained some other way is refused.
+        async def _issue(db):
+            demo = await db.scalar(select(AdminUser).where(AdminUser.email == "demo@calabarzon.da.gov.ph"))
+            return await accounts.issue_link_token(db, demo, accounts.RESET_PASSWORD)
+        token = run(api, _issue)
+        r = reset(api, token)
+        assert r.status_code == 400 and error(r)["code"] == "link_invalid"
+        demo = find(api, "demo@calabarzon.da.gov.ph")
+        assert security.verify_password(PASSWORD, demo.password_hash)  # password unchanged
+
+    def test_reset_is_audited_without_secrets(self, api, outbox):
+        add_user(api)
+        forgot(api)
+        token = link_token(outbox[-1])
+        reset(api, token)
+        rows = run(api, lambda db: _scalars(db, select(AuditRecord).where(AuditRecord.action == "password_reset")))
+        assert len(rows) == 1 and rows[0].actor_email == EMAIL
+        assert token not in str(rows[0].__dict__) and NEW_PASSWORD not in str(rows[0].__dict__)
+
+    def test_reset_clears_a_sign_in_lockout(self, api, outbox, monkeypatch):
+        from app.services import ratelimit
+        ratelimit.reset()
+        monkeypatch.setattr(settings, "RATE_LIMIT_ENABLED", True)
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_PER_15MIN", 1000)
+        monkeypatch.setattr(settings, "RATE_LIMIT_LOGIN_FAILURES_PER_ACCOUNT_PER_HOUR", 2)
+        add_user(api)
+        for _ in range(2):
+            sign_in(api, password="wrong-password-xyz")
+        assert sign_in(api).status_code == 401  # locked
+        forgot(api)
+        reset(api, link_token(outbox[-1]))
+        ok = sign_in(api, EMAIL, NEW_PASSWORD).status_code
+        ratelimit.reset()
+        assert ok == 200
+
+
+
+# ---------------------------------------------------------------------------
+# The view-only demo account
+# ---------------------------------------------------------------------------
+
+DEMO = "demo.account@calabarzon.da.gov.ph"
+SAFE = {"GET", "HEAD", "OPTIONS"}
+
+
+@pytest.fixture
+def demo_on(monkeypatch):
+    monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+
+
+def demo_headers(api):
+    add_user(api, email=DEMO, is_demo=True)
+    r = sign_in(api, DEMO)
+    assert r.status_code == 200, r.text
+    assert r.json()["user"]["isDemo"] is True
+    return bearer(r.json()["token"])
+
+
+def admin_write_routes():
+    """Every state-changing route under /api/v1/admin, as the app registers them."""
+    from fastapi.routing import APIRoute
+    from app.main import app
+    for route in app.routes:
+        if isinstance(route, APIRoute) and route.path.startswith("/api/v1/admin"):
+            for method in sorted(route.methods - SAFE):
+                path = re.sub(r"\{[^}]+\}", "1", route.path)
+                yield method, path
+
+
+class TestDemoAccount:
+
+    def test_there_are_write_routes_to_check(self):
+        routes = list(admin_write_routes())
+        assert len(routes) >= 7  # review x3, rejections, accounts x3
+
+    def test_every_admin_write_is_403_for_the_demo_account(self, api, demo_on):
+        h = demo_headers(api)
+        for method, path in admin_write_routes():
+            r = api.request(method, path, headers=h, json={"reason": "Data quality issue"})
+            assert r.status_code == 403, (method, path, r.status_code)
+            assert error(r)["code"] == "demo_read_only", (method, path)
+            assert error(r)["message"] == "Not available in the demo account."
+
+    def test_the_demo_account_can_read_admin_pages(self, api, demo_on):
+        h = demo_headers(api)
+        for path in ("/api/v1/admin/review", "/api/v1/admin/audit", "/api/v1/admin/feedback"):
+            assert api.get(path, headers=h).status_code == 200, path
+
+    def test_the_demo_account_cannot_even_read_accounts(self, api, demo_on):
+        h = demo_headers(api)
+        r = api.get("/api/v1/admin/accounts", headers=h)
+        assert r.status_code == 403 and error(r)["code"] == "demo_read_only"
+
+    def test_feedback_personal_details_are_masked_for_the_demo_account(self, api, demo_on):
+        from app.db.models import FeedbackRecord
+        async def _add(db):
+            db.add(FeedbackRecord(score=80.0, answers={str(i): 3 for i in range(10)}, sus_version="sus-v1",
+                                  full_name="Juana Respondent", email="juana@example.com", agency="DA RFO IV-A",
+                                  designation="Analyst", province="Laguna"))
+        run(api, _add)
+        h = demo_headers(api)
+        shown = api.get("/api/v1/admin/feedback", headers=h).json()["data"][0]["demographics"]
+        assert shown["fullName"] == shown["email"] == shown["agency"] == "Hidden in the demo account"
+        assert "Juana" not in str(shown) and "juana@" not in str(shown)
+        assert shown["province"] == "Laguna"  # non-identifying fields stay
+        # A real admin still sees them.
+        api.cookies.clear()
+        real = admin_headers(api)
+        full = api.get("/api/v1/admin/feedback", headers=real).json()["data"][0]["demographics"]
+        assert full["fullName"] == "Juana Respondent" and full["email"] == "juana@example.com"
+
+    def test_switched_off_the_demo_account_cannot_sign_in(self, api):
+        add_user(api, email=DEMO, is_demo=True)
+        r = sign_in(api, DEMO)
+        assert r.status_code == 401 and error(r)["message"] == GENERIC
+
+    def test_switching_it_off_ends_tokens_and_refresh_already_issued(self, api, monkeypatch):
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+        h = demo_headers(api)
+        cookie = api.cookies.get(sessions.COOKIE_NAME)
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", False)
+        assert api.get("/api/v1/admin/review", headers=h).status_code == 401
+        assert present(api, cookie).status_code == 401
+
+    def test_demo_account_is_listed_only_while_enabled(self, api, monkeypatch):
+        add_user(api, email=DEMO, is_demo=True)
+        h = admin_headers(api)
+        listed = lambda: [a["email"] for a in api.get("/api/v1/admin/accounts", headers=h).json()["active"]]
+        assert DEMO not in listed()
+        monkeypatch.setattr(settings, "ENABLE_DEMO_ACCOUNT", True)
+        assert DEMO in listed()
+
+    def test_me_reports_whether_this_is_the_demo_account(self, api, demo_on):
+        h = demo_headers(api)
+        assert api.get("/api/v1/auth/me", headers=h).json()["isDemo"] is True
+        api.cookies.clear()
+        assert api.get("/api/v1/auth/me", headers=admin_headers(api)).json()["isDemo"] is False
+        assert api.post(REFRESH, headers=CSRF).json()["user"]["isDemo"] is False
+
+    def test_the_demo_account_can_still_sign_out(self, api, demo_on):
+        h = demo_headers(api)
+        assert api.post("/api/v1/auth/logout", headers=h).status_code == 200
+
+
+# ---------------------------------------------------------------------------
+# create_admin.py --demo (run as the real script against a throwaway DB)
+# ---------------------------------------------------------------------------
+
+def _script(tmp_path, *args, **env):
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path as _P
+    backend = _P(__file__).resolve().parents[2]
+    full_env = {**os.environ, "DATABASE_URL": f"sqlite+aiosqlite:///{tmp_path / 'demo.db'}",
+                "SECRET_KEY": "test-signing-key-not-for-production", **env}
+    full_env.pop("AIPHEED_ADMIN_PASSWORD", None)
+    full_env.update({k: v for k, v in env.items()})
+    return subprocess.run([sys.executable, "-W", "ignore", "scripts/create_admin.py", *args], cwd=backend,
+                          env=full_env, capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=120)
+
+
+def _rows(tmp_path):
+    import sqlite3
+    c = sqlite3.connect(tmp_path / "demo.db")
+    return {r[0]: r[1:] for r in c.execute("select email, status, is_demo, email_verified_at is not null, approved_at is not null from admin_users")}
+
+
+@pytest.fixture
+def demo_db(tmp_path):
+    from sqlalchemy import create_engine
+    from app.db.database import Base
+    engine = create_engine(f"sqlite:///{tmp_path / 'demo.db'}")
+    Base.metadata.create_all(engine)
+    engine.dispose()
+    return tmp_path
+
+
+class TestDemoScript:
+
+    def test_creates_one_verified_approved_demo_account(self, demo_db):
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode == 0, r.stdout + r.stderr
+        assert "ENABLE_DEMO_ACCOUNT is OFF" in r.stdout
+        assert _rows(demo_db)[DEMO] == ("active", 1, 1, 1)
+
+    def test_refuses_another_domain_and_a_weak_password(self, demo_db):
+        bad_domain = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL="demo@da.gov.ph", DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        weak = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD="password1234")
+        assert bad_domain.returncode != 0 and weak.returncode != 0
+        assert _rows(demo_db) == {}
+
+    def test_never_turns_a_real_admin_into_the_demo(self, demo_db):
+        made = _script(demo_db, "--email", EMAIL, "--name", "Real Admin", AIPHEED_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert made.returncode == 0, made.stdout + made.stderr
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=EMAIL, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode != 0 and "regular admin" in (r.stdout + r.stderr)
+        assert _rows(demo_db)[EMAIL][1] == 0  # still not a demo
+
+    def test_a_new_demo_address_retires_the_old_demo_account(self, demo_db):
+        _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=DEMO, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        other = "presentation@calabarzon.da.gov.ph"
+        r = _script(demo_db, "--demo", DEMO_ADMIN_EMAIL=other, DEMO_ADMIN_PASSWORD=GOOD_PASSWORD)
+        assert r.returncode == 0, r.stdout + r.stderr
+        rows = _rows(demo_db)
+        assert rows[other][:2] == ("active", 1)
+        # Un-marked AND deactivated: never left behind as a full admin.
+        assert rows[DEMO][:2] == ("deactivated", 0)

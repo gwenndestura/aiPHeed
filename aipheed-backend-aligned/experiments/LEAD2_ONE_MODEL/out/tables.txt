@@ -1,0 +1,64 @@
+selection: {
+"S0": {
+"dev_lead2_bal": 0.5492424242424242,
+"dev_lead2_brier": 0.2729613931549342,
+"dev_lead1_acc": 0.85,
+"admissible": false
+},
+"S1": {
+"dev_lead2_bal": 0.5037878787878788,
+"dev_lead2_brier": 0.2724618110880082,
+"dev_lead1_acc": 0.8,
+"admissible": false
+},
+"S2": {
+"dev_lead2_bal": 0.5492424242424242,
+"dev_lead2_brier": 0.2794342550193712,
+"dev_lead1_acc": 0.85,
+"admissible": false
+},
+"S3": {
+"dev_lead2_bal": 0.5492424242424242,
+"dev_lead2_brier": 0.2794342550193712,
+"dev_lead1_acc": 0.85,
+"admissible": false
+}
+}
+S0             L1: n 70 q 14 HIGH 17 acc 0.814 CI [0.71, 0.91] bal 0.738 P 0.62 R 0.59 F1 0.61 FAR 0.113 AUC 0.76 PR 0.66 Brier 0.153 TP 10 FP 6 FN 7 | onsets 10 rec 0.4 | fail ['R5', 'R6'] | not_reliable
+S0             L2: n 65 q 13 HIGH 17 acc 0.677 CI [0.55, 0.8] bal 0.591 P 0.39 R 0.41 F1 0.40 FAR 0.229 AUC 0.52 PR 0.42 Brier 0.243 TP 7 FP 11 FN 10 | onsets 10 rec 0.0 | fail ['R2', 'R3', 'R4', 'R5', 'R6', 'R7'] | not_reliable
+    I: {'I1_recall_ge_8_of_17': False, 'I2_precision_ge_0.50_far_le_0.15': False, 'I3_bal_ge_0.685': False, 'I4_brier_le_0.204': False, 'I5_new_detections_in_ge_2_quarters': False, 'I6_lead1_acc_ge_0.75_and_brier_not_worse': True}
+S1             L1: n 70 q 14 HIGH 17 acc 0.771 CI [0.66, 0.87] bal 0.669 P 0.53 R 0.47 F1 0.50 FAR 0.132 AUC 0.74 PR 0.65 Brier 0.155 TP 8 FP 7 FN 9 | onsets 10 rec 0.3 | fail ['R3', 'R5', 'R6'] | not_reliable
+S1             L2: n 65 q 13 HIGH 17 acc 0.662 CI [0.54, 0.77] bal 0.562 P 0.35 R 0.35 F1 0.35 FAR 0.229 AUC 0.51 PR 0.4 Brier 0.241 TP 6 FP 11 FN 11 | onsets 10 rec 0.0 | fail ['R2', 'R3', 'R4', 'R5', 'R6', 'R7'] | not_reliable
+    I: {'I1_recall_ge_8_of_17': False, 'I2_precision_ge_0.50_far_le_0.15': False, 'I3_bal_ge_0.685': False, 'I4_brier_le_0.204': False, 'I5_new_detections_in_ge_2_quarters': False, 'I6_lead1_acc_ge_0.75_and_brier_not_worse': True}
+S2             L1: n 70 q 14 HIGH 17 acc 0.871 CI [0.79, 0.96] bal 0.775 P 0.83 R 0.59 F1 0.69 FAR 0.038 AUC 0.83 PR 0.71 Brier 0.111 TP 10 FP 2 FN 7 | onsets 10 rec 0.3 | fail ['R6'] | not_reliable
+S2             L2: n 65 q 13 HIGH 17 acc 0.754 CI [0.65, 0.86] bal 0.643 P 0.54 R 0.41 F1 0.47 FAR 0.125 AUC 0.52 PR 0.48 Brier 0.218 TP 7 FP 6 FN 10 | onsets 10 rec 0.0 | fail ['R3', 'R5', 'R6'] | not_reliable
+    I: {'I1_recall_ge_8_of_17': False, 'I2_precision_ge_0.50_far_le_0.15': True, 'I3_bal_ge_0.685': False, 'I4_brier_le_0.204': False, 'I5_new_detections_in_ge_2_quarters': False, 'I6_lead1_acc_ge_0.75_and_brier_not_worse': True}
+S3             L1: n 70 q 14 HIGH 17 acc 0.857 CI [0.77, 0.93] bal 0.786 P 0.73 R 0.65 F1 0.69 FAR 0.075 AUC 0.83 PR 0.71 Brier 0.112 TP 11 FP 4 FN 6 | onsets 10 rec 0.4 | fail [] | promising_not_yet_verified
+S3             L2: n 65 q 13 HIGH 17 acc 0.738 CI [0.62, 0.85] bal 0.633 P 0.50 R 0.41 F1 0.45 FAR 0.146 AUC 0.51 PR 0.46 Brier 0.232 TP 7 FP 7 FN 10 | onsets 10 rec 0.0 | fail ['R2', 'R3', 'R4', 'R5', 'R6'] | not_reliable
+    I: {'I1_recall_ge_8_of_17': False, 'I2_precision_ge_0.50_far_le_0.15': True, 'I3_bal_ge_0.685': False, 'I4_brier_le_0.204': False, 'I5_new_detections_in_ge_2_quarters': False, 'I6_lead1_acc_ge_0.75_and_brier_not_worse': True}
+P0H4 (served)  L1: n 70 q 14 HIGH 17 acc 0.843 CI [0.76, 0.93] bal 0.776 P 0.69 R 0.65 F1 0.67 FAR 0.094 AUC 0.87 PR 0.65 Brier 0.132 TP 11 FP 5 FN 6 | onsets 10 rec 0.4 | fail [] | promising_not_yet_verified
+P0H4 (served)  L2: n 65 q 13 HIGH 17 acc 0.769 CI [0.65, 0.88] bal 0.635 P 0.60 R 0.35 F1 0.44 FAR 0.083 AUC 0.62 PR 0.42 Brier 0.194 TP 6 FP 4 FN 11 | onsets 10 rec 0.0 | fail ['R3', 'R5', 'R6'] | not_reliable
+UNI-FINAL      L1: n 70 q 14 HIGH 17 acc 0.829 CI [0.74, 0.91] bal 0.767 P 0.65 R 0.65 F1 0.65 FAR 0.113 AUC 0.88 PR 0.66 Brier 0.131 TP 11 FP 6 FN 6 | onsets 10 rec 0.4 | fail [] | promising_not_yet_verified
+UNI-FINAL      L2: n 65 q 13 HIGH 17 acc 0.769 CI [0.65, 0.88] bal 0.635 P 0.60 R 0.35 F1 0.44 FAR 0.083 AUC 0.59 PR 0.41 Brier 0.206 TP 6 FP 4 FN 11 | onsets 10 rec 0.0 | fail ['R3', 'R5', 'R6'] | not_reliable
+
+Lead 2 quarter by quarter (5 provinces each): HIGH | P0H4 TP/FP | S2 TP/FP | S3 TP/FP | mean p P0H4 / S2
+2023-Q2 hunger 0 H 11.3 | HIGH 0 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.08 0.02
+2023-Q3 hunger 0 H 10.3 | HIGH 0 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.29 0.02
+2023-Q4 hunger 1 H 14.3 | HIGH 3 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.09 0.01
+2024-Q1 hunger 1 H 15.3 | HIGH 0 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.29 0.01
+2024-Q2 hunger 1 H 19.6 | HIGH 4 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.31 0.01
+2024-Q3 hunger 1 H 18.1 | HIGH 1 | P0H4 (0, 1) | S2 (1, 2) | S3 (1, 2) | p 0.35 0.5
+2024-Q4 hunger 1 H 25.3 | HIGH 3 | P0H4 (1, 0) | S2 (1, 0) | S3 (1, 0) | p 0.28 0.22
+2025-Q2 hunger 1 H 16.15 | HIGH 3 | P0H4 (3, 1) | S2 (3, 1) | S3 (3, 1) | p 0.53 0.66
+2025-Q3 hunger 1 H 23.8 | HIGH 2 | P0H4 (2, 1) | S2 (2, 1) | S3 (2, 2) | p 0.58 0.62
+2025-Q4 hunger 1 H 16.7 | HIGH 0 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.32 0.22
+2026-Q1 hunger 1 H 22.4 | HIGH 0 | P0H4 (0, 0) | S2 (0, 0) | S3 (0, 0) | p 0.29 0.24
+2026-Q2 hunger 1 H 17.3 | HIGH 1 | P0H4 (0, 1) | S2 (0, 1) | S3 (0, 1) | p 0.3 0.34
+2026-Q3 hunger 1 H 23.6 | HIGH 0 | P0H4 (0, 0) | S2 (0, 1) | S3 (0, 1) | p 0.12 0.18
+
+S3 vs P0H4 Brier (cluster bootstrap by target quarter; diff = S3 - P0H4, negative = S3 better)
+lead 1: diff -0.0204 CI90 [-0.0601, 0.0248] p_two 0.427
+lead 2: diff +0.0372 CI90 [-0.0115, 0.0945] p_two 0.252
+lead 3: diff +0.0734 CI90 [0.0221, 0.1314] p_two 0.003
+S3 max R1-R7 lead 1 | Lead 3-5 acc [0.65, 0.582, 0.52]
+P0H4 (served) max R1-R7 lead 1 | Lead 3-5 acc [0.717, 0.673, 0.72]

@@ -1,0 +1,177 @@
+{
+ "A0ReproductionMaxAbsDiff": 4.992117830227016e-13,
+ "content_sha256": "2b4ea4f3dc29d159575d878f08c39ea6bbdf8757250bbccbe48728b745cb9518",
+ "evidenceStatus": "development evidence only (all 50 back-test rows were examined before E67); not validated",
+ "experiment": "E67_Lead2_Best_Model_Objectives_1_4",
+ "lead2Accuracy": "Lead-2 development back-test, 50 province-quarters 2024-Q2..2026-Q3: accuracy 0.72 (36/50), balanced accuracy 0.68; the early-warning reading 0.78 (39/50). Always-LOW scores 0.64; neither result is distinguishable from it, and the 75% goal is not legitimately met.",
+ "lowUnderWatch": {
+  "2026-Q4": {
+   "Batangas": {
+    "config": 68,
+    "foodProjection": 2.39,
+    "foodThreshold": 7.15,
+    "gapProjection": -1.92,
+    "gapThreshold": 0.66,
+    "issueDate": "2026-07-01",
+    "maxPricePartAnyAblation": 0.1039,
+    "pricePart": 0.0186
+   },
+   "Cavite": {
+    "config": 68,
+    "foodProjection": 0.99,
+    "foodThreshold": 4.71,
+    "gapProjection": -2.71,
+    "gapThreshold": 0.74,
+    "issueDate": "2026-07-01",
+    "maxPricePartAnyAblation": 0.1437,
+    "pricePart": 0.0242
+   },
+   "Laguna": {
+    "config": 68,
+    "foodProjection": 1.34,
+    "foodThreshold": 6.05,
+    "gapProjection": -4.48,
+    "gapThreshold": 0.61,
+    "issueDate": "2026-07-01",
+    "maxPricePartAnyAblation": 0.1205,
+    "pricePart": 0.0612
+   },
+   "Quezon": {
+    "config": 68,
+    "foodProjection": 5.41,
+    "foodThreshold": 6.24,
+    "gapProjection": -1.61,
+    "gapThreshold": -0.56,
+    "issueDate": "2026-07-01",
+    "maxPricePartAnyAblation": 0.4348,
+    "pricePart": 0.2858
+   },
+   "Rizal": {
+    "config": 68,
+    "foodProjection": 1.11,
+    "foodThreshold": 7.1,
+    "gapProjection": -4.38,
+    "gapThreshold": 0.92,
+    "issueDate": "2026-07-01",
+    "maxPricePartAnyAblation": 0.0396,
+    "pricePart": 0.0053
+   }
+  },
+  "2027-Q1": {
+   "Batangas": {
+    "config": 23,
+    "foodProjection": 0.75,
+    "foodThreshold": 7.15,
+    "gapProjection": -2.5,
+    "gapThreshold": 0.66,
+    "issueDate": "2026-10-01",
+    "maxPricePartAnyAblation": 0.0596,
+    "pricePart": 0.0443
+   },
+   "Cavite": {
+    "config": 23,
+    "foodProjection": 1.03,
+    "foodThreshold": 4.71,
+    "gapProjection": -2.53,
+    "gapThreshold": 0.74,
+    "issueDate": "2026-10-01",
+    "maxPricePartAnyAblation": 0.1483,
+    "pricePart": 0.1134
+   },
+   "Laguna": {
+    "config": 23,
+    "foodProjection": 0.86,
+    "foodThreshold": 6.05,
+    "gapProjection": -2.42,
+    "gapThreshold": 0.61,
+    "issueDate": "2026-10-01",
+    "maxPricePartAnyAblation": 0.0891,
+    "pricePart": 0.073
+   },
+   "Quezon": {
+    "config": 23,
+    "foodProjection": 2.08,
+    "foodThreshold": 6.24,
+    "gapProjection": -2.58,
+    "gapThreshold": -0.56,
+    "issueDate": "2026-10-01",
+    "maxPricePartAnyAblation": 0.1824,
+    "pricePart": 0.1518
+   },
+   "Rizal": {
+    "config": 23,
+    "foodProjection": 1.67,
+    "foodThreshold": 7.1,
+    "gapProjection": -2.55,
+    "gapThreshold": 0.92,
+    "issueDate": "2026-10-01",
+    "maxPricePartAnyAblation": 0.0693,
+    "pricePart": 0.0519
+   }
+  }
+ },
+ "protocolSha256": "7cb1afa853b938834301b729e1b23fec721245a4ce48f99b539afe4c9f709abd",
+ "schema": "aipheed.e67.disclosure/1",
+ "triggerCoverage": [
+  {
+   "dataUsed": "PSA provincial food and headline CPI (projection of food inflation two quarters ahead), PSA wholesale rice prices, national rice-policy orders",
+   "geography": "province (policy orders national)",
+   "key": "market",
+   "label": "Market / Prices",
+   "latestAtIssue": "CPI through 2026-08; wholesale rice 2026-Q2; policy orders through 2025-10-30",
+   "measuredEffect": "not ablated (every arm keeps it; the market-only arm was not distinguishable from all groups)",
+   "missingAtIssue": false,
+   "note": "almost always zero in 2024-2026: import_suspension_share, price_ceiling_share (too thin to carry a signal)."
+  },
+  {
+   "dataUsed": "observed ENSO phase (NOAA ONI, quarters t-1 and t-2), typhoons within 300 km (IBTrACS), PSA provincial palay and corn production; no rainfall, drought or forward PAGASA outlook",
+   "geography": "province (ENSO national)",
+   "key": "climate",
+   "label": "Climate Stress",
+   "latestAtIssue": "ENSO 2026-Q2; typhoons 2026-Q3 (incomplete quarter, fetched 2026-09-09); palay/corn 2026-Q2",
+   "measuredEffect": "not distinguishable from zero",
+   "missingAtIssue": false,
+   "note": "observed conditions only, so an approaching El Nino is not in the model."
+  },
+  {
+   "dataUsed": "PSA provincial fisheries and aquaculture production; no official fish-kill event series exists",
+   "geography": "province",
+   "key": "fish_kill",
+   "label": "Fish Kill",
+   "latestAtIssue": "2026-Q2",
+   "measuredEffect": "not distinguishable from zero",
+   "missingAtIssue": false,
+   "note": "measures production, not fish-kill events."
+  },
+  {
+   "dataUsed": "PSA Labor Force Survey unemployment and underemployment (national)",
+   "geography": "national",
+   "key": "employment",
+   "label": "Employment",
+   "latestAtIssue": "2026-Q2 (months of quarter t-1)",
+   "measuredEffect": "not distinguishable from zero",
+   "missingAtIssue": false,
+   "note": "national figures, the same for every province."
+  },
+  {
+   "dataUsed": "BSP OF cash remittances (national; file ends 2025-Q4) and the USD/PHP rate",
+   "geography": "national",
+   "key": "ofw_remittance",
+   "label": "OFW Remittance",
+   "latestAtIssue": "remittances 2025-Q4 (none for 2026); USD/PHP 2026-Q2",
+   "measuredEffect": "not distinguishable from zero",
+   "missingAtIssue": true,
+   "note": "missing at the 2026-10-01 issue: remit_usd_yoy, remit_php_yoy (treated as unknown, not as zero); national figures, the same for every province."
+  },
+  {
+   "dataUsed": "share of the quarter's news titles tagged to each trigger and the article count (E40 keyword tagging)",
+   "geography": "province",
+   "key": "news",
+   "label": "News signals",
+   "latestAtIssue": "articles of 2026-Q3",
+   "measuredEffect": "not distinguishable from zero",
+   "missingAtIssue": false,
+   "note": "almost always zero in 2024-2026: news_market, news_fish_kill, news_employment, news_ofw_remittance (too thin to carry a signal)."
+  }
+ ]
+}

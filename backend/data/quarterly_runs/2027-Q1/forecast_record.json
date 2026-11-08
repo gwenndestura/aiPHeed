@@ -1,0 +1,341 @@
+{
+  "period": {
+    "reference_quarter": "2026-Q4",
+    "target_quarter": "2027-Q1",
+    "cutoff": "2026-12-31T23:59:59+08:00",
+    "timezone": "Asia/Manila",
+    "news_window_start": "2026-10-01T00:00:00+08:00",
+    "news_window_end": "2026-12-31T23:59:59+08:00",
+    "quarter_complete": true,
+    "target_display": "Q1 2027 (January\u2013March 2027)",
+    "news_display": "Q4 2026 (October\u2013December 2026)",
+    "model_version": "PCF21 (E25 frozen protocol 694a757082e3)",
+    "feature_version": "E25: SWS rounds usable at the origin (verified date or documented upper bound); D through reference-1; Dnow months 1-2 of the reference quarter; 2021+ only",
+    "requirements": [
+      {
+        "id": "news_reference_quarter",
+        "kind": "news",
+        "quarter": "2026-Q4",
+        "source_ids": [
+          "news_2026Q4"
+        ],
+        "blocking": false,
+        "note": "Supporting news (display only; PCF21 does not use news).",
+        "needs": "2026-Q4 news articles (October-December 2026) with original publication times",
+        "supplier": "aiPHeed news fetchers; researcher authorizes",
+        "normal_release": "continuous; complete at the cutoff"
+      },
+      {
+        "id": "sws_rounds",
+        "kind": "label",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "sws_rounds"
+        ],
+        "note": "SWS Balance Luzon rounds; the September 2026 round (with its publication date) is needed",
+        "needs": "SWS Balance Luzon production round for 2026-Q3 (September 2026) with its publication date",
+        "supplier": "researcher authorizes; source SWS",
+        "normal_release": "2021-2025 Q3 rounds were published 17 October - 6 December of the same year"
+      },
+      {
+        "id": "label_history",
+        "kind": "label",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "s1_labels"
+        ],
+        "note": "Published S1 labels through 2026-Q3 (threshold rule and persistence)",
+        "needs": "S1 labels through 2026-Q3 (needs the 2026-Q3 SWS round and July-September 2026 provincial CPI)",
+        "supplier": "derived by aiPHeed once both inputs are authorized",
+        "normal_release": "after both inputs are published"
+      },
+      {
+        "id": "provincial_D_quarterly",
+        "kind": "indicator",
+        "quarter": "2026-Q3",
+        "source_ids": [
+          "d_quarterly_panel"
+        ],
+        "note": "D through 2026-Q3 (July-September 2026 provincial CPI)",
+        "needs": "provincial food CPI YoY, July-September 2026, with PSA release dates",
+        "supplier": "researcher authorizes; source PSA",
+        "normal_release": "PSA monthly CPI is released in the first week of the following month (September 2026 -> early October 2026)"
+      },
+      {
+        "id": "provincial_D_now",
+        "kind": "indicator",
+        "quarter": "2026-Q4",
+        "source_ids": [
+          "dnow_panel"
+        ],
+        "note": "October-November 2026 provincial CPI: price-pressure indicator only; NOT used by the regional-risk forecast, so it does not block it",
+        "needs": "provincial food CPI YoY, October-November 2026 (price-pressure indicator only)",
+        "supplier": "researcher authorizes; source PSA",
+        "normal_release": "November 2026 CPI -> early December 2026",
+        "blocking": false
+      },
+      {
+        "id": "forecasting_model",
+        "kind": "model",
+        "source_ids": [
+          "pcf_model_card"
+        ],
+        "note": "PCF21 (E25 FINAL_T1); development evidence only",
+        "needs": "PCF21 model card",
+        "supplier": "aiPHeed",
+        "normal_release": "present"
+      },
+      {
+        "id": "lgu_vulnerability",
+        "kind": "static",
+        "source_ids": [
+          "lgu_vulnerability"
+        ],
+        "note": "142 LGUs; 126 carry a labelled province-mean poverty substitute",
+        "needs": "142-LGU census and poverty table",
+        "supplier": "aiPHeed",
+        "normal_release": "present"
+      }
+    ]
+  },
+  "status": "INSUFFICIENT_DATA",
+  "missing": [
+    "sws_rounds: STALE (sws_rounds: STALE)",
+    "label_history: STALE (s1_labels: STALE)",
+    "provincial_D_quarterly: STALE (d_quarterly_panel: STALE)",
+    "cutoff 2026-12-31T23:59:59+08:00 not yet reached at run time; the reference quarter's news is incomplete"
+  ],
+  "context_missing": [
+    "news_reference_quarter: MISSING (no registered source) - display context only, not used by the model",
+    "provincial_D_now: STALE (dnow_panel: STALE) - display context only, not used by the model"
+  ],
+  "dependencies": [
+    {
+      "id": "news_reference_quarter",
+      "status": "MISSING",
+      "blocking": false,
+      "needs": "2026-Q4 news articles (October-December 2026) with original publication times",
+      "data_through_quarter": "2026-Q4",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "aiPHeed news fetchers; researcher authorizes",
+      "normal_release": "continuous; complete at the cutoff",
+      "detail": "no registered source"
+    },
+    {
+      "id": "sws_rounds",
+      "status": "STALE",
+      "blocking": true,
+      "needs": "SWS Balance Luzon production round for 2026-Q3 (September 2026) with its publication date",
+      "data_through_quarter": "2026-Q3",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "researcher authorizes; source SWS",
+      "normal_release": "2021-2025 Q3 rounds were published 17 October - 6 December of the same year",
+      "detail": "sws_rounds: STALE"
+    },
+    {
+      "id": "label_history",
+      "status": "STALE",
+      "blocking": true,
+      "needs": "S1 labels through 2026-Q3 (needs the 2026-Q3 SWS round and July-September 2026 provincial CPI)",
+      "data_through_quarter": "2026-Q3",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "derived by aiPHeed once both inputs are authorized",
+      "normal_release": "after both inputs are published",
+      "detail": "s1_labels: STALE"
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "status": "STALE",
+      "blocking": true,
+      "needs": "provincial food CPI YoY, July-September 2026, with PSA release dates",
+      "data_through_quarter": "2026-Q3",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "researcher authorizes; source PSA",
+      "normal_release": "PSA monthly CPI is released in the first week of the following month (September 2026 -> early October 2026)",
+      "detail": "d_quarterly_panel: STALE"
+    },
+    {
+      "id": "provincial_D_now",
+      "status": "STALE",
+      "blocking": false,
+      "needs": "provincial food CPI YoY, October-November 2026 (price-pressure indicator only)",
+      "data_through_quarter": "2026-Q4",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "researcher authorizes; source PSA",
+      "normal_release": "November 2026 CPI -> early December 2026",
+      "detail": "dnow_panel: STALE"
+    },
+    {
+      "id": "information_cutoff",
+      "status": "NOT_REACHED",
+      "blocking": true,
+      "needs": "the information cutoff 2026-12-31T23:59:59+08:00 (Asia/Manila) to pass",
+      "data_through_quarter": "2026-Q4",
+      "affects": "forecast for Q1 2027 (January\u2013March 2027)",
+      "supplier": "time",
+      "normal_release": "2026-12-31T23:59:59+08:00",
+      "detail": "cannot be produced earlier"
+    }
+  ],
+  "mode": "LIVE",
+  "requirements": [
+    {
+      "id": "news_reference_quarter",
+      "kind": "news",
+      "quarter": "2026-Q4",
+      "sources": [],
+      "status": "MISSING",
+      "detail": "no registered source",
+      "blocking": false
+    },
+    {
+      "id": "sws_rounds",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "sws_rounds",
+          "vintage": 1,
+          "sha256": "2a99771a13580ec6dc4d13d56bd9dbae98f70de89e8f83978574a1ed20b16d92",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-09-10T00:00:00+08:00",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "sws_rounds: STALE",
+      "blocking": true
+    },
+    {
+      "id": "label_history",
+      "kind": "label",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "s1_labels",
+          "vintage": 1,
+          "sha256": "6efdaeb4665599daf360ed436f1c630d3579d08d1850a9149d1d031a9bad00ec",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-09-10T00:00:00+08:00",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "s1_labels: STALE",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_quarterly",
+      "kind": "indicator",
+      "quarter": "2026-Q3",
+      "sources": [
+        {
+          "source_id": "d_quarterly_panel",
+          "vintage": 1,
+          "sha256": "1f3e15ac7898865ec8a4515d045531b1ceb927d2bd2a63e5383e7680ce77736a",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "d_quarterly_panel: STALE",
+      "blocking": true
+    },
+    {
+      "id": "provincial_D_now",
+      "kind": "indicator",
+      "quarter": "2026-Q4",
+      "sources": [
+        {
+          "source_id": "dnow_panel",
+          "vintage": 1,
+          "sha256": "af5a14247ba0c973f61c7377f059cf4f36a4423be16ee025f68cd6d89dc27d24",
+          "observation_end": "2026-Q2",
+          "available_at": "2026-10-09T14:40:00Z",
+          "authorized": true,
+          "status": "STALE"
+        }
+      ],
+      "status": "STALE",
+      "detail": "dnow_panel: STALE",
+      "blocking": false
+    },
+    {
+      "id": "forecasting_model",
+      "kind": "model",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "pcf_model_card",
+          "vintage": 1,
+          "sha256": "774e2f9bc07fe82e87b525f424bf938ad145ac00f11cf97dc10455be41e005b8",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "pcf_model_card v1",
+      "blocking": true
+    },
+    {
+      "id": "lgu_vulnerability",
+      "kind": "static",
+      "quarter": null,
+      "sources": [
+        {
+          "source_id": "lgu_vulnerability",
+          "vintage": 1,
+          "sha256": "b918efa278a5a22feb9f32eb1ca6321c37a617576bb0597643a006aa2623477c",
+          "observation_end": null,
+          "available_at": null,
+          "authorized": true,
+          "status": "OK"
+        }
+      ],
+      "status": "OK",
+      "detail": "lgu_vulnerability v1",
+      "blocking": true
+    }
+  ],
+  "supporting_news": {
+    "window_start": "2026-10-01T00:00:00+08:00",
+    "window_end": "2026-12-31T23:59:59+08:00",
+    "quarter": "2026-Q4",
+    "display": "Q4 2026 (October\u2013December 2026)",
+    "quarter_complete": true,
+    "eligible": 0,
+    "by_province": {
+      "PH040100000": 0,
+      "PH040200000": 0,
+      "PH040300000": 0,
+      "PH040400000": 0,
+      "PH040500000": 0
+    },
+    "limited_signal": {
+      "PH040100000": true,
+      "PH040200000": true,
+      "PH040300000": true,
+      "PH040400000": true,
+      "PH040500000": true
+    },
+    "articles": []
+  },
+  "forecast": null,
+  "labels": {
+    "target": "Forecast target: Q1 2027 (January\u2013March 2027)",
+    "news": "Supporting news: Q4 2026 (October\u2013December 2026)",
+    "cutoff": "Information cutoff: 2026-12-31T23:59:59+08:00 (Asia/Manila)",
+    "caveat": "Relative ordinal risk estimates; not official food insecurity classifications.",
+    "mode": "LIVE"
+  },
+  "content_sha256": "23970e1d2565f0fc9022e388dc474225c1fc6a8a05c5e2d61f366a36a513ed37",
+  "generated_at": "2026-10-14T07:21:24.304696+00:00",
+  "run_clock": "2026-10-14T15:21:24.247054+08:00",
+  "cutoff_reached": false
+}
