@@ -50,7 +50,7 @@ def _data_dir(mid: str) -> Path:
 # history they are shown as "Other model inputs", so the five bars plus Other add to 100 % of |contribution| (nothing is
 # rescaled away). Contributions are exact LightGBM pred_contrib values, which add, so a bar is the sum of its stored columns.
 GROUPS = {"market": "Market / Prices", "climate": "Climate Stress", "employment": "Employment (national)",
-          "ofw_remittance": "OFW Remittance (national)", "fish_kill": "Fish Kill (fisheries production proxy)"}
+          "ofw_remittance": "OFW Remittance (national)", "fish_kill": "Fish Production"}
 BAR_COLS = {"market": ("shap_market",), "climate": ("shap_climate",), "employment": ("shap_employment",),
             "ofw_remittance": ("shap_ofw_remittance",), "fish_kill": ("shap_fish_kill",)}
 OTHER_COLS = ("shap_poverty", "shap_other")
@@ -69,8 +69,8 @@ INDICATOR = {
     "definition": ("Forecast probability that the share of households with moderate or severe food insecurity (FNRI "
                    "HFIAS) in the province is 50% or more (HIGH). E168 starts from the latest published provincial survey "
                    "level and adds a constrained LightGBM forecast of the change, from the five trigger groups (market and "
-                   "prices; climate; employment and OFW remittances, both national series; and fish kill, measured by the "
-                   "proxy of provincial fisheries production change, not by fish-kill event records), with news signals "
+                   "prices; climate; employment and OFW remittances, both national series; and fish production, the "
+                   "change in total provincial fisheries production), with news signals "
                    "inside each group. Poverty and density are also inputs and weight the city and municipal ranking. "
                    "HIGH at 0.50."),
     "unit": "probability 0-1 (HIGH at 0.50)",
@@ -634,10 +634,10 @@ def plain_evidence(code: str | None, quarter: str, group: str) -> str | None:
         f = v("c_fish_yoy")
         if f is None:
             return none
-        why = ("A smaller catch means less fish to eat and less income for fishing families." if f < 0 else
-               "A bigger catch means more fish to eat and more income for fishing families.")
+        why = ("Lower fish production means less fish to eat and less income for fishing families." if f < 0 else
+               "Higher fish production means more fish to eat and more income for fishing families.")
         when, prev = _production_text("fish", issue)
-        return (f"The fish catch in {r['province']} {when} was {_change(100 * (math.exp(f) - 1))} than in {prev}. "
+        return (f"Fish production in {r['province']} {when} was {_change(100 * (math.exp(f) - 1))} than in {prev}. "
                 f"{why} {_effect(r, group)}")
     if group == "employment":
         rate, yoy = v("unemp_rate"), v("unemp_yoy")
@@ -689,7 +689,7 @@ def _region_evidence(rs: list[dict], group: str) -> str | None:
         return lead + "Typhoons, soil moisture and farm harvests also count. " + eff
     if group == "fish_kill" and vals("c_fish_yoy"):
         when, prev = _production_text("fish", issue)
-        return (f"The fish catch {when} changed by {rng(vals('c_fish_yoy'), lambda x: 100 * (math.exp(x) - 1))} across "
+        return (f"Fish production {when} changed by {rng(vals('c_fish_yoy'), lambda x: 100 * (math.exp(x) - 1))} across "
                 f"the five provinces compared with {prev}. {eff}")
     if group == "employment" and vals("unemp_rate"):
         m = _latest_month(issue, 45, "lfs")
@@ -762,7 +762,7 @@ def data_used() -> dict:
         "oni": ("El Niño", rng(oni_m - pd.DateOffset(months=2), oni_m)),
         "employment": ("Unemployment", f"{_latest_month(issue, 45, 'lfs'):%b %Y}"),
         "ofw_remittance": ("OFW remittances", str(_remit_year(issue))),
-        "fish_kill": ("Fish catch", prod_short("fish")),
+        "fish_kill": ("Fish production", prod_short("fish")),
         "news": ("News", rng(news_from, last_day)),
         "poverty": ("Poverty & population", "2023, 2024"),
     }
@@ -782,7 +782,7 @@ def data_used() -> dict:
          "period": m(_latest_month(issue, 45, "lfs")), "note": "Compared with the same month a year before"},
         {"group": "ofw_remittance", "name": "Money sent home by OFWs", "source": "BSP (World Bank series)", "level": "National",
          "period": f"{_remit_year(issue)} full year", "note": "Compared with the year before"},
-        {"group": "fish_kill", "name": "Fish catch", "source": "PSA", "level": "Province", "period": prod("fish")},
+        {"group": "fish_kill", "name": "Fish production", "source": "PSA", "level": "Province", "period": prod("fish")},
         {"group": "news", "name": "News reports", "source": "Rappler, Vera Files, Newsbytes, PCIJ and earlier archives",
          "level": "Province, area and national", "period": f"{news_from.day} {m(news_from)} to {last_day.day} {m(last_day)}"},
         {"group": "poverty", "name": "Poverty and population", "source": "PSA", "level": "Province",

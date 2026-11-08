@@ -203,7 +203,7 @@ const SOURCES = [
   { s: "FNRI National/Expanded National Nutrition Survey (HFIAS)", m: "Share of households moderately or severely food insecure: the forecast target and each province's starting level", p: "Survey rounds 2013, 2015, 2018, 2019 and 2021", l: "Provincial" },
   { s: "PSA Consumer Price Index (food and rice)", m: "Food and rice inflation, and provincial food prices relative to the national level (Market / Prices)", p: "2013 to the issue date", l: "Provincial" },
   { s: "PSA palay and corn production", m: "Drops in local farm production (Climate Stress)", p: "2013 to the newest published quarter (checked daily)", l: "Provincial" },
-  { s: "PSA fisheries production", m: "Year-on-year change in fish production; the proxy for the Fish Kill trigger, not a record of fish-kill events", p: "2013 to the newest published quarter (checked daily)", l: "Provincial" },
+  { s: "PSA fisheries production", m: "Year-on-year change in total fish production: commercial, municipal and aquaculture (Fish Production)", p: "2013 to the newest published quarter (checked daily)", l: "Provincial" },
   { s: "NASA POWER rainfall and soil moisture", m: "Rainfall and soil-moisture anomalies (Climate Stress)", p: "2000 to the newest published month (checked daily)", l: "Provincial" },
   { s: "IBTrACS (NOAA) tropical cyclone tracks", m: "Typhoons in the last four quarters (Climate Stress)", p: "2013 to the issue date", l: "Provincial" },
   { s: "NOAA Oceanic Niño Index (ONI)", m: "El Niño / La Niña conditions (Climate Stress)", p: "2013 to the issue date", l: "Global" },
@@ -227,7 +227,7 @@ const STEPS = [
   },
   {
     t: "Forecast change (LightGBM)",
-    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices; climate; employment and OFW remittances (both national series, the same for every province); and fish kill, measured by the proxy of provincial fisheries production change because no record of fish-kill events exists. News signals (XLM-RoBERTa event scores and BERTopic topics) are counted inside each group. The province's poverty and density profile is also an input (shown as Other model inputs) and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
+    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices; climate; employment and OFW remittances (both national series, the same for every province); and fish production, the change in total provincial fisheries production. News signals (XLM-RoBERTa event scores and BERTopic topics) are counted inside each group. The province's poverty and density profile is also an input (shown as Other model inputs) and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
   },
   {
     t: "Classification",
@@ -515,7 +515,7 @@ const DISCLAIMER = [
   "Validated on few survey rounds. The forecast was tested on 72 provincial forecasts from three FNRI survey rounds (2018, 2019, 2021). Only 5 were CALABARZON provinces, all observed Low.",
   "The acceptance rule was set after the results. Accuracy of at least 75% and better than the latest survey was adopted on 7 November 2026, after these results were known; one and three quarters ahead are exactly at 75%.",
   "Some inputs are national. Unemployment, remittances and the El Niño index are national or global figures, the same for every province.",
-  "Fish kill is measured by a proxy. No public record of fish-kill events exists, so the Fish Kill group uses the change in provincial fisheries production. It does not show whether a fish kill happened.",
+  "Fish production is the province's total fisheries output (commercial, municipal and aquaculture) from PSA. It does not record fish-kill events.",
   "City and municipal values are a relative prioritization within each province, based on the province forecast, poverty and population density. They are not forecasts for each city or municipality. Some cities have no PSA 2021 municipal poverty estimate; this is stated where it applies.",
   "News has limits. Only headlines are used, collected after the fact, and the news dataset was reviewed and signed off by Department of Agriculture staff; no item-by-item second annotation was done.",
   "Missing data is not low risk. When a source has not yet published, the input is left blank. The dashboard says which inputs are missing.",

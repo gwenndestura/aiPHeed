@@ -33,8 +33,8 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
     lowers: "Food prices were lower than usual.",
   },
   fish_kill: {
-    raises: "The fish catch fell more than usual.",
-    lowers: "The fish catch held up better than usual.",
+    raises: "Fish production fell more than usual.",
+    lowers: "Fish production held up better than usual.",
   },
   ofw_remittance: {
     raises: "Money sent home by OFWs grew less than usual.",
@@ -62,7 +62,7 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
 const FRIENDLY_NAME: Record<string, string> = {
   market: "Food prices",
   climate: "Weather and farm supply",
-  fish_kill: "Fish catch",
+  fish_kill: "Fish production",
   employment: "Jobs (national figures)",
   ofw_remittance: "Money sent home by OFWs (national figures)",
   poverty: "Poverty and vulnerability",

@@ -12,7 +12,7 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "Weather and farm supply", def: "Typhoons passing nearby, El Niño or La Niña, rainfall, soil moisture and the rice and corn harvest. Bad weather and poor harvests can cut food supply and income." },
   { term: "Jobs (national figures)", def: "The national unemployment rate and its change from a year earlier (PSA Labor Force Survey). The same figure for every province." },
   { term: "Money sent home by OFWs (national figures)", def: "The yearly change in money sent home by Filipinos working abroad (BSP). The same figure for every province." },
-  { term: "Fish catch", def: "The province's fish catch compared with the year before (PSA). It stands in for the fish-kill trigger, because there is no public record of fish-kill events; it does not show whether a fish kill happened." },
+  { term: "Fish production", def: "The province's total fish production (commercial, municipal and aquaculture) compared with the year before (PSA). Lower production means less fish to eat and less income for fishing families." },
   { term: "Other factors", def: "Inputs outside the five groups: how poor and how crowded the province is, and how far ahead the forecast looks." },
   { term: "News reports used", def: "The news stories the forecast read: those published in the three months before the forecast was made, about the province, CALABARZON, Luzon or the whole country. Off-topic stories are removed. News feeds into the five groups above; it is not a separate bar." },
   { term: "Few news reports", def: "Fewer than 5 news stories were about the province itself, so its forecast rests on less local news. It does not mean the risk is low." },

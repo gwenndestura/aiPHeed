@@ -7,8 +7,8 @@ import { driverCopy } from "@/lib/driverCopy";
 describe("driver labels", () => {
   it("names C4 as fisheries production", () => {
     const c = driverCopy({ key: "fish_kill", direction: "increases_risk", status: "contributes", pct: 10, plainEvidence: null });
-    expect(c.title).toBe("Fish catch");
-    expect(c.description).toContain("The fish catch fell");
+    expect(c.title).toBe("Fish production");
+    expect(c.description).toContain("Fish production fell");
   });
 
   it.each(["poverty", "news", "hunger_indicator"])("has copy for %s", (key) => {

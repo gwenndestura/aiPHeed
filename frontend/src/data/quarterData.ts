@@ -120,7 +120,7 @@ export const TRIGGER_CATEGORIES = [
   { key: "climate", name: "Climate / Panahon", color: "hsl(var(--risk-high))" },
   { key: "employment", name: "Employment / Hanapbuhay", color: "hsl(var(--primary))" },
   { key: "ofw", name: "OFW Remittance", color: "#8b5cf6" },
-  { key: "fishkill", name: "Fish Kill", color: "#06b6d4" },
+  { key: "fishkill", name: "Fish Production", color: "#06b6d4" },
 ] as const;
 
 // Per-province trigger composition (proportions sum ~1.0)
@@ -159,7 +159,7 @@ export const TRIGGER_LABELS: Record<TriggerKey, string> = {
   climate: "Climate Stress",
   employment: "Employment",
   ofw: "OFW Remittance",
-  fishkill: "Fish Kill",
+  fishkill: "Fish Production",
 };
 
 // Red / yellow cutoff — shared everywhere. `pct` is a trigger's share of ALL 5

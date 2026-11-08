@@ -76,7 +76,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "News reports used",
       body: () =>
-        "News reports are sorted into topics such as fish kill or typhoon and disaster; each percentage is that topic's share of the reports. The list below shows the news the forecast used.",
+        "News reports are sorted into topics such as food prices or weather and farm supply; each percentage is that topic's share of the reports. The list below shows the news the forecast used.",
       target: () => "news",
       // At the top of its panel or tab, so the article list shows below it.
       scroll: "start",
