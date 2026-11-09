@@ -1257,7 +1257,7 @@
    0.0175
   ]
  },
- "leakage_max_abs_change": 0.12346868517364451,
+ "leakage_max_abs_change": 0.0,
  "E168_reference": {
   "shuffle": {
    "brier_shuffled": 0.1233,
@@ -1662,7 +1662,7 @@
   "brier_ci_upper_below_0_lead2": false,
   "accuracy_at_least_E168_lead1": true,
   "accuracy_at_least_E168_lead2": false,
-  "leakage_below_1e-9": false,
+  "leakage_below_1e-9": true,
   "beats_shuffled": false
  },
  "decision": "E179: TUNED SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL ON THE PRE-REGISTERED RULE (E168 stays in production)",
@@ -1715,7 +1715,7 @@
     "min_setting": "smote|r=0.25|w=1|sd=0.25|uniform"
    },
    {
-    "job": "ENNS2021|L1|corrupt",
+    "job": "ENNS2021|L1|corrupt_own_stream",
     "chosen": "jitter|r=1|w=1|sd=0.5|boundary",
     "n_eligible": 53,
     "gain_mean": -20.66916385613589,
@@ -1763,10 +1763,10 @@
     "min_setting": "none"
    },
    {
-    "job": "ENNS2019|L1|corrupt",
+    "job": "ENNS2019|L1|corrupt_own_stream",
     "chosen": "jitter|r=2|w=0.2|sd=0.5|boundary",
     "n_eligible": 3,
-    "gain_mean": -2.7557014257090837,
+    "gain_mean": -2.755701425709084,
     "gain_se": 1.752877829047161,
     "min_setting": "jitter|r=2|w=0.2|sd=0.5|boundary"
    },
@@ -1811,14 +1811,43 @@
     "min_setting": "none"
    },
    {
-    "job": "ENNS2018|L1|corrupt",
+    "job": "ENNS2018|L1|corrupt_own_stream",
     "chosen": "jitter|r=1|w=0.2|sd=0.5|uniform",
     "n_eligible": 4,
     "gain_mean": -2.299143718328628,
     "gain_se": 1.588713976004971,
     "min_setting": "jitter|r=1|w=0.2|sd=0.5|uniform"
+   },
+   {
+    "job": "ENNS2021|L1|corrupt",
+    "chosen": "jitter|r=2|w=1|sd=0.25|boundary",
+    "n_eligible": 68,
+    "gain_mean": -17.582251617569547,
+    "gain_se": 6.858035987820602,
+    "min_setting": "jitter|r=2|w=1|sd=0.25|boundary"
+   },
+   {
+    "job": "ENNS2019|L1|corrupt",
+    "chosen": "jitter|r=0.5|w=0.2|sd=0.5|boundary",
+    "n_eligible": 2,
+    "gain_mean": -1.6550036003557174,
+    "gain_se": 0.9765658772358214,
+    "min_setting": "jitter|r=0.5|w=0.2|sd=0.5|boundary"
+   },
+   {
+    "job": "ENNS2018|L1|corrupt",
+    "chosen": "jitter|r=1|w=0.4|sd=0.5|boundary",
+    "n_eligible": 5,
+    "gain_mean": -3.3819091476484204,
+    "gain_se": 0.8958201312481741,
+    "min_setting": "jitter|r=1|w=0.4|sd=0.5|boundary"
    }
   ],
-  "share_jobs_using_augmentation_all_seeds": 0.833
+  "share_jobs_using_augmentation_all_seeds": 0.844
+ },
+ "deviation_D3": {
+  "note": "Deviation D3 (2026-11-09): in the first run the corrupted-data control drew its synthetic rows from its own random stream (the stream key included the job mode), so its difference from the main run mixed generator randomness with any leakage (0.1235). The control was re-run with the main job's random stream, so the only difference is the corruption of unreleased rounds. E179's own predictions are unchanged; the first-run rows are kept as mode 'corrupt_own_stream'.",
+  "leakage_first_run_own_stream": 0.12346868517364451,
+  "leakage_rerun_main_stream": 0.0
  }
 }
