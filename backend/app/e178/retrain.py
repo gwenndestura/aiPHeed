@@ -272,10 +272,7 @@ def run_eval() -> None:
     log("start", protocol_sha256=K.sha256(K.DOCS / "PROTOCOL.md"), accepted_generators=accepted, seeds=A.SEEDS,
         ratios=A.RATIOS, syn_weight=A.SYN_WEIGHT, n_jobs=N_JOBS)
     if not accepted:
-        doc = {"decision": "NOT RUN: no synthetic generator met the fidelity criteria", "fidelity": fid["rejected_generators"]}
-        K.dump_json(doc, OUT / "results.json")
-        log("stop", **doc)
-        print(doc)
+        _not_run(fid, log)
         return
     menu = [(g, r) for g, r in MENU if g in accepted]
     H, L, S_P = K.pipeline_inputs()
@@ -295,6 +292,46 @@ def run_eval() -> None:
     syn.to_parquet(K.SYN / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet", index=False)
     log("fitted", seconds=round(time.time() - t0, 1), rows=len(Al), synthetic_train_rows=len(syn))
     evaluate(log)
+
+
+FID_KEYS = ("median_ks", "max_w1_sd", "max_w1_feature", "corr_mad", "tstr_ratio", "copy_share", "exact_copies",
+            "median_real_nn", "sign_agreement_share", "n_features", "n_real", "real_high", "real_low", "n_syn", "syn_high",
+            "syn_low", "smote_fallback_jitter")
+
+
+def _not_run(fid: dict, log) -> dict:
+    """The protocol's outcome when every generator failed the fidelity criteria: Stage 2 is not run. Records why, the
+    class balance the generators would have produced, and the hashes."""
+    summ = {j: {g: {**{k: m[k] for k in FID_KEYS}, "checks": m["checks"], "passed": m["passed"]} for g, m in r.items()}
+            for j, r in fid["jobs"].items()}
+    failed = {g: {j: [c for c, ok in r[g]["checks"].items() if not ok] for j, r in fid["jobs"].items() if not r[g]["passed"]}
+              for g in A.GENERATORS}
+    bal = []
+    for j, r in fid["jobs"].items():
+        m = next(iter(r.values()))
+        high = np.r_[np.ones(m["real_high"], bool), np.zeros(m["real_low"], bool)]
+        for rt in A.RATIOS:
+            a = A.allocate(high, int(round(rt * m["n_real"])))
+            bal.append({"job": j, "ratio": rt, "real_high": m["real_high"], "real_low": m["real_low"],
+                        "real_high_share": round(m["real_high"] / m["n_real"], 3), "syn_high_planned": a[1], "syn_low_planned": a[0],
+                        "after_high_share": round((m["real_high"] + a[1]) / (m["n_real"] + a[0] + a[1]), 3),
+                        **{f"{g}_syn_high_realised_r1": r[g]["syn_high"] for g in r if rt == 1.0}})
+    pd.DataFrame(bal).to_csv(OUT / "balance.csv", index=False, lineterminator="\n")
+    doc = {"protocol": "docs/e178/PROTOCOL.md", "stage2_run": False,
+           "decision": ("NOT RUN: no synthetic generator met the fidelity criteria. Synthetic augmentation was not adopted; "
+                        "E168 stays in production."),
+           "rule": "A generator that fails any primary fidelity criterion in any of the six outer training sets is rejected; "
+                   "if both are rejected, Stage 2 is not run.",
+           "thresholds": fid["thresholds"], "rejected_generators": fid["rejected_generators"], "failed_checks": failed,
+           "fidelity_summary": summ, "class_balance": bal, "E168_reference": {k: json.loads((E.OUT / "results.json").read_text())[k]
+                                                                               for k in ("shuffle", "leakage_max_abs_change", "decision")}}
+    K.dump_json(doc, OUT / "results.json")
+    log("stage2_not_run", rejected=fid["rejected_generators"], failed_checks=failed)
+    outs = [OUT / n for n in ("results.json", "fidelity.json", "balance.csv", "equivalence.json", "deviations.json", "fidelity_log.jsonl", "equiv_log.jsonl")]
+    log("hashes")
+    K.write_hashes(outs + [OUT / "run_log.jsonl"], OUT / "hashes.json")
+    print(json.dumps({k: doc[k] for k in ("decision", "rejected_generators", "failed_checks")}, indent=1))
+    return doc
 
 
 # ---------------------------------------------------------------------------------------------------- evaluation
