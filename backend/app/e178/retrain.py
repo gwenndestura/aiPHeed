@@ -368,9 +368,9 @@ def _mcnemar(x, a, b):
 STAB = ("accuracy", "balanced_accuracy", "high_recall", "high_precision", "f1", "macro_f1", "auc", "brier", "calibration_slope")
 
 
-def evaluate(log=None) -> dict:
-    log = log or K.RunLog(OUT / "run_log.jsonl", fresh=False)
-    Al = pd.read_csv(OUT / "all_rows.csv", float_precision="round_trip")
+def evaluate(log=None, d=OUT, exploratory: bool = False) -> dict:
+    log = log or K.RunLog(d / "run_log.jsonl", fresh=False)
+    Al = pd.read_csv(d / "all_rows.csv", float_precision="round_trip")
     arms = sorted(a for a in Al["arm"].unique())
     desc = ["PERS", "E168"] + ["E178"] + [a for a in arms if a != "E178"]
     res = {"protocol": "docs/e178/PROTOCOL.md", "primary_seed": A.PRIMARY_SEED, "leads": {}, "mcnemar": {}, "stability": {}}
@@ -413,7 +413,7 @@ def evaluate(log=None) -> dict:
                                  "brier_minus_E168": round(dd["diff"], 4), "brier_minus_E168_ci95": [round(z, 4) for z in dd["ci95"]],
                                  "accuracy_E168": round(float(((xs["E168"] >= .5) == (xs["y_high"] == 1)).mean()), 3)}
         res["stability"][Ld] = {"per_seed": per_seed, "mean_sd": {k: [round(float(np.mean([p[k] for p in per_seed.values()])), 4),
-                                                                      round(float(np.std([p[k] for p in per_seed.values()], ddof=1)), 4)]
+                                                                      round(float(np.std([p[k] for p in per_seed.values()], ddof=1)), 4) if len(per_seed) > 1 else None]
                                                                   for k in list(STAB) + ["brier_minus_E168"]}}
     for sd in seeds:
         rule12.append(int(sd) if all(res["stability"][Ld]["per_seed"][int(sd)]["brier_minus_E168_ci95"][1] < 0 and
@@ -421,7 +421,7 @@ def evaluate(log=None) -> dict:
                                      for Ld in (1, 2)) else None)
     res["seeds_meeting_criteria_1_2"] = [s for s in rule12 if s is not None]
     # class balance (primary seed, final fits)
-    bp = OUT / "balance.csv"
+    bp = d / "balance.csv"
     if bp.exists():
         b = pd.read_csv(bp)
         f = b[b["fold"].astype(str) == "final"]
@@ -436,14 +436,68 @@ def evaluate(log=None) -> dict:
     res["decision_rule"] = acc
     res["decision"] = ("E178 BETTER THAN E168 (candidate only; not promoted)" if all(acc.values())
                        else "SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL (E168 stays in production)")
-    K.dump_json(res, OUT / "results.json")
+    if exploratory:
+        res["status"] = EXP_NOTE
+        res["seeds_available"] = [int(s) for s in seeds]
+        res["decision"] = ("EXPLORATORY, outside the protocol (the E178 result stays 'Stage 2 not run'): the augmented model "
+                           + ("would have met" if all(acc.values()) else "would NOT have met") + " the pre-registered decision rule.")
+    K.dump_json(res, d / "results.json")
     log("evaluated", decision=res["decision"], rule=acc)
-    outs = [OUT / n for n in ("all_rows.csv", "balance.csv", "results.json", "fidelity.json", "equivalence.json", "deviations.json")] + \
-           [K.SYN / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet"]
+    if exploratory:
+        outs = [d / n for n in ("all_rows.csv", "balance.csv", "results.json")] + sorted((d / "synthetic").rglob("*.parquet")) + sorted(d.glob("rows_phase*.csv"))
+    else:
+        outs = [d / n for n in ("all_rows.csv", "balance.csv", "results.json", "fidelity.json", "equivalence.json", "deviations.json")] + \
+               [K.SYN / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet"]
     log("hashes")
-    K.write_hashes(outs + [OUT / "run_log.jsonl"], OUT / "hashes.json")
+    K.write_hashes(outs + [d / "run_log.jsonl"], d / "hashes.json")
     _print(res)
     return res
+
+
+# ------------------------------------------------------------------------------------- exploratory (deviation D2)
+EXP = K.ROOT / "exploratory"
+EXP_NOTE = ("EXPLORATORY, outside docs/e178/PROTOCOL.md (deviation D2, run at the owner's request on 2026-11-09). Both "
+            "generators failed the pre-registered fidelity criteria, so the protocol's result is 'Stage 2 not run' and E168 "
+            "stays in production; these numbers cannot change that result. Otherwise the Stage 2 design is unchanged: both "
+            "generators, r in {0.25, 0.5, 1.0} chosen by inner region GroupKFold, synthetic weight 0.4, seeds 17801-17805, "
+            "controls at Lead 1, metrics on the 72 real outer rows only.")
+
+
+def explore() -> None:
+    """python -m app.e178.retrain explore 1|2. Phase 1: primary seed and the Lead-1 controls; phase 2: the four stability
+    seeds. Each phase re-evaluates everything available. Writes only to data/e178/exploratory/."""
+    phase = sys.argv[2] if len(sys.argv) > 2 else "1"
+    if phase not in ("1", "2", "eval"):
+        sys.exit("usage: python -m app.e178.retrain explore 1|2|eval")
+    if phase == "eval":                          # re-score the saved rows only (no refit)
+        evaluate(K.RunLog(EXP / "run_log.jsonl", fresh=False), EXP, exploratory=True)
+        return
+    EXP.mkdir(parents=True, exist_ok=True)
+    log = K.RunLog(EXP / "run_log.jsonl", fresh=(phase == "1"))
+    _check_inputs(log)
+    log("start", phase=phase, note=EXP_NOTE, menu=MENU, seeds=A.SEEDS, syn_weight=A.SYN_WEIGHT, n_jobs=N_JOBS,
+        protocol_sha256=K.sha256(K.DOCS / "PROTOCOL.md"))
+    H, L, S_P = K.pipeline_inputs()
+    if phase == "1":
+        jobs = [(s, l, "main", A.PRIMARY_SEED) for s, l in MAIN] + [(s, 1, m, A.PRIMARY_SEED) for s in SURVEYS for m in CONTROLS]
+    else:
+        jobs = [(s, l, "main", sd) for sd in A.SEEDS[1:] for s, l in MAIN]
+    jobs.sort(key=lambda j: SURVEYS.index(j[0]))
+    t0 = time.time()
+    R = Parallel(n_jobs=N_JOBS, verbose=5)(delayed(task_aug)(s, l, H, L, S_P, m, sd, MENU, keep_syn=(phase == "1" and m == "main"))
+                                           for s, l, m, sd in jobs)
+    for r in R:
+        log("job", job=r["job"], seed=r["seed"], seconds=r["seconds"], n_train=r["n_train"], n_test=r["n_test"])
+    pd.concat([r["rows"] for r in R], ignore_index=True).to_csv(EXP / f"rows_phase{phase}.csv", index=False, lineterminator="\n")
+    if phase == "1":
+        pd.concat([r["balance"] for r in R if r["job"].endswith("|main")], ignore_index=True).to_csv(EXP / "balance.csv", index=False, lineterminator="\n")
+        (EXP / "synthetic" / "train").mkdir(parents=True, exist_ok=True)
+        pd.concat([r["syn"] for r in R if r["syn"] is not None], ignore_index=True).to_parquet(
+            EXP / "synthetic" / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet", index=False)
+    parts = [pd.read_csv(p, float_precision="round_trip") for p in sorted(EXP.glob("rows_phase*.csv"))]
+    pd.concat(parts, ignore_index=True).to_csv(EXP / "all_rows.csv", index=False, lineterminator="\n")
+    log("fitted", phase=phase, seconds=round(time.time() - t0, 1))
+    evaluate(log, EXP, exploratory=True)
 
 
 def _print(res) -> None:
@@ -458,4 +512,5 @@ def _print(res) -> None:
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
-    {"equiv": equiv, "fidelity": fidelity, "eval": run_eval, "report": evaluate}.get(cmd, lambda: sys.exit("usage: python -m app.e178.retrain equiv | fidelity | eval | report"))()
+    {"equiv": equiv, "fidelity": fidelity, "eval": run_eval, "report": evaluate, "explore": explore}.get(
+        cmd, lambda: sys.exit("usage: python -m app.e178.retrain equiv | fidelity | eval | report | explore 1|2"))()
