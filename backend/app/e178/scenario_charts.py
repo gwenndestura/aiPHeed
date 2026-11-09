@@ -30,7 +30,8 @@ plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.righ
 def _label(fig, title: str, real: bool = False) -> None:
     fig.text(0.5, 0.995, K.LABEL if not real else f"{K.LABEL} (report)  ·  this chart: real inputs", ha="center", va="top",
              fontsize=9, fontweight="bold", color="black", bbox=dict(boxstyle="square,pad=0.3", fc="#fbbf24", ec="none"))
-    fig.suptitle(title, y=0.945, fontsize=11, fontweight="bold")
+    fig.suptitle(title, y=0.94, fontsize=11, fontweight="bold")
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
 
 
 def _save(fig, name: str) -> None:

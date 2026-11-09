@@ -148,7 +148,9 @@ def test_inputs_stay_within_bounds_unless_flagged():
 @needs_run
 def test_recorded_hashes_match():
     h = json.loads((K.SYN / "hashes.json").read_text())
-    assert len(h["outputs"]) == 8
+    want = {"scenarios_outputs.csv", "scenarios_inputs.csv", "s5_municipal.csv", "s4_response.json", "s4_dashboard_rows.csv",
+            "scenarios_summary.json", "run_log.jsonl"}
+    assert {r.rsplit("/", 1)[1] for r in h["outputs"]} == want
     for rel, sha in h["outputs"].items():
         assert K.sha256(K.BACKEND_DIR.parent / rel) == sha, rel
     assert h["production_artifact_sha256"] == K.production_issue()["artifact_sha256"]
