@@ -401,7 +401,7 @@ def evaluate(log=None) -> dict:
                        else "SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL (E168 stays in production)")
     K.dump_json(res, OUT / "results.json")
     log("evaluated", decision=res["decision"], rule=acc)
-    outs = [OUT / n for n in ("all_rows.csv", "balance.csv", "results.json", "fidelity.json", "equivalence.json")] + \
+    outs = [OUT / n for n in ("all_rows.csv", "balance.csv", "results.json", "fidelity.json", "equivalence.json", "deviations.json")] + \
            [K.SYN / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet"]
     log("hashes")
     K.write_hashes(outs + [OUT / "run_log.jsonl"], OUT / "hashes.json")

@@ -1,0 +1,32 @@
+{
+ "deviations": [
+  {
+   "id": "D1",
+   "date": "2026-11-09",
+   "protocol_rule": "E168 must reproduce bit-for-bit (Inputs and their provenance; Part B equivalence check)",
+   "observed": {
+    "rows": 432,
+    "same_configuration": true,
+    "selected_outputs_max_abs_diff": {
+     "mu": 0.0,
+     "p": 0.0,
+     "half": 0.0,
+     "mu_raw": 0.0,
+     "p_raw": 0.0,
+     "half_raw": 0.0
+    },
+    "unselected_layers_max_abs_diff": {
+     "mu_linear": 0.0,
+     "p_linear": 1.1102230246251565e-16,
+     "half_linear": 2.220446049250313e-16,
+     "mu_platt": 0.0,
+     "p_platt": 2.220446049250313e-16,
+     "half_platt": 0.0
+    }
+   },
+   "likely_cause": "installed scikit-learn 1.7.2 / scipy 1.16.3 / joblib 1.5.2 instead of the pinned 1.8.0 / 1.17.1 / 1.5.3 (the Platt layer uses sklearn LogisticRegression)",
+   "effect": "None on any compared quantity: E178 is compared with E168's selected p (raw layer, identical); the linear and Platt layers are descriptive and differ by at most one floating-point unit (2.2e-16).",
+   "decision": "Owner chose to proceed with the installed versions and document the deviation (2026-11-09)."
+  }
+ ]
+}
