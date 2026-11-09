@@ -34,6 +34,7 @@ from app.e163 import model as C
 from app.e164 import auto as A4
 from app.e165 import final as F5
 from app.e166 import nested_source as N
+from app.e168 import robust as RB
 from app.paths import BACKEND_DIR
 
 warnings.filterwarnings("ignore")
@@ -139,6 +140,7 @@ def task(survey, lead, H, L, S_P, mode):
     if mode.startswith("shuf"):
         s_ = int(mode[4:])
         tr, te = C.shuffle_cols(tr, TRIG, s_), C.shuffle_cols(te, TRIG, s_)
+    te, _ = RB.fill_unseen_missing(tr, te)          # E183: same step as serve._forecast (a no-op on the 72 validation rows)
     P, chosen, tag, abl, inner, nfeat = run_proc(tr, te, AN, ablate=(mode == "main" and lead == 1))
     o = te[["key", "survey", "lead"]].copy()
     o["mode"], o["cfg"], o["cal"], o["n_features"] = mode, tag, chosen, nfeat

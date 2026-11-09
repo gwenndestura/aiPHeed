@@ -309,6 +309,10 @@ def province_row(code: str, name: str, quarter: str, base: dict | None) -> dict 
     p = float(r["probability"])
     what = (f"{reliability_text(r)}; issued {r['issue_date']}; forecast HFIAS moderate+severe {float(r['score_pct']):.1f}% "
             f"(90% range {float(r['range90_low']):.1f}-{float(r['range90_high']):.1f}%); the outcome is not yet published.")
+    from app.e168 import robust as RB
+    warn = RB.warning(r)                     # E183: rows staged since E183 say when inputs were missing and filled
+    if warn:
+        what = f"{what} {warn}"
     out = dict(base or {})
     out.update({
         "province_code": code, "province_name": name, "quarter": quarter,
