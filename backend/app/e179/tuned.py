@@ -54,9 +54,12 @@ def _augment(real, an, s, seed, job, fold):
                      jitter_sd=sd, focus=foc, tag="E179")
 
 
-def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False):
-    """Stage A once, Stage B per seed. Returns rows (one block per arm and seed), the selection log and balance log."""
+def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False, stream=None):
+    """Stage A once, Stage B per seed. Returns rows (one block per arm and seed), the selection log and balance log.
+    `stream` names the random stream of the synthetic rows (default: the job). The leakage control passes the main job's
+    stream, so that the corrupted run differs from the main run only by the corruption (deviation D3)."""
     assert "is_synthetic" not in te.columns, "outer rows must be real"
+    log_job, job = job, (stream or job)
     tr = tr.reset_index(drop=True)
     y, q, w = tr["y_true"].values, tr["q_true"].values, (1.0 / (tr["se_true"] ** 2 + 0.05)).values
     gap = tr["gap_q"].values.astype(float)
@@ -88,7 +91,7 @@ def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False):
             mdl.syn_weight = s[2]
             mdl.fit(tr.assign(e=y - atr), syn.assign(e=syn["y_true"].values - sa[a]))
             if keep_syn:
-                syn_out = syn.assign(**{f"anchor_{x}": sa[x] for x in sa}, job=job, setting=setting_name(s))
+                syn_out = syn.assign(**{f"anchor_{x}": sa[x] for x in sa}, job=log_job, setting=setting_name(s))
         mu = ate + mdl.predict(te)
         P, chosen, inner = RT._calibrate(tr, te, folds, cand_oof, mu, y, q, w, gap)
         return P, chosen, inner, len(mdl.use_), syn_out, info
@@ -108,7 +111,7 @@ def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False):
         if syn_out is not None:
             syn_keep.append(syn_out.assign(seed=seed, arm=arm))
         if info is not None and arm == "E179":
-            bal.append({"job": job, "seed": seed, "fold": "final", "setting": setting_name(s), **info})
+            bal.append({"job": log_job, "seed": seed, "fold": "final", "setting": setting_name(s), **info})
 
     emit("E168_rerun", seeds[0], None, final(None, seeds[0]))
     for seed in seeds:
@@ -133,7 +136,7 @@ def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False):
         eligible = [s for s in settings[1:] if gain[s][0] + gain[s][1] < 0]
         chosen = min(eligible, key=lambda s: (cands[s]["sse"], settings.index(s))) if eligible else None
         best_any = min(settings, key=lambda s: (base["sse"] if s is None else cands[s]["sse"], settings.index(s)))
-        sel.append({"job": job, "seed": seed, "config": tag0, "sse_none": base["sse"], "n_eligible": len(eligible),
+        sel.append({"job": log_job, "stream": job, "seed": seed, "config": tag0, "sse_none": base["sse"], "n_eligible": len(eligible),
                     "chosen": setting_name(chosen), "sse_chosen": base["sse"] if chosen is None else cands[chosen]["sse"],
                     "gain_mean": None if chosen is None else gain[chosen][0], "gain_se": None if chosen is None else gain[chosen][1],
                     "min_setting": setting_name(best_any), "sse_min": base["sse"] if best_any is None else cands[best_any]["sse"]})
@@ -142,11 +145,11 @@ def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False):
     return rows, sel, bal, syn_keep
 
 
-def task(survey, lead, H, L, S_P, mode, seeds, keep_syn=False):
+def task(survey, lead, H, L, S_P, mode, seeds, keep_syn=False, stream=None):
     t0 = time.time()
     job = RT.job_id(survey, lead, mode)
     tr, te, AN = RT.build(survey, lead, H, L, S_P, mode)
-    rows, sel, bal, syn = run_proc_tuned(tr, te, AN, seeds, job, keep_syn=keep_syn)
+    rows, sel, bal, syn = run_proc_tuned(tr, te, AN, seeds, job, keep_syn=keep_syn, stream=stream)
     out = pd.concat(rows, ignore_index=True)
     out["mode"] = mode
     return {"rows": out, "sel": pd.DataFrame(sel), "bal": pd.DataFrame(bal), "syn": pd.concat(syn, ignore_index=True) if syn else None,
@@ -205,6 +208,40 @@ def run():
     evaluate(log)
 
 
+D3 = ("Deviation D3 (2026-11-09): in the first run the corrupted-data control drew its synthetic rows from its own random "
+      "stream (the stream key included the job mode), so its difference from the main run mixed generator randomness with "
+      "any leakage (0.1235). The control was re-run with the main job's random stream, so the only difference is the "
+      "corruption of unreleased rounds. E179's own predictions are unchanged; the first-run rows are kept as mode "
+      "'corrupt_own_stream'.")
+
+
+def leakage():
+    """Re-run the three Lead-1 corrupted-data controls with the main jobs' random streams (deviation D3)."""
+    log = K.RunLog(OUT / "run_log.jsonl", fresh=False)
+    log("leakage_control_rerun", note=D3)
+    H, L, S_P = K.pipeline_inputs()
+    R = Parallel(n_jobs=3)(delayed(task)(s, 1, H, L, S_P, "corrupt", (PRIMARY,), False, RT.job_id(s, 1, "main")) for s in RT.SURVEYS)
+    Al = pd.read_csv(OUT / "all_rows.csv", float_precision="round_trip")
+    first = Al[(Al["mode"] == "corrupt") & (Al["arm"] == "E179")].merge(
+        Al[(Al["mode"] == "main") & (Al["lead"] == 1) & (Al["seed"] == PRIMARY) & (Al["arm"] == "E179")], on=RT.KEYS, suffixes=("_c", "_m"))
+    first_leak = float(np.max(np.abs(first["mu_c"] - first["mu_m"])))
+    Al.loc[Al["mode"] == "corrupt", "mode"] = "corrupt_own_stream"
+    Al = pd.concat([Al] + [r["rows"] for r in R], ignore_index=True)
+    Al.to_csv(OUT / "all_rows.csv", index=False, lineterminator=chr(10))
+    sel = pd.read_csv(OUT / "selection.csv")
+    sel.loc[sel["job"].str.endswith("|corrupt"), "job"] = sel.loc[sel["job"].str.endswith("|corrupt"), "job"] + "_own_stream"
+    sel = pd.concat([sel] + [r["sel"] for r in R], ignore_index=True)
+    sel.to_csv(OUT / "selection.csv", index=False, lineterminator=chr(10))
+    for r in R:
+        log("job", job=r["job"], stream="main", seconds=r["seconds"], n_train=r["n_train"])
+    res = evaluate(log)
+    res["deviation_D3"] = {"note": D3, "leakage_first_run_own_stream": first_leak, "leakage_rerun_main_stream": res["leakage_max_abs_change"]}
+    K.dump_json(res, OUT / "results.json")
+    K.write_hashes([OUT / n for n in ("all_rows.csv", "balance.csv", "results.json", "selection.csv")] + sorted(SYN.rglob("*.parquet"))
+                   + [OUT / "run_log.jsonl"], OUT / "hashes.json")
+    print("leakage: first run (own stream)", first_leak, "-> re-run (main stream)", res["leakage_max_abs_change"])
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
-    {"run": run, "report": evaluate}.get(cmd, lambda: sys.exit("usage: python -m app.e179.tuned run | report"))()
+    {"run": run, "report": evaluate, "leakage": leakage}.get(cmd, lambda: sys.exit("usage: python -m app.e179.tuned run | report | leakage"))()
