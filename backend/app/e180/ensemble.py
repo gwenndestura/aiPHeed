@@ -131,7 +131,7 @@ def seal() -> None:
                       "E179": "E179 (docs/e179/PROTOCOL.md), generator seed 17901",
                       "E180": "mean of E179 over generator seeds 17901-17905 (docs/e180/PROTOCOL.md)"},
            "rule": "HIGH = p_high >= 0.5; score only on HFIAS moderate_or_severe provincial rows once public and verified comparable; no re-fitting",
-           "e168_seal_check": check, "e179_selection": pd.concat([r["sel"] for r in R]).to_dict("records"),
+           "e168_seal_check": check, "e179_selection": [s for r in R for s in r["sel"]],
            "forecasts": F.round(6).to_dict("records")}
     SEAL.write_text(json.dumps(doc, indent=1, default=str), encoding="utf-8", newline="\n")
     sha = K.sha256(SEAL)
