@@ -155,8 +155,9 @@ def evaluate(log=None) -> dict:
         full[Ld] = {"E181": RT._metrics(x, "E181", rng), "E168": RT._metrics(x, "E168", rng),
                     "brier_E181_minus_E168": E.E7.diff_ci(x, "E181", "E168", "q_true", np.random.default_rng(181), n=2000),
                     "mcnemar": RT._mcnemar(x, "E181", "E168")}
-    res["winner_metrics"] = {Ld: {"E181": {k: v[k] for k in ("accuracy", "balanced_accuracy", "high_recall", "high_precision", "low_recall", "f1", "auc", "brier", "confusion")},
-                                  "E168": {k: v[k] for k in ("accuracy", "balanced_accuracy", "high_recall", "high_precision", "low_recall", "f1", "auc", "brier", "confusion")},
+    keep = ("accuracy", "balanced_accuracy", "high_recall", "high_precision", "low_recall", "f1", "auc", "brier", "confusion")
+    res["winner_metrics"] = {Ld: {"E181": {k: full[Ld]["E181"][k] for k in keep},
+                                  "E168": {k: full[Ld]["E168"][k] for k in keep},
                                   "brier_diff": {"diff": round(full[Ld]["brier_E181_minus_E168"]["diff"], 4), "ci95": [round(z, 4) for z in full[Ld]["brier_E181_minus_E168"]["ci95"]]},
                                   "mcnemar": full[Ld]["mcnemar"]} for Ld in (1, 2)}
     # chronological select-then-test (the honest estimate)
@@ -175,7 +176,7 @@ def evaluate(log=None) -> dict:
     K.write_hashes([OUT / n for n in ("variant_rows.csv", "variant_scores.csv", "results.json")] + [OUT / "run_log.jsonl"], OUT / "hashes.json")
     print("variants:", res["n_variants"], "eligible:", res["n_eligible"], "winner:", best)
     print(table.head(10)[["eligible", "acc_L1", "acc_L2", "bal_acc_L1", "bal_acc_L2", "high_recall_L1", "high_recall_L2", "brier_L1", "brier_L2"]].round(4).to_string())
-    print("E168 (none):", table.loc["none", ["acc_L1", "acc_L2", "bal_acc_L1", "bal_acc_L2", "high_recall_L1", "high_recall_L2", "brier_L1", "brier_L2"]].round(4).to_dict())
+    print("E168 (none):", table.loc["none", ["acc_L1", "acc_L2", "bal_acc_L1", "bal_acc_L2", "high_recall_L1", "high_recall_L2", "brier_L1", "brier_L2"]].astype(float).round(4).to_dict())
     for Ld in (1, 2):
         print("Lead", Ld, res["winner_metrics"][Ld])
     print("chronological picks:", chrono)
