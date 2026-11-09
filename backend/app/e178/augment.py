@@ -28,6 +28,7 @@ RATIOS = (0.25, 0.5, 1.0)
 SYN_WEIGHT = 0.4
 JITTER_SD = 0.25
 K_NN = 5
+BOUNDARY_TAU = 0.5                                       # E179 "boundary" focus: parent weight exp(-|y| / 0.5) on the logit scale
 SEEDS = (17801, 17802, 17803, 17804, 17805)
 PRIMARY_SEED = SEEDS[0]
 ANCH = ("H", "OH", "RSS")
@@ -89,13 +90,22 @@ def _stats(X: pd.DataFrame):
 
 
 def generate(real: pd.DataFrame, anchors: dict[str, np.ndarray], gen: str, n_syn: int, rng: np.random.Generator,
-             cols: list[str]) -> tuple[pd.DataFrame, dict[str, np.ndarray], dict]:
-    """n_syn synthetic rows from `real` (reset index; y_true, se_true, region, lead, gap_q and `cols`) and its anchors."""
+             cols: list[str], jitter_sd: float = JITTER_SD, focus: str = "uniform") -> tuple[pd.DataFrame, dict[str, np.ndarray], dict]:
+    """n_syn synthetic rows from `real` (reset index; y_true, se_true, region, lead, gap_q and `cols`) and its anchors.
+    jitter_sd and focus are E179's options; the defaults are E178's generators exactly."""
     real = real.reset_index(drop=True)
     high = (real["y_true"].values >= 0)
     alloc = allocate(high, n_syn)
-    parents = np.concatenate([rng.choice(np.flatnonzero(high == bool(c)), size=alloc[c], replace=True) if alloc[c] else
-                              np.empty(0, int) for c in (1, 0)]).astype(int)
+    yv = real["y_true"].values.astype(float)
+
+    def draw(c):
+        idx = np.flatnonzero(high == bool(c))
+        if focus == "uniform":                   # E178: uniform within class (the same random calls as before)
+            return rng.choice(idx, size=alloc[c], replace=True)
+        p = np.exp(-np.abs(yv[idx]) / BOUNDARY_TAU)                  # "boundary": rows near the 50 % line drawn more often
+        return rng.choice(idx, size=alloc[c], replace=True, p=p / p.sum())
+
+    parents = np.concatenate([draw(c) if alloc[c] else np.empty(0, int) for c in (1, 0)]).astype(int)
     X = real[cols].astype(float)
     lo, hi, sd, mu = _stats(X)
     jc = jitter_columns(X)
@@ -111,7 +121,7 @@ def generate(real: pd.DataFrame, anchors: dict[str, np.ndarray], gen: str, n_syn
     def jitter_rows(idx):
         for c in jc:
             x0 = Xs.loc[idx, c].values
-            noise = rng.standard_normal(len(idx)) * JITTER_SD * sd[c]
+            noise = rng.standard_normal(len(idx)) * jitter_sd * sd[c]
             Xs.loc[idx, c] = np.where(np.isnan(x0), np.nan, np.clip(x0 + noise, lo[c], hi[c]))
         y[idx] = y[idx] + rng.standard_normal(len(idx)) * se[idx]
 
@@ -155,10 +165,12 @@ def generate(real: pd.DataFrame, anchors: dict[str, np.ndarray], gen: str, n_syn
     return syn, As, info
 
 
-def augment(real: pd.DataFrame, anchors: dict, gen: str, r: float, rng, cols: list[str], seed: int):
+def augment(real: pd.DataFrame, anchors: dict, gen: str, r: float, rng, cols: list[str], seed: int,
+            jitter_sd: float = JITTER_SD, focus: str = "uniform", tag: str = "B"):
     n_syn = int(round(r * len(real)))
-    syn, As, info = generate(real, anchors, gen, n_syn, rng, cols)
-    syn["is_synthetic"], syn["scenario_id"], syn["generator_seed"] = True, f"B:{gen}:r{r:g}", int(seed)
+    syn, As, info = generate(real, anchors, gen, n_syn, rng, cols, jitter_sd=jitter_sd, focus=focus)
+    sid = f"{tag}:{gen}:r{r:g}" if (jitter_sd, focus) == (JITTER_SD, "uniform") else f"{tag}:{gen}:r{r:g}:sd{jitter_sd:g}:{focus}"
+    syn["is_synthetic"], syn["scenario_id"], syn["generator_seed"] = True, sid, int(seed)
     return syn, As, info
 
 

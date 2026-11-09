@@ -78,7 +78,8 @@ class LGBResAug(E.LGBRes):
         self.use_ = use
         X = pd.concat([d[use], syn[use]], ignore_index=True)
         e = np.r_[d["e"].values, syn["e"].values]
-        w = np.r_[1.0 / (d["se_true"].values ** 2 + 0.05), A.SYN_WEIGHT / (syn["se_true"].values ** 2 + 0.05)]
+        alpha = getattr(self, "syn_weight", A.SYN_WEIGHT)              # E178: 0.4 fixed; E179 tunes it on inner folds
+        w = np.r_[1.0 / (d["se_true"].values ** 2 + 0.05), alpha / (syn["se_true"].values ** 2 + 0.05)]
         self.m_ = lgb.LGBMRegressor(**_params(self, use)).fit(X, e, sample_weight=w)
         return self
 
@@ -368,35 +369,37 @@ def _mcnemar(x, a, b):
 STAB = ("accuracy", "balanced_accuracy", "high_recall", "high_precision", "f1", "macro_f1", "auc", "brier", "calibration_slope")
 
 
-def evaluate(log=None, d=OUT, exploratory: bool = False) -> dict:
+def evaluate(log=None, d=OUT, exploratory: bool = False, name: str = "E178", protocol: str = "docs/e178/PROTOCOL.md",
+             primary_seed: int = A.PRIMARY_SEED, extra_outs=(), decision_text=None) -> dict:
+    """Score arm `name` (and every other arm in d/all_rows.csv) on the 72 real outer rows per lead, as lgbm_only.evaluate."""
     log = log or K.RunLog(d / "run_log.jsonl", fresh=False)
     Al = pd.read_csv(d / "all_rows.csv", float_precision="round_trip")
     arms = sorted(a for a in Al["arm"].unique())
-    desc = ["PERS", "E168"] + ["E178"] + [a for a in arms if a != "E178"]
-    res = {"protocol": "docs/e178/PROTOCOL.md", "primary_seed": A.PRIMARY_SEED, "leads": {}, "mcnemar": {}, "stability": {}}
+    desc = ["PERS", "E168"] + [name] + [a for a in arms if a not in (name, "E168")]
+    res = {"protocol": protocol, "primary_seed": primary_seed, "leads": {}, "mcnemar": {}, "stability": {}}
     for Ld in (1, 2):
-        x = _frame(Al, Ld, A.PRIMARY_SEED, arms)
+        x = _frame(Al, Ld, primary_seed, [a for a in arms if a != "E168"])
         rng = np.random.default_rng(178)
         cm = {a: _metrics(x, a, rng) for a in desc}
-        d = E.E7.diff_ci(x, "E178", "E168", "q_true", np.random.default_rng(178), n=2000)
-        res["mcnemar"][Ld] = _mcnemar(x, "E178", "E168")
+        dci = E.E7.diff_ci(x, name, "E168", "q_true", np.random.default_rng(178), n=2000)
+        res["mcnemar"][Ld] = _mcnemar(x, name, "E168")
         per = {s: {a: {"accuracy": round(float(((g[a] >= .5) == (g["y_high"] == 1)).mean()), 3), "brier": round(float(np.mean((g[a] - g["q_true"]) ** 2)), 4)}
-                   for a in ("PERS", "E168", "E178")} for s, g in x.groupby("survey")}
-        sel = x.groupby("survey")["cfg_E178"].first().to_dict()
-        res["leads"][Ld] = {"class": cm, "brier_E178_minus_E168": {"diff": round(d["diff"], 4), "ci95": [round(z, 4) for z in d["ci95"]]},
-                            "per_round": per, "selected_E178": sel,
+                   for a in ("PERS", "E168", name)} for s, g in x.groupby("survey")}
+        sel = x.groupby("survey")[f"cfg_{name}"].first().to_dict()
+        res["leads"][Ld] = {"class": cm, f"brier_{name}_minus_E168": {"diff": round(dci["diff"], 4), "ci95": [round(z, 4) for z in dci["ci95"]]},
+                            "per_round": per, f"selected_{name}": sel,
                             "brier_minus_E168_by_arm": {a: round(float(np.mean((x[a] - x["q_true"]) ** 2) - np.mean((x["E168"] - x["q_true"]) ** 2)), 4) for a in desc[2:]}}
         if Ld == 1:
             x1 = x
     x = x1
     for m in CONTROLS:
-        c = Al[(Al["lead"] == 1) & (Al["mode"] == m) & (Al["arm"] == "E178")][KEYS + ["mu", "p"]].rename(columns={"mu": f"mu_{m}", "p": m})
+        c = Al[(Al["lead"] == 1) & (Al["mode"] == m) & (Al["arm"] == name)][KEYS + ["mu", "p"]].rename(columns={"mu": f"mu_{m}", "p": m})
         x = x.merge(c, on=KEYS)
     assert len(x) == 72
     x["SHUF"] = x[["shuf1", "shuf2", "shuf3"]].mean(axis=1)
-    v = E.E7.diff_ci(x, "E178", "SHUF", "q_true", np.random.default_rng(178), n=2000)
-    res["shuffle"] = {"brier_shuffled": round(float(np.mean((x["SHUF"] - x["q_true"]) ** 2)), 4), "E178_minus_shuffled": round(v["diff"], 4), "ci95": [round(z, 4) for z in v["ci95"]]}
-    res["leakage_max_abs_change"] = float(np.max(np.abs(x["mu_E178"] - x["mu_corrupt"])))
+    v = E.E7.diff_ci(x, name, "SHUF", "q_true", np.random.default_rng(178), n=2000)
+    res["shuffle"] = {"brier_shuffled": round(float(np.mean((x["SHUF"] - x["q_true"]) ** 2)), 4), f"{name}_minus_shuffled": round(v["diff"], 4), "ci95": [round(z, 4) for z in v["ci95"]]}
+    res["leakage_max_abs_change"] = float(np.max(np.abs(x[f"mu_{name}"] - x["mu_corrupt"])))
     e168 = json.loads((E.OUT / "results.json").read_text())
     res["E168_reference"] = {"shuffle": e168["shuffle"], "leakage_max_abs_change": e168["leakage_max_abs_change"]}
     # stability over generator seeds
@@ -405,9 +408,9 @@ def evaluate(log=None, d=OUT, exploratory: bool = False) -> dict:
     for Ld in (1, 2):
         per_seed = {}
         for sd in seeds:
-            xs = _frame(Al, Ld, sd, ["E178"])
-            mm = E.C.cls_metrics(xs, "E178", np.random.default_rng(178))
-            dd = E.E7.diff_ci(xs, "E178", "E168", "q_true", np.random.default_rng(178), n=2000)
+            xs = _frame(Al, Ld, sd, [name])
+            mm = E.C.cls_metrics(xs, name, np.random.default_rng(178))
+            dd = E.E7.diff_ci(xs, name, "E168", "q_true", np.random.default_rng(178), n=2000)
             f_low = 2 * mm["low_precision"] * mm["low_recall"] / max(1e-9, mm["low_precision"] + mm["low_recall"])
             per_seed[int(sd)] = {**{k: mm[k] for k in STAB if k != "macro_f1"}, "macro_f1": round((mm["f1"] + f_low) / 2, 3),
                                  "brier_minus_E168": round(dd["diff"], 4), "brier_minus_E168_ci95": [round(z, 4) for z in dd["ci95"]],
@@ -420,37 +423,41 @@ def evaluate(log=None, d=OUT, exploratory: bool = False) -> dict:
                                      res["stability"][Ld]["per_seed"][int(sd)]["accuracy"] >= res["stability"][Ld]["per_seed"][int(sd)]["accuracy_E168"]
                                      for Ld in (1, 2)) else None)
     res["seeds_meeting_criteria_1_2"] = [s for s in rule12 if s is not None]
-    # class balance (primary seed, final fits)
-    bp = d / "balance.csv"
+    bp = d / "balance.csv"                       # class balance (primary seed, final fits)
     if bp.exists():
         b = pd.read_csv(bp)
         f = b[b["fold"].astype(str) == "final"]
-        res["class_balance_final_fits"] = f[["job", "generator", "ratio", "n_real", "real_high", "real_low", "n_syn", "syn_high", "syn_low", "smote_fallback_jitter"]].to_dict("records")
+        keep = [c for c in ("job", "setting", "generator", "ratio", "n_real", "real_high", "real_low", "n_syn", "syn_high", "syn_low", "smote_fallback_jitter") if c in f]
+        res["class_balance_final_fits"] = f[keep].to_dict("records")
     l1, l2 = res["leads"][1], res["leads"][2]
-    acc = {"brier_ci_upper_below_0_lead1": l1["brier_E178_minus_E168"]["ci95"][1] < 0,
-           "brier_ci_upper_below_0_lead2": l2["brier_E178_minus_E168"]["ci95"][1] < 0,
-           "accuracy_at_least_E168_lead1": l1["class"]["E178"]["accuracy"] >= l1["class"]["E168"]["accuracy"],
-           "accuracy_at_least_E168_lead2": l2["class"]["E178"]["accuracy"] >= l2["class"]["E168"]["accuracy"],
+    acc = {"brier_ci_upper_below_0_lead1": l1[f"brier_{name}_minus_E168"]["ci95"][1] < 0,
+           "brier_ci_upper_below_0_lead2": l2[f"brier_{name}_minus_E168"]["ci95"][1] < 0,
+           "accuracy_at_least_E168_lead1": l1["class"][name]["accuracy"] >= l1["class"]["E168"]["accuracy"],
+           "accuracy_at_least_E168_lead2": l2["class"][name]["accuracy"] >= l2["class"]["E168"]["accuracy"],
            "leakage_below_1e-9": res["leakage_max_abs_change"] < 1e-9,
            "beats_shuffled": res["shuffle"]["ci95"][1] < 0}
     res["decision_rule"] = acc
-    res["decision"] = ("E178 BETTER THAN E168 (candidate only; not promoted)" if all(acc.values())
-                       else "SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL (E168 stays in production)")
+    res["decision"] = (f"{name} BETTER THAN E168 (candidate only; not promoted)" if all(acc.values())
+                       else f"{name}: SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL (E168 stays in production)")
     if exploratory:
         res["status"] = EXP_NOTE
         res["seeds_available"] = [int(s) for s in seeds]
         res["decision"] = ("EXPLORATORY, outside the protocol (the E178 result stays 'Stage 2 not run'): the augmented model "
                            + ("would have met" if all(acc.values()) else "would NOT have met") + " the pre-registered decision rule.")
+    if decision_text:
+        res["decision"] = decision_text(acc, res)
     K.dump_json(res, d / "results.json")
     log("evaluated", decision=res["decision"], rule=acc)
     if exploratory:
         outs = [d / n for n in ("all_rows.csv", "balance.csv", "results.json")] + sorted((d / "synthetic").rglob("*.parquet")) + sorted(d.glob("rows_phase*.csv"))
-    else:
+    elif name == "E178":
         outs = [d / n for n in ("all_rows.csv", "balance.csv", "results.json", "fidelity.json", "equivalence.json", "deviations.json")] + \
                [K.SYN / "train" / f"train_rows_seed{A.PRIMARY_SEED}.parquet"]
+    else:
+        outs = [d / n for n in ("all_rows.csv", "balance.csv", "results.json")] + list(extra_outs)
     log("hashes")
     K.write_hashes(outs + [d / "run_log.jsonl"], d / "hashes.json")
-    _print(res)
+    _print(res, name)
     return res
 
 
@@ -500,12 +507,12 @@ def explore() -> None:
     evaluate(log, EXP, exploratory=True)
 
 
-def _print(res) -> None:
+def _print(res, name: str = "E178") -> None:
     print(json.dumps({k: res[k] for k in ("decision", "decision_rule", "leakage_max_abs_change", "shuffle", "mcnemar", "seeds_meeting_criteria_1_2")}, indent=1, default=str))
     cols = ("accuracy", "balanced_accuracy", "high_precision", "high_recall", "f1", "macro_f1", "auc", "brier", "calibration_slope", "calibration_slope_ci95")
     for Ld in (1, 2):
         r = res["leads"][Ld]
-        print(f"\nLead {Ld}  Brier E178-E168 {r['brier_E178_minus_E168']}  selected {r['selected_E178']}")
+        print(f"\nLead {Ld}  Brier {name}-E168 {r[f'brier_{name}_minus_E168']}  selected {r[f'selected_{name}']}")
         print(pd.DataFrame({a: {c: v.get(c) for c in cols} | {"conf": v["confusion"]} for a, v in r["class"].items()}).T.to_string())
         print("stability mean/sd:", res["stability"][Ld]["mean_sd"])
 
