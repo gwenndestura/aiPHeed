@@ -187,6 +187,45 @@ def seal() -> None:
     print("sealed", len(F), "rows; sha256", sha, "; E168 check", check)
 
 
+# ----------------------------------------------------------------------------------- Lead 3 (descriptive addendum)
+def lead3() -> None:
+    """Addendum (owner question, 2026-11-10): E182 at Lead 3, the third served lead, on the same 72 real rows, against
+    E168's stored Lead-3 rows (data/e168/out/all_rows_l3_8.csv, app.e168.longer_leads). The setting was fixed using
+    Leads 1-2 only. Descriptive: the pre-registered decision covered Leads 1-2."""
+    from scipy.stats import binomtest
+    log = K.RunLog(OUT / "run_log.jsonl", fresh=False)
+    RT._check_inputs(log)
+    H, L, S_P = K.pipeline_inputs()
+    R = Parallel(n_jobs=3)(delayed(job)(s, 3, H, L, S_P, "main") for s in RT.SURVEYS)
+    rows = pd.concat([r["rows"] for r in R], ignore_index=True)
+    rows.to_csv(OUT / "lead3_rows.csv", index=False, lineterminator="\n")
+    e8 = pd.read_csv(E.OUT / "all_rows_l3_8.csv", float_precision="round_trip")
+    e8 = e8[(e8["lead"] == 3) & (e8["mode"] == "main")]
+    G = pd.read_csv(K.D / "e158" / "out" / "oof.csv")
+    x = G[G["lead"] == 3].merge(e8[RT.KEYS + ["mu", "p"]].rename(columns={"mu": "mu_E168", "p": "E168"}), on=RT.KEYS)
+    for arm, col in ((NAME, NAME), ("E168_rerun", "E168_rerun")):
+        x = x.merge(rows[rows["arm"] == arm][RT.KEYS + ["mu", "p"]].rename(columns={"mu": f"mu_{col}", "p": col}), on=RT.KEYS)
+    assert len(x) == 72
+    rerun = float(np.max(np.abs(x["E168"] - x["E168_rerun"])))
+    rng = np.random.default_rng(182)
+    keep = ("accuracy", "balanced_accuracy", "high_precision", "high_recall", "low_recall", "f1", "auc", "brier", "calibration_slope", "confusion")
+    met = {a: {k: v for k, v in RT._metrics(x, a, rng).items() if k in keep} for a in ("PERS", "E168", NAME)}
+    d = E.E7.diff_ci(x, NAME, "E168", "q_true", np.random.default_rng(182), n=2000)
+    cA, cB = (x[NAME] >= .5) == (x["y_high"] == 1), (x["E168"] >= .5) == (x["y_high"] == 1)
+    bb, cc = int((cA & ~cB).sum()), int((~cA & cB).sum())
+    doc = {"label": "Descriptive addendum: Lead 3 was not part of the pre-registered E182 decision (Leads 1-2)",
+           "rows": int(len(x)), "e168_rerun_max_abs_diff_p": rerun, "metrics": met,
+           "brier_E182_minus_E168": {"diff": round(d["diff"], 4), "ci95": [round(z, 4) for z in d["ci95"]]},
+           "mcnemar": {"E182_only_right": bb, "E168_only_right": cc, "p": round(float(binomtest(bb, bb + cc, .5).pvalue), 4) if bb + cc else 1.0}}
+    K.dump_json(doc, OUT / "lead3_results.json")
+    log("lead3", **{k: doc[k] for k in ("rows", "e168_rerun_max_abs_diff_p", "brier_E182_minus_E168", "mcnemar")})
+    K.write_hashes([OUT / n for n in ("all_rows.csv", "results.json", "sealed_enns2022.json", "lead3_rows.csv", "lead3_results.json")]
+                   + [OUT / "run_log.jsonl"], OUT / "hashes.json")
+    print(pd.DataFrame({a: {k: m[k] for k in keep if k != "confusion"} | {"conf": m["confusion"]} for a, m in met.items()}).T.to_string())
+    print("Brier E182-E168:", doc["brier_E182_minus_E168"], "McNemar:", doc["mcnemar"], "E168 rerun diff:", rerun)
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
-    {"run": run, "report": evaluate, "seal": seal}.get(cmd, lambda: sys.exit("usage: python -m app.e182.candidate run | report | seal"))()
+    {"run": run, "report": evaluate, "seal": seal, "lead3": lead3}.get(
+        cmd, lambda: sys.exit("usage: python -m app.e182.candidate run | report | seal | lead3"))()
