@@ -195,16 +195,19 @@ def lead3() -> None:
     from scipy.stats import binomtest
     log = K.RunLog(OUT / "run_log.jsonl", fresh=False)
     RT._check_inputs(log)
-    H, L, S_P = K.pipeline_inputs()
-    R = Parallel(n_jobs=3)(delayed(job)(s, 3, H, L, S_P, "main") for s in RT.SURVEYS)
-    rows = pd.concat([r["rows"] for r in R], ignore_index=True)
-    rows.to_csv(OUT / "lead3_rows.csv", index=False, lineterminator="\n")
+    if (OUT / "lead3_rows.csv").exists() and "--refit" not in sys.argv:          # re-score the saved rows
+        rows = pd.read_csv(OUT / "lead3_rows.csv", float_precision="round_trip")
+    else:
+        H, L, S_P = K.pipeline_inputs()
+        R = Parallel(n_jobs=3)(delayed(job)(s, 3, H, L, S_P, "main") for s in RT.SURVEYS)
+        rows = pd.concat([r["rows"] for r in R], ignore_index=True)
+        rows.to_csv(OUT / "lead3_rows.csv", index=False, lineterminator="\n")
     e8 = pd.read_csv(E.OUT / "all_rows_l3_8.csv", float_precision="round_trip")
     e8 = e8[(e8["lead"] == 3) & (e8["mode"] == "main")]
     G = pd.read_csv(K.D / "e158" / "out" / "oof.csv")
-    x = G[G["lead"] == 3].merge(e8[RT.KEYS + ["mu", "p"]].rename(columns={"mu": "mu_E168", "p": "E168"}), on=RT.KEYS)
+    x = G[G["lead"] == 3].merge(e8[RT.KEYS + ["mu", "p", "half"]].rename(columns={"mu": "mu_E168", "p": "E168", "half": "half_E168"}), on=RT.KEYS)
     for arm, col in ((NAME, NAME), ("E168_rerun", "E168_rerun")):
-        x = x.merge(rows[rows["arm"] == arm][RT.KEYS + ["mu", "p"]].rename(columns={"mu": f"mu_{col}", "p": col}), on=RT.KEYS)
+        x = x.merge(rows[rows["arm"] == arm][RT.KEYS + ["mu", "p", "half"]].rename(columns={"mu": f"mu_{col}", "p": col, "half": f"half_{col}"}), on=RT.KEYS)
     assert len(x) == 72
     rerun = float(np.max(np.abs(x["E168"] - x["E168_rerun"])))
     rng = np.random.default_rng(182)

@@ -1,0 +1,70 @@
+{
+ "label": "Descriptive addendum: Lead 3 was not part of the pre-registered E182 decision (Leads 1-2)",
+ "rows": 72,
+ "e168_rerun_max_abs_diff_p": 0.0,
+ "metrics": {
+  "PERS": {
+   "accuracy": 0.625,
+   "balanced_accuracy": 0.703,
+   "high_precision": 0.48,
+   "high_recall": 0.96,
+   "low_recall": 0.447,
+   "f1": 0.64,
+   "auc": 0.827,
+   "brier": 0.213,
+   "calibration_slope": 0.71,
+   "confusion": {
+    "tp": 24,
+    "fp": 26,
+    "fn": 1,
+    "tn": 21
+   }
+  },
+  "E168": {
+   "accuracy": 0.75,
+   "balanced_accuracy": 0.771,
+   "high_precision": 0.6,
+   "high_recall": 0.84,
+   "low_recall": 0.702,
+   "f1": 0.7,
+   "auc": 0.873,
+   "brier": 0.1352,
+   "calibration_slope": 0.7,
+   "confusion": {
+    "tp": 21,
+    "fp": 14,
+    "fn": 4,
+    "tn": 33
+   }
+  },
+  "E182": {
+   "accuracy": 0.778,
+   "balanced_accuracy": 0.802,
+   "high_precision": 0.629,
+   "high_recall": 0.88,
+   "low_recall": 0.723,
+   "f1": 0.733,
+   "auc": 0.891,
+   "brier": 0.1282,
+   "calibration_slope": 0.791,
+   "confusion": {
+    "tp": 22,
+    "fp": 13,
+    "fn": 3,
+    "tn": 34
+   }
+  }
+ },
+ "brier_E182_minus_E168": {
+  "diff": -0.007,
+  "ci95": [
+   -0.0158,
+   0.0017
+  ]
+ },
+ "mcnemar": {
+  "E182_only_right": 2,
+  "E168_only_right": 0,
+  "p": 0.5
+ }
+}
