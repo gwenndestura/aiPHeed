@@ -37,7 +37,7 @@ def test_fidelity_thresholds_are_the_protocols(fid):
 def test_fidelity_verdicts_follow_from_the_numbers(fid):
     t = fid["thresholds"]
     accepted = []
-    for g in A.GENERATORS:
+    for g in A.GENERATORS[:2]:                       # E178 tested jitter and smote; copula was added later by E185
         ok_all = True
         for j, r in fid["jobs"].items():
             m = r[g]
@@ -56,7 +56,7 @@ def test_decision_follows_the_protocol(res, fid):
     if not fid["accepted_generators"]:
         assert res["stage2_run"] is False and res["decision"].startswith("NOT RUN: no synthetic generator met the fidelity criteria")
         assert "E168 stays in production" in res["decision"]
-        assert sorted(res["rejected_generators"]) == sorted(A.GENERATORS)
+        assert sorted(res["rejected_generators"]) == ["jitter", "smote"]
         return
     acc = res["decision_rule"]
     l1, l2 = res["leads"]["1"], res["leads"]["2"]
