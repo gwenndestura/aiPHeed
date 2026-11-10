@@ -51,6 +51,29 @@ def stage_a(tr, AN, folds):
     return best["cfg"], best["oof"]
 
 
+def seed_run(tr, te, AN, folds, cfg, setting, seed, stream):
+    """One generator seed of the fixed-setting candidate: inner OOF with synthetic rows in each inner fit set only (real
+    held-out rows scored), the final fit, and the calibration layers. tr and te must have a 0..n-1 index."""
+    a, f, pr, h = cfg
+    y, q, w = tr["y_true"].values, tr["q_true"].values, (1.0 / (tr["se_true"] ** 2 + 0.05)).values
+    gap = tr["gap_q"].values.astype(float)
+    atr, ate = AN[a]
+    an_all = {x: np.asarray(AN[x][0], float) for x in E.ANCH}
+    oof = np.zeros(len(tr))
+    for fi, (i_tr, i_te) in enumerate(folds):
+        syn, sa = T._augment(tr.iloc[i_tr].reset_index(drop=True), {x: v[i_tr] for x, v in an_all.items()}, setting, seed, stream, fi)[:2]
+        m = RT.LGBResAug(E.FS[f], *h, pr)
+        m.syn_weight = setting[2]
+        m.fit(tr.iloc[i_tr].assign(e=y[i_tr] - atr[i_tr]), syn.assign(e=syn["y_true"].values - sa[a]))
+        oof[i_te] = atr[i_te] + m.predict(tr.iloc[i_te])                     # real held-out rows only
+    syn, sa = T._augment(tr, an_all, setting, seed, stream, "final")[:2]
+    m = RT.LGBResAug(E.FS[f], *h, pr)
+    m.syn_weight = setting[2]
+    m.fit(tr.assign(e=y - atr), syn.assign(e=syn["y_true"].values - sa[a]))
+    P, chosen, _ = RT._calibrate(tr, te, folds, oof, ate + m.predict(te), y, q, w, gap)
+    return P, chosen, oof, m
+
+
 def fixed(tr, te, AN, seeds, stream, setting=SETTING, contrib=False, oof_p=False):
     """E168 (no augmentation) and the fixed-setting candidate (mean over `seeds`) for one outer job. With contrib=True also
     the mean over seeds of the final models' LightGBM contributions on te (for the dashboard's driver bars)."""
@@ -68,18 +91,7 @@ def fixed(tr, te, AN, seeds, stream, setting=SETTING, contrib=False, oof_p=False
     tag = f"{a}|{f}|prune={pr}|leaves={h[0]},minchild={h[1]},lambda={h[2]},trees={h[3]}"
     runs, cals, contribs, use_cols, oofps = [], [], [], None, []
     for seed in seeds:
-        oof = np.zeros(len(tr))
-        for fi, (i_tr, i_te) in enumerate(folds):
-            syn, sa = T._augment(tr.iloc[i_tr].reset_index(drop=True), {x: v[i_tr] for x, v in an_all.items()}, setting, seed, stream, fi)[:2]
-            m = RT.LGBResAug(E.FS[f], *h, pr)
-            m.syn_weight = setting[2]
-            m.fit(tr.iloc[i_tr].assign(e=y[i_tr] - atr[i_tr]), syn.assign(e=syn["y_true"].values - sa[a]))
-            oof[i_te] = atr[i_te] + m.predict(tr.iloc[i_te])                     # real held-out rows only
-        syn, sa = T._augment(tr, an_all, setting, seed, stream, "final")[:2]
-        m = RT.LGBResAug(E.FS[f], *h, pr)
-        m.syn_weight = setting[2]
-        m.fit(tr.assign(e=y - atr), syn.assign(e=syn["y_true"].values - sa[a]))
-        P, chosen, _ = RT._calibrate(tr, te, folds, oof, ate + m.predict(te), y, q, w, gap)
+        P, chosen, oof, m = seed_run(tr, te, AN, folds, cfg, setting, seed, stream)
         if oof_p:                                   # E187: real training rows' inner out-of-fold P(HIGH), raw layer
             oofps.append(norm.cdf(oof / E.A4.scale(y - oof, gap, gap)[0]))
         runs.append(P[chosen])
