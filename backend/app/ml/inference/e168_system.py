@@ -259,7 +259,7 @@ def _relabels(mid: str) -> tuple[tuple[str, str], ...]:
         ("Lead 4 accuracy 73.6% is below 75% (it still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
         ("Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
         (MODEL_ID, E184_ID),
-        ("E168 LightGBM", "E184 LightGBM (E168 + balanced synthetic training data)"),
+        ("E168 LightGBM", "E184 LightGBM with balanced synthetic training data"),
         (SEAL, _e184_seal()),
         ("E168", "E184"),
     )
