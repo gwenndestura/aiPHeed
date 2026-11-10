@@ -22,8 +22,27 @@ def _clear():
         f.cache_clear()
 
 
-def test_with_e168_in_production_nothing_changes():
+E168_PRODUCTION = {"model_id": "e168-lgbm-1.0", "version": "E168 LightGBM, issue 2026-Q4_2026-11-01",
+                   "artifact_path": "data/e168/issues/2026-Q4_2026-11-01/live.json",
+                   "artifact_file_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
+                   "approved_utc": "2026-11-08T04:39:41+00:00"}
+
+
+@pytest.fixture
+def e168_in_production(tmp_path, monkeypatch):
+    """The committed registry state (E168 in production), whatever the local registry currently serves."""
+    regdir = tmp_path / "registry"
+    regdir.mkdir()
+    (regdir / "registry.json").write_text(json.dumps({"production": E168_PRODUCTION, "models": {}, "history": []}))
+    monkeypatch.setattr(R, "DIR", regdir)
+    monkeypatch.setattr(R, "REGISTRY", regdir / "registry.json")
+    monkeypatch.setattr(R, "APPROVALS", regdir / "approvals")
     _clear()
+    yield
+    _clear()
+
+
+def test_with_e168_in_production_nothing_changes(e168_in_production):
     assert E.served_id() == "e168-lgbm-1.0" and E.active()
     s = "Serving e168-lgbm-1.0 (E168 LightGBM food-insecurity risk) on the dashboard (strict)"
     assert E.relabel(s) is s
