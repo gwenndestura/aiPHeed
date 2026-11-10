@@ -23,7 +23,8 @@ from scipy.spatial.distance import cdist
 from scipy.stats import ks_2samp, norm, spearmanr, wasserstein_distance
 from sklearn.model_selection import GroupKFold
 
-GENERATORS = ("jitter", "smote")
+GENERATORS = ("jitter", "smote", "copula")          # copula added by E185 (docs/e185/PROTOCOL.md); order kept for seeds
+COPULA_SHRINK = 0.2
 RATIOS = (0.25, 0.5, 1.0)
 SYN_WEIGHT = 0.4
 JITTER_SD = 0.25
@@ -154,6 +155,8 @@ def generate(real: pd.DataFrame, anchors: dict[str, np.ndarray], gen: str, n_syn
         if jit:
             fallback = len(jit)
             jitter_rows(np.array(jit))
+    elif gen == "copula":
+        Xs, y, se, gap, As = _copula(real, X, A, high, parents, rng)
     else:
         raise ValueError(gen)
     syn = Xs.assign(y_true=y, se_true=se, q_true=norm.cdf(y / se), region=real["region"].values[parents],
@@ -163,6 +166,54 @@ def generate(real: pd.DataFrame, anchors: dict[str, np.ndarray], gen: str, n_syn
             "syn_high": int((y >= 0).sum()), "syn_low": int((y < 0).sum()), "alloc_high": alloc[1], "alloc_low": alloc[0],
             "smote_fallback_jitter": fallback}
     return syn, As, info
+
+
+def _copula(real, X, A, high, parents, rng):
+    """E185 Gaussian copula, per class: normal scores of every variable (inputs, y, se, gap_q, anchors), rank correlation
+    shrunk toward the identity, draws mapped back through each variable's empirical quantiles (marginals kept, values
+    within the class's range). The parent row supplies the missing-value pattern; lead and region come from it too."""
+    V = X.copy()
+    V["__y"], V["__se"], V["__gap"] = real["y_true"].values, real["se_true"].values, real["gap_q"].values
+    for a, v in A.items():
+        V[f"__a_{a}"] = v
+    names = list(V.columns)
+    vals_all = V.values.astype(float)
+    out = np.full((len(parents), len(names)), np.nan)
+    for c in (True, False):
+        k_idx = np.flatnonzero(high[parents] == c)
+        if not len(k_idx):
+            continue
+        R = vals_all[high == c]
+        cont = [j for j in range(R.shape[1]) if np.unique(R[~np.isnan(R[:, j]), j]).size >= 3]
+        if cont:
+            Z = np.zeros((len(R), len(cont)))
+            for t, j in enumerate(cont):
+                col = R[:, j]
+                m = ~np.isnan(col)
+                Z[m, t] = norm.ppf((pd.Series(col[m]).rank(method="average").values - 0.5) / m.sum())
+            S = np.atleast_2d(np.corrcoef(Z, rowvar=False)) if len(cont) > 1 else np.ones((1, 1))
+            S = np.nan_to_num(S, nan=0.0)
+            np.fill_diagonal(S, 1.0)
+            S = (1 - COPULA_SHRINK) * S + COPULA_SHRINK * np.eye(len(cont))
+            L = np.linalg.cholesky(S + 1e-9 * np.eye(len(cont)))
+            U = norm.cdf(rng.standard_normal((len(k_idx), len(cont))) @ L.T)
+            for t, j in enumerate(cont):
+                v = np.sort(R[~np.isnan(R[:, j]), j])
+                out[k_idx, j] = np.quantile(v, U[:, t])
+        for j in [j for j in range(R.shape[1]) if j not in set(cont)]:
+            v = R[~np.isnan(R[:, j]), j]
+            out[k_idx, j] = rng.choice(v, size=len(k_idx)) if len(v) else np.nan
+    nx = X.shape[1]
+    feats = out[:, :nx]
+    feats[np.isnan(X.values.astype(float)[parents])] = np.nan            # the parent's missing-value pattern
+    Xs = pd.DataFrame(feats, columns=X.columns)
+    if "lead" in Xs:
+        Xs["lead"] = real["lead"].values[parents]
+    pos = {n: i for i, n in enumerate(names)}
+    y, se = out[:, pos["__y"]], np.maximum(out[:, pos["__se"]], 1e-6)
+    gap = np.round(out[:, pos["__gap"]])
+    As = {a: out[:, pos[f"__a_{a}"]] for a in A}
+    return Xs, y, se, gap, As
 
 
 def augment(real: pd.DataFrame, anchors: dict, gen: str, r: float, rng, cols: list[str], seed: int,

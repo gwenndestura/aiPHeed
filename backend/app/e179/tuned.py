@@ -54,7 +54,7 @@ def _augment(real, an, s, seed, job, fold):
                      jitter_sd=sd, focus=foc, tag="E179")
 
 
-def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False, stream=None):
+def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False, stream=None, base_setting=None):
     """Stage A once, Stage B per seed. Returns rows (one block per arm and seed), the selection log and balance log.
     `stream` names the random stream of the synthetic rows (default: the job). The leakage control passes the main job's
     stream, so that the corrupted run differs from the main run only by the corruption (deviation D3)."""
@@ -131,14 +131,18 @@ def run_proc_tuned(tr, te, AN, seeds, job, settings=SETTINGS, keep_syn=False, st
                 m.fit(tr.iloc[i_tr].assign(e=y[i_tr] - atr[i_tr]), syn.assign(e=syn["y_true"].values - sa[a]))
                 oof[i_te] = atr[i_te] + m.predict(tr.iloc[i_te])                 # real held-out rows only
             cands[s] = {"oof": oof, "folds": fold_sse(oof), "sse": float(np.sum(w * (y - oof) ** 2))}
-        gain = {s: (float(np.mean(c["folds"] - base["folds"])), float(np.std(c["folds"] - base["folds"], ddof=1) / np.sqrt(len(folds))))
+        # one-SE rule against "none" (E179) or against `base_setting` (E185: E184's setting)
+        ref = base if base_setting is None else cands[base_setting]
+        gain = {s: (float(np.mean(c["folds"] - ref["folds"])), float(np.std(c["folds"] - ref["folds"], ddof=1) / np.sqrt(len(folds))))
                 for s, c in cands.items()}
-        eligible = [s for s in settings[1:] if gain[s][0] + gain[s][1] < 0]
-        chosen = min(eligible, key=lambda s: (cands[s]["sse"], settings.index(s))) if eligible else None
+        eligible = [s for s in settings[1:] if s != base_setting and gain[s][0] + gain[s][1] < 0]
+        chosen = min(eligible, key=lambda s: (cands[s]["sse"], settings.index(s))) if eligible else base_setting
         best_any = min(settings, key=lambda s: (base["sse"] if s is None else cands[s]["sse"], settings.index(s)))
         sel.append({"job": log_job, "stream": job, "seed": seed, "config": tag0, "sse_none": base["sse"], "n_eligible": len(eligible),
                     "chosen": setting_name(chosen), "sse_chosen": base["sse"] if chosen is None else cands[chosen]["sse"],
-                    "gain_mean": None if chosen is None else gain[chosen][0], "gain_se": None if chosen is None else gain[chosen][1],
+                    "base": setting_name(base_setting),
+                    "gain_mean": None if chosen in (None, base_setting) else gain[chosen][0],
+                    "gain_se": None if chosen in (None, base_setting) else gain[chosen][1],
                     "min_setting": setting_name(best_any), "sse_min": base["sse"] if best_any is None else cands[best_any]["sse"]})
         emit("E179", seed, chosen, final(chosen, seed))
         emit("E179_min", seed, best_any, final(best_any, seed))

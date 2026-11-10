@@ -63,7 +63,8 @@ def test_synthetic_rows_are_labelled_bounded_and_from_the_given_rows(gen):
     if gen == "smote":                                            # interpolation within class keeps the class
         assert ((syn["y_true"].values >= 0) == (d["y_true"].values[syn["parent"]] >= 0)).all()
     zero_inflated = [c for c in E.NEWS[:5] if c in cols]
-    assert all(set(syn[c].dropna().unique()) <= set(d[c].unique()) or gen == "smote" for c in zero_inflated)
+    # jitter copies zero-inflated columns from the parent; smote and copula draw within the bounds checked above
+    assert all(set(syn[c].dropna().unique()) <= set(d[c].unique()) or gen != "jitter" for c in zero_inflated)
 
 
 @pytest.mark.parametrize("gen", A.GENERATORS)
