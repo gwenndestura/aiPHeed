@@ -36,7 +36,7 @@ def candidates() -> list[dict]:
             out.append({"quarter": quarter, "province_code": code, "alert_reason": REASON, "threshold_exceeded": True,
                         "prev_risk_probability": None, "risk_delta": None,
                         "evidence": {"lead": int(r["lead"]), "p_high": p, "score_pct": float(r["score_pct"])},
-                        "statement": STATEMENT})
+                        "statement": E.relabel(STATEMENT)})
     return out
 
 

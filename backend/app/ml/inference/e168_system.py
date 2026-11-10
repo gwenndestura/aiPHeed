@@ -26,6 +26,11 @@ ROWS = DATA / "dashboard_rows.csv"
 MODEL_ID = "e168-lgbm-1.0"
 ISSUE = "2026-10-01"
 SEAL = "f8228fae"
+# E184 (docs/e184/PROTOCOL.md): E168 with synthetic training data balanced 50/50, same artifact schema. It is served by
+# this adapter only when the owner has promoted it in the registry; with E168 in production nothing below changes.
+E184_ID = "e184-lgbm-syn50-1.0"
+FAMILY = (MODEL_ID, E184_ID)
+E184_DATA = Path(__file__).resolve().parents[3] / "data" / "e184" / "out"
 # The thesis's five triggers (Chapter III, Algorithm 2): market, climate, employment, OFW remittance and fish kill.
 # Fish kill is measured by a PROXY, PSA provincial fisheries production year-on-year (c_fish_yoy): no public fish-kill event
 # series exists, so the label says so. Employment and OFW remittances are national series (the same for every province).
@@ -103,12 +108,20 @@ def _production(path: str, mtime: int) -> str | None:
         return None
 
 
+def served_id() -> str:
+    """The production model of this adapter's family (E168, or E184 once the owner promotes it); E168 otherwise."""
+    from app import registry as R
+    reg = R.DIR / "registry.json"
+    prod = _production(str(reg), reg.stat().st_mtime_ns) if reg.exists() else None
+    return prod if prod in FAMILY else MODEL_ID
+
+
 def active() -> bool:
     if os.getenv("AIPHEED_MAP_MODEL", "auto").lower() not in ("auto", "e168") or not ROWS.exists():
         return False
     from app import registry as R
     reg = R.DIR / "registry.json"
-    return reg.exists() and _production(str(reg), reg.stat().st_mtime_ns) == MODEL_ID
+    return reg.exists() and _production(str(reg), reg.stat().st_mtime_ns) in FAMILY
 
 
 def not_served_reasons() -> list[str]:
@@ -121,8 +134,8 @@ def not_served_reasons() -> list[str]:
     if not ROWS.exists():
         out.append(f"served rows missing: {ROWS}")
     prod = _production(str(reg), reg.stat().st_mtime_ns) if reg.exists() else None
-    if prod != MODEL_ID:
-        out.append(f"registry production model is {prod!r}, not {MODEL_ID}")
+    if prod not in FAMILY:
+        out.append(f"registry production model is {prod!r}, not {MODEL_ID}" + (f" or {E184_ID}" if E184_ID else ""))
     return out
 
 
@@ -170,10 +183,16 @@ def _f(x) -> float | None:
     return None if x in (None, "", "nan") else float(x)
 
 
-@functools.lru_cache(maxsize=1)
 def evaluation() -> dict:
-    H = json.loads((DATA / "lead_horizon.json").read_text(encoding="utf-8"))
-    tm_path = DATA / "thesis_metrics.json"
+    """The served model's own evaluation (E168's, or E184's once it is in production)."""
+    return _evaluation(served_id())
+
+
+@functools.lru_cache(maxsize=4)
+def _evaluation(mid: str) -> dict:
+    base = DATA if mid == MODEL_ID else E184_DATA
+    H = json.loads((base / "lead_horizon.json").read_text(encoding="utf-8"))
+    tm_path = base / "thesis_metrics.json"
     T = json.loads(tm_path.read_text(encoding="utf-8")) if tm_path.exists() else {}
     rl = H.get("horizon_75pct_and_beats_persistence") or 0
     leads, hz = {}, {}
@@ -206,10 +225,66 @@ def evaluation() -> dict:
                      "max_reliable_lead": rl, "individually_passing_leads": [int(k) for k, v in hz.items() if all(v["criteria"].values())],
                      "why_not_longer": "Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).",
                      "leads": hz}
-    return {"model": MODEL_ID, "max_reliable_lead": rl, "leads": leads, "horizon": horizon_block,
-            "skill_horizon": H.get("skill_horizon_beats_persistence"), "seal_sha256": SEAL, "seal_issue_date": "ENNS 2022 forecasts",
+    return {"model": mid, "max_reliable_lead": rl, "leads": leads, "horizon": horizon_block,
+            "skill_horizon": H.get("skill_horizon_beats_persistence"), "seal_sha256": SEAL if mid == MODEL_ID else _e184_seal(),
+            "seal_issue_date": "ENNS 2022 forecasts",
             "protocol_name": "owner-defined acceptance (2026-11-07)",
             "acceptance_rule": "accuracy >= 75% and Brier significantly better than reusing the latest survey (set 2026-11-07, after the results were known)"}
+
+
+evaluation.cache_clear = _evaluation.cache_clear
+
+
+def _e184_seal() -> str:
+    p = E184_DATA / "sealed_enns2022.json"
+    if not p.exists():
+        return "not sealed"
+    import hashlib
+    return hashlib.sha256(p.read_bytes()).hexdigest()[:8]
+
+
+@functools.lru_cache(maxsize=2)
+def _relabels(mid: str) -> tuple[tuple[str, str], ...]:
+    """Text replacements when E184 is the served model: its own name, id, seal and accuracy instead of E168's."""
+    if mid == MODEL_ID:
+        return ()
+    m = _evaluation(mid)["leads"]
+    a1, p1 = m["1"]["metrics"]["accuracy"] * 100, m["1"]["metrics"]["persistence_accuracy"] * 100
+    return (
+        ("accuracy 75.0% at one quarter ahead against 62.5% for the latest survey alone. It tends to over-predict by about 3 "
+         "points (about 2 in 5 HIGH calls were false alarms) and rarely misses a HIGH province.",
+         f"accuracy {a1:.1f}% at one quarter ahead against {p1:.1f}% for the latest survey alone. It was trained on the real "
+         "survey rows plus an equal number of labelled synthetic rows (never used in testing)."),
+        ("Lead 4 (73.6%) does not.", "E184 was evaluated at Leads 1-3."),
+        ("Lead 4 accuracy 73.6% is below 75% (it still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
+        ("Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
+        (MODEL_ID, E184_ID),
+        ("E168 LightGBM", "E184 LightGBM (E168 + balanced synthetic training data)"),
+        (SEAL, _e184_seal()),
+        ("E168", "E184"),
+    )
+
+
+def relabel(obj):
+    """Return `obj` with E168's name, id, seal and accuracy sentences replaced by E184's when E184 is the production model.
+    With E168 in production it returns `obj` itself, unchanged."""
+    reps = _relabels(served_id())
+    if not reps:
+        return obj
+
+    def sub(x):
+        if isinstance(x, str):
+            for a, b in reps:
+                x = x.replace(a, b)
+            return x
+        if isinstance(x, dict):
+            return {k: sub(v) for k, v in x.items()}
+        if isinstance(x, list):
+            return [sub(v) for v in x]
+        if isinstance(x, tuple):
+            return tuple(sub(v) for v in x)
+        return x
+    return sub(obj)
 
 
 def structural() -> bool:

@@ -78,11 +78,12 @@ def live():
 
 
 def artifact():
-    """The approved E168 artifact: the registry's production artifact when it is an E168 issue, else the 2026-Q4 export."""
+    """The approved E168 artifact: the registry's production artifact when it is an E168 issue (or, once the owner
+    promotes it, an E184 issue in the same schema), else the 2026-Q4 export."""
     try:
         from app import registry as R
         p = R.production()
-        if p["model_id"] == "e168-lgbm-1.0":
+        if p["model_id"] in ("e168-lgbm-1.0", "e184-lgbm-syn50-1.0"):
             return BACKEND_DIR / p["artifact_path"]
     except Exception:
         pass

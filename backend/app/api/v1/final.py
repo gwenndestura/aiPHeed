@@ -91,11 +91,11 @@ def final_lgus() -> dict:
     from app.ml.inference import e168_system as E168, map_engine
     if map_engine.selected() is E168:     # the approved forecast drives the ranking: say so, and trace each row to it
         by = {m["id"]: m for m in muni}
-        out["label"] = ("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk forecast "
-                        "(E168)")
-        out["note"] = (E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
-                       "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
-        out["quarter"], out["model"] = q, E168.MODEL_ID
+        out["label"] = E168.relabel("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk "
+                                    "forecast (E168)")
+        out["note"] = E168.relabel(E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
+                                   "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
+        out["quarter"], out["model"] = q, E168.served_id()
         for r in out["rows"]:
             m = by.get(r["id"], {})
             r["provinceEstimate"], r["rankingBasis"] = m.get("provinceEstimate"), m.get("riskLevelBasis")

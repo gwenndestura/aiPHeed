@@ -50,8 +50,9 @@ def stage_a(tr, AN, folds):
     return best["cfg"], best["oof"]
 
 
-def fixed(tr, te, AN, seeds, stream, setting=SETTING):
-    """E168 (no augmentation) and the fixed-setting candidate (mean over `seeds`) for one outer job."""
+def fixed(tr, te, AN, seeds, stream, setting=SETTING, contrib=False):
+    """E168 (no augmentation) and the fixed-setting candidate (mean over `seeds`) for one outer job. With contrib=True also
+    the mean over seeds of the final models' LightGBM contributions on te (for the dashboard's driver bars)."""
     assert "is_synthetic" not in te.columns, "outer rows must be real"
     tr, te = tr.reset_index(drop=True), te.reset_index(drop=True)
     y, q, w = tr["y_true"].values, tr["q_true"].values, (1.0 / (tr["se_true"] ** 2 + 0.05)).values
@@ -64,7 +65,7 @@ def fixed(tr, te, AN, seeds, stream, setting=SETTING):
     mdl = E.LGBRes(E.FS[f], *h, pr).fit(tr.assign(e=y - atr))
     P0, c0, _ = RT._calibrate(tr, te, folds, base_oof, ate + mdl.predict(te), y, q, w, gap)
     tag = f"{a}|{f}|prune={pr}|leaves={h[0]},minchild={h[1]},lambda={h[2]},trees={h[3]}"
-    runs, cals = [], []
+    runs, cals, contribs, use_cols = [], [], [], None
     for seed in seeds:
         oof = np.zeros(len(tr))
         for fi, (i_tr, i_te) in enumerate(folds):
@@ -80,8 +81,14 @@ def fixed(tr, te, AN, seeds, stream, setting=SETTING):
         P, chosen, _ = RT._calibrate(tr, te, folds, oof, ate + m.predict(te), y, q, w, gap)
         runs.append(P[chosen])
         cals.append(chosen)
+        if contrib:
+            contribs.append(m.m_.predict(te[m.use_], pred_contrib=True))
+            use_cols = list(m.use_)
     mean = tuple(np.mean([np.asarray(r[k]) for r in runs], axis=0) for k in range(3))
-    return {"E168": P0[c0], NAME: mean, "cfg": tag, "cal_E168": c0, "cal_seeds": cals}
+    out = {"E168": P0[c0], NAME: mean, "cfg": tag, "cal_E168": c0, "cal_seeds": cals}
+    if contrib:
+        out["contrib"], out["contrib_cols"], out["anchor"] = np.mean(contribs, axis=0), use_cols, np.asarray(ate, float)
+    return out
 
 
 def job(survey, lead, H, L, S_P, mode):
