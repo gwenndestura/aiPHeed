@@ -40,6 +40,7 @@ const App = () => (
             <Route path="/admin/feedback" element={<RequireAdmin><Admin /></RequireAdmin>} />
             <Route path="/admin/review" element={<RequireAdmin><Admin /></RequireAdmin>} />
             <Route path="/admin/accounts" element={<RequireAdmin><Admin /></RequireAdmin>} />
+            <Route path="/admin/scenarios" element={<RequireAdmin><Admin /></RequireAdmin>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

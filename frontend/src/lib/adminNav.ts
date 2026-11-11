@@ -4,7 +4,7 @@
 // by the public header when an admin is signed in, so both navigate the same
 // way. The URL is the source of truth for which section is showing.
 
-export type AdminSection = "map" | "review" | "feedback" | "accounts";
+export type AdminSection = "map" | "review" | "feedback" | "accounts" | "scenarios";
 
 export const ADMIN_SECTIONS: readonly { section: AdminSection; label: string; path: string }[] = [
   { section: "map", label: "Mapping", path: "/admin" },
@@ -12,6 +12,8 @@ export const ADMIN_SECTIONS: readonly { section: AdminSection; label: string; pa
   { section: "feedback", label: "Feedback", path: "/admin/feedback" },
   // In the menu, not the header (see AdminAccountsMenuItem in TopNavbar.tsx).
   { section: "accounts", label: "Accounts", path: "/admin/accounts" },
+  // E178 synthetic scenarios: in the menu, and only while Scenario / Demo mode is on (lib/demoMode.ts).
+  { section: "scenarios", label: "Scenarios", path: "/admin/scenarios" },
 ];
 
 /**

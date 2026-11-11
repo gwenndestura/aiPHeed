@@ -1,0 +1,24 @@
+{
+ "issue": "2026-Q4",
+ "folder": "2026-Q4_2026-11-01_r2",
+ "model": "e196-lgbm-avg5-laf-1.0",
+ "status": "staged",
+ "information_cutoff": "2026-11-01",
+ "created_utc": "2026-11-11T05:51:55+00:00",
+ "inputs_sha256": {
+  "e152/out/local_panel.parquet": "01025bdc0972a1302186ab5d9331924dc3c10854146478b0d932f70d6671e44f",
+  "e151/out/news_panel.parquet": "ce37570569151f67f7de242e340dbf456b11eb72454d4fde21c9ce68f9afa025",
+  "hfias/clean/enns_hfias.csv": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3"
+ },
+ "live_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+ "replaces": "e184-lgbm-syn50-1.0",
+ "promote": "python -m app.e196.serve promote --approver \"<name>\"",
+ "rollback": "python -m app.e196.serve rollback --approver \"<name>\"",
+ "leads": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "extends": "2026-Q4_2026-11-01"
+}

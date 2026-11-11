@@ -1,4 +1,21 @@
+# Local tooling and personal notes
 .claude/
+CLAUDE.md
+CLAUDE.local.md
+Claude outputs/
+QA_REPORT.md
+
+# Secrets: only the .env.example templates are committed
+.env
+.env.*
+!.env.example
+
+# Python and Node build output, anywhere in the tree
+__pycache__/
+*.pyc
+venv/
+.venv/
+node_modules/
 
 # Bulk reference geometry — geoBoundaries PHL ADM2 is 424MB and re-downloadable
 # from https://www.geoboundaries.org/api/current/gbOpen/PHL/ADM2/

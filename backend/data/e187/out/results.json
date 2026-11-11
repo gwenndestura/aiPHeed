@@ -1,0 +1,246 @@
+{
+ "protocol": "docs/e187/PROTOCOL.md",
+ "A_longer_leads": {
+  "4": {
+   "metrics": {
+    "PERS": {
+     "accuracy": 0.625,
+     "balanced_accuracy": 0.703,
+     "high_recall": 0.96,
+     "high_precision": 0.48,
+     "false_alarms": 26,
+     "missed_high": 1,
+     "brier": 0.213
+    },
+    "E168": {
+     "accuracy": 0.736,
+     "balanced_accuracy": 0.751,
+     "high_recall": 0.8,
+     "high_precision": 0.588,
+     "false_alarms": 14,
+     "missed_high": 5,
+     "brier": 0.1365
+    },
+    "E184": {
+     "accuracy": 0.778,
+     "balanced_accuracy": 0.792,
+     "high_recall": 0.84,
+     "high_precision": 0.636,
+     "false_alarms": 12,
+     "missed_high": 4,
+     "brier": 0.1261
+    }
+   },
+   "brier_minus_persistence": [
+    -0.0868,
+    [
+     -0.1359,
+     -0.0428
+    ]
+   ],
+   "brier_minus_E168": [
+    -0.0103,
+    [
+     -0.0184,
+     -0.0025
+    ]
+   ],
+   "passes_owner_rule": true,
+   "e168_rerun_max_abs_diff_p": 0.0
+  },
+  "5": {
+   "metrics": {
+    "PERS": {
+     "accuracy": 0.625,
+     "balanced_accuracy": 0.703,
+     "high_recall": 0.96,
+     "high_precision": 0.48,
+     "false_alarms": 26,
+     "missed_high": 1,
+     "brier": 0.213
+    },
+    "E168": {
+     "accuracy": 0.722,
+     "balanced_accuracy": 0.74,
+     "high_recall": 0.8,
+     "high_precision": 0.571,
+     "false_alarms": 15,
+     "missed_high": 5,
+     "brier": 0.138
+    },
+    "E184": {
+     "accuracy": 0.75,
+     "balanced_accuracy": 0.752,
+     "high_recall": 0.76,
+     "high_precision": 0.613,
+     "false_alarms": 12,
+     "missed_high": 6,
+     "brier": 0.1281
+    }
+   },
+   "brier_minus_persistence": [
+    -0.0849,
+    [
+     -0.1401,
+     -0.0334
+    ]
+   ],
+   "brier_minus_E168": [
+    -0.0099,
+    [
+     -0.0186,
+     -0.0016
+    ]
+   ],
+   "passes_owner_rule": true,
+   "e168_rerun_max_abs_diff_p": 0.0
+  },
+  "6": {
+   "metrics": {
+    "PERS": {
+     "accuracy": 0.625,
+     "balanced_accuracy": 0.703,
+     "high_recall": 0.96,
+     "high_precision": 0.48,
+     "false_alarms": 26,
+     "missed_high": 1,
+     "brier": 0.213
+    },
+    "E168": {
+     "accuracy": 0.694,
+     "balanced_accuracy": 0.719,
+     "high_recall": 0.8,
+     "high_precision": 0.541,
+     "false_alarms": 17,
+     "missed_high": 5,
+     "brier": 0.1433
+    },
+    "E184": {
+     "accuracy": 0.764,
+     "balanced_accuracy": 0.772,
+     "high_recall": 0.8,
+     "high_precision": 0.625,
+     "false_alarms": 12,
+     "missed_high": 5,
+     "brier": 0.1286
+    }
+   },
+   "brier_minus_persistence": [
+    -0.0843,
+    [
+     -0.1429,
+     -0.0318
+    ]
+   ],
+   "brier_minus_E168": [
+    -0.0147,
+    [
+     -0.0269,
+     -0.0045
+    ]
+   ],
+   "passes_owner_rule": true,
+   "e168_rerun_max_abs_diff_p": 0.0
+  }
+ },
+ "B_cutoff": {
+  "1": {
+   "cutoffs_by_round": {
+    "ENNS2018": 0.5,
+    "ENNS2019": 0.55,
+    "ENNS2021": 0.45
+   },
+   "E187": {
+    "accuracy": 0.778,
+    "balanced_accuracy": 0.783,
+    "high_recall": 0.8,
+    "high_precision": 0.645,
+    "false_alarms": 11,
+    "missed_high": 5,
+    "brier": 0.1211
+   },
+   "E184_at_0.50": {
+    "accuracy": 0.764,
+    "balanced_accuracy": 0.782,
+    "high_recall": 0.84,
+    "high_precision": 0.618,
+    "false_alarms": 13,
+    "missed_high": 4,
+    "brier": 0.1211
+   },
+   "E168": null,
+   "mcnemar_vs_E184": {
+    "E187_only_right": 3,
+    "E184_only_right": 2,
+    "p": 1.0
+   },
+   "probabilities_equal_E184_max_abs_diff": 0.0
+  },
+  "2": {
+   "cutoffs_by_round": {
+    "ENNS2018": 0.45,
+    "ENNS2019": 0.4,
+    "ENNS2021": 0.45
+   },
+   "E187": {
+    "accuracy": 0.722,
+    "balanced_accuracy": 0.759,
+    "high_recall": 0.88,
+    "high_precision": 0.564,
+    "false_alarms": 17,
+    "missed_high": 3,
+    "brier": 0.1185
+   },
+   "E184_at_0.50": {
+    "accuracy": 0.792,
+    "balanced_accuracy": 0.803,
+    "high_recall": 0.84,
+    "high_precision": 0.656,
+    "false_alarms": 11,
+    "missed_high": 4,
+    "brier": 0.1185
+   },
+   "E168": null,
+   "mcnemar_vs_E184": {
+    "E187_only_right": 1,
+    "E184_only_right": 6,
+    "p": 0.125
+   },
+   "probabilities_equal_E184_max_abs_diff": 0.0
+  },
+  "3": {
+   "cutoffs_by_round": {
+    "ENNS2018": 0.55,
+    "ENNS2019": 0.55,
+    "ENNS2021": 0.4
+   },
+   "E187": {
+    "accuracy": 0.806,
+    "balanced_accuracy": 0.823,
+    "high_recall": 0.88,
+    "high_precision": 0.667,
+    "false_alarms": 11,
+    "missed_high": 3,
+    "brier": 0.1258
+   },
+   "E184_at_0.50": {
+    "accuracy": 0.778,
+    "balanced_accuracy": 0.792,
+    "high_recall": 0.84,
+    "high_precision": 0.636,
+    "false_alarms": 12,
+    "missed_high": 4,
+    "brier": 0.1258
+   },
+   "E168": null,
+   "mcnemar_vs_E184": {
+    "E187_only_right": 4,
+    "E184_only_right": 2,
+    "p": 0.6875
+   },
+   "probabilities_equal_E184_max_abs_diff": 0.0
+  }
+ },
+ "A_served_horizon_E184": 6,
+ "B_decision": "E184 keeps the 0.50 cut-off"
+}

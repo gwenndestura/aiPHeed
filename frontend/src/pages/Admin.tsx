@@ -11,6 +11,7 @@ import {
   Menu,
   Sun,
   Moon,
+  FlaskConical,
 } from "lucide-react";
 import { RISK_COLORS, RISK_LABELS } from "@/data/types";
 import { EarlyWarningBanner } from "@/components/EarlyWarningBanner";
@@ -18,7 +19,9 @@ import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { MetricLabel } from "@/components/ui/metric";
 import { Note } from "@/components/ui/note";
 import { MapDashboard } from "@/components/MapDashboard";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ScenarioDemo } from "@/components/ScenarioDemo";
+import { SYNTHETIC_LABEL, useDemoMode } from "@/lib/demoMode";
 import { MENU_SHEET_CLASS, MenuSection, MenuSheetHeader } from "@/components/MenuSection";
 import { PSTClock, PSTClockMenuRow } from "@/components/PSTClock";
 import logoDark from "@/assets/logo-dark.png";
@@ -68,6 +71,7 @@ export default function Admin() {
   const navigate = useNavigate();
   const section = sectionFromPath(location.pathname);
   const { user, logout } = useAuth();
+  const [demoMode] = useDemoMode();
 
   const { data: quartersRes } = useQuarters("nowcast");
   const { data: config } = useConfig();
@@ -104,6 +108,23 @@ export default function Admin() {
         </div>
         {section === "review" && <div className="h-full overflow-auto"><ReviewSection /></div>}
         {section === "feedback" && <div className="h-full overflow-auto"><FeedbackSection /></div>}
+        {section === "scenarios" && (
+          <div className="h-full overflow-auto">
+            {demoMode ? (
+              <ScenarioDemo />
+            ) : (
+              <>
+                <SectionHeader title="Scenario / Demo mode" subtitle={`Synthetic scenarios for presentations (${SYNTHETIC_LABEL})`} />
+                <div className="px-6 py-5">
+                  <Note label={null}>
+                    Scenario / Demo mode is off. Turn it on in the menu (☰ → Presentation) to view the synthetic scenarios.
+                    The public dashboard and the real outlook never show them.
+                  </Note>
+                </div>
+              </>
+            )}
+          </div>
+        )}
         {section === "accounts" && (
           <div className="h-full overflow-auto">
             <SectionHeader title="Accounts" subtitle="Approve requests for administrator access and manage who has it" />
@@ -140,6 +161,16 @@ function AdminNavbar({
   // Fetched with the header, so the menu's pending count is ready when it opens.
   // Never for the demo account, which may not see account requests at all.
   useAccounts(!user.isDemo);
+  // Scenario / Demo mode (E178): off by default, this browser session only.
+  const [demoMode, setDemoMode] = useDemoMode();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const toggleDemoMode = () => {
+    const on = !demoMode;
+    setDemoMode(on);
+    if (on) navigate(adminPath("scenarios"));
+    else if (sectionFromPath(pathname) === "scenarios") navigate(adminPath("map"));
+  };
 
   return (
     <header className="relative h-16 shrink-0 surface-header z-[1002] flex items-center px-4 gap-3">
@@ -156,6 +187,15 @@ function AdminNavbar({
         <span className="hidden md:inline ml-2 text-[9px] uppercase tracking-widest text-primary font-bold">Admin</span>
       </Link>
       {user.isDemo && <DemoBadge />}
+      {demoMode && (
+        <Link
+          to={adminPath("scenarios")}
+          className="shrink-0"
+          title={`Scenario / Demo mode is on: the Scenarios page shows ${SYNTHETIC_LABEL} data`}
+        >
+          <StatusBadge tone="moderate" className="shrink-0">Scenario mode</StatusBadge>
+        </Link>
+      )}
 
       {/* Nav links — centered */}
       {/* Five links; below 1024px they move into the menu (AdminMenuLinks). */}
@@ -178,6 +218,37 @@ function AdminNavbar({
           <div className="flex-1 min-h-0 overflow-y-auto thin-scrollbar px-3 mt-4 space-y-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <AdminMenuLinks demo={!!user.isDemo} />
             <PSTClockMenuRow from="xl" />
+            <MenuSection heading="Presentation">
+              <div className="flex items-center justify-between gap-3 px-2 py-2 rounded-md">
+                <span className="flex items-center gap-3">
+                  <FlaskConical className="h-3.5 w-3.5" />
+                  <span className="text-[11px] font-medium">Scenario / Demo mode</span>
+                </span>
+                <button
+                  onClick={toggleDemoMode}
+                  role="switch"
+                  aria-checked={demoMode}
+                  aria-label="Scenario / Demo mode (synthetic data)"
+                  data-testid="demo-mode-switch"
+                  className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors border after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] ${
+                    demoMode ? "bg-amber-400 border-amber-400" : "bg-secondary border-border/50"
+                  }`}
+                >
+                  <span
+                    className={`relative z-10 inline-block h-4 w-4 transform rounded-full bg-card shadow-md transition-transform ${
+                      demoMode ? "translate-x-5" : "translate-x-0.5"
+                    }`}
+                  />
+                </button>
+              </div>
+              {demoMode && (
+                <SheetClose asChild>
+                  <Link to={adminPath("scenarios")} className="block px-2 py-1.5 rounded-md text-[11px] hover:bg-secondary">
+                    Open the synthetic scenarios ({SYNTHETIC_LABEL})
+                  </Link>
+                </SheetClose>
+              )}
+            </MenuSection>
             <MenuSection heading="Account">
               {!user.isDemo && <AdminAccountsMenuItem />}
               <div className="px-2 py-2 rounded-md bg-secondary flex items-center gap-2">

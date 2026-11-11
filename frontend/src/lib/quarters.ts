@@ -8,8 +8,11 @@
 /** Earliest quarter any public quarter selector offers. */
 export const EARLIEST_SELECTABLE_QUARTER = "2025-Q1";
 
-/** How many quarters past the calendar quarter a selector may reach: E168 is accepted 1 to 3 quarters ahead. */
-export const FORECAST_QUARTERS_AHEAD = 3;
+/**
+ * How many quarters past the calendar quarter a selector may reach: E196 is accepted 1 to 4 quarters ahead
+ * (maximum reliable lead time 4). Only quarters the API returns are shown, so a model serving fewer leads shows fewer.
+ */
+export const FORECAST_QUARTERS_AHEAD = 4;
 
 /**
  * How many quarters the map timeline shows: the newest ones, ending at the

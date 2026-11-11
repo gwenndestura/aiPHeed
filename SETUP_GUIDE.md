@@ -17,7 +17,7 @@ the project. To get there, open PowerShell and type (adjust the path if the
 project is somewhere else):
 
 ```powershell
-cd C:\aipheed-updated\backend
+cd C:\aipheed-system\backend
 ```
 
 ---
@@ -219,7 +219,8 @@ Go through this list before real users rely on the system:
   example the website on `something.vercel.app` and the server elsewhere),
   administrators would be signed out on every refresh. Ask the developers to
   either put both under one address (recommended) or switch the setting — the
-  second option needs a security fix first (QA report item SEC-08).
+  second option needs a security fix first: `CORS_PREVIEW_REGEX` must be
+  pinned to this project.
 - [ ] **The first administrator** exists (section 3) and has signed in.
 - [ ] **A backup** of `aipheed.db` is made regularly (section 2).
 

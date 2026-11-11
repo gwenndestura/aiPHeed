@@ -74,7 +74,10 @@ def _lead(lead: int, issue: str = "2026-Q4") -> pd.DataFrame:
              "issue_date": _cutoff(issue), "probability": r["p_high"], "class": r["risk_class"], "score_pct": r["score_pct"],
              "range90_low": r["range90_pct"][0], "range90_high": r["range90_pct"][1], "config": r["config"],
              "baseline_pct": round(float(pct(mu - change)), 2), "change_logit": round(change, 6), "bias_logit": round(float(contrib[-1]), 6),
-             "shap_other": round(float(other), 6), "model": "e168-lgbm-1.0"}
+             "shap_other": round(float(other), 6), "model": "e168-lgbm-1.0",
+             # E183: inputs missing at the issue date and filled with their training median (none = data complete)
+             "inputs_filled": int(r.get("inputs_filled", 0)), "inputs_filled_names": r.get("inputs_filled_names", ""),
+             "data_complete": bool(r.get("data_complete", True))}
         for v in BARS:
             o[f"shap_{v}"], o[f"shap_news_{v}"] = round(g[v], 6), round(g_news[v], 6)
         for c in VALUES:

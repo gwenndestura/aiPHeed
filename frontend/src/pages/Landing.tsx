@@ -11,7 +11,7 @@ import { readStorage } from "@/lib/storage";
 
 const THEME_KEY = "aipheed_theme";
 
-/* The hero photo sits under a warm tint in both themes (CLAUDE.local.md allows this gradient): the dark
+/* The hero photo sits under a warm tint in both themes (one of the three gradients the style guide allows): the dark
    theme's --background, then a low-opacity primary amber and risk red toward the right. The text sits on
    the photo, so it uses the dark theme's own --foreground values. */
 const HERO_TINT =
@@ -650,7 +650,7 @@ const FOOT_LINK =
   "transition-colors hover:text-foreground compact:inline-flex compact:items-center compact:min-h-11 compact:min-w-11";
 const FOOT_HEAD = "mb-4 text-[13px] font-bold uppercase tracking-[0.14em] text-foreground";
 
-/* The one gradient on the landing page (CLAUDE.local.md style rule): the page background into a soft
+/* The one gradient on the landing page (allowed by the style guide): the page background into a soft
    amber and risk-red tint, existing tokens only, low enough that the footer text keeps its contrast. */
 const FOOTER_BG =
   "bg-[linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--background))_40%,hsl(var(--primary)/0.14)_78%,hsl(var(--risk-high)/0.16)_100%)]";
