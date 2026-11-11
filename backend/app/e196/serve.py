@@ -194,7 +194,12 @@ def _evaluation_files() -> dict:
                          "brier_minus_persistence": round(v["diff"], 4), "brier_minus_persistence_ci95": [round(z, 4) for z in v["ci95"]],
                          "beats_persistence_C2": bool(beats)}
         # thesis_metrics.json keeps the adapter's schema key ("E168") for the served model's own metrics
-        tm[str(L)] = {"n_high": int(c["tp"] + c["fn"]), "E168": {"precision_high": m["precision"], "recall_high": m["recall"], "f1_high": m["f1"], "auc_roc": m["roc_auc"]}}
+        # f1_weighted is the thesis target metric (Algorithm 4; app/ml/training/evaluator.py lightgbm_weighted_f1_target 0.75)
+        nh, nl = c["tp"] + c["fn"], c["tn"] + c["fp"]
+        f1l = 2 * c["tn"] / max(1, 2 * c["tn"] + c["fn"] + c["fp"])
+        tm[str(L)] = {"n_high": int(nh), "E168": {"precision_high": m["precision"], "recall_high": m["recall"], "f1_high": m["f1"], "f1_low": round(f1l, 3),
+                                                  "f1_weighted": round((nh * m["f1"] + nl * f1l) / (nh + nl), 3), "f1_macro": round((m["f1"] + f1l) / 2, 3),
+                                                  "auc_roc": m["roc_auc"]}}
         ok.append(m["accuracy"] >= 0.75 and beats)
     rl = 0
     for good in ok:

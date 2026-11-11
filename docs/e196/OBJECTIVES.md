@@ -22,12 +22,23 @@ food insecurity risk patterns per province-quarter."*
 
 ## Objective 2 — evaluate LightGBM (accuracy, precision, recall, F1, AUC; furthest reliable lead): **MET**
 
-| Lead | Accuracy | Precision | Recall | F1 | AUC |
-|---|---|---|---|---|---|
-| 1 | 81.9 % | 0.69 | 0.88 | 0.77 | 0.90 |
-| 2 | 80.6 % | 0.67 | 0.88 | 0.76 | 0.90 |
-| 3 | 79.2 % | 0.65 | 0.88 | 0.74 | 0.89 |
-| 4 | 76.4 % | — | — | — | — |
+| Lead | Accuracy | Precision (HIGH) | Recall (HIGH) | **Weighted F1** (target ≥ 0.75) | F1 (HIGH class) | AUC (target ≥ 0.80) |
+|---|---|---|---|---|---|---|
+| 1 | 81.9 % | 0.69 | 0.88 | **0.823** ✓ | 0.772 | 0.90 ✓ |
+| 2 | 80.6 % | 0.67 | 0.88 | **0.810** ✓ | 0.759 | 0.90 ✓ |
+| 3 | 79.2 % | 0.65 | 0.88 | **0.797** ✓ | 0.746 | 0.89 ✓ |
+| 4 | 76.4 % | 0.63 | 0.80 | **0.769** ✓ | 0.702 | 0.88 ✓ |
+
+- **Which F1 the target refers to.**
+  - The thesis's F1 target is **weighted F1**. Algorithm 4's LightGBM target is `lightgbm_weighted_f1_target: 0.75` in
+    `backend/app/ml/training/evaluator.py`, committed in the E168 release on 2026-11-08, before E196.
+  - `docs/final/THESIS_MRLT_EVIDENCE_E168.md` also names weighted F1 as the objective in Algorithm 4.
+  - E196 meets it at Leads 1–4. The source is `backend/data/e196/out/thesis_metrics.json`, computed as sklearn
+    `f1_score(average="weighted")`.
+- **Correction.**
+  - Earlier E196 notes, including the E197 protocol, compared the HIGH-class F1 with the 0.75 target.
+  - On that stricter, non-thesis measure, Lead 3 is 0.746.
+  - Both figures are reported. No model, cut-off or prediction was changed.
 
 - **Maximum reliable lead time: 4 quarters.** At Leads 1–4, accuracy is ≥ 75 % and significantly better than
   persistence. Sources: `data/e196/out/lead_horizon.json`, `REPORT.md`, `RELIABILITY.md`.

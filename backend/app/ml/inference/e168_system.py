@@ -228,7 +228,7 @@ def _evaluation(mid: str) -> dict:
                          "baseline_accuracy": {"ALWAYS-LOW": always_low, "PERSISTENCE": v["persistence_accuracy"]},
                          "metrics": {"n": n, "accuracy": a, "balanced_accuracy": round((v["high_recall"] + v["low_recall"]) / 2, 3),
                                      "precision": m.get("precision_high", v["precision"]), "recall": m.get("recall_high", v["high_recall"]),
-                                     "f1": m.get("f1_high"), "auc": m.get("auc_roc"), "brier": v["brier"], **cm, "correct": v["correct"],
+                                     "f1": m.get("f1_high"), "f1_weighted": m.get("f1_weighted"), "f1_macro": m.get("f1_macro"), "auc": m.get("auc_roc"), "brier": v["brier"], **cm, "correct": v["correct"],
                                      "persistence_accuracy": v["persistence_accuracy"]}}
         hz[str(k)] = {"n": n, "n_quarters": leads[str(k)]["n_quarters"], "accuracy": a, "always_low_accuracy": always_low,
                       "reliable": int(k) <= rl, "criteria": {"accuracy_at_least_75": ok75, "better_than_latest_survey": beats},
