@@ -248,14 +248,48 @@ class TestReviewPipeline:
         assert quezon["status"] == "Approved"
         assert len(again) == 5
 
-    def test_rejection_reason_must_be_recognised(self, api):
+    @pytest.mark.parametrize("reason", [
+        "",                 # blank
+        "     ",            # only spaces
+        "too short",        # under 10 characters
+        "aaaaaaaaaaaaaa",   # one word
+        "!!!! ???? ....",   # no letters
+    ])
+    def test_rejection_reason_is_validated(self, api, reason):
         make_user(api)
         headers = auth_headers(api)
         api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
         r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject",
-                     headers=headers, json={"reason": "just because"})
+                     headers=headers, json={"reason": reason})
         assert r.status_code == 400
-        assert r.json()["error"]["code"] == "unknown_reason"
+        assert r.json()["error"]["code"] == "invalid_reason"
+        item = next(i for i in api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers).json()["data"]
+                    if i["provinceId"] == "quezon")
+        assert item["status"] == "Staged"
+
+    def test_rejection_reason_over_200_characters_is_refused(self, api):
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject",
+                     headers=headers, json={"reason": "word " * 41})
+        assert r.status_code in (400, 422)
+
+    def test_a_typed_reason_is_accepted_and_tidied(self, api):
+        # The adviser's demo case: a reason that was never on a preset list.
+        make_user(api)
+        headers = auth_headers(api)
+        api.get("/api/v1/admin/review?quarter=2025-Q4", headers=headers)
+        r = api.post("/api/v1/admin/review/rv_2025Q4_quezon/reject", headers=headers,
+                     json={"reason": "  Typhoon damage   delayed the provincial survey  "})
+        assert r.status_code == 200
+        assert r.json()["status"] == "Rejected"
+        assert r.json()["rejectionReason"] == "Typhoon damage delayed the provincial survey"
+
+    def test_review_list_no_longer_offers_preset_reasons(self, api):
+        make_user(api)
+        body = api.get("/api/v1/admin/review?quarter=2025-Q4", headers=auth_headers(api)).json()
+        assert "rejectionReasons" not in body
 
     def test_rejection_records_who_and_why(self, api):
         make_user(api)
