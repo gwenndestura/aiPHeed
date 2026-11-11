@@ -815,7 +815,7 @@ function RejectReasonModal({
 
   return (
     <div className="fixed inset-0 z-[2100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-6 compact:p-3">
-      <div className="surface-dialog border border-destructive/40 w-full max-w-md overflow-hidden">
+      <div className="surface-dialog border border-destructive/40 w-full max-w-md max-h-full overflow-y-auto">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold text-destructive">Reject forecast</h2>
