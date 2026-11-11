@@ -59,12 +59,9 @@ TriggerLabel = {
 }
 
 ReviewStatus   = "Staged" | "Approved" | "Rejected"
-RejectionReason = "Data quality issue"
-  | "Insufficient signal / limited articles"
-  | "Conflicts with field intelligence"
-  | "Model anomaly / outlier prediction"
-  | "Sensitive context — withhold publication"
-  | "Other"
+RejectionReason = string   // typed by the administrator, no preset list:
+                           // 10-200 characters after spaces are collapsed,
+                           // at least two words containing letters
 ```
 
 ### 0.2 Thresholds (frontend constants — send them so the UI stops hardcoding)
@@ -511,7 +508,7 @@ Auth: admin. → `{ "id": "...", "status": "Approved", "updatedAt": "...", "upda
 Auth: admin.
 ```jsonc
 // request
-{ "reason": "Model anomaly / outlier prediction",   // one of RejectionReason
+{ "reason": "Score spike not seen in field reports",   // RejectionReason: typed, validated
   "notes": "Score spike not seen in field reports." } // optional free text
 // 200
 { "id": "...", "status": "Rejected", "rejection": { ...see K.5 row... } }
