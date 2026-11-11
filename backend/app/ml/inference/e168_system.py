@@ -29,8 +29,20 @@ SEAL = "f8228fae"
 # E184 (docs/e184/PROTOCOL.md): E168 with synthetic training data balanced 50/50, same artifact schema. It is served by
 # this adapter only when the owner has promoted it in the registry; with E168 in production nothing below changes.
 E184_ID = "e184-lgbm-syn50-1.0"
-FAMILY = (MODEL_ID, E184_ID)
 E184_DATA = Path(__file__).resolve().parents[3] / "data" / "e184" / "out"
+# E196 (docs/e196/REPORT.md): E184 averaged over its top-5 configurations x 20 draws, Lead 1 lagged-averaged. Served
+# only when promoted in the registry, in the same artifact schema.
+E196_ID = "e196-lgbm-avg5-laf-1.0"
+E196_DATA = Path(__file__).resolve().parents[3] / "data" / "e196" / "out"
+FAMILY = (MODEL_ID, E184_ID, E196_ID)
+NAMES = {E184_ID: "E184 LightGBM with balanced synthetic training data",
+         E196_ID: "E196 LightGBM (E184 averaged over 5 configurations, Lead-1 lagged averaging)"}
+SHORT = {E184_ID: "E184", E196_ID: "E196"}
+
+
+def _data_dir(mid: str) -> Path:
+    """The evaluation folder of a promoted family member (looked up at call time, so tests can redirect it)."""
+    return E196_DATA if mid == E196_ID else E184_DATA
 # The thesis's five triggers (Chapter III, Algorithm 2): market, climate, employment, OFW remittance and fish kill.
 # Fish kill is measured by a PROXY, PSA provincial fisheries production year-on-year (c_fish_yoy): no public fish-kill event
 # series exists, so the label says so. Employment and OFW remittances are national series (the same for every province).
@@ -135,7 +147,7 @@ def not_served_reasons() -> list[str]:
         out.append(f"served rows missing: {ROWS}")
     prod = _production(str(reg), reg.stat().st_mtime_ns) if reg.exists() else None
     if prod not in FAMILY:
-        out.append(f"registry production model is {prod!r}, not {MODEL_ID}" + (f" or {E184_ID}" if E184_ID else ""))
+        out.append(f"registry production model is {prod!r}, not one of {FAMILY}")
     return out
 
 
@@ -190,7 +202,7 @@ def evaluation() -> dict:
 
 @functools.lru_cache(maxsize=4)
 def _evaluation(mid: str) -> dict:
-    base = DATA if mid == MODEL_ID else E184_DATA
+    base = DATA if mid == MODEL_ID else _data_dir(mid)
     H = json.loads((base / "lead_horizon.json").read_text(encoding="utf-8"))
     tm_path = base / "thesis_metrics.json"
     T = json.loads(tm_path.read_text(encoding="utf-8")) if tm_path.exists() else {}
@@ -226,13 +238,21 @@ def _evaluation(mid: str) -> dict:
                      "why_not_longer": "Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).",
                      "leads": hz}
     return {"model": mid, "max_reliable_lead": rl, "leads": leads, "horizon": horizon_block,
-            "skill_horizon": H.get("skill_horizon_beats_persistence"), "seal_sha256": SEAL if mid == MODEL_ID else _e184_seal(),
+            "skill_horizon": H.get("skill_horizon_beats_persistence"), "seal_sha256": SEAL if mid == MODEL_ID else _seal_of(mid),
             "seal_issue_date": "ENNS 2022 forecasts",
             "protocol_name": "owner-defined acceptance (2026-11-07)",
             "acceptance_rule": "accuracy >= 75% and Brier significantly better than reusing the latest survey (set 2026-11-07, after the results were known)"}
 
 
 evaluation.cache_clear = _evaluation.cache_clear
+
+
+def _seal_of(mid: str) -> str:
+    p = _data_dir(mid) / "sealed_enns2022.json"
+    if not p.exists():
+        return "not sealed"
+    import hashlib
+    return hashlib.sha256(p.read_bytes()).hexdigest()[:8]
 
 
 def _e184_seal() -> str:
@@ -250,18 +270,22 @@ def _relabels(mid: str) -> tuple[tuple[str, str], ...]:
         return ()
     m = _evaluation(mid)["leads"]
     a1, p1 = m["1"]["metrics"]["accuracy"] * 100, m["1"]["metrics"]["persistence_accuracy"] * 100
+    short, name = SHORT.get(mid, "E184"), NAMES.get(mid, NAMES[E184_ID])
+    rl = _evaluation(mid)["max_reliable_lead"]
+    extra = (" Each forecast averages its 5 best model configurations, and the one-quarter-ahead forecast also averages the "
+             "forecast made a quarter earlier for the same quarter.") if mid == E196_ID else ""
     return (
         ("accuracy 75.0% at one quarter ahead against 62.5% for the latest survey alone. It tends to over-predict by about 3 "
          "points (about 2 in 5 HIGH calls were false alarms) and rarely misses a HIGH province.",
          f"accuracy {a1:.1f}% at one quarter ahead against {p1:.1f}% for the latest survey alone. It was trained on the real "
-         "survey rows plus an equal number of labelled synthetic rows (never used in testing)."),
-        ("Lead 4 (73.6%) does not.", "E184 was evaluated at Leads 1-3."),
-        ("Lead 4 accuracy 73.6% is below 75% (it still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
-        ("Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).", "E184 was evaluated at Leads 1-3 only."),
-        (MODEL_ID, E184_ID),
-        ("E168 LightGBM", "E184 LightGBM with balanced synthetic training data"),
-        (SEAL, _e184_seal()),
-        ("E168", "E184"),
+         "survey rows plus an equal number of labelled synthetic rows (never used in testing)." + extra),
+        ("Lead 4 (73.6%) does not.", f"{short} was evaluated at Leads 1-{len(m)}."),
+        ("Lead 4 accuracy 73.6% is below 75% (it still beats the latest survey up to Lead 6).", f"{short} was evaluated at Leads 1-{len(m)} (reliable up to Lead {rl})."),
+        ("Lead 4 accuracy is below 75% (the model still beats the latest survey up to Lead 6).", f"{short} was evaluated at Leads 1-{len(m)} (reliable up to Lead {rl})."),
+        (MODEL_ID, mid),
+        ("E168 LightGBM", name),
+        (SEAL, _seal_of(mid)),
+        ("E168", short),
     )
 
 

@@ -1,0 +1,265 @@
+{
+ "variants_used": [
+  "E184",
+  "E168",
+  "E182",
+  "E185",
+  "E186",
+  "E188a",
+  "E188b",
+  "E189",
+  "E189_ridge",
+  "E189_rf",
+  "E190a",
+  "E190b",
+  "E191:E191",
+  "E191:E191_min",
+  "E191:best_bootstrap",
+  "E191:best_boundary",
+  "E191:best_combination",
+  "E191:best_feature",
+  "E191:best_minority",
+  "E191:best_model",
+  "E191:best_multivariate",
+  "E191:best_ratio",
+  "E191:best_temporal",
+  "E191:best_weighting",
+  "E191:gen:adasyn",
+  "E191:gen:boot_class",
+  "E191:gen:boot_prov",
+  "E191:gen:boot_row",
+  "E191:gen:bsmote",
+  "E191:gen:classw",
+  "E191:gen:copula",
+  "E191:gen:corrnoise",
+  "E191:gen:e184",
+  "E191:gen:gauss",
+  "E191:gen:gmm",
+  "E191:gen:hard",
+  "E191:gen:hybrid",
+  "E191:gen:kde",
+  "E191:gen:kmsmote",
+  "E191:gen:mixup",
+  "E191:gen:none",
+  "E191:gen:smote",
+  "E191:gen:svmsmote",
+  "E191:gen:traj",
+  "E191:gen:undersample",
+  "E191:gen:vae",
+  "E192:traj",
+  "E192:E192",
+  "E192:E192_20",
+  "E193",
+  "E194",
+  "E195",
+  "E196"
+ ],
+ "selection_adjustment": {
+  "n_variants": 52,
+  "mean_gain_all_variants_pts": -2.07,
+  "between_variant_sd_pts": 2.24,
+  "E196_observed_gain_pts": 2.78,
+  "E196_gain_se_pts": 0.83,
+  "shrinkage_weight": 0.879,
+  "E196_selection_adjusted_gain_pts": 2.19,
+  "E184_pooled_accuracy": 77.78,
+  "E196_observed_pooled_accuracy": 80.56,
+  "E196_selection_adjusted_pooled_accuracy": 79.97,
+  "rank_of_E196_among_variants": 1
+ },
+ "region_jackknife_gain_pts": {
+  "ARMM": 2.94,
+  "Bicol": 2.49,
+  "CALABARZON": 2.99,
+  "CAR": 2.53,
+  "Cagayan Valley": 2.94,
+  "Caraga": 2.45,
+  "Central Luzon": 2.53,
+  "Central Visayas": 2.9,
+  "Davao": 2.9,
+  "Eastern Visayas": 3.03,
+  "Ilocos": 2.94,
+  "MIMAROPA": 2.99,
+  "Northern Mindanao": 2.99,
+  "SOCCSKSARGEN": 2.45,
+  "Western Visayas": 2.53,
+  "Zamboanga Peninsula": 2.86
+ },
+ "region_jackknife_min_max": [
+  2.45,
+  3.03
+ ],
+ "bootstrap_ci_E196": {
+  "1": {
+   "accuracy": [
+    0.8194,
+    [
+     0.7397,
+     0.9
+    ]
+   ],
+   "recall": [
+    0.88,
+    [
+     0.7143,
+     1.0
+    ]
+   ],
+   "specificity": [
+    0.7872,
+    [
+     0.6316,
+     0.9
+    ]
+   ],
+   "brier": [
+    0.1187,
+    [
+     0.0835,
+     0.1558
+    ]
+   ],
+   "roc_auc": 0.901
+  },
+  "2": {
+   "accuracy": [
+    0.8056,
+    [
+     0.7237,
+     0.8923
+    ]
+   ],
+   "recall": [
+    0.88,
+    [
+     0.7143,
+     1.0
+    ]
+   ],
+   "specificity": [
+    0.766,
+    [
+     0.6154,
+     0.8919
+    ]
+   ],
+   "brier": [
+    0.1188,
+    [
+     0.0833,
+     0.1554
+    ]
+   ],
+   "roc_auc": 0.9
+  },
+  "3": {
+   "accuracy": [
+    0.7917,
+    [
+     0.7121,
+     0.8784
+    ]
+   ],
+   "recall": [
+    0.88,
+    [
+     0.7143,
+     1.0
+    ]
+   ],
+   "specificity": [
+    0.7447,
+    [
+     0.5952,
+     0.8679
+    ]
+   ],
+   "brier": [
+    0.1255,
+    [
+     0.0886,
+     0.1624
+    ]
+   ],
+   "roc_auc": 0.889
+  }
+ },
+ "calibration": {
+  "E184": [
+   {
+    "E184": "(-0.001, 0.2]",
+    "n": "51",
+    "mean_p": "0.085",
+    "observed_high": "0.0"
+   },
+   {
+    "E184": "(0.2, 0.4]",
+    "n": "32",
+    "mean_p": "0.32",
+    "observed_high": "0.125"
+   },
+   {
+    "E184": "(0.4, 0.5]",
+    "n": "34",
+    "mean_p": "0.449",
+    "observed_high": "0.235"
+   },
+   {
+    "E184": "(0.5, 0.6]",
+    "n": "30",
+    "mean_p": "0.547",
+    "observed_high": "0.333"
+   },
+   {
+    "E184": "(0.6, 0.8]",
+    "n": "40",
+    "mean_p": "0.694",
+    "observed_high": "0.625"
+   },
+   {
+    "E184": "(0.8, 1.0]",
+    "n": "29",
+    "mean_p": "0.896",
+    "observed_high": "0.966"
+   }
+  ],
+  "E196": [
+   {
+    "E196": "(-0.001, 0.2]",
+    "n": "48",
+    "mean_p": "0.084",
+    "observed_high": "0.0"
+   },
+   {
+    "E196": "(0.2, 0.4]",
+    "n": "30",
+    "mean_p": "0.303",
+    "observed_high": "0.1"
+   },
+   {
+    "E196": "(0.4, 0.5]",
+    "n": "39",
+    "mean_p": "0.446",
+    "observed_high": "0.154"
+   },
+   {
+    "E196": "(0.5, 0.6]",
+    "n": "26",
+    "mean_p": "0.553",
+    "observed_high": "0.346"
+   },
+   {
+    "E196": "(0.6, 0.8]",
+    "n": "43",
+    "mean_p": "0.693",
+    "observed_high": "0.628"
+   },
+   {
+    "E196": "(0.8, 1.0]",
+    "n": "30",
+    "mean_p": "0.901",
+    "observed_high": "1.0"
+   }
+  ]
+ }
+}

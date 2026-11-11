@@ -83,7 +83,7 @@ def artifact():
     try:
         from app import registry as R
         p = R.production()
-        if p["model_id"] in ("e168-lgbm-1.0", "e184-lgbm-syn50-1.0"):
+        if p["model_id"] in ("e168-lgbm-1.0", "e184-lgbm-syn50-1.0", "e196-lgbm-avg5-laf-1.0"):
             return BACKEND_DIR / p["artifact_path"]
     except Exception:
         pass

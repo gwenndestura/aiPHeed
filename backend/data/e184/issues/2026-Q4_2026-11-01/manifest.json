@@ -1,0 +1,17 @@
+{
+ "issue": "2026-Q4",
+ "folder": "2026-Q4_2026-11-01",
+ "model": "e184-lgbm-syn50-1.0",
+ "status": "staged",
+ "information_cutoff": "2026-11-01",
+ "created_utc": "2026-11-10T02:39:31+00:00",
+ "inputs_sha256": {
+  "e152/out/local_panel.parquet": "01025bdc0972a1302186ab5d9331924dc3c10854146478b0d932f70d6671e44f",
+  "e151/out/news_panel.parquet": "ce37570569151f67f7de242e340dbf456b11eb72454d4fde21c9ce68f9afa025",
+  "hfias/clean/enns_hfias.csv": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3"
+ },
+ "live_sha256": "2095598ba07717a8744bb6b11c13f4825f1742471ec0d60f762395b2d8a9eb15",
+ "e168_issue_it_replaces": "2026-Q4_2026-11-01",
+ "promote": "python -m app.e184.serve promote --approver \"<name>\"",
+ "rollback": "python -m app.e184.serve rollback --approver \"<name>\""
+}

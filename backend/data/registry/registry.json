@@ -1,10 +1,10 @@
 {
  "production": {
-  "model_id": "e168-lgbm-1.0",
-  "version": "E168 LightGBM, issue 2026-Q4_2026-11-01",
-  "artifact_path": "data/e168/issues/2026-Q4_2026-11-01/live.json",
-  "artifact_file_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
-  "approved_utc": "2026-11-08T04:39:41+00:00"
+  "model_id": "e196-lgbm-avg5-laf-1.0",
+  "version": "E196 (E184 x top-5 configurations, Lead-1 lagged averaging), issue 2026-Q4_2026-11-01_r2, Leads 1-4",
+  "artifact_path": "data/e196/issues/2026-Q4_2026-11-01_r2/live.json",
+  "artifact_file_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+  "approved_utc": "2026-11-11T05:52:54+00:00"
  },
  "models": {
   "ch1-p0h4": {
@@ -1550,6 +1550,114 @@
     "artifact_file_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b",
     "evaluated_utc": "2026-11-08T04:39:41+00:00"
    }
+  },
+  "e184-lgbm-syn50-1.0": {
+   "version": "E184 (E168 + synthetic 50/50), issue 2026-Q4_2026-11-01",
+   "artifact_path": "data/e184/issues/2026-Q4_2026-11-01/live.json",
+   "artifact_sha256": "2095598ba07717a8744bb6b11c13f4825f1742471ec0d60f762395b2d8a9eb15",
+   "target": "HFIAS moderate+severe household food insecurity by province; HIGH at 50 %",
+   "note": "Candidate staged by app.e184.serve; promote only by the owner (docs/e184/PROTOCOL.md).",
+   "model_id": "e184-lgbm-syn50-1.0",
+   "status": "approved",
+   "registered_utc": "2026-11-10T02:39:31+00:00",
+   "gate": {
+    "model_id": "e184-lgbm-syn50-1.0",
+    "evaluated_utc": "2026-11-10T02:39:31+00:00",
+    "passed": true,
+    "rule": "owner production rule (accuracy >= 75 % and Brier CI vs persistence < 0 at each served lead) + leakage < 1e-9",
+    "checks": [
+     {
+      "id": "lead1_accuracy_at_least_75",
+      "name": "lead1_accuracy_at_least_75",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead2_accuracy_at_least_75",
+      "name": "lead2_accuracy_at_least_75",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead3_accuracy_at_least_75",
+      "name": "lead3_accuracy_at_least_75",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead1_beats_persistence_brier_ci",
+      "name": "lead1_beats_persistence_brier_ci",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead2_beats_persistence_brier_ci",
+      "name": "lead2_beats_persistence_brier_ci",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead3_beats_persistence_brier_ci",
+      "name": "lead3_beats_persistence_brier_ci",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "leakage_below_1e-9",
+      "name": "leakage_below_1e-9",
+      "status": "pass",
+      "critical": true
+     }
+    ],
+    "artifact_file_sha256": "2095598ba07717a8744bb6b11c13f4825f1742471ec0d60f762395b2d8a9eb15",
+    "results_sha256": "b8f4a4f3b5b855ad2fc232f6355529677245f88f1b59610c32fcbeb3cdd07a2a",
+    "decision": "eligible for promotion by the owner"
+   }
+  },
+  "e196-lgbm-avg5-laf-1.0": {
+   "version": "E196 (E184 x top-5 configurations, Lead-1 lagged averaging), issue 2026-Q4_2026-11-01_r2, Leads 1-4",
+   "artifact_path": "data/e196/issues/2026-Q4_2026-11-01_r2/live.json",
+   "artifact_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+   "target": "HFIAS moderate+severe household food insecurity by province; HIGH at 50 %",
+   "note": "Local candidate (extended leads) staged by app.e196.serve extend; promote only by the owner.",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "status": "approved",
+   "registered_utc": "2026-11-11T05:51:55+00:00",
+   "gate": {
+    "model_id": "e196-lgbm-avg5-laf-1.0",
+    "evaluated_utc": "2026-11-11T05:52:53+00:00",
+    "passed": true,
+    "rule": "owner production rule at each served lead",
+    "checks": [
+     {
+      "id": "lead1_accuracy_75_and_beats_persistence",
+      "name": "lead1_accuracy_75_and_beats_persistence",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead2_accuracy_75_and_beats_persistence",
+      "name": "lead2_accuracy_75_and_beats_persistence",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead3_accuracy_75_and_beats_persistence",
+      "name": "lead3_accuracy_75_and_beats_persistence",
+      "status": "pass",
+      "critical": true
+     },
+     {
+      "id": "lead4_accuracy_75_and_beats_persistence",
+      "name": "lead4_accuracy_75_and_beats_persistence",
+      "status": "pass",
+      "critical": true
+     }
+    ],
+    "artifact_file_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+    "results_sha256": "2edbd35f49dfc75bfb2697d02f7a3b754a3af54867437012f168b27d76f16277",
+    "decision": "eligible for promotion by the owner"
+   }
   }
  },
  "history": [
@@ -2097,6 +2205,69 @@
    "event": "promoted",
    "model_id": "e168-lgbm-1.0",
    "approver": "automatic live refresh (standing instruction of the owner, Angel Melindo, 2026-11-08)"
+  },
+  {
+   "utc": "2026-11-10T02:39:31+00:00",
+   "event": "registered",
+   "model_id": "e184-lgbm-syn50-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-10T02:39:31+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e184-lgbm-syn50-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-10T02:42:45+00:00",
+   "event": "promoted",
+   "model_id": "e184-lgbm-syn50-1.0",
+   "approver": "Christina M. Esico (local preview, owner request 2026-11-10)"
+  },
+  {
+   "utc": "2026-11-11T02:52:46+00:00",
+   "event": "registered",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-11T02:52:46+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-11T02:54:11+00:00",
+   "event": "promoted",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "approver": "Christina M. Esico (local preview, owner request 2026-11-11)"
+  },
+  {
+   "utc": "2026-11-11T05:51:55+00:00",
+   "event": "production_cleared",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "reason": "artifact changed after approval"
+  },
+  {
+   "utc": "2026-11-11T05:51:55+00:00",
+   "event": "registered",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "status": "candidate"
+  },
+  {
+   "utc": "2026-11-11T05:52:53+00:00",
+   "event": "gate_evaluated",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "passed": true,
+   "failed_checks": []
+  },
+  {
+   "utc": "2026-11-11T05:52:54+00:00",
+   "event": "promoted",
+   "model_id": "e196-lgbm-avg5-laf-1.0",
+   "approver": "Christina M. Esico (local preview, owner request 2026-11-11)"
   }
  ]
 }
