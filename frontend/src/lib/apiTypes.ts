@@ -450,7 +450,6 @@ export interface ReviewListResponse {
   quarter: string | null;
   status: string | null;
   statuses: string[];
-  rejectionReasons: string[];
   data: ReviewItem[];
 }
 
