@@ -12,7 +12,6 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
-import type { DemoIndex, DemoScenario } from "./demoTypes";
 import type {
   AuditResponse,
   Fi10Provinces,
@@ -340,29 +339,5 @@ export function useAccountAction() {
     mutationFn: ({ id, action }: { id: number; action: AccountAction }) =>
       api.post<AccountRow>(`/api/v1/admin/accounts/${id}/${action}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "accounts"] }),
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Scenario / Demo mode (E178): SYNTHETIC scenarios, admin login, own endpoint
-// ---------------------------------------------------------------------------
-
-export function useDemoScenarios(enabled = true) {
-  return useQuery({
-    queryKey: ["demo", "scenarios"],
-    queryFn: () => api.get<DemoIndex>("/api/v1/demo/scenarios"),
-    enabled,
-    staleTime: HOUR,
-    retry: false,
-  });
-}
-
-export function useDemoScenario<T>(id: string, enabled = true) {
-  return useQuery({
-    queryKey: ["demo", "scenarios", id],
-    queryFn: () => api.get<DemoScenario<T>>(`/api/v1/demo/scenarios/${encodeURIComponent(id)}`),
-    enabled: enabled && !!id,
-    staleTime: HOUR,
-    retry: false,
   });
 }

@@ -108,8 +108,8 @@ function Hero() {
             Food Insecurity Risk Forecasting System for Region IV-A
           </h1>
           <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
-            A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one to three
-            quarters ahead, using the approved E168 LightGBM model.
+            A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one to four
+            quarters ahead, using the approved E196 LightGBM model.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -149,7 +149,7 @@ function About() {
       <Card>
         <div className="space-y-5">
           <p>
-            aiPHeed forecasts food-insecurity risk in the five CALABARZON provinces with the approved E168 model. A
+            aiPHeed forecasts food-insecurity risk in the five CALABARZON provinces with the approved E196 model. A
             province is at High risk in a quarter when 50% or more of its households are moderately or severely food
             insecure on the FNRI Household Food Insecurity Access Scale (HFIAS). The number shown is the forecast
             probability of High risk, from 0 to 1; a probability of 0.50 or higher is shown as High risk. It is a model
@@ -166,7 +166,7 @@ function About() {
           </p>
           <ul className="list-disc pl-6 space-y-2 marker:text-primary">
             <li>
-              a map of the provinces, each coloured Low or High for the selected quarter, one to three quarters
+              a map of the provinces, each coloured Low or High for the selected quarter, one to four quarters
               ahead of the issue date;
             </li>
             <li>
@@ -197,7 +197,7 @@ function About() {
 }
 
 /* ---------------- METHODOLOGY ---------------- */
-/* The inputs of the served E168 model (backend/app/e168/lgbm_only.py FS; app/e151/prov.py GOV_COLS and the E151 news
+/* The inputs of the served E196 model, the same as E168's (backend/app/e168/lgbm_only.py FS; app/e151/prov.py GOV_COLS and the E151 news
    panel). Each forecast uses only values published before its issue date; training rows start with the 2013 survey round. */
 const SOURCES = [
   { s: "FNRI National/Expanded National Nutrition Survey (HFIAS)", m: "Share of households moderately or severely food insecure: the forecast target and each province's starting level", p: "Survey rounds 2013, 2015, 2018, 2019 and 2021", l: "Provincial" },
@@ -212,10 +212,10 @@ const SOURCES = [
   { s: "PSA official poverty statistics and population density", m: "Poverty incidence, subsistence incidence, poverty gap and density (model inputs shown under Other model inputs)", p: "Releases 2015, 2018, 2021 and 2023, as published by the issue date", l: "Provincial" },
   { s: "PSA 2021 Small Area Estimates of poverty and 2024 Census of Population", m: "City and municipal weights for the priority ranking (60% poverty, 40% density); not model inputs", p: "2021 and 2024 (fixed)", l: "Municipal" },
   { s: "News (GDELT, newspaper archives and Google News titles, Filipino and English)", m: "Food-stress news signals, counted inside the five trigger groups", p: "Collected daily; a forecast uses only stories published before its cut-off date", l: "Provincial, area and national" },
-  { s: "Social Weather Stations (SWS) involuntary hunger", m: "Regional hunger, shown in About as context; not an E168 input", p: "Latest survey round", l: "Regional (Balance Luzon)" },
+  { s: "Social Weather Stations (SWS) involuntary hunger", m: "Regional hunger, shown in About as context; not a model input", p: "Latest survey round", l: "Regional (Balance Luzon)" },
 ];
 
-/* The approved forecast (E168): backend/app/e168/lgbm_only.py, serve.py; docs/final/FINAL_SYSTEM_REPORT_E168.md. */
+/* The approved forecast (E196): backend/app/e196/run.py, serve.py; docs/e196/PROTOCOL.md and REPORT.md. */
 const STEPS = [
   {
     t: "What High risk means",
@@ -227,7 +227,11 @@ const STEPS = [
   },
   {
     t: "Forecast change (LightGBM)",
-    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices; climate; employment and OFW remittances (both national series, the same for every province); and fish production, the change in total provincial fisheries production. News signals (XLM-RoBERTa event scores and BERTopic topics) are counted inside each group. The province's poverty and density profile is also an input (shown as Other model inputs) and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
+    d: "A small, strongly regularised LightGBM forecasts how much the province's level will change from that starting point. Its inputs are the five trigger groups: market and prices; climate; employment and OFW remittances (both national series, the same for every province); and fish production, the change in total provincial fisheries production. News signals (XLM-RoBERTa event scores) are counted inside each group. The province's poverty and density profile is also an input (shown as Other model inputs) and weights the city and municipal ranking. Each input may only push the forecast in its known direction. All choices are made on training data only.",
+  },
+  {
+    t: "Averaging and synthetic training rows",
+    d: "The forecast averages 100 versions of this model: the five best settings found on training data, each trained 20 times. Every training run adds one synthetic row per real training row, a slightly perturbed copy labelled as synthetic; synthetic rows are never used to test the model. One quarter ahead, the forecast is also averaged with the previous quarter's two-quarters-ahead forecast for the same quarter, a rule chosen on training data.",
   },
   {
     t: "Classification",
@@ -235,7 +239,7 @@ const STEPS = [
   },
   {
     t: "City and municipal ranking",
-    d: "Each city or municipality's value is the province's E168 probability multiplied by a vulnerability weight of 60% poverty incidence (PSA 2021) and 40% population density (POPCEN 2024), ranked within the province and the region. On the map it takes its province's risk colour.",
+    d: "Each city or municipality's value is the province's E196 probability multiplied by a vulnerability weight of 60% poverty incidence (PSA 2021) and 40% population density (POPCEN 2024), ranked within the province and the region. On the map it takes its province's risk colour.",
   },
 ];
 
@@ -244,7 +248,7 @@ const STEPS = [
 const NOTES = [
   {
     t: "Forecast lead",
-    d: "Forecasts are issued at the start of a quarter, using only information published before the issue date, for the next one, two and three quarters. All three meet the acceptance rule: accuracy of at least 75% and better than the latest survey.",
+    d: "Forecasts are issued at the start of a quarter, using only information published before the issue date, for the next one, two, three and four quarters. All four meet the acceptance rule: accuracy of at least 75% and better than the latest survey.",
   },
   {
     t: "Missing data",
@@ -332,23 +336,25 @@ function Methodology() {
 }
 
 /* ---------------- ACCURACY ---------------- */
-/* Figures from backend/data/e168/out/thesis_metrics.json and lead_horizon.json (E168, 72 provincial forecasts for the
-   ENNS 2018, 2019 and 2021 rounds); baselines on the same rows from backend/data/e151/out/prov_oof.csv. */
+/* Figures from backend/data/e196/out/thesis_metrics.json and lead_horizon.json (E196, 72 provincial forecasts for the
+   ENNS 2018, 2019 and 2021 rounds); baselines on the same rows from backend/data/e151/out/prov_oof.csv. F1 (High) is the
+   High-class F1; Weighted F1 is the thesis target metric (Algorithm 4, >= 0.75). */
 const LEADS = [
-  { label: "1 quarter ahead", reliable: true, acc: "0.750", prec: "0.595", rec: "0.88", f1: "0.71", auc: "0.891", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "2 quarters ahead", reliable: true, acc: "0.778", prec: "0.629", rec: "0.88", f1: "0.73", auc: "0.893", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "3 quarters ahead", reliable: true, acc: "0.750", prec: "0.600", rec: "0.84", f1: "0.70", auc: "0.873", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "4 quarters ahead (not shown on the map)", acc: "0.736", prec: "0.588", rec: "0.80", f1: "0.68", auc: "0.860", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "1 quarter ahead", reliable: true, acc: "0.819", prec: "0.688", rec: "0.88", f1: "0.772", wf1: "0.823", auc: "0.901", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "2 quarters ahead", reliable: true, acc: "0.806", prec: "0.667", rec: "0.88", f1: "0.759", wf1: "0.810", auc: "0.900", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "3 quarters ahead", reliable: true, acc: "0.792", prec: "0.647", rec: "0.88", f1: "0.746", wf1: "0.797", auc: "0.889", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "4 quarters ahead", reliable: true, acc: "0.764", prec: "0.625", rec: "0.80", f1: "0.702", wf1: "0.769", auc: "0.881", tested: "72 provincial forecasts, 3 survey rounds" },
 ];
 const LEAD_METRICS = [
   ["acc", "Accuracy"],
   ["prec", "Precision"],
   ["rec", "Recall"],
-  ["f1", "F1"],
+  ["f1", "F1 (High)"],
+  ["wf1", "Weighted F1"],
   ["auc", "AUC"],
 ] as const;
 const BRIER = [
-  ["LightGBM (E168, served forecast)", "0.123"],
+  ["LightGBM (E196, served forecast)", "0.119"],
   ["Naive persistence (latest survey)", "0.213"],
   ["PSA indicators only (logistic)", "0.228"],
   ["News only (logistic)", "0.219"],
@@ -357,19 +363,19 @@ const BRIER = [
 const RESULTS = [
   {
     t: "Lead time",
-    d: "The acceptance rule (accuracy of at least 75% and a Brier score significantly better than reusing the latest survey) is met 1, 2 and 3 quarters ahead. Four quarters ahead accuracy is 0.736, so the furthest accepted lead is three quarters. The model still beats the latest survey up to six quarters ahead.",
+    d: "The acceptance rule (accuracy of at least 75% and a Brier score significantly better than reusing the latest survey) is met 1, 2, 3 and 4 quarters ahead (accuracy 0.819, 0.806, 0.792 and 0.764), so the furthest accepted lead is four quarters, the furthest lead evaluated for this model.",
   },
   {
     t: "The 75% accuracy goal",
-    d: "Met 1 to 3 quarters ahead: 54 of 72 forecasts correct one quarter ahead (0.750), against 0.625 for reusing the latest survey and 0.653 for always predicting Low. One and three quarters ahead are exactly at 75%, so one more wrong forecast would fall below it. The rule was set on 7 November 2026, after these results were known.",
+    d: "Met 1 to 4 quarters ahead: 59 of 72 forecasts correct one quarter ahead (0.819), against 0.625 for reusing the latest survey and 0.653 for always predicting Low. With only 72 forecasts the uncertainty is wide: the 95% interval one quarter ahead runs from about 0.72 to 0.89. The rule was set on 7 November 2026, after these results were known.",
   },
   {
     t: "Known tendencies",
-    d: "The model rarely misses a High province (recall 0.84 to 0.88) but about 2 in 5 High calls were false alarms. On average it over-predicts the food-insecure share by about 3 points, more in Luzon. Of the five trigger groups, only market prices measurably improved accuracy when tested one group at a time.",
+    d: "The model rarely misses a High province (recall 0.88 one to three quarters ahead) but about 1 in 3 High calls were false alarms (precision 0.65 to 0.69). It ranks provinces well (AUC 0.88 to 0.90), but its probabilities are not exact chances: provinces forecast between 0.30 and 0.50 turned out High less than 1 time in 5.",
   },
   {
     t: "What could not be tested, and the next test",
-    d: "Only 5 of the 72 tested forecasts are CALABARZON provinces, all observed Low, so detecting a High province in CALABARZON is untested. The forecasts for the ENNS 2022 survey round were sealed before their outcomes were known (SHA-256 f8228fae) and will be scored when FNRI publishes provincial results.",
+    d: "Only 5 of the 72 tested forecasts are CALABARZON provinces, all observed Low, so detecting a High province in CALABARZON is untested. The forecasts for the ENNS 2022 survey round were sealed before their outcomes were known (SHA-256 d12b6a8c) and will be scored when FNRI publishes provincial results.",
   },
 ];
 
@@ -388,7 +394,7 @@ function LeadTimeTable() {
   return (
     <div>
       <p className="mb-2 font-bold text-foreground leading-snug">
-        E168 food-insecurity risk forecast by lead time: chronological, as-of predictions
+        E196 food-insecurity risk forecast by lead time: chronological, as-of predictions
       </p>
 
       {/* Desktop: one table. */}
@@ -452,7 +458,7 @@ function LeadTimeTable() {
       </ul>
 
       <p className="mt-3">
-        Accuracy falls the further ahead the forecast looks. The map shows the forecasts 1, 2 and 3 quarters ahead.
+        Accuracy falls the further ahead the forecast looks. The map shows the forecasts 1, 2, 3 and 4 quarters ahead.
       </p>
     </div>
   );
@@ -493,7 +499,7 @@ function Accuracy() {
         <div className="mt-10 lg:max-w-[50%]">
           <MetricTable
             title="Brier score against the baselines, one quarter ahead (lower is better)"
-            note="Same 72 provincial forecasts. The advantage over naive persistence is statistically established (95% interval below zero); against the other baselines only the point estimates are compared."
+            note="Same 72 provincial forecasts. The advantage over each baseline is statistically established (95% interval of the difference below zero)."
             rows={BRIER}
           />
         </div>
@@ -511,13 +517,14 @@ function Accuracy() {
 
 /* ---------------- DISCLAIMER ---------------- */
 const DISCLAIMER = [
-  "A forecast probability, not a measurement. The number is E168's forecast probability that 50% or more of a province's households are moderately or severely food insecure (FNRI HFIAS). It is not a measured food-insecurity rate, and not an official statistic or classification.",
+  "A forecast probability, not a measurement. The number is E196's forecast probability that 50% or more of a province's households are moderately or severely food insecure (FNRI HFIAS). It is not a measured food-insecurity rate, and not an official statistic or classification.",
   "Validated on few survey rounds. The forecast was tested on 72 provincial forecasts from three FNRI survey rounds (2018, 2019, 2021). Only 5 were CALABARZON provinces, all observed Low.",
-  "The acceptance rule was set after the results. Accuracy of at least 75% and better than the latest survey was adopted on 7 November 2026, after these results were known; one and three quarters ahead are exactly at 75%.",
+  "The acceptance rule was set after the results. Accuracy of at least 75% and better than the latest survey was adopted on 7 November 2026, after these results were known. E196 was chosen among many model versions compared on the same 72 forecasts, so its accuracy is likely slightly optimistic.",
   "Some inputs are national. Unemployment, remittances and the El Niño index are national or global figures, the same for every province.",
   "Fish production is the province's total fisheries output (commercial, municipal and aquaculture) from PSA. It does not record fish-kill events.",
   "City and municipal values are a relative prioritization within each province, based on the province forecast, poverty and population density. They are not forecasts for each city or municipality. Some cities have no PSA 2021 municipal poverty estimate; this is stated where it applies.",
   "News has limits. Only headlines are used, collected after the fact, and the news dataset was reviewed and signed off by Department of Agriculture staff; no item-by-item second annotation was done.",
+  "Synthetic rows are training data only. E196 adds labelled synthetic copies of real training rows to help it learn; every accuracy figure is computed on real survey results only.",
   "Missing data is not low risk. When a source has not yet published, the input is left blank. The dashboard says which inputs are missing.",
   "Back-test results are not live results. They were computed after the fact on survey rounds examined during development. The sealed forecasts for the ENNS 2022 round will be a true test.",
   "aiPHeed outputs must not replace official assessment procedures or be used as official food-insecurity classifications or policy recommendations.",
@@ -541,7 +548,7 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "A student research system that forecasts food-insecurity risk in the five CALABARZON provinces. The map shows the approved E168 forecast: the probability that 50% or more of a province's households are moderately or severely food insecure (FNRI HFIAS). It is a model forecast, not an official statistic.",
+    a: "A student research system that forecasts food-insecurity risk in the five CALABARZON provinces. The map shows the approved E196 forecast: the probability that 50% or more of a province's households are moderately or severely food insecure (FNRI HFIAS). It is a model forecast, not an official statistic.",
   },
   {
     q: "Is the score the probability that people will go hungry?",
@@ -553,11 +560,11 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "Forecasts are issued at the start of a quarter, using only information published before that date, for the next one, two and three quarters. All three meet the acceptance rule.",
+    a: "Forecasts are issued at the start of a quarter, using only information published before that date, for the next one, two, three and four quarters. All four meet the acceptance rule.",
   },
   {
     q: "How accurate is it?",
-    a: "One quarter ahead, 54 of 72 past provincial forecasts were correct (0.750), against 0.625 for reusing the latest survey. Two and three quarters ahead: 0.778 and 0.750. All results come from survey rounds examined during development; see \"How accurate it is\".",
+    a: "One quarter ahead, 59 of 72 past provincial forecasts were correct (0.819), against 0.625 for reusing the latest survey. Two, three and four quarters ahead: 0.806, 0.792 and 0.764. All results come from survey rounds examined during development; see \"How accurate it is\".",
   },
   {
     q: "Are the city and municipal values forecasts?",
@@ -669,9 +676,9 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces with the approved E168 model:
+              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces with the approved E196 model:
               a LightGBM forecast of the change from each province's latest FNRI survey level, driven by five trigger
-              groups with news signals inside them. It is not an official statistic.
+              groups with news signals inside them and averaged over 100 model versions. It is not an official statistic.
             </p>
           </div>
 

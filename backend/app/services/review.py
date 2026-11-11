@@ -151,6 +151,13 @@ async def ensure_rows(db: AsyncSession, quarter: str) -> None:
     logger.info("review: seeded %d rows for %s", len(missing), quarter)
 
 
+def served_quarters() -> list[str]:
+    """The quarters the dashboard serves forecasts for (Leads 1-4 of the production issue in thesis mode)."""
+    if svc._ch1_mode():
+        return svc.ch1_quarters()
+    return [svc.latest_quarter()]
+
+
 async def list_items(
     db: AsyncSession,
     quarter: str | None = None,
@@ -159,6 +166,11 @@ async def list_items(
     """The review queue, newest quarter first then by risk descending."""
     if quarter:
         await ensure_rows(db, quarter)
+    else:
+        # Every served quarter gets its rows, not only the ones someone happened to open first
+        # (the admin header only asks for the current quarter, which left Q2-Q4 unseeded).
+        for q in served_quarters():
+            await ensure_rows(db, q)
 
     query = select(ReviewRecord)
     if quarter:

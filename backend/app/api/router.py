@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.services.security import require_admin
 from app.api.v1 import (
-    admin, alerts, assessments, auth, dashboard, demo, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, fi9, fi10,
+    admin, alerts, assessments, auth, dashboard, e107, e108, e109, e110, e111, e112, e113, fi5, fi6, fi7, fi9, fi10,
     forecast, forecast_history, fpp, health, hunger_forecast, insights, final, lead2, quarterly, registry, report, simple,
 )
 
@@ -68,9 +68,6 @@ router.include_router(fi9.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tag
 router.include_router(fi10.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["FI10 provincial outlooks"])
 # Release gate: the public food-insecurity route serves only the registry's approved model (503 otherwise).
 router.include_router(registry.public_router, prefix=API_V1, tags=["Model registry (release gate)"])
-# E178 scenario / demo mode: SYNTHETIC scenario inputs run through the frozen E168 procedure, for presentations. Admin
-# login (the view-only demo account included); serves only data/e178/synthetic/ and never the real outlook.
-router.include_router(demo.router, prefix=API_V1, dependencies=RESEARCH_ONLY, tags=["Scenario demo (E178, synthetic)"])
 
 # Auth, and the public face of the review pipeline (rejections, feedback
 # submission) -- both unauthenticated by design.

@@ -13,9 +13,10 @@ import { resolve } from "node:path";
 import Landing from "@/pages/Landing";
 import { AboutModal } from "@/components/AboutModal";
 
-// Every lead-time figure the page states about the served forecast (backend/app/e168/thesis_metrics.py output).
+// Every lead-time figure the page states about the served forecast (E196: app/e196/serve.py _evaluation_files output;
+// the "E168" key is the adapter's schema name for the served model's own metrics).
 const FIGURES = JSON.parse(
-  readFileSync(resolve(__dirname, "../../../backend/data/e168/out/thesis_metrics.json"), "utf-8"),
+  readFileSync(resolve(__dirname, "../../../backend/data/e196/out/thesis_metrics.json"), "utf-8"),
 );
 
 // The footer's feedback form submits through react-query.
@@ -75,7 +76,7 @@ describe("Landing page", () => {
     );
     const sub = within(card).getByText(/^A geospatial system/);
     expect(sub.textContent).toBe(
-      "A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one to three quarters ahead, using the approved E168 LightGBM model.",
+      "A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one to four quarters ahead, using the approved E196 LightGBM model.",
     );
     expect(sub.className).not.toContain("italic");
     expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
@@ -96,12 +97,13 @@ describe("Landing page", () => {
     expect(container.querySelector("#methodology ol")).toBeNull();
     expect(container.querySelector("#methodology .inner-card")).toBeNull();
     const titles = [...container.querySelectorAll("#methodology h4")].map((h) => h.textContent);
-    expect(titles.slice(0, 5)).toEqual([
+    expect(titles.slice(0, 6)).toEqual([
       "1.What High risk means",
       "2.Survey starting point",
       "3.Forecast change (LightGBM)",
-      "4.Classification",
-      "5.City and municipal ranking",
+      "4.Averaging and synthetic training rows",
+      "5.Classification",
+      "6.City and municipal ranking",
     ]);
   });
 
@@ -143,14 +145,14 @@ describe("Landing page", () => {
     );
   });
 
-  it("words the lead time one way: one to three quarters ahead, never Lead-2", () => {
+  it("words the lead time one way: one to four quarters ahead, never Lead-2", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/Lead-2|\(Lead 2\)|experimental/i);
-    expect(text).toContain("for the next one, two and three quarters");
+    expect(text).toContain("for the next one, two, three and four quarters");
     fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
     expect(
-      screen.getByText(/^Forecasts are issued at the start of a quarter.*All three meet the acceptance rule\.$/),
+      screen.getByText(/^Forecasts are issued at the start of a quarter.*All four meet the acceptance rule\.$/),
     ).toBeTruthy();
   });
 
@@ -189,36 +191,36 @@ describe("Landing page", () => {
     expect(container.querySelector("section")?.textContent).toContain("Photo by Atom Araullo on GMA News");
   });
 
-  it("shows the E168 lead-time table (backend/data/e168/out/thesis_metrics.json), Leads 1-3 accepted", () => {
+  it("shows the E196 lead-time table (backend/data/e196/out/thesis_metrics.json), Leads 1-4 accepted", () => {
     const { container } = renderLanding();
     const table = container.querySelector("#accuracy table") as HTMLTableElement;
     const rows = [...table.querySelectorAll("tbody tr")].map((tr) =>
-      [...tr.querySelectorAll("td")].slice(0, 5).map((td) => td.textContent),
+      [...tr.querySelectorAll("td")].slice(0, 6).map((td) => td.textContent),
     );
     expect(rows).toEqual([
-      ["0.750", "0.595", "0.88", "0.71", "0.891"],
-      ["0.778", "0.629", "0.88", "0.73", "0.893"],
-      ["0.750", "0.600", "0.84", "0.70", "0.873"],
-      ["0.736", "0.588", "0.80", "0.68", "0.860"],
+      ["0.819", "0.688", "0.88", "0.772", "0.823", "0.901"],
+      ["0.806", "0.667", "0.88", "0.759", "0.810", "0.900"],
+      ["0.792", "0.647", "0.88", "0.746", "0.797", "0.889"],
+      ["0.764", "0.625", "0.80", "0.702", "0.769", "0.881"],
     ]);
     rows.forEach((r, i) => {
       const m = FIGURES[String(i + 1)].E168;
-      expect(r).toEqual([m.accuracy.toFixed(3), m.precision_high.toFixed(3), m.recall_high.toFixed(2), m.f1_high.toFixed(2), m.auc_roc.toFixed(3)]);
+      expect(r.slice(1)).toEqual([m.precision_high.toFixed(3), m.recall_high.toFixed(2), m.f1_high.toFixed(3), m.f1_weighted.toFixed(3), m.auc_roc.toFixed(3)]);
     });
     const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
     expect(heads).toEqual([
       "1 quarter aheadMeets the acceptance rule",
       "2 quarters aheadMeets the acceptance rule",
       "3 quarters aheadMeets the acceptance rule",
-      "4 quarters ahead (not shown on the map)",
+      "4 quarters aheadMeets the acceptance rule",
     ]);
     expect(table.textContent).toContain("72 provincial forecasts, 3 survey rounds");
     const acc = container.querySelector("#accuracy")?.textContent ?? "";
-    expect(acc).toContain("The map shows the forecasts 1, 2 and 3 quarters ahead.");
+    expect(acc).toContain("The map shows the forecasts 1, 2, 3 and 4 quarters ahead.");
     expect(acc).toContain("All results below are development evidence");
     expect(acc).toContain("The 75% accuracy goal");
     expect(acc).toContain("The rule was set on 7 November 2026, after these results were known.");
-    expect(acc).toContain("SHA-256 f8228fae");
+    expect(acc).toContain("SHA-256 d12b6a8c");
   });
 
   it("shows the one-quarter-ahead Brier comparison on the same 72 forecasts", () => {
@@ -230,14 +232,14 @@ describe("Landing page", () => {
       tr.querySelector("td")?.textContent,
     ]);
     expect(cells).toEqual([
-      ["LightGBM (E168, served forecast)", "0.123"],
+      ["LightGBM (E196, served forecast)", "0.119"],
       ["Naive persistence (latest survey)", "0.213"],
       ["PSA indicators only (logistic)", "0.228"],
       ["News only (logistic)", "0.219"],
       ["Logistic regression, all inputs", "0.307"],
     ]);
     expect(container.querySelector("#accuracy")?.textContent).toContain(
-      "Same 72 provincial forecasts. The advantage over naive persistence is statistically established",
+      "Same 72 provincial forecasts. The advantage over each baseline is statistically established",
     );
   });
 
@@ -246,7 +248,7 @@ describe("Landing page", () => {
     expect(screen.getByText(/72 provincial forecasts from three FNRI survey rounds/)).toBeTruthy();
   });
 
-  it("describes the served forecast (E168), never the FIRI v2 index or the price-pressure index", () => {
+  it("describes the served forecast (E196), never the FIRI v2 index or the price-pressure index", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/FIRI|risk index|price-pressure|six domains|proxy index|11\.3%|Combining the domains/i);
