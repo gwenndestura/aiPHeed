@@ -3,7 +3,7 @@
 
   <h1>aiPHeed</h1>
 
-  <p>A food-insecurity risk forecasting system for the five CALABARZON provinces,<br/>backed by an E168 LightGBM model with SHAP explanations and an interactive map dashboard.</p>
+  <p>A food-insecurity risk forecasting system for the five CALABARZON provinces,<br/>backed by an E196 LightGBM model with SHAP explanations and an interactive map dashboard.</p>
 
   <p>
     <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white" />
@@ -36,11 +36,11 @@ also in the repository at `docs/user-manual/aiPHeed_User_Manual.pdf`.
 
 **aiPHeed** forecasts, for each of the five CALABARZON provinces (Batangas,
 Cavite, Laguna, Quezon and Rizal), the chance that household food insecurity
-will be **HIGH** one to three quarters ahead. It explains what drives each
+will be **HIGH** one to four quarters ahead. It explains what drives each
 forecast and shows it on an interactive map dashboard with province and
 municipal detail, charts, news evidence and PDF reports.
 
-The served model, **E168 LightGBM** (`e168-lgbm-1.0`), forecasts the provincial
+The served model, **E196 LightGBM** (`e196-lgbm-avg5-laf-1.0`), forecasts the provincial
 share of households that are moderately or severely food insecure on the HFIAS
 scale (Household Food Insecurity Access Scale, as measured by FNRI's Expanded
 National Nutrition Survey). A province is **HIGH** when that share is 50 % or
@@ -48,17 +48,25 @@ more. The number shown on the map and in the ranking is the **probability of
 HIGH** (0 to 1), with the forecast share of food-insecure households alongside
 it.
 
-Tested on 72 chronological, as-of forecasts against the ENNS 2018, 2019 and 2021
-survey rounds, E168 is **75.0 %, 77.8 % and 75.0 % accurate** at one, two and
-three quarters ahead, against 62.5 % for reusing the latest survey.
+Tested on 72 chronological, as-of forecasts per lead against the ENNS 2018, 2019
+and 2021 survey rounds, E196 is **81.9 %, 80.6 %, 79.2 % and 76.4 % accurate**
+at one, two, three and four quarters ahead, against 62.5 % for reusing the
+latest survey. The same 72 forecasts were used to compare many model variants,
+so these figures may be slightly optimistic. After adjusting for that, the
+estimate is about 80 % over leads 1 to 3 (`docs/e196/RELIABILITY.md`).
+Independent confirmation against the sealed ENNS 2022 results is still pending.
 
 ---
 
 ## Features
 
-- **Food-insecurity forecasting.** E168 LightGBM combines the latest measured
-  provincial HFIAS figure with a constrained LightGBM model of its change and a
-  calibration layer that turns the forecast into a probability of HIGH.
+- **Food-insecurity forecasting.** E196 builds on the E168 method: the latest
+  measured provincial HFIAS figure, a constrained LightGBM model of its change,
+  and a calibration layer that turns the forecast into a probability of HIGH.
+  It adds synthetic training rows (training only, never used for testing),
+  averages the five best model configurations over 20 synthetic draws, and for
+  one quarter ahead also averages in the previous quarter's two-quarters-ahead
+  forecast.
 - **Five trigger groups.** Weather and farm supply, food prices, jobs,
   remittances from overseas Filipino workers, and fish catch, with news
   evidence inside the groups.
@@ -108,7 +116,7 @@ Ensure you have the following installed before proceeding:
 - **Python** `3.13` (developed on 3.13.2)
 - **Node.js** `22` (developed on 22.14) with npm
 - **Git**
-- About **6 GB** of free disk space: the repository is about 400 MB, and the
+- About **6 GB** of free disk space: the repository is about 450 MB, and the
   Python packages include PyTorch and the transformer libraries used for news
   scoring
 
@@ -171,9 +179,10 @@ You can generate one with:
 python -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-Leave the other settings as they are. In particular, keep these two lines, which
-select the E168 model and make the API refuse to start rather than fall back to
-an older model:
+Leave the other settings as they are. In particular, keep these two lines. They
+make the API serve the approved production model (E196, recorded in
+`backend/data/registry/registry.json`) and refuse to start rather than fall
+back to an older model:
 
 ```env
 AIPHEED_LEAD2_MODEL=thesis
@@ -201,7 +210,7 @@ Start-up takes up to a minute. The server is ready at `http://localhost:8000`
 when the terminal shows:
 
 ```
-Serving e168-lgbm-1.0 (E168 LightGBM food-insecurity risk) on the dashboard (strict)
+Serving e196-lgbm-avg5-laf-1.0 (E196 LightGBM (E184 averaged over 5 configurations, Lead-1 lagged averaging) food-insecurity risk) on the dashboard (strict)
 ```
 
 Leave this window open.
@@ -244,11 +253,13 @@ With the backend running:
 | Address | Expected |
 |---|---|
 | `http://127.0.0.1:8000/api/v1/health` | `{"status": "ok", ...}` |
-| `http://127.0.0.1:8000/api/v1/final/food-insecurity/outlook` | `"status": "approved"`, `"model": "e168-lgbm-1.0"` |
+| `http://127.0.0.1:8000/api/v1/final/food-insecurity/outlook` | `"status": "approved"`, `"model": "e196-lgbm-avg5-laf-1.0"` |
 | `http://127.0.0.1:8000/api/v1/provinces?quarter=2027-Q1` | five provinces, each with a `riskScore` |
 
-On the dashboard, the overall CALABARZON score for 2027-Q1 is **0.03** (low
-risk), with Quezon the highest-risk province.
+On the dashboard, the overall CALABARZON score for 2027-Q1 is **0.02** (low
+risk), with Quezon the highest-risk province. The timeline shows four forecast
+quarters, 2027-Q1 to 2027-Q4. The dashboard always opens on the quarter after
+the current one, so the quarters move forward as the calendar does.
 
 To browse every API route, set `ENABLE_API_DOCS=true` in `backend/.env`, restart
 the backend, and open `http://127.0.0.1:8000/docs`. Keep it `false` in a
@@ -314,11 +325,16 @@ outputs; they report errors that do not affect the served dashboard.
 
 ### Keeping the Forecast Current
 
-`backend/scripts/live_refresh_monthly.ps1` refreshes the forecast once a month
-with the newest public data and news, using the frozen E168 model. It is a
-maintenance task for the deployed system and is not needed to run or evaluate
-it. It needs the `AIPHEED_PYTHON` environment variable to point at the Python
-environment that runs the news scorer.
+`backend/scripts/live_refresh_monthly.ps1` collects the newest public data and
+news once a month and prepares a refreshed E168 forecast for review. Because
+E196 is the production model, the refresh does not replace the E196 forecast
+being served. A new E196 forecast is prepared from the `backend` folder with
+`python -m app.e196.serve stage`, and the owner makes it the production
+forecast with `python -m app.e196.serve promote --approver "<name>"`; restart
+the backend afterwards. These are maintenance tasks for the deployed system and
+are not needed to run or evaluate it. The monthly script needs the
+`AIPHEED_PYTHON` environment variable to point at the Python environment that
+runs the news scorer.
 
 ---
 
@@ -331,14 +347,17 @@ aipheed-system/
 │   │   ├── main.py                   # API start-up, including the strict model check
 │   │   ├── api/v1/                   # HTTP endpoints (dashboard, forecast, explainability,
 │   │   │                             #   final outlook, report, auth, admin)
-│   │   ├── e168/                     # Served E168 model: serving, release gate, monthly refresh
+│   │   ├── e196/                     # Served E196 model: staging, promotion, reliability and
+│   │   │                             #   face-validity checks
+│   │   ├── e168/                     # E168 base method: features, release gate, monthly data refresh
 │   │   ├── ml/inference/
-│   │   │   └── e168_system.py        # Connects E168 to every dashboard endpoint
+│   │   │   └── e168_system.py        # Connects the production model (E196) to every dashboard endpoint
 │   │   ├── services/                 # Dashboard assembly, reports, review, accounts, security
 │   │   ├── db/                       # SQLAlchemy models and Alembic migrations
-│   │   └── e1xx/, fi*/               # Earlier experiments E168 builds on (several imported by E168)
+│   │   └── e1xx/, fi*/               # Earlier experiments E196 builds on (E168, E178, E184 and others)
 │   ├── data/
-│   │   ├── e168/                     # E168 forecasts, inputs and evaluation outputs
+│   │   ├── e196/                     # E196 forecasts and evaluation outputs
+│   │   ├── e168/                     # E168 inputs, live data and forecasts
 │   │   └── registry/                 # Model registry and release-gate results
 │   ├── scripts/
 │   │   ├── create_admin.py           # Create and manage administrator accounts
@@ -362,7 +381,8 @@ aipheed-system/
 │   └── experiments/                  # Research experiments behind the model selection,
 │                                     #   with protocols, sealed results and hashes
 ├── docs/
-│   ├── final/                        # Final model, audit and evaluation reports
+│   ├── e196/                         # E196 results, reliability, face validity and objectives
+│   ├── final/                        # E168 model, audit and evaluation reports
 │   └── user-manual/                  # User manual (PDF and Word)
 │
 ├── SETUP_GUIDE.md                    # Plain-language guide for the system maintainer
@@ -388,7 +408,7 @@ All endpoints are under `/api/v1`.
 | GET | `/explainability` | None | Driver shares (SHAP) and explanations |
 | GET | `/news` | None | News reports used by the forecast |
 | GET | `/search` | None | Search provinces and municipalities |
-| GET | `/final/food-insecurity/outlook` | None | Approved E168 forecast for the coming quarters |
+| GET | `/final/food-insecurity/outlook` | None | Approved E196 forecast for the coming quarters |
 | GET | `/final/model-registry` | None | Registered models and the production model |
 | GET | `/report` | None | Assessment report as PDF |
 | POST | `/feedback` | None | Submit user feedback |
@@ -419,9 +439,9 @@ GET /api/v1/provinces?quarter=2027-Q1
       "id": "quezon",
       "name": "Quezon",
       "currentQuarter": "2027-Q1",
-      "riskScore": 0.064,
+      "riskScore": 0.052,
       "riskLevel": "low",
-      "qoqChange": 0.005
+      "qoqChange": -0.007
     }
   ]
 }
@@ -435,9 +455,12 @@ GET /api/v1/provinces?quarter=2027-Q1
 |---|---|
 | [aiPHeed User Guide (PDF)](https://drive.google.com/file/d/1jTWFy2kj809mipEthBBRTCXNMAjYIO49/view?usp=drive_link) | Guide for the system's users |
 | `SETUP_GUIDE.md` | Plain-language guide for the person who maintains the system |
-| `docs/final/FINAL_SYSTEM_REPORT_E168.md` | The served model and its accuracy |
-| `docs/final/INDEPENDENT_COMPLIANCE_AUDIT_E168.md` | Independent audit of the E168 system |
-| `docs/final/LEAKAGE_AUDIT_E168.md` | Check that no future information leaks into the forecasts |
+| `docs/e196/REPORT.md` | How E196 was chosen and its accuracy at each lead |
+| `docs/e196/RELIABILITY.md` | Reliability checks, including the adjusted accuracy estimate |
+| `docs/e196/FACE_VALIDITY.md` | E196 forecasts compared with DOST-FNRI CALABARZON figures |
+| `docs/e196/OBJECTIVES.md` | The study's specific objectives checked against the E196 system |
+| `docs/final/FINAL_SYSTEM_REPORT_E168.md` | The E168 base model that E196 builds on |
+| `docs/final/LEAKAGE_AUDIT_E168.md` | Check that no future information leaks into the E168 forecasts |
 | `docs/e158_frontend_verification/FINAL_FRONTEND_MODEL_VERIFICATION.md` | End-to-end check that the model's output reaches the screen unchanged |
 | `docs/final/iso25010/` | ISO/IEC 25010 software quality evaluation material |
 
