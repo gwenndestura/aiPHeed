@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useMemo, useState } from "react";
+import { fmtPct } from "@/lib/risk";
 import L from "leaflet";
 import { leafletLayer } from "protomaps-leaflet";
 import { RegionData, MunicipalityData, RISK_COLORS, NO_DATA_COLOR } from "@/data/types";
@@ -502,7 +503,7 @@ export function PhilippineMap({
               <strong>${name}</strong>
               ${isProvRejected
                 ? `<br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span>`
-                : muni ? `<br/><span style="color:${tipColor}">Priority ${muni.riskScore.toFixed(2)} • ${muni.riskLevel === "high" ? "high" : "low"}-risk province</span>`
+                : muni ? `<br/><span style="color:${tipColor}">Priority ${fmtPct(muni.riskScore * 100)} • ${muni.riskLevel === "high" ? "high" : "low"}-risk province</span>`
                 : `<br/><span style="color:var(--map-tip-muted);font-style:italic">No data available</span>`}
             </div>`,
             { sticky: true }
@@ -683,7 +684,7 @@ export function PhilippineMap({
       (layer as any).bindTooltip(
         isRej
           ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
-          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
+          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${fmtPct(region.riskScore * 100)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
         { sticky: true }
       );
     });
@@ -932,7 +933,7 @@ export function PhilippineMap({
                 layer.bindTooltip(
                   isRej
                     ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
-                    : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
+                    : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${fmtPct(region.riskScore * 100)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
                   { sticky: true }
                 );
               }
@@ -1066,7 +1067,7 @@ export function PhilippineMap({
       (layer as any).bindTooltip(
         isRej
           ? `<div style="font-size:12px"><strong>${region.name}</strong><br/><span style="color:var(--map-tip-muted);font-style:italic">No Forecast Available</span></div>`
-          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${region.riskScore.toFixed(2)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
+          : `<div style="font-size:12px"><strong>${region.name}</strong><br/>Risk Level: ${fmtPct(region.riskScore * 100)}<br/><span style="text-transform:capitalize">${region.riskLevel} risk</span></div>`,
         { sticky: true }
       );
     });

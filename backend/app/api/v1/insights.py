@@ -152,6 +152,17 @@ THESIS_EXPLAINABILITY_NOTE = (
 )
 
 
+HCW_EXPLAINABILITY_NOTE = (
+    "The value shown is the Setup H + class weights forecast probability that the province is HIGH (50% or more of "
+    "households moderately or severely food insecure, FNRI HFIAS). Each bar is an input group's share of the model's exact "
+    "LightGBM contributions: Food prices = PSA food and rice inflation; Local rice and palay prices = provincial wholesale "
+    "and farmgate prices; Weather and farm supply = typhoons, El Nino, rainfall, soil moisture and farm output; Dry spells "
+    "and typhoons = dry months and strong typhoons; Rice and corn harvests = palay and corn output; Jobs = national "
+    "unemployment; Regional economy = regional GRDP. Fisheries production and OFW remittances are not inputs of this "
+    "model. Shares describe how the forecast is built; they are not causes."
+)
+
+
 # E64: the Objectives 1-3 candidate (improved news pipeline v3); the product of the two parts is a model score
 E64_EXPLAINABILITY_NOTE = (
     "This experimental forecast is a model score for HIGH food-stress risk: the regional SWS hunger rate staying above "
@@ -178,6 +189,13 @@ NOT_RECORDED_EXPLAINABILITY_NOTE = (
 def _served_note(quarter: str | None = None) -> str:
     from app.ml.inference import e31_engine as E31
     from app.ml.inference import e41_lead2 as LEAD2
+
+    try:                                  # Setup H + class weights (branch): describe its own groups
+        from app.ml.inference import hcw_system as HS
+        if HS.active():
+            return HCW_EXPLAINABILITY_NOTE
+    except ImportError:
+        pass
 
     # E47: any five-trigger candidate (e44, e46, e52) on a quarter whose attribution it carries (the issued forecast or
     # a past quarter refitted at its own issue date); a past quarter without one says so instead of the E38/E31 note

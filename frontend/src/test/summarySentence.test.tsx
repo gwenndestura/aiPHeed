@@ -10,6 +10,10 @@ vi.mock("@/lib/queries", () => ({
   useExplainability: () => ({ data: explain, isLoading: false, error: null }),
   useNews: () => ({ data: undefined, isLoading: false, isError: false, refetch: () => undefined }),
 }));
+vi.mock("@/lib/finalShap", async (orig) => ({
+  ...(await orig<typeof import("@/lib/finalShap")>()),
+  useFinalShap: () => ({ data: { available: true, groups: [] }, isLoading: false, error: null }),
+}));
 
 import { ShapNarrativeCardBody } from "@/components/RightAnalyticsPanel";
 

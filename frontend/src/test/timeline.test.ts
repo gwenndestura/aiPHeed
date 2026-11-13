@@ -9,8 +9,9 @@ const ids = (from: number, to: number) => {
 const ord = (y: number, q: number) => y * 4 + (q - 1);
 
 describe("timelineWindow", () => {
-  it("shows the newest five quarters, ending at the forecast", () => {
-    // Forecast reaches 2027-Q2: the timeline is 2026-Q2 .. 2027-Q2.
+  it("shows the newest TIMELINE_DOTS quarters, ending at the forecast", () => {
+    // FINAL: the timeline shows at most TIMELINE_DOTS (5) quarters; the quarters themselves come from the backend's forecast period.
+    expect(TIMELINE_DOTS).toBe(5);
     const all = ids(ord(2025, 1), ord(2027, 2));
     expect(timelineWindow(all)).toEqual(["2026-Q2", "2026-Q3", "2026-Q4", "2027-Q1", "2027-Q2"]);
   });
@@ -21,7 +22,7 @@ describe("timelineWindow", () => {
     expect(timelineWindow(all)).toHaveLength(TIMELINE_DOTS);
   });
 
-  it("shows every quarter when there are fewer than five", () => {
+  it("shows every quarter when there are fewer than TIMELINE_DOTS", () => {
     expect(timelineWindow(["2025-Q1", "2025-Q2"])).toEqual(["2025-Q1", "2025-Q2"]);
   });
 });

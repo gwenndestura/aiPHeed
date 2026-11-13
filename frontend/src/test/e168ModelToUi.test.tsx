@@ -2,17 +2,24 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import type { ExplainabilityResponse, ProvinceSummary, Trigger } from "@/lib/apiTypes";
+import type { ExplainabilityResponse, ProvinceSummary } from "@/lib/apiTypes";
 
-// E168 model -> API -> UI: the panels show exactly what the API returns, label it as food-insecurity risk, disclose
-// national series and the fish-kill proxy, never invent a contribution, and never turn a missing forecast into 0 / Low.
+// FINAL model -> API -> UI: the panels show exactly what the API returns, label it as food-insecurity risk, never invent a
+// contribution, and never turn a missing forecast into 0 / Low.
 let explain: Partial<ExplainabilityResponse> | undefined;
 let explainError: unknown = null;
+let outlook: { provinces: Array<Record<string, unknown>> } | undefined;
+let shap: { data?: unknown; isLoading: boolean; error: unknown } = { data: undefined, isLoading: false, error: null };
 vi.mock("@/lib/queries", () => ({
   useConfig: () => ({ data: { thresholds: { riskDisplayCutoff: 0.5 } } }),
   useExplainability: () => ({ data: explain, isLoading: false, error: explainError }),
   useForecast: () => ({ data: undefined, error: null }),
   useNews: () => ({ data: undefined, isLoading: false, isError: false, refetch: () => undefined }),
+  useFoodInsecurityStatus: () => ({ data: outlook }),
+}));
+vi.mock("@/lib/finalShap", async (orig) => ({
+  ...(await orig<typeof import("@/lib/finalShap")>()),
+  useFinalShap: () => shap,
 }));
 
 import { RiskDriversCardBody, ProvinceRankingCardBody } from "@/components/LeftPanel";
@@ -21,33 +28,36 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { RISK_LABELS } from "@/data/types";
 import { provinceToRegion } from "@/lib/adapters";
 
-// The served 2027-Q1 values (backend/data/e168/out/live_2027.json, as /api/v1/provinces returns them).
-const API_2027Q1: Record<string, number> = { quezon: 0.076, rizal: 0.068, laguna: 0.016, cavite: 0.009, batangas: 0.003 };
+// Served 2027-Q1 values as /api/v1/provinces returns them (map value = forecast share 0-1) and the outlook's shares in %.
+const API_2027Q1: Record<string, number> = { quezon: 0.268, rizal: 0.248, laguna: 0.237, cavite: 0.243, batangas: 0.232 };
 const NAMES: Record<string, string> = { quezon: "Quezon", rizal: "Rizal", laguna: "Laguna", cavite: "Cavite", batangas: "Batangas" };
 
 const province = (id: string, riskScore: number | null): ProvinceSummary =>
   ({ id, name: NAMES[id], riskScore, riskLevel: riskScore == null ? null : riskScore >= 0.5 ? "high" : "low",
      centroid: { lat: 14, lng: 121 }, limitedSignal: false, articleCount: 6 }) as unknown as ProvinceSummary;
+const group = (key: string, label: string, pct: number) =>
+  ({ key, label, pct, signedContribution: 0.05, direction: "increases_risk", status: "contributes", plainEvidence: `${label} text.`, inputs: [] });
 
-const trig = (key: string, label: string, pct: number): Trigger =>
-  ({ key, label, pct, direction: "increases_risk", color: "yellow", status: "contributes" }) as unknown as Trigger;
-
-describe("E168 values reach the screen unchanged", () => {
-  it("the province ranking shows each API probability, sorted by it, with food-insecurity labels", () => {
+describe("FINAL values reach the screen unchanged", () => {
+  it("the province ranking shows each API forecast share, sorted by it, with food-insecurity labels", () => {
+    outlook = { provinces: Object.entries(API_2027Q1).map(([id, v]) => ({ province: NAMES[id], lead: 1, target_quarter: "2027-Q1",
+      score_pct: Math.round(v * 1000) / 10, range90_pct: [10, 40], p_high: 0.01, risk_class: "LOW" })) };
     const regions = Object.entries(API_2027Q1).map(([id, p]) => provinceToRegion(province(id, p)));
     render(<ProvinceRankingCardBody onRegionClick={() => undefined} regionsData={regions.slice().reverse()} />);
     const rows = [...document.querySelectorAll("button")].map((b) => b.textContent ?? "");
-    expect(rows.map((t) => t.match(/^(Quezon|Rizal|Laguna|Cavite|Batangas)/)?.[1])).toEqual(["Quezon", "Rizal", "Laguna", "Cavite", "Batangas"]);
+    const order = Object.entries(API_2027Q1).sort((a, b) => b[1] - a[1]).map(([id]) => NAMES[id]);
+    expect(rows.map((t) => t.match(/^(Quezon|Rizal|Laguna|Cavite|Batangas)/)?.[1])).toEqual(order);
     rows.forEach((t, i) => {
-      const id = ["quezon", "rizal", "laguna", "cavite", "batangas"][i];
-      expect(t).toContain(API_2027Q1[id].toFixed(2));
+      const id = order[i].toLowerCase();
+      expect(t).toContain(`${Math.round(API_2027Q1[id] * 1000) / 10}%`);
       expect(t).toContain("Low risk");
       expect(t).not.toMatch(/price/i);
     });
   });
 
   it("a province with no forecast is shown as 'No forecast' and '—', never 0.00 or Low", () => {
-    const regions = [provinceToRegion(province("quezon", 0.076)), provinceToRegion(province("rizal", null))];
+    outlook = { provinces: [] };
+    const regions = [provinceToRegion(province("quezon", 0.268)), provinceToRegion(province("rizal", null))];
     expect(regions[1].hasForecast).toBe(false);
     render(<ProvinceRankingCardBody onRegionClick={() => undefined} regionsData={regions} />);
     const rizal = [...document.querySelectorAll("button")].find((b) => b.textContent?.startsWith("Rizal"))!;
@@ -59,40 +69,33 @@ describe("E168 values reach the screen unchanged", () => {
 });
 
 describe("driver bars use the API's shares and disclose the rest", () => {
-  it("shows the five API bars plus Other model inputs, adding to 100", () => {
-    explainError = null;
-    explain = {
-      triggers: [
-        trig("climate", "Climate Stress", 49), trig("employment", "Employment (national)", 9),
-        trig("market", "Market / Prices", 5), trig("fish_kill", "Fish Kill (fisheries production proxy)", 1),
-        trig("ofw_remittance", "OFW Remittance (national)", 0),
-      ],
-      otherPct: 36,
-    };
+  it("shows the top five API groups plus Other factors, adding to 100", () => {
+    shap = { isLoading: false, error: null, data: { available: true, otherPct: 3, groups: [
+      group("hunger", "Hunger & Food Stress", 41), group("climate", "Climate Stress", 38), group("ag_production", "Agricultural Production", 12),
+      group("market", "Market / Prices", 2), group("employment", "Employment", 2), group("poverty", "Poverty level", 2)] } };
     render(<RiskDriversCardBody provinceId="quezon" quarterId="2027-Q1" />);
-    for (const lab of ["Weather and farm supply", "Jobs (national figures)", "Food prices", "Fish production",
-      "Money sent home by OFWs (national figures)", "Other factors (poverty, population, timing)"]) expect(screen.getByText(lab)).toBeTruthy();
-    expect(screen.getByText("36%")).toBeTruthy();
-    expect(49 + 9 + 5 + 1 + 0 + 36).toBe(100);
+    for (const lab of ["Hunger & Food Stress", "Climate Stress", "Agricultural Production", "Market / Prices", "Employment"]) expect(screen.getByText(lab)).toBeTruthy();
+    expect(screen.queryByText("Poverty level")).toBeNull();                  // sixth group: under Other until "See all"
+    const bars = screen.getByTestId("shap-top-bars").textContent ?? "";
+    expect(bars).toContain("5%");                                          // Other = 100 - (41 + 38 + 12 + 2 + 2)
   });
 
-  it("never invents an Other bar when the API does not report one", () => {
-    explainError = null;
-    explain = { triggers: [trig("climate", "Climate Stress", 100)], otherPct: null };
+  it("an unavailable explanation shows its reason, never invented bars", () => {
+    shap = { isLoading: false, error: null, data: { available: false, reason: "No explanation for this quarter." } };
     render(<RiskDriversCardBody provinceId="quezon" quarterId="2027-Q1" />);
-    expect(screen.queryByText("Other factors (poverty, population, timing)")).toBeNull();
+    expect(screen.getByText("No explanation for this quarter.")).toBeTruthy();
+    expect(screen.queryByTestId("shap-top-bars")).toBeNull();
   });
 
   it("an API failure shows the load error, not stale or demo bars", () => {
-    explain = undefined;
-    explainError = Object.assign(new Error("network"), { status: 0 });
+    shap = { isLoading: false, data: undefined, error: Object.assign(new Error("network"), { status: 0 }) };
     render(<RiskDriversCardBody provinceId="quezon" quarterId="2027-Q1" />);
-    expect(screen.queryByText("Weather and farm supply")).toBeNull();
-    expect(screen.queryByText("Other factors (poverty, population, timing)")).toBeNull();
+    expect(screen.queryByTestId("shap-top-bars")).toBeNull();
+    expect(screen.queryByText("Climate Stress")).toBeNull();
   });
 });
 
-describe("labels describe the E168 target", () => {
+describe("labels describe the FINAL target", () => {
   it("risk labels are plain High / Low risk, never price risk", () => {
     for (const v of Object.values(RISK_LABELS)) {
       expect(v).toMatch(/^(Low|High) risk$/);

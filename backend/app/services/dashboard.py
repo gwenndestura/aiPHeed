@@ -289,7 +289,15 @@ def forecast_target() -> dict:
     """The dashboard's dynamic forecast target (app/quarterly/target.py; Asia/Manila; next calendar quarter)."""
     from app.quarterly.target import forecast_target as _ft
 
-    return _ft()
+    t = _ft()
+    try:                                     # Setup H + class weights (branch): the served artifact's own cut-off
+        from app.ml.inference import hcw_system as HS
+        if HS.active():
+            cut = json.loads((HS.ROWS.parent / "live.json").read_text(encoding="utf-8"))["information_cutoff"]
+            t = {**t, "origin": cut, "information_cutoff": f"{cut}T00:00:00+08:00 (exclusive)"}
+    except Exception:
+        pass
+    return t
 
 
 def latest_quarter(horizon: str = DEFAULT_HORIZON) -> str:
@@ -567,7 +575,8 @@ def _comparable(quarter: str, prev_q: str, horizon: str) -> bool:
 
 def _e168_previous(quarter: str, code: str) -> dict | None:
     try:
-        from app.ml.inference import e168_system as E
+        from app.ml.inference import e168_system, hcw_system
+        E = hcw_system if hcw_system.active() else e168_system     # the served survey-anchored model (branch: Setup H + class weights)
         return E.previous(code, quarter) if E.active() and E.covers(quarter) else None
     except Exception:
         return None
@@ -695,7 +704,10 @@ def province_summary(
                                     else record.get("confidence_statement")),
             "verificationDate": record.get("verification_date"),
             "articleCount": article_count(code, quarter),
-            "limitedSignal": record.get("data_sufficiency_flag") == "LIMITED_SIGNAL",
+            # fix 2026-11-11: the glossary's rule (fewer than 5 stories about the province) when the forecast read a news
+            # list (E168 / Setup H + class weights); the model rows themselves always carry "SUFFICIENT"
+            "limitedSignal": (record.get("data_sufficiency_flag") == "LIMITED_SIGNAL"
+                              or (_e168_news() is not None and article_count(code, quarter) < 5)),
             "horizon": horizon,
             "withheld": False,
         })
@@ -1977,10 +1989,18 @@ def _e31_articles() -> list[dict]:
 
 
 def _e168_news() -> dict | None:
-    """The stories the served E168 issue used (app.e168.news_used), or None when E168 is not served or has no list."""
+    """The stories the served issue used (app.e168.news_used), or None when no list exists. Setup H + class weights reads
+    the same news panel as E168, so its list is built the same way at its own cut-off (data/hcw/out/news_used.json)."""
     try:
         from app.e168 import serve as SV
         from app.ml.inference import e168_system as E
+        try:
+            from app.ml.inference import hcw_system as HS
+            if HS.active():
+                p = HS.ROWS.parent / "news_used.json"
+                return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+        except ImportError:
+            pass
         if not E.active():
             return None
         p = SV.artifact().parent / "news_used.json"

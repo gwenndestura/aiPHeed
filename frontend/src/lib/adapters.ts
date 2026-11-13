@@ -71,6 +71,8 @@ export function municipalityToData(m: MunicipalitySummary, provinceName: string)
     classification: m.classification as MunicipalityData["classification"],
     limitedSignal: m.limitedSignal,
     disaggregationLabel: m.disaggregationLabel,
+    rankInProvince: m.rankInProvince ?? null,
+    tied: m.tied ?? false,
     // Not produced by the API -- see file header.
     householdsAtRisk: 0,
     fpsi: 0,

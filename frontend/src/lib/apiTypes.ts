@@ -209,6 +209,9 @@ export interface MunicipalitySummary {
   mapCategory?: "low" | "medium" | "high" | null;
   mapLabel?: string | null;
   mapNote?: string | null;
+  /** Priority rank within the province (1 = highest priority), from the backend ranking (unrounded values); ties share a rank. */
+  rankInProvince?: number | null;
+  tied?: boolean;
 }
 
 export interface MunicipalitiesResponse {
@@ -857,4 +860,64 @@ export interface FoodInsecurityStatus {
   data_published_by?: string;
   /** The newest period of every input the served forecast used (app.ml.inference.e168_system.data_used). */
   data_used?: { group: string; name: string; source: string; level: string; period: string; note?: string; label?: string; when?: string }[];
+  /** Per province and lead: forecast share of moderately or severely food-insecure households (HFIAS, %) and its 90% range. */
+  provinces?: { province: string; lead: number; target_quarter: string; score_pct: number; range90_pct: [number, number]; p_high: number; risk_class: string; low_confidence?: boolean }[];
+}
+
+// GET /api/v1/forecast-period (app.final.cycle.status): the Philippine quarter now and the served issue, all computed by the backend.
+export interface ForecastPeriodTarget {
+  lead: number;
+  quarter: string;
+  status: "past" | "current" | "future";
+}
+export interface ForecastPeriod {
+  now_ph: string;
+  current_quarter: string;
+  issue_quarter: string;
+  issue_date: string;
+  next_issue_quarter: string;
+  next_issue_date: string;
+  max_lead: number;
+  targets: ForecastPeriodTarget[];
+  served_issue_quarter: string | null;
+  served_generated_utc: string | null;
+  served_targets: ForecastPeriodTarget[];
+  stale: boolean;
+  stale_reason: string | null;
+  latest_data_update_utc: string | null;
+  last_successful_run_utc: string | null;
+  model: { id: string; name?: string; approved_on?: string; lead_basis?: string; caveat?: string };
+}
+
+// GET /api/v1/final/forecast-history (app.final.history): every issued forecast, never overwritten.
+export interface HistoryForecast {
+  model_id: string;
+  model_version: string;
+  issue_quarter: string;
+  information_cutoff: string;
+  target_quarter: string;
+  lead: number;
+  province: string;
+  p_high: number;
+  risk_class: "HIGH" | "LOW";
+  share_pct: number;
+  range90_pct: [number, number];
+  generated_utc: string;
+  data_version: string;
+  withdrawn: boolean;
+  validation_status: "validated" | "awaiting outcome";
+  observed_share_pct: number | null;
+  observed_class: "HIGH" | "LOW" | null;
+  correct: boolean | null;
+  error_pp: number | null;
+  issue_status: "current issue" | "historical";
+  target_status: "past" | "current" | "future";
+}
+export interface ForecastHistory {
+  current_quarter: string;
+  served_issue_quarter: string | null;
+  issues: string[];
+  count: number;
+  forecasts: HistoryForecast[];
+  ledger: { ok: boolean; records?: number; reason?: string };
 }

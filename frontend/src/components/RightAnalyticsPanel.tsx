@@ -14,6 +14,8 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
 import { Note } from "@/components/ui/note";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { groupsAsTriggers } from "@/components/ShapCards";
+import { useFinalShap } from "@/lib/finalShap";
 
 interface Props {
   quarter: Quarter;
@@ -55,6 +57,8 @@ export function ShapNarrativeCardBody({
   const id = region?.id ?? "calabarzon";
   const { data: explain, isLoading: explainLoading, error: explainError } = useExplainability(scope, id, quarter.id);
   const triggers: Trigger[] = explain?.triggers ?? [];
+  // 2026-11-13: the factor cards show the exact SHAP of the official FINAL forecast, by group (/api/v1/final/shap/province).
+  const { data: shap, isLoading: shapLoading, error: shapError } = useFinalShap(id, quarter.id);
   const explainFailed = isLoadFailure(explainError);
 
   // Badges only for a real score -- never a 0 standing in for "unknown".
@@ -73,7 +77,7 @@ export function ShapNarrativeCardBody({
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="min-w-0">
           <p className="text-[11px] text-muted-foreground">{quarterPeriodLabel(quarter)}</p>
-          <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} at a glance</h2>
+          <h2 className="text-sm font-bold mt-0.5 truncate">{subjectName} summary</h2>
         </div>
         <button
           onClick={() => setGlossaryOpen(true)}
@@ -102,12 +106,15 @@ export function ShapNarrativeCardBody({
         )}
       </div>
 
-      {explainLoading ? (
-        <ShapDriverListSkeleton />
-      ) : explainFailed ? (
+      {/* 2026-11-13: the exact SHAP explanation of the official FINAL forecast replaces the grouped share-of-|SHAP| list. */}
+      {isLoadFailure(shapError) ? (
         <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>
+      ) : shapLoading || !shap ? (
+        <ShapDriverListSkeleton />
+      ) : shap?.available ? (
+        <ShapDriverList items={groupsAsTriggers(shap.groups ?? [], config?.thresholds.triggerRedCutoff ?? 20)} />
       ) : (
-        <ShapDriverList items={triggers} />
+        <Note label={null}>{shap?.reason ?? LOAD_ERROR_MESSAGE}</Note>
       )}
 
       {/* The backend's plain-language summary as one line: the data status and
@@ -289,6 +296,11 @@ export function NewsArticlesCardBody({
             {regionWide > 0 && news && (
               <p className="text-[9px] italic text-muted-foreground leading-snug">
                 {news.provinceAttributed} about CALABARZON · {regionWide} national or Luzon-wide
+              </p>
+            )}
+            {news && (
+              <p className="text-[9px] italic text-muted-foreground leading-snug" data-testid="news-same-every-quarter">
+                The same stories inform every forecast quarter shown.
               </p>
             )}
 

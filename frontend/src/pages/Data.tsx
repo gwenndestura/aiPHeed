@@ -11,6 +11,7 @@ import { StatusBadge, type RiskLevelKey } from "@/components/ui/status-badge";
 import { formatSigned } from "@/components/ui/metric";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 import { writeStorage } from "@/lib/storage";
+import { pct } from "@/lib/risk";
 
 type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCount";
 
@@ -68,14 +69,14 @@ export default function DataPage() {
   };
 
   const exportCsv = () => {
-    const header = ["Province", "Quarter", "Risk Probability", "Risk Level", "QoQ Change %", "Articles", "Status"];
+    const header = ["Province", "Quarter", "Food insecurity risk (%)", "Risk Level", "QoQ Change %", "Articles", "Status"];
     const csv = [
       header.join(","),
       ...filtered.map((r) =>
         [
           r.name,
           r.currentQuarter,
-          r.riskScore?.toFixed(2) ?? "",
+          r.riskScore != null ? (r.riskScore * 100).toFixed(1).replace(/\.0$/, "") : "",
           r.riskLevel ?? "",
           r.qoqChangePct?.toFixed(1) ?? "",
           r.articleCount,
@@ -203,7 +204,7 @@ export default function DataPage() {
                     <span className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[14px]">
                       <span className="flex flex-col">
                         <span className="text-[12px] text-muted-foreground">Risk score</span>
-                        <span className="tabular-nums font-bold" style={{ color }}>{r.riskScore !== null ? r.riskScore.toFixed(2) : "—"}</span>
+                        <span className="tabular-nums font-bold" style={{ color }}>{r.riskScore !== null ? pct(r.riskScore) : "—"}</span>
                       </span>
                       <span className="flex flex-col">
                         <span className="text-[12px] text-muted-foreground">Quarter-on-quarter change</span>
@@ -255,7 +256,7 @@ export default function DataPage() {
                     >
                       <td className="px-4 py-2 font-medium">{r.name}</td>
                       <td className="px-4 py-2 tabular-nums font-bold" style={{ color }}>
-                        {r.riskScore !== null ? r.riskScore.toFixed(2) : "—"}
+                        {r.riskScore !== null ? pct(r.riskScore) : "—"}
                       </td>
                       <td className="px-4 py-2">
                         {r.riskLevel && r.riskLevel in RISK_LABELS ? (

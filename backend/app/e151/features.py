@@ -27,6 +27,19 @@ from app.e151.topics import EVENTS, GROUP, ORIGINS, event_probs
 K = 5.0
 # Topics removed by reading their keywords, applied to every fit: reasons in docs/e151. Written from the last fit's keyword list; no outcome was read.
 IRRELEVANT = re.compile(r"cuisine|restaurant|festival|flood control|dpwh|arrested|police|president|duterte|marcos|robredo|aquino|vera files|fact check|\bfact\b|election|senator|stock|shares|airline|flight|movie|film", re.I)
+# A topic LED by a weather hazard (one of its first three keywords) is about the hazard even when a tail keyword such as
+# "flood control" matches the rule above. Fix 2026-11-11: at the 2026-10-01 origin the typhoon/flood topic carried
+# "flood control" in its tail and was dropped (about half of all stories), unlike every earlier origin; no earlier topic changes.
+HAZARD_LEAD = re.compile(r"\b(typhoon|super typhoon|storm|tropical storm|drought|el ni[nñ]o|monsoon|landslide)\b", re.I)
+
+
+def off_topic(keywords: pd.Series) -> pd.Series:
+    """Topics removed as off-topic: keyword rule IRRELEVANT, unless a weather hazard leads the keyword list."""
+    k = keywords.fillna("")
+    lead3 = k.map(lambda s: ", ".join(s.split(", ")[:3]))
+    return k.str.contains(IRRELEVANT) & ~lead3.str.contains(HAZARD_LEAD)
+
+
 GROUPS = ["market", "climate", "employment", "remittance", "poverty", "response"]
 BASE_M = 36
 MIN_SITE = 20
@@ -156,7 +169,7 @@ def build(without_top=False):
     st = stream_table(d)
     assign = {}
     rep = pd.read_csv(OUT / "topic_report.csv")
-    rep["irrelevant"] = rep["keywords"].fillna("").str.contains(IRRELEVANT)
+    rep["irrelevant"] = off_topic(rep["keywords"])
     rep.to_csv(OUT / "topic_report.csv", index=False, lineterminator="\n")
     for o in ORIGINS:
         a = pd.read_parquet(RAW / f"topic_assign_{o}.parquet")

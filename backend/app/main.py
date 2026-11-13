@@ -48,7 +48,18 @@ def strict_model_check() -> None:
     # The map, rankings, explanations and reports are served by the approved food-insecurity model (E168). Strict mode
     # must not let them fall back silently to the Chapter I price index when its registry entry or rows are missing.
     from app.ml.inference import e168_system as E168
+    from app.ml.inference import hcw_system as HCW
+    from app.final import serving as FINAL_SERVING
 
+    if FINAL_SERVING.is_production():
+        st = FINAL_SERVING.activate()
+        if not st.get("active"):
+            raise RuntimeError(f"production model FINAL is not served: {st.get('reason')}")
+        print(f"Serving {HCW.MODEL_ID} (FINAL RATE + MIND LightGBM), issue {st['issue']} (strict)")
+        return
+    if HCW.active():                         # branch aiPHeed/setup-h-cw-dashboard: Setup H + class weights is the production model
+        print(f"Serving {HCW.MODEL_ID} (Setup H + class weights LightGBM food-insecurity risk) on the dashboard (strict)")
+        return
     missing = E168.not_served_reasons()
     if missing:
         raise RuntimeError(f"approved model {E168.MODEL_ID} is not served: " + "; ".join(missing))
@@ -61,6 +72,9 @@ async def lifespan(app: FastAPI):
     # review; it never publishes.
     print("Starting up aiPHeed backend...")
     load_model_settings()
+    from app.final import serving as FINAL_SERVING
+    if FINAL_SERVING.is_production():
+        FINAL_SERVING.activate()             # the dashboard serves the latest FINAL issue in the forecast history
     strict_model_check()
     start_scheduler()
     from app.quarterly.alerts_e168 import stage_on_startup
@@ -210,3 +224,6 @@ def root():
 
 
 app.include_router(router)
+
+from app.final import shap_api as _FINAL_SHAP  # noqa: E402  exact SHAP explanation of the served FINAL issue
+_FINAL_SHAP.register(app)

@@ -162,8 +162,8 @@ export function GuidedTour({ tour }: { tour: TourDef }) {
   const tablet = useMediaQuery(MEDIUM_QUERY);
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const layout: Layout = phone ? "phone" : tablet ? "tablet" : "desktop";
-  const cutoff = (config?.thresholds.riskDisplayCutoff ?? 0.5).toFixed(2);
-  const alert = (config?.thresholds.alertThreshold ?? 0.6).toFixed(2);
+  const cutoff = `${((config?.thresholds.riskDisplayCutoff ?? 0.5) * 100).toFixed(0)}%`;
+  const alert = `${((config?.thresholds.alertThreshold ?? 0.6) * 100).toFixed(0)}%`;
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);

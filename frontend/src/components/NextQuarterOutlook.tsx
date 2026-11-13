@@ -1,4 +1,5 @@
 import { useNextQuarterOutlook, useProvincialMeasurements } from "@/lib/queries";
+import { fmtPct } from "@/lib/risk";
 import { isLoadFailure } from "@/lib/loadError";
 
 /**
@@ -163,7 +164,7 @@ export function NextQuarterOutlookCardBody() {
               <ul className="space-y-0.5" data-testid="fi9-provincial-2015">
                 {[...byProv.entries()].map(([p, v]) => (
                   <li key={p}>
-                    {p}: {v.toFixed(1)}% of households moderately or severely food insecure
+                    {p}: {fmtPct(v)} of households moderately or severely food insecure
                   </li>
                 ))}
               </ul>

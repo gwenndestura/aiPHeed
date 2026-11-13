@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { pct } from "@/lib/risk";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MessageSquareText,
@@ -432,7 +433,7 @@ function ReviewSection() {
                       )}
                     </td>
                     <td role="cell" data-label="Risk Level Score" className="px-4 py-2.5 tabular-nums font-bold" style={{ color: RISK_COLORS[r.riskLevel] ?? "#6b7280" }}>
-                      {r.riskScore.toFixed(2)}
+                      {pct(r.riskScore)}
                     </td>
                     <td role="cell" data-label="Status" className="px-4 py-2.5">{statusBadge(r.status)}</td>
                     <td role="cell" data-label="Action" className="px-4 py-2.5">
@@ -566,7 +567,7 @@ function ReviewDetailModal({
           <div>
             <h2 className="text-base font-bold">{item.province} — Risk Review</h2>
             <p className="text-[10px] text-muted-foreground">
-              <span className="font-semibold text-primary">{item.quarter}</span> · Risk Level {item.riskScore.toFixed(2)} · Status: {item.status}
+              <span className="font-semibold text-primary">{item.quarter}</span> · Risk Level {pct(item.riskScore)} · Status: {item.status}
             </p>
             {item.riskLevel in RISK_LABELS && (
               <div className="mt-1.5 flex items-center gap-1.5">
@@ -719,7 +720,7 @@ function ProvincialRanking({ currentProvince, quarter }: { currentProvince: stri
           <span className="text-[10px] w-5 text-muted-foreground tabular-nums">#{i + 1}</span>
           <span className="text-[11px] flex-1">{r.province}</span>
           <span className="text-[11px] tabular-nums font-bold" style={{ color: RISK_COLORS[r.riskLevel] ?? "#6b7280" }}>
-            {r.riskScore.toFixed(2)}
+            {pct(r.riskScore)}
           </span>
         </div>
       ))}

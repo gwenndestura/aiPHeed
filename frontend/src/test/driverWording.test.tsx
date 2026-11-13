@@ -15,8 +15,11 @@ describe("driver and risk wording", () => {
 
   it("does not present municipal values as food-insecurity probabilities", () => {
     render(<GlossaryPanel open onClose={() => {}} />);
-    const risk = screen.getByText(/A score from 0 to 1\./);
-    expect(risk.textContent).toContain("priority ranking");
+    const risk = screen.getByText(/A score from 0 to 1:/);
+    expect(risk.textContent).toContain("forecast share");
     expect(risk.textContent).toContain("not a measured provincial rate");
+    const towns = screen.getByText(/Towns and cities ranked by priority/);
+    expect(towns.textContent).toContain("They are not separat");
+    expect(towns.textContent).not.toMatch(/probability/i);
   });
 });

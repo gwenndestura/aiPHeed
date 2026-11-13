@@ -341,3 +341,25 @@ export function useAccountAction() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "accounts"] }),
   });
 }
+
+/** The forecasting period, computed by the backend from the Philippine date (never hard-coded in the frontend). */
+export function useForecastPeriod() {
+  return useQuery({
+    queryKey: ["forecast-period"],
+    queryFn: () => api.get<import("./apiTypes").ForecastPeriod>("/api/v1/forecast-period", undefined, { auth: false }),
+    staleTime: 10 * 60 * 1000,
+    refetchInterval: 30 * 60 * 1000,         // a quarter change or a new issue reaches an open page without a reload
+    retry: false,
+  });
+}
+
+/** Every issued forecast (historical, current issue), with its validation status. */
+export function useForecastHistory(enabled = true) {
+  return useQuery({
+    queryKey: ["forecast-history"],
+    queryFn: () => api.get<import("./apiTypes").ForecastHistory>("/api/v1/final/forecast-history", undefined, { auth: false }),
+    staleTime: 10 * 60 * 1000,
+    retry: false,
+    enabled,
+  });
+}

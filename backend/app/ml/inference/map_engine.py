@@ -10,10 +10,13 @@ ch1_system was used.
 """
 from __future__ import annotations
 
-from app.ml.inference import ch1_system, e168_system
+from app.ml.inference import ch1_system, e168_system, hcw_system
 
 
 def selected():
+    # Setup H + class weights (hcw-lgbm-1.0) when it is the registry's production model (branch aiPHeed/setup-h-cw-dashboard)
+    if hcw_system.active():
+        return hcw_system
     return e168_system if e168_system.active() else ch1_system
 
 

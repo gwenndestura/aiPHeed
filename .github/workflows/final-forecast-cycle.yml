@@ -1,0 +1,44 @@
+# Daily trigger of the FINAL forecasting cycle on the deployed backend (POST /api/v1/internal/forecast-cycle).
+# The backend decides what is due (sources by their own publication rhythm; the quarterly issue on its issue day) and does
+# nothing otherwise, so a daily call is safe. Repeated or overlapping calls never create duplicate forecasts.
+#
+# Setup (owner): add two repository secrets
+#   AIPHEED_API_URL     the backend base URL, e.g. https://<service>.onrender.com
+#   AIPHEED_CRON_TOKEN  a random token of at least 24 characters; set the SAME value as the AIPHEED_CRON_TOKEN environment
+#                       variable of the backend service
+# Scheduled workflows run only from the repository's default branch.
+#
+# Note: the quarterly issue needs the data stage (news scoring with the XLM-R model, panel rebuild). A host that cannot run it
+# records the run as "failed" and keeps serving the last valid issue, clearly dated; the daily Windows task
+# (backend/scripts/final_daily_cycle.ps1) is the full-capability runner.
+name: FINAL forecast cycle
+
+on:
+  schedule:
+    - cron: "30 22 * * *"      # 06:30 Asia/Manila (UTC+8)
+  workflow_dispatch: {}
+
+concurrency:
+  group: final-forecast-cycle
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Call the protected cycle endpoint
+        env:
+          API: ${{ secrets.AIPHEED_API_URL }}
+          TOKEN: ${{ secrets.AIPHEED_CRON_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${API:-}" ] || [ -z "${TOKEN:-}" ]; then echo "AIPHEED_API_URL / AIPHEED_CRON_TOKEN not set"; exit 1; fi
+          code=$(curl -sS -o resp.json -w "%{http_code}" --max-time 120 --retry 3 --retry-delay 30 \
+                 -X POST -H "Authorization: Bearer ${TOKEN}" "${API%/}/api/v1/internal/forecast-cycle")
+          cat resp.json; echo
+          test "$code" = "202"
+      - name: Report the forecasting period
+        env:
+          API: ${{ secrets.AIPHEED_API_URL }}
+        run: curl -sS --max-time 60 "${API%/}/api/v1/forecast-period" | head -c 2000

@@ -26,9 +26,9 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed forecasts food-insecurity risk in the five CALABARZON provinces with the approved E168 LightGBM
-            model (accepted 2026-11-07 under the project rule: accuracy of at least 75% and better than the latest
-            survey, one to three quarters ahead). The map shows each province's forecast and a planning priority for
+            aiPHeed with the FINAL (RATE + MIND) LightGBM model, updated automatically every quarter (in walk-forward tests all five
+            accuracy measures reach 75%, pooled, one and two quarters ahead, retrospectively, so only those two quarters are shown;
+            no lead passes in every single survey round). The map shows each province's forecast and a planning priority for
             its 142 cities and municipalities, with the latest measured regional hunger (SWS) as context. It was developed by a student research
             team at De La Salle University - Dasmariñas, with DA Region IV-A planning staff as its
             intended users. It is not an official statistic, and DA did not develop or endorse it.
@@ -38,7 +38,7 @@ export function AboutModal() {
         <div className="space-y-2 mt-1">
           <Section title="How to read the map">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              The map shows the <b className="text-foreground">E168 food-insecurity risk forecast</b>. A province is
+              The map shows the <b className="text-foreground">FINAL (RATE + MIND) food-insecurity risk forecast</b>. A province is
               at <b className="text-foreground">high food-insecurity risk</b> in a quarter when 50% or more of its
               households are forecast to be moderately or severely food insecure (FNRI HFIAS). Each province shows
               the forecast{" "}
@@ -72,12 +72,14 @@ export function AboutModal() {
             {risk ? (
               <div className="grid gap-1.5">
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  E168: a constrained LightGBM forecasts each province's change from its latest FNRI survey level,
-                  from the five trigger groups. It was tested on 72 provincial forecasts for the 2018, 2019 and 2021
-                  survey rounds, using only data published before each forecast was issued. Accuracy is the share of
-                  correct high/low calls.
+                  FINAL (RATE + MIND): a constrained LightGBM forecasts each province's change per quarter from its latest
+                  FNRI survey level, from food prices, local rice and palay prices, weather and farm supply, dry spells
+                  and typhoons, rice and corn harvests, jobs (national) and the regional economy, with HIGH and LOW
+                  cases weighted equally and the average of five fits. It was tested on 72 provincial forecasts for the
+                  2018, 2019 and 2021 survey rounds, using only data published before each forecast was issued, and
+                  these same results were also used to choose this setup. Accuracy is the share of correct high/low calls.
                 </p>
-                {[1, 2, 3, 4].map((k) => {
+                {[1, 2, 3, 4, 5, 6, 7].map((k) => {
                   const l = risk.leads[String(k)];
                   if (!l) return null;
                   return (
@@ -97,7 +99,7 @@ export function AboutModal() {
                     <Row
                       k="Further horizons tested"
                       v={risk.horizon.leads_evaluated
-                        .filter((k) => k > 4)
+                        .filter((k) => k > 7)
                         .map((k) => `${k} quarters ahead ${risk.horizon!.leads[String(k)].accuracy.toFixed(2)} (${risk.horizon!.leads[String(k)].n} cases; always-low ${risk.horizon!.leads[String(k)].always_low_accuracy.toFixed(2)})`)
                         .join(" · ")}
                     />
@@ -111,13 +113,13 @@ export function AboutModal() {
                   k="Reliable forecast horizon"
                   v={
                     risk.max_reliable_lead
-                      ? `${risk.max_reliable_lead} quarters ahead (evidence from 3 survey rounds; Leads 1 and 3 are exactly at 75%)`
+                      ? `${risk.max_reliable_lead} quarters ahead (evidence from 3 survey rounds; a stricter rule that every survey round and seed must pass holds to 4; in the 2021 round 1 of 4 HIGH provinces was found)`
                       : "Not established"
                   }
                 />
-                <Row k="Forecasts further ahead" v="Not shown: from 4 quarters ahead accuracy is below 75%" />
-                <Row k="News" v="Counted inside the five trigger groups" />
-                <Row k="Food-insecurity forecast" v="Approved: E168 LightGBM (2026-11-07, project acceptance rule)" />
+                <Row k="Forecasts further ahead" v="Not shown: from 3 quarters ahead precision and F1 fall below 75%" />
+                <Row k="News" v="Counted inside the input groups; adds about 2 correct provinces of 72 at 1 quarter ahead only" />
+                <Row k="Food-insecurity forecast" v="FINAL (RATE + MIND) LightGBM, issued automatically every quarter; earlier forecasts kept in the forecast history" />
               </div>
             ) : (
               <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>
@@ -133,15 +135,16 @@ export function AboutModal() {
               ))}
             </ul>
             <p className="text-[10px] text-muted-foreground/70 mt-1.5">
-              Forecasts are issued at the start of a quarter for the next one to three quarters, using only data
-              published before the issue date.
+              Forecasts are issued for the next one and two quarters, using only data published before the
+              issue date. All quarters shown come from the same information.
             </p>
           </Section>
 
           <Section title="Missing and limited data">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              A missing input is left out, never counted as zero, and the dashboard lists missing
-              inputs. Provinces with fewer than 5 news articles in the quarter are marked "Limited data".
+              A missing figure is left out, not counted as zero, and the dashboard lists missing inputs. The one
+              exception is news about a single province: when there was none, that province's news counts as "no
+              change from usual". Provinces with fewer than 5 news articles about them are marked "Limited data".
             </p>
           </Section>
 
@@ -167,9 +170,9 @@ export function AboutModal() {
           </Section>
 
           <div className="grid gap-2 pt-1">
-            <Row k="Model" v="E168: latest FNRI survey level + LightGBM change from the five trigger groups" />
+            <Row k="Model" v="FINAL (RATE + MIND): latest FNRI survey level + LightGBM change per quarter, missing-input flags, HIGH and LOW weighted equally" />
             <Row k="Map value" v="Probability that 50% or more of households are moderately or severely food insecure" />
-            <Row k="Lead time" v="1 to 3 quarters ahead meet the acceptance rule · further ahead: not shown" />
+            <Row k="Lead time" v="1 and 2 quarters ahead: all five measures 75% or more (pooled) · further ahead: not shown" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
 
@@ -191,13 +194,12 @@ export function AboutModal() {
 }
 
 /** The data sources, one row each with a thin divider between rows. */
-// The served E168 model's sources (backend/app/e168/lgbm_only.py inputs); SWS is shown as context only.
+// Setup H + class weights sources (backend/app/hcw/engine.py feature sets: no fisheries production, no remittances); SWS is context only.
 const DATA_SOURCES = [
   "FNRI National and Expanded National Nutrition Surveys: household food insecurity (HFIAS), by province",
-  "Philippine Statistics Authority (PSA): food and rice prices, farm and fisheries production, poverty, population, labor force",
-  "Bangko Sentral ng Pilipinas (BSP): cash remittances",
+  "Philippine Statistics Authority (PSA): food and rice prices, farmgate and wholesale rice prices, palay and corn production, regional GRDP, poverty, population, labor force",
   "NASA POWER: rainfall and soil moisture · IBTrACS: typhoons · NOAA: El Niño index (ONI)",
-  "News in Filipino and English (GDELT, newspaper archives, Google News titles)",
+  "News, mostly in English (newspaper archives and Google News titles; about 1.6% Filipino or mixed)",
   "Social Weather Stations (SWS): hunger, Balance Luzon (regional; context, not a model input)",
 ];
 

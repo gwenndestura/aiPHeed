@@ -50,6 +50,9 @@ export interface MunicipalityData {
   // Why the province score was reweighted for this LGU (poverty/density).
   disaggregationLabel: string;
   classification: "City" | "Municipality";
+  // Priority rank within the province from the API (1 = highest priority); null when not provided.
+  rankInProvince?: number | null;
+  tied?: boolean;
 }
 
 export interface FilterState {

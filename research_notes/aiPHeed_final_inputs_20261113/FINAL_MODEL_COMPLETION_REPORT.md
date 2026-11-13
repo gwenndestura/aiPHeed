@@ -112,6 +112,60 @@ These were tested as candidates (§4). None was adopted, so production inputs ar
 - **Population growth.** Needs two released censuses, so it is missing for every 2015-round training row. It adds nothing.
 - **AFF.** Significantly worse at both leads, mainly through 2018 false alarms. Excluded.
 
+### 4b. Poverty and social vulnerability as model inputs (PROTOCOL_POVVULN, sha `bb63c891`)
+
+**Data added.** All four PSA poverty bases by province were fetched from PSA OpenSTAT (`backend/app/hcw/poverty_official.py` → `backend/data/hcw_official/raw/psa_poverty_by_province.csv`):
+- poverty incidence among families and among population;
+- subsistence incidence among families and among population;
+- rounds 2006, 2009, 2012, 2015, 2018, 2021, 2023, each with its coefficient of variation.
+
+Notes on the data:
+- The 2006–2015 families tables are published rounded to whole percents.
+- Social vulnerability uses census density from the latest *released* census and population growth between the last two released censuses.
+
+**Finding on FINAL's own poverty input.** FINAL's existing `p_poverty` is each province's poverty **relative to its round's level**, not the absolute PSA rate:
+- the shift is constant within a round: 0.813, 1.096, 1.457 and 1.627 log-odds for the 2012, 2015, 2018 and 2023 rounds;
+- training and live rows carry the same rule, so it is consistent and leakage-free;
+- the new `pv_*` / `sb_*` inputs carry the **absolute** level.
+
+**Arms** (Leads 1–2; 5 seeds; ENNS 2018/2019/2021; 210 fits; 0 failures):
+- **P0:** FINAL without any poverty or vulnerability input.
+- **P1:** + poverty: 4 bases, change since the previous round, poverty gap.
+- **P2:** + vulnerability: density from the latest census, growth.
+- **P3:** + both.
+- **P1F–P3F:** the same, forced past the input selection.
+
+| Lead 1, 72 forecasts | Accuracy | Precision | Recall | F1 | AUC | Brier | HIGH found | All five pass 2018 / 2019 / 2021 |
+|---|---|---|---|---|---|---|---|---|
+| FINAL (B0) | 86.1% | 80.0% | 80.0% | 80.0% | 0.898 | 0.123 | 20/25 | no / yes / no |
+| P0: none | 83.3% | 76.0% | 76.0% | 76.0% | 0.902 | 0.121 | 19/25 | no / yes / no |
+| P1: + poverty | 84.7% | 76.9% | 80.0% | 78.4% | 0.905 | 0.117 | 20/25 | no / yes / no |
+| P2: + vulnerability | **87.5%** | **83.3%** | 80.0% | **81.6%** | 0.900 | 0.122 | 20/25 | **yes** / yes / no |
+| P3: + both | 84.7% | 76.9% | 80.0% | 78.4% | 0.909 | 0.118 | 20/25 | no / yes / no |
+| P1F / P2F / P3F (forced) | 81.9 / 87.5 / 84.7% | 73.1 / 83.3 / 79.2% | 76 / 80 / 76% | 74.5 / 81.6 / 77.6% | — | 0.124 / 0.122 / 0.125 | 19 / 20 / 19 | — |
+
+**Lead 2:**
+- FINAL: 84.7% / 76.9% / 80.0% / 78.4%, Brier 0.123.
+- P1: 86.1% / 80.0% / 80.0% / 80.0%, AUC 0.916, Brier 0.113.
+- P2: identical classifications to FINAL.
+
+Evidence: `evidence/POVVULN_metrics.csv`, `POVVULN_incremental.csv`, `POVVULN_selection_counts.csv`, `POVVULN_decision.csv`, `POVVULN_spearman.csv`.
+
+**What the evidence says:**
+- **Poverty and vulnerability inputs belong in the model.** Without them (P0), FINAL misses one more HIGH province and raises one more false alarm at Lead 1.
+- **Contribution vs P0 (Brier, 95% CI):**
+  - poverty: Lead 1 −0.004 [−0.021, 0.010]; Lead 2 −0.014 [−0.032, 0.004];
+  - vulnerability: Lead 1 +0.001 [−0.007, 0.009];
+  - neither is significant.
+- **Selection:** the selection picks families poverty and families subsistence (`pv_fam`, `sb_fam`) in the 2018/2019 folds (10/15 fits), and density in 10/15.
+- **Redundancy:** families vs population subsistence, Spearman 0.997 (83–87 provinces, each round). Subsistence vs poverty, 0.94–0.97.
+- **Decision (locked rule):** no arm replaces FINAL.
+  - P2 fails only "a round gains HIGH F1" at Lead 2, where its classifications equal FINAL's.
+  - P1 fails it at Lead 1.
+- **2021:** 1 of 4 HIGH found in every arm.
+- **Production set:** FINAL as sealed. It already includes relative poverty, subsistence, poverty gap and density.
+- **Strongest candidates for the next protocol:** P2 (fewer false alarms at Lead 1) and P1 (better probabilities at Lead 2), to be judged on the next unseen FNRI round, not on these reused rounds.
+
 ## 5. Final selected feature set
 
 **Unchanged.** FINAL keeps its pool and its 25-input screen. For the current forecasts the screen picks the 23 inputs listed in §1.

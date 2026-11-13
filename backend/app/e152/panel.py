@@ -47,8 +47,47 @@ def norm_name(s: str) -> str:
     return ALIAS.get(s, s)
 
 
+# Fix 2026-11-11 (temporal leakage): each commodity used to be centred on its mean over the WHOLE price history, future
+# months included. With ASOF_CENTRING the centring for issue quarter i uses only months the issue could read (up to
+# LAG_M months before its issue date). False reproduces the earlier panel exactly (kept for audit).
+ASOF_CENTRING = True
+
+
+def load_raw_px(name, want) -> pd.DataFrame:
+    """Province x commodity x month log prices, not centred."""
+    d = json.loads((RAW / f"{name}.json").read_text())
+    c = d["columns"]
+    m = d["meta"]
+    geo, com, per = m[c[0]], m[c[1]], m[c[3]]
+    keep = {a for a, b in com.items() if any(k in b.lower() for k in want)}
+    rows = []
+    for yr, data in d["data"].items():
+        for r in data:
+            g, cm, _, p = r["key"]
+            if cm not in keep or per[p] not in MON or not geo[g].startswith("...."):
+                continue
+            try:
+                v = float(r["values"][0])
+            except ValueError:
+                continue
+            if v > 0:
+                rows.append((norm_name(geo[g]), cm, pd.Period(year=int(yr), month=MON[per[p]], freq="M"), np.log(v)))
+    return pd.DataFrame(rows, columns=["name", "cm", "p", "lv"])
+
+
+def centred_asof(t: pd.DataFrame, end: pd.Period) -> dict:
+    """Province-month mean of commodity-centred log prices, using only months up to `end` for both the centring and the values."""
+    x = t[t["p"] <= end]
+    if x.empty:
+        return {}
+    v = x["lv"] - x.groupby("cm")["lv"].transform("mean")
+    g = x.assign(v=v).groupby(["name", "p"])["v"].mean().reset_index()
+    return {k: s.set_index("p")["v"].sort_index() for k, s in g.groupby("name")}
+
+
 def load_px(name, want) -> pd.DataFrame:
-    """Province-month mean of the commodities whose names contain any of `want`. Each commodity is first scaled to its own mean, so a change in which varieties report does not look like a price change."""
+    """Province-month mean of the commodities whose names contain any of `want`. Each commodity is first scaled to its own mean, so a change in which varieties report does not look like a price change.
+    Full-history centring (the pre-fix behaviour, used only when ASOF_CENTRING is False)."""
     d = json.loads((RAW / f"{name}.json").read_text())
     c = d["columns"]
     m = d["meta"]
@@ -93,8 +132,15 @@ COLS = ["l_fg_yoy", "l_rice_yoy", "l_fish_yoy", "l_rice_rel", "l_fg_rel", "l_ter
 
 def build():
     base = Fe.base_rows().drop_duplicates("key")
-    fg, rc, fs = load_px("farmgate_cereals", ["palay"]), load_px("wholesale_cereals", ["rice"]), load_px("wholesale_fish", ["bangus", "galunggong", "tilapia", "milkfish", "round scad"])
-    tab = {n: {k: g.set_index("p")["v"].sort_index() for k, g in t.groupby("name")} for n, t in (("fg", fg), ("rc", rc), ("fs", fs))}
+    SRC = (("fg", "farmgate_cereals", ["palay"]), ("rc", "wholesale_cereals", ["rice"]), ("fs", "wholesale_fish", ["bangus", "galunggong", "tilapia", "milkfish", "round scad"]))
+    if ASOF_CENTRING:
+        raw = {n: load_raw_px(f, w) for n, f, w in SRC}
+        tab = {n: {k: None for k in t["name"].unique()} for n, t in raw.items()}          # names only (coverage check)
+        tab_i = {i: {n: centred_asof(t, Pn.q_start(i).to_period("M") - LAG_M) for n, t in raw.items()} for i in range(Pn.FIRST, Pn.LAST + 1)}
+    else:
+        full = {n: load_px(f, w) for n, f, w in SRC}
+        tab = {n: {k: g.set_index("p")["v"].sort_index() for k, g in t.groupby("name")} for n, t in full.items()}
+        tab_i = {i: tab for i in range(Pn.FIRST, Pn.LAST + 1)}
     R = pd.read_csv(RAW / "rain_monthly.csv")
     R["p"] = pd.PeriodIndex(R["month"], freq="M")
     rn = {k: g.set_index("p")["rain"] for k, g in R.groupby("k")}
@@ -109,7 +155,7 @@ def build():
             q = Pn.q_start(i)
             o = {"key": key, "qi": i}
             for t, nm in (("fg", "l_fg_yoy"), ("rc", "l_rice_yoy"), ("fs", "l_fish_yoy")):
-                s = tab[t].get(n)
+                s = tab_i[i][t].get(n)
                 o[nm] = (window(s, q, 3) - window(s, q, 3, 1)) if s is not None else np.nan
                 o[nm.replace("_yoy", "_lvl")] = window(s, q, 3) if s is not None else np.nan
             o["l_rain3"], o["l_rain6"] = (rain_anom(r_, q, 3), rain_anom(r_, q, 6)) if r_ is not None else (np.nan, np.nan)

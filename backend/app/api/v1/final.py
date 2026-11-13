@@ -88,11 +88,12 @@ def final_lgus() -> dict:
     q = D.latest_quarter()
     muni = D.municipality_summary(q)
     out = _guard(FE.lgus, muni)
-    from app.ml.inference import e168_system as E168, map_engine
-    if map_engine.selected() is E168:     # the approved forecast drives the ranking: say so, and trace each row to it
+    from app.ml.inference import e168_system, hcw_system, map_engine
+    E168 = map_engine.selected()
+    if E168 in (e168_system, hcw_system):  # the approved forecast drives the ranking: say so, and trace each row to it
         by = {m["id"]: m for m in muni}
         out["label"] = ("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk forecast "
-                        "(E168)")
+                        f"({'Setup H + class weights' if E168 is hcw_system else 'E168'})")
         out["note"] = (E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
                        "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
         out["quarter"], out["model"] = q, E168.MODEL_ID

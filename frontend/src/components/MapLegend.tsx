@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 /** What each colour on the map means, with the cutoff from the server's config. */
 function useMeanings() {
   const { data: config } = useConfig();
-  const cutoff = (config?.thresholds.riskDisplayCutoff ?? 0.5).toFixed(2);
+  const cutoff = `${((config?.thresholds.riskDisplayCutoff ?? 0.5) * 100).toFixed(0)}%`;
   return {
     high: `High risk: a good chance (${cutoff} or more) that half or more of the province's households will have trouble getting enough food`,
     low: `Low risk: a smaller chance (below ${cutoff}) of that happening`,

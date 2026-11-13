@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { RegionData, MunicipalityData, RISK_COLORS, RISK_LABELS, NO_DATA_COLOR } from "@/data/types";
-import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish, Home, Newspaper, Utensils } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Briefcase, Plane, CloudRain, Store, Fish, Home, Newspaper, Utensils, Wheat, CloudLightning, Landmark, ShoppingBasket } from "lucide-react";
 import { AboutModal } from "./AboutModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { useCountUp } from "@/hooks/useCountUp";
-import { useConfig, useExplainability, useForecast } from "@/lib/queries";
+import { useConfig, useExplainability, useForecast, useFoodInsecurityStatus } from "@/lib/queries";
 import type { Trigger } from "@/lib/apiTypes";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ConfidenceTag } from "@/components/ui/confidence-tag";
@@ -12,10 +12,26 @@ import { Note } from "@/components/ui/note";
 import { MetricLabel, formatSigned, changeTone } from "@/components/ui/metric";
 import { StatusDot } from "@/components/ui/status-dot";
 import { ExplainTip } from "@/components/ui/explain-tip";
-import { isHighRisk } from "@/lib/risk";
+import { isHighRisk, pct, fmtPct } from "@/lib/risk";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { plainName, OTHER_FACTORS_NAME, OTHER_FACTORS_NOTE } from "@/lib/driverCopy";
+import { ShapTopBars, groupsAsTriggers } from "@/components/ShapCards";
+import { useFinalShap } from "@/lib/finalShap";
+
+/** Exact SHAP of the official FINAL forecasts in the "Why is this at risk?" card (preview, 2026-11-13). */
+const FINAL_SHAP_CARD = true;
+
+/** FINAL preview: the outlook rows of one quarter (forecast share of food-insecure households, with its 90% range). */
+function useShareRows(quarterId?: string) {
+  const { data } = useFoodInsecurityStatus();
+  const all = data?.provinces ?? [];
+  const rows = quarterId ? all.filter((r) => r.target_quarter === quarterId) : all.filter((r) => r.lead === 1);
+  const byName = new Map(rows.map((r) => [r.province.toLowerCase(), r]));
+  const mean = (f: (r: (typeof rows)[number]) => number) => (rows.length ? rows.reduce((a, r) => a + f(r), 0) / rows.length : null);
+  return { rows, byName, share: mean((r) => r.score_pct), lo: mean((r) => r.range90_pct[0]), hi: mean((r) => r.range90_pct[1]),
+           lowConfidence: rows.filter((r) => r.low_confidence).length, pHigh: mean((r) => r.p_high) };
+}
 
 interface Props {
   selectedRegion: RegionData | null;
@@ -61,6 +77,7 @@ export function LeftPanel({
           ) : (
             <MunicipalityDetail
               municipality={selectedMunicipality}
+              municipalitiesData={municipalitiesData}
               onBack={onCloseMunicipality}
             />
           )
@@ -122,6 +139,9 @@ export function RfiiScoreCardBody({
   const hasScore = !failed && typeof rawScore === "number";
   const avgScore = hasScore ? rawScore : 0;
   const animScore = useCountUp(avgScore, 1000, 2);
+  const sh = useShareRows(quarterId);
+  const hasShare = !failed && sh.share !== null;
+  const animShare = useCountUp((sh.share ?? 0) / 100, 1000, 2);
 
   let high = 0, low = 0, limited = 0;
   regionsData.forEach((r) => {
@@ -140,7 +160,7 @@ export function RfiiScoreCardBody({
     : { label: "LOW", color: "hsl(var(--risk-low))" };
 
   // Position of pointer along 0..1 segmented track
-  const trackPct = Math.min(Math.max(animScore, 0), 1) * 100;
+  const trackPct = hasShare ? Math.min(Math.max(animShare, 0), 1) * 100 : Math.min(Math.max(animScore, 0), 1) * 100;
 
   // The glow follows the band's colour (red for high, yellow for low). The
   // colour is "hsl(var(--risk-high))": `accent` is its "var(--risk-high)", so
@@ -186,7 +206,7 @@ export function RfiiScoreCardBody({
         <div className="relative flex flex-col">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-1">
-            <MetricLabel className="uppercase tracking-[0.28em]">Chance of high food insecurity</MetricLabel>
+            <MetricLabel className="uppercase tracking-[0.28em]">{hasShare ? "Food insecurity risk" : "Chance of high food insecurity"}</MetricLabel>
           </div>
 
           {/* Hero score. DM Mono gives the "." a full digit's width: the tighter
@@ -202,9 +222,9 @@ export function RfiiScoreCardBody({
                 transformOrigin: 'left bottom',
               }}
             >
-              {hasScore ? animScore.toFixed(2) : "—"}
+              {hasShare ? pct(animShare) : hasScore ? pct(animScore) : "—"}
             </span>
-            <span className="text-[11px] text-muted-foreground font-mono-num whitespace-nowrap pb-2">/ 1.00</span>
+            <span className="text-[11px] text-muted-foreground font-mono-num whitespace-nowrap pb-2">of households</span>
           </div>
 
           {/* Risk band pill -- only for a real score */}
@@ -248,9 +268,9 @@ export function RfiiScoreCardBody({
               />}
             </div>
             <div className="flex justify-between text-[10px] uppercase tracking-wider text-muted-foreground font-mono-num mt-1.5">
-              <span>0.0 low</span>
-              <span>0.5</span>
-              <span>1.0 high</span>
+              <span>{hasShare ? "low" : "0% low"}</span>
+              <span>{hasShare ? "50% = HIGH" : "50%"}</span>
+              <span>{hasShare ? "high" : "100% high"}</span>
             </div>
           </div>
         </div>
@@ -280,6 +300,11 @@ const TRIGGER_ICONS: Record<string, typeof Briefcase> = {
   poverty: Home,
   news: Newspaper,
   hunger_indicator: Utensils,
+  // Setup H + class weights groups (branch aiPHeed/setup-h-cw-dashboard)
+  food_market: ShoppingBasket,
+  ag_vulnerability: CloudLightning,
+  ag_production: Wheat,
+  household_economy: Landmark,
 };
 
 export function RiskDriversCardBody({
@@ -299,10 +324,14 @@ export function RiskDriversCardBody({
       <div className="flex items-center gap-2 mb-3">
         <h3 className="text-[13px] font-semibold leading-tight">Why is this at risk?</h3>
         <span className="text-[9px] text-muted-foreground/60 ml-auto">
-          {isLoading ? "Loading…" : failed ? "" : "Biggest first"}
+          {FINAL_SHAP_CARD ? "Biggest first" : isLoading ? "Loading…" : failed ? "" : "Biggest first"}
         </span>
       </div>
-      {isLoading ? (
+      {/* 2026-11-13: exact SHAP of the official FINAL forecasts (region = average of the five provinces). The grouped
+          share-of-|SHAP| bars below are kept only for scopes the SHAP endpoint does not cover (FINAL_SHAP_CARD = false). */}
+      {FINAL_SHAP_CARD ? (
+        <ShapTopBars id={provinceId ?? "calabarzon"} quarterId={quarterId} />
+      ) : isLoading ? (
         <DriverRowsSkeleton />
       ) : failed ? (
         <Note label={null}>{LOAD_ERROR_MESSAGE}</Note>
@@ -392,6 +421,8 @@ export function ProvinceRankingCardBody({
   const sortedProvinces = regionsData.slice().sort((a, b) =>
     Number(scored(b)) - Number(scored(a)) || b.riskScore - a.riskScore);
   const maxScore = Math.max(...regionsData.filter(scored).map((r) => r.riskScore), 0.01);
+  const sh = useShareRows();
+  const shareOf = (r: RegionData) => sh.byName.get(r.name.toLowerCase())?.score_pct;
 
   return (
     <div>
@@ -403,7 +434,8 @@ export function ProvinceRankingCardBody({
       <div className="space-y-1.5">
         {sortedProvinces.map((r) => {
           const has = scored(r);
-          const widthPct = has ? (r.riskScore / maxScore) * 100 : 0;
+          const share = shareOf(r);
+          const widthPct = has ? (typeof share === "number" ? share : (r.riskScore / maxScore) * 100) : 0;
           const color = has ? RISK_COLORS[r.riskLevel] : NO_DATA_COLOR;
           return (
             <button
@@ -420,7 +452,7 @@ export function ProvinceRankingCardBody({
                   </span>
                 </span>
                 <span className="font-mono-num font-bold tabular-nums" style={{ color }}>
-                  {has ? r.riskScore.toFixed(2) : "—"}
+                  {has ? (typeof share === "number" ? fmtPct(share) : pct(r.riskScore)) : "—"}
                 </span>
               </div>
               <div className="h-2 bg-secondary/40 rounded-full overflow-hidden">
@@ -508,6 +540,7 @@ function RegionDetail({
   const qoqValue = byPoints ? (region.momDelta as number) * 100 : region.momChange;
   const qoqText = changeKnown ? formatSigned(qoqValue, 1, byPoints ? " pts" : "%") : "—";
   const munis = municipalitiesData.slice().sort((a, b) => b.riskScore - a.riskScore);
+  const shareRow = useShareRows(quarterId).byName.get(region.name.toLowerCase());
 
   const displayCutoff = config?.thresholds.riskDisplayCutoff ?? 0.5;
   const alertThreshold = config?.thresholds.alertThreshold ?? 0.6;
@@ -526,7 +559,7 @@ function RegionDetail({
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <StatusBadge
                 level={isHigh ? "high" : "low"}
-                title={`Forecast risk level (${displayCutoff.toFixed(2)} display cutoff)`}
+                title={`Forecast risk level (${pct(displayCutoff, 0)} display cutoff)`}
               />
               {isActiveAlert && (
                 <StatusBadge tone="high" title={`Active alert: risk probability at or above ${alertThreshold}`}>
@@ -556,10 +589,10 @@ function RegionDetail({
       {/* Key Metrics */}
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
-          <MetricLabel>Chance of high food insecurity</MetricLabel>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{region.riskScore.toFixed(2)}</div>
+          <MetricLabel>{shareRow ? "Food insecurity risk" : "Chance of high food insecurity"}</MetricLabel>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{shareRow ? fmtPct(shareRow.score_pct) : pct(region.riskScore)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
-            <div className="h-full rounded-full transition-all" style={{ width: `${region.riskScore * 100}%`, backgroundColor: riskColor }} />
+            <div className="h-full rounded-full transition-all" style={{ width: `${shareRow ? shareRow.score_pct : region.riskScore * 100}%`, backgroundColor: riskColor }} />
           </div>
         </div>
         <div className="inner-box px-3 py-3 overflow-hidden">
@@ -574,7 +607,7 @@ function RegionDetail({
           />
           {changeKnown && typeof region.prevScore === "number" && region.prevQuarter && (
             <p className="text-[9px] text-muted-foreground leading-snug mt-1" data-testid="qoq-basis">
-              Q{region.prevQuarter.slice(-1)} {region.prevQuarter.slice(0, 4)}: {region.prevScore.toFixed(2)} → now {region.riskScore.toFixed(2)}
+              Q{region.prevQuarter.slice(-1)} {region.prevQuarter.slice(0, 4)}: {pct(region.prevScore)} → now {pct(region.riskScore)}
             </p>
           )}
           {!changeKnown && (
@@ -629,7 +662,7 @@ function RegionDetail({
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
                 <span className="text-[11px] font-bold tabular-nums font-mono-num" style={{ color: RISK_COLORS[m.riskLevel] }}>
-                  {m.riskScore.toFixed(2)}
+                  {pct(m.riskScore)}
                 </span>
                 <ChevronRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
@@ -645,12 +678,19 @@ function RegionDetail({
 /* ─── Municipality / City Detail ─── */
 function MunicipalityDetail({
   municipality,
+  municipalitiesData,
   onBack,
 }: {
   municipality: MunicipalityData;
+  municipalitiesData: MunicipalityData[];
   onBack: () => void;
 }) {
   const riskColor = RISK_COLORS[municipality.riskLevel];
+  // Rank within the province (1 = highest priority): the backend's rank; if absent, the order of the province's town list.
+  const sameProvince = municipalitiesData
+    .filter((m) => m.provinceId === municipality.provinceId)
+    .sort((a, b) => b.riskScore - a.riskScore);
+  const rank = municipality.rankInProvince ?? sameProvince.findIndex((m) => m.id === municipality.id) + 1;
 
   return (
     <div className="px-5 py-4 space-y-4">
@@ -679,7 +719,7 @@ function MunicipalityDetail({
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
           <MetricLabel>Priority within the province</MetricLabel>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{municipality.riskScore.toFixed(2)}</div>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{pct(municipality.riskScore)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
@@ -688,8 +728,13 @@ function MunicipalityDetail({
           </div>
         </div>
         <div className="inner-box px-3 py-3">
-          <MetricLabel className="mb-1">How this is worked out</MetricLabel>
-          <p className="text-[10px] leading-snug text-muted-foreground line-clamp-4">{municipality.disaggregationLabel}</p>
+          <MetricLabel>Rank in {municipality.provinceName}</MetricLabel>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{rank > 0 ? rank : "—"}</div>
+          {rank > 0 && (
+            <p className="text-[10px] text-muted-foreground mt-1">
+              of {sameProvince.length} towns and cities{municipality.tied ? " (tied)" : ""}
+            </p>
+          )}
         </div>
       </div>
 
@@ -701,7 +746,7 @@ function MunicipalityDetail({
         </div>
         <div className="flex items-center justify-between">
           <MetricLabel>Poverty rate</MetricLabel>
-          <div className="text-[11px] font-bold tabular-nums">{municipality.povertyRate}%</div>
+          <div className="text-[11px] font-bold tabular-nums">{fmtPct(municipality.povertyRate)}</div>
         </div>
       </div>
 
@@ -772,8 +817,12 @@ function SummaryChip({ label, value, color, tip }: { label: string; value: numbe
 export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: string | null; quarterId?: string }) {
   const scope = provinceId ? "province" : "region";
   const id = provinceId ?? "calabarzon";
-  const { data, isLoading } = useExplainability(scope, id, quarterId || undefined);
-  const triggers: Trigger[] = data?.triggers ?? [];
+  // 2026-11-13: the same exact-SHAP groups as the "Why is this at risk?" and summary cards (official FINAL forecast).
+  void scope;
+  const { data: shap, isLoading } = useFinalShap(id, quarterId || undefined);
+  const { data: config } = useConfig();
+  const triggers: Trigger[] = shap?.available ? groupsAsTriggers(shap.groups ?? [], config?.thresholds.triggerRedCutoff ?? 20) : [];
+  const data = shap?.available ? { otherPct: shap.otherPct } : undefined;
 
   return (
     <div>
@@ -804,7 +853,7 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
           );
         })}
         {typeof data?.otherPct === "number" && (
-          <div title={`${OTHER_FACTORS_NAME} — ${data.otherPct}%`} style={{ width: `${data.otherPct}%` }} className="bg-muted-foreground/50" />
+          <div title={`Other factors (time since the last survey) — ${data.otherPct}%`} style={{ width: `${data.otherPct}%` }} className="bg-muted-foreground/50" />
         )}
       </div>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
@@ -823,7 +872,7 @@ export function TriggerCompositionBar({ provinceId, quarterId }: { provinceId: s
         {typeof data?.otherPct === "number" && (
           <div className="flex items-center gap-1.5 text-[9px]" title={OTHER_FACTORS_NOTE}>
             <span className="w-2 h-2 rounded-sm shrink-0 bg-muted-foreground/50" />
-            <span className="truncate text-muted-foreground">{OTHER_FACTORS_NAME}</span>
+            <span className="truncate text-muted-foreground">Other factors (time since the last survey)</span>
             <span className="ml-auto font-mono-num font-bold tabular-nums text-foreground/90">{data.otherPct}%</span>
           </div>
         )}

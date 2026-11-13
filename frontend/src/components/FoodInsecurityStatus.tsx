@@ -1,4 +1,4 @@
-import { useFoodInsecurityStatus } from "@/lib/queries";
+import { useFoodInsecurityStatus, useForecastPeriod } from "@/lib/queries";
 import { isLoadFailure } from "@/lib/loadError";
 
 /**
@@ -6,6 +6,30 @@ import { isLoadFailure } from "@/lib/loadError";
  * model the release gate has approved and otherwise answers `validation_pending` with no forecast values. Nothing here
  * falls back to a candidate, a placeholder or another model.
  */
+const qLabel = (q?: string | null) => (q ? `${q.slice(5)} ${q.slice(0, 4)}` : "");
+const day = (iso?: string | null) =>
+  iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Manila" }) : "";
+
+/** The forecasting period from the backend (GET /api/v1/forecast-period): current quarter, issue, freshness, next issue. */
+export function ForecastPeriodLines() {
+  const { data: p } = useForecastPeriod();
+  if (!p) return null;
+  return (
+    <div className="space-y-0.5 text-[10px] leading-snug text-muted-foreground" data-testid="forecast-period">
+      <p>
+        <span className="font-semibold text-foreground">Now: {qLabel(p.current_quarter)}</span>
+        {p.served_issue_quarter && <> · forecast issued {qLabel(p.served_issue_quarter)}{p.served_generated_utc ? `, made ${day(p.served_generated_utc)}` : ""}</>}
+      </p>
+      {p.stale && p.stale_reason && (
+        <p className="text-foreground" data-testid="forecast-period-stale">{p.stale_reason}.</p>
+      )}
+      <p>
+        {p.latest_data_update_utc ? `Data sources last updated ${day(p.latest_data_update_utc)} · ` : ""}next forecast {day(p.next_issue_date)}
+      </p>
+    </div>
+  );
+}
+
 export function FoodInsecurityStatusCardBody() {
   const { data, error, isLoading } = useFoodInsecurityStatus();
 
@@ -57,13 +81,12 @@ export function FoodInsecurityStatusCardBody() {
     <div className="space-y-2" data-testid="fi-status-approved">
       <h3 className="text-[13px] font-semibold leading-tight">About this forecast</h3>
       <p className="text-[10px] leading-snug">
-        Shows each province's chance of high food insecurity.
-        {typeof acc === "number" && ` Correct ${Math.round(acc * 100)}% of the time in past tests.`}
+        Forecast share of food-insecure households per province.
+        {typeof acc === "number" && ` Right ${Math.round(acc * 100)}% of the time in past tests (2018–2021 surveys).`}
       </p>
       {through && (
-        <p className="text-[10px] leading-snug" data-testid="fi-status-cutoff">
-          <span className="font-semibold">Data up to {through}</span>
-          <span className="text-muted-foreground"> · updated monthly</span>
+        <p className="text-[10px] leading-snug text-muted-foreground" data-testid="fi-status-cutoff">
+          <span className="font-semibold text-foreground">Data up to {through}</span> · all quarters of this forecast use the same data
         </p>
       )}
       {data.data_used && data.data_used.length > 0 && (
@@ -76,6 +99,7 @@ export function FoodInsecurityStatusCardBody() {
           ))}
         </dl>
       )}
+      <ForecastPeriodLines />
       <p className="text-[9px] text-muted-foreground">
         Model {data.production?.model_id}{approved ? `, approved ${approved}` : ""}.
       </p>

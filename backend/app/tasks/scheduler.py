@@ -186,6 +186,29 @@ def run_e168_live_refresh() -> dict:
     return out
 
 
+FINAL_JOB_ID = "aipheed_final_daily_cycle"
+# Daily at 06:30 PHT. The cycle itself decides what is due (sources by their own rhythm; the quarterly issue from its issue day),
+# so a missed day is caught up on the next run and repeated runs change nothing (app.final.cycle).
+FINAL_HOUR = os.getenv("AIPHEED_FINAL_CYCLE_HOUR", "6")
+FINAL_MINUTE = os.getenv("AIPHEED_FINAL_CYCLE_MINUTE", "30")
+
+
+def run_final_cycle() -> dict:
+    from app.final import cycle as CY
+    from app.final import serving as SVG
+
+    out = CY.run()
+    if out.get("status") == "issued":
+        SVG.activate()                       # the dashboard moves to the new issue without a restart
+    try:
+        from app.final import dbsync
+        dbsync.sync()                        # queryable mirror; the files stay the record of truth
+    except Exception:                        # noqa: BLE001 - a database problem never fails a forecast run
+        logger.exception("FINAL history database mirror failed")
+    logger.info("FINAL cycle: %s", {k: out.get(k) for k in ("issue_quarter", "status", "reason", "error")})
+    return out
+
+
 def start_scheduler():
     """
     Start the APScheduler background scheduler and register the quarterly job.
@@ -217,6 +240,23 @@ def start_scheduler():
         return None
 
     _scheduler = BackgroundScheduler(timezone="Asia/Manila")
+    from app.final import serving as FINAL_SERVING
+    if FINAL_SERVING.is_production():
+        # FINAL is the served model: one daily, idempotent cycle (app.final.cycle) does everything that is due (official sources,
+        # news, panels, the quarterly issue on its issue day, the forecast history). The legacy E31/E168 jobs are NOT registered:
+        # the E168 live refresh promotes E168 through the registry and would replace the served model.
+        _scheduler.add_job(
+            run_final_cycle,
+            trigger=CronTrigger(hour=FINAL_HOUR, minute=FINAL_MINUTE),
+            id=FINAL_JOB_ID,
+            name="aiPHeed FINAL daily cycle (sources, quarterly issue, forecast history)",
+            replace_existing=True,
+            max_instances=1,
+            coalesce=True,
+        )
+        _scheduler.start()
+        logger.info("Scheduler started: FINAL daily cycle at %s:%s Asia/Manila.", FINAL_HOUR, FINAL_MINUTE)
+        return _scheduler
     _scheduler.add_job(
         run_quarterly_cycle,
         trigger=CronTrigger(month=CRON_MONTHS, day=CRON_DAY, hour=CRON_HOUR),

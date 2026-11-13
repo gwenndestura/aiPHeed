@@ -10,6 +10,7 @@ import { api, ApiError } from "@/lib/api";
 import { captureLightFigure, renderReportPdf, toAscii, type ReportPayload } from "@/lib/chartReport";
 import { X, ImageIcon, FileText } from "lucide-react";
 import { isLoadFailure, LOAD_ERROR_MESSAGE } from "@/lib/loadError";
+import { pct } from "@/lib/risk";
 import { plainName, OTHER_FACTORS_NAME } from "@/lib/driverCopy";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY } from "@/lib/breakpoints";
@@ -320,6 +321,21 @@ function TrendView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generated, isMuni, isSingleProvince, isAllProvinces, muniTs, singleProvinceTs, caviteTs, lagunaTs, batangasTs, rizalTs, quezonTs, quartersRes]);
 
+  // FINAL preview: zoom the value axis to the plotted values (with a little padding) so rises and drops are visible.
+  // When the HIGH (0.50) and alert lines fall outside the zoomed axis they are not drawn; the axis title says so.
+  const yZoom = useMemo(() => {
+    const vals: number[] = [];
+    data.forEach((r) => Object.entries(r).forEach(([k, v]) => { if (k !== "quarter" && typeof v === "number" && Number.isFinite(v)) vals.push(v); }));
+    if (!vals.length) return { domain: [0, 1] as [number, number], ticks: undefined as number[] | undefined, zoomed: false };
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const pad = Math.max((hi - lo) * 0.25, 0.01);
+    const d0 = Math.max(0, Math.floor((lo - pad) * 100) / 100), d1 = Math.min(1, Math.ceil((hi + pad) * 100) / 100);
+    const step = d1 - d0 <= 0.12 ? 0.01 : d1 - d0 <= 0.3 ? 0.02 : 0.05;
+    const ticks: number[] = [];
+    for (let t = Math.ceil(d0 / step - 1e-9) * step; t <= d1 + 1e-9; t += step) ticks.push(Math.round(t * 100) / 100);
+    return { domain: [d0, d1] as [number, number], ticks, zoomed: d1 < displayCutoff || d0 > 0 };
+  }, [data, displayCutoff]);
+
   const handleGenerate = () => setGenerated({ province, municipality, from, to });
 
   // The tour's chart step draws the chart for the current choices if there is none yet.
@@ -381,7 +397,7 @@ function TrendView() {
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">Risk over time, by province or town</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
-          How the chance of high food insecurity changes from quarter to quarter
+          How the food insecurity risk changes from quarter to quarter. The scale is zoomed to the values shown; HIGH starts at 0.50
         </p>
       </div>
 
@@ -455,9 +471,13 @@ function TrendView() {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border)/.4)" />
               <XAxis dataKey="quarter" tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }} />
               <YAxis
-                domain={[0, 1]}
+                domain={yZoom.domain}
+                allowDataOverflow
+                ticks={yZoom.ticks}
+                interval={0}
+                tickFormatter={(v: number) => pct(v, 0)}
                 tick={{ fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
-                label={{ value: "Chance of high risk", angle: -90, position: "insideLeft", fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
+                label={{ value: yZoom.zoomed && yZoom.domain[1] < displayCutoff ? "Food insecurity risk (zoomed)" : "Food insecurity risk", angle: -90, position: "insideLeft", fontSize: fs(10), fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip
                 contentStyle={{
@@ -467,6 +487,7 @@ function TrendView() {
                   border: "1px solid hsl(var(--border))",
                 }}
                 payloadUniqBy={(entry) => String(entry.name)}
+                formatter={(v: number) => (typeof v === "number" ? pct(v) : v)}
                 labelFormatter={(label: string) => (data.find((r) => r.quarter === label)?.forecast === true ? `${label} (forecast)` : label)}
               />
               <Legend wrapperStyle={{ fontSize: fs(11) }} />
@@ -474,13 +495,13 @@ function TrendView() {
                 y={alertThreshold}
                 stroke="hsl(var(--risk-high))"
                 strokeDasharray="5 4"
-                label={{ value: `Alert Threshold (${alertThreshold.toFixed(2)})`, position: compact ? "insideTopRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-high))" }}
+                label={{ value: `Alert Threshold (${pct(alertThreshold, 0)})`, position: compact ? "insideTopRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-high))" }}
               />
               <ReferenceLine
                 y={displayCutoff}
                 stroke="hsl(var(--risk-moderate))"
                 strokeDasharray="5 4"
-                label={{ value: `High Risk (${displayCutoff.toFixed(2)})`, position: compact ? "insideBottomRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-moderate))" }}
+                label={{ value: `High Risk (${pct(displayCutoff, 0)})`, position: compact ? "insideBottomRight" : "right", fontSize: fs(9), fill: "hsl(var(--risk-moderate))" }}
               />
               {/* Observed quarters: a solid line. Phones: value labels only for a
                   single line; with five they overlap. Every value is in the
@@ -498,7 +519,7 @@ function TrendView() {
                   connectNulls={false}
                 >
                   {(!compact || seriesKeys.length === 1) && (
-                    <LabelList dataKey={p} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" />
+                    <LabelList dataKey={p} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" formatter={(v: number) => (typeof v === "number" ? pct(v) : v)} />
                   )}
                 </Line>
               ))}
@@ -518,7 +539,7 @@ function TrendView() {
                   connectNulls={false}
                 >
                   {(!compact || seriesKeys.length === 1) && (
-                    <LabelList dataKey={forecastLabelKey(p)} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" />
+                    <LabelList dataKey={forecastLabelKey(p)} position="top" fontSize={fs(9)} fill="hsl(var(--foreground))" formatter={(v: number) => (typeof v === "number" ? pct(v) : v)} />
                   )}
                 </Line>
               ))}

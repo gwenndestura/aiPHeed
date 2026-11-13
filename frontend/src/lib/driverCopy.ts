@@ -52,6 +52,23 @@ const PLAIN_SENTENCE: Record<string, { raises: string; lowers: string }> = {
     raises: "The regional hunger outlook pushed the food-price estimate up.",
     lowers: "The regional hunger outlook pulled the food-price estimate down.",
   },
+  // Setup H + class weights groups (branch aiPHeed/setup-h-cw-dashboard)
+  food_market: {
+    raises: "Local rice and palay prices were higher than usual.",
+    lowers: "Local rice and palay prices were lower than usual.",
+  },
+  ag_vulnerability: {
+    raises: "Dry spells or strong typhoons were worse than usual.",
+    lowers: "Dry spells and typhoons were milder than usual.",
+  },
+  ag_production: {
+    raises: "Rice and corn harvests were smaller than usual.",
+    lowers: "Rice and corn harvests held up better than usual.",
+  },
+  household_economy: {
+    raises: "The regional economy grew less than usual.",
+    lowers: "The regional economy grew more than usual.",
+  },
 };
 
 // E42: a direction is only stated for a group that actually moved the forecast. A group with no model input, no
@@ -68,6 +85,10 @@ const FRIENDLY_NAME: Record<string, string> = {
   poverty: "Poverty and vulnerability",
   news: "News reports",
   hunger_indicator: "Regional hunger (indicator)",
+  food_market: "Local rice and palay prices",
+  ag_vulnerability: "Dry spells and typhoons",
+  ag_production: "Rice and corn harvests",
+  household_economy: "Regional economy (regional figures)",
 };
 
 /** The plain name of a trigger group for the public dashboard; falls back to the label the API sent. */

@@ -8,15 +8,15 @@
 /** Earliest quarter any public quarter selector offers. */
 export const EARLIEST_SELECTABLE_QUARTER = "2025-Q1";
 
-/** How many quarters past the calendar quarter a selector may reach: E168 is accepted 1 to 3 quarters ahead. */
-export const FORECAST_QUARTERS_AHEAD = 3;
+/** How many quarters past the calendar quarter a selector may reach: Setup H + class weights (branch aiPHeed/setup-h-cw-dashboard) is accepted 1 to 6 quarters ahead. */
+export const FORECAST_QUARTERS_AHEAD = 5;   // FINAL preview: Leads 1-5
 
 /**
  * How many quarters the map timeline shows: the newest ones, ending at the
  * forecast. When a new forecast quarter is added the window moves forward;
  * older quarters stay reachable through the History list.
  */
-export const TIMELINE_DOTS = 5;
+export const TIMELINE_DOTS = 5;   // FINAL (RATE + MIND) preview serves five forecast quarters (Leads 1-5)
 
 /** The newest TIMELINE_DOTS quarters of an oldest-first list. */
 export function timelineWindow<T>(quarters: T[]): T[] {

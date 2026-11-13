@@ -26,7 +26,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { COMPACT_QUERY, MEDIUM_QUERY } from "@/lib/breakpoints";
 import { isLoadFailure } from "@/lib/loadError";
-import { isHighRisk } from "@/lib/risk";
+import { isHighRisk, fmtPct } from "@/lib/risk";
 import { TOUR_LAYOUT_EVENT, type TourLayout } from "@/lib/tour";
 import { readStorage, removeStorage } from "@/lib/storage";
 
@@ -618,7 +618,7 @@ export function MapDashboard({ showAboutFeedback = true }: Props) {
                 {peekScore !== null && (
                   <>
                     <span aria-hidden className="text-muted-foreground">·</span>
-                    <span className="font-semibold tabular-nums">{peekScore.toFixed(2)}</span>
+                    <span className="font-semibold tabular-nums">{fmtPct(peekScore * 100)}</span>
                     {peekLevel && <StatusBadge level={peekLevel} className="shrink-0" />}
                   </>
                 )}
