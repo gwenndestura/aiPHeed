@@ -35,7 +35,7 @@ Protocol `PROTOCOL_INPUTS.md` (sha `4cb830c6`) and addendum 1 (sha `56e6c928`) w
 
 **Inputs FINAL actually uses for the current 2027-Q1/Q2 forecasts.**
 - Logged from the live refit, `build_corrected._one` with `AIPHEED_LIVE_ASOF=2026-11-01`.
-- The 7 fits logged so far, Lead 1 (5 seeds) and Lead 2 (2 seeds), all select the same 23 inputs (`evidence/live_selected_inputs.json`).
+- All 10 live fits, Leads 1 and 2 with 5 seeds each, select the same 23 inputs (`evidence/live_selected_inputs.json`).
 
 `a_e_hunger, a_net_since, ag_dev3y, ag_palay_yoy, cpi_food_3m, cpi_food_rel_nat, cpi_food_yoy, cpi_since, gap_q, l_fish_yoy, l_rice_rel,
 mi_ag_pc, mi_cpi_food_accel, mi_l_fg_rel, mi_l_fg_yoy, mi_r_e_net, n_e_hunger, n_e_market, n_e_net, n_net_since, soil_since, unemp_rate, vu_tc_clim`
@@ -232,7 +232,6 @@ The model *served* by the branch's registry is E168, not FINAL (§13).
 - **2021 HIGH detection stays at 1 of 4.** No public input tested fixes it.
 - **GRDP not used live.** The live selection does not use GRDP, even though GRDP is the only official group with significant out-of-sample value in earlier folds (§5).
 - **Estimated GRDP years.** The 2024–2025 GRDP-per-person values are estimates; the 2024–2025 AFF values are PSA-published.
-- **Partial live log.** 7 of 10 live fits were logged when this report was written; all 7 selected the same 23 inputs.
 
 ## 16. Files, branch, commits, artifacts
 
