@@ -245,10 +245,26 @@ def ledger_rows(issue_dir: Path) -> list[dict]:
             for r in R.to_dict("records")]
 
 
+def check_information_rule(issue_label: str) -> None:
+    """An issue may use only figures online BEFORE its cut-off (the rule the walk-forward evaluation used). The E168 live-refresh
+    rule lets a figure first downloaded up to the refresh day count at the cut-off; that is refused here (audit 2026-11-14: the
+    2026-Q4 issue, built by hand from the E168 refresh panels, used October CPI and September LFS published after 1 November)."""
+    from app.e168 import live_data as LD
+    a, p = LD._live_dates()
+    cut = PD.issue_datetime(issue_label).date()
+    if a is None or a.date() != cut:
+        raise IssueError(f"issue {issue_label}: the data cut-off in effect is {a and a.date()}, not the issue cut-off {cut} "
+                         "(set AIPHEED_LIVE_ASOF; app.final.cycle does this)")
+    if p is not None and p.date() > cut:
+        raise IssueError(f"issue {issue_label}: figures published up to {p.date()} would count as available at the {cut} cut-off; "
+                         "only figures online before the cut-off may be used (unset AIPHEED_LIVE_PUBLISHED)")
+
+
 def build(issue_label: str, now_utc: str | None = None) -> Path:
     if not MODEL.exists():
         raise IssueError("no frozen model (python -m app.final.issue freeze)")
     gen = now_utc or datetime.now(timezone.utc).isoformat(timespec="seconds")
+    check_information_rule(issue_label)
     R = predict_issue(issue_label)
     A = assemble(issue_label, R, gen)
     validate(issue_label, A)

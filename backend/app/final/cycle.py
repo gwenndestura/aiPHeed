@@ -108,6 +108,7 @@ def run(now=None, skip_sources: bool = False, skip_data: bool = False, *, build_
             as_of = PD.issue_datetime(issue).date().isoformat()
             published = PD.now_ph(now).date().isoformat()
             os.environ["AIPHEED_LIVE_ASOF"] = as_of
+            os.environ.pop("AIPHEED_LIVE_PUBLISHED", None)     # strict: only figures online before the cut-off (issue.check_information_rule)
             if not skip_data:
                 rec["stages"]["data"] = (refresh_data or data_stage)(as_of, published)
             if build_issue is not None:

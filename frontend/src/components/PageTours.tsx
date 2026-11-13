@@ -23,7 +23,7 @@ const DATA_TOUR: TourDef = {
       title: "Sort",
       body: ({ layout }) =>
         layout === "phone"
-          ? "Choose the order of the provinces, for example by risk probability from high to low."
+          ? "Choose the order of the provinces, for example by food insecurity risk from high to low."
           : "Click a column heading to sort the table by it. Click it again to reverse the order.",
       target: () => "data-sort",
     },
@@ -31,8 +31,8 @@ const DATA_TOUR: TourDef = {
       title: "The provinces",
       body: ({ layout }) =>
         layout === "phone"
-          ? "Each card is one province: its risk probability, its change from the previous quarter and the number of news articles analyzed. Tap a card to open that province on the map."
-          : "Each row is one province: its risk probability and level, its change from the previous quarter and the number of news articles analyzed. Click a row to open that province on the map.",
+          ? "Each card is one province: its food insecurity risk, its change from the previous quarter and the number of news articles analyzed. Tap a card to open that province on the map."
+          : "Each row is one province: its food insecurity risk and level, its change from the previous quarter and the number of news articles analyzed. Click a row to open that province on the map.",
       // Phones: the first card (the whole list is taller than the screen).
       target: (l) => (l === "phone" ? "data-row" : "data-table"),
     },
@@ -63,7 +63,7 @@ const VIZ_TOUR: TourDef = {
     {
       title: "Two kinds of chart",
       body: () =>
-        "Province Risk Level Trend draws risk probabilities quarter by quarter. Feature Contribution Breakdown shows how much each group of factors, such as food prices or the weather, added to one province's risk in a quarter.",
+        "Risk over time draws each province's food insecurity risk quarter by quarter. Why is this at risk? shows how much each group of factors, such as food prices or the weather, moved one province's forecast in a quarter.",
       target: () => "viz-tabs",
       layout: { vizTab: "trend" },
     },
@@ -83,7 +83,7 @@ const VIZ_TOUR: TourDef = {
     {
       title: "Reading the chart",
       body: ({ cutoff, alert }) =>
-        `Each line is a forecast probability of HIGH risk. At or above the High risk line (${cutoff}) a province is high risk; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
+        `Each line is a province's forecast share of food-insecure households. At or above the High risk line (${cutoff}) a province is high risk; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
       target: () => "viz-chart",
       // Phones: just the two lines, so the card has room beside them.
       area: (l) => (l === "phone" ? thresholdLinesArea() : null),

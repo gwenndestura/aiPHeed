@@ -55,6 +55,17 @@ describe("FINAL values reach the screen unchanged", () => {
     });
   });
 
+  it("the ranking shows the SELECTED quarter's values, not the Lead-1 outlook (audit 2026-11-14)", () => {
+    // outlook rows are Q1 (Quezon 26.8%); the selected quarter's /provinces values are Q2 (Quezon 26.6%)
+    outlook = { provinces: Object.entries(API_2027Q1).map(([id, v]) => ({ province: NAMES[id], target_quarter: "2027-Q1", lead: 1,
+      score_pct: Math.round(v * 1000) / 10, range90_pct: [10, 40], p_high: 0.01, risk_class: "LOW" })) };
+    const Q2: Record<string, number> = { quezon: 0.266, rizal: 0.244, laguna: 0.235, cavite: 0.241, batangas: 0.23 };
+    render(<ProvinceRankingCardBody onRegionClick={() => undefined} regionsData={Object.entries(Q2).map(([id, p]) => provinceToRegion(province(id, p)))} />);
+    const quezon = [...document.querySelectorAll("button")].find((b) => b.textContent?.startsWith("Quezon"))!;
+    expect(quezon.textContent).toContain("26.6%");
+    expect(quezon.textContent).not.toContain("26.8%");
+  });
+
   it("a province with no forecast is shown as 'No forecast' and '—', never 0.00 or Low", () => {
     outlook = { provinces: [] };
     const regions = [provinceToRegion(province("quezon", 0.268)), provinceToRegion(province("rizal", null))];

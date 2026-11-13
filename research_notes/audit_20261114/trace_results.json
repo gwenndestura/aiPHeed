@@ -1,0 +1,236 @@
+[
+ {
+  "layer": "serving",
+  "check": "served issue exists",
+  "pass": true,
+  "detail": "C:\\Users\\admin\\aipheed_fmc\\backend\\data\\final\\issues\\2026-Q4"
+ },
+ {
+  "layer": "model",
+  "check": "frozen artifact sha = manifest model_sha256",
+  "pass": true,
+  "detail": "e1f8675fdaf48335"
+ },
+ {
+  "layer": "model",
+  "check": "one fit per seed x served lead",
+  "pass": true,
+  "detail": "10 fits"
+ },
+ {
+  "layer": "model",
+  "check": "re-prediction reproduces the stored shares and P(HIGH)",
+  "pass": true,
+  "detail": "10 rows, max |d share| 0.0000 pts, max |d P(HIGH)| 0.000000"
+ },
+ {
+  "layer": "issue",
+  "check": "only served leads",
+  "pass": true,
+  "detail": [
+   1,
+   2
+  ]
+ },
+ {
+  "layer": "issue",
+  "check": "exactly the five CALABARZON provinces per quarter",
+  "pass": true,
+  "detail": [
+   "Batangas",
+   "Cavite",
+   "Laguna",
+   "Quezon",
+   "Rizal"
+  ]
+ },
+ {
+  "layer": "issue",
+  "check": "targets = issue quarter + 1..max_lead",
+  "pass": true,
+  "detail": [
+   "2027-Q1",
+   "2027-Q2"
+  ]
+ },
+ {
+  "layer": "issue",
+  "check": "class = HIGH iff share >= 50%",
+  "pass": true,
+  "detail": "all rows"
+ },
+ {
+  "layer": "issue",
+  "check": "cut-off = issue rule date (1st of 2nd month, PHT)",
+  "pass": true,
+  "detail": "2026-11-01"
+ },
+ {
+  "layer": "history",
+  "check": "ledger hash chain intact",
+  "pass": true,
+  "detail": {
+   "ok": true,
+   "records": 10,
+   "head": "d46a19859a36299edc6b7aa97c70c94eb1b91471a4eba2839564e0bb2c4eac48"
+  }
+ },
+ {
+  "layer": "history",
+  "check": "ledger records = issue rows",
+  "pass": true,
+  "detail": "10 ledger rows; mismatches []"
+ },
+ {
+  "layer": "api",
+  "check": "/final/food-insecurity/outlook = issue rows",
+  "pass": true,
+  "detail": "10 rows"
+ },
+ {
+  "layer": "api",
+  "check": "/final/forecast-history contains the served issue",
+  "pass": true,
+  "detail": [
+   "current_quarter",
+   "served_issue_quarter",
+   "issues",
+   "count",
+   "forecasts",
+   "ledger"
+  ]
+ },
+ {
+  "layer": "api",
+  "check": "/provinces 2027-Q1: riskScore = issue share (map colour source)",
+  "pass": true,
+  "detail": "5 provinces; bad []"
+ },
+ {
+  "layer": "api",
+  "check": "/provinces 2027-Q1: riskLevel = issue class",
+  "pass": true,
+  "detail": "bad []"
+ },
+ {
+  "layer": "api",
+  "check": "/forecast region 2027-Q1 = mean of the five shares",
+  "pass": true,
+  "detail": "api 0.2452 vs 0.2452"
+ },
+ {
+  "layer": "api",
+  "check": "/forecast/timeseries Quezon 2027-Q1 = issue share",
+  "pass": true,
+  "detail": "[{'quarter': '2027-Q1', 'riskScore': 0.268, 'riskLevel': 'low', 'isForecast': True, 'scoreType': 'final_food_insecurity_risk'}] vs 0.268"
+ },
+ {
+  "layer": "api",
+  "check": "/provinces 2027-Q2: riskScore = issue share (map colour source)",
+  "pass": true,
+  "detail": "5 provinces; bad []"
+ },
+ {
+  "layer": "api",
+  "check": "/provinces 2027-Q2: riskLevel = issue class",
+  "pass": true,
+  "detail": "bad []"
+ },
+ {
+  "layer": "api",
+  "check": "/forecast region 2027-Q2 = mean of the five shares",
+  "pass": true,
+  "detail": "api 0.2432 vs 0.2432"
+ },
+ {
+  "layer": "api",
+  "check": "/forecast/timeseries Quezon 2027-Q2 = issue share",
+  "pass": true,
+  "detail": "[{'quarter': '2027-Q2', 'riskScore': 0.266, 'riskLevel': 'low', 'isForecast': True, 'scoreType': 'final_food_insecurity_risk'}] vs 0.266"
+ },
+ {
+  "layer": "api",
+  "check": "/forecast-period names the served issue",
+  "pass": true,
+  "detail": {
+   "now_ph": "2026-11-14T07:35:02+08:00",
+   "timezone": "Asia/Manila",
+   "current_quarter": "2026-Q4",
+   "issue_quarter": "2026-Q4",
+   "issue_date": "2026-11-01T00:00:00+08:00",
+   "information_cutoff": "2026-11-01T00:00:00+08:00 (exclusive)"
+  }
+ },
+ {
+  "layer": "lgu",
+  "check": "Quezon towns ranked from 1",
+  "pass": true,
+  "detail": "41 towns, ranks 1..41"
+ },
+ {
+  "layer": "lgu",
+  "check": "a higher priority never ranks below a lower one",
+  "pass": true,
+  "detail": []
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q1: 142 cities and municipalities, 5 provinces",
+  "pass": true,
+  "detail": 142
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q1: provinceEstimate = own province's issue share",
+  "pass": true,
+  "detail": "every town carries its own province's value"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q1: vulnerability = 0.6 poverty pct + 0.4 density pct (recomputed over 142)",
+  "pass": true,
+  "detail": "max |d| 0.0000"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q1: priority = province share x vulnerability",
+  "pass": true,
+  "detail": "max |d| 0.000049"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q1: town colour class = province class",
+  "pass": true,
+  "detail": "all"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q2: 142 cities and municipalities, 5 provinces",
+  "pass": true,
+  "detail": 142
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q2: provinceEstimate = own province's issue share",
+  "pass": true,
+  "detail": "every town carries its own province's value"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q2: vulnerability = 0.6 poverty pct + 0.4 density pct (recomputed over 142)",
+  "pass": true,
+  "detail": "max |d| 0.0000"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q2: priority = province share x vulnerability",
+  "pass": true,
+  "detail": "max |d| 0.000049"
+ },
+ {
+  "layer": "lgu",
+  "check": "2027-Q2: town colour class = province class",
+  "pass": true,
+  "detail": "all"
+ }
+]

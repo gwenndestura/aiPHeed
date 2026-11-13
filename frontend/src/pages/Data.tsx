@@ -17,14 +17,14 @@ type SortKey = "name" | "riskScore" | "riskLevel" | "qoqChangePct" | "articleCou
 
 /** Phones: the table's sortable headings as one menu. */
 const SORT_OPTIONS: { value: `${SortKey}:${"asc" | "desc"}`; label: string }[] = [
-  { value: "riskScore:desc", label: "Sort: chance of high risk, highest first" },
-  { value: "riskScore:asc", label: "Sort: chance of high risk, lowest first" },
+  { value: "riskScore:desc", label: "Sort: food insecurity risk, highest first" },
+  { value: "riskScore:asc", label: "Sort: food insecurity risk, lowest first" },
   { value: "name:asc", label: "Sort: province, A to Z" },
   { value: "name:desc", label: "Sort: province, Z to A" },
   { value: "qoqChangePct:desc", label: "Sort: change from last quarter, largest first" },
   { value: "qoqChangePct:asc", label: "Sort: change from last quarter, smallest first" },
-  { value: "articleCount:desc", label: "Sort: news reports, most first" },
-  { value: "articleCount:asc", label: "Sort: news reports, fewest first" },
+  { value: "articleCount:desc", label: "Sort: local news reports, most first" },
+  { value: "articleCount:asc", label: "Sort: local news reports, fewest first" },
   { value: "riskLevel:desc", label: "Sort: risk level, high first" },
   { value: "riskLevel:asc", label: "Sort: risk level, low first" },
 ];
@@ -69,7 +69,7 @@ export default function DataPage() {
   };
 
   const exportCsv = () => {
-    const header = ["Province", "Quarter", "Food insecurity risk (%)", "Risk Level", "QoQ Change %", "Articles", "Status"];
+    const header = ["Province", "Quarter", "Food insecurity risk (%)", "Risk Level", "QoQ Change %", "Local news reports", "Status"];
     const csv = [
       header.join(","),
       ...filtered.map((r) =>
@@ -100,10 +100,10 @@ export default function DataPage() {
 
   const columns: { key: SortKey; label: string }[] = [
     { key: "name", label: "Province" },
-    { key: "riskScore", label: "Chance of high risk" },
+    { key: "riskScore", label: "Food insecurity risk" },
     { key: "riskLevel", label: "Risk level" },
     { key: "qoqChangePct", label: "Change from last quarter" },
-    { key: "articleCount", label: "News reports" },
+    { key: "articleCount", label: "Local news reports" },
   ];
 
   return (
@@ -203,7 +203,7 @@ export default function DataPage() {
                     </span>
                     <span className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[14px]">
                       <span className="flex flex-col">
-                        <span className="text-[12px] text-muted-foreground">Risk score</span>
+                        <span className="text-[12px] text-muted-foreground">Food insecurity risk</span>
                         <span className="tabular-nums font-bold" style={{ color }}>{r.riskScore !== null ? pct(r.riskScore) : "—"}</span>
                       </span>
                       <span className="flex flex-col">
@@ -211,7 +211,7 @@ export default function DataPage() {
                         <span className="tabular-nums">{r.qoqChangePct !== null ? formatSigned(r.qoqChangePct, 1, "%") : "—"}</span>
                       </span>
                       <span className="flex flex-col">
-                        <span className="text-[12px] text-muted-foreground">Articles</span>
+                        <span className="text-[12px] text-muted-foreground">Local news reports</span>
                         <span className="tabular-nums">{r.articleCount}</span>
                       </span>
                       <span className="flex flex-col">

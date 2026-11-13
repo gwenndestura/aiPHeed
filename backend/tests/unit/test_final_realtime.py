@@ -348,3 +348,95 @@ def test_news_panel_lists_every_story_the_served_issue_read():
     assert n["articleCount"] == len(doc["stories"]) == 307
     assert n["provinceAttributed"] == doc["counts"]["province"]                  # 64 stories about a specific province
     assert (doc["from"], doc["to"]) == ("2026-08-01", "2026-10-31")
+
+
+# ------------------------------------------------------------------------------------------- full-system audit 2026-11-14
+def test_an_issue_cannot_use_figures_published_after_its_cut_off(monkeypatch):
+    """C1: the 2026-Q4 issue used October CPI / September LFS released after 1 November (E168 refresh rule). An issue now
+    refuses to build unless only figures online before its cut-off count."""
+    from app.final import issue as IS
+    from app.e168 import live_data as LD
+    monkeypatch.setenv("AIPHEED_LIVE_ASOF", "2027-02-01")
+    monkeypatch.setenv("AIPHEED_LIVE_PUBLISHED", "2027-02-08")
+    with pytest.raises(IS.IssueError, match="published up to 2027-02-08"):
+        IS.check_information_rule("2027-Q1")
+    monkeypatch.delenv("AIPHEED_LIVE_PUBLISHED")
+    IS.check_information_rule("2027-Q1")                                  # strict: published-by = cut-off
+    assert LD._live_dates()[1] == LD._live_dates()[0]
+    monkeypatch.setenv("AIPHEED_LIVE_ASOF", "2026-11-01")
+    with pytest.raises(IS.IssueError, match="not the issue cut-off"):
+        IS.check_information_rule("2027-Q1")
+
+
+def test_the_cycle_never_carries_a_later_published_by_date(env, monkeypatch):
+    import os
+    seen = {}
+    monkeypatch.setenv("AIPHEED_LIVE_PUBLISHED", "2099-01-01")
+
+    def stage(as_of, published):
+        seen["pub"] = os.environ.get("AIPHEED_LIVE_PUBLISHED")
+        return {}
+    CY.run("2027-02-01T07:00", update_sources=lambda n: {}, refresh_data=stage, build_issue=lambda q: fake_issue(env["issues"], q),
+           ledger=env["led"], runs=env["runs"], lock=env["lock"])
+    assert seen["pub"] is None                                            # a stray later published-by date is dropped
+
+
+def test_issue_disclosure_reaches_every_surface():
+    """C1 disclosure for the served 2026-Q4 issue: outlook, forecast period, history and both PDFs state it."""
+    import json
+    from app.final import period as PD
+    from app.final import report_data as FRD
+    from app.final import serving as SVG
+    from app.hcw import serve as SV
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    assert PD.published_by("2026-Q4") == "2026-11-08" and "October 2026 consumer prices" in PD.issue_note("2026-Q4")
+    assert PD.published_by("2027-Q1") == "2027-02-01" and PD.issue_note("2027-Q1") is None
+    o = SV.outlook()
+    assert o["data_published_by"] == "2026-11-08" and o["issue_note"] and "as published by 2026-11-08" in o["information_cutoff"]
+    t = json.dumps(FRD.trend("region", None, "2027-Q1", "2027-Q2"))
+    assert "as published by 8 November 2026" in t and "About the data" in t
+
+
+def test_town_panel_shows_the_poverty_value_the_rank_used():
+    """L1: Lucena showed a 16.8% 'province substitute' while its rank used PSA's own 2021 City of Lucena figure (10%)."""
+    import pandas as pd
+    from app.e145 import lgu as L
+    from app.final import serving as SVG
+    from app.services import dashboard as D
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    V = pd.read_csv(L.BASE, dtype={"lgu_psgc": str})
+    used = dict(zip(V["lgu_psgc"].str.zfill(9), V["poverty_incidence_2021"]))
+    M = D.municipality_summary("2027-Q1")
+    assert len(M) == 142
+    assert all(abs(m["povertyValueUsed"] - used[m["lguCode"]]) < 1e-9 for m in M)
+    luc = next(m for m in M if m["name"] == "Lucena")
+    assert luc["povertyRate"] == 10.0 and "substitute" not in (luc["povertyEstimateKind"] or "")
+    assert all("probability" not in m["riskLevelBasis"] and "probability" not in m["disaggregationLabel"] for m in M)
+
+
+def test_rows_endpoint_horizon_note_is_finals_own():
+    from app.final import serving as SVG
+    from app.ml.inference import hcw_system as HS
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    assert "Lead 18" not in HS.horizon()["why_not_longer"] and "Lead 3" in HS.horizon()["why_not_longer"]
+
+
+def test_pdf_population_matches_the_dashboard():
+    """Quezon's PDF headline read 1,980,338 (PSA province row, without Lucena); the dashboard and the 41 towns sum to 2,260,669."""
+    from app.final import report_data as FRD
+    from app.final import serving as SVG
+    from app.services import dashboard as D
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    towns = sum(m["population"] for m in D.municipality_summary("2027-Q1", province_id="quezon"))
+    head = next(b for b in FRD.drivers("quezon", "2027-Q1")["blocks"] if b["kind"] == "table")
+    row = next(r for r in head["rows"] if r[0].startswith("Population"))
+    assert row[1] == f"{towns:,}" == "2,260,669"
+
+
+def test_harvest_period_shown_is_the_one_the_inputs_used():
+    """The panel said Oct 2025-Sep 2026; the 45-day rule (app.e137.features._published_quarters) gives Q3 2025-Q2 2026."""
+    from app.final import serving as SVG
+    from app.ml.inference import hcw_system as HS
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    it = next(i for i in HS.data_used()["items"] if i["name"] == "Rice and corn harvest")
+    assert it["when"] == "Jul 2025–Jun 2026" and it["period"].startswith("Q3 2025 to Q2 2026")

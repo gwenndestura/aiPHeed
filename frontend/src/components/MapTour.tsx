@@ -62,7 +62,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Province summary",
       body: ({ layout }) =>
-        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its chance of high risk, how it changed from last quarter and its population.`,
+        `${layout === "phone" ? "The Summary tab" : "This panel"} shows the regional picture. Select a province to see its food insecurity risk, how it changed from last quarter and its population.`,
       target: (l) => (l === "phone" ? "sheet" : "summary"),
       layout: { panel: "summary", sheet: "half" },
     },

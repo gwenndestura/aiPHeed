@@ -99,6 +99,9 @@ export function FoodInsecurityStatusCardBody() {
           ))}
         </dl>
       )}
+      {data.issue_note && (
+        <p className="text-[9px] text-muted-foreground leading-snug" data-testid="fi-status-issue-note">{data.issue_note}</p>
+      )}
       <ForecastPeriodLines />
       <p className="text-[9px] text-muted-foreground">
         Model {data.production?.model_id}{approved ? `, approved ${approved}` : ""}.

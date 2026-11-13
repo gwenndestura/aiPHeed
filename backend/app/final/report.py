@@ -90,12 +90,15 @@ def _period_block() -> list:
     served = st.get("served_issue_quarter")
     lines = [f"<b>Now:</b> {_ql(st['current_quarter'])}"]
     if served:
-        lines.append(f"<b>Forecast issued:</b> {_ql(served)}, with data published before {_day(PD.issue_datetime(served).isoformat())}; "
-                     f"made {_day(st.get('served_generated_utc'))}")
+        lines.append(f"<b>Forecast issued:</b> {_ql(served)}, with data for periods before {_day(PD.issue_datetime(served).isoformat())}"
+                     + (f" as published by {_day(PD.published_by(served) + 'T00:00:00+08:00')}" if PD.issue_note(served) else "")
+                     + f"; made {_day(st.get('served_generated_utc'))}")
         lines.append("<b>Quarters forecast:</b> " + ", ".join(f"{_ql(t['quarter'])} ({t['lead']} quarter{'s' if t['lead'] > 1 else ''} ahead)"
                                                            for t in PD.targets(served)))
     lines.append(f"<b>Next forecast:</b> {_day(st['next_issue_date'])} (a new forecast is issued automatically every quarter)")
     flow = [R._callout("Forecast period", "<br/>".join(lines))]
+    if served and PD.issue_note(served):
+        flow += [Spacer(1, 2 * mm), R._callout("About the data in this forecast", R._escape(PD.issue_note(served)), R.WARN_BG)]
     if st.get("stale") and st.get("stale_reason"):
         flow += [Spacer(1, 2 * mm), R._callout("Not yet updated", R._escape(st["stale_reason"][0].upper() + st["stale_reason"][1:]) + ".", R.WARN_BG)]
     return flow
@@ -206,7 +209,9 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
         [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(share)}</b> of households (forecast)", "cell")],
         [R._p("Risk class", "small"), R._p(f"<b>{str(r.get('class') or pv.get('riskLabel') or '--').upper()}</b> (High risk at 50%)", "cell")],
         [R._p("Rank in CALABARZON", "small"), R._p(f"<b>{rank} of {len(published)}</b> (highest risk first)" if rank else "--", "cell")],
-        [R._p(f"Population ({fig.get('census_year', '')} census)", "small"), R._p(f"<b>{fig['population']:,}</b>" if "population" in fig else "--", "cell")],
+        # the dashboard's population: all the province's cities and municipalities, independent cities included (audit 2026-11-14:
+        # the PSA province row leaves out Lucena, so Quezon read 1,980,338 here and 2,260,669 on the dashboard)
+        [R._p(f"Population ({fig.get('census_year', '')} census)", "small"), R._p(f"<b>{pv['population']:,}</b>" if pv.get("population") else "--", "cell")],
         [R._p("News reports used", "small"), R._p(f"<b>{pv['articleCount']}</b>", "cell")],
     ], [55 * mm, width - 55 * mm])]
     if pv.get("limitedSignal"):

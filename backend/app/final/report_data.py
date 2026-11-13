@@ -55,8 +55,9 @@ def _served(quarter: str | None = None) -> tuple[str, list[dict]]:
 
 def _metadata(area: str, period: str, issue: str) -> list[list[str]]:
     return [["Area", area], ["Period", period], ["Date prepared", _today()], ["Prepared for", "DA Region IV-A"],
-            ["Data", f"FINAL forecast issued {_ql(issue)}, using data published before "
-                     f"{FR._day(PD.issue_datetime(issue).isoformat())}"],
+            ["Data", f"FINAL forecast issued {_ql(issue)}, using data for periods before "
+                     f"{FR._day(PD.issue_datetime(issue).isoformat())}"
+                     + (f" as published by {FR._day(PD.published_by(issue) + 'T00:00:00+08:00')}" if PD.issue_note(issue) else "")],
             ["Model", "FINAL (RATE + MIND): LightGBM, starting from the latest FNRI provincial survey"]]
 
 
@@ -64,10 +65,13 @@ def _period_blocks(issue: str) -> list[dict]:
     from app.final import cycle as CY
     st = CY.status()
     items = [f"Now: {_ql(st['current_quarter'])}.",
-             f"Forecast issued: {_ql(issue)}, with data published before {FR._day(PD.issue_datetime(issue).isoformat())}.",
+             f"Forecast issued: {_ql(issue)}, with data for periods before {FR._day(PD.issue_datetime(issue).isoformat())}"
+             + (f" as published by {FR._day(PD.published_by(issue) + 'T00:00:00+08:00')}." if PD.issue_note(issue) else "."),
              "Quarters forecast: " + ", ".join(f"{_ql(t['quarter'])} ({t['lead']} quarter{'s' if t['lead'] > 1 else ''} ahead)"
                                                for t in PD.targets(issue)) + ".",
              f"Next forecast: {FR._day(st['next_issue_date'])} (a new forecast is issued automatically every quarter)."]
+    if PD.issue_note(issue):
+        items.append("About the data: " + PD.issue_note(issue))
     if st.get("stale") and st.get("stale_reason"):
         items.append("Not yet updated: " + st["stale_reason"][0].upper() + st["stale_reason"][1:] + ".")
     return [{"kind": "heading", "level": 1, "text": "Forecast Period"}, {"kind": "bullets", "items": items}]
@@ -241,7 +245,7 @@ def drivers(pid: str, quarter: str) -> dict:
     head = [["Food insecurity risk", f"{_pct(r.get('score_pct'))} of households (forecast)"],
             ["Risk class", f"{str(r.get('class') or '--').upper()} (High risk at 50%)"],
             ["Rank in CALABARZON", f"{rank} of 5 (highest risk first)"],
-            [f"Population ({fig.get('census_year', '')} census)", f"{fig['population']:,}" if "population" in fig else "--"],
+            [f"Population ({fig.get('census_year', '')} census)", f"{pv['population']:,}" if pv.get("population") else "--"],   # as on the dashboard
             ["News reports used", str(pv.get("articleCount", "--"))]]
     blocks = [{"kind": "paragraph", "style": "body", "text": INTRO}, *_period_blocks(issue),
               {"kind": "heading", "level": 1, "text": "Key Points"},

@@ -169,8 +169,11 @@ def _install(HS, SV) -> None:
         cut = d["information_cutoff"]
         return {**{k: d[k] for k in ("model", "name", "issue_quarter", "target", "acceptance_basis", "statistical_reliability")},
                 "accuracy_by_lead": {str(k): v for k, v in d["accuracy_by_lead"].items()}, "seals": {},
-                "origin_date": cut, "classification_threshold": 0.5, "information_cutoff": f"data published before {cut}",
-                "created_utc": d.get("created_utc"), "data_published_by": cut,
+                "origin_date": cut, "classification_threshold": 0.5,
+                "information_cutoff": (f"data for periods before {cut}, as published by {PD.published_by(d['issue_quarter'])}"
+                                       if PD.issue_note(d["issue_quarter"]) else f"data published before {cut}"),
+                "created_utc": d.get("created_utc"), "data_published_by": PD.published_by(d["issue_quarter"]),
+                "issue_note": PD.issue_note(d["issue_quarter"]),
                 "data_through": (pd.Timestamp(cut) - pd.Timedelta(days=1)).date().isoformat(), "data_used": HS.data_used()["items"],
                 "provinces": [r for r in d["provinces"] if r["lead"] in served]}
     SV.outlook = _outlook_final
@@ -194,6 +197,9 @@ def _install(HS, SV) -> None:
     V = pd.read_csv(_L.BASE, dtype={"lgu_psgc": str})
     V["code"] = V["lgu_psgc"].str.zfill(9)
     VUL = dict(zip(V["code"], _L.W_POVERTY * V["pct_poverty"] + _L.W_DENSITY * V["pct_density"]))
+    # the poverty value the ranking actually used, with its source (audit 2026-11-14: Lucena showed a 16.8% "province substitute"
+    # while the ranking used PSA's own 2021 City of Lucena figure, 10%); the panel must show the value behind the rank
+    POV = {c: (float(v), str(s)) for c, v, s in zip(V["code"], V["poverty_incidence_2021"], V["poverty_source"])}
     _muni = _D.municipality_summary
     METHOD = ("vulnerability = 0.6 x poverty percentile + 0.4 x density percentile across the 142 LGUs (owner Option A, app/e145/lgu.py); "
               "priority = province food insecurity risk x vulnerability, 4 dp; ranked on the unrounded value. A relative "
@@ -206,6 +212,12 @@ def _install(HS, SV) -> None:
             if v is not None and p is not None:
                 m["vulnerabilityIndex"], m["riskIndex"], m["rankingMethod"] = round(float(v), 6), round(float(p) * float(v), 4), METHOD
                 m["_u"] = float(p) * float(v)
+            used = POV.get(m["lguCode"])
+            if used is not None and (m.get("povertyValueUsed") is None or abs(float(m["povertyValueUsed"]) - used[0]) > 1e-6):
+                m["povertyRate"], m["povertyValueUsed"] = used[0], used[0]
+                m["povertyEstimateKind"] = f"PSA city or municipal estimate: {used[1]}"
+                m["povertyLimitation"] = ("PSA publishes this figure rounded to the whole percent." if "whole percent" in used[1]
+                                          else None)
         scored = sorted([m for m in rows if "_u" in m], key=lambda m: (-m["_u"], m["lguCode"]))
         for i, m in enumerate(scored, 1):
             m["rankRegion"] = i
@@ -230,7 +242,27 @@ def _install(HS, SV) -> None:
                 it["when"], it["period"] = F["local_prices"], f"{F['local_prices']} (3 months ending 3 months before the issue quarter)"
             elif it.get("group") == "household_economy":
                 it["when"], it["period"] = str(F["grdp_year"]), f"{F['grdp_year']} (latest year published by the issue date)"
+            elif it.get("name") == "Rice and corn harvest":
+                it["when"], it["period"] = _harvest_window(F["cutoff"])
         return {**d, "items": items}
+
+    def _harvest_window(cutoff):
+        """The four quarters FINAL's harvest inputs used: a quarter counts 45 days after it ends (app.hcw.inputs ->
+        app.e137.features._published_quarters, no download rule). Audit 2026-11-14: the panel said Oct 2025-Sep 2026 (the
+        E168 download rule) while the inputs used Q3 2025-Q2 2026."""
+        cut = pd.Timestamp(cutoff)
+        y, q = cut.year, (cut.month - 1) // 3 + 1
+        while True:
+            q, y = (q - 1, y) if q > 1 else (4, y - 1)
+            end = pd.Timestamp(year=y, month=3 * q, day=1) + pd.offsets.MonthEnd(0)
+            if end + pd.Timedelta(days=45) <= cut:
+                break
+        last = pd.Period(f"{y}Q{q}", "Q")
+        first, prev = last - 3, last - 7
+        mon = lambda p, e: (p.end_time if e else p.start_time).strftime("%b %Y")
+        return (f"{mon(first, 0)}–{mon(last, 1)}",
+                f"Q{first.quarter} {first.year} to Q{last.quarter} {last.year}, compared with Q{prev.quarter} {prev.year} to "
+                f"Q{(last - 4).quarter} {(last - 4).year} (a quarter counts 45 days after it ends)")
     HS.data_used = _data_used_final
 
     # ---- evaluation: the served leads (period.max_lead) and the five-metric rule
@@ -250,6 +282,12 @@ def _install(HS, SV) -> None:
         ev["horizon"] = hz
         return ev
     HS.evaluation = _evaluation_final
+    _horizon0 = HS.horizon
+
+    def _horizon_final():
+        # /final/risk/rows: the horizon note is FINAL's own (it carried Setup H's "Lead 7 ... up to Lead 18"; audit 2026-11-14)
+        return {**_horizon0(), "why_not_longer": HS.evaluation()["horizon"]["why_not_longer"]}
+    HS.horizon = _horizon_final
 
     # ---- factor groups as shown (merged, non-overlapping) + poverty bar
     HS.GROUPS = {"market": "Food prices", "ag_production": "Rice and corn harvests", "ag_vulnerability": "Dry spells and typhoons",
@@ -396,3 +434,11 @@ def _install(HS, SV) -> None:
     for k, v in list(vars(HS).items()):
         if not k.startswith("_") and isinstance(v, str) and OLD in v:
             setattr(HS, k, v.replace(OLD, NEW))
+    # the province value behind a town is FINAL's forecast SHARE of food-insecure households, not a probability (audit 2026-11-14)
+    HS.LGU_BASIS = ("Relative position within the province: the province's FINAL (RATE + MIND) forecast share of food-insecure "
+                    "households re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a "
+                    "measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.")
+    HS.LGU_LEVEL_BASIS = ("Colour = the province's FINAL (RATE + MIND) risk class (High when 50% or more of its households are forecast to be "
+                          "food insecure). The number and rank are this city's or municipality's priority within the province: the province "
+                          "forecast share re-weighted by PSA poverty incidence (60%) and population density (40%). Not a measured or official "
+                          "municipal food-insecurity rate; the ranking has not been checked against municipal outcomes.")

@@ -42,8 +42,8 @@ export function AboutModal() {
               at <b className="text-foreground">high food-insecurity risk</b> in a quarter when 50% or more of its
               households are forecast to be moderately or severely food insecure (FNRI HFIAS). Each province shows
               the forecast{" "}
-              <b className="text-foreground">probability of high risk</b>; <b>0.50</b> or more is High risk. An{" "}
-              <b className="text-foreground">active alert</b> appears when the regional value is <b>0.60</b> or
+              <b className="text-foreground">share of food-insecure households</b>; <b>50%</b> or more is High risk. An{" "}
+              <b className="text-foreground">active alert</b> appears when a province's forecast share is <b>60%</b> or
               higher. City and municipal values rank towns within each province by poverty and density; they are a
               priority ranking from the province forecast, not a measured or forecast municipal rate.
             </p>
@@ -74,8 +74,9 @@ export function AboutModal() {
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
                   FINAL (RATE + MIND): a constrained LightGBM forecasts each province's change per quarter from its latest
                   FNRI survey level, from food prices, local rice and palay prices, weather and farm supply, dry spells
-                  and typhoons, rice and corn harvests, jobs (national) and the regional economy, with HIGH and LOW
-                  cases weighted equally and the average of five fits. It was tested on 72 provincial forecasts for the
+                  and typhoons, rice and corn harvests, jobs (national), the regional economy, poverty and population, and
+                  news on food stress, with HIGH and LOW cases weighted equally and the average of five fits. Each forecast keeps
+                  only the 25 candidate inputs most related to the outcome; the groups it used are shown under "Why is this at risk?". It was tested on 72 provincial forecasts for the
                   2018, 2019 and 2021 survey rounds, using only data published before each forecast was issued, and
                   these same results were also used to choose this setup. Accuracy is the share of correct high/low calls.
                 </p>
@@ -113,7 +114,7 @@ export function AboutModal() {
                   k="Reliable forecast horizon"
                   v={
                     risk.max_reliable_lead
-                      ? `${risk.max_reliable_lead} quarters ahead (evidence from 3 survey rounds; a stricter rule that every survey round and seed must pass holds to 4; in the 2021 round 1 of 4 HIGH provinces was found)`
+                      ? `${risk.max_reliable_lead} quarters ahead (pooled over 3 survey rounds; no lead passes in every single round; in the 2021 round 1 of 4 HIGH provinces was found)`
                       : "Not established"
                   }
                 />
@@ -142,9 +143,10 @@ export function AboutModal() {
 
           <Section title="Missing and limited data">
             <p className="text-[11px] leading-relaxed text-muted-foreground">
-              A missing figure is left out, not counted as zero, and the dashboard lists missing inputs. The one
-              exception is news about a single province: when there was none, that province's news counts as "no
-              change from usual". Provinces with fewer than 5 news articles about them are marked "Limited data".
+              A figure not yet published at the issue date is filled with its typical value and flagged as missing; it is
+              never counted as zero or as low risk. News about a single province is the one exception: when there was none,
+              that province's news counts as "no change from usual". Provinces with fewer than 5 news stories about them are
+              marked LIMITED_SIGNAL.
             </p>
           </Section>
 
@@ -171,7 +173,7 @@ export function AboutModal() {
 
           <div className="grid gap-2 pt-1">
             <Row k="Model" v="FINAL (RATE + MIND): latest FNRI survey level + LightGBM change per quarter, missing-input flags, HIGH and LOW weighted equally" />
-            <Row k="Map value" v="Probability that 50% or more of households are moderately or severely food insecure" />
+            <Row k="Map value" v="Forecast share of households moderately or severely food insecure (High risk at 50%)" />
             <Row k="Lead time" v="1 and 2 quarters ahead: all five measures 75% or more (pooled) · further ahead: not shown" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>
@@ -194,7 +196,8 @@ export function AboutModal() {
 }
 
 /** The data sources, one row each with a thin divider between rows. */
-// Setup H + class weights sources (backend/app/hcw/engine.py feature sets: no fisheries production, no remittances); SWS is context only.
+// FINAL (RATE + MIND) candidate-input sources (data/final/meta/feature_inventory.csv); SWS hunger (h2) is a candidate input that the
+// current forecast does not use, so it is listed as context.
 const DATA_SOURCES = [
   "FNRI National and Expanded National Nutrition Surveys: household food insecurity (HFIAS), by province",
   "Philippine Statistics Authority (PSA): food and rice prices, farmgate and wholesale rice prices, palay and corn production, regional GRDP, poverty, population, labor force",

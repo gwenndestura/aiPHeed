@@ -860,6 +860,8 @@ export interface FoodInsecurityStatus {
   /** Last day of the newest period used (the cut-off minus one day) and the day the figures were checked online. */
   data_through?: string;
   data_published_by?: string;
+  /** A recorded disclosure about this issue's data (e.g. figures published after its cut-off). */
+  issue_note?: string | null;
   /** The newest period of every input the served forecast used (app.ml.inference.e168_system.data_used). */
   data_used?: { group: string; name: string; source: string; level: string; period: string; note?: string; label?: string; when?: string }[];
   /** Per province and lead: forecast share of moderately or severely food-insecure households (HFIAS, %) and its 90% range. */
@@ -922,4 +924,6 @@ export interface ForecastHistory {
   count: number;
   forecasts: HistoryForecast[];
   ledger: { ok: boolean; records?: number; reason?: string };
+  /** Recorded disclosures per issue quarter, e.g. figures published after its cut-off. */
+  issue_notes?: Record<string, { note: string; published_by: string }>;
 }

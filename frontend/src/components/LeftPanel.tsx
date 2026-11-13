@@ -421,8 +421,9 @@ export function ProvinceRankingCardBody({
   const sortedProvinces = regionsData.slice().sort((a, b) =>
     Number(scored(b)) - Number(scored(a)) || b.riskScore - a.riskScore);
   const maxScore = Math.max(...regionsData.filter(scored).map((r) => r.riskScore), 0.01);
-  const sh = useShareRows();
-  const shareOf = (r: RegionData) => sh.byName.get(r.name.toLowerCase())?.score_pct;
+  // The selected quarter's value from /provinces (the backend's forecast share for THAT quarter). Audit 2026-11-14: this card read
+  // the Lead-1 outlook rows whatever quarter was selected, so Q2 2027 listed Q1 2027's shares.
+  const shareOf = (r: RegionData) => (typeof r.riskScore === "number" ? Math.round(r.riskScore * 1000) / 10 : undefined);
 
   return (
     <div>
@@ -562,7 +563,7 @@ function RegionDetail({
                 title={`Forecast risk level (${pct(displayCutoff, 0)} display cutoff)`}
               />
               {isActiveAlert && (
-                <StatusBadge tone="high" title={`Active alert: risk probability at or above ${alertThreshold}`}>
+                <StatusBadge tone="high" title={`Active alert: forecast share at or above ${pct(alertThreshold, 0)}`}>
                   Active alert
                 </StatusBadge>
               )}

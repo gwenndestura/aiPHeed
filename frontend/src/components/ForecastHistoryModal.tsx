@@ -43,8 +43,8 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <DialogTitle className="text-sm">Forecast history</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
-            Every forecast issued so far, newest first. Each was made only with information published before its issue date and
-            is kept unchanged. A forecast is checked against the actual result only when FNRI publishes a provincial survey for that
+            Every forecast issued so far, newest first. Each is kept unchanged; any exception to the rule that a
+            forecast uses only information published before its issue date is stated under that forecast. A forecast is checked against the actual result only when FNRI publishes a provincial survey for that
             quarter.
           </DialogDescription>
         </DialogHeader>
@@ -62,12 +62,18 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
               <div className="flex flex-wrap items-baseline gap-x-2 text-[11px]">
                 <span className="font-semibold">Issued {qLabel(iq)}</span>
                 <span className="text-muted-foreground">
-                  data published before {day(head.information_cutoff)} · made {day(head.generated_utc)} · model {head.model_version}
+                  {data?.issue_notes?.[iq]
+                    ? <>data for periods before {day(head.information_cutoff)}, as published by {day(data.issue_notes[iq].published_by)}</>
+                    : <>data published before {day(head.information_cutoff)}</>}{" "}
+                  · made {day(head.generated_utc)} · model {head.model_version}
                 </span>
                 <span className="ml-auto text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
                   {current ? "Current issue" : "Earlier issue"}
                 </span>
               </div>
+              {data?.issue_notes?.[iq] && (
+                <p className="mt-1 text-[10px] leading-snug text-muted-foreground" data-testid={`history-note-${iq}`}>{data.issue_notes[iq].note}</p>
+              )}
               <div className="mt-1.5 overflow-x-auto">
                 <table className="w-full text-[11px] border-collapse">
                   <thead>

@@ -43,6 +43,17 @@ def max_lead(cfg: dict | None = None) -> int:
     return lead
 
 
+def published_by(issue_quarter: str, cfg: dict | None = None) -> str:
+    """The date by which an issue's figures had been published: the cut-off, unless the issue carries a recorded exception."""
+    n = (cfg or serving()).get("issue_notes", {}).get(issue_quarter, {})
+    return n.get("published_by") or issue_datetime(issue_quarter, cfg).date().isoformat()
+
+
+def issue_note(issue_quarter: str, cfg: dict | None = None) -> str | None:
+    """A recorded disclosure about one issue (e.g. figures published after its cut-off), shown wherever that issue is described."""
+    return (cfg or serving()).get("issue_notes", {}).get(issue_quarter, {}).get("note")
+
+
 def issue_datetime(quarter: str, cfg: dict | None = None) -> datetime:
     rule = {**DEFAULT_RULE, **(cfg or serving()).get("issue_rule", {})}
     y, q = int(quarter[:4]), int(quarter[-1])
@@ -88,6 +99,8 @@ def period(now: datetime | str | None = None, cfg: dict | None = None) -> dict:
         "issue_quarter": issue,
         "issue_date": issue_datetime(issue, cfg).isoformat(),
         "information_cutoff": issue_datetime(issue, cfg).isoformat() + " (exclusive)",
+        "published_by": published_by(issue, cfg),
+        "issue_note": issue_note(issue, cfg),
         "next_issue_quarter": nxt,
         "next_issue_date": issue_datetime(nxt, cfg).isoformat(),
         "max_lead": max_lead(cfg),

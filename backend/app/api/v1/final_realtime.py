@@ -24,7 +24,7 @@ from app.final import cycle as CY
 from app.final import history as HI
 from app.final import period as PD
 from app.final import sources as SR
-from app.services.security import require_admin
+from app.services.security import forbid_demo_writes, require_admin
 
 router = APIRouter()
 _RUNNING = threading.Lock()
@@ -70,7 +70,10 @@ def forecast_history(province: str | None = Query(None), issue: str | None = Que
                     "target_status": PD.status_of(r["target_quarter"], per["current_quarter"])})
     out.sort(key=lambda r: (r["issue_quarter"], r["target_quarter"], r["province"]), reverse=True)
     return {"current_quarter": per["current_quarter"], "served_issue_quarter": served, "issues": HI.issues(per["model_id"]),
-            "count": len(out), "forecasts": out, "ledger": HI.verify()}
+            "count": len(out), "forecasts": out, "ledger": HI.verify(),
+            # recorded disclosures per issue (e.g. figures published after the cut-off), never a rewrite of the issue itself
+            "issue_notes": {q: {"note": PD.issue_note(q), "published_by": PD.published_by(q)}
+                            for q in HI.issues(per["model_id"]) if PD.issue_note(q)}}
 
 
 @router.get("/forecast-evaluation")
@@ -122,7 +125,9 @@ class OutcomeIn(BaseModel):
     source_sha256: str = Field(min_length=64, max_length=64)
 
 
-@router.post("/admin/forecast-outcomes")
+# the admin router's guards (app/api/v1/admin.py): an admin login, and the demo account is read-only. Audit 2026-11-14: this route
+# lived outside that router, so the demo account got 422 (its body was validated) instead of 403.
+@router.post("/admin/forecast-outcomes", dependencies=[Depends(require_admin), Depends(forbid_demo_writes)])
 async def record_outcome(body: OutcomeIn, user=Depends(require_admin)) -> dict:
     try:
         return HI.record_outcome(body.province, body.reference_quarter, body.observed_share_pct, body.source, body.source_sha256,
