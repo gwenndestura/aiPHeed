@@ -253,12 +253,17 @@ describe("Landing page", () => {
     expect(text).toContain("The number shown is the forecast probability of High risk, from 0 to 1");
     expect(text).toContain("Household Food Insecurity Access Scale (HFIAS)");
     expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
-    const src = container.querySelector("#methodology table")?.textContent ?? "";
-    expect(src).toContain("FNRI National/Expanded National Nutrition Survey (HFIAS)");
-    expect(src).toMatch(/Bangko Sentral ng Pilipinas cash remittances.*Yearly, 2013 to 2025/);
-    expect(src).not.toMatch(/Pink Sheet|PAGASA El Ni|9,667/);
-    expect(src).toMatch(/PSA fisheries production.*total fish production: commercial, municipal and aquaculture/);
     expect(text).not.toMatch(/did not (measurably )?change the tested accuracy/);
+  });
+
+  it("does not list or explain the forecast model's input variables", () => {
+    const { container } = renderLanding();
+    const text = container.textContent ?? "";
+    expect(container.querySelector("#methodology table")).toBeNull();
+    expect(container.querySelector("#methodology")?.textContent).not.toContain("Data sources");
+    expect(text).not.toMatch(
+      /trigger group|remittance|fisheries production|Fish production|Oceanic Ni|El Niño index|GRDP|regional accounts|Consumer Price Index|Labor Force Survey|NASA POWER|IBTrACS|XLM-RoBERTa|BERTopic|Other model inputs|Used now/,
+    );
   });
 
   it("opens one FAQ row at a time, with aria-expanded", () => {
