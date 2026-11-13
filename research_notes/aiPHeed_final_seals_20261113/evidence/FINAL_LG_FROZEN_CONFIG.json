@@ -1,0 +1,90 @@
+{
+ "model": "FINAL-LG (experimental): FINAL (RATE + MIND) LightGBM + genuine long-gap pair rows",
+ "status": "EXPERIMENTAL; not official; not served",
+ "definition": "PROTOCOL_OPT2 (sha f3a6fdf7): training rows re-built with FNRI2015 withheld from the anchor (NNS2013 anchor) for every released target round after 2015, added to FINAL's training table; engine app.hcw.final_engine.fit_predict unchanged",
+ "pairs": {
+  "n_train": 1308,
+  "n_pairs": 576,
+  "train_rounds": {
+   "ENNS2018": 352,
+   "ENNS2019": 400,
+   "ENNS2021": 400,
+   "FNRI2015": 156
+  },
+  "issue": 8107,
+  "pair_anchor_rq": [
+   8054
+  ],
+  "pair_targets": {
+   "ENNS2018": 22,
+   "ENNS2019": 25,
+   "ENNS2021": 25
+  }
+ },
+ "threshold": 0.5,
+ "seeds": [
+  168,
+  1,
+  2,
+  3,
+  4
+ ],
+ "seed_aggregation": "mean probability",
+ "issue_quarter": "2026-Q4",
+ "information_cutoff": "2026-11-01",
+ "leads": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "reproduction_of_official_FINAL_without_pairs": {
+  "rows": 25,
+  "max_abs_diff_vs_official_rounded_4dp": 0.0,
+  "max_abs_diff_raw": 4.9630544691160175e-05,
+  "PASS": true
+ },
+ "retrospective_evidence": "aiPHeed_final_model_optimization_20261113 (OPT2), aiPHeed_final_reformulation_20261113",
+ "code_sha256": {
+  "seal_fits": "3906b87a49ccc85018f7dfd9801c991a4a97d1645394400eaf5a621ddf773346",
+  "seal_write": "c2fdf827a0afb8cb1fc3bc1f304470736f0ab72c5e05b5d110ef241e5cbedbe6",
+  "build_lg_make_pairs": "a6ee9b4c3820883e16cb626e6452bda247904a32a2771269146007742b0d531a",
+  "final_engine": "2c8e396ee55e2bfbff02597712718a03f2b5ebb0cd29bc100935d876496e4a81",
+  "base_engine": "e38f6adf831ca4a0f1deea0447147e80dc1984d531f88be2f7deac27e4fcece4",
+  "inputs_builder": "c09ec606eff10a546d039c31cff104ea30f9ded034ad9cb899c3408de45894ba",
+  "attr_research": "eadb5f3444479af8f1b88ad4671a25597a4b8a19ece0cff501cc0ca3c2ab41f9"
+ },
+ "data_sha256": {
+  "cand_panel_live": "823f9145ec29eaa8a4cd0da8b923f49d75f2b2d3cb1da7564bf74afd0338a0f4",
+  "labels_oof": "9f0c91849e0d07b39b67c37e53f7d32f25c5cdf824247eaee7128266cc47f3f5",
+  "official_FINAL_seal": "80b20aed3b3ca59d5a246f1195978a5bfdb1671b6409b7c0f189288a27967680"
+ },
+ "parts_sha256": {
+  "LG__L1__1.csv": "794dab2b5f70087e98eec9e0119063678f63af6b1119b6ca5baa6a79883a1c3e",
+  "LG__L1__168.csv": "82b6f5f5b053eeccfbfe09eeab3af98d0d91a8434f3d12d25865a0ae9a8582d5",
+  "LG__L1__2.csv": "7964d883bc7146011f32301f3ebfeb04bc5333cbf8de794c6cd6d2be8c677a34",
+  "LG__L1__3.csv": "ffd44005f30a309554ab97d28d28b21515f1d26864a24a100d09b3022fc93b6f",
+  "LG__L1__4.csv": "796647b446012b488327bf11f39f333a39af8c8eee673103ca766ab9809a089f",
+  "LG__L2__1.csv": "7f2d0003472d6ed31332c6be5d5755aeec1e18db88a453edf6a8982e4567b002",
+  "LG__L2__168.csv": "3d3cca116cf02dda1a732e90242a63420390e778f178b7dd2f19373675b5eef0",
+  "LG__L2__2.csv": "7af4976e5406fb07268884987aff3c70f3af1669438c6225edbc2604d2a11ef3",
+  "LG__L2__3.csv": "8af75a9fe777a0496188769513072697991401bfee1f6f8c798a123286e4e254",
+  "LG__L2__4.csv": "0ad0d9227e2c27e54237c8f500b00b5326da0442af00efd791de3c9a5c72aa34",
+  "LG__L3__1.csv": "fba5d633fbe1871908dee2de798a0e444198ec5c6f68cd36de9aceaf99f3b5f1",
+  "LG__L3__168.csv": "3bde40f5b9031799f0444cc057d4c84b9bea75685d4cbda209cf4f2c91882ddb",
+  "LG__L3__2.csv": "3f030dd91bbef1f44e7a55e38aca8adcf9d07231070e159103d56aead453f74a",
+  "LG__L3__3.csv": "1c32fcd6e77bd6289c2b8b9a58b74f6a5a7997c85ded8a853f7a34e03d1a733b",
+  "LG__L3__4.csv": "bd3fcc76c7ff754cc0142d59938492eb645f1d5ffa6f705c1f70799e962ade66",
+  "LG__L4__1.csv": "a6c636228db90d259f267fa49b7d39c6f2aced4cfbd030c4e183123f41b0655b",
+  "LG__L4__168.csv": "48744bba4b5527b9fe52da7b5dcc81b5bc9804554b9e639c860ef1178d2a6df0",
+  "LG__L4__2.csv": "ff352fb0dc5f9c4a9090f1e3cb2ee8d4f15c86907dbecc867efb37dde7e70eeb",
+  "LG__L4__3.csv": "46617b1a17ee6378305379636c1cea030714211a37c40764877632ad6861bd09",
+  "LG__L4__4.csv": "b06cd487a54771a84506aae4f167c045914e75c84eeab13f6c8d96be724d7ec1",
+  "LG__L5__1.csv": "d51e08b2052f70b819d81e68f417d6468da37908d6674b1af47f48802adf6754",
+  "LG__L5__168.csv": "6e5344328dee8efd2d30ca15985928a6ce8e87cdb51f37a066c8529a8352c667",
+  "LG__L5__2.csv": "a56726c836909cfeeeafbee3d819233bfba2d4f6766664df2cb9839a642899bb",
+  "LG__L5__3.csv": "f4b18894d5c25de257e4c82a551a41f672086ece2126f83ee662b26ae9c12ff2",
+  "LG__L5__4.csv": "5267dc80b3c3c84a346fed5619a097aabe8254aec3ece123d0e4fe0bb3024996"
+ }
+}

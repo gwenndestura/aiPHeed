@@ -1,0 +1,55 @@
+{
+ "model": "ATTR (experimental): Bayesian structural-attractor regression (sklearn BayesianRidge, default priors) of the national-relative HFIAS logit",
+ "status": "EXPERIMENTAL; not official; not served; NOT LightGBM",
+ "protocol": "PROTOCOL_ATTR sha 79ebae22 (aiPHeed_final_detection_20261113)",
+ "label": "province HFIAS mod+sev in the target round > national HFIAS mod+sev in that round (NOT the absolute 50 % label)",
+ "inputs": [
+  "z_anchor (latest survey relative to its round's national value)",
+  "income_rel",
+  "p_poverty",
+  "p_poverty_gap",
+  "hh_grdp_rel",
+  "p_subsistence"
+ ],
+ "training_transitions": [
+  "ENNS2018",
+  "ENNS2019",
+  "ENNS2021",
+  "FNRI2015"
+ ],
+ "n_train": 150,
+ "coef_standardised": {
+  "z_a": 0.12889,
+  "income_rel": -0.08009,
+  "p_poverty": 0.07071,
+  "p_poverty_gap": 0.06192,
+  "hh_grdp_rel": -0.11016,
+  "p_subsistence": 0.01803
+ },
+ "national_reference_pct": {
+  "NNS2013": 56.051,
+  "FNRI2015": 53.8,
+  "ENNS2018": 41.6,
+  "ENNS2019": 46.9,
+  "ENNS2021": 41.0
+ },
+ "nns2013_national": "estimated (not published)",
+ "issue_quarter": "2026-Q4",
+ "information_cutoff": "2026-11-01",
+ "note": "Inputs as of the 2026-Q4 issue; identical for every lead, so one probability covers 2027-Q1..2028-Q1.",
+ "code_sha256": {
+  "seal_fits": "3906b87a49ccc85018f7dfd9801c991a4a97d1645394400eaf5a621ddf773346",
+  "seal_write": "c2fdf827a0afb8cb1fc3bc1f304470736f0ab72c5e05b5d110ef241e5cbedbe6",
+  "build_lg_make_pairs": "a6ee9b4c3820883e16cb626e6452bda247904a32a2771269146007742b0d531a",
+  "final_engine": "2c8e396ee55e2bfbff02597712718a03f2b5ebb0cd29bc100935d876496e4a81",
+  "base_engine": "e38f6adf831ca4a0f1deea0447147e80dc1984d531f88be2f7deac27e4fcece4",
+  "inputs_builder": "c09ec606eff10a546d039c31cff104ea30f9ded034ad9cb899c3408de45894ba",
+  "attr_research": "eadb5f3444479af8f1b88ad4671a25597a4b8a19ece0cff501cc0ca3c2ab41f9"
+ },
+ "data_sha256": {
+  "cand_panel_live": "823f9145ec29eaa8a4cd0da8b923f49d75f2b2d3cb1da7564bf74afd0338a0f4",
+  "labels_oof": "9f0c91849e0d07b39b67c37e53f7d32f25c5cdf824247eaee7128266cc47f3f5",
+  "official_FINAL_seal": "80b20aed3b3ca59d5a246f1195978a5bfdb1671b6409b7c0f189288a27967680"
+ },
+ "live_tables_sha256": "831337580243110107d7d054c767ce825146c0c1451416108986b3665e07642a"
+}

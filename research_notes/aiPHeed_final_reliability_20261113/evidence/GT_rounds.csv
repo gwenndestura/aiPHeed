@@ -1,0 +1,6 @@
+round,instrument,provinces_with_mod_sev_label,HIGH_(>=50%),median_pct,se_source,median_se_pp,max_se_pp,labels_within_1.96SE_of_50,expected_misclassified_labels,used_in_training,evaluation_rows_L1,evaluation_HIGH_L1,role,heatmap_areas_any_level,heatmap_areas_mod_or_sev
+NNS2013,"HFIAS 9 items, 30-day recall (FNRI scoring)",78,54,58.7,not printed; approximated sqrt(deff 3.17 p(1-p)/n) (flagged),4.59,12.98,32,5.99,False,0,0,anchor history only (not a training/test target in FINAL folds),86,86
+FNRI2015,"HFIAS 9 items, 30-day recall (FNRI scoring)",78,54,55.5,derived from printed category SEs via design effect,3.89,16.54,39,9.96,True,0,0,training only,86,87
+ENNS2018,"HFIAS 9 items, 30-day recall (FNRI scoring)",22,8,46.4,sum of printed category 90% CI half-widths / 1.645 (conservative),2.11,3.13,4,1.19,True,22,8,test fold 1 (train 2015),40,40
+ENNS2019,"HFIAS 9 items, 30-day recall (FNRI scoring)",25,13,51.6,sum of printed category 90% CI half-widths / 1.645 (conservative),2.82,4.47,8,1.18,True,25,13,test fold 2 (train 2015 only: 2018 not released by the 2019 origin),38,38
+ENNS2021,"HFIAS 9 items, 30-day recall (FNRI scoring)",25,4,41.4,NOT PUBLISHED: assumed 3.0 pp for every province,3.0,3.0,5,1.16,True,25,4,test fold 3 (train 2015+2018+2019),37,37

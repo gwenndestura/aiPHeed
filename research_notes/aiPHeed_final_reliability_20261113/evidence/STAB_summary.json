@@ -1,0 +1,62 @@
+{
+ "pooled": {
+  "unseen_pooled": {
+   "n": 72,
+   "high": 25,
+   "accuracy": 0.8472,
+   "recall_high": 0.76,
+   "precision_high": 0.7917,
+   "brier": 0.119,
+   "TP/FP/FN/TN": "19/5/6/42"
+  },
+  "full_pooled_same_rows": {
+   "n": 72,
+   "high": 25,
+   "accuracy": 0.8611,
+   "recall_high": 0.8,
+   "precision_high": 0.8,
+   "brier": 0.1233,
+   "TP/FP/FN/TN": "20/5/5/42"
+  },
+  "unseen_by_round": {
+   "ENNS2018": {
+    "n": 22,
+    "high": 8,
+    "accuracy": 0.8636,
+    "recall_high": 0.875,
+    "precision_high": 0.7778,
+    "brier": 0.1183,
+    "TP/FP/FN/TN": "7/2/1/12"
+   },
+   "ENNS2019": {
+    "n": 25,
+    "high": 13,
+    "accuracy": 0.8,
+    "recall_high": 0.8462,
+    "precision_high": 0.7857,
+    "brier": 0.1466,
+    "TP/FP/FN/TN": "11/3/2/9"
+   },
+   "ENNS2021": {
+    "n": 25,
+    "high": 4,
+    "accuracy": 0.88,
+    "recall_high": 0.25,
+    "precision_high": 1.0,
+    "brier": 0.0921,
+    "TP/FP/FN/TN": "1/0/3/21"
+   }
+  }
+ },
+ "gates": {
+  "G10a_all_executable_refits_acc>=.70": true,
+  "G10a_executable": 3,
+  "G10a_not_executable_or_noop": 2,
+  "G10a_max_flips_vs_full": 8,
+  "G10a_recall_range": [
+   0.25,
+   0.75
+  ],
+  "G10b_unseen_acc>=.70_and_recall>=.50": true
+ }
+}

@@ -1,0 +1,1184 @@
+{
+ "final_repro_max_abs_diff": 1.1102230246251565e-16,
+ "select_pool": [
+  "FINAL",
+  "BASE",
+  "RATE",
+  "RATE_SQRT",
+  "IMPUTE",
+  "MIND",
+  "RIMP",
+  "DROPGAP",
+  "COMP",
+  "FINAL_ET",
+  "FINAL_SA",
+  "FINAL_ETMIX",
+  "FINAL_CF",
+  "DELTA",
+  "TRAJ",
+  "DELTA_TRAJ"
+ ],
+ "select_logloss_2018_2019": {
+  "FINAL": 0.43365237717545585,
+  "BASE": 0.465649552203576,
+  "RATE": 0.4361043455162687,
+  "RATE_SQRT": 0.446880409563879,
+  "IMPUTE": 0.4526893626632404,
+  "MIND": 0.4688644608627922,
+  "RIMP": 0.4898087270258224,
+  "DROPGAP": 0.460330180436541,
+  "COMP": 0.46725467696500833,
+  "FINAL_ET": 0.4337617775609998,
+  "FINAL_SA": 0.46875280255779767,
+  "FINAL_ETMIX": 0.4336523771754557,
+  "FINAL_CF": 0.42911668975356554,
+  "DELTA": 0.42978875180401704,
+  "TRAJ": 0.43365237717545585,
+  "DELTA_TRAJ": 0.42978875180401704
+ },
+ "select_chosen_for_2021": "FINAL_CF",
+ "verdict": {
+  "SELECT": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": null,
+   "seed_pooled_accuracy": null,
+   "seed_rounds_all8": null,
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1237,
+   "ACCEPT": false
+  },
+  "FINAL": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8611
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1233,
+   "ACCEPT": false
+  },
+  "BASE": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8194,
+    "2": 0.8194,
+    "3": 0.8194,
+    "4": 0.8472,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/1/3/20",
+   "pooled_brier": 0.1349,
+   "ACCEPT": false
+  },
+  "RATE": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8333,
+    "2": 0.8472,
+    "3": 0.8194,
+    "4": 0.8333,
+    "168": 0.8194
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1247,
+   "ACCEPT": false
+  },
+  "RATE_SQRT": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8333,
+    "2": 0.8472,
+    "3": 0.8333,
+    "4": 0.8333,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1277,
+   "ACCEPT": false
+  },
+  "IMPUTE": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8333,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1295,
+   "ACCEPT": false
+  },
+  "MIND": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8056,
+    "2": 0.8056,
+    "3": 0.8194,
+    "4": 0.8056,
+    "168": 0.8194
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "2/2/2/19",
+   "pooled_brier": 0.1389,
+   "ACCEPT": false
+  },
+  "RIMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.7917,
+    "2": 0.7917,
+    "3": 0.7917,
+    "4": 0.7917,
+    "168": 0.7917
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "2/2/2/19",
+   "pooled_brier": 0.1429,
+   "ACCEPT": false
+  },
+  "DROPGAP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8194,
+    "2": 0.8333,
+    "3": 0.8194,
+    "4": 0.8333,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "2/2/2/19",
+   "pooled_brier": 0.1348,
+   "ACCEPT": false
+  },
+  "COMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8194,
+    "2": 0.8194,
+    "3": 0.8194,
+    "4": 0.8194,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/1/3/20",
+   "pooled_brier": 0.1355,
+   "ACCEPT": false
+  },
+  "FINAL_ET": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": null,
+   "seed_pooled_accuracy": null,
+   "seed_rounds_all8": null,
+   "2021_cm": "2/4/2/17",
+   "pooled_brier": 0.1368,
+   "ACCEPT": false
+  },
+  "FINAL_SA": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": null,
+   "seed_pooled_accuracy": null,
+   "seed_rounds_all8": null,
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1323,
+   "ACCEPT": false
+  },
+  "FINAL_ETMIX": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": null,
+   "seed_pooled_accuracy": null,
+   "seed_rounds_all8": null,
+   "2021_cm": "2/1/2/20",
+   "pooled_brier": 0.1269,
+   "ACCEPT": false
+  },
+  "FINAL_CF": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": null,
+   "seed_pooled_accuracy": null,
+   "seed_rounds_all8": null,
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1229,
+   "ACCEPT": false
+  },
+  "DELTA": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8611,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1223,
+   "ACCEPT": false
+  },
+  "TRAJ": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1272,
+   "ACCEPT": false
+  },
+  "DELTA_TRAJ": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8611,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1259,
+   "ACCEPT": false
+  },
+  "CAP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8194,
+    "2": 0.8194,
+    "3": 0.8333,
+    "4": 0.8194,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1324,
+   "ACCEPT": false
+  },
+  "CAPVAR": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8194,
+    "2": 0.8194,
+    "3": 0.8333,
+    "4": 0.8194,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1448,
+   "ACCEPT": false
+  },
+  "VAR": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8611
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1333,
+   "ACCEPT": false
+  },
+  "CONV": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8611,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8611
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1233,
+   "ACCEPT": false
+  },
+  "A025_IMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8472,
+    "3": 0.8611,
+    "4": 0.8611,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1255,
+   "ACCEPT": false
+  },
+  "A025_MIND": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8472,
+    "2": 0.8333,
+    "3": 0.8472,
+    "4": 0.8611,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1321,
+   "ACCEPT": false
+  },
+  "A050_IMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8333,
+    "2": 0.8472,
+    "3": 0.8611,
+    "4": 0.8472,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.122,
+   "ACCEPT": false
+  },
+  "A050_MIND": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8472,
+    "2": 0.8611,
+    "3": 0.8333,
+    "4": 0.8472,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1284,
+   "ACCEPT": false
+  },
+  "A075_IMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8333,
+    "2": 0.8333,
+    "3": 0.8472,
+    "4": 0.8472,
+    "168": 0.8472
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1199,
+   "ACCEPT": false
+  },
+  "A075_MIND": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": true,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8611,
+    "2": 0.8472,
+    "3": 0.8472,
+    "4": 0.8472,
+    "168": 0.8611
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": false,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.125,
+   "ACCEPT": false
+  },
+  "A100_IMP": {
+   "every_round_all_8": false,
+   "rounds_passing": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "2018_2019_not_worse_F1_BA": false,
+   "pooled_brier_beats_persistence": true,
+   "every_seed_pooled_acc_ge_75": true,
+   "seed_pooled_accuracy": {
+    "1": 0.8472,
+    "2": 0.8472,
+    "3": 0.8472,
+    "4": 0.8472,
+    "168": 0.8333
+   },
+   "seed_rounds_all8": {
+    "1": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "2": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "3": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "4": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    },
+    "168": {
+     "ENNS2018": true,
+     "ENNS2019": true,
+     "ENNS2021": false
+    }
+   },
+   "2021_cm": "1/0/3/21",
+   "pooled_brier": 0.1191,
+   "ACCEPT": false
+  }
+ }
+}

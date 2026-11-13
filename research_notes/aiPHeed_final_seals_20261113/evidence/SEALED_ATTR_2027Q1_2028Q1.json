@@ -1,0 +1,131 @@
+{
+ "sealed_utc": "2026-11-13T06:53:25+00:00",
+ "model": "ATTR (experimental): Bayesian structural-attractor regression (sklearn BayesianRidge, default priors) of the national-relative HFIAS logit",
+ "status": "EXPERIMENTAL; not official; not served; NOT LightGBM",
+ "config_sha256": "8661c1454be2fbea0f45abc1f43438f934e309894107b2a54caffd2f4da1aa78",
+ "issue_quarter": "2026-Q4",
+ "information_cutoff": "2026-11-01",
+ "scoring_procedure": "score once against the next FNRI provincial HFIAS round covering these provinces; no refit; compare with the official FINAL seal 80b20aed (above-national label using that round's published national value)",
+ "rows": [
+  {
+   "province": "Batangas",
+   "target_quarters": [
+    "2027-Q1",
+    "2027-Q2",
+    "2027-Q3",
+    "2027-Q4",
+    "2028-Q1"
+   ],
+   "p_above_national_ATTR": 0.331824,
+   "class_ATTR": "NOT above national",
+   "relative_logit_z_hat": -0.1403,
+   "predictive_sd": 0.3225,
+   "anchor_round": "ENNS2021",
+   "anchor_pct": 39.9,
+   "inputs": {
+    "income_rel": null,
+    "p_poverty": -0.8715,
+    "p_poverty_gap": -2.2221,
+    "hh_grdp_rel": 0.2494,
+    "p_subsistence": -1.0492
+   },
+   "context_only_implied_share_pct_if_national_stays_at_2021_value": 37.7
+  },
+  {
+   "province": "Cavite",
+   "target_quarters": [
+    "2027-Q1",
+    "2027-Q2",
+    "2027-Q3",
+    "2027-Q4",
+    "2028-Q1"
+   ],
+   "p_above_national_ATTR": 0.261535,
+   "class_ATTR": "NOT above national",
+   "relative_logit_z_hat": -0.2061,
+   "predictive_sd": 0.3227,
+   "anchor_round": "ENNS2021",
+   "anchor_pct": 35.5,
+   "inputs": {
+    "income_rel": null,
+    "p_poverty": -1.0072,
+    "p_poverty_gap": -2.3221,
+    "hh_grdp_rel": 0.2494,
+    "p_subsistence": -1.7464
+   },
+   "context_only_implied_share_pct_if_national_stays_at_2021_value": 36.1
+  },
+  {
+   "province": "Laguna",
+   "target_quarters": [
+    "2027-Q1",
+    "2027-Q2",
+    "2027-Q3",
+    "2027-Q4",
+    "2028-Q1"
+   ],
+   "p_above_national_ATTR": 0.186071,
+   "class_ATTR": "NOT above national",
+   "relative_logit_z_hat": -0.288,
+   "predictive_sd": 0.3227,
+   "anchor_round": "ENNS2018",
+   "anchor_pct": 26.2,
+   "inputs": {
+    "income_rel": null,
+    "p_poverty": -0.8295,
+    "p_poverty_gap": -2.1221,
+    "hh_grdp_rel": 0.2494,
+    "p_subsistence": -1.0492
+   },
+   "context_only_implied_share_pct_if_national_stays_at_2021_value": 34.3
+  },
+  {
+   "province": "Quezon",
+   "target_quarters": [
+    "2027-Q1",
+    "2027-Q2",
+    "2027-Q3",
+    "2027-Q4",
+    "2028-Q1"
+   ],
+   "p_above_national_ATTR": 0.338152,
+   "class_ATTR": "NOT above national",
+   "relative_logit_z_hat": -0.1347,
+   "predictive_sd": 0.3226,
+   "anchor_round": "ENNS2019",
+   "anchor_pct": 44.0,
+   "inputs": {
+    "income_rel": null,
+    "p_poverty": -0.5487,
+    "p_poverty_gap": -2.0221,
+    "hh_grdp_rel": 0.2494,
+    "p_subsistence": -1.5223
+   },
+   "context_only_implied_share_pct_if_national_stays_at_2021_value": 37.8
+  },
+  {
+   "province": "Rizal",
+   "target_quarters": [
+    "2027-Q1",
+    "2027-Q2",
+    "2027-Q3",
+    "2027-Q4",
+    "2028-Q1"
+   ],
+   "p_above_national_ATTR": 0.288175,
+   "class_ATTR": "NOT above national",
+   "relative_logit_z_hat": -0.1802,
+   "predictive_sd": 0.3225,
+   "anchor_round": "ENNS2019",
+   "anchor_pct": 39.1,
+   "inputs": {
+    "income_rel": null,
+    "p_poverty": -0.7498,
+    "p_poverty_gap": -1.8221,
+    "hh_grdp_rel": 0.2494,
+    "p_subsistence": -0.4135
+   },
+   "context_only_implied_share_pct_if_national_stays_at_2021_value": 36.7
+  }
+ ]
+}

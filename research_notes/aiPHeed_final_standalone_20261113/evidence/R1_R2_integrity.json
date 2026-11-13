@@ -1,0 +1,322 @@
+{
+ "protocol_sha256": "15202d27800c3eb1e7efea5abe33a8dcf7ac67d6b9170eeb3c8080839ba957eb",
+ "checks": {
+  "R1a every FINAL fit ran without a synthetic generator": true,
+  "R1a no synthetic marker in any training table": true,
+  "R1b each evaluation row is a unique province-round-lead": true,
+  "R1c no exact duplicate training rows (province, round, origin)": true,
+  "R1d repeated origins per training outcome documented (never evaluation cases)": true,
+  "R1e every Lead 1 outcome reproduces from a published FNRI file": true,
+  "R1e every Lead 1 anchor reproduces from FNRI 2015 province tables": true,
+  "R1e 2021 standard error is an assumed 3.0 points (FNRI did not publish provincial 2021 SEs); disclosed, used for weights and q only, not for the HIGH class": true,
+  "R1f missing inputs handled by MIND from training statistics only (code) with rates reported": true,
+  "R1g source register documented": true,
+  "R2a target quarter = origin + lead = the survey's reference quarter, every row": true,
+  "R2b anchor survey released (reference + 6 quarters) on or before the origin, every row": true,
+  "R2c every training outcome released on or before the fold origin": true,
+  "R2d RATE uses the gap and the training-mean gap only; MIND flags use inputs only": true
+ },
+ "detail": {
+  "R1a every FINAL fit ran without a synthetic generator": {
+   "fits": 45
+  },
+  "R1b each evaluation row is a unique province-round-lead": {
+   "ENNS2018_L1": 0,
+   "ENNS2018_L2": 0,
+   "ENNS2018_L3": 0,
+   "ENNS2019_L1": 0,
+   "ENNS2019_L2": 0,
+   "ENNS2019_L3": 0,
+   "ENNS2021_L1": 0,
+   "ENNS2021_L2": 0,
+   "ENNS2021_L3": 0
+  },
+  "R1c no exact duplicate training rows (province, round, origin)": {
+   "ENNS2018_L1": 0,
+   "ENNS2018_L2": 0,
+   "ENNS2018_L3": 0,
+   "ENNS2019_L1": 0,
+   "ENNS2019_L2": 0,
+   "ENNS2019_L3": 0,
+   "ENNS2021_L1": 0,
+   "ENNS2021_L2": 0,
+   "ENNS2021_L3": 0
+  },
+  "R1d repeated origins per training outcome documented (never evaluation cases)": {
+   "ENNS2018_L1": {
+    "FNRI2015": {
+     "min": 2,
+     "max": 2
+    }
+   },
+   "ENNS2019_L1": {
+    "FNRI2015": {
+     "min": 2,
+     "max": 2
+    }
+   },
+   "ENNS2021_L1": {
+    "ENNS2018": {
+     "min": 8,
+     "max": 8
+    },
+    "ENNS2019": {
+     "min": 8,
+     "max": 8
+    },
+    "FNRI2015": {
+     "min": 2,
+     "max": 2
+    }
+   }
+  },
+  "R1e every Lead 1 outcome reproduces from a published FNRI file": {
+   "matched": 72,
+   "of": 72,
+   "unmatched": []
+  },
+  "R1e every Lead 1 anchor reproduces from FNRI 2015 province tables": {
+   "matched": 72,
+   "of": 72,
+   "unmatched": []
+  },
+  "R1e 2021 standard error is an assumed 3.0 points (FNRI did not publish provincial 2021 SEs); disclosed, used for weights and q only, not for the HIGH class": {
+   "source": "app/e151/prov.py target_rows: se_p = 3.0 for ENNS2021"
+  },
+  "R1f missing inputs handled by MIND from training statistics only (code) with rates reported": {
+   "inputs": 77,
+   "mean_missing_train": 0.093,
+   "mean_missing_test": 0.074,
+   "missing_in_test_but_never_in_training (filled with training median, no learned flag)": [],
+   "entirely_missing_in_training": [
+    {
+     "fold": "ENNS2018",
+     "input": "ag_dev3y"
+    },
+    {
+     "fold": "ENNS2018",
+     "input": "ag_pc"
+    },
+    {
+     "fold": "ENNS2018",
+     "input": "unemp_region"
+    },
+    {
+     "fold": "ENNS2019",
+     "input": "ag_dev3y"
+    },
+    {
+     "fold": "ENNS2019",
+     "input": "ag_pc"
+    },
+    {
+     "fold": "ENNS2019",
+     "input": "unemp_region"
+    },
+    {
+     "fold": "ENNS2021",
+     "input": "unemp_region"
+    }
+   ]
+  },
+  "R1g source register documented": "evidence/R1_source_register.md",
+  "R2c every training outcome released on or before the fold origin": [
+   {
+    "fold": "ENNS2018_L1",
+    "origin": 8073,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2018_L2",
+    "origin": 8072,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2018_L3",
+    "origin": 8071,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2019_L1",
+    "origin": 8077,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2019_L2",
+    "origin": 8076,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2019_L3",
+    "origin": 8075,
+    "latest_training_release": 8068,
+    "ok": true,
+    "training_rounds": [
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2021_L1",
+    "origin": 8085,
+    "latest_training_release": 8084,
+    "ok": true,
+    "training_rounds": [
+     "ENNS2018",
+     "ENNS2019",
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2021_L2",
+    "origin": 8084,
+    "latest_training_release": 8084,
+    "ok": true,
+    "training_rounds": [
+     "ENNS2018",
+     "ENNS2019",
+     "FNRI2015"
+    ]
+   },
+   {
+    "fold": "ENNS2021_L3",
+    "origin": 8083,
+    "latest_training_release": 8080,
+    "ok": true,
+    "training_rounds": [
+     "ENNS2018",
+     "FNRI2015"
+    ]
+   }
+  ],
+  "R2d RATE uses the gap and the training-mean gap only; MIND flags use inputs only": {
+   "rate_scale": "g = gap / mean(training gap)",
+   "test": "tests/unit/test_hcw_final_engine.py::test_missing_flags_use_inputs_only_and_leave_values_untouched"
+  },
+  "gaps": {
+   "ENNS2018_L1": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     12
+    ]
+   },
+   "ENNS2018_L2": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     12
+    ]
+   },
+   "ENNS2018_L3": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     12
+    ]
+   },
+   "ENNS2019_L1": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     16
+    ]
+   },
+   "ENNS2019_L2": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     16
+    ]
+   },
+   "ENNS2019_L3": {
+    "train_gaps": [
+     8
+    ],
+    "test_gaps": [
+     16
+    ]
+   },
+   "ENNS2021_L1": {
+    "train_gaps": [
+     8,
+     12,
+     16,
+     20
+    ],
+    "test_gaps": [
+     24
+    ]
+   },
+   "ENNS2021_L2": {
+    "train_gaps": [
+     8,
+     12,
+     16,
+     20
+    ],
+    "test_gaps": [
+     24
+    ]
+   },
+   "ENNS2021_L3": {
+    "train_gaps": [
+     8,
+     12,
+     20
+    ],
+    "test_gaps": [
+     24
+    ]
+   }
+  },
+  "R7f operational gap range": {
+   "sealed_ENNS2022_test_gaps": [
+    12,
+    16,
+    28
+   ],
+   "calabarzon_latest_round_in_label_table": {
+    "Batangas": "ENNS2021",
+    "Cavite": "ENNS2021",
+    "Laguna": "ENNS2018",
+    "Quezon": "ENNS2019",
+    "Rizal": "ENNS2019"
+   },
+   "gap_2027Q1_from_latest_round_quarters": {
+    "Batangas": 22,
+    "Cavite": 22,
+    "Laguna": 34,
+    "Quezon": 30,
+    "Rizal": 30
+   },
+   "max_training_gap_available_for_a_2026_origin": 24
+  }
+ },
+ "rule1_pass": true,
+ "rule2_pass": true
+}

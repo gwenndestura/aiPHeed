@@ -1,0 +1,155 @@
+{
+ "FINAL_LG_refit_repro_max_abs_p": 0.0,
+ "cw_choice_A2": {
+  "ENNS2018/sqrt": 3,
+  "ENNS2018/none": 2,
+  "ENNS2019/sqrt": 3,
+  "ENNS2019/none": 2,
+  "ENNS2021/balanced": 5
+ },
+ "cw_choice_A5": {
+  "ENNS2018/none": 5,
+  "ENNS2019/none": 5,
+  "ENNS2021/balanced": 5
+ },
+ "SELECT_logloss_2018_2019": {
+  "FINAL_LG": 0.43365237717545585,
+  "FINAL_LG(refit)": 0.43365237717545585,
+  "A1_LG_WIDE": 0.43549467736619935,
+  "A2_LG_CW": 0.43839907618515256,
+  "A4_LG_SANC": 0.43365237717545585,
+  "A5_LG_OPT": 0.4651938689862557
+ },
+ "SELECT_chosen_for_2021": "FINAL_LG",
+ "bootstrap": {
+  "FINAL_LG(refit)": {
+   "dBrier_vs_FINAL_LG": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "A1_LG_WIDE": {
+   "dBrier_vs_FINAL_LG": 0.0019,
+   "ci95": [
+    -0.0098,
+    0.0131
+   ]
+  },
+  "A2_LG_CW": {
+   "dBrier_vs_FINAL_LG": 0.002,
+   "ci95": [
+    -0.0094,
+    0.0129
+   ]
+  },
+  "A3_LG_THR": {
+   "dBrier_vs_FINAL_LG": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "A4_LG_SANC": {
+   "dBrier_vs_FINAL_LG": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "A5_LG_OPT": {
+   "dBrier_vs_FINAL_LG": 0.0106,
+   "ci95": [
+    -0.0021,
+    0.0245
+   ]
+  }
+ },
+ "decision": {
+  "A1_LG_WIDE": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": true,
+   "2_pooled_brier_le_LG+0.005": true,
+   "3_2021_more_HIGH_le2FP_F1_up": false,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "1/0/3/21"
+  },
+  "A2_LG_CW": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": false,
+   "2_pooled_brier_le_LG+0.005": true,
+   "3_2021_more_HIGH_le2FP_F1_up": false,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "1/1/3/20"
+  },
+  "A3_LG_THR": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": false,
+   "2_pooled_brier_le_LG+0.005": true,
+   "3_2021_more_HIGH_le2FP_F1_up": true,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "2/1/2/20"
+  },
+  "A4_LG_SANC": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": true,
+   "2_pooled_brier_le_LG+0.005": true,
+   "3_2021_more_HIGH_le2FP_F1_up": false,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "1/1/3/20"
+  },
+  "A5_LG_OPT": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": false,
+   "2_pooled_brier_le_LG+0.005": false,
+   "3_2021_more_HIGH_le2FP_F1_up": true,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "2/1/2/20"
+  },
+  "A5_LG_OPT@0.5": {
+   "1_2018_2019_pooled_all8_mean_and_seeds": false,
+   "2_pooled_brier_le_LG+0.005": false,
+   "3_2021_more_HIGH_le2FP_F1_up": false,
+   "4_SELECT_picks_it": false,
+   "BETTER_THAN_FINAL_LG": false,
+   "2021": "1/0/3/21"
+  }
+ },
+ "modal_configs": {
+  "FINAL_LG(refit)": {
+   "ENNS2018": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=5.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A1_LG_WIDE": {
+   "ENNS2018": "OH|GOV|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|GOV|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=15,max_depth=4,learning_rate=0.01,n_estimators=100,min_child_samples=40,feature_fraction=0.5,bagging_fraction=0.6,bagging_freq=0,lambda_l1=0.1,lambda_l2=50.0,min_split_gain=0.01|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A2_LG_CW": {
+   "ENNS2018": "OH|FULL|prune=True|num_leaves=3,min_child_samples=10,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=sqrt|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|FULL|prune=True|num_leaves=3,min_child_samples=10,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=sqrt|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=5.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A3_LG_THR": {
+   "ENNS2018": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=5.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A4_LG_SANC": {
+   "ENNS2018": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|GOV+cons|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=20.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=3,min_child_samples=40,lambda_l2=5.0,n_estimators=150,learning_rate=0.02,feature_fraction=0.8,bagging_fraction=0.8,max_depth=-1,lambda_l1=0.0,min_split_gain=0.0,bagging_freq=1|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A5_LG_OPT": {
+   "ENNS2018": "OH|FULL|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=none|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|FULL|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=none|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=15,max_depth=4,learning_rate=0.01,n_estimators=100,min_child_samples=40,feature_fraction=0.5,bagging_fraction=0.6,bagging_freq=0,lambda_l1=0.1,lambda_l2=50.0,min_split_gain=0.01|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  },
+  "A5_LG_OPT@0.5": {
+   "ENNS2018": "OH|FULL|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=none|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2019": "OH|FULL|prune=True|num_leaves=7,max_depth=-1,learning_rate=0.01,n_estimators=100,min_child_samples=10,feature_fraction=1.0,bagging_fraction=0.6,bagging_freq=1,lambda_l1=1.0,lambda_l2=20.0,min_split_gain=0.1|cal=raw|cw=none|sel=25|imp=1|syn=None/prop/0.0",
+   "ENNS2021": "RSS|FULL|prune=True|num_leaves=15,max_depth=4,learning_rate=0.01,n_estimators=100,min_child_samples=40,feature_fraction=0.5,bagging_fraction=0.6,bagging_freq=0,lambda_l1=0.1,lambda_l2=50.0,min_split_gain=0.01|cal=raw|cw=balanced|sel=25|imp=1|syn=None/prop/0.0"
+  }
+ }
+}

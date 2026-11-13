@@ -1,0 +1,103 @@
+40 jobs
+[Parallel(n_jobs=16)]: Using backend LokyBackend with 16 concurrent workers.
+[Parallel(n_jobs=16)]: Done  18 out of  40 | elapsed:  1.5min remaining:  1.8min
+[Parallel(n_jobs=16)]: Done  27 out of  40 | elapsed:  2.0min remaining:   58.3s
+[Parallel(n_jobs=16)]: Done  36 out of  40 | elapsed:  2.6min remaining:   17.5s
+[Parallel(n_jobs=16)]: Done  40 out of  40 | elapsed:  2.9min finished
+FAILED
+5
+FAIL ('ENNS2019', 168, 'dropround', 'FNRI2015'): k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0. Traceback (most recent call last):
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 45, in safe
+    return job(*a)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 34, in job
+    r = EF.fit_predict(tr, te, AN, seed, rate="lin", miss="mind", cw="balanced")
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_final_optimization_20261112\scripts\engine_final.py", line 136, in fit_predict
+    r = EO.fit_predict(tr, te, AN, seed, FS=FS, **kw)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_optimization_20261112\scripts\engine_opt.py", line 323, in fit_predict
+    folds = list(GroupKFold(min(5, tr["region"].nunique())).split(tr, groups=tr["region"]))
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 610, in __init__
+    super().__init__(n_splits, shuffle=shuffle, random_state=random_state)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 356, in __init__
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0.
+
+FAIL ('ENNS2019', 1, 'dropround', 'FNRI2015'): k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0. Traceback (most recent call last):
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 45, in safe
+    return job(*a)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 34, in job
+    r = EF.fit_predict(tr, te, AN, seed, rate="lin", miss="mind", cw="balanced")
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_final_optimization_20261112\scripts\engine_final.py", line 136, in fit_predict
+    r = EO.fit_predict(tr, te, AN, seed, FS=FS, **kw)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_optimization_20261112\scripts\engine_opt.py", line 323, in fit_predict
+    folds = list(GroupKFold(min(5, tr["region"].nunique())).split(tr, groups=tr["region"]))
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 610, in __init__
+    super().__init__(n_splits, shuffle=shuffle, random_state=random_state)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 356, in __init__
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0.
+
+FAIL ('ENNS2019', 2, 'dropround', 'FNRI2015'): k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0. Traceback (most recent call last):
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 45, in safe
+    return job(*a)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 34, in job
+    r = EF.fit_predict(tr, te, AN, seed, rate="lin", miss="mind", cw="balanced")
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_final_optimization_20261112\scripts\engine_final.py", line 136, in fit_predict
+    r = EO.fit_predict(tr, te, AN, seed, FS=FS, **kw)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_optimization_20261112\scripts\engine_opt.py", line 323, in fit_predict
+    folds = list(GroupKFold(min(5, tr["region"].nunique())).split(tr, groups=tr["region"]))
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 610, in __init__
+    super().__init__(n_splits, shuffle=shuffle, random_state=random_state)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 356, in __init__
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0.
+
+FAIL ('ENNS2019', 3, 'dropround', 'FNRI2015'): k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0. Traceback (most recent call last):
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 45, in safe
+    return job(*a)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 34, in job
+    r = EF.fit_predict(tr, te, AN, seed, rate="lin", miss="mind", cw="balanced")
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_final_optimization_20261112\scripts\engine_final.py", line 136, in fit_predict
+    r = EO.fit_predict(tr, te, AN, seed, FS=FS, **kw)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_optimization_20261112\scripts\engine_opt.py", line 323, in fit_predict
+    folds = list(GroupKFold(min(5, tr["region"].nunique())).split(tr, groups=tr["region"]))
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 610, in __init__
+    super().__init__(n_splits, shuffle=shuffle, random_state=random_state)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 356, in __init__
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0.
+
+FAIL ('ENNS2019', 4, 'dropround', 'FNRI2015'): k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0. Traceback (most recent call last):
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 45, in safe
+    return job(*a)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_reliability_20261113\scripts\stab_jobs.py", line 34, in job
+    r = EF.fit_predict(tr, te, AN, seed, rate="lin", miss="mind", cw="balanced")
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_final_optimization_20261112\scripts\engine_final.py", line 136, in fit_predict
+    r = EO.fit_predict(tr, te, AN, seed, FS=FS, **kw)
+  File "C:\Users\admin\aipheed_final\research_notes\aiPHeed_hcw_optimization_20261112\scripts\engine_opt.py", line 323, in fit_predict
+    folds = list(GroupKFold(min(5, tr["region"].nunique())).split(tr, groups=tr["region"]))
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 610, in __init__
+    super().__init__(n_splits, shuffle=shuffle, random_state=random_state)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\aipheed\backend\venv\Lib\site-packages\sklearn\model_selection\_split.py", line 356, in __init__
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: k-fold cross-validation requires at least one train/test split by setting n_splits=2 or more, got n_splits=0.
+

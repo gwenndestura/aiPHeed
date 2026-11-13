@@ -1,0 +1,20 @@
+{
+ "seeds_per_row_min": 5,
+ "MRLT_FINAL": 5,
+ "MRLT_CF": 5,
+ "brier_L1to5": {
+  "FINAL": 0.1304,
+  "CF": 0.131
+ },
+ "decision_rule": {
+  "1_MRLT_CF>=5": true,
+  "2_mean_fold_acc_not_lower_than_FINAL_minus_0.0133_L1to5": false,
+  "3_pooled_Brier_L1to5_CF<=FINAL": false,
+  "4_F1_kept_at_leads_where_FINAL_passes(1,2,4)": false
+ },
+ "ADOPT_CF": false,
+ "lead3_F1": {
+  "FINAL": 0.7451,
+  "CF": 0.7451
+ }
+}

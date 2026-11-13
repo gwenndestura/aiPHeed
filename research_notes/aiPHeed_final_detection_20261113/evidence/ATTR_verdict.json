@@ -1,0 +1,184 @@
+{
+ "attr_fit_info": {
+  "ENNS2018": {
+   "n_train": 78,
+   "transitions": [
+    "FNRI2015"
+   ],
+   "coef_std": {
+    "z_a": 0.1397,
+    "income_rel": 0.028,
+    "p_poverty": 0.1506,
+    "p_poverty_gap": 0.0786,
+    "hh_grdp_rel": -0.1558,
+    "p_subsistence": -0.0397
+   },
+   "test_missing": 3,
+   "train_missing_share": 0.023076923076923075
+  },
+  "ENNS2019": {
+   "n_train": 78,
+   "transitions": [
+    "FNRI2015"
+   ],
+   "coef_std": {
+    "z_a": 0.1397,
+    "income_rel": 0.028,
+    "p_poverty": 0.1506,
+    "p_poverty_gap": 0.0786,
+    "hh_grdp_rel": -0.1558,
+    "p_subsistence": -0.0397
+   },
+   "test_missing": 0,
+   "train_missing_share": 0.023076923076923075
+  },
+  "ENNS2021": {
+   "n_train": 125,
+   "transitions": [
+    "ENNS2018",
+    "ENNS2019",
+    "FNRI2015"
+   ],
+   "coef_std": {
+    "z_a": 0.1151,
+    "income_rel": -0.0738,
+    "p_poverty": 0.0729,
+    "p_poverty_gap": 0.0887,
+    "hh_grdp_rel": -0.1194,
+    "p_subsistence": 0.0239
+   },
+   "test_missing": 0,
+   "train_missing_share": 0.019200000000000002
+  },
+  "ENNS2021_drop_T1": {
+   "n_train": 47,
+   "transitions": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "coef_std": {
+    "z_a": 0.1221,
+    "income_rel": -0.2013,
+    "p_poverty": 0.0128,
+    "p_poverty_gap": 0.1106,
+    "hh_grdp_rel": -0.04,
+    "p_subsistence": 0.0507
+   },
+   "test_missing": 0,
+   "train_missing_share": 0.01276595744680851
+  },
+  "ENNS2021_drop_T2": {
+   "n_train": 103,
+   "transitions": [
+    "ENNS2019",
+    "FNRI2015"
+   ],
+   "coef_std": {
+    "z_a": 0.1183,
+    "income_rel": -0.0666,
+    "p_poverty": 0.1373,
+    "p_poverty_gap": 0.0152,
+    "hh_grdp_rel": -0.0978,
+    "p_subsistence": 0.0111
+   },
+   "test_missing": 0,
+   "train_missing_share": 0.017475728155339803
+  },
+  "ENNS2021_drop_T3": {
+   "n_train": 100,
+   "transitions": [
+    "ENNS2018",
+    "FNRI2015"
+   ],
+   "coef_std": {
+    "z_a": 0.1302,
+    "income_rel": -0.0075,
+    "p_poverty": 0.0688,
+    "p_poverty_gap": 0.1699,
+    "hh_grdp_rel": -0.1692,
+    "p_subsistence": -0.0318
+   },
+   "test_missing": 0,
+   "train_missing_share": 0.024
+  }
+ },
+ "coef_sign_check": {
+  "ENNS2018": {
+   "income_rel": false,
+   "p_poverty": true,
+   "p_poverty_gap": true,
+   "hh_grdp_rel": true,
+   "p_subsistence": false
+  },
+  "ENNS2019": {
+   "income_rel": false,
+   "p_poverty": true,
+   "p_poverty_gap": true,
+   "hh_grdp_rel": true,
+   "p_subsistence": false
+  },
+  "ENNS2021": {
+   "income_rel": true,
+   "p_poverty": true,
+   "p_poverty_gap": true,
+   "hh_grdp_rel": true,
+   "p_subsistence": true
+  }
+ },
+ "within_highstart_2021_auc": {
+  "FINAL": 0.562,
+  "FINAL_LG": 0.625,
+  "PERS": 0.469,
+  "HYB": 0.625,
+  "ATTR_z_hat": 0.625
+ },
+ "highstart_provinces": [
+  "agusan del sur",
+  "masbate",
+  "negros occidental",
+  "negros oriental",
+  "north cotabato",
+  "occidental mindoro",
+  "sarangani",
+  "tawi tawi"
+ ],
+ "bootstrap": {
+  "brier": {
+   "HYB_minus_LG": 0.0287,
+   "ci95": [
+    0.0066,
+    0.0491
+   ]
+  },
+  "brier_2021": {
+   "HYB_minus_LG": 0.0067,
+   "ci95": [
+    -0.0209,
+    0.0343
+   ]
+  },
+  "abs_err_pp": {
+   "HYB_minus_LG": 0.1335,
+   "ci95": [
+    -0.8442,
+    1.1521
+   ]
+  },
+  "abs_err_pp_2021": {
+   "HYB_minus_LG": -0.0951,
+   "ci95": [
+    -1.4423,
+    1.1557
+   ]
+  }
+ },
+ "decision": {
+  "1_2018_2019_all8_and_within_0.05": false,
+  "2_pooled_all8": false,
+  "3_pooled_brier_le_LG_plus_0.005": false,
+  "4_2021_auc_gt_LG_and_f1_ge": false,
+  "5_every_seed_2021_tp_fp_as_mean_or_better": true,
+  "6_signs_match_T1_T3": false,
+  "RECOMMENDED": false
+ }
+}

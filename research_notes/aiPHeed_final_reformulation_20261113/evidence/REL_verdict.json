@@ -1,0 +1,178 @@
+{
+ "bootstrap_pooled_brier_relative": {
+  "REL_LGBM - FINAL_as_REL": {
+   "dBrier": -0.0207,
+   "ci95": [
+    -0.0859,
+    0.0443
+   ]
+  },
+  "REL_LGBM - REL_P": {
+   "dBrier": -0.0015,
+   "ci95": [
+    -0.039,
+    0.0336
+   ]
+  },
+  "REL_LGBM - REL_HB": {
+   "dBrier": 0.0067,
+   "ci95": [
+    -0.0197,
+    0.0344
+   ]
+  },
+  "REL_HB - REL_P": {
+   "dBrier": -0.0082,
+   "ci95": [
+    -0.0225,
+    0.0052
+   ]
+  },
+  "FINAL_as_REL - REL_P": {
+   "dBrier": 0.0192,
+   "ci95": [
+    -0.0383,
+    0.0773
+   ]
+  }
+ },
+ "monte_carlo": {
+  "relative_counts": {
+   "ENNS2018": [
+    13,
+    9
+   ],
+   "ENNS2019": [
+    14,
+    11
+   ],
+   "ENNS2021": [
+    13,
+    12
+   ]
+  },
+  "absolute_counts": {
+   "ENNS2018": [
+    8,
+    14
+   ],
+   "ENNS2019": [
+    13,
+    12
+   ],
+   "ENNS2021": [
+    4,
+    21
+   ]
+  },
+  "REL_LGBM skill (TPR 0.80, FPR 0.38) at relative counts": {
+   "ENNS2018": 0.408,
+   "ENNS2019": 0.433,
+   "ENNS2021": 0.376,
+   "all_three": 0.066
+  },
+  "REL_LGBM skill at ABSOLUTE counts": {
+   "ENNS2018": 0.102,
+   "ENNS2019": 0.378,
+   "ENNS2021": 0.001,
+   "all_three": 0.0
+  },
+  "FINAL_as_REL skill (TPR 0.50, FPR 0.09) at relative counts": {
+   "ENNS2018": 0.044,
+   "ENNS2019": 0.085,
+   "ENNS2021": 0.045,
+   "all_three": 0.0
+  },
+  "FINAL_as_REL skill at ABSOLUTE counts": {
+   "ENNS2018": 0.128,
+   "ENNS2019": 0.045,
+   "ENNS2021": 0.126,
+   "all_three": 0.001
+  }
+ },
+ "decision": {
+  "evaluable_rounds": [
+   "ENNS2018",
+   "ENNS2019",
+   "ENNS2021"
+  ],
+  "a_pooled_all8": false,
+  "b_mean_all8_every_evaluable_round": false,
+  "b_every_seed_all8_every_evaluable_round": false,
+  "c_brier_le_FINAL_as_REL": true,
+  "c_brier_le_REL_P": true,
+  "d_2018_2019_F1_BA_within_0.05_of_FINAL_as_REL": false,
+  "RECOMMENDED": false,
+  "LightGBM_adds_no_measurable_value_over_REL_HB": false
+ },
+ "FINAL_absolute_error_decomposition": {
+  "ENNS2018": {
+   "mean_error_logit": 0.196,
+   "latest_national_minus_actual_national_logit": 0.492,
+   "sd_error_logit": 0.295
+  },
+  "ENNS2019": {
+   "mean_error_logit": 0.013,
+   "latest_national_minus_actual_national_logit": 0.276,
+   "sd_error_logit": 0.447
+  },
+  "ENNS2021": {
+   "mean_error_logit": -0.262,
+   "latest_national_minus_actual_national_logit": 0.24,
+   "sd_error_logit": 0.329
+  }
+ },
+ "label_counts": {
+  "relative": {
+   "ENNS2018": [
+    13,
+    9
+   ],
+   "ENNS2019": [
+    14,
+    11
+   ],
+   "ENNS2021": [
+    13,
+    12
+   ]
+  },
+  "absolute": {
+   "ENNS2018": [
+    8,
+    14
+   ],
+   "ENNS2019": [
+    13,
+    12
+   ],
+   "ENNS2021": [
+    4,
+    21
+   ]
+  },
+  "confident_relative_rows": 50
+ },
+ "label_agreement_abs_vs_rel": {
+  "abs0_rel0": {
+   "ENNS2018": 9,
+   "ENNS2019": 11,
+   "ENNS2021": 12
+  },
+  "abs0_rel1": {
+   "ENNS2018": 5,
+   "ENNS2019": 1,
+   "ENNS2021": 9
+  },
+  "abs1_rel0": {
+   "ENNS2018": 0,
+   "ENNS2019": 0,
+   "ENNS2021": 0
+  },
+  "abs1_rel1": {
+   "ENNS2018": 8,
+   "ENNS2019": 13,
+   "ENNS2021": 4
+  }
+ }
+}

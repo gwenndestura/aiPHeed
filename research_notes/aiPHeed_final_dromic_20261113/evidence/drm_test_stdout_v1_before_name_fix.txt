@@ -1,0 +1,67 @@
+C:\Users\admin\aipheed_final\research_notes\aiPHeed_final_dromic_20261113\scripts\drm_test.py:68: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  R["CONFIRMED"] = (R.holm_p < .05) & R.sign_ok_both.fillna(False) & (np.sign(R.comb_z) == R.predicted_sign)
+    feature  predicted_sign  T2_rho  T2_n  T2_nonzero  T3_rho  T3_n  T3_nonzero  T4_rho  T4_n  T4_nonzero  comb_z   comb_p sign_ok_both   holm_p  CONFIRMED
+     D1_aff               1   0.474    20          18  -0.021    25          22   0.206    25          24   1.433 0.151787        False 0.607147      False
+     D2_dmg               1   0.511    20           6  -0.271    25          21   0.162    25          23   0.723 0.469882        False 1.000000      False
+    D3_disp               1   0.530    20          17   0.274    25          22   0.271    25          24   2.652 0.008013         True 0.040063       True
+     D4_aid              -1   0.070    20          13   0.174    25          21  -0.441    25          24   0.768 0.442291        False 1.000000      False
+ D5_aid_aff              -1   0.118    20          15  -0.021    25          21  -0.491    25          24   0.269 0.787700        False 1.000000      False
+D6_conflict               1     NaN    20           0   0.083    25           4  -0.069    25           8     NaN      NaN          NaN      NaN      False
+{
+ "T2+T3": {
+  "n": 34,
+  "stayed_high": 20,
+  "D1_aff": {
+   "AUC_stay_vs_recover": NaN,
+   "p": NaN
+  },
+  "D2_dmg": {
+   "AUC_stay_vs_recover": NaN,
+   "p": NaN
+  },
+  "D3_disp": {
+   "AUC_stay_vs_recover": NaN,
+   "p": NaN
+  },
+  "D4_aid": {
+   "AUC_stay_vs_recover": NaN,
+   "p": NaN
+  },
+  "D5_aid_aff": {
+   "AUC_stay_vs_recover": 0.636,
+   "p": 0.187
+  },
+  "D6_conflict": {
+   "AUC_stay_vs_recover": NaN,
+   "p": NaN
+  }
+ },
+ "T4_descriptive": {
+  "n": 16,
+  "stayed_high": 4,
+  "D1_aff": {
+   "AUC_stay_vs_recover": 0.583,
+   "p": 0.684
+  },
+  "D2_dmg": {
+   "AUC_stay_vs_recover": 0.49,
+   "p": 1.0
+  },
+  "D3_disp": {
+   "AUC_stay_vs_recover": 0.625,
+   "p": 0.521
+  },
+  "D4_aid": {
+   "AUC_stay_vs_recover": 0.458,
+   "p": 0.862
+  },
+  "D5_aid_aff": {
+   "AUC_stay_vs_recover": 0.25,
+   "p": 0.17
+  },
+  "D6_conflict": {
+   "AUC_stay_vs_recover": 0.375,
+   "p": 0.462
+  }
+ }
+}

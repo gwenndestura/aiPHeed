@@ -1,0 +1,51 @@
+{
+ "model": "FINAL (RATE + MIND) LightGBM, final-rate-mind-1.0",
+ "selected_by_owner": "2026-11-13",
+ "procedure": "app.hcw.final_engine.fit_predict (= research engine_final rate='lin', miss='mind', cw='balanced'): per fit, anchor (H/OH/RSS), input set (GOV/GOV+cons/FULL), 25-input selection + correlation pruning, 16-setting grid by inner GroupKFold over regions, monotone constraints, survey-precision x balanced class weights, RATE target (y - anchor)/g with weight g^2, MIND median fill + missing flags, raw-first calibration",
+ "threshold": 0.5,
+ "seeds": [
+  168,
+  1,
+  2,
+  3,
+  4
+ ],
+ "seed_aggregation": "mean probability",
+ "target": "FNRI HFIAS moderate+severe share of households >= 50 % (HIGH), provincial",
+ "training_rounds": [
+  "FNRI2015",
+  "ENNS2018",
+  "ENNS2019",
+  "ENNS2021"
+ ],
+ "anchor_history_from": "NNS2013",
+ "information_cutoff": "2026-11-01",
+ "issue_quarter": "2026-Q4",
+ "mrlt_thesis_algorithm3": 5,
+ "served_leads": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "inputs_change_2026_11_13": "by-crop palay/corn inputs extended past 2023-Q4 with the PSA live download (same OpenSTAT table; 2023 overlap identical); affects live rows only (qi >= 2024-Q3); no historical training or test row changed",
+ "code_sha256": {
+  "final_engine": "2c8e396ee55e2bfbff02597712718a03f2b5ebb0cd29bc100935d876496e4a81",
+  "base_engine": "e38f6adf831ca4a0f1deea0447147e80dc1984d531f88be2f7deac27e4fcece4",
+  "inputs_builder": "c09ec606eff10a546d039c31cff104ea30f9ded034ad9cb899c3408de45894ba",
+  "serve_rows": "6e799b89f56b9ae93eb85aae67b5cc858f51187f573c9bab10a61c9a4c117ae5",
+  "live_build": "125926063c572104044091d60d9b6a06221956e5d26f782e4e898120ecb124c9",
+  "research_engine": "f56d13f4ce7ff552797e3abedec8929bb10bc7fe9e55793988d81d19f43f1e16"
+ },
+ "data_sha256": {
+  "labels_oof": "9f0c91849e0d07b39b67c37e53f7d32f25c5cdf824247eaee7128266cc47f3f5",
+  "fnri2015": "c0a1ad6c56d086391ea119c3d535e3883c932e7dcda76423062301db21e68053",
+  "enns_2018_2019": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3",
+  "nns2013": "e9cb4178df73d3f134b0cb64d020add2856c551555da6e6a7f7095b35c062a72",
+  "enns2021_heatmap": "f15a1977b8c5d5b6c1385890482eed4815351c2afce609dcab33421e09ce4ef5",
+  "cand_panel_live": "823f9145ec29eaa8a4cd0da8b923f49d75f2b2d3cb1da7564bf74afd0338a0f4",
+  "psa_palay_corn_live": "75f5cf63e2c2e8c5a0ed8d8d8d286c9e60d3fcef4b21c8d1719c205b7f81cae1"
+ },
+ "not_in_version_control": "app/hcw/ and research_notes/ are untracked in git (commit pending owner approval)"
+}

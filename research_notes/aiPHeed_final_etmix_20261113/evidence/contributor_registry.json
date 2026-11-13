@@ -1,0 +1,370 @@
+{
+ "model": "final-etmix-1.0-experimental (protocol a365da1f)",
+ "basis": "retrospective walk-forward, 72 reused province-rounds (50 at Leads 7-8); 110 fits x 2 hypotheses; Lead-1 retraining 105 fits",
+ "integrity": {
+  "fits": 110,
+  "selected_matches_stored_FINAL_fit": 110,
+  "train_gap_equals_staleness_all_fits": true,
+  "rows": 532,
+  "max_abs_diff_vs_stored_ETMIX": 2.220446049250313e-16
+ },
+ "rules": "(fixed in this script before it was first run; group level):\n  core        : retraining without the group lowers Lead-1 balanced accuracy by >= 0.03 OR raises Brier by >= 0.005, AND the\n                within-fold permutation raises Brier in >= 2 of 3 survey rounds at Lead 1, AND withholding flips >= 2 % of forecasts\n  supporting  : some measurable predictive effect (permutation dBrier > 0 pooled over leads, or >= 1 flip when withheld, or a\n                retraining loss) but not all core conditions\n  redundant   : withholding / permuting matters but retraining without it changes nothing (|dBA| < 0.01 and |dBrier| < 0.003):\n                its information is carried by other inputs\n  contextual  : no measurable predictive effect (0 flips, |permutation dBrier| < 0.001) but kept for situational context\n  excluded    : not a candidate input of the model (dropped by design or unavailable)",
+ "groups": [
+  {
+   "group": "market_prices",
+   "name": "Food prices and inflation",
+   "classification": "supporting",
+   "tier": "supporting",
+   "evidence": {
+    "withhold_flips": "28/532",
+    "withhold_dBA_L1": -0.031,
+    "permute_dBrier_L1": 0.0019,
+    "permute_dBrier_L1_ci95": [
+     -0.0087,
+     0.0116
+    ],
+    "permute_rounds_up_L1": 1,
+    "permute_dBrier_mean_L1to8": 0.0014,
+    "retrain_dBA_L1": -0.032,
+    "retrain_dBrier_L1": 0.011,
+    "retrain_dBrier_ci95": [
+     -0.0031,
+     0.0259
+    ],
+    "retrain_flips": 7,
+    "retrain_by_round_dBA": {
+     "2018": -0.107,
+     "2019": 0.038,
+     "2021": -0.125
+    },
+    "shap_share_L1": 0.278,
+    "gain_share": 0.186
+   },
+   "inputs": [
+    "cpi_food_3m",
+    "cpi_food_accel",
+    "cpi_food_rel_nat",
+    "cpi_food_yoy",
+    "cpi_rice_yoy",
+    "cpi_since",
+    "l_fg_rel",
+    "l_fg_yoy",
+    "l_rice_rel",
+    "l_rice_yoy",
+    "l_terms"
+   ],
+   "geography": {
+    "provincial (varies within region)": 11
+   },
+   "evidence_summary": "withholding changes 28/532 forecast classes; permutation raises Lead-1 Brier by +0.0019 (up in 1/3 rounds); retraining without it: balanced accuracy -0.032, Brier +0.011; 28% of Lead-1 attribution"
+  },
+  {
+   "group": "climate",
+   "name": "Climate and typhoon exposure",
+   "classification": "supporting",
+   "tier": "contextual",
+   "evidence": {
+    "withhold_flips": "2/532",
+    "withhold_dBA_L1": 0.0,
+    "permute_dBrier_L1": -0.0001,
+    "permute_dBrier_L1_ci95": [
+     -0.0001,
+     0.0
+    ],
+    "permute_rounds_up_L1": 0,
+    "permute_dBrier_mean_L1to8": -0.0005,
+    "retrain_dBA_L1": -0.02,
+    "retrain_dBrier_L1": -0.002,
+    "retrain_dBrier_ci95": [
+     -0.0116,
+     0.0061
+    ],
+    "retrain_flips": 1,
+    "retrain_by_round_dBA": {
+     "2018": 0.0,
+     "2019": -0.038,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.001,
+    "gain_share": 0.014
+   },
+   "inputs": [
+    "c_rain_anom_6m",
+    "c_soil_anom_3m",
+    "c_tc_4q",
+    "oni",
+    "rain_since",
+    "soil_since",
+    "tc_rate_since",
+    "vu_dry6",
+    "vu_rain12",
+    "vu_tc_clim",
+    "vu_tc_strong",
+    "vu_tc_wind"
+   ],
+   "geography": {
+    "provincial (varies within region)": 11,
+    "NATIONAL (one value per quarter)": 1
+   },
+   "evidence_summary": "withholding changes 2/532 forecast classes; permutation raises Lead-1 Brier by -0.0001 (up in 0/3 rounds); retraining without it: balanced accuracy -0.020, Brier -0.002; 0% of Lead-1 attribution"
+  },
+  {
+   "group": "employment",
+   "name": "Employment",
+   "classification": "contextual",
+   "tier": "contextual",
+   "evidence": {
+    "withhold_flips": "0/532",
+    "withhold_dBA_L1": 0.0,
+    "permute_dBrier_L1": 0.0,
+    "permute_dBrier_L1_ci95": [
+     0.0,
+     0.0
+    ],
+    "permute_rounds_up_L1": 0,
+    "permute_dBrier_mean_L1to8": 0.0,
+    "retrain_dBA_L1": 0.0,
+    "retrain_dBrier_L1": -0.0,
+    "retrain_dBrier_ci95": [
+     -0.0001,
+     -0.0
+    ],
+    "retrain_flips": 0,
+    "retrain_by_round_dBA": {
+     "2018": 0.0,
+     "2019": 0.0,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.0,
+    "gain_share": 0.0
+   },
+   "inputs": [
+    "unemp_chg_since",
+    "unemp_rate",
+    "unemp_region",
+    "unemp_yoy"
+   ],
+   "geography": {
+    "NATIONAL (one value per quarter)": 3,
+    "not available in training rows": 1
+   },
+   "evidence_summary": "withholding changes 0/532 forecast classes; permutation raises Lead-1 Brier by +0.0000 (up in 0/3 rounds); retraining without it: balanced accuracy +0.000, Brier -0.000; 0% of Lead-1 attribution"
+  },
+  {
+   "group": "regional_accounts",
+   "name": "Regional economy (GRDP and household income)",
+   "classification": "core",
+   "tier": "core",
+   "evidence": {
+    "withhold_flips": "85/532",
+    "withhold_dBA_L1": -0.112,
+    "permute_dBrier_L1": 0.0194,
+    "permute_dBrier_L1_ci95": [
+     -0.0051,
+     0.0389
+    ],
+    "permute_rounds_up_L1": 2,
+    "permute_dBrier_mean_L1to8": 0.0148,
+    "retrain_dBA_L1": -0.117,
+    "retrain_dBrier_L1": 0.029,
+    "retrain_dBrier_ci95": [
+     0.003,
+     0.0542
+    ],
+    "retrain_flips": 15,
+    "retrain_by_round_dBA": {
+     "2018": -0.286,
+     "2019": -0.125,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.417,
+    "gain_share": 0.455
+   },
+   "inputs": [
+    "hh_grdp_g",
+    "hh_grdp_rel",
+    "income_growth",
+    "income_rel"
+   ],
+   "geography": {
+    "REGIONAL (same value for every province of a region)": 4
+   },
+   "evidence_summary": "withholding changes 85/532 forecast classes; permutation raises Lead-1 Brier by +0.0194 (up in 2/3 rounds); retraining without it: balanced accuracy -0.117, Brier +0.029; 42% of Lead-1 attribution"
+  },
+  {
+   "group": "poverty_vulnerability",
+   "name": "Poverty and social vulnerability",
+   "classification": "supporting",
+   "tier": "supporting",
+   "evidence": {
+    "withhold_flips": "31/532",
+    "withhold_dBA_L1": -0.011,
+    "permute_dBrier_L1": 0.0034,
+    "permute_dBrier_L1_ci95": [
+     -0.0044,
+     0.0108
+    ],
+    "permute_rounds_up_L1": 1,
+    "permute_dBrier_mean_L1to8": -0.002,
+    "retrain_dBA_L1": -0.031,
+    "retrain_dBrier_L1": -0.002,
+    "retrain_dBrier_ci95": [
+     -0.0125,
+     0.0081
+    ],
+    "retrain_flips": 2,
+    "retrain_by_round_dBA": {
+     "2018": 0.0,
+     "2019": -0.08,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.26,
+    "gain_share": 0.229
+   },
+   "inputs": [
+    "p_density",
+    "p_poverty",
+    "p_poverty_gap",
+    "p_subsistence"
+   ],
+   "geography": {
+    "provincial (varies within region)": 4
+   },
+   "evidence_summary": "withholding changes 31/532 forecast classes; permutation raises Lead-1 Brier by +0.0034 (up in 1/3 rounds); retraining without it: balanced accuracy -0.031, Brier -0.002; 26% of Lead-1 attribution"
+  },
+  {
+   "group": "agri_fish_production",
+   "name": "Agriculture and fish production",
+   "classification": "supporting",
+   "tier": "supporting",
+   "evidence": {
+    "withhold_flips": "17/532",
+    "withhold_dBA_L1": -0.043,
+    "permute_dBrier_L1": 0.0008,
+    "permute_dBrier_L1_ci95": [
+     -0.003,
+     0.0046
+    ],
+    "permute_rounds_up_L1": 1,
+    "permute_dBrier_mean_L1to8": -0.0015,
+    "retrain_dBA_L1": -0.032,
+    "retrain_dBrier_L1": 0.011,
+    "retrain_dBrier_ci95": [
+     0.0028,
+     0.0199
+    ],
+    "retrain_flips": 3,
+    "retrain_by_round_dBA": {
+     "2018": -0.107,
+     "2019": 0.0,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.105,
+    "gain_share": 0.067
+   },
+   "inputs": [
+    "ag_corn_yoy",
+    "ag_dev3y",
+    "ag_palay_yoy",
+    "ag_pc",
+    "agri_since",
+    "c_agri_yoy",
+    "l_fish_yoy"
+   ],
+   "geography": {
+    "provincial (varies within region)": 7
+   },
+   "evidence_summary": "withholding changes 17/532 forecast classes; permutation raises Lead-1 Brier by +0.0008 (up in 1/3 rounds); retraining without it: balanced accuracy -0.032, Brier +0.011; 10% of Lead-1 attribution"
+  },
+  {
+   "group": "news_nlp",
+   "name": "News signals (NLP / FSSI)",
+   "classification": "redundant",
+   "tier": "contextual",
+   "evidence": {
+    "withhold_flips": "2/532",
+    "withhold_dBA_L1": -0.02,
+    "permute_dBrier_L1": 0.001,
+    "permute_dBrier_L1_ci95": [
+     0.0004,
+     0.0018
+    ],
+    "permute_rounds_up_L1": 2,
+    "permute_dBrier_mean_L1to8": 0.0001,
+    "retrain_dBA_L1": 0.0,
+    "retrain_dBrier_L1": 0.002,
+    "retrain_dBrier_ci95": [
+     -0.0006,
+     0.004
+    ],
+    "retrain_flips": 0,
+    "retrain_by_round_dBA": {
+     "2018": 0.0,
+     "2019": 0.0,
+     "2021": 0.0
+    },
+    "shap_share_L1": 0.174,
+    "gain_share": 0.048
+   },
+   "inputs": [
+    "a_e_climate",
+    "a_e_employment",
+    "a_e_hunger",
+    "a_e_market",
+    "a_e_net",
+    "a_e_poverty",
+    "a_net_since",
+    "h2",
+    "n_e_climate",
+    "n_e_employment",
+    "n_e_hunger",
+    "n_e_market",
+    "n_e_net",
+    "n_e_poverty",
+    "n_net_since",
+    "p_e_climate",
+    "p_e_employment",
+    "p_e_hunger",
+    "p_e_market",
+    "p_e_net",
+    "p_e_poverty",
+    "p_e_response",
+    "p_intensity",
+    "p_net_since",
+    "p_tg_hard",
+    "p_tg_net",
+    "p_tg_resp",
+    "p_tp_climate",
+    "p_tp_employment",
+    "p_tp_market",
+    "p_tp_poverty",
+    "p_tp_response",
+    "r_e_net"
+   ],
+   "geography": {
+    "provincial (varies within region)": 18,
+    "NATIONAL (one value per quarter)": 8,
+    "REGIONAL (same value for every province of a region)": 7
+   },
+   "evidence_summary": "withholding changes 2/532 forecast classes; permutation raises Lead-1 Brier by +0.0010 (up in 2/3 rounds); retraining without it: balanced accuracy +0.000, Brier +0.002; 17% of Lead-1 attribution"
+  }
+ ],
+ "excluded": [
+  {
+   "input": "c_fish_yoy (fish production growth)",
+   "reason": "dropped by design in the candidate set (app.hcw.engine DROP)"
+  },
+  {
+   "input": "OFW remittances",
+   "reason": "dropped by design; no provincial remittance series exists"
+  },
+  {
+   "input": "SWS hunger",
+   "reason": "not a FINAL candidate input (different measure; tested 11-11, no gain)"
+  }
+ ],
+ "structural": {
+  "anchor": "latest provincial HFIAS survey level: the starting point of every forecast",
+  "timing": "elapsed time since the survey (gap_q; the two hypotheses g and s)"
+ }
+}

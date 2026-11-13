@@ -1,0 +1,118 @@
+{
+ "base": "http://127.0.0.1:8998/api/v1",
+ "model": "e196-lgbm-avg5-laf-1.0",
+ "passed": 22,
+ "failed": 0,
+ "checks": [
+  {
+   "check": "registry: production artifact file hash matches the registry",
+   "pass": true,
+   "detail": "e196-lgbm-avg5-laf-1.0 c3d3ccd5352f"
+  },
+  {
+   "check": "health and readiness",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "quarters: current target is the quarter after the calendar quarter (one quarter ahead)",
+   "pass": true,
+   "detail": "{\"current\": \"2027-Q1\", \"calendar\": \"2026-Q4\"}"
+  },
+  {
+   "check": "quarters: every forecast quarter is served by an artifact lead",
+   "pass": true,
+   "detail": "{\"forecast_quarters\": [\"2027-Q1\", \"2027-Q2\", \"2027-Q3\", \"2027-Q4\"]}"
+  },
+  {
+   "check": "provinces: Cavite, Laguna, Batangas, Rizal, Quezon served for every forecast quarter",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "provinces: API probability equals the artifact (to the API's 3 decimals)",
+   "pass": true,
+   "detail": "{\"max_abs_diff\": 0.0}"
+  },
+  {
+   "check": "provinces: risk class consistent with probability and the 0.50 cut-off",
+   "pass": true,
+   "detail": "{\"mismatch\": [], \"levels\": [\"low\"]}"
+  },
+  {
+   "check": "outlook: approved production model is the one served",
+   "pass": true,
+   "detail": "{\"api\": \"e196-lgbm-avg5-laf-1.0\", \"registry\": \"e196-lgbm-avg5-laf-1.0\"}"
+  },
+  {
+   "check": "outlook: trigger groups listed in data_used",
+   "pass": true,
+   "detail": "{\"groups\": [\"climate\", \"employment\", \"fish_kill\", \"market\", \"news\", \"ofw_remittance\", \"poverty\"]}"
+  },
+  {
+   "check": "outlook: news-derived inputs appear inside trigger groups",
+   "pass": true,
+   "detail": "{\"n_data_used\": 11}"
+  },
+  {
+   "check": "consistency: one information cut-off stated across endpoints",
+   "pass": true,
+   "detail": "{\"quarters.origin\": \"2026-11-01\", \"outlook.origin_date\": \"2026-11-01\", \"config_horizon\": \"issued 2026-11-01; Lead 1 = 2027-Q1, Lea\"}"
+  },
+  {
+   "check": "consistency: data completeness flagged per province in the artifact",
+   "pass": true,
+   "detail": "{\"incomplete\": []}"
+  },
+  {
+   "check": "consistency: indicator horizon states the served cut-off",
+   "pass": true,
+   "detail": "{\"horizon\": \"issued 2026-11-01; Lead 1 = 2027-Q1, Lead 2 = 2027-Q2, Lead 3 = 2027-Q3, Lead 4 = 2027-Q4. Leads 1-4 meet the project ac\", \"outlook\": \"2026-11-01\"}"
+  },
+  {
+   "check": "identity: /config names the approved model on the map",
+   "pass": true,
+   "detail": "{\"mapModel\": {\"model\": \"e196-lgbm-avg5-laf-1.0\", \"issueQuarter\": \"2026-Q4\", \"issued\": \"2026-11-01\", \"dataPublishedBy\": \"2026-11-08\", \"servedLeads\": [1, 2, 3, 4], \"targetQuarters\": [\"2027-Q1\", \"2027-Q2\", \"2027-Q3\", \"2027-Q4\"]}, \"registry\": \"e196-lgbm-avg5-laf-1.0\"}"
+  },
+  {
+   "check": "identity: /final/risk/evaluation is the approved model's",
+   "pass": true,
+   "detail": "{}"
+  },
+  {
+   "check": "frontend integration: every public route the dashboard calls answers without a server error",
+   "pass": true,
+   "detail": "{\"/config\": 200, \"/quarters\": 200, \"/provinces\": 200, \"/explainability?scope=province&id=quezon\": 200, \"/news?id=quezon\": 200, \"/search?q=quezon\": 200, \"/final/overview\": 200, \"/final/risk/evaluation\": 200, \"/final/risk/rows\": 200, \"/final/food-insecurity/outlook\": 200, \"/final/archive\": 401, \"/final/evaluation\": 401, \"/forecast\": 200, \"/forecast/timeseries?id=quezon\": 200, \"/fi9/outlook\": 401, \"/fi10/provinces\": 401, \"/fi9/provincial-measurements\": 401, \"/provinces/quezon/municipalities\": 200, \"/report/data?scope=province&id=quezon\": 200}"
+  },
+  {
+   "check": "LGU rows: served for all five provinces",
+   "pass": true,
+   "detail": "{\"rows\": 142}"
+  },
+  {
+   "check": "LGU rows: no city or municipal food-insecurity class is presented as a measurement",
+   "pass": true,
+   "detail": "{\"violations\": [], \"sample_row\": {\"id\": \"quezon-lucena\", \"name\": \"Lucena\", \"provinceId\": \"quezon\", \"lguCode\": \"045624000\", \"classification\": \"City\", \"population\": 280331, \"densityPerKm2\": 3918.0, \"povertyRate\": null, \"quarter\": \"2027-Q1\", \"riskIndex\": 0.0359, \"riskLevel\": \"low\", \"disaggregationLabel\": \"Relative position within the province: the province's E196 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.\", \"limitedSignal\": false, \"rankRegion\": 1, \"provinceEstimate\": 0.052, \"provinceEstimateSource\": {\"mode\": \"E196_LEAD1_FORECAST\", \"origin\": \"2026-11-01\", \"quarter\": \"2027-Q1\", \"score_type\": \"e168_high_probability\"}, \"vulnerabilityIndex\": 0.689839, \"rankingMethod\": \"vulnerability = 0.6 x pov"
+  },
+  {
+   "check": "errors: unknown province returns 404",
+   "pass": true,
+   "detail": "{\"status\": 404}"
+  },
+  {
+   "check": "errors: a quarter with no forecast is refused or returned empty, never invented",
+   "pass": true,
+   "detail": "{\"status\": 404, \"n\": 0}"
+  },
+  {
+   "check": "news: endpoint answers with dated stories",
+   "pass": true,
+   "detail": "{\"status\": 200, \"keys\": [\"scope\", \"id\", \"quarter\", \"articleCount\", \"provinceAttributed\", \"topics\", \"data\", \"page\"]}"
+  },
+  {
+   "check": "ranking: endpoint answers",
+   "pass": true,
+   "detail": "{\"status\": 200, \"keys\": [\"quarter\", \"indicator\", \"method\", \"horizonLabel\", \"data\"]}"
+  }
+ ]
+}
