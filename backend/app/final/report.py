@@ -4,7 +4,7 @@ PDF report of the served FINAL forecast (province or CALABARZON), built from the
   forecast period        app.final.cycle.status       issue, cut-off, when made, next issue, stale warning
   headline               app.ml.inference.hcw_system  forecast share and class of the served issue (as the left card)
   why is this at risk?   app.final.shap_api           the same groups, shares and plain sentences as the left bars and right cards
-                                                      (El Nino note, Poverty and Vulnerability always listed)
+                                                      (El Nino note; Poverty and Vulnerability only when the forecast used it)
   towns and cities       app.services.dashboard       the dashboard's priority ranking (rank in province)
   method                 data/final/meta              FINAL's walk-forward evaluation; served leads from data/final/serving.json
 
@@ -106,8 +106,7 @@ def _why_block(d: dict, width: float) -> list:
     if not d.get("available"):
         return [R._p(R._escape(d.get("reason") or "No explanation is available for this quarter."), "body")]
     groups = d.get("groups", [])
-    pov = [g for g in groups if g["key"] == "poverty"]
-    shown = [g for g in groups if g["key"] != "poverty"][:5] + pov
+    shown = groups[:5]
     other = max(0, 100 - sum(g["pct"] for g in shown))
     word = {"increases_risk": "raises", "protective": "lowers", "no_effect": "no effect"}
     rows = [(g["label"], int(g["pct"]), f"{g['pct']}%  {word[g['direction']]}",
@@ -208,8 +207,6 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
         [R._p("Risk class", "small"), R._p(f"<b>{str(r.get('class') or pv.get('riskLabel') or '--').upper()}</b> (High risk at 50%)", "cell")],
         [R._p("Rank in CALABARZON", "small"), R._p(f"<b>{rank} of {len(published)}</b> (highest risk first)" if rank else "--", "cell")],
         [R._p(f"Population ({fig.get('census_year', '')} census)", "small"), R._p(f"<b>{fig['population']:,}</b>" if "population" in fig else "--", "cell")],
-        [R._p(f"Poverty (PSA {fig.get('poverty_year', '')})", "small"), R._p(f"<b>{_pct(fig.get('poverty_pct'))}</b> of people" if "poverty_pct" in fig else "--", "cell")],
-        [R._p("Population density", "small"), R._p(f"<b>{fig['density']:,.0f}</b> people per km²" if "density" in fig else "--", "cell")],
         [R._p("News reports used", "small"), R._p(f"<b>{pv['articleCount']}</b>", "cell")],
     ], [55 * mm, width - 55 * mm])]
     if pv.get("limitedSignal"):
@@ -249,9 +246,6 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     published.sort(key=lambda p: -float(rows_hs[p["id"]].get("score_pct") or 0))
     shares = [float(rows_hs[p["id"]]["score_pct"]) for p in published if rows_hs[p["id"]].get("score_pct") is not None]
     shap = SA.province("calabarzon", quarter)
-    S = SA._load()[1]
-    lead = int(S[S.quarter == quarter]["lead"].iloc[0]) if (S.quarter == quarter).any() else 1
-    figs = SA._vulnerability_figures([p["name"] for p in published], SA._cutoff_of(quarter, lead))
     news = svc.news(None, quarter, 1, 60)
 
     buf = io.BytesIO()
@@ -275,13 +269,9 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     flow.append(Spacer(1, 3 * mm))
     rows = [[R._p(R._escape(p["name"]), "cellb"), R._p(_pct(rows_hs[p["id"]].get("score_pct")), "cell"),
              R._p(str(rows_hs[p["id"]].get("class", "--")).upper(), "cell"),
-             R._p(_pct(figs.get(p["name"], {}).get("poverty_pct")), "cell"),
-             R._p(f"{figs[p['name']]['density']:,.0f}" if "density" in figs.get(p["name"], {}) else "--", "cell"),
              R._p(str(p["articleCount"]), "cell")] for p in published]
-    py = next((f["poverty_year"] for f in figs.values() if "poverty_year" in f), "")
-    cy = next((f["census_year"] for f in figs.values() if "census_year" in f), "")
-    flow.append(R._data_table(["Province", "Risk", "Class", f"Poverty (PSA {py})", f"People per km² ({cy})", "News"], rows,
-                              [width - 122 * mm, 20 * mm, 18 * mm, 30 * mm, 34 * mm, 20 * mm], {1: "RIGHT", 3: "RIGHT", 4: "RIGHT", 5: "RIGHT"}))
+    flow.append(R._data_table(["Province", "Risk", "Class", "News"], rows,
+                              [width - 70 * mm, 25 * mm, 25 * mm, 20 * mm], {1: "RIGHT", 3: "RIGHT"}))
     flow.append(PageBreak())
     flow += R._section(f"Why is CALABARZON at risk? {_ql(quarter)}")
     flow += _why_block(shap, width)

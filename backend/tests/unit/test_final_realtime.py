@@ -275,18 +275,12 @@ def test_database_mirror_inserts_once_and_never_overwrites(env, tmp_path):
 
 # ------------------------------------------------------------------ Poverty and Vulnerability on the explanation cards
 @pytest.mark.parametrize("pid", ["calabarzon", "quezon", "rizal"])
-def test_poverty_and_vulnerability_is_always_listed_with_its_true_contribution(pid):
+def test_poverty_and_vulnerability_is_shown_only_when_the_forecast_used_it(pid):
     from app.final import shap_api as SA
     d = SA.province(pid, "2027-Q1")
-    g = [x for x in d["groups"] if x["key"] == "poverty"]
-    assert len(g) == 1 and g[0]["label"] == "Poverty and Vulnerability"
-    used = any(c["feature"].lstrip("mi_").startswith(("p_poverty", "p_subsistence", "p_density")) for c in d["contributors"])
-    if not used:                                                          # the 2026-Q4 forecasts used no poverty input: 0, stated plainly
-        assert g[0]["pct"] == 0 and g[0]["status"] == "no_effect"
-        assert "This forecast did not use them, so they did not change the risk" in g[0]["plainEvidence"]
-    assert "(PSA 2023)" in g[0]["plainEvidence"] and "(2024 census)" in g[0]["plainEvidence"]
-    if pid == "quezon":
-        assert "10.2% of people were poor" in g[0]["plainEvidence"] and "227 people per km²" in g[0]["plainEvidence"]
+    shown = any(x["key"] == "poverty" for x in d["groups"])
+    used = any(SA.group_of(c["feature"]) == "poverty" for c in d["contributors"])
+    assert shown == used                                                  # never a 0% placeholder for an unused group
     assert sum(x["pct"] for x in d["groups"]) + d["otherPct"] in range(99, 102)
 
 
@@ -327,8 +321,8 @@ def test_visualization_explanation_and_pdf_match_the_dashboard():
     head = next(b for b in r["blocks"] if b["kind"] == "table")
     assert head["rows"][0][1].startswith(f"{share[('Quezon', '2027-Q1')]}%")
     bars = next(b for b in r["blocks"] if b["kind"] == "figure")["chart"]["bars"]
-    pov = [b for b in bars if b["label"] == "Poverty and Vulnerability"]
-    assert len(pov) == 1 and pov[0]["pct"] == 0
+    assert [b["label"] for b in bars[:-1]] == [g["label"] for g in SA.province("quezon", "2027-Q1")["groups"][:5]]
+    assert "Poverty (PSA" not in text
     assert sum(b["pct"] for b in bars) in range(99, 102)
 
     t = FRD.trend("region", None, "2027-Q1", "2027-Q2")
@@ -339,3 +333,18 @@ def test_visualization_explanation_and_pdf_match_the_dashboard():
     assert fig["yFormat"] == "percent" and fig["lines"][0]["value"] == 0.5
     with pytest.raises(KeyError):
         FRD.trend("region", None, "2026-Q1", "2026-Q2")                   # outside the served quarters: no invented values
+
+
+def test_news_panel_lists_every_story_the_served_issue_read():
+    """The news count is the stories FINAL read (3 months before the cut-off: provinces, region, Luzon, national), not a
+    province-tagged subset; regression for 307 -> 49."""
+    import json
+    from app.final import serving as SVG
+    from app.services import dashboard as D
+    issue = SVG.ROOT / "issues" / "2026-Q4"
+    assert SVG.activate(issue)["active"]
+    doc = json.loads((issue / "news_used.json").read_text(encoding="utf-8"))
+    n = D.news(None, "2027-Q1", 1, 5)
+    assert n["articleCount"] == len(doc["stories"]) == 307
+    assert n["provinceAttributed"] == doc["counts"]["province"]                  # 64 stories about a specific province
+    assert (doc["from"], doc["to"]) == ("2026-08-01", "2026-10-31")

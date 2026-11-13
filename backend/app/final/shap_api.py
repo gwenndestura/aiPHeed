@@ -665,10 +665,7 @@ def factor_groups(d: dict) -> dict:
             g["plainEvidence"] += _enso_sentence(enso)
             g["enso"] = enso
         out.append(g)
-    if not any(g["key"] == "poverty" for g in out):
-        # the model used no poverty or vulnerability input in this forecast: shown with its true contribution, 0
-        out.append({"key": "poverty", "label": "Poverty and Vulnerability", "pct": 0, "signedContribution": 0.0, "direction": "no_effect",
-                    "status": "no_effect", "plainEvidence": _vulnerability_text(d, False), "inputs": [], "usedByModel": False})
+    # Poverty and Vulnerability is listed only when this forecast used a poverty or vulnerability input (owner, 2026-11-14)
     out.sort(key=lambda g: -abs(g["signedContribution"]))
     return {"groups": out, "otherPct": round(100 * abs(sums.get("other", 0.0)) / tot), "otherInputs": [c["feature"] for c in by.get("other", [])]}
 

@@ -3,7 +3,7 @@ The Visualization page's PDF (GET /api/v1/report/data) when FINAL is served: the
 
   trend   the forecast share of each province for the served quarters (the on-screen trend chart), class, rank, the forecast
           period, the method table and limitations
-  shap    one province-quarter: headline (share, class, rank, PSA poverty, census density), the "Why is this at risk?" bars
+  shap    one province-quarter: headline (share, class, rank, population), the "Why is this at risk?" bars
           (top five + Poverty and Vulnerability + time since the last survey) and every card, word for word with the dashboard
 
 The page lays the blocks out (frontend/src/lib/chartReport.ts); nothing here is a new number: shares and classes come from
@@ -116,27 +116,26 @@ def _limitations(limited: bool, articles: int) -> list[dict]:
 
 
 def _why_blocks(d: dict, subject: str, quarter: str, label: str) -> list[dict]:
-    """The dashboard's left bars (top five + Poverty and Vulnerability + time since the last survey) and its right cards."""
+    """The dashboard's left bars (top five + other factors) and its right cards; Poverty and Vulnerability only when the forecast used it."""
     out = [{"kind": "heading", "level": 1, "text": "Why Is This at Risk?"}]
     if not d.get("available"):
         return out + [{"kind": "paragraph", "style": "body", "text": d.get("reason") or "No explanation is available for this quarter."}]
     groups = d.get("groups", [])
-    pov = [g for g in groups if g["key"] == "poverty"]
-    shown = [g for g in groups if g["key"] != "poverty"][:5] + pov
+    shown = groups[:5]
     word = {"increases_risk": "raises the risk", "protective": "lowers the risk", "no_effect": "almost no effect"}
     bars = [{"label": g["label"], "pct": int(g["pct"]), "direction": g["direction"],
-             "text": "0%, not used by this forecast" if g.get("usedByModel") is False else f"{g['pct']}%, {word[g['direction']]}"}
+             "text": f"{g['pct']}%, {word[g['direction']]}"}
             for g in shown]
     rest = 100 - sum(int(g["pct"]) for g in shown)
     if rest > 0:
-        bars.append({"label": "Time since the last survey", "pct": rest, "direction": "no_effect", "text": f"{rest}%"})
+        bars.append({"label": "Other factors", "pct": rest, "direction": "no_effect", "text": f"{rest}%"})
     out += [{"kind": "paragraph", "style": "body",
              "text": f"Figure {label} shows what moved the forecast for {subject} in {_ql(quarter)}. Each bar is a factor group's share "
                      "of what moved the model's forecast (exact LightGBM contributions). It shows what moved the forecast, not proof of cause."},
             {"kind": "figure", "label": f"Figure {label}", "title": f"Why Is {subject} at Risk? {_ql(quarter)}",
              "chart": {"type": "bars", "bars": bars},
-             "note": "Red bars raised the risk, green bars lowered it, grey bars had almost no effect. Poverty and Vulnerability is always "
-                     "listed, with its true contribution."}]
+             "note": "Red bars raised the risk, green bars lowered it, grey bars had almost no effect. Other factors include "
+                     "the time since the last survey."}]
     for key, head in SECTIONS:
         gs = [g for g in groups if g["direction"] == key]
         if not gs:
@@ -243,8 +242,6 @@ def drivers(pid: str, quarter: str) -> dict:
             ["Risk class", f"{str(r.get('class') or '--').upper()} (High risk at 50%)"],
             ["Rank in CALABARZON", f"{rank} of 5 (highest risk first)"],
             [f"Population ({fig.get('census_year', '')} census)", f"{fig['population']:,}" if "population" in fig else "--"],
-            [f"Poverty (PSA {fig.get('poverty_year', '')})", f"{_pct(fig.get('poverty_pct'))} of people" if "poverty_pct" in fig else "--"],
-            ["Population density", f"{fig['density']:,.0f} people per km2" if "density" in fig else "--"],
             ["News reports used", str(pv.get("articleCount", "--"))]]
     blocks = [{"kind": "paragraph", "style": "body", "text": INTRO}, *_period_blocks(issue),
               {"kind": "heading", "level": 1, "text": "Key Points"},
@@ -253,8 +250,7 @@ def drivers(pid: str, quarter: str) -> dict:
               {"kind": "heading", "level": 1, "text": "Headline"},
               {"kind": "table", "label": "Table 1", "title": f"{name}, {_ql(quarter)}",
                "columns": [{"label": "Item", "align": "left", "width": 0.4}, {"label": "Value", "align": "left", "width": 0.6}],
-               "rows": head, "note": "Poverty is the PSA official poverty incidence among the population; density is people per square "
-                                     "kilometre from the PSA census. Both are shown for context and used to rank towns and cities."}]
+               "rows": head, "note": "High risk at 50% or more of households. Rank 1 is the highest of the five provinces."}]
     blocks += _why_blocks(d, name, quarter, "1")
     munis = sorted(svc.municipality_summary(quarter, province_id=slug), key=lambda m: (m.get("rankInProvince") or 999, m["name"]))
     if munis:

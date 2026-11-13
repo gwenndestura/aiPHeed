@@ -217,6 +217,12 @@ def write_issue(issue_label: str, A: dict, data_ver: dict, model_sha: str, root:
     pd.DataFrame(A["features"]).to_csv(tmp / "shap_live_features.csv", index=False, lineterminator="\n")
     pd.DataFrame(A["summary"]).to_csv(tmp / "shap_live_summary.csv", index=False, lineterminator="\n")
     (tmp / "live.json").write_text(json.dumps(A["live"], indent=1), encoding="utf-8", newline="\n")
+    try:   # the stories this issue read (3 months before its cut-off: provinces, region, Balance Luzon, national) for the news panel
+        from app.e168 import news_used as NU
+        doc = NU.build(A["live"]["information_cutoff"])
+        (tmp / "news_used.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
+    except Exception:                                            # the forecast does not depend on the list; the panel falls back
+        pass
     files = {f.name: sha256(f) for f in sorted(tmp.iterdir())}
     man = {"issue_quarter": issue_label, "information_cutoff": A["live"]["information_cutoff"], "generated_utc": A["live"]["created_utc"],
            "model_id": A["live"]["model"], "model_sha256": model_sha, "data_version": data_ver, "files": files}
