@@ -14,6 +14,10 @@ REF = pd.read_csv(RN / "aiPHeed_final_etmix_20261113" / "evidence" / "ETMIX_rows
 REF = REF[REF.lead.isin([1, 2])][K + ["province", "region", "y_high", "FINAL"]]
 P = pd.concat([pd.read_csv(f) for f in glob.glob(str(HERE / "parts" / "*.csv"))], ignore_index=True)
 ARMS = ["B0", "D-ALL", "D-POV", "D-DEN", "D-GRDP", "D-ONI", "F-ALL", "N-OFF", "N-OFF-F", "N-AFF", "N-ALL", "N-ALL-F"]
+import os
+if os.environ.get("ARMS_ONLY"):
+    ARMS = [a for a in ARMS if a in os.environ["ARMS_ONLY"].split(",")]
+P = P[P.arm.isin(ARMS)]
 rng = np.random.default_rng(20261113)
 
 
@@ -64,7 +68,7 @@ for lead in (1, 2):
     for arm in ARMS[1:]:
         a = M[(M.arm == arm) & (M.lead == lead)].set_index(["key", "survey"]).reindex(base.index)
         y = base.y.values
-        for name, f in (("brier", lambda p: (p - y) ** 2), ("logloss", lambda p: -(y * np.log(np.clip(p, 1e-6, 1 - 1e-6)) + (1 - y) * np.log(np.clip(1 - p, 1e-6, 1)))))):
+        for name, f in (("brier", lambda p: (p - y) ** 2), ("logloss", lambda p: -(y * np.log(np.clip(p, 1e-6, 1 - 1e-6)) + (1 - y) * np.log(np.clip(1 - p, 1e-6, 1))))):
             d = f(a.p.values) - f(base.p.values)
             bs = np.array([d[rng.integers(0, len(d), len(d))].mean() for _ in range(3000)])
             inc.append({"lead": lead, "arm": arm, "metric": name, "delta_vs_B0": round(float(d.mean()), 4),
@@ -82,7 +86,7 @@ S.to_csv(EV / "INPUTS_selection_counts.csv", index=False, lineterminator="\n")
 
 # ---- decision rule
 dec = []
-sm = T[T.agg == "seed_mean"]
+sm = T[T["agg"] == "seed_mean"]
 for arm in ARMS[1:]:
     ok, why = True, []
     for lead in (1, 2):
