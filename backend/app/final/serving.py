@@ -74,6 +74,14 @@ def issue_facts(issue_dir: Path) -> dict:
             "targets": {L: PD.label(i + L) for L in leads}, "model_sha": man.get("model_sha256", "")}
 
 
+def model_accuracy_by_lead() -> dict:
+    """The model's walk-forward accuracy per lead (data/final/meta/lead_horizon.json), in the outlook's shape."""
+    H = json.loads((ROOT / "meta" / "lead_horizon.json").read_text(encoding="utf-8"))["leads"]
+    return {k: {"accuracy": v["accuracy"], "mean_fold_accuracy": v.get("mean_fold_accuracy"), "high_recall": v.get("high_recall"),
+                "low_recall": v.get("low_recall"), "persistence_accuracy": v.get("persistence_accuracy"),
+                "beats_persistence": v.get("beats_persistence_C2")} for k, v in H.items()}
+
+
 def _served_rows(issue_dir: Path) -> Path:
     """Map value = forecast SHARE (0-1, HIGH at 0.50); the probability of HIGH is kept in p_high (served copy only)."""
     out = issue_dir / "dashboard_rows_served.csv"
@@ -148,6 +156,24 @@ def _install(HS, SV) -> None:
     from app.services import dashboard as _D
     from app.e145 import lgu as _L
     from app.services import report as _RPT
+
+    # ---- outlook: an issue's live.json carries the forecasts; the acceptance basis and per-lead accuracy describe the MODEL
+    # and come from data/final (serving.json, meta) when an issue file does not carry them (issues are never rewritten)
+    def _outlook_final():
+        d = json.loads(SV.LIVE.read_text(encoding="utf-8"))
+        cfg = PD.serving()
+        d.setdefault("acceptance_basis", cfg.get("lead_basis", ""))
+        d.setdefault("statistical_reliability", cfg.get("caveat", ""))
+        d.setdefault("accuracy_by_lead", model_accuracy_by_lead())
+        served = set(d["served_leads"])
+        cut = d["information_cutoff"]
+        return {**{k: d[k] for k in ("model", "name", "issue_quarter", "target", "acceptance_basis", "statistical_reliability")},
+                "accuracy_by_lead": {str(k): v for k, v in d["accuracy_by_lead"].items()}, "seals": {},
+                "origin_date": cut, "classification_threshold": 0.5, "information_cutoff": f"data published before {cut}",
+                "created_utc": d.get("created_utc"), "data_published_by": cut,
+                "data_through": (pd.Timestamp(cut) - pd.Timedelta(days=1)).date().isoformat(), "data_used": HS.data_used()["items"],
+                "provinces": [r for r in d["provinces"] if r["lead"] in served]}
+    SV.outlook = _outlook_final
 
     # ---- confidence statement: the share is the map value; the chance of HIGH is stated from p_high
     _province_row = HS.province_row
@@ -330,6 +356,41 @@ def _install(HS, SV) -> None:
         st, msg = _status0(code, quarter)
         return st, re.sub(r"regional GRDP \(\d{4}\)", f"regional GRDP ({HS._FACTS['grdp_year']})", msg)
     HS.data_status = _data_status
+
+    # ---- /explainability (Visualization "Why is this at risk?", its PDF, the panels' fallbacks): the same exact FINAL SHAP
+    # groups as the dashboard cards (/final/shap), never another model's grouping next to a FINAL forecast
+    from app.final import shap_api as _SA
+    from app.services import reference as _ref
+    _expl0, _expl_reg0 = _D.explainability, _D.explainability_region
+
+    def _final_groups(pid, quarter, base):
+        d = _SA.province(pid, quarter)
+        if not d.get("available"):
+            return base
+        trig = [{"key": g["key"], "label": g["label"], "share": round(g["pct"] / 100, 4), "pct": int(g["pct"]),
+                 "signedContribution": float(g["signedContribution"]), "direction": g["direction"],
+                 "color": _D.trigger_color(int(g["pct"]), g["direction"]), "status": g["status"],
+                 "statusNote": ("This moved the forecast in the direction shown (model influence, not a cause)."
+                                if g["status"] == "contributes" else "This had almost no effect on this forecast."),
+                 "evidenceNote": None, "plainEvidence": g["plainEvidence"], "newsSignalProportion": None}
+                for g in d["groups"]]
+        return {**base, "quarter": quarter, "triggers": trig, "otherPct": d["otherPct"], "otherAbs": None,
+                "model": "final-rate-mind-1.0", "summaryLines": d.get("summary")}
+
+    def _explainability_final(code, quarter):
+        try:
+            base = _expl0(code, quarter)
+        except Exception:
+            base = {"articleCount": _D.article_count(code, quarter), "triggerMatchedArticles": 0}
+        return _final_groups(_ref.province_slug(code), quarter, base)
+
+    def _explainability_region_final(quarter):
+        try:
+            base = _expl_reg0(quarter)
+        except Exception:
+            base = {"articleCount": 0, "triggerMatchedArticles": 0}
+        return _final_groups("calabarzon", quarter, base)
+    _D.explainability, _D.explainability_region = _explainability_final, _explainability_region_final
 
     OLD, NEW = "Setup H + class weights", "FINAL (RATE + MIND)"
     for k, v in list(vars(HS).items()):

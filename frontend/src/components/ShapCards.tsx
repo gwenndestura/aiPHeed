@@ -40,7 +40,10 @@ export function ShapTopBars({ id, quarterId }: { id: string; quarterId?: string 
   if (isLoading || !quarterId || !data) return <p className="text-[10px] text-muted-foreground">Loading…</p>;
   if (!data?.available) return <Note label={null}>{data?.reason ?? "No explanation is available for this quarter."}</Note>;
   const groups = data.groups ?? [];
-  const shown = all ? groups : groups.slice(0, 5);
+  // Poverty and Vulnerability is always listed (owner 2026-11-14), with its true share (0% when this forecast did not use it).
+  const pov = groups.find((g) => g.key === "poverty");
+  const top = groups.filter((g) => g.key !== "poverty").slice(0, 5);
+  const shown = all ? groups : pov ? [...top, pov] : top;
   const other = all ? (data.otherPct ?? 0) : Math.max(0, 100 - shown.reduce((s, g) => s + g.pct, 0));
   return (
     <div className="space-y-2" data-testid="shap-top-bars">
@@ -77,7 +80,7 @@ export function ShapTopBars({ id, quarterId }: { id: string; quarterId?: string 
           <span className="font-mono-num text-[10px] font-bold tabular-nums text-right text-muted-foreground">{other}%</span>
         </div>
       )}
-      {groups.length > 5 && (
+      {(all || groups.length > top.length + (pov ? 1 : 0)) && (
         <button onClick={() => setAll(!all)} className="text-[10px] font-semibold text-primary hover:underline" aria-expanded={all}>
           {all ? "Show top 5" : "See all"}
         </button>

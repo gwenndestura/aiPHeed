@@ -182,7 +182,10 @@ def assemble(issue_label: str, R: list[dict], generated_utc: str) -> dict:
     live = {"model": cfg["model_id"], "name": cfg.get("model_name", cfg["model_id"]), "created_utc": generated_utc,
             "issue_quarter": issue_label, "information_cutoff": cutoff, "target": "HFIAS moderate+severe household food insecurity, HIGH at 50 %",
             "provinces": prov, "served_leads": sorted({r["lead"] for r in R}), "seeds": sorted({r["seed"] for r in R}),
-            "served_leads_rule": cfg.get("lead_basis", ""), "statistical_reliability": cfg.get("caveat", "")}
+            "served_leads_rule": cfg.get("lead_basis", ""), "statistical_reliability": cfg.get("caveat", ""),
+            "acceptance_basis": cfg.get("lead_basis", "")}
+    from app.final.serving import model_accuracy_by_lead
+    live["accuracy_by_lead"] = model_accuracy_by_lead()
     return {"rows": rows, "features": feats, "summary": summ, "live": live}
 
 

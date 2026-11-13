@@ -452,6 +452,8 @@ class ExplainabilityResponse(BaseModel):
     # share (%) of the model's absolute attribution outside the five trigger bars ("Other model inputs"); the five
     # trigger pcts plus otherPct add to 100. None when the served model does not report it.
     otherPct: float | None = None
+    # the model whose explanation this is ("final-rate-mind-1.0" when FINAL is served: its groups use the dashboard labels)
+    model: str | None = None
 
 
 # ---------------------------------------------------------------------------

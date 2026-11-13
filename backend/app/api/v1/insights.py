@@ -296,6 +296,7 @@ async def get_explainability(
         note=_served_note(q) if svc.e31_active() else EXPLAINABILITY_NOTE,
         otherPct=result.get("otherPct"),
         summary=summary,
+        model=result.get("model"),
     )
 
 

@@ -329,6 +329,8 @@ export interface ExplainabilityResponse {
   triggers: Trigger[];
   /** % of the model's absolute attribution outside the five trigger groups; null when not reported. */
   otherPct?: number | null;
+  /** The model whose explanation this is ("final-rate-mind-1.0" when FINAL is served). */
+  model?: string | null;
   articleCount: number;
   triggerMatchedArticles: number;
   narrative: string;

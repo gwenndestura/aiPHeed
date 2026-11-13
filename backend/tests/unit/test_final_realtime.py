@@ -271,3 +271,71 @@ def test_database_mirror_inserts_once_and_never_overwrites(env, tmp_path):
     DB.sync(url, env["led"], env["runs"], tmp_path / "none.jsonl")
     with create_engine(f"sqlite:///{db.as_posix()}").connect() as c:
         assert c.execute(text("SELECT COUNT(*), COUNT(DISTINCT issue_quarter) FROM final_forecast_history")).one() == (20, 2)
+
+
+# ------------------------------------------------------------------ Poverty and Vulnerability on the explanation cards
+@pytest.mark.parametrize("pid", ["calabarzon", "quezon", "rizal"])
+def test_poverty_and_vulnerability_is_always_listed_with_its_true_contribution(pid):
+    from app.final import shap_api as SA
+    d = SA.province(pid, "2027-Q1")
+    g = [x for x in d["groups"] if x["key"] == "poverty"]
+    assert len(g) == 1 and g[0]["label"] == "Poverty and Vulnerability"
+    used = any(c["feature"].lstrip("mi_").startswith(("p_poverty", "p_subsistence", "p_density")) for c in d["contributors"])
+    if not used:                                                          # the 2026-Q4 forecasts used no poverty input: 0, stated plainly
+        assert g[0]["pct"] == 0 and g[0]["status"] == "no_effect"
+        assert "This forecast did not use them, so they did not change the risk" in g[0]["plainEvidence"]
+    assert "(PSA 2023)" in g[0]["plainEvidence"] and "(2024 census)" in g[0]["plainEvidence"]
+    if pid == "quezon":
+        assert "10.2% of people were poor" in g[0]["plainEvidence"] and "227 people per km²" in g[0]["plainEvidence"]
+    assert sum(x["pct"] for x in d["groups"]) + d["otherPct"] in range(99, 102)
+
+
+def test_outlook_of_the_served_issue_has_the_model_fields():
+    """Regression: the 2026-Q4 issue file has no acceptance_basis / accuracy_by_lead; the outlook must still answer (they come
+    from the model's files), so the dashboard does not fall back to the old labels."""
+    from app.final import serving as SVG
+    from app.hcw import serve as SV
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    o = SV.outlook()
+    assert o["issue_quarter"] == "2026-Q4" and o["acceptance_basis"].startswith("Leads 1-2")
+    assert o["accuracy_by_lead"]["1"]["accuracy"] == pytest.approx(0.861)
+    assert {(p["province"], p["lead"]) for p in o["provinces"]} == {(p, L) for p in PROV for L in (1, 2)}
+
+
+def test_visualization_explanation_and_pdf_match_the_dashboard():
+    """The Visualization page's chart (/explainability) and its PDF (/report/data) show FINAL's own groups, numbers and words:
+    the same as the dashboard cards (/final/shap) and the outlook, never another model's grouping or a probability."""
+    import json
+    from app.final import report_data as FRD
+    from app.final import serving as SVG
+    from app.final import shap_api as SA
+    from app.hcw import serve as SV
+    from app.services import dashboard as D
+    assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
+    from app.services import reference as ref
+    for pid in ("quezon", "rizal"):
+        code = ref.PROVINCES[pid]["code"]
+        e, s = D.explainability(code, "2027-Q1"), SA.province(pid, "2027-Q1")
+        assert e["model"] == "final-rate-mind-1.0" and e["otherPct"] == s["otherPct"]
+        assert [(t["key"], t["label"], t["pct"]) for t in e["triggers"]] == [(g["key"], g["label"], g["pct"]) for g in s["groups"]]
+    assert D.explainability_region("2027-Q1")["model"] == "final-rate-mind-1.0"
+
+    share = {(p["province"], p["target_quarter"]): p["score_pct"] for p in SV.outlook()["provinces"]}
+    r = FRD.drivers("quezon", "2027-Q1")
+    text = json.dumps(r)
+    assert "Setup H" not in text and "probability" not in text.lower()
+    head = next(b for b in r["blocks"] if b["kind"] == "table")
+    assert head["rows"][0][1].startswith(f"{share[('Quezon', '2027-Q1')]}%")
+    bars = next(b for b in r["blocks"] if b["kind"] == "figure")["chart"]["bars"]
+    pov = [b for b in bars if b["label"] == "Poverty and Vulnerability"]
+    assert len(pov) == 1 and pov[0]["pct"] == 0
+    assert sum(b["pct"] for b in bars) in range(99, 102)
+
+    t = FRD.trend("region", None, "2027-Q1", "2027-Q2")
+    tab = next(b for b in t["blocks"] if b["kind"] == "table")
+    row = next(x for x in tab["rows"] if x[0] == "Quezon")
+    assert row[1:3] == [f"{share[('Quezon', '2027-Q1')]}%", f"{share[('Quezon', '2027-Q2')]}%"]
+    fig = next(b for b in t["blocks"] if b["kind"] == "figure")["chart"]
+    assert fig["yFormat"] == "percent" and fig["lines"][0]["value"] == 0.5
+    with pytest.raises(KeyError):
+        FRD.trend("region", None, "2026-Q1", "2026-Q2")                   # outside the served quarters: no invented values

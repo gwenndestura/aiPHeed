@@ -489,7 +489,7 @@ NEWS_RE = __import__("re").compile(r"^(mi_)?([pan]_(e_|net_since|tp_|tg_|intensi
 
 GROUP = [  # (key, dashboard label): what the input measures; news is counted inside its topic's group (thesis convention)
     ("market", "Market / Prices"), ("climate", "Climate Stress"), ("ag_production", "Agricultural Production"), ("employment", "Employment"),
-    ("household_economy", "Regional Economy"), ("poverty", "Poverty & Population"), ("hunger", "Hunger & Food Stress")]
+    ("household_economy", "Regional Economy"), ("poverty", "Poverty and Vulnerability"), ("hunger", "Hunger & Food Stress")]
 
 
 def group_of(feature: str) -> str:
@@ -568,6 +568,79 @@ def _enso_sentence(e: dict | None) -> str:
             f"The forecast does not include {kind}, so the actual risk may be higher.")
 
 
+# ---------- Poverty and Vulnerability (owner 2026-11-14: always shown on the left bars and the right cards) ----------
+# Its bar is the model's exact contribution (0 when the forecast used no poverty or density input). The card also states the
+# province's official figures as of the forecast's cut-off, so readers see the situation even when the model did not use it.
+POV_YEARS = (2006, 2009, 2012, 2015, 2018, 2021, 2023, 2025, 2027, 2029)
+CENSUS_COL = {2010: "Total Population (01 May 2010)", 2015: "Total Population (01 August 2015)", 2020: "Total Population (01 May 2020)",
+              2024: "Total Population (01 July 2024)"}
+
+
+def _cutoff_of(quarter: str, lead: int) -> pd.Timestamp:
+    i = int(quarter[:4]) * 4 + int(quarter[-1]) - 1 - int(lead)                 # issue quarter; issued on the 1st of its 2nd month
+    return pd.Timestamp(year=i // 4, month=3 * (i % 4) + 2, day=1)
+
+
+def _vulnerability_figures(names: list[str], cutoff: pd.Timestamp) -> dict:
+    """Latest official poverty incidence among population (round R usable from 1 Jan R+2) and density (census C from 1 Jan C+2)."""
+    import re
+    from app.paths import BACKEND_DIR as BD
+    out = {n: {} for n in names}
+    try:
+        P = pd.read_csv(BD / "data" / "hcw_official" / "raw" / "psa_poverty_by_province.csv")
+        P = P[(P.indicator == "pov_pop") & (P.level == "province_or_district") & P.name.isin(names)]
+        P = P[P.year.map(lambda y: pd.Timestamp(year=int(y) + 2, month=1, day=1) <= cutoff)]
+        for n, g in P.dropna(subset=["value_pct"]).groupby("name"):
+            r = g.sort_values("year").iloc[-1]
+            out[n].update(poverty_pct=float(r.value_pct), poverty_year=int(r.year))
+    except Exception:
+        pass
+    try:
+        raw = BD / "data" / "e137" / "raw" / "psa"
+        pop = pd.read_csv(raw / "population_2010_2024.csv", dtype=str, encoding="latin-1")
+        area = pd.read_csv(raw / "land_area_density_2024.csv", dtype=str, encoding="latin-1")
+        prov = lambda t: t[t.iloc[:, 0].str.match(r"^\.\.\.\.[^.]", na=False)].copy()   # province rows only (towns have six dots)
+        pop, area = prov(pop), prov(area)
+        clean = lambda s: re.sub(r"[^a-z ]", "", str(s).lower()).strip()
+        pop["k"], area["k"] = pop.iloc[:, 0].map(clean), area.iloc[:, 0].map(clean)
+        acol = [c for c in area.columns if "Land Area" in c][0]
+        rel = [y for y in CENSUS_COL if pd.Timestamp(year=y + 2, month=1, day=1) <= cutoff]
+        for n in names:
+            pr, ar = pop[pop.k == n.lower()], area[area.k == n.lower()]
+            if rel and len(pr) and len(ar):
+                y = max(rel)
+                v = float(str(pr.iloc[0][CENSUS_COL[y]]).replace(",", "")) / float(str(ar.iloc[0][acol]).replace(",", ""))
+                out[n].update(density=v, census_year=y, population=int(float(str(pr.iloc[0][CENSUS_COL[y]]).replace(",", ""))))
+    except Exception:
+        pass
+    return out
+
+
+def _vulnerability_text(d: dict, used: bool) -> str:
+    names = [p["province"] for p in d.get("provinces", [])] if d["scope"] == "region" else [d["name"]]
+    lead = d.get("lead")
+    if lead is None:                                     # region view: the lead of this target quarter in the served issue
+        S = _load()[1]
+        lead = int(S[S.quarter == d["quarter"]]["lead"].iloc[0])
+    F = _vulnerability_figures(names, _cutoff_of(d["quarter"], lead))
+    pv = [F[n]["poverty_pct"] for n in names if "poverty_pct" in F[n]]
+    dn = [F[n]["density"] for n in names if "density" in F[n]]
+    py = next((F[n]["poverty_year"] for n in names if "poverty_year" in F[n]), None)
+    cy = next((F[n]["census_year"] for n in names if "census_year" in F[n]), None)
+    parts = []
+    if pv:
+        parts.append((f"{min(pv):.1f}%–{max(pv):.1f}% of people were poor" if len(pv) > 1
+                      else f"{pv[0]:.1f}% of people were poor") + (f" (PSA {py})" if py else ""))
+    if dn:
+        parts.append((f"{min(dn):,.0f}–{max(dn):,.0f} people per km²" if len(dn) > 1
+                      else f"{dn[0]:,.0f} people per km²") + (f" ({cy} census)" if cy else ""))
+    fig = ("; ".join(parts) + ".") if parts else "Official poverty and population figures were not available."
+    fig = fig[0].upper() + fig[1:]
+    if used:
+        return fig
+    return f"{fig} This forecast did not use them, so they did not change the risk. They are used to rank towns and cities."
+
+
 def factor_groups(d: dict) -> dict:
     """Group bars and cards: exact input SHAP summed within each group (additive, so exact); % of the total absolute group SHAP."""
     by = {}
@@ -585,11 +658,17 @@ def factor_groups(d: dict) -> dict:
              "direction": "increases_risk" if s >= NEAR_ZERO else "protective" if s <= -NEAR_ZERO else "no_effect",
              "status": "contributes" if abs(s) >= NEAR_ZERO else "no_effect",
              "plainEvidence": _simple_card(by[key], d), "inputs": [c["feature"] for c in by[key]]}
+        if key == "poverty":
+            g["plainEvidence"] += " " + _vulnerability_text(d, True)
         if key == "climate" and enso and enso["phase"]:
             # context only: the bar and pct above stay the model's exact SHAP; ENSO adds no contribution
             g["plainEvidence"] += _enso_sentence(enso)
             g["enso"] = enso
         out.append(g)
+    if not any(g["key"] == "poverty" for g in out):
+        # the model used no poverty or vulnerability input in this forecast: shown with its true contribution, 0
+        out.append({"key": "poverty", "label": "Poverty and Vulnerability", "pct": 0, "signedContribution": 0.0, "direction": "no_effect",
+                    "status": "no_effect", "plainEvidence": _vulnerability_text(d, False), "inputs": [], "usedByModel": False})
     out.sort(key=lambda g: -abs(g["signedContribution"]))
     return {"groups": out, "otherPct": round(100 * abs(sums.get("other", 0.0)) / tot), "otherInputs": [c["feature"] for c in by.get("other", [])]}
 

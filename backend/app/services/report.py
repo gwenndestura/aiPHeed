@@ -639,9 +639,21 @@ def _thesis_outlook_block(code: str | None, quarter: str, name: str, triggers: l
     return flow
 
 
+def _final() -> bool:
+    """FINAL is served: the report is built by app.final.report from the same sources as the dashboard."""
+    try:
+        from app.final import serving as FS
+        return FS.current_issue() is not None
+    except Exception:
+        return False
+
+
 def build_province_report(province_id: str, quarter: str,
                           withheld: frozenset[str] = frozenset()) -> bytes:
     """A single province: headline, drivers, commodities, LGUs, news, method."""
+    if _final():
+        from app.final import report as FR
+        return FR.build_province_report(province_id, quarter, withheld)
     slug = province_id.lower()
     if slug not in ref.PROVINCES:
         raise svc.SubjectNotFound(f"Unknown province id '{province_id}'.")
@@ -751,6 +763,9 @@ def build_province_report(province_id: str, quarter: str,
 
 def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) -> bytes:
     """CALABARZON: regional headline, province comparison, drivers, news, method."""
+    if _final():
+        from app.final import report as FR
+        return FR.build_region_report(quarter, withheld)
     region = svc.region_forecast(quarter, withheld)
     provinces = svc.province_summary(quarter, withheld)
     published = [p for p in provinces if not p["withheld"]]

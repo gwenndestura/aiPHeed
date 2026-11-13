@@ -69,15 +69,18 @@ describe("FINAL values reach the screen unchanged", () => {
 });
 
 describe("driver bars use the API's shares and disclose the rest", () => {
-  it("shows the top five API groups plus Other factors, adding to 100", () => {
+  it("shows the top five API groups, always Poverty and Vulnerability, and Other factors, adding to 100", () => {
     shap = { isLoading: false, error: null, data: { available: true, otherPct: 3, groups: [
       group("hunger", "Hunger & Food Stress", 41), group("climate", "Climate Stress", 38), group("ag_production", "Agricultural Production", 12),
-      group("market", "Market / Prices", 2), group("employment", "Employment", 2), group("poverty", "Poverty level", 2)] } };
+      group("market", "Market / Prices", 2), group("employment", "Employment", 1), group("household_economy", "Regional Economy", 1),
+      { ...group("poverty", "Poverty and Vulnerability", 0), direction: "no_effect", status: "no_effect" }] } };
     render(<RiskDriversCardBody provinceId="quezon" quarterId="2027-Q1" />);
-    for (const lab of ["Hunger & Food Stress", "Climate Stress", "Agricultural Production", "Market / Prices", "Employment"]) expect(screen.getByText(lab)).toBeTruthy();
-    expect(screen.queryByText("Poverty level")).toBeNull();                  // sixth group: under Other until "See all"
+    for (const lab of ["Hunger & Food Stress", "Climate Stress", "Agricultural Production", "Market / Prices", "Employment", "Poverty and Vulnerability"])
+      expect(screen.getByText(lab)).toBeTruthy();
+    expect(screen.queryByText("Regional Economy")).toBeNull();             // sixth largest group: under Other until "See all"
     const bars = screen.getByTestId("shap-top-bars").textContent ?? "";
-    expect(bars).toContain("5%");                                          // Other = 100 - (41 + 38 + 12 + 2 + 2)
+    expect(bars).toContain("Poverty and Vulnerability0%");                 // its true share, never invented
+    expect(bars).toContain("Other factors6%");                             // 100 - (41 + 38 + 12 + 2 + 1 + 0)
   });
 
   it("an unavailable explanation shows its reason, never invented bars", () => {

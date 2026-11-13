@@ -94,6 +94,24 @@ async def get_report_data(
     from app.quarterly import preview as PV
     from app.services import report_data_e31 as R
 
+    from app.final import serving as FS
+    if FS.current_issue() is not None:                 # FINAL served: the same numbers and words as the dashboard
+        from app.final import report_data as FRD
+        slugs = [id.lower()] if scope == "province" and id else list(ref.PROVINCES)
+        try:
+            _, T = FRD._served()
+            quarters = [to] if type == "shap" and to else FRD._window([t["quarter"] for t in T], from_, to)
+            held = await rv.rejected_pairs(db)
+            if any((s, q) in held for s in slugs for q in quarters):
+                raise svc.ForecastWithheld("This report includes a forecast that is withheld from publication "
+                                           "(rejected by a DA administrator).")
+            if type == "trend":
+                return FRD.trend(scope, id, from_, to, municipality)
+            if not id or not to:
+                raise HTTPException(status_code=422, detail="a driver report needs a province id and a quarter (to)")
+            return FRD.drivers(id, to)
+        except KeyError as ex:
+            raise HTTPException(status_code=404, detail=str(ex).strip("'\""))
     if not svc.e31_active():
         raise HTTPException(status_code=404, detail="report data is served from the E31 record only")
     # Thesis p. 60: a report never shows a withheld (rejected) forecast

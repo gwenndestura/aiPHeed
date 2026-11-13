@@ -107,11 +107,14 @@ export interface LineChart {
   yMax: number;
   yStep: number;
   lines: { value: number; label: string }[];
+  /** "percent": values are shares (0-1) printed as whole percentages, with this axis title (FINAL). */
+  yFormat?: "percent";
+  yTitle?: string;
 }
 
 export interface BarChart {
   type: "bars";
-  bars: { label: string; pct: number; direction: "increases_risk" | "protective"; unmeasured?: boolean }[];
+  bars: { label: string; pct: number; direction: "increases_risk" | "protective" | "no_effect"; unmeasured?: boolean; text?: string }[];
 }
 
 export type ReportBlock =
@@ -506,14 +509,14 @@ export function renderReportPdf(report: ReportPayload): jsPDF {
       pdf.setDrawColor(228);
       pdf.setLineWidth(0.4);
       pdf.line(left, yy, right, yy);
-      pdf.text(v.toFixed(2), left - 5, yy + 2.5, { align: "right" });
+      pdf.text(c.yFormat === "percent" ? `${Math.round(v * 100)}%` : v.toFixed(2), left - 5, yy + 2.5, { align: "right" });
     }
     pdf.setDrawColor(110);
     pdf.setLineWidth(0.7);
     pdf.line(left, top, left, base);
     pdf.line(left, base, right, base);
     c.quarters.forEach((q, i) => pdf.text(q, xOf(i), base + 11, { align: "center" }));
-    pdf.text("Risk score", x0 + 12, (top + base) / 2 + 18, { angle: 90 });
+    pdf.text(c.yTitle ?? "Risk score", x0 + 12, (top + base) / 2 + 18, { angle: 90 });
 
     for (const ln of c.lines) {
       const col = ln.label.toLowerCase().startsWith("alert") ? ALERT_COLOR : HIGH_COLOR;
@@ -593,13 +596,14 @@ export function renderReportPdf(report: ReportPayload): jsPDF {
       const cy = top + band * (i + 0.5);
       const bh = Math.min(15, band * 0.6);
       if (b.pct > 0) {
-        pdf.setFillColor(...hex(b.direction === "increases_risk" ? BAR_RAISE : BAR_LOWER));
+        if (b.direction === "no_effect") pdf.setFillColor(160, 160, 160);
+        else pdf.setFillColor(...hex(b.direction === "increases_risk" ? BAR_RAISE : BAR_LOWER));
         pdf.rect(left, cy - bh / 2, xOf(b.pct) - left, bh, "F");
       }
       font(8.5, "normal", INK);
       pdf.text(toAscii(b.label), left - 6, cy + 3, { align: "right" });
       font(8, "normal", 60);
-      const text = b.unmeasured ? "not yet measured"
+      const text = b.text ? toAscii(b.text) : b.unmeasured ? "not yet measured"
         : b.pct === 0 ? "0%, no noticeable effect"
         : `${b.pct}%, ${b.direction === "increases_risk" ? "raises" : "lowers"} risk`;
       pdf.text(text, xOf(b.pct) + 4, cy + 3);

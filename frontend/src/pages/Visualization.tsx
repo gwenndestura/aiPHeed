@@ -397,7 +397,7 @@ function TrendView() {
       <div className="rounded-t-xl bg-card/80 border edge-faint px-5 sm:px-6 py-4">
         <h1 className="text-base sm:text-lg font-bold tracking-tight">Risk over time, by province or town</h1>
         <p className="text-[11px] text-muted-foreground mt-0.5 compact:text-[14px]">
-          How the food insecurity risk changes from quarter to quarter. The scale is zoomed to the values shown; HIGH starts at 0.50
+          How the food insecurity risk changes from quarter to quarter. The scale is zoomed to the values shown; High risk starts at 50%
         </p>
       </div>
 
@@ -580,21 +580,23 @@ function ShapView() {
   const loadFailed = isLoadFailure(quartersError) || isLoadFailure(explainError);
 
   const otherPct = explain?.otherPct;
+  // FINAL: the same group names as the dashboard's "Why is this at risk?" card; its "Other" is the time since the last survey
+  const isFinal = explain?.model === "final-rate-mind-1.0";
   const data = useMemo(
     () => [
       ...triggers
         .map((t) => ({
-          feature: plainName(t.key, t.label),
+          feature: isFinal ? t.label : plainName(t.key, t.label),
           pct: t.pct,
           color: t.color === "red" ? "hsl(var(--risk-high))" : t.color === "green" ? "hsl(var(--risk-low))" : "hsl(var(--risk-moderate))",
         }))
         .sort((a, b) => b.pct - a.pct),
       // the share outside the five trigger groups, so the bars add to 100% of the model's attribution
       ...(typeof otherPct === "number"
-        ? [{ feature: OTHER_FACTORS_NAME, pct: otherPct, color: "hsl(var(--muted-foreground))" }]
+        ? [{ feature: isFinal ? "Time since the last survey" : OTHER_FACTORS_NAME, pct: otherPct, color: "hsl(var(--muted-foreground))" }]
         : []),
     ],
-    [triggers, otherPct]
+    [triggers, otherPct, isFinal]
   );
 
   const handleGenerate = () => setGenerated({ province, quarter });
