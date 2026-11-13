@@ -102,4 +102,16 @@
 
 ## 4. Re-runs after the commit
 
-See `REMAINING_ISSUES.md` for anything still open. The two working-tree checks (`test_e119r2_framework`, `test_e120_firi_design`) are re-run after the commit; the result is in the commit report.
+After commit `77101572`:
+
+```bash
+python -m pytest tests/integration/test_e119r2_framework.py tests/integration/test_e120_firi_design.py -q
+```
+
+**4 passed.**
+
+Remaining failures in the full backend suite after this audit:
+- the 22 pre-existing unit failures, none touching FINAL;
+- `test_corrected_pipeline::test_raw_inputs_unchanged`, which needs a git-ignored file.
+
+See `REMAINING_ISSUES.md` for anything still open.
