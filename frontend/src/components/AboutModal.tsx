@@ -26,7 +26,7 @@ export function AboutModal() {
           <img src={logoLight} alt="" className="light-only h-10 w-auto self-start object-contain" />
           <DialogTitle className="text-sm pt-2">About aiPHeed</DialogTitle>
           <DialogDescription className="text-[11px] leading-relaxed pt-2">
-            aiPHeed with the FINAL (RATE + MIND) LightGBM model, updated automatically every quarter (in walk-forward tests all five
+            aiPHeed with the FINAL (RATE + MIND) LightGBM model, updated automatically on the 10th of every month (in walk-forward tests all five
             accuracy measures reach 75%, pooled, one and two quarters ahead, retrospectively, so only those two quarters are shown;
             no lead passes in every single survey round). The map shows each province's forecast and a planning priority for
             its 142 cities and municipalities, with the latest measured regional hunger (SWS) as context. It was developed by a student research
