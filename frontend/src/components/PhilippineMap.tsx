@@ -216,6 +216,8 @@ export function PhilippineMap({
   const provincesLayerRef = useRef<L.GeoJSON | null>(null);
   const municipalitiesLayerRef = useRef<L.GeoJSON | null>(null);
   const lakesLayerRef = useRef<L.GeoJSON | null>(null);
+  // The province whose towns are on the map now (null when none are).
+  const shownMuniProvinceRef = useRef<string | null>(null);
   const provincePulsesRef = useRef<{ marker: L.Marker; provinceId: string }[]>([]);
   const provinceLabelsRef = useRef<L.Marker[]>([]);
   const municipalityLabelsRef = useRef<L.Marker[]>([]);
@@ -413,6 +415,7 @@ export function PhilippineMap({
     selectedLabelRef.current = null;
     selectedMuniLayerRef.current = null;
     muniLabelsByKeyRef.current.clear();
+    shownMuniProvinceRef.current = null;
     if (municipalitiesLayerRef.current) {
       map.removeLayer(municipalitiesLayerRef.current);
       municipalitiesLayerRef.current = null;
@@ -543,6 +546,7 @@ export function PhilippineMap({
       }
     ).addTo(map);
     municipalitiesLayerRef.current = muniLayer;
+    shownMuniProvinceRef.current = provinceId;
 
     muniLayer.eachLayer((layer) => {
       const feature = (layer as any).feature as GeoJSON.Feature;
@@ -727,6 +731,11 @@ export function PhilippineMap({
     isZoomedRef.current = true;
     setIsZoomed(true);
 
+    // Another province's towns are still on the map: take them off now. Left on until the new towns are
+    // drawn after the zoom, they were re-coloured from the new province's town data, matched none of it and
+    // showed grey ("no data") for most of a second.
+    if (shownMuniProvinceRef.current && shownMuniProvinceRef.current !== provinceId) clearMunicipalities();
+
     // Hide all province pulses (we'll show muni layer instead)
     provincePulsesRef.current.forEach(({ marker }) => map.removeLayer(marker));
 
@@ -759,7 +768,7 @@ export function PhilippineMap({
         });
       }, 800);
     }
-  }, [getProvinceStyle, showMunicipalities]);
+  }, [getProvinceStyle, showMunicipalities, clearMunicipalities]);
 
   // ─── Init map once ───
   useEffect(() => {
