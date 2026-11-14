@@ -34,10 +34,10 @@ describe("forecast history", () => {
     render(<ForecastHistoryModal open onOpenChange={() => undefined} quarters={[]} value="2027-Q2" onSelect={() => undefined} />);
     const sections = screen.getAllByTestId(/^history-issue-/);
     expect(sections.map((s) => s.getAttribute("data-testid"))).toEqual(["history-issue-2027-Q1", "history-issue-2026-Q4"]);
-    expect(within(sections[0]).getByText("Current issue")).toBeTruthy();
+    expect(within(sections[0]).getByText("Current")).toBeTruthy();
     expect(within(sections[1]).getByText("Earlier issue")).toBeTruthy();
-    expect(within(sections[0]).getByText("awaiting outcome")).toBeTruthy();
-    expect(within(sections[1]).getByText("55% measured · class wrong")).toBeTruthy();
+    expect(within(sections[0]).getByText("Pending")).toBeTruthy();
+    expect(within(sections[1]).getByText("55% measured (incorrect)")).toBeTruthy();
     expect(within(sections[1]).getByText(/Q2 2027/)).toBeTruthy();       // the original Q4 2026 forecast of Q2 2027 stays listed
   });
 
@@ -57,7 +57,7 @@ describe("forecast history", () => {
     const sections = screen.getAllByTestId(/^history-issue-/);
     // by issue DATE: as text "2026-Q4" would sort after "2026-11"
     expect(sections.map((s) => s.getAttribute("data-testid"))).toEqual(["history-issue-2026-11", "history-issue-2026-Q4"]);
-    expect(within(sections[0]).getByText("Current issue")).toBeTruthy();
+    expect(within(sections[0]).getByText("Current")).toBeTruthy();
     expect(within(sections[0]).getByText(/Issued 10 November 2026/)).toBeTruthy();
     expect(within(sections[1]).getByText("Superseded")).toBeTruthy();
     expect(within(sections[1]).getByTestId("history-superseded-2026-Q4").textContent).toContain("Replaced by the forecast issued 10 November 2026");

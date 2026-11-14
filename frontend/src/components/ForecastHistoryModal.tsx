@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { History } from "lucide-react";
 import { Quarter } from "./QuarterTimeSlider";
@@ -15,17 +16,16 @@ interface Props {
 }
 
 const qLabel = (q: string) => `${q.slice(5)} ${q.slice(0, 4)}`;
-const day = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Manila" });
-const TARGET = { past: "ended", current: "this quarter", future: "ahead" } as const;
+const day = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Manila" });
 
 /**
- * Every forecast the system has issued (GET /api/v1/final/forecast-history), newest issue first. Forecasts are never replaced:
- * a later issue for the same quarter is listed separately, so the original stays visible. A forecast is marked validated
- * only when FNRI has published the province's result for that quarter; until then it is "awaiting outcome".
- * Selecting a row of the current issue loads that quarter on the map.
+ * Every forecast the system has issued (GET /api/v1/final/forecast-history), newest issue first. Forecasts are never changed;
+ * a superseded issue is kept, collapsed, under the forecast that replaced it. Selecting a row of the current issue loads that
+ * quarter on the map.
  */
 export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSelect }: Props) {
   const { data, isLoading, error } = useForecastHistory(open);
+  const [shown, setShown] = useState<Set<string>>(new Set());
   const onMap = new Set(quarters.map((q) => q.id));
   const byIssue = new Map<string, HistoryForecast[]>();
   for (const f of data?.forecasts ?? []) {
@@ -45,9 +45,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
             <DialogTitle className="text-sm">Forecast history</DialogTitle>
           </div>
           <DialogDescription className="text-[11px] leading-relaxed pt-1">
-            Every forecast issued so far, newest first. Each is kept unchanged; any exception to the rule that a
-            forecast uses only information published before its issue date is stated under that forecast. A forecast is checked against the actual result only when FNRI publishes a provincial survey for that
-            quarter.
+            All issued forecasts, newest first. A forecast is never changed after it is issued.
           </DialogDescription>
         </DialogHeader>
 
@@ -61,81 +59,77 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
           const current = head.issue_status === "current issue";
           const superseded = head.issue_status === "superseded" || head.record_status === "superseded";
           const sup = data?.superseded?.[iq];
+          const open_ = !superseded || shown.has(iq);
           return (
             <section key={iq} className="mt-4" data-testid={`history-issue-${iq}`}>
               <div className="flex flex-wrap items-baseline gap-x-2 text-[11px]">
-                <span className={`font-semibold ${superseded ? "line-through text-muted-foreground" : ""}`}>
-                  Issued {head.issue_label ?? qLabel(iq)}
-                </span>
-                <span className="text-muted-foreground">
-                  {data?.issue_notes?.[iq]
-                    ? <>data for periods before {day(head.information_cutoff)}, as published by {day(data.issue_notes[iq].published_by)}</>
-                    : <>data published before {day(head.information_cutoff)}</>}{" "}
-                  · made {day(head.generated_utc)} · model {head.model_version}
-                </span>
+                <span className={`font-semibold ${superseded ? "text-muted-foreground" : ""}`}>Issued {head.issue_label ?? qLabel(iq)}</span>
+                <span className="text-muted-foreground">Data published before {day(head.information_cutoff)}</span>
                 <span className="ml-auto text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {current ? "Current issue" : superseded ? "Superseded" : "Earlier issue"}
+                  {current ? "Current" : superseded ? "Superseded" : "Earlier issue"}
                 </span>
               </div>
-              {data?.issue_notes?.[iq] && (
-                <p className="mt-1 text-[10px] leading-snug text-muted-foreground" data-testid={`history-note-${iq}`}>{data.issue_notes[iq].note}</p>
-              )}
               {sup && (
-                <p className="mt-1 text-[10px] leading-snug font-semibold" data-testid={`history-superseded-${iq}`}>
-                  Replaced by the forecast issued {sup.superseded_by_label}. Kept here unchanged for the record; its values are not
-                  used on the map.
+                <p className="mt-1 text-[10px] leading-snug text-muted-foreground" data-testid={`history-superseded-${iq}`}>
+                  Replaced by the forecast issued {sup.superseded_by_label}: it used data released after its cut-off.{" "}
+                  <button
+                    type="button"
+                    className="underline hover:text-foreground"
+                    onClick={() => setShown((s) => { const n = new Set(s); if (n.has(iq)) n.delete(iq); else n.add(iq); return n; })}
+                  >
+                    {open_ ? "Hide values" : "Show values"}
+                  </button>
                 </p>
               )}
-              <div className={`mt-1.5 overflow-x-auto ${superseded ? "opacity-60" : ""}`}>
-                <table className="w-full text-[11px] border-collapse">
-                  <thead>
-                    <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
-                      <th className="text-left py-1.5 pr-3">Quarter</th>
-                      <th className="text-left px-2">Province</th>
-                      <th className="text-right px-2">Forecast share</th>
-                      <th className="text-right px-2">Chance of High</th>
-                      <th className="text-center px-2">Class</th>
-                      <th className="text-left px-2">Actual result</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((f) => {
-                      const selectable = current && onMap.has(f.target_quarter);
-                      return (
-                        <tr
-                          key={`${f.target_quarter}-${f.province}`}
-                          onClick={selectable ? () => onSelect(f.target_quarter) : undefined}
-                          className={`border-b border-border/25 ${selectable ? "cursor-pointer hover:bg-secondary/40" : ""} ${
-                            selectable && f.target_quarter === value ? "bg-secondary/50" : ""}`}
-                        >
-                          <td className="py-1.5 pr-3 whitespace-nowrap">
-                            {qLabel(f.target_quarter)} <span className="text-[9px] text-muted-foreground">({TARGET[f.target_status]})</span>
-                          </td>
-                          <td className="px-2">{f.province}</td>
-                          <td className="px-2 text-right font-mono-num">{fmtPct(f.share_pct)}</td>
-                          <td className="px-2 text-right font-mono-num">{f.p_high < 0.005 ? "<1%" : fmtPct(f.p_high * 100, 0)}</td>
-                          <td className="px-2 text-center">
-                            <StatusBadge level={f.risk_class === "HIGH" ? "high" : "low"} />
-                          </td>
-                          <td className="px-2 text-[10px]">
-                            {f.withdrawn ? "withdrawn by an administrator" :
-                              f.validation_status === "validated"
-                                ? `${fmtPct(f.observed_share_pct ?? 0)} measured · ${f.correct ? "class correct" : "class wrong"}`
-                                : "awaiting outcome"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+              {open_ && (
+                <div className={`mt-1.5 overflow-x-auto ${superseded ? "opacity-60" : ""}`}>
+                  <table className="w-full text-[11px] border-collapse">
+                    <thead>
+                      <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
+                        <th className="text-left py-1.5 pr-3">Quarter</th>
+                        <th className="text-left px-2">Province</th>
+                        <th className="text-right px-2">Forecast</th>
+                        <th className="text-center px-2">Risk</th>
+                        <th className="text-left px-2">Result</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((f) => {
+                        const selectable = current && onMap.has(f.target_quarter);
+                        return (
+                          <tr
+                            key={`${f.target_quarter}-${f.province}`}
+                            onClick={selectable ? () => onSelect(f.target_quarter) : undefined}
+                            className={`border-b border-border/25 ${selectable ? "cursor-pointer hover:bg-secondary/40" : ""} ${
+                              selectable && f.target_quarter === value ? "bg-secondary/50" : ""}`}
+                          >
+                            <td className="py-1.5 pr-3 whitespace-nowrap">{qLabel(f.target_quarter)}</td>
+                            <td className="px-2">{f.province}</td>
+                            <td className="px-2 text-right font-mono-num">{fmtPct(f.share_pct)}</td>
+                            <td className="px-2 text-center">
+                              <StatusBadge level={f.risk_class === "HIGH" ? "high" : "low"} />
+                            </td>
+                            <td className="px-2 text-[10px]">
+                              {f.withdrawn ? "Withdrawn" :
+                                f.validation_status === "validated"
+                                  ? `${fmtPct(f.observed_share_pct ?? 0)} measured (${f.correct ? "correct" : "incorrect"})`
+                                  : "Pending"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </section>
           );
         })}
 
-        <p className="mt-4 text-[9px] italic text-muted-foreground leading-snug">
-          Forecast share = forecast share of households moderately or severely food insecure (FNRI HFIAS); High risk at 50%. A forecast,
-          not a measured rate or an official classification. {data?.ledger?.ok === false ? "Warning: the history file failed its integrity check." : ""}
+        <p className="mt-4 text-[9px] text-muted-foreground leading-snug">
+          Forecast: share of households moderately or severely food insecure (FNRI HFIAS); High risk at 50% or more. Results are
+          added when FNRI publishes a provincial survey for that quarter.
+          {data?.ledger?.ok === false ? " Warning: the history file failed its integrity check." : ""}
         </p>
       </DialogContent>
     </Dialog>
