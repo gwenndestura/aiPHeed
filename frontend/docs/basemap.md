@@ -24,9 +24,9 @@ falling back to **`/basemap.pmtiles`** (i.e. `public/basemap.pmtiles`).
 - **Production:** host it on the agency CDN / object store and set
   `VITE_BASEMAP_PMTILES_URL` at build time.
 
-`public/basemap.pmtiles` is git-ignored (binary build artifact). Provision it in
-the deploy pipeline, or commit it deliberately if reproducibility matters more
-than repo size.
+`public/basemap.pmtiles` is committed (on purpose, so Vercel deploys it with the
+site) even though `.gitignore` still lists it: git keeps tracking a file once it
+is added. To replace it, regenerate it (below) and `git add -f` it again.
 
 If the file is missing the map still renders province/municipality outlines on
 the themed background, and logs a one-line `console.warn`.
