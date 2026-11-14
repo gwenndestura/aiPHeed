@@ -67,6 +67,7 @@ def test_treeshap_explanations_are_exact_and_complete(e55):
                     assert d["group_shap"] == 0.0
 
 
+@pytest.mark.legacy_served
 def test_api_states_the_target_and_method(e55):
     rows = client.get("/api/v1/provinces?quarter=2027-Q1&horizon=nowcast").json()
     assert rows["indicator"]["id"] == "food_insecurity_risk_probability"

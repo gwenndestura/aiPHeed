@@ -100,6 +100,7 @@ def test_tampered_record_is_refused(e41, monkeypatch, tmp_path):
     assert client.get("/api/v1/lead2/summary").status_code == 503
 
 
+@pytest.mark.legacy_served
 def test_triggers_without_model_input_are_zero_not_invented(e41):
     body = client.get("/api/v1/explainability?scope=province&id=quezon&quarter=2027-Q1").json()
     by = {t["key"]: t for t in body["triggers"]}

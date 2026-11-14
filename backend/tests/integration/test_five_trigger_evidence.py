@@ -122,6 +122,7 @@ def test_regenerating_the_evidence_keeps_the_approved_wording():
     assert X.sentence("employment", r) == EMPLOYMENT_WORDING
 
 
+@pytest.mark.legacy_served
 def test_api_cards_carry_the_tested_contribution_at_both_scopes(thesis):
     assert CH1.evaluation()["seal_sha256"] == SERVED_SEAL
     for scope, id_ in (("province", "quezon"), ("region", "calabarzon")):

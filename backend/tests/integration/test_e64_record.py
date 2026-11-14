@@ -104,6 +104,7 @@ def test_prospective_seal(e64):
         assert r["probability"] == pytest.approx(e64["provinces"][r["province_code"]]["forecast"]["probability"], abs=1e-12)
 
 
+@pytest.mark.legacy_served
 def test_dashboard_serves_the_record_and_lgus_use_it(e64):
     tq = e64["targetQuarter"]
     rows = {p["provinceCode"]: p["riskScore"] for p in client.get(f"/api/v1/provinces?quarter={tq}").json()["data"]}
@@ -137,6 +138,7 @@ def test_e38_default_unaffected(monkeypatch):
     assert not LEAD2.active()
 
 
+@pytest.mark.legacy_served
 def test_lgu_rows_trace_to_the_served_forecast(e64):
     tq = e64["targetQuarter"]
     shas = set()

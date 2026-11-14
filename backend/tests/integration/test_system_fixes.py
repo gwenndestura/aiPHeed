@@ -53,6 +53,7 @@ def _issue(quarter):
 
 
 # ---------------------------------------------------------------------------------------------- item 1: reports
+@pytest.mark.legacy_served
 def test_report_series_equals_the_served_forecast_and_never_describes_firi(thesis):
     pl = _get("/api/v1/report/data", type="trend", scope="province", id="quezon", **{"from": "2023-Q1", "to": "2026-Q4"})
     fig = next(b for b in pl["blocks"] if b["kind"] == "figure" and b["chart"]["type"] == "line")
@@ -69,12 +70,14 @@ def test_report_series_equals_the_served_forecast_and_never_describes_firi(thesi
     assert any("Reliability rule" in i for b in pl["blocks"] if b["kind"] == "bullets" for i in b["items"])
 
 
+@pytest.mark.legacy_served
 def test_report_marks_lead2_as_experimental(thesis):
     pl = _get("/api/v1/report/data", type="trend", scope="region", **{"from": "2026-Q3", "to": "2027-Q1"})
     kp = next(b for b in pl["blocks"] if b["kind"] == "bullets")["items"]
     assert any("Lead-2 forecast issued 2026-10-01 (experimental" in i for i in kp)
 
 
+@pytest.mark.legacy_served
 def test_server_pdf_describes_the_served_forecast(thesis):
     from pdfminer.high_level import extract_text
 

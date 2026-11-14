@@ -77,6 +77,7 @@ def test_backtest_is_the_committed_candidate_and_matches_the_e52_rows(e52):
     assert rec["assessment"]["E52"]["metrics"]["accuracy"] == pytest.approx(res["metrics"]["E52PS"]["accuracy"], abs=1e-3)
 
 
+@pytest.mark.legacy_served
 def test_attribution_is_of_the_served_probability(e52):
     rec = LEAD2.record()
     for code, v in rec["provinces"].items():
@@ -105,6 +106,7 @@ def test_attribution_is_of_the_served_probability(e52):
             assert signed[g] == pytest.approx(c["logOddsEffect"])
 
 
+@pytest.mark.legacy_served
 def test_plain_summary_states_result_reasons_evidence_and_data_status(e52):
     rec = LEAD2.record()
     for slug, v in ((v["name"].lower(), v) for v in rec["provinces"].values()):

@@ -26,6 +26,7 @@ def _triggers(scope="province", id_="quezon", quarter="2027-Q1"):
     return {t["key"]: t for t in client.get(f"/api/v1/explainability?scope={scope}&id={id_}&quarter={quarter}").json()["triggers"]}
 
 
+@pytest.mark.legacy_served
 @pytest.mark.parametrize("mode", ["e38", "e42"])
 def test_trigger_status_never_implies_a_direction_without_input(monkeypatch, mode):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", mode)

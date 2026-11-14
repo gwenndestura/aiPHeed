@@ -96,6 +96,7 @@ def test_e65_evaluation_reproduces_a_and_no_arm_passes_the_rule():
         assert hashlib.sha256(p.read_bytes()).hexdigest() == want
 
 
+@pytest.mark.legacy_served
 def test_forecast_summaries_carry_the_el_nino_limitation(e58):
     rec = LEAD2.record()
     for code, v in rec["provinces"].items():
@@ -124,6 +125,7 @@ def test_indicator_horizon_names_each_estimates_own_issue_date(e58):
     assert h1 == LEAD2.record()["indicator"]["horizon"]
 
 
+@pytest.mark.legacy_served
 def test_production_default_gets_no_enso_text(e38):
     ex = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
     assert ex.get("summary") is None

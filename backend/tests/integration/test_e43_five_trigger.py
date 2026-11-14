@@ -49,6 +49,7 @@ def test_indicator_describes_the_food_stress_target(e43):
     assert r.status_code == 404 or r.json()["indicator"]["id"] == "food_stress_risk_probability"
 
 
+@pytest.mark.legacy_served
 @pytest.mark.parametrize("scope,id_", [("province", "quezon"), ("region", "calabarzon")])
 def test_trigger_cards_follow_the_record_status(e43, scope, id_):
     t = {x["key"]: x for x in client.get(f"/api/v1/explainability?scope={scope}&id={id_}&quarter=2027-Q1").json()["triggers"]}

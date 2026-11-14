@@ -137,6 +137,7 @@ def test_fssi_v2_rebuilds_byte_identically():
 
 @pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
                     reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
+@pytest.mark.legacy_served
 def test_e64_feed_lists_classifier_v2_articles_before_the_issue_date(monkeypatch):
     monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "e64")
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-19T09:00:00")
@@ -157,6 +158,7 @@ def test_e64_feed_lists_classifier_v2_articles_before_the_issue_date(monkeypatch
 
 @pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
                     reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
+@pytest.mark.legacy_served
 def test_e38_feed_is_unchanged(monkeypatch):
     monkeypatch.delenv("AIPHEED_LEAD2_MODEL", raising=False)
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-19T09:00:00")

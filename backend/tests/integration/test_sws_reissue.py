@@ -132,6 +132,7 @@ def test_replay_reproduces_p0h4u_and_is_idempotent():
     assert r["lead2"]["P0H4 + SWS re-issue (deployable)"]["failed"] == ["R6"]   # timing alone does not pass R6
 
 
+@pytest.mark.legacy_served
 def test_scheduler_registers_job_only_when_enabled(monkeypatch):
     pytest.importorskip("apscheduler")
     from app.tasks import scheduler as SCH

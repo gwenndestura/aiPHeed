@@ -64,6 +64,7 @@ def test_five_triggers_labelled_honestly():
     assert len(used) == len(set(used))
 
 
+@pytest.mark.legacy_served
 def test_driver_shares_include_other_and_add_to_100(thesis):
     for scope, sid in (("province", "quezon"), ("region", "calabarzon")):
         d = _get("/api/v1/explainability", scope=scope, id=sid, quarter="2027-Q1")
@@ -71,12 +72,14 @@ def test_driver_shares_include_other_and_add_to_100(thesis):
         assert sum(t["pct"] for t in d["triggers"]) + d["otherPct"] == 100
 
 
+@pytest.mark.legacy_served
 def test_fish_kill_bar_is_disclosed_as_a_proxy(thesis):
     d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
     fk = next(t for t in d["triggers"] if t["key"] == "fish_kill")
     assert fk["label"] == "Fish Production" and "Fish production" in (fk["plainEvidence"] or "")
 
 
+@pytest.mark.legacy_served
 def test_report_and_config_describe_e168_not_the_retired_index(thesis):
     rep = json.dumps(_get("/api/v1/report/data", scope="province", id="quezon", quarter="2027-Q1"))
     assert "price-pressure" not in rep and "E168" in rep
@@ -92,6 +95,7 @@ def test_evaluation_confusion_matrix_is_consistent():
     assert m["tp"] + m["fp"] + m["fn"] + m["tn"] == m["n"] and m["tp"] + m["tn"] == m["correct"]
 
 
+@pytest.mark.legacy_served
 def test_map_engine_selects_e168_and_ch1_on_request(thesis):
     assert map_engine.selected() is E
     thesis.setenv("AIPHEED_MAP_MODEL", "ch1")
@@ -99,6 +103,7 @@ def test_map_engine_selects_e168_and_ch1_on_request(thesis):
     assert map_engine.selected() is ch1_system
 
 
+@pytest.mark.legacy_served
 def test_province_map_and_ranking_are_e168(thesis):
     for lead, q in ((1, "2027-Q1"), (2, "2027-Q2"), (3, "2027-Q3")):
         d = _get("/api/v1/provinces", quarter=q)
@@ -124,6 +129,7 @@ def test_timeline_covers_the_three_accepted_leads(thesis):
         assert {"2027-Q1", "2027-Q2", "2027-Q3"} <= set(ids)
 
 
+@pytest.mark.legacy_served
 def test_lgu_ranking_starts_from_e168(thesis):
     rows = [r for slug in ("batangas", "cavite", "laguna", "quezon", "rizal")
             for r in _get(f"/api/v1/provinces/{slug}/municipalities", quarter="2027-Q1")["data"]]
@@ -140,6 +146,7 @@ def test_lgu_ranking_starts_from_e168(thesis):
             assert any(r["provinceEstimate"] == pytest.approx(p, abs=1e-6) for p in prov.values())
 
 
+@pytest.mark.legacy_served
 def test_explanations_are_e168_groups(thesis):
     d = _get("/api/v1/explainability", scope="province", id="quezon", quarter="2027-Q1")
     keys = {t["key"] for t in d["triggers"]}
@@ -154,6 +161,7 @@ def test_no_early_warning_when_all_low():
     assert alerts_e168.candidates() == []
 
 
+@pytest.mark.legacy_served
 def test_strict_start_refuses_when_e168_is_not_served(thesis, tmp_path):
     # No silent fallback to the Chapter I price index: strict start-up names why the approved model is not served.
     from app import main as MAIN
@@ -196,6 +204,7 @@ def test_production_cards_state_the_period_actually_used():
     assert ("newest figures in the system" in fish) == stale       # stale data, and only stale data, is labelled as such
 
 
+@pytest.mark.legacy_served
 def test_news_panel_lists_the_stories_the_forecast_read():
     """The news panel is the served issue's own reading list: every story published in the three months before the
     cut-off, national ones included, none on or after the cut-off; local counts drive the few-news flag."""

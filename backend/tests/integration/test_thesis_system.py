@@ -175,6 +175,7 @@ def test_target_advances_with_the_clock_and_no_stale_forecast(thesis, monkeypatc
     assert not LEAD2.serves("2027-Q2")
 
 
+@pytest.mark.legacy_served
 def test_142_lgus_finite_mapped_and_coloured(thesis):
     rows = []
     for s in SLUG.values():
@@ -362,6 +363,7 @@ def test_firi_evaluation_reported_honestly(thesis):
     assert perf["lgbmChecks"] == {"plattRecalibration": False, "walkForwardThreshold": False}
 
 
+@pytest.mark.legacy_served
 def test_driver_bars_explain_the_served_index(thesis):
     rec = LEAD2.record()
     for c, slug in SLUG.items():
@@ -380,6 +382,7 @@ def test_driver_bars_explain_the_served_index(thesis):
         assert d["other_pct"] == pytest.approx(100 * sum(abs(pu.get(k, 0)) for k in T.OTHER_INDICATORS) / tot, abs=0.06)
 
 
+@pytest.mark.legacy_served
 def test_factor_cards_follow_the_served_index(thesis):
     """Card statuses come from FIRI, not the price model: a group with a share contributes; an all-missing group is insufficient_data."""
     for sc, i, q in [("region", "calabarzon", "2027-Q1")] + [("province", s, q) for s in SLUG.values() for q in ("2027-Q1", "2024-Q3")]:

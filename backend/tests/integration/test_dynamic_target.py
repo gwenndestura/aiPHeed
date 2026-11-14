@@ -53,6 +53,7 @@ def test_target_advances_with_the_clock_and_is_not_hard_coded(monkeypatch):
     assert seen == {"2027-Q1", "2027-Q2", "2027-Q3", "2027-Q4", "2028-Q1"}
 
 
+@pytest.mark.legacy_served
 def test_on_15_october_2026_every_surface_targets_2027_q1(monkeypatch):
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-15T09:00:00")
     q = client.get("/api/v1/quarters?horizon=nowcast").json()
@@ -121,6 +122,7 @@ def test_next_quarter_forecast_is_frozen_reproducible_and_cutoff_bound():
         assert NQ["provinces"][code]["p_high"] == pytest.approx(v["p_high"], abs=5e-5)
 
 
+@pytest.mark.legacy_served
 def test_five_triggers_keep_their_identity_and_follow_the_model(monkeypatch):
     monkeypatch.setenv("AIPHEED_NOW", "2026-10-15T09:00:00")
     for scope, ident in (("province", "batangas"), ("province", "laguna"), ("region", "calabarzon")):

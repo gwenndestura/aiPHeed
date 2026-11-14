@@ -238,13 +238,15 @@ def drivers(pid: str, quarter: str) -> dict:
     d = SA.province(slug, quarter)
     lead = d.get("lead") or 1
     fig = SA._vulnerability_figures([name], SA._cutoff_of(quarter, lead)).get(name, {})
-    shares = {s: float(_row(s, quarter).get("score_pct") or 0) for s in ref.PROVINCES}
-    rank = sorted(shares, key=lambda s: -shares[s]).index(slug) + 1
-    pv = next((p for p in svc.province_summary(quarter) if p["id"] == slug), {})
+    summary = svc.province_summary(quarter)
+    pv = next((p for p in summary if p["id"] == slug), {})
+    # the API's competition rank (ties share a rank) out of the published provinces, as on the map
+    rank, tied = pv.get("rank"), bool(pv.get("rankTied"))
+    n_pub = sum(1 for p in summary if not p.get("withheld"))
 
     head = [["Food insecurity risk", f"{_pct(r.get('score_pct'))} of households (forecast)"],
             ["Risk class", f"{str(r.get('class') or '--').upper()} (High risk at 50%)"],
-            ["Rank in CALABARZON", f"{rank} of 5 (highest risk first)"],
+            ["Rank in CALABARZON", f"{rank} of {n_pub}{' (tied)' if tied else ''} (highest risk first)" if rank else "--"],
             [f"Population ({fig.get('census_year', '')} census)", f"{pv['population']:,}" if pv.get("population") else "--"],   # as on the dashboard
             ["News reports used", str(pv.get("articleCount", "--"))]]
     blocks = [{"kind": "paragraph", "style": "body", "text": INTRO}, *_period_blocks(issue),

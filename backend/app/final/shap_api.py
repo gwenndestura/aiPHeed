@@ -648,13 +648,19 @@ def factor_groups(d: dict) -> dict:
         by.setdefault(group_of(c["feature"]), []).append(c)
     sums = {g: sum(c["shapLogOdds"] for c in items) for g, items in by.items()}
     tot = sum(abs(v) for v in sums.values()) or 1.0
+    # integer shares that add to exactly 100 with "Other" (largest remainder), the API's contract; plain rounding drifted to 99-101
+    keys = [k for k, _ in GROUP if k in by] + (["other"] if "other" in sums else [])
+    raw = {k: 100 * abs(sums[k]) / tot for k in keys}
+    pct = {k: int(raw[k]) for k in keys}
+    for k in sorted(keys, key=lambda k: raw[k] - pct[k], reverse=True)[:100 - sum(pct.values())]:
+        pct[k] += 1
     enso = enso_context()
     out = []
     for key, label in GROUP:
         if key not in by:
             continue
         s = sums[key]
-        g = {"key": key, "label": label, "pct": round(100 * abs(s) / tot), "signedContribution": round(s, 4),
+        g = {"key": key, "label": label, "pct": pct[key], "signedContribution": round(s, 4),
              "direction": "increases_risk" if s >= NEAR_ZERO else "protective" if s <= -NEAR_ZERO else "no_effect",
              "status": "contributes" if abs(s) >= NEAR_ZERO else "no_effect",
              "plainEvidence": _simple_card(by[key], d), "inputs": [c["feature"] for c in by[key]]}
@@ -667,7 +673,7 @@ def factor_groups(d: dict) -> dict:
         out.append(g)
     # Poverty and Vulnerability is listed only when this forecast used a poverty or vulnerability input (owner, 2026-11-14)
     out.sort(key=lambda g: -abs(g["signedContribution"]))
-    return {"groups": out, "otherPct": round(100 * abs(sums.get("other", 0.0)) / tot), "otherInputs": [c["feature"] for c in by.get("other", [])]}
+    return {"groups": out, "otherPct": pct.get("other", 0), "otherInputs": [c["feature"] for c in by.get("other", [])]}
 
 
 def province(pid: str, quarter: str, scope: str = "province") -> dict:

@@ -52,6 +52,7 @@ def test_every_trigger_is_traceable_to_model_features(e44):
             assert p["triggerStatus"][g]["evidenceNote"]
 
 
+@pytest.mark.legacy_served
 def test_cards_show_evidence_and_no_unsupported_direction(e44):
     t = {x["key"]: x for x in client.get("/api/v1/explainability?scope=province&id=quezon&quarter=2027-Q1").json()["triggers"]}
     assert set(t) == FIVE
@@ -82,6 +83,7 @@ def test_default_remains_e38(monkeypatch):
     assert client.get("/api/v1/lead2/summary").status_code == 404
 
 
+@pytest.mark.legacy_served
 def test_notes_and_config_describe_the_served_candidate(e44):
     body = client.get("/api/v1/explainability?scope=province&id=quezon&quarter=2027-Q1").json()
     assert "Every group has inputs in this model" in body["note"] and "only Market / Prices" not in body["note"]

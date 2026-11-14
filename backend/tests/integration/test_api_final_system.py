@@ -104,8 +104,8 @@ def test_all_142_lgus_are_served_as_priority_scores_without_hunger_figures():
     d = _get("lgus")
     assert d["count"] == 142 and len({r["lguCode"] for r in d["rows"]}) == 142
     assert {r["province"] for r in d["rows"]} == {"cavite", "laguna", "batangas", "rizal", "quezon"}
-    from app.ml.inference import e168_system as E168, map_engine
-    if map_engine.selected() is E168:             # the approved E168 forecast drives the ranking (Objective 3)
+    from app.ml.inference import e168_system as E168, hcw_system, map_engine
+    if map_engine.selected() in (E168, hcw_system):   # the approved forecast (E168 / FINAL) drives the ranking (Objective 3)
         assert d["label"].startswith("Vulnerability-weighted municipal priority based on the provincial food-insecurity")
         assert "No measured food-insecurity figure exists for individual cities or municipalities" in d["note"]
         assert all(r["provinceEstimate"] is not None for r in d["rows"])

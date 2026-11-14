@@ -96,6 +96,7 @@ def test_horizon_and_freshness_are_disclosed(e56):
     assert "2026-Q2" in rows["indicator"]["horizon"]
 
 
+@pytest.mark.legacy_served
 def test_treeshap_reconstructs_and_note_is_e56(e56):
     rec = LEAD2.record()
     for v in rec["provinces"].values():

@@ -119,6 +119,7 @@ def test_psa_2021_sae_reaches_all_142_lgus_with_lucena_flagged():
     assert "population_2020" not in v.columns
 
 
+@pytest.mark.legacy_served
 def test_lgu_ranking_in_record_api_and_recompute_agree():
     vul = pd.read_csv("data/inputs/lgu_vulnerability.csv", dtype={"lgu_code": str})
     ros = pd.read_csv("data/reference/calabarzon_lgus.csv", dtype={"lgu_psgc": str})

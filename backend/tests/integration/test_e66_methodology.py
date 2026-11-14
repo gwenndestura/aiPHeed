@@ -211,6 +211,7 @@ def test_exact_ranks_remove_rounding_ties_and_default_is_unchanged():
         assert (g["rank_in_province"] == g["vulnerability_rank_in_province"]).all()
 
 
+@pytest.mark.legacy_served
 def test_e66_municipalities_endpoint_uses_exact_ranks(mode):
     def rows():
         out = []

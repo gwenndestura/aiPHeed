@@ -212,7 +212,8 @@ def test_every_municipal_row_declares_it_is_disaggregated():
 ])
 def test_driver_percentages_sum_to_exactly_100(scope, subject):
     body = client.get(f"/api/v1/explainability?scope={scope}&id={subject}").json()
-    assert sum(t["pct"] for t in body["triggers"]) == 100
+    # the schema's contract: the group shares plus "Other model inputs" (otherPct, when the model reports it) are integers adding to 100
+    assert sum(t["pct"] for t in body["triggers"]) + (body.get("otherPct") or 0) == 100
 
 
 def test_drivers_are_ranked_descending():
@@ -299,16 +300,23 @@ def _evidence_quarter(quarter: str) -> str:
 def test_news_count_agrees_with_the_province_summary():
     quarter = client.get("/api/v1/quarters").json()["current"]
     provinces = {p["id"]: p for p in client.get("/api/v1/provinces").json()["data"]}
+    from app.services import dashboard as D
+    stories_read = D._e168_news() is not None      # E168 / FINAL: the panel lists every story the forecast read
     for slug, province in provinces.items():
         news = client.get(f"/api/v1/news?scope=province&id={slug}&quarter={quarter}").json()
+        if stories_read:
+            # articleCount = every story read (province, region, Luzon, national); the summary counts the local ones
+            assert news["provinceAttributed"] == province["articleCount"] <= news["articleCount"]
+            continue
         assert news["articleCount"] == province["articleCount"]
         # E31 alignment (promoted in E34): a forecast's news is the previous quarter's; a nowcast's is its own.
         assert news["sourceQuarter"] == _evidence_quarter(quarter)
 
 
-@pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
-                    reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
 def test_forecast_quarter_news_comes_from_the_information_cutoff():
+    from app.services import dashboard as D
+    if D._e168_news() is not None:                 # decided at run time: the served model may be activated after import
+        pytest.skip("E168/FINAL serve the stories their own forecast read (news_used.json); the legacy feed is not shown")
     forecast = [q["id"] for q in client.get("/api/v1/quarters").json()["quarters"]
                 if q.get("state") == "forecast"]
     if not forecast:

@@ -43,6 +43,7 @@ def test_serves_the_frozen_corrected_forecast(e46):
         assert v["forecast"]["kind"].startswith("FORECAST") and v["forecast"]["decisionThreshold"] == 0.5
 
 
+@pytest.mark.legacy_served
 def test_acceptance_is_not_claimed_and_triggers_are_traced(e46):
     rec = LEAD2.record()
     assert rec["assessment"]["forecastingAcceptanceMet"] is False and rec["assessment"]["finalCandidate"] is None
@@ -179,6 +180,7 @@ def test_insufficient_data_rule_is_distinct_from_negligible():
     assert math.isclose(b.NEGLIGIBLE_POINTS, 0.1)
 
 
+@pytest.mark.legacy_served
 def test_e50_market_attribution_includes_the_cpi_projection(e46):
     """E50: the market group is credited with the base-effect food / gap projections (the model's price inputs), all
     groups use the training-mean reference, the SWS level is reported separately, and probabilities are unchanged."""

@@ -50,6 +50,7 @@ def _bars(payload):
     return [(b["label"], b["pct"], b["direction"]) for b in fig[0]["chart"]["bars"]] if fig else []
 
 
+@pytest.mark.legacy_served
 @pytest.mark.parametrize("quarter", ["2026-Q4", "2027-Q1"])
 def test_thesis_region_report_equals_the_dashboard(thesis, quarter):
     pl = _get("/api/v1/report/data", type="trend", scope="region", **{"from": "2026-Q1", "to": quarter})
@@ -72,6 +73,7 @@ def test_thesis_region_report_equals_the_dashboard(thesis, quarter):
     assert "FIRI" not in text and "not a probability" not in text and "exact share" not in text
 
 
+@pytest.mark.legacy_served
 @pytest.mark.parametrize("slug", PROVINCES)
 def test_thesis_driver_report_equals_the_right_panel(thesis, slug):
     quarter = "2027-Q1"
@@ -88,6 +90,7 @@ def test_thesis_driver_report_equals_the_right_panel(thesis, slug):
     assert "FIRI" not in json.dumps(pl)
 
 
+@pytest.mark.legacy_served
 def test_legacy_report_data_still_served(monkeypatch):
     monkeypatch.delenv("AIPHEED_LEAD2_MODEL", raising=False)
     for params in ({"type": "trend", "scope": "region", "from": "2021-Q1", "to": "2027-Q1"},

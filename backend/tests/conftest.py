@@ -173,3 +173,32 @@ def pytest_collection_modifyitems(config, items):
         key = item.nodeid.split("/")[-1]
         if key in E34_SUPERSEDED:
             item.add_marker(pytest.mark.skip(reason=f"E34 superseded by the E31 promotion: {E34_SUPERSEDED[key]}"))
+
+
+# ------------------------------------------------------------------------------------- tests of a model no longer served
+# Since 2026-11-14 FINAL (final-rate-mind-1.0) is production. Tests that check the E168/E196/CH1 serving path itself (their
+# probabilities, group names, record formulas, legacy news feed) are marked `legacy_served`: they run when one of those models
+# is production and are skipped, with this reason, otherwise. FINAL's own serving path is tested in tests/unit/test_final_realtime.py
+# and by the generic API tests, which run against whatever model is production.
+LEGACY_SERVED = {"e168-lgbm-1.0", "e184-lgbm-syn50-1.0", "e196-lgbm-avg5-laf-1.0", "ch1-p0h4"}
+
+
+def _production_model_id():
+    import json
+    from app.paths import BACKEND_DIR
+    try:
+        reg = json.loads((BACKEND_DIR / "data" / "registry" / "registry.json").read_text(encoding="utf-8"))
+        return (reg.get("production") or {}).get("model_id")
+    except Exception:
+        return None
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "legacy_served: checks the E168/E196/CH1 serving path; skipped while another model is production")
+
+
+def pytest_runtest_setup(item):
+    if item.get_closest_marker("legacy_served"):
+        prod = _production_model_id()
+        if prod not in LEGACY_SERVED:
+            pytest.skip(f"checks the E168/E196/CH1 serving path; production is {prod}")

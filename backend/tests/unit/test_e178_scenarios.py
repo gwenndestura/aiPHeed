@@ -79,6 +79,7 @@ def out():
     return pd.read_csv(OUT)
 
 
+@pytest.mark.legacy_served
 @needs_run
 def test_s0_equals_the_production_issue(out):
     prod = K.production_issue()
@@ -145,6 +146,7 @@ def test_inputs_stay_within_bounds_unless_flagged():
     assert set(ext.scenario_id) <= {"S3", "S3-B"}
 
 
+@pytest.mark.legacy_served
 @needs_run
 def test_recorded_hashes_match():
     h = json.loads((K.SYN / "hashes.json").read_text())

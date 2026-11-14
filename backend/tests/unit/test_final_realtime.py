@@ -15,6 +15,27 @@ CFG = {**PD.serving(), "max_lead": 2, "validated_max_lead": 2, "issue_rule": {"m
 PROV = ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"]
 
 
+@pytest.fixture(autouse=True)
+def _leave_serving_as_found():
+    """Isolation: several tests activate the superseded 2026-Q4 issue or run the cycle (which sets AIPHEED_LIVE_ASOF in the
+    process). Put the served issue and those variables back so later test files see the production state."""
+    import os
+    keys = ("AIPHEED_LIVE_ASOF", "AIPHEED_LIVE_PUBLISHED")
+    saved = {k: os.environ.get(k) for k in keys}
+    yield
+    for k, v in saved.items():
+        if v is None:
+            os.environ.pop(k, None)
+        else:
+            os.environ[k] = v
+    from app.final import serving as SVG
+    if SVG._STATE.get("patched"):
+        try:
+            SVG.activate(SVG.served_issue_dir())
+        except Exception:                                         # noqa: BLE001 - restoring must never fail a test
+            pass
+
+
 # ------------------------------------------------------------------ quarter detection and transitions
 @pytest.mark.parametrize("now,cal,issue,targets", [
     ("2026-12-15T09:00", "2026-Q4", "2026-Q4", ["2027-Q1", "2027-Q2"]),

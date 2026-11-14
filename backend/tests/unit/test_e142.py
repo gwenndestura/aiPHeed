@@ -85,6 +85,7 @@ def test_registry_register_and_route():
         app.dependency_overrides.pop(require_admin, None)
 
 
+@pytest.mark.legacy_served
 def test_ch1_explanation_is_labelled_as_price_pressure():
     from app.main import app
     d = TestClient(app).get("/api/v1/explainability?scope=province&id=quezon").json()

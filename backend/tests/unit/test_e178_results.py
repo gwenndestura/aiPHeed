@@ -85,6 +85,7 @@ def test_recorded_hashes_match():
         assert K.sha256(K.BACKEND_DIR.parent / rel) == sha, rel
 
 
+@pytest.mark.legacy_served
 def test_production_is_untouched():
     reg = json.loads((K.D / "registry" / "registry.json").read_text())
     assert reg["production"]["model_id"] == "e168-lgbm-1.0"

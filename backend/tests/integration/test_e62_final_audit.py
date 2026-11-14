@@ -55,6 +55,7 @@ def _entries(v: dict, target: str) -> dict:
     return out
 
 
+@pytest.mark.legacy_served
 def test_employment_caveat_follows_every_drawn_bar(e58):
     rec = LEAD2.record()
     seen = 0
@@ -71,6 +72,7 @@ def test_employment_caveat_follows_every_drawn_bar(e58):
 
 @pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
                     reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
+@pytest.mark.legacy_served
 def test_news_beside_a_lead2_estimate_never_postdates_its_issue_date(e58):
     for q in LEAD2.candidate_quarters():
         rows = LEAD2.rows_for(q)

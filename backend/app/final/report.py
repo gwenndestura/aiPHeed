@@ -195,9 +195,8 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
     lead = shap.get("lead") or 1
     fig = SA._vulnerability_figures([name], SA._cutoff_of(quarter, lead)).get(name, {})
     published = [p for p in provinces if not p["withheld"]]
-    share_of = {p["id"]: float((HS.row(p["provinceCode"], quarter) or {}).get("score_pct") or 0) for p in published}
-    published.sort(key=lambda p: -share_of[p["id"]])                     # rank by the number the report shows
-    rank = next((i for i, p in enumerate(published, 1) if p["id"] == slug), None)
+    # the API's own competition rank (tied values share a rank), never a re-sort (test_pdf_rank_tied)
+    rank, tied = pv.get("rank"), bool(pv.get("rankTied"))
 
     buf = io.BytesIO()
     doc = _doc(buf, f"aiPHeed {name} {quarter}")
@@ -208,7 +207,8 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
     flow += [R._data_table([], [
         [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(share)}</b> of households (forecast)", "cell")],
         [R._p("Risk class", "small"), R._p(f"<b>{str(r.get('class') or pv.get('riskLabel') or '--').upper()}</b> (High risk at 50%)", "cell")],
-        [R._p("Rank in CALABARZON", "small"), R._p(f"<b>{rank} of {len(published)}</b> (highest risk first)" if rank else "--", "cell")],
+        [R._p("Rank in CALABARZON", "small"), R._p(f"<b>{rank} of {len(published)}{' (tied)' if tied else ''}</b> (highest risk first)"
+                                                    if rank else "--", "cell")],
         # the dashboard's population: all the province's cities and municipalities, independent cities included (audit 2026-11-14:
         # the PSA province row leaves out Lucena, so Quezon read 1,980,338 here and 2,260,669 on the dashboard)
         [R._p(f"Population ({fig.get('census_year', '')} census)", "small"), R._p(f"<b>{pv['population']:,}</b>" if pv.get("population") else "--", "cell")],
@@ -223,7 +223,7 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
     flow.append(PageBreak())
     flow += R._section("Towns and cities")
     flow += [R._p("Ranked by priority within the province: the province forecast weighted by poverty (60%) and population density "
-                  "(40%). <b>These are not separate forecasts for each town or city</b>; every town rises and falls with its province.",
+                  "(40%). <b>These are not independent municipal forecasts</b>; every town rises and falls with its province.",
                   "body"), Spacer(1, 3 * mm)]
     munis = sorted(svc.municipality_summary(quarter, province_id=slug), key=lambda m: (m.get("rankInProvince") or 999, m["name"]))
     rows = [[R._p(str(m.get("rankInProvince") or "--"), "cell"), R._p(R._escape(m["name"]), "cellb"), R._p(m["classification"], "cell"),
@@ -261,9 +261,9 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     high = sum(1 for p in published if str(rows_hs[p["id"]].get("class", "")).upper() == "HIGH")
     flow += [R._data_table([], [
         [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(sum(shares) / len(shares)) if shares else '--'}</b> of households "
-                                                     f"(average of the {len(shares)} provinces)", "cell")],
+                                                     f"(mean of {len(shares)} published province scores)", "cell")],
         [R._p("Provinces at High risk", "small"), R._p(f"<b>{high} of {len(published)}</b>", "cell")],
-        [R._p("Provinces withheld", "small"), R._p(f"<b>{len(provinces) - len(published)}</b>", "cell")],
+        [R._p("Provinces published", "small"), R._p(f"<b>{len(published)} of {len(provinces)}</b>", "cell")],
         [R._p("News reports used", "small"), R._p(f"<b>{news['articleCount']}</b> ({news['provinceAttributed']} about a specific province)", "cell")],
     ], [55 * mm, width - 55 * mm])]
     flow += R._section("Provinces from highest to lowest risk")
@@ -277,6 +277,11 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
              R._p(str(p["articleCount"]), "cell")] for p in published]
     flow.append(R._data_table(["Province", "Risk", "Class", "News"], rows,
                               [width - 70 * mm, 25 * mm, 25 * mm, 20 * mm], {1: "RIGHT", 3: "RIGHT"}))
+    held = [p["name"] for p in provinces if p["withheld"]]
+    if held:                                   # named, but no number: a withheld forecast is never shown (thesis p. 60)
+        flow += [Spacer(1, 3 * mm), R._callout("Withheld from this assessment",
+                                               R._escape(", ".join(held)) + ": withheld from publication by a Department of Agriculture "
+                                               "reviewer. Its forecast is not shown and is left out of the regional mean.", R.WARN_BG)]
     flow.append(PageBreak())
     flow += R._section(f"Why is CALABARZON at risk? {_ql(quarter)}")
     flow += _why_block(shap, width)

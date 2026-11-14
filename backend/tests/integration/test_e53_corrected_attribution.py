@@ -39,6 +39,7 @@ def test_probabilities_are_e52s_unchanged(e53):
     assert rows["indicator"]["id"] == "food_price_pressure_probability"
 
 
+@pytest.mark.legacy_served
 def test_every_input_is_attributed_and_reconciles(e53):
     rec = LEAD2.record()
     some_other = False

@@ -90,6 +90,7 @@ def test_e171_results_and_seals():
         assert hashlib.sha256((D / path).read_bytes()).hexdigest().startswith(prefix)
 
 
+@pytest.mark.legacy_served
 def test_e168_lead_horizon_and_owner_approval():
     h = json.loads((D / "e168" / "out" / "lead_horizon.json").read_text())
     assert h["horizon_75pct_and_beats_persistence"] == 3 and h["skill_horizon_beats_persistence"] == 6 and h["maximum_reliable_lead_E156"] == 0

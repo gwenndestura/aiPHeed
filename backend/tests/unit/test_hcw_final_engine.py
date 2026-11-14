@@ -48,6 +48,7 @@ def test_final_engine_reproduces_scored_research_predictions(survey, lead, seed)
     assert out["version"].endswith("experimental") and ((out["p"] >= 0) & (out["p"] <= 1)).all()
 
 
+@pytest.mark.legacy_served
 def test_final_engine_is_not_wired_into_serving_or_registry():
     for rel in ("app/hcw/serve.py", "app/hcw/make_system.py", "app/ml/inference/map_engine.py", "app/api/v1/registry.py", "app/main.py"):
         p = BACKEND / rel

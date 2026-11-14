@@ -29,6 +29,7 @@ def _clock(monkeypatch):
 
 @pytest.mark.skipif(__import__("app.services.dashboard", fromlist=["_e168_news"])._e168_news() is not None,
                     reason="E168 serves the stories its own forecast read (app.e168.news_used); the legacy feed is not shown")
+@pytest.mark.legacy_served
 @pytest.mark.parametrize("scope,id_", SUBJECTS)
 def test_news_feed_returns_real_relevant_articles(scope, id_):
     r = client.get(f"/api/v1/news?scope={scope}&id={id_}&quarter=2027-Q1&pageSize=100")
@@ -67,6 +68,7 @@ def _key(province, name):
     return province + "::" + re.sub(r"\s+city$", "", re.sub(r"^city of\s+", "", name.lower().strip()))
 
 
+@pytest.mark.legacy_served
 def test_every_lgu_gets_an_approved_palette_band_and_joins_its_geometry():
     """The approved map colours an LGU with RISK_COLORS[riskLevel]; every LGU must carry a band (or null only when it
     has no index, shown as the approved gray), and every boundary feature must join an API record."""

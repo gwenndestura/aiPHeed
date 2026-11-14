@@ -114,6 +114,7 @@ def test_trigger_note_says_the_bars_explain_only_the_price_part(thesis):
         assert {by[k] for k in by if k != "employment"} == {base}
 
 
+@pytest.mark.legacy_served
 def test_only_the_five_trigger_groups_are_drawn_and_the_rest_is_stated(thesis):
     """User decision 2026-10-27: the dashboard shows the five trigger groups of the thesis proposal. Poverty and density,
     news and the regional hunger indicator stay model inputs; their share is otherPct and is named in the note."""
