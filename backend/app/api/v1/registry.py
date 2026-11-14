@@ -32,7 +32,11 @@ PRODUCTION_SERVERS = {"pfi-1.0": ("app.pfi.serve", "outlook"), "e139-lgbm-1.0": 
                       "hcw-lgbm-1.0": ("app.hcw.serve", "outlook"),      # Setup H + class weights (branch aiPHeed/setup-h-cw-dashboard)
                       # FINAL (RATE + MIND): the outlook of the served quarterly issue (app.final.serving points app.hcw.serve at it).
                       # Takes effect only after FINAL is promoted through the release gate (app.registry.promote).
-                      "final-rate-mind-1.0": ("app.hcw.serve", "outlook")}
+                      "final-rate-mind-1.0": ("app.hcw.serve", "outlook"),
+                      # E184 (E168 + balanced synthetic training data): served only after the owner promotes it
+                      "e184-lgbm-syn50-1.0": ("app.e168.serve", "outlook"),
+                      # E196 (E184 averaged over its top-5 configurations, Lead-1 lagged averaging): local, owner-promoted
+                      "e196-lgbm-avg5-laf-1.0": ("app.e168.serve", "outlook")}
 CANDIDATES = {"pfi-1.0": "app.pfi.serve", "e139-lgbm-1.0": "app.e139.serve", "e140-lgbm-native-1.0": "app.e140.serve",
               "e141-lgbm-3round-1.0": "app.e141.serve", "e142-state-lgbm-1.0": "app.e142.serve",
               "e143-re-lgbm-1.0": "app.e143.serve", "e143-hre-lgbm-1.0": "app.e143.serve"}

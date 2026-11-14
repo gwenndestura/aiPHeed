@@ -1,0 +1,374 @@
+{
+ "label": "SYNTHETIC – FOR DEMONSTRATION",
+ "scenario_id": "S4",
+ "source_variant": "combined:t=1+anchor+0.8",
+ "is_synthetic": true,
+ "high_rows": [
+  {
+   "province": "Quezon",
+   "quarter": "2027-Q1"
+  },
+  {
+   "province": "Quezon",
+   "quarter": "2027-Q2"
+  },
+  {
+   "province": "Quezon",
+   "quarter": "2027-Q3"
+  }
+ ],
+ "alerts": [
+  {
+   "quarter": "2027-Q1",
+   "province_code": "PH040300000",
+   "alert_reason": "E168_HIGH",
+   "threshold_exceeded": true,
+   "prev_risk_probability": null,
+   "risk_delta": null,
+   "evidence": {
+    "lead": 1,
+    "p_high": 0.562,
+    "score_pct": 51.5
+   },
+   "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+  },
+  {
+   "quarter": "2027-Q2",
+   "province_code": "PH040300000",
+   "alert_reason": "E168_HIGH",
+   "threshold_exceeded": true,
+   "prev_risk_probability": null,
+   "risk_delta": null,
+   "evidence": {
+    "lead": 2,
+    "p_high": 0.562,
+    "score_pct": 51.5
+   },
+   "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+  },
+  {
+   "quarter": "2027-Q3",
+   "province_code": "PH040300000",
+   "alert_reason": "E168_HIGH",
+   "threshold_exceeded": true,
+   "prev_risk_probability": null,
+   "risk_delta": null,
+   "evidence": {
+    "lead": 3,
+    "p_high": 0.562,
+    "score_pct": 51.5
+   },
+   "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+  }
+ ],
+ "alert_rule": "E168_HIGH: P(HIGH) >= 0.5 at a lead the acceptance rule covers",
+ "review_flow": [
+  "The candidate is STAGED (app.quarterly.alerts_e168.stage), never published automatically.",
+  "A DA Region IV-A administrator opens Admin > Review and either confirms it (POST /api/v1/admin/alerts/{id}/confirm) or dismisses it (POST /api/v1/admin/alerts/{id}/dismiss).",
+  "Only a confirmed alert reaches the public dashboard (GET /api/v1/alerts); a dismissed one stays in the records for audit. The demo account can view the queue but cannot confirm or dismiss.",
+  "In this demonstration nothing was written to the database: the candidates above are what staging would insert."
+ ],
+ "ranking": {
+  "2027-Q1": [
+   {
+    "rank": 1,
+    "province": "Quezon",
+    "p_high": 0.562,
+    "band": "High"
+   },
+   {
+    "rank": 2,
+    "province": "Rizal",
+    "p_high": 0.428,
+    "band": "Low"
+   },
+   {
+    "rank": 3,
+    "province": "Batangas",
+    "p_high": 0.364,
+    "band": "Low"
+   },
+   {
+    "rank": 4,
+    "province": "Cavite",
+    "p_high": 0.345,
+    "band": "Low"
+   },
+   {
+    "rank": 5,
+    "province": "Laguna",
+    "p_high": 0.272,
+    "band": "Low"
+   }
+  ],
+  "2027-Q2": [
+   {
+    "rank": 1,
+    "province": "Quezon",
+    "p_high": 0.562,
+    "band": "High"
+   },
+   {
+    "rank": 2,
+    "province": "Rizal",
+    "p_high": 0.428,
+    "band": "Low"
+   },
+   {
+    "rank": 3,
+    "province": "Batangas",
+    "p_high": 0.364,
+    "band": "Low"
+   },
+   {
+    "rank": 4,
+    "province": "Cavite",
+    "p_high": 0.345,
+    "band": "Low"
+   },
+   {
+    "rank": 5,
+    "province": "Laguna",
+    "p_high": 0.272,
+    "band": "Low"
+   }
+  ],
+  "2027-Q3": [
+   {
+    "rank": 1,
+    "province": "Quezon",
+    "p_high": 0.562,
+    "band": "High"
+   },
+   {
+    "rank": 2,
+    "province": "Rizal",
+    "p_high": 0.428,
+    "band": "Low"
+   },
+   {
+    "rank": 3,
+    "province": "Batangas",
+    "p_high": 0.364,
+    "band": "Low"
+   },
+   {
+    "rank": 4,
+    "province": "Cavite",
+    "p_high": 0.345,
+    "band": "Low"
+   },
+   {
+    "rank": 5,
+    "province": "Laguna",
+    "p_high": 0.274,
+    "band": "Low"
+   }
+  ]
+ },
+ "explanations": [
+  {
+   "province_code": "PH040300000",
+   "province": "Quezon",
+   "quarter": "2027-Q1",
+   "lead": 1,
+   "drivers": [
+    {
+     "driver_group": "market",
+     "driver_label": "Market / Prices",
+     "group_shap": 0.009263,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "climate",
+     "driver_label": "Climate Stress",
+     "group_shap": 0.008384,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "employment",
+     "driver_label": "Employment (national)",
+     "group_shap": 0.040712,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "ofw_remittance",
+     "driver_label": "OFW Remittance (national)",
+     "group_shap": 0.001945,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "fish_kill",
+     "driver_label": "Fish Kill (fisheries production proxy)",
+     "group_shap": 0.002041,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    }
+   ],
+   "other_pct": 76.0,
+   "plain_evidence": {
+    "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+    "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+    "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+    "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+    "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+   },
+   "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+   "statement": "Quezon, 2027-Q1: HIGH food-insecurity risk (probability 0.56). Lead-1 forecast: meets the acceptance rule (accuracy 0.750 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+  },
+  {
+   "province_code": "PH040300000",
+   "province": "Quezon",
+   "quarter": "2027-Q2",
+   "lead": 2,
+   "drivers": [
+    {
+     "driver_group": "market",
+     "driver_label": "Market / Prices",
+     "group_shap": 0.009263,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "climate",
+     "driver_label": "Climate Stress",
+     "group_shap": 0.008384,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "employment",
+     "driver_label": "Employment (national)",
+     "group_shap": 0.040712,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "ofw_remittance",
+     "driver_label": "OFW Remittance (national)",
+     "group_shap": 0.001945,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "fish_kill",
+     "driver_label": "Fish Kill (fisheries production proxy)",
+     "group_shap": 0.002041,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    }
+   ],
+   "other_pct": 76.0,
+   "plain_evidence": {
+    "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+    "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+    "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+    "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+    "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+   },
+   "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+   "statement": "Quezon, 2027-Q2: HIGH food-insecurity risk (probability 0.56). Lead-2 forecast: meets the acceptance rule (accuracy 0.778 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+  },
+  {
+   "province_code": "PH040300000",
+   "province": "Quezon",
+   "quarter": "2027-Q3",
+   "lead": 3,
+   "drivers": [
+    {
+     "driver_group": "market",
+     "driver_label": "Market / Prices",
+     "group_shap": 0.009263,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "climate",
+     "driver_label": "Climate Stress",
+     "group_shap": 0.008384,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "employment",
+     "driver_label": "Employment (national)",
+     "group_shap": 0.040712,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "ofw_remittance",
+     "driver_label": "OFW Remittance (national)",
+     "group_shap": 0.001945,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    },
+    {
+     "driver_group": "fish_kill",
+     "driver_label": "Fish Kill (fisheries production proxy)",
+     "group_shap": 0.002041,
+     "direction": "increases_risk",
+     "trigger_proportion": null
+    }
+   ],
+   "other_pct": 76.0,
+   "plain_evidence": {
+    "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+    "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+    "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+    "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+    "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+   },
+   "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+   "statement": "Quezon, 2027-Q3: HIGH food-insecurity risk (probability 0.56). Lead-3 forecast: meets the acceptance rule (accuracy 0.750 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+  }
+ ],
+ "report_text": {
+  "Quezon 2027-Q1": [
+   "1. Summary of Findings",
+   "2. Drivers of the Forecast (SHAP)",
+   "Interpretation",
+   "For Quezon in 2027 Q1, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+   "Change in drivers, 2026 Q4 to 2027 Q1",
+   "Between 2026 Q4 and 2027 Q1, Market / Prices gained the most share for Quezon (+2 percentage points, from 1% to 3%). Climate Stress lost the most (-12 percentage points, from 15% to 3%).",
+   "3. Supporting News Evidence",
+   "244 relevant articles were geocoded to Quezon for 2027 Q1; the trigger tally behind the model's news inputs records 40 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+   "4. Provincial Context",
+   "5. Model Reliability",
+   "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+   "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion."
+  ],
+  "Quezon 2027-Q2": [
+   "1. Summary of Findings",
+   "2. Drivers of the Forecast (SHAP)",
+   "Interpretation",
+   "For Quezon in 2027 Q2, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+   "3. Supporting News Evidence",
+   "244 relevant articles were geocoded to Quezon for 2027 Q2; the trigger tally behind the model's news inputs records 0 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+   "4. Provincial Context",
+   "5. Model Reliability",
+   "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+   "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion.",
+   "Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.",
+   "Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose."
+  ],
+  "Quezon 2027-Q3": [
+   "1. Summary of Findings",
+   "2. Drivers of the Forecast (SHAP)",
+   "Interpretation",
+   "For Quezon in 2027 Q3, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+   "3. Supporting News Evidence",
+   "244 relevant articles were geocoded to Quezon for 2027 Q3; the trigger tally behind the model's news inputs records 0 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+   "4. Provincial Context",
+   "5. Model Reliability",
+   "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+   "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion.",
+   "Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.",
+   "Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose."
+  ]
+ }
+}

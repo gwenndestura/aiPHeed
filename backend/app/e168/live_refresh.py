@@ -243,6 +243,16 @@ def _fingerprint(i: int) -> str:
     return h.hexdigest()
 
 
+def _other_production() -> str | None:
+    """The production model id when it is not E168 (e.g. E184 promoted by the owner), else None."""
+    try:
+        from app import registry as R
+        mid = R.production()["model_id"]
+    except Exception:                                               # noqa: BLE001 - no production: E168 may be promoted
+        return None
+    return None if mid == "e168-lgbm-1.0" else mid
+
+
 def run(as_of: str | None = None, skip_news: bool = False, promote: bool = True, force: bool = False, published: str | None = None) -> dict:
     """`as_of` is the cut-off (default: the first day of the current month, so the newest period is the last complete
     month); `published` is the day the figures were checked online (default: today)."""
@@ -280,7 +290,11 @@ def run(as_of: str | None = None, skip_news: bool = False, promote: bool = True,
                 rev += 1
             out = _run(["-c", f"import json; from app.e168 import regenerate as RG; print(json.dumps(RG.stage('{issue}', '{as_of}', {rev})))"], as_of)
             rec["steps"]["stage"] = json.loads(out.strip().splitlines()[-1])
-            if promote and rec["steps"]["stage"].get("status") == "staged":
+            other = _other_production()            # E184 guard: never switch the owner's chosen model back silently
+            if promote and other:
+                rec["steps"]["promote"] = {"status": "skipped", "reason": f"production model is {other}, chosen by the owner; "
+                                           "the E168 issue is staged only (promote it by hand to switch back)"}
+            elif promote and rec["steps"]["stage"].get("status") == "staged":
                 rec["steps"]["promote"] = RG.promote(rec["steps"]["stage"]["folder"], APPROVER)
                 st.update(served_fingerprint=fp, served_folder=rec["steps"]["stage"]["folder"], served_cutoff=as_of, served_published_by=published)
             rec["status"] = "promoted" if "promote" in rec["steps"] else rec["steps"]["stage"].get("status", "staged")

@@ -1,0 +1,43 @@
+{
+ "model_id": "e196-lgbm-avg5-laf-1.0",
+ "version": "E196 (E184 x top-5 configurations, Lead-1 lagged averaging), issue 2026-Q4_2026-11-01_r2, Leads 1-4",
+ "artifact_path": "data/e196/issues/2026-Q4_2026-11-01_r2/live.json",
+ "artifact_file_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+ "approved_utc": "2026-11-11T05:52:54+00:00",
+ "approver": "Christina M. Esico (local preview, owner request 2026-11-11)",
+ "gate": {
+  "model_id": "e196-lgbm-avg5-laf-1.0",
+  "evaluated_utc": "2026-11-11T05:52:53+00:00",
+  "passed": true,
+  "rule": "owner production rule at each served lead",
+  "checks": [
+   {
+    "id": "lead1_accuracy_75_and_beats_persistence",
+    "name": "lead1_accuracy_75_and_beats_persistence",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead2_accuracy_75_and_beats_persistence",
+    "name": "lead2_accuracy_75_and_beats_persistence",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead3_accuracy_75_and_beats_persistence",
+    "name": "lead3_accuracy_75_and_beats_persistence",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead4_accuracy_75_and_beats_persistence",
+    "name": "lead4_accuracy_75_and_beats_persistence",
+    "status": "pass",
+    "critical": true
+   }
+  ],
+  "artifact_file_sha256": "c3d3ccd5352f884a18e700948af4039cd2a9714596e2aa902d2ce8fca4476655",
+  "results_sha256": "2edbd35f49dfc75bfb2697d02f7a3b754a3af54867437012f168b27d76f16277",
+  "decision": "eligible for promotion by the owner"
+ }
+}

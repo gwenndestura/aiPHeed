@@ -195,7 +195,7 @@ describe("Landing page", () => {
     const { container } = renderLanding();
     const table = container.querySelector("#accuracy table") as HTMLTableElement;
     const rows = [...table.querySelectorAll("tbody tr")].map((tr) =>
-      [...tr.querySelectorAll("td")].slice(0, 5).map((td) => td.textContent),
+      [...tr.querySelectorAll("td")].slice(0, 6).map((td) => td.textContent),
     );
     expect(rows).toHaveLength(5);
     rows.forEach((r, i) => {
@@ -229,7 +229,7 @@ describe("Landing page", () => {
       ["Logistic regression, all inputs", "0.320"],
     ]);
     expect(container.querySelector("#accuracy")?.textContent).toContain(
-      "Same 72 provincial forecasts. The advantage over naive persistence is statistically established",
+      "Same 72 provincial forecasts. The advantage over each baseline is statistically established",
     );
   });
 

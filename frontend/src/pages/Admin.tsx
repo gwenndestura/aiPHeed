@@ -59,6 +59,7 @@ import {
   Tooltip,
 } from "recharts";
 import { readStorage, writeStorage } from "@/lib/storage";
+import { REASON_MAX_CHARS, reasonProblem, tidyReason } from "@/lib/rejectionReason";
 
 const THEME_KEY = "aipheed_theme";
 
@@ -265,8 +266,8 @@ function ReviewSection() {
 
   const { data: quartersRes } = useQuarters("nowcast");
   const years = useMemo(() => {
-    // The review queue covers nowcast quarters; the E20 forecast is not reviewed here.
-    const set = new Set((quartersRes?.quarters ?? []).filter((q) => q.state !== "forecast").map((q) => q.year));
+    // Every served quarter is reviewed, forecast quarters included (E196 serves 1-4 quarters ahead).
+    const set = new Set((quartersRes?.quarters ?? []).map((q) => q.year));
     return Array.from(set).sort((a, b) => b - a);
   }, [quartersRes]);
   useEffect(() => {
@@ -277,7 +278,6 @@ function ReviewSection() {
   // is small) and filter client-side, so switching Year/Quarter doesn't
   // trigger a refetch.
   const { data: reviewRes, isLoading } = useReviewQueue();
-  const rejectionReasons = reviewRes?.rejectionReasons ?? [];
 
   const approveMut = useApproveReview();
   const rejectMut = useRejectReview();
@@ -460,7 +460,6 @@ function ReviewSection() {
       {open && (
         <ReviewDetailModal
           item={open}
-          rejectionReasons={rejectionReasons}
           onClose={() => setOpen(null)}
           onApprove={() => approve(open)}
           onUnpublish={() => unpublish(open)}
@@ -526,7 +525,6 @@ function RejectionLog({ rejected, onRestore, busy = false }: { rejected: ReviewI
 
 function ReviewDetailModal({
   item,
-  rejectionReasons,
   onClose,
   onApprove,
   onUnpublish,
@@ -536,7 +534,6 @@ function ReviewDetailModal({
   readOnly = false,
 }: {
   item: ReviewItem;
-  rejectionReasons: string[];
   onClose: () => void;
   onApprove: () => void;
   onUnpublish: () => void;
@@ -698,7 +695,6 @@ function ReviewDetailModal({
       {rejectOpen && (
         <RejectReasonModal
           item={item}
-          reasons={rejectionReasons}
           onCancel={() => setRejectOpen(false)}
           onConfirm={(reason, notes) => {
             setRejectOpen(false);
@@ -730,25 +726,26 @@ function ProvincialRanking({ currentProvince, quarter }: { currentProvince: stri
 
 function RejectReasonModal({
   item,
-  reasons,
   onCancel,
   onConfirm,
 }: {
   item: ReviewItem;
-  reasons: string[];
   onCancel: () => void;
   onConfirm: (reason: string, notes?: string) => void;
 }) {
-  const [reason, setReason] = useState<string>("");
-  const [other, setOther] = useState("");
+  const [reason, setReason] = useState("");
+  const [touched, setTouched] = useState(false);
   const [notes, setNotes] = useState("");
 
-  const finalReason = reason === "Other" ? other.trim() : reason;
-  const valid = finalReason.length > 0;
+  // Same rules as the server (backend/app/services/review.py clean_reason).
+  const problem = reasonProblem(reason);
+  const valid = problem === null;
+  const showProblem = touched && !valid;
+  const length = tidyReason(reason).length;
 
   return (
     <div className="fixed inset-0 z-[2100] bg-background/80 backdrop-blur-sm flex items-center justify-center p-6 compact:p-3">
-      <div className="surface-dialog border border-destructive/40 w-full max-w-md overflow-hidden">
+      <div className="surface-dialog border border-destructive/40 w-full max-w-md max-h-full overflow-y-auto">
         <div className="px-5 py-3.5 border-b border-border/40 flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold text-destructive">Reject forecast</h2>
@@ -761,25 +758,28 @@ function RejectReasonModal({
 
         <div className="p-5 space-y-3">
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block mb-1.5">
+            <label htmlFor="reject-reason" className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block mb-1.5">
               Rejection reason <span className="text-destructive">*</span>
             </label>
-            <select
+            <textarea
+              id="reject-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full h-9 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
-            >
-              <option value="">Select a reason…</option>
-              {reasons.map((r) => <option key={r} value={r}>{r}</option>)}
-            </select>
-            {reason === "Other" && (
-              <input
-                value={other}
-                onChange={(e) => setOther(e.target.value)}
-                placeholder="Specify reason…"
-                className="mt-2 w-full h-9 compact:h-11 compact:text-[16px] rounded-md border border-border/60 bg-background px-2 text-[12px] focus:outline-none focus:ring-2 focus:ring-destructive"
-              />
-            )}
+              onBlur={() => setTouched(true)}
+              maxLength={REASON_MAX_CHARS}
+              rows={2}
+              autoFocus
+              aria-invalid={showProblem}
+              aria-describedby="reject-reason-help"
+              placeholder="Explain why this forecast should not be published"
+              className={`w-full rounded-md border bg-background px-2 py-1.5 text-[12px] compact:text-[16px] focus:outline-none focus:ring-2 focus:ring-destructive resize-none ${showProblem ? "border-destructive" : "border-border/60"}`}
+            />
+            <div id="reject-reason-help" className="mt-1 flex items-start justify-between gap-3 text-[11px] compact:text-[12px]">
+              <span className={showProblem ? "text-destructive" : "text-muted-foreground"} role={showProblem ? "alert" : undefined}>
+                {showProblem ? problem : "At least 10 characters and two words."}
+              </span>
+              <span className="text-muted-foreground tabular-nums shrink-0">{length}/{REASON_MAX_CHARS}</span>
+            </div>
           </div>
 
           <div>
@@ -800,7 +800,7 @@ function RejectReasonModal({
         <div className="px-5 py-3 border-t border-border/40 flex items-center justify-end gap-2">
           <button onClick={onCancel} className="px-3 py-1.5 compact:min-h-11 rounded-md border edge-control text-[11px] hover:bg-secondary/60">Cancel</button>
           <button
-            onClick={() => valid && onConfirm(finalReason, notes.trim() || undefined)}
+            onClick={() => (valid ? onConfirm(tidyReason(reason), notes.trim() || undefined) : setTouched(true))}
             disabled={!valid}
             className="px-3 py-1.5 compact:min-h-11 rounded-md bg-destructive shadow-md text-destructive-foreground text-[11px] font-bold hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed"
           >

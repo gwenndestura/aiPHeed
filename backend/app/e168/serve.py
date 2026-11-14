@@ -38,6 +38,7 @@ def _forecast(lead, issue_label: str = "2026-Q4"):
     from app.e155.test import panel as sun_panel
     from app.e164 import auto as A4
     from app.e166 import nested_source as N
+    from app.e168 import robust as RB
     from app.e168.lgbm_only import run_proc
     from app.fi5.target import qindex, qlabel
     Fe.LT = 0.0
@@ -51,11 +52,14 @@ def _forecast(lead, issue_label: str = "2026-Q4"):
     te = N.add_sources(Pv.add_inputs(S, M.rows_for(S, five, [lead], "F")), L, H, S_P).reset_index(drop=True)   # same path as lgbm_only.task
     tr = N.add_sources(Pv.add_inputs(S, P.tr), L, H, S_P).reset_index(drop=True)
     AN = A4.anchors(S, P, tr, te)
+    te, filled = RB.fill_unseen_missing(tr, te)      # E183: inputs never missing in training are filled, not read as zero
     Pr, chosen, tag, _, _, nf = run_proc(tr, te, AN)
     mu, p, half = Pr[chosen]
+    used = RB.used_by(tag, filled)                   # only inputs of the selected feature set count for the warning
     return [{"province": te["province"].iloc[k], "lead": lead, "target_quarter": qlabel(issue + lead),
              "score_pct": round(float(pct(mu[k])), 1), "range90_pct": [round(float(pct(mu[k] - half[k])), 1), round(float(pct(mu[k] + half[k])), 1)],
-             "p_high": round(float(p[k]), 3), "risk_class": "HIGH" if p[k] >= .5 else "LOW", "config": tag} for k in range(len(te))]
+             "p_high": round(float(p[k]), 3), "risk_class": "HIGH" if p[k] >= .5 else "LOW", "config": tag,
+             "inputs_filled": len(used[k]), "inputs_filled_names": ";".join(used[k]), "data_complete": not used[k]} for k in range(len(te))]
 
 
 def live():
@@ -74,11 +78,12 @@ def live():
 
 
 def artifact():
-    """The approved E168 artifact: the registry's production artifact when it is an E168 issue, else the 2026-Q4 export."""
+    """The approved E168 artifact: the registry's production artifact when it is an E168 issue (or, once the owner
+    promotes it, an E184 issue in the same schema), else the 2026-Q4 export."""
     try:
         from app import registry as R
         p = R.production()
-        if p["model_id"] == "e168-lgbm-1.0":
+        if p["model_id"] in ("e168-lgbm-1.0", "e184-lgbm-syn50-1.0", "e196-lgbm-avg5-laf-1.0"):
             return BACKEND_DIR / p["artifact_path"]
     except Exception:
         pass

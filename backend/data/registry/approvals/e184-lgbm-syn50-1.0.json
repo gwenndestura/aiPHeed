@@ -1,0 +1,61 @@
+{
+ "model_id": "e184-lgbm-syn50-1.0",
+ "version": "E184 (E168 + synthetic 50/50), issue 2026-Q4_2026-11-01",
+ "artifact_path": "data/e184/issues/2026-Q4_2026-11-01/live.json",
+ "artifact_file_sha256": "2095598ba07717a8744bb6b11c13f4825f1742471ec0d60f762395b2d8a9eb15",
+ "approved_utc": "2026-11-10T02:42:45+00:00",
+ "approver": "Christina M. Esico (local preview, owner request 2026-11-10)",
+ "gate": {
+  "model_id": "e184-lgbm-syn50-1.0",
+  "evaluated_utc": "2026-11-10T02:39:31+00:00",
+  "passed": true,
+  "rule": "owner production rule (accuracy >= 75 % and Brier CI vs persistence < 0 at each served lead) + leakage < 1e-9",
+  "checks": [
+   {
+    "id": "lead1_accuracy_at_least_75",
+    "name": "lead1_accuracy_at_least_75",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead2_accuracy_at_least_75",
+    "name": "lead2_accuracy_at_least_75",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead3_accuracy_at_least_75",
+    "name": "lead3_accuracy_at_least_75",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead1_beats_persistence_brier_ci",
+    "name": "lead1_beats_persistence_brier_ci",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead2_beats_persistence_brier_ci",
+    "name": "lead2_beats_persistence_brier_ci",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "lead3_beats_persistence_brier_ci",
+    "name": "lead3_beats_persistence_brier_ci",
+    "status": "pass",
+    "critical": true
+   },
+   {
+    "id": "leakage_below_1e-9",
+    "name": "leakage_below_1e-9",
+    "status": "pass",
+    "critical": true
+   }
+  ],
+  "artifact_file_sha256": "2095598ba07717a8744bb6b11c13f4825f1742471ec0d60f762395b2d8a9eb15",
+  "results_sha256": "b8f4a4f3b5b855ad2fc232f6355529677245f88f1b59610c32fcbeb3cdd07a2a",
+  "decision": "eligible for promotion by the owner"
+ }
+}

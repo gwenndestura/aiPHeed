@@ -21,4 +21,15 @@ def selected():
 
 
 def __getattr__(name: str):
-    return getattr(selected(), name)
+    mod = selected()
+    value = getattr(mod, name)
+    if mod is not e168_system or name in ("relabel", "served_id", "active", "rows", "row"):
+        return value
+    # E184 (docs/e184/PROTOCOL.md): when the owner has promoted E184, its name, id and accuracy replace E168's in every
+    # text the dashboard reads through this engine. With E168 in production, relabel returns its argument unchanged.
+    if callable(value):
+        def wrapped(*a, **k):
+            return e168_system.relabel(value(*a, **k))
+        wrapped.__name__ = getattr(value, "__name__", name)
+        return wrapped
+    return e168_system.relabel(value)

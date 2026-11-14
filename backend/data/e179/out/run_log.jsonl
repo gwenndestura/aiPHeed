@@ -1,0 +1,31 @@
+{"utc": "2026-11-09T11:24:05+00:00", "event": "inputs", "regional_income_long.csv": "6bff3d80f49c0c12db48bd2aa92ddd6f798e093ad1991c002143e334e4d05888", "sunstar": "empty stand-in (columns used by no E168 feature set)"}
+{"utc": "2026-11-09T11:24:05+00:00", "event": "start", "protocol_sha256": "0453025b14df5fcd33daf248e5f704ff742915433aeb91aa60e8eb39e5d4e241", "n_settings": 129, "seeds": [17901, 17902, 17903, 17904, 17905], "n_jobs": 7}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L1|main", "seconds": 1897.7, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L2|main", "seconds": 1920.7, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L1|shuf1", "seconds": 1235.5, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L1|shuf2", "seconds": 1201.5, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L1|shuf3", "seconds": 1382.0, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2021|L1|corrupt", "seconds": 1256.5, "n_train": 532}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L1|main", "seconds": 759.8, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L2|main", "seconds": 648.5, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L1|shuf1", "seconds": 274.0, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L1|shuf2", "seconds": 291.4, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L1|shuf3", "seconds": 278.9, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2019|L1|corrupt", "seconds": 269.7, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L1|main", "seconds": 464.8, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L2|main", "seconds": 433.5, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L1|shuf1", "seconds": 258.0, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L1|shuf2", "seconds": 273.4, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L1|shuf3", "seconds": 234.8, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "job", "job": "ENNS2018|L1|corrupt", "seconds": 162.9, "n_train": 156}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "fitted", "seconds": 1978.1}
+{"utc": "2026-11-09T11:57:03+00:00", "event": "e168_rerun_check", "rows": 432, "max_abs_diff_p": 0.0, "max_abs_diff_mu": 0.0, "same_config": true}
+{"utc": "2026-11-09T11:57:38+00:00", "event": "evaluated", "decision": "E179: TUNED SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL ON THE PRE-REGISTERED RULE (E168 stays in production)", "rule": {"brier_ci_upper_below_0_lead1": false, "brier_ci_upper_below_0_lead2": false, "accuracy_at_least_E168_lead1": true, "accuracy_at_least_E168_lead2": false, "leakage_below_1e-9": false, "beats_shuffled": false}}
+{"utc": "2026-11-09T11:57:38+00:00", "event": "hashes"}
+{"utc": "2026-11-09T12:00:10+00:00", "event": "leakage_control_rerun", "note": "Deviation D3 (2026-11-09): in the first run the corrupted-data control drew its synthetic rows from its own random stream (the stream key included the job mode), so its difference from the main run mixed generator randomness with any leakage (0.1235). The control was re-run with the main job's random stream, so the only difference is the corruption of unreleased rounds. E179's own predictions are unchanged; the first-run rows are kept as mode 'corrupt_own_stream'."}
+{"utc": "2026-11-09T12:06:54+00:00", "event": "job", "job": "ENNS2021|L1|corrupt", "stream": "main", "seconds": 399.1, "n_train": 532}
+{"utc": "2026-11-09T12:06:54+00:00", "event": "job", "job": "ENNS2019|L1|corrupt", "stream": "main", "seconds": 174.0, "n_train": 156}
+{"utc": "2026-11-09T12:06:54+00:00", "event": "job", "job": "ENNS2018|L1|corrupt", "stream": "main", "seconds": 173.4, "n_train": 156}
+{"utc": "2026-11-09T12:06:54+00:00", "event": "e168_rerun_check", "rows": 432, "max_abs_diff_p": 0.0, "max_abs_diff_mu": 0.0, "same_config": true}
+{"utc": "2026-11-09T12:07:34+00:00", "event": "evaluated", "decision": "E179: TUNED SYNTHETIC AUGMENTATION DID NOT IMPROVE THE MODEL ON THE PRE-REGISTERED RULE (E168 stays in production)", "rule": {"brier_ci_upper_below_0_lead1": false, "brier_ci_upper_below_0_lead2": false, "accuracy_at_least_E168_lead1": true, "accuracy_at_least_E168_lead2": false, "leakage_below_1e-9": true, "beats_shuffled": false}}
+{"utc": "2026-11-09T12:07:34+00:00", "event": "hashes"}

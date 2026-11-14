@@ -1,0 +1,176 @@
+{
+ "label": "POST-HOC (not in docs/e181/PROTOCOL.md): the recall floor was dropped after the E181 results were seen",
+ "rule": "select the variant with the highest mean balanced accuracy over Leads 1-2 on earlier rounds only; test it on the next round",
+ "picks": [
+  {
+   "select_on": [
+    "ENNS2018"
+   ],
+   "test_on": "ENNS2019",
+   "picked": "jitter|r=2|w=1|sd=0.5|boundary"
+  },
+  {
+   "select_on": [
+    "ENNS2018",
+    "ENNS2019"
+   ],
+   "test_on": "ENNS2021",
+   "picked": "jitter|r=2|w=1|sd=0.5|boundary"
+  }
+ ],
+ "select_then_test_on_2019_2021": [
+  {
+   "variant": "SELECT_THEN_TEST_nofloor",
+   "lead": 1,
+   "n": 50,
+   "acc": 0.8,
+   "tp": 14,
+   "pos": 17,
+   "tn": 26,
+   "neg": 33,
+   "brier": 0.1139,
+   "high_recall": 0.8235,
+   "low_recall": 0.7879,
+   "bal_acc": 0.8057
+  },
+  {
+   "variant": "SELECT_THEN_TEST_nofloor",
+   "lead": 2,
+   "n": 50,
+   "acc": 0.84,
+   "tp": 15,
+   "pos": 17,
+   "tn": 27,
+   "neg": 33,
+   "brier": 0.1123,
+   "high_recall": 0.8824,
+   "low_recall": 0.8182,
+   "bal_acc": 0.8503
+  },
+  {
+   "variant": "none",
+   "lead": 1,
+   "n": 50,
+   "acc": 0.78,
+   "tp": 14,
+   "pos": 17,
+   "tn": 25,
+   "neg": 33,
+   "brier": 0.1104,
+   "high_recall": 0.8235,
+   "low_recall": 0.7576,
+   "bal_acc": 0.7906
+  },
+  {
+   "variant": "none",
+   "lead": 2,
+   "n": 50,
+   "acc": 0.82,
+   "tp": 14,
+   "pos": 17,
+   "tn": 27,
+   "neg": 33,
+   "brier": 0.109,
+   "high_recall": 0.8235,
+   "low_recall": 0.8182,
+   "bal_acc": 0.8209
+  }
+ ],
+ "variant_on_all_72_rows": {
+  "variant": "jitter|r=2|w=1|sd=0.5|boundary",
+  "leads": {
+   "1": {
+    "variant": {
+     "accuracy": 0.792,
+     "balanced_accuracy": 0.803,
+     "high_recall": 0.84,
+     "high_precision": 0.656,
+     "low_recall": 0.766,
+     "f1": 0.737,
+     "auc": 0.889,
+     "brier": 0.1212,
+     "confusion": {
+      "tp": 21,
+      "fp": 11,
+      "fn": 4,
+      "tn": 36
+     }
+    },
+    "E168": {
+     "accuracy": 0.75,
+     "balanced_accuracy": 0.78,
+     "high_recall": 0.88,
+     "high_precision": 0.595,
+     "low_recall": 0.681,
+     "f1": 0.71,
+     "auc": 0.891,
+     "brier": 0.123,
+     "confusion": {
+      "tp": 22,
+      "fp": 15,
+      "fn": 3,
+      "tn": 32
+     }
+    },
+    "brier_diff": {
+     "diff": -0.0018,
+     "ci95": [
+      -0.012,
+      0.0073
+     ]
+    },
+    "mcnemar": {
+     "E181_nofloor_only_right": 5,
+     "E168_only_right": 2,
+     "p": 0.4531
+    }
+   },
+   "2": {
+    "variant": {
+     "accuracy": 0.792,
+     "balanced_accuracy": 0.812,
+     "high_recall": 0.88,
+     "high_precision": 0.647,
+     "low_recall": 0.745,
+     "f1": 0.746,
+     "auc": 0.894,
+     "brier": 0.1199,
+     "confusion": {
+      "tp": 22,
+      "fp": 12,
+      "fn": 3,
+      "tn": 35
+     }
+    },
+    "E168": {
+     "accuracy": 0.778,
+     "balanced_accuracy": 0.802,
+     "high_recall": 0.88,
+     "high_precision": 0.629,
+     "low_recall": 0.723,
+     "f1": 0.733,
+     "auc": 0.893,
+     "brier": 0.1221,
+     "confusion": {
+      "tp": 22,
+      "fp": 13,
+      "fn": 3,
+      "tn": 34
+     }
+    },
+    "brier_diff": {
+     "diff": -0.0022,
+     "ci95": [
+      -0.0106,
+      0.0056
+     ]
+    },
+    "mcnemar": {
+     "E181_nofloor_only_right": 2,
+     "E168_only_right": 1,
+     "p": 1.0
+    }
+   }
+  }
+ }
+}

@@ -63,7 +63,8 @@ def strict_model_check() -> None:
     missing = E168.not_served_reasons()
     if missing:
         raise RuntimeError(f"approved model {E168.MODEL_ID} is not served: " + "; ".join(missing))
-    print(f"Serving {E168.MODEL_ID} (E168 LightGBM food-insecurity risk) on the dashboard (strict)")
+    # E184: the same adapter serves E184 once the owner promotes it; relabel() leaves E168's text unchanged otherwise
+    print(E168.relabel(f"Serving {E168.MODEL_ID} (E168 LightGBM food-insecurity risk) on the dashboard (strict)"))
 
 
 @asynccontextmanager

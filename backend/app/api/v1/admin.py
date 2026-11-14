@@ -177,7 +177,6 @@ async def list_review(
         quarter=resolved,
         status=status,
         statuses=list(rv.API_STATUSES),
-        rejectionReasons=list(rv.REJECTION_REASONS),
         data=[_item(r) for r in rows],
     )
 

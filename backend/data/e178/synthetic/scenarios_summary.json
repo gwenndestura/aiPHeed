@@ -1,0 +1,7401 @@
+{
+ "label": "SYNTHETIC – FOR DEMONSTRATION",
+ "meta": {
+  "production": {
+   "model_id": "e168-lgbm-1.0",
+   "folder": "2026-Q4_2026-11-01",
+   "issue": "2026-Q4",
+   "cutoff": "2026-11-01",
+   "published": "2026-11-08",
+   "artifact_sha256": "a01aa189795e97fc057cd345d5e5a52bd306bae648ed7144edb45c7e7358382b"
+  },
+  "provenance": {
+   "inputs_sha256": {
+    "e152/out/local_panel.parquet": "01025bdc0972a1302186ab5d9331924dc3c10854146478b0d932f70d6671e44f",
+    "e151/out/news_panel.parquet": "ce37570569151f67f7de242e340dbf456b11eb72454d4fde21c9ce68f9afa025",
+    "hfias/clean/enns_hfias.csv": "db2d1d63f421dd8191f824728c6620a595839c84be9729f6f38295778d9856b3"
+   },
+   "regional_income_long.csv": "6bff3d80f49c0c12db48bd2aa92ddd6f798e093ad1991c002143e334e4d05888",
+   "sunstar": "empty stand-in (columns used by no E168 feature set)"
+  },
+  "s3_first_high": {
+   "scenario_id": "S3-B",
+   "variant": "combined:t=1+anchor+0.8",
+   "param": 0.8,
+   "province": "Quezon"
+  },
+  "s3b_used": true,
+  "s2_warnings": {
+   "forecast_row_flag": "The forecast rows (live.json, dashboard rows) have no field for missing inputs; a masked input is passed to LightGBM as missing and nothing in the output says so.",
+   "range90": "The 90 % range is computed from survey age (gap_q) only (app.e164.auto.scale), so it does not widen when inputs are missing.",
+   "stale_panel_check": "app.e168.regenerate._check_fresh refuses to stage an issue when the provincial panel ends more than two quarters before the issue quarter; that is the only staleness stop.",
+   "data_freshness_panel": "The dashboard's 'Latest data used' list (app.ml.inference.e168_system.data_used) shows the newest period of each real source; it describes the real inputs, not scenario inputs."
+  },
+  "configs": {
+   "lead1": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw",
+   "lead2": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw",
+   "lead3": "RSS|FULL|prune=False|leaves=3,minchild=10,lambda=20.0,trees=400|cal=raw",
+   "lead1_no2021": "RSS|FULL|prune=True|leaves=3,minchild=10,lambda=5.0,trees=150|cal=raw",
+   "lead2_no2021": "RSS|FULL|prune=True|leaves=3,minchild=10,lambda=5.0,trees=150|cal=raw",
+   "lead3_no2021": "RSS|FULL|prune=True|leaves=3,minchild=10,lambda=5.0,trees=150|cal=raw"
+  },
+  "groups": {
+   "weather_farm": {
+    "label": "Weather and farm",
+    "columns": {
+     "c_tc_4q": 1,
+     "tc_rate_since": 1,
+     "c_agri_yoy": -1,
+     "agri_since": -1,
+     "oni": 1,
+     "c_rain_anom_6m": -1,
+     "c_soil_anom_3m": -1,
+     "rain_since": -1,
+     "soil_since": -1
+    }
+   },
+   "food_prices": {
+    "label": "Food prices",
+    "columns": {
+     "cpi_food_yoy": 1,
+     "cpi_rice_yoy": 1,
+     "cpi_food_3m": 1,
+     "cpi_food_accel": 1,
+     "cpi_since": 1,
+     "cpi_food_rel_nat": 1
+    }
+   },
+   "jobs": {
+    "label": "Jobs",
+    "columns": {
+     "unemp_rate": 1,
+     "unemp_yoy": 1,
+     "unemp_chg_since": 1,
+     "unemp_region": 1
+    }
+   },
+   "remittances": {
+    "label": "Remittances",
+    "columns": {
+     "remit_yoy": -1,
+     "remit_since": -1,
+     "remit_q_yoy": -1
+    }
+   },
+   "fish_catch": {
+    "label": "Fish catch",
+    "columns": {
+     "c_fish_yoy": -1
+    }
+   }
+  },
+  "shocks": {
+   "typhoon": {
+    "label": "Typhoon",
+    "columns": {
+     "c_tc_4q": 1,
+     "tc_rate_since": 1,
+     "c_agri_yoy": -1,
+     "agri_since": -1
+    }
+   },
+   "el_nino_drought": {
+    "label": "El Niño drought",
+    "columns": {
+     "oni": 1,
+     "c_rain_anom_6m": -1,
+     "c_soil_anom_3m": -1,
+     "rain_since": -1,
+     "soil_since": -1,
+     "c_agri_yoy": -1,
+     "agri_since": -1
+    }
+   },
+   "rice_price_spike": {
+    "label": "Rice and food price spike",
+    "columns": {
+     "cpi_food_yoy": 1,
+     "cpi_rice_yoy": 1,
+     "cpi_food_3m": 1,
+     "cpi_food_accel": 1,
+     "cpi_since": 1,
+     "cpi_food_rel_nat": 1
+    }
+   },
+   "job_loss": {
+    "label": "Job loss",
+    "columns": {
+     "unemp_rate": 1,
+     "unemp_yoy": 1,
+     "unemp_chg_since": 1,
+     "unemp_region": 1
+    }
+   },
+   "remittance_drop": {
+    "label": "Remittance drop",
+    "columns": {
+     "remit_yoy": -1,
+     "remit_since": -1,
+     "remit_q_yoy": -1
+    }
+   },
+   "low_fish_catch": {
+    "label": "Low fish catch",
+    "columns": {
+     "c_fish_yoy": -1
+    }
+   },
+   "combined": {
+    "label": "All shocks combined",
+    "columns": {
+     "c_tc_4q": 1,
+     "tc_rate_since": 1,
+     "c_agri_yoy": -1,
+     "agri_since": -1,
+     "oni": 1,
+     "c_rain_anom_6m": -1,
+     "c_soil_anom_3m": -1,
+     "rain_since": -1,
+     "soil_since": -1,
+     "cpi_food_yoy": 1,
+     "cpi_rice_yoy": 1,
+     "cpi_food_3m": 1,
+     "cpi_food_accel": 1,
+     "cpi_since": 1,
+     "cpi_food_rel_nat": 1,
+     "unemp_rate": 1,
+     "unemp_yoy": 1,
+     "unemp_chg_since": 1,
+     "unemp_region": 1,
+     "remit_yoy": -1,
+     "remit_since": -1,
+     "remit_q_yoy": -1,
+     "c_fish_yoy": -1
+    }
+   }
+  },
+  "unsigned_columns": [
+   "c_rain_anom_6m",
+   "c_soil_anom_3m",
+   "cpi_food_rel_nat",
+   "oni",
+   "rain_since",
+   "soil_since"
+  ]
+ },
+ "titles": {
+  "S0": "Baseline (real latest inputs)",
+  "S1": "Perturbation / sensitivity",
+  "S2": "Limited data",
+  "S3": "High-risk shock",
+  "S3-B": "High-risk shock with a hypothetical worse survey baseline",
+  "S4": "High-risk response",
+  "S5": "Municipal high-risk sample"
+ },
+ "scenarios": {
+  "S0": [
+   {
+    "province": "Batangas",
+    "lead": 1,
+    "quarter": "2027-Q1",
+    "score_pct": 25.3,
+    "range90_low": 15.7,
+    "range90_high": 38.0,
+    "probability": 0.003,
+    "class": "LOW",
+    "top_driver_1": "market",
+    "top_driver_2": "employment",
+    "top_driver_3": "climate"
+   },
+   {
+    "province": "Cavite",
+    "lead": 1,
+    "quarter": "2027-Q1",
+    "score_pct": 28.3,
+    "range90_low": 17.9,
+    "range90_high": 41.8,
+    "probability": 0.009,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Laguna",
+    "lead": 1,
+    "quarter": "2027-Q1",
+    "score_pct": 29.5,
+    "range90_low": 18.8,
+    "range90_high": 43.1,
+    "probability": 0.013,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Quezon",
+    "lead": 1,
+    "quarter": "2027-Q1",
+    "score_pct": 35.5,
+    "range90_low": 23.3,
+    "range90_high": 49.9,
+    "probability": 0.064,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Rizal",
+    "lead": 1,
+    "quarter": "2027-Q1",
+    "score_pct": 33.9,
+    "range90_low": 22.1,
+    "range90_high": 48.2,
+    "probability": 0.044,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Batangas",
+    "lead": 2,
+    "quarter": "2027-Q2",
+    "score_pct": 24.9,
+    "range90_low": 15.4,
+    "range90_high": 37.5,
+    "probability": 0.002,
+    "class": "LOW",
+    "top_driver_1": "market",
+    "top_driver_2": "employment",
+    "top_driver_3": "climate"
+   },
+   {
+    "province": "Cavite",
+    "lead": 2,
+    "quarter": "2027-Q2",
+    "score_pct": 28.3,
+    "range90_low": 17.9,
+    "range90_high": 41.8,
+    "probability": 0.009,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Laguna",
+    "lead": 2,
+    "quarter": "2027-Q2",
+    "score_pct": 29.5,
+    "range90_low": 18.8,
+    "range90_high": 43.1,
+    "probability": 0.013,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Quezon",
+    "lead": 2,
+    "quarter": "2027-Q2",
+    "score_pct": 35.5,
+    "range90_low": 23.3,
+    "range90_high": 49.9,
+    "probability": 0.064,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Rizal",
+    "lead": 2,
+    "quarter": "2027-Q2",
+    "score_pct": 33.9,
+    "range90_low": 22.1,
+    "range90_high": 48.2,
+    "probability": 0.044,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Batangas",
+    "lead": 3,
+    "quarter": "2027-Q3",
+    "score_pct": 24.9,
+    "range90_low": 15.4,
+    "range90_high": 37.5,
+    "probability": 0.002,
+    "class": "LOW",
+    "top_driver_1": "market",
+    "top_driver_2": "employment",
+    "top_driver_3": "climate"
+   },
+   {
+    "province": "Cavite",
+    "lead": 3,
+    "quarter": "2027-Q3",
+    "score_pct": 28.3,
+    "range90_low": 17.9,
+    "range90_high": 41.8,
+    "probability": 0.009,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Laguna",
+    "lead": 3,
+    "quarter": "2027-Q3",
+    "score_pct": 29.5,
+    "range90_low": 18.8,
+    "range90_high": 43.2,
+    "probability": 0.013,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Quezon",
+    "lead": 3,
+    "quarter": "2027-Q3",
+    "score_pct": 35.5,
+    "range90_low": 23.3,
+    "range90_high": 49.9,
+    "probability": 0.064,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   },
+   {
+    "province": "Rizal",
+    "lead": 3,
+    "quarter": "2027-Q3",
+    "score_pct": 33.9,
+    "range90_low": 22.1,
+    "range90_high": 48.2,
+    "probability": 0.044,
+    "class": "LOW",
+    "top_driver_1": "climate",
+    "top_driver_2": "employment",
+    "top_driver_3": "market"
+   }
+  ],
+  "S1": {
+   "shifts": [
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.008,
+     "score_pct": 28.1,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.03,
+     "score_pct": 32.3,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.015,
+     "score_pct": 29.9,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.008,
+     "score_pct": 27.8,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.024,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.01,
+     "score_pct": 28.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.0,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.055,
+     "score_pct": 34.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.004,
+     "score_pct": 25.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.025,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.012,
+     "score_pct": 29.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.8,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.004,
+     "score_pct": 26.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.006,
+     "score_pct": 27.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.038,
+     "score_pct": 33.3,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.8,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.05,
+     "score_pct": 34.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.007,
+     "score_pct": 27.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.011,
+     "score_pct": 29.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.016,
+     "score_pct": 30.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.076,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.2,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.011,
+     "score_pct": 28.9,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.016,
+     "score_pct": 30.2,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.075,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.003,
+     "score_pct": 25.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.014,
+     "score_pct": 29.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.014,
+     "score_pct": 29.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.003,
+     "score_pct": 25.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.008,
+     "score_pct": 28.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.012,
+     "score_pct": 29.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.06,
+     "score_pct": 35.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.003,
+     "score_pct": 25.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.007,
+     "score_pct": 27.6,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.012,
+     "score_pct": 29.1,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.03,
+     "score_pct": 32.3,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.015,
+     "score_pct": 29.9,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.006,
+     "score_pct": 27.4,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.024,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.01,
+     "score_pct": 28.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.0,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.055,
+     "score_pct": 34.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.004,
+     "score_pct": 25.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.025,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.012,
+     "score_pct": 29.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.004,
+     "score_pct": 26.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.006,
+     "score_pct": 27.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.038,
+     "score_pct": 33.3,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.05,
+     "score_pct": 34.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.011,
+     "score_pct": 29.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.016,
+     "score_pct": 30.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.076,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.007,
+     "score_pct": 27.7,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.011,
+     "score_pct": 28.9,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.016,
+     "score_pct": 30.2,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.075,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.003,
+     "score_pct": 25.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.014,
+     "score_pct": 29.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.014,
+     "score_pct": 29.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.008,
+     "score_pct": 28.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.012,
+     "score_pct": 29.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.06,
+     "score_pct": 35.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.007,
+     "score_pct": 27.6,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.012,
+     "score_pct": 29.1,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.006,
+     "score_pct": 27.3,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.03,
+     "score_pct": 32.3,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -2.0,
+     "probability": 0.015,
+     "score_pct": 29.9,
+     "class": "LOW",
+     "clipped_cells": 14
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.006,
+     "score_pct": 27.4,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.7,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.024,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": -1.0,
+     "probability": 0.01,
+     "score_pct": 28.6,
+     "class": "LOW",
+     "clipped_cells": 12
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.004,
+     "score_pct": 26.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.055,
+     "score_pct": 34.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.004,
+     "score_pct": 25.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.025,
+     "score_pct": 31.6,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "weather_farm",
+     "param": 2.0,
+     "probability": 0.012,
+     "score_pct": 29.1,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.004,
+     "score_pct": 26.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.007,
+     "score_pct": 27.4,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.038,
+     "score_pct": 33.3,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -2.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 1
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.005,
+     "score_pct": 26.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.007,
+     "score_pct": 27.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.05,
+     "score_pct": 34.4,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "food_prices",
+     "param": -1.0,
+     "probability": 0.028,
+     "score_pct": 32.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.006,
+     "score_pct": 27.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.011,
+     "score_pct": 29.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.017,
+     "score_pct": 30.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.076,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 1.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.007,
+     "score_pct": 27.7,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.011,
+     "score_pct": 28.9,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.017,
+     "score_pct": 30.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.075,
+     "score_pct": 36.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "food_prices",
+     "param": 2.0,
+     "probability": 0.049,
+     "score_pct": 34.3,
+     "class": "LOW",
+     "clipped_cells": 3
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "jobs",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 15
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "jobs",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 7
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.003,
+     "score_pct": 25.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.014,
+     "score_pct": 29.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "jobs",
+     "param": 1.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.003,
+     "score_pct": 25.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.014,
+     "score_pct": 29.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.066,
+     "score_pct": 35.6,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "jobs",
+     "param": 2.0,
+     "probability": 0.046,
+     "score_pct": 34.0,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "remittances",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.8,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "remittances",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 5
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "remittances",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "remittances",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 10
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.002,
+     "score_pct": 24.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.008,
+     "score_pct": 28.1,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.012,
+     "score_pct": 29.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.06,
+     "score_pct": 35.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.002,
+     "score_pct": 24.7,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.009,
+     "score_pct": 28.2,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": -1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 1.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.002,
+     "score_pct": 24.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.009,
+     "score_pct": 28.3,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.013,
+     "score_pct": 29.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.064,
+     "score_pct": 35.5,
+     "class": "LOW",
+     "clipped_cells": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "group": "fish_catch",
+     "param": 2.0,
+     "probability": 0.044,
+     "score_pct": 33.9,
+     "class": "LOW",
+     "clipped_cells": 0
+    }
+   ],
+   "noise": [
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "p_mean": 0.0066,
+     "p_p05": 0.0009,
+     "p_p95": 0.0281,
+     "score_p05": 22.7,
+     "score_p95": 32.1,
+     "p_s0": 0.003,
+     "n_high": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "p_mean": 0.006,
+     "p_p05": 0.0007,
+     "p_p95": 0.0247,
+     "score_p05": 22.3,
+     "score_p95": 31.6,
+     "p_s0": 0.002,
+     "n_high": 0
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "p_mean": 0.006,
+     "p_p05": 0.0007,
+     "p_p95": 0.0247,
+     "score_p05": 22.3,
+     "score_p95": 31.6,
+     "p_s0": 0.002,
+     "n_high": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "p_mean": 0.0058,
+     "p_p05": 0.0015,
+     "p_p95": 0.0122,
+     "score_p05": 23.8,
+     "score_p95": 29.2,
+     "p_s0": 0.009,
+     "n_high": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "p_mean": 0.0057,
+     "p_p05": 0.0015,
+     "p_p95": 0.0122,
+     "score_p05": 23.8,
+     "score_p95": 29.2,
+     "p_s0": 0.009,
+     "n_high": 0
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "p_mean": 0.0057,
+     "p_p05": 0.0015,
+     "p_p95": 0.0122,
+     "score_p05": 23.8,
+     "score_p95": 29.2,
+     "p_s0": 0.009,
+     "n_high": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "p_mean": 0.0061,
+     "p_p05": 0.0005,
+     "p_p95": 0.018,
+     "score_p05": 21.6,
+     "score_p95": 30.5,
+     "p_s0": 0.013,
+     "n_high": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "p_mean": 0.0061,
+     "p_p05": 0.0005,
+     "p_p95": 0.018,
+     "score_p05": 21.6,
+     "score_p95": 30.5,
+     "p_s0": 0.013,
+     "n_high": 0
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "p_mean": 0.0062,
+     "p_p05": 0.0005,
+     "p_p95": 0.0183,
+     "score_p05": 21.7,
+     "score_p95": 30.6,
+     "p_s0": 0.013,
+     "n_high": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "p_mean": 0.0454,
+     "p_p05": 0.0101,
+     "p_p95": 0.1042,
+     "score_p05": 28.7,
+     "score_p95": 37.9,
+     "p_s0": 0.064,
+     "n_high": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "p_mean": 0.0454,
+     "p_p05": 0.0101,
+     "p_p95": 0.1042,
+     "score_p05": 28.7,
+     "score_p95": 37.9,
+     "p_s0": 0.064,
+     "n_high": 0
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "p_mean": 0.0454,
+     "p_p05": 0.0101,
+     "p_p95": 0.1042,
+     "score_p05": 28.7,
+     "score_p95": 37.9,
+     "p_s0": 0.064,
+     "n_high": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "p_mean": 0.0211,
+     "p_p05": 0.0044,
+     "p_p95": 0.0456,
+     "score_p05": 26.3,
+     "score_p95": 34.0,
+     "p_s0": 0.044,
+     "n_high": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "p_mean": 0.0211,
+     "p_p05": 0.0044,
+     "p_p95": 0.0456,
+     "score_p05": 26.3,
+     "score_p95": 34.0,
+     "p_s0": 0.044,
+     "n_high": 0
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "p_mean": 0.0211,
+     "p_p05": 0.0044,
+     "p_p95": 0.0456,
+     "score_p05": 26.3,
+     "score_p95": 34.0,
+     "p_s0": 0.044,
+     "n_high": 0
+    }
+   ]
+  },
+  "S2": {
+   "masks": [
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "masked_share": 0.25,
+     "p_mean": 0.0022,
+     "p_min": 0.0005,
+     "p_max": 0.0046,
+     "range90_width_mean": 21.67,
+     "range90_width_s0": 22.29,
+     "p_s0": 0.003
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "masked_share": 0.5,
+     "p_mean": 0.002,
+     "p_min": 0.0002,
+     "p_max": 0.0064,
+     "range90_width_mean": 21.38,
+     "range90_width_s0": 22.29,
+     "p_s0": 0.003
+    },
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "masked_share": 0.75,
+     "p_mean": 0.0011,
+     "p_min": 0.0002,
+     "p_max": 0.0031,
+     "range90_width_mean": 20.77,
+     "range90_width_s0": 22.29,
+     "p_s0": 0.003
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "masked_share": 0.25,
+     "p_mean": 0.0018,
+     "p_min": 0.0004,
+     "p_max": 0.0039,
+     "range90_width_mean": 21.44,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "masked_share": 0.5,
+     "p_mean": 0.0017,
+     "p_min": 0.0002,
+     "p_max": 0.0054,
+     "range90_width_mean": 21.14,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "masked_share": 0.75,
+     "p_mean": 0.0009,
+     "p_min": 0.0002,
+     "p_max": 0.0026,
+     "range90_width_mean": 20.53,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "masked_share": 0.25,
+     "p_mean": 0.0018,
+     "p_min": 0.0004,
+     "p_max": 0.0039,
+     "range90_width_mean": 21.44,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "masked_share": 0.5,
+     "p_mean": 0.0017,
+     "p_min": 0.0002,
+     "p_max": 0.0054,
+     "range90_width_mean": 21.14,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "masked_share": 0.75,
+     "p_mean": 0.0009,
+     "p_min": 0.0002,
+     "p_max": 0.0026,
+     "range90_width_mean": 20.53,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "masked_share": 0.25,
+     "p_mean": 0.0059,
+     "p_min": 0.0015,
+     "p_max": 0.0171,
+     "range90_width_mean": 22.97,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "masked_share": 0.5,
+     "p_mean": 0.0036,
+     "p_min": 0.0005,
+     "p_max": 0.0151,
+     "range90_width_mean": 22.16,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "masked_share": 0.75,
+     "p_mean": 0.0017,
+     "p_min": 0.0002,
+     "p_max": 0.0056,
+     "range90_width_mean": 21.27,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "masked_share": 0.25,
+     "p_mean": 0.0057,
+     "p_min": 0.0015,
+     "p_max": 0.0171,
+     "range90_width_mean": 22.9,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "masked_share": 0.5,
+     "p_mean": 0.0035,
+     "p_min": 0.0004,
+     "p_max": 0.0151,
+     "range90_width_mean": 22.08,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "masked_share": 0.75,
+     "p_mean": 0.0016,
+     "p_min": 0.0002,
+     "p_max": 0.0052,
+     "range90_width_mean": 21.11,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "masked_share": 0.25,
+     "p_mean": 0.0057,
+     "p_min": 0.0015,
+     "p_max": 0.0171,
+     "range90_width_mean": 22.9,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "masked_share": 0.5,
+     "p_mean": 0.0035,
+     "p_min": 0.0004,
+     "p_max": 0.0151,
+     "range90_width_mean": 22.08,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "masked_share": 0.75,
+     "p_mean": 0.0016,
+     "p_min": 0.0002,
+     "p_max": 0.0052,
+     "range90_width_mean": 21.11,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "masked_share": 0.25,
+     "p_mean": 0.0108,
+     "p_min": 0.0017,
+     "p_max": 0.0236,
+     "range90_width_mean": 23.85,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "masked_share": 0.5,
+     "p_mean": 0.004,
+     "p_min": 0.0001,
+     "p_max": 0.016,
+     "range90_width_mean": 21.56,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "masked_share": 0.75,
+     "p_mean": 0.0019,
+     "p_min": 0.0001,
+     "p_max": 0.0115,
+     "range90_width_mean": 20.93,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "masked_share": 0.25,
+     "p_mean": 0.0108,
+     "p_min": 0.0017,
+     "p_max": 0.0236,
+     "range90_width_mean": 23.85,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "masked_share": 0.5,
+     "p_mean": 0.004,
+     "p_min": 0.0001,
+     "p_max": 0.016,
+     "range90_width_mean": 21.56,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "masked_share": 0.75,
+     "p_mean": 0.0019,
+     "p_min": 0.0001,
+     "p_max": 0.0115,
+     "range90_width_mean": 20.93,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "masked_share": 0.25,
+     "p_mean": 0.0109,
+     "p_min": 0.0017,
+     "p_max": 0.0236,
+     "range90_width_mean": 23.87,
+     "range90_width_s0": 24.4,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "masked_share": 0.5,
+     "p_mean": 0.004,
+     "p_min": 0.0001,
+     "p_max": 0.016,
+     "range90_width_mean": 21.57,
+     "range90_width_s0": 24.4,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "masked_share": 0.75,
+     "p_mean": 0.0019,
+     "p_min": 0.0001,
+     "p_max": 0.0117,
+     "range90_width_mean": 20.93,
+     "range90_width_s0": 24.4,
+     "p_s0": 0.013
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "masked_share": 0.25,
+     "p_mean": 0.0367,
+     "p_min": 0.0025,
+     "p_max": 0.0716,
+     "range90_width_mean": 25.42,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "masked_share": 0.5,
+     "p_mean": 0.0135,
+     "p_min": 0.001,
+     "p_max": 0.0355,
+     "range90_width_mean": 23.92,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "masked_share": 0.75,
+     "p_mean": 0.0095,
+     "p_min": 0.0008,
+     "p_max": 0.0475,
+     "range90_width_mean": 22.65,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "masked_share": 0.25,
+     "p_mean": 0.0367,
+     "p_min": 0.0025,
+     "p_max": 0.0716,
+     "range90_width_mean": 25.42,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "masked_share": 0.5,
+     "p_mean": 0.0135,
+     "p_min": 0.001,
+     "p_max": 0.0355,
+     "range90_width_mean": 23.92,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "masked_share": 0.75,
+     "p_mean": 0.0095,
+     "p_min": 0.0008,
+     "p_max": 0.0475,
+     "range90_width_mean": 22.65,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "masked_share": 0.25,
+     "p_mean": 0.0367,
+     "p_min": 0.0025,
+     "p_max": 0.0716,
+     "range90_width_mean": 25.42,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "masked_share": 0.5,
+     "p_mean": 0.0135,
+     "p_min": 0.001,
+     "p_max": 0.0355,
+     "range90_width_mean": 23.92,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "masked_share": 0.75,
+     "p_mean": 0.0095,
+     "p_min": 0.0008,
+     "p_max": 0.0475,
+     "range90_width_mean": 22.65,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "masked_share": 0.25,
+     "p_mean": 0.0228,
+     "p_min": 0.0016,
+     "p_max": 0.0425,
+     "range90_width_mean": 24.85,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "masked_share": 0.5,
+     "p_mean": 0.0079,
+     "p_min": 0.0005,
+     "p_max": 0.0253,
+     "range90_width_mean": 23.15,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "masked_share": 0.75,
+     "p_mean": 0.0034,
+     "p_min": 0.0003,
+     "p_max": 0.0266,
+     "range90_width_mean": 21.52,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "masked_share": 0.25,
+     "p_mean": 0.0228,
+     "p_min": 0.0016,
+     "p_max": 0.0425,
+     "range90_width_mean": 24.85,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "masked_share": 0.5,
+     "p_mean": 0.0079,
+     "p_min": 0.0005,
+     "p_max": 0.0253,
+     "range90_width_mean": 23.15,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "masked_share": 0.75,
+     "p_mean": 0.0034,
+     "p_min": 0.0003,
+     "p_max": 0.0266,
+     "range90_width_mean": 21.52,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "masked_share": 0.25,
+     "p_mean": 0.0228,
+     "p_min": 0.0016,
+     "p_max": 0.0425,
+     "range90_width_mean": 24.85,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "masked_share": 0.5,
+     "p_mean": 0.0079,
+     "p_min": 0.0005,
+     "p_max": 0.0253,
+     "range90_width_mean": 23.15,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "masked_share": 0.75,
+     "p_mean": 0.0034,
+     "p_min": 0.0003,
+     "p_max": 0.0266,
+     "range90_width_mean": 21.52,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044
+    }
+   ],
+   "all_missing": [
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "probability": 0.001,
+     "score_pct": 22.2,
+     "range90_width_pts": 20.49,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "probability": 0.0,
+     "score_pct": 21.6,
+     "range90_width_pts": 20.08,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "probability": 0.0,
+     "score_pct": 20.1,
+     "range90_width_pts": 19.16,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "probability": 0.001,
+     "score_pct": 22.7,
+     "range90_width_pts": 20.8,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "probability": 0.0,
+     "score_pct": 21.4,
+     "range90_width_pts": 19.98,
+     "class": "LOW"
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "probability": 0.001,
+     "score_pct": 21.8,
+     "range90_width_pts": 20.24,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "probability": 0.0,
+     "score_pct": 21.2,
+     "range90_width_pts": 19.84,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "probability": 0.0,
+     "score_pct": 20.1,
+     "range90_width_pts": 19.16,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "probability": 0.001,
+     "score_pct": 22.7,
+     "range90_width_pts": 20.8,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "probability": 0.0,
+     "score_pct": 21.4,
+     "range90_width_pts": 19.98,
+     "class": "LOW"
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "probability": 0.001,
+     "score_pct": 21.8,
+     "range90_width_pts": 20.24,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "probability": 0.0,
+     "score_pct": 21.2,
+     "range90_width_pts": 19.84,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "probability": 0.0,
+     "score_pct": 20.1,
+     "range90_width_pts": 19.16,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "probability": 0.001,
+     "score_pct": 22.7,
+     "range90_width_pts": 20.8,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "probability": 0.0,
+     "score_pct": 21.4,
+     "range90_width_pts": 19.98,
+     "class": "LOW"
+    }
+   ],
+   "latest_missing": [
+    {
+     "province": "Batangas",
+     "lead": 1,
+     "probability": 0.015,
+     "score_pct": 24.7,
+     "range90_low": 15.3,
+     "range90_high": 37.2,
+     "range90_width_pts": 21.9,
+     "gap_q": 46,
+     "gap_q_s0": 22,
+     "range90_width_s0": 22.29,
+     "p_s0": 0.003,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 1,
+     "probability": 0.036,
+     "score_pct": 28.4,
+     "range90_low": 18.0,
+     "range90_high": 41.8,
+     "range90_width_pts": 23.84,
+     "gap_q": 46,
+     "gap_q_s0": 22,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 1,
+     "probability": 0.053,
+     "score_pct": 30.3,
+     "range90_low": 19.4,
+     "range90_high": 44.1,
+     "range90_width_pts": 24.68,
+     "gap_q": 34,
+     "gap_q_s0": 34,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 1,
+     "probability": 0.086,
+     "score_pct": 33.1,
+     "range90_low": 21.5,
+     "range90_high": 47.3,
+     "range90_width_pts": 25.79,
+     "gap_q": 30,
+     "gap_q_s0": 30,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 1,
+     "probability": 0.102,
+     "score_pct": 34.3,
+     "range90_low": 22.4,
+     "range90_high": 48.6,
+     "range90_width_pts": 26.19,
+     "gap_q": 30,
+     "gap_q_s0": 30,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044,
+     "class": "LOW"
+    },
+    {
+     "province": "Batangas",
+     "lead": 2,
+     "probability": 0.015,
+     "score_pct": 24.7,
+     "range90_low": 15.3,
+     "range90_high": 37.2,
+     "range90_width_pts": 21.9,
+     "gap_q": 47,
+     "gap_q_s0": 23,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 2,
+     "probability": 0.036,
+     "score_pct": 28.4,
+     "range90_low": 18.0,
+     "range90_high": 41.8,
+     "range90_width_pts": 23.84,
+     "gap_q": 47,
+     "gap_q_s0": 23,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 2,
+     "probability": 0.053,
+     "score_pct": 30.3,
+     "range90_low": 19.4,
+     "range90_high": 44.1,
+     "range90_width_pts": 24.68,
+     "gap_q": 35,
+     "gap_q_s0": 35,
+     "range90_width_s0": 24.37,
+     "p_s0": 0.013,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 2,
+     "probability": 0.086,
+     "score_pct": 33.1,
+     "range90_low": 21.5,
+     "range90_high": 47.3,
+     "range90_width_pts": 25.79,
+     "gap_q": 31,
+     "gap_q_s0": 31,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 2,
+     "probability": 0.102,
+     "score_pct": 34.3,
+     "range90_low": 22.4,
+     "range90_high": 48.6,
+     "range90_width_pts": 26.19,
+     "gap_q": 31,
+     "gap_q_s0": 31,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044,
+     "class": "LOW"
+    },
+    {
+     "province": "Batangas",
+     "lead": 3,
+     "probability": 0.015,
+     "score_pct": 24.7,
+     "range90_low": 15.3,
+     "range90_high": 37.2,
+     "range90_width_pts": 21.9,
+     "gap_q": 48,
+     "gap_q_s0": 24,
+     "range90_width_s0": 22.06,
+     "p_s0": 0.002,
+     "class": "LOW"
+    },
+    {
+     "province": "Cavite",
+     "lead": 3,
+     "probability": 0.036,
+     "score_pct": 28.4,
+     "range90_low": 18.0,
+     "range90_high": 41.8,
+     "range90_width_pts": 23.84,
+     "gap_q": 48,
+     "gap_q_s0": 24,
+     "range90_width_s0": 23.85,
+     "p_s0": 0.009,
+     "class": "LOW"
+    },
+    {
+     "province": "Laguna",
+     "lead": 3,
+     "probability": 0.053,
+     "score_pct": 30.3,
+     "range90_low": 19.4,
+     "range90_high": 44.1,
+     "range90_width_pts": 24.68,
+     "gap_q": 36,
+     "gap_q_s0": 36,
+     "range90_width_s0": 24.4,
+     "p_s0": 0.013,
+     "class": "LOW"
+    },
+    {
+     "province": "Quezon",
+     "lead": 3,
+     "probability": 0.086,
+     "score_pct": 33.1,
+     "range90_low": 21.5,
+     "range90_high": 47.3,
+     "range90_width_pts": 25.79,
+     "gap_q": 32,
+     "gap_q_s0": 32,
+     "range90_width_s0": 26.64,
+     "p_s0": 0.064,
+     "class": "LOW"
+    },
+    {
+     "province": "Rizal",
+     "lead": 3,
+     "probability": 0.102,
+     "score_pct": 34.3,
+     "range90_low": 22.4,
+     "range90_high": 48.6,
+     "range90_width_pts": 26.19,
+     "gap_q": 32,
+     "gap_q_s0": 32,
+     "range90_width_s0": 26.13,
+     "p_s0": 0.044,
+     "class": "LOW"
+    }
+   ],
+   "what_the_system_warns": {
+    "forecast_row_flag": "The forecast rows (live.json, dashboard rows) have no field for missing inputs; a masked input is passed to LightGBM as missing and nothing in the output says so.",
+    "range90": "The 90 % range is computed from survey age (gap_q) only (app.e164.auto.scale), so it does not widen when inputs are missing.",
+    "stale_panel_check": "app.e168.regenerate._check_fresh refuses to stage an issue when the provincial panel ends more than two quarters before the issue quarter; that is the only staleness stop.",
+    "data_freshness_panel": "The dashboard's 'Latest data used' list (app.ml.inference.e168_system.data_used) shows the newest period of each real source; it describes the real inputs, not scenario inputs."
+   }
+  },
+  "S3": {
+   "ladder": [
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0322,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0302,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0322,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0302,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0322,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0302,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0299,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0265,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0257,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0265,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0257,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0265,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0257,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "el_nino_drought",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0254,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "job_loss",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0655,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "low_fish_catch",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "remittance_drop",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0637,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "rice_price_spike",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.0752,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 0.25,
+     "max_p": 0.1116,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 0.75,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 1.25,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 0.25,
+     "max_p": 0.1116,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 0.75,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 1.25,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 0.25,
+     "max_p": 0.1116,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 0.75,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 1.25,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3",
+     "shock": "typhoon",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.1147,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": true
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.1,
+     "max_p": 0.0518,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.2,
+     "max_p": 0.0849,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.3,
+     "max_p": 0.1318,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.4,
+     "max_p": 0.1941,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.5,
+     "max_p": 0.2717,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.6,
+     "max_p": 0.3621,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.7,
+     "max_p": 0.461,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.8,
+     "max_p": 0.5624,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 0.9,
+     "max_p": 0.6598,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.0,
+     "max_p": 0.7476,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.1,
+     "max_p": 0.8217,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.2,
+     "max_p": 0.8803,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.3,
+     "max_p": 0.9239,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.4,
+     "max_p": 0.9542,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.5,
+     "max_p": 0.9739,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.6,
+     "max_p": 0.986,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.7,
+     "max_p": 0.9929,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.8,
+     "max_p": 0.9966,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 1.9,
+     "max_p": 0.9985,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 1,
+     "param": 2.0,
+     "max_p": 0.9994,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.1,
+     "max_p": 0.0518,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.2,
+     "max_p": 0.0849,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.3,
+     "max_p": 0.1318,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.4,
+     "max_p": 0.1941,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.5,
+     "max_p": 0.2717,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.6,
+     "max_p": 0.3621,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.7,
+     "max_p": 0.461,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.8,
+     "max_p": 0.5624,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 0.9,
+     "max_p": 0.6598,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.0,
+     "max_p": 0.7476,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.1,
+     "max_p": 0.8217,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.2,
+     "max_p": 0.8803,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.3,
+     "max_p": 0.9239,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.4,
+     "max_p": 0.9542,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.5,
+     "max_p": 0.9739,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.6,
+     "max_p": 0.986,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.7,
+     "max_p": 0.9929,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.8,
+     "max_p": 0.9966,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 1.9,
+     "max_p": 0.9985,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 2,
+     "param": 2.0,
+     "max_p": 0.9994,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.1,
+     "max_p": 0.0518,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.2,
+     "max_p": 0.0849,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.3,
+     "max_p": 0.1318,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.4,
+     "max_p": 0.1941,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.5,
+     "max_p": 0.2717,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.6,
+     "max_p": 0.3621,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.7,
+     "max_p": 0.461,
+     "highest_province": "Quezon",
+     "high_provinces": [],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.8,
+     "max_p": 0.5624,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 0.9,
+     "max_p": 0.6598,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.0,
+     "max_p": 0.7476,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.1,
+     "max_p": 0.8217,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.2,
+     "max_p": 0.8803,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.3,
+     "max_p": 0.9239,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.4,
+     "max_p": 0.9542,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.5,
+     "max_p": 0.9739,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.6,
+     "max_p": 0.986,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.7,
+     "max_p": 0.9929,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.8,
+     "max_p": 0.9966,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 1.9,
+     "max_p": 0.9985,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    },
+    {
+     "scenario_id": "S3-B",
+     "shock": "combined",
+     "lead": 3,
+     "param": 2.0,
+     "max_p": 0.9994,
+     "highest_province": "Quezon",
+     "high_provinces": [
+      "Batangas",
+      "Cavite",
+      "Laguna",
+      "Quezon",
+      "Rizal"
+     ],
+     "extrapolated": false
+    }
+   ],
+   "first_high": {
+    "scenario_id": "S3-B",
+    "variant": "combined:t=1+anchor+0.8",
+    "param": 0.8,
+    "province": "Quezon"
+   },
+   "s3b_used": true
+  },
+  "S4": {
+   "label": "SYNTHETIC – FOR DEMONSTRATION",
+   "scenario_id": "S4",
+   "source_variant": "combined:t=1+anchor+0.8",
+   "is_synthetic": true,
+   "high_rows": [
+    {
+     "province": "Quezon",
+     "quarter": "2027-Q1"
+    },
+    {
+     "province": "Quezon",
+     "quarter": "2027-Q2"
+    },
+    {
+     "province": "Quezon",
+     "quarter": "2027-Q3"
+    }
+   ],
+   "alerts": [
+    {
+     "quarter": "2027-Q1",
+     "province_code": "PH040300000",
+     "alert_reason": "E168_HIGH",
+     "threshold_exceeded": true,
+     "prev_risk_probability": null,
+     "risk_delta": null,
+     "evidence": {
+      "lead": 1,
+      "p_high": 0.562,
+      "score_pct": 51.5
+     },
+     "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+    },
+    {
+     "quarter": "2027-Q2",
+     "province_code": "PH040300000",
+     "alert_reason": "E168_HIGH",
+     "threshold_exceeded": true,
+     "prev_risk_probability": null,
+     "risk_delta": null,
+     "evidence": {
+      "lead": 2,
+      "p_high": 0.562,
+      "score_pct": 51.5
+     },
+     "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+    },
+    {
+     "quarter": "2027-Q3",
+     "province_code": "PH040300000",
+     "alert_reason": "E168_HIGH",
+     "threshold_exceeded": true,
+     "prev_risk_probability": null,
+     "risk_delta": null,
+     "evidence": {
+      "lead": 3,
+      "p_high": 0.562,
+      "score_pct": 51.5
+     },
+     "statement": "Model-generated early-warning candidate (E168 food-insecurity forecast) for review by DA Region IV-A. Not an official food-insecurity classification and not a confirmed emergency."
+    }
+   ],
+   "alert_rule": "E168_HIGH: P(HIGH) >= 0.5 at a lead the acceptance rule covers",
+   "review_flow": [
+    "The candidate is STAGED (app.quarterly.alerts_e168.stage), never published automatically.",
+    "A DA Region IV-A administrator opens Admin > Review and either confirms it (POST /api/v1/admin/alerts/{id}/confirm) or dismisses it (POST /api/v1/admin/alerts/{id}/dismiss).",
+    "Only a confirmed alert reaches the public dashboard (GET /api/v1/alerts); a dismissed one stays in the records for audit. The demo account can view the queue but cannot confirm or dismiss.",
+    "In this demonstration nothing was written to the database: the candidates above are what staging would insert."
+   ],
+   "ranking": {
+    "2027-Q1": [
+     {
+      "rank": 1,
+      "province": "Quezon",
+      "p_high": 0.562,
+      "band": "High"
+     },
+     {
+      "rank": 2,
+      "province": "Rizal",
+      "p_high": 0.428,
+      "band": "Low"
+     },
+     {
+      "rank": 3,
+      "province": "Batangas",
+      "p_high": 0.364,
+      "band": "Low"
+     },
+     {
+      "rank": 4,
+      "province": "Cavite",
+      "p_high": 0.345,
+      "band": "Low"
+     },
+     {
+      "rank": 5,
+      "province": "Laguna",
+      "p_high": 0.272,
+      "band": "Low"
+     }
+    ],
+    "2027-Q2": [
+     {
+      "rank": 1,
+      "province": "Quezon",
+      "p_high": 0.562,
+      "band": "High"
+     },
+     {
+      "rank": 2,
+      "province": "Rizal",
+      "p_high": 0.428,
+      "band": "Low"
+     },
+     {
+      "rank": 3,
+      "province": "Batangas",
+      "p_high": 0.364,
+      "band": "Low"
+     },
+     {
+      "rank": 4,
+      "province": "Cavite",
+      "p_high": 0.345,
+      "band": "Low"
+     },
+     {
+      "rank": 5,
+      "province": "Laguna",
+      "p_high": 0.272,
+      "band": "Low"
+     }
+    ],
+    "2027-Q3": [
+     {
+      "rank": 1,
+      "province": "Quezon",
+      "p_high": 0.562,
+      "band": "High"
+     },
+     {
+      "rank": 2,
+      "province": "Rizal",
+      "p_high": 0.428,
+      "band": "Low"
+     },
+     {
+      "rank": 3,
+      "province": "Batangas",
+      "p_high": 0.364,
+      "band": "Low"
+     },
+     {
+      "rank": 4,
+      "province": "Cavite",
+      "p_high": 0.345,
+      "band": "Low"
+     },
+     {
+      "rank": 5,
+      "province": "Laguna",
+      "p_high": 0.274,
+      "band": "Low"
+     }
+    ]
+   },
+   "explanations": [
+    {
+     "province_code": "PH040300000",
+     "province": "Quezon",
+     "quarter": "2027-Q1",
+     "lead": 1,
+     "drivers": [
+      {
+       "driver_group": "market",
+       "driver_label": "Market / Prices",
+       "group_shap": 0.009263,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "climate",
+       "driver_label": "Climate Stress",
+       "group_shap": 0.008384,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "employment",
+       "driver_label": "Employment (national)",
+       "group_shap": 0.040712,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "ofw_remittance",
+       "driver_label": "OFW Remittance (national)",
+       "group_shap": 0.001945,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "fish_kill",
+       "driver_label": "Fish Kill (fisheries production proxy)",
+       "group_shap": 0.002041,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      }
+     ],
+     "other_pct": 76.0,
+     "plain_evidence": {
+      "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+      "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+      "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+      "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+      "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+     },
+     "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+     "statement": "Quezon, 2027-Q1: HIGH food-insecurity risk (probability 0.56). Lead-1 forecast: meets the acceptance rule (accuracy 0.750 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+    },
+    {
+     "province_code": "PH040300000",
+     "province": "Quezon",
+     "quarter": "2027-Q2",
+     "lead": 2,
+     "drivers": [
+      {
+       "driver_group": "market",
+       "driver_label": "Market / Prices",
+       "group_shap": 0.009263,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "climate",
+       "driver_label": "Climate Stress",
+       "group_shap": 0.008384,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "employment",
+       "driver_label": "Employment (national)",
+       "group_shap": 0.040712,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "ofw_remittance",
+       "driver_label": "OFW Remittance (national)",
+       "group_shap": 0.001945,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "fish_kill",
+       "driver_label": "Fish Kill (fisheries production proxy)",
+       "group_shap": 0.002041,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      }
+     ],
+     "other_pct": 76.0,
+     "plain_evidence": {
+      "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+      "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+      "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+      "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+      "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+     },
+     "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+     "statement": "Quezon, 2027-Q2: HIGH food-insecurity risk (probability 0.56). Lead-2 forecast: meets the acceptance rule (accuracy 0.778 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+    },
+    {
+     "province_code": "PH040300000",
+     "province": "Quezon",
+     "quarter": "2027-Q3",
+     "lead": 3,
+     "drivers": [
+      {
+       "driver_group": "market",
+       "driver_label": "Market / Prices",
+       "group_shap": 0.009263,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "climate",
+       "driver_label": "Climate Stress",
+       "group_shap": 0.008384,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "employment",
+       "driver_label": "Employment (national)",
+       "group_shap": 0.040712,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "ofw_remittance",
+       "driver_label": "OFW Remittance (national)",
+       "group_shap": 0.001945,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      },
+      {
+       "driver_group": "fish_kill",
+       "driver_label": "Fish Kill (fisheries production proxy)",
+       "group_shap": 0.002041,
+       "direction": "increases_risk",
+       "trigger_proportion": null
+      }
+     ],
+     "other_pct": 76.0,
+     "plain_evidence": {
+      "market": "In October 2026, food prices in Quezon were 18.3% higher than a year before, and rice prices were 32.7% higher. Rising food prices make it harder for families to buy enough food. This raised Quezon's forecast by about 0.2 points.",
+      "climate": "11 typhoons passed near the province from November 2025 to October 2026. A strong El Niño was under way in October 2026 (sea temperature +2.5 °C above normal), which usually means less rain. Rice and corn harvests in Q4 2025 to Q3 2026 were 50.2% lower than in Q4 2024 to Q3 2025. Typhoons, dry weather and poor harvests can cut food supply and income. This raised Quezon's forecast by about 0.2 points.",
+      "employment": "Unemployment in the whole country was 17.6% in September 2026 (the latest figure when this forecast was made), 12.5 points higher than in September 2025. When more people are out of work, families have less money for food. This raised Quezon's forecast by about 1.0 points. This is a national figure, the same for all five provinces.",
+      "ofw_remittance": "Money sent home by OFWs in 2025 was 0.8% less than in 2024 (the latest yearly figure). This money helps many families buy food. It barely changed Quezon's forecast. This is a national figure, the same for all five provinces.",
+      "fish_kill": "The fish catch in Quezon in Q4 2025 to Q3 2026 was 53.2% lower than in Q4 2024 to Q3 2025. A smaller catch means less fish to eat and less income for fishing families. This raised Quezon's forecast by about 0.1 points."
+     },
+     "evidence_note": "The bars show each trigger group's share of the absolute LightGBM contributions (log-odds) to E168's forecast change in household food insecurity. News signals are counted inside their group. They are model influence, not causes. The forecast starts from the latest published survey level (about 52% for this province); the bars explain only the change from it. Poverty and density (which also weight the city and municipal ranking), forecast timing and survey history account for the remaining 76%, shown as \"Other model inputs\".",
+     "statement": "Quezon, 2027-Q3: HIGH food-insecurity risk (probability 0.56). Lead-3 forecast: meets the acceptance rule (accuracy 0.750 on 72 past provincial forecasts; latest survey alone 0.625); issued 2026-11-01; forecast HFIAS moderate+severe 51.5% (90% range 37.0-65.8%); the outcome is not yet published."
+    }
+   ],
+   "report_text": {
+    "Quezon 2027-Q1": [
+     "1. Summary of Findings",
+     "2. Drivers of the Forecast (SHAP)",
+     "Interpretation",
+     "For Quezon in 2027 Q1, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+     "Change in drivers, 2026 Q4 to 2027 Q1",
+     "Between 2026 Q4 and 2027 Q1, Market / Prices gained the most share for Quezon (+2 percentage points, from 1% to 3%). Climate Stress lost the most (-12 percentage points, from 15% to 3%).",
+     "3. Supporting News Evidence",
+     "244 relevant articles were geocoded to Quezon for 2027 Q1; the trigger tally behind the model's news inputs records 40 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+     "4. Provincial Context",
+     "5. Model Reliability",
+     "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+     "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion."
+    ],
+    "Quezon 2027-Q2": [
+     "1. Summary of Findings",
+     "2. Drivers of the Forecast (SHAP)",
+     "Interpretation",
+     "For Quezon in 2027 Q2, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+     "3. Supporting News Evidence",
+     "244 relevant articles were geocoded to Quezon for 2027 Q2; the trigger tally behind the model's news inputs records 0 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+     "4. Provincial Context",
+     "5. Model Reliability",
+     "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+     "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion.",
+     "Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.",
+     "Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose."
+    ],
+    "Quezon 2027-Q3": [
+     "1. Summary of Findings",
+     "2. Drivers of the Forecast (SHAP)",
+     "Interpretation",
+     "For Quezon in 2027 Q3, the SHAP decomposition assigns the largest share of the attributed model output among the 5 driver groups to Employment (national) (16%), which increases the predicted Risk Level score. No driver group exceeds the 20% even-share cutoff, indicating that the attributed output is distributed approximately evenly across the groups. By comparison, Employment (national) (16%, increasing), Market / Prices (3%, increasing), Climate Stress (3%, increasing), OFW Remittance (national) (1%, increasing), and Fish Kill (fisheries production proxy) (1%, increasing) fall at or below the cutoff and therefore exert a comparatively limited influence on the forecast. The percentages above are normalized among the 5 driver groups, which together represent 24% of the total SHAP-explained output. The remaining 76% is attributable to model inputs outside these groups, namely the Food Stress Sentiment Index (FSSI), its values in the two preceding quarters, and its acceleration. These inputs are reported separately rather than allocated to any single driver group.",
+     "3. Supporting News Evidence",
+     "244 relevant articles were geocoded to Quezon for 2027 Q3; the trigger tally behind the model's news inputs records 0 keyword-matched articles for this province-quarter. 3 articles matching the top driver group, Employment (national), are listed below.",
+     "4. Provincial Context",
+     "5. Model Reliability",
+     "Target of the LightGBM rows: T43, an exploratory food-stress label: regional SWS hunger above 11.3% AND provincial food-price pressure; on every evaluated row it equals provincial food-price pressure. Not a measure of household food insecurity.",
+     "Reliability criterion (set before scoring): E63 section 8 (pre-registered 2026-10-19, protocol sha 5b3ee7e9): paired Brier better than naive persistence AND climatology, each with a quarter-cluster 95% CI below 0 and a two-sided quarter sign test p < 0.05. Result: no lead meets the reliability criterion.",
+     "Lead-2 accuracy 0.72 (36/50, E57 rolling origin) and 0.778 (35/45, the Objective 4 rows); neither is distinguishable from always predicting LOW at the quarter level, and neither is on unseen quarters: the >75% Lead-2 goal is not demonstrated.",
+     "Development evidence: every scored row was examined during model development (E56-E69). No independent (unseen) quarter has been scored yet; the forecasts for 2026-Q4 and 2027-Q1 are sealed (E68/E69) for that purpose."
+    ]
+   }
+  },
+  "S5": [
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 1,
+    "municipality": "Lucena",
+    "lgu_code": "045624000",
+    "risk_index": 0.3877,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": NaN,
+    "population": 280331,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 2,
+    "municipality": "San Francisco",
+    "lgu_code": "045642000",
+    "risk_index": 0.3478,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.214238,
+    "population": 63789,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 3,
+    "municipality": "Macalelon",
+    "lgu_code": "045625000",
+    "risk_index": 0.346,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.101027,
+    "population": 25266,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 4,
+    "municipality": "San Andres",
+    "lgu_code": "045640000",
+    "risk_index": 0.3174,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.817577,
+    "population": 38407,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 5,
+    "municipality": "Infanta",
+    "lgu_code": "045620000",
+    "risk_index": 0.3114,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.335361,
+    "population": 77676,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 6,
+    "municipality": "Agdangan",
+    "lgu_code": "045601000",
+    "risk_index": 0.2988,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.498332,
+    "population": 13316,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 7,
+    "municipality": "Pitogo",
+    "lgu_code": "045634000",
+    "risk_index": 0.2967,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.850478,
+    "population": 22499,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 8,
+    "municipality": "Pagbilao",
+    "lgu_code": "045630000",
+    "risk_index": 0.2942,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.883842,
+    "population": 82132,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 9,
+    "municipality": "Panukulan",
+    "lgu_code": "045631000",
+    "risk_index": 0.2857,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 26.02755,
+    "population": 17118,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q1",
+    "lead": 1,
+    "rank_in_province": 10,
+    "municipality": "Buenavista",
+    "lgu_code": "045605000",
+    "risk_index": 0.2787,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.961811,
+    "population": 31550,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 1,
+    "municipality": "Lucena",
+    "lgu_code": "045624000",
+    "risk_index": 0.3877,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": NaN,
+    "population": 280331,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 2,
+    "municipality": "San Francisco",
+    "lgu_code": "045642000",
+    "risk_index": 0.3478,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.214238,
+    "population": 63789,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 3,
+    "municipality": "Macalelon",
+    "lgu_code": "045625000",
+    "risk_index": 0.346,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.101027,
+    "population": 25266,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 4,
+    "municipality": "San Andres",
+    "lgu_code": "045640000",
+    "risk_index": 0.3174,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.817577,
+    "population": 38407,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 5,
+    "municipality": "Infanta",
+    "lgu_code": "045620000",
+    "risk_index": 0.3114,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.335361,
+    "population": 77676,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 6,
+    "municipality": "Agdangan",
+    "lgu_code": "045601000",
+    "risk_index": 0.2988,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.498332,
+    "population": 13316,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 7,
+    "municipality": "Pitogo",
+    "lgu_code": "045634000",
+    "risk_index": 0.2967,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.850478,
+    "population": 22499,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 8,
+    "municipality": "Pagbilao",
+    "lgu_code": "045630000",
+    "risk_index": 0.2942,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.883842,
+    "population": 82132,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 9,
+    "municipality": "Panukulan",
+    "lgu_code": "045631000",
+    "risk_index": 0.2857,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 26.02755,
+    "population": 17118,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q2",
+    "lead": 2,
+    "rank_in_province": 10,
+    "municipality": "Buenavista",
+    "lgu_code": "045605000",
+    "risk_index": 0.2787,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.961811,
+    "population": 31550,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 1,
+    "municipality": "Lucena",
+    "lgu_code": "045624000",
+    "risk_index": 0.3877,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": NaN,
+    "population": 280331,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 2,
+    "municipality": "San Francisco",
+    "lgu_code": "045642000",
+    "risk_index": 0.3478,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.214238,
+    "population": 63789,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 3,
+    "municipality": "Macalelon",
+    "lgu_code": "045625000",
+    "risk_index": 0.346,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 30.101027,
+    "population": 25266,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 4,
+    "municipality": "San Andres",
+    "lgu_code": "045640000",
+    "risk_index": 0.3174,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.817577,
+    "population": 38407,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 5,
+    "municipality": "Infanta",
+    "lgu_code": "045620000",
+    "risk_index": 0.3114,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 27.335361,
+    "population": 77676,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 6,
+    "municipality": "Agdangan",
+    "lgu_code": "045601000",
+    "risk_index": 0.2988,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.498332,
+    "population": 13316,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 7,
+    "municipality": "Pitogo",
+    "lgu_code": "045634000",
+    "risk_index": 0.2967,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 25.850478,
+    "population": 22499,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 8,
+    "municipality": "Pagbilao",
+    "lgu_code": "045630000",
+    "risk_index": 0.2942,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.883842,
+    "population": 82132,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 9,
+    "municipality": "Panukulan",
+    "lgu_code": "045631000",
+    "risk_index": 0.2857,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 26.02755,
+    "population": 17118,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   },
+   {
+    "province": "Quezon",
+    "quarter": "2027-Q3",
+    "lead": 3,
+    "rank_in_province": 10,
+    "municipality": "Buenavista",
+    "lgu_code": "045605000",
+    "risk_index": 0.2787,
+    "risk_level": "high",
+    "province_p_high": 0.562,
+    "poverty_rate": 24.961811,
+    "population": 31550,
+    "disaggregation_label": "Relative position within the province: the province's E168 HIGH probability re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.",
+    "note": "reweighted provincial estimate, not a municipal forecast",
+    "is_synthetic": true,
+    "scenario_id": "S5",
+    "generator_seed": null
+   }
+  ]
+ }
+}

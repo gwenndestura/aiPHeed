@@ -92,11 +92,18 @@ def final_lgus() -> dict:
     E168 = map_engine.selected()
     if E168 in (e168_system, hcw_system):  # the approved forecast drives the ranking: say so, and trace each row to it
         by = {m["id"]: m for m in muni}
-        out["label"] = ("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk forecast "
-                        f"({'Setup H + class weights' if E168 is hcw_system else 'E168'})")
-        out["note"] = (E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
-                       "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
-        out["quarter"], out["model"] = q, E168.MODEL_ID
+        if E168 is hcw_system:              # FINAL (served through hcw_system) or Setup H: its own name and id
+            out["label"] = ("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk forecast "
+                            f"({'FINAL (RATE + MIND)' if E168.MODEL_ID == 'final-rate-mind-1.0' else 'Setup H + class weights'})")
+            out["note"] = (E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
+                           "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
+            out["quarter"], out["model"] = q, E168.MODEL_ID
+        else:                               # E168 / E196 (main): relabelled to the served E168-family model
+            out["label"] = E168.relabel("Vulnerability-weighted municipal priority based on the provincial food-insecurity risk "
+                                        "forecast (E168)")
+            out["note"] = E168.relabel(E168.LGU_BASIS + " No measured food-insecurity figure exists for individual cities or "
+                                       "municipalities; missing PSA poverty values are stated per LGU, never filled with a made-up value.")
+            out["quarter"], out["model"] = q, E168.served_id()
         for r in out["rows"]:
             m = by.get(r["id"], {})
             r["provinceEstimate"], r["rankingBasis"] = m.get("provinceEstimate"), m.get("riskLevelBasis")

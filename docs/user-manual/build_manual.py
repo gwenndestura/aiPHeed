@@ -342,7 +342,8 @@ bullet("The risk review shows the score of each city and municipality and the fa
 bullet("Click **Approve & Publish** to show the forecast to the public, or **Reject** to withhold it. "
        "**Undo Publishing** takes back an approved forecast.")
 image(IMG / "20-admin-review-detail.png")
-bullet("When rejecting, choose a **Rejection reason**, add notes if needed, then click **Confirm rejection**. "
+bullet("When rejecting, type the **Rejection reason** (at least 10 characters and two words), add notes if "
+       "needed, then click **Confirm rejection**. "
        "A rejected province is shown in grey on the public map.")
 bullet("The **Rejection Log** tab lists every rejected forecast with its reason and time. Click "
        "**Restore** to send a forecast back for review.")

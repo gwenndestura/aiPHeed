@@ -135,13 +135,13 @@ class ReviewListResponse(BaseModel):
     quarter: str | None = None
     status: str | None = None
     statuses: list[str]
-    rejectionReasons: list[str]
     data: list[ReviewItem]
 
 
 class RejectRequest(BaseModel):
-    # Constrained on purpose: a rejection removes a number the public would
-    # otherwise see, so "why" has to outlive the person who clicked it.
+    # Typed by the administrator and validated by review.clean_reason: a
+    # rejection removes a number the public would otherwise see, so "why" has
+    # to outlive the person who clicked it.
     reason: ShortText
     notes: FreeText | None = None
 

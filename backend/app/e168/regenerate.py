@@ -111,7 +111,10 @@ def stage(issue: str | None = None, as_of: str | None = None, revision: int | No
                         "beats_persistence": v["beats_persistence_C2"]} for k, v in H["leads"].items()}
         rows = [{"province": r["province"], "lead": int(r["lead"]), "target_quarter": r["quarter"], "score_pct": float(r["score_pct"]),
                  "range90_pct": [float(r["range90_low"]), float(r["range90_high"])], "p_high": float(r["probability"]),
-                 "risk_class": r["class"], "config": r["config"]} for _, r in dash.iterrows()]
+                 "risk_class": r["class"], "config": r["config"],
+                 # E183: data-completeness flag of each forecast row
+                 "inputs_filled": int(r.get("inputs_filled", 0) or 0), "data_complete": bool(r.get("data_complete", True))}
+                for _, r in dash.iterrows()]
         validate(issue, rows, dash)
         doc = {"model": MODEL_ID, "name": "E168 LightGBM-only (survey baseline + constrained LightGBM change + calibration layer)",
                "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "issue_quarter": issue,

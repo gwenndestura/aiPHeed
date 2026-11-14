@@ -60,14 +60,41 @@ def api_status(row) -> str:
         return API_REJECTED
     return row.status
 
-REJECTION_REASONS = (
-    "Data quality issue",
-    "Insufficient signal / limited articles",
-    "Conflicts with field intelligence",
-    "Model anomaly / outlier prediction",
-    "Sensitive context - withhold publication",
-    "Other",
-)
+# The administrator types the rejection reason; there is no preset list. The
+# same rules are applied by the reject form (frontend/src/lib/rejectionReason.ts).
+REASON_MIN_CHARS = 10
+REASON_MAX_CHARS = 200
+REASON_MIN_WORDS = 2
+
+
+def clean_reason(reason: str | None) -> str:
+    """
+    Validate a typed rejection reason and return it tidied.
+
+    Spaces are collapsed and trimmed. The result must be 10 to 200 characters,
+    at least two words, and contain letters, so a blank, a single word or a row
+    of symbols cannot stand in for a reason.
+    """
+    text = " ".join((reason or "").split())
+    if not text:
+        raise ReviewError("Enter a reason for the rejection.", code="invalid_reason")
+    if len(text) < REASON_MIN_CHARS:
+        raise ReviewError(
+            f"The reason must be at least {REASON_MIN_CHARS} characters.",
+            code="invalid_reason",
+        )
+    if len(text) > REASON_MAX_CHARS:
+        raise ReviewError(
+            f"The reason must be {REASON_MAX_CHARS} characters or fewer.",
+            code="invalid_reason",
+        )
+    words = [w for w in text.split(" ") if any(c.isalpha() for c in w)]
+    if len(words) < REASON_MIN_WORDS:
+        raise ReviewError(
+            "Describe the reason in at least two words.",
+            code="invalid_reason",
+        )
+    return text
 
 
 class ReviewError(Exception):
@@ -124,6 +151,13 @@ async def ensure_rows(db: AsyncSession, quarter: str) -> None:
     logger.info("review: seeded %d rows for %s", len(missing), quarter)
 
 
+def served_quarters() -> list[str]:
+    """The quarters the dashboard serves forecasts for (Leads 1-4 of the production issue in thesis mode)."""
+    if svc._ch1_mode():
+        return svc.ch1_quarters()
+    return [svc.latest_quarter()]
+
+
 async def list_items(
     db: AsyncSession,
     quarter: str | None = None,
@@ -132,6 +166,11 @@ async def list_items(
     """The review queue, newest quarter first then by risk descending."""
     if quarter:
         await ensure_rows(db, quarter)
+    else:
+        # Every served quarter gets its rows, not only the ones someone happened to open first
+        # (the admin header only asks for the current quarter, which left Q2-Q4 unseeded).
+        for q in served_quarters():
+            await ensure_rows(db, q)
 
     query = select(ReviewRecord)
     if quarter:
@@ -231,14 +270,11 @@ async def reject(
     """
     Withhold a forecast from publication.
 
-    The reason is required and constrained: a rejection removes a number the
-    public would otherwise see, and "why" has to survive the person who did it.
+    The reason is required and validated (clean_reason): a rejection removes a
+    number the public would otherwise see, and "why" has to survive the person
+    who did it.
     """
-    if reason not in REJECTION_REASONS:
-        raise ReviewError(
-            f"'{reason}' is not a recognised rejection reason.",
-            code="unknown_reason",
-        )
+    reason = clean_reason(reason)
     row = await get_item(db, item_id)
     # Figure 3.6.3: rejection returns the record to PENDING. The reason stays on
     # the row, which is what marks it withheld rather than merely unscored.

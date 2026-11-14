@@ -8,8 +8,12 @@
 /** Earliest quarter any public quarter selector offers. */
 export const EARLIEST_SELECTABLE_QUARTER = "2025-Q1";
 
-/** How many quarters past the calendar quarter a selector may reach: Setup H + class weights (branch aiPHeed/setup-h-cw-dashboard) is accepted 1 to 6 quarters ahead. */
-export const FORECAST_QUARTERS_AHEAD = 5;   // FINAL preview: Leads 1-5
+/**
+ * How many quarters past the calendar quarter a selector may reach: FINAL (RATE + MIND) serves Leads 1-2 (all five measures
+ * >= 75% pooled), counted from the quarter its monthly issue is made in, so at most 2 quarters past the calendar quarter.
+ * Only quarters the API returns are shown, so a model serving fewer leads shows fewer.
+ */
+export const FORECAST_QUARTERS_AHEAD = 2;
 
 /**
  * How many quarters the map timeline shows: the newest ones, ending at the
