@@ -12,6 +12,10 @@ Record types:
   outcome    an observed result (FNRI provincial HFIAS round) for a province and reference quarter, entered with the source
              file's SHA-256 and who authorized it. It is linked to forecasts at read time; forecasts are never edited.
   withdrawn  an administrator's rejection of a served forecast (kept; the forecast stays in history, marked withdrawn).
+  superseded a whole issue replaced by a corrected re-issue (e.g. 2026-Q4, cut-off 1 Nov 2026, used figures released after its
+             cut-off; superseded by 2026-11, cut-off 10 Nov 2026). The original forecasts are kept unchanged and marked
+             superseded; the record names the replacement issue, the reason, who decided and the evidence.
+Issue ids are "YYYY-MM" (monthly) or "YYYY-Qn" (quarterly) and are ordered by their issue date (app.final.period).
 
 The file is the record of truth: it is committed with the code, so it survives redeploys of a host with an ephemeral disk.
 """
@@ -130,13 +134,57 @@ def record_withdrawal(model_id: str, issue_quarter: str, target_quarter: str, pr
     return {"appended": 1}
 
 
+def _chrono(issue_id: str) -> tuple:
+    from app.final import period as PD
+    try:
+        return (PD.issue_datetime(issue_id).isoformat(), issue_id)
+    except Exception:
+        return ("", issue_id)
+
+
 def issues(model_id: str | None = None, path: Path | None = None) -> list[str]:
-    return sorted({r["issue_quarter"] for r in forecasts(path) if model_id is None or r["model_id"] == model_id})
+    """Every issue id with forecasts, oldest first (by issue date, not by text: "2026-11" comes after "2026-Q4")."""
+    return sorted({r["issue_quarter"] for r in forecasts(path) if model_id is None or r["model_id"] == model_id}, key=_chrono)
+
+
+def supersessions(model_id: str | None = None, path: Path | None = None) -> dict[str, dict]:
+    """{superseded issue id: its supersession record}."""
+    return {r["issue_quarter"]: r for r in read(path)
+            if r.get("type") == "superseded" and (model_id is None or r["model_id"] == model_id)}
+
+
+def active_issues(model_id: str | None = None, path: Path | None = None) -> list[str]:
+    sup = supersessions(model_id, path)
+    return [q for q in issues(model_id, path) if q not in sup]
 
 
 def latest_issue(model_id: str, path: Path | None = None) -> str | None:
-    q = issues(model_id, path)
+    """The newest issue that has not been superseded (the one to serve)."""
+    q = active_issues(model_id, path)
     return q[-1] if q else None
+
+
+def record_supersession(model_id: str, issue_quarter: str, superseded_by: str, reason: str, by: str, evidence: str,
+                        path: Path | None = None) -> dict:
+    """Mark a whole issue superseded by a recorded re-issue. Append-only: the original forecasts are not touched. The
+    replacement must already be in the ledger, and an issue can be superseded once."""
+    if not has_issue(model_id, issue_quarter, path):
+        raise HistoryError(f"no issue {issue_quarter} to supersede")
+    if not has_issue(model_id, superseded_by, path):
+        raise HistoryError(f"the replacement issue {superseded_by} is not recorded yet")
+    if issue_quarter == superseded_by:
+        raise HistoryError("an issue cannot supersede itself")
+    old = supersessions(model_id, path).get(issue_quarter)
+    if old is not None:
+        if old["superseded_by"] == superseded_by:
+            return {"appended": 0, "already_recorded": 1}
+        raise HistoryError(f"issue {issue_quarter} is already superseded by {old['superseded_by']}")
+    if not reason or not by:
+        raise HistoryError("a supersession needs a reason and the person who decided it")
+    rec = {"type": "superseded", "model_id": model_id, "issue_quarter": issue_quarter, "superseded_by": superseded_by,
+           "reason": reason, "by": by, "evidence": evidence, "recorded_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    _append(rec, path)
+    return {"appended": 1, "already_recorded": 0}
 
 
 def has_issue(model_id: str, issue_quarter: str, path: Path | None = None) -> bool:
@@ -149,6 +197,7 @@ def with_outcomes(model_id: str | None = None, path: Path | None = None) -> list
     rows = read(path)
     outs = {(r["province"], r["reference_quarter"]): r for r in rows if r.get("type") == "outcome"}
     wd = {(r["model_id"], r["issue_quarter"], r["target_quarter"], r["province"]) for r in rows if r.get("type") == "withdrawn"}
+    sup = {(r["model_id"], r["issue_quarter"]): r for r in rows if r.get("type") == "superseded"}
     out = []
     for r in rows:
         if r.get("type") != "forecast" or (model_id and r["model_id"] != model_id):
@@ -156,6 +205,11 @@ def with_outcomes(model_id: str | None = None, path: Path | None = None) -> list
         o = outs.get((r["province"], r["target_quarter"]))
         x = {k: v for k, v in r.items() if k not in ("prev", "hash", "type")}
         x["withdrawn"] = _key(r) in wd
+        s = sup.get((r["model_id"], r["issue_quarter"]))
+        x["superseded"] = s is not None
+        x["superseded_by"] = s["superseded_by"] if s else None
+        x["supersede_reason"] = s["reason"] if s else None
+        x["record_status"] = "withdrawn" if x["withdrawn"] else "superseded" if s else "active"
         if o is None:
             x.update({"validation_status": "awaiting outcome", "observed_share_pct": None, "observed_class": None, "correct": None, "error_pp": None})
         else:
@@ -169,7 +223,7 @@ def with_outcomes(model_id: str | None = None, path: Path | None = None) -> list
 
 def evaluation(model_id: str | None = None, path: Path | None = None) -> dict:
     """Forecast-versus-actual summary over validated forecasts only: overall, by lead, by province, by target quarter."""
-    v = [r for r in with_outcomes(model_id, path) if r["validation_status"] == "validated" and not r["withdrawn"]]
+    v = [r for r in with_outcomes(model_id, path) if r["validation_status"] == "validated" and r["record_status"] == "active"]
 
     def summ(rows):
         if not rows:
@@ -184,7 +238,7 @@ def evaluation(model_id: str | None = None, path: Path | None = None) -> dict:
                 "mean_abs_error_pp": round(sum(err) / len(err), 2) if err else None}
 
     by = lambda k: {str(g): summ([r for r in v if r[k] == g]) for g in sorted({r[k] for r in v})}
-    awaiting = sum(1 for r in with_outcomes(model_id, path) if r["validation_status"] != "validated")
+    awaiting = sum(1 for r in with_outcomes(model_id, path) if r["validation_status"] != "validated" and r["record_status"] == "active")
     return {"overall": summ(v), "by_lead": by("lead"), "by_province": by("province"), "by_target_quarter": by("target_quarter"),
             "awaiting_outcome": awaiting,
             "note": "Computed only from forecasts whose target quarter has an authorized observed outcome (FNRI provincial HFIAS). "

@@ -55,7 +55,7 @@ def _served(quarter: str | None = None) -> tuple[str, list[dict]]:
 
 def _metadata(area: str, period: str, issue: str) -> list[list[str]]:
     return [["Area", area], ["Period", period], ["Date prepared", _today()], ["Prepared for", "DA Region IV-A"],
-            ["Data", f"FINAL forecast issued {_ql(issue)}, using data for periods before "
+            ["Data", f"FINAL forecast issued {PD.issue_label(issue)}, using data for periods before "
                      f"{FR._day(PD.issue_datetime(issue).isoformat())}"
                      + (f" as published by {FR._day(PD.published_by(issue) + 'T00:00:00+08:00')}" if PD.issue_note(issue) else "")],
             ["Model", "FINAL (RATE + MIND): LightGBM, starting from the latest FNRI provincial survey"]]
@@ -65,11 +65,11 @@ def _period_blocks(issue: str) -> list[dict]:
     from app.final import cycle as CY
     st = CY.status()
     items = [f"Now: {_ql(st['current_quarter'])}.",
-             f"Forecast issued: {_ql(issue)}, with data for periods before {FR._day(PD.issue_datetime(issue).isoformat())}"
+             f"Forecast issued: {PD.issue_label(issue)}, with data for periods before {FR._day(PD.issue_datetime(issue).isoformat())}"
              + (f" as published by {FR._day(PD.published_by(issue) + 'T00:00:00+08:00')}." if PD.issue_note(issue) else "."),
              "Quarters forecast: " + ", ".join(f"{_ql(t['quarter'])} ({t['lead']} quarter{'s' if t['lead'] > 1 else ''} ahead)"
                                                for t in PD.targets(issue)) + ".",
-             f"Next forecast: {FR._day(st['next_issue_date'])} (a new forecast is issued automatically every quarter)."]
+             f"Next forecast: {FR._day(st['next_issue_date'])} (a new forecast is issued automatically on the 10th of every month)."]
     if PD.issue_note(issue):
         items.append("About the data: " + PD.issue_note(issue))
     if st.get("stale") and st.get("stale_reason"):

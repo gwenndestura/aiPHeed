@@ -120,7 +120,7 @@ export function AboutModal() {
                 />
                 <Row k="Forecasts further ahead" v="Not shown: from 3 quarters ahead precision and F1 fall below 75%" />
                 <Row k="News" v="Counted inside the input groups; adds about 2 correct provinces of 72 at 1 quarter ahead only" />
-                <Row k="Food-insecurity forecast" v="FINAL (RATE + MIND) LightGBM, issued automatically every quarter; earlier forecasts kept in the forecast history" />
+                <Row k="Food-insecurity forecast" v="FINAL (RATE + MIND) LightGBM, data updated and a new forecast issued automatically on the 10th of every month; earlier forecasts kept in the forecast history" />
               </div>
             ) : (
               <p className="text-[11px] text-muted-foreground">Loading the evaluation…</p>

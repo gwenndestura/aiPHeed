@@ -90,12 +90,12 @@ def _period_block() -> list:
     served = st.get("served_issue_quarter")
     lines = [f"<b>Now:</b> {_ql(st['current_quarter'])}"]
     if served:
-        lines.append(f"<b>Forecast issued:</b> {_ql(served)}, with data for periods before {_day(PD.issue_datetime(served).isoformat())}"
+        lines.append(f"<b>Forecast issued:</b> {PD.issue_label(served)}, with data for periods before {_day(PD.issue_datetime(served).isoformat())}"
                      + (f" as published by {_day(PD.published_by(served) + 'T00:00:00+08:00')}" if PD.issue_note(served) else "")
                      + f"; made {_day(st.get('served_generated_utc'))}")
         lines.append("<b>Quarters forecast:</b> " + ", ".join(f"{_ql(t['quarter'])} ({t['lead']} quarter{'s' if t['lead'] > 1 else ''} ahead)"
                                                            for t in PD.targets(served)))
-    lines.append(f"<b>Next forecast:</b> {_day(st['next_issue_date'])} (a new forecast is issued automatically every quarter)")
+    lines.append(f"<b>Next forecast:</b> {_day(st['next_issue_date'])} (a new forecast is issued automatically on the 10th of every month)")
     flow = [R._callout("Forecast period", "<br/>".join(lines))]
     if served and PD.issue_note(served):
         flow += [Spacer(1, 2 * mm), R._callout("About the data in this forecast", R._escape(PD.issue_note(served)), R.WARN_BG)]
@@ -144,7 +144,7 @@ def _method_block() -> list:
     return [R._p("FINAL (RATE + MIND): one LightGBM model per seed (5 seeds, averaged). It starts from each province's latest FNRI "
                  "survey level and forecasts the change per quarter since that survey. A figure that was not yet published is filled "
                  "with its typical value and flagged as missing. Every input may only push the forecast in its known direction. "
-                 "A new forecast is issued automatically every quarter from data published before the issue date.", "body"),
+                 "A new forecast is issued automatically on the 10th of every month from data published before that day.", "body"),
             Spacer(1, 3 * mm),
             R._data_table(["Quarters ahead", "Accuracy", "Precision", "Recall", "F1", "AUC", "Shown"], rows, [w] * 7,
                           {i: "RIGHT" for i in range(1, 6)}),

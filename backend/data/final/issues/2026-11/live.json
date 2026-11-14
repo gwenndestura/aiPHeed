@@ -1,0 +1,225 @@
+{
+ "model": "final-rate-mind-1.0",
+ "name": "FINAL (RATE + MIND) LightGBM",
+ "created_utc": "2026-11-14T00:19:15+00:00",
+ "issue_quarter": "2026-11",
+ "information_cutoff": "2026-11-10",
+ "target": "HFIAS moderate+severe household food insecurity, HIGH at 50 %",
+ "provinces": [
+  {
+   "province": "Batangas",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 23.2,
+   "range90_pct": [
+    13.3,
+    37.3
+   ],
+   "p_high": 0.0019,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Cavite",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 24.3,
+   "range90_pct": [
+    14.1,
+    38.7
+   ],
+   "p_high": 0.0029,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Laguna",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 23.7,
+   "range90_pct": [
+    13.6,
+    37.9
+   ],
+   "p_high": 0.0022,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Quezon",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 26.8,
+   "range90_pct": [
+    15.7,
+    41.8
+   ],
+   "p_high": 0.0072,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Rizal",
+   "lead": 1,
+   "target_quarter": "2027-Q1",
+   "score_pct": 24.6,
+   "range90_pct": [
+    14.3,
+    39.1
+   ],
+   "p_high": 0.0033,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Batangas",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 23.0,
+   "range90_pct": [
+    13.2,
+    37.0
+   ],
+   "p_high": 0.0017,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Cavite",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 24.1,
+   "range90_pct": [
+    13.9,
+    38.5
+   ],
+   "p_high": 0.0027,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Laguna",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 23.5,
+   "range90_pct": [
+    13.5,
+    37.7
+   ],
+   "p_high": 0.0021,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Quezon",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 26.6,
+   "range90_pct": [
+    15.6,
+    41.6
+   ],
+   "p_high": 0.0068,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  },
+  {
+   "province": "Rizal",
+   "lead": 2,
+   "target_quarter": "2027-Q2",
+   "score_pct": 24.4,
+   "range90_pct": [
+    14.1,
+    38.8
+   ],
+   "p_high": 0.003,
+   "risk_class": "LOW",
+   "value_basis": "FINAL issue 2026-11 (frozen model)"
+  }
+ ],
+ "served_leads": [
+  1,
+  2
+ ],
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  168
+ ],
+ "served_leads_rule": "Leads 1-2: all five primary metrics (accuracy, precision, recall, F1 >= 75%; AUC >= 0.75) pass pooled over the ENNS 2018, 2019 and 2021 walk-forward rounds (owner rule, 2026-11-13). From Lead 3 pooled precision (73.1%) and F1 (74.5%) fall below 75%. No lead passes in every single round (2018 precision 72.7%; 2021 recall 25%).",
+ "statistical_reliability": "Retrospective validation on 72 province-rounds (3 survey rounds); 2021 HIGH recall 1 of 4; not independently validated.",
+ "acceptance_basis": "Leads 1-2: all five primary metrics (accuracy, precision, recall, F1 >= 75%; AUC >= 0.75) pass pooled over the ENNS 2018, 2019 and 2021 walk-forward rounds (owner rule, 2026-11-13). From Lead 3 pooled precision (73.1%) and F1 (74.5%) fall below 75%. No lead passes in every single round (2018 precision 72.7%; 2021 recall 25%).",
+ "issue_label": "10 November 2026",
+ "base_quarter": "2026-Q4",
+ "accuracy_by_lead": {
+  "1": {
+   "accuracy": 0.861,
+   "mean_fold_accuracy": 0.861,
+   "high_recall": 0.8,
+   "low_recall": 0.894,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "2": {
+   "accuracy": 0.847,
+   "mean_fold_accuracy": 0.846,
+   "high_recall": 0.8,
+   "low_recall": 0.872,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "3": {
+   "accuracy": 0.819,
+   "mean_fold_accuracy": 0.819,
+   "high_recall": 0.76,
+   "low_recall": 0.851,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "4": {
+   "accuracy": 0.819,
+   "mean_fold_accuracy": 0.819,
+   "high_recall": 0.8,
+   "low_recall": 0.83,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "5": {
+   "accuracy": 0.792,
+   "mean_fold_accuracy": 0.791,
+   "high_recall": 0.76,
+   "low_recall": 0.809,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "6": {
+   "accuracy": 0.75,
+   "mean_fold_accuracy": 0.747,
+   "high_recall": 0.68,
+   "low_recall": 0.787,
+   "persistence_accuracy": 0.625,
+   "beats_persistence": true
+  },
+  "7": {
+   "accuracy": 0.7,
+   "mean_fold_accuracy": 0.7,
+   "high_recall": 0.706,
+   "low_recall": 0.697,
+   "persistence_accuracy": 0.64,
+   "beats_persistence": true
+  },
+  "8": {
+   "accuracy": 0.74,
+   "mean_fold_accuracy": 0.74,
+   "high_recall": 0.824,
+   "low_recall": 0.697,
+   "persistence_accuracy": 0.64,
+   "beats_persistence": true
+  }
+ },
+ "supersedes": "2026-Q4",
+ "correction_reason": "Temporal data availability correction: the 2026-Q4 forecast (cut-off 1 Nov 2026) used October 2026 CPI (released by PSA on 5 Nov 2026) and September 2026 LFS unemployment (released 6 Nov 2026), published after its cut-off. Replaced by the 10 November 2026 forecast under the monthly rule (data update and forecast on the 10th), built only from figures published before 10 Nov 2026.",
+ "news_window": "2026-08-01 to 2026-10-31"
+}

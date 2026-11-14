@@ -195,7 +195,8 @@ def rebuild_panels() -> dict:
         live = G[G["qi"] == G["qi"].max()].copy()
         live["qi"] = i
         live[["remit_q_yoy", "unemp_region"]] = np.nan     # not carried forward; recomputed below
-    rows = Parallel(n_jobs=8)(delayed(Fe.gov_row)(k.replace(" ", ""), Pn.q_start(i)) for k in live["key"])
+    # 8 workers ran out of memory on the production PC (2026-11-14); AIPHEED_DATA_JOBS overrides
+    rows = Parallel(n_jobs=int(os.getenv("AIPHEED_DATA_JOBS", "2")))(delayed(Fe.gov_row)(k.replace(" ", ""), Pn.q_start(i)) for k in live["key"])
     for c in Fe.GOV:
         live[c] = [r.get(c, np.nan) for r in rows]
     if live["remit_q_yoy"].isna().all() or live["unemp_region"].isna().all():

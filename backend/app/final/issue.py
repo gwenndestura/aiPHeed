@@ -1,7 +1,11 @@
 """
-Build one quarterly ISSUE of the served FINAL forecast from the frozen model (no refit) and write it atomically to
+Build one ISSUE of the served FINAL forecast from the frozen model (no refit) and write it atomically to
 
-    data/final/issues/<issue>/  live.json, dashboard_rows.csv, shap_live_features.csv, shap_live_summary.csv, manifest.json
+    data/final/issues/<issue id>/  live.json, dashboard_rows.csv, shap_live_features.csv, shap_live_summary.csv, inputs.csv,
+                                   news_used.json, manifest.json
+
+Issue ids: "YYYY-MM" (monthly, issued on the 10th; owner rule 2026-11-14) or "YYYY-Qn" (the earlier quarterly rule). inputs.csv
+is the exact inference input rows (every candidate input of the five provinces, per lead), so an issue keeps its own input snapshot.
 
 Inputs are the as-of rows of app.hcw.serve._rows (data published before the issue's information cut-off, built by the data stage).
 Official values are FINAL's own: P(HIGH) = mean over the 5 seeds, forecast share = sigmoid(mean mu), class HIGH when P >= 0.50;
@@ -100,14 +104,14 @@ def predict_issue(issue_label: str, models: list | None = None) -> list[dict]:
         ms = [m for m in models if m.lead == lead]
         if not ms:
             raise IssueError(f"no frozen model for Lead {lead}")
-        tr, te, AN, issue = SV._rows(lead, issue_label)
+        tr, te, AN, issue = SV._rows(lead, PD.base_quarter(issue_label))
         fp = FZ.training_fingerprint(tr)
         if any(m.train_fingerprint != fp for m in ms):
             raise RetrainingRequired(f"Lead {lead}: the training rows changed since the model was frozen (new survey round?); "
                                      f"retrain and re-evaluate before issuing")
         for m in ms:
             q = m.predict(te, np.asarray(AN[m.anchor][1], float))
-            out.append({"lead": lead, "seed": m.seed, "issue": issue, "province": te["province"].tolist(), "anchor_values": np.asarray(AN[m.anchor][1], float),
+            out.append({"lead": lead, "seed": m.seed, "issue": issue, "te_raw": te, "province": te["province"].tolist(), "anchor_values": np.asarray(AN[m.anchor][1], float),
                         "g": m.model._g(q["te"]), "med": m.model.med_, **q})
     return out
 
@@ -122,7 +126,7 @@ def assemble(issue_label: str, R: list[dict], generated_utc: str) -> dict:
     rows, feats, summ, prov = [], [], [], []
     for lead in sorted({r["lead"] for r in R}):
         rs = [r for r in R if r["lead"] == lead]
-        tq = PD.label(PD.quarter_index(issue_label) + lead)
+        tq = PD.label(PD.quarter_index(PD.base_quarter(issue_label)) + lead)
         for k, name in enumerate(rs[0]["province"]):
             p = float(np.mean([r["p"][k] for r in rs]))
             mu = float(np.mean([r["mu"][k] for r in rs]))
@@ -183,15 +187,25 @@ def assemble(issue_label: str, R: list[dict], generated_utc: str) -> dict:
             "issue_quarter": issue_label, "information_cutoff": cutoff, "target": "HFIAS moderate+severe household food insecurity, HIGH at 50 %",
             "provinces": prov, "served_leads": sorted({r["lead"] for r in R}), "seeds": sorted({r["seed"] for r in R}),
             "served_leads_rule": cfg.get("lead_basis", ""), "statistical_reliability": cfg.get("caveat", ""),
-            "acceptance_basis": cfg.get("lead_basis", "")}
+            "acceptance_basis": cfg.get("lead_basis", ""), "issue_label": PD.issue_label(issue_label),
+            "base_quarter": PD.base_quarter(issue_label)}
     from app.final.serving import model_accuracy_by_lead
     live["accuracy_by_lead"] = model_accuracy_by_lead()
-    return {"rows": rows, "features": feats, "summary": summ, "live": live}
+    seen, inputs = set(), []
+    for r in R:                                                    # one copy of each lead's raw input rows (identical across seeds)
+        if r["lead"] in seen or "te_raw" not in r:
+            continue
+        seen.add(r["lead"])
+        X = r["te_raw"].copy()
+        X["served_lead"] = r["lead"]
+        inputs.append(X)
+    return {"rows": rows, "features": feats, "summary": summ, "live": live,
+            "inputs": pd.concat(inputs, ignore_index=True) if inputs else pd.DataFrame()}
 
 
 def validate(issue_label: str, A: dict) -> None:
     R = pd.DataFrame(A["rows"])
-    want = {(p, PD.label(PD.quarter_index(issue_label) + L)) for p in ("Batangas", "Cavite", "Laguna", "Quezon", "Rizal")
+    want = {(p, PD.label(PD.quarter_index(PD.base_quarter(issue_label)) + L)) for p in ("Batangas", "Cavite", "Laguna", "Quezon", "Rizal")
             for L in range(1, PD.max_lead() + 1)}
     got = set(zip(R.province, R.quarter))
     if got != want:
@@ -217,12 +231,17 @@ def write_issue(issue_label: str, A: dict, data_ver: dict, model_sha: str, root:
     pd.DataFrame(A["features"]).to_csv(tmp / "shap_live_features.csv", index=False, lineterminator="\n")
     pd.DataFrame(A["summary"]).to_csv(tmp / "shap_live_summary.csv", index=False, lineterminator="\n")
     (tmp / "live.json").write_text(json.dumps(A["live"], indent=1), encoding="utf-8", newline="\n")
-    try:   # the stories this issue read (3 months before its cut-off: provinces, region, Balance Luzon, national) for the news panel
-        from app.e168 import news_used as NU
-        doc = NU.build(A["live"]["information_cutoff"])
-        (tmp / "news_used.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
-    except Exception:                                            # the forecast does not depend on the list; the panel falls back
-        pass
+    if isinstance(A.get("inputs"), pd.DataFrame) and not A["inputs"].empty:
+        A["inputs"].to_csv(tmp / "inputs.csv", index=False, lineterminator="\n")
+    if A.get("news_used") is not None:                           # the caller states the exact stories the news inputs read
+        (tmp / "news_used.json").write_text(json.dumps(A["news_used"], indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
+    else:
+        try:   # the stories this issue read (3 months before its cut-off: provinces, region, Balance Luzon, national) for the news panel
+            from app.e168 import news_used as NU
+            doc = NU.build(A["live"]["information_cutoff"])
+            (tmp / "news_used.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
+        except Exception:                                        # the forecast does not depend on the list; the panel falls back
+            pass
     files = {f.name: sha256(f) for f in sorted(tmp.iterdir())}
     man = {"issue_quarter": issue_label, "information_cutoff": A["live"]["information_cutoff"], "generated_utc": A["live"]["created_utc"],
            "model_id": A["live"]["model"], "model_sha256": model_sha, "data_version": data_ver, "files": files}
@@ -260,7 +279,9 @@ def check_information_rule(issue_label: str) -> None:
                          "only figures online before the cut-off may be used (unset AIPHEED_LIVE_PUBLISHED)")
 
 
-def build(issue_label: str, now_utc: str | None = None) -> Path:
+def build(issue_label: str, now_utc: str | None = None, *, news_used: dict | None = None, live_extra: dict | None = None) -> Path:
+    """`news_used` states the stories the news inputs read when they were not rebuilt for this cut-off; `live_extra` adds
+    provenance fields to live.json (e.g. which issue this one supersedes)."""
     if not MODEL.exists():
         raise IssueError("no frozen model (python -m app.final.issue freeze)")
     gen = now_utc or datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -268,6 +289,8 @@ def build(issue_label: str, now_utc: str | None = None) -> Path:
     R = predict_issue(issue_label)
     A = assemble(issue_label, R, gen)
     validate(issue_label, A)
+    A["live"].update(live_extra or {})
+    A["news_used"] = news_used
     return write_issue(issue_label, A, data_version(), sha256(MODEL))
 
 

@@ -114,7 +114,7 @@ def test_cycle_status_reports_staleness_and_generation(env):
     env["run"]("2026-12-01T07:00")
     st = CY.status("2027-02-03T10:00", ledger=env["led"], runs=env["runs"])
     assert st["issue_quarter"] == "2027-Q1" and st["served_issue_quarter"] == "2026-Q4" and st["stale"]
-    assert "2026-Q4" in st["stale_reason"] and st["served_generated_utc"]
+    assert "Q4 2026" in st["stale_reason"] and st["served_generated_utc"]
 
 
 def test_failed_run_keeps_the_last_valid_issue(env):
@@ -266,11 +266,36 @@ def test_database_mirror_inserts_once_and_never_overwrites(env, tmp_path):
     first = DB.sync(url, env["led"], env["runs"], tmp_path / "none.jsonl")
     assert first["forecasts"] == 10 and first["runs"] == 1
     again = DB.sync(url, env["led"], env["runs"], tmp_path / "none.jsonl")
-    assert again == {"forecasts": 0, "outcomes": 0, "runs": 0, "sources": 0}
+    assert again == {"forecasts": 0, "outcomes": 0, "supersessions": 0, "runs": 0, "sources": 0}
     env["run"]("2027-02-01T07:00")
     DB.sync(url, env["led"], env["runs"], tmp_path / "none.jsonl")
     with create_engine(f"sqlite:///{db.as_posix()}").connect() as c:
         assert c.execute(text("SELECT COUNT(*), COUNT(DISTINCT issue_quarter) FROM final_forecast_history")).one() == (20, 2)
+
+
+def test_database_mirror_carries_the_supersession(tmp_path):
+    """The real ledger (2026-Q4 superseded by 2026-11): the database keeps all 20 forecasts and one supersession row, so the
+    active forecasts are the ones whose issue has no supersession."""
+    import os
+    import subprocess
+    import sys
+
+    from sqlalchemy import create_engine, text
+    from app.final import dbsync as DB
+    db = tmp_path / "m.db"
+    url = f"sqlite+aiosqlite:///{db.as_posix()}"
+    root = Path(__file__).resolve().parents[2]
+    r = subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=root, env={**os.environ, "DATABASE_URL": url},
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    n = DB.sync(url, None, tmp_path / "runs.jsonl", tmp_path / "none.jsonl")
+    assert n["forecasts"] == 20 and n["supersessions"] == 1
+    with create_engine(f"sqlite:///{db.as_posix()}").connect() as c:
+        assert c.execute(text("SELECT issue_quarter, superseded_by FROM final_forecast_supersessions")).all() == [("2026-Q4", "2026-11")]
+        active = c.execute(text("SELECT COUNT(*) FROM final_forecast_history h WHERE NOT EXISTS (SELECT 1 FROM final_forecast_supersessions s "
+                                "WHERE s.model_id = h.model_id AND s.issue_quarter = h.issue_quarter)")).scalar()
+        assert active == 10
+    assert DB.sync(url, None, tmp_path / "runs.jsonl", tmp_path / "none.jsonl")["supersessions"] == 0
 
 
 # ------------------------------------------------------------------ Poverty and Vulnerability on the explanation cards
@@ -440,3 +465,154 @@ def test_harvest_period_shown_is_the_one_the_inputs_used():
     assert SVG.activate(SVG.ROOT / "issues" / "2026-Q4")["active"]
     it = next(i for i in HS.data_used()["items"] if i["name"] == "Rice and corn harvest")
     assert it["when"] == "Jul 2025–Jun 2026" and it["period"].startswith("Q3 2025 to Q2 2026")
+
+
+# ---------------------------------------------------------------- Q4 2026 temporal-validity correction (2026-11-14)
+MONTHLY = {**PD.serving(), "max_lead": 2, "validated_max_lead": 2, "issue_rule": {"cadence": "monthly", "day": 10}}
+
+
+@pytest.mark.parametrize("now,issue,base,targets,nxt", [
+    ("2026-11-09T23:59", "2026-10", "2026-Q4", ["2027-Q1", "2027-Q2"], "2026-11-10"),   # before the 10th: last month's issue
+    ("2026-11-10T00:00", "2026-11", "2026-Q4", ["2027-Q1", "2027-Q2"], "2026-12-10"),   # the 10th at 00:00 PHT
+    ("2026-12-31T23:59", "2026-12", "2026-Q4", ["2027-Q1", "2027-Q2"], "2027-01-10"),
+    ("2027-01-09T23:00", "2026-12", "2026-Q4", ["2027-Q1", "2027-Q2"], "2027-01-10"),   # across the year, before the 10th
+    ("2027-01-10T08:00", "2027-01", "2027-Q1", ["2027-Q2", "2027-Q3"], "2027-02-10"),   # Q4 -> Q1: leads count from Q1
+    ("2027-04-10T00:00", "2027-04", "2027-Q2", ["2027-Q3", "2027-Q4"], "2027-05-10"),   # Q1 -> Q2
+    ("2027-07-10T00:00", "2027-07", "2027-Q3", ["2027-Q4", "2028-Q1"], "2027-08-10"),   # Q2 -> Q3, targets cross the year
+    ("2027-10-10T00:00", "2027-10", "2027-Q4", ["2028-Q1", "2028-Q2"], "2027-11-10"),   # Q3 -> Q4
+])
+def test_monthly_issue_on_the_10th(now, issue, base, targets, nxt):
+    p = PD.period(now, MONTHLY)
+    assert (p["issue_quarter"], p["base_quarter"], p["forecast_quarters"], p["next_issue_date"][:10]) == (issue, base, targets, nxt)
+    assert p["information_cutoff"].startswith(f"{issue}-10T00:00:00+08:00") and p["cadence"] == "monthly"
+
+
+def test_legacy_quarterly_ids_keep_their_own_rule():
+    assert PD.issue_datetime("2026-Q4", MONTHLY).isoformat() == "2026-11-01T00:00:00+08:00"
+    assert PD.base_quarter("2026-11", MONTHLY) == "2026-Q4" and PD.issue_label("2026-11", MONTHLY) == "10 November 2026"
+    assert PD.issue_label("2026-Q4", MONTHLY) == "Q4 2026"
+
+
+def test_publication_date_eligibility(monkeypatch):
+    """Verified PSA releases: Oct 2026 CPI on 5 Nov, Sep 2026 LFS on 6 Nov (both first downloaded 8 Nov). Ineligible at the
+    1 Nov cut-off; eligible at 10 Nov. A month that has not ended is never eligible."""
+    import pandas as pd
+    from app.e168 import live_data as LD
+    end = lambda p: pd.Timestamp(p + "-01") + pd.offsets.MonthEnd(0)
+    monkeypatch.delenv("AIPHEED_LIVE_PUBLISHED", raising=False)
+    monkeypatch.setenv("AIPHEED_LIVE_ASOF", "2026-11-01")                 # strict at the original cut-off
+    assert not LD.usable("cpi", "2026-10", end("2026-10"), pd.Timestamp("2026-11-01"))
+    assert not LD.usable("lfs", "2026-09", end("2026-09"), pd.Timestamp("2026-11-01"))
+    monkeypatch.setenv("AIPHEED_LIVE_ASOF", "2026-11-10")                 # strict at the corrected cut-off
+    assert LD.usable("cpi", "2026-10", end("2026-10"), pd.Timestamp("2026-11-10"))
+    assert LD.usable("lfs", "2026-09", end("2026-09"), pd.Timestamp("2026-11-10"))
+    assert not LD.usable("cpi", "2026-11", end("2026-11"), pd.Timestamp("2026-11-10"))
+
+
+def test_original_issue_preserved_and_superseded():
+    import hashlib
+    import json
+
+    import pandas as pd
+    from app.final import issue as IS
+    d = IS.ISSUES / "2026-Q4"
+    man = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+    for f, h in man["files"].items():                                     # every original issue file unchanged
+        assert hashlib.sha256((d / f).read_bytes()).hexdigest() == h, f
+    assert man["information_cutoff"] == "2026-11-01" and man["generated_utc"] == "2026-11-13T15:20:58+00:00"
+    snap = IS.ROOT / "corrections" / "2026-Q4"
+    for f, h in man["data_version"]["files"].items():                     # the original input files, hash-checked
+        assert hashlib.sha256((snap / "original_input_files" / f.replace("/", "__")).read_bytes()).hexdigest() == h
+    X = pd.read_csv(snap / "original_inputs.csv")
+    assert len(X) == 10 and abs(X.loc[X.province == "Batangas", "cpi_food_yoy"].iloc[0] - 2.037736) < 1e-6
+    old = [r for r in HI.with_outcomes("final-rate-mind-1.0") if r["issue_quarter"] == "2026-Q4"]
+    assert len(old) == 10 and all(r["record_status"] == "superseded" and r["superseded_by"] == "2026-11" for r in old)
+    rows = pd.read_csv(d / "dashboard_rows.csv")
+    assert sorted(r["share_pct"] for r in old) == sorted(rows["score_pct"])  # original values, untouched
+    assert HI.verify()["ok"]
+
+
+def test_corrected_issue_uses_only_eligible_data_and_the_approved_model():
+    import json
+
+    import pandas as pd
+    from app.final import issue as IS
+    d = IS.ISSUES / "2026-11"
+    man = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+    assert man["information_cutoff"] == "2026-11-10" and man["model_sha256"] == IS.sha256(IS.MODEL)
+    live = json.loads((d / "live.json").read_text(encoding="utf-8"))
+    assert live["supersedes"] == "2026-Q4" and live["base_quarter"] == "2026-Q4"
+    o = pd.read_csv(IS.ISSUES / "2026-Q4" / "shap_live_features.csv")
+    c = pd.read_csv(d / "shap_live_features.csv")
+    assert sorted(o.feature.unique()) == sorted(c.feature.unique())      # same approved input schema (23 inputs)
+    R = pd.read_csv(d / "dashboard_rows.csv")
+    assert sorted(set(R.quarter)) == ["2027-Q1", "2027-Q2"] and len(R) == 10
+    news = json.loads((d / "news_used.json").read_text(encoding="utf-8"))
+    assert news["to"] < "2026-11-10" and "not collected" in news["note"]  # no story after the cut-off; the gap is stated
+
+
+def test_no_duplicate_active_forecasts_and_history_order():
+    from app.api.v1 import final_realtime as FRT
+    m = "final-rate-mind-1.0"
+    led = HI.with_outcomes(m)
+    active = [(r["target_quarter"], r["province"]) for r in led if r["record_status"] == "active"]
+    assert len(active) == len(set(active)) == 10                          # one active forecast per province and target quarter
+    assert HI.latest_issue(m) == "2026-11" and HI.issues(m) == ["2026-Q4", "2026-11"]
+    h = FRT.forecast_history(province=None, issue=None, target=None)
+    assert h["served_issue_quarter"] == "2026-11" and h["issues_newest_first"][0] == "2026-11"
+    assert [f["issue_quarter"] for f in h["forecasts"]][:10] == ["2026-11"] * 10    # newest issue first (by date, not text)
+    assert {f["issue_status"] for f in h["forecasts"] if f["issue_quarter"] == "2026-Q4"} == {"superseded"}
+    assert h["superseded"]["2026-Q4"]["superseded_by"] == "2026-11"
+    with pytest.raises(HI.HistoryError):                                  # an issue is superseded once, never re-pointed
+        HI.record_supersession(m, "2026-Q4", "2026-Q4", "x", "y", "z")
+
+
+def test_supersession_rules(tmp_path):
+    led = tmp_path / "l.jsonl"
+    base = {"model_id": "m", "model_version": "v", "information_cutoff": "c", "lead": 1, "province": "Quezon", "province_code": "x",
+            "p_high": 0.1, "risk_class": "LOW", "share_pct": 20.0, "range90_pct": [10, 30], "generated_utc": "g", "data_version": "d",
+            "issue_dir": "i", "target_quarter": "2027-Q1"}
+    HI.record_issue([{**base, "issue_quarter": "2026-Q4"}], led)
+    with pytest.raises(HI.HistoryError, match="not recorded yet"):
+        HI.record_supersession("m", "2026-Q4", "2026-11", "r", "b", "e", led)
+    HI.record_issue([{**base, "issue_quarter": "2026-11", "share_pct": 21.0}], led)
+    with pytest.raises(HI.HistoryError, match="reason"):
+        HI.record_supersession("m", "2026-Q4", "2026-11", "", "b", "e", led)
+    assert HI.record_supersession("m", "2026-Q4", "2026-11", "r", "b", "e", led)["appended"] == 1
+    assert HI.record_supersession("m", "2026-Q4", "2026-11", "r", "b", "e", led)["already_recorded"] == 1
+    assert HI.latest_issue("m", led) == "2026-11" and HI.active_issues("m", led) == ["2026-11"]
+    assert HI.evaluation("m", led)["awaiting_outcome"] == 1                # the superseded forecast is not counted
+    assert HI.verify(led)["ok"]
+
+
+def test_served_api_is_the_corrected_issue():
+    from app.final import serving as SVG
+    from app.hcw import serve as SV
+    assert SVG.activate(SVG.served_issue_dir())["active"] and SVG.current_issue() == "2026-11"
+    o = SV.outlook()
+    assert o["issue_quarter"] == "2026-11" and o["data_published_by"] == "2026-11-10" and not o.get("issue_note")
+    assert "data published before 2026-11-10" in o["information_cutoff"]
+    used = {i.get("label"): i.get("when") for i in o["data_used"]}
+    assert used["News"] == "Aug–Oct 2026"                                # the news window the inputs read, not cut-off minus 3 months
+    assert used["Food prices"] == "Oct 2026" and used["Unemployment"] == "Sep 2026"   # released 5 and 6 Nov: before 10 Nov
+
+
+def test_corrected_forecast_regenerates_exactly(monkeypatch):
+    """Also guards: an issue can be built while the dashboard is serving (serve.OUT points at the served issue folder)."""
+    from app.final import serving as SVG
+    assert SVG.activate(SVG.served_issue_dir())["active"]
+    """Corrected forecast generation: the frozen FINAL model on the panels rebuilt at the 10 Nov 2026 cut-off reproduces the
+    stored 2026-11 issue (shares and P(HIGH))."""
+    import json
+
+    import pandas as pd
+    from app.final import issue as IS
+    monkeypatch.setenv("AIPHEED_LIVE_ASOF", "2026-11-10")                 # the issue's own cut-off (cycle tests leave another one set)
+    monkeypatch.delenv("AIPHEED_LIVE_PUBLISHED", raising=False)
+    d = IS.ISSUES / "2026-11"
+    man = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+    for f, h in man["data_version"]["files"].items():                     # the panels are the ones the issue was built from
+        assert IS.sha256(IS.D / f) == h, f
+    A = IS.assemble("2026-11", IS.predict_issue("2026-11"), man["generated_utc"])
+    m = pd.read_csv(d / "dashboard_rows.csv").merge(pd.DataFrame(A["rows"]), on=["province", "quarter"], suffixes=("", "_re"))
+    assert len(m) == 10 and (m.score_pct - m.score_pct_re).abs().max() == 0 and (m.probability - m.probability_re).abs().max() == 0

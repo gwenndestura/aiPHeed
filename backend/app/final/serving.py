@@ -63,7 +63,7 @@ def issue_facts(issue_dir: Path) -> dict:
     from app.e154 import model as E154
     man = json.loads((issue_dir / "manifest.json").read_text(encoding="utf-8"))
     issue = man["issue_quarter"]
-    i = PD.quarter_index(issue)
+    i = PD.quarter_index(PD.base_quarter(issue))                          # leads and quarterly data periods count from this quarter
     qs = pd.Timestamp(year=i // 4, month=3 * (i % 4) + 1, day=1)
     end = qs - pd.DateOffset(months=3)                                     # local prices: 3 months ending 3 months before the quarter start
     rounds = [y for y in (2006, 2009, 2012, 2015, 2018, 2021, 2023, 2025, 2027, 2029) if pd.Timestamp(year=y + 2, month=1, day=1) <= pd.Timestamp(man["information_cutoff"])]
@@ -244,6 +244,14 @@ def _install(HS, SV) -> None:
                 it["when"], it["period"] = str(F["grdp_year"]), f"{F['grdp_year']} (latest year published by the issue date)"
             elif it.get("name") == "Rice and corn harvest":
                 it["when"], it["period"] = _harvest_window(F["cutoff"])
+        # news: the window the issue's news inputs actually read (an issue that reused earlier news inputs records it)
+        win = json.loads(SV.LIVE.read_text(encoding="utf-8")).get("news_window") if SV.LIVE.exists() else None
+        if win:
+            a, b = (pd.Timestamp(x) for x in win.split(" to "))
+            for it in items:
+                if it.get("label") == "News" or str(it.get("name", "")).startswith("News"):
+                    it["when"] = _months(a, b)
+                    it["period"] = f"{a:%d %B %Y} to {b:%d %B %Y}".replace(" 0", " ").lstrip("0")
         return {**d, "items": items}
 
     def _harvest_window(cutoff):

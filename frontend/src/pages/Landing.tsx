@@ -109,7 +109,7 @@ function Hero() {
           </h1>
           <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.8vw,1.3rem)] leading-relaxed" style={{ color: HERO_MUTED }}>
             A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one and two
-            quarters ahead, using the FINAL (RATE + MIND) LightGBM model, updated automatically every quarter.
+            quarters ahead, using the FINAL (RATE + MIND) LightGBM model, updated automatically on the 10th of every month.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -229,7 +229,7 @@ const STEPS = [
 const NOTES = [
   {
     t: "Forecast lead",
-    d: "A new forecast is issued automatically every quarter, on the first day of its second month (1 February, 1 May, 1 August, 1 November), from information published before that day. It looks one and two quarters ahead. Only these two are shown because all five accuracy measures reach 75% there; from three quarters ahead they do not. Earlier forecasts stay in the forecast history. See \"How accurate it is\".",
+    d: "The data are updated and a new forecast is issued automatically on the 10th of every month, from information published before that day. It looks one and two quarters ahead of the quarter it is made in. Only these two are shown because all five accuracy measures reach 75% there; from three quarters ahead they do not. Earlier forecasts stay in the forecast history. See \"How accurate it is\".",
   },
   {
     t: "Missing data",
@@ -493,7 +493,7 @@ const FAQS = [
   },
   {
     q: "How far ahead does it forecast?",
-    a: "One and two quarters ahead. A new forecast is issued every quarter, on the first day of its second month, from information published before that day. Only these two are shown because all five accuracy measures reach 75% there; from three quarters ahead they do not.",
+    a: "One and two quarters ahead. A new forecast is issued on the 10th of every month, from information published before that day. Only these two are shown because all five accuracy measures reach 75% there; from three quarters ahead they do not.",
   },
   {
     q: "How accurate is it?",
@@ -513,7 +513,7 @@ const FAQS = [
   },
   {
     q: "How often is it updated?",
-    a: "Automatically every quarter, on the first day of its second month; the data sources are checked daily. Earlier forecasts are kept in the forecast history. Every estimate is shown publicly unless an authorized administrator rejects it; a rejected province-quarter is withheld and shown as withheld.",
+    a: "Automatically on the 10th of every month, when the data are updated. Earlier forecasts are kept in the forecast history. Every estimate is shown publicly unless an authorized administrator rejects it; a rejected province-quarter is withheld and shown as withheld.",
   },
   {
     q: "Where can I get official food-security information?",
@@ -609,7 +609,7 @@ function Footer() {
             <img src={logoDark} alt="aiPHeed" className="dark-only mb-4 h-11 w-auto object-contain" />
             <img src={logoLight} alt="aiPHeed" className="light-only mb-4 h-11 w-auto object-contain" />
             <p className="text-[14px] leading-[1.8] text-ink-secondary">
-              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces with the FINAL (RATE + MIND) model, updated automatically every quarter:
+              aiPHeed forecasts food-insecurity risk for the five CALABARZON provinces with the FINAL (RATE + MIND) model, updated automatically on the 10th of every month:
               a LightGBM forecast of the change from each province's latest FNRI survey level. It is not an official
               statistic.
             </p>

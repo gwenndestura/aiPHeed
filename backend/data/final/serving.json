@@ -6,8 +6,8 @@
  "lead_basis": "Leads 1-2: all five primary metrics (accuracy, precision, recall, F1 >= 75%; AUC >= 0.75) pass pooled over the ENNS 2018, 2019 and 2021 walk-forward rounds (owner rule, 2026-11-13). From Lead 3 pooled precision (73.1%) and F1 (74.5%) fall below 75%. No lead passes in every single round (2018 precision 72.7%; 2021 recall 25%).",
  "lead_evidence": "research_notes/aiPHeed_final_inputs_20261113/evidence/INPUTS_metrics.csv; research_notes/aiPHeed_final_official_20261113/12_PASS_FAIL_ASSESSMENT.md",
  "issue_rule": {
-  "month_of_quarter": 2,
-  "day": 1
+  "cadence": "monthly",
+  "day": 10
  },
  "seeds": [
   168,
@@ -22,8 +22,10 @@
  "issue_notes": {
   "2026-Q4": {
    "published_by": "2026-11-08",
-   "note": "This forecast used figures for periods ending before 1 November 2026 as published by 8 November 2026: October 2026 consumer prices (PSA CPI) and September 2026 unemployment (PSA LFS) were released after 1 November. Later forecasts use only figures published before their issue date. Removing these inputs entirely would move each province's forecast by at most about 2 points; every province stays Low risk.",
-   "evidence": "FULL_SYSTEM_AUDIT_REPORT.md (finding C1); research_notes/audit_20261114/trace_results.json"
+   "note": "Superseded. This forecast (cut-off 1 November 2026) used October 2026 consumer prices (PSA CPI, released 5 November) and September 2026 unemployment (PSA LFS, released 6 November), published after its cut-off. It is kept unchanged in the history and replaced by the forecast issued 10 November 2026, which uses only figures published before that day.",
+   "evidence": "Q4_2026_FORECAST_CORRECTION_REPORT.md; data/final/corrections/2026-Q4/"
   }
- }
+ },
+ "issue_rule_basis": "Owner instruction 2026-11-14: the data used for the forecast are updated, and a new forecast issued, on the 10th of every month at 00:00 Philippine time, from figures published before that moment. Until 2026-11-14 the rule was quarterly (1st of each quarter's second month); the 2026-Q4 issue (cut-off 1 Nov 2026) was made under it.",
+ "cadence_caveat": "FINAL's walk-forward validation issued each forecast on the 1st of the quarter's second month. Monthly forecasts issued on other dates use the same model and lead definition (target = the issue date's quarter + lead) but slightly more or less information; they have not been validated separately."
 }

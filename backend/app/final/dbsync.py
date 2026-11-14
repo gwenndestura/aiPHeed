@@ -28,9 +28,10 @@ def sync(url: str | None = None, ledger: Path | None = None, runs: Path | None =
         from app.config import settings
         url = settings.DATABASE_URL
     eng = create_engine(_sync_url(url))
-    n = {"forecasts": 0, "outcomes": 0, "runs": 0, "sources": 0}
+    n = {"forecasts": 0, "outcomes": 0, "supersessions": 0, "runs": 0, "sources": 0}
     with eng.begin() as c:
-        have = {r[0] for r in c.execute(text("SELECT ledger_hash FROM final_forecast_history UNION SELECT ledger_hash FROM final_forecast_outcomes"))}
+        have = {r[0] for r in c.execute(text("SELECT ledger_hash FROM final_forecast_history UNION SELECT ledger_hash FROM final_forecast_outcomes "
+                                             "UNION SELECT ledger_hash FROM final_forecast_supersessions"))}
         for r in HI.read(ledger):
             if r["hash"] in have:
                 continue
@@ -48,6 +49,12 @@ def sync(url: str | None = None, ledger: Path | None = None, runs: Path | None =
                     "source_sha256, authorized_by, recorded_utc) VALUES (:h, :province, :reference_quarter, :observed_share_pct, :observed_class, "
                     ":source, :source_sha256, :authorized_by, :recorded_utc)"), {**r, "h": r["hash"]})
                 n["outcomes"] += 1
+            elif r.get("type") == "superseded":                  # a corrected re-issue replaced this issue (forecasts stay as they were)
+                c.execute(text(
+                    "INSERT INTO final_forecast_supersessions (ledger_hash, model_id, issue_quarter, superseded_by, reason, decided_by, "
+                    "evidence, recorded_utc) VALUES (:h, :model_id, :issue_quarter, :superseded_by, :reason, :by, :evidence, :recorded_utc)"),
+                    {**r, "h": r["hash"]})
+                n["supersessions"] += 1
         have_runs = {r[0] for r in c.execute(text("SELECT run_id FROM final_forecast_runs"))}
         for r in CY.runs_log(runs or CY.RUNS):
             if r.get("run_id") in have_runs or "run_id" not in r:

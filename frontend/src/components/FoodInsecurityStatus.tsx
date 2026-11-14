@@ -18,7 +18,7 @@ export function ForecastPeriodLines() {
     <div className="space-y-0.5 text-[10px] leading-snug text-muted-foreground" data-testid="forecast-period">
       <p>
         <span className="font-semibold text-foreground">Now: {qLabel(p.current_quarter)}</span>
-        {p.served_issue_quarter && <> · forecast issued {qLabel(p.served_issue_quarter)}{p.served_generated_utc ? `, made ${day(p.served_generated_utc)}` : ""}</>}
+        {p.served_issue_quarter && <> · forecast issued {p.served_issue_label ?? qLabel(p.served_issue_quarter)}{p.served_generated_utc ? `, made ${day(p.served_generated_utc)}` : ""}</>}
       </p>
       {p.stale && p.stale_reason && (
         <p className="text-foreground" data-testid="forecast-period-stale">{p.stale_reason}.</p>
@@ -74,8 +74,9 @@ export function FoodInsecurityStatusCardBody() {
   // An approved model exists: say in plain words what it is and how often it was right in past tests.
   const acc = data.accuracy_by_lead?.["1"]?.accuracy;
   const approved = data.production?.approved_utc?.slice(0, 10);
+  // the publication cut-off (the newest period of each source is listed below); a month name here read as "data for November"
   const through = data.data_through
-    ? new Date(`${data.data_through}T00:00:00`).toLocaleDateString("en-PH", { month: "long", year: "numeric" })
+    ? new Date(`${data.data_through}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : null;
   return (
     <div className="space-y-2" data-testid="fi-status-approved">
@@ -86,7 +87,7 @@ export function FoodInsecurityStatusCardBody() {
       </p>
       {through && (
         <p className="text-[10px] leading-snug text-muted-foreground" data-testid="fi-status-cutoff">
-          <span className="font-semibold text-foreground">Data up to {through}</span> · all quarters of this forecast use the same data
+          <span className="font-semibold text-foreground">Data published up to {through}</span> · all quarters of this forecast use the same data
         </p>
       )}
       {data.data_used && data.data_used.length > 0 && (

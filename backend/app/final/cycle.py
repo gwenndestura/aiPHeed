@@ -2,7 +2,8 @@
 The automatic forecasting cycle of the served model. Safe to run as often as you like (daily by the scheduler): it does nothing
 unless something is due.
 
-    1  period     the Philippine quarter now and the issue that should be served (app.final.period)
+    1  period     the Philippine date now and the issue that should be served (app.final.period): monthly, issued on the 10th
+                  at 00:00 PHT from data published before that moment (owner rule 2026-11-14)
     2  lock       one run at a time (lock file; a lock older than 6 hours is treated as abandoned)
     3  sources    fetch the official sources that are due (app.final.sources); failures keep the previous data
     4  issue      only when the current issue is not yet in the history:
@@ -13,7 +14,7 @@ unless something is due.
        A new survey round (training rows changed) stops the issue with status "retraining required"; the last valid issue stays.
     5  log        data/final/runs.jsonl (every run, its stages, status and error)
 
-    python -m app.final.cycle run [--now 2027-02-01T08:00] [--skip-data] [--skip-sources]
+    python -m app.final.cycle run [--now 2026-12-10T08:00] [--skip-data] [--skip-sources]
     python -m app.final.cycle status
 """
 from __future__ import annotations
@@ -153,8 +154,10 @@ def status(now=None, ledger: Path | None = None, runs: Path = RUNS) -> dict:
         g = [r["generated_utc"] for r in HI.forecasts(ledger) if r["model_id"] == model and r["issue_quarter"] == served]
         gen = max(g) if g else None
     stale = served != per["issue_quarter"]
-    return {**per, "served_issue_quarter": served, "served_generated_utc": gen, "stale": stale,
-            "stale_reason": (f"the {per['issue_quarter']} issue has not been generated yet; the {served} issue (generated {gen}) is shown"
+    return {**per, "served_issue_quarter": served, "served_issue_label": PD.issue_label(served) if served else None,
+            "served_generated_utc": gen, "stale": stale,
+            "stale_reason": (f"the forecast due {per['issue_label']} has not been generated yet; the forecast issued "
+                             f"{PD.issue_label(served)} (generated {gen}) is shown"
                              if stale and served else ("no forecast has been issued yet" if stale else None)),
             "last_run": {k: last.get(k) for k in ("run_id", "started_utc", "status", "error", "issue_quarter")} if last else None,
             "last_successful_run_utc": last_ok["finished_utc"] if last_ok else None,

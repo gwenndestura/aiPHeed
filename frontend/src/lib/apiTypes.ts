@@ -884,6 +884,9 @@ export interface ForecastPeriod {
   max_lead: number;
   targets: ForecastPeriodTarget[];
   served_issue_quarter: string | null;
+  /** Plain label of the served issue: "10 November 2026" (monthly) or "Q4 2026" (the earlier quarterly rule). */
+  served_issue_label?: string | null;
+  cadence?: "monthly" | "quarterly";
   served_generated_utc: string | null;
   served_targets: ForecastPeriodTarget[];
   stale: boolean;
@@ -909,12 +912,18 @@ export interface HistoryForecast {
   generated_utc: string;
   data_version: string;
   withdrawn: boolean;
+  /** "active", "superseded" (replaced by a corrected re-issue; kept unchanged) or "withdrawn". */
+  record_status?: "active" | "superseded" | "withdrawn";
+  superseded_by?: string | null;
+  /** Plain issue label ("10 November 2026" for a monthly issue, "Q4 2026" for the earlier quarterly one) and its issue moment. */
+  issue_label?: string;
+  issue_date?: string;
   validation_status: "validated" | "awaiting outcome";
   observed_share_pct: number | null;
   observed_class: "HIGH" | "LOW" | null;
   correct: boolean | null;
   error_pp: number | null;
-  issue_status: "current issue" | "historical";
+  issue_status: "current issue" | "historical" | "superseded";
   target_status: "past" | "current" | "future";
 }
 export interface ForecastHistory {
@@ -926,4 +935,6 @@ export interface ForecastHistory {
   ledger: { ok: boolean; records?: number; reason?: string };
   /** Recorded disclosures per issue quarter, e.g. figures published after its cut-off. */
   issue_notes?: Record<string, { note: string; published_by: string }>;
+  /** Issues replaced by a corrected re-issue: what replaced them and why. */
+  superseded?: Record<string, { superseded_by: string; superseded_by_label: string; reason: string; by: string; evidence: string; recorded_utc: string }>;
 }

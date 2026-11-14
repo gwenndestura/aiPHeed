@@ -76,7 +76,7 @@ describe("Landing page", () => {
     );
     const sub = within(card).getByText(/^A geospatial system/);
     expect(sub.textContent).toBe(
-      "A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one and two quarters ahead, using the FINAL (RATE + MIND) LightGBM model, updated automatically every quarter.",
+      "A geospatial system that forecasts food-insecurity risk in the five CALABARZON provinces one and two quarters ahead, using the FINAL (RATE + MIND) LightGBM model, updated automatically on the 10th of every month.",
     );
     expect(sub.className).not.toContain("italic");
     expect(within(card).getByRole("link", { name: /Explore the map/ }).getAttribute("href")).toBe("/dashboard");
@@ -149,10 +149,11 @@ describe("Landing page", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/Lead-2|\(Lead 2\)|experimental|local preview/i);
-    expect(text).toContain("A new forecast is issued automatically every quarter, on the first day of its second month");
+    expect(text).toContain("a new forecast is issued automatically on the 10th of every month");
     expect(text).not.toContain("1 November 2026");                       // no issue date frozen into the page
     fireEvent.click(screen.getByRole("button", { name: "How far ahead does it forecast?" }));
-    expect(screen.getByText(/^One and two quarters ahead\. A new forecast is issued every quarter/)).toBeTruthy();
+    expect(screen.getByText(/^One and two quarters ahead\. A new forecast is issued on the 10th of every month/)).toBeTruthy();
+    expect(text).not.toContain("10 November 2026");                      // no issue date frozen into the page
   });
 
   it("has no research email and no [CONFIRM] placeholder", () => {

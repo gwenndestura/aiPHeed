@@ -28,6 +28,7 @@ from app.paths import BACKEND_DIR
 warnings.filterwarnings("ignore")
 D = BACKEND_DIR / "data"
 OUT = D / "hcw" / "out"
+CAND_PANEL = D / "hcw" / "out" / "cand_panel.parquet"   # an INPUT panel: fixed path (app.final.serving re-points OUT to the served issue)
 LIVE = OUT / "live.json"
 ROWS = OUT / "dashboard_rows.csv"
 VALID = OUT / "validation_lead_metrics.csv"        # copied from research_notes/aiPHeed_complete_validation/evidence/model_lead_metrics.csv
@@ -64,7 +65,7 @@ def _rows(lead: int, issue_label: str):
     te = N.add_sources(Pv.add_inputs(S, M.rows_for(S, five, [lead], "F")), L, Hn, S_P).reset_index(drop=True)
     tr = N.add_sources(Pv.add_inputs(S, P.tr), L, Hn, S_P).reset_index(drop=True)
     AN = A4.anchors(S, P, tr, te)
-    cp = pd.read_parquet(OUT / "cand_panel.parquet")
+    cp = pd.read_parquet(CAND_PANEL)            # audit 2026-11-14: read via OUT, a scheduled issue failed once the dashboard was serving
     new = [c for c in H.ADD if c in cp and c not in tr]
     tr = tr.merge(cp[["key", "qi"] + new].rename(columns={"qi": "i"}), on=["key", "i"], how="left")
     te = te.merge(cp[["key", "qi"] + new].rename(columns={"qi": "i"}), on=["key", "i"], how="left")

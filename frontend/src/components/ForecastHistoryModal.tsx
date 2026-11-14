@@ -32,7 +32,9 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
     if (!byIssue.has(f.issue_quarter)) byIssue.set(f.issue_quarter, []);
     byIssue.get(f.issue_quarter)!.push(f);
   }
-  const issues = [...byIssue.keys()].sort().reverse();
+  // newest issue first by its issue DATE (as text, "2026-Q4" would sort after the later "2026-11")
+  const issueDate = (iq: string) => byIssue.get(iq)![0].issue_date ?? byIssue.get(iq)![0].information_cutoff;
+  const issues = [...byIssue.keys()].sort((a, b) => issueDate(b).localeCompare(issueDate(a)));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -57,10 +59,14 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
           const rows = byIssue.get(iq)!.slice().sort((a, b) => a.target_quarter.localeCompare(b.target_quarter) || a.province.localeCompare(b.province));
           const head = rows[0];
           const current = head.issue_status === "current issue";
+          const superseded = head.issue_status === "superseded" || head.record_status === "superseded";
+          const sup = data?.superseded?.[iq];
           return (
             <section key={iq} className="mt-4" data-testid={`history-issue-${iq}`}>
               <div className="flex flex-wrap items-baseline gap-x-2 text-[11px]">
-                <span className="font-semibold">Issued {qLabel(iq)}</span>
+                <span className={`font-semibold ${superseded ? "line-through text-muted-foreground" : ""}`}>
+                  Issued {head.issue_label ?? qLabel(iq)}
+                </span>
                 <span className="text-muted-foreground">
                   {data?.issue_notes?.[iq]
                     ? <>data for periods before {day(head.information_cutoff)}, as published by {day(data.issue_notes[iq].published_by)}</>
@@ -68,13 +74,19 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                   · made {day(head.generated_utc)} · model {head.model_version}
                 </span>
                 <span className="ml-auto text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {current ? "Current issue" : "Earlier issue"}
+                  {current ? "Current issue" : superseded ? "Superseded" : "Earlier issue"}
                 </span>
               </div>
               {data?.issue_notes?.[iq] && (
                 <p className="mt-1 text-[10px] leading-snug text-muted-foreground" data-testid={`history-note-${iq}`}>{data.issue_notes[iq].note}</p>
               )}
-              <div className="mt-1.5 overflow-x-auto">
+              {sup && (
+                <p className="mt-1 text-[10px] leading-snug font-semibold" data-testid={`history-superseded-${iq}`}>
+                  Replaced by the forecast issued {sup.superseded_by_label}. Kept here unchanged for the record; its values are not
+                  used on the map.
+                </p>
+              )}
+              <div className={`mt-1.5 overflow-x-auto ${superseded ? "opacity-60" : ""}`}>
                 <table className="w-full text-[11px] border-collapse">
                   <thead>
                     <tr className="text-[9px] uppercase tracking-wider text-muted-foreground border-b border-border/50">

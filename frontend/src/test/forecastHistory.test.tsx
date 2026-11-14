@@ -41,6 +41,28 @@ describe("forecast history", () => {
     expect(within(sections[1]).getByText(/Q2 2027/)).toBeTruthy();       // the original Q4 2026 forecast of Q2 2027 stays listed
   });
 
+  it("puts the corrected 10 November 2026 issue first and keeps the original marked superseded (audit 2026-11-14)", () => {
+    history = {
+      current_quarter: "2026-Q4", served_issue_quarter: "2026-11", issues: ["2026-Q4", "2026-11"], count: 2, ledger: { ok: true },
+      forecasts: [
+        f("2026-Q4", "2027-Q1", "Quezon", { issue_status: "superseded", record_status: "superseded", superseded_by: "2026-11",
+          issue_label: "Q4 2026", issue_date: "2026-11-01T00:00:00+08:00", share_pct: 26.8 }),
+        f("2026-11", "2027-Q1", "Quezon", { issue_status: "current issue", record_status: "active", issue_label: "10 November 2026",
+          issue_date: "2026-11-10T00:00:00+08:00", information_cutoff: "2026-11-10", share_pct: 26.8 }),
+      ],
+      superseded: { "2026-Q4": { superseded_by: "2026-11", superseded_by_label: "10 November 2026", reason: "late CPI/LFS",
+        by: "owner", evidence: "report", recorded_utc: "2026-11-14T00:20:00+00:00" } },
+    };
+    render(<ForecastHistoryModal open onOpenChange={() => undefined} quarters={[]} value="2027-Q1" onSelect={() => undefined} />);
+    const sections = screen.getAllByTestId(/^history-issue-/);
+    // by issue DATE: as text "2026-Q4" would sort after "2026-11"
+    expect(sections.map((s) => s.getAttribute("data-testid"))).toEqual(["history-issue-2026-11", "history-issue-2026-Q4"]);
+    expect(within(sections[0]).getByText("Current issue")).toBeTruthy();
+    expect(within(sections[0]).getByText(/Issued 10 November 2026/)).toBeTruthy();
+    expect(within(sections[1]).getByText("Superseded")).toBeTruthy();
+    expect(within(sections[1]).getByTestId("history-superseded-2026-Q4").textContent).toContain("Replaced by the forecast issued 10 November 2026");
+  });
+
   it("states the current quarter, the served issue and a stale forecast plainly", () => {
     period = {
       now_ph: "2027-02-03T10:00:00+08:00", current_quarter: "2027-Q1", issue_quarter: "2027-Q1", issue_date: "2027-02-01T00:00:00+08:00",

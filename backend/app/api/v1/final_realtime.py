@@ -66,14 +66,24 @@ def forecast_history(province: str | None = Query(None), issue: str | None = Que
             continue
         if target and r["target_quarter"] != target:
             continue
-        out.append({**r, "issue_status": "current issue" if r["issue_quarter"] == served else "historical",
+        out.append({**r, "issue_status": ("current issue" if r["issue_quarter"] == served else
+                                          "superseded" if r.get("record_status") == "superseded" else "historical"),
+                    "issue_label": PD.issue_label(r["issue_quarter"]), "issue_date": PD.issue_datetime(r["issue_quarter"]).isoformat(),
                     "target_status": PD.status_of(r["target_quarter"], per["current_quarter"])})
-    out.sort(key=lambda r: (r["issue_quarter"], r["target_quarter"], r["province"]), reverse=True)
-    return {"current_quarter": per["current_quarter"], "served_issue_quarter": served, "issues": HI.issues(per["model_id"]),
+    # newest issue first by its issue DATE (as text "2026-Q4" would sort after the later "2026-11"), then target and province
+    out.sort(key=lambda r: r["province"])                                      # stable: provinces A-Z within an issue and target
+    out.sort(key=lambda r: (r["issue_date"], r["target_quarter"]), reverse=True)
+    ids = HI.issues(per["model_id"])
+    sup = HI.supersessions(per["model_id"])
+    return {"current_quarter": per["current_quarter"], "served_issue_quarter": served, "issues": ids,
+            "issues_newest_first": list(reversed(ids)),
             "count": len(out), "forecasts": out, "ledger": HI.verify(),
             # recorded disclosures per issue (e.g. figures published after the cut-off), never a rewrite of the issue itself
             "issue_notes": {q: {"note": PD.issue_note(q), "published_by": PD.published_by(q)}
-                            for q in HI.issues(per["model_id"]) if PD.issue_note(q)}}
+                            for q in ids if PD.issue_note(q)},
+            "superseded": {q: {"superseded_by": r["superseded_by"], "superseded_by_label": PD.issue_label(r["superseded_by"]),
+                               "reason": r["reason"], "by": r["by"], "evidence": r["evidence"], "recorded_utc": r["recorded_utc"]}
+                           for q, r in sup.items()}}
 
 
 @router.get("/forecast-evaluation")
