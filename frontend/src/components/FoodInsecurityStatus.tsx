@@ -82,7 +82,7 @@ export function FoodInsecurityStatusCardBody() {
     <div className="space-y-2" data-testid="fi-status-approved">
       <h3 className="text-[13px] font-semibold leading-tight">About this forecast</h3>
       <p className="text-[10px] leading-snug">
-        Forecast share of food-insecure households per province.
+        Food insecurity risk per province.
         {typeof acc === "number" && ` Right ${Math.round(acc * 100)}% of the time in past tests (2018–2021 surveys).`}
       </p>
       {through && (

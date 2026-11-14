@@ -33,7 +33,7 @@ ANCHOR_TEXT = {"RSS": "the province's latest FNRI survey level, combined with th
                       "(regional shared-level anchor)",
                "OH": "the province's own FNRI survey history (own-history anchor)",
                "H": "a survey-level estimate pooled across provinces (hierarchical anchor)"}
-OUTPUT = ("forecast log-odds of the share of households moderately or severely food insecure (FNRI HFIAS). 0 log-odds = a 50 % share = "
+OUTPUT = ("forecast log-odds of the food insecurity risk (FNRI HFIAS). 0 log-odds = a 50 % share = "
           "the HIGH cut-off. Positive SHAP pushes this output up (toward HIGH), negative pushes it down.")
 RATE_MIND = ("FINAL is one LightGBM model per seed (5 seeds, averaged), not two models. RATE is how its target is defined: the model learns the "
              "change per unit of elapsed time since the province's anchor survey, and the forecast is anchor + elapsed-time scale x model output. "
@@ -41,7 +41,7 @@ RATE_MIND = ("FINAL is one LightGBM model per seed (5 seeds, averaged), not two 
              "So RATE and MIND have no separate outputs to explain: every input below, including the 'missing' inputs (MIND), is explained "
              "inside the same RATE model. The anchor is not a LightGBM contribution and is shown as the starting point.")
 PROB_NOTE = ("The probability of HIGH is Phi(forecast log-odds / uncertainty) in each seed, averaged over 5 seeds. That step is not additive, so the "
-             "SHAP values explain the forecast log-odds and the forecast share, not the probability directly. The order is the same: a higher "
+             "SHAP values explain the forecast log-odds and the food insecurity risk, not the probability directly. The order is the same: a higher "
              "forecast log-odds always means a higher probability of HIGH.")
 
 
@@ -143,26 +143,32 @@ def _drivers_sentence(contrib, inputs_pts):
     return s[0].upper() + s[1:] + "."
 
 
+def _risk(mu, sd) -> float:
+    """Food insecurity risk (0-1) of one forecast: E[P], logit(P) ~ N(mu, sd^2) (app.final.risk)."""
+    from app.final.risk import expected_risk
+    return float(expected_risk(float(mu), float(sd)))
+
+
 def plain_summary(d: dict) -> list[str]:
     """2-3 plain sentences for the public, built only from the exact SHAP result (no causal claims)."""
     import math
     lg = lambda p: math.log(p / (100 - p)); sg = lambda z: 100 / (1 + math.exp(-z))
     w, c, q = d["waterfall"], d["contributors"], d["quarter"]
     if d["scope"] == "region":
-        sh = [p["sharePct"] for p in d["provinces"]]
+        sh = [p["riskPct"] for p in d["provinces"]]
         hi = [p["province"] for p in d["provinces"] if p["class"] == "HIGH"]
-        s1 = (f"For {_period(q)}, all five CALABARZON provinces are forecast at low risk: about {min(sh):.0f}% to {max(sh):.0f}% of households "
-              f"are expected to have moderate or severe food insecurity, below the 50% line for high risk." if not hi else
-              f"For {_period(q)}, {_list(hi)} {'is' if len(hi) == 1 else 'are'} forecast at high risk (50% or more of households moderately or "
-              f"severely food insecure).")
+        s1 = (f"For {_period(q)}, all five CALABARZON provinces are forecast at low risk: food insecurity risk of about "
+              f"{min(sh):.1f}% to {max(sh):.1f}%, below the 50% line for high risk." if not hi else
+              f"For {_period(q)}, {_list(hi)} {'is' if len(hi) == 1 else 'are'} forecast at high risk (food insecurity risk of 50% or "
+              f"more).")
         s2 = ("Each forecast starts from the province's last food survey and comes down, because in past surveys food insecurity usually "
               "fell over a similar length of time." if w["expectedLogOdds"] < 0 else
               "Each forecast starts from the province's last food survey and goes up, because in past surveys food insecurity usually rose "
               "over a similar length of time.")
         return [s1, s2, _drivers_sentence(c, 0.0)]
     o = d["official"]; start = w["anchorSharePct"]; after = sg(lg(start) + w["expectedLogOdds"])
-    s1 = (f"{d['name']} is forecast at {'high' if o['class'] == 'HIGH' else 'low'} risk for {_period(q)}: about {o['sharePct']:.0f}% of "
-          f"households are expected to have moderate or severe food insecurity, {'at or above' if o['class'] == 'HIGH' else 'below'} the 50% "
+    s1 = (f"{d['name']} is forecast at {'high' if o['class'] == 'HIGH' else 'low'} risk for {_period(q)}: food insecurity risk of about "
+          f"{o['riskPct']:.1f}%, {'at or above' if o['class'] == 'HIGH' else 'below'} the 50% "
           f"line for high risk.")
     s2 = (f"The forecast starts from {d['name']}'s last food survey ({start:.0f}%) and "
           + ("comes down, because in past surveys food insecurity usually fell over a similar length of time." if after < start else
@@ -703,8 +709,8 @@ def _province(pid: str, quarter: str, scope: str = "province") -> dict:
         return {**base, "available": True, "scope": "region", "name": "CALABARZON (average of the five provinces)",
                 "waterfall": {"anchorLogOdds": round(float(s.anchor_logit.mean()), 4), "expectedLogOdds": round(float(s.expected_value_logit.mean()), 4),
                               "inputsLogOdds": round(float(s.inputs_shap_logit.mean()), 4), "forecastLogOdds": round(float(s.mu.mean()), 4)},
-                "provinces": [{"province": r.province, "class": r.official_class, "pHigh": r.official_p_high, "sharePct": round(r.forecast_share_pct, 1)}
-                              for r in s.itertuples()],
+                "provinces": [{"province": r.province, "class": r.official_class, "pHigh": r.official_p_high, "sharePct": round(r.forecast_share_pct, 1),
+                               "riskPct": round(100 * _risk(r.mu, r.sd_mean), 1)} for r in s.itertuples()],
                 "contributors": contrib}
     name = SLUG.get(pid.lower())
     if name is None:
@@ -723,7 +729,8 @@ def _province(pid: str, quarter: str, scope: str = "province") -> dict:
     contrib.sort(key=lambda c: -abs(c["shapLogOdds"]))
     anchors = sorted(set(s.anchor_names.split("|")))
     return {**base, "available": True, "scope": "province", "name": name, "lead": int(s.lead),
-            "official": {"class": s.official_class, "pHigh": float(s.official_p_high), "sharePct": round(float(s.forecast_share_pct), 1), "highAtSharePct": 50},
+            "official": {"class": s.official_class, "pHigh": float(s.official_p_high), "sharePct": round(float(s.forecast_share_pct), 1),
+                         "riskPct": round(100 * _risk(s.mu, s.sd_mean), 1), "highAtSharePct": 50},
             "waterfall": {"anchorLogOdds": round(float(s.anchor_logit), 4), "anchorSharePct": round(float(s.anchor_share_pct), 1),
                           "anchorText": "Starting point: " + "; ".join(ANCHOR_TEXT.get(a, a) for a in anchors) + ". Not a LightGBM contribution.",
                           "expectedLogOdds": round(float(s.expected_value_logit), 4),

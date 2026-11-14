@@ -1,7 +1,7 @@
 """
 The Visualization page's PDF (GET /api/v1/report/data) when FINAL is served: the same numbers and words as the dashboard.
 
-  trend   the forecast share of each province for the served quarters (the on-screen trend chart), class, rank, the forecast
+  trend   the food insecurity risk of each province for the served quarters (the on-screen trend chart), class, rank, the forecast
           period, the method table and limitations
   shap    one province-quarter: headline (share, class, rank, population), the "Why is this at risk?" bars
           (top five + Poverty and Vulnerability + time since the last survey) and every card, word for word with the dashboard
@@ -21,7 +21,7 @@ from app.services import dashboard as svc
 from app.services import reference as ref
 
 MODEL = "final-rate-mind-1.0"
-INTRO = ("The number in this report is the forecast share of households that will be moderately or severely food insecure "
+INTRO = ("The number in this report is the food insecurity risk "
          "(FNRI Household Food Insecurity Access Scale, HFIAS) in the quarter shown. 50% or more is High risk. The forecast starts "
          "from the province's latest FNRI survey and adds a LightGBM forecast of the change, using only data published before the "
          "issue date. It is a forecast, not a measured food-insecurity rate or an official statistic.")
@@ -104,7 +104,7 @@ def _method_blocks() -> list[dict]:
 
 def _limitations(limited: bool, articles: int) -> list[dict]:
     items = [f"{t}. {b}" for t, b in (
-        ("A forecast, not a measurement", "The number is FINAL's forecast share of households moderately or severely food insecure. "
+        ("A forecast, not a measurement", "The number is FINAL's food insecurity risk. "
          "It is not a measured rate, an official statistic or an official classification."),
         ("Tested on few survey rounds", "72 provincial forecasts from three FNRI rounds (2018, 2019, 2021). Only 5 were CALABARZON "
          "provinces, all observed Low. In 2021 only 1 of 4 High provinces was found."),
@@ -167,13 +167,13 @@ def trend(scope: str, pid: str | None, from_: str | None, to: str | None, munici
             raise KeyError(f"Unknown province id '{s}'.")
     rows = {s: {q: _row(s, q) for q in win} for s in slugs}
     last = win[-1]
-    share = lambda s, q: rows[s][q].get("score_pct")
+    share = lambda s, q: rows[s][q].get("risk_pct")
     order = sorted(slugs, key=lambda s: -float(share(s, last) or 0))
     names = {s: ref.PROVINCES[s]["name"] for s in slugs}
     area = names[slugs[0]] if len(slugs) == 1 else "All provinces (" + ", ".join(names[s] for s in ref.PROVINCES) + ")"
     period = _ql(win[0]) if len(win) == 1 else f"{_ql(win[0])} to {_ql(win[-1])}"
 
-    all_last = {s: float(_row(s, last).get("score_pct") or 0) for s in ref.PROVINCES}
+    all_last = {s: float(_row(s, last).get("risk_pct") or 0) for s in ref.PROVINCES}
     rank_all = {s: i for i, s in enumerate(sorted(all_last, key=lambda s: -all_last[s]), 1)}
     key = []
     for q in win:
@@ -183,12 +183,12 @@ def trend(scope: str, pid: str | None, from_: str | None, to: str | None, munici
             top = max(slugs, key=lambda s: float(share(s, q) or 0))
             low = min(slugs, key=lambda s: float(share(s, q) or 0))
             key.append(f"{_ql(q)} ({lead[q]} quarter{'s' if lead[q] > 1 else ''} ahead): {len(hs)} of {len(slugs)} provinces are at High risk. "
-                       f"The CALABARZON average is {_pct(sum(vals) / len(vals))} of households. {names[top]} is highest "
+                       f"The CALABARZON average food insecurity risk is {_pct(sum(vals) / len(vals))}. {names[top]} is highest "
                        f"({_pct(share(top, q))}) and {names[low]} lowest ({_pct(share(low, q))}).")
         else:
             s = slugs[0]
-            key.append(f"{_ql(q)} ({lead[q]} quarter{'s' if lead[q] > 1 else ''} ahead): about {_pct(share(s, q))} of households in "
-                       f"{names[s]} are forecast to be moderately or severely food insecure ({str(rows[s][q].get('class', '')).capitalize()} risk).")
+            key.append(f"{_ql(q)} ({lead[q]} quarter{'s' if lead[q] > 1 else ''} ahead): {names[s]} food insecurity risk "
+                       f"{_pct(share(s, q))} ({str(rows[s][q].get('class', '')).capitalize()} risk).")
     key.append("These are forecasts; their outcomes are not yet known.")
 
     cols = ([{"label": "Province", "align": "center", "width": 0.22}]
@@ -202,7 +202,7 @@ def trend(scope: str, pid: str | None, from_: str | None, to: str | None, munici
     vals = [float(share(s, q)) / 100 for s in slugs for q in win if share(s, q) is not None]
     lo = max(0.0, (int(min(vals) * 20) - 1) / 20) if vals else 0.0
     hi = min(1.0, max(0.55, (int(max(vals) * 20) + 2) / 20)) if vals else 1.0
-    chart = {"type": "line", "quarters": [_ql(q) for q in win], "yFormat": "percent", "yTitle": "Households food insecure",
+    chart = {"type": "line", "quarters": [_ql(q) for q in win], "yFormat": "percent", "yTitle": "Food insecurity risk",
              "series": [{"name": names[s], "values": [None if share(s, q) is None else round(float(share(s, q)) / 100, 4) for q in win]}
                         for s in order],
              "yMin": lo, "yMax": hi, "yStep": 0.05, "lines": [{"value": 0.5, "label": "High risk (50%)"}]}
@@ -217,9 +217,9 @@ def trend(scope: str, pid: str | None, from_: str | None, to: str | None, munici
                                    f"is rank {m.get('rankInProvince') or '--'} ({_pct(100 * float(m['riskIndex'])) if m.get('riskIndex') is not None else '--'}), "
                                    "from the province forecast weighted by poverty (60%) and population density (40%)."})
     blocks += [{"kind": "heading", "level": 1, "text": "Forecast by Province"},
-               {"kind": "table", "label": "Table 1", "title": f"Forecast Share of Food-Insecure Households, {period}", "columns": cols,
+               {"kind": "table", "label": "Table 1", "title": f"Food Insecurity Risk, {period}", "columns": cols,
                 "rows": trows, "note": f"High risk at 50% or more. Risk class and rank are for {_ql(last)}; rank 1 is the highest of the five provinces."},
-               {"kind": "figure", "label": "Figure 1", "title": f"Forecast Share of Food-Insecure Households, {period}", "chart": chart,
+               {"kind": "figure", "label": "Figure 1", "title": f"Food Insecurity Risk, {period}", "chart": chart,
                 "note": "The dashed line marks High risk (50%)."},
                *_method_blocks(), *_limitations(False, 0)]
     return {"type": "trend", "scope": scope, "title": "aiPHeed Food Insecurity Forecast Report", "subtitle": "Food Insecurity Risk Over Time",
@@ -244,7 +244,7 @@ def drivers(pid: str, quarter: str) -> dict:
     rank, tied = pv.get("rank"), bool(pv.get("rankTied"))
     n_pub = sum(1 for p in summary if not p.get("withheld"))
 
-    head = [["Food insecurity risk", f"{_pct(r.get('score_pct'))} of households (forecast)"],
+    head = [["Food insecurity risk", f"{_pct(r.get('risk_pct'))} (forecast)"],
             ["Risk class", f"{str(r.get('class') or '--').upper()} (High risk at 50%)"],
             ["Rank in CALABARZON", f"{rank} of {n_pub}{' (tied)' if tied else ''} (highest risk first)" if rank else "--"],
             [f"Population ({fig.get('census_year', '')} census)", f"{pv['population']:,}" if pv.get("population") else "--"],   # as on the dashboard
@@ -256,7 +256,7 @@ def drivers(pid: str, quarter: str) -> dict:
               {"kind": "heading", "level": 1, "text": "Headline"},
               {"kind": "table", "label": "Table 1", "title": f"{name}, {_ql(quarter)}",
                "columns": [{"label": "Item", "align": "left", "width": 0.4}, {"label": "Value", "align": "left", "width": 0.6}],
-               "rows": head, "note": "High risk at 50% or more of households. Rank 1 is the highest of the five provinces."}]
+               "rows": head, "note": "High risk at 50% or more. Rank 1 is the highest of the five provinces."}]
     blocks += _why_blocks(d, name, quarter, "1")
     munis = sorted(svc.municipality_summary(quarter, province_id=slug), key=lambda m: (m.get("rankInProvince") or 999, m["name"]))
     if munis:

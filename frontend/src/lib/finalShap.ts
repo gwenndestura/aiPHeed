@@ -35,8 +35,8 @@ export interface ShapProvince {
   rateMind: string;
   probabilityNote: string;
   nearZeroLogOdds: number;
-  official?: { class: "HIGH" | "LOW"; pHigh: number; sharePct: number; highAtSharePct: number };
-  provinces?: { province: string; class: string; pHigh: number; sharePct: number }[];
+  official?: { class: "HIGH" | "LOW"; pHigh: number; sharePct: number; riskPct?: number; highAtSharePct: number };
+  provinces?: { province: string; class: string; pHigh: number; sharePct: number; riskPct?: number }[];
   waterfall?: {
     anchorLogOdds: number;
     anchorSharePct?: number;

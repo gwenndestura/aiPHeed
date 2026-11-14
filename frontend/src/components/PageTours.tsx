@@ -83,7 +83,7 @@ const VIZ_TOUR: TourDef = {
     {
       title: "Reading the chart",
       body: ({ cutoff, alert }) =>
-        `Each line is a province's forecast share of food-insecure households. At or above the High risk line (${cutoff}) a province is high risk; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
+        `Each line is a province's food insecurity risk. At or above the High risk line (${cutoff}) a province is high risk; at or above the Alert line (${alert}) it has an active alert, a call for early action.`,
       target: () => "viz-chart",
       // Phones: just the two lines, so the card has room beside them.
       area: (l) => (l === "phone" ? thresholdLinesArea() : null),

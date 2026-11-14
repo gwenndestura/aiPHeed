@@ -59,6 +59,7 @@ def forecast_history(province: str | None = Query(None), issue: str | None = Que
     served = HI.latest_issue(per["model_id"])
     rows = HI.with_outcomes(per["model_id"])
     out = []
+    risks: dict = {}
     for r in rows:
         if province and r["province"].lower() != province.lower():
             continue
@@ -66,7 +67,7 @@ def forecast_history(province: str | None = Query(None), issue: str | None = Que
             continue
         if target and r["target_quarter"] != target:
             continue
-        out.append({**r, "issue_status": ("current issue" if r["issue_quarter"] == served else
+        out.append({**r, "risk_pct": _risk_pct(r, risks), "issue_status": ("current issue" if r["issue_quarter"] == served else
                                           "superseded" if r.get("record_status") == "superseded" else "historical"),
                     "issue_label": PD.issue_label(r["issue_quarter"]), "issue_date": PD.issue_datetime(r["issue_quarter"]).isoformat(),
                     "target_status": PD.status_of(r["target_quarter"], per["current_quarter"])})
@@ -84,6 +85,25 @@ def forecast_history(province: str | None = Query(None), issue: str | None = Que
             "superseded": {q: {"superseded_by": r["superseded_by"], "superseded_by_label": PD.issue_label(r["superseded_by"]),
                                "reason": r["reason"], "by": r["by"], "evidence": r["evidence"], "recorded_utc": r["recorded_utc"]}
                            for q, r in sup.items()}}
+
+
+def _risk_pct(r: dict, cache: dict) -> float | None:
+    """Food insecurity risk (%) of a ledger record (app.final.risk): exact from its issue's mu and sd when the issue folder is
+    present, else from the stored level and 90% range (same value to rounding)."""
+    from app.final import risk as RK
+    from app.final import serving as SVG
+    from app.paths import BACKEND_DIR
+    d = BACKEND_DIR / str(r.get("issue_dir") or "")
+    if r.get("issue_dir") and (d / "shap_live_summary.csv").exists():
+        if d not in cache:
+            cache[d] = SVG.issue_risks(d)
+        v = cache[d].get((r["province"], r["target_quarter"]))
+        if v is not None:
+            return round(100 * v, 1)
+    rng = r.get("range90_pct") or [None, None]
+    if r.get("share_pct") is None or None in rng:
+        return None
+    return round(100 * RK.risk_from_record(float(r["share_pct"]), float(rng[0]), float(rng[1])), 1)
 
 
 @router.get("/forecast-evaluation")

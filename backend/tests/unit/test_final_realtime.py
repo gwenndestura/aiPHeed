@@ -360,7 +360,7 @@ def test_visualization_explanation_and_pdf_match_the_dashboard():
         assert [(t["key"], t["label"], t["pct"]) for t in e["triggers"]] == [(g["key"], g["label"], g["pct"]) for g in s["groups"]]
     assert D.explainability_region("2027-Q1")["model"] == "final-rate-mind-1.0"
 
-    share = {(p["province"], p["target_quarter"]): p["score_pct"] for p in SV.outlook()["provinces"]}
+    share = {(p["province"], p["target_quarter"]): p["risk_pct"] for p in SV.outlook()["provinces"]}   # food insecurity risk (%)
     r = FRD.drivers("quezon", "2027-Q1")
     text = json.dumps(r)
     assert "Setup H" not in text and "probability" not in text.lower()
@@ -637,3 +637,60 @@ def test_corrected_forecast_regenerates_exactly(monkeypatch):
     A = IS.assemble("2026-11", IS.predict_issue("2026-11"), man["generated_utc"])
     m = pd.read_csv(d / "dashboard_rows.csv").merge(pd.DataFrame(A["rows"]), on=["province", "quarter"], suffixes=("", "_re"))
     assert len(m) == 10 and (m.score_pct - m.score_pct_re).abs().max() == 0 and (m.probability - m.probability_re).abs().max() == 0
+
+
+def test_served_food_insecurity_risk_is_the_expected_household_risk(monkeypatch):
+    """Food insecurity risk (2026-11-14, app.final.risk): the value served as riskScore is the probability that a randomly selected
+    household in the province is moderately or severely food insecure (FNRI HFIAS) in the target quarter = E[P] over FINAL's
+    forecast distribution logit(P) ~ N(mu, sd^2). It is not the median level sigmoid(mu) served before, not the probability of
+    HIGH, and the CALABARZON value is the mean of the province values, not a share of HIGH provinces. The class is unchanged."""
+    import math
+    import pandas as pd
+    from scipy.stats import norm
+    from app.final import serving as SVG
+    from app.services import dashboard as D
+    monkeypatch.setenv("AIPHEED_LEAD2_MODEL", "thesis")          # production mode (render.yaml)
+    d = SVG.ROOT / "issues" / "2026-11"
+    assert SVG.activate(d)["active"]
+    S = pd.read_csv(d / "shap_live_summary.csv").set_index(["province", "quarter"])
+    R = pd.read_csv(d / "dashboard_rows.csv").set_index(["province", "quarter"])
+    import numpy as np
+    z = norm.ppf((np.arange(1, 200001) - 0.5) / 200000)                           # deterministic quasi-Monte-Carlo check of E[P]
+    for q in ("2027-Q1", "2027-Q2"):
+        got = D.province_summary(q)
+        assert len(got) == 5
+        for p in got:
+            s, r = S.loc[(p["name"], q)], R.loc[(p["name"], q)]
+            mu, sd = float(s["mu"]), float(s["sd_mean"])
+            risk = float(np.mean(1 / (1 + np.exp(-(mu + sd * z)))))
+            assert abs(p["riskScore"] - round(risk, 3)) < 1.5e-3                     # served value = E[P]
+            assert p["riskScore"] > round(1 / (1 + math.exp(-mu)), 3)               # above the old median value when mu < 0
+            assert abs(p["riskScore"] - float(r["probability"])) > 0.1              # not the probability of HIGH
+            assert (p["riskLevel"] == "high") == (risk >= 0.5) == (mu >= 0) == (str(r["class"]) == "HIGH")
+        reg = D.region_forecast(q)
+        assert abs(reg["riskScore"] - sum(p["riskScore"] for p in got) / 5) < 1e-3    # mean of province risks
+        assert reg["riskScore"] != sum(p["riskLevel"] == "high" for p in got) / 5    # not a share of HIGH provinces
+    quezon = next(p for p in D.province_summary("2027-Q1") if p["name"] == "Quezon")
+    assert quezon["riskScore"] == 0.275 and quezon["riskLevel"] == "low"
+
+
+def test_expected_risk_function():
+    """app.final.risk: E[sigmoid(Z)] by quadrature; sd = 0 is sigmoid(mu); symmetric, so E[P] >= 0.5 exactly when mu >= 0; the
+    ledger fallback (level + 90% range) reproduces the exact issue value to rounding."""
+    import math
+    import numpy as np
+    import pandas as pd
+    from app.final import risk as RK
+    from app.final import serving as SVG
+    assert abs(RK.expected_risk(-1.0, 0.0) - 1 / (1 + math.exp(1.0))) < 1e-12
+    for mu in (-2.0, -0.3, 0.0, 0.3, 2.0):
+        for sd in (0.2, 0.5, 1.0):
+            v = RK.expected_risk(mu, sd)
+            assert abs(v + RK.expected_risk(-mu, sd) - 1) < 1e-12 and ((v >= 0.5) == (mu >= 0))
+            assert abs(v - RK.expected_risk(np.array([mu]), np.array([sd]))[0]) < 1e-15
+    d = SVG.ROOT / "issues" / "2026-11"
+    exact = SVG.issue_risks(d)
+    R = pd.read_csv(d / "dashboard_rows.csv")
+    for r in R.itertuples():
+        approx = RK.risk_from_record(r.score_pct, r.range90_low, r.range90_high)
+        assert abs(approx - exact[(r.province, r.quarter)]) < 2e-3

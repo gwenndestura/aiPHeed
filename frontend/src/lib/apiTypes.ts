@@ -863,8 +863,8 @@ export interface FoodInsecurityStatus {
   issue_note?: string | null;
   /** The newest period of every input the served forecast used (app.ml.inference.e168_system.data_used). */
   data_used?: { group: string; name: string; source: string; level: string; period: string; note?: string; label?: string; when?: string }[];
-  /** Per province and lead: forecast share of moderately or severely food-insecure households (HFIAS, %) and its 90% range. */
-  provinces?: { province: string; lead: number; target_quarter: string; score_pct: number; range90_pct: [number, number]; p_high: number; risk_class: string; low_confidence?: boolean }[];
+  /** Per province and lead: food insecurity risk (HFIAS, %) and its 90% range. */
+  provinces?: { province: string; lead: number; target_quarter: string; score_pct: number; risk_pct?: number; range90_pct: [number, number]; p_high: number; risk_class: string; low_confidence?: boolean }[];
 }
 
 // GET /api/v1/forecast-period (app.final.cycle.status): the Philippine quarter now and the served issue, all computed by the backend.
@@ -907,6 +907,8 @@ export interface HistoryForecast {
   p_high: number;
   risk_class: "HIGH" | "LOW";
   share_pct: number;
+  /** Food insecurity risk (%): app.final.risk (expected HFIAS proportion). */
+  risk_pct?: number | null;
   range90_pct: [number, number];
   generated_utc: string;
   data_version: string;

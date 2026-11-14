@@ -22,14 +22,14 @@ import { useFinalShap } from "@/lib/finalShap";
 /** Exact SHAP of the official FINAL forecasts in the "Why is this at risk?" card (preview, 2026-11-13). */
 const FINAL_SHAP_CARD = true;
 
-/** FINAL preview: the outlook rows of one quarter (forecast share of food-insecure households, with its 90% range). */
+/** FINAL preview: the outlook rows of one quarter (food insecurity risk, with its 90% range). */
 function useShareRows(quarterId?: string) {
   const { data } = useFoodInsecurityStatus();
   const all = data?.provinces ?? [];
   const rows = quarterId ? all.filter((r) => r.target_quarter === quarterId) : all.filter((r) => r.lead === 1);
   const byName = new Map(rows.map((r) => [r.province.toLowerCase(), r]));
   const mean = (f: (r: (typeof rows)[number]) => number) => (rows.length ? rows.reduce((a, r) => a + f(r), 0) / rows.length : null);
-  return { rows, byName, share: mean((r) => r.score_pct), lo: mean((r) => r.range90_pct[0]), hi: mean((r) => r.range90_pct[1]),
+  return { rows, byName, share: mean((r) => r.risk_pct ?? r.score_pct), lo: mean((r) => r.range90_pct[0]), hi: mean((r) => r.range90_pct[1]),
            lowConfidence: rows.filter((r) => r.low_confidence).length, pHigh: mean((r) => r.p_high) };
 }
 
@@ -224,7 +224,6 @@ export function RfiiScoreCardBody({
             >
               {hasShare ? pct(animShare) : hasScore ? pct(animScore) : "—"}
             </span>
-            <span className="text-[11px] text-muted-foreground font-mono-num whitespace-nowrap pb-2">of households</span>
           </div>
 
           {/* Risk band pill -- only for a real score */}
@@ -421,7 +420,7 @@ export function ProvinceRankingCardBody({
   const sortedProvinces = regionsData.slice().sort((a, b) =>
     Number(scored(b)) - Number(scored(a)) || b.riskScore - a.riskScore);
   const maxScore = Math.max(...regionsData.filter(scored).map((r) => r.riskScore), 0.01);
-  // The selected quarter's value from /provinces (the backend's forecast share for THAT quarter). Audit 2026-11-14: this card read
+  // The selected quarter's value from /provinces (the backend's food insecurity risk for THAT quarter). Audit 2026-11-14: this card read
   // the Lead-1 outlook rows whatever quarter was selected, so Q2 2027 listed Q1 2027's shares.
   const shareOf = (r: RegionData) => (typeof r.riskScore === "number" ? Math.round(r.riskScore * 1000) / 10 : undefined);
 
@@ -563,7 +562,7 @@ function RegionDetail({
                 title={`Forecast risk level (${pct(displayCutoff, 0)} display cutoff)`}
               />
               {isActiveAlert && (
-                <StatusBadge tone="high" title={`Active alert: forecast share at or above ${pct(alertThreshold, 0)}`}>
+                <StatusBadge tone="high" title={`Active alert: food insecurity risk at or above ${pct(alertThreshold, 0)}`}>
                   Active alert
                 </StatusBadge>
               )}
@@ -591,9 +590,9 @@ function RegionDetail({
       <div className="grid grid-cols-2 gap-2.5">
         <div className="inner-box px-3 py-3">
           <MetricLabel>{shareRow ? "Food insecurity risk" : "Chance of high food insecurity"}</MetricLabel>
-          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{shareRow ? fmtPct(shareRow.score_pct) : pct(region.riskScore)}</div>
+          <div className="text-3xl font-extrabold mt-1 tracking-tight tabular-nums">{shareRow ? fmtPct(shareRow.risk_pct ?? shareRow.score_pct) : pct(region.riskScore)}</div>
           <div className="h-1.5 rounded-full mt-2 bg-muted overflow-hidden">
-            <div className="h-full rounded-full transition-all" style={{ width: `${shareRow ? shareRow.score_pct : region.riskScore * 100}%`, backgroundColor: riskColor }} />
+            <div className="h-full rounded-full transition-all" style={{ width: `${shareRow ? (shareRow.risk_pct ?? shareRow.score_pct) : region.riskScore * 100}%`, backgroundColor: riskColor }} />
           </div>
         </div>
         <div className="inner-box px-3 py-3 overflow-hidden">

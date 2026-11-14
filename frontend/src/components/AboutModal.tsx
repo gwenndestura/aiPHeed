@@ -42,8 +42,8 @@ export function AboutModal() {
               at <b className="text-foreground">high food-insecurity risk</b> in a quarter when 50% or more of its
               households are forecast to be moderately or severely food insecure (FNRI HFIAS). Each province shows
               the forecast{" "}
-              <b className="text-foreground">share of food-insecure households</b>; <b>50%</b> or more is High risk. An{" "}
-              <b className="text-foreground">active alert</b> appears when a province's forecast share is <b>60%</b> or
+              <b className="text-foreground">food insecurity risk</b>; <b>50%</b> or more is High risk. An{" "}
+              <b className="text-foreground">active alert</b> appears when a province's food insecurity risk is <b>60%</b> or
               higher. City and municipal values rank towns within each province by poverty and density; they are a
               priority ranking from the province forecast, not a measured or forecast municipal rate.
             </p>
@@ -173,7 +173,7 @@ export function AboutModal() {
 
           <div className="grid gap-2 pt-1">
             <Row k="Model" v="FINAL (RATE + MIND): latest FNRI survey level + LightGBM change per quarter, missing-input flags, HIGH and LOW weighted equally" />
-            <Row k="Map value" v="Forecast share of households moderately or severely food insecure (High risk at 50%)" />
+            <Row k="Map value" v="Food insecurity risk (High risk at 50%)" />
             <Row k="Lead time" v="1 and 2 quarters ahead: all five measures 75% or more (pooled) · further ahead: not shown" />
             <Row k="Coverage" v="5 provinces · 142 LGUs" />
           </div>

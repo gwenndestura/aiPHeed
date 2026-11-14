@@ -16,7 +16,7 @@ describe("driver and risk wording", () => {
   it("does not present municipal values as food-insecurity probabilities", () => {
     render(<GlossaryPanel open onClose={() => {}} />);
     const risk = screen.getByText(/shown as a percentage/);
-    expect(risk.textContent).toContain("forecast share");
+    expect(risk.textContent).toContain("The food insecurity risk of a province");
     expect(risk.textContent).toContain("not a measured provincial rate");
     const towns = screen.getByText(/Towns and cities ranked by priority/);
     expect(towns.textContent).toContain("They are not separat");

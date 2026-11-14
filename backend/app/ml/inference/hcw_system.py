@@ -65,8 +65,7 @@ INDICATOR = {
                "survey alone. It tends to over-predict by about 3 points (about 2 in 5 HIGH calls were false alarms) and "
                "rarely misses a HIGH province."),
 }
-RISK_LEVEL_BASIS = ("Band of the Setup H + class weights probability (>= 0.50 is HIGH): HIGH means the forecast share of households with "
-                    "moderate or severe food insecurity (HFIAS) is 50% or more. A forecast risk class, not a measured rate.")
+RISK_LEVEL_BASIS = ("Band of the Setup H + class weights probability (>= 0.50 is HIGH): HIGH means the food insecurity risk (HFIAS) is 50% or more. A forecast risk class, not a measured rate.")
 LGU_BASIS = ("Relative position within the province: the province's Setup H + class weights HIGH probability re-weighted by PSA poverty "
              "incidence (60%) and population density (40%), as Objective 3 specifies. Not a measured or official municipal "
              "food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.")
@@ -704,19 +703,21 @@ def sentence(code: str | None, name: str, quarter: str, mean_p: float | None = N
         if not rs:
             return None
         high = sum(float(r["probability"]) >= 0.5 for r in rs)
-        top = max(rs, key=lambda r: float(r["score_pct"]))
-        return (f"In CALABARZON, {period}: {high} of {len(rs)} provinces at high risk. The highest is {top['province']}, where "
-                f"about {float(top['score_pct']):.0f} in 100 households are expected to have moderate or severe trouble "
-                f"getting enough food (high risk means 50 in 100 or more). {_plain_reliability(rs[0])}")
+        top = max(rs, key=lambda r: _risk_pct(r))
+        return (f"In CALABARZON, {period}: {high} of {len(rs)} provinces at high risk. The highest food insecurity risk is "
+                f"{top['province']}'s, {_risk_pct(top):.0f}% (high risk means 50% or more). {_plain_reliability(rs[0])}")
     r = row(code, quarter)
     if r is None:
         return None
     p = float(r["probability"])
-    chance = "less than 1 in 100" if p < 0.005 else f"about {round(p * 100)} in 100"
-    return (f"{name}, {period}: {'high' if p >= 0.5 else 'low'} risk. About {float(r['score_pct']):.0f} in 100 households are "
-            f"expected to have moderate or severe trouble getting enough food (most likely between "
-            f"{float(r['range90_low']):.0f} and {float(r['range90_high']):.0f}). High risk means 50 in 100 or more; the "
-            f"chance of that is {chance}. {_plain_reliability(r)}")
+    return (f"{name}, {period}: {'high' if p >= 0.5 else 'low'} risk. Food insecurity risk {_risk_pct(r):.0f}% "
+            f"(high risk means 50% or more). {_plain_reliability(r)}")
+
+
+def _risk_pct(r: dict) -> float:
+    """The served food insecurity risk in % (risk_pct of the served rows; the served probability column holds the same value 0-1)."""
+    v = r.get("risk_pct")
+    return float(v) if v not in (None, "", "nan") else 100 * float(r["probability"])
 
 
 _MONTHS = {"Q1": "January-March", "Q2": "April-June", "Q3": "July-September", "Q4": "October-December"}

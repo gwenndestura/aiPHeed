@@ -63,8 +63,8 @@ function ProvinceView({ data }: { data: ShapProvince }) {
       <div className="flex flex-wrap items-center gap-1.5">
         <StatusBadge level={o.class === "HIGH" ? "high" : "low"} />
         <span className="text-[10px] text-foreground/90">
-          Probability of HIGH <span className="font-mono-num font-bold">{o.pHigh < 0.001 ? "<0.1%" : fmtPct(o.pHigh * 100)}</span> · forecast share{" "}
-          <span className="font-mono-num font-bold">{fmtPct(o.sharePct)}</span> (HIGH at {o.highAtSharePct}%)
+          Probability of HIGH <span className="font-mono-num font-bold">{o.pHigh < 0.001 ? "<0.1%" : fmtPct(o.pHigh * 100)}</span> · food insecurity risk{" "}
+          <span className="font-mono-num font-bold">{fmtPct(o.riskPct ?? o.sharePct)}</span> (HIGH at {o.highAtSharePct}%)
         </span>
       </div>
       <p className="text-[10px] text-muted-foreground leading-snug">
@@ -94,7 +94,7 @@ function RegionView({ data, compact }: { data: ShapProvince; compact: boolean })
   return (
     <div className="space-y-2">
       <p className="text-[10px] text-muted-foreground leading-snug">
-        SHAP of the five official province forecasts, averaged (log-odds of the forecast share). Select a province for its own explanation and
+        SHAP of the five official province forecasts, averaged (log-odds of the food insecurity risk). Select a province for its own explanation and
         the values its forecast used.
       </p>
       {data.provinces && !compact && (
@@ -102,7 +102,7 @@ function RegionView({ data, compact }: { data: ShapProvince; compact: boolean })
           {data.provinces.map((p) => (
             <div key={p.province} className="inner-box px-1 py-1">
               <p className="text-[9px] truncate">{p.province}</p>
-              <p className="text-[10px] font-mono-num font-bold">{fmtPct(p.sharePct)}</p>
+              <p className="text-[10px] font-mono-num font-bold">{fmtPct(p.riskPct ?? p.sharePct)}</p>
               <p className="text-[9px] text-muted-foreground">{p.class}</p>
             </div>
           ))}
@@ -206,7 +206,7 @@ function AllInputs({ items, nearZero }: { items: ShapContributor[]; nearZero: nu
         </tbody>
       </table>
       <p className="text-[9px] text-muted-foreground mt-1">
-        SHAP in log-odds of the forecast share; |SHAP| below {nearZero} = little influence. Values are on the model's own scale (some are
+        SHAP in log-odds of the food insecurity risk; |SHAP| below {nearZero} = little influence. Values are on the model's own scale (some are
         log-odds or relative values); the typical training value is in each row's explanation.
       </p>
     </div>

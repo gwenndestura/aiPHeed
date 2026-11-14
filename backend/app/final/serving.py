@@ -23,7 +23,7 @@ from app.final import period as PD
 from app.paths import BACKEND_DIR
 
 ROOT = BACKEND_DIR / "data" / "final"
-MIN_PP = 0.5                       # a factor bar is drawn when it moves this forecast share by >= 0.5 points
+MIN_PP = 0.5                       # a factor bar is drawn when it moves this food insecurity risk by >= 0.5 points
 _LOCK = threading.Lock()
 _STATE = {"issue": None, "patched": False}
 
@@ -82,15 +82,34 @@ def model_accuracy_by_lead() -> dict:
                 "beats_persistence": v.get("beats_persistence_C2")} for k, v in H.items()}
 
 
+def issue_risks(issue_dir: Path) -> dict[tuple[str, str], float]:
+    """FOOD INSECURITY RISK (0-1) per (province, target quarter) of an issue: E[P] over the forecast distribution
+    logit(P) ~ N(mu, sd^2), from the exact mu and sd of shap_live_summary.csv (app.final.risk). Issue files are never rewritten."""
+    from app.final import risk as RK
+    S = pd.read_csv(issue_dir / "shap_live_summary.csv")
+    v = RK.expected_risk(S["mu"].values, S["sd_mean"].values)
+    return {(p, q): float(x) for p, q, x in zip(S["province"], S["quarter"], np.atleast_1d(v))}
+
+
 def _served_rows(issue_dir: Path) -> Path:
-    """Map value = forecast SHARE (0-1, HIGH at 0.50); the probability of HIGH is kept in p_high (served copy only)."""
+    """Served copy of the issue rows (Leads 1..max_lead). Map value `probability` = FOOD INSECURITY RISK (0-1): the probability that a
+    randomly selected household in the province is moderately or severely food insecure (FNRI HFIAS) in the target quarter, the
+    expected HFIAS proportion over the forecast's uncertainty (app.final.risk; 2026-11-14). Kept alongside: risk_pct (same, in %),
+    score_pct (the median forecast level, the value served before 2026-11-14) and p_high (the probability of HIGH). HIGH RISK at
+    0.50; identical to the stored class. Rebuilt whenever its content would differ."""
     out = issue_dir / "dashboard_rows_served.csv"
-    if not out.exists() or out.stat().st_mtime < (issue_dir / "dashboard_rows.csv").stat().st_mtime:
-        r = pd.read_csv(issue_dir / "dashboard_rows.csv")
-        r = r[r["lead"] <= PD.max_lead()].reset_index(drop=True)
-        r["p_high"] = r["probability"]
-        r["probability"] = (r["score_pct"] / 100.0).round(3)
-        r.to_csv(out, index=False, lineterminator="\n")
+    r = pd.read_csv(issue_dir / "dashboard_rows.csv")
+    r = r[r["lead"] <= PD.max_lead()].reset_index(drop=True)
+    risk = issue_risks(issue_dir)
+    rk = np.array([risk[(p, q)] for p, q in zip(r["province"], r["quarter"])])
+    if not (((rk >= 0.5) == (r["class"] == "HIGH")).all()):
+        raise RuntimeError("food insecurity risk disagrees with the stored class")      # cannot happen: both are mu >= 0
+    r["p_high"] = r["probability"]
+    r["risk_pct"] = np.round(100 * rk, 1)
+    r["probability"] = np.round(rk, 3)
+    new = r.to_csv(index=False, lineterminator="\n")
+    if not out.exists() or out.read_text(encoding="utf-8") != new:
+        out.write_text(new, encoding="utf-8", newline="")
     return out
 
 
@@ -138,9 +157,9 @@ def _texts(HS, F: dict, cfg: dict) -> None:
     tgt = ", ".join(f"Lead {L} = {F['targets'][L]}" for L in leads)
     HS.INDICATOR = {**HS.INDICATOR,
                     "id": "final_food_insecurity_risk",
-                    "name": f"Food-insecurity risk ({cfg.get('model_name', 'FINAL')}): forecast share of households moderately or severely food insecure",
-                    "unit": "forecast share 0-1 of households moderately or severely food insecure (FNRI HFIAS); HIGH at 0.50",
-                    "definition": ("Forecast share (0-1) of households with moderate or severe food insecurity (FNRI HFIAS) in the province; HIGH when "
+                    "name": f"Food insecurity risk ({cfg.get('model_name', 'FINAL')})",
+                    "unit": "food insecurity risk 0-1 (FNRI HFIAS); HIGH at 0.50",
+                    "definition": ("Food insecurity risk (0-1) in the province (FNRI HFIAS); HIGH when "
                                    "it is 0.50 or more, which is the same rule as a probability of HIGH of 0.50 or more. The probability of HIGH is "
                                    "stated separately. A forecast, not a measured survey value."),
                     "horizon": f"issued with data published before {F['cutoff']}; {tgt}. {cfg.get('lead_basis', '')}",
@@ -167,6 +186,7 @@ def _install(HS, SV) -> None:
         d.setdefault("accuracy_by_lead", model_accuracy_by_lead())
         served = set(d["served_leads"])
         cut = d["information_cutoff"]
+        risk = issue_risks(SV.OUT)                  # food insecurity risk per province and quarter (app.final.risk)
         return {**{k: d[k] for k in ("model", "name", "issue_quarter", "target", "acceptance_basis", "statistical_reliability")},
                 "accuracy_by_lead": {str(k): v for k, v in d["accuracy_by_lead"].items()}, "seals": {},
                 "origin_date": cut, "classification_threshold": 0.5,
@@ -175,7 +195,8 @@ def _install(HS, SV) -> None:
                 "created_utc": d.get("created_utc"), "data_published_by": PD.published_by(d["issue_quarter"]),
                 "issue_note": PD.issue_note(d["issue_quarter"]),
                 "data_through": (pd.Timestamp(cut) - pd.Timedelta(days=1)).date().isoformat(), "data_used": HS.data_used()["items"],
-                "provinces": [r for r in d["provinces"] if r["lead"] in served]}
+                "provinces": [{**r, "risk_pct": round(100 * risk[(r["province"], r["target_quarter"])], 1)}
+                              for r in d["provinces"] if r["lead"] in served]}
     SV.outlook = _outlook_final
 
     # ---- confidence statement: the share is the map value; the chance of HIGH is stated from p_high
@@ -186,10 +207,12 @@ def _install(HS, SV) -> None:
         if out is None:
             return None
         r = HS.row(code, quarter)
-        lvl, ph = float(r["probability"]), float(r["p_high"])
-        out["score_type"] = "final_forecast_food_insecurity_risk"
-        out["confidence_statement"] = (f"{name}, {quarter}: food insecurity risk {lvl:.2f} (forecast share of households moderately or "
-                                       f"severely food insecure; HIGH at 0.50), class {r['class']}; chance of HIGH {ph:.3f}. {out['horizon_label']}")
+        risk = float(r["risk_pct"])
+        out["score_type"] = "final_food_insecurity_risk"
+        out["horizon_label"] = (f"{HS.reliability_text(r)}; issued {r['issue_date']}; food insecurity risk {risk:.1f}%; "
+                                f"the outcome is not yet published.")
+        out["confidence_statement"] = (f"{name}, {quarter}: food insecurity risk {risk:.1f}% (HIGH at 50%), class {r['class']}. "
+                                       f"{out['horizon_label']}")
         return out
     HS.province_row = _row_share
 
@@ -332,7 +355,7 @@ def _install(HS, SV) -> None:
                     " In tests on past surveys, forecasts were not measurably worse without this group, so read it as context.")
     HS.plain_evidence = _plain_final
 
-    # ---- contributor bars: groups that move THIS forecast share by >= MIN_PP points; the rest is "Other"
+    # ---- contributor bars: groups that move THIS food insecurity risk by >= MIN_PP points; the rest is "Other"
     def _pp_effect(r, c):
         z = math.log(float(r["baseline_pct"]) / (100 - float(r["baseline_pct"]))) + float(r["change_logit"])
         return 100 * (1 / (1 + math.exp(-z)) - 1 / (1 + math.exp(-(z - c))))
@@ -442,11 +465,10 @@ def _install(HS, SV) -> None:
     for k, v in list(vars(HS).items()):
         if not k.startswith("_") and isinstance(v, str) and OLD in v:
             setattr(HS, k, v.replace(OLD, NEW))
-    # the province value behind a town is FINAL's forecast SHARE of food-insecure households, not a probability (audit 2026-11-14)
-    HS.LGU_BASIS = ("Relative position within the province: the province's FINAL (RATE + MIND) forecast share of food-insecure "
-                    "households re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a "
+    # the province value behind a town is FINAL's food insecurity risk, not a probability (audit 2026-11-14)
+    HS.LGU_BASIS = ("Relative position within the province: the province's FINAL (RATE + MIND) food insecurity risk re-weighted by PSA poverty incidence (60%) and population density (40%), as Objective 3 specifies. Not a "
                     "measured or official municipal food-insecurity rate or forecast; the ranking has not been checked against municipal outcomes.")
     HS.LGU_LEVEL_BASIS = ("Colour = the province's FINAL (RATE + MIND) risk class (High when 50% or more of its households are forecast to be "
                           "food insecure). The number and rank are this city's or municipality's priority within the province: the province "
-                          "forecast share re-weighted by PSA poverty incidence (60%) and population density (40%). Not a measured or official "
+                          "food insecurity risk re-weighted by PSA poverty incidence (60%) and population density (40%). Not a measured or official "
                           "municipal food-insecurity rate; the ranking has not been checked against municipal outcomes.")

@@ -244,7 +244,7 @@ describe("Landing page", () => {
     const { container } = renderLanding();
     const text = container.textContent ?? "";
     expect(text).not.toMatch(/FIRI|risk index|price-pressure|six domains|proxy index|11\.3%|Combining the domains/i);
-    expect(text).toContain("The number shown is the forecast share of households moderately or severely food insecure");
+    expect(text).toContain("The number shown is the food insecurity risk, from 0% to 100%");
     expect(text).toContain("Household Food Insecurity Access Scale (HFIAS)");
     expect(container.querySelector("#methodology")?.textContent).toContain("How the forecast is built");
     expect(text).not.toMatch(/did not (measurably )?change the tested accuracy/);

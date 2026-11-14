@@ -151,8 +151,7 @@ function About() {
           <p>
             aiPHeed forecasts food-insecurity risk in the five CALABARZON provinces with the FINAL (RATE + MIND) LightGBM model. A
             province is at High risk in a quarter when 50% or more of its households are moderately or severely food
-            insecure on the FNRI Household Food Insecurity Access Scale (HFIAS). The number shown is the forecast
-            share of households moderately or severely food insecure, from 0% to 100%; 50% or higher is shown as High risk. It is a model
+            insecure on the FNRI Household Food Insecurity Access Scale (HFIAS). The number shown is the food insecurity risk, from 0% to 100%; 50% or higher is shown as High risk. It is a model
             forecast, not an official statistic or a measured food-insecurity rate.
           </p>
           <p>
@@ -170,7 +169,7 @@ function About() {
               ahead of the issue date;
             </li>
             <li>
-              each province's forecast: the forecast share of food-insecure households with its 90% range, the chance of
+              each province's forecast: the food insecurity risk with its 90% range, the chance of
               High risk, and which inputs had published values at the issue date;
             </li>
             <li>
@@ -212,7 +211,7 @@ const STEPS = [
   },
   {
     t: "Classification",
-    d: "The forecast share and its uncertainty give the chance of High risk. A province is shown High risk when its forecast share is 50% or more, which is the same as a chance of High risk of 50% or more.",
+    d: "The food insecurity risk and its uncertainty give the chance of High risk. A province is shown High risk when its food insecurity risk is 50% or more, which is the same as a chance of High risk of 50% or more.",
   },
   {
     t: "Why each forecast came out as it did",
@@ -220,7 +219,7 @@ const STEPS = [
   },
   {
     t: "City and municipal ranking",
-    d: "Each city or municipality's value is its province's forecast share multiplied by a vulnerability weight of 60% poverty (PSA 2021 small-area estimates) and 40% population density (POPCEN 2024), as percentiles across the 142 LGUs, ranked within the province and the region. On the map it takes its province's risk colour.",
+    d: "Each city or municipality's value is its province's food insecurity risk multiplied by a vulnerability weight of 60% poverty (PSA 2021 small-area estimates) and 40% population density (POPCEN 2024), as percentiles across the 142 LGUs, ranked within the province and the region. On the map it takes its province's risk colour.",
   },
 ];
 
@@ -455,7 +454,7 @@ function Accuracy() {
 
 /* ---------------- DISCLAIMER ---------------- */
 const DISCLAIMER = [
-  "A forecast share, not a measurement. The number is FINAL's forecast share of a province's households that are moderately or severely food insecure (FNRI HFIAS); 50% or more is shown as High risk. It is not a measured food-insecurity rate, and not an official statistic or classification.",
+  "A forecast, not a measurement. The number is FINAL's food insecurity risk of a province (FNRI HFIAS); 50% or more is shown as High risk. It is not a measured food-insecurity rate, and not an official statistic or classification.",
   "Validated on few survey rounds. The forecast was tested on 72 provincial forecasts from three FNRI survey rounds (2018, 2019, 2021), which were also examined during development. Only 5 were CALABARZON provinces, all observed Low.",
   "Not every survey round passes. Pooled results reach 75% one and two quarters ahead, but in 2018 precision was 72.7% and in 2021 only 1 of 4 High provinces was found.",
   "City and municipal values are a relative prioritization within each province, based on the province forecast, poverty and population density. They are not forecasts for each city or municipality. Some cities have no PSA 2021 municipal poverty estimate; this is stated where it applies.",
@@ -484,11 +483,11 @@ function Disclaimer() {
 const FAQS = [
   {
     q: "What is aiPHeed?",
-    a: "A student research system that forecasts food-insecurity risk in the five CALABARZON provinces. The map shows the FINAL forecast: the forecast share of a province's households that are moderately or severely food insecure (FNRI HFIAS), High when it is 50% or more. It is a model forecast, not an official statistic.",
+    a: "A student research system that forecasts food-insecurity risk in the five CALABARZON provinces. The map shows the FINAL forecast: the food insecurity risk of a province (FNRI HFIAS), High when it is 50% or more. It is a model forecast, not an official statistic.",
   },
   {
     q: "Is the score the share of people who will go hungry?",
-    a: "No. It is the forecast share of a province's households that are moderately or severely food insecure (FNRI HFIAS), a broader measure than hunger. Provinces at 50% or above are shown as High risk.",
+    a: "No. It is the food insecurity risk of a province (FNRI HFIAS), a broader measure than hunger. Provinces at 50% or above are shown as High risk.",
   },
   {
     q: "Did the Department of Agriculture develop or endorse aiPHeed?",

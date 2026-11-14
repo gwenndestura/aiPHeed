@@ -97,7 +97,7 @@ export function ShapNarrativeCardBody({
           />
         )}
         {hasScore && finalScore >= alertThreshold && (
-          <StatusBadge tone="high" title={`Active alert: forecast share at or above ${Math.round(alertThreshold * 100)}%`}>
+          <StatusBadge tone="high" title={`Active alert: food insecurity risk at or above ${Math.round(alertThreshold * 100)}%`}>
             Active alert
           </StatusBadge>
         )}

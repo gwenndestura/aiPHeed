@@ -42,7 +42,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Welcome to aiPHeed",
       body: () =>
-        "The map shows, for each CALABARZON province, the forecast share of households that will have trouble getting enough food in the coming months. A new forecast is made on the 10th of every month. Department of Agriculture staff can withhold a forecast after reviewing it.",
+        "The map shows, for each CALABARZON province, the food insecurity risk in the coming months. A new forecast is made on the 10th of every month. Department of Agriculture staff can withhold a forecast after reviewing it.",
       layout: { panel: "summary", sheet: "collapsed" },
     },
     {
@@ -55,7 +55,7 @@ const MAP_TOUR: TourDef = {
     {
       title: "Reading the colours",
       body: ({ cutoff }) =>
-        `Red means high risk (${cutoff} or more of households forecast to be food insecure). Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
+        `Red means high risk (food insecurity risk of ${cutoff} or more). Yellow means low risk. Grey means there is no forecast for that province this quarter.`,
       target: () => "legend",
       layout: { sheet: "collapsed" },
     },

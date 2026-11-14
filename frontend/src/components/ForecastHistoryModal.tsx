@@ -105,7 +105,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
                           >
                             <td className="py-1.5 pr-3 whitespace-nowrap">{qLabel(f.target_quarter)}</td>
                             <td className="px-2">{f.province}</td>
-                            <td className="px-2 text-right font-mono-num">{fmtPct(f.share_pct)}</td>
+                            <td className="px-2 text-right font-mono-num">{fmtPct(f.risk_pct ?? f.share_pct)}</td>
                             <td className="px-2 text-center">
                               <StatusBadge level={f.risk_class === "HIGH" ? "high" : "low"} />
                             </td>
@@ -127,7 +127,7 @@ export function ForecastHistoryModal({ open, onOpenChange, quarters, value, onSe
         })}
 
         <p className="mt-4 text-[9px] text-muted-foreground leading-snug">
-          Forecast: share of households moderately or severely food insecure (FNRI HFIAS); High risk at 50% or more. Results are
+          Forecast: food insecurity risk (FNRI HFIAS); High risk at 50% or more. Results are
           added when FNRI publishes a provincial survey for that quarter.
           {data?.ledger?.ok === false ? " Warning: the history file failed its integrity check." : ""}
         </p>

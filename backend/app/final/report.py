@@ -2,7 +2,7 @@
 PDF report of the served FINAL forecast (province or CALABARZON), built from the same sources as the dashboard:
 
   forecast period        app.final.cycle.status       issue, cut-off, when made, next issue, stale warning
-  headline               app.ml.inference.hcw_system  forecast share and class of the served issue (as the left card)
+  headline               app.ml.inference.hcw_system  food insecurity risk and class of the served issue (as the left card)
   why is this at risk?   app.final.shap_api           the same groups, shares and plain sentences as the left bars and right cards
                                                       (El Nino note; Poverty and Vulnerability only when the forecast used it)
   towns and cities       app.services.dashboard       the dashboard's priority ranking (rank in province)
@@ -28,8 +28,8 @@ from app.services import dashboard as svc
 from app.services import reference as ref
 from app.services import report as R
 
-FOOTER = "Forecast share of food-insecure households (FNRI HFIAS; High risk at 50%). A forecast, not an official classification."
-COVER = ("<b>The number in this report is the forecast share of households that will be moderately or severely food insecure</b> "
+FOOTER = "Food insecurity risk (FNRI HFIAS; High risk at 50%). A forecast, not an official classification."
+COVER = ("<b>The number in this report is the food insecurity risk</b> "
          "(FNRI Household Food Insecurity Access Scale, HFIAS), for the quarter shown. 50% or more is High risk. The forecast starts "
          "from the province's latest FNRI survey and adds a LightGBM forecast of the change, using only data published before the "
          "issue date. <b>It is a forecast, not a measured food-insecurity rate or an official statistic.</b>")
@@ -155,7 +155,7 @@ def _method_block() -> list:
 
 def _limitations_block(limited: bool, articles: int) -> list:
     items = [
-        ("A forecast, not a measurement", "The number is FINAL's forecast share of households moderately or severely food insecure. "
+        ("A forecast, not a measurement", "The number is FINAL's food insecurity risk. "
          "It is not a measured food-insecurity rate, an official statistic or an official classification."),
         ("Tested on few survey rounds", "72 provincial forecasts from three FNRI rounds (2018, 2019, 2021), also examined during "
          "development. Only 5 were CALABARZON provinces, all observed Low. In 2021 only 1 of 4 High provinces was found."),
@@ -203,9 +203,9 @@ def build_province_report(province_id: str, quarter: str, withheld: frozenset[st
     width = doc.width
     flow = _cover("Food Insecurity Risk Forecast", name, quarter) + [Spacer(1, 3 * mm)] + _period_block()
     flow += R._section("Headline")
-    share = r.get("score_pct")
+    share = r.get("risk_pct")
     flow += [R._data_table([], [
-        [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(share)}</b> of households (forecast)", "cell")],
+        [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(share)}</b> (forecast)", "cell")],
         [R._p("Risk class", "small"), R._p(f"<b>{str(r.get('class') or pv.get('riskLabel') or '--').upper()}</b> (High risk at 50%)", "cell")],
         [R._p("Rank in CALABARZON", "small"), R._p(f"<b>{rank} of {len(published)}{' (tied)' if tied else ''}</b> (highest risk first)"
                                                     if rank else "--", "cell")],
@@ -248,8 +248,8 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     provinces = svc.province_summary(quarter, withheld)
     published = [p for p in provinces if not p["withheld"]]
     rows_hs = {p["id"]: (HS.row(p["provinceCode"], quarter) or {}) for p in published}
-    published.sort(key=lambda p: -float(rows_hs[p["id"]].get("score_pct") or 0))
-    shares = [float(rows_hs[p["id"]]["score_pct"]) for p in published if rows_hs[p["id"]].get("score_pct") is not None]
+    published.sort(key=lambda p: -float(rows_hs[p["id"]].get("risk_pct") or 0))
+    shares = [float(rows_hs[p["id"]]["risk_pct"]) for p in published if rows_hs[p["id"]].get("risk_pct") is not None]
     shap = SA.province("calabarzon", quarter)
     news = svc.news(None, quarter, 1, 60)
 
@@ -260,7 +260,7 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     flow += R._section("Headline")
     high = sum(1 for p in published if str(rows_hs[p["id"]].get("class", "")).upper() == "HIGH")
     flow += [R._data_table([], [
-        [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(sum(shares) / len(shares)) if shares else '--'}</b> of households "
+        [R._p("Food insecurity risk", "small"), R._p(f"<b>{_pct(sum(shares) / len(shares)) if shares else '--'}</b> "
                                                      f"(mean of {len(shares)} published province scores)", "cell")],
         [R._p("Provinces at High risk", "small"), R._p(f"<b>{high} of {len(published)}</b>", "cell")],
         [R._p("Provinces published", "small"), R._p(f"<b>{len(published)} of {len(provinces)}</b>", "cell")],
@@ -268,11 +268,11 @@ def build_region_report(quarter: str, withheld: frozenset[str] = frozenset()) ->
     ], [55 * mm, width - 55 * mm])]
     flow += R._section("Provinces from highest to lowest risk")
     top = max(shares, default=1) or 1
-    flow.append(R._bar_table([(p["name"], int(round(float(rows_hs[p["id"]].get("score_pct") or 0) / top * 100)),
-                               f"{_pct(rows_hs[p['id']].get('score_pct'))}  {str(rows_hs[p['id']].get('class', '')).capitalize()}",
+    flow.append(R._bar_table([(p["name"], int(round(float(rows_hs[p["id"]].get("risk_pct") or 0) / top * 100)),
+                               f"{_pct(rows_hs[p['id']].get('risk_pct'))}  {str(rows_hs[p['id']].get('class', '')).capitalize()}",
                                R.RAISING if str(rows_hs[p["id"]].get("class", "")).upper() == "HIGH" else R.ACCENT) for p in published], width))
     flow.append(Spacer(1, 3 * mm))
-    rows = [[R._p(R._escape(p["name"]), "cellb"), R._p(_pct(rows_hs[p["id"]].get("score_pct")), "cell"),
+    rows = [[R._p(R._escape(p["name"]), "cellb"), R._p(_pct(rows_hs[p["id"]].get("risk_pct")), "cell"),
              R._p(str(rows_hs[p["id"]].get("class", "--")).upper(), "cell"),
              R._p(str(p["articleCount"]), "cell")] for p in published]
     flow.append(R._data_table(["Province", "Risk", "Class", "News"], rows,

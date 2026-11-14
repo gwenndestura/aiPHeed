@@ -2,8 +2,8 @@ import { X } from "lucide-react";
 
 // Plain words, in the order a visitor meets them on the dashboard. Each term is the label the dashboard shows.
 const TERMS: Array<{ term: string; def: string }> = [
-  { term: "Food insecurity risk", def: "The forecast share of a province's households that will be moderately or severely food insecure (FNRI Household Food Insecurity Access Scale, HFIAS), shown as a percentage. 25% means about one household in four. On the CALABARZON card it is the average of the five provinces. It is a forecast, not a measured provincial rate." },
-  { term: "High risk / Low risk", def: "A food insecurity risk of 50% or more (half or more of households food insecure) is High risk; below 50% is Low risk." },
+  { term: "Food insecurity risk", def: "The food insecurity risk of a province (FNRI Household Food Insecurity Access Scale, HFIAS), shown as a percentage. On the CALABARZON card it is the average of the five provinces. It is a forecast, not a measured provincial rate." },
+  { term: "High risk / Low risk", def: "A food insecurity risk of 50% or more is High risk; below 50% is Low risk." },
   { term: "Active alert", def: "A stronger warning, shown when the food insecurity risk is 60% or more." },
   { term: "Forecast quarter", def: "The three-month period being forecast (Q1 = January to March, and so on). Each quarter the dashboard forecasts only as many quarters ahead as the model passed in testing (now two), using only data published before the forecast was made." },
   { term: "Change from last quarter", def: "How much the food insecurity risk moved compared with the previous quarter's forecast, in percentage points (26.8% to 26.6% is −0.2 points). Up means more risk, down means less. The line below it shows both values." },
@@ -20,7 +20,7 @@ const TERMS: Array<{ term: string; def: string }> = [
   { term: "Limited data", def: "Fewer than 5 news stories were about the province itself, so its forecast rests on less local news. It does not mean the risk is low." },
   { term: "Latest data used", def: "The newest month or period of each source the forecast used, listed under \"About this forecast\". Only complete months are used: in November, the newest data is October." },
   { term: "Updated monthly", def: "The data are updated and a new forecast is made automatically on the 10th of every month, from the data published before that day. Each forecast looks one and two quarters ahead of the quarter it is made in. Earlier forecasts are kept in the forecast history, never replaced; a forecast that had to be corrected is kept and marked superseded." },
-  { term: "Forecast history", def: "Every forecast made so far, with its forecast share, its chance of reaching High risk and its class. When a new FNRI survey is published, the actual result is added next to the forecast so they can be compared." },
+  { term: "Forecast history", def: "Every forecast made so far, with its food insecurity risk, its chance of reaching High risk and its class. When a new FNRI survey is published, the actual result is added next to the forecast so they can be compared." },
   { term: "Towns and cities", def: "Towns and cities ranked by priority within their province: the province's food insecurity risk weighted by poverty (60%) and population density (40%), each as a percentile of the 142 towns and cities. They are not separate forecasts." },
   { term: "Priority within the province / Rank", def: "A town's priority score and its rank among the towns and cities of its province (1 = highest priority). Towns with the same score share a rank (tied)." },
   { term: "Report (PDF)", def: "The Download PDF button on the Visualization page makes a printable report with the same numbers and explanations as the dashboard, the forecast period, the towns and cities ranking, how well the model did on past surveys, and its limitations." },

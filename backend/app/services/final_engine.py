@@ -29,7 +29,7 @@ DATA = Path(__file__).resolve().parents[2] / "data" / "final_engine"
 REQUIRED = ("engine.json", "archive.csv", "news_events.csv")
 NO_LOCAL_OUTCOME = ("No measured food-insecurity figure has been published for individual provinces after FNRI's 2021 "
                     "survey round, or for any city or municipality (SWS reports regions only; CBMS 2024 LGU results are "
-                    "not public). The province values on the map are forecast shares of food-insecure households, not measured rates; "
+                    "not public). The province values on the map are food insecurity risk forecasts, not measured rates; "
                     "city and municipal values are relative priorities within each province, not forecasts.")
 PRIORITY_LABEL = "Priority score (indicator-based; not a measured or forecast hunger rate)"
 NEWS_STATUS = ("Context only: news indicators did not improve the hunger forecasts in controlled tests "
